@@ -58,10 +58,10 @@ public enum ButtonNames
     Battle_MouseRight,
     Battle_MouseMiddle,
 
-    Battle_Skill_0,
-    Battle_Skill_1,
-    Battle_Skill_2,
-    Battle_Skill_3,
+    Battle_Skill_0_Player1,
+    Battle_Skill_1_Player1,
+    Battle_Skill_0_Player2,
+    Battle_Skill_1_Player2,
     Battle_ToggleBattleTip,
 
     BATTLE_MAX_FLAG = 400,

@@ -7,14 +7,14 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
 {
     private PlayerInput PlayerInput;
     private PlayerInput.CommonActions CommonInputActions;
-    private PlayerInput.BattleInputActions MechaBattleInputActions;
-    private PlayerInput.BuildingInputActions MechaBuildingInputActions;
+    private PlayerInput.BattleInputActions BattleInputActions;
+    private PlayerInput.BuildingInputActions BuildingInputActions;
 
     public Dictionary<ButtonNames, ButtonState> ButtonStateDict = new Dictionary<ButtonNames, ButtonState>();
 
     #region Building
 
-    public bool BuildingInputActionEnabled => MechaBuildingInputActions.enabled;
+    public bool BuildingInputActionEnabled => BuildingInputActions.enabled;
 
     public ButtonState Building_MouseLeft = new ButtonState() {ButtonName = ButtonNames.Building_MouseLeft};
     public ButtonState Building_MouseRight = new ButtonState() {ButtonName = ButtonNames.Building_MouseRight};
@@ -28,7 +28,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     {
         get
         {
-            if (MechaBuildingInputActions.enabled)
+            if (BuildingInputActions.enabled)
             {
                 Last_Building_MousePosition = MousePosition;
                 return MousePosition;
@@ -44,7 +44,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     {
         get
         {
-            if (MechaBuildingInputActions.enabled)
+            if (BuildingInputActions.enabled)
             {
                 return MouseWheel;
             }
@@ -63,13 +63,14 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
 
     #region Battle
 
-    public bool BattleInputActionEnabled => MechaBattleInputActions.enabled;
+    public bool BattleInputActionEnabled => BattleInputActions.enabled;
 
     public ButtonState Battle_MouseLeft = new ButtonState() {ButtonName = ButtonNames.Battle_MouseLeft};
     public ButtonState Battle_MouseRight = new ButtonState() {ButtonName = ButtonNames.Battle_MouseRight};
     public ButtonState Battle_MouseMiddle = new ButtonState() {ButtonName = ButtonNames.Battle_MouseMiddle};
 
-    public Vector2 Battle_Move;
+    public Vector2 Battle_Move_Player1;
+    public Vector2 Battle_Move_Player2;
 
     private Vector2 Last_Battle_MousePosition = Vector2.zero;
 
@@ -77,7 +78,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     {
         get
         {
-            if (MechaBattleInputActions.enabled)
+            if (BattleInputActions.enabled)
             {
                 Last_Battle_MousePosition = MousePosition;
                 return MousePosition;
@@ -93,7 +94,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     {
         get
         {
-            if (MechaBattleInputActions.enabled)
+            if (BattleInputActions.enabled)
             {
                 return MouseWheel;
             }
@@ -104,10 +105,10 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         }
     }
 
-    public ButtonState Battle_Skill_0 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_0};
-    public ButtonState Battle_Skill_1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_1};
-    public ButtonState Battle_Skill_2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_2};
-    public ButtonState Battle_Skill_3 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_3};
+    public ButtonState Battle_Skill_0_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_0_Player1};
+    public ButtonState Battle_Skill_1_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_1_Player1};
+    public ButtonState Battle_Skill_0_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_0_Player2};
+    public ButtonState Battle_Skill_1_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_1_Player2};
 
     public ButtonState Battle_ToggleBattleTip = new ButtonState() {ButtonName = ButtonNames.Battle_ToggleBattleTip};
 
@@ -169,32 +170,35 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     {
         PlayerInput = new PlayerInput();
         CommonInputActions = new PlayerInput.CommonActions(PlayerInput);
-        MechaBattleInputActions = new PlayerInput.BattleInputActions(PlayerInput);
-        MechaBuildingInputActions = new PlayerInput.BuildingInputActions(PlayerInput);
+        BattleInputActions = new PlayerInput.BattleInputActions(PlayerInput);
+        BuildingInputActions = new PlayerInput.BuildingInputActions(PlayerInput);
 
-        Building_MouseLeft.GetStateCallbackFromContext(MechaBuildingInputActions.MouseLeftClick);
-        Building_MouseRight.GetStateCallbackFromContext(MechaBuildingInputActions.MouseRightClick);
-        Building_MouseMiddle.GetStateCallbackFromContext(MechaBuildingInputActions.MouseMiddleClick);
+        Building_MouseLeft.GetStateCallbackFromContext(BuildingInputActions.MouseLeftClick);
+        Building_MouseRight.GetStateCallbackFromContext(BuildingInputActions.MouseRightClick);
+        Building_MouseMiddle.GetStateCallbackFromContext(BuildingInputActions.MouseMiddleClick);
 
-        MechaBuildingInputActions.Move.performed += context => Building_Move = context.ReadValue<Vector2>();
-        MechaBuildingInputActions.Move.canceled += context => Building_Move = Vector2.zero;
+        BuildingInputActions.Move.performed += context => Building_Move = context.ReadValue<Vector2>();
+        BuildingInputActions.Move.canceled += context => Building_Move = Vector2.zero;
 
-        Building_RotateItem.GetStateCallbackFromContext(MechaBuildingInputActions.RotateItem);
-        Building_ToggleBackpack.GetStateCallbackFromContext(MechaBuildingInputActions.ToggleBackpack);
-        Building_ToggleWireLines.GetStateCallbackFromContext(MechaBuildingInputActions.ToggleWireLines);
+        Building_RotateItem.GetStateCallbackFromContext(BuildingInputActions.RotateItem);
+        Building_ToggleBackpack.GetStateCallbackFromContext(BuildingInputActions.ToggleBackpack);
+        Building_ToggleWireLines.GetStateCallbackFromContext(BuildingInputActions.ToggleWireLines);
 
-        Battle_MouseLeft.GetStateCallbackFromContext(MechaBattleInputActions.MouseLeftClick);
-        Battle_MouseRight.GetStateCallbackFromContext(MechaBattleInputActions.MouseRightClick);
-        Battle_MouseMiddle.GetStateCallbackFromContext(MechaBattleInputActions.MouseMiddleClick);
+        Battle_MouseLeft.GetStateCallbackFromContext(BattleInputActions.MouseLeftClick);
+        Battle_MouseRight.GetStateCallbackFromContext(BattleInputActions.MouseRightClick);
+        Battle_MouseMiddle.GetStateCallbackFromContext(BattleInputActions.MouseMiddleClick);
 
-        MechaBattleInputActions.Move.performed += context => Battle_Move = context.ReadValue<Vector2>();
-        MechaBattleInputActions.Move.canceled += context => Battle_Move = Vector2.zero;
+        BattleInputActions.Player1Move.performed += context => Battle_Move_Player1 = context.ReadValue<Vector2>();
+        BattleInputActions.Player1Move.canceled += context => Battle_Move_Player1 = Vector2.zero;
 
-        Battle_Skill_0.GetStateCallbackFromContext(MechaBattleInputActions.Skill_0);
-        Battle_Skill_1.GetStateCallbackFromContext(MechaBattleInputActions.Skill_1);
-        Battle_Skill_2.GetStateCallbackFromContext(MechaBattleInputActions.Skill_2);
-        Battle_Skill_3.GetStateCallbackFromContext(MechaBattleInputActions.Skill_3);
-        Battle_ToggleBattleTip.GetStateCallbackFromContext(MechaBattleInputActions.ToggleBattleTip);
+        BattleInputActions.Player2Move.performed += context => Battle_Move_Player2 = context.ReadValue<Vector2>();
+        BattleInputActions.Player2Move.canceled += context => Battle_Move_Player2 = Vector2.zero;
+
+        Battle_Skill_0_Player1.GetStateCallbackFromContext(BattleInputActions.Skill_0_Player1);
+        Battle_Skill_1_Player1.GetStateCallbackFromContext(BattleInputActions.Skill_1_Player1);
+        Battle_Skill_0_Player2.GetStateCallbackFromContext(BattleInputActions.Skill_0_Player2);
+        Battle_Skill_1_Player2.GetStateCallbackFromContext(BattleInputActions.Skill_1_Player2);
+        Battle_ToggleBattleTip.GetStateCallbackFromContext(BattleInputActions.ToggleBattleTip);
 
         Common_MouseLeft.GetStateCallbackFromContext(CommonInputActions.MouseLeftClick);
         Common_MouseRight.GetStateCallbackFromContext(CommonInputActions.MouseRightClick);
@@ -208,12 +212,14 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
 
         PlayerInput.Enable();
         CommonInputActions.Enable();
-        MechaBattleInputActions.Enable();
-        MechaBuildingInputActions.Disable();
+        BattleInputActions.Enable();
+        BuildingInputActions.Disable();
     }
 
-    public override void Update(float deltaTime)
+    public override void FixedUpdate(float deltaTime)
     {
+        InputSystem.Update();
+
         if (false)
         {
             foreach (KeyValuePair<ButtonNames, ButtonState> kv in ButtonStateDict)
@@ -225,6 +231,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
                 }
             }
         }
+
+        base.FixedUpdate(deltaTime);
     }
 
     public override void LateUpdate(float deltaTime)
@@ -233,17 +241,19 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         {
             kv.Value.Reset();
         }
+
+        base.LateUpdate(deltaTime);
     }
 
     public void EnableBattleInputActions(bool enable)
     {
         if (enable)
         {
-            MechaBattleInputActions.Enable();
+            BattleInputActions.Enable();
         }
         else
         {
-            MechaBattleInputActions.Disable();
+            BattleInputActions.Disable();
         }
     }
 
@@ -251,11 +261,11 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     {
         if (enable)
         {
-            MechaBuildingInputActions.Enable();
+            BuildingInputActions.Enable();
         }
         else
         {
-            MechaBuildingInputActions.Disable();
+            BuildingInputActions.Disable();
         }
     }
 

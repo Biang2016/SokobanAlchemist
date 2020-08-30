@@ -7,13 +7,20 @@ using UnityEngine;
 public class WorldModule : PoolObject
 {
     public const int MODULE_SIZE = 16;
+    public World World;
+
+    /// <summary>
+    /// 按16格为一单位的坐标
+    /// </summary>
+    public GridPos3D ModuleGP;
 
     public WorldModuleData WorldModuleData;
+    public BoxBase[,,] BoxMatrix = new BoxBase[MODULE_SIZE, MODULE_SIZE, MODULE_SIZE];
 
-    public List<BoxBase> Boxes = new List<BoxBase>();
-
-    public void Initialize(WorldModuleData worldModuleData)
+    public void Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world)
     {
+        ModuleGP = moduleGP;
+        World = world;
         WorldModuleData = worldModuleData;
         for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
         {
@@ -25,9 +32,10 @@ public class WorldModule : PoolObject
                     if (boxType != BoxType.None)
                     {
                         BoxBase box = GameObjectPoolManager.Instance.BoxDict[boxType].AllocateGameObject<BoxBase>(transform);
-                        GridPos3D.ApplyGridPosToLocalTrans(new GridPos3D(x, y, z), box.transform, 1);
+                        GridPos3D gp = new GridPos3D(x, y, z);
+                        box.Initialize(gp, this);
                         box.name = $"{boxType}({x}, {y}, {z})";
-                        Boxes.Add(box);
+                        BoxMatrix[x, y, z] = box;
                     }
                 }
             }
@@ -51,6 +59,12 @@ public enum WorldModuleType
 {
     None,
     SampleWorldModule = 1,
+    GroundWorldModule = 2,
+
+    BorderWorldModule_Up = 101,
+    BorderWorldModule_Down = 102,
+    BorderWorldModule_Left = 103,
+    BorderWorldModule_Right = 104,
 
     MAX = 255,
 }

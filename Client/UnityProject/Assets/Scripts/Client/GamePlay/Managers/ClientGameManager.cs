@@ -6,7 +6,8 @@ using BiangStudio.Singleton;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ClientGameManager : MonoSingleton<ClientGameManager>
+public class
+    ClientGameManager : MonoSingleton<ClientGameManager>
 {
     #region Managers
 
@@ -111,7 +112,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
         UIManager.Instance.ShowUIForms<DebugPanel>();
 #if !DEBUG
-            UIManager.Instance.CloseUIForm<DebugPanel>();
+        UIManager.Instance.CloseUIForm<DebugPanel>();
 #endif
 
         StartGame();

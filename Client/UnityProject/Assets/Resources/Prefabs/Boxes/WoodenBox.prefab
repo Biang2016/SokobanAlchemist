@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 503256582304662053}
   - component: {fileID: 6606436713834532754}
   - component: {fileID: 8927949040156535614}
+  - component: {fileID: 7021853090644221752}
   - component: {fileID: -9039420178514498492}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: WoodenBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8049be8d346caa442b101468b320fc0c, type: 2}
+  - {fileID: 2100000, guid: 276b6ac79cda4ee4997f2f5735175686, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -108,6 +109,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SnapperGridSize: 1
+--- !u!114 &7021853090644221752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916418203503847193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bde1fc3a2e2ce9478f7e8a7b170ee37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefaultPosition: {x: 0, y: 0, z: 0}
+  DefaultRotation: {x: 0, y: 0, z: 0, w: 1}
+  DefaultScale: {x: 1, y: 1, z: 1}
 --- !u!114 &-9039420178514498492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,3 +138,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsRecycled: 0
   BoxType: 11
+  GridPos3D:
+    x: 0
+    y: 0
+    z: 0
+  WorldModule: {fileID: 0}
+  PushThreshold: 0.1
+  PushPowerAccumulated: 0

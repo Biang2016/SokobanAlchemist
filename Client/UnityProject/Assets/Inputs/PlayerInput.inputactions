@@ -30,7 +30,7 @@
                     "interactions": "Press(behavior=2)"
                 },
                 {
-                    "name": "Move",
+                    "name": "Player1Move",
                     "type": "Value",
                     "id": "bd466e74-41ff-4ec2-9bc2-c86fdc792344",
                     "expectedControlType": "Vector2",
@@ -38,23 +38,15 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Skill_0",
-                    "type": "Button",
-                    "id": "10804770-1f15-4fa3-ab77-f9c65eda1450",
-                    "expectedControlType": "Button",
+                    "name": "Player2Move",
+                    "type": "Value",
+                    "id": "35c1c381-d25b-4e4d-b776-f4747eace5e0",
+                    "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": "Press(behavior=2)"
+                    "interactions": ""
                 },
                 {
-                    "name": "Skill_1",
-                    "type": "Button",
-                    "id": "d54c8a7b-ae23-43b7-b6a4-ea80959376ec",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "Skill_2",
+                    "name": "Skill_0_Player1",
                     "type": "Button",
                     "id": "797408c5-59fe-4154-b3ea-9afca0591bb8",
                     "expectedControlType": "Button",
@@ -62,9 +54,25 @@
                     "interactions": "Press(behavior=2)"
                 },
                 {
-                    "name": "Skill_3",
+                    "name": "Skill_1_Player1",
+                    "type": "Button",
+                    "id": "cca62478-03c7-43fd-bedb-6ab2a816094e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "Skill_0_Player2",
                     "type": "Button",
                     "id": "f027c168-eca3-48e2-be31-6edf44e526b2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "Skill_1_Player2",
+                    "type": "Button",
+                    "id": "5bf27678-969d-408c-b4ee-0d8e232e54f6",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)"
@@ -81,133 +89,23 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "e4a4021e-82f8-43f0-885a-287d2c76bf59",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Skill_0",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6e531402-3a0b-4fe2-a31f-1bfe037f8fb8",
-                    "path": "<XInputController>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Skill_0",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7772607d-1167-445b-92d2-25c88f0895f1",
-                    "path": "<DualShockGamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Skill_0",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "21be93bb-0e5c-4a59-b6f3-9b516c74bedb",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Skill_1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "4f494aa8-d790-488f-92ed-eb872ff00203",
-                    "path": "<XInputController>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Skill_1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e433f5f4-1da6-4811-8a30-9779dcf2f46a",
-                    "path": "<DualShockGamepad>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Skill_1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "da13915c-fa95-4a85-9caf-88322ccb72bf",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Skill_2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d159f5b1-f423-44d0-8b13-93a264559f9b",
-                    "path": "<XInputController>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Skill_2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b16342ce-bb49-4a47-93ec-c85b88ac524e",
-                    "path": "<DualShockGamepad>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Skill_2",
+                    "action": "Skill_0_Player1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "c6bae345-756c-4b79-9f20-2a60951a487a",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Skill_3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a5f6a9ce-ecd9-4c21-b3ba-78b1d1497938",
-                    "path": "<XInputController>/leftTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Skill_3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ed93d23b-9510-4320-85f3-98f8c1377c0f",
-                    "path": "<DualShockGamepad>/leftTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Skill_3",
+                    "action": "Skill_0_Player2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -251,7 +149,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Move",
+                    "action": "Player1Move",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -262,7 +160,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Player1Move",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -273,7 +171,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Move",
+                    "action": "Player1Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -284,7 +182,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Move",
+                    "action": "Player1Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -295,7 +193,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Move",
+                    "action": "Player1Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -306,7 +204,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Move",
+                    "action": "Player1Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -318,6 +216,94 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "ToggleBattleTip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d52fa57f-3fae-4b12-b993-c66604d86f81",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Player2Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Arrows",
+                    "id": "196d71d6-e36e-4eca-999d-fd636c364557",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player2Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "7a711c63-0ded-4971-bfd5-6763efa9cc99",
+                    "path": "<Keyboard>/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Player2Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "dffaee49-73b3-4701-afe0-60c62257a353",
+                    "path": "<Keyboard>/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Player2Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "c1ba0d01-1c82-4f84-8abd-a22dcbbd2d1b",
+                    "path": "<Keyboard>/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Player2Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "db40706c-de41-411a-a957-a2c14e5ac15e",
+                    "path": "<Keyboard>/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Player2Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "dd014788-5e27-4daf-9256-adfce84e4ba7",
+                    "path": "<Keyboard>/j",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Skill_1_Player1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c1deb210-99ec-4ab0-886c-aa4c3b44578c",
+                    "path": "<Keyboard>/[0]",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Skill_1_Player2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

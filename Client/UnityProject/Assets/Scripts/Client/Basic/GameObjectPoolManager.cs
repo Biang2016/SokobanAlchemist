@@ -20,7 +20,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     {
         {PrefabNames.Player, 1},
         {PrefabNames.WorldModule, 16},
-        {PrefabNames.World, 16},
+        {PrefabNames.World, 1},
         {PrefabNames.DebugPanelColumn, 4},
         {PrefabNames.DebugPanelButton, 4},
     };

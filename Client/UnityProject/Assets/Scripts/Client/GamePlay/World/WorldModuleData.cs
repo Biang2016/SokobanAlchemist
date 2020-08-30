@@ -1,14 +1,17 @@
-﻿using Sirenix.OdinInspector;
+﻿using BiangStudio.CloneVariant;
+using BiangStudio.GameDataFormat.Grid;
 
-public class WorldModuleData
+public class WorldModuleData : IClone<WorldModuleData>
 {
+    #region ConfigData
+
     public WorldModuleType WorldModuleType;
 
     /// <summary>
     /// 世界模组制作规范，一个模组容量为16x16x16
     /// 模组上下层叠，底部模组Y为0，顶部Y为15
     /// </summary>
-    public byte[,,] BoxMatrix = new byte[16, 16, 16];
+    public byte[,,] BoxMatrix = new byte[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
 
     public byte Y;
 
@@ -30,4 +33,6 @@ public class WorldModuleData
         data.Y = Y;
         return data;
     }
+
+    #endregion
 }
