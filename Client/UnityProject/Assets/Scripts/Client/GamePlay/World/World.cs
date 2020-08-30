@@ -73,7 +73,7 @@ public class World : PoolObject
         if (module_src == null || module_target == null || box_src == null || box_target != null) return;
         module_src.BoxMatrix[localGP_src.x, localGP_src.y, localGP_src.z] = null;
         module_target.BoxMatrix[localGP_target.x, localGP_target.y, localGP_target.z] = box_src;
-        box_src.Initialize(localGP_target, module_target);
+        box_src.Initialize(localGP_target, module_target, true);
     }
 
     #endregion

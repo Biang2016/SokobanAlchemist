@@ -339,10 +339,15 @@ namespace BiangStudio.GameDataFormat.Grid
 
         public static void ApplyGridPosToLocalTrans(GridPos3D gridPos, Transform transform, int gridSize)
         {
+            transform.localPosition = GetLocalPositionByGridPos(gridPos, transform, gridSize);
+        }
+
+        public static Vector3 GetLocalPositionByGridPos(GridPos3D gridPos, Transform transform, int gridSize)
+        {
             float x = gridPos.x * gridSize;
             float y = gridPos.y * gridSize;
             float z = gridPos.z * gridSize;
-            transform.localPosition = new Vector3(x, y, z);
+            return new Vector3(x, y, z);
         }
 
         public static List<GridPos3D> TransformOccupiedPositions(GridPos3D localGridPos, List<GridPos3D> ori_OccupiedPositions)

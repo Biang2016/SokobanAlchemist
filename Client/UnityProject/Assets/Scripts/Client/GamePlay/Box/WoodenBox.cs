@@ -10,12 +10,4 @@ public class WoodenBox : BoxBase
     {
         base.PoolRecycle();
     }
-
-    void Start()
-    {
-    }
-
-    void Update()
-    {
-    }
 }

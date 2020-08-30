@@ -5,12 +5,4 @@ public class GroundBox : BoxBase
     {
         base.PoolRecycle();
     }
-
-    void Start()
-    {
-    }
-
-    void Update()
-    {
-    }
 }
