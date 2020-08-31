@@ -11,6 +11,7 @@ public class Actor : PoolObject
     public Rigidbody RigidBody;
     public ActorPushHelper ActorPushHelper;
     public ActorFaceHelper ActorFaceHelper;
+    public ActorSkinHelper ActorSkinHelper;
 
     [DisplayAsString]
     [LabelText("移动倾向")]

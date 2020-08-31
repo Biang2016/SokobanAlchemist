@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System.Collections.Generic;
+using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class FieldCamera : MonoBehaviour
     private Camera BattleUICamera;
 
     [SerializeField]
-    private Transform target;
+    private List<Transform> targetList = new List<Transform>();
 
     [LabelText("水平角")]
     public float HorizontalAngle;
@@ -29,12 +30,12 @@ public class FieldCamera : MonoBehaviour
 
     void Start()
     {
-        ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, SetTarget);
+        ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, AddTarget);
     }
 
-    private void SetTarget(Actor actor)
+    private void AddTarget(Actor actor)
     {
-        target = actor.transform;
+        targetList.Add(actor.transform);
     }
 
     public float GetScaleForBattleUI()
@@ -53,24 +54,32 @@ public class FieldCamera : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (target)
+        Vector3 targetCenter = Vector3.zero;
+        foreach (Transform trans in targetList)
         {
-            Vector3 diff = Vector3.zero;
-            diff.x = Distance * Mathf.Cos(VerticalAngle * Mathf.Deg2Rad) * Mathf.Sin(HorizontalAngle * Mathf.Deg2Rad);
-            diff.y = Distance * Mathf.Sin(VerticalAngle * Mathf.Deg2Rad);
-            diff.z = -Distance * Mathf.Cos(VerticalAngle * Mathf.Deg2Rad) * Mathf.Cos(HorizontalAngle * Mathf.Deg2Rad);
-            Vector3 destination = target.position + diff;
-            if (NeedLerp)
-            {
-                transform.position = Vector3.SmoothDamp(transform.position, destination, ref curVelocity, SmoothTime);
-            }
-            else
-            {
-                transform.position = destination;
-            }
-
-            transform.forward = target.position - destination;
+            targetCenter += trans.position;
         }
+
+        if (targetList.Count != 0)
+        {
+            targetCenter /= targetList.Count;
+        }
+
+        Vector3 diff = Vector3.zero;
+        diff.x = Distance * Mathf.Cos(VerticalAngle * Mathf.Deg2Rad) * Mathf.Sin(HorizontalAngle * Mathf.Deg2Rad);
+        diff.y = Distance * Mathf.Sin(VerticalAngle * Mathf.Deg2Rad);
+        diff.z = -Distance * Mathf.Cos(VerticalAngle * Mathf.Deg2Rad) * Mathf.Cos(HorizontalAngle * Mathf.Deg2Rad);
+        Vector3 destination = targetCenter + diff;
+        if (NeedLerp)
+        {
+            transform.position = Vector3.SmoothDamp(transform.position, destination, ref curVelocity, SmoothTime);
+        }
+        else
+        {
+            transform.position = destination;
+        }
+
+        transform.forward = targetCenter - destination;
     }
 
     #region Distance Levels

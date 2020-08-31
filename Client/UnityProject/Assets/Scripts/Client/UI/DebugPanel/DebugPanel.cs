@@ -107,24 +107,28 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("战斗/踢力+100")]
     public void AddKickForce()
     {
-        BattleManager.Instance.MainPlayer.KickForce += 100;
+        BattleManager.Instance.MainPlayer1.KickForce += 100;
+        BattleManager.Instance.MainPlayer2.KickForce += 100;
     }
 
     [DebugButton("战斗/踢力-100")]
     public void ReduceKickForce()
     {
-        BattleManager.Instance.MainPlayer.KickForce = Mathf.Max(BattleManager.Instance.MainPlayer.KickForce - 100, 0);
+        BattleManager.Instance.MainPlayer1.KickForce = Mathf.Max(BattleManager.Instance.MainPlayer1.KickForce - 100, 0);
+        BattleManager.Instance.MainPlayer2.KickForce = Mathf.Max(BattleManager.Instance.MainPlayer2.KickForce - 100, 0);
     }
 
     [DebugButton("战斗/增加移速")]
     public void AddMoveSpeed()
     {
-        BattleManager.Instance.MainPlayer.MoveSpeed += 1;
+        BattleManager.Instance.MainPlayer1.MoveSpeed += 1;
+        BattleManager.Instance.MainPlayer2.MoveSpeed += 1;
     }
 
     [DebugButton("战斗/降低移速")]
     public void ReduceMoveSpeed()
     {
-        BattleManager.Instance.MainPlayer.MoveSpeed = Mathf.Max(BattleManager.Instance.MainPlayer.MoveSpeed - 1, 0);
+        BattleManager.Instance.MainPlayer1.MoveSpeed = Mathf.Max(BattleManager.Instance.MainPlayer1.MoveSpeed - 1, 0);
+        BattleManager.Instance.MainPlayer2.MoveSpeed = Mathf.Max(BattleManager.Instance.MainPlayer2.MoveSpeed - 1, 0);
     }
 }

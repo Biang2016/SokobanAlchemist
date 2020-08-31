@@ -114,7 +114,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c6bae345-756c-4b79-9f20-2a60951a487a"",
-                    ""path"": ""<Keyboard>/enter"",
+                    ""path"": ""<Keyboard>/numpadEnter"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -257,7 +257,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""up"",
                     ""id"": ""7a711c63-0ded-4971-bfd5-6763efa9cc99"",
-                    ""path"": ""<Keyboard>/up"",
+                    ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -268,7 +268,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""down"",
                     ""id"": ""dffaee49-73b3-4701-afe0-60c62257a353"",
-                    ""path"": ""<Keyboard>/down"",
+                    ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -279,7 +279,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""left"",
                     ""id"": ""c1ba0d01-1c82-4f84-8abd-a22dcbbd2d1b"",
-                    ""path"": ""<Keyboard>/left"",
+                    ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -290,7 +290,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""right"",
                     ""id"": ""db40706c-de41-411a-a957-a2c14e5ac15e"",
-                    ""path"": ""<Keyboard>/right"",
+                    ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -312,7 +312,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c1deb210-99ec-4ab0-886c-aa4c3b44578c"",
-                    ""path"": ""<Keyboard>/[0]"",
+                    ""path"": ""<Keyboard>/numpad0"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",

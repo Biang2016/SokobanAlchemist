@@ -143,7 +143,7 @@ public class Box : PoolObject
 
     public bool Pushable()
     {
-        return BoxType != BoxType.None;
+        return BoxType != BoxType.None && BoxType != BoxType.GroundBox && BoxType != BoxType.BorderBox;
     }
 
     public enum States

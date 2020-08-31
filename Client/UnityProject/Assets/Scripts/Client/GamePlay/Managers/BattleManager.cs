@@ -8,7 +8,8 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
 {
     public Messenger BattleMessenger = new Messenger();
 
-    internal Actor MainPlayer;
+    internal PlayerActor MainPlayer1;
+    internal PlayerActor MainPlayer2;
     internal SortedDictionary<uint, Actor> ActorDict = new SortedDictionary<uint, Actor>();
 
     public Transform ActorContainerRoot;
@@ -21,8 +22,10 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
         }
 
         ActorDict.Clear();
-        MainPlayer?.PoolRecycle();
-        MainPlayer = null;
+        MainPlayer1?.PoolRecycle();
+        MainPlayer1 = null;
+        MainPlayer2?.PoolRecycle();
+        MainPlayer2 = null;
     }
 
     public override void Awake()
@@ -40,9 +43,17 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
 
     public void StartBattle()
     {
-        MainPlayer = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
-        GridPos3D.ApplyGridPosToLocalTrans(WorldManager.Instance.CurrentWorld.WorldData.WorldActorData.PlayerBornPoint, MainPlayer.transform, 1);
-        BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, MainPlayer);
+        MainPlayer1 = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
+        MainPlayer1.Initialize(PlayerNumber.Player1);
+        GridPos3D.ApplyGridPosToLocalTrans(WorldManager.Instance.CurrentWorld.WorldData.WorldActorData.Player1BornPoint, MainPlayer1.transform, 1);
+        BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) MainPlayer1);
+
+        MainPlayer2 = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
+        MainPlayer2.Initialize(PlayerNumber.Player2);
+        MainPlayer2.PlayerNumber = PlayerNumber.Player2;
+        GridPos3D.ApplyGridPosToLocalTrans(WorldManager.Instance.CurrentWorld.WorldData.WorldActorData.Player2BornPoint, MainPlayer2.transform, 1);
+        BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) MainPlayer2);
+
         GameStateManager.Instance.SetState(GameState.Fighting);
     }
 

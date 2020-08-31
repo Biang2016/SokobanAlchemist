@@ -44,11 +44,22 @@ public class WorldDesignHelper : MonoBehaviour
             gp -= zeroPoint * WorldModule.MODULE_SIZE;
             if (bp.BornPointType == BornPointType.Player)
             {
-                worldData.WorldActorData.PlayerBornPoint = gp;
+                switch (bp.PlayerNumber)
+                {
+                    case PlayerNumber.Player1:
+                    {
+                        worldData.WorldActorData.Player1BornPoint = gp;
+                        break;
+                    }
+                    case PlayerNumber.Player2:
+                    {
+                        worldData.WorldActorData.Player2BornPoint = gp;
+                        break;
+                    }
+                }
             }
         }
 
         return worldData;
     }
 }
-

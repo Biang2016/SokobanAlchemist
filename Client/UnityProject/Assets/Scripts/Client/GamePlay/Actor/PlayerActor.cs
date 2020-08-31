@@ -13,6 +13,12 @@ public class PlayerActor : Actor
     internal bool skill1_Down;
     internal bool skill1_Up;
 
+    public void Initialize(PlayerNumber playerNumber)
+    {
+        PlayerNumber = playerNumber;
+        ActorSkinHelper.Initialize(playerNumber);
+    }
+
     void FixedUpdate()
     {
         Vector2 movement = ControlManager.Instance.Battle_Move[(int) PlayerNumber] * Time.fixedDeltaTime * Accelerate;
