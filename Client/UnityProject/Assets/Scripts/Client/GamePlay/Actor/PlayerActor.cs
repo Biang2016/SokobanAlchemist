@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlayerActor : Actor
 {
     public PlayerNumber PlayerNumber;
+    public float Accelerate = 10f;
     public float MoveSpeed = 10f;
+    public float Drag = 10f;
 
     void FixedUpdate()
     {
@@ -14,25 +16,34 @@ public class PlayerActor : Actor
         {
             case PlayerNumber.Player1:
             {
-                movement = ControlManager.Instance.Battle_Move_Player1 * Time.fixedDeltaTime * MoveSpeed;
+                movement = ControlManager.Instance.Battle_Move_Player1 * Time.fixedDeltaTime * Accelerate;
                 break;
             }
             case PlayerNumber.Player2:
             {
-                movement = ControlManager.Instance.Battle_Move_Player2 * Time.fixedDeltaTime * MoveSpeed;
+                movement = ControlManager.Instance.Battle_Move_Player2 * Time.fixedDeltaTime * Accelerate;
                 break;
             }
         }
 
         CurMoveAttempt = new Vector3(movement.x, 0, movement.y);
-        RigidBody.velocity = CurMoveAttempt;
-        if (RigidBody.velocity.magnitude > 0)
+
+        if (CurMoveAttempt.magnitude > 0)
         {
-            transform.forward = RigidBody.velocity;
+            RigidBody.drag = 0;
+            RigidBody.AddForce(CurMoveAttempt);
+
+            if (RigidBody.velocity.magnitude > MoveSpeed)
+            {
+                RigidBody.AddForce(-RigidBody.velocity * Drag);
+            }
+
+            transform.forward = CurMoveAttempt;
             PushTrigger.PushTriggerOut();
         }
         else
         {
+            RigidBody.drag = 100f;
             PushTrigger.PushTriggerReset();
         }
 

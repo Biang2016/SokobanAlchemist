@@ -29,12 +29,12 @@ public class FieldCamera : MonoBehaviour
 
     void Start()
     {
-        ClientGameManager.Instance.BattleMessenger.AddListener<Transform>((uint) Enum_Events.OnPlayerLoaded, SetTarget);
+        ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, SetTarget);
     }
 
-    private void SetTarget(Transform _target)
+    private void SetTarget(Actor actor)
     {
-        target = _target;
+        target = actor.transform;
     }
 
     public float GetScaleForBattleUI()

@@ -360,9 +360,9 @@ namespace BiangStudio.GameDataFormat.Grid
             return ori_OccupiedPositions;
         }
 
-        public bool Equals(GridPos3D r)
+        public Vector3 ToVector3()
         {
-            return r.x == x && r.y == y && r.z == z;
+            return new Vector3(x, y, z);
         }
 
         public static GridPos3D operator -(GridPos3D a)
@@ -388,6 +388,16 @@ namespace BiangStudio.GameDataFormat.Grid
         public static GridPos3D operator *(int b, GridPos3D a)
         {
             return new GridPos3D(a.x * b, a.y * b, a.z * b);
+        }
+
+        public static bool operator ==(GridPos3D a, GridPos3D b)
+        {
+            return a.x == b.x && a.y == b.y && a.z == b.z;
+        }
+
+        public static bool operator !=(GridPos3D a, GridPos3D b)
+        {
+            return a.x != b.x || a.y != b.y || a.z != b.z;
         }
 
         public override string ToString()

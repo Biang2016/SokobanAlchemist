@@ -23,11 +23,4 @@ public static class ClientUtils
 
         action.canceled += context => { state.Pressed = false; };
     }
-
-    public static void PushBox(this BoxBase box, Vector3 direction)
-    {
-        Vector3 targetPos = box.transform.position + direction.normalized;
-        GridPos3D gp = GridPos3D.GetGridPosByPoint(targetPos, 1);
-        WorldManager.Instance.CurrentWorld.MoveBox(box.GridPos3D, gp);
-    }
 }

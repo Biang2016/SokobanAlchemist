@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 503256582304662053}
   - component: {fileID: 6606436713834532754}
   - component: {fileID: 8927949040156535614}
-  - component: {fileID: 8374266514744798642}
-  - component: {fileID: 7735140624319386015}
-  m_Layer: 8
-  m_Name: GroundBox
+  - component: {fileID: 7021853090644221752}
+  - component: {fileID: -9039420178514498492}
+  m_Layer: 9
+  m_Name: SilverBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8049be8d346caa442b101468b320fc0c, type: 2}
+  - {fileID: 2100000, guid: d122e36b9d79e3644b62cc289c18f3ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SnapperGridSize: 1
---- !u!114 &8374266514744798642
+--- !u!114 &7021853090644221752
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,7 +124,7 @@ MonoBehaviour:
   DefaultPosition: {x: 0, y: 0, z: 0}
   DefaultRotation: {x: 0, y: 0, z: 0, w: 1}
   DefaultScale: {x: 1, y: 1, z: 1}
---- !u!114 &7735140624319386015
+--- !u!114 &-9039420178514498492
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -133,11 +133,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1916418203503847193}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22bdf0304caa5be44b8563d222124f75, type: 3}
+  m_Script: {fileID: 11500000, guid: 47d071bdb19f89745aebad266b6a3f34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   IsRecycled: 0
-  BoxType: 1
+  BoxType: 13
   GridPos3D:
     x: 0
     y: 0
@@ -146,6 +146,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
-  Weight: 200
-  Inertia: 0
+  WorldModule: {fileID: 0}
+  Weight: 0.35
+  Inertia: 0.32
   State: 0

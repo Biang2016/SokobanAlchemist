@@ -4,51 +4,28 @@ using DG.Tweening;
 public class PushTrigger : MonoBehaviour
 {
     public Actor Actor;
-    private Vector3 DefaultPushTriggerPos;
+
+    public Collider Collider;
+    public GameObject Model;
+    internal Vector3 DefaultTriggerPos;
+    internal Vector3 DefaultModelPos;
 
     void Awake()
     {
-        DefaultPushTriggerPos = transform.localPosition;
+        DefaultTriggerPos = Collider.transform.localPosition;
+        DefaultModelPos = Model.transform.localPosition;
     }
 
     public void PushTriggerOut()
     {
-        transform.DOLocalMove(DefaultPushTriggerPos + Vector3.forward * 0.5f, 0.2f);
+        Collider.transform.DOLocalMove(DefaultTriggerPos + Vector3.forward * 0.5f, 0.2f);
     }
 
     public void PushTriggerReset()
     {
-        transform.DOPause();
-        transform.DOLocalMove(DefaultPushTriggerPos, 0.2f);
+        Collider.transform.DOPause();
+        Collider.transform.DOLocalMove(DefaultTriggerPos, 0.2f);
     }
 
-    void OnTriggerEnter(Collider collider)
-    {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_Box)
-        {
-            BoxBase box = collider.gameObject.GetComponent<BoxBase>();
-            if (box)
-            {
-                if (box.BoxType == BoxType.WoodenBox)
-                {
-                    box.ResetPush();
-                }
-            }
-        }
-    }
-
-    void OnTriggerStay(Collider collider)
-    {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_Box)
-        {
-            BoxBase box = collider.gameObject.GetComponent<BoxBase>();
-            if (box)
-            {
-                if (box.BoxType == BoxType.WoodenBox)
-                {
-                    box.Push(Time.deltaTime, Actor.CurMoveAttempt);
-                }
-            }
-        }
-    }
+  
 }

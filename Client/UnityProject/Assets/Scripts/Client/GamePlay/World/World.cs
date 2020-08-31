@@ -66,11 +66,12 @@ public class World : PoolObject
         }
     }
 
-    public void MoveBox(GridPos3D srcGP, GridPos3D targetGP)
+    public void MoveBox(GridPos3D srcGP, GridPos3D targetGP, BoxBase.States sucState)
     {
         BoxBase box_src = GetBoxByGridPosition(srcGP, out WorldModule module_src, out GridPos3D localGP_src);
         BoxBase box_target = GetBoxByGridPosition(targetGP, out WorldModule module_target, out GridPos3D localGP_target);
         if (module_src == null || module_target == null || box_src == null || box_target != null) return;
+        box_src.State = sucState;
         module_src.BoxMatrix[localGP_src.x, localGP_src.y, localGP_src.z] = null;
         module_target.BoxMatrix[localGP_target.x, localGP_target.y, localGP_target.z] = box_src;
         box_src.Initialize(localGP_target, module_target, true);

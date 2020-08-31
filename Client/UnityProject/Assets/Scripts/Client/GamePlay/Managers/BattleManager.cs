@@ -42,7 +42,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
     {
         MainPlayer = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
         GridPos3D.ApplyGridPosToLocalTrans(WorldManager.Instance.CurrentWorld.WorldData.WorldActorData.PlayerBornPoint, MainPlayer.transform, 1);
-        BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, MainPlayer.transform);
+        BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, MainPlayer);
         GameStateManager.Instance.SetState(GameState.Fighting);
     }
 
