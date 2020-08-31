@@ -231,7 +231,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         }
 
         InputSystem.Update();
-        if (true)
+        if (false)
         {
             foreach (KeyValuePair<ButtonNames, ButtonState> kv in ButtonStateDict)
             {
