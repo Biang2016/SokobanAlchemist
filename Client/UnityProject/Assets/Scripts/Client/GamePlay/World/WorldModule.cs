@@ -15,7 +15,7 @@ public class WorldModule : PoolObject
     public GridPos3D ModuleGP;
 
     public WorldModuleData WorldModuleData;
-    public BoxBase[,,] BoxMatrix = new BoxBase[MODULE_SIZE, MODULE_SIZE, MODULE_SIZE];
+    public Box[,,] BoxMatrix = new Box[MODULE_SIZE, MODULE_SIZE, MODULE_SIZE];
 
     public void Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world)
     {
@@ -31,7 +31,7 @@ public class WorldModule : PoolObject
                     BoxType boxType = (BoxType) worldModuleData.BoxMatrix[x, y, z];
                     if (boxType != BoxType.None)
                     {
-                        BoxBase box = GameObjectPoolManager.Instance.BoxDict[boxType].AllocateGameObject<BoxBase>(transform);
+                        Box box = GameObjectPoolManager.Instance.BoxDict[boxType].AllocateGameObject<Box>(transform);
                         GridPos3D gp = new GridPos3D(x, y, z);
                         box.Initialize(gp, this, false);
                         box.name = $"{boxType}({x}, {y}, {z})";

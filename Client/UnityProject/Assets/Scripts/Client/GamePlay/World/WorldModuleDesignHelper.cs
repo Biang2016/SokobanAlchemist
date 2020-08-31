@@ -14,11 +14,11 @@ public class WorldModuleDesignHelper : MonoBehaviour
 
     public WorldModuleData ExportWorldModuleData()
     {
-        List<BoxBase> boxes = GetComponentsInChildren<BoxBase>().ToList();
+        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
 
         WorldModuleData worldModuleData = new WorldModuleData();
 
-        foreach (BoxBase box in boxes)
+        foreach (Box box in boxes)
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
             worldModuleData.BoxMatrix[gp.x, gp.y, gp.z] = (byte) box.BoxType;

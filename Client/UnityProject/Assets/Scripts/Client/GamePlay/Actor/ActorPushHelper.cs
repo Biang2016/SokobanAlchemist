@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class PushTrigger : MonoBehaviour
+public class ActorPushHelper : ActorHelper
 {
-    public Actor Actor;
-
     public Collider Collider;
     public GameObject Model;
     internal Vector3 DefaultTriggerPos;
     internal Vector3 DefaultModelPos;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         DefaultTriggerPos = Collider.transform.localPosition;
         DefaultModelPos = Model.transform.localPosition;
     }
@@ -26,6 +25,4 @@ public class PushTrigger : MonoBehaviour
         Collider.transform.DOPause();
         Collider.transform.DOLocalMove(DefaultTriggerPos, 0.2f);
     }
-
-  
 }

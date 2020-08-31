@@ -1,5 +1,62 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3358630026517066639
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1289024184008787450}
+  - component: {fileID: 4533478217872303346}
+  - component: {fileID: 1237389182277966846}
+  m_Layer: 13
+  m_Name: ActorFaceHelper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1289024184008787450
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3358630026517066639}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4892195723853597978}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4533478217872303346
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3358630026517066639}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.536404, y: 0.77954316, z: 1.1186491}
+  m_Center: {x: 0.0033113956, y: 0.11022842, z: 0.78350204}
+--- !u!114 &1237389182277966846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3358630026517066639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc2d5590f57625442bf5edcb04e0a945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4643122133151563449
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,6 +182,7 @@ Transform:
   m_Children:
   - {fileID: 5030896888471535644}
   - {fileID: 5080745972890202582}
+  - {fileID: 1289024184008787450}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -172,10 +230,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsRecycled: 0
   RigidBody: {fileID: 3522706739585230582}
-  PushTrigger: {fileID: 900320894205187531}
+  ActorPushHelper: {fileID: 900320894205187531}
+  ActorFaceHelper: {fileID: 1237389182277966846}
   CurMoveAttempt: {x: 0, y: 0, z: 0}
+  CurGP:
+    x: 0
+    y: 0
+    z: 0
   Camp: 1
-  PlayerNumber: 1
+  KickForce: 100
+  PlayerNumber: 0
   Accelerate: 5000
   MoveSpeed: 10
   Drag: 10
@@ -249,7 +313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a84028c181aa334bb4c34b9146babe0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PushTrigger: {fileID: 900320894205187531}
+  ActorPushHelper: {fileID: 900320894205187531}
 --- !u!1 &8635302422182133083
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,7 +356,7 @@ GameObject:
   - component: {fileID: 5080745972890202582}
   - component: {fileID: 900320894205187531}
   m_Layer: 13
-  m_Name: PushTrigger
+  m_Name: ActorPushHelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -326,7 +390,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48a64c07696e1de48a3d059337142e7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Actor: {fileID: 4892195723853597981}
   Collider: {fileID: 7779744464523502240}
   Model: {fileID: 8635302422182133083}
 --- !u!1001 &4781678684241897463

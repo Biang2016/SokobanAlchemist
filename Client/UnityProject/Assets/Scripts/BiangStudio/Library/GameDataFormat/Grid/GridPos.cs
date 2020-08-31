@@ -30,6 +30,18 @@ namespace BiangStudio.GameDataFormat.Grid
             this.orientation = orientation;
         }
 
+        public static Orientation GetOrientationByLocalTrans(Transform transform)
+        {
+            int rotY = Mathf.RoundToInt(transform.localRotation.eulerAngles.y / 90f) % 4;
+            return (Orientation) rotY;
+        }
+
+        public static Orientation GetOrientationByTrans(Transform transform)
+        {
+            int rotY = Mathf.RoundToInt(transform.rotation.eulerAngles.y / 90f) % 4;
+            return (Orientation) rotY;
+        }
+
         public static GridPosR GetGridPosByLocalTrans(Transform transform, int gridSize)
         {
             int x = Mathf.FloorToInt(transform.localPosition.x / gridSize) * gridSize;

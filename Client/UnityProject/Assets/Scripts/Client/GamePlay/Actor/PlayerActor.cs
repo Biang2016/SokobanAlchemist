@@ -1,30 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class PlayerActor : Actor
 {
+    [LabelText("玩家编号")]
     public PlayerNumber PlayerNumber;
-    public float Accelerate = 10f;
-    public float MoveSpeed = 10f;
-    public float Drag = 10f;
+
+    internal bool skill0_Down;
+    internal bool skill0_Up;
+    internal bool skill1_Down;
+    internal bool skill1_Up;
 
     void FixedUpdate()
     {
-        Vector2 movement = Vector2.zero;
-        switch (PlayerNumber)
-        {
-            case PlayerNumber.Player1:
-            {
-                movement = ControlManager.Instance.Battle_Move_Player1 * Time.fixedDeltaTime * Accelerate;
-                break;
-            }
-            case PlayerNumber.Player2:
-            {
-                movement = ControlManager.Instance.Battle_Move_Player2 * Time.fixedDeltaTime * Accelerate;
-                break;
-            }
-        }
+        Vector2 movement = ControlManager.Instance.Battle_Move[(int) PlayerNumber] * Time.fixedDeltaTime * Accelerate;
+
+        #region Move
 
         CurMoveAttempt = new Vector3(movement.x, 0, movement.y);
 
@@ -39,20 +32,36 @@ public class PlayerActor : Actor
             }
 
             transform.forward = CurMoveAttempt;
-            PushTrigger.PushTriggerOut();
+            ActorPushHelper.PushTriggerOut();
         }
         else
         {
             RigidBody.drag = 100f;
-            PushTrigger.PushTriggerReset();
+            ActorPushHelper.PushTriggerReset();
         }
 
         RigidBody.angularVelocity = Vector3.zero;
+
+        #endregion
+
+        #region Skill
+
+        skill0_Down = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0].Down;
+        skill0_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0].Up;
+        skill1_Down = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Down;
+        skill1_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Up;
+
+        if (skill0_Up)
+        {
+            Kick();
+        }
+
+        #endregion
     }
 }
 
 public enum PlayerNumber
 {
-    Player1 = 1,
-    Player2 = 2
+    Player1 = 0,
+    Player2 = 1
 }

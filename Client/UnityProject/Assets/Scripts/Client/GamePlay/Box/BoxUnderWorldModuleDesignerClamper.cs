@@ -7,9 +7,9 @@ public class BoxUnderWorldModuleDesignerClamper : MonoBehaviour
     private WorldModuleDesignHelper ParentWorldModuleDesignHelper;
     private WorldDesignHelper ParentWorldDesignHelper;
 
-    public Vector3 DefaultPosition;
-    public Quaternion DefaultRotation;
-    public Vector3 DefaultScale;
+    internal Vector3 DefaultPosition;
+    internal Quaternion DefaultRotation;
+    internal Vector3 DefaultScale;
 
     void Awake()
     {

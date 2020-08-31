@@ -69,8 +69,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     public ButtonState Battle_MouseRight = new ButtonState() {ButtonName = ButtonNames.Battle_MouseRight};
     public ButtonState Battle_MouseMiddle = new ButtonState() {ButtonName = ButtonNames.Battle_MouseMiddle};
 
-    public Vector2 Battle_Move_Player1;
-    public Vector2 Battle_Move_Player2;
+    public Vector2[] Battle_Move = new Vector2[2];
 
     private Vector2 Last_Battle_MousePosition = Vector2.zero;
 
@@ -104,6 +103,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
             }
         }
     }
+
+    public ButtonState[,] Battle_Skill = new ButtonState[2, 2];
 
     public ButtonState Battle_Skill_0_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_0_Player1};
     public ButtonState Battle_Skill_1_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_1_Player1};
@@ -188,16 +189,22 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         Battle_MouseRight.GetStateCallbackFromContext(BattleInputActions.MouseRightClick);
         Battle_MouseMiddle.GetStateCallbackFromContext(BattleInputActions.MouseMiddleClick);
 
-        BattleInputActions.Player1Move.performed += context => Battle_Move_Player1 = context.ReadValue<Vector2>();
-        BattleInputActions.Player1Move.canceled += context => Battle_Move_Player1 = Vector2.zero;
+        BattleInputActions.Player1Move.performed += context => Battle_Move[(int)PlayerNumber.Player1] = context.ReadValue<Vector2>();
+        BattleInputActions.Player1Move.canceled += context => Battle_Move[(int)PlayerNumber.Player1] = Vector2.zero;
 
-        BattleInputActions.Player2Move.performed += context => Battle_Move_Player2 = context.ReadValue<Vector2>();
-        BattleInputActions.Player2Move.canceled += context => Battle_Move_Player2 = Vector2.zero;
+        BattleInputActions.Player2Move.performed += context => Battle_Move[(int)PlayerNumber.Player2] = context.ReadValue<Vector2>();
+        BattleInputActions.Player2Move.canceled += context => Battle_Move[(int)PlayerNumber.Player2] = Vector2.zero;
 
         Battle_Skill_0_Player1.GetStateCallbackFromContext(BattleInputActions.Skill_0_Player1);
         Battle_Skill_1_Player1.GetStateCallbackFromContext(BattleInputActions.Skill_1_Player1);
         Battle_Skill_0_Player2.GetStateCallbackFromContext(BattleInputActions.Skill_0_Player2);
         Battle_Skill_1_Player2.GetStateCallbackFromContext(BattleInputActions.Skill_1_Player2);
+
+        Battle_Skill[(int) PlayerNumber.Player1, 0] = Battle_Skill_0_Player1;
+        Battle_Skill[(int) PlayerNumber.Player1, 1] = Battle_Skill_1_Player1;
+        Battle_Skill[(int) PlayerNumber.Player2, 0] = Battle_Skill_0_Player2;
+        Battle_Skill[(int) PlayerNumber.Player2, 1] = Battle_Skill_1_Player2;
+
         Battle_ToggleBattleTip.GetStateCallbackFromContext(BattleInputActions.ToggleBattleTip);
 
         Common_MouseLeft.GetStateCallbackFromContext(CommonInputActions.MouseLeftClick);
@@ -218,8 +225,12 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
 
     public override void FixedUpdate(float deltaTime)
     {
-        InputSystem.Update();
+        foreach (KeyValuePair<ButtonNames, ButtonState> kv in ButtonStateDict)
+        {
+            kv.Value.Reset();
+        }
 
+        InputSystem.Update();
         if (false)
         {
             foreach (KeyValuePair<ButtonNames, ButtonState> kv in ButtonStateDict)
@@ -237,11 +248,6 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
 
     public override void LateUpdate(float deltaTime)
     {
-        foreach (KeyValuePair<ButtonNames, ButtonState> kv in ButtonStateDict)
-        {
-            kv.Value.Reset();
-        }
-
         base.LateUpdate(deltaTime);
     }
 

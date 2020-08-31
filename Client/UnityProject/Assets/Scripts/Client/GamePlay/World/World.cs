@@ -38,7 +38,7 @@ public class World : PoolObject
 
     #region MoveBox Calculators
 
-    public BoxBase GetBoxByGridPosition(GridPos3D gp, out WorldModule module, out GridPos3D localGP)
+    public Box GetBoxByGridPosition(GridPos3D gp, out WorldModule module, out GridPos3D localGP)
     {
         module = GetModuleByGridPosition(gp);
         if (module != null)
@@ -66,15 +66,30 @@ public class World : PoolObject
         }
     }
 
-    public void MoveBox(GridPos3D srcGP, GridPos3D targetGP, BoxBase.States sucState)
+    public void MoveBox(GridPos3D srcGP, GridPos3D targetGP, Box.States sucState)
     {
-        BoxBase box_src = GetBoxByGridPosition(srcGP, out WorldModule module_src, out GridPos3D localGP_src);
-        BoxBase box_target = GetBoxByGridPosition(targetGP, out WorldModule module_target, out GridPos3D localGP_target);
+        Box box_src = GetBoxByGridPosition(srcGP, out WorldModule module_src, out GridPos3D localGP_src);
+        Box box_target = GetBoxByGridPosition(targetGP, out WorldModule module_target, out GridPos3D localGP_target);
         if (module_src == null || module_target == null || box_src == null || box_target != null) return;
         box_src.State = sucState;
         module_src.BoxMatrix[localGP_src.x, localGP_src.y, localGP_src.z] = null;
         module_target.BoxMatrix[localGP_target.x, localGP_target.y, localGP_target.z] = box_src;
         box_src.Initialize(localGP_target, module_target, true);
+    }
+
+    public void RemoveBoxForPhysics(Box box)
+    {
+        box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
+    }
+
+    public void BoxReturnToWorldFromPhysics(Box box)
+    {
+        GridPos3D gp = GridPos3D.GetGridPosByTrans(box.transform, 1);
+        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(gp);
+        GridPos3D localGP = gp - module.ModuleGP * WorldModule.MODULE_SIZE;
+        module.BoxMatrix[localGP.x, localGP.y, localGP.z] = box;
+        box.Initialize(localGP, module, true);
+        box.State = Box.States.Moving;
     }
 
     #endregion

@@ -104,18 +104,27 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugButton("战斗/添加随机敌人")]
-    public void AddEnemy()
+    [DebugButton("战斗/踢力+100")]
+    public void AddKickForce()
     {
+        BattleManager.Instance.MainPlayer.KickForce += 100;
     }
 
-    [DebugButton("背包/增加5格")]
-    public void AddBackpackGrid5()
+    [DebugButton("战斗/踢力-100")]
+    public void ReduceKickForce()
     {
+        BattleManager.Instance.MainPlayer.KickForce = Mathf.Max(BattleManager.Instance.MainPlayer.KickForce - 100, 0);
     }
 
-    [DebugButton("背包/增加10格")]
-    public void AddBackpackGrid10()
+    [DebugButton("战斗/增加移速")]
+    public void AddMoveSpeed()
     {
+        BattleManager.Instance.MainPlayer.MoveSpeed += 1;
+    }
+
+    [DebugButton("战斗/降低移速")]
+    public void ReduceMoveSpeed()
+    {
+        BattleManager.Instance.MainPlayer.MoveSpeed = Mathf.Max(BattleManager.Instance.MainPlayer.MoveSpeed - 1, 0);
     }
 }
