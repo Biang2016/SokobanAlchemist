@@ -114,7 +114,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c6bae345-756c-4b79-9f20-2a60951a487a"",
-                    ""path"": ""<Keyboard>/numpadEnter"",
+                    ""path"": ""<Keyboard>/rightCtrl"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -312,7 +312,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c1deb210-99ec-4ab0-886c-aa4c3b44578c"",
-                    ""path"": ""<Keyboard>/numpad0"",
+                    ""path"": ""<Keyboard>/rightShift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
