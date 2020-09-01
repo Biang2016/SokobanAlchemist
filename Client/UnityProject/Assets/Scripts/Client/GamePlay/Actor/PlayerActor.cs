@@ -11,6 +11,7 @@ public class PlayerActor : Actor
     internal bool skill0_Down;
     internal bool skill0_Up;
     internal bool skill1_Down;
+    internal bool skill1_Pressed;
     internal bool skill1_Up;
 
     public void Initialize(PlayerNumber playerNumber)
@@ -19,48 +20,28 @@ public class PlayerActor : Actor
         ActorSkinHelper.Initialize(playerNumber);
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
         Vector2 movement = ControlManager.Instance.Battle_Move[(int) PlayerNumber] * Time.fixedDeltaTime * Accelerate;
-
-        #region Move
-
         CurMoveAttempt = new Vector3(movement.x, 0, movement.y);
 
-        if (CurMoveAttempt.magnitude > 0)
-        {
-            RigidBody.drag = 0;
-            RigidBody.AddForce(CurMoveAttempt);
-
-            if (RigidBody.velocity.magnitude > MoveSpeed)
-            {
-                RigidBody.AddForce(-RigidBody.velocity * Drag);
-            }
-
-            transform.forward = CurMoveAttempt;
-            ActorPushHelper.PushTriggerOut();
-        }
-        else
-        {
-            RigidBody.drag = 100f;
-            ActorPushHelper.PushTriggerReset();
-        }
-
-        RigidBody.angularVelocity = Vector3.zero;
-
-        #endregion
+        base.FixedUpdate();
 
         #region Skill
 
         skill0_Down = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0].Down;
         skill0_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0].Up;
         skill1_Down = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Down;
+        skill1_Pressed = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Pressed;
         skill1_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Up;
 
-        if (skill0_Up)
-        {
-            Kick();
-        }
+        if (skill0_Up) Kick();
+
+        if (skill1_Down) Lift();
+
+        if (skill1_Pressed) ThrowCharge();
+
+        if (skill1_Up) Throw();
 
         #endregion
     }

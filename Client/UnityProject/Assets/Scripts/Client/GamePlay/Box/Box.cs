@@ -26,7 +26,7 @@ public class Box : PoolObject
     public float Static_Weight;
 
     [BoxGroup("推箱子属性")]
-    [LabelText("惯性")]
+    [LabelText("抗推力")]
     [PropertyRange(0, 1)]
     [FormerlySerializedAs("Inertia")]
     public float Static_Inertia = 0.5f;
@@ -50,6 +50,21 @@ public class Box : PoolObject
     [HideInEditorMode]
     public WorldModule WorldModule;
 
+    public enum States
+    {
+        Static,
+        Moving,
+        MovingCanceling,
+        BeingKicked,
+        BeingLift,
+        Lifted,
+        Flying,
+    }
+
+    [ReadOnly]
+    [LabelText("移动状态")]
+    public States State = States.Static;
+
     protected virtual void Awake()
     {
         GridSnapper = GetComponent<GridSnapper>();
@@ -71,17 +86,19 @@ public class Box : PoolObject
         {
             transform.DOPause();
             transform.DOLocalMove(localGridPos3D.ToVector3(), Static_Weight).SetEase(Ease.Linear).OnComplete(() => { State = States.Static; });
+            transform.DOLocalRotate(Vector3.zero, Static_Weight);
         }
         else
         {
             transform.localPosition = localGridPos3D.ToVector3();
+            transform.localRotation = Quaternion.identity;
             State = States.Static;
         }
     }
 
     public void Push(Vector3 direction)
     {
-        if (State == States.Static || State == States.Canceling)
+        if (State == States.Static || State == States.MovingCanceling)
         {
             Vector3 targetPos = GridPos3D.ToVector3() + direction.normalized;
             GridPos3D gp = GridPos3D.GetGridPosByPoint(targetPos, 1);
@@ -92,41 +109,61 @@ public class Box : PoolObject
         }
     }
 
-    public void Kick(Vector3 direction, float distance)
+    public void Kick(Vector3 direction, float force)
     {
-        if (State == States.Moving || State == States.Static || State == States.Canceling)
+        if (State == States.Moving || State == States.Static || State == States.MovingCanceling)
         {
             State = States.BeingKicked;
             WorldManager.Instance.CurrentWorld.RemoveBoxForPhysics(this);
-            StaticCollider.enabled = false;
-            DynamicCollider.enabled = true;
             transform.DOPause();
             transform.localPosition = LocalGridPos3D.ToVector3();
+            StaticCollider.enabled = false;
+            DynamicCollider.enabled = true;
             Rigidbody = gameObject.GetComponent<Rigidbody>();
             if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
             Rigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             Rigidbody.mass = Static_Weight;
             Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-            Rigidbody.AddForce(direction * distance);
+            Rigidbody.AddForce(direction.normalized * force);
             Rigidbody.drag = Dynamic_Drag;
-            StaticCollider.material.bounciness = Dynamic_Bounce;
+            DynamicCollider.material.bounciness = Dynamic_Bounce;
             Rigidbody.velocity = direction * 1.1f;
         }
     }
 
+    public void Throw(Vector3 direction, float velocity)
+    {
+        State = States.Flying;
+        transform.DOPause();
+        StaticCollider.enabled = false;
+        DynamicCollider.enabled = true;
+        Rigidbody = gameObject.GetComponent<Rigidbody>();
+        if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
+        Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        Rigidbody.mass = Static_Weight;
+        Rigidbody.useGravity = true;
+        Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+        Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        Rigidbody.drag = 0;
+        Rigidbody.angularDrag = 0;
+        Rigidbody.velocity = direction.normalized * velocity;
+        DynamicCollider.material.bounciness = 0;
+    }
+
     void FixedUpdate()
     {
-        if (State == States.BeingKicked)
+        bool destroyRigidBody = false;
+        destroyRigidBody |= State == States.BeingKicked && Rigidbody && Rigidbody.velocity.magnitude < 1f;
+        destroyRigidBody |= State == States.Flying && Rigidbody && Rigidbody.velocity.magnitude < 0.1f;
+
+        if (destroyRigidBody)
         {
-            if (Rigidbody && Rigidbody.velocity.magnitude < 1f)
-            {
-                Rigidbody.velocity = Vector3.zero;
-                DestroyImmediate(Rigidbody);
-                StaticCollider.enabled = true;
-                DynamicCollider.enabled = false;
-                WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this);
-            }
+            Rigidbody.velocity = Vector3.zero;
+            DestroyImmediate(Rigidbody);
+            StaticCollider.enabled = true;
+            DynamicCollider.enabled = false;
+            WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this);
         }
     }
 
@@ -136,7 +173,7 @@ public class Box : PoolObject
         {
             if ((transform.localPosition - LocalGridPos3D.ToVector3()).magnitude > Static_Inertia)
             {
-                WorldManager.Instance.CurrentWorld.MoveBox(GridPos3D, lastGP, States.Canceling);
+                WorldManager.Instance.CurrentWorld.MoveBox(GridPos3D, lastGP, States.MovingCanceling);
             }
         }
     }
@@ -146,17 +183,10 @@ public class Box : PoolObject
         return BoxType != BoxType.None && BoxType != BoxType.GroundBox && BoxType != BoxType.BorderBox;
     }
 
-    public enum States
+    public bool Liftable()
     {
-        Static,
-        Moving,
-        BeingKicked,
-        Canceling,
+        return BoxType != BoxType.None && BoxType != BoxType.GroundBox && BoxType != BoxType.BorderBox;
     }
-
-    [ReadOnly]
-    [LabelText("移动状态")]
-    public States State;
 }
 
 public enum BoxType

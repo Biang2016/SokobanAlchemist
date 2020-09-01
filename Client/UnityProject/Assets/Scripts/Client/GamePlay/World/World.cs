@@ -79,7 +79,10 @@ public class World : PoolObject
 
     public void RemoveBoxForPhysics(Box box)
     {
-        box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
+        if (box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] == box)
+        {
+            box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
+        }
     }
 
     public void BoxReturnToWorldFromPhysics(Box box)
@@ -87,6 +90,12 @@ public class World : PoolObject
         GridPos3D gp = GridPos3D.GetGridPosByTrans(box.transform, 1);
         WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(gp);
         GridPos3D localGP = gp - module.ModuleGP * WorldModule.MODULE_SIZE;
+        if (module.BoxMatrix[localGP.x, localGP.y, localGP.z] != null)
+        {
+            Debug.LogError($"该位置非空 {module},{localGP}");
+            return;
+        }
+
         module.BoxMatrix[localGP.x, localGP.y, localGP.z] = box;
         box.Initialize(localGP, module, true);
         box.State = Box.States.Moving;

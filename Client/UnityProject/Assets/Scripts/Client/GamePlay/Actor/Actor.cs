@@ -12,6 +12,8 @@ public class Actor : PoolObject
     public ActorPushHelper ActorPushHelper;
     public ActorFaceHelper ActorFaceHelper;
     public ActorSkinHelper ActorSkinHelper;
+    public ActorLaunchArcRendererHelper ActorLaunchArcRendererHelper;
+    public Transform LiftBoxPivot;
 
     [DisplayAsString]
     [LabelText("移动倾向")]
@@ -36,9 +38,43 @@ public class Actor : PoolObject
     [LabelText("最大速度阻力")]
     public float Drag = 10f;
 
+    [LabelText("扔箱子力量")]
+    public float ThrowForce = 100;
+
+    [LabelText("扔箱子蓄力速度曲线(X为重量Y为蓄力速度)")]
+    public AnimationCurve ThrowChargeSpeedCurveByWeight;
+
+    [LabelText("扔箱子蓄力曲线(X为重量Y为蓄力上限)")]
+    public AnimationCurve ThrowChargeMaxCurveByWeight;
+
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 
+    internal Box CurrentLiftBox = null;
+
     public bool IsPlayer => Camp == Camp.Player;
+
+    public enum MovementStates
+    {
+        Static,
+        Moving,
+    }
+
+    [ReadOnly]
+    [LabelText("移动状态")]
+    public MovementStates MovementState = MovementStates.Static;
+
+    public enum ActionStates
+    {
+        None,
+        Pushing,
+        Raising,
+        Lifting,
+        ThrowCharging,
+    }
+
+    [ReadOnly]
+    [LabelText("技能状态")]
+    public ActionStates ActionState = ActionStates.None;
 
     void Awake()
     {
@@ -49,6 +85,11 @@ public class Actor : PoolObject
         }
 
         ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
+    }
+
+    private void Update()
+    {
+        UpdateThrowParabolaLine();
     }
 
     public void OnLoaded(Actor actor)
@@ -66,10 +107,39 @@ public class Actor : PoolObject
     {
     }
 
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
+
+        #region Move
+
+        if (CurMoveAttempt.magnitude > 0)
+        {
+            MovementState = MovementStates.Moving;
+            RigidBody.drag = 0;
+            RigidBody.AddForce(CurMoveAttempt);
+
+            if (RigidBody.velocity.magnitude > MoveSpeed)
+            {
+                RigidBody.AddForce(-RigidBody.velocity * Drag);
+            }
+
+            transform.forward = CurMoveAttempt;
+            ActorPushHelper.PushTriggerOut();
+        }
+        else
+        {
+            MovementState = MovementStates.Static;
+            RigidBody.drag = 100f;
+            ActorPushHelper.PushTriggerReset();
+        }
+
+        RigidBody.angularVelocity = Vector3.zero;
+
+        #endregion
     }
+
+    #region Skills
 
     public void Kick()
     {
@@ -80,4 +150,85 @@ public class Actor : PoolObject
 
         ActorFaceHelper.FacingBoxList.Clear();
     }
+
+    public void Lift()
+    {
+        if (CurrentLiftBox) return;
+        Ray ray = new Ray(transform.position, transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1.3f, LayerManager.Instance.LayerMask_Box, QueryTriggerInteraction.Collide))
+        {
+            Box box = hit.collider.gameObject.GetComponentInParent<Box>();
+            if (box && box.Liftable())
+            {
+                CurrentLiftBox = box;
+                ActionState = ActionStates.Raising;
+                ActorFaceHelper.FacingBoxList.Remove(box);
+                WorldManager.Instance.CurrentWorld.RemoveBoxForPhysics(box);
+                box.transform.DOPause();
+                box.transform.parent = LiftBoxPivot.transform.parent;
+                box.State = Box.States.BeingLift;
+                box.transform.DOLocalMove(LiftBoxPivot.transform.localPosition, 0.2f).OnComplete(() =>
+                {
+                    box.State = Box.States.Lifted;
+                    ActionState = ActionStates.Lifting;
+                });
+            }
+        }
+    }
+
+    private float ThrowChargeTick = 0;
+    private float FinalThrowForce => (2 + ThrowChargeTick * 5) * ThrowForce;
+
+    protected void ThrowCharge()
+    {
+        if (!CurrentLiftBox)
+        {
+            ThrowChargeTick = 0;
+            return;
+        }
+
+        if (ActionState == ActionStates.Lifting)
+        {
+            ActionState = ActionStates.ThrowCharging;
+        }
+
+        if (ActionState == ActionStates.ThrowCharging)
+        {
+            float max = ThrowChargeMaxCurveByWeight.Evaluate(CurrentLiftBox.Static_Weight);
+            ThrowChargeTick += Time.fixedDeltaTime * ThrowChargeSpeedCurveByWeight.Evaluate(CurrentLiftBox.Static_Weight);
+            if (ThrowChargeTick > max) ThrowChargeTick = max;
+        }
+    }
+
+    private void UpdateThrowParabolaLine()
+    {
+        bool isCharging = CurrentLiftBox && ActionState == ActionStates.ThrowCharging;
+        ActorLaunchArcRendererHelper.SetShown(isCharging);
+        if (isCharging)
+        {
+            float velocity = GetThrowBoxVelocity(CurrentLiftBox);
+            ActorLaunchArcRendererHelper.Initialize(velocity, 45, 2, 3f);
+        }
+    }
+
+    public void Throw()
+    {
+        if (CurrentLiftBox && ActionState == ActionStates.ThrowCharging)
+        {
+            float velocity = GetThrowBoxVelocity(CurrentLiftBox);
+            ActionState = ActionStates.None;
+            CurrentLiftBox.transform.parent = WorldManager.Instance.CurrentWorld.transform;
+            Vector3 throwVel = transform.TransformDirection(new Vector3(0, 1, 1));
+            CurrentLiftBox.Throw(throwVel, velocity);
+            CurrentLiftBox = null;
+            ThrowChargeTick = 0;
+        }
+    }
+
+    private float GetThrowBoxVelocity(Box box)
+    {
+        return FinalThrowForce * Time.fixedDeltaTime / box.Static_Weight;
+    }
+
+    #endregion
 }
