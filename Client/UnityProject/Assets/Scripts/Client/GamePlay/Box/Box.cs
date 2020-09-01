@@ -20,10 +20,17 @@ public class Box : PoolObject
     [LabelText("箱子类型")]
     public BoxType BoxType;
 
-    [BoxGroup("推箱子属性")]
+    [BoxGroup("箱子属性")]
     [LabelText("重量")]
     [FormerlySerializedAs("Weight")]
-    public float Static_Weight;
+    [SerializeField]
+    private float Weight;
+
+    public float FinalWeight => Weight * ConfigManager.BoxWeightFactor_Cheat;
+
+    [BoxGroup("推箱子属性")]
+    [LabelText("弹性")]
+    public float Static_Bounce;
 
     [BoxGroup("推箱子属性")]
     [LabelText("抗推力")]
@@ -68,6 +75,8 @@ public class Box : PoolObject
     protected virtual void Awake()
     {
         GridSnapper = GetComponent<GridSnapper>();
+        StaticCollider.material.bounciness = Mathf.Clamp(Static_Bounce * ConfigManager.BoxStaticBounceFactor_Cheat, 0, 1);
+        DynamicCollider.material.bounciness = Mathf.Clamp(Dynamic_Bounce * ConfigManager.BoxDynamicBounceFactor_Cheat, 0, 1);
     }
 
     protected virtual void Start()
@@ -85,8 +94,8 @@ public class Box : PoolObject
         if (moveLerp)
         {
             transform.DOPause();
-            transform.DOLocalMove(localGridPos3D.ToVector3(), Static_Weight).SetEase(Ease.Linear).OnComplete(() => { State = States.Static; });
-            transform.DOLocalRotate(Vector3.zero, Static_Weight);
+            transform.DOLocalMove(localGridPos3D.ToVector3(), FinalWeight * ConfigManager.BoxWeightFactor_Cheat).SetEase(Ease.Linear).OnComplete(() => { State = States.Static; });
+            transform.DOLocalRotate(Vector3.zero, FinalWeight);
         }
         else
         {
@@ -122,12 +131,11 @@ public class Box : PoolObject
             Rigidbody = gameObject.GetComponent<Rigidbody>();
             if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
             Rigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-            Rigidbody.mass = Static_Weight;
+            Rigidbody.mass = FinalWeight;
             Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             Rigidbody.AddForce(direction.normalized * force);
             Rigidbody.drag = Dynamic_Drag;
-            DynamicCollider.material.bounciness = Dynamic_Bounce;
             Rigidbody.velocity = direction * 1.1f;
         }
     }
@@ -141,18 +149,20 @@ public class Box : PoolObject
         Rigidbody = gameObject.GetComponent<Rigidbody>();
         if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
         Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        Rigidbody.mass = Static_Weight;
+        Rigidbody.mass = FinalWeight;
         Rigidbody.useGravity = true;
         Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         Rigidbody.drag = 0;
         Rigidbody.angularDrag = 0;
         Rigidbody.velocity = direction.normalized * velocity;
-        DynamicCollider.material.bounciness = 0;
     }
 
     void FixedUpdate()
     {
+        StaticCollider.material.bounciness = Mathf.Clamp(Static_Bounce * ConfigManager.BoxStaticBounceFactor_Cheat, 0, 1);
+        DynamicCollider.material.bounciness = Mathf.Clamp(Dynamic_Bounce * ConfigManager.BoxDynamicBounceFactor_Cheat, 0, 1);
+
         bool destroyRigidBody = false;
         destroyRigidBody |= State == States.BeingKicked && Rigidbody && Rigidbody.velocity.magnitude < 1f;
         destroyRigidBody |= State == States.Flying && Rigidbody && Rigidbody.velocity.magnitude < 0.1f;
@@ -171,7 +181,7 @@ public class Box : PoolObject
     {
         if (State == States.Moving)
         {
-            if ((transform.localPosition - LocalGridPos3D.ToVector3()).magnitude > Static_Inertia)
+            if ((transform.localPosition - LocalGridPos3D.ToVector3()).magnitude > (1 - Static_Inertia))
             {
                 WorldManager.Instance.CurrentWorld.MoveBox(GridPos3D, lastGP, States.MovingCanceling);
             }

@@ -4,10 +4,8 @@ using BiangStudio.ObjectPool;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class DebugPanelButton : PoolObject
+public class DebugPanelButton : DebugPanelComponent
 {
-    public Dictionary<string, DebugPanelButton> DebugButtonDictTree = new Dictionary<string, DebugPanelButton>();
-
     public Button Button;
     public Text Text;
     public Color CloseColor;
@@ -15,13 +13,6 @@ public class DebugPanelButton : PoolObject
 
     public override void PoolRecycle()
     {
-        foreach (KeyValuePair<string, DebugPanelButton> kv in DebugButtonDictTree)
-        {
-            kv.Value.PoolRecycle();
-        }
-
-        DebugButtonDictTree.Clear();
-
         Button.onClick.RemoveAllListeners();
         base.PoolRecycle();
     }
@@ -38,11 +29,13 @@ public class DebugPanelButton : PoolObject
 
     private bool isOpen;
 
-    public bool IsOpen {
+    public override bool IsOpen
+    {
         get { return isOpen; }
-        set {
+        set
+        {
             Button.image.color = value ? OpenColor : CloseColor;
-            foreach (KeyValuePair<string, DebugPanelButton> kv in DebugButtonDictTree)
+            foreach (KeyValuePair<string, DebugPanelComponent> kv in DebugComponentDictTree)
             {
                 kv.Value.gameObject.SetActive(value);
                 kv.Value.IsOpen = false;

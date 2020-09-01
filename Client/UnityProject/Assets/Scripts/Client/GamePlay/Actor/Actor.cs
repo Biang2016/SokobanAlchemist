@@ -41,11 +41,23 @@ public class Actor : PoolObject
     [LabelText("扔箱子力量")]
     public float ThrowForce = 100;
 
+   
+
+  
+
     [LabelText("扔箱子蓄力速度曲线(X为重量Y为蓄力速度)")]
     public AnimationCurve ThrowChargeSpeedCurveByWeight;
 
+    [ReadOnly]
+    [LabelText("扔箱子蓄力速度因子(作弊调整)")]
+    public float ThrowChargeSpeedFactor_Cheat = 1f;
+
     [LabelText("扔箱子蓄力曲线(X为重量Y为蓄力上限)")]
     public AnimationCurve ThrowChargeMaxCurveByWeight;
+
+    [ReadOnly]
+    [LabelText("扔箱子蓄力曲线因子(作弊调整)")]
+    public float ThrowChargeMaxCurveFactor_Cheat = 1f;
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 
@@ -194,8 +206,8 @@ public class Actor : PoolObject
 
         if (ActionState == ActionStates.ThrowCharging)
         {
-            float max = ThrowChargeMaxCurveByWeight.Evaluate(CurrentLiftBox.Static_Weight);
-            ThrowChargeTick += Time.fixedDeltaTime * ThrowChargeSpeedCurveByWeight.Evaluate(CurrentLiftBox.Static_Weight);
+            float max = ThrowChargeMaxCurveByWeight.Evaluate(CurrentLiftBox.FinalWeight) * ThrowChargeMaxCurveFactor_Cheat;
+            ThrowChargeTick += Time.fixedDeltaTime * ThrowChargeSpeedCurveByWeight.Evaluate(CurrentLiftBox.FinalWeight) * ThrowChargeSpeedFactor_Cheat;
             if (ThrowChargeTick > max) ThrowChargeTick = max;
         }
     }
@@ -227,7 +239,7 @@ public class Actor : PoolObject
 
     private float GetThrowBoxVelocity(Box box)
     {
-        return FinalThrowForce * Time.fixedDeltaTime / box.Static_Weight;
+        return FinalThrowForce * Time.fixedDeltaTime / box.FinalWeight;
     }
 
     #endregion

@@ -14,6 +14,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         World,
         DebugPanelColumn,
         DebugPanelButton,
+        DebugPanelSlider,
     }
 
     public Dictionary<PrefabNames, int> PoolConfigs = new Dictionary<PrefabNames, int>
@@ -23,6 +24,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         {PrefabNames.World, 1},
         {PrefabNames.DebugPanelColumn, 4},
         {PrefabNames.DebugPanelButton, 4},
+        {PrefabNames.DebugPanelSlider, 4},
     };
 
     public Dictionary<PrefabNames, int> PoolWarmUpDict = new Dictionary<PrefabNames, int>

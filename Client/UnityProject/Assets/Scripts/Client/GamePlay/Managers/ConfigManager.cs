@@ -9,6 +9,10 @@ using UnityEngine;
 
 public class ConfigManager : TSingletonBaseManager<ConfigManager>
 {
+    public static float BoxStaticBounceFactor_Cheat = 1f;
+    public static float BoxDynamicBounceFactor_Cheat = 1f;
+    public static float BoxWeightFactor_Cheat = 1f;
+
     [ShowInInspector]
     [LabelText("世界配置表")]
     public static readonly Dictionary<WorldType, WorldData> WorldDataConfigDict = new Dictionary<WorldType, WorldData>();
