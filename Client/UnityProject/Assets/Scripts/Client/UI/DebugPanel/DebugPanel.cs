@@ -165,14 +165,14 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugSlider("人物战斗数值/移速", 10, 1, 30)]
+    [DebugSlider("人物战斗数值/移速", 3.5f, 1, 30)]
     public void ChangeMoveSpeed(float value)
     {
         BattleManager.Instance.MainPlayer1.MoveSpeed = value;
         BattleManager.Instance.MainPlayer2.MoveSpeed = value;
     }
 
-    [DebugSlider("人物战斗数值/踢力", 100, 0, 1000)]
+    [DebugSlider("人物战斗数值/踢力", 150, 0, 1000)]
     public void ChangeKickForce(float value)
     {
         BattleManager.Instance.MainPlayer1.KickForce = value;

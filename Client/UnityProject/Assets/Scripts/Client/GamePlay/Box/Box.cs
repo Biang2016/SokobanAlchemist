@@ -10,7 +10,7 @@ public class Box : PoolObject
     private GridSnapper GridSnapper;
     public Collider StaticCollider;
     public Collider DynamicCollider;
-    private Rigidbody Rigidbody;
+    internal Rigidbody Rigidbody;
 
     public override void PoolRecycle()
     {
@@ -120,42 +120,73 @@ public class Box : PoolObject
 
     public void Kick(Vector3 direction, float force)
     {
-        if (State == States.Moving || State == States.Static || State == States.MovingCanceling)
+        if (State == States.Moving || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.MovingCanceling)
         {
-            State = States.BeingKicked;
             WorldManager.Instance.CurrentWorld.RemoveBoxForPhysics(this);
+            State = States.BeingKicked;
             transform.DOPause();
-            transform.localPosition = LocalGridPos3D.ToVector3();
             StaticCollider.enabled = false;
             DynamicCollider.enabled = true;
             Rigidbody = gameObject.GetComponent<Rigidbody>();
             if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
-            Rigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             Rigidbody.mass = FinalWeight;
             Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-            Rigidbody.AddForce(direction.normalized * force);
+
             Rigidbody.drag = Dynamic_Drag;
+            Rigidbody.angularDrag = 0;
             Rigidbody.velocity = direction * 1.1f;
+            Rigidbody.angularVelocity = Vector3.zero;
+            Rigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+            if (direction.x.Equals(0)) Rigidbody.constraints |= RigidbodyConstraints.FreezePositionX;
+            if (direction.z.Equals(0)) Rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
+            Rigidbody.AddForce(direction.normalized * force);
+            transform.position = transform.position.ToGridPos3D().ToVector3();
         }
+    }
+
+    public bool BeingLift()
+    {
+        if (State == States.Moving || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.MovingCanceling)
+        {
+            WorldManager.Instance.CurrentWorld.RemoveBoxForPhysics(this);
+            State = States.BeingLift;
+            transform.DOPause();
+            StaticCollider.enabled = false;
+            DynamicCollider.enabled = false;
+            if (Rigidbody)
+            {
+                DestroyImmediate(Rigidbody);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     public void Throw(Vector3 direction, float velocity)
     {
-        State = States.Flying;
-        transform.DOPause();
-        StaticCollider.enabled = false;
-        DynamicCollider.enabled = true;
-        Rigidbody = gameObject.GetComponent<Rigidbody>();
-        if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
-        Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        Rigidbody.mass = FinalWeight;
-        Rigidbody.useGravity = true;
-        Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-        Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-        Rigidbody.drag = 0;
-        Rigidbody.angularDrag = 0;
-        Rigidbody.velocity = direction.normalized * velocity;
+        if (State == States.Lifted)
+        {
+            transform.DOPause();
+            transform.parent = WorldManager.Instance.CurrentWorld.transform;
+            State = States.Flying;
+            StaticCollider.enabled = false;
+            DynamicCollider.enabled = true;
+            Rigidbody = gameObject.GetComponent<Rigidbody>();
+            if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
+            Rigidbody.mass = FinalWeight;
+            Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+            Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
+            Rigidbody.drag = 0;
+            Rigidbody.angularDrag = 0;
+            Rigidbody.useGravity = true;
+            Rigidbody.velocity = direction.normalized * velocity;
+            Rigidbody.angularVelocity = Vector3.zero;
+            Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        }
     }
 
     void FixedUpdate()
@@ -165,11 +196,10 @@ public class Box : PoolObject
 
         bool destroyRigidBody = false;
         destroyRigidBody |= State == States.BeingKicked && Rigidbody && Rigidbody.velocity.magnitude < 1f;
-        destroyRigidBody |= State == States.Flying && Rigidbody && Rigidbody.velocity.magnitude < 0.1f;
+        destroyRigidBody |= State == States.Flying && Rigidbody && Rigidbody.velocity.magnitude < 1f;
 
         if (destroyRigidBody)
         {
-            Rigidbody.velocity = Vector3.zero;
             DestroyImmediate(Rigidbody);
             StaticCollider.enabled = true;
             DynamicCollider.enabled = false;
@@ -196,6 +226,32 @@ public class Box : PoolObject
     public bool Liftable()
     {
         return BoxType != BoxType.None && BoxType != BoxType.GroundBox && BoxType != BoxType.BorderBox;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        //if ((State == States.Flying || State == States.BeingKicked) && Rigidbody)
+        //{
+        //    bool stop = false;
+        //    if (collision.gameObject.layer == LayerManager.Instance.Layer_Box)
+        //    {
+        //        Box box = collision.gameObject.GetComponentInParent<Box>();
+        //        if (box && box.BoxType != BoxType.GroundBox && box.BoxType != BoxType.None)
+        //        {
+        //            stop = true;
+        //        }
+        //    }
+
+        //    if (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
+        //    {
+        //        //stop = true;
+        //    }
+
+        //    if (stop)
+        //    {
+        //        Rigidbody.velocity = Rigidbody.velocity * 0.1f;
+        //    }
+        //}
     }
 }
 

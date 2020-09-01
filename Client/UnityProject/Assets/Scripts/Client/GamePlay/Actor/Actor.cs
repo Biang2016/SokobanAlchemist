@@ -15,9 +15,17 @@ public class Actor : PoolObject
     public ActorLaunchArcRendererHelper ActorLaunchArcRendererHelper;
     public Transform LiftBoxPivot;
 
+    [ReadOnly]
     [DisplayAsString]
     [LabelText("移动倾向")]
     public Vector3 CurMoveAttempt;
+
+    [ReadOnly]
+    [DisplayAsString]
+    [LabelText("上一帧移动倾向")]
+    public Vector3 LastMoveAttempt;
+
+    private Vector3 CurForward = Vector3.forward;
 
     [DisplayAsString]
     [LabelText("世界坐标")]
@@ -35,15 +43,8 @@ public class Actor : PoolObject
     [LabelText("移动速度")]
     public float MoveSpeed = 10f;
 
-    [LabelText("最大速度阻力")]
-    public float Drag = 10f;
-
     [LabelText("扔箱子力量")]
     public float ThrowForce = 100;
-
-   
-
-  
 
     [LabelText("扔箱子蓄力速度曲线(X为重量Y为蓄力速度)")]
     public AnimationCurve ThrowChargeSpeedCurveByWeight;
@@ -127,24 +128,47 @@ public class Actor : PoolObject
 
         if (CurMoveAttempt.magnitude > 0)
         {
+            if (!CurMoveAttempt.x.Equals(0) && !CurMoveAttempt.z.Equals(0))
+            {
+                if (!LastMoveAttempt.x.Equals(0))
+                {
+                    CurMoveAttempt.z = 0;
+                }
+                else if (!LastMoveAttempt.z.Equals(0))
+                {
+                    CurMoveAttempt.x = 0;
+                }
+                else
+                {
+                    CurMoveAttempt.z = 0;
+                }
+            }
+
+            if (CurMoveAttempt.x.Equals(0)) RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
+            if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
+
             MovementState = MovementStates.Moving;
             RigidBody.drag = 0;
             RigidBody.AddForce(CurMoveAttempt);
 
             if (RigidBody.velocity.magnitude > MoveSpeed)
             {
-                RigidBody.AddForce(-RigidBody.velocity * Drag);
+                RigidBody.AddForce(-RigidBody.velocity.normalized * (RigidBody.velocity.magnitude - MoveSpeed), ForceMode.VelocityChange);
             }
 
             transform.forward = CurMoveAttempt;
+            CurForward = transform.forward;
             ActorPushHelper.PushTriggerOut();
         }
         else
         {
+            transform.forward = CurForward;
             MovementState = MovementStates.Static;
             RigidBody.drag = 100f;
             ActorPushHelper.PushTriggerReset();
         }
+
+        LastMoveAttempt = CurMoveAttempt;
 
         RigidBody.angularVelocity = Vector3.zero;
 
@@ -157,7 +181,7 @@ public class Actor : PoolObject
     {
         foreach (Box box in ActorFaceHelper.FacingBoxList)
         {
-            box.Kick(transform.forward, KickForce);
+            box.Kick(CurForward, KickForce);
         }
 
         ActorFaceHelper.FacingBoxList.Clear();
@@ -172,18 +196,18 @@ public class Actor : PoolObject
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Liftable())
             {
-                CurrentLiftBox = box;
-                ActionState = ActionStates.Raising;
-                ActorFaceHelper.FacingBoxList.Remove(box);
-                WorldManager.Instance.CurrentWorld.RemoveBoxForPhysics(box);
-                box.transform.DOPause();
-                box.transform.parent = LiftBoxPivot.transform.parent;
-                box.State = Box.States.BeingLift;
-                box.transform.DOLocalMove(LiftBoxPivot.transform.localPosition, 0.2f).OnComplete(() =>
+                if (box.BeingLift())
                 {
-                    box.State = Box.States.Lifted;
-                    ActionState = ActionStates.Lifting;
-                });
+                    CurrentLiftBox = box;
+                    ActionState = ActionStates.Raising;
+                    ActorFaceHelper.FacingBoxList.Remove(box);
+                    box.transform.parent = LiftBoxPivot.transform.parent;
+                    box.transform.DOLocalMove(LiftBoxPivot.transform.localPosition, 0.2f).OnComplete(() =>
+                    {
+                        box.State = Box.States.Lifted;
+                        ActionState = ActionStates.Lifting;
+                    });
+                }
             }
         }
     }
@@ -229,7 +253,6 @@ public class Actor : PoolObject
         {
             float velocity = GetThrowBoxVelocity(CurrentLiftBox);
             ActionState = ActionStates.None;
-            CurrentLiftBox.transform.parent = WorldManager.Instance.CurrentWorld.transform;
             Vector3 throwVel = transform.TransformDirection(new Vector3(0, 1, 1));
             CurrentLiftBox.Throw(throwVel, velocity);
             CurrentLiftBox = null;

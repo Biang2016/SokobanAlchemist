@@ -10,6 +10,7 @@ public class World : PoolObject
 
     public WorldData WorldData;
     public WorldModule[,,] WorldModuleMatrix = new WorldModule[WORLD_SIZE, WORLD_HEIGHT, WORLD_SIZE];
+    public bool[,,] WorldDeadZoneTriggerMatrix = new bool[WORLD_SIZE, WORLD_HEIGHT, WORLD_SIZE];
 
     public void Initialize(WorldData worldData)
     {
@@ -79,9 +80,13 @@ public class World : PoolObject
 
     public void RemoveBoxForPhysics(Box box)
     {
-        if (box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] == box)
+        if (box.WorldModule)
         {
-            box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
+            if (box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] == box)
+            {
+                box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
+                box.WorldModule = null;
+            }
         }
     }
 
@@ -90,9 +95,10 @@ public class World : PoolObject
         GridPos3D gp = GridPos3D.GetGridPosByTrans(box.transform, 1);
         WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(gp);
         GridPos3D localGP = gp - module.ModuleGP * WorldModule.MODULE_SIZE;
-        if (module.BoxMatrix[localGP.x, localGP.y, localGP.z] != null)
+        Box existBox = module.BoxMatrix[localGP.x, localGP.y, localGP.z];
+        if (existBox != null)
         {
-            Debug.LogError($"该位置非空 {module},{localGP}");
+            Debug.LogError($"{box.name}想要前往的位置{localGP}非空, 存在{existBox.name}");
             return;
         }
 
