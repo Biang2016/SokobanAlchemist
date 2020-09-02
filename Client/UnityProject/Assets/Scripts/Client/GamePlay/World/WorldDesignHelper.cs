@@ -7,8 +7,6 @@ using BiangStudio.GameDataFormat.Grid;
 [ExecuteInEditMode]
 public class WorldDesignHelper : MonoBehaviour
 {
-    public WorldType WorldType;
-
     public WorldData ExportWorldData()
     {
         List<WorldModuleDesignHelper> modules = GetComponentsInChildren<WorldModuleDesignHelper>().ToList();
@@ -35,7 +33,7 @@ public class WorldDesignHelper : MonoBehaviour
             worldData.ModuleMatrix[gp.x, gp.y, gp.z] = (byte) module.WorldModuleType;
         }
 
-        worldData.WorldType = WorldType;
+        worldData.WorldName = name;
 
         List<BornPoint> bornPoints = GetComponentsInChildren<BornPoint>().ToList();
         foreach (BornPoint bp in bornPoints)

@@ -61,6 +61,18 @@ public enum WorldModuleType
     SampleWorldModule = 1,
     GroundWorldModule = 2,
 
+    WorldModule_Steven_1 = 51,
+    WorldModule_Steven_2 = 52,
+    WorldModule_Steven_3 = 53,
+    WorldModule_Steven_4 = 54,
+    WorldModule_Steven_5 = 55,
+
+    WorldModule_Julia_1 = 71,
+    WorldModule_Julia_2 = 72,
+    WorldModule_Julia_3 = 73,
+    WorldModule_Julia_4 = 74,
+    WorldModule_Julia_5 = 75,
+
     BorderWorldModule_Up = 101,
     BorderWorldModule_Down = 102,
     BorderWorldModule_Left = 103,

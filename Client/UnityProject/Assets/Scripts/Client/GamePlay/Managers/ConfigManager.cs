@@ -17,7 +17,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     [ShowInInspector]
     [LabelText("世界配置表")]
-    public static readonly Dictionary<WorldType, WorldData> WorldDataConfigDict = new Dictionary<WorldType, WorldData>();
+    public static readonly Dictionary<string, WorldData> WorldDataConfigDict = new Dictionary<string, WorldData>();
 
     [ShowInInspector]
     [LabelText("世界模组配置表")]
@@ -62,7 +62,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
             WorldDesignHelper module = obj.GetComponent<WorldDesignHelper>();
             WorldData data = module.ExportWorldData();
-            string path = folder + module.WorldType + ".config";
+            string path = folder + module.name + ".config";
             byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
             File.WriteAllBytes(path, bytes);
         }
@@ -117,13 +117,13 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             {
                 byte[] bytes = File.ReadAllBytes(fi.FullName);
                 WorldData data = SerializationUtility.DeserializeValue<WorldData>(bytes, dataFormat);
-                if (WorldDataConfigDict.ContainsKey(data.WorldType))
+                if (WorldDataConfigDict.ContainsKey(data.WorldName))
                 {
-                    Debug.LogError($"世界重名:{data.WorldType}");
+                    Debug.LogError($"世界重名:{data.WorldName}");
                 }
                 else
                 {
-                    WorldDataConfigDict.Add(data.WorldType, data);
+                    WorldDataConfigDict.Add(data.WorldName, data);
                 }
             }
         }
@@ -164,7 +164,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     #region Getter
 
-    public WorldData GetWorldDataConfig(WorldType worldType)
+    public WorldData GetWorldDataConfig(string worldType)
     {
         if (!IsLoaded) LoadAllConfigs();
         WorldDataConfigDict.TryGetValue(worldType, out WorldData worldData);

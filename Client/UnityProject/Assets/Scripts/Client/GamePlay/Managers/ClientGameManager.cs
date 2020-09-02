@@ -3,11 +3,11 @@ using BiangStudio.GamePlay.UI;
 using BiangStudio.Log;
 using BiangStudio.Messenger;
 using BiangStudio.Singleton;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class
-    ClientGameManager : MonoSingleton<ClientGameManager>
+public class ClientGameManager : MonoSingleton<ClientGameManager>
 {
     #region Managers
 
@@ -59,6 +59,9 @@ public class
 
     public DebugConsole DebugConsole;
 
+    [LabelText("开局世界类型")]
+    public string StartWorldName;
+
     private void Awake()
     {
         UIManager.Init(
@@ -81,10 +84,7 @@ public class
         RoutineManager.Awake();
         GameStateManager.Awake();
         DebugConsole.OnDebugConsoleKeyDownHandler = () => ControlManager.Instance.Common_Debug.Down;
-        DebugConsole.OnDebugConsoleToggleHandler = (enable) =>
-        {
-            ControlManager.Instance.EnableBattleInputActions(!enable);
-        };
+        DebugConsole.OnDebugConsoleToggleHandler = (enable) => { ControlManager.Instance.EnableBattleInputActions(!enable); };
 
         WorldManager.Awake();
         BattleManager.Awake();

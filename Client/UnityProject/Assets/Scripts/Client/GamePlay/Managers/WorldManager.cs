@@ -19,13 +19,13 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
     public override void Start()
     {
         base.Start();
-        Initialize(ConfigManager.Instance.GetWorldDataConfig(WorldType.SampleWorld));
+        Initialize(ConfigManager.Instance.GetWorldDataConfig(ClientGameManager.Instance.StartWorldName));
     }
 
     public void Initialize(WorldData worldData)
     {
         CurrentWorld = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.World].AllocateGameObject<World>(WorldRoot);
-        CurrentWorld.name = worldData.WorldType.ToString();
+        CurrentWorld.name = worldData.WorldName;
         CurrentWorld.Initialize(worldData);
     }
 

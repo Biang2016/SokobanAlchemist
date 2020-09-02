@@ -178,11 +178,3 @@ public class World : PoolObject
 
     #endregion
 }
-
-public enum WorldType
-{
-    None = 0,
-    SampleWorld = 1,
-
-    Max = 255
-}
