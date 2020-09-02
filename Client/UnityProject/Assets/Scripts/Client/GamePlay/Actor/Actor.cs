@@ -202,7 +202,15 @@ public class Actor : PoolObject
 
     public void Kick()
     {
-        ActorPushHelper.ActorPushHelperTrigger.curPushingBox?.Kick(CurForward, KickForce);
+        Ray ray = new Ray(transform.position, transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1.3f, LayerManager.Instance.LayerMask_Box, QueryTriggerInteraction.Collide))
+        {
+            Box box = hit.collider.gameObject.GetComponentInParent<Box>();
+            if (box && box.Pushable())
+            {
+                box.Kick(CurForward, KickForce);
+            }
+        }
     }
 
     public void Lift()

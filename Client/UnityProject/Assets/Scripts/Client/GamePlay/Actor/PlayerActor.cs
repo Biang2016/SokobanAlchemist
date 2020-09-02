@@ -47,29 +47,67 @@ public class PlayerActor : Actor
         #endregion
     }
 
+    public float DoubleMoveKickInterval = 0.3f;
+    private bool forwardLastUp;
+    private float forwardTick;
+    private bool backwardLastUp;
+    private float backwardTick;
+    private bool leftwardLastUp;
+    private float leftwardTick;
+    private bool rightwardLastUp;
+    private float rightwardTick;
+
     protected override void InternalFixedUpdate()
     {
         base.InternalFixedUpdate();
 
-        // 推的过程中再次按下对应方向键，则踢出箱子
-        bool kick = false;
-        if (!CurMoveAttempt.x.Equals(0) && LastMoveAttempt.x.Equals(0))
+        // 双击方向键踢箱子
+        if (LastMoveAttempt.x > 0 && CurMoveAttempt.x.Equals(0))
         {
-            if (CurMoveAttempt.x * CurForward.x > 0)
-            {
-                kick = true;
-            }
+            rightwardLastUp = true;
+            rightwardTick = DoubleMoveKickInterval;
         }
 
-        if (!CurMoveAttempt.z.Equals(0) && LastMoveAttempt.z.Equals(0))
+        if (LastMoveAttempt.x < 0 && CurMoveAttempt.x.Equals(0))
         {
-            if (CurMoveAttempt.z * CurForward.z > 0)
-            {
-                kick = true;
-            }
+            leftwardLastUp = true;
+            leftwardTick = DoubleMoveKickInterval;
         }
 
-        if (PushState == PushStates.Pushing && kick)
+        if (LastMoveAttempt.z > 0 && CurMoveAttempt.z.Equals(0))
+        {
+            forwardLastUp = true;
+            forwardTick = DoubleMoveKickInterval;
+        }
+
+        if (LastMoveAttempt.z < 0 && CurMoveAttempt.z.Equals(0))
+        {
+            backwardLastUp = true;
+            backwardTick = DoubleMoveKickInterval;
+        }
+
+        rightwardTick -= Time.fixedDeltaTime;
+        if (rightwardTick <= 0) rightwardLastUp = false;
+        leftwardTick -= Time.fixedDeltaTime;
+        if (leftwardTick <= 0) leftwardLastUp = false;
+        forwardTick -= Time.fixedDeltaTime;
+        if (forwardTick <= 0) forwardLastUp = false;
+        backwardTick -= Time.fixedDeltaTime;
+        if (backwardTick <= 0) backwardLastUp = false;
+
+        if (CurMoveAttempt.x > 0 && LastMoveAttempt.x.Equals(0) && rightwardLastUp)
+        {
+            Kick();
+        }
+        else if (CurMoveAttempt.x < 0 && LastMoveAttempt.x.Equals(0) && leftwardLastUp)
+        {
+            Kick();
+        }
+        else if (CurMoveAttempt.z > 0 && LastMoveAttempt.z.Equals(0) && forwardLastUp)
+        {
+            Kick();
+        }
+        else if (CurMoveAttempt.z < 0 && LastMoveAttempt.z.Equals(0) && backwardLastUp)
         {
             Kick();
         }
