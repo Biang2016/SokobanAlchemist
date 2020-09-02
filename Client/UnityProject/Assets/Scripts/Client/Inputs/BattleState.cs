@@ -20,10 +20,13 @@ public class ButtonState
     [HideInInspector]
     public bool LastPressed;
 
+    [LabelText("连击")]
+    public int MultiClick;
+
     public override string ToString()
     {
-        if (!Down && !Up) return "";
-        string res = ButtonName + (Down ? ",Down" : "") + (Up ? ",Up" : "");
+        if (!Down && !Up && MultiClick <= 1) return "";
+        string res = ButtonName + (Down ? ",Down" : "") + (Up ? ",Up" : "") + (MultiClick > 1 ? "x" + MultiClick : "");
         return res;
     }
 
@@ -32,6 +35,17 @@ public class ButtonState
         Down = false;
         LastPressed = Pressed;
         Up = false;
+        MultiClick = 0;
+    }
+
+    public void ApplyTo(ButtonState target)
+    {
+        target.ButtonName = ButtonName;
+        target.Down = Down;
+        target.Up = Up;
+        target.Pressed = Pressed;
+        target.LastPressed = LastPressed;
+        target.MultiClick = MultiClick;
     }
 }
 
@@ -57,6 +71,15 @@ public enum ButtonNames
     Battle_MouseLeft,
     Battle_MouseRight,
     Battle_MouseMiddle,
+
+    Battle_Move_Up_Player1,
+    Battle_Move_Right_Player1,
+    Battle_Move_Down_Player1,
+    Battle_Move_Left_Player1,
+    Battle_Move_Up_Player2,
+    Battle_Move_Right_Player2,
+    Battle_Move_Down_Player2,
+    Battle_Move_Left_Player2,
 
     Battle_Skill_0_Player1,
     Battle_Skill_1_Player1,

@@ -43,22 +43,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)""
                 },
                 {
-                    ""name"": ""Player1Move"",
-                    ""type"": ""Value"",
-                    ""id"": ""bd466e74-41ff-4ec2-9bc2-c86fdc792344"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Player2Move"",
-                    ""type"": ""Value"",
-                    ""id"": ""35c1c381-d25b-4e4d-b776-f4747eace5e0"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""Skill_0_Player1"",
                     ""type"": ""Button"",
                     ""id"": ""797408c5-59fe-4154-b3ea-9afca0591bb8"",
@@ -97,6 +81,150 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Player1_Move_Up"",
+                    ""type"": ""Button"",
+                    ""id"": ""37b67fb2-d4f3-414a-8eba-ca6625406613"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Player1_Move_Up_M"",
+                    ""type"": ""Button"",
+                    ""id"": ""1d291fd4-50d2-4a04-8020-518dda2ad6f4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap""
+                },
+                {
+                    ""name"": ""Player1_Move_Down"",
+                    ""type"": ""Button"",
+                    ""id"": ""9b2beb4f-36de-4ad9-8de9-6172873ea4cd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Player1_Move_Down_M"",
+                    ""type"": ""Button"",
+                    ""id"": ""da302877-7216-4e98-a9b0-b8ff9c551565"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap""
+                },
+                {
+                    ""name"": ""Player1_Move_Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""da1a7bb8-6527-4fc3-97ec-289b7797b1b7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Player1_Move_Left_M"",
+                    ""type"": ""Button"",
+                    ""id"": ""aff66ec5-9ea3-4960-b5ee-a6923de63a3e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap""
+                },
+                {
+                    ""name"": ""Player1_Move_Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""fc9e0a5e-1efc-4b8f-8944-89fadc0f0fa9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Player1_Move_Right_M"",
+                    ""type"": ""Button"",
+                    ""id"": ""020592f2-636d-4f98-bedc-267c92874100"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap""
+                },
+                {
+                    ""name"": ""Player2_Move_Up"",
+                    ""type"": ""Button"",
+                    ""id"": ""5486c412-9038-4eaf-9c47-6eb902436113"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Player2_Move_Up_M"",
+                    ""type"": ""Button"",
+                    ""id"": ""82f42399-2104-49fe-9f8e-1704256ea076"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap""
+                },
+                {
+                    ""name"": ""Player2_Move_Down"",
+                    ""type"": ""Button"",
+                    ""id"": ""a106b680-7852-4c43-a6a1-64d0564cbded"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Player2_Move_Down_M"",
+                    ""type"": ""Button"",
+                    ""id"": ""f41c3794-cc2b-4da6-b4bc-41db85a969d8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap""
+                },
+                {
+                    ""name"": ""Player2_Move_Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""410f507e-4816-470f-88a5-d34dae660bf8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Player2_Move_Left_M"",
+                    ""type"": ""Button"",
+                    ""id"": ""457c66ed-2668-48f0-9759-cb7a71264b99"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap""
+                },
+                {
+                    ""name"": ""Player2_Move_Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""a8b1f2be-4766-438a-adcd-b22ab2f8daca"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Player2_Move_Right_M"",
+                    ""type"": ""Button"",
+                    ""id"": ""d3980ffd-68e0-4487-97a9-cdbdbdb2a428"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap""
+                },
+                {
+                    ""name"": ""Player1_Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""0b215f27-ebbe-472c-975b-47da80fb2f2e"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Player2_Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""aa33bbb9-0b58-4323-9720-decb690a7265"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -157,72 +285,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""aa9bcc24-85ce-491a-ad30-60acc3a6e5b5"",
-                    ""path"": ""<Gamepad>/leftStick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Player1Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""WASD"",
-                    ""id"": ""6b95673d-8a12-412a-9390-8184253550b8"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player1Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""b0ca1bb8-34d0-457b-8918-390c38c82bf3"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Player1Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""5faf8d5b-04de-42a3-80e9-df1147142717"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Player1Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""e9718a4c-1f96-49cf-8f1f-0f1f9488a89f"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Player1Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""5e2988c1-cf9c-4a5c-aaeb-3d177349c4e8"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Player1Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
                     ""id"": ""27cf3453-9af4-41fd-9ab4-deae6e3b6533"",
                     ""path"": ""<Keyboard>/t"",
                     ""interactions"": """",
@@ -231,72 +293,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""action"": ""ToggleBattleTip"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d52fa57f-3fae-4b12-b993-c66604d86f81"",
-                    ""path"": ""<Gamepad>/leftStick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Player2Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""Arrows"",
-                    ""id"": ""196d71d6-e36e-4eca-999d-fd636c364557"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player2Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""7a711c63-0ded-4971-bfd5-6763efa9cc99"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Player2Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""dffaee49-73b3-4701-afe0-60c62257a353"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Player2Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""c1ba0d01-1c82-4f84-8abd-a22dcbbd2d1b"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Player2Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""db40706c-de41-411a-a957-a2c14e5ac15e"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Player2Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -319,219 +315,290 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""action"": ""Skill_1_Player2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""BuildingInput"",
-            ""id"": ""e3b1181f-7121-4f94-89e7-addd0d7b9803"",
-            ""actions"": [
-                {
-                    ""name"": ""MouseLeftClick"",
-                    ""type"": ""Button"",
-                    ""id"": ""015b758b-31e4-4e14-ab9d-383d30922006"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
                 },
-                {
-                    ""name"": ""Move"",
-                    ""type"": ""Value"",
-                    ""id"": ""3e484d28-18ca-4c8e-a899-7cdaff5fab1d"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""MouseRightClick"",
-                    ""type"": ""Button"",
-                    ""id"": ""dfc6415d-0fa1-4f02-897c-0a00d4f2c106"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
-                },
-                {
-                    ""name"": ""MouseMiddleClick"",
-                    ""type"": ""Button"",
-                    ""id"": ""91a6bbaa-0bcc-4eb3-b451-59fa66970d2d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
-                },
-                {
-                    ""name"": ""RotateItem"",
-                    ""type"": ""Button"",
-                    ""id"": ""097c04ba-5832-435d-8a3d-368f89c5f76b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
-                },
-                {
-                    ""name"": ""ToggleBackpack"",
-                    ""type"": ""Button"",
-                    ""id"": ""9c4bb76c-4707-4e5c-a7f3-74e9d4fe4aa9"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
-                },
-                {
-                    ""name"": ""ToggleWireLines"",
-                    ""type"": ""Button"",
-                    ""id"": ""ab7dc26b-d210-49a5-bc1e-93e822716dbc"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
-                },
-                {
-                    ""name"": ""ToggleDebug"",
-                    ""type"": ""Button"",
-                    ""id"": ""ff7e40b2-232a-4a3e-bd3c-5911d1a7078e"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
-                }
-            ],
-            ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""631bf7b5-0411-4e1c-a8bb-042821cc53d0"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""id"": ""7c7e96ad-7dd7-4f27-9721-298be7e8e6b0"",
+                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""MouseLeftClick"",
+                    ""action"": ""Player1_Move_Up"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""55efd318-f9f9-4475-b5a8-b4074461a8a9"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""id"": ""f812ec38-218d-4bdf-98f3-93eec323f367"",
+                    ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""RotateItem"",
+                    ""action"": ""Player1_Move_Down"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""f36765b4-70ff-4ede-b1f7-71db8bd78fd1"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""id"": ""b764e9d7-7f57-4a3b-9311-3eec6c798df3"",
+                    ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""ToggleBackpack"",
+                    ""action"": ""Player1_Move_Left"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""b23b49ab-92c7-4c71-9d25-26e508838519"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""id"": ""4a3ddf94-d08a-4662-90fa-cc0153a30321"",
+                    ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""MouseRightClick"",
+                    ""action"": ""Player1_Move_Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8f46ccae-7a7e-4634-b2f9-1e1afb241b88"",
-                    ""path"": ""<Mouse>/middleButton"",
+                    ""id"": ""8687155c-c902-46a1-a86a-a88f7caad4e4"",
+                    ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""MouseMiddleClick"",
+                    ""action"": ""Player2_Move_Up"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""da559815-77f3-4f03-aa50-6e7dfd6bc3e7"",
-                    ""path"": ""<Keyboard>/U"",
+                    ""id"": ""a0f8ec31-4fc9-4f5f-87e2-e9d419a7f474"",
+                    ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""ToggleDebug"",
+                    ""action"": ""Player2_Move_Down"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""18410dfb-989a-4efe-b6ca-8529847e146b"",
-                    ""path"": ""<Keyboard>/g"",
+                    ""id"": ""a32f34a4-4861-439d-bc49-5f66cd390df3"",
+                    ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""ToggleWireLines"",
+                    ""action"": ""Player2_Move_Left"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""054689b7-60de-4224-8ea7-a74cd32b3c3c"",
-                    ""path"": ""<Gamepad>/leftStick"",
+                    ""id"": ""d636d0f0-80a9-40e3-bb9f-02c7a3a4cbfc"",
+                    ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Move"",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player2_Move_Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e7536e91-91b8-4267-862f-d6a42d6ddf06"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player1_Move_Up_M"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4609c32c-99ae-442f-8a92-2f54ecc03b60"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player1_Move_Down_M"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ade7b06b-cde4-4786-b485-b6d79a7e8fbb"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player1_Move_Left_M"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bea9c54b-79d1-40ff-ab7e-63ef50e13009"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player1_Move_Right_M"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5da9a9fc-ab45-4f61-b06f-88a77debfc06"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player2_Move_Up_M"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d463c90-1c5a-4c28-bc50-a70040a20947"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player2_Move_Down_M"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""66efcc29-b70a-4846-a662-fbaac0892bab"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player2_Move_Left_M"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""01052686-3780-4d1f-906f-4280ba96308c"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player2_Move_Right_M"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": ""WASD"",
-                    ""id"": ""17d857f9-cc87-416c-b57c-72e8d84ae6a1"",
+                    ""id"": ""c57745e1-5ccf-4c28-83b2-e7436003a6ce"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Player1_Move"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": ""up"",
-                    ""id"": ""3b986b9f-f881-43da-9d46-24b198c0411a"",
+                    ""id"": ""22754c01-0164-461b-b5c1-4658db58f124"",
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Move"",
+                    ""action"": ""Player1_Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""down"",
-                    ""id"": ""cc3cfbc1-9f05-4f9a-a2e8-4d31cf4b5ba6"",
+                    ""id"": ""d3e8ef33-db4d-4881-a9fe-11a593c1bd2b"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Move"",
+                    ""action"": ""Player1_Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""left"",
-                    ""id"": ""978feba3-2e79-49c8-9001-7ee444c4500f"",
+                    ""id"": ""9eee0886-6ef0-49d8-b25b-1f831f7b1060"",
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Move"",
+                    ""action"": ""Player1_Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""right"",
-                    ""id"": ""853fe531-968f-48f1-b307-1e18488081a9"",
+                    ""id"": ""39ce92e4-447c-4714-8859-73dbebe5497b"",
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Move"",
+                    ""action"": ""Player1_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Arrows"",
+                    ""id"": ""0848bc1d-c24c-443f-9c4e-ce8ab5fe91ba"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player2_Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""01f4dc9b-b62f-47ca-8a67-b8cb5ba9a22e"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player2_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""2fd2d29e-3fe7-4d59-9bb3-d18157c814ce"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player2_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""3f8b841e-dd08-4125-bb2e-79a129ad9859"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player2_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""35fe9c26-0e6b-4f7a-9973-a72593680417"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player2_Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -754,23 +821,29 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_BattleInput_MouseLeftClick = m_BattleInput.FindAction("MouseLeftClick", throwIfNotFound: true);
         m_BattleInput_MouseRightClick = m_BattleInput.FindAction("MouseRightClick", throwIfNotFound: true);
         m_BattleInput_MouseMiddleClick = m_BattleInput.FindAction("MouseMiddleClick", throwIfNotFound: true);
-        m_BattleInput_Player1Move = m_BattleInput.FindAction("Player1Move", throwIfNotFound: true);
-        m_BattleInput_Player2Move = m_BattleInput.FindAction("Player2Move", throwIfNotFound: true);
         m_BattleInput_Skill_0_Player1 = m_BattleInput.FindAction("Skill_0_Player1", throwIfNotFound: true);
         m_BattleInput_Skill_1_Player1 = m_BattleInput.FindAction("Skill_1_Player1", throwIfNotFound: true);
         m_BattleInput_Skill_0_Player2 = m_BattleInput.FindAction("Skill_0_Player2", throwIfNotFound: true);
         m_BattleInput_Skill_1_Player2 = m_BattleInput.FindAction("Skill_1_Player2", throwIfNotFound: true);
         m_BattleInput_ToggleBattleTip = m_BattleInput.FindAction("ToggleBattleTip", throwIfNotFound: true);
-        // BuildingInput
-        m_BuildingInput = asset.FindActionMap("BuildingInput", throwIfNotFound: true);
-        m_BuildingInput_MouseLeftClick = m_BuildingInput.FindAction("MouseLeftClick", throwIfNotFound: true);
-        m_BuildingInput_Move = m_BuildingInput.FindAction("Move", throwIfNotFound: true);
-        m_BuildingInput_MouseRightClick = m_BuildingInput.FindAction("MouseRightClick", throwIfNotFound: true);
-        m_BuildingInput_MouseMiddleClick = m_BuildingInput.FindAction("MouseMiddleClick", throwIfNotFound: true);
-        m_BuildingInput_RotateItem = m_BuildingInput.FindAction("RotateItem", throwIfNotFound: true);
-        m_BuildingInput_ToggleBackpack = m_BuildingInput.FindAction("ToggleBackpack", throwIfNotFound: true);
-        m_BuildingInput_ToggleWireLines = m_BuildingInput.FindAction("ToggleWireLines", throwIfNotFound: true);
-        m_BuildingInput_ToggleDebug = m_BuildingInput.FindAction("ToggleDebug", throwIfNotFound: true);
+        m_BattleInput_Player1_Move_Up = m_BattleInput.FindAction("Player1_Move_Up", throwIfNotFound: true);
+        m_BattleInput_Player1_Move_Up_M = m_BattleInput.FindAction("Player1_Move_Up_M", throwIfNotFound: true);
+        m_BattleInput_Player1_Move_Down = m_BattleInput.FindAction("Player1_Move_Down", throwIfNotFound: true);
+        m_BattleInput_Player1_Move_Down_M = m_BattleInput.FindAction("Player1_Move_Down_M", throwIfNotFound: true);
+        m_BattleInput_Player1_Move_Left = m_BattleInput.FindAction("Player1_Move_Left", throwIfNotFound: true);
+        m_BattleInput_Player1_Move_Left_M = m_BattleInput.FindAction("Player1_Move_Left_M", throwIfNotFound: true);
+        m_BattleInput_Player1_Move_Right = m_BattleInput.FindAction("Player1_Move_Right", throwIfNotFound: true);
+        m_BattleInput_Player1_Move_Right_M = m_BattleInput.FindAction("Player1_Move_Right_M", throwIfNotFound: true);
+        m_BattleInput_Player2_Move_Up = m_BattleInput.FindAction("Player2_Move_Up", throwIfNotFound: true);
+        m_BattleInput_Player2_Move_Up_M = m_BattleInput.FindAction("Player2_Move_Up_M", throwIfNotFound: true);
+        m_BattleInput_Player2_Move_Down = m_BattleInput.FindAction("Player2_Move_Down", throwIfNotFound: true);
+        m_BattleInput_Player2_Move_Down_M = m_BattleInput.FindAction("Player2_Move_Down_M", throwIfNotFound: true);
+        m_BattleInput_Player2_Move_Left = m_BattleInput.FindAction("Player2_Move_Left", throwIfNotFound: true);
+        m_BattleInput_Player2_Move_Left_M = m_BattleInput.FindAction("Player2_Move_Left_M", throwIfNotFound: true);
+        m_BattleInput_Player2_Move_Right = m_BattleInput.FindAction("Player2_Move_Right", throwIfNotFound: true);
+        m_BattleInput_Player2_Move_Right_M = m_BattleInput.FindAction("Player2_Move_Right_M", throwIfNotFound: true);
+        m_BattleInput_Player1_Move = m_BattleInput.FindAction("Player1_Move", throwIfNotFound: true);
+        m_BattleInput_Player2_Move = m_BattleInput.FindAction("Player2_Move", throwIfNotFound: true);
         // Common
         m_Common = asset.FindActionMap("Common", throwIfNotFound: true);
         m_Common_MouseLeftClick = m_Common.FindAction("MouseLeftClick", throwIfNotFound: true);
@@ -835,13 +908,29 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_BattleInput_MouseLeftClick;
     private readonly InputAction m_BattleInput_MouseRightClick;
     private readonly InputAction m_BattleInput_MouseMiddleClick;
-    private readonly InputAction m_BattleInput_Player1Move;
-    private readonly InputAction m_BattleInput_Player2Move;
     private readonly InputAction m_BattleInput_Skill_0_Player1;
     private readonly InputAction m_BattleInput_Skill_1_Player1;
     private readonly InputAction m_BattleInput_Skill_0_Player2;
     private readonly InputAction m_BattleInput_Skill_1_Player2;
     private readonly InputAction m_BattleInput_ToggleBattleTip;
+    private readonly InputAction m_BattleInput_Player1_Move_Up;
+    private readonly InputAction m_BattleInput_Player1_Move_Up_M;
+    private readonly InputAction m_BattleInput_Player1_Move_Down;
+    private readonly InputAction m_BattleInput_Player1_Move_Down_M;
+    private readonly InputAction m_BattleInput_Player1_Move_Left;
+    private readonly InputAction m_BattleInput_Player1_Move_Left_M;
+    private readonly InputAction m_BattleInput_Player1_Move_Right;
+    private readonly InputAction m_BattleInput_Player1_Move_Right_M;
+    private readonly InputAction m_BattleInput_Player2_Move_Up;
+    private readonly InputAction m_BattleInput_Player2_Move_Up_M;
+    private readonly InputAction m_BattleInput_Player2_Move_Down;
+    private readonly InputAction m_BattleInput_Player2_Move_Down_M;
+    private readonly InputAction m_BattleInput_Player2_Move_Left;
+    private readonly InputAction m_BattleInput_Player2_Move_Left_M;
+    private readonly InputAction m_BattleInput_Player2_Move_Right;
+    private readonly InputAction m_BattleInput_Player2_Move_Right_M;
+    private readonly InputAction m_BattleInput_Player1_Move;
+    private readonly InputAction m_BattleInput_Player2_Move;
     public struct BattleInputActions
     {
         private @PlayerInput m_Wrapper;
@@ -849,13 +938,29 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @MouseLeftClick => m_Wrapper.m_BattleInput_MouseLeftClick;
         public InputAction @MouseRightClick => m_Wrapper.m_BattleInput_MouseRightClick;
         public InputAction @MouseMiddleClick => m_Wrapper.m_BattleInput_MouseMiddleClick;
-        public InputAction @Player1Move => m_Wrapper.m_BattleInput_Player1Move;
-        public InputAction @Player2Move => m_Wrapper.m_BattleInput_Player2Move;
         public InputAction @Skill_0_Player1 => m_Wrapper.m_BattleInput_Skill_0_Player1;
         public InputAction @Skill_1_Player1 => m_Wrapper.m_BattleInput_Skill_1_Player1;
         public InputAction @Skill_0_Player2 => m_Wrapper.m_BattleInput_Skill_0_Player2;
         public InputAction @Skill_1_Player2 => m_Wrapper.m_BattleInput_Skill_1_Player2;
         public InputAction @ToggleBattleTip => m_Wrapper.m_BattleInput_ToggleBattleTip;
+        public InputAction @Player1_Move_Up => m_Wrapper.m_BattleInput_Player1_Move_Up;
+        public InputAction @Player1_Move_Up_M => m_Wrapper.m_BattleInput_Player1_Move_Up_M;
+        public InputAction @Player1_Move_Down => m_Wrapper.m_BattleInput_Player1_Move_Down;
+        public InputAction @Player1_Move_Down_M => m_Wrapper.m_BattleInput_Player1_Move_Down_M;
+        public InputAction @Player1_Move_Left => m_Wrapper.m_BattleInput_Player1_Move_Left;
+        public InputAction @Player1_Move_Left_M => m_Wrapper.m_BattleInput_Player1_Move_Left_M;
+        public InputAction @Player1_Move_Right => m_Wrapper.m_BattleInput_Player1_Move_Right;
+        public InputAction @Player1_Move_Right_M => m_Wrapper.m_BattleInput_Player1_Move_Right_M;
+        public InputAction @Player2_Move_Up => m_Wrapper.m_BattleInput_Player2_Move_Up;
+        public InputAction @Player2_Move_Up_M => m_Wrapper.m_BattleInput_Player2_Move_Up_M;
+        public InputAction @Player2_Move_Down => m_Wrapper.m_BattleInput_Player2_Move_Down;
+        public InputAction @Player2_Move_Down_M => m_Wrapper.m_BattleInput_Player2_Move_Down_M;
+        public InputAction @Player2_Move_Left => m_Wrapper.m_BattleInput_Player2_Move_Left;
+        public InputAction @Player2_Move_Left_M => m_Wrapper.m_BattleInput_Player2_Move_Left_M;
+        public InputAction @Player2_Move_Right => m_Wrapper.m_BattleInput_Player2_Move_Right;
+        public InputAction @Player2_Move_Right_M => m_Wrapper.m_BattleInput_Player2_Move_Right_M;
+        public InputAction @Player1_Move => m_Wrapper.m_BattleInput_Player1_Move;
+        public InputAction @Player2_Move => m_Wrapper.m_BattleInput_Player2_Move;
         public InputActionMap Get() { return m_Wrapper.m_BattleInput; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -874,12 +979,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @MouseMiddleClick.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnMouseMiddleClick;
                 @MouseMiddleClick.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnMouseMiddleClick;
                 @MouseMiddleClick.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnMouseMiddleClick;
-                @Player1Move.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1Move;
-                @Player1Move.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1Move;
-                @Player1Move.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1Move;
-                @Player2Move.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2Move;
-                @Player2Move.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2Move;
-                @Player2Move.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2Move;
                 @Skill_0_Player1.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_0_Player1;
                 @Skill_0_Player1.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_0_Player1;
                 @Skill_0_Player1.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_0_Player1;
@@ -895,6 +994,60 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @ToggleBattleTip.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnToggleBattleTip;
                 @ToggleBattleTip.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnToggleBattleTip;
                 @ToggleBattleTip.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnToggleBattleTip;
+                @Player1_Move_Up.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Up;
+                @Player1_Move_Up.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Up;
+                @Player1_Move_Up.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Up;
+                @Player1_Move_Up_M.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Up_M;
+                @Player1_Move_Up_M.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Up_M;
+                @Player1_Move_Up_M.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Up_M;
+                @Player1_Move_Down.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Down;
+                @Player1_Move_Down.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Down;
+                @Player1_Move_Down.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Down;
+                @Player1_Move_Down_M.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Down_M;
+                @Player1_Move_Down_M.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Down_M;
+                @Player1_Move_Down_M.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Down_M;
+                @Player1_Move_Left.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Left;
+                @Player1_Move_Left.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Left;
+                @Player1_Move_Left.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Left;
+                @Player1_Move_Left_M.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Left_M;
+                @Player1_Move_Left_M.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Left_M;
+                @Player1_Move_Left_M.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Left_M;
+                @Player1_Move_Right.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Right;
+                @Player1_Move_Right.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Right;
+                @Player1_Move_Right.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Right;
+                @Player1_Move_Right_M.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Right_M;
+                @Player1_Move_Right_M.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Right_M;
+                @Player1_Move_Right_M.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move_Right_M;
+                @Player2_Move_Up.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Up;
+                @Player2_Move_Up.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Up;
+                @Player2_Move_Up.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Up;
+                @Player2_Move_Up_M.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Up_M;
+                @Player2_Move_Up_M.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Up_M;
+                @Player2_Move_Up_M.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Up_M;
+                @Player2_Move_Down.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Down;
+                @Player2_Move_Down.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Down;
+                @Player2_Move_Down.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Down;
+                @Player2_Move_Down_M.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Down_M;
+                @Player2_Move_Down_M.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Down_M;
+                @Player2_Move_Down_M.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Down_M;
+                @Player2_Move_Left.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Left;
+                @Player2_Move_Left.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Left;
+                @Player2_Move_Left.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Left;
+                @Player2_Move_Left_M.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Left_M;
+                @Player2_Move_Left_M.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Left_M;
+                @Player2_Move_Left_M.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Left_M;
+                @Player2_Move_Right.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Right;
+                @Player2_Move_Right.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Right;
+                @Player2_Move_Right.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Right;
+                @Player2_Move_Right_M.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Right_M;
+                @Player2_Move_Right_M.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Right_M;
+                @Player2_Move_Right_M.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move_Right_M;
+                @Player1_Move.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move;
+                @Player1_Move.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move;
+                @Player1_Move.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move;
+                @Player2_Move.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move;
+                @Player2_Move.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move;
+                @Player2_Move.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move;
             }
             m_Wrapper.m_BattleInputActionsCallbackInterface = instance;
             if (instance != null)
@@ -908,12 +1061,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @MouseMiddleClick.started += instance.OnMouseMiddleClick;
                 @MouseMiddleClick.performed += instance.OnMouseMiddleClick;
                 @MouseMiddleClick.canceled += instance.OnMouseMiddleClick;
-                @Player1Move.started += instance.OnPlayer1Move;
-                @Player1Move.performed += instance.OnPlayer1Move;
-                @Player1Move.canceled += instance.OnPlayer1Move;
-                @Player2Move.started += instance.OnPlayer2Move;
-                @Player2Move.performed += instance.OnPlayer2Move;
-                @Player2Move.canceled += instance.OnPlayer2Move;
                 @Skill_0_Player1.started += instance.OnSkill_0_Player1;
                 @Skill_0_Player1.performed += instance.OnSkill_0_Player1;
                 @Skill_0_Player1.canceled += instance.OnSkill_0_Player1;
@@ -929,99 +1076,64 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @ToggleBattleTip.started += instance.OnToggleBattleTip;
                 @ToggleBattleTip.performed += instance.OnToggleBattleTip;
                 @ToggleBattleTip.canceled += instance.OnToggleBattleTip;
+                @Player1_Move_Up.started += instance.OnPlayer1_Move_Up;
+                @Player1_Move_Up.performed += instance.OnPlayer1_Move_Up;
+                @Player1_Move_Up.canceled += instance.OnPlayer1_Move_Up;
+                @Player1_Move_Up_M.started += instance.OnPlayer1_Move_Up_M;
+                @Player1_Move_Up_M.performed += instance.OnPlayer1_Move_Up_M;
+                @Player1_Move_Up_M.canceled += instance.OnPlayer1_Move_Up_M;
+                @Player1_Move_Down.started += instance.OnPlayer1_Move_Down;
+                @Player1_Move_Down.performed += instance.OnPlayer1_Move_Down;
+                @Player1_Move_Down.canceled += instance.OnPlayer1_Move_Down;
+                @Player1_Move_Down_M.started += instance.OnPlayer1_Move_Down_M;
+                @Player1_Move_Down_M.performed += instance.OnPlayer1_Move_Down_M;
+                @Player1_Move_Down_M.canceled += instance.OnPlayer1_Move_Down_M;
+                @Player1_Move_Left.started += instance.OnPlayer1_Move_Left;
+                @Player1_Move_Left.performed += instance.OnPlayer1_Move_Left;
+                @Player1_Move_Left.canceled += instance.OnPlayer1_Move_Left;
+                @Player1_Move_Left_M.started += instance.OnPlayer1_Move_Left_M;
+                @Player1_Move_Left_M.performed += instance.OnPlayer1_Move_Left_M;
+                @Player1_Move_Left_M.canceled += instance.OnPlayer1_Move_Left_M;
+                @Player1_Move_Right.started += instance.OnPlayer1_Move_Right;
+                @Player1_Move_Right.performed += instance.OnPlayer1_Move_Right;
+                @Player1_Move_Right.canceled += instance.OnPlayer1_Move_Right;
+                @Player1_Move_Right_M.started += instance.OnPlayer1_Move_Right_M;
+                @Player1_Move_Right_M.performed += instance.OnPlayer1_Move_Right_M;
+                @Player1_Move_Right_M.canceled += instance.OnPlayer1_Move_Right_M;
+                @Player2_Move_Up.started += instance.OnPlayer2_Move_Up;
+                @Player2_Move_Up.performed += instance.OnPlayer2_Move_Up;
+                @Player2_Move_Up.canceled += instance.OnPlayer2_Move_Up;
+                @Player2_Move_Up_M.started += instance.OnPlayer2_Move_Up_M;
+                @Player2_Move_Up_M.performed += instance.OnPlayer2_Move_Up_M;
+                @Player2_Move_Up_M.canceled += instance.OnPlayer2_Move_Up_M;
+                @Player2_Move_Down.started += instance.OnPlayer2_Move_Down;
+                @Player2_Move_Down.performed += instance.OnPlayer2_Move_Down;
+                @Player2_Move_Down.canceled += instance.OnPlayer2_Move_Down;
+                @Player2_Move_Down_M.started += instance.OnPlayer2_Move_Down_M;
+                @Player2_Move_Down_M.performed += instance.OnPlayer2_Move_Down_M;
+                @Player2_Move_Down_M.canceled += instance.OnPlayer2_Move_Down_M;
+                @Player2_Move_Left.started += instance.OnPlayer2_Move_Left;
+                @Player2_Move_Left.performed += instance.OnPlayer2_Move_Left;
+                @Player2_Move_Left.canceled += instance.OnPlayer2_Move_Left;
+                @Player2_Move_Left_M.started += instance.OnPlayer2_Move_Left_M;
+                @Player2_Move_Left_M.performed += instance.OnPlayer2_Move_Left_M;
+                @Player2_Move_Left_M.canceled += instance.OnPlayer2_Move_Left_M;
+                @Player2_Move_Right.started += instance.OnPlayer2_Move_Right;
+                @Player2_Move_Right.performed += instance.OnPlayer2_Move_Right;
+                @Player2_Move_Right.canceled += instance.OnPlayer2_Move_Right;
+                @Player2_Move_Right_M.started += instance.OnPlayer2_Move_Right_M;
+                @Player2_Move_Right_M.performed += instance.OnPlayer2_Move_Right_M;
+                @Player2_Move_Right_M.canceled += instance.OnPlayer2_Move_Right_M;
+                @Player1_Move.started += instance.OnPlayer1_Move;
+                @Player1_Move.performed += instance.OnPlayer1_Move;
+                @Player1_Move.canceled += instance.OnPlayer1_Move;
+                @Player2_Move.started += instance.OnPlayer2_Move;
+                @Player2_Move.performed += instance.OnPlayer2_Move;
+                @Player2_Move.canceled += instance.OnPlayer2_Move;
             }
         }
     }
     public BattleInputActions @BattleInput => new BattleInputActions(this);
-
-    // BuildingInput
-    private readonly InputActionMap m_BuildingInput;
-    private IBuildingInputActions m_BuildingInputActionsCallbackInterface;
-    private readonly InputAction m_BuildingInput_MouseLeftClick;
-    private readonly InputAction m_BuildingInput_Move;
-    private readonly InputAction m_BuildingInput_MouseRightClick;
-    private readonly InputAction m_BuildingInput_MouseMiddleClick;
-    private readonly InputAction m_BuildingInput_RotateItem;
-    private readonly InputAction m_BuildingInput_ToggleBackpack;
-    private readonly InputAction m_BuildingInput_ToggleWireLines;
-    private readonly InputAction m_BuildingInput_ToggleDebug;
-    public struct BuildingInputActions
-    {
-        private @PlayerInput m_Wrapper;
-        public BuildingInputActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MouseLeftClick => m_Wrapper.m_BuildingInput_MouseLeftClick;
-        public InputAction @Move => m_Wrapper.m_BuildingInput_Move;
-        public InputAction @MouseRightClick => m_Wrapper.m_BuildingInput_MouseRightClick;
-        public InputAction @MouseMiddleClick => m_Wrapper.m_BuildingInput_MouseMiddleClick;
-        public InputAction @RotateItem => m_Wrapper.m_BuildingInput_RotateItem;
-        public InputAction @ToggleBackpack => m_Wrapper.m_BuildingInput_ToggleBackpack;
-        public InputAction @ToggleWireLines => m_Wrapper.m_BuildingInput_ToggleWireLines;
-        public InputAction @ToggleDebug => m_Wrapper.m_BuildingInput_ToggleDebug;
-        public InputActionMap Get() { return m_Wrapper.m_BuildingInput; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(BuildingInputActions set) { return set.Get(); }
-        public void SetCallbacks(IBuildingInputActions instance)
-        {
-            if (m_Wrapper.m_BuildingInputActionsCallbackInterface != null)
-            {
-                @MouseLeftClick.started -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnMouseLeftClick;
-                @MouseLeftClick.performed -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnMouseLeftClick;
-                @MouseLeftClick.canceled -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnMouseLeftClick;
-                @Move.started -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnMove;
-                @Move.performed -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnMove;
-                @Move.canceled -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnMove;
-                @MouseRightClick.started -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnMouseRightClick;
-                @MouseRightClick.performed -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnMouseRightClick;
-                @MouseRightClick.canceled -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnMouseRightClick;
-                @MouseMiddleClick.started -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnMouseMiddleClick;
-                @MouseMiddleClick.performed -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnMouseMiddleClick;
-                @MouseMiddleClick.canceled -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnMouseMiddleClick;
-                @RotateItem.started -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnRotateItem;
-                @RotateItem.performed -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnRotateItem;
-                @RotateItem.canceled -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnRotateItem;
-                @ToggleBackpack.started -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnToggleBackpack;
-                @ToggleBackpack.performed -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnToggleBackpack;
-                @ToggleBackpack.canceled -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnToggleBackpack;
-                @ToggleWireLines.started -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnToggleWireLines;
-                @ToggleWireLines.performed -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnToggleWireLines;
-                @ToggleWireLines.canceled -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnToggleWireLines;
-                @ToggleDebug.started -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnToggleDebug;
-                @ToggleDebug.performed -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnToggleDebug;
-                @ToggleDebug.canceled -= m_Wrapper.m_BuildingInputActionsCallbackInterface.OnToggleDebug;
-            }
-            m_Wrapper.m_BuildingInputActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @MouseLeftClick.started += instance.OnMouseLeftClick;
-                @MouseLeftClick.performed += instance.OnMouseLeftClick;
-                @MouseLeftClick.canceled += instance.OnMouseLeftClick;
-                @Move.started += instance.OnMove;
-                @Move.performed += instance.OnMove;
-                @Move.canceled += instance.OnMove;
-                @MouseRightClick.started += instance.OnMouseRightClick;
-                @MouseRightClick.performed += instance.OnMouseRightClick;
-                @MouseRightClick.canceled += instance.OnMouseRightClick;
-                @MouseMiddleClick.started += instance.OnMouseMiddleClick;
-                @MouseMiddleClick.performed += instance.OnMouseMiddleClick;
-                @MouseMiddleClick.canceled += instance.OnMouseMiddleClick;
-                @RotateItem.started += instance.OnRotateItem;
-                @RotateItem.performed += instance.OnRotateItem;
-                @RotateItem.canceled += instance.OnRotateItem;
-                @ToggleBackpack.started += instance.OnToggleBackpack;
-                @ToggleBackpack.performed += instance.OnToggleBackpack;
-                @ToggleBackpack.canceled += instance.OnToggleBackpack;
-                @ToggleWireLines.started += instance.OnToggleWireLines;
-                @ToggleWireLines.performed += instance.OnToggleWireLines;
-                @ToggleWireLines.canceled += instance.OnToggleWireLines;
-                @ToggleDebug.started += instance.OnToggleDebug;
-                @ToggleDebug.performed += instance.OnToggleDebug;
-                @ToggleDebug.canceled += instance.OnToggleDebug;
-            }
-        }
-    }
-    public BuildingInputActions @BuildingInput => new BuildingInputActions(this);
 
     // Common
     private readonly InputActionMap m_Common;
@@ -1150,24 +1262,29 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnMouseLeftClick(InputAction.CallbackContext context);
         void OnMouseRightClick(InputAction.CallbackContext context);
         void OnMouseMiddleClick(InputAction.CallbackContext context);
-        void OnPlayer1Move(InputAction.CallbackContext context);
-        void OnPlayer2Move(InputAction.CallbackContext context);
         void OnSkill_0_Player1(InputAction.CallbackContext context);
         void OnSkill_1_Player1(InputAction.CallbackContext context);
         void OnSkill_0_Player2(InputAction.CallbackContext context);
         void OnSkill_1_Player2(InputAction.CallbackContext context);
         void OnToggleBattleTip(InputAction.CallbackContext context);
-    }
-    public interface IBuildingInputActions
-    {
-        void OnMouseLeftClick(InputAction.CallbackContext context);
-        void OnMove(InputAction.CallbackContext context);
-        void OnMouseRightClick(InputAction.CallbackContext context);
-        void OnMouseMiddleClick(InputAction.CallbackContext context);
-        void OnRotateItem(InputAction.CallbackContext context);
-        void OnToggleBackpack(InputAction.CallbackContext context);
-        void OnToggleWireLines(InputAction.CallbackContext context);
-        void OnToggleDebug(InputAction.CallbackContext context);
+        void OnPlayer1_Move_Up(InputAction.CallbackContext context);
+        void OnPlayer1_Move_Up_M(InputAction.CallbackContext context);
+        void OnPlayer1_Move_Down(InputAction.CallbackContext context);
+        void OnPlayer1_Move_Down_M(InputAction.CallbackContext context);
+        void OnPlayer1_Move_Left(InputAction.CallbackContext context);
+        void OnPlayer1_Move_Left_M(InputAction.CallbackContext context);
+        void OnPlayer1_Move_Right(InputAction.CallbackContext context);
+        void OnPlayer1_Move_Right_M(InputAction.CallbackContext context);
+        void OnPlayer2_Move_Up(InputAction.CallbackContext context);
+        void OnPlayer2_Move_Up_M(InputAction.CallbackContext context);
+        void OnPlayer2_Move_Down(InputAction.CallbackContext context);
+        void OnPlayer2_Move_Down_M(InputAction.CallbackContext context);
+        void OnPlayer2_Move_Left(InputAction.CallbackContext context);
+        void OnPlayer2_Move_Left_M(InputAction.CallbackContext context);
+        void OnPlayer2_Move_Right(InputAction.CallbackContext context);
+        void OnPlayer2_Move_Right_M(InputAction.CallbackContext context);
+        void OnPlayer1_Move(InputAction.CallbackContext context);
+        void OnPlayer2_Move(InputAction.CallbackContext context);
     }
     public interface ICommonActions
     {

@@ -133,76 +133,22 @@ public class Actor : PoolObject
     {
         RigidBody.angularVelocity = Vector3.zero;
         CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
-
-        #region Move
-
-        if (CurMoveAttempt.magnitude > 0)
-        {
-            if (!CurMoveAttempt.x.Equals(0) && !CurMoveAttempt.z.Equals(0))
-            {
-                if (!LastMoveAttempt.x.Equals(0))
-                {
-                    CurMoveAttempt.z = 0;
-                }
-                else if (!LastMoveAttempt.z.Equals(0))
-                {
-                    CurMoveAttempt.x = 0;
-                }
-                else
-                {
-                    CurMoveAttempt.z = 0;
-                }
-            }
-
-            if (CurMoveAttempt.x.Equals(0))
-            {
-                CurMoveAttempt.x = 0;
-                RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
-            }
-
-            if (CurMoveAttempt.z.Equals(0))
-            {
-                CurMoveAttempt.z = 0;
-                RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
-            }
-
-            MovementState = MovementStates.Moving;
-            RigidBody.drag = 0;
-            RigidBody.AddForce(CurMoveAttempt);
-
-            if (RigidBody.velocity.magnitude > MoveSpeed)
-            {
-                RigidBody.AddForce(-RigidBody.velocity.normalized * (RigidBody.velocity.magnitude - MoveSpeed), ForceMode.VelocityChange);
-            }
-
-            transform.forward = CurMoveAttempt;
-            CurForward = CurMoveAttempt.normalized;
-            ActorPushHelper.PushTriggerOut();
-        }
-        else
-        {
-            transform.forward = CurForward;
-            MovementState = MovementStates.Static;
-            RigidBody.drag = 100f;
-            ActorPushHelper.PushTriggerReset();
-        }
-
-        InternalFixedUpdate();
-
-        LastMoveAttempt = CurMoveAttempt;
-
-        #endregion
-    }
-
-    protected virtual void InternalFixedUpdate()
-    {
     }
 
     #region Skills
 
-    public void Kick()
+    public void KickDoubleClick()
     {
-        ActorPushHelper.ActorPushHelperTrigger.curPushingBox?.Kick(CurForward, KickForce);
+        Ray ray = new Ray(transform.position, transform.forward);
+        Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1.5f, LayerManager.Instance.LayerMask_Box, QueryTriggerInteraction.Collide))
+        {
+            Box box = hit.collider.gameObject.GetComponentInParent<Box>();
+            if (box && box.Pushable())
+            {
+                box.Kick(CurForward, KickForce);
+            }
+        }
     }
 
     public void Lift()

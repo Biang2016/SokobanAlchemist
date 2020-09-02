@@ -84,7 +84,6 @@ public class
         DebugConsole.OnDebugConsoleToggleHandler = (enable) =>
         {
             ControlManager.Instance.EnableBattleInputActions(!enable);
-            ControlManager.Instance.EnableBuildingInputActions(!enable);
         };
 
         WorldManager.Awake();

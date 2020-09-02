@@ -1,65 +1,18 @@
 ﻿using System.Collections.Generic;
+using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.Singleton;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 public class ControlManager : TSingletonBaseManager<ControlManager>
 {
     private PlayerInput PlayerInput;
     private PlayerInput.CommonActions CommonInputActions;
     private PlayerInput.BattleInputActions BattleInputActions;
-    private PlayerInput.BuildingInputActions BuildingInputActions;
 
     public Dictionary<ButtonNames, ButtonState> ButtonStateDict = new Dictionary<ButtonNames, ButtonState>();
-
-    #region Building
-
-    public bool BuildingInputActionEnabled => BuildingInputActions.enabled;
-
-    public ButtonState Building_MouseLeft = new ButtonState() {ButtonName = ButtonNames.Building_MouseLeft};
-    public ButtonState Building_MouseRight = new ButtonState() {ButtonName = ButtonNames.Building_MouseRight};
-    public ButtonState Building_MouseMiddle = new ButtonState() {ButtonName = ButtonNames.Building_MouseMiddle};
-
-    public Vector2 Building_Move;
-
-    private Vector2 Last_Building_MousePosition = Vector2.zero;
-
-    public Vector2 Building_MousePosition
-    {
-        get
-        {
-            if (BuildingInputActions.enabled)
-            {
-                Last_Building_MousePosition = MousePosition;
-                return MousePosition;
-            }
-            else
-            {
-                return Last_Building_MousePosition;
-            }
-        }
-    }
-
-    public Vector2 Building_MouseWheel
-    {
-        get
-        {
-            if (BuildingInputActions.enabled)
-            {
-                return MouseWheel;
-            }
-            else
-            {
-                return Vector2.zero;
-            }
-        }
-    }
-
-    public ButtonState Building_RotateItem = new ButtonState() {ButtonName = ButtonNames.Building_RotateItem};
-    public ButtonState Building_ToggleBackpack = new ButtonState() {ButtonName = ButtonNames.Building_ToggleBackpack};
-    public ButtonState Building_ToggleWireLines = new ButtonState() {ButtonName = ButtonNames.Building_ToggleWireLines};
-
-    #endregion
+    public Dictionary<ButtonNames, ButtonState> ButtonStateDict_LastFrame = new Dictionary<ButtonNames, ButtonState>();
 
     #region Battle
 
@@ -70,6 +23,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     public ButtonState Battle_MouseMiddle = new ButtonState() {ButtonName = ButtonNames.Battle_MouseMiddle};
 
     public Vector2[] Battle_Move = new Vector2[2];
+    public ButtonState[,] Battle_MoveButtons = new ButtonState[2,4];
+    public ButtonState[,] Battle_MoveButtons_LastFrame = new ButtonState[2,4];
 
     private Vector2 Last_Battle_MousePosition = Vector2.zero;
 
@@ -172,59 +127,95 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         PlayerInput = new PlayerInput();
         CommonInputActions = new PlayerInput.CommonActions(PlayerInput);
         BattleInputActions = new PlayerInput.BattleInputActions(PlayerInput);
-        BuildingInputActions = new PlayerInput.BuildingInputActions(PlayerInput);
 
-        Building_MouseLeft.GetStateCallbackFromContext(BuildingInputActions.MouseLeftClick);
-        Building_MouseRight.GetStateCallbackFromContext(BuildingInputActions.MouseRightClick);
-        Building_MouseMiddle.GetStateCallbackFromContext(BuildingInputActions.MouseMiddleClick);
+        Battle_MouseLeft.GetStateCallbackFromContext_UpDownPress(BattleInputActions.MouseLeftClick);
+        Battle_MouseRight.GetStateCallbackFromContext_UpDownPress(BattleInputActions.MouseRightClick);
+        Battle_MouseMiddle.GetStateCallbackFromContext_UpDownPress(BattleInputActions.MouseMiddleClick);
 
-        BuildingInputActions.Move.performed += context => Building_Move = context.ReadValue<Vector2>();
-        BuildingInputActions.Move.canceled += context => Building_Move = Vector2.zero;
+        // 移动组合向量
+        BattleInputActions.Player1_Move.performed += context => Battle_Move[(int)PlayerNumber.Player1] = context.ReadValue<Vector2>();
+        BattleInputActions.Player1_Move.canceled += context => Battle_Move[(int)PlayerNumber.Player1] = Vector2.zero;
 
-        Building_RotateItem.GetStateCallbackFromContext(BuildingInputActions.RotateItem);
-        Building_ToggleBackpack.GetStateCallbackFromContext(BuildingInputActions.ToggleBackpack);
-        Building_ToggleWireLines.GetStateCallbackFromContext(BuildingInputActions.ToggleWireLines);
+        BattleInputActions.Player2_Move.performed += context => Battle_Move[(int)PlayerNumber.Player2] = context.ReadValue<Vector2>();
+        BattleInputActions.Player2_Move.canceled += context => Battle_Move[(int)PlayerNumber.Player2] = Vector2.zero;
 
-        Battle_MouseLeft.GetStateCallbackFromContext(BattleInputActions.MouseLeftClick);
-        Battle_MouseRight.GetStateCallbackFromContext(BattleInputActions.MouseRightClick);
-        Battle_MouseMiddle.GetStateCallbackFromContext(BattleInputActions.MouseMiddleClick);
+        // 正常按键
+        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Up] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Up_Player1 };
+        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Right] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Right_Player1 };
+        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Down] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Down_Player1 };
+        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Left] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Left_Player1 };
 
-        BattleInputActions.Player1Move.performed += context => Battle_Move[(int)PlayerNumber.Player1] = context.ReadValue<Vector2>();
-        BattleInputActions.Player1Move.canceled += context => Battle_Move[(int)PlayerNumber.Player1] = Vector2.zero;
+        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Up] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Up_Player2 };
+        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Right] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Right_Player2 };
+        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Down] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Down_Player2 };
+        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Left] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Left_Player2 };
 
-        BattleInputActions.Player2Move.performed += context => Battle_Move[(int)PlayerNumber.Player2] = context.ReadValue<Vector2>();
-        BattleInputActions.Player2Move.canceled += context => Battle_Move[(int)PlayerNumber.Player2] = Vector2.zero;
+        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Up].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player1_Move_Up);
+        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Right].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player1_Move_Right);
+        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Down].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player1_Move_Down);
+        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Left].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player1_Move_Left);
 
-        Battle_Skill_0_Player1.GetStateCallbackFromContext(BattleInputActions.Skill_0_Player1);
-        Battle_Skill_1_Player1.GetStateCallbackFromContext(BattleInputActions.Skill_1_Player1);
-        Battle_Skill_0_Player2.GetStateCallbackFromContext(BattleInputActions.Skill_0_Player2);
-        Battle_Skill_1_Player2.GetStateCallbackFromContext(BattleInputActions.Skill_1_Player2);
+        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Up].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player2_Move_Up);
+        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Right].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player2_Move_Right);
+        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Down].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player2_Move_Down);
+        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Left].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player2_Move_Left);
+
+        // 双击方向键
+        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Up].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player1_Move_Up_M);
+        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Right].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player1_Move_Right_M);
+        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Down].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player1_Move_Down_M);
+        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Left].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player1_Move_Left_M);
+
+        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Up].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player2_Move_Up_M);
+        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Right].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player2_Move_Right_M);
+        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Down].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player2_Move_Down_M);
+        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Left].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player2_Move_Left_M);
+
+        Battle_MoveButtons_LastFrame[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Up] = ButtonStateDict_LastFrame[ButtonNames.Battle_Move_Up_Player1];
+        Battle_MoveButtons_LastFrame[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Right] = ButtonStateDict_LastFrame[ButtonNames.Battle_Move_Right_Player1];
+        Battle_MoveButtons_LastFrame[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Down] = ButtonStateDict_LastFrame[ButtonNames.Battle_Move_Down_Player1];
+        Battle_MoveButtons_LastFrame[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Left] = ButtonStateDict_LastFrame[ButtonNames.Battle_Move_Left_Player1];
+
+        Battle_MoveButtons_LastFrame[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Up] = ButtonStateDict_LastFrame[ButtonNames.Battle_Move_Up_Player2];
+        Battle_MoveButtons_LastFrame[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Right] = ButtonStateDict_LastFrame[ButtonNames.Battle_Move_Right_Player2];
+        Battle_MoveButtons_LastFrame[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Down] = ButtonStateDict_LastFrame[ButtonNames.Battle_Move_Down_Player2];
+        Battle_MoveButtons_LastFrame[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Left] = ButtonStateDict_LastFrame[ButtonNames.Battle_Move_Left_Player2];
+
+        // 技能
+        Battle_Skill_0_Player1.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_0_Player1);
+        Battle_Skill_1_Player1.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_1_Player1);
+        Battle_Skill_0_Player2.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_0_Player2);
+        Battle_Skill_1_Player2.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_1_Player2);
 
         Battle_Skill[(int) PlayerNumber.Player1, 0] = Battle_Skill_0_Player1;
         Battle_Skill[(int) PlayerNumber.Player1, 1] = Battle_Skill_1_Player1;
         Battle_Skill[(int) PlayerNumber.Player2, 0] = Battle_Skill_0_Player2;
         Battle_Skill[(int) PlayerNumber.Player2, 1] = Battle_Skill_1_Player2;
 
-        Battle_ToggleBattleTip.GetStateCallbackFromContext(BattleInputActions.ToggleBattleTip);
+        Battle_ToggleBattleTip.GetStateCallbackFromContext_UpDownPress(BattleInputActions.ToggleBattleTip);
 
-        Common_MouseLeft.GetStateCallbackFromContext(CommonInputActions.MouseLeftClick);
-        Common_MouseRight.GetStateCallbackFromContext(CommonInputActions.MouseRightClick);
-        Common_MouseMiddle.GetStateCallbackFromContext(CommonInputActions.MouseMiddleClick);
+        Common_MouseLeft.GetStateCallbackFromContext_UpDownPress(CommonInputActions.MouseLeftClick);
+        Common_MouseRight.GetStateCallbackFromContext_UpDownPress(CommonInputActions.MouseRightClick);
+        Common_MouseMiddle.GetStateCallbackFromContext_UpDownPress(CommonInputActions.MouseMiddleClick);
 
-        Common_Confirm.GetStateCallbackFromContext(CommonInputActions.Confirm);
-        Common_Debug.GetStateCallbackFromContext(CommonInputActions.Debug);
-        Common_Exit.GetStateCallbackFromContext(CommonInputActions.Exit);
-        Common_Tab.GetStateCallbackFromContext(CommonInputActions.Tab);
-        Common_RestartGame.GetStateCallbackFromContext(CommonInputActions.RestartGame);
+        Common_Confirm.GetStateCallbackFromContext_UpDownPress(CommonInputActions.Confirm);
+        Common_Debug.GetStateCallbackFromContext_UpDownPress(CommonInputActions.Debug);
+        Common_Exit.GetStateCallbackFromContext_UpDownPress(CommonInputActions.Exit);
+        Common_Tab.GetStateCallbackFromContext_UpDownPress(CommonInputActions.Tab);
+        Common_RestartGame.GetStateCallbackFromContext_UpDownPress(CommonInputActions.RestartGame);
 
         PlayerInput.Enable();
         CommonInputActions.Enable();
         BattleInputActions.Enable();
-        BuildingInputActions.Disable();
     }
 
     public override void FixedUpdate(float deltaTime)
     {
+        foreach (KeyValuePair<ButtonNames, ButtonState> kv in ButtonStateDict_LastFrame)
+        {
+            ButtonStateDict[kv.Key].ApplyTo(kv.Value);
+        }
+
         foreach (KeyValuePair<ButtonNames, ButtonState> kv in ButtonStateDict)
         {
             kv.Value.Reset();
@@ -260,18 +251,6 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         else
         {
             BattleInputActions.Disable();
-        }
-    }
-
-    public void EnableBuildingInputActions(bool enable)
-    {
-        if (enable)
-        {
-            BuildingInputActions.Enable();
-        }
-        else
-        {
-            BuildingInputActions.Disable();
         }
     }
 

@@ -306,4 +306,7 @@ public enum BoxType
 
     [LabelText("银箱子")]
     SilverBox = 13,
+
+    [LabelText("黑箱子")]
+    BlackBox = 14,
 }

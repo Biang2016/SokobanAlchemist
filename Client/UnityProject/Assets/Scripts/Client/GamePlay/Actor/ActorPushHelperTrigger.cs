@@ -18,7 +18,6 @@ public class ActorPushHelperTrigger : MonoBehaviour
             if (box && box.Pushable())
             {
                 PushingBoxList.Add(box);
-                ActorPushHelper.Actor.PushState = PushingBoxList.Count > 0 ? Actor.PushStates.Pushing : Actor.PushStates.None;
             }
         }
     }
@@ -52,7 +51,6 @@ public class ActorPushHelperTrigger : MonoBehaviour
                 ActorPushHelper.AnimModel.ResetTrigger("MoveOut");
                 box.PushCanceled();
                 PushingBoxList.Remove(box);
-                ActorPushHelper.Actor.PushState = PushingBoxList.Count > 0 ? Actor.PushStates.Pushing : Actor.PushStates.None;
             }
         }
     }

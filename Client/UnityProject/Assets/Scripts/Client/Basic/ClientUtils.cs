@@ -2,12 +2,24 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.Interactions;
 
 public static class ClientUtils
 {
-    public static void GetStateCallbackFromContext(this ButtonState state, InputAction action)
+    public static void GetStateCallbackFromContext_UpDownPress(this ButtonState state, InputAction action)
     {
-        ControlManager.Instance.ButtonStateDict.Add(state.ButtonName, state);
+        if (!ControlManager.Instance.ButtonStateDict.ContainsKey(state.ButtonName))
+        {
+            ControlManager.Instance.ButtonStateDict.Add(state.ButtonName, state);
+            ButtonState lastFrameState = new ButtonState();
+            state.ApplyTo(lastFrameState);
+            ControlManager.Instance.ButtonStateDict_LastFrame.Add(state.ButtonName, lastFrameState);
+        }
+        else
+        {
+            Debug.Log($"ControlManager ButtonState {state.ButtonName} 重名");
+        }
+
         action.performed += context =>
         {
             ButtonControl bc = (ButtonControl) context.control;
@@ -22,6 +34,27 @@ public static class ClientUtils
         };
 
         action.canceled += context => { state.Pressed = false; };
+    }
+
+    public static void GetStateCallbackFromContext_MultipleClick(this ButtonState state, InputAction action)
+    {
+        if (!ControlManager.Instance.ButtonStateDict.ContainsKey(state.ButtonName))
+        {
+            ControlManager.Instance.ButtonStateDict.Add(state.ButtonName, state);
+            ButtonState lastFrameState = new ButtonState();
+            state.ApplyTo(lastFrameState);
+            ControlManager.Instance.ButtonStateDict_LastFrame.Add(state.ButtonName, lastFrameState);
+        }
+
+        action.performed += context =>
+        {
+            if (context.interaction is MultiTapInteraction mt)
+            {
+                state.MultiClick = mt.tapCount;
+            }
+        };
+
+        action.canceled += context => { state.MultiClick = 0; };
     }
 
     public static GridPos3D ToGridPos3D(this Vector3 vector3)

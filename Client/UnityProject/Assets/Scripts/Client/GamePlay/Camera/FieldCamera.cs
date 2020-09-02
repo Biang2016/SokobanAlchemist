@@ -120,19 +120,6 @@ public class FieldCamera : MonoBehaviour
         {
             Distance_Level--;
         }
-
-        if (ControlManager.Instance.Building_MouseWheel.y < 0)
-        {
-            if (Distance_Level <= 1)
-            {
-                Distance_Level++;
-            }
-        }
-
-        if (ControlManager.Instance.Building_MouseWheel.y > 0)
-        {
-            Distance_Level--;
-        }
     }
 
     #endregion
