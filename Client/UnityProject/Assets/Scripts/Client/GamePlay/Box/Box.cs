@@ -176,7 +176,7 @@ public class Box : PoolObject
 
             Rigidbody.drag = Dynamic_Drag * ConfigManager.BoxKickDragFactor_Cheat;
             Rigidbody.angularDrag = 0;
-            Rigidbody.velocity = direction * 1.1f;
+            Rigidbody.velocity = direction.normalized * 1.1f;
             Rigidbody.angularVelocity = Vector3.zero;
             Rigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             if (direction.x.Equals(0)) Rigidbody.constraints |= RigidbodyConstraints.FreezePositionX;

@@ -23,7 +23,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
         }
     }
 
-    public Box curPushingBox = null;
+    public Box curPushingBox = null; // 一次只推一个箱子
 
     void OnTriggerStay(Collider collider)
     {

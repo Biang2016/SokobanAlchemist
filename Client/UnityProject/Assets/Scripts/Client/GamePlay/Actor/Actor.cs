@@ -154,8 +154,17 @@ public class Actor : PoolObject
                 }
             }
 
-            if (CurMoveAttempt.x.Equals(0)) RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
-            if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
+            if (CurMoveAttempt.x.Equals(0))
+            {
+                CurMoveAttempt.x = 0;
+                RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
+            }
+
+            if (CurMoveAttempt.z.Equals(0))
+            {
+                CurMoveAttempt.z = 0;
+                RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
+            }
 
             MovementState = MovementStates.Moving;
             RigidBody.drag = 0;
@@ -167,7 +176,7 @@ public class Actor : PoolObject
             }
 
             transform.forward = CurMoveAttempt;
-            CurForward = transform.forward;
+            CurForward = CurMoveAttempt.normalized;
             ActorPushHelper.PushTriggerOut();
         }
         else
@@ -187,7 +196,6 @@ public class Actor : PoolObject
 
     protected virtual void InternalFixedUpdate()
     {
-
     }
 
     #region Skills

@@ -71,7 +71,7 @@ public class PlayerActor : Actor
 
         if (PushState == PushStates.Pushing && kick)
         {
-            //Kick();
+            Kick();
         }
     }
 }
