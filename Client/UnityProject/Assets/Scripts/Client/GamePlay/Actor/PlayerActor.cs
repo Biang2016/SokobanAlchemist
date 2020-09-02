@@ -8,11 +8,13 @@ public class PlayerActor : Actor
     [LabelText("玩家编号")]
     public PlayerNumber PlayerNumber;
 
-    internal bool skill0_Down;
-    internal bool skill0_Up;
-    internal bool skill1_Down;
-    internal bool skill1_Pressed;
-    internal bool skill1_Up;
+    // Skill_0 is Throw
+    internal bool skill_0_Down;
+    internal bool skill_0_Pressed;
+    internal bool skill_0_Up;
+    internal bool skill_1_Down;
+    internal bool skill_1_Pressed;
+    internal bool skill_1_Up;
 
     public void Initialize(PlayerNumber playerNumber)
     {
@@ -29,21 +31,48 @@ public class PlayerActor : Actor
 
         #region Skill
 
-        skill0_Down = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0].Down;
-        skill0_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0].Up;
-        skill1_Down = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Down;
-        skill1_Pressed = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Pressed;
-        skill1_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Up;
+        skill_0_Down = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0].Down;
+        skill_0_Pressed = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0].Pressed;
+        skill_0_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0].Up;
+        skill_1_Down = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Down;
+        skill_1_Pressed = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Pressed;
+        skill_1_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Up;
 
-        if (skill0_Up) Kick();
+        if (skill_0_Down) Lift();
 
-        if (skill1_Down) Lift();
+        if (skill_0_Pressed) ThrowCharge();
 
-        if (skill1_Pressed) ThrowCharge();
-
-        if (skill1_Up) Throw();
+        if (skill_0_Up) Throw();
 
         #endregion
+    }
+
+    protected override void InternalFixedUpdate()
+    {
+        base.InternalFixedUpdate();
+
+        // 推的过程中再次按下对应方向键，则踢出箱子
+        bool kick = false;
+        if (!CurMoveAttempt.x.Equals(0) && LastMoveAttempt.x.Equals(0))
+        {
+            if (CurMoveAttempt.x * CurForward.x > 0)
+            {
+                kick = true;
+            }
+        }
+
+        if (!CurMoveAttempt.z.Equals(0) && LastMoveAttempt.z.Equals(0))
+        {
+            if (CurMoveAttempt.z * CurForward.z > 0)
+            {
+                kick = true;
+            }
+        }
+
+        if (PushState == PushStates.Pushing && kick)
+        {
+            //Kick();
+        }
     }
 }
 

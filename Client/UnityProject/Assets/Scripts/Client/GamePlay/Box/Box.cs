@@ -123,6 +123,7 @@ public class Box : PoolObject
             transform.DOPause();
             transform.DOLocalMove(localGridPos3D.ToVector3(), lerpTime).SetEase(Ease.Linear).OnComplete(() => { State = States.Static; });
             transform.DOLocalRotate(Vector3.zero, lerpTime);
+            State = States.BeingPushed;
         }
         else
         {
@@ -131,7 +132,6 @@ public class Box : PoolObject
             State = States.Static;
         }
 
-        State = States.BeingPushed;
         WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
     }
 
@@ -144,6 +144,17 @@ public class Box : PoolObject
             if (gp != GridPos3D)
             {
                 WorldManager.Instance.CurrentWorld.MoveBox(GridPos3D, gp, States.BeingPushed);
+            }
+        }
+    }
+
+    public void PushCanceled()
+    {
+        if (State == States.BeingPushed)
+        {
+            if ((transform.localPosition - LocalGridPos3D.ToVector3()).magnitude > (1 - Static_Inertia))
+            {
+                WorldManager.Instance.CurrentWorld.MoveBox(GridPos3D, lastGP, States.PushingCanceling);
             }
         }
     }
@@ -227,17 +238,6 @@ public class Box : PoolObject
             StaticCollider.enabled = true;
             DynamicCollider.enabled = false;
             WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this);
-        }
-    }
-
-    public void PushCanceled()
-    {
-        if (State == States.BeingPushed)
-        {
-            if ((transform.localPosition - LocalGridPos3D.ToVector3()).magnitude > (1 - Static_Inertia))
-            {
-                WorldManager.Instance.CurrentWorld.MoveBox(GridPos3D, lastGP, States.PushingCanceling);
-            }
         }
     }
 

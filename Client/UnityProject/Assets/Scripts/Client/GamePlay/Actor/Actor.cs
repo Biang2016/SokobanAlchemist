@@ -25,7 +25,7 @@ public class Actor : PoolObject
     [LabelText("上一帧移动倾向")]
     public Vector3 LastMoveAttempt;
 
-    private Vector3 CurForward = Vector3.forward;
+    protected Vector3 CurForward = Vector3.forward;
 
     [DisplayAsString]
     [LabelText("世界坐标")]
@@ -76,18 +76,27 @@ public class Actor : PoolObject
     [LabelText("移动状态")]
     public MovementStates MovementState = MovementStates.Static;
 
-    public enum ActionStates
+    public enum PushStates
     {
         None,
         Pushing,
+    }
+
+    [ReadOnly]
+    [LabelText("推箱子状态")]
+    public PushStates PushState = PushStates.None;
+
+    public enum ThrowStates
+    {
+        None,
         Raising,
         Lifting,
         ThrowCharging,
     }
 
     [ReadOnly]
-    [LabelText("技能状态")]
-    public ActionStates ActionState = ActionStates.None;
+    [LabelText("扔技能状态")]
+    public ThrowStates ThrowState = ThrowStates.None;
 
     void Awake()
     {
@@ -122,6 +131,7 @@ public class Actor : PoolObject
 
     protected virtual void FixedUpdate()
     {
+        RigidBody.angularVelocity = Vector3.zero;
         CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
 
         #region Move
@@ -168,23 +178,23 @@ public class Actor : PoolObject
             ActorPushHelper.PushTriggerReset();
         }
 
+        InternalFixedUpdate();
+
         LastMoveAttempt = CurMoveAttempt;
 
-        RigidBody.angularVelocity = Vector3.zero;
-
         #endregion
+    }
+
+    protected virtual void InternalFixedUpdate()
+    {
+
     }
 
     #region Skills
 
     public void Kick()
     {
-        foreach (Box box in ActorFaceHelper.FacingBoxList)
-        {
-            box.Kick(CurForward, KickForce);
-        }
-
-        ActorFaceHelper.FacingBoxList.Clear();
+        ActorPushHelper.ActorPushHelperTrigger.curPushingBox?.Kick(CurForward, KickForce);
     }
 
     public void Lift()
@@ -199,13 +209,13 @@ public class Actor : PoolObject
                 if (box.BeingLift())
                 {
                     CurrentLiftBox = box;
-                    ActionState = ActionStates.Raising;
+                    ThrowState = ThrowStates.Raising;
                     ActorFaceHelper.FacingBoxList.Remove(box);
                     box.transform.parent = LiftBoxPivot.transform.parent;
                     box.transform.DOLocalMove(LiftBoxPivot.transform.localPosition, 0.2f).OnComplete(() =>
                     {
                         box.State = Box.States.Lifted;
-                        ActionState = ActionStates.Lifting;
+                        ThrowState = ThrowStates.Lifting;
                     });
                 }
             }
@@ -223,12 +233,12 @@ public class Actor : PoolObject
             return;
         }
 
-        if (ActionState == ActionStates.Lifting)
+        if (ThrowState == ThrowStates.Lifting)
         {
-            ActionState = ActionStates.ThrowCharging;
+            ThrowState = ThrowStates.ThrowCharging;
         }
 
-        if (ActionState == ActionStates.ThrowCharging)
+        if (ThrowState == ThrowStates.ThrowCharging)
         {
             float max = ThrowChargeMaxCurveByWeight.Evaluate(CurrentLiftBox.FinalWeight) * ThrowChargeMaxCurveFactor_Cheat;
             ThrowChargeTick += Time.fixedDeltaTime * ThrowChargeSpeedCurveByWeight.Evaluate(CurrentLiftBox.FinalWeight) * ThrowChargeSpeedFactor_Cheat;
@@ -238,7 +248,7 @@ public class Actor : PoolObject
 
     private void UpdateThrowParabolaLine()
     {
-        bool isCharging = CurrentLiftBox && ActionState == ActionStates.ThrowCharging;
+        bool isCharging = CurrentLiftBox && ThrowState == ThrowStates.ThrowCharging;
         ActorLaunchArcRendererHelper.SetShown(isCharging);
         if (isCharging)
         {
@@ -249,10 +259,10 @@ public class Actor : PoolObject
 
     public void Throw()
     {
-        if (CurrentLiftBox && ActionState == ActionStates.ThrowCharging)
+        if (CurrentLiftBox && ThrowState == ThrowStates.ThrowCharging)
         {
             float velocity = GetThrowBoxVelocity(CurrentLiftBox);
-            ActionState = ActionStates.None;
+            ThrowState = ThrowStates.None;
             Vector3 throwVel = transform.TransformDirection(new Vector3(0, 1, 1));
             CurrentLiftBox.Throw(throwVel, velocity);
             CurrentLiftBox = null;

@@ -561,7 +561,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   ThrowChargeMaxCurveFactor_Cheat: 1
   MovementState: 0
-  ActionState: 0
+  PushState: 0
+  ThrowState: 0
   PlayerNumber: 0
 --- !u!114 &2166859655936540271
 MonoBehaviour:
@@ -635,6 +636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorPushHelper: {fileID: 900320894205187531}
+  curPushingBox: {fileID: 0}
 --- !u!95 &5261948187243038876
 Animator:
   serializedVersion: 3
@@ -734,6 +736,7 @@ MonoBehaviour:
   Model: {fileID: 8635302422182133083}
   AnimCollider: {fileID: 5261948187243038876}
   AnimModel: {fileID: 1229286271962095937}
+  ActorPushHelperTrigger: {fileID: 5397992360963508541}
 --- !u!1 &9187498043078746423
 GameObject:
   m_ObjectHideFlags: 0

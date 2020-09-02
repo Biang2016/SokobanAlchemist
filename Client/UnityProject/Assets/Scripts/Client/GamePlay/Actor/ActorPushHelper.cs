@@ -7,6 +7,7 @@ public class ActorPushHelper : ActorHelper
     public GameObject Model;
     public Animator AnimCollider;
     public Animator AnimModel;
+    public ActorPushHelperTrigger ActorPushHelperTrigger;
 
     public void PushTriggerOut()
     {

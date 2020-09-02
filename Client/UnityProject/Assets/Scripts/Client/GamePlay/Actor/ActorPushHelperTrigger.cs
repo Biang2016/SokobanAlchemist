@@ -18,11 +18,12 @@ public class ActorPushHelperTrigger : MonoBehaviour
             if (box && box.Pushable())
             {
                 PushingBoxList.Add(box);
+                ActorPushHelper.Actor.PushState = PushingBoxList.Count > 0 ? Actor.PushStates.Pushing : Actor.PushStates.None;
             }
         }
     }
 
-    private Box curPushingBox = null;
+    public Box curPushingBox = null;
 
     void OnTriggerStay(Collider collider)
     {
@@ -51,6 +52,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
                 ActorPushHelper.AnimModel.ResetTrigger("MoveOut");
                 box.PushCanceled();
                 PushingBoxList.Remove(box);
+                ActorPushHelper.Actor.PushState = PushingBoxList.Count > 0 ? Actor.PushStates.Pushing : Actor.PushStates.None;
             }
         }
     }
