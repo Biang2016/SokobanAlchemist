@@ -33,7 +33,7 @@ public class WorldDeadZoneTrigger : MonoBehaviour
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box)
             {
-                WorldManager.Instance.CurrentWorld.RemoveBoxForPhysics(box);
+                WorldManager.Instance.CurrentWorld.RemoveBox(box);
                 if (box.Rigidbody)
                 {
                     DestroyImmediate(box.Rigidbody);

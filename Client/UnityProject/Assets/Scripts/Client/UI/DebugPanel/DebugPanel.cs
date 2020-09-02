@@ -180,7 +180,7 @@ public class DebugPanel : BaseUIPanel
         BattleManager.Instance.MainPlayer2.KickForce = value;
     }
 
-    [DebugSlider("人物战斗数值/扔力", 8, 1, 20)]
+    [DebugSlider("人物战斗数值/扔力", 40, 1, 100)]
     public void ChangeThrowForce(float value)
     {
         BattleManager.Instance.MainPlayer1.ThrowForce = value;
@@ -213,6 +213,18 @@ public class DebugPanel : BaseUIPanel
     {
         ConfigManager.BoxDynamicBounceFactor_Cheat = value;
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint)Enum_Events.OnBoxDynamicBounceCheatChanged);
+    }
+
+    [DebugSlider("箱子参数/扔箱子落地摩阻力", 10f, 0, 20f)]
+    public void ChangeBoxThrowDrag(float value)
+    {
+        ConfigManager.BoxThrowDragFactor_Cheat = value;
+    }
+
+    [DebugSlider("箱子参数/踢箱子摩阻力", 1, 0, 20f)]
+    public void ChangeBoxKickDrag(float value)
+    {
+        ConfigManager.BoxKickDragFactor_Cheat = value;
     }
 
     [DebugSlider("箱子参数/重量调整因子", 1, 0.1f, 10f)]

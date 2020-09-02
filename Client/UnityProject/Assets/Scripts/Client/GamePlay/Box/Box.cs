@@ -39,9 +39,13 @@ public class Box : PoolObject
 
     public float FinalWeight => Weight * ConfigManager.BoxWeightFactor_Cheat;
 
-    [BoxGroup("推箱子属性")]
+    [BoxGroup("静止属性")]
     [LabelText("弹性")]
     public float Static_Bounce;
+
+    [BoxGroup("动态属性")]
+    [LabelText("弹性")]
+    public float Dynamic_Bounce = 1f;
 
     [BoxGroup("推箱子属性")]
     [LabelText("抗推力")]
@@ -49,13 +53,13 @@ public class Box : PoolObject
     [FormerlySerializedAs("Inertia")]
     public float Static_Inertia = 0.5f;
 
-    [BoxGroup("踢箱子属性")]
-    [LabelText("阻力")]
-    public float Dynamic_Drag = 0.5f;
+    [BoxGroup("扔箱子属性")]
+    [LabelText("落地摩阻力")]
+    public float Throw_Drag = 0.5f;
 
     [BoxGroup("踢箱子属性")]
-    [LabelText("弹性")]
-    public float Dynamic_Bounce = 1f;
+    [LabelText("摩阻力")]
+    public float Dynamic_Drag = 0.5f;
 
     private GridPos3D lastGP;
 
@@ -71,8 +75,8 @@ public class Box : PoolObject
     public enum States
     {
         Static,
-        Moving,
-        MovingCanceling,
+        BeingPushed,
+        PushingCanceling,
         BeingKicked,
         BeingLift,
         Lifted,
@@ -107,18 +111,18 @@ public class Box : PoolObject
         DynamicCollider.material.bounciness = Dynamic_Bounce * ConfigManager.BoxStaticBounceFactor_Cheat;
     }
 
-    public void Initialize(GridPos3D localGridPos3D, WorldModule module, bool moveLerp)
+    public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime)
     {
         lastGP = GridPos3D;
         WorldModule = module;
         GridPos3D = localGridPos3D + module.ModuleGP * WorldModule.MODULE_SIZE;
         LocalGridPos3D = localGridPos3D;
         transform.parent = module.transform;
-        if (moveLerp)
+        if (lerpTime > 0)
         {
             transform.DOPause();
-            transform.DOLocalMove(localGridPos3D.ToVector3(), FinalWeight * ConfigManager.BoxWeightFactor_Cheat).SetEase(Ease.Linear).OnComplete(() => { State = States.Static; });
-            transform.DOLocalRotate(Vector3.zero, FinalWeight);
+            transform.DOLocalMove(localGridPos3D.ToVector3(), lerpTime).SetEase(Ease.Linear).OnComplete(() => { State = States.Static; });
+            transform.DOLocalRotate(Vector3.zero, lerpTime);
         }
         else
         {
@@ -126,26 +130,29 @@ public class Box : PoolObject
             transform.localRotation = Quaternion.identity;
             State = States.Static;
         }
+
+        State = States.BeingPushed;
+        WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
     }
 
     public void Push(Vector3 direction)
     {
-        if (State == States.Static || State == States.MovingCanceling)
+        if (State == States.Static || State == States.PushingCanceling)
         {
             Vector3 targetPos = GridPos3D.ToVector3() + direction.normalized;
             GridPos3D gp = GridPos3D.GetGridPosByPoint(targetPos, 1);
             if (gp != GridPos3D)
             {
-                WorldManager.Instance.CurrentWorld.MoveBox(GridPos3D, gp, States.Moving);
+                WorldManager.Instance.CurrentWorld.MoveBox(GridPos3D, gp, States.BeingPushed);
             }
         }
     }
 
     public void Kick(Vector3 direction, float force)
     {
-        if (State == States.Moving || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.MovingCanceling)
+        if (State == States.BeingPushed || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.PushingCanceling)
         {
-            WorldManager.Instance.CurrentWorld.RemoveBoxForPhysics(this);
+            WorldManager.Instance.CurrentWorld.RemoveBox(this);
             State = States.BeingKicked;
             transform.DOPause();
             StaticCollider.enabled = false;
@@ -156,7 +163,7 @@ public class Box : PoolObject
             Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 
-            Rigidbody.drag = Dynamic_Drag;
+            Rigidbody.drag = Dynamic_Drag * ConfigManager.BoxKickDragFactor_Cheat;
             Rigidbody.angularDrag = 0;
             Rigidbody.velocity = direction * 1.1f;
             Rigidbody.angularVelocity = Vector3.zero;
@@ -170,9 +177,9 @@ public class Box : PoolObject
 
     public bool BeingLift()
     {
-        if (State == States.Moving || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.MovingCanceling)
+        if (State == States.BeingPushed || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.PushingCanceling)
         {
-            WorldManager.Instance.CurrentWorld.RemoveBoxForPhysics(this);
+            WorldManager.Instance.CurrentWorld.RemoveBox(this);
             State = States.BeingLift;
             transform.DOPause();
             StaticCollider.enabled = false;
@@ -192,9 +199,9 @@ public class Box : PoolObject
     {
         if (State == States.Lifted)
         {
+            State = States.Flying;
             transform.DOPause();
             transform.parent = WorldManager.Instance.CurrentWorld.transform;
-            State = States.Flying;
             StaticCollider.enabled = false;
             DynamicCollider.enabled = true;
             Rigidbody = gameObject.GetComponent<Rigidbody>();
@@ -225,11 +232,11 @@ public class Box : PoolObject
 
     public void PushCanceled()
     {
-        if (State == States.Moving)
+        if (State == States.BeingPushed)
         {
             if ((transform.localPosition - LocalGridPos3D.ToVector3()).magnitude > (1 - Static_Inertia))
             {
-                WorldManager.Instance.CurrentWorld.MoveBox(GridPos3D, lastGP, States.MovingCanceling);
+                WorldManager.Instance.CurrentWorld.MoveBox(GridPos3D, lastGP, States.PushingCanceling);
             }
         }
     }
@@ -244,8 +251,18 @@ public class Box : PoolObject
         return BoxType != BoxType.None && BoxType != BoxType.GroundBox && BoxType != BoxType.BorderBox;
     }
 
+    public bool Droppable()
+    {
+        return BoxType != BoxType.None && BoxType != BoxType.GroundBox && BoxType != BoxType.BorderBox;
+    }
+
     void OnCollisionEnter(Collision collision)
     {
+        if (State == States.Flying)
+        {
+            Rigidbody.drag = Throw_Drag * ConfigManager.BoxThrowDragFactor_Cheat;
+        }
+
         //if ((State == States.Flying || State == States.BeingKicked) && Rigidbody)
         //{
         //    bool stop = false;

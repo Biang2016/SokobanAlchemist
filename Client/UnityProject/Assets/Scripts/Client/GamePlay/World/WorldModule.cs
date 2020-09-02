@@ -33,7 +33,7 @@ public class WorldModule : PoolObject
                     {
                         Box box = GameObjectPoolManager.Instance.BoxDict[boxType].AllocateGameObject<Box>(transform);
                         GridPos3D gp = new GridPos3D(x, y, z);
-                        box.Initialize(gp, this, false);
+                        box.Initialize(gp, this, 0);
                         box.name = $"{boxType}({x}, {y}, {z})";
                         BoxMatrix[x, y, z] = box;
                     }

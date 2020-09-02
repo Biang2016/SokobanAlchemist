@@ -75,16 +75,19 @@ public class World : PoolObject
         box_src.State = sucState;
         module_src.BoxMatrix[localGP_src.x, localGP_src.y, localGP_src.z] = null;
         module_target.BoxMatrix[localGP_target.x, localGP_target.y, localGP_target.z] = box_src;
-        box_src.Initialize(localGP_target, module_target, true);
+        box_src.Initialize(localGP_target, module_target, 0.3f);
     }
 
-    public void RemoveBoxForPhysics(Box box)
+    public void RemoveBox(Box box)
     {
         if (box.WorldModule)
         {
-            if (box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] == box)
+            WorldModule module = box.WorldModule;
+            GridPos3D localGridPos3D = box.LocalGridPos3D;
+            if (module.BoxMatrix[localGridPos3D.x, localGridPos3D.y, localGridPos3D.z] == box)
             {
-                box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
+                module.BoxMatrix[localGridPos3D.x, localGridPos3D.y, localGridPos3D.z] = null;
+                CheckDropAbove(box);
                 box.WorldModule = null;
             }
         }
@@ -96,15 +99,81 @@ public class World : PoolObject
         WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(gp);
         GridPos3D localGP = gp - module.ModuleGP * WorldModule.MODULE_SIZE;
         Box existBox = module.BoxMatrix[localGP.x, localGP.y, localGP.z];
-        if (existBox != null)
+        if (existBox != null && existBox != box)
         {
             Debug.LogError($"{box.name}想要前往的位置{localGP}非空, 存在{existBox.name}");
             return;
         }
 
-        module.BoxMatrix[localGP.x, localGP.y, localGP.z] = box;
-        box.Initialize(localGP, module, true);
-        box.State = Box.States.Moving;
+        if (existBox == null)
+        {
+            module.BoxMatrix[localGP.x, localGP.y, localGP.z] = box;
+            box.Initialize(localGP, module, 0.3f);
+        }
+    }
+
+    public void CheckDropSelf(Box box)
+    {
+        if (box && box.Droppable())
+        {
+            WorldModule module = box.WorldModule;
+            GridPos3D localGridPos3D = box.LocalGridPos3D;
+            if (localGridPos3D.y > 0)
+            {
+                Box boxBeneath = module.BoxMatrix[localGridPos3D.x, localGridPos3D.y - 1, localGridPos3D.z];
+                if (boxBeneath == null)
+                {
+                    GridPos3D localGP = new GridPos3D(localGridPos3D.x, localGridPos3D.y - 1, localGridPos3D.z);
+                    box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
+                    module.BoxMatrix[localGridPos3D.x, localGridPos3D.y - 1, localGridPos3D.z] = box;
+                    box.Initialize(localGP, module, 0.1f);
+                }
+            }
+            else
+            {
+                if (module.ModuleGP.y > 0)
+                {
+                    WorldModule moduleBeneath = WorldModuleMatrix[module.ModuleGP.x, module.ModuleGP.y - 1, module.ModuleGP.z];
+                    if (moduleBeneath)
+                    {
+                        Box boxBeneath = moduleBeneath.BoxMatrix[localGridPos3D.x, WorldModule.MODULE_SIZE - 1, localGridPos3D.z];
+                        if (boxBeneath == null)
+                        {
+                            GridPos3D localGP = new GridPos3D(localGridPos3D.x, WorldModule.MODULE_SIZE - 1, localGridPos3D.z);
+                            box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
+                            moduleBeneath.BoxMatrix[localGridPos3D.x, WorldModule.MODULE_SIZE - 1, localGridPos3D.z] = box;
+                            box.Initialize(localGP, moduleBeneath, 0.3f);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void CheckDropAbove(Box box)
+    {
+        WorldModule module = box.WorldModule;
+        GridPos3D localGridPos3D = box.LocalGridPos3D;
+        if (localGridPos3D.y < WorldModule.MODULE_SIZE - 1)
+        {
+            Box boxAbove = module.BoxMatrix[localGridPos3D.x, localGridPos3D.y + 1, localGridPos3D.z];
+            CheckDropSelf(boxAbove);
+        }
+        else
+        {
+            if (module.ModuleGP.y < WORLD_HEIGHT - 1)
+            {
+                WorldModule moduleAbove = WorldModuleMatrix[module.ModuleGP.x, module.ModuleGP.y + 1, module.ModuleGP.z];
+                if (moduleAbove)
+                {
+                    Box boxAbove = moduleAbove.BoxMatrix[localGridPos3D.x, 0, localGridPos3D.z];
+                    if (boxAbove)
+                    {
+                        CheckDropSelf(boxAbove);
+                    }
+                }
+            }
+        }
     }
 
     #endregion

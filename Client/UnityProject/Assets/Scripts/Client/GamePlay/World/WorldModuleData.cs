@@ -13,8 +13,6 @@ public class WorldModuleData : IClone<WorldModuleData>
     /// </summary>
     public byte[,,] BoxMatrix = new byte[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
 
-    public byte Y;
-
     public WorldModuleData Clone()
     {
         WorldModuleData data = new WorldModuleData();
@@ -30,7 +28,6 @@ public class WorldModuleData : IClone<WorldModuleData>
             }
         }
 
-        data.Y = Y;
         return data;
     }
 

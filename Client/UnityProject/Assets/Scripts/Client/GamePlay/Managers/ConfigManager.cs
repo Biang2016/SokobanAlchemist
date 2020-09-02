@@ -11,6 +11,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 {
     public static float BoxStaticBounceFactor_Cheat = 1f;
     public static float BoxDynamicBounceFactor_Cheat = 1f;
+    public static float BoxThrowDragFactor_Cheat = 10f;
+    public static float BoxKickDragFactor_Cheat = 1f;
     public static float BoxWeightFactor_Cheat = 1f;
 
     [ShowInInspector]

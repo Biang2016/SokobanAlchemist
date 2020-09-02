@@ -213,7 +213,7 @@ public class Actor : PoolObject
     }
 
     private float ThrowChargeTick = 0;
-    private float FinalThrowForce => (2 + ThrowChargeTick * 5) * ThrowForce;
+    private float FinalThrowForce => ThrowChargeTick * ThrowForce;
 
     protected void ThrowCharge()
     {
@@ -262,7 +262,7 @@ public class Actor : PoolObject
 
     private float GetThrowBoxVelocity(Box box)
     {
-        return FinalThrowForce * Time.fixedDeltaTime / box.FinalWeight;
+        return 3.5f + FinalThrowForce * Time.fixedDeltaTime / box.FinalWeight;
     }
 
     #endregion
