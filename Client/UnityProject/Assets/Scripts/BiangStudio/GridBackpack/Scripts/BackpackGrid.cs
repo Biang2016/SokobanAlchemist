@@ -11,10 +11,10 @@ namespace BiangStudio.GridBackpack
     /// </summary>
     public class BackpackGrid : PoolObject
     {
-        public override void PoolRecycle()
+        public override void OnRecycled()
         {
-            base.PoolRecycle();
             Data = null;
+            base.OnRecycled();
         }
 
         public InventoryGrid Data;

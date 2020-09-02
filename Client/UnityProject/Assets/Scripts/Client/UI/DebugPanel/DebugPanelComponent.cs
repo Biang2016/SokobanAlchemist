@@ -5,7 +5,7 @@ public class DebugPanelComponent : PoolObject
 {
     public Dictionary<string, DebugPanelComponent> DebugComponentDictTree = new Dictionary<string, DebugPanelComponent>();
 
-    public override void PoolRecycle()
+    public override void OnRecycled()
     {
         foreach (KeyValuePair<string, DebugPanelComponent> kv in DebugComponentDictTree)
         {
@@ -13,7 +13,7 @@ public class DebugPanelComponent : PoolObject
         }
 
         DebugComponentDictTree.Clear();
-        base.PoolRecycle();
+        base.OnRecycled();
     }
 
     public virtual bool IsOpen { get; set; }

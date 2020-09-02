@@ -8,10 +8,10 @@ namespace BiangStudio.GridBackpack
 {
     public class BackpackVirtualOccupationQuad : PoolObject
     {
-        public override void PoolRecycle()
+        public override void OnRecycled()
         {
             Inventory = null;
-            base.PoolRecycle();
+            base.OnRecycled();
         }
 
         void Awake()

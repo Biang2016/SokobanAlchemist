@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using BiangStudio.GamePlay.UI;
 using UnityEngine;
@@ -59,7 +60,7 @@ public class DebugPanel : BaseUIPanel
     {
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
         float fps = 1.0f / deltaTime;
-        fpsText.text = Mathf.Ceil(fps).ToString();
+        fpsText.text = fps.ToString("###");
         DebugToggleButton.image.color = FrameRateGradient.Evaluate(fps / 144f);
     }
 
@@ -204,12 +205,14 @@ public class DebugPanel : BaseUIPanel
     public void ChangeBoxStaticBounce(float value)
     {
         ConfigManager.BoxStaticBounceFactor_Cheat = value;
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint)Enum_Events.OnBoxStaticBounceCheatChanged);
     }
 
     [DebugSlider("箱子参数/动态弹性调整因子", 1, 0.3f, 10f)]
     public void ChangeBoxDynamicBounce(float value)
     {
         ConfigManager.BoxDynamicBounceFactor_Cheat = value;
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint)Enum_Events.OnBoxDynamicBounceCheatChanged);
     }
 
     [DebugSlider("箱子参数/重量调整因子", 1, 0.1f, 10f)]

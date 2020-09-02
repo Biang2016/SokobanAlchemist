@@ -73,6 +73,7 @@ namespace BiangStudio.ObjectPool
                         }
 
                         isUsed[i] = true;
+                        gameObjectPool[i].OnUsed();
                         gameObjectPool[i].IsRecycled = false;
                         return (T) gameObjectPool[i];
                     }

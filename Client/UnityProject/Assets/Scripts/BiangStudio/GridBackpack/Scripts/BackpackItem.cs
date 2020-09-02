@@ -12,10 +12,10 @@ namespace BiangStudio.GridBackpack
 {
     public class BackpackItem : PoolObject, IDraggable, IMouseHoverComponent
     {
-        public override void PoolRecycle()
+        public override void OnRecycled()
         {
             BackpackItemGridRoot.Clear();
-            base.PoolRecycle();
+            base.OnRecycled();
             Backpack = null;
             InventoryItem = null;
         }

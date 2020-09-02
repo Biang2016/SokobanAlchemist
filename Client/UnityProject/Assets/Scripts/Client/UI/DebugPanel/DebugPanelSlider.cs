@@ -8,10 +8,10 @@ public class DebugPanelSlider : DebugPanelComponent
     public Text Text;
     public Text ValueText;
 
-    public override void PoolRecycle()
+    public override void OnRecycled()
     {
         Slider.onValueChanged.RemoveAllListeners();
-        base.PoolRecycle();
+        base.OnRecycled();
     }
 
     public void Initialize(string sliderName, float defaultValue, float min, float max, UnityAction<float> action)

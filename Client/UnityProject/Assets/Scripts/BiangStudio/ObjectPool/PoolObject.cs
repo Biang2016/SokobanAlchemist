@@ -16,11 +16,20 @@ namespace BiangStudio.ObjectPool
 
         private int usedTimes = 0;
 
-        public virtual void PoolRecycle()
+        public void PoolRecycle()
         {
+            OnRecycled();
             Pool.RecycleGameObject(this);
             IsRecycled = true;
             usedTimes++;
+        }
+
+        public virtual void OnRecycled()
+        {
+        }
+
+        public virtual void OnUsed()
+        {
         }
 
         public virtual void PoolRecycleAtFrameEnd()

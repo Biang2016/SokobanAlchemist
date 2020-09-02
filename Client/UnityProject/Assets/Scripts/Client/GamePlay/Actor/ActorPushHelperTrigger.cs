@@ -33,8 +33,8 @@ public class ActorPushHelperTrigger : MonoBehaviour
             if (box && box.Pushable())
             {
                 curPushingBox = box;
-                ActorPushHelper.Model.transform.DOPause();
-                ActorPushHelper.Model.transform.DOLocalMove(ActorPushHelper.DefaultModelPos + Vector3.forward * 0.5f, 0.2f);
+                ActorPushHelper.AnimModel.ResetTrigger("Reset");
+                ActorPushHelper.AnimModel.SetTrigger("MoveOut");
                 box.Push(ActorPushHelper.Actor.CurMoveAttempt);
             }
         }
@@ -47,7 +47,8 @@ public class ActorPushHelperTrigger : MonoBehaviour
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Pushable())
             {
-                ActorPushHelper.Model.transform.DOLocalMove(ActorPushHelper.DefaultModelPos, 0.2f);
+                ActorPushHelper.AnimModel.SetTrigger("Reset");
+                ActorPushHelper.AnimModel.ResetTrigger("MoveOut");
                 box.PushCanceled();
                 PushingBoxList.Remove(box);
             }

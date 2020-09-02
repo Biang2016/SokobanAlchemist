@@ -297,6 +297,7 @@ GameObject:
   - component: {fileID: 5724697493339499563}
   - component: {fileID: 2649158088655530124}
   - component: {fileID: 832889172591195500}
+  - component: {fileID: 1229286271962095937}
   m_Layer: 13
   m_Name: Model
   m_TagString: Untagged
@@ -378,6 +379,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SmoothTime: 0.02
+--- !u!95 &1229286271962095937
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4643122133151563449}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 229902ffad37114438c1f11cd0622650, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4892195723853597974
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,6 +587,7 @@ GameObject:
   - component: {fileID: 4983063829743367501}
   - component: {fileID: 7779744464523502240}
   - component: {fileID: 5397992360963508541}
+  - component: {fileID: 5261948187243038876}
   m_Layer: 13
   m_Name: Trigger
   m_TagString: Untagged
@@ -614,6 +635,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorPushHelper: {fileID: 900320894205187531}
+--- !u!95 &5261948187243038876
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5772600293728927881}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 229902ffad37114438c1f11cd0622650, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8635302422182133083
 GameObject:
   m_ObjectHideFlags: 0
@@ -692,6 +732,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Collider: {fileID: 7779744464523502240}
   Model: {fileID: 8635302422182133083}
+  AnimCollider: {fileID: 5261948187243038876}
+  AnimModel: {fileID: 1229286271962095937}
 --- !u!1 &9187498043078746423
 GameObject:
   m_ObjectHideFlags: 0

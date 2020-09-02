@@ -25,31 +25,25 @@ public class BoxUnderWorldModuleDesignerClamper : MonoBehaviour
 
     void OnTransformParentChanged()
     {
-        if (!Application.isPlaying)
-        {
-            ParentWorldDesignHelper = GetComponentInParent<WorldDesignHelper>();
-            ParentWorldModuleDesignHelper = GetComponentInParent<WorldModuleDesignHelper>();
-        }
+        ParentWorldDesignHelper = GetComponentInParent<WorldDesignHelper>();
+        ParentWorldModuleDesignHelper = GetComponentInParent<WorldModuleDesignHelper>();
     }
 
     private void LateUpdate()
     {
-        if (!Application.isPlaying && ParentWorldModuleDesignHelper)
+        if (ParentWorldDesignHelper)
         {
-            if (ParentWorldDesignHelper)
-            {
-                transform.localPosition = DefaultPosition;
-            }
-            else
-            {
-                transform.localPosition = new Vector3(
-                    Mathf.Clamp(transform.localPosition.x, 0, WorldModule.MODULE_SIZE - 1),
-                    Mathf.Clamp(transform.localPosition.y, 0, WorldModule.MODULE_SIZE - 1),
-                    Mathf.Clamp(transform.localPosition.z, 0, WorldModule.MODULE_SIZE - 1));
-            }
-
-            transform.localRotation = DefaultRotation;
-            transform.localScale = DefaultScale;
+            transform.localPosition = DefaultPosition;
         }
+        else
+        {
+            transform.localPosition = new Vector3(
+                Mathf.Clamp(transform.localPosition.x, 0, WorldModule.MODULE_SIZE - 1),
+                Mathf.Clamp(transform.localPosition.y, 0, WorldModule.MODULE_SIZE - 1),
+                Mathf.Clamp(transform.localPosition.z, 0, WorldModule.MODULE_SIZE - 1));
+        }
+
+        transform.localRotation = DefaultRotation;
+        transform.localScale = DefaultScale;
     }
 }

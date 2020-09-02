@@ -7,14 +7,25 @@ using UnityEngine.Serialization;
 
 public class Box : PoolObject
 {
+    private BoxUnderWorldModuleDesignerClamper BoxUnderWorldModuleDesignerClamper;
     private GridSnapper GridSnapper;
     public Collider StaticCollider;
     public Collider DynamicCollider;
     internal Rigidbody Rigidbody;
 
-    public override void PoolRecycle()
+    public override void OnUsed()
     {
-        base.PoolRecycle();
+        ClientGameManager.Instance.BattleMessenger.AddListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnStaticBounceChanged);
+        ClientGameManager.Instance.BattleMessenger.AddListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnDynamicBounceChanged);
+        base.OnUsed();
+    }
+
+    public override void OnRecycled()
+    {
+        transform.DOPause();
+        ClientGameManager.Instance.BattleMessenger.RemoveListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnStaticBounceChanged);
+        ClientGameManager.Instance.BattleMessenger.RemoveListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnDynamicBounceChanged);
+        base.OnRecycled();
     }
 
     [LabelText("箱子类型")]
@@ -75,13 +86,25 @@ public class Box : PoolObject
     protected virtual void Awake()
     {
         GridSnapper = GetComponent<GridSnapper>();
-        StaticCollider.material.bounciness = Mathf.Clamp(Static_Bounce * ConfigManager.BoxStaticBounceFactor_Cheat, 0, 1);
-        DynamicCollider.material.bounciness = Mathf.Clamp(Dynamic_Bounce * ConfigManager.BoxDynamicBounceFactor_Cheat, 0, 1);
+        BoxUnderWorldModuleDesignerClamper = GetComponent<BoxUnderWorldModuleDesignerClamper>();
+        BoxUnderWorldModuleDesignerClamper.enabled = !Application.isPlaying;
+        GridSnapper.enabled = false;
     }
 
     protected virtual void Start()
     {
-        GridSnapper.enabled = false;
+        OnStaticBounceChanged();
+        OnDynamicBounceChanged();
+    }
+
+    private void OnStaticBounceChanged()
+    {
+        StaticCollider.material.bounciness = Static_Bounce * ConfigManager.BoxStaticBounceFactor_Cheat;
+    }
+
+    private void OnDynamicBounceChanged()
+    {
+        DynamicCollider.material.bounciness = Dynamic_Bounce * ConfigManager.BoxStaticBounceFactor_Cheat;
     }
 
     public void Initialize(GridPos3D localGridPos3D, WorldModule module, bool moveLerp)
@@ -191,14 +214,7 @@ public class Box : PoolObject
 
     void FixedUpdate()
     {
-        StaticCollider.material.bounciness = Mathf.Clamp(Static_Bounce * ConfigManager.BoxStaticBounceFactor_Cheat, 0, 1);
-        DynamicCollider.material.bounciness = Mathf.Clamp(Dynamic_Bounce * ConfigManager.BoxDynamicBounceFactor_Cheat, 0, 1);
-
-        bool destroyRigidBody = false;
-        destroyRigidBody |= State == States.BeingKicked && Rigidbody && Rigidbody.velocity.magnitude < 1f;
-        destroyRigidBody |= State == States.Flying && Rigidbody && Rigidbody.velocity.magnitude < 1f;
-
-        if (destroyRigidBody)
+        if ((State == States.BeingKicked || State == States.Flying) && Rigidbody && Rigidbody.velocity.magnitude < 1f)
         {
             DestroyImmediate(Rigidbody);
             StaticCollider.enabled = true;

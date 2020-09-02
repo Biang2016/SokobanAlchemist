@@ -14,10 +14,10 @@ public class FX : PoolObject
         }
     }
 
-    public override void PoolRecycle()
+    public override void OnRecycled()
     {
         ParticleSystem.Stop(true);
-        base.PoolRecycle();
+        base.OnRecycled();
     }
 
     public void Play()

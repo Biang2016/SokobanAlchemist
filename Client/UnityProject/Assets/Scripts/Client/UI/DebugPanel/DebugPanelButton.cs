@@ -11,10 +11,10 @@ public class DebugPanelButton : DebugPanelComponent
     public Color CloseColor;
     public Color OpenColor;
 
-    public override void PoolRecycle()
+    public override void OnRecycled()
     {
         Button.onClick.RemoveAllListeners();
-        base.PoolRecycle();
+        base.OnRecycled();
     }
 
     public void Initialize(string buttonName, UnityAction action)
