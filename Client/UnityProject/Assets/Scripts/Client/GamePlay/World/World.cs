@@ -104,7 +104,8 @@ public class World : PoolObject
         Box existBox = module.BoxMatrix[localGP.x, localGP.y, localGP.z];
         if (existBox != null && existBox != box)
         {
-            Debug.LogError($"{box.name}想要前往的位置{localGP}非空, 存在{existBox.name}");
+            string logStr = $"{box.name}想要前往的位置{localGP}非空, 存在{existBox.name}";
+            Debug.LogError(logStr);
             return;
         }
 
@@ -179,5 +180,5 @@ public class World : PoolObject
         }
     }
 
-    #endregion
+#endregion
 }

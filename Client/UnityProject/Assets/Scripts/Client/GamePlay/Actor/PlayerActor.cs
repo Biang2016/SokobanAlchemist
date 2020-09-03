@@ -9,15 +9,15 @@ public class PlayerActor : Actor
     [LabelText("玩家编号")]
     public PlayerNumber PlayerNumber;
 
-    public ButtonState BS_Up;
-    public ButtonState BS_Right;
-    public ButtonState BS_Down;
-    public ButtonState BS_Left;
-
-    public ButtonState BS_Up_Last;
-    public ButtonState BS_Right_Last;
-    public ButtonState BS_Down_Last;
-    public ButtonState BS_Left_Last;
+    private ButtonState BS_Up;
+    private ButtonState BS_Right;
+    private ButtonState BS_Down;
+    private ButtonState BS_Left;
+    
+    private ButtonState BS_Up_Last;
+    private ButtonState BS_Right_Last;
+    private ButtonState BS_Down_Last;
+    private ButtonState BS_Left_Last;
 
     public void Initialize(PlayerNumber playerNumber)
     {

@@ -14,8 +14,11 @@ public class Box : PoolObject
     public Collider DynamicCollider;
     internal Rigidbody Rigidbody;
 
+    internal Actor LastTouchActor;
+
     public override void OnUsed()
     {
+        LastTouchActor = null;
         ClientGameManager.Instance.BattleMessenger.AddListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnStaticBounceChanged);
         ClientGameManager.Instance.BattleMessenger.AddListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnDynamicBounceChanged);
         base.OnUsed();
@@ -23,6 +26,7 @@ public class Box : PoolObject
 
     public override void OnRecycled()
     {
+        LastTouchActor = null;
         transform.DOPause();
         ClientGameManager.Instance.BattleMessenger.RemoveListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnStaticBounceChanged);
         ClientGameManager.Instance.BattleMessenger.RemoveListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnDynamicBounceChanged);
@@ -31,9 +35,6 @@ public class Box : PoolObject
 
     [HideInInspector]
     public byte BoxTypeIndex;
-
-    [HideInInspector]
-    public string BoxType;
 
     [LabelText("箱子特性")]
     public BoxFeature BoxFeature;
@@ -120,6 +121,7 @@ public class Box : PoolObject
 
     public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime)
     {
+        LastTouchActor = null;
         lastGP = GridPos3D;
         WorldModule = module;
         GridPos3D = localGridPos3D + module.ModuleGP * WorldModule.MODULE_SIZE;
@@ -166,10 +168,11 @@ public class Box : PoolObject
         }
     }
 
-    public void Kick(Vector3 direction, float force)
+    public void Kick(Vector3 direction, float force, Actor actor)
     {
         if (State == States.BeingPushed || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.PushingCanceling)
         {
+            LastTouchActor = actor;
             WorldManager.Instance.CurrentWorld.RemoveBox(this);
             State = States.BeingKicked;
             transform.DOPause();
@@ -193,10 +196,11 @@ public class Box : PoolObject
         }
     }
 
-    public bool BeingLift()
+    public bool BeingLift(Actor actor)
     {
         if (State == States.BeingPushed || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.PushingCanceling)
         {
+            LastTouchActor = actor;
             WorldManager.Instance.CurrentWorld.RemoveBox(this);
             State = States.BeingLift;
             transform.DOPause();
@@ -213,10 +217,11 @@ public class Box : PoolObject
         return false;
     }
 
-    public void Throw(Vector3 direction, float velocity)
+    public void Throw(Vector3 direction, float velocity, Actor actor)
     {
         if (State == States.Lifted)
         {
+            LastTouchActor = actor;
             State = States.Flying;
             transform.DOPause();
             transform.parent = WorldManager.Instance.CurrentWorld.transform;

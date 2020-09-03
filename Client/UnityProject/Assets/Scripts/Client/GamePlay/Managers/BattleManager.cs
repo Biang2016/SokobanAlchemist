@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BiangStudio.GameDataFormat.Grid;
+using BiangStudio.GamePlay.UI;
 using BiangStudio.Messenger;
 using BiangStudio.Singleton;
 using UnityEngine;
@@ -50,11 +51,18 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
 
         MainPlayer2 = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
         MainPlayer2.Initialize(PlayerNumber.Player2);
-        MainPlayer2.PlayerNumber = PlayerNumber.Player2;
         GridPos3D.ApplyGridPosToLocalTrans(WorldManager.Instance.CurrentWorld.WorldData.WorldActorData.Player2BornPoint, MainPlayer2.transform, 1);
         BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) MainPlayer2);
 
+        UIManager.Instance.ShowUIForms<PlayerHUDPanel>().Initialize();
+
         GameStateManager.Instance.SetState(GameState.Fighting);
+    }
+
+    public void ResetBattle()
+    {
+        MainPlayer1.ActorBattleHelper.ResetState();
+        MainPlayer2.ActorBattleHelper.ResetState();
     }
 
     private void AddActor(Actor actor)

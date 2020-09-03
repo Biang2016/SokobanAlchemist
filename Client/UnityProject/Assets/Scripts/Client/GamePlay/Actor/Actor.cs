@@ -13,6 +13,7 @@ public class Actor : PoolObject
     public ActorFaceHelper ActorFaceHelper;
     public ActorSkinHelper ActorSkinHelper;
     public ActorLaunchArcRendererHelper ActorLaunchArcRendererHelper;
+    public ActorBattleHelper ActorBattleHelper;
     public Transform LiftBoxPivot;
 
     [ReadOnly]
@@ -29,34 +30,67 @@ public class Actor : PoolObject
 
     [DisplayAsString]
     [LabelText("世界坐标")]
+    [BoxGroup("战斗状态")]
     public GridPos3D CurGP;
 
     [LabelText("阵营")]
+    [BoxGroup("战斗状态")]
+    [DisableInPlayMode]
     public Camp Camp;
 
+    [LabelText("总血量")]
+    [BoxGroup("战斗状态")]
+    [SerializeField]
+    [DisableInPlayMode]
+    private int MaxHealth;
+
+    [LabelText("总命数")]
+    [BoxGroup("战斗状态")]
+    [SerializeField]
+    [DisableInPlayMode]
+    private int TotalLife;
+
+    [ShowInInspector]
+    [LabelText("剩余命数")]
+    [BoxGroup("战斗状态")]
+    public int Life => ActorBattleHelper.Life;
+
+    [ShowInInspector]
+    [LabelText("剩余生命值")]
+    [BoxGroup("战斗状态")]
+    public int Health => ActorBattleHelper.Health;
+
+    [BoxGroup("配置")]
     [LabelText("踢箱子力量")]
     public float KickForce = 5;
 
+    [BoxGroup("配置")]
     [LabelText("起步速度")]
     public float Accelerate = 10f;
 
+    [BoxGroup("配置")]
     [LabelText("移动速度")]
     public float MoveSpeed = 10f;
 
+    [BoxGroup("配置")]
     [LabelText("扔箱子力量")]
     public float ThrowForce = 100;
 
+    [BoxGroup("配置")]
     [LabelText("扔箱子蓄力速度曲线(X为重量Y为蓄力速度)")]
     public AnimationCurve ThrowChargeSpeedCurveByWeight;
 
     [ReadOnly]
+    [BoxGroup("配置")]
     [LabelText("扔箱子蓄力速度因子(作弊调整)")]
     public float ThrowChargeSpeedFactor_Cheat = 1f;
 
+    [BoxGroup("配置")]
     [LabelText("扔箱子蓄力曲线(X为重量Y为蓄力上限)")]
     public AnimationCurve ThrowChargeMaxCurveByWeight;
 
     [ReadOnly]
+    [BoxGroup("配置")]
     [LabelText("扔箱子蓄力曲线因子(作弊调整)")]
     public float ThrowChargeMaxCurveFactor_Cheat = 1f;
 
@@ -73,6 +107,7 @@ public class Actor : PoolObject
     }
 
     [ReadOnly]
+    [BoxGroup("战斗状态")]
     [LabelText("移动状态")]
     public MovementStates MovementState = MovementStates.Static;
 
@@ -83,6 +118,7 @@ public class Actor : PoolObject
     }
 
     [ReadOnly]
+    [BoxGroup("战斗状态")]
     [LabelText("推箱子状态")]
     public PushStates PushState = PushStates.None;
 
@@ -95,6 +131,7 @@ public class Actor : PoolObject
     }
 
     [ReadOnly]
+    [BoxGroup("战斗状态")]
     [LabelText("扔技能状态")]
     public ThrowStates ThrowState = ThrowStates.None;
 
@@ -107,6 +144,7 @@ public class Actor : PoolObject
         }
 
         ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
+        ActorBattleHelper.Initialize(TotalLife, MaxHealth);
     }
 
     private void Update()
@@ -146,7 +184,7 @@ public class Actor : PoolObject
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Pushable())
             {
-                box.Kick(CurForward, KickForce);
+                box.Kick(CurForward, KickForce, this);
             }
         }
     }
@@ -160,7 +198,7 @@ public class Actor : PoolObject
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Liftable())
             {
-                if (box.BeingLift())
+                if (box.BeingLift(this))
                 {
                     CurrentLiftBox = box;
                     ThrowState = ThrowStates.Raising;
@@ -218,7 +256,7 @@ public class Actor : PoolObject
             float velocity = GetThrowBoxVelocity(CurrentLiftBox);
             ThrowState = ThrowStates.None;
             Vector3 throwVel = transform.TransformDirection(new Vector3(0, 1, 1));
-            CurrentLiftBox.Throw(throwVel, velocity);
+            CurrentLiftBox.Throw(throwVel, velocity, this);
             CurrentLiftBox = null;
             ThrowChargeTick = 0;
         }
