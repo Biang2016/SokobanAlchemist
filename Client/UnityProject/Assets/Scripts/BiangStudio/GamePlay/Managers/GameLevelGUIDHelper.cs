@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-public static class MSGameLevelGUIDHelper
+public static class GameLevelGUIDHelper
 {
     private static Dictionary<object, string> dictMapGuid = new Dictionary<object, string>();
     private static HashSet<string> setUUid = new HashSet<string>();
