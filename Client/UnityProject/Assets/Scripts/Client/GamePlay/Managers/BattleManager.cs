@@ -53,7 +53,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
         MainPlayer2.Initialize(PlayerNumber.Player2);
         GridPos3D.ApplyGridPosToLocalTrans(WorldManager.Instance.CurrentWorld.WorldData.WorldActorData.Player2BornPoint, MainPlayer2.transform, 1);
         BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) MainPlayer2);
-
+        
         UIManager.Instance.ShowUIForms<PlayerHUDPanel>().Initialize();
 
         GameStateManager.Instance.SetState(GameState.Fighting);

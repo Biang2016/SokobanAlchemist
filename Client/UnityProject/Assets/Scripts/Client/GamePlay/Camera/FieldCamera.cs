@@ -30,12 +30,18 @@ public class FieldCamera : MonoBehaviour
 
     void Start()
     {
-        ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, AddTarget);
+        ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, AddTargetActor);
+        ClientGameManager.Instance.BattleMessenger.AddListener<WorldCameraPOI>((uint) Enum_Events.OnWorldCameraPOILoaded, AddTargetPOI);
     }
 
-    private void AddTarget(Actor actor)
+    private void AddTargetActor(Actor actor)
     {
         targetList.Add(actor.transform);
+    }
+
+    public void AddTargetPOI(WorldCameraPOI poi)
+    {
+        targetList.Add(poi.transform);
     }
 
     public float GetScaleForBattleUI()

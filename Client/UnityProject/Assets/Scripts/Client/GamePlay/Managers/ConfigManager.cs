@@ -201,6 +201,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 #endif
     public static void LoadAllConfigs()
     {
+        if (IsLoaded) return;
         DataFormat dataFormat = DataFormat.Binary;
         LoadBoxTypeNames();
         LoadWorldModuleTypeNames();

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using BiangStudio.CloneVariant;
-using BiangStudio.GameDataFormat.Grid;
+using Sirenix.OdinInspector;
 
 public class WorldData : IClone<WorldData>
 {
@@ -8,18 +8,21 @@ public class WorldData : IClone<WorldData>
 
     public string WorldName;
 
+    public WorldFeature WorldFeature;
+
     /// <summary>
     /// 世界制作规范，世界最大范围为16x16x8个模组
     /// </summary>
     public byte[,,] ModuleMatrix = new byte[World.WORLD_SIZE, World.WORLD_SIZE, World.WORLD_HEIGHT];
 
-    public byte Y;
     public WorldActorData WorldActorData = new WorldActorData();
+    public WorldCameraPOIData WorldCameraPOIData = new WorldCameraPOIData();
 
     public WorldData Clone()
     {
         WorldData data = new WorldData();
         data.WorldName = WorldName;
+        data.WorldFeature = WorldFeature;
         for (int x = 0; x < ModuleMatrix.GetLength(0); x++)
         {
             for (int y = 0; y < ModuleMatrix.GetLength(1); y++)
@@ -31,10 +34,19 @@ public class WorldData : IClone<WorldData>
             }
         }
 
-        data.Y = Y;
         data.WorldActorData = WorldActorData.Clone();
+        data.WorldCameraPOIData = WorldCameraPOIData.Clone();
         return data;
     }
 
     #endregion
+}
+
+[Flags]
+public enum WorldFeature
+{
+    None = 0,
+
+    [LabelText("玩家无敌")]
+    PlayerImmune = 1 << 0,
 }

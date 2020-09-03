@@ -10,6 +10,8 @@ using UnityEditor;
 [ExecuteInEditMode]
 public class WorldDesignHelper : MonoBehaviour
 {
+    public WorldFeature WorldFeature;
+
 #if UNITY_EDITOR
     public WorldData ExportWorldData()
     {
@@ -24,6 +26,7 @@ public class WorldDesignHelper : MonoBehaviour
         }
 
         WorldData worldData = new WorldData();
+        worldData.WorldFeature = WorldFeature;
         foreach (WorldModuleDesignHelper module in modules)
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(module.transform, WorldModule.MODULE_SIZE);
@@ -62,6 +65,14 @@ public class WorldDesignHelper : MonoBehaviour
                     }
                 }
             }
+        }
+
+        List<WorldCameraPOI> cameraPOIs = GetComponentsInChildren<WorldCameraPOI>().ToList();
+        foreach (WorldCameraPOI poi in cameraPOIs)
+        {
+            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(poi.transform, 1);
+            gp -= zeroPoint * WorldModule.MODULE_SIZE;
+            worldData.WorldCameraPOIData.POIs.Add(gp);
         }
 
         return worldData;

@@ -118,6 +118,7 @@ public class ActorBattleHelper : ActorHelper
 
     void OnTriggerEnter(Collider collider)
     {
+        if (WorldManager.Instance.CurrentWorld.WorldData.WorldFeature.HasFlag(WorldFeature.PlayerImmune)) return;
         Box box = collider.gameObject.GetComponentInParent<Box>();
         if (box != null)
         {

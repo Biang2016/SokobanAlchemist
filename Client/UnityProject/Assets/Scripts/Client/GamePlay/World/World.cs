@@ -15,6 +15,8 @@ public class World : PoolObject
 
     public bool[,,] WorldDeadZoneTriggerMatrix = new bool[WORLD_SIZE, WORLD_HEIGHT, WORLD_SIZE];
 
+    private List<WorldCameraPOI> POIs = new List<WorldCameraPOI>();
+
     public void Initialize(WorldData worldData)
     {
         WorldData = worldData;
@@ -37,6 +39,14 @@ public class World : PoolObject
                     }
                 }
             }
+        }
+
+        foreach (GridPos3D gp in WorldManager.Instance.CurrentWorld.WorldData.WorldCameraPOIData.POIs)
+        {
+            WorldCameraPOI poi = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldCameraPOI].AllocateGameObject<WorldCameraPOI>(transform);
+            GridPos3D.ApplyGridPosToLocalTrans(gp, poi.transform, 1);
+            POIs.Add(poi);
+            ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnWorldCameraPOILoaded, poi);
         }
     }
 
@@ -180,5 +190,5 @@ public class World : PoolObject
         }
     }
 
-#endregion
+    #endregion
 }

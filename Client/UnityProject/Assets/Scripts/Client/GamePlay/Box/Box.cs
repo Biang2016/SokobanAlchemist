@@ -1,10 +1,18 @@
 ﻿using System;
+using System.Linq;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
+#if UNITY_EDITOR
+using System.Collections.Generic;
+using BiangStudio.GamePlay;
+using UnityEditor;
+
+#endif
 
 public class Box : PoolObject
 {
@@ -307,6 +315,49 @@ public class Box : PoolObject
             Gizmos.DrawCube(transform.position, Vector3.one);
         }
     }
+
+#if UNITY_EDITOR
+    [HideInPlayMode]
+    [BoxGroup("模组编辑器")]
+    [Button("替换Box", ButtonSizes.Large)]
+    private void ReplaceBox_Editor()
+    {
+        WorldModuleDesignHelper module = GetComponentInParent<WorldModuleDesignHelper>();
+        if (!module)
+        {
+            Debug.LogError("此功能只能在模组编辑器中使用");
+            return;
+        }
+
+        WorldDesignHelper world = GetComponentInParent<WorldDesignHelper>();
+        if (world)
+        {
+            Debug.LogError("此功能只能在模组编辑器中使用");
+            return;
+        }
+
+        GameObject prefab = (GameObject) Resources.Load("Prefabs/Designs/Boxes/" + ReplaceBoxTypeName);
+        GameObject go = (GameObject) PrefabUtility.InstantiatePrefab(prefab, transform.parent);
+        go.transform.position = transform.position;
+        go.transform.rotation = Quaternion.identity;
+        DestroyImmediate(gameObject);
+    }
+
+    [HideInPlayMode]
+    [NonSerialized]
+    [BoxGroup("模组编辑器")]
+    [LabelText("替换Box类型")]
+    [ValueDropdown("GetAllBoxTypeNames")]
+    [ShowInInspector]
+    private string ReplaceBoxTypeName;
+
+    private IEnumerable<string> GetAllBoxTypeNames()
+    {
+        ConfigManager.LoadAllConfigs();
+        List<string> res = ConfigManager.BoxTypeIndexDict.Keys.ToList();
+        return res;
+    }
+#endif
 }
 
 [Flags]
@@ -325,4 +376,13 @@ public enum BoxFeature
 
     [LabelText("会塌落")]
     Droppable = 1 << 3,
+
+    [LabelText("ChessKing")]
+    ChessKing = 1 << 4,
+
+    [LabelText("从属玩家1")]
+    BelongToPlayer1 = 1 << 5,
+
+    [LabelText("从属玩家2")]
+    BelongToPlayer2 = 1 << 6,
 }

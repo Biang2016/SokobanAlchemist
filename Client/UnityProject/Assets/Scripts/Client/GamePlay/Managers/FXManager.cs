@@ -21,7 +21,4 @@ public class FXManager : TSingletonBaseManager<FXManager>
 
 public enum FX_Type
 {
-    FX_BlockDamageHit = 1,
-    FX_BlockDamagedLightening = 2,
-    FX_BlockExplode = 3,
 }

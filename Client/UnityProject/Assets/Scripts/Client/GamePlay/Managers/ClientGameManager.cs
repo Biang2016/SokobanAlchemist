@@ -45,6 +45,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     private WorldManager WorldManager => WorldManager.Instance;
     private BattleManager BattleManager => BattleManager.Instance;
+    private ProjectileManager ProjectileManager => ProjectileManager.Instance;
 
     public Messenger BattleMessenger => BattleManager.BattleMessenger;
 
@@ -103,6 +104,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
         WorldManager.Awake();
         BattleManager.Awake();
+        ProjectileManager.Awake();
+        ProjectileManager.Init(new GameObject("ProjectileRoot").transform);
         FXManager.Awake();
 
         ControlManager.Awake();
@@ -120,6 +123,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
         WorldManager.Start();
         BattleManager.Start();
+        ProjectileManager.Start();
         FXManager.Start();
 
         ControlManager.Start();
@@ -150,6 +154,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
         WorldManager.Update(Time.deltaTime);
         BattleManager.Update(Time.deltaTime);
+        ProjectileManager.Update(Time.deltaTime);
         FXManager.Update(Time.deltaTime);
 
         ControlManager.Update(Time.deltaTime);
@@ -167,6 +172,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
         WorldManager.LateUpdate(Time.deltaTime);
         BattleManager.LateUpdate(Time.deltaTime);
+        ProjectileManager.LateUpdate(Time.deltaTime);
         FXManager.LateUpdate(Time.deltaTime);
 
         ControlManager.LateUpdate(Time.deltaTime);
@@ -184,6 +190,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
         WorldManager.FixedUpdate(Time.fixedDeltaTime);
         BattleManager.FixedUpdate(Time.fixedDeltaTime);
+        ProjectileManager.FixedUpdate(Time.fixedDeltaTime);
         FXManager.FixedUpdate(Time.fixedDeltaTime);
 
         ControlManager.FixedUpdate(Time.fixedDeltaTime);
