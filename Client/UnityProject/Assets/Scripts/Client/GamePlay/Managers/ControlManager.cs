@@ -3,7 +3,6 @@ using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.Singleton;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
 
 public class ControlManager : TSingletonBaseManager<ControlManager>
 {
@@ -124,6 +123,9 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
 
     public override void Awake()
     {
+        ButtonStateDict.Clear();
+        ButtonStateDict_LastFrame.Clear();
+
         PlayerInput = new PlayerInput();
         CommonInputActions = new PlayerInput.CommonActions(PlayerInput);
         BattleInputActions = new PlayerInput.BattleInputActions(PlayerInput);

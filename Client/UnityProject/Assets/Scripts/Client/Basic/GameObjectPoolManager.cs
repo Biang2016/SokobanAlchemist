@@ -47,6 +47,10 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
 
     public override void Awake()
     {
+        PoolDict.Clear();
+        BoxDict.Clear();
+        FXDict.Clear();
+        MarkerDict.Clear();
         foreach (KeyValuePair<PrefabNames, int> kv in PoolConfigs)
         {
             string prefabName = kv.Key.ToString();

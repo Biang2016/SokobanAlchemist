@@ -64,6 +64,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     [ValueDropdown("GetAllWorldNames")]
     public string StartWorldName;
 
+    public static string DebugChangeWorldName = null;
+
     private IEnumerable<string> GetAllWorldNames()
     {
         List<string> res = new List<string>();

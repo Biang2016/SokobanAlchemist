@@ -204,7 +204,7 @@ public class Box : PoolObject
             WorldManager.Instance.CurrentWorld.RemoveBox(this);
             State = States.BeingLift;
             transform.DOPause();
-            StaticCollider.enabled = false;
+            StaticCollider.enabled = true;
             DynamicCollider.enabled = false;
             if (Rigidbody)
             {
@@ -297,6 +297,15 @@ public class Box : PoolObject
         //        Rigidbody.velocity = Rigidbody.velocity * 0.1f;
         //    }
         //}
+    }
+
+    void OnDrawGizmos()
+    {
+        if (!Application.isPlaying)
+        {
+            Gizmos.color = new Color(0.2f, 0.2f, 0.2f, 0.1f);
+            Gizmos.DrawCube(transform.position, Vector3.one);
+        }
     }
 }
 

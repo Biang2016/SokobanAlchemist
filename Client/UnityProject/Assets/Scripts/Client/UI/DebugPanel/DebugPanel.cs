@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection;
 using BiangStudio.GamePlay.UI;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DebugPanel : BaseUIPanel
@@ -205,14 +205,14 @@ public class DebugPanel : BaseUIPanel
     public void ChangeBoxStaticBounce(float value)
     {
         ConfigManager.BoxStaticBounceFactor_Cheat = value;
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint)Enum_Events.OnBoxStaticBounceCheatChanged);
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnBoxStaticBounceCheatChanged);
     }
 
     [DebugSlider("箱子参数/动态弹性调整因子", 1, 0.3f, 10f)]
     public void ChangeBoxDynamicBounce(float value)
     {
         ConfigManager.BoxDynamicBounceFactor_Cheat = value;
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint)Enum_Events.OnBoxDynamicBounceCheatChanged);
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnBoxDynamicBounceCheatChanged);
     }
 
     [DebugSlider("箱子参数/扔箱子落地摩阻力", 10f, 0, 20f)]
@@ -231,5 +231,26 @@ public class DebugPanel : BaseUIPanel
     public void ChangeBoxWeight(float value)
     {
         ConfigManager.BoxWeightFactor_Cheat = value;
+    }
+
+    [DebugButton("切换世界/ChessWorld")]
+    public void ChangeChessWorld()
+    {
+        ClientGameManager.DebugChangeWorldName = "ChessWorld";
+        SceneManager.LoadScene("MainScene");
+    }
+
+    [DebugButton("切换世界/ArenaWorld")]
+    public void ChangeArenaWorld()
+    {
+        ClientGameManager.DebugChangeWorldName = "ArenaWorld";
+        SceneManager.LoadScene("MainScene");
+    }
+
+    [DebugButton("切换世界/BasicWorld")]
+    public void ChangeWilliamsWorld()
+    {
+        ClientGameManager.DebugChangeWorldName = "BasicWorld";
+        SceneManager.LoadScene("MainScene");
     }
 }

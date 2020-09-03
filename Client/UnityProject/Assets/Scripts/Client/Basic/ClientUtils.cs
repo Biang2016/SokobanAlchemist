@@ -18,6 +18,7 @@ public static class ClientUtils
         else
         {
             Debug.Log($"ControlManager ButtonState {state.ButtonName} 重名");
+            return;
         }
 
         action.performed += context =>
@@ -44,6 +45,10 @@ public static class ClientUtils
             ButtonState lastFrameState = new ButtonState();
             state.ApplyTo(lastFrameState);
             ControlManager.Instance.ButtonStateDict_LastFrame.Add(state.ButtonName, lastFrameState);
+        }
+        else
+        {
+            return;
         }
 
         action.performed += context =>
