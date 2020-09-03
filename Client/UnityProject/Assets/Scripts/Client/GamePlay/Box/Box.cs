@@ -1,4 +1,5 @@
-﻿using BiangStudio.GameDataFormat.Grid;
+﻿using System;
+using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
 using DG.Tweening;
 using Sirenix.OdinInspector;
@@ -28,8 +29,14 @@ public class Box : PoolObject
         base.OnRecycled();
     }
 
-    [LabelText("箱子类型")]
-    public BoxType BoxType;
+    [HideInInspector]
+    public byte BoxTypeIndex;
+
+    [HideInInspector]
+    public string BoxType;
+
+    [LabelText("箱子特性")]
+    public BoxFeature BoxFeature;
 
     [BoxGroup("箱子属性")]
     [LabelText("重量")]
@@ -243,17 +250,17 @@ public class Box : PoolObject
 
     public bool Pushable()
     {
-        return BoxType != BoxType.None && BoxType != BoxType.GroundBox && BoxType != BoxType.BorderBox;
+        return BoxFeature.HasFlag(BoxFeature.Pushable);
     }
 
     public bool Liftable()
     {
-        return BoxType != BoxType.None && BoxType != BoxType.GroundBox && BoxType != BoxType.BorderBox;
+        return BoxFeature.HasFlag(BoxFeature.Liftable);
     }
 
     public bool Droppable()
     {
-        return BoxType != BoxType.None && BoxType != BoxType.GroundBox && BoxType != BoxType.BorderBox;
+        return BoxFeature.HasFlag(BoxFeature.Droppable);
     }
 
     void OnCollisionEnter(Collision collision)
@@ -288,25 +295,20 @@ public class Box : PoolObject
     }
 }
 
-public enum BoxType
+[Flags]
+public enum BoxFeature
 {
     None = 0,
 
-    [LabelText("地面箱子")]
-    GroundBox = 1,
+    [LabelText("可推动")]
+    Pushable = 1 << 0,
 
-    [LabelText("墙壁箱子")]
-    BorderBox = 2,
+    [LabelText("可踢")]
+    Kickable = 1 << 1,
 
-    [LabelText("木箱子")]
-    WoodenBox = 11,
+    [LabelText("可扔")]
+    Liftable = 1 << 2,
 
-    [LabelText("金箱子")]
-    GoldenBox = 12,
-
-    [LabelText("银箱子")]
-    SilverBox = 13,
-
-    [LabelText("黑箱子")]
-    BlackBox = 14,
+    [LabelText("会塌落")]
+    Droppable = 1 << 3,
 }

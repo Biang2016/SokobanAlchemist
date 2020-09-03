@@ -1,4 +1,5 @@
-﻿using BiangStudio.GamePlay;
+﻿using System.Collections.Generic;
+using BiangStudio.GamePlay;
 using BiangStudio.GamePlay.UI;
 using BiangStudio.Log;
 using BiangStudio.Messenger;
@@ -60,7 +61,19 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public DebugConsole DebugConsole;
 
     [LabelText("开局世界类型")]
+    [ValueDropdown("GetAllWorldNames")]
     public string StartWorldName;
+
+    private IEnumerable<string> GetAllWorldNames()
+    {
+        List<string> res = new List<string>();
+        foreach (KeyValuePair<string, WorldData> kv in ConfigManager.WorldDataConfigDict)
+        {
+            res.Add(kv.Key);
+        }
+
+        return res;
+    }
 
     private void Awake()
     {

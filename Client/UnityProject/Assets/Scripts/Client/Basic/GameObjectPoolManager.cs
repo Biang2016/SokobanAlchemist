@@ -32,7 +32,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     };
 
     public Dictionary<PrefabNames, GameObjectPool> PoolDict = new Dictionary<PrefabNames, GameObjectPool>();
-    public Dictionary<BoxType, GameObjectPool> BoxDict = new Dictionary<BoxType, GameObjectPool>();
+    public Dictionary<byte, GameObjectPool> BoxDict = new Dictionary<byte, GameObjectPool>();
     public Dictionary<FX_Type, GameObjectPool> FXDict = new Dictionary<FX_Type, GameObjectPool>();
     public Dictionary<MarkerType, GameObjectPool> MarkerDict = new Dictionary<MarkerType, GameObjectPool>();
 
@@ -62,17 +62,16 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             }
         }
 
-        foreach (string s in Enum.GetNames(typeof(BoxType)))
+        foreach (KeyValuePair<byte, string> kv in ConfigManager.BoxTypeNameDict)
         {
-            string prefabName = s;
-            BoxType boxType = (BoxType) Enum.Parse(typeof(BoxType), s);
+            string prefabName = kv.Value;
             GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
             if (go_Prefab)
             {
                 GameObject go = new GameObject("Pool_" + prefabName);
                 GameObjectPool pool = go.AddComponent<GameObjectPool>();
                 pool.transform.SetParent(Root);
-                BoxDict.Add(boxType, pool);
+                BoxDict.Add(kv.Key, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
                 pool.Initiate(po, 20);
             }

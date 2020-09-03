@@ -16,6 +16,14 @@ public class ConfigPreviewerWindow : OdinEditorWindow
     }
 
     [ShowInInspector]
+    [LabelText("箱子类型表")]
+    public SortedDictionary<byte, string> BoxTypeNameDict => ConfigManager.BoxTypeNameDict;
+
+    [ShowInInspector]
+    [LabelText("世界模组类型表")]
+    public SortedDictionary<byte, string> WorldModuleTypeNameDict => ConfigManager.WorldModuleTypeNameDict;
+
+    [ShowInInspector]
     [LabelText("世界配置表")]
     [TableList]
     public List<WorldData> AbilityConfigDict => ConfigManager.WorldDataConfigDict.Values.ToList();

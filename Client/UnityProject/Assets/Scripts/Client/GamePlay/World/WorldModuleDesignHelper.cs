@@ -10,8 +10,7 @@ using UnityEditor;
 [ExecuteInEditMode]
 public class WorldModuleDesignHelper : MonoBehaviour
 {
-    public WorldModuleType WorldModuleType;
-
+#if UNITY_EDITOR
     public WorldModuleData ExportWorldModuleData()
     {
         List<Box> boxes = GetComponentsInChildren<Box>().ToList();
@@ -21,12 +20,14 @@ public class WorldModuleDesignHelper : MonoBehaviour
         foreach (Box box in boxes)
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
-            worldModuleData.BoxMatrix[gp.x, gp.y, gp.z] = (byte) box.BoxType;
+            GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
+            byte boxTypeIndex = ConfigManager.BoxTypeIndexDict[boxPrefab.name];
+            worldModuleData.BoxMatrix[gp.x, gp.y, gp.z] = boxTypeIndex;
         }
 
-        worldModuleData.WorldModuleType = WorldModuleType;
         return worldModuleData;
     }
+#endif
 
 #if UNITY_EDITOR
     public Color RangeGizmoColor;

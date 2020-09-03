@@ -9,7 +9,10 @@ public class World : PoolObject
     public const int WORLD_HEIGHT = 8;
 
     public WorldData WorldData;
+
+    [HideInInspector]
     public WorldModule[,,] WorldModuleMatrix = new WorldModule[WORLD_SIZE, WORLD_HEIGHT, WORLD_SIZE];
+
     public bool[,,] WorldDeadZoneTriggerMatrix = new bool[WORLD_SIZE, WORLD_HEIGHT, WORLD_SIZE];
 
     public void Initialize(WorldData worldData)
@@ -21,12 +24,12 @@ public class World : PoolObject
             {
                 for (int z = 0; z < worldData.ModuleMatrix.GetLength(2); z++)
                 {
-                    WorldModuleType wmType = (WorldModuleType) worldData.ModuleMatrix[x, y, z];
-                    if (wmType != WorldModuleType.None)
+                    byte worldModuleTypeIndex = worldData.ModuleMatrix[x, y, z];
+                    if (worldModuleTypeIndex != 0)
                     {
                         WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(transform);
                         wm.name = $"WorldModule({x}, {y}, {z})";
-                        WorldModuleData data = ConfigManager.Instance.GetWorldModuleDataConfig(wmType);
+                        WorldModuleData data = ConfigManager.GetWorldModuleDataConfig(worldModuleTypeIndex);
                         WorldModuleMatrix[x, y, z] = wm;
                         GridPos3D gp = new GridPos3D(x, y, z);
                         GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);

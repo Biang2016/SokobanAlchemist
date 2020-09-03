@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BiangStudio.GameDataFormat.Grid;
+#if UNITY_EDITOR
+using UnityEditor;
+
+#endif
 
 [ExecuteInEditMode]
 public class WorldDesignHelper : MonoBehaviour
 {
+#if UNITY_EDITOR
     public WorldData ExportWorldData()
     {
         List<WorldModuleDesignHelper> modules = GetComponentsInChildren<WorldModuleDesignHelper>().ToList();
@@ -30,7 +34,9 @@ public class WorldDesignHelper : MonoBehaviour
                 continue;
             }
 
-            worldData.ModuleMatrix[gp.x, gp.y, gp.z] = (byte) module.WorldModuleType;
+            GameObject worldModulePrefab = PrefabUtility.GetCorrespondingObjectFromSource(module.gameObject);
+            byte worldModuleTypeIndex = ConfigManager.WorldModuleTypeIndexDict[worldModulePrefab.name];
+            worldData.ModuleMatrix[gp.x, gp.y, gp.z] = worldModuleTypeIndex;
         }
 
         worldData.WorldName = name;
@@ -60,4 +66,5 @@ public class WorldDesignHelper : MonoBehaviour
 
         return worldData;
     }
+#endif
 }

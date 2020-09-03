@@ -15,6 +15,8 @@ public class WorldModule : PoolObject
     public GridPos3D ModuleGP;
 
     public WorldModuleData WorldModuleData;
+
+    [HideInInspector]
     public Box[,,] BoxMatrix = new Box[MODULE_SIZE, MODULE_SIZE, MODULE_SIZE];
 
     public void Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world)
@@ -28,13 +30,15 @@ public class WorldModule : PoolObject
             {
                 for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
                 {
-                    BoxType boxType = (BoxType) worldModuleData.BoxMatrix[x, y, z];
-                    if (boxType != BoxType.None)
+                    byte boxTypeIndex = worldModuleData.BoxMatrix[x, y, z];
+                    if (boxTypeIndex != 0)
                     {
-                        Box box = GameObjectPoolManager.Instance.BoxDict[boxType].AllocateGameObject<Box>(transform);
+                        Box box = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);
+                        string boxName = ConfigManager.GetBoxTypeName(boxTypeIndex);
+                        box.BoxTypeIndex = boxTypeIndex;
                         GridPos3D gp = new GridPos3D(x, y, z);
                         box.Initialize(gp, this, 0);
-                        box.name = $"{boxType}({x}, {y}, {z})";
+                        box.name = $"{boxName}_{gp}";
                         BoxMatrix[x, y, z] = box;
                     }
                 }
@@ -53,30 +57,4 @@ public class WorldModule : PoolObject
     public void ExportModuleData()
     {
     }
-}
-
-public enum WorldModuleType
-{
-    None,
-    SampleWorldModule = 1,
-    GroundWorldModule = 2,
-
-    WorldModule_Steven_1 = 51,
-    WorldModule_Steven_2 = 52,
-    WorldModule_Steven_3 = 53,
-    WorldModule_Steven_4 = 54,
-    WorldModule_Steven_5 = 55,
-
-    WorldModule_Julia_1 = 71,
-    WorldModule_Julia_2 = 72,
-    WorldModule_Julia_3 = 73,
-    WorldModule_Julia_4 = 74,
-    WorldModule_Julia_5 = 75,
-
-    BorderWorldModule_Up = 101,
-    BorderWorldModule_Down = 102,
-    BorderWorldModule_Left = 103,
-    BorderWorldModule_Right = 104,
-
-    MAX = 255,
 }

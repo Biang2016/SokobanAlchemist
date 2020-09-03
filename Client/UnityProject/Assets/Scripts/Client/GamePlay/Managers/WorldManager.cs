@@ -19,7 +19,7 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
     public override void Start()
     {
         base.Start();
-        Initialize(ConfigManager.Instance.GetWorldDataConfig(ClientGameManager.Instance.StartWorldName));
+        Initialize(ConfigManager.GetWorldDataConfig(ClientGameManager.Instance.StartWorldName));
     }
 
     public void Initialize(WorldData worldData)

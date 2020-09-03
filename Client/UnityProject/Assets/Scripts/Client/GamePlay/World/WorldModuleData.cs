@@ -1,11 +1,11 @@
 ﻿using BiangStudio.CloneVariant;
-using BiangStudio.GameDataFormat.Grid;
 
 public class WorldModuleData : IClone<WorldModuleData>
 {
     #region ConfigData
 
-    public WorldModuleType WorldModuleType;
+    public byte WorldModuleTypeIndex;
+    public string WorldModuleTypeName;
 
     /// <summary>
     /// 世界模组制作规范，一个模组容量为16x16x16
@@ -16,7 +16,8 @@ public class WorldModuleData : IClone<WorldModuleData>
     public WorldModuleData Clone()
     {
         WorldModuleData data = new WorldModuleData();
-        data.WorldModuleType = WorldModuleType;
+        data.WorldModuleTypeIndex = WorldModuleTypeIndex;
+        data.WorldModuleTypeName = WorldModuleTypeName;
         for (int x = 0; x < BoxMatrix.GetLength(0); x++)
         {
             for (int y = 0; y < BoxMatrix.GetLength(1); y++)
