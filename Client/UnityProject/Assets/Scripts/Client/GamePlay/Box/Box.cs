@@ -354,7 +354,7 @@ public class Box : PoolObject
     private IEnumerable<string> GetAllBoxTypeNames()
     {
         ConfigManager.LoadAllConfigs();
-        List<string> res = ConfigManager.BoxTypeIndexDict.Keys.ToList();
+        List<string> res = ConfigManager.BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
         return res;
     }
 #endif

@@ -53,16 +53,12 @@ public class Actor : PoolObject
     [ShowInInspector]
     [LabelText("剩余命数")]
     [BoxGroup("战斗状态")]
-    public int Life => ActorBattleHelper.Life;
+    public int Life => ActorBattleHelper ? ActorBattleHelper.Life : 0;
 
     [ShowInInspector]
     [LabelText("剩余生命值")]
     [BoxGroup("战斗状态")]
-    public int Health => ActorBattleHelper.Health;
-
-    [BoxGroup("配置")]
-    [LabelText("踢箱子力量")]
-    public float KickForce = 5;
+    public int Health => ActorBattleHelper ? ActorBattleHelper.Health : 0;
 
     [BoxGroup("配置")]
     [LabelText("起步速度")]
@@ -73,25 +69,43 @@ public class Actor : PoolObject
     public float MoveSpeed = 10f;
 
     [BoxGroup("配置")]
+    [LabelText("会踢箱子")]
+    public bool CanKickBox = true;
+
+    [BoxGroup("配置")]
+    [LabelText("踢箱子力量")]
+    [ShowIf("CanKickBox")]
+    public float KickForce = 5;
+
+    [BoxGroup("配置")]
+    [LabelText("会扔箱子")]
+    public bool CanThrowBox = true;
+
+    [BoxGroup("配置")]
     [LabelText("扔箱子力量")]
+    [ShowIf("CanThrowBox")]
     public float ThrowForce = 100;
 
     [BoxGroup("配置")]
     [LabelText("扔箱子蓄力速度曲线(X为重量Y为蓄力速度)")]
+    [ShowIf("CanThrowBox")]
     public AnimationCurve ThrowChargeSpeedCurveByWeight;
 
     [ReadOnly]
     [BoxGroup("配置")]
     [LabelText("扔箱子蓄力速度因子(作弊调整)")]
+    [ShowIf("CanThrowBox")]
     public float ThrowChargeSpeedFactor_Cheat = 1f;
 
     [BoxGroup("配置")]
     [LabelText("扔箱子蓄力曲线(X为重量Y为蓄力上限)")]
+    [ShowIf("CanThrowBox")]
     public AnimationCurve ThrowChargeMaxCurveByWeight;
 
     [ReadOnly]
     [BoxGroup("配置")]
     [LabelText("扔箱子蓄力曲线因子(作弊调整)")]
+    [ShowIf("CanThrowBox")]
     public float ThrowChargeMaxCurveFactor_Cheat = 1f;
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();

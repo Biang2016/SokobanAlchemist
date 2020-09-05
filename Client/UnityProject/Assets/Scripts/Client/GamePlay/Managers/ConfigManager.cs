@@ -16,22 +16,97 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static float BoxKickDragFactor_Cheat = 1f;
     public static float BoxWeightFactor_Cheat = 1f;
 
-    public static string BoxTypeNamesConfig_File => $"{BoxTypeNamesConfigFolder_Build}/BoxNames.config";
-    public static string BoxTypeNamesConfigFolder_Build = Application.streamingAssetsPath + "/Configs/Boxes";
-    public static string BoxPrefabFolder_Relative = "/Resources/Prefabs/Designs/Boxes";
-    public static Dictionary<string, byte> BoxTypeIndexDict = new Dictionary<string, byte>();
+    public class TypeDefineConfig<T> where T : MonoBehaviour
+    {
+        public TypeDefineConfig(string typeNamePrefix, bool inResources)
+        {
+            TypeNamePrefix = typeNamePrefix;
+            PrefabFolder_Relative = (inResources ? "/Resources/Prefabs/Designs/" : "/Designs/") + TypeNamePrefix;
+        }
+
+        private string TypeNamePrefix;
+        private string TypeNamesConfig_File => $"{TypeNamesConfigFolder_Build}/{TypeNamePrefix}Names.config";
+        private string TypeNamesConfigFolder_Build => Application.streamingAssetsPath + $"/Configs/{TypeNamePrefix}";
+        private string PrefabFolder_Relative;
+
+        public Dictionary<string, byte> TypeIndexDict = new Dictionary<string, byte>();
+        public SortedDictionary<byte, string> TypeNameDict = new SortedDictionary<byte, string>();
+
+        public void ExportTypeNames()
+        {
+            TypeNameDict.Clear();
+            TypeIndexDict.Clear();
+            string folder = TypeNamesConfigFolder_Build;
+            if (Directory.Exists(folder)) Directory.Delete(folder, true);
+            Directory.CreateDirectory(folder);
+
+            byte index = 1;
+            DirectoryInfo di = new DirectoryInfo(Application.dataPath + PrefabFolder_Relative);
+            foreach (FileInfo fi in di.GetFiles("*.prefab"))
+            {
+                if (index == byte.MaxValue)
+                {
+                    Debug.LogError($"{typeof(T).Name}类型数量超过255");
+                    break;
+                }
+
+                string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
+                GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
+                T t = obj.GetComponent<T>();
+                if (t != null)
+                {
+                    TypeNameDict.Add(index, t.name);
+                    TypeIndexDict.Add(t.name, index);
+                    index++;
+                }
+                else
+                {
+                    Debug.LogError($"Prefab {fi.Name} 不含{typeof(T).Name}脚本，已跳过");
+                }
+            }
+
+            string json = JsonConvert.SerializeObject(TypeIndexDict, Formatting.Indented);
+            StreamWriter sw = new StreamWriter(TypeNamesConfig_File);
+            sw.Write(json);
+            sw.Close();
+        }
+
+        public void LoadTypeNames()
+        {
+            FileInfo fi = new FileInfo(TypeNamesConfig_File);
+            if (fi.Exists)
+            {
+                StreamReader sr = new StreamReader(TypeNamesConfig_File);
+                string content = sr.ReadToEnd();
+                sr.Close();
+                TypeIndexDict.Clear();
+                TypeNameDict.Clear();
+                TypeIndexDict = JsonConvert.DeserializeObject<Dictionary<string, byte>>(content);
+                foreach (KeyValuePair<string, byte> kv in TypeIndexDict)
+                {
+                    TypeNameDict.Add(kv.Value, kv.Key);
+                }
+            }
+        }
+
+        public void Clear()
+        {
+            TypeIndexDict.Clear();
+            TypeNameDict.Clear();
+        }
+    }
 
     [ShowInInspector]
     [LabelText("箱子类型表")]
-    public static readonly SortedDictionary<byte, string> BoxTypeNameDict = new SortedDictionary<byte, string>();
+    public static readonly TypeDefineConfig<Box> BoxTypeDefineDict = new TypeDefineConfig<Box>("Box", true);
 
-    public static string WorldModuleTypeNamesConfig_File => $"{WorldModuleTypeNamesConfigFolder_Build}/WorldModules.config";
-    public static string WorldModuleTypeNamesConfigFolder_Build = Application.streamingAssetsPath + "/Configs/WorldModules";
-    public static Dictionary<string, byte> WorldModuleTypeIndexDict = new Dictionary<string, byte>();
+    [ShowInInspector]
+    [LabelText("敌人类型表")]
+    public static readonly TypeDefineConfig<EnemyActor> EnemyTypeDefineDict = new TypeDefineConfig<EnemyActor>("Enemy", true);
 
     [ShowInInspector]
     [LabelText("世界模组类型表")]
-    public static readonly SortedDictionary<byte, string> WorldModuleTypeNameDict = new SortedDictionary<byte, string>();
+    public static readonly TypeDefineConfig<WorldModuleDesignHelper> WorldModuleTypeDefineDict = new TypeDefineConfig<WorldModuleDesignHelper>("WorldModule", false);
 
     [ShowInInspector]
     [LabelText("世界配置表")]
@@ -44,7 +119,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static string DesignRoot = "/Designs/";
 
     public static string WorldDataConfigFolder_Relative = "Worlds";
-    public static string WorldModuleDataConfigFolder_Relative = "WorldModules";
+    public static string WorldModuleDataConfigFolder_Relative = "WorldModule";
 
     public static string WorldDataConfigFolder_Build = Application.streamingAssetsPath + "/Configs/" + WorldDataConfigFolder_Relative + "/";
     public static string WorldModuleDataConfigFolder_Build = Application.streamingAssetsPath + "/Configs/" + WorldModuleDataConfigFolder_Relative + "/";
@@ -63,89 +138,12 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         // http://www.sirenix.net/odininspector/faq?Search=&t-11=on#faq
 
         DataFormat dataFormat = DataFormat.Binary;
-        ExportBoxTypeNames();
-        ExportWorldModuleTypeNames();
+        BoxTypeDefineDict.ExportTypeNames();
+        EnemyTypeDefineDict.ExportTypeNames();
+        WorldModuleTypeDefineDict.ExportTypeNames();
         ExportWorldDataConfig(dataFormat);
         ExportWorldModuleDataConfig(dataFormat);
         AssetDatabase.Refresh();
-    }
-
-    private static void ExportBoxTypeNames()
-    {
-        BoxTypeNameDict.Clear();
-        BoxTypeIndexDict.Clear();
-        string folder = BoxTypeNamesConfigFolder_Build;
-        if (Directory.Exists(folder)) Directory.Delete(folder, true);
-        Directory.CreateDirectory(folder);
-
-        byte index = 1;
-        DirectoryInfo di = new DirectoryInfo(Application.dataPath + BoxPrefabFolder_Relative);
-        foreach (FileInfo fi in di.GetFiles("*.prefab"))
-        {
-            if (index == byte.MaxValue)
-            {
-                Debug.LogError($"箱子类型数量超过255");
-                break;
-            }
-
-            string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
-            GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
-            Box box = obj.GetComponent<Box>();
-            if (box != null)
-            {
-                BoxTypeNameDict.Add(index, box.name);
-                BoxTypeIndexDict.Add(box.name, index);
-                index++;
-            }
-            else
-            {
-                Debug.LogError($"Prefab {fi.Name} 不含{typeof(Box).Name}脚本，已跳过");
-            }
-        }
-
-        string json = JsonConvert.SerializeObject(BoxTypeIndexDict, Formatting.Indented);
-        StreamWriter sw = new StreamWriter(BoxTypeNamesConfig_File);
-        sw.Write(json);
-        sw.Close();
-    }
-
-    private static void ExportWorldModuleTypeNames()
-    {
-        WorldModuleTypeNameDict.Clear();
-        WorldModuleTypeIndexDict.Clear();
-        string folder = WorldModuleTypeNamesConfigFolder_Build;
-        if (Directory.Exists(folder)) Directory.Delete(folder, true);
-        Directory.CreateDirectory(folder);
-
-        byte index = 1;
-        DirectoryInfo di = new DirectoryInfo(Application.dataPath + DesignRoot + WorldModuleDataConfigFolder_Relative);
-        foreach (FileInfo fi in di.GetFiles("*.prefab"))
-        {
-            if (index == byte.MaxValue)
-            {
-                Debug.LogError($"世界模组类型数量超过255");
-                break;
-            }
-
-            string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
-            GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
-            WorldModuleDesignHelper module = obj.GetComponent<WorldModuleDesignHelper>();
-            if (module != null)
-            {
-                WorldModuleTypeNameDict.Add(index, module.name);
-                WorldModuleTypeIndexDict.Add(module.name, index);
-                index++;
-            }
-            else
-            {
-                Debug.LogError($"Prefab {fi.Name} 不含{typeof(WorldModuleDesignHelper).Name}脚本，已跳过");
-            }
-        }
-
-        string json = JsonConvert.SerializeObject(WorldModuleTypeIndexDict, Formatting.Indented);
-        StreamWriter sw = new StreamWriter(WorldModuleTypeNamesConfig_File);
-        sw.Write(json);
-        sw.Close();
     }
 
     private static void ExportWorldDataConfig(DataFormat dataFormat)
@@ -203,47 +201,12 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     {
         if (IsLoaded) return;
         DataFormat dataFormat = DataFormat.Binary;
-        LoadBoxTypeNames();
-        LoadWorldModuleTypeNames();
+        BoxTypeDefineDict.LoadTypeNames();
+        EnemyTypeDefineDict.LoadTypeNames();
+        WorldModuleTypeDefineDict.LoadTypeNames();
         LoadWorldDataConfig(dataFormat);
         LoadWorldModuleDataConfig(dataFormat);
         IsLoaded = true;
-    }
-
-    private static void LoadBoxTypeNames()
-    {
-        FileInfo fi = new FileInfo(BoxTypeNamesConfig_File);
-        if (fi.Exists)
-        {
-            StreamReader sr = new StreamReader(BoxTypeNamesConfig_File);
-            string content = sr.ReadToEnd();
-            sr.Close();
-            BoxTypeIndexDict.Clear();
-            BoxTypeNameDict.Clear();
-            BoxTypeIndexDict = JsonConvert.DeserializeObject<Dictionary<string, byte>>(content);
-            foreach (KeyValuePair<string, byte> kv in BoxTypeIndexDict)
-            {
-                BoxTypeNameDict.Add(kv.Value, kv.Key);
-            }
-        }
-    }
-
-    private static void LoadWorldModuleTypeNames()
-    {
-        FileInfo fi = new FileInfo(WorldModuleTypeNamesConfig_File);
-        if (fi.Exists)
-        {
-            StreamReader sr = new StreamReader(WorldModuleTypeNamesConfig_File);
-            string content = sr.ReadToEnd();
-            sr.Close();
-            WorldModuleTypeIndexDict.Clear();
-            WorldModuleTypeNameDict.Clear();
-            WorldModuleTypeIndexDict = JsonConvert.DeserializeObject<Dictionary<string, byte>>(content);
-            foreach (KeyValuePair<string, byte> kv in WorldModuleTypeIndexDict)
-            {
-                WorldModuleTypeNameDict.Add(kv.Value, kv.Key);
-            }
-        }
     }
 
     private static void LoadWorldDataConfig(DataFormat dataFormat)
@@ -307,28 +270,42 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static string GetBoxTypeName(byte boxTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
-        BoxTypeNameDict.TryGetValue(boxTypeIndex, out string boxTypeName);
+        BoxTypeDefineDict.TypeNameDict.TryGetValue(boxTypeIndex, out string boxTypeName);
         return boxTypeName;
     }
 
     public static byte GetBoxTypeIndex(string boxTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
-        BoxTypeIndexDict.TryGetValue(boxTypeName, out byte boxTypeIndex);
+        BoxTypeDefineDict.TypeIndexDict.TryGetValue(boxTypeName, out byte boxTypeIndex);
         return boxTypeIndex;
+    }
+
+    public static string GetEnemyTypeName(byte enemyTypeIndex)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        EnemyTypeDefineDict.TypeNameDict.TryGetValue(enemyTypeIndex, out string enemyTypeName);
+        return enemyTypeName;
+    }
+
+    public static byte GetEnemyTypeIndex(string enemyTypeName)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        EnemyTypeDefineDict.TypeIndexDict.TryGetValue(enemyTypeName, out byte enemyTypeIndex);
+        return enemyTypeIndex;
     }
 
     public static string GetWorldModuleName(byte worldModuleTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
-        WorldModuleTypeNameDict.TryGetValue(worldModuleTypeIndex, out string worldModuleTypeName);
+        WorldModuleTypeDefineDict.TypeNameDict.TryGetValue(worldModuleTypeIndex, out string worldModuleTypeName);
         return worldModuleTypeName;
     }
 
     public static byte GetWorldModuleTypeIndex(string worldModuleTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
-        WorldModuleTypeIndexDict.TryGetValue(worldModuleTypeName, out byte worldModuleTypeIndex);
+        WorldModuleTypeDefineDict.TypeIndexDict.TryGetValue(worldModuleTypeName, out byte worldModuleTypeIndex);
         return worldModuleTypeIndex;
     }
 
@@ -336,14 +313,14 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     {
         if (!IsLoaded) LoadAllConfigs();
         WorldDataConfigDict.TryGetValue(worldType, out WorldData worldData);
-        return worldData.Clone();
+        return worldData?.Clone();
     }
 
     public static WorldModuleData GetWorldModuleDataConfig(byte worldModuleTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
         WorldModuleDataConfigDict.TryGetValue(worldModuleTypeIndex, out WorldModuleData worldModuleData);
-        return worldModuleData.Clone();
+        return worldModuleData?.Clone();
     }
 
     #endregion

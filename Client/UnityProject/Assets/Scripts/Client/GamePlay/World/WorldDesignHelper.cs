@@ -38,33 +38,19 @@ public class WorldDesignHelper : MonoBehaviour
             }
 
             GameObject worldModulePrefab = PrefabUtility.GetCorrespondingObjectFromSource(module.gameObject);
-            byte worldModuleTypeIndex = ConfigManager.WorldModuleTypeIndexDict[worldModulePrefab.name];
+            byte worldModuleTypeIndex = ConfigManager.WorldModuleTypeDefineDict.TypeIndexDict[worldModulePrefab.name];
             worldData.ModuleMatrix[gp.x, gp.y, gp.z] = worldModuleTypeIndex;
         }
 
         worldData.WorldName = name;
 
-        List<BornPoint> bornPoints = GetComponentsInChildren<BornPoint>().ToList();
-        foreach (BornPoint bp in bornPoints)
+        List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
+        foreach (BornPointDesignHelper bp in bornPoints)
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(bp.transform, 1);
             gp -= zeroPoint * WorldModule.MODULE_SIZE;
-            if (bp.BornPointType == BornPointType.Player)
-            {
-                switch (bp.PlayerNumber)
-                {
-                    case PlayerNumber.Player1:
-                    {
-                        worldData.WorldActorData.Player1BornPoint = gp;
-                        break;
-                    }
-                    case PlayerNumber.Player2:
-                    {
-                        worldData.WorldActorData.Player2BornPoint = gp;
-                        break;
-                    }
-                }
-            }
+            bp.BornPointData.GridPos3D = gp;
+            worldData.WorldActorData.BornPoints.Add(bp.BornPointData);
         }
 
         List<WorldCameraPOI> cameraPOIs = GetComponentsInChildren<WorldCameraPOI>().ToList();

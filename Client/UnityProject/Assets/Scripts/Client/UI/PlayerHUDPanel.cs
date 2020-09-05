@@ -1,10 +1,8 @@
 ﻿using BiangStudio.GamePlay.UI;
-using UnityEngine;
 
 public class PlayerHUDPanel : BaseUIPanel
 {
-    public HealthSlider HealthSlider_Player1;
-    public HealthSlider HealthSlider_Player2;
+    public HealthSlider[] HealthSliders_Player = new HealthSlider[2];
 
     void Awake()
     {
@@ -19,7 +17,15 @@ public class PlayerHUDPanel : BaseUIPanel
 
     public void Initialize()
     {
-        HealthSlider_Player1.Initialize(BattleManager.Instance.MainPlayer1.ActorBattleHelper);
-        HealthSlider_Player2.Initialize(BattleManager.Instance.MainPlayer2.ActorBattleHelper);
+        for (int i = 0; i < HealthSliders_Player.Length; i++)
+        {
+            HealthSlider slider = HealthSliders_Player[i];
+            PlayerActor player = BattleManager.Instance.MainPlayers[i];
+            slider.gameObject.SetActive(player != null);
+            if (player != null)
+            {
+                slider.Initialize(player.ActorBattleHelper);
+            }
+        }
     }
 }

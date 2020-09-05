@@ -169,36 +169,51 @@ public class DebugPanel : BaseUIPanel
     [DebugSlider("人物战斗数值/移速", 3.5f, 1, 30)]
     public void ChangeMoveSpeed(float value)
     {
-        BattleManager.Instance.MainPlayer1.MoveSpeed = value;
-        BattleManager.Instance.MainPlayer2.MoveSpeed = value;
+        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
+        {
+            PlayerActor player = BattleManager.Instance.MainPlayers[i];
+            if (player != null) player.MoveSpeed = value;
+        }
     }
 
     [DebugSlider("人物战斗数值/踢力", 150, 0, 1000)]
     public void ChangeKickForce(float value)
     {
-        BattleManager.Instance.MainPlayer1.KickForce = value;
-        BattleManager.Instance.MainPlayer2.KickForce = value;
+        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
+        {
+            PlayerActor player = BattleManager.Instance.MainPlayers[i];
+            if (player != null) player.KickForce = value;
+        }
     }
 
     [DebugSlider("人物战斗数值/扔力", 40, 1, 100)]
     public void ChangeThrowForce(float value)
     {
-        BattleManager.Instance.MainPlayer1.ThrowForce = value;
-        BattleManager.Instance.MainPlayer2.ThrowForce = value;
+        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
+        {
+            PlayerActor player = BattleManager.Instance.MainPlayers[i];
+            if (player != null) player.ThrowForce = value;
+        }
     }
 
     [DebugSlider("人物战斗数值/蓄力速度", 1, 0.1f, 3f)]
     public void ChangeThrowChargeSpeed(float value)
     {
-        BattleManager.Instance.MainPlayer1.ThrowChargeSpeedFactor_Cheat = value;
-        BattleManager.Instance.MainPlayer2.ThrowChargeSpeedFactor_Cheat = value;
+        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
+        {
+            PlayerActor player = BattleManager.Instance.MainPlayers[i];
+            if (player != null) player.ThrowChargeSpeedFactor_Cheat = value;
+        }
     }
 
     [DebugSlider("人物战斗数值/蓄力上限", 1, 0.1f, 3f)]
     public void ChangeThrowChargeMax(float value)
     {
-        BattleManager.Instance.MainPlayer1.ThrowChargeMaxCurveFactor_Cheat = value;
-        BattleManager.Instance.MainPlayer2.ThrowChargeMaxCurveFactor_Cheat = value;
+        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
+        {
+            PlayerActor player = BattleManager.Instance.MainPlayers[i];
+            if (player != null) player.ThrowChargeMaxCurveFactor_Cheat = value;
+        }
     }
 
     [DebugSlider("箱子参数/静态弹性调整因子", 1, 0.3f, 10f)]

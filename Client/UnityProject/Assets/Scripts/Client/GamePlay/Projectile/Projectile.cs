@@ -87,11 +87,11 @@ public class Projectile : PoolObject
                 {
                     if (box.BoxFeature.HasFlag(BoxFeature.BelongToPlayer1) && PlayerNumber == PlayerNumber.Player2)
                     {
-                        BattleManager.Instance.MainPlayer1.ActorBattleHelper.Damage(1);
+                        BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player1]?.ActorBattleHelper.Damage(1);
                     }
                     else if (box.BoxFeature.HasFlag(BoxFeature.BelongToPlayer2) && PlayerNumber == PlayerNumber.Player1)
                     {
-                        BattleManager.Instance.MainPlayer2.ActorBattleHelper.Damage(1);
+                        BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player2]?.ActorBattleHelper.Damage(1);
                     }
                 }
             }

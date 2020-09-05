@@ -9,8 +9,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
 {
     public Messenger BattleMessenger = new Messenger();
 
-    internal PlayerActor MainPlayer1;
-    internal PlayerActor MainPlayer2;
+    internal PlayerActor[] MainPlayers = new PlayerActor[2];
     internal SortedDictionary<uint, Actor> ActorDict = new SortedDictionary<uint, Actor>();
 
     public Transform ActorContainerRoot;
@@ -23,10 +22,12 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
         }
 
         ActorDict.Clear();
-        MainPlayer1?.PoolRecycle();
-        MainPlayer1 = null;
-        MainPlayer2?.PoolRecycle();
-        MainPlayer2 = null;
+
+        for (int index = 0; index < MainPlayers.Length; index++)
+        {
+            MainPlayers[index]?.PoolRecycle();
+            MainPlayers[index] = null;
+        }
     }
 
     public override void Awake()
@@ -44,25 +45,32 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
 
     public void StartBattle()
     {
-        MainPlayer1 = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
-        MainPlayer1.Initialize(PlayerNumber.Player1);
-        GridPos3D.ApplyGridPosToLocalTrans(WorldManager.Instance.CurrentWorld.WorldData.WorldActorData.Player1BornPoint, MainPlayer1.transform, 1);
-        BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) MainPlayer1);
-
-        MainPlayer2 = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
-        MainPlayer2.Initialize(PlayerNumber.Player2);
-        GridPos3D.ApplyGridPosToLocalTrans(WorldManager.Instance.CurrentWorld.WorldData.WorldActorData.Player2BornPoint, MainPlayer2.transform, 1);
-        BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) MainPlayer2);
-        
+        LoadActors();
         UIManager.Instance.ShowUIForms<PlayerHUDPanel>().Initialize();
-
         GameStateManager.Instance.SetState(GameState.Fighting);
+    }
+
+    private void LoadActors()
+    {
+        foreach (BornPointData bpd in WorldManager.Instance.CurrentWorld.WorldData.WorldActorData.BornPoints)
+        {
+            if (bpd.BornPointType == BornPointType.Player)
+            {
+                PlayerActor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
+                player.Initialize(bpd.PlayerNumber);
+                GridPos3D.ApplyGridPosToLocalTrans(bpd.GridPos3D, player.transform, 1);
+                BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
+                MainPlayers[(int) bpd.PlayerNumber] = player;
+            }
+        }
     }
 
     public void ResetBattle()
     {
-        MainPlayer1.ActorBattleHelper.ResetState();
-        MainPlayer2.ActorBattleHelper.ResetState();
+        for (int i = 0; i < MainPlayers.Length; i++)
+        {
+            MainPlayers[i]?.ActorBattleHelper.ResetState();
+        }
     }
 
     private void AddActor(Actor actor)

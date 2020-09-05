@@ -74,7 +74,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             }
         }
 
-        foreach (KeyValuePair<byte, string> kv in ConfigManager.BoxTypeNameDict)
+        foreach (KeyValuePair<byte, string> kv in ConfigManager.BoxTypeDefineDict.TypeNameDict)
         {
             string prefabName = kv.Value;
             GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
