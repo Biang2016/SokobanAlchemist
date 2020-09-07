@@ -5,8 +5,11 @@ using BiangStudio.Singleton;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+
+#endif
 
 public class ConfigManager : TSingletonBaseManager<ConfigManager>
 {
@@ -32,6 +35,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         public Dictionary<string, byte> TypeIndexDict = new Dictionary<string, byte>();
         public SortedDictionary<byte, string> TypeNameDict = new SortedDictionary<byte, string>();
 
+#if UNITY_EDITOR
         public void ExportTypeNames()
         {
             TypeNameDict.Clear();
@@ -70,6 +74,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             sw.Write(json);
             sw.Close();
         }
+#endif
 
         public void LoadTypeNames()
         {

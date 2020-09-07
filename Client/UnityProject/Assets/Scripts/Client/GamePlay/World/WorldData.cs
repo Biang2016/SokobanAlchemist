@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using BiangStudio.CloneVariant;
 using Sirenix.OdinInspector;
 
 public class WorldData : IClone<WorldData>
 {
-    #region ConfigData
-
     public string WorldName;
 
     public WorldFeature WorldFeature;
@@ -38,8 +37,6 @@ public class WorldData : IClone<WorldData>
         data.WorldCameraPOIData = WorldCameraPOIData.Clone();
         return data;
     }
-
-    #endregion
 }
 
 [Flags]

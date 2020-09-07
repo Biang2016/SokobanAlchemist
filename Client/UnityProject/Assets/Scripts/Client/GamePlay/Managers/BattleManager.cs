@@ -10,18 +10,18 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
     public Messenger BattleMessenger = new Messenger();
 
     internal PlayerActor[] MainPlayers = new PlayerActor[2];
-    internal SortedDictionary<uint, Actor> ActorDict = new SortedDictionary<uint, Actor>();
+    internal List<EnemyActor> Enemies = new List<EnemyActor>();
 
     public Transform ActorContainerRoot;
 
     public void Clear()
     {
-        foreach (KeyValuePair<uint, Actor> kv in ActorDict)
+        foreach (EnemyActor enemy in Enemies)
         {
-            kv.Value.PoolRecycle();
+            enemy.PoolRecycle();
         }
 
-        ActorDict.Clear();
+        Enemies.Clear();
 
         for (int index = 0; index < MainPlayers.Length; index++)
         {
@@ -62,6 +62,14 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
                 BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
                 MainPlayers[(int) bpd.PlayerNumber] = player;
             }
+
+            if (bpd.BornPointType == BornPointType.Enemy)
+            {
+                byte enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.EnemyName);
+                EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
+                GridPos3D.ApplyGridPosToLocalTrans(bpd.GridPos3D, enemy.transform, 1);
+                Enemies.Add(enemy);
+            }
         }
     }
 
@@ -81,28 +89,16 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
     {
     }
 
-    public Actor FindActor(uint guid)
-    {
-        ActorDict.TryGetValue(guid, out Actor actor);
-        return actor;
-    }
-
     public void SetAllActorShown(bool shown)
     {
-        foreach (KeyValuePair<uint, Actor> kv in ActorDict)
+        for (int i = 0; i < MainPlayers.Length; i++)
         {
-            kv.Value.SetShown(shown);
+            MainPlayers[i]?.SetShown(shown);
         }
-    }
 
-    public void SetAllEnemyShown(bool shown)
-    {
-        foreach (KeyValuePair<uint, Actor> kv in ActorDict)
+        foreach (EnemyActor enemy in Enemies)
         {
-            if (!kv.Value.IsPlayer)
-            {
-                kv.Value.SetShown(shown);
-            }
+            enemy.SetShown(shown);
         }
     }
 }

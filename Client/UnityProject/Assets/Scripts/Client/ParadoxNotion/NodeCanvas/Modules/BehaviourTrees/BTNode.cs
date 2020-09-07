@@ -10,7 +10,7 @@ namespace NodeCanvas.BehaviourTrees
     {
         private Actor actor;
 
-        public Actor Actor {
+        internal Actor Actor {
             get {
                 if (actor == null)
                 {

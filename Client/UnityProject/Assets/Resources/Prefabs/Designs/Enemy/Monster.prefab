@@ -471,6 +471,8 @@ GameObject:
   - component: {fileID: 4892195723853597978}
   - component: {fileID: 3522706739585230582}
   - component: {fileID: 2884598377431085198}
+  - component: {fileID: -7398402967007363521}
+  - component: {fileID: -6048773597420499849}
   m_Layer: 13
   m_Name: Monster
   m_TagString: Untagged
@@ -509,7 +511,7 @@ Rigidbody:
   m_GameObject: {fileID: 4892195723853597974}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 100
   m_AngularDrag: 20
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -545,8 +547,8 @@ MonoBehaviour:
   Camp: 2
   MaxHealth: 1
   TotalLife: 1
-  Accelerate: 10
-  MoveSpeed: 10
+  Accelerate: 5000
+  MoveSpeed: 2
   CanKickBox: 0
   KickForce: 5
   CanThrowBox: 0
@@ -568,6 +570,51 @@ MonoBehaviour:
   MovementState: 0
   PushState: 0
   ThrowState: 0
+  AIUpdateInterval: 10
+--- !u!114 &-7398402967007363521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4892195723853597974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _serializedExposedParameters: []
+  _boundGraphSerialization: 
+  _boundGraphObjectReferences: []
+  _boundGraphSource:
+    _version: 0
+    _category: 
+    _comments: 
+    _translation: {x: 0, y: 0}
+    _zoomFactor: 1
+  _firstActivation: 0
+  _enableAction: 0
+  _disableAction: 0
+  _lockBoundGraphPrefabOverrides: 1
+  _preInitializeSubGraphs: 0
+  _updateMode: 3
+  _graph: {fileID: 11400000, guid: 1b8a82413f86bd84e8b043cd10066d8b, type: 2}
+  _blackboard: {fileID: -6048773597420499849}
+--- !u!114 &-6048773597420499849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4892195723853597974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b98a6db0b653f764eac834f85857a9dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _serializedBlackboard: '{"_variables":{}}'
+  _objectReferences: []
+  _serializedVariables: []
 --- !u!1 &5422490775058854720
 GameObject:
   m_ObjectHideFlags: 0

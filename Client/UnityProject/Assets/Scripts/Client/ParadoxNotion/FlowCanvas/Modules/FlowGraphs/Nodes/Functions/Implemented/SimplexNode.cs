@@ -15,7 +15,7 @@ namespace FlowCanvas.Nodes
     {
         private Actor actor;
 
-        public Actor Mecha {
+        internal Actor Actor {
             get {
                 if (actor == null)
                 {

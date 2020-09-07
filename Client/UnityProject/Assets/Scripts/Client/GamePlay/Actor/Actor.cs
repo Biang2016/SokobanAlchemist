@@ -3,6 +3,7 @@ using System.Linq;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
 using DG.Tweening;
+using NodeCanvas.BehaviourTrees;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -15,6 +16,9 @@ public class Actor : PoolObject
     public ActorLaunchArcRendererHelper ActorLaunchArcRendererHelper;
     public ActorBattleHelper ActorBattleHelper;
     public Transform LiftBoxPivot;
+
+    internal BehaviourTreeOwner BehaviourTreeOwner;
+    internal ActorAIAgent ActorAIAgent;
 
     [ReadOnly]
     [DisplayAsString]
@@ -151,6 +155,8 @@ public class Actor : PoolObject
 
     void Awake()
     {
+        ActorAIAgent = new ActorAIAgent(this);
+        BehaviourTreeOwner = GetComponent<BehaviourTreeOwner>();
         SmoothMoves = GetComponentsInChildren<SmoothMove>().ToList();
         foreach (SmoothMove sm in SmoothMoves)
         {
@@ -185,6 +191,35 @@ public class Actor : PoolObject
     {
         RigidBody.angularVelocity = Vector3.zero;
         CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
+    }
+
+    protected virtual void MoveInternal()
+    {
+        if (CurMoveAttempt.magnitude > 0)
+        {
+            if (CurMoveAttempt.x.Equals(0)) RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
+            if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
+            MovementState = MovementStates.Moving;
+            RigidBody.drag = 0;
+            RigidBody.AddForce(CurMoveAttempt * Time.fixedDeltaTime * Accelerate);
+            if (RigidBody.velocity.magnitude > MoveSpeed)
+            {
+                RigidBody.AddForce(-RigidBody.velocity.normalized * (RigidBody.velocity.magnitude - MoveSpeed), ForceMode.VelocityChange);
+            }
+
+            transform.forward = CurMoveAttempt;
+            CurForward = CurMoveAttempt.normalized;
+            ActorPushHelper.PushTriggerOut();
+        }
+        else
+        {
+            transform.forward = CurForward;
+            MovementState = MovementStates.Static;
+            RigidBody.drag = 100f;
+            ActorPushHelper.PushTriggerReset();
+        }
+
+        LastMoveAttempt = CurMoveAttempt;
     }
 
     #region Skills
