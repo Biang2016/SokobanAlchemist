@@ -12,10 +12,10 @@
         else
         {
             BehaviourTreeOwner.UpdateBehaviour();
-            ActorAIAgent.AITick();
             AIUpdateIntervalTick = 0;
         }
 
+        ActorAIAgent.Update();
         MoveInternal();
         base.FixedUpdate();
     }

@@ -190,5 +190,53 @@ public class World : PoolObject
         }
     }
 
+    public enum SearchRangeShape
+    {
+        Circle,
+        Square,
+    }
+
+    public List<Box> SearchBoxInRange(GridPos3D center, int radius, string boxTypeName, SearchRangeShape shape)
+    {
+        List<Box> res = new List<Box>();
+        if (boxTypeName == "None") return res;
+
+        GetBoxByGridPosition(center, out WorldModule module, out GridPos3D localGP);
+        if (module)
+        {
+            byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxTypeName);
+            if (boxTypeIndex == 0 && boxTypeName != "All")
+            {
+                return res;
+            }
+
+            for (int x = -radius; x <= radius; x++)
+            {
+                for (int z = -radius; z <= radius; z++)
+                {
+                    if (shape == SearchRangeShape.Circle)
+                    {
+                        if (x * x + z * z > radius * radius) continue;
+                    }
+                    else if (shape == SearchRangeShape.Square)
+                    {
+                    }
+
+                    GridPos3D gp = center + new GridPos3D(x, 0, z);
+                    Box box = GetBoxByGridPosition(gp, out WorldModule tarModule, out GridPos3D _);
+                    if (box != null)
+                    {
+                        if (boxTypeName == "All" || box.BoxTypeIndex == boxTypeIndex)
+                        {
+                            res.Add(box);
+                        }
+                    }
+                }
+            }
+        }
+
+        return res;
+    }
+
     #endregion
 }

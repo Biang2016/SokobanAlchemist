@@ -30,7 +30,7 @@ public class Actor : PoolObject
     [LabelText("上一帧移动倾向")]
     public Vector3 LastMoveAttempt;
 
-    protected Vector3 CurForward = Vector3.forward;
+    internal Vector3 CurForward = Vector3.forward;
 
     [DisplayAsString]
     [LabelText("世界坐标")]

@@ -20,8 +20,8 @@ public class ActorPathFinding
     public static LinkedList<GridPos3D> FindPath(GridPos3D ori, GridPos3D dest)
     {
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori, out WorldModule oriModule, out GridPos3D _);
-        Box destBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(dest, out WorldModule destModule, out GridPos3D _);
-        if (oriModule != null && destModule != null && destBox == null)
+        WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(dest, out WorldModule destModule, out GridPos3D _);
+        if (oriModule != null && destModule != null)
         {
             return FindPath(new Node {GridPos3D = ori}, new Node {GridPos3D = dest});
         }
@@ -51,7 +51,7 @@ public class ActorPathFinding
 
             OpenList.Remove(minFNode);
             CloseList.AddFirst(minFNode);
-            List<Node> adjacentNodes = GetAdjacentNodes(minFNode);
+            List<Node> adjacentNodes = GetAdjacentNodes(minFNode, dest.GridPos3D);
             foreach (Node node in adjacentNodes)
             {
                 bool inCloseList = false;
@@ -111,7 +111,7 @@ public class ActorPathFinding
         return null;
     }
 
-    private static List<Node> GetAdjacentNodes(Node node)
+    private static List<Node> GetAdjacentNodes(Node node, GridPos3D destGP)
     {
         List<Node> res = new List<Node>();
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(node.GridPos3D, out WorldModule curModule, out GridPos3D _);
@@ -119,6 +119,13 @@ public class ActorPathFinding
 
         void tryAddNode(GridPos3D gp)
         {
+            if (gp == destGP)
+            {
+                Node leftNode = new Node {GridPos3D = gp, ParentNode = node};
+                res.Add(leftNode);
+                return;
+            }
+
             Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gp, out WorldModule module, out GridPos3D _);
             if (module != null && box == null)
             {
@@ -137,7 +144,6 @@ public class ActorPathFinding
 
     private static int AStarHeuristicsDistance(Node start, Node end)
     {
-        GridPos3D diff = start.GridPos3D - end.GridPos3D;
-        return Mathf.Abs(diff.x) + Mathf.Abs(diff.z);
+        return ClientUtils.AStarHeuristicsDistance(start.GridPos3D, end.GridPos3D);
     }
 }

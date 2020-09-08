@@ -11,7 +11,7 @@ public class ActorAIAgent
         Actor = actor;
     }
 
-    public void AITick()
+    public void Update()
     {
         if (EnableRotate) RotateTowardsTarget();
         if (EnableMove) MoveToDestination();
@@ -41,34 +41,46 @@ public class ActorAIAgent
     private LinkedListNode<GridPos3D> currentNode;
     private LinkedListNode<GridPos3D> nextNode;
 
-    public void SetDestination(GridPos3D dest, float keepDistance)
+    public enum SetDestinationRetCode
+    {
+        AlreadyArrived,
+        Suc,
+        Failed,
+    }
+
+    public SetDestinationRetCode SetDestination(GridPos3D dest, float keepDistance)
     {
         currentDestination = dest;
         KeepDistance = keepDistance;
+        if ((Actor.CurGP.ToVector3() - dest.ToVector3()).magnitude <= keepDistance) return SetDestinationRetCode.AlreadyArrived;
         currentPath = ActorPathFinding.FindPath(Actor.CurGP, dest);
         if (currentPath != null)
         {
             currentNode = currentPath.First;
             nextNode = currentPath.First.Next;
+            return SetDestinationRetCode.Suc;
         }
         else
         {
             currentNode = null;
             nextNode = null;
+            return SetDestinationRetCode.Failed;
         }
     }
 
     public void MoveToDestination()
     {
-        if (currentPath != null && (currentPath.Last.Value.ToVector3() - Actor.transform.position).magnitude <= KeepDistance)
+        Vector3 diff = currentPath.Last.Value.ToVector3() - Actor.transform.position;
+        if (currentPath != null && diff.magnitude <= KeepDistance)
         {
+            Actor.CurForward = diff.normalized.ToGridPos3D().ToVector3();
             Actor.CurMoveAttempt = Vector3.zero;
         }
         else
         {
             if (nextNode != null)
             {
-                if ((Actor.transform.position - nextNode.Value.ToVector3()).magnitude < 0.1f)
+                if ((Actor.transform.position - nextNode.Value.ToVector3()).magnitude < 0.01f)
                 {
                     currentNode = nextNode;
                     nextNode = nextNode.Next;
