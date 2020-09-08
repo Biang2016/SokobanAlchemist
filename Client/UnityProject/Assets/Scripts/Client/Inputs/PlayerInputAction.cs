@@ -225,6 +225,14 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Player2_RightStick"",
+                    ""type"": ""Value"",
+                    ""id"": ""83a1b127-8522-46ed-9cf7-b8e16d0651d6"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -246,6 +254,17 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Skill_0_Player2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3817b7ce-ae5b-4aba-b3bd-082722b4cd9a"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Skill_0_Player2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -297,7 +316,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""dd014788-5e27-4daf-9256-adfce84e4ba7"",
-                    ""path"": ""<Keyboard>/j"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -312,6 +331,17 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Skill_1_Player2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e3d5732d-a9b3-4198-9978-5c29a5a30341"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Skill_1_Player2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -373,11 +403,55 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""a6d2e747-b7f3-42f3-9f54-30af9e8f01e0"",
+                    ""path"": ""<XInputController>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Player2_Move_Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1bde870d-a270-4b07-a0f3-78bad3f18908"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Player2_Move_Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""a0f8ec31-4fc9-4f5f-87e2-e9d419a7f474"",
                     ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player2_Move_Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5342d7ae-7633-4f5a-8e4e-84a5f849f5d7"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Player2_Move_Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b894efd5-5f72-48d9-9210-df5b571b6e81"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Player2_Move_Down"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -395,11 +469,55 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""3ae5518b-6b3a-416c-93ec-250fc135d98f"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Player2_Move_Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ddf0dc4d-752b-414a-8096-1501dbedcd1a"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Player2_Move_Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""d636d0f0-80a9-40e3-bb9f-02c7a3a4cbfc"",
                     ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Player2_Move_Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ac0020b5-c3a0-4bb3-8625-7ea547575212"",
+                    ""path"": ""<XInputController>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Player2_Move_Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8271e681-3b5b-43a3-8490-a95da9ba2a94"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Player2_Move_Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -601,6 +719,28 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""action"": ""Player2_Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e809f72-9970-4fca-843a-dd747f335638"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Player2_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fe69d644-20d7-4d7c-adf2-8b8814f6ce4a"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Player2_RightStick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -770,10 +910,10 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""bf3217aa-e15c-4140-9082-aa2291a3acbf"",
-                    ""path"": ""*/{Point}"",
+                    ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""KeyboardMouse;Gamepad"",
+                    ""groups"": ""KeyboardMouse"",
                     ""action"": ""MousePosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -844,6 +984,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_BattleInput_Player2_Move_Right_M = m_BattleInput.FindAction("Player2_Move_Right_M", throwIfNotFound: true);
         m_BattleInput_Player1_Move = m_BattleInput.FindAction("Player1_Move", throwIfNotFound: true);
         m_BattleInput_Player2_Move = m_BattleInput.FindAction("Player2_Move", throwIfNotFound: true);
+        m_BattleInput_Player2_RightStick = m_BattleInput.FindAction("Player2_RightStick", throwIfNotFound: true);
         // Common
         m_Common = asset.FindActionMap("Common", throwIfNotFound: true);
         m_Common_MouseLeftClick = m_Common.FindAction("MouseLeftClick", throwIfNotFound: true);
@@ -931,6 +1072,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_BattleInput_Player2_Move_Right_M;
     private readonly InputAction m_BattleInput_Player1_Move;
     private readonly InputAction m_BattleInput_Player2_Move;
+    private readonly InputAction m_BattleInput_Player2_RightStick;
     public struct BattleInputActions
     {
         private @PlayerInput m_Wrapper;
@@ -961,6 +1103,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @Player2_Move_Right_M => m_Wrapper.m_BattleInput_Player2_Move_Right_M;
         public InputAction @Player1_Move => m_Wrapper.m_BattleInput_Player1_Move;
         public InputAction @Player2_Move => m_Wrapper.m_BattleInput_Player2_Move;
+        public InputAction @Player2_RightStick => m_Wrapper.m_BattleInput_Player2_RightStick;
         public InputActionMap Get() { return m_Wrapper.m_BattleInput; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1048,6 +1191,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Player2_Move.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move;
                 @Player2_Move.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move;
                 @Player2_Move.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move;
+                @Player2_RightStick.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_RightStick;
+                @Player2_RightStick.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_RightStick;
+                @Player2_RightStick.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_RightStick;
             }
             m_Wrapper.m_BattleInputActionsCallbackInterface = instance;
             if (instance != null)
@@ -1130,6 +1276,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Player2_Move.started += instance.OnPlayer2_Move;
                 @Player2_Move.performed += instance.OnPlayer2_Move;
                 @Player2_Move.canceled += instance.OnPlayer2_Move;
+                @Player2_RightStick.started += instance.OnPlayer2_RightStick;
+                @Player2_RightStick.performed += instance.OnPlayer2_RightStick;
+                @Player2_RightStick.canceled += instance.OnPlayer2_RightStick;
             }
         }
     }
@@ -1285,6 +1434,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnPlayer2_Move_Right_M(InputAction.CallbackContext context);
         void OnPlayer1_Move(InputAction.CallbackContext context);
         void OnPlayer2_Move(InputAction.CallbackContext context);
+        void OnPlayer2_RightStick(InputAction.CallbackContext context);
     }
     public interface ICommonActions
     {

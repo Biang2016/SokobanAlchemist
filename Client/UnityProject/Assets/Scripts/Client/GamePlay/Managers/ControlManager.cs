@@ -22,6 +22,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     public ButtonState Battle_MouseMiddle = new ButtonState() {ButtonName = ButtonNames.Battle_MouseMiddle};
 
     public Vector2[] Battle_Move = new Vector2[2];
+    public Vector2 Player2_RightStick = new Vector2();
     public ButtonState[,] Battle_MoveButtons = new ButtonState[2,4];
     public ButtonState[,] Battle_MoveButtons_LastFrame = new ButtonState[2,4];
 
@@ -140,6 +141,9 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
 
         BattleInputActions.Player2_Move.performed += context => Battle_Move[(int)PlayerNumber.Player2] = context.ReadValue<Vector2>();
         BattleInputActions.Player2_Move.canceled += context => Battle_Move[(int)PlayerNumber.Player2] = Vector2.zero;
+
+        BattleInputActions.Player2_RightStick.performed += context => Player2_RightStick = context.ReadValue<Vector2>();
+        BattleInputActions.Player2_RightStick.canceled += context => Player2_RightStick = Vector2.zero;
 
         // 正常按键
         Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Up] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Up_Player1 };

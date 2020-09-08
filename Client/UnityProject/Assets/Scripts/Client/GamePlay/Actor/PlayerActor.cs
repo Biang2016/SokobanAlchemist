@@ -34,27 +34,27 @@ public class PlayerActor : Actor
 
     protected override void FixedUpdate()
     {
-        // 双击方向键踢出箱子
-        if (PushState == PushStates.None)
-        {
-            if ((CurForward.x > 0 && BS_Right.MultiClick == 2) ||
-                (CurForward.x < 0 && BS_Left.MultiClick == 2) ||
-                (CurForward.z > 0 && BS_Up.MultiClick == 2) ||
-                (CurForward.z < 0 && BS_Down.MultiClick == 2))
-            {
-                KickDoubleClick();
-            }
-        }
-        else if (PushState == PushStates.Pushing)
-        {
-            if ((CurForward.x > 0 && BS_Right.Down) ||
-                (CurForward.x < 0 && BS_Left.Down) ||
-                (CurForward.z > 0 && BS_Up.Down) ||
-                (CurForward.z < 0 && BS_Down.Down))
-            {
-                KickDoubleClick();
-            }
-        }
+        //// 双击方向键踢出箱子
+        //if (PushState == PushStates.None)
+        //{
+        //    if ((CurForward.x > 0 && BS_Right.MultiClick == 2) ||
+        //        (CurForward.x < 0 && BS_Left.MultiClick == 2) ||
+        //        (CurForward.z > 0 && BS_Up.MultiClick == 2) ||
+        //        (CurForward.z < 0 && BS_Down.MultiClick == 2))
+        //    {
+        //        KickDoubleClick();
+        //    }
+        //}
+        //else if (PushState == PushStates.Pushing)
+        //{
+        //    if ((CurForward.x > 0 && BS_Right.Down) ||
+        //        (CurForward.x < 0 && BS_Left.Down) ||
+        //        (CurForward.z > 0 && BS_Up.Down) ||
+        //        (CurForward.z < 0 && BS_Down.Down))
+        //    {
+        //        KickDoubleClick();
+        //    }
+        //}
 
         #region Move
 
@@ -102,14 +102,28 @@ public class PlayerActor : Actor
 
         #region Throw Charging
 
-        CurThrowMoveAttempt = Vector3.zero;
         if (ThrowState == ThrowStates.ThrowCharging)
         {
-            if (BS_Up.Pressed) CurThrowMoveAttempt.z += 1;
-            if (BS_Down.Pressed) CurThrowMoveAttempt.z -= 1;
-            if (BS_Left.Pressed) CurThrowMoveAttempt.x -= 1;
-            if (BS_Right.Pressed) CurThrowMoveAttempt.x += 1;
-            CurThrowMoveAttempt.Normalize();
+            if (PlayerNumber == PlayerNumber.Player1)
+            {
+                Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(ControlManager.Instance.Battle_MousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit, 100f, LayerManager.Instance.LayerMask_Ground))
+                {
+                    CurThrowPointOffset = hit.point - transform.position;
+                    CurThrowPointOffset.y = 0;
+                }
+            }
+            else if (PlayerNumber == PlayerNumber.Player2)
+            {
+                CurThrowMoveAttempt = Vector3.zero;
+                if (ThrowState == ThrowStates.ThrowCharging)
+                {
+                    CurThrowMoveAttempt = new Vector3(ControlManager.Instance.Player2_RightStick.x, 0, ControlManager.Instance.Player2_RightStick.y);
+                    CurThrowMoveAttempt.Normalize();
+                }
+
+                CurThrowPointOffset += CurThrowMoveAttempt * Mathf.Max(ThrowAimMoveSpeed * Mathf.Sqrt(CurThrowPointOffset.magnitude), 2f) * Time.fixedDeltaTime;
+            }
         }
 
         ThrowChargeAimInternal();
@@ -125,11 +139,13 @@ public class PlayerActor : Actor
         bool skill_1_Pressed = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Pressed;
         bool skill_1_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Up;
 
-        if (skill_0_Down) Lift();
+        if (skill_1_Down) Lift();
 
-        if (skill_0_Pressed) ThrowCharge();
+        if (skill_1_Pressed) ThrowCharge();
 
-        if (skill_0_Up) Throw();
+        if (skill_1_Up) Throw();
+
+        if (skill_0_Up) KickDoubleClick();
 
         #endregion
 

@@ -86,6 +86,8 @@ public class Actor : PoolObject
     [LabelText("瞄准点移动速度")]
     public float ThrowAimMoveSpeed = 10f;
 
+    private float ThrowRadiusMin = 0.75f;
+
     [BoxGroup("配置")]
     [LabelText("扔半径")]
     public float ThrowRadius = 10f;
@@ -186,11 +188,6 @@ public class Actor : PoolObject
 
     protected virtual void MoveInternal()
     {
-        if (ThrowState == ThrowStates.ThrowCharging)
-        {
-            CurMoveAttempt = Vector3.zero;
-        }
-
         if (CurMoveAttempt.magnitude > 0)
         {
             if (CurMoveAttempt.x.Equals(0)) RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
@@ -218,19 +215,32 @@ public class Actor : PoolObject
         LastMoveAttempt = CurMoveAttempt;
     }
 
+    private float ThrowChargeTick;
+    public float ThrowChargeMax = 1.5f;
+
     protected virtual void ThrowChargeAimInternal()
     {
         if (ThrowState == ThrowStates.ThrowCharging)
         {
-            CurThrowPointOffset += CurThrowMoveAttempt * Mathf.Max(ThrowAimMoveSpeed * Mathf.Sqrt(CurThrowPointOffset.magnitude), 2f) * Time.fixedDeltaTime;
-            if (CurThrowPointOffset.magnitude > ThrowRadius)
+            if (ThrowChargeTick < ThrowChargeMax)
             {
-                CurThrowPointOffset = CurThrowPointOffset.normalized * ThrowRadius;
+                ThrowChargeTick += Time.fixedDeltaTime;
+            }
+            else
+            {
+                ThrowChargeTick = ThrowChargeMax;
+            }
+
+            float radius = ThrowRadius * ThrowChargeTick / ThrowChargeMax + ThrowRadiusMin;
+            if (CurThrowPointOffset.magnitude > radius)
+            {
+                CurThrowPointOffset = CurThrowPointOffset.normalized * radius;
             }
         }
         else
         {
             CurThrowPointOffset = Vector3.zero;
+            ThrowChargeTick = 0;
         }
     }
 
@@ -281,7 +291,7 @@ public class Actor : PoolObject
         if (ThrowState == ThrowStates.Lifting)
         {
             ThrowState = ThrowStates.ThrowCharging;
-            CurThrowPointOffset = transform.forward * 0.7f;
+            CurThrowPointOffset = transform.forward * ThrowRadiusMin;
         }
     }
 

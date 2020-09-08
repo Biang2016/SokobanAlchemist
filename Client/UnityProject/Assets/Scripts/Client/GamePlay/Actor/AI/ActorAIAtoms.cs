@@ -93,7 +93,7 @@ public static class ActorAIAtoms
             }
 
             if (nearestBox == null) return Status.Failure;
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(nearestBox.GridPos3D, 1.05f);
+            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(nearestBox.GridPos3D, 1.1f);
             switch (retCode)
             {
                 case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
