@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
 using DG.Tweening;
@@ -28,19 +29,19 @@ public class Box : PoolObject
     public override void OnUsed()
     {
         LastTouchActor = null;
-        ClientGameManager.Instance.BattleMessenger.AddListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnStaticBounceChanged);
-        ClientGameManager.Instance.BattleMessenger.AddListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnDynamicBounceChanged);
         base.OnUsed();
     }
 
     public override void OnRecycled()
     {
+        WorldModule = null;
+        GridPos3D = GridPos3D.Zero;
+        lastGP = GridPos3D.Zero;
+        State = States.Static;
         LastTouchActor = null;
         BoxEffectHelper?.PoolRecycle();
         BoxEffectHelper = null;
         transform.DOPause();
-        ClientGameManager.Instance.BattleMessenger.RemoveListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnStaticBounceChanged);
-        ClientGameManager.Instance.BattleMessenger.RemoveListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnDynamicBounceChanged);
         base.OnRecycled();
     }
 
@@ -48,37 +49,78 @@ public class Box : PoolObject
     public byte BoxTypeIndex;
 
     [LabelText("箱子特性")]
+    [AssetsOnly]
     public BoxFeature BoxFeature;
 
+    [AssetsOnly]
+    [ShowIf("Moveable")]
     [BoxGroup("箱子属性")]
     [LabelText("重量")]
-    [FormerlySerializedAs("Weight")]
     [SerializeField]
     private float Weight;
 
     public float FinalWeight => Weight * ConfigManager.BoxWeightFactor_Cheat;
 
-    [BoxGroup("静止属性")]
-    [LabelText("弹性")]
-    public float Static_Bounce;
+    [AssetsOnly]
+    [ShowIf("KickOrLiftable")]
+    [BoxGroup("箱子属性")]
+    [LabelText("撞击特效")]
+    [SerializeField]
+    private ProjectileType CollideFX;
 
-    [BoxGroup("动态属性")]
-    [LabelText("弹性")]
-    public float Dynamic_Bounce = 1f;
+    [AssetsOnly]
+    [ShowIf("KickOrLiftable")]
+    [BoxGroup("箱子属性")]
+    [LabelText("撞击特效尺寸")]
+    [SerializeField]
+    private float CollideFXScale = 1f;
 
+    [AssetsOnly]
+    [ShowIf("Pushable")]
     [BoxGroup("推箱子属性")]
     [LabelText("抗推力")]
     [PropertyRange(0, 1)]
-    [FormerlySerializedAs("Inertia")]
     public float Static_Inertia = 0.5f;
 
+    [AssetsOnly]
+    [ShowIf("Liftable")]
+    [BoxGroup("扔箱子属性")]
+    [LabelText("扔毁灭伤害半径")]
+    [SerializeField]
+    private float DestroyDamageRadius_Throw = 1.5f;
+
+    [AssetsOnly]
+    [ShowIf("Liftable")]
+    [BoxGroup("扔箱子属性")]
+    [LabelText("扔毁灭伤害")]
+    [SerializeField]
+    private float DestroyDamage_Throw = 3f;
+
+    [AssetsOnly]
+    [ShowIf("Liftable")]
     [BoxGroup("扔箱子属性")]
     [LabelText("落地摩阻力")]
     public float Throw_Drag = 0.5f;
 
+    [AssetsOnly]
+    [ShowIf("Kickable")]
     [BoxGroup("踢箱子属性")]
     [LabelText("摩阻力")]
     public float Dynamic_Drag = 0.5f;
+
+    [AssetsOnly]
+    [ShowIf("Kickable")]
+    [BoxGroup("踢箱子属性")]
+    [LabelText("踢毁灭伤害半径")]
+    [SerializeField]
+    private float DestroyDamageRadius_Kick = 0.5f;
+
+    [AssetsOnly]
+    [ShowIf("Kickable")]
+    [BoxGroup("踢箱子属性")]
+    [LabelText("踢毁灭伤害")]
+    [SerializeField]
+    private float DestroyDamage_Kick = 3f;
 
     private GridPos3D lastGP;
 
@@ -102,6 +144,7 @@ public class Box : PoolObject
         Flying,
     }
 
+    [HideInPrefabAssets]
     [ReadOnly]
     [LabelText("移动状态")]
     public States State = States.Static;
@@ -116,18 +159,6 @@ public class Box : PoolObject
 
     protected virtual void Start()
     {
-        OnStaticBounceChanged();
-        OnDynamicBounceChanged();
-    }
-
-    private void OnStaticBounceChanged()
-    {
-        StaticCollider.material.bounciness = Static_Bounce * ConfigManager.BoxStaticBounceFactor_Cheat;
-    }
-
-    private void OnDynamicBounceChanged()
-    {
-        DynamicCollider.material.bounciness = Dynamic_Bounce * ConfigManager.BoxStaticBounceFactor_Cheat;
     }
 
     public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime)
@@ -287,50 +318,80 @@ public class Box : PoolObject
         }
     }
 
-    public bool Pushable()
-    {
-        return BoxFeature.HasFlag(BoxFeature.Pushable);
-    }
+    public bool Pushable => BoxFeature.HasFlag(BoxFeature.Pushable);
 
-    public bool Liftable()
-    {
-        return BoxFeature.HasFlag(BoxFeature.Liftable);
-    }
+    public bool Kickable => BoxFeature.HasFlag(BoxFeature.Kickable);
 
-    public bool Droppable()
-    {
-        return BoxFeature.HasFlag(BoxFeature.Droppable);
-    }
+    public bool Liftable => BoxFeature.HasFlag(BoxFeature.Liftable);
+
+    public bool KickOrLiftable => Kickable || Liftable;
+
+    public bool Moveable => Pushable || Kickable || Liftable;
+
+    public bool Droppable => BoxFeature.HasFlag(BoxFeature.Droppable);
+
+    public bool Breakable => BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable) || BoxFeature.HasFlag(BoxFeature.KickHitBreakable);
 
     void OnCollisionEnter(Collision collision)
     {
+        if (LastTouchActor != null && collision.gameObject == LastTouchActor.gameObject) return;
         if (State == States.Flying)
         {
-            Rigidbody.drag = Throw_Drag * ConfigManager.BoxThrowDragFactor_Cheat;
+            // Destroy AOE Damage
+            if (!WorldManager.Instance.CurrentWorld.WorldData.WorldFeature.HasFlag(WorldFeature.PlayerImmune))
+            {
+                Collider[] colliders = Physics.OverlapSphere(transform.position, DestroyDamageRadius_Throw, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
+                HashSet<Actor> damagedActors = new HashSet<Actor>();
+                foreach (Collider collider in colliders)
+                {
+                    Actor actor = collider.GetComponentInParent<Actor>();
+                    if (actor && actor != LastTouchActor && actor.ActorBattleHelper && !damagedActors.Contains(actor))
+                    {
+                        actor.ActorBattleHelper.Damage(DestroyDamage_Throw);
+                        damagedActors.Add(actor);
+                    }
+                }
+            }
+
+            // FX and Recycle
+            ProjectileHit hit = ProjectileManager.Instance.PlayProjectileHit(CollideFX, transform.position);
+            if (hit) hit.transform.localScale = Vector3.one * CollideFXScale;
+            if (BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable))
+            {
+                PoolRecycle();
+            }
+            else
+            {
+                Rigidbody.drag = Throw_Drag * ConfigManager.BoxThrowDragFactor_Cheat;
+            }
         }
 
-        //if ((State == States.Flying || State == States.BeingKicked) && Rigidbody)
-        //{
-        //    bool stop = false;
-        //    if (collision.gameObject.layer == LayerManager.Instance.Layer_Box)
-        //    {
-        //        Box box = collision.gameObject.GetComponentInParent<Box>();
-        //        if (box && box.BoxType != BoxType.GroundBox && box.BoxType != BoxType.None)
-        //        {
-        //            stop = true;
-        //        }
-        //    }
+        if (State == States.BeingKicked)
+        {
+            // Destroy AOE Damage
+            if (!WorldManager.Instance.CurrentWorld.WorldData.WorldFeature.HasFlag(WorldFeature.PlayerImmune))
+            {
+                Collider[] colliders = Physics.OverlapSphere(transform.position, DestroyDamageRadius_Kick, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
+                HashSet<Actor> damagedActors = new HashSet<Actor>();
+                foreach (Collider collider in colliders)
+                {
+                    Actor actor = collider.GetComponentInParent<Actor>();
+                    if (actor && actor != LastTouchActor && actor.ActorBattleHelper && !damagedActors.Contains(actor))
+                    {
+                        actor.ActorBattleHelper.Damage(DestroyDamage_Kick);
+                        damagedActors.Add(actor);
+                    }
+                }
+            }
 
-        //    if (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
-        //    {
-        //        //stop = true;
-        //    }
-
-        //    if (stop)
-        //    {
-        //        Rigidbody.velocity = Rigidbody.velocity * 0.1f;
-        //    }
-        //}
+            // FX and Recycle
+            ProjectileHit hit = ProjectileManager.Instance.PlayProjectileHit(CollideFX, transform.position);
+            if (hit) hit.transform.localScale = Vector3.one * CollideFXScale;
+            if (BoxFeature.HasFlag(BoxFeature.KickHitBreakable))
+            {
+                PoolRecycle();
+            }
+        }
     }
 
     void OnDrawGizmos()
@@ -344,6 +405,7 @@ public class Box : PoolObject
 
 #if UNITY_EDITOR
     [HideInPlayMode]
+    [HideInPrefabAssets]
     [BoxGroup("模组编辑器")]
     [Button("替换Box", ButtonSizes.Large)]
     private void ReplaceBox_Editor()
@@ -362,7 +424,7 @@ public class Box : PoolObject
             return;
         }
 
-        GameObject prefab = (GameObject) Resources.Load("Prefabs/Designs/Boxes/" + ReplaceBoxTypeName);
+        GameObject prefab = (GameObject) Resources.Load("Prefabs/Designs/Box/" + ReplaceBoxTypeName);
         GameObject go = (GameObject) PrefabUtility.InstantiatePrefab(prefab, transform.parent);
         go.transform.position = transform.position;
         go.transform.rotation = Quaternion.identity;
@@ -370,11 +432,12 @@ public class Box : PoolObject
     }
 
     [HideInPlayMode]
+    [HideInPrefabAssets]
+    [ShowInInspector]
     [NonSerialized]
     [BoxGroup("模组编辑器")]
     [LabelText("替换Box类型")]
     [ValueDropdown("GetAllBoxTypeNames")]
-    [ShowInInspector]
     private string ReplaceBoxTypeName;
 
     private IEnumerable<string> GetAllBoxTypeNames()
@@ -411,4 +474,10 @@ public enum BoxFeature
 
     [LabelText("从属玩家2")]
     BelongToPlayer2 = 1 << 6,
+
+    [LabelText("踢撞会碎")]
+    KickHitBreakable = 1 << 7,
+
+    [LabelText("扔撞会碎")]
+    ThrowHitBreakable = 1 << 8,
 }

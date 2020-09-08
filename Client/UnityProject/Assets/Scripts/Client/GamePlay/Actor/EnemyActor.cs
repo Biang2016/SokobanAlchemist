@@ -1,6 +1,6 @@
 ﻿public class EnemyActor : Actor
 {
-    public int AIUpdateInterval = 10;
+    internal int AIUpdateInterval = 10;
     private int AIUpdateIntervalTick = 0;
 
     protected override void FixedUpdate()

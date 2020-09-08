@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BiangStudio.ObjectPool;
 using BiangStudio.Singleton;
 using UnityEngine;
 
@@ -24,5 +25,20 @@ public class ProjectileManager : TSingletonBaseManager<ProjectileManager>
         projectile.Initialize(velocity, dummyPos.forward, projectileType, playerNumber, projectileScale);
         projectile.Launch(dummyPos);
         return projectile;
+    }
+
+    public ProjectileHit PlayProjectileHit(ProjectileType projectType, Vector3 position)
+    {
+        if (GameObjectPoolManager.Instance.ProjectileHitDict.ContainsKey(projectType))
+        {
+            ProjectileHit hit = GameObjectPoolManager.Instance.ProjectileHitDict[projectType].AllocateGameObject<ProjectileHit>(Root);
+            hit.transform.position = position;
+            hit.transform.localScale = Vector3.one;
+            hit.transform.rotation = Quaternion.identity;
+            hit.Play();
+            return hit;
+        }
+
+        return null;
     }
 }

@@ -234,7 +234,7 @@ public class Actor : PoolObject
     }
 
     private float ThrowChargeTick;
-    public float ThrowChargeMax = 1.5f;
+    internal float ThrowChargeMax = 1.5f;
 
     protected virtual void ThrowChargeAimInternal()
     {
@@ -264,14 +264,14 @@ public class Actor : PoolObject
 
     #region Skills
 
-    public void KickDoubleClick()
+    public void Kick()
     {
         Ray ray = new Ray(transform.position, transform.forward);
         Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
         if (Physics.Raycast(ray, out RaycastHit hit, 1.5f, LayerManager.Instance.LayerMask_Box, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Pushable())
+            if (box && box.Kickable)
             {
                 box.Kick(CurForward, KickForce, this);
             }
@@ -285,7 +285,7 @@ public class Actor : PoolObject
         if (Physics.Raycast(ray, out RaycastHit hit, 1.3f, LayerManager.Instance.LayerMask_Box, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Liftable())
+            if (box && box.Liftable)
             {
                 if (box.BeingLift(this))
                 {

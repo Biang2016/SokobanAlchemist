@@ -186,20 +186,6 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugSlider("Boxes/StaticBounce", 1, 0.3f, 10f)]
-    public void ChangeBoxStaticBounce(float value)
-    {
-        ConfigManager.BoxStaticBounceFactor_Cheat = value;
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnBoxStaticBounceCheatChanged);
-    }
-
-    [DebugSlider("Boxes/DynamicBounce", 1, 0.3f, 10f)]
-    public void ChangeBoxDynamicBounce(float value)
-    {
-        ConfigManager.BoxDynamicBounceFactor_Cheat = value;
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnBoxDynamicBounceCheatChanged);
-    }
-
     [DebugSlider("Boxes/ThrowFriction", 10f, 0, 20f)]
     public void ChangeBoxThrowDrag(float value)
     {

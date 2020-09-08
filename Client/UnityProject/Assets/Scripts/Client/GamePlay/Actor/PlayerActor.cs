@@ -146,7 +146,7 @@ public class PlayerActor : Actor
 
         if (skill_1_Up) Throw();
 
-        if (skill_0_Up) KickDoubleClick();
+        if (skill_0_Up) Kick();
 
         #endregion
 

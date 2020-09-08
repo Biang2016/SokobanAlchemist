@@ -126,14 +126,11 @@ public class Projectile : PoolObject
 
     public void PlayHitEffect(Vector3 position, Vector3 direction)
     {
-        if (GameObjectPoolManager.Instance.ProjectileHitDict.ContainsKey(ProjectileType))
+        ProjectileHit hit = ProjectileManager.Instance.PlayProjectileHit(ProjectileType, position);
+        if (hit)
         {
-            ProjectileHit hit = GameObjectPoolManager.Instance.ProjectileHitDict[ProjectileType].AllocateGameObject<ProjectileHit>(ProjectileManager.Instance.Root);
-            hit.transform.position = position;
             hit.transform.localScale = Vector3.one * Scale;
-            hit.transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);
             hit.transform.LookAt(position + direction);
-            hit.Play();
         }
     }
 }

@@ -129,7 +129,7 @@ public class World : PoolObject
 
     public void CheckDropSelf(Box box)
     {
-        if (box && box.Droppable())
+        if (box && box.Droppable)
         {
             WorldModule module = box.WorldModule;
             GridPos3D localGridPos3D = box.LocalGridPos3D;
