@@ -70,30 +70,33 @@ public class ActorAIAgent
 
     public void MoveToDestination()
     {
-        Vector3 diff = currentPath.Last.Value.ToVector3() - Actor.transform.position;
-        if (currentPath != null && diff.magnitude <= KeepDistance)
+        if (currentPath != null)
         {
-            Actor.CurForward = diff.normalized.ToGridPos3D().ToVector3();
-            Actor.CurMoveAttempt = Vector3.zero;
-        }
-        else
-        {
-            if (nextNode != null)
+            Vector3 diff = currentPath.Last.Value.ToVector3() - Actor.transform.position;
+            if (diff.magnitude <= KeepDistance)
             {
-                if ((Actor.transform.position - nextNode.Value.ToVector3()).magnitude < 0.01f)
-                {
-                    currentNode = nextNode;
-                    nextNode = nextNode.Next;
-                }
-            }
-
-            if (nextNode != null && currentNode != null)
-            {
-                Actor.CurMoveAttempt = (nextNode.Value.ToVector3() - Actor.transform.position).normalized;
+                Actor.CurForward = diff.normalized.ToGridPos3D().ToVector3();
+                Actor.CurMoveAttempt = Vector3.zero;
             }
             else
             {
-                Actor.CurMoveAttempt = Vector3.zero;
+                if (nextNode != null)
+                {
+                    if ((Actor.transform.position - nextNode.Value.ToVector3()).magnitude < 0.01f)
+                    {
+                        currentNode = nextNode;
+                        nextNode = nextNode.Next;
+                    }
+                }
+
+                if (nextNode != null && currentNode != null)
+                {
+                    Actor.CurMoveAttempt = (nextNode.Value.ToVector3() - Actor.transform.position).normalized;
+                }
+                else
+                {
+                    Actor.CurMoveAttempt = Vector3.zero;
+                }
             }
         }
     }

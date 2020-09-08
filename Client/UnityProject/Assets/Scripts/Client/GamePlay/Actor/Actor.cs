@@ -30,6 +30,16 @@ public class Actor : PoolObject
     [LabelText("上一帧移动倾向")]
     public Vector3 LastMoveAttempt;
 
+    [ReadOnly]
+    [DisplayAsString]
+    [LabelText("扔箱子瞄准点移动倾向")]
+    public Vector3 CurThrowMoveAttempt;
+
+    [ReadOnly]
+    [DisplayAsString]
+    [LabelText("扔箱子瞄准点偏移")]
+    public Vector3 CurThrowPointOffset;
+
     internal Vector3 CurForward = Vector3.forward;
 
     [DisplayAsString]
@@ -73,6 +83,14 @@ public class Actor : PoolObject
     public float MoveSpeed = 10f;
 
     [BoxGroup("配置")]
+    [LabelText("瞄准点移动速度")]
+    public float ThrowAimMoveSpeed = 10f;
+
+    [BoxGroup("配置")]
+    [LabelText("扔半径")]
+    public float ThrowRadius = 10f;
+
+    [BoxGroup("配置")]
     [LabelText("会踢箱子")]
     public bool CanKickBox = true;
 
@@ -84,33 +102,6 @@ public class Actor : PoolObject
     [BoxGroup("配置")]
     [LabelText("会扔箱子")]
     public bool CanThrowBox = true;
-
-    [BoxGroup("配置")]
-    [LabelText("扔箱子力量")]
-    [ShowIf("CanThrowBox")]
-    public float ThrowForce = 100;
-
-    [BoxGroup("配置")]
-    [LabelText("扔箱子蓄力速度曲线(X为重量Y为蓄力速度)")]
-    [ShowIf("CanThrowBox")]
-    public AnimationCurve ThrowChargeSpeedCurveByWeight;
-
-    [ReadOnly]
-    [BoxGroup("配置")]
-    [LabelText("扔箱子蓄力速度因子(作弊调整)")]
-    [ShowIf("CanThrowBox")]
-    public float ThrowChargeSpeedFactor_Cheat = 1f;
-
-    [BoxGroup("配置")]
-    [LabelText("扔箱子蓄力曲线(X为重量Y为蓄力上限)")]
-    [ShowIf("CanThrowBox")]
-    public AnimationCurve ThrowChargeMaxCurveByWeight;
-
-    [ReadOnly]
-    [BoxGroup("配置")]
-    [LabelText("扔箱子蓄力曲线因子(作弊调整)")]
-    [ShowIf("CanThrowBox")]
-    public float ThrowChargeMaxCurveFactor_Cheat = 1f;
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 
@@ -195,6 +186,11 @@ public class Actor : PoolObject
 
     protected virtual void MoveInternal()
     {
+        if (ThrowState == ThrowStates.ThrowCharging)
+        {
+            CurMoveAttempt = Vector3.zero;
+        }
+
         if (CurMoveAttempt.magnitude > 0)
         {
             if (CurMoveAttempt.x.Equals(0)) RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
@@ -220,6 +216,22 @@ public class Actor : PoolObject
         }
 
         LastMoveAttempt = CurMoveAttempt;
+    }
+
+    protected virtual void ThrowChargeAimInternal()
+    {
+        if (ThrowState == ThrowStates.ThrowCharging)
+        {
+            CurThrowPointOffset += CurThrowMoveAttempt * Mathf.Max(ThrowAimMoveSpeed * Mathf.Sqrt(CurThrowPointOffset.magnitude), 2f) * Time.fixedDeltaTime;
+            if (CurThrowPointOffset.magnitude > ThrowRadius)
+            {
+                CurThrowPointOffset = CurThrowPointOffset.normalized * ThrowRadius;
+            }
+        }
+        else
+        {
+            CurThrowPointOffset = Vector3.zero;
+        }
     }
 
     #region Skills
@@ -263,27 +275,13 @@ public class Actor : PoolObject
         }
     }
 
-    private float ThrowChargeTick = 0;
-    private float FinalThrowForce => ThrowChargeTick * ThrowForce;
-
     protected void ThrowCharge()
     {
-        if (!CurrentLiftBox)
-        {
-            ThrowChargeTick = 0;
-            return;
-        }
-
+        if (!CurrentLiftBox) return;
         if (ThrowState == ThrowStates.Lifting)
         {
             ThrowState = ThrowStates.ThrowCharging;
-        }
-
-        if (ThrowState == ThrowStates.ThrowCharging)
-        {
-            float max = ThrowChargeMaxCurveByWeight.Evaluate(CurrentLiftBox.FinalWeight) * ThrowChargeMaxCurveFactor_Cheat;
-            ThrowChargeTick += Time.fixedDeltaTime * ThrowChargeSpeedCurveByWeight.Evaluate(CurrentLiftBox.FinalWeight) * ThrowChargeSpeedFactor_Cheat;
-            if (ThrowChargeTick > max) ThrowChargeTick = max;
+            CurThrowPointOffset = transform.forward * 0.7f;
         }
     }
 
@@ -293,8 +291,7 @@ public class Actor : PoolObject
         ActorLaunchArcRendererHelper.SetShown(isCharging);
         if (isCharging)
         {
-            float velocity = GetThrowBoxVelocity(CurrentLiftBox);
-            ActorLaunchArcRendererHelper.Initialize(velocity, 45, 2, 3f);
+            ActorLaunchArcRendererHelper.InitializeByOffset(CurThrowPointOffset, 45, 2, 3f);
         }
     }
 
@@ -302,18 +299,12 @@ public class Actor : PoolObject
     {
         if (CurrentLiftBox && ThrowState == ThrowStates.ThrowCharging)
         {
-            float velocity = GetThrowBoxVelocity(CurrentLiftBox);
+            float velocity = ActorLaunchArcRendererHelper.CalculateVelocityByOffset(CurThrowPointOffset, 45);
             ThrowState = ThrowStates.None;
-            Vector3 throwVel = transform.TransformDirection(new Vector3(0, 1, 1));
+            Vector3 throwVel = (CurThrowPointOffset.normalized + Vector3.up) * velocity;
             CurrentLiftBox.Throw(throwVel, velocity, this);
             CurrentLiftBox = null;
-            ThrowChargeTick = 0;
         }
-    }
-
-    private float GetThrowBoxVelocity(Box box)
-    {
-        return 3.5f + FinalThrowForce * Time.fixedDeltaTime / box.FinalWeight;
     }
 
     #endregion

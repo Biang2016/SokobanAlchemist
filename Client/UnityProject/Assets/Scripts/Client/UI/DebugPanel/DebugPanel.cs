@@ -166,7 +166,7 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugSlider("人物战斗数值/移速", 3.5f, 1, 30)]
+    [DebugSlider("PlayerBattle/MoveSpeed", 3.5f, 1, 30)]
     public void ChangeMoveSpeed(float value)
     {
         for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
@@ -176,7 +176,7 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugSlider("人物战斗数值/踢力", 150, 0, 1000)]
+    [DebugSlider("PlayerBattle/KickForce", 150, 0, 1000)]
     public void ChangeKickForce(float value)
     {
         for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
@@ -186,83 +186,53 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugSlider("人物战斗数值/扔力", 40, 1, 100)]
-    public void ChangeThrowForce(float value)
-    {
-        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
-        {
-            PlayerActor player = BattleManager.Instance.MainPlayers[i];
-            if (player != null) player.ThrowForce = value;
-        }
-    }
-
-    [DebugSlider("人物战斗数值/蓄力速度", 1, 0.1f, 3f)]
-    public void ChangeThrowChargeSpeed(float value)
-    {
-        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
-        {
-            PlayerActor player = BattleManager.Instance.MainPlayers[i];
-            if (player != null) player.ThrowChargeSpeedFactor_Cheat = value;
-        }
-    }
-
-    [DebugSlider("人物战斗数值/蓄力上限", 1, 0.1f, 3f)]
-    public void ChangeThrowChargeMax(float value)
-    {
-        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
-        {
-            PlayerActor player = BattleManager.Instance.MainPlayers[i];
-            if (player != null) player.ThrowChargeMaxCurveFactor_Cheat = value;
-        }
-    }
-
-    [DebugSlider("箱子参数/静态弹性调整因子", 1, 0.3f, 10f)]
+    [DebugSlider("Boxes/StaticBounce", 1, 0.3f, 10f)]
     public void ChangeBoxStaticBounce(float value)
     {
         ConfigManager.BoxStaticBounceFactor_Cheat = value;
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnBoxStaticBounceCheatChanged);
     }
 
-    [DebugSlider("箱子参数/动态弹性调整因子", 1, 0.3f, 10f)]
+    [DebugSlider("Boxes/DynamicBounce", 1, 0.3f, 10f)]
     public void ChangeBoxDynamicBounce(float value)
     {
         ConfigManager.BoxDynamicBounceFactor_Cheat = value;
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnBoxDynamicBounceCheatChanged);
     }
 
-    [DebugSlider("箱子参数/扔箱子落地摩阻力", 10f, 0, 20f)]
+    [DebugSlider("Boxes/ThrowFriction", 10f, 0, 20f)]
     public void ChangeBoxThrowDrag(float value)
     {
         ConfigManager.BoxThrowDragFactor_Cheat = value;
     }
 
-    [DebugSlider("箱子参数/踢箱子摩阻力", 1, 0, 20f)]
+    [DebugSlider("Boxes/KickFriction", 1, 0, 20f)]
     public void ChangeBoxKickDrag(float value)
     {
         ConfigManager.BoxKickDragFactor_Cheat = value;
     }
 
-    [DebugSlider("箱子参数/重量调整因子", 1, 0.1f, 10f)]
+    [DebugSlider("Boxes/WeightFactor", 1, 0.1f, 10f)]
     public void ChangeBoxWeight(float value)
     {
         ConfigManager.BoxWeightFactor_Cheat = value;
     }
 
-    [DebugButton("切换世界/ChessWorld")]
+    [DebugButton("SwitchWorld/ChessWorld")]
     public void ChangeChessWorld()
     {
         ClientGameManager.DebugChangeWorldName = "ChessWorld";
         SceneManager.LoadScene("MainScene");
     }
 
-    [DebugButton("切换世界/ArenaWorld")]
+    [DebugButton("SwitchWorld/ArenaWorld")]
     public void ChangeArenaWorld()
     {
         ClientGameManager.DebugChangeWorldName = "ArenaWorld";
         SceneManager.LoadScene("MainScene");
     }
 
-    [DebugButton("切换世界/BasicWorld")]
+    [DebugButton("SwitchWorld/BasicWorld")]
     public void ChangeWilliamsWorld()
     {
         ClientGameManager.DebugChangeWorldName = "BasicWorld";

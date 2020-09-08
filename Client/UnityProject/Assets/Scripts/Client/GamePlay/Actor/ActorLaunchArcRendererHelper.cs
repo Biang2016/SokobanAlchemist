@@ -10,7 +10,7 @@ public class ActorLaunchArcRendererHelper : ActorHelper
     private float TimeStep;
     private int MarkerCount;
 
-    private float gravity => Physics.gravity.y;
+    private static float gravity => Physics.gravity.y;
     private float radianAngle;
 
     private bool Shown;
@@ -24,10 +24,34 @@ public class ActorLaunchArcRendererHelper : ActorHelper
         }
     }
 
+    public void InitializeByOffset(Vector3 offset, float angle, int resolutionPerUnit, float simulateSeconds)
+    {
+        transform.forward = offset.normalized;
+        Angle = angle;
+        radianAngle = Mathf.Deg2Rad * Angle;
+        Velocity = CalculateVelocityByOffset(offset, angle);
+        InitializeCore(Velocity, resolutionPerUnit, simulateSeconds);
+    }
+
+    public static float CalculateVelocityByOffset(Vector3 offset, float angle)
+    {
+        float dist = offset.magnitude;
+        float rad = Mathf.Deg2Rad * angle;
+        float velocity = Mathf.Sqrt(dist * -gravity / 2 / (Mathf.Sin(rad) * Mathf.Cos(rad)));
+        return velocity;
+    }
+
     public void Initialize(float velocity, float angle, int resolutionPerUnit, float simulateSeconds)
     {
+        transform.rotation = Quaternion.identity;
         Velocity = velocity;
         Angle = angle;
+        radianAngle = Mathf.Deg2Rad * Angle;
+        InitializeCore(velocity, resolutionPerUnit, simulateSeconds);
+    }
+
+    private void InitializeCore(float velocity, int resolutionPerUnit, float simulateSeconds)
+    {
         float resolutionPerSecond = velocity * resolutionPerUnit;
         TimeStep = 1 / resolutionPerSecond;
         MarkerCount = Mathf.CeilToInt(resolutionPerSecond * simulateSeconds);
@@ -60,7 +84,6 @@ public class ActorLaunchArcRendererHelper : ActorHelper
     {
         Vector3[] arcArray = new Vector3[MarkerCount];
 
-        radianAngle = Mathf.Deg2Rad * Angle;
         for (int i = 0; i < MarkerCount; i++)
         {
             float t = i * TimeStep;

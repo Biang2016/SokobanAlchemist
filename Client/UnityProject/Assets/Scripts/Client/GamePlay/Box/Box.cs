@@ -23,6 +23,7 @@ public class Box : PoolObject
     internal Rigidbody Rigidbody;
 
     internal Actor LastTouchActor;
+    internal BoxEffectHelper BoxEffectHelper;
 
     public override void OnUsed()
     {
@@ -35,6 +36,8 @@ public class Box : PoolObject
     public override void OnRecycled()
     {
         LastTouchActor = null;
+        BoxEffectHelper?.PoolRecycle();
+        BoxEffectHelper = null;
         transform.DOPause();
         ClientGameManager.Instance.BattleMessenger.RemoveListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnStaticBounceChanged);
         ClientGameManager.Instance.BattleMessenger.RemoveListener((uint) Enum_Events.OnBoxStaticBounceCheatChanged, OnDynamicBounceChanged);
@@ -180,6 +183,11 @@ public class Box : PoolObject
     {
         if (State == States.BeingPushed || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.PushingCanceling)
         {
+            if (BoxEffectHelper == null)
+            {
+                BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
+            }
+
             LastTouchActor = actor;
             WorldManager.Instance.CurrentWorld.RemoveBox(this);
             State = States.BeingKicked;
@@ -219,6 +227,8 @@ public class Box : PoolObject
                 DestroyImmediate(Rigidbody);
             }
 
+            BoxEffectHelper?.PoolRecycle();
+            BoxEffectHelper = null;
             return true;
         }
 
@@ -229,6 +239,11 @@ public class Box : PoolObject
     {
         if (State == States.Lifted)
         {
+            if (BoxEffectHelper == null)
+            {
+                BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
+            }
+
             LastTouchActor = actor;
             State = States.Flying;
             transform.DOPause();
@@ -258,6 +273,17 @@ public class Box : PoolObject
             StaticCollider.enabled = true;
             DynamicCollider.enabled = false;
             WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this);
+            BoxEffectHelper?.PoolRecycle();
+            BoxEffectHelper = null;
+        }
+
+        if (Rigidbody && Rigidbody.velocity.magnitude > 1f)
+        {
+            BoxEffectHelper?.Play();
+        }
+        else
+        {
+            BoxEffectHelper?.Stop();
         }
     }
 

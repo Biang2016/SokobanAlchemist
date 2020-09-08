@@ -538,6 +538,8 @@ MonoBehaviour:
   LiftBoxPivot: {fileID: 4143581407255531107}
   CurMoveAttempt: {x: 0, y: 0, z: 0}
   LastMoveAttempt: {x: 0, y: 0, z: 0}
+  CurThrowMoveAttempt: {x: 0, y: 0, z: 0}
+  CurThrowPointOffset: {x: 0, y: 0, z: 0}
   CurGP:
     x: 0
     y: 0
@@ -545,87 +547,13 @@ MonoBehaviour:
   Camp: 1
   MaxHealth: 20
   TotalLife: 3
-  KickForce: 150
   Accelerate: 10000
   MoveSpeed: 3.5
-  ThrowForce: 40
-  ThrowChargeSpeedCurveByWeight:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.002660066
-      value: 1
-      inSlope: 7.251972
-      outSlope: 7.251972
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.2284388
-      value: 2.637341
-      inSlope: 6.1778374
-      outSlope: 6.1778374
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.4998436
-      value: 4.0225105
-      inSlope: 5.103703
-      outSlope: 5.103703
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  ThrowChargeSpeedFactor_Cheat: 1
-  ThrowChargeMaxCurveByWeight:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.027501374
-      value: 1
-      inSlope: 15.730323
-      outSlope: 15.730323
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.130189
-      value: 2.6153095
-      inSlope: 16.176445
-      outSlope: 16.176445
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.3368007
-      value: 6.049726
-      inSlope: 16.366005
-      outSlope: 16.366005
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.49777222
-      value: 8.642888
-      inSlope: 16.109446
-      outSlope: 16.109446
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  ThrowChargeMaxCurveFactor_Cheat: 1
+  ThrowAimMoveSpeed: 5
+  ThrowRadius: 10
+  CanKickBox: 1
+  KickForce: 150
+  CanThrowBox: 1
   MovementState: 0
   PushState: 0
   ThrowState: 0

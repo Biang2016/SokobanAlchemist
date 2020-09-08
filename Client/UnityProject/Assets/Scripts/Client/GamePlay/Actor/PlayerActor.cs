@@ -11,7 +11,7 @@ public class PlayerActor : Actor
     private ButtonState BS_Right;
     private ButtonState BS_Down;
     private ButtonState BS_Left;
-    
+
     private ButtonState BS_Up_Last;
     private ButtonState BS_Right_Last;
     private ButtonState BS_Down_Last;
@@ -97,6 +97,22 @@ public class PlayerActor : Actor
         }
 
         MoveInternal();
+
+        #endregion
+
+        #region Throw Charging
+
+        CurThrowMoveAttempt = Vector3.zero;
+        if (ThrowState == ThrowStates.ThrowCharging)
+        {
+            if (BS_Up.Pressed) CurThrowMoveAttempt.z += 1;
+            if (BS_Down.Pressed) CurThrowMoveAttempt.z -= 1;
+            if (BS_Left.Pressed) CurThrowMoveAttempt.x -= 1;
+            if (BS_Right.Pressed) CurThrowMoveAttempt.x += 1;
+            CurThrowMoveAttempt.Normalize();
+        }
+
+        ThrowChargeAimInternal();
 
         #endregion
 
