@@ -19,6 +19,7 @@ public class PlayerActor : Actor
 
     public void Initialize(PlayerNumber playerNumber)
     {
+        base.Initialize();
         PlayerNumber = playerNumber;
         ActorSkinHelper.Initialize(playerNumber);
         BS_Up = ControlManager.Instance.Battle_MoveButtons[(int) PlayerNumber, (int) GridPosR.Orientation.Up];

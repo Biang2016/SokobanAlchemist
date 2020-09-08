@@ -129,8 +129,21 @@ public class ActorPathFinding
             Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gp, out WorldModule module, out GridPos3D _);
             if (module != null && box == null)
             {
-                Node leftNode = new Node {GridPos3D = gp, ParentNode = node};
-                res.Add(leftNode);
+                bool isActorOnTheWay = false;
+                foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
+                {
+                    if (enemy.CurGP == gp)
+                    {
+                        isActorOnTheWay = true;
+                        break;
+                    }
+                }
+
+                if (!isActorOnTheWay)
+                {
+                    Node leftNode = new Node {GridPos3D = gp, ParentNode = node};
+                    res.Add(leftNode);
+                }
             }
         }
 

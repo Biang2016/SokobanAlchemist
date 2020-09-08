@@ -160,6 +160,11 @@ public class Actor : PoolObject
         ActorBattleHelper.Initialize(TotalLife, MaxHealth);
     }
 
+    public void Initialize()
+    {
+        CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
+    }
+
     private void Update()
     {
         UpdateThrowParabolaLine();
@@ -186,6 +191,9 @@ public class Actor : PoolObject
         CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
     }
 
+    private Tweener TransTweener_X;
+    private Tweener TransTweener_Z;
+
     protected virtual void MoveInternal()
     {
         if (CurMoveAttempt.magnitude > 0)
@@ -210,6 +218,16 @@ public class Actor : PoolObject
             MovementState = MovementStates.Static;
             RigidBody.drag = 100f;
             ActorPushHelper.PushTriggerReset();
+        }
+
+        if (CurMoveAttempt.x.Equals(0))
+        {
+            transform.position = new Vector3(CurGP.x, transform.position.y, transform.position.z);
+        }
+
+        if (CurMoveAttempt.z.Equals(0))
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, CurGP.z);
         }
 
         LastMoveAttempt = CurMoveAttempt;

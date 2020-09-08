@@ -540,6 +540,8 @@ MonoBehaviour:
   LiftBoxPivot: {fileID: 4143581407255531107}
   CurMoveAttempt: {x: 0, y: 0, z: 0}
   LastMoveAttempt: {x: 0, y: 0, z: 0}
+  CurThrowMoveAttempt: {x: 0, y: 0, z: 0}
+  CurThrowPointOffset: {x: 0, y: 0, z: 0}
   CurGP:
     x: 0
     y: 0
@@ -548,28 +550,16 @@ MonoBehaviour:
   MaxHealth: 1
   TotalLife: 1
   Accelerate: 5000
-  MoveSpeed: 2
+  MoveSpeed: 0.5
+  ThrowAimMoveSpeed: 10
+  ThrowRadius: 10
   CanKickBox: 0
   KickForce: 5
   CanThrowBox: 0
-  ThrowForce: 100
-  ThrowChargeSpeedCurveByWeight:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  ThrowChargeSpeedFactor_Cheat: 1
-  ThrowChargeMaxCurveByWeight:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  ThrowChargeMaxCurveFactor_Cheat: 1
   MovementState: 0
   PushState: 0
   ThrowState: 0
+  ThrowChargeMax: 1.5
   AIUpdateInterval: 10
 --- !u!114 &-7398402967007363521
 MonoBehaviour:

@@ -12,13 +12,16 @@ public static class ActorAIAtoms
     [Description("朝玩家移动")]
     public class BT_MoveToMainPlayer : BTNode
     {
-        [Name("默认保持距离")]
-        public BBParameter<float> KeepDistance;
+        [Name("默认保持距离Min")]
+        public BBParameter<float> KeepDistanceMin;
+
+        [Name("默认保持距离Max")]
+        public BBParameter<float> KeepDistanceMax;
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null) return Status.Failure;
-            Actor.ActorAIAgent.SetDestination(BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player1].CurGP, KeepDistance.value);
+            Actor.ActorAIAgent.SetDestination(BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player1].CurGP, KeepDistanceMin.value, KeepDistanceMax.value);
             Actor.ActorAIAgent.EnableMove = true;
             return Status.Success;
         }
@@ -93,7 +96,7 @@ public static class ActorAIAtoms
             }
 
             if (nearestBox == null) return Status.Failure;
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(nearestBox.GridPos3D, 1.1f);
+            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(nearestBox.GridPos3D, 1f, 1.1f);
             switch (retCode)
             {
                 case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:

@@ -35,7 +35,8 @@ public class ActorAIAgent
     }
 
     public bool EnableMove = false;
-    private float KeepDistance;
+    private float KeepDistanceMin;
+    private float KeepDistanceMax;
     private GridPos3D currentDestination;
     private LinkedList<GridPos3D> currentPath;
     private LinkedListNode<GridPos3D> currentNode;
@@ -48,11 +49,21 @@ public class ActorAIAgent
         Failed,
     }
 
-    public SetDestinationRetCode SetDestination(GridPos3D dest, float keepDistance)
+    public SetDestinationRetCode SetDestination(GridPos3D dest, float keepDistanceMin, float keepDistanceMax)
     {
         currentDestination = dest;
-        KeepDistance = keepDistance;
-        if ((Actor.CurGP.ToVector3() - dest.ToVector3()).magnitude <= keepDistance) return SetDestinationRetCode.AlreadyArrived;
+        KeepDistanceMin = keepDistanceMin;
+        KeepDistanceMax = keepDistanceMax;
+        float dist = (Actor.CurGP.ToVector3() - dest.ToVector3()).magnitude;
+        if (dist <= keepDistanceMax && dist >= keepDistanceMin)
+        {
+            currentPath = null;
+            currentNode = null;
+            nextNode = null;
+            EnableMove = false;
+            return SetDestinationRetCode.AlreadyArrived;
+        }
+
         currentPath = ActorPathFinding.FindPath(Actor.CurGP, dest);
         if (currentPath != null)
         {
@@ -70,10 +81,11 @@ public class ActorAIAgent
 
     public void MoveToDestination()
     {
+        Actor.CurMoveAttempt = Vector3.zero;
         if (currentPath != null)
         {
             Vector3 diff = currentPath.Last.Value.ToVector3() - Actor.transform.position;
-            if (diff.magnitude <= KeepDistance)
+            if (diff.magnitude <= (KeepDistanceMax + KeepDistanceMin) / 2f)
             {
                 Actor.CurForward = diff.normalized.ToGridPos3D().ToVector3();
                 Actor.CurMoveAttempt = Vector3.zero;

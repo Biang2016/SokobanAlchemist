@@ -57,8 +57,8 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
             if (bpd.BornPointType == BornPointType.Player)
             {
                 PlayerActor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
-                player.Initialize(bpd.PlayerNumber);
                 GridPos3D.ApplyGridPosToLocalTrans(bpd.GridPos3D, player.transform, 1);
+                player.Initialize(bpd.PlayerNumber);
                 BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
                 MainPlayers[(int) bpd.PlayerNumber] = player;
             }
@@ -68,6 +68,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
                 byte enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.EnemyName);
                 EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
                 GridPos3D.ApplyGridPosToLocalTrans(bpd.GridPos3D, enemy.transform, 1);
+                enemy.Initialize();
                 Enemies.Add(enemy);
             }
         }
