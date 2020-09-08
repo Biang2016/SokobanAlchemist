@@ -15,6 +15,23 @@ public class ActorLaunchArcRendererHelper : ActorHelper
 
     private bool Shown;
 
+    public override void OnRecycled()
+    {
+        foreach (Marker marker in Markers)
+        {
+            marker.PoolRecycle();
+        }
+
+        Markers.Clear();
+        Velocity = 0;
+        Angle = 0;
+        TimeStep = 0;
+        MarkerCount = 0;
+        radianAngle = 0;
+        SetShown(false);
+        base.OnRecycled();
+    }
+
     public void SetShown(bool shown)
     {
         Shown = shown;

@@ -3,6 +3,17 @@ using UnityEngine.Events;
 
 public class ActorBattleHelper : ActorHelper
 {
+    public override void OnRecycled()
+    {
+        totalLife = 0;
+        life = 0;
+        maxHealth = 0;
+        health = 0;
+        OnHealthChanged = null;
+        OnLifeChanged = null;
+        base.OnRecycled();
+    }
+
     public void Initialize(int totalLife, int maxHealth)
     {
         this.totalLife = totalLife;
@@ -70,7 +81,7 @@ public class ActorBattleHelper : ActorHelper
                 OnLifeChanged?.Invoke(life, totalLife);
                 if (totalLife <= 0)
                 {
-                    Lose();
+                    DestroyActor();
                 }
             }
         }
@@ -89,7 +100,7 @@ public class ActorBattleHelper : ActorHelper
                 OnLifeChanged?.Invoke(life, totalLife);
                 if (life <= 0)
                 {
-                    Lose();
+                    DestroyActor();
                 }
             }
         }
@@ -111,13 +122,23 @@ public class ActorBattleHelper : ActorHelper
         Health = MaxHealth;
     }
 
-    public void Lose()
+    public void DestroyActor()
     {
-        BattleManager.Instance.ResetBattle();
+        if (Actor.IsPlayer)
+        {
+            BattleManager.Instance.ResetBattle();
+        }
+        else
+        {
+            ProjectileHit hit = ProjectileManager.Instance.PlayProjectileHit(Actor.DieFX, transform.position);
+            if (hit) hit.transform.localScale = Vector3.one * Actor.DieFXScale;
+            Actor.PoolRecycle();
+        }
     }
 
     void OnTriggerEnter(Collider collider)
     {
+        if (Actor.IsRecycled) return;
         if (WorldManager.Instance.CurrentWorld.WorldData.WorldFeature.HasFlag(WorldFeature.PlayerImmune)) return;
         Box box = collider.gameObject.GetComponentInParent<Box>();
         if (box != null)

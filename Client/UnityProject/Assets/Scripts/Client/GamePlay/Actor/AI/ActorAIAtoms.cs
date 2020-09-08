@@ -32,28 +32,17 @@ public static class ActorAIAtoms
     [Description("是否举着某类箱子")]
     public class BT_LiftCondition : ConditionTask
     {
-        [Name("箱子类型名称(或All/None)")]
-        public BBParameter<string> BoxName;
+        [Name("箱子类型名称")]
+        public BBParameter<List<string>> LiftBoxTypeNames;
 
         protected override bool OnCheck()
         {
             if (Actor == null) return false;
-            if (string.IsNullOrWhiteSpace(BoxName.value)) return false;
-
-            if (BoxName.value == "All")
-            {
-                return Actor.ThrowState == Actor.ThrowStates.Lifting;
-            }
-
-            if (BoxName.value == "None")
-            {
-                return Actor.ThrowState == Actor.ThrowStates.None;
-            }
-
+            if (LiftBoxTypeNames.value == null || LiftBoxTypeNames.value.Count == 0) return false;
             if (Actor.CurrentLiftBox != null)
             {
                 string boxName = ConfigManager.GetBoxTypeName(Actor.CurrentLiftBox.BoxTypeIndex);
-                return boxName != null && boxName == BoxName.value;
+                return boxName != null && LiftBoxTypeNames.value.Contains(boxName);
             }
 
             return false;
@@ -65,8 +54,8 @@ public static class ActorAIAtoms
     [Description("搜索并移动至某类箱子附近")]
     public class BT_MoveTowardsBox : BTNode
     {
-        [Name("箱子类型名称(或All/None)")]
-        public BBParameter<string> BoxName;
+        [Name("箱子类型名称")]
+        public BBParameter<List<string>> LiftBoxTypeNames;
 
         [Name("搜索形状")]
         public BBParameter<World.SearchRangeShape> SearchRangeShape;
@@ -77,7 +66,8 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null) return Status.Failure;
-            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurGP, SearchRadius.value, BoxName.value, SearchRangeShape.value);
+            if (LiftBoxTypeNames.value == null || LiftBoxTypeNames.value.Count == 0) return Status.Failure;
+            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurGP, SearchRadius.value, LiftBoxTypeNames.value, SearchRangeShape.value);
             if (boxes.Count == 0) return Status.Failure;
             int minDistance = int.MaxValue;
             Box nearestBox = null;
@@ -125,19 +115,20 @@ public static class ActorAIAtoms
     [Description("举起面前箱子")]
     public class BT_LiftBox : BTNode
     {
-        [Name("箱子类型名称(或All/None)")]
-        public BBParameter<string> BoxName;
+        [Name("箱子类型名称")]
+        public BBParameter<List<string>> LiftBoxTypeNames;
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null) return Status.Failure;
+            if (LiftBoxTypeNames.value == null) return Status.Failure;
             if (Actor.ThrowState != Actor.ThrowStates.None) return Status.Failure;
             GridPos3D boxGP = Actor.CurGP + Actor.CurForward.ToGridPos3D();
             Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(boxGP, out WorldModule module, out GridPos3D _);
             if (box != null)
             {
-                byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(BoxName.value);
-                if (boxTypeIndex != box.BoxTypeIndex) return Status.Failure;
+                string boxName = ConfigManager.GetBoxTypeName(box.BoxTypeIndex);
+                if (boxName == null || !LiftBoxTypeNames.value.Contains(boxName)) return Status.Failure;
 
                 Actor.Lift();
                 if (Actor.ThrowState == Actor.ThrowStates.Raising)

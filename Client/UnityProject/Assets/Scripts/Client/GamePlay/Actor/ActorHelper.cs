@@ -8,4 +8,10 @@ public class ActorHelper : MonoBehaviour
     {
         Actor = GetComponentInParent<Actor>();
     }
+
+
+    public virtual void OnRecycled()
+    {
+
+    }
 }

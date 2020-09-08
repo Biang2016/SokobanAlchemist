@@ -5,18 +5,22 @@
 
     protected override void FixedUpdate()
     {
-        if (AIUpdateIntervalTick < AIUpdateInterval)
+        if (!IsRecycled)
         {
-            AIUpdateIntervalTick++;
-        }
-        else
-        {
-            BehaviourTreeOwner.UpdateBehaviour();
-            AIUpdateIntervalTick = 0;
+            if (AIUpdateIntervalTick < AIUpdateInterval)
+            {
+                AIUpdateIntervalTick++;
+            }
+            else
+            {
+                BehaviourTreeOwner.UpdateBehaviour();
+                AIUpdateIntervalTick = 0;
+            }
+
+            ActorAIAgent.Update();
+            MoveInternal();
         }
 
-        ActorAIAgent.Update();
-        MoveInternal();
         base.FixedUpdate();
     }
 }

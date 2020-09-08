@@ -199,20 +199,14 @@ public class World : PoolObject
         Square,
     }
 
-    public List<Box> SearchBoxInRange(GridPos3D center, int radius, string boxTypeName, SearchRangeShape shape)
+    public List<Box> SearchBoxInRange(GridPos3D center, int radius, List<string> boxTypeNames, SearchRangeShape shape)
     {
         List<Box> res = new List<Box>();
-        if (boxTypeName == "None") return res;
+        if (boxTypeNames == null || boxTypeNames.Count == 0) return res;
 
         GetBoxByGridPosition(center, out WorldModule module, out GridPos3D localGP);
         if (module)
         {
-            byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxTypeName);
-            if (boxTypeIndex == 0 && boxTypeName != "All")
-            {
-                return res;
-            }
-
             for (int x = -radius; x <= radius; x++)
             {
                 for (int z = -radius; z <= radius; z++)
@@ -229,7 +223,8 @@ public class World : PoolObject
                     Box box = GetBoxByGridPosition(gp, out WorldModule tarModule, out GridPos3D _);
                     if (box != null)
                     {
-                        if (boxTypeName == "All" || box.BoxTypeIndex == boxTypeIndex)
+                        string boxName = ConfigManager.GetBoxTypeName(box.BoxTypeIndex);
+                        if (boxName != null && boxTypeNames.Contains(boxName))
                         {
                             res.Add(box);
                         }

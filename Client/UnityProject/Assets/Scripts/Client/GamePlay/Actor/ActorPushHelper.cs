@@ -9,6 +9,12 @@ public class ActorPushHelper : ActorHelper
     public Animator AnimModel;
     public ActorPushHelperTrigger ActorPushHelperTrigger;
 
+    public override void OnRecycled()
+    {
+        PushTriggerReset();
+        base.OnRecycled();
+    }
+
     public void PushTriggerOut()
     {
         AnimCollider.ResetTrigger("Reset");

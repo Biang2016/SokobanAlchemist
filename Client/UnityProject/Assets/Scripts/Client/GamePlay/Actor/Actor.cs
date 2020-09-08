@@ -74,6 +74,14 @@ public class Actor : PoolObject
     [BoxGroup("战斗状态")]
     public int Health => ActorBattleHelper ? ActorBattleHelper.Health : 0;
 
+    [BoxGroup("特效")]
+    [LabelText("死亡特效")]
+    public ProjectileType DieFX;
+
+    [BoxGroup("特效")]
+    [LabelText("死亡特效尺寸")]
+    public float DieFXScale = 1f;
+
     [BoxGroup("配置")]
     [LabelText("起步速度")]
     public float Accelerate = 10f;
@@ -146,6 +154,31 @@ public class Actor : PoolObject
     [LabelText("扔技能状态")]
     public ThrowStates ThrowState = ThrowStates.None;
 
+    public override void OnRecycled()
+    {
+        BehaviourTreeOwner.StopBehaviour();
+        ActorAIAgent.Stop();
+        CurMoveAttempt = Vector3.zero;
+        LastMoveAttempt = Vector3.zero;
+        CurThrowMoveAttempt = Vector3.zero;
+        CurThrowPointOffset = Vector3.zero;
+        CurForward = Vector3.forward;
+        CurGP = GridPos3D.Zero;
+        MovementState = MovementStates.Static;
+        PushState = PushStates.None;
+        ThrowState = ThrowStates.None;
+        ThrowWhenDie();
+        ActorPushHelper.OnRecycled();
+        ActorFaceHelper.OnRecycled();
+        ActorSkinHelper.OnRecycled();
+        ActorLaunchArcRendererHelper.OnRecycled();
+        ActorBattleHelper.OnRecycled();
+        RigidBody.drag = 100f;
+        RigidBody.velocity = Vector3.zero;
+        RigidBody.angularVelocity = Vector3.zero;
+        base.OnRecycled();
+    }
+
     void Awake()
     {
         ActorAIAgent = new ActorAIAgent(this);
@@ -163,11 +196,15 @@ public class Actor : PoolObject
     public void Initialize()
     {
         CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
+        ActorAIAgent.Start();
     }
 
     private void Update()
     {
-        UpdateThrowParabolaLine();
+        if (!IsRecycled)
+        {
+            UpdateThrowParabolaLine();
+        }
     }
 
     public void OnLoaded(Actor actor)
@@ -187,8 +224,11 @@ public class Actor : PoolObject
 
     protected virtual void FixedUpdate()
     {
-        RigidBody.angularVelocity = Vector3.zero;
-        CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
+        if (!IsRecycled)
+        {
+            RigidBody.angularVelocity = Vector3.zero;
+            CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
+        }
     }
 
     private Tweener TransTweener_X;
@@ -331,6 +371,17 @@ public class Actor : PoolObject
             ThrowState = ThrowStates.None;
             Vector3 throwVel = (CurThrowPointOffset.normalized + Vector3.up) * velocity;
             CurrentLiftBox.Throw(throwVel, velocity, this);
+            CurrentLiftBox = null;
+        }
+    }
+
+    private void ThrowWhenDie()
+    {
+        if (CurrentLiftBox)
+        {
+            ThrowState = ThrowStates.None;
+            Vector3 throwVel = Vector3.up * 3;
+            CurrentLiftBox.Throw(throwVel, 3, this);
             CurrentLiftBox = null;
         }
     }

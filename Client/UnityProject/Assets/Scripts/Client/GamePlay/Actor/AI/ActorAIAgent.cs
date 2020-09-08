@@ -9,10 +9,24 @@ public class ActorAIAgent
     public ActorAIAgent(Actor actor)
     {
         Actor = actor;
+        Stop();
+    }
+
+    private bool isStop = false;
+
+    public void Stop()
+    {
+        isStop = true;
+    }
+
+    public void Start()
+    {
+        isStop = false;
     }
 
     public void Update()
     {
+        if (isStop) return;
         if (EnableRotate) RotateTowardsTarget();
         if (EnableMove) MoveToDestination();
     }

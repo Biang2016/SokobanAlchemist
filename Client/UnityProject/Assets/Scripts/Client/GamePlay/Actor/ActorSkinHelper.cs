@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ActorSkinHelper : MonoBehaviour
+public class ActorSkinHelper : ActorHelper
 {
     public List<SkinConfig> SkinConfigs = new List<SkinConfig>();
 
