@@ -358,7 +358,14 @@ public class Box : PoolObject
             }
             else
             {
-                Rigidbody.drag = Throw_Drag * ConfigManager.BoxThrowDragFactor_Cheat;
+                Box box = collision.gameObject.GetComponentInParent<Box>();
+                if (box && !box.BoxFeature.HasFlag(BoxFeature.IsBorder))
+                {
+                    if (!box.BoxFeature.HasFlag(BoxFeature.IsBorder))
+                    {
+                        Rigidbody.drag = Throw_Drag * ConfigManager.BoxThrowDragFactor_Cheat;
+                    }
+                }
             }
         }
 
@@ -476,4 +483,7 @@ public enum BoxFeature
 
     [LabelText("扔撞会碎")]
     ThrowHitBreakable = 1 << 8,
+
+    [LabelText("墙壁")]
+    IsBorder = 1 << 9,
 }
