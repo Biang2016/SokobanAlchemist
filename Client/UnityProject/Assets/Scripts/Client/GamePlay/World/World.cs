@@ -88,6 +88,7 @@ public class World : PoolObject
         box_src.State = sucState;
         module_src.BoxMatrix[localGP_src.x, localGP_src.y, localGP_src.z] = null;
         module_target.BoxMatrix[localGP_target.x, localGP_target.y, localGP_target.z] = box_src;
+        CheckDropAbove(box_src);
         box_src.Initialize(localGP_target, module_target, box_src.FinalWeight);
     }
 
@@ -140,6 +141,7 @@ public class World : PoolObject
                     GridPos3D localGP = new GridPos3D(localGridPos3D.x, localGridPos3D.y - 1, localGridPos3D.z);
                     box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
                     module.BoxMatrix[localGridPos3D.x, localGridPos3D.y - 1, localGridPos3D.z] = box;
+                    CheckDropAbove(box);
                     box.Initialize(localGP, module, 0.1f);
                 }
             }
@@ -156,6 +158,7 @@ public class World : PoolObject
                             GridPos3D localGP = new GridPos3D(localGridPos3D.x, WorldModule.MODULE_SIZE - 1, localGridPos3D.z);
                             box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
                             moduleBeneath.BoxMatrix[localGridPos3D.x, WorldModule.MODULE_SIZE - 1, localGridPos3D.z] = box;
+                            CheckDropAbove(box);
                             box.Initialize(localGP, moduleBeneath, 0.3f);
                         }
                     }
