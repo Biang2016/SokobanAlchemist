@@ -30,8 +30,8 @@ public class World : PoolObject
                     if (worldModuleTypeIndex != 0)
                     {
                         WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(transform);
-                        wm.name = $"WorldModule({x}, {y}, {z})";
                         WorldModuleData data = ConfigManager.GetWorldModuleDataConfig(worldModuleTypeIndex);
+                        wm.name = $"WM_{data.WorldModuleTypeName}({x}, {y}, {z})";
                         WorldModuleMatrix[x, y, z] = wm;
                         GridPos3D gp = new GridPos3D(x, y, z);
                         GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);
@@ -55,7 +55,7 @@ public class World : PoolObject
     public Box GetBoxByGridPosition(GridPos3D gp, out WorldModule module, out GridPos3D localGP)
     {
         module = GetModuleByGridPosition(gp);
-        if (module != null)
+        if (module != null && module.IsAccessible)
         {
             localGP = gp - module.ModuleGP * WorldModule.MODULE_SIZE;
             return module.BoxMatrix[localGP.x, localGP.y, localGP.z];
@@ -72,7 +72,15 @@ public class World : PoolObject
         GridPos3D gp_module = new GridPos3D(gp.x / WorldModule.MODULE_SIZE, gp.y / WorldModule.MODULE_SIZE, gp.z / WorldModule.MODULE_SIZE);
         if (gp_module.x >= 0 && gp_module.x < WORLD_SIZE && gp_module.y >= 0 && gp_module.y < WORLD_HEIGHT && gp_module.z >= 0 && gp_module.z < WORLD_SIZE)
         {
-            return WorldModuleMatrix[gp_module.x, gp_module.y, gp_module.z];
+            WorldModule module = WorldModuleMatrix[gp_module.x, gp_module.y, gp_module.z];
+            if (module != null && module.IsAccessible)
+            {
+                return module;
+            }
+            else
+            {
+                return null;
+            }
         }
         else
         {
@@ -89,7 +97,7 @@ public class World : PoolObject
         module_src.BoxMatrix[localGP_src.x, localGP_src.y, localGP_src.z] = null;
         module_target.BoxMatrix[localGP_target.x, localGP_target.y, localGP_target.z] = box_src;
         CheckDropAbove(box_src);
-        box_src.Initialize(localGP_target, module_target, box_src.FinalWeight);
+        box_src.Initialize(localGP_target, module_target, box_src.FinalWeight, box_src.ArtOnly);
     }
 
     public void RemoveBox(Box box)
@@ -123,7 +131,7 @@ public class World : PoolObject
         if (existBox == null)
         {
             module.BoxMatrix[localGP.x, localGP.y, localGP.z] = box;
-            box.Initialize(localGP, module, 0.3f);
+            box.Initialize(localGP, module, 0.3f, box.ArtOnly);
         }
     }
 
@@ -142,7 +150,7 @@ public class World : PoolObject
                     box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
                     module.BoxMatrix[localGridPos3D.x, localGridPos3D.y - 1, localGridPos3D.z] = box;
                     CheckDropAbove(box);
-                    box.Initialize(localGP, module, 0.1f);
+                    box.Initialize(localGP, module, 0.1f, box.ArtOnly);
                 }
             }
             else
@@ -150,7 +158,7 @@ public class World : PoolObject
                 if (module.ModuleGP.y > 0)
                 {
                     WorldModule moduleBeneath = WorldModuleMatrix[module.ModuleGP.x, module.ModuleGP.y - 1, module.ModuleGP.z];
-                    if (moduleBeneath)
+                    if (moduleBeneath && moduleBeneath.IsAccessible)
                     {
                         Box boxBeneath = moduleBeneath.BoxMatrix[localGridPos3D.x, WorldModule.MODULE_SIZE - 1, localGridPos3D.z];
                         if (boxBeneath == null)
@@ -159,7 +167,7 @@ public class World : PoolObject
                             box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
                             moduleBeneath.BoxMatrix[localGridPos3D.x, WorldModule.MODULE_SIZE - 1, localGridPos3D.z] = box;
                             CheckDropAbove(box);
-                            box.Initialize(localGP, moduleBeneath, 0.3f);
+                            box.Initialize(localGP, moduleBeneath, 0.3f, box.ArtOnly);
                         }
                     }
                 }
@@ -181,7 +189,7 @@ public class World : PoolObject
             if (module.ModuleGP.y < WORLD_HEIGHT - 1)
             {
                 WorldModule moduleAbove = WorldModuleMatrix[module.ModuleGP.x, module.ModuleGP.y + 1, module.ModuleGP.z];
-                if (moduleAbove)
+                if (moduleAbove && moduleAbove.IsAccessible)
                 {
                     Box boxAbove = moduleAbove.BoxMatrix[localGridPos3D.x, 0, localGridPos3D.z];
                     if (boxAbove)

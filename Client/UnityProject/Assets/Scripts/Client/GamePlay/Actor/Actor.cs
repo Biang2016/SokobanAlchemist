@@ -115,6 +115,8 @@ public class Actor : PoolObject
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 
+    [DisableInEditorMode]
+    [ShowInInspector]
     internal Box CurrentLiftBox = null;
 
     public bool IsPlayer => Camp == Camp.Player;
@@ -359,7 +361,7 @@ public class Actor : PoolObject
         ActorLaunchArcRendererHelper.SetShown(isCharging);
         if (isCharging)
         {
-            ActorLaunchArcRendererHelper.InitializeByOffset(CurThrowPointOffset, 45, 2, 3f);
+            ActorLaunchArcRendererHelper.InitializeByOffset(CurThrowPointOffset, 45, 1, 3f);
         }
     }
 

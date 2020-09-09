@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using BiangStudio.GameDataFormat.Grid;
+﻿using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class WorldModule : PoolObject
@@ -24,6 +22,27 @@ public class WorldModule : PoolObject
         ModuleGP = moduleGP;
         World = world;
         WorldModuleData = worldModuleData;
+        if (WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.DeadZone))
+        {
+            WorldDeadZoneTrigger deadZone = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldDeadZoneTrigger].AllocateGameObject<WorldDeadZoneTrigger>(transform);
+            deadZone.name = $"{nameof(WorldDeadZoneTrigger)}_{ModuleGP}";
+            deadZone.Initialize(moduleGP);
+        }
+
+        if (WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Wall))
+        {
+            WorldWallCollider wallCollider = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldWallCollider].AllocateGameObject<WorldWallCollider>(transform);
+            wallCollider.name = $"{nameof(WorldWallCollider)}_{ModuleGP}";
+            wallCollider.Initialize(moduleGP);
+        }
+
+        if (WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Ground))
+        {
+            WorldGroundCollider groundCollider = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldGroundCollider].AllocateGameObject<WorldGroundCollider>(transform);
+            groundCollider.name = $"{nameof(WorldGroundCollider)}_{ModuleGP}";
+            groundCollider.Initialize(moduleGP);
+        }
+
         for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
         {
             for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
@@ -37,7 +56,7 @@ public class WorldModule : PoolObject
                         string boxName = ConfigManager.GetBoxTypeName(boxTypeIndex);
                         box.BoxTypeIndex = boxTypeIndex;
                         GridPos3D gp = new GridPos3D(x, y, z);
-                        box.Initialize(gp, this, 0);
+                        box.Initialize(gp, this, 0, !IsAccessible);
                         box.name = $"{boxName}_{gp}";
                         BoxMatrix[x, y, z] = box;
                     }
@@ -45,6 +64,10 @@ public class WorldModule : PoolObject
             }
         }
     }
+
+    public bool IsAccessible => !WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.DeadZone)
+                                && !WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Wall)
+                                && !WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Ground);
 
     void Start()
     {

@@ -22,22 +22,33 @@ public class Box : PoolObject
     internal Actor LastTouchActor;
     internal BoxEffectHelper BoxEffectHelper;
 
+    internal bool ArtOnly;
+
     public override void OnUsed()
     {
         LastTouchActor = null;
+        ArtOnly = true;
         base.OnUsed();
     }
 
     public override void OnRecycled()
     {
+        ArtOnly = true;
         WorldModule = null;
         GridPos3D = GridPos3D.Zero;
         lastGP = GridPos3D.Zero;
         State = States.Static;
-        LastTouchActor = null;
         BoxEffectHelper?.PoolRecycle();
         BoxEffectHelper = null;
         transform.DOPause();
+        if (Rigidbody) Destroy(Rigidbody);
+        if (LastTouchActor != null && LastTouchActor.CurrentLiftBox == this)
+        {
+            LastTouchActor.ThrowState = Actor.ThrowStates.None;
+            LastTouchActor.CurrentLiftBox = null;
+            LastTouchActor = null;
+        }
+
         base.OnRecycled();
     }
 
@@ -157,8 +168,12 @@ public class Box : PoolObject
     {
     }
 
-    public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime)
+    public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly)
     {
+        ArtOnly = artOnly;
+        StaticCollider.gameObject.SetActive(!artOnly);
+        DynamicCollider.gameObject.SetActive(!artOnly);
+
         LastTouchActor = null;
         lastGP = GridPos3D;
         WorldModule = module;
@@ -350,8 +365,7 @@ public class Box : PoolObject
             }
 
             // FX and Recycle
-            ProjectileHit hit = ProjectileManager.Instance.PlayProjectileHit(CollideFX, transform.position);
-            if (hit) hit.transform.localScale = Vector3.one * CollideFXScale;
+            PlayDestroyFX();
             if (BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable))
             {
                 PoolRecycle();
@@ -388,13 +402,18 @@ public class Box : PoolObject
             }
 
             // FX and Recycle
-            ProjectileHit hit = ProjectileManager.Instance.PlayProjectileHit(CollideFX, transform.position);
-            if (hit) hit.transform.localScale = Vector3.one * CollideFXScale;
+            PlayDestroyFX();
             if (BoxFeature.HasFlag(BoxFeature.KickHitBreakable))
             {
                 PoolRecycle();
             }
         }
+    }
+
+    public void PlayDestroyFX()
+    {
+        ProjectileHit hit = ProjectileManager.Instance.PlayProjectileHit(CollideFX, transform.position);
+        if (hit) hit.transform.localScale = Vector3.one * CollideFXScale;
     }
 
     void OnDrawGizmos()

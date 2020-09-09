@@ -41,7 +41,7 @@ public class ActorLaunchArcRendererHelper : ActorHelper
         }
     }
 
-    public void InitializeByOffset(Vector3 offset, float angle, int resolutionPerUnit, float simulateSeconds)
+    public void InitializeByOffset(Vector3 offset, float angle, float resolutionPerUnit, float simulateSeconds)
     {
         transform.forward = offset.normalized;
         Angle = angle;
@@ -58,7 +58,7 @@ public class ActorLaunchArcRendererHelper : ActorHelper
         return velocity;
     }
 
-    public void Initialize(float velocity, float angle, int resolutionPerUnit, float simulateSeconds)
+    public void Initialize(float velocity, float angle, float resolutionPerUnit, float simulateSeconds)
     {
         transform.rotation = Quaternion.identity;
         Velocity = velocity;
@@ -67,7 +67,7 @@ public class ActorLaunchArcRendererHelper : ActorHelper
         InitializeCore(velocity, resolutionPerUnit, simulateSeconds);
     }
 
-    private void InitializeCore(float velocity, int resolutionPerUnit, float simulateSeconds)
+    private void InitializeCore(float velocity, float resolutionPerUnit, float simulateSeconds)
     {
         float resolutionPerSecond = velocity * resolutionPerUnit;
         TimeStep = 1 / resolutionPerSecond;

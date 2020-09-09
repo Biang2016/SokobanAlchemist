@@ -1,4 +1,6 @@
-﻿using BiangStudio.CloneVariant;
+﻿using System;
+using BiangStudio.CloneVariant;
+using Sirenix.OdinInspector;
 
 public class WorldModuleData : IClone<WorldModuleData>
 {
@@ -6,6 +8,8 @@ public class WorldModuleData : IClone<WorldModuleData>
 
     public byte WorldModuleTypeIndex;
     public string WorldModuleTypeName;
+
+    public WorldModuleFeature WorldModuleFeature;
 
     /// <summary>
     /// 世界模组制作规范，一个模组容量为16x16x16
@@ -18,6 +22,7 @@ public class WorldModuleData : IClone<WorldModuleData>
         WorldModuleData data = new WorldModuleData();
         data.WorldModuleTypeIndex = WorldModuleTypeIndex;
         data.WorldModuleTypeName = WorldModuleTypeName;
+        data.WorldModuleFeature = WorldModuleFeature;
         for (int x = 0; x < BoxMatrix.GetLength(0); x++)
         {
             for (int y = 0; y < BoxMatrix.GetLength(1); y++)
@@ -33,4 +38,19 @@ public class WorldModuleData : IClone<WorldModuleData>
     }
 
     #endregion
+}
+
+[Flags]
+public enum WorldModuleFeature
+{
+    None = 0,
+
+    [LabelText("墙壁")]
+    Wall = 1 << 0,
+
+    [LabelText("死亡面")]
+    DeadZone = 1 << 1,
+
+    [LabelText("地面")]
+    Ground = 1 << 2,
 }

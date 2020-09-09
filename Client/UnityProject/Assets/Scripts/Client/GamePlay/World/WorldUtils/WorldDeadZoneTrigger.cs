@@ -1,7 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using BiangStudio.GameDataFormat.Grid;
+using UnityEngine;
+using BiangStudio.ObjectPool;
 
-public class WorldDeadZoneTrigger : MonoBehaviour
+public class WorldDeadZoneTrigger : PoolObject
 {
     private BoxCollider BoxCollider;
 
@@ -10,10 +11,11 @@ public class WorldDeadZoneTrigger : MonoBehaviour
         BoxCollider = GetComponent<BoxCollider>();
     }
 
-    public void Initialize(Vector3 position)
+    public void Initialize(GridPos3D gp)
     {
-        transform.position = position;
+        transform.position = gp.ToVector3() * WorldModule.MODULE_SIZE;
         BoxCollider.size = Vector3.one * WorldModule.MODULE_SIZE;
+        BoxCollider.center = 0.5f * Vector3.one * (WorldModule.MODULE_SIZE - 1);
     }
 
     void OnTriggerEnter(Collider collider)
@@ -23,7 +25,7 @@ public class WorldDeadZoneTrigger : MonoBehaviour
 
     void OnTriggerStay(Collider collider)
     {
-        CheckObject(collider);
+        //CheckObject(collider);
     }
 
     private static void CheckObject(Collider collider)
@@ -34,11 +36,7 @@ public class WorldDeadZoneTrigger : MonoBehaviour
             if (box)
             {
                 WorldManager.Instance.CurrentWorld.RemoveBox(box);
-                if (box.Rigidbody)
-                {
-                    DestroyImmediate(box.Rigidbody);
-                }
-
+                box.PlayDestroyFX();
                 box.PoolRecycle();
             }
         }
@@ -48,7 +46,7 @@ public class WorldDeadZoneTrigger : MonoBehaviour
             Actor actor = collider.gameObject.GetComponentInParent<Actor>();
             if (actor)
             {
-                Debug.LogError($"玩家出界 {actor}");
+                actor.ActorBattleHelper.Die();
             }
         }
 
