@@ -356,7 +356,7 @@ public class Box : PoolObject
                 foreach (Collider collider in colliders)
                 {
                     Actor actor = collider.GetComponentInParent<Actor>();
-                    if (actor && actor != LastTouchActor && actor.ActorBattleHelper && !damagedActors.Contains(actor))
+                    if (actor && actor != LastTouchActor && actor.IsOpponent(LastTouchActor) && actor.ActorBattleHelper && !damagedActors.Contains(actor))
                     {
                         actor.ActorBattleHelper.Damage(DestroyDamage_Throw);
                         damagedActors.Add(actor);
@@ -393,7 +393,7 @@ public class Box : PoolObject
                 foreach (Collider collider in colliders)
                 {
                     Actor actor = collider.GetComponentInParent<Actor>();
-                    if (actor && actor != LastTouchActor && actor.ActorBattleHelper && !damagedActors.Contains(actor))
+                    if (actor && actor != LastTouchActor && actor.IsOpponent(LastTouchActor) && actor.ActorBattleHelper && !damagedActors.Contains(actor))
                     {
                         actor.ActorBattleHelper.Damage(DestroyDamage_Kick);
                         damagedActors.Add(actor);

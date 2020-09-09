@@ -135,21 +135,4 @@ public class ActorBattleHelper : ActorHelper
             Actor.PoolRecycle();
         }
     }
-
-    void OnTriggerEnter(Collider collider)
-    {
-        if (Actor.IsRecycled) return;
-        if (WorldManager.Instance.CurrentWorld.WorldData.WorldFeature.HasFlag(WorldFeature.PlayerImmune)) return;
-        Box box = collider.gameObject.GetComponentInParent<Box>();
-        if (box != null)
-        {
-            if (box.State == Box.States.Flying || box.State == Box.States.BeingKicked)
-            {
-                if (box.LastTouchActor != Actor)
-                {
-                    Damage(box.FinalWeight * 10f);
-                }
-            }
-        }
-    }
 }

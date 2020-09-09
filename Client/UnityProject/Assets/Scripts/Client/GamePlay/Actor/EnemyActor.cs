@@ -13,7 +13,7 @@
             }
             else
             {
-                BehaviourTreeOwner.UpdateBehaviour();
+                GraphOwner.UpdateBehaviour();
                 AIUpdateIntervalTick = 0;
             }
 

@@ -4,6 +4,7 @@ using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
 using DG.Tweening;
 using NodeCanvas.BehaviourTrees;
+using NodeCanvas.Framework;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -17,8 +18,9 @@ public class Actor : PoolObject
     public ActorBattleHelper ActorBattleHelper;
     public Transform LiftBoxPivot;
 
-    internal BehaviourTreeOwner BehaviourTreeOwner;
+    internal GraphOwner GraphOwner;
     internal ActorAIAgent ActorAIAgent;
+    public Transform NavTrackMarkerRoot;
 
     [ReadOnly]
     [DisplayAsString]
@@ -119,8 +121,6 @@ public class Actor : PoolObject
     [ShowInInspector]
     internal Box CurrentLiftBox = null;
 
-    public bool IsPlayer => Camp == Camp.Player;
-
     public enum MovementStates
     {
         Static,
@@ -158,7 +158,7 @@ public class Actor : PoolObject
 
     public override void OnRecycled()
     {
-        BehaviourTreeOwner.StopBehaviour();
+        GraphOwner?.StopBehaviour();
         ActorAIAgent.Stop();
         CurMoveAttempt = Vector3.zero;
         LastMoveAttempt = Vector3.zero;
@@ -184,7 +184,7 @@ public class Actor : PoolObject
     void Awake()
     {
         ActorAIAgent = new ActorAIAgent(this);
-        BehaviourTreeOwner = GetComponent<BehaviourTreeOwner>();
+        GraphOwner = GetComponent<GraphOwner>();
         SmoothMoves = GetComponentsInChildren<SmoothMove>().ToList();
         foreach (SmoothMove sm in SmoothMoves)
         {
@@ -386,6 +386,24 @@ public class Actor : PoolObject
             CurrentLiftBox.Throw(throwVel, 3, this);
             CurrentLiftBox = null;
         }
+    }
+
+    #endregion
+
+    #region Camp
+
+    public bool IsPlayer => Camp == Camp.Player;
+
+    public bool IsOpponent(Actor target)
+    {
+        if ((Camp == Camp.Player || Camp == Camp.Friend) && target.Camp == Camp.Enemy) return true;
+        if ((target.Camp == Camp.Player || target.Camp == Camp.Friend) && Camp == Camp.Enemy) return true;
+        return false;
+    }
+
+    public bool IsFriend(Actor target)
+    {
+        return !IsOpponent(target);
     }
 
     #endregion

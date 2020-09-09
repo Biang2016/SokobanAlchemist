@@ -27,4 +27,5 @@ public class Marker : PoolObject
 public enum MarkerType
 {
     LaunchArcMarker,
+    NavTrackMarker,
 }

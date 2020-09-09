@@ -5,6 +5,7 @@ using UnityEngine;
 public class ActorAIAgent
 {
     internal Actor Actor;
+    private List<Marker> NavTrackMarkers = new List<Marker>();
 
     public ActorAIAgent(Actor actor)
     {
@@ -17,6 +18,17 @@ public class ActorAIAgent
     public void Stop()
     {
         isStop = true;
+        ClearNavTrackMarkers();
+    }
+
+    private void ClearNavTrackMarkers()
+    {
+        foreach (Marker marker in NavTrackMarkers)
+        {
+            marker.PoolRecycle();
+        }
+
+        NavTrackMarkers.Clear();
     }
 
     public void Start()
@@ -59,6 +71,7 @@ public class ActorAIAgent
     public enum SetDestinationRetCode
     {
         AlreadyArrived,
+        TooClose,
         Suc,
         Failed,
     }
@@ -78,11 +91,24 @@ public class ActorAIAgent
             return SetDestinationRetCode.AlreadyArrived;
         }
 
+        //if (dist < keepDistanceMin)
+        //{
+        //    return SetDestinationRetCode.TooClose;
+        //}
+
         currentPath = ActorPathFinding.FindPath(Actor.CurGP, dest);
         if (currentPath != null)
         {
             currentNode = currentPath.First;
             nextNode = currentPath.First.Next;
+            ClearNavTrackMarkers();
+            foreach (GridPos3D gp in currentPath)
+            {
+                Marker marker = Marker.BaseInitialize(MarkerType.NavTrackMarker, Actor.NavTrackMarkerRoot);
+                marker.transform.position = gp.ToVector3();
+                NavTrackMarkers.Add(marker);
+            }
+
             return SetDestinationRetCode.Suc;
         }
         else
