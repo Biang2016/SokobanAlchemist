@@ -53,6 +53,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
     [HideInPrefabAssets]
     [BoxGroup("世界编辑器")]
     [Button("替换世界模组", ButtonSizes.Large)]
+    [GUIColor(0f, 1f, 1f)]
     private void ReplaceWorldModule_Editor()
     {
         WorldDesignHelper world = GetComponentInParent<WorldDesignHelper>();
@@ -62,7 +63,6 @@ public class WorldModuleDesignHelper : MonoBehaviour
             return;
         }
 
-        ;
         GameObject prefab = (GameObject) AssetDatabase.LoadAssetAtPath<Object>("Assets/Designs/WorldModule/" + ReplaceWorldModuleTypeName + ".prefab");
         GameObject go = (GameObject) PrefabUtility.InstantiatePrefab(prefab, transform.parent);
         go.transform.position = transform.position;
@@ -84,6 +84,27 @@ public class WorldModuleDesignHelper : MonoBehaviour
         ConfigManager.LoadAllConfigs();
         List<string> res = ConfigManager.WorldModuleTypeDefineDict.TypeIndexDict.Keys.ToList();
         return res;
+    }
+
+    [HideInPlayMode]
+    [HideInPrefabAssets]
+    [Button("所有箱子命名重置为Prefab名称", ButtonSizes.Large)]
+    [GUIColor(0f, 1f, 0f)]
+    private void FormatAllBoxName_Editor()
+    {
+        WorldDesignHelper world = GetComponentInParent<WorldDesignHelper>();
+        if (world)
+        {
+            Debug.LogError("此功能只能在模组编辑器中使用");
+            return;
+        }
+
+        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
+        foreach (Box box in boxes)
+        {
+            GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
+            box.name = boxPrefab.name;
+        }
     }
 #endif
 }

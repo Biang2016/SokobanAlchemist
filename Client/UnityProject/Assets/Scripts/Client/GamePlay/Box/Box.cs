@@ -430,6 +430,7 @@ public class Box : PoolObject
     [HideInPrefabAssets]
     [BoxGroup("模组编辑器")]
     [Button("替换Box", ButtonSizes.Large)]
+    [GUIColor(0f, 1f, 1f)]
     private void ReplaceBox_Editor()
     {
         WorldModuleDesignHelper module = GetComponentInParent<WorldModuleDesignHelper>();

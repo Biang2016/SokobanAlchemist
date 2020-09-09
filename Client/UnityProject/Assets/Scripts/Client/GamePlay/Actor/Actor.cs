@@ -345,7 +345,7 @@ public class Actor : PoolObject
         }
     }
 
-    protected void ThrowCharge()
+    public void ThrowCharge()
     {
         if (!CurrentLiftBox) return;
         if (ThrowState == ThrowStates.Lifting)

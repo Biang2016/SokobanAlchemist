@@ -10,7 +10,7 @@ public static class ActorAIAtoms
     [Category("敌兵")]
     [Name("朝玩家移动")]
     [Description("朝玩家移动")]
-    public class BT_MoveToMainPlayer : BTNode
+    public class BT_Enemy_MoveToMainPlayer : BTNode
     {
         [Name("默认保持距离Min")]
         public BBParameter<float> KeepDistanceMin;
@@ -21,16 +21,37 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null) return Status.Failure;
-            Actor.ActorAIAgent.SetDestination(BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player1].CurGP, KeepDistanceMin.value, KeepDistanceMax.value);
-            Actor.ActorAIAgent.EnableMove = true;
-            return Status.Success;
+            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player1].CurGP, KeepDistanceMin.value, KeepDistanceMax.value);
+            switch (retCode)
+            {
+                case ActorAIAgent.SetDestinationRetCode.Suc:
+                {
+                    Actor.ActorAIAgent.EnableMove = true;
+                    return Status.Running;
+                    break;
+                }
+                case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
+                {
+                    Actor.ActorAIAgent.EnableMove = false;
+                    return Status.Success;
+                    break;
+                }
+                case ActorAIAgent.SetDestinationRetCode.Failed:
+                {
+                    Actor.ActorAIAgent.EnableMove = false;
+                    return Status.Failure;
+                    break;
+                }
+            }
+
+            return Status.Failure;
         }
     }
 
     [Category("敌兵")]
-    [Name("是否举着某类箱子")]
-    [Description("是否举着某类箱子")]
-    public class BT_LiftCondition : ConditionTask
+    [Name("举着指定类型箱子")]
+    [Description("举着指定类型箱子")]
+    public class BT_Enemy_LiftCondition : ConditionTask
     {
         [Name("箱子类型名称")]
         public BBParameter<List<string>> LiftBoxTypeNames;
@@ -50,9 +71,9 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵")]
-    [Name("搜索并移动至某类箱子附近")]
-    [Description("搜索并移动至某类箱子附近")]
-    public class BT_MoveTowardsBox : BTNode
+    [Name("搜索并移动至指定类型箱子附近")]
+    [Description("搜索并移动至指定类型箱子附近")]
+    public class BT_Enemy_MoveTowardsBox : BTNode
     {
         [Name("箱子类型名称")]
         public BBParameter<List<string>> LiftBoxTypeNames;
@@ -113,7 +134,7 @@ public static class ActorAIAtoms
     [Category("敌兵")]
     [Name("举起面前箱子")]
     [Description("举起面前箱子")]
-    public class BT_LiftBox : BTNode
+    public class BT_Enemy_LiftBox : BTNode
     {
         [Name("箱子类型名称")]
         public BBParameter<List<string>> LiftBoxTypeNames;
@@ -144,28 +165,32 @@ public static class ActorAIAtoms
     [Category("敌兵")]
     [Name("扔箱子")]
     [Description("扔箱子")]
-    public class BT_ThrowBox : BTNode
+    public class BT_Enemy_ThrowBox : BTNode
     {
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            return Status.Failure;
-            //if (Actor == null) return Status.Failure;
-            //if (Actor.ThrowState != Actor.ThrowStates.None) return Status.Failure;
-            //GridPos3D boxGP = Actor.CurGP + Actor.CurForward.ToGridPos3D();
-            //Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(boxGP, out WorldModule module, out GridPos3D _);
-            //if (box != null)
-            //{
-            //    byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(BoxName.value);
-            //    if (boxTypeIndex != box.BoxTypeIndex) return Status.Failure;
+            if (Actor == null) return Status.Failure;
+            if (Actor.ThrowState != Actor.ThrowStates.Lifting && Actor.CurrentLiftBox == null) return Status.Failure;
+            Actor.ThrowCharge();
+            Actor.CurThrowPointOffset = BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player1].transform.position - Actor.transform.position;
+            Actor.Throw();
+            return Status.Success;
+        }
+    }
 
-            //    Actor.Lift();
-            //    if (Actor.ThrowState == Actor.ThrowStates.Raising)
-            //    {
-            //        return Status.Success;
-            //    }
-            //}
-
-            //return Status.Failure;
+    [Category("敌兵")]
+    [Name("闲逛")]
+    [Description("闲逛")]
+    public class BT_Enemy_Idle : BTNode
+    {
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null) return Status.Failure;
+            if (Actor.ThrowState != Actor.ThrowStates.Lifting && Actor.CurrentLiftBox == null) return Status.Failure;
+            Actor.ThrowCharge();
+            Actor.CurThrowPointOffset = BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player1].transform.position - Actor.transform.position;
+            Actor.Throw();
+            return Status.Success;
         }
     }
 }

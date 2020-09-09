@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BiangStudio.GameDataFormat.Grid;
+using Sirenix.OdinInspector;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -62,6 +63,20 @@ public class WorldDesignHelper : MonoBehaviour
         }
 
         return worldData;
+    }
+
+    [HideInPlayMode]
+    [HideInPrefabAssets]
+    [Button("所有世界模组命名重置为Prefab名称", ButtonSizes.Large)]
+    [GUIColor(0f, 1f, 0f)]
+    private void FormatAllWorldModuleName_Editor()
+    {
+        List<WorldModuleDesignHelper> modules = GetComponentsInChildren<WorldModuleDesignHelper>().ToList();
+        foreach (WorldModuleDesignHelper module in modules)
+        {
+            GameObject modulePrefab = PrefabUtility.GetCorrespondingObjectFromSource(module.gameObject);
+            module.name = modulePrefab.name;
+        }
     }
 #endif
 }
