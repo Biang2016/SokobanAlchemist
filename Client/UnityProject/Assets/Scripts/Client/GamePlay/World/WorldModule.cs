@@ -56,7 +56,7 @@ public class WorldModule : PoolObject
                         string boxName = ConfigManager.GetBoxTypeName(boxTypeIndex);
                         box.BoxTypeIndex = boxTypeIndex;
                         GridPos3D gp = new GridPos3D(x, y, z);
-                        box.Initialize(gp, this, 0, !IsAccessible);
+                        box.Initialize(gp, this, 0, !IsAccessible, false);
                         box.name = $"{boxName}_{gp}";
                         BoxMatrix[x, y, z] = box;
                     }

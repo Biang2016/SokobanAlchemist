@@ -168,8 +168,14 @@ public class Box : PoolObject
     {
     }
 
-    public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly)
+    public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly, bool dropping)
     {
+        if (dropping)
+        {
+            if (StaticCollider) StaticCollider.enabled = false;
+            if (DynamicCollider) DynamicCollider.enabled = false;
+        }
+
         ArtOnly = artOnly;
         StaticCollider.gameObject.SetActive(!artOnly);
         DynamicCollider.gameObject.SetActive(!artOnly);
@@ -183,7 +189,15 @@ public class Box : PoolObject
         if (lerpTime > 0)
         {
             transform.DOPause();
-            transform.DOLocalMove(localGridPos3D.ToVector3(), lerpTime).SetEase(Ease.Linear).OnComplete(() => { State = States.Static; });
+            transform.DOLocalMove(localGridPos3D.ToVector3(), lerpTime).SetEase(Ease.OutQuad).OnComplete(() =>
+            {
+                State = States.Static;
+                if (dropping)
+                {
+                    if (StaticCollider) StaticCollider.enabled = true;
+                    if (DynamicCollider) DynamicCollider.enabled = true;
+                }
+            });
             transform.DOLocalRotate(Vector3.zero, lerpTime);
             State = States.BeingPushed;
         }
@@ -192,6 +206,11 @@ public class Box : PoolObject
             transform.localPosition = localGridPos3D.ToVector3();
             transform.localRotation = Quaternion.identity;
             State = States.Static;
+            if (dropping)
+            {
+                if (StaticCollider) StaticCollider.enabled = true;
+                if (DynamicCollider) DynamicCollider.enabled = true;
+            }
         }
 
         WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
