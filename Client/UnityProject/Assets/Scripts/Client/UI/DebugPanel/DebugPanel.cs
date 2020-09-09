@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using BiangStudio.GamePlay.UI;
 using UnityEngine;
@@ -33,13 +34,46 @@ public class DebugPanel : BaseUIPanel
     {
         IsButtonsShow = false;
         Type type = typeof(DebugPanel);
-        foreach (MethodInfo m in type.GetMethods())
+        foreach (MethodInfo m in type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
         {
-            foreach (Attribute a in m.GetCustomAttributes(true))
+            foreach (Attribute a in m.GetCustomAttributes(false))
             {
                 if (a is DebugButtonAttribute dba)
                 {
-                    AddButton(dba.ButtonName, 0, DebugComponentDictTree, () => { m.Invoke(this, new object[] { }); }, true);
+                    if (string.IsNullOrEmpty(dba.MethodName))
+                    {
+                        AddButton(dba.ButtonName, 0, DebugComponentDictTree, () => { m.Invoke(this, new object[] { }); }, true);
+                    }
+                    else
+                    {
+                        bool methodFound = false;
+                        foreach (MethodInfo method in type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
+                        {
+                            if (method.Name.Equals(dba.MethodName))
+                            {
+                                methodFound = true;
+                                try
+                                {
+                                    List<string> strList = (List<string>) method.Invoke(this, new object[] { });
+                                    foreach (string s in strList)
+                                    {
+                                        string buttonName = string.Format(dba.ButtonName, s);
+                                        AddButton(buttonName, 0, DebugComponentDictTree, () => { m.Invoke(this, new object[] {s}); }, true);
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Debug.LogError(e);
+                                    throw;
+                                }
+                            }
+                        }
+
+                        if (!methodFound)
+                        {
+                            Debug.LogError($"[DebugPanel] 无法找到名为{dba.MethodName}的函数");
+                        }
+                    }
                 }
             }
         }
@@ -204,24 +238,15 @@ public class DebugPanel : BaseUIPanel
         ConfigManager.BoxWeightFactor_Cheat = value;
     }
 
-    [DebugButton("SwitchWorld/ChessWorld")]
-    public void ChangeChessWorld()
+    [DebugButton("SwitchWorld/{0}", "GetWorldNames")]
+    public void ChangeWorld(string worldName)
     {
-        ClientGameManager.DebugChangeWorldName = "ChessWorld";
+        ClientGameManager.DebugChangeWorldName = worldName;
         SceneManager.LoadScene("MainScene");
     }
 
-    [DebugButton("SwitchWorld/ArenaWorld")]
-    public void ChangeArenaWorld()
+    public List<string> GetWorldNames()
     {
-        ClientGameManager.DebugChangeWorldName = "ArenaWorld";
-        SceneManager.LoadScene("MainScene");
-    }
-
-    [DebugButton("SwitchWorld/BasicWorld")]
-    public void ChangeWilliamsWorld()
-    {
-        ClientGameManager.DebugChangeWorldName = "BasicWorld";
-        SceneManager.LoadScene("MainScene");
+        return ConfigManager.WorldDataConfigDict.Keys.ToList();
     }
 }

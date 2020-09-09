@@ -77,6 +77,11 @@ public class PlayerActor : Actor
                 }
             }
 
+            if (!CurMoveAttempt.x.Equals(0) && !CurMoveAttempt.z.Equals(0))
+            {
+                CurMoveAttempt.z = 0;
+            }
+
             MoveInternal();
 
             #endregion

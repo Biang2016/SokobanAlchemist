@@ -8,7 +8,14 @@ public class DebugButtonAttribute : Attribute
         ButtonName = buttonName;
     }
 
+    public DebugButtonAttribute(string buttonName, string methodName)
+    {
+        ButtonName = buttonName;
+        MethodName = methodName;
+    }
+
     public string ButtonName { get; }
+    public string MethodName { get; }
 }
 
 [AttributeUsage(AttributeTargets.Method)]
