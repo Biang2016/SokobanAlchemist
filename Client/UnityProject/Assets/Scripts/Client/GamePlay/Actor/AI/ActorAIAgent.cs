@@ -91,10 +91,14 @@ public class ActorAIAgent
             return SetDestinationRetCode.AlreadyArrived;
         }
 
-        //if (dist < keepDistanceMin)
-        //{
-        //    return SetDestinationRetCode.TooClose;
-        //}
+        if (dist < keepDistanceMin)
+        {
+            currentPath = null;
+            currentNode = null;
+            nextNode = null;
+            EnableMove = false;
+            return SetDestinationRetCode.TooClose;
+        }
 
         currentPath = ActorPathFinding.FindPath(Actor.CurGP, dest);
         if (currentPath != null)

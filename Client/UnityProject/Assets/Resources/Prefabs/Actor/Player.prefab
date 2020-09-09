@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7701955372322874405}
   - component: {fileID: 7385203569512998102}
   - component: {fileID: 2570500252900393547}
-  m_Layer: 13
+  m_Layer: 18
   m_Name: ActorBattleHelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,8 +55,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.9170215, y: 1, z: 0.9924567}
-  m_Center: {x: 0, y: 0, z: 0.07354909}
+  m_Size: {x: 0.8, y: 0.8, z: 0.8}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1200859146300972617
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 5181619664730324012}
   - component: {fileID: 5261093319832100040}
   m_Layer: 13
-  m_Name: Colliders
+  m_Name: MoveColliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -973,6 +973,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: boxMan
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7aa48d153dc23b84a982b803ba933a91,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7aa48d153dc23b84a982b803ba933a91, type: 3}

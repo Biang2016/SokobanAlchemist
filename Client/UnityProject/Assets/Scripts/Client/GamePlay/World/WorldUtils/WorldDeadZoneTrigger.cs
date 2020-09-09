@@ -14,7 +14,7 @@ public class WorldDeadZoneTrigger : PoolObject
     public void Initialize(GridPos3D gp)
     {
         transform.position = gp.ToVector3() * WorldModule.MODULE_SIZE;
-        BoxCollider.size = Vector3.one * WorldModule.MODULE_SIZE;
+        BoxCollider.size = Vector3.one * (WorldModule.MODULE_SIZE - 0.5f);
         BoxCollider.center = 0.5f * Vector3.one * (WorldModule.MODULE_SIZE - 1);
     }
 
@@ -43,8 +43,9 @@ public class WorldDeadZoneTrigger : PoolObject
 
         if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
         {
+            ActorFaceHelper actorFaceHelper = collider.gameObject.GetComponent<ActorFaceHelper>();
             Actor actor = collider.gameObject.GetComponentInParent<Actor>();
-            if (actor)
+            if (actor && !actorFaceHelper)
             {
                 actor.ActorBattleHelper.Die();
             }

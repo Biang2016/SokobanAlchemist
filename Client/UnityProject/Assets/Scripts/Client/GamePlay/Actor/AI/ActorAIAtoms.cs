@@ -30,40 +30,38 @@ public static class ActorAIAtoms
                     Actor.ActorAIAgent.EnableMove = false;
                     return Status.Success;
                 }
-                //case ActorAIAgent.SetDestinationRetCode.TooClose:
-                //{
-                //    // 逃脱寻路
-                //    List<GridPos3D> runDestList = new List<GridPos3D>();
-                //    for (int x = Mathf.RoundToInt(-KeepDistanceMin.value + 1); x <= Mathf.RoundToInt(KeepDistanceMin.value + 1); x++)
-                //    {
-                //        int absZ = Mathf.RoundToInt(KeepDistanceMin.value + 1 - Mathf.Abs(x));
-                //        for (int z = -absZ; z <= absZ; z++)
-                //        {
-                //            runDestList.Add(new GridPos3D(x, 0, z));
-                //        }
-                //    }
+                case ActorAIAgent.SetDestinationRetCode.TooClose:
+                {
+                    // 逃脱寻路
+                    List<GridPos3D> runDestList = new List<GridPos3D>();
+                    for (int x = Mathf.RoundToInt(-KeepDistanceMin.value + 1); x <= Mathf.RoundToInt(KeepDistanceMin.value + 1); x++)
+                    {
+                        int absZ = Mathf.RoundToInt(KeepDistanceMin.value + 1 - Mathf.Abs(x));
+                        runDestList.Add(new GridPos3D(x, 0, absZ));
+                        runDestList.Add(new GridPos3D(x, 0, -absZ));
+                    }
 
-                //    runDestList.Sort((gp1, gp2) =>
-                //    {
-                //        float dist1 = (gp1.ToVector3() + player.transform.position - Actor.transform.position).magnitude;
-                //        float dist2 = (gp2.ToVector3() + player.transform.position - Actor.transform.position).magnitude;
-                //        return dist1.CompareTo(dist2);
-                //    });
+                    runDestList.Sort((gp1, gp2) =>
+                    {
+                        float dist1 = (gp1.ToVector3() + player.transform.position - Actor.transform.position).magnitude;
+                        float dist2 = (gp2.ToVector3() + player.transform.position - Actor.transform.position).magnitude;
+                        return dist1.CompareTo(dist2);
+                    });
 
-                //    foreach (GridPos3D gp in runDestList)
-                //    {
-                //        ActorAIAgent.SetDestinationRetCode rc = Actor.ActorAIAgent.SetDestination(player.CurGP + gp, 0, 1);
-                //        if (rc == ActorAIAgent.SetDestinationRetCode.Suc)
-                //        {
-                //            Actor.ActorAIAgent.EnableMove = true;
-                //            return Status.Running;
-                //        }
-                //    }
+                    foreach (GridPos3D gp in runDestList)
+                    {
+                        ActorAIAgent.SetDestinationRetCode rc = Actor.ActorAIAgent.SetDestination(player.CurGP + gp, 0, 1);
+                        if (rc == ActorAIAgent.SetDestinationRetCode.Suc)
+                        {
+                            Actor.ActorAIAgent.EnableMove = true;
+                            return Status.Running;
+                        }
+                    }
 
-                //    Actor.ActorAIAgent.EnableMove = false;
+                    Actor.ActorAIAgent.EnableMove = false;
 
-                //    return Status.Failure;
-                //}
+                    return Status.Failure;
+                }
                 case ActorAIAgent.SetDestinationRetCode.Suc:
                 {
                     Actor.ActorAIAgent.EnableMove = true;
@@ -139,7 +137,7 @@ public static class ActorAIAtoms
             }
 
             if (nearestBox == null) return Status.Failure;
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(nearestBox.GridPos3D, 1f, 1.1f);
+            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(nearestBox.GridPos3D, 0.8f, 1.1f);
             switch (retCode)
             {
                 case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
