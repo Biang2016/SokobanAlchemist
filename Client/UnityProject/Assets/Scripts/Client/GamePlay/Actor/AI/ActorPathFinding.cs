@@ -17,19 +17,19 @@ public class ActorPathFinding
     private static LinkedList<Node> OpenList = new LinkedList<Node>();
     private static LinkedList<Node> CloseList = new LinkedList<Node>();
 
-    public static LinkedList<GridPos3D> FindPath(GridPos3D ori, GridPos3D dest)
+    public static LinkedList<GridPos3D> FindPath(GridPos3D ori, GridPos3D dest, float keepDistanceMin, float keepDistanceMax)
     {
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori, out WorldModule oriModule, out GridPos3D _);
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(dest, out WorldModule destModule, out GridPos3D _);
         if (oriModule != null && destModule != null)
         {
-            return FindPath(new Node {GridPos3D = ori}, new Node {GridPos3D = dest});
+            return FindPath(new Node {GridPos3D = ori}, new Node {GridPos3D = dest}, keepDistanceMin, keepDistanceMax);
         }
 
         return null;
     }
 
-    private static LinkedList<GridPos3D> FindPath(Node ori, Node dest)
+    private static LinkedList<GridPos3D> FindPath(Node ori, Node dest, float keepDistanceMin, float keepDistanceMax)
     {
         OpenList.Clear();
         CloseList.Clear();
@@ -91,19 +91,20 @@ public class ActorPathFinding
                     node.ParentNode = minFNode;
                     node.G = newG;
                     node.H = AStarHeuristicsDistance(node, dest);
-                }
 
-                if (node.GridPos3D == dest.GridPos3D)
-                {
-                    LinkedList<GridPos3D> path = new LinkedList<GridPos3D>();
-                    Node nodePtr = node;
-                    while (nodePtr != null)
+                    float diffToDest = (node.GridPos3D - dest.GridPos3D).ToVector3().magnitude;
+                    if (diffToDest <= keepDistanceMax && diffToDest >= keepDistanceMin)
                     {
-                        path.AddFirst(nodePtr.GridPos3D);
-                        nodePtr = nodePtr.ParentNode;
-                    }
+                        LinkedList<GridPos3D> path = new LinkedList<GridPos3D>();
+                        Node nodePtr = node;
+                        while (nodePtr != null)
+                        {
+                            path.AddFirst(nodePtr.GridPos3D);
+                            nodePtr = nodePtr.ParentNode;
+                        }
 
-                    return path;
+                        return path;
+                    }
                 }
             }
         }
@@ -139,6 +140,8 @@ public class ActorPathFinding
                     }
                 }
 
+                if (BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player1].CurGP == gp) isActorOnTheWay = true;
+                if (BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player2].CurGP == gp) isActorOnTheWay = true;
                 if (!isActorOnTheWay)
                 {
                     Node leftNode = new Node {GridPos3D = gp, ParentNode = node};

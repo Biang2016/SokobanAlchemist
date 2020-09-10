@@ -1,14 +1,24 @@
 ﻿using System;
 
 [AttributeUsage(AttributeTargets.Method)]
-public class DebugButtonAttribute : Attribute
+public class DebugControllerAttribute : Attribute
 {
-    public DebugButtonAttribute(string buttonName)
+    public int Priority = 0;
+
+    public DebugControllerAttribute(int priority)
+    {
+        Priority = priority;
+    }
+}
+
+public class DebugButtonAttribute : DebugControllerAttribute
+{
+    public DebugButtonAttribute(string buttonName, int priority = 0) : base(priority)
     {
         ButtonName = buttonName;
     }
 
-    public DebugButtonAttribute(string buttonName, string methodName)
+    public DebugButtonAttribute(string buttonName, string methodName, int priority = 0) : base(priority)
     {
         ButtonName = buttonName;
         MethodName = methodName;
@@ -18,10 +28,9 @@ public class DebugButtonAttribute : Attribute
     public string MethodName { get; }
 }
 
-[AttributeUsage(AttributeTargets.Method)]
-public class DebugSliderAttribute : Attribute
+public class DebugSliderAttribute : DebugControllerAttribute
 {
-    public DebugSliderAttribute(string sliderName, float defaultValue, float min, float max)
+    public DebugSliderAttribute(string sliderName, float defaultValue, float min, float max, int priority = 0) : base(priority)
     {
         SliderName = sliderName;
         DefaultValue = defaultValue;
@@ -33,4 +42,14 @@ public class DebugSliderAttribute : Attribute
     public float DefaultValue { get; }
     public float Min { get; }
     public float Max { get; }
+}
+
+public class DebugToggleButtonAttribute : DebugControllerAttribute
+{
+    public DebugToggleButtonAttribute(string buttonName, int priority = 0) : base(priority)
+    {
+        ButtonName = buttonName;
+    }
+
+    public string ButtonName { get; }
 }

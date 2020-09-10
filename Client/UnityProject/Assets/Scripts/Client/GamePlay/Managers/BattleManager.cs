@@ -13,6 +13,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
     internal List<EnemyActor> Enemies = new List<EnemyActor>();
 
     public Transform ActorContainerRoot;
+    public Transform NavTrackMarkerRoot;
 
     public void Clear()
     {
@@ -33,6 +34,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
     public override void Awake()
     {
         ActorContainerRoot = new GameObject("ActorContainerRoot").transform;
+        NavTrackMarkerRoot = new GameObject("NavTrackMarkerRoot").transform;
     }
 
     public override void Start()

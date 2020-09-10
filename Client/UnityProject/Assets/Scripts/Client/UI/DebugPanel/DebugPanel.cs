@@ -34,11 +34,26 @@ public class DebugPanel : BaseUIPanel
     {
         IsButtonsShow = false;
         Type type = typeof(DebugPanel);
+        List<(MethodInfo, DebugControllerAttribute)> dcas = new List<(MethodInfo, DebugControllerAttribute)>();
         foreach (MethodInfo m in type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
         {
             foreach (Attribute a in m.GetCustomAttributes(false))
             {
-                if (a is DebugButtonAttribute dba)
+                if (a is DebugControllerAttribute dca)
+                {
+                    dcas.Add((m, dca));
+                }
+            }
+        }
+
+        dcas.Sort((pair1, pair2) => { return pair1.Item2.Priority.CompareTo(pair2.Item2.Priority); });
+
+        foreach ((MethodInfo, DebugControllerAttribute) pair in dcas)
+        {
+            MethodInfo m = pair.Item1;
+            switch (pair.Item2)
+            {
+                case DebugButtonAttribute dba:
                 {
                     if (string.IsNullOrEmpty(dba.MethodName))
                     {
@@ -74,17 +89,18 @@ public class DebugPanel : BaseUIPanel
                             Debug.LogError($"[DebugPanel] 无法找到名为{dba.MethodName}的函数");
                         }
                     }
-                }
-            }
-        }
 
-        foreach (MethodInfo m in type.GetMethods())
-        {
-            foreach (Attribute a in m.GetCustomAttributes(true))
-            {
-                if (a is DebugSliderAttribute dsa)
+                    break;
+                }
+                case DebugToggleButtonAttribute dtba:
+                {
+                    AddButton(dtba.ButtonName, 0, DebugComponentDictTree, () => { m.Invoke(this, new object[] { }); }, true);
+                    break;
+                }
+                case DebugSliderAttribute dsa:
                 {
                     AddSlider(dsa.SliderName, 0, dsa.DefaultValue, dsa.Min, dsa.Max, DebugComponentDictTree, (float value) => { m.Invoke(this, new object[] {value}); });
+                    break;
                 }
             }
         }
@@ -200,45 +216,7 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugSlider("PlayerBattle/MoveSpeed", 3.5f, 1, 30)]
-    public void ChangeMoveSpeed(float value)
-    {
-        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
-        {
-            PlayerActor player = BattleManager.Instance.MainPlayers[i];
-            if (player != null) player.MoveSpeed = value;
-        }
-    }
-
-    [DebugSlider("PlayerBattle/KickForce", 150, 0, 1000)]
-    public void ChangeKickForce(float value)
-    {
-        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
-        {
-            PlayerActor player = BattleManager.Instance.MainPlayers[i];
-            if (player != null) player.KickForce = value;
-        }
-    }
-
-    [DebugSlider("Boxes/ThrowFriction", 10f, 0, 20f)]
-    public void ChangeBoxThrowDrag(float value)
-    {
-        ConfigManager.BoxThrowDragFactor_Cheat = value;
-    }
-
-    [DebugSlider("Boxes/KickFriction", 1, 0, 20f)]
-    public void ChangeBoxKickDrag(float value)
-    {
-        ConfigManager.BoxKickDragFactor_Cheat = value;
-    }
-
-    [DebugSlider("Boxes/WeightFactor", 1, 0.1f, 10f)]
-    public void ChangeBoxWeight(float value)
-    {
-        ConfigManager.BoxWeightFactor_Cheat = value;
-    }
-
-    [DebugButton("SwitchWorld/{0}", "GetWorldNames")]
+    [DebugButton("SwitchWorld/{0}", "GetWorldNames", -10)]
     public void ChangeWorld(string worldName)
     {
         ClientGameManager.DebugChangeWorldName = worldName;
@@ -248,5 +226,53 @@ public class DebugPanel : BaseUIPanel
     public List<string> GetWorldNames()
     {
         return ConfigManager.WorldDataConfigDict.Keys.ToList();
+    }
+
+    [DebugSlider("Player/MoveSpeed", 3.5f, 1, 30)]
+    public void ChangeMoveSpeed(float value)
+    {
+        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
+        {
+            PlayerActor player = BattleManager.Instance.MainPlayers[i];
+            if (player != null) player.MoveSpeed = value;
+        }
+    }
+
+    [DebugSlider("Player/KickForce", 150, 0, 1000)]
+    public void ChangeKickForce(float value)
+    {
+        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
+        {
+            PlayerActor player = BattleManager.Instance.MainPlayers[i];
+            if (player != null) player.KickForce = value;
+        }
+    }
+
+    [DebugToggleButton("Enemy/TogglePathFinding")]
+    public void ToggleEnemyPathFinding()
+    {
+        ConfigManager.ShowEnemyPathFinding = !ConfigManager.ShowEnemyPathFinding;
+        foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
+        {
+            enemy.ActorAIAgent.SetNavTrackMarkersShown(ConfigManager.ShowEnemyPathFinding);
+        }
+    }
+
+    [DebugSlider("Boxes/ThrowFriction", 10f, 0, 20f, 10)]
+    public void ChangeBoxThrowDrag(float value)
+    {
+        ConfigManager.BoxThrowDragFactor_Cheat = value;
+    }
+
+    [DebugSlider("Boxes/KickFriction", 1, 0, 20f, 10)]
+    public void ChangeBoxKickDrag(float value)
+    {
+        ConfigManager.BoxKickDragFactor_Cheat = value;
+    }
+
+    [DebugSlider("Boxes/WeightFactor", 1, 0.1f, 10f, 10)]
+    public void ChangeBoxWeight(float value)
+    {
+        ConfigManager.BoxWeightFactor_Cheat = value;
     }
 }

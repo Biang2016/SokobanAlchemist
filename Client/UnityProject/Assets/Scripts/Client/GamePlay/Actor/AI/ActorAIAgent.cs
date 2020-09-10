@@ -7,6 +7,11 @@ public class ActorAIAgent
     internal Actor Actor;
     private List<Marker> NavTrackMarkers = new List<Marker>();
 
+    public Box TargetBox;
+    public GridPos3D TargetBoxGP;
+
+    public float StuckWithNavTask_Tick = 0;
+
     public ActorAIAgent(Actor actor)
     {
         Actor = actor;
@@ -31,6 +36,14 @@ public class ActorAIAgent
         NavTrackMarkers.Clear();
     }
 
+    public void SetNavTrackMarkersShown(bool setShown)
+    {
+        foreach (Marker marker in NavTrackMarkers)
+        {
+            marker.SetShown(setShown);
+        }
+    }
+
     public void Start()
     {
         isStop = false;
@@ -39,34 +52,33 @@ public class ActorAIAgent
     public void Update()
     {
         if (isStop) return;
-        if (EnableRotate) RotateTowardsTarget();
-        if (EnableMove) MoveToDestination();
+        if (Actor.CurGP == Actor.LastGP && currentPath != null)
+        {
+            StuckWithNavTask_Tick += Time.fixedDeltaTime;
+        }
+        else
+        {
+            StuckWithNavTask_Tick = 0;
+        }
+
+        MoveToDestination();
     }
 
-    public bool EnableRotate = false;
-    public float RotateSpeed;
-    private Vector3 currentRotateTarget;
-
-    public void SetRotateTarget(Vector3 target)
-    {
-        target.y = Actor.transform.position.y;
-        currentRotateTarget = target;
-    }
-
-    public void RotateTowardsTarget()
-    {
-        Vector3 diff = currentRotateTarget - Actor.transform.position;
-        Quaternion rotation = Quaternion.LookRotation(diff);
-        Actor.transform.rotation = Quaternion.Lerp(Actor.transform.rotation, rotation, Time.deltaTime * diff.magnitude * RotateSpeed);
-    }
-
-    public bool EnableMove = false;
     private float KeepDistanceMin;
     private float KeepDistanceMax;
+    private bool LastNodeOccupied;
     private GridPos3D currentDestination;
     private LinkedList<GridPos3D> currentPath;
     private LinkedListNode<GridPos3D> currentNode;
     private LinkedListNode<GridPos3D> nextNode;
+
+    private void ClearPathFinding()
+    {
+        currentPath = null;
+        currentNode = null;
+        nextNode = null;
+        Actor.CurMoveAttempt = Vector3.zero;
+    }
 
     public enum SetDestinationRetCode
     {
@@ -76,49 +88,52 @@ public class ActorAIAgent
         Failed,
     }
 
-    public SetDestinationRetCode SetDestination(GridPos3D dest, float keepDistanceMin, float keepDistanceMax)
+    public SetDestinationRetCode SetDestination(GridPos3D dest, float keepDistanceMin, float keepDistanceMax, bool lastNodeOccupied)
     {
         currentDestination = dest;
         KeepDistanceMin = keepDistanceMin;
         KeepDistanceMax = keepDistanceMax;
-        float dist = (Actor.CurGP.ToVector3() - dest.ToVector3()).magnitude;
-        if (dist <= keepDistanceMax && dist >= keepDistanceMin)
+        LastNodeOccupied = lastNodeOccupied;
+        float dist = (Actor.CurGP.ToVector3() - currentDestination.ToVector3()).magnitude;
+        if (dist <= KeepDistanceMax + (KeepDistanceMax.Equals(0) && LastNodeOccupied ? 1 : 0) && dist >= KeepDistanceMin)
         {
-            currentPath = null;
-            currentNode = null;
-            nextNode = null;
-            EnableMove = false;
+            Actor.CurForward = (dest - Actor.CurGP).ToVector3().normalized;
+            ClearPathFinding();
             return SetDestinationRetCode.AlreadyArrived;
         }
 
-        if (dist < keepDistanceMin)
+        if (dist < KeepDistanceMin)
         {
-            currentPath = null;
-            currentNode = null;
-            nextNode = null;
-            EnableMove = false;
+            ClearPathFinding();
             return SetDestinationRetCode.TooClose;
         }
 
-        currentPath = ActorPathFinding.FindPath(Actor.CurGP, dest);
+        currentPath = ActorPathFinding.FindPath(Actor.CurGP, currentDestination, KeepDistanceMin, KeepDistanceMax);
         if (currentPath != null)
         {
             currentNode = currentPath.First;
             nextNode = currentPath.First.Next;
+
+            // 绘制Debug寻路点
             ClearNavTrackMarkers();
-            foreach (GridPos3D gp in currentPath)
+            if (ConfigManager.ShowEnemyPathFinding)
             {
-                Marker marker = Marker.BaseInitialize(MarkerType.NavTrackMarker, Actor.NavTrackMarkerRoot);
-                marker.transform.position = gp.ToVector3();
-                NavTrackMarkers.Add(marker);
+                int count = 0;
+                foreach (GridPos3D gp in currentPath)
+                {
+                    MarkerType mt = count == currentPath.Count - 1 ? MarkerType.NavTrackMarker_Final : MarkerType.NavTrackMarker;
+                    count++;
+                    Marker marker = Marker.BaseInitialize(mt, BattleManager.Instance.NavTrackMarkerRoot);
+                    marker.transform.position = gp.ToVector3();
+                    NavTrackMarkers.Add(marker);
+                }
             }
 
             return SetDestinationRetCode.Suc;
         }
         else
         {
-            currentNode = null;
-            nextNode = null;
+            ClearPathFinding();
             return SetDestinationRetCode.Failed;
         }
     }
@@ -128,30 +143,31 @@ public class ActorAIAgent
         Actor.CurMoveAttempt = Vector3.zero;
         if (currentPath != null)
         {
-            Vector3 diff = currentPath.Last.Value.ToVector3() - Actor.transform.position;
-            if (diff.magnitude <= (KeepDistanceMax + KeepDistanceMin) / 2f)
+            if (nextNode != null)
             {
-                Actor.CurForward = diff.normalized.ToGridPos3D().ToVector3();
-                Actor.CurMoveAttempt = Vector3.zero;
-            }
-            else
-            {
-                if (nextNode != null)
+                Vector3 diff = nextNode.Value.ToVector3() - Actor.transform.position;
+
+                if (diff.magnitude < 0.1f)
                 {
-                    if ((Actor.transform.position - nextNode.Value.ToVector3()).magnitude < 0.01f)
+                    bool checkArriveDest = nextNode == currentPath.Last || (LastNodeOccupied && nextNode.Next == currentPath.Last);
+                    if (checkArriveDest)
                     {
-                        currentNode = nextNode;
-                        nextNode = nextNode.Next;
+                        if (LastNodeOccupied && nextNode.Next != null && nextNode.Next == currentPath.Last)
+                        {
+                            Actor.CurForward = (nextNode.Next.Value - nextNode.Value).ToVector3().normalized;
+                        }
+
+                        ClearPathFinding();
+                        return;
                     }
+
+                    currentNode = nextNode;
+                    nextNode = nextNode.Next;
                 }
 
-                if (nextNode != null && currentNode != null)
+                if (nextNode != null)
                 {
                     Actor.CurMoveAttempt = (nextNode.Value.ToVector3() - Actor.transform.position).normalized;
-                }
-                else
-                {
-                    Actor.CurMoveAttempt = Vector3.zero;
                 }
             }
         }

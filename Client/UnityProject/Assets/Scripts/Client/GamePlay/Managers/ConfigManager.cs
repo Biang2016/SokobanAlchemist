@@ -13,6 +13,8 @@ using UnityEditor;
 
 public class ConfigManager : TSingletonBaseManager<ConfigManager>
 {
+    public static bool ShowEnemyPathFinding = false;
+
     public static float BoxStaticBounceFactor_Cheat = 1f;
     public static float BoxDynamicBounceFactor_Cheat = 1f;
     public static float BoxThrowDragFactor_Cheat = 10f;

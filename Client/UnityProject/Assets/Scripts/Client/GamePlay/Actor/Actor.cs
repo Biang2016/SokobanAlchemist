@@ -20,7 +20,6 @@ public class Actor : PoolObject
 
     internal GraphOwner GraphOwner;
     internal ActorAIAgent ActorAIAgent;
-    public Transform NavTrackMarkerRoot;
 
     [ReadOnly]
     [DisplayAsString]
@@ -42,12 +41,21 @@ public class Actor : PoolObject
     [LabelText("扔箱子瞄准点偏移")]
     public Vector3 CurThrowPointOffset;
 
-    internal Vector3 CurForward = Vector3.forward;
+    internal Vector3 CurForward
+    {
+        get { return transform.forward; }
+        set { transform.forward = value; }
+    }
 
     [DisplayAsString]
     [LabelText("世界坐标")]
     [BoxGroup("战斗状态")]
     public GridPos3D CurGP;
+
+    [DisplayAsString]
+    [LabelText("上帧世界坐标")]
+    [BoxGroup("战斗状态")]
+    public GridPos3D LastGP;
 
     [LabelText("阵营")]
     [BoxGroup("战斗状态")]
@@ -166,6 +174,7 @@ public class Actor : PoolObject
         CurThrowPointOffset = Vector3.zero;
         CurForward = Vector3.forward;
         CurGP = GridPos3D.Zero;
+        LastGP = GridPos3D.Zero;
         MovementState = MovementStates.Static;
         PushState = PushStates.None;
         ThrowState = ThrowStates.None;
@@ -198,6 +207,7 @@ public class Actor : PoolObject
     public void Initialize()
     {
         CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
+        LastGP = CurGP;
         ActorAIAgent.Start();
     }
 
@@ -229,6 +239,7 @@ public class Actor : PoolObject
         if (!IsRecycled)
         {
             RigidBody.angularVelocity = Vector3.zero;
+            LastGP = CurGP;
             CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
         }
     }
@@ -250,13 +261,11 @@ public class Actor : PoolObject
                 RigidBody.AddForce(-RigidBody.velocity.normalized * (RigidBody.velocity.magnitude - MoveSpeed), ForceMode.VelocityChange);
             }
 
-            transform.forward = CurMoveAttempt;
             CurForward = CurMoveAttempt.normalized;
             ActorPushHelper.PushTriggerOut();
         }
         else
         {
-            transform.forward = CurForward;
             MovementState = MovementStates.Static;
             RigidBody.drag = 100f;
             ActorPushHelper.PushTriggerReset();
