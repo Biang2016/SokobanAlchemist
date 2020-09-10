@@ -134,13 +134,9 @@ public class Actor : PoolObject
     public List<string> LiftableBoxList = new List<string>();
 
     [BoxGroup("死亡")]
-    [LabelText("死亡掉落皮肤")]
-    public Material DieDropMaterial;
-
-    [BoxGroup("死亡")]
-    [LabelText("死亡掉落踢技能")]
+    [LabelText("死亡掉落箱子")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string DieDropKickAbilityName;
+    public string DieDropBoxTypeName;
 
     private IEnumerable<string> GetAllBoxTypeNames()
     {

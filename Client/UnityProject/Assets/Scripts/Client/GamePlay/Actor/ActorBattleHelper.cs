@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BiangStudio.GameDataFormat.Grid;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class ActorBattleHelper : ActorHelper
@@ -126,6 +127,8 @@ public class ActorBattleHelper : ActorHelper
 
     public void DestroyActor()
     {
+        DropDieBox();
+
         if (Actor.IsPlayer)
         {
             BattleManager.Instance.ResetBattle();
@@ -136,18 +139,31 @@ public class ActorBattleHelper : ActorHelper
             {
                 if (LastAttackBox.LastTouchActor.IsPlayer)
                 {
-                    Actor player = LastAttackBox.LastTouchActor;
-                    byte b = ConfigManager.GetBoxTypeIndex(Actor.DieDropKickAbilityName);
-                    player.ActorSkillHelper.KickableBoxSet.Remove(player.ActorSkillHelper.CurrentGetKickAbility);
-                    player.ActorSkillHelper.CurrentGetKickAbility = b;
-                    player.ActorSkillHelper.KickableBoxSet.Add(b);
-                    player.ActorSkinHelper.SwitchSkin(Actor.DieDropMaterial);
+                   
                 }
             }
 
             ProjectileHit hit = ProjectileManager.Instance.PlayProjectileHit(Actor.DieFX, transform.position);
             if (hit) hit.transform.localScale = Vector3.one * Actor.DieFXScale;
             Actor.PoolRecycle();
+        }
+    }
+
+    private void DropDieBox()
+    {
+        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Actor.CurGP);
+        if (module)
+        {
+            byte boxIndex = ConfigManager.GetBoxTypeIndex(Actor.DieDropBoxTypeName);
+            if (boxIndex == 0) return;
+            Box box = GameObjectPoolManager.Instance.BoxDict[boxIndex].AllocateGameObject<Box>(transform);
+            string boxName = Actor.DieDropBoxTypeName;
+            box.BoxTypeIndex = boxIndex;
+            GridPos3D gp = Actor.CurGP;
+            GridPos3D localGP = gp - module.ModuleGP * WorldModule.MODULE_SIZE;
+            box.Initialize(localGP, module, 0, false, false);
+            box.name = $"{boxName}_{gp}";
+            box.DropFromDeadActor();
         }
     }
 }

@@ -60,7 +60,7 @@ public class Box : PoolObject
     public BoxFeature BoxFeature;
 
     [AssetsOnly]
-    [ShowIf("Moveable")]
+    [ShowIf("Interactable")]
     [BoxGroup("箱子属性")]
     [LabelText("重量")]
     [SerializeField]
@@ -110,6 +110,19 @@ public class Box : PoolObject
     [LabelText("落地摩阻力")]
     public float Throw_Drag = 0.5f;
 
+    [ShowIf("Liftable")]
+    [BoxGroup("扔箱子属性")]
+    [GUIColor(0, 1.0f, 0)]
+    [LabelText("举起箱子掉落踢技能")]
+    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    public string LiftGetLiftBoxAbility;
+
+    [ShowIf("Liftable")]
+    [BoxGroup("扔箱子属性")]
+    [GUIColor(0, 1.0f, 0)]
+    [LabelText("举起箱子更换皮肤")]
+    public Material DieDropMaterial;
+
     [AssetsOnly]
     [ShowIf("Kickable")]
     [BoxGroup("踢箱子属性")]
@@ -151,6 +164,7 @@ public class Box : PoolObject
         BeingLift,
         Lifted,
         Flying,
+        DropingFromDeadPlayer,
     }
 
     [HideInPrefabAssets]
@@ -279,6 +293,16 @@ public class Box : PoolObject
     {
         if (State == States.BeingPushed || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.PushingCanceling)
         {
+            byte dropLiftAbilityIndex = ConfigManager.GetBoxTypeIndex(LiftGetLiftBoxAbility);
+            if (dropLiftAbilityIndex != 0)
+            {
+                PlayDestroyFX();
+                actor.ActorSkillHelper.KickableBoxSet.Remove(actor.ActorSkillHelper.CurrentGetKickAbility);
+                actor.ActorSkillHelper.CurrentGetKickAbility = dropLiftAbilityIndex;
+                actor.ActorSkillHelper.KickableBoxSet.Add(dropLiftAbilityIndex);
+                actor.ActorSkinHelper.SwitchSkin(DieDropMaterial);
+            }
+
             LastTouchActor = actor;
             WorldManager.Instance.CurrentWorld.RemoveBox(this);
             State = States.BeingLift;
@@ -328,9 +352,36 @@ public class Box : PoolObject
         }
     }
 
+    public void DropFromDeadActor()
+    {
+        if (BoxEffectHelper == null)
+        {
+            BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
+        }
+
+        LastTouchActor = null;
+        State = States.DropingFromDeadPlayer;
+        transform.DOPause();
+        transform.parent = WorldManager.Instance.CurrentWorld.transform;
+        StaticCollider.enabled = false;
+        DynamicCollider.enabled = true;
+        Rigidbody = gameObject.GetComponent<Rigidbody>();
+        if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
+        Rigidbody.mass = FinalWeight;
+        Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+        Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
+        Rigidbody.drag = 0;
+        Rigidbody.angularDrag = 0;
+        Rigidbody.useGravity = true;
+        Rigidbody.velocity = Vector3.up * 10f;
+        Rigidbody.angularVelocity = Vector3.zero;
+        Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+    }
+
     void FixedUpdate()
     {
-        if ((State == States.BeingKicked || State == States.Flying) && Rigidbody && Rigidbody.velocity.magnitude < 1f)
+        if ((State == States.BeingKicked || State == States.Flying || State == States.DropingFromDeadPlayer) && Rigidbody && Rigidbody.velocity.magnitude < 1f)
         {
             DestroyImmediate(Rigidbody);
             StaticCollider.enabled = true;
@@ -486,13 +537,14 @@ public class Box : PoolObject
     [ValueDropdown("GetAllBoxTypeNames")]
     private string ReplaceBoxTypeName;
 
+#endif
+
     private IEnumerable<string> GetAllBoxTypeNames()
     {
         ConfigManager.LoadAllConfigs();
         List<string> res = ConfigManager.BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
         return res;
     }
-#endif
 }
 
 [Flags]

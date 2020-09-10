@@ -52,17 +52,22 @@ public class WorldModule : PoolObject
                     byte boxTypeIndex = worldModuleData.BoxMatrix[x, y, z];
                     if (boxTypeIndex != 0)
                     {
-                        Box box = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);
-                        string boxName = ConfigManager.GetBoxTypeName(boxTypeIndex);
-                        box.BoxTypeIndex = boxTypeIndex;
-                        GridPos3D gp = new GridPos3D(x, y, z);
-                        box.Initialize(gp, this, 0, !IsAccessible, false);
-                        box.name = $"{boxName}_{gp}";
-                        BoxMatrix[x, y, z] = box;
+                        GenerateBox(boxTypeIndex, x, y, z);
                     }
                 }
             }
         }
+    }
+
+    public void GenerateBox(byte boxTypeIndex, int x, int y, int z)
+    {
+        Box box = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);
+        string boxName = ConfigManager.GetBoxTypeName(boxTypeIndex);
+        box.BoxTypeIndex = boxTypeIndex;
+        GridPos3D gp = new GridPos3D(x, y, z);
+        box.Initialize(gp, this, 0, !IsAccessible, false);
+        box.name = $"{boxName}_{gp}";
+        BoxMatrix[x, y, z] = box;
     }
 
     public bool IsAccessible => !WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.DeadZone)
