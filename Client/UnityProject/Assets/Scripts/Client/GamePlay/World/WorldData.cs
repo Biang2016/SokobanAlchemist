@@ -12,7 +12,7 @@ public class WorldData : IClone<WorldData>
     /// <summary>
     /// 世界制作规范，世界最大范围为16x16x8个模组
     /// </summary>
-    public byte[,,] ModuleMatrix = new byte[World.WORLD_SIZE, World.WORLD_SIZE, World.WORLD_HEIGHT];
+    public byte[,,] ModuleMatrix = new byte[World.WORLD_SIZE, World.WORLD_HEIGHT, World.WORLD_SIZE];
 
     public WorldActorData WorldActorData = new WorldActorData();
     public WorldCameraPOIData WorldCameraPOIData = new WorldCameraPOIData();

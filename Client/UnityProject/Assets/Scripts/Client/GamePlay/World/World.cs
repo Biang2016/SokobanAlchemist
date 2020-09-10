@@ -13,9 +13,11 @@ public class World : PoolObject
     [HideInInspector]
     public WorldModule[,,] WorldModuleMatrix = new WorldModule[WORLD_SIZE, WORLD_HEIGHT, WORLD_SIZE];
 
-    public bool[,,] WorldDeadZoneTriggerMatrix = new bool[WORLD_SIZE, WORLD_HEIGHT, WORLD_SIZE];
+    public WorldModule[,,] DeadZoneWorldModuleMatrix = new WorldModule[WORLD_SIZE + 2, WORLD_HEIGHT + 2, WORLD_SIZE + 2];
 
     private List<WorldCameraPOI> POIs = new List<WorldCameraPOI>();
+
+    public Transform DeadZoneModuleRoot;
 
     public void Initialize(WorldData worldData)
     {
@@ -29,17 +31,105 @@ public class World : PoolObject
                     byte worldModuleTypeIndex = worldData.ModuleMatrix[x, y, z];
                     if (worldModuleTypeIndex != 0)
                     {
-                        WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(transform);
-                        WorldModuleData data = ConfigManager.GetWorldModuleDataConfig(worldModuleTypeIndex);
-                        wm.name = $"WM_{data.WorldModuleTypeName}({x}, {y}, {z})";
-                        WorldModuleMatrix[x, y, z] = wm;
-                        GridPos3D gp = new GridPos3D(x, y, z);
-                        GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);
-                        wm.Initialize(data, gp, this);
+                        GenerateWorldModule(worldModuleTypeIndex, x, y, z);
                     }
                 }
             }
         }
+
+        #region DeadZoneWorldModules
+
+        for (int x = 0; x < worldData.ModuleMatrix.GetLength(0); x++)
+        {
+            for (int y = 0; y < worldData.ModuleMatrix.GetLength(1); y++)
+            {
+                GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, -1);
+                GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, worldData.ModuleMatrix.GetLength(2));
+            }
+        }
+
+        for (int x = 0; x < worldData.ModuleMatrix.GetLength(0); x++)
+        {
+            for (int z = 0; z < worldData.ModuleMatrix.GetLength(2); z++)
+            {
+                GenerateWorldModule(WorldManager.DeadZoneIndex, x, -1, z);
+                GenerateWorldModule(WorldManager.DeadZoneIndex, x, worldData.ModuleMatrix.GetLength(1), z);
+            }
+        }
+
+        for (int y = 0; y < worldData.ModuleMatrix.GetLength(1); y++)
+        {
+            for (int z = 0; z < worldData.ModuleMatrix.GetLength(2); z++)
+            {
+                GenerateWorldModule(WorldManager.DeadZoneIndex, -1, y, z);
+                GenerateWorldModule(WorldManager.DeadZoneIndex, worldData.ModuleMatrix.GetLength(0), y, z);
+            }
+        }
+
+        for (int x = 0; x < worldData.ModuleMatrix.GetLength(0); x++)
+        {
+            for (int y = 0; y < worldData.ModuleMatrix.GetLength(1); y++)
+            {
+                for (int z = 1; z < worldData.ModuleMatrix.GetLength(2); z++)
+                {
+                    byte index = worldData.ModuleMatrix[x, y, z];
+                    byte index_before = worldData.ModuleMatrix[x, y, z - 1];
+                    if (index == 0 && index_before != 0)
+                    {
+                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, z);
+                    }
+
+                    if (index != 0 && index_before == 0)
+                    {
+                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, z - 1);
+                    }
+                }
+            }
+        }
+
+        for (int x = 0; x < worldData.ModuleMatrix.GetLength(0); x++)
+        {
+            for (int z = 0; z < worldData.ModuleMatrix.GetLength(2); z++)
+            {
+                for (int y = 1; y < worldData.ModuleMatrix.GetLength(1); y++)
+                {
+                    byte index = worldData.ModuleMatrix[x, y, z];
+                    byte index_before = worldData.ModuleMatrix[x, y - 1, z];
+                    if (index == 0 && index_before != 0)
+                    {
+                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, z);
+                    }
+
+                    if (index != 0 && index_before == 0)
+                    {
+                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, y - 1, z);
+                    }
+                }
+            }
+        }
+
+        for (int y = 0; y < worldData.ModuleMatrix.GetLength(1); y++)
+        {
+            for (int z = 0; z < worldData.ModuleMatrix.GetLength(2); z++)
+            {
+                for (int x = 1; x < worldData.ModuleMatrix.GetLength(0); x++)
+                {
+                    byte index = worldData.ModuleMatrix[x, y, z];
+                    byte index_before = worldData.ModuleMatrix[x - 1, y, z];
+                    if (index == 0 && index_before != 0)
+                    {
+                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, z);
+                    }
+
+                    if (index != 0 && index_before == 0)
+                    {
+                        GenerateWorldModule(WorldManager.DeadZoneIndex, x - 1, y, z);
+                    }
+                }
+            }
+        }
+
+        #endregion
 
         foreach (GridPos3D gp in WorldManager.Instance.CurrentWorld.WorldData.WorldCameraPOIData.POIs)
         {
@@ -48,6 +138,27 @@ public class World : PoolObject
             POIs.Add(poi);
             ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnWorldCameraPOILoaded, poi);
         }
+    }
+
+    private void GenerateWorldModule(byte worldModuleTypeIndex, int x, int y, int z)
+    {
+        bool isDeadModule = worldModuleTypeIndex == WorldManager.DeadZoneIndex;
+        if (isDeadModule && DeadZoneWorldModuleMatrix[x + 1, y + 1, z + 1] != null) return;
+        WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(isDeadModule ? DeadZoneModuleRoot : transform);
+        WorldModuleData data = ConfigManager.GetWorldModuleDataConfig(worldModuleTypeIndex);
+        wm.name = $"WM_{data.WorldModuleTypeName}({x}, {y}, {z})";
+        if (isDeadModule)
+        {
+            DeadZoneWorldModuleMatrix[x + 1, y + 1, z + 1] = wm;
+        }
+        else
+        {
+            WorldModuleMatrix[x, y, z] = wm;
+        }
+
+        GridPos3D gp = new GridPos3D(x, y, z);
+        GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);
+        wm.Initialize(data, gp, this);
     }
 
     #region MoveBox Calculators
@@ -69,7 +180,7 @@ public class World : PoolObject
 
     public WorldModule GetModuleByGridPosition(GridPos3D gp)
     {
-        GridPos3D gp_module = new GridPos3D(gp.x / WorldModule.MODULE_SIZE, gp.y / WorldModule.MODULE_SIZE, gp.z / WorldModule.MODULE_SIZE);
+        GridPos3D gp_module = new GridPos3D(Mathf.FloorToInt((float) gp.x / WorldModule.MODULE_SIZE), Mathf.FloorToInt((float) gp.y / WorldModule.MODULE_SIZE), Mathf.FloorToInt((float) gp.z / WorldModule.MODULE_SIZE));
         if (gp_module.x >= 0 && gp_module.x < WORLD_SIZE && gp_module.y >= 0 && gp_module.y < WORLD_HEIGHT && gp_module.z >= 0 && gp_module.z < WORLD_SIZE)
         {
             WorldModule module = WorldModuleMatrix[gp_module.x, gp_module.y, gp_module.z];

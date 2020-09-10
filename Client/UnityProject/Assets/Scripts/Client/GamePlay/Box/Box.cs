@@ -263,9 +263,10 @@ public class Box : PoolObject
 
             Rigidbody.drag = Dynamic_Drag * ConfigManager.BoxKickDragFactor_Cheat;
             Rigidbody.angularDrag = 0;
+            Rigidbody.useGravity = true;
             Rigidbody.velocity = direction.normalized * 1.1f;
             Rigidbody.angularVelocity = Vector3.zero;
-            Rigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+            Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             if (direction.x.Equals(0)) Rigidbody.constraints |= RigidbodyConstraints.FreezePositionX;
             if (direction.z.Equals(0)) Rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
             Rigidbody.AddForce(direction.normalized * force);
@@ -394,37 +395,37 @@ public class Box : PoolObject
                 Box box = collision.gameObject.GetComponentInParent<Box>();
                 if (box && !box.BoxFeature.HasFlag(BoxFeature.IsBorder))
                 {
-                    if (!box.BoxFeature.HasFlag(BoxFeature.IsBorder))
-                    {
-                        Rigidbody.drag = Throw_Drag * ConfigManager.BoxThrowDragFactor_Cheat;
-                    }
+                    Rigidbody.drag = Throw_Drag * ConfigManager.BoxThrowDragFactor_Cheat;
                 }
             }
         }
 
         if (State == States.BeingKicked)
         {
-            // Destroy AOE Damage
-            if (!WorldManager.Instance.CurrentWorld.WorldData.WorldFeature.HasFlag(WorldFeature.PlayerImmune))
+            if (collision.gameObject.layer != LayerManager.Instance.Layer_Ground)
             {
-                Collider[] colliders = Physics.OverlapSphere(transform.position, DestroyDamageRadius_Kick, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
-                HashSet<Actor> damagedActors = new HashSet<Actor>();
-                foreach (Collider collider in colliders)
+                // Destroy AOE Damage
+                if (!WorldManager.Instance.CurrentWorld.WorldData.WorldFeature.HasFlag(WorldFeature.PlayerImmune))
                 {
-                    Actor actor = collider.GetComponentInParent<Actor>();
-                    if (actor && actor != LastTouchActor && actor.IsOpponent(LastTouchActor) && actor.ActorBattleHelper && !damagedActors.Contains(actor))
+                    Collider[] colliders = Physics.OverlapSphere(transform.position, DestroyDamageRadius_Kick, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
+                    HashSet<Actor> damagedActors = new HashSet<Actor>();
+                    foreach (Collider collider in colliders)
                     {
-                        actor.ActorBattleHelper.Damage(DestroyDamage_Kick);
-                        damagedActors.Add(actor);
+                        Actor actor = collider.GetComponentInParent<Actor>();
+                        if (actor && actor != LastTouchActor && actor.IsOpponent(LastTouchActor) && actor.ActorBattleHelper && !damagedActors.Contains(actor))
+                        {
+                            actor.ActorBattleHelper.Damage(DestroyDamage_Kick);
+                            damagedActors.Add(actor);
+                        }
                     }
                 }
-            }
 
-            // FX and Recycle
-            PlayDestroyFX();
-            if (BoxFeature.HasFlag(BoxFeature.KickHitBreakable))
-            {
-                PoolRecycle();
+                // FX and Recycle
+                PlayDestroyFX();
+                if (BoxFeature.HasFlag(BoxFeature.KickHitBreakable))
+                {
+                    PoolRecycle();
+                }
             }
         }
     }

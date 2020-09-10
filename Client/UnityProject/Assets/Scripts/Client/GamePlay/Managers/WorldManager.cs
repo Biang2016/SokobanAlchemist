@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WorldManager : TSingletonBaseManager<WorldManager>
 {
+    public static byte DeadZoneIndex;
+
     public Transform WorldRoot;
     public World CurrentWorld;
 
@@ -13,6 +15,7 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
 
     public override void Awake()
     {
+        DeadZoneIndex = ConfigManager.GetWorldModuleTypeIndex("WorldModule_DeadZone");
         WorldRoot = new GameObject("WorldRoot").transform;
     }
 

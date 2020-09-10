@@ -97,7 +97,7 @@ public class ActorAIAgent
         float dist = (Actor.CurGP.ToVector3() - currentDestination.ToVector3()).magnitude;
         if (dist <= KeepDistanceMax + (KeepDistanceMax.Equals(0) && LastNodeOccupied ? 1 : 0) && dist >= KeepDistanceMin)
         {
-            Actor.CurForward = (dest - Actor.CurGP).ToVector3().normalized;
+            Actor.CurForward = (dest.ToVector3() - Actor.transform.position).normalized;
             ClearPathFinding();
             return SetDestinationRetCode.AlreadyArrived;
         }

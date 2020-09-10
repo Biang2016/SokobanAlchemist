@@ -1,4 +1,5 @@
-﻿using BiangStudio.GameDataFormat.Grid;
+﻿using BiangStudio;
+using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -93,11 +94,8 @@ public class PlayerActor : Actor
                 if (PlayerNumber == PlayerNumber.Player1)
                 {
                     Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(ControlManager.Instance.Battle_MousePosition);
-                    if (Physics.Raycast(ray, out RaycastHit hit, 100f, LayerManager.Instance.LayerMask_Ground))
-                    {
-                        CurThrowPointOffset = hit.point - transform.position;
-                        CurThrowPointOffset.y = 0;
-                    }
+                    Vector3 intersectPoint= CommonUtils.GetIntersectWithLineAndPlane(ray.origin, ray.direction, Vector3.up, transform.position);
+                    CurThrowPointOffset = intersectPoint - transform.position;
                 }
                 else if (PlayerNumber == PlayerNumber.Player2)
                 {

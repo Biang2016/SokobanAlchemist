@@ -15,8 +15,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 {
     public static bool ShowEnemyPathFinding = false;
 
-    public static float BoxStaticBounceFactor_Cheat = 1f;
-    public static float BoxDynamicBounceFactor_Cheat = 1f;
     public static float BoxThrowDragFactor_Cheat = 10f;
     public static float BoxKickDragFactor_Cheat = 1f;
     public static float BoxWeightFactor_Cheat = 1f;
@@ -129,7 +127,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static string WorldModuleDataConfigFolder_Relative = "WorldModule";
 
     public static string WorldDataConfigFolder_Build = Application.streamingAssetsPath + "/Configs/" + WorldDataConfigFolder_Relative + "/";
-    public static string WorldModuleDataConfigFolder_Build = Application.streamingAssetsPath + "/Configs/" + WorldModuleDataConfigFolder_Relative + "/";
+    public static string WorldModuleDataConfigFolder_Build = Application.streamingAssetsPath + "/Configs/" + WorldModuleDataConfigFolder_Relative + "s/";
 
     public override void Awake()
     {
