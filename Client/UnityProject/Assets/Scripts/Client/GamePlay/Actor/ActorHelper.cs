@@ -2,16 +2,18 @@
 
 public class ActorHelper : MonoBehaviour
 {
-    internal Actor Actor;
+    private Actor actor;
 
-    protected virtual void Awake()
+    internal Actor Actor
     {
-        Actor = GetComponentInParent<Actor>();
+        get
+        {
+            if (actor == null) actor = GetComponentInParent<Actor>();
+            return actor;
+        }
     }
-
 
     public virtual void OnRecycled()
     {
-
     }
 }

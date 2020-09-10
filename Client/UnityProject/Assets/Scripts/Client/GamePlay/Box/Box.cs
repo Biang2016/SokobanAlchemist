@@ -92,14 +92,15 @@ public class Box : PoolObject
     [AssetsOnly]
     [ShowIf("Liftable")]
     [BoxGroup("扔箱子属性")]
-    [LabelText("扔毁灭伤害半径")]
+    [LabelText("扔伤害半径")]
     [SerializeField]
     private float DestroyDamageRadius_Throw = 1.5f;
 
     [AssetsOnly]
     [ShowIf("Liftable")]
     [BoxGroup("扔箱子属性")]
-    [LabelText("扔毁灭伤害")]
+    [LabelText("扔伤害")]
+    [GUIColor(1.0f, 0, 1.0f)]
     [SerializeField]
     private float DestroyDamage_Throw = 3f;
 
@@ -112,22 +113,23 @@ public class Box : PoolObject
     [AssetsOnly]
     [ShowIf("Kickable")]
     [BoxGroup("踢箱子属性")]
-    [LabelText("摩阻力")]
-    public float Dynamic_Drag = 0.5f;
-
-    [AssetsOnly]
-    [ShowIf("Kickable")]
-    [BoxGroup("踢箱子属性")]
-    [LabelText("踢毁灭伤害半径")]
+    [LabelText("踢伤害半径")]
     [SerializeField]
     private float DestroyDamageRadius_Kick = 0.5f;
 
     [AssetsOnly]
     [ShowIf("Kickable")]
     [BoxGroup("踢箱子属性")]
-    [LabelText("踢毁灭伤害")]
+    [LabelText("踢伤害")]
+    [GUIColor(1.0f, 0, 1.0f)]
     [SerializeField]
     private float DestroyDamage_Kick = 3f;
+
+    [AssetsOnly]
+    [ShowIf("Kickable")]
+    [BoxGroup("踢箱子属性")]
+    [LabelText("摩阻力")]
+    public float Dynamic_Drag = 0.5f;
 
     private GridPos3D lastGP;
 
@@ -240,7 +242,7 @@ public class Box : PoolObject
         }
     }
 
-    public void Kick(Vector3 direction, float force, Actor actor)
+    public void Kick(Vector3 direction, float velocity, Actor actor)
     {
         if (State == States.BeingPushed || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.PushingCanceling)
         {
@@ -264,12 +266,11 @@ public class Box : PoolObject
             Rigidbody.drag = Dynamic_Drag * ConfigManager.BoxKickDragFactor_Cheat;
             Rigidbody.angularDrag = 0;
             Rigidbody.useGravity = true;
-            Rigidbody.velocity = direction.normalized * 1.1f;
             Rigidbody.angularVelocity = Vector3.zero;
             Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             if (direction.x.Equals(0)) Rigidbody.constraints |= RigidbodyConstraints.FreezePositionX;
             if (direction.z.Equals(0)) Rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
-            Rigidbody.AddForce(direction.normalized * force);
+            Rigidbody.velocity = direction.normalized * velocity;
             transform.position = transform.position.ToGridPos3D().ToVector3();
         }
     }
@@ -357,7 +358,7 @@ public class Box : PoolObject
 
     public bool KickOrLiftable => Kickable || Liftable;
 
-    public bool Moveable => Pushable || Kickable || Liftable;
+    public bool Interactable => Pushable || Kickable || Liftable;
 
     public bool Droppable => BoxFeature.HasFlag(BoxFeature.Droppable);
 
@@ -378,6 +379,7 @@ public class Box : PoolObject
                     Actor actor = collider.GetComponentInParent<Actor>();
                     if (actor && actor != LastTouchActor && actor.IsOpponent(LastTouchActor) && actor.ActorBattleHelper && !damagedActors.Contains(actor))
                     {
+                        actor.ActorBattleHelper.LastAttackBox = this;
                         actor.ActorBattleHelper.Damage(DestroyDamage_Throw);
                         damagedActors.Add(actor);
                     }
@@ -414,6 +416,7 @@ public class Box : PoolObject
                         Actor actor = collider.GetComponentInParent<Actor>();
                         if (actor && actor != LastTouchActor && actor.IsOpponent(LastTouchActor) && actor.ActorBattleHelper && !damagedActors.Contains(actor))
                         {
+                            actor.ActorBattleHelper.LastAttackBox = this;
                             actor.ActorBattleHelper.Damage(DestroyDamage_Kick);
                             damagedActors.Add(actor);
                         }

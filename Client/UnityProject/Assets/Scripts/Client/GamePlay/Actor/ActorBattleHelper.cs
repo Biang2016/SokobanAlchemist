@@ -3,6 +3,8 @@ using UnityEngine.Events;
 
 public class ActorBattleHelper : ActorHelper
 {
+    internal Box LastAttackBox;
+
     public override void OnRecycled()
     {
         totalLife = 0;
@@ -130,6 +132,19 @@ public class ActorBattleHelper : ActorHelper
         }
         else
         {
+            if (LastAttackBox != null && LastAttackBox.LastTouchActor != null)
+            {
+                if (LastAttackBox.LastTouchActor.IsPlayer)
+                {
+                    Actor player = LastAttackBox.LastTouchActor;
+                    byte b = ConfigManager.GetBoxTypeIndex(Actor.DieDropKickAbilityName);
+                    player.ActorSkillHelper.KickableBoxSet.Remove(player.ActorSkillHelper.CurrentGetKickAbility);
+                    player.ActorSkillHelper.CurrentGetKickAbility = b;
+                    player.ActorSkillHelper.KickableBoxSet.Add(b);
+                    player.ActorSkinHelper.SwitchSkin(Actor.DieDropMaterial);
+                }
+            }
+
             ProjectileHit hit = ProjectileManager.Instance.PlayProjectileHit(Actor.DieFX, transform.position);
             if (hit) hit.transform.localScale = Vector3.one * Actor.DieFXScale;
             Actor.PoolRecycle();

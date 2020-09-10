@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class ActorSkinHelper : ActorHelper
 {
+    public Renderer MainSwitchSkin;
     public List<SkinConfig> SkinConfigs = new List<SkinConfig>();
 
     [Serializable]
@@ -20,5 +20,10 @@ public class ActorSkinHelper : ActorHelper
         {
             sc.Renderer.material = sc.Materials[(int) playerNumber];
         }
+    }
+
+    public void SwitchSkin(Material mat)
+    {
+        MainSwitchSkin.material = mat;
     }
 }

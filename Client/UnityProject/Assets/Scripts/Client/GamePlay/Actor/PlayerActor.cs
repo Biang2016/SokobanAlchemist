@@ -1,4 +1,5 @@
-﻿using BiangStudio;
+﻿using System;
+using BiangStudio;
 using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -135,6 +136,21 @@ public class PlayerActor : Actor
         }
 
         base.FixedUpdate();
+    }
+
+    [HideInPlayMode]
+    [HideInPrefabAssets]
+    [ShowInInspector]
+    [NonSerialized]
+    [BoxGroup("一键换装")]
+    [LabelText("一键换装角色编号")]
+    private PlayerNumber SwitchAvatarPlayerNumber;
+
+    [BoxGroup("一键换装")]
+    [Button("一键换装")]
+    private void SwitchAvatar()
+    {
+        ActorSkinHelper.Initialize(SwitchAvatarPlayerNumber);
     }
 }
 

@@ -3,7 +3,6 @@ using System.Linq;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
 using DG.Tweening;
-using NodeCanvas.BehaviourTrees;
 using NodeCanvas.Framework;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -11,12 +10,15 @@ using UnityEngine;
 public class Actor : PoolObject
 {
     public Rigidbody RigidBody;
-    public ActorPushHelper ActorPushHelper;
-    public ActorFaceHelper ActorFaceHelper;
-    public ActorSkinHelper ActorSkinHelper;
-    public ActorLaunchArcRendererHelper ActorLaunchArcRendererHelper;
-    public ActorBattleHelper ActorBattleHelper;
-    public Transform LiftBoxPivot;
+    public ActorCommonHelpers ActorCommonHelpers;
+
+    internal ActorPushHelper ActorPushHelper => ActorCommonHelpers.ActorPushHelper;
+    internal ActorFaceHelper ActorFaceHelper => ActorCommonHelpers.ActorFaceHelper;
+    internal ActorSkinHelper ActorSkinHelper => ActorCommonHelpers.ActorSkinHelper;
+    internal ActorLaunchArcRendererHelper ActorLaunchArcRendererHelper => ActorCommonHelpers.ActorLaunchArcRendererHelper;
+    internal ActorBattleHelper ActorBattleHelper => ActorCommonHelpers.ActorBattleHelper;
+    internal ActorSkillHelper ActorSkillHelper => ActorCommonHelpers.ActorSkillHelper;
+    internal Transform LiftBoxPivot => ActorCommonHelpers.LiftBoxPivot;
 
     internal GraphOwner GraphOwner;
     internal ActorAIAgent ActorAIAgent;
@@ -75,11 +77,13 @@ public class Actor : PoolObject
     private int TotalLife;
 
     [ShowInInspector]
+    [HideInEditorMode]
     [LabelText("剩余命数")]
     [BoxGroup("战斗状态")]
     public int Life => ActorBattleHelper ? ActorBattleHelper.Life : 0;
 
     [ShowInInspector]
+    [HideInEditorMode]
     [LabelText("剩余生命值")]
     [BoxGroup("战斗状态")]
     public int Health => ActorBattleHelper ? ActorBattleHelper.Health : 0;
@@ -92,15 +96,15 @@ public class Actor : PoolObject
     [LabelText("死亡特效尺寸")]
     public float DieFXScale = 1f;
 
-    [BoxGroup("配置")]
+    [BoxGroup("手感")]
     [LabelText("起步速度")]
     public float Accelerate = 10f;
 
-    [BoxGroup("配置")]
+    [BoxGroup("手感")]
     [LabelText("移动速度")]
     public float MoveSpeed = 10f;
 
-    [BoxGroup("配置")]
+    [BoxGroup("手感")]
     [LabelText("瞄准点移动速度")]
     public float ThrowAimMoveSpeed = 10f;
 
@@ -111,17 +115,39 @@ public class Actor : PoolObject
     public float ThrowRadius = 10f;
 
     [BoxGroup("配置")]
-    [LabelText("会踢箱子")]
-    public bool CanKickBox = true;
-
-    [BoxGroup("配置")]
     [LabelText("踢箱子力量")]
-    [ShowIf("CanKickBox")]
     public float KickForce = 5;
 
-    [BoxGroup("配置")]
-    [LabelText("会扔箱子")]
-    public bool CanThrowBox = true;
+    [BoxGroup("能力")]
+    [LabelText("推箱子类型")]
+    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    public List<string> PushableBoxList = new List<string>();
+
+    [BoxGroup("能力")]
+    [LabelText("踢箱子类型")]
+    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    public List<string> KickableBoxList = new List<string>();
+
+    [BoxGroup("能力")]
+    [LabelText("扔箱子类型")]
+    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    public List<string> LiftableBoxList = new List<string>();
+
+    [BoxGroup("死亡")]
+    [LabelText("死亡掉落皮肤")]
+    public Material DieDropMaterial;
+
+    [BoxGroup("死亡")]
+    [LabelText("死亡掉落踢技能")]
+    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    public string DieDropKickAbilityName;
+
+    private IEnumerable<string> GetAllBoxTypeNames()
+    {
+        ConfigManager.LoadAllConfigs();
+        List<string> res = ConfigManager.BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
+        return res;
+    }
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 
@@ -184,6 +210,7 @@ public class Actor : PoolObject
         ActorSkinHelper.OnRecycled();
         ActorLaunchArcRendererHelper.OnRecycled();
         ActorBattleHelper.OnRecycled();
+        ActorSkillHelper.OnRecycled();
         RigidBody.drag = 100f;
         RigidBody.velocity = Vector3.zero;
         RigidBody.angularVelocity = Vector3.zero;
@@ -202,6 +229,7 @@ public class Actor : PoolObject
 
         ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
         ActorBattleHelper.Initialize(TotalLife, MaxHealth);
+        ActorSkillHelper.Initialize();
     }
 
     public void Initialize()
@@ -243,9 +271,6 @@ public class Actor : PoolObject
             CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
         }
     }
-
-    private Tweener TransTweener_X;
-    private Tweener TransTweener_Z;
 
     protected virtual void MoveInternal()
     {
@@ -322,7 +347,7 @@ public class Actor : PoolObject
         if (Physics.Raycast(ray, out RaycastHit hit, 1.5f, LayerManager.Instance.LayerMask_Box, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Kickable)
+            if (box && box.Kickable && ActorSkillHelper.KickableBoxSet.Contains(box.BoxTypeIndex))
             {
                 box.Kick(CurForward, KickForce, this);
             }
@@ -336,7 +361,7 @@ public class Actor : PoolObject
         if (Physics.Raycast(ray, out RaycastHit hit, 1.3f, LayerManager.Instance.LayerMask_Box, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Liftable)
+            if (box && box.Liftable && ActorSkillHelper.LiftableBoxSet.Contains(box.BoxTypeIndex))
             {
                 if (box.BeingLift(this))
                 {
