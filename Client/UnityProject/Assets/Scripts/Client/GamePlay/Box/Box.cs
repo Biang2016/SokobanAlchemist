@@ -107,8 +107,15 @@ public class Box : PoolObject
     [AssetsOnly]
     [ShowIf("Liftable")]
     [BoxGroup("扔箱子属性")]
-    [LabelText("落地摩阻力")]
+    [LabelText("落地拖拽力")]
     public float Throw_Drag = 0.5f;
+
+    [AssetsOnly]
+    [ShowIf("Liftable")]
+    [BoxGroup("扔箱子属性")]
+    [LabelText("落地摩擦力")]
+    [Range(0, 1)]
+    public float Throw_Friction = 1;
 
     [ShowIf("Liftable")]
     [BoxGroup("扔箱子属性")]
@@ -271,6 +278,7 @@ public class Box : PoolObject
             transform.DOPause();
             StaticCollider.enabled = false;
             DynamicCollider.enabled = true;
+            DynamicCollider.material.dynamicFriction = 0f;
             Rigidbody = gameObject.GetComponent<Rigidbody>();
             if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
             Rigidbody.mass = FinalWeight;
@@ -337,6 +345,7 @@ public class Box : PoolObject
             transform.parent = WorldManager.Instance.CurrentWorld.transform;
             StaticCollider.enabled = false;
             DynamicCollider.enabled = true;
+            DynamicCollider.material.dynamicFriction = Throw_Friction;
             Rigidbody = gameObject.GetComponent<Rigidbody>();
             if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
             Rigidbody.mass = FinalWeight;

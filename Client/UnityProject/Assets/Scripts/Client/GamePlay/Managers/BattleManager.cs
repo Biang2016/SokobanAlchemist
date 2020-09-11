@@ -10,6 +10,9 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
     public Messenger BattleMessenger = new Messenger();
 
     internal PlayerActor[] MainPlayers = new PlayerActor[2];
+    internal PlayerActor Player1 => MainPlayers[(int) PlayerNumber.Player1];
+    internal PlayerActor Player2 => MainPlayers[(int) PlayerNumber.Player2];
+
     internal List<EnemyActor> Enemies = new List<EnemyActor>();
 
     public Transform ActorContainerRoot;

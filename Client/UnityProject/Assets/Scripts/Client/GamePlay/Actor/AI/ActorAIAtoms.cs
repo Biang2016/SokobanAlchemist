@@ -22,7 +22,7 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
-            Actor player = BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player1];
+            Actor player = BattleManager.Instance.Player1;
             ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.CurGP, KeepDistanceMin.value, KeepDistanceMax.value, true);
             switch (retCode)
             {
@@ -280,7 +280,7 @@ public static class ActorAIAtoms
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ThrowState != Actor.ThrowStates.Lifting && Actor.CurrentLiftBox == null) return Status.Failure;
             Actor.ThrowCharge();
-            Actor.CurThrowPointOffset = BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player1].transform.position - Actor.transform.position;
+            Actor.CurThrowPointOffset = BattleManager.Instance.Player1.transform.position - Actor.transform.position;
             Actor.Throw();
             return Status.Success;
         }
@@ -355,7 +355,7 @@ public static class ActorAIAtoms
         protected override bool OnCheck()
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
-            return (BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player1].transform.position - Actor.transform.position).magnitude <= RangeRadius.value;
+            return (BattleManager.Instance.Player1.transform.position - Actor.transform.position).magnitude <= RangeRadius.value;
         }
     }
 }

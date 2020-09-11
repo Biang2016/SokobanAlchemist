@@ -140,8 +140,8 @@ public class ActorPathFinding
                     }
                 }
 
-                if (BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player1].CurGP == gp) isActorOnTheWay = true;
-                if (BattleManager.Instance.MainPlayers[(int) PlayerNumber.Player2].CurGP == gp) isActorOnTheWay = true;
+                if (BattleManager.Instance.Player1.CurGP == gp) isActorOnTheWay = true;
+                if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.CurGP == gp) isActorOnTheWay = true;
                 if (!isActorOnTheWay)
                 {
                     Node leftNode = new Node {GridPos3D = gp, ParentNode = node};
