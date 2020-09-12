@@ -49,6 +49,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     public Dictionary<ProjectileType, GameObjectPool> ProjectileDict = new Dictionary<ProjectileType, GameObjectPool>();
     public Dictionary<ProjectileType, GameObjectPool> ProjectileHitDict = new Dictionary<ProjectileType, GameObjectPool>();
     public Dictionary<ProjectileType, GameObjectPool> ProjectileFlashDict = new Dictionary<ProjectileType, GameObjectPool>();
+    public Dictionary<BattleTipPrefabType, GameObjectPool> BattleUIDict = new Dictionary<BattleTipPrefabType, GameObjectPool>();
 
     private Transform Root;
 
@@ -61,14 +62,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
 
     public override void Awake()
     {
-        PoolDict.Clear();
-        BoxDict.Clear();
-        EnemyDict.Clear();
-        FXDict.Clear();
-        MarkerDict.Clear();
-        ProjectileDict.Clear();
-        ProjectileHitDict.Clear();
-        ProjectileFlashDict.Clear();
+        IsInit = true;
         foreach (KeyValuePair<PrefabNames, int> kv in PoolConfigs)
         {
             string prefabName = kv.Key.ToString();
@@ -188,6 +182,21 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 GameObjectPool pool = go.AddComponent<GameObjectPool>();
                 pool.transform.SetParent(Root);
                 ProjectileFlashDict.Add(projectileType, pool);
+                PoolObject po = go_Prefab.GetComponent<PoolObject>();
+                pool.Initiate(po, 20);
+            }
+        }
+
+        foreach (string s in Enum.GetNames(typeof(BattleTipPrefabType)))
+        {
+            BattleTipPrefabType bt_Type = (BattleTipPrefabType) Enum.Parse(typeof(BattleTipPrefabType), s);
+            GameObject go_Prefab = PrefabManager.Instance.GetPrefab(s);
+            if (go_Prefab)
+            {
+                GameObject go = new GameObject("Pool_" + s);
+                GameObjectPool pool = go.AddComponent<GameObjectPool>();
+                pool.transform.SetParent(Root);
+                BattleUIDict.Add(bt_Type, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
                 pool.Initiate(po, 20);
             }

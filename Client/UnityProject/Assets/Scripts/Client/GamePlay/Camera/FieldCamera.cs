@@ -102,6 +102,7 @@ public class FieldCamera : MonoBehaviour
                 _distance_Level = Mathf.Clamp(value, 0, DistanceLevels.Length - 1);
                 Distance = DistanceLevels[_distance_Level];
                 Camera.orthographicSize = OrthographicSizeLevels[_distance_Level];
+                BattleUICamera.orthographicSize = OrthographicSizeLevels[_distance_Level];
             }
         }
     }

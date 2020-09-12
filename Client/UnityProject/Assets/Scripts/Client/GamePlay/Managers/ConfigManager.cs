@@ -13,6 +13,12 @@ using UnityEditor;
 
 public class ConfigManager : TSingletonBaseManager<ConfigManager>
 {
+    public enum GUID_Separator
+    {
+        Actor = 2000,
+        Box = 3000,
+    }
+
     public static bool ShowEnemyPathFinding = false;
 
     public static float BoxThrowDragFactor_Cheat = 10f;

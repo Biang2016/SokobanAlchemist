@@ -9,8 +9,24 @@ using UnityEngine;
 
 public class Actor : PoolObject
 {
+    #region GUID
+
+    [ReadOnly]
+    [HideInEditorMode]
+    public uint GUID;
+
+    private static uint guidGenerator = (uint) ConfigManager.GUID_Separator.Actor;
+
+    private uint GetGUID()
+    {
+        return guidGenerator++;
+    }
+
+    #endregion
+
     public Rigidbody RigidBody;
     public ActorCommonHelpers ActorCommonHelpers;
+    public GameObject ActorMoveColliderRoot;
 
     internal ActorPushHelper ActorPushHelper => ActorCommonHelpers.ActorPushHelper;
     internal ActorFaceHelper ActorFaceHelper => ActorCommonHelpers.ActorFaceHelper;
@@ -210,7 +226,15 @@ public class Actor : PoolObject
         RigidBody.drag = 100f;
         RigidBody.velocity = Vector3.zero;
         RigidBody.angularVelocity = Vector3.zero;
+        ActorMoveColliderRoot.SetActive(false);
+        SetSmoothMovesEnable(false);
         base.OnRecycled();
+    }
+
+    public override void OnUsed()
+    {
+        base.OnUsed();
+        ActorMoveColliderRoot.SetActive(true);
     }
 
     void Awake()
@@ -218,21 +242,27 @@ public class Actor : PoolObject
         ActorAIAgent = new ActorAIAgent(this);
         GraphOwner = GetComponent<GraphOwner>();
         SmoothMoves = GetComponentsInChildren<SmoothMove>().ToList();
+        SetSmoothMovesEnable(false);
+    }
+
+    private void SetSmoothMovesEnable(bool enable)
+    {
         foreach (SmoothMove sm in SmoothMoves)
         {
-            sm.enabled = false;
+            sm.enabled = enable;
         }
-
-        ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
-        ActorBattleHelper.Initialize(TotalLife, MaxHealth);
-        ActorSkillHelper.Initialize();
     }
 
     public void Initialize()
     {
+        ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
+        ActorBattleHelper.Initialize(TotalLife, MaxHealth);
+        ActorSkillHelper.Initialize();
+
         CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
         LastGP = CurGP;
         ActorAIAgent.Start();
+        GUID = GetGUID();
     }
 
     private void Update()
@@ -247,10 +277,7 @@ public class Actor : PoolObject
     {
         if (actor == this)
         {
-            foreach (SmoothMove sm in SmoothMoves)
-            {
-                sm.enabled = true;
-            }
+            SetSmoothMovesEnable(true);
         }
     }
 
@@ -423,11 +450,13 @@ public class Actor : PoolObject
     #region Camp
 
     public bool IsPlayer => Camp == Camp.Player;
+    public bool IsPlayerOrFriend => Camp == Camp.Player || Camp == Camp.Friend;
+    public bool IsEnemy => Camp == Camp.Enemy;
 
     public bool IsOpponent(Actor target)
     {
-        if ((Camp == Camp.Player || Camp == Camp.Friend) && target.Camp == Camp.Enemy) return true;
-        if ((target.Camp == Camp.Player || target.Camp == Camp.Friend) && Camp == Camp.Enemy) return true;
+        if ((IsPlayerOrFriend) && target.IsEnemy) return true;
+        if ((target.IsPlayerOrFriend) && IsEnemy) return true;
         return false;
     }
 

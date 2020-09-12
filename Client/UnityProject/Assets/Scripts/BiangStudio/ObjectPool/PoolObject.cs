@@ -18,6 +18,7 @@ namespace BiangStudio.ObjectPool
 
         public void PoolRecycle()
         {
+            if (IsRecycled) return;
             OnRecycled();
             Pool.RecycleGameObject(this);
             IsRecycled = true;

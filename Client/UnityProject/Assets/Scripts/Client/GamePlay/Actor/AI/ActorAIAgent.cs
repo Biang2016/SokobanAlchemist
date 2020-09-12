@@ -47,6 +47,7 @@ public class ActorAIAgent
     public void Start()
     {
         isStop = false;
+        Actor.GraphOwner?.StartBehaviour();
     }
 
     public void Update()

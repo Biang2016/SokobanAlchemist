@@ -11,6 +11,7 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
     public int LayerMask_Box;
     public int LayerMask_Ground;
     public int LayerMask_ItemDropped;
+    public int LayerMask_BattleTips;
 
     public int Layer_UI;
     public int Layer_Player;
@@ -20,6 +21,7 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
     public int Layer_Box;
     public int Layer_Ground;
     public int Layer_ItemDropped;
+    public int Layer_BattleTips;
 
     public override void Awake()
     {
@@ -31,6 +33,7 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
         LayerMask_Box = LayerMask.GetMask("Box");
         LayerMask_Ground = LayerMask.GetMask("Ground");
         LayerMask_ItemDropped = LayerMask.GetMask("ItemDropped");
+        LayerMask_BattleTips = LayerMask.GetMask("BattleTips");
 
         Layer_UI = LayerMask.NameToLayer("UI");
         Layer_Player = LayerMask.NameToLayer("Player");
@@ -40,5 +43,6 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
         Layer_Box = LayerMask.NameToLayer("Box");
         Layer_Ground = LayerMask.NameToLayer("Ground");
         Layer_ItemDropped = LayerMask.NameToLayer("ItemDropped");
+        Layer_BattleTips = LayerMask.NameToLayer("BattleTips");
     }
 }

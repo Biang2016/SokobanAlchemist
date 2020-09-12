@@ -46,4 +46,7 @@ public enum WorldFeature
 
     [LabelText("玩家无敌")]
     PlayerImmune = 1 << 0,
+
+    [LabelText("PVP")]
+    PVP = 1 << 1,
 }

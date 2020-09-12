@@ -9,8 +9,21 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
     public Transform WorldRoot;
     public World CurrentWorld;
 
+    /// <summary>
+    /// 不属于世界管辖范围内的Box
+    /// </summary>
+    public SortedDictionary<uint, Box> OtherBoxDict = new SortedDictionary<uint, Box>();
+
     public void Clear()
     {
+        foreach (KeyValuePair<uint, Box> kv in OtherBoxDict)
+        {
+            kv.Value.PoolRecycle();
+        }
+
+        OtherBoxDict.Clear();
+        CurrentWorld?.Clear();
+        CurrentWorld = null;
     }
 
     public override void Awake()
@@ -41,5 +54,11 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
 
     public override void Update(float deltaTime)
     {
+    }
+
+    public override void ShutDown()
+    {
+        base.ShutDown();
+        Clear();
     }
 }

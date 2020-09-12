@@ -21,5 +21,10 @@
         public virtual void FixedUpdate(float deltaTime)
         {
         }
+
+        public virtual void ShutDown()
+        {
+
+        }
     }
 }

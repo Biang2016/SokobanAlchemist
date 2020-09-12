@@ -13,6 +13,21 @@ using UnityEditor;
 
 public class Box : PoolObject
 {
+    #region GUID
+
+    [ReadOnly]
+    [HideInEditorMode]
+    public uint GUID;
+
+    private static uint guidGenerator = (uint) ConfigManager.GUID_Separator.Box;
+
+    private uint GetGUID()
+    {
+        return guidGenerator++;
+    }
+
+    #endregion
+
     private BoxUnderWorldModuleDesignerClamper BoxUnderWorldModuleDesignerClamper;
     private GridSnapper GridSnapper;
     public Collider StaticCollider;
@@ -41,6 +56,9 @@ public class Box : PoolObject
         BoxEffectHelper?.PoolRecycle();
         BoxEffectHelper = null;
         transform.DOPause();
+        StaticCollider.enabled = false;
+        DynamicCollider.enabled = false;
+        damageTimes = 0;
         if (Rigidbody) Destroy(Rigidbody);
         if (LastTouchActor != null && LastTouchActor.CurrentLiftBox == this)
         {
@@ -130,6 +148,15 @@ public class Box : PoolObject
     [LabelText("举起箱子更换皮肤")]
     public Material DieDropMaterial;
 
+    [ShowIf("Liftable")]
+    [BoxGroup("扔箱子属性")]
+    [GUIColor(0, 1.0f, 0)]
+    [LabelText("最大伤害次数")]
+    [Range(1, 3)]
+    public int MaxDamageTimes = 1;
+
+    private int damageTimes;
+
     [AssetsOnly]
     [ShowIf("Kickable")]
     [BoxGroup("踢箱子属性")]
@@ -185,6 +212,7 @@ public class Box : PoolObject
         BoxUnderWorldModuleDesignerClamper = GetComponent<BoxUnderWorldModuleDesignerClamper>();
         BoxUnderWorldModuleDesignerClamper.enabled = !Application.isPlaying;
         GridSnapper.enabled = false;
+        GUID = GetGUID();
     }
 
     protected virtual void Start()
@@ -193,15 +221,25 @@ public class Box : PoolObject
 
     public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly, bool dropping)
     {
+        StaticCollider.enabled = true;
+        DynamicCollider.enabled = false;
         if (dropping)
         {
-            if (StaticCollider) StaticCollider.enabled = false;
-            if (DynamicCollider) DynamicCollider.enabled = false;
+            StaticCollider.enabled = false;
+            DynamicCollider.enabled = false;
         }
 
         ArtOnly = artOnly;
         StaticCollider.gameObject.SetActive(!artOnly);
         DynamicCollider.gameObject.SetActive(!artOnly);
+
+        if (BoxFeature.HasFlag(BoxFeature.IsGround))
+        {
+            StaticCollider.material.staticFriction = 0;
+            StaticCollider.material.dynamicFriction = 0;
+            DynamicCollider.material.staticFriction = 0;
+            DynamicCollider.material.dynamicFriction = 0;
+        }
 
         LastTouchActor = null;
         lastGP = GridPos3D;
@@ -217,8 +255,8 @@ public class Box : PoolObject
                 State = States.Static;
                 if (dropping)
                 {
-                    if (StaticCollider) StaticCollider.enabled = true;
-                    if (DynamicCollider) DynamicCollider.enabled = true;
+                    StaticCollider.enabled = true;
+                    DynamicCollider.enabled = true;
                 }
             });
             transform.DOLocalRotate(Vector3.zero, lerpTime);
@@ -231,8 +269,8 @@ public class Box : PoolObject
             State = States.Static;
             if (dropping)
             {
-                if (StaticCollider) StaticCollider.enabled = true;
-                if (DynamicCollider) DynamicCollider.enabled = true;
+                StaticCollider.enabled = true;
+                DynamicCollider.enabled = true;
             }
         }
 
@@ -272,6 +310,7 @@ public class Box : PoolObject
                 BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
             }
 
+            damageTimes = 0;
             LastTouchActor = actor;
             WorldManager.Instance.CurrentWorld.RemoveBox(this);
             State = States.BeingKicked;
@@ -287,9 +326,9 @@ public class Box : PoolObject
 
             Rigidbody.drag = Dynamic_Drag * ConfigManager.BoxKickDragFactor_Cheat;
             Rigidbody.angularDrag = 0;
-            Rigidbody.useGravity = true;
+            Rigidbody.useGravity = false;
             Rigidbody.angularVelocity = Vector3.zero;
-            Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+            Rigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             if (direction.x.Equals(0)) Rigidbody.constraints |= RigidbodyConstraints.FreezePositionX;
             if (direction.z.Equals(0)) Rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
             Rigidbody.velocity = direction.normalized * velocity;
@@ -301,6 +340,7 @@ public class Box : PoolObject
     {
         if (State == States.BeingPushed || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.PushingCanceling)
         {
+            damageTimes = 0;
             byte dropLiftAbilityIndex = ConfigManager.GetBoxTypeIndex(LiftGetLiftBoxAbility);
             if (dropLiftAbilityIndex != 0)
             {
@@ -334,6 +374,7 @@ public class Box : PoolObject
     {
         if (State == States.Lifted)
         {
+            damageTimes = 0;
             if (BoxEffectHelper == null)
             {
                 BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
@@ -368,6 +409,7 @@ public class Box : PoolObject
             BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
         }
 
+        damageTimes = 0;
         LastTouchActor = null;
         State = States.DropingFromDeadPlayer;
         transform.DOPause();
@@ -390,14 +432,35 @@ public class Box : PoolObject
 
     void FixedUpdate()
     {
-        if ((State == States.BeingKicked || State == States.Flying || State == States.DropingFromDeadPlayer) && Rigidbody && Rigidbody.velocity.magnitude < 1f)
+        if (IsRecycled) return;
+        if ((State == States.BeingKicked || State == States.Flying || State == States.DropingFromDeadPlayer) && Rigidbody)
         {
-            DestroyImmediate(Rigidbody);
-            StaticCollider.enabled = true;
-            DynamicCollider.enabled = false;
-            WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this);
-            BoxEffectHelper?.PoolRecycle();
-            BoxEffectHelper = null;
+            if (State == States.BeingKicked)
+            {
+                bool isGrounded = Physics.Raycast(new Ray(transform.position, Vector3.down), 0.55f, LayerManager.Instance.LayerMask_Box | LayerManager.Instance.LayerMask_Ground);
+                Rigidbody.useGravity = !isGrounded;
+                if (isGrounded)
+                {
+                    Rigidbody.constraints |= RigidbodyConstraints.FreezePositionY;
+                }
+                else
+                {
+                    if ((Rigidbody.constraints & RigidbodyConstraints.FreezePositionY) != 0)
+                    {
+                        Rigidbody.constraints -= RigidbodyConstraints.FreezePositionY;
+                    }
+                }
+            }
+
+            if (Rigidbody.velocity.magnitude < 1f)
+            {
+                DestroyImmediate(Rigidbody);
+                StaticCollider.enabled = true;
+                DynamicCollider.enabled = false;
+                WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this);
+                BoxEffectHelper?.PoolRecycle();
+                BoxEffectHelper = null;
+            }
         }
 
         if (Rigidbody && Rigidbody.velocity.magnitude > 1f)
@@ -426,28 +489,16 @@ public class Box : PoolObject
 
     void OnCollisionEnter(Collision collision)
     {
+        if (IsRecycled) return;
         if (LastTouchActor != null && collision.gameObject == LastTouchActor.gameObject) return;
         if (State == States.Flying)
         {
-            // Destroy AOE Damage
-            if (!WorldManager.Instance.CurrentWorld.WorldData.WorldFeature.HasFlag(WorldFeature.PlayerImmune))
+            if (damageTimes < MaxDamageTimes)
             {
-                Collider[] colliders = Physics.OverlapSphere(transform.position, DestroyDamageRadius_Throw, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
-                HashSet<Actor> damagedActors = new HashSet<Actor>();
-                foreach (Collider collider in colliders)
-                {
-                    Actor actor = collider.GetComponentInParent<Actor>();
-                    if (actor && actor != LastTouchActor && actor.IsOpponent(LastTouchActor) && actor.ActorBattleHelper && !damagedActors.Contains(actor))
-                    {
-                        actor.ActorBattleHelper.LastAttackBox = this;
-                        actor.ActorBattleHelper.Damage(DestroyDamage_Throw);
-                        damagedActors.Add(actor);
-                    }
-                }
+                DestroyAOEDamage(DestroyDamageRadius_Throw, DestroyDamage_Throw);
+                PlayDestroyFX();
             }
 
-            // FX and Recycle
-            PlayDestroyFX();
             if (BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable))
             {
                 PoolRecycle();
@@ -466,28 +517,41 @@ public class Box : PoolObject
         {
             if (collision.gameObject.layer != LayerManager.Instance.Layer_Ground)
             {
-                // Destroy AOE Damage
-                if (!WorldManager.Instance.CurrentWorld.WorldData.WorldFeature.HasFlag(WorldFeature.PlayerImmune))
+                if (damageTimes < MaxDamageTimes)
                 {
-                    Collider[] colliders = Physics.OverlapSphere(transform.position, DestroyDamageRadius_Kick, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
-                    HashSet<Actor> damagedActors = new HashSet<Actor>();
-                    foreach (Collider collider in colliders)
-                    {
-                        Actor actor = collider.GetComponentInParent<Actor>();
-                        if (actor && actor != LastTouchActor && actor.IsOpponent(LastTouchActor) && actor.ActorBattleHelper && !damagedActors.Contains(actor))
-                        {
-                            actor.ActorBattleHelper.LastAttackBox = this;
-                            actor.ActorBattleHelper.Damage(DestroyDamage_Kick);
-                            damagedActors.Add(actor);
-                        }
-                    }
+                    DestroyAOEDamage(DestroyDamageRadius_Kick, DestroyDamage_Kick);
+                    PlayDestroyFX();
                 }
 
-                // FX and Recycle
-                PlayDestroyFX();
                 if (BoxFeature.HasFlag(BoxFeature.KickHitBreakable))
                 {
                     PoolRecycle();
+                }
+            }
+        }
+    }
+
+    private void DestroyAOEDamage(float radius, float damage)
+    {
+        damageTimes++;
+        WorldFeature wf = WorldManager.Instance.CurrentWorld.WorldData.WorldFeature;
+        bool playerImmune = wf.HasFlag(WorldFeature.PlayerImmune);
+        bool pvp = wf.HasFlag(WorldFeature.PVP);
+        if (!playerImmune)
+        {
+            Collider[] colliders = Physics.OverlapSphere(transform.position, radius, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
+            HashSet<Actor> damagedActors = new HashSet<Actor>();
+            foreach (Collider collider in colliders)
+            {
+                Actor actor = collider.GetComponentInParent<Actor>();
+                if (actor && actor != LastTouchActor && actor.ActorBattleHelper && !damagedActors.Contains(actor))
+                {
+                    if (actor.IsOpponent(LastTouchActor) || (pvp && actor.IsPlayer && LastTouchActor.IsPlayer))
+                    {
+                        actor.ActorBattleHelper.LastAttackBox = this;
+                        actor.ActorBattleHelper.Damage(LastTouchActor, damage);
+                        damagedActors.Add(actor);
+                    }
                 }
             }
         }
@@ -590,4 +654,7 @@ public enum BoxFeature
 
     [LabelText("墙壁")]
     IsBorder = 1 << 9,
+
+    [LabelText("地面")]
+    IsGround = 1 << 10,
 }

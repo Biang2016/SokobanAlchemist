@@ -64,8 +64,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsRecycled: 0
+  GUID: 0
   RigidBody: {fileID: 3522706739585230582}
   ActorCommonHelpers: {fileID: 1526363832739594291}
+  ActorMoveColliderRoot: {fileID: 2733344564624173504}
   CurMoveAttempt: {x: 0, y: 0, z: 0}
   LastMoveAttempt: {x: 0, y: 0, z: 0}
   CurThrowMoveAttempt: {x: 0, y: 0, z: 0}
@@ -137,7 +139,6 @@ MonoBehaviour:
   - GoldenDropBoomBox
   - DiamondDropBoomBox
   - SilverDropBoomBox
-  DieDropMaterial: {fileID: 0}
   DieDropBoxTypeName: 
   MovementState: 0
   PushState: 0
@@ -342,6 +343,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7a1155254cbf4c468febb53f6761e7a, type: 3}
+--- !u!1 &2733344564624173504 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8278438388418090777, guid: e7a1155254cbf4c468febb53f6761e7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6272425472956907225}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &821257663666743273 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6659012688222968112, guid: e7a1155254cbf4c468febb53f6761e7a,

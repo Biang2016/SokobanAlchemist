@@ -14,6 +14,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
     internal PlayerActor Player2 => MainPlayers[(int) PlayerNumber.Player2];
 
     internal List<EnemyActor> Enemies = new List<EnemyActor>();
+    internal SortedDictionary<uint, Actor> ActorDict = new SortedDictionary<uint, Actor>();
 
     public Transform ActorContainerRoot;
     public Transform NavTrackMarkerRoot;
@@ -32,10 +33,13 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
             MainPlayers[index]?.PoolRecycle();
             MainPlayers[index] = null;
         }
+
+        ActorDict.Clear();
     }
 
     public override void Awake()
     {
+        Clear();
         ActorContainerRoot = new GameObject("ActorContainerRoot").transform;
         NavTrackMarkerRoot = new GameObject("NavTrackMarkerRoot").transform;
     }
@@ -66,6 +70,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
                 player.Initialize(bpd.PlayerNumber);
                 BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
                 MainPlayers[(int) bpd.PlayerNumber] = player;
+                AddActor(player);
             }
 
             if (bpd.BornPointType == BornPointType.Enemy)
@@ -75,6 +80,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
                 GridPos3D.ApplyGridPosToLocalTrans(bpd.GridPos3D, enemy.transform, 1);
                 enemy.Initialize();
                 Enemies.Add(enemy);
+                AddActor(enemy);
             }
         }
     }
@@ -89,10 +95,18 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
 
     private void AddActor(Actor actor)
     {
+        ActorDict.Add(actor.GUID, actor);
     }
 
     private void RemoveActor(Actor actor)
     {
+        ActorDict.Remove(actor.GUID);
+    }
+
+    public Actor FindActor(uint actorGUID)
+    {
+        ActorDict.TryGetValue(actorGUID, out Actor actor);
+        return actor;
     }
 
     public void SetAllActorShown(bool shown)
@@ -106,5 +120,11 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
         {
             enemy.SetShown(shown);
         }
+    }
+
+    public override void ShutDown()
+    {
+        base.ShutDown();
+        Clear();
     }
 }

@@ -220,7 +220,7 @@ public class DebugPanel : BaseUIPanel
     public void ChangeWorld(string worldName)
     {
         ClientGameManager.DebugChangeWorldName = worldName;
-        SceneManager.LoadScene("MainScene");
+        ClientGameManager.Instance.ReloadGame();
     }
 
     public List<string> GetWorldNames()

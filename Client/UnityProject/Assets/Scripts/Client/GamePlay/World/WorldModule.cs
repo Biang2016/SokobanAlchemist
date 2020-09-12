@@ -1,5 +1,6 @@
 ﻿using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
+using UnityEditor;
 using UnityEngine;
 
 public class WorldModule : PoolObject
@@ -14,8 +15,36 @@ public class WorldModule : PoolObject
 
     public WorldModuleData WorldModuleData;
 
+    public WorldDeadZoneTrigger WorldDeadZoneTrigger;
+    public WorldWallCollider WorldWallCollider;
+    public WorldGroundCollider WorldGroundCollider;
+
     [HideInInspector]
     public Box[,,] BoxMatrix = new Box[MODULE_SIZE, MODULE_SIZE, MODULE_SIZE];
+
+    public void Clear()
+    {
+        for (int x = 0; x < BoxMatrix.GetLength(0); x++)
+        {
+            for (int y = 0; y < BoxMatrix.GetLength(1); y++)
+            {
+                for (int z = 0; z < BoxMatrix.GetLength(2); z++)
+                {
+                    BoxMatrix[x, y, z]?.PoolRecycle();
+                    BoxMatrix[x, y, z] = null;
+                }
+            }
+        }
+
+        World = null;
+        WorldModuleData = null;
+        WorldDeadZoneTrigger?.PoolRecycle();
+        WorldDeadZoneTrigger = null;
+        WorldWallCollider?.PoolRecycle();
+        WorldWallCollider = null;
+        WorldGroundCollider?.PoolRecycle();
+        WorldGroundCollider = null;
+    }
 
     public void Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world)
     {
@@ -24,23 +53,23 @@ public class WorldModule : PoolObject
         WorldModuleData = worldModuleData;
         if (WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.DeadZone))
         {
-            WorldDeadZoneTrigger deadZone = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldDeadZoneTrigger].AllocateGameObject<WorldDeadZoneTrigger>(transform);
-            deadZone.name = $"{nameof(WorldDeadZoneTrigger)}_{ModuleGP}";
-            deadZone.Initialize(moduleGP);
+            WorldDeadZoneTrigger = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldDeadZoneTrigger].AllocateGameObject<WorldDeadZoneTrigger>(transform);
+            WorldDeadZoneTrigger.name = $"{nameof(WorldDeadZoneTrigger)}_{ModuleGP}";
+            WorldDeadZoneTrigger.Initialize(moduleGP);
         }
 
         if (WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Wall))
         {
-            WorldWallCollider wallCollider = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldWallCollider].AllocateGameObject<WorldWallCollider>(transform);
-            wallCollider.name = $"{nameof(WorldWallCollider)}_{ModuleGP}";
-            wallCollider.Initialize(moduleGP);
+            WorldWallCollider = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldWallCollider].AllocateGameObject<WorldWallCollider>(transform);
+            WorldWallCollider.name = $"{nameof(WorldWallCollider)}_{ModuleGP}";
+            WorldWallCollider.Initialize(moduleGP);
         }
 
         if (WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Ground))
         {
-            WorldGroundCollider groundCollider = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldGroundCollider].AllocateGameObject<WorldGroundCollider>(transform);
-            groundCollider.name = $"{nameof(WorldGroundCollider)}_{ModuleGP}";
-            groundCollider.Initialize(moduleGP);
+            WorldGroundCollider = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldGroundCollider].AllocateGameObject<WorldGroundCollider>(transform);
+            WorldGroundCollider.name = $"{nameof(WorldGroundCollider)}_{ModuleGP}";
+            WorldGroundCollider.Initialize(moduleGP);
         }
 
         for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
@@ -85,4 +114,18 @@ public class WorldModule : PoolObject
     public void ExportModuleData()
     {
     }
+
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        if (Selection.Contains(gameObject))
+        {
+            if (WorldModuleData != null && WorldModuleData.WorldModuleTypeIndex == WorldManager.DeadZoneIndex)
+            {
+                Gizmos.color = new Color(1f, 0, 0, 0.7f);
+                Gizmos.DrawSphere(transform.position + Vector3.one * (MODULE_SIZE - 1) * 0.5f, 3f);
+            }
+        }
+    }
+#endif
 }

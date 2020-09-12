@@ -46,7 +46,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     private WorldManager WorldManager => WorldManager.Instance;
     private BattleManager BattleManager => BattleManager.Instance;
     private ProjectileManager ProjectileManager => ProjectileManager.Instance;
-
+    private UIBattleTipManager UIBattleTipManager => UIBattleTipManager.Instance;
     public Messenger BattleMessenger => BattleManager.BattleMessenger;
 
     private FXManager FXManager => FXManager.Instance;
@@ -93,8 +93,13 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         ConfigManager.Awake();
         LayerManager.Awake();
         PrefabManager.Awake();
-        GameObjectPoolManager.Init(new GameObject("GameObjectPoolRoot").transform);
-        GameObjectPoolManager.Awake();
+        if (!GameObjectPoolManager.IsInit)
+        {
+            Transform root = new GameObject("GameObjectPool").transform;
+            DontDestroyOnLoad(root.gameObject);
+            GameObjectPoolManager.Init(root);
+            GameObjectPoolManager.Awake();
+        }
 
         RoutineManager.LogErrorHandler = Debug.LogError;
         RoutineManager.Awake();
@@ -106,6 +111,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         BattleManager.Awake();
         ProjectileManager.Awake();
         ProjectileManager.Init(new GameObject("ProjectileRoot").transform);
+        UIBattleTipManager.Awake();
         FXManager.Awake();
 
         ControlManager.Awake();
@@ -124,6 +130,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         WorldManager.Start();
         BattleManager.Start();
         ProjectileManager.Start();
+        UIBattleTipManager.Start();
         FXManager.Start();
 
         ControlManager.Start();
@@ -140,7 +147,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     {
         if (ControlManager.Common_RestartGame.Up)
         {
-            SceneManager.LoadScene(0);
+            ReloadGame();
             return;
         }
 
@@ -155,6 +162,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         WorldManager.Update(Time.deltaTime);
         BattleManager.Update(Time.deltaTime);
         ProjectileManager.Update(Time.deltaTime);
+        UIBattleTipManager.Update(Time.deltaTime);
         FXManager.Update(Time.deltaTime);
 
         ControlManager.Update(Time.deltaTime);
@@ -173,6 +181,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         WorldManager.LateUpdate(Time.deltaTime);
         BattleManager.LateUpdate(Time.deltaTime);
         ProjectileManager.LateUpdate(Time.deltaTime);
+        UIBattleTipManager.LateUpdate(Time.deltaTime);
         FXManager.LateUpdate(Time.deltaTime);
 
         ControlManager.LateUpdate(Time.deltaTime);
@@ -191,6 +200,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         WorldManager.FixedUpdate(Time.fixedDeltaTime);
         BattleManager.FixedUpdate(Time.fixedDeltaTime);
         ProjectileManager.FixedUpdate(Time.fixedDeltaTime);
+        UIBattleTipManager.FixedUpdate(Time.fixedDeltaTime);
         FXManager.FixedUpdate(Time.fixedDeltaTime);
 
         ControlManager.FixedUpdate(Time.fixedDeltaTime);
@@ -201,7 +211,30 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         BattleManager.Instance.StartBattle();
     }
 
+    public void ReloadGame()
+    {
+        ShutDownGame();
+        SceneManager.LoadScene("MainScene");
+    }
+
     private void ShutDownGame()
     {
+        ControlManager.ShutDown();
+
+        FXManager.ShutDown();
+        UIBattleTipManager.ShutDown();
+        ProjectileManager.ShutDown();
+        BattleManager.ShutDown();
+        WorldManager.ShutDown();
+
+        DebugConsole.OnDebugConsoleToggleHandler = null;
+        DebugConsole.OnDebugConsoleKeyDownHandler = null;
+        GameStateManager.ShutDown();
+        RoutineManager.ShutDown();
+
+        GameObjectPoolManager.ShutDown();
+        PrefabManager.ShutDown();
+        LayerManager.ShutDown();
+        ConfigManager.ShutDown();
     }
 }

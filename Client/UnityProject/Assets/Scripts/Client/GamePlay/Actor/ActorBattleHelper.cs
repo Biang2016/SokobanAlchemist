@@ -6,6 +6,9 @@ public class ActorBattleHelper : ActorHelper
 {
     internal Box LastAttackBox;
 
+    [SerializeField]
+    private BoxCollider BoxCollider;
+
     public override void OnRecycled()
     {
         totalLife = 0;
@@ -14,6 +17,7 @@ public class ActorBattleHelper : ActorHelper
         health = 0;
         OnHealthChanged = null;
         OnLifeChanged = null;
+        BoxCollider.enabled = false;
         base.OnRecycled();
     }
 
@@ -23,6 +27,7 @@ public class ActorBattleHelper : ActorHelper
         life = totalLife;
         this.maxHealth = maxHealth;
         health = maxHealth;
+        BoxCollider.enabled = true;
     }
 
     public void ResetState()
@@ -109,14 +114,18 @@ public class ActorBattleHelper : ActorHelper
         }
     }
 
-    public void Damage(int damage)
+    public UnityAction<Actor, int> OnDamaged;
+
+    public void Damage(Actor attacker, int damage)
     {
         Health -= damage;
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorAttackTip, new AttackData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
+        OnDamaged?.Invoke(attacker, damage);
     }
 
-    public void Damage(float damage)
+    public void Damage(Actor attacker, float damage)
     {
-        Damage(Mathf.FloorToInt(damage));
+        Damage(attacker, Mathf.FloorToInt(damage));
     }
 
     public void Die()
@@ -139,7 +148,6 @@ public class ActorBattleHelper : ActorHelper
             {
                 if (LastAttackBox.LastTouchActor.IsPlayer)
                 {
-                   
                 }
             }
 

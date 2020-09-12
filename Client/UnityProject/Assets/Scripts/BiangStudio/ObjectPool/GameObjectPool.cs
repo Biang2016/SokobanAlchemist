@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace BiangStudio.ObjectPool
 {
@@ -65,11 +66,13 @@ namespace BiangStudio.ObjectPool
                         }
                         else
                         {
+                            Profiler.BeginSample($"PoolAlloc_{gameObjectPrefab.name}");
                             gameObjectPool[i] = Instantiate(gameObjectPrefab, parent);
                             gameObjectPool[i].name = gameObjectPrefab.name + "_" + i; //便于调试的时候分辨对象
                             gameObjectPool[i].SetObjectPool(this);
                             empty--;
                             used++;
+                            Profiler.EndSample();
                         }
 
                         isUsed[i] = true;
