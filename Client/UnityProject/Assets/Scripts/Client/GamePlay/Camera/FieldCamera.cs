@@ -23,6 +23,9 @@ public class FieldCamera : MonoBehaviour
     [LabelText("距离")]
     public float Distance;
 
+    [LabelText("InGameUISize")]
+    public float InGameUISize;
+
     void Awake()
     {
         Distance_Level = 2;
@@ -101,6 +104,7 @@ public class FieldCamera : MonoBehaviour
             {
                 _distance_Level = Mathf.Clamp(value, 0, DistanceLevels.Length - 1);
                 Distance = DistanceLevels[_distance_Level];
+                InGameUISize = InGameUISizeLevels[_distance_Level];
                 Camera.orthographicSize = OrthographicSizeLevels[_distance_Level];
                 BattleUICamera.orthographicSize = OrthographicSizeLevels[_distance_Level];
             }
@@ -108,13 +112,16 @@ public class FieldCamera : MonoBehaviour
     }
 
     [LabelText("距离等级表")]
-    public float[] DistanceLevels = new float[] {10, 15, 25, 35, 50, 75};
+    public float[] DistanceLevels = new float[] {10, 15, 20, 25, 30, 35, 50, 75};
 
     [LabelText("距离等级表-战斗飘字UI")]
-    public float[] DistanceLevels_ScaleForBattleUI = new float[] {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+    public float[] DistanceLevels_ScaleForBattleUI = new float[] {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 
     [LabelText("正交大小等级表")]
-    public float[] OrthographicSizeLevels = new float[] {5, 7, 9, 11, 13, 15};
+    public float[] OrthographicSizeLevels = new float[] {5, 7, 9, 10, 11, 12, 13, 15};
+
+    [LabelText("InGameUI大小等级")]
+    public float[] InGameUISizeLevels = new float[] {2f, 1.5f, 1, 0.8f, 0.65f, 0.5f, 0.3f, 0.2f};
 
     void UpdateFOVLevel()
     {

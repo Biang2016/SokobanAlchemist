@@ -139,6 +139,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 #if !DEBUG
         UIManager.Instance.CloseUIForm<DebugPanel>();
 #endif
+        UIManager.Instance.ShowUIForms<InGameUIPanel>();
 
         StartGame();
     }

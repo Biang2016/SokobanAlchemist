@@ -10,6 +10,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     public enum PrefabNames
     {
         Player,
+        InGameHealthBar,
         WorldCameraPOI,
         WorldModule,
         World,
@@ -25,6 +26,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     public Dictionary<PrefabNames, int> PoolConfigs = new Dictionary<PrefabNames, int>
     {
         {PrefabNames.Player, 1},
+        {PrefabNames.InGameHealthBar, 10},
         {PrefabNames.WorldCameraPOI, 2},
         {PrefabNames.WorldModule, 16},
         {PrefabNames.World, 1},

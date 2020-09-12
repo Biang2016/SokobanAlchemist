@@ -1,4 +1,5 @@
 ﻿using BiangStudio.GameDataFormat.Grid;
+using BiangStudio.GamePlay.UI;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,6 +10,9 @@ public class ActorBattleHelper : ActorHelper
     [SerializeField]
     private BoxCollider BoxCollider;
 
+    public Transform HealthBarPivot;
+    public InGameHealthBar InGameHealthBar;
+
     public override void OnRecycled()
     {
         totalLife = 0;
@@ -18,6 +22,8 @@ public class ActorBattleHelper : ActorHelper
         OnHealthChanged = null;
         OnLifeChanged = null;
         BoxCollider.enabled = false;
+        InGameHealthBar?.PoolRecycle();
+        InGameHealthBar = null;
         base.OnRecycled();
     }
 
@@ -28,6 +34,8 @@ public class ActorBattleHelper : ActorHelper
         this.maxHealth = maxHealth;
         health = maxHealth;
         BoxCollider.enabled = true;
+        InGameHealthBar = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.InGameHealthBar].AllocateGameObject<InGameHealthBar>(UIManager.Instance.GetBaseUIForm<InGameUIPanel>().transform);
+        InGameHealthBar.Initialize(this, 100, 30);
     }
 
     public void ResetState()
@@ -118,8 +126,8 @@ public class ActorBattleHelper : ActorHelper
 
     public void Damage(Actor attacker, int damage)
     {
-        Health -= damage;
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorAttackTip, new AttackData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
+        Health -= damage;
         OnDamaged?.Invoke(attacker, damage);
     }
 
