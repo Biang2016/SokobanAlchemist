@@ -248,7 +248,7 @@ public class World : PoolObject
         module_src.BoxMatrix[localGP_src.x, localGP_src.y, localGP_src.z] = null;
         module_target.BoxMatrix[localGP_target.x, localGP_target.y, localGP_target.z] = box_src;
         CheckDropAbove(box_src);
-        box_src.Initialize(localGP_target, module_target, box_src.FinalWeight, box_src.ArtOnly, false);
+        box_src.Initialize(localGP_target, module_target, 0.2f, box_src.ArtOnly, false);
     }
 
     public void RemoveBox(Box box)

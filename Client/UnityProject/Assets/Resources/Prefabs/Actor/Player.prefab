@@ -83,31 +83,63 @@ MonoBehaviour:
   Camp: 1
   MaxHealth: 10
   TotalLife: 1
+  KickFX: 4
+  KickFXScale: 1
+  KickFXPivot: {fileID: 4968612011542319011}
+  InjureFX: 1
+  InjureFXScale: 1
   DieFX: 19
   DieFXScale: 1
   Accelerate: 10000
   MoveSpeed: 2.5
   ThrowAimMoveSpeed: 8
+  LiftingMoveSpeedRatioCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.3785059
+      outSlope: -0.3785059
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9946264
+      value: 0.62352806
+      inSlope: -0.3785059
+      outSlope: -0.3785059
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   ThrowRadius: 15
   KickForce: 15
   PushableBoxList:
   - DeadBoxShow
-  - DiamondBox
-  - DiamondBoxKickable
+  - IceBox
+  - IceBoxKickable
+  - IceDropBoomBox
   - GoldenBox
   - GroundBox
   - SilverBox
   - WoodenBox
-  - DiamondDropBoomBox
   - GoldenDropBoomBox
   - SilverDropBoomBox
   KickableBoxList:
   - WoodenBox
-  - DiamondBoxKickable
-  LiftableBoxList:
-  - DiamondBoxKickable
+  - IceBoxKickable
   - GoldenDropBoomBox
-  - DiamondDropBoomBox
+  - IceDropBoomBox
+  - SilverDropBoomBox
+  LiftableBoxList:
+  - IceBoxKickable
+  - GoldenDropBoomBox
+  - IceDropBoomBox
   - SilverDropBoomBox
   DieDropBoxTypeName: 
   MovementState: 0
@@ -422,3 +454,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18bd7d632ec2b094e8c43111b37d693b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &4968612011542319011 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2423020542915541692, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+    type: 3}
+  m_PrefabInstance: {fileID: 7301533550099854623}
+  m_PrefabAsset: {fileID: 0}

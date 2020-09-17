@@ -228,7 +228,7 @@ public class DebugPanel : BaseUIPanel
         return ConfigManager.WorldDataConfigDict.Keys.ToList();
     }
 
-    [DebugSlider("Player/MoveSpeed", 3.5f, 1, 30)]
+    [DebugSlider("Player/MoveSpeed", 2.5f, 1, 30)]
     public void ChangeMoveSpeed(float value)
     {
         for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
@@ -238,7 +238,7 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugSlider("Player/KickForce", 150, 0, 1000)]
+    [DebugSlider("Player/KickForce", 15, 0, 1000)]
     public void ChangeKickForce(float value)
     {
         for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)

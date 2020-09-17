@@ -85,17 +85,46 @@ MonoBehaviour:
   Camp: 2
   MaxHealth: 1
   TotalLife: 1
+  KickFX: 0
+  KickFXScale: 1
+  KickFXPivot: {fileID: 3872904913339084885}
+  InjureFX: 1
+  InjureFXScale: 1
   DieFX: 19
   DieFXScale: 2
   Accelerate: 5000
   MoveSpeed: 0.5
   ThrowAimMoveSpeed: 10
+  LiftingMoveSpeedRatioCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   ThrowRadius: 10
   KickForce: 5
   PushableBoxList:
   - DeadBoxShow
-  - DiamondBox
-  - DiamondBoxKickable
+  - IceBox
+  - IceBoxKickable
   - GoldenBox
   - GroundBox
   - SilverBox
@@ -547,3 +576,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18bd7d632ec2b094e8c43111b37d693b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &3872904913339084885 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2423020542915541692, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1449910759491668713}
+  m_PrefabAsset: {fileID: 0}

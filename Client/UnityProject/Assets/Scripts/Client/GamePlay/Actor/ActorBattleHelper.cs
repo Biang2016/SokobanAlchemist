@@ -129,6 +129,9 @@ public class ActorBattleHelper : ActorHelper
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorAttackTip, new AttackData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
         Health -= damage;
         OnDamaged?.Invoke(attacker, damage);
+
+        ProjectileHit kickFX = ProjectileManager.Instance.PlayProjectileHit(Actor.InjureFX, Actor.transform.position);
+        if (kickFX) kickFX.transform.localScale = Vector3.one * Actor.InjureFXScale;
     }
 
     public void Damage(Actor attacker, float damage)

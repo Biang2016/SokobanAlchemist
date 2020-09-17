@@ -106,6 +106,26 @@ public class Actor : PoolObject
     public int Health => ActorBattleHelper ? ActorBattleHelper.Health : 0;
 
     [BoxGroup("特效")]
+    [LabelText("踢特效")]
+    public ProjectileType KickFX;
+
+    [BoxGroup("特效")]
+    [LabelText("踢特效尺寸")]
+    public float KickFXScale = 1f;
+
+    [BoxGroup("特效")]
+    [LabelText("踢特效锚点")]
+    public Transform KickFXPivot;
+
+    [BoxGroup("特效")]
+    [LabelText("受伤特效")]
+    public ProjectileType InjureFX;
+
+    [BoxGroup("特效")]
+    [LabelText("受伤特效尺寸")]
+    public float InjureFXScale = 1f;
+
+    [BoxGroup("特效")]
     [LabelText("死亡特效")]
     public ProjectileType DieFX;
 
@@ -117,15 +137,65 @@ public class Actor : PoolObject
     [LabelText("起步速度")]
     public float Accelerate = 10f;
 
+    [HideInEditorMode]
+    [ShowInInspector]
     [BoxGroup("手感")]
-    [LabelText("移动速度")]
+    [LabelText("最终起步速度")]
+    public float FinalAccelerate
+    {
+        get
+        {
+            float final = Accelerate;
+            if (CurrentLiftBox != null)
+            {
+                final = Accelerate * LiftingMoveSpeedRatioCurve.Evaluate(CurrentLiftBox.FinalWeight);
+            }
+
+            if (ThrowState == ThrowStates.ThrowCharging)
+            {
+                final *= 0.5f;
+            }
+
+            return final;
+        }
+    }
+
+    [BoxGroup("手感")]
+    [LabelText("基本移动速度")]
     public float MoveSpeed = 10f;
+
+    [HideInEditorMode]
+    [ShowInInspector]
+    [BoxGroup("手感")]
+    [LabelText("最终移动速度")]
+    public float FinalSpeed
+    {
+        get
+        {
+            float final = MoveSpeed;
+            if (CurrentLiftBox != null)
+            {
+                final = MoveSpeed * LiftingMoveSpeedRatioCurve.Evaluate(CurrentLiftBox.FinalWeight);
+            }
+
+            if (ThrowState == ThrowStates.ThrowCharging)
+            {
+                final *= 0.5f;
+            }
+
+            return final;
+        }
+    }
 
     [BoxGroup("手感")]
     [LabelText("瞄准点移动速度")]
     public float ThrowAimMoveSpeed = 10f;
 
     private float ThrowRadiusMin = 0.75f;
+
+    [BoxGroup("配置")]
+    [LabelText("举箱子移速比例")]
+    public AnimationCurve LiftingMoveSpeedRatioCurve;
 
     [BoxGroup("配置")]
     [LabelText("扔半径")]
@@ -304,10 +374,10 @@ public class Actor : PoolObject
             if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
             MovementState = MovementStates.Moving;
             RigidBody.drag = 0;
-            RigidBody.AddForce(CurMoveAttempt * Time.fixedDeltaTime * Accelerate);
-            if (RigidBody.velocity.magnitude > MoveSpeed)
+            RigidBody.AddForce(CurMoveAttempt * Time.fixedDeltaTime * FinalAccelerate);
+            if (RigidBody.velocity.magnitude > FinalSpeed)
             {
-                RigidBody.AddForce(-RigidBody.velocity.normalized * (RigidBody.velocity.magnitude - MoveSpeed), ForceMode.VelocityChange);
+                RigidBody.AddForce(RigidBody.velocity.normalized * (FinalSpeed - RigidBody.velocity.magnitude), ForceMode.VelocityChange);
             }
 
             CurForward = CurMoveAttempt.normalized;
@@ -374,6 +444,8 @@ public class Actor : PoolObject
             if (box && box.Kickable && ActorSkillHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
             {
                 box.Kick(CurForward, KickForce, this);
+                ProjectileHit kickFX = ProjectileManager.Instance.PlayProjectileHit(KickFX, KickFXPivot.position);
+                if (kickFX) kickFX.transform.localScale = Vector3.one * KickFXScale;
             }
         }
     }

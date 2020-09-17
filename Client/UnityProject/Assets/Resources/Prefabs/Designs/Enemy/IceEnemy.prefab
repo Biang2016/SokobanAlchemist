@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7861377238865694945}
   - component: {fileID: -6048773597420499849}
   m_Layer: 14
-  m_Name: DiamondEnemy
+  m_Name: IceEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,28 +85,57 @@ MonoBehaviour:
   Camp: 2
   MaxHealth: 3
   TotalLife: 1
-  DieFX: 19
+  KickFX: 0
+  KickFXScale: 1
+  KickFXPivot: {fileID: 4600379336666123548}
+  InjureFX: 10
+  InjureFXScale: 1
+  DieFX: 13
   DieFXScale: 2
   Accelerate: 5000
   MoveSpeed: 0.5
   ThrowAimMoveSpeed: 10
+  LiftingMoveSpeedRatioCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   ThrowRadius: 10
   KickForce: 5
   PushableBoxList:
   - DeadBoxShow
-  - DiamondBox
-  - DiamondBoxKickable
+  - IceBox
+  - IceBoxKickable
   - GoldenBox
   - GroundBox
   - SilverBox
   - WoodenBox
   KickableBoxList:
-  - DiamondBox
+  - IceBox
   - WoodenBox
   LiftableBoxList:
-  - DiamondBox
+  - IceBox
   - WoodenBox
-  DieDropBoxTypeName: DiamondDropBoomBox
+  DieDropBoxTypeName: IceDropBoomBox
   MovementState: 0
   PushState: 0
   ThrowState: 0
@@ -441,6 +470,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18bd7d632ec2b094e8c43111b37d693b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &4600379336666123548 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2423020542915541692, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2195391545392002976}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4144594154008945974
 PrefabInstance:
   m_ObjectHideFlags: 0
