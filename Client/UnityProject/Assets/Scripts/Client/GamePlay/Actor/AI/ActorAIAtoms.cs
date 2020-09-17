@@ -304,27 +304,33 @@ public static class ActorAIAtoms
                 Actor.Throw();
             }
 
-            int x_offset = Random.Range(-IdleRadius.value, IdleRadius.value);
-            int z_offset = Random.Range(-IdleRadius.value, IdleRadius.value);
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(Actor.CurGP + new GridPos3D(x_offset, 0, z_offset), 0f, 0.5f, false);
-            switch (retCode)
+            bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.CurGP, IdleRadius.value, out GridPos3D destination);
+            if (suc)
             {
-                case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
-                case ActorAIAgent.SetDestinationRetCode.TooClose:
+                ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination, 0f, 0.5f, false);
+                switch (retCode)
                 {
-                    return Status.Success;
+                    case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
+                    case ActorAIAgent.SetDestinationRetCode.TooClose:
+                    {
+                        return Status.Success;
+                    }
+                    case ActorAIAgent.SetDestinationRetCode.Suc:
+                    {
+                        return Status.Success;
+                    }
+                    case ActorAIAgent.SetDestinationRetCode.Failed:
+                    {
+                        return Status.Failure;
+                    }
                 }
-                case ActorAIAgent.SetDestinationRetCode.Suc:
-                {
-                    return Status.Success;
-                }
-                case ActorAIAgent.SetDestinationRetCode.Failed:
-                {
-                    return Status.Failure;
-                }
-            }
 
-            return Status.Success;
+                return Status.Success;
+            }
+            else
+            {
+                return Status.Failure;
+            }
         }
     }
 

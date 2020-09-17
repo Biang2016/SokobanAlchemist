@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using BiangStudio;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.GamePlay;
 using UnityEngine;
@@ -14,6 +16,8 @@ public class ActorPathFinding
         public int H; // 从该点到终点的估计路程
     }
 
+    #region AStar PathFinding
+
     private static LinkedList<Node> OpenList = new LinkedList<Node>();
     private static LinkedList<Node> CloseList = new LinkedList<Node>();
 
@@ -27,6 +31,21 @@ public class ActorPathFinding
         }
 
         return null;
+    }
+
+    public static bool FindRandomAccessibleDestination(GridPos3D ori, float rangeRadius, out GridPos3D gp)
+    {
+        gp = GridPos3D.Zero;
+        WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori, out WorldModule oriModule, out GridPos3D _);
+        if (oriModule != null)
+        {
+            List<GridPos3D> validNodes = UnionFindNodes(ori, rangeRadius);
+            if (validNodes.Count == 0) return false;
+            gp = CommonUtils.GetRandomFromList(validNodes, 1)[0];
+            return true;
+        }
+
+        return false;
     }
 
     private static LinkedList<GridPos3D> FindPath(Node ori, Node dest, float keepDistanceMin, float keepDistanceMax)
@@ -51,7 +70,7 @@ public class ActorPathFinding
 
             OpenList.Remove(minFNode);
             CloseList.AddFirst(minFNode);
-            List<Node> adjacentNodes = GetAdjacentNodes(minFNode, dest.GridPos3D);
+            List<Node> adjacentNodes = GetAdjacentNodesForAStar(minFNode, dest.GridPos3D);
             foreach (Node node in adjacentNodes)
             {
                 bool inCloseList = false;
@@ -112,7 +131,7 @@ public class ActorPathFinding
         return null;
     }
 
-    private static List<Node> GetAdjacentNodes(Node node, GridPos3D destGP)
+    private static List<Node> GetAdjacentNodesForAStar(Node node, GridPos3D destGP)
     {
         List<Node> res = new List<Node>();
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(node.GridPos3D, out WorldModule curModule, out GridPos3D _);
@@ -162,4 +181,61 @@ public class ActorPathFinding
     {
         return ClientUtils.AStarHeuristicsDistance(start.GridPos3D, end.GridPos3D);
     }
+
+    #endregion
+
+    #region UnionFind
+
+    private static List<GridPos3D> UnionFindNodes(GridPos3D center, float rangeRadius)
+    {
+        int radius = Mathf.RoundToInt(rangeRadius);
+        int matrixSize = radius * 2 + 1;
+        bool[,] occupation = new bool[matrixSize, matrixSize];
+        List<GridPos3D> res = new List<GridPos3D>();
+        Queue<GridPos3D> queue = new Queue<GridPos3D>();
+        queue.Enqueue(center);
+        occupation[0 + radius, 0 + radius] = true;
+        res.Add(center);
+        while (queue.Count > 0)
+        {
+            GridPos3D head = queue.Dequeue();
+            WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(head, out WorldModule curModule, out GridPos3D _);
+            if (curModule == null) return res;
+
+            // 四邻边
+            tryAddNode(head + new GridPos3D(-1, 0, 0));
+            tryAddNode(head + new GridPos3D(1, 0, 0));
+            tryAddNode(head + new GridPos3D(0, 0, -1));
+            tryAddNode(head + new GridPos3D(0, 0, 1));
+
+            void tryAddNode(GridPos3D gp)
+            {
+                if ((gp.ToVector3() - center.ToVector3()).magnitude > radius) return;
+                GridPos3D offset = gp - center;
+                if (occupation[offset.x + radius, offset.z + radius]) return;
+                foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
+                {
+                    if (enemy.CurGP == gp)
+                    {
+                        return;
+                    }
+                }
+
+                if (BattleManager.Instance.Player1.CurGP == gp) return;
+                if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.CurGP == gp) return;
+
+                Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gp, out WorldModule module, out GridPos3D _);
+                if (module != null && box == null)
+                {
+                    queue.Enqueue(gp);
+                    res.Add(gp);
+                    occupation[offset.x + radius, offset.z + radius] = true;
+                }
+            }
+        }
+
+        return res;
+    }
+
+    #endregion
 }
