@@ -36,6 +36,7 @@ public class Box : PoolObject
 
     internal Actor LastTouchActor;
     internal BoxEffectHelper BoxEffectHelper;
+    public BoxSkinHelper BoxSkinHelper;
 
     internal bool ArtOnly;
 
@@ -66,6 +67,8 @@ public class Box : PoolObject
             LastTouchActor.CurrentLiftBox = null;
             LastTouchActor = null;
         }
+
+        UnRegisterEvents();
 
         base.OnRecycled();
     }
@@ -215,8 +218,29 @@ public class Box : PoolObject
         GUID = GetGUID();
     }
 
-    protected virtual void Start()
+    private void RegisterEvents()
     {
+        ClientGameManager.Instance.BattleMessenger.AddListener<InteractSkillType, byte>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
+    }
+
+    private void UnRegisterEvents()
+    {
+        ClientGameManager.Instance.BattleMessenger.RemoveListener<InteractSkillType, byte>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
+    }
+
+    private void OnPlayerInteractSkillChanged(InteractSkillType interactSkillType, byte boxTypeIndex)
+    {
+        if (boxTypeIndex == BoxTypeIndex)
+        {
+            BoxSkinHelper.SwitchModel(interactSkillType.ConvertToBoxModelType());
+        }
+    }
+
+    public void Setup(byte boxTypeIndex)
+    {
+        BoxTypeIndex = boxTypeIndex;
+        RegisterEvents();
+        if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorSkillHelper.GetInteractSkillType(BoxTypeIndex), BoxTypeIndex);
     }
 
     public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly, bool dropping)
@@ -345,9 +369,9 @@ public class Box : PoolObject
             if (dropLiftAbilityIndex != 0)
             {
                 PlayDestroyFX();
-                actor.ActorSkillHelper.KickableBoxSet.Remove(actor.ActorSkillHelper.CurrentGetKickAbility);
-                actor.ActorSkillHelper.CurrentGetKickAbility = dropLiftAbilityIndex;
-                actor.ActorSkillHelper.KickableBoxSet.Add(dropLiftAbilityIndex);
+                actor.ActorSkillHelper.DisableInteract(InteractSkillType.Kick, actor.ActorSkillHelper.PlayerCurrentGetKickAbility);
+                actor.ActorSkillHelper.PlayerCurrentGetKickAbility = dropLiftAbilityIndex;
+                actor.ActorSkillHelper.EnableInteract(InteractSkillType.Kick, dropLiftAbilityIndex);
                 actor.ActorSkinHelper.SwitchSkin(DieDropMaterial);
             }
 

@@ -33,7 +33,7 @@ public class ActorFaceHelper : ActorHelper
         if (collider.gameObject.layer == LayerManager.Instance.Layer_Box)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Pushable && Actor.ActorSkillHelper.PushableBoxSet.Contains(box.BoxTypeIndex))
+            if (box && box.Pushable && Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
                 FacingBoxList.Add(box);
             }
@@ -46,7 +46,7 @@ public class ActorFaceHelper : ActorHelper
         if (collider.gameObject.layer == LayerManager.Instance.Layer_Box)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Pushable && Actor.ActorSkillHelper.PushableBoxSet.Contains(box.BoxTypeIndex))
+            if (box && box.Pushable && Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
                 FacingBoxList.Remove(box);
             }

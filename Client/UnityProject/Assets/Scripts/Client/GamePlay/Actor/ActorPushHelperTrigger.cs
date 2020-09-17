@@ -15,7 +15,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
         if (collider.gameObject.layer == LayerManager.Instance.Layer_Box)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.PushableBoxSet.Contains(box.BoxTypeIndex))
+            if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
                 PushingBoxList.Add(box);
             }
@@ -30,7 +30,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
         {
             if (curPushingBox) return;
             Box box = collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.PushableBoxSet.Contains(box.BoxTypeIndex))
+            if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
                 curPushingBox = box;
                 ActorPushHelper.AnimModel.ResetTrigger("Reset");
@@ -45,7 +45,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
         if (collider.gameObject.layer == LayerManager.Instance.Layer_Box)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.PushableBoxSet.Contains(box.BoxTypeIndex))
+            if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
                 ActorPushHelper.AnimModel.SetTrigger("Reset");
                 ActorPushHelper.AnimModel.ResetTrigger("MoveOut");

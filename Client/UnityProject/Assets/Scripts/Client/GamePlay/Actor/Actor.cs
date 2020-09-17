@@ -371,7 +371,7 @@ public class Actor : PoolObject
         if (Physics.Raycast(ray, out RaycastHit hit, 1.5f, LayerManager.Instance.LayerMask_Box, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Kickable && ActorSkillHelper.KickableBoxSet.Contains(box.BoxTypeIndex))
+            if (box && box.Kickable && ActorSkillHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
             {
                 box.Kick(CurForward, KickForce, this);
             }
@@ -385,7 +385,7 @@ public class Actor : PoolObject
         if (Physics.Raycast(ray, out RaycastHit hit, 1.3f, LayerManager.Instance.LayerMask_Box, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Liftable && ActorSkillHelper.LiftableBoxSet.Contains(box.BoxTypeIndex))
+            if (box && box.Liftable && ActorSkillHelper.CanInteract(InteractSkillType.Lift, box.BoxTypeIndex))
             {
                 if (box.BeingLift(this))
                 {

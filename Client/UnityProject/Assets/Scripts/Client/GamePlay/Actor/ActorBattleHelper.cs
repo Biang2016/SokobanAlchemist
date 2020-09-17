@@ -174,9 +174,9 @@ public class ActorBattleHelper : ActorHelper
             if (boxIndex == 0) return;
             Box box = GameObjectPoolManager.Instance.BoxDict[boxIndex].AllocateGameObject<Box>(transform);
             string boxName = Actor.DieDropBoxTypeName;
-            box.BoxTypeIndex = boxIndex;
             GridPos3D gp = Actor.CurGP;
             GridPos3D localGP = gp - module.ModuleGP * WorldModule.MODULE_SIZE;
+            box.Setup(boxIndex);
             box.Initialize(localGP, module, 0, false, false);
             box.name = $"{boxName}_{gp}";
             box.DropFromDeadActor();

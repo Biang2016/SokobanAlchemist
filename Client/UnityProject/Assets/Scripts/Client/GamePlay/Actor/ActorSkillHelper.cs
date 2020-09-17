@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class ActorSkillHelper : ActorHelper
 {
@@ -7,30 +9,112 @@ public class ActorSkillHelper : ActorHelper
         base.OnRecycled();
     }
 
+    private SortedDictionary<byte, InteractSkillType> InteractSkillDict = new SortedDictionary<byte, InteractSkillType>();
+
+    public byte PlayerCurrentGetKickAbility = 0;
+
     public void Initialize()
     {
+        foreach (KeyValuePair<byte, string> kv in ConfigManager.BoxTypeDefineDict.TypeNameDict)
+        {
+            InteractSkillDict.Add(kv.Key, 0);
+        }
+
         foreach (string boxName in Actor.PushableBoxList)
         {
-            byte boxIndex = ConfigManager.GetBoxTypeIndex(boxName);
-            PushableBoxSet.Add(boxIndex);
+            byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
+            InteractSkillDict[boxTypeIndex] |= InteractSkillType.Push;
+            if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
         }
 
         foreach (string boxName in Actor.KickableBoxList)
         {
-            byte boxIndex = ConfigManager.GetBoxTypeIndex(boxName);
-            KickableBoxSet.Add(boxIndex);
+            byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
+            InteractSkillDict[boxTypeIndex] |= InteractSkillType.Kick;
+            if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
         }
 
         foreach (string boxName in Actor.LiftableBoxList)
         {
-            byte boxIndex = ConfigManager.GetBoxTypeIndex(boxName);
-            LiftableBoxSet.Add(boxIndex);
+            byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
+            InteractSkillDict[boxTypeIndex] |= InteractSkillType.Lift;
+            if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
         }
     }
 
-    public byte CurrentGetKickAbility = 0;
+    public InteractSkillType GetInteractSkillType(byte boxTypeIndex)
+    {
+        return InteractSkillDict[boxTypeIndex];
+    }
 
-    public HashSet<byte> PushableBoxSet = new HashSet<byte>();
-    public HashSet<byte> KickableBoxSet = new HashSet<byte>();
-    public HashSet<byte> LiftableBoxSet = new HashSet<byte>();
+    public bool CanInteract(InteractSkillType interactType, byte boxTypeIndex)
+    {
+        if (!InteractSkillDict.ContainsKey(boxTypeIndex)) return false;
+        return InteractSkillDict[boxTypeIndex].HasFlag(interactType);
+    }
+
+    public void EnableInteract(InteractSkillType interactType, byte boxTypeIndex)
+    {
+        if (!InteractSkillDict.ContainsKey(boxTypeIndex)) return;
+        if (!InteractSkillDict[boxTypeIndex].HasFlag(interactType))
+        {
+            InteractSkillDict[boxTypeIndex] |= interactType;
+            if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
+        }
+    }
+
+    public void DisableInteract(InteractSkillType interactType, byte boxTypeIndex)
+    {
+        if (!InteractSkillDict.ContainsKey(boxTypeIndex)) return;
+        if (InteractSkillDict[boxTypeIndex].HasFlag(interactType))
+        {
+            InteractSkillDict[boxTypeIndex] -= interactType;
+            if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
+        }
+    }
+}
+
+[Flags]
+public enum InteractSkillType
+{
+    None = 0,
+    Push = 1 << 0,
+    Kick = 1 << 1,
+    Lift = 1 << 2,
+}
+
+public static class InteractSkillTypeExtension
+{
+    public static BoxFeature ConvertToBoxFeature(this InteractSkillType interactSkillType)
+    {
+        switch (interactSkillType)
+        {
+            case InteractSkillType.Push:
+            {
+                return BoxFeature.Pushable;
+            }
+            case InteractSkillType.Kick:
+            {
+                return BoxFeature.Kickable;
+            }
+            case InteractSkillType.Lift:
+            {
+                return BoxFeature.Liftable;
+            }
+        }
+
+        return 0;
+    }
+
+    public static BoxSkinHelper.BoxModelType ConvertToBoxModelType(this InteractSkillType interactSkillType)
+    {
+        if (interactSkillType.HasFlag(InteractSkillType.Kick))
+        {
+            return BoxSkinHelper.BoxModelType.Rounded;
+        }
+        else
+        {
+            return BoxSkinHelper.BoxModelType.Box;
+        }
+    }
 }
