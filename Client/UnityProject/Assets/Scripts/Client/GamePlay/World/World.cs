@@ -272,20 +272,43 @@ public class World : PoolObject
     {
         WorldManager.Instance.OtherBoxDict.Remove(box.GUID);
         GridPos3D gp = GridPos3D.GetGridPosByTrans(box.transform, 1);
-        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(gp);
-        GridPos3D localGP = gp - module.ModuleGP * WorldModule.MODULE_SIZE;
-        Box existBox = module.BoxMatrix[localGP.x, localGP.y, localGP.z];
-        if (existBox != null && existBox != box)
+
+        if (!tryPutBox(gp))
         {
-            string logStr = $"{box.name}想要前往的位置{localGP}非空, 存在{existBox.name}";
-            Debug.LogError(logStr);
-            return;
+            bool canPutAside = tryPutBox(gp + new GridPos3D(1, 0, 0))
+                               || tryPutBox(gp + new GridPos3D(-1, 0, 0))
+                               || tryPutBox(gp + new GridPos3D(0, 1, 0))
+                               || tryPutBox(gp + new GridPos3D(0, -1, 0))
+                               || tryPutBox(gp + new GridPos3D(0, 0, 1))
+                               || tryPutBox(gp + new GridPos3D(0, 0, -1));
+            if (!canPutAside) box.PoolRecycle(); // 无处可放即销毁
         }
 
-        if (existBox == null)
+        bool tryPutBox(GridPos3D worldGP)
         {
-            module.BoxMatrix[localGP.x, localGP.y, localGP.z] = box;
-            box.Initialize(localGP, module, 0.3f, box.ArtOnly, false);
+            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(worldGP);
+            if (module != null)
+            {
+                GridPos3D localGP = worldGP - module.ModuleGP * WorldModule.MODULE_SIZE;
+                Box existBox = module.BoxMatrix[localGP.x, localGP.y, localGP.z];
+                if (existBox == null)
+                {
+                    module.BoxMatrix[localGP.x, localGP.y, localGP.z] = box;
+                    box.Initialize(localGP, module, 0.3f, box.ArtOnly, false);
+                    return true;
+                }
+                else
+                {
+                    if (existBox != box)
+                    {
+                        //string logStr = $"{box.name}想要前往的位置{localGP}非空, 存在{existBox.name}";
+                        //Debug.LogError(logStr);
+                        return false;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 

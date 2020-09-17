@@ -6,6 +6,7 @@ public class ActorSkillHelper : ActorHelper
 {
     public override void OnRecycled()
     {
+        InteractSkillDict.Clear();
         base.OnRecycled();
     }
 

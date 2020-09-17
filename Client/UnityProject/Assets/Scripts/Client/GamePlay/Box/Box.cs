@@ -274,7 +274,7 @@ public class Box : PoolObject
         if (lerpTime > 0)
         {
             transform.DOPause();
-            transform.DOLocalMove(localGridPos3D.ToVector3(), lerpTime).SetEase(Ease.OutQuad).OnComplete(() =>
+            transform.DOLocalMove(localGridPos3D.ToVector3(), lerpTime).SetEase(Ease.Linear).OnComplete(() =>
             {
                 State = States.Static;
                 if (dropping)
