@@ -374,7 +374,7 @@ public class Actor : PoolObject
             if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
             MovementState = MovementStates.Moving;
             RigidBody.drag = 0;
-            RigidBody.AddForce(CurMoveAttempt * Time.fixedDeltaTime * FinalAccelerate);
+            RigidBody.AddForce(CurMoveAttempt * Time.fixedDeltaTime * FinalAccelerate, ForceMode.VelocityChange);
             if (RigidBody.velocity.magnitude > FinalSpeed)
             {
                 RigidBody.AddForce(RigidBody.velocity.normalized * (FinalSpeed - RigidBody.velocity.magnitude), ForceMode.VelocityChange);
