@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class FieldCamera : MonoBehaviour
 {
-    [SerializeField]
-    private Camera Camera;
+    public Camera Camera;
 
     [SerializeField]
     private Camera BattleUICamera;
@@ -26,6 +25,9 @@ public class FieldCamera : MonoBehaviour
     [LabelText("InGameUISize")]
     public float InGameUISize;
 
+    [LabelText("相机震屏力度曲线(x伤害y强度")]
+    public AnimationCurve CameraShakeStrengthCurve;
+
     void Awake()
     {
         Distance_Level = 2;
@@ -35,6 +37,11 @@ public class FieldCamera : MonoBehaviour
     {
         ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, AddTargetActor);
         ClientGameManager.Instance.BattleMessenger.AddListener<WorldCameraPOI>((uint) Enum_Events.OnWorldCameraPOILoaded, AddTargetPOI);
+    }
+
+    public void InitFocus()
+    {
+        CameraLerp(false);
     }
 
     private void AddTargetActor(Actor actor)
@@ -52,7 +59,6 @@ public class FieldCamera : MonoBehaviour
         return DistanceLevels_ScaleForBattleUI[Distance_Level];
     }
 
-    public bool NeedLerp = true;
     public float SmoothTime = 0.05f;
     Vector3 curVelocity = Vector3.zero;
 
@@ -62,6 +68,11 @@ public class FieldCamera : MonoBehaviour
     }
 
     private void LateUpdate()
+    {
+        CameraLerp(true);
+    }
+
+    private void CameraLerp(bool lerp)
     {
         Vector3 targetCenter = Vector3.zero;
         foreach (Transform trans in targetList)
@@ -79,7 +90,7 @@ public class FieldCamera : MonoBehaviour
         diff.y = Distance * Mathf.Sin(VerticalAngle * Mathf.Deg2Rad);
         diff.z = -Distance * Mathf.Cos(VerticalAngle * Mathf.Deg2Rad) * Mathf.Cos(HorizontalAngle * Mathf.Deg2Rad);
         Vector3 destination = targetCenter + diff;
-        if (NeedLerp)
+        if (lerp)
         {
             transform.position = Vector3.SmoothDamp(transform.position, destination, ref curVelocity, SmoothTime);
         }
@@ -89,6 +100,11 @@ public class FieldCamera : MonoBehaviour
         }
 
         transform.forward = targetCenter - destination;
+    }
+
+    public void CameraShake(int damage)
+    {
+        Camera.transform.DOShakePosition(0.1f, CameraShakeStrengthCurve.Evaluate(damage), 10, 90f);
     }
 
     #region Distance Levels

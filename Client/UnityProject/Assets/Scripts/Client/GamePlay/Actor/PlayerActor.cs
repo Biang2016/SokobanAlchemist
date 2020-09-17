@@ -33,6 +33,8 @@ public class PlayerActor : Actor
         BS_Right_Last = ControlManager.Instance.Battle_MoveButtons_LastFrame[(int) PlayerNumber, (int) GridPosR.Orientation.Right];
         BS_Down_Last = ControlManager.Instance.Battle_MoveButtons_LastFrame[(int) PlayerNumber, (int) GridPosR.Orientation.Down];
         BS_Left_Last = ControlManager.Instance.Battle_MoveButtons_LastFrame[(int) PlayerNumber, (int) GridPosR.Orientation.Left];
+
+        ActorBattleHelper.OnDamaged += (Actor, damage) => { CameraManager.Instance.FieldCamera.CameraShake(damage); };
     }
 
     protected override void FixedUpdate()
@@ -95,7 +97,7 @@ public class PlayerActor : Actor
                 if (PlayerNumber == PlayerNumber.Player1)
                 {
                     Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(ControlManager.Instance.Battle_MousePosition);
-                    Vector3 intersectPoint= CommonUtils.GetIntersectWithLineAndPlane(ray.origin, ray.direction, Vector3.up, transform.position);
+                    Vector3 intersectPoint = CommonUtils.GetIntersectWithLineAndPlane(ray.origin, ray.direction, Vector3.up, transform.position);
                     CurThrowPointOffset = intersectPoint - transform.position;
                 }
                 else if (PlayerNumber == PlayerNumber.Player2)

@@ -83,6 +83,8 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
                 AddActor(enemy);
             }
         }
+
+        CameraManager.Instance.FieldCamera.InitFocus();
     }
 
     public void ResetBattle()
