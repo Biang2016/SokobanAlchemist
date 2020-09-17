@@ -130,9 +130,9 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
                 btType = BattleTipPrefabType.SelfAttack;
             }
         }
-        else if (info.AttackerType == AttackerType.LocalPlayerSelfDamage)
+        else if (info.AttackerType == AttackerType.Enemy)
         {
-            if (info.BattleTipType == BattleTipType.Attack)
+            if (info.BattleTipType == BattleTipType.Damage)
             {
                 btType = BattleTipPrefabType.SelfDamage;
             }
