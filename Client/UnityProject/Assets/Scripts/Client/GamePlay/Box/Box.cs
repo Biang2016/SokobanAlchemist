@@ -69,7 +69,6 @@ public class Box : PoolObject
         }
 
         UnRegisterEvents();
-
         base.OnRecycled();
     }
 

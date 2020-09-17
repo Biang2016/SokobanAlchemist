@@ -5,8 +5,8 @@ public class BoxEffectHelper : PoolObject
 {
     public override void OnRecycled()
     {
-        base.OnRecycled();
         Stop();
+        base.OnRecycled();
     }
 
     public ParticleSystem ImpulseParticleSystem;
