@@ -12,16 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a686a47eee2fa44cb0a34b5d86e4d5e, type: 3}
   m_Name: BT_EnemyChasing
   m_EditorClassIdentifier: 
-  _serializedGraph: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[{"_condition":{"LiftBoxTypeNames":{"_name":"LiftBoxTypeNames","_targetVariableID":"d21dc8a8-3517-4ed3-a546-5846f9fdc8ca"},"$type":"ActorAIAtoms+BT_Enemy_LiftCondition"},"_position":{"x":390.0,"y":330.0},"$type":"NodeCanvas.BehaviourTrees.BinarySelector","$id":"0"},{"_position":{"x":225.0,"y":450.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"1"},{"_action":{"boolVariable":{"_name":"_LiftingBox","_targetVariableID":"39cfb4ec-52c3-4bfd-b187-b182db88398a"},"$type":"NodeCanvas.Tasks.Actions.SetBoolean"},"_position":{"x":45.0,"y":540.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"2"},{"KeepDistanceMin":{"_name":"KeepDistanceMin","_targetVariableID":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"},"KeepDistanceMax":{"_name":"KeepDistanceMax","_targetVariableID":"f4670f67-b504-4764-ac45-263d9b4a165b"},"_position":{"x":225.0,"y":540.0},"$type":"ActorAIAtoms+BT_Enemy_MoveToMainPlayer","$id":"3"},{"repeaterMode":1,"repeatTimes":{"_value":1},"_position":{"x":480.0,"y":450.0},"$type":"NodeCanvas.BehaviourTrees.Repeater","$id":"4"},{"_position":{"x":480.0,"y":540.0},"$type":"NodeCanvas.BehaviourTrees.StepIterator","$id":"5"},{"_action":{"boolVariable":{"_name":"_LiftingBox","_targetVariableID":"39cfb4ec-52c3-4bfd-b187-b182db88398a"},"setTo":0,"$type":"NodeCanvas.Tasks.Actions.SetBoolean"},"_position":{"x":225.0,"y":630.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"6"},{"_condition":{"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_HasSearchedBox"},"_position":{"x":450.0,"y":630.0},"$type":"NodeCanvas.BehaviourTrees.ConditionalEvaluator","$id":"7"},{"_action":{"boolVariable":{"_name":"_CanSearchBox","_targetVariableID":"3fafd0d0-9cb0-4815-8e99-6a25373cfbb1"},"setTo":0,"$type":"NodeCanvas.Tasks.Actions.SetBoolean"},"_position":{"x":360.0,"y":735.0},"$type":"NodeCanvas.BehaviourTrees.Monitor","$id":"8"},{"_position":{"x":405.0,"y":870.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"9"},{"LiftBoxTypeNames":{"_name":"LiftBoxTypeNames","_targetVariableID":"d21dc8a8-3517-4ed3-a546-5846f9fdc8ca"},"SearchRangeShape":{},"SearchRadius":{"_value":7},"MinimumDistance":{"_value":true},"ExceptRadiusAroundPlayer":{"_name":"KeepDistanceMin","_targetVariableID":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"},"_position":{"x":225.0,"y":945.0},"$type":"ActorAIAtoms+BT_Enemy_SearchBoxAndSetTarget","$id":"10"},{"_action":{"boolVariable":{"_name":"_CanSearchBox","_targetVariableID":"3fafd0d0-9cb0-4815-8e99-6a25373cfbb1"},"$type":"NodeCanvas.Tasks.Actions.SetBoolean"},"_position":{"x":450.0,"y":945.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"11"},{"_condition":{"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_HasSearchedBox"},"_position":{"x":675.0,"y":630.0},"$type":"NodeCanvas.BehaviourTrees.Interruptor","$id":"12"},{"_position":{"x":720.0,"y":735.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"13"},{"_position":{"x":585.0,"y":825.0},"$type":"ActorAIAtoms+BT_Enemy_MoveTowardsBox","$id":"14"},{"_position":{"x":720.0,"y":825.0},"$type":"ActorAIAtoms+BT_Enemy_LiftBox","$id":"15"},{"_action":{"boolVariable":{"_name":"_LiftingBox","_targetVariableID":"39cfb4ec-52c3-4bfd-b187-b182db88398a"},"$type":"NodeCanvas.Tasks.Actions.SetBoolean"},"_position":{"x":840.0,"y":825.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"16"}],"connections":[{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"4"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"4"},"_targetNode":{"$ref":"5"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"5"},"_targetNode":{"$ref":"6"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"5"},"_targetNode":{"$ref":"7"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"5"},"_targetNode":{"$ref":"12"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"7"},"_targetNode":{"$ref":"8"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"8"},"_targetNode":{"$ref":"9"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"9"},"_targetNode":{"$ref":"10"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"9"},"_targetNode":{"$ref":"11"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"12"},"_targetNode":{"$ref":"13"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"13"},"_targetNode":{"$ref":"14"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"13"},"_targetNode":{"$ref":"15"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"13"},"_targetNode":{"$ref":"16"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{"_CanSearchBox":{"_name":"_CanSearchBox","_id":"3fafd0d0-9cb0-4815-8e99-6a25373cfbb1","_isPublic":true,"$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"_LiftingBox":{"_name":"_LiftingBox","_id":"39cfb4ec-52c3-4bfd-b187-b182db88398a","_isPublic":true,"$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
+  _serializedGraph: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[{"_condition":{"LiftBoxTypeNames":{"_name":"LiftBoxTypeNames","_targetVariableID":"d21dc8a8-3517-4ed3-a546-5846f9fdc8ca"},"$type":"ActorAIAtoms+BT_Enemy_LiftCondition"},"_position":{"x":390.0,"y":330.0},"$type":"NodeCanvas.BehaviourTrees.BinarySelector","$id":"0"},{"_position":{"x":225.0,"y":450.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"1"},{"KeepDistanceMin":{"_name":"KeepDistanceMin","_targetVariableID":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"},"KeepDistanceMax":{"_name":"KeepDistanceMax","_targetVariableID":"f4670f67-b504-4764-ac45-263d9b4a165b"},"_position":{"x":135.0,"y":555.0},"$type":"ActorAIAtoms+BT_Enemy_MoveToMainPlayer","$id":"2"},{"BoxDropAngleRange":{"_name":"BoxDropAngleRange","_targetVariableID":"746405f1-59b8-49bf-9ced-25bb2da40ef0"},"BoxDropRadiusRange":{"_name":"BoxDropRadiusRange","_targetVariableID":"70df902a-e67b-4a95-8da4-46d8af9deed2"},"_position":{"x":300.0,"y":555.0},"$type":"ActorAIAtoms+BT_Enemy_ThrowBox","$id":"3"},{"repeaterMode":1,"repeatTimes":{"_value":1},"_position":{"x":480.0,"y":450.0},"$type":"NodeCanvas.BehaviourTrees.Repeater","$id":"4"},{"_position":{"x":480.0,"y":540.0},"$type":"NodeCanvas.BehaviourTrees.StepIterator","$id":"5"},{"_condition":{"ExceptRadiusAroundPlayer":{"_name":"KeepDistanceMin","_targetVariableID":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_HasSearchedBox"},"_position":{"x":450.0,"y":630.0},"$type":"NodeCanvas.BehaviourTrees.ConditionalEvaluator","$id":"6"},{"_action":{"boolVariable":{"_name":"_CanSearchBox","_targetVariableID":"3fafd0d0-9cb0-4815-8e99-6a25373cfbb1"},"setTo":0,"$type":"NodeCanvas.Tasks.Actions.SetBoolean"},"_position":{"x":360.0,"y":735.0},"$type":"NodeCanvas.BehaviourTrees.Monitor","$id":"7"},{"_position":{"x":405.0,"y":870.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"8"},{"LiftBoxTypeNames":{"_name":"LiftBoxTypeNames","_targetVariableID":"d21dc8a8-3517-4ed3-a546-5846f9fdc8ca"},"SearchRangeShape":{},"SearchRadius":{"_value":7},"MinimumDistance":{"_value":true},"ExceptRadiusAroundPlayer":{"_name":"KeepDistanceMin","_targetVariableID":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"},"_position":{"x":225.0,"y":945.0},"$type":"ActorAIAtoms+BT_Enemy_SearchBoxAndSetTarget","$id":"9"},{"_action":{"boolVariable":{"_name":"_CanSearchBox","_targetVariableID":"3fafd0d0-9cb0-4815-8e99-6a25373cfbb1"},"$type":"NodeCanvas.Tasks.Actions.SetBoolean"},"_position":{"x":450.0,"y":945.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"10"},{"_condition":{"ExceptRadiusAroundPlayer":{"_name":"KeepDistanceMin","_targetVariableID":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_HasSearchedBox"},"_position":{"x":675.0,"y":630.0},"$type":"NodeCanvas.BehaviourTrees.Interruptor","$id":"11"},{"_position":{"x":885.0,"y":795.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"12"},{"_position":{"x":735.0,"y":870.0},"$type":"ActorAIAtoms+BT_Enemy_MoveTowardsBox","$id":"13"},{"childWeights":[{"_value":1.0},{"_value":1.0}],"failChance":{},"_position":{"x":885.0,"y":870.0},"$type":"NodeCanvas.BehaviourTrees.ProbabilitySelector","$id":"14"},{"_position":{"x":810.0,"y":945.0},"$type":"ActorAIAtoms+BT_Enemy_LiftBox","$id":"15"},{"_position":{"x":945.0,"y":945.0},"$type":"ActorAIAtoms+BT_Enemy_KickBox","$id":"16"}],"connections":[{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"4"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"4"},"_targetNode":{"$ref":"5"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"5"},"_targetNode":{"$ref":"6"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"5"},"_targetNode":{"$ref":"11"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"6"},"_targetNode":{"$ref":"7"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"7"},"_targetNode":{"$ref":"8"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"8"},"_targetNode":{"$ref":"9"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"8"},"_targetNode":{"$ref":"10"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"11"},"_targetNode":{"$ref":"12"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"12"},"_targetNode":{"$ref":"13"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"12"},"_targetNode":{"$ref":"14"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"14"},"_targetNode":{"$ref":"15"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"14"},"_targetNode":{"$ref":"16"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{"_CanSearchBox":{"_name":"_CanSearchBox","_id":"3fafd0d0-9cb0-4815-8e99-6a25373cfbb1","_isPublic":true,"$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
   _objectReferences: []
   _graphSource:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: 405, y: -393}
-    _zoomFactor: 0.9989791
+    _translation: {x: 68, y: -314}
+    _zoomFactor: 1
   _haltSerialization: 0
 #---GRAPH_START---
 #The pretty formatted json serialization bellow is only a reference to help in version control diff. Other than that it is not used at all.
@@ -52,21 +51,6 @@ MonoBehaviour:
 #            "$id": "1"
 #        },
 #        {
-#            "_action": {
-#                "boolVariable": {
-#                    "_name": "_LiftingBox",
-#                    "_targetVariableID": "39cfb4ec-52c3-4bfd-b187-b182db88398a"
-#                },
-#                "$type": "NodeCanvas.Tasks.Actions.SetBoolean"
-#            },
-#            "_position": {
-#                "x": 45.0,
-#                "y": 540.0
-#            },
-#            "$type": "NodeCanvas.BehaviourTrees.ActionNode",
-#            "$id": "2"
-#        },
-#        {
 #            "KeepDistanceMin": {
 #                "_name": "KeepDistanceMin",
 #                "_targetVariableID": "c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"
@@ -76,10 +60,26 @@ MonoBehaviour:
 #                "_targetVariableID": "f4670f67-b504-4764-ac45-263d9b4a165b"
 #            },
 #            "_position": {
-#                "x": 225.0,
-#                "y": 540.0
+#                "x": 135.0,
+#                "y": 555.0
 #            },
 #            "$type": "ActorAIAtoms+BT_Enemy_MoveToMainPlayer",
+#            "$id": "2"
+#        },
+#        {
+#            "BoxDropAngleRange": {
+#                "_name": "BoxDropAngleRange",
+#                "_targetVariableID": "746405f1-59b8-49bf-9ced-25bb2da40ef0"
+#            },
+#            "BoxDropRadiusRange": {
+#                "_name": "BoxDropRadiusRange",
+#                "_targetVariableID": "70df902a-e67b-4a95-8da4-46d8af9deed2"
+#            },
+#            "_position": {
+#                "x": 300.0,
+#                "y": 555.0
+#            },
+#            "$type": "ActorAIAtoms+BT_Enemy_ThrowBox",
 #            "$id": "3"
 #        },
 #        {
@@ -103,23 +103,11 @@ MonoBehaviour:
 #            "$id": "5"
 #        },
 #        {
-#            "_action": {
-#                "boolVariable": {
-#                    "_name": "_LiftingBox",
-#                    "_targetVariableID": "39cfb4ec-52c3-4bfd-b187-b182db88398a"
-#                },
-#                "setTo": 0,
-#                "$type": "NodeCanvas.Tasks.Actions.SetBoolean"
-#            },
-#            "_position": {
-#                "x": 225.0,
-#                "y": 630.0
-#            },
-#            "$type": "NodeCanvas.BehaviourTrees.ActionNode",
-#            "$id": "6"
-#        },
-#        {
 #            "_condition": {
+#                "ExceptRadiusAroundPlayer": {
+#                    "_name": "KeepDistanceMin",
+#                    "_targetVariableID": "c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"
+#                },
 #                "_invert": true,
 #                "$type": "ActorAIAtoms+BT_Enemy_HasSearchedBox"
 #            },
@@ -128,7 +116,7 @@ MonoBehaviour:
 #                "y": 630.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.ConditionalEvaluator",
-#            "$id": "7"
+#            "$id": "6"
 #        },
 #        {
 #            "_action": {
@@ -144,7 +132,7 @@ MonoBehaviour:
 #                "y": 735.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.Monitor",
-#            "$id": "8"
+#            "$id": "7"
 #        },
 #        {
 #            "_position": {
@@ -152,7 +140,7 @@ MonoBehaviour:
 #                "y": 870.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.Sequencer",
-#            "$id": "9"
+#            "$id": "8"
 #        },
 #        {
 #            "LiftBoxTypeNames": {
@@ -177,7 +165,7 @@ MonoBehaviour:
 #                "y": 945.0
 #            },
 #            "$type": "ActorAIAtoms+BT_Enemy_SearchBoxAndSetTarget",
-#            "$id": "10"
+#            "$id": "9"
 #        },
 #        {
 #            "_action": {
@@ -192,10 +180,14 @@ MonoBehaviour:
 #                "y": 945.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.ActionNode",
-#            "$id": "11"
+#            "$id": "10"
 #        },
 #        {
 #            "_condition": {
+#                "ExceptRadiusAroundPlayer": {
+#                    "_name": "KeepDistanceMin",
+#                    "_targetVariableID": "c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"
+#                },
 #                "_invert": true,
 #                "$type": "ActorAIAtoms+BT_Enemy_HasSearchedBox"
 #            },
@@ -204,45 +196,57 @@ MonoBehaviour:
 #                "y": 630.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.Interruptor",
+#            "$id": "11"
+#        },
+#        {
+#            "_position": {
+#                "x": 885.0,
+#                "y": 795.0
+#            },
+#            "$type": "NodeCanvas.BehaviourTrees.Sequencer",
 #            "$id": "12"
 #        },
 #        {
 #            "_position": {
-#                "x": 720.0,
-#                "y": 735.0
+#                "x": 735.0,
+#                "y": 870.0
 #            },
-#            "$type": "NodeCanvas.BehaviourTrees.Sequencer",
+#            "$type": "ActorAIAtoms+BT_Enemy_MoveTowardsBox",
 #            "$id": "13"
 #        },
 #        {
-#            "_position": {
-#                "x": 585.0,
-#                "y": 825.0
+#            "childWeights": [
+#                {
+#                    "_value": 1.0
+#                },
+#                {
+#                    "_value": 1.0
+#                }
+#            ],
+#            "failChance": {
+#
 #            },
-#            "$type": "ActorAIAtoms+BT_Enemy_MoveTowardsBox",
+#            "_position": {
+#                "x": 885.0,
+#                "y": 870.0
+#            },
+#            "$type": "NodeCanvas.BehaviourTrees.ProbabilitySelector",
 #            "$id": "14"
 #        },
 #        {
 #            "_position": {
-#                "x": 720.0,
-#                "y": 825.0
+#                "x": 810.0,
+#                "y": 945.0
 #            },
 #            "$type": "ActorAIAtoms+BT_Enemy_LiftBox",
 #            "$id": "15"
 #        },
 #        {
-#            "_action": {
-#                "boolVariable": {
-#                    "_name": "_LiftingBox",
-#                    "_targetVariableID": "39cfb4ec-52c3-4bfd-b187-b182db88398a"
-#                },
-#                "$type": "NodeCanvas.Tasks.Actions.SetBoolean"
-#            },
 #            "_position": {
-#                "x": 840.0,
-#                "y": 825.0
+#                "x": 945.0,
+#                "y": 945.0
 #            },
-#            "$type": "NodeCanvas.BehaviourTrees.ActionNode",
+#            "$type": "ActorAIAtoms+BT_Enemy_KickBox",
 #            "$id": "16"
 #        }
 #    ],
@@ -306,16 +310,16 @@ MonoBehaviour:
 #                "$ref": "5"
 #            },
 #            "_targetNode": {
-#                "$ref": "7"
+#                "$ref": "11"
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.BTConnection"
 #        },
 #        {
 #            "_sourceNode": {
-#                "$ref": "5"
+#                "$ref": "6"
 #            },
 #            "_targetNode": {
-#                "$ref": "12"
+#                "$ref": "7"
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.BTConnection"
 #        },
@@ -339,7 +343,7 @@ MonoBehaviour:
 #        },
 #        {
 #            "_sourceNode": {
-#                "$ref": "9"
+#                "$ref": "8"
 #            },
 #            "_targetNode": {
 #                "$ref": "10"
@@ -348,10 +352,10 @@ MonoBehaviour:
 #        },
 #        {
 #            "_sourceNode": {
-#                "$ref": "9"
+#                "$ref": "11"
 #            },
 #            "_targetNode": {
-#                "$ref": "11"
+#                "$ref": "12"
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.BTConnection"
 #        },
@@ -366,7 +370,7 @@ MonoBehaviour:
 #        },
 #        {
 #            "_sourceNode": {
-#                "$ref": "13"
+#                "$ref": "12"
 #            },
 #            "_targetNode": {
 #                "$ref": "14"
@@ -375,7 +379,7 @@ MonoBehaviour:
 #        },
 #        {
 #            "_sourceNode": {
-#                "$ref": "13"
+#                "$ref": "14"
 #            },
 #            "_targetNode": {
 #                "$ref": "15"
@@ -384,7 +388,7 @@ MonoBehaviour:
 #        },
 #        {
 #            "_sourceNode": {
-#                "$ref": "13"
+#                "$ref": "14"
 #            },
 #            "_targetNode": {
 #                "$ref": "16"
@@ -398,12 +402,6 @@ MonoBehaviour:
 #            "_CanSearchBox": {
 #                "_name": "_CanSearchBox",
 #                "_id": "3fafd0d0-9cb0-4815-8e99-6a25373cfbb1",
-#                "_isPublic": true,
-#                "$type": "NodeCanvas.Framework.Variable`1[[System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"
-#            },
-#            "_LiftingBox": {
-#                "_name": "_LiftingBox",
-#                "_id": "39cfb4ec-52c3-4bfd-b187-b182db88398a",
 #                "_isPublic": true,
 #                "$type": "NodeCanvas.Framework.Variable`1[[System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"
 #            }

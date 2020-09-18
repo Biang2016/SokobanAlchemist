@@ -33,20 +33,23 @@ public class EnemyActor : Actor
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
-        if (Selection.Contains(gameObject))
+        if (Application.isPlaying)
         {
-            float guardRange = (float) GraphOwner.blackboard.GetVariable("GuardRange").value;
-            float chasingRange = (float) GraphOwner.blackboard.GetVariable("ChasingRange").value;
-            float keepDistanceMin = (float) GraphOwner.blackboard.GetVariable("KeepDistanceMin").value;
-            float keepDistanceMax = (float) GraphOwner.blackboard.GetVariable("KeepDistanceMax").value;
-            Gizmos.color = new Color(0, 1, 0, 1f);
-            Gizmos.DrawWireSphere(transform.position, guardRange);
-            Gizmos.color = new Color(1, 0, 0, 1f);
-            Gizmos.DrawWireSphere(transform.position, chasingRange);
-            Gizmos.color = new Color(1, 0, 1f, 1f);
-            Gizmos.DrawWireSphere(transform.position, keepDistanceMin);
-            Gizmos.color = new Color(1, 0, 1f, 1f);
-            Gizmos.DrawWireSphere(transform.position, keepDistanceMax);
+            if (Selection.Contains(gameObject))
+            {
+                float guardRange = (float) GraphOwner.blackboard.GetVariable("GuardRange").value;
+                float chasingRange = (float) GraphOwner.blackboard.GetVariable("ChasingRange").value;
+                float keepDistanceMin = (float) GraphOwner.blackboard.GetVariable("KeepDistanceMin").value;
+                float keepDistanceMax = (float) GraphOwner.blackboard.GetVariable("KeepDistanceMax").value;
+                Gizmos.color = new Color(0, 1, 0, 1f);
+                Gizmos.DrawWireSphere(transform.position, guardRange);
+                Gizmos.color = new Color(1, 0, 0, 1f);
+                Gizmos.DrawWireSphere(transform.position, chasingRange);
+                Gizmos.color = new Color(1, 0, 1f, 1f);
+                Gizmos.DrawWireSphere(transform.position, keepDistanceMin);
+                Gizmos.color = new Color(1, 0, 1f, 1f);
+                Gizmos.DrawWireSphere(transform.position, keepDistanceMax);
+            }
         }
     }
 

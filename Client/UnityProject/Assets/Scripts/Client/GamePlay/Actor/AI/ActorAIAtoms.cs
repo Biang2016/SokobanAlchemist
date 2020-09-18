@@ -189,11 +189,23 @@ public static class ActorAIAtoms
     [Description("已搜索到箱子且箱子还在那儿")]
     public class BT_Enemy_HasSearchedBox : ConditionTask
     {
+        [Name("排除距离玩家一定范围内的箱子")]
+        public BBParameter<float> ExceptRadiusAroundPlayer;
+
         protected override bool OnCheck()
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             if (Actor.ActorAIAgent.TargetBox == null || Actor.ActorAIAgent.TargetBox.GridPos3D != Actor.ActorAIAgent.TargetBoxGP) return false;
-            return true;
+            if ((Actor.ActorAIAgent.TargetBox.transform.position - BattleManager.Instance.Player1.transform.position).magnitude <= ExceptRadiusAroundPlayer.value)
+            {
+                Actor.ActorAIAgent.TargetBox = null;
+                Actor.ActorAIAgent.TargetBoxGP = GridPos3D.Zero;
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 
@@ -301,6 +313,20 @@ public static class ActorAIAtoms
             Vector3 randomDirection = Quaternion.Euler(0, angleOffset, 0) * direction.normalized;
             Actor.CurThrowPointOffset = randomDirection * randomDistance;
             Actor.Throw();
+            return Status.Success;
+        }
+    }
+
+    [Category("敌兵")]
+    [Name("踢箱子")]
+    [Description("踢箱子")]
+    public class BT_Enemy_KickBox : BTNode
+    {
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ThrowState != Actor.ThrowStates.None && Actor.CurrentLiftBox != null) return Status.Failure;
+            Actor.Kick();
             return Status.Success;
         }
     }
