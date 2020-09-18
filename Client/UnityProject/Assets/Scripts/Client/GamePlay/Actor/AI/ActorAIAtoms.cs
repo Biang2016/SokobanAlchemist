@@ -111,11 +111,14 @@ public static class ActorAIAtoms
         [Name("搜索半径")]
         public BBParameter<int> SearchRadius;
 
+        [Name("排除距离玩家一定范围内的箱子")]
+        public BBParameter<float> ExceptRadiusAroundPlayer;
+
         protected override bool OnCheck()
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             if (LiftBoxTypeNames.value == null || LiftBoxTypeNames.value.Count == 0) return false;
-            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurGP, SearchRadius.value, LiftBoxTypeNames.value, SearchRangeShape.value);
+            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurGP, SearchRadius.value, LiftBoxTypeNames.value, SearchRangeShape.value, ExceptRadiusAroundPlayer.value);
             if (boxes.Count == 0) return false;
             return true;
         }
@@ -138,11 +141,14 @@ public static class ActorAIAtoms
         [Name("最短距离")]
         public BBParameter<bool> MinimumDistance;
 
+        [Name("排除距离玩家一定范围内的箱子")]
+        public BBParameter<float> ExceptRadiusAroundPlayer;
+
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (LiftBoxTypeNames.value == null || LiftBoxTypeNames.value.Count == 0) return Status.Failure;
-            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurGP, SearchRadius.value, LiftBoxTypeNames.value, SearchRangeShape.value);
+            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurGP, SearchRadius.value, LiftBoxTypeNames.value, SearchRangeShape.value, ExceptRadiusAroundPlayer.value);
             if (boxes.Count == 0) return Status.Failure;
             int minDistance = int.MaxValue;
             Box nearestBox = null;
@@ -275,12 +281,25 @@ public static class ActorAIAtoms
     [Description("扔箱子")]
     public class BT_Enemy_ThrowBox : BTNode
     {
+        [Name("扔箱子方向散射角")]
+        [Description("扔箱子方向散射角")]
+        public BBParameter<float> BoxDropAngleRange;
+
+        [Name("扔箱子射程浮动")]
+        [Description("扔箱子射程浮动")]
+        public BBParameter<float> BoxDropRadiusRange;
+
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ThrowState != Actor.ThrowStates.Lifting && Actor.CurrentLiftBox == null) return Status.Failure;
             Actor.ThrowCharge();
-            Actor.CurThrowPointOffset = BattleManager.Instance.Player1.transform.position - Actor.transform.position;
+            Vector3 direction = BattleManager.Instance.Player1.transform.position - Actor.transform.position;
+            float correctDistance = direction.magnitude;
+            float randomDistance = correctDistance + Random.Range(-BoxDropRadiusRange.value, BoxDropRadiusRange.value);
+            float angleOffset = Random.Range(-BoxDropAngleRange.value, BoxDropAngleRange.value);
+            Vector3 randomDirection = Quaternion.Euler(0, angleOffset, 0) * direction.normalized;
+            Actor.CurThrowPointOffset = randomDirection * randomDistance;
             Actor.Throw();
             return Status.Success;
         }
@@ -304,6 +323,8 @@ public static class ActorAIAtoms
                 Actor.Throw();
             }
 
+            if (Actor.ActorAIAgent.IsPathFinding) return Status.Running;
+
             bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.CurGP, IdleRadius.value, out GridPos3D destination);
             if (suc)
             {
@@ -317,7 +338,7 @@ public static class ActorAIAtoms
                     }
                     case ActorAIAgent.SetDestinationRetCode.Suc:
                     {
-                        return Status.Success;
+                        return Status.Running;
                     }
                     case ActorAIAgent.SetDestinationRetCode.Failed:
                     {

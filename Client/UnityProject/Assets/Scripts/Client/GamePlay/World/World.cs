@@ -384,7 +384,7 @@ public class World : PoolObject
         Square,
     }
 
-    public List<Box> SearchBoxInRange(GridPos3D center, int radius, List<string> boxTypeNames, SearchRangeShape shape)
+    public List<Box> SearchBoxInRange(GridPos3D center, int radius, List<string> boxTypeNames, SearchRangeShape shape, float exceptRadiusAroundPlayer)
     {
         List<Box> res = new List<Box>();
         if (boxTypeNames == null || boxTypeNames.Count == 0) return res;
@@ -408,10 +408,13 @@ public class World : PoolObject
                     Box box = GetBoxByGridPosition(gp, out WorldModule tarModule, out GridPos3D _);
                     if (box != null)
                     {
-                        string boxName = ConfigManager.GetBoxTypeName(box.BoxTypeIndex);
-                        if (boxName != null && boxTypeNames.Contains(boxName))
+                        if ((gp.ToVector3() - BattleManager.Instance.Player1.transform.position).magnitude > exceptRadiusAroundPlayer)
                         {
-                            res.Add(box);
+                            string boxName = ConfigManager.GetBoxTypeName(box.BoxTypeIndex);
+                            if (boxName != null && boxTypeNames.Contains(boxName))
+                            {
+                                res.Add(box);
+                            }
                         }
                     }
                 }

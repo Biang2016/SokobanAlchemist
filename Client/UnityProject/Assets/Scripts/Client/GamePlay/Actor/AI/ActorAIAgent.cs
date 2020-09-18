@@ -68,6 +68,7 @@ public class ActorAIAgent
     private float KeepDistanceMin;
     private float KeepDistanceMax;
     private bool LastNodeOccupied;
+    public bool IsPathFinding;
     private GridPos3D currentDestination;
     private LinkedList<GridPos3D> currentPath;
     private LinkedListNode<GridPos3D> currentNode;
@@ -75,6 +76,7 @@ public class ActorAIAgent
 
     private void ClearPathFinding()
     {
+        IsPathFinding = false;
         currentPath = null;
         currentNode = null;
         nextNode = null;
@@ -98,7 +100,12 @@ public class ActorAIAgent
         float dist = (Actor.CurGP.ToVector3() - currentDestination.ToVector3()).magnitude;
         if (dist <= KeepDistanceMax + (KeepDistanceMax.Equals(0) && LastNodeOccupied ? 1 : 0) && dist >= KeepDistanceMin)
         {
-            Actor.CurForward = (dest.ToVector3() - Actor.transform.position).normalized;
+            Vector3 forward = dest.ToVector3() - Actor.transform.position;
+            if (!forward.magnitude.Equals(0))
+            {
+                Actor.CurForward = forward.normalized;
+            }
+
             ClearPathFinding();
             return SetDestinationRetCode.AlreadyArrived;
         }
@@ -112,6 +119,7 @@ public class ActorAIAgent
         currentPath = ActorPathFinding.FindPath(Actor.CurGP, currentDestination, KeepDistanceMin, KeepDistanceMax);
         if (currentPath != null)
         {
+            IsPathFinding = true;
             currentNode = currentPath.First;
             nextNode = currentPath.First.Next;
 
