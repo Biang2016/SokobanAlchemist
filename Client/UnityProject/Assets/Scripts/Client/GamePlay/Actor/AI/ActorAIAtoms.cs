@@ -23,7 +23,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             Actor player = BattleManager.Instance.Player1;
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.CurGP, KeepDistanceMin.value, KeepDistanceMax.value, true);
+            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.CurGP, KeepDistanceMin.value, KeepDistanceMax.value, true, ActorPathFinding.DestinationType.Actor);
             switch (retCode)
             {
                 case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
@@ -52,7 +52,7 @@ public static class ActorAIAtoms
 
                     foreach (GridPos3D gp in runDestList)
                     {
-                        ActorAIAgent.SetDestinationRetCode rc = Actor.ActorAIAgent.SetDestination(gp, 0, 1, true);
+                        ActorAIAgent.SetDestinationRetCode rc = Actor.ActorAIAgent.SetDestination(gp, 0, 1, true, ActorPathFinding.DestinationType.EmptyGrid);
                         if (rc == ActorAIAgent.SetDestinationRetCode.Suc)
                         {
                             return Status.Running;
@@ -156,7 +156,7 @@ public static class ActorAIAtoms
             {
                 foreach (Box box in boxes)
                 {
-                    LinkedList<GridPos3D> path = ActorPathFinding.FindPath(Actor.CurGP, box.GridPos3D, 0, 0);
+                    LinkedList<GridPos3D> path = ActorPathFinding.FindPath(Actor.CurGP, box.GridPos3D, 0, 0, ActorPathFinding.DestinationType.Box);
                     if (path != null && path.Count != 0)
                     {
                         int dist = path.Count;
@@ -221,7 +221,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorAIAgent.TargetBox == null || Actor.ActorAIAgent.TargetBox.GridPos3D != Actor.ActorAIAgent.TargetBoxGP) return Status.Failure;
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(Actor.ActorAIAgent.TargetBoxGP, 0f, 0f, true);
+            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(Actor.ActorAIAgent.TargetBoxGP, 0f, 0f, true, ActorPathFinding.DestinationType.Box);
             switch (retCode)
             {
                 case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
@@ -323,12 +323,15 @@ public static class ActorAIAtoms
                 Actor.Throw();
             }
 
-            if (Actor.ActorAIAgent.IsPathFinding) return Status.Running;
+            if (Actor.ActorAIAgent.IsPathFinding)
+            {
+                return Status.Running;
+            }
 
             bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.CurGP, IdleRadius.value, out GridPos3D destination);
             if (suc)
             {
-                ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination, 0f, 0.5f, false);
+                ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination, 0f, 0.5f, false, ActorPathFinding.DestinationType.EmptyGrid);
                 switch (retCode)
                 {
                     case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
@@ -352,6 +355,23 @@ public static class ActorAIAtoms
             {
                 return Status.Failure;
             }
+        }
+    }
+
+    [Category("敌兵")]
+    [Name("结束寻路")]
+    [Description("结束寻路")]
+    public class BT_Enemy_TerminatePathFinding : BTNode
+    {
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ActorAIAgent.IsPathFinding)
+            {
+                Actor.ActorAIAgent.ClearPathFinding();
+            }
+
+            return Status.Success;
         }
     }
 

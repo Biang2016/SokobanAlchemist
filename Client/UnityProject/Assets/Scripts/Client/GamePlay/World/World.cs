@@ -203,10 +203,10 @@ public class World : PoolObject
 
     #region MoveBox Calculators
 
-    public Box GetBoxByGridPosition(GridPos3D gp, out WorldModule module, out GridPos3D localGP)
+    public Box GetBoxByGridPosition(GridPos3D gp, out WorldModule module, out GridPos3D localGP, bool ignoreUnaccessibleModule = true)
     {
-        module = GetModuleByGridPosition(gp);
-        if (module != null && module.IsAccessible)
+        module = GetModuleByGridPosition(gp, ignoreUnaccessibleModule);
+        if (module != null && (!ignoreUnaccessibleModule || module.IsAccessible))
         {
             localGP = gp - module.ModuleGP * WorldModule.MODULE_SIZE;
             return module.BoxMatrix[localGP.x, localGP.y, localGP.z];
@@ -218,13 +218,13 @@ public class World : PoolObject
         }
     }
 
-    public WorldModule GetModuleByGridPosition(GridPos3D gp)
+    public WorldModule GetModuleByGridPosition(GridPos3D gp, bool ignoreUnaccessibleModule = true)
     {
         GridPos3D gp_module = new GridPos3D(Mathf.FloorToInt((float) gp.x / WorldModule.MODULE_SIZE), Mathf.FloorToInt((float) gp.y / WorldModule.MODULE_SIZE), Mathf.FloorToInt((float) gp.z / WorldModule.MODULE_SIZE));
         if (gp_module.x >= 0 && gp_module.x < WORLD_SIZE && gp_module.y >= 0 && gp_module.y < WORLD_HEIGHT && gp_module.z >= 0 && gp_module.z < WORLD_SIZE)
         {
             WorldModule module = WorldModuleMatrix[gp_module.x, gp_module.y, gp_module.z];
-            if (module != null && module.IsAccessible)
+            if (module != null && (!ignoreUnaccessibleModule || module.IsAccessible))
             {
                 return module;
             }

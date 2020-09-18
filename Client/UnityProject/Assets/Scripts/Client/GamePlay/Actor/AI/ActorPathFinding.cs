@@ -21,13 +21,13 @@ public class ActorPathFinding
     private static LinkedList<Node> OpenList = new LinkedList<Node>();
     private static LinkedList<Node> CloseList = new LinkedList<Node>();
 
-    public static LinkedList<GridPos3D> FindPath(GridPos3D ori, GridPos3D dest, float keepDistanceMin, float keepDistanceMax)
+    public static LinkedList<GridPos3D> FindPath(GridPos3D ori, GridPos3D dest, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType)
     {
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori, out WorldModule oriModule, out GridPos3D _);
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(dest, out WorldModule destModule, out GridPos3D _);
         if (oriModule != null && destModule != null)
         {
-            return FindPath(new Node {GridPos3D = ori}, new Node {GridPos3D = dest}, keepDistanceMin, keepDistanceMax);
+            return FindPath(new Node {GridPos3D = ori}, new Node {GridPos3D = dest}, keepDistanceMin, keepDistanceMax, destinationType);
         }
 
         return null;
@@ -48,7 +48,7 @@ public class ActorPathFinding
         return false;
     }
 
-    private static LinkedList<GridPos3D> FindPath(Node ori, Node dest, float keepDistanceMin, float keepDistanceMax)
+    private static LinkedList<GridPos3D> FindPath(Node ori, Node dest, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType)
     {
         OpenList.Clear();
         CloseList.Clear();
@@ -70,7 +70,7 @@ public class ActorPathFinding
 
             OpenList.Remove(minFNode);
             CloseList.AddFirst(minFNode);
-            List<Node> adjacentNodes = GetAdjacentNodesForAStar(minFNode, dest.GridPos3D);
+            List<Node> adjacentNodes = GetAdjacentNodesForAStar(minFNode, dest.GridPos3D, destinationType);
             foreach (Node node in adjacentNodes)
             {
                 bool inCloseList = false;
@@ -131,7 +131,7 @@ public class ActorPathFinding
         return null;
     }
 
-    private static List<Node> GetAdjacentNodesForAStar(Node node, GridPos3D destGP)
+    private static List<Node> GetAdjacentNodesForAStar(Node node, GridPos3D destGP, DestinationType destinationType)
     {
         List<Node> res = new List<Node>();
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(node.GridPos3D, out WorldModule curModule, out GridPos3D _);
@@ -139,16 +139,27 @@ public class ActorPathFinding
 
         void tryAddNode(GridPos3D gp)
         {
-            if (gp == destGP)
+            if (destinationType == DestinationType.Box || destinationType == DestinationType.Actor)
             {
-                Node leftNode = new Node {GridPos3D = gp, ParentNode = node};
-                res.Add(leftNode);
-                return;
+                if (gp == destGP)
+                {
+                    Node leftNode = new Node {GridPos3D = gp, ParentNode = node};
+                    res.Add(leftNode);
+                    return;
+                }
             }
 
             Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gp, out WorldModule module, out GridPos3D _);
-            if (module != null && box == null)
+            Box box_beneath = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gp + new GridPos3D(0, -1, 0), out WorldModule module_beneath, out GridPos3D _, false);
+            if (module != null && box == null && module_beneath != null && box_beneath != null)
             {
+                if (gp == destGP)
+                {
+                    Node leftNode = new Node {GridPos3D = gp, ParentNode = node};
+                    res.Add(leftNode);
+                    return;
+                }
+
                 bool isActorOnTheWay = false;
                 foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
                 {
@@ -175,6 +186,13 @@ public class ActorPathFinding
         tryAddNode(node.GridPos3D + new GridPos3D(0, 0, -1));
         tryAddNode(node.GridPos3D + new GridPos3D(0, 0, 1));
         return res;
+    }
+
+    public enum DestinationType
+    {
+        EmptyGrid,
+        Box,
+        Actor,
     }
 
     private static int AStarHeuristicsDistance(Node start, Node end)
