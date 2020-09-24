@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using BiangStudio.GamePlay.UI;
 using BiangStudio.Messenger;
 using BiangStudio.Singleton;
@@ -138,6 +139,12 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
             }
         }
 
+        ClientGameManager.Instance.StartCoroutine(Co_ShowUIBattleTip(btType, info, maxSortingOrder));
+    }
+
+    IEnumerator Co_ShowUIBattleTip(BattleTipPrefabType btType, UIBattleTipInfo info, int maxSortingOrder)
+    {
+        yield return null;
         UIBattleTip tip = GameObjectPoolManager.Instance.BattleUIDict[btType].AllocateGameObject<UIBattleTip>(UIManager.Instance.UI3DRoot);
         tip.Initialize(info, maxSortingOrder + 1);
         UIBattleTipList.Add(tip);

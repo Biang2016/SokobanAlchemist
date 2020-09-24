@@ -4,11 +4,12 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: TwoSides19
-  m_Shader: {fileID: 4800000, guid: 56bedbcbfe68e1345a5e87fe73790dab, type: 3}
-  m_ShaderKeywords: _USECUSTOMDATA_ON _USEFRESNEL_ON
+  m_Shader: {fileID: 4800000, guid: 65ebf61e1c6310c4aa8065768071beff, type: 3}
+  m_ShaderKeywords: _USECUSTOMDATA_ON _USEDARK_ON _USEFRESNEL_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -38,7 +39,15 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Flow:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -72,31 +81,52 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
+    - _Colorpower: 1
+    - _Colorrange: 1
+    - _CullMode: 0
     - _Cutoff: 0.5
+    - _Depthpower: 1
     - _DetailNormalMapScale: 1
+    - _Distortionpower: 0.2
     - _DstBlend: 0
     - _Emission: 2
     - _Fresnel: 1
     - _FresnelEmission: 1
+    - _Fresnelpower: 3
+    - _Fresnelscale: 3
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _Mask: 0
+    - _Maskpower: 10
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _Opacity: 1
     - _Parallax: 0.02
+    - _SeparateEmission: 2
+    - _SeparateFresnel: 0
+    - _Smoothness: 0.2
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _UseCustomData: 1
     - _UseFresnel: 1
+    - _Usecenterglow: 0
+    - _Usedark: 1
+    - _Usedepth: 0
+    - _Useonlycolor: 0
     - _ZWrite: 1
     - __dirty: 1
     m_Colors:
     - _BackFacesColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DistortionSpeedXYPowerZ: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EndColor: {r: 1, g: 1, b: 0, a: 1}
     - _FresnelColor: {r: 1, g: 1, b: 1, a: 1}
     - _FrontFacesColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpeedMainTexUVNoiseZW: {r: 0, g: 0, b: 0, a: 0}
+    - _StartColor: {r: 1, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
