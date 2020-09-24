@@ -23,7 +23,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             Actor player = BattleManager.Instance.Player1;
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.CurGP, KeepDistanceMin.value, KeepDistanceMax.value, true);
+            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.CurGP, KeepDistanceMin.value, KeepDistanceMax.value, true, ActorPathFinding.DestinationType.Actor);
             switch (retCode)
             {
                 case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
@@ -52,7 +52,7 @@ public static class ActorAIAtoms
 
                     foreach (GridPos3D gp in runDestList)
                     {
-                        ActorAIAgent.SetDestinationRetCode rc = Actor.ActorAIAgent.SetDestination(gp, 0, 1, true);
+                        ActorAIAgent.SetDestinationRetCode rc = Actor.ActorAIAgent.SetDestination(gp, 0, 1, true, ActorPathFinding.DestinationType.EmptyGrid);
                         if (rc == ActorAIAgent.SetDestinationRetCode.Suc)
                         {
                             return Status.Running;
@@ -111,11 +111,14 @@ public static class ActorAIAtoms
         [Name("搜索半径")]
         public BBParameter<int> SearchRadius;
 
+        [Name("排除距离玩家一定范围内的箱子")]
+        public BBParameter<float> ExceptRadiusAroundPlayer;
+
         protected override bool OnCheck()
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             if (LiftBoxTypeNames.value == null || LiftBoxTypeNames.value.Count == 0) return false;
-            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurGP, SearchRadius.value, LiftBoxTypeNames.value, SearchRangeShape.value);
+            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurGP, SearchRadius.value, LiftBoxTypeNames.value, SearchRangeShape.value, ExceptRadiusAroundPlayer.value);
             if (boxes.Count == 0) return false;
             return true;
         }
@@ -138,11 +141,14 @@ public static class ActorAIAtoms
         [Name("最短距离")]
         public BBParameter<bool> MinimumDistance;
 
+        [Name("排除距离玩家一定范围内的箱子")]
+        public BBParameter<float> ExceptRadiusAroundPlayer;
+
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (LiftBoxTypeNames.value == null || LiftBoxTypeNames.value.Count == 0) return Status.Failure;
-            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurGP, SearchRadius.value, LiftBoxTypeNames.value, SearchRangeShape.value);
+            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurGP, SearchRadius.value, LiftBoxTypeNames.value, SearchRangeShape.value, ExceptRadiusAroundPlayer.value);
             if (boxes.Count == 0) return Status.Failure;
             int minDistance = int.MaxValue;
             Box nearestBox = null;
@@ -150,7 +156,7 @@ public static class ActorAIAtoms
             {
                 foreach (Box box in boxes)
                 {
-                    LinkedList<GridPos3D> path = ActorPathFinding.FindPath(Actor.CurGP, box.GridPos3D, 0, 0);
+                    LinkedList<GridPos3D> path = ActorPathFinding.FindPath(Actor.CurGP, box.GridPos3D, 0, 0, ActorPathFinding.DestinationType.Box);
                     if (path != null && path.Count != 0)
                     {
                         int dist = path.Count;
@@ -183,11 +189,23 @@ public static class ActorAIAtoms
     [Description("已搜索到箱子且箱子还在那儿")]
     public class BT_Enemy_HasSearchedBox : ConditionTask
     {
+        [Name("排除距离玩家一定范围内的箱子")]
+        public BBParameter<float> ExceptRadiusAroundPlayer;
+
         protected override bool OnCheck()
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             if (Actor.ActorAIAgent.TargetBox == null || Actor.ActorAIAgent.TargetBox.GridPos3D != Actor.ActorAIAgent.TargetBoxGP) return false;
-            return true;
+            if ((Actor.ActorAIAgent.TargetBox.transform.position - BattleManager.Instance.Player1.transform.position).magnitude <= ExceptRadiusAroundPlayer.value)
+            {
+                Actor.ActorAIAgent.TargetBox = null;
+                Actor.ActorAIAgent.TargetBoxGP = GridPos3D.Zero;
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 
@@ -215,7 +233,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorAIAgent.TargetBox == null || Actor.ActorAIAgent.TargetBox.GridPos3D != Actor.ActorAIAgent.TargetBoxGP) return Status.Failure;
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(Actor.ActorAIAgent.TargetBoxGP, 0f, 0f, true);
+            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(Actor.ActorAIAgent.TargetBoxGP, 0f, 0f, true, ActorPathFinding.DestinationType.Box);
             switch (retCode)
             {
                 case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
@@ -275,13 +293,40 @@ public static class ActorAIAtoms
     [Description("扔箱子")]
     public class BT_Enemy_ThrowBox : BTNode
     {
+        [Name("扔箱子方向散射角")]
+        [Description("扔箱子方向散射角")]
+        public BBParameter<float> BoxDropAngleRange;
+
+        [Name("扔箱子射程浮动")]
+        [Description("扔箱子射程浮动")]
+        public BBParameter<float> BoxDropRadiusRange;
+
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ThrowState != Actor.ThrowStates.Lifting && Actor.CurrentLiftBox == null) return Status.Failure;
             Actor.ThrowCharge();
-            Actor.CurThrowPointOffset = BattleManager.Instance.Player1.transform.position - Actor.transform.position;
+            Vector3 direction = BattleManager.Instance.Player1.transform.position - Actor.transform.position;
+            float correctDistance = direction.magnitude;
+            float randomDistance = correctDistance + Random.Range(-BoxDropRadiusRange.value, BoxDropRadiusRange.value);
+            float angleOffset = Random.Range(-BoxDropAngleRange.value, BoxDropAngleRange.value);
+            Vector3 randomDirection = Quaternion.Euler(0, angleOffset, 0) * direction.normalized;
+            Actor.CurThrowPointOffset = randomDirection * randomDistance;
             Actor.Throw();
+            return Status.Success;
+        }
+    }
+
+    [Category("敌兵")]
+    [Name("踢箱子")]
+    [Description("踢箱子")]
+    public class BT_Enemy_KickBox : BTNode
+    {
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ThrowState != Actor.ThrowStates.None && Actor.CurrentLiftBox != null) return Status.Failure;
+            Actor.Kick();
             return Status.Success;
         }
     }
@@ -304,24 +349,52 @@ public static class ActorAIAtoms
                 Actor.Throw();
             }
 
-            int x_offset = Random.Range(-IdleRadius.value, IdleRadius.value);
-            int z_offset = Random.Range(-IdleRadius.value, IdleRadius.value);
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(Actor.CurGP + new GridPos3D(x_offset, 0, z_offset), 0f, 0.5f, false);
-            switch (retCode)
+            if (Actor.ActorAIAgent.IsPathFinding)
             {
-                case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
-                case ActorAIAgent.SetDestinationRetCode.TooClose:
+                return Status.Running;
+            }
+
+            bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.CurGP, IdleRadius.value, out GridPos3D destination);
+            if (suc)
+            {
+                ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination, 0f, 0.5f, false, ActorPathFinding.DestinationType.EmptyGrid);
+                switch (retCode)
                 {
-                    return Status.Success;
+                    case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
+                    case ActorAIAgent.SetDestinationRetCode.TooClose:
+                    {
+                        return Status.Success;
+                    }
+                    case ActorAIAgent.SetDestinationRetCode.Suc:
+                    {
+                        return Status.Running;
+                    }
+                    case ActorAIAgent.SetDestinationRetCode.Failed:
+                    {
+                        return Status.Failure;
+                    }
                 }
-                case ActorAIAgent.SetDestinationRetCode.Suc:
-                {
-                    return Status.Success;
-                }
-                case ActorAIAgent.SetDestinationRetCode.Failed:
-                {
-                    return Status.Failure;
-                }
+
+                return Status.Success;
+            }
+            else
+            {
+                return Status.Failure;
+            }
+        }
+    }
+
+    [Category("敌兵")]
+    [Name("结束寻路")]
+    [Description("结束寻路")]
+    public class BT_Enemy_TerminatePathFinding : BTNode
+    {
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ActorAIAgent.IsPathFinding)
+            {
+                Actor.ActorAIAgent.ClearPathFinding();
             }
 
             return Status.Success;

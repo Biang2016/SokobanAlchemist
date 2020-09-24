@@ -416,5 +416,23 @@ namespace BiangStudio.GameDataFormat.Grid
         {
             return $"({x},{y},{z})";
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj != null)
+            {
+                GridPos3D target = (GridPos3D) obj;
+                return x == target.x && y == target.y && z == target.z;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return (x.GetHashCode() + y.GetHashCode() + z.GetHashCode()).GetHashCode();
+        }
     }
 }

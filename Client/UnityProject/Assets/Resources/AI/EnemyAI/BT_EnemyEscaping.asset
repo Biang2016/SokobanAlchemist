@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a686a47eee2fa44cb0a34b5d86e4d5e, type: 3}
   m_Name: BT_EnemyEscaping
   m_EditorClassIdentifier: 
-  _serializedGraph: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[{"_position":{"x":465.0,"y":225.0},"$type":"NodeCanvas.BehaviourTrees.StepIterator","$id":"0"},{"_position":{"x":375.0,"y":315.0},"$type":"NodeCanvas.BehaviourTrees.Optional","$id":"1"},{"_condition":{"RangeRadius":{"_name":"KeepDistanceMin","_targetVariableID":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"},"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},"_position":{"x":360.0,"y":420.0},"$type":"NodeCanvas.BehaviourTrees.ConditionalEvaluator","$id":"2"},{"KeepDistanceMin":{"_name":"EscapeDistanceFromPlayer","_targetVariableID":"64a17788-e308-42ec-8038-c37c7f100b19"},"KeepDistanceMax":{"_value":100.0},"_position":{"x":330.0,"y":525.0},"$type":"ActorAIAtoms+BT_Enemy_MoveToMainPlayer","$id":"3"},{"_position":{"x":540.0,"y":315.0},"$type":"NodeCanvas.BehaviourTrees.Optional","$id":"4"},{"_condition":{"LiftBoxTypeNames":{"_name":"LiftBoxTypeNames","_targetVariableID":"d21dc8a8-3517-4ed3-a546-5846f9fdc8ca"},"SearchRangeShape":{},"SearchRadius":{"_value":7},"$type":"ActorAIAtoms+BT_Enemy_SearchBoxCondition"},"_position":{"x":540.0,"y":420.0},"$type":"NodeCanvas.BehaviourTrees.ConditionalEvaluator","$id":"5"},{"_action":{"boolVariable":{"_name":"_CanSearchBox","_targetVariableID":"50531503-6957-4627-9b0b-1a956d4119b2"},"$type":"NodeCanvas.Tasks.Actions.SetBoolean"},"_position":{"x":525.0,"y":525.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"6"},{"repeaterMode":2,"repeatTimes":{"_value":1},"_position":{"x":465.0,"y":105.0},"$type":"NodeCanvas.BehaviourTrees.Repeater","$id":"7"}],"connections":[{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"4"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"4"},"_targetNode":{"$ref":"5"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"5"},"_targetNode":{"$ref":"6"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"7"},"_targetNode":{"$ref":"0"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{"_CanSearchBox":{"_name":"_CanSearchBox","_id":"50531503-6957-4627-9b0b-1a956d4119b2","_isPublic":true,"$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
+  _serializedGraph: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[{"_position":{"x":465.0,"y":225.0},"$type":"NodeCanvas.BehaviourTrees.StepIterator","$id":"0"},{"_position":{"x":375.0,"y":315.0},"$type":"NodeCanvas.BehaviourTrees.Optional","$id":"1"},{"_condition":{"RangeRadius":{"_name":"KeepDistanceMin","_targetVariableID":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"},"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},"_position":{"x":360.0,"y":420.0},"$type":"NodeCanvas.BehaviourTrees.ConditionalEvaluator","$id":"2"},{"KeepDistanceMin":{"_name":"EscapeDistanceFromPlayer","_targetVariableID":"f18ffcd4-c5c4-41f5-a058-c6678f296949"},"KeepDistanceMax":{"_value":100.0},"_position":{"x":330.0,"y":525.0},"$type":"ActorAIAtoms+BT_Enemy_MoveToMainPlayer","$id":"3"},{"_position":{"x":540.0,"y":315.0},"$type":"NodeCanvas.BehaviourTrees.Optional","$id":"4"},{"_condition":{"LiftBoxTypeNames":{"_name":"LiftBoxTypeNames","_targetVariableID":"d21dc8a8-3517-4ed3-a546-5846f9fdc8ca"},"SearchRangeShape":{},"SearchRadius":{"_value":7},"ExceptRadiusAroundPlayer":{"_name":"KeepDistanceMin","_targetVariableID":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"},"$type":"ActorAIAtoms+BT_Enemy_SearchBoxCondition"},"_position":{"x":540.0,"y":420.0},"$type":"NodeCanvas.BehaviourTrees.ConditionalEvaluator","$id":"5"},{"_action":{"boolVariable":{"_name":"_CanSearchBox","_targetVariableID":"50531503-6957-4627-9b0b-1a956d4119b2"},"$type":"NodeCanvas.Tasks.Actions.SetBoolean"},"_position":{"x":525.0,"y":525.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"6"},{"repeaterMode":2,"repeatTimes":{"_value":1},"_position":{"x":465.0,"y":105.0},"$type":"NodeCanvas.BehaviourTrees.Repeater","$id":"7"}],"connections":[{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"4"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"4"},"_targetNode":{"$ref":"5"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"5"},"_targetNode":{"$ref":"6"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"7"},"_targetNode":{"$ref":"0"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{"_CanSearchBox":{"_name":"_CanSearchBox","_id":"50531503-6957-4627-9b0b-1a956d4119b2","_isPublic":true,"$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
   _objectReferences: []
   _graphSource:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: -8, y: -111}
+    _translation: {x: 65, y: -186}
     _zoomFactor: 1
   _haltSerialization: 0
 #---GRAPH_START---
@@ -61,7 +61,7 @@ MonoBehaviour:
 #        {
 #            "KeepDistanceMin": {
 #                "_name": "EscapeDistanceFromPlayer",
-#                "_targetVariableID": "64a17788-e308-42ec-8038-c37c7f100b19"
+#                "_targetVariableID": "f18ffcd4-c5c4-41f5-a058-c6678f296949"
 #            },
 #            "KeepDistanceMax": {
 #                "_value": 100.0
@@ -92,6 +92,10 @@ MonoBehaviour:
 #                },
 #                "SearchRadius": {
 #                    "_value": 7
+#                },
+#                "ExceptRadiusAroundPlayer": {
+#                    "_name": "KeepDistanceMin",
+#                    "_targetVariableID": "c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"
 #                },
 #                "$type": "ActorAIAtoms+BT_Enemy_SearchBoxCondition"
 #            },
