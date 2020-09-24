@@ -94,22 +94,29 @@ public class PlayerActor : Actor
 
             if (ThrowState == ThrowStates.ThrowCharging)
             {
-                if (PlayerNumber == PlayerNumber.Player1)
+                if (!ActorSkillHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.BoxTypeIndex))
                 {
-                    Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(ControlManager.Instance.Battle_MousePosition);
-                    Vector3 intersectPoint = CommonUtils.GetIntersectWithLineAndPlane(ray.origin, ray.direction, Vector3.up, transform.position);
-                    CurThrowPointOffset = intersectPoint - transform.position;
+                    CurThrowPointOffset = CurThrowPointOffset.normalized * ThrowRadiusMin;
                 }
-                else if (PlayerNumber == PlayerNumber.Player2)
+                else
                 {
-                    CurThrowMoveAttempt = Vector3.zero;
-                    if (ThrowState == ThrowStates.ThrowCharging)
+                    if (PlayerNumber == PlayerNumber.Player1)
                     {
-                        CurThrowMoveAttempt = new Vector3(ControlManager.Instance.Player2_RightStick.x, 0, ControlManager.Instance.Player2_RightStick.y);
-                        CurThrowMoveAttempt.Normalize();
+                        Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(ControlManager.Instance.Battle_MousePosition);
+                        Vector3 intersectPoint = CommonUtils.GetIntersectWithLineAndPlane(ray.origin, ray.direction, Vector3.up, transform.position);
+                        CurThrowPointOffset = intersectPoint - transform.position;
                     }
+                    else if (PlayerNumber == PlayerNumber.Player2)
+                    {
+                        CurThrowMoveAttempt = Vector3.zero;
+                        if (ThrowState == ThrowStates.ThrowCharging)
+                        {
+                            CurThrowMoveAttempt = new Vector3(ControlManager.Instance.Player2_RightStick.x, 0, ControlManager.Instance.Player2_RightStick.y);
+                            CurThrowMoveAttempt.Normalize();
+                        }
 
-                    CurThrowPointOffset += CurThrowMoveAttempt * Mathf.Max(ThrowAimMoveSpeed * Mathf.Sqrt(CurThrowPointOffset.magnitude), 2f) * Time.fixedDeltaTime;
+                        CurThrowPointOffset += CurThrowMoveAttempt * Mathf.Max(ThrowAimMoveSpeed * Mathf.Sqrt(CurThrowPointOffset.magnitude), 2f) * Time.fixedDeltaTime;
+                    }
                 }
             }
 
@@ -130,7 +137,10 @@ public class PlayerActor : Actor
 
             if (skill_1_Pressed) ThrowCharge();
 
-            if (skill_1_Up) Throw();
+            if (skill_1_Up)
+            {
+                ThrowOrPut();
+            }
 
             if (skill_0_Up) Kick();
 

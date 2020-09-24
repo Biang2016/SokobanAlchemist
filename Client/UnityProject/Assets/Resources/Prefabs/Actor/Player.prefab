@@ -81,13 +81,16 @@ MonoBehaviour:
     y: 0
     z: 0
   Camp: 1
-  MaxHealth: 10
+  MaxHealth: 5
   TotalLife: 1
+  ImmuneTimeAfterDamaged: 0.4
   KickFX: 4
   KickFXScale: 1
   KickFXPivot: {fileID: 4968612011542319011}
   InjureFX: 1
   InjureFXScale: 1
+  GainLifeFX: 0
+  GainLifeFXScale: 1
   DieFX: 19
   DieFXScale: 1
   Accelerate: 200
@@ -120,9 +123,7 @@ MonoBehaviour:
   ThrowRadius: 15
   KickForce: 15
   PushableBoxList:
-  - DeadBoxShow
   - IceBox
-  - IceBoxKickable
   - IceDropBoomBox
   - GoldenBox
   - GroundBox
@@ -130,18 +131,30 @@ MonoBehaviour:
   - WoodenBox
   - GoldenDropBoomBox
   - SilverDropBoomBox
+  - HealthBox
   KickableBoxList:
   - WoodenBox
-  - IceBoxKickable
   - GoldenDropBoomBox
   - IceDropBoomBox
   - SilverDropBoomBox
+  - HealthBox
   LiftableBoxList:
-  - IceBoxKickable
+  - IceBox
+  - IceDropBoomBox
+  - GoldenBox
+  - GroundBox
+  - SilverBox
+  - WoodenBox
+  - GoldenDropBoomBox
+  - SilverDropBoomBox
+  - HealthBox
+  ThrowableBoxList:
   - GoldenDropBoomBox
   - IceDropBoomBox
   - SilverDropBoomBox
   DieDropBoxTypeName: 
+  CollideDamage: 0
+  CollideForce: 0
   MovementState: 0
   PushState: 0
   ThrowState: 0

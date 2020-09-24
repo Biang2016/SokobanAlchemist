@@ -83,17 +83,6 @@ public class Projectile : PoolObject
             Box box = collision.collider.GetComponentInParent<Box>();
             if (box)
             {
-                if (box.BoxFeature.HasFlag(BoxFeature.ChessKing))
-                {
-                    if (box.BoxFeature.HasFlag(BoxFeature.BelongToPlayer1) && PlayerNumber == PlayerNumber.Player2)
-                    {
-                        BattleManager.Instance.Player1?.ActorBattleHelper.Damage(BattleManager.Instance.Player2, 1);
-                    }
-                    else if (box.BoxFeature.HasFlag(BoxFeature.BelongToPlayer2) && PlayerNumber == PlayerNumber.Player1)
-                    {
-                        BattleManager.Instance.Player2?.ActorBattleHelper.Damage(BattleManager.Instance.Player1, 1);
-                    }
-                }
             }
 
             PlayHitEffect(contact.point, contact.normal);

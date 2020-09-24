@@ -89,14 +89,12 @@ public class Box : PoolObject
     public float FinalWeight => Weight * ConfigManager.BoxWeightFactor_Cheat;
 
     [AssetsOnly]
-    [ShowIf("KickOrLiftable")]
     [BoxGroup("箱子属性")]
     [LabelText("撞击特效")]
     [SerializeField]
     private ProjectileType CollideFX;
 
     [AssetsOnly]
-    [ShowIf("KickOrLiftable")]
     [BoxGroup("箱子属性")]
     [LabelText("撞击特效尺寸")]
     [SerializeField]
@@ -110,14 +108,14 @@ public class Box : PoolObject
     public float Static_Inertia = 0.5f;
 
     [AssetsOnly]
-    [ShowIf("Liftable")]
+    [ShowIf("Throwable")]
     [BoxGroup("扔箱子属性")]
     [LabelText("扔伤害半径")]
     [SerializeField]
     private float DestroyDamageRadius_Throw = 1.5f;
 
     [AssetsOnly]
-    [ShowIf("Liftable")]
+    [ShowIf("Throwable")]
     [BoxGroup("扔箱子属性")]
     [LabelText("扔伤害")]
     [GUIColor(1.0f, 0, 1.0f)]
@@ -125,39 +123,76 @@ public class Box : PoolObject
     private float DestroyDamage_Throw = 3f;
 
     [AssetsOnly]
-    [ShowIf("Liftable")]
+    [ShowIf("Throwable")]
+    [HideIf("ExplodePullForce_Throw")]
     [BoxGroup("扔箱子属性")]
-    [LabelText("落地拖拽力")]
+    [LabelText("落地爆炸推力")]
+    [SerializeField]
+    private bool ExplodePushForce_Throw = false;
+
+    [AssetsOnly]
+    [ShowIf("Throwable")]
+    [ShowIf("ExplodePushForce_Throw")]
+    [BoxGroup("扔箱子属性")]
+    [LabelText("落地爆炸推力半径")]
+    [SerializeField]
+    private float ExplodePushRadius_Throw = 3f;
+
+    [AssetsOnly]
+    [ShowIf("Throwable")]
+    [HideIf("ExplodePushForce_Throw")]
+    [BoxGroup("扔箱子属性")]
+    [LabelText("落地爆炸吸力")]
+    [SerializeField]
+    private bool ExplodePullForce_Throw = false;
+
+    [AssetsOnly]
+    [ShowIf("Throwable")]
+    [ShowIf("ExplodePullForce_Throw")]
+    [BoxGroup("扔箱子属性")]
+    [LabelText("落地爆炸吸力半径")]
+    [SerializeField]
+    private float ExplodePullRadius_Throw = 3f;
+
+    [AssetsOnly]
+    [ShowIf("Throwable")]
+    [BoxGroup("扔箱子属性")]
+    [LabelText("落地Drag")]
     public float Throw_Drag = 0.5f;
 
     [AssetsOnly]
-    [ShowIf("Liftable")]
+    [ShowIf("Throwable")]
     [BoxGroup("扔箱子属性")]
     [LabelText("落地摩擦力")]
     [Range(0, 1)]
     public float Throw_Friction = 1;
 
-    [ShowIf("Liftable")]
-    [BoxGroup("扔箱子属性")]
-    [GUIColor(0, 1.0f, 0)]
-    [LabelText("举起箱子掉落踢技能")]
-    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string LiftGetLiftBoxAbility;
-
-    [ShowIf("Liftable")]
-    [BoxGroup("扔箱子属性")]
-    [GUIColor(0, 1.0f, 0)]
-    [LabelText("举起箱子更换皮肤")]
-    public Material DieDropMaterial;
-
-    [ShowIf("Liftable")]
+    [ShowIf("Throwable")]
     [BoxGroup("扔箱子属性")]
     [GUIColor(0, 1.0f, 0)]
     [LabelText("最大伤害次数")]
     [Range(1, 3)]
     public int MaxDamageTimes = 1;
 
+    [ShowIf("Liftable")]
+    [BoxGroup("举箱子属性")]
+    [GUIColor(0, 1.0f, 0)]
+    [LabelText("举起箱子掉落踢技能")]
+    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    public string LiftGetLiftBoxAbility;
+
+    [ShowIf("Liftable")]
+    [BoxGroup("举箱子属性")]
+    [GUIColor(0, 1.0f, 0)]
+    [LabelText("举起箱子更换皮肤")]
+    public Material DieDropMaterial;
+
     private int damageTimes;
+
+    [ShowIf("Healable")]
+    [BoxGroup("举箱子属性")]
+    [LabelText("举箱子回复生命")]
+    public int HealLifeCountWhenLifted;
 
     [AssetsOnly]
     [ShowIf("Kickable")]
@@ -200,6 +235,7 @@ public class Box : PoolObject
         BeingLift,
         Lifted,
         Flying,
+        Putting,
         DropingFromDeadPlayer,
     }
 
@@ -375,22 +411,36 @@ public class Box : PoolObject
             }
 
             LastTouchActor = actor;
-            WorldManager.Instance.CurrentWorld.RemoveBox(this);
-            State = States.BeingLift;
-            transform.DOPause();
-            StaticCollider.enabled = true;
-            DynamicCollider.enabled = false;
-            if (Rigidbody)
+            if (Healable && HealLifeCountWhenLifted > 0)
             {
-                DestroyImmediate(Rigidbody);
+                actor.ActorBattleHelper.AddLife(HealLifeCountWhenLifted);
+                return true;
             }
+            else
+            {
+                WorldManager.Instance.CurrentWorld.RemoveBox(this);
+                State = States.BeingLift;
+                transform.DOPause();
+                StaticCollider.enabled = true;
+                DynamicCollider.enabled = false;
+                if (Rigidbody)
+                {
+                    DestroyImmediate(Rigidbody);
+                }
 
-            BoxEffectHelper?.PoolRecycle();
-            BoxEffectHelper = null;
-            return true;
+                BoxEffectHelper?.PoolRecycle();
+                BoxEffectHelper = null;
+                return true;
+            }
         }
 
         return false;
+    }
+
+    public void LiftThenConsume()
+    {
+        PlayDestroyFX();
+        PoolRecycle();
     }
 
     public void Throw(Vector3 direction, float velocity, Actor actor)
@@ -405,6 +455,38 @@ public class Box : PoolObject
 
             LastTouchActor = actor;
             State = States.Flying;
+            transform.DOPause();
+            transform.parent = WorldManager.Instance.CurrentWorld.transform;
+            StaticCollider.enabled = false;
+            DynamicCollider.enabled = true;
+            DynamicCollider.material.dynamicFriction = Throw_Friction;
+            Rigidbody = gameObject.GetComponent<Rigidbody>();
+            if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
+            Rigidbody.mass = FinalWeight;
+            Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+            Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
+            Rigidbody.drag = 0;
+            Rigidbody.angularDrag = 0;
+            Rigidbody.useGravity = true;
+            Rigidbody.velocity = direction.normalized * velocity;
+            Rigidbody.angularVelocity = Vector3.zero;
+            Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        }
+    }
+
+    public void Put(Vector3 direction, float velocity, Actor actor)
+    {
+        if (State == States.Lifted)
+        {
+            damageTimes = 0;
+            if (BoxEffectHelper == null)
+            {
+                BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
+            }
+
+            LastTouchActor = actor;
+            State = States.Putting;
             transform.DOPause();
             transform.parent = WorldManager.Instance.CurrentWorld.transform;
             StaticCollider.enabled = false;
@@ -456,7 +538,7 @@ public class Box : PoolObject
     void FixedUpdate()
     {
         if (IsRecycled) return;
-        if ((State == States.BeingKicked || State == States.Flying || State == States.DropingFromDeadPlayer) && Rigidbody)
+        if ((State == States.BeingKicked || State == States.Flying || State == States.DropingFromDeadPlayer || State == States.Putting) && Rigidbody)
         {
             if (State == States.BeingKicked)
             {
@@ -504,11 +586,15 @@ public class Box : PoolObject
 
     public bool KickOrLiftable => Kickable || Liftable;
 
-    public bool Interactable => Pushable || Kickable || Liftable;
+    public bool Throwable => BoxFeature.HasFlag(BoxFeature.Throwable);
+
+    public bool Interactable => Pushable || Kickable || Liftable || Throwable;
 
     public bool Droppable => BoxFeature.HasFlag(BoxFeature.Droppable);
 
     public bool Breakable => BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable) || BoxFeature.HasFlag(BoxFeature.KickHitBreakable);
+
+    public bool Healable => BoxFeature.HasFlag(BoxFeature.HealingBox);
 
     void OnCollisionEnter(Collision collision)
     {
@@ -520,6 +606,14 @@ public class Box : PoolObject
             {
                 DestroyAOEDamage(DestroyDamageRadius_Throw, DestroyDamage_Throw);
                 PlayDestroyFX();
+                if (ExplodePushForce_Throw)
+                {
+                    this.ExplodePushBox(transform.position, ExplodePushRadius_Throw);
+                }
+                else if (ExplodePullForce_Throw)
+                {
+                    this.ExplodePullBox(transform.position, ExplodePullRadius_Throw);
+                }
             }
 
             if (BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable))
@@ -533,6 +627,15 @@ public class Box : PoolObject
                 {
                     Rigidbody.drag = Throw_Drag * ConfigManager.BoxThrowDragFactor_Cheat;
                 }
+            }
+        }
+
+        if (State == States.Putting)
+        {
+            Box box = collision.gameObject.GetComponentInParent<Box>();
+            if (box && !box.BoxFeature.HasFlag(BoxFeature.IsBorder))
+            {
+                Rigidbody.drag = Throw_Drag * ConfigManager.BoxThrowDragFactor_Cheat;
             }
         }
 
@@ -654,14 +757,14 @@ public enum BoxFeature
     [LabelText("可踢")]
     Kickable = 1 << 1,
 
-    [LabelText("可扔")]
+    [LabelText("可举")]
     Liftable = 1 << 2,
 
-    [LabelText("会塌落")]
-    Droppable = 1 << 3,
+    [LabelText("可扔")]
+    Throwable = 1 << 3,
 
-    [LabelText("ChessKing")]
-    ChessKing = 1 << 4,
+    [LabelText("会塌落")]
+    Droppable = 1 << 4,
 
     [LabelText("从属玩家1")]
     BelongToPlayer1 = 1 << 5,
@@ -680,4 +783,7 @@ public enum BoxFeature
 
     [LabelText("地面")]
     IsGround = 1 << 10,
+
+    [LabelText("补血")]
+    HealingBox = 1 << 11,
 }

@@ -13,6 +13,8 @@ public class ActorBattleHelper : ActorHelper
     public Transform HealthBarPivot;
     public InGameHealthBar InGameHealthBar;
 
+    private float immuneTimeAfterDamaged_Ticker = 0;
+
     public override void OnRecycled()
     {
         totalLife = 0;
@@ -36,6 +38,14 @@ public class ActorBattleHelper : ActorHelper
         BoxCollider.enabled = true;
         InGameHealthBar = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.InGameHealthBar].AllocateGameObject<InGameHealthBar>(UIManager.Instance.GetBaseUIForm<InGameUIPanel>().transform);
         InGameHealthBar.Initialize(this, 100, 30);
+    }
+
+    void FixedUpdate()
+    {
+        if (immuneTimeAfterDamaged_Ticker > 0)
+        {
+            immuneTimeAfterDamaged_Ticker -= Time.fixedDeltaTime;
+        }
     }
 
     public void ResetState()
@@ -126,6 +136,8 @@ public class ActorBattleHelper : ActorHelper
 
     public void Damage(Actor attacker, int damage)
     {
+        if (immuneTimeAfterDamaged_Ticker > 0) return;
+        immuneTimeAfterDamaged_Ticker = Actor.ImmuneTimeAfterDamaged;
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorAttackTip, new AttackData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
         Health -= damage;
         OnDamaged?.Invoke(attacker, damage);
@@ -137,6 +149,15 @@ public class ActorBattleHelper : ActorHelper
     public void Damage(Actor attacker, float damage)
     {
         Damage(attacker, Mathf.FloorToInt(damage));
+    }
+
+    public void AddLife(int addLife)
+    {
+        //ClientGameManager.Instance.BattleMessenger.Broadcast((uint)ENUM_BattleEvent.Battle_ActorAttackTip, new AttackData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
+        TotalLife += addLife;
+        Life += addLife;
+        ProjectileHit gainLifeFX = ProjectileManager.Instance.PlayProjectileHit(Actor.GainLifeFX, Actor.transform.position);
+        if (gainLifeFX) gainLifeFX.transform.localScale = Vector3.one * Actor.GainLifeFXScale;
     }
 
     public void Die()
@@ -151,7 +172,7 @@ public class ActorBattleHelper : ActorHelper
 
         if (Actor.IsPlayer)
         {
-            BattleManager.Instance.ResetBattle();
+            BattleManager.Instance.LoseGame();
         }
         else
         {

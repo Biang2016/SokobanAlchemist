@@ -10,15 +10,11 @@ public class FXManager : TSingletonBaseManager<FXManager>
         Root = root;
     }
 
-    public FX PlayFX(FX_Type fx_Type, Vector3 from)
-    {
-        FX fx = GameObjectPoolManager.Instance.FXDict[fx_Type].AllocateGameObject<FX>(Root);
-        fx.transform.position = from;
-        fx.Play();
-        return fx;
-    }
-}
-
-public enum FX_Type
-{
+    //public FX PlayFX(string fxPath, Vector3 from)
+    //{
+    //    FX fx = GameObjectPoolManager.Instance.FXDict[fx_Type].AllocateGameObject<FX>(Root);
+    //    fx.transform.position = from;
+    //    fx.Play();
+    //    return fx;
+    //}
 }
