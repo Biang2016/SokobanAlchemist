@@ -41,6 +41,13 @@ public class ActorSkillHelper : ActorHelper
             InteractSkillDict[boxTypeIndex] |= InteractSkillType.Lift;
             if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
         }
+
+        foreach (string boxName in Actor.ThrowableBoxList)
+        {
+            byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
+            InteractSkillDict[boxTypeIndex] |= InteractSkillType.Throw;
+            if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
+        }
     }
 
     public InteractSkillType GetInteractSkillType(byte boxTypeIndex)
@@ -82,6 +89,7 @@ public enum InteractSkillType
     Push = 1 << 0,
     Kick = 1 << 1,
     Lift = 1 << 2,
+    Throw = 1 << 3,
 }
 
 public static class InteractSkillTypeExtension
@@ -101,6 +109,10 @@ public static class InteractSkillTypeExtension
             case InteractSkillType.Lift:
             {
                 return BoxFeature.Liftable;
+            }
+            case InteractSkillType.Throw:
+            {
+                return BoxFeature.Throwable;
             }
         }
 

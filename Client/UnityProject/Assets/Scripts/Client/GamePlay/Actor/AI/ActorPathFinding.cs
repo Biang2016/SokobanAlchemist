@@ -1,20 +1,50 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using BiangStudio;
+using BiangStudio.CloneVariant;
 using BiangStudio.GameDataFormat.Grid;
-using BiangStudio.GamePlay;
+using BiangStudio.ObjectPool;
 using UnityEngine;
 
 public class ActorPathFinding
 {
-    public class Node
+    public class Node : IClassPoolObject<Node>
     {
+        private int PoolIndex;
         public Node ParentNode;
         public GridPos3D GridPos3D;
         public int F => G + H; // G+H
         public int G; // 从起点到该点的路径长度
         public int H; // 从该点到终点的估计路程
+
+        public Node Create()
+        {
+            return new Node();
+        }
+
+        public void OnUsed()
+        {
+        }
+
+        public void OnRelease()
+        {
+            ParentNode = null;
+            GridPos3D = GridPos3D.Zero;
+            G = 0;
+            H = 0;
+        }
+
+        public void SetPoolIndex(int index)
+        {
+            PoolIndex = index;
+        }
+
+        public int GetPoolIndex()
+        {
+            return PoolIndex;
+        }
     }
+
+    private static ClassObjectPool<Node> NodeFactory = new ClassObjectPool<Node>(100);
 
     #region AStar PathFinding
 
@@ -27,7 +57,11 @@ public class ActorPathFinding
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(dest, out WorldModule destModule, out GridPos3D _);
         if (oriModule != null && destModule != null)
         {
-            return FindPath(new Node {GridPos3D = ori}, new Node {GridPos3D = dest}, keepDistanceMin, keepDistanceMax, destinationType);
+            Node oriNode = NodeFactory.Alloc();
+            oriNode.GridPos3D = ori;
+            Node destNode = NodeFactory.Alloc();
+            destNode.GridPos3D = dest;
+            return FindPath(oriNode, destNode, keepDistanceMin, keepDistanceMax, destinationType);
         }
 
         return null;
@@ -71,6 +105,7 @@ public class ActorPathFinding
             OpenList.Remove(minFNode);
             CloseList.AddFirst(minFNode);
             List<Node> adjacentNodes = GetAdjacentNodesForAStar(minFNode, dest.GridPos3D, destinationType);
+            List<Node> uselessAdjacentNodes = adjacentNodes.Clone();
             foreach (Node node in adjacentNodes)
             {
                 bool inCloseList = false;
@@ -106,6 +141,7 @@ public class ActorPathFinding
                 }
                 else
                 {
+                    uselessAdjacentNodes.Remove(node);
                     OpenList.AddFirst(node);
                     node.ParentNode = minFNode;
                     node.G = newG;
@@ -122,20 +158,52 @@ public class ActorPathFinding
                             nodePtr = nodePtr.ParentNode;
                         }
 
+                        foreach (Node n in uselessAdjacentNodes)
+                        {
+                            NodeFactory.Release(n);
+                        }
+                        releaseNodes();
                         return path;
                     }
                 }
             }
+
+            foreach (Node n in uselessAdjacentNodes)
+            {
+                NodeFactory.Release(n);
+            }
+        }
+
+        releaseNodes();
+
+        void releaseNodes()
+        {
+            foreach (Node n in OpenList)
+            {
+                NodeFactory.Release(n);
+            }
+
+            OpenList.Clear();
+
+            foreach (Node n in CloseList)
+            {
+                NodeFactory.Release(n);
+            }
+
+            CloseList.Clear();
+            NodeFactory.Release(dest);
         }
 
         return null;
     }
 
+    private static List<Node> cached_adjacentNodesList = new List<Node>(4);
+
     private static List<Node> GetAdjacentNodesForAStar(Node node, GridPos3D destGP, DestinationType destinationType)
     {
-        List<Node> res = new List<Node>();
+        cached_adjacentNodesList.Clear();
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(node.GridPos3D, out WorldModule curModule, out GridPos3D _);
-        if (curModule == null) return res;
+        if (curModule == null) return cached_adjacentNodesList;
 
         void tryAddNode(GridPos3D gp)
         {
@@ -143,8 +211,10 @@ public class ActorPathFinding
             {
                 if (gp == destGP)
                 {
-                    Node leftNode = new Node {GridPos3D = gp, ParentNode = node};
-                    res.Add(leftNode);
+                    Node leftNode = NodeFactory.Alloc();
+                    leftNode.GridPos3D = gp;
+                    leftNode.ParentNode = node;
+                    cached_adjacentNodesList.Add(leftNode);
                     return;
                 }
             }
@@ -155,27 +225,31 @@ public class ActorPathFinding
             {
                 if (gp == destGP)
                 {
-                    Node leftNode = new Node {GridPos3D = gp, ParentNode = node};
-                    res.Add(leftNode);
+                    Node leftNode = NodeFactory.Alloc();
+                    leftNode.GridPos3D = gp;
+                    leftNode.ParentNode = node;
+                    cached_adjacentNodesList.Add(leftNode);
                     return;
                 }
 
-                bool isActorOnTheWay = false;
-                foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
-                {
-                    if (enemy.CurGP == gp)
-                    {
-                        isActorOnTheWay = true;
-                        break;
-                    }
-                }
+                //bool isActorOnTheWay = false;
+                //foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
+                //{
+                //    if (enemy.CurGP == gp)
+                //    {
+                //        isActorOnTheWay = true;
+                //        break;
+                //    }
+                //}
 
-                if (BattleManager.Instance.Player1.CurGP == gp) isActorOnTheWay = true;
-                if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.CurGP == gp) isActorOnTheWay = true;
-                if (!isActorOnTheWay)
+                //if (BattleManager.Instance.Player1.CurGP == gp) isActorOnTheWay = true;
+                //if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.CurGP == gp) isActorOnTheWay = true;
+                //if (!isActorOnTheWay)
                 {
-                    Node leftNode = new Node {GridPos3D = gp, ParentNode = node};
-                    res.Add(leftNode);
+                    Node leftNode = NodeFactory.Alloc();
+                    leftNode.GridPos3D = gp;
+                    leftNode.ParentNode = node;
+                    cached_adjacentNodesList.Add(leftNode);
                 }
             }
         }
@@ -185,7 +259,7 @@ public class ActorPathFinding
         tryAddNode(node.GridPos3D + new GridPos3D(1, 0, 0));
         tryAddNode(node.GridPos3D + new GridPos3D(0, 0, -1));
         tryAddNode(node.GridPos3D + new GridPos3D(0, 0, 1));
-        return res;
+        return cached_adjacentNodesList;
     }
 
     public enum DestinationType
@@ -204,21 +278,23 @@ public class ActorPathFinding
 
     #region UnionFind
 
+    private static List<GridPos3D> cached_UnionFindNodeList = new List<GridPos3D>(100);
+
     private static List<GridPos3D> UnionFindNodes(GridPos3D center, float rangeRadius)
     {
+        cached_UnionFindNodeList.Clear();
         int radius = Mathf.RoundToInt(rangeRadius);
         int matrixSize = radius * 2 + 1;
         bool[,] occupation = new bool[matrixSize, matrixSize];
-        List<GridPos3D> res = new List<GridPos3D>();
         Queue<GridPos3D> queue = new Queue<GridPos3D>();
         queue.Enqueue(center);
         occupation[0 + radius, 0 + radius] = true;
-        res.Add(center);
+        cached_UnionFindNodeList.Add(center);
         while (queue.Count > 0)
         {
             GridPos3D head = queue.Dequeue();
             WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(head, out WorldModule curModule, out GridPos3D _);
-            if (curModule == null) return res;
+            if (curModule == null) return cached_UnionFindNodeList;
 
             // 四邻边
             tryAddNode(head + new GridPos3D(-1, 0, 0));
@@ -246,13 +322,13 @@ public class ActorPathFinding
                 if (module != null && box == null)
                 {
                     queue.Enqueue(gp);
-                    res.Add(gp);
+                    cached_UnionFindNodeList.Add(gp);
                     occupation[offset.x + radius, offset.z + radius] = true;
                 }
             }
         }
 
-        return res;
+        return cached_UnionFindNodeList;
     }
 
     #endregion

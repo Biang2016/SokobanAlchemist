@@ -69,6 +69,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     private IEnumerable<string> GetAllWorldNames()
     {
+        ConfigManager.LoadAllConfigs();
         List<string> res = new List<string>();
         foreach (KeyValuePair<string, WorldData> kv in ConfigManager.WorldDataConfigDict)
         {

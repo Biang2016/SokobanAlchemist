@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.GamePlay.UI;
 using BiangStudio.Messenger;
@@ -87,14 +88,6 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
         CameraManager.Instance.FieldCamera.InitFocus();
     }
 
-    public void ResetBattle()
-    {
-        for (int i = 0; i < MainPlayers.Length; i++)
-        {
-            MainPlayers[i]?.ActorBattleHelper.ResetState();
-        }
-    }
-
     private void AddActor(Actor actor)
     {
         ActorDict.Add(actor.GUID, actor);
@@ -122,6 +115,30 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
         {
             enemy.SetShown(shown);
         }
+    }
+
+    public void LoseGame()
+    {
+        ClientGameManager.Instance.StartCoroutine(Co_LoseGame());
+    }
+
+    public void WinGame()
+    {
+        ClientGameManager.Instance.StartCoroutine(Co_WinGame());
+    }
+
+    IEnumerator Co_LoseGame()
+    {
+        WinLosePanel panel = UIManager.Instance.ShowUIForms<WinLosePanel>();
+        yield return panel.Co_LoseGame();
+        ClientGameManager.Instance.ReloadGame();
+    }
+
+    IEnumerator Co_WinGame()
+    {
+        WinLosePanel panel = UIManager.Instance.ShowUIForms<WinLosePanel>();
+        yield return panel.Co_WinGame();
+        ClientGameManager.Instance.ReloadGame();
     }
 
     public override void ShutDown()

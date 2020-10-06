@@ -8,7 +8,7 @@ public class PlayerHealthSlider : MonoBehaviour
     public Animator SliderHandelAnim;
     public Text LifeText;
     public Animator LifeTextAnim;
-    public Color[] LifeColors;
+    public Gradient LifeColorGradient;
 
     public void Initialize(ActorBattleHelper helper)
     {
@@ -35,6 +35,6 @@ public class PlayerHealthSlider : MonoBehaviour
     {
         LifeTextAnim.SetTrigger("Jump");
         LifeText.text = leftLife.ToString();
-        SliderFillImage.color = LifeColors[leftLife];
+        SliderFillImage.color = LifeColorGradient.Evaluate((float) leftLife / totalLife);
     }
 }

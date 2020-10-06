@@ -105,6 +105,12 @@ public class Actor : PoolObject
     [BoxGroup("战斗状态")]
     public int Health => ActorBattleHelper ? ActorBattleHelper.Health : 0;
 
+    [ShowInInspector]
+    [HideInEditorMode]
+    [LabelText("受伤无敌时间")]
+    [BoxGroup("战斗状态")]
+    public float ImmuneTimeAfterDamaged = 0.4f;
+
     [BoxGroup("特效")]
     [LabelText("踢特效")]
     public ProjectileType KickFX;
@@ -124,6 +130,14 @@ public class Actor : PoolObject
     [BoxGroup("特效")]
     [LabelText("受伤特效尺寸")]
     public float InjureFXScale = 1f;
+
+    [BoxGroup("特效")]
+    [LabelText("命数增加特效")]
+    public ProjectileType GainLifeFX;
+
+    [BoxGroup("特效")]
+    [LabelText("命数增加特效尺寸")]
+    public float GainLifeFXScale = 1f;
 
     [BoxGroup("特效")]
     [LabelText("死亡特效")]
@@ -191,7 +205,7 @@ public class Actor : PoolObject
     [LabelText("瞄准点移动速度")]
     public float ThrowAimMoveSpeed = 10f;
 
-    private float ThrowRadiusMin = 0.75f;
+    protected float ThrowRadiusMin = 0.75f;
 
     [BoxGroup("配置")]
     [LabelText("举箱子移速比例")]
@@ -216,14 +230,27 @@ public class Actor : PoolObject
     public List<string> KickableBoxList = new List<string>();
 
     [BoxGroup("能力")]
-    [LabelText("扔箱子类型")]
+    [LabelText("举箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public List<string> LiftableBoxList = new List<string>();
+
+    [BoxGroup("能力")]
+    [LabelText("扔箱子类型")]
+    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    public List<string> ThrowableBoxList = new List<string>();
 
     [BoxGroup("死亡")]
     [LabelText("死亡掉落箱子")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public string DieDropBoxTypeName;
+
+    [BoxGroup("敌兵专用")]
+    [LabelText("碰撞伤害")]
+    public int CollideDamage;
+
+    [BoxGroup("敌兵专用")]
+    [LabelText("碰撞击飞力")]
+    public int CollideForce;
 
     private IEnumerable<string> GetAllBoxTypeNames()
     {
@@ -467,9 +494,23 @@ public class Actor : PoolObject
                     box.transform.parent = LiftBoxPivot.transform.parent;
                     box.transform.DOLocalMove(LiftBoxPivot.transform.localPosition, 0.2f).OnComplete(() =>
                     {
-                        box.State = Box.States.Lifted;
-                        ThrowState = ThrowStates.Lifting;
+                        if (box.Healable)
+                        {
+                            box.State = Box.States.Static;
+                            ThrowState = ThrowStates.None;
+                            box.LiftThenConsume();
+                        }
+                        else
+                        {
+                            box.State = Box.States.Lifted;
+                            ThrowState = ThrowStates.Lifting;
+                        }
                     });
+
+                    if (box.Healable)
+                    {
+                        ThrowState = ThrowStates.None;
+                    }
                 }
             }
         }
@@ -495,14 +536,55 @@ public class Actor : PoolObject
         }
     }
 
-    public void Throw()
+    public void ThrowOrPut()
     {
         if (CurrentLiftBox && ThrowState == ThrowStates.ThrowCharging)
+        {
+            if (ActorSkillHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.BoxTypeIndex))
+            {
+                Throw();
+            }
+            else
+            {
+                Put();
+            }
+        }
+    }
+
+    public void Throw()
+    {
+        if (CurrentLiftBox && CurrentLiftBox.Throwable && ThrowState == ThrowStates.ThrowCharging)
         {
             float velocity = ActorLaunchArcRendererHelper.CalculateVelocityByOffset(CurThrowPointOffset, 45);
             ThrowState = ThrowStates.None;
             Vector3 throwVel = (CurThrowPointOffset.normalized + Vector3.up) * velocity;
             CurrentLiftBox.Throw(throwVel, velocity, this);
+            CurrentLiftBox = null;
+        }
+    }
+
+    public void Put()
+    {
+        if (CurrentLiftBox && ThrowState == ThrowStates.Lifting || ThrowState == ThrowStates.ThrowCharging)
+        {
+            CurThrowPointOffset = transform.forward * ThrowRadiusMin;
+            float velocity = ActorLaunchArcRendererHelper.CalculateVelocityByOffset(CurThrowPointOffset, 45);
+            ThrowState = ThrowStates.None;
+            Vector3 throwVel = (CurThrowPointOffset.normalized + Vector3.up) * velocity;
+            CurrentLiftBox.Put(throwVel, velocity, this);
+            CurrentLiftBox = null;
+        }
+    }
+
+    public void PutBehind()
+    {
+        if (CurrentLiftBox && ThrowState == ThrowStates.Lifting || ThrowState == ThrowStates.ThrowCharging)
+        {
+            CurThrowPointOffset = -transform.forward * ThrowRadiusMin;
+            float velocity = ActorLaunchArcRendererHelper.CalculateVelocityByOffset(CurThrowPointOffset, 45);
+            ThrowState = ThrowStates.None;
+            Vector3 throwVel = (CurThrowPointOffset.normalized + Vector3.up) * velocity;
+            CurrentLiftBox.Put(throwVel, velocity, this);
             CurrentLiftBox = null;
         }
     }
@@ -513,7 +595,15 @@ public class Actor : PoolObject
         {
             ThrowState = ThrowStates.None;
             Vector3 throwVel = Vector3.up * 3;
-            CurrentLiftBox.Throw(throwVel, 3, this);
+            if (CurrentLiftBox.Throwable)
+            {
+                CurrentLiftBox.Throw(throwVel, 3, this);
+            }
+            else
+            {
+                CurrentLiftBox.Put(throwVel, 3, this);
+            }
+
             CurrentLiftBox = null;
         }
     }

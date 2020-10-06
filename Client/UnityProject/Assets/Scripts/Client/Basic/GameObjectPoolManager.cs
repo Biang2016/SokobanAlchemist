@@ -46,7 +46,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     public Dictionary<PrefabNames, GameObjectPool> PoolDict = new Dictionary<PrefabNames, GameObjectPool>();
     public Dictionary<byte, GameObjectPool> BoxDict = new Dictionary<byte, GameObjectPool>();
     public Dictionary<byte, GameObjectPool> EnemyDict = new Dictionary<byte, GameObjectPool>();
-    public Dictionary<FX_Type, GameObjectPool> FXDict = new Dictionary<FX_Type, GameObjectPool>();
+    public Dictionary<string, GameObjectPool> FXDict = new Dictionary<string, GameObjectPool>();
     public Dictionary<MarkerType, GameObjectPool> MarkerDict = new Dictionary<MarkerType, GameObjectPool>();
     public Dictionary<ProjectileType, GameObjectPool> ProjectileDict = new Dictionary<ProjectileType, GameObjectPool>();
     public Dictionary<ProjectileType, GameObjectPool> ProjectileHitDict = new Dictionary<ProjectileType, GameObjectPool>();
@@ -110,20 +110,20 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             }
         }
 
-        foreach (string s in Enum.GetNames(typeof(FX_Type)))
-        {
-            FX_Type fx_Type = (FX_Type) Enum.Parse(typeof(FX_Type), s);
-            GameObject go_Prefab = PrefabManager.Instance.GetPrefab(s);
-            if (go_Prefab)
-            {
-                GameObject go = new GameObject("Pool_" + s);
-                GameObjectPool pool = go.AddComponent<GameObjectPool>();
-                pool.transform.SetParent(Root);
-                FXDict.Add(fx_Type, pool);
-                PoolObject po = go_Prefab.GetComponent<PoolObject>();
-                pool.Initiate(po, 20);
-            }
-        }
+        //foreach (string s in Enum.GetNames(typeof(FX_Type)))
+        //{
+        //    string fx_Path = (FX_Type) Enum.Parse(typeof(FX_Type), s);
+        //    GameObject go_Prefab = PrefabManager.Instance.GetPrefab(s);
+        //    if (go_Prefab)
+        //    {
+        //        GameObject go = new GameObject("Pool_" + s);
+        //        GameObjectPool pool = go.AddComponent<GameObjectPool>();
+        //        pool.transform.SetParent(Root);
+        //        FXDict.Add(fx_Type, pool);
+        //        PoolObject po = go_Prefab.GetComponent<PoolObject>();
+        //        pool.Initiate(po, 20);
+        //    }
+        //}
 
         foreach (string s in Enum.GetNames(typeof(MarkerType)))
         {

@@ -54,6 +54,7 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
     private void HandleAttackTip(AttackData attackData)
     {
         if (!EnableUIBattleTip) return;
+        if (attackData.DecHp == 0 && attackData.ElementHP == 0) return;
         UIBattleTipInfo info = new UIBattleTipInfo(
             0,
             attackData.BattleTipType,

@@ -110,7 +110,7 @@ public class ActorAIAgent
             return SetDestinationRetCode.AlreadyArrived;
         }
 
-        if (dist < KeepDistanceMin)
+        if (dist <= KeepDistanceMin)
         {
             ClearPathFinding();
             return SetDestinationRetCode.TooClose;
