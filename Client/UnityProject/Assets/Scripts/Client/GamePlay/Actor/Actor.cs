@@ -565,8 +565,22 @@ public class Actor : PoolObject
 
     public void Put()
     {
-        if (CurrentLiftBox && ThrowState == ThrowStates.ThrowCharging)
+        if (CurrentLiftBox && ThrowState == ThrowStates.Lifting || ThrowState == ThrowStates.ThrowCharging)
         {
+            CurThrowPointOffset = transform.forward * ThrowRadiusMin;
+            float velocity = ActorLaunchArcRendererHelper.CalculateVelocityByOffset(CurThrowPointOffset, 45);
+            ThrowState = ThrowStates.None;
+            Vector3 throwVel = (CurThrowPointOffset.normalized + Vector3.up) * velocity;
+            CurrentLiftBox.Put(throwVel, velocity, this);
+            CurrentLiftBox = null;
+        }
+    }
+
+    public void PutBehind()
+    {
+        if (CurrentLiftBox && ThrowState == ThrowStates.Lifting || ThrowState == ThrowStates.ThrowCharging)
+        {
+            CurThrowPointOffset = -transform.forward * ThrowRadiusMin;
             float velocity = ActorLaunchArcRendererHelper.CalculateVelocityByOffset(CurThrowPointOffset, 45);
             ThrowState = ThrowStates.None;
             Vector3 throwVel = (CurThrowPointOffset.normalized + Vector3.up) * velocity;

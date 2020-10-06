@@ -248,6 +248,13 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
+    [DebugButton("Player/AddLife*1000")]
+    public void AddLife1000()
+    {
+        BattleManager.Instance.Player1.ActorBattleHelper.TotalLife += 1000;
+        BattleManager.Instance.Player1.ActorBattleHelper.Life += 1000;
+    }
+
     [DebugToggleButton("Enemy/TogglePathFinding")]
     public void ToggleEnemyPathFinding()
     {

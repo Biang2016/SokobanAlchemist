@@ -23,7 +23,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             Actor player = BattleManager.Instance.Player1;
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.CurGP, KeepDistanceMin.value, KeepDistanceMax.value, true, ActorPathFinding.DestinationType.Actor);
+            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.CurGP, KeepDistanceMin.value, KeepDistanceMax.value, false, ActorPathFinding.DestinationType.Actor);
             switch (retCode)
             {
                 case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
@@ -52,7 +52,7 @@ public static class ActorAIAtoms
 
                     foreach (GridPos3D gp in runDestList)
                     {
-                        ActorAIAgent.SetDestinationRetCode rc = Actor.ActorAIAgent.SetDestination(gp, 0, 1, true, ActorPathFinding.DestinationType.EmptyGrid);
+                        ActorAIAgent.SetDestinationRetCode rc = Actor.ActorAIAgent.SetDestination(gp, 0, 1, false, ActorPathFinding.DestinationType.EmptyGrid);
                         if (rc == ActorAIAgent.SetDestinationRetCode.Suc)
                         {
                             return Status.Running;
@@ -72,6 +72,31 @@ public static class ActorAIAtoms
             }
 
             return Status.Failure;
+        }
+    }
+
+    [Category("敌兵")]
+    [Name("是否能够移动到玩家")]
+    [Description("是否能够移动到玩家")]
+    public class BT_Enemy_CheckCanMoveToMainPlayer : ConditionTask
+    {
+        [Name("保持最小距离")]
+        public BBParameter<float> KeepDistanceMin;
+
+        [Name("保持最大距离")]
+        public BBParameter<float> KeepDistanceMax;
+
+        [Name("警戒距离")]
+        public BBParameter<float> GuardingRange;
+
+        protected override bool OnCheck()
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return false;
+            Actor player = BattleManager.Instance.Player1;
+            if ((player.transform.position - Actor.transform.position).magnitude > GuardingRange.value) return false;
+            LinkedList<GridPos3D> path = ActorPathFinding.FindPath(Actor.CurGP, player.CurGP, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor);
+            if (path != null) return true;
+            return false;
         }
     }
 

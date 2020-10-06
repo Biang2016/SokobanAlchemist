@@ -124,7 +124,6 @@ public class Box : PoolObject
 
     [AssetsOnly]
     [ShowIf("Throwable")]
-    [HideIf("ExplodePullForce_Throw")]
     [BoxGroup("扔箱子属性")]
     [LabelText("落地爆炸推力")]
     [SerializeField]
@@ -136,23 +135,7 @@ public class Box : PoolObject
     [BoxGroup("扔箱子属性")]
     [LabelText("落地爆炸推力半径")]
     [SerializeField]
-    private float ExplodePushRadius_Throw = 3f;
-
-    [AssetsOnly]
-    [ShowIf("Throwable")]
-    [HideIf("ExplodePushForce_Throw")]
-    [BoxGroup("扔箱子属性")]
-    [LabelText("落地爆炸吸力")]
-    [SerializeField]
-    private bool ExplodePullForce_Throw = false;
-
-    [AssetsOnly]
-    [ShowIf("Throwable")]
-    [ShowIf("ExplodePullForce_Throw")]
-    [BoxGroup("扔箱子属性")]
-    [LabelText("落地爆炸吸力半径")]
-    [SerializeField]
-    private float ExplodePullRadius_Throw = 3f;
+    private int ExplodePushRadius_Throw = 3;
 
     [AssetsOnly]
     [ShowIf("Throwable")]
@@ -214,6 +197,21 @@ public class Box : PoolObject
     [BoxGroup("踢箱子属性")]
     [LabelText("摩阻力")]
     public float Dynamic_Drag = 0.5f;
+
+    [AssetsOnly]
+    [ShowIf("Kickable")]
+    [BoxGroup("踢箱子属性")]
+    [LabelText("碰撞爆炸推力")]
+    [SerializeField]
+    private bool ExplodePushForce_Kick = false;
+
+    [AssetsOnly]
+    [ShowIf("Kickable")]
+    [ShowIf("ExplodePushForce_Kick")]
+    [BoxGroup("踢箱子属性")]
+    [LabelText("碰撞爆炸推力半径")]
+    [SerializeField]
+    private int ExplodePushRadius_Kick = 3;
 
     private GridPos3D lastGP;
 
@@ -610,10 +608,6 @@ public class Box : PoolObject
                 {
                     this.ExplodePushBox(transform.position, ExplodePushRadius_Throw);
                 }
-                else if (ExplodePullForce_Throw)
-                {
-                    this.ExplodePullBox(transform.position, ExplodePullRadius_Throw);
-                }
             }
 
             if (BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable))
@@ -647,6 +641,10 @@ public class Box : PoolObject
                 {
                     DestroyAOEDamage(DestroyDamageRadius_Kick, DestroyDamage_Kick);
                     PlayDestroyFX();
+                    if (ExplodePushForce_Kick)
+                    {
+                        this.ExplodePushBox(transform.position, ExplodePushRadius_Kick);
+                    }
                 }
 
                 if (BoxFeature.HasFlag(BoxFeature.KickHitBreakable))

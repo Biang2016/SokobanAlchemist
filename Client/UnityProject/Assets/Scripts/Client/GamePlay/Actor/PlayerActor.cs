@@ -37,6 +37,8 @@ public class PlayerActor : Actor
         ActorBattleHelper.OnDamaged += (Actor, damage) => { CameraManager.Instance.FieldCamera.CameraShake(damage); };
     }
 
+    private float Skill0_PressDuration;
+
     protected override void FixedUpdate()
     {
         if (!IsRecycled)
@@ -142,7 +144,39 @@ public class PlayerActor : Actor
                 ThrowOrPut();
             }
 
-            if (skill_0_Up) Kick();
+            // 时序问题放在最前，避免刚扔出去就踢
+            if (skill_0_Up)
+            {
+                //if (Skill0_PressDuration < 0.2f && ThrowState == ThrowStates.None)
+                //{
+                    Kick();
+                //}
+
+                //Skill0_PressDuration = 0f;
+            }
+
+            //if (skill_0_Down)
+            //{
+            //    if (ThrowState == ThrowStates.Lifting)
+            //    {
+            //        Put();
+            //    }
+            //}
+
+            //if (skill_0_Pressed)
+            //{
+            //    Skill0_PressDuration += Time.fixedDeltaTime;
+            //}
+
+            //if (Skill0_PressDuration > 0.2f && ThrowState == ThrowStates.None)
+            //{
+            //    Lift();
+            //}
+
+            //if (Skill0_PressDuration > 0.6f && ThrowState == ThrowStates.Lifting)
+            //{
+            //    PutBehind();
+            //}
 
             #endregion
         }
