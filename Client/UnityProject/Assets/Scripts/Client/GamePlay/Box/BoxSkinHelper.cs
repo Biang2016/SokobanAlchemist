@@ -1,13 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BoxSkinHelper : MonoBehaviour
+public class BoxSkinHelper : MonoBehaviour, IBoxHelper
 {
     public Mesh BoxMesh;
     public Mesh RoundedBoxMesh;
 
     public MeshRenderer MeshRenderer;
     public MeshFilter MeshFilter;
+
+    public void PoolRecycle()
+    {
+    }
 
     public void SwitchModel(BoxModelType boxModelType)
     {

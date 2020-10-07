@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using BiangStudio.ObjectPool;
 
-public class BoxEffectHelper : PoolObject
+public class BoxEffectHelper : PoolObject, IBoxHelper
 {
     public override void OnRecycled()
     {

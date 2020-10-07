@@ -21,7 +21,7 @@ public static class WorldBoxSkill
             }
         }
 
-        Collider[] colliders = Physics.OverlapSphere(center, radius, LayerManager.Instance.LayerMask_Box);
+        Collider[] colliders = Physics.OverlapSphere(center, radius, LayerManager.Instance.LayerMask_HitBox_Box);
         foreach (Collider collider in colliders)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();

@@ -6,12 +6,13 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using System.Collections.Generic;
+using Sirenix.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 
 #endif
 
-public class Box : PoolObject
+public class Box : PoolObject, ISerializationCallbackReceiver
 {
     #region GUID
 
@@ -30,12 +31,15 @@ public class Box : PoolObject
 
     private BoxUnderWorldModuleDesignerClamper BoxUnderWorldModuleDesignerClamper;
     private GridSnapper GridSnapper;
+    public GameObject NormalColliders;
     public Collider StaticCollider;
     public Collider DynamicCollider;
+    public Collider BoxOnlyDynamicCollider;
     internal Rigidbody Rigidbody;
 
     internal Actor LastTouchActor;
     internal BoxEffectHelper BoxEffectHelper;
+    internal BoxThornTrapTriggerHelper BoxThornTrapTriggerHelper;
     public BoxSkinHelper BoxSkinHelper;
 
     internal bool ArtOnly;
@@ -55,10 +59,12 @@ public class Box : PoolObject
         lastGP = GridPos3D.Zero;
         State = States.Static;
         BoxEffectHelper?.PoolRecycle();
+        BoxThornTrapTriggerHelper?.PoolRecycle();
         BoxEffectHelper = null;
         transform.DOPause();
         StaticCollider.enabled = false;
         DynamicCollider.enabled = false;
+        BoxOnlyDynamicCollider.enabled = false;
         damageTimes = 0;
         if (Rigidbody) Destroy(Rigidbody);
         if (LastTouchActor != null && LastTouchActor.CurrentLiftBox == this)
@@ -125,21 +131,6 @@ public class Box : PoolObject
     [AssetsOnly]
     [ShowIf("Throwable")]
     [BoxGroup("扔箱子属性")]
-    [LabelText("落地爆炸推力")]
-    [SerializeField]
-    private bool ExplodePushForce_Throw = false;
-
-    [AssetsOnly]
-    [ShowIf("Throwable")]
-    [ShowIf("ExplodePushForce_Throw")]
-    [BoxGroup("扔箱子属性")]
-    [LabelText("落地爆炸推力半径")]
-    [SerializeField]
-    private int ExplodePushRadius_Throw = 3;
-
-    [AssetsOnly]
-    [ShowIf("Throwable")]
-    [BoxGroup("扔箱子属性")]
     [LabelText("落地Drag")]
     public float Throw_Drag = 0.5f;
 
@@ -157,25 +148,7 @@ public class Box : PoolObject
     [Range(1, 3)]
     public int MaxDamageTimes = 1;
 
-    [ShowIf("Liftable")]
-    [BoxGroup("举箱子属性")]
-    [GUIColor(0, 1.0f, 0)]
-    [LabelText("举起箱子掉落踢技能")]
-    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string LiftGetLiftBoxAbility;
-
-    [ShowIf("Liftable")]
-    [BoxGroup("举箱子属性")]
-    [GUIColor(0, 1.0f, 0)]
-    [LabelText("举起箱子更换皮肤")]
-    public Material DieDropMaterial;
-
     private int damageTimes;
-
-    [ShowIf("Healable")]
-    [BoxGroup("举箱子属性")]
-    [LabelText("举箱子回复生命")]
-    public int HealLifeCountWhenLifted;
 
     [AssetsOnly]
     [ShowIf("Kickable")]
@@ -198,20 +171,23 @@ public class Box : PoolObject
     [LabelText("摩阻力")]
     public float Dynamic_Drag = 0.5f;
 
-    [AssetsOnly]
-    [ShowIf("Kickable")]
-    [BoxGroup("踢箱子属性")]
-    [LabelText("碰撞爆炸推力")]
-    [SerializeField]
-    private bool ExplodePushForce_Kick = false;
+    [ShowInInspector]
+    [LabelText("箱子特殊功能")]
+    internal List<BoxFunctionBase> BoxFunctions = new List<BoxFunctionBase>();
 
-    [AssetsOnly]
-    [ShowIf("Kickable")]
-    [ShowIf("ExplodePushForce_Kick")]
-    [BoxGroup("踢箱子属性")]
-    [LabelText("碰撞爆炸推力半径")]
-    [SerializeField]
-    private int ExplodePushRadius_Kick = 3;
+    [HideInInspector]
+    public byte[] BoxFunctionBaseData;
+
+    public void OnBeforeSerialize()
+    {
+        if (BoxFunctions == null) BoxFunctions = new List<BoxFunctionBase>();
+        BoxFunctionBaseData = SerializationUtility.SerializeValue(BoxFunctions, DataFormat.JSON);
+    }
+
+    public void OnAfterDeserialize()
+    {
+        BoxFunctions = SerializationUtility.DeserializeValue<List<BoxFunctionBase>>(BoxFunctionBaseData, DataFormat.JSON);
+    }
 
     private GridPos3D lastGP;
 
@@ -265,7 +241,7 @@ public class Box : PoolObject
     {
         if (boxTypeIndex == BoxTypeIndex)
         {
-            BoxSkinHelper.SwitchModel(interactSkillType.ConvertToBoxModelType());
+            BoxSkinHelper?.SwitchModel(interactSkillType.ConvertToBoxModelType());
         }
     }
 
@@ -280,15 +256,19 @@ public class Box : PoolObject
     {
         StaticCollider.enabled = true;
         DynamicCollider.enabled = false;
+        BoxOnlyDynamicCollider.enabled = false;
         if (dropping)
         {
             StaticCollider.enabled = false;
             DynamicCollider.enabled = false;
+            BoxOnlyDynamicCollider.enabled = false;
         }
 
         ArtOnly = artOnly;
+        NormalColliders.SetActive(!Passable);
         StaticCollider.gameObject.SetActive(!artOnly);
         DynamicCollider.gameObject.SetActive(!artOnly);
+        BoxOnlyDynamicCollider.gameObject.SetActive(!artOnly && Passable);
 
         if (BoxFeature.HasFlag(BoxFeature.IsGround))
         {
@@ -314,6 +294,7 @@ public class Box : PoolObject
                 {
                     StaticCollider.enabled = true;
                     DynamicCollider.enabled = true;
+                    BoxOnlyDynamicCollider.enabled = true;
                 }
             });
             transform.DOLocalRotate(Vector3.zero, lerpTime);
@@ -328,6 +309,7 @@ public class Box : PoolObject
             {
                 StaticCollider.enabled = true;
                 DynamicCollider.enabled = true;
+                BoxOnlyDynamicCollider.enabled = true;
             }
         }
 
@@ -374,6 +356,7 @@ public class Box : PoolObject
             transform.DOPause();
             StaticCollider.enabled = false;
             DynamicCollider.enabled = true;
+            BoxOnlyDynamicCollider.enabled = true;
             DynamicCollider.material.dynamicFriction = 0f;
             Rigidbody = gameObject.GetComponent<Rigidbody>();
             if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
@@ -398,38 +381,61 @@ public class Box : PoolObject
         if (State == States.BeingPushed || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.PushingCanceling)
         {
             damageTimes = 0;
-            byte dropLiftAbilityIndex = ConfigManager.GetBoxTypeIndex(LiftGetLiftBoxAbility);
-            if (dropLiftAbilityIndex != 0)
-            {
-                PlayDestroyFX();
-                actor.ActorSkillHelper.DisableInteract(InteractSkillType.Kick, actor.ActorSkillHelper.PlayerCurrentGetKickAbility);
-                actor.ActorSkillHelper.PlayerCurrentGetKickAbility = dropLiftAbilityIndex;
-                actor.ActorSkillHelper.EnableInteract(InteractSkillType.Kick, dropLiftAbilityIndex);
-                actor.ActorSkinHelper.SwitchSkin(DieDropMaterial);
-            }
-
             LastTouchActor = actor;
-            if (Healable && HealLifeCountWhenLifted > 0)
+            foreach (BoxFunctionBase bf in BoxFunctions)
             {
-                actor.ActorBattleHelper.AddLife(HealLifeCountWhenLifted);
-                return true;
-            }
-            else
-            {
-                WorldManager.Instance.CurrentWorld.RemoveBox(this);
-                State = States.BeingLift;
-                transform.DOPause();
-                StaticCollider.enabled = true;
-                DynamicCollider.enabled = false;
-                if (Rigidbody)
+                switch (bf)
                 {
-                    DestroyImmediate(Rigidbody);
-                }
+                    case BoxFunction_LiftDropSkill skill:
+                    {
+                        byte dropLiftAbilityIndex = ConfigManager.GetBoxTypeIndex(skill.LiftGetLiftBoxAbility);
+                        if (dropLiftAbilityIndex != 0)
+                        {
+                            PlayDestroyFX();
+                            actor.ActorSkillHelper.DisableInteract(InteractSkillType.Kick, actor.ActorSkillHelper.PlayerCurrentGetKickAbility);
+                            actor.ActorSkillHelper.PlayerCurrentGetKickAbility = dropLiftAbilityIndex;
+                            actor.ActorSkillHelper.EnableInteract(InteractSkillType.Kick, dropLiftAbilityIndex);
+                        }
 
-                BoxEffectHelper?.PoolRecycle();
-                BoxEffectHelper = null;
-                return true;
+                        break;
+                    }
+                    case BoxFunction_LiftDropSkin skill:
+                    {
+                        actor.ActorSkinHelper.SwitchSkin(skill.DieDropMaterial);
+                        break;
+                    }
+                }
             }
+
+            if (Healable)
+            {
+                foreach (BoxFunctionBase bf in BoxFunctions)
+                {
+                    switch (bf)
+                    {
+                        case BoxFunction_LiftGainHealth skill:
+                        {
+                            actor.ActorBattleHelper.AddLife(skill.HealLifeCountWhenLifted);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            WorldManager.Instance.CurrentWorld.RemoveBox(this);
+            State = States.BeingLift;
+            transform.DOPause();
+            StaticCollider.enabled = true;
+            DynamicCollider.enabled = false;
+            BoxOnlyDynamicCollider.enabled = true;
+            if (Rigidbody)
+            {
+                DestroyImmediate(Rigidbody);
+            }
+
+            BoxEffectHelper?.PoolRecycle();
+            BoxEffectHelper = null;
+            return true;
         }
 
         return false;
@@ -457,6 +463,7 @@ public class Box : PoolObject
             transform.parent = WorldManager.Instance.CurrentWorld.transform;
             StaticCollider.enabled = false;
             DynamicCollider.enabled = true;
+            BoxOnlyDynamicCollider.enabled = true;
             DynamicCollider.material.dynamicFriction = Throw_Friction;
             Rigidbody = gameObject.GetComponent<Rigidbody>();
             if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
@@ -489,6 +496,7 @@ public class Box : PoolObject
             transform.parent = WorldManager.Instance.CurrentWorld.transform;
             StaticCollider.enabled = false;
             DynamicCollider.enabled = true;
+            BoxOnlyDynamicCollider.enabled = true;
             DynamicCollider.material.dynamicFriction = Throw_Friction;
             Rigidbody = gameObject.GetComponent<Rigidbody>();
             if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
@@ -519,6 +527,7 @@ public class Box : PoolObject
         transform.parent = WorldManager.Instance.CurrentWorld.transform;
         StaticCollider.enabled = false;
         DynamicCollider.enabled = true;
+        BoxOnlyDynamicCollider.enabled = true;
         Rigidbody = gameObject.GetComponent<Rigidbody>();
         if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
         Rigidbody.mass = FinalWeight;
@@ -540,7 +549,7 @@ public class Box : PoolObject
         {
             if (State == States.BeingKicked)
             {
-                bool isGrounded = Physics.Raycast(new Ray(transform.position, Vector3.down), 0.55f, LayerManager.Instance.LayerMask_Box | LayerManager.Instance.LayerMask_Ground);
+                bool isGrounded = Physics.Raycast(new Ray(transform.position, Vector3.down), 0.55f, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground);
                 Rigidbody.useGravity = !isGrounded;
                 if (isGrounded)
                 {
@@ -560,6 +569,7 @@ public class Box : PoolObject
                 DestroyImmediate(Rigidbody);
                 StaticCollider.enabled = true;
                 DynamicCollider.enabled = false;
+                BoxOnlyDynamicCollider.enabled = false;
                 WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this);
                 BoxEffectHelper?.PoolRecycle();
                 BoxEffectHelper = null;
@@ -588,6 +598,8 @@ public class Box : PoolObject
 
     public bool Interactable => Pushable || Kickable || Liftable || Throwable;
 
+    public bool Passable => BoxFeature.HasFlag(BoxFeature.Passable);
+
     public bool Droppable => BoxFeature.HasFlag(BoxFeature.Droppable);
 
     public bool Breakable => BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable) || BoxFeature.HasFlag(BoxFeature.KickHitBreakable);
@@ -604,9 +616,20 @@ public class Box : PoolObject
             {
                 DestroyAOEDamage(DestroyDamageRadius_Throw, DestroyDamage_Throw);
                 PlayDestroyFX();
-                if (ExplodePushForce_Throw)
+                foreach (BoxFunctionBase bf in BoxFunctions)
                 {
-                    this.ExplodePushBox(transform.position, ExplodePushRadius_Throw);
+                    switch (bf)
+                    {
+                        case BoxFunction_ExplodePushForce skill:
+                        {
+                            if (skill.ExplodePushForce)
+                            {
+                                this.ExplodePushBox(transform.position, skill.ExplodePushRadius);
+                            }
+
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -641,9 +664,20 @@ public class Box : PoolObject
                 {
                     DestroyAOEDamage(DestroyDamageRadius_Kick, DestroyDamage_Kick);
                     PlayDestroyFX();
-                    if (ExplodePushForce_Kick)
+                    foreach (BoxFunctionBase bf in BoxFunctions)
                     {
-                        this.ExplodePushBox(transform.position, ExplodePushRadius_Kick);
+                        switch (bf)
+                        {
+                            case BoxFunction_ExplodePushForce skill:
+                            {
+                                if (skill.ExplodePushForce)
+                                {
+                                    this.ExplodePushBox(transform.position, skill.ExplodePushRadius);
+                                }
+
+                                break;
+                            }
+                        }
                     }
                 }
 
@@ -764,10 +798,10 @@ public enum BoxFeature
     [LabelText("会塌落")]
     Droppable = 1 << 4,
 
-    [LabelText("从属玩家1")]
-    BelongToPlayer1 = 1 << 5,
+    [LabelText("可穿过")]
+    Passable = 1 << 5,
 
-    [LabelText("从属玩家2")]
+    [LabelText("--占位--")]
     BelongToPlayer2 = 1 << 6,
 
     [LabelText("踢撞会碎")]

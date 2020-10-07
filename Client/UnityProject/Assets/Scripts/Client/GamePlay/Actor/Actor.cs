@@ -465,7 +465,7 @@ public class Actor : PoolObject
     {
         Ray ray = new Ray(transform.position, transform.forward);
         Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1.5f, LayerManager.Instance.LayerMask_Box, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(ray, out RaycastHit hit, 1f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Kickable && ActorSkillHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
@@ -481,7 +481,7 @@ public class Actor : PoolObject
     {
         if (CurrentLiftBox) return;
         Ray ray = new Ray(transform.position, transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1.3f, LayerManager.Instance.LayerMask_Box, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(ray, out RaycastHit hit, 1.3f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Liftable && ActorSkillHelper.CanInteract(InteractSkillType.Lift, box.BoxTypeIndex))
@@ -626,6 +626,19 @@ public class Actor : PoolObject
     public bool IsFriend(Actor target)
     {
         return !IsOpponent(target);
+    }
+
+    #endregion
+
+    #region Collisions
+
+    void OnTriggerEnter(Collider trigger)
+    {
+    }
+
+    void OnTriggerStay(Collider trigger)
+    {
+
     }
 
     #endregion

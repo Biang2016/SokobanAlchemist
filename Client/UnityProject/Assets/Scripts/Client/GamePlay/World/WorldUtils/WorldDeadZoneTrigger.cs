@@ -30,7 +30,7 @@ public class WorldDeadZoneTrigger : PoolObject
 
     private static void CheckObject(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_Box)
+        if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box)
@@ -49,11 +49,6 @@ public class WorldDeadZoneTrigger : PoolObject
             {
                 actor.ActorBattleHelper.Die();
             }
-        }
-
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_ItemDropped)
-        {
-            // todo
         }
     }
 }

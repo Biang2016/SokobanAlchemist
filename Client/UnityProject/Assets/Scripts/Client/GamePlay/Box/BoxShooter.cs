@@ -39,20 +39,20 @@ public class BoxShooter : MonoBehaviour
 
     public void Shoot()
     {
-        PlayerNumber playerNumber = PlayerNumber.Player1;
-        if (Box.BoxFeature.HasFlag(BoxFeature.BelongToPlayer1))
-        {
-            playerNumber = PlayerNumber.Player1;
-        }
-        else if (Box.BoxFeature.HasFlag(BoxFeature.BelongToPlayer2))
-        {
-            playerNumber = PlayerNumber.Player2;
-        }
-        else
-        {
-            return;
-        }
+        //PlayerNumber playerNumber = PlayerNumber.Player1;
+        //if (Box.BoxFeature.HasFlag(BoxFeature.BelongToPlayer1))
+        //{
+        //    playerNumber = PlayerNumber.Player1;
+        //}
+        //else if (Box.BoxFeature.HasFlag(BoxFeature.BelongToPlayer2))
+        //{
+        //    playerNumber = PlayerNumber.Player2;
+        //}
+        //else
+        //{
+        //    return;
+        //}
 
-        ProjectileManager.Instance.EmitProjectile(ShooterDummy, ProjectileType, playerNumber, ProjectileVelocity, ProjectileScale);
+        //ProjectileManager.Instance.EmitProjectile(ShooterDummy, ProjectileType, playerNumber, ProjectileVelocity, ProjectileScale);
     }
 }

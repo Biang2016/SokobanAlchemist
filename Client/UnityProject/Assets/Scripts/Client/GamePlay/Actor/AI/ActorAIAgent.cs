@@ -101,7 +101,7 @@ public class ActorAIAgent
         if (dist <= KeepDistanceMax + (KeepDistanceMax.Equals(0) && LastNodeOccupied ? 1 : 0) && dist >= KeepDistanceMin)
         {
             Vector3 forward = dest.ToVector3() - Actor.transform.position;
-            if (!forward.magnitude.Equals(0))
+            if (forward.normalized.magnitude > 0)
             {
                 Actor.CurForward = forward.normalized;
             }

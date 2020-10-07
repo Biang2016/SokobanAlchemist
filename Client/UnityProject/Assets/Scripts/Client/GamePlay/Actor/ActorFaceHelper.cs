@@ -30,7 +30,7 @@ public class ActorFaceHelper : ActorHelper
     void OnTriggerEnter(Collider collider)
     {
         if (Actor.IsRecycled) return;
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_Box)
+        if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Pushable && Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
@@ -43,7 +43,7 @@ public class ActorFaceHelper : ActorHelper
     void OnTriggerExit(Collider collider)
     {
         if (Actor.IsRecycled) return;
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_Box)
+        if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Pushable && Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))

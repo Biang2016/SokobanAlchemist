@@ -12,7 +12,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_Box)
+        if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
@@ -26,7 +26,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
 
     void OnTriggerStay(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_Box)
+        if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             if (curPushingBox) return;
             Box box = collider.gameObject.GetComponentInParent<Box>();
@@ -42,7 +42,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
 
     void OnTriggerExit(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_Box)
+        if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
