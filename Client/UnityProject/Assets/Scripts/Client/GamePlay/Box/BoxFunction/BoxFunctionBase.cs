@@ -52,8 +52,8 @@ public abstract class BoxFunctionBase
 }
 
 [Serializable]
-[LabelText("关卡事件触发行为")]
-public class BoxFunction_InvokeOnLevelEventID : BoxFunctionBase
+[LabelText("关卡事件触发")]
+public abstract class BoxFunction_InvokeOnLevelEventID : BoxFunctionBase
 {
     [LabelText("监听关卡事件ID")]
     public int ListenLevelEventID;
@@ -72,6 +72,33 @@ public class BoxFunction_InvokeOnLevelEventID : BoxFunctionBase
     {
         if (ListenLevelEventID == eventID)
         {
+            OnEventExecute();
+        }
+    }
+
+    protected abstract void OnEventExecute();
+}
+
+[Serializable]
+[LabelText("更改箱子类型")]
+public class BoxFunction_ChangeBoxType : BoxFunction_InvokeOnLevelEventID
+{
+    [LabelText("更改箱子类型为")]
+    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    public string ChangeBoxTypeTo;
+
+    protected override void OnEventExecute()
+    {
+        if (Box.State == Box.States.Static)
+        {
+            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Box.GridPos3D);
+            if (module != null)
+            {
+                GridPos3D localGP = Box.LocalGridPos3D;
+                WorldManager.Instance.CurrentWorld.DeleteBox(Box);
+                byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
+                module.GenerateBox(boxTypeIndex, localGP);
+            }
         }
     }
 }

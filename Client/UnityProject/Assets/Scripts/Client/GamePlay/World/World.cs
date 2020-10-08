@@ -271,7 +271,7 @@ public class World : PoolObject
         box_src.Initialize(localGP_target, module_target, 0.2f, box_src.ArtOnly, Box.LerpType.Push);
     }
 
-    public void RemoveBox(Box box)
+    public void RemoveBoxFromGrid(Box box)
     {
         if (box.WorldModule)
         {
@@ -286,6 +286,13 @@ public class World : PoolObject
 
             WorldManager.Instance.OtherBoxDict.Add(box.GUID, box);
         }
+    }
+
+    public void DeleteBox(Box box)
+    {
+        RemoveBoxFromGrid(box);
+        WorldManager.Instance.OtherBoxDict.Remove(box.GUID);
+        box.PoolRecycle();
     }
 
     public void BoxReturnToWorldFromPhysics(Box box)

@@ -418,7 +418,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
             damageTimes = 0;
             LastTouchActor = actor;
-            WorldManager.Instance.CurrentWorld.RemoveBox(this);
+            WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this);
             State = States.BeingKicked;
             transform.DOPause();
             StaticCollider.enabled = false;
@@ -454,7 +454,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
                 bf.OnBeingLift(actor);
             }
 
-            WorldManager.Instance.CurrentWorld.RemoveBox(this);
+            WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this);
             State = States.BeingLift;
             transform.DOPause();
             StaticCollider.enabled = true;
@@ -636,7 +636,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
             if (BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable))
             {
-                PoolRecycle();
+                WorldManager.Instance.CurrentWorld.DeleteBox(this);
             }
             else
             {
@@ -673,7 +673,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
                 if (BoxFeature.HasFlag(BoxFeature.KickHitBreakable))
                 {
-                    PoolRecycle();
+                    WorldManager.Instance.CurrentWorld.DeleteBox(this);
                 }
             }
         }
