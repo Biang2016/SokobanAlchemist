@@ -65,6 +65,11 @@ public class World : PoolObject
             poi.PoolRecycle();
         }
 
+        foreach (LevelTriggerBase trigger in LevelTriggers)
+        {
+            trigger.PoolRecycle();
+        }
+
         POIs.Clear();
         WorldData = null;
     }

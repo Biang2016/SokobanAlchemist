@@ -148,6 +148,12 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     private void Update()
     {
+        if (ControlManager.Common_RestartGame.Up)
+        {
+            ReloadGame();
+            return;
+        }
+
         ConfigManager.Update(Time.deltaTime);
         LayerManager.Update(Time.deltaTime);
         PrefabManager.Update(Time.deltaTime);
@@ -186,12 +192,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     void FixedUpdate()
     {
-        if (ControlManager.Common_RestartGame.Up)
-        {
-            ReloadGame();
-            return;
-        }
-
         //if (ControlManager.Common_PauseGame.Up)
         //{
         //    Debug.Break();
