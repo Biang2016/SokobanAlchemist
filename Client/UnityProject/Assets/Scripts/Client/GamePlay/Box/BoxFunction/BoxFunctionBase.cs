@@ -18,6 +18,14 @@ public abstract class BoxFunctionBase
         return res;
     }
 
+    public virtual void OnRegisterLevelEventID()
+    {
+    }
+
+    public virtual void OnUnRegisterLevelEventID()
+    {
+    }
+
     public virtual void OnBeingLift(Actor actor)
     {
     }
@@ -40,6 +48,31 @@ public abstract class BoxFunctionBase
 
     public virtual void OnBoxThornTrapTriggerExit(Collider collider)
     {
+    }
+}
+
+[Serializable]
+[LabelText("关卡事件触发行为")]
+public class BoxFunction_InvokeOnLevelEventID : BoxFunctionBase
+{
+    [LabelText("监听关卡事件ID")]
+    public int ListenLevelEventID;
+
+    public override void OnRegisterLevelEventID()
+    {
+        ClientGameManager.Instance.BattleMessenger.AddListener<int>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventID, OnEvent);
+    }
+
+    public override void OnUnRegisterLevelEventID()
+    {
+        ClientGameManager.Instance.BattleMessenger.RemoveListener<int>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventID, OnEvent);
+    }
+
+    private void OnEvent(int eventID)
+    {
+        if (ListenLevelEventID == eventID)
+        {
+        }
     }
 }
 

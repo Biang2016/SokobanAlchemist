@@ -480,8 +480,7 @@ public class Actor : PoolObject
     public void Kick()
     {
         Ray ray = new Ray(ArtPos - transform.forward * 0.49f, transform.forward);
-        Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
-        Debug.Log(ray.origin.z);
+        //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();

@@ -252,11 +252,19 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     private void RegisterEvents()
     {
         ClientGameManager.Instance.BattleMessenger.AddListener<InteractSkillType, byte>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
+        foreach (BoxFunctionBase bf in BoxFunctions)
+        {
+            bf.OnRegisterLevelEventID();
+        }
     }
 
     private void UnRegisterEvents()
     {
         ClientGameManager.Instance.BattleMessenger.RemoveListener<InteractSkillType, byte>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
+        foreach (BoxFunctionBase bf in BoxFunctions)
+        {
+            bf.OnUnRegisterLevelEventID();
+        }
     }
 
     private void OnPlayerInteractSkillChanged(InteractSkillType interactSkillType, byte boxTypeIndex)
