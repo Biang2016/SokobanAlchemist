@@ -58,13 +58,14 @@ public class PlayerActor : Actor
                 case GridPosR.Orientation.Down:
                 {
                     CurMoveAttempt.z = -CurMoveAttempt.z;
+                    CurMoveAttempt.x = -CurMoveAttempt.x;
                     break;
                 }
                 case GridPosR.Orientation.Left:
                 {
                     float x = CurMoveAttempt.x;
                     float z = CurMoveAttempt.z;
-                    CurMoveAttempt.x = z;
+                    CurMoveAttempt.x = -z;
                     CurMoveAttempt.z = x;
                     break;
                 }
@@ -73,7 +74,7 @@ public class PlayerActor : Actor
                     float x = CurMoveAttempt.x;
                     float z = CurMoveAttempt.z;
                     CurMoveAttempt.x = z;
-                    CurMoveAttempt.z = x;
+                    CurMoveAttempt.z = -x;
                     break;
                 }
             }
