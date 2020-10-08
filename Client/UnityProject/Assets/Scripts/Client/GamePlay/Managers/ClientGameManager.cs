@@ -148,17 +148,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     private void Update()
     {
-        if (ControlManager.Common_RestartGame.Up)
-        {
-            ReloadGame();
-            return;
-        }
-
-        if (ControlManager.Common_PauseGame.Up)
-        {
-            Debug.Break();
-        }
-
         ConfigManager.Update(Time.deltaTime);
         LayerManager.Update(Time.deltaTime);
         PrefabManager.Update(Time.deltaTime);
@@ -197,6 +186,27 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     void FixedUpdate()
     {
+        if (ControlManager.Common_RestartGame.Up)
+        {
+            ReloadGame();
+            return;
+        }
+
+        //if (ControlManager.Common_PauseGame.Up)
+        //{
+        //    Debug.Break();
+        //}
+
+        if (ControlManager.Battle_LeftRotateCamera.Up)
+        {
+            CameraManager.Instance.FieldCamera.CameraLeftRotate();
+        }
+
+        if (ControlManager.Battle_RightRotateCamera.Up)
+        {
+            CameraManager.Instance.FieldCamera.CameraRightRotate();
+        }
+
         ConfigManager.FixedUpdate(Time.fixedDeltaTime);
         LayerManager.FixedUpdate(Time.fixedDeltaTime);
         PrefabManager.FixedUpdate(Time.fixedDeltaTime);

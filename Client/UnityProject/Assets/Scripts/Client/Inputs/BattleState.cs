@@ -87,6 +87,9 @@ public enum ButtonNames
     Battle_Skill_1_Player2,
     Battle_ToggleBattleTip,
 
+    Battle_LeftRotateCamera,
+    Battle_RightRotateCamera,
+
     BATTLE_MAX_FLAG = 400,
 
     COMMON_MIN_FLAG = 500,

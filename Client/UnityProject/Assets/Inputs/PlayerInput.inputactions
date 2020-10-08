@@ -220,6 +220,22 @@
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "LeftRotateCamera",
+                    "type": "Button",
+                    "id": "4c0ad541-70b9-4323-b90a-f89bd96489f9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "RightRotateCamera",
+                    "type": "Button",
+                    "id": "7ecf879f-d5c0-432e-b67c-46f4c52d0d68",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
                 }
             ],
             "bindings": [
@@ -728,6 +744,28 @@
                     "action": "Player2_RightStick",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bb7a45e9-abe3-4220-bd4a-d31e251e0abc",
+                    "path": "<Keyboard>/#(Q)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftRotateCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ceb3501d-8804-4b43-83aa-7c167bdcf35a",
+                    "path": "<Keyboard>/#(E)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "RightRotateCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -938,7 +976,7 @@
                 {
                     "name": "",
                     "id": "73a94d58-4b5b-4d7d-a9fb-57918fb08e48",
-                    "path": "<Keyboard>/#(Q)",
+                    "path": "<Keyboard>/#(P)",
                     "interactions": "Press(behavior=2)",
                     "processors": "Clamp(max=1)",
                     "groups": "KeyboardMouse",
