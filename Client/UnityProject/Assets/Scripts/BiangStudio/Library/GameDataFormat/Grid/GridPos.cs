@@ -79,6 +79,11 @@ namespace BiangStudio.GameDataFormat.Grid
             return (Orientation) (((int) orientation + 1) % 4);
         }
 
+        public static Orientation RotateOrientationAntiClockwise90(Orientation orientation)
+        {
+            return (Orientation) (((int) orientation - 1) % 4);
+        }
+
         public static List<GridPos> TransformOccupiedPositions(GridPosR localGridPos, List<GridPos> ori_OccupiedPositions)
         {
             List<GridPos> resGP = new List<GridPos>();

@@ -23,8 +23,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
 
     public Vector2[] Battle_Move = new Vector2[2];
     public Vector2 Player2_RightStick = new Vector2();
-    public ButtonState[,] Battle_MoveButtons = new ButtonState[2,4];
-    public ButtonState[,] Battle_MoveButtons_LastFrame = new ButtonState[2,4];
+    public ButtonState[,] Battle_MoveButtons = new ButtonState[2, 4];
+    public ButtonState[,] Battle_MoveButtons_LastFrame = new ButtonState[2, 4];
 
     private Vector2 Last_Battle_MousePosition = Vector2.zero;
 
@@ -67,6 +67,9 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     public ButtonState Battle_Skill_1_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_1_Player2};
 
     public ButtonState Battle_ToggleBattleTip = new ButtonState() {ButtonName = ButtonNames.Battle_ToggleBattleTip};
+
+    public ButtonState Battle_LeftRotateCamera = new ButtonState() {ButtonName = ButtonNames.Battle_LeftRotateCamera};
+    public ButtonState Battle_RightRotateCamera = new ButtonState() {ButtonName = ButtonNames.Battle_RightRotateCamera};
 
     #endregion
 
@@ -116,7 +119,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     public ButtonState Common_Exit = new ButtonState() {ButtonName = ButtonNames.Common_Exit};
     public ButtonState Common_Tab = new ButtonState() {ButtonName = ButtonNames.Common_Tab};
     public ButtonState Common_RestartGame = new ButtonState() {ButtonName = ButtonNames.Common_RestartGame};
-    public ButtonState Common_PauseGame = new ButtonState() {ButtonName = ButtonNames.Common_Pause };
+    public ButtonState Common_PauseGame = new ButtonState() {ButtonName = ButtonNames.Common_Pause};
 
     #endregion
 
@@ -137,46 +140,46 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         Battle_MouseMiddle.GetStateCallbackFromContext_UpDownPress(BattleInputActions.MouseMiddleClick);
 
         // 移动组合向量
-        BattleInputActions.Player1_Move.performed += context => Battle_Move[(int)PlayerNumber.Player1] = context.ReadValue<Vector2>();
-        BattleInputActions.Player1_Move.canceled += context => Battle_Move[(int)PlayerNumber.Player1] = Vector2.zero;
+        BattleInputActions.Player1_Move.performed += context => Battle_Move[(int) PlayerNumber.Player1] = context.ReadValue<Vector2>();
+        BattleInputActions.Player1_Move.canceled += context => Battle_Move[(int) PlayerNumber.Player1] = Vector2.zero;
 
-        BattleInputActions.Player2_Move.performed += context => Battle_Move[(int)PlayerNumber.Player2] = context.ReadValue<Vector2>();
-        BattleInputActions.Player2_Move.canceled += context => Battle_Move[(int)PlayerNumber.Player2] = Vector2.zero;
+        BattleInputActions.Player2_Move.performed += context => Battle_Move[(int) PlayerNumber.Player2] = context.ReadValue<Vector2>();
+        BattleInputActions.Player2_Move.canceled += context => Battle_Move[(int) PlayerNumber.Player2] = Vector2.zero;
 
         BattleInputActions.Player2_RightStick.performed += context => Player2_RightStick = context.ReadValue<Vector2>();
         BattleInputActions.Player2_RightStick.canceled += context => Player2_RightStick = Vector2.zero;
 
         // 正常按键
-        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Up] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Up_Player1 };
-        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Right] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Right_Player1 };
-        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Down] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Down_Player1 };
-        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Left] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Left_Player1 };
+        Battle_MoveButtons[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Up] = new ButtonState() {ButtonName = ButtonNames.Battle_Move_Up_Player1};
+        Battle_MoveButtons[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Right] = new ButtonState() {ButtonName = ButtonNames.Battle_Move_Right_Player1};
+        Battle_MoveButtons[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Down] = new ButtonState() {ButtonName = ButtonNames.Battle_Move_Down_Player1};
+        Battle_MoveButtons[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Left] = new ButtonState() {ButtonName = ButtonNames.Battle_Move_Left_Player1};
 
-        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Up] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Up_Player2 };
-        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Right] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Right_Player2 };
-        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Down] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Down_Player2 };
-        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Left] = new ButtonState() { ButtonName = ButtonNames.Battle_Move_Left_Player2 };
+        Battle_MoveButtons[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Up] = new ButtonState() {ButtonName = ButtonNames.Battle_Move_Up_Player2};
+        Battle_MoveButtons[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Right] = new ButtonState() {ButtonName = ButtonNames.Battle_Move_Right_Player2};
+        Battle_MoveButtons[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Down] = new ButtonState() {ButtonName = ButtonNames.Battle_Move_Down_Player2};
+        Battle_MoveButtons[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Left] = new ButtonState() {ButtonName = ButtonNames.Battle_Move_Left_Player2};
 
-        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Up].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player1_Move_Up);
-        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Right].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player1_Move_Right);
-        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Down].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player1_Move_Down);
-        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Left].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player1_Move_Left);
+        Battle_MoveButtons[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Up].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player1_Move_Up);
+        Battle_MoveButtons[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Right].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player1_Move_Right);
+        Battle_MoveButtons[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Down].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player1_Move_Down);
+        Battle_MoveButtons[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Left].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player1_Move_Left);
 
-        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Up].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player2_Move_Up);
-        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Right].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player2_Move_Right);
-        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Down].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player2_Move_Down);
-        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Left].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player2_Move_Left);
+        Battle_MoveButtons[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Up].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player2_Move_Up);
+        Battle_MoveButtons[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Right].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player2_Move_Right);
+        Battle_MoveButtons[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Down].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player2_Move_Down);
+        Battle_MoveButtons[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Left].GetStateCallbackFromContext_UpDownPress(BattleInputActions.Player2_Move_Left);
 
         // 双击方向键
-        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Up].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player1_Move_Up_M);
-        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Right].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player1_Move_Right_M);
-        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Down].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player1_Move_Down_M);
-        Battle_MoveButtons[(int)PlayerNumber.Player1, (int)GridPosR.Orientation.Left].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player1_Move_Left_M);
+        Battle_MoveButtons[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Up].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player1_Move_Up_M);
+        Battle_MoveButtons[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Right].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player1_Move_Right_M);
+        Battle_MoveButtons[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Down].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player1_Move_Down_M);
+        Battle_MoveButtons[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Left].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player1_Move_Left_M);
 
-        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Up].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player2_Move_Up_M);
-        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Right].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player2_Move_Right_M);
-        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Down].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player2_Move_Down_M);
-        Battle_MoveButtons[(int)PlayerNumber.Player2, (int)GridPosR.Orientation.Left].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player2_Move_Left_M);
+        Battle_MoveButtons[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Up].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player2_Move_Up_M);
+        Battle_MoveButtons[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Right].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player2_Move_Right_M);
+        Battle_MoveButtons[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Down].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player2_Move_Down_M);
+        Battle_MoveButtons[(int) PlayerNumber.Player2, (int) GridPosR.Orientation.Left].GetStateCallbackFromContext_MultipleClick(BattleInputActions.Player2_Move_Left_M);
 
         Battle_MoveButtons_LastFrame[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Up] = ButtonStateDict_LastFrame[ButtonNames.Battle_Move_Up_Player1];
         Battle_MoveButtons_LastFrame[(int) PlayerNumber.Player1, (int) GridPosR.Orientation.Right] = ButtonStateDict_LastFrame[ButtonNames.Battle_Move_Right_Player1];
@@ -200,6 +203,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         Battle_Skill[(int) PlayerNumber.Player2, 1] = Battle_Skill_1_Player2;
 
         Battle_ToggleBattleTip.GetStateCallbackFromContext_UpDownPress(BattleInputActions.ToggleBattleTip);
+        Battle_LeftRotateCamera.GetStateCallbackFromContext_UpDownPress(BattleInputActions.LeftRotateCamera);
+        Battle_RightRotateCamera.GetStateCallbackFromContext_UpDownPress(BattleInputActions.RightRotateCamera);
 
         Common_MouseLeft.GetStateCallbackFromContext_UpDownPress(CommonInputActions.MouseLeftClick);
         Common_MouseRight.GetStateCallbackFromContext_UpDownPress(CommonInputActions.MouseRightClick);

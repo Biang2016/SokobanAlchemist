@@ -48,6 +48,36 @@ public class PlayerActor : Actor
             if (BS_Down.Pressed) CurMoveAttempt.z -= 1;
             if (BS_Left.Pressed) CurMoveAttempt.x -= 1;
             if (BS_Right.Pressed) CurMoveAttempt.x += 1;
+
+            switch (CameraManager.Instance.FieldCamera.RotateDirection)
+            {
+                case GridPosR.Orientation.Up:
+                {
+                    break;
+                }
+                case GridPosR.Orientation.Down:
+                {
+                    CurMoveAttempt.z = -CurMoveAttempt.z;
+                    break;
+                }
+                case GridPosR.Orientation.Left:
+                {
+                    float x = CurMoveAttempt.x;
+                    float z = CurMoveAttempt.z;
+                    CurMoveAttempt.x = z;
+                    CurMoveAttempt.z = x;
+                    break;
+                }
+                case GridPosR.Orientation.Right:
+                {
+                    float x = CurMoveAttempt.x;
+                    float z = CurMoveAttempt.z;
+                    CurMoveAttempt.x = z;
+                    CurMoveAttempt.z = x;
+                    break;
+                }
+            }
+
             if (!CurMoveAttempt.x.Equals(0) && !CurMoveAttempt.z.Equals(0))
             {
                 if ((LastMoveAttempt.x > 0 && BS_Right_Last.Pressed) || (LastMoveAttempt.x < 0 && BS_Left_Last.Pressed))
