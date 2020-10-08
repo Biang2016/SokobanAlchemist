@@ -96,30 +96,6 @@ MonoBehaviour:
   Accelerate: 200
   MoveSpeed: 5
   ThrowAimMoveSpeed: 8
-  LiftingMoveSpeedRatioCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: -0.3785059
-      outSlope: -0.3785059
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.9946264
-      value: 0.62352806
-      inSlope: -0.3785059
-      outSlope: -0.3785059
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   ThrowRadius: 15
   KickForce: 15
   PushableBoxList:
@@ -132,6 +108,7 @@ MonoBehaviour:
   - GoldenDropBoomBox
   - SilverDropBoomBox
   - HealthBox
+  - LockerBox01
   KickableBoxList:
   - WoodenBox
   - GoldenDropBoomBox
@@ -155,6 +132,7 @@ MonoBehaviour:
   - ThornTrapBox
   ThrowableBoxList: []
   DieDropBoxTypeName: 
+  DieDropBoxProbabilityPercent: 0
   CollideDamage: 0
   CollideForce: 0
   MovementState: 0
