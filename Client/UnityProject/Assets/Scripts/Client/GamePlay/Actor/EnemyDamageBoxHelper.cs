@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyDamageBoxHelper : ActorHelper
+public class EnemyDamageBoxHelper : ActorMonoHelper
 {
 
     private void OnTriggerEnter(Collider collider)

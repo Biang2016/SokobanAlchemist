@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class ActorLaunchArcRendererHelper : ActorHelper
+public class ActorLaunchArcRendererHelper : ActorMonoHelper
 {
     private List<Marker> Markers = new List<Marker>();
 

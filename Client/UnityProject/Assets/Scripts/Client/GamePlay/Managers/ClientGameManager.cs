@@ -114,6 +114,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         ProjectileManager.Init(new GameObject("ProjectileRoot").transform);
         UIBattleTipManager.Awake();
         FXManager.Awake();
+        FXManager.Init(new GameObject("FXRoot").transform);
 
         ControlManager.Awake();
     }

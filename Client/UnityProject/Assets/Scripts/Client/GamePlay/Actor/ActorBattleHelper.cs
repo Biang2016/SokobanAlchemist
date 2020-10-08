@@ -3,7 +3,7 @@ using BiangStudio.GamePlay.UI;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ActorBattleHelper : ActorHelper
+public class ActorBattleHelper : ActorMonoHelper
 {
     internal Box LastAttackBox;
 
@@ -142,7 +142,7 @@ public class ActorBattleHelper : ActorHelper
         Health -= damage;
         OnDamaged?.Invoke(attacker, damage);
 
-        ProjectileHit kickFX = ProjectileManager.Instance.PlayProjectileHit(Actor.InjureFX, Actor.transform.position);
+        FX kickFX = FXManager.Instance.PlayFX(Actor.InjureFX, Actor.transform.position);
         if (kickFX) kickFX.transform.localScale = Vector3.one * Actor.InjureFXScale;
     }
 
@@ -156,7 +156,7 @@ public class ActorBattleHelper : ActorHelper
         //ClientGameManager.Instance.BattleMessenger.Broadcast((uint)ENUM_BattleEvent.Battle_ActorAttackTip, new AttackData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
         TotalLife += addLife;
         Life += addLife;
-        ProjectileHit gainLifeFX = ProjectileManager.Instance.PlayProjectileHit(Actor.GainLifeFX, Actor.transform.position);
+        FX gainLifeFX = FXManager.Instance.PlayFX(Actor.GainLifeFX, Actor.transform.position);
         if (gainLifeFX) gainLifeFX.transform.localScale = Vector3.one * Actor.GainLifeFXScale;
     }
 
@@ -183,7 +183,7 @@ public class ActorBattleHelper : ActorHelper
                 }
             }
 
-            ProjectileHit hit = ProjectileManager.Instance.PlayProjectileHit(Actor.DieFX, transform.position);
+            FX hit = FXManager.Instance.PlayFX(Actor.DieFX, transform.position);
             if (hit) hit.transform.localScale = Vector3.one * Actor.DieFXScale;
             Actor.PoolRecycle();
         }

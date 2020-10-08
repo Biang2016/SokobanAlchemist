@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BiangStudio.GameDataFormat.Grid;
-using BiangStudio.GamePlay.UI;
 using BiangStudio.ObjectPool;
 using DG.Tweening;
 using NodeCanvas.Framework;
@@ -35,6 +34,7 @@ public class Actor : PoolObject
     internal ActorLaunchArcRendererHelper ActorLaunchArcRendererHelper => ActorCommonHelpers.ActorLaunchArcRendererHelper;
     internal ActorBattleHelper ActorBattleHelper => ActorCommonHelpers.ActorBattleHelper;
     internal ActorSkillHelper ActorSkillHelper => ActorCommonHelpers.ActorSkillHelper;
+    internal ActorBuffHelper ActorBuffHelper => ActorCommonHelpers.ActorBuffHelper;
     internal Transform LiftBoxPivot => ActorCommonHelpers.LiftBoxPivot;
 
     internal GraphOwner GraphOwner;
@@ -113,7 +113,8 @@ public class Actor : PoolObject
 
     [BoxGroup("特效")]
     [LabelText("踢特效")]
-    public ProjectileType KickFX;
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
+    public string KickFX;
 
     [BoxGroup("特效")]
     [LabelText("踢特效尺寸")]
@@ -125,7 +126,8 @@ public class Actor : PoolObject
 
     [BoxGroup("特效")]
     [LabelText("受伤特效")]
-    public ProjectileType InjureFX;
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
+    public string InjureFX;
 
     [BoxGroup("特效")]
     [LabelText("受伤特效尺寸")]
@@ -133,7 +135,8 @@ public class Actor : PoolObject
 
     [BoxGroup("特效")]
     [LabelText("命数增加特效")]
-    public ProjectileType GainLifeFX;
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
+    public string GainLifeFX;
 
     [BoxGroup("特效")]
     [LabelText("命数增加特效尺寸")]
@@ -141,7 +144,8 @@ public class Actor : PoolObject
 
     [BoxGroup("特效")]
     [LabelText("死亡特效")]
-    public ProjectileType DieFX;
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
+    public string DieFX;
 
     [BoxGroup("特效")]
     [LabelText("死亡特效尺寸")]
@@ -197,6 +201,8 @@ public class Actor : PoolObject
                 final *= 0.5f;
             }
 
+            ActorBuffHelper.AdjustFinalSpeed(final, out final);
+
             return final;
         }
     }
@@ -251,13 +257,6 @@ public class Actor : PoolObject
     [BoxGroup("敌兵专用")]
     [LabelText("碰撞击飞力")]
     public int CollideForce;
-
-    private IEnumerable<string> GetAllBoxTypeNames()
-    {
-        ConfigManager.LoadAllConfigs();
-        List<string> res = ConfigManager.BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
-        return res;
-    }
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 
@@ -321,6 +320,7 @@ public class Actor : PoolObject
         ActorLaunchArcRendererHelper.OnRecycled();
         ActorBattleHelper.OnRecycled();
         ActorSkillHelper.OnRecycled();
+        ActorBuffHelper.OnRecycled();
         RigidBody.drag = 100f;
         RigidBody.velocity = Vector3.zero;
         RigidBody.angularVelocity = Vector3.zero;
@@ -401,11 +401,15 @@ public class Actor : PoolObject
             if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
             MovementState = MovementStates.Moving;
             RigidBody.drag = 0;
-            RigidBody.AddForce(CurMoveAttempt * Time.fixedDeltaTime * FinalAccelerate, ForceMode.VelocityChange);
-            if (RigidBody.velocity.magnitude > FinalSpeed)
+
+            Vector3 velDiff = CurMoveAttempt.normalized * Time.fixedDeltaTime * FinalAccelerate;
+            Vector3 finalVel = RigidBody.velocity + velDiff;
+            if (finalVel.magnitude > FinalSpeed)
             {
-                RigidBody.AddForce(RigidBody.velocity.normalized * (FinalSpeed - RigidBody.velocity.magnitude), ForceMode.VelocityChange);
+                finalVel = finalVel.normalized * FinalSpeed;
             }
+
+            RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);
 
             CurForward = CurMoveAttempt.normalized;
             ActorPushHelper.PushTriggerOut();
@@ -471,7 +475,7 @@ public class Actor : PoolObject
             if (box && box.Kickable && ActorSkillHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
             {
                 box.Kick(CurForward, KickForce, this);
-                ProjectileHit kickFX = ProjectileManager.Instance.PlayProjectileHit(KickFX, KickFXPivot.position);
+                FX kickFX = FXManager.Instance.PlayFX(KickFX, KickFXPivot.position);
                 if (kickFX) kickFX.transform.localScale = Vector3.one * KickFXScale;
             }
         }
@@ -615,30 +619,45 @@ public class Actor : PoolObject
     public bool IsPlayer => Camp == Camp.Player;
     public bool IsPlayerOrFriend => Camp == Camp.Player || Camp == Camp.Friend;
     public bool IsEnemy => Camp == Camp.Enemy;
+    public bool IsNeutral => Camp == Camp.None;
 
-    public bool IsOpponent(Actor target)
+    public bool IsOpponentCampOf(Actor target)
     {
         if ((IsPlayerOrFriend) && target.IsEnemy) return true;
         if ((target.IsPlayerOrFriend) && IsEnemy) return true;
         return false;
     }
 
-    public bool IsFriend(Actor target)
+    public bool IsSameCampOf(Actor target)
     {
-        return !IsOpponent(target);
+        return !IsOpponentCampOf(target);
+    }
+
+    public bool IsNeutralCampOf(Actor target)
+    {
+        if ((IsPlayerOrFriend) && target.IsNeutral) return true;
+        if ((target.IsPlayerOrFriend) && IsNeutral) return true;
+        return false;
     }
 
     #endregion
 
-    #region Collisions
+    #region Utils
 
-    void OnTriggerEnter(Collider trigger)
+    private IEnumerable<string> GetAllBoxTypeNames()
     {
+        ConfigManager.LoadAllConfigs();
+        List<string> res = ConfigManager.BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
+        res.Insert(0, "None");
+        return res;
     }
 
-    void OnTriggerStay(Collider trigger)
+    private IEnumerable<string> GetAllFXTypeNames()
     {
-
+        ConfigManager.LoadAllConfigs();
+        List<string> res = ConfigManager.FXTypeDefineDict.TypeIndexDict.Keys.ToList();
+        res.Insert(0, "None");
+        return res;
     }
 
     #endregion

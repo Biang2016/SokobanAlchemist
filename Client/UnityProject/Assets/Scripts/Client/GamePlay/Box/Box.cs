@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using System.Collections.Generic;
 using Sirenix.Serialization;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -39,7 +40,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     internal Actor LastTouchActor;
     internal BoxEffectHelper BoxEffectHelper;
-    internal BoxThornTrapTriggerHelper BoxThornTrapTriggerHelper;
+    public BoxThornTrapTriggerHelper BoxThornTrapTriggerHelper;
     public BoxSkinHelper BoxSkinHelper;
 
     internal bool ArtOnly;
@@ -95,16 +96,34 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     public float FinalWeight => Weight * ConfigManager.BoxWeightFactor_Cheat;
 
     [AssetsOnly]
-    [BoxGroup("箱子属性")]
+    [BoxGroup("碰撞")]
     [LabelText("撞击特效")]
     [SerializeField]
-    private ProjectileType CollideFX;
+    [ValueDropdown("GetAllFXTypeNames")]
+    private string CollideFX;
 
     [AssetsOnly]
-    [BoxGroup("箱子属性")]
+    [BoxGroup("碰撞")]
     [LabelText("撞击特效尺寸")]
     [SerializeField]
     private float CollideFXScale = 1f;
+
+    [AssetsOnly]
+    [ShowIf("KickOrThrowable")]
+    [BoxGroup("碰撞")]
+    [LabelText("碰撞伤害半径")]
+    [SerializeField]
+    [FormerlySerializedAs("DestroyDamageRadius_Kick")]
+    private float CollideDamageRadius = 0.5f;
+
+    [AssetsOnly]
+    [ShowIf("KickOrThrowable")]
+    [BoxGroup("碰撞")]
+    [LabelText("碰撞伤害")]
+    [GUIColor(1.0f, 0, 1.0f)]
+    [SerializeField]
+    [FormerlySerializedAs("DestroyDamage_Kick")]
+    private float CollideDamage = 3f;
 
     [AssetsOnly]
     [ShowIf("Pushable")]
@@ -112,21 +131,6 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     [LabelText("抗推力")]
     [PropertyRange(0, 1)]
     public float Static_Inertia = 0.5f;
-
-    [AssetsOnly]
-    [ShowIf("Throwable")]
-    [BoxGroup("扔箱子属性")]
-    [LabelText("扔伤害半径")]
-    [SerializeField]
-    private float DestroyDamageRadius_Throw = 1.5f;
-
-    [AssetsOnly]
-    [ShowIf("Throwable")]
-    [BoxGroup("扔箱子属性")]
-    [LabelText("扔伤害")]
-    [GUIColor(1.0f, 0, 1.0f)]
-    [SerializeField]
-    private float DestroyDamage_Throw = 3f;
 
     [AssetsOnly]
     [ShowIf("Throwable")]
@@ -140,30 +144,6 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     [LabelText("落地摩擦力")]
     [Range(0, 1)]
     public float Throw_Friction = 1;
-
-    [ShowIf("Throwable")]
-    [BoxGroup("扔箱子属性")]
-    [GUIColor(0, 1.0f, 0)]
-    [LabelText("最大伤害次数")]
-    [Range(1, 3)]
-    public int MaxDamageTimes = 1;
-
-    private int damageTimes;
-
-    [AssetsOnly]
-    [ShowIf("Kickable")]
-    [BoxGroup("踢箱子属性")]
-    [LabelText("踢伤害半径")]
-    [SerializeField]
-    private float DestroyDamageRadius_Kick = 0.5f;
-
-    [AssetsOnly]
-    [ShowIf("Kickable")]
-    [BoxGroup("踢箱子属性")]
-    [LabelText("踢伤害")]
-    [GUIColor(1.0f, 0, 1.0f)]
-    [SerializeField]
-    private float DestroyDamage_Kick = 3f;
 
     [AssetsOnly]
     [ShowIf("Kickable")]
@@ -200,6 +180,8 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     [HideInEditorMode]
     public WorldModule WorldModule;
 
+    private int damageTimes;
+
     public enum States
     {
         Static,
@@ -225,6 +207,11 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         BoxUnderWorldModuleDesignerClamper.enabled = !Application.isPlaying;
         GridSnapper.enabled = false;
         GUID = GetGUID();
+
+        foreach (BoxFunctionBase bf in BoxFunctions)
+        {
+            bf.Box = this;
+        }
     }
 
     private void RegisterEvents()
@@ -384,42 +371,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             LastTouchActor = actor;
             foreach (BoxFunctionBase bf in BoxFunctions)
             {
-                switch (bf)
-                {
-                    case BoxFunction_LiftDropSkill skill:
-                    {
-                        byte dropLiftAbilityIndex = ConfigManager.GetBoxTypeIndex(skill.LiftGetLiftBoxAbility);
-                        if (dropLiftAbilityIndex != 0)
-                        {
-                            PlayDestroyFX();
-                            actor.ActorSkillHelper.DisableInteract(InteractSkillType.Kick, actor.ActorSkillHelper.PlayerCurrentGetKickAbility);
-                            actor.ActorSkillHelper.PlayerCurrentGetKickAbility = dropLiftAbilityIndex;
-                            actor.ActorSkillHelper.EnableInteract(InteractSkillType.Kick, dropLiftAbilityIndex);
-                        }
-
-                        break;
-                    }
-                    case BoxFunction_LiftDropSkin skill:
-                    {
-                        actor.ActorSkinHelper.SwitchSkin(skill.DieDropMaterial);
-                        break;
-                    }
-                }
-            }
-
-            if (Healable)
-            {
-                foreach (BoxFunctionBase bf in BoxFunctions)
-                {
-                    switch (bf)
-                    {
-                        case BoxFunction_LiftGainHealth skill:
-                        {
-                            actor.ActorBattleHelper.AddLife(skill.HealLifeCountWhenLifted);
-                            break;
-                        }
-                    }
-                }
+                bf.OnBeingLift(actor);
             }
 
             WorldManager.Instance.CurrentWorld.RemoveBox(this);
@@ -443,7 +395,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     public void LiftThenConsume()
     {
-        PlayDestroyFX();
+        PlayCollideFX();
         PoolRecycle();
     }
 
@@ -555,7 +507,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
                 {
                     Rigidbody.constraints |= RigidbodyConstraints.FreezePositionY;
                 }
-                else
+                else // 踢出地面时允许抛物线向下落
                 {
                     if ((Rigidbody.constraints & RigidbodyConstraints.FreezePositionY) != 0)
                     {
@@ -586,50 +538,19 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         }
     }
 
-    public bool Pushable => BoxFeature.HasFlag(BoxFeature.Pushable);
-
-    public bool Kickable => BoxFeature.HasFlag(BoxFeature.Kickable);
-
-    public bool Liftable => BoxFeature.HasFlag(BoxFeature.Liftable);
-
-    public bool KickOrLiftable => Kickable || Liftable;
-
-    public bool Throwable => BoxFeature.HasFlag(BoxFeature.Throwable);
-
-    public bool Interactable => Pushable || Kickable || Liftable || Throwable;
-
-    public bool Passable => BoxFeature.HasFlag(BoxFeature.Passable);
-
-    public bool Droppable => BoxFeature.HasFlag(BoxFeature.Droppable);
-
-    public bool Breakable => BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable) || BoxFeature.HasFlag(BoxFeature.KickHitBreakable);
-
-    public bool Healable => BoxFeature.HasFlag(BoxFeature.HealingBox);
-
     void OnCollisionEnter(Collision collision)
     {
         if (IsRecycled) return;
         if (LastTouchActor != null && collision.gameObject == LastTouchActor.gameObject) return;
         if (State == States.Flying)
         {
-            if (damageTimes < MaxDamageTimes)
+            if (damageTimes < 1)
             {
-                DestroyAOEDamage(DestroyDamageRadius_Throw, DestroyDamage_Throw);
-                PlayDestroyFX();
+                CollideAOEDamage(CollideDamageRadius, CollideDamage);
+                PlayCollideFX();
                 foreach (BoxFunctionBase bf in BoxFunctions)
                 {
-                    switch (bf)
-                    {
-                        case BoxFunction_ExplodePushForce skill:
-                        {
-                            if (skill.ExplodePushForce)
-                            {
-                                this.ExplodePushBox(transform.position, skill.ExplodePushRadius);
-                            }
-
-                            break;
-                        }
-                    }
+                    bf.OnFlyingCollisionEnterDestroy(collision);
                 }
             }
 
@@ -660,24 +581,13 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         {
             if (collision.gameObject.layer != LayerManager.Instance.Layer_Ground)
             {
-                if (damageTimes < MaxDamageTimes)
+                if (damageTimes < 1)
                 {
-                    DestroyAOEDamage(DestroyDamageRadius_Kick, DestroyDamage_Kick);
-                    PlayDestroyFX();
+                    CollideAOEDamage(CollideDamageRadius, CollideDamage);
+                    PlayCollideFX();
                     foreach (BoxFunctionBase bf in BoxFunctions)
                     {
-                        switch (bf)
-                        {
-                            case BoxFunction_ExplodePushForce skill:
-                            {
-                                if (skill.ExplodePushForce)
-                                {
-                                    this.ExplodePushBox(transform.position, skill.ExplodePushRadius);
-                                }
-
-                                break;
-                            }
-                        }
+                        bf.OnBeingKickedCollisionEnterDestroy(collision);
                     }
                 }
 
@@ -689,7 +599,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         }
     }
 
-    private void DestroyAOEDamage(float radius, float damage)
+    private void CollideAOEDamage(float radius, float damage)
     {
         damageTimes++;
         WorldFeature wf = WorldManager.Instance.CurrentWorld.WorldData.WorldFeature;
@@ -704,7 +614,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
                 Actor actor = collider.GetComponentInParent<Actor>();
                 if (actor && actor != LastTouchActor && actor.ActorBattleHelper && !damagedActors.Contains(actor))
                 {
-                    if (actor.IsOpponent(LastTouchActor) || (pvp && actor.IsPlayer && LastTouchActor.IsPlayer))
+                    if (actor.IsOpponentCampOf(LastTouchActor) || (pvp && actor.IsPlayer && LastTouchActor.IsPlayer))
                     {
                         actor.ActorBattleHelper.LastAttackBox = this;
                         actor.ActorBattleHelper.Damage(LastTouchActor, damage);
@@ -715,9 +625,9 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         }
     }
 
-    public void PlayDestroyFX()
+    public void PlayCollideFX()
     {
-        ProjectileHit hit = ProjectileManager.Instance.PlayProjectileHit(CollideFX, transform.position);
+        FX hit = FXManager.Instance.PlayFX(CollideFX, transform.position);
         if (hit) hit.transform.localScale = Vector3.one * CollideFXScale;
     }
 
@@ -770,12 +680,45 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
 #endif
 
+    public bool Pushable => BoxFeature.HasFlag(BoxFeature.Pushable);
+
+    public bool Kickable => BoxFeature.HasFlag(BoxFeature.Kickable);
+
+    public bool Liftable => BoxFeature.HasFlag(BoxFeature.Liftable);
+
+    public bool KickOrThrowable => Kickable || Throwable;
+
+    public bool Throwable => BoxFeature.HasFlag(BoxFeature.Throwable);
+
+    public bool Interactable => Pushable || Kickable || Liftable || Throwable;
+
+    public bool Passable => BoxFeature.HasFlag(BoxFeature.Passable);
+
+    public bool Droppable => BoxFeature.HasFlag(BoxFeature.Droppable);
+
+    public bool Breakable => BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable) || BoxFeature.HasFlag(BoxFeature.KickHitBreakable);
+
+    public bool Healable => BoxFeature.HasFlag(BoxFeature.HealingBox);
+
+    #region Utils
+
     private IEnumerable<string> GetAllBoxTypeNames()
     {
         ConfigManager.LoadAllConfigs();
         List<string> res = ConfigManager.BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
+        res.Insert(0, "None");
         return res;
     }
+
+    private IEnumerable<string> GetAllFXTypeNames()
+    {
+        ConfigManager.LoadAllConfigs();
+        List<string> res = ConfigManager.FXTypeDefineDict.TypeIndexDict.Keys.ToList();
+        res.Insert(0, "None");
+        return res;
+    }
+
+    #endregion
 }
 
 [Flags]

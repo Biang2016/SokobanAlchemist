@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 
-public class ActorFaceHelper : ActorHelper
+public class ActorFaceHelper : ActorMonoHelper
 {
     [ReadOnly]
     public HashSet<Box> FacingBoxList = new HashSet<Box>();

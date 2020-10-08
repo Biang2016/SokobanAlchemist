@@ -175,7 +175,7 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
             }
 
             //同个阵营
-            if (hitter != null && attacker.IsFriend(hitter))
+            if (hitter != null && attacker.IsSameCampOf(hitter))
             {
                 return AttackerType.LocalPlayerSelfDamage;
             }
@@ -187,7 +187,7 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
             }
 
             //敌人
-            if (hitter != null && attacker.IsOpponent(hitter))
+            if (hitter != null && attacker.IsOpponentCampOf(hitter))
             {
                 return AttackerType.Enemy;
             }

@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class ActorSkinHelper : ActorHelper
+public class ActorSkinHelper : ActorMonoHelper
 {
     public Renderer MainSwitchSkin;
     public List<SkinConfig> SkinConfigs = new List<SkinConfig>();

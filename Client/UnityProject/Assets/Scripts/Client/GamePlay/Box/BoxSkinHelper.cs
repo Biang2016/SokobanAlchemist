@@ -15,17 +15,20 @@ public class BoxSkinHelper : MonoBehaviour, IBoxHelper
 
     public void SwitchModel(BoxModelType boxModelType)
     {
-        switch (boxModelType)
+        if (MeshFilter)
         {
-            case BoxModelType.Box:
+            switch (boxModelType)
             {
-                MeshFilter.mesh = BoxMesh;
-                break;
-            }
-            case BoxModelType.Rounded:
-            {
-                MeshFilter.mesh = RoundedBoxMesh;
-                break;
+                case BoxModelType.Box:
+                {
+                    MeshFilter.mesh = BoxMesh;
+                    break;
+                }
+                case BoxModelType.Rounded:
+                {
+                    MeshFilter.mesh = RoundedBoxMesh;
+                    break;
+                }
             }
         }
     }

@@ -1,17 +1,6 @@
-﻿using UnityEngine;
-
-public class ActorHelper : MonoBehaviour
+﻿public class ActorHelper
 {
-    private Actor actor;
-
-    internal Actor Actor
-    {
-        get
-        {
-            if (actor == null) actor = GetComponentInParent<Actor>();
-            return actor;
-        }
-    }
+    public Actor Actor;
 
     public virtual void OnRecycled()
     {

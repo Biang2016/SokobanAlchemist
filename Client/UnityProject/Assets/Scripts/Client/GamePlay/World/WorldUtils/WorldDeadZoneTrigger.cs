@@ -36,7 +36,7 @@ public class WorldDeadZoneTrigger : PoolObject
             if (box)
             {
                 WorldManager.Instance.CurrentWorld.RemoveBox(box);
-                box.PlayDestroyFX();
+                box.PlayCollideFX();
                 box.PoolRecycle();
             }
         }

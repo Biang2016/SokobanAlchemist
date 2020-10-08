@@ -17,6 +17,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     {
         Actor = 2000,
         Box = 3000,
+        Buff = 10000,
     }
 
     public static bool ShowEnemyPathFinding = false;
@@ -27,16 +28,18 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public class TypeDefineConfig<T> where T : MonoBehaviour
     {
-        public TypeDefineConfig(string typeNamePrefix, bool inResources)
+        public TypeDefineConfig(string typeNamePrefix, string prefabFolder, bool includeSubFolder)
         {
             TypeNamePrefix = typeNamePrefix;
-            PrefabFolder_Relative = (inResources ? "/Resources/Prefabs/Designs/" : "/Designs/") + TypeNamePrefix;
+            PrefabFolder_Relative = prefabFolder;
+            IncludeSubFolder = includeSubFolder;
         }
 
         private string TypeNamePrefix;
         private string TypeNamesConfig_File => $"{TypeNamesConfigFolder_Build}/{TypeNamePrefix}Names.config";
         private string TypeNamesConfigFolder_Build => Application.streamingAssetsPath + $"/Configs/{TypeNamePrefix}";
         private string PrefabFolder_Relative;
+        private bool IncludeSubFolder;
 
         public Dictionary<string, byte> TypeIndexDict = new Dictionary<string, byte>();
         public SortedDictionary<byte, string> TypeNameDict = new SortedDictionary<byte, string>();
@@ -52,7 +55,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
             byte index = 1;
             DirectoryInfo di = new DirectoryInfo(Application.dataPath + PrefabFolder_Relative);
-            foreach (FileInfo fi in di.GetFiles("*.prefab"))
+            foreach (FileInfo fi in di.GetFiles("*.prefab", IncludeSubFolder ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
             {
                 if (index == byte.MaxValue)
                 {
@@ -109,15 +112,19 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     [ShowInInspector]
     [LabelText("箱子类型表")]
-    public static readonly TypeDefineConfig<Box> BoxTypeDefineDict = new TypeDefineConfig<Box>("Box", true);
+    public static readonly TypeDefineConfig<Box> BoxTypeDefineDict = new TypeDefineConfig<Box>("Box", "/Resources/Prefabs/Designs/Box", true);
 
     [ShowInInspector]
     [LabelText("敌人类型表")]
-    public static readonly TypeDefineConfig<EnemyActor> EnemyTypeDefineDict = new TypeDefineConfig<EnemyActor>("Enemy", true);
+    public static readonly TypeDefineConfig<EnemyActor> EnemyTypeDefineDict = new TypeDefineConfig<EnemyActor>("Enemy", "/Resources/Prefabs/Designs/Enemy", true);
 
     [ShowInInspector]
     [LabelText("世界模组类型表")]
-    public static readonly TypeDefineConfig<WorldModuleDesignHelper> WorldModuleTypeDefineDict = new TypeDefineConfig<WorldModuleDesignHelper>("WorldModule", false);
+    public static readonly TypeDefineConfig<WorldModuleDesignHelper> WorldModuleTypeDefineDict = new TypeDefineConfig<WorldModuleDesignHelper>("WorldModule", "/Designs/WorldModule", true);
+
+    [ShowInInspector]
+    [LabelText("FX类型表")]
+    public static readonly TypeDefineConfig<FX> FXTypeDefineDict = new TypeDefineConfig<FX>("FX", "/Resources/Prefabs/FX", true);
 
     [ShowInInspector]
     [LabelText("世界配置表")]
@@ -152,6 +159,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         BoxTypeDefineDict.ExportTypeNames();
         EnemyTypeDefineDict.ExportTypeNames();
         WorldModuleTypeDefineDict.ExportTypeNames();
+        FXTypeDefineDict.ExportTypeNames();
         ExportWorldDataConfig(dataFormat);
         ExportWorldModuleDataConfig(dataFormat);
         AssetDatabase.Refresh();
@@ -215,6 +223,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         BoxTypeDefineDict.LoadTypeNames();
         EnemyTypeDefineDict.LoadTypeNames();
         WorldModuleTypeDefineDict.LoadTypeNames();
+        FXTypeDefineDict.LoadTypeNames();
         LoadWorldDataConfig(dataFormat);
         LoadWorldModuleDataConfig(dataFormat);
         IsLoaded = true;
@@ -318,6 +327,20 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         if (!IsLoaded) LoadAllConfigs();
         WorldModuleTypeDefineDict.TypeIndexDict.TryGetValue(worldModuleTypeName, out byte worldModuleTypeIndex);
         return worldModuleTypeIndex;
+    }
+
+    public static string GetFXName(byte fxTypeIndex)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        FXTypeDefineDict.TypeNameDict.TryGetValue(fxTypeIndex, out string fxTypeName);
+        return fxTypeName;
+    }
+
+    public static byte GetFXTypeIndex(string fxTypeName)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        FXTypeDefineDict.TypeIndexDict.TryGetValue(fxTypeName, out byte fxTypeIndex);
+        return fxTypeIndex;
     }
 
     public static WorldData GetWorldDataConfig(string worldType)

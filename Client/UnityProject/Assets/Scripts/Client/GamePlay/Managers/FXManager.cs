@@ -10,11 +10,19 @@ public class FXManager : TSingletonBaseManager<FXManager>
         Root = root;
     }
 
-    //public FX PlayFX(string fxPath, Vector3 from)
-    //{
-    //    FX fx = GameObjectPoolManager.Instance.FXDict[fx_Type].AllocateGameObject<FX>(Root);
-    //    fx.transform.position = from;
-    //    fx.Play();
-    //    return fx;
-    //}
+    public FX PlayFX(string fxName, Vector3 position)
+    {
+        byte fxTypeIndex = ConfigManager.GetFXTypeIndex(fxName);
+        if (GameObjectPoolManager.Instance.FXDict.ContainsKey(fxTypeIndex))
+        {
+            FX fx = GameObjectPoolManager.Instance.FXDict[fxTypeIndex].AllocateGameObject<FX>(Root);
+            fx.transform.position = position;
+            fx.transform.localScale = Vector3.one;
+            fx.transform.rotation = Quaternion.identity;
+            fx.Play();
+            return fx;
+        }
+
+        return null;
+    }
 }

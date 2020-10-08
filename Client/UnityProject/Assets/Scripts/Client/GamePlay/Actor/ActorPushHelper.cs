@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class ActorPushHelper : ActorHelper
+public class ActorPushHelper : ActorMonoHelper
 {
     public Collider Collider;
     public GameObject Model;

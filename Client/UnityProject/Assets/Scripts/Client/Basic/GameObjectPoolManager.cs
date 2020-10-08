@@ -46,11 +46,9 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     public Dictionary<PrefabNames, GameObjectPool> PoolDict = new Dictionary<PrefabNames, GameObjectPool>();
     public Dictionary<byte, GameObjectPool> BoxDict = new Dictionary<byte, GameObjectPool>();
     public Dictionary<byte, GameObjectPool> EnemyDict = new Dictionary<byte, GameObjectPool>();
-    public Dictionary<string, GameObjectPool> FXDict = new Dictionary<string, GameObjectPool>();
+    public Dictionary<byte, GameObjectPool> FXDict = new Dictionary<byte, GameObjectPool>();
     public Dictionary<MarkerType, GameObjectPool> MarkerDict = new Dictionary<MarkerType, GameObjectPool>();
     public Dictionary<ProjectileType, GameObjectPool> ProjectileDict = new Dictionary<ProjectileType, GameObjectPool>();
-    public Dictionary<ProjectileType, GameObjectPool> ProjectileHitDict = new Dictionary<ProjectileType, GameObjectPool>();
-    public Dictionary<ProjectileType, GameObjectPool> ProjectileFlashDict = new Dictionary<ProjectileType, GameObjectPool>();
     public Dictionary<BattleTipPrefabType, GameObjectPool> BattleUIDict = new Dictionary<BattleTipPrefabType, GameObjectPool>();
 
     private Transform Root;
@@ -110,20 +108,20 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             }
         }
 
-        //foreach (string s in Enum.GetNames(typeof(FX_Type)))
-        //{
-        //    string fx_Path = (FX_Type) Enum.Parse(typeof(FX_Type), s);
-        //    GameObject go_Prefab = PrefabManager.Instance.GetPrefab(s);
-        //    if (go_Prefab)
-        //    {
-        //        GameObject go = new GameObject("Pool_" + s);
-        //        GameObjectPool pool = go.AddComponent<GameObjectPool>();
-        //        pool.transform.SetParent(Root);
-        //        FXDict.Add(fx_Type, pool);
-        //        PoolObject po = go_Prefab.GetComponent<PoolObject>();
-        //        pool.Initiate(po, 20);
-        //    }
-        //}
+        foreach (KeyValuePair<byte, string> kv in ConfigManager.FXTypeDefineDict.TypeNameDict)
+        {
+            string prefabName = kv.Value;
+            GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
+            if (go_Prefab)
+            {
+                GameObject go = new GameObject("Pool_" + prefabName);
+                GameObjectPool pool = go.AddComponent<GameObjectPool>();
+                pool.transform.SetParent(Root);
+                FXDict.Add(kv.Key, pool);
+                PoolObject po = go_Prefab.GetComponent<PoolObject>();
+                pool.Initiate(po, 20);
+            }
+        }
 
         foreach (string s in Enum.GetNames(typeof(MarkerType)))
         {
@@ -154,40 +152,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 pool.Initiate(po, 20);
             }
         }
-
-        foreach (string s in Enum.GetNames(typeof(ProjectileType)))
-        {
-            string prefabName = s.Replace("Projectile_", "Hit_");
-            ProjectileType projectileType = (ProjectileType) Enum.Parse(typeof(ProjectileType), s);
-
-            GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
-            if (go_Prefab)
-            {
-                GameObject go = new GameObject("Pool_" + prefabName);
-                GameObjectPool pool = go.AddComponent<GameObjectPool>();
-                pool.transform.SetParent(Root);
-                ProjectileHitDict.Add(projectileType, pool);
-                PoolObject po = go_Prefab.GetComponent<PoolObject>();
-                pool.Initiate(po, 20);
-            }
-        }
-
-        foreach (string s in Enum.GetNames(typeof(ProjectileType)))
-        {
-            string prefabName = s.Replace("Projectile_", "Flash_");
-            ProjectileType projectileType = (ProjectileType) Enum.Parse(typeof(ProjectileType), s);
-
-            GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
-            if (go_Prefab)
-            {
-                GameObject go = new GameObject("Pool_" + prefabName);
-                GameObjectPool pool = go.AddComponent<GameObjectPool>();
-                pool.transform.SetParent(Root);
-                ProjectileFlashDict.Add(projectileType, pool);
-                PoolObject po = go_Prefab.GetComponent<PoolObject>();
-                pool.Initiate(po, 20);
-            }
-        }
+       
 
         foreach (string s in Enum.GetNames(typeof(BattleTipPrefabType)))
         {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.Events;
 
-public class ActorSkillHelper : ActorHelper
+public class ActorSkillHelper : ActorMonoHelper
 {
     public override void OnRecycled()
     {

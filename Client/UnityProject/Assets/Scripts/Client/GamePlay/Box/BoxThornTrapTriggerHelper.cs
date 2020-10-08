@@ -7,95 +7,32 @@ public class BoxThornTrapTriggerHelper : MonoBehaviour, IBoxHelper
 
     public void PoolRecycle()
     {
-        actorStayTimeDict.Clear();
+        ActorStayTimeDict.Clear();
     }
 
-    private Dictionary<uint, float> actorStayTimeDict = new Dictionary<uint, float>();
+    public Dictionary<uint, float> ActorStayTimeDict = new Dictionary<uint, float>();
 
     public void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
+        foreach (BoxFunctionBase bf in Box.BoxFunctions)
         {
-            Actor actor = collider.GetComponentInParent<Actor>();
-            if (actor != null)
-            {
-                foreach (BoxFunctionBase bf in Box.BoxFunctions)
-                {
-                    switch (bf)
-                    {
-                        case BoxFunction_ThornDamage skill:
-                        {
-                            if (!actorStayTimeDict.ContainsKey(actor.GUID))
-                            {
-                                actor.ActorBattleHelper.Damage(null, skill.Damage);
-                                actorStayTimeDict.Add(actor.GUID, 0);
-                            }
-
-                            break;
-                        }
-                    }
-                }
-            }
+            bf.OnBoxThornTrapTriggerEnter(collider);
         }
     }
 
     public void OnTriggerStay(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
+        foreach (BoxFunctionBase bf in Box.BoxFunctions)
         {
-            Actor actor = collider.GetComponentInParent<Actor>();
-            if (actor != null)
-            {
-                foreach (BoxFunctionBase bf in Box.BoxFunctions)
-                {
-                    switch (bf)
-                    {
-                        case BoxFunction_ThornDamage skill:
-                        {
-                            if (actorStayTimeDict.TryGetValue(actor.GUID, out float duration))
-                            {
-                                if (duration > skill.DamageInterval)
-                                {
-                                    actor.ActorBattleHelper.Damage(null, skill.Damage);
-                                    actorStayTimeDict[actor.GUID] = 0;
-                                }
-                                else
-                                {
-                                    actorStayTimeDict[actor.GUID] += Time.fixedDeltaTime;
-                                }
-                            }
-
-                            break;
-                        }
-                    }
-                }
-            }
+            bf.OnBoxThornTrapTriggerStay(collider);
         }
     }
 
     public void OnTriggerExit(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
+        foreach (BoxFunctionBase bf in Box.BoxFunctions)
         {
-            Actor actor = collider.GetComponentInParent<Actor>();
-            if (actor != null)
-            {
-                foreach (BoxFunctionBase bf in Box.BoxFunctions)
-                {
-                    switch (bf)
-                    {
-                        case BoxFunction_ThornDamage skill:
-                        {
-                            if (actorStayTimeDict.ContainsKey(actor.GUID))
-                            {
-                                actorStayTimeDict.Remove(actor.GUID);
-                            }
-
-                            break;
-                        }
-                    }
-                }
-            }
+            bf.OnBoxThornTrapTriggerExit(collider);
         }
     }
 }
