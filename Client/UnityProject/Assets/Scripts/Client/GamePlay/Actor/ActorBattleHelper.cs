@@ -1,4 +1,5 @@
-﻿using BiangStudio.GameDataFormat.Grid;
+﻿using BiangStudio;
+using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.GamePlay.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -196,14 +197,17 @@ public class ActorBattleHelper : ActorMonoHelper
         {
             byte boxIndex = ConfigManager.GetBoxTypeIndex(Actor.DieDropBoxTypeName);
             if (boxIndex == 0) return;
-            Box box = GameObjectPoolManager.Instance.BoxDict[boxIndex].AllocateGameObject<Box>(transform);
-            string boxName = Actor.DieDropBoxTypeName;
-            GridPos3D gp = Actor.CurGP;
-            GridPos3D localGP = gp - module.ModuleGP * WorldModule.MODULE_SIZE;
-            box.Setup(boxIndex);
-            box.Initialize(localGP, module, 0, false, false);
-            box.name = $"{boxName}_{gp}";
-            box.DropFromDeadActor();
+            if (Actor.DieDropBoxProbabilityPercent.ProbabilityBool())
+            {
+                Box box = GameObjectPoolManager.Instance.BoxDict[boxIndex].AllocateGameObject<Box>(transform);
+                string boxName = Actor.DieDropBoxTypeName;
+                GridPos3D gp = Actor.CurGP;
+                GridPos3D localGP = gp - module.ModuleGP * WorldModule.MODULE_SIZE;
+                box.Setup(boxIndex);
+                box.Initialize(localGP, module, 0, false, Box.LerpType.DropFromDeadActor);
+                box.name = $"{boxName}_{gp}";
+                box.DropFromDeadActor();
+            }
         }
     }
 }

@@ -604,5 +604,15 @@ namespace BiangStudio
                 return null;
             }
         }
+
+        public static bool ProbabilityBool(this float probability)
+        {
+            return Random.Range(0f, 1f) < probability;
+        }
+
+        public static bool ProbabilityBool(this uint probabilityPercent)
+        {
+            return Random.Range(0, 100) < probabilityPercent;
+        }
     }
 }

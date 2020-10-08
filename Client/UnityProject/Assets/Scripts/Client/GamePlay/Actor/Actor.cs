@@ -28,6 +28,8 @@ public class Actor : PoolObject
     public ActorCommonHelpers ActorCommonHelpers;
     public GameObject ActorMoveColliderRoot;
 
+    public Vector3 ArtPos => ActorSkinHelper.MainArtTransform.position;
+
     internal ActorPushHelper ActorPushHelper => ActorCommonHelpers.ActorPushHelper;
     internal ActorFaceHelper ActorFaceHelper => ActorCommonHelpers.ActorFaceHelper;
     internal ActorSkinHelper ActorSkinHelper => ActorCommonHelpers.ActorSkinHelper;
@@ -164,15 +166,15 @@ public class Actor : PoolObject
         get
         {
             float final = Accelerate;
-            if (CurrentLiftBox != null)
-            {
-                final = Accelerate * LiftingMoveSpeedRatioCurve.Evaluate(CurrentLiftBox.FinalWeight);
-            }
+            //if (CurrentLiftBox != null)
+            //{
+            //    final = Accelerate * LiftingMoveSpeedRatioCurve.Evaluate(CurrentLiftBox.FinalWeight);
+            //}
 
-            if (ThrowState == ThrowStates.ThrowCharging)
-            {
-                final *= 0.5f;
-            }
+            //if (ThrowState == ThrowStates.ThrowCharging)
+            //{
+            //    final *= 0.5f;
+            //}
 
             return final;
         }
@@ -191,15 +193,15 @@ public class Actor : PoolObject
         get
         {
             float final = MoveSpeed;
-            if (CurrentLiftBox != null)
-            {
-                final = MoveSpeed * LiftingMoveSpeedRatioCurve.Evaluate(CurrentLiftBox.FinalWeight);
-            }
+            //if (CurrentLiftBox != null)
+            //{
+            //    final = MoveSpeed * LiftingMoveSpeedRatioCurve.Evaluate(CurrentLiftBox.FinalWeight);
+            //}
 
-            if (ThrowState == ThrowStates.ThrowCharging)
-            {
-                final *= 0.5f;
-            }
+            //if (ThrowState == ThrowStates.ThrowCharging)
+            //{
+            //    final *= 0.5f;
+            //}
 
             ActorBuffHelper.AdjustFinalSpeed(final, out final);
 
@@ -213,9 +215,9 @@ public class Actor : PoolObject
 
     protected float ThrowRadiusMin = 0.75f;
 
-    [BoxGroup("配置")]
-    [LabelText("举箱子移速比例")]
-    public AnimationCurve LiftingMoveSpeedRatioCurve;
+    //[BoxGroup("配置")]
+    //[LabelText("举箱子移速比例")]
+    //public AnimationCurve LiftingMoveSpeedRatioCurve;
 
     [BoxGroup("配置")]
     [LabelText("扔半径")]
@@ -249,6 +251,10 @@ public class Actor : PoolObject
     [LabelText("死亡掉落箱子")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public string DieDropBoxTypeName;
+
+    [BoxGroup("死亡")]
+    [LabelText("死亡掉落箱子概率%")]
+    public uint DieDropBoxProbabilityPercent;
 
     [BoxGroup("敌兵专用")]
     [LabelText("碰撞伤害")]
@@ -361,6 +367,12 @@ public class Actor : PoolObject
         LastGP = CurGP;
         ActorAIAgent.Start();
         GUID = GetGUID();
+
+        ActorBattleHelper.OnDamaged += (Actor, damage) =>
+        {
+            float distance = (BattleManager.Instance.Player1.transform.position - transform.position).magnitude;
+            CameraManager.Instance.FieldCamera.CameraShake(damage, distance);
+        };
     }
 
     private void Update()
@@ -467,9 +479,10 @@ public class Actor : PoolObject
 
     public void Kick()
     {
-        Ray ray = new Ray(transform.position, transform.forward);
+        Ray ray = new Ray(ArtPos - transform.forward * 0.49f, transform.forward);
         Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
+        Debug.Log(ray.origin.z);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Kickable && ActorSkillHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
@@ -484,8 +497,8 @@ public class Actor : PoolObject
     public void Lift()
     {
         if (CurrentLiftBox) return;
-        Ray ray = new Ray(transform.position, transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1.3f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
+        Ray ray = new Ray(ArtPos - transform.forward * 0.49f, transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Liftable && ActorSkillHelper.CanInteract(InteractSkillType.Lift, box.BoxTypeIndex))
@@ -571,20 +584,6 @@ public class Actor : PoolObject
     {
         if (CurrentLiftBox && ThrowState == ThrowStates.Lifting || ThrowState == ThrowStates.ThrowCharging)
         {
-            CurThrowPointOffset = transform.forward * ThrowRadiusMin;
-            float velocity = ActorLaunchArcRendererHelper.CalculateVelocityByOffset(CurThrowPointOffset, 45);
-            ThrowState = ThrowStates.None;
-            Vector3 throwVel = (CurThrowPointOffset.normalized + Vector3.up) * velocity;
-            CurrentLiftBox.Put(throwVel, velocity, this);
-            CurrentLiftBox = null;
-        }
-    }
-
-    public void PutBehind()
-    {
-        if (CurrentLiftBox && ThrowState == ThrowStates.Lifting || ThrowState == ThrowStates.ThrowCharging)
-        {
-            CurThrowPointOffset = -transform.forward * ThrowRadiusMin;
             float velocity = ActorLaunchArcRendererHelper.CalculateVelocityByOffset(CurThrowPointOffset, 45);
             ThrowState = ThrowStates.None;
             Vector3 throwVel = (CurThrowPointOffset.normalized + Vector3.up) * velocity;

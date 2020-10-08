@@ -814,6 +814,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "PauseGame",
+                    "type": "Button",
+                    "id": "c7c254db-3263-4037-a169-d65434e02f33",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
                 }
             ],
             "bindings": [
@@ -924,6 +932,17 @@
                     "processors": "Clamp(max=1)",
                     "groups": "KeyboardMouse",
                     "action": "RestartGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "73a94d58-4b5b-4d7d-a9fb-57918fb08e48",
+                    "path": "<Keyboard>/#(Q)",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "Clamp(max=1)",
+                    "groups": "KeyboardMouse",
+                    "action": "PauseGame",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

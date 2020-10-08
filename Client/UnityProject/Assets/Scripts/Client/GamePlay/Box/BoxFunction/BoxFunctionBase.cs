@@ -260,7 +260,7 @@ public class BoxFunction_ThornDamage : BoxFunctionBase
         if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
         {
             Actor actor = collider.GetComponentInParent<Actor>();
-            if (actor != null)
+            if (actor != null && actor.IsEnemy)
             {
                 if (!Box.BoxThornTrapTriggerHelper.ActorStayTimeDict.ContainsKey(actor.GUID))
                 {
@@ -277,7 +277,7 @@ public class BoxFunction_ThornDamage : BoxFunctionBase
         if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
         {
             Actor actor = collider.GetComponentInParent<Actor>();
-            if (actor != null)
+            if (actor != null && actor.IsEnemy)
             {
                 if (Box.BoxThornTrapTriggerHelper.ActorStayTimeDict.TryGetValue(actor.GUID, out float duration))
                 {
@@ -301,7 +301,7 @@ public class BoxFunction_ThornDamage : BoxFunctionBase
         if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
         {
             Actor actor = collider.GetComponentInParent<Actor>();
-            if (actor != null)
+            if (actor != null && actor.IsEnemy)
             {
                 if (Box.BoxThornTrapTriggerHelper.ActorStayTimeDict.ContainsKey(actor.GUID))
                 {

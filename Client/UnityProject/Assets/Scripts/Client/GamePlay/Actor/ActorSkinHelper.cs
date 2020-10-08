@@ -7,6 +7,8 @@ public class ActorSkinHelper : ActorMonoHelper
     public Renderer MainSwitchSkin;
     public List<SkinConfig> SkinConfigs = new List<SkinConfig>();
 
+    public Transform MainArtTransform;
+
     [Serializable]
     public class SkinConfig
     {

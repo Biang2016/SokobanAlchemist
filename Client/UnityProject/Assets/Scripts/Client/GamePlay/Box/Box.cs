@@ -58,6 +58,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         WorldModule = null;
         GridPos3D = GridPos3D.Zero;
         lastGP = GridPos3D.Zero;
+        LastState = States.Static;
         State = States.Static;
         BoxEffectHelper?.PoolRecycle();
         BoxThornTrapTriggerHelper?.PoolRecycle();
@@ -192,13 +193,47 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         Lifted,
         Flying,
         Putting,
-        DropingFromDeadPlayer,
+        DroppingFromDeadActor,
+        Dropping,
+    }
+
+    public enum LerpType
+    {
+        Push,
+        Kick,
+        Throw,
+        Put,
+        Drop,
+        DropFromDeadActor,
+        Create,
     }
 
     [HideInPrefabAssets]
     [ReadOnly]
+    [ShowInInspector]
+    [BoxGroup("状态")]
+    [LabelText("上一个移动状态")]
+    private States LastState = States.Static;
+
+    private States state = States.Static;
+
+    [HideInPrefabAssets]
+    [ReadOnly]
+    [ShowInInspector]
+    [BoxGroup("状态")]
     [LabelText("移动状态")]
-    public States State = States.Static;
+    public States State
+    {
+        get { return state; }
+        set
+        {
+            if (state != value)
+            {
+                LastState = state;
+                state = value;
+            }
+        }
+    }
 
     protected virtual void Awake()
     {
@@ -239,12 +274,12 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorSkillHelper.GetInteractSkillType(BoxTypeIndex), BoxTypeIndex);
     }
 
-    public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly, bool dropping)
+    public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly, LerpType lerpType)
     {
         StaticCollider.enabled = true;
         DynamicCollider.enabled = false;
         BoxOnlyDynamicCollider.enabled = false;
-        if (dropping)
+        if (lerpType == LerpType.Drop)
         {
             StaticCollider.enabled = false;
             DynamicCollider.enabled = false;
@@ -277,7 +312,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             transform.DOLocalMove(localGridPos3D.ToVector3(), lerpTime).SetEase(Ease.Linear).OnComplete(() =>
             {
                 State = States.Static;
-                if (dropping)
+                if (lerpType == LerpType.Drop)
                 {
                     StaticCollider.enabled = true;
                     DynamicCollider.enabled = true;
@@ -285,14 +320,51 @@ public class Box : PoolObject, ISerializationCallbackReceiver
                 }
             });
             transform.DOLocalRotate(Vector3.zero, lerpTime);
-            State = States.BeingPushed;
+            switch (lerpType)
+            {
+                case LerpType.Push:
+                {
+                    State = States.BeingPushed;
+                    break;
+                }
+                case LerpType.Kick:
+                {
+                    State = States.BeingKicked;
+                    break;
+                }
+                case LerpType.Throw:
+                {
+                    State = States.Flying;
+                    break;
+                }
+                case LerpType.Put:
+                {
+                    State = States.Putting;
+                    break;
+                }
+                case LerpType.Drop:
+                {
+                    State = States.Dropping;
+                    break;
+                }
+                case LerpType.DropFromDeadActor:
+                {
+                    State = States.DroppingFromDeadActor;
+                    break;
+                }
+                case LerpType.Create:
+                {
+                    State = States.Static;
+                    break;
+                }
+            }
         }
         else
         {
             transform.localPosition = localGridPos3D.ToVector3();
             transform.localRotation = Quaternion.identity;
             State = States.Static;
-            if (dropping)
+            if (lerpType == LerpType.Drop)
             {
                 StaticCollider.enabled = true;
                 DynamicCollider.enabled = true;
@@ -474,7 +546,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
         damageTimes = 0;
         LastTouchActor = null;
-        State = States.DropingFromDeadPlayer;
+        State = States.DroppingFromDeadActor;
         transform.DOPause();
         transform.parent = WorldManager.Instance.CurrentWorld.transform;
         StaticCollider.enabled = false;
@@ -497,7 +569,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     void FixedUpdate()
     {
         if (IsRecycled) return;
-        if ((State == States.BeingKicked || State == States.Flying || State == States.DropingFromDeadPlayer || State == States.Putting) && Rigidbody)
+        if ((State == States.BeingKicked || State == States.Flying || State == States.DroppingFromDeadActor || State == States.Putting) && Rigidbody)
         {
             if (State == States.BeingKicked)
             {

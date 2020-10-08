@@ -827,6 +827,14 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""PauseGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""c7c254db-3263-4037-a169-d65434e02f33"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
                 }
             ],
             ""bindings"": [
@@ -939,6 +947,17 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""action"": ""RestartGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""73a94d58-4b5b-4d7d-a9fb-57918fb08e48"",
+                    ""path"": ""<Keyboard>/#(Q)"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": ""Clamp(max=1)"",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""PauseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -997,6 +1016,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_Common_Confirm = m_Common.FindAction("Confirm", throwIfNotFound: true);
         m_Common_Debug = m_Common.FindAction("Debug", throwIfNotFound: true);
         m_Common_RestartGame = m_Common.FindAction("RestartGame", throwIfNotFound: true);
+        m_Common_PauseGame = m_Common.FindAction("PauseGame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1297,6 +1317,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Common_Confirm;
     private readonly InputAction m_Common_Debug;
     private readonly InputAction m_Common_RestartGame;
+    private readonly InputAction m_Common_PauseGame;
     public struct CommonActions
     {
         private @PlayerInput m_Wrapper;
@@ -1311,6 +1332,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @Confirm => m_Wrapper.m_Common_Confirm;
         public InputAction @Debug => m_Wrapper.m_Common_Debug;
         public InputAction @RestartGame => m_Wrapper.m_Common_RestartGame;
+        public InputAction @PauseGame => m_Wrapper.m_Common_PauseGame;
         public InputActionMap Get() { return m_Wrapper.m_Common; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1350,6 +1372,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @RestartGame.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnRestartGame;
                 @RestartGame.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnRestartGame;
                 @RestartGame.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnRestartGame;
+                @PauseGame.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnPauseGame;
+                @PauseGame.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnPauseGame;
+                @PauseGame.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnPauseGame;
             }
             m_Wrapper.m_CommonActionsCallbackInterface = instance;
             if (instance != null)
@@ -1384,6 +1409,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @RestartGame.started += instance.OnRestartGame;
                 @RestartGame.performed += instance.OnRestartGame;
                 @RestartGame.canceled += instance.OnRestartGame;
+                @PauseGame.started += instance.OnPauseGame;
+                @PauseGame.performed += instance.OnPauseGame;
+                @PauseGame.canceled += instance.OnPauseGame;
             }
         }
     }
@@ -1448,5 +1476,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnConfirm(InputAction.CallbackContext context);
         void OnDebug(InputAction.CallbackContext context);
         void OnRestartGame(InputAction.CallbackContext context);
+        void OnPauseGame(InputAction.CallbackContext context);
     }
 }

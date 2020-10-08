@@ -28,6 +28,9 @@ public class FieldCamera : MonoBehaviour
     [LabelText("相机震屏力度曲线(x伤害y强度")]
     public AnimationCurve CameraShakeStrengthCurve;
 
+    [LabelText("相机震屏力度曲线(x距离y衰减")]
+    public AnimationCurve CameraShakeAttenuationByDistanceCurve;
+
     void Awake()
     {
         Distance_Level = 2;
@@ -102,9 +105,9 @@ public class FieldCamera : MonoBehaviour
         transform.forward = targetCenter - destination;
     }
 
-    public void CameraShake(int damage)
+    public void CameraShake(int damage, float distanceFromPlayer)
     {
-        Camera.transform.DOShakePosition(0.1f, CameraShakeStrengthCurve.Evaluate(damage), 10, 90f);
+        Camera.transform.DOShakePosition(0.1f, CameraShakeStrengthCurve.Evaluate(damage) * CameraShakeAttenuationByDistanceCurve.Evaluate(distanceFromPlayer), 10, 90f);
     }
 
     #region Distance Levels

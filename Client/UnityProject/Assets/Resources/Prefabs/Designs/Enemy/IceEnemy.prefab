@@ -99,30 +99,6 @@ MonoBehaviour:
   Accelerate: 250
   MoveSpeed: 1
   ThrowAimMoveSpeed: 10
-  LiftingMoveSpeedRatioCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   ThrowRadius: 10
   KickForce: 5
   PushableBoxList:
@@ -143,6 +119,7 @@ MonoBehaviour:
   - IceBox
   - WoodenBox
   DieDropBoxTypeName: IceDropBoomBox
+  DieDropBoxProbabilityPercent: 25
   CollideDamage: 2
   CollideForce: 500
   MovementState: 0

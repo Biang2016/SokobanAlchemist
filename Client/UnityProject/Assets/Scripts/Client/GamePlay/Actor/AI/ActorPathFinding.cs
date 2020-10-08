@@ -162,6 +162,7 @@ public class ActorPathFinding
                         {
                             NodeFactory.Release(n);
                         }
+
                         releaseNodes();
                         return path;
                     }
@@ -221,7 +222,7 @@ public class ActorPathFinding
 
             Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gp, out WorldModule module, out GridPos3D _);
             Box box_beneath = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gp + new GridPos3D(0, -1, 0), out WorldModule module_beneath, out GridPos3D _, false);
-            if (module != null && box == null && module_beneath != null && box_beneath != null)
+            if (module != null && (box == null || box.Passable) && module_beneath != null && box_beneath != null)
             {
                 if (gp == destGP)
                 {

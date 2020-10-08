@@ -154,6 +154,11 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             return;
         }
 
+        if (ControlManager.Common_PauseGame.Up)
+        {
+            Debug.Break();
+        }
+
         ConfigManager.Update(Time.deltaTime);
         LayerManager.Update(Time.deltaTime);
         PrefabManager.Update(Time.deltaTime);

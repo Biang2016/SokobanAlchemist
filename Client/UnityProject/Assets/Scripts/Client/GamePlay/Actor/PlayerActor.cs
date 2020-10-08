@@ -33,11 +33,9 @@ public class PlayerActor : Actor
         BS_Right_Last = ControlManager.Instance.Battle_MoveButtons_LastFrame[(int) PlayerNumber, (int) GridPosR.Orientation.Right];
         BS_Down_Last = ControlManager.Instance.Battle_MoveButtons_LastFrame[(int) PlayerNumber, (int) GridPosR.Orientation.Down];
         BS_Left_Last = ControlManager.Instance.Battle_MoveButtons_LastFrame[(int) PlayerNumber, (int) GridPosR.Orientation.Left];
-
-        ActorBattleHelper.OnDamaged += (Actor, damage) => { CameraManager.Instance.FieldCamera.CameraShake(damage); };
     }
 
-    private float Skill0_PressDuration;
+    private float Skill1_PressDuration;
 
     protected override void FixedUpdate()
     {
@@ -94,31 +92,38 @@ public class PlayerActor : Actor
 
             #region Throw Charging
 
-            if (ThrowState == ThrowStates.ThrowCharging)
+            if (ThrowState == ThrowStates.ThrowCharging && Skill1_PressDuration > 0.2f)
             {
+                if (PlayerNumber == PlayerNumber.Player1)
+                {
+                    Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(ControlManager.Instance.Battle_MousePosition);
+                    Vector3 intersectPoint = CommonUtils.GetIntersectWithLineAndPlane(ray.origin, ray.direction, Vector3.up, transform.position);
+                    CurThrowPointOffset = intersectPoint - transform.position;
+                }
+                else if (PlayerNumber == PlayerNumber.Player2)
+                {
+                    CurThrowMoveAttempt = Vector3.zero;
+                    if (ThrowState == ThrowStates.ThrowCharging)
+                    {
+                        CurThrowMoveAttempt = new Vector3(ControlManager.Instance.Player2_RightStick.x, 0, ControlManager.Instance.Player2_RightStick.y);
+                        CurThrowMoveAttempt.Normalize();
+                    }
+
+                    CurThrowPointOffset += CurThrowMoveAttempt * Mathf.Max(ThrowAimMoveSpeed * Mathf.Sqrt(CurThrowPointOffset.magnitude), 2f) * Time.fixedDeltaTime;
+                }
+
                 if (!ActorSkillHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.BoxTypeIndex))
                 {
-                    CurThrowPointOffset = CurThrowPointOffset.normalized * ThrowRadiusMin;
-                }
-                else
-                {
-                    if (PlayerNumber == PlayerNumber.Player1)
+                    if (Mathf.Abs(CurThrowPointOffset.x) > Mathf.Abs(CurThrowPointOffset.z))
                     {
-                        Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(ControlManager.Instance.Battle_MousePosition);
-                        Vector3 intersectPoint = CommonUtils.GetIntersectWithLineAndPlane(ray.origin, ray.direction, Vector3.up, transform.position);
-                        CurThrowPointOffset = intersectPoint - transform.position;
+                        CurThrowPointOffset.z = 0;
                     }
-                    else if (PlayerNumber == PlayerNumber.Player2)
+                    else
                     {
-                        CurThrowMoveAttempt = Vector3.zero;
-                        if (ThrowState == ThrowStates.ThrowCharging)
-                        {
-                            CurThrowMoveAttempt = new Vector3(ControlManager.Instance.Player2_RightStick.x, 0, ControlManager.Instance.Player2_RightStick.y);
-                            CurThrowMoveAttempt.Normalize();
-                        }
+                        CurThrowPointOffset.x = 0;
+                    }
 
-                        CurThrowPointOffset += CurThrowMoveAttempt * Mathf.Max(ThrowAimMoveSpeed * Mathf.Sqrt(CurThrowPointOffset.magnitude), 2f) * Time.fixedDeltaTime;
-                    }
+                    CurThrowPointOffset = CurThrowPointOffset.normalized * ThrowRadiusMin;
                 }
             }
 
@@ -135,48 +140,28 @@ public class PlayerActor : Actor
             bool skill_1_Pressed = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Pressed;
             bool skill_1_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Up;
 
-            if (skill_1_Down) Lift();
+            if (skill_1_Down)
+            {
+                Lift();
+                Skill1_PressDuration = 0;
+            }
 
-            if (skill_1_Pressed) ThrowCharge();
+            if (skill_1_Pressed)
+            {
+                ThrowCharge();
+                Skill1_PressDuration += Time.fixedDeltaTime;
+            }
 
             if (skill_1_Up)
             {
+                Skill1_PressDuration = 0;
                 ThrowOrPut();
             }
 
-            // 时序问题放在最前，避免刚扔出去就踢
-            if (skill_0_Up)
+            if (skill_0_Down)
             {
-                //if (Skill0_PressDuration < 0.2f && ThrowState == ThrowStates.None)
-                //{
-                    Kick();
-                //}
-
-                //Skill0_PressDuration = 0f;
+                Kick();
             }
-
-            //if (skill_0_Down)
-            //{
-            //    if (ThrowState == ThrowStates.Lifting)
-            //    {
-            //        Put();
-            //    }
-            //}
-
-            //if (skill_0_Pressed)
-            //{
-            //    Skill0_PressDuration += Time.fixedDeltaTime;
-            //}
-
-            //if (Skill0_PressDuration > 0.2f && ThrowState == ThrowStates.None)
-            //{
-            //    Lift();
-            //}
-
-            //if (Skill0_PressDuration > 0.6f && ThrowState == ThrowStates.Lifting)
-            //{
-            //    PutBehind();
-            //}
 
             #endregion
         }
