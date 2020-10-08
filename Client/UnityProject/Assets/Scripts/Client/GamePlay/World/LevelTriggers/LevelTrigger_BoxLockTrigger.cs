@@ -25,7 +25,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box)
+        if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box != null)
@@ -60,7 +60,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
 
     void OnTriggerExit(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box)
+        if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box != null)
