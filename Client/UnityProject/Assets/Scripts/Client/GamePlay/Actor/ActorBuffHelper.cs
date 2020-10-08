@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ActorBuffHelper : ActorMonoHelper
 {
-    private SortedDictionary<uint, GameObject> BuffFXDict = new SortedDictionary<uint, GameObject>();
+    private SortedDictionary<uint, FX> BuffFXDict = new SortedDictionary<uint, FX>();
     private SortedDictionary<uint, ActorBuff> BuffDict = new SortedDictionary<uint, ActorBuff>();
     private SortedDictionary<uint, float> BuffRemainTimeDict = new SortedDictionary<uint, float>();
 
@@ -18,6 +18,18 @@ public class ActorBuffHelper : ActorMonoHelper
     {
         ActorBuff cloneBuff = buff.Clone();
         BuffDict.Add(cloneBuff.GUID, cloneBuff);
+        PlayBuffFX(cloneBuff);
+    }
+
+    private void PlayBuffFX(ActorBuff buff)
+    {
+        FX fx = FXManager.Instance.PlayFX(buff.BuffFX, transform.position, buff.BuffFXScale);
+        BuffFXDict.Add(buff.GUID, fx);
+        fx.OnFXEnd = () =>
+        {
+            BuffFXDict.Remove(buff.GUID);
+            PlayBuffFX(buff);
+        };
     }
 
     public void AddBuff(ActorBuff buff, float duration)
@@ -25,6 +37,7 @@ public class ActorBuffHelper : ActorMonoHelper
         ActorBuff cloneBuff = buff.Clone();
         BuffDict.Add(cloneBuff.GUID, cloneBuff);
         BuffRemainTimeDict.Add(cloneBuff.GUID, duration);
+        PlayBuffFX(cloneBuff);
     }
 
     void FixedUpdate()
@@ -46,6 +59,8 @@ public class ActorBuffHelper : ActorMonoHelper
         {
             BuffDict.Remove(removeKey);
             BuffRemainTimeDict.Remove(removeKey);
+            BuffFXDict[removeKey].OnFXEnd = null;
+            BuffFXDict.Remove(removeKey);
         }
     }
 
