@@ -252,11 +252,19 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     private void RegisterEvents()
     {
         ClientGameManager.Instance.BattleMessenger.AddListener<InteractSkillType, byte>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
+        foreach (BoxFunctionBase bf in BoxFunctions)
+        {
+            bf.OnRegisterLevelEventID();
+        }
     }
 
     private void UnRegisterEvents()
     {
         ClientGameManager.Instance.BattleMessenger.RemoveListener<InteractSkillType, byte>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
+        foreach (BoxFunctionBase bf in BoxFunctions)
+        {
+            bf.OnUnRegisterLevelEventID();
+        }
     }
 
     private void OnPlayerInteractSkillChanged(InteractSkillType interactSkillType, byte boxTypeIndex)
@@ -410,7 +418,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
             damageTimes = 0;
             LastTouchActor = actor;
-            WorldManager.Instance.CurrentWorld.RemoveBox(this);
+            WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this);
             State = States.BeingKicked;
             transform.DOPause();
             StaticCollider.enabled = false;
@@ -446,7 +454,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
                 bf.OnBeingLift(actor);
             }
 
-            WorldManager.Instance.CurrentWorld.RemoveBox(this);
+            WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this);
             State = States.BeingLift;
             transform.DOPause();
             StaticCollider.enabled = true;
@@ -628,7 +636,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
             if (BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable))
             {
-                PoolRecycle();
+                WorldManager.Instance.CurrentWorld.DeleteBox(this);
             }
             else
             {
@@ -665,7 +673,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
                 if (BoxFeature.HasFlag(BoxFeature.KickHitBreakable))
                 {
-                    PoolRecycle();
+                    WorldManager.Instance.CurrentWorld.DeleteBox(this);
                 }
             }
         }

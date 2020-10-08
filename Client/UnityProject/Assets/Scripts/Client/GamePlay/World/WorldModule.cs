@@ -88,6 +88,11 @@ public class WorldModule : PoolObject
         }
     }
 
+    public void GenerateBox(byte boxTypeIndex, GridPos3D localGP)
+    {
+        GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z);
+    }
+
     public void GenerateBox(byte boxTypeIndex, int x, int y, int z)
     {
         Box box = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);

@@ -18,6 +18,14 @@ public abstract class BoxFunctionBase
         return res;
     }
 
+    public virtual void OnRegisterLevelEventID()
+    {
+    }
+
+    public virtual void OnUnRegisterLevelEventID()
+    {
+    }
+
     public virtual void OnBeingLift(Actor actor)
     {
     }
@@ -40,6 +48,58 @@ public abstract class BoxFunctionBase
 
     public virtual void OnBoxThornTrapTriggerExit(Collider collider)
     {
+    }
+}
+
+[Serializable]
+[LabelText("关卡事件触发")]
+public abstract class BoxFunction_InvokeOnLevelEventID : BoxFunctionBase
+{
+    [LabelText("监听关卡事件ID")]
+    public int ListenLevelEventID;
+
+    public override void OnRegisterLevelEventID()
+    {
+        ClientGameManager.Instance.BattleMessenger.AddListener<int>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventID, OnEvent);
+    }
+
+    public override void OnUnRegisterLevelEventID()
+    {
+        ClientGameManager.Instance.BattleMessenger.RemoveListener<int>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventID, OnEvent);
+    }
+
+    private void OnEvent(int eventID)
+    {
+        if (ListenLevelEventID == eventID)
+        {
+            OnEventExecute();
+        }
+    }
+
+    protected abstract void OnEventExecute();
+}
+
+[Serializable]
+[LabelText("更改箱子类型")]
+public class BoxFunction_ChangeBoxType : BoxFunction_InvokeOnLevelEventID
+{
+    [LabelText("更改箱子类型为")]
+    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    public string ChangeBoxTypeTo;
+
+    protected override void OnEventExecute()
+    {
+        if (Box.State == Box.States.Static)
+        {
+            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Box.GridPos3D);
+            if (module != null)
+            {
+                GridPos3D localGP = Box.LocalGridPos3D;
+                WorldManager.Instance.CurrentWorld.DeleteBox(Box);
+                byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
+                module.GenerateBox(boxTypeIndex, localGP);
+            }
+        }
     }
 }
 

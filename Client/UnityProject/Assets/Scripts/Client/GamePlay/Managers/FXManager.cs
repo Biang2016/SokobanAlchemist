@@ -10,14 +10,14 @@ public class FXManager : TSingletonBaseManager<FXManager>
         Root = root;
     }
 
-    public FX PlayFX(string fxName, Vector3 position)
+    public FX PlayFX(string fxName, Vector3 position, float scale = 1.0f)
     {
         byte fxTypeIndex = ConfigManager.GetFXTypeIndex(fxName);
         if (GameObjectPoolManager.Instance.FXDict.ContainsKey(fxTypeIndex))
         {
             FX fx = GameObjectPoolManager.Instance.FXDict[fxTypeIndex].AllocateGameObject<FX>(Root);
             fx.transform.position = position;
-            fx.transform.localScale = Vector3.one;
+            fx.transform.localScale = Vector3.one * scale;
             fx.transform.rotation = Quaternion.identity;
             fx.Play();
             return fx;

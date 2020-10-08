@@ -14,7 +14,7 @@ public class WorldDeadZoneTrigger : PoolObject
     public void Initialize(GridPos3D gp)
     {
         transform.position = gp.ToVector3() * WorldModule.MODULE_SIZE;
-        BoxCollider.size = Vector3.one * WorldModule.MODULE_SIZE;
+        BoxCollider.size = Vector3.one * (WorldModule.MODULE_SIZE - 0.5f);
         BoxCollider.center = 0.5f * Vector3.one * (WorldModule.MODULE_SIZE - 1);
     }
 
@@ -35,9 +35,8 @@ public class WorldDeadZoneTrigger : PoolObject
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box)
             {
-                WorldManager.Instance.CurrentWorld.RemoveBox(box);
                 box.PlayCollideFX();
-                box.PoolRecycle();
+                WorldManager.Instance.CurrentWorld.DeleteBox(box);
             }
         }
 

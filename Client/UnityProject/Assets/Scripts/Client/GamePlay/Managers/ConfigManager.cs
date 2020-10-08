@@ -163,6 +163,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         ExportWorldDataConfig(dataFormat);
         ExportWorldModuleDataConfig(dataFormat);
         AssetDatabase.Refresh();
+        LoadAllConfigs();
     }
 
     private static void ExportWorldDataConfig(DataFormat dataFormat)

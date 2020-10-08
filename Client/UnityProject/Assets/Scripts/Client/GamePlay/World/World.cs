@@ -16,8 +16,21 @@ public class World : PoolObject
     public WorldModule[,,] DeadZoneWorldModuleMatrix = new WorldModule[WORLD_SIZE + 2, WORLD_HEIGHT + 2, WORLD_SIZE + 2];
 
     private List<WorldCameraPOI> POIs = new List<WorldCameraPOI>();
+    private List<LevelTriggerBase> LevelTriggers = new List<LevelTriggerBase>();
 
-    public Transform DeadZoneModuleRoot;
+    void Awake()
+    {
+        DeadZoneModuleRoot = new GameObject("DeadZoneModuleRoot").transform;
+        DeadZoneModuleRoot.parent = transform;
+        WorldCameraPOIRoot = new GameObject("WorldCameraPOIRoot").transform;
+        WorldCameraPOIRoot.parent = transform;
+        WorldLevelTriggerRoot = new GameObject("WorldLevelTriggerRoot").transform;
+        WorldLevelTriggerRoot.parent = transform;
+    }
+
+    private Transform DeadZoneModuleRoot;
+    private Transform WorldCameraPOIRoot;
+    private Transform WorldLevelTriggerRoot;
 
     public void Clear()
     {
@@ -173,10 +186,17 @@ public class World : PoolObject
 
         foreach (GridPos3D gp in WorldManager.Instance.CurrentWorld.WorldData.WorldCameraPOIData.POIs)
         {
-            WorldCameraPOI poi = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldCameraPOI].AllocateGameObject<WorldCameraPOI>(transform);
+            WorldCameraPOI poi = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldCameraPOI].AllocateGameObject<WorldCameraPOI>(WorldCameraPOIRoot);
             GridPos3D.ApplyGridPosToLocalTrans(gp, poi.transform, 1);
             POIs.Add(poi);
             ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnWorldCameraPOILoaded, poi);
+        }
+
+        foreach (LevelTriggerBase.Data triggerData in WorldManager.Instance.CurrentWorld.WorldData.WorldLevelTriggerData.TriggerDataList)
+        {
+            LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[triggerData.LevelTriggerType].AllocateGameObject<LevelTriggerBase>(WorldLevelTriggerRoot);
+            trigger.Initialize(triggerData);
+            LevelTriggers.Add(trigger);
         }
     }
 
@@ -251,7 +271,7 @@ public class World : PoolObject
         box_src.Initialize(localGP_target, module_target, 0.2f, box_src.ArtOnly, Box.LerpType.Push);
     }
 
-    public void RemoveBox(Box box)
+    public void RemoveBoxFromGrid(Box box)
     {
         if (box.WorldModule)
         {
@@ -266,6 +286,13 @@ public class World : PoolObject
 
             WorldManager.Instance.OtherBoxDict.Add(box.GUID, box);
         }
+    }
+
+    public void DeleteBox(Box box)
+    {
+        RemoveBoxFromGrid(box);
+        WorldManager.Instance.OtherBoxDict.Remove(box.GUID);
+        box.PoolRecycle();
     }
 
     public void BoxReturnToWorldFromPhysics(Box box)

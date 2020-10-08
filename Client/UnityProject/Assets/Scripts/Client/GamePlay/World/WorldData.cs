@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using BiangStudio.CloneVariant;
 using Sirenix.OdinInspector;
 
@@ -16,6 +15,7 @@ public class WorldData : IClone<WorldData>
 
     public WorldActorData WorldActorData = new WorldActorData();
     public WorldCameraPOIData WorldCameraPOIData = new WorldCameraPOIData();
+    public WorldLevelTriggerData WorldLevelTriggerData = new WorldLevelTriggerData();
 
     public WorldData Clone()
     {
@@ -35,6 +35,7 @@ public class WorldData : IClone<WorldData>
 
         data.WorldActorData = WorldActorData.Clone();
         data.WorldCameraPOIData = WorldCameraPOIData.Clone();
+        data.WorldLevelTriggerData = WorldLevelTriggerData.Clone();
         return data;
     }
 }

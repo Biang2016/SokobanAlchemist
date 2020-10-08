@@ -62,6 +62,15 @@ public class WorldDesignHelper : MonoBehaviour
             worldData.WorldCameraPOIData.POIs.Add(gp);
         }
 
+        List<LevelTriggerBase> levelTriggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
+        foreach (LevelTriggerBase trigger in levelTriggers)
+        {
+            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(trigger.transform, 1);
+            gp -= zeroPoint * WorldModule.MODULE_SIZE;
+            trigger.TriggerData.GridPos = gp;
+            worldData.WorldLevelTriggerData.TriggerDataList.Add(trigger.TriggerData);
+        }
+
         return worldData;
     }
 

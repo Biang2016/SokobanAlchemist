@@ -47,6 +47,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     public Dictionary<byte, GameObjectPool> BoxDict = new Dictionary<byte, GameObjectPool>();
     public Dictionary<byte, GameObjectPool> EnemyDict = new Dictionary<byte, GameObjectPool>();
     public Dictionary<byte, GameObjectPool> FXDict = new Dictionary<byte, GameObjectPool>();
+    public Dictionary<LevelTriggerType, GameObjectPool> LevelTriggerDict = new Dictionary<LevelTriggerType, GameObjectPool>();
     public Dictionary<MarkerType, GameObjectPool> MarkerDict = new Dictionary<MarkerType, GameObjectPool>();
     public Dictionary<ProjectileType, GameObjectPool> ProjectileDict = new Dictionary<ProjectileType, GameObjectPool>();
     public Dictionary<BattleTipPrefabType, GameObjectPool> BattleUIDict = new Dictionary<BattleTipPrefabType, GameObjectPool>();
@@ -123,6 +124,21 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             }
         }
 
+        foreach (string s in Enum.GetNames(typeof(LevelTriggerType)))
+        {
+            LevelTriggerType lt_Type = (LevelTriggerType) Enum.Parse(typeof(LevelTriggerType), s);
+            GameObject go_Prefab = PrefabManager.Instance.GetPrefab(s);
+            if (go_Prefab)
+            {
+                GameObject go = new GameObject("Pool_" + s);
+                GameObjectPool pool = go.AddComponent<GameObjectPool>();
+                pool.transform.SetParent(Root);
+                LevelTriggerDict.Add(lt_Type, pool);
+                PoolObject po = go_Prefab.GetComponent<PoolObject>();
+                pool.Initiate(po, 100);
+            }
+        }
+
         foreach (string s in Enum.GetNames(typeof(MarkerType)))
         {
             MarkerType mk_Type = (MarkerType) Enum.Parse(typeof(MarkerType), s);
@@ -152,7 +168,6 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 pool.Initiate(po, 20);
             }
         }
-       
 
         foreach (string s in Enum.GetNames(typeof(BattleTipPrefabType)))
         {
