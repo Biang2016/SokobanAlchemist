@@ -81,7 +81,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     }
 
     [HideInInspector]
-    public byte BoxTypeIndex;
+    public ushort BoxTypeIndex;
 
     [LabelText("箱子特性")]
     [AssetsOnly]
@@ -251,7 +251,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     private void RegisterEvents()
     {
-        ClientGameManager.Instance.BattleMessenger.AddListener<InteractSkillType, byte>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
+        ClientGameManager.Instance.BattleMessenger.AddListener<InteractSkillType, ushort>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
         foreach (BoxFunctionBase bf in BoxFunctions)
         {
             bf.OnRegisterLevelEventID();
@@ -260,14 +260,14 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     private void UnRegisterEvents()
     {
-        ClientGameManager.Instance.BattleMessenger.RemoveListener<InteractSkillType, byte>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
+        ClientGameManager.Instance.BattleMessenger.RemoveListener<InteractSkillType, ushort>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
         foreach (BoxFunctionBase bf in BoxFunctions)
         {
             bf.OnUnRegisterLevelEventID();
         }
     }
 
-    private void OnPlayerInteractSkillChanged(InteractSkillType interactSkillType, byte boxTypeIndex)
+    private void OnPlayerInteractSkillChanged(InteractSkillType interactSkillType, ushort boxTypeIndex)
     {
         if (boxTypeIndex == BoxTypeIndex)
         {
@@ -275,7 +275,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         }
     }
 
-    public void Setup(byte boxTypeIndex)
+    public void Setup(ushort boxTypeIndex)
     {
         BoxTypeIndex = boxTypeIndex;
         RegisterEvents();

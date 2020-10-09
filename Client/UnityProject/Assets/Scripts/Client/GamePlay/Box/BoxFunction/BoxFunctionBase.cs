@@ -96,7 +96,7 @@ public class BoxFunction_ChangeBoxType : BoxFunction_InvokeOnLevelEventID
             {
                 GridPos3D localGP = Box.LocalGridPos3D;
                 WorldManager.Instance.CurrentWorld.DeleteBox(Box);
-                byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
+                ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
                 module.GenerateBox(boxTypeIndex, localGP);
             }
         }
@@ -114,7 +114,7 @@ public class BoxFunction_LiftDropSkill : BoxFunctionBase
 
     public override void OnBeingLift(Actor actor)
     {
-        byte dropLiftAbilityIndex = ConfigManager.GetBoxTypeIndex(LiftGetLiftBoxAbility);
+        ushort dropLiftAbilityIndex = ConfigManager.GetBoxTypeIndex(LiftGetLiftBoxAbility);
         if (dropLiftAbilityIndex != 0)
         {
             Box.PlayCollideFX();

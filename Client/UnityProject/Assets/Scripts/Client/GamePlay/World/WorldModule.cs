@@ -78,7 +78,7 @@ public class WorldModule : PoolObject
             {
                 for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
                 {
-                    byte boxTypeIndex = worldModuleData.BoxMatrix[x, y, z];
+                    ushort boxTypeIndex = worldModuleData.BoxMatrix[x, y, z];
                     if (boxTypeIndex != 0)
                     {
                         GenerateBox(boxTypeIndex, x, y, z);
@@ -88,12 +88,12 @@ public class WorldModule : PoolObject
         }
     }
 
-    public void GenerateBox(byte boxTypeIndex, GridPos3D localGP)
+    public void GenerateBox(ushort boxTypeIndex, GridPos3D localGP)
     {
         GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z);
     }
 
-    public void GenerateBox(byte boxTypeIndex, int x, int y, int z)
+    public void GenerateBox(ushort boxTypeIndex, int x, int y, int z)
     {
         Box box = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);
         string boxName = ConfigManager.GetBoxTypeName(boxTypeIndex);

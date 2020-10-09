@@ -6,7 +6,7 @@ public class WorldModuleData : IClone<WorldModuleData>
 {
     #region ConfigData
 
-    public byte WorldModuleTypeIndex;
+    public ushort WorldModuleTypeIndex;
     public string WorldModuleTypeName;
 
     public WorldModuleFeature WorldModuleFeature;
@@ -15,7 +15,7 @@ public class WorldModuleData : IClone<WorldModuleData>
     /// 世界模组制作规范，一个模组容量为16x16x16
     /// 模组上下层叠，底部模组Y为0，顶部Y为15
     /// </summary>
-    public byte[,,] BoxMatrix = new byte[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+    public ushort[,,] BoxMatrix = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
 
     public WorldModuleData Clone()
     {

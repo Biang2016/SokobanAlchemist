@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WorldManager : TSingletonBaseManager<WorldManager>
 {
-    public static byte DeadZoneIndex;
+    public static ushort DeadZoneIndex;
 
     public Transform WorldRoot;
     public World CurrentWorld;

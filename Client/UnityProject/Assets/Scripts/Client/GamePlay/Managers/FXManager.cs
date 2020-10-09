@@ -12,7 +12,7 @@ public class FXManager : TSingletonBaseManager<FXManager>
 
     public FX PlayFX(string fxName, Vector3 position, float scale = 1.0f)
     {
-        byte fxTypeIndex = ConfigManager.GetFXTypeIndex(fxName);
+        ushort fxTypeIndex = ConfigManager.GetFXTypeIndex(fxName);
         if (GameObjectPoolManager.Instance.FXDict.ContainsKey(fxTypeIndex))
         {
             FX fx = GameObjectPoolManager.Instance.FXDict[fxTypeIndex].AllocateGameObject<FX>(Root);

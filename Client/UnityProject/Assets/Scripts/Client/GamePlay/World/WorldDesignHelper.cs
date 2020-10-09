@@ -39,7 +39,7 @@ public class WorldDesignHelper : MonoBehaviour
             }
 
             GameObject worldModulePrefab = PrefabUtility.GetCorrespondingObjectFromSource(module.gameObject);
-            byte worldModuleTypeIndex = ConfigManager.WorldModuleTypeDefineDict.TypeIndexDict[worldModulePrefab.name];
+            ushort worldModuleTypeIndex = ConfigManager.WorldModuleTypeDefineDict.TypeIndexDict[worldModulePrefab.name];
             worldData.ModuleMatrix[gp.x, gp.y, gp.z] = worldModuleTypeIndex;
         }
 

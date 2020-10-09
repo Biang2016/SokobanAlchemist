@@ -23,7 +23,7 @@ public class BornPointData : IClone<BornPointData>
     private List<string> GetAllEnemyNames()
     {
         List<string> res = new List<string>();
-        foreach (KeyValuePair<string, byte> kv in ConfigManager.EnemyTypeDefineDict.TypeIndexDict)
+        foreach (KeyValuePair<string, ushort> kv in ConfigManager.EnemyTypeDefineDict.TypeIndexDict)
         {
             res.Add(kv.Key);
         }

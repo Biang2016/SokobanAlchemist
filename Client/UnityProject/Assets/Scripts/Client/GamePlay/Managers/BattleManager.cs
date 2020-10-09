@@ -76,7 +76,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
 
             if (bpd.BornPointType == BornPointType.Enemy)
             {
-                byte enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.EnemyName);
+                ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.EnemyName);
                 EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
                 GridPos3D.ApplyGridPosToLocalTrans(bpd.GridPos3D, enemy.transform, 1);
                 enemy.Initialize();

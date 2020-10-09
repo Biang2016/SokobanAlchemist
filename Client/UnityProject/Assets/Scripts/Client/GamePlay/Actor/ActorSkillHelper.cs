@@ -10,58 +10,58 @@ public class ActorSkillHelper : ActorMonoHelper
         base.OnRecycled();
     }
 
-    private SortedDictionary<byte, InteractSkillType> InteractSkillDict = new SortedDictionary<byte, InteractSkillType>();
+    private SortedDictionary<ushort, InteractSkillType> InteractSkillDict = new SortedDictionary<ushort, InteractSkillType>();
 
-    public byte PlayerCurrentGetKickAbility = 0;
+    public ushort PlayerCurrentGetKickAbility = 0;
 
     public void Initialize()
     {
-        foreach (KeyValuePair<byte, string> kv in ConfigManager.BoxTypeDefineDict.TypeNameDict)
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.BoxTypeDefineDict.TypeNameDict)
         {
             InteractSkillDict.Add(kv.Key, 0);
         }
 
         foreach (string boxName in Actor.PushableBoxList)
         {
-            byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
+            ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
             InteractSkillDict[boxTypeIndex] |= InteractSkillType.Push;
             if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
         }
 
         foreach (string boxName in Actor.KickableBoxList)
         {
-            byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
+            ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
             InteractSkillDict[boxTypeIndex] |= InteractSkillType.Kick;
             if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
         }
 
         foreach (string boxName in Actor.LiftableBoxList)
         {
-            byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
+            ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
             InteractSkillDict[boxTypeIndex] |= InteractSkillType.Lift;
             if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
         }
 
         foreach (string boxName in Actor.ThrowableBoxList)
         {
-            byte boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
+            ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
             InteractSkillDict[boxTypeIndex] |= InteractSkillType.Throw;
             if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
         }
     }
 
-    public InteractSkillType GetInteractSkillType(byte boxTypeIndex)
+    public InteractSkillType GetInteractSkillType(ushort boxTypeIndex)
     {
         return InteractSkillDict[boxTypeIndex];
     }
 
-    public bool CanInteract(InteractSkillType interactType, byte boxTypeIndex)
+    public bool CanInteract(InteractSkillType interactType, ushort boxTypeIndex)
     {
         if (!InteractSkillDict.ContainsKey(boxTypeIndex)) return false;
         return InteractSkillDict[boxTypeIndex].HasFlag(interactType);
     }
 
-    public void EnableInteract(InteractSkillType interactType, byte boxTypeIndex)
+    public void EnableInteract(InteractSkillType interactType, ushort boxTypeIndex)
     {
         if (!InteractSkillDict.ContainsKey(boxTypeIndex)) return;
         if (!InteractSkillDict[boxTypeIndex].HasFlag(interactType))
@@ -71,7 +71,7 @@ public class ActorSkillHelper : ActorMonoHelper
         }
     }
 
-    public void DisableInteract(InteractSkillType interactType, byte boxTypeIndex)
+    public void DisableInteract(InteractSkillType interactType, ushort boxTypeIndex)
     {
         if (!InteractSkillDict.ContainsKey(boxTypeIndex)) return;
         if (InteractSkillDict[boxTypeIndex].HasFlag(interactType))

@@ -26,7 +26,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
             GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
-            byte boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxPrefab.name];
+            ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxPrefab.name];
             worldModuleData.BoxMatrix[gp.x, gp.y, gp.z] = boxTypeIndex;
         }
 

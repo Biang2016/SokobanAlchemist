@@ -195,7 +195,7 @@ public class ActorBattleHelper : ActorMonoHelper
         WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Actor.CurGP);
         if (module)
         {
-            byte boxIndex = ConfigManager.GetBoxTypeIndex(Actor.DieDropBoxTypeName);
+            ushort boxIndex = ConfigManager.GetBoxTypeIndex(Actor.DieDropBoxTypeName);
             if (boxIndex == 0) return;
             if (Actor.DieDropBoxProbabilityPercent.ProbabilityBool())
             {

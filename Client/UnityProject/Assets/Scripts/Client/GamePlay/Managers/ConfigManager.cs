@@ -41,8 +41,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         private string PrefabFolder_Relative;
         private bool IncludeSubFolder;
 
-        public Dictionary<string, byte> TypeIndexDict = new Dictionary<string, byte>();
-        public SortedDictionary<byte, string> TypeNameDict = new SortedDictionary<byte, string>();
+        public Dictionary<string, ushort> TypeIndexDict = new Dictionary<string, ushort>();
+        public SortedDictionary<ushort, string> TypeNameDict = new SortedDictionary<ushort, string>();
 
 #if UNITY_EDITOR
         public void ExportTypeNames()
@@ -53,11 +53,11 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             if (Directory.Exists(folder)) Directory.Delete(folder, true);
             Directory.CreateDirectory(folder);
 
-            byte index = 1;
+            ushort index = 1;
             DirectoryInfo di = new DirectoryInfo(Application.dataPath + PrefabFolder_Relative);
             foreach (FileInfo fi in di.GetFiles("*.prefab", IncludeSubFolder ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
             {
-                if (index == byte.MaxValue)
+                if (index == ushort.MaxValue)
                 {
                     Debug.LogError($"{typeof(T).Name}类型数量超过255");
                     break;
@@ -95,8 +95,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 sr.Close();
                 TypeIndexDict.Clear();
                 TypeNameDict.Clear();
-                TypeIndexDict = JsonConvert.DeserializeObject<Dictionary<string, byte>>(content);
-                foreach (KeyValuePair<string, byte> kv in TypeIndexDict)
+                TypeIndexDict = JsonConvert.DeserializeObject<Dictionary<string, ushort>>(content);
+                foreach (KeyValuePair<string, ushort> kv in TypeIndexDict)
                 {
                     TypeNameDict.Add(kv.Value, kv.Key);
                 }
@@ -132,7 +132,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     [ShowInInspector]
     [LabelText("世界模组配置表")]
-    public static readonly SortedDictionary<byte, WorldModuleData> WorldModuleDataConfigDict = new SortedDictionary<byte, WorldModuleData>();
+    public static readonly SortedDictionary<ushort, WorldModuleData> WorldModuleDataConfigDict = new SortedDictionary<ushort, WorldModuleData>();
 
     public static string DesignRoot = "/Designs/";
 
@@ -288,59 +288,59 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     #region Getter
 
-    public static string GetBoxTypeName(byte boxTypeIndex)
+    public static string GetBoxTypeName(ushort boxTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
         BoxTypeDefineDict.TypeNameDict.TryGetValue(boxTypeIndex, out string boxTypeName);
         return boxTypeName;
     }
 
-    public static byte GetBoxTypeIndex(string boxTypeName)
+    public static ushort GetBoxTypeIndex(string boxTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
-        BoxTypeDefineDict.TypeIndexDict.TryGetValue(boxTypeName, out byte boxTypeIndex);
+        BoxTypeDefineDict.TypeIndexDict.TryGetValue(boxTypeName, out ushort boxTypeIndex);
         return boxTypeIndex;
     }
 
-    public static string GetEnemyTypeName(byte enemyTypeIndex)
+    public static string GetEnemyTypeName(ushort enemyTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
         EnemyTypeDefineDict.TypeNameDict.TryGetValue(enemyTypeIndex, out string enemyTypeName);
         return enemyTypeName;
     }
 
-    public static byte GetEnemyTypeIndex(string enemyTypeName)
+    public static ushort GetEnemyTypeIndex(string enemyTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
-        EnemyTypeDefineDict.TypeIndexDict.TryGetValue(enemyTypeName, out byte enemyTypeIndex);
+        EnemyTypeDefineDict.TypeIndexDict.TryGetValue(enemyTypeName, out ushort enemyTypeIndex);
         return enemyTypeIndex;
     }
 
-    public static string GetWorldModuleName(byte worldModuleTypeIndex)
+    public static string GetWorldModuleName(ushort worldModuleTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
         WorldModuleTypeDefineDict.TypeNameDict.TryGetValue(worldModuleTypeIndex, out string worldModuleTypeName);
         return worldModuleTypeName;
     }
 
-    public static byte GetWorldModuleTypeIndex(string worldModuleTypeName)
+    public static ushort GetWorldModuleTypeIndex(string worldModuleTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
-        WorldModuleTypeDefineDict.TypeIndexDict.TryGetValue(worldModuleTypeName, out byte worldModuleTypeIndex);
+        WorldModuleTypeDefineDict.TypeIndexDict.TryGetValue(worldModuleTypeName, out ushort worldModuleTypeIndex);
         return worldModuleTypeIndex;
     }
 
-    public static string GetFXName(byte fxTypeIndex)
+    public static string GetFXName(ushort fxTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
         FXTypeDefineDict.TypeNameDict.TryGetValue(fxTypeIndex, out string fxTypeName);
         return fxTypeName;
     }
 
-    public static byte GetFXTypeIndex(string fxTypeName)
+    public static ushort GetFXTypeIndex(string fxTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
-        FXTypeDefineDict.TypeIndexDict.TryGetValue(fxTypeName, out byte fxTypeIndex);
+        FXTypeDefineDict.TypeIndexDict.TryGetValue(fxTypeName, out ushort fxTypeIndex);
         return fxTypeIndex;
     }
 
@@ -351,7 +351,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return worldData?.Clone();
     }
 
-    public static WorldModuleData GetWorldModuleDataConfig(byte worldModuleTypeIndex)
+    public static WorldModuleData GetWorldModuleDataConfig(ushort worldModuleTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
         WorldModuleDataConfigDict.TryGetValue(worldModuleTypeIndex, out WorldModuleData worldModuleData);

@@ -83,7 +83,7 @@ public class World : PoolObject
             {
                 for (int z = 0; z < worldData.ModuleMatrix.GetLength(2); z++)
                 {
-                    byte worldModuleTypeIndex = worldData.ModuleMatrix[x, y, z];
+                    ushort worldModuleTypeIndex = worldData.ModuleMatrix[x, y, z];
                     if (worldModuleTypeIndex != 0)
                     {
                         GenerateWorldModule(worldModuleTypeIndex, x, y, z);
@@ -100,8 +100,8 @@ public class World : PoolObject
             {
                 for (int z = 1; z < WORLD_SIZE; z++)
                 {
-                    byte index = worldData.ModuleMatrix[x, y, z];
-                    byte index_before = worldData.ModuleMatrix[x, y, z - 1];
+                    ushort index = worldData.ModuleMatrix[x, y, z];
+                    ushort index_before = worldData.ModuleMatrix[x, y, z - 1];
                     if (index == 0 && index_before != 0)
                     {
                         GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, z);
@@ -131,8 +131,8 @@ public class World : PoolObject
             {
                 for (int y = 1; y < WORLD_HEIGHT; y++)
                 {
-                    byte index = worldData.ModuleMatrix[x, y, z];
-                    byte index_before = worldData.ModuleMatrix[x, y - 1, z];
+                    ushort index = worldData.ModuleMatrix[x, y, z];
+                    ushort index_before = worldData.ModuleMatrix[x, y - 1, z];
                     if (index == 0 && index_before != 0)
                     {
                         GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, z);
@@ -162,8 +162,8 @@ public class World : PoolObject
             {
                 for (int x = 1; x < WORLD_SIZE; x++)
                 {
-                    byte index = worldData.ModuleMatrix[x, y, z];
-                    byte index_before = worldData.ModuleMatrix[x - 1, y, z];
+                    ushort index = worldData.ModuleMatrix[x, y, z];
+                    ushort index_before = worldData.ModuleMatrix[x - 1, y, z];
                     if (index == 0 && index_before != 0)
                     {
                         GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, z);
@@ -205,7 +205,7 @@ public class World : PoolObject
         }
     }
 
-    private void GenerateWorldModule(byte worldModuleTypeIndex, int x, int y, int z)
+    private void GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z)
     {
         bool isDeadModule = worldModuleTypeIndex == WorldManager.DeadZoneIndex;
         if (isDeadModule && DeadZoneWorldModuleMatrix[x + 1, y + 1, z + 1] != null) return;
