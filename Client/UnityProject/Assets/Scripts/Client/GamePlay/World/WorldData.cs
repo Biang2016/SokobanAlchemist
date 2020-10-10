@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BiangStudio.CloneVariant;
 using Sirenix.OdinInspector;
 
@@ -16,6 +17,22 @@ public class WorldData : IClone<WorldData>
     public WorldActorData WorldActorData = new WorldActorData();
     public WorldCameraPOIData WorldCameraPOIData = new WorldCameraPOIData();
     public WorldLevelTriggerData WorldLevelTriggerData = new WorldLevelTriggerData();
+    public List<Box.WorldSpecialBoxData> WorldSpecialBoxDataList = new List<Box.WorldSpecialBoxData>();
+    public List<Box.BoxExtraSerializeData>[,,] ModuleBoxExtraSerializeDataMatrix = new List<Box.BoxExtraSerializeData>[World.WORLD_SIZE, World.WORLD_HEIGHT, World.WORLD_SIZE];
+
+    public WorldData()
+    {
+        for (int x = 0; x < ModuleMatrix.GetLength(0); x++)
+        {
+            for (int y = 0; y < ModuleMatrix.GetLength(1); y++)
+            {
+                for (int z = 0; z < ModuleMatrix.GetLength(2); z++)
+                {
+                    ModuleBoxExtraSerializeDataMatrix[x, y, z] = new List<Box.BoxExtraSerializeData>();
+                }
+            }
+        }
+    }
 
     public WorldData Clone()
     {
@@ -29,6 +46,7 @@ public class WorldData : IClone<WorldData>
                 for (int z = 0; z < ModuleMatrix.GetLength(2); z++)
                 {
                     data.ModuleMatrix[x, y, z] = ModuleMatrix[x, y, z];
+                    data.ModuleBoxExtraSerializeDataMatrix[x, y, z] = ModuleBoxExtraSerializeDataMatrix[x, y, z].Clone();
                 }
             }
         }
@@ -36,6 +54,7 @@ public class WorldData : IClone<WorldData>
         data.WorldActorData = WorldActorData.Clone();
         data.WorldCameraPOIData = WorldCameraPOIData.Clone();
         data.WorldLevelTriggerData = WorldLevelTriggerData.Clone();
+        data.WorldSpecialBoxDataList = WorldSpecialBoxDataList.Clone();
         return data;
     }
 }

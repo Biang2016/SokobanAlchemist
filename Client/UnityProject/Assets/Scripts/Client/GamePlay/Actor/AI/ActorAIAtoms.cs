@@ -23,7 +23,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             Actor player = BattleManager.Instance.Player1;
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.CurGP, KeepDistanceMin.value, KeepDistanceMax.value, false, ActorPathFinding.DestinationType.Actor);
+            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.CurWorldGP, KeepDistanceMin.value, KeepDistanceMax.value, false, ActorPathFinding.DestinationType.Actor);
             switch (retCode)
             {
                 case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
@@ -38,7 +38,7 @@ public static class ActorAIAtoms
                     for (int angle = 0; angle <= 360; angle += 10)
                     {
                         float radianAngle = Mathf.Deg2Rad * angle;
-                        Vector3 dest = player.CurGP.ToVector3() + new Vector3((KeepDistanceMin.value + 1) * Mathf.Sin(radianAngle), 0, (KeepDistanceMin.value + 1) * Mathf.Cos(radianAngle));
+                        Vector3 dest = player.CurWorldGP.ToVector3() + new Vector3((KeepDistanceMin.value + 1) * Mathf.Sin(radianAngle), 0, (KeepDistanceMin.value + 1) * Mathf.Cos(radianAngle));
                         GridPos3D destGP = dest.ToGridPos3D();
                         runDestList.Add(destGP);
                     }
@@ -94,7 +94,7 @@ public static class ActorAIAtoms
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             Actor player = BattleManager.Instance.Player1;
             if ((player.transform.position - Actor.transform.position).magnitude > GuardingRange.value) return false;
-            LinkedList<GridPos3D> path = ActorPathFinding.FindPath(Actor.CurGP, player.CurGP, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor);
+            LinkedList<GridPos3D> path = ActorPathFinding.FindPath(Actor.CurWorldGP, player.CurWorldGP, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor);
             if (path != null) return true;
             return false;
         }
@@ -143,7 +143,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             if (LiftBoxTypeNames.value == null || LiftBoxTypeNames.value.Count == 0) return false;
-            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurGP, SearchRadius.value, LiftBoxTypeNames.value, SearchRangeShape.value, ExceptRadiusAroundPlayer.value);
+            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurWorldGP, SearchRadius.value, LiftBoxTypeNames.value, SearchRangeShape.value, ExceptRadiusAroundPlayer.value);
             if (boxes.Count == 0) return false;
             return true;
         }
@@ -173,7 +173,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (LiftBoxTypeNames.value == null || LiftBoxTypeNames.value.Count == 0) return Status.Failure;
-            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurGP, SearchRadius.value, LiftBoxTypeNames.value, SearchRangeShape.value, ExceptRadiusAroundPlayer.value);
+            List<Box> boxes = WorldManager.Instance.CurrentWorld.SearchBoxInRange(Actor.CurWorldGP, SearchRadius.value, LiftBoxTypeNames.value, SearchRangeShape.value, ExceptRadiusAroundPlayer.value);
             if (boxes.Count == 0) return Status.Failure;
             int minDistance = int.MaxValue;
             Box nearestBox = null;
@@ -181,7 +181,7 @@ public static class ActorAIAtoms
             {
                 foreach (Box box in boxes)
                 {
-                    LinkedList<GridPos3D> path = ActorPathFinding.FindPath(Actor.CurGP, box.GridPos3D, 0, 0, ActorPathFinding.DestinationType.Box);
+                    LinkedList<GridPos3D> path = ActorPathFinding.FindPath(Actor.CurWorldGP, box.WorldGP, 0, 0, ActorPathFinding.DestinationType.Box);
                     if (path != null && path.Count != 0)
                     {
                         int dist = path.Count;
@@ -204,7 +204,7 @@ public static class ActorAIAtoms
 
             if (nearestBox == null) return Status.Failure;
             Actor.ActorAIAgent.TargetBox = nearestBox;
-            Actor.ActorAIAgent.TargetBoxGP = nearestBox.GridPos3D;
+            Actor.ActorAIAgent.TargetBoxGP = nearestBox.WorldGP;
             return Status.Success;
         }
     }
@@ -220,7 +220,7 @@ public static class ActorAIAtoms
         protected override bool OnCheck()
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
-            if (Actor.ActorAIAgent.TargetBox == null || Actor.ActorAIAgent.TargetBox.GridPos3D != Actor.ActorAIAgent.TargetBoxGP) return false;
+            if (Actor.ActorAIAgent.TargetBox == null || Actor.ActorAIAgent.TargetBox.WorldGP != Actor.ActorAIAgent.TargetBoxGP) return false;
             if ((Actor.ActorAIAgent.TargetBox.transform.position - BattleManager.Instance.Player1.transform.position).magnitude <= ExceptRadiusAroundPlayer.value)
             {
                 Actor.ActorAIAgent.TargetBox = null;
@@ -257,7 +257,7 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
-            if (Actor.ActorAIAgent.TargetBox == null || Actor.ActorAIAgent.TargetBox.GridPos3D != Actor.ActorAIAgent.TargetBoxGP) return Status.Failure;
+            if (Actor.ActorAIAgent.TargetBox == null || Actor.ActorAIAgent.TargetBox.WorldGP != Actor.ActorAIAgent.TargetBoxGP) return Status.Failure;
             ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(Actor.ActorAIAgent.TargetBoxGP, 0f, 0f, true, ActorPathFinding.DestinationType.Box);
             switch (retCode)
             {
@@ -289,8 +289,8 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ThrowState != Actor.ThrowStates.None) return Status.Failure;
-            GridPos3D boxGP = Actor.CurGP + Actor.CurForward.ToGridPos3D();
-            if (Actor.ActorAIAgent.TargetBox != null && Actor.ActorAIAgent.TargetBox.GridPos3D == Actor.ActorAIAgent.TargetBoxGP && boxGP == Actor.ActorAIAgent.TargetBoxGP)
+            GridPos3D boxGP = Actor.CurWorldGP + Actor.CurForward.ToGridPos3D();
+            if (Actor.ActorAIAgent.TargetBox != null && Actor.ActorAIAgent.TargetBox.WorldGP == Actor.ActorAIAgent.TargetBoxGP && boxGP == Actor.ActorAIAgent.TargetBoxGP)
             {
                 Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(boxGP, out WorldModule module, out GridPos3D _);
                 if (box != null && box == Actor.ActorAIAgent.TargetBox)
@@ -379,7 +379,7 @@ public static class ActorAIAtoms
                 return Status.Running;
             }
 
-            bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.CurGP, IdleRadius.value, out GridPos3D destination);
+            bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.CurWorldGP, IdleRadius.value, out GridPos3D destination);
             if (suc)
             {
                 ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination, 0f, 0.5f, false, ActorPathFinding.DestinationType.EmptyGrid);

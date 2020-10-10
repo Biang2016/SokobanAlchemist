@@ -14,6 +14,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+#if UNITY_EDITOR
+using UnityEditor;
+
+#endif
 
 namespace BiangStudio
 {
@@ -613,6 +617,46 @@ namespace BiangStudio
         public static bool ProbabilityBool(this uint probabilityPercent)
         {
             return Random.Range(0, 100) < probabilityPercent;
+        }
+
+        public static bool HasAncestorName(this Transform transform, string ancestorName)
+        {
+            Transform parent = transform;
+            while (parent != null)
+            {
+                if (parent.name.Equals(ancestorName))
+                {
+                    return true;
+                }
+
+                parent = parent.parent;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Can only be used inside OnDrawGizmos()
+        /// </summary>
+        /// <param name="m_Trans"></param>
+        /// <param name="relativePosition"></param>
+        /// <param name="wireFrameColor"></param>
+        /// <param name="labelColor"></param>
+        /// <param name="label"></param>
+        public static void DrawSpecialTip(this Transform m_Trans, Vector3 relativePosition, Color wireFrameColor, Color labelColor, string label)
+        {
+#if UNITY_EDITOR
+            Gizmos.color = wireFrameColor;
+            Gizmos.DrawWireCube(m_Trans.position, Vector3.one);
+            GUIStyle style = new GUIStyle();
+            style.normal.textColor = labelColor;
+            style.fontSize = 15;
+            Handles.BeginGUI();
+            Vector3 pos = m_Trans.position + relativePosition;
+            Vector2 pos2D = HandleUtility.WorldToGUIPoint(pos);
+            GUI.Label(new Rect(pos2D.x, pos2D.y, 100, 100), label, style);
+            Handles.EndGUI();
+#endif
         }
     }
 }

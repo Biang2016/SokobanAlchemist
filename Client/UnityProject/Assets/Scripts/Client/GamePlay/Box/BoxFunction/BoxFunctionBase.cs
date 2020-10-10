@@ -1,14 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BiangStudio.CloneVariant;
 using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public abstract class BoxFunctionBase
+public abstract class BoxFunctionBase : IClone<BoxFunctionBase>
 {
     internal Box Box;
+
+    [LabelText("特例类型")]
+    [EnumToggleButtons]
+    public BoxFunctionBaseSpecialCaseType SpecialCaseType = BoxFunctionBaseSpecialCaseType.None;
+
+    public enum BoxFunctionBaseSpecialCaseType
+    {
+        [LabelText("无")]
+        None,
+
+        [LabelText("模组特例")]
+        Module,
+
+        [LabelText("模组特例")]
+        World,
+    }
 
     private IEnumerable<string> GetAllBoxTypeNames()
     {
@@ -49,6 +66,22 @@ public abstract class BoxFunctionBase
     public virtual void OnBoxThornTrapTriggerExit(Collider collider)
     {
     }
+
+    public BoxFunctionBase Clone()
+    {
+        Type type = GetType();
+        BoxFunctionBase newBF = (BoxFunctionBase) Activator.CreateInstance(type);
+        ChildClone(newBF);
+        return newBF;
+    }
+
+    protected virtual void ChildClone(BoxFunctionBase newBF)
+    {
+    }
+
+    public virtual void ApplyData(BoxFunctionBase srcData)
+    {
+    }
 }
 
 [Serializable]
@@ -77,6 +110,20 @@ public abstract class BoxFunction_InvokeOnLevelEventID : BoxFunctionBase
     }
 
     protected abstract void OnEventExecute();
+
+    protected override void ChildClone(BoxFunctionBase newBF)
+    {
+        base.ChildClone(newBF);
+        BoxFunction_InvokeOnLevelEventID bf = ((BoxFunction_InvokeOnLevelEventID) newBF);
+        bf.ListenLevelEventID = ListenLevelEventID;
+    }
+
+    public override void ApplyData(BoxFunctionBase srcData)
+    {
+        base.ApplyData(srcData);
+        BoxFunction_InvokeOnLevelEventID bf = ((BoxFunction_InvokeOnLevelEventID) srcData);
+        ListenLevelEventID = bf.ListenLevelEventID;
+    }
 }
 
 [Serializable]
@@ -91,15 +138,29 @@ public class BoxFunction_ChangeBoxType : BoxFunction_InvokeOnLevelEventID
     {
         if (Box.State == Box.States.Static)
         {
-            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Box.GridPos3D);
+            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Box.WorldGP);
             if (module != null)
             {
-                GridPos3D localGP = Box.LocalGridPos3D;
+                GridPos3D localGP = Box.LocalGP;
                 WorldManager.Instance.CurrentWorld.DeleteBox(Box);
                 ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
                 module.GenerateBox(boxTypeIndex, localGP);
             }
         }
+    }
+
+    protected override void ChildClone(BoxFunctionBase newBF)
+    {
+        base.ChildClone(newBF);
+        BoxFunction_ChangeBoxType bf = ((BoxFunction_ChangeBoxType) newBF);
+        bf.ChangeBoxTypeTo = ChangeBoxTypeTo;
+    }
+
+    public override void ApplyData(BoxFunctionBase srcData)
+    {
+        base.ApplyData(srcData);
+        BoxFunction_ChangeBoxType bf = ((BoxFunction_ChangeBoxType) srcData);
+        ChangeBoxTypeTo = bf.ChangeBoxTypeTo;
     }
 }
 
@@ -123,6 +184,20 @@ public class BoxFunction_LiftDropSkill : BoxFunctionBase
             actor.ActorSkillHelper.EnableInteract(InteractSkillType.Kick, dropLiftAbilityIndex);
         }
     }
+
+    protected override void ChildClone(BoxFunctionBase newBF)
+    {
+        base.ChildClone(newBF);
+        BoxFunction_LiftDropSkill bf = ((BoxFunction_LiftDropSkill) newBF);
+        bf.LiftGetLiftBoxAbility = LiftGetLiftBoxAbility;
+    }
+
+    public override void ApplyData(BoxFunctionBase srcData)
+    {
+        base.ApplyData(srcData);
+        BoxFunction_LiftDropSkill bf = ((BoxFunction_LiftDropSkill) srcData);
+        LiftGetLiftBoxAbility = bf.LiftGetLiftBoxAbility;
+    }
 }
 
 [Serializable]
@@ -138,6 +213,20 @@ public class BoxFunction_LiftDropSkin : BoxFunctionBase
         base.OnBeingLift(actor);
         actor.ActorSkinHelper.SwitchSkin(DieDropMaterial);
     }
+
+    protected override void ChildClone(BoxFunctionBase newBF)
+    {
+        base.ChildClone(newBF);
+        BoxFunction_LiftDropSkin bf = ((BoxFunction_LiftDropSkin) newBF);
+        bf.DieDropMaterial = DieDropMaterial;
+    }
+
+    public override void ApplyData(BoxFunctionBase srcData)
+    {
+        base.ApplyData(srcData);
+        BoxFunction_LiftDropSkin bf = ((BoxFunction_LiftDropSkin) srcData);
+        DieDropMaterial = bf.DieDropMaterial;
+    }
 }
 
 [Serializable]
@@ -150,10 +239,21 @@ public class BoxFunction_LiftGainHealth : BoxFunctionBase
     public override void OnBeingLift(Actor actor)
     {
         base.OnBeingLift(actor);
-        if (Box.Healable)
-        {
-            actor.ActorBattleHelper.AddLife(HealLifeCountWhenLifted);
-        }
+        actor.ActorBattleHelper.AddLife(HealLifeCountWhenLifted);
+    }
+
+    protected override void ChildClone(BoxFunctionBase newBF)
+    {
+        base.ChildClone(newBF);
+        BoxFunction_LiftGainHealth bf = ((BoxFunction_LiftGainHealth) newBF);
+        bf.HealLifeCountWhenLifted = HealLifeCountWhenLifted;
+    }
+
+    public override void ApplyData(BoxFunctionBase srcData)
+    {
+        base.ApplyData(srcData);
+        BoxFunction_LiftGainHealth bf = ((BoxFunction_LiftGainHealth) srcData);
+        HealLifeCountWhenLifted = bf.HealLifeCountWhenLifted;
     }
 }
 
@@ -219,6 +319,20 @@ public class BoxFunction_ExplodePushForce : BoxFunctionBase
                 }
             }
         }
+    }
+
+    protected override void ChildClone(BoxFunctionBase newBF)
+    {
+        base.ChildClone(newBF);
+        BoxFunction_ExplodePushForce bf = ((BoxFunction_ExplodePushForce) newBF);
+        bf.ExplodePushRadius = ExplodePushRadius;
+    }
+
+    public override void ApplyData(BoxFunctionBase srcData)
+    {
+        base.ApplyData(srcData);
+        BoxFunction_ExplodePushForce bf = ((BoxFunction_ExplodePushForce) srcData);
+        ExplodePushRadius = bf.ExplodePushRadius;
     }
 }
 
@@ -302,6 +416,28 @@ public class BoxFunction_ExplodeAddActorBuff : BoxFunctionBase
             }
         }
     }
+
+    protected override void ChildClone(BoxFunctionBase newBF)
+    {
+        base.ChildClone(newBF);
+        BoxFunction_ExplodeAddActorBuff bf = ((BoxFunction_ExplodeAddActorBuff) newBF);
+        bf.ActorBuff = ActorBuff.Clone();
+        bf.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
+        bf.AddBuffRadius = AddBuffRadius;
+        bf.PermanentBuff = PermanentBuff;
+        bf.Duration = Duration;
+    }
+
+    public override void ApplyData(BoxFunctionBase srcData)
+    {
+        base.ApplyData(srcData);
+        BoxFunction_ExplodeAddActorBuff bf = ((BoxFunction_ExplodeAddActorBuff) srcData);
+        ActorBuff = bf.ActorBuff.Clone();
+        EffectiveOnRelativeCamp = bf.EffectiveOnRelativeCamp;
+        AddBuffRadius = bf.AddBuffRadius;
+        PermanentBuff = bf.PermanentBuff;
+        Duration = bf.Duration;
+    }
 }
 
 [Serializable]
@@ -370,6 +506,22 @@ public class BoxFunction_ThornDamage : BoxFunctionBase
             }
         }
     }
+
+    protected override void ChildClone(BoxFunctionBase newBF)
+    {
+        base.ChildClone(newBF);
+        BoxFunction_ThornDamage bf = ((BoxFunction_ThornDamage) newBF);
+        bf.Damage = Damage;
+        bf.DamageInterval = DamageInterval;
+    }
+
+    public override void ApplyData(BoxFunctionBase srcData)
+    {
+        base.ApplyData(srcData);
+        BoxFunction_ThornDamage bf = ((BoxFunction_ThornDamage) srcData);
+        Damage = bf.Damage;
+        DamageInterval = bf.DamageInterval;
+    }
 }
 
 [Serializable]
@@ -379,4 +531,18 @@ public class BoxFunction_GenerateNewBoxes : BoxFunctionBase
     [LabelText("箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames")]
     private string BoxTypeName;
+
+    protected override void ChildClone(BoxFunctionBase newBF)
+    {
+        base.ChildClone(newBF);
+        BoxFunction_GenerateNewBoxes bf = ((BoxFunction_GenerateNewBoxes) newBF);
+        bf.BoxTypeName = BoxTypeName;
+    }
+
+    public override void ApplyData(BoxFunctionBase srcData)
+    {
+        base.ApplyData(srcData);
+        BoxFunction_GenerateNewBoxes bf = ((BoxFunction_GenerateNewBoxes) srcData);
+        BoxTypeName = bf.BoxTypeName;
+    }
 }

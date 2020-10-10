@@ -26,7 +26,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static float BoxKickDragFactor_Cheat = 1f;
     public static float BoxWeightFactor_Cheat = 1f;
 
-    public class TypeDefineConfig<T> where T : MonoBehaviour
+    public class TypeDefineConfig<T> where T : Object
     {
         public TypeDefineConfig(string typeNamePrefix, string prefabFolder, bool includeSubFolder)
         {
@@ -55,26 +55,56 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
             ushort index = 1;
             DirectoryInfo di = new DirectoryInfo(Application.dataPath + PrefabFolder_Relative);
-            foreach (FileInfo fi in di.GetFiles("*.prefab", IncludeSubFolder ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
-            {
-                if (index == ushort.MaxValue)
-                {
-                    Debug.LogError($"{typeof(T).Name}类型数量超过255");
-                    break;
-                }
 
-                string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
-                GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
-                T t = obj.GetComponent<T>();
-                if (t != null)
+            if (CommonUtils.IsBaseType(typeof(T), typeof(MonoBehaviour)))
+            {
+                foreach (FileInfo fi in di.GetFiles("*.prefab", IncludeSubFolder ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
                 {
-                    TypeNameDict.Add(index, t.name);
-                    TypeIndexDict.Add(t.name, index);
-                    index++;
+                    if (index == ushort.MaxValue)
+                    {
+                        Debug.LogError($"{typeof(T).Name}类型数量超过{ushort.MaxValue}");
+                        break;
+                    }
+
+                    string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
+                    GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
+                    T t = obj.GetComponent<T>();
+                    if (t != null)
+                    {
+                        TypeNameDict.Add(index, t.name);
+                        TypeIndexDict.Add(t.name, index);
+                        index++;
+                    }
+                    else
+                    {
+                        Debug.LogError($"Prefab {fi.Name} 不含{typeof(T).Name}脚本，已跳过");
+                    }
                 }
-                else
+            }
+            else
+            {
+                foreach (FileInfo fi in di.GetFiles("*.*", IncludeSubFolder ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
                 {
-                    Debug.LogError($"Prefab {fi.Name} 不含{typeof(T).Name}脚本，已跳过");
+                    if (fi.Name.EndsWith(".meta")) continue;
+                    if(index == ushort.MaxValue)
+                    {
+                        Debug.LogError($"{typeof(T).Name}类型数量超过{ushort.MaxValue}");
+                        break;
+                    }
+
+                    string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
+                    Object obj = AssetDatabase.LoadAssetAtPath<Object>(relativePath);
+                    T t = (T) obj;
+                    if (t != null)
+                    {
+                        TypeNameDict.Add(index, t.name);
+                        TypeIndexDict.Add(t.name, index);
+                        index++;
+                    }
+                    else
+                    {
+                        Debug.LogError($"文件 {fi.Name} 不是{typeof(T).Name}类型，已跳过");
+                    }
                 }
             }
 
@@ -113,6 +143,10 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     [ShowInInspector]
     [LabelText("箱子类型表")]
     public static readonly TypeDefineConfig<Box> BoxTypeDefineDict = new TypeDefineConfig<Box>("Box", "/Resources/Prefabs/Designs/Box", true);
+
+    [ShowInInspector]
+    [LabelText("箱子Icon类型表")]
+    public static readonly TypeDefineConfig<Texture2D> BoxIconTypeDefineDict = new TypeDefineConfig<Texture2D>("BoxIcon", "/Resources/BoxIcons", true);
 
     [ShowInInspector]
     [LabelText("敌人类型表")]
@@ -157,6 +191,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         DataFormat dataFormat = DataFormat.Binary;
         BoxTypeDefineDict.ExportTypeNames();
+        BoxIconTypeDefineDict.ExportTypeNames();
         EnemyTypeDefineDict.ExportTypeNames();
         WorldModuleTypeDefineDict.ExportTypeNames();
         FXTypeDefineDict.ExportTypeNames();
@@ -222,6 +257,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         if (IsLoaded) return;
         DataFormat dataFormat = DataFormat.Binary;
         BoxTypeDefineDict.LoadTypeNames();
+        BoxIconTypeDefineDict.LoadTypeNames();
         EnemyTypeDefineDict.LoadTypeNames();
         WorldModuleTypeDefineDict.LoadTypeNames();
         FXTypeDefineDict.LoadTypeNames();
@@ -300,6 +336,20 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         if (!IsLoaded) LoadAllConfigs();
         BoxTypeDefineDict.TypeIndexDict.TryGetValue(boxTypeName, out ushort boxTypeIndex);
         return boxTypeIndex;
+    }
+
+    public static string GetBoxIconTypeName(ushort boxIconTypeIndex)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        BoxIconTypeDefineDict.TypeNameDict.TryGetValue(boxIconTypeIndex, out string boxIconTypeName);
+        return boxIconTypeName;
+    }
+
+    public static ushort GetBoxIconTypeIndex(string boxIconTypeName)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        BoxIconTypeDefineDict.TypeIndexDict.TryGetValue(boxIconTypeName, out ushort boxIconTypeIndex);
+        return boxIconTypeIndex;
     }
 
     public static string GetEnemyTypeName(ushort enemyTypeIndex)

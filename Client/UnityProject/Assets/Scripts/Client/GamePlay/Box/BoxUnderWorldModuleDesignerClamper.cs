@@ -31,7 +31,7 @@ public class BoxUnderWorldModuleDesignerClamper : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (ParentWorldDesignHelper)
+        if (ParentWorldDesignHelper && ParentWorldModuleDesignHelper)
         {
             transform.localPosition = DefaultPosition;
         }

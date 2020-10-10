@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BiangStudio;
 using BiangStudio.CloneVariant;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
@@ -9,6 +10,12 @@ using UnityEngine;
 
 public abstract class LevelTriggerBase : PoolObject
 {
+    public enum LevelTriggerBelongsTo
+    {
+        World,
+        WorldModule,
+    }
+
     public abstract Data TriggerData { get; set; }
 
     public BoxCollider Trigger;
@@ -22,10 +29,18 @@ public abstract class LevelTriggerBase : PoolObject
     public class Data : IClone<Data>
     {
         [ReadOnly]
+        [LabelText("LevelTrigger类型")]
         public LevelTriggerType LevelTriggerType;
 
         [ReadOnly]
-        public GridPos3D GridPos;
+        [LabelText("从属")]
+        public LevelTriggerBelongsTo LevelTriggerBelongsTo;
+
+        [ReadOnly]
+        public GridPos3D WorldGP;
+
+        [ReadOnly]
+        public GridPos3D LocalGP;
 
         [LabelText("触发时发送事件ID")]
         public int TriggerEmitEventID;
@@ -47,7 +62,9 @@ public abstract class LevelTriggerBase : PoolObject
         {
             Type type = GetType();
             Data data = (Data) Activator.CreateInstance(type);
-            data.GridPos = GridPos;
+            data.LevelTriggerBelongsTo = LevelTriggerBelongsTo;
+            data.WorldGP = WorldGP;
+            data.LocalGP = LocalGP;
             data.TriggerEmitEventID = TriggerEmitEventID;
             data.MaxTriggerTime = MaxTriggerTime;
             data.TriggerFX = TriggerFX;
@@ -88,10 +105,17 @@ public abstract class LevelTriggerBase : PoolObject
         HasTriggeredTimes = 0;
     }
 
-    public void Initialize(Data data)
+    public void InitializeInWorld(Data data)
     {
         TriggerData = data;
-        GridPos3D.ApplyGridPosToLocalTrans(data.GridPos, transform, 1);
+        GridPos3D.ApplyGridPosToLocalTrans(data.WorldGP, transform, 1);
+        InitializeColor();
+    }
+
+    public void InitializeInWorldModule(Data data)
+    {
+        TriggerData = data;
+        GridPos3D.ApplyGridPosToLocalTrans(data.LocalGP, transform, 1);
         InitializeColor();
     }
 
@@ -108,9 +132,29 @@ public abstract class LevelTriggerBase : PoolObject
     {
         HasTriggeredTimes++;
         if (HasTriggeredTimes > TriggerData.MaxTriggerTime) return;
-        FXManager.Instance.PlayFX(TriggerData.TriggerFX, TriggerData.GridPos.ToVector3(), TriggerData.TriggerFXScale);
+        FXManager.Instance.PlayFX(TriggerData.TriggerFX, transform.position, TriggerData.TriggerFXScale);
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventID, TriggerData.TriggerEmitEventID);
-        Debug.Log(TriggerData.TriggerEmitEventID);
+        Debug.Log("LevelTriggerEventID:" + TriggerData.TriggerEmitEventID);
+    }
+
+    void OnDrawGizmos()
+    {
+        if (!Application.isPlaying)
+        {
+#if UNITY_EDITOR
+
+            if (transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot}"))
+            {
+                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#0AFFF1"), Color.cyan, "模组特例");
+            }
+
+            if (transform.HasAncestorName($"@_{WorldHierarchyRootType.WorldLevelTriggersRoot}"))
+            {
+                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#FF8000"), Color.yellow, "世界特例");
+            }
+
+#endif
+        }
     }
 }
 

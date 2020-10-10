@@ -28,6 +28,22 @@ public class WorldModuleDesignHelper : MonoBehaviour
             GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
             ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxPrefab.name];
             worldModuleData.BoxMatrix[gp.x, gp.y, gp.z] = boxTypeIndex;
+
+            if (box.RequireSerializeFunctionIntoWorldModule)
+            {
+                Box.BoxExtraSerializeData data = box.GetBoxExtraSerializeDataForWorldModule();
+                data.LocalGP = gp;
+                worldModuleData.BoxExtraSerializeDataMatrix[gp.x, gp.y, gp.z] = data;
+            }
+        }
+
+        List<LevelTriggerBase> levelTriggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
+        foreach (LevelTriggerBase trigger in levelTriggers)
+        {
+            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(trigger.transform, 1);
+            trigger.TriggerData.LocalGP = gp;
+            trigger.TriggerData.LevelTriggerBelongsTo = LevelTriggerBase.LevelTriggerBelongsTo.WorldModule;
+            worldModuleData.WorldModuleLevelTriggerData.TriggerDataList.Add(trigger.TriggerData);
         }
 
         return worldModuleData;
@@ -88,9 +104,9 @@ public class WorldModuleDesignHelper : MonoBehaviour
 
     [HideInPlayMode]
     [HideInPrefabAssets]
-    [Button("所有箱子命名重置为Prefab名称", ButtonSizes.Large)]
+    [Button("一键整理", ButtonSizes.Large)]
     [GUIColor(0f, 1f, 0f)]
-    private void FormatAllBoxName_Editor()
+    private void SortModule()
     {
         WorldDesignHelper world = GetComponentInParent<WorldDesignHelper>();
         if (world)
@@ -99,6 +115,12 @@ public class WorldModuleDesignHelper : MonoBehaviour
             return;
         }
 
+        FormatAllBoxName_Editor();
+        ArrangeAllRoots();
+    }
+
+    private void FormatAllBoxName_Editor()
+    {
         List<Box> boxes = GetComponentsInChildren<Box>().ToList();
         foreach (Box box in boxes)
         {
@@ -106,5 +128,52 @@ public class WorldModuleDesignHelper : MonoBehaviour
             box.name = boxPrefab.name;
         }
     }
+
+    private Transform GetRoot(WorldModuleHierarchyRootType rootType)
+    {
+        Transform root = transform.Find($"@_{rootType}");
+        if (root) return root;
+        return transform;
+    }
+
+    private void ArrangeAllRoots()
+    {
+        foreach (WorldModuleHierarchyRootType rootType in Enum.GetValues(typeof(WorldModuleHierarchyRootType)))
+        {
+            Transform root = transform.Find("@_" + rootType);
+            if (root == null)
+            {
+                root = new GameObject("@_" + rootType).transform;
+                root.parent = transform;
+            }
+        }
+
+        List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
+        foreach (LevelTriggerBase trigger in triggers)
+        {
+            Transform root = GetRoot(WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot);
+            if (!trigger.transform.IsChildOf(root))
+            {
+                trigger.transform.parent = root;
+            }
+        }
+
+        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
+        foreach (Box box in boxes)
+        {
+            Transform boxesRoot = GetRoot(WorldModuleHierarchyRootType.BoxesRoot);
+            if (!box.transform.IsChildOf(boxesRoot))
+            {
+                box.transform.parent = boxesRoot;
+            }
+        }
+    }
+
 #endif
+}
+
+public enum WorldModuleHierarchyRootType
+{
+    BoxesRoot = 0,
+    WorldModuleLevelTriggersRoot = 1,
 }

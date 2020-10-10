@@ -1,4 +1,5 @@
-﻿using BiangStudio.GameDataFormat.Grid;
+﻿using System.Collections.Generic;
+using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
 using UnityEditor;
 using UnityEngine;
@@ -18,9 +19,28 @@ public class WorldModule : PoolObject
     public WorldDeadZoneTrigger WorldDeadZoneTrigger;
     public WorldWallCollider WorldWallCollider;
     public WorldGroundCollider WorldGroundCollider;
+    private List<LevelTriggerBase> WorldModuleLevelTriggers = new List<LevelTriggerBase>();
 
     [HideInInspector]
     public Box[,,] BoxMatrix = new Box[MODULE_SIZE, MODULE_SIZE, MODULE_SIZE];
+
+    #region Roots
+
+    private Transform WorldModuleBoxRoot;
+    private Transform WorldModuleTriggerRoot;
+    private Transform WorldModuleLevelTriggerRoot;
+
+    #endregion
+
+    void Awake()
+    {
+        WorldModuleBoxRoot = new GameObject("WorldModuleBoxRoot").transform;
+        WorldModuleBoxRoot.parent = transform;
+        WorldModuleTriggerRoot = new GameObject("WorldModuleTriggerRoot").transform;
+        WorldModuleTriggerRoot.parent = transform;
+        WorldModuleLevelTriggerRoot = new GameObject("WorldModuleLevelTriggerRoot").transform;
+        WorldModuleLevelTriggerRoot.parent = transform;
+    }
 
     public void Clear()
     {
@@ -46,30 +66,40 @@ public class WorldModule : PoolObject
         WorldGroundCollider = null;
     }
 
-    public void Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world)
+    public void Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, List<Box.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)
     {
         ModuleGP = moduleGP;
         World = world;
         WorldModuleData = worldModuleData;
         if (WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.DeadZone))
         {
-            WorldDeadZoneTrigger = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldDeadZoneTrigger].AllocateGameObject<WorldDeadZoneTrigger>(transform);
+            WorldDeadZoneTrigger = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldDeadZoneTrigger].AllocateGameObject<WorldDeadZoneTrigger>(WorldModuleTriggerRoot);
             WorldDeadZoneTrigger.name = $"{nameof(WorldDeadZoneTrigger)}_{ModuleGP}";
             WorldDeadZoneTrigger.Initialize(moduleGP);
         }
 
         if (WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Wall))
         {
-            WorldWallCollider = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldWallCollider].AllocateGameObject<WorldWallCollider>(transform);
+            WorldWallCollider = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldWallCollider].AllocateGameObject<WorldWallCollider>(WorldModuleTriggerRoot);
             WorldWallCollider.name = $"{nameof(WorldWallCollider)}_{ModuleGP}";
             WorldWallCollider.Initialize(moduleGP);
         }
 
         if (WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Ground))
         {
-            WorldGroundCollider = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldGroundCollider].AllocateGameObject<WorldGroundCollider>(transform);
+            WorldGroundCollider = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldGroundCollider].AllocateGameObject<WorldGroundCollider>(WorldModuleTriggerRoot);
             WorldGroundCollider.name = $"{nameof(WorldGroundCollider)}_{ModuleGP}";
             WorldGroundCollider.Initialize(moduleGP);
+        }
+
+        // Get world box extra serialize data
+        Box.BoxExtraSerializeData[,,] worldExtraSerializeDataForOneModule = new Box.BoxExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+        if (worldBoxExtraSerializeDataList != null)
+        {
+            foreach (Box.BoxExtraSerializeData worldBoxExtraData in worldBoxExtraSerializeDataList)
+            {
+                worldExtraSerializeDataForOneModule[worldBoxExtraData.LocalGP.x, worldBoxExtraData.LocalGP.y, worldBoxExtraData.LocalGP.z] = worldBoxExtraData;
+            }
         }
 
         for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
@@ -81,44 +111,61 @@ public class WorldModule : PoolObject
                     ushort boxTypeIndex = worldModuleData.BoxMatrix[x, y, z];
                     if (boxTypeIndex != 0)
                     {
-                        GenerateBox(boxTypeIndex, x, y, z);
+                        Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[x, y, z];
+                        Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = worldExtraSerializeDataForOneModule[x, y, z];
+                        GenerateBox(boxTypeIndex, x, y, z, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
                     }
                 }
             }
         }
+
+        foreach (LevelTriggerBase.Data triggerData in worldModuleData.WorldModuleLevelTriggerData.TriggerDataList)
+        {
+            LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[triggerData.LevelTriggerType].AllocateGameObject<LevelTriggerBase>(WorldModuleLevelTriggerRoot);
+            trigger.InitializeInWorldModule(triggerData.Clone());
+            WorldModuleLevelTriggers.Add(trigger);
+        }
     }
 
-    public void GenerateBox(ushort boxTypeIndex, GridPos3D localGP)
+    public Box GenerateBox(ushort boxTypeIndex, GridPos3D localGP, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
-        GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z);
+        return GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
     }
 
-    public void GenerateBox(ushort boxTypeIndex, int x, int y, int z)
+    public Box GenerateBox(ushort boxTypeIndex, int x, int y, int z, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
-        Box box = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);
-        string boxName = ConfigManager.GetBoxTypeName(boxTypeIndex);
-        GridPos3D gp = new GridPos3D(x, y, z);
-        box.Setup(boxTypeIndex);
-        box.Initialize(gp, this, 0, !IsAccessible, Box.LerpType.Create);
-        box.name = $"{boxName}_{gp}";
-        BoxMatrix[x, y, z] = box;
+        if (BoxMatrix[x, y, z] != null)
+        {
+            Debug.LogError($"世界模组{name}的局部坐标({x},{y},{z})位置处已存在Box,请检查世界Box是否重叠放置于该模组已有的Box位置处");
+            return null;
+        }
+        else
+        {
+            Box box = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(WorldModuleBoxRoot);
+            string boxName = ConfigManager.GetBoxTypeName(boxTypeIndex);
+            GridPos3D gp = new GridPos3D(x, y, z);
+            box.ApplyBoxExtraSerializeData(boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
+            box.Setup(boxTypeIndex);
+            box.Initialize(gp, this, 0, !IsAccessible, Box.LerpType.Create);
+            box.name = $"{boxName}_{gp}";
+            BoxMatrix[x, y, z] = box;
+            return box;
+        }
+    }
+
+    public GridPos3D WorldGPToLocalGP(GridPos3D worldGP)
+    {
+        return worldGP - ModuleGP * MODULE_SIZE;
+    }
+
+    public GridPos3D LocalGPToWorldGP(GridPos3D localGP)
+    {
+        return localGP + ModuleGP * MODULE_SIZE;
     }
 
     public bool IsAccessible => !WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.DeadZone)
                                 && !WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Wall)
                                 && !WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Ground);
-
-    void Start()
-    {
-    }
-
-    void Update()
-    {
-    }
-
-    public void ExportModuleData()
-    {
-    }
 
 #if UNITY_EDITOR
     void OnDrawGizmos()

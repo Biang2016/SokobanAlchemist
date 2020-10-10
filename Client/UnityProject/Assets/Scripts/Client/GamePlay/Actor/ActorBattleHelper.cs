@@ -192,7 +192,7 @@ public class ActorBattleHelper : ActorMonoHelper
 
     private void DropDieBox()
     {
-        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Actor.CurGP);
+        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Actor.CurWorldGP);
         if (module)
         {
             ushort boxIndex = ConfigManager.GetBoxTypeIndex(Actor.DieDropBoxTypeName);
@@ -201,8 +201,8 @@ public class ActorBattleHelper : ActorMonoHelper
             {
                 Box box = GameObjectPoolManager.Instance.BoxDict[boxIndex].AllocateGameObject<Box>(transform);
                 string boxName = Actor.DieDropBoxTypeName;
-                GridPos3D gp = Actor.CurGP;
-                GridPos3D localGP = gp - module.ModuleGP * WorldModule.MODULE_SIZE;
+                GridPos3D gp = Actor.CurWorldGP;
+                GridPos3D localGP = module.WorldGPToLocalGP(gp);
                 box.Setup(boxIndex);
                 box.Initialize(localGP, module, 0, false, Box.LerpType.DropFromDeadActor);
                 box.name = $"{boxName}_{gp}";

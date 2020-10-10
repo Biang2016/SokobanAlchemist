@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using BiangStudio.GameDataFormat.Grid;
@@ -41,6 +42,19 @@ public class WorldDesignHelper : MonoBehaviour
             GameObject worldModulePrefab = PrefabUtility.GetCorrespondingObjectFromSource(module.gameObject);
             ushort worldModuleTypeIndex = ConfigManager.WorldModuleTypeDefineDict.TypeIndexDict[worldModulePrefab.name];
             worldData.ModuleMatrix[gp.x, gp.y, gp.z] = worldModuleTypeIndex;
+
+            // Box ExtraSerializeData
+            List<Box> boxes = module.transform.GetComponentsInChildren<Box>().ToList();
+            foreach (Box box in boxes)
+            {
+                GridPos3D boxModuleGP = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
+                if (box.RequireSerializeFunctionIntoWorld)
+                {
+                    Box.BoxExtraSerializeData data = box.GetBoxExtraSerializeDataForWorld();
+                    data.LocalGP = boxModuleGP;
+                    worldData.ModuleBoxExtraSerializeDataMatrix[gp.x, gp.y, gp.z].Add(data);
+                }
+            }
         }
 
         worldData.WorldName = name;
@@ -67,8 +81,22 @@ public class WorldDesignHelper : MonoBehaviour
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(trigger.transform, 1);
             gp -= zeroPoint * WorldModule.MODULE_SIZE;
-            trigger.TriggerData.GridPos = gp;
+            trigger.TriggerData.WorldGP = gp;
+            trigger.TriggerData.LevelTriggerBelongsTo = LevelTriggerBase.LevelTriggerBelongsTo.World;
             worldData.WorldLevelTriggerData.TriggerDataList.Add(trigger.TriggerData);
+        }
+
+        List<Box> worldBoxes = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot).GetComponentsInChildren<Box>().ToList();
+        foreach (Box worldBox in worldBoxes)
+        {
+            Box.WorldSpecialBoxData worldSpecialBoxData = worldBox.GetBoxSerializeInWorldData();
+            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(worldBox.transform, 1);
+            gp -= zeroPoint * WorldModule.MODULE_SIZE;
+            GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(worldBox.gameObject);
+            ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxPrefab.name];
+            worldSpecialBoxData.WorldGP = gp;
+            worldSpecialBoxData.BoxTypeIndex = boxTypeIndex;
+            worldData.WorldSpecialBoxDataList.Add(worldSpecialBoxData);
         }
 
         return worldData;
@@ -76,8 +104,14 @@ public class WorldDesignHelper : MonoBehaviour
 
     [HideInPlayMode]
     [HideInPrefabAssets]
-    [Button("所有世界模组命名重置为Prefab名称", ButtonSizes.Large)]
-    [GUIColor(0f, 1f, 0f)]
+    [Button("一键整理", ButtonSizes.Large)]
+    [GUIColor(0f, 1f, 0)]
+    public void SortWorld()
+    {
+        FormatAllWorldModuleName_Editor();
+        ArrangeAllRoots();
+    }
+
     private void FormatAllWorldModuleName_Editor()
     {
         List<WorldModuleDesignHelper> modules = GetComponentsInChildren<WorldModuleDesignHelper>().ToList();
@@ -87,5 +121,123 @@ public class WorldDesignHelper : MonoBehaviour
             module.name = modulePrefab.name;
         }
     }
+
+    private Transform GetRoot(WorldHierarchyRootType rootType)
+    {
+        Transform root = transform.Find($"@_{rootType}");
+        if (root) return root;
+        return transform;
+    }
+
+    private void ArrangeAllRoots()
+    {
+        foreach (WorldHierarchyRootType rootType in Enum.GetValues(typeof(WorldHierarchyRootType)))
+        {
+            Transform root = transform.Find("@_" + rootType);
+            if (root == null)
+            {
+                root = new GameObject("@_" + rootType).transform;
+                root.parent = transform;
+            }
+        }
+
+        List<WorldModuleDesignHelper> modules = GetComponentsInChildren<WorldModuleDesignHelper>().ToList();
+        foreach (WorldModuleDesignHelper module in modules)
+        {
+            if (module.WorldModuleFeature.HasFlag(WorldModuleFeature.Wall))
+            {
+                Transform root = GetRoot(WorldHierarchyRootType.WallModulesRoot);
+                if (!module.transform.IsChildOf(root))
+                {
+                    module.transform.parent = root;
+                }
+            }
+            else if (module.WorldModuleFeature.HasFlag(WorldModuleFeature.DeadZone))
+            {
+                Transform root = GetRoot(WorldHierarchyRootType.DeadZoneModulesRoot);
+                if (!module.transform.IsChildOf(root))
+                {
+                    module.transform.parent = root;
+                }
+            }
+            else if (module.WorldModuleFeature.HasFlag(WorldModuleFeature.Ground))
+            {
+                Transform root = GetRoot(WorldHierarchyRootType.GroundModulesRoot);
+                if (!module.transform.IsChildOf(root))
+                {
+                    module.transform.parent = root;
+                }
+            }
+            else
+            {
+                Transform root = GetRoot(WorldHierarchyRootType.ModulesRoot);
+                if (!module.transform.IsChildOf(root))
+                {
+                    module.transform.parent = root;
+                }
+            }
+        }
+
+        List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
+        foreach (BornPointDesignHelper bornPoint in bornPoints)
+        {
+            Transform root = GetRoot(WorldHierarchyRootType.BornPointsRoot);
+            if (!bornPoint.transform.IsChildOf(root))
+            {
+                bornPoint.transform.parent = root;
+            }
+        }
+
+        List<WorldCameraPOI> pois = GetComponentsInChildren<WorldCameraPOI>().ToList();
+        foreach (WorldCameraPOI poi in pois)
+        {
+            Transform root = GetRoot(WorldHierarchyRootType.WorldCameraPOIsRoot);
+            if (!poi.transform.IsChildOf(root))
+            {
+                poi.transform.parent = root;
+            }
+        }
+
+        List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
+        foreach (LevelTriggerBase trigger in triggers)
+        {
+            Transform root = GetRoot(WorldHierarchyRootType.WorldLevelTriggersRoot);
+            if (!trigger.transform.IsChildOf(root))
+            {
+                trigger.transform.parent = root;
+            }
+        }
+
+        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
+        foreach (Box box in boxes)
+        {
+            Transform modulesRoot = GetRoot(WorldHierarchyRootType.ModulesRoot);
+            Transform wallModulesRoot = GetRoot(WorldHierarchyRootType.WallModulesRoot);
+            Transform deadZoneModulesRoot = GetRoot(WorldHierarchyRootType.DeadZoneModulesRoot);
+            Transform groundModulesRoot = GetRoot(WorldHierarchyRootType.GroundModulesRoot);
+            Transform worldSpecialBoxesRoot = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot);
+            if (!box.transform.IsChildOf(modulesRoot) &&
+                !box.transform.IsChildOf(wallModulesRoot) &&
+                !box.transform.IsChildOf(deadZoneModulesRoot) &&
+                !box.transform.IsChildOf(groundModulesRoot) &&
+                !box.transform.IsChildOf(worldSpecialBoxesRoot))
+            {
+                box.transform.parent = worldSpecialBoxesRoot;
+            }
+        }
+    }
+
 #endif
+}
+
+public enum WorldHierarchyRootType
+{
+    ModulesRoot = 0,
+    WallModulesRoot = 1,
+    DeadZoneModulesRoot = 2,
+    GroundModulesRoot = 3,
+    BornPointsRoot = 4,
+    WorldCameraPOIsRoot = 5,
+    WorldSpecialBoxesRoot = 6,
+    WorldLevelTriggersRoot = 7,
 }

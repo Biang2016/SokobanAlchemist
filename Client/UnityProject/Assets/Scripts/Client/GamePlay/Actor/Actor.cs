@@ -71,12 +71,12 @@ public class Actor : PoolObject
     [DisplayAsString]
     [LabelText("世界坐标")]
     [BoxGroup("战斗状态")]
-    public GridPos3D CurGP;
+    public GridPos3D CurWorldGP;
 
     [DisplayAsString]
     [LabelText("上帧世界坐标")]
     [BoxGroup("战斗状态")]
-    public GridPos3D LastGP;
+    public GridPos3D LastWorldGP;
 
     [LabelText("阵营")]
     [BoxGroup("战斗状态")]
@@ -314,8 +314,8 @@ public class Actor : PoolObject
         CurThrowMoveAttempt = Vector3.zero;
         CurThrowPointOffset = Vector3.zero;
         CurForward = Vector3.forward;
-        CurGP = GridPos3D.Zero;
-        LastGP = GridPos3D.Zero;
+        CurWorldGP = GridPos3D.Zero;
+        LastWorldGP = GridPos3D.Zero;
         MovementState = MovementStates.Static;
         PushState = PushStates.None;
         ThrowState = ThrowStates.None;
@@ -363,8 +363,8 @@ public class Actor : PoolObject
         ActorBattleHelper.Initialize(TotalLife, MaxHealth);
         ActorSkillHelper.Initialize();
 
-        CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
-        LastGP = CurGP;
+        CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+        LastWorldGP = CurWorldGP;
         ActorAIAgent.Start();
         GUID = GetGUID();
 
@@ -400,8 +400,8 @@ public class Actor : PoolObject
         if (!IsRecycled)
         {
             RigidBody.angularVelocity = Vector3.zero;
-            LastGP = CurGP;
-            CurGP = GridPos3D.GetGridPosByTrans(transform, 1);
+            LastWorldGP = CurWorldGP;
+            CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
         }
     }
 
@@ -435,12 +435,12 @@ public class Actor : PoolObject
 
         if (CurMoveAttempt.x.Equals(0))
         {
-            transform.position = new Vector3(CurGP.x, transform.position.y, transform.position.z);
+            transform.position = new Vector3(CurWorldGP.x, transform.position.y, transform.position.z);
         }
 
         if (CurMoveAttempt.z.Equals(0))
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, CurGP.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y, CurWorldGP.z);
         }
 
         LastMoveAttempt = CurMoveAttempt;
@@ -510,7 +510,7 @@ public class Actor : PoolObject
                     box.transform.parent = LiftBoxPivot.transform.parent;
                     box.transform.DOLocalMove(LiftBoxPivot.transform.localPosition, 0.2f).OnComplete(() =>
                     {
-                        if (box.Healable)
+                        if (box.Consumable)
                         {
                             box.State = Box.States.Static;
                             ThrowState = ThrowStates.None;
@@ -523,7 +523,7 @@ public class Actor : PoolObject
                         }
                     });
 
-                    if (box.Healable)
+                    if (box.Consumable)
                     {
                         ThrowState = ThrowStates.None;
                     }

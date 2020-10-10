@@ -310,14 +310,14 @@ public class ActorPathFinding
                 if (occupation[offset.x + radius, offset.z + radius]) return;
                 foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
                 {
-                    if (enemy.CurGP == gp)
+                    if (enemy.CurWorldGP == gp)
                     {
                         return;
                     }
                 }
 
-                if (BattleManager.Instance.Player1.CurGP == gp) return;
-                if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.CurGP == gp) return;
+                if (BattleManager.Instance.Player1.CurWorldGP == gp) return;
+                if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.CurWorldGP == gp) return;
 
                 Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gp, out WorldModule module, out GridPos3D _);
                 if (module != null && box == null)

@@ -16,10 +16,21 @@ public class World : PoolObject
     public WorldModule[,,] DeadZoneWorldModuleMatrix = new WorldModule[WORLD_SIZE + 2, WORLD_HEIGHT + 2, WORLD_SIZE + 2];
 
     private List<WorldCameraPOI> POIs = new List<WorldCameraPOI>();
-    private List<LevelTriggerBase> LevelTriggers = new List<LevelTriggerBase>();
+    private List<LevelTriggerBase> WorldLevelTriggers = new List<LevelTriggerBase>();
+
+    #region Root
+
+    private Transform WorldModuleRoot;
+    private Transform DeadZoneModuleRoot;
+    private Transform WorldCameraPOIRoot;
+    private Transform WorldLevelTriggerRoot;
+
+    #endregion
 
     void Awake()
     {
+        WorldModuleRoot = new GameObject("WorldModuleRoot").transform;
+        WorldModuleRoot.parent = transform;
         DeadZoneModuleRoot = new GameObject("DeadZoneModuleRoot").transform;
         DeadZoneModuleRoot.parent = transform;
         WorldCameraPOIRoot = new GameObject("WorldCameraPOIRoot").transform;
@@ -27,10 +38,6 @@ public class World : PoolObject
         WorldLevelTriggerRoot = new GameObject("WorldLevelTriggerRoot").transform;
         WorldLevelTriggerRoot.parent = transform;
     }
-
-    private Transform DeadZoneModuleRoot;
-    private Transform WorldCameraPOIRoot;
-    private Transform WorldLevelTriggerRoot;
 
     public void Clear()
     {
@@ -65,7 +72,7 @@ public class World : PoolObject
             poi.PoolRecycle();
         }
 
-        foreach (LevelTriggerBase trigger in LevelTriggers)
+        foreach (LevelTriggerBase trigger in WorldLevelTriggers)
         {
             trigger.PoolRecycle();
         }
@@ -86,7 +93,7 @@ public class World : PoolObject
                     ushort worldModuleTypeIndex = worldData.ModuleMatrix[x, y, z];
                     if (worldModuleTypeIndex != 0)
                     {
-                        GenerateWorldModule(worldModuleTypeIndex, x, y, z);
+                        GenerateWorldModule(worldModuleTypeIndex, x, y, z, worldData.ModuleBoxExtraSerializeDataMatrix[x, y, z]);
                     }
                 }
             }
@@ -189,7 +196,7 @@ public class World : PoolObject
 
         #endregion
 
-        foreach (GridPos3D gp in WorldManager.Instance.CurrentWorld.WorldData.WorldCameraPOIData.POIs)
+        foreach (GridPos3D gp in WorldData.WorldCameraPOIData.POIs)
         {
             WorldCameraPOI poi = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldCameraPOI].AllocateGameObject<WorldCameraPOI>(WorldCameraPOIRoot);
             GridPos3D.ApplyGridPosToLocalTrans(gp, poi.transform, 1);
@@ -197,20 +204,31 @@ public class World : PoolObject
             ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnWorldCameraPOILoaded, poi);
         }
 
-        foreach (LevelTriggerBase.Data triggerData in WorldManager.Instance.CurrentWorld.WorldData.WorldLevelTriggerData.TriggerDataList)
+        foreach (LevelTriggerBase.Data triggerData in WorldData.WorldLevelTriggerData.TriggerDataList)
         {
             LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[triggerData.LevelTriggerType].AllocateGameObject<LevelTriggerBase>(WorldLevelTriggerRoot);
-            trigger.Initialize(triggerData);
-            LevelTriggers.Add(trigger);
+            trigger.InitializeInWorld(triggerData.Clone());
+            WorldLevelTriggers.Add(trigger);
+        }
+
+        foreach (Box.WorldSpecialBoxData worldSpecialBoxData in WorldData.WorldSpecialBoxDataList)
+        {
+            GridPos3D worldGP = worldSpecialBoxData.WorldGP;
+            WorldModule module = GetModuleByGridPosition(worldGP);
+            if (module != null)
+            {
+                module.GenerateBox(worldSpecialBoxData.BoxTypeIndex, module.WorldGPToLocalGP(worldGP), null, worldSpecialBoxData.BoxExtraSerializeDataFromWorld);
+            }
         }
     }
 
-    private void GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z)
+    private void GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, List<Box.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)
     {
         bool isDeadModule = worldModuleTypeIndex == WorldManager.DeadZoneIndex;
         if (isDeadModule && DeadZoneWorldModuleMatrix[x + 1, y + 1, z + 1] != null) return;
-        WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(isDeadModule ? DeadZoneModuleRoot : transform);
+        WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(isDeadModule ? DeadZoneModuleRoot : WorldModuleRoot);
         WorldModuleData data = ConfigManager.GetWorldModuleDataConfig(worldModuleTypeIndex);
+
         wm.name = $"WM_{data.WorldModuleTypeName}({x}, {y}, {z})";
         if (isDeadModule)
         {
@@ -223,7 +241,7 @@ public class World : PoolObject
 
         GridPos3D gp = new GridPos3D(x, y, z);
         GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);
-        wm.Initialize(data, gp, this);
+        wm.Initialize(data, gp, this, worldBoxExtraSerializeDataList);
     }
 
     #region MoveBox Calculators
@@ -233,7 +251,7 @@ public class World : PoolObject
         module = GetModuleByGridPosition(gp, ignoreUnaccessibleModule);
         if (module != null && (!ignoreUnaccessibleModule || module.IsAccessible))
         {
-            localGP = gp - module.ModuleGP * WorldModule.MODULE_SIZE;
+            localGP = module.WorldGPToLocalGP(gp);
             return module.BoxMatrix[localGP.x, localGP.y, localGP.z];
         }
         else
@@ -281,7 +299,7 @@ public class World : PoolObject
         if (box.WorldModule)
         {
             WorldModule module = box.WorldModule;
-            GridPos3D localGridPos3D = box.LocalGridPos3D;
+            GridPos3D localGridPos3D = box.LocalGP;
             if (module.BoxMatrix[localGridPos3D.x, localGridPos3D.y, localGridPos3D.z] == box)
             {
                 module.BoxMatrix[localGridPos3D.x, localGridPos3D.y, localGridPos3D.z] = null;
@@ -321,7 +339,7 @@ public class World : PoolObject
             WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(worldGP);
             if (module != null)
             {
-                GridPos3D localGP = worldGP - module.ModuleGP * WorldModule.MODULE_SIZE;
+                GridPos3D localGP = module.WorldGPToLocalGP(worldGP);
                 Box existBox = module.BoxMatrix[localGP.x, localGP.y, localGP.z];
                 if (existBox == null)
                 {
@@ -374,14 +392,14 @@ public class World : PoolObject
         if (box && box.Droppable)
         {
             WorldModule module = box.WorldModule;
-            GridPos3D localGridPos3D = box.LocalGridPos3D;
+            GridPos3D localGridPos3D = box.LocalGP;
             if (localGridPos3D.y > 0)
             {
                 Box boxBeneath = module.BoxMatrix[localGridPos3D.x, localGridPos3D.y - 1, localGridPos3D.z];
                 if (boxBeneath == null)
                 {
                     GridPos3D localGP = new GridPos3D(localGridPos3D.x, localGridPos3D.y - 1, localGridPos3D.z);
-                    box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
+                    box.WorldModule.BoxMatrix[box.LocalGP.x, box.LocalGP.y, box.LocalGP.z] = null;
                     module.BoxMatrix[localGridPos3D.x, localGridPos3D.y - 1, localGridPos3D.z] = box;
                     CheckDropAbove(box);
                     box.Initialize(localGP, module, 0.1f, box.ArtOnly, Box.LerpType.Drop);
@@ -398,7 +416,7 @@ public class World : PoolObject
                         if (boxBeneath == null)
                         {
                             GridPos3D localGP = new GridPos3D(localGridPos3D.x, WorldModule.MODULE_SIZE - 1, localGridPos3D.z);
-                            box.WorldModule.BoxMatrix[box.LocalGridPos3D.x, box.LocalGridPos3D.y, box.LocalGridPos3D.z] = null;
+                            box.WorldModule.BoxMatrix[box.LocalGP.x, box.LocalGP.y, box.LocalGP.z] = null;
                             moduleBeneath.BoxMatrix[localGridPos3D.x, WorldModule.MODULE_SIZE - 1, localGridPos3D.z] = box;
                             CheckDropAbove(box);
                             box.Initialize(localGP, moduleBeneath, 0.3f, box.ArtOnly, Box.LerpType.Drop);
@@ -412,7 +430,7 @@ public class World : PoolObject
     public void CheckDropAbove(Box box)
     {
         WorldModule module = box.WorldModule;
-        GridPos3D localGridPos3D = box.LocalGridPos3D;
+        GridPos3D localGridPos3D = box.LocalGP;
         if (localGridPos3D.y < WorldModule.MODULE_SIZE - 1)
         {
             Box boxAbove = module.BoxMatrix[localGridPos3D.x, localGridPos3D.y + 1, localGridPos3D.z];

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using Sirenix.OdinInspector;
 
 public class BoxSkinHelper : MonoBehaviour, IBoxHelper
 {
@@ -31,6 +31,18 @@ public class BoxSkinHelper : MonoBehaviour, IBoxHelper
                 }
             }
         }
+    }
+
+    [Button("预览变圆")]
+    private void SwitchToRound()
+    {
+        SwitchModel(BoxModelType.Rounded);
+    }
+
+    [Button("预览变方")]
+    private void SwitchToBox()
+    {
+        SwitchModel(BoxModelType.Box);
     }
 
     public enum BoxModelType

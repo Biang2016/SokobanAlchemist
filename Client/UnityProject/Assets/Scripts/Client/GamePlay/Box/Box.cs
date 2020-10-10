@@ -6,6 +6,8 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using System.Collections.Generic;
+using BiangStudio;
+using BiangStudio.CloneVariant;
 using Sirenix.Serialization;
 using UnityEngine.Serialization;
 #if UNITY_EDITOR
@@ -42,6 +44,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     internal BoxEffectHelper BoxEffectHelper;
     public BoxThornTrapTriggerHelper BoxThornTrapTriggerHelper;
     public BoxSkinHelper BoxSkinHelper;
+    public BoxIconSpriteHelper BoxIconSpriteHelper;
 
     internal bool ArtOnly;
 
@@ -56,12 +59,14 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         ArtOnly = true;
         WorldModule = null;
-        GridPos3D = GridPos3D.Zero;
-        lastGP = GridPos3D.Zero;
+        WorldGP = GridPos3D.Zero;
+        lastWorldGP = GridPos3D.Zero;
         LastState = States.Static;
         State = States.Static;
         BoxEffectHelper?.PoolRecycle();
         BoxThornTrapTriggerHelper?.PoolRecycle();
+        BoxSkinHelper?.PoolRecycle();
+        BoxIconSpriteHelper?.PoolRecycle();
         BoxEffectHelper = null;
         transform.DOPause();
         StaticCollider.enabled = false;
@@ -170,13 +175,13 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         BoxFunctions = SerializationUtility.DeserializeValue<List<BoxFunctionBase>>(BoxFunctionBaseData, DataFormat.JSON);
     }
 
-    private GridPos3D lastGP;
+    private GridPos3D lastWorldGP;
 
     [HideInEditorMode]
-    public GridPos3D GridPos3D;
+    public GridPos3D WorldGP;
 
     [HideInEditorMode]
-    public GridPos3D LocalGridPos3D;
+    public GridPos3D LocalGP;
 
     [HideInEditorMode]
     public WorldModule WorldModule;
@@ -309,10 +314,10 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         }
 
         LastTouchActor = null;
-        lastGP = GridPos3D;
+        lastWorldGP = WorldGP;
         WorldModule = module;
-        GridPos3D = localGridPos3D + module.ModuleGP * WorldModule.MODULE_SIZE;
-        LocalGridPos3D = localGridPos3D;
+        WorldGP = module.LocalGPToWorldGP(localGridPos3D);
+        LocalGP = localGridPos3D;
         transform.parent = module.transform;
         if (lerpTime > 0)
         {
@@ -387,11 +392,11 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         if (State == States.Static || State == States.PushingCanceling)
         {
-            Vector3 targetPos = GridPos3D.ToVector3() + direction.normalized;
+            Vector3 targetPos = WorldGP.ToVector3() + direction.normalized;
             GridPos3D gp = GridPos3D.GetGridPosByPoint(targetPos, 1);
-            if (gp != GridPos3D)
+            if (gp != WorldGP)
             {
-                WorldManager.Instance.CurrentWorld.MoveBox(GridPos3D, gp, States.BeingPushed);
+                WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, gp, States.BeingPushed);
             }
         }
     }
@@ -400,9 +405,9 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         if (State == States.BeingPushed)
         {
-            if ((transform.localPosition - LocalGridPos3D.ToVector3()).magnitude > (1 - Static_Inertia))
+            if ((transform.localPosition - LocalGP.ToVector3()).magnitude > (1 - Static_Inertia))
             {
-                WorldManager.Instance.CurrentWorld.MoveBox(GridPos3D, lastGP, States.PushingCanceling);
+                WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, lastWorldGP, States.PushingCanceling);
             }
         }
     }
@@ -717,6 +722,18 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         {
             Gizmos.color = new Color(0.2f, 0.2f, 0.2f, 0.1f);
             Gizmos.DrawCube(transform.position, Vector3.one);
+
+#if UNITY_EDITOR
+            if (RequireSerializeFunctionIntoWorldModule)
+            {
+                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#0AFFF1"), Color.cyan, "模组特例");
+            }
+
+            if (RequireSerializeFunctionIntoWorld || transform.HasAncestorName($"@_{WorldHierarchyRootType.WorldSpecialBoxesRoot}"))
+            {
+                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#FF8000"), Color.yellow, "世界特例");
+            }
+#endif
         }
     }
 
@@ -760,6 +777,178 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
 #endif
 
+    #region ExtraSerialize
+
+    #region BoxSerializeInWorldData
+
+    public class WorldSpecialBoxData : IClone<WorldSpecialBoxData>
+    {
+        public GridPos3D WorldGP;
+        public ushort BoxTypeIndex;
+        public BoxExtraSerializeData BoxExtraSerializeDataFromWorld; // 序列化到世界中的Box自己处理自己的ExtraData
+
+        public WorldSpecialBoxData Clone()
+        {
+            WorldSpecialBoxData newData = new WorldSpecialBoxData();
+            newData.WorldGP = WorldGP;
+            newData.BoxTypeIndex = BoxTypeIndex;
+            newData.BoxExtraSerializeDataFromWorld = BoxExtraSerializeDataFromWorld.Clone();
+            return newData;
+        }
+    }
+
+    public WorldSpecialBoxData GetBoxSerializeInWorldData()
+    {
+        WorldSpecialBoxData data = new WorldSpecialBoxData();
+        data.BoxExtraSerializeDataFromWorld = GetBoxExtraSerializeDataForWorld();
+        return data;
+    }
+
+    #endregion
+
+    #region BoxExtraData
+
+    public bool RequireSerializeFunctionIntoWorld
+    {
+        get
+        {
+            foreach (BoxFunctionBase bf in BoxFunctions)
+            {
+                if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    public bool RequireSerializeFunctionIntoWorldModule
+    {
+        get
+        {
+            foreach (BoxFunctionBase bf in BoxFunctions)
+            {
+                if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    public class BoxExtraSerializeData : IClone<BoxExtraSerializeData>
+    {
+        public GridPos3D LocalGP; // Box在Module内的GP
+        public List<BoxFunctionBase> BoxFunctions = new List<BoxFunctionBase>();
+
+        public BoxExtraSerializeData Clone()
+        {
+            return new BoxExtraSerializeData
+            {
+                LocalGP = LocalGP,
+                BoxFunctions = BoxFunctions.Clone()
+            };
+        }
+    }
+
+    public BoxExtraSerializeData GetBoxExtraSerializeDataForWorld()
+    {
+        BoxExtraSerializeData data = new BoxExtraSerializeData();
+        data.BoxFunctions = new List<BoxFunctionBase>();
+        foreach (BoxFunctionBase bf in BoxFunctions)
+        {
+            if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
+            {
+                data.BoxFunctions.Add(bf.Clone());
+            }
+        }
+
+        return data;
+    }
+
+    public BoxExtraSerializeData GetBoxExtraSerializeDataForWorldModule()
+    {
+        BoxExtraSerializeData data = new BoxExtraSerializeData();
+        data.BoxFunctions = new List<BoxFunctionBase>();
+        foreach (BoxFunctionBase bf in BoxFunctions)
+        {
+            if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module)
+            {
+                data.BoxFunctions.Add(bf.Clone());
+            }
+        }
+
+        return data;
+    }
+
+    public void ApplyBoxExtraSerializeData(BoxExtraSerializeData boxExtraSerializeDataFromModule = null, BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    {
+        if (boxExtraSerializeDataFromModule != null)
+        {
+            List<BoxFunctionBase> newFunctionList = new List<BoxFunctionBase>();
+            foreach (BoxFunctionBase extraBF in boxExtraSerializeDataFromModule.BoxFunctions)
+            {
+                bool foundMatch = false;
+                foreach (BoxFunctionBase bf in BoxFunctions)
+                {
+                    if (bf.GetType() == extraBF.GetType())
+                    {
+                        foundMatch = true;
+                        bf.ApplyData(extraBF);
+                    }
+                }
+
+                if (!foundMatch)
+                {
+                    newFunctionList.Add(extraBF.Clone());
+                }
+            }
+
+            foreach (BoxFunctionBase newFunction in newFunctionList)
+            {
+                newFunction.Box = this;
+                BoxFunctions.Add(newFunction);
+            }
+        }
+
+        // world box extra data has higher priority
+        if (boxExtraSerializeDataFromWorld != null)
+        {
+            List<BoxFunctionBase> newFunctionList = new List<BoxFunctionBase>();
+            foreach (BoxFunctionBase extraBF in boxExtraSerializeDataFromWorld.BoxFunctions)
+            {
+                bool foundMatch = false;
+                foreach (BoxFunctionBase bf in BoxFunctions)
+                {
+                    if (bf.GetType() == extraBF.GetType())
+                    {
+                        foundMatch = true;
+                        bf.ApplyData(extraBF);
+                    }
+                }
+
+                if (!foundMatch)
+                {
+                    newFunctionList.Add(extraBF.Clone());
+                }
+            }
+
+            foreach (BoxFunctionBase newFunction in newFunctionList)
+            {
+                newFunction.Box = this;
+                BoxFunctions.Add(newFunction);
+            }
+        }
+    }
+
+    #endregion
+
+    #endregion
+
     public bool Pushable => BoxFeature.HasFlag(BoxFeature.Pushable);
 
     public bool Kickable => BoxFeature.HasFlag(BoxFeature.Kickable);
@@ -778,7 +967,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     public bool Breakable => BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable) || BoxFeature.HasFlag(BoxFeature.KickHitBreakable);
 
-    public bool Healable => BoxFeature.HasFlag(BoxFeature.HealingBox);
+    public bool Consumable => BoxFeature.HasFlag(BoxFeature.LiftThenDisappear);
 
     #region Utils
 
@@ -839,6 +1028,6 @@ public enum BoxFeature
     [LabelText("地面")]
     IsGround = 1 << 10,
 
-    [LabelText("补血")]
-    HealingBox = 1 << 11,
+    [LabelText("举起就消失")]
+    LiftThenDisappear = 1 << 11,
 }

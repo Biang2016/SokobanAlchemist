@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BiangStudio.CloneVariant;
 using Sirenix.OdinInspector;
 
@@ -16,6 +17,8 @@ public class WorldModuleData : IClone<WorldModuleData>
     /// 模组上下层叠，底部模组Y为0，顶部Y为15
     /// </summary>
     public ushort[,,] BoxMatrix = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+    public WorldModuleLevelTriggerData WorldModuleLevelTriggerData = new WorldModuleLevelTriggerData();
+    public Box.BoxExtraSerializeData[,,] BoxExtraSerializeDataMatrix = new Box.BoxExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
 
     public WorldModuleData Clone()
     {
@@ -23,6 +26,7 @@ public class WorldModuleData : IClone<WorldModuleData>
         data.WorldModuleTypeIndex = WorldModuleTypeIndex;
         data.WorldModuleTypeName = WorldModuleTypeName;
         data.WorldModuleFeature = WorldModuleFeature;
+        data.WorldModuleLevelTriggerData = WorldModuleLevelTriggerData.Clone();
         for (int x = 0; x < BoxMatrix.GetLength(0); x++)
         {
             for (int y = 0; y < BoxMatrix.GetLength(1); y++)
@@ -30,6 +34,10 @@ public class WorldModuleData : IClone<WorldModuleData>
                 for (int z = 0; z < BoxMatrix.GetLength(2); z++)
                 {
                     data.BoxMatrix[x, y, z] = BoxMatrix[x, y, z];
+                    if (BoxExtraSerializeDataMatrix[x, y, z] != null)
+                    {
+                        data.BoxExtraSerializeDataMatrix[x, y, z] = BoxExtraSerializeDataMatrix[x, y, z].Clone();
+                    }
                 }
             }
         }
