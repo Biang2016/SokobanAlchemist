@@ -62,30 +62,40 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
 
     private void LoadActors()
     {
-        foreach (BornPointData bpd in WorldManager.Instance.CurrentWorld.WorldData.WorldActorData.BornPoints)
-        {
-            if (bpd.BornPointType == BornPointType.Player)
-            {
-                PlayerActor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
-                GridPos3D.ApplyGridPosToLocalTrans(bpd.GridPos3D, player.transform, 1);
-                player.Initialize(bpd.PlayerNumber);
-                BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
-                MainPlayers[(int) bpd.PlayerNumber] = player;
-                AddActor(player);
-            }
+        CameraManager.Instance.FieldCamera.InitFocus();
+    }
 
-            if (bpd.BornPointType == BornPointType.Enemy)
-            {
-                ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.EnemyName);
-                EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
-                GridPos3D.ApplyGridPosToLocalTrans(bpd.GridPos3D, enemy.transform, 1);
-                enemy.Initialize();
-                Enemies.Add(enemy);
-                AddActor(enemy);
-            }
+    public void CreateActorsByBornPointGroupData(BornPointGroupData dataGroup, WorldModule parentModule = null)
+    {
+        foreach (BornPointData bpd in dataGroup.BornPoints)
+        {
+            CreateActorByBornPointData(bpd, parentModule);
+        }
+    }
+
+    private void CreateActorByBornPointData(BornPointData bpd, WorldModule parentModule = null)
+    {
+        if (bpd.BornPointType == BornPointType.Player)
+        {
+            PlayerActor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
+            GridPos3D worldGP = parentModule ? parentModule.LocalGPToWorldGP(bpd.LocalGP) : bpd.WorldGP;
+            GridPos3D.ApplyGridPosToLocalTrans(worldGP, player.transform, 1);
+            player.Initialize(bpd.PlayerNumber);
+            BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
+            MainPlayers[(int) bpd.PlayerNumber] = player;
+            AddActor(player);
         }
 
-        CameraManager.Instance.FieldCamera.InitFocus();
+        if (bpd.BornPointType == BornPointType.Enemy)
+        {
+            ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.EnemyName);
+            EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
+            GridPos3D worldGP = parentModule ? parentModule.LocalGPToWorldGP(bpd.LocalGP) : bpd.WorldGP;
+            GridPos3D.ApplyGridPosToLocalTrans(worldGP, enemy.transform, 1);
+            enemy.Initialize();
+            Enemies.Add(enemy);
+            AddActor(enemy);
+        }
     }
 
     private void AddActor(Actor actor)

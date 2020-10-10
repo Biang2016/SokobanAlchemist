@@ -204,10 +204,10 @@ public class World : PoolObject
             ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnWorldCameraPOILoaded, poi);
         }
 
-        foreach (LevelTriggerBase.Data triggerData in WorldData.WorldLevelTriggerData.TriggerDataList)
+        foreach (LevelTriggerBase.Data triggerData in WorldData.WorldLevelTriggerGroupData.TriggerDataList)
         {
             LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[triggerData.LevelTriggerType].AllocateGameObject<LevelTriggerBase>(WorldLevelTriggerRoot);
-            trigger.InitializeInWorld(triggerData.Clone());
+            trigger.InitializeInWorld((LevelTriggerBase.Data) triggerData.Clone());
             WorldLevelTriggers.Add(trigger);
         }
 
@@ -218,6 +218,18 @@ public class World : PoolObject
             if (module != null)
             {
                 module.GenerateBox(worldSpecialBoxData.BoxTypeIndex, module.WorldGPToLocalGP(worldGP), null, worldSpecialBoxData.BoxExtraSerializeDataFromWorld);
+            }
+        }
+
+        BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData);
+        for (int x = 0; x < worldData.ModuleMatrix.GetLength(0); x++)
+        {
+            for (int y = 0; y < worldData.ModuleMatrix.GetLength(1); y++)
+            {
+                for (int z = 0; z < worldData.ModuleMatrix.GetLength(2); z++)
+                {
+                    WorldModuleMatrix[x, y, z]?.CreateActorFromWorldModuleData();
+                }
             }
         }
     }

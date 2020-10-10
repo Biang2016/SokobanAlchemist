@@ -17,9 +17,10 @@ public class BornPointDesignHelper : MonoBehaviour
     private void FormatAllName_Editor()
     {
         WorldDesignHelper world = GetComponentInParent<WorldDesignHelper>();
-        if (!world)
+        WorldModuleDesignHelper module = GetComponentInParent<WorldModuleDesignHelper>();
+        if (world && module)
         {
-            Debug.LogError("此功能只能在世界编辑器中使用");
+            Debug.LogError("无法重命名模组内的BornPoint");
             return;
         }
 

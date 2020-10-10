@@ -119,12 +119,17 @@ public class WorldModule : PoolObject
             }
         }
 
-        foreach (LevelTriggerBase.Data triggerData in worldModuleData.WorldModuleLevelTriggerData.TriggerDataList)
+        foreach (LevelTriggerBase.Data triggerData in worldModuleData.WorldModuleLevelTriggerGroupData.TriggerDataList)
         {
             LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[triggerData.LevelTriggerType].AllocateGameObject<LevelTriggerBase>(WorldModuleLevelTriggerRoot);
-            trigger.InitializeInWorldModule(triggerData.Clone());
+            trigger.InitializeInWorldModule((LevelTriggerBase.Data) triggerData.Clone());
             WorldModuleLevelTriggers.Add(trigger);
         }
+    }
+
+    public void CreateActorFromWorldModuleData()
+    {
+        BattleManager.Instance.CreateActorsByBornPointGroupData(WorldModuleData.WorldModuleBornPointGroupData, this);
     }
 
     public Box GenerateBox(ushort boxTypeIndex, GridPos3D localGP, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)

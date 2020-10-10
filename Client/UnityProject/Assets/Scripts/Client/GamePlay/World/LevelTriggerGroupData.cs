@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using BiangStudio.CloneVariant;
 
-public class WorldModuleLevelTriggerData : IClone<WorldModuleLevelTriggerData>
+public class LevelTriggerGroupData : IClone<LevelTriggerGroupData>
 {
     public List<LevelTriggerBase.Data> TriggerDataList = new List<LevelTriggerBase.Data>();
 
-    public WorldModuleLevelTriggerData Clone()
+    public LevelTriggerGroupData Clone()
     {
-        WorldModuleLevelTriggerData newData = new WorldModuleLevelTriggerData();
+        LevelTriggerGroupData newData = new LevelTriggerGroupData();
         newData.TriggerDataList = TriggerDataList.Clone();
         return newData;
     }

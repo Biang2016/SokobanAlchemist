@@ -14,9 +14,9 @@ public class WorldData : IClone<WorldData>
     /// </summary>
     public ushort[,,] ModuleMatrix = new ushort[World.WORLD_SIZE, World.WORLD_HEIGHT, World.WORLD_SIZE];
 
-    public WorldActorData WorldActorData = new WorldActorData();
+    public BornPointGroupData WorldBornPointGroupData = new BornPointGroupData();
     public WorldCameraPOIData WorldCameraPOIData = new WorldCameraPOIData();
-    public WorldLevelTriggerData WorldLevelTriggerData = new WorldLevelTriggerData();
+    public LevelTriggerGroupData WorldLevelTriggerGroupData = new LevelTriggerGroupData();
     public List<Box.WorldSpecialBoxData> WorldSpecialBoxDataList = new List<Box.WorldSpecialBoxData>();
     public List<Box.BoxExtraSerializeData>[,,] ModuleBoxExtraSerializeDataMatrix = new List<Box.BoxExtraSerializeData>[World.WORLD_SIZE, World.WORLD_HEIGHT, World.WORLD_SIZE];
 
@@ -51,9 +51,9 @@ public class WorldData : IClone<WorldData>
             }
         }
 
-        data.WorldActorData = WorldActorData.Clone();
+        data.WorldBornPointGroupData = WorldBornPointGroupData.Clone();
         data.WorldCameraPOIData = WorldCameraPOIData.Clone();
-        data.WorldLevelTriggerData = WorldLevelTriggerData.Clone();
+        data.WorldLevelTriggerGroupData = WorldLevelTriggerGroupData.Clone();
         data.WorldSpecialBoxDataList = WorldSpecialBoxDataList.Clone();
         return data;
     }

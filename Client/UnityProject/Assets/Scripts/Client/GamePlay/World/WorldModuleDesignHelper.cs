@@ -40,10 +40,21 @@ public class WorldModuleDesignHelper : MonoBehaviour
         List<LevelTriggerBase> levelTriggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
         foreach (LevelTriggerBase trigger in levelTriggers)
         {
+            LevelTriggerBase.Data data = (LevelTriggerBase.Data) trigger.TriggerData.Clone();
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(trigger.transform, 1);
-            trigger.TriggerData.LocalGP = gp;
-            trigger.TriggerData.LevelTriggerBelongsTo = LevelTriggerBase.LevelTriggerBelongsTo.WorldModule;
-            worldModuleData.WorldModuleLevelTriggerData.TriggerDataList.Add(trigger.TriggerData);
+            data.LocalGP = gp;
+            data.LevelComponentBelongsTo = LevelComponentBelongsTo.WorldModule;
+            worldModuleData.WorldModuleLevelTriggerGroupData.TriggerDataList.Add(data);
+        }
+
+        List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
+        foreach (BornPointDesignHelper bp in bornPoints)
+        {
+            BornPointData data = (BornPointData) bp.BornPointData.Clone();
+            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(bp.transform, 1);
+            data.LocalGP = gp;
+            data.LevelComponentBelongsTo = LevelComponentBelongsTo.WorldModule;
+            worldModuleData.WorldModuleBornPointGroupData.BornPoints.Add(data);
         }
 
         return worldModuleData;
@@ -158,6 +169,16 @@ public class WorldModuleDesignHelper : MonoBehaviour
             }
         }
 
+        List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
+        foreach (BornPointDesignHelper bornPoint in bornPoints)
+        {
+            Transform root = GetRoot(WorldModuleHierarchyRootType.WorldModuleBornPointsRoot);
+            if (!bornPoint.transform.IsChildOf(root))
+            {
+                bornPoint.transform.parent = root;
+            }
+        }
+
         List<Box> boxes = GetComponentsInChildren<Box>().ToList();
         foreach (Box box in boxes)
         {
@@ -176,4 +197,5 @@ public enum WorldModuleHierarchyRootType
 {
     BoxesRoot = 0,
     WorldModuleLevelTriggersRoot = 1,
+    WorldModuleBornPointsRoot = 2,
 }

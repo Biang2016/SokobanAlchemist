@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using BiangStudio;
 using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 #if UNITY_EDITOR
@@ -62,10 +63,13 @@ public class WorldDesignHelper : MonoBehaviour
         List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
         foreach (BornPointDesignHelper bp in bornPoints)
         {
+            if (bp.transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleBornPointsRoot}")) continue;
+            BornPointData data = (BornPointData) bp.BornPointData.Clone();
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(bp.transform, 1);
             gp -= zeroPoint * WorldModule.MODULE_SIZE;
-            bp.BornPointData.GridPos3D = gp;
-            worldData.WorldActorData.BornPoints.Add(bp.BornPointData);
+            data.WorldGP = gp;
+            data.LevelComponentBelongsTo = LevelComponentBelongsTo.World;
+            worldData.WorldBornPointGroupData.BornPoints.Add(data);
         }
 
         List<WorldCameraPOI> cameraPOIs = GetComponentsInChildren<WorldCameraPOI>().ToList();
@@ -79,11 +83,15 @@ public class WorldDesignHelper : MonoBehaviour
         List<LevelTriggerBase> levelTriggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
         foreach (LevelTriggerBase trigger in levelTriggers)
         {
+            if (trigger.transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot}")) continue;
+            WorldModuleDesignHelper module = trigger.transform.GetComponentInParent<WorldModuleDesignHelper>();
+            if (module) continue;
+            LevelTriggerBase.Data data = (LevelTriggerBase.Data) trigger.TriggerData.Clone();
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(trigger.transform, 1);
             gp -= zeroPoint * WorldModule.MODULE_SIZE;
-            trigger.TriggerData.WorldGP = gp;
-            trigger.TriggerData.LevelTriggerBelongsTo = LevelTriggerBase.LevelTriggerBelongsTo.World;
-            worldData.WorldLevelTriggerData.TriggerDataList.Add(trigger.TriggerData);
+            data.WorldGP = gp;
+            data.LevelComponentBelongsTo = LevelComponentBelongsTo.World;
+            worldData.WorldLevelTriggerGroupData.TriggerDataList.Add(data);
         }
 
         List<Box> worldBoxes = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot).GetComponentsInChildren<Box>().ToList();
@@ -181,7 +189,9 @@ public class WorldDesignHelper : MonoBehaviour
         List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
         foreach (BornPointDesignHelper bornPoint in bornPoints)
         {
-            Transform root = GetRoot(WorldHierarchyRootType.BornPointsRoot);
+            WorldModuleDesignHelper module = bornPoint.transform.GetComponentInParent<WorldModuleDesignHelper>();
+            if (module) continue;
+            Transform root = GetRoot(WorldHierarchyRootType.WorldBornPointsRoot);
             if (!bornPoint.transform.IsChildOf(root))
             {
                 bornPoint.transform.parent = root;
@@ -201,6 +211,8 @@ public class WorldDesignHelper : MonoBehaviour
         List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
         foreach (LevelTriggerBase trigger in triggers)
         {
+            WorldModuleDesignHelper module = trigger.transform.GetComponentInParent<WorldModuleDesignHelper>();
+            if (module) continue;
             Transform root = GetRoot(WorldHierarchyRootType.WorldLevelTriggersRoot);
             if (!trigger.transform.IsChildOf(root))
             {
@@ -211,16 +223,10 @@ public class WorldDesignHelper : MonoBehaviour
         List<Box> boxes = GetComponentsInChildren<Box>().ToList();
         foreach (Box box in boxes)
         {
-            Transform modulesRoot = GetRoot(WorldHierarchyRootType.ModulesRoot);
-            Transform wallModulesRoot = GetRoot(WorldHierarchyRootType.WallModulesRoot);
-            Transform deadZoneModulesRoot = GetRoot(WorldHierarchyRootType.DeadZoneModulesRoot);
-            Transform groundModulesRoot = GetRoot(WorldHierarchyRootType.GroundModulesRoot);
+            WorldModuleDesignHelper module = box.transform.GetComponentInParent<WorldModuleDesignHelper>();
+            if (module) continue;
             Transform worldSpecialBoxesRoot = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot);
-            if (!box.transform.IsChildOf(modulesRoot) &&
-                !box.transform.IsChildOf(wallModulesRoot) &&
-                !box.transform.IsChildOf(deadZoneModulesRoot) &&
-                !box.transform.IsChildOf(groundModulesRoot) &&
-                !box.transform.IsChildOf(worldSpecialBoxesRoot))
+            if (!box.transform.IsChildOf(worldSpecialBoxesRoot))
             {
                 box.transform.parent = worldSpecialBoxesRoot;
             }
@@ -236,7 +242,7 @@ public enum WorldHierarchyRootType
     WallModulesRoot = 1,
     DeadZoneModulesRoot = 2,
     GroundModulesRoot = 3,
-    BornPointsRoot = 4,
+    WorldBornPointsRoot = 4,
     WorldCameraPOIsRoot = 5,
     WorldSpecialBoxesRoot = 6,
     WorldLevelTriggersRoot = 7,

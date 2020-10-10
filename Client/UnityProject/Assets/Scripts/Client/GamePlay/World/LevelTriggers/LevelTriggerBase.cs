@@ -10,12 +10,6 @@ using UnityEngine;
 
 public abstract class LevelTriggerBase : PoolObject
 {
-    public enum LevelTriggerBelongsTo
-    {
-        World,
-        WorldModule,
-    }
-
     public abstract Data TriggerData { get; set; }
 
     public BoxCollider Trigger;
@@ -26,21 +20,11 @@ public abstract class LevelTriggerBase : PoolObject
     private int HasTriggeredTimes = 0;
 
     [Serializable]
-    public class Data : IClone<Data>
+    public class Data : LevelComponentData
     {
         [ReadOnly]
         [LabelText("LevelTrigger类型")]
         public LevelTriggerType LevelTriggerType;
-
-        [ReadOnly]
-        [LabelText("从属")]
-        public LevelTriggerBelongsTo LevelTriggerBelongsTo;
-
-        [ReadOnly]
-        public GridPos3D WorldGP;
-
-        [ReadOnly]
-        public GridPos3D LocalGP;
 
         [LabelText("触发时发送事件ID")]
         public int TriggerEmitEventID;
@@ -58,24 +42,15 @@ public abstract class LevelTriggerBase : PoolObject
         [LabelText("材质颜色")]
         public Color TriggerColor;
 
-        public Data Clone()
+        protected override void ChildClone(LevelComponentData newData)
         {
-            Type type = GetType();
-            Data data = (Data) Activator.CreateInstance(type);
-            data.LevelTriggerBelongsTo = LevelTriggerBelongsTo;
-            data.WorldGP = WorldGP;
-            data.LocalGP = LocalGP;
+            base.ChildClone(newData);
+            Data data = ((Data) newData);
             data.TriggerEmitEventID = TriggerEmitEventID;
             data.MaxTriggerTime = MaxTriggerTime;
             data.TriggerFX = TriggerFX;
             data.TriggerFXScale = TriggerFXScale;
             data.TriggerColor = TriggerColor;
-            ChildClone(data);
-            return data;
-        }
-
-        protected virtual void ChildClone(Data newData)
-        {
         }
 
         #region Utils

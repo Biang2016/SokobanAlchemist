@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using BiangStudio.CloneVariant;
-using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 [Serializable]
-public class BornPointData : IClone<BornPointData>
+public class BornPointData : LevelComponentData
 {
     public BornPointType BornPointType;
 
     [ShowIf("BornPointType", BornPointType.Player)]
     public PlayerNumber PlayerNumber;
-
-    [HideInInspector]
-    public GridPos3D GridPos3D;
 
     [ValueDropdown("GetAllEnemyNames")]
     [ShowIf("BornPointType", BornPointType.Enemy)]
@@ -31,14 +25,13 @@ public class BornPointData : IClone<BornPointData>
         return res;
     }
 
-    public BornPointData Clone()
+    protected override void ChildClone(LevelComponentData newData)
     {
-        BornPointData newData = new BornPointData();
-        newData.BornPointType = BornPointType;
-        newData.PlayerNumber = PlayerNumber;
-        newData.GridPos3D = GridPos3D;
-        newData.EnemyName = EnemyName;
-        return newData;
+        base.ChildClone(newData);
+        BornPointData data = ((BornPointData) newData);
+        data.BornPointType = BornPointType;
+        data.PlayerNumber = PlayerNumber;
+        data.EnemyName = EnemyName;
     }
 }
 

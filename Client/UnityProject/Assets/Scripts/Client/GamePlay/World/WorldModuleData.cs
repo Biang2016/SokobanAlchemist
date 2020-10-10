@@ -17,7 +17,8 @@ public class WorldModuleData : IClone<WorldModuleData>
     /// 模组上下层叠，底部模组Y为0，顶部Y为15
     /// </summary>
     public ushort[,,] BoxMatrix = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
-    public WorldModuleLevelTriggerData WorldModuleLevelTriggerData = new WorldModuleLevelTriggerData();
+    public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
+    public LevelTriggerGroupData WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();
     public Box.BoxExtraSerializeData[,,] BoxExtraSerializeDataMatrix = new Box.BoxExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
 
     public WorldModuleData Clone()
@@ -26,7 +27,8 @@ public class WorldModuleData : IClone<WorldModuleData>
         data.WorldModuleTypeIndex = WorldModuleTypeIndex;
         data.WorldModuleTypeName = WorldModuleTypeName;
         data.WorldModuleFeature = WorldModuleFeature;
-        data.WorldModuleLevelTriggerData = WorldModuleLevelTriggerData.Clone();
+        data.WorldModuleBornPointGroupData = WorldModuleBornPointGroupData.Clone();
+        data.WorldModuleLevelTriggerGroupData = WorldModuleLevelTriggerGroupData.Clone();
         for (int x = 0; x < BoxMatrix.GetLength(0); x++)
         {
             for (int y = 0; y < BoxMatrix.GetLength(1); y++)

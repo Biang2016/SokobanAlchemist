@@ -84,7 +84,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
         [LabelText("箱子至少停留时间/s")]
         public float RequireStayDuration;
 
-        protected override void ChildClone(LevelTriggerBase.Data newData)
+        protected override void ChildClone(LevelComponentData newData)
         {
             base.ChildClone(newData);
             Data data = ((Data) newData);
