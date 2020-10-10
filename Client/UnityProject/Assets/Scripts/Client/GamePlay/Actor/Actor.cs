@@ -548,7 +548,7 @@ public class Actor : PoolObject
         ActorLaunchArcRendererHelper.SetShown(isCharging);
         if (isCharging)
         {
-            ActorLaunchArcRendererHelper.InitializeByOffset(CurThrowPointOffset, 45, 1, 3f);
+            ActorLaunchArcRendererHelper.InitializeByOffset(CurThrowPointOffset, 45, 2, 3f);
         }
     }
 
