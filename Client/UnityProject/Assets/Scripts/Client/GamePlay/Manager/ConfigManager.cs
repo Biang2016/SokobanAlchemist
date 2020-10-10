@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BiangStudio;
 using BiangStudio.Singleton;
 using Newtonsoft.Json;
@@ -86,7 +87,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 foreach (FileInfo fi in di.GetFiles("*.*", IncludeSubFolder ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
                 {
                     if (fi.Name.EndsWith(".meta")) continue;
-                    if(index == ushort.MaxValue)
+                    if (index == ushort.MaxValue)
                     {
                         Debug.LogError($"{typeof(T).Name}类型数量超过{ushort.MaxValue}");
                         break;
@@ -323,6 +324,44 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     #endregion
 
     #region Getter
+
+    // -------- Get All Type Names --------
+
+    public static IEnumerable<string> GetAllBoxTypeNames()
+    {
+        LoadAllConfigs();
+        List<string> res = BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
+        res.Insert(0, "None");
+        return res;
+    }
+
+    public static IEnumerable<string> GetAllFXTypeNames()
+    {
+        LoadAllConfigs();
+        List<string> res = FXTypeDefineDict.TypeIndexDict.Keys.ToList();
+        res.Insert(0, "None");
+        return res;
+    }
+
+    public static IEnumerable<string> GetAllEnemyNames()
+    {
+        List<string> res = new List<string>();
+        res = EnemyTypeDefineDict.TypeIndexDict.Keys.ToList();
+        res.Insert(0, "None");
+        return res;
+    }
+
+    public static IEnumerable<string> GetAllActorNames()
+    {
+        LoadAllConfigs();
+        List<string> res = new List<string>();
+        res = EnemyTypeDefineDict.TypeIndexDict.Keys.ToList();
+        res.Insert(0, "Player1");
+        res.Insert(0, "None");
+        return res;
+    }
+
+    // -------- Get All Type Names --------
 
     public static string GetBoxTypeName(ushort boxTypeIndex)
     {

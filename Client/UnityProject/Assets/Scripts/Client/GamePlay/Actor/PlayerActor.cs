@@ -19,9 +19,9 @@ public class PlayerActor : Actor
     private ButtonState BS_Down_Last;
     private ButtonState BS_Left_Last;
 
-    public void Initialize(PlayerNumber playerNumber)
+    public void Initialize(string actorType, ActorCategory actorCategory, PlayerNumber playerNumber)
     {
-        base.Initialize();
+        base.Initialize(actorType, actorCategory);
         PlayerNumber = playerNumber;
         ActorSkinHelper.Initialize(playerNumber);
         BS_Up = ControlManager.Instance.Battle_MoveButtons[(int) PlayerNumber, (int) GridPosR.Orientation.Up];

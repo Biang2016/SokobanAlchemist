@@ -24,20 +24,13 @@ public class BornPointDesignHelper : MonoBehaviour
             return;
         }
 
-        if (BornPointData.BornPointType == BornPointType.Player)
-        {
-            gameObject.name = "BornPoint_" + BornPointData.PlayerNumber;
-        }
-        else
-        {
-            gameObject.name = "BornPoint_" + BornPointData.EnemyName;
-        }
+        gameObject.name = "BornPoint_" + BornPointData.ActorType;
     }
 
     void OnDrawGizmos()
     {
         Color gizmosColor;
-        if (BornPointData.BornPointType == BornPointType.Player)
+        if (BornPointData.ActorType == "Player1")
         {
             gizmosColor = Color.yellow;
         }

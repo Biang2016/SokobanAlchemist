@@ -44,6 +44,16 @@ public class Actor : PoolObject
 
     [ReadOnly]
     [DisplayAsString]
+    [LabelText("角色分类")]
+    public ActorCategory ActorCategory;
+
+    [ReadOnly]
+    [DisplayAsString]
+    [LabelText("角色类型")]
+    public string ActorType;
+
+    [ReadOnly]
+    [DisplayAsString]
     [LabelText("移动倾向")]
     public Vector3 CurMoveAttempt;
 
@@ -357,8 +367,10 @@ public class Actor : PoolObject
         }
     }
 
-    public void Initialize()
+    public void Initialize(string actorType, ActorCategory actorCategory)
     {
+        ActorType = actorType;
+        ActorCategory = actorCategory;
         ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
         ActorBattleHelper.Initialize(TotalLife, MaxHealth);
         ActorSkillHelper.Initialize();
@@ -642,21 +654,8 @@ public class Actor : PoolObject
 
     #region Utils
 
-    private IEnumerable<string> GetAllBoxTypeNames()
-    {
-        ConfigManager.LoadAllConfigs();
-        List<string> res = ConfigManager.BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
-        res.Insert(0, "None");
-        return res;
-    }
-
-    private IEnumerable<string> GetAllFXTypeNames()
-    {
-        ConfigManager.LoadAllConfigs();
-        List<string> res = ConfigManager.FXTypeDefineDict.TypeIndexDict.Keys.ToList();
-        res.Insert(0, "None");
-        return res;
-    }
+    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
+    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
 
     #endregion
 }

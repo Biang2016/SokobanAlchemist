@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 public class LevelComponentData : IClone<LevelComponentData>
 {
     [ReadOnly]
+    [HideInEditorMode]
     [LabelText("从属")]
     public LevelComponentBelongsTo LevelComponentBelongsTo;
 

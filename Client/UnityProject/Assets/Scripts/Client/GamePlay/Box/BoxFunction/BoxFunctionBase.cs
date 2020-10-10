@@ -144,7 +144,7 @@ public class BoxFunction_ChangeBoxType : BoxFunction_InvokeOnLevelEventID
                 GridPos3D localGP = Box.LocalGP;
                 WorldManager.Instance.CurrentWorld.DeleteBox(Box);
                 ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
-                module.GenerateBox(boxTypeIndex, localGP);
+                if (boxTypeIndex != 0) module.GenerateBox(boxTypeIndex, localGP);
             }
         }
     }

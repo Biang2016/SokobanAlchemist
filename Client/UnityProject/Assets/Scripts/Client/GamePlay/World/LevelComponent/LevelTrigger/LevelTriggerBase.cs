@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using BiangStudio;
-using BiangStudio.CloneVariant;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
 using Sirenix.OdinInspector;
@@ -46,6 +44,7 @@ public abstract class LevelTriggerBase : PoolObject
         {
             base.ChildClone(newData);
             Data data = ((Data) newData);
+            data.LevelTriggerType = LevelTriggerType;
             data.TriggerEmitEventID = TriggerEmitEventID;
             data.MaxTriggerTime = MaxTriggerTime;
             data.TriggerFX = TriggerFX;
@@ -55,21 +54,11 @@ public abstract class LevelTriggerBase : PoolObject
 
         #region Utils
 
-        private IEnumerable<string> GetAllBoxTypeNames()
-        {
-            ConfigManager.LoadAllConfigs();
-            List<string> res = ConfigManager.BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
-            res.Insert(0, "None");
-            return res;
-        }
+        private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
 
-        private IEnumerable<string> GetAllFXTypeNames()
-        {
-            ConfigManager.LoadAllConfigs();
-            List<string> res = ConfigManager.FXTypeDefineDict.TypeIndexDict.Keys.ToList();
-            res.Insert(0, "None");
-            return res;
-        }
+        private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
+
+        private IEnumerable<string> GetAllEnemyNames => ConfigManager.GetAllEnemyNames();
 
         #endregion
     }
@@ -136,4 +125,5 @@ public abstract class LevelTriggerBase : PoolObject
 public enum LevelTriggerType
 {
     LevelTrigger_BoxLockTrigger,
+    LevelTrigger_ActorEnterTrigger,
 }

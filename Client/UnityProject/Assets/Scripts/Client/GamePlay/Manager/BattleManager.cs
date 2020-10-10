@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.GamePlay.UI;
@@ -75,24 +76,24 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
 
     private void CreateActorByBornPointData(BornPointData bpd, WorldModule parentModule = null)
     {
-        if (bpd.BornPointType == BornPointType.Player)
+        if (bpd.ActorCategory == ActorCategory.Player)
         {
+            PlayerNumber playerNumber = (PlayerNumber) Enum.Parse(typeof(PlayerNumber), bpd.ActorType);
             PlayerActor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
             GridPos3D worldGP = parentModule ? parentModule.LocalGPToWorldGP(bpd.LocalGP) : bpd.WorldGP;
             GridPos3D.ApplyGridPosToLocalTrans(worldGP, player.transform, 1);
-            player.Initialize(bpd.PlayerNumber);
+            player.Initialize(bpd.ActorType, bpd.ActorCategory, playerNumber);
             BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
-            MainPlayers[(int) bpd.PlayerNumber] = player;
+            MainPlayers[(int) playerNumber] = player;
             AddActor(player);
         }
-
-        if (bpd.BornPointType == BornPointType.Enemy)
+        else
         {
-            ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.EnemyName);
+            ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.ActorType);
             EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
             GridPos3D worldGP = parentModule ? parentModule.LocalGPToWorldGP(bpd.LocalGP) : bpd.WorldGP;
             GridPos3D.ApplyGridPosToLocalTrans(worldGP, enemy.transform, 1);
-            enemy.Initialize();
+            enemy.Initialize(bpd.ActorType, bpd.ActorCategory);
             Enemies.Add(enemy);
             AddActor(enemy);
         }

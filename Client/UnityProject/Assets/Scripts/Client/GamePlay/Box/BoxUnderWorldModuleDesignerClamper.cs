@@ -35,7 +35,7 @@ public class BoxUnderWorldModuleDesignerClamper : MonoBehaviour
         {
             transform.localPosition = DefaultPosition;
         }
-        else
+        else if(ParentWorldModuleDesignHelper && !ParentWorldDesignHelper)
         {
             transform.localPosition = new Vector3(
                 Mathf.Clamp(transform.localPosition.x, 0, WorldModule.MODULE_SIZE - 1),

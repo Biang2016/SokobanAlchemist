@@ -50,21 +50,9 @@ public class ActorBuff : IClone<ActorBuff>
 
     #region Utils
 
-    private IEnumerable<string> GetAllBoxTypeNames()
-    {
-        ConfigManager.LoadAllConfigs();
-        List<string> res = ConfigManager.BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
-        res.Insert(0, "None");
-        return res;
-    }
+    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
 
-    private IEnumerable<string> GetAllFXTypeNames()
-    {
-        ConfigManager.LoadAllConfigs();
-        List<string> res = ConfigManager.FXTypeDefineDict.TypeIndexDict.Keys.ToList();
-        res.Insert(0, "None");
-        return res;
-    }
+    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
 
     #endregion
 }

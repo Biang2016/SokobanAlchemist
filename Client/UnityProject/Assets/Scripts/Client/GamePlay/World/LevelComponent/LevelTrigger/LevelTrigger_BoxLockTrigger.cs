@@ -2,15 +2,37 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
 {
+    [LabelText("配置")]
     public Data childData = new Data {LevelTriggerType = LevelTriggerType.LevelTrigger_BoxLockTrigger};
 
     public override LevelTriggerBase.Data TriggerData
     {
         get { return childData; }
         set { childData = (Data) value; }
+    }
+
+    [Serializable]
+    public new class Data : LevelTriggerBase.Data
+    {
+        [LabelText("指定箱子类型")]
+        [ValueDropdown("GetAllBoxTypeNames", DropdownTitle = "选择箱子类型")]
+        public string RequireBoxTypeName;
+
+        [LabelText("箱子至少停留时间/s")]
+        [FormerlySerializedAs("RequireStayDuration")]
+        public float RequiredStayDuration;
+
+        protected override void ChildClone(LevelComponentData newData)
+        {
+            base.ChildClone(newData);
+            Data data = ((Data) newData);
+            data.RequireBoxTypeName = RequireBoxTypeName;
+            data.RequiredStayDuration = RequiredStayDuration;
+        }
     }
 
     private SortedDictionary<uint, Box> StayBoxDict = new SortedDictionary<uint, Box>();
@@ -49,7 +71,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
             if (StayBoxTimeDict.ContainsKey(kv.Key))
             {
                 StayBoxTimeDict[kv.Key] += Time.fixedDeltaTime;
-                if (StayBoxTimeDict[kv.Key] >= childData.RequireStayDuration)
+                if (StayBoxTimeDict[kv.Key] >= childData.RequiredStayDuration)
                 {
                     TriggerEvent();
                     StayBoxTimeDict[kv.Key] = 0;
@@ -71,25 +93,6 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
                     StayBoxTimeDict.Remove(box.GUID);
                 }
             }
-        }
-    }
-
-    [Serializable]
-    public new class Data : LevelTriggerBase.Data
-    {
-        [LabelText("指定箱子类型")]
-        [ValueDropdown("GetAllBoxTypeNames", DropdownTitle = "选择箱子类型")]
-        public string RequireBoxTypeName;
-
-        [LabelText("箱子至少停留时间/s")]
-        public float RequireStayDuration;
-
-        protected override void ChildClone(LevelComponentData newData)
-        {
-            base.ChildClone(newData);
-            Data data = ((Data) newData);
-            data.RequireBoxTypeName = RequireBoxTypeName;
-            data.RequireStayDuration = RequireStayDuration;
         }
     }
 }
