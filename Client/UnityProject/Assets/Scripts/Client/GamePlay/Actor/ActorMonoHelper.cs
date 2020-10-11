@@ -13,6 +13,10 @@ public class ActorMonoHelper : MonoBehaviour
         }
     }
 
+    public virtual void OnUsed()
+    {
+    }
+
     public virtual void OnRecycled()
     {
     }

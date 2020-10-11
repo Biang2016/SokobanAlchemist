@@ -67,18 +67,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     public static string DebugChangeWorldName = null;
 
-    private IEnumerable<string> GetAllWorldNames()
-    {
-        ConfigManager.LoadAllConfigs();
-        List<string> res = new List<string>();
-        foreach (KeyValuePair<string, WorldData> kv in ConfigManager.WorldDataConfigDict)
-        {
-            res.Add(kv.Key);
-        }
-
-        return res;
-    }
-
+    private IEnumerable<string> GetAllWorldNames => ConfigManager.GetAllWorldNames();
+    
     private void Awake()
     {
         UIManager.Init(

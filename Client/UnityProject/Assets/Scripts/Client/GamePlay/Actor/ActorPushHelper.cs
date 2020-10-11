@@ -9,9 +9,16 @@ public class ActorPushHelper : ActorMonoHelper
     public Animator AnimModel;
     public ActorPushHelperTrigger ActorPushHelperTrigger;
 
+    public override void OnUsed()
+    {
+        base.OnUsed();
+        ActorPushHelperTrigger.OnUsed();
+    }
+
     public override void OnRecycled()
     {
         PushTriggerReset();
+        ActorPushHelperTrigger.OnRecycled();
         base.OnRecycled();
     }
 

@@ -348,6 +348,14 @@ public class Actor : PoolObject
     public override void OnUsed()
     {
         base.OnUsed();
+        ActorPushHelper.OnUsed();
+        ActorPushHelper.OnUsed();
+        ActorFaceHelper.OnUsed();
+        ActorSkinHelper.OnUsed();
+        ActorLaunchArcRendererHelper.OnUsed();
+        ActorBattleHelper.OnUsed();
+        ActorSkillHelper.OnUsed();
+        ActorBuffHelper.OnUsed();
         ActorMoveColliderRoot.SetActive(true);
     }
 

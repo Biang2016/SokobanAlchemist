@@ -6,12 +6,30 @@ using Sirenix.OdinInspector;
 public class ActorPushHelperTrigger : MonoBehaviour
 {
     public ActorPushHelper ActorPushHelper;
+    public BoxCollider BoxCollider;
 
     [ReadOnly]
     public HashSet<Box> PushingBoxList = new HashSet<Box>();
 
+    private bool isRecycled = false;
+
+    internal void OnUsed()
+    {
+        isRecycled = false;
+        BoxCollider.enabled = true;
+    }
+
+    internal void OnRecycled()
+    {
+        isRecycled = true;
+        BoxCollider.enabled = false;
+        PushingBoxList.Clear();
+        curPushingBox = null;
+    }
+
     void OnTriggerEnter(Collider collider)
     {
+        if (isRecycled) return;
         if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
@@ -26,6 +44,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
 
     void OnTriggerStay(Collider collider)
     {
+        if (isRecycled) return;
         if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             if (curPushingBox) return;
@@ -42,6 +61,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
 
     void OnTriggerExit(Collider collider)
     {
+        if (isRecycled) return;
         if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
@@ -57,6 +77,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isRecycled) return;
         curPushingBox = null;
     }
 }

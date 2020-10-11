@@ -327,6 +327,13 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     // -------- Get All Type Names --------
 
+    public static IEnumerable<string> GetAllWorldNames()
+    {
+        LoadAllConfigs();
+        List<string> res = WorldDataConfigDict.Keys.ToList();
+        res.Insert(0, "None");
+        return res;
+    }
     public static IEnumerable<string> GetAllBoxTypeNames()
     {
         LoadAllConfigs();
