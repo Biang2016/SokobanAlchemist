@@ -85,27 +85,120 @@ public abstract class BoxFunctionBase : IClone<BoxFunctionBase>
 }
 
 [Serializable]
+[LabelText("隐藏")]
+public class BoxFunction_Hide : BoxFunctionBase
+{
+    [InfoBox("注意，此功能仅在世界特例生效")]
+    [ReadOnly]
+    [HideLabel]
+    internal string Tip;
+
+    protected override void ChildClone(BoxFunctionBase newBF)
+    {
+        base.ChildClone(newBF);
+        BoxFunction_Hide bf = ((BoxFunction_Hide)newBF);
+    }
+
+    public override void ApplyData(BoxFunctionBase srcData)
+    {
+        base.ApplyData(srcData);
+        BoxFunction_Hide bf = ((BoxFunction_Hide)srcData);
+    }
+}
+
+[Serializable]
 [LabelText("关卡事件触发")]
 public abstract class BoxFunction_InvokeOnLevelEventID : BoxFunctionBase
 {
-    [LabelText("监听关卡事件ID")]
-    public int ListenLevelEventID;
+    [BoxGroup("事件监听与触发")]
+    [LabelText("多个事件联合触发")]
+    public bool MultiEventTrigger = false;
+
+    [BoxGroup("事件监听与触发")]
+    [ShowIf("MultiEventTrigger")]
+    [LabelText("监听关卡事件花名列表(联合触发)")]
+    public List<string> ListenLevelEventAliasList = new List<string>();
+
+    [ShowInInspector]
+    [HideInEditorMode]
+    [LabelText("联合触发记录")]
+    private List<bool> multiTriggerFlags = new List<bool>();
+
+    [BoxGroup("事件监听与触发")]
+    [HideIf("MultiEventTrigger")]
+    [LabelText("监听关卡事件花名(单个触发)")]
+    public string ListenLevelEventAlias;
+
+    [BoxGroup("事件监听与触发")]
+    [LabelText("最大触发次数")]
+    public int MaxTriggeredTimes = 1;
+
+    [ShowInInspector]
+    [HideInEditorMode]
+    [LabelText("已触发次数")]
+    private int triggeredTimes = 0;
 
     public override void OnRegisterLevelEventID()
     {
-        ClientGameManager.Instance.BattleMessenger.AddListener<int>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventID, OnEvent);
+        triggeredTimes = 0;
+        ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnEvent);
+        multiTriggerFlags.Clear();
+        foreach (string alias in ListenLevelEventAliasList)
+        {
+            multiTriggerFlags.Add(false);
+        }
     }
 
     public override void OnUnRegisterLevelEventID()
     {
-        ClientGameManager.Instance.BattleMessenger.RemoveListener<int>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventID, OnEvent);
+        triggeredTimes = 0;
+        ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnEvent);
+        multiTriggerFlags.Clear();
     }
 
-    private void OnEvent(int eventID)
+    private void OnEvent(string eventAlias)
     {
-        if (ListenLevelEventID == eventID)
+        if (MultiEventTrigger)
+        {
+            for (int index = 0; index < ListenLevelEventAliasList.Count; index++)
+            {
+                string alias = ListenLevelEventAliasList[index];
+                if (eventAlias == alias && !multiTriggerFlags[index])
+                {
+                    multiTriggerFlags[index] = true;
+                }
+            }
+
+            bool trigger = true;
+            foreach (bool flag in multiTriggerFlags)
+            {
+                if (!flag) trigger = false;
+            }
+
+            if (trigger)
+            {
+                ExecuteFunction();
+            }
+        }
+        else
+        {
+            if (ListenLevelEventAlias.Equals(eventAlias))
+            {
+                ExecuteFunction();
+            }
+        }
+    }
+
+    private void ExecuteFunction()
+    {
+        if (triggeredTimes < MaxTriggeredTimes)
         {
             OnEventExecute();
+            triggeredTimes++;
+            for (int i = 0; i < multiTriggerFlags.Count; i++)
+            {
+                multiTriggerFlags[i] = false;
+            }
         }
     }
 
@@ -115,14 +208,20 @@ public abstract class BoxFunction_InvokeOnLevelEventID : BoxFunctionBase
     {
         base.ChildClone(newBF);
         BoxFunction_InvokeOnLevelEventID bf = ((BoxFunction_InvokeOnLevelEventID) newBF);
-        bf.ListenLevelEventID = ListenLevelEventID;
+        bf.MultiEventTrigger = MultiEventTrigger;
+        bf.ListenLevelEventAliasList = ListenLevelEventAliasList.Clone();
+        bf.ListenLevelEventAlias = ListenLevelEventAlias;
+        bf.MaxTriggeredTimes = MaxTriggeredTimes;
     }
 
     public override void ApplyData(BoxFunctionBase srcData)
     {
         base.ApplyData(srcData);
         BoxFunction_InvokeOnLevelEventID bf = ((BoxFunction_InvokeOnLevelEventID) srcData);
-        ListenLevelEventID = bf.ListenLevelEventID;
+        MultiEventTrigger = bf.MultiEventTrigger;
+        ListenLevelEventAliasList = bf.ListenLevelEventAliasList.Clone();
+        ListenLevelEventAlias = bf.ListenLevelEventAlias;
+        MaxTriggeredTimes = bf.MaxTriggeredTimes;
     }
 }
 

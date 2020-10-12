@@ -119,6 +119,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     public ButtonState Common_Exit = new ButtonState() {ButtonName = ButtonNames.Common_Exit};
     public ButtonState Common_Tab = new ButtonState() {ButtonName = ButtonNames.Common_Tab};
     public ButtonState Common_RestartGame = new ButtonState() {ButtonName = ButtonNames.Common_RestartGame};
+    public ButtonState Common_RestartGameR = new ButtonState() {ButtonName = ButtonNames.Common_RestartGameR };
     public ButtonState Common_PauseGame = new ButtonState() {ButtonName = ButtonNames.Common_Pause};
 
     #endregion
@@ -215,6 +216,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         Common_Exit.GetStateCallbackFromContext_UpDownPress(CommonInputActions.Exit);
         Common_Tab.GetStateCallbackFromContext_UpDownPress(CommonInputActions.Tab);
         Common_RestartGame.GetStateCallbackFromContext_UpDownPress(CommonInputActions.RestartGame);
+        Common_RestartGameR.GetStateCallbackFromContext_UpDownPress(CommonInputActions.RestartGameR);
         Common_PauseGame.GetStateCallbackFromContext_UpDownPress(CommonInputActions.PauseGame);
 
         PlayerInput.Enable();

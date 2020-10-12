@@ -66,6 +66,8 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
 
     void FixedUpdate()
     {
+        bool trigger = false;
+        List<uint> triggeredBoxList = new List<uint>();
         foreach (KeyValuePair<uint, Box> kv in StayBoxDict)
         {
             if (StayBoxTimeDict.ContainsKey(kv.Key))
@@ -73,11 +75,26 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
                 StayBoxTimeDict[kv.Key] += Time.fixedDeltaTime;
                 if (StayBoxTimeDict[kv.Key] >= childData.RequiredStayDuration)
                 {
-                    TriggerEvent();
-                    StayBoxTimeDict[kv.Key] = 0;
+                    trigger = true;
+                    if (TriggerData.KeepTriggering)
+                    {
+                        StayBoxTimeDict[kv.Key] = 0;
+                    }
+                    else
+                    {
+                        triggeredBoxList.Add(kv.Key);
+                    }
                 }
             }
         }
+
+        foreach (uint guid in triggeredBoxList)
+        {
+            StayBoxDict.Remove(guid);
+            StayBoxTimeDict.Remove(guid);
+        }
+
+        if (trigger) TriggerEvent();
     }
 
     void OnTriggerExit(Collider collider)

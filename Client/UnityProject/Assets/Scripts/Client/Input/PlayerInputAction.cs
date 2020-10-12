@@ -867,6 +867,14 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)""
                 },
                 {
+                    ""name"": ""RestartGameR"",
+                    ""type"": ""Button"",
+                    ""id"": ""fe201fdf-66b4-42fc-afab-f0140f76e6ae"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
                     ""name"": ""PauseGame"",
                     ""type"": ""Button"",
                     ""id"": ""c7c254db-3263-4037-a169-d65434e02f33"",
@@ -996,6 +1004,17 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""action"": ""PauseGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6eb7e6eb-7226-408c-ab10-841faa1f75dc"",
+                    ""path"": ""<Keyboard>/#(R)"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": ""Clamp(max=1)"",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RestartGameR"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1056,6 +1075,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_Common_Confirm = m_Common.FindAction("Confirm", throwIfNotFound: true);
         m_Common_Debug = m_Common.FindAction("Debug", throwIfNotFound: true);
         m_Common_RestartGame = m_Common.FindAction("RestartGame", throwIfNotFound: true);
+        m_Common_RestartGameR = m_Common.FindAction("RestartGameR", throwIfNotFound: true);
         m_Common_PauseGame = m_Common.FindAction("PauseGame", throwIfNotFound: true);
     }
 
@@ -1373,6 +1393,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Common_Confirm;
     private readonly InputAction m_Common_Debug;
     private readonly InputAction m_Common_RestartGame;
+    private readonly InputAction m_Common_RestartGameR;
     private readonly InputAction m_Common_PauseGame;
     public struct CommonActions
     {
@@ -1388,6 +1409,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @Confirm => m_Wrapper.m_Common_Confirm;
         public InputAction @Debug => m_Wrapper.m_Common_Debug;
         public InputAction @RestartGame => m_Wrapper.m_Common_RestartGame;
+        public InputAction @RestartGameR => m_Wrapper.m_Common_RestartGameR;
         public InputAction @PauseGame => m_Wrapper.m_Common_PauseGame;
         public InputActionMap Get() { return m_Wrapper.m_Common; }
         public void Enable() { Get().Enable(); }
@@ -1428,6 +1450,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @RestartGame.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnRestartGame;
                 @RestartGame.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnRestartGame;
                 @RestartGame.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnRestartGame;
+                @RestartGameR.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnRestartGameR;
+                @RestartGameR.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnRestartGameR;
+                @RestartGameR.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnRestartGameR;
                 @PauseGame.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnPauseGame;
                 @PauseGame.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnPauseGame;
                 @PauseGame.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnPauseGame;
@@ -1465,6 +1490,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @RestartGame.started += instance.OnRestartGame;
                 @RestartGame.performed += instance.OnRestartGame;
                 @RestartGame.canceled += instance.OnRestartGame;
+                @RestartGameR.started += instance.OnRestartGameR;
+                @RestartGameR.performed += instance.OnRestartGameR;
+                @RestartGameR.canceled += instance.OnRestartGameR;
                 @PauseGame.started += instance.OnPauseGame;
                 @PauseGame.performed += instance.OnPauseGame;
                 @PauseGame.canceled += instance.OnPauseGame;
@@ -1534,6 +1562,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnConfirm(InputAction.CallbackContext context);
         void OnDebug(InputAction.CallbackContext context);
         void OnRestartGame(InputAction.CallbackContext context);
+        void OnRestartGameR(InputAction.CallbackContext context);
         void OnPauseGame(InputAction.CallbackContext context);
     }
 }

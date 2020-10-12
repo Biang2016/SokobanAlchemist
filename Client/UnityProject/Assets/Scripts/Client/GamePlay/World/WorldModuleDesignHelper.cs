@@ -15,6 +15,9 @@ public class WorldModuleDesignHelper : MonoBehaviour
 {
     public WorldModuleFeature WorldModuleFeature;
 
+    [LabelText("模组AI路径 Resources/??")]
+    public string WorldModuleFlowAssetPath;
+
 #if UNITY_EDITOR
     public WorldModuleData ExportWorldModuleData()
     {
@@ -57,6 +60,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
             worldModuleData.WorldModuleBornPointGroupData.BornPoints.Add(data);
         }
 
+        worldModuleData.WorldModuleFlowAssetPath = WorldModuleFlowAssetPath;
         return worldModuleData;
     }
 
@@ -65,15 +69,15 @@ public class WorldModuleDesignHelper : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Gizmos.matrix = transform.localToWorldMatrix;
-        if (Selection.Contains(gameObject))
-        {
-            Gizmos.color = RangeGizmoColor;
-            Gizmos.DrawCube(Vector3.zero + Vector3.one * (WorldModule.MODULE_SIZE / 2f - 0.5f), Vector3.one * WorldModule.MODULE_SIZE);
-        }
+        //Gizmos.matrix = transform.localToWorldMatrix;
+        //if (Selection.Contains(gameObject))
+        //{
+        //    Gizmos.color = RangeGizmoColor;
+        //    Gizmos.DrawCube(Vector3.zero + Vector3.one * (WorldModule.MODULE_SIZE / 2f - 0.5f), Vector3.one * WorldModule.MODULE_SIZE);
+        //}
 
-        Gizmos.color = RangeGizmoBorderColor;
-        Gizmos.DrawWireCube(Vector3.zero + Vector3.one * (WorldModule.MODULE_SIZE / 2f - 0.5f), Vector3.one * WorldModule.MODULE_SIZE);
+        //Gizmos.color = RangeGizmoBorderColor;
+        //Gizmos.DrawWireCube(Vector3.zero + Vector3.one * (WorldModule.MODULE_SIZE / 2f - 0.5f), Vector3.one * WorldModule.MODULE_SIZE);
     }
 
     [HideInPlayMode]

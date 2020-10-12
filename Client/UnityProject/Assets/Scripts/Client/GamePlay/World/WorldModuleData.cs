@@ -8,6 +8,7 @@ public class WorldModuleData : IClone<WorldModuleData>
 
     public ushort WorldModuleTypeIndex;
     public string WorldModuleTypeName;
+    public string WorldModuleFlowAssetPath;
 
     public WorldModuleFeature WorldModuleFeature;
 
@@ -25,6 +26,7 @@ public class WorldModuleData : IClone<WorldModuleData>
         WorldModuleData data = new WorldModuleData();
         data.WorldModuleTypeIndex = WorldModuleTypeIndex;
         data.WorldModuleTypeName = WorldModuleTypeName;
+        data.WorldModuleFlowAssetPath = WorldModuleFlowAssetPath;
         data.WorldModuleFeature = WorldModuleFeature;
         data.WorldModuleBornPointGroupData = WorldModuleBornPointGroupData.Clone();
         data.WorldModuleLevelTriggerGroupData = WorldModuleLevelTriggerGroupData.Clone();

@@ -854,6 +854,14 @@
                     "interactions": "Press(behavior=2)"
                 },
                 {
+                    "name": "RestartGameR",
+                    "type": "Button",
+                    "id": "fe201fdf-66b4-42fc-afab-f0140f76e6ae",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
                     "name": "PauseGame",
                     "type": "Button",
                     "id": "c7c254db-3263-4037-a169-d65434e02f33",
@@ -981,6 +989,17 @@
                     "processors": "Clamp(max=1)",
                     "groups": "KeyboardMouse",
                     "action": "PauseGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6eb7e6eb-7226-408c-ab10-841faa1f75dc",
+                    "path": "<Keyboard>/#(R)",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "Clamp(max=1)",
+                    "groups": "KeyboardMouse",
+                    "action": "RestartGameR",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
+using FlowCanvas;
 using UnityEditor;
 using UnityEngine;
 
@@ -32,6 +33,9 @@ public class WorldModule : PoolObject
 
     #endregion
 
+    [SerializeField]
+    private FlowScriptController FlowScriptController;
+
     void Awake()
     {
         WorldModuleBoxRoot = new GameObject("WorldModuleBoxRoot").transform;
@@ -56,6 +60,13 @@ public class WorldModule : PoolObject
             }
         }
 
+        foreach (LevelTriggerBase trigger in WorldModuleLevelTriggers)
+        {
+            trigger.PoolRecycle();
+        }
+
+        WorldModuleLevelTriggers.Clear();
+
         World = null;
         WorldModuleData = null;
         WorldDeadZoneTrigger?.PoolRecycle();
@@ -64,6 +75,8 @@ public class WorldModule : PoolObject
         WorldWallCollider = null;
         WorldGroundCollider?.PoolRecycle();
         WorldGroundCollider = null;
+        FlowScriptController.StopBehaviour();
+        FlowScriptController.graph = null;
     }
 
     public void Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, List<Box.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)
@@ -125,6 +138,16 @@ public class WorldModule : PoolObject
             trigger.InitializeInWorldModule((LevelTriggerBase.Data) triggerData.Clone());
             WorldModuleLevelTriggers.Add(trigger);
         }
+
+        if (!string.IsNullOrWhiteSpace(worldModuleData.WorldModuleFlowAssetPath))
+        {
+            FlowScript flowScript = (FlowScript) Resources.Load(worldModuleData.WorldModuleFlowAssetPath);
+            if (flowScript)
+            {
+                FlowScriptController.graph = flowScript;
+                FlowScriptController.StartBehaviour();
+            }
+        }
     }
 
     public void CreateActorFromWorldModuleData()
@@ -132,17 +155,28 @@ public class WorldModule : PoolObject
         BattleManager.Instance.CreateActorsByBornPointGroupData(WorldModuleData.WorldModuleBornPointGroupData, this);
     }
 
-    public Box GenerateBox(ushort boxTypeIndex, GridPos3D localGP, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    public void GenerateBox(ushort boxTypeIndex, GridPos3D localGP, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
-        return GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
+        GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
     }
 
-    public Box GenerateBox(ushort boxTypeIndex, int x, int y, int z, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    public void GenerateBox(ushort boxTypeIndex, int x, int y, int z, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
+        if (boxExtraSerializeDataFromWorld != null)
+        {
+            foreach (BoxFunctionBase bf in boxExtraSerializeDataFromWorld.BoxFunctions)
+            {
+                if (bf is BoxFunction_Hide)
+                {
+                    return;
+                }
+            }
+        }
+
         if (BoxMatrix[x, y, z] != null)
         {
             Debug.LogError($"世界模组{name}的局部坐标({x},{y},{z})位置处已存在Box,请检查世界Box是否重叠放置于该模组已有的Box位置处");
-            return null;
+            return;
         }
         else
         {
@@ -154,7 +188,7 @@ public class WorldModule : PoolObject
             box.Initialize(gp, this, 0, !IsAccessible, Box.LerpType.Create);
             box.name = $"{boxName}_{gp}";
             BoxMatrix[x, y, z] = box;
-            return box;
+            return;
         }
     }
 

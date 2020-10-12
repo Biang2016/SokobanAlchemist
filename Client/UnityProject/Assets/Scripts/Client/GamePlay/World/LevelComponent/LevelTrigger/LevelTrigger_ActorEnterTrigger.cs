@@ -66,6 +66,8 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
 
     void FixedUpdate()
     {
+        bool trigger = false;
+        List<uint> triggeredActorList = new List<uint>();
         foreach (KeyValuePair<uint, Actor> kv in StayActorDict)
         {
             if (StayActorTimeDict.ContainsKey(kv.Key))
@@ -73,11 +75,26 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
                 StayActorTimeDict[kv.Key] += Time.fixedDeltaTime;
                 if (StayActorTimeDict[kv.Key] >= childData.RequiredStayDuration)
                 {
-                    TriggerEvent();
-                    StayActorTimeDict[kv.Key] = 0;
+                    trigger = true;
+                    if (TriggerData.KeepTriggering)
+                    {
+                        StayActorTimeDict[kv.Key] = 0;
+                    }
+                    else
+                    {
+                        triggeredActorList.Add(kv.Key);
+                    }
                 }
             }
         }
+
+        foreach (uint guid in triggeredActorList)
+        {
+            StayActorDict.Remove(guid);
+            StayActorTimeDict.Remove(guid);
+        }
+
+        if (trigger) TriggerEvent();
     }
 
     void OnTriggerExit(Collider collider)

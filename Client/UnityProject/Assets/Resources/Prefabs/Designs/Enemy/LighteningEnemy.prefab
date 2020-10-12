@@ -71,15 +71,17 @@ MonoBehaviour:
   RigidBody: {fileID: 3522706739585230582}
   ActorCommonHelpers: {fileID: 7234443338025959365}
   ActorMoveColliderRoot: {fileID: 8917431860882690342}
+  ActorCategory: 0
+  ActorType: 
   CurMoveAttempt: {x: 0, y: 0, z: 0}
   LastMoveAttempt: {x: 0, y: 0, z: 0}
   CurThrowMoveAttempt: {x: 0, y: 0, z: 0}
   CurThrowPointOffset: {x: 0, y: 0, z: 0}
-  CurGP:
+  CurWorldGP:
     x: 0
     y: 0
     z: 0
-  LastGP:
+  LastWorldGP:
     x: 0
     y: 0
     z: 0
@@ -111,6 +113,7 @@ MonoBehaviour:
   - LifeBox
   - LighteningBox
   - LighteningDropBoomBox
+  - ForbidLiftBox
   KickableBoxList:
   - WoodenBox
   LiftableBoxList:

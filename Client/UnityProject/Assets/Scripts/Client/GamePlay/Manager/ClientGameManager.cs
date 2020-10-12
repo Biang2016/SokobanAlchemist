@@ -68,7 +68,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public static string DebugChangeWorldName = null;
 
     private IEnumerable<string> GetAllWorldNames => ConfigManager.GetAllWorldNames();
-    
+
     private void Awake()
     {
         UIManager.Init(
@@ -139,6 +139,12 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     private void Update()
     {
         if (ControlManager.Common_RestartGame.Up)
+        {
+            ReloadGame();
+            return;
+        }
+
+        if (ControlManager.Common_RestartGameR.Up)
         {
             ReloadGame();
             return;

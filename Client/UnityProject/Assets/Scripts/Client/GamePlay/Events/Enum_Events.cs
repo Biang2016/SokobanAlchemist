@@ -17,7 +17,7 @@ public enum ENUM_BattleEvent
     Battle_ActorAttackTip,
     Battle_ActorCommonTip,
 
-    Battle_TriggerLevelEventID,
+    Battle_TriggerLevelEventAlias,
 
     ENUM_BattleEvent_MAX = 8000,
 }

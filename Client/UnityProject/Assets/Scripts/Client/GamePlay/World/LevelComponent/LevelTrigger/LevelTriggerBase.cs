@@ -20,20 +20,37 @@ public abstract class LevelTriggerBase : PoolObject
     [Serializable]
     public class Data : LevelComponentData
     {
+        [BoxGroup("监听事件")]
+        [LabelText("收到事件后出现(空则默认出现)")]
+        public string AppearLevelEventAlias;
+
+        [BoxGroup("监听事件")]
+        [LabelText("收到事件后消失(空则不会消失)")]
+        public string DisappearLevelEventAlias;
+
         [ReadOnly]
+        [BoxGroup("触发事件并发送")]
         [LabelText("LevelTrigger类型")]
         public LevelTriggerType LevelTriggerType;
 
-        [LabelText("触发时发送事件ID")]
-        public int TriggerEmitEventID;
+        [BoxGroup("触发事件并发送")]
+        [LabelText("触发时发送事件花名")]
+        public string TriggerEmitEventAlias;
 
+        [BoxGroup("触发事件并发送")]
         [LabelText("最大触发次数")]
         public int MaxTriggerTime;
 
+        [BoxGroup("触发事件并发送")]
+        [LabelText("持续触发")]
+        public bool KeepTriggering = false;
+
+        [BoxGroup("触发事件并发送")]
         [LabelText("触发特效")]
         [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
         public string TriggerFX;
 
+        [BoxGroup("触发事件并发送")]
         [LabelText("触发特效尺寸")]
         public float TriggerFXScale = 1.0f;
 
@@ -44,9 +61,12 @@ public abstract class LevelTriggerBase : PoolObject
         {
             base.ChildClone(newData);
             Data data = ((Data) newData);
+            data.AppearLevelEventAlias = AppearLevelEventAlias;
+            data.DisappearLevelEventAlias = DisappearLevelEventAlias;
             data.LevelTriggerType = LevelTriggerType;
-            data.TriggerEmitEventID = TriggerEmitEventID;
+            data.TriggerEmitEventAlias = TriggerEmitEventAlias;
             data.MaxTriggerTime = MaxTriggerTime;
+            data.KeepTriggering = KeepTriggering;
             data.TriggerFX = TriggerFX;
             data.TriggerFXScale = TriggerFXScale;
             data.TriggerColor = TriggerColor;
@@ -63,24 +83,85 @@ public abstract class LevelTriggerBase : PoolObject
         #endregion
     }
 
+    public override void OnUsed()
+    {
+        base.OnUsed();
+        HasTriggeredTimes = 0;
+    }
+
     public override void OnRecycled()
     {
         base.OnRecycled();
         HasTriggeredTimes = 0;
+        UnRegisterEvent();
+        SetShown(true);
+    }
+
+    protected virtual void SetShown(bool shown)
+    {
+        Trigger.enabled = shown;
+        Renderer.enabled = shown;
     }
 
     public void InitializeInWorld(Data data)
     {
+        HasTriggeredTimes = 0;
         TriggerData = data;
         GridPos3D.ApplyGridPosToLocalTrans(data.WorldGP, transform, 1);
         InitializeColor();
+        RegisterEvent();
     }
 
     public void InitializeInWorldModule(Data data)
     {
+        HasTriggeredTimes = 0;
         TriggerData = data;
         GridPos3D.ApplyGridPosToLocalTrans(data.LocalGP, transform, 1);
         InitializeColor();
+        RegisterEvent();
+    }
+
+    private void RegisterEvent()
+    {
+        if (!string.IsNullOrWhiteSpace(TriggerData.AppearLevelEventAlias))
+        {
+            SetShown(false);
+            ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnAppearEvent);
+        }
+
+        if (!string.IsNullOrWhiteSpace(TriggerData.DisappearLevelEventAlias))
+        {
+            ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnDisappearEvent);
+        }
+    }
+
+    private void UnRegisterEvent()
+    {
+        if (!string.IsNullOrWhiteSpace(TriggerData.AppearLevelEventAlias))
+        {
+            ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnAppearEvent);
+        }
+
+        if (!string.IsNullOrWhiteSpace(TriggerData.DisappearLevelEventAlias))
+        {
+            ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnDisappearEvent);
+        }
+    }
+
+    private void OnAppearEvent(string eventAlias)
+    {
+        if (eventAlias == TriggerData.AppearLevelEventAlias)
+        {
+            SetShown(true);
+        }
+    }
+
+    private void OnDisappearEvent(string eventAlias)
+    {
+        if (eventAlias == TriggerData.DisappearLevelEventAlias)
+        {
+            PoolRecycle();
+        }
     }
 
     [Button("预览颜色")]
@@ -97,8 +178,8 @@ public abstract class LevelTriggerBase : PoolObject
         HasTriggeredTimes++;
         if (HasTriggeredTimes > TriggerData.MaxTriggerTime) return;
         FXManager.Instance.PlayFX(TriggerData.TriggerFX, transform.position, TriggerData.TriggerFXScale);
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventID, TriggerData.TriggerEmitEventID);
-        Debug.Log("LevelTriggerEventID:" + TriggerData.TriggerEmitEventID);
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, TriggerData.TriggerEmitEventAlias);
+        //Debug.Log("LevelTriggerEventAlias:" + TriggerData.TriggerEmitEventAlias);
     }
 
     void OnDrawGizmos()
