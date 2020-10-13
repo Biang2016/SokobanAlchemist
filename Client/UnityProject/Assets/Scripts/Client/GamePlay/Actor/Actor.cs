@@ -463,6 +463,13 @@ public class Actor : PoolObject
             transform.position = new Vector3(transform.position.x, transform.position.y, CurWorldGP.z);
         }
 
+        CurWorldGP = transform.position.ToGridPos3D();
+        Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(CurWorldGP + new GridPos3D(0, -1, 0), out WorldModule module, out GridPos3D localGP, false);
+        if (!box)
+        {
+            transform.position += Vector3.down;
+        }
+
         LastMoveAttempt = CurMoveAttempt;
     }
 

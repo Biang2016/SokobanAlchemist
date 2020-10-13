@@ -624,7 +624,7 @@ namespace BiangStudio
             Transform parent = transform;
             while (parent != null)
             {
-                if (parent.name.Equals(ancestorName))
+                if (parent.name == ancestorName)
                 {
                     return true;
                 }

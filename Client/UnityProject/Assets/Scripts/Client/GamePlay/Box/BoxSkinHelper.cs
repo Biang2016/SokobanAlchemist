@@ -1,53 +1,101 @@
-﻿using UnityEngine;
+﻿using BiangStudio.GameDataFormat.Grid;
+using UnityEngine;
 using Sirenix.OdinInspector;
 
 public class BoxSkinHelper : MonoBehaviour, IBoxHelper
 {
-    public Mesh BoxMesh;
-    public Mesh RoundedBoxMesh;
+    [SerializeField]
+    private Box Box;
 
-    public MeshRenderer MeshRenderer;
-    public MeshFilter MeshFilter;
+    [SerializeField]
+    private Mesh[] NormalMeshes;
+
+    [SerializeField]
+    private Mesh[] RoundedMeshes;
+
+    [SerializeField]
+    private MeshRenderer MeshRenderer;
+
+    [SerializeField]
+    private MeshFilter MeshFilter;
 
     public void PoolRecycle()
     {
     }
 
-    public void SwitchModel(BoxModelType boxModelType)
+    [SerializeField]
+    [OnValueChanged("SwitchBoxModelType")]
+    private BoxModelType BoxModelType;
+
+    private void SwitchBoxModelType()
+    {
+        if (MeshFilter)
+        {
+            SwitchBoxModelType(BoxModelType);
+        }
+    }
+
+    public void SwitchBoxModelType(BoxModelType boxModelType)
     {
         if (MeshFilter)
         {
             switch (boxModelType)
             {
-                case BoxModelType.Box:
+                case BoxModelType.Normal:
                 {
-                    MeshFilter.mesh = BoxMesh;
+                    MeshFilter.mesh = NormalMeshes[(int) Box.BoxShapeType];
                     break;
                 }
                 case BoxModelType.Rounded:
                 {
-                    MeshFilter.mesh = RoundedBoxMesh;
+                    MeshFilter.mesh = RoundedMeshes[(int) Box.BoxShapeType];
+                    break;
+                }
+            }
+        }
+
+        BoxModelType = boxModelType;
+    }
+
+    public void RefreshBoxShapeType()
+    {
+        if (MeshFilter)
+        {
+            switch (BoxModelType)
+            {
+                case BoxModelType.Normal:
+                {
+                    MeshFilter.mesh = NormalMeshes[(int) Box.BoxShapeType];
+                    break;
+                }
+                case BoxModelType.Rounded:
+                {
+                    MeshFilter.mesh = RoundedMeshes[(int) Box.BoxShapeType];
                     break;
                 }
             }
         }
     }
 
-    [Button("预览变圆")]
-    private void SwitchToRound()
+    public void SwitchBoxOrientation()
     {
-        SwitchModel(BoxModelType.Rounded);
+        if (MeshFilter)
+        {
+            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, Box.BoxOrientation), MeshFilter.transform, 1);
+        }
     }
 
-    [Button("预览变方")]
-    private void SwitchToBox()
+    public void ResetBoxOrientation()
     {
-        SwitchModel(BoxModelType.Box);
+        if (MeshFilter)
+        {
+            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, GridPosR.Orientation.Up), MeshFilter.transform, 1);
+        }
     }
+}
 
-    public enum BoxModelType
-    {
-        Box,
-        Rounded,
-    }
+public enum BoxModelType
+{
+    Normal,
+    Rounded,
 }

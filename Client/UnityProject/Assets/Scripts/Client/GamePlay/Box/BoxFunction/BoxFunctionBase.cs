@@ -88,21 +88,43 @@ public abstract class BoxFunctionBase : IClone<BoxFunctionBase>
 [LabelText("隐藏")]
 public class BoxFunction_Hide : BoxFunctionBase
 {
-    [InfoBox("注意，此功能仅在世界特例生效")]
-    [ReadOnly]
-    [HideLabel]
-    internal string Tip;
-
     protected override void ChildClone(BoxFunctionBase newBF)
     {
         base.ChildClone(newBF);
-        BoxFunction_Hide bf = ((BoxFunction_Hide)newBF);
+        BoxFunction_Hide bf = ((BoxFunction_Hide) newBF);
     }
 
     public override void ApplyData(BoxFunctionBase srcData)
     {
         base.ApplyData(srcData);
-        BoxFunction_Hide bf = ((BoxFunction_Hide)srcData);
+        BoxFunction_Hide bf = ((BoxFunction_Hide) srcData);
+    }
+}
+
+[Serializable]
+[LabelText("形状和朝向")]
+public class BoxFunction_ShapeAndOrientation : BoxFunctionBase
+{
+    [LabelText("形状")]
+    public BoxShapeType BoxShapeType = BoxShapeType.Box;
+
+    [LabelText("朝向")]
+    public GridPosR.Orientation Orientation = GridPosR.Orientation.Up;
+
+    protected override void ChildClone(BoxFunctionBase newBF)
+    {
+        base.ChildClone(newBF);
+        BoxFunction_ShapeAndOrientation bf = ((BoxFunction_ShapeAndOrientation) newBF);
+        bf.BoxShapeType = BoxShapeType;
+        bf.Orientation = Orientation;
+    }
+
+    public override void ApplyData(BoxFunctionBase srcData)
+    {
+        base.ApplyData(srcData);
+        BoxFunction_ShapeAndOrientation bf = ((BoxFunction_ShapeAndOrientation) srcData);
+        BoxShapeType = bf.BoxShapeType;
+        Orientation = bf.Orientation;
     }
 }
 

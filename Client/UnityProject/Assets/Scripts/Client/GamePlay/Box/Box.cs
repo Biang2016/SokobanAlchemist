@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
 using DG.Tweening;
@@ -34,14 +33,13 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     private BoxUnderWorldModuleDesignerClamper BoxUnderWorldModuleDesignerClamper;
     private GridSnapper GridSnapper;
-    public GameObject NormalColliders;
-    public Collider StaticCollider;
-    public Collider DynamicCollider;
-    public Collider BoxOnlyDynamicCollider;
+
     internal Rigidbody Rigidbody;
+    public Collider BoxIndicatorTrigger;
 
     internal Actor LastTouchActor;
     internal BoxEffectHelper BoxEffectHelper;
+    public BoxColliderHelper BoxColliderHelper;
     public BoxThornTrapTriggerHelper BoxThornTrapTriggerHelper;
     public BoxSkinHelper BoxSkinHelper;
     public BoxIconSpriteHelper BoxIconSpriteHelper;
@@ -52,6 +50,8 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         LastTouchActor = null;
         ArtOnly = true;
+        BoxColliderHelper.OnUsed();
+        BoxIndicatorTrigger.gameObject.SetActive(true);
         base.OnUsed();
     }
 
@@ -64,14 +64,12 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         LastState = States.Static;
         State = States.Static;
         BoxEffectHelper?.PoolRecycle();
+        BoxColliderHelper.PoolRecycle();
         BoxThornTrapTriggerHelper?.PoolRecycle();
         BoxSkinHelper?.PoolRecycle();
         BoxIconSpriteHelper?.PoolRecycle();
         BoxEffectHelper = null;
         transform.DOPause();
-        StaticCollider.enabled = false;
-        DynamicCollider.enabled = false;
-        BoxOnlyDynamicCollider.enabled = false;
         damageTimes = 0;
         if (Rigidbody) Destroy(Rigidbody);
         if (LastTouchActor != null && LastTouchActor.CurrentLiftBox == this)
@@ -82,6 +80,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         }
 
         UnRegisterEvents();
+        BoxIndicatorTrigger.gameObject.SetActive(false);
         base.OnRecycled();
     }
 
@@ -91,6 +90,36 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     [LabelText("箱子特性")]
     [AssetsOnly]
     public BoxFeature BoxFeature;
+
+    [LabelText("箱子形状")]
+    [AssetsOnly]
+    [OnValueChanged("SwitchBoxShapeType")]
+    public BoxShapeType BoxShapeType;
+
+    private void SwitchBoxShapeType()
+    {
+        if (BoxShapeType == BoxShapeType.Box)
+        {
+            BoxSkinHelper?.ResetBoxOrientation();
+            BoxColliderHelper.ResetBoxOrientation();
+            BoxOrientation = GridPosR.Orientation.Up;
+        }
+
+        BoxSkinHelper?.RefreshBoxShapeType();
+        BoxColliderHelper.SwitchBoxShapeType();
+    }
+
+    [LabelText("箱子朝向")]
+    [HideIf("BoxShapeType", BoxShapeType.Box)]
+    [OnValueChanged("SwitchBoxOrientation")]
+    [EnumToggleButtons]
+    public GridPosR.Orientation BoxOrientation;
+
+    private void SwitchBoxOrientation()
+    {
+        BoxSkinHelper?.SwitchBoxOrientation();
+        BoxColliderHelper.SwitchBoxOrientation();
+    }
 
     [AssetsOnly]
     [ShowIf("Interactable")]
@@ -159,7 +188,8 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     [ShowInInspector]
     [LabelText("箱子特殊功能")]
-    internal List<BoxFunctionBase> BoxFunctions = new List<BoxFunctionBase>();
+    [NonSerialized]
+    public List<BoxFunctionBase> BoxFunctions = new List<BoxFunctionBase>();
 
     [HideInInspector]
     public byte[] BoxFunctionBaseData;
@@ -276,7 +306,17 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         if (boxTypeIndex == BoxTypeIndex)
         {
-            BoxSkinHelper?.SwitchModel(interactSkillType.ConvertToBoxModelType());
+            if (BoxSkinHelper)
+            {
+                if (interactSkillType.HasFlag(InteractSkillType.Kick))
+                {
+                    BoxSkinHelper.SwitchBoxModelType(BoxModelType.Rounded);
+                }
+                else
+                {
+                    BoxSkinHelper.SwitchBoxModelType(BoxModelType.Normal);
+                }
+            }
         }
     }
 
@@ -284,52 +324,50 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         BoxTypeIndex = boxTypeIndex;
         RegisterEvents();
+
+        foreach (BoxFunctionBase bf in BoxFunctions)
+        {
+            if (bf is BoxFunction_ShapeAndOrientation bf_so)
+            {
+                BoxShapeType = bf_so.BoxShapeType;
+                BoxOrientation = bf_so.Orientation;
+            }
+        }
+
         if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorSkillHelper.GetInteractSkillType(BoxTypeIndex), BoxTypeIndex);
     }
 
     public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly, LerpType lerpType)
     {
-        StaticCollider.enabled = true;
-        DynamicCollider.enabled = false;
-        BoxOnlyDynamicCollider.enabled = false;
-        if (lerpType == LerpType.Drop)
-        {
-            StaticCollider.enabled = false;
-            DynamicCollider.enabled = false;
-            BoxOnlyDynamicCollider.enabled = false;
-        }
-
         ArtOnly = artOnly;
-        NormalColliders.SetActive(!Passable);
-        StaticCollider.gameObject.SetActive(!artOnly);
-        DynamicCollider.gameObject.SetActive(!artOnly);
-        BoxOnlyDynamicCollider.gameObject.SetActive(!artOnly && Passable);
-
-        if (BoxFeature.HasFlag(BoxFeature.IsGround))
-        {
-            StaticCollider.material.staticFriction = 0;
-            StaticCollider.material.dynamicFriction = 0;
-            DynamicCollider.material.staticFriction = 0;
-            DynamicCollider.material.dynamicFriction = 0;
-        }
-
         LastTouchActor = null;
         lastWorldGP = WorldGP;
         WorldModule = module;
         WorldGP = module.LocalGPToWorldGP(localGridPos3D);
         LocalGP = localGridPos3D;
         transform.parent = module.transform;
+        BoxColliderHelper.Initialize(Passable, artOnly, BoxFeature.HasFlag(BoxFeature.IsGround), lerpType == LerpType.Drop, lerpTime > 0);
+        SwitchBoxOrientation();
+        SwitchBoxShapeType();
         if (lerpTime > 0)
         {
+            if (lerpType == LerpType.Push)
+            {
+                BoxColliderHelper.OnPush();
+            }
+
             transform.DOPause();
             transform.DOLocalMove(localGridPos3D.ToVector3(), lerpTime).SetEase(Ease.Linear).OnComplete(() =>
             {
                 State = States.Static;
                 if (lerpType == LerpType.Drop)
                 {
-                    StaticCollider.enabled = true;
-                    DynamicCollider.enabled = true;
-                    BoxOnlyDynamicCollider.enabled = true;
+                    BoxColliderHelper.OnDropComplete();
+                }
+
+                if (lerpType == LerpType.Push)
+                {
+                    BoxColliderHelper.OnPushEnd();
                 }
             });
             transform.DOLocalRotate(Vector3.zero, lerpTime);
@@ -377,12 +415,6 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             transform.localPosition = localGridPos3D.ToVector3();
             transform.localRotation = Quaternion.identity;
             State = States.Static;
-            if (lerpType == LerpType.Drop)
-            {
-                StaticCollider.enabled = true;
-                DynamicCollider.enabled = true;
-                BoxOnlyDynamicCollider.enabled = true;
-            }
         }
 
         WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
@@ -426,10 +458,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this);
             State = States.BeingKicked;
             transform.DOPause();
-            StaticCollider.enabled = false;
-            DynamicCollider.enabled = true;
-            BoxOnlyDynamicCollider.enabled = true;
-            DynamicCollider.material.dynamicFriction = 0f;
+            BoxColliderHelper.OnKick();
             Rigidbody = gameObject.GetComponent<Rigidbody>();
             if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
             Rigidbody.mass = FinalWeight;
@@ -448,10 +477,13 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         }
     }
 
+    private Quaternion DefaultRotBeforeLift;
+
     public bool BeingLift(Actor actor)
     {
         if (State == States.BeingPushed || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.PushingCanceling)
         {
+            DefaultRotBeforeLift = transform.rotation;
             damageTimes = 0;
             LastTouchActor = actor;
             foreach (BoxFunctionBase bf in BoxFunctions)
@@ -462,9 +494,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this);
             State = States.BeingLift;
             transform.DOPause();
-            StaticCollider.enabled = true;
-            DynamicCollider.enabled = false;
-            BoxOnlyDynamicCollider.enabled = true;
+            BoxColliderHelper.OnBeingLift();
             if (Rigidbody)
             {
                 DestroyImmediate(Rigidbody);
@@ -498,10 +528,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             State = States.Flying;
             transform.DOPause();
             transform.parent = WorldManager.Instance.CurrentWorld.transform;
-            StaticCollider.enabled = false;
-            DynamicCollider.enabled = true;
-            BoxOnlyDynamicCollider.enabled = true;
-            DynamicCollider.material.dynamicFriction = Throw_Friction;
+            BoxColliderHelper.OnThrow();
             Rigidbody = gameObject.GetComponent<Rigidbody>();
             if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
             Rigidbody.mass = FinalWeight;
@@ -531,10 +558,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             State = States.Putting;
             transform.DOPause();
             transform.parent = WorldManager.Instance.CurrentWorld.transform;
-            StaticCollider.enabled = false;
-            DynamicCollider.enabled = true;
-            BoxOnlyDynamicCollider.enabled = true;
-            DynamicCollider.material.dynamicFriction = Throw_Friction;
+            BoxColliderHelper.OnPut();
             Rigidbody = gameObject.GetComponent<Rigidbody>();
             if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
             Rigidbody.mass = FinalWeight;
@@ -562,9 +586,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         State = States.DroppingFromDeadActor;
         transform.DOPause();
         transform.parent = WorldManager.Instance.CurrentWorld.transform;
-        StaticCollider.enabled = false;
-        DynamicCollider.enabled = true;
-        BoxOnlyDynamicCollider.enabled = true;
+        BoxColliderHelper.OnDropFromDeadActor();
         Rigidbody = gameObject.GetComponent<Rigidbody>();
         if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
         Rigidbody.mass = FinalWeight;
@@ -604,13 +626,16 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             if (Rigidbody.velocity.magnitude < 1f)
             {
                 DestroyImmediate(Rigidbody);
-                StaticCollider.enabled = true;
-                DynamicCollider.enabled = false;
-                BoxOnlyDynamicCollider.enabled = false;
+                BoxColliderHelper.OnRigidbodyStop();
                 WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this);
                 BoxEffectHelper?.PoolRecycle();
                 BoxEffectHelper = null;
             }
+        }
+
+        if (state == States.Lifted || state == States.BeingLift)
+        {
+            transform.rotation = DefaultRotBeforeLift;
         }
 
         if (Rigidbody && Rigidbody.velocity.magnitude > 1f)
@@ -716,26 +741,46 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         if (hit) hit.transform.localScale = Vector3.one * CollideFXScale;
     }
 
+#if UNITY_EDITOR
+
     void OnDrawGizmos()
     {
         if (!Application.isPlaying)
         {
-            Gizmos.color = new Color(0.2f, 0.2f, 0.2f, 0.1f);
-            Gizmos.DrawCube(transform.position, Vector3.one);
+            //Gizmos.color = new Color(0.2f, 0.2f, 0.2f, 0.1f);
+            //Gizmos.DrawCube(transform.position, Vector3.one);
 
-#if UNITY_EDITOR
             if (RequireSerializeFunctionIntoWorldModule)
             {
-                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#0AFFF1"), Color.cyan, "模组特例");
+                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#0AFFF1"), Color.cyan, "模特");
             }
 
-            if (RequireSerializeFunctionIntoWorld || transform.HasAncestorName($"@_{WorldHierarchyRootType.WorldSpecialBoxesRoot}"))
+            if (RequireHideInWorldForModuleBox)
             {
-                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#FF8000"), Color.yellow, "世界特例");
+                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#FF8000"), Color.yellow, "世隐");
             }
-#endif
+            else if (RequireSerializeFunctionIntoWorld || IsUnderWorldSpecialBoxesRoot)
+            {
+                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#FF8000"), Color.yellow, "世特");
+            }
         }
     }
+
+    private bool IsUnderWorldSpecialBoxesRoot = false;
+
+    void OnTransformParentChanged()
+    {
+        RefreshIsUnderWorldSpecialBoxesRoot();
+    }
+
+    internal void RefreshIsUnderWorldSpecialBoxesRoot()
+    {
+        if (!Application.isPlaying)
+        {
+            IsUnderWorldSpecialBoxesRoot = transform.HasAncestorName($"@_{WorldHierarchyRootType.WorldSpecialBoxesRoot}");
+        }
+    }
+#endif
 
 #if UNITY_EDITOR
     [HideInPlayMode]
@@ -807,6 +852,25 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     #endregion
 
     #region BoxExtraData
+
+    public bool RequireHideInWorldForModuleBox
+    {
+        get
+        {
+            foreach (BoxFunctionBase bf in BoxFunctions)
+            {
+                if (bf is BoxFunction_Hide hide)
+                {
+                    if (hide.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
 
     public bool RequireSerializeFunctionIntoWorld
     {
@@ -1018,4 +1082,10 @@ public enum BoxFeature
 
     [LabelText("举起就消失")]
     LiftThenDisappear = 1 << 11,
+}
+
+public enum BoxShapeType
+{
+    Box,
+    Wedge,
 }

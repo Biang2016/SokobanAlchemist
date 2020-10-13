@@ -54,8 +54,10 @@ GameObject:
   - component: {fileID: 7729307243981049466}
   - component: {fileID: 7729307243981049467}
   - component: {fileID: -2219425402513466831}
+  - component: {fileID: -6763505200943297621}
+  - component: {fileID: -4344891144511347859}
   m_Layer: 0
-  m_Name: GameMechanismExpModuleS2
+  m_Name: WilliamsWorld2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -91,6 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WorldModuleFeature: 0
+  WorldModuleFlowAssetPath: 
   RangeGizmoColor: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 0.35686275}
   RangeGizmoBorderColor: {r: 0.5754717, g: 0.21987364, b: 0.24095955, a: 1}
 --- !u!114 &-2219425402513466831
@@ -106,6 +109,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SnapperGridSize: 16
+--- !u!114 &-6763505200943297621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7729307243981049460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5c3ebb24c97464da319951cafe5a47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _serializedExposedParameters: []
+  _boundGraphSerialization: 
+  _boundGraphObjectReferences: []
+  _boundGraphSource:
+    _version: 0
+    _category: 
+    _comments: 
+    _translation: {x: 0, y: 0}
+    _zoomFactor: 1
+  _firstActivation: 0
+  _enableAction: 0
+  _disableAction: 0
+  _lockBoundGraphPrefabOverrides: 1
+  _preInitializeSubGraphs: 0
+  _updateMode: 0
+  _graph: {fileID: 0}
+  _blackboard: {fileID: -4344891144511347859}
+--- !u!114 &-4344891144511347859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7729307243981049460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b98a6db0b653f764eac834f85857a9dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _serializedBlackboard: '{"_variables":{}}'
+  _objectReferences: []
+  _serializedVariables: []
 --- !u!1 &7858115411830184747
 GameObject:
   m_ObjectHideFlags: 0
@@ -477,6 +524,11 @@ PrefabInstance:
       propertyPath: BornPointData.EnemyName
       value: FireEnemey
       objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
+      value: FireEnemey
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
 --- !u!4 &4845636090581104010 stripped
@@ -710,6 +762,11 @@ PrefabInstance:
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: BornPointData.EnemyName
+      value: FireEnemey
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
       value: FireEnemey
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1622,6 +1679,11 @@ PrefabInstance:
       propertyPath: BornPointData.EnemyName
       value: FireEnemey
       objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
+      value: FireEnemey
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
 --- !u!4 &6214752823108374449 stripped
@@ -1855,6 +1917,11 @@ PrefabInstance:
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: BornPointData.EnemyName
+      value: FireEnemey
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
       value: FireEnemey
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2167,6 +2234,11 @@ PrefabInstance:
       propertyPath: BornPointData.EnemyName
       value: FireEnemey
       objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
+      value: FireEnemey
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
 --- !u!4 &6775591110839784195 stripped
@@ -2325,6 +2397,11 @@ PrefabInstance:
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: BornPointData.EnemyName
+      value: FireEnemey
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
       value: FireEnemey
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2935,6 +3012,11 @@ PrefabInstance:
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: BornPointData.EnemyName
+      value: FireEnemey
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
       value: FireEnemey
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -4447,6 +4529,11 @@ PrefabInstance:
       propertyPath: BornPointData.EnemyName
       value: FireEnemey
       objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
+      value: FireEnemey
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
 --- !u!4 &978227243921900061 stripped
@@ -4907,6 +4994,11 @@ PrefabInstance:
       propertyPath: BornPointData.EnemyName
       value: FireEnemey
       objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
+      value: FireEnemey
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
 --- !u!4 &1392024370161827221 stripped
@@ -5215,6 +5307,11 @@ PrefabInstance:
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: BornPointData.EnemyName
+      value: FireEnemey
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
       value: FireEnemey
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -6652,6 +6749,11 @@ PrefabInstance:
       propertyPath: BornPointData.EnemyName
       value: FireEnemey
       objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
+      value: FireEnemey
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
 --- !u!4 &2778421439706529487 stripped
@@ -7187,6 +7289,11 @@ PrefabInstance:
       propertyPath: BornPointData.EnemyName
       value: FireEnemey
       objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
+      value: FireEnemey
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
 --- !u!4 &3936053792715135938 stripped
@@ -7570,6 +7677,11 @@ PrefabInstance:
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: BornPointData.EnemyName
+      value: FireEnemey
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
       value: FireEnemey
       objectReference: {fileID: 0}
     m_RemovedComponents: []

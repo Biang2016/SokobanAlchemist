@@ -20,7 +20,10 @@ public class ModuleAIAtoms
         protected override void RegisterPorts()
         {
             OnTriggered = AddFlowOutput("OnTriggered");
-            ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnEvent);
+            if (ClientGameManager.Instance != null)
+            {
+                ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint)ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnEvent);
+            }
         }
 
         private void OnEvent(string levelEventAlias)

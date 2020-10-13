@@ -46,27 +46,23 @@ namespace UnityToolbarExtender
 
         private static void OnLeftToolbarGUI()
         {
-            //if (GUILayout.Button(new GUIContent("序列化世界配置"), ToolbarStyles.toolbarbutton))
-            //{
-            //}
+            if (GUILayout.Button(new GUIContent("世界模组编辑器"), ToolbarStyles.toolbarbutton))
+            {
+                WorldAndModuleEditorWindow.OpenWorldAndModuleEditorWindow();
+            }
 
-            //GUILayout.FlexibleSpace();
+            GUILayout.FlexibleSpace();
         }
 
         private static void OnRightToolbarGUI()
         {
             GUILayout.FlexibleSpace();
 
-            if (GUILayout.Button(new GUIContent("序列化配置"), ToolbarStyles.toolbarbuttonLeft))
+            if (GUILayout.Button(new GUIContent("序列化配置"), ToolbarStyles.toolbarbutton))
             {
                 ConfigManager.ExportConfigs();
                 ConfigManager.LoadAllConfigs();
                 EditorUtility.DisplayDialog("提示", "序列化成功", "确定");
-            }
-
-            if (GUILayout.Button(new GUIContent("配置面板"), ToolbarStyles.toolbarbuttonRight))
-            {
-                ConfigPreviewerWindow.OpenConfigPreviewWindow();
             }
         }
     }

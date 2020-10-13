@@ -69,15 +69,15 @@ public class WorldModuleDesignHelper : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        //Gizmos.matrix = transform.localToWorldMatrix;
+        Gizmos.matrix = transform.localToWorldMatrix;
         //if (Selection.Contains(gameObject))
         //{
         //    Gizmos.color = RangeGizmoColor;
         //    Gizmos.DrawCube(Vector3.zero + Vector3.one * (WorldModule.MODULE_SIZE / 2f - 0.5f), Vector3.one * WorldModule.MODULE_SIZE);
         //}
 
-        //Gizmos.color = RangeGizmoBorderColor;
-        //Gizmos.DrawWireCube(Vector3.zero + Vector3.one * (WorldModule.MODULE_SIZE / 2f - 0.5f), Vector3.one * WorldModule.MODULE_SIZE);
+        Gizmos.color = RangeGizmoBorderColor;
+        Gizmos.DrawWireCube(Vector3.zero + Vector3.one * (WorldModule.MODULE_SIZE / 2f - 0.5f), Vector3.one * WorldModule.MODULE_SIZE);
     }
 
     [HideInPlayMode]
@@ -171,6 +171,8 @@ public class WorldModuleDesignHelper : MonoBehaviour
             {
                 trigger.transform.parent = root;
             }
+
+            trigger.RefreshIsUnderWorldOrModuleBoxesRoot();
         }
 
         List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
@@ -191,9 +193,10 @@ public class WorldModuleDesignHelper : MonoBehaviour
             {
                 box.transform.parent = boxesRoot;
             }
+
+            box.RefreshIsUnderWorldSpecialBoxesRoot();
         }
     }
-
 #endif
 }
 

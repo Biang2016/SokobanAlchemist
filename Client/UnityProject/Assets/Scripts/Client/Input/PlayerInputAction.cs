@@ -1017,6 +1017,109 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Editor"",
+            ""id"": ""8bcbd970-9a64-4c63-8582-30bf3a934dc8"",
+            ""actions"": [
+                {
+                    ""name"": ""MousePosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""9f4b06f8-c4f2-4b3e-9b0e-61e8c39ee7d0"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MouseWheel"",
+                    ""type"": ""Value"",
+                    ""id"": ""d8359d80-c966-4fea-a049-6cf9a449b6e9"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MouseMiddleClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""8ee37cb6-d6a1-47a9-a18b-a5e101d610ab"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""MouseRightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""21ccacfa-737a-46b6-aaca-28c64c1397e2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""MouseLeftClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""d47754d1-b274-474d-88d2-e3f130dff8b8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""ac607e74-38ef-48f4-9167-b122f949bb51"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""MouseLeftClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""44c9c46f-3545-4217-ab96-dc31ff218319"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""MouseRightClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""76339cd0-e103-44f0-97d5-7c284bad2b7c"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""MouseMiddleClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""01cb0134-2578-4f2c-81a2-c41232a250f6"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""MouseWheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3e51ece5-1ac3-41fc-999d-192463550e19"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""MousePosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1077,6 +1180,13 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_Common_RestartGame = m_Common.FindAction("RestartGame", throwIfNotFound: true);
         m_Common_RestartGameR = m_Common.FindAction("RestartGameR", throwIfNotFound: true);
         m_Common_PauseGame = m_Common.FindAction("PauseGame", throwIfNotFound: true);
+        // Editor
+        m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
+        m_Editor_MousePosition = m_Editor.FindAction("MousePosition", throwIfNotFound: true);
+        m_Editor_MouseWheel = m_Editor.FindAction("MouseWheel", throwIfNotFound: true);
+        m_Editor_MouseMiddleClick = m_Editor.FindAction("MouseMiddleClick", throwIfNotFound: true);
+        m_Editor_MouseRightClick = m_Editor.FindAction("MouseRightClick", throwIfNotFound: true);
+        m_Editor_MouseLeftClick = m_Editor.FindAction("MouseLeftClick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1500,6 +1610,71 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         }
     }
     public CommonActions @Common => new CommonActions(this);
+
+    // Editor
+    private readonly InputActionMap m_Editor;
+    private IEditorActions m_EditorActionsCallbackInterface;
+    private readonly InputAction m_Editor_MousePosition;
+    private readonly InputAction m_Editor_MouseWheel;
+    private readonly InputAction m_Editor_MouseMiddleClick;
+    private readonly InputAction m_Editor_MouseRightClick;
+    private readonly InputAction m_Editor_MouseLeftClick;
+    public struct EditorActions
+    {
+        private @PlayerInput m_Wrapper;
+        public EditorActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MousePosition => m_Wrapper.m_Editor_MousePosition;
+        public InputAction @MouseWheel => m_Wrapper.m_Editor_MouseWheel;
+        public InputAction @MouseMiddleClick => m_Wrapper.m_Editor_MouseMiddleClick;
+        public InputAction @MouseRightClick => m_Wrapper.m_Editor_MouseRightClick;
+        public InputAction @MouseLeftClick => m_Wrapper.m_Editor_MouseLeftClick;
+        public InputActionMap Get() { return m_Wrapper.m_Editor; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(EditorActions set) { return set.Get(); }
+        public void SetCallbacks(IEditorActions instance)
+        {
+            if (m_Wrapper.m_EditorActionsCallbackInterface != null)
+            {
+                @MousePosition.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnMousePosition;
+                @MousePosition.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnMousePosition;
+                @MousePosition.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnMousePosition;
+                @MouseWheel.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseWheel;
+                @MouseWheel.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseWheel;
+                @MouseWheel.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseWheel;
+                @MouseMiddleClick.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseMiddleClick;
+                @MouseMiddleClick.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseMiddleClick;
+                @MouseMiddleClick.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseMiddleClick;
+                @MouseRightClick.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseRightClick;
+                @MouseRightClick.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseRightClick;
+                @MouseRightClick.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseRightClick;
+                @MouseLeftClick.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseLeftClick;
+                @MouseLeftClick.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseLeftClick;
+                @MouseLeftClick.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseLeftClick;
+            }
+            m_Wrapper.m_EditorActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @MousePosition.started += instance.OnMousePosition;
+                @MousePosition.performed += instance.OnMousePosition;
+                @MousePosition.canceled += instance.OnMousePosition;
+                @MouseWheel.started += instance.OnMouseWheel;
+                @MouseWheel.performed += instance.OnMouseWheel;
+                @MouseWheel.canceled += instance.OnMouseWheel;
+                @MouseMiddleClick.started += instance.OnMouseMiddleClick;
+                @MouseMiddleClick.performed += instance.OnMouseMiddleClick;
+                @MouseMiddleClick.canceled += instance.OnMouseMiddleClick;
+                @MouseRightClick.started += instance.OnMouseRightClick;
+                @MouseRightClick.performed += instance.OnMouseRightClick;
+                @MouseRightClick.canceled += instance.OnMouseRightClick;
+                @MouseLeftClick.started += instance.OnMouseLeftClick;
+                @MouseLeftClick.performed += instance.OnMouseLeftClick;
+                @MouseLeftClick.canceled += instance.OnMouseLeftClick;
+            }
+        }
+    }
+    public EditorActions @Editor => new EditorActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1564,5 +1739,13 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnRestartGame(InputAction.CallbackContext context);
         void OnRestartGameR(InputAction.CallbackContext context);
         void OnPauseGame(InputAction.CallbackContext context);
+    }
+    public interface IEditorActions
+    {
+        void OnMousePosition(InputAction.CallbackContext context);
+        void OnMouseWheel(InputAction.CallbackContext context);
+        void OnMouseMiddleClick(InputAction.CallbackContext context);
+        void OnMouseRightClick(InputAction.CallbackContext context);
+        void OnMouseLeftClick(InputAction.CallbackContext context);
     }
 }

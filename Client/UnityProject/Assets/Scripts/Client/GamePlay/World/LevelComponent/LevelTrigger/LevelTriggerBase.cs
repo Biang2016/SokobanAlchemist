@@ -182,25 +182,40 @@ public abstract class LevelTriggerBase : PoolObject
         //Debug.Log("LevelTriggerEventAlias:" + TriggerData.TriggerEmitEventAlias);
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmos()
     {
         if (!Application.isPlaying)
         {
-#if UNITY_EDITOR
-
-            if (transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot}"))
+            if (IsUnderWorldModuleSpecialBoxesRoot)
             {
-                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#0AFFF1"), Color.cyan, "模组特例");
+                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#0AFFF1"), Color.cyan, "模特");
             }
 
-            if (transform.HasAncestorName($"@_{WorldHierarchyRootType.WorldLevelTriggersRoot}"))
+            if (IsUnderWorldSpecialBoxesRoot)
             {
-                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#FF8000"), Color.yellow, "世界特例");
+                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#FF8000"), Color.yellow, "世特");
             }
-
-#endif
         }
     }
+
+    private bool IsUnderWorldModuleSpecialBoxesRoot = false;
+    private bool IsUnderWorldSpecialBoxesRoot = false;
+
+    void OnTransformParentChanged()
+    {
+        RefreshIsUnderWorldOrModuleBoxesRoot();
+    }
+
+    internal void RefreshIsUnderWorldOrModuleBoxesRoot()
+    {
+        if (!Application.isPlaying)
+        {
+            IsUnderWorldSpecialBoxesRoot = transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot}");
+            IsUnderWorldSpecialBoxesRoot = transform.HasAncestorName($"@_{WorldHierarchyRootType.WorldLevelTriggersRoot}");
+        }
+    }
+#endif
 }
 
 public enum LevelTriggerType

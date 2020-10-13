@@ -218,6 +218,8 @@ public class WorldDesignHelper : MonoBehaviour
             {
                 trigger.transform.parent = root;
             }
+
+            trigger.RefreshIsUnderWorldOrModuleBoxesRoot();
         }
 
         List<Box> boxes = GetComponentsInChildren<Box>().ToList();
@@ -232,7 +234,6 @@ public class WorldDesignHelper : MonoBehaviour
             }
         }
     }
-
 #endif
 }
 

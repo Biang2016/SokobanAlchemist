@@ -118,16 +118,4 @@ public static class InteractSkillTypeExtension
 
         return 0;
     }
-
-    public static BoxSkinHelper.BoxModelType ConvertToBoxModelType(this InteractSkillType interactSkillType)
-    {
-        if (interactSkillType.HasFlag(InteractSkillType.Kick))
-        {
-            return BoxSkinHelper.BoxModelType.Rounded;
-        }
-        else
-        {
-            return BoxSkinHelper.BoxModelType.Box;
-        }
-    }
 }

@@ -51,18 +51,26 @@ MonoBehaviour:
   Trigger: {fileID: 3593645129036904678}
   Renderer: {fileID: 9000911640552907456}
   childData:
-    LevelTriggerType: 0
-    GridPos:
+    LevelComponentBelongsTo: 0
+    WorldGP:
       x: 0
       y: 0
       z: 0
-    TriggerEmitEventID: 0
+    LocalGP:
+      x: 0
+      y: 0
+      z: 0
+    AppearLevelEventAlias: 
+    DisappearLevelEventAlias: 
+    LevelTriggerType: 0
+    TriggerEmitEventAlias: 
     MaxTriggerTime: 1
+    KeepTriggering: 0
     TriggerFX: Flash_Leaves
     TriggerFXScale: 2
     TriggerColor: {r: 0.2028302, g: 1, b: 0.9541518, a: 0.4392157}
     RequireBoxTypeName: IceDropBoomBox
-    RequireStayDuration: 1
+    RequiredStayDuration: 1
 --- !u!65 &3593645129036904678
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -144,7 +152,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7525911696421158106}
-  m_Mesh: {fileID: -5495902117074765545, guid: 0942a3c814f092245b049064e17bea6d, type: 3}
+  m_Mesh: {fileID: -3262789968867269347, guid: 0942a3c814f092245b049064e17bea6d, type: 3}
 --- !u!23 &9000911640552907456
 MeshRenderer:
   m_ObjectHideFlags: 0
