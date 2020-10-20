@@ -27,13 +27,9 @@ public abstract class BoxFunctionBase : IClone<BoxFunctionBase>
         World,
     }
 
-    private IEnumerable<string> GetAllBoxTypeNames()
-    {
-        ConfigManager.LoadAllConfigs();
-        List<string> res = ConfigManager.BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
-        res.Insert(0, "None");
-        return res;
-    }
+    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
+
+    private IEnumerable<string> GetAllEnemyNames => ConfigManager.GetAllEnemyNames();
 
     public virtual void OnRegisterLevelEventID()
     {
@@ -282,6 +278,49 @@ public class BoxFunction_ChangeBoxType : BoxFunction_InvokeOnLevelEventID
         base.ApplyData(srcData);
         BoxFunction_ChangeBoxType bf = ((BoxFunction_ChangeBoxType) srcData);
         ChangeBoxTypeTo = bf.ChangeBoxTypeTo;
+    }
+}
+
+[Serializable]
+[LabelText("箱子变敌人")]
+public class BoxFunction_ChangeBoxToEnemy : BoxFunction_InvokeOnLevelEventID
+{
+    [LabelText("更改箱子为敌人")]
+    [ValueDropdown("GetAllEnemyNames", IsUniqueList = true, DropdownTitle = "选择敌人类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    public string ChangeBoxToEnemyType;
+
+    protected override void OnEventExecute()
+    {
+        if (Box.State == Box.States.Static)
+        {
+            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Box.WorldGP);
+            if (module != null)
+            {
+                GridPos3D localGP = Box.LocalGP;
+                WorldManager.Instance.CurrentWorld.DeleteBox(Box);
+                ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(ChangeBoxToEnemyType);
+                if (enemyTypeIndex != 0)
+                {
+                    BornPointData newBornPointData = new BornPointData();
+                    newBornPointData.LocalGP = localGP;
+                    newBornPointData.ActorType = ChangeBoxToEnemyType;
+                    BattleManager.Instance.CreateActorByBornPointData(newBornPointData, module);
+                }
+            }
+        }
+    }
+
+    protected override void ChildClone(BoxFunctionBase newBF)
+    {
+        base.ChildClone(newBF);
+        BoxFunction_ChangeBoxToEnemy bf = ((BoxFunction_ChangeBoxToEnemy) newBF);
+        bf.ChangeBoxToEnemyType = ChangeBoxToEnemyType;
+    }
+
+    public override void ApplyData(BoxFunctionBase srcData)
+    {
+        base.ApplyData(srcData);
+        BoxFunction_ChangeBoxToEnemy bf = ((BoxFunction_ChangeBoxToEnemy) srcData);
     }
 }
 

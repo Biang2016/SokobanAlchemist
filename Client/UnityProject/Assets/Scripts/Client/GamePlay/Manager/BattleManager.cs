@@ -39,6 +39,8 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
         }
 
         ActorDict.Clear();
+
+        BattleMessenger.Cleanup();
     }
 
     public override void Awake()
@@ -73,11 +75,24 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
     {
         foreach (BornPointData bpd in dataGroup.BornPoints)
         {
-            CreateActorByBornPointData(bpd, parentModule);
+            if (string.IsNullOrEmpty(bpd.SpawnLevelEventAlias))
+            {
+                CreateActorByBornPointData(bpd, parentModule);
+            }
+            else
+            {
+                ClientGameManager.Instance.BattleMessenger.AddListener((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, (string eventAlias) =>
+                {
+                    if (eventAlias == bpd.SpawnLevelEventAlias)
+                    {
+                        CreateActorByBornPointData(bpd, parentModule);
+                    }
+                });
+            }
         }
     }
 
-    private void CreateActorByBornPointData(BornPointData bpd, WorldModule parentModule = null)
+    public void CreateActorByBornPointData(BornPointData bpd, WorldModule parentModule = null)
     {
         if (bpd.ActorCategory == ActorCategory.Player)
         {

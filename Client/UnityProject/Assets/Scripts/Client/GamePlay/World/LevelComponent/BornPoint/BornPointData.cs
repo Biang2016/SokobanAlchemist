@@ -6,6 +6,10 @@ using UnityEngine.Serialization;
 [Serializable]
 public class BornPointData : LevelComponentData
 {
+    [BoxGroup("监听事件")]
+    [LabelText("收到事件后刷怪(空则开场刷怪)")]
+    public string SpawnLevelEventAlias;
+
     [ValueDropdown("GetAllActorNames")]
     [LabelText("角色类型")]
     [FormerlySerializedAs("EnemyName")]
@@ -32,6 +36,7 @@ public class BornPointData : LevelComponentData
     {
         base.ChildClone(newData);
         BornPointData data = ((BornPointData) newData);
+        data.SpawnLevelEventAlias = SpawnLevelEventAlias;
         data.ActorType = ActorType;
     }
 }
