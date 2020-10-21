@@ -393,6 +393,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort GetBoxTypeIndex(string boxTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
+        if (string.IsNullOrEmpty(boxTypeName)) return 0;
         BoxTypeDefineDict.TypeIndexDict.TryGetValue(boxTypeName, out ushort boxTypeIndex);
         return boxTypeIndex;
     }
@@ -407,6 +408,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort GetBoxIconTypeIndex(string boxIconTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
+        if (string.IsNullOrEmpty(boxIconTypeName)) return 0;
         BoxIconTypeDefineDict.TypeIndexDict.TryGetValue(boxIconTypeName, out ushort boxIconTypeIndex);
         return boxIconTypeIndex;
     }
@@ -421,6 +423,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort GetEnemyTypeIndex(string enemyTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
+        if (string.IsNullOrEmpty(enemyTypeName)) return 0;
         EnemyTypeDefineDict.TypeIndexDict.TryGetValue(enemyTypeName, out ushort enemyTypeIndex);
         return enemyTypeIndex;
     }
@@ -435,6 +438,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort GetWorldModuleTypeIndex(string worldModuleTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
+        if (string.IsNullOrEmpty(worldModuleTypeName)) return 0;
         WorldModuleTypeDefineDict.TypeIndexDict.TryGetValue(worldModuleTypeName, out ushort worldModuleTypeIndex);
         return worldModuleTypeIndex;
     }
@@ -449,6 +453,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort GetFXTypeIndex(string fxTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
+        if (string.IsNullOrEmpty(fxTypeName)) return 0;
         FXTypeDefineDict.TypeIndexDict.TryGetValue(fxTypeName, out ushort fxTypeIndex);
         return fxTypeIndex;
     }

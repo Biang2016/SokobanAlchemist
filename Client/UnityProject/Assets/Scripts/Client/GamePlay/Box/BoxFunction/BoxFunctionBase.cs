@@ -200,9 +200,12 @@ public abstract class BoxFunction_InvokeOnLevelEventID : BoxFunctionBase
         }
         else
         {
-            if (ListenLevelEventAlias.Equals(eventAlias))
+            if (!string.IsNullOrEmpty(ListenLevelEventAlias))
             {
-                ExecuteFunction();
+                if (ListenLevelEventAlias.Equals(eventAlias))
+                {
+                    ExecuteFunction();
+                }
             }
         }
     }

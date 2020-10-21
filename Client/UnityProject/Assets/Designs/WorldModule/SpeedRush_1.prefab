@@ -74,16 +74,6 @@ Transform:
   - {fileID: 7387839599002250699}
   - {fileID: 8068679493292881086}
   - {fileID: 1983357061677681433}
-  - {fileID: 482846401998642014}
-  - {fileID: 912696036815425903}
-  - {fileID: 4585500218172182148}
-  - {fileID: 3335158741601668306}
-  - {fileID: 1945189098124326259}
-  - {fileID: 2309584381398901552}
-  - {fileID: 6833117332623974216}
-  - {fileID: 922656175408814142}
-  - {fileID: 8393031233037150111}
-  - {fileID: 453411833349640875}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -186,7 +176,10 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 6833117332623974216}
+  - {fileID: 922656175408814142}
+  - {fileID: 8393031233037150111}
   m_Father: {fileID: 7729307243981049466}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -356,6 +349,11 @@ Transform:
   - {fileID: 6661031024186802734}
   - {fileID: 7554725903225516505}
   - {fileID: 1452123240082525488}
+  - {fileID: 4585500218172182148}
+  - {fileID: 3335158741601668306}
+  - {fileID: 1945189098124326259}
+  - {fileID: 2309584381398901552}
+  - {fileID: 453411833349640875}
   m_Father: {fileID: 7729307243981049466}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -424,7 +422,7 @@ PrefabInstance:
     - target: {fileID: 8422987936597983299, guid: 39dbe77370839f54a9dc30b53e79e842,
         type: 3}
       propertyPath: m_Name
-      value: FireDropBoomBox (1)
+      value: FireDropBoomBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39dbe77370839f54a9dc30b53e79e842, type: 3}
@@ -499,7 +497,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (76)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -574,7 +572,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (23)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -649,7 +647,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (35)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -799,7 +797,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (41)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -814,7 +812,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7729307243981049466}
+    m_TransformParent: {fileID: 8068679493292881086}
     m_Modifications:
     - target: {fileID: 3306344780855447505, guid: 764652e7e0033704a9bf185bcdc0ddfa,
         type: 3}
@@ -825,6 +823,11 @@ PrefabInstance:
         type: 3}
       propertyPath: childData.TriggerEmitEventAlias
       value: SpeedRush_1_EnemyAppear
+      objectReference: {fileID: 0}
+    - target: {fileID: 5666251240290953977, guid: 764652e7e0033704a9bf185bcdc0ddfa,
+        type: 3}
+      propertyPath: childData.RequireBoxTypeName
+      value: KeyBox
       objectReference: {fileID: 0}
     - target: {fileID: 6566653740014015075, guid: 764652e7e0033704a9bf185bcdc0ddfa,
         type: 3}
@@ -864,7 +867,7 @@ PrefabInstance:
     - target: {fileID: 6566653740014015075, guid: 764652e7e0033704a9bf185bcdc0ddfa,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6566653740014015075, guid: 764652e7e0033704a9bf185bcdc0ddfa,
         type: 3}
@@ -954,7 +957,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (38)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -1029,7 +1032,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (16)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -1179,7 +1182,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (58)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -1254,7 +1257,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (70)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -4404,7 +4407,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (18)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -7509,7 +7512,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (13)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -7584,7 +7587,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (32)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -10574,7 +10577,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (16)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -10649,7 +10652,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (56)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -10949,7 +10952,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (14)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -11024,7 +11027,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (72)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -11099,7 +11102,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (42)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -11174,7 +11177,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (54)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -14244,7 +14247,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (52)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -14319,7 +14322,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (26)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -14394,7 +14397,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (48)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -14469,7 +14472,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (15)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -14784,7 +14787,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (50)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -14934,7 +14937,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (27)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -15009,7 +15012,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (43)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -15084,7 +15087,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (60)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -18234,7 +18237,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (2)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -18309,7 +18312,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (63)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -18384,7 +18387,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (8)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -21534,7 +21537,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (11)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -21609,7 +21612,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (30)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -24789,7 +24792,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (19)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -24864,7 +24867,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (51)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -24939,7 +24942,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (44)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -25164,7 +25167,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (64)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -25314,7 +25317,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (74)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -25464,7 +25467,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (6)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -25479,7 +25482,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7729307243981049466}
+    m_TransformParent: {fileID: 8068679493292881086}
     m_Modifications:
     - target: {fileID: 3306344780855447505, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
         type: 3}
@@ -25490,6 +25493,11 @@ PrefabInstance:
         type: 3}
       propertyPath: childData.TriggerEmitEventAlias
       value: SpeedRush1_CheckPoint_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3639352320134274290, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
+        type: 3}
+      propertyPath: childData.RequiredStayDuration
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
         type: 3}
@@ -25529,7 +25537,7 @@ PrefabInstance:
     - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
         type: 3}
@@ -25619,7 +25627,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (21)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -25934,7 +25942,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (49)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -26009,7 +26017,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (68)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -29114,7 +29122,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (17)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -32184,7 +32192,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (75)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -35604,7 +35612,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (6)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -35679,7 +35687,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (34)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -35754,7 +35762,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (33)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -36069,7 +36077,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (13)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -39219,7 +39227,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (7)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -39294,7 +39302,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (25)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -39369,7 +39377,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (24)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -39384,7 +39392,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7729307243981049466}
+    m_TransformParent: {fileID: 7387839599002250699}
     m_Modifications:
     - target: {fileID: 6961233744665873246, guid: 0c309c324bc5ad242a24dc798ef51cd1,
         type: 3}
@@ -39429,7 +39437,7 @@ PrefabInstance:
     - target: {fileID: 9073070508734585024, guid: 0c309c324bc5ad242a24dc798ef51cd1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 139
       objectReference: {fileID: 0}
     - target: {fileID: 9073070508734585024, guid: 0c309c324bc5ad242a24dc798ef51cd1,
         type: 3}
@@ -39519,7 +39527,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (77)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -39759,7 +39767,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (59)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -39834,7 +39842,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (18)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -40059,7 +40067,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (17)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -43204,7 +43212,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (20)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -43279,7 +43287,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (53)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -43354,7 +43362,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (36)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -43429,7 +43437,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (22)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -43519,7 +43527,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7729307243981049466}
+    m_TransformParent: {fileID: 7387839599002250699}
     m_Modifications:
     - target: {fileID: 7608046922164982749, guid: cc90a7b524c0e6d4eaaf9fa4638f328d,
         type: 3}
@@ -43559,7 +43567,7 @@ PrefabInstance:
     - target: {fileID: 7608046922164982749, guid: cc90a7b524c0e6d4eaaf9fa4638f328d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 142
       objectReference: {fileID: 0}
     - target: {fileID: 7608046922164982749, guid: cc90a7b524c0e6d4eaaf9fa4638f328d,
         type: 3}
@@ -43654,7 +43662,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (40)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -43729,7 +43737,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (31)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -43804,7 +43812,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (12)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -44104,7 +44112,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (55)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -44179,7 +44187,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (5)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -44254,7 +44262,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (78)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -44329,7 +44337,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (71)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -47479,7 +47487,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (4)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -47554,7 +47562,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (69)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -50544,7 +50552,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (15)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -50619,7 +50627,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (1)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -50694,7 +50702,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (45)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -50704,87 +50712,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6272182018368079581}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &6308413867807261452
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 7729307243981049466}
-    m_Modifications:
-    - target: {fileID: 3306344780855447505, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_Name
-      value: LevelTrigger_ActorEnterTrigger (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 75f2b4dbcf678544897d3ce8d9cca02e, type: 3}
---- !u!4 &912696036815425903 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-    type: 3}
-  m_PrefabInstance: {fileID: 6308413867807261452}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6335612703751965277
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7729307243981049466}
+    m_TransformParent: {fileID: 8068679493292881086}
     m_Modifications:
     - target: {fileID: 3306344780855447505, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
         type: 3}
@@ -50795,6 +50728,11 @@ PrefabInstance:
         type: 3}
       propertyPath: childData.TriggerEmitEventAlias
       value: SpeedRush1_CheckPoint_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3639352320134274290, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
+        type: 3}
+      propertyPath: childData.RequiredStayDuration
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
         type: 3}
@@ -50834,7 +50772,7 @@ PrefabInstance:
     - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
         type: 3}
@@ -51089,7 +51027,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (7)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -51254,7 +51192,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (39)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -51329,7 +51267,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (47)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -51404,7 +51342,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (11)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -51494,7 +51432,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7729307243981049466}
+    m_TransformParent: {fileID: 7387839599002250699}
     m_Modifications:
     - target: {fileID: 7945599627807909301, guid: 20404ab5f19e8c24fb707ecc4d9a8bb7,
         type: 3}
@@ -51539,7 +51477,7 @@ PrefabInstance:
     - target: {fileID: 8301594782707250731, guid: 20404ab5f19e8c24fb707ecc4d9a8bb7,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 140
       objectReference: {fileID: 0}
     - target: {fileID: 8301594782707250731, guid: 20404ab5f19e8c24fb707ecc4d9a8bb7,
         type: 3}
@@ -51563,81 +51501,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8301594782707250731, guid: 20404ab5f19e8c24fb707ecc4d9a8bb7,
     type: 3}
   m_PrefabInstance: {fileID: 6736801532084534009}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &6742481237613660477
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 7729307243981049466}
-    m_Modifications:
-    - target: {fileID: 3306344780855447505, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_Name
-      value: LevelTrigger_ActorEnterTrigger
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 75f2b4dbcf678544897d3ce8d9cca02e, type: 3}
---- !u!4 &482846401998642014 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6566653740014015075, guid: 75f2b4dbcf678544897d3ce8d9cca02e,
-    type: 3}
-  m_PrefabInstance: {fileID: 6742481237613660477}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6788744243290848010
 PrefabInstance:
@@ -51779,7 +51642,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (67)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -52004,7 +51867,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (3)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -55379,7 +55242,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (3)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -55454,7 +55317,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (4)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -55529,7 +55392,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (37)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -55604,7 +55467,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (2)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -58784,7 +58647,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (5)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -58799,12 +58662,12 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7729307243981049466}
+    m_TransformParent: {fileID: 7387839599002250699}
     m_Modifications:
     - target: {fileID: 6961233744665873246, guid: 0c309c324bc5ad242a24dc798ef51cd1,
         type: 3}
       propertyPath: m_Name
-      value: LighteningDropBoomBox (1)
+      value: LighteningDropBoomBox
       objectReference: {fileID: 0}
     - target: {fileID: 9073070508734585024, guid: 0c309c324bc5ad242a24dc798ef51cd1,
         type: 3}
@@ -58844,7 +58707,7 @@ PrefabInstance:
     - target: {fileID: 9073070508734585024, guid: 0c309c324bc5ad242a24dc798ef51cd1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 141
       objectReference: {fileID: 0}
     - target: {fileID: 9073070508734585024, guid: 0c309c324bc5ad242a24dc798ef51cd1,
         type: 3}
@@ -62009,7 +61872,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (9)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -62174,7 +62037,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (73)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -62399,7 +62262,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (46)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -62639,7 +62502,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (29)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -62714,7 +62577,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (10)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -62789,7 +62652,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (1)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -65894,7 +65757,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (14)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -65969,7 +65832,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (66)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -66134,7 +65997,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (61)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -66209,7 +66072,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (28)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -69359,7 +69222,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (12)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -69434,7 +69297,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (62)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -69509,7 +69372,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (57)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -69584,7 +69447,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (8)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -69734,7 +69597,7 @@ PrefabInstance:
     - target: {fileID: 3528091137053200142, guid: 185e09172df5a8b48bc4797248a51b8b,
         type: 3}
       propertyPath: m_Name
-      value: WoodenBox (9)
+      value: WoodenBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185e09172df5a8b48bc4797248a51b8b, type: 3}
@@ -69809,7 +69672,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (65)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -69824,12 +69687,12 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7729307243981049466}
+    m_TransformParent: {fileID: 7387839599002250699}
     m_Modifications:
     - target: {fileID: 6961233744665873246, guid: 0c309c324bc5ad242a24dc798ef51cd1,
         type: 3}
       propertyPath: m_Name
-      value: LighteningDropBoomBox (2)
+      value: LighteningDropBoomBox
       objectReference: {fileID: 0}
     - target: {fileID: 9073070508734585024, guid: 0c309c324bc5ad242a24dc798ef51cd1,
         type: 3}
@@ -69869,7 +69732,7 @@ PrefabInstance:
     - target: {fileID: 9073070508734585024, guid: 0c309c324bc5ad242a24dc798ef51cd1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 143
       objectReference: {fileID: 0}
     - target: {fileID: 9073070508734585024, guid: 0c309c324bc5ad242a24dc798ef51cd1,
         type: 3}
@@ -73034,7 +72897,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (10)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
@@ -76104,7 +75967,7 @@ PrefabInstance:
     - target: {fileID: 8602307947877864225, guid: 2019a5cf2c0c6324ea987bf187ddbf75,
         type: 3}
       propertyPath: m_Name
-      value: BorderBox_HalfTransparent (79)
+      value: BorderBox_HalfTransparent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2019a5cf2c0c6324ea987bf187ddbf75, type: 3}
