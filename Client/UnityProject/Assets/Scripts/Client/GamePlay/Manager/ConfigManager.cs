@@ -182,6 +182,17 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         LoadAllConfigs();
     }
 
+    private static void Clear()
+    {
+        BoxTypeDefineDict.Clear();
+        BoxIconTypeDefineDict.Clear();
+        EnemyTypeDefineDict.Clear();
+        WorldModuleTypeDefineDict.Clear();
+        FXTypeDefineDict.Clear();
+        WorldDataConfigDict.Clear();
+        WorldModuleDataConfigDict.Clear();
+    }
+
     #region Export
 
 #if UNITY_EDITOR
@@ -199,6 +210,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         ExportWorldDataConfig(dataFormat);
         ExportWorldModuleDataConfig(dataFormat);
         AssetDatabase.Refresh();
+        IsLoaded = false;
         LoadAllConfigs();
     }
 
@@ -256,6 +268,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static void LoadAllConfigs()
     {
         if (IsLoaded) return;
+        Clear();
         DataFormat dataFormat = DataFormat.Binary;
         BoxTypeDefineDict.LoadTypeNames();
         BoxIconTypeDefineDict.LoadTypeNames();

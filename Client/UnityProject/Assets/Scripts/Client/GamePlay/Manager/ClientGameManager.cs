@@ -65,9 +65,16 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     [ValueDropdown("GetAllWorldNames")]
     public string StartWorldName;
 
-    public static string DebugChangeWorldName = null;
+    [Button("刷新世界名称列表")]
+    private void RefreshWorldNameList()
+    {
+        ConfigManager.LoadAllConfigs();
+        GetAllWorldNames = ConfigManager.GetAllWorldNames();
+    }
 
-    private IEnumerable<string> GetAllWorldNames => ConfigManager.GetAllWorldNames();
+    private IEnumerable<string> GetAllWorldNames;
+
+    public static string DebugChangeWorldName = null;
 
     private void Awake()
     {

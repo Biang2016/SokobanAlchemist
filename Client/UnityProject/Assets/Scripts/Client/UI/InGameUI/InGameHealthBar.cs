@@ -52,7 +52,7 @@ public class InGameHealthBar : PoolObject
     {
         if (!IsRecycled)
         {
-            Vector2 screenPos = CameraManager.Instance.MainCamera.WorldToScreenPoint(ActorBattleHelper.HealthBarPivot.position);
+            Vector2 screenPos = CameraManager.Instance.MainCamera.WorldToScreenPoint(ActorBattleHelper.HealthBarPivot.position + ActorBattleHelper.Actor.ArtPos - ActorBattleHelper.Actor.transform.position);
             //Debug.Log($"ScreenPos: {screenPos}");
             //Debug.Log($"ScreenSize: {Screen.width}, {Screen.height}");
             float p_X = screenPos.x / Screen.width;
