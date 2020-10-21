@@ -111,7 +111,7 @@ public class BoxColliderHelper : MonoBehaviour, IBoxHelper
 
     public void OnPush()
     {
-        StaticBoxCollider.enabled = false;
+        StaticBoxCollider.enabled = true;
         StaticWedgeCollider.enabled = false;
         DynamicCollider.enabled = true;
         BoxOnlyDynamicCollider.enabled = true;
