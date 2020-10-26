@@ -258,11 +258,36 @@ public class WorldModuleDesignHelper : MonoBehaviour
         return dirty;
     }
 
+    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)
+    {
+        bool isDirty = false;
+        StringBuilder localInfo = new StringBuilder();
+        localInfo.Append($"------------ ModuleStart: {name}\n");
+        List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
+        foreach (LevelTriggerBase trigger in triggers)
+        {
+            isDirty |= trigger.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo);
+        }
+
+        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
+        foreach (Box box in boxes)
+        {
+            if (box.RequireSerializeFunctionIntoWorldModule)
+            {
+                isDirty |= box.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo, true, false);
+            }
+        }
+
+        localInfo.Append($"ModuleEnd: {name} ------------\n");
+        if (isDirty) info.Append(localInfo);
+        return isDirty;
+    }
+
     public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info)
     {
         bool isDirty = false;
         StringBuilder localInfo = new StringBuilder();
-        localInfo.Append($"ModuleStart: {name}\n");
+        localInfo.Append($"------------ ModuleStart: {name}\n");
         List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
         foreach (LevelTriggerBase trigger in triggers)
         {
@@ -279,7 +304,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
         }
 
         localInfo.Append($"ModuleEnd: {name} ------------\n");
-        if (isDirty) info.Append(localInfo.ToString());
+        if (isDirty) info.Append(localInfo);
         return isDirty;
     }
 

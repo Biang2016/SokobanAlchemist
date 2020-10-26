@@ -342,11 +342,45 @@ public class WorldDesignHelper : MonoBehaviour
         return dirty;
     }
 
+    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)
+    {
+        bool isDirty = false;
+        StringBuilder localInfo = new StringBuilder();
+        localInfo.Append($"------------ WorldStart: {name}\n");
+        List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
+        foreach (LevelTriggerBase trigger in triggers)
+        {
+            if (trigger.transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot}")) continue;
+            WorldModuleDesignHelper module = trigger.transform.GetComponentInParent<WorldModuleDesignHelper>();
+            if (module) continue;
+            isDirty |= trigger.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo);
+        }
+
+        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
+        foreach (Box box in boxes)
+        {
+            if (box.RequireSerializeFunctionIntoWorld)
+            {
+                isDirty |= box.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo, false, true);
+            }
+            else
+            {
+                WorldModuleDesignHelper module = box.transform.GetComponentInParent<WorldModuleDesignHelper>();
+                if (module) continue;
+                isDirty |= box.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo, false, true);
+            }
+        }
+
+        localInfo.Append($"WorldEnd: {name} ------------\n");
+        if (isDirty) info.Append(localInfo);
+        return isDirty;
+    }
+
     public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info)
     {
         bool isDirty = false;
         StringBuilder localInfo = new StringBuilder();
-        localInfo.Append($"WorldStart: {name}\n");
+        localInfo.Append($"------------ WorldStart: {name}\n");
         List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
         foreach (LevelTriggerBase trigger in triggers)
         {
@@ -372,7 +406,7 @@ public class WorldDesignHelper : MonoBehaviour
         }
 
         localInfo.Append($"WorldEnd: {name} ------------\n");
-        if (isDirty) info.Append(localInfo.ToString());
+        if (isDirty) info.Append(localInfo);
         return isDirty;
     }
 #endif

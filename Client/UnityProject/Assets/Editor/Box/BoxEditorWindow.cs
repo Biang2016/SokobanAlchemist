@@ -36,6 +36,118 @@ public class BoxEditorWindow : EditorWindow
 
     private void RenameBox(string srcBoxName, string tarBoxName)
     {
+        string renameBoxRef()
+        {
+            StringBuilder info = new StringBuilder();
+
+            // Ref in Boxes
+            Dictionary<string, ushort> boxDict = ConfigManager.BoxTypeDefineDict.TypeIndexDict;
+            foreach (string boxName in boxDict.Keys.ToList())
+            {
+                GameObject boxPrefab = ConfigManager.FindBoxPrefabByName(boxName);
+                bool isDirty = false;
+                if (boxPrefab)
+                {
+                    Box box = boxPrefab.GetComponent<Box>();
+                    if (box)
+                    {
+                        isDirty = box.RenameBoxTypeName(srcBoxName, tarBoxName, info);
+                    }
+                }
+
+                if (isDirty)
+                {
+                    PrefabUtility.SavePrefabAsset(boxPrefab);
+                }
+            }
+
+            // Ref in Actors
+            List<string> actorList = ConfigManager.GetAllActorNames();
+            foreach (string actorName in actorList)
+            {
+                GameObject actorPrefab = ConfigManager.FindActorPrefabByName(actorName);
+                bool isDirty = false;
+                if (actorPrefab)
+                {
+                    Actor actor = actorPrefab.GetComponent<Actor>();
+                    if (actor)
+                    {
+                        isDirty = actor.RenameBoxTypeName(srcBoxName, tarBoxName, info);
+                    }
+                }
+
+                if (isDirty)
+                {
+                    PrefabUtility.SavePrefabAsset(actorPrefab);
+                }
+            }
+
+            // Ref in LevelTriggers
+            List<string> levelTriggerNames = ConfigManager.GetAllLevelTriggerNames();
+            foreach (string levelTriggerName in levelTriggerNames)
+            {
+                GameObject levelTriggerPrefab = ConfigManager.FindLevelTriggerPrefabByName(levelTriggerName);
+                bool isDirty = false;
+                if (levelTriggerPrefab)
+                {
+                    LevelTriggerBase levelTrigger = levelTriggerPrefab.GetComponent<LevelTriggerBase>();
+                    if (levelTrigger)
+                    {
+                        isDirty = levelTrigger.RenameBoxTypeName(srcBoxName, tarBoxName, info);
+                    }
+                }
+
+                if (isDirty)
+                {
+                    PrefabUtility.SavePrefabAsset(levelTriggerPrefab);
+                }
+            }
+
+            // Ref in WorldModules
+            List<string> worldModuleNames = ConfigManager.GetAllWorldModuleNames();
+            foreach (string worldModuleName in worldModuleNames)
+            {
+                GameObject worldModulePrefab = ConfigManager.FindWorldModulePrefabByName(worldModuleName);
+                bool isDirty = false;
+                if (worldModulePrefab)
+                {
+                    WorldModuleDesignHelper module = worldModulePrefab.GetComponent<WorldModuleDesignHelper>();
+                    if (module)
+                    {
+                        isDirty = module.RenameBoxTypeName(srcBoxName, tarBoxName, info);
+                    }
+                }
+
+                if (isDirty)
+                {
+                    PrefabUtility.SavePrefabAsset(worldModulePrefab);
+                }
+            }
+
+            // Ref in Worlds
+            List<string> worldNames = ConfigManager.GetAllWorldNames();
+            foreach (string worldName in worldNames)
+            {
+                GameObject worldPrefab = ConfigManager.FindWorldPrefabByName(worldName);
+                bool isDirty = false;
+                if (worldPrefab)
+                {
+                    WorldDesignHelper world = worldPrefab.GetComponent<WorldDesignHelper>();
+                    if (world)
+                    {
+                        isDirty = world.RenameBoxTypeName(srcBoxName, tarBoxName, info);
+                    }
+                }
+
+                if (isDirty)
+                {
+                    PrefabUtility.SavePrefabAsset(worldPrefab);
+                }
+            }
+
+            return info.ToString();
+        }
+
         if (string.IsNullOrEmpty(srcBoxName) || string.IsNullOrEmpty(tarBoxName))
         {
             EditorUtility.DisplayDialog("箱子更名确认", $"源箱子名称或目标箱子名称不能为空", "确定");
@@ -44,8 +156,8 @@ public class BoxEditorWindow : EditorWindow
 
         if (EditorUtility.DisplayDialog("箱子更名确认", $"您确定将箱子{srcBoxName}更名为{tarBoxName}? 这将包括对应名称的Prefab及其相关引用", "确定"))
         {
-            GameObject srcPrefabFound = FindBoxPrefabByName(srcBoxName);
-            GameObject tarPrefabFound = FindBoxPrefabByName(tarBoxName);
+            GameObject srcPrefabFound = ConfigManager.FindBoxPrefabByName(srcBoxName);
+            GameObject tarPrefabFound = ConfigManager.FindBoxPrefabByName(tarBoxName);
             if (srcPrefabFound)
             {
                 if (tarPrefabFound)
@@ -57,14 +169,15 @@ public class BoxEditorWindow : EditorWindow
                 }
                 else
                 {
-                    if (EditorUtility.DisplayDialog("箱子更名确认", $"现在将名为{srcBoxName}的Prefab重名名为{tarBoxName}", "确定", "取消更名"))
+                    if (EditorUtility.DisplayDialog("箱子更名确认", $"现在为您替换该箱子{srcBoxName}相关的引用", "确定", "取消更名"))
                     {
-                        // todo rename
-                        EditorUtility.DisplayDialog("箱子更名确认", $"Prefab重命名成功", "确定");
-                        if (EditorUtility.DisplayDialog("箱子更名确认", $"现在为您替换该箱子{srcBoxName}相关的引用", "确定", "取消更名"))
+                        string info = renameBoxRef();
+                        EditorUtility.DisplayDialog("箱子更名确认", $"已更名引用:\n{info}", "确定");
+
+                        if (EditorUtility.DisplayDialog("箱子更名确认", $"现在将名为{srcBoxName}的Prefab重名名为{tarBoxName}", "确定", "取消更名"))
                         {
-                            // todo rename ref
-                            return;
+                            ConfigManager.RenameBoxPrefabByName(srcBoxName, tarBoxName);
+                            EditorUtility.DisplayDialog("箱子更名确认", $"Prefab重命名成功", "确定");
                         }
 
                         ConfigManager.ExportConfigs();
@@ -75,8 +188,10 @@ public class BoxEditorWindow : EditorWindow
             {
                 if (EditorUtility.DisplayDialog("箱子更名确认", $"无法检测到Prefab中的{srcBoxName}（可能已被删除或更名），点击继续为您替换该箱子相关的引用", "继续", "取消更名"))
                 {
-                    // todo rename ref
+                    string info = renameBoxRef();
+                    EditorUtility.DisplayDialog("箱子更名确认", $"已更名引用:\n{info}", "确定");
                     ConfigManager.ExportConfigs();
+                    return;
                 }
             }
         }
@@ -92,7 +207,7 @@ public class BoxEditorWindow : EditorWindow
             Dictionary<string, ushort> boxDict = ConfigManager.BoxTypeDefineDict.TypeIndexDict;
             foreach (string boxName in boxDict.Keys.ToList())
             {
-                GameObject boxPrefab = FindBoxPrefabByName(boxName);
+                GameObject boxPrefab = ConfigManager.FindBoxPrefabByName(boxName);
                 bool isDirty = false;
                 if (boxPrefab)
                 {
@@ -113,7 +228,7 @@ public class BoxEditorWindow : EditorWindow
             List<string> actorList = ConfigManager.GetAllActorNames();
             foreach (string actorName in actorList)
             {
-                GameObject actorPrefab = FindActorPrefabByName(actorName);
+                GameObject actorPrefab = ConfigManager.FindActorPrefabByName(actorName);
                 bool isDirty = false;
                 if (actorPrefab)
                 {
@@ -134,7 +249,7 @@ public class BoxEditorWindow : EditorWindow
             List<string> levelTriggerNames = ConfigManager.GetAllLevelTriggerNames();
             foreach (string levelTriggerName in levelTriggerNames)
             {
-                GameObject levelTriggerPrefab = FindLevelTriggerPrefabByName(levelTriggerName);
+                GameObject levelTriggerPrefab = ConfigManager.FindLevelTriggerPrefabByName(levelTriggerName);
                 bool isDirty = false;
                 if (levelTriggerPrefab)
                 {
@@ -155,7 +270,7 @@ public class BoxEditorWindow : EditorWindow
             List<string> worldModuleNames = ConfigManager.GetAllWorldModuleNames();
             foreach (string worldModuleName in worldModuleNames)
             {
-                GameObject worldModulePrefab = FindWorldModulePrefabByName(worldModuleName);
+                GameObject worldModulePrefab = ConfigManager.FindWorldModulePrefabByName(worldModuleName);
                 bool isDirty = false;
                 if (worldModulePrefab)
                 {
@@ -176,7 +291,7 @@ public class BoxEditorWindow : EditorWindow
             List<string> worldNames = ConfigManager.GetAllWorldNames();
             foreach (string worldName in worldNames)
             {
-                GameObject worldPrefab = FindWorldPrefabByName(worldName);
+                GameObject worldPrefab = ConfigManager.FindWorldPrefabByName(worldName);
                 bool isDirty = false;
                 if (worldPrefab)
                 {
@@ -204,12 +319,12 @@ public class BoxEditorWindow : EditorWindow
 
         if (EditorUtility.DisplayDialog("箱子删除确认", $"您确定将箱子{srcBoxName}删除? 这将包括对应名称的Prefab及其相关引用", "确定"))
         {
-            GameObject srcPrefabFound = FindBoxPrefabByName(srcBoxName);
+            GameObject srcPrefabFound = ConfigManager.FindBoxPrefabByName(srcBoxName);
             if (srcPrefabFound)
             {
                 if (EditorUtility.DisplayDialog("箱子删除确认", $"现在将名为{srcBoxName}的Prefab删除", "确定", "取消删除"))
                 {
-                    bool sucDelete = DeleteBoxPrefabByName(srcBoxName);
+                    bool sucDelete = ConfigManager.DeleteBoxPrefabByName(srcBoxName);
                     if (sucDelete)
                     {
                         EditorUtility.DisplayDialog("箱子删除确认", $"Prefab删除成功", "确定");
@@ -246,53 +361,5 @@ public class BoxEditorWindow : EditorWindow
         {
             return;
         }
-    }
-
-    private GameObject FindBoxPrefabByName(string boxName)
-    {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
-        return prefab;
-    }
-
-    private bool DeleteBoxPrefabByName(string boxName)
-    {
-        return AssetDatabase.DeleteAsset(ConfigManager.BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
-    }
-
-    private string RenameBoxPrefabByName(string boxName, string targetBoxName)
-    {
-        return AssetDatabase.RenameAsset(ConfigManager.BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName), targetBoxName);
-    }
-
-    private GameObject FindActorPrefabByName(string actorName)
-    {
-        if (actorName.StartsWith("Player"))
-        {
-            PrefabManager.Instance.LoadPrefabs();
-            return PrefabManager.Instance.GetPrefab("Player");
-        }
-        else
-        {
-            GameObject enemyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.EnemyTypeDefineDict.GetTypeAssetDataBasePath(actorName));
-            return enemyPrefab;
-        }
-    }
-
-    private GameObject FindLevelTriggerPrefabByName(string levelTriggerName)
-    {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.LevelTriggerTypeDefineDict.GetTypeAssetDataBasePath(levelTriggerName));
-        return prefab;
-    }
-
-    private GameObject FindWorldModulePrefabByName(string worldModuleName)
-    {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.WorldModuleTypeDefineDict.GetTypeAssetDataBasePath(worldModuleName));
-        return prefab;
-    }
-
-    private GameObject FindWorldPrefabByName(string worldName)
-    {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.WorldTypeDefineDict.GetTypeAssetDataBasePath(worldName));
-        return prefab;
     }
 }

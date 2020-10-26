@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using BiangStudio;
+using BiangStudio.GamePlay;
 using BiangStudio.Singleton;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
@@ -228,7 +229,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static void ExportConfigs()
     {
         // http://www.sirenix.net/odininspector/faq?Search=&t-11=on#faq
-
         DataFormat dataFormat = DataFormat.Binary;
         BoxTypeDefineDict.ExportTypeNames();
         BoxIconTypeDefineDict.ExportTypeNames();
@@ -237,12 +237,62 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         WorldModuleTypeDefineDict.ExportTypeNames();
         WorldTypeDefineDict.ExportTypeNames();
         FXTypeDefineDict.ExportTypeNames();
+        SortWorldAndWorldModule();
         ExportWorldDataConfig(dataFormat);
         ExportWorldModuleDataConfig(dataFormat);
         AssetDatabase.Refresh();
         IsLoaded = false;
         LoadAllConfigs();
         EditorUtility.DisplayDialog("提示", "序列化成功", "确定");
+    }
+
+    private static void SortWorldAndWorldModule()
+    {
+        List<string> worldModuleNames = WorldModuleTypeDefineDict.TypeIndexDict.Keys.ToList();
+        foreach (string worldModuleName in worldModuleNames)
+        {
+            string prefabPath = WorldModuleTypeDefineDict.GetTypeAssetDataBasePath(worldModuleName);
+            GameObject worldModulePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
+            bool isDirty = false;
+            if (worldModulePrefab)
+            {
+                WorldModuleDesignHelper module = worldModulePrefab.GetComponent<WorldModuleDesignHelper>();
+                if (module)
+                {
+                    isDirty = module.SortModule();
+                }
+            }
+
+            if (isDirty)
+            {
+                PrefabUtility.SaveAsPrefabAsset(worldModulePrefab, prefabPath);
+            }
+
+            PrefabUtility.UnloadPrefabContents(worldModulePrefab);
+        }
+
+        List<string> worldNames = WorldTypeDefineDict.TypeIndexDict.Keys.ToList();
+        foreach (string worldName in worldNames)
+        {
+            string prefabPath = WorldTypeDefineDict.GetTypeAssetDataBasePath(worldName);
+            GameObject worldPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
+            bool isDirty = false;
+            if (worldPrefab)
+            {
+                WorldDesignHelper world = worldPrefab.GetComponent<WorldDesignHelper>();
+                if (world)
+                {
+                    isDirty = world.SortWorld();
+                }
+            }
+
+            if (isDirty)
+            {
+                PrefabUtility.SaveAsPrefabAsset(worldPrefab, prefabPath);
+            }
+
+            PrefabUtility.UnloadPrefabContents(worldPrefab);
+        }
     }
 
     private static void ExportWorldDataConfig(DataFormat dataFormat)
@@ -603,6 +653,58 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         if (!IsLoaded) LoadAllConfigs();
         WorldModuleDataConfigDict.TryGetValue(worldModuleTypeIndex, out WorldModuleData worldModuleData);
         return worldModuleData?.Clone();
+    }
+
+    #endregion
+
+    #region Prefabs
+
+    public static GameObject FindBoxPrefabByName(string boxName)
+    {
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
+        return prefab;
+    }
+
+    public static bool DeleteBoxPrefabByName(string boxName)
+    {
+        return AssetDatabase.DeleteAsset(ConfigManager.BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
+    }
+
+    public static string RenameBoxPrefabByName(string boxName, string targetBoxName)
+    {
+        return AssetDatabase.RenameAsset(ConfigManager.BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName), targetBoxName);
+    }
+
+    public static GameObject FindActorPrefabByName(string actorName)
+    {
+        if (actorName.StartsWith("Player"))
+        {
+            PrefabManager.Instance.LoadPrefabs();
+            return PrefabManager.Instance.GetPrefab("Player");
+        }
+        else
+        {
+            GameObject enemyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(EnemyTypeDefineDict.GetTypeAssetDataBasePath(actorName));
+            return enemyPrefab;
+        }
+    }
+
+    public static GameObject FindLevelTriggerPrefabByName(string levelTriggerName)
+    {
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(LevelTriggerTypeDefineDict.GetTypeAssetDataBasePath(levelTriggerName));
+        return prefab;
+    }
+
+    public static GameObject FindWorldModulePrefabByName(string worldModuleName)
+    {
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(WorldModuleTypeDefineDict.GetTypeAssetDataBasePath(worldModuleName));
+        return prefab;
+    }
+
+    public static GameObject FindWorldPrefabByName(string worldName)
+    {
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(WorldTypeDefineDict.GetTypeAssetDataBasePath(worldName));
+        return prefab;
     }
 
     #endregion
