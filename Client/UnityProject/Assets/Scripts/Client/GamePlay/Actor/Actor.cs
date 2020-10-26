@@ -237,26 +237,31 @@ public class Actor : PoolObject
     [LabelText("踢箱子力量")]
     public float KickForce = 5;
 
+    [BoxNameList]
     [BoxGroup("能力")]
     [LabelText("推箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public List<string> PushableBoxList = new List<string>();
 
+    [BoxNameList]
     [BoxGroup("能力")]
     [LabelText("踢箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public List<string> KickableBoxList = new List<string>();
 
+    [BoxNameList]
     [BoxGroup("能力")]
     [LabelText("举箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public List<string> LiftableBoxList = new List<string>();
 
+    [BoxNameList]
     [BoxGroup("能力")]
     [LabelText("扔箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public List<string> ThrowableBoxList = new List<string>();
 
+    [BoxName]
     [BoxGroup("死亡")]
     [LabelText("死亡掉落箱子")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]

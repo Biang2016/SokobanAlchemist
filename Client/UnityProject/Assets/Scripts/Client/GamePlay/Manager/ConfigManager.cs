@@ -45,6 +45,21 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         public Dictionary<string, ushort> TypeIndexDict = new Dictionary<string, ushort>();
         public SortedDictionary<ushort, string> TypeNameDict = new SortedDictionary<ushort, string>();
 
+        public Dictionary<string ,string> TypeAssetDataBasePathDict = new Dictionary<string, string>();
+
+        public string AssetDataBaseFolderPath => "Assets" + PrefabFolder_Relative;
+
+        public string GetTypeAssetDataBasePath(string assetName)
+        {
+            if (TypeAssetDataBasePathDict.TryGetValue(assetName, out string assetDataBasePath))
+            {
+                return assetDataBasePath;
+            }
+            {
+                return null;
+            }
+        }
+
 #if UNITY_EDITOR
         public void ExportTypeNames()
         {
@@ -74,6 +89,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                     {
                         TypeNameDict.Add(index, t.name);
                         TypeIndexDict.Add(t.name, index);
+                        TypeAssetDataBasePathDict.Add(t.name, relativePath);
                         index++;
                     }
                     else
@@ -100,6 +116,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                     {
                         TypeNameDict.Add(index, t.name);
                         TypeIndexDict.Add(t.name, index);
+                        TypeAssetDataBasePathDict.Add(t.name, relativePath);
                         index++;
                     }
                     else
@@ -347,6 +364,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         res.Insert(0, "None");
         return res;
     }
+
     public static IEnumerable<string> GetAllBoxTypeNames()
     {
         LoadAllConfigs();

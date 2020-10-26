@@ -43,11 +43,11 @@ public abstract class BoxFunctionBase : IClone<BoxFunctionBase>
     {
     }
 
-    public virtual void OnFlyingCollisionEnterDestroy(Collision collision)
+    public virtual void OnFlyingCollisionEnter(Collision collision)
     {
     }
 
-    public virtual void OnBeingKickedCollisionEnterDestroy(Collision collision)
+    public virtual void OnBeingKickedCollisionEnter(Collision collision)
     {
     }
 
@@ -250,6 +250,7 @@ public abstract class BoxFunction_InvokeOnLevelEventID : BoxFunctionBase
 [LabelText("更改箱子类型")]
 public class BoxFunction_ChangeBoxType : BoxFunction_InvokeOnLevelEventID
 {
+    [BoxName]
     [LabelText("更改箱子类型为")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public string ChangeBoxTypeTo;
@@ -288,6 +289,7 @@ public class BoxFunction_ChangeBoxType : BoxFunction_InvokeOnLevelEventID
 [LabelText("箱子变敌人")]
 public class BoxFunction_ChangeBoxToEnemy : BoxFunction_InvokeOnLevelEventID
 {
+    [BoxName]
     [LabelText("更改箱子为敌人")]
     [ValueDropdown("GetAllEnemyNames", IsUniqueList = true, DropdownTitle = "选择敌人类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public string ChangeBoxToEnemyType;
@@ -331,6 +333,7 @@ public class BoxFunction_ChangeBoxToEnemy : BoxFunction_InvokeOnLevelEventID
 [LabelText("举起箱子掉落踢技能")]
 public class BoxFunction_LiftDropSkill : BoxFunctionBase
 {
+    [BoxName]
     [GUIColor(0, 1.0f, 0)]
     [LabelText("举起箱子掉落踢技能")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
@@ -360,6 +363,73 @@ public class BoxFunction_LiftDropSkill : BoxFunctionBase
         base.ApplyData(srcData);
         BoxFunction_LiftDropSkill bf = ((BoxFunction_LiftDropSkill) srcData);
         LiftGetLiftBoxAbility = bf.LiftGetLiftBoxAbility;
+    }
+}
+
+[Serializable]
+[LabelText("撞击损坏耐久")]
+public class BoxFunction_CollideBreakable : BoxFunctionBase
+{
+    [LabelText("不会撞坏")]
+    public bool UnBreakable = false;
+
+    [LabelText("撞击损坏耐久")]
+    [HideIf("UnBreakable")]
+    public int Durability;
+
+    private int remainDurability;
+
+    public override void OnBeingKickedCollisionEnter(Collision collision)
+    {
+        base.OnBeingKickedCollisionEnter(collision);
+        if (UnBreakable) return;
+        remainDurability--;
+        if (remainDurability <= 0)
+        {
+            Break();
+        }
+        else
+        {
+            // Kick Collide behavior
+        }
+    }
+
+    public override void OnFlyingCollisionEnter(Collision collision)
+    {
+        base.OnFlyingCollisionEnter(collision);
+        if (UnBreakable) return;
+        remainDurability--;
+        if (remainDurability <= 0)
+        {
+            Break();
+        }
+        else
+        {
+            Box box = collision.gameObject.GetComponentInParent<Box>();
+            if (box && !box.BoxFeature.HasFlag(BoxFeature.IsBorder))
+            {
+                Box.Rigidbody.drag = Box.Throw_Drag * ConfigManager.BoxThrowDragFactor_Cheat;
+            }
+        }
+    }
+
+    private void Break()
+    {
+        WorldManager.Instance.CurrentWorld.DeleteBox(Box);
+    }
+
+    protected override void ChildClone(BoxFunctionBase newBF)
+    {
+        base.ChildClone(newBF);
+        BoxFunction_CollideBreakable bf = ((BoxFunction_CollideBreakable) newBF);
+        bf.Durability = Durability;
+    }
+
+    public override void ApplyData(BoxFunctionBase srcData)
+    {
+        base.ApplyData(srcData);
+        BoxFunction_CollideBreakable bf = ((BoxFunction_CollideBreakable) srcData);
+        Durability = bf.Durability;
     }
 }
 
@@ -427,15 +497,15 @@ public class BoxFunction_ExplodePushForce : BoxFunctionBase
     [LabelText("碰撞爆炸推力半径")]
     public int ExplodePushRadius = 3;
 
-    public override void OnFlyingCollisionEnterDestroy(Collision collision)
+    public override void OnFlyingCollisionEnter(Collision collision)
     {
-        base.OnFlyingCollisionEnterDestroy(collision);
+        base.OnFlyingCollisionEnter(collision);
         ExplodePushBox(Box, Box.transform.position, ExplodePushRadius);
     }
 
-    public override void OnBeingKickedCollisionEnterDestroy(Collision collision)
+    public override void OnBeingKickedCollisionEnter(Collision collision)
     {
-        base.OnBeingKickedCollisionEnterDestroy(collision);
+        base.OnBeingKickedCollisionEnter(collision);
         ExplodePushBox(Box, Box.transform.position, ExplodePushRadius);
     }
 
@@ -519,15 +589,15 @@ public class BoxFunction_ExplodeAddActorBuff : BoxFunctionBase
     [HideIf("PermanentBuff")]
     public float Duration;
 
-    public override void OnFlyingCollisionEnterDestroy(Collision collision)
+    public override void OnFlyingCollisionEnter(Collision collision)
     {
-        base.OnFlyingCollisionEnterDestroy(collision);
+        base.OnFlyingCollisionEnter(collision);
         ExplodeAddBuff(collision.contacts[0].point);
     }
 
-    public override void OnBeingKickedCollisionEnterDestroy(Collision collision)
+    public override void OnBeingKickedCollisionEnter(Collision collision)
     {
-        base.OnBeingKickedCollisionEnterDestroy(collision);
+        base.OnBeingKickedCollisionEnter(collision);
         ExplodeAddBuff(collision.contacts[0].point);
     }
 
@@ -691,6 +761,7 @@ public class BoxFunction_ThornDamage : BoxFunctionBase
 [LabelText("沿途生成新箱子")]
 public class BoxFunction_GenerateNewBoxes : BoxFunctionBase
 {
+    [BoxName]
     [LabelText("箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames")]
     private string BoxTypeName;
