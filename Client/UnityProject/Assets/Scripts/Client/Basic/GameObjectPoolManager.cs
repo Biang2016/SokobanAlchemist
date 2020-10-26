@@ -46,8 +46,8 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     public Dictionary<PrefabNames, GameObjectPool> PoolDict = new Dictionary<PrefabNames, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> BoxDict = new Dictionary<ushort, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> EnemyDict = new Dictionary<ushort, GameObjectPool>();
+    public Dictionary<ushort, GameObjectPool> LevelTriggerDict = new Dictionary<ushort, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> FXDict = new Dictionary<ushort, GameObjectPool>();
-    public Dictionary<LevelTriggerType, GameObjectPool> LevelTriggerDict = new Dictionary<LevelTriggerType, GameObjectPool>();
     public Dictionary<MarkerType, GameObjectPool> MarkerDict = new Dictionary<MarkerType, GameObjectPool>();
     public Dictionary<ProjectileType, GameObjectPool> ProjectileDict = new Dictionary<ProjectileType, GameObjectPool>();
     public Dictionary<BattleTipPrefabType, GameObjectPool> BattleUIDict = new Dictionary<BattleTipPrefabType, GameObjectPool>();
@@ -109,6 +109,21 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             }
         }
 
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.LevelTriggerTypeDefineDict.TypeNameDict)
+        {
+            string prefabName = kv.Value;
+            GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
+            if (go_Prefab)
+            {
+                GameObject go = new GameObject("Pool_" + prefabName);
+                GameObjectPool pool = go.AddComponent<GameObjectPool>();
+                pool.transform.SetParent(Root);
+                LevelTriggerDict.Add(kv.Key, pool);
+                PoolObject po = go_Prefab.GetComponent<PoolObject>();
+                pool.Initiate(po, 20);
+            }
+        }
+
         foreach (KeyValuePair<ushort, string> kv in ConfigManager.FXTypeDefineDict.TypeNameDict)
         {
             string prefabName = kv.Value;
@@ -121,21 +136,6 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 FXDict.Add(kv.Key, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
                 pool.Initiate(po, 20);
-            }
-        }
-
-        foreach (string s in Enum.GetNames(typeof(LevelTriggerType)))
-        {
-            LevelTriggerType lt_Type = (LevelTriggerType) Enum.Parse(typeof(LevelTriggerType), s);
-            GameObject go_Prefab = PrefabManager.Instance.GetPrefab(s);
-            if (go_Prefab)
-            {
-                GameObject go = new GameObject("Pool_" + s);
-                GameObjectPool pool = go.AddComponent<GameObjectPool>();
-                pool.transform.SetParent(Root);
-                LevelTriggerDict.Add(lt_Type, pool);
-                PoolObject po = go_Prefab.GetComponent<PoolObject>();
-                pool.Initiate(po, 100);
             }
         }
 

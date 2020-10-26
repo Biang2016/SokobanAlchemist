@@ -6,7 +6,7 @@ using UnityEngine;
 public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
 {
     [LabelText("配置")]
-    public Data childData = new Data {LevelTriggerType = LevelTriggerType.LevelTrigger_ActorEnterTrigger};
+    public Data childData = new Data();
 
     public override LevelTriggerBase.Data TriggerData
     {

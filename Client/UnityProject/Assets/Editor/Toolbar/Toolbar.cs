@@ -46,9 +46,9 @@ namespace UnityToolbarExtender
 
         private static void OnLeftToolbarGUI()
         {
-            if (GUILayout.Button(new GUIContent("世界模组编辑器"), ToolbarStyles.toolbarbutton))
+            if (GUILayout.Button(new GUIContent("箱子编辑器"), ToolbarStyles.toolbarbutton))
             {
-                WorldAndModuleEditorWindow.OpenWorldAndModuleEditorWindow();
+                BoxEditorTools.ShowBoxEditorWindow();
             }
 
             GUILayout.FlexibleSpace();
@@ -61,8 +61,6 @@ namespace UnityToolbarExtender
             if (GUILayout.Button(new GUIContent("序列化配置"), ToolbarStyles.toolbarbutton))
             {
                 ConfigManager.ExportConfigs();
-                ConfigManager.LoadAllConfigs();
-                EditorUtility.DisplayDialog("提示", "序列化成功", "确定");
             }
         }
     }

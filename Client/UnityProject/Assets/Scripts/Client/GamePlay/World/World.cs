@@ -207,7 +207,7 @@ public class World : PoolObject
 
         foreach (LevelTriggerBase.Data triggerData in WorldData.WorldLevelTriggerGroupData.TriggerDataList)
         {
-            LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[triggerData.LevelTriggerType].AllocateGameObject<LevelTriggerBase>(WorldLevelTriggerRoot);
+            LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[triggerData.LevelTriggerTypeIndex].AllocateGameObject<LevelTriggerBase>(WorldLevelTriggerRoot);
             trigger.InitializeInWorld((LevelTriggerBase.Data) triggerData.Clone());
             WorldLevelTriggers.Add(trigger);
         }

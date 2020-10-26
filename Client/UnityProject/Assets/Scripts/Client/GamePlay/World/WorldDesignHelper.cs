@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using BiangStudio;
 using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
@@ -58,8 +59,6 @@ public class WorldDesignHelper : MonoBehaviour
             }
         }
 
-        worldData.WorldName = name;
-
         List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
         foreach (BornPointDesignHelper bp in bornPoints)
         {
@@ -91,6 +90,9 @@ public class WorldDesignHelper : MonoBehaviour
             gp -= zeroPoint * WorldModule.MODULE_SIZE;
             data.WorldGP = gp;
             data.LevelComponentBelongsTo = LevelComponentBelongsTo.World;
+            GameObject levelTriggerPrefab = PrefabUtility.GetCorrespondingObjectFromSource(trigger.gameObject);
+            ushort levelTriggerTypeIndex = ConfigManager.LevelTriggerTypeDefineDict.TypeIndexDict[levelTriggerPrefab.name];
+            data.LevelTriggerTypeIndex = levelTriggerTypeIndex;
             worldData.WorldLevelTriggerGroupData.TriggerDataList.Add(data);
         }
 
@@ -114,20 +116,106 @@ public class WorldDesignHelper : MonoBehaviour
     [HideInPrefabAssets]
     [Button("一键整理", ButtonSizes.Large)]
     [GUIColor(0f, 1f, 0)]
-    public void SortWorld()
+    public void SortWorldButton()
     {
-        FormatAllWorldModuleName_Editor();
-        ArrangeAllRoots();
+        SortWorld();
     }
 
-    private void FormatAllWorldModuleName_Editor()
+    public bool SortWorld()
     {
+        bool dirty = false;
+        dirty |= FormatAllWorldModuleName_Editor();
+        dirty |= FormatAllBornPointName_Editor();
+        dirty |= FormatAllWorldCameraPOIName_Editor();
+        dirty |= FormatAllLevelTriggerName_Editor();
+        dirty |= FormatAllBoxName_Editor();
+        dirty |= ArrangeAllRoots();
+        return dirty;
+    }
+
+    private bool FormatAllWorldModuleName_Editor()
+    {
+        bool dirty = false;
         List<WorldModuleDesignHelper> modules = GetComponentsInChildren<WorldModuleDesignHelper>().ToList();
         foreach (WorldModuleDesignHelper module in modules)
         {
-            GameObject modulePrefab = PrefabUtility.GetCorrespondingObjectFromSource(module.gameObject);
-            module.name = modulePrefab.name;
+            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(module.gameObject);
+            if (module.name != prefab.name)
+            {
+                module.name = prefab.name;
+                dirty = true;
+            }
         }
+
+        return dirty;
+    }
+
+    private bool FormatAllBornPointName_Editor()
+    {
+        bool dirty = false;
+        List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
+        foreach (BornPointDesignHelper bp in bornPoints)
+        {
+            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(bp.gameObject);
+            if (bp.name != prefab.name)
+            {
+                bp.name = prefab.name;
+                dirty = true;
+            }
+        }
+
+        return dirty;
+    }
+
+    private bool FormatAllWorldCameraPOIName_Editor()
+    {
+        bool dirty = false;
+        List<WorldCameraPOI> cameraPOIs = GetComponentsInChildren<WorldCameraPOI>().ToList();
+        foreach (WorldCameraPOI poi in cameraPOIs)
+        {
+            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(poi.gameObject);
+            if (poi.name != prefab.name)
+            {
+                poi.name = prefab.name;
+                dirty = true;
+            }
+        }
+
+        return dirty;
+    }
+
+    private bool FormatAllLevelTriggerName_Editor()
+    {
+        bool dirty = false;
+        List<LevelTriggerBase> levelTriggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
+        foreach (LevelTriggerBase trigger in levelTriggers)
+        {
+            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(trigger.gameObject);
+            if (trigger.name != prefab.name)
+            {
+                trigger.name = prefab.name;
+                dirty = true;
+            }
+        }
+
+        return dirty;
+    }
+
+    private bool FormatAllBoxName_Editor()
+    {
+        bool dirty = false;
+        List<Box> worldBoxes = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot).GetComponentsInChildren<Box>().ToList();
+        foreach (Box worldBox in worldBoxes)
+        {
+            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(worldBox.gameObject);
+            if (worldBox.name != prefab.name)
+            {
+                worldBox.name = prefab.name;
+                dirty = true;
+            }
+        }
+
+        return dirty;
     }
 
     private Transform GetRoot(WorldHierarchyRootType rootType)
@@ -137,8 +225,9 @@ public class WorldDesignHelper : MonoBehaviour
         return transform;
     }
 
-    private void ArrangeAllRoots()
+    private bool ArrangeAllRoots()
     {
+        bool dirty = false;
         foreach (WorldHierarchyRootType rootType in Enum.GetValues(typeof(WorldHierarchyRootType)))
         {
             Transform root = transform.Find("@_" + rootType);
@@ -146,6 +235,7 @@ public class WorldDesignHelper : MonoBehaviour
             {
                 root = new GameObject("@_" + rootType).transform;
                 root.parent = transform;
+                dirty = true;
             }
         }
 
@@ -158,6 +248,7 @@ public class WorldDesignHelper : MonoBehaviour
                 if (!module.transform.IsChildOf(root))
                 {
                     module.transform.parent = root;
+                    dirty = true;
                 }
             }
             else if (module.WorldModuleFeature.HasFlag(WorldModuleFeature.DeadZone))
@@ -166,6 +257,7 @@ public class WorldDesignHelper : MonoBehaviour
                 if (!module.transform.IsChildOf(root))
                 {
                     module.transform.parent = root;
+                    dirty = true;
                 }
             }
             else if (module.WorldModuleFeature.HasFlag(WorldModuleFeature.Ground))
@@ -174,6 +266,7 @@ public class WorldDesignHelper : MonoBehaviour
                 if (!module.transform.IsChildOf(root))
                 {
                     module.transform.parent = root;
+                    dirty = true;
                 }
             }
             else
@@ -182,6 +275,7 @@ public class WorldDesignHelper : MonoBehaviour
                 if (!module.transform.IsChildOf(root))
                 {
                     module.transform.parent = root;
+                    dirty = true;
                 }
             }
         }
@@ -195,6 +289,7 @@ public class WorldDesignHelper : MonoBehaviour
             if (!bornPoint.transform.IsChildOf(root))
             {
                 bornPoint.transform.parent = root;
+                dirty = true;
             }
         }
 
@@ -205,6 +300,7 @@ public class WorldDesignHelper : MonoBehaviour
             if (!poi.transform.IsChildOf(root))
             {
                 poi.transform.parent = root;
+                dirty = true;
             }
         }
 
@@ -217,6 +313,7 @@ public class WorldDesignHelper : MonoBehaviour
             if (!trigger.transform.IsChildOf(root))
             {
                 trigger.transform.parent = root;
+                dirty = true;
             }
 
             trigger.RefreshIsUnderWorldOrModuleBoxesRoot();
@@ -231,8 +328,79 @@ public class WorldDesignHelper : MonoBehaviour
             if (!box.transform.IsChildOf(worldSpecialBoxesRoot))
             {
                 box.transform.parent = worldSpecialBoxesRoot;
+                dirty = true;
             }
         }
+
+        return dirty;
+    }
+
+    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)
+    {
+        bool isDirty = false;
+        StringBuilder localInfo = new StringBuilder();
+        localInfo.Append($"------------ WorldStart: {name}\n");
+        List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
+        foreach (LevelTriggerBase trigger in triggers)
+        {
+            if (trigger.transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot}")) continue;
+            WorldModuleDesignHelper module = trigger.transform.GetComponentInParent<WorldModuleDesignHelper>();
+            if (module) continue;
+            isDirty |= trigger.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo);
+        }
+
+        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
+        foreach (Box box in boxes)
+        {
+            if (box.RequireSerializeFunctionIntoWorld)
+            {
+                isDirty |= box.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo, false, true);
+            }
+            else
+            {
+                WorldModuleDesignHelper module = box.transform.GetComponentInParent<WorldModuleDesignHelper>();
+                if (module) continue;
+                isDirty |= box.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo, false, true);
+            }
+        }
+
+        localInfo.Append($"WorldEnd: {name} ------------\n");
+        if (isDirty) info.Append(localInfo);
+        return isDirty;
+    }
+
+    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info)
+    {
+        bool isDirty = false;
+        StringBuilder localInfo = new StringBuilder();
+        localInfo.Append($"------------ WorldStart: {name}\n");
+        List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
+        foreach (LevelTriggerBase trigger in triggers)
+        {
+            if (trigger.transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot}")) continue;
+            WorldModuleDesignHelper module = trigger.transform.GetComponentInParent<WorldModuleDesignHelper>();
+            if (module) continue;
+            isDirty |= trigger.DeleteBoxTypeName(srcBoxName, localInfo);
+        }
+
+        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
+        foreach (Box box in boxes)
+        {
+            if (box.RequireSerializeFunctionIntoWorld)
+            {
+                isDirty |= box.DeleteBoxTypeName(srcBoxName, localInfo, false, true);
+            }
+            else
+            {
+                WorldModuleDesignHelper module = box.transform.GetComponentInParent<WorldModuleDesignHelper>();
+                if (module) continue;
+                isDirty |= box.DeleteBoxTypeName(srcBoxName, localInfo, false, true);
+            }
+        }
+
+        localInfo.Append($"WorldEnd: {name} ------------\n");
+        if (isDirty) info.Append(localInfo);
+        return isDirty;
     }
 #endif
 }

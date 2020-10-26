@@ -5,6 +5,8 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
 using BiangStudio;
 using BiangStudio.CloneVariant;
 using Sirenix.Serialization;
@@ -70,7 +72,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         BoxIconSpriteHelper?.PoolRecycle();
         BoxEffectHelper = null;
         transform.DOPause();
-        damageTimes = 0;
+        alreadyCollide = false;
         if (Rigidbody) Destroy(Rigidbody);
         if (LastTouchActor != null && LastTouchActor.CurrentLiftBox == this)
         {
@@ -80,6 +82,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         }
 
         UnRegisterEvents();
+        UnInitBoxFunctions();
         BoxIndicatorTrigger.gameObject.SetActive(false);
         base.OnRecycled();
     }
@@ -186,24 +189,61 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     [LabelText("摩阻力")]
     public float Dynamic_Drag = 0.5f;
 
+    #region 箱子特殊功能
+
+    [BoxGroup("箱子特殊功能")]
     [ShowInInspector]
     [LabelText("箱子特殊功能")]
     [NonSerialized]
-    public List<BoxFunctionBase> BoxFunctions = new List<BoxFunctionBase>();
+    [FormerlySerializedAs("BoxFunctions")]
+    public List<BoxFunctionBase> RawBoxFunctions = new List<BoxFunctionBase>(); // 干数据，禁修改
+
+    public List<BoxFunctionBase> BoxFunctions = new List<BoxFunctionBase>(); // 湿数据，每个Box生命周期开始前从干数据拷出，结束后清除
+    public Dictionary<string, BoxFunctionBase> BoxFunctionDict = new Dictionary<string, BoxFunctionBase>(); // 便于寻找
 
     [HideInInspector]
     public byte[] BoxFunctionBaseData;
 
     public void OnBeforeSerialize()
     {
-        if (BoxFunctions == null) BoxFunctions = new List<BoxFunctionBase>();
-        BoxFunctionBaseData = SerializationUtility.SerializeValue(BoxFunctions, DataFormat.JSON);
+        if (RawBoxFunctions == null) RawBoxFunctions = new List<BoxFunctionBase>();
+        BoxFunctionBaseData = SerializationUtility.SerializeValue(RawBoxFunctions, DataFormat.JSON);
     }
 
     public void OnAfterDeserialize()
     {
-        BoxFunctions = SerializationUtility.DeserializeValue<List<BoxFunctionBase>>(BoxFunctionBaseData, DataFormat.JSON);
+        RawBoxFunctions = SerializationUtility.DeserializeValue<List<BoxFunctionBase>>(BoxFunctionBaseData, DataFormat.JSON);
     }
+
+    private void InitBoxFunctions()
+    {
+        BoxFunctions.Clear();
+        BoxFunctionDict.Clear();
+        BoxFunctions = RawBoxFunctions.Clone();
+        foreach (BoxFunctionBase bf in RawBoxFunctions)
+        {
+            bf.Box = this;
+            bf.OnRegisterLevelEventID();
+            string bfName = bf.GetType().Name;
+            if (!BoxFunctionDict.ContainsKey(bfName))
+            {
+                BoxFunctionDict.Add(bfName, bf.Clone());
+            }
+        }
+    }
+
+    private void UnInitBoxFunctions()
+    {
+        foreach (BoxFunctionBase bf in RawBoxFunctions)
+        {
+            bf.OnUnRegisterLevelEventID();
+        }
+
+        BoxFunctions.Clear();
+        BoxFunctionDict.Clear();
+    }
+
+    #endregion
 
     private GridPos3D lastWorldGP;
 
@@ -216,7 +256,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     [HideInEditorMode]
     public WorldModule WorldModule;
 
-    private int damageTimes;
+    private bool alreadyCollide;
 
     public enum States
     {
@@ -277,29 +317,16 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         BoxUnderWorldModuleDesignerClamper.enabled = !Application.isPlaying;
         GridSnapper.enabled = false;
         GUID = GetGUID();
-
-        foreach (BoxFunctionBase bf in BoxFunctions)
-        {
-            bf.Box = this;
-        }
     }
 
     private void RegisterEvents()
     {
         ClientGameManager.Instance.BattleMessenger.AddListener<InteractSkillType, ushort>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
-        foreach (BoxFunctionBase bf in BoxFunctions)
-        {
-            bf.OnRegisterLevelEventID();
-        }
     }
 
     private void UnRegisterEvents()
     {
         ClientGameManager.Instance.BattleMessenger.RemoveListener<InteractSkillType, ushort>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
-        foreach (BoxFunctionBase bf in BoxFunctions)
-        {
-            bf.OnUnRegisterLevelEventID();
-        }
     }
 
     private void OnPlayerInteractSkillChanged(InteractSkillType interactSkillType, ushort boxTypeIndex)
@@ -323,6 +350,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     public void Setup(ushort boxTypeIndex)
     {
         BoxTypeIndex = boxTypeIndex;
+        InitBoxFunctions();
         RegisterEvents();
 
         foreach (BoxFunctionBase bf in BoxFunctions)
@@ -453,7 +481,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
                 BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
             }
 
-            damageTimes = 0;
+            alreadyCollide = false;
             LastTouchActor = actor;
             WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this);
             State = States.BeingKicked;
@@ -484,7 +512,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         if (State == States.BeingPushed || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.PushingCanceling)
         {
             DefaultRotBeforeLift = transform.rotation;
-            damageTimes = 0;
+            alreadyCollide = false;
             LastTouchActor = actor;
             foreach (BoxFunctionBase bf in BoxFunctions)
             {
@@ -518,7 +546,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         if (State == States.Lifted)
         {
-            damageTimes = 0;
+            alreadyCollide = false;
             if (BoxEffectHelper == null)
             {
                 BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
@@ -548,7 +576,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         if (State == States.Lifted)
         {
-            damageTimes = 0;
+            alreadyCollide = false;
             if (BoxEffectHelper == null)
             {
                 BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
@@ -581,7 +609,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
         }
 
-        damageTimes = 0;
+        alreadyCollide = false;
         LastTouchActor = null;
         State = States.DroppingFromDeadActor;
         transform.DOPause();
@@ -652,31 +680,6 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         if (IsRecycled) return;
         if (LastTouchActor != null && collision.gameObject == LastTouchActor.gameObject) return;
-        if (State == States.Flying)
-        {
-            if (damageTimes < 1)
-            {
-                CollideAOEDamage(CollideDamageRadius, CollideDamage);
-                PlayCollideFX();
-                foreach (BoxFunctionBase bf in BoxFunctions)
-                {
-                    bf.OnFlyingCollisionEnterDestroy(collision);
-                }
-            }
-
-            if (BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable))
-            {
-                WorldManager.Instance.CurrentWorld.DeleteBox(this);
-            }
-            else
-            {
-                Box box = collision.gameObject.GetComponentInParent<Box>();
-                if (box && !box.BoxFeature.HasFlag(BoxFeature.IsBorder))
-                {
-                    Rigidbody.drag = Throw_Drag * ConfigManager.BoxThrowDragFactor_Cheat;
-                }
-            }
-        }
 
         if (State == States.Putting)
         {
@@ -687,23 +690,41 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             }
         }
 
+        if (State == States.Flying)
+        {
+            if (!alreadyCollide)
+            {
+                CollideAOEDamage(CollideDamageRadius, CollideDamage);
+                PlayCollideFX();
+                if (!BoxFunctionDict.ContainsKey(typeof(BoxFunction_CollideBreakable).Name))
+                {
+                    WorldManager.Instance.CurrentWorld.DeleteBox(this); // 如果没配默认撞击破坏
+                }
+
+                foreach (BoxFunctionBase bf in BoxFunctions)
+                {
+                    bf.OnFlyingCollisionEnter(collision);
+                }
+            }
+        }
+
         if (State == States.BeingKicked)
         {
             if (collision.gameObject.layer != LayerManager.Instance.Layer_Ground)
             {
-                if (damageTimes < 1)
+                if (!alreadyCollide)
                 {
                     CollideAOEDamage(CollideDamageRadius, CollideDamage);
                     PlayCollideFX();
+                    if (!BoxFunctionDict.ContainsKey(typeof(BoxFunction_CollideBreakable).Name))
+                    {
+                        WorldManager.Instance.CurrentWorld.DeleteBox(this); // 如果没配默认撞击破坏
+                    }
+
                     foreach (BoxFunctionBase bf in BoxFunctions)
                     {
-                        bf.OnBeingKickedCollisionEnterDestroy(collision);
+                        bf.OnBeingKickedCollisionEnter(collision);
                     }
-                }
-
-                if (BoxFeature.HasFlag(BoxFeature.KickHitBreakable))
-                {
-                    WorldManager.Instance.CurrentWorld.DeleteBox(this);
                 }
             }
         }
@@ -711,7 +732,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     private void CollideAOEDamage(float radius, float damage)
     {
-        damageTimes++;
+        alreadyCollide = true;
         WorldFeature wf = WorldManager.Instance.CurrentWorld.WorldData.WorldFeature;
         bool playerImmune = wf.HasFlag(WorldFeature.PlayerImmune);
         bool pvp = wf.HasFlag(WorldFeature.PVP);
@@ -820,6 +841,105 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     [ValueDropdown("GetAllBoxTypeNames")]
     private string ReplaceBoxTypeName;
 
+    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
+    {
+        bool isDirty = false;
+        foreach (BoxFunctionBase bf in RawBoxFunctions)
+        {
+            if (moduleSpecial && bf.SpecialCaseType != BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module) continue;
+            if (worldSpecial && bf.SpecialCaseType != BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World) continue;
+
+            foreach (FieldInfo fi in bf.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
+            {
+                foreach (Attribute a in fi.GetCustomAttributes(false))
+                {
+                    if (a is BoxNameAttribute)
+                    {
+                        if (fi.FieldType == typeof(string))
+                        {
+                            string fieldValue = (string) fi.GetValue(bf);
+                            if (fieldValue == srcBoxName)
+                            {
+                                info.Append($"替换{name}.BoxFunctions.{bf.GetType().Name}.{fi.Name} -> '{targetBoxName}'\n");
+                                fi.SetValue(bf, targetBoxName);
+                                isDirty = true;
+                            }
+                        }
+                    }
+                    else if (a is BoxNameListAttribute)
+                    {
+                        if (fi.FieldType == typeof(List<string>))
+                        {
+                            List<string> fieldValueList = (List<string>) fi.GetValue(bf);
+                            for (int i = 0; i < fieldValueList.Count; i++)
+                            {
+                                string fieldValue = fieldValueList[i];
+                                if (fieldValue == srcBoxName)
+                                {
+                                    info.Append($"替换于{name}.BoxFunctions.{bf.GetType().Name}.{fi.Name}\n");
+                                    fieldValueList[i] = targetBoxName;
+                                    isDirty = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return isDirty;
+    }
+
+    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
+    {
+        bool isDirty = false;
+        foreach (BoxFunctionBase bf in RawBoxFunctions)
+        {
+            if (moduleSpecial && bf.SpecialCaseType != BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module) continue;
+            if (worldSpecial && bf.SpecialCaseType != BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World) continue;
+
+            foreach (FieldInfo fi in bf.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
+            {
+                foreach (Attribute a in fi.GetCustomAttributes(false))
+                {
+                    if (a is BoxNameAttribute)
+                    {
+                        if (fi.FieldType == typeof(string))
+                        {
+                            string fieldValue = (string) fi.GetValue(bf);
+                            if (fieldValue == srcBoxName)
+                            {
+                                info.Append($"替换{name}.BoxFunctions.{bf.GetType().Name}.{fi.Name} -> 'None'\n");
+                                fi.SetValue(bf, "None");
+                                isDirty = true;
+                            }
+                        }
+                    }
+                    else if (a is BoxNameListAttribute)
+                    {
+                        if (fi.FieldType == typeof(List<string>))
+                        {
+                            List<string> fieldValueList = (List<string>) fi.GetValue(bf);
+                            for (int i = 0; i < fieldValueList.Count; i++)
+                            {
+                                string fieldValue = fieldValueList[i];
+                                if (fieldValue == srcBoxName)
+                                {
+                                    info.Append($"移除自{name}.BoxFunctions.{bf.GetType().Name}.{fi.Name}\n");
+                                    fieldValueList.RemoveAt(i);
+                                    i--;
+                                    isDirty = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return isDirty;
+    }
+
 #endif
 
     #region ExtraSerialize
@@ -853,11 +973,12 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     #region BoxExtraData
 
+#if UNITY_EDITOR
     public bool RequireHideInWorldForModuleBox
     {
         get
         {
-            foreach (BoxFunctionBase bf in BoxFunctions)
+            foreach (BoxFunctionBase bf in RawBoxFunctions)
             {
                 if (bf is BoxFunction_Hide hide)
                 {
@@ -876,7 +997,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         get
         {
-            foreach (BoxFunctionBase bf in BoxFunctions)
+            foreach (BoxFunctionBase bf in RawBoxFunctions)
             {
                 if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
                 {
@@ -892,7 +1013,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         get
         {
-            foreach (BoxFunctionBase bf in BoxFunctions)
+            foreach (BoxFunctionBase bf in RawBoxFunctions)
             {
                 if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module)
                 {
@@ -903,6 +1024,8 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             return false;
         }
     }
+
+#endif
 
     public class BoxExtraSerializeData : IClone<BoxExtraSerializeData>
     {
@@ -923,7 +1046,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         BoxExtraSerializeData data = new BoxExtraSerializeData();
         data.BoxFunctions = new List<BoxFunctionBase>();
-        foreach (BoxFunctionBase bf in BoxFunctions)
+        foreach (BoxFunctionBase bf in RawBoxFunctions)
         {
             if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
             {
@@ -938,7 +1061,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         BoxExtraSerializeData data = new BoxExtraSerializeData();
         data.BoxFunctions = new List<BoxFunctionBase>();
-        foreach (BoxFunctionBase bf in BoxFunctions)
+        foreach (BoxFunctionBase bf in RawBoxFunctions)
         {
             if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module)
             {
@@ -957,7 +1080,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             foreach (BoxFunctionBase extraBF in boxExtraSerializeDataFromModule.BoxFunctions)
             {
                 bool foundMatch = false;
-                foreach (BoxFunctionBase bf in BoxFunctions)
+                foreach (BoxFunctionBase bf in RawBoxFunctions)
                 {
                     if (bf.GetType() == extraBF.GetType())
                     {
@@ -975,7 +1098,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             foreach (BoxFunctionBase newFunction in newFunctionList)
             {
                 newFunction.Box = this;
-                BoxFunctions.Add(newFunction);
+                RawBoxFunctions.Add(newFunction);
             }
         }
 
@@ -986,7 +1109,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             foreach (BoxFunctionBase extraBF in boxExtraSerializeDataFromWorld.BoxFunctions)
             {
                 bool foundMatch = false;
-                foreach (BoxFunctionBase bf in BoxFunctions)
+                foreach (BoxFunctionBase bf in RawBoxFunctions)
                 {
                     if (bf.GetType() == extraBF.GetType())
                     {
@@ -1004,7 +1127,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             foreach (BoxFunctionBase newFunction in newFunctionList)
             {
                 newFunction.Box = this;
-                BoxFunctions.Add(newFunction);
+                RawBoxFunctions.Add(newFunction);
             }
         }
     }
@@ -1028,8 +1151,6 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     public bool Passable => BoxFeature.HasFlag(BoxFeature.Passable);
 
     public bool Droppable => BoxFeature.HasFlag(BoxFeature.Droppable);
-
-    public bool Breakable => BoxFeature.HasFlag(BoxFeature.ThrowHitBreakable) || BoxFeature.HasFlag(BoxFeature.KickHitBreakable);
 
     public bool Consumable => BoxFeature.HasFlag(BoxFeature.LiftThenDisappear);
 
@@ -1065,14 +1186,14 @@ public enum BoxFeature
     [LabelText("可穿过")]
     Passable = 1 << 5,
 
-    [LabelText("--占位--")]
-    BelongToPlayer2 = 1 << 6,
+    [LabelText("--占位1--")]
+    Other1 = 1 << 6,
 
-    [LabelText("踢撞会碎")]
-    KickHitBreakable = 1 << 7,
+    [LabelText("--占位2--")]
+    Other2 = 1 << 7,
 
-    [LabelText("扔撞会碎")]
-    ThrowHitBreakable = 1 << 8,
+    [LabelText("--占位3--")]
+    Other3 = 1 << 8,
 
     [LabelText("墙壁")]
     IsBorder = 1 << 9,

@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
 using DG.Tweening;
@@ -237,26 +240,31 @@ public class Actor : PoolObject
     [LabelText("踢箱子力量")]
     public float KickForce = 5;
 
+    [BoxNameList]
     [BoxGroup("能力")]
     [LabelText("推箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public List<string> PushableBoxList = new List<string>();
 
+    [BoxNameList]
     [BoxGroup("能力")]
     [LabelText("踢箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public List<string> KickableBoxList = new List<string>();
 
+    [BoxNameList]
     [BoxGroup("能力")]
     [LabelText("举箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public List<string> LiftableBoxList = new List<string>();
 
+    [BoxNameList]
     [BoxGroup("能力")]
     [LabelText("扔箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public List<string> ThrowableBoxList = new List<string>();
 
+    [BoxName]
     [BoxGroup("死亡")]
     [LabelText("死亡掉落箱子")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
@@ -673,4 +681,139 @@ public class Actor : PoolObject
     private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
 
     #endregion
+
+#if UNITY_EDITOR
+    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)
+    {
+        bool isDirty = false;
+        foreach (FieldInfo fi in GetType().GetFields(BindingFlags.Instance | BindingFlags.Public))
+        {
+            foreach (Attribute a in fi.GetCustomAttributes(false))
+            {
+                if (a is BoxNameAttribute)
+                {
+                    if (fi.FieldType == typeof(string))
+                    {
+                        string fieldValue = (string) fi.GetValue(this);
+                        if (fieldValue == srcBoxName)
+                        {
+                            isDirty = true;
+                            info.Append($"替换{name}.{fi.Name} -> '{targetBoxName}'\n");
+                            fi.SetValue(this, targetBoxName);
+                        }
+                    }
+                }
+                else if (a is BoxNameListAttribute)
+                {
+                    if (fi.FieldType == typeof(List<string>))
+                    {
+                        List<string> fieldValueList = (List<string>) fi.GetValue(this);
+                        for (int i = 0; i < fieldValueList.Count; i++)
+                        {
+                            string fieldValue = fieldValueList[i];
+                            if (fieldValue == srcBoxName)
+                            {
+                                isDirty = true;
+                                info.Append($"替换于{name}.{fi.Name}\n");
+                                fieldValueList[i] = targetBoxName;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (this is EnemyActor enemyActor)
+        {
+            NodeCanvas.Framework.GraphOwner tempGraphOwner = GetComponent<GraphOwner>();
+            if (tempGraphOwner)
+            {
+                Variable<List<string>> liftBoxTypeNames = tempGraphOwner.blackboard.GetVariable<List<string>>("LiftBoxTypeNames");
+                if (liftBoxTypeNames != null)
+                {
+                    for (int index = 0; index < liftBoxTypeNames.value.Count; index++)
+                    {
+                        string boxTypeName = liftBoxTypeNames.value[index];
+                        if (boxTypeName == srcBoxName)
+                        {
+                            isDirty = true;
+                            info.Append($"替换于{name}.FSM.BB.LiftBoxTypeNames\n");
+                            liftBoxTypeNames.value[index] = targetBoxName;
+                        }
+                    }
+                }
+            }
+        }
+
+        return isDirty;
+    }
+
+    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info)
+    {
+        bool isDirty = false;
+        foreach (FieldInfo fi in GetType().GetFields(BindingFlags.Instance | BindingFlags.Public))
+        {
+            foreach (Attribute a in fi.GetCustomAttributes(false))
+            {
+                if (a is BoxNameAttribute)
+                {
+                    if (fi.FieldType == typeof(string))
+                    {
+                        string fieldValue = (string) fi.GetValue(this);
+                        if (fieldValue == srcBoxName)
+                        {
+                            isDirty = true;
+                            info.Append($"替换{name}.{fi.Name} -> 'None'\n");
+                            fi.SetValue(this, "None");
+                        }
+                    }
+                }
+                else if (a is BoxNameListAttribute)
+                {
+                    if (fi.FieldType == typeof(List<string>))
+                    {
+                        List<string> fieldValueList = (List<string>) fi.GetValue(this);
+                        for (int i = 0; i < fieldValueList.Count; i++)
+                        {
+                            string fieldValue = fieldValueList[i];
+                            if (fieldValue == srcBoxName)
+                            {
+                                isDirty = true;
+                                info.Append($"移除自{name}.{fi.Name}\n");
+                                fieldValueList.RemoveAt(i);
+                                i--;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (this is EnemyActor enemyActor)
+        {
+            NodeCanvas.Framework.GraphOwner tempGraphOwner = GetComponent<GraphOwner>();
+            if (tempGraphOwner)
+            {
+                Variable<List<string>> liftBoxTypeNames = tempGraphOwner.blackboard.GetVariable<List<string>>("LiftBoxTypeNames");
+                if (liftBoxTypeNames != null)
+                {
+                    for (int index = 0; index < liftBoxTypeNames.value.Count; index++)
+                    {
+                        string boxTypeName = liftBoxTypeNames.value[index];
+                        if (boxTypeName == srcBoxName)
+                        {
+                            isDirty = true;
+                            info.Append($"移除自{name}.FSM.BB.LiftBoxTypeNames\n");
+                            liftBoxTypeNames.value.RemoveAt(index);
+                            index--;
+                        }
+                    }
+                }
+            }
+        }
+
+        return isDirty;
+    }
+
+#endif
 }

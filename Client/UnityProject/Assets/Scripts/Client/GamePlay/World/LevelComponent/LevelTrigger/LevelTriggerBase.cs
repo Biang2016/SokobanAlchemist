@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
 using BiangStudio;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
@@ -20,6 +22,9 @@ public abstract class LevelTriggerBase : PoolObject
     [Serializable]
     public class Data : LevelComponentData
     {
+        [HideInInspector]
+        public ushort LevelTriggerTypeIndex;
+
         [BoxGroup("监听事件")]
         [LabelText("收到事件后出现(空则默认出现)")]
         public string AppearLevelEventAlias;
@@ -27,11 +32,6 @@ public abstract class LevelTriggerBase : PoolObject
         [BoxGroup("监听事件")]
         [LabelText("收到事件后消失(空则不会消失)")]
         public string DisappearLevelEventAlias;
-
-        [ReadOnly]
-        [BoxGroup("触发事件并发送")]
-        [LabelText("LevelTrigger类型")]
-        public LevelTriggerType LevelTriggerType;
 
         [BoxGroup("触发事件并发送")]
         [LabelText("触发时发送事件花名")]
@@ -61,9 +61,9 @@ public abstract class LevelTriggerBase : PoolObject
         {
             base.ChildClone(newData);
             Data data = ((Data) newData);
+            data.LevelTriggerTypeIndex = LevelTriggerTypeIndex;
             data.AppearLevelEventAlias = AppearLevelEventAlias;
             data.DisappearLevelEventAlias = DisappearLevelEventAlias;
-            data.LevelTriggerType = LevelTriggerType;
             data.TriggerEmitEventAlias = TriggerEmitEventAlias;
             data.MaxTriggerTime = MaxTriggerTime;
             data.KeepTriggering = KeepTriggering;
@@ -215,11 +215,91 @@ public abstract class LevelTriggerBase : PoolObject
             IsUnderWorldSpecialBoxesRoot = transform.HasAncestorName($"@_{WorldHierarchyRootType.WorldLevelTriggersRoot}");
         }
     }
-#endif
-}
 
-public enum LevelTriggerType
-{
-    LevelTrigger_BoxLockTrigger,
-    LevelTrigger_ActorEnterTrigger,
+    public bool RenameBoxTypeName(string srcBoxName,string targetBoxName, StringBuilder info)
+    {
+        bool isDirty = false;
+        foreach (FieldInfo fi in TriggerData.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public))
+        {
+            foreach (Attribute a in fi.GetCustomAttributes(false))
+            {
+                if (a is BoxNameAttribute)
+                {
+                    if (fi.FieldType == typeof(string))
+                    {
+                        string fieldValue = (string) fi.GetValue(TriggerData);
+                        if (fieldValue == srcBoxName)
+                        {
+                            isDirty = true;
+                            info.Append($"替换{name}.TriggerData.{fi.Name} -> '{targetBoxName}'\n");
+                            fi.SetValue(TriggerData, targetBoxName);
+                        }
+                    }
+                }
+                else if (a is BoxNameListAttribute)
+                {
+                    if (fi.FieldType == typeof(List<string>))
+                    {
+                        List<string> fieldValueList = (List<string>) fi.GetValue(TriggerData);
+                        for (int i = 0; i < fieldValueList.Count; i++)
+                        {
+                            string fieldValue = fieldValueList[i];
+                            if (fieldValue == srcBoxName)
+                            {
+                                isDirty = true;
+                                info.Append($"替换于{name}.TriggerData.{fi.Name}\n");
+                                fieldValueList[i] = targetBoxName;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return isDirty;
+    }
+    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info)
+    {
+        bool isDirty = false;
+        foreach (FieldInfo fi in TriggerData.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public))
+        {
+            foreach (Attribute a in fi.GetCustomAttributes(false))
+            {
+                if (a is BoxNameAttribute)
+                {
+                    if (fi.FieldType == typeof(string))
+                    {
+                        string fieldValue = (string) fi.GetValue(TriggerData);
+                        if (fieldValue == srcBoxName)
+                        {
+                            isDirty = true;
+                            info.Append($"替换{name}.TriggerData.{fi.Name} -> 'None'\n");
+                            fi.SetValue(TriggerData, "None");
+                        }
+                    }
+                }
+                else if (a is BoxNameListAttribute)
+                {
+                    if (fi.FieldType == typeof(List<string>))
+                    {
+                        List<string> fieldValueList = (List<string>) fi.GetValue(TriggerData);
+                        for (int i = 0; i < fieldValueList.Count; i++)
+                        {
+                            string fieldValue = fieldValueList[i];
+                            if (fieldValue == srcBoxName)
+                            {
+                                isDirty = true;
+                                info.Append($"移除自{name}.TriggerData.{fi.Name}\n");
+                                fieldValueList.RemoveAt(i);
+                                i--;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return isDirty;
+    }
+#endif
 }

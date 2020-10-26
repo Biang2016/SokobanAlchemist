@@ -5,7 +5,8 @@ using Sirenix.OdinInspector;
 
 public class WorldData : IClone<WorldData>
 {
-    public string WorldName;
+    public ushort WorldTypeIndex;
+    public string WorldTypeName;
 
     public WorldFeature WorldFeature;
 
@@ -37,7 +38,8 @@ public class WorldData : IClone<WorldData>
     public WorldData Clone()
     {
         WorldData data = new WorldData();
-        data.WorldName = WorldName;
+        data.WorldTypeIndex = WorldTypeIndex;
+        data.WorldTypeName = WorldTypeName;
         data.WorldFeature = WorldFeature;
         for (int x = 0; x < ModuleMatrix.GetLength(0); x++)
         {

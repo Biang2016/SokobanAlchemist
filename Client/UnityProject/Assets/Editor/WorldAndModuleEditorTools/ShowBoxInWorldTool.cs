@@ -37,7 +37,7 @@ class ShowBoxInWorldTool : EditorTool
                 if (world && module)
                 {
                     BoxFunction_Hide hide = null;
-                    foreach (BoxFunctionBase bf in box.BoxFunctions)
+                    foreach (BoxFunctionBase bf in box.RawBoxFunctions)
                     {
                         if (bf is BoxFunction_Hide bfHide)
                         {
@@ -48,7 +48,7 @@ class ShowBoxInWorldTool : EditorTool
 
                     if (hide != null)
                     {
-                        box.BoxFunctions.Remove(hide);
+                        box.RawBoxFunctions.Remove(hide);
                         EditorUtility.SetDirty(box);
                     }
                     else
