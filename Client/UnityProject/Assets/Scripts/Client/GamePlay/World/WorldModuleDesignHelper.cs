@@ -46,6 +46,9 @@ public class WorldModuleDesignHelper : MonoBehaviour
         foreach (LevelTriggerBase trigger in levelTriggers)
         {
             LevelTriggerBase.Data data = (LevelTriggerBase.Data) trigger.TriggerData.Clone();
+            GameObject levelTriggerPrefab = PrefabUtility.GetCorrespondingObjectFromSource(trigger.gameObject);
+            ushort levelTriggerTypeIndex = ConfigManager.LevelTriggerTypeDefineDict.TypeIndexDict[levelTriggerPrefab.name];
+            data.LevelTriggerTypeIndex = levelTriggerTypeIndex;
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(trigger.transform, 1);
             data.LocalGP = gp;
             data.LevelComponentBelongsTo = LevelComponentBelongsTo.WorldModule;

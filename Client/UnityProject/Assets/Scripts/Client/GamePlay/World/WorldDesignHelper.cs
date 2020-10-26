@@ -91,16 +91,9 @@ public class WorldDesignHelper : MonoBehaviour
             data.WorldGP = gp;
             data.LevelComponentBelongsTo = LevelComponentBelongsTo.World;
             GameObject levelTriggerPrefab = PrefabUtility.GetCorrespondingObjectFromSource(trigger.gameObject);
-            if (!ConfigManager.LevelTriggerTypeDefineDict.TypeIndexDict.ContainsKey(levelTriggerPrefab.name))
-            {
-                int a = 0;
-            }
-            else
-            {
-                ushort levelTriggerTypeIndex = ConfigManager.LevelTriggerTypeDefineDict.TypeIndexDict[levelTriggerPrefab.name];
-                data.LevelTriggerTypeIndex = levelTriggerTypeIndex;
-                worldData.WorldLevelTriggerGroupData.TriggerDataList.Add(data);
-            }
+            ushort levelTriggerTypeIndex = ConfigManager.LevelTriggerTypeDefineDict.TypeIndexDict[levelTriggerPrefab.name];
+            data.LevelTriggerTypeIndex = levelTriggerTypeIndex;
+            worldData.WorldLevelTriggerGroupData.TriggerDataList.Add(data);
         }
 
         List<Box> worldBoxes = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot).GetComponentsInChildren<Box>().ToList();

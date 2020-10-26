@@ -223,12 +223,17 @@ public class DebugPanel : BaseUIPanel
         ClientGameManager.Instance.ReloadGame();
     }
 
-    public List<string> GetAllWorldNames => ConfigManager.GetAllWorldNames();
+    public List<string> GetAllWorldNames()
+    {
+        return ConfigManager.GetAllWorldNames();
+    }
 
     [DebugSlider("Player/MoveSpeed", 2.5f, 1, 30)]
     public void ChangeMoveSpeed(float value)
     {
-        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
+        for (int i = 0;
+            i < BattleManager.Instance.MainPlayers.Length;
+            i++)
         {
             PlayerActor player = BattleManager.Instance.MainPlayers[i];
             if (player != null) player.MoveSpeed = value;
@@ -238,7 +243,9 @@ public class DebugPanel : BaseUIPanel
     [DebugSlider("Player/KickForce", 15, 0, 1000)]
     public void ChangeKickForce(float value)
     {
-        for (int i = 0; i < BattleManager.Instance.MainPlayers.Length; i++)
+        for (int i = 0;
+            i < BattleManager.Instance.MainPlayers.Length;
+            i++)
         {
             PlayerActor player = BattleManager.Instance.MainPlayers[i];
             if (player != null) player.KickForce = value;
