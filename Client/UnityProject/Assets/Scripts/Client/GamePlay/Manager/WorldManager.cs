@@ -37,18 +37,18 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
         base.Start();
         if (string.IsNullOrEmpty(ClientGameManager.DebugChangeWorldName))
         {
-            Initialize(ConfigManager.GetWorldDataConfig(ClientGameManager.Instance.StartWorldName));
+            Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetWorldTypeIndex(ClientGameManager.Instance.StartWorldName)));
         }
         else
         {
-            Initialize(ConfigManager.GetWorldDataConfig(ClientGameManager.DebugChangeWorldName));
+            Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetWorldTypeIndex(ClientGameManager.DebugChangeWorldName)));
         }
     }
 
     public void Initialize(WorldData worldData)
     {
         CurrentWorld = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.World].AllocateGameObject<World>(WorldRoot);
-        CurrentWorld.name = worldData.WorldName;
+        CurrentWorld.name = worldData.WorldTypeName;
         CurrentWorld.Initialize(worldData);
     }
 

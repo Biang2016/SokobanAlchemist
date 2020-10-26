@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using BiangStudio.GamePlay;
 using UnityEditor;
 using UnityEngine;
 
@@ -86,54 +87,109 @@ public class BoxEditorWindow : EditorWindow
         string deleteBoxRef()
         {
             StringBuilder info = new StringBuilder();
+
+            // Ref in Boxes
             Dictionary<string, ushort> boxDict = ConfigManager.BoxTypeDefineDict.TypeIndexDict;
-            foreach (KeyValuePair<string, ushort> kv in boxDict)
+            foreach (string boxName in boxDict.Keys.ToList())
             {
-                GameObject boxPrefab = FindBoxPrefabByName(kv.Key);
+                GameObject boxPrefab = FindBoxPrefabByName(boxName);
+                bool isDirty = false;
                 if (boxPrefab)
                 {
                     Box box = boxPrefab.GetComponent<Box>();
                     if (box)
                     {
-                        foreach (BoxFunctionBase bf in box.BoxFunctions)
-                        {
-                            foreach (FieldInfo fi in bf.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
-                            {
-                                foreach (Attribute a in fi.GetCustomAttributes(false))
-                                {
-                                    if (a is BoxNameAttribute)
-                                    {
-                                        if (fi.FieldType == typeof(string))
-                                        {
-                                            string fieldValue = (string) fi.GetValue(bf);
-                                            if (fieldValue == srcBoxName)
-                                            {
-                                                info.Append($"{box.name}.BoxFunctions.{bf.GetType().Name}.{fi.Name} = '{srcBoxName}' -> 'None'");
-                                                fi.SetValue(bf, "None");
-                                            }
-                                        }
-                                    }
-                                    else if (a is BoxNameListAttribute)
-                                    {
-                                        if (fi.FieldType == typeof(List<string>))
-                                        {
-                                            List<string> fieldValueList = (List<string>) fi.GetValue(bf);
-                                            for (int i = 0; i < fieldValueList.Count; i++)
-                                            {
-                                                string fieldValue = fieldValueList[i];
-                                                if (fieldValue == srcBoxName)
-                                                {
-                                                    info.Append($"{box.name}.BoxFunctions.{bf.GetType().Name}.{fi.Name} Remove '{srcBoxName}'");
-                                                    fieldValueList.RemoveAt(i);
-                                                    i--;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        isDirty = box.DeleteBoxTypeName(srcBoxName, info);
                     }
+                }
+
+                if (isDirty)
+                {
+                    PrefabUtility.SavePrefabAsset(boxPrefab);
+                }
+            }
+
+            // Ref in Actors
+            List<string> actorList = ConfigManager.GetAllActorNames();
+            foreach (string actorName in actorList)
+            {
+                GameObject actorPrefab = FindActorPrefabByName(actorName);
+                bool isDirty = false;
+                if (actorPrefab)
+                {
+                    Actor actor = actorPrefab.GetComponent<Actor>();
+                    if (actor)
+                    {
+                        isDirty = actor.DeleteBoxTypeName(srcBoxName, info);
+                    }
+                }
+
+                if (isDirty)
+                {
+                    PrefabUtility.SavePrefabAsset(actorPrefab);
+                }
+            }
+
+            // Ref in LevelTriggers
+            List<string> levelTriggerNames = ConfigManager.GetAllLevelTriggerNames();
+            foreach (string levelTriggerName in levelTriggerNames)
+            {
+                GameObject levelTriggerPrefab = FindLevelTriggerPrefabByName(levelTriggerName);
+                bool isDirty = false;
+                if (levelTriggerPrefab)
+                {
+                    LevelTriggerBase levelTrigger = levelTriggerPrefab.GetComponent<LevelTriggerBase>();
+                    if (levelTrigger)
+                    {
+                        isDirty = levelTrigger.DeleteBoxTypeName(srcBoxName, info);
+                    }
+                }
+
+                if (isDirty)
+                {
+                    PrefabUtility.SavePrefabAsset(levelTriggerPrefab);
+                }
+            }
+
+            // Ref in WorldModules
+            List<string> worldModuleNames = ConfigManager.GetAllWorldModuleNames();
+            foreach (string worldModuleName in worldModuleNames)
+            {
+                GameObject worldModulePrefab = FindWorldModulePrefabByName(worldModuleName);
+                bool isDirty = false;
+                if (worldModulePrefab)
+                {
+                    WorldModuleDesignHelper module = worldModulePrefab.GetComponent<WorldModuleDesignHelper>();
+                    if (module)
+                    {
+                        isDirty = module.DeleteBoxTypeName(srcBoxName, info);
+                    }
+                }
+
+                if (isDirty)
+                {
+                    PrefabUtility.SavePrefabAsset(worldModulePrefab);
+                }
+            }
+
+            // Ref in Worlds
+            List<string> worldNames = ConfigManager.GetAllWorldNames();
+            foreach (string worldName in worldNames)
+            {
+                GameObject worldPrefab = FindWorldPrefabByName(worldName);
+                bool isDirty = false;
+                if (worldPrefab)
+                {
+                    WorldDesignHelper world = worldPrefab.GetComponent<WorldDesignHelper>();
+                    if (world)
+                    {
+                        isDirty = world.DeleteBoxTypeName(srcBoxName, info);
+                    }
+                }
+
+                if (isDirty)
+                {
+                    PrefabUtility.SavePrefabAsset(worldPrefab);
                 }
             }
 
@@ -153,15 +209,22 @@ public class BoxEditorWindow : EditorWindow
             {
                 if (EditorUtility.DisplayDialog("箱子删除确认", $"现在将名为{srcBoxName}的Prefab删除", "确定", "取消删除"))
                 {
-                    DeleteBox(srcBoxName);
-                    EditorUtility.DisplayDialog("箱子删除确认", $"Prefab删除成功", "确定");
-                    if (EditorUtility.DisplayDialog("箱子删除确认", $"现在为您删除该箱子{srcBoxName}相关的引用", "确定", "取消删除"))
+                    bool sucDelete = DeleteBoxPrefabByName(srcBoxName);
+                    if (sucDelete)
                     {
-                        string info = deleteBoxRef();
-                        EditorUtility.DisplayDialog("箱子删除确认", $"已删除引用:\n{info}", "确定");
-                    }
+                        EditorUtility.DisplayDialog("箱子删除确认", $"Prefab删除成功", "确定");
+                        if (EditorUtility.DisplayDialog("箱子删除确认", $"现在为您删除该箱子{srcBoxName}相关的引用", "确定", "取消删除"))
+                        {
+                            string info = deleteBoxRef();
+                            EditorUtility.DisplayDialog("箱子删除确认", $"已删除引用:\n{info}", "确定");
+                        }
 
-                    ConfigManager.ExportConfigs();
+                        ConfigManager.ExportConfigs();
+                    }
+                    else
+                    {
+                        EditorUtility.DisplayDialog("箱子删除确认", $"Prefab删除失败，请重试", "确定");
+                    }
                 }
                 else
                 {
@@ -179,12 +242,16 @@ public class BoxEditorWindow : EditorWindow
                 }
             }
         }
+        else
+        {
+            return;
+        }
     }
 
     private GameObject FindBoxPrefabByName(string boxName)
     {
-        GameObject boxPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
-        return boxPrefab;
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
+        return prefab;
     }
 
     private bool DeleteBoxPrefabByName(string boxName)
@@ -195,5 +262,37 @@ public class BoxEditorWindow : EditorWindow
     private string RenameBoxPrefabByName(string boxName, string targetBoxName)
     {
         return AssetDatabase.RenameAsset(ConfigManager.BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName), targetBoxName);
+    }
+
+    private GameObject FindActorPrefabByName(string actorName)
+    {
+        if (actorName.StartsWith("Player"))
+        {
+            PrefabManager.Instance.LoadPrefabs();
+            return PrefabManager.Instance.GetPrefab("Player");
+        }
+        else
+        {
+            GameObject enemyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.EnemyTypeDefineDict.GetTypeAssetDataBasePath(actorName));
+            return enemyPrefab;
+        }
+    }
+
+    private GameObject FindLevelTriggerPrefabByName(string levelTriggerName)
+    {
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.LevelTriggerTypeDefineDict.GetTypeAssetDataBasePath(levelTriggerName));
+        return prefab;
+    }
+
+    private GameObject FindWorldModulePrefabByName(string worldModuleName)
+    {
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.WorldModuleTypeDefineDict.GetTypeAssetDataBasePath(worldModuleName));
+        return prefab;
+    }
+
+    private GameObject FindWorldPrefabByName(string worldName)
+    {
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.WorldModuleTypeDefineDict.GetTypeAssetDataBasePath(worldName));
+        return prefab;
     }
 }

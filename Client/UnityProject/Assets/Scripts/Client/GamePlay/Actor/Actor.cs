@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
 using DG.Tweening;
@@ -678,4 +681,51 @@ public class Actor : PoolObject
     private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
 
     #endregion
+
+#if UNITY_EDITOR
+    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info)
+    {
+        bool isDirty = false;
+        foreach (FieldInfo fi in GetType().GetFields(BindingFlags.Instance | BindingFlags.Public))
+        {
+            foreach (Attribute a in fi.GetCustomAttributes(false))
+            {
+                if (a is BoxNameAttribute)
+                {
+                    if (fi.FieldType == typeof(string))
+                    {
+                        string fieldValue = (string) fi.GetValue(this);
+                        if (fieldValue == srcBoxName)
+                        {
+                            isDirty = true;
+                            info.Append($"替换{name}.{fi.Name} -> 'None'\n");
+                            fi.SetValue(this, "None");
+                        }
+                    }
+                }
+                else if (a is BoxNameListAttribute)
+                {
+                    if (fi.FieldType == typeof(List<string>))
+                    {
+                        List<string> fieldValueList = (List<string>) fi.GetValue(this);
+                        for (int i = 0; i < fieldValueList.Count; i++)
+                        {
+                            string fieldValue = fieldValueList[i];
+                            if (fieldValue == srcBoxName)
+                            {
+                                isDirty = true;
+                                info.Append($"移除自{name}.{fi.Name}\n");
+                                fieldValueList.RemoveAt(i);
+                                i--;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return isDirty;
+    }
+
+#endif
 }

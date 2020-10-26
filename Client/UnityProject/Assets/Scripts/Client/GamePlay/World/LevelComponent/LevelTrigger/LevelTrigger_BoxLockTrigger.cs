@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
 {
     [LabelText("配置")]
-    public Data childData = new Data {LevelTriggerType = LevelTriggerType.LevelTrigger_BoxLockTrigger};
+    public Data childData = new Data();
 
     public override LevelTriggerBase.Data TriggerData
     {
@@ -18,6 +18,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
     [Serializable]
     public new class Data : LevelTriggerBase.Data
     {
+        [BoxName]
         [LabelText("指定箱子类型")]
         [ValueDropdown("GetAllBoxTypeNames", DropdownTitle = "选择箱子类型")]
         public string RequireBoxTypeName;

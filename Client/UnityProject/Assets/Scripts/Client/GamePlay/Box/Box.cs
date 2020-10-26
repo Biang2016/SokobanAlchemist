@@ -5,6 +5,8 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
 using BiangStudio;
 using BiangStudio.CloneVariant;
 using Sirenix.Serialization;
@@ -838,6 +840,56 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     [LabelText("替换Box类型")]
     [ValueDropdown("GetAllBoxTypeNames")]
     private string ReplaceBoxTypeName;
+
+    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
+    {
+        bool isDirty = false;
+        foreach (BoxFunctionBase bf in BoxFunctions)
+        {
+            if (moduleSpecial && bf.SpecialCaseType != BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module) continue;
+            if (worldSpecial && bf.SpecialCaseType != BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World) continue;
+
+            foreach (FieldInfo fi in bf.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
+            {
+                foreach (Attribute a in fi.GetCustomAttributes(false))
+                {
+                    if (a is BoxNameAttribute)
+                    {
+                        if (fi.FieldType == typeof(string))
+                        {
+                            string fieldValue = (string) fi.GetValue(bf);
+                            if (fieldValue == srcBoxName)
+                            {
+                                info.Append($"替换{name}.BoxFunctions.{bf.GetType().Name}.{fi.Name} -> 'None'\n");
+                                fi.SetValue(bf, "None");
+                                isDirty = true;
+                            }
+                        }
+                    }
+                    else if (a is BoxNameListAttribute)
+                    {
+                        if (fi.FieldType == typeof(List<string>))
+                        {
+                            List<string> fieldValueList = (List<string>) fi.GetValue(bf);
+                            for (int i = 0; i < fieldValueList.Count; i++)
+                            {
+                                string fieldValue = fieldValueList[i];
+                                if (fieldValue == srcBoxName)
+                                {
+                                    info.Append($"移除自{name}.BoxFunctions.{bf.GetType().Name}.{fi.Name}\n");
+                                    fieldValueList.RemoveAt(i);
+                                    i--;
+                                    isDirty = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return isDirty;
+    }
 
 #endif
 

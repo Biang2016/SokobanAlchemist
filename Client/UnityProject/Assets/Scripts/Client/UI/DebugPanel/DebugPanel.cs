@@ -216,17 +216,14 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugButton("SwitchWorld/{0}", "GetWorldNames", -10)]
+    [DebugButton("SwitchWorld/{0}", "GetAllWorldNames", -10)]
     public void ChangeWorld(string worldName)
     {
         ClientGameManager.DebugChangeWorldName = worldName;
         ClientGameManager.Instance.ReloadGame();
     }
 
-    public List<string> GetWorldNames()
-    {
-        return ConfigManager.WorldDataConfigDict.Keys.ToList();
-    }
+    public List<string> GetAllWorldNames => ConfigManager.GetAllWorldNames();
 
     [DebugSlider("Player/MoveSpeed", 2.5f, 1, 30)]
     public void ChangeMoveSpeed(float value)

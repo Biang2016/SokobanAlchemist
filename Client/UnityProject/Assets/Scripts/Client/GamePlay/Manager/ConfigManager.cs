@@ -45,7 +45,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         public Dictionary<string, ushort> TypeIndexDict = new Dictionary<string, ushort>();
         public SortedDictionary<ushort, string> TypeNameDict = new SortedDictionary<ushort, string>();
 
-        public Dictionary<string ,string> TypeAssetDataBasePathDict = new Dictionary<string, string>();
+        public Dictionary<string, string> TypeAssetDataBasePathDict = new Dictionary<string, string>();
 
         public string AssetDataBaseFolderPath => "Assets" + PrefabFolder_Relative;
 
@@ -55,6 +55,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             {
                 return assetDataBasePath;
             }
+
             {
                 return null;
             }
@@ -63,8 +64,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 #if UNITY_EDITOR
         public void ExportTypeNames()
         {
-            TypeNameDict.Clear();
-            TypeIndexDict.Clear();
+            Clear();
+            TypeAssetDataBasePathDict.Clear();
             string folder = TypeNamesConfigFolder_Build;
             if (Directory.Exists(folder)) Directory.Delete(folder, true);
             Directory.CreateDirectory(folder);
@@ -171,8 +172,16 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static readonly TypeDefineConfig<EnemyActor> EnemyTypeDefineDict = new TypeDefineConfig<EnemyActor>("Enemy", "/Resources/Prefabs/Designs/Enemy", true);
 
     [ShowInInspector]
+    [LabelText("关卡Trigger类型表")]
+    public static readonly TypeDefineConfig<LevelTriggerBase> LevelTriggerTypeDefineDict = new TypeDefineConfig<LevelTriggerBase>("LevelTrigger", "/Resources/Prefabs/Designs/LevelTrigger", true);
+
+    [ShowInInspector]
     [LabelText("世界模组类型表")]
     public static readonly TypeDefineConfig<WorldModuleDesignHelper> WorldModuleTypeDefineDict = new TypeDefineConfig<WorldModuleDesignHelper>("WorldModule", "/Designs/WorldModule", true);
+
+    [ShowInInspector]
+    [LabelText("世界类型表")]
+    public static readonly TypeDefineConfig<WorldDesignHelper> WorldTypeDefineDict = new TypeDefineConfig<WorldDesignHelper>("World", "/Designs/Worlds", true);
 
     [ShowInInspector]
     [LabelText("FX类型表")]
@@ -180,7 +189,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     [ShowInInspector]
     [LabelText("世界配置表")]
-    public static readonly Dictionary<string, WorldData> WorldDataConfigDict = new Dictionary<string, WorldData>();
+    public static readonly Dictionary<ushort, WorldData> WorldDataConfigDict = new Dictionary<ushort, WorldData>();
 
     [ShowInInspector]
     [LabelText("世界模组配置表")]
@@ -204,7 +213,9 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         BoxTypeDefineDict.Clear();
         BoxIconTypeDefineDict.Clear();
         EnemyTypeDefineDict.Clear();
+        LevelTriggerTypeDefineDict.Clear();
         WorldModuleTypeDefineDict.Clear();
+        WorldTypeDefineDict.Clear();
         FXTypeDefineDict.Clear();
         WorldDataConfigDict.Clear();
         WorldModuleDataConfigDict.Clear();
@@ -222,13 +233,16 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         BoxTypeDefineDict.ExportTypeNames();
         BoxIconTypeDefineDict.ExportTypeNames();
         EnemyTypeDefineDict.ExportTypeNames();
+        LevelTriggerTypeDefineDict.ExportTypeNames();
         WorldModuleTypeDefineDict.ExportTypeNames();
+        WorldTypeDefineDict.ExportTypeNames();
         FXTypeDefineDict.ExportTypeNames();
         ExportWorldDataConfig(dataFormat);
         ExportWorldModuleDataConfig(dataFormat);
         AssetDatabase.Refresh();
         IsLoaded = false;
         LoadAllConfigs();
+        EditorUtility.DisplayDialog("提示", "序列化成功", "确定");
     }
 
     private static void ExportWorldDataConfig(DataFormat dataFormat)
@@ -242,11 +256,21 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         {
             string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
             GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
-            WorldDesignHelper module = obj.GetComponent<WorldDesignHelper>();
-            WorldData data = module.ExportWorldData();
-            string path = folder + module.name + ".config";
-            byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
-            File.WriteAllBytes(path, bytes);
+            WorldDesignHelper world = obj.GetComponent<WorldDesignHelper>();
+            WorldData data = world.ExportWorldData();
+            WorldTypeDefineDict.TypeIndexDict.TryGetValue(world.name, out ushort worldTypeIndex);
+            if (worldTypeIndex != 0)
+            {
+                data.WorldTypeIndex = worldTypeIndex;
+                data.WorldTypeName = world.name;
+                string path = folder + world.name + ".config";
+                byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
+                File.WriteAllBytes(path, bytes);
+            }
+            else
+            {
+                Debug.LogError($"WorldTypeDefineDict 中无{world.name}");
+            }
         }
     }
 
@@ -263,11 +287,19 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
             WorldModuleDesignHelper module = obj.GetComponent<WorldModuleDesignHelper>();
             WorldModuleData data = module.ExportWorldModuleData();
-            data.WorldModuleTypeIndex = GetWorldModuleTypeIndex(module.name);
-            data.WorldModuleTypeName = module.name;
-            string path = folder + module.name + ".config";
-            byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
-            File.WriteAllBytes(path, bytes);
+            WorldModuleTypeDefineDict.TypeIndexDict.TryGetValue(module.name, out ushort worldModuleTypeIndex);
+            if (worldModuleTypeIndex != 0)
+            {
+                data.WorldModuleTypeIndex = GetWorldModuleTypeIndex(module.name);
+                data.WorldModuleTypeName = module.name;
+                string path = folder + module.name + ".config";
+                byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
+                File.WriteAllBytes(path, bytes);
+            }
+            else
+            {
+                Debug.LogError($"WorldModuleTypeDefineDict 中无{module.name}");
+            }
         }
     }
 
@@ -290,7 +322,9 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         BoxTypeDefineDict.LoadTypeNames();
         BoxIconTypeDefineDict.LoadTypeNames();
         EnemyTypeDefineDict.LoadTypeNames();
+        LevelTriggerTypeDefineDict.LoadTypeNames();
         WorldModuleTypeDefineDict.LoadTypeNames();
+        WorldTypeDefineDict.LoadTypeNames();
         FXTypeDefineDict.LoadTypeNames();
         LoadWorldDataConfig(dataFormat);
         LoadWorldModuleDataConfig(dataFormat);
@@ -308,13 +342,13 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             {
                 byte[] bytes = File.ReadAllBytes(fi.FullName);
                 WorldData data = SerializationUtility.DeserializeValue<WorldData>(bytes, dataFormat);
-                if (WorldDataConfigDict.ContainsKey(data.WorldName))
+                if (WorldDataConfigDict.ContainsKey(data.WorldTypeIndex))
                 {
-                    Debug.LogError($"世界重名:{data.WorldName}");
+                    Debug.LogError($"世界重名:{data.WorldTypeIndex}");
                 }
                 else
                 {
-                    WorldDataConfigDict.Add(data.WorldName, data);
+                    WorldDataConfigDict.Add(data.WorldTypeIndex, data);
                 }
             }
         }
@@ -357,15 +391,23 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     // -------- Get All Type Names --------
 
-    public static IEnumerable<string> GetAllWorldNames()
+    public static List<string> GetAllWorldNames()
     {
         LoadAllConfigs();
-        List<string> res = WorldDataConfigDict.Keys.ToList();
+        List<string> res = WorldTypeDefineDict.TypeIndexDict.Keys.ToList();
         res.Insert(0, "None");
         return res;
     }
 
-    public static IEnumerable<string> GetAllBoxTypeNames()
+    public static List<string> GetAllWorldModuleNames()
+    {
+        LoadAllConfigs();
+        List<string> res = WorldModuleTypeDefineDict.TypeIndexDict.Keys.ToList();
+        res.Insert(0, "None");
+        return res;
+    }
+
+    public static List<string> GetAllBoxTypeNames()
     {
         LoadAllConfigs();
         List<string> res = BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
@@ -373,7 +415,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return res;
     }
 
-    public static IEnumerable<string> GetAllFXTypeNames()
+    public static List<string> GetAllFXTypeNames()
     {
         LoadAllConfigs();
         List<string> res = FXTypeDefineDict.TypeIndexDict.Keys.ToList();
@@ -381,7 +423,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return res;
     }
 
-    public static IEnumerable<string> GetAllEnemyNames()
+    public static List<string> GetAllEnemyNames()
     {
         List<string> res = new List<string>();
         res = EnemyTypeDefineDict.TypeIndexDict.Keys.ToList();
@@ -389,12 +431,20 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return res;
     }
 
-    public static IEnumerable<string> GetAllActorNames()
+    public static List<string> GetAllActorNames()
     {
         LoadAllConfigs();
         List<string> res = new List<string>();
         res = EnemyTypeDefineDict.TypeIndexDict.Keys.ToList();
         res.Insert(0, "Player1");
+        res.Insert(0, "None");
+        return res;
+    }
+
+    public static List<string> GetAllLevelTriggerNames()
+    {
+        List<string> res = new List<string>();
+        res = LevelTriggerTypeDefineDict.TypeIndexDict.Keys.ToList();
         res.Insert(0, "None");
         return res;
     }
@@ -411,7 +461,12 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort GetBoxTypeIndex(string boxTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(boxTypeName)) return 0;
+        if (string.IsNullOrEmpty(boxTypeName))
+        {
+            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的箱子Prefab", "#00A9D1", boxTypeName));
+            return 0;
+        }
+
         BoxTypeDefineDict.TypeIndexDict.TryGetValue(boxTypeName, out ushort boxTypeIndex);
         return boxTypeIndex;
     }
@@ -426,7 +481,12 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort GetBoxIconTypeIndex(string boxIconTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(boxIconTypeName)) return 0;
+        if (string.IsNullOrEmpty(boxIconTypeName))
+        {
+            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的箱子Icon", "#0DD100", boxIconTypeName));
+            return 0;
+        }
+
         BoxIconTypeDefineDict.TypeIndexDict.TryGetValue(boxIconTypeName, out ushort boxIconTypeIndex);
         return boxIconTypeIndex;
     }
@@ -441,9 +501,34 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort GetEnemyTypeIndex(string enemyTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(enemyTypeName)) return 0;
+        if (string.IsNullOrEmpty(enemyTypeName))
+        {
+            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的敌兵Prefab", "#8600D1", enemyTypeName));
+            return 0;
+        }
+
         EnemyTypeDefineDict.TypeIndexDict.TryGetValue(enemyTypeName, out ushort enemyTypeIndex);
         return enemyTypeIndex;
+    }
+
+    public static string GetLevelTriggerTypeName(ushort levelTriggerTypeIndex)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        LevelTriggerTypeDefineDict.TypeNameDict.TryGetValue(levelTriggerTypeIndex, out string levelTriggerTypeName);
+        return levelTriggerTypeName;
+    }
+
+    public static ushort GetLevelTriggerTypeIndex(string levelTriggerTypeName)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        if (string.IsNullOrEmpty(levelTriggerTypeName))
+        {
+            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的LevelTrigger Prefab", "#6DF707", levelTriggerTypeName));
+            return 0;
+        }
+
+        LevelTriggerTypeDefineDict.TypeIndexDict.TryGetValue(levelTriggerTypeName, out ushort levelTriggerTypeIndex);
+        return levelTriggerTypeIndex;
     }
 
     public static string GetWorldModuleName(ushort worldModuleTypeIndex)
@@ -456,9 +541,34 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort GetWorldModuleTypeIndex(string worldModuleTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(worldModuleTypeName)) return 0;
+        if (string.IsNullOrEmpty(worldModuleTypeName))
+        {
+            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的世界模组Prefab", "#D100BC", worldModuleTypeName));
+            return 0;
+        }
+
         WorldModuleTypeDefineDict.TypeIndexDict.TryGetValue(worldModuleTypeName, out ushort worldModuleTypeIndex);
         return worldModuleTypeIndex;
+    }
+
+    public static string GetWorldName(ushort worldTypeIndex)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        WorldTypeDefineDict.TypeNameDict.TryGetValue(worldTypeIndex, out string worldTypeName);
+        return worldTypeName;
+    }
+
+    public static ushort GetWorldTypeIndex(string worldTypeName)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        if (string.IsNullOrEmpty(worldTypeName))
+        {
+            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的世界Prefab", "#009CD1", worldTypeName));
+            return 0;
+        }
+
+        WorldTypeDefineDict.TypeIndexDict.TryGetValue(worldTypeName, out ushort worldTypeIndex);
+        return worldTypeIndex;
     }
 
     public static string GetFXName(ushort fxTypeIndex)
@@ -471,15 +581,20 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort GetFXTypeIndex(string fxTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(fxTypeName)) return 0;
+        if (string.IsNullOrEmpty(fxTypeName))
+        {
+            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的FX Prefab", "#D1004D", fxTypeName));
+            return 0;
+        }
+
         FXTypeDefineDict.TypeIndexDict.TryGetValue(fxTypeName, out ushort fxTypeIndex);
         return fxTypeIndex;
     }
 
-    public static WorldData GetWorldDataConfig(string worldType)
+    public static WorldData GetWorldDataConfig(ushort worldTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
-        WorldDataConfigDict.TryGetValue(worldType, out WorldData worldData);
+        WorldDataConfigDict.TryGetValue(worldTypeIndex, out WorldData worldData);
         return worldData?.Clone();
     }
 

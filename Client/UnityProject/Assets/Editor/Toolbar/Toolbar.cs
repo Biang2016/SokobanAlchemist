@@ -61,8 +61,6 @@ namespace UnityToolbarExtender
             if (GUILayout.Button(new GUIContent("序列化配置"), ToolbarStyles.toolbarbutton))
             {
                 ConfigManager.ExportConfigs();
-                ConfigManager.LoadAllConfigs();
-                EditorUtility.DisplayDialog("提示", "序列化成功", "确定");
             }
         }
     }
