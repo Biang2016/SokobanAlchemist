@@ -844,7 +844,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
     {
         bool isDirty = false;
-        foreach (BoxFunctionBase bf in BoxFunctions)
+        foreach (BoxFunctionBase bf in RawBoxFunctions)
         {
             if (moduleSpecial && bf.SpecialCaseType != BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module) continue;
             if (worldSpecial && bf.SpecialCaseType != BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World) continue;
@@ -924,11 +924,12 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     #region BoxExtraData
 
+#if UNITY_EDITOR
     public bool RequireHideInWorldForModuleBox
     {
         get
         {
-            foreach (BoxFunctionBase bf in BoxFunctions)
+            foreach (BoxFunctionBase bf in RawBoxFunctions)
             {
                 if (bf is BoxFunction_Hide hide)
                 {
@@ -947,7 +948,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         get
         {
-            foreach (BoxFunctionBase bf in BoxFunctions)
+            foreach (BoxFunctionBase bf in RawBoxFunctions)
             {
                 if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
                 {
@@ -963,7 +964,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         get
         {
-            foreach (BoxFunctionBase bf in BoxFunctions)
+            foreach (BoxFunctionBase bf in RawBoxFunctions)
             {
                 if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module)
                 {
@@ -974,6 +975,8 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             return false;
         }
     }
+
+#endif
 
     public class BoxExtraSerializeData : IClone<BoxExtraSerializeData>
     {
@@ -994,7 +997,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         BoxExtraSerializeData data = new BoxExtraSerializeData();
         data.BoxFunctions = new List<BoxFunctionBase>();
-        foreach (BoxFunctionBase bf in BoxFunctions)
+        foreach (BoxFunctionBase bf in RawBoxFunctions)
         {
             if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
             {
@@ -1009,7 +1012,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         BoxExtraSerializeData data = new BoxExtraSerializeData();
         data.BoxFunctions = new List<BoxFunctionBase>();
-        foreach (BoxFunctionBase bf in BoxFunctions)
+        foreach (BoxFunctionBase bf in RawBoxFunctions)
         {
             if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module)
             {
@@ -1028,7 +1031,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             foreach (BoxFunctionBase extraBF in boxExtraSerializeDataFromModule.BoxFunctions)
             {
                 bool foundMatch = false;
-                foreach (BoxFunctionBase bf in BoxFunctions)
+                foreach (BoxFunctionBase bf in RawBoxFunctions)
                 {
                     if (bf.GetType() == extraBF.GetType())
                     {
@@ -1046,7 +1049,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             foreach (BoxFunctionBase newFunction in newFunctionList)
             {
                 newFunction.Box = this;
-                BoxFunctions.Add(newFunction);
+                RawBoxFunctions.Add(newFunction);
             }
         }
 
@@ -1057,7 +1060,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             foreach (BoxFunctionBase extraBF in boxExtraSerializeDataFromWorld.BoxFunctions)
             {
                 bool foundMatch = false;
-                foreach (BoxFunctionBase bf in BoxFunctions)
+                foreach (BoxFunctionBase bf in RawBoxFunctions)
                 {
                     if (bf.GetType() == extraBF.GetType())
                     {
@@ -1075,7 +1078,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             foreach (BoxFunctionBase newFunction in newFunctionList)
             {
                 newFunction.Box = this;
-                BoxFunctions.Add(newFunction);
+                RawBoxFunctions.Add(newFunction);
             }
         }
     }

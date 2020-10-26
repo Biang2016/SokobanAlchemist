@@ -292,7 +292,7 @@ public class BoxEditorWindow : EditorWindow
 
     private GameObject FindWorldPrefabByName(string worldName)
     {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.WorldModuleTypeDefineDict.GetTypeAssetDataBasePath(worldName));
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.WorldTypeDefineDict.GetTypeAssetDataBasePath(worldName));
         return prefab;
     }
 }

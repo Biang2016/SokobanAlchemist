@@ -262,7 +262,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
     {
         bool isDirty = false;
         StringBuilder localInfo = new StringBuilder();
-        localInfo.Append($"ModuleStart: {name} ---\n");
+        localInfo.Append($"ModuleStart: {name}\n");
         List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
         foreach (LevelTriggerBase trigger in triggers)
         {
@@ -278,8 +278,8 @@ public class WorldModuleDesignHelper : MonoBehaviour
             }
         }
 
-        localInfo.Append($"ModuleEnd: {name} ---\n");
-        info.Append(localInfo.ToString());
+        localInfo.Append($"ModuleEnd: {name} ------------\n");
+        if (isDirty) info.Append(localInfo.ToString());
         return isDirty;
     }
 

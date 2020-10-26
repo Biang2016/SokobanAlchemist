@@ -34,12 +34,16 @@ public class ConfigPreviewerWindow : OdinEditorWindow
     public SortedDictionary<ushort, string> WorldModuleTypeNameDict => ConfigManager.WorldModuleTypeDefineDict.TypeNameDict;
 
     [ShowInInspector]
-    [LabelText("世界配置表")]
-    [TableList]
-    public List<WorldData> WorldDataConfigDict => ConfigManager.WorldDataConfigDict.Values.ToList();
+    [LabelText("世界类型表")]
+    public SortedDictionary<ushort, string> WorldTypeNameDict => ConfigManager.WorldTypeDefineDict.TypeNameDict;
 
     [ShowInInspector]
     [LabelText("世界模组配置表")]
     [TableList]
     public List<WorldModuleData> WorldModuleDataConfigDict => ConfigManager.WorldModuleDataConfigDict.Values.ToList();
+
+    [ShowInInspector]
+    [LabelText("世界配置表")]
+    [TableList]
+    public List<WorldData> WorldDataConfigDict => ConfigManager.WorldDataConfigDict.Values.ToList();
 }

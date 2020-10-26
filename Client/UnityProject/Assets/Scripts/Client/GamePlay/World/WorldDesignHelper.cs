@@ -346,10 +346,13 @@ public class WorldDesignHelper : MonoBehaviour
     {
         bool isDirty = false;
         StringBuilder localInfo = new StringBuilder();
-        localInfo.Append($"WorldStart: {name} ---\n");
+        localInfo.Append($"WorldStart: {name}\n");
         List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
         foreach (LevelTriggerBase trigger in triggers)
         {
+            if (trigger.transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot}")) continue;
+            WorldModuleDesignHelper module = trigger.transform.GetComponentInParent<WorldModuleDesignHelper>();
+            if (module) continue;
             isDirty |= trigger.DeleteBoxTypeName(srcBoxName, localInfo);
         }
 
@@ -368,8 +371,8 @@ public class WorldDesignHelper : MonoBehaviour
             }
         }
 
-        localInfo.Append($"WorldEnd: {name} ---\n");
-        info.Append(localInfo.ToString());
+        localInfo.Append($"WorldEnd: {name} ------------\n");
+        if (isDirty) info.Append(localInfo.ToString());
         return isDirty;
     }
 #endif

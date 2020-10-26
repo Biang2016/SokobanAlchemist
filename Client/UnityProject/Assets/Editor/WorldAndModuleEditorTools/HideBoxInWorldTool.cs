@@ -37,7 +37,7 @@ class HideBoxInWorldTool : EditorTool
                 if (world && module)
                 {
                     bool hasHide = false;
-                    foreach (BoxFunctionBase bf in box.BoxFunctions)
+                    foreach (BoxFunctionBase bf in box.RawBoxFunctions)
                     {
                         if (bf is BoxFunction_Hide)
                         {
@@ -54,7 +54,7 @@ class HideBoxInWorldTool : EditorTool
                     {
                         BoxFunction_Hide hide = new BoxFunction_Hide();
                         hide.SpecialCaseType = BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World;
-                        box.BoxFunctions.Add(hide);
+                        box.RawBoxFunctions.Add(hide);
                         EditorUtility.SetDirty(box);
                     }
                 }
