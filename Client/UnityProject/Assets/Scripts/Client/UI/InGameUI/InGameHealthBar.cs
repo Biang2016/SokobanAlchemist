@@ -1,4 +1,5 @@
-﻿using BiangStudio.ObjectPool;
+﻿using BiangStudio;
+using BiangStudio.ObjectPool;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,12 +8,22 @@ public class InGameHealthBar : PoolObject
     private ActorBattleHelper ActorBattleHelper;
     public RectTransform RectTransform;
     public Image MainSliderFillImage;
+    public Image SubSliderFillImage;
+    public Image SubSliderBackground;
     public Slider MainSlider;
     public Slider SubSlider;
     public Gradient HealthBarGradient;
 
     private int Length;
     private int Height;
+
+    private static Color Transparent = new Color(0, 0, 0, 0);
+    private Color BackGroundDark;
+
+    void Awake()
+    {
+        BackGroundDark = CommonUtils.HTMLColorToColor("#2E2E2E");
+    }
 
     public override void OnRecycled()
     {
@@ -29,7 +40,6 @@ public class InGameHealthBar : PoolObject
         SubSlider.value = 0;
         SetHealthSliderValue(helper.Health, helper.MaxHealth);
         helper.OnHealthChanged += SetHealthSliderValue;
-        MainSliderFillImage.color = HealthBarGradient.Evaluate(MainSlider.value);
     }
 
     public void SetHealthSliderValue(int left, int total)
@@ -43,7 +53,18 @@ public class InGameHealthBar : PoolObject
             MainSlider.value = (float) left / total;
         }
 
-        MainSliderFillImage.color = HealthBarGradient.Evaluate(MainSlider.value);
+        if (left == total)
+        {
+            MainSliderFillImage.color = Transparent;
+            SubSliderFillImage.color = Transparent;
+            SubSliderBackground.color = Transparent;
+        }
+        else
+        {
+            MainSliderFillImage.color = HealthBarGradient.Evaluate(MainSlider.value);
+            SubSliderFillImage.color = Color.white;
+            SubSliderBackground.color = BackGroundDark;
+        }
     }
 
     private float smoothDampVelocity;
