@@ -141,10 +141,28 @@ public class WorldModuleDesignHelper : MonoBehaviour
         }
 
         bool dirty = false;
+        dirty |= ArrangeAllRoots();
+        dirty |= RemoveTriggersFromBoxes_Editor();
         dirty |= FormatAllBoxName_Editor();
         dirty |= FormatAllBornPointName_Editor();
         dirty |= FormatAllLevelTriggerName_Editor();
-        dirty |= ArrangeAllRoots();
+        return dirty;
+    }
+
+    private bool RemoveTriggersFromBoxes_Editor()
+    {
+        bool dirty = false;
+        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
+        foreach (Box box in boxes)
+        {
+            if (box.BoxColliderHelper != null)
+            {
+                DestroyImmediate(box.BoxColliderHelper.gameObject);
+                box.BoxColliderHelper = null;
+                dirty = true;
+            }
+        }
+
         return dirty;
     }
 

@@ -253,7 +253,7 @@ public class BoxFunction_ChangeBoxType : BoxFunction_InvokeOnLevelEventID
     [BoxName]
     [LabelText("更改箱子类型为")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string ChangeBoxTypeTo;
+    public string ChangeBoxTypeTo = "None";
 
     protected override void OnEventExecute()
     {
@@ -292,7 +292,7 @@ public class BoxFunction_ChangeBoxToEnemy : BoxFunction_InvokeOnLevelEventID
     [BoxName]
     [LabelText("更改箱子为敌人")]
     [ValueDropdown("GetAllEnemyNames", IsUniqueList = true, DropdownTitle = "选择敌人类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string ChangeBoxToEnemyType;
+    public string ChangeBoxToEnemyType = "None";
 
     protected override void OnEventExecute()
     {
@@ -337,7 +337,7 @@ public class BoxFunction_LiftDropSkill : BoxFunctionBase
     [GUIColor(0, 1.0f, 0)]
     [LabelText("举起箱子掉落踢技能")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string LiftGetLiftBoxAbility;
+    public string LiftGetLiftBoxAbility = "None";
 
     public override void OnBeingLift(Actor actor)
     {
@@ -764,7 +764,7 @@ public class BoxFunction_GenerateNewBoxes : BoxFunctionBase
     [BoxName]
     [LabelText("箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames")]
-    private string BoxTypeName;
+    private string BoxTypeName = "None";
 
     protected override void ChildClone(BoxFunctionBase newBF)
     {

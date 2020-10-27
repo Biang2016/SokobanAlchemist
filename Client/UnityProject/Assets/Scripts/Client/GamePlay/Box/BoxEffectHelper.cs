@@ -9,6 +9,11 @@ public class BoxEffectHelper : PoolObject, IBoxHelper
         base.OnRecycled();
     }
 
+    public void OnBoxPoolRecycle()
+    {
+        PoolRecycle();
+    }
+
     public ParticleSystem ImpulseParticleSystem;
 
     public void Play()

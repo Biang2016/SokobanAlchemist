@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BoxIconSpriteHelper : MonoBehaviour, IBoxHelper
 {
-    public void PoolRecycle()
+    public void OnBoxPoolRecycle()
     {
     }
 

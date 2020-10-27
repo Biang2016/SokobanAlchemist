@@ -1,10 +1,10 @@
 ﻿using BiangStudio.GameDataFormat.Grid;
+using BiangStudio.ObjectPool;
 using UnityEngine;
 
-public class BoxColliderHelper : MonoBehaviour, IBoxHelper
+public class BoxColliderHelper : PoolObject, IBoxHelper
 {
-    [SerializeField]
-    private Box Box;
+    public Box Box;
 
     [SerializeField]
     private GameObject NormalColliders;
@@ -24,8 +24,12 @@ public class BoxColliderHelper : MonoBehaviour, IBoxHelper
     [SerializeField]
     private Collider BoxOnlyDynamicCollider;
 
-    public void PoolRecycle()
+    [SerializeField]
+    private Collider BoxIndicatorTrigger;
+
+    public override void OnRecycled()
     {
+        base.OnRecycled();
         StaticBoxCollider.enabled = false;
         StaticWedgeCollider.enabled = false;
         DynamicCollider.enabled = false;
@@ -33,13 +37,21 @@ public class BoxColliderHelper : MonoBehaviour, IBoxHelper
         NormalColliders.SetActive(false);
         StaticColliders.SetActive(false);
         BoxOnlyDynamicCollider.gameObject.SetActive(false);
+        BoxIndicatorTrigger.gameObject.SetActive(false);
     }
 
-    public void OnUsed()
+    public void OnBoxPoolRecycle()
     {
+        PoolRecycle();
+    }
+
+    public override void OnUsed()
+    {
+        base.OnUsed();
         NormalColliders.SetActive(true);
         StaticColliders.SetActive(true);
         BoxOnlyDynamicCollider.gameObject.SetActive(true);
+        BoxIndicatorTrigger.gameObject.SetActive(true);
     }
 
     public void SwitchBoxShapeType()

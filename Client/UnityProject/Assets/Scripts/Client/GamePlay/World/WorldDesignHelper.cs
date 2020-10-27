@@ -124,12 +124,13 @@ public class WorldDesignHelper : MonoBehaviour
     public bool SortWorld()
     {
         bool dirty = false;
+        dirty |= ArrangeAllRoots();
         dirty |= FormatAllWorldModuleName_Editor();
         dirty |= FormatAllBornPointName_Editor();
         dirty |= FormatAllWorldCameraPOIName_Editor();
         dirty |= FormatAllLevelTriggerName_Editor();
+        dirty |= RemoveTriggersFromBoxes_Editor();
         dirty |= FormatAllBoxName_Editor();
-        dirty |= ArrangeAllRoots();
         return dirty;
     }
 
@@ -194,6 +195,23 @@ public class WorldDesignHelper : MonoBehaviour
             if (trigger.name != prefab.name)
             {
                 trigger.name = prefab.name;
+                dirty = true;
+            }
+        }
+
+        return dirty;
+    }
+
+    private bool RemoveTriggersFromBoxes_Editor()
+    {
+        bool dirty = false;
+        List<Box> worldBoxes = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot).GetComponentsInChildren<Box>().ToList();
+        foreach (Box worldBox in worldBoxes)
+        {
+            if (worldBox.BoxColliderHelper != null)
+            {
+                DestroyImmediate(worldBox.BoxColliderHelper.gameObject);
+                worldBox.BoxColliderHelper = null;
                 dirty = true;
             }
         }

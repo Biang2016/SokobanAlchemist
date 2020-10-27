@@ -63,7 +63,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     [LabelText("开局世界类型")]
     [ValueDropdown("GetAllWorldNames")]
-    public string StartWorldName;
+    public string StartWorldName = "None";
 
     [Button("刷新世界名称列表")]
     private void RefreshWorldNameList()

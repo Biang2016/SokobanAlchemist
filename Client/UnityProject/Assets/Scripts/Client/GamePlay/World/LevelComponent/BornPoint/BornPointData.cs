@@ -12,8 +12,7 @@ public class BornPointData : LevelComponentData
 
     [ValueDropdown("GetAllActorNames")]
     [LabelText("角色类型")]
-    [FormerlySerializedAs("EnemyName")]
-    public string ActorType;
+    public string ActorType = "None";
 
     public ActorCategory ActorCategory
     {

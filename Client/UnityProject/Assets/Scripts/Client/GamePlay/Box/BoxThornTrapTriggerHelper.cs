@@ -5,7 +5,7 @@ public class BoxThornTrapTriggerHelper : MonoBehaviour, IBoxHelper
 {
     public Box Box;
 
-    public void PoolRecycle()
+    public void OnBoxPoolRecycle()
     {
         ActorStayTimeDict.Clear();
     }

@@ -19,7 +19,7 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
     {
         [ValueDropdown("GetAllActorNames")]
         [LabelText("角色类型")]
-        public string RequiredActorType;
+        public string RequiredActorType = "None";
 
         private IEnumerable<string> GetAllActorNames => ConfigManager.GetAllActorNames();
 

@@ -37,7 +37,6 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     private GridSnapper GridSnapper;
 
     internal Rigidbody Rigidbody;
-    public Collider BoxIndicatorTrigger;
 
     internal Actor LastTouchActor;
     internal BoxEffectHelper BoxEffectHelper;
@@ -52,8 +51,8 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         LastTouchActor = null;
         ArtOnly = true;
-        BoxColliderHelper.OnUsed();
-        BoxIndicatorTrigger.gameObject.SetActive(true);
+        BoxColliderHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxColliderHelper].AllocateGameObject<BoxColliderHelper>(transform);
+        BoxColliderHelper.Box = this;
         base.OnUsed();
     }
 
@@ -65,12 +64,13 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         lastWorldGP = GridPos3D.Zero;
         LastState = States.Static;
         State = States.Static;
-        BoxEffectHelper?.PoolRecycle();
-        BoxColliderHelper.PoolRecycle();
-        BoxThornTrapTriggerHelper?.PoolRecycle();
-        BoxSkinHelper?.PoolRecycle();
-        BoxIconSpriteHelper?.PoolRecycle();
+        BoxEffectHelper?.OnBoxPoolRecycle();
         BoxEffectHelper = null;
+        BoxColliderHelper.OnBoxPoolRecycle();
+        BoxColliderHelper = null;
+        BoxThornTrapTriggerHelper?.OnBoxPoolRecycle();
+        BoxSkinHelper?.OnBoxPoolRecycle();
+        BoxIconSpriteHelper?.OnBoxPoolRecycle();
         transform.DOPause();
         alreadyCollide = false;
         if (Rigidbody) Destroy(Rigidbody);
@@ -83,7 +83,6 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
         UnRegisterEvents();
         UnInitBoxFunctions();
-        BoxIndicatorTrigger.gameObject.SetActive(false);
         base.OnRecycled();
     }
 
@@ -104,12 +103,12 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         if (BoxShapeType == BoxShapeType.Box)
         {
             BoxSkinHelper?.ResetBoxOrientation();
-            BoxColliderHelper.ResetBoxOrientation();
+            BoxColliderHelper?.ResetBoxOrientation();
             BoxOrientation = GridPosR.Orientation.Up;
         }
 
         BoxSkinHelper?.RefreshBoxShapeType();
-        BoxColliderHelper.SwitchBoxShapeType();
+        BoxColliderHelper?.SwitchBoxShapeType();
     }
 
     [LabelText("箱子朝向")]
@@ -121,7 +120,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     private void SwitchBoxOrientation()
     {
         BoxSkinHelper?.SwitchBoxOrientation();
-        BoxColliderHelper.SwitchBoxOrientation();
+        BoxColliderHelper?.SwitchBoxOrientation();
     }
 
     [AssetsOnly]
@@ -220,21 +219,21 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         BoxFunctions.Clear();
         BoxFunctionDict.Clear();
         BoxFunctions = RawBoxFunctions.Clone();
-        foreach (BoxFunctionBase bf in RawBoxFunctions)
+        foreach (BoxFunctionBase bf in BoxFunctions)
         {
             bf.Box = this;
             bf.OnRegisterLevelEventID();
             string bfName = bf.GetType().Name;
             if (!BoxFunctionDict.ContainsKey(bfName))
             {
-                BoxFunctionDict.Add(bfName, bf.Clone());
+                BoxFunctionDict.Add(bfName, bf);
             }
         }
     }
 
     private void UnInitBoxFunctions()
     {
-        foreach (BoxFunctionBase bf in RawBoxFunctions)
+        foreach (BoxFunctionBase bf in BoxFunctions)
         {
             bf.OnUnRegisterLevelEventID();
         }
@@ -839,7 +838,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     [BoxGroup("模组编辑器")]
     [LabelText("替换Box类型")]
     [ValueDropdown("GetAllBoxTypeNames")]
-    private string ReplaceBoxTypeName;
+    private string ReplaceBoxTypeName = "None";
 
     public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
     {

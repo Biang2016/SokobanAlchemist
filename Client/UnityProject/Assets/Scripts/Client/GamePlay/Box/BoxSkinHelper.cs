@@ -19,7 +19,7 @@ public class BoxSkinHelper : MonoBehaviour, IBoxHelper
     [SerializeField]
     private MeshFilter MeshFilter;
 
-    public void PoolRecycle()
+    public void OnBoxPoolRecycle()
     {
     }
 

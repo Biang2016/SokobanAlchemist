@@ -268,7 +268,7 @@ public class Actor : PoolObject
     [BoxGroup("死亡")]
     [LabelText("死亡掉落箱子")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string DieDropBoxTypeName;
+    public string DieDropBoxTypeName = "None";
 
     [BoxGroup("死亡")]
     [LabelText("死亡掉落箱子概率%")]

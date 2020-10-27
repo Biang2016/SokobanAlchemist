@@ -1,4 +1,4 @@
 ﻿public interface IBoxHelper
 {
-    void PoolRecycle();
+    void OnBoxPoolRecycle();
 }

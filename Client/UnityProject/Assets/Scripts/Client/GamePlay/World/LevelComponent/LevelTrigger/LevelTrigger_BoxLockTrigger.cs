@@ -21,7 +21,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
         [BoxName]
         [LabelText("指定箱子类型")]
         [ValueDropdown("GetAllBoxTypeNames", DropdownTitle = "选择箱子类型")]
-        public string RequireBoxTypeName;
+        public string RequireBoxTypeName = "None";
 
         [LabelText("箱子至少停留时间/s")]
         [FormerlySerializedAs("RequireStayDuration")]
