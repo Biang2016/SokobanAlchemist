@@ -200,6 +200,8 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     public List<BoxFunctionBase> BoxFunctions = new List<BoxFunctionBase>(); // 湿数据，每个Box生命周期开始前从干数据拷出，结束后清除
     public Dictionary<string, BoxFunctionBase> BoxFunctionDict = new Dictionary<string, BoxFunctionBase>(); // 便于寻找
 
+    internal bool BoxFunctionMarkAsDeleted = false;
+
     [HideInInspector]
     public byte[] BoxFunctionBaseData;
 
@@ -219,9 +221,11 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         BoxFunctions.Clear();
         BoxFunctionDict.Clear();
         BoxFunctions = RawBoxFunctions.Clone();
+        BoxFunctionMarkAsDeleted = false;
         foreach (BoxFunctionBase bf in BoxFunctions)
         {
             bf.Box = this;
+            bf.OnInit();
             bf.OnRegisterLevelEventID();
             string bfName = bf.GetType().Name;
             if (!BoxFunctionDict.ContainsKey(bfName))
@@ -240,6 +244,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
         BoxFunctions.Clear();
         BoxFunctionDict.Clear();
+        BoxFunctionMarkAsDeleted = false;
     }
 
     #endregion
@@ -695,14 +700,15 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             {
                 CollideAOEDamage(CollideDamageRadius, CollideDamage);
                 PlayCollideFX();
-                if (!BoxFunctionDict.ContainsKey(typeof(BoxFunction_CollideBreakable).Name))
-                {
-                    WorldManager.Instance.CurrentWorld.DeleteBox(this); // 如果没配默认撞击破坏
-                }
 
                 foreach (BoxFunctionBase bf in BoxFunctions)
                 {
                     bf.OnFlyingCollisionEnter(collision);
+                }
+
+                if (BoxFunctionMarkAsDeleted || !BoxFunctionDict.ContainsKey(typeof(BoxFunction_CollideBreakable).Name))
+                {
+                    WorldManager.Instance.CurrentWorld.DeleteBox(this); // 如果没配默认撞击破坏
                 }
             }
         }
@@ -715,14 +721,15 @@ public class Box : PoolObject, ISerializationCallbackReceiver
                 {
                     CollideAOEDamage(CollideDamageRadius, CollideDamage);
                     PlayCollideFX();
-                    if (!BoxFunctionDict.ContainsKey(typeof(BoxFunction_CollideBreakable).Name))
-                    {
-                        WorldManager.Instance.CurrentWorld.DeleteBox(this); // 如果没配默认撞击破坏
-                    }
 
                     foreach (BoxFunctionBase bf in BoxFunctions)
                     {
                         bf.OnBeingKickedCollisionEnter(collision);
+                    }
+
+                    if (BoxFunctionMarkAsDeleted || !BoxFunctionDict.ContainsKey(typeof(BoxFunction_CollideBreakable).Name))
+                    {
+                        WorldManager.Instance.CurrentWorld.DeleteBox(this); // 如果没配默认撞击破坏
                     }
                 }
             }

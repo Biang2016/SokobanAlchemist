@@ -31,6 +31,10 @@ public abstract class BoxFunctionBase : IClone<BoxFunctionBase>
 
     private IEnumerable<string> GetAllEnemyNames => ConfigManager.GetAllEnemyNames();
 
+    public virtual void OnInit()
+    {
+    }
+
     public virtual void OnRegisterLevelEventID()
     {
     }
@@ -370,40 +374,46 @@ public class BoxFunction_LiftDropSkill : BoxFunctionBase
 [LabelText("撞击损坏耐久")]
 public class BoxFunction_CollideBreakable : BoxFunctionBase
 {
-    [LabelText("不会撞坏")]
-    public bool UnBreakable = false;
+    [InfoBox("备注: 任一耐久值为0时箱子损坏")]
+    [LabelText("公共碰撞耐久(-1无限)")]
+    public int CommonDurability = -1;
 
-    [LabelText("撞击损坏耐久")]
-    [HideIf("UnBreakable")]
-    public int Durability;
+    [LabelText("撞击箱子损坏耐久(-1无限)")]
+    public int CollideWithBoxDurability = -1;
 
-    private int remainDurability;
+    [LabelText("撞击角色损坏耐久(-1无限)")]
+    public int CollideWithActorDurability = -1;
+
+    private int remainCommonDurability;
+    private int remainDurabilityCollideWithBox;
+    private int remainDurabilityCollideWithActor;
+
+    public override void OnInit()
+    {
+        base.OnInit();
+        remainCommonDurability = CommonDurability;
+        remainDurabilityCollideWithBox = CollideWithBoxDurability;
+        remainDurabilityCollideWithActor = CollideWithActorDurability;
+    }
 
     public override void OnBeingKickedCollisionEnter(Collision collision)
     {
         base.OnBeingKickedCollisionEnter(collision);
-        if (UnBreakable) return;
-        remainDurability--;
-        if (remainDurability <= 0)
+        bool playCollideBehavior = CollideCalculate(collision);
+        if (playCollideBehavior) kickCollideBehavior();
+
+        void kickCollideBehavior()
         {
-            Break();
-        }
-        else
-        {
-            // Kick Collide behavior
         }
     }
 
     public override void OnFlyingCollisionEnter(Collision collision)
     {
         base.OnFlyingCollisionEnter(collision);
-        if (UnBreakable) return;
-        remainDurability--;
-        if (remainDurability <= 0)
-        {
-            Break();
-        }
-        else
+        bool playCollideBehavior = CollideCalculate(collision);
+        if (playCollideBehavior) flyCollideBehavior();
+
+        void flyCollideBehavior()
         {
             Box box = collision.gameObject.GetComponentInParent<Box>();
             if (box && !box.BoxFeature.HasFlag(BoxFeature.IsBorder))
@@ -413,23 +423,80 @@ public class BoxFunction_CollideBreakable : BoxFunctionBase
         }
     }
 
+    private bool CollideCalculate(Collision collision)
+    {
+        bool playCollideBehavior = false;
+        if (remainDurabilityCollideWithBox > 0 && collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box)
+        {
+            Box box = collision.gameObject.GetComponentInParent<Box>();
+            if (box != null)
+            {
+                remainDurabilityCollideWithBox--;
+                if (remainDurabilityCollideWithBox == 0)
+                {
+                    Break();
+                }
+                else
+                {
+                    playCollideBehavior = true;
+                }
+            }
+        }
+
+        if (remainDurabilityCollideWithActor > 0 && collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
+        {
+            Actor actor = collision.gameObject.GetComponentInParent<Actor>();
+            if (actor != null)
+            {
+                if (Box.LastTouchActor != null && Box.LastTouchActor.IsOpponentCampOf(actor))
+                {
+                    remainDurabilityCollideWithActor--;
+                    if (remainDurabilityCollideWithActor == 0)
+                    {
+                        Break();
+                    }
+                    else
+                    {
+                        playCollideBehavior = true;
+                    }
+                }
+            }
+        }
+
+        remainCommonDurability--;
+        if (remainCommonDurability == 0)
+        {
+            Break();
+        }
+        else
+        {
+            playCollideBehavior = true;
+        }
+
+        return playCollideBehavior;
+    }
+
     private void Break()
     {
-        WorldManager.Instance.CurrentWorld.DeleteBox(Box);
+        Box.BoxFunctionMarkAsDeleted = true;
     }
 
     protected override void ChildClone(BoxFunctionBase newBF)
     {
         base.ChildClone(newBF);
         BoxFunction_CollideBreakable bf = ((BoxFunction_CollideBreakable) newBF);
-        bf.Durability = Durability;
+        bf.CommonDurability = CommonDurability;
+        bf.remainDurabilityCollideWithBox = remainDurabilityCollideWithBox;
+        bf.remainDurabilityCollideWithActor = remainDurabilityCollideWithActor;
     }
 
     public override void ApplyData(BoxFunctionBase srcData)
     {
         base.ApplyData(srcData);
         BoxFunction_CollideBreakable bf = ((BoxFunction_CollideBreakable) srcData);
-        Durability = bf.Durability;
+        CommonDurability = bf.CommonDurability;
+        remainDurabilityCollideWithBox = bf.remainDurabilityCollideWithBox;
+        remainDurabilityCollideWithActor = bf.remainDurabilityCollideWithActor;
     }
 }
 

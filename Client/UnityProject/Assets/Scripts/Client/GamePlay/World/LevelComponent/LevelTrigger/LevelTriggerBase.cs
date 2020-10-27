@@ -179,7 +179,7 @@ public abstract class LevelTriggerBase : PoolObject
         if (HasTriggeredTimes > TriggerData.MaxTriggerTime) return;
         FXManager.Instance.PlayFX(TriggerData.TriggerFX, transform.position, TriggerData.TriggerFXScale);
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, TriggerData.TriggerEmitEventAlias);
-        //Debug.Log("LevelTriggerEventAlias:" + TriggerData.TriggerEmitEventAlias);
+        Debug.Log("LevelTriggerEventAlias:" + TriggerData.TriggerEmitEventAlias);
     }
 
 #if UNITY_EDITOR
