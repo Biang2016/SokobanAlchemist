@@ -384,8 +384,22 @@ public class BoxFunction_CollideBreakable : BoxFunctionBase
     [LabelText("撞击角色损坏耐久(-1无限)")]
     public int CollideWithActorDurability = -1;
 
+    [ReadOnly]
+    [ShowInInspector]
+    [HideInEditorMode]
+    [LabelText("公共碰撞剩余耐久")]
     private int remainCommonDurability;
+
+    [ReadOnly]
+    [ShowInInspector]
+    [HideInEditorMode]
+    [LabelText("撞击箱子损坏剩余耐久")]
     private int remainDurabilityCollideWithBox;
+
+    [ReadOnly]
+    [ShowInInspector]
+    [HideInEditorMode]
+    [LabelText("撞击角色损坏剩余耐久")]
     private int remainDurabilityCollideWithActor;
 
     public override void OnInit()
@@ -443,7 +457,11 @@ public class BoxFunction_CollideBreakable : BoxFunctionBase
             }
         }
 
-        if (remainDurabilityCollideWithActor > 0 && collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
+        if (remainDurabilityCollideWithActor > 0 &&
+            (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player ||
+             collision.gameObject.layer == LayerManager.Instance.Layer_Player ||
+             collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy ||
+             collision.gameObject.layer == LayerManager.Instance.Layer_Enemy))
         {
             Actor actor = collision.gameObject.GetComponentInParent<Actor>();
             if (actor != null)
@@ -486,8 +504,8 @@ public class BoxFunction_CollideBreakable : BoxFunctionBase
         base.ChildClone(newBF);
         BoxFunction_CollideBreakable bf = ((BoxFunction_CollideBreakable) newBF);
         bf.CommonDurability = CommonDurability;
-        bf.remainDurabilityCollideWithBox = remainDurabilityCollideWithBox;
-        bf.remainDurabilityCollideWithActor = remainDurabilityCollideWithActor;
+        bf.CollideWithBoxDurability = CollideWithBoxDurability;
+        bf.CollideWithActorDurability = CollideWithActorDurability;
     }
 
     public override void ApplyData(BoxFunctionBase srcData)
@@ -495,8 +513,8 @@ public class BoxFunction_CollideBreakable : BoxFunctionBase
         base.ApplyData(srcData);
         BoxFunction_CollideBreakable bf = ((BoxFunction_CollideBreakable) srcData);
         CommonDurability = bf.CommonDurability;
-        remainDurabilityCollideWithBox = bf.remainDurabilityCollideWithBox;
-        remainDurabilityCollideWithActor = bf.remainDurabilityCollideWithActor;
+        CollideWithBoxDurability = bf.CollideWithBoxDurability;
+        CollideWithActorDurability = bf.CollideWithActorDurability;
     }
 }
 
@@ -534,26 +552,26 @@ public class BoxFunction_LiftDropSkin : BoxFunctionBase
 public class BoxFunction_LiftGainHealth : BoxFunctionBase
 {
     [LabelText("举箱子回复生命")]
-    public int HealLifeCountWhenLifted;
+    public int GainHealthWhenLifted;
 
     public override void OnBeingLift(Actor actor)
     {
         base.OnBeingLift(actor);
-        actor.ActorBattleHelper.AddLife(HealLifeCountWhenLifted);
+        actor.ActorBattleHelper.Heal(actor, GainHealthWhenLifted);
     }
 
     protected override void ChildClone(BoxFunctionBase newBF)
     {
         base.ChildClone(newBF);
         BoxFunction_LiftGainHealth bf = ((BoxFunction_LiftGainHealth) newBF);
-        bf.HealLifeCountWhenLifted = HealLifeCountWhenLifted;
+        bf.GainHealthWhenLifted = GainHealthWhenLifted;
     }
 
     public override void ApplyData(BoxFunctionBase srcData)
     {
         base.ApplyData(srcData);
         BoxFunction_LiftGainHealth bf = ((BoxFunction_LiftGainHealth) srcData);
-        HealLifeCountWhenLifted = bf.HealLifeCountWhenLifted;
+        GainHealthWhenLifted = bf.GainHealthWhenLifted;
     }
 }
 
@@ -670,7 +688,7 @@ public class BoxFunction_ExplodeAddActorBuff : BoxFunctionBase
 
     private void ExplodeAddBuff(Vector3 center)
     {
-        Collider[] colliders = Physics.OverlapSphere(center, AddBuffRadius, LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.Layer_HitBox_Player);
+        Collider[] colliders = Physics.OverlapSphere(center, AddBuffRadius, LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
         List<Actor> actorList = new List<Actor>();
         foreach (Collider collider in colliders)
         {

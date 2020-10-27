@@ -83,6 +83,7 @@ public class ActorBattleHelper : ActorMonoHelper
         get { return health; }
         set
         {
+            value = Mathf.Clamp(value, 0, MaxHealth);
             if (health != value)
             {
                 health = value;
@@ -140,17 +141,34 @@ public class ActorBattleHelper : ActorMonoHelper
     {
         if (immuneTimeAfterDamaged_Ticker > 0) return;
         immuneTimeAfterDamaged_Ticker = Actor.ImmuneTimeAfterDamaged;
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorAttackTip, new AttackData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
         Health -= damage;
         OnDamaged?.Invoke(attacker, damage);
 
-        FX kickFX = FXManager.Instance.PlayFX(Actor.InjureFX, Actor.transform.position);
-        if (kickFX) kickFX.transform.localScale = Vector3.one * Actor.InjureFXScale;
+        FX injureFX = FXManager.Instance.PlayFX(Actor.InjureFX, Actor.transform.position);
+        if (injureFX) injureFX.transform.localScale = Vector3.one * Actor.InjureFXScale;
     }
 
     public void Damage(Actor attacker, float damage)
     {
         Damage(attacker, Mathf.FloorToInt(damage));
+    }
+
+    public UnityAction<Actor, int> OnHealed;
+
+    public void Heal(Actor healer, int health)
+    {
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(healer, Actor, health, BattleTipType.AddHp, 0, 0));
+        Health += health;
+        OnHealed?.Invoke(healer, health);
+
+        FX healFX = FXManager.Instance.PlayFX(Actor.HealFX, Actor.transform.position);
+        if (healFX) healFX.transform.localScale = Vector3.one * Actor.HealFXScale;
+    }
+
+    public void Heal(Actor healer, float health)
+    {
+        Heal(healer, Mathf.FloorToInt(health));
     }
 
     public void AddLife(int addLife)

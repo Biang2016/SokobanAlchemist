@@ -14,7 +14,7 @@ public enum ENUM_BattleEvent
 {
     ENUM_BattleEvent_MIN = 7001,
 
-    Battle_ActorAttackTip,
+    Battle_ActorNumeralTip,
     Battle_ActorCommonTip,
 
     Battle_TriggerLevelEventAlias,

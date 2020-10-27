@@ -9,6 +9,7 @@ using DG.Tweening;
 using NodeCanvas.Framework;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Actor : PoolObject
 {
@@ -149,12 +150,23 @@ public class Actor : PoolObject
     public float InjureFXScale = 1f;
 
     [BoxGroup("特效")]
+    [LabelText("生命恢复特效")]
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
+    public string HealFX;
+
+    [BoxGroup("特效")]
+    [LabelText("生命恢复特效尺寸")]
+    [FormerlySerializedAs("GainLifeFXScale")]
+    public float HealFXScale = 1f;
+
+    [BoxGroup("特效")]
     [LabelText("命数增加特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
     public string GainLifeFX;
 
     [BoxGroup("特效")]
     [LabelText("命数增加特效尺寸")]
+    [FormerlySerializedAs("GainLifeFXScale")]
     public float GainLifeFXScale = 1f;
 
     [BoxGroup("特效")]
@@ -179,16 +191,6 @@ public class Actor : PoolObject
         get
         {
             float final = Accelerate;
-            //if (CurrentLiftBox != null)
-            //{
-            //    final = Accelerate * LiftingMoveSpeedRatioCurve.Evaluate(CurrentLiftBox.FinalWeight);
-            //}
-
-            //if (ThrowState == ThrowStates.ThrowCharging)
-            //{
-            //    final *= 0.5f;
-            //}
-
             return final;
         }
     }
@@ -206,16 +208,6 @@ public class Actor : PoolObject
         get
         {
             float final = MoveSpeed;
-            //if (CurrentLiftBox != null)
-            //{
-            //    final = MoveSpeed * LiftingMoveSpeedRatioCurve.Evaluate(CurrentLiftBox.FinalWeight);
-            //}
-
-            //if (ThrowState == ThrowStates.ThrowCharging)
-            //{
-            //    final *= 0.5f;
-            //}
-
             ActorBuffHelper.AdjustFinalSpeed(final, out final);
 
             return final;
@@ -651,6 +643,7 @@ public class Actor : PoolObject
 
     public bool IsPlayer => Camp == Camp.Player;
     public bool IsPlayerOrFriend => Camp == Camp.Player || Camp == Camp.Friend;
+    public bool IsFriend => Camp == Camp.Friend;
     public bool IsEnemy => Camp == Camp.Enemy;
     public bool IsNeutral => Camp == Camp.None;
 
@@ -791,7 +784,7 @@ public class Actor : PoolObject
 
         if (this is EnemyActor enemyActor)
         {
-            NodeCanvas.Framework.GraphOwner tempGraphOwner = GetComponent<GraphOwner>();
+            GraphOwner tempGraphOwner = GetComponent<GraphOwner>();
             if (tempGraphOwner)
             {
                 Variable<List<string>> liftBoxTypeNames = tempGraphOwner.blackboard.GetVariable<List<string>>("LiftBoxTypeNames");

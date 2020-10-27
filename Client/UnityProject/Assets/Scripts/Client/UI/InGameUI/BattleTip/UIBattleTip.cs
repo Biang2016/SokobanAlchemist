@@ -5,22 +5,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum AttackerType
-{
-    None = 0,
-    LocalPlayer = 1,
-    Enemy = 2,
-    Team = 3,
-    LocalPlayerSelfDamage = 4,
-
-    NoTip = 100,
-}
-
 public enum BattleTipPrefabType
 {
-    SelfAttack,
-    SelfCriticalAttack,
-    SelfDamage,
+    UIBattleTip_PlayerAttack,
+    UIBattleTip_PlayerCriticalAttack,
+    UIBattleTip_FriendAttack,
+    UIBattleTip_PlayerGetDamaged,
+    UIBattleTip_FriendGetDamaged,
+    UIBattleTip_PlayerGetHealed,
+    UIBattleTip_FriendGetHealed,
+    UIBattleTip_EnemyGetHealed,
+    UIBattleTip_AttributeTip,
 }
 
 public enum BattleTipType
