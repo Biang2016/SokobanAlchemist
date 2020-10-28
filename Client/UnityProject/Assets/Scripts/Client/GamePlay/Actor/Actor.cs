@@ -34,13 +34,13 @@ public class Actor : PoolObject
 
     public Vector3 ArtPos => ActorSkinHelper.MainArtTransform.position;
 
+    internal ActorBuffHelper ActorBuffHelper => ActorCommonHelpers.ActorBuffHelper;
     internal ActorPushHelper ActorPushHelper => ActorCommonHelpers.ActorPushHelper;
     internal ActorFaceHelper ActorFaceHelper => ActorCommonHelpers.ActorFaceHelper;
     internal ActorSkinHelper ActorSkinHelper => ActorCommonHelpers.ActorSkinHelper;
     internal ActorLaunchArcRendererHelper ActorLaunchArcRendererHelper => ActorCommonHelpers.ActorLaunchArcRendererHelper;
     internal ActorBattleHelper ActorBattleHelper => ActorCommonHelpers.ActorBattleHelper;
     internal ActorSkillHelper ActorSkillHelper => ActorCommonHelpers.ActorSkillHelper;
-    internal ActorBuffHelper ActorBuffHelper => ActorCommonHelpers.ActorBuffHelper;
     internal Transform LiftBoxPivot => ActorCommonHelpers.LiftBoxPivot;
 
     internal GraphOwner GraphOwner;
@@ -96,30 +96,6 @@ public class Actor : PoolObject
     [BoxGroup("战斗状态")]
     [DisableInPlayMode]
     public Camp Camp;
-
-    [LabelText("总血量")]
-    [BoxGroup("战斗状态")]
-    [SerializeField]
-    [DisableInPlayMode]
-    private int MaxHealth;
-
-    [LabelText("总命数")]
-    [BoxGroup("战斗状态")]
-    [SerializeField]
-    [DisableInPlayMode]
-    private int TotalLife;
-
-    [ShowInInspector]
-    [HideInEditorMode]
-    [LabelText("剩余命数")]
-    [BoxGroup("战斗状态")]
-    public int Life => ActorBattleHelper ? ActorBattleHelper.Life : 0;
-
-    [ShowInInspector]
-    [HideInEditorMode]
-    [LabelText("剩余生命值")]
-    [BoxGroup("战斗状态")]
-    public int Health => ActorBattleHelper ? ActorBattleHelper.Health : 0;
 
     [ShowInInspector]
     [HideInEditorMode]
@@ -178,41 +154,19 @@ public class Actor : PoolObject
     [LabelText("死亡特效尺寸")]
     public float DieFXScale = 1f;
 
+    [BoxGroup("初始战斗数值")]
+    [HideLabel]
+    public ActorStatPropSet RawActorStatPropSet = new ActorStatPropSet(); // 干数据，禁修改
+
+    [ReadOnly]
+    [BoxGroup("当前战斗数值")]
+    [HideLabel]
+    [HideInEditorMode]
+    public ActorStatPropSet ActorStatPropSet; // 湿数据，每次Recycle置空，使用时从干数据拷贝
+
     [BoxGroup("手感")]
     [LabelText("起步速度")]
     public float Accelerate = 10f;
-
-    [HideInEditorMode]
-    [ShowInInspector]
-    [BoxGroup("手感")]
-    [LabelText("最终起步速度")]
-    public float FinalAccelerate
-    {
-        get
-        {
-            float final = Accelerate;
-            return final;
-        }
-    }
-
-    [BoxGroup("手感")]
-    [LabelText("基本移动速度")]
-    public float MoveSpeed = 10f;
-
-    [HideInEditorMode]
-    [ShowInInspector]
-    [BoxGroup("手感")]
-    [LabelText("最终移动速度")]
-    public float FinalSpeed
-    {
-        get
-        {
-            float final = MoveSpeed;
-            ActorBuffHelper.AdjustFinalSpeed(final, out final);
-
-            return final;
-        }
-    }
 
     [BoxGroup("手感")]
     [LabelText("瞄准点移动速度")]
@@ -220,17 +174,13 @@ public class Actor : PoolObject
 
     protected float ThrowRadiusMin = 0.75f;
 
-    //[BoxGroup("配置")]
-    //[LabelText("举箱子移速比例")]
-    //public AnimationCurve LiftingMoveSpeedRatioCurve;
+    [BoxGroup("手感")]
+    [LabelText("踢箱子力量")]
+    public float KickForce = 5;
 
     [BoxGroup("配置")]
     [LabelText("扔半径")]
     public float ThrowRadius = 10f;
-
-    [BoxGroup("配置")]
-    [LabelText("踢箱子力量")]
-    public float KickForce = 5;
 
     [BoxNameList]
     [BoxGroup("能力")]
@@ -330,13 +280,15 @@ public class Actor : PoolObject
         PushState = PushStates.None;
         ThrowState = ThrowStates.None;
         ThrowWhenDie();
+        ActorBuffHelper.OnRecycled();
         ActorPushHelper.OnRecycled();
         ActorFaceHelper.OnRecycled();
         ActorSkinHelper.OnRecycled();
         ActorLaunchArcRendererHelper.OnRecycled();
         ActorBattleHelper.OnRecycled();
         ActorSkillHelper.OnRecycled();
-        ActorBuffHelper.OnRecycled();
+        ActorStatPropSet.OnRecycled();
+        ActorStatPropSet = null;
         RigidBody.drag = 100f;
         RigidBody.velocity = Vector3.zero;
         RigidBody.angularVelocity = Vector3.zero;
@@ -348,6 +300,7 @@ public class Actor : PoolObject
     public override void OnUsed()
     {
         base.OnUsed();
+        ActorBuffHelper.OnUsed();
         ActorPushHelper.OnUsed();
         ActorPushHelper.OnUsed();
         ActorFaceHelper.OnUsed();
@@ -355,7 +308,6 @@ public class Actor : PoolObject
         ActorLaunchArcRendererHelper.OnUsed();
         ActorBattleHelper.OnUsed();
         ActorSkillHelper.OnUsed();
-        ActorBuffHelper.OnUsed();
         ActorMoveColliderRoot.SetActive(true);
     }
 
@@ -380,7 +332,10 @@ public class Actor : PoolObject
         ActorType = actorType;
         ActorCategory = actorCategory;
         ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
-        ActorBattleHelper.Initialize(TotalLife, MaxHealth);
+        ActorStatPropSet = RawActorStatPropSet.Clone();
+        ActorStatPropSet.Initialize();
+        ActorStatPropSet.Life.OnValueReachZero += ActorBattleHelper.Die;
+        ActorBattleHelper.Initialize();
         ActorSkillHelper.Initialize();
 
         CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
@@ -434,11 +389,12 @@ public class Actor : PoolObject
             MovementState = MovementStates.Moving;
             RigidBody.drag = 0;
 
-            Vector3 velDiff = CurMoveAttempt.normalized * Time.fixedDeltaTime * FinalAccelerate;
+            Vector3 velDiff = CurMoveAttempt.normalized * Time.fixedDeltaTime * Accelerate;
             Vector3 finalVel = RigidBody.velocity + velDiff;
-            if (finalVel.magnitude > FinalSpeed)
+            float finalSpeed = ActorStatPropSet.MoveSpeed.GetModifiedValue / 10f;
+            if (finalVel.magnitude > finalSpeed)
             {
-                finalVel = finalVel.normalized * FinalSpeed;
+                finalVel = finalVel.normalized * finalSpeed;
             }
 
             RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);

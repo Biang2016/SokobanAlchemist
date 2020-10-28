@@ -62,7 +62,6 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
     {
         LoadActors();
         NoticePanel = UIManager.Instance.ShowUIForms<NoticePanel>();
-        UIManager.Instance.ShowUIForms<PlayerHUDPanel>().Initialize();
         GameStateManager.Instance.SetState(GameState.Fighting);
     }
 
@@ -104,6 +103,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
             BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
             MainPlayers[(int) playerNumber] = player;
             AddActor(player);
+            UIManager.Instance.ShowUIForms<PlayerHUDPanel>().Initialize();
         }
         else
         {

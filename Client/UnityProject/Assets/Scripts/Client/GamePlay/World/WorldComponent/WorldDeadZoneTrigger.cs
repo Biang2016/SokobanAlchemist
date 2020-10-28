@@ -46,7 +46,7 @@ public class WorldDeadZoneTrigger : PoolObject
             Actor actor = collider.gameObject.GetComponentInParent<Actor>();
             if (actor && !actorFaceHelper)
             {
-                actor.ActorBattleHelper.Die();
+                actor.ActorBattleHelper.LoseLife();
             }
         }
     }

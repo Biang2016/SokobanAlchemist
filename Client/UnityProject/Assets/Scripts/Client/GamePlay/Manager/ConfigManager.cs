@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BiangStudio;
@@ -8,6 +9,7 @@ using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -20,6 +22,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         Actor = 2000,
         Box = 3000,
         Buff = 10000,
+        PropertyModifier = 100000,
     }
 
     public static bool ShowEnemyPathFinding = false;
@@ -27,6 +30,11 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static float BoxThrowDragFactor_Cheat = 10f;
     public static float BoxKickDragFactor_Cheat = 1f;
     public static float BoxWeightFactor_Cheat = 1f;
+
+    [ReadOnly]
+    [ShowInInspector]
+    [BoxGroup("角色Buff相克表")]
+    public static ActorBuffAttributeRelationship[,] ActorBuffAttributeMatrix;
 
     public class TypeDefineConfig<T> where T : Object
     {
@@ -198,9 +206,11 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static string DesignRoot = "/Designs/";
 
+    public static string ActorBuffAttributeMatrixConfigFolder_Relative = "ActorBuffAttributeMatrix";
     public static string WorldDataConfigFolder_Relative = "Worlds";
     public static string WorldModuleDataConfigFolder_Relative = "WorldModule";
 
+    public static string ActorBuffAttributeMatrixConfigFolder_Build = Application.streamingAssetsPath + "/Configs/" + ActorBuffAttributeMatrixConfigFolder_Relative + "/";
     public static string WorldDataConfigFolder_Build = Application.streamingAssetsPath + "/Configs/" + WorldDataConfigFolder_Relative + "/";
     public static string WorldModuleDataConfigFolder_Build = Application.streamingAssetsPath + "/Configs/" + WorldModuleDataConfigFolder_Relative + "s/";
 
@@ -238,6 +248,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         WorldTypeDefineDict.ExportTypeNames();
         FXTypeDefineDict.ExportTypeNames();
         SortWorldAndWorldModule();
+        ExportActorBuffAttributeMatrix(dataFormat);
         ExportWorldDataConfig(dataFormat);
         ExportWorldModuleDataConfig(dataFormat);
         AssetDatabase.Refresh();
@@ -293,6 +304,35 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
             PrefabUtility.UnloadPrefabContents(worldPrefab);
         }
+    }
+
+    public static void ExportActorBuffAttributeMatrix(DataFormat dataFormat)
+    {
+        string folder = ActorBuffAttributeMatrixConfigFolder_Build;
+        if (Directory.Exists(folder)) Directory.Delete(folder, true);
+        Directory.CreateDirectory(folder);
+        string file = $"{folder}/ActorBuffAttributeMatrix.config";
+        SortedDictionary<string, SortedDictionary<string, string>> exportDict = new SortedDictionary<string, SortedDictionary<string, string>>();
+        for (int y = 0; y < ActorBuffAttributeMatrix.GetLength(0); y++)
+        {
+            for (int x = 0; x < ActorBuffAttributeMatrix.GetLength(1); x++)
+            {
+                ActorBuffAttribute rowType = (ActorBuffAttribute) y;
+                ActorBuffAttribute columnType = (ActorBuffAttribute) x;
+                if (!exportDict.ContainsKey(rowType.ToString()))
+                {
+                    exportDict.Add(rowType.ToString(), new SortedDictionary<string, string>());
+                }
+
+                if (!exportDict[rowType.ToString()].ContainsKey(columnType.ToString()))
+                {
+                    exportDict[rowType.ToString()].Add(columnType.ToString(), ActorBuffAttributeMatrix[y, x].ToString());
+                }
+            }
+        }
+
+        byte[] bytes = SerializationUtility.SerializeValue(exportDict, DataFormat.JSON);
+        File.WriteAllBytes(file, bytes);
     }
 
     private static void ExportWorldDataConfig(DataFormat dataFormat)
@@ -376,9 +416,43 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         WorldModuleTypeDefineDict.LoadTypeNames();
         WorldTypeDefineDict.LoadTypeNames();
         FXTypeDefineDict.LoadTypeNames();
+        LoadActorBuffAttributeMatrix(dataFormat);
         LoadWorldDataConfig(dataFormat);
         LoadWorldModuleDataConfig(dataFormat);
         IsLoaded = true;
+    }
+
+    public static void LoadActorBuffAttributeMatrix(DataFormat dataFormat)
+    {
+        string file = $"{ActorBuffAttributeMatrixConfigFolder_Build}/ActorBuffAttributeMatrix.config";
+        FileInfo fi = new FileInfo(file);
+        if (fi.Exists)
+        {
+            byte[] bytes = File.ReadAllBytes(fi.FullName);
+            SortedDictionary<string, SortedDictionary<string, string>> loadDict = SerializationUtility.DeserializeValue<SortedDictionary<string, SortedDictionary<string, string>>>(bytes, DataFormat.JSON);
+            int buffTypeEnumCount = Enum.GetValues(typeof(ActorBuffAttribute)).Length;
+            ActorBuffAttributeMatrix = new ActorBuffAttributeRelationship[buffTypeEnumCount, buffTypeEnumCount];
+            foreach (KeyValuePair<string, SortedDictionary<string, string>> kv in loadDict)
+            {
+                foreach (KeyValuePair<string, string> _kv in kv.Value)
+                {
+                    if (Enum.TryParse(kv.Key, out ActorBuffAttribute y))
+                    {
+                        if (Enum.TryParse(_kv.Key, out ActorBuffAttribute x))
+                        {
+                            if (Enum.TryParse(_kv.Value, out ActorBuffAttributeRelationship value))
+                            {
+                                ActorBuffAttributeMatrix[(int) y, (int) x] = value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("角色Buff克制表不存在");
+        }
     }
 
     private static void LoadWorldDataConfig(DataFormat dataFormat)

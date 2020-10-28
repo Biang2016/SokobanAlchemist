@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using BiangStudio.CloneVariant;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 [Serializable]
-public class ActorBuff : IClone<ActorBuff>
+public abstract class ActorBuff : IClone<ActorBuff>
 {
     #region GUID
 
@@ -21,6 +22,37 @@ public class ActorBuff : IClone<ActorBuff>
 
     #endregion
 
+    [LabelText("Buff标签")]
+    [ValidateInput("ValidateActorBuffAttribute", "$validateActorBuffAttributeInfo")]
+    public ActorBuffAttribute ActorBuffAttribute;
+
+    protected string validateActorBuffAttributeInfo = "";
+
+    protected virtual bool ValidateActorBuffAttribute(ActorBuffAttribute actorBuffAttribute)
+    {
+        return true;
+    }
+
+    [LabelText("永久Buff")]
+    [HideIf("ActorBuffAttribute", ActorBuffAttribute.InstantEffect)]
+    public bool IsPermanent;
+
+    [LabelText("Buff持续时间")]
+    [HideIf("IsPermanent")]
+    [HideIf("ActorBuffAttribute", ActorBuffAttribute.InstantEffect)]
+    [ValidateInput("ValidateDuration", "若非【瞬时效果】或永久Buff，持续时间不可为0")]
+    public float Duration;
+
+    private bool ValidateDuration(float duration)
+    {
+        if (!IsPermanent && duration.Equals(0))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     [ValueDropdown("GetAllFXTypeNames")]
     [LabelText("Buff特效")]
     public string BuffFX;
@@ -28,7 +60,7 @@ public class ActorBuff : IClone<ActorBuff>
     [LabelText("Buff特效尺寸")]
     public float BuffFXScale = 1.0f;
 
-    public ActorBuff()
+    protected ActorBuff()
     {
         GUID = GetGUID();
     }
@@ -49,6 +81,9 @@ public class ActorBuff : IClone<ActorBuff>
     {
         Type type = GetType();
         ActorBuff newBuff = (ActorBuff) Activator.CreateInstance(type);
+        newBuff.ActorBuffAttribute = ActorBuffAttribute;
+        newBuff.IsPermanent = IsPermanent;
+        newBuff.Duration = Duration;
         newBuff.BuffFX = BuffFX;
         newBuff.BuffFXScale = BuffFXScale;
         ChildClone(newBuff);
@@ -69,81 +104,315 @@ public class ActorBuff : IClone<ActorBuff>
 }
 
 [Serializable]
-public class ActorBuff_ChangeMoveSpeed : ActorBuff
+public class ActorBuff_ActorPropertyMultiplyModifier : ActorBuff
 {
-    [LabelText("速度增加比率%")]
+    public ActorBuff_ActorPropertyMultiplyModifier()
+    {
+        MultiplyModifier = new ActorProperty.MultiplyModifier {Percent = Percent};
+    }
+
+    [InfoBox("角色属性乘法修正")]
+    [LabelText("增加比率%")]
     public int Percent;
 
-    protected override void ChildClone(ActorBuff newBuff)
+    [LabelText("在持续时间内线性衰减至0")]
+    [HideIf("IsPermanent")]
+    public bool LinearDecayInDuration;
+
+    [LabelText("角色属性类型")]
+    public ActorProperty.PropertyType PropertyType;
+
+    internal ActorProperty.MultiplyModifier MultiplyModifier;
+
+    public override void OnAdded(Actor actor)
     {
-        base.ChildClone(newBuff);
-        ActorBuff_ChangeMoveSpeed buff = ((ActorBuff_ChangeMoveSpeed) newBuff);
-        buff.Percent = Percent;
-    }
-}
-
-[Serializable]
-public class ActorBuff_FreezeToIceBlock : ActorBuff
-{
-    [BoxGroup("冻结成冰块")]
-    [LabelText("持续时间(一阶段)")]
-    public float FreezeDuration1;
-
-    [BoxGroup("冻结成冰块")]
-    [LabelText("持续时间(二阶段)")]
-    public float FreezeDuration2;
-
-    [BoxGroup("冻结成冰块")]
-    [LabelText("持续时间(二阶段)")]
-    public float FreezeDuration3;
-
-    protected override void ChildClone(ActorBuff newBuff)
-    {
-        base.ChildClone(newBuff);
-        ActorBuff_FreezeToIceBlock buff = ((ActorBuff_FreezeToIceBlock) newBuff);
-        buff.FreezeDuration1 = FreezeDuration1;
-        buff.FreezeDuration2 = FreezeDuration2;
-        buff.FreezeDuration3 = FreezeDuration3;
+        base.OnAdded(actor);
+        if (actor.ActorStatPropSet.PropertyDict.TryGetValue(PropertyType, out ActorProperty property))
+        {
+            property.AddModifier(MultiplyModifier);
+        }
     }
 
     public override void OnFixedUpdate(Actor actor, float passedTime, float remainTime)
     {
         base.OnFixedUpdate(actor, passedTime, remainTime);
-        if (passedTime > FreezeDuration1 + FreezeDuration2 + FreezeDuration3)
+        if (!IsPermanent && LinearDecayInDuration)
         {
-            // restore
-        }
-        else if (passedTime > FreezeDuration1 + FreezeDuration2)
-        {
-            // lower stage
-        }
-        else if (passedTime > FreezeDuration1)
-        {
-            // higher stage
-        }
-        else
-        {
-            // full
+            MultiplyModifier.Percent = Mathf.RoundToInt(Percent * remainTime / Duration);
         }
     }
-}
 
-[Serializable]
-public class ActorBuff_GainLifeInstantly : ActorBuff
-{
-    [LabelText("获取生命值")]
-    public int GainHealth;
+    public override void OnRemoved(Actor actor)
+    {
+        base.OnRemoved(actor);
+        if (actor.ActorStatPropSet.PropertyDict.TryGetValue(PropertyType, out ActorProperty property))
+        {
+            if (!property.RemoveModifier(MultiplyModifier))
+            {
+                Debug.Log($"RemoveMultiplyModifier: {PropertyType} failed from {actor.name}");
+            }
+        }
+
+        MultiplyModifier = null;
+    }
+
+    protected override bool ValidateActorBuffAttribute(ActorBuffAttribute actorBuffAttribute)
+    {
+        if (actorBuffAttribute == ActorBuffAttribute.InstantEffect)
+        {
+            validateActorBuffAttributeInfo = "本Buff不支持【瞬时效果】标签";
+            return false;
+        }
+
+        return true;
+    }
 
     protected override void ChildClone(ActorBuff newBuff)
     {
         base.ChildClone(newBuff);
-        ActorBuff_GainLifeInstantly buff = ((ActorBuff_GainLifeInstantly) newBuff);
-        buff.GainHealth = GainHealth;
+        ActorBuff_ActorPropertyMultiplyModifier buff = ((ActorBuff_ActorPropertyMultiplyModifier) newBuff);
+        buff.Percent = Percent;
+        buff.LinearDecayInDuration = LinearDecayInDuration;
+        buff.PropertyType = PropertyType;
+        buff.MultiplyModifier = new ActorProperty.MultiplyModifier {Percent = Percent};
     }
+}
+
+[Serializable]
+public class ActorBuff_ActorPropertyPlusModifier : ActorBuff
+{
+    public ActorBuff_ActorPropertyPlusModifier()
+    {
+        PlusModifier = new ActorProperty.PlusModifier {Delta = Delta};
+    }
+
+    [InfoBox("角色属性加法修正")]
+    [LabelText("角色属性类型")]
+    public ActorProperty.PropertyType PropertyType;
+
+    [LabelText("变化量")]
+    public int Delta;
+
+    [LabelText("在持续时间内线性衰减至0")]
+    [HideIf("IsPermanent")]
+    public bool LinearDecayInDuration;
+
+    internal ActorProperty.PlusModifier PlusModifier;
 
     public override void OnAdded(Actor actor)
     {
         base.OnAdded(actor);
-        actor.ActorBattleHelper.Heal(actor, GainHealth);
+        if (actor.ActorStatPropSet.PropertyDict.TryGetValue(PropertyType, out ActorProperty property))
+        {
+            property.AddModifier(PlusModifier);
+        }
     }
+
+    public override void OnFixedUpdate(Actor actor, float passedTime, float remainTime)
+    {
+        base.OnFixedUpdate(actor, passedTime, remainTime);
+        if (!IsPermanent && LinearDecayInDuration)
+        {
+            PlusModifier.Delta = Mathf.RoundToInt(Delta * remainTime / Duration );
+        }
+    }
+
+    public override void OnRemoved(Actor actor)
+    {
+        base.OnRemoved(actor);
+        if (actor.ActorStatPropSet.PropertyDict.TryGetValue(PropertyType, out ActorProperty property))
+        {
+            if (!property.RemoveModifier(PlusModifier))
+            {
+                Debug.LogError($"Failed to RemovePlusModifier: {PropertyType} from {actor.name}");
+            }
+        }
+
+        PlusModifier = null;
+    }
+
+    protected override bool ValidateActorBuffAttribute(ActorBuffAttribute actorBuffAttribute)
+    {
+        if (actorBuffAttribute == ActorBuffAttribute.InstantEffect)
+        {
+            validateActorBuffAttributeInfo = "本Buff不支持【瞬时效果】标签";
+            return false;
+        }
+
+        return true;
+    }
+
+    protected override void ChildClone(ActorBuff newBuff)
+    {
+        base.ChildClone(newBuff);
+        ActorBuff_ActorPropertyPlusModifier buff = ((ActorBuff_ActorPropertyPlusModifier) newBuff);
+        buff.Delta = Delta;
+        buff.PropertyType = PropertyType;
+        buff.LinearDecayInDuration = LinearDecayInDuration;
+        buff.PlusModifier = new ActorProperty.PlusModifier {Delta = Delta};
+    }
+}
+
+[Serializable]
+public class ActorBuff_InstantDamage : ActorBuff
+{
+    [LabelText("伤害")]
+    public int Damage;
+
+    public override void OnAdded(Actor actor)
+    {
+        base.OnAdded(actor);
+        actor.ActorBattleHelper.Damage(actor, Damage); // 此处施加对象是自己，暂时有点奇怪
+    }
+
+    protected override bool ValidateActorBuffAttribute(ActorBuffAttribute actorBuffAttribute)
+    {
+        if (actorBuffAttribute != ActorBuffAttribute.InstantEffect)
+        {
+            validateActorBuffAttributeInfo = "本Buff仅支持【瞬时效果】标签";
+            return false;
+        }
+
+        return true;
+    }
+
+    protected override void ChildClone(ActorBuff newBuff)
+    {
+        base.ChildClone(newBuff);
+        ActorBuff_InstantDamage buff = ((ActorBuff_InstantDamage) newBuff);
+        buff.Damage = Damage;
+    }
+}
+
+[Serializable]
+public class ActorBuff_InstantHeal : ActorBuff
+{
+    [LabelText("治疗量")]
+    public int Health;
+
+    public override void OnAdded(Actor actor)
+    {
+        base.OnAdded(actor);
+        actor.ActorBattleHelper.Heal(actor, Health); // 此处施加对象是自己，暂时有点奇怪
+    }
+
+    protected override bool ValidateActorBuffAttribute(ActorBuffAttribute actorBuffAttribute)
+    {
+        if (actorBuffAttribute != ActorBuffAttribute.InstantEffect)
+        {
+            validateActorBuffAttributeInfo = "本Buff仅支持【瞬时效果】标签";
+            return false;
+        }
+
+        return true;
+    }
+
+    protected override void ChildClone(ActorBuff newBuff)
+    {
+        base.ChildClone(newBuff);
+        ActorBuff_InstantHeal buff = ((ActorBuff_InstantHeal) newBuff);
+        buff.Health = Health;
+    }
+}
+
+[Serializable]
+public class ActorBuff_ChangeActorStatInstantly : ActorBuff
+{
+    [InfoBox("角色异常状态累积值瞬时变化")]
+    [LabelText("角色属性类型")]
+    [ValidateInput("ValidateStatType", "请选择异常状态累积值")]
+    public ActorStat.StatType StatType;
+
+    private bool ValidateStatType(ActorStat.StatType statType)
+    {
+        if (statType == ActorStat.StatType.Health || statType == ActorStat.StatType.Life)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    [LabelText("变化量")]
+    public int Delta;
+
+    [LabelText("增加比率%")]
+    public int Percent;
+
+    public override void OnAdded(Actor actor)
+    {
+        base.OnAdded(actor);
+        float valueBefore = actor.ActorStatPropSet.StatDict[StatType].Value;
+        valueBefore += Delta;
+        valueBefore *= (100 + Percent) / 100f;
+        actor.ActorStatPropSet.StatDict[StatType].Value = Mathf.RoundToInt(valueBefore);
+    }
+
+    protected override bool ValidateActorBuffAttribute(ActorBuffAttribute actorBuffAttribute)
+    {
+        if (actorBuffAttribute != ActorBuffAttribute.InstantEffect)
+        {
+            validateActorBuffAttributeInfo = "本Buff仅支持【瞬时效果】标签";
+            return false;
+        }
+
+        return true;
+    }
+
+    protected override void ChildClone(ActorBuff newBuff)
+    {
+        base.ChildClone(newBuff);
+        ActorBuff_ChangeActorStatInstantly buff = ((ActorBuff_ChangeActorStatInstantly) newBuff);
+        buff.StatType = StatType;
+        buff.Delta = Delta;
+        buff.Percent = Percent;
+    }
+}
+
+public enum ActorBuffAttribute
+{
+    [LabelText("瞬时效果")]
+    InstantEffect,
+
+    [LabelText("加速")]
+    SpeedUp,
+
+    [LabelText("减速")]
+    SlowDown,
+
+    [LabelText("冰冻")]
+    Frozen,
+
+    [LabelText("灼烧")]
+    Firing,
+
+    [LabelText("眩晕")]
+    Stun,
+
+    [LabelText("无敌")]
+    Invincible,
+
+    [LabelText("隐身")]
+    Hiding,
+
+    [LabelText("中毒")]
+    Poison,
+}
+
+public enum ActorBuffAttributeRelationship
+{
+    [LabelText("相容")]
+    Compatible, // Buff相容
+
+    [LabelText("互斥")]
+    Mutex, // 直接替换
+
+    [LabelText("排斥")]
+    Repel, // 后者无法添加
+
+    [LabelText("抵消")]
+    SetOff, // 两者同时消失
+
+    [LabelText("大值优先")]
+    MaxDominant, // 仅针对同种ActorBuffAttribute，允许多buff共存但同一时刻仅最大值生效，各buff分别计时
 }

@@ -86,23 +86,78 @@ MonoBehaviour:
     y: 0
     z: 0
   Camp: 2
-  MaxHealth: 1
-  TotalLife: 1
   ImmuneTimeAfterDamaged: 0.4
   KickFX: Flash_SnowFlake
   KickFXScale: 1
   KickFXPivot: {fileID: 1630707899577583179}
   InjureFX: Hit_BloodBlade
   InjureFXScale: 2
+  HealFX: 
+  HealFXScale: 1
   GainLifeFX: Hit_LoveHeart
   GainLifeFXScale: 1
   DieFX: Hit_EvilBigGravBall
   DieFXScale: 2
+  RawActorStatPropSet:
+    Health:
+      _value: 1
+      _minValue: 0
+      _maxValue: 1
+    MaxHealth:
+      BaseValue: 1
+      ModifiedValue: 0
+      MinValue: 1
+      MaxValue: 10000
+    Life:
+      _value: 1
+      _minValue: 0
+      _maxValue: 10
+    FrozenResistance:
+      BaseValue: 100
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 200
+    FrozenValue:
+      _value: 0
+      _minValue: 0
+      _maxValue: 1000
+    MoveSpeed:
+      BaseValue: 25
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
+  ActorStatPropSet:
+    Health:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    MaxHealth:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    Life:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FrozenResistance:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FrozenValue:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    MoveSpeed:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
   Accelerate: 250
-  MoveSpeed: 2.5
   ThrowAimMoveSpeed: 10
-  ThrowRadius: 10
   KickForce: 5
+  ThrowRadius: 10
   PushableBoxList:
   - IceBox
   - GroundBox

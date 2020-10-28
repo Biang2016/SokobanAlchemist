@@ -18,24 +18,14 @@ public class ActorBattleHelper : ActorMonoHelper
 
     public override void OnRecycled()
     {
-        totalLife = 0;
-        life = 0;
-        maxHealth = 0;
-        health = 0;
-        OnHealthChanged = null;
-        OnLifeChanged = null;
         BoxCollider.enabled = false;
         InGameHealthBar?.PoolRecycle();
         InGameHealthBar = null;
         base.OnRecycled();
     }
 
-    public void Initialize(int totalLife, int maxHealth)
+    public void Initialize()
     {
-        this.totalLife = totalLife;
-        life = totalLife;
-        this.maxHealth = maxHealth;
-        health = maxHealth;
         BoxCollider.enabled = true;
         Transform trans = UIManager.Instance.ShowUIForms<InGameUIPanel>().transform;
         InGameHealthBar = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.InGameHealthBar].AllocateGameObject<InGameHealthBar>(trans);
@@ -44,96 +34,18 @@ public class ActorBattleHelper : ActorMonoHelper
 
     void FixedUpdate()
     {
-        if (immuneTimeAfterDamaged_Ticker > 0)
+        if (!Actor.IsRecycled)
         {
-            immuneTimeAfterDamaged_Ticker -= Time.fixedDeltaTime;
-        }
-    }
-
-    public void ResetState()
-    {
-        Life = TotalLife;
-        Health = MaxHealth;
-    }
-
-    public UnityAction<int, int> OnHealthChanged;
-    private int maxHealth;
-
-    public int MaxHealth
-    {
-        get { return maxHealth; }
-        set
-        {
-            if (maxHealth != value)
+            Actor.ActorStatPropSet.FixedUpdate();
+            if (immuneTimeAfterDamaged_Ticker > 0)
             {
-                maxHealth = value;
-                OnHealthChanged?.Invoke(health, maxHealth);
-                if (maxHealth <= 0)
-                {
-                    Die();
-                }
+                immuneTimeAfterDamaged_Ticker -= Time.fixedDeltaTime;
             }
         }
+       
     }
 
-    private int health;
-
-    public int Health
-    {
-        get { return health; }
-        set
-        {
-            value = Mathf.Clamp(value, 0, MaxHealth);
-            if (health != value)
-            {
-                health = value;
-                OnHealthChanged?.Invoke(health, maxHealth);
-                if (health <= 0)
-                {
-                    Die();
-                }
-            }
-        }
-    }
-
-    public UnityAction<int, int> OnLifeChanged;
-    private int totalLife;
-
-    public int TotalLife
-    {
-        get { return totalLife; }
-        set
-        {
-            if (totalLife != value)
-            {
-                totalLife = value;
-                OnLifeChanged?.Invoke(life, totalLife);
-                if (totalLife <= 0)
-                {
-                    DestroyActor();
-                }
-            }
-        }
-    }
-
-    private int life;
-
-    public int Life
-    {
-        get { return life; }
-        set
-        {
-            if (life != value)
-            {
-                life = value;
-                OnLifeChanged?.Invoke(life, totalLife);
-                if (life <= 0)
-                {
-                    DestroyActor();
-                }
-            }
-        }
-    }
+    #region Life & Health
 
     public UnityAction<Actor, int> OnDamaged;
 
@@ -142,7 +54,7 @@ public class ActorBattleHelper : ActorMonoHelper
         if (immuneTimeAfterDamaged_Ticker > 0) return;
         immuneTimeAfterDamaged_Ticker = Actor.ImmuneTimeAfterDamaged;
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
-        Health -= damage;
+        Actor.ActorStatPropSet.Health.Value -= damage;
         OnDamaged?.Invoke(attacker, damage);
 
         FX injureFX = FXManager.Instance.PlayFX(Actor.InjureFX, Actor.transform.position);
@@ -156,37 +68,39 @@ public class ActorBattleHelper : ActorMonoHelper
 
     public UnityAction<Actor, int> OnHealed;
 
-    public void Heal(Actor healer, int health)
+    public void Heal(Actor healer, int addHealth)
     {
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(healer, Actor, health, BattleTipType.AddHp, 0, 0));
-        Health += health;
-        OnHealed?.Invoke(healer, health);
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(healer, Actor, addHealth, BattleTipType.AddHp, 0, 0));
+        Actor.ActorStatPropSet.Health.Value += addHealth;
+        OnHealed?.Invoke(healer, addHealth);
 
         FX healFX = FXManager.Instance.PlayFX(Actor.HealFX, Actor.transform.position);
         if (healFX) healFX.transform.localScale = Vector3.one * Actor.HealFXScale;
     }
 
-    public void Heal(Actor healer, float health)
+    public void Heal(Actor healer, float addHealth)
     {
-        Heal(healer, Mathf.FloorToInt(health));
+        Heal(healer, Mathf.FloorToInt(addHealth));
     }
 
     public void AddLife(int addLife)
     {
         //ClientGameManager.Instance.BattleMessenger.Broadcast((uint)ENUM_BattleEvent.Battle_ActorAttackTip, new AttackData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
-        TotalLife += addLife;
-        Life += addLife;
+        Actor.ActorStatPropSet.Life.Value += addLife;
         FX gainLifeFX = FXManager.Instance.PlayFX(Actor.GainLifeFX, Actor.transform.position);
         if (gainLifeFX) gainLifeFX.transform.localScale = Vector3.one * Actor.GainLifeFXScale;
     }
 
-    public void Die()
+    public void LoseLife()
     {
-        Life--;
-        Health = MaxHealth;
+        Actor.ActorStatPropSet.Life.Value--;
     }
 
-    public void DestroyActor()
+    #endregion
+
+    #region Die
+
+    public void Die()
     {
         DropDieBox();
 
@@ -229,4 +143,10 @@ public class ActorBattleHelper : ActorMonoHelper
             }
         }
     }
+
+    #endregion
+
+    #region Elements
+
+    #endregion
 }

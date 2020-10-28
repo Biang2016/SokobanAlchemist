@@ -438,7 +438,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             if (Actor.ActorBattleHelper == null) return false;
-            return Actor.ActorBattleHelper.Health >= LifeThreshold.value;
+            return Actor.ActorStatPropSet.Health.Value >= LifeThreshold.value;
         }
     }
 

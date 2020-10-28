@@ -658,37 +658,31 @@ public class BoxFunction_ExplodePushForce : BoxFunctionBase
 [LabelText("爆炸施加Buff")]
 public class BoxFunction_ExplodeAddActorBuff : BoxFunctionBase
 {
-    [LabelText("爆炸施加ActorBuff")]
-    public ActorBuff ActorBuff;
-
     [LabelText("生效于相对阵营")]
     public RelativeCamp EffectiveOnRelativeCamp;
 
     [LabelText("判定半径")]
     public int AddBuffRadius = 2;
 
-    [LabelText("永久Buff")]
-    public bool PermanentBuff;
-
-    [LabelText("Buff持续时间")]
-    [HideIf("PermanentBuff")]
-    public float Duration;
+    [BoxGroup("爆炸施加ActorBuff")]
+    [HideLabel]
+    public ActorBuff ActorBuff;
 
     public override void OnFlyingCollisionEnter(Collision collision)
     {
         base.OnFlyingCollisionEnter(collision);
-        ExplodeAddBuff(collision.contacts[0].point);
+        ExplodeAddBuff();
     }
 
     public override void OnBeingKickedCollisionEnter(Collision collision)
     {
         base.OnBeingKickedCollisionEnter(collision);
-        ExplodeAddBuff(collision.contacts[0].point);
+        ExplodeAddBuff();
     }
 
-    private void ExplodeAddBuff(Vector3 center)
+    private void ExplodeAddBuff()
     {
-        Collider[] colliders = Physics.OverlapSphere(center, AddBuffRadius, LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
+        Collider[] colliders = Physics.OverlapSphere(Box.transform.position, AddBuffRadius, LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
         List<Actor> actorList = new List<Actor>();
         foreach (Collider collider in colliders)
         {
@@ -722,13 +716,9 @@ public class BoxFunction_ExplodeAddActorBuff : BoxFunctionBase
                 if (!actorList.Contains(actor))
                 {
                     actorList.Add(actor);
-                    if (PermanentBuff)
+                    if (!actor.ActorBuffHelper.AddBuff(ActorBuff.Clone()))
                     {
-                        actor.ActorBuffHelper.AddPermanentBuff(ActorBuff);
-                    }
-                    else
-                    {
-                        actor.ActorBuffHelper.AddBuff(ActorBuff, Duration);
+                        Debug.Log($"Failed to AddBuff: {ActorBuff.GetType().Name} to {actor.name}");
                     }
                 }
             }
@@ -742,8 +732,6 @@ public class BoxFunction_ExplodeAddActorBuff : BoxFunctionBase
         bf.ActorBuff = ActorBuff.Clone();
         bf.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
         bf.AddBuffRadius = AddBuffRadius;
-        bf.PermanentBuff = PermanentBuff;
-        bf.Duration = Duration;
     }
 
     public override void ApplyData(BoxFunctionBase srcData)
@@ -753,8 +741,6 @@ public class BoxFunction_ExplodeAddActorBuff : BoxFunctionBase
         ActorBuff = bf.ActorBuff.Clone();
         EffectiveOnRelativeCamp = bf.EffectiveOnRelativeCamp;
         AddBuffRadius = bf.AddBuffRadius;
-        PermanentBuff = bf.PermanentBuff;
-        Duration = bf.Duration;
     }
 }
 
