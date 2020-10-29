@@ -22,7 +22,7 @@ public class ModuleAIAtoms
             OnTriggered = AddFlowOutput("OnTriggered");
             if (ClientGameManager.Instance != null)
             {
-                ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint)ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnEvent);
+                ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnEvent);
             }
         }
 

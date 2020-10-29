@@ -141,7 +141,8 @@ public class WorldModule : PoolObject
 
         if (!string.IsNullOrWhiteSpace(worldModuleData.WorldModuleFlowAssetPath))
         {
-            FlowScript flowScript = (FlowScript) Resources.Load(worldModuleData.WorldModuleFlowAssetPath);
+            FlowScript flowScriptAsset = (FlowScript) Resources.Load(worldModuleData.WorldModuleFlowAssetPath);
+            FlowScript flowScript = Instantiate(flowScriptAsset, transform);
             if (flowScript)
             {
                 FlowScriptController.graph = flowScript;

@@ -43,8 +43,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     #region Level
 
-    private WorldManager WorldManager => WorldManager.Instance;
     private BattleManager BattleManager => BattleManager.Instance;
+    private WorldManager WorldManager => WorldManager.Instance;
     private ProjectileManager ProjectileManager => ProjectileManager.Instance;
     private UIBattleTipManager UIBattleTipManager => UIBattleTipManager.Instance;
     public Messenger BattleMessenger => BattleManager.BattleMessenger;
@@ -105,8 +105,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         DebugConsole.OnDebugConsoleKeyDownHandler = () => ControlManager.Instance.Common_Debug.Down;
         DebugConsole.OnDebugConsoleToggleHandler = (enable) => { ControlManager.Instance.EnableBattleInputActions(!enable); };
 
-        WorldManager.Awake();
         BattleManager.Awake();
+        WorldManager.Awake();
         ProjectileManager.Awake();
         ProjectileManager.Init(new GameObject("ProjectileRoot").transform);
         UIBattleTipManager.Awake();
@@ -126,8 +126,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         RoutineManager.Start();
         GameStateManager.Start();
 
-        WorldManager.Start();
         BattleManager.Start();
+        WorldManager.Start();
         ProjectileManager.Start();
         UIBattleTipManager.Start();
         FXManager.Start();
@@ -165,8 +165,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         RoutineManager.Update(Time.deltaTime, Time.frameCount);
         GameStateManager.Update(Time.deltaTime);
 
-        WorldManager.Update(Time.deltaTime);
         BattleManager.Update(Time.deltaTime);
+        WorldManager.Update(Time.deltaTime);
         ProjectileManager.Update(Time.deltaTime);
         UIBattleTipManager.Update(Time.deltaTime);
         FXManager.Update(Time.deltaTime);
@@ -184,8 +184,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         RoutineManager.LateUpdate(Time.deltaTime);
         GameStateManager.LateUpdate(Time.deltaTime);
 
-        WorldManager.LateUpdate(Time.deltaTime);
         BattleManager.LateUpdate(Time.deltaTime);
+        WorldManager.LateUpdate(Time.deltaTime);
         ProjectileManager.LateUpdate(Time.deltaTime);
         UIBattleTipManager.LateUpdate(Time.deltaTime);
         FXManager.LateUpdate(Time.deltaTime);
@@ -218,8 +218,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         RoutineManager.FixedUpdate(Time.fixedDeltaTime);
         GameStateManager.FixedUpdate(Time.fixedDeltaTime);
 
-        WorldManager.FixedUpdate(Time.fixedDeltaTime);
         BattleManager.FixedUpdate(Time.fixedDeltaTime);
+        WorldManager.FixedUpdate(Time.fixedDeltaTime);
         ProjectileManager.FixedUpdate(Time.fixedDeltaTime);
         UIBattleTipManager.FixedUpdate(Time.fixedDeltaTime);
         FXManager.FixedUpdate(Time.fixedDeltaTime);

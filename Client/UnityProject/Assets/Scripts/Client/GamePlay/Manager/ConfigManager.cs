@@ -249,7 +249,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         WorldTypeDefineDict.ExportTypeNames();
         FXTypeDefineDict.ExportTypeNames();
         SortWorldAndWorldModule();
-        //ExportActorBuffAttributeMatrix(dataFormat);
+        ExportActorBuffAttributeMatrix(dataFormat);
         ExportWorldDataConfig(dataFormat);
         ExportWorldModuleDataConfig(dataFormat);
         AssetDatabase.Refresh();
