@@ -754,6 +754,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     #region Prefabs
 
+#if UNITY_EDITOR
     public static GameObject FindBoxPrefabByName(string boxName)
     {
         GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
@@ -801,6 +802,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(WorldTypeDefineDict.GetTypeAssetDataBasePath(worldName));
         return prefab;
     }
+#endif
 
     #endregion
 }
