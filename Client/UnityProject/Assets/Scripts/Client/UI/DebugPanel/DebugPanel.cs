@@ -241,6 +241,7 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("Player/AddHealth*1000")]
     public void AddHealth1000()
     {
+        BattleManager.Instance.Player1.ActorStatPropSet.MaxHealth.AddModifier(new ActorProperty.PlusModifier {Delta = 1000});
         BattleManager.Instance.Player1.ActorStatPropSet.Health.Value += 1000;
     }
 
