@@ -9,6 +9,13 @@ using UnityEngine;
 
 public class BoxEditorWindow : EditorWindow
 {
+    [MenuItem("开发工具/配置/箱子编辑窗口")]
+    public static void ShowBoxEditorWindow()
+    {
+        BoxEditorWindow window = new BoxEditorWindow();
+        window.ShowUtility();
+    }
+
     private string srcBoxName;
     private string tarBoxName;
 

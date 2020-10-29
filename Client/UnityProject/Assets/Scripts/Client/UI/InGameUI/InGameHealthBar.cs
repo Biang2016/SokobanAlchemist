@@ -38,22 +38,23 @@ public class InGameHealthBar : PoolObject
         RectTransform.sizeDelta = new Vector2(length, height) * CameraManager.Instance.FieldCamera.InGameUISize;
         ActorBattleHelper = helper;
         SubSlider.value = 0;
-        SetHealthSliderValue(helper.Health, helper.MaxHealth);
-        helper.OnHealthChanged += SetHealthSliderValue;
+        ActorStatPropSet asps = helper.Actor.ActorStatPropSet;
+        SetHealthSliderValue(asps.Health.Value, asps.Health.MinValue, asps.Health.MaxValue);
+        asps.Health.OnChanged += SetHealthSliderValue;
     }
 
-    public void SetHealthSliderValue(int left, int total)
+    public void SetHealthSliderValue(int currentHealth, int minHealth, int maxHealth)
     {
-        if (total == 0)
+        if (maxHealth == 0)
         {
             MainSlider.value = 0f;
         }
         else
         {
-            MainSlider.value = (float) left / total;
+            MainSlider.value = (float) currentHealth / maxHealth;
         }
 
-        if (left == total)
+        if (currentHealth == maxHealth)
         {
             MainSliderFillImage.color = Transparent;
             SubSliderFillImage.color = Transparent;

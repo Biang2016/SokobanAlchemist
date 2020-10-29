@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ActorBuffHelper : ActorMonoHelper
 {
+    private SortedDictionary<ActorBuffAttribute, List<ActorBuff>> BuffAttributeDict = new SortedDictionary<ActorBuffAttribute, List<ActorBuff>>();
     private SortedDictionary<uint, FX> BuffFXDict = new SortedDictionary<uint, FX>();
     private SortedDictionary<uint, ActorBuff> BuffDict = new SortedDictionary<uint, ActorBuff>();
     private SortedDictionary<uint, float> BuffRemainTimeDict = new SortedDictionary<uint, float>();
@@ -11,37 +13,175 @@ public class ActorBuffHelper : ActorMonoHelper
     public override void OnRecycled()
     {
         base.OnRecycled();
+        BuffAttributeDict.Clear();
+        foreach (KeyValuePair<uint, FX> kv in BuffFXDict)
+        {
+            kv.Value.OnFXEnd = null;
+            kv.Value.PoolRecycle();
+        }
+
+        BuffFXDict.Clear();
         BuffDict.Clear();
         BuffRemainTimeDict.Clear();
         BuffPassedTimeDict.Clear();
     }
 
-    public void AddPermanentBuff(ActorBuff buff)
+    public override void OnUsed()
     {
-        ActorBuff cloneBuff = buff.Clone();
-        BuffDict.Add(cloneBuff.GUID, cloneBuff);
-        if (!string.IsNullOrEmpty(cloneBuff.BuffFX)) PlayBuffFX(cloneBuff);
-    }
-
-    private void PlayBuffFX(ActorBuff buff)
-    {
-        FX fx = FXManager.Instance.PlayFX(buff.BuffFX, transform.position, buff.BuffFXScale);
-        BuffFXDict.Add(buff.GUID, fx);
-        fx.OnFXEnd = () =>
+        base.OnUsed();
+        foreach (ActorBuffAttribute attribute in Enum.GetValues(typeof(ActorBuffAttribute)))
         {
-            BuffFXDict.Remove(buff.GUID);
-            PlayBuffFX(buff);
-        };
+            BuffAttributeDict.Add(attribute, new List<ActorBuff>());
+        }
     }
 
-    public void AddBuff(ActorBuff buff, float duration)
+    private bool BuffRelationshipProcess(ActorBuff newBuff)
     {
-        ActorBuff cloneBuff = buff.Clone();
-        BuffDict.Add(cloneBuff.GUID, cloneBuff);
-        BuffRemainTimeDict.Add(cloneBuff.GUID, duration);
-        BuffPassedTimeDict.Add(cloneBuff.GUID, 0);
-        cloneBuff.OnAdded(Actor);
-        if (!string.IsNullOrEmpty(cloneBuff.BuffFX)) PlayBuffFX(cloneBuff);
+        bool canAdd = true;
+        bool canAddButSetOff = false;
+        List<ActorBuff> buffsNeedToRemove = new List<ActorBuff>();
+        List<ActorBuff> buffsNeedToSetOff = new List<ActorBuff>();
+        foreach (KeyValuePair<ActorBuffAttribute, List<ActorBuff>> kv in BuffAttributeDict)
+        {
+            if (kv.Value.Count == 0) continue;
+            ActorBuffAttributeRelationship relationship = ConfigManager.ActorBuffAttributeMatrix[(int) kv.Key, (int) newBuff.ActorBuffAttribute];
+            switch (relationship)
+            {
+                case ActorBuffAttributeRelationship.Compatible:
+                {
+                    break;
+                }
+                case ActorBuffAttributeRelationship.Mutex:
+                {
+                    foreach (ActorBuff oldBuff in kv.Value)
+                    {
+                        buffsNeedToRemove.Add(oldBuff);
+                    }
+
+                    break;
+                }
+                case ActorBuffAttributeRelationship.Repel:
+                {
+                    canAdd = false;
+                    break;
+                }
+                case ActorBuffAttributeRelationship.SetOff:
+                {
+                    canAddButSetOff = true;
+                    foreach (ActorBuff oldBuff in kv.Value)
+                    {
+                        buffsNeedToSetOff.Add(oldBuff);
+                    }
+
+                    break;
+                }
+                case ActorBuffAttributeRelationship.MaxDominant:
+                {
+                    if (kv.Key == newBuff.ActorBuffAttribute)
+                    {
+                        if (newBuff is ActorBuff_ActorPropertyMultiplyModifier newBuff_multi)
+                        {
+                            ActorProperty.MultiplyModifier newModifier = newBuff_multi.MultiplyModifier;
+                            foreach (ActorBuff oldBuff in kv.Value)
+                            {
+                                if (oldBuff is ActorBuff_ActorPropertyMultiplyModifier oldBuff_multi)
+                                {
+                                    ActorProperty.MultiplyModifier oldModifier = oldBuff_multi.MultiplyModifier;
+                                    if (newBuff_multi.PropertyType == oldBuff_multi.PropertyType)
+                                    {
+                                        if (newModifier.CanCover(oldModifier))
+                                        {
+                                            oldModifier.CoverModifiersGUID.Add(newModifier.GUID);
+                                        }
+                                        else
+                                        {
+                                            newModifier.CoverModifiersGUID.Add(oldModifier.GUID);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (newBuff is ActorBuff_ActorPropertyPlusModifier newBuff_plus)
+                        {
+                            ActorProperty.PlusModifier newModifier = newBuff_plus.PlusModifier;
+                            foreach (ActorBuff oldBuff in kv.Value)
+                            {
+                                if (oldBuff is ActorBuff_ActorPropertyPlusModifier oldBuff_multi)
+                                {
+                                    ActorProperty.PlusModifier oldModifier = oldBuff_multi.PlusModifier;
+                                    if (newBuff_plus.PropertyType == oldBuff_multi.PropertyType)
+                                    {
+                                        if (newModifier.CanCover(oldModifier))
+                                        {
+                                            oldModifier.CoverModifiersGUID.Add(newModifier.GUID);
+                                        }
+                                        else
+                                        {
+                                            newModifier.CoverModifiersGUID.Add(oldModifier.GUID);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError($"【角色Buff相克矩阵】{kv.Key}和{newBuff.ActorBuffAttribute}之间的关系有误，异种BuffAttribute之间的关系不允许选用{relationship}");
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        if (canAdd)
+        {
+            if (canAddButSetOff)
+            {
+                foreach (ActorBuff setOffBuff in buffsNeedToSetOff)
+                {
+                    RemoveBuff(setOffBuff.GUID);
+                }
+
+                return false;
+            }
+            else
+            {
+                foreach (ActorBuff removeBuff in buffsNeedToRemove)
+                {
+                    RemoveBuff(removeBuff.GUID);
+                }
+
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool AddBuff(ActorBuff newBuff)
+    {
+        bool suc = BuffRelationshipProcess(newBuff);
+        if (suc)
+        {
+            newBuff.OnAdded(Actor);
+            if (newBuff.ActorBuffAttribute != ActorBuffAttribute.InstantEffect)
+            {
+                BuffDict.Add(newBuff.GUID, newBuff);
+                BuffAttributeDict[newBuff.ActorBuffAttribute].Add(newBuff);
+                if (!newBuff.IsPermanent)
+                {
+                    BuffRemainTimeDict.Add(newBuff.GUID, newBuff.Duration);
+                    BuffPassedTimeDict.Add(newBuff.GUID, 0);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(newBuff.BuffFX)) PlayBuffFX(newBuff);
+        }
+
+        return suc;
     }
 
     public void RemoveBuff(ActorBuff buff)
@@ -54,7 +194,9 @@ public class ActorBuffHelper : ActorMonoHelper
 
     public void RemoveBuff(uint removeKey)
     {
-        BuffDict[removeKey].OnRemoved(Actor);
+        ActorBuff buff = BuffDict[removeKey];
+        buff.OnRemoved(Actor);
+        BuffAttributeDict[buff.ActorBuffAttribute].Remove(buff);
         BuffDict.Remove(removeKey);
         BuffRemainTimeDict.Remove(removeKey);
         BuffPassedTimeDict.Remove(removeKey);
@@ -62,6 +204,20 @@ public class ActorBuffHelper : ActorMonoHelper
         {
             BuffFXDict[removeKey].OnFXEnd = null;
             BuffFXDict.Remove(removeKey);
+        }
+    }
+
+    private void PlayBuffFX(ActorBuff buff)
+    {
+        FX fx = FXManager.Instance.PlayFX(buff.BuffFX, transform.position, buff.BuffFXScale);
+        if (buff.ActorBuffAttribute != ActorBuffAttribute.InstantEffect)
+        {
+            BuffFXDict.Add(buff.GUID, fx);
+            fx.OnFXEnd = () =>
+            {
+                BuffFXDict.Remove(buff.GUID);
+                PlayBuffFX(buff);
+            };
         }
     }
 
@@ -85,22 +241,6 @@ public class ActorBuffHelper : ActorMonoHelper
         foreach (uint removeKey in removeKeys)
         {
             RemoveBuff(removeKey);
-        }
-    }
-
-    public void AdjustFinalSpeed(float rawFinalSpeed, out float modifiedFinalSpeed)
-    {
-        modifiedFinalSpeed = rawFinalSpeed;
-        foreach (KeyValuePair<uint, ActorBuff> kv in BuffDict)
-        {
-            switch (kv.Value)
-            {
-                case ActorBuff_ChangeMoveSpeed b:
-                {
-                    modifiedFinalSpeed *= (100 + b.Percent) / 100f;
-                    break;
-                }
-            }
         }
     }
 }

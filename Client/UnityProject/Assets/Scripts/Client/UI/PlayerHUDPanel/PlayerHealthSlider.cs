@@ -12,29 +12,30 @@ public class PlayerHealthSlider : MonoBehaviour
 
     public void Initialize(ActorBattleHelper helper)
     {
-        SetHealthSliderValue(helper.Health, helper.MaxHealth);
-        SetLife(helper.Life, helper.TotalLife);
-        helper.OnHealthChanged += SetHealthSliderValue;
-        helper.OnLifeChanged = SetLife;
+        ActorStatPropSet asps = helper.Actor.ActorStatPropSet;
+        SetHealthSliderValue(asps.Health.Value, asps.Health.MinValue, asps.Health.MaxValue);
+        SetLife(asps.Life.Value, asps.Life.MinValue, asps.Life.MaxValue);
+        asps.Health.OnChanged += SetHealthSliderValue;
+        asps.Life.OnChanged += SetLife;
     }
 
-    public void SetHealthSliderValue(int left, int total)
+    public void SetHealthSliderValue(int currentHealth, int minHealth, int maxHealth)
     {
-        if (total == 0)
+        if (maxHealth == 0)
         {
             Slider.value = 0f;
         }
         else
         {
-            Slider.value = (float) left / total;
+            Slider.value = (float) currentHealth / maxHealth;
             SliderHandelAnim.SetTrigger("Jump");
         }
     }
 
-    public void SetLife(int leftLife, int totalLife)
+    public void SetLife(int currentLife, int minLife, int maxLife)
     {
         LifeTextAnim.SetTrigger("Jump");
-        LifeText.text = leftLife.ToString();
-        SliderFillImage.color = LifeColorGradient.Evaluate((float) leftLife / totalLife);
+        LifeText.text = currentLife.ToString();
+        SliderFillImage.color = LifeColorGradient.Evaluate((float) currentLife / maxLife);
     }
 }

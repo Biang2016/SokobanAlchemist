@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using BiangStudio.GamePlay.UI;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DebugPanel : BaseUIPanel
@@ -228,18 +226,6 @@ public class DebugPanel : BaseUIPanel
         return ConfigManager.GetAllWorldNames();
     }
 
-    [DebugSlider("Player/MoveSpeed", 2.5f, 1, 30)]
-    public void ChangeMoveSpeed(float value)
-    {
-        for (int i = 0;
-            i < BattleManager.Instance.MainPlayers.Length;
-            i++)
-        {
-            PlayerActor player = BattleManager.Instance.MainPlayers[i];
-            if (player != null) player.MoveSpeed = value;
-        }
-    }
-
     [DebugSlider("Player/KickForce", 15, 0, 1000)]
     public void ChangeKickForce(float value)
     {
@@ -252,11 +238,10 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugButton("Player/AddLife*1000")]
-    public void AddLife1000()
+    [DebugButton("Player/AddHealth*1000")]
+    public void AddHealth1000()
     {
-        BattleManager.Instance.Player1.ActorBattleHelper.TotalLife += 1000;
-        BattleManager.Instance.Player1.ActorBattleHelper.Life += 1000;
+        BattleManager.Instance.Player1.ActorStatPropSet.Health.Value += 1000;
     }
 
     [DebugToggleButton("Enemy/TogglePathFinding")]
