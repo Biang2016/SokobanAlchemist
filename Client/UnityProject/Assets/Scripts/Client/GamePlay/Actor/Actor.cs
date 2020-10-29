@@ -30,10 +30,10 @@ public class Actor : PoolObject
 
     public Rigidbody RigidBody;
     public ActorCommonHelpers ActorCommonHelpers;
-    public GameObject ActorMoveColliderRoot;
 
     public Vector3 ArtPos => ActorSkinHelper.MainArtTransform.position;
 
+    internal GameObject ActorMoveColliderRoot => ActorCommonHelpers.ActorMoveColliderRoot;
     internal ActorBuffHelper ActorBuffHelper => ActorCommonHelpers.ActorBuffHelper;
     internal ActorPushHelper ActorPushHelper => ActorCommonHelpers.ActorPushHelper;
     internal ActorFaceHelper ActorFaceHelper => ActorCommonHelpers.ActorFaceHelper;
