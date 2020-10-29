@@ -72,7 +72,7 @@ public class ActorBuffEditorWindow : EditorWindow
             }
         }
 
-        ActorBuffAttributeRelationship[,] arr = ConfigManager.ActorBuffAttributeMatrix;
+        ActorBuffAttributeRelationship[,] arr = ConfigManager.GetActorBuffAttributeMatrixAsset().ActorBuffAttributeMatrix;
         if (arr != null)
         {
             this.table = GUITable.Create(
@@ -121,6 +121,14 @@ public class ActorBuffEditorWindow : EditorWindow
             ConfigManager.ExportActorBuffAttributeMatrix(DataFormat.Binary);
             ConfigManager.LoadActorBuffAttributeMatrix(DataFormat.Binary);
             Init();
+        }
+
+        if (GUILayout.Button("新建"))
+        {
+            if (EditorUtility.DisplayDialog("提示", $"新建矩阵将覆盖现有矩阵，是否继续?", "继续", "取消"))
+            {
+                ConfigManager.CreateNewActorBuffAttributeMatrixAsset();
+            }
         }
     }
 }

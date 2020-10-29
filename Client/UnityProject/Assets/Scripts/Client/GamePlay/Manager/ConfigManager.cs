@@ -206,6 +206,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static string DesignRoot = "/Designs/";
 
+    public static string ActorBuffAttributeMatrixAssetPath_Relative = "Buff/ActorBuffAttributeMatrixAsset.asset";
     public static string ActorBuffAttributeMatrixConfigFolder_Relative = "ActorBuffAttributeMatrix";
     public static string WorldDataConfigFolder_Relative = "Worlds";
     public static string WorldModuleDataConfigFolder_Relative = "WorldModule";
@@ -248,7 +249,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         WorldTypeDefineDict.ExportTypeNames();
         FXTypeDefineDict.ExportTypeNames();
         SortWorldAndWorldModule();
-        ExportActorBuffAttributeMatrix(dataFormat);
+        //ExportActorBuffAttributeMatrix(dataFormat);
         ExportWorldDataConfig(dataFormat);
         ExportWorldModuleDataConfig(dataFormat);
         AssetDatabase.Refresh();
@@ -306,16 +307,36 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
+    public static ActorBuffAttributeMatrixAsset GetActorBuffAttributeMatrixAsset()
+    {
+        FileInfo assetFile = new FileInfo(Application.dataPath + DesignRoot + ActorBuffAttributeMatrixAssetPath_Relative);
+        string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(assetFile.FullName);
+        Object configObj = AssetDatabase.LoadAssetAtPath<Object>(relativePath);
+        ActorBuffAttributeMatrixAsset configSSO = (ActorBuffAttributeMatrixAsset) configObj;
+        return configSSO;
+    }
+
+    public static void CreateNewActorBuffAttributeMatrixAsset()
+    {
+        ActorBuffAttributeMatrixAsset configSSO = GetActorBuffAttributeMatrixAsset();
+        int buffTypeEnumCount = Enum.GetValues(typeof(ActorBuffAttribute)).Length;
+        configSSO.ActorBuffAttributeMatrix = new ActorBuffAttributeRelationship[buffTypeEnumCount, buffTypeEnumCount];
+        ExportActorBuffAttributeMatrix(DataFormat.JSON);
+    }
+
     public static void ExportActorBuffAttributeMatrix(DataFormat dataFormat)
     {
         string folder = ActorBuffAttributeMatrixConfigFolder_Build;
         if (Directory.Exists(folder)) Directory.Delete(folder, true);
         Directory.CreateDirectory(folder);
+
+        ActorBuffAttributeMatrixAsset configSSO = GetActorBuffAttributeMatrixAsset();
+
         string file = $"{folder}/ActorBuffAttributeMatrix.config";
         SortedDictionary<string, SortedDictionary<string, string>> exportDict = new SortedDictionary<string, SortedDictionary<string, string>>();
-        for (int y = 0; y < ActorBuffAttributeMatrix.GetLength(0); y++)
+        for (int y = 0; y < configSSO.ActorBuffAttributeMatrix.GetLength(0); y++)
         {
-            for (int x = 0; x < ActorBuffAttributeMatrix.GetLength(1); x++)
+            for (int x = 0; x < configSSO.ActorBuffAttributeMatrix.GetLength(1); x++)
             {
                 ActorBuffAttribute rowType = (ActorBuffAttribute) y;
                 ActorBuffAttribute columnType = (ActorBuffAttribute) x;
@@ -326,7 +347,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
                 if (!exportDict[rowType.ToString()].ContainsKey(columnType.ToString()))
                 {
-                    exportDict[rowType.ToString()].Add(columnType.ToString(), ActorBuffAttributeMatrix[y, x].ToString());
+                    exportDict[rowType.ToString()].Add(columnType.ToString(), configSSO.ActorBuffAttributeMatrix[y, x].ToString());
                 }
             }
         }
