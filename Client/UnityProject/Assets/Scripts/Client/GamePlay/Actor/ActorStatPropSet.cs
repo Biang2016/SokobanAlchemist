@@ -93,7 +93,7 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         FrozenValue.OnValueChanged += (before, after) =>
         {
             FrozenLevel.Value = Mathf.FloorToInt(after / ((float) FrozenValue.MaxValue / FrozenLevel.MaxValue));
-            Actor.ActorBuffHelper.PlayAbnormalStatFX(ActorStat.StatType.FrozenValue, FrozenFX, FrozenFXScaleCurve.Evaluate(FrozenLevel.Value)); // 冰冻值变化时，播放一次特效
+            if (FrozenLevel.Value > 0) Actor.ActorBuffHelper.PlayAbnormalStatFX(ActorStat.StatType.FrozenValue, FrozenFX, FrozenFXScaleCurve.Evaluate(FrozenLevel.Value)); // 冰冻值变化时，播放一次特效
         };
         StatDict.Add(ActorStat.StatType.FrozenValue, FrozenValue);
 
@@ -108,7 +108,7 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         FiringValue.OnValueChanged += (before, after) =>
         {
             FiringLevel.Value = Mathf.FloorToInt(after / ((float) FiringValue.MaxValue / FiringLevel.MaxValue));
-            Actor.ActorBuffHelper.PlayAbnormalStatFX(ActorStat.StatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 灼烧值变化时，播放一次特效
+            if (FiringLevel.Value > 0) Actor.ActorBuffHelper.PlayAbnormalStatFX(ActorStat.StatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 灼烧值变化时，播放一次特效
         };
         StatDict.Add(ActorStat.StatType.FiringValue, FiringValue);
 
