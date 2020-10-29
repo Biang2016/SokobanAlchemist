@@ -156,9 +156,9 @@ public class Actor : PoolObject
 
     [BoxGroup("初始战斗数值")]
     [HideLabel]
+    [DisableInPlayMode]
     public ActorStatPropSet RawActorStatPropSet = new ActorStatPropSet(); // 干数据，禁修改
 
-    [ReadOnly]
     [BoxGroup("当前战斗数值")]
     [HideLabel]
     [HideInEditorMode]
@@ -333,7 +333,7 @@ public class Actor : PoolObject
         ActorCategory = actorCategory;
         ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
         ActorStatPropSet = RawActorStatPropSet.Clone();
-        ActorStatPropSet.Initialize();
+        ActorStatPropSet.Initialize(this);
         ActorStatPropSet.Life.OnValueReachZero += ActorBattleHelper.Die;
         ActorBattleHelper.Initialize();
         ActorSkillHelper.Initialize();

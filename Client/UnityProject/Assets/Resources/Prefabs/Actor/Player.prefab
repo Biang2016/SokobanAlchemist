@@ -109,6 +109,11 @@ MonoBehaviour:
       _value: 1
       _minValue: 0
       _maxValue: 10
+    MoveSpeed:
+      BaseValue: 50
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
     FrozenResistance:
       BaseValue: 1000
       ModifiedValue: 0
@@ -118,11 +123,15 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 1000
-    MoveSpeed:
-      BaseValue: 50
+    FiringResistance:
+      BaseValue: 100
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 1000
+      MaxValue: 200
+    FiringValue:
+      _value: 0
+      _minValue: 0
+      _maxValue: 1000
   ActorStatPropSet:
     Health:
       _value: 0
@@ -137,6 +146,11 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 0
+    MoveSpeed:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     FrozenResistance:
       BaseValue: 0
       ModifiedValue: 0
@@ -146,44 +160,42 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 0
-    MoveSpeed:
+    FiringResistance:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
+    FiringValue:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
   Accelerate: 200
   ThrowAimMoveSpeed: 8
   KickForce: 15
   ThrowRadius: 15
   PushableBoxList:
   - IceBox
-  - IceDropBoomBox
   - WoodenBox
   - KeyBox
   - FireBox
-  - FireDropBoomBox
   - LifeBox
   - LighteningBox
-  - LighteningDropBoomBox
   - ForbidLiftBox
   - SilverWedgeBox
   KickableBoxList:
   - WoodenBox
   - ThornTrapBox
-  - FireDropBoomBox
-  - IceDropBoomBox
+  - FireBox
+  - IceBox
   - LifeBox
-  - LighteningDropBoomBox
+  - LighteningBox
   - FlagBox
   LiftableBoxList:
   - IceBox
-  - IceDropBoomBox
   - WoodenBox
   - FireBox
-  - FireDropBoomBox
   - LifeBox
   - LighteningBox
-  - LighteningDropBoomBox
   - ThornTrapBox
   - SilverWedgeBox
   - FlagBox

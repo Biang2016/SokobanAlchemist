@@ -36,13 +36,12 @@ public class ActorBattleHelper : ActorMonoHelper
     {
         if (!Actor.IsRecycled)
         {
-            Actor.ActorStatPropSet.FixedUpdate();
+            Actor.ActorStatPropSet.FixedUpdate(Time.fixedDeltaTime);
             if (immuneTimeAfterDamaged_Ticker > 0)
             {
                 immuneTimeAfterDamaged_Ticker -= Time.fixedDeltaTime;
             }
         }
-       
     }
 
     #region Life & Health
@@ -52,6 +51,7 @@ public class ActorBattleHelper : ActorMonoHelper
     public void Damage(Actor attacker, int damage)
     {
         if (immuneTimeAfterDamaged_Ticker > 0) return;
+        if (damage == 0) return;
         immuneTimeAfterDamaged_Ticker = Actor.ImmuneTimeAfterDamaged;
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
         Actor.ActorStatPropSet.Health.Value -= damage;
@@ -70,6 +70,7 @@ public class ActorBattleHelper : ActorMonoHelper
 
     public void Heal(Actor healer, int addHealth)
     {
+        if (addHealth == 0) return;
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(healer, Actor, addHealth, BattleTipType.AddHp, 0, 0));
         Actor.ActorStatPropSet.Health.Value += addHealth;
         OnHealed?.Invoke(healer, addHealth);
@@ -85,6 +86,7 @@ public class ActorBattleHelper : ActorMonoHelper
 
     public void AddLife(int addLife)
     {
+        if (addLife == 0) return;
         //ClientGameManager.Instance.BattleMessenger.Broadcast((uint)ENUM_BattleEvent.Battle_ActorAttackTip, new AttackData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
         Actor.ActorStatPropSet.Life.Value += addLife;
         FX gainLifeFX = FXManager.Instance.PlayFX(Actor.GainLifeFX, Actor.transform.position);
@@ -146,7 +148,4 @@ public class ActorBattleHelper : ActorMonoHelper
 
     #endregion
 
-    #region Elements
-
-    #endregion
 }

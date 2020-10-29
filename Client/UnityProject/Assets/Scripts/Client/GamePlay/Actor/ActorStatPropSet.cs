@@ -9,6 +9,8 @@ using UnityEngine.Events;
 [Serializable]
 public class ActorStatPropSet : IClone<ActorStatPropSet>
 {
+    internal Actor Actor;
+
     public Dictionary<ActorStat.StatType, ActorStat> StatDict = new Dictionary<ActorStat.StatType, ActorStat>();
     public Dictionary<ActorProperty.PropertyType, ActorProperty> PropertyDict = new Dictionary<ActorProperty.PropertyType, ActorProperty>();
 
@@ -30,14 +32,26 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
     [LabelText("@\"冰冻累积值\t\"+FrozenValue")]
     public ActorStat FrozenValue = new ActorStat(ActorStat.StatType.FrozenValue);
 
+    [ReadOnly]
+    [ShowInInspector]
+    [LabelText("冰冻等级")]
+    private int FrozenLevel;
+
     [LabelText("@\"灼烧抗性\t\"+FiringResistance")]
     public ActorProperty FiringResistance = new ActorProperty(ActorProperty.PropertyType.FiringResistance);
 
     [LabelText("@\"灼烧累积值\t\"+FiringValue")]
     public ActorStat FiringValue = new ActorStat(ActorStat.StatType.FiringValue);
 
-    public void Initialize()
+    [ReadOnly]
+    [ShowInInspector]
+    [LabelText("灼烧等级")]
+    private int FireLevel;
+
+    public void Initialize(Actor actor)
     {
+        Actor = actor;
+
         Health.OnValueReachZero += () => { Life.Value--; };
         StatDict.Add(ActorStat.StatType.Health, Health);
 
@@ -52,15 +66,17 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         PropertyDict.Add(ActorProperty.PropertyType.MoveSpeed, MoveSpeed);
 
         FrozenResistance.Initialize();
-        FrozenResistance.OnValueChanged += (before, after) => { FrozenValue.Resistance = after; };
+        FrozenResistance.OnValueChanged += (before, after) => { FrozenValue.AbnormalResistance = after; };
         PropertyDict.Add(ActorProperty.PropertyType.FrozenResistance, FrozenResistance);
 
+        FrozenValue.OnValueChanged += (before, after) => { FrozenLevel = Mathf.FloorToInt(after / 250f); };
         StatDict.Add(ActorStat.StatType.FrozenValue, FrozenValue);
 
         FiringResistance.Initialize();
-        FiringResistance.OnValueChanged += (before, after) => { FiringValue.Resistance = after; };
+        FiringResistance.OnValueChanged += (before, after) => { FiringValue.AbnormalResistance = after; };
         PropertyDict.Add(ActorProperty.PropertyType.FiringResistance, FiringResistance);
 
+        FiringValue.OnValueChanged += (before, after) => { FireLevel = Mathf.FloorToInt(after / 250f); };
         StatDict.Add(ActorStat.StatType.FiringValue, FiringValue);
     }
 
@@ -78,10 +94,28 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         }
 
         PropertyDict.Clear();
+
+        FireLevel = 0;
+        FrozenLevel = 0;
     }
 
-    public void FixedUpdate()
+    private float abnormalStateAutoTick = 0f;
+    private int abnormalStateAutoTickInterval = 1; // 异常状态值每秒降低
+
+    public void FixedUpdate(float fixedDeltaTime)
     {
+        abnormalStateAutoTick += fixedDeltaTime;
+        if (abnormalStateAutoTick > abnormalStateAutoTickInterval)
+        {
+            abnormalStateAutoTick -= abnormalStateAutoTickInterval;
+            foreach (KeyValuePair<ActorStat.StatType, ActorStat> kv in StatDict)
+            {
+                kv.Value.AbnormalStatAutoDecrease();
+            }
+
+            Actor.ActorBattleHelper.Damage(Actor, FireLevel);
+        }
+
         foreach (KeyValuePair<ActorProperty.PropertyType, ActorProperty> kv in PropertyDict)
         {
             kv.Value.RefreshModifiedValue();
@@ -426,7 +460,9 @@ public class ActorStat : IClone<ActorStat>
 
     internal StatType m_StatType;
 
-    internal int Resistance = 100; // 抗性，取值范围0~200，仅用于累积值的Property，如冰冻累积值，0为2倍弱冰，100为正常，150为50%免疫，200为100%免疫
+    internal int AbnormalResistance = 100; // 抗性，取值范围0~200，仅用于累积值的Property，如冰冻累积值，0为2倍弱冰，100为正常，150为50%免疫，200为100%免疫
+
+    public bool IsAbnormalStat => m_StatType == StatType.FiringValue || m_StatType == StatType.FrozenValue;
 
     [SerializeField]
     [LabelText("当前值")]
@@ -442,11 +478,13 @@ public class ActorStat : IClone<ActorStat>
             {
                 // 对异常状态累积值而言:
                 // 抗性低则积累快，抗性高则积累慢，免疫则不积累。消退速度不受抗性影响
-                // 对生命值不适用
-                if (_value < value)
+                if (IsAbnormalStat)
                 {
-                    value = Mathf.RoundToInt((value - _value) * (200f - Resistance) / 100f) + _value;
-                    value = Mathf.Clamp(value, _minValue, _maxValue);
+                    if (_value < value)
+                    {
+                        value = Mathf.RoundToInt((value - _value) * (200f - AbnormalResistance) / 100f) + _value;
+                        value = Mathf.Clamp(value, _minValue, _maxValue);
+                    }
                 }
 
                 int before = _value;
@@ -510,6 +548,14 @@ public class ActorStat : IClone<ActorStat>
                 OnMaxValueChanged?.Invoke(before, _maxValue);
                 OnChanged?.Invoke(_value, _minValue, _maxValue);
             }
+        }
+    }
+
+    public void AbnormalStatAutoDecrease()
+    {
+        if (IsAbnormalStat)
+        {
+            Value -= AbnormalResistance;
         }
     }
 

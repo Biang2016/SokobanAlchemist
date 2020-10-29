@@ -22,6 +22,9 @@ public abstract class ActorBuff : IClone<ActorBuff>
 
     #endregion
 
+    protected abstract string ActorBuffDisplayName { get; }
+
+    [InfoBox("@ActorBuffDisplayName")]
     [LabelText("Buff标签")]
     [ValidateInput("ValidateActorBuffAttribute", "$validateActorBuffAttributeInfo")]
     public ActorBuffAttribute ActorBuffAttribute;
@@ -106,12 +109,13 @@ public abstract class ActorBuff : IClone<ActorBuff>
 [Serializable]
 public class ActorBuff_ActorPropertyMultiplyModifier : ActorBuff
 {
+    protected override string ActorBuffDisplayName => "角色属性乘法修正Buff, 必须是延时buff, buff结束后消除该修正值";
+
     public ActorBuff_ActorPropertyMultiplyModifier()
     {
         MultiplyModifier = new ActorProperty.MultiplyModifier {Percent = Percent};
     }
 
-    [InfoBox("角色属性乘法修正")]
     [LabelText("增加比率%")]
     public int Percent;
 
@@ -181,12 +185,13 @@ public class ActorBuff_ActorPropertyMultiplyModifier : ActorBuff
 [Serializable]
 public class ActorBuff_ActorPropertyPlusModifier : ActorBuff
 {
+    protected override string ActorBuffDisplayName => "角色属性加法修正Buff, 必须是延时buff, buff结束后消除该修正值";
+
     public ActorBuff_ActorPropertyPlusModifier()
     {
         PlusModifier = new ActorProperty.PlusModifier {Delta = Delta};
     }
 
-    [InfoBox("角色属性加法修正")]
     [LabelText("角色属性类型")]
     public ActorProperty.PropertyType PropertyType;
 
@@ -213,7 +218,7 @@ public class ActorBuff_ActorPropertyPlusModifier : ActorBuff
         base.OnFixedUpdate(actor, passedTime, remainTime);
         if (!IsPermanent && LinearDecayInDuration)
         {
-            PlusModifier.Delta = Mathf.RoundToInt(Delta * remainTime / Duration );
+            PlusModifier.Delta = Mathf.RoundToInt(Delta * remainTime / Duration);
         }
     }
 
@@ -256,6 +261,8 @@ public class ActorBuff_ActorPropertyPlusModifier : ActorBuff
 [Serializable]
 public class ActorBuff_InstantDamage : ActorBuff
 {
+    protected override string ActorBuffDisplayName => "瞬间伤害buff, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
+
     [LabelText("伤害")]
     public int Damage;
 
@@ -287,6 +294,8 @@ public class ActorBuff_InstantDamage : ActorBuff
 [Serializable]
 public class ActorBuff_InstantHeal : ActorBuff
 {
+    protected override string ActorBuffDisplayName => "瞬间治疗buff, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
+
     [LabelText("治疗量")]
     public int Health;
 
@@ -318,7 +327,8 @@ public class ActorBuff_InstantHeal : ActorBuff
 [Serializable]
 public class ActorBuff_ChangeActorStatInstantly : ActorBuff
 {
-    [InfoBox("角色异常状态累积值瞬时变化")]
+    protected override string ActorBuffDisplayName => "瞬间更改角色异常状态累积值, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
+
     [LabelText("角色属性类型")]
     [ValidateInput("ValidateStatType", "请选择异常状态累积值")]
     public ActorStat.StatType StatType;
