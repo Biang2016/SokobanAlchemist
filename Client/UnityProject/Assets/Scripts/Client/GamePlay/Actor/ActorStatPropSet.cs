@@ -26,27 +26,47 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
     [LabelText("@\"移动速度\t\"+MoveSpeed")]
     public ActorProperty MoveSpeed = new ActorProperty(ActorProperty.PropertyType.MoveSpeed);
 
+    [BoxGroup("冰冻")]
     [LabelText("@\"冰冻抗性\t\"+FrozenResistance")]
     public ActorProperty FrozenResistance = new ActorProperty(ActorProperty.PropertyType.FrozenResistance);
 
+    [BoxGroup("冰冻")]
     [LabelText("@\"冰冻累积值\t\"+FrozenValue")]
     public ActorStat FrozenValue = new ActorStat(ActorStat.StatType.FrozenValue);
 
-    [ReadOnly]
-    [ShowInInspector]
+    [BoxGroup("冰冻")]
     [LabelText("冰冻等级")]
-    private int FrozenLevel;
+    public ActorStat FrozenLevel = new ActorStat(ActorStat.StatType.FrozenLevel);
 
+    [BoxGroup("冰冻")]
+    [LabelText("冰冻持续特效")]
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
+    public string FrozenFX;
+
+    [BoxGroup("冰冻")]
+    [LabelText("冰冻持续特效尺寸(x->冰冻等级")]
+    public AnimationCurve FrozenFXScaleCurve;
+
+    [BoxGroup("灼烧")]
     [LabelText("@\"灼烧抗性\t\"+FiringResistance")]
     public ActorProperty FiringResistance = new ActorProperty(ActorProperty.PropertyType.FiringResistance);
 
+    [BoxGroup("灼烧")]
     [LabelText("@\"灼烧累积值\t\"+FiringValue")]
     public ActorStat FiringValue = new ActorStat(ActorStat.StatType.FiringValue);
 
-    [ReadOnly]
-    [ShowInInspector]
+    [BoxGroup("灼烧")]
     [LabelText("灼烧等级")]
-    private int FireLevel;
+    public ActorStat FiringLevel = new ActorStat(ActorStat.StatType.FiringLevel);
+
+    [BoxGroup("灼烧")]
+    [LabelText("灼烧持续特效")]
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
+    public string FiringFX;
+
+    [BoxGroup("灼烧")]
+    [LabelText("灼烧持续特效尺寸(x->灼烧等级")]
+    public AnimationCurve FiringFXScaleCurve;
 
     public void Initialize(Actor actor)
     {
@@ -69,15 +89,30 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         FrozenResistance.OnValueChanged += (before, after) => { FrozenValue.AbnormalResistance = after; };
         PropertyDict.Add(ActorProperty.PropertyType.FrozenResistance, FrozenResistance);
 
-        FrozenValue.OnValueChanged += (before, after) => { FrozenLevel = Mathf.FloorToInt(after / 250f); };
+        FrozenValue.AbnormalResistance = FrozenResistance.GetModifiedValue;
+        FrozenValue.OnValueChanged += (before, after) =>
+        {
+            FrozenLevel.Value = Mathf.FloorToInt(after / ((float) FrozenValue.MaxValue / FrozenLevel.MaxValue));
+            Actor.ActorBuffHelper.PlayAbnormalStatFX(ActorStat.StatType.FrozenValue, FrozenFX, FrozenFXScaleCurve.Evaluate(FrozenLevel.Value)); // 冰冻值变化时，播放一次特效
+        };
         StatDict.Add(ActorStat.StatType.FrozenValue, FrozenValue);
+
+        FrozenLevel.OnValueChanged += (before, after) => { ; }; // todo 冰冻等级变化时，角色冰块形态发生变化
+        StatDict.Add(ActorStat.StatType.FrozenLevel, FrozenLevel);
 
         FiringResistance.Initialize();
         FiringResistance.OnValueChanged += (before, after) => { FiringValue.AbnormalResistance = after; };
         PropertyDict.Add(ActorProperty.PropertyType.FiringResistance, FiringResistance);
 
-        FiringValue.OnValueChanged += (before, after) => { FireLevel = Mathf.FloorToInt(after / 250f); };
+        FiringValue.AbnormalResistance = FiringResistance.GetModifiedValue;
+        FiringValue.OnValueChanged += (before, after) =>
+        {
+            FiringLevel.Value = Mathf.FloorToInt(after / ((float) FiringValue.MaxValue / FiringLevel.MaxValue));
+            Actor.ActorBuffHelper.PlayAbnormalStatFX(ActorStat.StatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 灼烧值变化时，播放一次特效
+        };
         StatDict.Add(ActorStat.StatType.FiringValue, FiringValue);
+
+        StatDict.Add(ActorStat.StatType.FiringLevel, FiringLevel);
     }
 
     public void OnRecycled()
@@ -94,9 +129,6 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         }
 
         PropertyDict.Clear();
-
-        FireLevel = 0;
-        FrozenLevel = 0;
     }
 
     private float abnormalStateAutoTick = 0f;
@@ -104,16 +136,17 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
 
     public void FixedUpdate(float fixedDeltaTime)
     {
+        foreach (KeyValuePair<ActorStat.StatType, ActorStat> kv in StatDict)
+        {
+            kv.Value.AbnormalStatFixedUpdate(fixedDeltaTime);
+        }
+
         abnormalStateAutoTick += fixedDeltaTime;
         if (abnormalStateAutoTick > abnormalStateAutoTickInterval)
         {
             abnormalStateAutoTick -= abnormalStateAutoTickInterval;
-            foreach (KeyValuePair<ActorStat.StatType, ActorStat> kv in StatDict)
-            {
-                kv.Value.AbnormalStatAutoDecrease();
-            }
 
-            Actor.ActorBattleHelper.Damage(Actor, FireLevel);
+            Actor.ActorBattleHelper.Damage(Actor, FiringLevel.Value);
         }
 
         foreach (KeyValuePair<ActorProperty.PropertyType, ActorProperty> kv in PropertyDict)
@@ -131,10 +164,22 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         newStatPropSet.MoveSpeed = MoveSpeed.Clone();
         newStatPropSet.FrozenResistance = FrozenResistance.Clone();
         newStatPropSet.FrozenValue = FrozenValue.Clone();
+        newStatPropSet.FrozenLevel = FrozenLevel.Clone();
+        newStatPropSet.FrozenFX = FrozenFX;
+        newStatPropSet.FrozenFXScaleCurve = FrozenFXScaleCurve; // 风险，此处没有深拷贝
         newStatPropSet.FiringResistance = FiringResistance.Clone();
         newStatPropSet.FiringValue = FiringValue.Clone();
+        newStatPropSet.FiringLevel = FiringLevel.Clone();
+        newStatPropSet.FiringFX = FiringFX;
+        newStatPropSet.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
         return newStatPropSet;
     }
+
+    #region Utils
+
+    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
+
+    #endregion
 }
 
 /// <summary>
@@ -427,8 +472,14 @@ public class ActorStat : IClone<ActorStat>
         [LabelText("冰冻累积值")]
         FrozenValue = 100,
 
+        [LabelText("冰冻等级")]
+        FrozenLevel = 120,
+
         [LabelText("灼烧累积值")]
         FiringValue = 101,
+
+        [LabelText("灼烧等级")]
+        FiringLevel = 121,
     }
 
     public ActorStat(StatType statType)
@@ -460,9 +511,30 @@ public class ActorStat : IClone<ActorStat>
 
     internal StatType m_StatType;
 
-    internal int AbnormalResistance = 100; // 抗性，取值范围0~200，仅用于累积值的Property，如冰冻累积值，0为2倍弱冰，100为正常，150为50%免疫，200为100%免疫
+    #region 异常状态
 
+    internal int AbnormalResistance = 100; // 抗性，取值范围0~200，仅用于累积值的Property，如冰冻累积值，0为2倍弱冰，100为正常，150为50%免疫，200为100%免疫
     public bool IsAbnormalStat => m_StatType == StatType.FiringValue || m_StatType == StatType.FrozenValue;
+    private float abnormalStateAutoTick = 0f;
+
+    [LabelText("异常状态值自动衰减时间间隔/s")]
+    [ShowIf("IsAbnormalStat")]
+    public float AbnormalStateAutoTickInterval = 1f;
+
+    public void AbnormalStatFixedUpdate(float fixedDeltaTime)
+    {
+        if (IsAbnormalStat)
+        {
+            abnormalStateAutoTick += fixedDeltaTime;
+            if (abnormalStateAutoTick > AbnormalStateAutoTickInterval)
+            {
+                abnormalStateAutoTick -= AbnormalStateAutoTickInterval;
+                Value -= Mathf.RoundToInt((AbnormalResistance == 0 ? 10 : AbnormalResistance) * AbnormalStateAutoTickInterval); // 保底衰减率为10/s
+            }
+        }
+    }
+
+    #endregion
 
     [SerializeField]
     [LabelText("当前值")]
@@ -548,14 +620,6 @@ public class ActorStat : IClone<ActorStat>
                 OnMaxValueChanged?.Invoke(before, _maxValue);
                 OnChanged?.Invoke(_value, _minValue, _maxValue);
             }
-        }
-    }
-
-    public void AbnormalStatAutoDecrease()
-    {
-        if (IsAbnormalStat)
-        {
-            Value -= AbnormalResistance;
         }
     }
 

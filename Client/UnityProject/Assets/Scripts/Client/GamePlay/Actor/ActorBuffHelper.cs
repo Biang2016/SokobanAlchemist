@@ -5,6 +5,7 @@ using UnityEngine;
 public class ActorBuffHelper : ActorMonoHelper
 {
     private SortedDictionary<ActorBuffAttribute, List<ActorBuff>> BuffAttributeDict = new SortedDictionary<ActorBuffAttribute, List<ActorBuff>>();
+    private SortedDictionary<ActorStat.StatType, FX> AbnormalBuffFXDict = new SortedDictionary<ActorStat.StatType, FX>();
     private SortedDictionary<uint, FX> BuffFXDict = new SortedDictionary<uint, FX>();
     private SortedDictionary<uint, ActorBuff> BuffDict = new SortedDictionary<uint, ActorBuff>();
     private SortedDictionary<uint, float> BuffRemainTimeDict = new SortedDictionary<uint, float>();
@@ -21,6 +22,13 @@ public class ActorBuffHelper : ActorMonoHelper
         }
 
         BuffFXDict.Clear();
+        foreach (KeyValuePair<ActorStat.StatType, FX> kv in AbnormalBuffFXDict)
+        {
+            kv.Value.OnFXEnd = null;
+            kv.Value.PoolRecycle();
+        }
+
+        AbnormalBuffFXDict.Clear();
         BuffDict.Clear();
         BuffRemainTimeDict.Clear();
         BuffPassedTimeDict.Clear();
@@ -167,6 +175,7 @@ public class ActorBuffHelper : ActorMonoHelper
         if (suc)
         {
             newBuff.OnAdded(Actor);
+            PlayBuffFX(newBuff);
             if (newBuff.ActorBuffAttribute != ActorBuffAttribute.InstantEffect)
             {
                 BuffDict.Add(newBuff.GUID, newBuff);
@@ -177,8 +186,6 @@ public class ActorBuffHelper : ActorMonoHelper
                     BuffPassedTimeDict.Add(newBuff.GUID, 0);
                 }
             }
-
-            if (!string.IsNullOrEmpty(newBuff.BuffFX)) PlayBuffFX(newBuff);
         }
 
         return suc;
@@ -207,8 +214,26 @@ public class ActorBuffHelper : ActorMonoHelper
         }
     }
 
+    public void PlayAbnormalStatFX(ActorStat.StatType statType, string fxName, float scale)
+    {
+        if (string.IsNullOrEmpty(fxName)) return;
+        if (fxName == "None") return;
+        if (AbnormalBuffFXDict.ContainsKey(statType))
+        {
+            FX fx = AbnormalBuffFXDict[statType];
+            fx.OnFXEnd = null;
+            fx.PoolRecycle();
+        }
+
+        FX newFX = FXManager.Instance.PlayFX(fxName, transform.position, scale);
+        AbnormalBuffFXDict[statType] = newFX;
+        newFX.OnFXEnd = () => { AbnormalBuffFXDict.Remove(statType); };
+    }
+
     private void PlayBuffFX(ActorBuff buff)
     {
+        if (string.IsNullOrEmpty(buff.BuffFX)) return;
+        if (buff.BuffFX == "None") return;
         FX fx = FXManager.Instance.PlayFX(buff.BuffFX, transform.position, buff.BuffFXScale);
         if (buff.ActorBuffAttribute != ActorBuffAttribute.InstantEffect)
         {

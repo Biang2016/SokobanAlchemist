@@ -100,6 +100,7 @@ MonoBehaviour:
   DieFXScale: 2
   RawActorStatPropSet:
     Health:
+      AbnormalStateAutoTickInterval: 1
       _value: 6
       _minValue: 0
       _maxValue: 6
@@ -109,6 +110,7 @@ MonoBehaviour:
       MinValue: 1
       MaxValue: 10000
     Life:
+      AbnormalStateAutoTickInterval: 1
       _value: 1
       _minValue: 0
       _maxValue: 10
@@ -123,20 +125,83 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 200
     FrozenValue:
+      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 1000
+    FrozenLevel:
+      AbnormalStateAutoTickInterval: 1
+      _value: 0
+      _minValue: 0
+      _maxValue: 4
+    FrozenFX: None
+    FrozenFXScaleCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.7
+        inSlope: 0.325
+        outSlope: 0.325
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 4
+        value: 2
+        inSlope: 0.325
+        outSlope: 0.325
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     FiringResistance:
       BaseValue: 100
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 200
     FiringValue:
+      AbnormalStateAutoTickInterval: 0.5
       _value: 0
       _minValue: 0
       _maxValue: 1000
+    FiringLevel:
+      AbnormalStateAutoTickInterval: 1
+      _value: 0
+      _minValue: 0
+      _maxValue: 4
+    FiringFX: Hit_Fire
+    FiringFXScaleCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.7
+        inSlope: 0.325
+        outSlope: 0.325
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 4
+        value: 2
+        inSlope: 0.325
+        outSlope: 0.325
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   ActorStatPropSet:
     Health:
+      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 0
@@ -146,6 +211,7 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 0
     Life:
+      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 0
@@ -160,18 +226,44 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 0
     FrozenValue:
+      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 0
+    FrozenLevel:
+      AbnormalStateAutoTickInterval: 1
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FrozenFX: 
+    FrozenFXScaleCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     FiringResistance:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
     FiringValue:
+      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 0
+    FiringLevel:
+      AbnormalStateAutoTickInterval: 1
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FiringFX: 
+    FiringFXScaleCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   Accelerate: 250
   ThrowAimMoveSpeed: 10
   KickForce: 5
