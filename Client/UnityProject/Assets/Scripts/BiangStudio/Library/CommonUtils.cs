@@ -396,31 +396,45 @@ namespace BiangStudio
             return GetRandomFromListCore(OriList, number, null, exceptList);
         }
 
+        public static T GetRandomFromList<T>(List<T> OriList, SRandom random = null)
+        {
+            if (OriList == null || OriList.Count == 0) return default;
+            if (random == null)
+            {
+                System.Random rd = new System.Random(DateTime.Now.Millisecond);
+                int index = rd.Next(0, OriList.Count);
+                return OriList[index];
+            }
+            else
+            {
+                int index = random.Range(0, OriList.Count);
+                return OriList[index];
+            }
+        }
+
+        static HashSet<int> indices = new HashSet<int>();
+
         private static List<T> GetRandomFromListCore<T>(List<T> OriList, int number, SRandom random = null, List<T> exceptList = null)
         {
             if (OriList == null || OriList.Count == 0) return new List<T>();
 
-            List<T> ori = OriList.ToArray().ToList();
-            if (exceptList != null)
+            List<T> ori = new List<T>();
+            foreach (T t in OriList)
             {
-                List<T> remove = new List<T>();
-                foreach (T t in ori)
+                if (exceptList != null)
                 {
                     if (exceptList.Contains(t))
                     {
-                        remove.Add(t);
+                        continue;
                     }
                 }
 
-                foreach (T removeT in remove)
-                {
-                    ori.Remove(removeT);
-                }
+                ori.Add(t);
             }
 
             if (number > ori.Count) number = ori.Count;
 
-            HashSet<int> indices = new HashSet<int>();
+            indices.Clear();
             if (random == null)
             {
                 System.Random rd = new System.Random(DateTime.Now.Millisecond * number);

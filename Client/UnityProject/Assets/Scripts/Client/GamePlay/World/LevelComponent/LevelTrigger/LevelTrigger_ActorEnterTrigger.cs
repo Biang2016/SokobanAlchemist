@@ -35,13 +35,13 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
         }
     }
 
-    private SortedDictionary<uint, Actor> StayActorDict = new SortedDictionary<uint, Actor>();
-    private SortedDictionary<uint, float> StayActorTimeDict = new SortedDictionary<uint, float>();
+    private List<Actor> StayActorList = new List<Actor>();
+    private Dictionary<uint, float> StayActorTimeDict = new Dictionary<uint, float>();
 
     public override void OnRecycled()
     {
         base.OnRecycled();
-        StayActorDict.Clear();
+        StayActorList.Clear();
         StayActorTimeDict.Clear();
     }
 
@@ -54,9 +54,9 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
             {
                 if (actor.ActorType == childData.RequiredActorType)
                 {
-                    if (!StayActorDict.ContainsKey(actor.GUID))
+                    if (!StayActorList.Contains(actor))
                     {
-                        StayActorDict.Add(actor.GUID, actor);
+                        StayActorList.Add(actor);
                         StayActorTimeDict.Add(actor.GUID, 0);
                     }
                 }
@@ -64,34 +64,36 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
         }
     }
 
+    List<Actor> triggeredActorList = new List<Actor>();
+
     void FixedUpdate()
     {
         bool trigger = false;
-        List<uint> triggeredActorList = new List<uint>();
-        foreach (KeyValuePair<uint, Actor> kv in StayActorDict)
+        triggeredActorList.Clear();
+        foreach (Actor actor in StayActorList)
         {
-            if (StayActorTimeDict.ContainsKey(kv.Key))
+            if (StayActorTimeDict.ContainsKey(actor.GUID))
             {
-                StayActorTimeDict[kv.Key] += Time.fixedDeltaTime;
-                if (StayActorTimeDict[kv.Key] >= childData.RequiredStayDuration)
+                StayActorTimeDict[actor.GUID] += Time.fixedDeltaTime;
+                if (StayActorTimeDict[actor.GUID] >= childData.RequiredStayDuration)
                 {
                     trigger = true;
                     if (TriggerData.KeepTriggering)
                     {
-                        StayActorTimeDict[kv.Key] = 0;
+                        StayActorTimeDict[actor.GUID] = 0;
                     }
                     else
                     {
-                        triggeredActorList.Add(kv.Key);
+                        triggeredActorList.Add(actor);
                     }
                 }
             }
         }
 
-        foreach (uint guid in triggeredActorList)
+        foreach (Actor actor in triggeredActorList)
         {
-            StayActorDict.Remove(guid);
-            StayActorTimeDict.Remove(guid);
+            StayActorList.Remove(actor);
+            StayActorTimeDict.Remove(actor.GUID);
         }
 
         if (trigger) TriggerEvent();
@@ -106,7 +108,7 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
             {
                 if (actor.ActorType == childData.RequiredActorType)
                 {
-                    StayActorDict.Remove(actor.GUID);
+                    StayActorList.Remove(actor);
                     StayActorTimeDict.Remove(actor.GUID);
                 }
             }

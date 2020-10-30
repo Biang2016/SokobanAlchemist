@@ -195,11 +195,7 @@ public static class ActorAIAtoms
             }
             else
             {
-                List<Box> randomList = CommonUtils.GetRandomFromList(boxes, 1);
-                if (randomList != null && randomList.Count > 0)
-                {
-                    nearestBox = randomList[0];
-                }
+                nearestBox = CommonUtils.GetRandomFromList(boxes);
             }
 
             if (nearestBox == null) return Status.Failure;

@@ -148,11 +148,6 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
 
             Actor.ActorBattleHelper.Damage(Actor, FiringLevel.Value);
         }
-
-        foreach (KeyValuePair<ActorProperty.PropertyType, ActorProperty> kv in PropertyDict)
-        {
-            kv.Value.RefreshModifiedValue();
-        }
     }
 
     public ActorStatPropSet Clone()
@@ -239,6 +234,7 @@ public class ActorProperty : IClone<ActorProperty>
         if (!PlusModifiers_Value.ContainsKey(modifier.GUID))
         {
             PlusModifiers_Value.Add(modifier.GUID, modifier);
+            modifier.OnValueChanged += (before, after) => { RefreshModifiedValue(); };
             RefreshModifiedValue();
             return true;
         }
@@ -252,6 +248,7 @@ public class ActorProperty : IClone<ActorProperty>
     {
         if (PlusModifiers_Value.Remove(modifier.GUID))
         {
+            modifier.OnValueChanged = null;
             RefreshModifiedValue();
             return true;
         }
@@ -266,6 +263,7 @@ public class ActorProperty : IClone<ActorProperty>
         if (!MultiplyModifiers_Value.ContainsKey(modifier.GUID))
         {
             MultiplyModifiers_Value.Add(modifier.GUID, modifier);
+            modifier.OnValueChanged += (before, after) => { RefreshModifiedValue(); };
             RefreshModifiedValue();
             return true;
         }
@@ -284,6 +282,7 @@ public class ActorProperty : IClone<ActorProperty>
                 kv.Value.CoverModifiersGUID.Remove(modifier.GUID);
             }
 
+            modifier.OnValueChanged = null;
             RefreshModifiedValue();
             return true;
         }
@@ -403,6 +402,8 @@ public class ActorProperty : IClone<ActorProperty>
             GUID = GetGUID();
         }
 
+        public UnityAction<int, int> OnValueChanged;
+
         internal bool Covered => CoverModifiersGUID.Count > 0;
 
         /// <summary>
@@ -416,7 +417,20 @@ public class ActorProperty : IClone<ActorProperty>
     [Serializable]
     public class MultiplyModifier : Modifier
     {
-        public int Percent;
+        private int percent;
+
+        public int Percent
+        {
+            get { return percent; }
+            set
+            {
+                if (percent != value)
+                {
+                    OnValueChanged?.Invoke(percent, value);
+                    percent = value;
+                }
+            }
+        }
 
         public override string ToString()
         {
@@ -433,7 +447,20 @@ public class ActorProperty : IClone<ActorProperty>
     [Serializable]
     public class PlusModifier : Modifier
     {
-        public int Delta;
+        private int delta;
+
+        public int Delta
+        {
+            get { return delta; }
+            set
+            {
+                if (delta != value)
+                {
+                    OnValueChanged?.Invoke(delta, value);
+                    delta = value;
+                }
+            }
+        }
 
         public override string ToString()
         {

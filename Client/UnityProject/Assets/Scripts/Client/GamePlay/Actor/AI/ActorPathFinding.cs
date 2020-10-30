@@ -75,7 +75,7 @@ public class ActorPathFinding
         {
             List<GridPos3D> validNodes = UnionFindNodes(ori, rangeRadius);
             if (validNodes.Count == 0) return false;
-            gp = CommonUtils.GetRandomFromList(validNodes, 1)[0];
+            gp = CommonUtils.GetRandomFromList(validNodes);
             return true;
         }
 

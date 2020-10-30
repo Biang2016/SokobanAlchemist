@@ -36,14 +36,14 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
         }
     }
 
-    private SortedDictionary<uint, Box> StayBoxDict = new SortedDictionary<uint, Box>();
-    private SortedDictionary<uint, float> StayBoxTimeDict = new SortedDictionary<uint, float>();
+    private Box StayBox;
+    private float StayBoxTick = 0;
 
     public override void OnRecycled()
     {
         base.OnRecycled();
-        StayBoxDict.Clear();
-        StayBoxTimeDict.Clear();
+        StayBox = null;
+        StayBoxTick = 0;
     }
 
     void OnTriggerEnter(Collider collider)
@@ -55,11 +55,8 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
             {
                 if (ConfigManager.GetBoxTypeName(box.BoxTypeIndex) == childData.RequireBoxTypeName)
                 {
-                    if (!StayBoxDict.ContainsKey(box.GUID))
-                    {
-                        StayBoxDict.Add(box.GUID, box);
-                        StayBoxTimeDict.Add(box.GUID, 0);
-                    }
+                    StayBox = box;
+                    StayBoxTick = 0;
                 }
             }
         }
@@ -67,35 +64,22 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
 
     void FixedUpdate()
     {
-        bool trigger = false;
-        List<uint> triggeredBoxList = new List<uint>();
-        foreach (KeyValuePair<uint, Box> kv in StayBoxDict)
+        if (StayBox)
         {
-            if (StayBoxTimeDict.ContainsKey(kv.Key))
+            StayBoxTick += Time.fixedDeltaTime;
+            if (StayBoxTick >= childData.RequiredStayDuration)
             {
-                StayBoxTimeDict[kv.Key] += Time.fixedDeltaTime;
-                if (StayBoxTimeDict[kv.Key] >= childData.RequiredStayDuration)
+                TriggerEvent();
+                if (TriggerData.KeepTriggering)
                 {
-                    trigger = true;
-                    if (TriggerData.KeepTriggering)
-                    {
-                        StayBoxTimeDict[kv.Key] = 0;
-                    }
-                    else
-                    {
-                        triggeredBoxList.Add(kv.Key);
-                    }
+                    StayBoxTick = 0;
+                }
+                else
+                {
+                    StayBox = null;
                 }
             }
         }
-
-        foreach (uint guid in triggeredBoxList)
-        {
-            StayBoxDict.Remove(guid);
-            StayBoxTimeDict.Remove(guid);
-        }
-
-        if (trigger) TriggerEvent();
     }
 
     void OnTriggerExit(Collider collider)
@@ -107,8 +91,11 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
             {
                 if (ConfigManager.GetBoxTypeName(box.BoxTypeIndex) == childData.RequireBoxTypeName)
                 {
-                    StayBoxDict.Remove(box.GUID);
-                    StayBoxTimeDict.Remove(box.GUID);
+                    if (StayBox == box)
+                    {
+                        StayBox = null;
+                        StayBoxTick = 0;
+                    }
                 }
             }
         }

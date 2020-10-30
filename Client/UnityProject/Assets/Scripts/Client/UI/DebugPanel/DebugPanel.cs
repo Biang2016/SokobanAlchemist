@@ -11,7 +11,6 @@ public class DebugPanel : BaseUIPanel
     public Button DebugToggleButton;
     public Gradient FrameRateGradient;
     public Text fpsText;
-    private float deltaTime;
 
     private Dictionary<string, DebugPanelComponent> DebugComponentDictTree = new Dictionary<string, DebugPanelComponent>();
     private List<DebugPanelColumn> DebugButtonColumns = new List<DebugPanelColumn>();
@@ -104,12 +103,22 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
+    public float showTime = 0.5f;
+    private int count = 0;
+    private float deltaTime = 0f;
+
     void Update()
     {
-        deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
-        float fps = 1.0f / deltaTime;
-        fpsText.text = fps.ToString("###");
-        DebugToggleButton.image.color = FrameRateGradient.Evaluate(fps / 144f);
+        count++;
+        deltaTime += Time.deltaTime;
+        if (deltaTime >= showTime)
+        {
+            float fps = count / deltaTime;
+            count = 0;
+            deltaTime = 0f;
+            fpsText.text = fps.ToString("###");
+            DebugToggleButton.image.color = FrameRateGradient.Evaluate(fps / 144f);
+        }
     }
 
     private bool isButtonsShow = false;

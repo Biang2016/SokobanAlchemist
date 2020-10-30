@@ -6,6 +6,7 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class FieldCamera : MonoBehaviour
 {
     #region 相机本体
@@ -325,14 +326,17 @@ public class FieldCamera : MonoBehaviour
 
     void UpdateFOVLevel()
     {
-        if (ControlManager.Instance.Battle_MouseWheel.y < 0)
+        if (Application.isPlaying)
         {
-            Distance_Level++;
-        }
+            if (ControlManager.Instance.Battle_MouseWheel.y < 0)
+            {
+                Distance_Level++;
+            }
 
-        if (ControlManager.Instance.Battle_MouseWheel.y > 0)
-        {
-            Distance_Level--;
+            if (ControlManager.Instance.Battle_MouseWheel.y > 0)
+            {
+                Distance_Level--;
+            }
         }
     }
 

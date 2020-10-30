@@ -239,6 +239,11 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     [MenuItem("开发工具/配置/序列化配置")]
     public static void ExportConfigs()
     {
+        ExportConfigs(true);
+    }
+
+    public static void ExportConfigs(bool dialogShow = true)
+    {
         // http://www.sirenix.net/odininspector/faq?Search=&t-11=on#faq
         DataFormat dataFormat = DataFormat.Binary;
         BoxTypeDefineDict.ExportTypeNames();
@@ -255,7 +260,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         AssetDatabase.Refresh();
         IsLoaded = false;
         LoadAllConfigs();
-        EditorUtility.DisplayDialog("提示", "序列化成功", "确定");
+        if (dialogShow) EditorUtility.DisplayDialog("提示", "序列化成功", "确定");
     }
 
     private static void SortWorldAndWorldModule()

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ActorBuffHelper : ActorMonoHelper
 {
-    private SortedDictionary<ActorBuffAttribute, List<ActorBuff>> BuffAttributeDict = new SortedDictionary<ActorBuffAttribute, List<ActorBuff>>();
-    private SortedDictionary<ActorStat.StatType, FX> AbnormalBuffFXDict = new SortedDictionary<ActorStat.StatType, FX>();
-    private SortedDictionary<uint, FX> BuffFXDict = new SortedDictionary<uint, FX>();
-    private SortedDictionary<uint, ActorBuff> BuffDict = new SortedDictionary<uint, ActorBuff>();
-    private SortedDictionary<uint, float> BuffRemainTimeDict = new SortedDictionary<uint, float>();
-    private SortedDictionary<uint, float> BuffPassedTimeDict = new SortedDictionary<uint, float>();
+    private Dictionary<ActorBuffAttribute, List<ActorBuff>> BuffAttributeDict = new Dictionary<ActorBuffAttribute, List<ActorBuff>>();
+    private Dictionary<ActorStat.StatType, FX> AbnormalBuffFXDict = new Dictionary<ActorStat.StatType, FX>();
+    private Dictionary<uint, FX> BuffFXDict = new Dictionary<uint, FX>();
+    private Dictionary<uint, ActorBuff> BuffDict = new Dictionary<uint, ActorBuff>();
+    private Dictionary<uint, float> BuffRemainTimeDict = new Dictionary<uint, float>();
+    private Dictionary<uint, float> BuffPassedTimeDict = new Dictionary<uint, float>();
 
     public override void OnRecycled()
     {
@@ -246,9 +246,11 @@ public class ActorBuffHelper : ActorMonoHelper
         }
     }
 
+    List<uint> removeKeys = new List<uint>();
+
     void FixedUpdate()
     {
-        List<uint> removeKeys = new List<uint>();
+        removeKeys.Clear();
         foreach (KeyValuePair<uint, ActorBuff> kv in BuffDict)
         {
             if (BuffRemainTimeDict.ContainsKey(kv.Key))

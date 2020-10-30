@@ -73,7 +73,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         BoxIconSpriteHelper?.OnBoxPoolRecycle();
         transform.DOPause();
         alreadyCollide = false;
-        if (Rigidbody) Destroy(Rigidbody);
+        if (Rigidbody != null) Destroy(Rigidbody);
         if (LastTouchActor != null && LastTouchActor.CurrentLiftBox == this)
         {
             LastTouchActor.ThrowState = Actor.ThrowStates.None;
@@ -454,7 +454,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     public void Push(Vector3 direction)
     {
-        if (State == States.Static || State == States.PushingCanceling)
+        if (state == States.Static || state == States.PushingCanceling)
         {
             Vector3 targetPos = WorldGP.ToVector3() + direction.normalized;
             GridPos3D gp = GridPos3D.GetGridPosByPoint(targetPos, 1);
@@ -467,7 +467,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     public void PushCanceled()
     {
-        if (State == States.BeingPushed)
+        if (state == States.BeingPushed)
         {
             if ((transform.localPosition - LocalGP.ToVector3()).magnitude > (1 - Static_Inertia))
             {
@@ -478,7 +478,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     public void Kick(Vector3 direction, float velocity, Actor actor)
     {
-        if (State == States.BeingPushed || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.PushingCanceling)
+        if (state == States.BeingPushed || state == States.Flying || state == States.BeingKicked || state == States.Static || state == States.PushingCanceling)
         {
             if (BoxEffectHelper == null)
             {
@@ -492,7 +492,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             transform.DOPause();
             BoxColliderHelper.OnKick();
             Rigidbody = gameObject.GetComponent<Rigidbody>();
-            if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
+            if (Rigidbody == null) Rigidbody = gameObject.AddComponent<Rigidbody>();
             Rigidbody.mass = FinalWeight;
             Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -513,7 +513,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     public bool BeingLift(Actor actor)
     {
-        if (State == States.BeingPushed || State == States.Flying || State == States.BeingKicked || State == States.Static || State == States.PushingCanceling)
+        if (state == States.BeingPushed || state == States.Flying || state == States.BeingKicked || state == States.Static || state == States.PushingCanceling)
         {
             DefaultRotBeforeLift = transform.rotation;
             alreadyCollide = false;
@@ -527,7 +527,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             State = States.BeingLift;
             transform.DOPause();
             BoxColliderHelper.OnBeingLift();
-            if (Rigidbody)
+            if (Rigidbody != null)
             {
                 DestroyImmediate(Rigidbody);
             }
@@ -548,7 +548,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     public void Throw(Vector3 direction, float velocity, Actor actor)
     {
-        if (State == States.Lifted)
+        if (state == States.Lifted)
         {
             alreadyCollide = false;
             if (BoxEffectHelper == null)
@@ -562,7 +562,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             transform.parent = WorldManager.Instance.CurrentWorld.transform;
             BoxColliderHelper.OnThrow();
             Rigidbody = gameObject.GetComponent<Rigidbody>();
-            if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
+            if (Rigidbody == null) Rigidbody = gameObject.AddComponent<Rigidbody>();
             Rigidbody.mass = FinalWeight;
             Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -592,7 +592,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             transform.parent = WorldManager.Instance.CurrentWorld.transform;
             BoxColliderHelper.OnPut();
             Rigidbody = gameObject.GetComponent<Rigidbody>();
-            if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
+            if (Rigidbody == null) Rigidbody = gameObject.AddComponent<Rigidbody>();
             Rigidbody.mass = FinalWeight;
             Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -620,7 +620,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         transform.parent = WorldManager.Instance.CurrentWorld.transform;
         BoxColliderHelper.OnDropFromDeadActor();
         Rigidbody = gameObject.GetComponent<Rigidbody>();
-        if (!Rigidbody) Rigidbody = gameObject.AddComponent<Rigidbody>();
+        if (Rigidbody == null) Rigidbody = gameObject.AddComponent<Rigidbody>();
         Rigidbody.mass = FinalWeight;
         Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -636,9 +636,9 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     void FixedUpdate()
     {
         if (IsRecycled) return;
-        if ((State == States.BeingKicked || State == States.Flying || State == States.DroppingFromDeadActor || State == States.Putting) && Rigidbody)
+        if ((state == States.BeingKicked || state == States.Flying || state == States.DroppingFromDeadActor || state == States.Putting) && Rigidbody)
         {
-            if (State == States.BeingKicked)
+            if (state == States.BeingKicked)
             {
                 bool isGrounded = Physics.Raycast(new Ray(transform.position, Vector3.down), 0.55f, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground);
                 Rigidbody.useGravity = !isGrounded;
@@ -670,7 +670,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             transform.rotation = DefaultRotBeforeLift;
         }
 
-        if (Rigidbody && Rigidbody.velocity.magnitude > 1f)
+        if (Rigidbody != null && Rigidbody.velocity.magnitude > 1f)
         {
             BoxEffectHelper?.Play();
         }

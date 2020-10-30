@@ -13,6 +13,27 @@ public class EnemyActor : Actor
     {
         if (!IsRecycled)
         {
+            if (BattleManager.Instance.Player1 != null)
+            {
+                float distanceFromMainPlayer = (transform.position - BattleManager.Instance.Player1.transform.position).magnitude;
+                if (distanceFromMainPlayer > 30f)
+                {
+                    AIUpdateInterval = 50;
+                }
+                else if (distanceFromMainPlayer > 20f)
+                {
+                    AIUpdateInterval = 20;
+                }
+                else if (distanceFromMainPlayer > 10)
+                {
+                    AIUpdateInterval = 15;
+                }
+                else
+                {
+                    AIUpdateInterval = 10;
+                }
+            }
+
             if (AIUpdateIntervalTick < AIUpdateInterval)
             {
                 AIUpdateIntervalTick++;
