@@ -536,61 +536,61 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     // -------- Get All Type Names --------
 
-    public static List<string> GetAllWorldNames()
+    public static List<string> GetAllWorldNames(bool withNone = true)
     {
         LoadAllConfigs();
         List<string> res = WorldTypeDefineDict.TypeIndexDict.Keys.ToList();
-        res.Insert(0, "None");
+        if (withNone) res.Insert(0, "None");
         return res;
     }
 
-    public static List<string> GetAllWorldModuleNames()
+    public static List<string> GetAllWorldModuleNames(bool withNone = true)
     {
         LoadAllConfigs();
         List<string> res = WorldModuleTypeDefineDict.TypeIndexDict.Keys.ToList();
-        res.Insert(0, "None");
+        if (withNone) res.Insert(0, "None");
         return res;
     }
 
-    public static List<string> GetAllBoxTypeNames()
+    public static List<string> GetAllBoxTypeNames(bool withNone = true)
     {
         LoadAllConfigs();
         List<string> res = BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
-        res.Insert(0, "None");
+        if (withNone) res.Insert(0, "None");
         return res;
     }
 
-    public static List<string> GetAllFXTypeNames()
+    public static List<string> GetAllFXTypeNames(bool withNone = true)
     {
         LoadAllConfigs();
         List<string> res = FXTypeDefineDict.TypeIndexDict.Keys.ToList();
-        res.Insert(0, "None");
+        if (withNone) res.Insert(0, "None");
         return res;
     }
 
-    public static List<string> GetAllEnemyNames()
+    public static List<string> GetAllEnemyNames(bool withNone = true)
     {
         List<string> res = new List<string>();
         res = EnemyTypeDefineDict.TypeIndexDict.Keys.ToList();
-        res.Insert(0, "None");
+        if (withNone) res.Insert(0, "None");
         return res;
     }
 
-    public static List<string> GetAllActorNames()
+    public static List<string> GetAllActorNames(bool withNone = true)
     {
         LoadAllConfigs();
         List<string> res = new List<string>();
         res = EnemyTypeDefineDict.TypeIndexDict.Keys.ToList();
         res.Insert(0, "Player1");
-        res.Insert(0, "None");
+        if (withNone) res.Insert(0, "None");
         return res;
     }
 
-    public static List<string> GetAllLevelTriggerNames()
+    public static List<string> GetAllLevelTriggerNames(bool withNone = true)
     {
         List<string> res = new List<string>();
         res = LevelTriggerTypeDefineDict.TypeIndexDict.Keys.ToList();
-        res.Insert(0, "None");
+        if (withNone) res.Insert(0, "None");
         return res;
     }
 

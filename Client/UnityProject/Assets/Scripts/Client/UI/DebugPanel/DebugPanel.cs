@@ -223,7 +223,7 @@ public class DebugPanel : BaseUIPanel
 
     public List<string> GetAllWorldNames()
     {
-        return ConfigManager.GetAllWorldNames();
+        return ConfigManager.GetAllWorldNames(false);
     }
 
     [DebugSlider("Player/KickForce", 15, 0, 1000)]
