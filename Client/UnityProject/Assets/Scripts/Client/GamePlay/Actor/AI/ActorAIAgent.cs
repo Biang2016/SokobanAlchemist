@@ -154,29 +154,37 @@ public class ActorAIAgent
         {
             if (nextNode != null)
             {
-                Vector3 diff = nextNode.Value.ToVector3() - Actor.transform.position;
-
-                if (diff.magnitude < 0.1f)
+                Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(nextNode.Value, out WorldModule module, out GridPos3D _);
+                if (box)
                 {
-                    bool checkArriveDest = nextNode == currentPath.Last || (LastNodeOccupied && nextNode.Next == currentPath.Last);
-                    if (checkArriveDest)
+                    ClearPathFinding(); // 有箱子挡路，停止寻路
+                }
+                else
+                {
+                    Vector3 diff = nextNode.Value.ToVector3() - Actor.transform.position;
+
+                    if (diff.magnitude < 0.1f)
                     {
-                        if (LastNodeOccupied && nextNode.Next != null && nextNode.Next == currentPath.Last)
+                        bool checkArriveDest = nextNode == currentPath.Last || (LastNodeOccupied && nextNode.Next == currentPath.Last);
+                        if (checkArriveDest)
                         {
-                            Actor.CurForward = (nextNode.Next.Value - nextNode.Value).ToVector3().normalized;
+                            if (LastNodeOccupied && nextNode.Next != null && nextNode.Next == currentPath.Last)
+                            {
+                                Actor.CurForward = (nextNode.Next.Value - nextNode.Value).ToVector3().normalized;
+                            }
+
+                            ClearPathFinding();
+                            return;
                         }
 
-                        ClearPathFinding();
-                        return;
+                        currentNode = nextNode;
+                        nextNode = nextNode.Next;
                     }
 
-                    currentNode = nextNode;
-                    nextNode = nextNode.Next;
-                }
-
-                if (nextNode != null)
-                {
-                    Actor.CurMoveAttempt = (nextNode.Value.ToVector3() - Actor.transform.position).normalized;
+                    if (nextNode != null)
+                    {
+                        Actor.CurMoveAttempt = (nextNode.Value.ToVector3() - Actor.transform.position).normalized;
+                    }
                 }
             }
         }
