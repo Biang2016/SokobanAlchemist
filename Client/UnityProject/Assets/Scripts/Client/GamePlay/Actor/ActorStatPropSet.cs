@@ -525,7 +525,15 @@ public class ActorStat : IClone<ActorStat>
     {
         if (IsAbnormalStat)
         {
-            abnormalStateAutoTick += fixedDeltaTime;
+            if (Value > 0)
+            {
+                abnormalStateAutoTick += fixedDeltaTime;
+            }
+            else
+            {
+                abnormalStateAutoTick = 0;
+            }
+
             if (abnormalStateAutoTick > AbnormalStateAutoTickInterval)
             {
                 abnormalStateAutoTick -= AbnormalStateAutoTickInterval;

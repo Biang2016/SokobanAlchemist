@@ -55,10 +55,11 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
     {
         if (!EnableUIBattleTip) return;
         if (data.MainNum == 0 && data.SubNum == 0) return;
+        Camp casterCamp = data.Caster ? data.Caster.Camp : data.Receiver.Camp;
         UIBattleTipInfo info = new UIBattleTipInfo(
             0,
             data.BattleTipType,
-            data.Caster.Camp,
+            casterCamp,
             data.Receiver.Camp,
             data.MainNum,
             data.SubNum,
@@ -75,10 +76,11 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
     private void HandleCommonTip(CommonUIBattleTipData data)
     {
         if (!EnableUIBattleTip) return;
+        Camp casterCamp = data.Caster ? data.Caster.Camp : data.Receiver.Camp;
         UIBattleTipInfo info = new UIBattleTipInfo(
             0,
             data.BattleTipType,
-            data.Caster.Camp,
+            casterCamp,
             data.Receiver.Camp,
             0,
             0,
