@@ -254,12 +254,6 @@ public class DebugPanel : BaseUIPanel
         BattleManager.Instance.Player1.ActorStatPropSet.Health.Value += 1000;
     }
 
-    [DebugToggleButton("ToggleMoveLog")]
-    public void ToggleMoveLog()
-    {
-        Actor.ActorMoveDebugLog = !Actor.ActorMoveDebugLog;
-    }
-
     [DebugToggleButton("Enemy/TogglePathFinding")]
     public void ToggleEnemyPathFinding()
     {
