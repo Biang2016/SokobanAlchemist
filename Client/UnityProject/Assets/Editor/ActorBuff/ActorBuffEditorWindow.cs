@@ -110,7 +110,7 @@ public class ActorBuffEditorWindow : EditorWindow
     {
         EditorGUILayout.LabelField("角色Buff克制矩阵");
         table?.DrawTable();
-        if (GUILayout.Button("加载"))
+        if (GUILayout.Button("加载 / 修改矩阵维度后先加载再保存，否则丢失数据"))
         {
             ConfigManager.LoadActorBuffAttributeMatrix(DataFormat.Binary);
             Init();

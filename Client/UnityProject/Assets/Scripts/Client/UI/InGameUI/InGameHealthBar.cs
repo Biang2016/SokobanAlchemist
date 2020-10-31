@@ -84,11 +84,7 @@ public class InGameHealthBar : PoolObject
             RectTransform.anchoredPosition = new Vector2(size_X, size_Y);
 
             RectTransform.sizeDelta = new Vector2(Length, Height) * CameraManager.Instance.FieldCamera.InGameUISize;
+            SubSlider.value = Mathf.SmoothDamp(SubSlider.value, MainSlider.value, ref smoothDampVelocity, 0.5f, 1, Time.deltaTime);
         }
-    }
-
-    void FixedUpdate()
-    {
-        SubSlider.value = Mathf.SmoothDamp(SubSlider.value, MainSlider.value, ref smoothDampVelocity, 0.5f, 1, Time.fixedDeltaTime);
     }
 }

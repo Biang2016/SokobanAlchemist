@@ -194,7 +194,7 @@ public class PlayerActor : Actor
 
             if (skill_2_Down)
             {
-                SwapOrDash();
+                VaultOrDash();
             }
 
             if (skill_0_Down)

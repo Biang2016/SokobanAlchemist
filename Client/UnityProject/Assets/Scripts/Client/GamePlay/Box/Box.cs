@@ -501,14 +501,12 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         }
     }
 
-    public void ForceCancelPush()
+    public void ForceStop()
     {
-        if (state == States.BeingPushed)
-        {
-            transform.DOPause();
-            if (Actor.ActorMoveDebugLog) Debug.Log($"[Box] ForceCancelPush {WorldGP} -> {LastWorldGP}");
-            WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, LastWorldGP, States.PushingCanceling, false, true);
-        }
+        transform.DOPause();
+        GridPos3D targetGP = transform.position.ToGridPos3D();
+        if (Actor.ActorMoveDebugLog) Debug.Log($"[Box] ForceCancelPush {WorldGP} -> {targetGP}");
+        WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, targetGP, States.Static, false, true);
     }
 
     public void Kick(Vector3 direction, float velocity, Actor actor)

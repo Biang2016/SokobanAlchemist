@@ -97,7 +97,6 @@ MonoBehaviour:
   DieFXScale: 2
   RawActorStatPropSet:
     Health:
-      AbnormalStateAutoTickInterval: 1
       _value: 1
       _minValue: 0
       _maxValue: 1
@@ -106,8 +105,12 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 1
       MaxValue: 10000
+    HealthRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 10000
     Life:
-      AbnormalStateAutoTickInterval: 1
       _value: 1
       _minValue: 0
       _maxValue: 10
@@ -116,18 +119,45 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 1000
+    MaxActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    ActionPoint:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    ActionPointRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    KickConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    DashConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    VaultConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     FrozenResistance:
       BaseValue: 100
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 200
     FrozenValue:
-      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 1000
     FrozenLevel:
-      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 4
@@ -162,12 +192,10 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 200
     FiringValue:
-      AbnormalStateAutoTickInterval: 0.5
       _value: 0
       _minValue: 0
       _maxValue: 1000
     FiringLevel:
-      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 4
@@ -198,7 +226,6 @@ MonoBehaviour:
       m_RotationOrder: 4
   ActorStatPropSet:
     Health:
-      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 0
@@ -207,12 +234,45 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
+    HealthRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     Life:
-      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 0
     MoveSpeed:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    MaxActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    ActionPoint:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    ActionPointRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    KickConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    DashConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    VaultConsumeActionPoint:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
@@ -223,12 +283,10 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 0
     FrozenValue:
-      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 0
     FrozenLevel:
-      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 0
@@ -245,12 +303,10 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 0
     FiringValue:
-      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 0
     FiringLevel:
-      AbnormalStateAutoTickInterval: 1
       _value: 0
       _minValue: 0
       _maxValue: 0
@@ -261,6 +317,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+  DashForce: 10
   Accelerate: 250
   ThrowAimMoveSpeed: 10
   KickForce: 5
@@ -279,8 +336,8 @@ MonoBehaviour:
   - WoodenBox
   ThrowableBoxList:
   - WoodenBox
-  DieDropBoxTypeName: None
-  DieDropBoxProbabilityPercent: 25
+  DieDropBoxTypeName: ActionBox
+  DieDropBoxProbabilityPercent: 20
   CollideDamage: 2
   CollideForce: 500
   MovementState: 0

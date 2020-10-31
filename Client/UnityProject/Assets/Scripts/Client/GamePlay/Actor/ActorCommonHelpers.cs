@@ -4,6 +4,7 @@ using System.Collections;
 public class ActorCommonHelpers : MonoBehaviour
 {
     public GameObject ActorMoveColliderRoot;
+    public ActorArtHelper ActorArtHelper;
     public ActorPushHelper ActorPushHelper;
     public ActorFaceHelper ActorFaceHelper;
     public ActorSkinHelper ActorSkinHelper;

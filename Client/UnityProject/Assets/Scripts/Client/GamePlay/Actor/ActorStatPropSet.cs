@@ -14,17 +14,49 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
     public Dictionary<ActorStat.StatType, ActorStat> StatDict = new Dictionary<ActorStat.StatType, ActorStat>();
     public Dictionary<ActorProperty.PropertyType, ActorProperty> PropertyDict = new Dictionary<ActorProperty.PropertyType, ActorProperty>();
 
+    [BoxGroup("生命")]
     [LabelText("@\"血量\t\"+Health")]
     public ActorStat Health = new ActorStat(ActorStat.StatType.Health);
 
+    [BoxGroup("生命")]
     [LabelText("@\"血量上限\t\"+MaxHealth")]
     public ActorProperty MaxHealth = new ActorProperty(ActorProperty.PropertyType.MaxHealth);
 
+    [BoxGroup("生命")]
+    [LabelText("@\"回血速度\t\"+HealthRecovery")]
+    public ActorProperty HealthRecovery = new ActorProperty(ActorProperty.PropertyType.HealthRecovery);
+
+    [BoxGroup("生命")]
     [LabelText("@\"生命数\t\"+Life")]
     public ActorStat Life = new ActorStat(ActorStat.StatType.Life);
 
+    [BoxGroup("操作")]
     [LabelText("@\"移动速度\t\"+MoveSpeed")]
     public ActorProperty MoveSpeed = new ActorProperty(ActorProperty.PropertyType.MoveSpeed);
+
+    [BoxGroup("操作")]
+    [LabelText("@\"最大行动力\t\"+MaxActionPoint")]
+    public ActorProperty MaxActionPoint = new ActorProperty(ActorProperty.PropertyType.MaxActionPoint);
+
+    [BoxGroup("操作")]
+    [LabelText("@\"行动力\t\"+ActionPoint")]
+    public ActorStat ActionPoint = new ActorStat(ActorStat.StatType.ActionPoint);
+
+    [BoxGroup("操作")]
+    [LabelText("@\"行动力回复速度\t\"+ActionPointRecovery")]
+    public ActorProperty ActionPointRecovery = new ActorProperty(ActorProperty.PropertyType.ActionPointRecovery);
+
+    [BoxGroup("操作")]
+    [LabelText("@\"Kick消耗行动力\t\"+KickConsumeActionPoint")]
+    public ActorProperty KickConsumeActionPoint = new ActorProperty(ActorProperty.PropertyType.KickConsumeActionPoint);
+
+    [BoxGroup("操作")]
+    [LabelText("@\"Dash消耗行动力\t\"+DashConsumeActionPoint")]
+    public ActorProperty DashConsumeActionPoint = new ActorProperty(ActorProperty.PropertyType.DashConsumeActionPoint);
+
+    [BoxGroup("操作")]
+    [LabelText("@\"Vault消耗行动力\t\"+VaultConsumeActionPoint")]
+    public ActorProperty VaultConsumeActionPoint = new ActorProperty(ActorProperty.PropertyType.VaultConsumeActionPoint);
 
     [BoxGroup("冰冻")]
     [LabelText("@\"冰冻抗性\t\"+FrozenResistance")]
@@ -72,24 +104,61 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
     {
         Actor = actor;
 
+        MaxHealth.Initialize();
+        HealthRecovery.Initialize();
+        MoveSpeed.Initialize();
+        MaxActionPoint.Initialize();
+        ActionPointRecovery.Initialize();
+        KickConsumeActionPoint.Initialize();
+        DashConsumeActionPoint.Initialize();
+        VaultConsumeActionPoint.Initialize();
+        FrozenResistance.Initialize();
+        FiringResistance.Initialize();
+
+        Health.MaxValue = MaxHealth.GetModifiedValue;
         Health.OnValueReachZero += () => { Life.Value--; };
+        Health.Recovery = HealthRecovery.GetModifiedValue;
         StatDict.Add(ActorStat.StatType.Health, Health);
 
-        MaxHealth.Initialize();
         MaxHealth.OnValueChanged += (before, after) => { Health.MaxValue = after; };
         PropertyDict.Add(ActorProperty.PropertyType.MaxHealth, MaxHealth);
+
+        HealthRecovery.OnValueChanged += (before, after) => { Health.Recovery = after; };
+        PropertyDict.Add(ActorProperty.PropertyType.HealthRecovery, HealthRecovery);
 
         Life.OnValueDecrease += (_) => { Health.ChangeValueWithoutNotify(Health.MaxValue - Health.Value); };
         StatDict.Add(ActorStat.StatType.Life, Life);
 
-        MoveSpeed.Initialize();
         PropertyDict.Add(ActorProperty.PropertyType.MoveSpeed, MoveSpeed);
 
-        FrozenResistance.Initialize();
-        FrozenResistance.OnValueChanged += (before, after) => { FrozenValue.AbnormalResistance = after; };
+        MaxActionPoint.OnValueChanged += (before, after) =>
+        {
+            ActionPoint.MaxValue = after; 
+
+        };
+        PropertyDict.Add(ActorProperty.PropertyType.MaxActionPoint, MaxActionPoint);
+
+        ActionPoint.Recovery = ActionPointRecovery.GetModifiedValue;
+        StatDict.Add(ActorStat.StatType.ActionPoint, ActionPoint);
+
+        ActionPointRecovery.OnValueChanged += (before, after) => { ActionPoint.Recovery = after; };
+        PropertyDict.Add(ActorProperty.PropertyType.ActionPointRecovery, ActionPointRecovery);
+
+        PropertyDict.Add(ActorProperty.PropertyType.KickConsumeActionPoint, KickConsumeActionPoint);
+
+        PropertyDict.Add(ActorProperty.PropertyType.DashConsumeActionPoint, DashConsumeActionPoint);
+
+        PropertyDict.Add(ActorProperty.PropertyType.VaultConsumeActionPoint, VaultConsumeActionPoint);
+
+        FrozenResistance.OnValueChanged += (before, after) =>
+        {
+            FrozenValue.AbnormalStatResistance = after;
+            FrozenValue.Recovery = -after;
+        };
         PropertyDict.Add(ActorProperty.PropertyType.FrozenResistance, FrozenResistance);
 
-        FrozenValue.AbnormalResistance = FrozenResistance.GetModifiedValue;
+        FrozenValue.Recovery = -FrozenResistance.GetModifiedValue;
+        FrozenValue.AbnormalStatResistance = FrozenResistance.GetModifiedValue;
         FrozenValue.OnValueChanged += (before, after) =>
         {
             FrozenLevel.Value = Mathf.FloorToInt(after / ((float) FrozenValue.MaxValue / FrozenLevel.MaxValue));
@@ -100,11 +169,15 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         FrozenLevel.OnValueChanged += (before, after) => { ; }; // todo 冰冻等级变化时，角色冰块形态发生变化
         StatDict.Add(ActorStat.StatType.FrozenLevel, FrozenLevel);
 
-        FiringResistance.Initialize();
-        FiringResistance.OnValueChanged += (before, after) => { FiringValue.AbnormalResistance = after; };
+        FiringResistance.OnValueChanged += (before, after) =>
+        {
+            FiringValue.AbnormalStatResistance = after;
+            FiringValue.Recovery = -after;
+        };
         PropertyDict.Add(ActorProperty.PropertyType.FiringResistance, FiringResistance);
 
-        FiringValue.AbnormalResistance = FiringResistance.GetModifiedValue;
+        FiringValue.Recovery = -FiringResistance.GetModifiedValue;
+        FiringValue.AbnormalStatResistance = FiringResistance.GetModifiedValue;
         FiringValue.OnValueChanged += (before, after) =>
         {
             FiringLevel.Value = Mathf.FloorToInt(after / ((float) FiringValue.MaxValue / FiringLevel.MaxValue));
@@ -138,7 +211,7 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
     {
         foreach (KeyValuePair<ActorStat.StatType, ActorStat> kv in StatDict)
         {
-            kv.Value.AbnormalStatFixedUpdate(fixedDeltaTime);
+            kv.Value.FixedUpdate(fixedDeltaTime);
         }
 
         abnormalStateAutoTick += fixedDeltaTime;
@@ -155,8 +228,15 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         ActorStatPropSet newStatPropSet = new ActorStatPropSet();
         newStatPropSet.Health = Health.Clone();
         newStatPropSet.MaxHealth = MaxHealth.Clone();
+        newStatPropSet.HealthRecovery = HealthRecovery.Clone();
         newStatPropSet.Life = Life.Clone();
         newStatPropSet.MoveSpeed = MoveSpeed.Clone();
+        newStatPropSet.MaxActionPoint = MaxActionPoint.Clone();
+        newStatPropSet.ActionPoint = ActionPoint.Clone();
+        newStatPropSet.ActionPointRecovery = ActionPointRecovery.Clone();
+        newStatPropSet.KickConsumeActionPoint = KickConsumeActionPoint.Clone();
+        newStatPropSet.DashConsumeActionPoint = DashConsumeActionPoint.Clone();
+        newStatPropSet.VaultConsumeActionPoint = VaultConsumeActionPoint.Clone();
         newStatPropSet.FrozenResistance = FrozenResistance.Clone();
         newStatPropSet.FrozenValue = FrozenValue.Clone();
         newStatPropSet.FrozenLevel = FrozenLevel.Clone();
@@ -188,8 +268,26 @@ public class ActorProperty : IClone<ActorProperty>
         [LabelText("血量上限")]
         MaxHealth = 0,
 
+        [LabelText("回血速度")]
+        HealthRecovery = 1,
+
         [LabelText("移动速度")]
-        MoveSpeed = 1,
+        MoveSpeed = 10,
+
+        [LabelText("最大行动力")]
+        MaxActionPoint = 20,
+
+        [LabelText("行动力回复速度")]
+        ActionPointRecovery = 21,
+
+        [LabelText("Kick消耗行动力")]
+        KickConsumeActionPoint = 80,
+
+        [LabelText("Dash消耗行动力")]
+        DashConsumeActionPoint = 81,
+
+        [LabelText("Vault消耗行动力")]
+        VaultConsumeActionPoint = 82,
 
         [LabelText("冰冻抗性")]
         FrozenResistance = 100,
@@ -496,6 +594,9 @@ public class ActorStat : IClone<ActorStat>
         [LabelText("生命数")]
         Life = 1,
 
+        [LabelText("行动力")]
+        ActionPoint = 20,
+
         [LabelText("冰冻累积值")]
         FrozenValue = 100,
 
@@ -538,36 +639,52 @@ public class ActorStat : IClone<ActorStat>
 
     internal StatType m_StatType;
 
-    #region 异常状态
+    #region 自动恢复
 
-    internal int AbnormalResistance = 100; // 抗性，取值范围0~200，仅用于累积值的Property，如冰冻累积值，0为2倍弱冰，100为正常，150为50%免疫，200为100%免疫
-    public bool IsAbnormalStat => m_StatType == StatType.FiringValue || m_StatType == StatType.FrozenValue;
-    private float abnormalStateAutoTick = 0f;
+    /// <summary>
+    /// 每秒恢复率
+    /// </summary>
+    internal int Recovery = 0;
 
-    [LabelText("异常状态值自动衰减时间间隔/s")]
-    [ShowIf("IsAbnormalStat")]
-    public float AbnormalStateAutoTickInterval = 1f;
+    private float accumulatedRecovery = 0;
 
-    public void AbnormalStatFixedUpdate(float fixedDeltaTime)
+    public void FixedUpdate(float fixedDeltaTime)
     {
-        if (IsAbnormalStat)
+        if (Recovery < 0 && Value > 0)
         {
-            if (Value > 0)
-            {
-                abnormalStateAutoTick += fixedDeltaTime;
-            }
-            else
-            {
-                abnormalStateAutoTick = 0;
-            }
+            accumulatedRecovery += fixedDeltaTime * Recovery;
+        }
+        else if (Recovery > 0 && Value != MaxValue)
+        {
+            accumulatedRecovery += fixedDeltaTime * Recovery;
+        }
+        else
+        {
+            accumulatedRecovery = 0;
+        }
 
-            if (abnormalStateAutoTick > AbnormalStateAutoTickInterval)
-            {
-                abnormalStateAutoTick -= AbnormalStateAutoTickInterval;
-                Value -= Mathf.RoundToInt((AbnormalResistance == 0 ? 10 : AbnormalResistance) * AbnormalStateAutoTickInterval); // 保底衰减率为10/s
-            }
+        if (accumulatedRecovery > 1)
+        {
+            Value += 1;
+            accumulatedRecovery -= 1;
+        }
+        else if (accumulatedRecovery < -1)
+        {
+            Value -= 1;
+            accumulatedRecovery += 1;
         }
     }
+
+    #endregion
+
+    #region 异常属性抗性
+
+    public bool IsAbnormalStat => m_StatType == StatType.FiringValue || m_StatType == StatType.FrozenValue;
+
+    /// <summary>
+    /// 异常属性累积值抗性，取值范围0~200。如冰冻累积值，0为2倍弱冰，100为正常，150为50%免疫，200为100%免疫
+    /// </summary>
+    internal int AbnormalStatResistance = 100;
 
     #endregion
 
@@ -589,7 +706,7 @@ public class ActorStat : IClone<ActorStat>
                 {
                     if (_value < value)
                     {
-                        value = Mathf.RoundToInt((value - _value) * (200f - AbnormalResistance) / 100f) + _value;
+                        value = Mathf.RoundToInt((value - _value) * (200f - AbnormalStatResistance) / 100f) + _value;
                         value = Mathf.Clamp(value, _minValue, _maxValue);
                     }
                 }

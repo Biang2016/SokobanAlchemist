@@ -218,13 +218,7 @@ public class ActorBuffHelper : ActorMonoHelper
     {
         if (string.IsNullOrEmpty(fxName)) return;
         if (fxName == "None") return;
-        if (AbnormalBuffFXDict.ContainsKey(statType))
-        {
-            FX fx = AbnormalBuffFXDict[statType];
-            fx.OnFXEnd = null;
-            fx.PoolRecycle();
-        }
-
+        if (AbnormalBuffFXDict.ContainsKey(statType)) return;
         FX newFX = FXManager.Instance.PlayFX(fxName, transform.position, scale);
         AbnormalBuffFXDict[statType] = newFX;
         newFX.OnFXEnd = () => { AbnormalBuffFXDict.Remove(statType); };

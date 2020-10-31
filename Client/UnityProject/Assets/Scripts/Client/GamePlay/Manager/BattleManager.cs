@@ -105,7 +105,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
             BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
             MainPlayers[(int) playerNumber] = player;
             AddActor(player);
-            UIManager.Instance.ShowUIForms<PlayerHUDPanel>().Initialize();
+            UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>().Initialize();
         }
         else
         {

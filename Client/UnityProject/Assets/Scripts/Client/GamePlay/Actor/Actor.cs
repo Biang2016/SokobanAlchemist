@@ -41,6 +41,7 @@ public class Actor : PoolObject
     public Vector3 ArtPos => ActorSkinHelper.MainArtTransform.position;
 
     internal GameObject ActorMoveColliderRoot => ActorCommonHelpers.ActorMoveColliderRoot;
+    internal ActorArtHelper ActorArtHelper => ActorCommonHelpers.ActorArtHelper;
     internal ActorBuffHelper ActorBuffHelper => ActorCommonHelpers.ActorBuffHelper;
     internal ActorPushHelper ActorPushHelper => ActorCommonHelpers.ActorPushHelper;
     internal ActorFaceHelper ActorFaceHelper => ActorCommonHelpers.ActorFaceHelper;
@@ -291,6 +292,7 @@ public class Actor : PoolObject
         PushState = PushStates.None;
         ThrowState = ThrowStates.None;
         ThrowWhenDie();
+        ActorArtHelper.OnRecycled();
         ActorBuffHelper.OnRecycled();
         ActorPushHelper.OnRecycled();
         ActorFaceHelper.OnRecycled();
@@ -311,6 +313,7 @@ public class Actor : PoolObject
     public override void OnUsed()
     {
         base.OnUsed();
+        ActorArtHelper.OnUsed();
         ActorBuffHelper.OnUsed();
         ActorPushHelper.OnUsed();
         ActorPushHelper.OnUsed();
@@ -386,7 +389,7 @@ public class Actor : PoolObject
         if (!IsRecycled)
         {
             RigidBody.angularVelocity = Vector3.zero;
-            if (ActorMoveDebugLog && CurWorldGP != LastWorldGP) Debug.Log($"Move {LastWorldGP} -> {CurWorldGP}");
+            if (ActorMoveDebugLog && CurWorldGP != LastWorldGP) Debug.Log($"[Actor] Move {LastWorldGP} -> {CurWorldGP}");
             LastWorldGP = CurWorldGP;
             CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
         }
@@ -472,21 +475,16 @@ public class Actor : PoolObject
 
     #region Skills
 
-    public void Dash()
+    public void VaultOrDash()
     {
-        RigidBody.AddForce(CurForward * DashForce, ForceMode.VelocityChange);
-    }
-
-    public void SwapOrDash()
-    {
-        Ray ray = new Ray(ArtPos - transform.forward * 0.49f, transform.forward);
+        Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
         //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             if (box)
             {
-                Swap(box);
+                Vault();
             }
             else
             {
@@ -499,61 +497,69 @@ public class Actor : PoolObject
         }
     }
 
+    private void Dash()
+    {
+        if (ActorStatPropSet.ActionPoint.Value > ActorStatPropSet.DashConsumeActionPoint.GetModifiedValue)
+        {
+            ActorStatPropSet.ActionPoint.Value -= ActorStatPropSet.DashConsumeActionPoint.GetModifiedValue;
+            RigidBody.AddForce(CurForward * DashForce, ForceMode.VelocityChange);
+        }
+    }
+
+    private void Vault()
+    {
+        if (ActorStatPropSet.ActionPoint.Value > ActorStatPropSet.VaultConsumeActionPoint.GetModifiedValue)
+        {
+            ActorStatPropSet.ActionPoint.Value -= ActorStatPropSet.VaultConsumeActionPoint.GetModifiedValue;
+            ActorArtHelper.Vault();
+        }
+    }
+
     public void Kick()
     {
-        Ray ray = new Ray(ArtPos - transform.forward * 0.49f, transform.forward);
-        //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
+        if (ActorStatPropSet.ActionPoint.Value > ActorStatPropSet.KickConsumeActionPoint.GetModifiedValue)
         {
-            Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Kickable && ActorSkillHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
+            Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
+            //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
+            if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
             {
-                box.Kick(CurForward, KickForce, this);
-                FX kickFX = FXManager.Instance.PlayFX(KickFX, KickFXPivot.position);
-                if (kickFX) kickFX.transform.localScale = Vector3.one * KickFXScale;
+                Box box = hit.collider.gameObject.GetComponentInParent<Box>();
+                if (box && box.Kickable && ActorSkillHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
+                {
+                    ActorStatPropSet.ActionPoint.Value -= ActorStatPropSet.KickConsumeActionPoint.GetModifiedValue;
+                    box.Kick(CurForward, KickForce, this);
+                    FX kickFX = FXManager.Instance.PlayFX(KickFX, KickFXPivot.position);
+                    if (kickFX) kickFX.transform.localScale = Vector3.one * KickFXScale;
+                }
             }
         }
     }
 
-    private void Swap(Box box)
+    public void SwapBox()
     {
-        if (box && box.Pushable && ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
+        Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
+        //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
-            bool boxAlreadyPushAGrid = box.State == Box.States.BeingPushed && box.transform.position.ToGridPos3D() == box.WorldGP; // 是否已经过了一格界线
-            if (box.State == Box.States.Static)
+            Box box = hit.collider.gameObject.GetComponentInParent<Box>();
+            if (box && box.Pushable && ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
-                if (ActorMoveDebugLog) Debug.Log($"[Actor] SwapActor1 {CurWorldGP} -> {box.WorldGP}");
+                box.ForceStop();
                 transform.position = box.WorldGP.ToVector3();
-            }
-            else if (box.State == Box.States.BeingPushed)
-            {
-                if (boxAlreadyPushAGrid)
-                {
-                    if (ActorMoveDebugLog) Debug.Log($"[Actor] SwapActor2 {CurWorldGP} -> {box.WorldGP}");
-                    transform.position = box.WorldGP.ToVector3();
-                }
-                else
-                {
-                    if (ActorMoveDebugLog) Debug.Log($"[Actor] SwapActor3 {CurWorldGP} -> {box.LastWorldGP}");
-                    transform.position = box.LastWorldGP.ToVector3();
-                }
-            }
+                LastWorldGP = CurWorldGP;
+                CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+                if (ActorMoveDebugLog) Debug.Log($"[Box] SwapBox {box.WorldGP} -> {LastWorldGP}");
+                WorldManager.Instance.CurrentWorld.MoveBox(box.WorldGP, LastWorldGP, Box.States.BeingPushed, false, true);
 
-            box.ForceCancelPush();
-            if (!boxAlreadyPushAGrid)
-            {
-                if (ActorMoveDebugLog) Debug.Log($"[Box] SwapBox {box.WorldGP} -> {CurWorldGP}");
-                WorldManager.Instance.CurrentWorld.MoveBox(box.WorldGP, CurWorldGP, Box.States.BeingPushed, false, true);
+                // todo kicking box的swap如何兼容
             }
-
-            // todo kicking box的swap如何兼容
         }
     }
 
     public void Lift()
     {
         if (CurrentLiftBox) return;
-        Ray ray = new Ray(ArtPos - transform.forward * 0.49f, transform.forward);
+        Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();

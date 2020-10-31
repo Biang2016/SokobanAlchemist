@@ -59,7 +59,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4842464350258294753}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9120055890874861662
 MonoBehaviour:
@@ -194,7 +194,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4842464350258294753}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3839362069342926230
 GameObject:
@@ -304,7 +304,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4842464350258294753}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5460616897530611344
 GameObject:
@@ -395,7 +395,6 @@ Transform:
   - {fileID: 3647540564651512661}
   - {fileID: 2582301598295360713}
   - {fileID: 8410413747938996453}
-  - {fileID: 3810314685036412914}
   - {fileID: 5275395678079939461}
   - {fileID: 1132256796039909690}
   - {fileID: 6648586943387575735}
@@ -418,9 +417,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorMoveColliderRoot: {fileID: 2023754270052375932}
+  ActorArtHelper: {fileID: 1517891711036682851}
   ActorPushHelper: {fileID: 7578105724106580180}
   ActorFaceHelper: {fileID: 8392551312081465057}
-  ActorSkinHelper: {fileID: 2451151313383746207}
+  ActorSkinHelper: {fileID: 1321479151781057853}
   ActorLaunchArcRendererHelper: {fileID: 9120055890874861662}
   ActorBattleHelper: {fileID: 227926083524661705}
   ActorSkillHelper: {fileID: 5217150889472423656}
@@ -457,7 +457,7 @@ Transform:
   m_Children:
   - {fileID: 8024261377824337578}
   m_Father: {fileID: 4842464350258294753}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &227926083524661705
 MonoBehaviour:
@@ -516,7 +516,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4842464350258294753}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1972265583874991119
 MonoBehaviour:
@@ -530,52 +530,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0639474e0da215b448b0147864571b92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &8502247525430864726
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3810314685036412914}
-  - component: {fileID: 2451151313383746207}
-  m_Layer: 13
-  m_Name: ActorSkinHelper
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3810314685036412914
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8502247525430864726}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4842464350258294753}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2451151313383746207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8502247525430864726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfd0701b714345044b848fd19a5921c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MainSwitchSkin: {fileID: 0}
-  SkinConfigs: []
-  MainArtTransform: {fileID: 5566701871306825278}
 --- !u!1 &8627420964006559438
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,7 +559,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4842464350258294753}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5217150889472423656
 MonoBehaviour:
@@ -629,8 +583,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5566701871306825278}
+  - component: {fileID: 1517891711036682851}
+  - component: {fileID: 1321479151781057853}
   m_Layer: 0
-  m_Name: ArtRoot
+  m_Name: ActorArtHelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -650,3 +606,31 @@ Transform:
   m_Father: {fileID: 4842464350258294753}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1517891711036682851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8939274040882244123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e73f2549711298a4b9928a9de09ba5da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActorArtAnimator: {fileID: 0}
+--- !u!114 &1321479151781057853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8939274040882244123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfd0701b714345044b848fd19a5921c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainSwitchSkin: {fileID: 0}
+  SkinConfigs: []
+  MainArtTransform: {fileID: 5566701871306825278}

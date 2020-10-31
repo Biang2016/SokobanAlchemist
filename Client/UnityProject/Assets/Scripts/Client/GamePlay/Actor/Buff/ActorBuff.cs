@@ -387,6 +387,9 @@ public enum ActorBuffAttribute
     [LabelText("加速")]
     SpeedUp,
 
+    [LabelText("行动力")]
+    ActionPoint,
+
     [LabelText("减速")]
     SlowDown,
 

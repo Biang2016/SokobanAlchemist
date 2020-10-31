@@ -359,6 +359,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         byte[] bytes = SerializationUtility.SerializeValue(exportDict, DataFormat.JSON);
         File.WriteAllBytes(file, bytes);
+        AssetDatabase.Refresh();
     }
 
     private static void ExportWorldDataConfig(DataFormat dataFormat)
@@ -474,6 +475,12 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                     }
                 }
             }
+
+#if UNITY_EDITOR
+            ActorBuffAttributeMatrixAsset configSSO = GetActorBuffAttributeMatrixAsset();
+            configSSO.ActorBuffAttributeMatrix = ActorBuffAttributeMatrix;
+            AssetDatabase.Refresh();
+#endif
         }
         else
         {
