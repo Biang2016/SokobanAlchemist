@@ -281,19 +281,29 @@ public class ActorPathFinding
 
     private static List<GridPos3D> cached_UnionFindNodeList = new List<GridPos3D>(100);
 
+    private static Queue<GridPos3D> cached_QueueUnionFind = new Queue<GridPos3D>(50);
+    private static bool[,] cached_OccupationUnionFind = new bool[20, 20];
+
     private static List<GridPos3D> UnionFindNodes(GridPos3D center, float rangeRadius)
     {
         cached_UnionFindNodeList.Clear();
         int radius = Mathf.RoundToInt(rangeRadius);
         int matrixSize = radius * 2 + 1;
-        bool[,] occupation = new bool[matrixSize, matrixSize];
-        Queue<GridPos3D> queue = new Queue<GridPos3D>();
-        queue.Enqueue(center);
-        occupation[0 + radius, 0 + radius] = true;
-        cached_UnionFindNodeList.Add(center);
-        while (queue.Count > 0)
+        for (int i = 0; i < cached_OccupationUnionFind.GetLength(0); i++)
         {
-            GridPos3D head = queue.Dequeue();
+            for (int j = 0; j < cached_OccupationUnionFind.GetLength(1); j++)
+            {
+                cached_OccupationUnionFind[i, j] = false;
+            }
+        }
+
+        cached_QueueUnionFind.Clear();
+        cached_QueueUnionFind.Enqueue(center);
+        cached_OccupationUnionFind[0 + radius, 0 + radius] = true;
+        cached_UnionFindNodeList.Add(center);
+        while (cached_QueueUnionFind.Count > 0)
+        {
+            GridPos3D head = cached_QueueUnionFind.Dequeue();
             WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(head, out WorldModule curModule, out GridPos3D _);
             if (curModule == null) return cached_UnionFindNodeList;
 
@@ -307,7 +317,7 @@ public class ActorPathFinding
             {
                 if ((gp.ToVector3() - center.ToVector3()).magnitude > radius) return;
                 GridPos3D offset = gp - center;
-                if (occupation[offset.x + radius, offset.z + radius]) return;
+                if (cached_OccupationUnionFind[offset.x + radius, offset.z + radius]) return;
                 foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
                 {
                     if (enemy.CurWorldGP == gp)
@@ -322,9 +332,9 @@ public class ActorPathFinding
                 Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gp, out WorldModule module, out GridPos3D _);
                 if (module != null && box == null)
                 {
-                    queue.Enqueue(gp);
+                    cached_QueueUnionFind.Enqueue(gp);
                     cached_UnionFindNodeList.Add(gp);
-                    occupation[offset.x + radius, offset.z + radius] = true;
+                    cached_OccupationUnionFind[offset.x + radius, offset.z + radius] = true;
                 }
             }
         }

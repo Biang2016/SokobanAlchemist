@@ -174,19 +174,19 @@ public class PlayerActor : Actor
             bool skill_2_Pressed = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 2].Pressed;
             bool skill_2_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 2].Up;
 
-            if (skill_1_Down)
+            if (skill_2_Down)
             {
                 Lift();
                 Skill1_PressDuration = 0;
             }
 
-            if (skill_1_Pressed)
+            if (skill_2_Pressed)
             {
                 ThrowCharge();
                 Skill1_PressDuration += Time.fixedDeltaTime;
             }
 
-            if (skill_1_Up)
+            if (skill_2_Up)
             {
                 Skill1_PressDuration = 0;
                 ThrowOrPut();
@@ -194,7 +194,7 @@ public class PlayerActor : Actor
 
             if (skill_2_Down)
             {
-                Swap();
+                SwapOrDash();
             }
 
             if (skill_0_Down)

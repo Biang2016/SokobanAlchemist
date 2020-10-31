@@ -386,35 +386,21 @@ namespace BiangStudio
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
         };
 
-        public static List<T> GetRandomFromList<T>(List<T> OriList, int number, SRandom random, List<T> exceptList = null)
-        {
-            return GetRandomFromListCore(OriList, number, random, exceptList);
-        }
-
         public static List<T> GetRandomFromList<T>(List<T> OriList, int number, List<T> exceptList = null)
         {
-            return GetRandomFromListCore(OriList, number, null, exceptList);
+            return GetRandomFromListCore(OriList, number, exceptList);
         }
 
-        public static T GetRandomFromList<T>(List<T> OriList, SRandom random = null)
+        public static T GetRandomFromList<T>(List<T> OriList)
         {
             if (OriList == null || OriList.Count == 0) return default;
-            if (random == null)
-            {
-                System.Random rd = new System.Random(DateTime.Now.Millisecond);
-                int index = rd.Next(0, OriList.Count);
-                return OriList[index];
-            }
-            else
-            {
-                int index = random.Range(0, OriList.Count);
-                return OriList[index];
-            }
+            int index = Random.Range(0, OriList.Count);
+            return OriList[index];
         }
 
         static HashSet<int> indices = new HashSet<int>();
 
-        private static List<T> GetRandomFromListCore<T>(List<T> OriList, int number, SRandom random = null, List<T> exceptList = null)
+        private static List<T> GetRandomFromListCore<T>(List<T> OriList, int number, List<T> exceptList = null)
         {
             if (OriList == null || OriList.Count == 0) return new List<T>();
 
@@ -435,27 +421,12 @@ namespace BiangStudio
             if (number > ori.Count) number = ori.Count;
 
             indices.Clear();
-            if (random == null)
+            while (indices.Count < number)
             {
-                System.Random rd = new System.Random(DateTime.Now.Millisecond * number);
-                while (indices.Count < number)
+                int index = Random.Range(0, ori.Count);
+                if (!indices.Contains(index))
                 {
-                    int index = rd.Next(0, ori.Count);
-                    if (!indices.Contains(index))
-                    {
-                        indices.Add(index);
-                    }
-                }
-            }
-            else
-            {
-                while (indices.Count < number)
-                {
-                    int index = random.Range(0, ori.Count);
-                    if (!indices.Contains(index))
-                    {
-                        indices.Add(index);
-                    }
+                    indices.Add(index);
                 }
             }
 
@@ -483,11 +454,10 @@ namespace BiangStudio
                 }
             }
 
-            System.Random rd = new System.Random(DateTime.Now.Millisecond * number);
             HashSet<T> res = new HashSet<T>();
             while (res.Count < number)
             {
-                int index = rd.Next(0, accu);
+                int index = Random.Range(0, accu);
                 foreach (int key in resDict.Keys)
                 {
                     if (key >= index)

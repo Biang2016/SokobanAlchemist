@@ -172,6 +172,10 @@ public class Actor : PoolObject
     public ActorStatPropSet ActorStatPropSet; // 湿数据，每次Recycle置空，使用时从干数据拷贝
 
     [BoxGroup("手感")]
+    [LabelText("Dash力度")]
+    public float DashForce = 10f;
+
+    [BoxGroup("手感")]
     [LabelText("起步速度")]
     public float Accelerate = 10f;
 
@@ -466,7 +470,34 @@ public class Actor : PoolObject
         }
     }
 
-#region Skills
+    #region Skills
+
+    public void Dash()
+    {
+        RigidBody.AddForce(CurForward * DashForce, ForceMode.VelocityChange);
+    }
+
+    public void SwapOrDash()
+    {
+        Ray ray = new Ray(ArtPos - transform.forward * 0.49f, transform.forward);
+        //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
+        {
+            Box box = hit.collider.gameObject.GetComponentInParent<Box>();
+            if (box)
+            {
+                Swap(box);
+            }
+            else
+            {
+                Dash();
+            }
+        }
+        else
+        {
+            Dash();
+        }
+    }
 
     public void Kick()
     {
@@ -484,44 +515,38 @@ public class Actor : PoolObject
         }
     }
 
-    public void Swap()
+    private void Swap(Box box)
     {
-        Ray ray = new Ray(ArtPos - transform.forward * 0.49f, transform.forward);
-        //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
+        if (box && box.Pushable && ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
         {
-            Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Pushable && ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
+            bool boxAlreadyPushAGrid = box.State == Box.States.BeingPushed && box.transform.position.ToGridPos3D() == box.WorldGP; // 是否已经过了一格界线
+            if (box.State == Box.States.Static)
             {
-                bool boxAlreadyPushAGrid = box.State == Box.States.BeingPushed && box.transform.position.ToGridPos3D() == box.WorldGP; // 是否已经过了一格界线
-                if (box.State == Box.States.Static)
+                if (ActorMoveDebugLog) Debug.Log($"[Actor] SwapActor1 {CurWorldGP} -> {box.WorldGP}");
+                transform.position = box.WorldGP.ToVector3();
+            }
+            else if (box.State == Box.States.BeingPushed)
+            {
+                if (boxAlreadyPushAGrid)
                 {
-                    if (ActorMoveDebugLog) Debug.Log($"[Actor] SwapActor1 {CurWorldGP} -> {box.WorldGP}");
+                    if (ActorMoveDebugLog) Debug.Log($"[Actor] SwapActor2 {CurWorldGP} -> {box.WorldGP}");
                     transform.position = box.WorldGP.ToVector3();
                 }
-                else if (box.State == Box.States.BeingPushed)
+                else
                 {
-                    if (boxAlreadyPushAGrid)
-                    {
-                        if (ActorMoveDebugLog) Debug.Log($"[Actor] SwapActor2 {CurWorldGP} -> {box.WorldGP}");
-                        transform.position = box.WorldGP.ToVector3();
-                    }
-                    else
-                    {
-                        if (ActorMoveDebugLog) Debug.Log($"[Actor] SwapActor3 {CurWorldGP} -> {box.LastWorldGP}");
-                        transform.position = box.LastWorldGP.ToVector3();
-                    }
+                    if (ActorMoveDebugLog) Debug.Log($"[Actor] SwapActor3 {CurWorldGP} -> {box.LastWorldGP}");
+                    transform.position = box.LastWorldGP.ToVector3();
                 }
-
-                box.ForceCancelPush();
-                if (!boxAlreadyPushAGrid)
-                {
-                    if (ActorMoveDebugLog) Debug.Log($"[Box] SwapBox {box.WorldGP} -> {CurWorldGP}");
-                    WorldManager.Instance.CurrentWorld.MoveBox(box.WorldGP, CurWorldGP, Box.States.BeingPushed, false, true);
-                }
-
-                // todo kicking box的swap如何兼容
             }
+
+            box.ForceCancelPush();
+            if (!boxAlreadyPushAGrid)
+            {
+                if (ActorMoveDebugLog) Debug.Log($"[Box] SwapBox {box.WorldGP} -> {CurWorldGP}");
+                WorldManager.Instance.CurrentWorld.MoveBox(box.WorldGP, CurWorldGP, Box.States.BeingPushed, false, true);
+            }
+
+            // todo kicking box的swap如何兼容
         }
     }
 
@@ -642,9 +667,9 @@ public class Actor : PoolObject
         }
     }
 
-#endregion
+    #endregion
 
-#region Camp
+    #region Camp
 
     public bool IsPlayer => Camp == Camp.Player;
     public bool IsPlayerOrFriend => Camp == Camp.Player || Camp == Camp.Friend;
@@ -671,14 +696,14 @@ public class Actor : PoolObject
         return false;
     }
 
-#endregion
+    #endregion
 
-#region Utils
+    #region Utils
 
     private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
     private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
 
-#endregion
+    #endregion
 
 #if UNITY_EDITOR
     public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)

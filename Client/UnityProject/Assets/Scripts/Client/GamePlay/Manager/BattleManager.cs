@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using BiangStudio.GameDataFormat;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.GamePlay.UI;
 using BiangStudio.Messenger;
@@ -9,6 +10,7 @@ using UnityEngine;
 
 public class BattleManager : TSingletonBaseManager<BattleManager>
 {
+    public SRandom SRandom = new SRandom(12345);
     public Messenger BattleMessenger = new Messenger();
 
     internal PlayerActor[] MainPlayers = new PlayerActor[2];
