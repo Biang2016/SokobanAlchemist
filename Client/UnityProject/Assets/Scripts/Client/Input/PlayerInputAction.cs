@@ -59,6 +59,14 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)""
                 },
                 {
+                    ""name"": ""Skill_2_Player1"",
+                    ""type"": ""Button"",
+                    ""id"": ""56c0a96f-5fdd-4977-a34c-cb8d08314868"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
                     ""name"": ""Skill_0_Player2"",
                     ""type"": ""Button"",
                     ""id"": ""f027c168-eca3-48e2-be31-6edf44e526b2"",
@@ -70,6 +78,14 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""name"": ""Skill_1_Player2"",
                     ""type"": ""Button"",
                     ""id"": ""5bf27678-969d-408c-b4ee-0d8e232e54f6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Skill_2_Player2"",
+                    ""type"": ""Button"",
+                    ""id"": ""f7ea5b2e-833b-4a59-830b-a0433cf111ba"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
@@ -779,6 +795,28 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""action"": ""RightRotateCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""015bf92c-095b-4c0e-92a1-88d5782565e0"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Skill_2_Player1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4616c434-9000-4f70-8253-572be137f1cc"",
+                    ""path"": ""<Keyboard>/slash"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Skill_2_Player2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1142,8 +1180,10 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_BattleInput_MouseMiddleClick = m_BattleInput.FindAction("MouseMiddleClick", throwIfNotFound: true);
         m_BattleInput_Skill_0_Player1 = m_BattleInput.FindAction("Skill_0_Player1", throwIfNotFound: true);
         m_BattleInput_Skill_1_Player1 = m_BattleInput.FindAction("Skill_1_Player1", throwIfNotFound: true);
+        m_BattleInput_Skill_2_Player1 = m_BattleInput.FindAction("Skill_2_Player1", throwIfNotFound: true);
         m_BattleInput_Skill_0_Player2 = m_BattleInput.FindAction("Skill_0_Player2", throwIfNotFound: true);
         m_BattleInput_Skill_1_Player2 = m_BattleInput.FindAction("Skill_1_Player2", throwIfNotFound: true);
+        m_BattleInput_Skill_2_Player2 = m_BattleInput.FindAction("Skill_2_Player2", throwIfNotFound: true);
         m_BattleInput_ToggleBattleTip = m_BattleInput.FindAction("ToggleBattleTip", throwIfNotFound: true);
         m_BattleInput_Player1_Move_Up = m_BattleInput.FindAction("Player1_Move_Up", throwIfNotFound: true);
         m_BattleInput_Player1_Move_Up_M = m_BattleInput.FindAction("Player1_Move_Up_M", throwIfNotFound: true);
@@ -1241,8 +1281,10 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_BattleInput_MouseMiddleClick;
     private readonly InputAction m_BattleInput_Skill_0_Player1;
     private readonly InputAction m_BattleInput_Skill_1_Player1;
+    private readonly InputAction m_BattleInput_Skill_2_Player1;
     private readonly InputAction m_BattleInput_Skill_0_Player2;
     private readonly InputAction m_BattleInput_Skill_1_Player2;
+    private readonly InputAction m_BattleInput_Skill_2_Player2;
     private readonly InputAction m_BattleInput_ToggleBattleTip;
     private readonly InputAction m_BattleInput_Player1_Move_Up;
     private readonly InputAction m_BattleInput_Player1_Move_Up_M;
@@ -1274,8 +1316,10 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @MouseMiddleClick => m_Wrapper.m_BattleInput_MouseMiddleClick;
         public InputAction @Skill_0_Player1 => m_Wrapper.m_BattleInput_Skill_0_Player1;
         public InputAction @Skill_1_Player1 => m_Wrapper.m_BattleInput_Skill_1_Player1;
+        public InputAction @Skill_2_Player1 => m_Wrapper.m_BattleInput_Skill_2_Player1;
         public InputAction @Skill_0_Player2 => m_Wrapper.m_BattleInput_Skill_0_Player2;
         public InputAction @Skill_1_Player2 => m_Wrapper.m_BattleInput_Skill_1_Player2;
+        public InputAction @Skill_2_Player2 => m_Wrapper.m_BattleInput_Skill_2_Player2;
         public InputAction @ToggleBattleTip => m_Wrapper.m_BattleInput_ToggleBattleTip;
         public InputAction @Player1_Move_Up => m_Wrapper.m_BattleInput_Player1_Move_Up;
         public InputAction @Player1_Move_Up_M => m_Wrapper.m_BattleInput_Player1_Move_Up_M;
@@ -1322,12 +1366,18 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Skill_1_Player1.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_1_Player1;
                 @Skill_1_Player1.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_1_Player1;
                 @Skill_1_Player1.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_1_Player1;
+                @Skill_2_Player1.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_2_Player1;
+                @Skill_2_Player1.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_2_Player1;
+                @Skill_2_Player1.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_2_Player1;
                 @Skill_0_Player2.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_0_Player2;
                 @Skill_0_Player2.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_0_Player2;
                 @Skill_0_Player2.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_0_Player2;
                 @Skill_1_Player2.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_1_Player2;
                 @Skill_1_Player2.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_1_Player2;
                 @Skill_1_Player2.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_1_Player2;
+                @Skill_2_Player2.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_2_Player2;
+                @Skill_2_Player2.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_2_Player2;
+                @Skill_2_Player2.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_2_Player2;
                 @ToggleBattleTip.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnToggleBattleTip;
                 @ToggleBattleTip.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnToggleBattleTip;
                 @ToggleBattleTip.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnToggleBattleTip;
@@ -1413,12 +1463,18 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Skill_1_Player1.started += instance.OnSkill_1_Player1;
                 @Skill_1_Player1.performed += instance.OnSkill_1_Player1;
                 @Skill_1_Player1.canceled += instance.OnSkill_1_Player1;
+                @Skill_2_Player1.started += instance.OnSkill_2_Player1;
+                @Skill_2_Player1.performed += instance.OnSkill_2_Player1;
+                @Skill_2_Player1.canceled += instance.OnSkill_2_Player1;
                 @Skill_0_Player2.started += instance.OnSkill_0_Player2;
                 @Skill_0_Player2.performed += instance.OnSkill_0_Player2;
                 @Skill_0_Player2.canceled += instance.OnSkill_0_Player2;
                 @Skill_1_Player2.started += instance.OnSkill_1_Player2;
                 @Skill_1_Player2.performed += instance.OnSkill_1_Player2;
                 @Skill_1_Player2.canceled += instance.OnSkill_1_Player2;
+                @Skill_2_Player2.started += instance.OnSkill_2_Player2;
+                @Skill_2_Player2.performed += instance.OnSkill_2_Player2;
+                @Skill_2_Player2.canceled += instance.OnSkill_2_Player2;
                 @ToggleBattleTip.started += instance.OnToggleBattleTip;
                 @ToggleBattleTip.performed += instance.OnToggleBattleTip;
                 @ToggleBattleTip.canceled += instance.OnToggleBattleTip;
@@ -1700,8 +1756,10 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnMouseMiddleClick(InputAction.CallbackContext context);
         void OnSkill_0_Player1(InputAction.CallbackContext context);
         void OnSkill_1_Player1(InputAction.CallbackContext context);
+        void OnSkill_2_Player1(InputAction.CallbackContext context);
         void OnSkill_0_Player2(InputAction.CallbackContext context);
         void OnSkill_1_Player2(InputAction.CallbackContext context);
+        void OnSkill_2_Player2(InputAction.CallbackContext context);
         void OnToggleBattleTip(InputAction.CallbackContext context);
         void OnPlayer1_Move_Up(InputAction.CallbackContext context);
         void OnPlayer1_Move_Up_M(InputAction.CallbackContext context);

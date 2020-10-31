@@ -59,12 +59,14 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         }
     }
 
-    public ButtonState[,] Battle_Skill = new ButtonState[2, 2];
+    public ButtonState[,] Battle_Skill = new ButtonState[3, 3];
 
     public ButtonState Battle_Skill_0_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_0_Player1};
     public ButtonState Battle_Skill_1_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_1_Player1};
+    public ButtonState Battle_Skill_2_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_2_Player1};
     public ButtonState Battle_Skill_0_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_0_Player2};
     public ButtonState Battle_Skill_1_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_1_Player2};
+    public ButtonState Battle_Skill_2_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_2_Player2};
 
     public ButtonState Battle_ToggleBattleTip = new ButtonState() {ButtonName = ButtonNames.Battle_ToggleBattleTip};
 
@@ -195,13 +197,17 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         // 技能
         Battle_Skill_0_Player1.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_0_Player1);
         Battle_Skill_1_Player1.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_1_Player1);
+        Battle_Skill_2_Player1.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_2_Player1);
         Battle_Skill_0_Player2.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_0_Player2);
         Battle_Skill_1_Player2.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_1_Player2);
+        Battle_Skill_2_Player2.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_2_Player2);
 
         Battle_Skill[(int) PlayerNumber.Player1, 0] = Battle_Skill_0_Player1;
         Battle_Skill[(int) PlayerNumber.Player1, 1] = Battle_Skill_1_Player1;
+        Battle_Skill[(int) PlayerNumber.Player1, 2] = Battle_Skill_2_Player1;
         Battle_Skill[(int) PlayerNumber.Player2, 0] = Battle_Skill_0_Player2;
         Battle_Skill[(int) PlayerNumber.Player2, 1] = Battle_Skill_1_Player2;
+        Battle_Skill[(int) PlayerNumber.Player2, 2] = Battle_Skill_2_Player2;
 
         Battle_ToggleBattleTip.GetStateCallbackFromContext_UpDownPress(BattleInputActions.ToggleBattleTip);
         Battle_LeftRotateCamera.GetStateCallbackFromContext_UpDownPress(BattleInputActions.LeftRotateCamera);

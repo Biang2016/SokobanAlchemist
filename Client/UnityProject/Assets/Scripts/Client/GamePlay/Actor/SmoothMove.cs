@@ -25,6 +25,12 @@ public class SmoothMove : MonoBehaviour
         CurSpeed = Vector3.zero;
     }
 
+    void OnDisable()
+    {
+        transform.localPosition = DefaultLocalPosition;
+        CurSpeed = Vector3.zero;
+    }
+
     void LateUpdate()
     {
         if (enabled)

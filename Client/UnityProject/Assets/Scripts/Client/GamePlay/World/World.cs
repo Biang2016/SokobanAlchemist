@@ -295,7 +295,7 @@ public class World : PoolObject
         }
     }
 
-    public void MoveBox(GridPos3D srcGP, GridPos3D targetGP, Box.States sucState)
+    public void MoveBox(GridPos3D srcGP, GridPos3D targetGP, Box.States sucState, bool needLerp = true, bool needLerpModel = false)
     {
         Box box_src = GetBoxByGridPosition(srcGP, out WorldModule module_src, out GridPos3D localGP_src);
         Box box_target = GetBoxByGridPosition(targetGP, out WorldModule module_target, out GridPos3D localGP_target);
@@ -304,7 +304,7 @@ public class World : PoolObject
         module_src.BoxMatrix[localGP_src.x, localGP_src.y, localGP_src.z] = null;
         module_target.BoxMatrix[localGP_target.x, localGP_target.y, localGP_target.z] = box_src;
         CheckDropAbove(box_src);
-        box_src.Initialize(localGP_target, module_target, 0.2f, box_src.ArtOnly, Box.LerpType.Push);
+        box_src.Initialize(localGP_target, module_target, needLerp ? 0.2f : 0f, box_src.ArtOnly, Box.LerpType.Push, needLerpModel);
     }
 
     public void RemoveBoxFromGrid(Box box)

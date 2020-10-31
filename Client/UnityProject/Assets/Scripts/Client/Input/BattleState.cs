@@ -83,8 +83,10 @@ public enum ButtonNames
 
     Battle_Skill_0_Player1,
     Battle_Skill_1_Player1,
+    Battle_Skill_2_Player1,
     Battle_Skill_0_Player2,
     Battle_Skill_1_Player2,
+    Battle_Skill_2_Player2,
     Battle_ToggleBattleTip,
 
     Battle_LeftRotateCamera,

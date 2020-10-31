@@ -44,6 +44,8 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     public BoxThornTrapTriggerHelper BoxThornTrapTriggerHelper;
     public BoxSkinHelper BoxSkinHelper;
     public BoxIconSpriteHelper BoxIconSpriteHelper;
+    public SmoothMove BoxIconSpriteSmoothMove;
+    public SmoothMove BoxModelSmoothMove;
 
     internal bool ArtOnly;
 
@@ -61,7 +63,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         ArtOnly = true;
         WorldModule = null;
         WorldGP = GridPos3D.Zero;
-        lastWorldGP = GridPos3D.Zero;
+        LastWorldGP = GridPos3D.Zero;
         LastState = States.Static;
         State = States.Static;
         BoxEffectHelper?.OnBoxPoolRecycle();
@@ -249,7 +251,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     #endregion
 
-    private GridPos3D lastWorldGP;
+    internal GridPos3D LastWorldGP;
 
     [HideInEditorMode]
     public GridPos3D WorldGP;
@@ -369,11 +371,29 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorSkillHelper.GetInteractSkillType(BoxTypeIndex), BoxTypeIndex);
     }
 
-    public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly, LerpType lerpType)
+    private void SetModelSmoothMoveLerpTime(float lerpTime)
     {
+        if (lerpTime.Equals(0))
+        {
+            BoxIconSpriteSmoothMove.enabled = false;
+            BoxModelSmoothMove.enabled = false;
+        }
+        else
+        {
+            BoxIconSpriteSmoothMove.enabled = true;
+            BoxModelSmoothMove.enabled = true;
+        }
+
+        BoxIconSpriteSmoothMove.SmoothTime = lerpTime;
+        BoxModelSmoothMove.SmoothTime = lerpTime;
+    }
+
+    public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly, LerpType lerpType, bool needLerpModel = false)
+    {
+        SetModelSmoothMoveLerpTime(0);
         ArtOnly = artOnly;
         LastTouchActor = null;
-        lastWorldGP = WorldGP;
+        LastWorldGP = WorldGP;
         WorldModule = module;
         WorldGP = module.LocalGPToWorldGP(localGridPos3D);
         LocalGP = localGridPos3D;
@@ -444,6 +464,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         }
         else
         {
+            if (needLerpModel) SetModelSmoothMoveLerpTime(0.2f);
             transform.localPosition = localGridPos3D.ToVector3();
             transform.localRotation = Quaternion.identity;
             State = States.Static;
@@ -456,10 +477,12 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         if (state == States.Static || state == States.PushingCanceling)
         {
+            SetModelSmoothMoveLerpTime(0);
             Vector3 targetPos = WorldGP.ToVector3() + direction.normalized;
             GridPos3D gp = GridPos3D.GetGridPosByPoint(targetPos, 1);
             if (gp != WorldGP)
             {
+                if (Actor.ActorMoveDebugLog) Debug.Log($"[Box] Push {WorldGP} -> {gp}");
                 WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, gp, States.BeingPushed);
             }
         }
@@ -471,8 +494,20 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         {
             if ((transform.localPosition - LocalGP.ToVector3()).magnitude > (1 - Static_Inertia))
             {
-                WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, lastWorldGP, States.PushingCanceling);
+                SetModelSmoothMoveLerpTime(0);
+                if (Actor.ActorMoveDebugLog) Debug.Log($"[Box] PushCanceled {WorldGP} -> {LastWorldGP}");
+                WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, LastWorldGP, States.PushingCanceling);
             }
+        }
+    }
+
+    public void ForceCancelPush()
+    {
+        if (state == States.BeingPushed)
+        {
+            transform.DOPause();
+            if (Actor.ActorMoveDebugLog) Debug.Log($"[Box] ForceCancelPush {WorldGP} -> {LastWorldGP}");
+            WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, LastWorldGP, States.PushingCanceling, false, true);
         }
     }
 
@@ -480,6 +515,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         if (state == States.BeingPushed || state == States.Flying || state == States.BeingKicked || state == States.Static || state == States.PushingCanceling)
         {
+            SetModelSmoothMoveLerpTime(0);
             if (BoxEffectHelper == null)
             {
                 BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
@@ -515,6 +551,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         if (state == States.BeingPushed || state == States.Flying || state == States.BeingKicked || state == States.Static || state == States.PushingCanceling)
         {
+            SetModelSmoothMoveLerpTime(0);
             DefaultRotBeforeLift = transform.rotation;
             alreadyCollide = false;
             LastTouchActor = actor;
@@ -550,6 +587,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         if (state == States.Lifted)
         {
+            SetModelSmoothMoveLerpTime(0);
             alreadyCollide = false;
             if (BoxEffectHelper == null)
             {
@@ -580,6 +618,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         if (State == States.Lifted)
         {
+            SetModelSmoothMoveLerpTime(0);
             alreadyCollide = false;
             if (BoxEffectHelper == null)
             {
@@ -608,6 +647,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     public void DropFromDeadActor()
     {
+        SetModelSmoothMoveLerpTime(0);
         if (BoxEffectHelper == null)
         {
             BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
