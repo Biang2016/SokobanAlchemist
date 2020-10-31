@@ -52,8 +52,12 @@ public class ActorPushHelperTrigger : MonoBehaviour
             if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
                 curPushingBox = box;
-                ActorPushHelper.AnimModel.ResetTrigger("Reset");
-                ActorPushHelper.AnimModel.SetTrigger("MoveOut");
+                if (ActorPushHelper.AnimModel)
+                {
+                    ActorPushHelper.AnimModel.ResetTrigger("Reset");
+                    ActorPushHelper.AnimModel.SetTrigger("MoveOut");
+                }
+
                 box.Push(ActorPushHelper.Actor.CurMoveAttempt);
             }
         }
@@ -67,8 +71,12 @@ public class ActorPushHelperTrigger : MonoBehaviour
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
-                ActorPushHelper.AnimModel.SetTrigger("Reset");
-                ActorPushHelper.AnimModel.ResetTrigger("MoveOut");
+                if (ActorPushHelper.AnimModel)
+                {
+                    ActorPushHelper.AnimModel?.SetTrigger("Reset");
+                    ActorPushHelper.AnimModel?.ResetTrigger("MoveOut");
+                }
+
                 box.PushCanceled();
                 PushingBoxList.Remove(box);
             }

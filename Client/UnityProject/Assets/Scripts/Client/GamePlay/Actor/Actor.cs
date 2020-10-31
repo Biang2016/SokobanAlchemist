@@ -28,7 +28,12 @@ public class Actor : PoolObject
 
     #endregion
 
-    public static bool ActorMoveDebugLog = true;
+    public static bool ActorMoveDebugLog =
+#if UNITY_EDITOR
+        false;
+#else
+        false;
+#endif
 
     public Rigidbody RigidBody;
     public ActorCommonHelpers ActorCommonHelpers;
@@ -461,7 +466,7 @@ public class Actor : PoolObject
         }
     }
 
-    #region Skills
+#region Skills
 
     public void Kick()
     {
@@ -637,9 +642,9 @@ public class Actor : PoolObject
         }
     }
 
-    #endregion
+#endregion
 
-    #region Camp
+#region Camp
 
     public bool IsPlayer => Camp == Camp.Player;
     public bool IsPlayerOrFriend => Camp == Camp.Player || Camp == Camp.Friend;
@@ -666,14 +671,14 @@ public class Actor : PoolObject
         return false;
     }
 
-    #endregion
+#endregion
 
-    #region Utils
+#region Utils
 
     private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
     private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
 
-    #endregion
+#endregion
 
 #if UNITY_EDITOR
     public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)

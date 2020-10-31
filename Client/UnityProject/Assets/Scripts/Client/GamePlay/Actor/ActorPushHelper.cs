@@ -4,7 +4,6 @@ using DG.Tweening;
 public class ActorPushHelper : ActorMonoHelper
 {
     public Collider Collider;
-    public GameObject Model;
     public Animator AnimCollider;
     public Animator AnimModel;
     public ActorPushHelperTrigger ActorPushHelperTrigger;

@@ -20,12 +20,18 @@ public class ActorSkinHelper : ActorMonoHelper
     {
         foreach (SkinConfig sc in SkinConfigs)
         {
-            sc.Renderer.material = sc.Materials[(int) playerNumber];
+            if (sc.Renderer != null)
+            {
+                sc.Renderer.material = sc.Materials[(int)playerNumber];
+            }
         }
     }
 
     public void SwitchSkin(Material mat)
     {
-        MainSwitchSkin.material = mat;
+        if (MainSwitchSkin)
+        {
+            MainSwitchSkin.material = mat;
+        }
     }
 }
