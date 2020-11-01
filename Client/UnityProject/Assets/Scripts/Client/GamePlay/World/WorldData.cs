@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BiangStudio.CloneVariant;
+using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 
 public class WorldData : IClone<WorldData>
@@ -22,6 +23,8 @@ public class WorldData : IClone<WorldData>
     public LevelTriggerGroupData WorldLevelTriggerGroupData = new LevelTriggerGroupData();
     public List<Box.WorldSpecialBoxData> WorldSpecialBoxDataList = new List<Box.WorldSpecialBoxData>();
     public List<Box.BoxExtraSerializeData>[,,] ModuleBoxExtraSerializeDataMatrix = new List<Box.BoxExtraSerializeData>[World.WORLD_SIZE, World.WORLD_HEIGHT, World.WORLD_SIZE];
+
+    public List<GridPos3D> WorldModuleGPOrder = new List<GridPos3D>();
 
     public WorldData()
     {
@@ -60,6 +63,7 @@ public class WorldData : IClone<WorldData>
         data.WorldCameraPOIData = WorldCameraPOIData.Clone();
         data.WorldLevelTriggerGroupData = WorldLevelTriggerGroupData.Clone();
         data.WorldSpecialBoxDataList = WorldSpecialBoxDataList.Clone();
+        data.WorldModuleGPOrder = WorldModuleGPOrder.Clone();
         return data;
     }
 }

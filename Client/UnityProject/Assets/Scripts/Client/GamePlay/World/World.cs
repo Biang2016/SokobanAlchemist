@@ -224,16 +224,10 @@ public class World : PoolObject
 
         //todo 未来加卸载模组时需要跑一遍这里
         worldData.WorldBornPointGroupData.InitTempData();
-        for (int x = 0; x < worldData.ModuleMatrix.GetLength(0); x++)
+        foreach (GridPos3D worldModuleGP in worldData.WorldModuleGPOrder)
         {
-            for (int y = 0; y < worldData.ModuleMatrix.GetLength(1); y++)
-            {
-                for (int z = 0; z < worldData.ModuleMatrix.GetLength(2); z++)
-                {
-                    WorldModule module = WorldModuleMatrix[x, y, z];
-                    if (module != null) worldData.WorldBornPointGroupData.AddModuleData(module, new GridPos3D(x, y, z));
-                }
-            }
+            WorldModule module = WorldModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
+            if (module != null) worldData.WorldBornPointGroupData.AddModuleData(module, worldModuleGP);
         }
 
         BattleManager.Instance.CreateActorsByBornPointGroupData(worldData.WorldBornPointGroupData, worldData.DefaultWorldActorBornPointAlias);

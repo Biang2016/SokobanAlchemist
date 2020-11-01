@@ -410,6 +410,9 @@ public enum ActorBuffAttribute
 
     [LabelText("中毒")]
     Poison,
+
+    [LabelText("最大血量")]
+    MaxHealth,
 }
 
 public enum ActorBuffAttributeRelationship

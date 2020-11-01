@@ -48,6 +48,7 @@ public class WorldDesignHelper : MonoBehaviour
             GameObject worldModulePrefab = PrefabUtility.GetCorrespondingObjectFromSource(module.gameObject);
             ushort worldModuleTypeIndex = ConfigManager.WorldModuleTypeDefineDict.TypeIndexDict[worldModulePrefab.name];
             worldData.ModuleMatrix[gp.x, gp.y, gp.z] = worldModuleTypeIndex;
+            worldData.WorldModuleGPOrder.Add(gp);
 
             // Box ExtraSerializeData
             List<Box> boxes = module.transform.GetComponentsInChildren<Box>().ToList();

@@ -155,7 +155,7 @@ public class ActorAIAgent
             if (nextNode != null)
             {
                 Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(nextNode.Value, out WorldModule module, out GridPos3D _);
-                if (box)
+                if (box && !box.Passable)
                 {
                     ClearPathFinding(); // 有箱子挡路，停止寻路
                 }

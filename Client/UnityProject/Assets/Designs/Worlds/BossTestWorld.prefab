@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 1524981578155057112}
   - component: {fileID: 1524981578155057113}
   m_Layer: 0
-  m_Name: BossTestWorld 1
+  m_Name: BossTestWorld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WorldFeature: 0
-  DefaultWorldActorBornPointAlias: 
+  DefaultWorldActorBornPointAlias: FormalPlayerBP
 --- !u!1 &3117608157354636031
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +361,7 @@ PrefabInstance:
     - target: {fileID: 7818950748850363364, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_Name
-      value: BornPoint_Player1
+      value: BornPoint_Player1_FormalPlayerBP
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
@@ -387,6 +387,11 @@ PrefabInstance:
         type: 3}
       propertyPath: BornPointData.ActorType
       value: Player1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.BornPointAlias
+      value: FormalPlayerBP
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
@@ -488,6 +493,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4473764230237189337}
     m_Modifications:
+    - target: {fileID: 1270635543905236125, guid: 94fd0d37b6de28e438138756857b9f35,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1270635543905236125, guid: 94fd0d37b6de28e438138756857b9f35,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1270635543905236125, guid: 94fd0d37b6de28e438138756857b9f35,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1764814357101399316, guid: 94fd0d37b6de28e438138756857b9f35,
         type: 3}
       propertyPath: BornPointData.ActorType
