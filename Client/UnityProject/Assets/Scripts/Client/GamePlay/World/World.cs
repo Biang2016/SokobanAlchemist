@@ -222,17 +222,21 @@ public class World : PoolObject
             }
         }
 
-        BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData);
+        //todo 未来加卸载模组时需要跑一遍这里
+        worldData.WorldBornPointGroupData.InitTempData();
         for (int x = 0; x < worldData.ModuleMatrix.GetLength(0); x++)
         {
             for (int y = 0; y < worldData.ModuleMatrix.GetLength(1); y++)
             {
                 for (int z = 0; z < worldData.ModuleMatrix.GetLength(2); z++)
                 {
-                    WorldModuleMatrix[x, y, z]?.CreateActorFromWorldModuleData();
+                    WorldModule module = WorldModuleMatrix[x, y, z];
+                    if (module != null) worldData.WorldBornPointGroupData.AddModuleData(module, new GridPos3D(x, y, z));
                 }
             }
         }
+
+        BattleManager.Instance.CreateActorsByBornPointGroupData(worldData.WorldBornPointGroupData, worldData.DefaultWorldActorBornPointAlias);
     }
 
     private void GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, List<Box.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)

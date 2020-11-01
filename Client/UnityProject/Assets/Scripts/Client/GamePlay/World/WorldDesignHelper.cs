@@ -16,6 +16,9 @@ public class WorldDesignHelper : MonoBehaviour
 {
     public WorldFeature WorldFeature;
 
+    [LabelText("默认出生点花名")]
+    public string DefaultWorldActorBornPointAlias;
+
 #if UNITY_EDITOR
     public WorldData ExportWorldData()
     {
@@ -31,6 +34,7 @@ public class WorldDesignHelper : MonoBehaviour
 
         WorldData worldData = new WorldData();
         worldData.WorldFeature = WorldFeature;
+        worldData.DefaultWorldActorBornPointAlias = DefaultWorldActorBornPointAlias;
         foreach (WorldModuleDesignHelper module in modules)
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(module.transform, WorldModule.MODULE_SIZE);
@@ -68,7 +72,14 @@ public class WorldDesignHelper : MonoBehaviour
             gp -= zeroPoint * WorldModule.MODULE_SIZE;
             data.WorldGP = gp;
             data.LevelComponentBelongsTo = LevelComponentBelongsTo.World;
-            worldData.WorldBornPointGroupData.BornPoints.Add(data);
+            if (data.ActorCategory == ActorCategory.Player)
+            {
+                worldData.WorldBornPointGroupData.WorldSpecialBornPointGroupData.PlayerBornPoints.Add(data.BornPointAlias, data);
+            }
+            else
+            {
+                worldData.WorldBornPointGroupData.WorldSpecialBornPointGroupData.EnemyBornPoints.Add(data);
+            }
         }
 
         List<WorldCameraPOI> cameraPOIs = GetComponentsInChildren<WorldCameraPOI>().ToList();
@@ -157,12 +168,7 @@ public class WorldDesignHelper : MonoBehaviour
         List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
         foreach (BornPointDesignHelper bp in bornPoints)
         {
-            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(bp.gameObject);
-            if (bp.name != prefab.name)
-            {
-                bp.name = prefab.name;
-                dirty = true;
-            }
+            dirty |= bp.FormatAllName_Editor();
         }
 
         return dirty;

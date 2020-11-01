@@ -395,6 +395,13 @@ public class Actor : PoolObject
         }
     }
 
+    public void TransportPlayerGridPos(GridPos3D worldGP)
+    {
+        transform.position = worldGP.ToVector3();
+        LastWorldGP = CurWorldGP;
+        CurWorldGP = worldGP;
+    }
+
     protected virtual void MoveInternal()
     {
         if (CurMoveAttempt.magnitude > 0)

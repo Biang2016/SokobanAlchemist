@@ -10,21 +10,21 @@ public class BornPointDesignHelper : MonoBehaviour
     public BornPointData BornPointData;
 
 #if UNITY_EDITOR
-    [HideInPlayMode]
-    [HideInPrefabAssets]
-    [Button("命名重置为怪物名称", ButtonSizes.Large)]
-    [GUIColor(0f, 1f, 0f)]
-    private void FormatAllName_Editor()
+    public bool FormatAllName_Editor()
     {
+        bool dirty = false;
         WorldDesignHelper world = GetComponentInParent<WorldDesignHelper>();
         WorldModuleDesignHelper module = GetComponentInParent<WorldModuleDesignHelper>();
         if (world && module)
         {
-            Debug.LogError("无法重命名模组内的BornPoint");
-            return;
+            return false;
         }
 
-        gameObject.name = "BornPoint_" + BornPointData.ActorType;
+        string goName = "BornPoint_" + BornPointData.ActorType;
+        goName += string.IsNullOrEmpty(BornPointData.BornPointAlias) ? "" : "_" + BornPointData.BornPointAlias;
+        dirty = !gameObject.name.Equals(goName);
+        gameObject.name = goName;
+        return dirty;
     }
 
     void OnDrawGizmos()

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
@@ -62,7 +61,14 @@ public class WorldModuleDesignHelper : MonoBehaviour
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(bp.transform, 1);
             data.LocalGP = gp;
             data.LevelComponentBelongsTo = LevelComponentBelongsTo.WorldModule;
-            worldModuleData.WorldModuleBornPointGroupData.BornPoints.Add(data);
+            if (data.ActorCategory == ActorCategory.Player)
+            {
+                worldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints.Add(name + (string.IsNullOrEmpty(data.BornPointAlias) ? "" : "_" + data.BornPointAlias), data);
+            }
+            else
+            {
+                worldModuleData.WorldModuleBornPointGroupData.EnemyBornPoints.Add(data);
+            }
         }
 
         worldModuleData.WorldModuleFlowAssetPath = WorldModuleFlowAssetPath;
@@ -206,12 +212,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
         List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
         foreach (BornPointDesignHelper bp in bornPoints)
         {
-            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(bp.gameObject);
-            if (bp.name != prefab.name)
-            {
-                bp.name = prefab.name;
-                dirty = true;
-            }
+            dirty |= bp.FormatAllName_Editor();
         }
 
         return dirty;

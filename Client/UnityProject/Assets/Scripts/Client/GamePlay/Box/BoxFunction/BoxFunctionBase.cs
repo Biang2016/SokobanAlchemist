@@ -312,8 +312,9 @@ public class BoxFunction_ChangeBoxToEnemy : BoxFunction_InvokeOnLevelEventID
                 {
                     BornPointData newBornPointData = new BornPointData();
                     newBornPointData.LocalGP = localGP;
+                    newBornPointData.WorldGP = module.LocalGPToWorldGP(localGP);
                     newBornPointData.ActorType = ChangeBoxToEnemyType;
-                    BattleManager.Instance.CreateActorByBornPointData(newBornPointData, module);
+                    BattleManager.Instance.CreateActorByBornPointData(newBornPointData);
                 }
             }
         }

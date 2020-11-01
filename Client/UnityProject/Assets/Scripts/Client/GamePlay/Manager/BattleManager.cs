@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BiangStudio.GameDataFormat;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.GamePlay.UI;
@@ -72,35 +73,36 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
         CameraManager.Instance.FieldCamera.InitFocus();
     }
 
-    public void CreateActorsByBornPointGroupData(BornPointGroupData dataGroup, WorldModule parentModule = null)
+    public void CreateActorsByBornPointGroupData(WorldBornPointGroupData data, string firstPlayerBornPointAlias)
     {
-        foreach (BornPointData bpd in dataGroup.BornPoints)
+        CreateActorByBornPointData(data.PlayerBornPointDataAliasDict[firstPlayerBornPointAlias]); // Create Player At First Player BornPoint (world)
+        foreach (BornPointData bpd in data.AllEnemyBornPointDataList)
         {
             if (string.IsNullOrEmpty(bpd.SpawnLevelEventAlias))
             {
-                CreateActorByBornPointData(bpd, parentModule);
+                CreateActorByBornPointData(bpd);
             }
-            else
-            {
-                ClientGameManager.Instance.BattleMessenger.AddListener((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, (string eventAlias) =>
-                {
-                    if (eventAlias == bpd.SpawnLevelEventAlias)
-                    {
-                        CreateActorByBornPointData(bpd, parentModule);
-                    }
-                });
-            }
+        }
+
+        ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnTriggerLevelEventCreateActor);
+    }
+
+    private void OnTriggerLevelEventCreateActor(string eventAlias)
+    {
+        WorldBornPointGroupData data = WorldManager.Instance.CurrentWorld.WorldData.WorldBornPointGroupData;
+        if (data.EnemyBornPointDataAliasDict.TryGetValue(eventAlias, out BornPointData bp))
+        {
+            CreateActorByBornPointData(bp);
         }
     }
 
-    public void CreateActorByBornPointData(BornPointData bpd, WorldModule parentModule = null)
+    public void CreateActorByBornPointData(BornPointData bpd)
     {
         if (bpd.ActorCategory == ActorCategory.Player)
         {
             PlayerNumber playerNumber = (PlayerNumber) Enum.Parse(typeof(PlayerNumber), bpd.ActorType);
             PlayerActor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
-            GridPos3D worldGP = parentModule ? parentModule.LocalGPToWorldGP(bpd.LocalGP) : bpd.WorldGP;
-            GridPos3D.ApplyGridPosToLocalTrans(worldGP, player.transform, 1);
+            GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
             player.Initialize(bpd.ActorType, bpd.ActorCategory, playerNumber);
             BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
             MainPlayers[(int) playerNumber] = player;
@@ -111,8 +113,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
         {
             ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.ActorType);
             EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
-            GridPos3D worldGP = parentModule ? parentModule.LocalGPToWorldGP(bpd.LocalGP) : bpd.WorldGP;
-            GridPos3D.ApplyGridPosToLocalTrans(worldGP, enemy.transform, 1);
+            GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, enemy.transform, 1);
             enemy.Initialize(bpd.ActorType, bpd.ActorCategory);
             Enemies.Add(enemy);
             AddActor(enemy);

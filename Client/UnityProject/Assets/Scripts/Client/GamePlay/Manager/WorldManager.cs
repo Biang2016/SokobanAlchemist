@@ -28,7 +28,7 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
 
     public override void Awake()
     {
-        DeadZoneIndex = ConfigManager.GetWorldModuleTypeIndex("WorldModule_DeadZone");
+        DeadZoneIndex = ConfigManager.GetWorldModuleTypeIndex("Common_DeadZone");
         WorldRoot = new GameObject("WorldRoot").transform;
     }
 

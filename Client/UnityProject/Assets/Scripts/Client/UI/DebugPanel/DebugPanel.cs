@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using BiangStudio.GamePlay.UI;
 using UnityEngine;
@@ -233,6 +234,17 @@ public class DebugPanel : BaseUIPanel
     public List<string> GetAllWorldNames()
     {
         return ConfigManager.GetAllWorldNames(false);
+    }
+
+    [DebugButton("SwitchBornPoint/{0}", "GetAllWorldPlayerBornPoints", -9)]
+    public void ChangeWorldPlayerBornPoint(string playerBornPointAlias)
+    {
+        BattleManager.Instance.Player1.TransportPlayerGridPos(WorldManager.Instance.CurrentWorld.WorldData.WorldBornPointGroupData.PlayerBornPointDataAliasDict[playerBornPointAlias].WorldGP);
+    }
+
+    public List<string> GetAllWorldPlayerBornPoints()
+    {
+        return WorldManager.Instance.CurrentWorld.WorldData.WorldBornPointGroupData.PlayerBornPointDataAliasDict.Keys.ToList();
     }
 
     [DebugSlider("Player/KickForce", 15, 0, 1000)]

@@ -14,6 +14,22 @@ public class BornPointData : LevelComponentData
     [LabelText("角色类型")]
     public string ActorType = "None";
 
+    [LabelText("出生点花名")]
+    [ValidateInput("ValidateBornPointAlias", "请保证此项非空且唯一")]
+    public string BornPointAlias = "";
+
+    public bool ValidateBornPointAlias(string alias)
+    {
+        if (string.IsNullOrEmpty(alias))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public ActorCategory ActorCategory
     {
         get
@@ -37,5 +53,6 @@ public class BornPointData : LevelComponentData
         BornPointData data = ((BornPointData) newData);
         data.SpawnLevelEventAlias = SpawnLevelEventAlias;
         data.ActorType = ActorType;
+        data.BornPointAlias = BornPointAlias;
     }
 }

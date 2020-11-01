@@ -10,12 +10,14 @@ public class WorldData : IClone<WorldData>
 
     public WorldFeature WorldFeature;
 
+    public string DefaultWorldActorBornPointAlias;
+
     /// <summary>
     /// 世界制作规范，世界最大范围为16x16x8个模组
     /// </summary>
     public ushort[,,] ModuleMatrix = new ushort[World.WORLD_SIZE, World.WORLD_HEIGHT, World.WORLD_SIZE];
 
-    public BornPointGroupData WorldBornPointGroupData = new BornPointGroupData();
+    public WorldBornPointGroupData WorldBornPointGroupData = new WorldBornPointGroupData();
     public WorldCameraPOIData WorldCameraPOIData = new WorldCameraPOIData();
     public LevelTriggerGroupData WorldLevelTriggerGroupData = new LevelTriggerGroupData();
     public List<Box.WorldSpecialBoxData> WorldSpecialBoxDataList = new List<Box.WorldSpecialBoxData>();
@@ -41,6 +43,7 @@ public class WorldData : IClone<WorldData>
         data.WorldTypeIndex = WorldTypeIndex;
         data.WorldTypeName = WorldTypeName;
         data.WorldFeature = WorldFeature;
+        data.DefaultWorldActorBornPointAlias = DefaultWorldActorBornPointAlias;
         for (int x = 0; x < ModuleMatrix.GetLength(0); x++)
         {
             for (int y = 0; y < ModuleMatrix.GetLength(1); y++)

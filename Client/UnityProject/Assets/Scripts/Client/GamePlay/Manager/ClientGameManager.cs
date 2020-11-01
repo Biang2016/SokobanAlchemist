@@ -75,6 +75,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     private IEnumerable<string> GetAllWorldNames;
 
     public static string DebugChangeWorldName = null;
+    public static string DebugChangeWorldBornPointAlias = null;
 
     private void Awake()
     {

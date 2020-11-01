@@ -151,11 +151,6 @@ public class WorldModule : PoolObject
         }
     }
 
-    public void CreateActorFromWorldModuleData()
-    {
-        BattleManager.Instance.CreateActorsByBornPointGroupData(WorldModuleData.WorldModuleBornPointGroupData, this);
-    }
-
     public void GenerateBox(ushort boxTypeIndex, GridPos3D localGP, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
         GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
