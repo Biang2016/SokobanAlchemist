@@ -152,12 +152,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             return;
         }
 
-        if (ControlManager.Common_RestartGameR.Up)
-        {
-            ReloadGame();
-            return;
-        }
-
         ConfigManager.Update(Time.deltaTime);
         LayerManager.Update(Time.deltaTime);
         PrefabManager.Update(Time.deltaTime);

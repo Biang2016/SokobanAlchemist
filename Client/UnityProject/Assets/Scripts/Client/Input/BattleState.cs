@@ -105,7 +105,6 @@ public enum ButtonNames
     Common_Exit,
     Common_Tab,
     Common_RestartGame,
-    Common_RestartGameR,
     Common_Pause,
 
     COMMON_MAX_FLAG = 600,

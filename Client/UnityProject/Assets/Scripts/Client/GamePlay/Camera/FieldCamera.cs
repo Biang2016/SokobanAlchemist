@@ -354,7 +354,7 @@ public class FieldCamera : MonoBehaviour
             if (_rotateDirection != value)
             {
                 _rotateDirection = value;
-                Debug.Log(_rotateDirection);
+                //Debug.Log(_rotateDirection);
             }
         }
     }
