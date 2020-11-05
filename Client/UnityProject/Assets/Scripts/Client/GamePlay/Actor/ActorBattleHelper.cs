@@ -116,7 +116,14 @@ public class ActorBattleHelper : ActorMonoHelper
             {
                 if (LastAttackBox.LastTouchActor.IsPlayer)
                 {
+                    // todo 玩家击杀
                 }
+            }
+
+            if (Actor.ActorFrozenHelper.FrozenBox)
+            {
+                Actor.ActorFrozenHelper.FrozenBox.DeleteSelf();
+                Actor.ActorFrozenHelper.FrozenBox = null;
             }
 
             FX hit = FXManager.Instance.PlayFX(Actor.DieFX, transform.position);

@@ -28,7 +28,7 @@ public class WorldDeadZoneTrigger : PoolObject
         //CheckObject(collider);
     }
 
-    private static void CheckObject(Collider collider)
+    private void CheckObject(Collider collider)
     {
         if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box)
         {
@@ -46,6 +46,7 @@ public class WorldDeadZoneTrigger : PoolObject
             Actor actor = collider.gameObject.GetComponentInParent<Actor>();
             if (actor && !actorFaceHelper)
             {
+                Debug.Log("Actor die in WorldDeadZone:" + name);
                 actor.ActorBattleHelper.LoseLife();
             }
         }

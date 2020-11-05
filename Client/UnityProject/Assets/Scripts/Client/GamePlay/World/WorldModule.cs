@@ -171,7 +171,7 @@ public class WorldModule : PoolObject
 
         if (BoxMatrix[x, y, z] != null)
         {
-            Debug.LogError($"世界模组{name}的局部坐标({x},{y},{z})位置处已存在Box,请检查世界Box是否重叠放置于该模组已有的Box位置处");
+            //Debug.LogError($"世界模组{name}的局部坐标({x},{y},{z})位置处已存在Box,请检查世界Box是否重叠放置于该模组已有的Box位置处");
             return null;
         }
         else

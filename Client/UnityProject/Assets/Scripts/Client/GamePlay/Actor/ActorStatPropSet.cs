@@ -70,6 +70,8 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
     [LabelText("冰冻等级")]
     public ActorStat FrozenLevel = new ActorStat(ActorStat.StatType.FrozenLevel);
 
+    internal int FrozenValuePerLevel => Mathf.RoundToInt(((float) FrozenValue.MaxValue / FrozenLevel.MaxValue));
+
     public bool IsFrozen => FrozenLevel.Value > 0;
 
     [BoxGroup("冰冻")]
@@ -92,6 +94,8 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
     [BoxGroup("灼烧")]
     [LabelText("灼烧等级")]
     public ActorStat FiringLevel = new ActorStat(ActorStat.StatType.FiringLevel);
+
+    internal int FiringValuePerLevel => Mathf.RoundToInt(((float) FiringValue.MaxValue / FiringLevel.MaxValue));
 
     [BoxGroup("灼烧")]
     [LabelText("灼烧持续特效")]
@@ -159,7 +163,7 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         FrozenValue.AbnormalStatResistance = FrozenResistance.GetModifiedValue;
         FrozenValue.OnValueChanged += (before, after) =>
         {
-            FrozenLevel.Value = Mathf.FloorToInt(after / ((float) FrozenValue.MaxValue / FrozenLevel.MaxValue));
+            FrozenLevel.Value = after / FrozenValuePerLevel;
             if (FrozenLevel.Value > 0) Actor.ActorBuffHelper.PlayAbnormalStatFX(ActorStat.StatType.FrozenValue, FrozenFX, FrozenFXScaleCurve.Evaluate(FrozenLevel.Value)); // 冰冻值变化时，播放一次特效
         };
         StatDict.Add(ActorStat.StatType.FrozenValue, FrozenValue);
@@ -178,7 +182,7 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         FiringValue.AbnormalStatResistance = FiringResistance.GetModifiedValue;
         FiringValue.OnValueChanged += (before, after) =>
         {
-            FiringLevel.Value = Mathf.FloorToInt(after / ((float) FiringValue.MaxValue / FiringLevel.MaxValue));
+            FiringLevel.Value = after / FiringValuePerLevel;
             if (FiringLevel.Value > 0) Actor.ActorBuffHelper.PlayAbnormalStatFX(ActorStat.StatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 灼烧值变化时，播放一次特效
         };
         StatDict.Add(ActorStat.StatType.FiringValue, FiringValue);

@@ -12,6 +12,7 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
     public int LayerMask_HitBox_Box; // 用于物理碰撞和各种伤害检测
     public int LayerMask_BoxOnlyDynamicCollider;
     public int LayerMask_Ground;
+    public int LayerMask_Wall;
     public int LayerMask_BattleTips;
     public int LayerMask_BoxTriggerZone;
 
@@ -24,6 +25,7 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
     public int Layer_HitBox_Box;
     public int Layer_BoxOnlyDynamicCollider;
     public int Layer_Ground;
+    public int Layer_Wall;
     public int Layer_BattleTips;
     public int Layer_BoxTriggerZone;
 
@@ -38,6 +40,7 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
         LayerMask_HitBox_Box = LayerMask.GetMask("HitBox_Box");
         LayerMask_BoxOnlyDynamicCollider = LayerMask.GetMask("BoxOnlyDynamicCollider");
         LayerMask_Ground = LayerMask.GetMask("Ground");
+        LayerMask_Wall = LayerMask.GetMask("Wall");
         LayerMask_BattleTips = LayerMask.GetMask("BattleTips");
         LayerMask_BoxTriggerZone = LayerMask.GetMask("BoxTriggerZone");
 
@@ -50,6 +53,7 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
         Layer_HitBox_Box = LayerMask.NameToLayer("HitBox_Box");
         Layer_BoxOnlyDynamicCollider = LayerMask.NameToLayer("BoxOnlyDynamicCollider");
         Layer_Ground = LayerMask.NameToLayer("Ground");
+        Layer_Wall = LayerMask.NameToLayer("Wall");
         Layer_BattleTips = LayerMask.NameToLayer("BattleTips");
         Layer_BoxTriggerZone = LayerMask.NameToLayer("BoxTriggerZone");
     }

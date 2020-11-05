@@ -6,13 +6,13 @@ using System.Text;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
 using DG.Tweening;
-using FlowCanvas.Nodes;
 using NodeCanvas.Framework;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Actor : PoolObject
+public class Actor : PoolObject, ISerializationCallbackReceiver
 {
     #region GUID
 
@@ -233,6 +233,36 @@ public class Actor : PoolObject
     [BoxGroup("敌兵专用")]
     [LabelText("碰撞伤害")]
     public int CollideDamage;
+
+    [BoxGroup("冻结")]
+    [LabelText("冻结特效")]
+    [ValueDropdown("GetAllFXTypeNames", IsUniqueList = true, DropdownTitle = "选择FX类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    public string FrozeFX;
+
+    [BoxGroup("冻结")]
+    [LabelText("解冻特效")]
+    [ValueDropdown("GetAllFXTypeNames", IsUniqueList = true, DropdownTitle = "选择FX类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    public string ThawFX;
+
+    [NonSerialized]
+    [ShowInInspector]
+    [BoxGroup("冻结")]
+    [LabelText("冻结的箱子特殊功能")]
+    public List<BoxFunctionBase> RawFrozenBoxFunctions = new List<BoxFunctionBase>();// 干数据，禁修改
+
+    [HideInInspector]
+    public byte[] RawFrozenBoxFunctionData;
+
+    public void OnBeforeSerialize()
+    {
+        if (RawFrozenBoxFunctions == null) RawFrozenBoxFunctions = new List<BoxFunctionBase>();
+        RawFrozenBoxFunctionData = SerializationUtility.SerializeValue(RawFrozenBoxFunctions, DataFormat.JSON);
+    }
+
+    public void OnAfterDeserialize()
+    {
+        RawFrozenBoxFunctions = SerializationUtility.DeserializeValue<List<BoxFunctionBase>>(RawFrozenBoxFunctionData, DataFormat.JSON);
+    }
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 

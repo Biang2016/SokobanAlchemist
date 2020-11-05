@@ -1,10 +1,11 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections.Generic;
+using BiangStudio.CloneVariant;
+using UnityEngine;
 using Sirenix.OdinInspector;
 
 public class ActorFrozenHelper : ActorMonoHelper
 {
-    private Box FrozenBox;
+    internal Box FrozenBox;
 
     [BoxGroup("冻结")]
     [LabelText("冻结Root")]
@@ -13,16 +14,6 @@ public class ActorFrozenHelper : ActorMonoHelper
     [BoxGroup("冻结")]
     [LabelText("冻结MeshRenderer")]
     public GameObject[] FrozeModels;
-
-    [BoxGroup("冻结")]
-    [LabelText("冻结特效")]
-    [ValueDropdown("GetAllFXTypeNames", IsUniqueList = true, DropdownTitle = "选择FX类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string FrozeFX;
-
-    [BoxGroup("冻结")]
-    [LabelText("解冻特效")]
-    [ValueDropdown("GetAllFXTypeNames", IsUniqueList = true, DropdownTitle = "选择FX类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string ThawFX;
 
     public SmoothMove IceBlockSmoothMove;
 
@@ -53,29 +44,43 @@ public class ActorFrozenHelper : ActorMonoHelper
             }
 
             Thaw();
-            FXManager.Instance.PlayFX(ThawFX, transform.position, 1f);
+            FXManager.Instance.PlayFX(Actor.ThawFX, transform.position, 1f);
         }
         else
         {
-            Actor.CurMoveAttempt = Vector3.zero;
-            Actor.MovementState = Actor.MovementStates.Frozen;
-            Actor.ActorPushHelper.PushTriggerReset();
-
             if (FrozenBox)
             {
             }
             else
             {
+                Debug.Log("Actor Frozen: " + Actor.name);
                 Actor.SnapToGrid();
                 WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Actor.CurWorldGP);
                 if (module)
                 {
                     FrozenBox = module.GenerateBox(ConfigManager.Box_EnemyFrozenBoxIndex, module.WorldGPToLocalGP(Actor.CurWorldGP));
-                    FrozenBox.FrozenActor = Actor;
-                    Actor.transform.parent = FrozenBox.transform;
-                    Actor.RemoveRigidbody();
-                    transform.rotation = Quaternion.identity;
-                    FrozeModelRoot.SetActive(true);
+                    if (FrozenBox)
+                    {
+                        List<BoxFunctionBase> actorFrozenBoxFunctions = Actor.RawFrozenBoxFunctions.Clone();
+                        foreach (BoxFunctionBase abf in actorFrozenBoxFunctions)
+                        {
+                            FrozenBox.AddNewBoxFunction(abf);
+                            FrozenBox.BoxFunctions.Add(abf);
+                        }
+
+                        FrozenBox.FrozenActor = Actor;
+                        Actor.transform.parent = FrozenBox.transform;
+                        Actor.CurMoveAttempt = Vector3.zero;
+                        Actor.ActorPushHelper.PushTriggerReset();
+                        Actor.MovementState = Actor.MovementStates.Frozen;
+                        Actor.RemoveRigidbody();
+                        transform.rotation = Quaternion.identity;
+                        FrozeModelRoot.SetActive(true);
+                    }
+                    else
+                    {
+                        Debug.Log("生成冻结箱子失败");
+                    }
                 }
                 else
                 {
@@ -89,7 +94,7 @@ public class ActorFrozenHelper : ActorMonoHelper
                 frozeModel.SetActive(index == afterFrozenLevel - 1);
             }
 
-            FXManager.Instance.PlayFX(beforeFrozenLevel < afterFrozenLevel ? FrozeFX : ThawFX, transform.position, 1f);
+            FXManager.Instance.PlayFX(beforeFrozenLevel < afterFrozenLevel ? Actor.FrozeFX : Actor.ThawFX, transform.position, 1f);
         }
     }
 

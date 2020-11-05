@@ -266,6 +266,19 @@ public class DebugPanel : BaseUIPanel
         BattleManager.Instance.Player1.ActorStatPropSet.Health.Value += 1000;
     }
 
+    [DebugButton("Player/AddMaxAction*50")]
+    public void AddMaxAction50()
+    {
+        BattleManager.Instance.Player1.ActorStatPropSet.MaxActionPoint.AddModifier(new ActorProperty.PlusModifier {Delta = 50});
+        BattleManager.Instance.Player1.ActorStatPropSet.ActionPoint.Value += 50;
+    }
+
+    [DebugButton("Player/AddActionRecovery*10")]
+    public void AddActionRecovery10()
+    {
+        BattleManager.Instance.Player1.ActorStatPropSet.ActionPointRecovery.AddModifier(new ActorProperty.PlusModifier {Delta = 10});
+    }
+
     [DebugToggleButton("ToggleMoveLog")]
     public void ToggleMoveLog()
     {

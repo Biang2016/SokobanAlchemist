@@ -9,7 +9,14 @@ public class ActorMonoHelper : MonoBehaviour
     {
         get
         {
-            if (actor == null) actor = GetComponentInParent<Actor>();
+            if (actor == null)
+            {
+                actor = GetComponentInParent<Actor>();
+                if (actor == null)
+                {
+                    int a = 0;
+                }
+            }
             return actor;
         }
     }

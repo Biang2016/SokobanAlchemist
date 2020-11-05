@@ -10,7 +10,6 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
-using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -203,7 +202,6 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     [ShowInInspector]
     [LabelText("箱子特殊功能")]
     [NonSerialized]
-    [FormerlySerializedAs("BoxFunctions")]
     public List<BoxFunctionBase> RawBoxFunctions = new List<BoxFunctionBase>(); // 干数据，禁修改
 
     public List<BoxFunctionBase> BoxFunctions = new List<BoxFunctionBase>(); // 湿数据，每个Box生命周期开始前从干数据拷出，结束后清除
@@ -233,14 +231,19 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         BoxFunctionMarkAsDeleted = false;
         foreach (BoxFunctionBase bf in BoxFunctions)
         {
-            bf.Box = this;
-            bf.OnInit();
-            bf.OnRegisterLevelEventID();
-            string bfName = bf.GetType().Name;
-            if (!BoxFunctionDict.ContainsKey(bfName))
-            {
-                BoxFunctionDict.Add(bfName, bf);
-            }
+            AddNewBoxFunction(bf);
+        }
+    }
+
+    public void AddNewBoxFunction(BoxFunctionBase bf)
+    {
+        bf.Box = this;
+        bf.OnInit();
+        bf.OnRegisterLevelEventID();
+        string bfName = bf.GetType().Name;
+        if (!BoxFunctionDict.ContainsKey(bfName))
+        {
+            BoxFunctionDict.Add(bfName, bf);
         }
     }
 
@@ -251,8 +254,9 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             bf.OnUnRegisterLevelEventID();
         }
 
-        BoxFunctions.Clear();
-        BoxFunctionDict.Clear();
+        // 防止BoxFunctions里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
+        //BoxFunctions.Clear();
+        //BoxFunctionDict.Clear();
         BoxFunctionMarkAsDeleted = false;
     }
 
@@ -825,6 +829,11 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
     public void DeleteSelf()
     {
+        foreach (BoxFunctionBase bf in BoxFunctions)
+        {
+            bf.OnDeleteBox();
+        }
+
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
     }
 
