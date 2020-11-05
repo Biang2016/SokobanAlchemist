@@ -22,7 +22,7 @@ public class InGameHealthBar : PoolObject
 
     void Awake()
     {
-        BackGroundDark = CommonUtils.HTMLColorToColor("#2E2E2E");
+        BackGroundDark = "#2E2E2E".HTMLColorToColor();
     }
 
     public override void OnRecycled()

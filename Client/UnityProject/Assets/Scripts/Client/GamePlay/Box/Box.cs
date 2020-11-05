@@ -848,16 +848,16 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
             if (RequireSerializeFunctionIntoWorldModule)
             {
-                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#0AFFF1"), Color.cyan, "模特");
+                transform.DrawSpecialTip(Vector3.up, "#0AFFF1".HTMLColorToColor(), Color.cyan, "模特");
             }
 
             if (RequireHideInWorldForModuleBox)
             {
-                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#FF8000"), Color.yellow, "世隐");
+                transform.DrawSpecialTip(Vector3.up, "#FF8000".HTMLColorToColor(), Color.yellow, "世隐");
             }
             else if (RequireSerializeFunctionIntoWorld || IsUnderWorldSpecialBoxesRoot)
             {
-                transform.DrawSpecialTip(Vector3.up, CommonUtils.HTMLColorToColor("#FF8000"), Color.yellow, "世特");
+                transform.DrawSpecialTip(Vector3.up, "#FF8000".HTMLColorToColor(), Color.yellow, "世特");
             }
         }
     }
