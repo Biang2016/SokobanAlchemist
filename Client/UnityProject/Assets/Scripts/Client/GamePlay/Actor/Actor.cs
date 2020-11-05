@@ -6,6 +6,7 @@ using System.Text;
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.ObjectPool;
 using DG.Tweening;
+using FlowCanvas.Nodes;
 using NodeCanvas.Framework;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -49,6 +50,7 @@ public class Actor : PoolObject
     internal ActorLaunchArcRendererHelper ActorLaunchArcRendererHelper => ActorCommonHelpers.ActorLaunchArcRendererHelper;
     internal ActorBattleHelper ActorBattleHelper => ActorCommonHelpers.ActorBattleHelper;
     internal ActorSkillHelper ActorSkillHelper => ActorCommonHelpers.ActorSkillHelper;
+    internal ActorFrozenHelper ActorFrozenHelper => ActorCommonHelpers.ActorFrozenHelper;
     internal Transform LiftBoxPivot => ActorCommonHelpers.LiftBoxPivot;
 
     internal GraphOwner GraphOwner;
@@ -232,10 +234,6 @@ public class Actor : PoolObject
     [LabelText("碰撞伤害")]
     public int CollideDamage;
 
-    [BoxGroup("敌兵专用")]
-    [LabelText("碰撞击飞力")]
-    public int CollideForce;
-
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 
     [DisableInEditorMode]
@@ -246,6 +244,7 @@ public class Actor : PoolObject
     {
         Static,
         Moving,
+        Frozen,
     }
 
     [ReadOnly]
@@ -279,6 +278,11 @@ public class Actor : PoolObject
 
     public override void OnRecycled()
     {
+        if (!RigidBody) AddRigidbody();
+
+        RigidBody.drag = 100f;
+        RigidBody.velocity = Vector3.zero;
+
         GraphOwner?.StopBehaviour();
         ActorAIAgent.Stop();
         CurMoveAttempt = Vector3.zero;
@@ -292,6 +296,7 @@ public class Actor : PoolObject
         PushState = PushStates.None;
         ThrowState = ThrowStates.None;
         ThrowWhenDie();
+        ActorFrozenHelper.OnRecycled();
         ActorArtHelper.OnRecycled();
         ActorBuffHelper.OnRecycled();
         ActorPushHelper.OnRecycled();
@@ -302,20 +307,18 @@ public class Actor : PoolObject
         ActorSkillHelper.OnRecycled();
         ActorStatPropSet.OnRecycled();
         ActorStatPropSet = null;
-        RigidBody.drag = 100f;
-        RigidBody.velocity = Vector3.zero;
-        RigidBody.angularVelocity = Vector3.zero;
+
         ActorMoveColliderRoot.SetActive(false);
-        SetSmoothMovesEnable(false);
+        SetModelSmoothMoveLerpTime(0);
         base.OnRecycled();
     }
 
     public override void OnUsed()
     {
         base.OnUsed();
+        ActorFrozenHelper.OnUsed();
         ActorArtHelper.OnUsed();
         ActorBuffHelper.OnUsed();
-        ActorPushHelper.OnUsed();
         ActorPushHelper.OnUsed();
         ActorFaceHelper.OnUsed();
         ActorSkinHelper.OnUsed();
@@ -330,14 +333,25 @@ public class Actor : PoolObject
         ActorAIAgent = new ActorAIAgent(this);
         GraphOwner = GetComponent<GraphOwner>();
         SmoothMoves = GetComponentsInChildren<SmoothMove>().ToList();
-        SetSmoothMovesEnable(false);
+        SetModelSmoothMoveLerpTime(0);
     }
 
-    private void SetSmoothMovesEnable(bool enable)
+    public void SetModelSmoothMoveLerpTime(float lerpTime)
     {
-        foreach (SmoothMove sm in SmoothMoves)
+        if (lerpTime.Equals(0))
         {
-            sm.enabled = enable;
+            foreach (SmoothMove sm in SmoothMoves)
+            {
+                sm.enabled = false;
+            }
+        }
+        else
+        {
+            foreach (SmoothMove sm in SmoothMoves)
+            {
+                sm.enabled = true;
+                sm.SmoothTime = lerpTime;
+            }
         }
     }
 
@@ -376,7 +390,7 @@ public class Actor : PoolObject
     {
         if (actor == this)
         {
-            SetSmoothMovesEnable(true);
+            SetModelSmoothMoveLerpTime(0.02f);
         }
     }
 
@@ -388,7 +402,6 @@ public class Actor : PoolObject
     {
         if (!IsRecycled)
         {
-            RigidBody.angularVelocity = Vector3.zero;
             if (ActorMoveDebugLog && CurWorldGP != LastWorldGP) Debug.Log($"[Actor] Move {LastWorldGP} -> {CurWorldGP}");
             LastWorldGP = CurWorldGP;
             CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
@@ -404,51 +417,101 @@ public class Actor : PoolObject
 
     protected virtual void MoveInternal()
     {
-        if (CurMoveAttempt.magnitude > 0)
+        if (!ActorStatPropSet.IsFrozen)
         {
-            if (CurMoveAttempt.x.Equals(0)) RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
-            if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
-            MovementState = MovementStates.Moving;
-            RigidBody.drag = 0;
-
-            Vector3 velDiff = CurMoveAttempt.normalized * Time.fixedDeltaTime * Accelerate;
-            Vector3 finalVel = RigidBody.velocity + velDiff;
-            float finalSpeed = ActorStatPropSet.MoveSpeed.GetModifiedValue / 10f;
-            if (finalVel.magnitude > finalSpeed)
+            if (CurMoveAttempt.magnitude > 0)
             {
-                finalVel = finalVel.normalized * finalSpeed;
+                if (CurMoveAttempt.x.Equals(0)) RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
+                if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
+                MovementState = MovementStates.Moving;
+                RigidBody.drag = 0;
+                RigidBody.mass = 1f;
+
+                Vector3 velDiff = CurMoveAttempt.normalized * Time.fixedDeltaTime * Accelerate;
+                Vector3 finalVel = RigidBody.velocity + velDiff;
+                float finalSpeed = ActorStatPropSet.MoveSpeed.GetModifiedValue / 10f;
+                if (finalVel.magnitude > finalSpeed)
+                {
+                    finalVel = finalVel.normalized * finalSpeed;
+                }
+
+                RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);
+
+                CurForward = CurMoveAttempt.normalized;
+                ActorPushHelper.PushTriggerOut();
+            }
+            else
+            {
+                MovementState = MovementStates.Static;
+                RigidBody.drag = 100f;
+                RigidBody.mass = 1f;
+                ActorPushHelper.PushTriggerReset();
             }
 
-            RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);
+            if (CurMoveAttempt.x.Equals(0))
+            {
+                SnapToGridX();
+            }
 
-            CurForward = CurMoveAttempt.normalized;
-            ActorPushHelper.PushTriggerOut();
+            if (CurMoveAttempt.z.Equals(0))
+            {
+                SnapToGridZ();
+            }
         }
         else
         {
-            MovementState = MovementStates.Static;
-            RigidBody.drag = 100f;
-            ActorPushHelper.PushTriggerReset();
-        }
-
-        if (CurMoveAttempt.x.Equals(0))
-        {
-            transform.position = new Vector3(CurWorldGP.x, transform.position.y, transform.position.z);
-        }
-
-        if (CurMoveAttempt.z.Equals(0))
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, CurWorldGP.z);
+            CurMoveAttempt = Vector3.zero;
         }
 
         CurWorldGP = transform.position.ToGridPos3D();
-        Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(CurWorldGP + new GridPos3D(0, -1, 0), out WorldModule module, out GridPos3D localGP, false);
-        if (!box)
+
+        if (!ActorStatPropSet.IsFrozen)
         {
-            transform.position += Vector3.down;
+            Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(CurWorldGP + new GridPos3D(0, -1, 0), out WorldModule module, out GridPos3D localGP, false);
+            if (!box) transform.position += Vector3.down;
         }
 
         LastMoveAttempt = CurMoveAttempt;
+    }
+
+    public void AddRigidbody()
+    {
+        if (!RigidBody)
+        {
+            RigidBody = gameObject.AddComponent<Rigidbody>();
+            RigidBody.velocity = Vector3.zero;
+            RigidBody.mass = 1f;
+            RigidBody.drag = 0f;
+            RigidBody.angularDrag = 20f;
+            RigidBody.useGravity = true;
+            RigidBody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+            RigidBody.interpolation = RigidbodyInterpolation.Interpolate;
+            RigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        }
+    }
+
+    public void RemoveRigidbody()
+    {
+        if (RigidBody)
+        {
+            Destroy(RigidBody);
+        }
+    }
+
+    public void SnapToGrid()
+    {
+        SnapToGridX();
+        SnapToGridZ();
+    }
+
+    public void SnapToGridX()
+    {
+        transform.position = new Vector3(CurWorldGP.x, transform.position.y, transform.position.z);
+    }
+
+    public void SnapToGridZ()
+    {
+        transform.position = new Vector3(transform.position.x, transform.position.y, CurWorldGP.z);
     }
 
     private float ThrowChargeTick;

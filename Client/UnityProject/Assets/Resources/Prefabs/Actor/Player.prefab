@@ -1,37 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &969483554970642804
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5177179769559616356}
-  m_Layer: 0
-  m_Name: Models
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5177179769559616356
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 969483554970642804}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 5030896888471535644}
-  - {fileID: 4575499314055455425}
-  m_Father: {fileID: 2888117771117439777}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &4585308214756508847
 Animator:
   serializedVersion: 3
@@ -380,6 +348,7 @@ MonoBehaviour:
   - ForbidLiftBox
   - SilverWedgeBox
   - ActionBox
+  - EnemyFrozenBox
   KickableBoxList:
   - WoodenBox
   - ThornTrapBox
@@ -389,6 +358,7 @@ MonoBehaviour:
   - LightningBox
   - FlagBox
   - ActionBox
+  - EnemyFrozenBox
   LiftableBoxList:
   - ThornTrapBox
   - FlagBox
@@ -396,24 +366,10 @@ MonoBehaviour:
   DieDropBoxTypeName: 
   DieDropBoxProbabilityPercent: 0
   CollideDamage: 0
-  CollideForce: 0
   MovementState: 0
   PushState: 0
   ThrowState: 0
   PlayerNumber: 0
---- !u!114 &2166859655936540271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5663987624059509414}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcb1a9e73a61b2e49ac28078fa620b50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SmoothTime: 0.03
 --- !u!1 &8145695636727172613
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,7 +462,6 @@ GameObject:
   - component: {fileID: 4575499314055455425}
   - component: {fileID: 2599115961332705742}
   - component: {fileID: 8174089833248899104}
-  - component: {fileID: 217861039058006018}
   - component: {fileID: 281719149315088783}
   m_Layer: 13
   m_Name: Cap
@@ -527,7 +482,7 @@ Transform:
   m_LocalScale: {x: 0.5425409, y: 0.7377688, z: 0.57523125}
   m_Children:
   - {fileID: 6795891343878524148}
-  m_Father: {fileID: 5177179769559616356}
+  m_Father: {fileID: 5202888738938988597}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &2599115961332705742
@@ -579,19 +534,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8169575953156245361}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &217861039058006018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8169575953156245361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcb1a9e73a61b2e49ac28078fa620b50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SmoothTime: 0.02
 --- !u!95 &281719149315088783
 Animator:
   serializedVersion: 3
@@ -616,7 +558,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 5177179769559616356}
+    m_TransformParent: {fileID: 5202888738938988597}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 7aa48d153dc23b84a982b803ba933a91,
         type: 3}
@@ -710,18 +652,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7aa48d153dc23b84a982b803ba933a91, type: 3}
---- !u!1 &5663987624059509414 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 7aa48d153dc23b84a982b803ba933a91,
-    type: 3}
-  m_PrefabInstance: {fileID: 4781678684241897463}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &5030896888471535644 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7aa48d153dc23b84a982b803ba933a91,
-    type: 3}
-  m_PrefabInstance: {fileID: 4781678684241897463}
-  m_PrefabAsset: {fileID: 0}
 --- !u!23 &6168377656747834227 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 7aa48d153dc23b84a982b803ba933a91,
@@ -809,12 +739,17 @@ PrefabInstance:
         type: 3}
       propertyPath: MainArtTransform
       value: 
-      objectReference: {fileID: 5177179769559616356}
+      objectReference: {fileID: 5202888738938988597}
     - target: {fileID: 1517891711036682851, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
         type: 3}
       propertyPath: ActorArtAnimator
       value: 
       objectReference: {fileID: 4585308214756508847}
+    - target: {fileID: 3269645944699411754, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4842464350258294753, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -912,9 +847,9 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7301533550099854623}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &2888117771117439777 stripped
+--- !u!4 &5202888738938988597 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 5566701871306825278, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+  m_CorrespondingSourceObject: {fileID: 3269645944699411754, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
     type: 3}
   m_PrefabInstance: {fileID: 7301533550099854623}
   m_PrefabAsset: {fileID: 0}

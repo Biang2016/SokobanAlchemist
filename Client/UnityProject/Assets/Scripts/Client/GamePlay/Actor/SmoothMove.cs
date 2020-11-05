@@ -5,11 +5,14 @@ public class SmoothMove : MonoBehaviour
 {
     public float SmoothTime = 0.01f;
 
+    private float DefaultSmoothTime = 0f;
+
     private Vector3 DefaultLocalPosition;
 
     void Awake()
     {
         DefaultLocalPosition = transform.localPosition;
+        DefaultSmoothTime = SmoothTime;
     }
 
     void Start()

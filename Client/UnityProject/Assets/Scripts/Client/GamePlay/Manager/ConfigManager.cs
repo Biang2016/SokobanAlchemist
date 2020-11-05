@@ -544,6 +544,13 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     #endregion
 
+    #region Special types const
+
+    public static ushort WorldModule_DeadZoneIndex => GetWorldModuleTypeIndex("Common_DeadZone");
+    public static ushort Box_EnemyFrozenBoxIndex => GetBoxTypeIndex("EnemyFrozenBox");
+
+    #endregion
+
     #region Getter
 
     // -------- Get All Type Names --------

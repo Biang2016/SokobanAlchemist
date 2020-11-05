@@ -3,9 +3,9 @@ using System.Collections;
 
 public class EnemyDamageBoxHelper : ActorMonoHelper
 {
-
     private void OnTriggerEnter(Collider collider)
     {
+        if (Actor.ActorStatPropSet.IsFrozen) return;
         if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player)
         {
             PlayerActor player = collider.gameObject.GetComponentInParent<PlayerActor>();

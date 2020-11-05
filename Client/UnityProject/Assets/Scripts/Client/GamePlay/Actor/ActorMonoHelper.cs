@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class ActorMonoHelper : MonoBehaviour
 {
@@ -20,4 +21,11 @@ public class ActorMonoHelper : MonoBehaviour
     public virtual void OnRecycled()
     {
     }
+
+    #region Utils
+
+    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
+    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
+
+    #endregion
 }

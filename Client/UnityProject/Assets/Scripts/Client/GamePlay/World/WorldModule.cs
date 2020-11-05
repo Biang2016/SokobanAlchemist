@@ -151,12 +151,12 @@ public class WorldModule : PoolObject
         }
     }
 
-    public void GenerateBox(ushort boxTypeIndex, GridPos3D localGP, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    public Box GenerateBox(ushort boxTypeIndex, GridPos3D localGP, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
-        GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
+        return GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
     }
 
-    public void GenerateBox(ushort boxTypeIndex, int x, int y, int z, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    public Box GenerateBox(ushort boxTypeIndex, int x, int y, int z, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
         if (boxExtraSerializeDataFromWorld != null)
         {
@@ -164,7 +164,7 @@ public class WorldModule : PoolObject
             {
                 if (bf is BoxFunction_Hide)
                 {
-                    return;
+                    return null;
                 }
             }
         }
@@ -172,7 +172,7 @@ public class WorldModule : PoolObject
         if (BoxMatrix[x, y, z] != null)
         {
             Debug.LogError($"世界模组{name}的局部坐标({x},{y},{z})位置处已存在Box,请检查世界Box是否重叠放置于该模组已有的Box位置处");
-            return;
+            return null;
         }
         else
         {
@@ -184,7 +184,7 @@ public class WorldModule : PoolObject
             box.Initialize(gp, this, 0, !IsAccessible, Box.LerpType.Create);
             box.name = $"{boxName}_{gp}";
             BoxMatrix[x, y, z] = box;
-            return;
+            return box;
         }
     }
 
@@ -207,7 +207,7 @@ public class WorldModule : PoolObject
     {
         if (Selection.Contains(gameObject))
         {
-            if (WorldModuleData != null && WorldModuleData.WorldModuleTypeIndex == WorldManager.DeadZoneIndex)
+            if (WorldModuleData != null && WorldModuleData.WorldModuleTypeIndex == ConfigManager.WorldModule_DeadZoneIndex)
             {
                 Gizmos.color = new Color(1f, 0, 0, 0.7f);
                 Gizmos.DrawSphere(transform.position + Vector3.one * (MODULE_SIZE - 1) * 0.5f, 3f);

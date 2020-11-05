@@ -267,7 +267,7 @@ public class BoxFunction_ChangeBoxType : BoxFunction_InvokeOnLevelEventID
             if (module != null)
             {
                 GridPos3D localGP = Box.LocalGP;
-                WorldManager.Instance.CurrentWorld.DeleteBox(Box);
+                Box.DeleteSelf();
                 ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
                 if (boxTypeIndex != 0) module.GenerateBox(boxTypeIndex, localGP);
             }
@@ -306,7 +306,7 @@ public class BoxFunction_ChangeBoxToEnemy : BoxFunction_InvokeOnLevelEventID
             if (module != null)
             {
                 GridPos3D localGP = Box.LocalGP;
-                WorldManager.Instance.CurrentWorld.DeleteBox(Box);
+                Box.DeleteSelf();
                 ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(ChangeBoxToEnemyType);
                 if (enemyTypeIndex != 0)
                 {

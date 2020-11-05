@@ -112,22 +112,22 @@ public class World : PoolObject
                     ushort index_before = worldData.ModuleMatrix[x, y, z - 1];
                     if (index == 0 && index_before != 0)
                     {
-                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, z);
                     }
 
                     if (index != 0 && index_before == 0)
                     {
-                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, z - 1);
+                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, z - 1);
                     }
 
                     if (z == 1 && index_before != 0)
                     {
-                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, -1);
+                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, -1);
                     }
 
                     if (z == WORLD_SIZE - 1 && index != 0)
                     {
-                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, WORLD_SIZE);
+                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, WORLD_SIZE);
                     }
                 }
             }
@@ -143,22 +143,22 @@ public class World : PoolObject
                     ushort index_before = worldData.ModuleMatrix[x, y - 1, z];
                     if (index == 0 && index_before != 0)
                     {
-                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, z);
                     }
 
                     if (index != 0 && index_before == 0)
                     {
-                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, y - 1, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y - 1, z);
                     }
 
                     if (y == 1 && index_before != 0)
                     {
-                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, -1, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, -1, z);
                     }
 
                     if (y == WORLD_HEIGHT - 1 && index != 0)
                     {
-                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, WORLD_HEIGHT, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, WORLD_HEIGHT, z);
                     }
                 }
             }
@@ -174,22 +174,22 @@ public class World : PoolObject
                     ushort index_before = worldData.ModuleMatrix[x - 1, y, z];
                     if (index == 0 && index_before != 0)
                     {
-                        GenerateWorldModule(WorldManager.DeadZoneIndex, x, y, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, z);
                     }
 
                     if (index != 0 && index_before == 0)
                     {
-                        GenerateWorldModule(WorldManager.DeadZoneIndex, x - 1, y, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x - 1, y, z);
                     }
 
                     if (x == 1 && index_before != 0)
                     {
-                        GenerateWorldModule(WorldManager.DeadZoneIndex, -1, y, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, -1, y, z);
                     }
 
                     if (x == WORLD_SIZE - 1 && index != 0)
                     {
-                        GenerateWorldModule(WorldManager.DeadZoneIndex, WORLD_SIZE, y, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, WORLD_SIZE, y, z);
                     }
                 }
             }
@@ -235,7 +235,7 @@ public class World : PoolObject
 
     private void GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, List<Box.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)
     {
-        bool isDeadModule = worldModuleTypeIndex == WorldManager.DeadZoneIndex;
+        bool isDeadModule = worldModuleTypeIndex == ConfigManager.WorldModule_DeadZoneIndex;
         if (isDeadModule && DeadZoneWorldModuleMatrix[x + 1, y + 1, z + 1] != null) return;
         WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(isDeadModule ? DeadZoneModuleRoot : WorldModuleRoot);
         WorldModuleData data = ConfigManager.GetWorldModuleDataConfig(worldModuleTypeIndex);

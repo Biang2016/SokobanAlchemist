@@ -70,6 +70,8 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
     [LabelText("冰冻等级")]
     public ActorStat FrozenLevel = new ActorStat(ActorStat.StatType.FrozenLevel);
 
+    public bool IsFrozen => FrozenLevel.Value > 0;
+
     [BoxGroup("冰冻")]
     [LabelText("冰冻持续特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
@@ -131,11 +133,7 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
 
         PropertyDict.Add(ActorProperty.PropertyType.MoveSpeed, MoveSpeed);
 
-        MaxActionPoint.OnValueChanged += (before, after) =>
-        {
-            ActionPoint.MaxValue = after; 
-
-        };
+        MaxActionPoint.OnValueChanged += (before, after) => { ActionPoint.MaxValue = after; };
         PropertyDict.Add(ActorProperty.PropertyType.MaxActionPoint, MaxActionPoint);
 
         ActionPoint.Recovery = ActionPointRecovery.GetModifiedValue;
@@ -166,7 +164,7 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         };
         StatDict.Add(ActorStat.StatType.FrozenValue, FrozenValue);
 
-        FrozenLevel.OnValueChanged += (before, after) => { ; }; // todo 冰冻等级变化时，角色冰块形态发生变化
+        FrozenLevel.OnValueChanged += Actor.ActorFrozenHelper.FrozeIntoIceBlock;
         StatDict.Add(ActorStat.StatType.FrozenLevel, FrozenLevel);
 
         FiringResistance.OnValueChanged += (before, after) =>

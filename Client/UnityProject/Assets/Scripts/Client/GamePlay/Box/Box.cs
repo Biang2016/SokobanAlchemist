@@ -1,15 +1,15 @@
 ﻿using System;
-using BiangStudio.GameDataFormat.Grid;
-using BiangStudio.ObjectPool;
-using DG.Tweening;
-using Sirenix.OdinInspector;
-using UnityEngine;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using BiangStudio;
 using BiangStudio.CloneVariant;
+using BiangStudio.GameDataFormat.Grid;
+using BiangStudio.ObjectPool;
+using DG.Tweening;
+using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using UnityEngine;
 using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -46,6 +46,8 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     public BoxIconSpriteHelper BoxIconSpriteHelper;
     public SmoothMove BoxIconSpriteSmoothMove;
     public SmoothMove BoxModelSmoothMove;
+
+    internal Actor FrozenActor; // EnemyFrozenBox将敌人冻住包裹
 
     internal bool ArtOnly;
 
@@ -125,70 +127,75 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         BoxColliderHelper?.SwitchBoxOrientation();
     }
 
+    [ReadOnly]
     [AssetsOnly]
+    [ShowInInspector]
     [ShowIf("Interactable")]
     [BoxGroup("箱子属性")]
     [LabelText("重量")]
-    [SerializeField]
-    private float Weight;
+    private float Weight = 0.4f;
 
     public float FinalWeight => Weight * ConfigManager.BoxWeightFactor_Cheat;
 
     [AssetsOnly]
+    [SerializeField]
     [BoxGroup("碰撞")]
     [LabelText("撞击特效")]
-    [SerializeField]
     [ValueDropdown("GetAllFXTypeNames")]
     private string CollideFX;
 
     [AssetsOnly]
+    [SerializeField]
     [BoxGroup("碰撞")]
     [LabelText("撞击特效尺寸")]
-    [SerializeField]
     private float CollideFXScale = 1f;
 
     [AssetsOnly]
+    [SerializeField]
     [ShowIf("KickOrThrowable")]
     [BoxGroup("碰撞")]
     [LabelText("碰撞伤害半径")]
-    [SerializeField]
-    [FormerlySerializedAs("DestroyDamageRadius_Kick")]
     private float CollideDamageRadius = 0.5f;
 
     [AssetsOnly]
+    [SerializeField]
     [ShowIf("KickOrThrowable")]
     [BoxGroup("碰撞")]
     [LabelText("碰撞伤害")]
     [GUIColor(1.0f, 0, 1.0f)]
-    [SerializeField]
-    [FormerlySerializedAs("DestroyDamage_Kick")]
     private float CollideDamage = 3f;
 
+    [ReadOnly]
     [AssetsOnly]
+    [ShowInInspector]
     [ShowIf("Pushable")]
     [BoxGroup("推箱子属性")]
     [LabelText("抗推力")]
-    [PropertyRange(0, 1)]
-    public float Static_Inertia = 0.5f;
+    private float Static_Inertia = 0.5f;
 
+    [ReadOnly]
     [AssetsOnly]
+    [ShowInInspector]
     [ShowIf("Throwable")]
     [BoxGroup("扔箱子属性")]
     [LabelText("落地Drag")]
-    public float Throw_Drag = 0.5f;
+    internal float Throw_Drag = 10f;
 
+    [ReadOnly]
     [AssetsOnly]
+    [ShowInInspector]
     [ShowIf("Throwable")]
     [BoxGroup("扔箱子属性")]
     [LabelText("落地摩擦力")]
-    [Range(0, 1)]
-    public float Throw_Friction = 1;
+    internal float Throw_Friction = 1;
 
+    [ReadOnly]
     [AssetsOnly]
+    [ShowInInspector]
     [ShowIf("Kickable")]
     [BoxGroup("踢箱子属性")]
     [LabelText("摩阻力")]
-    public float Dynamic_Drag = 0.5f;
+    internal float Dynamic_Drag = 0.5f;
 
     #region 箱子特殊功能
 
@@ -377,15 +384,25 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         {
             BoxIconSpriteSmoothMove.enabled = false;
             BoxModelSmoothMove.enabled = false;
+            if (FrozenActor)
+            {
+                FrozenActor.ActorFrozenHelper.IceBlockSmoothMove.enabled = false;
+                FrozenActor.SetModelSmoothMoveLerpTime(0f);
+            }
         }
         else
         {
             BoxIconSpriteSmoothMove.enabled = true;
+            BoxIconSpriteSmoothMove.SmoothTime = lerpTime;
             BoxModelSmoothMove.enabled = true;
+            BoxModelSmoothMove.SmoothTime = lerpTime;
+            if (FrozenActor)
+            {
+                FrozenActor.ActorFrozenHelper.IceBlockSmoothMove.enabled = true;
+                FrozenActor.ActorFrozenHelper.IceBlockSmoothMove.SmoothTime = lerpTime;
+                FrozenActor.SetModelSmoothMoveLerpTime(lerpTime);
+            }
         }
-
-        BoxIconSpriteSmoothMove.SmoothTime = lerpTime;
-        BoxModelSmoothMove.SmoothTime = lerpTime;
     }
 
     public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly, LerpType lerpType, bool needLerpModel = false)
@@ -746,7 +763,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
                 if (BoxFunctionMarkAsDeleted || !BoxFunctionDict.ContainsKey(typeof(BoxFunction_CollideBreakable).Name))
                 {
-                    WorldManager.Instance.CurrentWorld.DeleteBox(this); // 如果没配默认撞击破坏
+                    DeleteSelf(); // 如果没配默认撞击破坏
                 }
             }
         }
@@ -767,7 +784,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
                     if (BoxFunctionMarkAsDeleted || !BoxFunctionDict.ContainsKey(typeof(BoxFunction_CollideBreakable).Name))
                     {
-                        WorldManager.Instance.CurrentWorld.DeleteBox(this); // 如果没配默认撞击破坏
+                        DeleteSelf(); // 如果没配默认撞击破坏
                     }
                 }
             }
@@ -804,6 +821,11 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         FX hit = FXManager.Instance.PlayFX(CollideFX, transform.position);
         if (hit) hit.transform.localScale = Vector3.one * CollideFXScale;
+    }
+
+    public void DeleteSelf()
+    {
+        WorldManager.Instance.CurrentWorld.DeleteBox(this);
     }
 
 #if UNITY_EDITOR
