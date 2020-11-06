@@ -366,6 +366,9 @@ MonoBehaviour:
   DieDropBoxTypeName: 
   DieDropBoxProbabilityPercent: 0
   CollideDamage: 0
+  FrozeFX: 
+  ThawFX: 
+  RawFrozenBoxFunctionData: 7b0d0a2020202022246964223a20302c0d0a20202020222474797065223a2022307c53797374656d2e436f6c6c656374696f6e732e47656e657269632e4c69737460315b5b426f7846756e6374696f6e426173652c20436c69656e745d5d2c206d73636f726c6962222c0d0a202020202224726c656e677468223a20302c0d0a20202020222472636f6e74656e74223a205b0d0a202020205d0d0a7d
   MovementState: 0
   PushState: 0
   ThrowState: 0
@@ -462,7 +465,6 @@ GameObject:
   - component: {fileID: 4575499314055455425}
   - component: {fileID: 2599115961332705742}
   - component: {fileID: 8174089833248899104}
-  - component: {fileID: 281719149315088783}
   m_Layer: 13
   m_Name: Cap
   m_TagString: Untagged
@@ -534,25 +536,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8169575953156245361}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!95 &281719149315088783
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8169575953156245361}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 229902ffad37114438c1f11cd0622650, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &4781678684241897463
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -814,7 +797,7 @@ PrefabInstance:
         type: 3}
       propertyPath: AnimModel
       value: 
-      objectReference: {fileID: 281719149315088783}
+      objectReference: {fileID: 0}
     - target: {fileID: 7614608216276483370, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
         type: 3}
       propertyPath: m_Name

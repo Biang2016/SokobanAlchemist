@@ -47,18 +47,12 @@ public class ActorPushHelperTrigger : MonoBehaviour
         if (isRecycled) return;
         if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
-            if (curPushingBox) return;
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
                 curPushingBox = box;
-                if (ActorPushHelper.AnimModel)
-                {
-                    ActorPushHelper.AnimModel.ResetTrigger("Reset");
-                    ActorPushHelper.AnimModel.SetTrigger("MoveOut");
-                }
-
                 box.Push(ActorPushHelper.Actor.CurMoveAttempt);
+                //Debug.Log("BoxPush " + Mathf.RoundToInt(Time.fixedTime / Time.fixedDeltaTime));
             }
         }
     }
@@ -71,14 +65,13 @@ public class ActorPushHelperTrigger : MonoBehaviour
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
-                if (ActorPushHelper.AnimModel)
-                {
-                    ActorPushHelper.AnimModel?.SetTrigger("Reset");
-                    ActorPushHelper.AnimModel?.ResetTrigger("MoveOut");
-                }
-
-                box.PushCanceled();
                 PushingBoxList.Remove(box);
+                if (!curPushingBox && curPushingBox == box)
+                {
+                    box.PushCanceled();
+                    curPushingBox = null;
+                    //Debug.Log("BoxExit " + Mathf.RoundToInt(Time.fixedTime / Time.fixedDeltaTime));
+                }
             }
         }
     }
@@ -86,6 +79,5 @@ public class ActorPushHelperTrigger : MonoBehaviour
     void FixedUpdate()
     {
         if (isRecycled) return;
-        curPushingBox = null;
     }
 }

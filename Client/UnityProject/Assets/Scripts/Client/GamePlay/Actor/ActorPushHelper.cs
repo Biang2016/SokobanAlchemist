@@ -5,7 +5,6 @@ public class ActorPushHelper : ActorMonoHelper
 {
     public Collider Collider;
     public Animator AnimCollider;
-    public Animator AnimModel;
     public ActorPushHelperTrigger ActorPushHelperTrigger;
 
     public override void OnUsed()
@@ -16,20 +15,32 @@ public class ActorPushHelper : ActorMonoHelper
 
     public override void OnRecycled()
     {
-        PushTriggerReset();
+        TriggerOut = false;
         ActorPushHelperTrigger.OnRecycled();
         base.OnRecycled();
     }
 
-    public void PushTriggerOut()
-    {
-        AnimCollider.ResetTrigger("Reset");
-        AnimCollider.SetTrigger("MoveOut");
-    }
+    private bool triggerOut = false;
 
-    public void PushTriggerReset()
+    public bool TriggerOut
     {
-        AnimCollider.SetTrigger("Reset");
-        AnimCollider.ResetTrigger("MoveOut");
+        get { return triggerOut; }
+        set
+        {
+            if (triggerOut != value)
+            {
+                triggerOut = value;
+                if (value)
+                {
+                    AnimCollider.ResetTrigger("Reset");
+                    AnimCollider.SetTrigger("MoveOut");
+                }
+                else
+                {
+                    AnimCollider.SetTrigger("Reset");
+                    AnimCollider.ResetTrigger("MoveOut");
+                }
+            }
+        }
     }
 }

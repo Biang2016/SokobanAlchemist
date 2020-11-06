@@ -170,7 +170,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     [ShowIf("Pushable")]
     [BoxGroup("推箱子属性")]
     [LabelText("抗推力")]
-    private float Static_Inertia = 0.5f;
+    internal static float Static_Inertia = 0.3f;
 
     [ReadOnly]
     [AssetsOnly]
@@ -441,6 +441,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
                 if (lerpType == LerpType.Push)
                 {
                     BoxColliderHelper.OnPushEnd();
+                    Debug.Log("BoxPushEnd " + Mathf.RoundToInt(Time.fixedTime / Time.fixedDeltaTime));
                 }
             });
             transform.DOLocalRotate(Vector3.zero, lerpTime);
@@ -716,6 +717,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
 
             if (Rigidbody.velocity.magnitude < 1f)
             {
+                LastTouchActor = null;
                 DestroyImmediate(Rigidbody);
                 BoxColliderHelper.OnRigidbodyStop();
                 WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this);

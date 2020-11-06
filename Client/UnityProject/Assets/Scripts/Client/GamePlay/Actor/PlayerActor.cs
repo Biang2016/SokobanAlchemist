@@ -14,10 +14,24 @@ public class PlayerActor : Actor
     private ButtonState BS_Down;
     private ButtonState BS_Left;
 
+    private float Duration_Up;
+    private float Duration_Right;
+    private float Duration_Down;
+    private float Duration_Left;
+
     private ButtonState BS_Up_Last;
     private ButtonState BS_Right_Last;
     private ButtonState BS_Down_Last;
     private ButtonState BS_Left_Last;
+
+    private ButtonState BS_Skill_0; // Space/RT
+    private ButtonState BS_Skill_1;
+    private ButtonState BS_Skill_2; // Shift/South
+
+    private float QuickMovePressThreshold = 0.2f;
+    private GridPos3D lastMoveButtonDownWorldGP = GridPos3D.Zero; // 记录上一次任一方向键按下时的角色坐标
+    private GridPos3D quickMoveStartWorldGP = GridPos3D.Zero; // 记录短按开始时的角色坐标（按上一次down键的世界坐标取值）
+    private Vector3 quickMoveAttempt = Vector3.zero; // 记录当前短按的移动方向，zero为无短按
 
     public void Initialize(string actorType, ActorCategory actorCategory, PlayerNumber playerNumber)
     {
@@ -33,9 +47,15 @@ public class PlayerActor : Actor
         BS_Right_Last = ControlManager.Instance.Battle_MoveButtons_LastFrame[(int) PlayerNumber, (int) GridPosR.Orientation.Right];
         BS_Down_Last = ControlManager.Instance.Battle_MoveButtons_LastFrame[(int) PlayerNumber, (int) GridPosR.Orientation.Down];
         BS_Left_Last = ControlManager.Instance.Battle_MoveButtons_LastFrame[(int) PlayerNumber, (int) GridPosR.Orientation.Left];
+
+        BS_Skill_0 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0];
+        BS_Skill_1 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1];
+        BS_Skill_2 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 2];
     }
 
     private float Skill1_PressDuration;
+
+    private int a = 0;
 
     protected override void FixedUpdate()
     {
@@ -43,12 +63,62 @@ public class PlayerActor : Actor
         {
             #region Move
 
+            if (BS_Up.Down) Duration_Up = 0;
+            if (BS_Right.Down) Duration_Right = 0;
+            if (BS_Down.Down) Duration_Down = 0;
+            if (BS_Left.Down) Duration_Left = 0;
+            if (BS_Up.Down || BS_Right.Down || BS_Down.Down || BS_Left.Down) lastMoveButtonDownWorldGP = CurWorldGP;
+
+            if (BS_Up.Pressed) Duration_Up += Time.fixedDeltaTime;
+            if (BS_Right.Pressed) Duration_Right += Time.fixedDeltaTime;
+            if (BS_Down.Pressed) Duration_Down += Time.fixedDeltaTime;
+            if (BS_Left.Pressed) Duration_Left += Time.fixedDeltaTime;
+
             CurMoveAttempt = Vector3.zero;
             if (BS_Up.Pressed) CurMoveAttempt.z += 1;
             if (BS_Down.Pressed) CurMoveAttempt.z -= 1;
             if (BS_Left.Pressed) CurMoveAttempt.x -= 1;
             if (BS_Right.Pressed) CurMoveAttempt.x += 1;
 
+            // 如果没有操作，判定是否短按，如果短按则为玩家坚持按该键一段时间，直到角色位置变化
+            if (CurMoveAttempt.Equals(Vector3.zero))
+            {
+                Vector3 quickMoveAttemptThisFrame = Vector3.zero; // 短按值
+                if (BS_Up.Up && Duration_Up < QuickMovePressThreshold) quickMoveAttemptThisFrame.z += 1;
+                if (BS_Right.Up && Duration_Right < QuickMovePressThreshold) quickMoveAttemptThisFrame.x += 1;
+                if (BS_Down.Up && Duration_Down < QuickMovePressThreshold) quickMoveAttemptThisFrame.z -= 1;
+                if (BS_Left.Up && Duration_Left < QuickMovePressThreshold) quickMoveAttemptThisFrame.x -= 1;
+                if (quickMoveAttemptThisFrame != Vector3.zero) // 此帧有短按
+                {
+                    quickMoveAttempt = quickMoveAttemptThisFrame;
+                    quickMoveStartWorldGP = lastMoveButtonDownWorldGP; // 短按瞬间记录角色位置
+                }
+
+                if (quickMoveAttempt != Vector3.zero) // 短按效果仍持续，且自短按开始后角色位置还未发生变化，则继续施加移动效果
+                {
+                    if (quickMoveStartWorldGP == CurWorldGP)
+                    {
+                        CurMoveAttempt = quickMoveAttempt;
+                    }
+                    else // 当角色位置变化时，短按效果结束
+                    {
+                        quickMoveStartWorldGP = GridPos3D.Zero;
+                        quickMoveAttempt = Vector3.zero;
+                    }
+                }
+                else
+                {
+                    quickMoveStartWorldGP = GridPos3D.Zero;
+                    quickMoveAttempt = Vector3.zero;
+                }
+            }
+            else
+            {
+                quickMoveStartWorldGP = GridPos3D.Zero;
+                quickMoveAttempt = Vector3.zero; // 长按打断短按
+            }
+
+            // 相机视角旋转后移动也相应旋转
             switch (CameraManager.Instance.FieldCamera.RotateDirection)
             {
                 case GridPosR.Orientation.Up:
@@ -79,6 +149,7 @@ public class PlayerActor : Actor
                 }
             }
 
+            // 双向移动交替打断
             if (!CurMoveAttempt.x.Equals(0) && !CurMoveAttempt.z.Equals(0))
             {
                 if ((LastMoveAttempt.x > 0 && BS_Right_Last.Pressed) || (LastMoveAttempt.x < 0 && BS_Left_Last.Pressed))
@@ -112,6 +183,7 @@ public class PlayerActor : Actor
                 }
             }
 
+            // 双向同时按取x轴优先
             if (!CurMoveAttempt.x.Equals(0) && !CurMoveAttempt.z.Equals(0))
             {
                 CurMoveAttempt.z = 0;
@@ -164,40 +236,30 @@ public class PlayerActor : Actor
 
             #region Skill
 
-            bool skill_0_Down = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0].Down;
-            bool skill_0_Pressed = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0].Pressed;
-            bool skill_0_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0].Up;
-            bool skill_1_Down = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Down;
-            bool skill_1_Pressed = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Pressed;
-            bool skill_1_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1].Up;
-            bool skill_2_Down = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 2].Down;
-            bool skill_2_Pressed = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 2].Pressed;
-            bool skill_2_Up = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 2].Up;
-
-            if (skill_2_Down)
+            if (BS_Skill_2.Down)
             {
                 Lift();
                 Skill1_PressDuration = 0;
             }
 
-            if (skill_2_Pressed)
+            if (BS_Skill_2.Pressed)
             {
                 ThrowCharge();
                 Skill1_PressDuration += Time.fixedDeltaTime;
             }
 
-            if (skill_2_Up)
+            if (BS_Skill_2.Up)
             {
                 Skill1_PressDuration = 0;
                 ThrowOrPut();
             }
 
-            if (skill_2_Down)
+            if (BS_Skill_2.Down)
             {
                 VaultOrDash();
             }
 
-            if (skill_0_Down)
+            if (BS_Skill_0.Down)
             {
                 Kick();
             }

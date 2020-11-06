@@ -468,14 +468,14 @@ public class Actor : PoolObject, ISerializationCallbackReceiver
                 RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);
 
                 CurForward = CurMoveAttempt.normalized;
-                ActorPushHelper.PushTriggerOut();
+                ActorPushHelper.TriggerOut = true;
             }
             else
             {
                 MovementState = MovementStates.Static;
                 RigidBody.drag = 100f;
                 RigidBody.mass = 1f;
-                ActorPushHelper.PushTriggerReset();
+                ActorPushHelper.TriggerOut = false;
             }
 
             if (CurMoveAttempt.x.Equals(0))
@@ -577,6 +577,7 @@ public class Actor : PoolObject, ISerializationCallbackReceiver
 
     public void VaultOrDash()
     {
+        if (ThrowState != ThrowStates.None) return;
         Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
         //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))

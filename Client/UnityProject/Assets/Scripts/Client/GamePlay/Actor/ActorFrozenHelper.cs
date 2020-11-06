@@ -71,7 +71,7 @@ public class ActorFrozenHelper : ActorMonoHelper
                         FrozenBox.FrozenActor = Actor;
                         Actor.transform.parent = FrozenBox.transform;
                         Actor.CurMoveAttempt = Vector3.zero;
-                        Actor.ActorPushHelper.PushTriggerReset();
+                        Actor.ActorPushHelper.TriggerOut = false;
                         Actor.MovementState = Actor.MovementStates.Frozen;
                         Actor.RemoveRigidbody();
                         transform.rotation = Quaternion.identity;
