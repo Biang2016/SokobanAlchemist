@@ -78,6 +78,7 @@ public class PlayerActor : Actor
             // 判定是否短按，如果短按则为玩家坚持按该键一段时间，直到角色位置变化
             if (!isQuickMoving)
             {
+                quickMoveAttempt = Vector3.zero;
                 int quickMoveAttemptXThisFrame = 0; // X轴短按值
                 if (BS_Right.Up && BS_Right.PressedDuration < QuickMovePressThreshold) quickMoveAttemptXThisFrame += 1;
                 if (BS_Left.Up && BS_Left.PressedDuration < QuickMovePressThreshold) quickMoveAttemptXThisFrame -= 1;
@@ -100,9 +101,11 @@ public class PlayerActor : Actor
 
                 if (quickMoveAttempt != Vector3.zero)
                 {
-                    GridPos3D targetPos = CurWorldGP + quickMoveAttempt.ToGridPos3D();
+                    GridPos3D quickMoveAttemptGP = quickMoveAttempt.ToGridPos3D();
+                    GridPos3D targetPos = CurWorldGP + quickMoveAttemptGP;
                     Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(targetPos, out WorldModule module, out GridPos3D _, false);
-                    if (!box || box.Passable) // 能走到才开启短按
+                    if (!box || box.Passable ||
+                        (box && WorldManager.Instance.CurrentWorld.CheckCanMoveBox(box.WorldGP, box.WorldGP + quickMoveAttemptGP))) // 能走到才开启短按
                     {
                         CurMoveAttempt = quickMoveAttempt;
                         isQuickMoving = true;
@@ -128,6 +131,10 @@ public class PlayerActor : Actor
                         quickMoveAttempt = Vector3.zero;
                         isQuickMoving = false;
                     }
+                }
+                else
+                {
+                    quickMoveAttempt = Vector3.zero;
                 }
             }
 

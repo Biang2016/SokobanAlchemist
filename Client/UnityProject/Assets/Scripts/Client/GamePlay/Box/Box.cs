@@ -441,7 +441,6 @@ public class Box : PoolObject, ISerializationCallbackReceiver
                 if (lerpType == LerpType.Push)
                 {
                     BoxColliderHelper.OnPushEnd();
-                    Debug.Log("BoxPushEnd " + Mathf.RoundToInt(Time.fixedTime / Time.fixedDeltaTime));
                 }
             });
             transform.DOLocalRotate(Vector3.zero, lerpTime);

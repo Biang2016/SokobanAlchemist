@@ -293,6 +293,14 @@ public class World : PoolObject
         }
     }
 
+    public bool CheckCanMoveBox(GridPos3D srcGP, GridPos3D targetGP)
+    {
+        Box box_src = GetBoxByGridPosition(srcGP, out WorldModule module_src, out GridPos3D localGP_src);
+        Box box_target = GetBoxByGridPosition(targetGP, out WorldModule module_target, out GridPos3D localGP_target);
+        if (module_src == null || module_target == null || box_src == null || box_target != null) return false;
+        return true;
+    }
+
     public void MoveBox(GridPos3D srcGP, GridPos3D targetGP, Box.States sucState, bool needLerp = true, bool needLerpModel = false)
     {
         Box box_src = GetBoxByGridPosition(srcGP, out WorldModule module_src, out GridPos3D localGP_src);
