@@ -14,11 +14,6 @@ public class PlayerActor : Actor
     private ButtonState BS_Down;
     private ButtonState BS_Left;
 
-    private float Duration_Up;
-    private float Duration_Right;
-    private float Duration_Down;
-    private float Duration_Left;
-
     private ButtonState BS_Up_Last;
     private ButtonState BS_Right_Last;
     private ButtonState BS_Down_Last;
@@ -28,8 +23,13 @@ public class PlayerActor : Actor
     private ButtonState BS_Skill_1;
     private ButtonState BS_Skill_2; // Shift/South
 
+    // 短按逻辑：短按最优先，短按过程中不接受其他短按，短按那个按键down时记录该轴位置，当位置变化时结束短按，短按结束后短按数据清空
+    private bool isQuickMoving = false;
     private float QuickMovePressThreshold = 0.2f;
-    private GridPos3D lastMoveButtonDownWorldGP = GridPos3D.Zero; // 记录上一次任一方向键按下时的角色坐标
+    private GridPos3D lastMoveUpButtonDownWorldGP = GridPos3D.Zero; // 记录上一次方向键按下时的角色坐标
+    private GridPos3D lastMoveRightButtonDownWorldGP = GridPos3D.Zero; // 记录上一次方向键按下时的角色坐标
+    private GridPos3D lastMoveDownButtonDownWorldGP = GridPos3D.Zero; // 记录上一次方向键按下时的角色坐标
+    private GridPos3D lastMoveLeftButtonDownWorldGP = GridPos3D.Zero; // 记录上一次方向键按下时的角色坐标
     private GridPos3D quickMoveStartWorldGP = GridPos3D.Zero; // 记录短按开始时的角色坐标（按上一次down键的世界坐标取值）
     private Vector3 quickMoveAttempt = Vector3.zero; // 记录当前短按的移动方向，zero为无短按
 
@@ -63,59 +63,72 @@ public class PlayerActor : Actor
         {
             #region Move
 
-            if (BS_Up.Down) Duration_Up = 0;
-            if (BS_Right.Down) Duration_Right = 0;
-            if (BS_Down.Down) Duration_Down = 0;
-            if (BS_Left.Down) Duration_Left = 0;
-            if (BS_Up.Down || BS_Right.Down || BS_Down.Down || BS_Left.Down) lastMoveButtonDownWorldGP = CurWorldGP;
-
-            if (BS_Up.Pressed) Duration_Up += Time.fixedDeltaTime;
-            if (BS_Right.Pressed) Duration_Right += Time.fixedDeltaTime;
-            if (BS_Down.Pressed) Duration_Down += Time.fixedDeltaTime;
-            if (BS_Left.Pressed) Duration_Left += Time.fixedDeltaTime;
-
             CurMoveAttempt = Vector3.zero;
+
+            if (BS_Up.Down) lastMoveUpButtonDownWorldGP = CurWorldGP;
+            if (BS_Right.Down) lastMoveRightButtonDownWorldGP = CurWorldGP;
+            if (BS_Down.Down) lastMoveDownButtonDownWorldGP = CurWorldGP;
+            if (BS_Left.Down) lastMoveLeftButtonDownWorldGP = CurWorldGP;
+
             if (BS_Up.Pressed) CurMoveAttempt.z += 1;
+            if (BS_Right.Pressed) CurMoveAttempt.x += 1;
             if (BS_Down.Pressed) CurMoveAttempt.z -= 1;
             if (BS_Left.Pressed) CurMoveAttempt.x -= 1;
-            if (BS_Right.Pressed) CurMoveAttempt.x += 1;
 
-            // 如果没有操作，判定是否短按，如果短按则为玩家坚持按该键一段时间，直到角色位置变化
-            if (CurMoveAttempt.Equals(Vector3.zero))
+            // 判定是否短按，如果短按则为玩家坚持按该键一段时间，直到角色位置变化
+            if (!isQuickMoving)
             {
-                Vector3 quickMoveAttemptThisFrame = Vector3.zero; // 短按值
-                if (BS_Up.Up && Duration_Up < QuickMovePressThreshold) quickMoveAttemptThisFrame.z += 1;
-                if (BS_Right.Up && Duration_Right < QuickMovePressThreshold) quickMoveAttemptThisFrame.x += 1;
-                if (BS_Down.Up && Duration_Down < QuickMovePressThreshold) quickMoveAttemptThisFrame.z -= 1;
-                if (BS_Left.Up && Duration_Left < QuickMovePressThreshold) quickMoveAttemptThisFrame.x -= 1;
-                if (quickMoveAttemptThisFrame != Vector3.zero) // 此帧有短按
+                int quickMoveAttemptXThisFrame = 0; // X轴短按值
+                if (BS_Right.Up && BS_Right.PressedDuration < QuickMovePressThreshold) quickMoveAttemptXThisFrame += 1;
+                if (BS_Left.Up && BS_Left.PressedDuration < QuickMovePressThreshold) quickMoveAttemptXThisFrame -= 1;
+                if (!quickMoveAttemptXThisFrame.Equals(0)) // 此帧X轴有短按
                 {
-                    quickMoveAttempt = quickMoveAttemptThisFrame;
-                    quickMoveStartWorldGP = lastMoveButtonDownWorldGP; // 短按瞬间记录角色位置
-                }
-
-                if (quickMoveAttempt != Vector3.zero) // 短按效果仍持续，且自短按开始后角色位置还未发生变化，则继续施加移动效果
-                {
-                    if (quickMoveStartWorldGP == CurWorldGP)
-                    {
-                        CurMoveAttempt = quickMoveAttempt;
-                    }
-                    else // 当角色位置变化时，短按效果结束
-                    {
-                        quickMoveStartWorldGP = GridPos3D.Zero;
-                        quickMoveAttempt = Vector3.zero;
-                    }
+                    quickMoveStartWorldGP = quickMoveAttemptXThisFrame < 0 ? lastMoveLeftButtonDownWorldGP : lastMoveRightButtonDownWorldGP;
+                    quickMoveAttempt.x = quickMoveAttemptXThisFrame;
                 }
                 else
                 {
-                    quickMoveStartWorldGP = GridPos3D.Zero;
-                    quickMoveAttempt = Vector3.zero;
+                    int quickMoveAttemptZThisFrame = 0; // Z轴短按值
+                    if (BS_Up.Up && BS_Up.PressedDuration < QuickMovePressThreshold) quickMoveAttemptZThisFrame += 1;
+                    if (BS_Down.Up && BS_Down.PressedDuration < QuickMovePressThreshold) quickMoveAttemptZThisFrame -= 1;
+                    if (!quickMoveAttemptZThisFrame.Equals(0)) // 此帧Z轴有短按
+                    {
+                        quickMoveStartWorldGP = quickMoveAttemptZThisFrame < 0 ? lastMoveDownButtonDownWorldGP : lastMoveUpButtonDownWorldGP;
+                        quickMoveAttempt.z = quickMoveAttemptZThisFrame;
+                    }
+                }
+
+                if (quickMoveAttempt != Vector3.zero)
+                {
+                    GridPos3D targetPos = CurWorldGP + quickMoveAttempt.ToGridPos3D();
+                    Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(targetPos, out WorldModule module, out GridPos3D _, false);
+                    if (!box || box.Passable) // 能走到才开启短按
+                    {
+                        CurMoveAttempt = quickMoveAttempt;
+                        isQuickMoving = true;
+                    }
                 }
             }
             else
             {
-                quickMoveStartWorldGP = GridPos3D.Zero;
-                quickMoveAttempt = Vector3.zero; // 长按打断短按
+                // 再长按改方向键取消
+                if (quickMoveAttempt.x.Equals(-1) && BS_Left.Pressed && BS_Left.PressedDuration >= QuickMovePressThreshold) isQuickMoving = false;
+                if (quickMoveAttempt.x.Equals(1) && BS_Right.Pressed && BS_Right.PressedDuration >= QuickMovePressThreshold) isQuickMoving = false;
+                if (quickMoveAttempt.z.Equals(-1) && BS_Down.Pressed && BS_Down.PressedDuration >= QuickMovePressThreshold) isQuickMoving = false;
+                if (quickMoveAttempt.z.Equals(1) && BS_Up.Pressed && BS_Up.PressedDuration >= QuickMovePressThreshold) isQuickMoving = false;
+                if (isQuickMoving)
+                {
+                    if (quickMoveStartWorldGP == CurWorldGP) // 自短按开始后角色该轴位置还未发生变化，则继续施加移动效果
+                    {
+                        CurMoveAttempt = quickMoveAttempt;
+                        isQuickMoving = true;
+                    }
+                    else // 停止短按移动
+                    {
+                        quickMoveAttempt = Vector3.zero;
+                        isQuickMoving = false;
+                    }
+                }
             }
 
             // 相机视角旋转后移动也相应旋转

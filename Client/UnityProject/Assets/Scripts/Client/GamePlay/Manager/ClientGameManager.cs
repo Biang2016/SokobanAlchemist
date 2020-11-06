@@ -89,6 +89,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             () => ControlManager.Instance.Common_Tab.Down
         );
 
+        ControlManager.Awake();
+
         ConfigManager.Awake();
         LayerManager.Awake();
         PrefabManager.Awake();
@@ -113,12 +115,12 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         UIBattleTipManager.Awake();
         FXManager.Awake();
         FXManager.Init(new GameObject("FXRoot").transform);
-
-        ControlManager.Awake();
     }
 
     private void Start()
     {
+        ControlManager.Start();
+
         ConfigManager.Start();
         LayerManager.Start();
         PrefabManager.Start();
@@ -133,8 +135,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         UIBattleTipManager.Start();
         FXManager.Start();
 
-        ControlManager.Start();
-
         UIManager.Instance.ShowUIForms<DebugPanel>();
 #if !DEBUG
         UIManager.Instance.CloseUIForm<DebugPanel>();
@@ -146,11 +146,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     private void Update()
     {
-        if (ControlManager.Common_RestartGame.Up)
-        {
-            ReloadGame();
-            return;
-        }
+        ControlManager.Update(Time.deltaTime);
 
         ConfigManager.Update(Time.deltaTime);
         LayerManager.Update(Time.deltaTime);
@@ -165,12 +161,12 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         ProjectileManager.Update(Time.deltaTime);
         UIBattleTipManager.Update(Time.deltaTime);
         FXManager.Update(Time.deltaTime);
-
-        ControlManager.Update(Time.deltaTime);
     }
 
     void LateUpdate()
     {
+        ControlManager.LateUpdate(Time.deltaTime);
+
         ConfigManager.LateUpdate(Time.deltaTime);
         LayerManager.LateUpdate(Time.deltaTime);
         PrefabManager.LateUpdate(Time.deltaTime);
@@ -184,16 +180,16 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         ProjectileManager.LateUpdate(Time.deltaTime);
         UIBattleTipManager.LateUpdate(Time.deltaTime);
         FXManager.LateUpdate(Time.deltaTime);
-
-        ControlManager.LateUpdate(Time.deltaTime);
     }
 
     void FixedUpdate()
     {
-        //if (ControlManager.Common_PauseGame.Up)
-        //{
-        //    Debug.Break();
-        //}
+        ControlManager.FixedUpdate(Time.fixedDeltaTime);
+        if (ControlManager.Common_RestartGame.Up)
+        {
+            ReloadGame();
+            return;
+        }
 
         if (ControlManager.Battle_LeftRotateCamera.Up)
         {
@@ -218,8 +214,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         ProjectileManager.FixedUpdate(Time.fixedDeltaTime);
         UIBattleTipManager.FixedUpdate(Time.fixedDeltaTime);
         FXManager.FixedUpdate(Time.fixedDeltaTime);
-
-        ControlManager.FixedUpdate(Time.fixedDeltaTime);
     }
 
     private void StartGame()

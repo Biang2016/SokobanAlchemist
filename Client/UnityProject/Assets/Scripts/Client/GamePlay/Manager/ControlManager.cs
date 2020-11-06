@@ -241,6 +241,12 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         }
 
         InputSystem.Update();
+
+        foreach (KeyValuePair<ButtonNames, ButtonState> kv in ButtonStateDict)
+        {
+            if (kv.Value.Pressed) kv.Value.PressedDuration += Time.fixedDeltaTime;
+        }
+
         if (false)
         {
             foreach (KeyValuePair<ButtonNames, ButtonState> kv in ButtonStateDict)
@@ -267,6 +273,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         {
             BattleInputActions.Enable();
         }
+
         else
         {
             BattleInputActions.Disable();

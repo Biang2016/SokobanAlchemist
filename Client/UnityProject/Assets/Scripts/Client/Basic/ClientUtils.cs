@@ -32,6 +32,8 @@ public static class ClientUtils
                 state.Down = false;
                 state.Pressed = false;
             }
+
+            if (state.Down) state.PressedDuration = 0;
         };
 
         action.canceled += context => { state.Pressed = false; };

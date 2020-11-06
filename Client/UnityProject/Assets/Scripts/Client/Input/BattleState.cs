@@ -23,6 +23,8 @@ public class ButtonState
     [LabelText("连击")]
     public int MultiClick;
 
+    public float PressedDuration;
+
     public override string ToString()
     {
         if (!Down && !Up && MultiClick <= 1) return "";
@@ -46,6 +48,7 @@ public class ButtonState
         target.Pressed = Pressed;
         target.LastPressed = LastPressed;
         target.MultiClick = MultiClick;
+        target.PressedDuration = PressedDuration;
     }
 }
 
