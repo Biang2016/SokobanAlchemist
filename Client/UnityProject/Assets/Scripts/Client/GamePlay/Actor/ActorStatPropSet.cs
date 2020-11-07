@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using BiangStudio.CloneVariant;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 
 [Serializable]
-public class ActorStatPropSet : IClone<ActorStatPropSet>
+public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallbackReceiver
 {
     internal Actor Actor;
 
@@ -106,6 +107,26 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
     [LabelText("灼烧持续特效尺寸(x->灼烧等级")]
     public AnimationCurve FiringFXScaleCurve;
 
+    [NonSerialized]
+    [ShowInInspector]
+    [BoxGroup("Buff")]
+    [LabelText("角色自带Buff")]
+    public List<ActorBuff> RawActorDefaultBuffs = new List<ActorBuff>(); // 干数据，禁修改
+
+    [HideInInspector]
+    public byte[] RawActorDefaultBuffData;
+
+    public void OnBeforeSerialize()
+    {
+        if (RawActorDefaultBuffs == null) RawActorDefaultBuffs = new List<ActorBuff>();
+        RawActorDefaultBuffData = SerializationUtility.SerializeValue(RawActorDefaultBuffs, DataFormat.JSON);
+    }
+
+    public void OnAfterDeserialize()
+    {
+        RawActorDefaultBuffs = SerializationUtility.DeserializeValue<List<ActorBuff>>(RawActorDefaultBuffData, DataFormat.JSON);
+    }
+
     public void Initialize(Actor actor)
     {
         Actor = actor;
@@ -188,6 +209,11 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         StatDict.Add(ActorStat.StatType.FiringValue, FiringValue);
 
         StatDict.Add(ActorStat.StatType.FiringLevel, FiringLevel);
+
+        foreach (ActorBuff rawActorDefaultBuff in RawActorDefaultBuffs)
+        {
+            actor.ActorBuffHelper.AddBuff(rawActorDefaultBuff.Clone());
+        }
     }
 
     public void OnRecycled()
@@ -249,6 +275,8 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         newStatPropSet.FiringLevel = FiringLevel.Clone();
         newStatPropSet.FiringFX = FiringFX;
         newStatPropSet.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
+
+        newStatPropSet.RawActorDefaultBuffs = RawActorDefaultBuffs.Clone();
         return newStatPropSet;
     }
 

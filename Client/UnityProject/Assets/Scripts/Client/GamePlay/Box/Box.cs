@@ -844,9 +844,6 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         if (!Application.isPlaying)
         {
-            //Gizmos.color = new Color(0.2f, 0.2f, 0.2f, 0.1f);
-            //Gizmos.DrawCube(transform.position, Vector3.one);
-
             if (RequireSerializeFunctionIntoWorldModule)
             {
                 transform.DrawSpecialTip(Vector3.up, "#0AFFF1".HTMLColorToColor(), Color.cyan, "模特");

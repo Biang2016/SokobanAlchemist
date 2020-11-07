@@ -107,6 +107,12 @@ public abstract class ActorBuff : IClone<ActorBuff>
 }
 
 [Serializable]
+public class ActorBuff_AttributeLabel : ActorBuff
+{
+    protected override string ActorBuffDisplayName => "本Buff仅提供标签作用";
+}
+
+[Serializable]
 public class ActorBuff_ActorPropertyMultiplyModifier : ActorBuff
 {
     protected override string ActorBuffDisplayName => "角色属性乘法修正Buff, 必须是延时buff, buff结束后消除该修正值";
@@ -401,6 +407,9 @@ public enum ActorBuffAttribute
 
     [LabelText("眩晕")]
     Stun,
+
+    [LabelText("眩晕免疫")]
+    StunImmune,
 
     [LabelText("无敌")]
     Invincible,

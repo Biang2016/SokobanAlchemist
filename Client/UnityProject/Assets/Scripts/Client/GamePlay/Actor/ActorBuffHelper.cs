@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class ActorBuffHelper : ActorMonoHelper
@@ -7,6 +8,8 @@ public class ActorBuffHelper : ActorMonoHelper
     private Dictionary<ActorBuffAttribute, List<ActorBuff>> BuffAttributeDict = new Dictionary<ActorBuffAttribute, List<ActorBuff>>();
     private Dictionary<ActorStat.StatType, FX> AbnormalBuffFXDict = new Dictionary<ActorStat.StatType, FX>();
     private Dictionary<uint, FX> BuffFXDict = new Dictionary<uint, FX>();
+
+    [ShowInInspector]
     private Dictionary<uint, ActorBuff> BuffDict = new Dictionary<uint, ActorBuff>();
     private Dictionary<uint, float> BuffRemainTimeDict = new Dictionary<uint, float>();
     private Dictionary<uint, float> BuffPassedTimeDict = new Dictionary<uint, float>();
