@@ -49,15 +49,18 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
+        if (!IsRecycled)
         {
-            Box box = collider.gameObject.GetComponentInParent<Box>();
-            if (box != null)
+            if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
             {
-                if (ConfigManager.GetBoxTypeName(box.BoxTypeIndex) == childData.RequireBoxTypeName)
+                Box box = collider.gameObject.GetComponentInParent<Box>();
+                if (box != null)
                 {
-                    StayBox = box;
-                    StayBoxTick = 0;
+                    if (ConfigManager.GetBoxTypeName(box.BoxTypeIndex) == childData.RequireBoxTypeName)
+                    {
+                        StayBox = box;
+                        StayBoxTick = 0;
+                    }
                 }
             }
         }
@@ -65,19 +68,25 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
 
     void FixedUpdate()
     {
-        if (StayBox)
+        if (!IsRecycled)
         {
-            StayBoxTick += Time.fixedDeltaTime;
-            if (StayBoxTick >= childData.RequiredStayDuration)
+            if (StayBox)
             {
-                TriggerEvent();
-                if (TriggerData.KeepTriggering)
+                StayBoxTick += Time.fixedDeltaTime;
+                if (StayBoxTick >= childData.RequiredStayDuration)
                 {
-                    StayBoxTick = 0;
-                }
-                else
-                {
-                    StayBox = null;
+                    TriggerEvent();
+                    if (TriggerData != null)
+                    {
+                        if (TriggerData.KeepTriggering)
+                        {
+                            StayBoxTick = 0;
+                        }
+                        else
+                        {
+                            StayBox = null;
+                        }
+                    }
                 }
             }
         }
@@ -85,17 +94,20 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
 
     void OnTriggerExit(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
+        if (!IsRecycled)
         {
-            Box box = collider.gameObject.GetComponentInParent<Box>();
-            if (box != null)
+            if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
             {
-                if (ConfigManager.GetBoxTypeName(box.BoxTypeIndex) == childData.RequireBoxTypeName)
+                Box box = collider.gameObject.GetComponentInParent<Box>();
+                if (box != null)
                 {
-                    if (StayBox == box)
+                    if (ConfigManager.GetBoxTypeName(box.BoxTypeIndex) == childData.RequireBoxTypeName)
                     {
-                        StayBox = null;
-                        StayBoxTick = 0;
+                        if (StayBox == box)
+                        {
+                            StayBox = null;
+                            StayBoxTick = 0;
+                        }
                     }
                 }
             }

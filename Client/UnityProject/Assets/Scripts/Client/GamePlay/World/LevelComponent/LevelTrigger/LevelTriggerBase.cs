@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using BiangStudio;
 using BiangStudio.GameDataFormat.Grid;
@@ -22,6 +23,8 @@ public abstract class LevelTriggerBase : PoolObject
     [Serializable]
     public class Data : LevelComponentData
     {
+        internal WorldModule WorldModule;
+
         [HideInInspector]
         public ushort LevelTriggerTypeIndex;
 
@@ -81,6 +84,14 @@ public abstract class LevelTriggerBase : PoolObject
         private IEnumerable<string> GetAllEnemyNames => ConfigManager.GetAllEnemyNames();
 
         #endregion
+
+        public void OnAppearEventAlias(string eventAlias)
+        {
+            if (AppearLevelEventAlias.Equals(eventAlias))
+            {
+                WorldModule.GenerateLevelTrigger(this);
+            }
+        }
     }
 
     public override void OnUsed()
@@ -95,6 +106,7 @@ public abstract class LevelTriggerBase : PoolObject
         HasTriggeredTimes = 0;
         UnRegisterEvent();
         SetShown(true);
+        TriggerData = null;
     }
 
     protected virtual void SetShown(bool shown)
@@ -125,8 +137,8 @@ public abstract class LevelTriggerBase : PoolObject
     {
         if (!string.IsNullOrWhiteSpace(TriggerData.AppearLevelEventAlias))
         {
-            SetShown(false);
-            ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnAppearEvent);
+            TriggerData.WorldModule = null;
+            ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, TriggerData.OnAppearEventAlias); // 初始化时就注销显示事件
         }
 
         if (!string.IsNullOrWhiteSpace(TriggerData.DisappearLevelEventAlias))
@@ -139,20 +151,13 @@ public abstract class LevelTriggerBase : PoolObject
     {
         if (!string.IsNullOrWhiteSpace(TriggerData.AppearLevelEventAlias))
         {
-            ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnAppearEvent);
+            TriggerData.WorldModule = null;
+            ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, TriggerData.OnAppearEventAlias); // 为了避免初始化时没有注销事件
         }
 
         if (!string.IsNullOrWhiteSpace(TriggerData.DisappearLevelEventAlias))
         {
             ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnDisappearEvent);
-        }
-    }
-
-    private void OnAppearEvent(string eventAlias)
-    {
-        if (eventAlias == TriggerData.AppearLevelEventAlias)
-        {
-            SetShown(true);
         }
     }
 

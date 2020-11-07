@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using BiangStudio.GameDataFormat.Grid;
+using BiangStudio.Messenger;
 using BiangStudio.ObjectPool;
 using FlowCanvas;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class WorldModule : PoolObject
 {
@@ -134,9 +136,16 @@ public class WorldModule : PoolObject
 
         foreach (LevelTriggerBase.Data triggerData in worldModuleData.WorldModuleLevelTriggerGroupData.TriggerDataList)
         {
-            LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[triggerData.LevelTriggerTypeIndex].AllocateGameObject<LevelTriggerBase>(WorldModuleLevelTriggerRoot);
-            trigger.InitializeInWorldModule((LevelTriggerBase.Data) triggerData.Clone());
-            WorldModuleLevelTriggers.Add(trigger);
+            LevelTriggerBase.Data dataClone = (LevelTriggerBase.Data) triggerData.Clone();
+            if (string.IsNullOrEmpty(dataClone.AppearLevelEventAlias))
+            {
+                GenerateLevelTrigger(dataClone);
+            }
+            else
+            {
+                dataClone.WorldModule = this; // todo 风险，内存泄漏，不释放
+                ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, dataClone.OnAppearEventAlias);
+            }
         }
 
         if (!string.IsNullOrWhiteSpace(worldModuleData.WorldModuleFlowAssetPath))
@@ -149,6 +158,13 @@ public class WorldModule : PoolObject
                 FlowScriptController.StartBehaviour();
             }
         }
+    }
+
+    public void GenerateLevelTrigger(LevelTriggerBase.Data dataClone)
+    {
+        LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[dataClone.LevelTriggerTypeIndex].AllocateGameObject<LevelTriggerBase>(WorldModuleLevelTriggerRoot);
+        trigger.InitializeInWorldModule(dataClone);
+        WorldModuleLevelTriggers.Add(trigger);
     }
 
     public Box GenerateBox(ushort boxTypeIndex, GridPos3D localGP, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)

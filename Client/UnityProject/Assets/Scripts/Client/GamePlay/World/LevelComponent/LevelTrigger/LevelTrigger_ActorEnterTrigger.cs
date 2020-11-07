@@ -48,17 +48,20 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
+        if (!IsRecycled)
         {
-            Actor actor = collider.gameObject.GetComponentInParent<Actor>();
-            if (actor != null)
+            if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
             {
-                if (actor.ActorType == childData.RequiredActorType)
+                Actor actor = collider.gameObject.GetComponentInParent<Actor>();
+                if (actor != null)
                 {
-                    if (!StayActorList.Contains(actor))
+                    if (actor.ActorType == childData.RequiredActorType)
                     {
-                        StayActorList.Add(actor);
-                        StayActorTimeDict.Add(actor.GUID, 0);
+                        if (!StayActorList.Contains(actor))
+                        {
+                            StayActorList.Add(actor);
+                            StayActorTimeDict.Add(actor.GUID, 0);
+                        }
                     }
                 }
             }
@@ -69,48 +72,57 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
 
     void FixedUpdate()
     {
-        bool trigger = false;
-        triggeredActorList.Clear();
-        foreach (Actor actor in StayActorList)
+        if (!IsRecycled)
         {
-            if (StayActorTimeDict.ContainsKey(actor.GUID))
+            bool trigger = false;
+            triggeredActorList.Clear();
+            foreach (Actor actor in StayActorList)
             {
-                StayActorTimeDict[actor.GUID] += Time.fixedDeltaTime;
-                if (StayActorTimeDict[actor.GUID] >= childData.RequiredStayDuration)
+                if (StayActorTimeDict.ContainsKey(actor.GUID))
                 {
-                    trigger = true;
-                    if (TriggerData.KeepTriggering)
+                    StayActorTimeDict[actor.GUID] += Time.fixedDeltaTime;
+                    if (StayActorTimeDict[actor.GUID] >= childData.RequiredStayDuration)
                     {
-                        StayActorTimeDict[actor.GUID] = 0;
-                    }
-                    else
-                    {
-                        triggeredActorList.Add(actor);
+                        trigger = true;
+                        if (TriggerData != null)
+                        {
+                            if (TriggerData.KeepTriggering)
+                            {
+                                StayActorTimeDict[actor.GUID] = 0;
+                            }
+                            else
+                            {
+                                triggeredActorList.Add(actor);
+                            }
+                        }
                     }
                 }
             }
-        }
 
-        foreach (Actor actor in triggeredActorList)
-        {
-            StayActorList.Remove(actor);
-            StayActorTimeDict.Remove(actor.GUID);
-        }
+            foreach (Actor actor in triggeredActorList)
+            {
+                StayActorList.Remove(actor);
+                StayActorTimeDict.Remove(actor.GUID);
+            }
 
-        if (trigger) TriggerEvent();
+            if (trigger) TriggerEvent();
+        }
     }
 
     void OnTriggerExit(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
+        if (!IsRecycled)
         {
-            Actor actor = collider.gameObject.GetComponentInParent<Actor>();
-            if (actor != null)
+            if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
             {
-                if (actor.ActorType == childData.RequiredActorType)
+                Actor actor = collider.gameObject.GetComponentInParent<Actor>();
+                if (actor != null)
                 {
-                    StayActorList.Remove(actor);
-                    StayActorTimeDict.Remove(actor.GUID);
+                    if (actor.ActorType == childData.RequiredActorType)
+                    {
+                        StayActorList.Remove(actor);
+                        StayActorTimeDict.Remove(actor.GUID);
+                    }
                 }
             }
         }
