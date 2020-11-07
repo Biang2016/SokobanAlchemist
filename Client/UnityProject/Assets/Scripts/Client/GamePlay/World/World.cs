@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BiangStudio.GameDataFormat.Grid;
+using BiangStudio.Messenger;
 using BiangStudio.ObjectPool;
 using UnityEngine;
 
@@ -207,9 +208,24 @@ public class World : PoolObject
 
         foreach (LevelTriggerBase.Data triggerData in WorldData.WorldLevelTriggerGroupData.TriggerDataList)
         {
-            LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[triggerData.LevelTriggerTypeIndex].AllocateGameObject<LevelTriggerBase>(WorldLevelTriggerRoot);
-            trigger.InitializeInWorld((LevelTriggerBase.Data) triggerData.Clone());
-            WorldLevelTriggers.Add(trigger);
+            LevelTriggerBase.Data dataClone = (LevelTriggerBase.Data) triggerData.Clone();
+            if (string.IsNullOrEmpty(dataClone.AppearLevelEventAlias))
+            {
+                GenerateLevelTrigger(dataClone);
+            }
+            else
+            {
+                Callback<string> cb = null;
+                cb = (eventAlias) =>
+                {
+                    if (eventAlias.Equals(dataClone.AppearLevelEventAlias))
+                    {
+                        GenerateLevelTrigger(dataClone);
+                        ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, cb);
+                    }
+                };
+                ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, cb);
+            }
         }
 
         foreach (Box.WorldSpecialBoxData worldSpecialBoxData in WorldData.WorldSpecialBoxDataList)
@@ -231,6 +247,13 @@ public class World : PoolObject
         }
 
         BattleManager.Instance.CreateActorsByBornPointGroupData(worldData.WorldBornPointGroupData, worldData.DefaultWorldActorBornPointAlias);
+    }
+
+    public void GenerateLevelTrigger(LevelTriggerBase.Data dataClone)
+    {
+        LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[dataClone.LevelTriggerTypeIndex].AllocateGameObject<LevelTriggerBase>(WorldLevelTriggerRoot);
+        trigger.InitializeInWorld(dataClone);
+        WorldLevelTriggers.Add(trigger);
     }
 
     private void GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, List<Box.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)

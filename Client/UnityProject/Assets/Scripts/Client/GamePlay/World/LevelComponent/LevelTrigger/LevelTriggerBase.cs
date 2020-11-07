@@ -23,8 +23,6 @@ public abstract class LevelTriggerBase : PoolObject
     [Serializable]
     public class Data : LevelComponentData
     {
-        internal WorldModule WorldModule;
-
         [HideInInspector]
         public ushort LevelTriggerTypeIndex;
 
@@ -84,14 +82,6 @@ public abstract class LevelTriggerBase : PoolObject
         private IEnumerable<string> GetAllEnemyNames => ConfigManager.GetAllEnemyNames();
 
         #endregion
-
-        public void OnAppearEventAlias(string eventAlias)
-        {
-            if (AppearLevelEventAlias.Equals(eventAlias))
-            {
-                WorldModule.GenerateLevelTrigger(this);
-            }
-        }
     }
 
     public override void OnUsed()
@@ -135,12 +125,6 @@ public abstract class LevelTriggerBase : PoolObject
 
     private void RegisterEvent()
     {
-        if (!string.IsNullOrWhiteSpace(TriggerData.AppearLevelEventAlias))
-        {
-            TriggerData.WorldModule = null;
-            ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, TriggerData.OnAppearEventAlias); // 初始化时就注销显示事件
-        }
-
         if (!string.IsNullOrWhiteSpace(TriggerData.DisappearLevelEventAlias))
         {
             ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnDisappearEvent);
@@ -149,12 +133,6 @@ public abstract class LevelTriggerBase : PoolObject
 
     private void UnRegisterEvent()
     {
-        if (!string.IsNullOrWhiteSpace(TriggerData.AppearLevelEventAlias))
-        {
-            TriggerData.WorldModule = null;
-            ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, TriggerData.OnAppearEventAlias); // 为了避免初始化时没有注销事件
-        }
-
         if (!string.IsNullOrWhiteSpace(TriggerData.DisappearLevelEventAlias))
         {
             ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnDisappearEvent);

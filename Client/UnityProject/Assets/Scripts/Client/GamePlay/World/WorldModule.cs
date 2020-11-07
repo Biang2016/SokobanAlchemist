@@ -143,8 +143,16 @@ public class WorldModule : PoolObject
             }
             else
             {
-                dataClone.WorldModule = this; // todo 风险，内存泄漏，不释放
-                ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, dataClone.OnAppearEventAlias);
+                Callback<string> cb = null;
+                cb = (eventAlias) =>
+                {
+                    if (eventAlias.Equals(dataClone.AppearLevelEventAlias))
+                    {
+                        GenerateLevelTrigger(dataClone);
+                        ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, cb);
+                    }
+                };
+                ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, cb);
             }
         }
 
