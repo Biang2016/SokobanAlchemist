@@ -17,7 +17,7 @@ MonoBehaviour:
     Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"1"},{"LevelEventAlias":{"_value":"Toturial_3_ActionBoxTip"},"_position":{"x":210.0,"y":180.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"2"},{"_simplexNode":{"NoticeTip":{"_value":"Kick
     ActionBox to gain action points"},"TipPositionType":{"_value":4},"Duration":{"_value":1.0}},"_position":{"x":585.0,"y":180.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
     Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"3"},{"LevelEventAlias":{"_value":"Toturial_3_GoodLuckTip"},"_position":{"x":210.0,"y":255.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"4"},{"_simplexNode":{"NoticeTip":{"_value":"Good
-    Luck!"},"TipPositionType":{},"Duration":{"_value":1.0}},"_position":{"x":585.0,"y":255.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
+    Luck!"},"TipPositionType":{"_value":4},"Duration":{"_value":1.0}},"_position":{"x":585.0,"y":255.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
     Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"5"},{"LevelEventAlias":{"_value":"Toturial_3_LockTrigger_1"},"_position":{"x":210.0,"y":330.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"6"},{"_position":{"x":570.0,"y":360.0},"$type":"FlowCanvas.Nodes.AwaitAll","$id":"7"},{"_simplexNode":{"LevelEventAlias":{"_value":"Toturial_3_LockOpen"}},"_position":{"x":750.0,"y":360.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_BroadcastLevelEvent,
     Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"8"},{"LevelEventAlias":{"_value":"Toturial_3_LockTrigger_2"},"_position":{"x":210.0,"y":405.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"9"}],"connections":[{"_sourcePortName":"OnTriggered","_targetPortName":"
     ","_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
@@ -29,7 +29,7 @@ MonoBehaviour:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: 125, y: -111}
+    _translation: {x: 53, y: -15}
     _zoomFactor: 1
   _haltSerialization: 0
 #---GRAPH_START---
@@ -114,7 +114,7 @@ MonoBehaviour:
 #                    "_value": "Good Luck!"
 #                },
 #                "TipPositionType": {
-#
+#                    "_value": 4
 #                },
 #                "Duration": {
 #                    "_value": 1.0

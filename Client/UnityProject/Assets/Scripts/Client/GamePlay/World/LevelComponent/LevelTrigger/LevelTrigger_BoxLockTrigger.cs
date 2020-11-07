@@ -114,6 +114,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
         }
     }
 
+#if UNITY_EDITOR
     protected override void OnDrawGizmos()
     {
         base.OnDrawGizmos();
@@ -123,4 +124,5 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
         Gizmos.DrawWireCube(transform.position, Vector3.one * 0.5f);
         Gizmos.DrawSphere(transform.position + Vector3.right * 0.25f + Vector3.forward * 0.25f, 0.15f);
     }
+#endif
 }
