@@ -183,7 +183,7 @@ public abstract class LevelTriggerBase : PoolObject
     }
 
 #if UNITY_EDITOR
-    void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         if (!Application.isPlaying)
         {
@@ -216,7 +216,7 @@ public abstract class LevelTriggerBase : PoolObject
         }
     }
 
-    public bool RenameBoxTypeName(string srcBoxName,string targetBoxName, StringBuilder info)
+    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)
     {
         bool isDirty = false;
         foreach (FieldInfo fi in TriggerData.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public))
@@ -258,6 +258,7 @@ public abstract class LevelTriggerBase : PoolObject
 
         return isDirty;
     }
+
     public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info)
     {
         bool isDirty = false;

@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using BiangStudio;
+using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -32,15 +33,16 @@ public class BornPointDesignHelper : MonoBehaviour
         Color gizmosColor;
         if (BornPointData.ActorType == "Player1")
         {
-            gizmosColor = Color.yellow;
+            gizmosColor = "#FF133A".HTMLColorToColor();
         }
         else
         {
-            gizmosColor = Color.white;
+            gizmosColor = "#9DFF01".HTMLColorToColor();
         }
 
         Gizmos.color = gizmosColor;
-        Gizmos.DrawSphere(transform.position, 0.5f);
+        Gizmos.DrawSphere(transform.position + Vector3.left * 0.25f + Vector3.forward * 0.25f, 0.25f);
+        transform.DrawSpecialTip(Vector3.up + Vector3.left * 0.15f, gizmosColor, gizmosColor, BornPointData.ActorType.Replace("Enemy", ""));
     }
 #endif
 }

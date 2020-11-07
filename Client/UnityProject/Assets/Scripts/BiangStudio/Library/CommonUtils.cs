@@ -115,10 +115,20 @@ namespace BiangStudio
             return new Color(R, G, B);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="htmlColor">AARRGGBB</param>
+        /// <returns></returns>
         public static Color HTMLColorToColor(this string htmlColor)
         {
             Color cl = new Color();
             ColorUtility.TryParseHtmlString(htmlColor, out cl);
+            if (!cl.a.Equals(1))
+            {
+                cl = new Color(cl.g, cl.b, cl.a, cl.r);
+            }
+
             return cl;
         }
 

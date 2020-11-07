@@ -103,9 +103,10 @@ public class PlayerActor : Actor
                 {
                     GridPos3D quickMoveAttemptGP = quickMoveAttempt.ToGridPos3D();
                     GridPos3D targetPos = CurWorldGP + quickMoveAttemptGP;
-                    Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(targetPos, out WorldModule module, out GridPos3D _, false);
-                    if (!box || box.Passable ||
-                        (box && WorldManager.Instance.CurrentWorld.CheckCanMoveBox(box.WorldGP, box.WorldGP + quickMoveAttemptGP))) // 能走到才开启短按
+                    Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(targetPos, out WorldModule module, out GridPos3D _, true);
+                    if ((!box && module)
+                        || (box && box.Passable)
+                        || (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex) && WorldManager.Instance.CurrentWorld.CheckCanMoveBox(box.WorldGP, box.WorldGP + quickMoveAttemptGP))) // 能走到才开启短按
                     {
                         CurMoveAttempt = quickMoveAttempt;
                         isQuickMoving = true;

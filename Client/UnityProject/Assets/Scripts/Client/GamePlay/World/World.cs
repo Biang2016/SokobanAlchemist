@@ -13,7 +13,7 @@ public class World : PoolObject
     [HideInInspector]
     public WorldModule[,,] WorldModuleMatrix = new WorldModule[WORLD_SIZE, WORLD_HEIGHT, WORLD_SIZE];
 
-    public WorldModule[,,] DeadZoneWorldModuleMatrix = new WorldModule[WORLD_SIZE + 2, WORLD_HEIGHT + 2, WORLD_SIZE + 2];
+    public WorldModule[,,] BorderWorldModuleMatrix = new WorldModule[WORLD_SIZE + 2, WORLD_HEIGHT + 2, WORLD_SIZE + 2];
 
     private List<WorldCameraPOI> POIs = new List<WorldCameraPOI>();
     private List<LevelTriggerBase> WorldLevelTriggers = new List<LevelTriggerBase>();
@@ -21,7 +21,7 @@ public class World : PoolObject
     #region Root
 
     private Transform WorldModuleRoot;
-    private Transform DeadZoneModuleRoot;
+    private Transform BorderWorldModuleRoot;
     private Transform WorldCameraPOIRoot;
     private Transform WorldLevelTriggerRoot;
 
@@ -31,8 +31,8 @@ public class World : PoolObject
     {
         WorldModuleRoot = new GameObject("WorldModuleRoot").transform;
         WorldModuleRoot.parent = transform;
-        DeadZoneModuleRoot = new GameObject("DeadZoneModuleRoot").transform;
-        DeadZoneModuleRoot.parent = transform;
+        BorderWorldModuleRoot = new GameObject("BorderWorldModuleRoot").transform;
+        BorderWorldModuleRoot.parent = transform;
         WorldCameraPOIRoot = new GameObject("WorldCameraPOIRoot").transform;
         WorldCameraPOIRoot.parent = transform;
         WorldLevelTriggerRoot = new GameObject("WorldLevelTriggerRoot").transform;
@@ -54,15 +54,15 @@ public class World : PoolObject
             }
         }
 
-        for (int x = 0; x < DeadZoneWorldModuleMatrix.GetLength(0); x++)
+        for (int x = 0; x < BorderWorldModuleMatrix.GetLength(0); x++)
         {
-            for (int y = 0; y < DeadZoneWorldModuleMatrix.GetLength(1); y++)
+            for (int y = 0; y < BorderWorldModuleMatrix.GetLength(1); y++)
             {
-                for (int z = 0; z < DeadZoneWorldModuleMatrix.GetLength(2); z++)
+                for (int z = 0; z < BorderWorldModuleMatrix.GetLength(2); z++)
                 {
-                    DeadZoneWorldModuleMatrix[x, y, z]?.Clear();
-                    DeadZoneWorldModuleMatrix[x, y, z]?.PoolRecycle();
-                    DeadZoneWorldModuleMatrix[x, y, z] = null;
+                    BorderWorldModuleMatrix[x, y, z]?.Clear();
+                    BorderWorldModuleMatrix[x, y, z]?.PoolRecycle();
+                    BorderWorldModuleMatrix[x, y, z] = null;
                 }
             }
         }
@@ -112,22 +112,22 @@ public class World : PoolObject
                     ushort index_before = worldData.ModuleMatrix[x, y, z - 1];
                     if (index == 0 && index_before != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
                     }
 
                     if (index != 0 && index_before == 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, z - 1);
+                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z - 1);
                     }
 
                     if (z == 1 && index_before != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, -1);
+                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, -1);
                     }
 
                     if (z == WORLD_SIZE - 1 && index != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, WORLD_SIZE);
+                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, WORLD_SIZE);
                     }
                 }
             }
@@ -174,22 +174,22 @@ public class World : PoolObject
                     ushort index_before = worldData.ModuleMatrix[x - 1, y, z];
                     if (index == 0 && index_before != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
                     }
 
                     if (index != 0 && index_before == 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x - 1, y, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x - 1, y, z);
                     }
 
                     if (x == 1 && index_before != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, -1, y, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, -1, y, z);
                     }
 
                     if (x == WORLD_SIZE - 1 && index != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, WORLD_SIZE, y, z);
+                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, WORLD_SIZE, y, z);
                     }
                 }
             }
@@ -235,15 +235,15 @@ public class World : PoolObject
 
     private void GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, List<Box.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)
     {
-        bool isDeadModule = worldModuleTypeIndex == ConfigManager.WorldModule_DeadZoneIndex;
-        if (isDeadModule && DeadZoneWorldModuleMatrix[x + 1, y + 1, z + 1] != null) return;
-        WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(isDeadModule ? DeadZoneModuleRoot : WorldModuleRoot);
+        bool isBorderModule = worldModuleTypeIndex == ConfigManager.WorldModule_DeadZoneIndex || worldModuleTypeIndex == ConfigManager.WorldModule_HiddenWallIndex;
+        if (isBorderModule && BorderWorldModuleMatrix[x + 1, y + 1, z + 1] != null) return;
+        WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(isBorderModule ? BorderWorldModuleRoot : WorldModuleRoot);
         WorldModuleData data = ConfigManager.GetWorldModuleDataConfig(worldModuleTypeIndex);
 
         wm.name = $"WM_{data.WorldModuleTypeName}({x}, {y}, {z})";
-        if (isDeadModule)
+        if (isBorderModule)
         {
-            DeadZoneWorldModuleMatrix[x + 1, y + 1, z + 1] = wm;
+            BorderWorldModuleMatrix[x + 1, y + 1, z + 1] = wm;
         }
         else
         {

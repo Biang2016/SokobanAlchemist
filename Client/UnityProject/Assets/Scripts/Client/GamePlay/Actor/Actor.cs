@@ -93,9 +93,23 @@ public class Actor : PoolObject, ISerializationCallbackReceiver
     }
 
     [DisplayAsString]
+    [ShowInInspector]
     [LabelText("世界坐标")]
     [BoxGroup("战斗状态")]
-    public GridPos3D CurWorldGP;
+    public GridPos3D CurWorldGP
+    {
+        get { return curWorldGP; }
+        set
+        {
+            if (curWorldGP != value)
+            {
+                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(value, true);
+                if (module) curWorldGP = value;
+            }
+        }
+    }
+
+    private GridPos3D curWorldGP;
 
     [DisplayAsString]
     [LabelText("上帧世界坐标")]
@@ -248,7 +262,7 @@ public class Actor : PoolObject, ISerializationCallbackReceiver
     [ShowInInspector]
     [BoxGroup("冻结")]
     [LabelText("冻结的箱子特殊功能")]
-    public List<BoxFunctionBase> RawFrozenBoxFunctions = new List<BoxFunctionBase>();// 干数据，禁修改
+    public List<BoxFunctionBase> RawFrozenBoxFunctions = new List<BoxFunctionBase>(); // 干数据，禁修改
 
     [HideInInspector]
     public byte[] RawFrozenBoxFunctionData;
@@ -495,10 +509,30 @@ public class Actor : PoolObject, ISerializationCallbackReceiver
 
         CurWorldGP = transform.position.ToGridPos3D();
 
+        // 底部无Box则下落一格
         if (!ActorStatPropSet.IsFrozen)
         {
-            Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(CurWorldGP + new GridPos3D(0, -1, 0), out WorldModule module, out GridPos3D localGP, false);
-            if (!box) transform.position += Vector3.down;
+            Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(CurWorldGP + new GridPos3D(0, -1, 0), out WorldModule _, out GridPos3D localGP, false);
+            if (!box)
+            {
+                if (RigidBody.constraints.HasFlag(RigidbodyConstraints.FreezePositionY))
+                {
+                    RigidBody.constraints -= RigidbodyConstraints.FreezePositionY;
+                }
+
+                RigidBody.drag = 0f;
+            }
+            else
+            {
+                RigidBody.constraints |= RigidbodyConstraints.FreezePositionY;
+                SnapToGridY();
+            }
+        }
+
+        if (ActorBattleHelper.IsDead)
+        {
+            RigidBody.constraints |= RigidbodyConstraints.FreezePositionY;
+            SnapToGridY();
         }
 
         LastMoveAttempt = CurMoveAttempt;
@@ -537,6 +571,11 @@ public class Actor : PoolObject, ISerializationCallbackReceiver
     public void SnapToGridX()
     {
         transform.position = new Vector3(CurWorldGP.x, transform.position.y, transform.position.z);
+    }
+
+    public void SnapToGridY()
+    {
+        transform.position = new Vector3(transform.position.x, CurWorldGP.y, transform.position.z);
     }
 
     public void SnapToGridZ()

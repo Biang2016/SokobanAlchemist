@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangStudio;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -99,5 +100,14 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
                 }
             }
         }
+    }
+
+    protected override void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
+        Color color = "#0081FF".HTMLColorToColor();
+        Gizmos.color = color;
+        transform.DrawSpecialTip(Vector3.zero, color, Color.white, "BLT");
+        Gizmos.DrawWireCube(transform.position, Vector3.one * 0.5f);
     }
 }

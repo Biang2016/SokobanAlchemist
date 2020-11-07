@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangStudio;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -113,5 +114,14 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
                 }
             }
         }
+    }
+
+    protected override void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
+        Color color = "#E85520".HTMLColorToColor();
+        Gizmos.color = color;
+        transform.DrawSpecialTip(Vector3.zero, color, Color.white, "AET");
+        Gizmos.DrawWireCube(transform.position, Vector3.one * 0.5f);
     }
 }

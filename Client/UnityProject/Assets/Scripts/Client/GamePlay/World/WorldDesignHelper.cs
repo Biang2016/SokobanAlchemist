@@ -124,15 +124,6 @@ public class WorldDesignHelper : MonoBehaviour
         return worldData;
     }
 
-    [HideInPlayMode]
-    [HideInPrefabAssets]
-    [Button("一键整理", ButtonSizes.Large)]
-    [GUIColor(0f, 1f, 0)]
-    public void SortWorldButton()
-    {
-        SortWorld();
-    }
-
     public bool SortWorld()
     {
         bool dirty = false;

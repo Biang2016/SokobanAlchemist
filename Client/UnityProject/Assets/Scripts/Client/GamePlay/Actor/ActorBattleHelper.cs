@@ -21,7 +21,14 @@ public class ActorBattleHelper : ActorMonoHelper
         BoxCollider.enabled = false;
         InGameHealthBar?.PoolRecycle();
         InGameHealthBar = null;
+        IsDead = false;
         base.OnRecycled();
+    }
+
+    public override void OnUsed()
+    {
+        base.OnUsed();
+        IsDead = false;
     }
 
     public void Initialize()
@@ -102,10 +109,12 @@ public class ActorBattleHelper : ActorMonoHelper
 
     #region Die
 
+    public bool IsDead = false;
+
     public void Die()
     {
         DropDieBox();
-
+        IsDead = true;
         if (Actor.IsPlayer)
         {
             BattleManager.Instance.LoseGame();

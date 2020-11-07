@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BiangStudio;
 using BiangStudio.GameDataFormat.Grid;
+using FlowCanvas;
+using NodeCanvas.Framework;
+using ParadoxNotion.Design;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -16,10 +20,29 @@ public class WorldModuleDesignHelper : MonoBehaviour
 {
     public WorldModuleFeature WorldModuleFeature;
 
-    [LabelText("模组AI路径 Resources/??")]
-    public string WorldModuleFlowAssetPath;
+    [LabelText("模组AI")]
+    [PropertyOrder(-1)]
+    public FlowScript WorldModuleAI;
 
 #if UNITY_EDITOR
+
+    [PropertyOrder(-1)]
+    [Button("创建模组AI")]
+    [HideIf("WorldModuleAI", null)]
+    private void CreateModuleAIFlowScript()
+    {
+        if (WorldModuleAI != null) return;
+        Graph newGraph = (Graph) EditorUtils.CreateAsset(typeof(FlowScript), "Assets/Resources/AI/ModuleAI/" + name + ".asset");
+        if (newGraph != null)
+        {
+            UndoUtility.RecordObject(gameObject, "Create Module AI asset");
+            WorldModuleAI = (FlowScript) newGraph;
+            UndoUtility.SetDirty(gameObject);
+            UndoUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
+        }
+    }
+
     public WorldModuleData ExportWorldModuleData()
     {
         List<Box> boxes = GetComponentsInChildren<Box>().ToList();
@@ -71,23 +94,23 @@ public class WorldModuleDesignHelper : MonoBehaviour
             }
         }
 
-        worldModuleData.WorldModuleFlowAssetPath = WorldModuleFlowAssetPath;
+        worldModuleData.WorldModuleFlowAssetPath = "";
+        if (WorldModuleAI)
+        {
+            string aiAssetPath = AssetDatabase.GetAssetPath(WorldModuleAI);
+            if (aiAssetPath.StartsWith("Assets/Resources/") && aiAssetPath.EndsWith(".asset"))
+            {
+                worldModuleData.WorldModuleFlowAssetPath = aiAssetPath.Replace("Assets/Resources/", "").Replace(".asset", "");
+            }
+        }
+
         return worldModuleData;
     }
-
-    public Color RangeGizmoColor;
-    public Color RangeGizmoBorderColor;
 
     void OnDrawGizmos()
     {
         Gizmos.matrix = transform.localToWorldMatrix;
-        //if (Selection.Contains(gameObject))
-        //{
-        //    Gizmos.color = RangeGizmoColor;
-        //    Gizmos.DrawCube(Vector3.zero + Vector3.one * (WorldModule.MODULE_SIZE / 2f - 0.5f), Vector3.one * WorldModule.MODULE_SIZE);
-        //}
-
-        Gizmos.color = RangeGizmoBorderColor;
+        Gizmos.color = "#93383D".HTMLColorToColor();
         Gizmos.DrawWireCube(Vector3.zero + Vector3.one * (WorldModule.MODULE_SIZE / 2f - 0.5f), Vector3.one * WorldModule.MODULE_SIZE);
     }
 
@@ -126,15 +149,6 @@ public class WorldModuleDesignHelper : MonoBehaviour
         ConfigManager.LoadAllConfigs();
         List<string> res = ConfigManager.WorldModuleTypeDefineDict.TypeIndexDict.Keys.ToList();
         return res;
-    }
-
-    [HideInPlayMode]
-    [HideInPrefabAssets]
-    [Button("一键整理", ButtonSizes.Large)]
-    [GUIColor(0f, 1f, 0f)]
-    public void SortModuleButton()
-    {
-        SortModule();
     }
 
     public bool SortModule()
