@@ -53,7 +53,6 @@ public class ActorFrozenHelper : ActorMonoHelper
             }
             else
             {
-                Debug.Log("Actor Frozen: " + Actor.name);
                 Actor.SnapToGrid();
                 WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Actor.CurWorldGP);
                 if (module)

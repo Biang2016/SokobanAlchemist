@@ -109,5 +109,6 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
         Gizmos.color = color;
         transform.DrawSpecialTip(Vector3.zero, color, Color.white, "BLT");
         Gizmos.DrawWireCube(transform.position, Vector3.one * 0.5f);
+        Gizmos.DrawSphere(transform.position + Vector3.right * 0.25f + Vector3.forward * 0.25f, 0.15f);
     }
 }
