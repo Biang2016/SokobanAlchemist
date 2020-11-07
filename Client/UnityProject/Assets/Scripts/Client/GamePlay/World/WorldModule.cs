@@ -133,13 +133,16 @@ public class WorldModule : PoolObject
             Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[localGP.x, localGP.y, localGP.z]; // 这里没有LevelEventTriggerBF的覆写信息
             Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = worldExtraSerializeDataForOneModule[localGP.x, localGP.y, localGP.z]; // 这里可能有LevelEventTriggerBF的覆写信息
             if (boxExtraSerializeDataFromWorld != null)
+            {
                 foreach (BoxFunctionBase worldBF in boxExtraSerializeDataFromWorld.BoxFunctions)
                 {
                     if (worldBF is BoxFunction_LevelEventTriggerAppear appear)
                     {
-                        bf.CopyDataFrom(appear);
+                        bf.CopyDataFrom(appear); // 此处仅拷贝这个BF的数据，其他BF在GenerateBox的时候再拷贝
+                        break;
                     }
                 }
+            }
 
             bf.GenerateBoxAction = () =>
             {

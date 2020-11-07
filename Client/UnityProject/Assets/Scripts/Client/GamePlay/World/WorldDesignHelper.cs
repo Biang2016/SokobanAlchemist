@@ -132,7 +132,7 @@ public class WorldDesignHelper : MonoBehaviour
                     data.BoxTypeIndex = boxTypeIndex;
                     data.BoxFunction_LevelEventTriggerAppear = (BoxFunction_LevelEventTriggerAppear) bf_leta.Clone();
                     data.WorldSpecialBoxData = worldSpecialBoxData;// 世界维度LevelEventTriggerAppear的箱子自己处理自己的ExtraSerializeData
-                    worldData.EventTriggerAppearBoxDataList.Add(data); // 序列到这里
+                    worldData.WorldSpecialBoxEventTriggerAppearBoxDataList.Add(data); // 序列到这里
                     isLevelEventTriggerAppearBox = true;
                     break;
                 }

@@ -235,7 +235,7 @@ public class World : PoolObject
             }
         }
 
-        foreach (BoxFunction_LevelEventTriggerAppear.Data data in WorldData.EventTriggerAppearBoxDataList)
+        foreach (BoxFunction_LevelEventTriggerAppear.Data data in WorldData.WorldSpecialBoxEventTriggerAppearBoxDataList)
         {
             BoxFunction_LevelEventTriggerAppear.Data dataClone = (BoxFunction_LevelEventTriggerAppear.Data) data.Clone();
             BoxFunction_LevelEventTriggerAppear bf = dataClone.BoxFunction_LevelEventTriggerAppear;
