@@ -172,12 +172,12 @@ public abstract class LevelTriggerBase : PoolObject
         {
             if (IsUnderWorldModuleSpecialBoxesRoot)
             {
-                transform.DrawSpecialTip(Vector3.up, "#0AFFF1".HTMLColorToColor(), Color.cyan, "模特");
+                transform.DrawSpecialTip(Vector3.left * 0.5f, "#0AFFF1".HTMLColorToColor(), Color.cyan, "模特");
             }
 
             if (IsUnderWorldSpecialBoxesRoot)
             {
-                transform.DrawSpecialTip(Vector3.up, "#FF8000".HTMLColorToColor(), Color.yellow, "世特");
+                transform.DrawSpecialTip(Vector3.left * 0.5f, "#FF8000".HTMLColorToColor(), Color.yellow, "世特");
             }
         }
     }

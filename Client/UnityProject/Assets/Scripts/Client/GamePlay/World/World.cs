@@ -18,6 +18,7 @@ public class World : PoolObject
 
     private List<WorldCameraPOI> POIs = new List<WorldCameraPOI>();
     private List<LevelTriggerBase> WorldLevelTriggers = new List<LevelTriggerBase>();
+    public List<BoxFunction_LevelEventTriggerAppear> EventTriggerAppearBoxFunctionList = new List<BoxFunction_LevelEventTriggerAppear>();
 
     #region Root
 
@@ -80,22 +81,28 @@ public class World : PoolObject
         }
 
         WorldLevelTriggers.Clear();
+        foreach (BoxFunction_LevelEventTriggerAppear bf in EventTriggerAppearBoxFunctionList)
+        {
+            bf.ClearAndUnRegister();
+        }
+
+        EventTriggerAppearBoxFunctionList.Clear();
         WorldData = null;
     }
 
     public void Initialize(WorldData worldData)
     {
         WorldData = worldData;
-        for (int x = 0; x < worldData.ModuleMatrix.GetLength(0); x++)
+        for (int x = 0; x < WorldData.ModuleMatrix.GetLength(0); x++)
         {
-            for (int y = 0; y < worldData.ModuleMatrix.GetLength(1); y++)
+            for (int y = 0; y < WorldData.ModuleMatrix.GetLength(1); y++)
             {
-                for (int z = 0; z < worldData.ModuleMatrix.GetLength(2); z++)
+                for (int z = 0; z < WorldData.ModuleMatrix.GetLength(2); z++)
                 {
-                    ushort worldModuleTypeIndex = worldData.ModuleMatrix[x, y, z];
+                    ushort worldModuleTypeIndex = WorldData.ModuleMatrix[x, y, z];
                     if (worldModuleTypeIndex != 0)
                     {
-                        GenerateWorldModule(worldModuleTypeIndex, x, y, z, worldData.ModuleBoxExtraSerializeDataMatrix[x, y, z]);
+                        GenerateWorldModule(worldModuleTypeIndex, x, y, z, WorldData.ModuleBoxExtraSerializeDataMatrix[x, y, z]);
                     }
                 }
             }
@@ -109,8 +116,8 @@ public class World : PoolObject
             {
                 for (int z = 1; z < WORLD_SIZE; z++)
                 {
-                    ushort index = worldData.ModuleMatrix[x, y, z];
-                    ushort index_before = worldData.ModuleMatrix[x, y, z - 1];
+                    ushort index = WorldData.ModuleMatrix[x, y, z];
+                    ushort index_before = WorldData.ModuleMatrix[x, y, z - 1];
                     if (index == 0 && index_before != 0)
                     {
                         GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
@@ -140,8 +147,8 @@ public class World : PoolObject
             {
                 for (int y = 1; y < WORLD_HEIGHT; y++)
                 {
-                    ushort index = worldData.ModuleMatrix[x, y, z];
-                    ushort index_before = worldData.ModuleMatrix[x, y - 1, z];
+                    ushort index = WorldData.ModuleMatrix[x, y, z];
+                    ushort index_before = WorldData.ModuleMatrix[x, y - 1, z];
                     if (index == 0 && index_before != 0)
                     {
                         GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, z);
@@ -171,8 +178,8 @@ public class World : PoolObject
             {
                 for (int x = 1; x < WORLD_SIZE; x++)
                 {
-                    ushort index = worldData.ModuleMatrix[x, y, z];
-                    ushort index_before = worldData.ModuleMatrix[x - 1, y, z];
+                    ushort index = WorldData.ModuleMatrix[x, y, z];
+                    ushort index_before = WorldData.ModuleMatrix[x - 1, y, z];
                     if (index == 0 && index_before != 0)
                     {
                         GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
@@ -228,6 +235,28 @@ public class World : PoolObject
             }
         }
 
+        foreach (BoxFunction_LevelEventTriggerAppear.Data data in WorldData.EventTriggerAppearBoxDataList)
+        {
+            BoxFunction_LevelEventTriggerAppear.Data dataClone = (BoxFunction_LevelEventTriggerAppear.Data) data.Clone();
+            BoxFunction_LevelEventTriggerAppear bf = dataClone.BoxFunction_LevelEventTriggerAppear;
+            bf.GenerateBoxAction = () =>
+            {
+                GridPos3D worldGP = data.WorldGP;
+                Box box = GetBoxByGridPosition(worldGP, out WorldModule module, out GridPos3D localGP);
+                box?.DeleteSelf(); // 强行删除该格占用Box
+                if (module)
+                {
+                    module.GenerateBox(dataClone.BoxTypeIndex, localGP.x, localGP.y, localGP.z, null, dataClone.WorldSpecialBoxData.BoxExtraSerializeDataFromWorld);
+
+                    // Box生成后此BoxFunction及注册的事件均作废
+                    bf.ClearAndUnRegister();
+                    EventTriggerAppearBoxFunctionList.Remove(bf);
+                }
+            };
+            bf.OnRegisterLevelEventID();
+            EventTriggerAppearBoxFunctionList.Add(bf);
+        }
+
         foreach (Box.WorldSpecialBoxData worldSpecialBoxData in WorldData.WorldSpecialBoxDataList)
         {
             GridPos3D worldGP = worldSpecialBoxData.WorldGP;
@@ -239,14 +268,14 @@ public class World : PoolObject
         }
 
         //todo 未来加卸载模组时需要跑一遍这里
-        worldData.WorldBornPointGroupData.InitTempData();
-        foreach (GridPos3D worldModuleGP in worldData.WorldModuleGPOrder)
+        WorldData.WorldBornPointGroupData.InitTempData();
+        foreach (GridPos3D worldModuleGP in WorldData.WorldModuleGPOrder)
         {
             WorldModule module = WorldModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
-            if (module != null) worldData.WorldBornPointGroupData.AddModuleData(module, worldModuleGP);
+            if (module != null) WorldData.WorldBornPointGroupData.AddModuleData(module, worldModuleGP);
         }
 
-        BattleManager.Instance.CreateActorsByBornPointGroupData(worldData.WorldBornPointGroupData, worldData.DefaultWorldActorBornPointAlias);
+        BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData, WorldData.DefaultWorldActorBornPointAlias);
     }
 
     public void GenerateLevelTrigger(LevelTriggerBase.Data dataClone)

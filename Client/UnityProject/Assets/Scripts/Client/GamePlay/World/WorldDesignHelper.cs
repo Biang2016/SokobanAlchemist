@@ -57,7 +57,7 @@ public class WorldDesignHelper : MonoBehaviour
                 GridPos3D boxModuleGP = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
                 if (box.RequireSerializeFunctionIntoWorld)
                 {
-                    Box.BoxExtraSerializeData data = box.GetBoxExtraSerializeDataForWorld();
+                    Box.BoxExtraSerializeData data = box.GetBoxExtraSerializeDataForWorldOverrideWorldModule();
                     data.LocalGP = boxModuleGP;
                     worldData.ModuleBoxExtraSerializeDataMatrix[gp.x, gp.y, gp.z].Add(data);
                 }
@@ -108,17 +108,38 @@ public class WorldDesignHelper : MonoBehaviour
             worldData.WorldLevelTriggerGroupData.TriggerDataList.Add(data);
         }
 
+        // 世界SpecialBox
         List<Box> worldBoxes = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot).GetComponentsInChildren<Box>().ToList();
         foreach (Box worldBox in worldBoxes)
         {
-            Box.WorldSpecialBoxData worldSpecialBoxData = worldBox.GetBoxSerializeInWorldData();
-            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(worldBox.transform, 1);
-            gp -= zeroPoint * WorldModule.MODULE_SIZE;
             GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(worldBox.gameObject);
             ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxPrefab.name];
+            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(worldBox.transform, 1);
+            gp -= zeroPoint * WorldModule.MODULE_SIZE;
+            Box.WorldSpecialBoxData worldSpecialBoxData = worldBox.GetBoxSerializeInWorldData();
             worldSpecialBoxData.WorldGP = gp;
             worldSpecialBoxData.BoxTypeIndex = boxTypeIndex;
-            worldData.WorldSpecialBoxDataList.Add(worldSpecialBoxData);
+
+            // 关卡事件触发出现的Box序列化到单独的地方
+            bool isLevelEventTriggerAppearBox = false;
+            foreach (BoxFunctionBase bf in worldBox.RawBoxFunctions)
+            {
+                if (bf is BoxFunction_LevelEventTriggerAppear bf_leta)
+                {
+                    BoxFunction_LevelEventTriggerAppear.Data data = new BoxFunction_LevelEventTriggerAppear.Data();
+                    data.WorldGP = gp;
+                    data.LevelComponentBelongsTo = LevelComponentBelongsTo.World;
+                    data.BoxTypeIndex = boxTypeIndex;
+                    data.BoxFunction_LevelEventTriggerAppear = (BoxFunction_LevelEventTriggerAppear) bf_leta.Clone();
+                    data.WorldSpecialBoxData = worldSpecialBoxData;// 世界维度LevelEventTriggerAppear的箱子自己处理自己的ExtraSerializeData
+                    worldData.EventTriggerAppearBoxDataList.Add(data); // 序列到这里
+                    isLevelEventTriggerAppearBox = true;
+                    break;
+                }
+            }
+
+            // LevelEventTriggerAppear的箱子不记录到此列表中
+            if (!isLevelEventTriggerAppearBox) worldData.WorldSpecialBoxDataList.Add(worldSpecialBoxData);
         }
 
         return worldData;

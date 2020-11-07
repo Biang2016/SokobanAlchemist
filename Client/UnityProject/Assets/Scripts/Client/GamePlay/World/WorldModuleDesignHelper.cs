@@ -54,11 +54,29 @@ public class WorldModuleDesignHelper : MonoBehaviour
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
             GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
             ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxPrefab.name];
-            worldModuleData.BoxMatrix[gp.x, gp.y, gp.z] = boxTypeIndex;
 
+            bool isLevelEventTriggerAppearBox = false;
+            foreach (BoxFunctionBase bf in box.RawBoxFunctions)
+            {
+                if (bf is BoxFunction_LevelEventTriggerAppear bf_leta)
+                {
+                    BoxFunction_LevelEventTriggerAppear.Data data = new BoxFunction_LevelEventTriggerAppear.Data();
+                    data.LocalGP = gp;
+                    data.LevelComponentBelongsTo = LevelComponentBelongsTo.WorldModule;
+                    data.BoxTypeIndex = boxTypeIndex;
+                    data.BoxFunction_LevelEventTriggerAppear = (BoxFunction_LevelEventTriggerAppear) bf_leta.Clone();
+                    worldModuleData.EventTriggerAppearBoxDataList.Add(data);
+                    isLevelEventTriggerAppearBox = true;
+                    break;
+                }
+            }
+
+            if (!isLevelEventTriggerAppearBox) worldModuleData.BoxMatrix[gp.x, gp.y, gp.z] = boxTypeIndex;
+
+            // 就算是LevelEventTriggerAppear的Box，模组特例数据也按原样序列化，箱子生成时到Matrix里面读取ExtraSerializeData
             if (box.RequireSerializeFunctionIntoWorldModule)
             {
-                Box.BoxExtraSerializeData data = box.GetBoxExtraSerializeDataForWorldModule();
+                Box.BoxExtraSerializeData data = box.GetBoxExtraSerializeDataForWorldModule(); 
                 data.LocalGP = gp;
                 worldModuleData.BoxExtraSerializeDataMatrix[gp.x, gp.y, gp.z] = data;
             }

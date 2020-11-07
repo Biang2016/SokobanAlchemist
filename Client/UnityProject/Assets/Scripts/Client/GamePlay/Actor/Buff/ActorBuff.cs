@@ -22,9 +22,9 @@ public abstract class ActorBuff : IClone<ActorBuff>
 
     #endregion
 
+    [InfoBox("@ActorBuffDisplayName")]
     protected abstract string ActorBuffDisplayName { get; }
 
-    [InfoBox("@ActorBuffDisplayName")]
     [LabelText("Buff标签")]
     [ValidateInput("ValidateActorBuffAttribute", "$validateActorBuffAttributeInfo")]
     public ActorBuffAttribute ActorBuffAttribute;

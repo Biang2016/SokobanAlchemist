@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BiangStudio.CloneVariant;
 using Sirenix.OdinInspector;
 
@@ -19,7 +20,8 @@ public class WorldModuleData : IClone<WorldModuleData>
     public ushort[,,] BoxMatrix = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
     public LevelTriggerGroupData WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();
-    public Box.BoxExtraSerializeData[,,] BoxExtraSerializeDataMatrix = new Box.BoxExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+    public Box.BoxExtraSerializeData[,,] BoxExtraSerializeDataMatrix = new Box.BoxExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 不含LevelEventTriggerBoxFunction，但含该Box的其他BF信息
+    public List<BoxFunction_LevelEventTriggerAppear.Data> EventTriggerAppearBoxDataList = new List<BoxFunction_LevelEventTriggerAppear.Data>();
 
     public WorldModuleData Clone()
     {
@@ -45,6 +47,7 @@ public class WorldModuleData : IClone<WorldModuleData>
             }
         }
 
+        data.EventTriggerAppearBoxDataList = EventTriggerAppearBoxDataList.Clone();
         return data;
     }
 

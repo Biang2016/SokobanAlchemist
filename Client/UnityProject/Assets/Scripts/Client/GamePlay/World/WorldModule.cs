@@ -23,6 +23,7 @@ public class WorldModule : PoolObject
     public WorldWallCollider WorldWallCollider;
     public WorldGroundCollider WorldGroundCollider;
     private List<LevelTriggerBase> WorldModuleLevelTriggers = new List<LevelTriggerBase>();
+    public List<BoxFunction_LevelEventTriggerAppear> EventTriggerAppearBoxFunctionList = new List<BoxFunction_LevelEventTriggerAppear>();
 
     [HideInInspector]
     public Box[,,] BoxMatrix = new Box[MODULE_SIZE, MODULE_SIZE, MODULE_SIZE];
@@ -68,6 +69,13 @@ public class WorldModule : PoolObject
         }
 
         WorldModuleLevelTriggers.Clear();
+
+        foreach (BoxFunction_LevelEventTriggerAppear bf in EventTriggerAppearBoxFunctionList)
+        {
+            bf.ClearAndUnRegister();
+        }
+
+        EventTriggerAppearBoxFunctionList.Clear();
 
         World = null;
         WorldModuleData = null;
@@ -115,6 +123,35 @@ public class WorldModule : PoolObject
             {
                 worldExtraSerializeDataForOneModule[worldBoxExtraData.LocalGP.x, worldBoxExtraData.LocalGP.y, worldBoxExtraData.LocalGP.z] = worldBoxExtraData;
             }
+        }
+
+        foreach (BoxFunction_LevelEventTriggerAppear.Data data in worldModuleData.EventTriggerAppearBoxDataList)
+        {
+            BoxFunction_LevelEventTriggerAppear.Data dataClone = (BoxFunction_LevelEventTriggerAppear.Data) data.Clone();
+            BoxFunction_LevelEventTriggerAppear bf = dataClone.BoxFunction_LevelEventTriggerAppear;
+            GridPos3D localGP = data.LocalGP;
+            Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[localGP.x, localGP.y, localGP.z]; // 这里没有LevelEventTriggerBF的覆写信息
+            Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = worldExtraSerializeDataForOneModule[localGP.x, localGP.y, localGP.z]; // 这里可能有LevelEventTriggerBF的覆写信息
+            if (boxExtraSerializeDataFromWorld != null)
+                foreach (BoxFunctionBase worldBF in boxExtraSerializeDataFromWorld.BoxFunctions)
+                {
+                    if (worldBF is BoxFunction_LevelEventTriggerAppear appear)
+                    {
+                        bf.CopyDataFrom(appear);
+                    }
+                }
+
+            bf.GenerateBoxAction = () =>
+            {
+                BoxMatrix[localGP.x, localGP.y, localGP.z]?.DeleteSelf(); // 强行删除该格占用Box
+                GenerateBox(dataClone.BoxTypeIndex, localGP.x, localGP.y, localGP.z, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
+
+                // Box生成后此BoxFunction及注册的事件均作废
+                bf.ClearAndUnRegister();
+                EventTriggerAppearBoxFunctionList.Remove(bf);
+            };
+            bf.OnRegisterLevelEventID();
+            EventTriggerAppearBoxFunctionList.Add(bf);
         }
 
         for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)

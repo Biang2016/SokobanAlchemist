@@ -227,7 +227,12 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     {
         BoxFunctions.Clear();
         BoxFunctionDict.Clear();
-        BoxFunctions = RawBoxFunctions.Clone();
+        foreach (BoxFunctionBase rawBF in RawBoxFunctions)
+        {
+            if (rawBF is BoxFunction_LevelEventTriggerAppear) continue;
+            BoxFunctions.Add(rawBF.Clone());
+        }
+
         BoxFunctionMarkAsDeleted = false;
         foreach (BoxFunctionBase bf in BoxFunctions)
         {
@@ -846,16 +851,25 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         {
             if (RequireSerializeFunctionIntoWorldModule)
             {
-                transform.DrawSpecialTip(Vector3.up, "#0AFFF1".HTMLColorToColor(), Color.cyan, "模特");
+                transform.DrawSpecialTip(Vector3.left * 0.5f, "#0AFFF1".HTMLColorToColor(), Color.cyan, "模特");
             }
 
             if (RequireHideInWorldForModuleBox)
             {
-                transform.DrawSpecialTip(Vector3.up, "#FF8000".HTMLColorToColor(), Color.yellow, "世隐");
+                transform.DrawSpecialTip(Vector3.left * 0.5f, "#FF8000".HTMLColorToColor(), Color.yellow, "世隐");
             }
             else if (RequireSerializeFunctionIntoWorld || IsUnderWorldSpecialBoxesRoot)
             {
-                transform.DrawSpecialTip(Vector3.up, "#FF8000".HTMLColorToColor(), Color.yellow, "世特");
+                transform.DrawSpecialTip(Vector3.left * 0.5f, "#FF8000".HTMLColorToColor(), Color.yellow, "世特");
+            }
+
+            if (LevelEventTriggerAppearInWorldModule)
+            {
+                transform.DrawSpecialTip(Vector3.left * 0.5f + Vector3.forward * 0.5f, Color.clear, "#B30AFF".HTMLColorToColor(), "模预隐");
+            }
+            else if (LevelEventTriggerAppearInWorld)
+            {
+                transform.DrawSpecialTip(Vector3.left * 0.5f + Vector3.forward * 0.5f, Color.clear, "#FF0A69".HTMLColorToColor(), "世预隐");
             }
         }
     }
@@ -1047,6 +1061,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
     #region BoxExtraData
 
 #if UNITY_EDITOR
+
     public bool RequireHideInWorldForModuleBox
     {
         get
@@ -1098,6 +1113,44 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         }
     }
 
+    public bool LevelEventTriggerAppearInWorldModule
+    {
+        get
+        {
+            foreach (BoxFunctionBase bf in RawBoxFunctions)
+            {
+                if (bf is BoxFunction_LevelEventTriggerAppear appear)
+                {
+                    if (appear.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
+
+    public bool LevelEventTriggerAppearInWorld
+    {
+        get
+        {
+            foreach (BoxFunctionBase bf in RawBoxFunctions)
+            {
+                if (bf is BoxFunction_LevelEventTriggerAppear appear)
+                {
+                    if (appear.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
+
 #endif
 
     public class BoxExtraSerializeData : IClone<BoxExtraSerializeData>
@@ -1121,6 +1174,22 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         data.BoxFunctions = new List<BoxFunctionBase>();
         foreach (BoxFunctionBase bf in RawBoxFunctions)
         {
+            if (bf is BoxFunction_LevelEventTriggerAppear) continue;
+            if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
+            {
+                data.BoxFunctions.Add(bf.Clone());
+            }
+        }
+
+        return data;
+    }
+
+    public BoxExtraSerializeData GetBoxExtraSerializeDataForWorldOverrideWorldModule()
+    {
+        BoxExtraSerializeData data = new BoxExtraSerializeData();
+        data.BoxFunctions = new List<BoxFunctionBase>();
+        foreach (BoxFunctionBase bf in RawBoxFunctions)
+        {
             if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
             {
                 data.BoxFunctions.Add(bf.Clone());
@@ -1136,6 +1205,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
         data.BoxFunctions = new List<BoxFunctionBase>();
         foreach (BoxFunctionBase bf in RawBoxFunctions)
         {
+            if (bf is BoxFunction_LevelEventTriggerAppear) continue;
             if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module)
             {
                 data.BoxFunctions.Add(bf.Clone());
@@ -1158,7 +1228,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
                     if (bf.GetType() == extraBF.GetType())
                     {
                         foundMatch = true;
-                        bf.ApplyData(extraBF);
+                        bf.CopyDataFrom(extraBF);
                     }
                 }
 
@@ -1187,7 +1257,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
                     if (bf.GetType() == extraBF.GetType())
                     {
                         foundMatch = true;
-                        bf.ApplyData(extraBF);
+                        bf.CopyDataFrom(extraBF);
                     }
                 }
 

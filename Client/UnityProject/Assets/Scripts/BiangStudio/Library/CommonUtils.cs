@@ -693,16 +693,24 @@ namespace BiangStudio
         public static void DrawSpecialTip(this Transform m_Trans, Vector3 relativePosition, Color wireFrameColor, Color labelColor, string label)
         {
 #if UNITY_EDITOR
-            Gizmos.color = wireFrameColor;
-            Gizmos.DrawWireCube(m_Trans.position, Vector3.one);
-            GUIStyle style = new GUIStyle();
-            style.normal.textColor = labelColor;
-            style.fontSize = 15;
-            Handles.BeginGUI();
-            Vector3 pos = m_Trans.position + relativePosition;
-            Vector2 pos2D = HandleUtility.WorldToGUIPoint(pos);
-            GUI.Label(new Rect(pos2D.x, pos2D.y, 100, 100), label, style);
-            Handles.EndGUI();
+            if (!wireFrameColor.a.Equals(0))
+            {
+                Gizmos.color = wireFrameColor;
+                Gizmos.DrawWireCube(m_Trans.position, Vector3.one);
+            }
+
+            if (!labelColor.a.Equals(0) && !string.IsNullOrWhiteSpace(label))
+            {
+                GUIStyle style = new GUIStyle();
+                style.normal.textColor = labelColor;
+                style.fontSize = 15;
+                Handles.BeginGUI();
+                Vector3 pos = m_Trans.position + relativePosition;
+                Vector2 pos2D = HandleUtility.WorldToGUIPoint(pos);
+                GUI.Label(new Rect(pos2D.x, pos2D.y, 100, 100), label, style);
+                Handles.EndGUI();
+            }
+
 #endif
         }
     }
