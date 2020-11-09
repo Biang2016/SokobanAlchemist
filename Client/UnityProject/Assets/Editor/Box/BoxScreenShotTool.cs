@@ -11,18 +11,54 @@ public class BoxScreenShotTool : Editor
     public static void CaptureScreen()
     {
         ConfigManager.ExportConfigs(false);
-        foreach (KeyValuePair<string, ushort> kv in ConfigManager.BoxTypeDefineDict.TypeIndexDict)
+        float defaultVerticalAngle = CameraManager.Instance.FieldCamera.TargetConfigData.VerAngle;
+        float defaultHorizontalAngle = CameraManager.Instance.FieldCamera.TargetConfigData.HorAngle;
+        float defaultFOV = CameraManager.Instance.FieldCamera.TargetConfigData.FOV;
+
+        CameraManager.Instance.FieldCamera.TargetConfigData.FOV = 10;
+
+        bool cancel = false;
+        int totalCount = (ConfigManager.BoxTypeDefineDict.TypeIndexDict.Count - 2) * 12;
+        int count = 0;
+        cancel = EditorUtility.DisplayCancelableProgressBar("拍照中", $"准备开始", 0);
+        if (!cancel)
         {
-            if (kv.Key.Equals("BorderBox_Hidden")) continue;
-            string filename = Application.dataPath + "/Textures/BoxScreenShots/" + kv.Key + ".png";
-            GameObject boxPrefab = (GameObject) Resources.Load("Prefabs/Designs/Box/" + kv.Key);
-            GameObject boxGO = Instantiate(boxPrefab, null);
-            Box box = boxGO.GetComponent<Box>();
-            CaptureScreenShot.CaptureTransparentScreenShot(Camera.main, 800, 800, filename);
-            DestroyImmediate(box.gameObject);
+            foreach (KeyValuePair<string, ushort> kv in ConfigManager.BoxTypeDefineDict.TypeIndexDict)
+            {
+                if (cancel) break;
+                if (kv.Key.Equals("BorderBox_Hidden")) continue;
+                if (kv.Key.Equals("EnemyFrozenBox")) continue;
+                GameObject boxPrefab = (GameObject) Resources.Load("Prefabs/Designs/Box/" + kv.Key);
+                GameObject boxGO = Instantiate(boxPrefab, null);
+                Box box = boxGO.GetComponent<Box>();
+                for (int verAngle = 0; verAngle <= 60; verAngle += 30)
+                {
+                    if (cancel) break;
+                    for (int horAngle = 0; horAngle <= 45; horAngle += 15)
+                    {
+                        if (cancel) break;
+                        count++;
+                        string filename = Application.dataPath + "/Textures/BoxScreenShots/" + kv.Key + "_" + horAngle + "_" + verAngle + ".png";
+                        CameraManager.Instance.FieldCamera.TargetConfigData.HorAngle = horAngle;
+                        CameraManager.Instance.FieldCamera.TargetConfigData.VerAngle = verAngle;
+                        CameraManager.Instance.FieldCamera.ForceUpdateCamera();
+                        CaptureScreenShot.CaptureTransparentScreenShot(Camera.main, 1920, 1080, filename);
+                        cancel = EditorUtility.DisplayCancelableProgressBar("拍照中", $"{kv.Key} 水平角{horAngle} 竖直角{verAngle}", (float) count / totalCount);
+                    }
+                }
+
+                DestroyImmediate(box.gameObject);
+            }
         }
 
+        CameraManager.Instance.FieldCamera.TargetConfigData.VerAngle = defaultVerticalAngle;
+        CameraManager.Instance.FieldCamera.TargetConfigData.HorAngle = defaultHorizontalAngle;
+        CameraManager.Instance.FieldCamera.TargetConfigData.FOV = defaultFOV;
+        CameraManager.Instance.FieldCamera.ForceUpdateCamera();
+        EditorUtility.ClearProgressBar();
+
         AssetDatabase.Refresh();
+        EditorUtility.DisplayDialog("Box拍照", "拍照完成", "好");
     }
 }
 

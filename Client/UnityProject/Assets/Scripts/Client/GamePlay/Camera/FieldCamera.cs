@@ -58,19 +58,16 @@ public class FieldCamera : MonoBehaviour
     [SerializeField]
     private List<Transform> targetList = new List<Transform>();
 
-    [SerializeField]
     [ReadOnly]
     [LabelText("回溯参数")]
     public CameraConfigData LastConfigData = new CameraConfigData();
 
-    [SerializeField]
     [ReadOnly]
     [LabelText("当前参数")]
     public CameraConfigData CurrentConfigData = new CameraConfigData();
 
-    [SerializeField]
     [LabelText("目标参数")]
-    private CameraConfigData TargetConfigData = new CameraConfigData();
+    public CameraConfigData TargetConfigData = new CameraConfigData();
 
     private void SetTargetConfigData(CameraConfigData newData)
     {
@@ -230,14 +227,20 @@ public class FieldCamera : MonoBehaviour
         CameraLerp(true);
     }
 
+    [Button("刷新相机位置")]
+    public void ForceUpdateCamera()
+    {
+        CameraLerp(false);
+    }
+
     private void CameraLerp(bool lerp)
     {
-        float _fov = Mathf.SmoothDamp(CurrentConfigData.FOV, TargetConfigData.FOV, ref tempChangeSpeed_FOV, CurrentConfigData.DampFOVTime, 9999);
-        float _horAngle = Mathf.SmoothDamp(CurrentConfigData.HorAngle, TargetConfigData.HorAngle, ref tempChangeSpeed_RotH, CurrentConfigData.DampRotTime, 9999);
-        float _verAngle = Mathf.SmoothDamp(CurrentConfigData.VerAngle, TargetConfigData.VerAngle, ref tempChangeSpeed_RotV, CurrentConfigData.DampRotTime, 9999);
-        float _screenAngle = Mathf.SmoothDamp(CurrentConfigData.ScreenAngle, TargetConfigData.ScreenAngle, ref tempChangeSpeed_RotS, CurrentConfigData.DampRotTime, 9999);
-        Vector3 _offset = Vector3.SmoothDamp(CurrentConfigData.Offset, TargetConfigData.Offset, ref tempChangeSpeed_Pos_Offset, CurrentConfigData.DampPosTime, 9999);
-        float _distance = Mathf.SmoothDamp(CurrentConfigData.Distance, TargetConfigData.Distance, ref tempChangeSpeed_Pos_Distance, CurrentConfigData.DampPosTime, 9999);
+        float _fov = lerp ? Mathf.SmoothDamp(CurrentConfigData.FOV, TargetConfigData.FOV, ref tempChangeSpeed_FOV, CurrentConfigData.DampFOVTime, 9999) : TargetConfigData.FOV;
+        float _horAngle = lerp ? Mathf.SmoothDamp(CurrentConfigData.HorAngle, TargetConfigData.HorAngle, ref tempChangeSpeed_RotH, CurrentConfigData.DampRotTime, 9999) : TargetConfigData.HorAngle;
+        float _verAngle = lerp ? Mathf.SmoothDamp(CurrentConfigData.VerAngle, TargetConfigData.VerAngle, ref tempChangeSpeed_RotV, CurrentConfigData.DampRotTime, 9999) : TargetConfigData.VerAngle;
+        float _screenAngle = lerp ? Mathf.SmoothDamp(CurrentConfigData.ScreenAngle, TargetConfigData.ScreenAngle, ref tempChangeSpeed_RotS, CurrentConfigData.DampRotTime, 9999) : TargetConfigData.ScreenAngle;
+        Vector3 _offset = lerp ? Vector3.SmoothDamp(CurrentConfigData.Offset, TargetConfigData.Offset, ref tempChangeSpeed_Pos_Offset, CurrentConfigData.DampPosTime, 9999) : (Vector3) TargetConfigData.Offset;
+        float _distance = lerp ? Mathf.SmoothDamp(CurrentConfigData.Distance, TargetConfigData.Distance, ref tempChangeSpeed_Pos_Distance, CurrentConfigData.DampPosTime, 9999) : TargetConfigData.Distance;
 
         // TargetPos计算（不带偏移）
         Vector3 _targetPos = Vector3.zero;
