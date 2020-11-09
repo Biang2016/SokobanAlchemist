@@ -847,6 +847,7 @@ public class Box : PoolObject, ISerializationCallbackReceiver
             bf.OnDeleteBox();
         }
 
+        BoxFunctions.Clear();
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
     }
 
