@@ -147,7 +147,7 @@ public class WorldModule : PoolObject
             bf.GenerateBoxAction = () =>
             {
                 BoxMatrix[localGP.x, localGP.y, localGP.z]?.DeleteSelf(); // 强行删除该格占用Box
-                GenerateBox(dataClone.BoxTypeIndex, localGP.x, localGP.y, localGP.z, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
+                GenerateBox(dataClone.BoxTypeIndex, localGP, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
 
                 // Box生成后此BoxFunction及注册的事件均作废
                 bf.ClearAndUnRegister();

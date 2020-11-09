@@ -820,6 +820,13 @@ public class Box : PoolObject, ISerializationCallbackReceiver
                     {
                         actor.ActorBattleHelper.LastAttackBox = this;
                         actor.ActorBattleHelper.Damage(LastTouchActor, damage);
+                        if (actor.RigidBody != null)
+                        {
+                            Vector3 force = (actor.transform.position - transform.position).normalized;
+                            actor.RigidBody.velocity = Vector3.zero;
+                            actor.RigidBody.AddForce(force * 70f, ForceMode.VelocityChange);
+                        }
+
                         damagedActors.Add(actor);
                     }
                 }

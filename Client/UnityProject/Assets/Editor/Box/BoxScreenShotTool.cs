@@ -14,6 +14,7 @@ public class BoxScreenShotTool : Editor
         float defaultVerticalAngle = CameraManager.Instance.FieldCamera.TargetConfigData.VerAngle;
         float defaultHorizontalAngle = CameraManager.Instance.FieldCamera.TargetConfigData.HorAngle;
         float defaultFOV = CameraManager.Instance.FieldCamera.TargetConfigData.FOV;
+        Color defaultBackgroundColor = CameraManager.Instance.MainCamera.backgroundColor;
 
         CameraManager.Instance.FieldCamera.TargetConfigData.FOV = 10;
 
@@ -55,6 +56,7 @@ public class BoxScreenShotTool : Editor
         CameraManager.Instance.FieldCamera.TargetConfigData.HorAngle = defaultHorizontalAngle;
         CameraManager.Instance.FieldCamera.TargetConfigData.FOV = defaultFOV;
         CameraManager.Instance.FieldCamera.ForceUpdateCamera();
+        CameraManager.Instance.MainCamera.backgroundColor = defaultBackgroundColor;
         EditorUtility.ClearProgressBar();
 
         AssetDatabase.Refresh();

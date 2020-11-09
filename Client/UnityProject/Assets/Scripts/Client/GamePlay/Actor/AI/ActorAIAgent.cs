@@ -23,6 +23,7 @@ public class ActorAIAgent
     public void Stop()
     {
         isStop = true;
+        ClearPathFinding();
         ClearNavTrackMarkers();
     }
 
