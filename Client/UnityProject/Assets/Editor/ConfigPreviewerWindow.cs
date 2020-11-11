@@ -50,5 +50,5 @@ public class ConfigPreviewerWindow : OdinEditorWindow
     [ReadOnly]
     [ShowInInspector]
     [LabelText("角色Buff相克表")]
-    public ActorBuffAttributeRelationship[,] ActorBuffAttributeMatrix => ConfigManager.ActorBuffAttributeMatrix;
+    public BuffAttributeRelationship[,] ActorBuffAttributeMatrix => ConfigManager.BuffAttributeMatrix;
 }

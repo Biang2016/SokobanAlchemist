@@ -51,9 +51,9 @@ namespace UnityToolbarExtender
                 BoxEditorWindow.ShowBoxEditorWindow();
             }
 
-            if (GUILayout.Button(new GUIContent("角色Buff克制编辑"), ToolbarStyles.toolbarbutton))
+            if (GUILayout.Button(new GUIContent("Buff克制编辑"), ToolbarStyles.toolbarbutton))
             {
-                ActorBuffEditorWindow.ShowActorBuffEditorWindow();
+                BuffEditorWindow.ShowBuffEditorWindow();
             }
 
             GUILayout.FlexibleSpace();
