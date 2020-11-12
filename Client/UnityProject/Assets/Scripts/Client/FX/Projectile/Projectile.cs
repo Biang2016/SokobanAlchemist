@@ -15,6 +15,13 @@ public class Projectile : PoolObject
     public string FlashFXName;
     public string HitFXName;
 
+    [Button("生成Hit和Flash名称")]
+    private void GenerateHitAndFlashName()
+    {
+        FlashFXName = name.Replace("Projectile_", "Flash_");
+        HitFXName = name.Replace("Projectile_", "Hit_");
+    }
+
     public override void OnRecycled()
     {
         StopSelfEffect();
@@ -150,4 +157,20 @@ public enum ProjectileType
     Projectile_Mushroom,
     Projectile_Butter,
     Projectile_ArrowsFly,
+
+    Projectile_BlackDarkGreenExplode,
+    Projectile_BloodyLightExplode,
+    Projectile_BlueStarSmoke,
+    Projectile_DarkBlueStar,
+    Projectile_FireExplodeSmoke,
+    Projectile_GreenPoisonBubbleExplode,
+    Projectile_LightBlueLightningShock,
+    Projectile_LightBlueQuickExplode,
+    Projectile_LittleFireUp,
+    Projectile_PinkSwirl,
+    Projectile_RainbowFlowerExplode,
+    Projectile_RainbowWaveFlower,
+    Projectile_WaterBubbleExplode,
+    Projectile_WhiteArrowLightning,
+    Projectile_YellowFireStar,
 }

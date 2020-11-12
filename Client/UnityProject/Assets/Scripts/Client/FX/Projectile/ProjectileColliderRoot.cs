@@ -5,7 +5,7 @@ public class ProjectileColliderRoot : MonoBehaviour
 {
     [LabelText("碰撞半径")]
     [OnValueChanged("OnRadiusChanged")]
-    public float Radius;
+    public float Radius = 0.5f;
 
     [SerializeField]
     private SphereCollider PlayerCollider;
