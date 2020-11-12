@@ -122,6 +122,7 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
                     {
                         StayActorList.Remove(actor);
                         StayActorTimeDict.Remove(actor.GUID);
+                        CancelStateValue();
                     }
                 }
             }

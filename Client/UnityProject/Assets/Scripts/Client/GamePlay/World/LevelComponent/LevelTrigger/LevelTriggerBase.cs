@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 using BiangStudio;
 using BiangStudio.GameDataFormat.Grid;
@@ -43,7 +42,7 @@ public abstract class LevelTriggerBase : PoolObject
         public int MaxTriggerTime;
 
         [BoxGroup("触发事件并发送")]
-        [LabelText("持续触发")]
+        [LabelText("Stay持续触发")]
         public bool KeepTriggering = false;
 
         [BoxGroup("触发事件并发送")]
@@ -54,6 +53,13 @@ public abstract class LevelTriggerBase : PoolObject
         [BoxGroup("触发事件并发送")]
         [LabelText("触发特效尺寸")]
         public float TriggerFXScale = 1.0f;
+
+        [BoxGroup("设置战场状态")]
+        [InfoBox("进入设为True离开设为False")]
+        [LabelText("触发时设置战场状态花名")]
+        public string TriggerSetStateAlias;
+
+        internal bool isTriggerSetStateAliasEmpty => string.IsNullOrWhiteSpace(TriggerSetStateAlias);
 
         [LabelText("材质颜色")]
         public Color TriggerColor;
@@ -66,6 +72,7 @@ public abstract class LevelTriggerBase : PoolObject
             data.AppearLevelEventAlias = AppearLevelEventAlias;
             data.DisappearLevelEventAlias = DisappearLevelEventAlias;
             data.TriggerEmitEventAlias = TriggerEmitEventAlias;
+            data.TriggerSetStateAlias = TriggerSetStateAlias;
             data.MaxTriggerTime = MaxTriggerTime;
             data.KeepTriggering = KeepTriggering;
             data.TriggerFX = TriggerFX;
@@ -159,10 +166,19 @@ public abstract class LevelTriggerBase : PoolObject
     protected virtual void TriggerEvent()
     {
         HasTriggeredTimes++;
-        if (HasTriggeredTimes > TriggerData.MaxTriggerTime) return;
-        FXManager.Instance.PlayFX(TriggerData.TriggerFX, transform.position, TriggerData.TriggerFXScale);
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, TriggerData.TriggerEmitEventAlias);
+        if (HasTriggeredTimes <= TriggerData.MaxTriggerTime)
+        {
+            FXManager.Instance.PlayFX(TriggerData.TriggerFX, transform.position, TriggerData.TriggerFXScale);
+            ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, TriggerData.TriggerEmitEventAlias);
+        }
+
+        if (!IsRecycled && !TriggerData.isTriggerSetStateAliasEmpty) BattleManager.Instance.SetStateBool(TriggerData.TriggerSetStateAlias, true);
         //Debug.Log("LevelTriggerEventAlias:" + TriggerData.TriggerEmitEventAlias);
+    }
+
+    protected virtual void CancelStateValue()
+    {
+        if (!IsRecycled && !TriggerData.isTriggerSetStateAliasEmpty) BattleManager.Instance.SetStateBool(TriggerData.TriggerSetStateAlias, false);
     }
 
 #if UNITY_EDITOR

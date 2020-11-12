@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using BiangStudio;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -82,10 +81,6 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
                         {
                             StayBoxTick = 0;
                         }
-                        else
-                        {
-                            StayBox = null;
-                        }
                     }
                 }
             }
@@ -107,6 +102,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
                         {
                             StayBox = null;
                             StayBoxTick = 0;
+                            CancelStateValue();
                         }
                     }
                 }

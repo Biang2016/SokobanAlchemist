@@ -12,24 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d31b62ec9d586a4e94389d9071559ca, type: 3}
   m_Name: Toturial_3
   m_EditorClassIdentifier: 
-  _serializedGraph: '{"type":"FlowCanvas.FlowScript","nodes":[{"LevelEventAlias":{"_value":"Toturial_3_LifeBoxTip"},"_position":{"x":210.0,"y":105.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"0"},{"_simplexNode":{"NoticeTip":{"_value":"Kick
+  _serializedGraph: '{"type":"FlowCanvas.FlowScript","nodes":[{"_position":{"x":210.0,"y":345.0},"$type":"FlowCanvas.Nodes.FixedUpdateEvent","$id":"0"},{"_simplexNode":{"BattleStateAliasList":{"_value":["Toturial_3_LockTrigger_1","Toturial_3_LockTrigger_2"]},"And":{"_value":true}},"_position":{"x":435.0,"y":345.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_GetMultiBattleStateAnd,
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"1"},{"_position":{"x":675.0,"y":345.0},"$type":"FlowCanvas.Nodes.SwitchBool","$id":"2"},{"_color":{"r":0.7490196,"g":0.4980392,"b":1.0,"a":1.0},"_position":{"x":855.0,"y":345.0},"$type":"FlowCanvas.Nodes.DoOnce","$id":"3"},{"_simplexNode":{"LevelEventAlias":{"_value":"Toturial_3_LockOpen"}},"_position":{"x":1005.0,"y":345.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_BroadcastLevelEvent,
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"4"},{"LevelEventAlias":{"_value":"Toturial_3_LifeBoxTip"},"_position":{"x":210.0,"y":105.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"5"},{"_simplexNode":{"NoticeTip":{"_value":"Kick
     LifeBox to gain life"},"TipPositionType":{"_value":4},"Duration":{"_value":1.0}},"_position":{"x":585.0,"y":105.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"1"},{"LevelEventAlias":{"_value":"Toturial_3_ActionBoxTip"},"_position":{"x":210.0,"y":180.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"2"},{"_simplexNode":{"NoticeTip":{"_value":"Kick
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"6"},{"LevelEventAlias":{"_value":"Toturial_3_ActionBoxTip"},"_position":{"x":210.0,"y":180.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"7"},{"_simplexNode":{"NoticeTip":{"_value":"Kick
     ActionBox to gain action points"},"TipPositionType":{"_value":4},"Duration":{"_value":1.0}},"_position":{"x":585.0,"y":180.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"3"},{"LevelEventAlias":{"_value":"Toturial_3_GoodLuckTip"},"_position":{"x":210.0,"y":255.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"4"},{"_simplexNode":{"NoticeTip":{"_value":"Good
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"8"},{"LevelEventAlias":{"_value":"Toturial_3_GoodLuckTip"},"_position":{"x":210.0,"y":255.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"9"},{"_simplexNode":{"NoticeTip":{"_value":"Good
     Luck!"},"TipPositionType":{"_value":4},"Duration":{"_value":1.0}},"_position":{"x":585.0,"y":255.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"5"},{"LevelEventAlias":{"_value":"Toturial_3_LockTrigger_1"},"_position":{"x":210.0,"y":330.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"6"},{"_position":{"x":570.0,"y":360.0},"$type":"FlowCanvas.Nodes.AwaitAll","$id":"7"},{"_simplexNode":{"LevelEventAlias":{"_value":"Toturial_3_LockOpen"}},"_position":{"x":750.0,"y":360.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_BroadcastLevelEvent,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"8"},{"LevelEventAlias":{"_value":"Toturial_3_LockTrigger_2"},"_position":{"x":210.0,"y":405.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"9"}],"connections":[{"_sourcePortName":"OnTriggered","_targetPortName":"
-    ","_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
-    ","_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
-    ","_sourceNode":{"$ref":"4"},"_targetNode":{"$ref":"5"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"0","_sourceNode":{"$ref":"6"},"_targetNode":{"$ref":"7"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Out","_targetPortName":"
-    ","_sourceNode":{"$ref":"7"},"_targetNode":{"$ref":"8"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"1","_sourceNode":{"$ref":"9"},"_targetNode":{"$ref":"7"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"10"}],"connections":[{"_sourcePortName":"Out","_targetPortName":"
+    ","_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"
+    ","_targetPortName":"In","_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Value","_targetPortName":"Condition","_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"FlowCanvas.BinderConnection`1[[System.Boolean,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},{"_sourcePortName":"True","_targetPortName":"In","_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Out","_targetPortName":"
+    ","_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"4"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
+    ","_sourceNode":{"$ref":"5"},"_targetNode":{"$ref":"6"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
+    ","_sourceNode":{"$ref":"7"},"_targetNode":{"$ref":"8"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
+    ","_sourceNode":{"$ref":"9"},"_targetNode":{"$ref":"10"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
   _objectReferences: []
   _graphSource:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: 53, y: -15}
+    _translation: {x: -289.67538, y: -293.82196}
     _zoomFactor: 1
   _haltSerialization: 0
 #---GRAPH_START---
@@ -37,6 +41,68 @@ MonoBehaviour:
 #{
 #    "type": "FlowCanvas.FlowScript",
 #    "nodes": [
+#        {
+#            "_position": {
+#                "x": 210.0,
+#                "y": 345.0
+#            },
+#            "$type": "FlowCanvas.Nodes.FixedUpdateEvent",
+#            "$id": "0"
+#        },
+#        {
+#            "_simplexNode": {
+#                "BattleStateAliasList": {
+#                    "_value": [
+#                        "Toturial_3_LockTrigger_1",
+#                        "Toturial_3_LockTrigger_2"
+#                    ]
+#                },
+#                "And": {
+#                    "_value": true
+#                }
+#            },
+#            "_position": {
+#                "x": 435.0,
+#                "y": 345.0
+#            },
+#            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_GetMultiBattleStateAnd, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+#            "$id": "1"
+#        },
+#        {
+#            "_position": {
+#                "x": 675.0,
+#                "y": 345.0
+#            },
+#            "$type": "FlowCanvas.Nodes.SwitchBool",
+#            "$id": "2"
+#        },
+#        {
+#            "_color": {
+#                "r": 0.7490196,
+#                "g": 0.4980392,
+#                "b": 1.0,
+#                "a": 1.0
+#            },
+#            "_position": {
+#                "x": 855.0,
+#                "y": 345.0
+#            },
+#            "$type": "FlowCanvas.Nodes.DoOnce",
+#            "$id": "3"
+#        },
+#        {
+#            "_simplexNode": {
+#                "LevelEventAlias": {
+#                    "_value": "Toturial_3_LockOpen"
+#                }
+#            },
+#            "_position": {
+#                "x": 1005.0,
+#                "y": 345.0
+#            },
+#            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_BroadcastLevelEvent, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+#            "$id": "4"
+#        },
 #        {
 #            "LevelEventAlias": {
 #                "_value": "Toturial_3_LifeBoxTip"
@@ -46,7 +112,7 @@ MonoBehaviour:
 #                "y": 105.0
 #            },
 #            "$type": "ModuleAIAtoms+Flow_OnLevelEventTrigger",
-#            "$id": "0"
+#            "$id": "5"
 #        },
 #        {
 #            "_simplexNode": {
@@ -65,7 +131,7 @@ MonoBehaviour:
 #                "y": 105.0
 #            },
 #            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-#            "$id": "1"
+#            "$id": "6"
 #        },
 #        {
 #            "LevelEventAlias": {
@@ -76,7 +142,7 @@ MonoBehaviour:
 #                "y": 180.0
 #            },
 #            "$type": "ModuleAIAtoms+Flow_OnLevelEventTrigger",
-#            "$id": "2"
+#            "$id": "7"
 #        },
 #        {
 #            "_simplexNode": {
@@ -95,7 +161,7 @@ MonoBehaviour:
 #                "y": 180.0
 #            },
 #            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-#            "$id": "3"
+#            "$id": "8"
 #        },
 #        {
 #            "LevelEventAlias": {
@@ -106,7 +172,7 @@ MonoBehaviour:
 #                "y": 255.0
 #            },
 #            "$type": "ModuleAIAtoms+Flow_OnLevelEventTrigger",
-#            "$id": "4"
+#            "$id": "9"
 #        },
 #        {
 #            "_simplexNode": {
@@ -125,55 +191,12 @@ MonoBehaviour:
 #                "y": 255.0
 #            },
 #            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-#            "$id": "5"
-#        },
-#        {
-#            "LevelEventAlias": {
-#                "_value": "Toturial_3_LockTrigger_1"
-#            },
-#            "_position": {
-#                "x": 210.0,
-#                "y": 330.0
-#            },
-#            "$type": "ModuleAIAtoms+Flow_OnLevelEventTrigger",
-#            "$id": "6"
-#        },
-#        {
-#            "_position": {
-#                "x": 570.0,
-#                "y": 360.0
-#            },
-#            "$type": "FlowCanvas.Nodes.AwaitAll",
-#            "$id": "7"
-#        },
-#        {
-#            "_simplexNode": {
-#                "LevelEventAlias": {
-#                    "_value": "Toturial_3_LockOpen"
-#                }
-#            },
-#            "_position": {
-#                "x": 750.0,
-#                "y": 360.0
-#            },
-#            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_BroadcastLevelEvent, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-#            "$id": "8"
-#        },
-#        {
-#            "LevelEventAlias": {
-#                "_value": "Toturial_3_LockTrigger_2"
-#            },
-#            "_position": {
-#                "x": 210.0,
-#                "y": 405.0
-#            },
-#            "$type": "ModuleAIAtoms+Flow_OnLevelEventTrigger",
-#            "$id": "9"
+#            "$id": "10"
 #        }
 #    ],
 #    "connections": [
 #        {
-#            "_sourcePortName": "OnTriggered",
+#            "_sourcePortName": "Out",
 #            "_targetPortName": " ",
 #            "_sourceNode": {
 #                "$ref": "0"
@@ -184,8 +207,30 @@ MonoBehaviour:
 #            "$type": "FlowCanvas.BinderConnection"
 #        },
 #        {
-#            "_sourcePortName": "OnTriggered",
-#            "_targetPortName": " ",
+#            "_sourcePortName": " ",
+#            "_targetPortName": "In",
+#            "_sourceNode": {
+#                "$ref": "1"
+#            },
+#            "_targetNode": {
+#                "$ref": "2"
+#            },
+#            "$type": "FlowCanvas.BinderConnection"
+#        },
+#        {
+#            "_sourcePortName": "Value",
+#            "_targetPortName": "Condition",
+#            "_sourceNode": {
+#                "$ref": "1"
+#            },
+#            "_targetNode": {
+#                "$ref": "2"
+#            },
+#            "$type": "FlowCanvas.BinderConnection`1[[System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"
+#        },
+#        {
+#            "_sourcePortName": "True",
+#            "_targetPortName": "In",
 #            "_sourceNode": {
 #                "$ref": "2"
 #            },
@@ -195,29 +240,29 @@ MonoBehaviour:
 #            "$type": "FlowCanvas.BinderConnection"
 #        },
 #        {
+#            "_sourcePortName": "Out",
+#            "_targetPortName": " ",
+#            "_sourceNode": {
+#                "$ref": "3"
+#            },
+#            "_targetNode": {
+#                "$ref": "4"
+#            },
+#            "$type": "FlowCanvas.BinderConnection"
+#        },
+#        {
 #            "_sourcePortName": "OnTriggered",
 #            "_targetPortName": " ",
 #            "_sourceNode": {
-#                "$ref": "4"
+#                "$ref": "5"
 #            },
 #            "_targetNode": {
-#                "$ref": "5"
+#                "$ref": "6"
 #            },
 #            "$type": "FlowCanvas.BinderConnection"
 #        },
 #        {
 #            "_sourcePortName": "OnTriggered",
-#            "_targetPortName": "0",
-#            "_sourceNode": {
-#                "$ref": "6"
-#            },
-#            "_targetNode": {
-#                "$ref": "7"
-#            },
-#            "$type": "FlowCanvas.BinderConnection"
-#        },
-#        {
-#            "_sourcePortName": "Out",
 #            "_targetPortName": " ",
 #            "_sourceNode": {
 #                "$ref": "7"
@@ -229,12 +274,12 @@ MonoBehaviour:
 #        },
 #        {
 #            "_sourcePortName": "OnTriggered",
-#            "_targetPortName": "1",
+#            "_targetPortName": " ",
 #            "_sourceNode": {
 #                "$ref": "9"
 #            },
 #            "_targetNode": {
-#                "$ref": "7"
+#                "$ref": "10"
 #            },
 #            "$type": "FlowCanvas.BinderConnection"
 #        }

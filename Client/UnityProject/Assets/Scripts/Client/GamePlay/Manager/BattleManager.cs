@@ -9,7 +9,7 @@ using BiangStudio.Messenger;
 using BiangStudio.Singleton;
 using UnityEngine;
 
-public class BattleManager : TSingletonBaseManager<BattleManager>
+public partial class BattleManager : TSingletonBaseManager<BattleManager>
 {
     public SRandom SRandom = new SRandom(12345);
     public Messenger BattleMessenger = new Messenger();
@@ -44,6 +44,7 @@ public class BattleManager : TSingletonBaseManager<BattleManager>
         ActorDict.Clear();
 
         BattleMessenger.Cleanup();
+        BattleStateBoolDict.Clear();
     }
 
     public override void Awake()
