@@ -176,3 +176,59 @@ public class BoxBuff_BoxPropertyPlusModifier : BoxBuff
         buff.PlusModifier = new Property.PlusModifier {Delta = Delta};
     }
 }
+
+[Serializable]
+public class BoxBuff_ChangeBoxStatInstantly : BoxBuff
+{
+    protected override string BuffDisplayName => "瞬间更改Box异常状态累积值, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
+
+    [LabelText("Box属性类型")]
+    [ValidateInput("ValidateStatType", "请选择异常状态累积值")]
+    public BoxStatType StatType;
+
+    private bool ValidateStatType(BoxStatType statType)
+    {
+        if (statType == BoxStatType.FiringValue || statType == BoxStatType.FrozenValue)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    [LabelText("变化量")]
+    public int Delta;
+
+    [LabelText("增加比率%")]
+    public int Percent;
+
+    public override void OnAdded(Entity entity)
+    {
+        base.OnAdded(entity);
+        Box box = (Box)entity;
+        float valueBefore = box.BoxStatPropSet.StatDict[StatType].Value;
+        valueBefore += Delta;
+        valueBefore *= (100 + Percent) / 100f;
+        box.BoxStatPropSet.StatDict[StatType].Value = Mathf.RoundToInt(valueBefore);
+    }
+
+    protected override bool ValidateBuffAttribute(BuffAttribute boxBuffAttribute)
+    {
+        if (boxBuffAttribute != BuffAttribute.InstantEffect)
+        {
+            validateBuffAttributeInfo = "本Buff仅支持【瞬时效果】标签";
+            return false;
+        }
+
+        return true;
+    }
+
+    protected override void ChildClone(EntityBuff newBuff)
+    {
+        base.ChildClone(newBuff);
+        BoxBuff_ChangeBoxStatInstantly buff = ((BoxBuff_ChangeBoxStatInstantly)newBuff);
+        buff.StatType = StatType;
+        buff.Delta = Delta;
+        buff.Percent = Percent;
+    }
+}

@@ -25,6 +25,7 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
     [LabelText("@\"撞击角色损坏耐久\t\"+CollideWithActorDurability")]
     public BoxStat CollideWithActorDurability = new BoxStat(BoxStatType.CollideWithActorDurability);
 
+    [BoxGroup("冰冻")]
     [LabelText("@\"冰冻抗性\t\"+FrozenResistance")]
     public BoxProperty FrozenResistance = new BoxProperty(BoxPropertyType.FrozenResistance);
 
@@ -138,6 +139,7 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         {
             FiringLevel.Value = after / FiringValuePerLevel;
             if (FiringLevel.Value > 0) Box.BoxBuffHelper.PlayAbnormalStatFX((int) BoxStatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 灼烧值变化时，播放一次特效
+            else if(after == 0) Box.BoxBuffHelper.RemoveAbnormalStatFX((int)BoxStatType.FiringValue);
         };
         StatDict.Add(BoxStatType.FiringValue, FiringValue);
 
@@ -188,9 +190,9 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
     public BoxStatPropSet Clone()
     {
         BoxStatPropSet newStatPropSet = new BoxStatPropSet();
-        newStatPropSet.CommonDurability = (BoxStat)CommonDurability.Clone();
-        newStatPropSet.CollideWithBoxDurability = (BoxStat)CollideWithBoxDurability.Clone();
-        newStatPropSet.CollideWithActorDurability = (BoxStat)CollideWithActorDurability.Clone();
+        newStatPropSet.CommonDurability = (BoxStat) CommonDurability.Clone();
+        newStatPropSet.CollideWithBoxDurability = (BoxStat) CollideWithBoxDurability.Clone();
+        newStatPropSet.CollideWithActorDurability = (BoxStat) CollideWithActorDurability.Clone();
         newStatPropSet.FrozenResistance = (BoxProperty) FrozenResistance.Clone();
         newStatPropSet.FrozenValue = (BoxStat) FrozenValue.Clone();
         newStatPropSet.FrozenLevel = (BoxStat) FrozenLevel.Clone();

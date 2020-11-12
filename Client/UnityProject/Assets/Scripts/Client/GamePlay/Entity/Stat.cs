@@ -58,13 +58,15 @@ public abstract class Stat : IClone<Stat>
 
         if (accumulatedRecovery > 1)
         {
-            Value += 1;
-            accumulatedRecovery -= 1;
+            int round = Mathf.FloorToInt(accumulatedRecovery);
+            Value += round;
+            accumulatedRecovery -= round;
         }
         else if (accumulatedRecovery < -1)
         {
-            Value -= 1;
-            accumulatedRecovery += 1;
+            int round = Mathf.CeilToInt(accumulatedRecovery);
+            Value += round;
+            accumulatedRecovery -= round;
         }
     }
 

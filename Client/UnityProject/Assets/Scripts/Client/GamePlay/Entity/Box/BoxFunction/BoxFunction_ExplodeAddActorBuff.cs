@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class BoxFunction_ExplodeAddActorBuff : BoxFunctionBase
 {
-    protected override string BoxFunctionDisplayName => "箱子撞击爆炸AOE施加Buff";
+    protected override string BoxFunctionDisplayName => "箱子撞击爆炸AOE给Actor施加Buff";
 
     [LabelText("生效于相对阵营")]
     public RelativeCamp EffectiveOnRelativeCamp;

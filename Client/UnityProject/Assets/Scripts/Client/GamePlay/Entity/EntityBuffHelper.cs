@@ -195,10 +195,23 @@ public class EntityBuffHelper : EntityMonoHelper
     {
         if (string.IsNullOrEmpty(fxName)) return;
         if (fxName == "None") return;
-        if (AbnormalBuffFXDict.ContainsKey(statType)) return;
+        if (AbnormalBuffFXDict.TryGetValue(statType, out FX fx))
+        {
+            fx.transform.localScale = Vector3.one * scale;
+            return;
+        }
+
         FX newFX = FXManager.Instance.PlayFX(fxName, transform.position, scale);
         AbnormalBuffFXDict[statType] = newFX;
         newFX.OnFXEnd = () => { AbnormalBuffFXDict.Remove(statType); };
+    }
+
+    public void RemoveAbnormalStatFX(int statType)
+    {
+        if (AbnormalBuffFXDict.TryGetValue(statType, out FX fx))
+        {
+            fx.PoolRecycle();
+        }
     }
 
     private void PlayBuffFX(EntityBuff buff)
@@ -209,17 +222,23 @@ public class EntityBuffHelper : EntityMonoHelper
         if (buff.BuffAttribute != BuffAttribute.InstantEffect)
         {
             BuffFXDict.Add(buff.GUID, fx);
-            fx.OnFXEnd = () =>
+            if (fx is LoopFX)
             {
-                BuffFXDict.Remove(buff.GUID);
-                PlayBuffFX(buff);
-            };
+            }
+            else
+            {
+                fx.OnFXEnd = () =>
+                {
+                    BuffFXDict.Remove(buff.GUID);
+                    PlayBuffFX(buff);
+                };
+            }
         }
     }
 
     List<uint> removeKeys = new List<uint>();
 
-    void FixedUpdate()
+    public void BuffFixedUpdate()
     {
         removeKeys.Clear();
         foreach (KeyValuePair<uint, EntityBuff> kv in BuffDict)

@@ -434,6 +434,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsRecycled: 0
   GUID: 0
+  GUID_Mod_FixedFrameRate: 0
   BoxBuffHelper: {fileID: 2962941836236094511}
   BoxFrozenHelper: {fileID: 7499738859985598480}
   BoxColliderHelper: {fileID: 0}
@@ -510,7 +511,7 @@ MonoBehaviour:
       _minValue: 0
       _maxValue: 99999
     FrozenResistance:
-      BaseValue: 100
+      BaseValue: 200
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 200
@@ -548,7 +549,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     FiringResistance:
-      BaseValue: 100
+      BaseValue: 200
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 200
@@ -560,24 +561,24 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 4
-    FiringFX: Hit_Fire
+    FiringFX: FX_Burning
     FiringFXScaleCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.7
-        inSlope: 0.325
-        outSlope: 0.325
+        value: 0.4
+        inSlope: 0.15
+        outSlope: 0.15
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 4
-        value: 2
-        inSlope: 0.325
-        outSlope: 0.325
+        value: 1
+        inSlope: 0.15
+        outSlope: 0.15
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334

@@ -263,12 +263,12 @@ public class ActorBuff_ChangeActorStatInstantly : ActorBuff
 
     private bool ValidateStatType(ActorStatType statType)
     {
-        if (statType == ActorStatType.Health || statType == ActorStatType.Life)
+        if (statType == ActorStatType.FrozenValue || statType == ActorStatType.FiringValue)
         {
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     [LabelText("变化量")]

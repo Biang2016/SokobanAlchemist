@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class BoxFunction_CollideAddActorBuff : BoxFunctionBase
 {
-    protected override string BoxFunctionDisplayName => "箱子撞击施加Buff";
+    protected override string BoxFunctionDisplayName => "箱子撞击给Actor施加Buff";
 
     [LabelText("生效于相对阵营")]
     public RelativeCamp EffectiveOnRelativeCamp;

@@ -433,6 +433,7 @@ public class Actor : Entity
         base.FixedUpdate();
         if (!IsRecycled)
         {
+            ActorBuffHelper.BuffFixedUpdate();
             if (ActorMoveDebugLog && CurWorldGP != LastWorldGP) Debug.Log($"[Actor] Move {LastWorldGP} -> {CurWorldGP}");
             LastWorldGP = CurWorldGP;
             CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);

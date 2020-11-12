@@ -23,11 +23,14 @@ public class FX : PoolObject
         ParticleSystem = GetComponentInChildren<ParticleSystem>();
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        if (!IsRecycled && ParticleSystem.isStopped)
+        if (!IsRecycled)
         {
-            PoolRecycle();
+            if (ParticleSystem.isStopped)
+            {
+                PoolRecycle();
+            }
         }
     }
 

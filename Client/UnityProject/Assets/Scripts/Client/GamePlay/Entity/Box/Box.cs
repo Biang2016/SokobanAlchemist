@@ -33,6 +33,8 @@ public partial class Box : Entity
     public SmoothMove BoxModelSmoothMove;
 
     [HideInEditorMode]
+    [BoxGroup("当前战斗数值")]
+    [HideLabel]
     public BoxStatPropSet BoxStatPropSet; // 湿数据，随生命周期消亡
 
     [BoxGroup("初始战斗数值")]
@@ -348,6 +350,7 @@ public partial class Box : Entity
         BoxUnderWorldModuleDesignerClamper.enabled = !Application.isPlaying;
         GridSnapper.enabled = false;
         GUID = GetGUID();
+        GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
     }
 
     private void RegisterEvents()
@@ -713,6 +716,11 @@ public partial class Box : Entity
     {
         base.FixedUpdate();
         if (IsRecycled) return;
+        if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate)
+        {
+            BoxStatPropSet.FixedUpdate(1f);
+            BoxBuffHelper.BuffFixedUpdate();
+        }
         if ((state == States.BeingKicked || state == States.Flying || state == States.DroppingFromDeadActor || state == States.Putting) && Rigidbody)
         {
             if (state == States.BeingKicked)
