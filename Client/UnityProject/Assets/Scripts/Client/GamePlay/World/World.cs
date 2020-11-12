@@ -307,7 +307,7 @@ public class World : PoolObject
         wm.Initialize(data, gp, this, worldBoxExtraSerializeDataList);
     }
 
-    #region MoveBox Calculators
+    #region Utils
 
     public Box GetBoxByGridPosition(GridPos3D gp, out WorldModule module, out GridPos3D localGP, bool ignoreUnaccessibleModule = true)
     {
@@ -344,6 +344,46 @@ public class World : PoolObject
             return null;
         }
     }
+
+    public List<Box> GetAroundBox(GridPos3D worldGP)
+    {
+        List<Box> boxes = new List<Box>();
+        Box leftBox = GetBoxByGridPosition(worldGP + new GridPos3D(-1, 0, 0), out WorldModule _, out GridPos3D _);
+        if (leftBox) boxes.Add(leftBox);
+        Box rightBox = GetBoxByGridPosition(worldGP + new GridPos3D(1, 0, 0), out WorldModule _, out GridPos3D _);
+        if (rightBox) boxes.Add(rightBox);
+        Box frontBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 0, 1), out WorldModule _, out GridPos3D _);
+        if (frontBox) boxes.Add(frontBox);
+        Box backBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 0, -1), out WorldModule _, out GridPos3D _);
+        if (backBox) boxes.Add(backBox);
+        Box leftFrontBox = GetBoxByGridPosition(worldGP + new GridPos3D(-1, 0, 1), out WorldModule _, out GridPos3D _);
+        if (leftFrontBox) boxes.Add(leftFrontBox);
+        Box rightFrontBox = GetBoxByGridPosition(worldGP + new GridPos3D(1, 0, 1), out WorldModule _, out GridPos3D _);
+        if (rightFrontBox) boxes.Add(rightFrontBox);
+        Box leftBackBox = GetBoxByGridPosition(worldGP + new GridPos3D(-1, 0, -1), out WorldModule _, out GridPos3D _);
+        if (leftBackBox) boxes.Add(leftBackBox);
+        Box rightBackBox = GetBoxByGridPosition(worldGP + new GridPos3D(1, 0, -1), out WorldModule _, out GridPos3D _);
+        if (rightBackBox) boxes.Add(rightBackBox);
+        return boxes;
+    }
+
+    public List<Box> GetAdjacentBox(GridPos3D worldGP)
+    {
+        List<Box> boxes = new List<Box>();
+        Box leftBox = GetBoxByGridPosition(worldGP + new GridPos3D(-1, 0, 0), out WorldModule _, out GridPos3D _);
+        if (leftBox) boxes.Add(leftBox);
+        Box rightBox = GetBoxByGridPosition(worldGP + new GridPos3D(1, 0, 0), out WorldModule _, out GridPos3D _);
+        if (rightBox) boxes.Add(rightBox);
+        Box frontBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 0, 1), out WorldModule _, out GridPos3D _);
+        if (frontBox) boxes.Add(frontBox);
+        Box backBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 0, -1), out WorldModule _, out GridPos3D _);
+        if (backBox) boxes.Add(backBox);
+        return boxes;
+    }
+
+    #endregion
+
+    #region MoveBox Calculators
 
     public bool CheckCanMoveBox(GridPos3D srcGP, GridPos3D targetGP)
     {

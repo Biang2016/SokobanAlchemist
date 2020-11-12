@@ -202,6 +202,7 @@ public class EntityBuffHelper : EntityMonoHelper
         }
 
         FX newFX = FXManager.Instance.PlayFX(fxName, transform.position, scale);
+        newFX.transform.parent = Entity.transform;
         AbnormalBuffFXDict[statType] = newFX;
         newFX.OnFXEnd = () => { AbnormalBuffFXDict.Remove(statType); };
     }
@@ -219,6 +220,7 @@ public class EntityBuffHelper : EntityMonoHelper
         if (string.IsNullOrEmpty(buff.BuffFX)) return;
         if (buff.BuffFX == "None") return;
         FX fx = FXManager.Instance.PlayFX(buff.BuffFX, transform.position, buff.BuffFXScale);
+        fx.transform.parent = Entity.transform;
         if (buff.BuffAttribute != BuffAttribute.InstantEffect)
         {
             BuffFXDict.Add(buff.GUID, fx);

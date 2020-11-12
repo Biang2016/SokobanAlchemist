@@ -30,6 +30,10 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
     public BoxProperty FrozenResistance = new BoxProperty(BoxPropertyType.FrozenResistance);
 
     [BoxGroup("冰冻")]
+    [LabelText("@\"冰冻恢复率\t\"+FrozenRecovery")]
+    public BoxProperty FrozenRecovery = new BoxProperty(BoxPropertyType.FrozenRecovery);
+
+    [BoxGroup("冰冻")]
     [LabelText("@\"冰冻累积值\t\"+FrozenValue")]
     public BoxStat FrozenValue = new BoxStat(BoxStatType.FrozenValue);
 
@@ -55,14 +59,31 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
     public BoxProperty FiringResistance = new BoxProperty(BoxPropertyType.FiringResistance);
 
     [BoxGroup("灼烧")]
+    [LabelText("@\"灼烧恢复率\t\"+FiringRecovery")]
+    public BoxProperty FiringRecovery = new BoxProperty(BoxPropertyType.FiringRecovery);
+
+    [BoxGroup("灼烧")]
+    [LabelText("@\"灼烧增长率Percent\t\"+FiringGrowthPercent")]
+    public BoxProperty FiringGrowthPercent = new BoxProperty(BoxPropertyType.FiringGrowthPercent);
+
+    [BoxGroup("灼烧")]
     [LabelText("@\"灼烧累积值\t\"+FiringValue")]
     public BoxStat FiringValue = new BoxStat(BoxStatType.FiringValue);
+
+    [BoxGroup("灼烧")]
+    [LabelText("@\"灼烧耐久度\t\"+FiringDurability")]
+    public BoxStat FiringDurability = new BoxStat(BoxStatType.FiringDurability);
 
     [BoxGroup("灼烧")]
     [LabelText("灼烧等级")]
     public BoxStat FiringLevel = new BoxStat(BoxStatType.FiringLevel);
 
     internal int FiringValuePerLevel => Mathf.RoundToInt(((float) FiringValue.MaxValue / FiringLevel.MaxValue));
+
+    [BoxGroup("灼烧")]
+    [LabelText("灼烧触发特效")]
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
+    public string StartFiringFX;
 
     [BoxGroup("灼烧")]
     [LabelText("灼烧持续特效")]
@@ -72,6 +93,11 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
     [BoxGroup("灼烧")]
     [LabelText("灼烧持续特效尺寸(x->灼烧等级")]
     public AnimationCurve FiringFXScaleCurve;
+
+    [BoxGroup("灼烧")]
+    [LabelText("灼烧毁坏特效")]
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
+    public string FiringBreakFX;
 
     [NonSerialized]
     [ShowInInspector]
@@ -97,9 +123,6 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
     {
         Box = box;
 
-        FrozenResistance.Initialize();
-        FiringResistance.Initialize();
-
         CommonDurability.OnValueReachZero += () => { box.BoxFunctionMarkAsDeleted = true; };
         CollideWithBoxDurability.OnValueReachZero += () => { box.BoxFunctionMarkAsDeleted = true; };
         CollideWithActorDurability.OnValueReachZero += () => { box.BoxFunctionMarkAsDeleted = true; };
@@ -107,14 +130,17 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         StatDict.Add(BoxStatType.CollideWithBoxDurability, CollideWithBoxDurability);
         StatDict.Add(BoxStatType.CollideWithActorDurability, CollideWithActorDurability);
 
-        FrozenResistance.OnValueChanged += (before, after) =>
-        {
-            FrozenValue.AbnormalStatResistance = after;
-            FrozenValue.Recovery = -after;
-        };
+        #region Frozen
+
+        FrozenResistance.Initialize();
+        FrozenResistance.OnValueChanged += (before, after) => { FrozenValue.AbnormalStatResistance = FrozenResistance.GetModifiedValue; };
         PropertyDict.Add(BoxPropertyType.FrozenResistance, FrozenResistance);
 
-        FrozenValue.Recovery = -FrozenResistance.GetModifiedValue;
+        FrozenRecovery.Initialize();
+        FrozenRecovery.OnValueChanged += (before, after) => { FrozenValue.Recovery = -after; };
+        PropertyDict.Add(BoxPropertyType.FrozenRecovery, FrozenRecovery);
+
+        FrozenValue.Recovery = -FrozenRecovery.GetModifiedValue;
         FrozenValue.AbnormalStatResistance = FrozenResistance.GetModifiedValue;
         FrozenValue.OnValueChanged += (before, after) =>
         {
@@ -126,24 +152,54 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         FrozenLevel.OnValueChanged += Box.BoxFrozenHelper.FrozeIntoIceBlock;
         StatDict.Add(BoxStatType.FrozenLevel, FrozenLevel);
 
-        FiringResistance.OnValueChanged += (before, after) =>
-        {
-            FiringValue.AbnormalStatResistance = after;
-            FiringValue.Recovery = -after;
-        };
+        #endregion
+
+        #region Firing
+
+        FiringResistance.Initialize();
+        FiringResistance.OnValueChanged += (before, after) => { FiringValue.AbnormalStatResistance = after; };
         PropertyDict.Add(BoxPropertyType.FiringResistance, FiringResistance);
 
-        FiringValue.Recovery = -FiringResistance.GetModifiedValue;
+        FiringRecovery.Initialize();
+        FiringRecovery.OnValueChanged += (before, after) => { FiringValue.Recovery = -after; };
+        PropertyDict.Add(BoxPropertyType.FiringRecovery, FiringRecovery);
+
+        FiringGrowthPercent.Initialize();
+        FiringGrowthPercent.OnValueChanged += (before, after) => { FrozenValue.GrowthPercent = after; };
+        PropertyDict.Add(BoxPropertyType.FiringGrowthPercent, FiringGrowthPercent);
+
+        FiringValue.Recovery = -FiringRecovery.GetModifiedValue;
+        FrozenValue.GrowthPercent = FiringGrowthPercent.GetModifiedValue;
         FiringValue.AbnormalStatResistance = FiringResistance.GetModifiedValue;
         FiringValue.OnValueChanged += (before, after) =>
         {
             FiringLevel.Value = after / FiringValuePerLevel;
             if (FiringLevel.Value > 0) Box.BoxBuffHelper.PlayAbnormalStatFX((int) BoxStatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 灼烧值变化时，播放一次特效
-            else if(after == 0) Box.BoxBuffHelper.RemoveAbnormalStatFX((int)BoxStatType.FiringValue);
+            else if (after == 0) Box.BoxBuffHelper.RemoveAbnormalStatFX((int) BoxStatType.FiringValue);
         };
         StatDict.Add(BoxStatType.FiringValue, FiringValue);
 
+        FiringDurability.OnValueChanged += (before, after) =>
+        {
+            if (after == 0)
+            {
+                FXManager.Instance.PlayFX(FiringBreakFX, Box.transform.position, 1.5f);
+                box.DeleteSelf();
+            }
+        };
+        StatDict.Add(BoxStatType.FiringDurability, FiringDurability);
+
+        FiringLevel.OnValueChanged += (before, after) =>
+        {
+            if (before == 0 && after > 0)
+            {
+                FX fx = FXManager.Instance.PlayFX(StartFiringFX, Box.transform.position + Vector3.up * 0.5f, 1f);
+                fx.transform.parent = Box.transform;
+            }
+        };
         StatDict.Add(BoxStatType.FiringLevel, FiringLevel);
+
+        #endregion
 
         foreach (BoxBuff rawBoxDefaultBuff in RawBoxDefaultBuffs)
         {
@@ -167,9 +223,6 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         PropertyDict.Clear();
     }
 
-    private float abnormalStateAutoTick = 0f;
-    private int abnormalStateAutoTickInterval = 1; // 异常状态值每秒降低
-
     public void FixedUpdate(float fixedDeltaTime)
     {
         foreach (KeyValuePair<BoxStatType, BoxStat> kv in StatDict)
@@ -177,13 +230,19 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
             kv.Value.FixedUpdate(fixedDeltaTime);
         }
 
-        abnormalStateAutoTick += fixedDeltaTime;
-        if (abnormalStateAutoTick > abnormalStateAutoTickInterval)
+        // 火焰蔓延
+        if (FiringLevel.Value >= 1)
         {
-            abnormalStateAutoTick -= abnormalStateAutoTickInterval;
+            foreach (Box adjacentBox in WorldManager.Instance.CurrentWorld.GetAdjacentBox(Box.WorldGP))
+            {
+                int diff = FiringValue.Value - adjacentBox.BoxStatPropSet.FiringValue.Value;
+                if (diff > 0)
+                {
+                    adjacentBox.BoxStatPropSet.FiringValue.Value += Mathf.RoundToInt(diff * 0.66f);
+                }
+            }
 
-            // todo
-            //Box.BoxBattleHelper.Damage(Box, FiringLevel.Value);
+            FiringDurability.Value -= FiringLevel.Value;
         }
     }
 
@@ -194,15 +253,21 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         newStatPropSet.CollideWithBoxDurability = (BoxStat) CollideWithBoxDurability.Clone();
         newStatPropSet.CollideWithActorDurability = (BoxStat) CollideWithActorDurability.Clone();
         newStatPropSet.FrozenResistance = (BoxProperty) FrozenResistance.Clone();
+        newStatPropSet.FrozenRecovery = (BoxProperty) FrozenRecovery.Clone();
         newStatPropSet.FrozenValue = (BoxStat) FrozenValue.Clone();
         newStatPropSet.FrozenLevel = (BoxStat) FrozenLevel.Clone();
         newStatPropSet.FrozenFX = FrozenFX;
         newStatPropSet.FrozenFXScaleCurve = FrozenFXScaleCurve; // 风险，此处没有深拷贝
         newStatPropSet.FiringResistance = (BoxProperty) FiringResistance.Clone();
+        newStatPropSet.FiringRecovery = (BoxProperty) FiringRecovery.Clone();
+        newStatPropSet.FiringGrowthPercent = (BoxProperty) FiringGrowthPercent.Clone();
         newStatPropSet.FiringValue = (BoxStat) FiringValue.Clone();
+        newStatPropSet.FiringDurability = (BoxStat) FiringDurability.Clone();
         newStatPropSet.FiringLevel = (BoxStat) FiringLevel.Clone();
+        newStatPropSet.StartFiringFX = StartFiringFX;
         newStatPropSet.FiringFX = FiringFX;
         newStatPropSet.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
+        newStatPropSet.FiringBreakFX = FiringBreakFX;
 
         newStatPropSet.RawBoxDefaultBuffs = RawBoxDefaultBuffs.Clone();
         return newStatPropSet;
@@ -280,6 +345,9 @@ public enum BoxStatType
     [LabelText("灼烧累积值")]
     FiringValue = 101,
 
+    [LabelText("燃烧耐久度")]
+    FiringDurability = 102,
+
     [LabelText("灼烧等级")]
     FiringLevel = 121,
 }
@@ -291,4 +359,13 @@ public enum BoxPropertyType
 
     [LabelText("灼烧抗性")]
     FiringResistance = 101,
+
+    [LabelText("冰冻恢复率")]
+    FrozenRecovery = 200,
+
+    [LabelText("灼烧恢复率")]
+    FiringRecovery = 201,
+
+    [LabelText("灼烧增长率")]
+    FiringGrowthPercent = 301,
 }

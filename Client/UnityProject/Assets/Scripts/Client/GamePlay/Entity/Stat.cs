@@ -39,22 +39,17 @@ public abstract class Stat : IClone<Stat>
     /// </summary>
     internal int Recovery = 0;
 
+    /// <summary>
+    /// 每秒增长率percent
+    /// </summary>
+    internal int GrowthPercent = 0;
+
     private float accumulatedRecovery = 0;
 
     public void FixedUpdate(float fixedDeltaTime)
     {
-        if (Recovery < 0 && Value > 0)
-        {
-            accumulatedRecovery += fixedDeltaTime * Recovery;
-        }
-        else if (Recovery > 0 && Value != MaxValue)
-        {
-            accumulatedRecovery += fixedDeltaTime * Recovery;
-        }
-        else
-        {
-            accumulatedRecovery = 0;
-        }
+        accumulatedRecovery += fixedDeltaTime * Recovery;
+        accumulatedRecovery += fixedDeltaTime * (Value * GrowthPercent / 100f);
 
         if (accumulatedRecovery > 1)
         {

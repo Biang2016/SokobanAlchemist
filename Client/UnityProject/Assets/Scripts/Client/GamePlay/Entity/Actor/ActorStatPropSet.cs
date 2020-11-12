@@ -62,6 +62,10 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
     public ActorProperty FrozenResistance = new ActorProperty(ActorPropertyType.FrozenResistance);
 
     [BoxGroup("冰冻")]
+    [LabelText("@\"冰冻恢复率\t\"+FrozenRecovery")]
+    public ActorProperty FrozenRecovery = new ActorProperty(ActorPropertyType.FrozenRecovery);
+
+    [BoxGroup("冰冻")]
     [LabelText("@\"冰冻累积值\t\"+FrozenValue")]
     public ActorStat FrozenValue = new ActorStat(ActorStatType.FrozenValue);
 
@@ -85,6 +89,14 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
     [BoxGroup("灼烧")]
     [LabelText("@\"灼烧抗性\t\"+FiringResistance")]
     public ActorProperty FiringResistance = new ActorProperty(ActorPropertyType.FiringResistance);
+
+    [BoxGroup("灼烧")]
+    [LabelText("@\"灼烧恢复率\t\"+FiringRecovery")]
+    public ActorProperty FiringRecovery = new ActorProperty(ActorPropertyType.FiringRecovery);
+
+    [BoxGroup("灼烧")]
+    [LabelText("@\"灼烧增长率\t\"+FiringGrowthPercent")]
+    public ActorProperty FiringGrowthPercent = new ActorProperty(ActorPropertyType.FiringGrowthPercent);
 
     [BoxGroup("灼烧")]
     [LabelText("@\"灼烧累积值\t\"+FiringValue")]
@@ -138,7 +150,10 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         DashConsumeActionPoint.Initialize();
         VaultConsumeActionPoint.Initialize();
         FrozenResistance.Initialize();
+        FrozenRecovery.Initialize();
         FiringResistance.Initialize();
+        FiringRecovery.Initialize();
+        FiringGrowthPercent.Initialize();
 
         Health.MaxValue = MaxHealth.GetModifiedValue;
         Health.OnValueReachZero += () => { Life.Value--; };
@@ -171,14 +186,15 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
 
         PropertyDict.Add(ActorPropertyType.VaultConsumeActionPoint, VaultConsumeActionPoint);
 
-        FrozenResistance.OnValueChanged += (before, after) =>
-        {
-            FrozenValue.AbnormalStatResistance = after;
-            FrozenValue.Recovery = -after;
-        };
+        #region Frozen
+
+        FrozenResistance.OnValueChanged += (before, after) => { FrozenValue.AbnormalStatResistance = after; };
         PropertyDict.Add(ActorPropertyType.FrozenResistance, FrozenResistance);
 
-        FrozenValue.Recovery = -FrozenResistance.GetModifiedValue;
+        FrozenRecovery.OnValueChanged += (before, after) => { FrozenValue.Recovery = -after; };
+        PropertyDict.Add(ActorPropertyType.FrozenRecovery, FrozenRecovery);
+
+        FrozenValue.Recovery = -FrozenRecovery.GetModifiedValue;
         FrozenValue.AbnormalStatResistance = FrozenResistance.GetModifiedValue;
         FrozenValue.OnValueChanged += (before, after) =>
         {
@@ -190,15 +206,22 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         FrozenLevel.OnValueChanged += Actor.ActorFrozenHelper.FrozeIntoIceBlock;
         StatDict.Add(ActorStatType.FrozenLevel, FrozenLevel);
 
-        FiringResistance.OnValueChanged += (before, after) =>
-        {
-            FiringValue.AbnormalStatResistance = after;
-            FiringValue.Recovery = -after;
-        };
+        #endregion
+
+        #region Firing
+
+        FiringResistance.OnValueChanged += (before, after) => { FiringValue.AbnormalStatResistance = after; };
         PropertyDict.Add(ActorPropertyType.FiringResistance, FiringResistance);
+
+        FiringRecovery.OnValueChanged += (before, after) => { FiringValue.Recovery = -after; };
+        PropertyDict.Add(ActorPropertyType.FiringRecovery, FiringRecovery);
+
+        FiringGrowthPercent.OnValueChanged += (before, after) => { FiringValue.GrowthPercent = after; };
+        PropertyDict.Add(ActorPropertyType.FiringGrowthPercent, FiringGrowthPercent);
 
         FiringValue.Recovery = -FiringResistance.GetModifiedValue;
         FiringValue.AbnormalStatResistance = FiringResistance.GetModifiedValue;
+        FiringValue.GrowthPercent = FiringGrowthPercent.GetModifiedValue;
         FiringValue.OnValueChanged += (before, after) =>
         {
             FiringLevel.Value = after / FiringValuePerLevel;
@@ -207,6 +230,8 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         StatDict.Add(ActorStatType.FiringValue, FiringValue);
 
         StatDict.Add(ActorStatType.FiringLevel, FiringLevel);
+
+        #endregion
 
         foreach (ActorBuff rawActorDefaultBuff in RawActorDefaultBuffs)
         {
@@ -264,11 +289,14 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         newStatPropSet.DashConsumeActionPoint = (ActorProperty) DashConsumeActionPoint.Clone();
         newStatPropSet.VaultConsumeActionPoint = (ActorProperty) VaultConsumeActionPoint.Clone();
         newStatPropSet.FrozenResistance = (ActorProperty) FrozenResistance.Clone();
+        newStatPropSet.FrozenRecovery = (ActorProperty) FrozenRecovery.Clone();
         newStatPropSet.FrozenValue = (ActorStat) FrozenValue.Clone();
         newStatPropSet.FrozenLevel = (ActorStat) FrozenLevel.Clone();
         newStatPropSet.FrozenFX = FrozenFX;
         newStatPropSet.FrozenFXScaleCurve = FrozenFXScaleCurve; // 风险，此处没有深拷贝
         newStatPropSet.FiringResistance = (ActorProperty) FiringResistance.Clone();
+        newStatPropSet.FiringRecovery = (ActorProperty) FiringRecovery.Clone();
+        newStatPropSet.FiringGrowthPercent = (ActorProperty) FiringGrowthPercent.Clone();
         newStatPropSet.FiringValue = (ActorStat) FiringValue.Clone();
         newStatPropSet.FiringLevel = (ActorStat) FiringLevel.Clone();
         newStatPropSet.FiringFX = FiringFX;
@@ -388,4 +416,13 @@ public enum ActorPropertyType
 
     [LabelText("灼烧抗性")]
     FiringResistance = 101,
+
+    [LabelText("冰冻恢复率")]
+    FrozenRecovery = 200,
+
+    [LabelText("灼烧恢复率")]
+    FiringRecovery = 201,
+
+    [LabelText("灼烧增长率")]
+    FiringGrowthPercent = 301,
 }

@@ -764,6 +764,11 @@ public partial class Box : Entity
         {
             BoxEffectHelper?.Stop();
         }
+
+        if (BoxFunctionMarkAsDeleted)
+        {
+            DeleteSelf();
+        }
     }
 
     protected override void OnCollisionEnter(Collision collision)
