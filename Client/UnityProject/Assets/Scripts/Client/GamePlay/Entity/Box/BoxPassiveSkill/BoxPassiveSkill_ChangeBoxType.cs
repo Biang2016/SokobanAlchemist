@@ -2,10 +2,12 @@
 using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 
+[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_ChangeBoxType", typeof(BoxPassiveSkill_ChangeBoxType))]
+
 [Serializable]
-public class BoxFunction_ChangeBoxType : BoxFunction_InvokeOnLevelEventID
+public class BoxPassiveSkill_ChangeBoxType : BoxPassiveSkill_InvokeOnLevelEventID
 {
-    protected override string BoxFunctionDisplayName => "更改箱子类型";
+    protected override string BoxPassiveSkillDisplayName => "更改箱子类型";
 
     [BoxName]
     [LabelText("更改箱子类型为")]
@@ -27,17 +29,17 @@ public class BoxFunction_ChangeBoxType : BoxFunction_InvokeOnLevelEventID
         }
     }
 
-    protected override void ChildClone(BoxFunctionBase newBF)
+    protected override void ChildClone(BoxPassiveSkill newBF)
     {
         base.ChildClone(newBF);
-        BoxFunction_ChangeBoxType bf = ((BoxFunction_ChangeBoxType) newBF);
+        BoxPassiveSkill_ChangeBoxType bf = ((BoxPassiveSkill_ChangeBoxType) newBF);
         bf.ChangeBoxTypeTo = ChangeBoxTypeTo;
     }
 
-    public override void CopyDataFrom(BoxFunctionBase srcData)
+    public override void CopyDataFrom(BoxPassiveSkill srcData)
     {
         base.CopyDataFrom(srcData);
-        BoxFunction_ChangeBoxType bf = ((BoxFunction_ChangeBoxType) srcData);
+        BoxPassiveSkill_ChangeBoxType bf = ((BoxPassiveSkill_ChangeBoxType) srcData);
         ChangeBoxTypeTo = bf.ChangeBoxTypeTo;
     }
 }

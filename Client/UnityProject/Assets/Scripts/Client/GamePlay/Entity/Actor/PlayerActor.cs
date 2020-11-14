@@ -55,8 +55,6 @@ public class PlayerActor : Actor
 
     private float Skill1_PressDuration;
 
-    private int a = 0;
-
     protected override void FixedUpdate()
     {
         if (!IsRecycled)

@@ -205,7 +205,7 @@ public class BoxBuff_ChangeBoxStatInstantly : BoxBuff
     public override void OnAdded(Entity entity)
     {
         base.OnAdded(entity);
-        Box box = (Box)entity;
+        Box box = (Box) entity;
         float valueBefore = box.BoxStatPropSet.StatDict[StatType].Value;
         valueBefore += Delta;
         valueBefore *= (100 + Percent) / 100f;
@@ -226,7 +226,7 @@ public class BoxBuff_ChangeBoxStatInstantly : BoxBuff
     protected override void ChildClone(EntityBuff newBuff)
     {
         base.ChildClone(newBuff);
-        BoxBuff_ChangeBoxStatInstantly buff = ((BoxBuff_ChangeBoxStatInstantly)newBuff);
+        BoxBuff_ChangeBoxStatInstantly buff = ((BoxBuff_ChangeBoxStatInstantly) newBuff);
         buff.StatType = StatType;
         buff.Delta = Delta;
         buff.Percent = Percent;

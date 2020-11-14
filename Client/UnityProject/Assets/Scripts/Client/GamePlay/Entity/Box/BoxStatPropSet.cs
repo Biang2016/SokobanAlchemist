@@ -123,9 +123,9 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
     {
         Box = box;
 
-        CommonDurability.OnValueReachZero += () => { box.BoxFunctionMarkAsDeleted = true; };
-        CollideWithBoxDurability.OnValueReachZero += () => { box.BoxFunctionMarkAsDeleted = true; };
-        CollideWithActorDurability.OnValueReachZero += () => { box.BoxFunctionMarkAsDeleted = true; };
+        CommonDurability.OnValueReachZero += () => { box.BoxPassiveSkillMarkAsDeleted = true; };
+        CollideWithBoxDurability.OnValueReachZero += () => { box.BoxPassiveSkillMarkAsDeleted = true; };
+        CollideWithActorDurability.OnValueReachZero += () => { box.BoxPassiveSkillMarkAsDeleted = true; };
         StatDict.Add(BoxStatType.CommonDurability, CommonDurability);
         StatDict.Add(BoxStatType.CollideWithBoxDurability, CollideWithBoxDurability);
         StatDict.Add(BoxStatType.CollideWithActorDurability, CollideWithActorDurability);

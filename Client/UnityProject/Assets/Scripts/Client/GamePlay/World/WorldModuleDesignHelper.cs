@@ -56,15 +56,15 @@ public class WorldModuleDesignHelper : MonoBehaviour
             ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxPrefab.name];
 
             bool isLevelEventTriggerAppearBox = false;
-            foreach (BoxFunctionBase bf in box.RawBoxFunctions)
+            foreach (BoxPassiveSkill bf in box.RawBoxPassiveSkills)
             {
-                if (bf is BoxFunction_LevelEventTriggerAppear bf_leta)
+                if (bf is BoxPassiveSkill_LevelEventTriggerAppear bf_leta)
                 {
-                    BoxFunction_LevelEventTriggerAppear.Data data = new BoxFunction_LevelEventTriggerAppear.Data();
+                    BoxPassiveSkill_LevelEventTriggerAppear.Data data = new BoxPassiveSkill_LevelEventTriggerAppear.Data();
                     data.LocalGP = gp;
                     data.LevelComponentBelongsTo = LevelComponentBelongsTo.WorldModule;
                     data.BoxTypeIndex = boxTypeIndex;
-                    data.BoxFunction_LevelEventTriggerAppear = (BoxFunction_LevelEventTriggerAppear) bf_leta.Clone();
+                    data.BoxPassiveSkill_LevelEventTriggerAppear = (BoxPassiveSkill_LevelEventTriggerAppear) bf_leta.Clone();
                     worldModuleData.EventTriggerAppearBoxDataList.Add(data);
                     isLevelEventTriggerAppearBox = true;
                     break;
@@ -76,7 +76,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
             // 就算是LevelEventTriggerAppear的Box，模组特例数据也按原样序列化，箱子生成时到Matrix里面读取ExtraSerializeData
             if (box.RequireSerializeFunctionIntoWorldModule)
             {
-                Box.BoxExtraSerializeData data = box.GetBoxExtraSerializeDataForWorldModule(); 
+                Box.BoxExtraSerializeData data = box.GetBoxExtraSerializeDataForWorldModule();
                 data.LocalGP = gp;
                 worldModuleData.BoxExtraSerializeDataMatrix[gp.x, gp.y, gp.z] = data;
             }

@@ -3,6 +3,7 @@ using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.Messenger;
 using BiangStudio.ObjectPool;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class World : PoolObject
 {
@@ -18,7 +19,9 @@ public class World : PoolObject
 
     private List<WorldCameraPOI> POIs = new List<WorldCameraPOI>();
     private List<LevelTriggerBase> WorldLevelTriggers = new List<LevelTriggerBase>();
-    public List<BoxFunction_LevelEventTriggerAppear> EventTriggerAppearBoxFunctionList = new List<BoxFunction_LevelEventTriggerAppear>();
+
+    [FormerlySerializedAs("EventTriggerAppearBoxFunctionList")]
+    public List<BoxPassiveSkill_LevelEventTriggerAppear> EventTriggerAppearBoxPassiveSkillList = new List<BoxPassiveSkill_LevelEventTriggerAppear>();
 
     #region Root
 
@@ -81,12 +84,12 @@ public class World : PoolObject
         }
 
         WorldLevelTriggers.Clear();
-        foreach (BoxFunction_LevelEventTriggerAppear bf in EventTriggerAppearBoxFunctionList)
+        foreach (BoxPassiveSkill_LevelEventTriggerAppear bf in EventTriggerAppearBoxPassiveSkillList)
         {
             bf.ClearAndUnRegister();
         }
 
-        EventTriggerAppearBoxFunctionList.Clear();
+        EventTriggerAppearBoxPassiveSkillList.Clear();
         WorldData = null;
     }
 
@@ -235,10 +238,10 @@ public class World : PoolObject
             }
         }
 
-        foreach (BoxFunction_LevelEventTriggerAppear.Data data in WorldData.WorldSpecialBoxEventTriggerAppearBoxDataList)
+        foreach (BoxPassiveSkill_LevelEventTriggerAppear.Data data in WorldData.WorldSpecialBoxEventTriggerAppearBoxDataList)
         {
-            BoxFunction_LevelEventTriggerAppear.Data dataClone = (BoxFunction_LevelEventTriggerAppear.Data) data.Clone();
-            BoxFunction_LevelEventTriggerAppear bf = dataClone.BoxFunction_LevelEventTriggerAppear;
+            BoxPassiveSkill_LevelEventTriggerAppear.Data dataClone = (BoxPassiveSkill_LevelEventTriggerAppear.Data) data.Clone();
+            BoxPassiveSkill_LevelEventTriggerAppear bf = dataClone.BoxPassiveSkill_LevelEventTriggerAppear;
             bf.GenerateBoxAction = () =>
             {
                 GridPos3D worldGP = data.WorldGP;
@@ -248,13 +251,13 @@ public class World : PoolObject
                 {
                     module.GenerateBox(dataClone.BoxTypeIndex, localGP.x, localGP.y, localGP.z, null, dataClone.WorldSpecialBoxData.BoxExtraSerializeDataFromWorld);
 
-                    // Box生成后此BoxFunction及注册的事件均作废
+                    // Box生成后此BoxPassiveSkill及注册的事件均作废
                     bf.ClearAndUnRegister();
-                    EventTriggerAppearBoxFunctionList.Remove(bf);
+                    EventTriggerAppearBoxPassiveSkillList.Remove(bf);
                 }
             };
             bf.OnRegisterLevelEventID();
-            EventTriggerAppearBoxFunctionList.Add(bf);
+            EventTriggerAppearBoxPassiveSkillList.Add(bf);
         }
 
         foreach (Box.WorldSpecialBoxData worldSpecialBoxData in WorldData.WorldSpecialBoxDataList)

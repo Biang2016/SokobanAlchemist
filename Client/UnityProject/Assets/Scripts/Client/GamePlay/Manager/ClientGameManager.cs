@@ -190,7 +190,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     void FixedUpdate()
     {
-        CurrentFixedFrameCount ++;
+        CurrentFixedFrameCount++;
         CurrentFixedFrameCount_Mod_FixedFrameRate = CurrentFixedFrameCount % FixedFrameRate;
         ControlManager.FixedUpdate(Time.fixedDeltaTime);
         if (ControlManager.Common_RestartGame.Up)

@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class ActorSkinHelper : ActorMonoHelper
 {
@@ -22,7 +22,7 @@ public class ActorSkinHelper : ActorMonoHelper
         {
             if (sc.Renderer != null)
             {
-                sc.Renderer.material = sc.Materials[(int)playerNumber];
+                sc.Renderer.material = sc.Materials[(int) playerNumber];
             }
         }
     }

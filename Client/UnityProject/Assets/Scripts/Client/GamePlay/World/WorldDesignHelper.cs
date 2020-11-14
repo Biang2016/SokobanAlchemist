@@ -1,11 +1,11 @@
 ﻿using System;
-using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BiangStudio;
 using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -122,16 +122,16 @@ public class WorldDesignHelper : MonoBehaviour
 
             // 关卡事件触发出现的Box序列化到单独的地方
             bool isLevelEventTriggerAppearBox = false;
-            foreach (BoxFunctionBase bf in worldBox.RawBoxFunctions)
+            foreach (BoxPassiveSkill bf in worldBox.RawBoxPassiveSkills)
             {
-                if (bf is BoxFunction_LevelEventTriggerAppear bf_leta)
+                if (bf is BoxPassiveSkill_LevelEventTriggerAppear bf_leta)
                 {
-                    BoxFunction_LevelEventTriggerAppear.Data data = new BoxFunction_LevelEventTriggerAppear.Data();
+                    BoxPassiveSkill_LevelEventTriggerAppear.Data data = new BoxPassiveSkill_LevelEventTriggerAppear.Data();
                     data.WorldGP = gp;
                     data.LevelComponentBelongsTo = LevelComponentBelongsTo.World;
                     data.BoxTypeIndex = boxTypeIndex;
-                    data.BoxFunction_LevelEventTriggerAppear = (BoxFunction_LevelEventTriggerAppear) bf_leta.Clone();
-                    data.WorldSpecialBoxData = worldSpecialBoxData;// 世界维度LevelEventTriggerAppear的箱子自己处理自己的ExtraSerializeData
+                    data.BoxPassiveSkill_LevelEventTriggerAppear = (BoxPassiveSkill_LevelEventTriggerAppear) bf_leta.Clone();
+                    data.WorldSpecialBoxData = worldSpecialBoxData; // 世界维度LevelEventTriggerAppear的箱子自己处理自己的ExtraSerializeData
                     worldData.WorldSpecialBoxEventTriggerAppearBoxDataList.Add(data); // 序列到这里
                     isLevelEventTriggerAppearBox = true;
                     break;

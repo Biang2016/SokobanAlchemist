@@ -23,7 +23,7 @@ public class WorldData : IClone<WorldData>
     public LevelTriggerGroupData WorldLevelTriggerGroupData = new LevelTriggerGroupData();
     public List<Box.WorldSpecialBoxData> WorldSpecialBoxDataList = new List<Box.WorldSpecialBoxData>(); // LevelEventTriggerAppear的箱子不记录到此列表中
     public List<Box.BoxExtraSerializeData>[,,] ModuleBoxExtraSerializeDataMatrix = new List<Box.BoxExtraSerializeData>[World.WORLD_SIZE, World.WORLD_HEIGHT, World.WORLD_SIZE];
-    public List<BoxFunction_LevelEventTriggerAppear.Data> WorldSpecialBoxEventTriggerAppearBoxDataList = new List<BoxFunction_LevelEventTriggerAppear.Data>(); // 覆盖模组特例的世界特例不序列化在此，序列化在ModuleBoxExtraSerializeDataMatrix中
+    public List<BoxPassiveSkill_LevelEventTriggerAppear.Data> WorldSpecialBoxEventTriggerAppearBoxDataList = new List<BoxPassiveSkill_LevelEventTriggerAppear.Data>(); // 覆盖模组特例的世界特例不序列化在此，序列化在ModuleBoxExtraSerializeDataMatrix中
 
     public List<GridPos3D> WorldModuleGPOrder = new List<GridPos3D>();
 

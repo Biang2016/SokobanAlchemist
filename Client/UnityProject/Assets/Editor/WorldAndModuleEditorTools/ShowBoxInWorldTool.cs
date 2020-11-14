@@ -36,10 +36,10 @@ class ShowBoxInWorldTool : EditorTool
                 WorldModuleDesignHelper module = box.GetComponentInParent<WorldModuleDesignHelper>();
                 if (world && module)
                 {
-                    BoxFunction_Hide hide = null;
-                    foreach (BoxFunctionBase bf in box.RawBoxFunctions)
+                    BoxPassiveSkill_Hide hide = null;
+                    foreach (BoxPassiveSkill bf in box.RawBoxPassiveSkills)
                     {
-                        if (bf is BoxFunction_Hide bfHide)
+                        if (bf is BoxPassiveSkill_Hide bfHide)
                         {
                             hide = bfHide;
                             break;
@@ -48,7 +48,7 @@ class ShowBoxInWorldTool : EditorTool
 
                     if (hide != null)
                     {
-                        box.RawBoxFunctions.Remove(hide);
+                        box.RawBoxPassiveSkills.Remove(hide);
                         EditorUtility.SetDirty(box);
                     }
                     else

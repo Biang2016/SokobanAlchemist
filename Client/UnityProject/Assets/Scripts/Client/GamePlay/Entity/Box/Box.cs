@@ -9,6 +9,7 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -94,7 +95,7 @@ public partial class Box : Entity
         BoxStatPropSet = null;
 
         UnRegisterEvents();
-        UnInitBoxFunctions();
+        UnInitPassiveSkills();
         base.OnRecycled();
     }
 
@@ -205,75 +206,90 @@ public partial class Box : Entity
     [LabelText("摩阻力")]
     internal float Dynamic_Drag = 0.5f;
 
-    #region 箱子特殊功能
+    [BoxGroup("冻结")]
+    [LabelText("解冻特效")]
+    [ValueDropdown("GetAllFXTypeNames")]
+    public string ThawFX;
 
-    [BoxGroup("箱子特殊功能")]
+    [BoxGroup("冻结")]
+    [LabelText("冻结特效")]
+    [ValueDropdown("GetAllFXTypeNames")]
+    public string FrozeFX;
+
+    #region 箱子被动技能
+
+    [BoxGroup("箱子被动技能")]
     [ShowInInspector]
-    [LabelText("箱子特殊功能")]
+    [LabelText("箱子被动技能")]
     [NonSerialized]
-    public List<BoxFunctionBase> RawBoxFunctions = new List<BoxFunctionBase>(); // 干数据，禁修改
+    [FormerlySerializedAs("RawBoxFunctions")]
+    public List<BoxPassiveSkill> RawBoxPassiveSkills = new List<BoxPassiveSkill>(); // 干数据，禁修改
 
-    public List<BoxFunctionBase> BoxFunctions = new List<BoxFunctionBase>(); // 湿数据，每个Box生命周期开始前从干数据拷出，结束后清除
-    public Dictionary<string, BoxFunctionBase> BoxFunctionDict = new Dictionary<string, BoxFunctionBase>(); // 便于寻找
+    [FormerlySerializedAs("BoxFunctions")]
+    public List<BoxPassiveSkill> BoxPassiveSkills = new List<BoxPassiveSkill>(); // 湿数据，每个Box生命周期开始前从干数据拷出，结束后清除
 
-    internal bool BoxFunctionMarkAsDeleted = false;
+    [FormerlySerializedAs("BoxFunctionDict")]
+    public Dictionary<string, BoxPassiveSkill> BoxPassiveSkillDict = new Dictionary<string, BoxPassiveSkill>(); // 便于寻找
+
+    internal bool BoxPassiveSkillMarkAsDeleted = false;
 
     [HideInInspector]
-    public byte[] BoxFunctionBaseData;
+    [FormerlySerializedAs("BoxFunctionBaseData")]
+    public byte[] BoxPassiveSkillBaseData;
 
     public override void OnBeforeSerialize()
     {
         base.OnBeforeSerialize();
-        if (RawBoxFunctions == null) RawBoxFunctions = new List<BoxFunctionBase>();
-        BoxFunctionBaseData = SerializationUtility.SerializeValue(RawBoxFunctions, DataFormat.JSON);
+        if (RawBoxPassiveSkills == null) RawBoxPassiveSkills = new List<BoxPassiveSkill>();
+        BoxPassiveSkillBaseData = SerializationUtility.SerializeValue(RawBoxPassiveSkills, DataFormat.JSON);
     }
 
     public override void OnAfterDeserialize()
     {
         base.OnAfterDeserialize();
-        RawBoxFunctions = SerializationUtility.DeserializeValue<List<BoxFunctionBase>>(BoxFunctionBaseData, DataFormat.JSON);
+        RawBoxPassiveSkills = SerializationUtility.DeserializeValue<List<BoxPassiveSkill>>(BoxPassiveSkillBaseData, DataFormat.JSON);
     }
 
-    private void InitBoxFunctions()
+    private void InitBoxPassiveSkills()
     {
-        BoxFunctions.Clear();
-        BoxFunctionDict.Clear();
-        foreach (BoxFunctionBase rawBF in RawBoxFunctions)
+        BoxPassiveSkills.Clear();
+        BoxPassiveSkillDict.Clear();
+        foreach (BoxPassiveSkill rawBF in RawBoxPassiveSkills)
         {
-            if (rawBF is BoxFunction_LevelEventTriggerAppear) continue;
-            BoxFunctions.Add(rawBF.Clone());
+            if (rawBF is BoxPassiveSkill_LevelEventTriggerAppear) continue;
+            BoxPassiveSkills.Add(rawBF.Clone());
         }
 
-        BoxFunctionMarkAsDeleted = false;
-        foreach (BoxFunctionBase bf in BoxFunctions)
+        BoxPassiveSkillMarkAsDeleted = false;
+        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
         {
-            AddNewBoxFunction(bf);
+            AddNewPassiveSkill(bf);
         }
     }
 
-    public void AddNewBoxFunction(BoxFunctionBase bf)
+    public void AddNewPassiveSkill(BoxPassiveSkill bf)
     {
         bf.Box = this;
         bf.OnInit();
         bf.OnRegisterLevelEventID();
         string bfName = bf.GetType().Name;
-        if (!BoxFunctionDict.ContainsKey(bfName))
+        if (!BoxPassiveSkillDict.ContainsKey(bfName))
         {
-            BoxFunctionDict.Add(bfName, bf);
+            BoxPassiveSkillDict.Add(bfName, bf);
         }
     }
 
-    private void UnInitBoxFunctions()
+    private void UnInitPassiveSkills()
     {
-        foreach (BoxFunctionBase bf in BoxFunctions)
+        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
         {
             bf.OnUnRegisterLevelEventID();
         }
 
-        // 防止BoxFunctions里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
-        //BoxFunctions.Clear();
-        //BoxFunctionDict.Clear();
-        BoxFunctionMarkAsDeleted = false;
+        // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
+        //BoxPassiveSkills.Clear();
+        //BoxPassiveSkillDict.Clear();
+        BoxPassiveSkillMarkAsDeleted = false;
     }
 
     #endregion
@@ -384,15 +400,15 @@ public partial class Box : Entity
     public void Setup(ushort boxTypeIndex)
     {
         BoxTypeIndex = boxTypeIndex;
-        InitBoxFunctions();
+        InitBoxPassiveSkills();
         RegisterEvents();
 
         BoxStatPropSet = RawBoxStatPropSet.Clone();
         BoxStatPropSet.Initialize(this);
 
-        foreach (BoxFunctionBase bf in BoxFunctions)
+        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
         {
-            if (bf is BoxFunction_ShapeAndOrientation bf_so)
+            if (bf is BoxPassiveSkill_ShapeAndOrientation bf_so)
             {
                 BoxShapeType = bf_so.BoxShapeType;
                 BoxOrientation = bf_so.Orientation;
@@ -594,7 +610,7 @@ public partial class Box : Entity
             DefaultRotBeforeLift = transform.rotation;
             alreadyCollide = false;
             LastTouchActor = actor;
-            foreach (BoxFunctionBase bf in BoxFunctions)
+            foreach (BoxPassiveSkill bf in BoxPassiveSkills)
             {
                 bf.OnBeingLift(actor);
             }
@@ -721,6 +737,7 @@ public partial class Box : Entity
             BoxStatPropSet.FixedUpdate(1f);
             BoxBuffHelper.BuffFixedUpdate();
         }
+
         if ((state == States.BeingKicked || state == States.Flying || state == States.DroppingFromDeadActor || state == States.Putting) && Rigidbody)
         {
             if (state == States.BeingKicked)
@@ -765,7 +782,7 @@ public partial class Box : Entity
             BoxEffectHelper?.Stop();
         }
 
-        if (BoxFunctionMarkAsDeleted)
+        if (BoxPassiveSkillMarkAsDeleted)
         {
             DeleteSelf();
         }
@@ -792,12 +809,12 @@ public partial class Box : Entity
                 CollideAOEDamage(CollideDamageRadius, CollideDamage);
                 PlayCollideFX();
 
-                foreach (BoxFunctionBase bf in BoxFunctions)
+                foreach (BoxPassiveSkill bf in BoxPassiveSkills)
                 {
                     bf.OnFlyingCollisionEnter(collision);
                 }
 
-                if (BoxFunctionMarkAsDeleted && !IsRecycled)
+                if (BoxPassiveSkillMarkAsDeleted && !IsRecycled)
                 {
                     DeleteSelf();
                     return;
@@ -806,7 +823,7 @@ public partial class Box : Entity
                 if (!IsRecycled)
                 {
                     OnFlyingCollisionEnter(collision);
-                    if (BoxFunctionMarkAsDeleted)
+                    if (BoxPassiveSkillMarkAsDeleted)
                     {
                         DeleteSelf();
                         return;
@@ -824,12 +841,12 @@ public partial class Box : Entity
                     CollideAOEDamage(CollideDamageRadius, CollideDamage);
                     PlayCollideFX();
 
-                    foreach (BoxFunctionBase bf in BoxFunctions)
+                    foreach (BoxPassiveSkill bf in BoxPassiveSkills)
                     {
                         bf.OnBeingKickedCollisionEnter(collision);
                     }
 
-                    if (BoxFunctionMarkAsDeleted && !IsRecycled)
+                    if (BoxPassiveSkillMarkAsDeleted && !IsRecycled)
                     {
                         DeleteSelf();
                         return;
@@ -838,7 +855,7 @@ public partial class Box : Entity
                     if (!IsRecycled)
                     {
                         OnBeingKickedCollisionEnter(collision);
-                        if (BoxFunctionMarkAsDeleted)
+                        if (BoxPassiveSkillMarkAsDeleted)
                         {
                             DeleteSelf();
                             return;
@@ -890,12 +907,13 @@ public partial class Box : Entity
 
     public void DeleteSelf()
     {
-        foreach (BoxFunctionBase bf in BoxFunctions)
+        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
         {
             bf.OnDeleteBox();
         }
 
-        //BoxFunctions.Clear();
+        //BoxPassiveSkills.Clear();
+        //BoxPassiveSkillDict.Clear();
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
     }
 
@@ -987,10 +1005,10 @@ public partial class Box : Entity
     public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
     {
         bool isDirty = false;
-        foreach (BoxFunctionBase bf in RawBoxFunctions)
+        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
         {
-            if (moduleSpecial && bf.SpecialCaseType != BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module) continue;
-            if (worldSpecial && bf.SpecialCaseType != BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World) continue;
+            if (moduleSpecial && bf.SpecialCaseType != BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module) continue;
+            if (worldSpecial && bf.SpecialCaseType != BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World) continue;
 
             foreach (FieldInfo fi in bf.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
             {
@@ -1003,7 +1021,7 @@ public partial class Box : Entity
                             string fieldValue = (string) fi.GetValue(bf);
                             if (fieldValue == srcBoxName)
                             {
-                                info.Append($"替换{name}.BoxFunctions.{bf.GetType().Name}.{fi.Name} -> '{targetBoxName}'\n");
+                                info.Append($"替换{name}.BoxPassiveSkills.{bf.GetType().Name}.{fi.Name} -> '{targetBoxName}'\n");
                                 fi.SetValue(bf, targetBoxName);
                                 isDirty = true;
                             }
@@ -1019,7 +1037,7 @@ public partial class Box : Entity
                                 string fieldValue = fieldValueList[i];
                                 if (fieldValue == srcBoxName)
                                 {
-                                    info.Append($"替换于{name}.BoxFunctions.{bf.GetType().Name}.{fi.Name}\n");
+                                    info.Append($"替换于{name}.PassiveSkills.{bf.GetType().Name}.{fi.Name}\n");
                                     fieldValueList[i] = targetBoxName;
                                     isDirty = true;
                                 }
@@ -1036,10 +1054,10 @@ public partial class Box : Entity
     public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
     {
         bool isDirty = false;
-        foreach (BoxFunctionBase bf in RawBoxFunctions)
+        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
         {
-            if (moduleSpecial && bf.SpecialCaseType != BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module) continue;
-            if (worldSpecial && bf.SpecialCaseType != BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World) continue;
+            if (moduleSpecial && bf.SpecialCaseType != BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module) continue;
+            if (worldSpecial && bf.SpecialCaseType != BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World) continue;
 
             foreach (FieldInfo fi in bf.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
             {
@@ -1052,7 +1070,7 @@ public partial class Box : Entity
                             string fieldValue = (string) fi.GetValue(bf);
                             if (fieldValue == srcBoxName)
                             {
-                                info.Append($"替换{name}.BoxFunctions.{bf.GetType().Name}.{fi.Name} -> 'None'\n");
+                                info.Append($"替换{name}.BoxPassiveSkills.{bf.GetType().Name}.{fi.Name} -> 'None'\n");
                                 fi.SetValue(bf, "None");
                                 isDirty = true;
                             }
@@ -1068,7 +1086,7 @@ public partial class Box : Entity
                                 string fieldValue = fieldValueList[i];
                                 if (fieldValue == srcBoxName)
                                 {
-                                    info.Append($"移除自{name}.BoxFunctions.{bf.GetType().Name}.{fi.Name}\n");
+                                    info.Append($"移除自{name}.PassiveSkills.{bf.GetType().Name}.{fi.Name}\n");
                                     fieldValueList.RemoveAt(i);
                                     i--;
                                     isDirty = true;
@@ -1122,11 +1140,11 @@ public partial class Box : Entity
     {
         get
         {
-            foreach (BoxFunctionBase bf in RawBoxFunctions)
+            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
             {
-                if (bf is BoxFunction_Hide hide)
+                if (bf is BoxPassiveSkill_Hide hide)
                 {
-                    if (hide.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
+                    if (hide.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
                     {
                         return true;
                     }
@@ -1141,9 +1159,9 @@ public partial class Box : Entity
     {
         get
         {
-            foreach (BoxFunctionBase bf in RawBoxFunctions)
+            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
             {
-                if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
+                if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
                 {
                     return true;
                 }
@@ -1157,9 +1175,9 @@ public partial class Box : Entity
     {
         get
         {
-            foreach (BoxFunctionBase bf in RawBoxFunctions)
+            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
             {
-                if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module)
+                if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
                 {
                     return true;
                 }
@@ -1173,11 +1191,11 @@ public partial class Box : Entity
     {
         get
         {
-            foreach (BoxFunctionBase bf in RawBoxFunctions)
+            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
             {
-                if (bf is BoxFunction_LevelEventTriggerAppear appear)
+                if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear)
                 {
-                    if (appear.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module)
+                    if (appear.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
                     {
                         return true;
                     }
@@ -1192,11 +1210,11 @@ public partial class Box : Entity
     {
         get
         {
-            foreach (BoxFunctionBase bf in RawBoxFunctions)
+            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
             {
-                if (bf is BoxFunction_LevelEventTriggerAppear appear)
+                if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear)
                 {
-                    if (appear.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
+                    if (appear.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
                     {
                         return true;
                     }
@@ -1212,14 +1230,16 @@ public partial class Box : Entity
     public class BoxExtraSerializeData : IClone<BoxExtraSerializeData>
     {
         public GridPos3D LocalGP; // Box在Module内的GP
-        public List<BoxFunctionBase> BoxFunctions = new List<BoxFunctionBase>();
+
+        [FormerlySerializedAs("BoxFunctions")]
+        public List<BoxPassiveSkill> BoxPassiveSkills = new List<BoxPassiveSkill>();
 
         public BoxExtraSerializeData Clone()
         {
             return new BoxExtraSerializeData
             {
                 LocalGP = LocalGP,
-                BoxFunctions = BoxFunctions.Clone()
+                BoxPassiveSkills = BoxPassiveSkills.Clone()
             };
         }
     }
@@ -1227,13 +1247,13 @@ public partial class Box : Entity
     public BoxExtraSerializeData GetBoxExtraSerializeDataForWorld()
     {
         BoxExtraSerializeData data = new BoxExtraSerializeData();
-        data.BoxFunctions = new List<BoxFunctionBase>();
-        foreach (BoxFunctionBase bf in RawBoxFunctions)
+        data.BoxPassiveSkills = new List<BoxPassiveSkill>();
+        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
         {
-            if (bf is BoxFunction_LevelEventTriggerAppear) continue;
-            if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
+            if (bf is BoxPassiveSkill_LevelEventTriggerAppear) continue;
+            if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
             {
-                data.BoxFunctions.Add(bf.Clone());
+                data.BoxPassiveSkills.Add(bf.Clone());
             }
         }
 
@@ -1243,12 +1263,12 @@ public partial class Box : Entity
     public BoxExtraSerializeData GetBoxExtraSerializeDataForWorldOverrideWorldModule()
     {
         BoxExtraSerializeData data = new BoxExtraSerializeData();
-        data.BoxFunctions = new List<BoxFunctionBase>();
-        foreach (BoxFunctionBase bf in RawBoxFunctions)
+        data.BoxPassiveSkills = new List<BoxPassiveSkill>();
+        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
         {
-            if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World)
+            if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
             {
-                data.BoxFunctions.Add(bf.Clone());
+                data.BoxPassiveSkills.Add(bf.Clone());
             }
         }
 
@@ -1258,13 +1278,13 @@ public partial class Box : Entity
     public BoxExtraSerializeData GetBoxExtraSerializeDataForWorldModule()
     {
         BoxExtraSerializeData data = new BoxExtraSerializeData();
-        data.BoxFunctions = new List<BoxFunctionBase>();
-        foreach (BoxFunctionBase bf in RawBoxFunctions)
+        data.BoxPassiveSkills = new List<BoxPassiveSkill>();
+        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
         {
-            if (bf is BoxFunction_LevelEventTriggerAppear) continue;
-            if (bf.SpecialCaseType == BoxFunctionBase.BoxFunctionBaseSpecialCaseType.Module)
+            if (bf is BoxPassiveSkill_LevelEventTriggerAppear) continue;
+            if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
             {
-                data.BoxFunctions.Add(bf.Clone());
+                data.BoxPassiveSkills.Add(bf.Clone());
             }
         }
 
@@ -1275,11 +1295,11 @@ public partial class Box : Entity
     {
         if (boxExtraSerializeDataFromModule != null)
         {
-            List<BoxFunctionBase> newFunctionList = new List<BoxFunctionBase>();
-            foreach (BoxFunctionBase extraBF in boxExtraSerializeDataFromModule.BoxFunctions)
+            List<BoxPassiveSkill> newFunctionList = new List<BoxPassiveSkill>();
+            foreach (BoxPassiveSkill extraBF in boxExtraSerializeDataFromModule.BoxPassiveSkills)
             {
                 bool foundMatch = false;
-                foreach (BoxFunctionBase bf in RawBoxFunctions)
+                foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
                 {
                     if (bf.GetType() == extraBF.GetType())
                     {
@@ -1294,21 +1314,21 @@ public partial class Box : Entity
                 }
             }
 
-            foreach (BoxFunctionBase newFunction in newFunctionList)
+            foreach (BoxPassiveSkill newFunction in newFunctionList)
             {
                 newFunction.Box = this;
-                RawBoxFunctions.Add(newFunction);
+                RawBoxPassiveSkills.Add(newFunction);
             }
         }
 
         // world box extra data has higher priority
         if (boxExtraSerializeDataFromWorld != null)
         {
-            List<BoxFunctionBase> newFunctionList = new List<BoxFunctionBase>();
-            foreach (BoxFunctionBase extraBF in boxExtraSerializeDataFromWorld.BoxFunctions)
+            List<BoxPassiveSkill> newFunctionList = new List<BoxPassiveSkill>();
+            foreach (BoxPassiveSkill extraBF in boxExtraSerializeDataFromWorld.BoxPassiveSkills)
             {
                 bool foundMatch = false;
-                foreach (BoxFunctionBase bf in RawBoxFunctions)
+                foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
                 {
                     if (bf.GetType() == extraBF.GetType())
                     {
@@ -1323,10 +1343,10 @@ public partial class Box : Entity
                 }
             }
 
-            foreach (BoxFunctionBase newFunction in newFunctionList)
+            foreach (BoxPassiveSkill newFunction in newFunctionList)
             {
                 newFunction.Box = this;
-                RawBoxFunctions.Add(newFunction);
+                RawBoxPassiveSkills.Add(newFunction);
             }
         }
     }

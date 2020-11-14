@@ -108,7 +108,6 @@ GameObject:
   - component: {fileID: 5626881361745039888}
   - component: {fileID: 1352397996760715391}
   - component: {fileID: 8368862076537041905}
-  - component: {fileID: 6467154531474349352}
   m_Layer: 9
   m_Name: Frozen3
   m_TagString: Untagged
@@ -125,7 +124,7 @@ Transform:
   m_GameObject: {fileID: 735240967322767885}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
+  m_LocalScale: {x: 1.05, y: 1.05, z: 1.05}
   m_Children: []
   m_Father: {fileID: 7456832890254092294}
   m_RootOrder: 2
@@ -179,19 +178,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6467154531474349352
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 735240967322767885}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1036370232954591802
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,12 +518,12 @@ MonoBehaviour:
       _minValue: 0
       _maxValue: 99999
     FrozenResistance:
-      BaseValue: 200
+      BaseValue: 100
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 200
     FrozenRecovery:
-      BaseValue: 200
+      BaseValue: 15
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 1000
@@ -637,6 +623,8 @@ MonoBehaviour:
   CollideFXScale: 1
   CollideDamageRadius: 0.5
   CollideDamage: 3
+  ThawFX: Flash_CyanSlight
+  FrozeFX: Hit_SnowFlake
   BoxFunctionBaseData: 7b0d0a2020202022246964223a20302c0d0a20202020222474797065223a2022307c53797374656d2e436f6c6c656374696f6e732e47656e657269632e4c69737460315b5b426f7846756e6374696f6e426173652c20436c69656e745d5d2c206d73636f726c6962222c0d0a202020202224726c656e677468223a20302c0d0a20202020222472636f6e74656e74223a205b0d0a202020205d0d0a7d
   WorldGP:
     x: 0
@@ -831,7 +819,6 @@ GameObject:
   - component: {fileID: 7373626628901215359}
   - component: {fileID: 941917358015904960}
   - component: {fileID: 8740395756652692371}
-  - component: {fileID: 5798087807039487254}
   m_Layer: 9
   m_Name: Frozen2
   m_TagString: Untagged
@@ -848,7 +835,7 @@ Transform:
   m_GameObject: {fileID: 4527291543388153191}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
+  m_LocalScale: {x: 1.05, y: 1.05, z: 1.05}
   m_Children: []
   m_Father: {fileID: 7456832890254092294}
   m_RootOrder: 1
@@ -902,19 +889,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5798087807039487254
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4527291543388153191}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5035177361514968551
 GameObject:
   m_ObjectHideFlags: 0
@@ -1167,7 +1141,6 @@ GameObject:
   - component: {fileID: 7927394191608660134}
   - component: {fileID: 2127938810293361597}
   - component: {fileID: 3109304753871670401}
-  - component: {fileID: 790667507733029241}
   m_Layer: 9
   m_Name: Frozen1
   m_TagString: Untagged
@@ -1184,7 +1157,7 @@ Transform:
   m_GameObject: {fileID: 8509937153823183230}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
+  m_LocalScale: {x: 1.05, y: 1.05, z: 1.05}
   m_Children: []
   m_Father: {fileID: 7456832890254092294}
   m_RootOrder: 0
@@ -1238,19 +1211,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &790667507733029241
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8509937153823183230}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8735561120089285539
 GameObject:
   m_ObjectHideFlags: 0
@@ -1262,7 +1222,6 @@ GameObject:
   - component: {fileID: 7110392498233450093}
   - component: {fileID: 5822782374041134009}
   - component: {fileID: 721935523025985107}
-  - component: {fileID: 2681260880578773732}
   m_Layer: 9
   m_Name: Frozen4
   m_TagString: Untagged
@@ -1279,7 +1238,7 @@ Transform:
   m_GameObject: {fileID: 8735561120089285539}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
+  m_LocalScale: {x: 1.05, y: 1.05, z: 1.05}
   m_Children: []
   m_Father: {fileID: 7456832890254092294}
   m_RootOrder: 3
@@ -1333,19 +1292,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2681260880578773732
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8735561120089285539}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8741064018221597463
 GameObject:
   m_ObjectHideFlags: 0

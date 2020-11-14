@@ -4,19 +4,22 @@ using BiangStudio.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunctionBase", typeof(BoxPassiveSkill))]
+[assembly: Sirenix.Serialization.BindTypeNameToType("BoxPassiveSkill.BoxFunctionBaseSpecialCaseType", typeof(BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType))]
+
 [Serializable]
-public abstract class BoxFunctionBase : IClone<BoxFunctionBase>
+public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
 {
     internal Box Box;
 
-    protected abstract string BoxFunctionDisplayName { get; }
+    protected abstract string BoxPassiveSkillDisplayName { get; }
 
-    [InfoBox("@BoxFunctionDisplayName")]
+    [InfoBox("@BoxPassiveSkillDisplayName")]
     [LabelText("特例类型")]
     [EnumToggleButtons]
-    public BoxFunctionBaseSpecialCaseType SpecialCaseType = BoxFunctionBaseSpecialCaseType.None;
+    public BoxPassiveSkillBaseSpecialCaseType SpecialCaseType = BoxPassiveSkillBaseSpecialCaseType.None;
 
-    public enum BoxFunctionBaseSpecialCaseType
+    public enum BoxPassiveSkillBaseSpecialCaseType
     {
         [LabelText("无")]
         None,
@@ -72,19 +75,19 @@ public abstract class BoxFunctionBase : IClone<BoxFunctionBase>
     {
     }
 
-    public BoxFunctionBase Clone()
+    public BoxPassiveSkill Clone()
     {
         Type type = GetType();
-        BoxFunctionBase newBF = (BoxFunctionBase) Activator.CreateInstance(type);
+        BoxPassiveSkill newBF = (BoxPassiveSkill) Activator.CreateInstance(type);
         ChildClone(newBF);
         return newBF;
     }
 
-    protected virtual void ChildClone(BoxFunctionBase newBF)
+    protected virtual void ChildClone(BoxPassiveSkill newBF)
     {
     }
 
-    public virtual void CopyDataFrom(BoxFunctionBase srcData)
+    public virtual void CopyDataFrom(BoxPassiveSkill srcData)
     {
     }
 }

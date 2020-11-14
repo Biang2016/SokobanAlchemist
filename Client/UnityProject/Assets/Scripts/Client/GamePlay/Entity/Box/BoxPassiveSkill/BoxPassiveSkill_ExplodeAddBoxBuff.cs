@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_ExplodeAddBoxBuff", typeof(BoxPassiveSkill_ExplodeAddBoxBuff))]
+
 [Serializable]
-public class BoxFunction_ExplodeAddBoxBuff : BoxFunctionBase
+public class BoxPassiveSkill_ExplodeAddBoxBuff : BoxPassiveSkill
 {
-    protected override string BoxFunctionDisplayName => "箱子撞击爆炸AOE给Box施加Buff";
+    protected override string BoxPassiveSkillDisplayName => "箱子撞击爆炸AOE给Box施加Buff";
 
     [LabelText("判定半径")]
     public int AddBuffRadius = 2;
@@ -48,18 +50,18 @@ public class BoxFunction_ExplodeAddBoxBuff : BoxFunctionBase
         }
     }
 
-    protected override void ChildClone(BoxFunctionBase newBF)
+    protected override void ChildClone(BoxPassiveSkill newBF)
     {
         base.ChildClone(newBF);
-        BoxFunction_ExplodeAddBoxBuff bf = ((BoxFunction_ExplodeAddBoxBuff) newBF);
+        BoxPassiveSkill_ExplodeAddBoxBuff bf = ((BoxPassiveSkill_ExplodeAddBoxBuff) newBF);
         bf.BoxBuff = (BoxBuff) BoxBuff.Clone();
         bf.AddBuffRadius = AddBuffRadius;
     }
 
-    public override void CopyDataFrom(BoxFunctionBase srcData)
+    public override void CopyDataFrom(BoxPassiveSkill srcData)
     {
         base.CopyDataFrom(srcData);
-        BoxFunction_ExplodeAddBoxBuff bf = ((BoxFunction_ExplodeAddBoxBuff) srcData);
+        BoxPassiveSkill_ExplodeAddBoxBuff bf = ((BoxPassiveSkill_ExplodeAddBoxBuff) srcData);
         BoxBuff = (BoxBuff) bf.BoxBuff.Clone();
         AddBuffRadius = bf.AddBuffRadius;
     }

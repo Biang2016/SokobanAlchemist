@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using BiangStudio.CloneVariant;
 using UnityEngine;
-using Sirenix.OdinInspector;
 
 public class ActorFrozenHelper : EntityFrozenHelper
 {
@@ -41,11 +40,11 @@ public class ActorFrozenHelper : EntityFrozenHelper
                     FrozenBox = module.GenerateBox(ConfigManager.Box_EnemyFrozenBoxIndex, module.WorldGPToLocalGP(actor.CurWorldGP));
                     if (FrozenBox)
                     {
-                        List<BoxFunctionBase> actorFrozenBoxFunctions = actor.RawFrozenBoxFunctions.Clone();
-                        foreach (BoxFunctionBase abf in actorFrozenBoxFunctions)
+                        List<BoxPassiveSkill> actorFrozenBoxPassiveSkills = actor.RawFrozenBoxPassiveSkills.Clone();
+                        foreach (BoxPassiveSkill abf in actorFrozenBoxPassiveSkills)
                         {
-                            FrozenBox.AddNewBoxFunction(abf);
-                            FrozenBox.BoxFunctions.Add(abf);
+                            FrozenBox.AddNewPassiveSkill(abf);
+                            FrozenBox.BoxPassiveSkills.Add(abf);
                         }
 
                         FrozenBox.FrozenActor = actor;

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using BiangStudio.CloneVariant;
 using Sirenix.OdinInspector;
 
+[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_InvokeOnLevelEventID", typeof(BoxPassiveSkill_InvokeOnLevelEventID))]
+
 [Serializable]
-public abstract class BoxFunction_InvokeOnLevelEventID : BoxFunctionBase
+public abstract class BoxPassiveSkill_InvokeOnLevelEventID : BoxPassiveSkill
 {
-    protected override string BoxFunctionDisplayName => "关卡事件触发基类";
+    protected override string BoxPassiveSkillDisplayName => "关卡事件触发基类";
 
     [BoxGroup("事件监听与触发")]
     [LabelText("多个事件联合触发")]
@@ -105,20 +107,20 @@ public abstract class BoxFunction_InvokeOnLevelEventID : BoxFunctionBase
 
     protected abstract void OnEventExecute();
 
-    protected override void ChildClone(BoxFunctionBase newBF)
+    protected override void ChildClone(BoxPassiveSkill newBF)
     {
         base.ChildClone(newBF);
-        BoxFunction_InvokeOnLevelEventID bf = ((BoxFunction_InvokeOnLevelEventID) newBF);
+        BoxPassiveSkill_InvokeOnLevelEventID bf = ((BoxPassiveSkill_InvokeOnLevelEventID) newBF);
         bf.MultiEventTrigger = MultiEventTrigger;
         bf.ListenLevelEventAliasList = ListenLevelEventAliasList.Clone();
         bf.ListenLevelEventAlias = ListenLevelEventAlias;
         bf.MaxTriggeredTimes = MaxTriggeredTimes;
     }
 
-    public override void CopyDataFrom(BoxFunctionBase srcData)
+    public override void CopyDataFrom(BoxPassiveSkill srcData)
     {
         base.CopyDataFrom(srcData);
-        BoxFunction_InvokeOnLevelEventID bf = ((BoxFunction_InvokeOnLevelEventID) srcData);
+        BoxPassiveSkill_InvokeOnLevelEventID bf = ((BoxPassiveSkill_InvokeOnLevelEventID) srcData);
         MultiEventTrigger = bf.MultiEventTrigger;
         ListenLevelEventAliasList = bf.ListenLevelEventAliasList.Clone();
         ListenLevelEventAlias = bf.ListenLevelEventAlias;

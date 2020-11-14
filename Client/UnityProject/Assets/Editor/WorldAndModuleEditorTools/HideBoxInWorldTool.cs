@@ -37,9 +37,9 @@ class HideBoxInWorldTool : EditorTool
                 if (world && module)
                 {
                     bool hasHide = false;
-                    foreach (BoxFunctionBase bf in box.RawBoxFunctions)
+                    foreach (BoxPassiveSkill bf in box.RawBoxPassiveSkills)
                     {
-                        if (bf is BoxFunction_Hide)
+                        if (bf is BoxPassiveSkill_Hide)
                         {
                             hasHide = true;
                             break;
@@ -52,9 +52,9 @@ class HideBoxInWorldTool : EditorTool
                     }
                     else
                     {
-                        BoxFunction_Hide hide = new BoxFunction_Hide();
-                        hide.SpecialCaseType = BoxFunctionBase.BoxFunctionBaseSpecialCaseType.World;
-                        box.RawBoxFunctions.Add(hide);
+                        BoxPassiveSkill_Hide hide = new BoxPassiveSkill_Hide();
+                        hide.SpecialCaseType = BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World;
+                        box.RawBoxPassiveSkills.Add(hide);
                         EditorUtility.SetDirty(box);
                     }
                 }

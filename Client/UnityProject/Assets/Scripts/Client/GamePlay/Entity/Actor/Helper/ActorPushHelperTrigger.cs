@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using DG.Tweening;
+﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 public class ActorPushHelperTrigger : MonoBehaviour
 {

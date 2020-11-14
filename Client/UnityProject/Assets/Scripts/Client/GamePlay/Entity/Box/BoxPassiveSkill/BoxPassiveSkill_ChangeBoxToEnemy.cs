@@ -2,10 +2,12 @@
 using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 
+[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_ChangeBoxToEnemy", typeof(BoxPassiveSkill_ChangeBoxToEnemy))]
+
 [Serializable]
-public class BoxFunction_ChangeBoxToEnemy : BoxFunction_InvokeOnLevelEventID
+public class BoxPassiveSkill_ChangeBoxToEnemy : BoxPassiveSkill_InvokeOnLevelEventID
 {
-    protected override string BoxFunctionDisplayName => "更改箱子为敌人";
+    protected override string BoxPassiveSkillDisplayName => "更改箱子为敌人";
 
     [BoxName]
     [LabelText("敌人类型")]
@@ -34,16 +36,16 @@ public class BoxFunction_ChangeBoxToEnemy : BoxFunction_InvokeOnLevelEventID
         }
     }
 
-    protected override void ChildClone(BoxFunctionBase newBF)
+    protected override void ChildClone(BoxPassiveSkill newBF)
     {
         base.ChildClone(newBF);
-        BoxFunction_ChangeBoxToEnemy bf = ((BoxFunction_ChangeBoxToEnemy) newBF);
+        BoxPassiveSkill_ChangeBoxToEnemy bf = ((BoxPassiveSkill_ChangeBoxToEnemy) newBF);
         bf.ChangeBoxToEnemyType = ChangeBoxToEnemyType;
     }
 
-    public override void CopyDataFrom(BoxFunctionBase srcData)
+    public override void CopyDataFrom(BoxPassiveSkill srcData)
     {
         base.CopyDataFrom(srcData);
-        BoxFunction_ChangeBoxToEnemy bf = ((BoxFunction_ChangeBoxToEnemy) srcData);
+        BoxPassiveSkill_ChangeBoxToEnemy bf = ((BoxPassiveSkill_ChangeBoxToEnemy) srcData);
     }
 }

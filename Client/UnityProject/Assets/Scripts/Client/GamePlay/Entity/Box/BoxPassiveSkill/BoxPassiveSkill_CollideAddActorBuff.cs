@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_CollideAddActorBuff", typeof(BoxPassiveSkill_CollideAddActorBuff))]
+
 [Serializable]
-public class BoxFunction_CollideAddActorBuff : BoxFunctionBase
+public class BoxPassiveSkill_CollideAddActorBuff : BoxPassiveSkill
 {
-    protected override string BoxFunctionDisplayName => "箱子撞击给Actor施加Buff";
+    protected override string BoxPassiveSkillDisplayName => "箱子撞击给Actor施加Buff";
 
     [LabelText("生效于相对阵营")]
     public RelativeCamp EffectiveOnRelativeCamp;
@@ -63,18 +64,18 @@ public class BoxFunction_CollideAddActorBuff : BoxFunctionBase
         }
     }
 
-    protected override void ChildClone(BoxFunctionBase newBF)
+    protected override void ChildClone(BoxPassiveSkill newBF)
     {
         base.ChildClone(newBF);
-        BoxFunction_CollideAddActorBuff bf = ((BoxFunction_CollideAddActorBuff) newBF);
+        BoxPassiveSkill_CollideAddActorBuff bf = ((BoxPassiveSkill_CollideAddActorBuff) newBF);
         bf.ActorBuff = (ActorBuff) ActorBuff.Clone();
         bf.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
     }
 
-    public override void CopyDataFrom(BoxFunctionBase srcData)
+    public override void CopyDataFrom(BoxPassiveSkill srcData)
     {
         base.CopyDataFrom(srcData);
-        BoxFunction_CollideAddActorBuff bf = ((BoxFunction_CollideAddActorBuff) srcData);
+        BoxPassiveSkill_CollideAddActorBuff bf = ((BoxPassiveSkill_CollideAddActorBuff) srcData);
         ActorBuff = (ActorBuff) bf.ActorBuff.Clone();
         EffectiveOnRelativeCamp = bf.EffectiveOnRelativeCamp;
     }

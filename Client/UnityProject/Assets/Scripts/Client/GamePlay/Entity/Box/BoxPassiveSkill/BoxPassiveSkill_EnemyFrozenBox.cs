@@ -1,11 +1,12 @@
 ﻿using System;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
+[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_EnemyFrozenBox", typeof(BoxPassiveSkill_EnemyFrozenBox))]
+
 [Serializable]
-public class BoxFunction_EnemyFrozenBox : BoxFunctionBase
+public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
 {
-    protected override string BoxFunctionDisplayName => "冻住敌人变成的箱子，勿乱用";
+    protected override string BoxPassiveSkillDisplayName => "冻住敌人变成的箱子，勿乱用";
 
     public override void OnFlyingCollisionEnter(Collision collision)
     {

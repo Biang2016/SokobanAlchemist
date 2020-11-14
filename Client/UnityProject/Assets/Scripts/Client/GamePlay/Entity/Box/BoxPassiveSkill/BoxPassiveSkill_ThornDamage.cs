@@ -2,10 +2,12 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_ThornDamage", typeof(BoxPassiveSkill_ThornDamage))]
+
 [Serializable]
-public class BoxFunction_ThornDamage : BoxFunctionBase
+public class BoxPassiveSkill_ThornDamage : BoxPassiveSkill
 {
-    protected override string BoxFunctionDisplayName => "荆棘伤害";
+    protected override string BoxPassiveSkillDisplayName => "荆棘伤害";
 
     [LabelText("每次伤害")]
     public int Damage = 0;
@@ -70,18 +72,18 @@ public class BoxFunction_ThornDamage : BoxFunctionBase
         }
     }
 
-    protected override void ChildClone(BoxFunctionBase newBF)
+    protected override void ChildClone(BoxPassiveSkill newBF)
     {
         base.ChildClone(newBF);
-        BoxFunction_ThornDamage bf = ((BoxFunction_ThornDamage) newBF);
+        BoxPassiveSkill_ThornDamage bf = ((BoxPassiveSkill_ThornDamage) newBF);
         bf.Damage = Damage;
         bf.DamageInterval = DamageInterval;
     }
 
-    public override void CopyDataFrom(BoxFunctionBase srcData)
+    public override void CopyDataFrom(BoxPassiveSkill srcData)
     {
         base.CopyDataFrom(srcData);
-        BoxFunction_ThornDamage bf = ((BoxFunction_ThornDamage) srcData);
+        BoxPassiveSkill_ThornDamage bf = ((BoxPassiveSkill_ThornDamage) srcData);
         Damage = bf.Damage;
         DamageInterval = bf.DamageInterval;
     }

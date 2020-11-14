@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class BoxThornTrapTriggerHelper : BoxMonoHelper
 {
@@ -18,7 +18,7 @@ public class BoxThornTrapTriggerHelper : BoxMonoHelper
 
     public void OnTriggerEnter(Collider collider)
     {
-        foreach (BoxFunctionBase bf in Box.BoxFunctions)
+        foreach (BoxPassiveSkill bf in Box.BoxPassiveSkills)
         {
             bf.OnBoxThornTrapTriggerEnter(collider);
         }
@@ -26,7 +26,7 @@ public class BoxThornTrapTriggerHelper : BoxMonoHelper
 
     public void OnTriggerStay(Collider collider)
     {
-        foreach (BoxFunctionBase bf in Box.BoxFunctions)
+        foreach (BoxPassiveSkill bf in Box.BoxPassiveSkills)
         {
             bf.OnBoxThornTrapTriggerStay(collider);
         }
@@ -34,7 +34,7 @@ public class BoxThornTrapTriggerHelper : BoxMonoHelper
 
     public void OnTriggerExit(Collider collider)
     {
-        foreach (BoxFunctionBase bf in Box.BoxFunctions)
+        foreach (BoxPassiveSkill bf in Box.BoxPassiveSkills)
         {
             bf.OnBoxThornTrapTriggerExit(collider);
         }

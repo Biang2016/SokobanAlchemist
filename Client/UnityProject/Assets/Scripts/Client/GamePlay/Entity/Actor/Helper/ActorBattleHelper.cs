@@ -163,5 +163,4 @@ public class ActorBattleHelper : ActorMonoHelper
     }
 
     #endregion
-
 }

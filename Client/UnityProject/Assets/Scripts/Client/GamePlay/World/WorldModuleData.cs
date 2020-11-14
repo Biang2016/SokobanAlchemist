@@ -18,10 +18,11 @@ public class WorldModuleData : IClone<WorldModuleData>
     /// 模组上下层叠，底部模组Y为0，顶部Y为15
     /// </summary>
     public ushort[,,] BoxMatrix = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
     public LevelTriggerGroupData WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();
-    public Box.BoxExtraSerializeData[,,] BoxExtraSerializeDataMatrix = new Box.BoxExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 不含LevelEventTriggerBoxFunction，但含该Box的其他BF信息
-    public List<BoxFunction_LevelEventTriggerAppear.Data> EventTriggerAppearBoxDataList = new List<BoxFunction_LevelEventTriggerAppear.Data>();
+    public Box.BoxExtraSerializeData[,,] BoxExtraSerializeDataMatrix = new Box.BoxExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 不含LevelEventTriggerBoxPassiveSkill，但含该Box的其他BF信息
+    public List<BoxPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearBoxDataList = new List<BoxPassiveSkill_LevelEventTriggerAppear.Data>();
 
     public WorldModuleData Clone()
     {

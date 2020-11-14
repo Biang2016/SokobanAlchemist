@@ -4,10 +4,12 @@ using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_ExplodePushForce", typeof(BoxPassiveSkill_ExplodePushForce))]
+
 [Serializable]
-public class BoxFunction_ExplodePushForce : BoxFunctionBase
+public class BoxPassiveSkill_ExplodePushForce : BoxPassiveSkill
 {
-    protected override string BoxFunctionDisplayName => "箱子撞击爆炸AOE对周围Box施加推力";
+    protected override string BoxPassiveSkillDisplayName => "箱子撞击爆炸AOE对周围Box施加推力";
 
     [LabelText("碰撞爆炸推力半径")]
     public int ExplodePushRadius = 3;
@@ -69,17 +71,17 @@ public class BoxFunction_ExplodePushForce : BoxFunctionBase
         }
     }
 
-    protected override void ChildClone(BoxFunctionBase newBF)
+    protected override void ChildClone(BoxPassiveSkill newBF)
     {
         base.ChildClone(newBF);
-        BoxFunction_ExplodePushForce bf = ((BoxFunction_ExplodePushForce) newBF);
+        BoxPassiveSkill_ExplodePushForce bf = ((BoxPassiveSkill_ExplodePushForce) newBF);
         bf.ExplodePushRadius = ExplodePushRadius;
     }
 
-    public override void CopyDataFrom(BoxFunctionBase srcData)
+    public override void CopyDataFrom(BoxPassiveSkill srcData)
     {
         base.CopyDataFrom(srcData);
-        BoxFunction_ExplodePushForce bf = ((BoxFunction_ExplodePushForce) srcData);
+        BoxPassiveSkill_ExplodePushForce bf = ((BoxPassiveSkill_ExplodePushForce) srcData);
         ExplodePushRadius = bf.ExplodePushRadius;
     }
 }

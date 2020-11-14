@@ -245,23 +245,25 @@ public class Actor : Entity
     [NonSerialized]
     [ShowInInspector]
     [BoxGroup("冻结")]
-    [LabelText("冻结的箱子特殊功能")]
-    public List<BoxFunctionBase> RawFrozenBoxFunctions = new List<BoxFunctionBase>(); // 干数据，禁修改
+    [LabelText("冻结的箱子被动技能")]
+    [FormerlySerializedAs("RawFrozenBoxFunctions")]
+    public List<BoxPassiveSkill> RawFrozenBoxPassiveSkills = new List<BoxPassiveSkill>(); // 干数据，禁修改
 
     [HideInInspector]
-    public byte[] RawFrozenBoxFunctionData;
+    [FormerlySerializedAs("RawFrozenBoxFunctionData")]
+    public byte[] RawFrozenBoxPassiveSkillData;
 
     public override void OnBeforeSerialize()
     {
         base.OnBeforeSerialize();
-        if (RawFrozenBoxFunctions == null) RawFrozenBoxFunctions = new List<BoxFunctionBase>();
-        RawFrozenBoxFunctionData = SerializationUtility.SerializeValue(RawFrozenBoxFunctions, DataFormat.JSON);
+        if (RawFrozenBoxPassiveSkills == null) RawFrozenBoxPassiveSkills = new List<BoxPassiveSkill>();
+        RawFrozenBoxPassiveSkillData = SerializationUtility.SerializeValue(RawFrozenBoxPassiveSkills, DataFormat.JSON);
     }
 
     public override void OnAfterDeserialize()
     {
         base.OnAfterDeserialize();
-        RawFrozenBoxFunctions = SerializationUtility.DeserializeValue<List<BoxFunctionBase>>(RawFrozenBoxFunctionData, DataFormat.JSON);
+        RawFrozenBoxPassiveSkills = SerializationUtility.DeserializeValue<List<BoxPassiveSkill>>(RawFrozenBoxPassiveSkillData, DataFormat.JSON);
     }
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();

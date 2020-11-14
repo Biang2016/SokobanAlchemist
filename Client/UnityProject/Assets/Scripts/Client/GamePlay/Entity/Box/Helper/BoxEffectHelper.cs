@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using BiangStudio.ObjectPool;
+﻿using BiangStudio.ObjectPool;
+using UnityEngine;
 
 public class BoxEffectHelper : PoolObject, IBoxHelper
 {

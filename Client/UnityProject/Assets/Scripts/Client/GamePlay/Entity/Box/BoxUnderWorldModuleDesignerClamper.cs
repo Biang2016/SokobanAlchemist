@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 [ExecuteInEditMode]
 public class BoxUnderWorldModuleDesignerClamper : MonoBehaviour
@@ -35,7 +34,7 @@ public class BoxUnderWorldModuleDesignerClamper : MonoBehaviour
         {
             transform.localPosition = DefaultPosition;
         }
-        else if(ParentWorldModuleDesignHelper && !ParentWorldDesignHelper)
+        else if (ParentWorldModuleDesignHelper && !ParentWorldDesignHelper)
         {
             transform.localPosition = new Vector3(
                 Mathf.Clamp(transform.localPosition.x, 0, WorldModule.MODULE_SIZE - 1),

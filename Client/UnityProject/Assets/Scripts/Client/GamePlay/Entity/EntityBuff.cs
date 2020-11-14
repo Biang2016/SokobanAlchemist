@@ -19,7 +19,7 @@ public abstract class EntityBuff : IClone<EntityBuff>
         return guidGenerator++;
     }
 
-    #endregion 
+    #endregion
 
     protected abstract string BuffDisplayName { get; }
 

@@ -5,7 +5,7 @@ using BiangStudio.ObjectPool;
 using FlowCanvas;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public class WorldModule : PoolObject
 {
@@ -23,7 +23,9 @@ public class WorldModule : PoolObject
     public WorldWallCollider WorldWallCollider;
     public WorldGroundCollider WorldGroundCollider;
     private List<LevelTriggerBase> WorldModuleLevelTriggers = new List<LevelTriggerBase>();
-    public List<BoxFunction_LevelEventTriggerAppear> EventTriggerAppearBoxFunctionList = new List<BoxFunction_LevelEventTriggerAppear>();
+
+    [FormerlySerializedAs("EventTriggerAppearBoxFunctionList")]
+    public List<BoxPassiveSkill_LevelEventTriggerAppear> EventTriggerAppearBoxPassiveSkillList = new List<BoxPassiveSkill_LevelEventTriggerAppear>();
 
     [HideInInspector]
     public Box[,,] BoxMatrix = new Box[MODULE_SIZE, MODULE_SIZE, MODULE_SIZE];
@@ -70,12 +72,12 @@ public class WorldModule : PoolObject
 
         WorldModuleLevelTriggers.Clear();
 
-        foreach (BoxFunction_LevelEventTriggerAppear bf in EventTriggerAppearBoxFunctionList)
+        foreach (BoxPassiveSkill_LevelEventTriggerAppear bf in EventTriggerAppearBoxPassiveSkillList)
         {
             bf.ClearAndUnRegister();
         }
 
-        EventTriggerAppearBoxFunctionList.Clear();
+        EventTriggerAppearBoxPassiveSkillList.Clear();
 
         World = null;
         WorldModuleData = null;
@@ -125,18 +127,18 @@ public class WorldModule : PoolObject
             }
         }
 
-        foreach (BoxFunction_LevelEventTriggerAppear.Data data in worldModuleData.EventTriggerAppearBoxDataList)
+        foreach (BoxPassiveSkill_LevelEventTriggerAppear.Data data in worldModuleData.EventTriggerAppearBoxDataList)
         {
-            BoxFunction_LevelEventTriggerAppear.Data dataClone = (BoxFunction_LevelEventTriggerAppear.Data) data.Clone();
-            BoxFunction_LevelEventTriggerAppear bf = dataClone.BoxFunction_LevelEventTriggerAppear;
+            BoxPassiveSkill_LevelEventTriggerAppear.Data dataClone = (BoxPassiveSkill_LevelEventTriggerAppear.Data) data.Clone();
+            BoxPassiveSkill_LevelEventTriggerAppear bf = dataClone.BoxPassiveSkill_LevelEventTriggerAppear;
             GridPos3D localGP = data.LocalGP;
             Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[localGP.x, localGP.y, localGP.z]; // 这里没有LevelEventTriggerBF的覆写信息
             Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = worldExtraSerializeDataForOneModule[localGP.x, localGP.y, localGP.z]; // 这里可能有LevelEventTriggerBF的覆写信息
             if (boxExtraSerializeDataFromWorld != null)
             {
-                foreach (BoxFunctionBase worldBF in boxExtraSerializeDataFromWorld.BoxFunctions)
+                foreach (BoxPassiveSkill worldBF in boxExtraSerializeDataFromWorld.BoxPassiveSkills)
                 {
-                    if (worldBF is BoxFunction_LevelEventTriggerAppear appear)
+                    if (worldBF is BoxPassiveSkill_LevelEventTriggerAppear appear)
                     {
                         bf.CopyDataFrom(appear); // 此处仅拷贝这个BF的数据，其他BF在GenerateBox的时候再拷贝
                         break;
@@ -150,12 +152,12 @@ public class WorldModule : PoolObject
                 Box box = GenerateBox(dataClone.BoxTypeIndex, localGP, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
                 box.name = box.name + "_Generated";
 
-                // Box生成后此BoxFunction及注册的事件均作废
+                // Box生成后此BoxPassiveSkill及注册的事件均作废
                 bf.ClearAndUnRegister();
-                EventTriggerAppearBoxFunctionList.Remove(bf);
+                EventTriggerAppearBoxPassiveSkillList.Remove(bf);
             };
             bf.OnRegisterLevelEventID();
-            EventTriggerAppearBoxFunctionList.Add(bf);
+            EventTriggerAppearBoxPassiveSkillList.Add(bf);
         }
 
         for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
@@ -225,9 +227,9 @@ public class WorldModule : PoolObject
     {
         if (boxExtraSerializeDataFromWorld != null)
         {
-            foreach (BoxFunctionBase bf in boxExtraSerializeDataFromWorld.BoxFunctions)
+            foreach (BoxPassiveSkill bf in boxExtraSerializeDataFromWorld.BoxPassiveSkills)
             {
-                if (bf is BoxFunction_Hide)
+                if (bf is BoxPassiveSkill_Hide)
                 {
                     return null;
                 }

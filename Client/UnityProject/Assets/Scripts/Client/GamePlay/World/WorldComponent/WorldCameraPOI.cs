@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using BiangStudio.ObjectPool;
+﻿using BiangStudio.ObjectPool;
+using UnityEngine;
 
 public class WorldCameraPOI : PoolObject
 {

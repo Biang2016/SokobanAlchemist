@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using BiangStudio.ObjectPool;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 public abstract class Entity : PoolObject, ISerializationCallbackReceiver
 {
@@ -10,6 +10,7 @@ public abstract class Entity : PoolObject, ISerializationCallbackReceiver
     [ReadOnly]
     [HideInEditorMode]
     public uint GUID;
+
     public int GUID_Mod_FixedFrameRate;
 
     private static uint guidGenerator = (uint) ConfigManager.GUID_Separator.Entity;
