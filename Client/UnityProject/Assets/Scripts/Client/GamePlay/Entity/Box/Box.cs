@@ -424,6 +424,7 @@ public partial class Box : Entity
         {
             BoxIconSpriteSmoothMove.enabled = false;
             BoxModelSmoothMove.enabled = false;
+            BoxFrozenHelper.IceBlockSmoothMove.enabled = false;
             if (FrozenActor)
             {
                 FrozenActor.ActorFrozenHelper.IceBlockSmoothMove.enabled = false;
@@ -436,6 +437,8 @@ public partial class Box : Entity
             BoxIconSpriteSmoothMove.SmoothTime = lerpTime;
             BoxModelSmoothMove.enabled = true;
             BoxModelSmoothMove.SmoothTime = lerpTime;
+            BoxFrozenHelper.IceBlockSmoothMove.enabled = true;
+            BoxFrozenHelper.IceBlockSmoothMove.SmoothTime = lerpTime;
             if (FrozenActor)
             {
                 FrozenActor.ActorFrozenHelper.IceBlockSmoothMove.enabled = true;

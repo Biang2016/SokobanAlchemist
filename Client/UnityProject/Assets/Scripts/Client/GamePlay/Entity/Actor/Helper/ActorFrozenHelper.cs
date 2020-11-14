@@ -6,8 +6,6 @@ public class ActorFrozenHelper : EntityFrozenHelper
 {
     internal Box FrozenBox;
 
-    public SmoothMove IceBlockSmoothMove;
-
     public override void FrozeIntoIceBlock(int beforeFrozenLevel, int afterFrozenLevel)
     {
         Actor actor = (Actor) Entity;

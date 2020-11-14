@@ -11,6 +11,8 @@ public class EntityFrozenHelper : EntityMonoHelper
     [LabelText("冻结MeshRenderer")]
     public GameObject[] FrozeModels;
 
+    public SmoothMove IceBlockSmoothMove;
+
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
