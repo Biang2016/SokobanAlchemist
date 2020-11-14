@@ -78,12 +78,12 @@ public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
     public BoxPassiveSkill Clone()
     {
         Type type = GetType();
-        BoxPassiveSkill newBF = (BoxPassiveSkill) Activator.CreateInstance(type);
-        ChildClone(newBF);
-        return newBF;
+        BoxPassiveSkill newPS = (BoxPassiveSkill) Activator.CreateInstance(type);
+        ChildClone(newPS);
+        return newPS;
     }
 
-    protected virtual void ChildClone(BoxPassiveSkill newBF)
+    protected virtual void ChildClone(BoxPassiveSkill newPS)
     {
     }
 

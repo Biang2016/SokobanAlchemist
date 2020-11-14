@@ -242,6 +242,70 @@ public class Actor : Entity
     [ValueDropdown("GetAllFXTypeNames", IsUniqueList = true, DropdownTitle = "选择FX类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public string ThawFX;
 
+    #region Actor被动技能
+
+    [BoxGroup("Actor被动技能")]
+    [ShowInInspector]
+    [LabelText("Actor被动技能")]
+    [NonSerialized]
+    public List<ActorPassiveSkill> RawActorPassiveSkills = new List<ActorPassiveSkill>(); // 干数据，禁修改
+
+    public List<ActorPassiveSkill> ActorPassiveSkills = new List<ActorPassiveSkill>(); // 湿数据，每个Actor生命周期开始前从干数据拷出，结束后清除
+
+    public Dictionary<string, ActorPassiveSkill> ActorPassiveSkillDict = new Dictionary<string, ActorPassiveSkill>(); // 便于寻找
+
+    internal bool ActorPassiveSkillMarkAsDeleted = false;
+
+    [HideInInspector]
+    public byte[] ActorPassiveSkillBaseData;
+
+    private void InitActorPassiveSkills()
+    {
+        ActorPassiveSkills.Clear();
+        ActorPassiveSkillDict.Clear();
+        foreach (ActorPassiveSkill rawBF in RawActorPassiveSkills)
+        {
+            ActorPassiveSkills.Add(rawBF.Clone());
+        }
+
+        ActorPassiveSkillMarkAsDeleted = false;
+        foreach (ActorPassiveSkill bf in ActorPassiveSkills)
+        {
+            AddNewPassiveSkill(bf);
+        }
+
+        actorPassiveSkillTicker = 0;
+    }
+
+    public void AddNewPassiveSkill(ActorPassiveSkill bf)
+    {
+        bf.Actor = this;
+        bf.OnInit();
+        bf.OnRegisterLevelEventID();
+        string bfName = bf.GetType().Name;
+        if (!ActorPassiveSkillDict.ContainsKey(bfName))
+        {
+            ActorPassiveSkillDict.Add(bfName, bf);
+        }
+    }
+
+    private void UnInitPassiveSkills()
+    {
+        foreach (ActorPassiveSkill bf in ActorPassiveSkills)
+        {
+            bf.OnUnRegisterLevelEventID();
+        }
+
+        actorPassiveSkillTicker = 0;
+
+        // 防止ActorPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
+        //ActorPassiveSkills.Clear();
+        //ActorPassiveSkillDict.Clear();
+        ActorPassiveSkillMarkAsDeleted = false;
+    }
+
+    #endregion
+
     [NonSerialized]
     [ShowInInspector]
     [BoxGroup("冻结")]
@@ -258,12 +322,16 @@ public class Actor : Entity
         base.OnBeforeSerialize();
         if (RawFrozenBoxPassiveSkills == null) RawFrozenBoxPassiveSkills = new List<BoxPassiveSkill>();
         RawFrozenBoxPassiveSkillData = SerializationUtility.SerializeValue(RawFrozenBoxPassiveSkills, DataFormat.JSON);
+
+        if (RawActorPassiveSkills == null) RawActorPassiveSkills = new List<ActorPassiveSkill>();
+        ActorPassiveSkillBaseData = SerializationUtility.SerializeValue(RawActorPassiveSkills, DataFormat.JSON);
     }
 
     public override void OnAfterDeserialize()
     {
         base.OnAfterDeserialize();
         RawFrozenBoxPassiveSkills = SerializationUtility.DeserializeValue<List<BoxPassiveSkill>>(RawFrozenBoxPassiveSkillData, DataFormat.JSON);
+        RawActorPassiveSkills = SerializationUtility.DeserializeValue<List<ActorPassiveSkill>>(ActorPassiveSkillBaseData, DataFormat.JSON);
     }
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
@@ -339,6 +407,7 @@ public class Actor : Entity
         ActorSkillHelper.OnHelperRecycled();
         ActorStatPropSet.OnRecycled();
         ActorStatPropSet = null;
+        UnInitPassiveSkills();
 
         ActorMoveColliderRoot.SetActive(false);
         SetModelSmoothMoveLerpTime(0);
@@ -397,6 +466,7 @@ public class Actor : Entity
         ActorStatPropSet.Life.OnValueReachZero += ActorBattleHelper.Die;
         ActorBattleHelper.Initialize();
         ActorSkillHelper.Initialize();
+        InitActorPassiveSkills();
 
         CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
         LastWorldGP = CurWorldGP;
@@ -430,11 +500,24 @@ public class Actor : Entity
     {
     }
 
+    private float actorPassiveSkillTicker = 0f;
+    private float actorPassiveSkillTickInterval = 0.3f;
+
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
         if (!IsRecycled)
         {
+            actorPassiveSkillTicker += Time.fixedDeltaTime;
+            if (actorPassiveSkillTicker >= actorPassiveSkillTickInterval)
+            {
+                actorPassiveSkillTicker -= actorPassiveSkillTickInterval;
+                foreach (ActorPassiveSkill ps in ActorPassiveSkills)
+                {
+                    ps.OnTick();
+                }
+            }
+
             ActorBuffHelper.BuffFixedUpdate();
             if (ActorMoveDebugLog && CurWorldGP != LastWorldGP) Debug.Log($"[Actor] Move {LastWorldGP} -> {CurWorldGP}");
             LastWorldGP = CurWorldGP;
