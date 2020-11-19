@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 [Serializable]
 public class BoxPassiveSkill_LevelEventTriggerAppear : BoxPassiveSkill_InvokeOnLevelEventID
 {
-    protected override string BoxPassiveSkillDisplayName => "关卡事件触发后才出现";
+    protected override string Description => "关卡事件触发后才出现";
 
     internal UnityAction GenerateBoxAction; // 不进行深拷贝
 

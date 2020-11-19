@@ -22,7 +22,7 @@ public abstract class BoxBuff : EntityBuff
 [Serializable]
 public class BoxBuff_BoxPropertyMultiplyModifier : BoxBuff
 {
-    protected override string BuffDisplayName => "Box属性乘法修正Buff, 必须是延时buff, buff结束后消除该修正值";
+    protected override string Description => "Box属性乘法修正Buff, 必须是延时buff, buff结束后消除该修正值";
 
     public BoxBuff_BoxPropertyMultiplyModifier()
     {
@@ -101,7 +101,7 @@ public class BoxBuff_BoxPropertyMultiplyModifier : BoxBuff
 [Serializable]
 public class BoxBuff_BoxPropertyPlusModifier : BoxBuff
 {
-    protected override string BuffDisplayName => "角色属性加法修正Buff, 必须是延时buff, buff结束后消除该修正值";
+    protected override string Description => "角色属性加法修正Buff, 必须是延时buff, buff结束后消除该修正值";
 
     public BoxBuff_BoxPropertyPlusModifier()
     {
@@ -180,7 +180,7 @@ public class BoxBuff_BoxPropertyPlusModifier : BoxBuff
 [Serializable]
 public class BoxBuff_ChangeBoxStatInstantly : BoxBuff
 {
-    protected override string BuffDisplayName => "瞬间更改Box异常状态累积值, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
+    protected override string Description => "瞬间更改Box异常状态累积值, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
 
     [LabelText("Box属性类型")]
     [ValidateInput("ValidateStatType", "请选择异常状态累积值")]

@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class BoxPassiveSkill_LiftDropSkin : BoxPassiveSkill
 {
-    protected override string BoxPassiveSkillDisplayName => "举起箱子更换皮肤";
+    protected override string Description => "举起箱子更换皮肤";
 
     [GUIColor(0, 1.0f, 0)]
     [LabelText("皮肤")]

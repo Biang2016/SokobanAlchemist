@@ -10,7 +10,7 @@ public static class ActorAIAtoms
 {
     #region 寻路
 
-    [Category("敌兵")]
+    [Category("敌兵/寻路")]
     [Name("设定目的地为玩家")]
     [Description("设定目的地为玩家")]
     public class BT_Enemy_SetDestinationToMainPlayer : BTNode
@@ -78,7 +78,7 @@ public static class ActorAIAtoms
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/寻路")]
     [Name("是否能够移动到玩家")]
     [Description("是否能够移动到玩家")]
     public class BT_Enemy_CheckCanMoveToMainPlayer : ConditionTask
@@ -103,7 +103,7 @@ public static class ActorAIAtoms
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/寻路")]
     [Name("寻路终点是否是玩家坐标")]
     [Description("寻路终点是否是玩家坐标")]
     public class BT_Enemy_CheckDestIsMainPlayer : ConditionTask
@@ -119,7 +119,7 @@ public static class ActorAIAtoms
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/寻路")]
     [Name("设置闲逛目标点")]
     [Description("设置闲逛目标点")]
     public class BT_Enemy_Idle : BTNode
@@ -168,7 +168,7 @@ public static class ActorAIAtoms
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/寻路")]
     [Name("结束寻路")]
     [Description("结束寻路")]
     public class BT_Enemy_TerminatePathFinding : BTNode
@@ -185,7 +185,7 @@ public static class ActorAIAtoms
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/寻路")]
     [Name("有寻路任务但卡在一个地方")]
     [Description("有寻路任务但卡在一个地方")]
     public class BT_Enemy_StuckWithNavTask : ConditionTask
@@ -205,7 +205,7 @@ public static class ActorAIAtoms
 
     #region 箱子相关
 
-    [Category("敌兵")]
+    [Category("敌兵/箱子")]
     [Name("举着指定类型箱子")]
     [Description("举着指定类型箱子")]
     public class BT_Enemy_LiftCondition : ConditionTask
@@ -227,7 +227,7 @@ public static class ActorAIAtoms
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/箱子")]
     [Name("附近有指定类型箱子")]
     [Description("附近有指定类型箱子")]
     public class BT_Enemy_SearchBoxCondition : ConditionTask
@@ -254,7 +254,7 @@ public static class ActorAIAtoms
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/箱子")]
     [Name("搜索指定类型箱子并设定为目标")]
     [Description("搜索指定类型箱子并设定为目标")]
     public class BT_Enemy_SearchBoxAndSetTarget : BTNode
@@ -310,7 +310,7 @@ public static class ActorAIAtoms
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/箱子")]
     [Name("已搜索到箱子且箱子还在那儿")]
     [Description("已搜索到箱子且箱子还在那儿")]
     public class BT_Enemy_HasSearchedBox : ConditionTask
@@ -335,7 +335,7 @@ public static class ActorAIAtoms
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/箱子")]
     [Name("移动至目标箱子附近")]
     [Description("移动至目标箱子附近")]
     public class BT_Enemy_MoveTowardsBox : BTNode
@@ -367,7 +367,7 @@ public static class ActorAIAtoms
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/箱子")]
     [Name("举起面前箱子")]
     [Description("举起面前箱子")]
     public class BT_Enemy_LiftBox : BTNode
@@ -400,7 +400,7 @@ public static class ActorAIAtoms
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/箱子")]
     [Name("扔箱子")]
     [Description("扔箱子")]
     public class BT_Enemy_ThrowBox : BTNode
@@ -429,7 +429,7 @@ public static class ActorAIAtoms
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/箱子")]
     [Name("踢箱子")]
     [Description("踢箱子")]
     public class BT_Enemy_KickBox : BTNode
@@ -487,10 +487,11 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            Actor player = BattleManager.Instance.Player1;
-            player.ActorBattleHelper.Damage(Actor, Actor.ActorStatPropSet.AttackDamage.GetModifiedValue);
-            player.ActorBattleHelper.Damage(Actor, Actor.ActorStatPropSet.AttackDamage_Firing.GetModifiedValue);
-            player.ActorBattleHelper.Damage(Actor, Actor.ActorStatPropSet.AttackDamage_Frozen.GetModifiedValue);
+            if (Actor.ActorActiveSkillDict.TryGetValue(typeof(ActorActiveSkill_Attack).Name, out ActorActiveSkill aas))
+            {
+                aas.TriggerActiveSkill();
+            }
+
             return Status.Success;
         }
     }

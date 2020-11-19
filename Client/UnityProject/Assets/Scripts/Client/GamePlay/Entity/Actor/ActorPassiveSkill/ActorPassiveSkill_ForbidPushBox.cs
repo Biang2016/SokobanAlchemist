@@ -3,5 +3,5 @@
 [Serializable]
 public class ActorPassiveSkill_ForbidPushBox : ActorPassiveSkill
 {
-    protected override string ActorPassiveSkillDisplayName => "禁止推箱子";
+    protected override string Description => "禁止推箱子";
 }

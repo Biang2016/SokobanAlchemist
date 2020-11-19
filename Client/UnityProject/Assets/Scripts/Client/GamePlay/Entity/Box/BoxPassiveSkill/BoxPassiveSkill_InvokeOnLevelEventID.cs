@@ -8,7 +8,7 @@ using Sirenix.OdinInspector;
 [Serializable]
 public abstract class BoxPassiveSkill_InvokeOnLevelEventID : BoxPassiveSkill
 {
-    protected override string BoxPassiveSkillDisplayName => "关卡事件触发基类";
+    protected override string Description => "关卡事件触发基类";
 
     [BoxGroup("事件监听与触发")]
     [LabelText("多个事件联合触发")]

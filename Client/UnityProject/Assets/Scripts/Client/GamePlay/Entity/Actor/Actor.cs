@@ -244,10 +244,11 @@ public class Actor : Entity
 
     #region Actor被动技能
 
-    [BoxGroup("Actor被动技能")]
-    [ShowInInspector]
-    [LabelText("Actor被动技能")]
     [NonSerialized]
+    [ShowInInspector]
+    [BoxGroup("Actor被动技能")]
+    [LabelText("Actor被动技能")]
+    [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<ActorPassiveSkill> RawActorPassiveSkills = new List<ActorPassiveSkill>(); // 干数据，禁修改
 
     public List<ActorPassiveSkill> ActorPassiveSkills = new List<ActorPassiveSkill>(); // 湿数据，每个Actor生命周期开始前从干数据拷出，结束后清除
@@ -266,39 +267,39 @@ public class Actor : Entity
         ActorForbidPushBox = false;
         ActorPassiveSkills.Clear();
         ActorPassiveSkillDict.Clear();
-        foreach (ActorPassiveSkill rawBF in RawActorPassiveSkills)
+        foreach (ActorPassiveSkill rawAPS in RawActorPassiveSkills)
         {
-            ActorPassiveSkills.Add(rawBF.Clone());
+            ActorPassiveSkills.Add(rawAPS.Clone());
         }
 
         ActorPassiveSkillMarkAsDeleted = false;
-        foreach (ActorPassiveSkill bf in ActorPassiveSkills)
+        foreach (ActorPassiveSkill aps in ActorPassiveSkills)
         {
-            AddNewPassiveSkill(bf);
+            AddNewPassiveSkill(aps);
         }
 
         actorPassiveSkillTicker = 0;
     }
 
-    public void AddNewPassiveSkill(ActorPassiveSkill bf)
+    public void AddNewPassiveSkill(ActorPassiveSkill aps)
     {
-        bf.Actor = this;
-        bf.OnInit();
-        bf.OnRegisterLevelEventID();
-        string bfName = bf.GetType().Name;
+        aps.Actor = this;
+        aps.OnInit();
+        aps.OnRegisterLevelEventID();
+        string bfName = aps.GetType().Name;
         if (!ActorPassiveSkillDict.ContainsKey(bfName))
         {
-            ActorPassiveSkillDict.Add(bfName, bf);
+            ActorPassiveSkillDict.Add(bfName, aps);
         }
 
-        if (bf is ActorPassiveSkill_ForbidPushBox) ActorForbidPushBox = true;
+        if (aps is ActorPassiveSkill_ForbidPushBox) ActorForbidPushBox = true;
     }
 
     private void UnInitPassiveSkills()
     {
-        foreach (ActorPassiveSkill bf in ActorPassiveSkills)
+        foreach (ActorPassiveSkill aps in ActorPassiveSkills)
         {
-            bf.OnUnRegisterLevelEventID();
+            aps.OnUnRegisterLevelEventID();
         }
 
         actorPassiveSkillTicker = 0;
@@ -311,11 +312,74 @@ public class Actor : Entity
 
     #endregion
 
+    #region Actor主动技能
+
+    [NonSerialized]
+    [ShowInInspector]
+    [BoxGroup("Actor主动技能")]
+    [LabelText("Actor主动技能")]
+    [ListDrawerSettings(ListElementLabelName = "Description")]
+    public List<ActorActiveSkill> RawActorActiveSkills = new List<ActorActiveSkill>(); // 干数据，禁修改
+
+    public List<ActorActiveSkill> ActorActiveSkills = new List<ActorActiveSkill>(); // 湿数据，每个Actor生命周期开始前从干数据拷出，结束后清除
+
+    public Dictionary<string, ActorActiveSkill> ActorActiveSkillDict = new Dictionary<string, ActorActiveSkill>(); // 便于寻找
+
+    internal bool ActorActiveSkillMarkAsDeleted = false;
+
+    [HideInInspector]
+    public byte[] ActorActiveSkillBaseData;
+
+    private void InitActorActiveSkills()
+    {
+        ActorForbidPushBox = false;
+        ActorActiveSkills.Clear();
+        ActorActiveSkillDict.Clear();
+        foreach (ActorActiveSkill rawAAS in RawActorActiveSkills)
+        {
+            ActorActiveSkills.Add(rawAAS.Clone());
+        }
+
+        ActorActiveSkillMarkAsDeleted = false;
+        foreach (ActorActiveSkill aas in ActorActiveSkills)
+        {
+            AddNewActiveSkill(aas);
+        }
+    }
+
+    public void AddNewActiveSkill(ActorActiveSkill aas)
+    {
+        aas.Actor = this;
+        aas.OnInit();
+        aas.OnRegisterLevelEventID();
+        string bfName = aas.GetType().Name;
+        if (!ActorActiveSkillDict.ContainsKey(bfName))
+        {
+            ActorActiveSkillDict.Add(bfName, aas);
+        }
+    }
+
+    private void UnInitActiveSkills()
+    {
+        foreach (ActorActiveSkill aas in ActorActiveSkills)
+        {
+            aas.OnUnRegisterLevelEventID();
+        }
+
+        // 防止ActorActiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
+        //ActorActiveSkills.Clear();
+        //ActorActiveSkillDict.Clear();
+        ActorActiveSkillMarkAsDeleted = false;
+    }
+
+    #endregion
+
     [NonSerialized]
     [ShowInInspector]
     [BoxGroup("冻结")]
     [LabelText("冻结的箱子被动技能")]
     [FormerlySerializedAs("RawFrozenBoxFunctions")]
+    [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<BoxPassiveSkill> RawFrozenBoxPassiveSkills = new List<BoxPassiveSkill>(); // 干数据，禁修改
 
     [HideInInspector]
@@ -330,6 +394,7 @@ public class Actor : Entity
 
         if (RawActorPassiveSkills == null) RawActorPassiveSkills = new List<ActorPassiveSkill>();
         ActorPassiveSkillBaseData = SerializationUtility.SerializeValue(RawActorPassiveSkills, DataFormat.JSON);
+        ActorActiveSkillBaseData = SerializationUtility.SerializeValue(RawActorActiveSkills, DataFormat.JSON);
     }
 
     public override void OnAfterDeserialize()
@@ -337,6 +402,7 @@ public class Actor : Entity
         base.OnAfterDeserialize();
         RawFrozenBoxPassiveSkills = SerializationUtility.DeserializeValue<List<BoxPassiveSkill>>(RawFrozenBoxPassiveSkillData, DataFormat.JSON);
         RawActorPassiveSkills = SerializationUtility.DeserializeValue<List<ActorPassiveSkill>>(ActorPassiveSkillBaseData, DataFormat.JSON);
+        RawActorActiveSkills = SerializationUtility.DeserializeValue<List<ActorActiveSkill>>(ActorActiveSkillBaseData, DataFormat.JSON);
     }
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
@@ -412,6 +478,7 @@ public class Actor : Entity
         ActorSkillHelper.OnHelperRecycled();
         ActorStatPropSet.OnRecycled();
         ActorStatPropSet = null;
+        UnInitActiveSkills();
         UnInitPassiveSkills();
 
         ActorMoveColliderRoot.SetActive(false);
@@ -472,6 +539,7 @@ public class Actor : Entity
         ActorBattleHelper.Initialize();
         ActorSkillHelper.Initialize();
         InitActorPassiveSkills();
+        InitActorActiveSkills();
 
         CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
         LastWorldGP = CurWorldGP;

@@ -41,7 +41,7 @@ public enum BattleTipType
     Invincible, //无敌
     Frozen, // 冰冻
     Poison, //中毒
-    Firing, //灼烧
+    Firing, //燃烧
     SecKill, //秒杀----
     Bullet, //弹药 +/- xxx
     ExtraDamage, //额外伤害 +/- xxx

@@ -21,9 +21,11 @@ public abstract class EntityBuff : IClone<EntityBuff>
 
     #endregion
 
-    protected abstract string BuffDisplayName { get; }
+    [LabelText("Buff描述")]
+    [ShowInInspector]
+    [PropertyOrder(-1)]
+    protected abstract string Description { get; }
 
-    [InfoBox("@BuffDisplayName")]
     [LabelText("Buff标签")]
     [ValidateInput("ValidateBuffAttribute", "$validateBuffAttributeInfo")]
     public BuffAttribute BuffAttribute;

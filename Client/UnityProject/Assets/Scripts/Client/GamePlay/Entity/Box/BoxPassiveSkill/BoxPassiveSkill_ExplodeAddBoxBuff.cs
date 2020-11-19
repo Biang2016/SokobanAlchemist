@@ -8,7 +8,7 @@ using UnityEngine;
 [Serializable]
 public class BoxPassiveSkill_ExplodeAddBoxBuff : BoxPassiveSkill
 {
-    protected override string BoxPassiveSkillDisplayName => "箱子撞击爆炸AOE给Box施加Buff";
+    protected override string Description => "箱子撞击爆炸AOE给Box施加Buff";
 
     [LabelText("判定半径")]
     public int AddBuffRadius = 2;

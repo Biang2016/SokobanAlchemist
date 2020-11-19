@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class BoxPassiveSkill_ThornDamage : BoxPassiveSkill
 {
-    protected override string BoxPassiveSkillDisplayName => "荆棘伤害";
+    protected override string Description => "荆棘伤害";
 
     [LabelText("每次伤害")]
     public int Damage = 0;

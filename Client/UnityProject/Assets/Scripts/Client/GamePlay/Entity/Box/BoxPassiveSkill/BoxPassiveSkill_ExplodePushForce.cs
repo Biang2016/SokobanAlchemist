@@ -9,7 +9,7 @@ using UnityEngine;
 [Serializable]
 public class BoxPassiveSkill_ExplodePushForce : BoxPassiveSkill
 {
-    protected override string BoxPassiveSkillDisplayName => "箱子撞击爆炸AOE对周围Box施加推力";
+    protected override string Description => "箱子撞击爆炸AOE对周围Box施加推力";
 
     [LabelText("碰撞爆炸推力半径")]
     public int ExplodePushRadius = 3;

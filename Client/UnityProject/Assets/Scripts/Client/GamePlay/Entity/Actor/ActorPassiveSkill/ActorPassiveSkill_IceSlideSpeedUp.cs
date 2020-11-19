@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class ActorPassiveSkill_IceSlideSpeedUp : ActorPassiveSkill
 {
-    protected override string ActorPassiveSkillDisplayName => "角色在冰面时施加Buff";
+    protected override string Description => "角色在冰面时施加Buff";
 
     [LabelText("施加Buff")]
     public ActorBuff RawActorBuff;

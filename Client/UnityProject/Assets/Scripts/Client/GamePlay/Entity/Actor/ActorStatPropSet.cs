@@ -86,53 +86,82 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
     [LabelText("冰冻持续特效尺寸(x->冰冻等级")]
     public AnimationCurve FrozenFXScaleCurve;
 
-    [BoxGroup("灼烧")]
-    [LabelText("@\"灼烧抗性\t\"+FiringResistance")]
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧抗性\t\"+FiringResistance")]
     public ActorProperty FiringResistance = new ActorProperty(ActorPropertyType.FiringResistance);
 
-    [BoxGroup("灼烧")]
-    [LabelText("@\"灼烧恢复率\t\"+FiringRecovery")]
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧恢复率\t\"+FiringRecovery")]
     public ActorProperty FiringRecovery = new ActorProperty(ActorPropertyType.FiringRecovery);
 
-    [BoxGroup("灼烧")]
-    [LabelText("@\"灼烧增长率\t\"+FiringGrowthPercent")]
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧增长率\t\"+FiringGrowthPercent")]
     public ActorProperty FiringGrowthPercent = new ActorProperty(ActorPropertyType.FiringGrowthPercent);
 
-    [BoxGroup("灼烧")]
-    [LabelText("@\"灼烧累积值\t\"+FiringValue")]
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧累积值\t\"+FiringValue")]
     public ActorStat FiringValue = new ActorStat(ActorStatType.FiringValue);
 
-    [BoxGroup("灼烧")]
-    [LabelText("灼烧等级")]
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧等级")]
     public ActorStat FiringLevel = new ActorStat(ActorStatType.FiringLevel);
 
     internal int FiringValuePerLevel => Mathf.RoundToInt(((float) FiringValue.MaxValue / FiringLevel.MaxValue));
 
-    [BoxGroup("灼烧")]
-    [LabelText("灼烧持续特效")]
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧持续特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
     public string FiringFX;
 
-    [BoxGroup("灼烧")]
-    [LabelText("灼烧持续特效尺寸(x->灼烧等级")]
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧持续特效尺寸(x->燃烧等级")]
     public AnimationCurve FiringFXScaleCurve;
+
+    #region 技能
+
+    #region 普通攻击
 
     [BoxGroup("攻击")]
     [LabelText("@\"攻击伤害\t\"+AttackDamage")]
     public ActorProperty AttackDamage = new ActorProperty(ActorPropertyType.AttackDamage);
 
     [BoxGroup("攻击")]
-    [LabelText("@\"攻击火焰伤害\t\"+AttackDamage_Firing")]
+    [LabelText("@\"攻击燃烧伤害\t\"+AttackDamage_Firing")]
     public ActorProperty AttackDamage_Firing = new ActorProperty(ActorPropertyType.AttackDamage_Firing);
 
     [BoxGroup("攻击")]
     [LabelText("@\"攻击冰冻伤害\t\"+AttackDamage_Frozen")]
     public ActorProperty AttackDamage_Frozen = new ActorProperty(ActorPropertyType.AttackDamage_Frozen);
 
+    [BoxGroup("攻击")]
+    [LabelText("@\"攻击范围\t\"+AttackRange")]
+    public ActorProperty AttackRange = new ActorProperty(ActorPropertyType.AttackRange);
+
+    [BoxGroup("攻击")]
+    [LabelText("@\"攻击CD/ms\t\"+AttackCooldown")]
+    public ActorProperty AttackCooldown = new ActorProperty(ActorPropertyType.AttackCooldown);
+
+    [BoxGroup("攻击")]
+    [LabelText("@\"攻击施法时间/ms\t\"+AttackCastDuration")]
+    public ActorProperty AttackCastDuration = new ActorProperty(ActorPropertyType.AttackCastDuration);
+
+    [BoxGroup("攻击")]
+    [LabelText("@\"攻击前摇/ms\t\"+AttackWingUp")]
+    public ActorProperty AttackWingUp = new ActorProperty(ActorPropertyType.AttackWingUp);
+
+    [BoxGroup("攻击")]
+    [LabelText("@\"攻击后摇/ms\t\"+AttackRecovery")]
+    public ActorProperty AttackRecovery = new ActorProperty(ActorPropertyType.AttackRecovery);
+
+    #endregion
+
+    #endregion
+
     [NonSerialized]
     [ShowInInspector]
     [BoxGroup("Buff")]
     [LabelText("角色自带Buff")]
+    [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<ActorBuff> RawActorDefaultBuffs = new List<ActorBuff>(); // 干数据，禁修改
 
     [HideInInspector]
@@ -169,6 +198,11 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         AttackDamage.Initialize();
         AttackDamage_Firing.Initialize();
         AttackDamage_Frozen.Initialize();
+        AttackRange.Initialize();
+        AttackCooldown.Initialize();
+        AttackCastDuration.Initialize();
+        AttackWingUp.Initialize();
+        AttackRecovery.Initialize();
 
         Health.MaxValue = MaxHealth.GetModifiedValue;
         Health.OnValueReachZero += () => { Life.Value--; };
@@ -240,7 +274,7 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         FiringValue.OnValueChanged += (before, after) =>
         {
             FiringLevel.Value = after / FiringValuePerLevel;
-            if (FiringLevel.Value > 0) Actor.ActorBuffHelper.PlayAbnormalStatFX((int) ActorStatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 灼烧值变化时，播放一次特效
+            if (FiringLevel.Value > 0) Actor.ActorBuffHelper.PlayAbnormalStatFX((int) ActorStatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 燃烧值变化时，播放一次特效
         };
         StatDict.Add(ActorStatType.FiringValue, FiringValue);
 
@@ -253,6 +287,11 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         PropertyDict.Add(ActorPropertyType.AttackDamage, AttackDamage);
         PropertyDict.Add(ActorPropertyType.AttackDamage_Firing, AttackDamage_Firing);
         PropertyDict.Add(ActorPropertyType.AttackDamage_Frozen, AttackDamage_Frozen);
+        PropertyDict.Add(ActorPropertyType.AttackRange, AttackRange);
+        PropertyDict.Add(ActorPropertyType.AttackCooldown, AttackCooldown);
+        PropertyDict.Add(ActorPropertyType.AttackCastDuration, AttackCastDuration);
+        PropertyDict.Add(ActorPropertyType.AttackWingUp, AttackWingUp);
+        PropertyDict.Add(ActorPropertyType.AttackRecovery, AttackRecovery);
 
         #endregion
 
@@ -327,6 +366,11 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         newStatPropSet.AttackDamage = (ActorProperty) AttackDamage.Clone();
         newStatPropSet.AttackDamage_Firing = (ActorProperty) AttackDamage_Firing.Clone();
         newStatPropSet.AttackDamage_Frozen = (ActorProperty) AttackDamage_Frozen.Clone();
+        newStatPropSet.AttackRange = (ActorProperty) AttackRange.Clone();
+        newStatPropSet.AttackCooldown = (ActorProperty) AttackCooldown.Clone();
+        newStatPropSet.AttackCastDuration = (ActorProperty)AttackCastDuration.Clone();
+        newStatPropSet.AttackWingUp = (ActorProperty) AttackWingUp.Clone();
+        newStatPropSet.AttackRecovery = (ActorProperty) AttackRecovery.Clone();
 
         newStatPropSet.RawActorDefaultBuffs = RawActorDefaultBuffs.Clone();
         return newStatPropSet;
@@ -404,10 +448,10 @@ public enum ActorStatType
     [LabelText("冰冻等级")]
     FrozenLevel = 120,
 
-    [LabelText("灼烧累积值")]
+    [LabelText("燃烧累积值")]
     FiringValue = 101,
 
-    [LabelText("灼烧等级")]
+    [LabelText("燃烧等级")]
     FiringLevel = 121,
 }
 
@@ -440,24 +484,39 @@ public enum ActorPropertyType
     [LabelText("冰冻抗性")]
     FrozenResistance = 100,
 
-    [LabelText("灼烧抗性")]
+    [LabelText("燃烧抗性")]
     FiringResistance = 101,
 
     [LabelText("冰冻恢复率")]
     FrozenRecovery = 200,
 
-    [LabelText("灼烧恢复率")]
+    [LabelText("燃烧恢复率")]
     FiringRecovery = 201,
 
-    [LabelText("灼烧增长率")]
+    [LabelText("燃烧增长率")]
     FiringGrowthPercent = 301,
 
     [LabelText("攻击伤害")]
     AttackDamage = 400,
 
-    [LabelText("攻击火焰伤害")]
+    [LabelText("攻击燃烧伤害")]
     AttackDamage_Firing = 401,
 
     [LabelText("攻击冰冻伤害")]
     AttackDamage_Frozen = 402,
+
+    [LabelText("攻击范围")]
+    AttackRange = 500,
+
+    [LabelText("攻击CD")]
+    AttackCooldown = 600,
+
+    [LabelText("攻击施法时间")]
+    AttackCastDuration = 601,
+
+    [LabelText("攻击前摇")]
+    AttackWingUp = 602,
+
+    [LabelText("攻击后摇")]
+    AttackRecovery = 603,
 }

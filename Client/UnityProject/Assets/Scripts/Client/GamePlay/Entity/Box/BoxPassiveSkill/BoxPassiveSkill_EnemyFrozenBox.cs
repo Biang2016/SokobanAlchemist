@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
 {
-    protected override string BoxPassiveSkillDisplayName => "冻住敌人变成的箱子，勿乱用";
+    protected override string Description => "冻住敌人变成的箱子，勿乱用";
 
     public override void OnFlyingCollisionEnter(Collision collision)
     {

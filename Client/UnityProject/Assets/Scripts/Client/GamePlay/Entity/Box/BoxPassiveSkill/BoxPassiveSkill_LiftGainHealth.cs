@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 [Serializable]
 public class BoxPassiveSkill_LiftGainHealth : BoxPassiveSkill
 {
-    protected override string BoxPassiveSkillDisplayName => "举箱子回复生命";
+    protected override string Description => "举箱子回复生命";
 
     [LabelText("回复生命")]
     public int GainHealthWhenLifted;

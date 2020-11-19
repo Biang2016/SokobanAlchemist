@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 [Serializable]
 public class BoxPassiveSkill_ChangeBoxToEnemy : BoxPassiveSkill_InvokeOnLevelEventID
 {
-    protected override string BoxPassiveSkillDisplayName => "更改箱子为敌人";
+    protected override string Description => "更改箱子为敌人";
 
     [BoxName]
     [LabelText("敌人类型")]

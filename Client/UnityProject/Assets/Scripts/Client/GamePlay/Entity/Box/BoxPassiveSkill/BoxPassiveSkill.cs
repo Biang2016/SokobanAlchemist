@@ -12,9 +12,11 @@ public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
 {
     internal Box Box;
 
-    protected abstract string BoxPassiveSkillDisplayName { get; }
+    [LabelText("技能描述")]
+    [ShowInInspector]
+    [PropertyOrder(-1)]
+    protected abstract string Description { get; }
 
-    [InfoBox("@BoxPassiveSkillDisplayName")]
     [LabelText("特例类型")]
     [EnumToggleButtons]
     public BoxPassiveSkillBaseSpecialCaseType SpecialCaseType = BoxPassiveSkillBaseSpecialCaseType.None;

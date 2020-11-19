@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class BoxPassiveSkill_CollideAddActorBuff : BoxPassiveSkill
 {
-    protected override string BoxPassiveSkillDisplayName => "箱子撞击给Actor施加Buff";
+    protected override string Description => "箱子撞击给Actor施加Buff";
 
     [LabelText("生效于相对阵营")]
     public RelativeCamp EffectiveOnRelativeCamp;

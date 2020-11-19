@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 [Serializable]
 public class BoxPassiveSkill_ShapeAndOrientation : BoxPassiveSkill
 {
-    protected override string BoxPassiveSkillDisplayName => "导出形状和朝向";
+    protected override string Description => "导出形状和朝向";
 
     [LabelText("形状")]
     public BoxShapeType BoxShapeType = BoxShapeType.Box;

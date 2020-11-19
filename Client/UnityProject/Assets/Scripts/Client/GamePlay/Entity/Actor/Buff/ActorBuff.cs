@@ -22,13 +22,13 @@ public abstract class ActorBuff : EntityBuff
 [Serializable]
 public class ActorBuff_AttributeLabel : ActorBuff
 {
-    protected override string BuffDisplayName => "本Buff仅提供标签作用";
+    protected override string Description => "本Buff仅提供标签作用";
 }
 
 [Serializable]
 public class ActorBuff_ActorPropertyMultiplyModifier : ActorBuff
 {
-    protected override string BuffDisplayName => "角色属性乘法修正Buff, 必须是延时buff, buff结束后消除该修正值";
+    protected override string Description => "角色属性乘法修正Buff, 必须是延时buff, buff结束后消除该修正值";
 
     public ActorBuff_ActorPropertyMultiplyModifier()
     {
@@ -107,7 +107,7 @@ public class ActorBuff_ActorPropertyMultiplyModifier : ActorBuff
 [Serializable]
 public class ActorBuff_ActorPropertyPlusModifier : ActorBuff
 {
-    protected override string BuffDisplayName => "角色属性加法修正Buff, 必须是延时buff, buff结束后消除该修正值";
+    protected override string Description => "角色属性加法修正Buff, 必须是延时buff, buff结束后消除该修正值";
 
     public ActorBuff_ActorPropertyPlusModifier()
     {
@@ -186,7 +186,7 @@ public class ActorBuff_ActorPropertyPlusModifier : ActorBuff
 [Serializable]
 public class ActorBuff_InstantDamage : ActorBuff
 {
-    protected override string BuffDisplayName => "瞬间伤害buff, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
+    protected override string Description => "瞬间伤害buff, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
 
     [LabelText("伤害")]
     public int Damage;
@@ -220,7 +220,7 @@ public class ActorBuff_InstantDamage : ActorBuff
 [Serializable]
 public class ActorBuff_InstantHeal : ActorBuff
 {
-    protected override string BuffDisplayName => "瞬间治疗buff, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
+    protected override string Description => "瞬间治疗buff, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
 
     [LabelText("治疗量")]
     public int Health;
@@ -254,7 +254,7 @@ public class ActorBuff_InstantHeal : ActorBuff
 [Serializable]
 public class ActorBuff_ChangeActorStatInstantly : ActorBuff
 {
-    protected override string BuffDisplayName => "瞬间更改角色异常状态累积值, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
+    protected override string Description => "瞬间更改角色异常状态累积值, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
 
     [LabelText("角色属性类型")]
     [ValidateInput("ValidateStatType", "请选择异常状态累积值")]
@@ -324,7 +324,7 @@ public enum BuffAttribute
     [LabelText("冰冻")]
     Frozen,
 
-    [LabelText("灼烧")]
+    [LabelText("燃烧")]
     Firing,
 
     [LabelText("眩晕")]

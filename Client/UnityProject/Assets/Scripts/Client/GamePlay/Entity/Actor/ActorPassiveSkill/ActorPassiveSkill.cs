@@ -9,8 +9,10 @@ public abstract class ActorPassiveSkill : IClone<ActorPassiveSkill>
 {
     internal Actor Actor;
 
-    [InfoBox("@ActorPassiveSkillDisplayName")]
-    protected abstract string ActorPassiveSkillDisplayName { get; }
+    [LabelText("技能描述")]
+    [ShowInInspector]
+    [PropertyOrder(-1)]
+    protected abstract string Description { get; }
 
     private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
 

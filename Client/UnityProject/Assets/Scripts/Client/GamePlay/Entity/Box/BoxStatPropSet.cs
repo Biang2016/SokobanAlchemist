@@ -54,48 +54,48 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
     [LabelText("冰冻持续特效尺寸(x->冰冻等级")]
     public AnimationCurve FrozenFXScaleCurve;
 
-    [BoxGroup("灼烧")]
-    [LabelText("@\"灼烧抗性\t\"+FiringResistance")]
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧抗性\t\"+FiringResistance")]
     public BoxProperty FiringResistance = new BoxProperty(BoxPropertyType.FiringResistance);
 
-    [BoxGroup("灼烧")]
-    [LabelText("@\"灼烧恢复率\t\"+FiringRecovery")]
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧恢复率\t\"+FiringRecovery")]
     public BoxProperty FiringRecovery = new BoxProperty(BoxPropertyType.FiringRecovery);
 
-    [BoxGroup("灼烧")]
-    [LabelText("@\"灼烧增长率Percent\t\"+FiringGrowthPercent")]
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧增长率Percent\t\"+FiringGrowthPercent")]
     public BoxProperty FiringGrowthPercent = new BoxProperty(BoxPropertyType.FiringGrowthPercent);
 
-    [BoxGroup("灼烧")]
-    [LabelText("@\"灼烧累积值\t\"+FiringValue")]
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧累积值\t\"+FiringValue")]
     public BoxStat FiringValue = new BoxStat(BoxStatType.FiringValue);
 
-    [BoxGroup("灼烧")]
-    [LabelText("@\"灼烧耐久度\t\"+FiringDurability")]
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧耐久度\t\"+FiringDurability")]
     public BoxStat FiringDurability = new BoxStat(BoxStatType.FiringDurability);
 
-    [BoxGroup("灼烧")]
-    [LabelText("灼烧等级")]
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧等级")]
     public BoxStat FiringLevel = new BoxStat(BoxStatType.FiringLevel);
 
     internal int FiringValuePerLevel => Mathf.RoundToInt(((float) FiringValue.MaxValue / FiringLevel.MaxValue));
 
-    [BoxGroup("灼烧")]
-    [LabelText("灼烧触发特效")]
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧触发特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
     public string StartFiringFX;
 
-    [BoxGroup("灼烧")]
-    [LabelText("灼烧持续特效")]
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧持续特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
     public string FiringFX;
 
-    [BoxGroup("灼烧")]
-    [LabelText("灼烧持续特效尺寸(x->灼烧等级")]
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧持续特效尺寸(x->燃烧等级")]
     public AnimationCurve FiringFXScaleCurve;
 
-    [BoxGroup("灼烧")]
-    [LabelText("灼烧毁坏特效")]
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧毁坏特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
     public string FiringBreakFX;
 
@@ -174,7 +174,7 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         FiringValue.OnValueChanged += (before, after) =>
         {
             FiringLevel.Value = after / FiringValuePerLevel;
-            if (FiringLevel.Value > 0) Box.BoxBuffHelper.PlayAbnormalStatFX((int) BoxStatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 灼烧值变化时，播放一次特效
+            if (FiringLevel.Value > 0) Box.BoxBuffHelper.PlayAbnormalStatFX((int) BoxStatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 燃烧值变化时，播放一次特效
             else if (after == 0) Box.BoxBuffHelper.RemoveAbnormalStatFX((int) BoxStatType.FiringValue);
         };
         StatDict.Add(BoxStatType.FiringValue, FiringValue);
@@ -230,7 +230,7 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
             kv.Value.FixedUpdate(fixedDeltaTime);
         }
 
-        // 火焰蔓延
+        // 燃烧蔓延
         if (FiringLevel.Value >= 1)
         {
             foreach (Box adjacentBox in WorldManager.Instance.CurrentWorld.GetAdjacentBox(Box.WorldGP))
@@ -342,13 +342,13 @@ public enum BoxStatType
     [LabelText("冰冻等级")]
     FrozenLevel = 120,
 
-    [LabelText("灼烧累积值")]
+    [LabelText("燃烧累积值")]
     FiringValue = 101,
 
     [LabelText("燃烧耐久度")]
     FiringDurability = 102,
 
-    [LabelText("灼烧等级")]
+    [LabelText("燃烧等级")]
     FiringLevel = 121,
 }
 
@@ -357,15 +357,15 @@ public enum BoxPropertyType
     [LabelText("冰冻抗性")]
     FrozenResistance = 100,
 
-    [LabelText("灼烧抗性")]
+    [LabelText("燃烧抗性")]
     FiringResistance = 101,
 
     [LabelText("冰冻恢复率")]
     FrozenRecovery = 200,
 
-    [LabelText("灼烧恢复率")]
+    [LabelText("燃烧恢复率")]
     FiringRecovery = 201,
 
-    [LabelText("灼烧增长率")]
+    [LabelText("燃烧增长率")]
     FiringGrowthPercent = 301,
 }

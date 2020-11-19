@@ -218,11 +218,12 @@ public partial class Box : Entity
 
     #region 箱子被动技能
 
-    [BoxGroup("箱子被动技能")]
-    [ShowInInspector]
-    [LabelText("箱子被动技能")]
     [NonSerialized]
+    [ShowInInspector]
+    [BoxGroup("箱子被动技能")]
+    [LabelText("箱子被动技能")]
     [FormerlySerializedAs("RawBoxFunctions")]
+    [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<BoxPassiveSkill> RawBoxPassiveSkills = new List<BoxPassiveSkill>(); // 干数据，禁修改
 
     [FormerlySerializedAs("BoxFunctions")]

@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 [Serializable]
 public class BoxPassiveSkill_ChangeBoxType : BoxPassiveSkill_InvokeOnLevelEventID
 {
-    protected override string BoxPassiveSkillDisplayName => "更改箱子类型";
+    protected override string Description => "更改箱子类型";
 
     [BoxName]
     [LabelText("更改箱子类型为")]
