@@ -18,13 +18,22 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
         base.OnBeingKickedCollisionEnter(collision);
         if (Box.FrozenActor != null)
         {
-            if (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
+            if (collision.gameObject.layer == LayerManager.Instance.Layer_Enemy)
             {
                 Actor actor = collision.gameObject.GetComponentInParent<Actor>();
                 actor.ActorBattleHelper.Damage(Box.FrozenActor, Box.FrozenActor.CollideDamage);
+                Box.FrozenActor.ActorBattleHelper.Damage(Box.FrozenActor, 1);
             }
-            else if (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box ||
-                     collision.gameObject.layer == LayerManager.Instance.Layer_Wall ||
+            else if (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box)
+            {
+                Box.FrozenActor.ActorBattleHelper.Damage(Box.FrozenActor, 1);
+                Box targetBox = collision.gameObject.GetComponentInParent<Box>();
+                if (targetBox.FrozenActor != null)
+                {
+                    targetBox.FrozenActor.ActorBattleHelper.Damage(Box.FrozenActor, 1);
+                }
+            }
+            else if (collision.gameObject.layer == LayerManager.Instance.Layer_Wall ||
                      collision.gameObject.layer == LayerManager.Instance.Layer_Ground)
             {
                 Box.FrozenActor.ActorBattleHelper.Damage(Box.FrozenActor, 1);

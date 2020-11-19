@@ -891,6 +891,7 @@ public partial class Box : Entity
                         if (actor.RigidBody != null)
                         {
                             Vector3 force = (actor.transform.position - transform.position).normalized;
+                            force = force.GetSingleDirectionVectorXZ();
                             actor.RigidBody.velocity = Vector3.zero;
                             actor.RigidBody.AddForce(force * 10f, ForceMode.VelocityChange);
                         }

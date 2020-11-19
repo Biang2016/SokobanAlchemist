@@ -713,5 +713,17 @@ namespace BiangStudio
 
 #endif
         }
+
+        public static Vector3 GetSingleDirectionVectorXZ(this Vector3 vector)
+        {
+            if (Mathf.Abs(vector.x) >= Mathf.Abs(vector.z))
+            {
+                return new Vector3(vector.x, 0, 0);
+            }
+            else
+            {
+                return new Vector3(0, 0, vector.z);
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BiangStudio;
 using BiangStudio.GameDataFormat.Grid;
 using UnityEngine;
 
@@ -213,18 +214,15 @@ public class ActorAIAgent
                         currentNode = nextNode;
                         nextNode = nextNode.Next;
                     }
+                    else if (diff.magnitude > 1.1f && !diff.x.Equals(0) && !diff.z.Equals(0)) // 由于某些意外，下一个路径点和目前离得较远，会发生角色原地打转不寻路的bug，此处强行重置
+                    {
+                        ClearPathFinding();
+                    }
 
                     if (nextNode != null)
                     {
                         Actor.CurMoveAttempt = (nextNode.Value.ToVector3() - Actor.transform.position).normalized;
-                        if (Mathf.Abs(Actor.CurMoveAttempt.x) > Mathf.Abs(Actor.CurMoveAttempt.z))
-                        {
-                            Actor.CurMoveAttempt.z = 0;
-                        }
-                        else
-                        {
-                            Actor.CurMoveAttempt.x = 0;
-                        }
+                        Actor.CurMoveAttempt = Actor.CurMoveAttempt.GetSingleDirectionVectorXZ();
                     }
                 }
             }
