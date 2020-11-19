@@ -22,7 +22,7 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
     public ActorProperty MaxHealth = new ActorProperty(ActorPropertyType.MaxHealth);
 
     [BoxGroup("生命")]
-    [LabelText("@\"回血速度\t\"+HealthRecovery")]
+    [LabelText("@\"回血速度*100\t\"+HealthRecovery")]
     public ActorProperty HealthRecovery = new ActorProperty(ActorPropertyType.HealthRecovery);
 
     [BoxGroup("生命")]
@@ -157,13 +157,13 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
 
         Health.MaxValue = MaxHealth.GetModifiedValue;
         Health.OnValueReachZero += () => { Life.Value--; };
-        Health.Recovery = HealthRecovery.GetModifiedValue;
+        Health.Recovery = HealthRecovery.GetModifiedValue / 100f;
         StatDict.Add(ActorStatType.Health, Health);
 
         MaxHealth.OnValueChanged += (before, after) => { Health.MaxValue = after; };
         PropertyDict.Add(ActorPropertyType.MaxHealth, MaxHealth);
 
-        HealthRecovery.OnValueChanged += (before, after) => { Health.Recovery = after; };
+        HealthRecovery.OnValueChanged += (before, after) => { Health.Recovery = after / 100f; };
         PropertyDict.Add(ActorPropertyType.HealthRecovery, HealthRecovery);
 
         Life.OnValueDecrease += (_) => { Health.ChangeValueWithoutNotify(Health.MaxValue - Health.Value); };

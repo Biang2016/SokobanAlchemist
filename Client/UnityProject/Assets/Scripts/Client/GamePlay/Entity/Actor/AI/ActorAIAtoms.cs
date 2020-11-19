@@ -9,9 +9,9 @@ using UnityEngine;
 public static class ActorAIAtoms
 {
     [Category("敌兵")]
-    [Name("移动至距离玩家一定范围")]
-    [Description("移动至距离玩家一定范围")]
-    public class BT_Enemy_MoveToMainPlayer : BTNode
+    [Name("设定目的地为玩家")]
+    [Description("设定目的地为玩家")]
+    public class BT_Enemy_SetDestinationToMainPlayer : BTNode
     {
         [Name("保持最小距离")]
         public BBParameter<float> KeepDistanceMin;
@@ -22,6 +22,7 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
             Actor player = BattleManager.Instance.Player1;
             ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.CurWorldGP, KeepDistanceMin.value, KeepDistanceMax.value, false, ActorPathFinding.DestinationType.Actor);
             switch (retCode)
@@ -63,7 +64,7 @@ public static class ActorAIAtoms
                 }
                 case ActorAIAgent.SetDestinationRetCode.Suc:
                 {
-                    return Status.Running;
+                    return Status.Success;
                 }
                 case ActorAIAgent.SetDestinationRetCode.Failed:
                 {
@@ -97,6 +98,22 @@ public static class ActorAIAtoms
             LinkedList<GridPos3D> path = ActorPathFinding.FindPath(Actor.CurWorldGP, player.CurWorldGP, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor);
             if (path != null) return true;
             return false;
+        }
+    }
+
+    [Category("敌兵")]
+    [Name("寻路终点是否是玩家坐标")]
+    [Description("寻路终点是否是玩家坐标")]
+    public class BT_Enemy_CheckDestIsMainPlayer : ConditionTask
+    {
+        [Name("容许偏差半径")]
+        public BBParameter<float> ToleranceRadius;
+
+        protected override bool OnCheck()
+        {
+            if (Actor == null || Actor.ActorAIAgent == null || !Actor.ActorAIAgent.IsPathFinding) return false;
+            Actor player = BattleManager.Instance.Player1;
+            return ((player.transform.position - Actor.ActorAIAgent.GetCurrentPathFindingDestination().ToVector3()).magnitude <= ToleranceRadius.value);
         }
     }
 
@@ -241,6 +258,7 @@ public static class ActorAIAtoms
         protected override bool OnCheck()
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
+            if (!Actor.ActorAIAgent.IsPathFinding) return false;
             return Actor.ActorAIAgent.StuckWithNavTask_Tick > (StuckTime.value / 1000f);
         }
     }
@@ -254,6 +272,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorAIAgent.TargetBox == null || Actor.ActorAIAgent.TargetBox.WorldGP != Actor.ActorAIAgent.TargetBoxGP) return Status.Failure;
+            if (Actor.ActorAIAgent.IsPathFinding) return Status.Running;
             ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(Actor.ActorAIAgent.TargetBoxGP, 0f, 0f, true, ActorPathFinding.DestinationType.Box);
             switch (retCode)
             {
@@ -370,11 +389,7 @@ public static class ActorAIAtoms
                 Actor.Throw();
             }
 
-            if (Actor.ActorAIAgent.IsPathFinding)
-            {
-                return Status.Running;
-            }
-
+            if (Actor.ActorAIAgent.IsPathFinding) return Status.Running;
             bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.CurWorldGP, IdleRadius.value, out GridPos3D destination);
             if (suc)
             {

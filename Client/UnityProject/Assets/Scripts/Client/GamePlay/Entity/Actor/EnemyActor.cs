@@ -44,8 +44,9 @@ public class EnemyActor : Actor
                 AIUpdateIntervalTick = 0;
             }
 
-            ActorAIAgent.Update();
+            ActorAIAgent.FixedUpdate();
             MoveInternal();
+            ActorAIAgent.FixedUpdateAfterMove();
         }
 
         base.FixedUpdate();

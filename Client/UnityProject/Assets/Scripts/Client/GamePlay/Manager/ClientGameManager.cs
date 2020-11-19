@@ -77,9 +77,9 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public static string DebugChangeWorldName = null;
     public static string DebugChangeWorldBornPointAlias = null;
 
-    public int FixedFrameRate;
-    public int CurrentFixedFrameCount;
-    public int CurrentFixedFrameCount_Mod_FixedFrameRate;
+    internal int FixedFrameRate;
+    internal int CurrentFixedFrameCount;
+    internal int CurrentFixedFrameCount_Mod_FixedFrameRate;
 
     private void Awake()
     {

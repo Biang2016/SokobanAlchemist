@@ -112,7 +112,7 @@ MonoBehaviour:
       _minValue: 0
       _maxValue: 10
     MoveSpeed:
-      BaseValue: 25
+      BaseValue: 15
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 1000
@@ -367,7 +367,7 @@ MonoBehaviour:
   - WoodenBox
   DieDropBoxTypeName: ActionBox
   DieDropBoxProbabilityPercent: 35
-  CollideDamage: 2
+  CollideDamage: 1
   FrozeFX: Hit_SnowFlake
   ThawFX: Flash_CyanSlight
   ActorPassiveSkillBaseData: 7b0d0a2020202022246964223a20302c0d0a20202020222474797065223a2022307c53797374656d2e436f6c6c656374696f6e732e47656e657269632e4c69737460315b5b4163746f7250617373697665536b696c6c2c20436c69656e745d5d2c206d73636f726c6962222c0d0a202020202224726c656e677468223a20312c0d0a20202020222472636f6e74656e74223a205b0d0a20202020202020207b0d0a20202020202020202020202022246964223a20312c0d0a202020202020202020202020222474797065223a2022317c4163746f7250617373697665536b696c6c5f496365536c696465537065656455702c20436c69656e74222c0d0a202020202020202020202020225261774163746f7242756666223a207b0d0a2020202020202020202020202020202022246964223a20322c0d0a20202020202020202020202020202020222474797065223a2022327c4163746f72427566665f4163746f7250726f70657274794d756c7469706c794d6f6469666965722c20436c69656e74222c0d0a202020202020202020202020202020202247554944223a2031303433342c0d0a202020202020202020202020202020202242756666417474726962757465223a20332c0d0a202020202020202020202020202020202249735065726d616e656e74223a20747275652c0d0a20202020202020202020202020202020224475726174696f6e223a20302c0d0a2020202020202020202020202020202022427566664658223a20224e6f6e65222c0d0a20202020202020202020202020202020224275666646585363616c65223a20312c0d0a202020202020202020202020202020202250657263656e74223a202d35302c0d0a20202020202020202020202020202020224c696e6561724465636179496e4475726174696f6e223a2066616c73652c0d0a202020202020202020202020202020202250726f706572747954797065223a2031300d0a2020202020202020202020207d0d0a20202020202020207d0d0a202020205d0d0a7d
@@ -416,8 +416,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98a6db0b653f764eac834f85857a9dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _serializedBlackboard: '{"_variables":{"KeepDistanceMin":{"_name":"KeepDistanceMin","_id":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax":{"_value":0.5,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+  _serializedBlackboard: '{"_variables":{"KeepDistanceMin":{"_value":1.0,"_name":"KeepDistanceMin","_id":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax":{"_value":1.3,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"LiftBoxTypeNames":{"_value":["WoodenBox"],"_name":"LiftBoxTypeNames","_id":"d21dc8a8-3517-4ed3-a546-5846f9fdc8ca","$type":"NodeCanvas.Framework.Variable`1[[System.Collections.Generic.List`1[[System.String,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]],
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"EscapeLowHealth":{"_value":1,"_name":"EscapeLowHealth","_id":"74c211c5-974d-49c6-845f-ae296a7f86d4","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
@@ -430,10 +430,10 @@ MonoBehaviour:
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
   _objectReferences: []
   _serializedVariables:
-  - _json: '{"_name":"KeepDistanceMin","_id":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+  - _json: '{"_value":1.0,"_name":"KeepDistanceMin","_id":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
-  - _json: '{"_value":0.5,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+  - _json: '{"_value":1.3,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
   - _json: '{"_value":["WoodenBox"],"_name":"LiftBoxTypeNames","_id":"d21dc8a8-3517-4ed3-a546-5846f9fdc8ca","$type":"NodeCanvas.Framework.Variable`1[[System.Collections.Generic.List`1[[System.String,

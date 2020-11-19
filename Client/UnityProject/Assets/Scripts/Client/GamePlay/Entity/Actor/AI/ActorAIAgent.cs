@@ -51,7 +51,13 @@ public class ActorAIAgent
         Actor.GraphOwner?.StartBehaviour();
     }
 
-    public void Update()
+    public void FixedUpdate()
+    {
+        if (isStop) return;
+        MoveToDestination();
+    }
+
+    public void FixedUpdateAfterMove()
     {
         if (isStop) return;
         if (Actor.CurWorldGP == Actor.LastWorldGP && currentPath != null)
@@ -62,8 +68,6 @@ public class ActorAIAgent
         {
             StuckWithNavTask_Tick = 0;
         }
-
-        MoveToDestination();
     }
 
     private float KeepDistanceMin;
@@ -82,6 +86,7 @@ public class ActorAIAgent
         currentNode = null;
         nextNode = null;
         Actor.CurMoveAttempt = Vector3.zero;
+        currentDestination = GridPos3D.Zero;
     }
 
     public enum SetDestinationRetCode
@@ -164,7 +169,7 @@ public class ActorAIAgent
                 {
                     Vector3 diff = nextNode.Value.ToVector3() - Actor.transform.position;
 
-                    if (diff.magnitude < 0.1f)
+                    if (diff.magnitude < 0.01f)
                     {
                         bool checkArriveDest = nextNode == currentPath.Last || (LastNodeOccupied && nextNode.Next == currentPath.Last);
                         if (checkArriveDest)
@@ -185,9 +190,22 @@ public class ActorAIAgent
                     if (nextNode != null)
                     {
                         Actor.CurMoveAttempt = (nextNode.Value.ToVector3() - Actor.transform.position).normalized;
+                        if (Mathf.Abs(Actor.CurMoveAttempt.x) > Mathf.Abs(Actor.CurMoveAttempt.z))
+                        {
+                            Actor.CurMoveAttempt.z = 0;
+                        }
+                        else
+                        {
+                            Actor.CurMoveAttempt.x = 0;
+                        }
                     }
                 }
             }
         }
+    }
+
+    public GridPos3D GetCurrentPathFindingDestination()
+    {
+        return currentDestination;
     }
 }

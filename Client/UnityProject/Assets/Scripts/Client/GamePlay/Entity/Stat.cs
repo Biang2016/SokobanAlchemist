@@ -37,7 +37,7 @@ public abstract class Stat : IClone<Stat>
     /// <summary>
     /// 每秒恢复率
     /// </summary>
-    internal int Recovery = 0;
+    internal float Recovery = 0;
 
     /// <summary>
     /// 每秒增长率percent
