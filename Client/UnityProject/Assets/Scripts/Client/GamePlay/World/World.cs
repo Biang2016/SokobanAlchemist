@@ -388,19 +388,37 @@ public class World : PoolObject
 
     #region MoveBox Calculators
 
-    public bool CheckCanMoveBox(GridPos3D srcGP, GridPos3D targetGP)
+    public bool CheckActorOccupiedGrid(GridPos3D targetGP, uint excludeActorGUID = 0)
     {
-        Box box_src = GetBoxByGridPosition(srcGP, out WorldModule module_src, out GridPos3D localGP_src);
-        Box box_target = GetBoxByGridPosition(targetGP, out WorldModule module_target, out GridPos3D localGP_target);
+        Collider[] results = Physics.OverlapSphere(targetGP.ToVector3(), 0.3f, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy, QueryTriggerInteraction.Collide);
+        if (results != null && results.Length > 0)
+        {
+            for (int index = 0; index < results.Length; index++)
+            {
+                Collider result = results[index];
+                Actor actor = result.GetComponentInParent<Actor>();
+                if (actor != null && actor.GUID != excludeActorGUID) return true;
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
+    public bool CheckCanMoveBox(GridPos3D srcGP, GridPos3D targetGP, out Box box_src, out Box box_target, out WorldModule module_src, out WorldModule module_target, out GridPos3D localGP_src, out GridPos3D localGP_target, uint excludeActorGUID = 0)
+    {
+        box_src = GetBoxByGridPosition(srcGP, out module_src, out localGP_src);
+        box_target = GetBoxByGridPosition(targetGP, out module_target, out localGP_target);
         if (module_src == null || module_target == null || box_src == null || box_target != null) return false;
+        if (CheckActorOccupiedGrid(targetGP, excludeActorGUID)) return false;
         return true;
     }
 
-    public void MoveBox(GridPos3D srcGP, GridPos3D targetGP, Box.States sucState, bool needLerp = true, bool needLerpModel = false)
+    public void MoveBox(GridPos3D srcGP, GridPos3D targetGP, Box.States sucState, bool needLerp = true, bool needLerpModel = false, uint excludeActorGUID = 0)
     {
-        Box box_src = GetBoxByGridPosition(srcGP, out WorldModule module_src, out GridPos3D localGP_src);
-        Box box_target = GetBoxByGridPosition(targetGP, out WorldModule module_target, out GridPos3D localGP_target);
-        if (module_src == null || module_target == null || box_src == null || box_target != null) return;
+        bool valid = CheckCanMoveBox(srcGP, targetGP, out Box box_src, out Box box_target, out WorldModule module_src, out WorldModule module_target, out GridPos3D localGP_src, out GridPos3D localGP_target, excludeActorGUID);
+        if (!valid) return;
         box_src.State = sucState;
         module_src.BoxMatrix[localGP_src.x, localGP_src.y, localGP_src.z] = null;
         module_target.BoxMatrix[localGP_target.x, localGP_target.y, localGP_target.z] = box_src;

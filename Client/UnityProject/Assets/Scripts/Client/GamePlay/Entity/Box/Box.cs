@@ -542,7 +542,7 @@ public partial class Box : Entity
             GridPos3D gp = GridPos3D.GetGridPosByPoint(targetPos, 1);
             if (gp != WorldGP)
             {
-                if (Actor.ActorMoveDebugLog) Debug.Log($"[Box] Push {WorldGP} -> {gp}");
+                if (Actor.ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {name} Push {WorldGP} -> {gp}");
                 WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, gp, States.BeingPushed);
             }
         }
@@ -555,7 +555,7 @@ public partial class Box : Entity
             if ((transform.localPosition - LocalGP.ToVector3()).magnitude > (1 - Static_Inertia))
             {
                 SetModelSmoothMoveLerpTime(0);
-                if (Actor.ActorMoveDebugLog) Debug.Log($"[Box] PushCanceled {WorldGP} -> {LastWorldGP}");
+                if (Actor.ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {name} PushCanceled {WorldGP} -> {LastWorldGP}");
                 WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, LastWorldGP, States.PushingCanceling);
             }
         }
@@ -565,7 +565,7 @@ public partial class Box : Entity
     {
         transform.DOPause();
         GridPos3D targetGP = transform.position.ToGridPos3D();
-        if (Actor.ActorMoveDebugLog) Debug.Log($"[Box] ForceCancelPush {WorldGP} -> {targetGP}");
+        if (Actor.ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {name} ForceCancelPush {WorldGP} -> {targetGP}");
         WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, targetGP, States.Static, false, true);
     }
 

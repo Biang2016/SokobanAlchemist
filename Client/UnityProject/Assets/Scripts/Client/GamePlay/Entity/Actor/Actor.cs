@@ -13,7 +13,7 @@ using UnityEngine.Serialization;
 
 public class Actor : Entity
 {
-    public static bool ActorMoveDebugLog =
+    public static bool ENABLE_ACTOR_MOVE_LOG =
 #if UNITY_EDITOR
         false;
 #else
@@ -524,7 +524,7 @@ public class Actor : Entity
             }
 
             ActorBuffHelper.BuffFixedUpdate();
-            if (ActorMoveDebugLog && CurWorldGP != LastWorldGP) Debug.Log($"[Actor] Move {LastWorldGP} -> {CurWorldGP}");
+            if (ENABLE_ACTOR_MOVE_LOG && CurWorldGP != LastWorldGP) Debug.Log($"[Actor] {name} Move {LastWorldGP} -> {CurWorldGP}");
             LastWorldGP = CurWorldGP;
             CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
         }
@@ -766,8 +766,8 @@ public class Actor : Entity
                 transform.position = box.WorldGP.ToVector3();
                 LastWorldGP = CurWorldGP;
                 CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
-                if (ActorMoveDebugLog) Debug.Log($"[Box] SwapBox {box.WorldGP} -> {LastWorldGP}");
-                WorldManager.Instance.CurrentWorld.MoveBox(box.WorldGP, LastWorldGP, Box.States.BeingPushed, false, true);
+                if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {box.name} SwapBox {box.WorldGP} -> {LastWorldGP}");
+                WorldManager.Instance.CurrentWorld.MoveBox(box.WorldGP, LastWorldGP, Box.States.BeingPushed, false, true, GUID);
 
                 // todo kicking box的swap如何兼容
             }

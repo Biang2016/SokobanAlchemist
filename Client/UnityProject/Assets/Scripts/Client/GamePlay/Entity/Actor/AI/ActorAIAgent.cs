@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ActorAIAgent
 {
-    internal static bool ENABLE_ACTOR_AI_AGENT_LOG = true;
+    internal static bool ENABLE_ACTOR_AI_AGENT_LOG = false;
 
     internal Actor Actor;
     private List<Marker> NavTrackMarkers = new List<Marker>();
@@ -85,6 +85,7 @@ public class ActorAIAgent
     {
         if (!IsPathFinding) return;
         if (currentPath == null) return;
+
         while (currentPath.Last != nextNode)
         {
             currentPath.RemoveLast();
@@ -177,10 +178,11 @@ public class ActorAIAgent
         {
             if (nextNode != null)
             {
+                // 有箱子或Actor挡路，停止寻路
                 Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(nextNode.Value, out WorldModule module, out GridPos3D _);
-                if (box && !box.Passable)
+                bool actorOccupied = WorldManager.Instance.CurrentWorld.CheckActorOccupiedGrid(nextNode.Value, Actor.GUID);
+                if ((box && !box.Passable) || actorOccupied)
                 {
-                    // 有箱子挡路，停止寻路
                     Vector3 diff = currentNode.Value.ToVector3() - Actor.transform.position;
                     if (diff.magnitude < 0.2f)
                     {

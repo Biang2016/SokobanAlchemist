@@ -120,8 +120,8 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵")]
-    [Name("闲逛")]
-    [Description("闲逛")]
+    [Name("设置闲逛目标点")]
+    [Description("设置闲逛目标点")]
     public class BT_Enemy_Idle : BTNode
     {
         [Name("闲逛半径")]
@@ -137,7 +137,7 @@ public static class ActorAIAtoms
                 Actor.Throw();
             }
 
-            if (Actor.ActorAIAgent.IsPathFinding) return Status.Running;
+            if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
             bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.CurWorldGP, IdleRadius.value, out GridPos3D destination);
             if (suc)
             {
@@ -151,7 +151,7 @@ public static class ActorAIAtoms
                     }
                     case ActorAIAgent.SetDestinationRetCode.Suc:
                     {
-                        return Status.Running;
+                        return Status.Success;
                     }
                     case ActorAIAgent.SetDestinationRetCode.Failed:
                     {

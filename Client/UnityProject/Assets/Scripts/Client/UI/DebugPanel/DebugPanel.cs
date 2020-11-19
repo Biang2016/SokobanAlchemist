@@ -259,11 +259,18 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugButton("Player/AddHealth*1000")]
-    public void AddHealth1000()
+    [DebugButton("Player/AddHealth*10")]
+    public void AddHealth10()
     {
-        BattleManager.Instance.Player1.ActorStatPropSet.MaxHealth.AddModifier(new Property.PlusModifier {Delta = 1000});
-        BattleManager.Instance.Player1.ActorStatPropSet.Health.Value += 1000;
+        BattleManager.Instance.Player1.ActorStatPropSet.MaxHealth.AddModifier(new Property.PlusModifier {Delta = 10});
+        BattleManager.Instance.Player1.ActorStatPropSet.Health.Value += 10;
+    }
+
+    [DebugButton("Player/AddHealth*100")]
+    public void AddHealth100()
+    {
+        BattleManager.Instance.Player1.ActorStatPropSet.MaxHealth.AddModifier(new Property.PlusModifier {Delta = 100 });
+        BattleManager.Instance.Player1.ActorStatPropSet.Health.Value += 100;
     }
 
     [DebugButton("Player/AddMaxAction*50")]
@@ -279,10 +286,16 @@ public class DebugPanel : BaseUIPanel
         BattleManager.Instance.Player1.ActorStatPropSet.ActionPointRecovery.AddModifier(new Property.PlusModifier {Delta = 10});
     }
 
-    [DebugToggleButton("ToggleMoveLog")]
+    [DebugToggleButton("Log/ToggleMoveLog")]
     public void ToggleMoveLog()
     {
-        Actor.ActorMoveDebugLog = !Actor.ActorMoveDebugLog;
+        Actor.ENABLE_ACTOR_MOVE_LOG = !Actor.ENABLE_ACTOR_MOVE_LOG;
+    }
+
+    [DebugToggleButton("Log/ToggleAIPathFindingLog")]
+    public void ToggleAIPathFindingLog()
+    {
+        ActorAIAgent.ENABLE_ACTOR_AI_AGENT_LOG = !ActorAIAgent.ENABLE_ACTOR_AI_AGENT_LOG;
     }
 
     [DebugToggleButton("Enemy/TogglePathFinding")]
