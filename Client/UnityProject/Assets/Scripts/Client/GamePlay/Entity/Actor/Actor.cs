@@ -256,11 +256,14 @@ public class Actor : Entity
 
     internal bool ActorPassiveSkillMarkAsDeleted = false;
 
+    internal bool ActorForbidPushBox = false;
+
     [HideInInspector]
     public byte[] ActorPassiveSkillBaseData;
 
     private void InitActorPassiveSkills()
     {
+        ActorForbidPushBox = false;
         ActorPassiveSkills.Clear();
         ActorPassiveSkillDict.Clear();
         foreach (ActorPassiveSkill rawBF in RawActorPassiveSkills)
@@ -287,6 +290,8 @@ public class Actor : Entity
         {
             ActorPassiveSkillDict.Add(bfName, bf);
         }
+
+        if (bf is ActorPassiveSkill_ForbidPushBox) ActorForbidPushBox = true;
     }
 
     private void UnInitPassiveSkills()
@@ -555,14 +560,14 @@ public class Actor : Entity
                 RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);
 
                 CurForward = CurMoveAttempt.normalized;
-                ActorPushHelper.TriggerOut = true;
+                if (!ActorForbidPushBox) ActorPushHelper.TriggerOut = true;
             }
             else
             {
                 MovementState = MovementStates.Static;
                 RigidBody.drag = 100f;
                 RigidBody.mass = 1f;
-                ActorPushHelper.TriggerOut = false;
+                if (!ActorForbidPushBox) ActorPushHelper.TriggerOut = false;
             }
 
             if (CurMoveAttempt.x.Equals(0))

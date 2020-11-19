@@ -8,6 +8,8 @@ using UnityEngine;
 
 public static class ActorAIAtoms
 {
+    #region 寻路
+
     [Category("敌兵")]
     [Name("设定目的地为玩家")]
     [Description("设定目的地为玩家")]
@@ -116,6 +118,92 @@ public static class ActorAIAtoms
             return ((player.transform.position - Actor.ActorAIAgent.GetCurrentPathFindingDestination().ToVector3()).magnitude <= ToleranceRadius.value);
         }
     }
+
+    [Category("敌兵")]
+    [Name("闲逛")]
+    [Description("闲逛")]
+    public class BT_Enemy_Idle : BTNode
+    {
+        [Name("闲逛半径")]
+        public BBParameter<int> IdleRadius;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ThrowState == Actor.ThrowStates.Lifting && Actor.CurrentLiftBox != null)
+            {
+                Actor.ThrowCharge();
+                Actor.CurThrowPointOffset = Actor.transform.forward * 3f;
+                Actor.Throw();
+            }
+
+            if (Actor.ActorAIAgent.IsPathFinding) return Status.Running;
+            bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.CurWorldGP, IdleRadius.value, out GridPos3D destination);
+            if (suc)
+            {
+                ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination, 0f, 0.5f, false, ActorPathFinding.DestinationType.EmptyGrid);
+                switch (retCode)
+                {
+                    case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
+                    case ActorAIAgent.SetDestinationRetCode.TooClose:
+                    {
+                        return Status.Success;
+                    }
+                    case ActorAIAgent.SetDestinationRetCode.Suc:
+                    {
+                        return Status.Running;
+                    }
+                    case ActorAIAgent.SetDestinationRetCode.Failed:
+                    {
+                        return Status.Failure;
+                    }
+                }
+
+                return Status.Success;
+            }
+            else
+            {
+                return Status.Failure;
+            }
+        }
+    }
+
+    [Category("敌兵")]
+    [Name("结束寻路")]
+    [Description("结束寻路")]
+    public class BT_Enemy_TerminatePathFinding : BTNode
+    {
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ActorAIAgent.IsPathFinding)
+            {
+                Actor.ActorAIAgent.InterruptCurrentPathFinding();
+            }
+
+            return Status.Success;
+        }
+    }
+
+    [Category("敌兵")]
+    [Name("有寻路任务但卡在一个地方")]
+    [Description("有寻路任务但卡在一个地方")]
+    public class BT_Enemy_StuckWithNavTask : ConditionTask
+    {
+        [Name("卡住时长/ms")]
+        public BBParameter<int> StuckTime;
+
+        protected override bool OnCheck()
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return false;
+            if (!Actor.ActorAIAgent.IsPathFinding) return false;
+            return Actor.ActorAIAgent.StuckWithNavTask_Tick > (StuckTime.value / 1000f);
+        }
+    }
+
+    #endregion
+
+    #region 箱子相关
 
     [Category("敌兵")]
     [Name("举着指定类型箱子")]
@@ -248,22 +336,6 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵")]
-    [Name("有寻路任务但卡在一个地方")]
-    [Description("有寻路任务但卡在一个地方")]
-    public class BT_Enemy_StuckWithNavTask : ConditionTask
-    {
-        [Name("卡住时长/ms")]
-        public BBParameter<int> StuckTime;
-
-        protected override bool OnCheck()
-        {
-            if (Actor == null || Actor.ActorAIAgent == null) return false;
-            if (!Actor.ActorAIAgent.IsPathFinding) return false;
-            return Actor.ActorAIAgent.StuckWithNavTask_Tick > (StuckTime.value / 1000f);
-        }
-    }
-
-    [Category("敌兵")]
     [Name("移动至目标箱子附近")]
     [Description("移动至目标箱子附近")]
     public class BT_Enemy_MoveTowardsBox : BTNode
@@ -371,71 +443,7 @@ public static class ActorAIAtoms
         }
     }
 
-    [Category("敌兵")]
-    [Name("闲逛")]
-    [Description("闲逛")]
-    public class BT_Enemy_Idle : BTNode
-    {
-        [Name("闲逛半径")]
-        public BBParameter<int> IdleRadius;
-
-        protected override Status OnExecute(Component agent, IBlackboard blackboard)
-        {
-            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
-            if (Actor.ThrowState == Actor.ThrowStates.Lifting && Actor.CurrentLiftBox != null)
-            {
-                Actor.ThrowCharge();
-                Actor.CurThrowPointOffset = Actor.transform.forward * 3f;
-                Actor.Throw();
-            }
-
-            if (Actor.ActorAIAgent.IsPathFinding) return Status.Running;
-            bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.CurWorldGP, IdleRadius.value, out GridPos3D destination);
-            if (suc)
-            {
-                ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination, 0f, 0.5f, false, ActorPathFinding.DestinationType.EmptyGrid);
-                switch (retCode)
-                {
-                    case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
-                    case ActorAIAgent.SetDestinationRetCode.TooClose:
-                    {
-                        return Status.Success;
-                    }
-                    case ActorAIAgent.SetDestinationRetCode.Suc:
-                    {
-                        return Status.Running;
-                    }
-                    case ActorAIAgent.SetDestinationRetCode.Failed:
-                    {
-                        return Status.Failure;
-                    }
-                }
-
-                return Status.Success;
-            }
-            else
-            {
-                return Status.Failure;
-            }
-        }
-    }
-
-    [Category("敌兵")]
-    [Name("结束寻路")]
-    [Description("结束寻路")]
-    public class BT_Enemy_TerminatePathFinding : BTNode
-    {
-        protected override Status OnExecute(Component agent, IBlackboard blackboard)
-        {
-            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
-            if (Actor.ActorAIAgent.IsPathFinding)
-            {
-                Actor.ActorAIAgent.ClearPathFinding();
-            }
-
-            return Status.Success;
-        }
-    }
+    #endregion
 
     [Category("敌兵")]
     [Name("生命值大等于")]
@@ -467,4 +475,25 @@ public static class ActorAIAtoms
             return (BattleManager.Instance.Player1.transform.position - Actor.transform.position).magnitude <= RangeRadius.value;
         }
     }
+
+    #region 战斗
+
+    [Category("敌兵/战斗")]
+    [Name("攻击")]
+    [Description("攻击")]
+    public class BT_Enemy_Attack : BTNode
+    {
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
+            Actor player = BattleManager.Instance.Player1;
+            player.ActorBattleHelper.Damage(Actor, Actor.ActorStatPropSet.AttackDamage.GetModifiedValue);
+            player.ActorBattleHelper.Damage(Actor, Actor.ActorStatPropSet.AttackDamage_Firing.GetModifiedValue);
+            player.ActorBattleHelper.Damage(Actor, Actor.ActorStatPropSet.AttackDamage_Frozen.GetModifiedValue);
+            return Status.Success;
+        }
+    }
+
+    #endregion
 }

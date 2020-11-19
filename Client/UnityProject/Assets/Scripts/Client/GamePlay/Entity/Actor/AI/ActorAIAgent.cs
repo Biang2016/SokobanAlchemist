@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ActorAIAgent
 {
+    internal static bool ENABLE_ACTOR_AI_AGENT_LOG = true;
+
     internal Actor Actor;
     private List<Marker> NavTrackMarkers = new List<Marker>();
 
@@ -79,6 +81,19 @@ public class ActorAIAgent
     private LinkedListNode<GridPos3D> currentNode;
     private LinkedListNode<GridPos3D> nextNode;
 
+    public void InterruptCurrentPathFinding()
+    {
+        if (!IsPathFinding) return;
+        if (currentPath == null) return;
+        while (currentPath.Last != nextNode)
+        {
+            currentPath.RemoveLast();
+        }
+    }
+
+    /// <summary>
+    /// 清除当前寻路，但是要求是完成下一个Node，完成后自动Clear，否则会出现停止瞬间snap到grid的bug
+    /// </summary>
     public void ClearPathFinding()
     {
         IsPathFinding = false;
@@ -87,6 +102,7 @@ public class ActorAIAgent
         nextNode = null;
         Actor.CurMoveAttempt = Vector3.zero;
         currentDestination = GridPos3D.Zero;
+        if (ENABLE_ACTOR_AI_AGENT_LOG) Debug.Log($"{Actor.name} [AIAgent] ClearPathFinding");
     }
 
     public enum SetDestinationRetCode
@@ -112,13 +128,13 @@ public class ActorAIAgent
                 Actor.CurForward = forward.normalized;
             }
 
-            ClearPathFinding();
+            InterruptCurrentPathFinding();
             return SetDestinationRetCode.AlreadyArrived;
         }
 
         if (dist <= KeepDistanceMin)
         {
-            ClearPathFinding();
+            InterruptCurrentPathFinding();
             return SetDestinationRetCode.TooClose;
         }
 
@@ -144,11 +160,12 @@ public class ActorAIAgent
                 }
             }
 
+            StuckWithNavTask_Tick = 0;
             return SetDestinationRetCode.Suc;
         }
         else
         {
-            ClearPathFinding();
+            InterruptCurrentPathFinding();
             return SetDestinationRetCode.Failed;
         }
     }
@@ -163,12 +180,20 @@ public class ActorAIAgent
                 Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(nextNode.Value, out WorldModule module, out GridPos3D _);
                 if (box && !box.Passable)
                 {
-                    ClearPathFinding(); // 有箱子挡路，停止寻路
+                    // 有箱子挡路，停止寻路
+                    Vector3 diff = currentNode.Value.ToVector3() - Actor.transform.position;
+                    if (diff.magnitude < 0.2f)
+                    {
+                        ClearPathFinding();
+                    }
+                    else
+                    {
+                        InterruptCurrentPathFinding();
+                    }
                 }
                 else
                 {
                     Vector3 diff = nextNode.Value.ToVector3() - Actor.transform.position;
-
                     if (diff.magnitude < 0.01f)
                     {
                         bool checkArriveDest = nextNode == currentPath.Last || (LastNodeOccupied && nextNode.Next == currentPath.Last);

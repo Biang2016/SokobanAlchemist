@@ -117,6 +117,18 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
     [LabelText("灼烧持续特效尺寸(x->灼烧等级")]
     public AnimationCurve FiringFXScaleCurve;
 
+    [BoxGroup("攻击")]
+    [LabelText("@\"攻击伤害\t\"+AttackDamage")]
+    public ActorProperty AttackDamage = new ActorProperty(ActorPropertyType.AttackDamage);
+
+    [BoxGroup("攻击")]
+    [LabelText("@\"攻击火焰伤害\t\"+AttackDamage_Firing")]
+    public ActorProperty AttackDamage_Firing = new ActorProperty(ActorPropertyType.AttackDamage_Firing);
+
+    [BoxGroup("攻击")]
+    [LabelText("@\"攻击冰冻伤害\t\"+AttackDamage_Frozen")]
+    public ActorProperty AttackDamage_Frozen = new ActorProperty(ActorPropertyType.AttackDamage_Frozen);
+
     [NonSerialized]
     [ShowInInspector]
     [BoxGroup("Buff")]
@@ -154,6 +166,9 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         FiringResistance.Initialize();
         FiringRecovery.Initialize();
         FiringGrowthPercent.Initialize();
+        AttackDamage.Initialize();
+        AttackDamage_Firing.Initialize();
+        AttackDamage_Frozen.Initialize();
 
         Health.MaxValue = MaxHealth.GetModifiedValue;
         Health.OnValueReachZero += () => { Life.Value--; };
@@ -233,6 +248,14 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
 
         #endregion
 
+        #region AttackDamage
+
+        PropertyDict.Add(ActorPropertyType.AttackDamage, AttackDamage);
+        PropertyDict.Add(ActorPropertyType.AttackDamage_Firing, AttackDamage_Firing);
+        PropertyDict.Add(ActorPropertyType.AttackDamage_Frozen, AttackDamage_Frozen);
+
+        #endregion
+
         foreach (ActorBuff rawActorDefaultBuff in RawActorDefaultBuffs)
         {
             actor.ActorBuffHelper.AddBuff((ActorBuff) rawActorDefaultBuff.Clone());
@@ -301,6 +324,9 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         newStatPropSet.FiringLevel = (ActorStat) FiringLevel.Clone();
         newStatPropSet.FiringFX = FiringFX;
         newStatPropSet.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
+        newStatPropSet.AttackDamage = (ActorProperty) AttackDamage.Clone();
+        newStatPropSet.AttackDamage_Firing = (ActorProperty) AttackDamage_Firing.Clone();
+        newStatPropSet.AttackDamage_Frozen = (ActorProperty) AttackDamage_Frozen.Clone();
 
         newStatPropSet.RawActorDefaultBuffs = RawActorDefaultBuffs.Clone();
         return newStatPropSet;
@@ -425,4 +451,13 @@ public enum ActorPropertyType
 
     [LabelText("灼烧增长率")]
     FiringGrowthPercent = 301,
+
+    [LabelText("攻击伤害")]
+    AttackDamage = 400,
+
+    [LabelText("攻击火焰伤害")]
+    AttackDamage_Firing = 401,
+
+    [LabelText("攻击冰冻伤害")]
+    AttackDamage_Frozen = 402,
 }
