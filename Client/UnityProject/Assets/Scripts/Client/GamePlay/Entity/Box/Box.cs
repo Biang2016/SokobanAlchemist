@@ -23,25 +23,32 @@ public partial class Box : Entity
     internal Rigidbody Rigidbody;
 
     internal Actor LastTouchActor;
+
+    [FoldoutGroup("组件")]
     public BoxBuffHelper BoxBuffHelper;
+
+    [FoldoutGroup("组件")]
     public BoxFrozenHelper BoxFrozenHelper;
+
     internal BoxEffectHelper BoxEffectHelper;
+
+    [FoldoutGroup("组件")]
     public BoxColliderHelper BoxColliderHelper;
+
+    [FoldoutGroup("组件")]
     public BoxThornTrapTriggerHelper BoxThornTrapTriggerHelper;
+
+    [FoldoutGroup("组件")]
     public BoxSkinHelper BoxSkinHelper;
+
+    [FoldoutGroup("组件")]
     public BoxIconSpriteHelper BoxIconSpriteHelper;
+
+    [FoldoutGroup("组件")]
     public SmoothMove BoxIconSpriteSmoothMove;
+
+    [FoldoutGroup("组件")]
     public SmoothMove BoxModelSmoothMove;
-
-    [HideInEditorMode]
-    [BoxGroup("当前战斗数值")]
-    [HideLabel]
-    public BoxStatPropSet BoxStatPropSet; // 湿数据，随生命周期消亡
-
-    [BoxGroup("初始战斗数值")]
-    [HideLabel]
-    [DisableInPlayMode]
-    public BoxStatPropSet RawBoxStatPropSet; // 干数据，禁修改
 
     internal Actor FrozenActor; // EnemyFrozenBox将敌人冻住包裹
 
@@ -102,14 +109,26 @@ public partial class Box : Entity
     [HideInInspector]
     public ushort BoxTypeIndex;
 
+    [FoldoutGroup("箱子属性")]
     [LabelText("箱子特性")]
     [AssetsOnly]
     public BoxFeature BoxFeature;
 
+    [FoldoutGroup("箱子属性")]
     [LabelText("箱子形状")]
     [AssetsOnly]
     [OnValueChanged("SwitchBoxShapeType")]
     public BoxShapeType BoxShapeType;
+
+    [FoldoutGroup("初始战斗数值")]
+    [HideLabel]
+    [DisableInPlayMode]
+    public BoxStatPropSet RawBoxStatPropSet; // 干数据，禁修改
+
+    [HideInEditorMode]
+    [FoldoutGroup("当前战斗数值")]
+    [HideLabel]
+    public BoxStatPropSet BoxStatPropSet; // 湿数据，随生命周期消亡
 
     private void SwitchBoxShapeType()
     {
@@ -140,7 +159,7 @@ public partial class Box : Entity
     [AssetsOnly]
     [ShowInInspector]
     [ShowIf("Interactable")]
-    [BoxGroup("箱子属性")]
+    [FoldoutGroup("箱子属性")]
     [LabelText("重量")]
     private float Weight = 0.7f;
 
@@ -148,28 +167,28 @@ public partial class Box : Entity
 
     [AssetsOnly]
     [SerializeField]
-    [BoxGroup("碰撞")]
+    [FoldoutGroup("碰撞")]
     [LabelText("撞击特效")]
     [ValueDropdown("GetAllFXTypeNames")]
     private string CollideFX;
 
     [AssetsOnly]
     [SerializeField]
-    [BoxGroup("碰撞")]
+    [FoldoutGroup("碰撞")]
     [LabelText("撞击特效尺寸")]
     private float CollideFXScale = 1f;
 
     [AssetsOnly]
     [SerializeField]
     [ShowIf("KickOrThrowable")]
-    [BoxGroup("碰撞")]
+    [FoldoutGroup("碰撞")]
     [LabelText("碰撞伤害半径")]
     private float CollideDamageRadius = 0.5f;
 
     [AssetsOnly]
     [SerializeField]
     [ShowIf("KickOrThrowable")]
-    [BoxGroup("碰撞")]
+    [FoldoutGroup("碰撞")]
     [LabelText("碰撞伤害")]
     [GUIColor(1.0f, 0, 1.0f)]
     private float CollideDamage = 3f;
@@ -178,7 +197,7 @@ public partial class Box : Entity
     [AssetsOnly]
     [ShowInInspector]
     [ShowIf("Pushable")]
-    [BoxGroup("推箱子属性")]
+    [FoldoutGroup("推箱子属性")]
     [LabelText("抗推力")]
     internal static float Static_Inertia = 0.3f;
 
@@ -186,7 +205,7 @@ public partial class Box : Entity
     [AssetsOnly]
     [ShowInInspector]
     [ShowIf("Throwable")]
-    [BoxGroup("扔箱子属性")]
+    [FoldoutGroup("扔箱子属性")]
     [LabelText("落地Drag")]
     internal float Throw_Drag = 10f;
 
@@ -194,7 +213,7 @@ public partial class Box : Entity
     [AssetsOnly]
     [ShowInInspector]
     [ShowIf("Throwable")]
-    [BoxGroup("扔箱子属性")]
+    [FoldoutGroup("扔箱子属性")]
     [LabelText("落地摩擦力")]
     internal float Throw_Friction = 1;
 
@@ -202,16 +221,16 @@ public partial class Box : Entity
     [AssetsOnly]
     [ShowInInspector]
     [ShowIf("Kickable")]
-    [BoxGroup("踢箱子属性")]
+    [FoldoutGroup("踢箱子属性")]
     [LabelText("摩阻力")]
     internal float Dynamic_Drag = 0.5f;
 
-    [BoxGroup("冻结")]
+    [FoldoutGroup("冻结")]
     [LabelText("解冻特效")]
     [ValueDropdown("GetAllFXTypeNames")]
     public string ThawFX;
 
-    [BoxGroup("冻结")]
+    [FoldoutGroup("冻结")]
     [LabelText("冻结特效")]
     [ValueDropdown("GetAllFXTypeNames")]
     public string FrozeFX;
@@ -220,7 +239,7 @@ public partial class Box : Entity
 
     [NonSerialized]
     [ShowInInspector]
-    [BoxGroup("箱子被动技能")]
+    [FoldoutGroup("箱子被动技能")]
     [LabelText("箱子被动技能")]
     [FormerlySerializedAs("RawBoxFunctions")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
@@ -336,7 +355,7 @@ public partial class Box : Entity
     [HideInPrefabAssets]
     [ReadOnly]
     [ShowInInspector]
-    [BoxGroup("状态")]
+    [FoldoutGroup("状态")]
     [LabelText("上一个移动状态")]
     private States LastState = States.Static;
 
@@ -345,7 +364,7 @@ public partial class Box : Entity
     [HideInPrefabAssets]
     [ReadOnly]
     [ShowInInspector]
-    [BoxGroup("状态")]
+    [FoldoutGroup("状态")]
     [LabelText("移动状态")]
     public States State
     {
@@ -972,7 +991,7 @@ public partial class Box : Entity
 #if UNITY_EDITOR
     [HideInPlayMode]
     [HideInPrefabAssets]
-    [BoxGroup("模组编辑器")]
+    [FoldoutGroup("模组编辑器")]
     [Button("替换Box", ButtonSizes.Large)]
     [GUIColor(0f, 1f, 1f)]
     private void ReplaceBox_Editor()
@@ -1002,7 +1021,7 @@ public partial class Box : Entity
     [HideInPrefabAssets]
     [ShowInInspector]
     [NonSerialized]
-    [BoxGroup("模组编辑器")]
+    [FoldoutGroup("模组编辑器")]
     [LabelText("替换Box类型")]
     [ValueDropdown("GetAllBoxTypeNames")]
     private string ReplaceBoxTypeName = "None";

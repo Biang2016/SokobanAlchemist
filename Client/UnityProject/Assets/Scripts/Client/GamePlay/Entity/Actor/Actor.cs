@@ -53,21 +53,25 @@ public class Actor : Entity
     [ReadOnly]
     [DisplayAsString]
     [LabelText("移动倾向")]
+    [FoldoutGroup("战斗状态")]
     public Vector3 CurMoveAttempt;
 
     [ReadOnly]
     [DisplayAsString]
     [LabelText("上一帧移动倾向")]
+    [FoldoutGroup("战斗状态")]
     public Vector3 LastMoveAttempt;
 
     [ReadOnly]
     [DisplayAsString]
     [LabelText("扔箱子瞄准点移动倾向")]
+    [FoldoutGroup("战斗状态")]
     public Vector3 CurThrowMoveAttempt;
 
     [ReadOnly]
     [DisplayAsString]
     [LabelText("扔箱子瞄准点偏移")]
+    [FoldoutGroup("战斗状态")]
     public Vector3 CurThrowPointOffset;
 
     internal Vector3 CurForward
@@ -79,7 +83,7 @@ public class Actor : Entity
     [DisplayAsString]
     [ShowInInspector]
     [LabelText("世界坐标")]
-    [BoxGroup("战斗状态")]
+    [FoldoutGroup("战斗状态")]
     public GridPos3D CurWorldGP
     {
         get { return curWorldGP; }
@@ -97,147 +101,147 @@ public class Actor : Entity
 
     [DisplayAsString]
     [LabelText("上帧世界坐标")]
-    [BoxGroup("战斗状态")]
+    [FoldoutGroup("战斗状态")]
     public GridPos3D LastWorldGP;
 
     [LabelText("阵营")]
-    [BoxGroup("战斗状态")]
+    [FoldoutGroup("战斗状态")]
     [DisableInPlayMode]
     public Camp Camp;
 
     [ShowInInspector]
     [HideInEditorMode]
     [LabelText("受伤无敌时间")]
-    [BoxGroup("战斗状态")]
+    [FoldoutGroup("战斗状态")]
     public float ImmuneTimeAfterDamaged = 0.4f;
 
-    [BoxGroup("特效")]
+    [FoldoutGroup("特效")]
     [LabelText("踢特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
     public string KickFX;
 
-    [BoxGroup("特效")]
+    [FoldoutGroup("特效")]
     [LabelText("踢特效尺寸")]
     public float KickFXScale = 1f;
 
-    [BoxGroup("特效")]
+    [FoldoutGroup("特效")]
     [LabelText("踢特效锚点")]
     public Transform KickFXPivot;
 
-    [BoxGroup("特效")]
+    [FoldoutGroup("特效")]
     [LabelText("受伤特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
     public string InjureFX;
 
-    [BoxGroup("特效")]
+    [FoldoutGroup("特效")]
     [LabelText("受伤特效尺寸")]
     public float InjureFXScale = 1f;
 
-    [BoxGroup("特效")]
+    [FoldoutGroup("特效")]
     [LabelText("生命恢复特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
     public string HealFX;
 
-    [BoxGroup("特效")]
+    [FoldoutGroup("特效")]
     [LabelText("生命恢复特效尺寸")]
     [FormerlySerializedAs("GainLifeFXScale")]
     public float HealFXScale = 1f;
 
-    [BoxGroup("特效")]
+    [FoldoutGroup("特效")]
     [LabelText("命数增加特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
     public string GainLifeFX;
 
-    [BoxGroup("特效")]
+    [FoldoutGroup("特效")]
     [LabelText("命数增加特效尺寸")]
     [FormerlySerializedAs("GainLifeFXScale")]
     public float GainLifeFXScale = 1f;
 
-    [BoxGroup("特效")]
+    [FoldoutGroup("特效")]
     [LabelText("死亡特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
     public string DieFX;
 
-    [BoxGroup("特效")]
+    [FoldoutGroup("特效")]
     [LabelText("死亡特效尺寸")]
     public float DieFXScale = 1f;
 
-    [BoxGroup("初始战斗数值")]
+    [FoldoutGroup("初始战斗数值")]
     [HideLabel]
     [DisableInPlayMode]
     public ActorStatPropSet RawActorStatPropSet = new ActorStatPropSet(); // 干数据，禁修改
 
-    [BoxGroup("当前战斗数值")]
+    [FoldoutGroup("当前战斗数值")]
     [HideLabel]
     [HideInEditorMode]
     public ActorStatPropSet ActorStatPropSet; // 湿数据，每次Recycle置空，使用时从干数据拷贝
 
-    [BoxGroup("手感")]
+    [FoldoutGroup("手感")]
     [LabelText("Dash力度")]
     public float DashForce = 10f;
 
-    [BoxGroup("手感")]
+    [FoldoutGroup("手感")]
     [LabelText("起步速度")]
     public float Accelerate = 10f;
 
-    [BoxGroup("手感")]
+    [FoldoutGroup("手感")]
     [LabelText("瞄准点移动速度")]
     public float ThrowAimMoveSpeed = 10f;
 
     protected float ThrowRadiusMin = 0.75f;
 
-    [BoxGroup("手感")]
+    [FoldoutGroup("手感")]
     [LabelText("踢箱子力量")]
     public float KickForce = 5;
 
-    [BoxGroup("配置")]
+    [FoldoutGroup("推踢扔举能力")]
     [LabelText("扔半径")]
     public float ThrowRadius = 10f;
 
     [BoxNameList]
-    [BoxGroup("能力")]
+    [FoldoutGroup("推踢扔举能力")]
     [LabelText("推箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public List<string> PushableBoxList = new List<string>();
 
     [BoxNameList]
-    [BoxGroup("能力")]
+    [FoldoutGroup("推踢扔举能力")]
     [LabelText("踢箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public List<string> KickableBoxList = new List<string>();
 
     [BoxNameList]
-    [BoxGroup("能力")]
+    [FoldoutGroup("推踢扔举能力")]
     [LabelText("举箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public List<string> LiftableBoxList = new List<string>();
 
     [BoxNameList]
-    [BoxGroup("能力")]
+    [FoldoutGroup("推踢扔举能力")]
     [LabelText("扔箱子类型")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public List<string> ThrowableBoxList = new List<string>();
 
     [BoxName]
-    [BoxGroup("死亡")]
+    [FoldoutGroup("死亡")]
     [LabelText("死亡掉落箱子")]
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public string DieDropBoxTypeName = "None";
 
-    [BoxGroup("死亡")]
+    [FoldoutGroup("死亡")]
     [LabelText("死亡掉落箱子概率%")]
     public uint DieDropBoxProbabilityPercent;
 
-    [BoxGroup("敌兵专用")]
+    [FoldoutGroup("敌兵专用")]
     [LabelText("碰撞伤害")]
     public int CollideDamage;
 
-    [BoxGroup("冻结")]
+    [FoldoutGroup("冻结")]
     [LabelText("冻结特效")]
     [ValueDropdown("GetAllFXTypeNames", IsUniqueList = true, DropdownTitle = "选择FX类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public string FrozeFX;
 
-    [BoxGroup("冻结")]
+    [FoldoutGroup("冻结")]
     [LabelText("解冻特效")]
     [ValueDropdown("GetAllFXTypeNames", IsUniqueList = true, DropdownTitle = "选择FX类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public string ThawFX;
@@ -246,8 +250,8 @@ public class Actor : Entity
 
     [NonSerialized]
     [ShowInInspector]
-    [BoxGroup("Actor被动技能")]
-    [LabelText("Actor被动技能")]
+    [FoldoutGroup("Actor被动技能")]
+    [LabelText("被动技能列表")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<ActorPassiveSkill> RawActorPassiveSkills = new List<ActorPassiveSkill>(); // 干数据，禁修改
 
@@ -316,8 +320,8 @@ public class Actor : Entity
 
     [NonSerialized]
     [ShowInInspector]
-    [BoxGroup("Actor主动技能")]
-    [LabelText("Actor主动技能")]
+    [FoldoutGroup("Actor主动技能")]
+    [LabelText("主动技能列表")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<ActorActiveSkill> RawActorActiveSkills = new List<ActorActiveSkill>(); // 干数据，禁修改
 
@@ -376,7 +380,7 @@ public class Actor : Entity
 
     [NonSerialized]
     [ShowInInspector]
-    [BoxGroup("冻结")]
+    [FoldoutGroup("冻结")]
     [LabelText("冻结的箱子被动技能")]
     [FormerlySerializedAs("RawFrozenBoxFunctions")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
@@ -419,7 +423,7 @@ public class Actor : Entity
     }
 
     [ReadOnly]
-    [BoxGroup("战斗状态")]
+    [FoldoutGroup("战斗状态")]
     [LabelText("移动状态")]
     public MovementStates MovementState = MovementStates.Static;
 
@@ -430,7 +434,7 @@ public class Actor : Entity
     }
 
     [ReadOnly]
-    [BoxGroup("战斗状态")]
+    [FoldoutGroup("战斗状态")]
     [LabelText("推箱子状态")]
     public PushStates PushState = PushStates.None;
 
@@ -443,7 +447,7 @@ public class Actor : Entity
     }
 
     [ReadOnly]
-    [BoxGroup("战斗状态")]
+    [FoldoutGroup("战斗状态")]
     [LabelText("扔技能状态")]
     public ThrowStates ThrowState = ThrowStates.None;
 
