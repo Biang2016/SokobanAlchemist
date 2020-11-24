@@ -336,7 +336,6 @@ public class Actor : Entity
 
     private void InitActorActiveSkills()
     {
-        ActorForbidPushBox = false;
         ActorActiveSkills.Clear();
         ActorActiveSkillDict.Clear();
         foreach (ActorActiveSkill rawAAS in RawActorActiveSkills)

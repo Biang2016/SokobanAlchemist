@@ -10,17 +10,17 @@ public class ActorActiveSkill_Attack : ActorActiveSkill_AreaCast
     [LabelText("攻击伤害")]
     public ActorPropertyType APT_AttackDamage;
 
-    internal ActorPropertyValue AttackDamage;
+    internal ActorPropertyValue AttackDamage = new ActorPropertyValue();
 
     [LabelText("攻击燃烧伤害")]
     public ActorPropertyType APT_AttackDamage_Firing;
 
-    internal ActorPropertyValue AttackDamage_Firing;
+    internal ActorPropertyValue AttackDamage_Firing = new ActorPropertyValue();
 
     [LabelText("攻击冰冻伤害")]
     public ActorPropertyType APT_AttackDamage_Frozen;
 
-    internal ActorPropertyValue AttackDamage_Frozen;
+    internal ActorPropertyValue AttackDamage_Frozen = new ActorPropertyValue();
 
     public override void OnInit()
     {
@@ -36,18 +36,6 @@ public class ActorActiveSkill_Attack : ActorActiveSkill_AreaCast
         UnBindActorProperty(AttackDamage, APT_AttackDamage);
         UnBindActorProperty(AttackDamage_Firing, APT_AttackDamage_Firing);
         UnBindActorProperty(AttackDamage_Frozen, APT_AttackDamage_Frozen);
-    }
-
-    public override bool TriggerActiveSkill()
-    {
-        if (base.TriggerActiveSkill())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     protected override void WingUp()

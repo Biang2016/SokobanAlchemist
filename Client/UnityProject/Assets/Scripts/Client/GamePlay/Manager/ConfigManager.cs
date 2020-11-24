@@ -196,6 +196,10 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static readonly TypeDefineConfig<FX> FXTypeDefineDict = new TypeDefineConfig<FX>("FX", "/Resources/Prefabs/FX", true);
 
     [ShowInInspector]
+    [LabelText("BattleIndicator类型表")]
+    public static readonly TypeDefineConfig<BattleIndicator> BattleIndicatorTypeDefineDict = new TypeDefineConfig<BattleIndicator>("BattleIndicator", "/Resources/Prefabs/BattleIndicator", true);
+
+    [ShowInInspector]
     [LabelText("世界配置表")]
     public static readonly Dictionary<ushort, WorldData> WorldDataConfigDict = new Dictionary<ushort, WorldData>();
 
@@ -228,6 +232,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         WorldModuleTypeDefineDict.Clear();
         WorldTypeDefineDict.Clear();
         FXTypeDefineDict.Clear();
+        BattleIndicatorTypeDefineDict.Clear();
         WorldDataConfigDict.Clear();
         WorldModuleDataConfigDict.Clear();
     }
@@ -252,6 +257,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         WorldModuleTypeDefineDict.ExportTypeNames();
         WorldTypeDefineDict.ExportTypeNames();
         FXTypeDefineDict.ExportTypeNames();
+        BattleIndicatorTypeDefineDict.ExportTypeNames();
         SortWorldAndWorldModule();
         ExportBuffAttributeMatrix(dataFormat);
         ExportWorldDataConfig(dataFormat);
@@ -442,6 +448,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         WorldModuleTypeDefineDict.LoadTypeNames();
         WorldTypeDefineDict.LoadTypeNames();
         FXTypeDefineDict.LoadTypeNames();
+        BattleIndicatorTypeDefineDict.LoadTypeNames();
         LoadBuffAttributeMatrix(dataFormat);
         LoadWorldDataConfig(dataFormat);
         LoadWorldModuleDataConfig(dataFormat);
@@ -591,6 +598,14 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     {
         LoadAllConfigs();
         List<string> res = FXTypeDefineDict.TypeIndexDict.Keys.ToList();
+        if (withNone) res.Insert(0, "None");
+        return res;
+    }
+
+    public static List<string> GetAllBattleIndicatorTypeNames(bool withNone = true)
+    {
+        LoadAllConfigs();
+        List<string> res = BattleIndicatorTypeDefineDict.TypeIndexDict.Keys.ToList();
         if (withNone) res.Insert(0, "None");
         return res;
     }
@@ -761,6 +776,26 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         FXTypeDefineDict.TypeIndexDict.TryGetValue(fxTypeName, out ushort fxTypeIndex);
         return fxTypeIndex;
+    }
+
+    public static string GetBattleIndicatorName(ushort battleIndicatorTypeIndex)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        BattleIndicatorTypeDefineDict.TypeNameDict.TryGetValue(battleIndicatorTypeIndex, out string battleIndicatorTypeName);
+        return battleIndicatorTypeName;
+    }
+
+    public static ushort GetBattleIndicatorTypeIndex(string battleIndicatorTypeName)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        if (string.IsNullOrEmpty(battleIndicatorTypeName))
+        {
+            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的BattleIndicator Prefab", "#D1004D", battleIndicatorTypeName));
+            return 0;
+        }
+
+        BattleIndicatorTypeDefineDict.TypeIndexDict.TryGetValue(battleIndicatorTypeName, out ushort battleIndicatorTypeIndex);
+        return battleIndicatorTypeIndex;
     }
 
     public static WorldData GetWorldDataConfig(ushort worldTypeIndex)

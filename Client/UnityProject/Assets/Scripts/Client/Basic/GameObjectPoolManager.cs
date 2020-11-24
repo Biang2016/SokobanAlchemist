@@ -19,6 +19,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         WorldDeadZoneTrigger,
         BoxEffectHelper,
         BoxColliderHelper,
+        BattleIndicator,
         DebugPanelColumn,
         DebugPanelButton,
         DebugPanelSlider,
@@ -36,6 +37,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         {PrefabNames.WorldDeadZoneTrigger, 5},
         {PrefabNames.BoxEffectHelper, 10},
         {PrefabNames.BoxColliderHelper, 100},
+        {PrefabNames.BattleIndicator, 10},
         {PrefabNames.DebugPanelColumn, 4},
         {PrefabNames.DebugPanelButton, 4},
         {PrefabNames.DebugPanelSlider, 4},
@@ -50,6 +52,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     public Dictionary<ushort, GameObjectPool> EnemyDict = new Dictionary<ushort, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> LevelTriggerDict = new Dictionary<ushort, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> FXDict = new Dictionary<ushort, GameObjectPool>();
+    public Dictionary<ushort, GameObjectPool> BattleIndicatorDict = new Dictionary<ushort, GameObjectPool>();
     public Dictionary<MarkerType, GameObjectPool> MarkerDict = new Dictionary<MarkerType, GameObjectPool>();
     public Dictionary<ProjectileType, GameObjectPool> ProjectileDict = new Dictionary<ProjectileType, GameObjectPool>();
     public Dictionary<BattleTipPrefabType, GameObjectPool> BattleUIDict = new Dictionary<BattleTipPrefabType, GameObjectPool>();
@@ -121,6 +124,21 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 GameObjectPool pool = go.AddComponent<GameObjectPool>();
                 pool.transform.SetParent(Root);
                 LevelTriggerDict.Add(kv.Key, pool);
+                PoolObject po = go_Prefab.GetComponent<PoolObject>();
+                pool.Initiate(po, 20);
+            }
+        }
+
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.BattleIndicatorTypeDefineDict.TypeNameDict)
+        {
+            string prefabName = kv.Value;
+            GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
+            if (go_Prefab)
+            {
+                GameObject go = new GameObject("Pool_" + prefabName);
+                GameObjectPool pool = go.AddComponent<GameObjectPool>();
+                pool.transform.SetParent(Root);
+                BattleIndicatorDict.Add(kv.Key, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
                 pool.Initiate(po, 20);
             }

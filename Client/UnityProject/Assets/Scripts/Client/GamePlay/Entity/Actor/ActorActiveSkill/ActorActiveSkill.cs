@@ -19,22 +19,22 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
     [LabelText("冷却时间")]
     public ActorPropertyType APT_Cooldown;
 
-    internal ActorPropertyValue CooldownTime;
+    internal ActorPropertyValue CooldownTime = new ActorPropertyValue();
 
     [LabelText("施法时间")]
     public ActorPropertyType APT_CastDuration;
 
-    internal ActorPropertyValue CastDuration;
+    internal ActorPropertyValue CastDuration = new ActorPropertyValue();
 
     [LabelText("前摇")]
     public ActorPropertyType APT_WingUp;
 
-    internal ActorPropertyValue WingUpTime;
+    internal ActorPropertyValue WingUpTime = new ActorPropertyValue();
 
     [LabelText("后摇")]
     public ActorPropertyType APT_Recovery;
 
-    internal ActorPropertyValue RecoveryTime;
+    internal ActorPropertyValue RecoveryTime = new ActorPropertyValue();
 
     [HideInInspector]
     public UnityAction<ActiveSkillPhase, ActiveSkillPhase> OnSkillPhaseChanged;
@@ -76,6 +76,8 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
     private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
 
     private IEnumerable<string> GetAllEnemyNames => ConfigManager.GetAllEnemyNames();
+
+    private IEnumerable<string> GetAllBattleIndicatorNames => ConfigManager.GetAllBattleIndicatorTypeNames();
 
     public virtual void OnInit()
     {
