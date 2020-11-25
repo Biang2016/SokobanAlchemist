@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -13,47 +14,51 @@ public class ActorActiveSkill_Attack : ActorActiveSkill_AreaCast
 
     internal ActorPropertyValue AttackDamage = new ActorPropertyValue();
 
-    [LabelText("攻击燃烧伤害")]
-    public ActorPropertyType APT_AttackDamage_Firing;
+    [LabelText("攻击附加燃烧值")]
+    public ActorPropertyType APT_AttackAttach_FiringValue;
 
-    internal ActorPropertyValue AttackDamage_Firing = new ActorPropertyValue();
+    internal ActorPropertyValue AttackAttach_FiringValue = new ActorPropertyValue();
 
-    [LabelText("攻击冰冻伤害")]
-    public ActorPropertyType APT_AttackDamage_Frozen;
+    [LabelText("攻击附加冰冻值")]
+    public ActorPropertyType APT_AttackAttach_FrozenValue;
 
-    internal ActorPropertyValue AttackDamage_Frozen = new ActorPropertyValue();
+    internal ActorPropertyValue AttackAttach_FrozenValue = new ActorPropertyValue();
 
     public override void OnInit()
     {
         base.OnInit();
         BindActorProperty(AttackDamage, APT_AttackDamage);
-        BindActorProperty(AttackDamage_Firing, APT_AttackDamage_Firing);
-        BindActorProperty(AttackDamage_Frozen, APT_AttackDamage_Frozen);
+        BindActorProperty(AttackAttach_FiringValue, APT_AttackAttach_FiringValue);
+        BindActorProperty(AttackAttach_FrozenValue, APT_AttackAttach_FrozenValue);
     }
 
     public override void OnUnInit()
     {
         base.OnUnInit();
         UnBindActorProperty(AttackDamage, APT_AttackDamage);
-        UnBindActorProperty(AttackDamage_Firing, APT_AttackDamage_Firing);
-        UnBindActorProperty(AttackDamage_Frozen, APT_AttackDamage_Frozen);
+        UnBindActorProperty(AttackAttach_FiringValue, APT_AttackAttach_FiringValue);
+        UnBindActorProperty(AttackAttach_FrozenValue, APT_AttackAttach_FrozenValue);
     }
 
     protected override void Cast()
     {
         base.Cast();
+        int targetCount = 0;
+        HashSet<uint> actorGUIDSet = new HashSet<uint>();
         foreach (GridPos3D gp in RealSkillEffectGPs)
         {
             Collider[] colliders = Physics.OverlapSphere(gp.ToVector3(), 0.3f, LayerManager.Instance.GetTargetActorLayerMask(Actor.Camp, TargetCamp));
             foreach (Collider c in colliders)
             {
                 Actor actor = c.GetComponentInParent<Actor>();
-                if (actor != null)
+                if (actor != null && !actorGUIDSet.Contains(actor.GUID))
                 {
+                    actorGUIDSet.Add(actor.GUID);
                     actor.ActorBattleHelper.Damage(Actor, AttackDamage.Value);
-                    actor.ActorBattleHelper.Damage(Actor, AttackDamage_Firing.Value);
-                    actor.ActorBattleHelper.Damage(Actor, AttackDamage_Frozen.Value);
-                    return;
+                    actor.ActorStatPropSet.FiringValue.Value += AttackAttach_FiringValue.Value;
+                    actor.ActorStatPropSet.FrozenValue.Value += AttackAttach_FrozenValue.Value;
+                    targetCount++;
+                    if (targetCount >= MaxTargetCount) return;
                 }
             }
         }
@@ -64,8 +69,8 @@ public class ActorActiveSkill_Attack : ActorActiveSkill_AreaCast
         base.ChildClone(newAS);
         ActorActiveSkill_Attack asAttack = (ActorActiveSkill_Attack) newAS;
         asAttack.APT_AttackDamage = APT_AttackDamage;
-        asAttack.APT_AttackDamage_Firing = APT_AttackDamage_Firing;
-        asAttack.APT_AttackDamage_Frozen = APT_AttackDamage_Frozen;
+        asAttack.APT_AttackAttach_FiringValue = APT_AttackAttach_FiringValue;
+        asAttack.APT_AttackAttach_FrozenValue = APT_AttackAttach_FrozenValue;
     }
 
     public override void CopyDataFrom(ActorActiveSkill srcData)
@@ -73,7 +78,7 @@ public class ActorActiveSkill_Attack : ActorActiveSkill_AreaCast
         base.CopyDataFrom(srcData);
         ActorActiveSkill_Attack asAttack = (ActorActiveSkill_Attack) srcData;
         APT_AttackDamage = asAttack.APT_AttackDamage;
-        APT_AttackDamage_Firing = asAttack.APT_AttackDamage_Firing;
-        APT_AttackDamage_Frozen = asAttack.APT_AttackDamage_Frozen;
+        APT_AttackAttach_FiringValue = asAttack.APT_AttackAttach_FiringValue;
+        APT_AttackAttach_FrozenValue = asAttack.APT_AttackAttach_FrozenValue;
     }
 }

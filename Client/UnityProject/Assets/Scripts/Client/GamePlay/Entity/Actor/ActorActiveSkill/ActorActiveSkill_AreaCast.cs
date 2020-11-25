@@ -63,6 +63,9 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
     [ValidateInput("ValidateCastAreaTypeAndTargetInclination", "当前施法偏好和判定范围类型不兼容")]
     public TargetInclination M_TargetInclination;
 
+    [LabelText("最大目标数量")]
+    public int MaxTargetCount;
+
     private bool ValidateCastAreaTypeAndTargetInclination(TargetInclination newValue)
     {
         if (M_CastAreaType == CastAreaType.FrontRectCast || M_CastAreaType == CastAreaType.FrontFanCast)
@@ -130,6 +133,13 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
     [LabelText("技能范围标识描边色模糊")]
     public Color GridWarningColorBorderDim;
 
+    [LabelText("释放特效")]
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择技能释放特效")]
+    public string CastFX;
+
+    [LabelText("释放特效尺寸")]
+    public float CastFXScale;
+
     internal Dictionary<GridPos3D, GridWarning> GridWarningDict = new Dictionary<GridPos3D, GridWarning>();
 
     public override void OnInit()
@@ -192,7 +202,7 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
             zMax_SkillCastPos -= Depth / 2 + 1 - 1;
         }
 
-        if (targetGP.x <= xMax && targetGP.x >= xMin && targetGP.z <= zMax && targetGP.z >= zMin)
+        if ((targetGP.x <= xMax && targetGP.x >= xMin && targetGP.z <= zMax && targetGP.z >= zMin) || DontNeedCastingArea)
         {
             switch (M_TargetInclination)
             {
@@ -270,7 +280,7 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
                     {
                         for (int zDiff = 1 * zSign; Mathf.Abs(zDiff) <= Depth; zDiff += zSign)
                         {
-                            GridPos3D gp = skillCastPosition + new GridPos3D(xDiff, 0, zDiff);
+                            GridPos3D gp = Actor.CurWorldGP + new GridPos3D(xDiff, 0, zDiff);
                             AddGP(gp);
                         }
                     }
@@ -281,7 +291,7 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
                     {
                         for (int zDiff = -(EffectRadius - 1); zDiff <= (EffectRadius - 1); zDiff++)
                         {
-                            GridPos3D gp = skillCastPosition + new GridPos3D(xDiff, 0, zDiff);
+                            GridPos3D gp = Actor.CurWorldGP + new GridPos3D(xDiff, 0, zDiff);
                             AddGP(gp);
                         }
                     }
@@ -301,7 +311,7 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
                         {
                             if (Mathf.Abs(xDiff) < Mathf.Abs(zDiff))
                             {
-                                GridPos3D gp = skillCastPosition + new GridPos3D(xDiff, 0, zDiff);
+                                GridPos3D gp = Actor.CurWorldGP + new GridPos3D(xDiff, 0, zDiff);
                                 AddGP(gp);
                             }
                         }
@@ -315,7 +325,7 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
                         {
                             if (Mathf.Abs(zDiff) < Mathf.Abs(xDiff))
                             {
-                                GridPos3D gp = skillCastPosition + new GridPos3D(xDiff, 0, zDiff);
+                                GridPos3D gp = Actor.CurWorldGP + new GridPos3D(xDiff, 0, zDiff);
                                 AddGP(gp);
                             }
                         }
@@ -367,6 +377,18 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
     {
         base.Cast();
         UpdateSkillEffectRealPositions();
+
+        if (!string.IsNullOrWhiteSpace(CastFX))
+        {
+            ushort fxTypeIndex = ConfigManager.GetFXTypeIndex(CastFX);
+            if (fxTypeIndex != 0)
+            {
+                foreach (GridPos3D gp in RealSkillEffectGPs)
+                {
+                    FX fx = FXManager.Instance.PlayFX(CastFX, gp.ToVector3(), CastFXScale);
+                }
+            }
+        }
     }
 
     protected override void Recover()
@@ -399,6 +421,7 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
         ActorActiveSkill_AreaCast asAreaCast = (ActorActiveSkill_AreaCast) newAS;
         asAreaCast.M_CastAreaType = M_CastAreaType;
         asAreaCast.M_TargetInclination = M_TargetInclination;
+        asAreaCast.MaxTargetCount = MaxTargetCount;
         asAreaCast.CastingRadius = CastingRadius;
         asAreaCast.EffectRadius = EffectRadius;
         asAreaCast.Width = Width;
@@ -411,6 +434,8 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
         asAreaCast.GridWarningColorFill = GridWarningColorFill;
         asAreaCast.GridWarningColorBorderHighlight = GridWarningColorBorderHighlight;
         asAreaCast.GridWarningColorBorderDim = GridWarningColorBorderDim;
+        asAreaCast.CastFX = CastFX;
+        asAreaCast.CastFXScale = CastFXScale;
     }
 
     public override void CopyDataFrom(ActorActiveSkill srcData)
@@ -419,6 +444,7 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
         ActorActiveSkill_AreaCast asAreaCast = (ActorActiveSkill_AreaCast) srcData;
         M_CastAreaType = asAreaCast.M_CastAreaType;
         M_TargetInclination = asAreaCast.M_TargetInclination;
+        MaxTargetCount = asAreaCast.MaxTargetCount;
         CastingRadius = asAreaCast.CastingRadius;
         EffectRadius = asAreaCast.EffectRadius;
         Width = asAreaCast.Width;
@@ -431,5 +457,7 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
         GridWarningColorFill = asAreaCast.GridWarningColorFill;
         GridWarningColorBorderHighlight = asAreaCast.GridWarningColorBorderHighlight;
         GridWarningColorBorderDim = asAreaCast.GridWarningColorBorderDim;
+        CastFX = asAreaCast.CastFX;
+        CastFXScale = asAreaCast.CastFXScale;
     }
 }

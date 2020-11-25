@@ -77,6 +77,8 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
 
     private IEnumerable<string> GetAllEnemyNames => ConfigManager.GetAllEnemyNames();
 
+    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
+
     private IEnumerable<string> GetAllBattleIndicatorNames => ConfigManager.GetAllBattleIndicatorTypeNames();
 
     public virtual void OnInit()

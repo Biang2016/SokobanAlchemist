@@ -394,6 +394,43 @@ namespace BiangStudio.GameDataFormat.Grid
             return new Vector3(x, y, z);
         }
 
+        /// <summary>
+        /// clamp X, Y, Z inside [-1, 1]
+        /// </summary>
+        /// <returns></returns>
+        public GridPos3D ClampOneUnit()
+        {
+            int newX = 0;
+            int newY = 0;
+            int newZ = 0;
+            if (x > 0) newX = 1;
+            if (x < 0) newX = -1;
+            if (x == 0) newX = 0;
+            if (y > 0) newY = 1;
+            if (y < 0) newY = -1;
+            if (y == 0) newY = 0;
+            if (z > 0) newZ = 1;
+            if (z < 0) newZ = -1;
+            if (z == 0) newZ = 0;
+            return new GridPos3D(newX, newY, newZ);
+        }
+
+        public GridPos3D Normalized()
+        {
+            int maxAxis = 0;
+            if (Mathf.Abs(x) >= Mathf.Abs(y) && Mathf.Abs(x) >= Mathf.Abs(z)) maxAxis = 0;
+            if (Mathf.Abs(y) >= Mathf.Abs(x) && Mathf.Abs(y) >= Mathf.Abs(z)) maxAxis = 1;
+            if (Mathf.Abs(z) >= Mathf.Abs(x) && Mathf.Abs(z) >= Mathf.Abs(y)) maxAxis = 2;
+            switch (maxAxis)
+            {
+                case 0: return x > 0 ? Right : (x < 0 ? Left : Zero);
+                case 1: return y > 0 ? Up : (y < 0 ? Down : Zero);
+                case 2: return z > 0 ? Forward : (z < 0 ? Back : Zero);
+            }
+
+            return Zero;
+        }
+
         public static GridPos3D operator -(GridPos3D a)
         {
             return new GridPos3D(-a.x, -a.y, -a.z);

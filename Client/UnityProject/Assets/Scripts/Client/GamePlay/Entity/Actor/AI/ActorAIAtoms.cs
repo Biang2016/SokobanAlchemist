@@ -484,6 +484,23 @@ public static class ActorAIAtoms
     #region 战斗
 
     [Category("敌兵/战斗")]
+    [Name("面向玩家")]
+    [Description("面向玩家")]
+    public class BT_Enemy_FaceToPlayer : BTNode
+    {
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
+            GridPos3D targetGP = BattleManager.Instance.Player1.CurWorldGP;
+            GridPos3D curGP = Actor.CurWorldGP;
+            GridPos3D diff = targetGP - curGP;
+            Actor.CurForward = diff.Normalized().ToVector3();
+            return Status.Success;
+        }
+    }
+
+    [Category("敌兵/战斗")]
     [Name("释放技能")]
     [Description("释放技能")]
     public class BT_Enemy_TriggerSkill : BTNode
@@ -495,6 +512,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
+            if (string.IsNullOrWhiteSpace(SkillClassName.value)) return Status.Failure;
             if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))
             {
                 Actor.ActorAIAgent.TargetActor = BattleManager.Instance.Player1;
@@ -525,6 +543,7 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (string.IsNullOrWhiteSpace(SkillClassName.value)) return Status.Failure;
             if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))
             {
                 if (aas.SkillPhase == ActiveSkillPhase.CoolingDown || aas.SkillPhase == ActiveSkillPhase.Ready)
@@ -552,11 +571,14 @@ public static class ActorAIAtoms
         public override IEnumerator Invoke()
         {
             if (Actor == null || Actor.ActorAIAgent == null) yield return null;
-            if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))
+            if (!string.IsNullOrWhiteSpace(SkillClassName.value))
             {
-                while (aas.SkillPhase != ActiveSkillPhase.CoolingDown && aas.SkillPhase != ActiveSkillPhase.Ready)
+                if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))
                 {
-                    yield return null;
+                    while (aas.SkillPhase != ActiveSkillPhase.CoolingDown && aas.SkillPhase != ActiveSkillPhase.Ready)
+                    {
+                        yield return null;
+                    }
                 }
             }
         }
@@ -573,6 +595,7 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (string.IsNullOrWhiteSpace(SkillClassName.value)) return Status.Failure;
             if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))
             {
                 aas.Interrupt();

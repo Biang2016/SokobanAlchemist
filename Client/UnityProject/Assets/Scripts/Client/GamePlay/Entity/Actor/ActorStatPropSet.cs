@@ -126,12 +126,12 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
     public ActorProperty AttackDamage = new ActorProperty(ActorPropertyType.AttackDamage);
 
     [BoxGroup("攻击")]
-    [LabelText("@\"攻击燃烧伤害\t\"+AttackDamage_Firing")]
-    public ActorProperty AttackDamage_Firing = new ActorProperty(ActorPropertyType.AttackDamage_Firing);
+    [LabelText("@\"攻击附加燃烧值\t\"+AttackAttach_FiringValue")]
+    public ActorProperty AttackAttach_FiringValue = new ActorProperty(ActorPropertyType.AttackAttach_FiringValue);
 
     [BoxGroup("攻击")]
-    [LabelText("@\"攻击冰冻伤害\t\"+AttackDamage_Frozen")]
-    public ActorProperty AttackDamage_Frozen = new ActorProperty(ActorPropertyType.AttackDamage_Frozen);
+    [LabelText("@\"攻击附加冰冻值\t\"+AttackAttach_FrozenValue")]
+    public ActorProperty AttackAttach_FrozenValue = new ActorProperty(ActorPropertyType.AttackAttach_FrozenValue);
 
     [BoxGroup("攻击")]
     [LabelText("@\"攻击范围\t\"+AttackRange")]
@@ -196,8 +196,8 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         FiringRecovery.Initialize();
         FiringGrowthPercent.Initialize();
         AttackDamage.Initialize();
-        AttackDamage_Firing.Initialize();
-        AttackDamage_Frozen.Initialize();
+        AttackAttach_FiringValue.Initialize();
+        AttackAttach_FrozenValue.Initialize();
         AttackRange.Initialize();
         AttackCooldown.Initialize();
         AttackCastDuration.Initialize();
@@ -285,8 +285,8 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         #region AttackDamage
 
         PropertyDict.Add(ActorPropertyType.AttackDamage, AttackDamage);
-        PropertyDict.Add(ActorPropertyType.AttackDamage_Firing, AttackDamage_Firing);
-        PropertyDict.Add(ActorPropertyType.AttackDamage_Frozen, AttackDamage_Frozen);
+        PropertyDict.Add(ActorPropertyType.AttackAttach_FiringValue, AttackAttach_FiringValue);
+        PropertyDict.Add(ActorPropertyType.AttackAttach_FrozenValue, AttackAttach_FrozenValue);
         PropertyDict.Add(ActorPropertyType.AttackRange, AttackRange);
         PropertyDict.Add(ActorPropertyType.AttackCooldown, AttackCooldown);
         PropertyDict.Add(ActorPropertyType.AttackCastDuration, AttackCastDuration);
@@ -364,8 +364,8 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         newStatPropSet.FiringFX = FiringFX;
         newStatPropSet.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
         newStatPropSet.AttackDamage = (ActorProperty) AttackDamage.Clone();
-        newStatPropSet.AttackDamage_Firing = (ActorProperty) AttackDamage_Firing.Clone();
-        newStatPropSet.AttackDamage_Frozen = (ActorProperty) AttackDamage_Frozen.Clone();
+        newStatPropSet.AttackAttach_FiringValue = (ActorProperty) AttackAttach_FiringValue.Clone();
+        newStatPropSet.AttackAttach_FrozenValue = (ActorProperty) AttackAttach_FrozenValue.Clone();
         newStatPropSet.AttackRange = (ActorProperty) AttackRange.Clone();
         newStatPropSet.AttackCooldown = (ActorProperty) AttackCooldown.Clone();
         newStatPropSet.AttackCastDuration = (ActorProperty)AttackCastDuration.Clone();
@@ -499,11 +499,11 @@ public enum ActorPropertyType
     [LabelText("攻击伤害")]
     AttackDamage = 400,
 
-    [LabelText("攻击燃烧伤害")]
-    AttackDamage_Firing = 401,
+    [LabelText("攻击附加燃烧值")]
+    AttackAttach_FiringValue = 401,
 
-    [LabelText("攻击冰冻伤害")]
-    AttackDamage_Frozen = 402,
+    [LabelText("攻击附加冰冻值")]
+    AttackAttach_FrozenValue = 402,
 
     [LabelText("攻击范围")]
     AttackRange = 500,

@@ -804,7 +804,14 @@ public class Actor : Entity
         if (ActorStatPropSet.ActionPoint.Value > ActorStatPropSet.DashConsumeActionPoint.GetModifiedValue)
         {
             ActorStatPropSet.ActionPoint.Value -= ActorStatPropSet.DashConsumeActionPoint.GetModifiedValue;
-            RigidBody.AddForce(CurForward * DashForce, ForceMode.VelocityChange);
+            if (ActorStatPropSet.IsFrozen)
+            {
+                ActorStatPropSet.FrozenValue.Value -= 50;
+            }
+            else
+            {
+                RigidBody.AddForce(CurForward * DashForce, ForceMode.VelocityChange);
+            }
         }
     }
 
@@ -813,7 +820,14 @@ public class Actor : Entity
         if (ActorStatPropSet.ActionPoint.Value > ActorStatPropSet.VaultConsumeActionPoint.GetModifiedValue)
         {
             ActorStatPropSet.ActionPoint.Value -= ActorStatPropSet.VaultConsumeActionPoint.GetModifiedValue;
-            ActorArtHelper.Vault();
+            if (ActorStatPropSet.IsFrozen)
+            {
+                ActorStatPropSet.FrozenValue.Value -= 50;
+            }
+            else
+            {
+                ActorArtHelper.Vault();
+            }
         }
     }
 
