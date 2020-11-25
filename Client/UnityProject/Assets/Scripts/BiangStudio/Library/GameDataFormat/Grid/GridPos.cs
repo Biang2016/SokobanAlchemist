@@ -328,6 +328,18 @@ namespace BiangStudio.GameDataFormat.Grid
 
         private static readonly GridPos3D zeroGP = new GridPos3D(0, 0, 0);
         public static GridPos3D Zero => zeroGP;
+        private static readonly GridPos3D rightGP = new GridPos3D(1, 0, 0);
+        public static GridPos3D Right => rightGP;
+        private static readonly GridPos3D leftGP = new GridPos3D(-1, 0, 0);
+        public static GridPos3D Left => leftGP;
+        private static readonly GridPos3D upGP = new GridPos3D(0, 1, 0);
+        public static GridPos3D Up => upGP;
+        private static readonly GridPos3D downGP = new GridPos3D(0, -1, 0);
+        public static GridPos3D Down => downGP;
+        private static readonly GridPos3D forwardGP = new GridPos3D(0, 0, 1);
+        public static GridPos3D Forward => forwardGP;
+        private static readonly GridPos3D backGP = new GridPos3D(0, 0, -1);
+        public static GridPos3D Back => backGP;
 
         public GridPos3D(int x, int y, int z)
         {

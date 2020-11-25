@@ -7,14 +7,20 @@ using UnityEngine.Serialization;
 
 public class BattleIndicator : PoolObject
 {
-    public Transform ArtRoot;
+    [SerializeField]
+    protected Transform ArtRoot;
 
-    [FormerlySerializedAs("MeshRenderer")]
-    public MeshRenderer MainMeshRenderer;
+    [SerializeField]
+    protected MeshRenderer MainMeshRenderer;
 
     void Awake()
     {
         mpb = new MaterialPropertyBlock();
+    }
+
+    public void SetShown(bool shown)
+    {
+        ArtRoot.gameObject.SetActive(shown);
     }
 
     public override void OnRecycled()
@@ -23,12 +29,14 @@ public class BattleIndicator : PoolObject
         ConstantYRotAngularVel = 0f;
         transform.DOPause();
         StopAllCoroutines();
+        SetShown(false);
         base.OnRecycled();
     }
 
     public override void OnUsed()
     {
         base.OnUsed();
+        SetShown(true);
     }
 
     protected MaterialPropertyBlock mpb;

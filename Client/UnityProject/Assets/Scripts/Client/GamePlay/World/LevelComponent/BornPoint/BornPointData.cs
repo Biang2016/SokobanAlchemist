@@ -14,14 +14,21 @@ public class BornPointData : LevelComponentData
     public string ActorType = "None";
 
     [LabelText("出生点花名")]
-    [ValidateInput("ValidateBornPointAlias", "请保证此项非空且唯一")]
+    [ValidateInput("ValidateBornPointAlias", "请保证此项非空时是唯一的；且一个模组只允许有一个玩家出生点花名为空")]
     public string BornPointAlias = "";
 
     public bool ValidateBornPointAlias(string alias)
     {
-        if (string.IsNullOrEmpty(alias))
+        if (ActorCategory == ActorCategory.Player)
         {
-            return false;
+            if (string.IsNullOrEmpty(alias))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         else
         {

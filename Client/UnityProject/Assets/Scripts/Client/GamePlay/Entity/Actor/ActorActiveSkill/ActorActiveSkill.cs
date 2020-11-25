@@ -94,6 +94,8 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
 
     public virtual void OnUnInit()
     {
+        Interrupt();
+        Clear();
         UnBindActorProperty(CooldownTime, APT_Cooldown);
         UnBindActorProperty(CastDuration, APT_CastDuration);
         UnBindActorProperty(WingUpTime, APT_WingUp);
@@ -116,15 +118,24 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
     public virtual bool TriggerActiveSkill()
     {
         if (skillPhase != ActiveSkillPhase.Ready || SkillCoroutine != null) return false;
-        SkillCoroutine = Actor.StartCoroutine(Co_CastSkill(WingUpTime.Value, CastDuration.Value, RecoveryTime.Value));
+        if (ValidateSkillTrigger())
+        {
+            SkillCoroutine = Actor.StartCoroutine(Co_CastSkill(WingUpTime.Value, CastDuration.Value, RecoveryTime.Value));
+        }
+
         return true;
     }
 
-    public virtual void FixedUpdate(float fixedDeltaTime)
+    protected virtual bool ValidateSkillTrigger()
+    {
+        return true;
+    }
+
+    public virtual void OnTick(float tickDeltaTime)
     {
         if (skillPhase == ActiveSkillPhase.CoolingDown)
         {
-            cooldownTimeTick -= fixedDeltaTime;
+            cooldownTimeTick -= tickDeltaTime * 1000f;
             if (cooldownTimeTick <= 0)
             {
                 cooldownTimeTick = 0;
@@ -140,21 +151,25 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
         SkillPhase = ActiveSkillPhase.WingingUp;
         // todo Actor 前摇animation， 且按时间缩放
         WingUp();
-        yield return new WaitForSeconds(wingUpTime);
+        yield return new WaitForSeconds(wingUpTime / 1000f);
 
         SkillPhase = ActiveSkillPhase.Casting;
         // todo Actor 攻击animation， 且按时间缩放
         // todo Actor 攻击逻辑
         Cast();
-        yield return new WaitForSeconds(castDuration);
+        yield return new WaitForSeconds(castDuration / 1000f);
 
         SkillPhase = ActiveSkillPhase.Recovering;
         // todo Actor 后摇animation， 且按时间缩放
         Recover();
-        yield return new WaitForSeconds(recoveryTime);
+        yield return new WaitForSeconds(recoveryTime / 1000f);
 
         SkillPhase = ActiveSkillPhase.CoolingDown;
         SkillCoroutine = null;
+    }
+
+    public virtual void Clear()
+    {
     }
 
     protected virtual void WingUp()
@@ -163,6 +178,7 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
 
     protected virtual void Cast()
     {
+        cooldownTimeTick = CooldownTime.Value;
     }
 
     protected virtual void Recover()
@@ -185,38 +201,6 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
         }
 
         // todo Actor reset animation
-    }
-
-    public virtual void OnRegisterLevelEventID()
-    {
-    }
-
-    public virtual void OnUnRegisterLevelEventID()
-    {
-    }
-
-    public virtual void OnFlyingCollisionEnter(Collision collision)
-    {
-    }
-
-    public virtual void OnKickedBoxCollisionEnter(Collision collision)
-    {
-    }
-
-    public virtual void OnThornTrapTriggerEnter(Collider collider)
-    {
-    }
-
-    public virtual void OnThornTrapTriggerStay(Collider collider)
-    {
-    }
-
-    public virtual void OnThornTrapTriggerExit(Collider collider)
-    {
-    }
-
-    public virtual void OnActorDie()
-    {
     }
 
     public ActorActiveSkill Clone()

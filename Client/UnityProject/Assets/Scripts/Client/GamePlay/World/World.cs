@@ -384,6 +384,29 @@ public class World : PoolObject
         return boxes;
     }
 
+    public bool BoxProject(GridPos3D dir, GridPos3D origin, int MaxDistance, bool touchBox, out GridPos3D worldGP, out Box firstBox)
+    {
+        firstBox = null;
+        worldGP = GridPos3D.Zero;
+        if (MaxDistance < 0) return false;
+        int distance = 0;
+        do
+        {
+            firstBox = GetBoxByGridPosition(origin + distance * dir, out WorldModule _, out GridPos3D _, false);
+            distance++;
+        } while (firstBox == null && distance <= MaxDistance);
+
+        if (firstBox != null)
+        {
+            worldGP = touchBox ? firstBox.WorldGP : firstBox.WorldGP - dir;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     #endregion
 
     #region MoveBox Calculators

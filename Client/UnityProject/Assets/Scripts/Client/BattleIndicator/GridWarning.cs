@@ -2,15 +2,19 @@
 
 public class GridWarning : BattleIndicator
 {
-    public MeshRenderer Fill;
-    public MeshRenderer BorderDim;
-    public MeshRenderer BorderHighlight;
+    [SerializeField]
+    private MeshRenderer Fill;
+
+    [SerializeField]
+    private MeshRenderer BorderDim;
+
+    [SerializeField]
+    private MeshRenderer BorderHighlight;
 
     public GridWarning SetFillColor(Color color)
     {
         Fill.GetPropertyBlock(mpb);
         mpb.SetColor("_Color", color);
-        mpb.SetColor("_EmissionColor", color);
         Fill.SetPropertyBlock(mpb);
         return this;
     }
@@ -19,7 +23,6 @@ public class GridWarning : BattleIndicator
     {
         BorderDim.GetPropertyBlock(mpb);
         mpb.SetColor("_Color", color);
-        mpb.SetColor("_EmissionColor", color);
         BorderDim.SetPropertyBlock(mpb);
         return this;
     }
@@ -28,7 +31,6 @@ public class GridWarning : BattleIndicator
     {
         BorderHighlight.GetPropertyBlock(mpb);
         mpb.SetColor("_Color", color);
-        mpb.SetColor("_EmissionColor", color);
         BorderHighlight.SetPropertyBlock(mpb);
         return this;
     }

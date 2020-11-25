@@ -13,6 +13,9 @@ public class ActorAIAgent
     public Box TargetBox;
     public GridPos3D TargetBoxGP;
 
+    public Actor TargetActor;
+    public GridPos3D TargetActorGP;
+
     public float StuckWithNavTask_Tick = 0;
 
     public ActorAIAgent(Actor actor)
@@ -26,6 +29,10 @@ public class ActorAIAgent
     public void Stop()
     {
         isStop = true;
+        TargetBox = null;
+        TargetBoxGP = GridPos3D.Zero;
+        TargetActor = null;
+        TargetActorGP = GridPos3D.Zero;
         ClearPathFinding();
         ClearNavTrackMarkers();
     }

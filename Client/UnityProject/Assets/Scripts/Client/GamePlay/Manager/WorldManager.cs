@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class WorldManager : TSingletonBaseManager<WorldManager>
 {
-    public Transform WorldRoot;
+    internal Transform WorldRoot;
+    internal Transform BattleIndicatorRoot;
     public World CurrentWorld;
 
     /// <summary>
@@ -27,6 +28,7 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
     public override void Awake()
     {
         WorldRoot = new GameObject("WorldRoot").transform;
+        BattleIndicatorRoot = new GameObject("BattleIndicatorRoot").transform;
     }
 
     public override void Start()

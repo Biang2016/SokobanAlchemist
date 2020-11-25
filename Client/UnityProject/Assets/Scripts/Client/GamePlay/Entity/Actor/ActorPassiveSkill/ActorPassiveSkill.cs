@@ -22,6 +22,10 @@ public abstract class ActorPassiveSkill : IClone<ActorPassiveSkill>
     {
     }
 
+    public virtual void OnUnInit()
+    {
+    }
+
     public virtual void OnRegisterLevelEventID()
     {
     }
@@ -50,7 +54,7 @@ public abstract class ActorPassiveSkill : IClone<ActorPassiveSkill>
     {
     }
 
-    public virtual void OnTick()
+    public virtual void OnTick(float tickDeltaTime)
     {
     }
 

@@ -259,7 +259,7 @@ public class Actor : Entity
 
     public Dictionary<string, ActorPassiveSkill> ActorPassiveSkillDict = new Dictionary<string, ActorPassiveSkill>(); // 便于寻找
 
-    internal bool ActorPassiveSkillMarkAsDeleted = false;
+    internal bool ActorPassiveSkillMarkAsDied = false;
 
     internal bool ActorForbidPushBox = false;
 
@@ -276,7 +276,7 @@ public class Actor : Entity
             ActorPassiveSkills.Add(rawAPS.Clone());
         }
 
-        ActorPassiveSkillMarkAsDeleted = false;
+        ActorPassiveSkillMarkAsDied = false;
         foreach (ActorPassiveSkill aps in ActorPassiveSkills)
         {
             AddNewPassiveSkill(aps);
@@ -304,6 +304,7 @@ public class Actor : Entity
         foreach (ActorPassiveSkill aps in ActorPassiveSkills)
         {
             aps.OnUnRegisterLevelEventID();
+            aps.OnUnInit();
         }
 
         actorPassiveSkillTicker = 0;
@@ -311,7 +312,7 @@ public class Actor : Entity
         // 防止ActorPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
         //ActorPassiveSkills.Clear();
         //ActorPassiveSkillDict.Clear();
-        ActorPassiveSkillMarkAsDeleted = false;
+        ActorPassiveSkillMarkAsDied = false;
     }
 
     #endregion
@@ -329,7 +330,7 @@ public class Actor : Entity
 
     public Dictionary<string, ActorActiveSkill> ActorActiveSkillDict = new Dictionary<string, ActorActiveSkill>(); // 便于寻找
 
-    internal bool ActorActiveSkillMarkAsDeleted = false;
+    internal bool ActorActiveSkillMarkAsDied = false;
 
     [HideInInspector]
     public byte[] ActorActiveSkillBaseData;
@@ -343,7 +344,7 @@ public class Actor : Entity
             ActorActiveSkills.Add(rawAAS.Clone());
         }
 
-        ActorActiveSkillMarkAsDeleted = false;
+        ActorActiveSkillMarkAsDied = false;
         foreach (ActorActiveSkill aas in ActorActiveSkills)
         {
             AddNewActiveSkill(aas);
@@ -354,7 +355,6 @@ public class Actor : Entity
     {
         aas.Actor = this;
         aas.OnInit();
-        aas.OnRegisterLevelEventID();
         string bfName = aas.GetType().Name;
         if (!ActorActiveSkillDict.ContainsKey(bfName))
         {
@@ -366,13 +366,13 @@ public class Actor : Entity
     {
         foreach (ActorActiveSkill aas in ActorActiveSkills)
         {
-            aas.OnUnRegisterLevelEventID();
+            aas.OnUnInit();
         }
 
         // 防止ActorActiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
         //ActorActiveSkills.Clear();
         //ActorActiveSkillDict.Clear();
-        ActorActiveSkillMarkAsDeleted = false;
+        ActorActiveSkillMarkAsDied = false;
     }
 
     #endregion
@@ -479,10 +479,10 @@ public class Actor : Entity
         ActorLaunchArcRendererHelper.OnHelperRecycled();
         ActorBattleHelper.OnHelperRecycled();
         ActorSkillHelper.OnHelperRecycled();
-        ActorStatPropSet.OnRecycled();
-        ActorStatPropSet = null;
         UnInitActiveSkills();
         UnInitPassiveSkills();
+        ActorStatPropSet.OnRecycled();
+        ActorStatPropSet = null;
 
         ActorMoveColliderRoot.SetActive(false);
         SetModelSmoothMoveLerpTime(0);
@@ -579,6 +579,9 @@ public class Actor : Entity
     private float actorPassiveSkillTicker = 0f;
     private float actorPassiveSkillTickInterval = 0.3f;
 
+    private float actorActiveSkillTicker = 0f;
+    private float actorActiveSkillTickInterval = 0.1f;
+
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
@@ -588,9 +591,19 @@ public class Actor : Entity
             if (actorPassiveSkillTicker >= actorPassiveSkillTickInterval)
             {
                 actorPassiveSkillTicker -= actorPassiveSkillTickInterval;
-                foreach (ActorPassiveSkill ps in ActorPassiveSkills)
+                foreach (ActorPassiveSkill aps in ActorPassiveSkills)
                 {
-                    ps.OnTick();
+                    aps.OnTick(actorPassiveSkillTickInterval);
+                }
+            }
+
+            actorActiveSkillTicker += Time.fixedDeltaTime;
+            if (actorActiveSkillTicker >= actorActiveSkillTickInterval)
+            {
+                actorActiveSkillTicker -= actorActiveSkillTickInterval;
+                foreach (ActorActiveSkill aas in ActorActiveSkills)
+                {
+                    aas.OnTick(actorActiveSkillTickInterval);
                 }
             }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -38,24 +39,24 @@ public class ActorActiveSkill_Attack : ActorActiveSkill_AreaCast
         UnBindActorProperty(AttackDamage_Frozen, APT_AttackDamage_Frozen);
     }
 
-    protected override void WingUp()
-    {
-        base.WingUp();
-    }
-
     protected override void Cast()
     {
         base.Cast();
-    }
-
-    protected override void Recover()
-    {
-        base.Recover();
-    }
-
-    public override void FixedUpdate(float fixedDeltaTime)
-    {
-        base.FixedUpdate(fixedDeltaTime);
+        foreach (GridPos3D gp in RealSkillEffectGPs)
+        {
+            Collider[] colliders = Physics.OverlapSphere(gp.ToVector3(), 0.3f, LayerManager.Instance.GetTargetActorLayerMask(Actor.Camp, TargetCamp));
+            foreach (Collider c in colliders)
+            {
+                Actor actor = c.GetComponentInParent<Actor>();
+                if (actor != null)
+                {
+                    actor.ActorBattleHelper.Damage(Actor, AttackDamage.Value);
+                    actor.ActorBattleHelper.Damage(Actor, AttackDamage_Firing.Value);
+                    actor.ActorBattleHelper.Damage(Actor, AttackDamage_Frozen.Value);
+                    return;
+                }
+            }
+        }
     }
 
     protected override void ChildClone(ActorActiveSkill newAS)

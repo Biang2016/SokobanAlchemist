@@ -16,9 +16,9 @@ public class ActorPassiveSkill_IceSlideSpeedUp : ActorPassiveSkill
     [ShowInInspector]
     private ActorBuff ActorBuff; // 实际施加的buff，取消施加时置空
 
-    public override void OnTick()
+    public override void OnTick(float tickDeltaTime)
     {
-        base.OnTick();
+        base.OnTick(tickDeltaTime);
         Ray ray = new Ray(Actor.transform.position, Vector3.down);
         if (Physics.Raycast(ray, out RaycastHit hit, 0.7f, LayerManager.Instance.LayerMask_BoxIndicator))
         {

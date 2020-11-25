@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using BiangStudio;
 using BiangStudio.GameDataFormat.Grid;
+using FlowCanvas;
+using FlowCanvas.Nodes;
 using NodeCanvas.BehaviourTrees;
 using NodeCanvas.Framework;
 using ParadoxNotion.Design;
 using UnityEngine;
+using Random = UnityEngine.Random;
+using WaitUntil = FlowCanvas.Nodes.WaitUntil;
 
 public static class ActorAIAtoms
 {
@@ -479,20 +484,102 @@ public static class ActorAIAtoms
     #region 战斗
 
     [Category("敌兵/战斗")]
-    [Name("攻击")]
-    [Description("攻击")]
-    public class BT_Enemy_Attack : BTNode
+    [Name("释放技能")]
+    [Description("释放技能")]
+    public class BT_Enemy_TriggerSkill : BTNode
     {
+        [Name("技能类名")]
+        public BBParameter<string> SkillClassName;
+
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            if (Actor.ActorActiveSkillDict.TryGetValue(typeof(ActorActiveSkill_Attack).Name, out ActorActiveSkill aas))
+            if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))
             {
+                Actor.ActorAIAgent.TargetActor = BattleManager.Instance.Player1;
+                Actor.ActorAIAgent.TargetActorGP = BattleManager.Instance.Player1.CurWorldGP;
                 aas.TriggerActiveSkill();
+                if (aas.SkillPhase == ActiveSkillPhase.CoolingDown || aas.SkillPhase == ActiveSkillPhase.Ready)
+                {
+                    return Status.Success;
+                }
+                else
+                {
+                    return Status.Running;
+                }
             }
 
-            return Status.Success;
+            return Status.Failure;
+        }
+    }
+
+    [Category("敌兵/战斗")]
+    [Name("等待技能结束")]
+    [Description("等待技能结束")]
+    public class BT_Enemy_WaitSkillEnd : BTNode
+    {
+        [Name("技能类名")]
+        public BBParameter<string> SkillClassName;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))
+            {
+                if (aas.SkillPhase == ActiveSkillPhase.CoolingDown || aas.SkillPhase == ActiveSkillPhase.Ready)
+                {
+                    return Status.Success;
+                }
+                else
+                {
+                    return Status.Running;
+                }
+            }
+
+            return Status.Failure;
+        }
+    }
+
+    [Category("敌兵/战斗")]
+    [Name("等待技能结束")]
+    [Description("等待技能结束")]
+    public class FL_Enemy_WaitSkillEnd : WaitUntil
+    {
+        [Name("技能类名")]
+        public BBParameter<string> SkillClassName;
+
+        public override IEnumerator Invoke()
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) yield return null;
+            if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))
+            {
+                while (aas.SkillPhase != ActiveSkillPhase.CoolingDown && aas.SkillPhase != ActiveSkillPhase.Ready)
+                {
+                    yield return null;
+                }
+            }
+        }
+    }
+
+    [Category("敌兵/战斗")]
+    [Name("强行打断技能")]
+    [Description("强行打断技能")]
+    public class BT_Enemy_InterruptSkill : BTNode
+    {
+        [Name("技能类名")]
+        public BBParameter<string> SkillClassName;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))
+            {
+                aas.Interrupt();
+                return Status.Success;
+            }
+
+            return Status.Failure;
         }
     }
 

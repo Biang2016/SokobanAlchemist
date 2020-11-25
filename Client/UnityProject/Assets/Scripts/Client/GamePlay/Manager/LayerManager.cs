@@ -57,4 +57,53 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
         Layer_BattleTips = LayerMask.NameToLayer("BattleTips");
         Layer_BoxTriggerZone = LayerMask.NameToLayer("BoxTriggerZone");
     }
+
+    public int GetTargetActorLayerMask(Camp selfCamp, RelativeCamp relativeCamp)
+    {
+        switch (selfCamp)
+        {
+            case Camp.None:
+            {
+                return 0;
+            }
+            case Camp.Player:
+            {
+                switch (relativeCamp)
+                {
+                    case RelativeCamp.None: return 0;
+                    case RelativeCamp.FriendCamp: return LayerMask_HitBox_Player;
+                    case RelativeCamp.OpponentCamp: return LayerMask_HitBox_Enemy;
+                    case RelativeCamp.NeutralCamp: return LayerMask_HitBox_Enemy;
+                }
+
+                break;
+            }
+            case Camp.Enemy:
+            {
+                switch (relativeCamp)
+                {
+                    case RelativeCamp.None: return 0;
+                    case RelativeCamp.FriendCamp: return LayerMask_HitBox_Enemy;
+                    case RelativeCamp.OpponentCamp: return LayerMask_HitBox_Player;
+                    case RelativeCamp.NeutralCamp: return LayerMask_HitBox_Enemy;
+                }
+
+                break;
+            }
+            case Camp.Friend:
+            {
+                switch (relativeCamp)
+                {
+                    case RelativeCamp.None: return 0;
+                    case RelativeCamp.FriendCamp: return LayerMask_HitBox_Player;
+                    case RelativeCamp.OpponentCamp: return LayerMask_HitBox_Enemy;
+                    case RelativeCamp.NeutralCamp: return LayerMask_HitBox_Enemy;
+                }
+
+                break;
+            }
+        }
+
+        return 0;
+    }
 }
