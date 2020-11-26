@@ -339,6 +339,7 @@ public partial class Box : Entity
         Putting,
         DroppingFromDeadActor,
         Dropping,
+        DroppingFromAir,
     }
 
     public enum LerpType
@@ -349,6 +350,7 @@ public partial class Box : Entity
         Put,
         Drop,
         DropFromDeadActor,
+        DropFromAir,
         Create,
     }
 
@@ -530,11 +532,6 @@ public partial class Box : Entity
                     State = States.Dropping;
                     break;
                 }
-                case LerpType.DropFromDeadActor:
-                {
-                    State = States.DroppingFromDeadActor;
-                    break;
-                }
                 case LerpType.Create:
                 {
                     State = States.Static;
@@ -544,10 +541,28 @@ public partial class Box : Entity
         }
         else
         {
+            switch (lerpType)
+            {
+                case LerpType.DropFromDeadActor:
+                {
+                    State = States.DroppingFromDeadActor;
+                    break;
+                }
+                case LerpType.DropFromAir:
+                {
+                    State = States.DroppingFromAir;
+                    break;
+                }
+                default:
+                {
+                    State = States.Static;
+                    break;
+                }
+            }
+
             if (needLerpModel) SetModelSmoothMoveLerpTime(0.2f);
             transform.localPosition = localGridPos3D.ToVector3();
             transform.localRotation = Quaternion.identity;
-            State = States.Static;
         }
 
         WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
@@ -751,6 +766,34 @@ public partial class Box : Entity
         Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
     }
 
+    public void DropFromAir()
+    {
+        SetModelSmoothMoveLerpTime(0);
+        if (BoxEffectHelper == null)
+        {
+            BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
+        }
+
+        alreadyCollide = false;
+        LastTouchActor = null;
+        State = States.DroppingFromAir;
+        transform.DOPause();
+        transform.parent = WorldManager.Instance.CurrentWorld.transform;
+        BoxColliderHelper.OnDropFromAir();
+        Rigidbody = gameObject.GetComponent<Rigidbody>();
+        if (Rigidbody == null) Rigidbody = gameObject.AddComponent<Rigidbody>();
+        Rigidbody.mass = FinalWeight;
+        Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+        Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
+        Rigidbody.drag = 0;
+        Rigidbody.angularDrag = 0;
+        Rigidbody.useGravity = true;
+        Rigidbody.velocity = Vector3.down * 2f;
+        Rigidbody.angularVelocity = Vector3.zero;
+        Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+    }
+
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
@@ -761,7 +804,7 @@ public partial class Box : Entity
             BoxBuffHelper.BuffFixedUpdate();
         }
 
-        if ((state == States.BeingKicked || state == States.Flying || state == States.DroppingFromDeadActor || state == States.Putting) && Rigidbody)
+        if ((state == States.BeingKicked || state == States.Flying || state == States.DroppingFromDeadActor || state == States.DroppingFromAir || state == States.Putting) && Rigidbody)
         {
             if (state == States.BeingKicked)
             {
@@ -825,39 +868,9 @@ public partial class Box : Entity
             }
         }
 
-        if (State == States.Flying)
+        switch (State)
         {
-            if (!alreadyCollide)
-            {
-                CollideAOEDamage(CollideDamageRadius, CollideDamage);
-                PlayCollideFX();
-
-                foreach (BoxPassiveSkill bf in BoxPassiveSkills)
-                {
-                    bf.OnFlyingCollisionEnter(collision);
-                }
-
-                if (BoxPassiveSkillMarkAsDeleted && !IsRecycled)
-                {
-                    DeleteSelf();
-                    return;
-                }
-
-                if (!IsRecycled)
-                {
-                    OnFlyingCollisionEnter(collision);
-                    if (BoxPassiveSkillMarkAsDeleted)
-                    {
-                        DeleteSelf();
-                        return;
-                    }
-                }
-            }
-        }
-
-        if (State == States.BeingKicked)
-        {
-            if (collision.gameObject.layer != LayerManager.Instance.Layer_Ground)
+            case States.Flying:
             {
                 if (!alreadyCollide)
                 {
@@ -866,7 +879,7 @@ public partial class Box : Entity
 
                     foreach (BoxPassiveSkill bf in BoxPassiveSkills)
                     {
-                        bf.OnBeingKickedCollisionEnter(collision);
+                        bf.OnFlyingCollisionEnter(collision);
                     }
 
                     if (BoxPassiveSkillMarkAsDeleted && !IsRecycled)
@@ -877,7 +890,7 @@ public partial class Box : Entity
 
                     if (!IsRecycled)
                     {
-                        OnBeingKickedCollisionEnter(collision);
+                        OnFlyingCollisionEnter(collision);
                         if (BoxPassiveSkillMarkAsDeleted)
                         {
                             DeleteSelf();
@@ -885,6 +898,75 @@ public partial class Box : Entity
                         }
                     }
                 }
+
+                break;
+            }
+            case States.BeingKicked:
+            {
+                if (collision.gameObject.layer != LayerManager.Instance.Layer_Ground)
+                {
+                    if (!alreadyCollide)
+                    {
+                        CollideAOEDamage(CollideDamageRadius, CollideDamage);
+                        PlayCollideFX();
+
+                        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+                        {
+                            bf.OnBeingKickedCollisionEnter(collision);
+                        }
+
+                        if (BoxPassiveSkillMarkAsDeleted && !IsRecycled)
+                        {
+                            DeleteSelf();
+                            return;
+                        }
+
+                        if (!IsRecycled)
+                        {
+                            OnBeingKickedCollisionEnter(collision);
+                            if (BoxPassiveSkillMarkAsDeleted)
+                            {
+                                DeleteSelf();
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                break;
+            }
+            case States.DroppingFromAir:
+            {
+                Box box = collision.gameObject.GetComponentInParent<Box>();
+                if (box != null && box.State == States.DroppingFromAir) return;
+                if (!alreadyCollide)
+                {
+                    CollideAOEDamage(CollideDamageRadius, CollideDamage);
+                    PlayCollideFX();
+
+                    foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+                    {
+                        bf.OnDroppingFromAirCollisionEnter(collision);
+                    }
+                }
+
+                if (BoxPassiveSkillMarkAsDeleted && !IsRecycled)
+                {
+                    DeleteSelf();
+                    return;
+                }
+
+                if (!IsRecycled)
+                {
+                    OnDroppingFromAirCollisionEnter(collision);
+                    if (BoxPassiveSkillMarkAsDeleted)
+                    {
+                        DeleteSelf();
+                        return;
+                    }
+                }
+
+                break;
             }
         }
     }

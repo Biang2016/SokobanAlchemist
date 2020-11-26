@@ -61,6 +61,10 @@ public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
     {
     }
 
+    public virtual void OnDroppingFromAirCollisionEnter(Collision collision)
+    {
+    }
+
     public virtual void OnBoxThornTrapTriggerEnter(Collider collider)
     {
     }

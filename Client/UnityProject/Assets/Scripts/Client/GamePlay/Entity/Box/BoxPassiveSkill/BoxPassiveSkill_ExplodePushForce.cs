@@ -26,6 +26,12 @@ public class BoxPassiveSkill_ExplodePushForce : BoxPassiveSkill
         ExplodePushBox(Box, Box.transform.position, ExplodePushRadius);
     }
 
+    public override void OnDroppingFromAirCollisionEnter(Collision collision)
+    {
+        base.OnDroppingFromAirCollisionEnter(collision);
+        ExplodePushBox(Box, Box.transform.position, ExplodePushRadius);
+    }
+
     private void ExplodePushBox(Box m_Box, Vector3 center, int radius)
     {
         List<Box> boxes = new List<Box>();

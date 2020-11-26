@@ -4,7 +4,7 @@ public partial class Box
 {
     public void OnBeingKickedCollisionEnter(Collision collision)
     {
-        bool playCollideBehavior = CollideCalculate(collision);
+        bool playCollideBehavior = CollideCalculate(collision, out bool validCollision);
         if (playCollideBehavior) kickCollideBehavior();
 
         void kickCollideBehavior()
@@ -14,7 +14,7 @@ public partial class Box
 
     public void OnFlyingCollisionEnter(Collision collision)
     {
-        bool playCollideBehavior = CollideCalculate(collision);
+        bool playCollideBehavior = CollideCalculate(collision, out bool validCollision);
         if (playCollideBehavior) flyCollideBehavior();
 
         void flyCollideBehavior()
@@ -27,17 +27,30 @@ public partial class Box
         }
     }
 
-    private bool CollideCalculate(Collision collision)
+    public void OnDroppingFromAirCollisionEnter(Collision collision)
+    {
+        bool playCollideBehavior = CollideCalculate(collision, out bool validCollision);
+        if (validCollision) CameraManager.Instance.FieldCamera.CameraShake(0.1f, 0.8f, (transform.position - BattleManager.Instance.Player1.transform.position).magnitude);
+        if (playCollideBehavior) dropFromAirCollideBehavior();
+
+        void dropFromAirCollideBehavior()
+        {
+        }
+    }
+
+    private bool CollideCalculate(Collision collision, out bool validCollision)
     {
         bool requireCommonDurabilityReduce = false;
+        validCollision = false;
         if (BoxStatPropSet.CollideWithBoxDurability.Value > 0 && collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box)
         {
             Box box = collision.gameObject.GetComponentInParent<Box>();
             if (box != null)
             {
+                validCollision = true;
                 if (BoxStatPropSet.FrozenLevel.Value >= 1)
                 {
-                    BoxStatPropSet.FrozenValue.Value -= BoxStatPropSet.FrozenValuePerLevel;
+                    BoxStatPropSet.FrozenValue.Value = 0;
                 }
                 else
                 {
@@ -58,9 +71,10 @@ public partial class Box
             {
                 if (LastTouchActor != null && LastTouchActor.IsOpponentCampOf(actor))
                 {
+                    validCollision = true;
                     if (BoxStatPropSet.FrozenLevel.Value >= 1)
                     {
-                        BoxStatPropSet.FrozenValue.Value -= BoxStatPropSet.FrozenValuePerLevel;
+                        BoxStatPropSet.FrozenValue.Value = 0;
                     }
                     else
                     {

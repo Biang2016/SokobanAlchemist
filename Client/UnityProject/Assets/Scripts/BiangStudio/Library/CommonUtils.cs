@@ -255,18 +255,20 @@ namespace BiangStudio
             return res;
         }
 
+        static SortedDictionary<int, Probability> resDict_GetRandomWithProbabilityFromList = new SortedDictionary<int, Probability>();
+
         public static List<T> GetRandomWithProbabilityFromList<T>(List<T> OriList, int number) where T : Probability
         {
+            resDict_GetRandomWithProbabilityFromList.Clear();
             if (OriList == null || OriList.Count == 0) return new List<T>();
 
             int accu = 0;
-            SortedDictionary<int, T> resDict = new SortedDictionary<int, T>();
             foreach (T probability in OriList)
             {
                 if (probability.Probability > 0)
                 {
                     accu += probability.Probability;
-                    resDict.Add(accu, probability);
+                    resDict_GetRandomWithProbabilityFromList.Add(accu, probability);
                 }
             }
 
@@ -274,11 +276,11 @@ namespace BiangStudio
             while (res.Count < number)
             {
                 int index = Random.Range(0, accu);
-                foreach (int key in resDict.Keys)
+                foreach (int key in resDict_GetRandomWithProbabilityFromList.Keys)
                 {
                     if (key >= index)
                     {
-                        T pr = resDict[key];
+                        T pr = (T) resDict_GetRandomWithProbabilityFromList[key];
                         if (!res.Contains(pr))
                         {
                             res.Add(pr);
@@ -297,6 +299,34 @@ namespace BiangStudio
             }
 
             return res.ToList();
+        }
+
+        public static T GetRandomWithProbabilityFromList<T>(List<T> OriList) where T : Probability
+        {
+            resDict_GetRandomWithProbabilityFromList.Clear();
+            if (OriList == null || OriList.Count == 0) return default;
+
+            int accu = 0;
+            foreach (T probability in OriList)
+            {
+                if (probability.Probability > 0)
+                {
+                    accu += probability.Probability;
+                    resDict_GetRandomWithProbabilityFromList.Add(accu, probability);
+                }
+            }
+
+            int index = Random.Range(0, accu);
+            foreach (int key in resDict_GetRandomWithProbabilityFromList.Keys)
+            {
+                if (key >= index)
+                {
+                    T pr = (T) resDict_GetRandomWithProbabilityFromList[key];
+                    return pr;
+                }
+            }
+
+            return default;
         }
 
         #endregion

@@ -256,9 +256,9 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
             }
             case CastAreaType.RectCast:
             {
-                for (int xDiff = -(width / 2 - 1); xDiff <= (width / 2 + 1 - 1); xDiff++)
+                for (int xDiff = -(width - 1) / 2; xDiff <= width / 2; xDiff++)
                 {
-                    for (int zDiff = -(width / 2 - 1); zDiff <= (width / 2 + 1 - 1); zDiff++)
+                    for (int zDiff = -(width - 1) / 2; zDiff <= width / 2; zDiff++)
                     {
                         GridPos3D gp = skillCastPosition + new GridPos3D(xDiff, 0, zDiff);
                         AddGP(gp);

@@ -6,6 +6,7 @@ using BiangStudio.GamePlay;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 [Serializable]
 public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
@@ -17,8 +18,9 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
     [LabelText("作用阵营")]
     public RelativeCamp TargetCamp;
 
-    [LabelText("绑定角色技能参数")]
-    public ActorSkillNames ActorSkillName;
+    [LabelText("绑定角色技能号")]
+    [FormerlySerializedAs("ActorSkillName")]
+    public ActorSkillIndex ActorSkillIndex;
 
     internal Dictionary<ActorSkillPropertyType, ActorPropertyValue> ActorPropertyValueDict = new Dictionary<ActorSkillPropertyType, ActorPropertyValue>();
 
@@ -102,14 +104,14 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
 
     protected void BindActorProperty(ActorPropertyValue apv, ActorSkillPropertyType actorSkillPropertyType)
     {
-        ActorProperty ap = Actor.ActorStatPropSet.SkillsPropertyCollections[(int) ActorSkillName].PropertyDict[actorSkillPropertyType];
+        ActorProperty ap = Actor.ActorStatPropSet.SkillsPropertyCollections[(int) ActorSkillIndex].PropertyDict[actorSkillPropertyType];
         apv.Value = ap.GetModifiedValue;
         ap.OnValueChanged += apv.OnValueChangedHandle;
     }
 
     protected void UnBindActorProperty(ActorPropertyValue apv, ActorSkillPropertyType actorSkillPropertyType)
     {
-        ActorProperty ap = Actor.ActorStatPropSet.SkillsPropertyCollections[(int) ActorSkillName].PropertyDict[actorSkillPropertyType];
+        ActorProperty ap = Actor.ActorStatPropSet.SkillsPropertyCollections[(int) ActorSkillIndex].PropertyDict[actorSkillPropertyType];
         ap.OnValueChanged -= apv.OnValueChangedHandle;
     }
 
@@ -240,7 +242,7 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
         Type type = GetType();
         ActorActiveSkill newAS = (ActorActiveSkill) Activator.CreateInstance(type);
         newAS.TargetCamp = TargetCamp;
-        newAS.ActorSkillName = ActorSkillName;
+        newAS.ActorSkillIndex = ActorSkillIndex;
         ChildClone(newAS);
         return newAS;
     }
@@ -252,7 +254,7 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
     public virtual void CopyDataFrom(ActorActiveSkill srcData)
     {
         TargetCamp = srcData.TargetCamp;
-        ActorSkillName = srcData.ActorSkillName;
+        ActorSkillIndex = srcData.ActorSkillIndex;
     }
 }
 

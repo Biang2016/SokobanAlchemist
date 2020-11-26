@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BiangStudio.GameDataFormat.Grid;
 using DG.Tweening;
+using FlowCanvas.Nodes;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -280,6 +281,11 @@ public class FieldCamera : MonoBehaviour
     public void CameraShake(int damage, float distanceFromPlayer)
     {
         Camera.transform.DOShakePosition(0.1f, CameraShakeStrengthCurve.Evaluate(damage) * CameraShakeAttenuationByDistanceCurve.Evaluate(distanceFromPlayer), 10, 90f);
+    }
+
+    public void CameraShake(float duration, float strength, float distanceFromPlayer)
+    {
+        Camera.transform.DOShakePosition(duration, strength * CameraShakeAttenuationByDistanceCurve.Evaluate(distanceFromPlayer), 10, 90f);
     }
 
     public void CameraLeftRotate()

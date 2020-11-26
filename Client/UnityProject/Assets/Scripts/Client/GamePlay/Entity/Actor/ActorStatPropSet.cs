@@ -517,7 +517,7 @@ public enum ActorStatType
     FiringLevel = 121,
 }
 
-public enum ActorSkillNames
+public enum ActorSkillIndex
 {
     [LabelText("技能0")]
     Skill_0 = 0,
@@ -533,6 +533,18 @@ public enum ActorSkillNames
 
     [LabelText("技能4")]
     Skill_4 = 4,
+
+    [LabelText("技能5")]
+    Skill_5 = 5,
+
+    [LabelText("技能6")]
+    Skill_6 = 6,
+
+    [LabelText("技能7")]
+    Skill_7 = 7,
+
+    [LabelText("技能8")]
+    Skill_8 = 8,
 }
 
 public enum ActorPropertyType

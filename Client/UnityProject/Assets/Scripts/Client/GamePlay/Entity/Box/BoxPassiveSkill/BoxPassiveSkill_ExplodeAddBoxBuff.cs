@@ -29,6 +29,12 @@ public class BoxPassiveSkill_ExplodeAddBoxBuff : BoxPassiveSkill
         ExplodeAddBuff();
     }
 
+    public override void OnDroppingFromAirCollisionEnter(Collision collision)
+    {
+        base.OnDroppingFromAirCollisionEnter(collision);
+        ExplodeAddBuff();
+    }
+
     private void ExplodeAddBuff()
     {
         Collider[] colliders = Physics.OverlapSphere(Box.transform.position, AddBuffRadius, LayerManager.Instance.LayerMask_BoxIndicator);

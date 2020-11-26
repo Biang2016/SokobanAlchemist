@@ -186,6 +186,14 @@ public class BoxColliderHelper : PoolObject, IBoxHelper
         BoxOnlyDynamicCollider.enabled = true;
     }
 
+    public void OnDropFromAir()
+    {
+        StaticBoxCollider.enabled = false;
+        StaticWedgeCollider.enabled = false;
+        DynamicCollider.enabled = true;
+        BoxOnlyDynamicCollider.enabled = true;
+    }
+
     public void OnRigidbodyStop()
     {
         StaticBoxCollider.enabled = true;

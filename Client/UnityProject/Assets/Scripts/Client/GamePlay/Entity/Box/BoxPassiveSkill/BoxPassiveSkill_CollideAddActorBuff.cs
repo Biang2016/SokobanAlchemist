@@ -28,6 +28,12 @@ public class BoxPassiveSkill_CollideAddActorBuff : BoxPassiveSkill
         Collide(collision);
     }
 
+    public override void OnDroppingFromAirCollisionEnter(Collision collision)
+    {
+        base.OnDroppingFromAirCollisionEnter(collision);
+        Collide(collision);
+    }
+
     private void Collide(Collision collision)
     {
         Actor actor = collision.gameObject.GetComponentInParent<Actor>();

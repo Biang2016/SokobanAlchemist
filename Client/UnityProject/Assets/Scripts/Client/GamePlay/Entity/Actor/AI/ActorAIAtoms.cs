@@ -506,16 +506,15 @@ public static class ActorAIAtoms
     [Description("释放技能")]
     public class BT_Enemy_TriggerSkill : BTNode
     {
-        [Name("技能类名")]
-        public BBParameter<string> SkillClassName;
+        [Name("技能编号")]
+        public BBParameter<ActorSkillIndex> ActorSkillIndex;
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.IsFrozen) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            if (string.IsNullOrWhiteSpace(SkillClassName.value)) return Status.Failure;
-            if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))
+            if (Actor.ActorActiveSkillDict.TryGetValue(ActorSkillIndex.value, out ActorActiveSkill aas))
             {
                 Actor.ActorAIAgent.TargetActor = BattleManager.Instance.Player1;
                 Actor.ActorAIAgent.TargetActorGP = BattleManager.Instance.Player1.CurWorldGP;
@@ -539,14 +538,13 @@ public static class ActorAIAtoms
     [Description("等待技能结束")]
     public class BT_Enemy_WaitSkillEnd : BTNode
     {
-        [Name("技能类名")]
-        public BBParameter<string> SkillClassName;
+        [Name("技能编号")]
+        public BBParameter<ActorSkillIndex> ActorSkillIndex;
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
-            if (string.IsNullOrWhiteSpace(SkillClassName.value)) return Status.Failure;
-            if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))
+            if (Actor.ActorActiveSkillDict.TryGetValue(ActorSkillIndex.value, out ActorActiveSkill aas))
             {
                 if (aas.SkillPhase == ActiveSkillPhase.CoolingDown || aas.SkillPhase == ActiveSkillPhase.Ready)
                 {
@@ -567,20 +565,17 @@ public static class ActorAIAtoms
     [Description("等待技能结束")]
     public class FL_Enemy_WaitSkillEnd : WaitUntil
     {
-        [Name("技能类名")]
-        public BBParameter<string> SkillClassName;
+        [Name("技能编号")]
+        public BBParameter<ActorSkillIndex> ActorSkillIndex;
 
         public override IEnumerator Invoke()
         {
             if (Actor == null || Actor.ActorAIAgent == null) yield return null;
-            if (!string.IsNullOrWhiteSpace(SkillClassName.value))
+            if (Actor.ActorActiveSkillDict.TryGetValue(ActorSkillIndex.value, out ActorActiveSkill aas))
             {
-                if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))
+                while (aas.SkillPhase != ActiveSkillPhase.CoolingDown && aas.SkillPhase != ActiveSkillPhase.Ready)
                 {
-                    while (aas.SkillPhase != ActiveSkillPhase.CoolingDown && aas.SkillPhase != ActiveSkillPhase.Ready)
-                    {
-                        yield return null;
-                    }
+                    yield return null;
                 }
             }
         }
@@ -591,14 +586,13 @@ public static class ActorAIAtoms
     [Description("强行打断技能")]
     public class BT_Enemy_InterruptSkill : BTNode
     {
-        [Name("技能类名")]
-        public BBParameter<string> SkillClassName;
+        [Name("技能编号")]
+        public BBParameter<ActorSkillIndex> ActorSkillIndex;
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
-            if (string.IsNullOrWhiteSpace(SkillClassName.value)) return Status.Failure;
-            if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))
+            if (Actor.ActorActiveSkillDict.TryGetValue(ActorSkillIndex.value, out ActorActiveSkill aas))
             {
                 aas.Interrupt();
                 return Status.Success;

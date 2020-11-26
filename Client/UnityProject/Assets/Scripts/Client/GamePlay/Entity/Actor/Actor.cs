@@ -340,7 +340,7 @@ public class Actor : Entity
 
     public List<ActorActiveSkill> ActorActiveSkills = new List<ActorActiveSkill>(); // 湿数据，每个Actor生命周期开始前从干数据拷出，结束后清除
 
-    public Dictionary<string, ActorActiveSkill> ActorActiveSkillDict = new Dictionary<string, ActorActiveSkill>(); // 便于寻找
+    public Dictionary<ActorSkillIndex, ActorActiveSkill> ActorActiveSkillDict = new Dictionary<ActorSkillIndex, ActorActiveSkill>(); // 便于寻找
 
     internal bool ActorActiveSkillMarkAsDied = false;
 
@@ -367,10 +367,13 @@ public class Actor : Entity
     {
         aas.Actor = this;
         aas.OnInit();
-        string bfName = aas.GetType().Name;
-        if (!ActorActiveSkillDict.ContainsKey(bfName))
+        if (!ActorActiveSkillDict.ContainsKey(aas.ActorSkillIndex))
         {
-            ActorActiveSkillDict.Add(bfName, aas);
+            ActorActiveSkillDict.Add(aas.ActorSkillIndex, aas);
+        }
+        else
+        {
+            Debug.LogError($"[主动技能] {name} 角色主动技能编号重复: {aas.ActorSkillIndex}");
         }
     }
 
