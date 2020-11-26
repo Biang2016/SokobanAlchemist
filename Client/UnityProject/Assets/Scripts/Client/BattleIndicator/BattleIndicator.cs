@@ -30,6 +30,7 @@ public class BattleIndicator : PoolObject
         transform.DOPause();
         StopAllCoroutines();
         SetShown(false);
+        OnProcess(0);
         base.OnRecycled();
     }
 
@@ -37,6 +38,10 @@ public class BattleIndicator : PoolObject
     {
         base.OnUsed();
         SetShown(true);
+    }
+
+    public virtual void OnProcess(float ratio)
+    {
     }
 
     protected MaterialPropertyBlock mpb;

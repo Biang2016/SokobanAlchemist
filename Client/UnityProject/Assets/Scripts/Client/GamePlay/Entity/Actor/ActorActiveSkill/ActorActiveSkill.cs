@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using BiangStudio.CloneVariant;
+using BiangStudio.GamePlay;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,25 +17,15 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
     [LabelText("作用阵营")]
     public RelativeCamp TargetCamp;
 
-    [LabelText("冷却时间")]
-    public ActorPropertyType APT_Cooldown;
+    [LabelText("绑定角色技能参数")]
+    public ActorSkillNames ActorSkillName;
 
-    internal ActorPropertyValue CooldownTime = new ActorPropertyValue();
+    internal Dictionary<ActorSkillPropertyType, ActorPropertyValue> ActorPropertyValueDict = new Dictionary<ActorSkillPropertyType, ActorPropertyValue>();
 
-    [LabelText("施法时间")]
-    public ActorPropertyType APT_CastDuration;
-
-    internal ActorPropertyValue CastDuration = new ActorPropertyValue();
-
-    [LabelText("前摇")]
-    public ActorPropertyType APT_WingUp;
-
-    internal ActorPropertyValue WingUpTime = new ActorPropertyValue();
-
-    [LabelText("后摇")]
-    public ActorPropertyType APT_Recovery;
-
-    internal ActorPropertyValue RecoveryTime = new ActorPropertyValue();
+    protected int GetValue(ActorSkillPropertyType type)
+    {
+        return ActorPropertyValueDict[type].Value;
+    }
 
     [HideInInspector]
     public UnityAction<ActiveSkillPhase, ActiveSkillPhase> OnSkillPhaseChanged;
@@ -88,32 +79,37 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
 
         cooldownTimeTick = 0;
 
-        BindActorProperty(CooldownTime, APT_Cooldown);
-        BindActorProperty(CastDuration, APT_CastDuration);
-        BindActorProperty(WingUpTime, APT_WingUp);
-        BindActorProperty(RecoveryTime, APT_Recovery);
+        ActorPropertyValueDict.Clear();
+        foreach (ActorSkillPropertyType aspt in Enum.GetValues(typeof(ActorSkillPropertyType)))
+        {
+            ActorPropertyValue apv = new ActorPropertyValue();
+            BindActorProperty(apv, aspt);
+            ActorPropertyValueDict.Add(aspt, apv);
+        }
     }
 
     public virtual void OnUnInit()
     {
         Interrupt();
+
+        foreach (KeyValuePair<ActorSkillPropertyType, ActorPropertyValue> kv in ActorPropertyValueDict)
+        {
+            UnBindActorProperty(kv.Value, kv.Key);
+        }
+
         Clear();
-        UnBindActorProperty(CooldownTime, APT_Cooldown);
-        UnBindActorProperty(CastDuration, APT_CastDuration);
-        UnBindActorProperty(WingUpTime, APT_WingUp);
-        UnBindActorProperty(RecoveryTime, APT_Recovery);
     }
 
-    protected void BindActorProperty(ActorPropertyValue apv, ActorPropertyType actorPropertyType)
+    protected void BindActorProperty(ActorPropertyValue apv, ActorSkillPropertyType actorSkillPropertyType)
     {
-        ActorProperty ap = Actor.ActorStatPropSet.PropertyDict[actorPropertyType];
+        ActorProperty ap = Actor.ActorStatPropSet.SkillsPropertyCollections[(int) ActorSkillName].PropertyDict[actorSkillPropertyType];
         apv.Value = ap.GetModifiedValue;
         ap.OnValueChanged += apv.OnValueChangedHandle;
     }
 
-    protected void UnBindActorProperty(ActorPropertyValue apv, ActorPropertyType actorPropertyType)
+    protected void UnBindActorProperty(ActorPropertyValue apv, ActorSkillPropertyType actorSkillPropertyType)
     {
-        ActorProperty ap = Actor.ActorStatPropSet.PropertyDict[actorPropertyType];
+        ActorProperty ap = Actor.ActorStatPropSet.SkillsPropertyCollections[(int) ActorSkillName].PropertyDict[actorSkillPropertyType];
         ap.OnValueChanged -= apv.OnValueChangedHandle;
     }
 
@@ -122,16 +118,16 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
         if (skillPhase != ActiveSkillPhase.Ready || SkillCoroutine != null) return false;
         if (ValidateSkillTrigger())
         {
-            SkillCoroutine = Actor.StartCoroutine(Co_CastSkill(WingUpTime.Value, CastDuration.Value, RecoveryTime.Value));
+            SkillCoroutine = Actor.StartCoroutine(Co_CastSkill(GetValue(ActorSkillPropertyType.WingUp),
+                GetValue(ActorSkillPropertyType.CastDuration),
+                GetValue(ActorSkillPropertyType.Recovery),
+                GetValue(ActorSkillPropertyType.SkillCastTimes)));
         }
 
         return true;
     }
 
-    protected virtual bool ValidateSkillTrigger()
-    {
-        return true;
-    }
+    protected abstract bool ValidateSkillTrigger();
 
     public virtual void OnTick(float tickDeltaTime)
     {
@@ -148,25 +144,59 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
 
     private Coroutine SkillCoroutine;
 
-    IEnumerator Co_CastSkill(float wingUpTime, float castDuration, float recoveryTime)
+    protected float WingUpRatio;
+    protected float CastRatio;
+    protected float RecoveryRatio;
+
+    IEnumerator Co_CastSkill(float wingUpTime, float castDuration, float recoveryTime, int skillTriggerTimes)
     {
+        WingUpRatio = 0;
+        CastRatio = 0;
+        RecoveryRatio = 0;
+
         SkillPhase = ActiveSkillPhase.WingingUp;
         // todo Actor 前摇animation， 且按时间缩放
         WingUp();
-        yield return new WaitForSeconds(wingUpTime / 1000f);
+        float wingUpTick = 0f;
+        while (wingUpTick < wingUpTime / 1000f)
+        {
+            wingUpTick += Time.deltaTime;
+            WingUpRatio = wingUpTick / (wingUpTime / 1000f);
+            yield return null;
+        }
 
         SkillPhase = ActiveSkillPhase.Casting;
         // todo Actor 攻击animation， 且按时间缩放
         // todo Actor 攻击逻辑
-        Cast();
-        yield return new WaitForSeconds(castDuration / 1000f);
+        for (int count = 0; count < skillTriggerTimes; count++)
+        {
+            Cast();
+            float castTick = 0f;
+            while (castTick < castDuration / 1000f)
+            {
+                castTick += Time.deltaTime;
+                CastRatio = castTick / (castDuration / 1000f);
+                yield return null;
+            }
+        }
 
         SkillPhase = ActiveSkillPhase.Recovering;
         // todo Actor 后摇animation， 且按时间缩放
         Recover();
-        yield return new WaitForSeconds(recoveryTime / 1000f);
+        float recoveryTick = 0f;
+        while (recoveryTick < recoveryTime / 1000f)
+        {
+            recoveryTick += Time.deltaTime;
+            RecoveryRatio = recoveryTick / (recoveryTime / 1000f);
+            yield return null;
+        }
 
         SkillPhase = ActiveSkillPhase.CoolingDown;
+
+        WingUpRatio = 0;
+        CastRatio = 0;
+        RecoveryRatio = 0;
+
         SkillCoroutine = null;
     }
 
@@ -180,7 +210,7 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
 
     protected virtual void Cast()
     {
-        cooldownTimeTick = CooldownTime.Value;
+        cooldownTimeTick = GetValue(ActorSkillPropertyType.Cooldown);
     }
 
     protected virtual void Recover()
@@ -193,7 +223,7 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
         Actor.StopCoroutine(SkillCoroutine);
         if (SkillPhase == ActiveSkillPhase.Casting)
         {
-            cooldownTimeTick = CooldownTime.Value;
+            cooldownTimeTick = GetValue(ActorSkillPropertyType.Cooldown);
             SkillPhase = ActiveSkillPhase.CoolingDown;
         }
         else
@@ -210,25 +240,19 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
         Type type = GetType();
         ActorActiveSkill newAS = (ActorActiveSkill) Activator.CreateInstance(type);
         newAS.TargetCamp = TargetCamp;
-        newAS.APT_Cooldown = APT_Cooldown;
-        newAS.APT_CastDuration = APT_CastDuration;
-        newAS.APT_WingUp = APT_WingUp;
-        newAS.APT_Recovery = APT_Recovery;
+        newAS.ActorSkillName = ActorSkillName;
         ChildClone(newAS);
         return newAS;
     }
 
-    protected virtual void ChildClone(ActorActiveSkill newAS)
+    protected virtual void ChildClone(ActorActiveSkill cloneData)
     {
     }
 
     public virtual void CopyDataFrom(ActorActiveSkill srcData)
     {
         TargetCamp = srcData.TargetCamp;
-        APT_Cooldown = srcData.APT_Cooldown;
-        APT_CastDuration = srcData.APT_CastDuration;
-        APT_WingUp = srcData.APT_WingUp;
-        APT_Recovery = srcData.APT_Recovery;
+        ActorSkillName = srcData.ActorSkillName;
     }
 }
 

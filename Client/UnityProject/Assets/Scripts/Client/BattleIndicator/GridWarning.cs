@@ -11,6 +11,12 @@ public class GridWarning : BattleIndicator
     [SerializeField]
     private MeshRenderer BorderHighlight;
 
+    public override void OnProcess(float ratio)
+    {
+        base.OnProcess(ratio);
+        Fill.transform.localScale = new Vector3(ratio, ratio, 1);
+    }
+
     public GridWarning SetFillColor(Color color)
     {
         Fill.GetPropertyBlock(mpb);

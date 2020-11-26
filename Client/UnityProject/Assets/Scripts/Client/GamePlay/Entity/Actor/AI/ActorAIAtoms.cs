@@ -491,6 +491,7 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.IsFrozen) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
             GridPos3D targetGP = BattleManager.Instance.Player1.CurWorldGP;
             GridPos3D curGP = Actor.CurWorldGP;
@@ -511,6 +512,7 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.IsFrozen) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
             if (string.IsNullOrWhiteSpace(SkillClassName.value)) return Status.Failure;
             if (Actor.ActorActiveSkillDict.TryGetValue(SkillClassName.value, out ActorActiveSkill aas))

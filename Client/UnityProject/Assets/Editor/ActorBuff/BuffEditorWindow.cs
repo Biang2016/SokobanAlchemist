@@ -109,7 +109,14 @@ public class BuffEditorWindow : EditorWindow
     private void OnGUI()
     {
         EditorGUILayout.LabelField("Buff克制矩阵");
-        table?.DrawTable();
+        try
+        {
+            table?.DrawTable();
+        }
+        catch
+        {
+        }
+
         if (GUILayout.Button("加载 / 修改矩阵维度后先加载再保存，否则丢失数据"))
         {
             ConfigManager.LoadBuffAttributeMatrix(DataFormat.Binary);

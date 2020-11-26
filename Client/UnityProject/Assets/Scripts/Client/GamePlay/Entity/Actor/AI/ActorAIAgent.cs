@@ -131,14 +131,27 @@ public class ActorAIAgent
         float dist = (Actor.CurWorldGP.ToVector3() - currentDestination.ToVector3()).magnitude;
         if (dist <= KeepDistanceMax + (KeepDistanceMax.Equals(0) && LastNodeOccupied ? 1 : 0) && dist >= KeepDistanceMin)
         {
-            Vector3 forward = dest.ToVector3() - Actor.transform.position;
-            if (forward.normalized.magnitude > 0)
+            bool interruptPathFinding = false;
+            if (dist - keepDistanceMin >= 1)
             {
-                Actor.CurForward = forward.normalized;
+                interruptPathFinding = 0.5f.ProbabilityBool();
+            }
+            else
+            {
+                interruptPathFinding = true;
             }
 
-            InterruptCurrentPathFinding();
-            return SetDestinationRetCode.AlreadyArrived;
+            if (interruptPathFinding)
+            {
+                Vector3 forward = dest.ToVector3() - Actor.transform.position;
+                if (forward.normalized.magnitude > 0)
+                {
+                    Actor.CurForward = forward.normalized;
+                }
+
+                InterruptCurrentPathFinding();
+                return SetDestinationRetCode.AlreadyArrived;
+            }
         }
 
         if (dist <= KeepDistanceMin)

@@ -29,12 +29,21 @@ public partial class Box
 
     private bool CollideCalculate(Collision collision)
     {
+        bool requireCommonDurabilityReduce = false;
         if (BoxStatPropSet.CollideWithBoxDurability.Value > 0 && collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box)
         {
             Box box = collision.gameObject.GetComponentInParent<Box>();
             if (box != null)
             {
-                BoxStatPropSet.CollideWithBoxDurability.Value--;
+                if (BoxStatPropSet.FrozenLevel.Value >= 1)
+                {
+                    BoxStatPropSet.FrozenValue.Value -= BoxStatPropSet.FrozenValuePerLevel;
+                }
+                else
+                {
+                    BoxStatPropSet.CollideWithBoxDurability.Value--;
+                    requireCommonDurabilityReduce = true;
+                }
             }
         }
 
@@ -49,12 +58,20 @@ public partial class Box
             {
                 if (LastTouchActor != null && LastTouchActor.IsOpponentCampOf(actor))
                 {
-                    BoxStatPropSet.CollideWithActorDurability.Value--;
+                    if (BoxStatPropSet.FrozenLevel.Value >= 1)
+                    {
+                        BoxStatPropSet.FrozenValue.Value -= BoxStatPropSet.FrozenValuePerLevel;
+                    }
+                    else
+                    {
+                        BoxStatPropSet.CollideWithActorDurability.Value--;
+                        requireCommonDurabilityReduce = true;
+                    }
                 }
             }
         }
 
-        BoxStatPropSet.CommonDurability.Value--;
+        if (requireCommonDurabilityReduce) BoxStatPropSet.CommonDurability.Value--;
         return BoxStatPropSet.CollideWithBoxDurability.Value > 0 && BoxStatPropSet.CollideWithActorDurability.Value > 0 && BoxStatPropSet.CommonDurability.Value > 0;
     }
 }

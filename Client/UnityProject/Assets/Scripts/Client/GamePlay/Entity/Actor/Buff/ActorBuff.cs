@@ -310,43 +310,37 @@ public class ActorBuff_ChangeActorStatInstantly : ActorBuff
 public enum BuffAttribute
 {
     [LabelText("瞬时效果")]
-    InstantEffect,
+    InstantEffect = 0,
 
     [LabelText("加速")]
-    SpeedUp,
+    SpeedUp = 1,
 
     [LabelText("行动力")]
-    ActionPoint,
+    ActionPoint = 2,
 
     [LabelText("减速")]
-    SlowDown,
-
-    [LabelText("冰冻")]
-    Frozen,
-
-    [LabelText("燃烧")]
-    Firing,
+    SlowDown = 3,
 
     [LabelText("眩晕")]
-    Stun,
+    Stun = 4,
 
     [LabelText("眩晕免疫")]
-    StunImmune,
+    StunImmune = 5,
 
     [LabelText("无敌")]
-    Invincible,
+    Invincible = 6,
 
     [LabelText("隐身")]
-    Hiding,
+    Hiding = 7,
 
     [LabelText("中毒")]
-    Poison,
+    Poison = 8,
 
     [LabelText("最大血量")]
-    MaxHealth,
+    MaxHealth = 9,
 
     [LabelText("击退")]
-    Repulse,
+    Repulse = 10,
 }
 
 public enum BuffAttributeRelationship

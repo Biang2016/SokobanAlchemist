@@ -74,6 +74,7 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
                     case RelativeCamp.FriendCamp: return LayerMask_HitBox_Player;
                     case RelativeCamp.OpponentCamp: return LayerMask_HitBox_Enemy;
                     case RelativeCamp.NeutralCamp: return LayerMask_HitBox_Enemy;
+                    case RelativeCamp.AllCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Player;
                 }
 
                 break;
@@ -86,6 +87,7 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
                     case RelativeCamp.FriendCamp: return LayerMask_HitBox_Enemy;
                     case RelativeCamp.OpponentCamp: return LayerMask_HitBox_Player;
                     case RelativeCamp.NeutralCamp: return LayerMask_HitBox_Enemy;
+                    case RelativeCamp.AllCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Player;
                 }
 
                 break;
@@ -98,9 +100,10 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
                     case RelativeCamp.FriendCamp: return LayerMask_HitBox_Player;
                     case RelativeCamp.OpponentCamp: return LayerMask_HitBox_Enemy;
                     case RelativeCamp.NeutralCamp: return LayerMask_HitBox_Enemy;
+                    case RelativeCamp.AllCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Player;
                 }
 
-                break;
+                    break;
             }
         }
 

@@ -77,7 +77,13 @@ public class Actor : Entity
     internal Vector3 CurForward
     {
         get { return transform.forward; }
-        set { transform.forward = value; }
+        set
+        {
+            if (value != Vector3.zero)
+            {
+                transform.forward = value;
+            }
+        }
     }
 
     [DisplayAsString]
@@ -108,6 +114,12 @@ public class Actor : Entity
     [FoldoutGroup("战斗状态")]
     [DisableInPlayMode]
     public Camp Camp;
+
+    [LabelText("冻结")]
+    [FoldoutGroup("战斗状态")]
+    [DisableInPlayMode]
+    [ShowInInspector]
+    public bool IsFrozen => ActorStatPropSet.IsFrozen;
 
     [ShowInInspector]
     [HideInEditorMode]
@@ -623,7 +635,7 @@ public class Actor : Entity
 
     protected virtual void MoveInternal()
     {
-        if (!ActorStatPropSet.IsFrozen && !ActorBuffHelper.IsBeingRepulsed)
+        if (!IsFrozen && !ActorBuffHelper.IsBeingRepulsed)
         {
             if (CurMoveAttempt.magnitude > 0)
             {
@@ -672,7 +684,7 @@ public class Actor : Entity
         CurWorldGP = transform.position.ToGridPos3D();
 
         // 底部无Box则下落一格
-        if (!ActorStatPropSet.IsFrozen)
+        if (!IsFrozen)
         {
             Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(CurWorldGP + new GridPos3D(0, -1, 0), out WorldModule _, out GridPos3D localGP, false);
             if (!box)
@@ -804,7 +816,7 @@ public class Actor : Entity
         if (ActorStatPropSet.ActionPoint.Value > ActorStatPropSet.DashConsumeActionPoint.GetModifiedValue)
         {
             ActorStatPropSet.ActionPoint.Value -= ActorStatPropSet.DashConsumeActionPoint.GetModifiedValue;
-            if (ActorStatPropSet.IsFrozen)
+            if (IsFrozen)
             {
                 ActorStatPropSet.FrozenValue.Value -= 50;
             }
@@ -820,7 +832,7 @@ public class Actor : Entity
         if (ActorStatPropSet.ActionPoint.Value > ActorStatPropSet.VaultConsumeActionPoint.GetModifiedValue)
         {
             ActorStatPropSet.ActionPoint.Value -= ActorStatPropSet.VaultConsumeActionPoint.GetModifiedValue;
-            if (ActorStatPropSet.IsFrozen)
+            if (IsFrozen)
             {
                 ActorStatPropSet.FrozenValue.Value -= 50;
             }

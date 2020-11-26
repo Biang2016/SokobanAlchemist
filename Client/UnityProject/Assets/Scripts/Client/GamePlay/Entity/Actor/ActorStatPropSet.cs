@@ -108,6 +108,8 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
 
     internal int FiringValuePerLevel => Mathf.RoundToInt(((float) FiringValue.MaxValue / FiringLevel.MaxValue));
 
+    public bool IsFiring => FiringLevel.Value > 0;
+
     [BoxGroup("燃烧")]
     [LabelText("燃烧持续特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
@@ -119,41 +121,114 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
 
     #region 技能
 
-    #region 普通攻击
+    [LabelText("技能参数列表")]
+    public List<SkillPropertyCollection> SkillsPropertyCollections = new List<SkillPropertyCollection>();
 
-    [BoxGroup("攻击")]
-    [LabelText("@\"攻击伤害\t\"+AttackDamage")]
-    public ActorProperty AttackDamage = new ActorProperty(ActorPropertyType.AttackDamage);
+    [Serializable]
+    public class SkillPropertyCollection : IClone<SkillPropertyCollection>
+    {
+        public Dictionary<ActorSkillPropertyType, ActorProperty> PropertyDict = new Dictionary<ActorSkillPropertyType, ActorProperty>();
 
-    [BoxGroup("攻击")]
-    [LabelText("@\"攻击附加燃烧值\t\"+AttackAttach_FiringValue")]
-    public ActorProperty AttackAttach_FiringValue = new ActorProperty(ActorPropertyType.AttackAttach_FiringValue);
+        [SerializeField]
+        [LabelText("技能名备注")]
+        private string skillAlias = "";
 
-    [BoxGroup("攻击")]
-    [LabelText("@\"攻击附加冰冻值\t\"+AttackAttach_FrozenValue")]
-    public ActorProperty AttackAttach_FrozenValue = new ActorProperty(ActorPropertyType.AttackAttach_FrozenValue);
+        [LabelText("@\"伤害\t\"+Damage")]
+        public ActorProperty Damage = new ActorProperty(ActorSkillPropertyType.Damage);
 
-    [BoxGroup("攻击")]
-    [LabelText("@\"攻击范围\t\"+AttackRange")]
-    public ActorProperty AttackRange = new ActorProperty(ActorPropertyType.AttackRange);
+        [LabelText("@\"附加燃烧值\t\"+Attach_FiringValue")]
+        public ActorProperty Attach_FiringValue = new ActorProperty(ActorSkillPropertyType.Attach_FiringValue);
 
-    [BoxGroup("攻击")]
-    [LabelText("@\"攻击CD/ms\t\"+AttackCooldown")]
-    public ActorProperty AttackCooldown = new ActorProperty(ActorPropertyType.AttackCooldown);
+        [LabelText("@\"附加冰冻值\t\"+Attach_FrozenValue")]
+        public ActorProperty Attach_FrozenValue = new ActorProperty(ActorSkillPropertyType.Attach_FrozenValue);
 
-    [BoxGroup("攻击")]
-    [LabelText("@\"攻击施法时间/ms\t\"+AttackCastDuration")]
-    public ActorProperty AttackCastDuration = new ActorProperty(ActorPropertyType.AttackCastDuration);
+        [LabelText("@\"目标数量\t\"+MaxTargetCount")]
+        public ActorProperty MaxTargetCount = new ActorProperty(ActorSkillPropertyType.MaxTargetCount);
 
-    [BoxGroup("攻击")]
-    [LabelText("@\"攻击前摇/ms\t\"+AttackWingUp")]
-    public ActorProperty AttackWingUp = new ActorProperty(ActorPropertyType.AttackWingUp);
+        [LabelText("@\"施法正方形范围边长\t\"+CastingRadius")]
+        public ActorProperty CastingRadius = new ActorProperty(ActorSkillPropertyType.CastingRadius);
 
-    [BoxGroup("攻击")]
-    [LabelText("@\"攻击后摇/ms\t\"+AttackRecovery")]
-    public ActorProperty AttackRecovery = new ActorProperty(ActorPropertyType.AttackRecovery);
+        [LabelText("@\"效果半径\t\"+EffectRadius")]
+        public ActorProperty EffectRadius = new ActorProperty(ActorSkillPropertyType.EffectRadius);
 
-    #endregion
+        [LabelText("@\"宽度X\t\"+Width")]
+        public ActorProperty Width = new ActorProperty(ActorSkillPropertyType.Width);
+
+        [LabelText("@\"深度Z\t\"+Depth")]
+        public ActorProperty Depth = new ActorProperty(ActorSkillPropertyType.Depth);
+
+        [LabelText("@\"冷却时间/ms\t\"+Cooldown")]
+        public ActorProperty Cooldown = new ActorProperty(ActorSkillPropertyType.Cooldown);
+
+        [LabelText("@\"前摇/ms\t\"+WingUp")]
+        public ActorProperty WingUp = new ActorProperty(ActorSkillPropertyType.WingUp);
+
+        [LabelText("@\"施法时间/ms\t\"+CastDuration")]
+        public ActorProperty CastDuration = new ActorProperty(ActorSkillPropertyType.CastDuration);
+
+        [LabelText("@\"后摇/ms\t\"+Recovery")]
+        public ActorProperty Recovery = new ActorProperty(ActorSkillPropertyType.Recovery);
+
+        [LabelText("@\"技能延迟/ms\t\"+Delay")]
+        public ActorProperty Delay = new ActorProperty(ActorSkillPropertyType.Delay);
+
+        [LabelText("@\"连续释放次数\t\"+SkillCastTimes")]
+        public ActorProperty SkillCastTimes = new ActorProperty(ActorSkillPropertyType.SkillCastTimes);
+
+        public void Initialize()
+        {
+            PropertyDict.Add(ActorSkillPropertyType.Damage, Damage);
+            PropertyDict.Add(ActorSkillPropertyType.Attach_FiringValue, Attach_FiringValue);
+            PropertyDict.Add(ActorSkillPropertyType.Attach_FrozenValue, Attach_FrozenValue);
+            PropertyDict.Add(ActorSkillPropertyType.MaxTargetCount, MaxTargetCount);
+            PropertyDict.Add(ActorSkillPropertyType.CastingRadius, CastingRadius);
+            PropertyDict.Add(ActorSkillPropertyType.EffectRadius, EffectRadius);
+            PropertyDict.Add(ActorSkillPropertyType.Width, Width);
+            PropertyDict.Add(ActorSkillPropertyType.Depth, Depth);
+            PropertyDict.Add(ActorSkillPropertyType.Cooldown, Cooldown);
+            PropertyDict.Add(ActorSkillPropertyType.WingUp, WingUp);
+            PropertyDict.Add(ActorSkillPropertyType.CastDuration, CastDuration);
+            PropertyDict.Add(ActorSkillPropertyType.Recovery, Recovery);
+            PropertyDict.Add(ActorSkillPropertyType.Delay, Delay);
+            PropertyDict.Add(ActorSkillPropertyType.SkillCastTimes, SkillCastTimes);
+
+            foreach (KeyValuePair<ActorSkillPropertyType, ActorProperty> kv in PropertyDict)
+            {
+                kv.Value.Initialize();
+            }
+        }
+
+        public void OnRecycled()
+        {
+            foreach (KeyValuePair<ActorSkillPropertyType, ActorProperty> kv in PropertyDict)
+            {
+                kv.Value.ClearCallBacks();
+            }
+
+            PropertyDict.Clear();
+        }
+
+        public SkillPropertyCollection Clone()
+        {
+            SkillPropertyCollection newSPC = new SkillPropertyCollection();
+            newSPC.skillAlias = skillAlias;
+            newSPC.Damage = (ActorProperty) Damage.Clone();
+            newSPC.Attach_FiringValue = (ActorProperty) Attach_FiringValue.Clone();
+            newSPC.Attach_FrozenValue = (ActorProperty) Attach_FrozenValue.Clone();
+            newSPC.MaxTargetCount = (ActorProperty) MaxTargetCount.Clone();
+            newSPC.CastingRadius = (ActorProperty) CastingRadius.Clone();
+            newSPC.EffectRadius = (ActorProperty) EffectRadius.Clone();
+            newSPC.Width = (ActorProperty) Width.Clone();
+            newSPC.Depth = (ActorProperty) Depth.Clone();
+            newSPC.Cooldown = (ActorProperty) Cooldown.Clone();
+            newSPC.WingUp = (ActorProperty) WingUp.Clone();
+            newSPC.CastDuration = (ActorProperty) CastDuration.Clone();
+            newSPC.Recovery = (ActorProperty) Recovery.Clone();
+            newSPC.Delay = (ActorProperty) Delay.Clone();
+            newSPC.SkillCastTimes = (ActorProperty) SkillCastTimes.Clone();
+            return newSPC;
+        }
+    }
 
     #endregion
 
@@ -195,14 +270,6 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         FiringResistance.Initialize();
         FiringRecovery.Initialize();
         FiringGrowthPercent.Initialize();
-        AttackDamage.Initialize();
-        AttackAttach_FiringValue.Initialize();
-        AttackAttach_FrozenValue.Initialize();
-        AttackRange.Initialize();
-        AttackCooldown.Initialize();
-        AttackCastDuration.Initialize();
-        AttackWingUp.Initialize();
-        AttackRecovery.Initialize();
 
         Health.MaxValue = MaxHealth.GetModifiedValue;
         Health.OnValueReachZero += () => { Life.Value--; };
@@ -282,18 +349,10 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
 
         #endregion
 
-        #region AttackDamage
-
-        PropertyDict.Add(ActorPropertyType.AttackDamage, AttackDamage);
-        PropertyDict.Add(ActorPropertyType.AttackAttach_FiringValue, AttackAttach_FiringValue);
-        PropertyDict.Add(ActorPropertyType.AttackAttach_FrozenValue, AttackAttach_FrozenValue);
-        PropertyDict.Add(ActorPropertyType.AttackRange, AttackRange);
-        PropertyDict.Add(ActorPropertyType.AttackCooldown, AttackCooldown);
-        PropertyDict.Add(ActorPropertyType.AttackCastDuration, AttackCastDuration);
-        PropertyDict.Add(ActorPropertyType.AttackWingUp, AttackWingUp);
-        PropertyDict.Add(ActorPropertyType.AttackRecovery, AttackRecovery);
-
-        #endregion
+        foreach (SkillPropertyCollection spc in SkillsPropertyCollections)
+        {
+            spc.Initialize();
+        }
 
         foreach (ActorBuff rawActorDefaultBuff in RawActorDefaultBuffs)
         {
@@ -315,6 +374,11 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         }
 
         PropertyDict.Clear();
+
+        foreach (SkillPropertyCollection spc in SkillsPropertyCollections)
+        {
+            spc.OnRecycled();
+        }
     }
 
     private float abnormalStateAutoTick = 0f;
@@ -363,15 +427,8 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         newStatPropSet.FiringLevel = (ActorStat) FiringLevel.Clone();
         newStatPropSet.FiringFX = FiringFX;
         newStatPropSet.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
-        newStatPropSet.AttackDamage = (ActorProperty) AttackDamage.Clone();
-        newStatPropSet.AttackAttach_FiringValue = (ActorProperty) AttackAttach_FiringValue.Clone();
-        newStatPropSet.AttackAttach_FrozenValue = (ActorProperty) AttackAttach_FrozenValue.Clone();
-        newStatPropSet.AttackRange = (ActorProperty) AttackRange.Clone();
-        newStatPropSet.AttackCooldown = (ActorProperty) AttackCooldown.Clone();
-        newStatPropSet.AttackCastDuration = (ActorProperty)AttackCastDuration.Clone();
-        newStatPropSet.AttackWingUp = (ActorProperty) AttackWingUp.Clone();
-        newStatPropSet.AttackRecovery = (ActorProperty) AttackRecovery.Clone();
 
+        newStatPropSet.SkillsPropertyCollections = SkillsPropertyCollections.Clone();
         newStatPropSet.RawActorDefaultBuffs = RawActorDefaultBuffs.Clone();
         return newStatPropSet;
     }
@@ -395,10 +452,15 @@ public class ActorProperty : Property
 
     public ActorProperty(ActorPropertyType propertyType)
     {
-        m_PropertyType = propertyType;
+        m_PropertyType = (int) propertyType;
     }
 
-    internal ActorPropertyType m_PropertyType;
+    public ActorProperty(ActorSkillPropertyType propertyType)
+    {
+        m_PropertyType = (int) propertyType;
+    }
+
+    internal int m_PropertyType;
 
     protected override void ChildClone(Property newProp)
     {
@@ -455,6 +517,24 @@ public enum ActorStatType
     FiringLevel = 121,
 }
 
+public enum ActorSkillNames
+{
+    [LabelText("技能0")]
+    Skill_0 = 0,
+
+    [LabelText("技能1")]
+    Skill_1 = 1,
+
+    [LabelText("技能2")]
+    Skill_2 = 2,
+
+    [LabelText("技能3")]
+    Skill_3 = 3,
+
+    [LabelText("技能4")]
+    Skill_4 = 4,
+}
+
 public enum ActorPropertyType
 {
     [LabelText("血量上限")]
@@ -495,28 +575,49 @@ public enum ActorPropertyType
 
     [LabelText("燃烧增长率")]
     FiringGrowthPercent = 301,
+}
 
-    [LabelText("攻击伤害")]
-    AttackDamage = 400,
+public enum ActorSkillPropertyType
+{
+    [LabelText("伤害")]
+    Damage = 10001,
 
-    [LabelText("攻击附加燃烧值")]
-    AttackAttach_FiringValue = 401,
+    [LabelText("附加燃烧值")]
+    Attach_FiringValue = 10011,
 
-    [LabelText("攻击附加冰冻值")]
-    AttackAttach_FrozenValue = 402,
+    [LabelText("附加冰冻值")]
+    Attach_FrozenValue = 10012,
 
-    [LabelText("攻击范围")]
-    AttackRange = 500,
+    [LabelText("目标数量")]
+    MaxTargetCount = 10021,
 
-    [LabelText("攻击CD")]
-    AttackCooldown = 600,
+    [LabelText("施法正方形范围边长")]
+    CastingRadius = 10022,
 
-    [LabelText("攻击施法时间")]
-    AttackCastDuration = 601,
+    [LabelText("效果半径")]
+    EffectRadius = 10023,
 
-    [LabelText("攻击前摇")]
-    AttackWingUp = 602,
+    [LabelText("宽度X")]
+    Width = 10024,
 
-    [LabelText("攻击后摇")]
-    AttackRecovery = 603,
+    [LabelText("深度Z")]
+    Depth = 10025,
+
+    [LabelText("冷却时间")]
+    Cooldown = 10031,
+
+    [LabelText("前摇")]
+    WingUp = 10032,
+
+    [LabelText("施法时间")]
+    CastDuration = 10033,
+
+    [LabelText("后摇")]
+    Recovery = 10034,
+
+    [LabelText("延迟")]
+    Delay = 10035,
+
+    [LabelText("连续释放次数")]
+    SkillCastTimes = 10041,
 }
