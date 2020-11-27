@@ -241,20 +241,16 @@ public partial class Box : Entity
     [ShowInInspector]
     [FoldoutGroup("箱子被动技能")]
     [LabelText("箱子被动技能")]
-    [FormerlySerializedAs("RawBoxFunctions")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<BoxPassiveSkill> RawBoxPassiveSkills = new List<BoxPassiveSkill>(); // 干数据，禁修改
 
-    [FormerlySerializedAs("BoxFunctions")]
     public List<BoxPassiveSkill> BoxPassiveSkills = new List<BoxPassiveSkill>(); // 湿数据，每个Box生命周期开始前从干数据拷出，结束后清除
 
-    [FormerlySerializedAs("BoxFunctionDict")]
     public Dictionary<string, BoxPassiveSkill> BoxPassiveSkillDict = new Dictionary<string, BoxPassiveSkill>(); // 便于寻找
 
     internal bool BoxPassiveSkillMarkAsDeleted = false;
 
     [HideInInspector]
-    [FormerlySerializedAs("BoxFunctionBaseData")]
     public byte[] BoxPassiveSkillBaseData;
 
     public override void OnBeforeSerialize()
@@ -1337,7 +1333,6 @@ public partial class Box : Entity
     {
         public GridPos3D LocalGP; // Box在Module内的GP
 
-        [FormerlySerializedAs("BoxFunctions")]
         public List<BoxPassiveSkill> BoxPassiveSkills = new List<BoxPassiveSkill>();
 
         public BoxExtraSerializeData Clone()

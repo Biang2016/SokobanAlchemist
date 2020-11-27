@@ -24,7 +24,6 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
         public string RequireBoxTypeName = "None";
 
         [LabelText("箱子至少停留时间/s")]
-        [FormerlySerializedAs("RequireStayDuration")]
         public float RequiredStayDuration;
 
         protected override void ChildClone(LevelComponentData newData)

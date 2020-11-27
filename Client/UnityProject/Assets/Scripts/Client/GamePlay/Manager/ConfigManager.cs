@@ -490,7 +490,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
         else
         {
-            Debug.LogError("Buff克制表不存在");
+            ExportBuffAttributeMatrix(dataFormat);
+            LoadBuffAttributeMatrix(dataFormat);
         }
     }
 

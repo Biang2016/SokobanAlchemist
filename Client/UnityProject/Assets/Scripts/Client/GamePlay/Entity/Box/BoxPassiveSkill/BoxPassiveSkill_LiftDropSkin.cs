@@ -2,8 +2,6 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_LiftDropSkin", typeof(BoxPassiveSkill_LiftDropSkin))]
-
 [Serializable]
 public class BoxPassiveSkill_LiftDropSkin : BoxPassiveSkill
 {

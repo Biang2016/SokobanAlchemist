@@ -156,7 +156,6 @@ public class Actor : Entity
 
     [FoldoutGroup("特效")]
     [LabelText("生命恢复特效尺寸")]
-    [FormerlySerializedAs("GainLifeFXScale")]
     public float HealFXScale = 1f;
 
     [FoldoutGroup("特效")]
@@ -166,7 +165,6 @@ public class Actor : Entity
 
     [FoldoutGroup("特效")]
     [LabelText("命数增加特效尺寸")]
-    [FormerlySerializedAs("GainLifeFXScale")]
     public float GainLifeFXScale = 1f;
 
     [FoldoutGroup("特效")]
@@ -335,7 +333,7 @@ public class Actor : Entity
     [ShowInInspector]
     [FoldoutGroup("Actor主动技能")]
     [LabelText("主动技能列表")]
-    [ListDrawerSettings(ListElementLabelName = "Description")]
+    [ListDrawerSettings(ListElementLabelName = "SkillAlias")]
     public List<ActorActiveSkill> RawActorActiveSkills = new List<ActorActiveSkill>(); // 干数据，禁修改
 
     public List<ActorActiveSkill> ActorActiveSkills = new List<ActorActiveSkill>(); // 湿数据，每个Actor生命周期开始前从干数据拷出，结束后清除
@@ -366,6 +364,7 @@ public class Actor : Entity
     public void AddNewActiveSkill(ActorActiveSkill aas)
     {
         aas.Actor = this;
+        aas.ParentActiveSkill = null;
         aas.OnInit();
         if (!ActorActiveSkillDict.ContainsKey(aas.ActorSkillIndex))
         {
@@ -396,12 +395,10 @@ public class Actor : Entity
     [ShowInInspector]
     [FoldoutGroup("冻结")]
     [LabelText("冻结的箱子被动技能")]
-    [FormerlySerializedAs("RawFrozenBoxFunctions")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<BoxPassiveSkill> RawFrozenBoxPassiveSkills = new List<BoxPassiveSkill>(); // 干数据，禁修改
 
     [HideInInspector]
-    [FormerlySerializedAs("RawFrozenBoxFunctionData")]
     public byte[] RawFrozenBoxPassiveSkillData;
 
     public override void OnBeforeSerialize()
@@ -610,6 +607,11 @@ public class Actor : Entity
                 {
                     aps.OnTick(actorPassiveSkillTickInterval);
                 }
+            }
+
+            foreach (ActorActiveSkill aas in ActorActiveSkills)
+            {
+                aas.OnFixedUpdate(Time.fixedDeltaTime);
             }
 
             actorActiveSkillTicker += Time.fixedDeltaTime;

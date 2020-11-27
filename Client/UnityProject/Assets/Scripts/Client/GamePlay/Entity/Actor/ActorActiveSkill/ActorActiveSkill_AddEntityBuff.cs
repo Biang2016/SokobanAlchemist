@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using BiangStudio.CloneVariant;
 using BiangStudio.GameDataFormat.Grid;
@@ -42,9 +43,8 @@ public class ActorActiveSkill_AddEntityBuff : ActorActiveSkill_AreaCast, ISerial
         base.OnUnInit();
     }
 
-    protected override void Cast()
+    protected override IEnumerator Cast(float castDuration)
     {
-        base.Cast();
         int targetCount = 0;
         HashSet<uint> entityGUIDSet = new HashSet<uint>();
         foreach (GridPos3D gp in RealSkillEffectGPs)
@@ -67,7 +67,7 @@ public class ActorActiveSkill_AddEntityBuff : ActorActiveSkill_AreaCast, ISerial
                     }
 
                     targetCount++;
-                    if (targetCount >= GetValue(ActorSkillPropertyType.MaxTargetCount)) return;
+                    if (targetCount >= GetValue(ActorSkillPropertyType.MaxTargetCount)) yield break;
                 }
             }
 
@@ -89,10 +89,11 @@ public class ActorActiveSkill_AddEntityBuff : ActorActiveSkill_AreaCast, ISerial
                     }
 
                     targetCount++;
-                    if (targetCount >= GetValue(ActorSkillPropertyType.MaxTargetCount)) return;
+                    if (targetCount >= GetValue(ActorSkillPropertyType.MaxTargetCount)) yield break;
                 }
             }
         }
+        yield return base.Cast(castDuration);
     }
 
     protected override void ChildClone(ActorActiveSkill cloneData)

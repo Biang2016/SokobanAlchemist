@@ -1,8 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_EnemyFrozenBox", typeof(BoxPassiveSkill_EnemyFrozenBox))]
-
 [Serializable]
 public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
 {

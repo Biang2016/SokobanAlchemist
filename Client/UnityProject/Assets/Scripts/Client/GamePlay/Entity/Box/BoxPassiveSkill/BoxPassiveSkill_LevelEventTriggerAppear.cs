@@ -2,8 +2,6 @@
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_LevelEventTriggerAppear", typeof(BoxPassiveSkill_LevelEventTriggerAppear))]
-
 [Serializable]
 public class BoxPassiveSkill_LevelEventTriggerAppear : BoxPassiveSkill_InvokeOnLevelEventID
 {
@@ -27,7 +25,6 @@ public class BoxPassiveSkill_LevelEventTriggerAppear : BoxPassiveSkill_InvokeOnL
     {
         public ushort BoxTypeIndex;
 
-        [FormerlySerializedAs("BoxFunction_LevelEventTriggerAppear")]
         public BoxPassiveSkill_LevelEventTriggerAppear BoxPassiveSkill_LevelEventTriggerAppear;
 
         public Box.WorldSpecialBoxData WorldSpecialBoxData; // 复用这个数据结构，仅世界下生效

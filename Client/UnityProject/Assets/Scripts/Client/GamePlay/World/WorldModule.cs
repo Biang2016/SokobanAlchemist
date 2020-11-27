@@ -24,7 +24,6 @@ public class WorldModule : PoolObject
     public WorldGroundCollider WorldGroundCollider;
     private List<LevelTriggerBase> WorldModuleLevelTriggers = new List<LevelTriggerBase>();
 
-    [FormerlySerializedAs("EventTriggerAppearBoxFunctionList")]
     public List<BoxPassiveSkill_LevelEventTriggerAppear> EventTriggerAppearBoxPassiveSkillList = new List<BoxPassiveSkill_LevelEventTriggerAppear>();
 
     [HideInInspector]

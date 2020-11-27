@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
@@ -9,9 +10,8 @@ public class ActorActiveSkill_Attack : ActorActiveSkill_AreaCast
 {
     protected override string Description => "普通攻击";
 
-    protected override void Cast()
+    protected override IEnumerator Cast(float castDuration)
     {
-        base.Cast();
         int targetCount = 0;
         HashSet<uint> actorGUIDSet = new HashSet<uint>();
         HashSet<uint> boxGUIDSet = new HashSet<uint>();
@@ -46,6 +46,8 @@ public class ActorActiveSkill_Attack : ActorActiveSkill_AreaCast
                 }
             }
         }
+
+        yield return base.Cast(castDuration);
     }
 
     protected override void ChildClone(ActorActiveSkill cloneData)

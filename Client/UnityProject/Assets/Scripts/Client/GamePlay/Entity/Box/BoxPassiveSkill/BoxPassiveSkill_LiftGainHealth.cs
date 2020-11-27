@@ -1,8 +1,6 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_LiftGainHealth", typeof(BoxPassiveSkill_LiftGainHealth))]
-
 [Serializable]
 public class BoxPassiveSkill_LiftGainHealth : BoxPassiveSkill
 {

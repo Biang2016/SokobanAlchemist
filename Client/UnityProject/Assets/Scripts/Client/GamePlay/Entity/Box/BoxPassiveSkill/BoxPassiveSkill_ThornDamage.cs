@@ -2,8 +2,6 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_ThornDamage", typeof(BoxPassiveSkill_ThornDamage))]
-
 [Serializable]
 public class BoxPassiveSkill_ThornDamage : BoxPassiveSkill
 {

@@ -17,6 +17,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     private AudioManager AudioManager => AudioManager.Instance;
     private CameraManager CameraManager => CameraManager.Instance;
     private UIManager UIManager => UIManager.Instance;
+    private ActiveSkillAgent ActiveSkillAgent => ActiveSkillAgent.Instance;
 
     #endregion
 
@@ -239,6 +240,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     {
         ControlManager.ShutDown();
 
+        ActiveSkillAgent.StopAllCoroutines();
+        
         FXManager.ShutDown();
         UIBattleTipManager.ShutDown();
         ProjectileManager.ShutDown();

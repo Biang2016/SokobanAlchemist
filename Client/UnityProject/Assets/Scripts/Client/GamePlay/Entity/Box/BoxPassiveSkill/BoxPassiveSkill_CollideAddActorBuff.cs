@@ -2,8 +2,6 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_CollideAddActorBuff", typeof(BoxPassiveSkill_CollideAddActorBuff))]
-
 [Serializable]
 public class BoxPassiveSkill_CollideAddActorBuff : BoxPassiveSkill
 {

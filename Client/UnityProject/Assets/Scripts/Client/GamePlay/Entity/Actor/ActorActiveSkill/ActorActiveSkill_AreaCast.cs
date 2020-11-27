@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using BiangStudio;
 using BiangStudio.GameDataFormat.Grid;
@@ -122,43 +123,26 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
 
     internal Dictionary<GridPos3D, GridWarning> GridWarningDict = new Dictionary<GridPos3D, GridWarning>();
 
-    public override void OnInit()
-    {
-        base.OnInit();
-    }
-
-    public override void OnUnInit()
-    {
-        base.OnUnInit();
-    }
-
-    public override void Clear()
-    {
-        base.Clear();
-        foreach (KeyValuePair<GridPos3D, GridWarning> kv in GridWarningDict)
-        {
-            kv.Value.PoolRecycle();
-        }
-
-        GridWarningDict.Clear();
-        SkillAreaGPs.Clear();
-        RealSkillEffectGPs.Clear();
-    }
-
     private List<GridPos3D> SkillAreaGPs = new List<GridPos3D>(16);
     protected List<GridPos3D> RealSkillEffectGPs = new List<GridPos3D>(16);
 
     protected override bool ValidateSkillTrigger()
     {
-        Clear();
+        if (!base.ValidateSkillTrigger()) return false;
+        GridPos3D targetGP = GetTargetGP();
+        GridRect castingRect = GetCastingRect();
+        if (!DontNeedCastingArea && !castingRect.Contains(targetGP))
+        {
+            Debug.Log("1111");
+            return false;
+        }
 
-        int effectRadius = GetValue(ActorSkillPropertyType.EffectRadius);
-        int width = GetValue(ActorSkillPropertyType.Width);
-        int depth = GetValue(ActorSkillPropertyType.Depth);
-        int castingRadius = GetValue(ActorSkillPropertyType.CastingRadius);
+        return true;
+    }
 
+    private GridPos3D GetTargetGP()
+    {
         GridPos3D targetGP = GridPos3D.Zero;
-        GridPos3D skillCastPosition = GridPos3D.Zero;
         switch (M_TargetInclination)
         {
             case TargetInclination.TargetCenteredNormalDistribution:
@@ -175,15 +159,33 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
             }
         }
 
-        int xMin = Actor.CurWorldGP.x - (castingRadius - 1);
-        int xMax = Actor.CurWorldGP.x + (castingRadius - 1);
-        int zMin = Actor.CurWorldGP.z - (castingRadius - 1);
-        int zMax = Actor.CurWorldGP.z + (castingRadius - 1);
+        return targetGP;
+    }
 
-        int xMin_SkillCastPos = xMin;
-        int xMax_SkillCastPos = xMax;
-        int zMin_SkillCastPos = zMin;
-        int zMax_SkillCastPos = zMax;
+    private GridRect GetCastingRect()
+    {
+        int castingRadius = GetValue(ActorSkillPropertyType.CastingRadius);
+        int xMin = Actor.CurWorldGP.x - (castingRadius - 1);
+        int zMin = Actor.CurWorldGP.z - (castingRadius - 1);
+        return new GridRect(xMin, zMin, castingRadius * 2 + 1, castingRadius * 2 + 1);
+    }
+
+    protected override void PrepareSkillInfo()
+    {
+        base.PrepareSkillInfo();
+
+        GridPos3D skillCastPosition = GridPos3D.Zero;
+        GridPos3D targetGP = GetTargetGP();
+        GridRect castingRect = GetCastingRect();
+
+        int effectRadius = GetValue(ActorSkillPropertyType.EffectRadius);
+        int width = GetValue(ActorSkillPropertyType.Width);
+        int depth = GetValue(ActorSkillPropertyType.Depth);
+
+        int xMin_SkillCastPos = castingRect.x_min;
+        int xMax_SkillCastPos = castingRect.x_max;
+        int zMin_SkillCastPos = castingRect.z_min;
+        int zMax_SkillCastPos = castingRect.z_max;
 
         if (M_CastAreaType == CastAreaType.RectCast)
         {
@@ -193,47 +195,40 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
             zMax_SkillCastPos -= width / 2 + 1 - 1;
         }
 
-        if ((targetGP.x <= xMax && targetGP.x >= xMin && targetGP.z <= zMax && targetGP.z >= zMin) || DontNeedCastingArea)
+        switch (M_TargetInclination)
         {
-            switch (M_TargetInclination)
+            case TargetInclination.TargetCenteredNormalDistribution:
             {
-                case TargetInclination.TargetCenteredNormalDistribution:
-                {
-                    int xRadius = Mathf.Min(Mathf.Abs(xMin_SkillCastPos - targetGP.x), Mathf.Abs(xMax_SkillCastPos - targetGP.x));
-                    int zRadius = Mathf.Min(Mathf.Abs(zMin_SkillCastPos - targetGP.z), Mathf.Abs(zMax_SkillCastPos - targetGP.z));
-                    skillCastPosition = new GridPos3D(CommonUtils.RandomGaussianInt(targetGP.x - xRadius, targetGP.x + xRadius), targetGP.y, CommonUtils.RandomGaussianInt(targetGP.z - zRadius, targetGP.z + zRadius));
-                    break;
-                }
-                case TargetInclination.CasterCenteredNormalDistribution:
-                {
-                    skillCastPosition = new GridPos3D(CommonUtils.RandomGaussianInt(xMin_SkillCastPos, xMax_SkillCastPos), targetGP.y, CommonUtils.RandomGaussianInt(zMin_SkillCastPos, zMax_SkillCastPos));
-                    break;
-                }
-                case TargetInclination.PurelyRandom:
-                {
-                    skillCastPosition = new GridPos3D(Random.Range(xMin_SkillCastPos, xMax_SkillCastPos), targetGP.y, Random.Range(zMin_SkillCastPos, zMax_SkillCastPos));
-                    break;
-                }
-                case TargetInclination.CasterExpelled:
-                {
-                    int xSign = Mathf.RoundToInt(Random.value * 2f - 1f);
-                    int zSign = Mathf.RoundToInt(Random.value * 2f - 1f);
-                    int x = xMin_SkillCastPos;
-                    int z = zMin_SkillCastPos;
-                    if (xSign == 0) x = Random.Range(xMin_SkillCastPos, xMax_SkillCastPos);
-                    if (zSign == 0) z = Random.Range(zMin_SkillCastPos, zMax_SkillCastPos);
-                    if (xSign == -1) x = xMin_SkillCastPos;
-                    if (xSign == 1) x = xMax_SkillCastPos;
-                    if (zSign == -1) z = zMin_SkillCastPos;
-                    if (zSign == 1) z = zMax_SkillCastPos;
-                    skillCastPosition = new GridPos3D(x, targetGP.y, z);
-                    break;
-                }
+                int xRadius = Mathf.Min(Mathf.Abs(xMin_SkillCastPos - targetGP.x), Mathf.Abs(xMax_SkillCastPos - targetGP.x));
+                int zRadius = Mathf.Min(Mathf.Abs(zMin_SkillCastPos - targetGP.z), Mathf.Abs(zMax_SkillCastPos - targetGP.z));
+                skillCastPosition = new GridPos3D(CommonUtils.RandomGaussianInt(targetGP.x - xRadius, targetGP.x + xRadius), targetGP.y, CommonUtils.RandomGaussianInt(targetGP.z - zRadius, targetGP.z + zRadius));
+                break;
             }
-        }
-        else
-        {
-            return false;
+            case TargetInclination.CasterCenteredNormalDistribution:
+            {
+                skillCastPosition = new GridPos3D(CommonUtils.RandomGaussianInt(xMin_SkillCastPos, xMax_SkillCastPos), targetGP.y, CommonUtils.RandomGaussianInt(zMin_SkillCastPos, zMax_SkillCastPos));
+                break;
+            }
+            case TargetInclination.PurelyRandom:
+            {
+                skillCastPosition = new GridPos3D(Random.Range(xMin_SkillCastPos, xMax_SkillCastPos), targetGP.y, Random.Range(zMin_SkillCastPos, zMax_SkillCastPos));
+                break;
+            }
+            case TargetInclination.CasterExpelled:
+            {
+                int xSign = Mathf.RoundToInt(Random.value * 2f - 1f);
+                int zSign = Mathf.RoundToInt(Random.value * 2f - 1f);
+                int x = xMin_SkillCastPos;
+                int z = zMin_SkillCastPos;
+                if (xSign == 0) x = Random.Range(xMin_SkillCastPos, xMax_SkillCastPos);
+                if (zSign == 0) z = Random.Range(zMin_SkillCastPos, zMax_SkillCastPos);
+                if (xSign == -1) x = xMin_SkillCastPos;
+                if (xSign == 1) x = xMax_SkillCastPos;
+                if (zSign == -1) z = zMin_SkillCastPos;
+                if (zSign == 1) z = zMax_SkillCastPos;
+                skillCastPosition = new GridPos3D(x, targetGP.y, z);
+                break;
+            }
         }
 
         switch (M_CastAreaType)
@@ -376,8 +371,6 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
                 RealSkillEffectGPs.Add(realGP);
             }
         }
-
-        return true;
     }
 
     private bool CheckAreaGPValid(GridPos3D gp, out GridPos3D worldGP)
@@ -399,9 +392,8 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
         return false;
     }
 
-    protected override void WingUp()
+    protected override IEnumerator WingUp(float wingUpTime)
     {
-        base.WingUp();
         foreach (GridPos3D gp in SkillAreaGPs)
         {
             GridWarning gw = GameObjectPoolManager.Instance.BattleIndicatorDict[BattleIndicatorTypeIndex].AllocateGameObject<GridWarning>(WorldManager.Instance.BattleIndicatorRoot);
@@ -409,13 +401,13 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
             gw.transform.position = gp.ToVector3();
             GridWarningDict.Add(gp, gw);
         }
+
+        yield return base.WingUp(wingUpTime);
     }
 
-    protected override void Cast()
+    protected override IEnumerator Cast(float castDuration)
     {
-        base.Cast();
         UpdateSkillEffectRealPositions();
-
         if (!string.IsNullOrWhiteSpace(CastFX))
         {
             ushort fxTypeIndex = ConfigManager.GetFXTypeIndex(CastFX);
@@ -427,12 +419,32 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
                 }
             }
         }
+
+        yield return base.Cast(castDuration);
     }
 
-    protected override void Recover()
+    public override void OnCastPhaseComplete()
     {
-        base.Recover();
-        Clear();
+        base.OnCastPhaseComplete();
+        foreach (KeyValuePair<GridPos3D, GridWarning> kv in GridWarningDict)
+        {
+            kv.Value.PoolRecycle();
+        }
+
+        GridWarningDict.Clear();
+        SkillAreaGPs.Clear();
+        RealSkillEffectGPs.Clear();
+    }
+
+    protected override IEnumerator Recover(float recoveryTime)
+    {
+        yield return base.Recover(recoveryTime);
+    }
+
+    public override void OnFixedUpdate(float fixedDeltaTime)
+    {
+        base.OnFixedUpdate(fixedDeltaTime);
+        UpdateSkillEffectGridWarning();
     }
 
     public override void OnTick(float tickDeltaTime)
@@ -450,6 +462,13 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
             if (valid) RealSkillEffectGPs.Add(realGP);
             GridWarningDict[gp].SetShown(valid);
             GridWarningDict[gp].transform.position = realGP.ToVector3();
+        }
+    }
+
+    private void UpdateSkillEffectGridWarning()
+    {
+        foreach (GridPos3D gp in SkillAreaGPs)
+        {
             GridWarningDict[gp].OnProcess(WingUpRatio);
         }
     }

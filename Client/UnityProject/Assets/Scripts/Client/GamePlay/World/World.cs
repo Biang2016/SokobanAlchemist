@@ -20,7 +20,6 @@ public class World : PoolObject
     private List<WorldCameraPOI> POIs = new List<WorldCameraPOI>();
     private List<LevelTriggerBase> WorldLevelTriggers = new List<LevelTriggerBase>();
 
-    [FormerlySerializedAs("EventTriggerAppearBoxFunctionList")]
     public List<BoxPassiveSkill_LevelEventTriggerAppear> EventTriggerAppearBoxPassiveSkillList = new List<BoxPassiveSkill_LevelEventTriggerAppear>();
 
     #region Root

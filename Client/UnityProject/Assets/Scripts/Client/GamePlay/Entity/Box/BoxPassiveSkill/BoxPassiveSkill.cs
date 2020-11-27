@@ -4,9 +4,6 @@ using BiangStudio.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunctionBase", typeof(BoxPassiveSkill))]
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxPassiveSkill.BoxFunctionBaseSpecialCaseType", typeof(BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType))]
-
 [Serializable]
 public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
 {

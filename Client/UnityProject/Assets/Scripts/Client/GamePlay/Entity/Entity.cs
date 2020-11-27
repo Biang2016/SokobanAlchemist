@@ -22,6 +22,12 @@ public abstract class Entity : PoolObject, ISerializationCallbackReceiver
 
     #endregion
 
+    public override void OnRecycled()
+    {
+        base.OnRecycled();
+        StopAllCoroutines();
+    }
+
     public virtual void OnBeforeSerialize()
     {
     }

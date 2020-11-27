@@ -2,8 +2,6 @@
 using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_ChangeBoxToEnemy", typeof(BoxPassiveSkill_ChangeBoxToEnemy))]
-
 [Serializable]
 public class BoxPassiveSkill_ChangeBoxToEnemy : BoxPassiveSkill_InvokeOnLevelEventID
 {

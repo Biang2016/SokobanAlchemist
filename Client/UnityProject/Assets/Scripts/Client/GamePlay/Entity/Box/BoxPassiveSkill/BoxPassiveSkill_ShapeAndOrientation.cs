@@ -2,8 +2,6 @@
 using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_ShapeAndOrientation", typeof(BoxPassiveSkill_ShapeAndOrientation))]
-
 [Serializable]
 public class BoxPassiveSkill_ShapeAndOrientation : BoxPassiveSkill
 {

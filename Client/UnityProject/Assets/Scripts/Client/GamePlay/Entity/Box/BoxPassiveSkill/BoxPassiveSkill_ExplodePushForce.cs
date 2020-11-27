@@ -4,8 +4,6 @@ using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_ExplodePushForce", typeof(BoxPassiveSkill_ExplodePushForce))]
-
 [Serializable]
 public class BoxPassiveSkill_ExplodePushForce : BoxPassiveSkill
 {

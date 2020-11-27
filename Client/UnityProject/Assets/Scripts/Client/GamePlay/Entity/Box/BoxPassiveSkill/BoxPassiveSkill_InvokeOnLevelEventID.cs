@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using BiangStudio.CloneVariant;
 using Sirenix.OdinInspector;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_InvokeOnLevelEventID", typeof(BoxPassiveSkill_InvokeOnLevelEventID))]
-
 [Serializable]
 public abstract class BoxPassiveSkill_InvokeOnLevelEventID : BoxPassiveSkill
 {

@@ -169,12 +169,6 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
         [LabelText("@\"后摇/ms\t\"+Recovery")]
         public ActorProperty Recovery = new ActorProperty(ActorSkillPropertyType.Recovery);
 
-        [LabelText("@\"技能延迟/ms\t\"+Delay")]
-        public ActorProperty Delay = new ActorProperty(ActorSkillPropertyType.Delay);
-
-        [LabelText("@\"连续释放次数\t\"+SkillCastTimes")]
-        public ActorProperty SkillCastTimes = new ActorProperty(ActorSkillPropertyType.SkillCastTimes);
-
         public void Initialize()
         {
             PropertyDict.Add(ActorSkillPropertyType.Damage, Damage);
@@ -189,8 +183,6 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
             PropertyDict.Add(ActorSkillPropertyType.WingUp, WingUp);
             PropertyDict.Add(ActorSkillPropertyType.CastDuration, CastDuration);
             PropertyDict.Add(ActorSkillPropertyType.Recovery, Recovery);
-            PropertyDict.Add(ActorSkillPropertyType.Delay, Delay);
-            PropertyDict.Add(ActorSkillPropertyType.SkillCastTimes, SkillCastTimes);
 
             foreach (KeyValuePair<ActorSkillPropertyType, ActorProperty> kv in PropertyDict)
             {
@@ -224,8 +216,6 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
             newSPC.WingUp = (ActorProperty) WingUp.Clone();
             newSPC.CastDuration = (ActorProperty) CastDuration.Clone();
             newSPC.Recovery = (ActorProperty) Recovery.Clone();
-            newSPC.Delay = (ActorProperty) Delay.Clone();
-            newSPC.SkillCastTimes = (ActorProperty) SkillCastTimes.Clone();
             return newSPC;
         }
     }
@@ -626,10 +616,4 @@ public enum ActorSkillPropertyType
 
     [LabelText("后摇")]
     Recovery = 10034,
-
-    [LabelText("延迟")]
-    Delay = 10035,
-
-    [LabelText("连续释放次数")]
-    SkillCastTimes = 10041,
 }

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_ExplodeAddBoxBuff", typeof(BoxPassiveSkill_ExplodeAddBoxBuff))]
-
 [Serializable]
 public class BoxPassiveSkill_ExplodeAddBoxBuff : BoxPassiveSkill
 {

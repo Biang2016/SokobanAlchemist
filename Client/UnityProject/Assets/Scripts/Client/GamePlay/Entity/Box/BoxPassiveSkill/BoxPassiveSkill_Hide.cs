@@ -1,8 +1,6 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_Hide", typeof(BoxPassiveSkill_Hide))]
-
 [Serializable]
 [LabelText("隐藏")]
 public class BoxPassiveSkill_Hide : BoxPassiveSkill

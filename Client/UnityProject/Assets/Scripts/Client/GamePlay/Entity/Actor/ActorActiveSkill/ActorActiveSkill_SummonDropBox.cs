@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using BiangStudio;
 using BiangStudio.CloneVariant;
@@ -17,9 +18,8 @@ public class ActorActiveSkill_SummonDropBox : ActorActiveSkill_AreaCast
     [LabelText("箱子起落高度")]
     public int DropFromHeightFromFloor = 1;
 
-    protected override void Cast()
+    protected override IEnumerator Cast(float castDuration)
     {
-        base.Cast();
         foreach (GridPos3D gp in RealSkillEffectGPs)
         {
             BoxNameWithProbability randomResult = CommonUtils.GetRandomWithProbabilityFromList(DropBoxList);
@@ -35,6 +35,8 @@ public class ActorActiveSkill_SummonDropBox : ActorActiveSkill_AreaCast
                 }
             }
         }
+
+        yield return base.Cast(castDuration);
     }
 
     protected override void ChildClone(ActorActiveSkill cloneData)

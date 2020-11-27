@@ -2,8 +2,6 @@
 using BiangStudio.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 
-[assembly: Sirenix.Serialization.BindTypeNameToType("BoxFunction_ChangeBoxType", typeof(BoxPassiveSkill_ChangeBoxType))]
-
 [Serializable]
 public class BoxPassiveSkill_ChangeBoxType : BoxPassiveSkill_InvokeOnLevelEventID
 {
