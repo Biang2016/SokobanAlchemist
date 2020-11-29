@@ -619,14 +619,14 @@ public static class ActorAIAtoms
             {
                 actor.ActorAIAgent.TargetActor = BattleManager.Instance.Player1;
                 actor.ActorAIAgent.TargetActorGP = BattleManager.Instance.Player1.CurWorldGP;
-                aas.TriggerActiveSkill();
-                if (aas.SkillPhase == ActiveSkillPhase.CoolingDown || aas.SkillPhase == ActiveSkillPhase.Ready)
+                bool triggerSuc = aas.TriggerActiveSkill();
+                if (triggerSuc)
                 {
                     return Status.Success;
                 }
                 else
                 {
-                    return Status.Running;
+                    return Status.Failure;
                 }
             }
 
@@ -635,16 +635,35 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵/战斗")]
-    [Name("释放技能")]
-    [Description("释放技能")]
-    public class BT_Enemy_TriggerSkillAction : ActionTask
+    [Name("释放技能+确认")]
+    [Description("释放技能+确认")]
+    public class BT_Enemy_TriggerSkill_ConditionTask : ConditionTask
     {
         [Name("技能编号")]
         public BBParameter<ActorSkillIndex> ActorSkillIndex;
 
-        protected override void OnExecute()
+        protected override string info => $"释放技能且成功 [{ActorSkillIndex.value}]";
+
+
+        protected override bool OnCheck()
         {
-            base.OnExecute();
+            Status status = BT_Enemy_TriggerSkill.TriggerSkill(Actor, ActorSkillIndex.value);
+            return status == Status.Success;
+        }
+    }
+
+    [Category("敌兵/战斗")]
+    [Name("释放技能")]
+    [Description("释放技能")]
+    public class FL_Enemy_TriggerSkillAction : CallableActionNode
+    {
+        [Name("技能编号")]
+        public BBParameter<ActorSkillIndex> ActorSkillIndex;
+
+        public override string name => $"释放技能 [{ActorSkillIndex.value}]";
+
+        public override void Invoke()
+        {
             BT_Enemy_TriggerSkill.TriggerSkill(Actor, ActorSkillIndex.value);
         }
     }

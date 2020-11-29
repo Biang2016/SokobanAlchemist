@@ -393,12 +393,15 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
 
     protected override IEnumerator WingUp(float wingUpTime)
     {
-        foreach (GridPos3D gp in SkillAreaGPs)
+        if (BattleIndicatorTypeIndex != 0)
         {
-            GridWarning gw = GameObjectPoolManager.Instance.BattleIndicatorDict[BattleIndicatorTypeIndex].AllocateGameObject<GridWarning>(WorldManager.Instance.BattleIndicatorRoot);
-            gw.SetFillColor(GridWarningColorFill).SetBorderHighlightColor(GridWarningColorBorderHighlight).SetBorderDimColor(GridWarningColorBorderDim);
-            gw.transform.position = gp.ToVector3();
-            GridWarningDict.Add(gp, gw);
+            foreach (GridPos3D gp in SkillAreaGPs)
+            {
+                GridWarning gw = GameObjectPoolManager.Instance.BattleIndicatorDict[BattleIndicatorTypeIndex].AllocateGameObject<GridWarning>(WorldManager.Instance.BattleIndicatorRoot);
+                gw.SetFillColor(GridWarningColorFill).SetBorderHighlightColor(GridWarningColorBorderHighlight).SetBorderDimColor(GridWarningColorBorderDim);
+                gw.transform.position = gp.ToVector3();
+                GridWarningDict.Add(gp, gw);
+            }
         }
 
         yield return base.WingUp(wingUpTime);
@@ -470,8 +473,11 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
         {
             bool valid = CheckAreaGPValid(gp, out GridPos3D realGP);
             if (valid) RealSkillEffectGPs.Add(realGP);
-            GridWarningDict[gp].SetShown(valid);
-            GridWarningDict[gp].transform.position = realGP.ToVector3();
+            if (GridWarningDict.TryGetValue(gp, out GridWarning gridWarning))
+            {
+                gridWarning.SetShown(valid);
+                gridWarning.transform.position = realGP.ToVector3();
+            }
         }
     }
 
@@ -479,7 +485,10 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
     {
         foreach (GridPos3D gp in SkillAreaGPs)
         {
-            GridWarningDict[gp].OnProcess(WingUpRatio);
+            if (GridWarningDict.TryGetValue(gp, out GridWarning gridWarning))
+            {
+                gridWarning.OnProcess(WingUpRatio);
+            }
         }
     }
 

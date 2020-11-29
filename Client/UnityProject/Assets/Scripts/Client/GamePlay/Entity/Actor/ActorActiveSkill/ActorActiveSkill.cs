@@ -281,12 +281,12 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
         OnSkillFinishedCallback = null;
     }
 
-    public virtual void TriggerActiveSkill()
+    public virtual bool TriggerActiveSkill()
     {
         if (!ValidateSkillTrigger())
         {
             OnValidateFailed?.Invoke();
-            return;
+            return false;
         }
 
         SkillCoroutine = Actor.StartCoroutine(Co_CastSkill(
@@ -294,6 +294,7 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
             GetValue(ActorSkillPropertyType.CastDuration),
             GetValue(ActorSkillPropertyType.Recovery),
             GetValue(ActorSkillPropertyType.Cooldown)));
+        return true;
     }
 
     protected virtual bool ValidateSkillTrigger()
