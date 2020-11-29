@@ -567,7 +567,7 @@ public class World : PoolObject
 
     public void CheckDropSelf(Box box)
     {
-        if (box && box.Droppable && box.State != Box.States.DroppingFromAir && box.State != Box.States.DroppingFromDeadActor)
+        if (box && box.Droppable && box.State != Box.States.DroppingFromAir)
         {
             WorldModule module = box.WorldModule;
             GridPos3D localGridPos3D = box.LocalGP;

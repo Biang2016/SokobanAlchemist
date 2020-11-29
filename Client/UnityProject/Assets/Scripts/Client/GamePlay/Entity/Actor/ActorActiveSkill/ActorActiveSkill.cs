@@ -3,12 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using BiangStudio;
 using BiangStudio.CloneVariant;
-using BiangStudio.GamePlay;
-using FlowCanvas.Nodes;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 [Serializable]
 public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
@@ -88,6 +85,39 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
     [InfoBox("必填且不得与并列技能重复")]
     [Required]
     public string SkillAlias;
+
+    [LabelText("前摇可移动")]
+    public bool WingUpCanMove;
+
+    [LabelText("施法中可移动")]
+    public bool CastCanMove;
+
+    [LabelText("后摇可移动")]
+    public bool RecoverCanMove;
+
+    public bool CurrentAllowMove
+    {
+        get
+        {
+            switch (SkillPhase)
+            {
+                case ActiveSkillPhase.WingingUp:
+                {
+                    return WingUpCanMove;
+                }
+                case ActiveSkillPhase.Casting:
+                {
+                    return CastCanMove;
+                }
+                case ActiveSkillPhase.Recovering:
+                {
+                    return RecoverCanMove;
+                }
+            }
+
+            return true;
+        }
+    }
 
     #region 子技能
 
@@ -207,6 +237,8 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
         }
 
         RunningSubActiveSkillList.Clear();
+
+        SubSkillManageCoroutines_CanNotInterrupt.Clear();
     }
 
     public virtual void OnUnInit()
@@ -231,6 +263,13 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
         }
 
         RunningSubActiveSkillList.Clear();
+
+        foreach (Coroutine coroutine in SubSkillManageCoroutines_CanNotInterrupt)
+        {
+            if (coroutine != null) ActiveSkillAgent.Instance.StopCoroutine(coroutine);
+        }
+
+        SubSkillManageCoroutines_CanNotInterrupt.Clear();
 
         Actor = null;
         ParentActiveSkill = null;
@@ -264,7 +303,8 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
     }
 
     private Coroutine SkillCoroutine;
-    private Coroutine SubSkillManageCoroutine_CanInterrupted; // 技能被打断时停止该协程
+    private Coroutine SubSkillManageCoroutine_CanInterrupt; // 技能被打断时或角色被销毁时停止该协程
+    private List<Coroutine> SubSkillManageCoroutines_CanNotInterrupt = new List<Coroutine>(); // 角色被销毁时停止该协程
 
     // 技能进度，用于美术表现
     protected float WingUpRatio;
@@ -325,11 +365,11 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
         {
             if (InterruptSubActiveSkillsWhenInterrupted)
             {
-                SubSkillManageCoroutine_CanInterrupted = Actor.StartCoroutine(CastSubActiveSkills());
+                SubSkillManageCoroutine_CanInterrupt = Actor.StartCoroutine(CastSubActiveSkills());
             }
             else
             {
-                ActiveSkillAgent.Instance.StartCoroutine(CastSubActiveSkills());
+                SubSkillManageCoroutines_CanNotInterrupt.Add(ActiveSkillAgent.Instance.StartCoroutine(CastSubActiveSkills()));
             }
         }
 
@@ -449,7 +489,7 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
             }
         }
 
-        if (InterruptSubActiveSkillsWhenInterrupted) SubSkillManageCoroutine_CanInterrupted = null;
+        if (InterruptSubActiveSkillsWhenInterrupted) SubSkillManageCoroutine_CanInterrupt = null;
     }
 
     public virtual void OnCastPhaseComplete()
@@ -480,7 +520,7 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
     public virtual void Interrupt()
     {
         if (SkillCoroutine != null) Actor.StopCoroutine(SkillCoroutine);
-        if (SubSkillManageCoroutine_CanInterrupted != null) Actor.StopCoroutine(SubSkillManageCoroutine_CanInterrupted);
+        if (SubSkillManageCoroutine_CanInterrupt != null) Actor.StopCoroutine(SubSkillManageCoroutine_CanInterrupt);
 
         switch (SkillPhase)
         {

@@ -486,12 +486,12 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             BuffAttributeMatrixAsset configSSO = GetBuffAttributeMatrixAsset();
             configSSO.BuffAttributeMatrix = BuffAttributeMatrix;
             AssetDatabase.Refresh();
-#endif
         }
         else
         {
             ExportBuffAttributeMatrix(dataFormat);
             LoadBuffAttributeMatrix(dataFormat);
+#endif
         }
     }
 

@@ -133,7 +133,6 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
         GridRect castingRect = GetCastingRect();
         if (!DontNeedCastingArea && !castingRect.Contains(targetGP))
         {
-            Debug.Log("1111");
             return false;
         }
 
@@ -423,9 +422,8 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
         yield return base.Cast(castDuration);
     }
 
-    public override void OnCastPhaseComplete()
+    private void ClearWhenSkillFinishedOrInterrupted()
     {
-        base.OnCastPhaseComplete();
         foreach (KeyValuePair<GridPos3D, GridWarning> kv in GridWarningDict)
         {
             kv.Value.PoolRecycle();
@@ -434,6 +432,18 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
         GridWarningDict.Clear();
         SkillAreaGPs.Clear();
         RealSkillEffectGPs.Clear();
+    }
+
+    public override void OnCastPhaseComplete()
+    {
+        base.OnCastPhaseComplete();
+        ClearWhenSkillFinishedOrInterrupted();
+    }
+
+    public override void Interrupt()
+    {
+        base.Interrupt();
+        ClearWhenSkillFinishedOrInterrupted();
     }
 
     protected override IEnumerator Recover(float recoveryTime)

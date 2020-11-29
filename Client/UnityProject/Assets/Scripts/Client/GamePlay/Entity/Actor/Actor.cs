@@ -329,6 +329,19 @@ public class Actor : Entity
 
     #region Actor主动技能
 
+    public bool ActorSkillCanMove
+    {
+        get
+        {
+            foreach (ActorActiveSkill aas in ActorActiveSkills)
+            {
+                if (!aas.CurrentAllowMove) return false;
+            }
+
+            return true;
+        }
+    }
+
     [NonSerialized]
     [ShowInInspector]
     [FoldoutGroup("Actor主动技能")]
@@ -640,6 +653,7 @@ public class Actor : Entity
 
     protected virtual void MoveInternal()
     {
+        if (!ActorSkillCanMove) CurMoveAttempt = Vector3.zero;
         if (!IsFrozen && !ActorBuffHelper.IsBeingRepulsed)
         {
             if (CurMoveAttempt.magnitude > 0)
@@ -710,7 +724,7 @@ public class Actor : Entity
 
         if (ActorBattleHelper.IsDead)
         {
-            RigidBody.constraints |= RigidbodyConstraints.FreezePositionY;
+            if (RigidBody != null) RigidBody.constraints |= RigidbodyConstraints.FreezePositionY;
             SnapToGridY();
         }
 
@@ -823,7 +837,7 @@ public class Actor : Entity
             ActorStatPropSet.ActionPoint.Value -= ActorStatPropSet.DashConsumeActionPoint.GetModifiedValue;
             if (IsFrozen)
             {
-                ActorStatPropSet.FrozenValue.Value -= 50;
+                ActorStatPropSet.FrozenValue.Value -= 200;
             }
             else
             {
@@ -839,7 +853,7 @@ public class Actor : Entity
             ActorStatPropSet.ActionPoint.Value -= ActorStatPropSet.VaultConsumeActionPoint.GetModifiedValue;
             if (IsFrozen)
             {
-                ActorStatPropSet.FrozenValue.Value -= 50;
+                ActorStatPropSet.FrozenValue.Value -= 200;
             }
             else
             {

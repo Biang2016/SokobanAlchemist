@@ -191,6 +191,53 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵/寻路")]
+    [Name("强制结束寻路")]
+    [Description("强制结束寻路")]
+    public class BT_Enemy_ForceTerminatePathFinding : BTNode
+    {
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ActorAIAgent.IsPathFinding)
+            {
+                Actor.ActorAIAgent.ClearPathFinding();
+            }
+
+            return Status.Success;
+        }
+    }
+
+    [Category("敌兵/寻路")]
+    [Name("结束寻路")]
+    [Description("结束寻路")]
+    public class FL_Enemy_TerminatePathFinding : CallableActionNode
+    {
+        public override void Invoke()
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return;
+            if (Actor.ActorAIAgent.IsPathFinding)
+            {
+                Actor.ActorAIAgent.InterruptCurrentPathFinding();
+            }
+        }
+    }
+
+    [Category("敌兵/寻路")]
+    [Name("强制结束寻路")]
+    [Description("强制结束寻路")]
+    public class FL_Enemy_ForceTerminatePathFinding : CallableActionNode
+    {
+        public override void Invoke()
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return;
+            if (Actor.ActorAIAgent.IsPathFinding)
+            {
+                Actor.ActorAIAgent.ClearPathFinding();
+            }
+        }
+    }
+
+    [Category("敌兵/寻路")]
     [Name("有寻路任务但卡在一个地方")]
     [Description("有寻路任务但卡在一个地方")]
     public class BT_Enemy_StuckWithNavTask : ConditionTask
@@ -467,6 +514,38 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵")]
+    [Name("生命值大于")]
+    [Description("生命值大于")]
+    public class BT_Enemy_LifeConditionLargerThan : ConditionTask
+    {
+        [Name("阈值")]
+        public BBParameter<int> LifeThreshold;
+
+        protected override bool OnCheck()
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return false;
+            if (Actor.ActorBattleHelper == null) return false;
+            return Actor.ActorStatPropSet.Health.Value > LifeThreshold.value;
+        }
+    }
+
+    [Category("敌兵")]
+    [Name("生命值大于%")]
+    [Description("生命值大于%")]
+    public class BT_Enemy_LifeConditionLargerThanPercent : ConditionTask
+    {
+        [Name("阈值%")]
+        public BBParameter<int> LifePercentThreshold;
+
+        protected override bool OnCheck()
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return false;
+            if (Actor.ActorBattleHelper == null) return false;
+            return Actor.ActorStatPropSet.Health.Value > LifePercentThreshold.value / 100f * Actor.ActorStatPropSet.MaxHealth.GetModifiedValue;
+        }
+    }
+
+    [Category("敌兵")]
     [Name("玩家在距离内")]
     [Description("玩家在距离内")]
     public class BT_Enemy_PlayerInGuardRangeCondition : ConditionTask
@@ -478,6 +557,22 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             return (BattleManager.Instance.Player1.transform.position - Actor.transform.position).magnitude <= RangeRadius.value;
+        }
+    }
+
+    [Category("敌兵")]
+    [Name("玩家在距离内")]
+    [Description("玩家在距离内")]
+    public class BT_Enemy_PlayerInGuardRangeConditionBTNode : BTNode
+    {
+        [Name("阈值")]
+        public BBParameter<float> RangeRadius;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            bool inside = (BattleManager.Instance.Player1.transform.position - Actor.transform.position).magnitude <= RangeRadius.value;
+            return inside ? Status.Success : Status.Failure;
         }
     }
 
@@ -509,15 +604,21 @@ public static class ActorAIAtoms
         [Name("技能编号")]
         public BBParameter<ActorSkillIndex> ActorSkillIndex;
 
+        public override string name => $"释放技能 [{ActorSkillIndex.value}]";
+
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
-            if (Actor.IsFrozen) return Status.Failure;
-            if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            if (Actor.ActorActiveSkillDict.TryGetValue(ActorSkillIndex.value, out ActorActiveSkill aas))
+            return TriggerSkill(Actor, ActorSkillIndex.value);
+        }
+
+        public static Status TriggerSkill(Actor actor, ActorSkillIndex skillIndex)
+        {
+            if (actor == null || actor.ActorAIAgent == null) return Status.Failure;
+            if (actor.IsFrozen) return Status.Failure;
+            if (actor.ActorActiveSkillDict.TryGetValue(skillIndex, out ActorActiveSkill aas))
             {
-                Actor.ActorAIAgent.TargetActor = BattleManager.Instance.Player1;
-                Actor.ActorAIAgent.TargetActorGP = BattleManager.Instance.Player1.CurWorldGP;
+                actor.ActorAIAgent.TargetActor = BattleManager.Instance.Player1;
+                actor.ActorAIAgent.TargetActorGP = BattleManager.Instance.Player1.CurWorldGP;
                 aas.TriggerActiveSkill();
                 if (aas.SkillPhase == ActiveSkillPhase.CoolingDown || aas.SkillPhase == ActiveSkillPhase.Ready)
                 {
@@ -534,12 +635,29 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵/战斗")]
+    [Name("释放技能")]
+    [Description("释放技能")]
+    public class BT_Enemy_TriggerSkillAction : ActionTask
+    {
+        [Name("技能编号")]
+        public BBParameter<ActorSkillIndex> ActorSkillIndex;
+
+        protected override void OnExecute()
+        {
+            base.OnExecute();
+            BT_Enemy_TriggerSkill.TriggerSkill(Actor, ActorSkillIndex.value);
+        }
+    }
+
+    [Category("敌兵/战斗")]
     [Name("等待技能结束")]
     [Description("等待技能结束")]
     public class BT_Enemy_WaitSkillEnd : BTNode
     {
         [Name("技能编号")]
         public BBParameter<ActorSkillIndex> ActorSkillIndex;
+
+        public override string name => $"等待技能结束 [{ActorSkillIndex.value}]";
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
@@ -568,6 +686,8 @@ public static class ActorAIAtoms
         [Name("技能编号")]
         public BBParameter<ActorSkillIndex> ActorSkillIndex;
 
+        public override string name => $"等待技能结束 [{ActorSkillIndex.value}]";
+
         public override IEnumerator Invoke()
         {
             if (Actor == null || Actor.ActorAIAgent == null) yield return null;
@@ -588,6 +708,8 @@ public static class ActorAIAtoms
     {
         [Name("技能编号")]
         public BBParameter<ActorSkillIndex> ActorSkillIndex;
+
+        public override string name => $"强行打断技能 [{ActorSkillIndex.value}]";
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {

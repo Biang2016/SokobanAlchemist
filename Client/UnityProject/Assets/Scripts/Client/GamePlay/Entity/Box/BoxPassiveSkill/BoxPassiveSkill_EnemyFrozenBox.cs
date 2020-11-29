@@ -22,7 +22,7 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
                 actor.ActorBattleHelper.Damage(Box.FrozenActor, Box.FrozenActor.CollideDamage);
                 Box.FrozenActor.ActorBattleHelper.Damage(Box.FrozenActor, 1);
             }
-            else if (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box)
+            else if (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box || collision.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
             {
                 Box.FrozenActor.ActorBattleHelper.Damage(Box.FrozenActor, 1);
                 Box targetBox = collision.gameObject.GetComponentInParent<Box>();

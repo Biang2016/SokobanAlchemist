@@ -25,6 +25,10 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
     [LabelText("@\"撞击角色损坏耐久\t\"+CollideWithActorDurability")]
     public BoxStat CollideWithActorDurability = new BoxStat(BoxStatType.CollideWithActorDurability);
 
+    [BoxGroup("耐久")]
+    [LabelText("@\"坠落留存率%\t\"+DropFromAirSurviveProbabilityPercent")]
+    public BoxStat DropFromAirSurviveProbabilityPercent = new BoxStat(BoxStatType.DropFromAirSurviveProbabilityPercent);
+
     [BoxGroup("冰冻")]
     [LabelText("@\"冰冻抗性\t\"+FrozenResistance")]
     public BoxProperty FrozenResistance = new BoxProperty(BoxPropertyType.FrozenResistance);
@@ -129,6 +133,7 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         StatDict.Add(BoxStatType.CommonDurability, CommonDurability);
         StatDict.Add(BoxStatType.CollideWithBoxDurability, CollideWithBoxDurability);
         StatDict.Add(BoxStatType.CollideWithActorDurability, CollideWithActorDurability);
+        StatDict.Add(BoxStatType.DropFromAirSurviveProbabilityPercent, DropFromAirSurviveProbabilityPercent);
 
         #region Frozen
 
@@ -252,6 +257,7 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         newStatPropSet.CommonDurability = (BoxStat) CommonDurability.Clone();
         newStatPropSet.CollideWithBoxDurability = (BoxStat) CollideWithBoxDurability.Clone();
         newStatPropSet.CollideWithActorDurability = (BoxStat) CollideWithActorDurability.Clone();
+        newStatPropSet.DropFromAirSurviveProbabilityPercent = (BoxStat)DropFromAirSurviveProbabilityPercent.Clone();
         newStatPropSet.FrozenResistance = (BoxProperty) FrozenResistance.Clone();
         newStatPropSet.FrozenRecovery = (BoxProperty) FrozenRecovery.Clone();
         newStatPropSet.FrozenValue = (BoxStat) FrozenValue.Clone();
@@ -335,6 +341,9 @@ public enum BoxStatType
 
     [LabelText("撞击角色损坏耐久(-1无限)")]
     CollideWithActorDurability = 2,
+
+    [LabelText("坠落留存率%")]
+    DropFromAirSurviveProbabilityPercent = 3,
 
     [LabelText("冰冻累积值")]
     FrozenValue = 100,
