@@ -2,6 +2,7 @@
 using BiangStudio.GameDataFormat.Grid;
 using BiangStudio.Messenger;
 using BiangStudio.ObjectPool;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -461,6 +462,66 @@ public class World : PoolObject
         return true;
     }
 
+    public bool CheckCanMoveBoxColumn(
+        GridPos3D srcGP, GridPos3D targetGP,
+        List<Box> boxes_src,
+        List<WorldModule> modules_src, List<WorldModule> modules_target,
+        List<GridPos3D> localGPs_src, List<GridPos3D> localGPs_target,
+        uint excludeActorGUID = 0)
+    {
+        Box box_src = GetBoxByGridPosition(srcGP, out WorldModule module_src, out GridPos3D localGP_src);
+        Box box_target = GetBoxByGridPosition(targetGP, out WorldModule module_target, out GridPos3D localGP_target);
+        if (module_src == null || module_target == null || box_src == null || box_target != null) return false;
+        if (CheckActorOccupiedGrid(targetGP, excludeActorGUID)) return false;
+        boxes_src.Add(box_src);
+        modules_src.Add(module_src);
+        modules_target.Add(module_target);
+        localGPs_src.Add(localGP_src);
+        localGPs_target.Add(localGP_target);
+        Box box_above = GetBoxByGridPosition(srcGP + GridPos3D.Up, out _, out _);
+        if (box_above != null && box_above.Droppable)
+        {
+            bool checkCanMoveBoxColumn_Above = CheckCanMoveBoxColumn(srcGP + GridPos3D.Up, targetGP + GridPos3D.Up, boxes_src, modules_src, modules_target, localGPs_src, localGPs_target, excludeActorGUID);
+            return checkCanMoveBoxColumn_Above;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public void BoxColumnTransformDOPause(GridPos3D baseBoxGP)
+    {
+        Box box_This = GetBoxByGridPosition(baseBoxGP , out _, out _);
+        if (box_This == null) return;
+        box_This.transform.DOPause();
+        BoxColumnTransformDOPause(baseBoxGP + GridPos3D.Up);
+    }
+
+    public void MoveBoxColumn(GridPos3D srcGP, GridPos3D targetGP, Box.States sucState, bool needLerp = true, bool needLerpModel = false, uint excludeActorGUID = 0)
+    {
+        List<Box> boxes_src = new List<Box>();
+        List<WorldModule> modules_src = new List<WorldModule>();
+        List<WorldModule> modules_target = new List<WorldModule>();
+        List<GridPos3D> localGPs_src = new List<GridPos3D>();
+        List<GridPos3D> localGPs_target = new List<GridPos3D>();
+        bool valid = CheckCanMoveBoxColumn(srcGP, targetGP, boxes_src, modules_src, modules_target, localGPs_src, localGPs_target, excludeActorGUID);
+        if (!valid) return;
+
+        for (int index = 0; index < boxes_src.Count; index++)
+        {
+            Box box_src = boxes_src[index];
+            WorldModule module_src = modules_src[index];
+            WorldModule module_target = modules_target[index];
+            GridPos3D localGP_src = localGPs_src[index];
+            GridPos3D localGP_target = localGPs_target[index];
+            box_src.State = sucState;
+            module_src.BoxMatrix[localGP_src.x, localGP_src.y, localGP_src.z] = null;
+            module_target.BoxMatrix[localGP_target.x, localGP_target.y, localGP_target.z] = box_src;
+            box_src.Initialize(localGP_target, module_target, needLerp ? 0.2f : 0f, box_src.ArtOnly, Box.LerpType.Push, needLerpModel, false);
+        }
+    }
+
     public void MoveBox(GridPos3D srcGP, GridPos3D targetGP, Box.States sucState, bool needLerp = true, bool needLerpModel = false, uint excludeActorGUID = 0)
     {
         bool valid = CheckCanMoveBox(srcGP, targetGP, out Box box_src, out Box box_target, out WorldModule module_src, out WorldModule module_target, out GridPos3D localGP_src, out GridPos3D localGP_target, excludeActorGUID);
@@ -483,9 +544,13 @@ public class World : PoolObject
                 module.BoxMatrix[localGridPos3D.x, localGridPos3D.y, localGridPos3D.z] = null;
                 CheckDropAbove(box);
                 box.WorldModule = null;
+                box.IsInGridSystem = false;
             }
 
-            WorldManager.Instance.OtherBoxDict.Add(box.GUID, box);
+            if (!WorldManager.Instance.OtherBoxDict.ContainsKey(box.GUID))
+            {
+                WorldManager.Instance.OtherBoxDict.Add(box.GUID, box);
+            }
         }
     }
 
@@ -519,7 +584,7 @@ public class World : PoolObject
             {
                 GridPos3D localGP = module.WorldGPToLocalGP(worldGP);
                 Box existBox = module.BoxMatrix[localGP.x, localGP.y, localGP.z];
-                if (existBox == null)
+                if (existBox == null || existBox == box)
                 {
                     module.BoxMatrix[localGP.x, localGP.y, localGP.z] = box;
                     Box.LerpType lerpType = Box.LerpType.Throw;

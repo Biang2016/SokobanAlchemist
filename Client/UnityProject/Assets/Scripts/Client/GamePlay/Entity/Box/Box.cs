@@ -77,6 +77,7 @@ public partial class Box : Entity
         WorldModule = null;
         WorldGP = GridPos3D.Zero;
         LastWorldGP = GridPos3D.Zero;
+        worldGP_WhenKicked = GridPos3D.Zero;
         LastState = States.Static;
         State = States.Static;
         BoxBuffHelper.OnHelperRecycled();
@@ -315,6 +316,10 @@ public partial class Box : Entity
     [HideInEditorMode]
     public GridPos3D WorldGP;
 
+    private GridPos3D worldGP_WhenKicked = GridPos3D.Zero;
+
+    internal bool IsInGridSystem;
+
     [HideInEditorMode]
     public GridPos3D LocalGP;
 
@@ -466,7 +471,7 @@ public partial class Box : Entity
         }
     }
 
-    public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly, LerpType lerpType, bool needLerpModel = false)
+    public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly, LerpType lerpType, bool needLerpModel = false, bool needCheckDrop = true)
     {
         SetModelSmoothMoveLerpTime(0);
         ArtOnly = artOnly;
@@ -490,6 +495,7 @@ public partial class Box : Entity
             transform.DOLocalMove(localGridPos3D.ToVector3(), lerpTime).SetEase(Ease.Linear).OnComplete(() =>
             {
                 State = States.Static;
+                IsInGridSystem = true;
                 if (lerpType == LerpType.Drop)
                 {
                     BoxColliderHelper.OnDropComplete();
@@ -537,6 +543,7 @@ public partial class Box : Entity
         }
         else
         {
+            IsInGridSystem = true;
             switch (lerpType)
             {
                 case LerpType.DropFromDeadActor:
@@ -561,7 +568,7 @@ public partial class Box : Entity
             transform.localRotation = Quaternion.identity;
         }
 
-        WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
+        if (needCheckDrop) WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
     }
 
     public void Push(Vector3 direction)
@@ -574,7 +581,7 @@ public partial class Box : Entity
             if (gp != WorldGP)
             {
                 if (Actor.ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {name} Push {WorldGP} -> {gp}");
-                WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, gp, States.BeingPushed);
+                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, gp, States.BeingPushed);
             }
         }
     }
@@ -587,17 +594,17 @@ public partial class Box : Entity
             {
                 SetModelSmoothMoveLerpTime(0);
                 if (Actor.ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {name} PushCanceled {WorldGP} -> {LastWorldGP}");
-                WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, LastWorldGP, States.PushingCanceling);
+                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, LastWorldGP, States.PushingCanceling);
             }
         }
     }
 
-    public void ForceStop()
+    public void ForceStopWhenSwapBox()
     {
-        transform.DOPause();
+        WorldManager.Instance.CurrentWorld.BoxColumnTransformDOPause(WorldGP);
         GridPos3D targetGP = transform.position.ToGridPos3D();
         if (Actor.ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {name} ForceCancelPush {WorldGP} -> {targetGP}");
-        WorldManager.Instance.CurrentWorld.MoveBox(WorldGP, targetGP, States.Static, false, true);
+        WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, targetGP, States.Static, false, true);
     }
 
     public void Kick(Vector3 direction, float velocity, Actor actor)
@@ -612,7 +619,8 @@ public partial class Box : Entity
 
             alreadyCollide = false;
             LastTouchActor = actor;
-            WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this);
+            worldGP_WhenKicked = WorldGP;
+            //WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this); // 放在FixedUpdate里面判定如果坐标有变则移除，避免踢向墙壁时上方塌落导致bug
             State = States.BeingKicked;
             transform.DOPause();
             BoxColliderHelper.OnKick();
@@ -800,6 +808,15 @@ public partial class Box : Entity
             BoxBuffHelper.BuffFixedUpdate();
         }
 
+        if (state == States.BeingKicked && IsInGridSystem)
+        {
+            if (transform.position.ToGridPos3D() != worldGP_WhenKicked)
+            {
+                WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this);
+                worldGP_WhenKicked = GridPos3D.Zero;
+            }
+        }
+
         if ((state == States.BeingKicked || state == States.Flying || state == States.DroppingFromDeadActor || state == States.DroppingFromAir || state == States.Putting) && Rigidbody)
         {
             if (state == States.BeingKicked)
@@ -824,7 +841,7 @@ public partial class Box : Entity
                 LastTouchActor = null;
                 DestroyImmediate(Rigidbody);
                 BoxColliderHelper.OnRigidbodyStop();
-                WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this);
+                WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this); // 这里面已经做了“Box本来就在Grid系统里”的判定
                 BoxEffectHelper?.PoolRecycle();
                 BoxEffectHelper = null;
             }

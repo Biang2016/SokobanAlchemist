@@ -38,7 +38,7 @@ public partial class Box
     public void OnDroppingFromAirCollisionEnter(Collision collision)
     {
         bool playCollideBehavior = CollideCalculate(collision, out bool validCollision, BoxCollideType.DropFromAir);
-        if (validCollision) CameraManager.Instance.FieldCamera.CameraShake(0.1f, 0.8f, (transform.position - BattleManager.Instance.Player1.transform.position).magnitude);
+        if (validCollision) CameraManager.Instance.FieldCamera.CameraShake(0.1f, 0.4f, (transform.position - BattleManager.Instance.Player1.transform.position).magnitude);
         if (playCollideBehavior) dropFromAirCollideBehavior();
 
         void dropFromAirCollideBehavior()

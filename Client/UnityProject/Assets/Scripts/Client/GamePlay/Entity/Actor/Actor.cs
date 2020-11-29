@@ -891,12 +891,12 @@ public class Actor : Entity
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Pushable && ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
-                box.ForceStop();
+                box.ForceStopWhenSwapBox();
                 transform.position = box.WorldGP.ToVector3();
                 LastWorldGP = CurWorldGP;
                 CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
                 if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {box.name} SwapBox {box.WorldGP} -> {LastWorldGP}");
-                WorldManager.Instance.CurrentWorld.MoveBox(box.WorldGP, LastWorldGP, Box.States.BeingPushed, false, true, GUID);
+                WorldManager.Instance.CurrentWorld.MoveBoxColumn(box.WorldGP, LastWorldGP, Box.States.BeingPushed, false, true, GUID);
 
                 // todo kicking box的swap如何兼容
             }
