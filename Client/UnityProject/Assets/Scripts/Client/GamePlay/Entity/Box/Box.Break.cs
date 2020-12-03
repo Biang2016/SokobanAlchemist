@@ -12,7 +12,10 @@ public partial class Box
 
     public void OnBeingKickedCollisionEnter(Collision collision)
     {
-        bool playCollideBehavior = CollideCalculate(collision, out bool validCollision, BoxCollideType.Kick);
+        bool playCollideBehavior = CollideCalculate(
+            collision.collider,
+            out bool validCollision,
+            BoxCollideType.Kick);
         if (playCollideBehavior) kickCollideBehavior();
 
         void kickCollideBehavior()
@@ -22,7 +25,10 @@ public partial class Box
 
     public void OnFlyingCollisionEnter(Collision collision)
     {
-        bool playCollideBehavior = CollideCalculate(collision, out bool validCollision, BoxCollideType.Fly);
+        bool playCollideBehavior = CollideCalculate(
+            collision.collider,
+            out bool validCollision,
+            BoxCollideType.Fly);
         if (playCollideBehavior) flyCollideBehavior();
 
         void flyCollideBehavior()
@@ -37,7 +43,10 @@ public partial class Box
 
     public void OnDroppingFromAirCollisionEnter(Collision collision)
     {
-        bool playCollideBehavior = CollideCalculate(collision, out bool validCollision, BoxCollideType.DropFromAir);
+        bool playCollideBehavior = CollideCalculate(
+            collision.collider,
+            out bool validCollision,
+            BoxCollideType.DropFromAir);
         if (validCollision) CameraManager.Instance.FieldCamera.CameraShake(0.1f, 0.4f, (transform.position - BattleManager.Instance.Player1.transform.position).magnitude);
         if (playCollideBehavior) dropFromAirCollideBehavior();
 
@@ -46,18 +55,18 @@ public partial class Box
         }
     }
 
-    private bool CollideCalculate(Collision collision, out bool validCollision, BoxCollideType collideType)
+    private bool CollideCalculate(Collider collider, out bool validCollision, BoxCollideType collideType)
     {
         bool requireCommonDurabilityReduce = false;
         validCollision = false;
 
         // 和一般箱子相撞
         if (BoxStatPropSet.CollideWithBoxDurability.Value > 0 &&
-            (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box ||
-             collision.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
+            (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box ||
+             collider.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
         )
         {
-            Box box = collision.gameObject.GetComponentInParent<Box>();
+            Box box = collider.gameObject.gameObject.GetComponentInParent<Box>();
             if (box != null)
             {
                 validCollision = true;
@@ -75,7 +84,7 @@ public partial class Box
 
         // 和世界碰撞体相撞
         if (BoxStatPropSet.CollideWithBoxDurability.Value > 0 &&
-            (collision.gameObject.layer == LayerManager.Instance.Layer_Wall)
+            (collider.gameObject.layer == LayerManager.Instance.Layer_Wall)
         )
         {
             validCollision = true;
@@ -92,12 +101,12 @@ public partial class Box
 
         // 和角色碰撞体相撞
         if (BoxStatPropSet.CollideWithActorDurability.Value > 0 &&
-            (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player ||
-             collision.gameObject.layer == LayerManager.Instance.Layer_Player ||
-             collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy ||
-             collision.gameObject.layer == LayerManager.Instance.Layer_Enemy))
+            (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player ||
+             collider.gameObject.layer == LayerManager.Instance.Layer_Player ||
+             collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy ||
+             collider.gameObject.layer == LayerManager.Instance.Layer_Enemy))
         {
-            Actor actor = collision.gameObject.GetComponentInParent<Actor>();
+            Actor actor = collider.gameObject.GetComponentInParent<Actor>();
             if (actor != null)
             {
                 if (LastTouchActor != null && LastTouchActor.IsOpponentCampOf(actor))
