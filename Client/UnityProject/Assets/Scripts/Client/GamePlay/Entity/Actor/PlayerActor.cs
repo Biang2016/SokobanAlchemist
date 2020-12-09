@@ -220,20 +220,22 @@ public class PlayerActor : Actor
             {
                 if (PlayerNumber == PlayerNumber.Player1)
                 {
-                    Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(ControlManager.Instance.Battle_MousePosition);
-                    Vector3 intersectPoint = CommonUtils.GetIntersectWithLineAndPlane(ray.origin, ray.direction, Vector3.up, transform.position);
-                    CurThrowPointOffset = intersectPoint - transform.position;
+                    CurThrowPointOffset = transform.forward;
+                    //Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(ControlManager.Instance.Battle_MousePosition);
+                    //Vector3 intersectPoint = CommonUtils.GetIntersectWithLineAndPlane(ray.origin, ray.direction, Vector3.up, transform.position);
+                    //CurThrowPointOffset = intersectPoint - transform.position;
                 }
                 else if (PlayerNumber == PlayerNumber.Player2)
                 {
-                    CurThrowMoveAttempt = Vector3.zero;
-                    if (ThrowState == ThrowStates.ThrowCharging)
-                    {
-                        CurThrowMoveAttempt = new Vector3(ControlManager.Instance.Player2_RightStick.x, 0, ControlManager.Instance.Player2_RightStick.y);
-                        CurThrowMoveAttempt.Normalize();
-                    }
+                    CurThrowPointOffset = transform.forward;
+                    //CurThrowMoveAttempt = Vector3.zero;
+                    //if (ThrowState == ThrowStates.ThrowCharging)
+                    //{
+                    //    CurThrowMoveAttempt = new Vector3(ControlManager.Instance.Player2_RightStick.x, 0, ControlManager.Instance.Player2_RightStick.y);
+                    //    CurThrowMoveAttempt.Normalize();
+                    //}
 
-                    CurThrowPointOffset += CurThrowMoveAttempt * Mathf.Max(ThrowAimMoveSpeed * Mathf.Sqrt(CurThrowPointOffset.magnitude), 2f) * Time.fixedDeltaTime;
+                    //CurThrowPointOffset += CurThrowMoveAttempt * Mathf.Max(ThrowAimMoveSpeed * Mathf.Sqrt(CurThrowPointOffset.magnitude), 2f) * Time.fixedDeltaTime;
                 }
 
                 if (!ActorSkillHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.BoxTypeIndex))
