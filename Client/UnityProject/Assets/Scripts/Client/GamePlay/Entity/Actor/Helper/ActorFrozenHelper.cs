@@ -9,7 +9,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
     public override void FrozeIntoIceBlock(int beforeFrozenLevel, int afterFrozenLevel)
     {
         Actor actor = (Actor) Entity;
-        if (afterFrozenLevel == 0)
+        if (afterFrozenLevel <= 1)
         {
             actor.AddRigidbody();
             actor.SetModelSmoothMoveLerpTime(0.02f);
