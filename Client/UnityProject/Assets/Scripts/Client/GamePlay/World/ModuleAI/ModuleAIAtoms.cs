@@ -157,4 +157,26 @@ public class ModuleAIAtoms
             BattleManager.Instance.NoticePanel.HideTip();
         }
     }
+
+    [Name("切换BGM")]
+    [Category("音乐")]
+    public class Flow_SwitchBGM : CallableActionNode
+    {
+        [RequiredField]
+        [Name("切换BGM")]
+        public BBParameter<string> BGM_Name = "bgm/???";
+
+        [Name("淡入时长")]
+        public BBParameter<float> FadeInDuration;
+
+        [Name("音量")]
+        public BBParameter<float> Volume;
+
+        public override string name => $"{base.name} [{BGM_Name.value}]";
+
+        public override void Invoke()
+        {
+            AudioManager.Instance.BGMFadeIn(BGM_Name.value, FadeInDuration.value, Volume.value, true);
+        }
+    }
 }
