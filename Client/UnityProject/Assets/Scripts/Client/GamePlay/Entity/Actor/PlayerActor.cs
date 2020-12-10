@@ -78,8 +78,8 @@ public class PlayerActor : Actor
             {
                 quickMoveAttempt = Vector3.zero;
                 int quickMoveAttemptXThisFrame = 0; // X轴短按值
-                if (BS_Right.Up && BS_Right.PressedDuration < QuickMovePressThreshold) quickMoveAttemptXThisFrame += 1;
-                if (BS_Left.Up && BS_Left.PressedDuration < QuickMovePressThreshold) quickMoveAttemptXThisFrame -= 1;
+                if (BS_Right.Up && BS_Right.PressedDuration < QuickMovePressThreshold && !BS_Left.Pressed) quickMoveAttemptXThisFrame += 1;
+                if (BS_Left.Up && BS_Left.PressedDuration < QuickMovePressThreshold && !BS_Right.Pressed) quickMoveAttemptXThisFrame -= 1;
                 if (!quickMoveAttemptXThisFrame.Equals(0)) // 此帧X轴有短按
                 {
                     quickMoveStartWorldGP = quickMoveAttemptXThisFrame < 0 ? lastMoveLeftButtonDownWorldGP : lastMoveRightButtonDownWorldGP;
@@ -88,8 +88,8 @@ public class PlayerActor : Actor
                 else
                 {
                     int quickMoveAttemptZThisFrame = 0; // Z轴短按值
-                    if (BS_Up.Up && BS_Up.PressedDuration < QuickMovePressThreshold) quickMoveAttemptZThisFrame += 1;
-                    if (BS_Down.Up && BS_Down.PressedDuration < QuickMovePressThreshold) quickMoveAttemptZThisFrame -= 1;
+                    if (BS_Up.Up && BS_Up.PressedDuration < QuickMovePressThreshold && !BS_Down.Pressed) quickMoveAttemptZThisFrame += 1;
+                    if (BS_Down.Up && BS_Down.PressedDuration < QuickMovePressThreshold && !BS_Up.Pressed) quickMoveAttemptZThisFrame -= 1;
                     if (!quickMoveAttemptZThisFrame.Equals(0)) // 此帧Z轴有短按
                     {
                         quickMoveStartWorldGP = quickMoveAttemptZThisFrame < 0 ? lastMoveDownButtonDownWorldGP : lastMoveUpButtonDownWorldGP;
@@ -104,11 +104,12 @@ public class PlayerActor : Actor
                     Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(targetPos, out WorldModule module, out GridPos3D _, true);
                     if ((!box && module)
                         || (box && box.Passable)
-                        || (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex) && 
+                        || (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex) &&
                             WorldManager.Instance.CurrentWorld.CheckCanMoveBox(box.WorldGP, box.WorldGP + quickMoveAttemptGP,
                                 out Box _, out Box _, out WorldModule _, out WorldModule _, out GridPos3D _, out GridPos3D _))) // 能走到才开启短按
                     {
                         CurMoveAttempt = quickMoveAttempt;
+                        Debug.Log("速按" + quickMoveAttempt);
                         isQuickMoving = true;
                     }
                 }
@@ -129,6 +130,7 @@ public class PlayerActor : Actor
                     }
                     else // 停止短按移动
                     {
+                        Debug.Log("速按结束" + quickMoveAttempt);
                         quickMoveAttempt = Vector3.zero;
                         isQuickMoving = false;
                     }
@@ -137,6 +139,110 @@ public class PlayerActor : Actor
                 {
                     quickMoveAttempt = Vector3.zero;
                 }
+            }
+
+            // 双轴操作互相打断逻辑
+            // 如果当前方向操作持续时间未超过短按阈值，则另一向操作插入需要按住超过短按阈值才会使方向变化，否则两个短按交替打断行为很难看
+            // 反之，如果当前方向操作持续时间已超过短按阈值，则另一向不论持续时间如何可立即插入 -> 可实现移动中快速变道平移的顺畅感觉
+            if (!CurMoveAttempt.x.Equals(0) && !CurMoveAttempt.z.Equals(0))
+            {
+                // 目前是按住上键，并且有向上移动分量，且向上移动在左右移动之前按下
+                if (CurMoveAttempt.z > 0 && BS_Up.Before(BS_Left) && BS_Up.Before(BS_Right))
+                {
+                    if (BS_Up.PressedDuration > QuickMovePressThreshold)
+                    {
+                        Debug.Log("左右打断上");
+                        CurMoveAttempt.z = 0;
+                    }
+                    else
+                    {
+                        if ((BS_Left.Pressed && BS_Left.PressedDuration > QuickMovePressThreshold)
+                            || (BS_Right.Pressed && BS_Right.PressedDuration > QuickMovePressThreshold))
+                        {
+                            CurMoveAttempt.z = 0;
+                        }
+                        else
+                        {
+                            Debug.Log("左右未能打断上");
+                            CurMoveAttempt.x = 0;
+                        }
+                    }
+                }
+
+                // 目前是按住下键，并且有向下移动分量，且向下移动在左右移动之前按下
+                if (CurMoveAttempt.z < 0 && BS_Down.Before(BS_Left) && BS_Down.Before(BS_Right))
+                {
+                    if (BS_Down.PressedDuration > QuickMovePressThreshold)
+                    {
+                        Debug.Log("左右打断下");
+                        CurMoveAttempt.z = 0;
+                    }
+                    else
+                    {
+                        if ((BS_Left.Pressed && BS_Left.PressedDuration > QuickMovePressThreshold)
+                            || (BS_Right.Pressed && BS_Right.PressedDuration > QuickMovePressThreshold))
+                        {
+                            CurMoveAttempt.z = 0;
+                        }
+                        else
+                        {
+                            Debug.Log("左右未能打断下");
+                            CurMoveAttempt.x = 0;
+                        }
+                    }
+                }
+
+                // 目前是按住左键，并且有向左移动分量，且向左移动在上下移动之前按下
+                if (CurMoveAttempt.x < 0 && BS_Left.Before(BS_Up) && BS_Left.Before(BS_Down))
+                {
+                    if (BS_Left.PressedDuration > QuickMovePressThreshold)
+                    {
+                        Debug.Log("上下打断左");
+                        CurMoveAttempt.x = 0;
+                    }
+                    else
+                    {
+                        if ((BS_Up.Pressed && BS_Up.PressedDuration > QuickMovePressThreshold)
+                            || (BS_Down.Pressed && BS_Down.PressedDuration > QuickMovePressThreshold))
+                        {
+                            CurMoveAttempt.x = 0;
+                        }
+                        else
+                        {
+                            Debug.Log("上下未能打断左");
+                            CurMoveAttempt.z = 0;
+                        }
+                    }
+                }
+
+                // 目前是按住右键，并且有向右移动分量，且向右移动在上下移动之前按下
+                if (CurMoveAttempt.x > 0 && BS_Right.Before(BS_Up) && BS_Right.Before(BS_Down))
+                {
+                    if (BS_Right.PressedDuration > QuickMovePressThreshold)
+                    {
+                        Debug.Log("上下打断右");
+                        CurMoveAttempt.x = 0;
+                    }
+                    else
+                    {
+                        if ((BS_Up.Pressed && BS_Up.PressedDuration > QuickMovePressThreshold)
+                            || (BS_Down.Pressed && BS_Down.PressedDuration > QuickMovePressThreshold))
+                        {
+                            CurMoveAttempt.x = 0;
+                        }
+                        else
+                        {
+                            Debug.Log("上下未能打断右");
+                            CurMoveAttempt.z = 0;
+                        }
+                    }
+                }
+            }
+
+            // 双向同时按取x轴优先, 理论上不应执行此处，仅为确保万一
+            if (!CurMoveAttempt.x.Equals(0) && !CurMoveAttempt.z.Equals(0))
+            {
+                CurMoveAttempt.z = 0;
             }
 
             // 相机视角旋转后移动也相应旋转
@@ -168,46 +274,6 @@ public class PlayerActor : Actor
                     CurMoveAttempt.z = -x;
                     break;
                 }
-            }
-
-            // 双向移动交替打断
-            if (!CurMoveAttempt.x.Equals(0) && !CurMoveAttempt.z.Equals(0))
-            {
-                if ((LastMoveAttempt.x > 0 && BS_Right_Last.Pressed) || (LastMoveAttempt.x < 0 && BS_Left_Last.Pressed))
-                {
-                    if (!BS_Up_Last.Pressed && !BS_Down_Last.Pressed)
-                    {
-                        CurMoveAttempt.x = 0;
-                    }
-                    else
-                    {
-                        if ((BS_Up_Last.Pressed && BS_Up.Pressed) || (BS_Down_Last.Pressed && BS_Down.Pressed))
-                        {
-                            CurMoveAttempt.z = 0;
-                        }
-                    }
-                }
-
-                if ((LastMoveAttempt.z > 0 && BS_Up_Last.Pressed) || (LastMoveAttempt.z < 0 && BS_Down_Last.Pressed))
-                {
-                    if (!BS_Left_Last.Pressed && !BS_Right_Last.Pressed)
-                    {
-                        CurMoveAttempt.z = 0;
-                    }
-                    else
-                    {
-                        if ((BS_Left_Last.Pressed && BS_Left.Pressed) || (BS_Right_Last.Pressed && BS_Right.Pressed))
-                        {
-                            CurMoveAttempt.x = 0;
-                        }
-                    }
-                }
-            }
-
-            // 双向同时按取x轴优先
-            if (!CurMoveAttempt.x.Equals(0) && !CurMoveAttempt.z.Equals(0))
-            {
-                CurMoveAttempt.z = 0;
             }
 
             MoveInternal();

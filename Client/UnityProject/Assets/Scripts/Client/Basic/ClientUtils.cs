@@ -27,13 +27,19 @@ public static class ClientUtils
             state.Down = !state.LastPressed;
             state.Pressed = bc.isPressed;
             state.Up = bc.wasReleasedThisFrame;
+            if (state.Up) state.LastUpFrame = Time.frameCount;
+
             if (bc.wasReleasedThisFrame)
             {
                 state.Down = false;
                 state.Pressed = false;
             }
 
-            if (state.Down) state.PressedDuration = 0;
+            if (state.Down)
+            {
+                state.PressedDuration = 0;
+                state.LastDownFrame = Time.frameCount;
+            }
         };
 
         action.canceled += context => { state.Pressed = false; };

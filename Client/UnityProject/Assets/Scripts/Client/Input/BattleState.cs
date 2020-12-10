@@ -8,11 +8,17 @@ public class ButtonState
     [LabelText("按键")]
     public ButtonNames ButtonName;
 
+    [LabelText("上一次按下帧号")]
+    public int LastDownFrame;
+
     [LabelText("按下")]
     public bool Down;
 
     [LabelText("按住")]
     public bool Pressed;
+
+    [LabelText("上一次释放帧号")]
+    public int LastUpFrame;
 
     [LabelText("释放")]
     public bool Up;
@@ -43,12 +49,21 @@ public class ButtonState
     public void ApplyTo(ButtonState target)
     {
         target.ButtonName = ButtonName;
+        target.LastDownFrame = LastDownFrame;
         target.Down = Down;
+        target.LastUpFrame = LastUpFrame;
         target.Up = Up;
         target.Pressed = Pressed;
         target.LastPressed = LastPressed;
         target.MultiClick = MultiClick;
         target.PressedDuration = PressedDuration;
+    }
+
+    public bool Before(ButtonState target)
+    {
+        if (Pressed && !target.Pressed) return true;
+        if (Pressed && target.Pressed && LastDownFrame < target.LastDownFrame) return true;
+        return false;
     }
 }
 
