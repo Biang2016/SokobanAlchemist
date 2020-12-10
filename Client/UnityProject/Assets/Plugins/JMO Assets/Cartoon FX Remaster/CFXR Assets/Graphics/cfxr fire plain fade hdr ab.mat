@@ -9,8 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: cfxr fire plain fade hdr ab
   m_Shader: {fileID: 4800000, guid: e198026df304af84a85675be636192ea, type: 3}
-  m_ShaderKeywords: _ALPHATEST_ON _FADING_ON _CFXR_HDR_BOOST _CFXR_SINGLE_CHANNEL _CFXR_EDGE_FADING
-    _CFXR_UV_DISTORTION
+  m_ShaderKeywords: _ALPHATEST_ON _CFXR_EDGE_FADING _CFXR_HDR_BOOST _CFXR_SINGLE_CHANNEL
+    _CFXR_UV_DISTORTION _FADING_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -50,6 +50,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BlendingType: 0
+    - _CFXR_DITHERED_SHADOWS: 0
+    - _CFXR_OVERLAYBLEND: 0
+    - _CFXR_OVERLAYTEX: 0
     - _Cutoff: 0.1
     - _DissolveSmooth: 0.1
     - _Distort: 0.7
@@ -62,7 +65,6 @@ Material:
     - _OVERLAYBLEND: 0
     - _OVERLAYTEX: 0
     - _ReceivedShadowsStrength: 0.5
-    - _CFXR_DITHERED_SHADOWS: 0
     - _SecondColorSmooth: 0.2
     - _ShadowStrength: 1
     - _SingleChannel: 1
@@ -74,6 +76,7 @@ Material:
     - _UseDissolve: 0
     - _UseEF: 1
     - _UseFB: 0
+    - _UseFontColor: 0
     - _UseGradientMap: 0
     - _UseSP: 1
     - _UseSecondColor: 0
@@ -84,3 +87,4 @@ Material:
     - _DistortScrolling: {r: 0, g: -1, b: 1, a: 1}
     - _OverlayTex_Scroll: {r: 0.1, g: 0.1, b: 1, a: 1}
     - _SoftParticlesFadeDistance: {r: 0, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []
