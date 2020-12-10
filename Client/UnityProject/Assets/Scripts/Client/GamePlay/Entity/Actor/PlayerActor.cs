@@ -53,7 +53,10 @@ public class PlayerActor : Actor
         BS_Skill_2 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 2];
     }
 
-    private float Skill1_PressDuration;
+    private float Skill_1_PressDuration;
+
+    private float QuickMoveDuration; // 快速移动开始后经过的时间
+    private Vector3 QuickMoveStartActorPosition = Vector3.zero;
 
     protected override void FixedUpdate()
     {
@@ -123,7 +126,11 @@ public class PlayerActor : Actor
                 if (quickMoveAttempt.z.Equals(1) && BS_Up.Pressed && BS_Up.PressedDuration >= QuickMovePressThreshold) isQuickMoving = false;
                 if (isQuickMoving)
                 {
-                    if (quickMoveStartWorldGP == CurWorldGP) // 自短按开始后角色该轴位置还未发生变化，则继续施加移动效果
+                    QuickMoveDuration += Time.fixedDeltaTime;
+                    float quickMoveSpeed = (transform.position - QuickMoveStartActorPosition).magnitude / QuickMoveDuration;
+
+                    if (quickMoveStartWorldGP == CurWorldGP // 自短按开始后角色该轴位置还未发生变化，则继续施加移动效果
+                        && !(QuickMoveDuration > 0.3f && quickMoveSpeed < 0.1f)) // 且短按期间的移动速度不能过低，否则判定为卡住
                     {
                         CurMoveAttempt = quickMoveAttempt;
                         isQuickMoving = true;
@@ -151,7 +158,7 @@ public class PlayerActor : Actor
                 {
                     if (BS_Up.PressedDuration > QuickMovePressThreshold)
                     {
-                        Debug.Log("左右打断上");
+                        //Debug.Log("左右打断上");
                         CurMoveAttempt.z = 0;
                     }
                     else
@@ -163,7 +170,7 @@ public class PlayerActor : Actor
                         }
                         else
                         {
-                            Debug.Log("左右未能打断上");
+                            //Debug.Log("左右未能打断上");
                             CurMoveAttempt.x = 0;
                         }
                     }
@@ -174,7 +181,7 @@ public class PlayerActor : Actor
                 {
                     if (BS_Down.PressedDuration > QuickMovePressThreshold)
                     {
-                        Debug.Log("左右打断下");
+                        //Debug.Log("左右打断下");
                         CurMoveAttempt.z = 0;
                     }
                     else
@@ -186,7 +193,7 @@ public class PlayerActor : Actor
                         }
                         else
                         {
-                            Debug.Log("左右未能打断下");
+                            //Debug.Log("左右未能打断下");
                             CurMoveAttempt.x = 0;
                         }
                     }
@@ -197,7 +204,7 @@ public class PlayerActor : Actor
                 {
                     if (BS_Left.PressedDuration > QuickMovePressThreshold)
                     {
-                        Debug.Log("上下打断左");
+                        //Debug.Log("上下打断左");
                         CurMoveAttempt.x = 0;
                     }
                     else
@@ -209,7 +216,7 @@ public class PlayerActor : Actor
                         }
                         else
                         {
-                            Debug.Log("上下未能打断左");
+                            //Debug.Log("上下未能打断左");
                             CurMoveAttempt.z = 0;
                         }
                     }
@@ -220,7 +227,7 @@ public class PlayerActor : Actor
                 {
                     if (BS_Right.PressedDuration > QuickMovePressThreshold)
                     {
-                        Debug.Log("上下打断右");
+                        //Debug.Log("上下打断右");
                         CurMoveAttempt.x = 0;
                     }
                     else
@@ -232,7 +239,7 @@ public class PlayerActor : Actor
                         }
                         else
                         {
-                            Debug.Log("上下未能打断右");
+                            //Debug.Log("上下未能打断右");
                             CurMoveAttempt.z = 0;
                         }
                     }
@@ -282,7 +289,7 @@ public class PlayerActor : Actor
 
             #region Throw Charging
 
-            if (ThrowState == ThrowStates.ThrowCharging && Skill1_PressDuration > 0.2f)
+            if (ThrowState == ThrowStates.ThrowCharging && Skill_1_PressDuration > 0.2f)
             {
                 if (PlayerNumber == PlayerNumber.Player1)
                 {
@@ -328,18 +335,18 @@ public class PlayerActor : Actor
             if (BS_Skill_2.Down)
             {
                 Lift();
-                Skill1_PressDuration = 0;
+                Skill_1_PressDuration = 0;
             }
 
             if (BS_Skill_2.Pressed)
             {
                 ThrowCharge();
-                Skill1_PressDuration += Time.fixedDeltaTime;
+                Skill_1_PressDuration += Time.fixedDeltaTime;
             }
 
             if (BS_Skill_2.Up)
             {
-                Skill1_PressDuration = 0;
+                Skill_1_PressDuration = 0;
                 ThrowOrPut();
             }
 
