@@ -66,8 +66,7 @@ public class ActorPathFinding
             oriNode.GridPos3D = ori;
             Node destNode = NodeFactory.Alloc();
             destNode.GridPos3D = dest;
-            FindPath(oriNode, destNode, resPath, keepDistanceMin, keepDistanceMax, destinationType);
-            return true;
+            return FindPath(oriNode, destNode, resPath, keepDistanceMin, keepDistanceMax, destinationType);
         }
 
         return false;

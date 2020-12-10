@@ -112,7 +112,7 @@ public class PlayerActor : Actor
                                 out Box _, out Box _, out WorldModule _, out WorldModule _, out GridPos3D _, out GridPos3D _))) // 能走到才开启短按
                     {
                         CurMoveAttempt = quickMoveAttempt;
-                        Debug.Log("速按" + quickMoveAttempt);
+                        //Debug.Log("速按" + quickMoveAttempt);
                         isQuickMoving = true;
                     }
                 }
@@ -137,7 +137,7 @@ public class PlayerActor : Actor
                     }
                     else // 停止短按移动
                     {
-                        Debug.Log("速按结束" + quickMoveAttempt);
+                        //Debug.Log("速按结束" + quickMoveAttempt);
                         quickMoveAttempt = Vector3.zero;
                         isQuickMoving = false;
                     }

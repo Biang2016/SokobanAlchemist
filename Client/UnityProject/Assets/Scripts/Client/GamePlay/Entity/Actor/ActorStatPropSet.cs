@@ -75,7 +75,7 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
 
     internal int FrozenValuePerLevel => Mathf.RoundToInt(((float) FrozenValue.MaxValue / FrozenLevel.MaxValue));
 
-    public bool IsFrozen => FrozenLevel.Value > 0;
+    public bool IsFrozen => FrozenLevel.Value > 1;
 
     [BoxGroup("冰冻")]
     [LabelText("冰冻持续特效")]
