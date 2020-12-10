@@ -199,7 +199,7 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
             if (before == 0 && after > 0)
             {
                 FX fx = FXManager.Instance.PlayFX(StartFiringFX, Box.transform.position + Vector3.up * 0.5f, 1f);
-                fx.transform.parent = Box.transform;
+                if (fx) fx.transform.parent = Box.transform;
             }
         };
         StatDict.Add(BoxStatType.FiringLevel, FiringLevel);
@@ -257,7 +257,7 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         newStatPropSet.CommonDurability = (BoxStat) CommonDurability.Clone();
         newStatPropSet.CollideWithBoxDurability = (BoxStat) CollideWithBoxDurability.Clone();
         newStatPropSet.CollideWithActorDurability = (BoxStat) CollideWithActorDurability.Clone();
-        newStatPropSet.DropFromAirSurviveProbabilityPercent = (BoxStat)DropFromAirSurviveProbabilityPercent.Clone();
+        newStatPropSet.DropFromAirSurviveProbabilityPercent = (BoxStat) DropFromAirSurviveProbabilityPercent.Clone();
         newStatPropSet.FrozenResistance = (BoxProperty) FrozenResistance.Clone();
         newStatPropSet.FrozenRecovery = (BoxProperty) FrozenRecovery.Clone();
         newStatPropSet.FrozenValue = (BoxStat) FrozenValue.Clone();

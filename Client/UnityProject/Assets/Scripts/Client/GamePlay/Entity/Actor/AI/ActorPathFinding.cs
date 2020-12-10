@@ -179,6 +179,8 @@ public class ActorPathFinding
                             nodePtr = nodePtr.ParentNode;
                         }
 
+                        resPath?.Reverse();
+
                         foreach (Node n in uselessAdjacentNodes)
                         {
                             n.Release();
