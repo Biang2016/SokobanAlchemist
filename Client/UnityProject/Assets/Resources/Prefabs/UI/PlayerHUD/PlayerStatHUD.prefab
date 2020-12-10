@@ -309,6 +309,7 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 8
     m_NumAlphaKeys: 3
+  ActionPointSliderAnim: {fileID: 9195879154893745696}
   ActionPointSlider: {fileID: 4592044891213862743}
   ActionPointSliderRectTransform: {fileID: 8983310862742922459}
 --- !u!1 &1135228008534579216
@@ -709,6 +710,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8983310862742922459}
+  - component: {fileID: 9195879154893745696}
   m_Layer: 5
   m_Name: ActionPointBar
   m_TagString: Untagged
@@ -736,6 +738,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 600, y: 30}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!95 &9195879154893745696
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5155215798811620485}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9857f05b18c6759489675c632bb9b61d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5740980222826564532
 GameObject:
   m_ObjectHideFlags: 0

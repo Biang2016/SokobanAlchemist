@@ -19,12 +19,12 @@ public class PlayerStatHUDPanel : BaseUIPanel
     {
         for (int i = 0; i < PlayerStatHUDs_Player.Length; i++)
         {
-            PlayerStatHUD slider = PlayerStatHUDs_Player[i];
+            PlayerStatHUD hud = PlayerStatHUDs_Player[i];
             PlayerActor player = BattleManager.Instance.MainPlayers[i];
-            slider.gameObject.SetActive(player != null);
+            hud.gameObject.SetActive(player != null);
             if (player != null)
             {
-                slider.Initialize(player.ActorBattleHelper);
+                hud.Initialize(player.ActorBattleHelper);
             }
         }
     }

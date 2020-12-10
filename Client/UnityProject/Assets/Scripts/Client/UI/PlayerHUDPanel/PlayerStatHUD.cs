@@ -10,6 +10,7 @@ public class PlayerStatHUD : MonoBehaviour
     public Animator HealthTextAnim;
     public Gradient HealthBarColorGradient;
 
+    public Animator ActionPointSliderAnim;
     public Slider ActionPointSlider;
     public RectTransform ActionPointSliderRectTransform;
     private float actionPointRatio;
@@ -24,6 +25,7 @@ public class PlayerStatHUD : MonoBehaviour
         asps.Health.OnChanged += SetHealth;
         asps.Life.OnChanged += SetLife;
         asps.ActionPoint.OnChanged += SetActionPoint;
+        asps.ActionPoint.OnMaxValueChanged += OnActionChangeNotice;
         asps.MaxActionPoint.OnValueChanged += SetActionPointBar;
     }
 
@@ -58,6 +60,16 @@ public class PlayerStatHUD : MonoBehaviour
     public void SetActionPointBar(int before, int after)
     {
         ActionPointSliderRectTransform.sizeDelta = new Vector2(after / 50f * 600f, ActionPointSliderRectTransform.sizeDelta.y);
+    }
+
+    public void OnActionLowWarning()
+    {
+        ActionPointSliderAnim.SetTrigger("JumpRed");
+    }
+
+    private void OnActionChangeNotice(int before, int after)
+    {
+        ActionPointSliderAnim.SetTrigger("JumpYellow");
     }
 
     void Update()

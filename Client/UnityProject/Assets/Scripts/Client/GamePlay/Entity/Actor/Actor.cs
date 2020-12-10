@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using BiangStudio.GameDataFormat.Grid;
+using BiangStudio.GamePlay.UI;
 using DG.Tweening;
 using NodeCanvas.Framework;
 using Sirenix.OdinInspector;
@@ -844,6 +845,10 @@ public class Actor : Entity
                 RigidBody.AddForce(CurForward * DashForce, ForceMode.VelocityChange);
             }
         }
+        else
+        {
+            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].OnActionLowWarning();
+        }
     }
 
     private void Vault()
@@ -859,6 +864,10 @@ public class Actor : Entity
             {
                 ActorArtHelper.Vault();
             }
+        }
+        else
+        {
+            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].OnActionLowWarning();
         }
     }
 
@@ -879,6 +888,10 @@ public class Actor : Entity
                     if (kickFX) kickFX.transform.localScale = Vector3.one * KickFXScale;
                 }
             }
+        }
+        else
+        {
+            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].OnActionLowWarning();
         }
     }
 
