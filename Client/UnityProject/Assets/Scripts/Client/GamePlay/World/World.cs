@@ -435,14 +435,16 @@ public class World : PoolObject
 
     #region MoveBox Calculators
 
+    private Collider[] actorOccupiedGridSphereOverlapTempResultCache = new Collider[100];
+
     public bool CheckActorOccupiedGrid(GridPos3D targetGP, uint excludeActorGUID = 0)
     {
-        Collider[] results = Physics.OverlapSphere(targetGP.ToVector3(), 0.3f, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy, QueryTriggerInteraction.Collide);
-        if (results != null && results.Length > 0)
+        int overlapCount = Physics.OverlapBoxNonAlloc(targetGP.ToVector3(), 0.3f * Vector3.one, actorOccupiedGridSphereOverlapTempResultCache, Quaternion.identity, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy, QueryTriggerInteraction.Collide);
+        if (overlapCount > 0)
         {
-            for (int index = 0; index < results.Length; index++)
+            for (int index = 0; index < overlapCount; index++)
             {
-                Collider result = results[index];
+                Collider result = actorOccupiedGridSphereOverlapTempResultCache[index];
                 Actor actor = result.GetComponentInParent<Actor>();
                 if (actor != null && actor.GUID != excludeActorGUID) return true;
             }
@@ -492,7 +494,7 @@ public class World : PoolObject
 
     public void BoxColumnTransformDOPause(GridPos3D baseBoxGP)
     {
-        Box box_This = GetBoxByGridPosition(baseBoxGP , out _, out _);
+        Box box_This = GetBoxByGridPosition(baseBoxGP, out _, out _);
         if (box_This == null) return;
         box_This.transform.DOPause();
         BoxColumnTransformDOPause(baseBoxGP + GridPos3D.Up);

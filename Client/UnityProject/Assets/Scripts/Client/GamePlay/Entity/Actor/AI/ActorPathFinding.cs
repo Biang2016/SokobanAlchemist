@@ -9,7 +9,7 @@ public class ActorPathFinding
 {
     public class Node : IClassPoolObject<Node>
     {
-        private int PoolIndex;
+        public int PoolIndex;
         public Node ParentNode;
         public GridPos3D GridPos3D;
         public int F => G + H; // G+H
@@ -23,6 +23,11 @@ public class ActorPathFinding
 
         public void OnUsed()
         {
+        }
+
+        public void Release()
+        {
+            NodeFactory.Release(this);
         }
 
         public void OnRelease()
@@ -48,10 +53,10 @@ public class ActorPathFinding
 
     #region AStar PathFinding
 
-    private static LinkedList<Node> OpenList = new LinkedList<Node>();
-    private static LinkedList<Node> CloseList = new LinkedList<Node>();
+    private static List<Node> OpenList = new List<Node>();
+    private static List<Node> CloseList = new List<Node>();
 
-    public static LinkedList<GridPos3D> FindPath(GridPos3D ori, GridPos3D dest, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType)
+    public static bool FindPath(GridPos3D ori, GridPos3D dest, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType)
     {
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori, out WorldModule oriModule, out GridPos3D _);
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(dest, out WorldModule destModule, out GridPos3D _);
@@ -61,10 +66,11 @@ public class ActorPathFinding
             oriNode.GridPos3D = ori;
             Node destNode = NodeFactory.Alloc();
             destNode.GridPos3D = dest;
-            return FindPath(oriNode, destNode, keepDistanceMin, keepDistanceMax, destinationType);
+            FindPath(oriNode, destNode, resPath, keepDistanceMin, keepDistanceMax, destinationType);
+            return true;
         }
 
-        return null;
+        return false;
     }
 
     public static bool FindRandomAccessibleDestination(GridPos3D ori, float rangeRadius, out GridPos3D gp)
@@ -82,17 +88,17 @@ public class ActorPathFinding
         return false;
     }
 
-    private static LinkedList<GridPos3D> FindPath(Node ori, Node dest, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType)
+    private static bool FindPath(Node ori, Node dest, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType)
     {
         OpenList.Clear();
         CloseList.Clear();
-        OpenList.AddFirst(ori);
+        OpenList.Add(ori);
         ori.G = 0;
         ori.H = AStarHeuristicsDistance(ori, dest);
         while (OpenList.Count > 0)
         {
             int minF = int.MaxValue;
-            Node minFNode = OpenList.First.Value;
+            Node minFNode = OpenList[0];
             foreach (Node node in OpenList)
             {
                 if (node.F < minF)
@@ -103,9 +109,9 @@ public class ActorPathFinding
             }
 
             OpenList.Remove(minFNode);
-            CloseList.AddFirst(minFNode);
+            CloseList.Add(minFNode);
             List<Node> adjacentNodes = GetAdjacentNodesForAStar(minFNode, dest.GridPos3D, destinationType);
-            List<Node> uselessAdjacentNodes = adjacentNodes.Clone();
+            List<Node> uselessAdjacentNodes = cached_adjacentNodesList_clone; // 对象引用仍为同一个,此list只是为了避免modify collection inside foreach
             foreach (Node node in adjacentNodes)
             {
                 bool inCloseList = false;
@@ -142,7 +148,7 @@ public class ActorPathFinding
                 else
                 {
                     uselessAdjacentNodes.Remove(node);
-                    OpenList.AddFirst(node);
+                    OpenList.Add(node);
                     node.ParentNode = minFNode;
                     node.G = newG;
                     node.H = AStarHeuristicsDistance(node, dest);
@@ -150,29 +156,48 @@ public class ActorPathFinding
                     float diffToDest = (node.GridPos3D - dest.GridPos3D).ToVector3().magnitude;
                     if (diffToDest <= keepDistanceMax && diffToDest >= keepDistanceMin)
                     {
-                        LinkedList<GridPos3D> path = new LinkedList<GridPos3D>();
+                        if (resPath != null)
+                        {
+                            foreach (Node n in resPath)
+                            {
+                                n.Release();
+                            }
+
+                            resPath.Clear();
+                        }
+
                         Node nodePtr = node;
                         while (nodePtr != null)
                         {
-                            path.AddFirst(nodePtr.GridPos3D);
+                            if (resPath != null)
+                            {
+                                Node pathNode = NodeFactory.Alloc(); // return的List中的Node均为新分配的，与本类中的cache无关
+                                pathNode.GridPos3D = nodePtr.GridPos3D;
+                                resPath.Add(pathNode);
+                            }
+
                             nodePtr = nodePtr.ParentNode;
                         }
 
                         foreach (Node n in uselessAdjacentNodes)
                         {
-                            NodeFactory.Release(n);
+                            n.Release();
                         }
 
+                        uselessAdjacentNodes.Clear();
+
                         releaseNodes();
-                        return path;
+                        return true;
                     }
                 }
             }
 
             foreach (Node n in uselessAdjacentNodes)
             {
-                NodeFactory.Release(n);
+                n.Release();
             }
+
+            uselessAdjacentNodes.Clear();
         }
 
         releaseNodes();
@@ -181,28 +206,30 @@ public class ActorPathFinding
         {
             foreach (Node n in OpenList)
             {
-                NodeFactory.Release(n);
+                n.Release();
             }
 
             OpenList.Clear();
 
             foreach (Node n in CloseList)
             {
-                NodeFactory.Release(n);
+                n.Release();
             }
 
             CloseList.Clear();
-            NodeFactory.Release(dest);
+            dest.Release();
         }
 
-        return null;
+        return false;
     }
 
     private static List<Node> cached_adjacentNodesList = new List<Node>(4);
+    private static List<Node> cached_adjacentNodesList_clone = new List<Node>(4);
 
     private static List<Node> GetAdjacentNodesForAStar(Node node, GridPos3D destGP, DestinationType destinationType)
     {
         cached_adjacentNodesList.Clear();
+        cached_adjacentNodesList_clone.Clear();
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(node.GridPos3D, out WorldModule curModule, out GridPos3D _);
         if (curModule == null) return cached_adjacentNodesList;
 
@@ -216,6 +243,7 @@ public class ActorPathFinding
                     leftNode.GridPos3D = gp;
                     leftNode.ParentNode = node;
                     cached_adjacentNodesList.Add(leftNode);
+                    cached_adjacentNodesList_clone.Add(leftNode);
                     return;
                 }
             }
@@ -230,6 +258,7 @@ public class ActorPathFinding
                     leftNode.GridPos3D = gp;
                     leftNode.ParentNode = node;
                     cached_adjacentNodesList.Add(leftNode);
+                    cached_adjacentNodesList_clone.Add(leftNode);
                     return;
                 }
 
@@ -251,6 +280,7 @@ public class ActorPathFinding
                     leftNode.GridPos3D = gp;
                     leftNode.ParentNode = node;
                     cached_adjacentNodesList.Add(leftNode);
+                    cached_adjacentNodesList_clone.Add(leftNode);
                 }
             }
         }

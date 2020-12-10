@@ -22,10 +22,16 @@ namespace BiangStudio.ObjectPool
             isUsed = new bool[initialCapacity];
             capacity = initialCapacity;
             empty = capacity;
+            used = 0;
+            notUsed = initialCapacity;
             for (int i = 0; i < initialCapacity; i++)
             {
-                gameObjectPool[i] = new T();
-                gameObjectPool[i].SetPoolIndex(i);
+                Alloc();
+            }
+
+            for (int i = 0; i < initialCapacity; i++)
+            {
+                Release(gameObjectPool[i]);
             }
         }
 

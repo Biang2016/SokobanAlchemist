@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BiangStudio;
 using BiangStudio.GameDataFormat.Grid;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class ActorAIAgent
@@ -9,9 +10,6 @@ public class ActorAIAgent
 
     internal Actor Actor;
     private List<Marker> NavTrackMarkers = new List<Marker>();
-
-    public Box TargetBox;
-    public GridPos3D TargetBoxGP;
 
     public Actor TargetActor;
     public GridPos3D TargetActorGP;
@@ -29,8 +27,6 @@ public class ActorAIAgent
     public void Stop()
     {
         isStop = true;
-        TargetBox = null;
-        TargetBoxGP = GridPos3D.Zero;
         TargetActor = null;
         TargetActorGP = GridPos3D.Zero;
         ClearPathFinding();
@@ -70,7 +66,7 @@ public class ActorAIAgent
     public void FixedUpdateAfterMove()
     {
         if (isStop) return;
-        if (Actor.CurWorldGP == Actor.LastWorldGP && currentPath != null)
+        if (Actor.CurWorldGP == Actor.LastWorldGP && IsPathFinding)
         {
             StuckWithNavTask_Tick += Time.fixedDeltaTime;
         }
@@ -83,20 +79,23 @@ public class ActorAIAgent
     private float KeepDistanceMin;
     private float KeepDistanceMax;
     private bool LastNodeOccupied;
-    public bool IsPathFinding;
+    public bool IsPathFinding => CurrentPath.Count > 0;
     private GridPos3D currentDestination;
-    private LinkedList<GridPos3D> currentPath;
-    private LinkedListNode<GridPos3D> currentNode;
-    private LinkedListNode<GridPos3D> nextNode;
+
+    [NotNull]
+    public List<ActorPathFinding.Node> CurrentPath = new List<ActorPathFinding.Node>(50);
+
+    private ActorPathFinding.Node currentNode;
+    private ActorPathFinding.Node nextNode;
 
     public void InterruptCurrentPathFinding()
     {
         if (!IsPathFinding) return;
-        if (currentPath == null) return;
-
-        while (currentPath.Last != nextNode)
+        while (CurrentPath.Count > 0 && CurrentPath[CurrentPath.Count - 1] != nextNode)
         {
-            currentPath.RemoveLast();
+            ActorPathFinding.Node lastNode = CurrentPath[CurrentPath.Count - 1];
+            lastNode.Release();
+            CurrentPath.RemoveAt(CurrentPath.Count - 1);
         }
     }
 
@@ -105,8 +104,12 @@ public class ActorAIAgent
     /// </summary>
     public void ClearPathFinding()
     {
-        IsPathFinding = false;
-        currentPath = null;
+        foreach (ActorPathFinding.Node node in CurrentPath)
+        {
+            node.Release();
+        }
+
+        CurrentPath.Clear();
         currentNode = null;
         nextNode = null;
         Actor.CurMoveAttempt = Vector3.zero;
@@ -160,24 +163,23 @@ public class ActorAIAgent
             return SetDestinationRetCode.TooClose;
         }
 
-        currentPath = ActorPathFinding.FindPath(Actor.CurWorldGP, currentDestination, KeepDistanceMin, KeepDistanceMax, destinationType);
-        if (currentPath != null)
+        bool suc = ActorPathFinding.FindPath(Actor.CurWorldGP, currentDestination, CurrentPath, KeepDistanceMin, KeepDistanceMax, destinationType);
+        if (IsPathFinding)
         {
-            IsPathFinding = true;
-            currentNode = currentPath.First;
-            nextNode = currentPath.First.Next;
+            currentNode = CurrentPath.Count > 0 ? CurrentPath[0] : null;
+            nextNode = CurrentPath.Count > 1 ? CurrentPath[1] : null;
 
             // 绘制Debug寻路点
             ClearNavTrackMarkers();
             if (ConfigManager.ShowEnemyPathFinding)
             {
                 int count = 0;
-                foreach (GridPos3D gp in currentPath)
+                foreach (ActorPathFinding.Node node in CurrentPath)
                 {
-                    MarkerType mt = count == currentPath.Count - 1 ? MarkerType.NavTrackMarker_Final : MarkerType.NavTrackMarker;
+                    MarkerType mt = count == CurrentPath.Count - 1 ? MarkerType.NavTrackMarker_Final : MarkerType.NavTrackMarker;
                     count++;
                     Marker marker = Marker.BaseInitialize(mt, BattleManager.Instance.NavTrackMarkerRoot);
-                    marker.transform.position = gp.ToVector3();
+                    marker.transform.position = node.GridPos3D.ToVector3();
                     NavTrackMarkers.Add(marker);
                 }
             }
@@ -195,16 +197,16 @@ public class ActorAIAgent
     public void MoveToDestination()
     {
         Actor.CurMoveAttempt = Vector3.zero;
-        if (currentPath != null)
+        if (IsPathFinding)
         {
             if (nextNode != null)
             {
                 // 有箱子或Actor挡路，停止寻路
-                Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(nextNode.Value, out WorldModule module, out GridPos3D _);
-                bool actorOccupied = WorldManager.Instance.CurrentWorld.CheckActorOccupiedGrid(nextNode.Value, Actor.GUID);
+                Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(nextNode.GridPos3D, out WorldModule module, out GridPos3D _);
+                bool actorOccupied = WorldManager.Instance.CurrentWorld.CheckActorOccupiedGrid(nextNode.GridPos3D, Actor.GUID);
                 if ((box && !box.Passable) || actorOccupied)
                 {
-                    Vector3 diff = currentNode.Value.ToVector3() - Actor.transform.position;
+                    Vector3 diff = currentNode.GridPos3D.ToVector3() - Actor.transform.position;
                     if (diff.magnitude < 0.2f)
                     {
                         ClearPathFinding();
@@ -216,15 +218,17 @@ public class ActorAIAgent
                 }
                 else
                 {
-                    Vector3 diff = nextNode.Value.ToVector3() - Actor.transform.position;
+                    Vector3 diff = nextNode.GridPos3D.ToVector3() - Actor.transform.position;
                     if (diff.magnitude < 0.01f)
                     {
-                        bool checkArriveDest = nextNode == currentPath.Last || (LastNodeOccupied && nextNode.Next == currentPath.Last);
+                        int nextNodeIndex = CurrentPath.IndexOf(nextNode);
+                        ActorPathFinding.Node nextNodeAfterNextNode = CurrentPath.Count > nextNodeIndex + 1 ? CurrentPath[nextNodeIndex + 1] : null;
+                        bool checkArriveDest = nextNode == CurrentPath[CurrentPath.Count - 1] || (LastNodeOccupied && nextNodeAfterNextNode == CurrentPath[CurrentPath.Count - 1]);
                         if (checkArriveDest)
                         {
-                            if (LastNodeOccupied && nextNode.Next != null && nextNode.Next == currentPath.Last)
+                            if (LastNodeOccupied && nextNodeAfterNextNode != null && nextNodeAfterNextNode == CurrentPath[CurrentPath.Count - 1])
                             {
-                                Actor.CurForward = (nextNode.Next.Value - nextNode.Value).ToVector3().normalized;
+                                Actor.CurForward = (nextNodeAfterNextNode.GridPos3D - nextNode.GridPos3D).ToVector3().normalized;
                             }
 
                             ClearPathFinding();
@@ -232,7 +236,7 @@ public class ActorAIAgent
                         }
 
                         currentNode = nextNode;
-                        nextNode = nextNode.Next;
+                        nextNode = nextNodeAfterNextNode;
                     }
                     else if (diff.magnitude > 1.1f && !diff.x.Equals(0) && !diff.z.Equals(0)) // 由于某些意外，下一个路径点和目前离得较远，会发生角色原地打转不寻路的bug，此处强行重置
                     {
@@ -241,7 +245,7 @@ public class ActorAIAgent
 
                     if (nextNode != null)
                     {
-                        Actor.CurMoveAttempt = (nextNode.Value.ToVector3() - Actor.transform.position).normalized;
+                        Actor.CurMoveAttempt = (nextNode.GridPos3D.ToVector3() - Actor.transform.position).normalized;
                         Actor.CurMoveAttempt = Actor.CurMoveAttempt.GetSingleDirectionVectorXZ();
                     }
                 }

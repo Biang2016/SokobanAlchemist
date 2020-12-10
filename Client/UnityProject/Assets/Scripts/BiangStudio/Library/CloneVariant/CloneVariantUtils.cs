@@ -87,8 +87,8 @@ namespace BiangStudio.CloneVariant
 
         private static List<T> Operate<T>(this List<T> src, OperationType operationType = OperationType.Clone)
         {
-            List<T> res = new List<T>();
-            if (src == null) return res;
+            if (src == null) return new List<T>();
+            List<T> res = new List<T>(src.Count);
             foreach (T t in src)
             {
                 res.Add(GetOperationResult(t, operationType));
@@ -109,8 +109,8 @@ namespace BiangStudio.CloneVariant
 
         private static Dictionary<T1, T2> Operate<T1, T2>(this Dictionary<T1, T2> src, OperationType operationType = OperationType.Clone)
         {
-            Dictionary<T1, T2> res = new Dictionary<T1, T2>();
-            if (src == null) return res;
+            if (src == null) return new Dictionary<T1, T2>();
+            Dictionary<T1, T2> res = new Dictionary<T1, T2>(src.Count);
             foreach (KeyValuePair<T1, T2> kv in src)
             {
                 res.Add(GetOperationResult(kv.Key, operationType), GetOperationResult(kv.Value, operationType));
