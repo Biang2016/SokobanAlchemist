@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using BiangStudio.CloneVariant;
-using BiangStudio.GameDataFormat.Grid;
+using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 
 public class WorldCameraPOIData : IClone<WorldCameraPOIData>
 {

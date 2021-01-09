@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using BiangStudio;
+using BiangLibrary;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

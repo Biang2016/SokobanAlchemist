@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using BiangStudio.CloneVariant;
-using BiangStudio.GameDataFormat.Grid;
+using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;

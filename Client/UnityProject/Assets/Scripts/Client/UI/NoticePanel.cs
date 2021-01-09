@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using BiangStudio.GamePlay.UI;
+using BiangLibrary.GamePlay.UI;
 using TMPro;
 using UnityEngine;
 

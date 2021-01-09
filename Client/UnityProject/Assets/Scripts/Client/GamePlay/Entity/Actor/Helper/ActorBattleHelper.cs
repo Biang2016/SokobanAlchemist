@@ -1,6 +1,6 @@
-﻿using BiangStudio;
-using BiangStudio.GameDataFormat.Grid;
-using BiangStudio.GamePlay.UI;
+﻿using BiangLibrary;
+using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.GamePlay.UI;
 using UnityEngine;
 using UnityEngine.Events;
 

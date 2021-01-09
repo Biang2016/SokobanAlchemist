@@ -1,6 +1,6 @@
 ﻿using System;
-using BiangStudio;
-using BiangStudio.GameDataFormat.Grid;
+using BiangLibrary;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

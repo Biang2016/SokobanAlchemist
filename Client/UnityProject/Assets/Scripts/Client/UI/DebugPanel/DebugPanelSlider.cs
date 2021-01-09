@@ -1,4 +1,4 @@
-﻿using BiangStudio.ObjectPool;
+﻿using BiangLibrary.ObjectPool;
 using UnityEngine.Events;
 using UnityEngine.UI;
 

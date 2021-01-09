@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using BiangStudio.GameDataFormat.Grid;
-using BiangStudio.Messenger;
-using BiangStudio.ObjectPool;
+using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.Messenger;
+using BiangLibrary.ObjectPool;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;

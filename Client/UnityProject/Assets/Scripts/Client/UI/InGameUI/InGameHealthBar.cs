@@ -1,5 +1,5 @@
-﻿using BiangStudio;
-using BiangStudio.ObjectPool;
+﻿using BiangLibrary;
+using BiangLibrary.ObjectPool;
 using UnityEngine;
 using UnityEngine.UI;
 

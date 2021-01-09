@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using BiangStudio.Singleton;
+using BiangLibrary.Singleton;
 using UnityEngine;
 using UnityEngine.Audio;
 

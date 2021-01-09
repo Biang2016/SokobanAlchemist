@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using BiangStudio.GamePlay;
-using BiangStudio.ObjectPool;
-using BiangStudio.Singleton;
+using BiangLibrary.GamePlay;
+using BiangLibrary.ObjectPool;
+using BiangLibrary.Singleton;
 using UnityEngine;
 
 public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager>

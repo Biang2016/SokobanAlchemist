@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using BiangStudio.ObjectPool;
+using BiangLibrary.ObjectPool;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;

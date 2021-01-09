@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using BiangStudio.GameDataFormat.Grid;
-using BiangStudio.Messenger;
-using BiangStudio.ObjectPool;
+using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.Messenger;
+using BiangLibrary.ObjectPool;
 using FlowCanvas;
 using UnityEditor;
 using UnityEngine;

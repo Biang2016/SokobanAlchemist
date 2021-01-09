@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BiangStudio.Singleton;
+using BiangLibrary.Singleton;
 using UnityEngine;
 
 public class WorldManager : TSingletonBaseManager<WorldManager>

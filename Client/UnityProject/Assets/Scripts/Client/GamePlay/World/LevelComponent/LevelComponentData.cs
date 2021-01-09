@@ -1,6 +1,6 @@
 ﻿using System;
-using BiangStudio.CloneVariant;
-using BiangStudio.GameDataFormat.Grid;
+using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 
 public class LevelComponentData : IClone<LevelComponentData>

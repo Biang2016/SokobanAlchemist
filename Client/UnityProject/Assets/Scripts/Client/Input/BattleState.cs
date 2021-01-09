@@ -124,6 +124,8 @@ public enum ButtonNames
     Common_Tab,
     Common_RestartGame,
     Common_Pause,
+    Common_ToggleUI,
+    Common_ToggleDebugButton,
 
     COMMON_MAX_FLAG = 600,
 }

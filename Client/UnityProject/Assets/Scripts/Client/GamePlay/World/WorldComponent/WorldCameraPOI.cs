@@ -1,4 +1,4 @@
-﻿using BiangStudio.ObjectPool;
+﻿using BiangLibrary.ObjectPool;
 using UnityEngine;
 
 public class WorldCameraPOI : PoolObject

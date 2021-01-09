@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using BiangStudio.CloneVariant;
-using BiangStudio.GameDataFormat;
+using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using BiangStudio.GamePlay;
-using BiangStudio.GamePlay.UI;
-using BiangStudio.Log;
-using BiangStudio.Messenger;
-using BiangStudio.Singleton;
+using BiangLibrary.GamePlay;
+using BiangLibrary.GamePlay.UI;
+using BiangLibrary.Log;
+using BiangLibrary.Messenger;
+using BiangLibrary.Singleton;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -61,6 +61,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     #endregion
 
     public DebugConsole DebugConsole;
+    public DebugPanel DebugPanel;
 
     [LabelText("开局世界类型")]
     [ValueDropdown("GetAllWorldNames")]
@@ -142,7 +143,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         UIBattleTipManager.Start();
         FXManager.Start();
 
-        UIManager.Instance.ShowUIForms<DebugPanel>();
+        DebugPanel = UIManager.Instance.ShowUIForms<DebugPanel>();
 #if !DEBUG
         UIManager.Instance.CloseUIForm<DebugPanel>();
 #endif
@@ -210,6 +211,16 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             CameraManager.Instance.FieldCamera.CameraRightRotate();
         }
 
+        if (ControlManager.Common_ToggleUI.Up)
+        {
+            UIManager.Instance.UICamera.enabled = !UIManager.Instance.UICamera.enabled;
+        }
+
+        if (ControlManager.Common_ToggleDebugButton.Up)
+        {
+            DebugPanel.DebugToggleButton.gameObject.SetActive(!DebugPanel.DebugToggleButton.gameObject.activeInHierarchy);
+        }
+
         ConfigManager.FixedUpdate(Time.fixedDeltaTime);
         LayerManager.FixedUpdate(Time.fixedDeltaTime);
         PrefabManager.FixedUpdate(Time.fixedDeltaTime);
@@ -241,7 +252,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         ControlManager.ShutDown();
 
         ActiveSkillAgent.StopAllCoroutines();
-        
+
         FXManager.ShutDown();
         UIBattleTipManager.ShutDown();
         ProjectileManager.ShutDown();

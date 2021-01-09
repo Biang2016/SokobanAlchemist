@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using BiangStudio.GameDataFormat.Grid;
-using BiangStudio.Singleton;
+using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.Singleton;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -122,6 +122,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     public ButtonState Common_Tab = new ButtonState() {ButtonName = ButtonNames.Common_Tab};
     public ButtonState Common_RestartGame = new ButtonState() {ButtonName = ButtonNames.Common_RestartGame};
     public ButtonState Common_PauseGame = new ButtonState() {ButtonName = ButtonNames.Common_Pause};
+    public ButtonState Common_ToggleUI = new ButtonState() {ButtonName = ButtonNames.Common_ToggleUI };
+    public ButtonState Common_ToggleDebugButton = new ButtonState() {ButtonName = ButtonNames.Common_ToggleDebugButton };
 
     #endregion
 
@@ -222,6 +224,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         Common_Tab.GetStateCallbackFromContext_UpDownPress(CommonInputActions.Tab);
         Common_RestartGame.GetStateCallbackFromContext_UpDownPress(CommonInputActions.RestartGame);
         Common_PauseGame.GetStateCallbackFromContext_UpDownPress(CommonInputActions.PauseGame);
+        Common_ToggleUI.GetStateCallbackFromContext_UpDownPress(CommonInputActions.ToggleUI);
+        Common_ToggleDebugButton.GetStateCallbackFromContext_UpDownPress(CommonInputActions.ToggleDebugButton);
 
         PlayerInput.Enable();
         CommonInputActions.Enable();

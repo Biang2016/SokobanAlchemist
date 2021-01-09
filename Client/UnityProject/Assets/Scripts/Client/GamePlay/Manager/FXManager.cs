@@ -1,4 +1,4 @@
-﻿using BiangStudio.Singleton;
+﻿using BiangLibrary.Singleton;
 using UnityEngine;
 
 public class FXManager : TSingletonBaseManager<FXManager>

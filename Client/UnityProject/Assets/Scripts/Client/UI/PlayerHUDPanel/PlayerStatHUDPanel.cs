@@ -1,4 +1,4 @@
-﻿using BiangStudio.GamePlay.UI;
+﻿using BiangLibrary.GamePlay.UI;
 
 public class PlayerStatHUDPanel : BaseUIPanel
 {

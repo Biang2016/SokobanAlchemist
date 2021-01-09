@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using BiangStudio;
-using BiangStudio.CloneVariant;
+using BiangLibrary;
+using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;

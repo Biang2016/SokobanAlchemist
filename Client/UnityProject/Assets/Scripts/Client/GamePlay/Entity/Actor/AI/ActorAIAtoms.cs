@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using BiangStudio;
-using BiangStudio.GameDataFormat.Grid;
+using BiangLibrary;
+using BiangLibrary.GameDataFormat.Grid;
 using FlowCanvas;
 using FlowCanvas.Nodes;
 using NodeCanvas.BehaviourTrees;

@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using BiangStudio.GamePlay.UI;
-using BiangStudio.Messenger;
-using BiangStudio.Singleton;
+using BiangLibrary.GamePlay.UI;
+using BiangLibrary.Messenger;
+using BiangLibrary.Singleton;
 using UnityEngine;
 
 public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>

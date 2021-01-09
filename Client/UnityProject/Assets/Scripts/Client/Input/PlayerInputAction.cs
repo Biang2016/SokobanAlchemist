@@ -1252,6 +1252,22 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""ToggleUI"",
+                    ""type"": ""Button"",
+                    ""id"": ""64044141-2d58-4858-a8df-455957fe23ea"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""ToggleDebugButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""25917861-bf33-45b7-906b-5b8ef997638c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
                 }
             ],
             ""bindings"": [
@@ -1395,6 +1411,28 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""RestartGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""50c4cd9c-6198-4d5d-b7b7-807142622972"",
+                    ""path"": ""<Keyboard>/f3"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ToggleUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""31728538-e785-458b-a6f4-15c2524dcb7b"",
+                    ""path"": ""<Keyboard>/f4"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ToggleDebugButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1563,6 +1601,8 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_Common_Debug = m_Common.FindAction("Debug", throwIfNotFound: true);
         m_Common_RestartGame = m_Common.FindAction("RestartGame", throwIfNotFound: true);
         m_Common_PauseGame = m_Common.FindAction("PauseGame", throwIfNotFound: true);
+        m_Common_ToggleUI = m_Common.FindAction("ToggleUI", throwIfNotFound: true);
+        m_Common_ToggleDebugButton = m_Common.FindAction("ToggleDebugButton", throwIfNotFound: true);
         // Editor
         m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
         m_Editor_MousePosition = m_Editor.FindAction("MousePosition", throwIfNotFound: true);
@@ -1903,6 +1943,8 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Common_Debug;
     private readonly InputAction m_Common_RestartGame;
     private readonly InputAction m_Common_PauseGame;
+    private readonly InputAction m_Common_ToggleUI;
+    private readonly InputAction m_Common_ToggleDebugButton;
     public struct CommonActions
     {
         private @PlayerInput m_Wrapper;
@@ -1918,6 +1960,8 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @Debug => m_Wrapper.m_Common_Debug;
         public InputAction @RestartGame => m_Wrapper.m_Common_RestartGame;
         public InputAction @PauseGame => m_Wrapper.m_Common_PauseGame;
+        public InputAction @ToggleUI => m_Wrapper.m_Common_ToggleUI;
+        public InputAction @ToggleDebugButton => m_Wrapper.m_Common_ToggleDebugButton;
         public InputActionMap Get() { return m_Wrapper.m_Common; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1960,6 +2004,12 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @PauseGame.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnPauseGame;
                 @PauseGame.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnPauseGame;
                 @PauseGame.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnPauseGame;
+                @ToggleUI.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleUI;
+                @ToggleUI.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleUI;
+                @ToggleUI.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleUI;
+                @ToggleDebugButton.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleDebugButton;
+                @ToggleDebugButton.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleDebugButton;
+                @ToggleDebugButton.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleDebugButton;
             }
             m_Wrapper.m_CommonActionsCallbackInterface = instance;
             if (instance != null)
@@ -1997,6 +2047,12 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @PauseGame.started += instance.OnPauseGame;
                 @PauseGame.performed += instance.OnPauseGame;
                 @PauseGame.canceled += instance.OnPauseGame;
+                @ToggleUI.started += instance.OnToggleUI;
+                @ToggleUI.performed += instance.OnToggleUI;
+                @ToggleUI.canceled += instance.OnToggleUI;
+                @ToggleDebugButton.started += instance.OnToggleDebugButton;
+                @ToggleDebugButton.performed += instance.OnToggleDebugButton;
+                @ToggleDebugButton.canceled += instance.OnToggleDebugButton;
             }
         }
     }
@@ -2131,6 +2187,8 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnDebug(InputAction.CallbackContext context);
         void OnRestartGame(InputAction.CallbackContext context);
         void OnPauseGame(InputAction.CallbackContext context);
+        void OnToggleUI(InputAction.CallbackContext context);
+        void OnToggleDebugButton(InputAction.CallbackContext context);
     }
     public interface IEditorActions
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using BiangStudio.CloneVariant;
+using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;

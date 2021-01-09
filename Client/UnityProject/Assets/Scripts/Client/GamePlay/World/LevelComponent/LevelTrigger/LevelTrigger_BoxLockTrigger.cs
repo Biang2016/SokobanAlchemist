@@ -1,5 +1,5 @@
 ﻿using System;
-using BiangStudio;
+using BiangLibrary;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;

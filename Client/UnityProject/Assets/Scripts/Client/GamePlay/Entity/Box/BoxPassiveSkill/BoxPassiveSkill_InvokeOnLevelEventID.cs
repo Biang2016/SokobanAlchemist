@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using BiangStudio.CloneVariant;
+using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 
 [Serializable]

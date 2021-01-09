@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using BiangStudio;
-using BiangStudio.GameDataFormat.Grid;
+using BiangLibrary;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;

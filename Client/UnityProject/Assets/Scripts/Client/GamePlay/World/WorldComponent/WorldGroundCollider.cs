@@ -1,5 +1,5 @@
-﻿using BiangStudio.GameDataFormat.Grid;
-using BiangStudio.ObjectPool;
+﻿using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.ObjectPool;
 using UnityEngine;
 
 public class WorldGroundCollider : PoolObject

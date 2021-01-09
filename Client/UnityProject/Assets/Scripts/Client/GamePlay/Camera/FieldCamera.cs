@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using BiangStudio.GameDataFormat.Grid;
+using BiangLibrary.GameDataFormat.Grid;
 using DG.Tweening;
 using FlowCanvas.Nodes;
 using Sirenix.OdinInspector;
@@ -217,7 +217,7 @@ public class FieldCamera : MonoBehaviour
         return DistanceLevels_ScaleForBattleUI[Distance_Level];
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         UpdateFOVLevel();
     }

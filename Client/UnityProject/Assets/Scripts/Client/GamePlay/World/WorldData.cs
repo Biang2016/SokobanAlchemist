@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using BiangStudio.CloneVariant;
-using BiangStudio.GameDataFormat.Grid;
+using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 
 public class WorldData : IClone<WorldData>

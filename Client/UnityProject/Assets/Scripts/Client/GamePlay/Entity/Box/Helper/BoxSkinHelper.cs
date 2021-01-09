@@ -1,4 +1,4 @@
-﻿using BiangStudio.GameDataFormat.Grid;
+﻿using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

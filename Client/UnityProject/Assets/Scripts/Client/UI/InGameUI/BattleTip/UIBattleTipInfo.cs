@@ -1,4 +1,4 @@
-﻿using BiangStudio.CloneVariant;
+﻿using BiangLibrary.CloneVariant;
 using UnityEngine;
 
 public class UIBattleTipInfo : IClone<UIBattleTipInfo>

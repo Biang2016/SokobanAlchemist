@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BiangStudio.CloneVariant;
+using BiangLibrary.CloneVariant;
 
 public class BornPointGroupData : IClone<BornPointGroupData>
 {

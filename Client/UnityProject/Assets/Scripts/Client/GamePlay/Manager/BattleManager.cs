@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using BiangStudio.GameDataFormat;
-using BiangStudio.GameDataFormat.Grid;
-using BiangStudio.GamePlay.UI;
-using BiangStudio.Messenger;
-using BiangStudio.Singleton;
+using BiangLibrary.GameDataFormat;
+using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.GamePlay.UI;
+using BiangLibrary.Messenger;
+using BiangLibrary.Singleton;
 using UnityEngine;
 
 public partial class BattleManager : TSingletonBaseManager<BattleManager>

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using BiangStudio;
-using BiangStudio.CloneVariant;
-using BiangStudio.GameDataFormat.Grid;
-using BiangStudio.ObjectPool;
+using BiangLibrary;
+using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.ObjectPool;
 using UnityEngine;
 
 public class ActorPathFinding

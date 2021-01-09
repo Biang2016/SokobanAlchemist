@@ -1,5 +1,5 @@
 ﻿using System;
-using BiangStudio.CloneVariant;
+using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;

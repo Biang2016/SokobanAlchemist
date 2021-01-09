@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BiangStudio.CloneVariant;
+using BiangLibrary.CloneVariant;
 using UnityEngine;
 
 public class ActorFrozenHelper : EntityFrozenHelper

@@ -1,4 +1,4 @@
-﻿using BiangStudio.Singleton;
+﻿using BiangLibrary.Singleton;
 
 public class GameStateManager : TSingletonBaseManager<GameStateManager>
 {

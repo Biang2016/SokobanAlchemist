@@ -1,4 +1,4 @@
-﻿using BiangStudio.Singleton;
+﻿using BiangLibrary.Singleton;
 using UnityEngine;
 
 public class CameraManager : MonoSingleton<CameraManager>

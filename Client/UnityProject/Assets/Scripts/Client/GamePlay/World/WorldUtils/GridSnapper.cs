@@ -1,4 +1,4 @@
-﻿using BiangStudio.GameDataFormat.Grid;
+﻿using BiangLibrary.GameDataFormat.Grid;
 using UnityEngine;
 
 [ExecuteInEditMode]

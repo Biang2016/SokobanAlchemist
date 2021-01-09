@@ -1239,6 +1239,22 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "ToggleUI",
+                    "type": "Button",
+                    "id": "64044141-2d58-4858-a8df-455957fe23ea",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "ToggleDebugButton",
+                    "type": "Button",
+                    "id": "25917861-bf33-45b7-906b-5b8ef997638c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
                 }
             ],
             "bindings": [
@@ -1382,6 +1398,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "RestartGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "50c4cd9c-6198-4d5d-b7b7-807142622972",
+                    "path": "<Keyboard>/f3",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ToggleUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "31728538-e785-458b-a6f4-15c2524dcb7b",
+                    "path": "<Keyboard>/f4",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ToggleDebugButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using BiangStudio.GameDataFormat.Grid;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 
 [Serializable]

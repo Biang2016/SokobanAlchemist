@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BiangStudio.ObjectPool;
+using BiangLibrary.ObjectPool;
 
 public class DebugPanelComponent : PoolObject
 {

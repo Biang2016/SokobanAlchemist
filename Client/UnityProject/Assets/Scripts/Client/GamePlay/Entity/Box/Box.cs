@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using BiangStudio;
-using BiangStudio.CloneVariant;
-using BiangStudio.GameDataFormat.Grid;
+using BiangLibrary;
+using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
