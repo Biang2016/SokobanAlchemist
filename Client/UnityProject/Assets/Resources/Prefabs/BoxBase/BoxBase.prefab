@@ -29,7 +29,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4739361339186791453}
   m_Father: {fileID: 570053385983063175}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -376,7 +377,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1675314425065157794}
-  - {fileID: 4739361339186791453}
   - {fileID: 1954411546141637248}
   - {fileID: 5044972585971240008}
   m_Father: {fileID: 0}
@@ -422,6 +422,7 @@ MonoBehaviour:
   IsRecycled: 0
   GUID: 0
   GUID_Mod_FixedFrameRate: 0
+  ModelRoot: {fileID: 277291848338598467}
   BoxBuffHelper: {fileID: 2962941836236094511}
   BoxFrozenHelper: {fileID: 7499738859985598480}
   BoxColliderHelper: {fileID: 0}
@@ -430,81 +431,9 @@ MonoBehaviour:
   BoxIconSpriteHelper: {fileID: 2878046515562270118}
   BoxIconSpriteSmoothMove: {fileID: 5487221777558947811}
   BoxModelSmoothMove: {fileID: 4907329536122643906}
-  BoxStatPropSet:
-    CommonDurability:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    CollideWithBoxDurability:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    CollideWithActorDurability:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FrozenResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FrozenLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FrozenFX: 
-    FrozenFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FiringResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringGrowthPercent:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FiringDurability:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FiringLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    StartFiringFX: 
-    FiringFX: 
-    FiringFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FiringBreakFX: 
-    RawBoxDefaultBuffData: 7b0d0a2020202022246964223a20302c0d0a20202020222474797065223a2022307c53797374656d2e436f6c6c656374696f6e732e47656e657269632e4c69737460315b5b426f78427566662c20436c69656e745d5d2c206d73636f726c6962222c0d0a202020202224726c656e677468223a20302c0d0a20202020222472636f6e74656e74223a205b0d0a202020205d0d0a7d
+  BoxTypeIndex: 0
+  BoxFeature: 0
+  BoxShapeType: 0
   RawBoxStatPropSet:
     CommonDurability:
       _value: 5
@@ -518,6 +447,10 @@ MonoBehaviour:
       _value: 5
       _minValue: 0
       _maxValue: 99999
+    DropFromAirSurviveProbabilityPercent:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
     FrozenResistance:
       BaseValue: 100
       ModifiedValue: 0
@@ -616,9 +549,85 @@ MonoBehaviour:
       m_RotationOrder: 4
     FiringBreakFX: Hit_YellowFireStar
     RawBoxDefaultBuffData: 7b0d0a2020202022246964223a20302c0d0a20202020222474797065223a2022307c53797374656d2e436f6c6c656374696f6e732e47656e657269632e4c69737460315b5b426f78427566662c20436c69656e745d5d2c206d73636f726c6962222c0d0a202020202224726c656e677468223a20302c0d0a20202020222472636f6e74656e74223a205b0d0a202020205d0d0a7d
-  BoxTypeIndex: 0
-  BoxFeature: 0
-  BoxShapeType: 0
+  BoxStatPropSet:
+    CommonDurability:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    CollideWithBoxDurability:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    CollideWithActorDurability:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    DropFromAirSurviveProbabilityPercent:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FrozenResistance:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FrozenRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FrozenValue:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FrozenLevel:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FrozenFX: 
+    FrozenFXScaleCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    FiringResistance:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringGrowthPercent:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringValue:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FiringDurability:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FiringLevel:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    StartFiringFX: 
+    FiringFX: 
+    FiringFXScaleCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    FiringBreakFX: 
+    RawBoxDefaultBuffData: 7b0d0a2020202022246964223a20302c0d0a20202020222474797065223a2022307c53797374656d2e436f6c6c656374696f6e732e47656e657269632e4c69737460315b5b426f78427566662c20436c69656e745d5d2c206d73636f726c6962222c0d0a202020202224726c656e677468223a20302c0d0a20202020222472636f6e74656e74223a205b0d0a202020205d0d0a7d
   BoxOrientation: 0
   CollideFX: 0
   CollideFXScale: 1
@@ -788,7 +797,7 @@ Transform:
   m_Children:
   - {fileID: 7456832890254092294}
   m_Father: {fileID: 570053385983063175}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7499738859985598480
 MonoBehaviour:
@@ -1002,7 +1011,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 570053385983063175}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2962941836236094511
 MonoBehaviour:
@@ -1741,7 +1750,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9095513965138293983}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1751,8 +1760,8 @@ Transform:
   - {fileID: 4994607420073324207}
   - {fileID: 2719675923301741112}
   - {fileID: 6273944462261468643}
-  m_Father: {fileID: 570053385983063175}
-  m_RootOrder: 1
+  m_Father: {fileID: 1675314425065157794}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5487221777558947811
 MonoBehaviour:

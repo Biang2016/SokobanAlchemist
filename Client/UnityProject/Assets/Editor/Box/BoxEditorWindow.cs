@@ -16,6 +16,47 @@ public class BoxEditorWindow : EditorWindow
         window.ShowUtility();
     }
 
+    [MenuItem("开发工具/配置/关卡编辑器箱子替换成纯美术体")]
+    public static void ReplaceBoxToPureArt()
+    {
+        // Ref in WorldModules
+        List<string> worldModuleNames = ConfigManager.GetAllWorldModuleNames();
+        foreach (string worldModuleName in worldModuleNames)
+        {
+            GameObject worldModulePrefab = ConfigManager.FindWorldModulePrefabByName(worldModuleName);
+            if (worldModulePrefab)
+            {
+                WorldModuleDesignHelper module = worldModulePrefab.GetComponent<WorldModuleDesignHelper>();
+                if (module)
+                {
+                    Box[] boxes = module.GetComponentsInChildren<Box>();
+                    foreach (Box box in boxes)
+                    {
+                        List<BoxPassiveSkill> passiveSkills = new List<BoxPassiveSkill>();
+                        foreach (BoxPassiveSkill bps in box.RawBoxPassiveSkills)
+                        {
+                            if (bps.SpecialCaseType != BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.None)
+                            {
+                                passiveSkills.Add(bps.Clone());
+                            }
+                        }
+
+                        GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
+                        GameObject boxLevelEditorPrefab = ConfigManager.FindBoxLevelEditorPrefabByName(boxPrefab.name);
+                        GameObject boxLevelEditorGO = (GameObject) PrefabUtility.InstantiatePrefab(boxLevelEditorPrefab);
+                        boxLevelEditorGO.transform.parent = box.transform.parent;
+                        boxLevelEditorGO.transform.SetSiblingIndex(box.transform.GetSiblingIndex());
+                        DestroyImmediate(box.gameObject);
+                        Box_LevelEditor boxLevelEditor = boxLevelEditorGO.GetComponent<Box_LevelEditor>();
+                        boxLevelEditor.RawBoxPassiveSkills = passiveSkills;
+                    }
+                }
+            }
+
+            PrefabUtility.SavePrefabAsset(worldModulePrefab);
+        }
+    }
+
     private string srcBoxName;
     private string tarBoxName;
 

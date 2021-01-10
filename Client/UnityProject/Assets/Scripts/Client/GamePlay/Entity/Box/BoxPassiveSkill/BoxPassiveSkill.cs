@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
 using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -93,4 +95,100 @@ public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
     public virtual void CopyDataFrom(BoxPassiveSkill srcData)
     {
     }
+
+#if UNITY_EDITOR
+
+    public bool RenameBoxTypeName(string boxInstanceName, string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
+    {
+        if (moduleSpecial && SpecialCaseType != BoxPassiveSkillBaseSpecialCaseType.Module) return false;
+        if (worldSpecial && SpecialCaseType != BoxPassiveSkillBaseSpecialCaseType.World) return false;
+        bool isDirty = false;
+        foreach (FieldInfo fi in GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
+        {
+            foreach (Attribute a in fi.GetCustomAttributes(false))
+            {
+                if (a is BoxNameAttribute)
+                {
+                    if (fi.FieldType == typeof(string))
+                    {
+                        string fieldValue = (string) fi.GetValue(this);
+                        if (fieldValue == srcBoxName)
+                        {
+                            info.Append($"替换{boxInstanceName}.BoxPassiveSkills.{GetType().Name}.{fi.Name} -> '{targetBoxName}'\n");
+                            fi.SetValue(this, targetBoxName);
+                            isDirty = true;
+                        }
+                    }
+                }
+                else if (a is BoxNameListAttribute)
+                {
+                    if (fi.FieldType == typeof(List<string>))
+                    {
+                        List<string> fieldValueList = (List<string>) fi.GetValue(this);
+                        for (int i = 0; i < fieldValueList.Count; i++)
+                        {
+                            string fieldValue = fieldValueList[i];
+                            if (fieldValue == srcBoxName)
+                            {
+                                info.Append($"替换于{boxInstanceName}.PassiveSkills.{GetType().Name}.{fi.Name}\n");
+                                fieldValueList[i] = targetBoxName;
+                                isDirty = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return isDirty;
+    }
+
+    public bool DeleteBoxTypeName(string boxInstanceName, string srcBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
+    {
+        if (moduleSpecial && SpecialCaseType != BoxPassiveSkillBaseSpecialCaseType.Module) return false;
+        if (worldSpecial && SpecialCaseType != BoxPassiveSkillBaseSpecialCaseType.World) return false;
+        bool isDirty = false;
+
+        foreach (FieldInfo fi in GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
+        {
+            foreach (Attribute a in fi.GetCustomAttributes(false))
+            {
+                if (a is BoxNameAttribute)
+                {
+                    if (fi.FieldType == typeof(string))
+                    {
+                        string fieldValue = (string) fi.GetValue(this);
+                        if (fieldValue == srcBoxName)
+                        {
+                            info.Append($"替换{boxInstanceName}.BoxPassiveSkills.{GetType().Name}.{fi.Name} -> 'None'\n");
+                            fi.SetValue(this, "None");
+                            isDirty = true;
+                        }
+                    }
+                }
+                else if (a is BoxNameListAttribute)
+                {
+                    if (fi.FieldType == typeof(List<string>))
+                    {
+                        List<string> fieldValueList = (List<string>) fi.GetValue(this);
+                        for (int i = 0; i < fieldValueList.Count; i++)
+                        {
+                            string fieldValue = fieldValueList[i];
+                            if (fieldValue == srcBoxName)
+                            {
+                                info.Append($"移除自{boxInstanceName}.PassiveSkills.{GetType().Name}.{fi.Name}\n");
+                                fieldValueList.RemoveAt(i);
+                                i--;
+                                isDirty = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return isDirty;
+    }
+
+#endif
 }

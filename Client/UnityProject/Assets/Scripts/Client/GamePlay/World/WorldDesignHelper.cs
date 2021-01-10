@@ -51,8 +51,8 @@ public class WorldDesignHelper : MonoBehaviour
             worldData.WorldModuleGPOrder.Add(gp);
 
             // Box ExtraSerializeData
-            List<Box> boxes = module.transform.GetComponentsInChildren<Box>().ToList();
-            foreach (Box box in boxes)
+            List<Box_LevelEditor> boxes = module.transform.GetComponentsInChildren<Box_LevelEditor>().ToList();
+            foreach (Box_LevelEditor box in boxes)
             {
                 GridPos3D boxModuleGP = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
                 if (box.RequireSerializeFunctionIntoWorld)
@@ -386,8 +386,8 @@ public class WorldDesignHelper : MonoBehaviour
             isDirty |= trigger.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo);
         }
 
-        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
-        foreach (Box box in boxes)
+        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
+        foreach (Box_LevelEditor box in boxes)
         {
             if (box.RequireSerializeFunctionIntoWorld)
             {
@@ -420,8 +420,8 @@ public class WorldDesignHelper : MonoBehaviour
             isDirty |= trigger.DeleteBoxTypeName(srcBoxName, localInfo);
         }
 
-        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
-        foreach (Box box in boxes)
+        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
+        foreach (Box_LevelEditor box in boxes)
         {
             if (box.RequireSerializeFunctionIntoWorld)
             {

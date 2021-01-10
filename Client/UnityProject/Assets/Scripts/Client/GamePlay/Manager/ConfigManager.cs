@@ -820,18 +820,34 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 #if UNITY_EDITOR
     public static GameObject FindBoxPrefabByName(string boxName)
     {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ConfigManager.BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
+        BoxTypeDefineDict.ExportTypeNames();
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
         return prefab;
+    }
+
+    public static GameObject FindBoxLevelEditorPrefabByName(string boxName)
+    {
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(FindBoxLevelEditorPrefabPathByName(boxName));
+        return prefab;
+    }
+
+    public static string FindBoxLevelEditorPrefabPathByName(string boxName)
+    {
+        BoxTypeDefineDict.ExportTypeNames();
+        string boxPrefabPath = BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName);
+        return boxPrefabPath.Replace("/Box/", "/Box_LevelEditor/").Replace(boxName, boxName + "_LevelEditor");
     }
 
     public static bool DeleteBoxPrefabByName(string boxName)
     {
-        return AssetDatabase.DeleteAsset(ConfigManager.BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
+        BoxTypeDefineDict.ExportTypeNames();
+        return AssetDatabase.DeleteAsset(BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
     }
 
     public static string RenameBoxPrefabByName(string boxName, string targetBoxName)
     {
-        return AssetDatabase.RenameAsset(ConfigManager.BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName), targetBoxName);
+        BoxTypeDefineDict.ExportTypeNames();
+        return AssetDatabase.RenameAsset(BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName), targetBoxName);
     }
 
     public static GameObject FindActorPrefabByName(string actorName)

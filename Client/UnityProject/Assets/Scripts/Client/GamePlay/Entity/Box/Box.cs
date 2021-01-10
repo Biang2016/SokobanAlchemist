@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
 using BiangLibrary;
 using BiangLibrary.CloneVariant;
@@ -8,21 +7,25 @@ using BiangLibrary.GameDataFormat.Grid;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.Serialization;
 #if UNITY_EDITOR
+using BiangLibrary.GamePlay;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 #endif
 
 public partial class Box : Entity
 {
-    private BoxUnderWorldModuleDesignerClamper BoxUnderWorldModuleDesignerClamper;
     private GridSnapper GridSnapper;
 
     internal Rigidbody Rigidbody;
 
     internal Actor LastTouchActor;
+
+    [FoldoutGroup("组件")]
+    public GameObject ModelRoot;
 
     [FoldoutGroup("组件")]
     public BoxBuffHelper BoxBuffHelper;
@@ -385,8 +388,6 @@ public partial class Box : Entity
     protected virtual void Awake()
     {
         GridSnapper = GetComponent<GridSnapper>();
-        BoxUnderWorldModuleDesignerClamper = GetComponent<BoxUnderWorldModuleDesignerClamper>();
-        BoxUnderWorldModuleDesignerClamper.enabled = !Application.isPlaying;
         GridSnapper.enabled = false;
         GUID = GetGUID();
         GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
@@ -1036,192 +1037,6 @@ public partial class Box : Entity
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
     }
 
-#if UNITY_EDITOR
-
-    void OnDrawGizmos()
-    {
-        if (!Application.isPlaying)
-        {
-            if (RequireSerializeFunctionIntoWorldModule)
-            {
-                transform.DrawSpecialTip(Vector3.left * 0.5f, "#0AFFF1".HTMLColorToColor(), Color.cyan, "模特");
-            }
-
-            if (RequireHideInWorldForModuleBox)
-            {
-                transform.DrawSpecialTip(Vector3.left * 0.5f, "#FF8000".HTMLColorToColor(), Color.yellow, "世隐");
-            }
-            else if (RequireSerializeFunctionIntoWorld || IsUnderWorldSpecialBoxesRoot)
-            {
-                transform.DrawSpecialTip(Vector3.left * 0.5f, "#FF8000".HTMLColorToColor(), Color.yellow, "世特");
-            }
-
-            if (LevelEventTriggerAppearInWorldModule)
-            {
-                transform.DrawSpecialTip(Vector3.left * 0.5f + Vector3.forward * 0.5f, Color.clear, "#B30AFF".HTMLColorToColor(), "模预隐");
-            }
-            else if (LevelEventTriggerAppearInWorld)
-            {
-                transform.DrawSpecialTip(Vector3.left * 0.5f + Vector3.forward * 0.5f, Color.clear, "#FF0A69".HTMLColorToColor(), "世预隐");
-            }
-        }
-    }
-
-    private bool IsUnderWorldSpecialBoxesRoot = false;
-
-    void OnTransformParentChanged()
-    {
-        RefreshIsUnderWorldSpecialBoxesRoot();
-    }
-
-    internal void RefreshIsUnderWorldSpecialBoxesRoot()
-    {
-        if (!Application.isPlaying)
-        {
-            IsUnderWorldSpecialBoxesRoot = transform.HasAncestorName($"@_{WorldHierarchyRootType.WorldSpecialBoxesRoot}");
-        }
-    }
-#endif
-
-#if UNITY_EDITOR
-    [HideInPlayMode]
-    [HideInPrefabAssets]
-    [FoldoutGroup("模组编辑器")]
-    [Button("替换Box", ButtonSizes.Large)]
-    [GUIColor(0f, 1f, 1f)]
-    private void ReplaceBox_Editor()
-    {
-        WorldModuleDesignHelper module = GetComponentInParent<WorldModuleDesignHelper>();
-        if (!module)
-        {
-            Debug.LogError("此功能只能在模组编辑器中使用");
-            return;
-        }
-
-        WorldDesignHelper world = GetComponentInParent<WorldDesignHelper>();
-        if (world)
-        {
-            Debug.LogError("此功能只能在模组编辑器中使用");
-            return;
-        }
-
-        GameObject prefab = (GameObject) Resources.Load("Prefabs/Designs/Box/" + ReplaceBoxTypeName);
-        GameObject go = (GameObject) PrefabUtility.InstantiatePrefab(prefab, transform.parent);
-        go.transform.position = transform.position;
-        go.transform.rotation = Quaternion.identity;
-        DestroyImmediate(gameObject);
-    }
-
-    [HideInPlayMode]
-    [HideInPrefabAssets]
-    [ShowInInspector]
-    [NonSerialized]
-    [FoldoutGroup("模组编辑器")]
-    [LabelText("替换Box类型")]
-    [ValueDropdown("GetAllBoxTypeNames")]
-    private string ReplaceBoxTypeName = "None";
-
-    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
-    {
-        bool isDirty = false;
-        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-        {
-            if (moduleSpecial && bf.SpecialCaseType != BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module) continue;
-            if (worldSpecial && bf.SpecialCaseType != BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World) continue;
-
-            foreach (FieldInfo fi in bf.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
-            {
-                foreach (Attribute a in fi.GetCustomAttributes(false))
-                {
-                    if (a is BoxNameAttribute)
-                    {
-                        if (fi.FieldType == typeof(string))
-                        {
-                            string fieldValue = (string) fi.GetValue(bf);
-                            if (fieldValue == srcBoxName)
-                            {
-                                info.Append($"替换{name}.BoxPassiveSkills.{bf.GetType().Name}.{fi.Name} -> '{targetBoxName}'\n");
-                                fi.SetValue(bf, targetBoxName);
-                                isDirty = true;
-                            }
-                        }
-                    }
-                    else if (a is BoxNameListAttribute)
-                    {
-                        if (fi.FieldType == typeof(List<string>))
-                        {
-                            List<string> fieldValueList = (List<string>) fi.GetValue(bf);
-                            for (int i = 0; i < fieldValueList.Count; i++)
-                            {
-                                string fieldValue = fieldValueList[i];
-                                if (fieldValue == srcBoxName)
-                                {
-                                    info.Append($"替换于{name}.PassiveSkills.{bf.GetType().Name}.{fi.Name}\n");
-                                    fieldValueList[i] = targetBoxName;
-                                    isDirty = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return isDirty;
-    }
-
-    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
-    {
-        bool isDirty = false;
-        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-        {
-            if (moduleSpecial && bf.SpecialCaseType != BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module) continue;
-            if (worldSpecial && bf.SpecialCaseType != BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World) continue;
-
-            foreach (FieldInfo fi in bf.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
-            {
-                foreach (Attribute a in fi.GetCustomAttributes(false))
-                {
-                    if (a is BoxNameAttribute)
-                    {
-                        if (fi.FieldType == typeof(string))
-                        {
-                            string fieldValue = (string) fi.GetValue(bf);
-                            if (fieldValue == srcBoxName)
-                            {
-                                info.Append($"替换{name}.BoxPassiveSkills.{bf.GetType().Name}.{fi.Name} -> 'None'\n");
-                                fi.SetValue(bf, "None");
-                                isDirty = true;
-                            }
-                        }
-                    }
-                    else if (a is BoxNameListAttribute)
-                    {
-                        if (fi.FieldType == typeof(List<string>))
-                        {
-                            List<string> fieldValueList = (List<string>) fi.GetValue(bf);
-                            for (int i = 0; i < fieldValueList.Count; i++)
-                            {
-                                string fieldValue = fieldValueList[i];
-                                if (fieldValue == srcBoxName)
-                                {
-                                    info.Append($"移除自{name}.PassiveSkills.{bf.GetType().Name}.{fi.Name}\n");
-                                    fieldValueList.RemoveAt(i);
-                                    i--;
-                                    isDirty = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return isDirty;
-    }
-
-#endif
-
     #region ExtraSerialize
 
     #region BoxSerializeInWorldData
@@ -1253,99 +1068,6 @@ public partial class Box : Entity
 
     #region BoxExtraData
 
-#if UNITY_EDITOR
-
-    public bool RequireHideInWorldForModuleBox
-    {
-        get
-        {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf is BoxPassiveSkill_Hide hide)
-                {
-                    if (hide.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-    }
-
-    public bool RequireSerializeFunctionIntoWorld
-    {
-        get
-        {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
-
-    public bool RequireSerializeFunctionIntoWorldModule
-    {
-        get
-        {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
-
-    public bool LevelEventTriggerAppearInWorldModule
-    {
-        get
-        {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear)
-                {
-                    if (appear.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-    }
-
-    public bool LevelEventTriggerAppearInWorld
-    {
-        get
-        {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear)
-                {
-                    if (appear.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-    }
-
-#endif
-
     public class BoxExtraSerializeData : IClone<BoxExtraSerializeData>
     {
         public GridPos3D LocalGP; // Box在Module内的GP
@@ -1370,37 +1092,6 @@ public partial class Box : Entity
         {
             if (bf is BoxPassiveSkill_LevelEventTriggerAppear) continue;
             if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-            {
-                data.BoxPassiveSkills.Add(bf.Clone());
-            }
-        }
-
-        return data;
-    }
-
-    public BoxExtraSerializeData GetBoxExtraSerializeDataForWorldOverrideWorldModule()
-    {
-        BoxExtraSerializeData data = new BoxExtraSerializeData();
-        data.BoxPassiveSkills = new List<BoxPassiveSkill>();
-        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-        {
-            if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-            {
-                data.BoxPassiveSkills.Add(bf.Clone());
-            }
-        }
-
-        return data;
-    }
-
-    public BoxExtraSerializeData GetBoxExtraSerializeDataForWorldModule()
-    {
-        BoxExtraSerializeData data = new BoxExtraSerializeData();
-        data.BoxPassiveSkills = new List<BoxPassiveSkill>();
-        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-        {
-            if (bf is BoxPassiveSkill_LevelEventTriggerAppear) continue;
-            if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
             {
                 data.BoxPassiveSkills.Add(bf.Clone());
             }
@@ -1472,6 +1163,77 @@ public partial class Box : Entity
     #endregion
 
     #endregion
+
+#if UNITY_EDITOR
+
+    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
+    {
+        bool isDirty = false;
+        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+        {
+            bool dirty = bf.RenameBoxTypeName(name, srcBoxName, targetBoxName, info, moduleSpecial, worldSpecial);
+            isDirty |= dirty;
+        }
+
+        return isDirty;
+    }
+
+    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
+    {
+        bool isDirty = false;
+
+        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+        {
+            bool dirty = bf.DeleteBoxTypeName(name, srcBoxName, info, moduleSpecial, worldSpecial);
+            isDirty |= dirty;
+        }
+
+        return isDirty;
+    }
+
+    [AssetsOnly]
+    [Button("刷新关卡编辑器中该箱子的形态", ButtonSizes.Large)]
+    [GUIColor(0, 1, 0)]
+    public void CreateBoxLevelEditor()
+    {
+        GameObject box_Instance = Instantiate(gameObject); // 这是实例化一个无链接的prefab实例（unpacked completely）
+        Box box = box_Instance.GetComponent<Box>();
+        GameObject modelRoot = box.ModelRoot;
+
+        GameObject boxLevelEditorPrefab = ConfigManager.FindBoxLevelEditorPrefabByName(name);
+        if (boxLevelEditorPrefab)
+        {
+            string box_LevelEditor_Prefab_Path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(boxLevelEditorPrefab);
+            GameObject box_LevelEditor_Instance = PrefabUtility.LoadPrefabContents(box_LevelEditor_Prefab_Path); // 这是实例化一个在预览场景里的prefab实例，为了能够顺利删除子GameObject
+
+            modelRoot.transform.parent = box_LevelEditor_Instance.transform;
+            Box_LevelEditor box_LevelEditor = box_LevelEditor_Instance.GetComponent<Box_LevelEditor>();
+            if (box_LevelEditor.ModelRoot) DestroyImmediate(box_LevelEditor.ModelRoot);
+            box_LevelEditor.ModelRoot = modelRoot;
+
+            PrefabUtility.SaveAsPrefabAsset(box_LevelEditor_Instance, box_LevelEditor_Prefab_Path, out bool suc); // 保存回改Prefab的Asset
+            DestroyImmediate(box_LevelEditor_Instance);
+        }
+        else
+        {
+            PrefabManager.Instance.LoadPrefabs(); // todo delete this line
+            GameObject BoxBase_LevelEditor_Prefab = PrefabManager.Instance.GetPrefab("BoxBase_LevelEditor");
+            GameObject box_LevelEditor_Instance = (GameObject) PrefabUtility.InstantiatePrefab(BoxBase_LevelEditor_Prefab); // 这是实例化一个在当前场景里的prefab实例（有链接），为了能够顺利保存成Variant
+
+            modelRoot.transform.parent = box_LevelEditor_Instance.transform;
+            Box_LevelEditor box_LevelEditor = box_LevelEditor_Instance.GetComponent<Box_LevelEditor>();
+            if (box_LevelEditor.ModelRoot) DestroyImmediate(box_LevelEditor.ModelRoot);
+            box_LevelEditor.ModelRoot = modelRoot;
+
+            string box_LevelEditor_PrefabPath = ConfigManager.FindBoxLevelEditorPrefabPathByName(name); // 保存成Variant
+            PrefabUtility.SaveAsPrefabAsset(box_LevelEditor_Instance, box_LevelEditor_PrefabPath, out bool suc);
+            DestroyImmediate(box_LevelEditor_Instance);
+        }
+
+        DestroyImmediate(box_Instance);
+    }
+
+#endif
 
     public bool Pushable => BoxFeature.HasFlag(BoxFeature.Pushable);
 

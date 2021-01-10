@@ -45,11 +45,11 @@ public class WorldModuleDesignHelper : MonoBehaviour
 
     public WorldModuleData ExportWorldModuleData()
     {
-        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
+        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
 
         WorldModuleData worldModuleData = new WorldModuleData();
         worldModuleData.WorldModuleFeature = WorldModuleFeature;
-        foreach (Box box in boxes)
+        foreach (Box_LevelEditor box in boxes)
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
             GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
@@ -296,9 +296,9 @@ public class WorldModuleDesignHelper : MonoBehaviour
             }
         }
 
-        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
+        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
         root = GetRoot(WorldModuleHierarchyRootType.BoxesRoot);
-        foreach (Box box in boxes)
+        foreach (Box_LevelEditor box in boxes)
         {
             if (!box.transform.IsChildOf(root))
             {
@@ -323,8 +323,8 @@ public class WorldModuleDesignHelper : MonoBehaviour
             isDirty |= trigger.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo);
         }
 
-        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
-        foreach (Box box in boxes)
+        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
+        foreach (Box_LevelEditor box in boxes)
         {
             if (box.RequireSerializeFunctionIntoWorldModule)
             {
@@ -348,8 +348,8 @@ public class WorldModuleDesignHelper : MonoBehaviour
             isDirty |= trigger.DeleteBoxTypeName(srcBoxName, localInfo);
         }
 
-        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
-        foreach (Box box in boxes)
+        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
+        foreach (Box_LevelEditor box in boxes)
         {
             if (box.RequireSerializeFunctionIntoWorldModule)
             {
