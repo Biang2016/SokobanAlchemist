@@ -43,97 +43,6 @@ public class Box_LevelEditor : Entity
 
     #endregion
 
-#if UNITY_EDITOR
-
-    public bool RequireHideInWorldForModuleBox
-    {
-        get
-        {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf is BoxPassiveSkill_Hide hide)
-                {
-                    if (hide.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-    }
-
-    public bool RequireSerializePassiveSkillsIntoWorld
-    {
-        get
-        {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
-
-    public bool RequireSerializePassiveSkillsIntoWorldModule
-    {
-        get
-        {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
-
-    public bool LevelEventTriggerAppearInWorldModule
-    {
-        get
-        {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear)
-                {
-                    if (appear.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-    }
-
-    public bool LevelEventTriggerAppearInWorld
-    {
-        get
-        {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear)
-                {
-                    if (appear.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-    }
-
     #region BoxSerializeInWorldData
 
     public class WorldSpecialBoxData : IClone<WorldSpecialBoxData>
@@ -227,6 +136,97 @@ public class Box_LevelEditor : Entity
     }
 
     #endregion
+
+#if UNITY_EDITOR
+
+    public bool RequireHideInWorldForModuleBox
+    {
+        get
+        {
+            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+            {
+                if (bf is BoxPassiveSkill_Hide hide)
+                {
+                    if (hide.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
+
+    public bool RequireSerializePassiveSkillsIntoWorld
+    {
+        get
+        {
+            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+            {
+                if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    public bool RequireSerializePassiveSkillsIntoWorldModule
+    {
+        get
+        {
+            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+            {
+                if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    public bool LevelEventTriggerAppearInWorldModule
+    {
+        get
+        {
+            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+            {
+                if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear)
+                {
+                    if (appear.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
+
+    public bool LevelEventTriggerAppearInWorld
+    {
+        get
+        {
+            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+            {
+                if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear)
+                {
+                    if (appear.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
 
     void OnDrawGizmos()
     {

@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 [Serializable]
 public class BoxPassiveSkill_LevelEventTriggerAppear : BoxPassiveSkill_InvokeOnLevelEventID
