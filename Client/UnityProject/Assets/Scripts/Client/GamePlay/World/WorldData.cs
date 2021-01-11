@@ -21,8 +21,8 @@ public class WorldData : IClone<WorldData>
     public WorldBornPointGroupData WorldBornPointGroupData = new WorldBornPointGroupData();
     public WorldCameraPOIData WorldCameraPOIData = new WorldCameraPOIData();
     public LevelTriggerGroupData WorldLevelTriggerGroupData = new LevelTriggerGroupData();
-    public List<Box.WorldSpecialBoxData> WorldSpecialBoxDataList = new List<Box.WorldSpecialBoxData>(); // LevelEventTriggerAppear的箱子不记录到此列表中
-    public List<Box.BoxExtraSerializeData>[,,] ModuleBoxExtraSerializeDataMatrix = new List<Box.BoxExtraSerializeData>[World.WORLD_SIZE, World.WORLD_HEIGHT, World.WORLD_SIZE];
+    public List<Box_LevelEditor.WorldSpecialBoxData> WorldSpecialBoxDataList = new List<Box_LevelEditor.WorldSpecialBoxData>(); // LevelEventTriggerAppear的箱子不记录到此列表中
+    public List<Box_LevelEditor.BoxExtraSerializeData>[,,] ModuleBoxExtraSerializeDataMatrix = new List<Box_LevelEditor.BoxExtraSerializeData>[World.WORLD_SIZE, World.WORLD_HEIGHT, World.WORLD_SIZE];
     public List<BoxPassiveSkill_LevelEventTriggerAppear.Data> WorldSpecialBoxEventTriggerAppearBoxDataList = new List<BoxPassiveSkill_LevelEventTriggerAppear.Data>(); // 覆盖模组特例的世界特例不序列化在此，序列化在ModuleBoxExtraSerializeDataMatrix中
 
     public List<GridPos3D> WorldModuleGPOrder = new List<GridPos3D>();
@@ -35,7 +35,7 @@ public class WorldData : IClone<WorldData>
             {
                 for (int z = 0; z < ModuleMatrix.GetLength(2); z++)
                 {
-                    ModuleBoxExtraSerializeDataMatrix[x, y, z] = new List<Box.BoxExtraSerializeData>();
+                    ModuleBoxExtraSerializeDataMatrix[x, y, z] = new List<Box_LevelEditor.BoxExtraSerializeData>();
                 }
             }
         }

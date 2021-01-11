@@ -27,7 +27,7 @@ public class BoxPassiveSkill_LevelEventTriggerAppear : BoxPassiveSkill_InvokeOnL
 
         public BoxPassiveSkill_LevelEventTriggerAppear BoxPassiveSkill_LevelEventTriggerAppear;
 
-        public Box.WorldSpecialBoxData WorldSpecialBoxData; // 复用这个数据结构，仅世界下生效
+        public Box_LevelEditor.WorldSpecialBoxData WorldSpecialBoxData; // 复用这个数据结构，仅世界下生效
 
         protected override void ChildClone(LevelComponentData newData)
         {

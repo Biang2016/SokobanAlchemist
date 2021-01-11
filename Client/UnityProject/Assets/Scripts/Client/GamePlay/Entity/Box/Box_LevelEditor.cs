@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using BiangLibrary;
+using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+
+#endif
 
 public class Box_LevelEditor : Entity
 {
@@ -59,7 +64,7 @@ public class Box_LevelEditor : Entity
         }
     }
 
-    public bool RequireSerializeFunctionIntoWorld
+    public bool RequireSerializePassiveSkillsIntoWorld
     {
         get
         {
@@ -75,7 +80,7 @@ public class Box_LevelEditor : Entity
         }
     }
 
-    public bool RequireSerializeFunctionIntoWorldModule
+    public bool RequireSerializePassiveSkillsIntoWorldModule
     {
         get
         {
@@ -129,9 +134,70 @@ public class Box_LevelEditor : Entity
         }
     }
 
-    public Box.BoxExtraSerializeData GetBoxExtraSerializeDataForWorldOverrideWorldModule()
+    #region BoxSerializeInWorldData
+
+    public class WorldSpecialBoxData : IClone<WorldSpecialBoxData>
     {
-        Box.BoxExtraSerializeData data = new Box.BoxExtraSerializeData();
+        public GridPos3D WorldGP;
+        public ushort BoxTypeIndex;
+        public BoxExtraSerializeData BoxExtraSerializeDataFromWorld; // 序列化到世界中的Box自己处理自己的ExtraData
+
+        public WorldSpecialBoxData Clone()
+        {
+            WorldSpecialBoxData newData = new WorldSpecialBoxData();
+            newData.WorldGP = WorldGP;
+            newData.BoxTypeIndex = BoxTypeIndex;
+            newData.BoxExtraSerializeDataFromWorld = BoxExtraSerializeDataFromWorld.Clone();
+            return newData;
+        }
+    }
+
+    public WorldSpecialBoxData GetBoxSerializeInWorldData()
+    {
+        WorldSpecialBoxData data = new WorldSpecialBoxData();
+        data.BoxExtraSerializeDataFromWorld = GetBoxExtraSerializeDataForWorld();
+        return data;
+    }
+
+    #endregion
+
+    #region BoxExtraData
+
+    public class BoxExtraSerializeData : IClone<BoxExtraSerializeData>
+    {
+        public GridPos3D LocalGP; // Box在Module内的GP
+
+        public List<BoxPassiveSkill> BoxPassiveSkills = new List<BoxPassiveSkill>();
+
+        public BoxExtraSerializeData Clone()
+        {
+            return new BoxExtraSerializeData
+            {
+                LocalGP = LocalGP,
+                BoxPassiveSkills = BoxPassiveSkills.Clone()
+            };
+        }
+    }
+
+    public BoxExtraSerializeData GetBoxExtraSerializeDataForWorld()
+    {
+        BoxExtraSerializeData data = new BoxExtraSerializeData();
+        data.BoxPassiveSkills = new List<BoxPassiveSkill>();
+        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+        {
+            if (bf is BoxPassiveSkill_LevelEventTriggerAppear) continue;
+            if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
+            {
+                data.BoxPassiveSkills.Add(bf.Clone());
+            }
+        }
+
+        return data;
+    }
+
+    public BoxExtraSerializeData GetBoxExtraSerializeDataForWorldOverrideWorldModule()
+    {
+        BoxExtraSerializeData data = new BoxExtraSerializeData();
         data.BoxPassiveSkills = new List<BoxPassiveSkill>();
         foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
         {
@@ -144,9 +210,9 @@ public class Box_LevelEditor : Entity
         return data;
     }
 
-    public Box.BoxExtraSerializeData GetBoxExtraSerializeDataForWorldModule()
+    public BoxExtraSerializeData GetBoxExtraSerializeDataForWorldModule()
     {
-        Box.BoxExtraSerializeData data = new Box.BoxExtraSerializeData();
+        BoxExtraSerializeData data = new BoxExtraSerializeData();
         data.BoxPassiveSkills = new List<BoxPassiveSkill>();
         foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
         {
@@ -160,11 +226,13 @@ public class Box_LevelEditor : Entity
         return data;
     }
 
+    #endregion
+
     void OnDrawGizmos()
     {
         if (!Application.isPlaying)
         {
-            if (RequireSerializeFunctionIntoWorldModule)
+            if (RequireSerializePassiveSkillsIntoWorldModule)
             {
                 transform.DrawSpecialTip(Vector3.left * 0.5f, "#0AFFF1".HTMLColorToColor(), Color.cyan, "模特");
             }
@@ -173,7 +241,7 @@ public class Box_LevelEditor : Entity
             {
                 transform.DrawSpecialTip(Vector3.left * 0.5f, "#FF8000".HTMLColorToColor(), Color.yellow, "世隐");
             }
-            else if (RequireSerializeFunctionIntoWorld || IsUnderWorldSpecialBoxesRoot)
+            else if (RequireSerializePassiveSkillsIntoWorld || IsUnderWorldSpecialBoxesRoot)
             {
                 transform.DrawSpecialTip(Vector3.left * 0.5f, "#FF8000".HTMLColorToColor(), Color.yellow, "世特");
             }

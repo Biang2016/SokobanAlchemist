@@ -84,6 +84,7 @@ public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
     {
         Type type = GetType();
         BoxPassiveSkill newPS = (BoxPassiveSkill) Activator.CreateInstance(type);
+        newPS.SpecialCaseType = SpecialCaseType;
         ChildClone(newPS);
         return newPS;
     }

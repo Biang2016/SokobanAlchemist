@@ -260,7 +260,7 @@ public class World : PoolObject
             EventTriggerAppearBoxPassiveSkillList.Add(bf);
         }
 
-        foreach (Box.WorldSpecialBoxData worldSpecialBoxData in WorldData.WorldSpecialBoxDataList)
+        foreach (Box_LevelEditor.WorldSpecialBoxData worldSpecialBoxData in WorldData.WorldSpecialBoxDataList)
         {
             GridPos3D worldGP = worldSpecialBoxData.WorldGP;
             WorldModule module = GetModuleByGridPosition(worldGP);
@@ -288,7 +288,7 @@ public class World : PoolObject
         WorldLevelTriggers.Add(trigger);
     }
 
-    private void GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, List<Box.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)
+    private void GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, List<Box_LevelEditor.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)
     {
         bool isBorderModule = worldModuleTypeIndex == ConfigManager.WorldModule_DeadZoneIndex || worldModuleTypeIndex == ConfigManager.WorldModule_HiddenWallIndex;
         if (isBorderModule && BorderWorldModuleMatrix[x + 1, y + 1, z + 1] != null) return;

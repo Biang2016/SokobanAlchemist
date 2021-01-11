@@ -21,7 +21,7 @@ public class WorldModuleData : IClone<WorldModuleData>
 
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
     public LevelTriggerGroupData WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();
-    public Box.BoxExtraSerializeData[,,] BoxExtraSerializeDataMatrix = new Box.BoxExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 不含LevelEventTriggerBoxPassiveSkill，但含该Box的其他BF信息
+    public Box_LevelEditor.BoxExtraSerializeData[,,] BoxExtraSerializeDataMatrix = new Box_LevelEditor.BoxExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 不含LevelEventTriggerBoxPassiveSkill，但含该Box的其他BF信息
     public List<BoxPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearBoxDataList = new List<BoxPassiveSkill_LevelEventTriggerAppear.Data>();
 
     public WorldModuleData Clone()

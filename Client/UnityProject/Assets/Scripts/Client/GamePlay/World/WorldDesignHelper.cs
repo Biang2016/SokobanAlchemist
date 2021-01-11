@@ -55,9 +55,9 @@ public class WorldDesignHelper : MonoBehaviour
             foreach (Box_LevelEditor box in boxes)
             {
                 GridPos3D boxModuleGP = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
-                if (box.RequireSerializeFunctionIntoWorld)
+                if (box.RequireSerializePassiveSkillsIntoWorld)
                 {
-                    Box.BoxExtraSerializeData data = box.GetBoxExtraSerializeDataForWorldOverrideWorldModule();
+                    Box_LevelEditor.BoxExtraSerializeData data = box.GetBoxExtraSerializeDataForWorldOverrideWorldModule();
                     data.LocalGP = boxModuleGP;
                     worldData.ModuleBoxExtraSerializeDataMatrix[gp.x, gp.y, gp.z].Add(data);
                 }
@@ -109,14 +109,14 @@ public class WorldDesignHelper : MonoBehaviour
         }
 
         // 世界SpecialBox
-        List<Box> worldBoxes = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot).GetComponentsInChildren<Box>().ToList();
-        foreach (Box worldBox in worldBoxes)
+        List<Box_LevelEditor> worldBoxes = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot).GetComponentsInChildren<Box_LevelEditor>().ToList();
+        foreach (Box_LevelEditor worldBox in worldBoxes)
         {
             GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(worldBox.gameObject);
-            ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxPrefab.name];
+            ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxPrefab.name.Replace("_LevelEditor", "")];
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(worldBox.transform, 1);
             gp -= zeroPoint * WorldModule.MODULE_SIZE;
-            Box.WorldSpecialBoxData worldSpecialBoxData = worldBox.GetBoxSerializeInWorldData();
+            Box_LevelEditor.WorldSpecialBoxData worldSpecialBoxData = worldBox.GetBoxSerializeInWorldData();
             worldSpecialBoxData.WorldGP = gp;
             worldSpecialBoxData.BoxTypeIndex = boxTypeIndex;
 
@@ -153,7 +153,6 @@ public class WorldDesignHelper : MonoBehaviour
         dirty |= FormatAllBornPointName_Editor();
         dirty |= FormatAllWorldCameraPOIName_Editor();
         dirty |= FormatAllLevelTriggerName_Editor();
-        dirty |= RemoveTriggersFromBoxes_Editor();
         dirty |= FormatAllBoxName_Editor();
         return dirty;
     }
@@ -221,33 +220,17 @@ public class WorldDesignHelper : MonoBehaviour
         return dirty;
     }
 
-    private bool RemoveTriggersFromBoxes_Editor()
-    {
-        bool dirty = false;
-        List<Box> worldBoxes = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot).GetComponentsInChildren<Box>().ToList();
-        foreach (Box worldBox in worldBoxes)
-        {
-            if (worldBox.BoxColliderHelper != null)
-            {
-                DestroyImmediate(worldBox.BoxColliderHelper.gameObject);
-                worldBox.BoxColliderHelper = null;
-                dirty = true;
-            }
-        }
-
-        return dirty;
-    }
-
     private bool FormatAllBoxName_Editor()
     {
         bool dirty = false;
-        List<Box> worldBoxes = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot).GetComponentsInChildren<Box>().ToList();
-        foreach (Box worldBox in worldBoxes)
+        List<Box_LevelEditor> worldBoxes = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot).GetComponentsInChildren<Box_LevelEditor>().ToList();
+        foreach (Box_LevelEditor worldBox in worldBoxes)
         {
             GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(worldBox.gameObject);
-            if (worldBox.name != prefab.name)
+            string prefabName = prefab.name.Replace("_LevelEditor", "");
+            if (worldBox.name != prefabName)
             {
-                worldBox.name = prefab.name;
+                worldBox.name = prefabName;
                 dirty = true;
             }
         }
@@ -356,8 +339,8 @@ public class WorldDesignHelper : MonoBehaviour
             trigger.RefreshIsUnderWorldOrModuleBoxesRoot();
         }
 
-        List<Box> boxes = GetComponentsInChildren<Box>().ToList();
-        foreach (Box box in boxes)
+        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
+        foreach (Box_LevelEditor box in boxes)
         {
             WorldModuleDesignHelper module = box.transform.GetComponentInParent<WorldModuleDesignHelper>();
             if (module) continue;
@@ -389,7 +372,7 @@ public class WorldDesignHelper : MonoBehaviour
         List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
         foreach (Box_LevelEditor box in boxes)
         {
-            if (box.RequireSerializeFunctionIntoWorld)
+            if (box.RequireSerializePassiveSkillsIntoWorld)
             {
                 isDirty |= box.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo, false, true);
             }
@@ -423,7 +406,7 @@ public class WorldDesignHelper : MonoBehaviour
         List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
         foreach (Box_LevelEditor box in boxes)
         {
-            if (box.RequireSerializeFunctionIntoWorld)
+            if (box.RequireSerializePassiveSkillsIntoWorld)
             {
                 isDirty |= box.DeleteBoxTypeName(srcBoxName, localInfo, false, true);
             }

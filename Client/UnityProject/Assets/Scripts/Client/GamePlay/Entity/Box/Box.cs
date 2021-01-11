@@ -1037,70 +1037,9 @@ public partial class Box : Entity
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
     }
 
-    #region ExtraSerialize
-
-    #region BoxSerializeInWorldData
-
-    public class WorldSpecialBoxData : IClone<WorldSpecialBoxData>
-    {
-        public GridPos3D WorldGP;
-        public ushort BoxTypeIndex;
-        public BoxExtraSerializeData BoxExtraSerializeDataFromWorld; // 序列化到世界中的Box自己处理自己的ExtraData
-
-        public WorldSpecialBoxData Clone()
-        {
-            WorldSpecialBoxData newData = new WorldSpecialBoxData();
-            newData.WorldGP = WorldGP;
-            newData.BoxTypeIndex = BoxTypeIndex;
-            newData.BoxExtraSerializeDataFromWorld = BoxExtraSerializeDataFromWorld.Clone();
-            return newData;
-        }
-    }
-
-    public WorldSpecialBoxData GetBoxSerializeInWorldData()
-    {
-        WorldSpecialBoxData data = new WorldSpecialBoxData();
-        data.BoxExtraSerializeDataFromWorld = GetBoxExtraSerializeDataForWorld();
-        return data;
-    }
-
-    #endregion
-
     #region BoxExtraData
 
-    public class BoxExtraSerializeData : IClone<BoxExtraSerializeData>
-    {
-        public GridPos3D LocalGP; // Box在Module内的GP
-
-        public List<BoxPassiveSkill> BoxPassiveSkills = new List<BoxPassiveSkill>();
-
-        public BoxExtraSerializeData Clone()
-        {
-            return new BoxExtraSerializeData
-            {
-                LocalGP = LocalGP,
-                BoxPassiveSkills = BoxPassiveSkills.Clone()
-            };
-        }
-    }
-
-    public BoxExtraSerializeData GetBoxExtraSerializeDataForWorld()
-    {
-        BoxExtraSerializeData data = new BoxExtraSerializeData();
-        data.BoxPassiveSkills = new List<BoxPassiveSkill>();
-        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-        {
-            if (bf is BoxPassiveSkill_LevelEventTriggerAppear) continue;
-            if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-            {
-                data.BoxPassiveSkills.Add(bf.Clone());
-            }
-        }
-
-        return data;
-    }
-
-    public void ApplyBoxExtraSerializeData(BoxExtraSerializeData boxExtraSerializeDataFromModule = null, BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    public void ApplyBoxExtraSerializeData(Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
         if (boxExtraSerializeDataFromModule != null)
         {
@@ -1159,8 +1098,6 @@ public partial class Box : Entity
             }
         }
     }
-
-    #endregion
 
     #endregion
 

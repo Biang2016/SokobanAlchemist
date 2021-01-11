@@ -820,7 +820,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 #if UNITY_EDITOR
     public static GameObject FindBoxPrefabByName(string boxName)
     {
-        BoxTypeDefineDict.ExportTypeNames();
+        BoxTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
         GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
         return prefab;
     }
@@ -833,20 +833,20 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static string FindBoxLevelEditorPrefabPathByName(string boxName)
     {
-        BoxTypeDefineDict.ExportTypeNames();
+        BoxTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
         string boxPrefabPath = BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName);
         return boxPrefabPath.Replace("/Box/", "/Box_LevelEditor/").Replace(boxName, boxName + "_LevelEditor");
     }
 
     public static bool DeleteBoxPrefabByName(string boxName)
     {
-        BoxTypeDefineDict.ExportTypeNames();
+        BoxTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
         return AssetDatabase.DeleteAsset(BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
     }
 
     public static string RenameBoxPrefabByName(string boxName, string targetBoxName)
     {
-        BoxTypeDefineDict.ExportTypeNames();
+        BoxTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
         return AssetDatabase.RenameAsset(BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName), targetBoxName);
     }
 
@@ -872,14 +872,26 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static GameObject FindWorldModulePrefabByName(string worldModuleName)
     {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(WorldModuleTypeDefineDict.GetTypeAssetDataBasePath(worldModuleName));
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(FindWorldModulePrefabPathByName(worldModuleName));
         return prefab;
+    }
+
+    public static string FindWorldModulePrefabPathByName(string worldModuleName)
+    {
+        WorldModuleTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
+        return WorldModuleTypeDefineDict.GetTypeAssetDataBasePath(worldModuleName);
     }
 
     public static GameObject FindWorldPrefabByName(string worldName)
     {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(WorldTypeDefineDict.GetTypeAssetDataBasePath(worldName));
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(FindWorldPrefabPathByName(worldName));
         return prefab;
+    }
+
+    public static string FindWorldPrefabPathByName(string worldName)
+    {
+        WorldTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
+        return WorldTypeDefineDict.GetTypeAssetDataBasePath(worldName);
     }
 #endif
 

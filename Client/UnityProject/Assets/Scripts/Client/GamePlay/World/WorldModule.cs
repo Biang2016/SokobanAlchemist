@@ -5,7 +5,6 @@ using BiangLibrary.ObjectPool;
 using FlowCanvas;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class WorldModule : PoolObject
 {
@@ -90,7 +89,7 @@ public class WorldModule : PoolObject
         FlowScriptController.graph = null;
     }
 
-    public void Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, List<Box.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)
+    public void Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, List<Box_LevelEditor.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)
     {
         ModuleGP = moduleGP;
         World = world;
@@ -117,10 +116,10 @@ public class WorldModule : PoolObject
         }
 
         // Get world box extra serialize data
-        Box.BoxExtraSerializeData[,,] worldExtraSerializeDataForOneModule = new Box.BoxExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+        Box_LevelEditor.BoxExtraSerializeData[,,] worldExtraSerializeDataForOneModule = new Box_LevelEditor.BoxExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
         if (worldBoxExtraSerializeDataList != null)
         {
-            foreach (Box.BoxExtraSerializeData worldBoxExtraData in worldBoxExtraSerializeDataList)
+            foreach (Box_LevelEditor.BoxExtraSerializeData worldBoxExtraData in worldBoxExtraSerializeDataList)
             {
                 worldExtraSerializeDataForOneModule[worldBoxExtraData.LocalGP.x, worldBoxExtraData.LocalGP.y, worldBoxExtraData.LocalGP.z] = worldBoxExtraData;
             }
@@ -131,8 +130,8 @@ public class WorldModule : PoolObject
             BoxPassiveSkill_LevelEventTriggerAppear.Data dataClone = (BoxPassiveSkill_LevelEventTriggerAppear.Data) data.Clone();
             BoxPassiveSkill_LevelEventTriggerAppear bf = dataClone.BoxPassiveSkill_LevelEventTriggerAppear;
             GridPos3D localGP = data.LocalGP;
-            Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[localGP.x, localGP.y, localGP.z]; // 这里没有LevelEventTriggerBF的覆写信息
-            Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = worldExtraSerializeDataForOneModule[localGP.x, localGP.y, localGP.z]; // 这里可能有LevelEventTriggerBF的覆写信息
+            Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[localGP.x, localGP.y, localGP.z]; // 这里没有LevelEventTriggerBF的覆写信息
+            Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = worldExtraSerializeDataForOneModule[localGP.x, localGP.y, localGP.z]; // 这里可能有LevelEventTriggerBF的覆写信息
             if (boxExtraSerializeDataFromWorld != null)
             {
                 foreach (BoxPassiveSkill worldBF in boxExtraSerializeDataFromWorld.BoxPassiveSkills)
@@ -168,8 +167,8 @@ public class WorldModule : PoolObject
                     ushort boxTypeIndex = worldModuleData.BoxMatrix[x, y, z];
                     if (boxTypeIndex != 0)
                     {
-                        Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[x, y, z];
-                        Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = worldExtraSerializeDataForOneModule[x, y, z];
+                        Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[x, y, z];
+                        Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = worldExtraSerializeDataForOneModule[x, y, z];
                         GenerateBox(boxTypeIndex, x, y, z, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
                     }
                 }
@@ -217,12 +216,12 @@ public class WorldModule : PoolObject
         WorldModuleLevelTriggers.Add(trigger);
     }
 
-    public Box GenerateBox(ushort boxTypeIndex, GridPos3D localGP, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    public Box GenerateBox(ushort boxTypeIndex, GridPos3D localGP, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
         return GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
     }
 
-    public Box GenerateBox(ushort boxTypeIndex, int x, int y, int z, Box.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    public Box GenerateBox(ushort boxTypeIndex, int x, int y, int z, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
         if (boxExtraSerializeDataFromWorld != null)
         {
