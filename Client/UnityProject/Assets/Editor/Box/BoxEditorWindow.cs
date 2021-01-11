@@ -56,48 +56,48 @@ public class BoxEditorWindow : EditorWindow
     //    }
     //}
 
-    [MenuItem("开发工具/配置/世界编辑器特殊箱子替换成纯美术体")]
-    public static void ReplaceBoxToPureArt()
-    {
-        List<string> worldNames = ConfigManager.GetAllWorldNames();
-        foreach (string worldName in worldNames)
-        {
-            string worldPrefabPath = ConfigManager.FindWorldPrefabPathByName(worldName);
-            if (!string.IsNullOrEmpty(worldPrefabPath))
-            {
-                GameObject worldGO = PrefabUtility.LoadPrefabContents(worldPrefabPath);
-                WorldDesignHelper world = worldGO.GetComponent<WorldDesignHelper>();
-                if (world)
-                {
-                    Box[] boxes = world.GetComponentsInChildren<Box>();
-                    foreach (Box box in boxes)
-                    {
-                        List<BoxPassiveSkill> passiveSkills = new List<BoxPassiveSkill>();
-                        foreach (BoxPassiveSkill bps in box.RawBoxPassiveSkills)
-                        {
-                            if (bps.SpecialCaseType != BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.None)
-                            {
-                                passiveSkills.Add(bps.Clone());
-                            }
-                        }
+    //[MenuItem("开发工具/配置/世界编辑器特殊箱子替换成纯美术体")]
+    //public static void ReplaceBoxToPureArt()
+    //{
+    //    List<string> worldNames = ConfigManager.GetAllWorldNames();
+    //    foreach (string worldName in worldNames)
+    //    {
+    //        string worldPrefabPath = ConfigManager.FindWorldPrefabPathByName(worldName);
+    //        if (!string.IsNullOrEmpty(worldPrefabPath))
+    //        {
+    //            GameObject worldGO = PrefabUtility.LoadPrefabContents(worldPrefabPath);
+    //            WorldDesignHelper world = worldGO.GetComponent<WorldDesignHelper>();
+    //            if (world)
+    //            {
+    //                Box[] boxes = world.GetComponentsInChildren<Box>();
+    //                foreach (Box box in boxes)
+    //                {
+    //                    List<BoxPassiveSkill> passiveSkills = new List<BoxPassiveSkill>();
+    //                    foreach (BoxPassiveSkill bps in box.RawBoxPassiveSkills)
+    //                    {
+    //                        if (bps.SpecialCaseType != BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.None)
+    //                        {
+    //                            passiveSkills.Add(bps.Clone());
+    //                        }
+    //                    }
 
-                        GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
-                        GameObject boxLevelEditorPrefab = ConfigManager.FindBoxLevelEditorPrefabByName(boxPrefab.name);
-                        GameObject boxLevelEditorGO = (GameObject) PrefabUtility.InstantiatePrefab(boxLevelEditorPrefab);
-                        boxLevelEditorGO.transform.parent = box.transform.parent;
-                        boxLevelEditorGO.transform.localPosition = box.transform.localPosition;
-                        boxLevelEditorGO.transform.localRotation = box.transform.localRotation;
-                        boxLevelEditorGO.transform.SetSiblingIndex(box.transform.GetSiblingIndex());
-                        DestroyImmediate(box.gameObject);
-                        Box_LevelEditor boxLevelEditor = boxLevelEditorGO.GetComponent<Box_LevelEditor>();
-                        boxLevelEditor.RawBoxPassiveSkills = passiveSkills;
-                    }
-                }
+    //                    GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
+    //                    GameObject boxLevelEditorPrefab = ConfigManager.FindBoxLevelEditorPrefabByName(boxPrefab.name);
+    //                    GameObject boxLevelEditorGO = (GameObject) PrefabUtility.InstantiatePrefab(boxLevelEditorPrefab);
+    //                    boxLevelEditorGO.transform.parent = box.transform.parent;
+    //                    boxLevelEditorGO.transform.localPosition = box.transform.localPosition;
+    //                    boxLevelEditorGO.transform.localRotation = box.transform.localRotation;
+    //                    boxLevelEditorGO.transform.SetSiblingIndex(box.transform.GetSiblingIndex());
+    //                    DestroyImmediate(box.gameObject);
+    //                    Box_LevelEditor boxLevelEditor = boxLevelEditorGO.GetComponent<Box_LevelEditor>();
+    //                    boxLevelEditor.RawBoxPassiveSkills = passiveSkills;
+    //                }
+    //            }
 
-                PrefabUtility.SaveAsPrefabAsset(worldGO, worldPrefabPath, out bool suc); // 保存回改Prefab的Asset
-            }
-        }
-    }
+    //            PrefabUtility.SaveAsPrefabAsset(worldGO, worldPrefabPath, out bool suc); // 保存回改Prefab的Asset
+    //        }
+    //    }
+    //}
 
     private string srcBoxName;
     private string tarBoxName;

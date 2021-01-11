@@ -841,13 +841,21 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static bool DeleteBoxPrefabByName(string boxName)
     {
         BoxTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
-        return AssetDatabase.DeleteAsset(BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
+        string boxPrefabPath = BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName);
+        string boxLevelEditorPrefabPath = boxPrefabPath.Replace("/Box/", "/Box_LevelEditor/").Replace(boxName, boxName + "_LevelEditor");
+        bool res_1 = AssetDatabase.DeleteAsset(boxPrefabPath);
+        bool res_2 = AssetDatabase.DeleteAsset(boxLevelEditorPrefabPath);
+        return res_1; // 源Box的Prefab删除就算成功
     }
 
     public static string RenameBoxPrefabByName(string boxName, string targetBoxName)
     {
         BoxTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
-        return AssetDatabase.RenameAsset(BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName), targetBoxName);
+        string boxPrefabPath = BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName);
+        string boxLevelEditorPrefabPath = boxPrefabPath.Replace("/Box/", "/Box_LevelEditor/").Replace(boxName, boxName + "_LevelEditor");
+        string res_1 = AssetDatabase.RenameAsset(boxPrefabPath, targetBoxName);
+        string res_2 = AssetDatabase.RenameAsset(boxLevelEditorPrefabPath, targetBoxName + "_LevelEditor");
+        return res_1 + "\t" + res_2;
     }
 
     public static GameObject FindActorPrefabByName(string actorName)
