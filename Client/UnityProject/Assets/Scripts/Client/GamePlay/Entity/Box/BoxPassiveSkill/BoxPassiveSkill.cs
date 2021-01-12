@@ -76,7 +76,7 @@ public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
     {
     }
 
-    public virtual void OnDeleteBox()
+    public virtual void OnDestroyBox()
     {
     }
 

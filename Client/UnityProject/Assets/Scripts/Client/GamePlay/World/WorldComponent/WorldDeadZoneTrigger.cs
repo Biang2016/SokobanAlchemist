@@ -36,7 +36,7 @@ public class WorldDeadZoneTrigger : PoolObject
             if (box)
             {
                 box.PlayCollideFX();
-                box.DeleteSelf();
+                box.DestroyBox();
             }
         }
 

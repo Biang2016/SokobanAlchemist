@@ -44,9 +44,9 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
         }
     }
 
-    public override void OnDeleteBox()
+    public override void OnDestroyBox()
     {
-        base.OnDeleteBox();
+        base.OnDestroyBox();
         Box.FrozenActor = null;
     }
 }

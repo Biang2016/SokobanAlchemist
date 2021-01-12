@@ -245,7 +245,7 @@ public class World : PoolObject
             {
                 GridPos3D worldGP = data.WorldGP;
                 Box box = GetBoxByGridPosition(worldGP, out WorldModule module, out GridPos3D localGP);
-                box?.DeleteSelf(); // 强行删除该格占用Box
+                box?.DestroyBox(); // 强行删除该格占用Box
                 if (module)
                 {
                     module.GenerateBox(dataClone.BoxTypeIndex, localGP.x, localGP.y, localGP.z, null, dataClone.WorldSpecialBoxData.BoxExtraSerializeDataFromWorld);

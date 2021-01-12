@@ -867,7 +867,7 @@ public partial class Box : Entity
 
         if (BoxPassiveSkillMarkAsDeleted)
         {
-            DeleteSelf();
+            DestroyBox();
         }
     }
 
@@ -901,7 +901,7 @@ public partial class Box : Entity
 
                     if (BoxPassiveSkillMarkAsDeleted && !IsRecycled)
                     {
-                        DeleteSelf();
+                        DestroyBox();
                         return;
                     }
 
@@ -910,7 +910,7 @@ public partial class Box : Entity
                         OnFlyingCollisionEnter(collision);
                         if (BoxPassiveSkillMarkAsDeleted)
                         {
-                            DeleteSelf();
+                            DestroyBox();
                             return;
                         }
                     }
@@ -934,7 +934,7 @@ public partial class Box : Entity
 
                         if (BoxPassiveSkillMarkAsDeleted && !IsRecycled)
                         {
-                            DeleteSelf();
+                            DestroyBox();
                             return;
                         }
 
@@ -943,7 +943,7 @@ public partial class Box : Entity
                             OnBeingKickedCollisionEnter(collision);
                             if (BoxPassiveSkillMarkAsDeleted)
                             {
-                                DeleteSelf();
+                                DestroyBox();
                                 return;
                             }
                         }
@@ -969,7 +969,7 @@ public partial class Box : Entity
 
                 if (BoxPassiveSkillMarkAsDeleted && !IsRecycled)
                 {
-                    DeleteSelf();
+                    DestroyBox();
                     return;
                 }
 
@@ -978,7 +978,7 @@ public partial class Box : Entity
                     OnDroppingFromAirCollisionEnter(collision);
                     if (BoxPassiveSkillMarkAsDeleted)
                     {
-                        DeleteSelf();
+                        DestroyBox();
                         return;
                     }
                 }
@@ -1028,17 +1028,17 @@ public partial class Box : Entity
         if (hit) hit.transform.localScale = Vector3.one * CollideFXScale;
     }
 
-    public void DeleteSelf()
+    public void DestroyBox()
     {
-        StartCoroutine(Co_DelayDeleteSelf());
+        StartCoroutine(Co_DelayDestroyBox());
     }
 
-    IEnumerator Co_DelayDeleteSelf()
+    IEnumerator Co_DelayDestroyBox()
     {
         yield return new WaitForSeconds(DeleteDelay);
         foreach (BoxPassiveSkill bf in BoxPassiveSkills)
         {
-            bf.OnDeleteBox();
+            bf.OnDestroyBox();
         }
 
         //BoxPassiveSkills.Clear();

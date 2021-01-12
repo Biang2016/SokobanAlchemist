@@ -20,7 +20,7 @@ public class BoxPassiveSkill_ChangeBoxType : BoxPassiveSkill_InvokeOnLevelEventI
             if (module != null)
             {
                 GridPos3D localGP = Box.LocalGP;
-                Box.DeleteSelf();
+                Box.DestroyBox();
                 ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
                 if (boxTypeIndex != 0) module.GenerateBox(boxTypeIndex, localGP);
             }

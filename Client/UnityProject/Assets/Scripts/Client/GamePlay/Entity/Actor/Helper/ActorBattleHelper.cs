@@ -131,7 +131,7 @@ public class ActorBattleHelper : ActorMonoHelper
 
             if (Actor.ActorFrozenHelper.FrozenBox)
             {
-                Actor.ActorFrozenHelper.FrozenBox.DeleteSelf();
+                Actor.ActorFrozenHelper.FrozenBox.DestroyBox();
                 Actor.ActorFrozenHelper.FrozenBox = null;
             }
 

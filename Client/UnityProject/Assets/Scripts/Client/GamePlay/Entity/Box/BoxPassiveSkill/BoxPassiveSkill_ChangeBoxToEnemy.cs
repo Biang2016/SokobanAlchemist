@@ -20,7 +20,7 @@ public class BoxPassiveSkill_ChangeBoxToEnemy : BoxPassiveSkill_InvokeOnLevelEve
             if (module != null)
             {
                 GridPos3D localGP = Box.LocalGP;
-                Box.DeleteSelf();
+                Box.DestroyBox();
                 ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(ChangeBoxToEnemyType);
                 if (enemyTypeIndex != 0)
                 {

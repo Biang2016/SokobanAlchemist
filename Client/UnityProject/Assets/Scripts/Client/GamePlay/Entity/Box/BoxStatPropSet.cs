@@ -189,7 +189,7 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
             if (after == 0)
             {
                 FXManager.Instance.PlayFX(FiringBreakFX, Box.transform.position, 1.5f);
-                box.DeleteSelf();
+                box.DestroyBox();
             }
         };
         StatDict.Add(BoxStatType.FiringDurability, FiringDurability);

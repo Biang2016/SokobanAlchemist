@@ -15,9 +15,9 @@ public class BoxPassiveSkill_ExplodeDamageBox : BoxPassiveSkill
     [HideLabel]
     public int DurabilityDamage;
 
-    public override void OnDeleteBox()
+    public override void OnDestroyBox()
     {
-        base.OnDeleteBox();
+        base.OnDestroyBox();
         ExplodeDamage();
     }
 
