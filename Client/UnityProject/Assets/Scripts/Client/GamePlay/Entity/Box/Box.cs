@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using BiangLibrary;
@@ -163,6 +164,11 @@ public partial class Box : Entity
     [FoldoutGroup("箱子属性")]
     [LabelText("重量")]
     private float Weight = 0.7f;
+
+    [SerializeField]
+    [FoldoutGroup("箱子属性")]
+    [LabelText("死亡延迟")]
+    private float DeleteDelay = 0;
 
     public float FinalWeight => Weight * ConfigManager.BoxWeightFactor_Cheat;
 
@@ -1024,6 +1030,12 @@ public partial class Box : Entity
 
     public void DeleteSelf()
     {
+        StartCoroutine(Co_DelayDeleteSelf());
+    }
+
+    IEnumerator Co_DelayDeleteSelf()
+    {
+        yield return new WaitForSeconds(DeleteDelay);
         foreach (BoxPassiveSkill bf in BoxPassiveSkills)
         {
             bf.OnDeleteBox();
