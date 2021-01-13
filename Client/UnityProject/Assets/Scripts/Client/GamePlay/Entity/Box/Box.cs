@@ -810,6 +810,10 @@ public partial class Box : Entity
         {
             BoxStatPropSet.FixedUpdate(1f);
             BoxBuffHelper.BuffFixedUpdate();
+            foreach (BoxPassiveSkill boxPassiveSkill in BoxPassiveSkills)
+            {
+                boxPassiveSkill.OnTick(1f);
+            }
         }
 
         if (state == States.BeingKicked && IsInGridSystem)
@@ -1030,6 +1034,11 @@ public partial class Box : Entity
 
     public void DestroyBox()
     {
+        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+        {
+            bf.OnBeforeDestroyBox();
+        }
+
         StartCoroutine(Co_DelayDestroyBox());
     }
 

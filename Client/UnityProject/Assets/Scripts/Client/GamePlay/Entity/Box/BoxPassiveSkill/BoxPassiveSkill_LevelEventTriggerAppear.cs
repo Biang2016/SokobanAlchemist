@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 
 [Serializable]
-public class BoxPassiveSkill_LevelEventTriggerAppear : BoxPassiveSkill_InvokeOnLevelEventID
+public class BoxPassiveSkill_LevelEventTriggerAppear : BoxPassiveSkill_Conditional
 {
     protected override string Description => "关卡事件触发后才出现";
 

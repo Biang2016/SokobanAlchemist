@@ -32,11 +32,13 @@ public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
         World,
     }
 
-    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
-
-    private IEnumerable<string> GetAllEnemyNames => ConfigManager.GetAllEnemyNames();
+    #region Conditions
 
     public virtual void OnInit()
+    {
+    }
+
+    public virtual void OnTick(float deltaTime)
     {
     }
 
@@ -49,6 +51,10 @@ public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
     }
 
     public virtual void OnBeingLift(Actor actor)
+    {
+    }
+
+    public virtual void OnBeingKicked(Actor actor)
     {
     }
 
@@ -76,9 +82,15 @@ public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
     {
     }
 
+    public virtual void OnBeforeDestroyBox()
+    {
+    }
+
     public virtual void OnDestroyBox()
     {
     }
+
+    #endregion
 
     public BoxPassiveSkill Clone()
     {
@@ -95,6 +107,7 @@ public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
 
     public virtual void CopyDataFrom(BoxPassiveSkill srcData)
     {
+        SpecialCaseType = srcData.SpecialCaseType;
     }
 
 #if UNITY_EDITOR
