@@ -3,7 +3,7 @@ using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public abstract class Entity : PoolObject, ISerializationCallbackReceiver
+public abstract class Entity : PoolObject
 {
     #region GUID
 
@@ -26,14 +26,6 @@ public abstract class Entity : PoolObject, ISerializationCallbackReceiver
     {
         base.OnRecycled();
         StopAllCoroutines();
-    }
-
-    public virtual void OnBeforeSerialize()
-    {
-    }
-
-    public virtual void OnAfterDeserialize()
-    {
     }
 
     protected virtual void FixedUpdate()

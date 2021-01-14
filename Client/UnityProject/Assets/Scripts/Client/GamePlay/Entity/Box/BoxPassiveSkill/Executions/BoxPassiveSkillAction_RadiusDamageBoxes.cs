@@ -8,11 +8,11 @@ public class BoxPassiveSkillAction_RadiusDamageBoxes : BoxPassiveSkillAction, Bo
 {
     protected override string Description => "对附近Boxes造成伤害";
 
-    [LabelText("判定半径")]
+    //[LabelText("判定半径")]
     public int AddBuffRadius = 2;
 
-    [BoxGroup("耐久值伤害")]
-    [HideLabel]
+    //[BoxGroup("耐久值伤害")]
+    //[HideLabel]
     public int DurabilityDamage;
 
     public  void Execute()

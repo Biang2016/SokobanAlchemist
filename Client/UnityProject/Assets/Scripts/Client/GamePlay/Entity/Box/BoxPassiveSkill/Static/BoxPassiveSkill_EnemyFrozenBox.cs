@@ -37,7 +37,7 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
                 Box.FrozenActor.ActorBattleHelper.Damage(Box.FrozenActor, 1);
             }
 
-            if (Box.FrozenActor != null)
+            if (Box.FrozenActor != null && !Box.FrozenActor.IsRecycled)
             {
                 Box.FrozenActor.ActorStatPropSet.FrozenValue.Value -= Box.FrozenActor.ActorStatPropSet.FrozenValuePerLevel;
             }

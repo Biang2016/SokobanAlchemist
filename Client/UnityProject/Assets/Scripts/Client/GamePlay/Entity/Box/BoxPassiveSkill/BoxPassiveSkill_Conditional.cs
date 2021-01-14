@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 
+[Serializable]
 public class BoxPassiveSkill_Conditional : BoxPassiveSkill
 {
     protected override string Description => "条件触发的箱子被动技能";
@@ -29,39 +30,6 @@ public class BoxPassiveSkill_Conditional : BoxPassiveSkill
     }
 
     public BoxPassiveSkillConditionType BoxPassiveSkillCondition;
-
-    #region 箱子被动技能行为部分
-
-    [LabelText("具体内容")]
-    [ListDrawerSettings(ListElementLabelName = "Description")]
-    public List<BoxPassiveSkillAction> RawBoxPassiveSkillActions = new List<BoxPassiveSkillAction>(); // 干数据，禁修改
-    
-    [HideInInspector]
-    public List<BoxPassiveSkillAction> BoxPassiveSkillActions = new List<BoxPassiveSkillAction>(); // 湿数据，每个Box生命周期开始前从干数据拷出，结束后清除
-
-    internal bool BoxPassiveSkillActionsMarkAsDeleted = false;
-
-    private void InitBoxPassiveSkillActions()
-    {
-        BoxPassiveSkillActions.Clear();
-        foreach (BoxPassiveSkillAction rawAction in RawBoxPassiveSkillActions)
-        {
-            BoxPassiveSkillActions.Add(rawAction.Clone());
-        }
-
-        BoxPassiveSkillActionsMarkAsDeleted = false;
-        foreach (BoxPassiveSkillAction action in BoxPassiveSkillActions)
-        {
-            action.Box = Box;
-        }
-    }
-
-    private void UnInitPassiveSkillActions()
-    {
-        BoxPassiveSkillActionsMarkAsDeleted = false;
-    }
-
-    #endregion
 
     #region Conditions
 
@@ -100,38 +68,27 @@ public class BoxPassiveSkill_Conditional : BoxPassiveSkill
 
     private bool IsEventTrigger => BoxPassiveSkillCondition.HasFlag(BoxPassiveSkillConditionType.OnLevelEvent);
 
-    [BoxGroup("事件监听与触发")]
     [ShowIf("IsEventTrigger")]
     [LabelText("多个事件联合触发")]
     public bool MultiEventTrigger = false;
 
-    [BoxGroup("事件监听与触发")]
     [ShowIf("IsEventTrigger")]
     [ShowIf("MultiEventTrigger")]
     [LabelText("监听关卡事件花名列表(联合触发)")]
     public List<string> ListenLevelEventAliasList = new List<string>();
 
-    [ShowInInspector]
-    [HideInEditorMode]
-    [ShowIf("IsEventTrigger")]
-    [LabelText("联合触发记录")]
+    // 联合触发记录
     private List<bool> multiTriggerFlags = new List<bool>();
 
-    [BoxGroup("事件监听与触发")]
     [HideIf("MultiEventTrigger")]
     [ShowIf("IsEventTrigger")]
     [LabelText("监听关卡事件花名(单个触发)")]
     public string ListenLevelEventAlias;
 
-    [BoxGroup("事件监听与触发")]
     [ShowIf("IsEventTrigger")]
     [LabelText("最大触发次数")]
     public int MaxTriggeredTimes = 1;
 
-    [ShowInInspector]
-    [ShowIf("IsEventTrigger")]
-    [HideInEditorMode]
-    [LabelText("已触发次数")]
     private int triggeredTimes = 0;
 
     public override void OnRegisterLevelEventID()
@@ -410,6 +367,40 @@ public class BoxPassiveSkill_Conditional : BoxPassiveSkill
         }
 
         UnInitPassiveSkillActions();
+    }
+
+    #endregion
+
+    #region 箱子被动技能行为部分
+
+    [SerializeReference]
+    [LabelText("具体内容")]
+    [ListDrawerSettings(ListElementLabelName = "Description")]
+    public List<BoxPassiveSkillAction> RawBoxPassiveSkillActions = new List<BoxPassiveSkillAction>(); // 干数据，禁修改
+
+    [HideInInspector]
+    public List<BoxPassiveSkillAction> BoxPassiveSkillActions = new List<BoxPassiveSkillAction>(); // 湿数据，每个Box生命周期开始前从干数据拷出，结束后清除
+
+    internal bool BoxPassiveSkillActionsMarkAsDeleted = false;
+
+    private void InitBoxPassiveSkillActions()
+    {
+        BoxPassiveSkillActions.Clear();
+        foreach (BoxPassiveSkillAction rawAction in RawBoxPassiveSkillActions)
+        {
+            BoxPassiveSkillActions.Add(rawAction.Clone());
+        }
+
+        BoxPassiveSkillActionsMarkAsDeleted = false;
+        foreach (BoxPassiveSkillAction action in BoxPassiveSkillActions)
+        {
+            action.Box = Box;
+        }
+    }
+
+    private void UnInitPassiveSkillActions()
+    {
+        BoxPassiveSkillActionsMarkAsDeleted = false;
     }
 
     #endregion

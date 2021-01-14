@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using UnityEngine.InputSystem.Utilities;
 using UnityEditor;
-using UnityEditor.Experimental.AssetImporters;
+
 
 ////TODO: support for multi-editing
 
@@ -13,7 +13,7 @@ namespace UnityEngine.InputSystem.Editor
     /// Custom editor that allows modifying importer settings for an <see cref="InputActionImporter"/>.
     /// </summary>
     [CustomEditor(typeof(InputActionImporter))]
-    internal class InputActionImporterEditor : ScriptedImporterEditor
+    internal class InputActionImporterEditor : UnityEditor.AssetImporters.ScriptedImporterEditor
     {
         public override void OnInspectorGUI()
         {

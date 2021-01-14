@@ -5,7 +5,6 @@ using BiangLibrary;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -18,28 +17,10 @@ public class Box_LevelEditor : Entity
 
     #region 箱子Extra被动技能
 
-    [NonSerialized]
-    [ShowInInspector]
     [FoldoutGroup("箱子Extra被动技能")]
     [LabelText("箱子Extra被动技能")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<BoxPassiveSkill> RawBoxPassiveSkills = new List<BoxPassiveSkill>(); // 干数据，禁修改
-
-    [HideInInspector]
-    public byte[] BoxPassiveSkillBaseData;
-
-    public override void OnBeforeSerialize()
-    {
-        base.OnBeforeSerialize();
-        if (RawBoxPassiveSkills == null) RawBoxPassiveSkills = new List<BoxPassiveSkill>();
-        BoxPassiveSkillBaseData = SerializationUtility.SerializeValue(RawBoxPassiveSkills, DataFormat.JSON);
-    }
-
-    public override void OnAfterDeserialize()
-    {
-        base.OnAfterDeserialize();
-        RawBoxPassiveSkills = SerializationUtility.DeserializeValue<List<BoxPassiveSkill>>(BoxPassiveSkillBaseData, DataFormat.JSON);
-    }
 
     #endregion
 
@@ -291,14 +272,9 @@ public class Box_LevelEditor : Entity
     private void ReplaceBox_Editor()
     {
         WorldModuleDesignHelper module = GetComponentInParent<WorldModuleDesignHelper>();
-        if (!module)
-        {
-            Debug.LogError("此功能只能在模组编辑器中使用");
-            return;
-        }
-
         WorldDesignHelper world = GetComponentInParent<WorldDesignHelper>();
-        if (world)
+
+        if (module && world)
         {
             Debug.LogError("此功能只能在模组编辑器中使用");
             return;

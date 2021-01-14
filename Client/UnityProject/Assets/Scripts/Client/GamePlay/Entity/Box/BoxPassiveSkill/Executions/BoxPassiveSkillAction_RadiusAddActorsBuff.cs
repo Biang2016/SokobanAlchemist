@@ -14,7 +14,7 @@ public class BoxPassiveSkillAction_RadiusAddActorsBuff : BoxPassiveSkillAction, 
     [LabelText("判定半径")]
     public int AddBuffRadius = 2;
 
-    [BoxGroup("爆炸施加ActorBuff")]
+    [SerializeReference]
     [HideLabel]
     public ActorBuff ActorBuff;
 

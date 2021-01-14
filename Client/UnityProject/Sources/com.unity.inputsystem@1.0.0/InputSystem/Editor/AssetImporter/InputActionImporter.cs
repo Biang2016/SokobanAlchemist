@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.Experimental.AssetImporters;
+
 using UnityEngine.InputSystem.Utilities;
 
 ////FIXME: The importer accesses icons through the asset db (which EditorGUIUtility.LoadIcon falls back on) which will
@@ -20,8 +20,8 @@ namespace UnityEngine.InputSystem.Editor
     /// Can generate code wrappers for the contained action sets as a convenience.
     /// Will not overwrite existing wrappers except if the generated code actually differs.
     /// </remarks>
-    [ScriptedImporter(kVersion, InputActionAsset.Extension)]
-    internal class InputActionImporter : ScriptedImporter
+    [UnityEditor.AssetImporters.ScriptedImporter(kVersion, InputActionAsset.Extension)]
+    internal class InputActionImporter : UnityEditor.AssetImporters.ScriptedImporter
     {
         private const int kVersion = 11;
 
@@ -41,7 +41,7 @@ namespace UnityEngine.InputSystem.Editor
             remove => s_OnImportCallbacks.Remove(value);
         }
 
-        public override void OnImportAsset(AssetImportContext ctx)
+        public override void OnImportAsset(UnityEditor.AssetImporters.AssetImportContext ctx)
         {
             if (ctx == null)
                 throw new ArgumentNullException(nameof(ctx));

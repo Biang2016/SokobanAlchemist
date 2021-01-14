@@ -6,7 +6,6 @@ using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using DG.Tweening;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 using BiangLibrary.GamePlay;
 #if UNITY_EDITOR
@@ -244,39 +243,21 @@ public partial class Box : Entity
 
     #region 箱子被动技能
 
-    [NonSerialized]
-    [ShowInInspector]
+    [SerializeReference]
     [FoldoutGroup("箱子被动技能")]
     [LabelText("箱子被动技能")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<BoxPassiveSkill> RawBoxPassiveSkills = new List<BoxPassiveSkill>(); // 干数据，禁修改
 
+    [HideInInspector]
     public List<BoxPassiveSkill> BoxPassiveSkills = new List<BoxPassiveSkill>(); // 湿数据，每个Box生命周期开始前从干数据拷出，结束后清除
 
-    public Dictionary<string, BoxPassiveSkill> BoxPassiveSkillDict = new Dictionary<string, BoxPassiveSkill>(); // 便于寻找
-
     internal bool BoxPassiveSkillMarkAsDeleted = false;
-
-    [HideInInspector]
-    public byte[] BoxPassiveSkillBaseData;
-
-    public override void OnBeforeSerialize()
-    {
-        base.OnBeforeSerialize();
-        if (RawBoxPassiveSkills == null) RawBoxPassiveSkills = new List<BoxPassiveSkill>();
-        BoxPassiveSkillBaseData = SerializationUtility.SerializeValue(RawBoxPassiveSkills, DataFormat.JSON);
-    }
-
-    public override void OnAfterDeserialize()
-    {
-        base.OnAfterDeserialize();
-        RawBoxPassiveSkills = SerializationUtility.DeserializeValue<List<BoxPassiveSkill>>(BoxPassiveSkillBaseData, DataFormat.JSON);
-    }
 
     private void InitBoxPassiveSkills()
     {
         BoxPassiveSkills.Clear();
-        BoxPassiveSkillDict.Clear();
+        //BoxPassiveSkillDict.Clear();
         foreach (BoxPassiveSkill rawBF in RawBoxPassiveSkills)
         {
             if (rawBF is BoxPassiveSkill_LevelEventTriggerAppear) continue;
@@ -296,10 +277,10 @@ public partial class Box : Entity
         bf.OnInit();
         bf.OnRegisterLevelEventID();
         string bfName = bf.GetType().Name;
-        if (!BoxPassiveSkillDict.ContainsKey(bfName))
-        {
-            BoxPassiveSkillDict.Add(bfName, bf);
-        }
+        //if (!BoxPassiveSkillDict.ContainsKey(bfName))
+        //{
+        //    BoxPassiveSkillDict.Add(bfName, bf);
+        //}
     }
 
     private void UnInitPassiveSkills()
@@ -619,6 +600,11 @@ public partial class Box : Entity
             if (BoxEffectHelper == null)
             {
                 BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
+            }
+
+            foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+            {
+                bf.OnBeingKicked(actor);
             }
 
             alreadyCollide = false;

@@ -10,8 +10,8 @@ public class BoxPassiveSkillAction_AddActorBuff : BoxPassiveSkillAction, BoxPass
     [LabelText("生效于相对阵营")]
     public RelativeCamp EffectiveOnRelativeCamp;
 
-    [BoxGroup("ActorBuff")]
     [HideLabel]
+    [SerializeReference]
     public ActorBuff ActorBuff;
 
     public void OnCollide(Collision collision)

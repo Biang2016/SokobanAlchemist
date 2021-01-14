@@ -259,8 +259,7 @@ public class Actor : Entity
 
     #region Actor被动技能
 
-    [NonSerialized]
-    [ShowInInspector]
+    [SerializeReference]
     [FoldoutGroup("Actor被动技能")]
     [LabelText("被动技能列表")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
@@ -273,9 +272,6 @@ public class Actor : Entity
     internal bool ActorPassiveSkillMarkAsDied = false;
 
     internal bool ActorForbidPushBox = false;
-
-    [HideInInspector]
-    public byte[] ActorPassiveSkillBaseData;
 
     private void InitActorPassiveSkills()
     {
@@ -343,8 +339,7 @@ public class Actor : Entity
         }
     }
 
-    [NonSerialized]
-    [ShowInInspector]
+    [SerializeReference]
     [FoldoutGroup("Actor主动技能")]
     [LabelText("主动技能列表")]
     [ListDrawerSettings(ListElementLabelName = "SkillAlias")]
@@ -355,9 +350,6 @@ public class Actor : Entity
     public Dictionary<ActorSkillIndex, ActorActiveSkill> ActorActiveSkillDict = new Dictionary<ActorSkillIndex, ActorActiveSkill>(); // 便于寻找
 
     internal bool ActorActiveSkillMarkAsDied = false;
-
-    [HideInInspector]
-    public byte[] ActorActiveSkillBaseData;
 
     private void InitActorActiveSkills()
     {
@@ -405,34 +397,11 @@ public class Actor : Entity
 
     #endregion
 
-    [NonSerialized]
-    [ShowInInspector]
+    [SerializeReference]
     [FoldoutGroup("冻结")]
     [LabelText("冻结的箱子被动技能")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<BoxPassiveSkill> RawFrozenBoxPassiveSkills = new List<BoxPassiveSkill>(); // 干数据，禁修改
-
-    [HideInInspector]
-    public byte[] RawFrozenBoxPassiveSkillData;
-
-    public override void OnBeforeSerialize()
-    {
-        base.OnBeforeSerialize();
-        if (RawFrozenBoxPassiveSkills == null) RawFrozenBoxPassiveSkills = new List<BoxPassiveSkill>();
-        RawFrozenBoxPassiveSkillData = SerializationUtility.SerializeValue(RawFrozenBoxPassiveSkills, DataFormat.JSON);
-
-        if (RawActorPassiveSkills == null) RawActorPassiveSkills = new List<ActorPassiveSkill>();
-        ActorPassiveSkillBaseData = SerializationUtility.SerializeValue(RawActorPassiveSkills, DataFormat.JSON);
-        ActorActiveSkillBaseData = SerializationUtility.SerializeValue(RawActorActiveSkills, DataFormat.JSON);
-    }
-
-    public override void OnAfterDeserialize()
-    {
-        base.OnAfterDeserialize();
-        RawFrozenBoxPassiveSkills = SerializationUtility.DeserializeValue<List<BoxPassiveSkill>>(RawFrozenBoxPassiveSkillData, DataFormat.JSON);
-        RawActorPassiveSkills = SerializationUtility.DeserializeValue<List<ActorPassiveSkill>>(ActorPassiveSkillBaseData, DataFormat.JSON);
-        RawActorActiveSkills = SerializationUtility.DeserializeValue<List<ActorActiveSkill>>(ActorActiveSkillBaseData, DataFormat.JSON);
-    }
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 

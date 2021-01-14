@@ -44,6 +44,8 @@ public abstract class BoxPassiveSkillAction : IClone<BoxPassiveSkillAction>
 
     private IEnumerable<string> GetAllEnemyNames => ConfigManager.GetAllEnemyNames();
 
+    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
+
     public BoxPassiveSkillAction Clone()
     {
         Type type = GetType();
