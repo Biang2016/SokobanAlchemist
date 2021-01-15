@@ -424,15 +424,41 @@ MonoBehaviour:
   FrozeFX: Hit_SnowFlake
   ThawFX: Flash_CyanSlight
   RawActorPassiveSkills: []
-  RawActorActiveSkills: []
-  RawFrozenBoxPassiveSkills:
+  RawActorActiveSkills:
   - id: 0
+  RawFrozenBoxPassiveSkills:
+  - id: 1
   MovementState: 0
   PushState: 0
   ThrowState: 0
   references:
     version: 1
     00000000:
+      type: {class: ActorActiveSkill_Attack, ns: , asm: Client}
+      data:
+        TargetCamp: 2
+        ActorSkillIndex: 0
+        SkillAlias: NormalAttack
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        M_CastAreaType: 4
+        M_TargetInclination: 2
+        CastOnTopLayer: 0
+        FanAngle: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName: GridWarning
+        ProjectOffsetZMax: 3
+        ProjectOffsetZMin: -3
+        GridWarningColorFill: {r: 0.98039216, g: 0.5875726, b: 0.26666668, a: 0.85490197}
+        GridWarningColorBorderHighlight: {r: 0.9622642, g: 0.30110356, b: 0.033285756,
+          a: 1}
+        GridWarningColorBorderDim: {r: 0.6886792, g: 0.6280408, b: 0.6280408, a: 0.6}
+        CastFX: Flash_BloodBlade
+        CastFXScale: 1
+    00000001:
       type: {class: BoxPassiveSkill_Conditional, ns: , asm: Client}
       data:
         SpecialCaseType: 0
@@ -442,22 +468,22 @@ MonoBehaviour:
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
         RawBoxPassiveSkillActions:
-        - id: 1
         - id: 2
-    00000001:
+        - id: 3
+    00000002:
       type: {class: BoxPassiveSkillAction_RadiusAddActorsBuff, ns: , asm: Client}
       data:
         EffectiveOnRelativeCamp: 2
         AddBuffRadius: 1
         ActorBuff:
-          id: 3
-    00000002:
+          id: 4
+    00000003:
       type: {class: BoxPassiveSkillAction_RadiusAddBoxesBuff, ns: , asm: Client}
       data:
         AddBuffRadius: 1
         BoxBuff:
-          id: 4
-    00000003:
+          id: 5
+    00000004:
       type: {class: ActorBuff_ChangeActorStatInstantly, ns: , asm: Client}
       data:
         GUID: 10004
@@ -469,7 +495,7 @@ MonoBehaviour:
         StatType: 101
         Delta: 500
         Percent: 0
-    00000004:
+    00000005:
       type: {class: BoxBuff_ChangeBoxStatInstantly, ns: , asm: Client}
       data:
         GUID: 10005

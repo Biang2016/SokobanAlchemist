@@ -47,6 +47,7 @@ public class ActorActiveSkill_AddEntityBuff : ActorActiveSkill_AreaCast, ISerial
     {
         int targetCount = 0;
         HashSet<uint> entityGUIDSet = new HashSet<uint>();
+        bool needBreak = false;
         foreach (GridPos3D gp in RealSkillEffectGPs)
         {
             Collider[] colliders_player = Physics.OverlapSphere(gp.ToVector3(), 0.3f, LayerManager.Instance.GetTargetActorLayerMask(Actor.Camp, TargetCamp));
@@ -67,10 +68,15 @@ public class ActorActiveSkill_AddEntityBuff : ActorActiveSkill_AreaCast, ISerial
                     }
 
                     targetCount++;
-                    if (targetCount >= GetValue(ActorSkillPropertyType.MaxTargetCount)) yield break;
+                    if (targetCount > GetValue(ActorSkillPropertyType.MaxTargetCount))
+                    {
+                        needBreak = true;
+                        break;
+                    }
                 }
             }
 
+            if (needBreak) break;
             Collider[] colliders_box = Physics.OverlapSphere(gp.ToVector3(), 0.3f, LayerManager.Instance.LayerMask_BoxIndicator);
             foreach (Collider c in colliders_box)
             {
@@ -89,10 +95,17 @@ public class ActorActiveSkill_AddEntityBuff : ActorActiveSkill_AreaCast, ISerial
                     }
 
                     targetCount++;
-                    if (targetCount >= GetValue(ActorSkillPropertyType.MaxTargetCount)) yield break;
+                    if (targetCount > GetValue(ActorSkillPropertyType.MaxTargetCount))
+                    {
+                        needBreak = true;
+                        break;
+                    }
                 }
             }
+
+            if (needBreak) break;
         }
+
         yield return base.Cast(castDuration);
     }
 

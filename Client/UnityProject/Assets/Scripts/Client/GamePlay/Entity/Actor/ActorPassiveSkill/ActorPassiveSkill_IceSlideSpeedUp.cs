@@ -7,6 +7,7 @@ public class ActorPassiveSkill_IceSlideSpeedUp : ActorPassiveSkill
 {
     protected override string Description => "角色在冰面时施加Buff";
 
+    [SerializeReference]
     [LabelText("施加Buff")]
     public ActorBuff RawActorBuff;
 

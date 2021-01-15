@@ -424,13 +424,39 @@ MonoBehaviour:
   FrozeFX: Hit_SnowFlake
   ThawFX: Flash_CyanSlight
   RawActorPassiveSkills: []
-  RawActorActiveSkills: []
+  RawActorActiveSkills:
+  - id: 0
   RawFrozenBoxPassiveSkills: []
   MovementState: 0
   PushState: 0
   ThrowState: 0
   references:
     version: 1
+    00000000:
+      type: {class: ActorActiveSkill_Attack, ns: , asm: Client}
+      data:
+        TargetCamp: 2
+        ActorSkillIndex: 0
+        SkillAlias: NormalAttack
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        M_CastAreaType: 3
+        M_TargetInclination: 2
+        CastOnTopLayer: 0
+        FanAngle: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName: GridWarning
+        ProjectOffsetZMax: 3
+        ProjectOffsetZMin: -3
+        GridWarningColorFill: {r: 0.9811321, g: 0.26533753, b: 0.26533753, a: 0.85490197}
+        GridWarningColorBorderHighlight: {r: 0.9622642, g: 0.30110356, b: 0.033285756,
+          a: 1}
+        GridWarningColorBorderDim: {r: 0.6886792, g: 0.6280408, b: 0.6280408, a: 0.6}
+        CastFX: Flash_BloodBlade
+        CastFXScale: 1
 --- !u!114 &8572106225310636948
 MonoBehaviour:
   m_ObjectHideFlags: 0
