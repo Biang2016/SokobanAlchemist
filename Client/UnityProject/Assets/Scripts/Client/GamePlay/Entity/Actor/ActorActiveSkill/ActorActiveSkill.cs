@@ -121,6 +121,7 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
 
     #region 子技能
 
+    [SerializeReference]
     [FoldoutGroup("子技能")]
     [LabelText("子技能列表")]
     public List<ActorActiveSkill> RawSubActiveSkillList = new List<ActorActiveSkill>(); // 干数据，运行时使用副本来触发技能
@@ -226,7 +227,7 @@ public abstract class ActorActiveSkill : IClone<ActorActiveSkill>
         {
             if (string.IsNullOrWhiteSpace(subAAS.SkillAlias) || SubActiveSkillDict.ContainsKey(subAAS.SkillAlias))
             {
-                Debug.LogError($"{SkillAlias}的子技能[{subAAS.SkillAlias}]花名为空或与其他子技能花名重复");
+                Debug.LogError($"[{Actor.name}]角色的[{SkillAlias}]的子技能[{subAAS.SkillAlias}]花名为空或与其他子技能花名重复");
                 continue;
             }
 
