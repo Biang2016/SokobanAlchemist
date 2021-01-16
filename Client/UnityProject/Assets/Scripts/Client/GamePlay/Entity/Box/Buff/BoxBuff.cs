@@ -232,3 +232,37 @@ public class BoxBuff_ChangeBoxStatInstantly : BoxBuff
         buff.Percent = Percent;
     }
 }
+
+[Serializable]
+public class BoxBuff_InstantDamage : BoxBuff
+{
+    protected override string Description => "瞬间伤害buff, 必须是【瞬时效果】. buff施加后, 不残留在Box身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
+
+    [LabelText("伤害")]
+    public int Damage;
+
+    public override void OnAdded(Entity entity)
+    {
+        base.OnAdded(entity);
+        Box box = (Box) entity;
+        box.BoxStatPropSet.CommonDurability.Value -= Damage; 
+    }
+
+    protected override bool ValidateBuffAttribute(BuffAttribute boxBuffAttribute)
+    {
+        if (boxBuffAttribute != BuffAttribute.InstantEffect)
+        {
+            validateBuffAttributeInfo = "本Buff仅支持【瞬时效果】标签";
+            return false;
+        }
+
+        return true;
+    }
+
+    protected override void ChildClone(EntityBuff newBuff)
+    {
+        base.ChildClone(newBuff);
+        BoxBuff_InstantDamage buff = ((BoxBuff_InstantDamage) newBuff);
+        buff.Damage = Damage;
+    }
+}

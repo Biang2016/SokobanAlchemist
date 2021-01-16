@@ -2,10 +2,8 @@
 using BiangLibrary.ObjectPool;
 using UnityEngine;
 
-public class BoxColliderHelper : PoolObject, IBoxHelper
+public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
 {
-    public Box Box;
-
     [SerializeField]
     private GameObject NormalColliders;
 
@@ -24,12 +22,15 @@ public class BoxColliderHelper : PoolObject, IBoxHelper
     [SerializeField]
     private Collider BoxOnlyDynamicCollider;
 
-    [SerializeField]
-    private Collider BoxIndicatorTrigger;
-
-    public override void OnRecycled()
+    public void OnBoxUsed()
     {
-        base.OnRecycled();
+        NormalColliders.SetActive(true);
+        StaticColliders.SetActive(true);
+        BoxOnlyDynamicCollider.gameObject.SetActive(true);
+    }
+
+    public void OnBoxPoolRecycled()
+    {
         StaticBoxCollider.enabled = false;
         StaticWedgeCollider.enabled = false;
         DynamicCollider.enabled = false;
@@ -37,25 +38,6 @@ public class BoxColliderHelper : PoolObject, IBoxHelper
         NormalColliders.SetActive(false);
         StaticColliders.SetActive(false);
         BoxOnlyDynamicCollider.gameObject.SetActive(false);
-        BoxIndicatorTrigger.gameObject.SetActive(false);
-    }
-
-    public void OnBoxUsed()
-    {
-    }
-
-    public void OnBoxPoolRecycled()
-    {
-        PoolRecycle();
-    }
-
-    public override void OnUsed()
-    {
-        base.OnUsed();
-        NormalColliders.SetActive(true);
-        StaticColliders.SetActive(true);
-        BoxOnlyDynamicCollider.gameObject.SetActive(true);
-        BoxIndicatorTrigger.gameObject.SetActive(true);
     }
 
     public void SwitchBoxShapeType()

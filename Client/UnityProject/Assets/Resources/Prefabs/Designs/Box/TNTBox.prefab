@@ -125,17 +125,32 @@ PrefabInstance:
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[0]
-      value: Client BoxPassiveSkillAction_RadiusDamageBoxes
+      value: Client BoxPassiveSkillAction_PlayFX
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[1]
-      value: Client BoxPassiveSkillAction_PlayFX
+      value: Client BoxPassiveSkillAction_RadiusAddActorsBuff
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2]
+      value: Client BoxPassiveSkillAction_RadiusAddBoxesBuff
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[3]
+      value: Client BoxPassiveSkillAction_RadiusAddBoxesBuff
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[0].FXScale
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -144,8 +159,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].BoxBuff
+      value: Client BoxBuff_InstantDamage
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[3].BoxBuff
+      value: Client BoxBuff_InstantDamage
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[1].ActorBuff
+      value: Client ActorBuff_InstantDamage
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].ActorBuff
+      value: Client ActorBuff_InstantDamage
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[0].FXTypeName
+      value: Hit_FireExplodeSmoke
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[1].FXTypeName
       value: Hit_FireExplodeSmoke
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].BoxBuff.GUID
+      value: 10021
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[3].BoxBuff.GUID
+      value: 10021
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -154,8 +204,163 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[1].AddBuffRadius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].AddBuffRadius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[3].AddBuffRadius
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[1].ActorBuff.GUID
+      value: 10299
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].ActorBuff.GUID
+      value: 10299
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].BoxBuff.BuffFX
+      value: Hit_FireExplodeSmoke
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].BoxBuff.Damage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[3].BoxBuff.BuffFX
+      value: Hit_FireExplodeSmoke
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[3].BoxBuff.Damage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[0].DurabilityDamage
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[1].ActorBuff.BuffFX
+      value: Hit_BloodyLightExplode
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[1].ActorBuff.Damage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].ActorBuff.BuffFX
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].ActorBuff.Damage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].BoxBuff.Duration
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[3].BoxBuff.Duration
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[1].ActorBuff.Duration
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].ActorBuff.Duration
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].BoxBuff.BuffFXScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].BoxBuff.IsPermanent
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[3].BoxBuff.BuffFXScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[3].BoxBuff.IsPermanent
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[1].ActorBuff.BuffFXScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[1].ActorBuff.IsPermanent
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].ActorBuff.BuffFXScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].ActorBuff.IsPermanent
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].BoxBuff.BuffAttribute
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[3].BoxBuff.BuffAttribute
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[1].ActorBuff.BuffAttribute
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[1].EffectiveOnRelativeCamp
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].ActorBuff.BuffAttribute
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawBoxPassiveSkillActions.Array.data[2].EffectiveOnRelativeCamp
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 570053385983063175, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}

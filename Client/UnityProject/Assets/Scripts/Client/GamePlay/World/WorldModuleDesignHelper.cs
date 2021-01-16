@@ -52,8 +52,9 @@ public class WorldModuleDesignHelper : MonoBehaviour
         foreach (Box_LevelEditor box in boxes)
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
-            GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
-            ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxPrefab.name.Replace("_LevelEditor", "")];
+            GameObject boxEditorPrefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
+            string boxName = boxEditorPrefab.name.Replace("_LevelEditor", "");
+            ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxName];
 
             bool isLevelEventTriggerAppearBox = false;
             foreach (BoxPassiveSkill bf in box.RawBoxPassiveSkills)

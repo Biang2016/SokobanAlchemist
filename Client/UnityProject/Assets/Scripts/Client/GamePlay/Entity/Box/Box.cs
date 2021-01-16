@@ -15,8 +15,6 @@ using UnityEditor;
 
 public partial class Box : Entity
 {
-    private GridSnapper GridSnapper;
-
     internal Rigidbody Rigidbody;
 
     internal Actor LastTouchActor;
@@ -36,7 +34,13 @@ public partial class Box : Entity
     public BoxColliderHelper BoxColliderHelper;
 
     [FoldoutGroup("组件")]
+    public BoxIndicatorHelper BoxIndicatorHelper;
+
+    [FoldoutGroup("组件")]
     public BoxThornTrapTriggerHelper BoxThornTrapTriggerHelper;
+
+    [FoldoutGroup("组件")]
+    public DoorBoxHelper DoorBoxHelper;
 
     [FoldoutGroup("组件")]
     public BoxSkinHelper BoxSkinHelper;
@@ -58,13 +62,11 @@ public partial class Box : Entity
     {
         LastTouchActor = null;
         ArtOnly = true;
-        BoxColliderHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxColliderHelper].AllocateGameObject<BoxColliderHelper>(transform);
-        BoxColliderHelper.Box = this;
-
         BoxBuffHelper.OnHelperUsed();
         BoxFrozenHelper.OnHelperUsed();
         BoxColliderHelper.OnBoxUsed();
         BoxThornTrapTriggerHelper?.OnHelperUsed();
+        DoorBoxHelper?.OnHelperUsed();
         BoxSkinHelper?.OnHelperUsed();
         BoxIconSpriteHelper.OnHelperUsed();
 
@@ -85,8 +87,8 @@ public partial class Box : Entity
         BoxEffectHelper?.OnBoxPoolRecycled();
         BoxEffectHelper = null;
         BoxColliderHelper.OnBoxPoolRecycled();
-        BoxColliderHelper = null;
         BoxThornTrapTriggerHelper?.OnHelperRecycled();
+        DoorBoxHelper?.OnHelperRecycled();
         BoxSkinHelper?.OnHelperRecycled();
         BoxIconSpriteHelper?.OnHelperRecycled();
         transform.DOPause();
@@ -199,36 +201,24 @@ public partial class Box : Entity
     [GUIColor(1.0f, 0, 1.0f)]
     private float CollideDamage = 3f;
 
-    [ReadOnly]
-    [AssetsOnly]
-    [ShowInInspector]
-    [ShowIf("Pushable")]
-    [FoldoutGroup("推箱子属性")]
-    [LabelText("抗推力")]
+    /// <summary>
+    /// 抗推力
+    /// </summary>
     internal static float Static_Inertia = 0.3f;
 
-    [ReadOnly]
-    [AssetsOnly]
-    [ShowInInspector]
-    [ShowIf("Throwable")]
-    [FoldoutGroup("扔箱子属性")]
-    [LabelText("落地Drag")]
+    /// <summary>
+    /// 扔箱子落地Drag
+    /// </summary>
     internal float Throw_Drag = 10f;
 
-    [ReadOnly]
-    [AssetsOnly]
-    [ShowInInspector]
-    [ShowIf("Throwable")]
-    [FoldoutGroup("扔箱子属性")]
-    [LabelText("落地摩擦力")]
+    /// <summary>
+    /// 扔箱子落地摩擦力
+    /// </summary>
     internal float Throw_Friction = 1;
 
-    [ReadOnly]
-    [AssetsOnly]
-    [ShowInInspector]
-    [ShowIf("Kickable")]
-    [FoldoutGroup("踢箱子属性")]
-    [LabelText("摩阻力")]
+    /// <summary>
+    /// 踢箱子摩阻力
+    /// </summary>
     internal float Dynamic_Drag = 0.5f;
 
     [FoldoutGroup("冻结")]
@@ -240,6 +230,11 @@ public partial class Box : Entity
     [LabelText("冻结特效")]
     [ValueDropdown("GetAllFXTypeNames")]
     public string FrozeFX;
+
+    public List<GridPos3D> GetBoxOccupationGPs()
+    {
+        return BoxIndicatorHelper.BoxIndicatorGPs;
+    }
 
     #region 箱子被动技能
 
@@ -371,8 +366,6 @@ public partial class Box : Entity
 
     protected virtual void Awake()
     {
-        GridSnapper = GetComponent<GridSnapper>();
-        GridSnapper.enabled = false;
         GUID = GetGUID();
         GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
     }
