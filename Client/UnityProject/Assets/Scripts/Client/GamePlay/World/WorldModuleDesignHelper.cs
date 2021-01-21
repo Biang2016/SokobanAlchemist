@@ -65,6 +65,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
                     data.LocalGP = gp;
                     data.LevelComponentBelongsTo = LevelComponentBelongsTo.WorldModule;
                     data.BoxTypeIndex = boxTypeIndex;
+                    data.BoxOrientation = box.BoxOrientation;
                     data.BoxPassiveSkill_LevelEventTriggerAppear = (BoxPassiveSkill_LevelEventTriggerAppear) bf_leta.Clone();
                     worldModuleData.EventTriggerAppearBoxDataList.Add(data);
                     isLevelEventTriggerAppearBox = true;
@@ -76,26 +77,27 @@ public class WorldModuleDesignHelper : MonoBehaviour
             {
                 bool spaceAvailable = true;
                 List<GridPos3D> boxOccupation = ConfigManager.BoxOccupationConfigDict[boxTypeIndex];
-
-                foreach (GridPos3D gridPos3D in boxOccupation)
+                List<GridPos3D> boxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(box.BoxOrientation, boxOccupation);
+                foreach (GridPos3D gridPos3D in boxOccupation_rotated)
                 {
-                    GridPos3D gridGP = gp + gridPos3D;
-                    if (worldModuleData.BoxMatrix_Temp_CheckOverlap[gridGP.x, gridGP.y, gridGP.z] != 0)
+                    GridPos3D gridPos = gridPos3D + gp;
+                    if (worldModuleData.BoxMatrix_Temp_CheckOverlap[gridPos.x, gridPos.y, gridPos.z] != 0)
                     {
                         spaceAvailable = false;
-                        string box1Name = ConfigManager.BoxTypeDefineDict.TypeNameDict[worldModuleData.BoxMatrix_Temp_CheckOverlap[gridGP.x, gridGP.y, gridGP.z]];
+                        string box1Name = ConfigManager.BoxTypeDefineDict.TypeNameDict[worldModuleData.BoxMatrix_Temp_CheckOverlap[gridPos.x, gridPos.y, gridPos.z]];
                         string box2Name = ConfigManager.BoxTypeDefineDict.TypeNameDict[boxTypeIndex];
-                        Debug.Log($"世界模组[{name}]的{gridGP}位置处存在重叠箱子{box1Name}和{box2Name},已忽略后者");
+                        Debug.Log($"世界模组[{name}]的{gridPos}位置处存在重叠箱子{box1Name}和{box2Name},已忽略后者");
                     }
                 }
 
                 if (spaceAvailable)
                 {
                     worldModuleData.BoxMatrix[gp.x, gp.y, gp.z] = boxTypeIndex;
-                    foreach (GridPos3D gridPos3D in boxOccupation)
+                    worldModuleData.BoxOrientationMatrix[gp.x, gp.y, gp.z] = box.BoxOrientation;
+                    foreach (GridPos3D gridPos3D in boxOccupation_rotated)
                     {
-                        GridPos3D gridGP = gp + gridPos3D;
-                        worldModuleData.BoxMatrix_Temp_CheckOverlap[gridGP.x, gridGP.y, gridGP.z] = boxTypeIndex;
+                        GridPos3D gridPos = gridPos3D + gp;
+                        worldModuleData.BoxMatrix_Temp_CheckOverlap[gridPos.x, gridPos.y, gridPos.z] = boxTypeIndex;
                     }
                 }
             }

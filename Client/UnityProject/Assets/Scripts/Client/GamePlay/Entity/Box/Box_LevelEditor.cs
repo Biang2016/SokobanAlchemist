@@ -20,7 +20,22 @@ public class Box_LevelEditor : Entity
     [FoldoutGroup("箱子Extra被动技能")]
     [LabelText("箱子Extra被动技能")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
+    [SerializeReference]
     public List<BoxPassiveSkill> RawBoxPassiveSkills = new List<BoxPassiveSkill>(); // 干数据，禁修改
+
+    [LabelText("箱子朝向")]
+    [OnValueChanged("RefreshOrientation")]
+    [EnumToggleButtons]
+    public GridPosR.Orientation BoxOrientation;
+
+    private void RefreshOrientation()
+    {
+        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, BoxOrientation), ModelRoot.transform, 1);
+#if UNITY_EDITOR
+        EditorWindow view = EditorWindow.GetWindow<SceneView>();
+        view.Repaint();
+#endif
+    }
 
     #endregion
 
@@ -30,6 +45,7 @@ public class Box_LevelEditor : Entity
     {
         public GridPos3D WorldGP;
         public ushort BoxTypeIndex;
+        public GridPosR.Orientation BoxOrientation;
         public BoxExtraSerializeData BoxExtraSerializeDataFromWorld; // 序列化到世界中的Box自己处理自己的ExtraData
 
         public WorldSpecialBoxData Clone()
@@ -37,6 +53,7 @@ public class Box_LevelEditor : Entity
             WorldSpecialBoxData newData = new WorldSpecialBoxData();
             newData.WorldGP = WorldGP;
             newData.BoxTypeIndex = BoxTypeIndex;
+            newData.BoxOrientation = BoxOrientation;
             newData.BoxExtraSerializeDataFromWorld = BoxExtraSerializeDataFromWorld.Clone();
             return newData;
         }

@@ -9,7 +9,7 @@ public class BoxFrozenHelper : EntityFrozenHelper
         if (afterFrozenLevel == 0)
         {
             Thaw();
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
             {
                 FXManager.Instance.PlayFX(box.ThawFX, transform.position + offset, 1f);
             }
@@ -24,7 +24,7 @@ public class BoxFrozenHelper : EntityFrozenHelper
                 frozeModel.SetActive(index == afterFrozenLevel - 1);
             }
 
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
             {
                 FXManager.Instance.PlayFX(beforeFrozenLevel < afterFrozenLevel ? box.FrozeFX : box.ThawFX, transform.position + offset, 1f);
             }

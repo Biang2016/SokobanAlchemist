@@ -1,4 +1,5 @@
 ﻿using System;
+using BiangLibrary.GameDataFormat.Grid;
 using UnityEngine.Events;
 
 [Serializable]
@@ -23,6 +24,7 @@ public class BoxPassiveSkill_LevelEventTriggerAppear : BoxPassiveSkill_Condition
     public class Data : LevelComponentData
     {
         public ushort BoxTypeIndex;
+        public GridPosR.Orientation BoxOrientation;
 
         public BoxPassiveSkill_LevelEventTriggerAppear BoxPassiveSkill_LevelEventTriggerAppear;
 
@@ -33,6 +35,7 @@ public class BoxPassiveSkill_LevelEventTriggerAppear : BoxPassiveSkill_Condition
             base.ChildClone(newData);
             Data data = ((Data) newData);
             data.BoxTypeIndex = BoxTypeIndex;
+            data.BoxOrientation = BoxOrientation;
             data.BoxPassiveSkill_LevelEventTriggerAppear = (BoxPassiveSkill_LevelEventTriggerAppear) BoxPassiveSkill_LevelEventTriggerAppear.Clone(); // 此处慎重Clone，因为GenerateBoxAction没有深拷贝
             data.WorldSpecialBoxData = WorldSpecialBoxData?.Clone();
         }

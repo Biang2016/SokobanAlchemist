@@ -189,7 +189,7 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         {
             if (after == 0)
             {
-                foreach (GridPos3D offset in Box.GetBoxOccupationGPs())
+                foreach (GridPos3D offset in Box.GetBoxOccupationGPs_Rotated())
                 {
                     FXManager.Instance.PlayFX(FiringBreakFX, Box.transform.position + offset, 1.5f);
                 }
@@ -203,7 +203,7 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         {
             if (before == 0 && after > 0)
             {
-                foreach (GridPos3D offset in Box.GetBoxOccupationGPs())
+                foreach (GridPos3D offset in Box.GetBoxOccupationGPs_Rotated())
                 {
                     FX fx = FXManager.Instance.PlayFX(StartFiringFX, Box.transform.position + Vector3.up * 0.5f + offset, 1f);
                     if (fx) fx.transform.parent = Box.transform;

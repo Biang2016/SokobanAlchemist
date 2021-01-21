@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 
 public class WorldModuleData : IClone<WorldModuleData>
@@ -18,6 +19,7 @@ public class WorldModuleData : IClone<WorldModuleData>
     /// 模组上下层叠，底部模组Y为0，顶部Y为15
     /// </summary>
     public ushort[,,] BoxMatrix = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 仅作为箱子核心格的位置记录，不代表每一格实际是否有占用。（因为有Mega箱子尺寸不止一格）
+    public GridPosR.Orientation[,,] BoxOrientationMatrix = new GridPosR.Orientation[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 箱子朝向矩阵记录，仅引用于对应核心格的箱子
     public ushort[,,] BoxMatrix_Temp_CheckOverlap = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 导出时 临时使用，为了检查箱子重叠
 
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
@@ -41,6 +43,7 @@ public class WorldModuleData : IClone<WorldModuleData>
                 for (int z = 0; z < BoxMatrix.GetLength(2); z++)
                 {
                     data.BoxMatrix[x, y, z] = BoxMatrix[x, y, z];
+                    data.BoxOrientationMatrix[x, y, z] = BoxOrientationMatrix[x, y, z];
                     if (BoxExtraSerializeDataMatrix[x, y, z] != null)
                     {
                         data.BoxExtraSerializeDataMatrix[x, y, z] = BoxExtraSerializeDataMatrix[x, y, z].Clone();

@@ -5,10 +5,10 @@ using UnityEngine;
 public class BoxSkinHelper : BoxMonoHelper
 {
     [SerializeField]
-    private Mesh[] NormalMeshes;
+    private Mesh NormalMesh;
 
     [SerializeField]
-    private Mesh[] RoundedMeshes;
+    private Mesh RoundedMesh;
 
     [SerializeField]
     private MeshRenderer MeshRenderer;
@@ -46,54 +46,18 @@ public class BoxSkinHelper : BoxMonoHelper
             {
                 case BoxModelType.Normal:
                 {
-                    MeshFilter.mesh = NormalMeshes[(int) Box.BoxShapeType];
+                    MeshFilter.mesh = NormalMesh;
                     break;
                 }
                 case BoxModelType.Rounded:
                 {
-                    MeshFilter.mesh = RoundedMeshes[(int) Box.BoxShapeType];
+                    MeshFilter.mesh = RoundedMesh;
                     break;
                 }
             }
         }
 
         BoxModelType = boxModelType;
-    }
-
-    public void RefreshBoxShapeType()
-    {
-        if (MeshFilter)
-        {
-            switch (BoxModelType)
-            {
-                case BoxModelType.Normal:
-                {
-                    MeshFilter.mesh = NormalMeshes[(int) Box.BoxShapeType];
-                    break;
-                }
-                case BoxModelType.Rounded:
-                {
-                    MeshFilter.mesh = RoundedMeshes[(int) Box.BoxShapeType];
-                    break;
-                }
-            }
-        }
-    }
-
-    public void SwitchBoxOrientation()
-    {
-        if (MeshFilter)
-        {
-            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, Box.BoxOrientation), MeshFilter.transform, 1);
-        }
-    }
-
-    public void ResetBoxOrientation()
-    {
-        if (MeshFilter)
-        {
-            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, GridPosR.Orientation.Up), MeshFilter.transform, 1);
-        }
     }
 }
 

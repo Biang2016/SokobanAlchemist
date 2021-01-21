@@ -118,12 +118,6 @@ public partial class Box : Entity
     [AssetsOnly]
     public BoxFeature BoxFeature;
 
-    [FoldoutGroup("箱子属性")]
-    [LabelText("箱子形状")]
-    [AssetsOnly]
-    [OnValueChanged("SwitchBoxShapeType")]
-    public BoxShapeType BoxShapeType;
-
     [FoldoutGroup("初始战斗数值")]
     [HideLabel]
     [DisableInPlayMode]
@@ -134,29 +128,15 @@ public partial class Box : Entity
     [HideLabel]
     public BoxStatPropSet BoxStatPropSet; // 湿数据，随生命周期消亡
 
-    private void SwitchBoxShapeType()
+    internal GridPosR.Orientation BoxOrientation { get; private set; }
+
+    private void SwitchBoxOrientation(GridPosR.Orientation boxOrientation)
     {
-        if (BoxShapeType == BoxShapeType.Box)
-        {
-            BoxSkinHelper?.ResetBoxOrientation();
-            BoxColliderHelper?.ResetBoxOrientation();
-            BoxOrientation = GridPosR.Orientation.Up;
-        }
-
-        BoxSkinHelper?.RefreshBoxShapeType();
-        BoxColliderHelper?.SwitchBoxShapeType();
-    }
-
-    [LabelText("箱子朝向")]
-    [HideIf("BoxShapeType", BoxShapeType.Box)]
-    [OnValueChanged("SwitchBoxOrientation")]
-    [EnumToggleButtons]
-    public GridPosR.Orientation BoxOrientation;
-
-    private void SwitchBoxOrientation()
-    {
-        BoxSkinHelper?.SwitchBoxOrientation();
-        BoxColliderHelper?.SwitchBoxOrientation();
+        BoxOrientation = boxOrientation;
+        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxColliderHelper.transform, 1);
+        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), ModelRoot.transform, 1);
+        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxFrozenHelper.FrozeModelRoot.transform, 1);
+        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxIndicatorHelper.transform, 1);
     }
 
     [ReadOnly]
@@ -233,6 +213,10 @@ public partial class Box : Entity
     public string FrozeFX;
 
 #if UNITY_EDITOR
+    /// <summary>
+    /// 仅仅用于Box的Prefab编辑，以供导出成Occupation配置表，（未经旋转过的 )
+    /// </summary>
+    /// <returns></returns>
     public List<GridPos3D> GetBoxOccupationGPs_Editor()
     {
         BoxIndicatorHelper.RefreshBoxIndicatorOccupationData();
@@ -241,12 +225,14 @@ public partial class Box : Entity
 
 #endif
 
-    public List<GridPos3D> GetBoxOccupationGPs()
+    // 旋转过的局部坐标
+    public List<GridPos3D> GetBoxOccupationGPs_Rotated() 
     {
-        return ConfigManager.GetBoxOccupationData(BoxTypeIndex);
+        List<GridPos3D> boxOccupation_transformed = GridPos3D.TransformOccupiedPositions_XZ(BoxOrientation, ConfigManager.GetBoxOccupationData(BoxTypeIndex));
+        return boxOccupation_transformed;
     }
 
-    public BoundsInt BoxBoundsInt => GetBoxOccupationGPs().GetBoundingRectFromListGridPos(WorldGP);
+    public BoundsInt BoxBoundsInt => GetBoxOccupationGPs_Rotated().GetBoundingRectFromListGridPos(WorldGP);
 
     #region 箱子被动技能
 
@@ -410,7 +396,7 @@ public partial class Box : Entity
         }
     }
 
-    public void Setup(ushort boxTypeIndex)
+    public void Setup(ushort boxTypeIndex, GridPosR.Orientation orientation)
     {
         BoxTypeIndex = boxTypeIndex;
         InitBoxPassiveSkills();
@@ -419,14 +405,7 @@ public partial class Box : Entity
         BoxStatPropSet = RawBoxStatPropSet.Clone();
         BoxStatPropSet.Initialize(this);
 
-        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
-        {
-            if (bf is BoxPassiveSkill_ShapeAndOrientation bf_so)
-            {
-                BoxShapeType = bf_so.BoxShapeType;
-                BoxOrientation = bf_so.Orientation;
-            }
-        }
+        SwitchBoxOrientation(orientation);
 
         if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorSkillHelper.GetInteractSkillType(BoxTypeIndex), BoxTypeIndex);
     }
@@ -472,8 +451,6 @@ public partial class Box : Entity
         LocalGP = localGridPos3D;
         transform.parent = module.transform;
         BoxColliderHelper.Initialize(Passable, artOnly, BoxFeature.HasFlag(BoxFeature.IsGround), lerpType == LerpType.Drop, lerpTime > 0);
-        SwitchBoxOrientation();
-        SwitchBoxShapeType();
         if (lerpTime > 0)
         {
             if (lerpType == LerpType.Push)
@@ -993,7 +970,7 @@ public partial class Box : Entity
         if (!playerImmune)
         {
             HashSet<Actor> damagedActors = new HashSet<Actor>();
-            foreach (GridPos3D offset in GetBoxOccupationGPs())
+            foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
             {
                 Vector3 boxIndicatorPos = transform.position + offset;
                 Collider[] colliders = Physics.OverlapSphere(boxIndicatorPos, radius, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
@@ -1024,7 +1001,7 @@ public partial class Box : Entity
 
     public void PlayCollideFX()
     {
-        foreach (GridPos3D offset in GetBoxOccupationGPs())
+        foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
         {
             FX hit = FXManager.Instance.PlayFX(CollideFX, transform.position + offset);
             if (hit) hit.transform.localScale = Vector3.one * CollideFXScale;
@@ -1273,10 +1250,4 @@ public enum BoxFeature
 
     [LabelText("举起就消失")]
     LiftThenDisappear = 1 << 11,
-}
-
-public enum BoxShapeType
-{
-    Box,
-    Wedge,
 }

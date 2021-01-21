@@ -22,7 +22,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, BoxPas
                 GridPos3D localGP = Box.LocalGP;
                 Box.DestroyBox();
                 ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
-                if (boxTypeIndex != 0) module.GenerateBox(boxTypeIndex, localGP);
+                if (boxTypeIndex != 0) module.GenerateBox(boxTypeIndex, localGP, GridPosR.Orientation.Up);
             }
         }
     }

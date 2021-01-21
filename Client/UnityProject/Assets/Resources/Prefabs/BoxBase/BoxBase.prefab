@@ -527,7 +527,6 @@ MonoBehaviour:
   BoxModelSmoothMove: {fileID: 4907329536122643906}
   BoxTypeIndex: 0
   BoxFeature: 0
-  BoxShapeType: 0
   RawBoxStatPropSet:
     CommonDurability:
       _value: 5
@@ -722,7 +721,6 @@ MonoBehaviour:
       m_RotationOrder: 4
     FiringBreakFX: 
     RawBoxDefaultBuffData: 7b0d0a2020202022246964223a20302c0d0a20202020222474797065223a2022307c53797374656d2e436f6c6c656374696f6e732e47656e657269632e4c69737460315b5b426f78427566662c20436c69656e745d5d2c206d73636f726c6962222c0d0a202020202224726c656e677468223a20302c0d0a20202020222472636f6e74656e74223a205b0d0a202020205d0d0a7d
-  BoxOrientation: 0
   DeleteDelay: 0
   CollideFX: None
   CollideFXScale: 1
@@ -754,12 +752,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1a9e333b6030b942b2ccd12b8a97a46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NormalMeshes:
-  - {fileID: -3262789968867269347, guid: 0942a3c814f092245b049064e17bea6d, type: 3}
-  - {fileID: -122999701322966394, guid: ec6117731afe3074b918d3cd2959114c, type: 3}
-  RoundedMeshes:
-  - {fileID: 5140355703917594671, guid: 4263c5d030a802a47a297e12676b57d4, type: 3}
-  - {fileID: -748824004433809106, guid: ffeec7de2b5d6c544b6afd83a6aa85c6, type: 3}
+  NormalMesh: {fileID: -3262789968867269347, guid: 0942a3c814f092245b049064e17bea6d,
+    type: 3}
+  RoundedMesh: {fileID: 5140355703917594671, guid: 4263c5d030a802a47a297e12676b57d4,
+    type: 3}
   MeshRenderer: {fileID: 7431117640458942461}
   MeshFilter: {fileID: 2562812541327348014}
   BoxModelType: 0
@@ -2035,7 +2031,6 @@ MonoBehaviour:
   NormalColliders: {fileID: 1457002968943346948}
   StaticColliders: {fileID: 2756207673049062598}
   StaticBoxCollider: {fileID: 4637758571029591130}
-  StaticWedgeCollider: {fileID: 7360559074616684378}
   DynamicCollider: {fileID: 5535159536523264937}
   BoxOnlyDynamicCollider: {fileID: 2692742187614778156}
 --- !u!1 &8741064018221597463

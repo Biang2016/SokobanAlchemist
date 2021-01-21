@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ public class BoxNameWithProbability : Probability, IClone<BoxNameWithProbability
     [BoxNameList]
     [ValueDropdown("GetAllBoxTypeNames", DropdownTitle = "选择箱子类型")]
     public string BoxTypeName;
+
+    public GridPosR.Orientation BoxOrientation;
 
     #region Utils
 
@@ -40,6 +43,7 @@ public class BoxNameWithProbability : Probability, IClone<BoxNameWithProbability
     {
         BoxNameWithProbability newData = new BoxNameWithProbability();
         newData.BoxTypeName = BoxTypeName;
+        newData.BoxOrientation = BoxOrientation;
         newData.probability = probability;
         newData.isSingleton = isSingleton;
         return newData;

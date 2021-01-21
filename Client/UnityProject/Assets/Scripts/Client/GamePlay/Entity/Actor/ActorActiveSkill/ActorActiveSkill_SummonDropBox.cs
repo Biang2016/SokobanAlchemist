@@ -28,7 +28,7 @@ public class ActorActiveSkill_SummonDropBox : ActorActiveSkill_AreaCast
                 ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(randomResult.BoxTypeName);
                 if (boxTypeIndex != 0)
                 {
-                    if (WorldManager.Instance.CurrentWorld.DropBoxOnTopLayer(boxTypeIndex, GridPos3D.Down, gp + GridPos3D.Up * DropFromHeightFromFloor, DropFromHeightFromFloor + 3, out Box dropBox))
+                    if (WorldManager.Instance.CurrentWorld.DropBoxOnTopLayer(boxTypeIndex, randomResult.BoxOrientation, GridPos3D.Down, gp + GridPos3D.Up * DropFromHeightFromFloor, DropFromHeightFromFloor + 3, out Box dropBox))
                     {
                         dropBox.LastTouchActor = Actor;
                     }

@@ -1,5 +1,4 @@
 ﻿using BiangLibrary.GameDataFormat.Grid;
-using BiangLibrary.ObjectPool;
 using UnityEngine;
 
 public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
@@ -12,9 +11,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
 
     [SerializeField]
     private Collider StaticBoxCollider;
-
-    [SerializeField]
-    private Collider StaticWedgeCollider;
 
     [SerializeField]
     private Collider DynamicCollider;
@@ -32,41 +28,11 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     public void OnBoxPoolRecycled()
     {
         StaticBoxCollider.enabled = false;
-        StaticWedgeCollider.enabled = false;
         DynamicCollider.enabled = false;
         BoxOnlyDynamicCollider.enabled = false;
         NormalColliders.SetActive(false);
         StaticColliders.SetActive(false);
         BoxOnlyDynamicCollider.gameObject.SetActive(false);
-    }
-
-    public void SwitchBoxShapeType()
-    {
-        switch (Box.BoxShapeType)
-        {
-            case BoxShapeType.Box:
-            {
-                StaticBoxCollider.gameObject.SetActive(true);
-                StaticWedgeCollider.gameObject.SetActive(false);
-                break;
-            }
-            case BoxShapeType.Wedge:
-            {
-                StaticBoxCollider.gameObject.SetActive(false);
-                StaticWedgeCollider.gameObject.SetActive(true);
-                break;
-            }
-        }
-    }
-
-    public void SwitchBoxOrientation()
-    {
-        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, Box.BoxOrientation), StaticColliders.transform, 1);
-    }
-
-    public void ResetBoxOrientation()
-    {
-        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, GridPosR.Orientation.Up), StaticColliders.transform, 1);
     }
 
     public void Initialize(bool passable, bool artOnly, bool isGround, bool drop, bool lerp)
@@ -81,20 +47,16 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
             DynamicCollider.enabled = false;
             BoxOnlyDynamicCollider.enabled = true;
             StaticBoxCollider.enabled = !drop;
-            StaticWedgeCollider.enabled = !drop;
         }
         else
         {
             DynamicCollider.enabled = false;
             BoxOnlyDynamicCollider.enabled = true;
             StaticBoxCollider.enabled = true;
-            StaticWedgeCollider.enabled = true;
         }
 
         StaticBoxCollider.material.staticFriction = 0;
         StaticBoxCollider.material.dynamicFriction = 0;
-        StaticWedgeCollider.material.staticFriction = 0;
-        StaticWedgeCollider.material.dynamicFriction = 0;
         DynamicCollider.material.staticFriction = 0;
         DynamicCollider.material.dynamicFriction = 0;
     }
@@ -102,7 +64,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     public void OnDropComplete()
     {
         StaticBoxCollider.enabled = true;
-        StaticWedgeCollider.enabled = true;
         DynamicCollider.enabled = false;
         BoxOnlyDynamicCollider.enabled = true;
     }
@@ -110,7 +71,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     public void OnPush()
     {
         StaticBoxCollider.enabled = true;
-        StaticWedgeCollider.enabled = false;
         DynamicCollider.enabled = true;
         BoxOnlyDynamicCollider.enabled = true;
         DynamicCollider.material.dynamicFriction = 0f;
@@ -119,7 +79,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     public void OnPushEnd()
     {
         StaticBoxCollider.enabled = true;
-        StaticWedgeCollider.enabled = true;
         DynamicCollider.enabled = false;
         BoxOnlyDynamicCollider.enabled = true;
         DynamicCollider.material.dynamicFriction = 0f;
@@ -128,7 +87,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     public void OnKick()
     {
         StaticBoxCollider.enabled = false;
-        StaticWedgeCollider.enabled = false;
         DynamicCollider.enabled = true;
         BoxOnlyDynamicCollider.enabled = true;
         DynamicCollider.material.dynamicFriction = 0f;
@@ -137,7 +95,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     public void OnBeingLift()
     {
         StaticBoxCollider.enabled = true;
-        StaticWedgeCollider.enabled = true;
         DynamicCollider.enabled = false;
         BoxOnlyDynamicCollider.enabled = true;
     }
@@ -145,7 +102,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     public void OnThrow()
     {
         StaticBoxCollider.enabled = false;
-        StaticWedgeCollider.enabled = false;
         DynamicCollider.enabled = true;
         BoxOnlyDynamicCollider.enabled = true;
         DynamicCollider.material.dynamicFriction = Box.Throw_Friction;
@@ -154,7 +110,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     public void OnPut()
     {
         StaticBoxCollider.enabled = false;
-        StaticWedgeCollider.enabled = false;
         DynamicCollider.enabled = true;
         BoxOnlyDynamicCollider.enabled = true;
         DynamicCollider.material.dynamicFriction = Box.Throw_Friction;
@@ -163,7 +118,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     public void OnDropFromDeadActor()
     {
         StaticBoxCollider.enabled = false;
-        StaticWedgeCollider.enabled = false;
         DynamicCollider.enabled = true;
         BoxOnlyDynamicCollider.enabled = true;
     }
@@ -171,7 +125,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     public void OnDropFromAir()
     {
         StaticBoxCollider.enabled = false;
-        StaticWedgeCollider.enabled = false;
         DynamicCollider.enabled = true;
         BoxOnlyDynamicCollider.enabled = true;
     }
@@ -179,7 +132,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     public void OnRigidbodyStop()
     {
         StaticBoxCollider.enabled = true;
-        StaticWedgeCollider.enabled = true;
         DynamicCollider.enabled = false;
         BoxOnlyDynamicCollider.enabled = false;
     }

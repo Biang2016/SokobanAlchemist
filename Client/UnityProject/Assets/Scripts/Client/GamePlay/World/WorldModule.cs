@@ -150,7 +150,7 @@ public class WorldModule : PoolObject
             bf.GenerateBoxAction = () =>
             {
                 BoxMatrix[localGP.x, localGP.y, localGP.z]?.DestroyBox(); // 强行删除该格占用Box
-                Box box = GenerateBox(dataClone.BoxTypeIndex, localGP, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
+                Box box = GenerateBox(dataClone.BoxTypeIndex, localGP, data.BoxOrientation, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
                 box.name = box.name + "_Generated";
 
                 // Box生成后此BoxPassiveSkill及注册的事件均作废
@@ -168,11 +168,12 @@ public class WorldModule : PoolObject
                 for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
                 {
                     ushort boxTypeIndex = worldModuleData.BoxMatrix[x, y, z];
+                    GridPosR.Orientation boxOrientation = worldModuleData.BoxOrientationMatrix[x, y, z];
                     if (boxTypeIndex != 0)
                     {
                         Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[x, y, z];
                         Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = worldExtraSerializeDataForOneModule[x, y, z];
-                        GenerateBox(boxTypeIndex, x, y, z, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
+                        GenerateBox(boxTypeIndex, x, y, z, boxOrientation, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
                     }
                 }
             }
@@ -219,12 +220,12 @@ public class WorldModule : PoolObject
         WorldModuleLevelTriggers.Add(trigger);
     }
 
-    public Box GenerateBox(ushort boxTypeIndex, GridPos3D localGP, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    public Box GenerateBox(ushort boxTypeIndex, GridPos3D localGP, GridPosR.Orientation orientation, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
-        return GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
+        return GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z, orientation, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
     }
 
-    public Box GenerateBox(ushort boxTypeIndex, int x, int y, int z, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    public Box GenerateBox(ushort boxTypeIndex, int x, int y, int z, GridPosR.Orientation orientation, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
         if (boxExtraSerializeDataFromWorld != null)
         {
@@ -245,12 +246,13 @@ public class WorldModule : PoolObject
         else
         {
             List<GridPos3D> boxOccupation = ConfigManager.GetBoxOccupationData(boxTypeIndex);
-            foreach (GridPos3D offset in boxOccupation)
+            List<GridPos3D> boxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(orientation, boxOccupation);
+            foreach (GridPos3D gridPos3D in boxOccupation_rotated)
             {
-                GridPos3D gridGP = offset + new GridPos3D(x, y, z);
-                if (BoxMatrix[gridGP.x, gridGP.y, gridGP.z] != null)
+                GridPos3D gridPos = gridPos3D + new GridPos3D(x, y, z);
+                if (BoxMatrix[gridPos.x, gridPos.y, gridPos.z] != null)
                 {
-                    //Debug.LogError($"世界模组{name}的局部坐标({gridGP})位置处已存在Box,请检查世界Box是否重叠放置于该模组已有的Box位置处");
+                    //Debug.LogError($"世界模组{name}的局部坐标({gridPos})位置处已存在Box,请检查世界Box是否重叠放置于该模组已有的Box位置处");
                     return null;
                 }
             }
@@ -259,13 +261,14 @@ public class WorldModule : PoolObject
             string boxName = ConfigManager.GetBoxTypeName(boxTypeIndex);
             GridPos3D gp = new GridPos3D(x, y, z);
             box.ApplyBoxExtraSerializeData(boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
-            box.Setup(boxTypeIndex);
+            box.Setup(boxTypeIndex, orientation);
             box.Initialize(gp, this, 0, !IsAccessible, Box.LerpType.Create);
             box.name = $"{boxName}_{gp}";
-            foreach (GridPos3D offset in boxOccupation)
+
+            foreach (GridPos3D gridPos3D in boxOccupation_rotated)
             {
-                GridPos3D gridGP = offset + new GridPos3D(x, y, z);
-                BoxMatrix[gridGP.x, gridGP.y, gridGP.z] = box;
+                GridPos3D gridPos = gridPos3D + new GridPos3D(x, y, z);
+                BoxMatrix[gridPos.x, gridPos.y, gridPos.z] = box;
             }
 
             return box;

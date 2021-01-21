@@ -119,6 +119,7 @@ public class WorldDesignHelper : MonoBehaviour
             Box_LevelEditor.WorldSpecialBoxData worldSpecialBoxData = worldBox.GetBoxSerializeInWorldData();
             worldSpecialBoxData.WorldGP = gp;
             worldSpecialBoxData.BoxTypeIndex = boxTypeIndex;
+            worldSpecialBoxData.BoxOrientation = worldBox.BoxOrientation;
 
             // 关卡事件触发出现的Box序列化到单独的地方
             bool isLevelEventTriggerAppearBox = false;
@@ -130,6 +131,7 @@ public class WorldDesignHelper : MonoBehaviour
                     data.WorldGP = gp;
                     data.LevelComponentBelongsTo = LevelComponentBelongsTo.World;
                     data.BoxTypeIndex = boxTypeIndex;
+                    data.BoxOrientation = worldBox.BoxOrientation;
                     data.BoxPassiveSkill_LevelEventTriggerAppear = (BoxPassiveSkill_LevelEventTriggerAppear) bf_leta.Clone();
                     data.WorldSpecialBoxData = worldSpecialBoxData; // 世界维度LevelEventTriggerAppear的箱子自己处理自己的ExtraSerializeData
                     worldData.WorldSpecialBoxEventTriggerAppearBoxDataList.Add(data); // 序列到这里

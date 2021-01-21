@@ -876,7 +876,7 @@ public class Actor : Entity
                 // 如果角色面朝方向Box的厚度大于一格，则无法swap
                 GridPos3D boxIndicatorGP_behind = boxIndicatorGP + (boxIndicatorGP - CurWorldGP);
                 GridPos3D offset_behind = boxIndicatorGP_behind - box.WorldGP;
-                foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+                foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
                 {
                     if (offset == offset_behind) return;
                 }

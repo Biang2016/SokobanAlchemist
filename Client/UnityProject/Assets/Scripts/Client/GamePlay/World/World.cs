@@ -249,7 +249,7 @@ public class World : PoolObject
                 box?.DestroyBox(); // 强行删除该格占用Box
                 if (module)
                 {
-                    module.GenerateBox(dataClone.BoxTypeIndex, localGP.x, localGP.y, localGP.z, null, dataClone.WorldSpecialBoxData.BoxExtraSerializeDataFromWorld);
+                    module.GenerateBox(dataClone.BoxTypeIndex, localGP.x, localGP.y, localGP.z, GridPosR.Orientation.Up, null, dataClone.WorldSpecialBoxData.BoxExtraSerializeDataFromWorld);
 
                     // Box生成后此BoxPassiveSkill及注册的事件均作废
                     bf.ClearAndUnRegister();
@@ -266,7 +266,7 @@ public class World : PoolObject
             WorldModule module = GetModuleByGridPosition(worldGP);
             if (module != null)
             {
-                module.GenerateBox(worldSpecialBoxData.BoxTypeIndex, module.WorldGPToLocalGP(worldGP), null, worldSpecialBoxData.BoxExtraSerializeDataFromWorld);
+                module.GenerateBox(worldSpecialBoxData.BoxTypeIndex, module.WorldGPToLocalGP(worldGP), worldSpecialBoxData.BoxOrientation, null, worldSpecialBoxData.BoxExtraSerializeDataFromWorld);
             }
         }
 
@@ -507,7 +507,7 @@ public class World : PoolObject
 
     #endregion
 
-    public bool DropBoxOnTopLayer(ushort boxTypeIndex, GridPos3D dir, GridPos3D origin, int maxDistance, out Box dropBox)
+    public bool DropBoxOnTopLayer(ushort boxTypeIndex, GridPosR.Orientation boxOrientation, GridPos3D dir, GridPos3D origin, int maxDistance, out Box dropBox)
     {
         dropBox = null;
         if (boxTypeIndex == 0) return false;
@@ -520,7 +520,7 @@ public class World : PoolObject
                 string boxName = ConfigManager.GetBoxTypeName(boxTypeIndex);
                 GridPos3D gp = origin;
                 GridPos3D localGP = module.WorldGPToLocalGP(gp);
-                dropBox.Setup(boxTypeIndex);
+                dropBox.Setup(boxTypeIndex, boxOrientation);
                 dropBox.Initialize(localGP, module, 0, false, Box.LerpType.DropFromAir);
                 dropBox.name = $"{boxName}_{gp}";
                 dropBox.DropFromAir();
@@ -560,7 +560,7 @@ public class World : PoolObject
     {
         Box box_src = GetBoxByGridPosition(srcGP, out WorldModule module_src, out GridPos3D localGP_src);
         if (box_src == null) return true;
-        foreach (GridPos3D offset in box_src.GetBoxOccupationGPs())
+        foreach (GridPos3D offset in box_src.GetBoxOccupationGPs_Rotated())
         {
             GridPos3D gridGP = offset + box_src.WorldGP;
             GridPos3D gridGP_after = gridGP + direction;
@@ -578,7 +578,7 @@ public class World : PoolObject
         boxes_moveable.Add(box_src);
 
         List<Box> aboveNearestBoxList = new List<Box>();
-        foreach (GridPos3D offset in box_src.GetBoxOccupationGPs())
+        foreach (GridPos3D offset in box_src.GetBoxOccupationGPs_Rotated())
         {
             GridPos3D gridGP = offset + box_src.WorldGP;
 
@@ -633,7 +633,7 @@ public class World : PoolObject
 
         foreach (Box box_moveable in boxes_moveable)
         {
-            foreach (GridPos3D offset in box_moveable.GetBoxOccupationGPs())
+            foreach (GridPos3D offset in box_moveable.GetBoxOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP;
                 GridPos3D gridWorldGP_after = gridWorldGP_before + direction;
@@ -657,7 +657,7 @@ public class World : PoolObject
     {
         if (box.WorldModule)
         {
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP = offset + box.WorldGP;
                 if (GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP) == box)
@@ -705,7 +705,7 @@ public class World : PoolObject
 
         bool tryPutBox(GridPos3D worldGP)
         {
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP = offset + worldGP;
                 Box existBox = GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP);
@@ -722,7 +722,7 @@ public class World : PoolObject
                 }
             }
 
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP = offset + worldGP;
                 GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP);
@@ -766,7 +766,7 @@ public class World : PoolObject
         {
             bool spaceAvailable = true; // logically nothing beneath
             bool spaceTempAvailable = true; // there is not any entity moving/kicking beneath
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP = offset + box.WorldGP;
                 GridPos3D beneathBoxGridWorldGP = gridWorldGP + GridPos3D.Down;
@@ -779,7 +779,7 @@ public class World : PoolObject
                 }
             }
 
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
             {
                 Vector3 gridWorldPos = offset + box.WorldGP;
                 Collider[] colliders = Physics.OverlapBox(gridWorldPos + Vector3.down * 0.5f, Vector3.one * 0.4f, Quaternion.identity, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
@@ -807,7 +807,7 @@ public class World : PoolObject
                 }
                 else
                 {
-                    foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+                    foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
                     {
                         GridPos3D gridWorldGP = offset + box.WorldGP;
                         GridPos3D beneathBoxGridWorldGP = gridWorldGP + GridPos3D.Down;
@@ -829,7 +829,7 @@ public class World : PoolObject
     public void CheckDropAbove(Box box)
     {
         HashSet<Box> boxSet = new HashSet<Box>(); // 避免上方的箱子也是Mega箱子，从而导致验算两遍
-        foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+        foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
         {
             GridPos3D gridWorldGP = offset + box.WorldGP + GridPos3D.Up;
             Box boxAbove = GetBoxByGridPosition(gridWorldGP, out WorldModule _, out GridPos3D _);

@@ -16,7 +16,7 @@ public class BoxPassiveSkillAction_PlayFX : BoxPassiveSkillAction, BoxPassiveSki
 
     public void Execute()
     {
-        foreach (GridPos3D offset in Box.GetBoxOccupationGPs())
+        foreach (GridPos3D offset in Box.GetBoxOccupationGPs_Rotated())
         {
             Vector3 boxIndicatorPos = Box.transform.position + offset;
             FXManager.Instance.PlayFX(FXTypeName, boxIndicatorPos, FXScale);
