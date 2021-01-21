@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 [AttributeUsage(AttributeTargets.Method)]
 public class DebugControllerAttribute : Attribute
@@ -13,9 +14,10 @@ public class DebugControllerAttribute : Attribute
 
 public class DebugButtonAttribute : DebugControllerAttribute
 {
-    public DebugButtonAttribute(string buttonName, int priority = 0) : base(priority)
+    public DebugButtonAttribute(string buttonName, KeyCode shortcut = KeyCode.None, int priority = 0) : base(priority)
     {
         ButtonName = buttonName;
+        Shortcut = shortcut;
     }
 
     public DebugButtonAttribute(string buttonName, string methodName, int priority = 0) : base(priority)
@@ -25,6 +27,7 @@ public class DebugButtonAttribute : DebugControllerAttribute
     }
 
     public string ButtonName { get; }
+    public KeyCode Shortcut { get; }
     public string MethodName { get; }
 }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -17,16 +18,17 @@ public class BoxPassiveSkillAction_RadiusAddBoxesBuff : BoxPassiveSkillAction, B
 
     public void Execute()
     {
-        Collider[] colliders = Physics.OverlapSphere(Box.transform.position, AddBuffRadius, LayerManager.Instance.LayerMask_BoxIndicator);
-        List<Box> boxList = new List<Box>();
-        foreach (Collider collider in colliders)
+        HashSet<uint> boxList = new HashSet<uint>();
+        foreach (GridPos3D offset in Box.GetBoxOccupationGPs())
         {
-            Box targetBox = collider.gameObject.GetComponentInParent<Box>();
-            if (targetBox != null)
+            Vector3 boxIndicatorPos = Box.transform.position + offset;
+            Collider[] colliders = Physics.OverlapSphere(boxIndicatorPos, AddBuffRadius, LayerManager.Instance.LayerMask_BoxIndicator);
+            foreach (Collider collider in colliders)
             {
-                if (!boxList.Contains(targetBox))
+                Box targetBox = collider.gameObject.GetComponentInParent<Box>();
+                if (targetBox != null && !boxList.Contains(targetBox.GUID))
                 {
-                    boxList.Add(targetBox);
+                    boxList.Add(targetBox.GUID);
                     if (!targetBox.BoxBuffHelper.AddBuff(BoxBuff.Clone()))
                     {
                         Debug.Log($"Failed to AddBuff: {BoxBuff.GetType().Name} to {targetBox.name}");
@@ -39,7 +41,7 @@ public class BoxPassiveSkillAction_RadiusAddBoxesBuff : BoxPassiveSkillAction, B
     protected override void ChildClone(BoxPassiveSkillAction newAction)
     {
         base.ChildClone(newAction);
-        BoxPassiveSkillAction_RadiusAddBoxesBuff action = ((BoxPassiveSkillAction_RadiusAddBoxesBuff)newAction);
+        BoxPassiveSkillAction_RadiusAddBoxesBuff action = ((BoxPassiveSkillAction_RadiusAddBoxesBuff) newAction);
         action.BoxBuff = (BoxBuff) BoxBuff.Clone();
         action.AddBuffRadius = AddBuffRadius;
     }
@@ -48,7 +50,7 @@ public class BoxPassiveSkillAction_RadiusAddBoxesBuff : BoxPassiveSkillAction, B
     {
         base.CopyDataFrom(srcData);
         BoxPassiveSkillAction_RadiusAddBoxesBuff action = ((BoxPassiveSkillAction_RadiusAddBoxesBuff) srcData);
-        BoxBuff = (BoxBuff)action.BoxBuff.Clone();
+        BoxBuff = (BoxBuff) action.BoxBuff.Clone();
         AddBuffRadius = action.AddBuffRadius;
     }
 }

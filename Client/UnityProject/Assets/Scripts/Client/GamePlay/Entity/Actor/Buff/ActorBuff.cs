@@ -51,6 +51,7 @@ public class ActorBuff_ActorPropertyMultiplyModifier : ActorBuff
     {
         base.OnAdded(entity);
         Actor actor = (Actor) entity;
+        if (actor.IsRecycled) return;
         if (actor.ActorStatPropSet.PropertyDict.TryGetValue(PropertyType, out ActorProperty property))
         {
             property.AddModifier(MultiplyModifier);
@@ -61,6 +62,7 @@ public class ActorBuff_ActorPropertyMultiplyModifier : ActorBuff
     {
         base.OnFixedUpdate(entity, passedTime, remainTime);
         Actor actor = (Actor) entity;
+        if (actor.IsRecycled) return;
         if (!IsPermanent && LinearDecayInDuration)
         {
             MultiplyModifier.Percent = Mathf.RoundToInt(Percent * remainTime / Duration);
@@ -71,6 +73,7 @@ public class ActorBuff_ActorPropertyMultiplyModifier : ActorBuff
     {
         base.OnRemoved(entity);
         Actor actor = (Actor) entity;
+        if (actor.IsRecycled) return;
         if (actor.ActorStatPropSet.PropertyDict.TryGetValue(PropertyType, out ActorProperty property))
         {
             if (!property.RemoveModifier(MultiplyModifier))
@@ -130,6 +133,7 @@ public class ActorBuff_ActorPropertyPlusModifier : ActorBuff
     {
         base.OnAdded(entity);
         Actor actor = (Actor) entity;
+        if (actor.IsRecycled) return;
         if (actor.ActorStatPropSet.PropertyDict.TryGetValue(PropertyType, out ActorProperty property))
         {
             property.AddModifier(PlusModifier);
@@ -140,6 +144,7 @@ public class ActorBuff_ActorPropertyPlusModifier : ActorBuff
     {
         base.OnFixedUpdate(entity, passedTime, remainTime);
         Actor actor = (Actor) entity;
+        if (actor.IsRecycled) return;
         if (!IsPermanent && LinearDecayInDuration)
         {
             PlusModifier.Delta = Mathf.RoundToInt(Delta * remainTime / Duration);
@@ -150,6 +155,7 @@ public class ActorBuff_ActorPropertyPlusModifier : ActorBuff
     {
         base.OnRemoved(entity);
         Actor actor = (Actor) entity;
+        if (actor.IsRecycled) return;
         if (actor.ActorStatPropSet.PropertyDict.TryGetValue(PropertyType, out ActorProperty property))
         {
             if (!property.RemoveModifier(PlusModifier))
@@ -195,6 +201,7 @@ public class ActorBuff_InstantDamage : ActorBuff
     {
         base.OnAdded(entity);
         Actor actor = (Actor) entity;
+        if (actor.IsRecycled) return;
         actor.ActorBattleHelper.Damage(actor, Damage); // 此处施加对象是自己，暂时有点奇怪
     }
 
@@ -229,6 +236,7 @@ public class ActorBuff_InstantHeal : ActorBuff
     {
         base.OnAdded(entity);
         Actor actor = (Actor) entity;
+        if (actor.IsRecycled) return;
         actor.ActorBattleHelper.Heal(actor, Health); // 此处施加对象是自己，暂时有点奇怪
     }
 
@@ -280,6 +288,7 @@ public class ActorBuff_ChangeActorStatInstantly : ActorBuff
     {
         base.OnAdded(entity);
         Actor actor = (Actor) entity;
+        if (actor.IsRecycled) return;
         float valueBefore = actor.ActorStatPropSet.StatDict[StatType].Value;
         valueBefore += Delta;
         valueBefore *= (100 + Percent) / 100f;

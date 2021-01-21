@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using BiangLibrary.ObjectPool;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -17,12 +16,12 @@ public class DebugPanelButton : DebugPanelComponent
         base.OnRecycled();
     }
 
-    public void Initialize(string buttonName, UnityAction action)
+    public void Initialize(string buttonName, KeyCode shortcut, UnityAction action)
     {
         name = "btn_" + buttonName;
         IsOpen = false;
         Button.image.color = CloseColor;
-        Text.text = buttonName;
+        Text.text = buttonName + (shortcut != KeyCode.None ? $"[{shortcut}]" : "");
         Button.onClick.RemoveAllListeners();
         if (action != null) Button.onClick.AddListener(action);
     }

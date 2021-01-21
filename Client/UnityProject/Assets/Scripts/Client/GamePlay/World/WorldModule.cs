@@ -6,6 +6,7 @@ using FlowCanvas;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
+
 #endif
 
 public class WorldModule : PoolObject
@@ -243,6 +244,17 @@ public class WorldModule : PoolObject
         }
         else
         {
+            List<GridPos3D> boxOccupation = ConfigManager.GetBoxOccupationData(boxTypeIndex);
+            foreach (GridPos3D offset in boxOccupation)
+            {
+                GridPos3D gridGP = offset + new GridPos3D(x, y, z);
+                if (BoxMatrix[gridGP.x, gridGP.y, gridGP.z] != null)
+                {
+                    //Debug.LogError($"世界模组{name}的局部坐标({gridGP})位置处已存在Box,请检查世界Box是否重叠放置于该模组已有的Box位置处");
+                    return null;
+                }
+            }
+
             Box box = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(WorldModuleBoxRoot);
             string boxName = ConfigManager.GetBoxTypeName(boxTypeIndex);
             GridPos3D gp = new GridPos3D(x, y, z);
@@ -250,7 +262,12 @@ public class WorldModule : PoolObject
             box.Setup(boxTypeIndex);
             box.Initialize(gp, this, 0, !IsAccessible, Box.LerpType.Create);
             box.name = $"{boxName}_{gp}";
-            BoxMatrix[x, y, z] = box;
+            foreach (GridPos3D offset in boxOccupation)
+            {
+                GridPos3D gridGP = offset + new GridPos3D(x, y, z);
+                BoxMatrix[gridGP.x, gridGP.y, gridGP.z] = box;
+            }
+
             return box;
         }
     }

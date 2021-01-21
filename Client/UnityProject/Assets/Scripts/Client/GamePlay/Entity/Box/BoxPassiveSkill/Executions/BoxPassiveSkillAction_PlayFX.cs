@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -15,9 +16,12 @@ public class BoxPassiveSkillAction_PlayFX : BoxPassiveSkillAction, BoxPassiveSki
 
     public void Execute()
     {
-        FXManager.Instance.PlayFX(FXTypeName, Box.transform.position, FXScale);
+        foreach (GridPos3D offset in Box.GetBoxOccupationGPs())
+        {
+            Vector3 boxIndicatorPos = Box.transform.position + offset;
+            FXManager.Instance.PlayFX(FXTypeName, boxIndicatorPos, FXScale);
+        }
     }
-
 
     protected override void ChildClone(BoxPassiveSkillAction newAction)
     {

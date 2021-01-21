@@ -17,6 +17,8 @@ public class DebugPanel : BaseUIPanel
     private List<DebugPanelColumn> DebugButtonColumns = new List<DebugPanelColumn>();
     public Transform ColumnContainer;
 
+    public UnityAction OnShortcutKeyDown = null;
+
     void Awake()
     {
         UIType.InitUIType(
@@ -55,7 +57,18 @@ public class DebugPanel : BaseUIPanel
                 {
                     if (string.IsNullOrEmpty(dba.MethodName))
                     {
-                        AddButton(dba.ButtonName, 0, DebugComponentDictTree, () => { m.Invoke(this, new object[] { }); }, true);
+                        UnityAction action = () => { m.Invoke(this, new object[] { }); };
+                        AddButton(dba.ButtonName, dba.Shortcut, 0, DebugComponentDictTree, action, true);
+                        if (dba.Shortcut != KeyCode.None)
+                        {
+                            OnShortcutKeyDown += () =>
+                            {
+                                if (Input.GetKeyDown(dba.Shortcut))
+                                {
+                                    action?.Invoke();
+                                }
+                            };
+                        }
                     }
                     else
                     {
@@ -71,7 +84,7 @@ public class DebugPanel : BaseUIPanel
                                     foreach (string s in strList)
                                     {
                                         string buttonName = string.Format(dba.ButtonName, s);
-                                        AddButton(buttonName, 0, DebugComponentDictTree, () => { m.Invoke(this, new object[] {s}); }, true);
+                                        AddButton(buttonName, KeyCode.None, 0, DebugComponentDictTree, () => { m.Invoke(this, new object[] {s}); }, true);
                                     }
                                 }
                                 catch (Exception e)
@@ -92,7 +105,7 @@ public class DebugPanel : BaseUIPanel
                 }
                 case DebugToggleButtonAttribute dtba:
                 {
-                    AddButton(dtba.ButtonName, 0, DebugComponentDictTree, () => { m.Invoke(this, new object[] { }); }, true);
+                    AddButton(dtba.ButtonName, KeyCode.None, 0, DebugComponentDictTree, () => { m.Invoke(this, new object[] { }); }, true);
                     break;
                 }
                 case DebugSliderAttribute dsa:
@@ -120,6 +133,8 @@ public class DebugPanel : BaseUIPanel
             fpsText.text = fps.ToString("###");
             DebugToggleButton.image.color = FrameRateGradient.Evaluate(fps / 144f);
         }
+
+        OnShortcutKeyDown?.Invoke();
     }
 
     private bool isButtonsShow = false;
@@ -139,7 +154,7 @@ public class DebugPanel : BaseUIPanel
         IsButtonsShow = !IsButtonsShow;
     }
 
-    private void AddButton(string buttonName, int layerDepth, Dictionary<string, DebugPanelComponent> currentTree, UnityAction action, bool functional)
+    private void AddButton(string buttonName, KeyCode shortcut, int layerDepth, Dictionary<string, DebugPanelComponent> currentTree, UnityAction action, bool functional)
     {
         if (layerDepth >= DebugButtonColumns.Count)
         {
@@ -153,9 +168,11 @@ public class DebugPanel : BaseUIPanel
         if (!currentTree.ContainsKey(paths[0]))
         {
             DebugPanelButton btn = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.DebugPanelButton].AllocateGameObject<DebugPanelButton>(currentColumn.transform);
-            btn.Initialize(paths[0], (paths.Length == 1 && functional)
-                ? action
-                : ToggleSubColumn(btn, currentTree));
+            bool isLeave = paths.Length == 1 && functional;
+            btn.Initialize(
+                paths[0],
+                isLeave ? shortcut : KeyCode.None,
+                isLeave ? action : ToggleSubColumn(btn, currentTree));
             btn.gameObject.SetActive(layerDepth == 0);
             currentTree.Add(paths[0], btn);
         }
@@ -163,7 +180,7 @@ public class DebugPanel : BaseUIPanel
         if (paths.Length > 1)
         {
             string remainingPath = buttonName.Replace(paths[0] + "/", "");
-            AddButton(remainingPath, layerDepth + 1, currentTree[paths[0]].DebugComponentDictTree, action, functional);
+            AddButton(remainingPath, shortcut, layerDepth + 1, currentTree[paths[0]].DebugComponentDictTree, action, functional);
         }
     }
 
@@ -217,7 +234,7 @@ public class DebugPanel : BaseUIPanel
             else
             {
                 string buttonPath = sliderName.Replace("/" + paths[paths.Length - 1], "");
-                AddButton(buttonPath, layerDepth, currentTree, null, false);
+                AddButton(buttonPath, KeyCode.None, layerDepth, currentTree, null, false);
                 AddSlider(sliderName, layerDepth, defaultValue, min, max, currentTree, action);
                 return;
             }
@@ -266,21 +283,21 @@ public class DebugPanel : BaseUIPanel
         BattleManager.Instance.Player1.ActorStatPropSet.Health.Value += 10;
     }
 
-    [DebugButton("Player/AddHealth*100")]
+    [DebugButton("Player/AddHealth*100", KeyCode.H)]
     public void AddHealth100()
     {
-        BattleManager.Instance.Player1.ActorStatPropSet.MaxHealth.AddModifier(new Property.PlusModifier {Delta = 100 });
+        BattleManager.Instance.Player1.ActorStatPropSet.MaxHealth.AddModifier(new Property.PlusModifier {Delta = 100});
         BattleManager.Instance.Player1.ActorStatPropSet.Health.Value += 100;
     }
 
-    [DebugButton("Player/AddMaxAction*50")]
+    [DebugButton("Player/AddMaxAction*50", KeyCode.J)]
     public void AddMaxAction50()
     {
         BattleManager.Instance.Player1.ActorStatPropSet.MaxActionPoint.AddModifier(new Property.PlusModifier {Delta = 50});
         BattleManager.Instance.Player1.ActorStatPropSet.ActionPoint.Value += 50;
     }
 
-    [DebugButton("Player/AddActionRecovery*10")]
+    [DebugButton("Player/AddActionRecovery*10", KeyCode.L)]
     public void AddActionRecovery10()
     {
         BattleManager.Instance.Player1.ActorStatPropSet.ActionPointRecovery.AddModifier(new Property.PlusModifier {Delta = 10});
@@ -305,6 +322,15 @@ public class DebugPanel : BaseUIPanel
         foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
         {
             enemy.ActorAIAgent.SetNavTrackMarkersShown(ConfigManager.ShowEnemyPathFinding);
+        }
+    }
+
+    [DebugButton("Enemy/KillAllEnemy", KeyCode.K)]
+    public void KillAllEnemy()
+    {
+        foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
+        {
+            enemy.ActorBattleHelper.Damage(enemy, 99999);
         }
     }
 

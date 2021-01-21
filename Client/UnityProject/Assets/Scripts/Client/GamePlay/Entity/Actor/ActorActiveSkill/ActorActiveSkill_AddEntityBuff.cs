@@ -50,7 +50,7 @@ public class ActorActiveSkill_AddEntityBuff : ActorActiveSkill_AreaCast, ISerial
         bool needBreak = false;
         foreach (GridPos3D gp in RealSkillEffectGPs)
         {
-            Collider[] colliders_player = Physics.OverlapSphere(gp.ToVector3(), 0.3f, LayerManager.Instance.GetTargetActorLayerMask(Actor.Camp, TargetCamp));
+            Collider[] colliders_player = Physics.OverlapSphere(gp, 0.3f, LayerManager.Instance.GetTargetActorLayerMask(Actor.Camp, TargetCamp));
             foreach (Collider c in colliders_player)
             {
                 Actor actor = c.GetComponentInParent<Actor>();
@@ -77,7 +77,7 @@ public class ActorActiveSkill_AddEntityBuff : ActorActiveSkill_AreaCast, ISerial
             }
 
             if (needBreak) break;
-            Collider[] colliders_box = Physics.OverlapSphere(gp.ToVector3(), 0.3f, LayerManager.Instance.LayerMask_BoxIndicator);
+            Collider[] colliders_box = Physics.OverlapSphere(gp, 0.3f, LayerManager.Instance.LayerMask_BoxIndicator);
             foreach (Collider c in colliders_box)
             {
                 Box box = c.GetComponentInParent<Box>();

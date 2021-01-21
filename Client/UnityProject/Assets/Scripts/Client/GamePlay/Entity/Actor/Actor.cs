@@ -8,9 +8,7 @@ using BiangLibrary.GamePlay.UI;
 using DG.Tweening;
 using NodeCanvas.Framework;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Actor : Entity
 {
@@ -616,7 +614,7 @@ public class Actor : Entity
 
     public void TransportPlayerGridPos(GridPos3D worldGP)
     {
-        transform.position = worldGP.ToVector3();
+        transform.position = worldGP;
         LastWorldGP = CurWorldGP;
         CurWorldGP = worldGP;
     }
@@ -871,14 +869,28 @@ public class Actor : Entity
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
+            Vector3 boxIndicatorPos = hit.collider.transform.position;
+            GridPos3D boxIndicatorGP = boxIndicatorPos.ToGridPos3D();
             if (box && box.Pushable && ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
+                // 如果角色面朝方向Box的厚度大于一格，则无法swap
+                GridPos3D boxIndicatorGP_behind = boxIndicatorGP + (boxIndicatorGP - CurWorldGP);
+                GridPos3D offset_behind = boxIndicatorGP_behind - box.WorldGP;
+                foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+                {
+                    if (offset == offset_behind) return;
+                }
+
                 box.ForceStopWhenSwapBox();
-                transform.position = box.WorldGP.ToVector3();
+                transform.position = boxIndicatorPos;
                 LastWorldGP = CurWorldGP;
                 CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
-                if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {box.name} SwapBox {box.WorldGP} -> {LastWorldGP}");
-                WorldManager.Instance.CurrentWorld.MoveBoxColumn(box.WorldGP, LastWorldGP, Box.States.BeingPushed, false, true, GUID);
+                GridPos3D boxWorldGP_before = box.WorldGP;
+                GridPos3D boxWorldGP_after = LastWorldGP - boxIndicatorGP + box.WorldGP;
+                if (WorldManager.Instance.CurrentWorld.MoveBoxColumn(box.WorldGP, (boxWorldGP_after - box.WorldGP).Normalized(), Box.States.BeingPushed, false, true, GUID))
+                {
+                    if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {box.name} SwapBox {boxWorldGP_before} -> {boxWorldGP_after}");
+                }
 
                 // todo kicking box的swap如何兼容
             }

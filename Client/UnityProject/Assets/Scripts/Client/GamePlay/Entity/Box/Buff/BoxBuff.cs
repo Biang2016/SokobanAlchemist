@@ -45,6 +45,7 @@ public class BoxBuff_BoxPropertyMultiplyModifier : BoxBuff
     {
         base.OnAdded(entity);
         Box box = (Box) entity;
+        if (box.IsRecycled) return;
         if (box.BoxStatPropSet.PropertyDict.TryGetValue(PropertyType, out BoxProperty property))
         {
             property.AddModifier(MultiplyModifier);
@@ -55,6 +56,7 @@ public class BoxBuff_BoxPropertyMultiplyModifier : BoxBuff
     {
         base.OnFixedUpdate(entity, passedTime, remainTime);
         Box box = (Box) entity;
+        if (box.IsRecycled) return;
         if (!IsPermanent && LinearDecayInDuration)
         {
             MultiplyModifier.Percent = Mathf.RoundToInt(Percent * remainTime / Duration);
@@ -65,6 +67,7 @@ public class BoxBuff_BoxPropertyMultiplyModifier : BoxBuff
     {
         base.OnRemoved(entity);
         Box box = (Box) entity;
+        if (box.IsRecycled) return;
         if (box.BoxStatPropSet.PropertyDict.TryGetValue(PropertyType, out BoxProperty property))
         {
             if (!property.RemoveModifier(MultiplyModifier))
@@ -124,6 +127,7 @@ public class BoxBuff_BoxPropertyPlusModifier : BoxBuff
     {
         base.OnAdded(entity);
         Box box = (Box) entity;
+        if (box.IsRecycled) return;
         if (box.BoxStatPropSet.PropertyDict.TryGetValue(PropertyType, out BoxProperty property))
         {
             property.AddModifier(PlusModifier);
@@ -134,6 +138,7 @@ public class BoxBuff_BoxPropertyPlusModifier : BoxBuff
     {
         base.OnFixedUpdate(entity, passedTime, remainTime);
         Box box = (Box) entity;
+        if (box.IsRecycled) return;
         if (!IsPermanent && LinearDecayInDuration)
         {
             PlusModifier.Delta = Mathf.RoundToInt(Delta * remainTime / Duration);
@@ -144,6 +149,7 @@ public class BoxBuff_BoxPropertyPlusModifier : BoxBuff
     {
         base.OnRemoved(entity);
         Box box = (Box) entity;
+        if (box.IsRecycled) return;
         if (box.BoxStatPropSet.PropertyDict.TryGetValue(PropertyType, out BoxProperty property))
         {
             if (!property.RemoveModifier(PlusModifier))
@@ -206,6 +212,7 @@ public class BoxBuff_ChangeBoxStatInstantly : BoxBuff
     {
         base.OnAdded(entity);
         Box box = (Box) entity;
+        if (box.IsRecycled) return;
         float valueBefore = box.BoxStatPropSet.StatDict[StatType].Value;
         valueBefore += Delta;
         valueBefore *= (100 + Percent) / 100f;
@@ -245,7 +252,8 @@ public class BoxBuff_InstantDamage : BoxBuff
     {
         base.OnAdded(entity);
         Box box = (Box) entity;
-        box.BoxStatPropSet.CommonDurability.Value -= Damage; 
+        if (box.IsRecycled) return;
+        box.BoxStatPropSet.CommonDurability.Value -= Damage;
     }
 
     protected override bool ValidateBuffAttribute(BuffAttribute boxBuffAttribute)

@@ -131,7 +131,7 @@ public class ActorAIAgent
         KeepDistanceMin = keepDistanceMin;
         KeepDistanceMax = keepDistanceMax;
         LastNodeOccupied = lastNodeOccupied;
-        float dist = (Actor.CurWorldGP.ToVector3() - currentDestination.ToVector3()).magnitude;
+        float dist = (Actor.CurWorldGP - currentDestination).magnitude;
         if (dist <= KeepDistanceMax + (KeepDistanceMax.Equals(0) && LastNodeOccupied ? 1 : 0) && dist >= KeepDistanceMin)
         {
             bool interruptPathFinding = false;
@@ -146,7 +146,7 @@ public class ActorAIAgent
 
             if (interruptPathFinding)
             {
-                Vector3 forward = dest.ToVector3() - Actor.transform.position;
+                Vector3 forward = dest - Actor.transform.position;
                 if (forward.normalized.magnitude > 0)
                 {
                     Actor.CurForward = forward.normalized;
@@ -179,7 +179,7 @@ public class ActorAIAgent
                     MarkerType mt = count == CurrentPath.Count - 1 ? MarkerType.NavTrackMarker_Final : MarkerType.NavTrackMarker;
                     count++;
                     Marker marker = Marker.BaseInitialize(mt, BattleManager.Instance.NavTrackMarkerRoot);
-                    marker.transform.position = node.GridPos3D.ToVector3();
+                    marker.transform.position = node.GridPos3D;
                     NavTrackMarkers.Add(marker);
                 }
             }
@@ -206,7 +206,7 @@ public class ActorAIAgent
                 bool actorOccupied = WorldManager.Instance.CurrentWorld.CheckActorOccupiedGrid(nextNode.GridPos3D, Actor.GUID);
                 if ((box && !box.Passable) || actorOccupied)
                 {
-                    Vector3 diff = currentNode.GridPos3D.ToVector3() - Actor.transform.position;
+                    Vector3 diff = currentNode.GridPos3D - Actor.transform.position;
                     if (diff.magnitude < 0.2f)
                     {
                         ClearPathFinding();
@@ -218,7 +218,7 @@ public class ActorAIAgent
                 }
                 else
                 {
-                    Vector3 diff = nextNode.GridPos3D.ToVector3() - Actor.transform.position;
+                    Vector3 diff = nextNode.GridPos3D - Actor.transform.position;
                     if (diff.magnitude < 0.01f)
                     {
                         int nextNodeIndex = CurrentPath.IndexOf(nextNode);
@@ -228,7 +228,7 @@ public class ActorAIAgent
                         {
                             if (LastNodeOccupied && nextNodeAfterNextNode != null && nextNodeAfterNextNode == CurrentPath[CurrentPath.Count - 1])
                             {
-                                Actor.CurForward = (nextNodeAfterNextNode.GridPos3D - nextNode.GridPos3D).ToVector3().normalized;
+                                Actor.CurForward = (nextNodeAfterNextNode.GridPos3D - nextNode.GridPos3D).normalized;
                             }
 
                             ClearPathFinding();
@@ -245,7 +245,7 @@ public class ActorAIAgent
 
                     if (nextNode != null)
                     {
-                        Actor.CurMoveAttempt = (nextNode.GridPos3D.ToVector3() - Actor.transform.position).normalized;
+                        Actor.CurMoveAttempt = (nextNode.GridPos3D - Actor.transform.position).normalized;
                         Actor.CurMoveAttempt = Actor.CurMoveAttempt.GetSingleDirectionVectorXZ();
                     }
                 }

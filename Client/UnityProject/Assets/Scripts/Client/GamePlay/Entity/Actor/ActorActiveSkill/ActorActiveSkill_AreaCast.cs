@@ -399,7 +399,7 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
             {
                 GridWarning gw = GameObjectPoolManager.Instance.BattleIndicatorDict[BattleIndicatorTypeIndex].AllocateGameObject<GridWarning>(WorldManager.Instance.BattleIndicatorRoot);
                 gw.SetFillColor(GridWarningColorFill).SetBorderHighlightColor(GridWarningColorBorderHighlight).SetBorderDimColor(GridWarningColorBorderDim);
-                gw.transform.position = gp.ToVector3();
+                gw.transform.position = gp;
                 GridWarningDict.Add(gp, gw);
             }
         }
@@ -417,7 +417,7 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
             {
                 foreach (GridPos3D gp in RealSkillEffectGPs)
                 {
-                    FX fx = FXManager.Instance.PlayFX(CastFX, gp.ToVector3(), CastFXScale);
+                    FX fx = FXManager.Instance.PlayFX(CastFX, gp, CastFXScale);
                 }
             }
         }
@@ -476,7 +476,7 @@ public abstract class ActorActiveSkill_AreaCast : ActorActiveSkill
             if (GridWarningDict.TryGetValue(gp, out GridWarning gridWarning))
             {
                 gridWarning.SetShown(valid);
-                gridWarning.transform.position = realGP.ToVector3();
+                gridWarning.transform.position = realGP;
             }
         }
     }

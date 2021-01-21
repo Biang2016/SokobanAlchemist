@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
@@ -108,8 +109,7 @@ public class PlayerActor : Actor
                     if ((!box && module)
                         || (box && box.Passable)
                         || (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex) &&
-                            WorldManager.Instance.CurrentWorld.CheckCanMoveBox(box.WorldGP, box.WorldGP + quickMoveAttemptGP,
-                                out Box _, out Box _, out WorldModule _, out WorldModule _, out GridPos3D _, out GridPos3D _))) // 能走到才开启短按
+                            WorldManager.Instance.CurrentWorld.CheckCanMoveBoxColumn(box.WorldGP, quickMoveAttemptGP, new HashSet<Box>()))) // 能走到才开启短按
                     {
                         CurMoveAttempt = quickMoveAttempt;
                         //Debug.Log("速按" + quickMoveAttempt);

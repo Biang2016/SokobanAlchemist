@@ -45,15 +45,15 @@ public static class ActorAIAtoms
                     for (int angle = 0; angle <= 360; angle += 10)
                     {
                         float radianAngle = Mathf.Deg2Rad * angle;
-                        Vector3 dest = player.CurWorldGP.ToVector3() + new Vector3((KeepDistanceMin.value + 1) * Mathf.Sin(radianAngle), 0, (KeepDistanceMin.value + 1) * Mathf.Cos(radianAngle));
+                        Vector3 dest = player.CurWorldGP + new Vector3((KeepDistanceMin.value + 1) * Mathf.Sin(radianAngle), 0, (KeepDistanceMin.value + 1) * Mathf.Cos(radianAngle));
                         GridPos3D destGP = dest.ToGridPos3D();
                         runDestList.Add(destGP);
                     }
 
                     runDestList.Sort((gp1, gp2) =>
                     {
-                        float dist1 = (gp1.ToVector3() + player.transform.position - Actor.transform.position).magnitude;
-                        float dist2 = (gp2.ToVector3() + player.transform.position - Actor.transform.position).magnitude;
+                        float dist1 = (gp1 + player.transform.position - Actor.transform.position).magnitude;
+                        float dist2 = (gp2 + player.transform.position - Actor.transform.position).magnitude;
                         return dist1.CompareTo(dist2);
                     });
 
@@ -118,7 +118,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null || !Actor.ActorAIAgent.IsPathFinding) return false;
             Actor player = BattleManager.Instance.Player1;
-            return ((player.transform.position - Actor.ActorAIAgent.GetCurrentPathFindingDestination().ToVector3()).magnitude <= ToleranceRadius.value);
+            return ((player.transform.position - Actor.ActorAIAgent.GetCurrentPathFindingDestination()).magnitude <= ToleranceRadius.value);
         }
     }
 
@@ -347,7 +347,7 @@ public static class ActorAIAtoms
             GridPos3D targetGP = BattleManager.Instance.Player1.CurWorldGP;
             GridPos3D curGP = Actor.CurWorldGP;
             GridPos3D diff = targetGP - curGP;
-            Actor.CurForward = diff.Normalized().ToVector3();
+            Actor.CurForward = diff.Normalized();
             return Status.Success;
         }
     }

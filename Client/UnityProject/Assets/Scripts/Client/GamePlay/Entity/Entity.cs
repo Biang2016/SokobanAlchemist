@@ -36,6 +36,11 @@ public abstract class Entity : PoolObject
     {
     }
 
+    public override int GetHashCode()
+    {
+        return GUID.GetHashCode();
+    }
+
     #region Utils
 
     private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();

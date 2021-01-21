@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -20,40 +21,41 @@ public class BoxPassiveSkillAction_RadiusAddActorsBuff : BoxPassiveSkillAction, 
 
     public void Execute()
     {
-        Collider[] colliders = Physics.OverlapSphere(Box.transform.position, AddBuffRadius, LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
-        List<Actor> actorList = new List<Actor>();
-        foreach (Collider collider in colliders)
+        HashSet<uint> actorList = new HashSet<uint>();
+        foreach (GridPos3D offset in Box.GetBoxOccupationGPs())
         {
-            Actor actor = collider.gameObject.GetComponentInParent<Actor>();
-            if (actor != null)
+            Vector3 boxIndicatorPos = Box.transform.position + offset;
+            Collider[] colliders = Physics.OverlapSphere(boxIndicatorPos, AddBuffRadius, LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
+            foreach (Collider collider in colliders)
             {
-                Actor m_Actor = Box.LastTouchActor;
-                if (m_Actor != null)
+                Actor actor = collider.gameObject.GetComponentInParent<Actor>();
+                if (actor != null && !actorList.Contains(actor.GUID))
                 {
-                    if (EffectiveOnRelativeCamp == RelativeCamp.FriendCamp && !actor.IsSameCampOf(m_Actor))
+                    actorList.Add(actor.GUID);
+                    Actor m_Actor = Box.LastTouchActor;
+                    if (m_Actor != null)
                     {
-                        continue;
+                        if (EffectiveOnRelativeCamp == RelativeCamp.FriendCamp && !actor.IsSameCampOf(m_Actor))
+                        {
+                            continue;
+                        }
+                        else if (EffectiveOnRelativeCamp == RelativeCamp.OpponentCamp && !actor.IsOpponentCampOf(m_Actor))
+                        {
+                            continue;
+                        }
+                        else if (EffectiveOnRelativeCamp == RelativeCamp.NeutralCamp && !actor.IsNeutralCampOf(m_Actor))
+                        {
+                            continue;
+                        }
+                        else if (EffectiveOnRelativeCamp == RelativeCamp.AllCamp)
+                        {
+                        }
+                        else if (EffectiveOnRelativeCamp == RelativeCamp.None)
+                        {
+                            continue;
+                        }
                     }
-                    else if (EffectiveOnRelativeCamp == RelativeCamp.OpponentCamp && !actor.IsOpponentCampOf(m_Actor))
-                    {
-                        continue;
-                    }
-                    else if (EffectiveOnRelativeCamp == RelativeCamp.NeutralCamp && !actor.IsNeutralCampOf(m_Actor))
-                    {
-                        continue;
-                    }
-                    else if (EffectiveOnRelativeCamp == RelativeCamp.AllCamp)
-                    {
-                    }
-                    else if (EffectiveOnRelativeCamp == RelativeCamp.None)
-                    {
-                        continue;
-                    }
-                }
 
-                if (!actorList.Contains(actor))
-                {
-                    actorList.Add(actor);
                     if (!actor.ActorBuffHelper.AddBuff(ActorBuff.Clone()))
                     {
                         Debug.Log($"Failed to AddBuff: {ActorBuff.GetType().Name} to {actor.name}");

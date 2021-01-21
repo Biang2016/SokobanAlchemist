@@ -17,7 +17,8 @@ public class WorldModuleData : IClone<WorldModuleData>
     /// 世界模组制作规范，一个模组容量为16x16x16
     /// 模组上下层叠，底部模组Y为0，顶部Y为15
     /// </summary>
-    public ushort[,,] BoxMatrix = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+    public ushort[,,] BoxMatrix = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 仅作为箱子核心格的位置记录，不代表每一格实际是否有占用。（因为有Mega箱子尺寸不止一格）
+    public ushort[,,] BoxMatrix_Temp_CheckOverlap = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 导出时 临时使用，为了检查箱子重叠
 
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
     public LevelTriggerGroupData WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();

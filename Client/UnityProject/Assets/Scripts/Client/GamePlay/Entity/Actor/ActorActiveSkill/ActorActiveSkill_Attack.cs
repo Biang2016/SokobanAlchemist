@@ -17,7 +17,7 @@ public class ActorActiveSkill_Attack : ActorActiveSkill_AreaCast
         HashSet<uint> boxGUIDSet = new HashSet<uint>();
         foreach (GridPos3D gp in RealSkillEffectGPs)
         {
-            Collider[] colliders_PlayerLayer = Physics.OverlapSphere(gp.ToVector3(), 0.3f, LayerManager.Instance.GetTargetActorLayerMask(Actor.Camp, TargetCamp));
+            Collider[] colliders_PlayerLayer = Physics.OverlapSphere(gp, 0.3f, LayerManager.Instance.GetTargetActorLayerMask(Actor.Camp, TargetCamp));
             if (targetCount < GetValue(ActorSkillPropertyType.MaxTargetCount))
             {
                 foreach (Collider c in colliders_PlayerLayer)
@@ -34,7 +34,7 @@ public class ActorActiveSkill_Attack : ActorActiveSkill_AreaCast
                 }
             }
 
-            Collider[] colliders_BoxLayer = Physics.OverlapSphere(gp.ToVector3(), 0.3f, LayerManager.Instance.LayerMask_BoxIndicator);
+            Collider[] colliders_BoxLayer = Physics.OverlapSphere(gp, 0.3f, LayerManager.Instance.LayerMask_BoxIndicator);
             foreach (Collider c in colliders_BoxLayer)
             {
                 Box box = c.GetComponentInParent<Box>();

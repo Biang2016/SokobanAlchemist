@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BiangLibrary;
+using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay;
 using BiangLibrary.Singleton;
 using Newtonsoft.Json;
@@ -46,7 +48,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         private string TypeNamePrefix;
         private string TypeNamesConfig_File => $"{TypeNamesConfigFolder_Build}/{TypeNamePrefix}Names.config";
-        private string TypeNamesConfigFolder_Build => Application.streamingAssetsPath + $"/Configs/{TypeNamePrefix}";
+        private string TypeNamesConfigFolder_Build => ConfigFolder_Build + "/TypeNames";
         private string PrefabFolder_Relative;
         private bool IncludeSubFolder;
 
@@ -75,8 +77,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             Clear();
             TypeAssetDataBasePathDict.Clear();
             string folder = TypeNamesConfigFolder_Build;
-            if (Directory.Exists(folder)) Directory.Delete(folder, true);
-            Directory.CreateDirectory(folder);
+            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
             ushort index = 1;
             DirectoryInfo di = new DirectoryInfo(Application.dataPath + PrefabFolder_Relative);
@@ -200,6 +201,10 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static readonly TypeDefineConfig<BattleIndicator> BattleIndicatorTypeDefineDict = new TypeDefineConfig<BattleIndicator>("BattleIndicator", "/Resources/Prefabs/BattleIndicator", true);
 
     [ShowInInspector]
+    [LabelText("箱子占位配置表")]
+    public static readonly Dictionary<ushort, List<GridPos3D>> BoxOccupationConfigDict = new Dictionary<ushort, List<GridPos3D>>();
+
+    [ShowInInspector]
     [LabelText("世界配置表")]
     public static readonly Dictionary<ushort, WorldData> WorldDataConfigDict = new Dictionary<ushort, WorldData>();
 
@@ -208,15 +213,19 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static readonly SortedDictionary<ushort, WorldModuleData> WorldModuleDataConfigDict = new SortedDictionary<ushort, WorldModuleData>();
 
     public static string DesignRoot = "/Designs/";
+    public static string ResourcesPrefabDesignRoot = "/Resources/Prefabs/Designs/";
 
     public static string BuffAttributeMatrixAssetPath_Relative = "Buff/BuffAttributeMatrixAsset.asset";
     public static string BuffAttributeMatrixConfigFolder_Relative = "BuffAttributeMatrix";
+    public static string BoxOccupationConfigDictFolder_Relative = "Box";
     public static string WorldDataConfigFolder_Relative = "Worlds";
     public static string WorldModuleDataConfigFolder_Relative = "WorldModule";
 
-    public static string BuffAttributeMatrixConfigFolder_Build = Application.streamingAssetsPath + "/Configs/" + BuffAttributeMatrixConfigFolder_Relative + "/";
-    public static string WorldDataConfigFolder_Build = Application.streamingAssetsPath + "/Configs/" + WorldDataConfigFolder_Relative + "/";
-    public static string WorldModuleDataConfigFolder_Build = Application.streamingAssetsPath + "/Configs/" + WorldModuleDataConfigFolder_Relative + "s/";
+    public static string ConfigFolder_Build = Application.streamingAssetsPath + "/Configs/";
+    public static string BuffAttributeMatrixConfigFolder_Build = ConfigFolder_Build + BuffAttributeMatrixConfigFolder_Relative + "/";
+    public static string BoxOccupationConfigDictFolder_Build = ConfigFolder_Build + BoxOccupationConfigDictFolder_Relative + "/";
+    public static string WorldDataConfigFolder_Build = ConfigFolder_Build + WorldDataConfigFolder_Relative + "/";
+    public static string WorldModuleDataConfigFolder_Build = ConfigFolder_Build + WorldModuleDataConfigFolder_Relative + "s/";
 
     public override void Awake()
     {
@@ -233,6 +242,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         WorldTypeDefineDict.Clear();
         FXTypeDefineDict.Clear();
         BattleIndicatorTypeDefineDict.Clear();
+        BoxOccupationConfigDict.Clear();
         WorldDataConfigDict.Clear();
         WorldModuleDataConfigDict.Clear();
     }
@@ -250,6 +260,11 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     {
         // http://www.sirenix.net/odininspector/faq?Search=&t-11=on#faq
         DataFormat dataFormat = DataFormat.Binary;
+
+        if (Directory.Exists(ConfigFolder_Build)) Directory.Delete(ConfigFolder_Build, true);
+        Directory.CreateDirectory(ConfigFolder_Build);
+
+        // 时序，先导出类型表
         BoxTypeDefineDict.ExportTypeNames();
         BoxIconTypeDefineDict.ExportTypeNames();
         EnemyTypeDefineDict.ExportTypeNames();
@@ -258,10 +273,13 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         WorldTypeDefineDict.ExportTypeNames();
         FXTypeDefineDict.ExportTypeNames();
         BattleIndicatorTypeDefineDict.ExportTypeNames();
+
         SortWorldAndWorldModule();
         ExportBuffAttributeMatrix(dataFormat);
+        ExportBoxOccupationDataConfig(dataFormat);
         ExportWorldDataConfig(dataFormat);
         ExportWorldModuleDataConfig(dataFormat);
+
         AssetDatabase.Refresh();
         IsLoaded = false;
         LoadAllConfigs();
@@ -337,12 +355,12 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static void ExportBuffAttributeMatrix(DataFormat dataFormat)
     {
         string folder = BuffAttributeMatrixConfigFolder_Build;
-        if (Directory.Exists(folder)) Directory.Delete(folder, true);
-        Directory.CreateDirectory(folder);
+        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+        string file = $"{folder}/BuffAttributeMatrix.config";
+        if (File.Exists(file)) File.Delete(file);
 
         BuffAttributeMatrixAsset configSSO = GetBuffAttributeMatrixAsset();
 
-        string file = $"{folder}/BuffAttributeMatrix.config";
         SortedDictionary<string, SortedDictionary<string, string>> exportDict = new SortedDictionary<string, SortedDictionary<string, string>>();
         for (int y = 0; y < configSSO.BuffAttributeMatrix.GetLength(0); y++)
         {
@@ -367,11 +385,36 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         AssetDatabase.Refresh();
     }
 
+    private static void ExportBoxOccupationDataConfig(DataFormat dataFormat)
+    {
+        BoxOccupationConfigDict.Clear();
+        string folder = BoxOccupationConfigDictFolder_Build;
+        string file = folder + "BoxOccupation.config";
+        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+        if (File.Exists(file)) File.Delete(file);
+
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + ResourcesPrefabDesignRoot + BoxOccupationConfigDictFolder_Relative);
+        foreach (FileInfo fi in di.GetFiles("*.prefab"))
+        {
+            string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
+            GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
+            Box box = obj.GetComponent<Box>();
+            List<GridPos3D> occupationData = box.GetBoxOccupationGPs_Editor();
+            ushort boxTypeIndex = BoxTypeDefineDict.TypeIndexDict[box.name];
+            if (boxTypeIndex != 0)
+            {
+                BoxOccupationConfigDict.Add(boxTypeIndex, occupationData);
+            }
+        }
+
+        byte[] bytes = SerializationUtility.SerializeValue(BoxOccupationConfigDict, dataFormat);
+        File.WriteAllBytes(file, bytes);
+    }
+
     private static void ExportWorldDataConfig(DataFormat dataFormat)
     {
         string folder = WorldDataConfigFolder_Build;
-        if (Directory.Exists(folder)) Directory.Delete(folder, true);
-        Directory.CreateDirectory(folder);
+        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + DesignRoot + WorldDataConfigFolder_Relative);
         foreach (FileInfo fi in di.GetFiles("*.prefab"))
@@ -399,8 +442,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     private static void ExportWorldModuleDataConfig(DataFormat dataFormat)
     {
         string folder = WorldModuleDataConfigFolder_Build;
-        if (Directory.Exists(folder)) Directory.Delete(folder, true);
-        Directory.CreateDirectory(folder);
+        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + DesignRoot + WorldModuleDataConfigFolder_Relative);
         foreach (FileInfo fi in di.GetFiles("*.prefab"))
@@ -412,7 +454,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             WorldModuleTypeDefineDict.TypeIndexDict.TryGetValue(module.name, out ushort worldModuleTypeIndex);
             if (worldModuleTypeIndex != 0)
             {
-                data.WorldModuleTypeIndex = GetWorldModuleTypeIndex(module.name);
+                data.WorldModuleTypeIndex = worldModuleTypeIndex;
                 data.WorldModuleTypeName = module.name;
                 string path = folder + module.name + ".config";
                 byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
@@ -441,6 +483,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         if (IsLoaded) return;
         Clear();
         DataFormat dataFormat = DataFormat.Binary;
+
         BoxTypeDefineDict.LoadTypeNames();
         BoxIconTypeDefineDict.LoadTypeNames();
         EnemyTypeDefineDict.LoadTypeNames();
@@ -449,9 +492,12 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         WorldTypeDefineDict.LoadTypeNames();
         FXTypeDefineDict.LoadTypeNames();
         BattleIndicatorTypeDefineDict.LoadTypeNames();
+
         LoadBuffAttributeMatrix(dataFormat);
+        LoadBoxOccupationDataConfig(dataFormat);
         LoadWorldDataConfig(dataFormat);
         LoadWorldModuleDataConfig(dataFormat);
+
         IsLoaded = true;
     }
 
@@ -492,6 +538,29 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             ExportBuffAttributeMatrix(dataFormat);
             LoadBuffAttributeMatrix(dataFormat);
 #endif
+        }
+    }
+
+    private static void LoadBoxOccupationDataConfig(DataFormat dataFormat)
+    {
+        BoxOccupationConfigDict.Clear();
+
+        DirectoryInfo di = new DirectoryInfo(BoxOccupationConfigDictFolder_Build);
+        if (di.Exists)
+        {
+            foreach (FileInfo fi in di.GetFiles("*.config", SearchOption.AllDirectories))
+            {
+                byte[] bytes = File.ReadAllBytes(fi.FullName);
+                Dictionary<ushort, List<GridPos3D>> data = SerializationUtility.DeserializeValue<Dictionary<ushort, List<GridPos3D>>>(bytes, dataFormat);
+                foreach (KeyValuePair<ushort, List<GridPos3D>> kv in data)
+                {
+                    BoxOccupationConfigDict.Add(kv.Key, kv.Value);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("箱子占位配置表不存在");
         }
     }
 
@@ -561,7 +630,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     #region Getter
 
-    // -------- Get All Type Names --------
+    // -------- Get All Type Names Starts--------
 
     public static List<string> GetAllWorldNames(bool withNone = true)
     {
@@ -637,7 +706,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return res;
     }
 
-    // -------- Get All Type Names --------
+    // -------- Get All Type Names Ends --------
 
     public static string GetBoxTypeName(ushort boxTypeIndex)
     {
@@ -797,6 +866,13 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         BattleIndicatorTypeDefineDict.TypeIndexDict.TryGetValue(battleIndicatorTypeName, out ushort battleIndicatorTypeIndex);
         return battleIndicatorTypeIndex;
+    }
+
+    public static List<GridPos3D> GetBoxOccupationData(ushort boxTypeIndex)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        BoxOccupationConfigDict.TryGetValue(boxTypeIndex, out List<GridPos3D> occupationData);
+        return occupationData;
     }
 
     public static WorldData GetWorldDataConfig(ushort worldTypeIndex)

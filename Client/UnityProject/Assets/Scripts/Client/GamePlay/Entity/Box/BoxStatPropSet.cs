@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
@@ -170,11 +171,11 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         PropertyDict.Add(BoxPropertyType.FiringRecovery, FiringRecovery);
 
         FiringGrowthPercent.Initialize();
-        FiringGrowthPercent.OnValueChanged += (before, after) => { FrozenValue.GrowthPercent = after; };
+        FiringGrowthPercent.OnValueChanged += (before, after) => { FiringValue.GrowthPercent = after; };
         PropertyDict.Add(BoxPropertyType.FiringGrowthPercent, FiringGrowthPercent);
 
         FiringValue.Recovery = -FiringRecovery.GetModifiedValue;
-        FrozenValue.GrowthPercent = FiringGrowthPercent.GetModifiedValue;
+        FiringValue.GrowthPercent = FiringGrowthPercent.GetModifiedValue;
         FiringValue.AbnormalStatResistance = FiringResistance.GetModifiedValue;
         FiringValue.OnValueChanged += (before, after) =>
         {
@@ -188,7 +189,11 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         {
             if (after == 0)
             {
-                FXManager.Instance.PlayFX(FiringBreakFX, Box.transform.position, 1.5f);
+                foreach (GridPos3D offset in Box.GetBoxOccupationGPs())
+                {
+                    FXManager.Instance.PlayFX(FiringBreakFX, Box.transform.position + offset, 1.5f);
+                }
+
                 box.DestroyBox();
             }
         };
@@ -198,8 +203,11 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
         {
             if (before == 0 && after > 0)
             {
-                FX fx = FXManager.Instance.PlayFX(StartFiringFX, Box.transform.position + Vector3.up * 0.5f, 1f);
-                if (fx) fx.transform.parent = Box.transform;
+                foreach (GridPos3D offset in Box.GetBoxOccupationGPs())
+                {
+                    FX fx = FXManager.Instance.PlayFX(StartFiringFX, Box.transform.position + Vector3.up * 0.5f + offset, 1f);
+                    if (fx) fx.transform.parent = Box.transform;
+                }
             }
         };
         StatDict.Add(BoxStatType.FiringLevel, FiringLevel);

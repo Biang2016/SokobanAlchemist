@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BiangLibrary.GameDataFormat.Grid;
+using UnityEngine;
 
 public class BoxFrozenHelper : EntityFrozenHelper
 {
@@ -8,7 +9,10 @@ public class BoxFrozenHelper : EntityFrozenHelper
         if (afterFrozenLevel == 0)
         {
             Thaw();
-            FXManager.Instance.PlayFX(box.ThawFX, transform.position, 1f);
+            foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+            {
+                FXManager.Instance.PlayFX(box.ThawFX, transform.position + offset, 1f);
+            }
         }
         else
         {
@@ -20,7 +24,10 @@ public class BoxFrozenHelper : EntityFrozenHelper
                 frozeModel.SetActive(index == afterFrozenLevel - 1);
             }
 
-            FXManager.Instance.PlayFX(beforeFrozenLevel < afterFrozenLevel ? box.FrozeFX : box.ThawFX, transform.position, 1f);
+            foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+            {
+                FXManager.Instance.PlayFX(beforeFrozenLevel < afterFrozenLevel ? box.FrozeFX : box.ThawFX, transform.position + offset, 1f);
+            }
         }
     }
 }

@@ -72,7 +72,33 @@ public class WorldModuleDesignHelper : MonoBehaviour
                 }
             }
 
-            if (!isLevelEventTriggerAppearBox) worldModuleData.BoxMatrix[gp.x, gp.y, gp.z] = boxTypeIndex;
+            if (!isLevelEventTriggerAppearBox)
+            {
+                bool spaceAvailable = true;
+                List<GridPos3D> boxOccupation = ConfigManager.BoxOccupationConfigDict[boxTypeIndex];
+
+                foreach (GridPos3D gridPos3D in boxOccupation)
+                {
+                    GridPos3D gridGP = gp + gridPos3D;
+                    if (worldModuleData.BoxMatrix_Temp_CheckOverlap[gridGP.x, gridGP.y, gridGP.z] != 0)
+                    {
+                        spaceAvailable = false;
+                        string box1Name = ConfigManager.BoxTypeDefineDict.TypeNameDict[worldModuleData.BoxMatrix_Temp_CheckOverlap[gridGP.x, gridGP.y, gridGP.z]];
+                        string box2Name = ConfigManager.BoxTypeDefineDict.TypeNameDict[boxTypeIndex];
+                        Debug.Log($"世界模组[{name}]的{gridGP}位置处存在重叠箱子{box1Name}和{box2Name},已忽略后者");
+                    }
+                }
+
+                if (spaceAvailable)
+                {
+                    worldModuleData.BoxMatrix[gp.x, gp.y, gp.z] = boxTypeIndex;
+                    foreach (GridPos3D gridPos3D in boxOccupation)
+                    {
+                        GridPos3D gridGP = gp + gridPos3D;
+                        worldModuleData.BoxMatrix_Temp_CheckOverlap[gridGP.x, gridGP.y, gridGP.z] = boxTypeIndex;
+                    }
+                }
+            }
 
             // 就算是LevelEventTriggerAppear的Box，模组特例数据也按原样序列化，箱子生成时到Matrix里面读取ExtraSerializeData
             if (box.RequireSerializePassiveSkillsIntoWorldModule)
@@ -129,8 +155,36 @@ public class WorldModuleDesignHelper : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.matrix = transform.localToWorldMatrix;
-        Gizmos.color = "#93383D".HTMLColorToColor();
+        Gizmos.color = "#9E93383D".HTMLColorToColor();
         Gizmos.DrawWireCube(Vector3.zero + Vector3.one * (WorldModule.MODULE_SIZE / 2f - 0.5f), Vector3.one * WorldModule.MODULE_SIZE);
+
+        // 仅在模组编辑器中绘制坐标标尺
+        WorldDesignHelper world = GetComponentInParent<WorldDesignHelper>();
+        if (!world)
+        {
+            for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
+            {
+                for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
+                {
+                    if (x == 0 && z == 0)
+                    {
+                        transform.DrawSpecialTip(new Vector3(x - 0.25f, -0.5f, z - 0.1f), Color.clear, "#6BC04543".HTMLColorToColor(), $"{x}", 7);
+                    }
+                    else if (z == 0)
+                    {
+                        transform.DrawSpecialTip(new Vector3(x - 0.25f, -0.5f, z - 0.1f), Color.clear, "#6BC04543".HTMLColorToColor(), $"{x}", 7);
+                        Gizmos.color = "#1AFFFFFF".HTMLColorToColor();
+                        Gizmos.DrawLine(new Vector3(x, 0, z) - Vector3.one * 0.5f, new Vector3(x, 0, WorldModule.MODULE_SIZE) - Vector3.one * 0.5f);
+                    }
+                    else if (x == 0)
+                    {
+                        transform.DrawSpecialTip(new Vector3(x - 0.25f, -0.5f, z - 0.1f), Color.clear, "#66609BF9".HTMLColorToColor(), $"{z}", 7);
+                        Gizmos.color = "#1AFFFFFF".HTMLColorToColor();
+                        Gizmos.DrawLine(new Vector3(x, 0, z) - Vector3.one * 0.5f, new Vector3(WorldModule.MODULE_SIZE, 0, z) - Vector3.one * 0.5f);
+                    }
+                }
+            }
+        }
     }
 
     [HideInPlayMode]

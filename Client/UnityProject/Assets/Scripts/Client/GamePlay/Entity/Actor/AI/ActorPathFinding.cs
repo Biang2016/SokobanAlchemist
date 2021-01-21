@@ -152,7 +152,7 @@ public class ActorPathFinding
                     node.G = newG;
                     node.H = AStarHeuristicsDistance(node, dest);
 
-                    float diffToDest = (node.GridPos3D - dest.GridPos3D).ToVector3().magnitude;
+                    float diffToDest = (node.GridPos3D - dest.GridPos3D).magnitude;
                     if (diffToDest <= keepDistanceMax && diffToDest >= keepDistanceMin)
                     {
                         if (resPath != null)
@@ -346,7 +346,7 @@ public class ActorPathFinding
 
             void tryAddNode(GridPos3D gp)
             {
-                if ((gp.ToVector3() - center.ToVector3()).magnitude > radius) return;
+                if ((gp - center).magnitude > radius) return;
                 GridPos3D offset = gp - center;
                 if (cached_OccupationUnionFind[offset.x + radius, offset.z + radius]) return;
                 foreach (EnemyActor enemy in BattleManager.Instance.Enemies)

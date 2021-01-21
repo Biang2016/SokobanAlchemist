@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -9,17 +10,23 @@ public class EntityBuffHelper : EntityMonoHelper
     {
         base.OnHelperRecycled();
         BuffAttributeDict.Clear();
-        foreach (KeyValuePair<uint, FX> kv in BuffFXDict)
+        foreach (KeyValuePair<uint, List<FX>> kv in BuffFXDict)
         {
-            kv.Value.OnFXEnd = null;
-            kv.Value.PoolRecycle();
+            foreach (FX fx in kv.Value)
+            {
+                fx.OnFXEnd = null;
+                fx.PoolRecycle();
+            }
         }
 
         BuffFXDict.Clear();
-        foreach (KeyValuePair<int, FX> kv in AbnormalBuffFXDict)
+        foreach (KeyValuePair<int, List<FX>> kv in AbnormalBuffFXDict)
         {
-            kv.Value.OnFXEnd = null;
-            kv.Value.PoolRecycle();
+            foreach (FX fx in kv.Value)
+            {
+                fx.OnFXEnd = null;
+                fx.PoolRecycle();
+            }
         }
 
         AbnormalBuffFXDict.Clear();
@@ -38,8 +45,8 @@ public class EntityBuffHelper : EntityMonoHelper
     }
 
     protected Dictionary<BuffAttribute, List<EntityBuff>> BuffAttributeDict = new Dictionary<BuffAttribute, List<EntityBuff>>();
-    protected Dictionary<int, FX> AbnormalBuffFXDict = new Dictionary<int, FX>();
-    protected Dictionary<uint, FX> BuffFXDict = new Dictionary<uint, FX>();
+    protected Dictionary<int, List<FX>> AbnormalBuffFXDict = new Dictionary<int, List<FX>>();
+    protected Dictionary<uint, List<FX>> BuffFXDict = new Dictionary<uint, List<FX>>();
 
     [ShowInInspector]
     protected Dictionary<uint, EntityBuff> BuffDict = new Dictionary<uint, EntityBuff>();
@@ -181,10 +188,15 @@ public class EntityBuffHelper : EntityMonoHelper
         BuffDict.Remove(removeKey);
         BuffRemainTimeDict.Remove(removeKey);
         BuffPassedTimeDict.Remove(removeKey);
-        if (BuffFXDict.ContainsKey(removeKey))
+        if (BuffFXDict.TryGetValue(removeKey, out List<FX> fxs))
         {
-            BuffFXDict[removeKey].OnFXEnd = null;
-            BuffFXDict.Remove(removeKey);
+            foreach (FX fx in fxs)
+            {
+                fx.OnFXEnd = null;
+                fx.PoolRecycle();
+            }
+
+            fxs.Clear();
         }
     }
 
@@ -202,23 +214,62 @@ public class EntityBuffHelper : EntityMonoHelper
     {
         if (string.IsNullOrEmpty(fxName)) return;
         if (fxName == "None") return;
-        if (AbnormalBuffFXDict.TryGetValue(statType, out FX fx))
+        if (AbnormalBuffFXDict.TryGetValue(statType, out List<FX> fxs))
         {
-            fx.transform.localScale = Vector3.one * scale;
-            return;
+            foreach (FX fx in fxs)
+            {
+                fx.transform.localScale = Vector3.one * scale;
+            }
+
+            if (fxs.Count > 0) return;
         }
 
-        FX newFX = FXManager.Instance.PlayFX(fxName, transform.position, scale);
-        newFX.transform.parent = Entity.transform;
-        AbnormalBuffFXDict[statType] = newFX;
-        newFX.OnFXEnd = () => { AbnormalBuffFXDict.Remove(statType); };
+        if (Entity is Box box)
+        {
+            foreach (GridPos3D offset in box.GetBoxOccupationGPs())
+            {
+                PlayFX(transform.position + offset);
+            }
+        }
+        else
+        {
+            PlayFX(transform.position);
+        }
+
+        void PlayFX(Vector3 position)
+        {
+            FX fx = FXManager.Instance.PlayFX(fxName, position, scale);
+            fx.transform.parent = Entity.transform;
+            if (!AbnormalBuffFXDict.ContainsKey(statType)) AbnormalBuffFXDict.Add(statType, new List<FX>());
+            AbnormalBuffFXDict[statType].Add(fx);
+            if (fx is LoopFX)
+            {
+                // 已经是循环FX不需要loop
+                fx.OnFXEnd = () => { AbnormalBuffFXDict[statType].Remove(fx); };
+            }
+            else
+            {
+                // 不是循环FX则自动loop
+                fx.OnFXEnd = () =>
+                {
+                    AbnormalBuffFXDict[statType].Remove(fx);
+                    PlayFX(position);
+                };
+            }
+        }
     }
 
     public void RemoveAbnormalStatFX(int statType)
     {
-        if (AbnormalBuffFXDict.TryGetValue(statType, out FX fx))
+        if (AbnormalBuffFXDict.TryGetValue(statType, out List<FX> fxs))
         {
-            fx.PoolRecycle();
+            foreach (FX fx in fxs)
+            {
+                fx.OnFXEnd = null;
+                fx.PoolRecycle();
+            }
+
+            fxs.Clear();
         }
     }
 
@@ -230,15 +281,18 @@ public class EntityBuffHelper : EntityMonoHelper
         fx.transform.parent = Entity.transform;
         if (buff.BuffAttribute != BuffAttribute.InstantEffect)
         {
-            BuffFXDict.Add(buff.GUID, fx);
+            if (!BuffFXDict.ContainsKey(buff.GUID)) BuffFXDict.Add(buff.GUID, new List<FX>());
+            BuffFXDict[buff.GUID].Add(fx);
             if (fx is LoopFX)
             {
+                // 已经是循环FX不需要loop
             }
             else
             {
+                // 不是循环FX则自动loop
                 fx.OnFXEnd = () =>
                 {
-                    BuffFXDict.Remove(buff.GUID);
+                    BuffFXDict[buff.GUID].Remove(fx);
                     PlayBuffFX(buff);
                 };
             }

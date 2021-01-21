@@ -75,6 +75,7 @@ public partial class Box : Entity
 
     public override void OnRecycled()
     {
+        if (KeepTryingDropSelfCoroutine != null) StopCoroutine(KeepTryingDropSelfCoroutine);
         ArtOnly = true;
         WorldModule = null;
         WorldGP = GridPos3D.Zero;
@@ -231,10 +232,21 @@ public partial class Box : Entity
     [ValueDropdown("GetAllFXTypeNames")]
     public string FrozeFX;
 
-    public List<GridPos3D> GetBoxOccupationGPs()
+#if UNITY_EDITOR
+    public List<GridPos3D> GetBoxOccupationGPs_Editor()
     {
+        BoxIndicatorHelper.RefreshBoxIndicatorOccupationData();
         return BoxIndicatorHelper.BoxIndicatorGPs;
     }
+
+#endif
+
+    public List<GridPos3D> GetBoxOccupationGPs()
+    {
+        return ConfigManager.GetBoxOccupationData(BoxTypeIndex);
+    }
+
+    public BoundsInt BoxBoundsInt => GetBoxOccupationGPs().GetBoundingRectFromListGridPos(WorldGP);
 
     #region 箱子被动技能
 
@@ -470,7 +482,7 @@ public partial class Box : Entity
             }
 
             transform.DOPause();
-            transform.DOLocalMove(localGridPos3D.ToVector3(), lerpTime).SetEase(Ease.Linear).OnComplete(() =>
+            transform.DOLocalMove(localGridPos3D, lerpTime).SetEase(Ease.Linear).OnComplete(() =>
             {
                 State = States.Static;
                 IsInGridSystem = true;
@@ -542,7 +554,7 @@ public partial class Box : Entity
             }
 
             if (needLerpModel) SetModelSmoothMoveLerpTime(0.2f);
-            transform.localPosition = localGridPos3D.ToVector3();
+            transform.localPosition = localGridPos3D;
             transform.localRotation = Quaternion.identity;
         }
 
@@ -554,12 +566,12 @@ public partial class Box : Entity
         if (state == States.Static || state == States.PushingCanceling)
         {
             SetModelSmoothMoveLerpTime(0);
-            Vector3 targetPos = WorldGP.ToVector3() + direction.normalized;
+            Vector3 targetPos = WorldGP + direction.normalized;
             GridPos3D gp = GridPos3D.GetGridPosByPoint(targetPos, 1);
             if (gp != WorldGP)
             {
                 if (Actor.ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {name} Push {WorldGP} -> {gp}");
-                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, gp, States.BeingPushed);
+                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, (gp - WorldGP).Normalized(), States.BeingPushed);
             }
         }
     }
@@ -568,21 +580,22 @@ public partial class Box : Entity
     {
         if (state == States.BeingPushed)
         {
-            if ((transform.localPosition - LocalGP.ToVector3()).magnitude > (1 - Static_Inertia))
+            if ((transform.localPosition - LocalGP).magnitude > (1 - Static_Inertia))
             {
                 SetModelSmoothMoveLerpTime(0);
                 if (Actor.ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {name} PushCanceled {WorldGP} -> {LastWorldGP}");
-                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, LastWorldGP, States.PushingCanceling);
+                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, (LastWorldGP - WorldGP).Normalized(), States.PushingCanceling);
             }
         }
     }
 
     public void ForceStopWhenSwapBox()
     {
-        WorldManager.Instance.CurrentWorld.BoxColumnTransformDOPause(WorldGP);
         GridPos3D targetGP = transform.position.ToGridPos3D();
+        GridPos3D moveDirection = (targetGP - WorldGP).Normalized();
+        WorldManager.Instance.CurrentWorld.BoxColumnTransformDOPause(WorldGP, moveDirection);
         if (Actor.ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {name} ForceCancelPush {WorldGP} -> {targetGP}");
-        WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, targetGP, States.Static, false, true);
+        WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, moveDirection, States.Static, false, true);
     }
 
     public void Kick(Vector3 direction, float velocity, Actor actor)
@@ -621,7 +634,7 @@ public partial class Box : Entity
             if (direction.x.Equals(0)) Rigidbody.constraints |= RigidbodyConstraints.FreezePositionX;
             if (direction.z.Equals(0)) Rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
             Rigidbody.velocity = direction.normalized * velocity;
-            transform.position = transform.position.ToGridPos3D().ToVector3();
+            transform.position = transform.position.ToGridPos3D();
         }
     }
 
@@ -979,26 +992,30 @@ public partial class Box : Entity
         bool pvp = wf.HasFlag(WorldFeature.PVP);
         if (!playerImmune)
         {
-            Collider[] colliders = Physics.OverlapSphere(transform.position, radius, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
             HashSet<Actor> damagedActors = new HashSet<Actor>();
-            foreach (Collider collider in colliders)
+            foreach (GridPos3D offset in GetBoxOccupationGPs())
             {
-                Actor actor = collider.GetComponentInParent<Actor>();
-                if (actor && actor != LastTouchActor && actor.ActorBattleHelper && !damagedActors.Contains(actor))
+                Vector3 boxIndicatorPos = transform.position + offset;
+                Collider[] colliders = Physics.OverlapSphere(boxIndicatorPos, radius, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
+                foreach (Collider collider in colliders)
                 {
-                    if (actor.IsOpponentCampOf(LastTouchActor) || (pvp && actor.IsPlayer && LastTouchActor.IsPlayer))
+                    Actor actor = collider.GetComponentInParent<Actor>();
+                    if (actor && actor != LastTouchActor && actor.ActorBattleHelper && !damagedActors.Contains(actor))
                     {
-                        actor.ActorBattleHelper.LastAttackBox = this;
-                        actor.ActorBattleHelper.Damage(LastTouchActor, damage);
-                        if (actor.RigidBody != null)
+                        if (actor.IsOpponentCampOf(LastTouchActor) || (pvp && actor.IsPlayer && LastTouchActor.IsPlayer))
                         {
-                            Vector3 force = (actor.transform.position - transform.position).normalized;
-                            force = force.GetSingleDirectionVectorXZ();
-                            actor.RigidBody.velocity = Vector3.zero;
-                            actor.RigidBody.AddForce(force * 10f, ForceMode.VelocityChange);
-                        }
+                            actor.ActorBattleHelper.LastAttackBox = this;
+                            actor.ActorBattleHelper.Damage(LastTouchActor, damage);
+                            if (actor.RigidBody != null)
+                            {
+                                Vector3 force = (actor.transform.position - boxIndicatorPos).normalized;
+                                force = force.GetSingleDirectionVectorXZ();
+                                actor.RigidBody.velocity = Vector3.zero;
+                                actor.RigidBody.AddForce(force * 10f, ForceMode.VelocityChange);
+                            }
 
-                        damagedActors.Add(actor);
+                            damagedActors.Add(actor);
+                        }
                     }
                 }
             }
@@ -1007,8 +1024,11 @@ public partial class Box : Entity
 
     public void PlayCollideFX()
     {
-        FX hit = FXManager.Instance.PlayFX(CollideFX, transform.position);
-        if (hit) hit.transform.localScale = Vector3.one * CollideFXScale;
+        foreach (GridPos3D offset in GetBoxOccupationGPs())
+        {
+            FX hit = FXManager.Instance.PlayFX(CollideFX, transform.position + offset);
+            if (hit) hit.transform.localScale = Vector3.one * CollideFXScale;
+        }
     }
 
     public void DestroyBox()
@@ -1032,6 +1052,31 @@ public partial class Box : Entity
         //BoxPassiveSkills.Clear();
         //BoxPassiveSkillDict.Clear();
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
+    }
+
+    private Coroutine KeepTryingDropSelfCoroutine;
+
+    public void StartTryingDropSelf()
+    {
+        if (KeepTryingDropSelfCoroutine != null) StopCoroutine(KeepTryingDropSelfCoroutine);
+        KeepTryingDropSelfCoroutine = StartCoroutine(Co_KeepTryingDropSelf());
+    }
+
+    static WaitForSeconds tryingDropInterval = new WaitForSeconds(0.1f);
+
+    IEnumerator Co_KeepTryingDropSelf()
+    {
+        yield return tryingDropInterval;
+        WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
+        yield return tryingDropInterval;
+        WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
+        yield return tryingDropInterval;
+        WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
+        yield return tryingDropInterval;
+        WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
+        yield return tryingDropInterval;
+        WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
+        KeepTryingDropSelfCoroutine = null;
     }
 
     #region BoxExtraData

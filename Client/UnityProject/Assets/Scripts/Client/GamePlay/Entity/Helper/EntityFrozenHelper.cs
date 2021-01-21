@@ -8,7 +8,7 @@ public class EntityFrozenHelper : EntityMonoHelper
     public GameObject FrozeModelRoot;
 
     [BoxGroup("冻结")]
-    [LabelText("冻结MeshRenderer")]
+    [LabelText("冻结模型")]
     public GameObject[] FrozeModels;
 
     public SmoothMove IceBlockSmoothMove;
