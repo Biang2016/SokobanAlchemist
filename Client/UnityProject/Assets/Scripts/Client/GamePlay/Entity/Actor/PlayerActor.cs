@@ -67,6 +67,8 @@ public class PlayerActor : Actor
 
             CurMoveAttempt = Vector3.zero;
 
+            // todo 转视角后按键映射问题
+
             if (BS_Up.Down) lastMoveUpButtonDownWorldGP = CurWorldGP;
             if (BS_Right.Down) lastMoveRightButtonDownWorldGP = CurWorldGP;
             if (BS_Down.Down) lastMoveDownButtonDownWorldGP = CurWorldGP;
@@ -103,17 +105,35 @@ public class PlayerActor : Actor
 
                 if (quickMoveAttempt != Vector3.zero)
                 {
-                    GridPos3D quickMoveAttemptGP = quickMoveAttempt.ToGridPos3D();
-                    GridPos3D targetPos = CurWorldGP + quickMoveAttemptGP;
+                    Vector3 rotatedQuickMoveAttempt = RotateMoveDirectionByCameraRotation(quickMoveAttempt);
+                    GridPos3D rotatedQuickMoveAttemptGP = rotatedQuickMoveAttempt.ToGridPos3D();
+                    GridPos3D targetPos = CurWorldGP + rotatedQuickMoveAttemptGP;
+
+                    // Check is there any box occupies the grid
                     Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(targetPos, out WorldModule module, out GridPos3D _, true);
                     if ((!box && module)
                         || (box && box.Passable)
                         || (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex) &&
-                            WorldManager.Instance.CurrentWorld.CheckCanMoveBoxColumn(box.WorldGP, quickMoveAttemptGP, new HashSet<Box>()))) // 能走到才开启短按
+                            WorldManager.Instance.CurrentWorld.CheckCanMoveBoxColumn(box.WorldGP, rotatedQuickMoveAttemptGP, new HashSet<Box>()))) // 能走到才开启短按
                     {
-                        CurMoveAttempt = quickMoveAttempt;
-                        //Debug.Log("速按" + quickMoveAttempt);
-                        isQuickMoving = true;
+                        // Check is there any actor occupies the grid
+                        bool isActorOccupying = false;
+                        Collider[] colliders = Physics.OverlapSphere(targetPos, 0.4f, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
+                        foreach (Collider collider in colliders)
+                        {
+                            Actor actor = collider.GetComponentInParent<Actor>();
+                            if (actor != null && actor.GUID != GUID)
+                            {
+                                isActorOccupying = true;
+                            }
+                        }
+
+                        if (!isActorOccupying)
+                        {
+                            CurMoveAttempt = quickMoveAttempt;
+                            //Debug.Log("速按" + quickMoveAttempt);
+                            isQuickMoving = true;
+                        }
                     }
                 }
             }
@@ -253,35 +273,7 @@ public class PlayerActor : Actor
             }
 
             // 相机视角旋转后移动也相应旋转
-            switch (CameraManager.Instance.FieldCamera.RotateDirection)
-            {
-                case GridPosR.Orientation.Up:
-                {
-                    break;
-                }
-                case GridPosR.Orientation.Down:
-                {
-                    CurMoveAttempt.z = -CurMoveAttempt.z;
-                    CurMoveAttempt.x = -CurMoveAttempt.x;
-                    break;
-                }
-                case GridPosR.Orientation.Left:
-                {
-                    float x = CurMoveAttempt.x;
-                    float z = CurMoveAttempt.z;
-                    CurMoveAttempt.x = -z;
-                    CurMoveAttempt.z = x;
-                    break;
-                }
-                case GridPosR.Orientation.Right:
-                {
-                    float x = CurMoveAttempt.x;
-                    float z = CurMoveAttempt.z;
-                    CurMoveAttempt.x = z;
-                    CurMoveAttempt.z = -x;
-                    break;
-                }
-            }
+            CurMoveAttempt = RotateMoveDirectionByCameraRotation(CurMoveAttempt);
 
             MoveInternal();
 
@@ -364,6 +356,42 @@ public class PlayerActor : Actor
         }
 
         base.FixedUpdate();
+    }
+
+    private Vector3 RotateMoveDirectionByCameraRotation(Vector3 moveDirection)
+    {
+        // 相机视角旋转后移动也相应旋转
+        switch (CameraManager.Instance.FieldCamera.RotateDirection)
+        {
+            case GridPosR.Orientation.Up:
+            {
+                break;
+            }
+            case GridPosR.Orientation.Down:
+            {
+                moveDirection.z = -moveDirection.z;
+                moveDirection.x = -moveDirection.x;
+                break;
+            }
+            case GridPosR.Orientation.Left:
+            {
+                float x = moveDirection.x;
+                float z = CurMoveAttempt.z;
+                moveDirection.x = -z;
+                moveDirection.z = x;
+                break;
+            }
+            case GridPosR.Orientation.Right:
+            {
+                float x = moveDirection.x;
+                float z = moveDirection.z;
+                moveDirection.x = z;
+                moveDirection.z = -x;
+                break;
+            }
+        }
+
+        return moveDirection;
     }
 
     [HideInPlayMode]
