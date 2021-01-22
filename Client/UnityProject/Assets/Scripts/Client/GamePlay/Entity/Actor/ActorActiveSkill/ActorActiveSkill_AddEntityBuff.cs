@@ -6,32 +6,18 @@ using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [Serializable]
-public class ActorActiveSkill_AddEntityBuff : ActorActiveSkill_AreaCast, ISerializationCallbackReceiver
+public class ActorActiveSkill_AddEntityBuff : ActorActiveSkill_AreaCast
 {
     protected override string Description => "给区域内角色或箱子施加Buff";
 
-    [NonSerialized]
-    [ShowInInspector]
     [BoxGroup("Buff")]
     [LabelText("Buff列表")]
+    [SerializeReference]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<EntityBuff> RawEntityBuffs = new List<EntityBuff>(); // 干数据，禁修改
-
-    [HideInInspector]
-    public byte[] RawEntityBuffData;
-
-    public void OnBeforeSerialize()
-    {
-        if (RawEntityBuffs == null) RawEntityBuffs = new List<EntityBuff>();
-        RawEntityBuffData = SerializationUtility.SerializeValue(RawEntityBuffs, DataFormat.JSON);
-    }
-
-    public void OnAfterDeserialize()
-    {
-        RawEntityBuffs = SerializationUtility.DeserializeValue<List<EntityBuff>>(RawEntityBuffData, DataFormat.JSON);
-    }
 
     public override void OnInit()
     {
