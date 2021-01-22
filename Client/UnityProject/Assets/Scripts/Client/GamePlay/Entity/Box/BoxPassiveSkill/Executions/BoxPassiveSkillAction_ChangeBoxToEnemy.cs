@@ -7,7 +7,6 @@ public class BoxPassiveSkillAction_ChangeBoxToEnemy : BoxPassiveSkillAction, Box
 {
     protected override string Description => "更改箱子为敌人";
 
-    [BoxName]
     [LabelText("敌人类型")]
     [ValueDropdown("GetAllEnemyNames", IsUniqueList = true, DropdownTitle = "选择敌人类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public string ChangeBoxToEnemyType = "None";

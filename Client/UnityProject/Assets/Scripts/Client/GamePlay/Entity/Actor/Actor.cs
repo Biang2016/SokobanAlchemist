@@ -238,6 +238,10 @@ public class Actor : Entity
     public string DieDropBoxTypeName = "None";
 
     [FoldoutGroup("死亡")]
+    [LabelText("死亡掉落箱子朝向")]
+    public GridPosR.Orientation DieDropBoxOrientation;
+
+    [FoldoutGroup("死亡")]
     [LabelText("死亡掉落箱子概率%")]
     public uint DieDropBoxProbabilityPercent;
 

@@ -154,7 +154,7 @@ public class ActorBattleHelper : ActorMonoHelper
                 string boxName = Actor.DieDropBoxTypeName;
                 GridPos3D gp = Actor.CurWorldGP;
                 GridPos3D localGP = module.WorldGPToLocalGP(gp);
-                box.Setup(boxIndex, GridPosR.Orientation.Up);
+                box.Setup(boxIndex, Actor.DieDropBoxOrientation);
                 box.Initialize(localGP, module, 0, false, Box.LerpType.DropFromDeadActor);
                 box.name = $"{boxName}_{gp}";
                 box.DropFromDeadActor();

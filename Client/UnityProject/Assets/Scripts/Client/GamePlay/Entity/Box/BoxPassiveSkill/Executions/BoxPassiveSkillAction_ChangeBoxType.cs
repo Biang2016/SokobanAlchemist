@@ -12,6 +12,9 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, BoxPas
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public string ChangeBoxTypeTo = "None";
 
+    [LabelText("更改的箱子的朝向")]
+    public GridPosR.Orientation BoxOrientation;
+
     public void Execute()
     {
         if (Box.State == Box.States.Static)
@@ -22,7 +25,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, BoxPas
                 GridPos3D localGP = Box.LocalGP;
                 Box.DestroyBox();
                 ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
-                if (boxTypeIndex != 0) module.GenerateBox(boxTypeIndex, localGP, GridPosR.Orientation.Up);
+                if (boxTypeIndex != 0) module.GenerateBox(boxTypeIndex, localGP, BoxOrientation);
             }
         }
     }
@@ -32,6 +35,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, BoxPas
         base.ChildClone(newAction);
         BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType)newAction);
         action.ChangeBoxTypeTo = ChangeBoxTypeTo;
+        action.BoxOrientation = BoxOrientation;
     }
 
     public override void CopyDataFrom(BoxPassiveSkillAction srcData)
@@ -39,5 +43,6 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, BoxPas
         base.CopyDataFrom(srcData);
         BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType) srcData);
         ChangeBoxTypeTo = action.ChangeBoxTypeTo;
+        BoxOrientation = action.BoxOrientation;
     }
 }
