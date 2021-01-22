@@ -226,7 +226,7 @@ public partial class Box : Entity
 #endif
 
     // 旋转过的局部坐标
-    public List<GridPos3D> GetBoxOccupationGPs_Rotated() 
+    public List<GridPos3D> GetBoxOccupationGPs_Rotated()
     {
         List<GridPos3D> boxOccupation_transformed = GridPos3D.TransformOccupiedPositions_XZ(BoxOrientation, ConfigManager.GetBoxOccupationData(BoxTypeIndex));
         return boxOccupation_transformed;
@@ -250,7 +250,6 @@ public partial class Box : Entity
     private void InitBoxPassiveSkills()
     {
         BoxPassiveSkills.Clear();
-        //BoxPassiveSkillDict.Clear();
         foreach (BoxPassiveSkill rawBF in RawBoxPassiveSkills)
         {
             if (rawBF is BoxPassiveSkill_LevelEventTriggerAppear) continue;
@@ -269,11 +268,6 @@ public partial class Box : Entity
         bf.Box = this;
         bf.OnInit();
         bf.OnRegisterLevelEventID();
-        string bfName = bf.GetType().Name;
-        //if (!BoxPassiveSkillDict.ContainsKey(bfName))
-        //{
-        //    BoxPassiveSkillDict.Add(bfName, bf);
-        //}
     }
 
     private void UnInitPassiveSkills()
@@ -283,9 +277,8 @@ public partial class Box : Entity
             bf.OnUnRegisterLevelEventID();
         }
 
-        // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
+        // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
         //BoxPassiveSkills.Clear();
-        //BoxPassiveSkillDict.Clear();
         BoxPassiveSkillMarkAsDeleted = false;
     }
 
@@ -1026,8 +1019,8 @@ public partial class Box : Entity
             bf.OnDestroyBox();
         }
 
-        //BoxPassiveSkills.Clear();
-        //BoxPassiveSkillDict.Clear();
+        // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
+        // BoxPassiveSkills.Clear(); 
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
     }
 
@@ -1062,58 +1055,21 @@ public partial class Box : Entity
     {
         if (boxExtraSerializeDataFromModule != null)
         {
-            List<BoxPassiveSkill> newFunctionList = new List<BoxPassiveSkill>();
             foreach (BoxPassiveSkill extraBF in boxExtraSerializeDataFromModule.BoxPassiveSkills)
             {
-                bool foundMatch = false;
-                foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-                {
-                    if (bf.GetType() == extraBF.GetType())
-                    {
-                        foundMatch = true;
-                        bf.CopyDataFrom(extraBF);
-                    }
-                }
-
-                if (!foundMatch)
-                {
-                    newFunctionList.Add(extraBF.Clone());
-                }
-            }
-
-            foreach (BoxPassiveSkill newFunction in newFunctionList)
-            {
-                newFunction.Box = this;
-                RawBoxPassiveSkills.Add(newFunction);
+                BoxPassiveSkill newPS = extraBF.Clone();
+                newPS.Box = this;
+                RawBoxPassiveSkills.Add(newPS);
             }
         }
 
-        // world box extra data has higher priority
         if (boxExtraSerializeDataFromWorld != null)
         {
-            List<BoxPassiveSkill> newFunctionList = new List<BoxPassiveSkill>();
             foreach (BoxPassiveSkill extraBF in boxExtraSerializeDataFromWorld.BoxPassiveSkills)
             {
-                bool foundMatch = false;
-                foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-                {
-                    if (bf.GetType() == extraBF.GetType())
-                    {
-                        foundMatch = true;
-                        bf.CopyDataFrom(extraBF);
-                    }
-                }
-
-                if (!foundMatch)
-                {
-                    newFunctionList.Add(extraBF.Clone());
-                }
-            }
-
-            foreach (BoxPassiveSkill newFunction in newFunctionList)
-            {
-                newFunction.Box = this;
-                RawBoxPassiveSkills.Add(newFunction);
+                BoxPassiveSkill newPS = extraBF.Clone();
+                newPS.Box = this;
+                RawBoxPassiveSkills.Add(newPS);
             }
         }
     }

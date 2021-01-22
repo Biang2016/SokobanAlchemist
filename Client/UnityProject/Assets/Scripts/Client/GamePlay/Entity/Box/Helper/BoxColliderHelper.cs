@@ -4,135 +4,212 @@ using UnityEngine;
 public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
 {
     [SerializeField]
-    private GameObject NormalColliders;
+    private GameObject NormalColliderRoot;
 
     [SerializeField]
-    private GameObject StaticColliders;
+    private GameObject StaticColliderRoot;
 
     [SerializeField]
-    private Collider StaticBoxCollider;
+    private GameObject DynamicColliderRoot; // gameObject.setActive字段为此类专用
 
     [SerializeField]
-    private Collider DynamicCollider;
+    private Collider[] StaticColliders; // enable 字段为此类专用；gameObject.setActive字段为其他特殊开关专用
+
+    [SerializeField]
+    private Collider[] DynamicColliders; // enable 字段为此类专用；gameObject.setActive字段为其他特殊开关专用
 
     [SerializeField]
     private Collider BoxOnlyDynamicCollider;
 
+    private bool staticColliderEnable;
+
+    private bool StaticColliderEnable
+    {
+        get { return staticColliderEnable; }
+        set
+        {
+            staticColliderEnable = value;
+            foreach (Collider sc in StaticColliders)
+            {
+                sc.enabled = value;
+            }
+        }
+    }
+
+    private float StaticColliderStaticFriction
+    {
+        set
+        {
+            foreach (Collider sc in StaticColliders)
+            {
+                sc.material.staticFriction = value;
+            }
+        }
+    }
+
+    private float StaticColliderDynamicFriction
+    {
+        set
+        {
+            foreach (Collider sc in StaticColliders)
+            {
+                sc.material.dynamicFriction = value;
+            }
+        }
+    }
+
+    private bool dynamicColliderEnable;
+
+    private bool DynamicColliderEnable
+    {
+        get { return dynamicColliderEnable; }
+        set
+        {
+            dynamicColliderEnable = value;
+            foreach (Collider dc in DynamicColliders)
+            {
+                dc.enabled = value;
+            }
+        }
+    }
+
+    private float DynamicColliderStaticFriction
+    {
+        set
+        {
+            foreach (Collider dc in DynamicColliders)
+            {
+                dc.material.staticFriction = value;
+            }
+        }
+    }
+
+    private float DynamicColliderDynamicFriction
+    {
+        set
+        {
+            foreach (Collider dc in DynamicColliders)
+            {
+                dc.material.dynamicFriction = value;
+            }
+        }
+    }
+
     public void OnBoxUsed()
     {
-        NormalColliders.SetActive(true);
-        StaticColliders.SetActive(true);
+        NormalColliderRoot.SetActive(true);
+        StaticColliderRoot.SetActive(true);
         BoxOnlyDynamicCollider.gameObject.SetActive(true);
     }
 
     public void OnBoxPoolRecycled()
     {
-        StaticBoxCollider.enabled = false;
-        DynamicCollider.enabled = false;
+        StaticColliderEnable = false;
+        DynamicColliderEnable = false;
         BoxOnlyDynamicCollider.enabled = false;
-        NormalColliders.SetActive(false);
-        StaticColliders.SetActive(false);
+        NormalColliderRoot.SetActive(false);
+        StaticColliderRoot.SetActive(false);
         BoxOnlyDynamicCollider.gameObject.SetActive(false);
     }
 
     public void Initialize(bool passable, bool artOnly, bool isGround, bool drop, bool lerp)
     {
-        NormalColliders.SetActive(!passable);
-        StaticColliders.SetActive(!artOnly);
-        DynamicCollider.gameObject.SetActive(!artOnly);
+        NormalColliderRoot.SetActive(!passable);
+        StaticColliderRoot.SetActive(!artOnly);
+        DynamicColliderRoot.gameObject.SetActive(!artOnly);
         BoxOnlyDynamicCollider.gameObject.SetActive(!artOnly && passable);
 
         if (lerp)
         {
-            DynamicCollider.enabled = false;
+            DynamicColliderEnable = false;
             BoxOnlyDynamicCollider.enabled = true;
-            StaticBoxCollider.enabled = !drop;
+            StaticColliderEnable = !drop;
         }
         else
         {
-            DynamicCollider.enabled = false;
+            DynamicColliderEnable = false;
             BoxOnlyDynamicCollider.enabled = true;
-            StaticBoxCollider.enabled = true;
+            StaticColliderEnable = true;
         }
 
-        StaticBoxCollider.material.staticFriction = 0;
-        StaticBoxCollider.material.dynamicFriction = 0;
-        DynamicCollider.material.staticFriction = 0;
-        DynamicCollider.material.dynamicFriction = 0;
+        StaticColliderStaticFriction = 0;
+        StaticColliderDynamicFriction = 0;
+        DynamicColliderStaticFriction = 0;
+        DynamicColliderDynamicFriction = 0;
     }
 
     public void OnDropComplete()
     {
-        StaticBoxCollider.enabled = true;
-        DynamicCollider.enabled = false;
+        StaticColliderEnable = true;
+        DynamicColliderEnable = false;
         BoxOnlyDynamicCollider.enabled = true;
     }
 
     public void OnPush()
     {
-        StaticBoxCollider.enabled = true;
-        DynamicCollider.enabled = true;
+        StaticColliderEnable = true;
+        DynamicColliderEnable = true;
         BoxOnlyDynamicCollider.enabled = true;
-        DynamicCollider.material.dynamicFriction = 0f;
+        DynamicColliderDynamicFriction = 0f;
     }
 
     public void OnPushEnd()
     {
-        StaticBoxCollider.enabled = true;
-        DynamicCollider.enabled = false;
+        StaticColliderEnable = true;
+        DynamicColliderEnable = false;
         BoxOnlyDynamicCollider.enabled = true;
-        DynamicCollider.material.dynamicFriction = 0f;
+        DynamicColliderDynamicFriction = 0f;
     }
 
     public void OnKick()
     {
-        StaticBoxCollider.enabled = false;
-        DynamicCollider.enabled = true;
+        StaticColliderEnable = false;
+        DynamicColliderEnable = true;
         BoxOnlyDynamicCollider.enabled = true;
-        DynamicCollider.material.dynamicFriction = 0f;
+        DynamicColliderDynamicFriction = 0f;
     }
 
     public void OnBeingLift()
     {
-        StaticBoxCollider.enabled = true;
-        DynamicCollider.enabled = false;
+        StaticColliderEnable = true;
+        DynamicColliderEnable = false;
         BoxOnlyDynamicCollider.enabled = true;
     }
 
     public void OnThrow()
     {
-        StaticBoxCollider.enabled = false;
-        DynamicCollider.enabled = true;
+        StaticColliderEnable = false;
+        DynamicColliderEnable = true;
         BoxOnlyDynamicCollider.enabled = true;
-        DynamicCollider.material.dynamicFriction = Box.Throw_Friction;
+        DynamicColliderDynamicFriction = Box.Throw_Friction;
     }
 
     public void OnPut()
     {
-        StaticBoxCollider.enabled = false;
-        DynamicCollider.enabled = true;
+        StaticColliderEnable = false;
+        DynamicColliderEnable = true;
         BoxOnlyDynamicCollider.enabled = true;
-        DynamicCollider.material.dynamicFriction = Box.Throw_Friction;
+        DynamicColliderDynamicFriction = Box.Throw_Friction;
     }
 
     public void OnDropFromDeadActor()
     {
-        StaticBoxCollider.enabled = false;
-        DynamicCollider.enabled = true;
+        StaticColliderEnable = false;
+        DynamicColliderEnable = true;
         BoxOnlyDynamicCollider.enabled = true;
     }
 
     public void OnDropFromAir()
     {
-        StaticBoxCollider.enabled = false;
-        DynamicCollider.enabled = true;
+        StaticColliderEnable = false;
+        DynamicColliderEnable = true;
         BoxOnlyDynamicCollider.enabled = true;
     }
 
     public void OnRigidbodyStop()
     {
-        StaticBoxCollider.enabled = true;
-        DynamicCollider.enabled = false;
+        StaticColliderEnable = true;
+        DynamicColliderEnable = false;
         BoxOnlyDynamicCollider.enabled = false;
     }
 }

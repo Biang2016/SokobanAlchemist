@@ -97,6 +97,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SmoothTime: 0.3
+--- !u!1 &339525969528462959
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6611312087366391132}
+  m_Layer: 9
+  m_Name: DynamicColliderRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6611312087366391132
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339525969528462959}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7464947649660376237}
+  m_Father: {fileID: 672081757180511407}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &735240967322767885
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,7 +444,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 672081757180511407}
+  m_Father: {fileID: 6611312087366391132}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &5535159536523264937
@@ -439,7 +470,7 @@ GameObject:
   m_Component:
   - component: {fileID: 672081757180511407}
   m_Layer: 9
-  m_Name: NormalColliders
+  m_Name: NormalColliderRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -456,8 +487,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 7464947649660376237}
   - {fileID: 1992564661001384448}
+  - {fileID: 6611312087366391132}
   m_Father: {fileID: 103343841482681952}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1076,7 +1107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1992564661001384448}
   m_Layer: 9
-  m_Name: StaticColliders
+  m_Name: StaticColliderRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1094,9 +1125,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4393426601527097192}
-  - {fileID: 2786721736264224834}
   m_Father: {fileID: 672081757180511407}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2833304608639248006
 GameObject:
@@ -1744,51 +1774,6 @@ Transform:
   m_Father: {fileID: 570053385983063175}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8343033933893933049
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2786721736264224834}
-  - component: {fileID: 7360559074616684378}
-  m_Layer: 9
-  m_Name: StaticWedgeCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &2786721736264224834
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8343033933893933049}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1992564661001384448}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &7360559074616684378
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8343033933893933049}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -122999701322966394, guid: ec6117731afe3074b918d3cd2959114c, type: 3}
 --- !u!1 &8413746803588069491
 GameObject:
   m_ObjectHideFlags: 0
@@ -2028,10 +2013,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b4ca5f0f7fba2349a9899a7d94ff2c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NormalColliders: {fileID: 1457002968943346948}
-  StaticColliders: {fileID: 2756207673049062598}
-  StaticBoxCollider: {fileID: 4637758571029591130}
-  DynamicCollider: {fileID: 5535159536523264937}
+  NormalColliderRoot: {fileID: 1457002968943346948}
+  StaticColliderRoot: {fileID: 2756207673049062598}
+  DynamicColliderRoot: {fileID: 339525969528462959}
+  StaticColliders:
+  - {fileID: 4637758571029591130}
+  DynamicColliders:
+  - {fileID: 5535159536523264937}
   BoxOnlyDynamicCollider: {fileID: 2692742187614778156}
 --- !u!1 &8741064018221597463
 GameObject:
