@@ -94,7 +94,7 @@ public class World : PoolObject
         WorldData = null;
     }
 
-    public IEnumerator Initialize(WorldData worldData)
+    public void Initialize(WorldData worldData)
     {
         WorldData = worldData;
         for (int x = 0; x < WorldData.ModuleMatrix.GetLength(0); x++)
@@ -280,7 +280,6 @@ public class World : PoolObject
         }
 
         BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData, WorldData.DefaultWorldActorBornPointAlias);
-        yield return null;
     }
 
     public void GenerateLevelTrigger(LevelTriggerBase.Data dataClone)

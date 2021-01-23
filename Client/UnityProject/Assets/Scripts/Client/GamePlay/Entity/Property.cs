@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,7 +9,7 @@ using UnityEngine.Events;
 /// Property是根据加或乘Modifier来增减、倍增的量，如最大生命值、速度、攻击等
 /// </summary>
 [Serializable]
-public abstract class Property : IClone<Property>
+public abstract class Property
 {
     public void Initialize()
     {
@@ -150,18 +149,15 @@ public abstract class Property : IClone<Property>
     [LabelText("上限")]
     private int MaxValue;
 
-    public Property Clone()
+    public void ApplyDataTo(Property target)
     {
-        Type type = GetType();
-        Property newProp = (Property) Activator.CreateInstance(type);
-        newProp.BaseValue = BaseValue;
-        newProp.MinValue = MinValue;
-        newProp.MaxValue = MaxValue;
-        ChildClone(newProp);
-        return newProp;
+        target.BaseValue = BaseValue;
+        target.MinValue = MinValue;
+        target.MaxValue = MaxValue;
+        ChildApplyDataTo(target);
     }
 
-    protected virtual void ChildClone(Property newProp)
+    protected virtual void ChildApplyDataTo(Property target)
     {
     }
 

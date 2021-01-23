@@ -479,7 +479,6 @@ public class Actor : Entity
         UnInitActiveSkills();
         UnInitPassiveSkills();
         ActorStatPropSet.OnRecycled();
-        ActorStatPropSet = null;
 
         ActorMoveColliderRoot.SetActive(false);
         SetModelSmoothMoveLerpTime(0);
@@ -533,7 +532,7 @@ public class Actor : Entity
         ActorType = actorType;
         ActorCategory = actorCategory;
         ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
-        ActorStatPropSet = RawActorStatPropSet.Clone();
+        RawActorStatPropSet.ApplyDataTo(ActorStatPropSet);
         ActorStatPropSet.Initialize(this);
         ActorStatPropSet.Life.OnValueReachZero += ActorBattleHelper.Die;
         ActorBattleHelper.Initialize();

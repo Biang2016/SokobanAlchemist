@@ -37,23 +37,23 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
         base.Start();
     }
 
-    public IEnumerator Co_StartGame()
+    public void StartGame()
     {
         if (string.IsNullOrEmpty(ClientGameManager.DebugChangeWorldName))
         {
-            yield return Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetWorldTypeIndex(ClientGameManager.Instance.StartWorldName)));
+            Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetWorldTypeIndex(ClientGameManager.Instance.StartWorldName)));
         }
         else
         {
-            yield return Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetWorldTypeIndex(ClientGameManager.DebugChangeWorldName)));
+            Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetWorldTypeIndex(ClientGameManager.DebugChangeWorldName)));
         }
     }
 
-    public IEnumerator Initialize(WorldData worldData)
+    public void Initialize(WorldData worldData)
     {
         CurrentWorld = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.World].AllocateGameObject<World>(WorldRoot);
         CurrentWorld.name = worldData.WorldTypeName;
-        yield return CurrentWorld.Initialize(worldData);
+        CurrentWorld.Initialize(worldData);
     }
 
     public override void Update(float deltaTime)

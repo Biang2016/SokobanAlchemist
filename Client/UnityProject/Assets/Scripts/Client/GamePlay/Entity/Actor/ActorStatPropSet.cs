@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 
 [Serializable]
-public class ActorStatPropSet : IClone<ActorStatPropSet>
+public class ActorStatPropSet
 {
     internal Actor Actor;
 
@@ -169,6 +168,7 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         [LabelText("@\"后摇/ms\t\"+Recovery")]
         public ActorProperty Recovery = new ActorProperty(ActorSkillPropertyType.Recovery);
 
+        [Button("初始化")]
         public void Initialize()
         {
             PropertyDict.Add(ActorSkillPropertyType.Damage, Damage);
@@ -204,18 +204,18 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         {
             SkillPropertyCollection newSPC = new SkillPropertyCollection();
             newSPC.skillAlias = skillAlias;
-            newSPC.Damage = (ActorProperty) Damage.Clone();
-            newSPC.Attach_FiringValue = (ActorProperty) Attach_FiringValue.Clone();
-            newSPC.Attach_FrozenValue = (ActorProperty) Attach_FrozenValue.Clone();
-            newSPC.MaxTargetCount = (ActorProperty) MaxTargetCount.Clone();
-            newSPC.CastingRadius = (ActorProperty) CastingRadius.Clone();
-            newSPC.EffectRadius = (ActorProperty) EffectRadius.Clone();
-            newSPC.Width = (ActorProperty) Width.Clone();
-            newSPC.Depth = (ActorProperty) Depth.Clone();
-            newSPC.Cooldown = (ActorProperty) Cooldown.Clone();
-            newSPC.WingUp = (ActorProperty) WingUp.Clone();
-            newSPC.CastDuration = (ActorProperty) CastDuration.Clone();
-            newSPC.Recovery = (ActorProperty) Recovery.Clone();
+            Damage.ApplyDataTo(newSPC.Damage);
+            Attach_FiringValue.ApplyDataTo(newSPC.Attach_FiringValue);
+            Attach_FrozenValue.ApplyDataTo(newSPC.Attach_FrozenValue);
+            MaxTargetCount.ApplyDataTo(newSPC.MaxTargetCount);
+            CastingRadius.ApplyDataTo(newSPC.CastingRadius);
+            EffectRadius.ApplyDataTo(newSPC.EffectRadius);
+            Width.ApplyDataTo(newSPC.Width);
+            Depth.ApplyDataTo(newSPC.Depth);
+            Cooldown.ApplyDataTo(newSPC.Cooldown);
+            WingUp.ApplyDataTo(newSPC.WingUp);
+            CastDuration.ApplyDataTo(newSPC.CastDuration);
+            Recovery.ApplyDataTo(newSPC.Recovery);
             return newSPC;
         }
     }
@@ -375,37 +375,35 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>
         }
     }
 
-    public ActorStatPropSet Clone()
+    public void ApplyDataTo(ActorStatPropSet target)
     {
-        ActorStatPropSet newStatPropSet = new ActorStatPropSet();
-        newStatPropSet.Health = (ActorStat) Health.Clone();
-        newStatPropSet.MaxHealth = (ActorProperty) MaxHealth.Clone();
-        newStatPropSet.HealthRecovery = (ActorProperty) HealthRecovery.Clone();
-        newStatPropSet.Life = (ActorStat) Life.Clone();
-        newStatPropSet.MoveSpeed = (ActorProperty) MoveSpeed.Clone();
-        newStatPropSet.MaxActionPoint = (ActorProperty) MaxActionPoint.Clone();
-        newStatPropSet.ActionPoint = (ActorStat) ActionPoint.Clone();
-        newStatPropSet.ActionPointRecovery = (ActorProperty) ActionPointRecovery.Clone();
-        newStatPropSet.KickConsumeActionPoint = (ActorProperty) KickConsumeActionPoint.Clone();
-        newStatPropSet.DashConsumeActionPoint = (ActorProperty) DashConsumeActionPoint.Clone();
-        newStatPropSet.VaultConsumeActionPoint = (ActorProperty) VaultConsumeActionPoint.Clone();
-        newStatPropSet.FrozenResistance = (ActorProperty) FrozenResistance.Clone();
-        newStatPropSet.FrozenRecovery = (ActorProperty) FrozenRecovery.Clone();
-        newStatPropSet.FrozenValue = (ActorStat) FrozenValue.Clone();
-        newStatPropSet.FrozenLevel = (ActorStat) FrozenLevel.Clone();
-        newStatPropSet.FrozenFX = FrozenFX;
-        newStatPropSet.FrozenFXScaleCurve = FrozenFXScaleCurve; // 风险，此处没有深拷贝
-        newStatPropSet.FiringResistance = (ActorProperty) FiringResistance.Clone();
-        newStatPropSet.FiringRecovery = (ActorProperty) FiringRecovery.Clone();
-        newStatPropSet.FiringGrowthPercent = (ActorProperty) FiringGrowthPercent.Clone();
-        newStatPropSet.FiringValue = (ActorStat) FiringValue.Clone();
-        newStatPropSet.FiringLevel = (ActorStat) FiringLevel.Clone();
-        newStatPropSet.FiringFX = FiringFX;
-        newStatPropSet.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
+        Health.ApplyDataTo(target.Health);
+        MaxHealth.ApplyDataTo(target.MaxHealth);
+        HealthRecovery.ApplyDataTo(target.HealthRecovery);
+        Life.ApplyDataTo(target.Life);
+        MoveSpeed.ApplyDataTo(target.MoveSpeed);
+        MaxActionPoint.ApplyDataTo(target.MaxActionPoint);
+        ActionPoint.ApplyDataTo(target.ActionPoint);
+        ActionPointRecovery.ApplyDataTo(target.ActionPointRecovery);
+        KickConsumeActionPoint.ApplyDataTo(target.KickConsumeActionPoint);
+        DashConsumeActionPoint.ApplyDataTo(target.DashConsumeActionPoint);
+        VaultConsumeActionPoint.ApplyDataTo(target.VaultConsumeActionPoint);
+        FrozenResistance.ApplyDataTo(target.FrozenResistance);
+        FrozenRecovery.ApplyDataTo(target.FrozenRecovery);
+        FrozenValue.ApplyDataTo(target.FrozenValue);
+        FrozenLevel.ApplyDataTo(target.FrozenLevel);
+        target.FrozenFX = FrozenFX;
+        target.FrozenFXScaleCurve = FrozenFXScaleCurve; // 风险，此处没有深拷贝
+        FiringResistance.ApplyDataTo(target.FiringResistance);
+        FiringRecovery.ApplyDataTo(target.FiringRecovery);
+        FiringGrowthPercent.ApplyDataTo(target.FiringGrowthPercent);
+        FiringValue.ApplyDataTo(target.FiringValue);
+        FiringLevel.ApplyDataTo(target.FiringLevel);
+        target.FiringFX = FiringFX;
+        target.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
 
-        newStatPropSet.SkillsPropertyCollections = SkillsPropertyCollections.Clone();
-        newStatPropSet.RawActorDefaultBuffs = RawActorDefaultBuffs.Clone();
-        return newStatPropSet;
+        target.SkillsPropertyCollections = SkillsPropertyCollections.Clone();
+        target.RawActorDefaultBuffs = RawActorDefaultBuffs.Clone();
     }
 
     #region Utils
@@ -437,10 +435,10 @@ public class ActorProperty : Property
 
     internal int m_PropertyType;
 
-    protected override void ChildClone(Property newProp)
+    protected override void ChildApplyDataTo(Property target)
     {
-        base.ChildClone(newProp);
-        ActorProperty newActorProp = (ActorProperty) newProp;
+        base.ChildApplyDataTo(target);
+        ActorProperty newActorProp = (ActorProperty) target;
         newActorProp.m_PropertyType = m_PropertyType;
     }
 }
@@ -460,10 +458,10 @@ public class ActorStat : Stat
     internal ActorStatType m_StatType;
     public override bool IsAbnormalStat => m_StatType == ActorStatType.FiringValue || m_StatType == ActorStatType.FrozenValue;
 
-    protected override void ChildClone(Stat newStat)
+    protected override void ChildApplyDataTo(Stat target)
     {
-        base.ChildClone(newStat);
-        ActorStat newActorStat = (ActorStat) newStat;
+        base.ChildApplyDataTo(target);
+        ActorStat newActorStat = (ActorStat) target;
         newActorStat.m_StatType = m_StatType;
     }
 }

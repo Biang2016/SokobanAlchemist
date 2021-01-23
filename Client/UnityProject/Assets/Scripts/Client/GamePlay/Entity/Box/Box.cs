@@ -105,7 +105,6 @@ public partial class Box : Entity
         }
 
         BoxStatPropSet.OnRecycled();
-        BoxStatPropSet = null;
 
         UnInitPassiveSkills();
         base.OnRecycled();
@@ -385,7 +384,7 @@ public partial class Box : Entity
         BoxTypeIndex = boxTypeIndex;
         InitBoxPassiveSkills();
 
-        BoxStatPropSet = RawBoxStatPropSet.Clone();
+        RawBoxStatPropSet.ApplyDataTo(BoxStatPropSet);
         BoxStatPropSet.Initialize(this);
 
         SwitchBoxOrientation(orientation);

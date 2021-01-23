@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 
 [Serializable]
-public class BoxStatPropSet : IClone<BoxStatPropSet>
+public class BoxStatPropSet
 {
     internal Box Box;
 
@@ -244,32 +243,29 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>
         }
     }
 
-    public BoxStatPropSet Clone()
+    public void ApplyDataTo(BoxStatPropSet target)
     {
-        BoxStatPropSet newStatPropSet = new BoxStatPropSet();
-        newStatPropSet.CommonDurability = (BoxStat) CommonDurability.Clone();
-        newStatPropSet.CollideWithBoxDurability = (BoxStat) CollideWithBoxDurability.Clone();
-        newStatPropSet.CollideWithActorDurability = (BoxStat) CollideWithActorDurability.Clone();
-        newStatPropSet.DropFromAirSurviveProbabilityPercent = (BoxStat) DropFromAirSurviveProbabilityPercent.Clone();
-        newStatPropSet.FrozenResistance = (BoxProperty) FrozenResistance.Clone();
-        newStatPropSet.FrozenRecovery = (BoxProperty) FrozenRecovery.Clone();
-        newStatPropSet.FrozenValue = (BoxStat) FrozenValue.Clone();
-        newStatPropSet.FrozenLevel = (BoxStat) FrozenLevel.Clone();
-        newStatPropSet.FrozenFX = FrozenFX;
-        newStatPropSet.FrozenFXScaleCurve = FrozenFXScaleCurve; // 风险，此处没有深拷贝
-        newStatPropSet.FiringResistance = (BoxProperty) FiringResistance.Clone();
-        newStatPropSet.FiringRecovery = (BoxProperty) FiringRecovery.Clone();
-        newStatPropSet.FiringGrowthPercent = (BoxProperty) FiringGrowthPercent.Clone();
-        newStatPropSet.FiringValue = (BoxStat) FiringValue.Clone();
-        newStatPropSet.FiringDurability = (BoxStat) FiringDurability.Clone();
-        newStatPropSet.FiringLevel = (BoxStat) FiringLevel.Clone();
-        newStatPropSet.StartFiringFX = StartFiringFX;
-        newStatPropSet.FiringFX = FiringFX;
-        newStatPropSet.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
-        newStatPropSet.FiringBreakFX = FiringBreakFX;
-
-        newStatPropSet.RawBoxDefaultBuffs = RawBoxDefaultBuffs.Clone();
-        return newStatPropSet;
+        CommonDurability.ApplyDataTo(target.CommonDurability);
+        CollideWithBoxDurability.ApplyDataTo(target.CollideWithBoxDurability);
+        CollideWithActorDurability.ApplyDataTo(target.CollideWithActorDurability);
+        DropFromAirSurviveProbabilityPercent.ApplyDataTo(target.DropFromAirSurviveProbabilityPercent);
+        FrozenResistance.ApplyDataTo(target.FrozenResistance);
+        FrozenRecovery.ApplyDataTo(target.FrozenRecovery);
+        FrozenValue.ApplyDataTo(target.FrozenValue);
+        FrozenLevel.ApplyDataTo(target.FrozenLevel);
+        target.FrozenFX = FrozenFX;
+        target.FrozenFXScaleCurve = FrozenFXScaleCurve; // 风险，此处没有深拷贝
+        FiringResistance.ApplyDataTo(target.FiringResistance);
+        FiringRecovery.ApplyDataTo(target.FiringRecovery);
+        FiringGrowthPercent.ApplyDataTo(target.FiringGrowthPercent);
+        FiringValue.ApplyDataTo(target.FiringValue);
+        FiringDurability.ApplyDataTo(target.FiringDurability);
+        FiringLevel.ApplyDataTo(target.FiringLevel);
+        target.StartFiringFX = StartFiringFX;
+        target.FiringFX = FiringFX;
+        target.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
+        target.FiringBreakFX = FiringBreakFX;
+        target.RawBoxDefaultBuffs = RawBoxDefaultBuffs.Clone();
     }
 
     #region Utils
@@ -293,10 +289,10 @@ public class BoxProperty : Property
 
     internal BoxPropertyType m_PropertyType;
 
-    protected override void ChildClone(Property newProp)
+    protected override void ChildApplyDataTo(Property target)
     {
-        base.ChildClone(newProp);
-        BoxProperty newBoxProp = (BoxProperty) newProp;
+        base.ChildApplyDataTo(target);
+        BoxProperty newBoxProp = (BoxProperty) target;
         newBoxProp.m_PropertyType = m_PropertyType;
     }
 }
@@ -316,10 +312,10 @@ public class BoxStat : Stat
     internal BoxStatType m_StatType;
     public override bool IsAbnormalStat => m_StatType == BoxStatType.FiringValue || m_StatType == BoxStatType.FrozenValue;
 
-    protected override void ChildClone(Stat newStat)
+    protected override void ChildApplyDataTo(Stat target)
     {
-        base.ChildClone(newStat);
-        BoxStat newBoxStat = (BoxStat) newStat;
+        base.ChildApplyDataTo(target);
+        BoxStat newBoxStat = (BoxStat) target;
         newBoxStat.m_StatType = m_StatType;
     }
 }

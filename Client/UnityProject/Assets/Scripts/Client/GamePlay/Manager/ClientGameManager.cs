@@ -144,12 +144,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         UIBattleTipManager.Start();
         FXManager.Start();
 
-        StartCoroutine(Co_StartGame());
-    }
-
-    private IEnumerator Co_StartGame()
-    {
-        yield return WorldManager.Co_StartGame();
+        WorldManager.StartGame();
         BattleManager.Instance.StartBattle();
 
         DebugPanel = UIManager.Instance.ShowUIForms<DebugPanel>();
@@ -158,6 +153,13 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         UIManager.Instance.CloseUIForm<DebugPanel>();
 #endif
         UIManager.Instance.ShowUIForms<InGameUIPanel>();
+
+        //StartCoroutine(Co_StartGame());
+    }
+
+    private IEnumerator Co_StartGame()
+    {
+        yield return null;
     }
 
     private void Update()

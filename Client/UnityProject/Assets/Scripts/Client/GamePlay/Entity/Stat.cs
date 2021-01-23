@@ -8,7 +8,7 @@ using UnityEngine.Events;
 /// Stat是可自由消耗、增加的量，如生命值，命数等
 /// </summary>
 [Serializable]
-public abstract class Stat : IClone<Stat>
+public abstract class Stat
 {
     public void ClearCallBacks()
     {
@@ -165,18 +165,15 @@ public abstract class Stat : IClone<Stat>
         }
     }
 
-    public Stat Clone()
+    public void ApplyDataTo(Stat target)
     {
-        Type type = GetType();
-        Stat newStat = (Stat) Activator.CreateInstance(type);
-        newStat._value = _value;
-        newStat._minValue = _minValue;
-        newStat._maxValue = _maxValue;
-        ChildClone(newStat);
-        return newStat;
+        target._value = _value;
+        target._minValue = _minValue;
+        target._maxValue = _maxValue;
+        ChildApplyDataTo(target);
     }
 
-    protected virtual void ChildClone(Stat newStat)
+    protected virtual void ChildApplyDataTo(Stat target)
     {
     }
 
