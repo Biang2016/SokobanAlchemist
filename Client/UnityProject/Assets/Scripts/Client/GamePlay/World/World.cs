@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.Messenger;
 using BiangLibrary.ObjectPool;
@@ -93,7 +94,7 @@ public class World : PoolObject
         WorldData = null;
     }
 
-    public void Initialize(WorldData worldData)
+    public IEnumerator Initialize(WorldData worldData)
     {
         WorldData = worldData;
         for (int x = 0; x < WorldData.ModuleMatrix.GetLength(0); x++)
@@ -249,7 +250,7 @@ public class World : PoolObject
                 box?.DestroyBox(); // 强行删除该格占用Box
                 if (module)
                 {
-                    module.GenerateBox(dataClone.BoxTypeIndex, localGP.x, localGP.y, localGP.z, GridPosR.Orientation.Up, null, dataClone.WorldSpecialBoxData.BoxExtraSerializeDataFromWorld);
+                    module.GenerateBox(dataClone.BoxTypeIndex, localGP.x, localGP.y, localGP.z, data.BoxOrientation, true, null, dataClone.WorldSpecialBoxData.BoxExtraSerializeDataFromWorld);
 
                     // Box生成后此BoxPassiveSkill及注册的事件均作废
                     bf.ClearAndUnRegister();
@@ -266,7 +267,7 @@ public class World : PoolObject
             WorldModule module = GetModuleByGridPosition(worldGP);
             if (module != null)
             {
-                module.GenerateBox(worldSpecialBoxData.BoxTypeIndex, module.WorldGPToLocalGP(worldGP), worldSpecialBoxData.BoxOrientation, null, worldSpecialBoxData.BoxExtraSerializeDataFromWorld);
+                module.GenerateBox(worldSpecialBoxData.BoxTypeIndex, module.WorldGPToLocalGP(worldGP), worldSpecialBoxData.BoxOrientation, false, null, worldSpecialBoxData.BoxExtraSerializeDataFromWorld);
             }
         }
 
@@ -279,6 +280,7 @@ public class World : PoolObject
         }
 
         BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData, WorldData.DefaultWorldActorBornPointAlias);
+        yield return null;
     }
 
     public void GenerateLevelTrigger(LevelTriggerBase.Data dataClone)

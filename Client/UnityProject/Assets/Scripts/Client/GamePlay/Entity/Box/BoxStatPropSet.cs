@@ -7,7 +7,7 @@ using Sirenix.Serialization;
 using UnityEngine;
 
 [Serializable]
-public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackReceiver
+public class BoxStatPropSet : IClone<BoxStatPropSet>
 {
     internal Box Box;
 
@@ -104,25 +104,10 @@ public class BoxStatPropSet : IClone<BoxStatPropSet>, ISerializationCallbackRece
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
     public string FiringBreakFX;
 
-    [NonSerialized]
-    [ShowInInspector]
+    [SerializeReference]
     [BoxGroup("Buff")]
     [LabelText("箱子自带Buff")]
     public List<BoxBuff> RawBoxDefaultBuffs = new List<BoxBuff>(); // 干数据，禁修改
-
-    [HideInInspector]
-    public byte[] RawBoxDefaultBuffData;
-
-    public void OnBeforeSerialize()
-    {
-        if (RawBoxDefaultBuffs == null) RawBoxDefaultBuffs = new List<BoxBuff>();
-        RawBoxDefaultBuffData = SerializationUtility.SerializeValue(RawBoxDefaultBuffs, DataFormat.JSON);
-    }
-
-    public void OnAfterDeserialize()
-    {
-        RawBoxDefaultBuffs = SerializationUtility.DeserializeValue<List<BoxBuff>>(RawBoxDefaultBuffData, DataFormat.JSON);
-    }
 
     public void Initialize(Box box)
     {

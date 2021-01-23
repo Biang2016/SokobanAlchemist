@@ -4,7 +4,6 @@
 
     OnPlayerLoaded = 1,
     OnWorldCameraPOILoaded = 2,
-    OnPlayerInteractSkillChanged = 3,
 
     OnBoxStaticBounceCheatChanged = 11,
     OnBoxDynamicBounceCheatChanged = 12,

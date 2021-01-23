@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using BiangLibrary.Singleton;
 using UnityEngine;
 
@@ -34,21 +35,25 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
     public override void Start()
     {
         base.Start();
+    }
+
+    public IEnumerator Co_StartGame()
+    {
         if (string.IsNullOrEmpty(ClientGameManager.DebugChangeWorldName))
         {
-            Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetWorldTypeIndex(ClientGameManager.Instance.StartWorldName)));
+            yield return Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetWorldTypeIndex(ClientGameManager.Instance.StartWorldName)));
         }
         else
         {
-            Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetWorldTypeIndex(ClientGameManager.DebugChangeWorldName)));
+            yield return Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetWorldTypeIndex(ClientGameManager.DebugChangeWorldName)));
         }
     }
 
-    public void Initialize(WorldData worldData)
+    public IEnumerator Initialize(WorldData worldData)
     {
         CurrentWorld = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.World].AllocateGameObject<World>(WorldRoot);
         CurrentWorld.name = worldData.WorldTypeName;
-        CurrentWorld.Initialize(worldData);
+        yield return CurrentWorld.Initialize(worldData);
     }
 
     public override void Update(float deltaTime)

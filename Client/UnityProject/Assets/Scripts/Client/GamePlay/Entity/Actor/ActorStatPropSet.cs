@@ -6,7 +6,7 @@ using Sirenix.Serialization;
 using UnityEngine;
 
 [Serializable]
-public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallbackReceiver
+public class ActorStatPropSet : IClone<ActorStatPropSet>
 {
     internal Actor Actor;
 
@@ -222,26 +222,11 @@ public class ActorStatPropSet : IClone<ActorStatPropSet>, ISerializationCallback
 
     #endregion
 
-    [NonSerialized]
-    [ShowInInspector]
+    [SerializeReference]
     [BoxGroup("Buff")]
     [LabelText("角色自带Buff")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<ActorBuff> RawActorDefaultBuffs = new List<ActorBuff>(); // 干数据，禁修改
-
-    [HideInInspector]
-    public byte[] RawActorDefaultBuffData;
-
-    public void OnBeforeSerialize()
-    {
-        if (RawActorDefaultBuffs == null) RawActorDefaultBuffs = new List<ActorBuff>();
-        RawActorDefaultBuffData = SerializationUtility.SerializeValue(RawActorDefaultBuffs, DataFormat.JSON);
-    }
-
-    public void OnAfterDeserialize()
-    {
-        RawActorDefaultBuffs = SerializationUtility.DeserializeValue<List<ActorBuff>>(RawActorDefaultBuffData, DataFormat.JSON);
-    }
 
     public void Initialize(Actor actor)
     {

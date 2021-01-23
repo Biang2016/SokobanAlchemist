@@ -11,6 +11,18 @@ public class BoxIndicatorHelper : BoxMonoHelper
 {
     public List<GridPos3D> BoxIndicatorGPs = new List<GridPos3D>();
 
+    public override void OnHelperUsed()
+    {
+        base.OnHelperUsed();
+        gameObject.SetActive(true);
+    }
+
+    public override void OnHelperRecycled()
+    {
+        base.OnHelperRecycled();
+        gameObject.SetActive(false);
+    }
+
 #if UNITY_EDITOR
     [Button("刷新箱子占用位置坐标")]
     public void RefreshBoxIndicatorOccupationData()

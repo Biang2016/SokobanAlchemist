@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using BiangLibrary.GamePlay;
 using BiangLibrary.GamePlay.UI;
 using BiangLibrary.Log;
@@ -143,13 +144,20 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         UIBattleTipManager.Start();
         FXManager.Start();
 
+        StartCoroutine(Co_StartGame());
+    }
+
+    private IEnumerator Co_StartGame()
+    {
+        yield return WorldManager.Co_StartGame();
+        BattleManager.Instance.StartBattle();
+
         DebugPanel = UIManager.Instance.ShowUIForms<DebugPanel>();
+
 #if !DEBUG
         UIManager.Instance.CloseUIForm<DebugPanel>();
 #endif
         UIManager.Instance.ShowUIForms<InGameUIPanel>();
-
-        StartGame();
     }
 
     private void Update()
@@ -234,11 +242,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         ProjectileManager.FixedUpdate(Time.fixedDeltaTime);
         UIBattleTipManager.FixedUpdate(Time.fixedDeltaTime);
         FXManager.FixedUpdate(Time.fixedDeltaTime);
-    }
-
-    private void StartGame()
-    {
-        BattleManager.Instance.StartBattle();
     }
 
     public void ReloadGame()

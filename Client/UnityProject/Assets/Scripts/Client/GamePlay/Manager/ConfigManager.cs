@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -484,6 +485,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         Clear();
         DataFormat dataFormat = DataFormat.Binary;
 
+        AllBuffAttributeTypes = Enum.GetValues(typeof(BuffAttribute));
+
         BoxTypeDefineDict.LoadTypeNames();
         BoxIconTypeDefineDict.LoadTypeNames();
         EnemyTypeDefineDict.LoadTypeNames();
@@ -622,6 +625,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     #region Special types const
 
+    public static IEnumerable AllBuffAttributeTypes;
+
     public static ushort WorldModule_DeadZoneIndex => GetWorldModuleTypeIndex("Common_DeadZone");
     public static ushort WorldModule_HiddenWallIndex => GetWorldModuleTypeIndex("Common_Wall_Hidden");
     public static ushort Box_EnemyFrozenBoxIndex => GetBoxTypeIndex("EnemyFrozenBox");
@@ -629,6 +634,11 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     #endregion
 
     #region Getter
+
+    public static IEnumerable GetAllBuffAttributeTypes()
+    {
+        return AllBuffAttributeTypes;
+    }
 
     // -------- Get All Type Names Starts--------
 

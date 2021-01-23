@@ -38,7 +38,7 @@ public class EntityBuffHelper : EntityMonoHelper
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
-        foreach (BuffAttribute attribute in Enum.GetValues(typeof(BuffAttribute)))
+        foreach (BuffAttribute attribute in ConfigManager.GetAllBuffAttributeTypes())
         {
             BuffAttributeDict.Add(attribute, new List<EntityBuff>());
         }

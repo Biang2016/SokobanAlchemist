@@ -65,6 +65,7 @@ public partial class Box : Entity
         BoxBuffHelper.OnHelperUsed();
         BoxFrozenHelper.OnHelperUsed();
         BoxColliderHelper.OnBoxUsed();
+        BoxIndicatorHelper.OnHelperUsed();
         BoxThornTrapTriggerHelper?.OnHelperUsed();
         DoorBoxHelper?.OnHelperUsed();
         BoxSkinHelper?.OnHelperUsed();
@@ -88,6 +89,7 @@ public partial class Box : Entity
         BoxEffectHelper?.OnBoxPoolRecycled();
         BoxEffectHelper = null;
         BoxColliderHelper.OnBoxPoolRecycled();
+        BoxIndicatorHelper.OnHelperRecycled();
         BoxThornTrapTriggerHelper?.OnHelperRecycled();
         DoorBoxHelper?.OnHelperRecycled();
         BoxSkinHelper?.OnHelperRecycled();
@@ -105,7 +107,6 @@ public partial class Box : Entity
         BoxStatPropSet.OnRecycled();
         BoxStatPropSet = null;
 
-        UnRegisterEvents();
         UnInitPassiveSkills();
         base.OnRecycled();
     }
@@ -361,16 +362,6 @@ public partial class Box : Entity
         GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
     }
 
-    private void RegisterEvents()
-    {
-        ClientGameManager.Instance.BattleMessenger.AddListener<InteractSkillType, ushort>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
-    }
-
-    private void UnRegisterEvents()
-    {
-        ClientGameManager.Instance.BattleMessenger.RemoveListener<InteractSkillType, ushort>((uint) Enum_Events.OnPlayerInteractSkillChanged, OnPlayerInteractSkillChanged);
-    }
-
     private void OnPlayerInteractSkillChanged(InteractSkillType interactSkillType, ushort boxTypeIndex)
     {
         if (boxTypeIndex == BoxTypeIndex)
@@ -393,7 +384,6 @@ public partial class Box : Entity
     {
         BoxTypeIndex = boxTypeIndex;
         InitBoxPassiveSkills();
-        RegisterEvents();
 
         BoxStatPropSet = RawBoxStatPropSet.Clone();
         BoxStatPropSet.Initialize(this);

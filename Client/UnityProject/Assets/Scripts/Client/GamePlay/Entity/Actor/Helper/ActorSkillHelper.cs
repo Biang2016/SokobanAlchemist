@@ -11,8 +11,6 @@ public class ActorSkillHelper : ActorMonoHelper
 
     private SortedDictionary<ushort, InteractSkillType> InteractSkillDict = new SortedDictionary<ushort, InteractSkillType>();
 
-    public ushort PlayerCurrentGetKickAbility = 0;
-
     public void Initialize()
     {
         foreach (KeyValuePair<ushort, string> kv in ConfigManager.BoxTypeDefineDict.TypeNameDict)
@@ -24,28 +22,24 @@ public class ActorSkillHelper : ActorMonoHelper
         {
             ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
             InteractSkillDict[boxTypeIndex] |= InteractSkillType.Push;
-            if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
         }
 
         foreach (string boxName in Actor.KickableBoxList)
         {
             ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
             InteractSkillDict[boxTypeIndex] |= InteractSkillType.Kick;
-            if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
         }
 
         foreach (string boxName in Actor.LiftableBoxList)
         {
             ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
             InteractSkillDict[boxTypeIndex] |= InteractSkillType.Lift;
-            if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
         }
 
         foreach (string boxName in Actor.ThrowableBoxList)
         {
             ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
             InteractSkillDict[boxTypeIndex] |= InteractSkillType.Throw;
-            if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
         }
     }
 
@@ -60,25 +54,24 @@ public class ActorSkillHelper : ActorMonoHelper
         return InteractSkillDict[boxTypeIndex].HasFlag(interactType);
     }
 
-    public void EnableInteract(InteractSkillType interactType, ushort boxTypeIndex)
-    {
-        if (!InteractSkillDict.ContainsKey(boxTypeIndex)) return;
-        if (!InteractSkillDict[boxTypeIndex].HasFlag(interactType))
-        {
-            InteractSkillDict[boxTypeIndex] |= interactType;
-            if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
-        }
-    }
+    // 废弃原因：所有箱子初始化时注册事件太耗了，如果还想启用，未来可以主动刷新所有箱子，或用从游戏设计上避免技能实时变化
+    //public void EnableInteract(InteractSkillType interactType, ushort boxTypeIndex)
+    //{
+    //    if (!InteractSkillDict.ContainsKey(boxTypeIndex)) return;
+    //    if (!InteractSkillDict[boxTypeIndex].HasFlag(interactType))
+    //    {
+    //        InteractSkillDict[boxTypeIndex] |= interactType;
+    //    }
+    //}
 
-    public void DisableInteract(InteractSkillType interactType, ushort boxTypeIndex)
-    {
-        if (!InteractSkillDict.ContainsKey(boxTypeIndex)) return;
-        if (InteractSkillDict[boxTypeIndex].HasFlag(interactType))
-        {
-            InteractSkillDict[boxTypeIndex] -= interactType;
-            if (Actor.IsPlayer) ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerInteractSkillChanged, InteractSkillDict[boxTypeIndex], boxTypeIndex);
-        }
-    }
+    //public void DisableInteract(InteractSkillType interactType, ushort boxTypeIndex)
+    //{
+    //    if (!InteractSkillDict.ContainsKey(boxTypeIndex)) return;
+    //    if (InteractSkillDict[boxTypeIndex].HasFlag(interactType))
+    //    {
+    //        InteractSkillDict[boxTypeIndex] -= interactType;
+    //    }
+    //}
 }
 
 [Flags]
