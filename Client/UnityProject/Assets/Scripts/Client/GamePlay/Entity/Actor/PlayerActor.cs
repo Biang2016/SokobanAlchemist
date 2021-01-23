@@ -376,7 +376,7 @@ public class PlayerActor : Actor
             case GridPosR.Orientation.Left:
             {
                 float x = moveDirection.x;
-                float z = CurMoveAttempt.z;
+                float z = moveDirection.z;
                 moveDirection.x = -z;
                 moveDirection.z = x;
                 break;

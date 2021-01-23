@@ -13,13 +13,16 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     private GameObject DynamicColliderRoot; // gameObject.setActive字段为此类专用
 
     [SerializeField]
+    private GameObject BoxOnlyDynamicColliderRoot;
+
+    [SerializeField]
     private Collider[] StaticColliders; // enable 字段为此类专用；gameObject.setActive字段为其他特殊开关专用
 
     [SerializeField]
     private Collider[] DynamicColliders; // enable 字段为此类专用；gameObject.setActive字段为其他特殊开关专用
 
     [SerializeField]
-    private Collider BoxOnlyDynamicCollider;
+    private Collider[] BoxOnlyDynamicColliders; // enable 字段为此类专用；gameObject.setActive字段为其他特殊开关专用
 
     private bool staticColliderEnable;
 
@@ -95,21 +98,36 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         }
     }
 
+    private bool boxOnlyDynamicCollidersEnable;
+
+    private bool BoxOnlyDynamicCollidersEnable
+    {
+        get { return boxOnlyDynamicCollidersEnable; }
+        set
+        {
+            boxOnlyDynamicCollidersEnable = value;
+            foreach (Collider bodc in BoxOnlyDynamicColliders)
+            {
+                bodc.enabled = value;
+            }
+        }
+    }
+
     public void OnBoxUsed()
     {
         NormalColliderRoot.SetActive(true);
         StaticColliderRoot.SetActive(true);
-        BoxOnlyDynamicCollider.gameObject.SetActive(true);
+        BoxOnlyDynamicColliderRoot.SetActive(true);
     }
 
     public void OnBoxPoolRecycled()
     {
         StaticColliderEnable = false;
         DynamicColliderEnable = false;
-        BoxOnlyDynamicCollider.enabled = false;
+        BoxOnlyDynamicCollidersEnable = false;
         NormalColliderRoot.SetActive(false);
         StaticColliderRoot.SetActive(false);
-        BoxOnlyDynamicCollider.gameObject.SetActive(false);
+        BoxOnlyDynamicColliderRoot.SetActive(false);
     }
 
     public void Initialize(bool passable, bool artOnly, bool isGround, bool drop, bool lerp)
@@ -117,18 +135,18 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         NormalColliderRoot.SetActive(!passable);
         StaticColliderRoot.SetActive(!artOnly);
         DynamicColliderRoot.gameObject.SetActive(!artOnly);
-        BoxOnlyDynamicCollider.gameObject.SetActive(!artOnly && passable);
+        BoxOnlyDynamicColliderRoot.SetActive(!artOnly && passable);
 
         if (lerp)
         {
             DynamicColliderEnable = false;
-            BoxOnlyDynamicCollider.enabled = true;
+            BoxOnlyDynamicCollidersEnable = true;
             StaticColliderEnable = !drop;
         }
         else
         {
             DynamicColliderEnable = false;
-            BoxOnlyDynamicCollider.enabled = true;
+            BoxOnlyDynamicCollidersEnable = true;
             StaticColliderEnable = true;
         }
 
@@ -142,14 +160,14 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     {
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
-        BoxOnlyDynamicCollider.enabled = true;
+        BoxOnlyDynamicCollidersEnable = true;
     }
 
     public void OnPush()
     {
         StaticColliderEnable = true;
         DynamicColliderEnable = true;
-        BoxOnlyDynamicCollider.enabled = true;
+        BoxOnlyDynamicCollidersEnable = true;
         DynamicColliderDynamicFriction = 0f;
     }
 
@@ -157,7 +175,7 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     {
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
-        BoxOnlyDynamicCollider.enabled = true;
+        BoxOnlyDynamicCollidersEnable = true;
         DynamicColliderDynamicFriction = 0f;
     }
 
@@ -165,7 +183,7 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     {
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
-        BoxOnlyDynamicCollider.enabled = true;
+        BoxOnlyDynamicCollidersEnable = true;
         DynamicColliderDynamicFriction = 0f;
     }
 
@@ -173,14 +191,14 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     {
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
-        BoxOnlyDynamicCollider.enabled = true;
+        BoxOnlyDynamicCollidersEnable = true;
     }
 
     public void OnThrow()
     {
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
-        BoxOnlyDynamicCollider.enabled = true;
+        BoxOnlyDynamicCollidersEnable = true;
         DynamicColliderDynamicFriction = Box.Throw_Friction;
     }
 
@@ -188,7 +206,7 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     {
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
-        BoxOnlyDynamicCollider.enabled = true;
+        BoxOnlyDynamicCollidersEnable = true;
         DynamicColliderDynamicFriction = Box.Throw_Friction;
     }
 
@@ -196,20 +214,20 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     {
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
-        BoxOnlyDynamicCollider.enabled = true;
+        BoxOnlyDynamicCollidersEnable = true;
     }
 
     public void OnDropFromAir()
     {
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
-        BoxOnlyDynamicCollider.enabled = true;
+        BoxOnlyDynamicCollidersEnable = true;
     }
 
     public void OnRigidbodyStop()
     {
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
-        BoxOnlyDynamicCollider.enabled = false;
+        BoxOnlyDynamicCollidersEnable = false;
     }
 }

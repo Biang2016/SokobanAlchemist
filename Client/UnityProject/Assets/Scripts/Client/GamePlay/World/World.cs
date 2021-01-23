@@ -250,7 +250,7 @@ public class World : PoolObject
                 box?.DestroyBox(); // 强行删除该格占用Box
                 if (module)
                 {
-                    module.GenerateBox(dataClone.BoxTypeIndex, localGP.x, localGP.y, localGP.z, data.BoxOrientation, true, null, dataClone.WorldSpecialBoxData.BoxExtraSerializeDataFromWorld);
+                    module.GenerateBox(dataClone.BoxTypeIndex, localGP.x, localGP.y, localGP.z, data.BoxOrientation, true, false, null, dataClone.WorldSpecialBoxData.BoxExtraSerializeDataFromWorld);
 
                     // Box生成后此BoxPassiveSkill及注册的事件均作废
                     bf.ClearAndUnRegister();
@@ -267,7 +267,7 @@ public class World : PoolObject
             WorldModule module = GetModuleByGridPosition(worldGP);
             if (module != null)
             {
-                module.GenerateBox(worldSpecialBoxData.BoxTypeIndex, module.WorldGPToLocalGP(worldGP), worldSpecialBoxData.BoxOrientation, false, null, worldSpecialBoxData.BoxExtraSerializeDataFromWorld);
+                module.GenerateBox(worldSpecialBoxData.BoxTypeIndex, module.WorldGPToLocalGP(worldGP), worldSpecialBoxData.BoxOrientation, false, true, null, worldSpecialBoxData.BoxExtraSerializeDataFromWorld);
             }
         }
 
@@ -566,9 +566,25 @@ public class World : PoolObject
             GridPos3D gridGP = offset + box_src.WorldGP;
             GridPos3D gridGP_after = gridGP + direction;
             Box box_after = GetBoxByGridPosition(gridGP_after, out WorldModule module_after, out GridPos3D localGP_after);
-            bool cannotMove = (box_after != box_src && box_after != null && !boxes_moveable.Contains(box_after))
-                              || module_after == null
-                              || CheckActorOccupiedGrid(gridGP_after, excludeActorGUID);
+
+            bool beBlockedByOtherBox = box_after != null && box_after != box_src && !boxes_moveable.Contains(box_after);
+            if (beBlockedByOtherBox)
+            {
+                bool is_box_after_aboveBox = false;
+                foreach (Box beneathBox in box_after.GetBeneathBoxes())
+                {
+                    if (beneathBox == box_src || boxes_moveable.Contains(beneathBox))
+                    {
+                        is_box_after_aboveBox = true;
+                    }
+                }
+
+                if (is_box_after_aboveBox) beBlockedByOtherBox = false;
+            }
+
+            bool beBlockedByActor = CheckActorOccupiedGrid(gridGP_after, excludeActorGUID);
+            bool cannotMove = module_after == null || beBlockedByOtherBox || beBlockedByActor;
+
             if (cannotMove)
             {
                 box_src.StartTryingDropSelf();
@@ -616,31 +632,43 @@ public class World : PoolObject
         return true;
     }
 
-    public void BoxColumnTransformDOPause(GridPos3D baseBoxGP, GridPos3D moveDirection)
+    public void BoxColumnTransformDOPause(GridPos3D baseBoxGP, GridPos3D moveDirection, uint excludeActorGUID = 0)
     {
         HashSet<Box> moveableBoxes = new HashSet<Box>();
-        CheckCanMoveBoxColumn(baseBoxGP, moveDirection, moveableBoxes);
+        CheckCanMoveBoxColumn(baseBoxGP, moveDirection, moveableBoxes, excludeActorGUID);
         foreach (Box moveableBox in moveableBoxes)
         {
             moveableBox.transform.DOPause();
+            if (Box.ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] BoxTransform DOPause {moveableBox.name}");
         }
     }
 
     public bool MoveBoxColumn(GridPos3D srcGP, GridPos3D direction, Box.States sucState, bool needLerp = true, bool needLerpModel = false, uint excludeActorGUID = 0)
     {
+        if (direction == GridPos3D.Zero) return false;
         HashSet<Box> boxes_moveable = new HashSet<Box>();
         bool valid = CheckCanMoveBoxColumn(srcGP, direction, boxes_moveable, excludeActorGUID);
         if (!valid) return false;
 
+        // 先将矩阵对应格子清空
+        foreach (Box box_moveable in boxes_moveable)
+        {
+            foreach (GridPos3D offset in box_moveable.GetBoxOccupationGPs_Rotated())
+            {
+                GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP;
+                GetBoxByGridPosition(gridWorldGP_before, out WorldModule module_before, out GridPos3D boxGridLocalGP_before);
+                module_before.BoxMatrix[boxGridLocalGP_before.x, boxGridLocalGP_before.y, boxGridLocalGP_before.z] = null;
+            }
+        }
+
+        // 再往矩阵填入引用，不可在一个循环内完成，否则后面的Box会将前面的引用置空
         foreach (Box box_moveable in boxes_moveable)
         {
             foreach (GridPos3D offset in box_moveable.GetBoxOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP;
                 GridPos3D gridWorldGP_after = gridWorldGP_before + direction;
-                GetBoxByGridPosition(gridWorldGP_before, out WorldModule module_before, out GridPos3D boxGridLocalGP_before);
                 GetBoxByGridPosition(gridWorldGP_after, out WorldModule module_after, out GridPos3D boxGridLocalGP_after);
-                module_before.BoxMatrix[boxGridLocalGP_before.x, boxGridLocalGP_before.y, boxGridLocalGP_before.z] = null;
                 module_after.BoxMatrix[boxGridLocalGP_after.x, boxGridLocalGP_after.y, boxGridLocalGP_after.z] = box_moveable;
             }
 
@@ -761,6 +789,37 @@ public class World : PoolObject
         }
     }
 
+    public HashSet<Box> GetBeneathBoxes(Box box)
+    {
+        HashSet<Box> beneathBoxes = new HashSet<Box>();
+        Queue<Box> beneathBoxesQueue = new Queue<Box>();
+        beneathBoxesQueue.Enqueue(box);
+        while (beneathBoxesQueue.Count > 0)
+        {
+            Box peakBox = beneathBoxesQueue.Dequeue();
+            GetBeneathBoxesCore(peakBox, beneathBoxes, beneathBoxesQueue);
+        }
+
+        return beneathBoxes;
+    }
+
+    private void GetBeneathBoxesCore(Box box, HashSet<Box> beneathBoxes, Queue<Box> beneathBoxesQueue)
+    {
+        if (box.State == Box.States.Static)
+        {
+            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+            {
+                GridPos3D gridGP = box.WorldGP + offset;
+                Box beneathBox = GetBoxByGridPosition(gridGP + GridPos3D.Down, out WorldModule _, out GridPos3D _);
+                if (beneathBox != null && beneathBox != box)
+                {
+                    bool addSuc = beneathBoxes.Add(beneathBox);
+                    if (addSuc) beneathBoxesQueue.Enqueue(beneathBox);
+                }
+            }
+        }
+    }
+
     public void CheckDropSelf(Box box)
     {
         if (box && box.Droppable && box.State != Box.States.DroppingFromAir)
@@ -834,7 +893,7 @@ public class World : PoolObject
         {
             GridPos3D gridWorldGP = offset + box.WorldGP + GridPos3D.Up;
             Box boxAbove = GetBoxByGridPosition(gridWorldGP, out WorldModule _, out GridPos3D _);
-            if (boxAbove != null && !boxSet.Contains(boxAbove))
+            if (boxAbove != null && boxAbove != box && !boxSet.Contains(boxAbove))
             {
                 boxSet.Add(boxAbove);
                 CheckDropSelf(boxAbove);

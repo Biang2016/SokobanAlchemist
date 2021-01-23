@@ -16,6 +16,8 @@ using UnityEditor;
 
 public partial class Box : Entity
 {
+    public static bool ENABLE_BOX_MOVE_LOG = true;
+
     internal Rigidbody Rigidbody;
 
     internal Actor LastTouchActor;
@@ -233,6 +235,12 @@ public partial class Box : Entity
         return boxOccupation_transformed;
     }
 
+    // 获得支撑此Box的底部Box
+    public HashSet<Box> GetBeneathBoxes()
+    {
+        return WorldManager.Instance.CurrentWorld.GetBeneathBoxes(this);
+    }
+
     public BoundsInt BoxBoundsInt => GetBoxOccupationGPs_Rotated().GetBoundingRectFromListGridPos(WorldGP);
 
     #region 箱子被动技能
@@ -425,6 +433,7 @@ public partial class Box : Entity
 
     public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly, LerpType lerpType, bool needLerpModel = false, bool needCheckDrop = true)
     {
+        if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Init LerpType:{lerpType} TargetGP:{module.LocalGPToWorldGP(localGridPos3D)}");
         SetModelSmoothMoveLerpTime(0);
         ArtOnly = artOnly;
         LastTouchActor = null;
@@ -455,6 +464,8 @@ public partial class Box : Entity
                 {
                     BoxColliderHelper.OnPushEnd();
                 }
+
+                if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Init LerpType:{lerpType} DOLerpGP:{localGridPos3D} finalPos:{transform.position}");
             });
             transform.DOLocalRotate(Vector3.zero, lerpTime);
             switch (lerpType)
@@ -515,13 +526,14 @@ public partial class Box : Entity
 
             if (needLerpModel) SetModelSmoothMoveLerpTime(0.2f);
             transform.localPosition = localGridPos3D;
+            if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Init LerpType:{lerpType} NoLerpTime {transform.position}");
             transform.localRotation = Quaternion.identity;
         }
 
         if (needCheckDrop) WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
     }
 
-    public void Push(Vector3 direction)
+    public void Push(Vector3 direction, Actor actor)
     {
         if (state == States.Static || state == States.PushingCanceling)
         {
@@ -530,8 +542,8 @@ public partial class Box : Entity
             GridPos3D gp = GridPos3D.GetGridPosByPoint(targetPos, 1);
             if (gp != WorldGP)
             {
-                if (Actor.ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {name} Push {WorldGP} -> {gp}");
-                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, (gp - WorldGP).Normalized(), States.BeingPushed);
+                if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Push {WorldGP} -> {gp}");
+                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, (gp - WorldGP).Normalized(), States.BeingPushed, true, false, actor.GUID);
             }
         }
     }
@@ -543,19 +555,22 @@ public partial class Box : Entity
             if ((transform.localPosition - LocalGP).magnitude > (1 - Static_Inertia))
             {
                 SetModelSmoothMoveLerpTime(0);
-                if (Actor.ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {name} PushCanceled {WorldGP} -> {LastWorldGP}");
+                if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} PushCanceled {WorldGP} -> {LastWorldGP}");
                 WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, (LastWorldGP - WorldGP).Normalized(), States.PushingCanceling);
             }
         }
     }
 
-    public void ForceStopWhenSwapBox()
+    public void ForceStopWhenSwapBox(Actor actor)
     {
         GridPos3D targetGP = transform.position.ToGridPos3D();
         GridPos3D moveDirection = (targetGP - WorldGP).Normalized();
-        WorldManager.Instance.CurrentWorld.BoxColumnTransformDOPause(WorldGP, moveDirection);
-        if (Actor.ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {name} ForceCancelPush {WorldGP} -> {targetGP}");
-        WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, moveDirection, States.Static, false, true);
+        WorldManager.Instance.CurrentWorld.BoxColumnTransformDOPause(WorldGP, moveDirection, actor.GUID);
+        if (moveDirection != GridPos3D.Zero)
+        {
+            if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] Box] {name} ForceCancelPush {WorldGP} -> {targetGP}");
+            WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, moveDirection, States.Static, false, true, actor.GUID);
+        }
     }
 
     public void Kick(Vector3 direction, float velocity, Actor actor)

@@ -151,7 +151,7 @@ public class WorldModule : PoolObject
             bf.GenerateBoxAction = () =>
             {
                 BoxMatrix[localGP.x, localGP.y, localGP.z]?.DestroyBox(); // 强行删除该格占用Box
-                Box box = GenerateBox(dataClone.BoxTypeIndex, localGP, data.BoxOrientation, true, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
+                Box box = GenerateBox(dataClone.BoxTypeIndex, localGP, data.BoxOrientation, true, false, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
                 box.name = box.name + "_Generated";
 
                 // Box生成后此BoxPassiveSkill及注册的事件均作废
@@ -162,7 +162,6 @@ public class WorldModule : PoolObject
             EventTriggerAppearBoxPassiveSkillList.Add(bf);
         }
 
-        int generatedBoxCount = 0;
         for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
         {
             for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
@@ -175,13 +174,7 @@ public class WorldModule : PoolObject
                     {
                         Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[x, y, z];
                         Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = worldExtraSerializeDataForOneModule[x, y, z];
-                        GenerateBox(boxTypeIndex, x, y, z, boxOrientation, false, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
-                        generatedBoxCount++;
-                        if (generatedBoxCount > 256)
-                        {
-                            generatedBoxCount -= 256;
-                            //yield return null;
-                        }
+                        GenerateBox(boxTypeIndex, x, y, z, boxOrientation, false, true, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
                     }
                 }
             }
@@ -228,12 +221,12 @@ public class WorldModule : PoolObject
         WorldModuleLevelTriggers.Add(trigger);
     }
 
-    public Box GenerateBox(ushort boxTypeIndex, GridPos3D localGP, GridPosR.Orientation orientation, bool isTriggerAppear = false, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    public Box GenerateBox(ushort boxTypeIndex, GridPos3D localGP, GridPosR.Orientation orientation, bool isTriggerAppear = false, bool isStartedBoxes = false, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
-        return GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z, orientation, isTriggerAppear, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
+        return GenerateBox(boxTypeIndex, localGP.x, localGP.y, localGP.z, orientation, isTriggerAppear, isStartedBoxes, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
     }
 
-    public Box GenerateBox(ushort boxTypeIndex, int x, int y, int z, GridPosR.Orientation orientation, bool isTriggerAppear = false, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    public Box GenerateBox(ushort boxTypeIndex, int x, int y, int z, GridPosR.Orientation orientation, bool isTriggerAppear = false, bool isStartedBoxes = false, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
         if (boxExtraSerializeDataFromWorld != null)
         {
@@ -270,7 +263,7 @@ public class WorldModule : PoolObject
             GridPos3D gp = new GridPos3D(x, y, z);
             box.ApplyBoxExtraSerializeData(boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
             box.Setup(boxTypeIndex, orientation);
-            box.Initialize(gp, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear); // 如果是TriggerAppear的箱子则不需要检查坠落
+            box.Initialize(gp, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedBoxes); // 如果是TriggerAppear的箱子则不需要检查坠落
             box.name = $"{boxName}_{gp}";
 
             foreach (GridPos3D gridPos3D in boxOccupation_rotated)

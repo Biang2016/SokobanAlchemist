@@ -14,7 +14,7 @@ public class Actor : Entity
 {
     public static bool ENABLE_ACTOR_MOVE_LOG =
 #if UNITY_EDITOR
-        false;
+        true;
 #else
         false;
 #endif
@@ -609,7 +609,7 @@ public class Actor : Entity
             }
 
             ActorBuffHelper.BuffFixedUpdate();
-            if (ENABLE_ACTOR_MOVE_LOG && CurWorldGP != LastWorldGP) Debug.Log($"[Actor] {name} Move {LastWorldGP} -> {CurWorldGP}");
+            if (ENABLE_ACTOR_MOVE_LOG && CurWorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {CurWorldGP}");
             LastWorldGP = CurWorldGP;
             CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
         }
@@ -872,30 +872,55 @@ public class Actor : Entity
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            Vector3 boxIndicatorPos = hit.collider.transform.position;
-            GridPos3D boxIndicatorGP = boxIndicatorPos.ToGridPos3D();
+            GridPos3D actorSwapBoxMoveAttempt = (hit.collider.transform.position - transform.position).ToGridPos3D().Normalized();
             if (box && box.Pushable && ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
+                box.ForceStopWhenSwapBox(this);
+
+                Vector3 boxIndicatorPos = hit.collider.transform.position;
+                GridPos3D boxIndicatorGP_offset = (boxIndicatorPos - box.transform.position).ToGridPos3D();
+                GridPos3D boxIndicatorGP = boxIndicatorGP_offset + box.WorldGP;
+
                 // 如果角色面朝方向Box的厚度大于一格，则无法swap
-                GridPos3D boxIndicatorGP_behind = boxIndicatorGP + (boxIndicatorGP - CurWorldGP);
-                GridPos3D offset_behind = boxIndicatorGP_behind - box.WorldGP;
+                GridPos3D boxIndicatorGP_behind = boxIndicatorGP + actorSwapBoxMoveAttempt;
                 foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
                 {
-                    if (offset == offset_behind) return;
+                    if (offset == boxIndicatorGP_behind - box.WorldGP) return;
                 }
 
-                box.ForceStopWhenSwapBox();
-                transform.position = boxIndicatorPos;
-                LastWorldGP = CurWorldGP;
-                CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
                 GridPos3D boxWorldGP_before = box.WorldGP;
                 GridPos3D boxWorldGP_after = LastWorldGP - boxIndicatorGP + box.WorldGP;
-                if (WorldManager.Instance.CurrentWorld.MoveBoxColumn(box.WorldGP, (boxWorldGP_after - box.WorldGP).Normalized(), Box.States.BeingPushed, false, true, GUID))
+                if (WorldManager.Instance.CurrentWorld.MoveBoxColumn(box.WorldGP, -actorSwapBoxMoveAttempt, Box.States.BeingPushed, false, true, GUID))
                 {
-                    if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[Box] {box.name} SwapBox {boxWorldGP_before} -> {boxWorldGP_after}");
+                    if (Box.ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {box.name} SwapBox {boxWorldGP_before} -> {box.WorldGP}");
+                    transform.position = boxIndicatorGP;
+                    LastWorldGP = CurWorldGP;
+                    CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+                    if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Actor] {name} Swap {LastWorldGP} -> {CurWorldGP}");
+                }
+                else
+                {
+                    if (Box.ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {box.name} SwapBox MoveFailed {boxWorldGP_before} -> {boxWorldGP_after}");
+                    GridPos3D actorTargetGP = boxIndicatorGP + actorSwapBoxMoveAttempt;
+                    Box targetBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(actorTargetGP, out WorldModule _, out GridPos3D _, false);
+                    if (targetBox == null || targetBox.Passable)
+                    {
+                        transform.position = boxIndicatorGP + actorSwapBoxMoveAttempt;
+                        LastWorldGP = CurWorldGP;
+                        CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+                        if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Actor] {name} SwapFailed MoveSuc {LastWorldGP} -> {CurWorldGP}");
+                    }
+                    else
+                    {
+                        if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Actor] {name} SwapFailed MoveFailed blocked by {targetBox.name} {LastWorldGP} -> {CurWorldGP}");
+                    }
                 }
 
                 // todo kicking box的swap如何兼容
+            }
+            else
+            {
+                if (Box.ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {box.name} SwapBoxFailed");
             }
         }
     }
