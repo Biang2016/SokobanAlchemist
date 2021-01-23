@@ -23,9 +23,14 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, BoxPas
             if (module != null)
             {
                 GridPos3D localGP = Box.LocalGP;
-                Box.DestroyBox();
                 ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
-                if (boxTypeIndex != 0) module.GenerateBox(boxTypeIndex, localGP, BoxOrientation);
+                Box.DestroyBox(delegate
+                {
+                    if (boxTypeIndex != 0)
+                    {
+                        module.GenerateBox(boxTypeIndex, localGP, BoxOrientation);
+                    }
+                });
             }
         }
     }
@@ -33,7 +38,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, BoxPas
     protected override void ChildClone(BoxPassiveSkillAction newAction)
     {
         base.ChildClone(newAction);
-        BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType)newAction);
+        BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType) newAction);
         action.ChangeBoxTypeTo = ChangeBoxTypeTo;
         action.BoxOrientation = BoxOrientation;
     }

@@ -8,6 +8,7 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using BiangLibrary.GamePlay;
+using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -990,17 +991,17 @@ public partial class Box : Entity
         }
     }
 
-    public void DestroyBox()
+    public void DestroyBox(UnityAction callBack = null)
     {
         foreach (BoxPassiveSkill bf in BoxPassiveSkills)
         {
             bf.OnBeforeDestroyBox();
         }
 
-        StartCoroutine(Co_DelayDestroyBox());
+        StartCoroutine(Co_DelayDestroyBox(callBack));
     }
 
-    IEnumerator Co_DelayDestroyBox()
+    IEnumerator Co_DelayDestroyBox(UnityAction callBack)
     {
         yield return new WaitForSeconds(DeleteDelay);
         foreach (BoxPassiveSkill bf in BoxPassiveSkills)
@@ -1011,6 +1012,7 @@ public partial class Box : Entity
         // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
         // BoxPassiveSkills.Clear(); 
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
+        callBack?.Invoke();
     }
 
     private Coroutine KeepTryingDropSelfCoroutine;
