@@ -246,7 +246,7 @@ public class WorldModule : PoolObject
         }
         else
         {
-            List<GridPos3D> boxOccupation = ConfigManager.GetBoxOccupationData(boxTypeIndex);
+            List<GridPos3D> boxOccupation = ConfigManager.GetBoxOccupationData(boxTypeIndex).BoxIndicatorGPs;
             List<GridPos3D> boxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(orientation, boxOccupation);
             foreach (GridPos3D gridPos3D in boxOccupation_rotated)
             {

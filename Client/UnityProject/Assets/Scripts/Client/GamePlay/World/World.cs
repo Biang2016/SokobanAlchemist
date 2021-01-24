@@ -679,6 +679,173 @@ public class World : PoolObject
             box_moveable.Initialize(localGP, newModule, needLerp ? 0.2f : 0f, box_moveable.ArtOnly, Box.LerpType.Push, needLerpModel, false);
         }
 
+        HashSet<Box> mergedBoxes = new HashSet<Box>();
+        foreach (Box box_moveable in boxes_moveable)
+        {
+            if (mergedBoxes.Contains(box_moveable)) continue;
+            CheckMatchThree(box_moveable, mergedBoxes);
+        }
+
+        foreach (Box mergedBox in mergedBoxes)
+        {
+            if (mergedBox.IsRecycled) continue; // 有可能合并完就回收了
+            mergedBox.MergeBox();
+        }
+
+        return true;
+    }
+
+    private bool CheckMatchThree(Box srcBox, HashSet<Box> mergedBoxes)
+    {
+        if (!srcBox.IsBoxShapeCuboid()) return false;
+
+        BoundsInt boundsInt = srcBox.BoxBoundsInt;
+        bool[] x_match_matrix = new bool[8] {true, true, true, true, true, true, true, true};
+        bool[] z_match_matrix = new bool[8] {true, true, true, true, true, true, true, true};
+        foreach (GridPos3D offset in srcBox.GetBoxOccupationGPs_Rotated())
+        {
+            GridPos3D alignRefGP = srcBox.WorldGP + offset; // 取每个点来作为基准，都要在相隔同样距离处找到同种箱子
+
+            // 依次找x轴左右各4格，和z轴前后各4格
+            for (int i = -4; i <= 4; i++)
+            {
+                if (i == 0) continue;
+                int matrixIndex = i > 0 ? i + 3 : i + 4;
+                GridPos3D targetGP = alignRefGP + GridPos3D.Right * i * boundsInt.size.x;
+                Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
+                if (targetBox == null || targetBox == srcBox || targetBox.BoxTypeIndex != srcBox.BoxTypeIndex)
+                {
+                    x_match_matrix[matrixIndex] = false;
+                }
+            }
+
+            for (int i = -4; i <= 4; i++)
+            {
+                if (i == 0) continue;
+                int matrixIndex = i > 0 ? i + 3 : i + 4;
+                GridPos3D targetGP = alignRefGP + GridPos3D.Forward * i * boundsInt.size.z;
+                Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
+                if (targetBox == null || targetBox == srcBox || targetBox.BoxTypeIndex != srcBox.BoxTypeIndex)
+                {
+                    z_match_matrix[matrixIndex] = false;
+                }
+            }
+        }
+
+        int x_connect_positive = 1;
+        int x_connect_negative = 1;
+        int z_connect_positive = 1;
+        int z_connect_negative = 1;
+
+        for (; x_connect_positive <= 4; x_connect_positive++)
+            if (!x_match_matrix[x_connect_positive + 3])
+                break;
+
+        for (; x_connect_negative <= 4; x_connect_negative++)
+            if (!x_match_matrix[4 - x_connect_negative])
+                break;
+
+        for (; z_connect_positive <= 4; z_connect_positive++)
+            if (!z_match_matrix[z_connect_positive + 3])
+                break;
+
+        for (; z_connect_negative <= 4; z_connect_negative++)
+            if (!z_match_matrix[4 - z_connect_negative])
+                break;
+
+        x_connect_positive--;
+        x_connect_negative--;
+        z_connect_positive--;
+        z_connect_negative--;
+
+        int matchesOnXAxis = 1 + x_connect_positive + x_connect_negative;
+        bool matchThreeOnXAxis = matchesOnXAxis >= 3;
+
+        int matchesOnZAxis = 1 + z_connect_positive + z_connect_negative;
+        bool matchThreeOnZAxis = matchesOnZAxis >= 3;
+
+        if (!matchThreeOnXAxis && !matchThreeOnZAxis) return false;
+
+        // 将单x轴上的消除数量限制在5个以内
+        if (matchesOnXAxis > 5)
+        {
+            if (x_connect_positive > 2 && x_connect_negative > 2)
+            {
+                x_connect_positive = 2;
+                x_connect_negative = 2;
+            }
+            else
+            {
+                if (x_connect_positive <= 2) x_connect_negative = 5 - 1 - x_connect_positive;
+                else if (x_connect_negative <= 2) x_connect_positive = 5 - 1 - x_connect_negative;
+            }
+        }
+
+        // 将单z轴上的消除数量限制在5个以内
+        if (matchesOnZAxis > 5)
+        {
+            if (z_connect_positive > 2 && z_connect_negative > 2)
+            {
+                z_connect_positive = 2;
+                z_connect_negative = 2;
+            }
+            else
+            {
+                if (z_connect_positive <= 2) z_connect_negative = 5 - 1 - z_connect_positive;
+                else if (z_connect_negative <= 2) z_connect_positive = 5 - 1 - z_connect_negative;
+            }
+        }
+
+        // 双轴同时满足，平均分配5个消除的箱子到两轴上
+        if (matchThreeOnXAxis && matchThreeOnZAxis)
+        {
+            // 将单x轴上的消除数量限制为2个
+            if (x_connect_positive == 2 && x_connect_negative == 2)
+            {
+                x_connect_positive = 1;
+                x_connect_negative = 1;
+            }
+            else
+            {
+                if (x_connect_positive == 0) x_connect_negative = 2;
+                else if (x_connect_negative == 0) x_connect_positive = 2;
+            }
+
+            // 将单z轴上的消除数量限制为2个
+            if (z_connect_positive == 2 && z_connect_negative == 2)
+            {
+                z_connect_positive = 1;
+                z_connect_negative = 1;
+            }
+            else
+            {
+                if (z_connect_positive == 0) z_connect_negative = 2;
+                else if (z_connect_negative == 0) z_connect_positive = 2;
+            }
+        }
+
+        if (matchThreeOnXAxis)
+        {
+            for (int offsetUnit = -x_connect_negative; offsetUnit <= x_connect_positive; offsetUnit++)
+            {
+                GridPos3D targetGP = srcBox.WorldGP + GridPos3D.Right * offsetUnit * boundsInt.size.x; // 这里用Box.WorldGP是仅为了随便取一个grid
+                Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
+                Assert.IsNotNull(targetBox);
+                mergedBoxes.Add(targetBox);
+            }
+        }
+
+        if (matchThreeOnZAxis)
+        {
+            for (int offsetUnit = -z_connect_negative; offsetUnit <= z_connect_positive; offsetUnit++)
+            {
+                GridPos3D targetGP = srcBox.WorldGP + GridPos3D.Forward * offsetUnit * boundsInt.size.z; // 这里用Box.WorldGP是仅为了随便取一个grid
+                Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
+                Assert.IsNotNull(targetBox);
+                mergedBoxes.Add(targetBox);
+            }
+        }
+
         return true;
     }
 

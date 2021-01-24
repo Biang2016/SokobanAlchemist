@@ -27,6 +27,8 @@ public class BoxPassiveSkill_Conditional : BoxPassiveSkill
         OnBeforeDestroyBox = 1 << 10,
         OnDestroyBox = 1 << 11,
         OnLevelEvent = 1 << 12,
+        OnBeforeMergeBox = 1 << 13,
+        OnMergeBox = 1 << 14,
     }
 
     public BoxPassiveSkillConditionType BoxPassiveSkillCondition;
@@ -356,6 +358,38 @@ public class BoxPassiveSkill_Conditional : BoxPassiveSkill
     {
         base.OnDestroyBox();
         if (BoxPassiveSkillCondition.HasFlag(BoxPassiveSkillConditionType.OnDestroyBox))
+        {
+            foreach (BoxPassiveSkillAction action in BoxPassiveSkillActions)
+            {
+                if (action is BoxPassiveSkillAction.IPureAction pureAction)
+                {
+                    pureAction.Execute();
+                }
+            }
+        }
+
+        UnInitPassiveSkillActions();
+    }
+
+    public override void OnBeforeMergeBox()
+    {
+        base.OnBeforeMergeBox();
+        if (BoxPassiveSkillCondition.HasFlag(BoxPassiveSkillConditionType.OnBeforeMergeBox))
+        {
+            foreach (BoxPassiveSkillAction action in BoxPassiveSkillActions)
+            {
+                if (action is BoxPassiveSkillAction.IPureAction pureAction)
+                {
+                    pureAction.Execute();
+                }
+            }
+        }
+    }
+
+    public override void OnMergeBox()
+    {
+        base.OnMergeBox();
+        if (BoxPassiveSkillCondition.HasFlag(BoxPassiveSkillConditionType.OnMergeBox))
         {
             foreach (BoxPassiveSkillAction action in BoxPassiveSkillActions)
             {

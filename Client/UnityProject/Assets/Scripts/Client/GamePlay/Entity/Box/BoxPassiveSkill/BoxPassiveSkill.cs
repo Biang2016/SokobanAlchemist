@@ -86,7 +86,15 @@ public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
     {
     }
 
+    public virtual void OnBeforeMergeBox()
+    {
+    }
+
     public virtual void OnDestroyBox()
+    {
+    }
+
+    public virtual void OnMergeBox()
     {
     }
 

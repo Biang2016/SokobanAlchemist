@@ -203,7 +203,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     [ShowInInspector]
     [LabelText("箱子占位配置表")]
-    public static readonly Dictionary<ushort, List<GridPos3D>> BoxOccupationConfigDict = new Dictionary<ushort, List<GridPos3D>>();
+    public static readonly Dictionary<ushort, BoxOccupationData> BoxOccupationConfigDict = new Dictionary<ushort, BoxOccupationData>();
 
     [ShowInInspector]
     [LabelText("世界配置表")]
@@ -294,19 +294,14 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         {
             string prefabPath = WorldModuleTypeDefineDict.GetTypeAssetDataBasePath(worldModuleName);
             GameObject worldModulePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
-            bool isDirty = false;
             if (worldModulePrefab)
             {
                 WorldModuleDesignHelper module = worldModulePrefab.GetComponent<WorldModuleDesignHelper>();
                 if (module)
                 {
-                    isDirty = module.SortModule();
+                    bool isDirty = module.SortModule();
+                    if (isDirty) PrefabUtility.SaveAsPrefabAsset(worldModulePrefab, prefabPath);
                 }
-            }
-
-            if (isDirty)
-            {
-                PrefabUtility.SaveAsPrefabAsset(worldModulePrefab, prefabPath);
             }
 
             PrefabUtility.UnloadPrefabContents(worldModulePrefab);
@@ -317,19 +312,14 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         {
             string prefabPath = WorldTypeDefineDict.GetTypeAssetDataBasePath(worldName);
             GameObject worldPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
-            bool isDirty = false;
             if (worldPrefab)
             {
                 WorldDesignHelper world = worldPrefab.GetComponent<WorldDesignHelper>();
                 if (world)
                 {
-                    isDirty = world.SortWorld();
+                    bool isDirty = world.SortWorld();
+                    if (isDirty) PrefabUtility.SaveAsPrefabAsset(worldPrefab, prefabPath);
                 }
-            }
-
-            if (isDirty)
-            {
-                PrefabUtility.SaveAsPrefabAsset(worldPrefab, prefabPath);
             }
 
             PrefabUtility.UnloadPrefabContents(worldPrefab);
@@ -394,18 +384,29 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
         if (File.Exists(file)) File.Delete(file);
 
-        DirectoryInfo di = new DirectoryInfo(Application.dataPath + ResourcesPrefabDesignRoot + BoxOccupationConfigDictFolder_Relative);
-        foreach (FileInfo fi in di.GetFiles("*.prefab"))
+        List<string> boxNames = BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
+        foreach (string boxName in boxNames)
         {
-            string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
-            GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
-            Box box = obj.GetComponent<Box>();
-            List<GridPos3D> occupationData = box.GetBoxOccupationGPs_Editor();
-            ushort boxTypeIndex = BoxTypeDefineDict.TypeIndexDict[box.name];
-            if (boxTypeIndex != 0)
+            string prefabPath = BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName);
+            GameObject boxPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
+            if (boxPrefab)
             {
-                BoxOccupationConfigDict.Add(boxTypeIndex, occupationData);
+                Box box = boxPrefab.GetComponent<Box>();
+                if (box)
+                {
+                    box.BoxIndicatorHelper.RefreshBoxIndicatorOccupationData();
+                    BoxOccupationData occupationData = box.GetBoxOccupationGPs_Editor().Clone();
+                    ushort boxTypeIndex = BoxTypeDefineDict.TypeIndexDict[box.name];
+                    if (boxTypeIndex != 0)
+                    {
+                        BoxOccupationConfigDict.Add(boxTypeIndex, occupationData);
+                    }
+
+                    PrefabUtility.SaveAsPrefabAsset(boxPrefab, prefabPath);
+                }
             }
+
+            PrefabUtility.UnloadPrefabContents(boxPrefab);
         }
 
         byte[] bytes = SerializationUtility.SerializeValue(BoxOccupationConfigDict, dataFormat);
@@ -554,8 +555,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             foreach (FileInfo fi in di.GetFiles("*.config", SearchOption.AllDirectories))
             {
                 byte[] bytes = File.ReadAllBytes(fi.FullName);
-                Dictionary<ushort, List<GridPos3D>> data = SerializationUtility.DeserializeValue<Dictionary<ushort, List<GridPos3D>>>(bytes, dataFormat);
-                foreach (KeyValuePair<ushort, List<GridPos3D>> kv in data)
+                Dictionary<ushort, BoxOccupationData> data = SerializationUtility.DeserializeValue<Dictionary<ushort, BoxOccupationData>>(bytes, dataFormat);
+                foreach (KeyValuePair<ushort, BoxOccupationData> kv in data)
                 {
                     BoxOccupationConfigDict.Add(kv.Key, kv.Value);
                 }
@@ -878,10 +879,10 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return battleIndicatorTypeIndex;
     }
 
-    public static List<GridPos3D> GetBoxOccupationData(ushort boxTypeIndex)
+    public static BoxOccupationData GetBoxOccupationData(ushort boxTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
-        BoxOccupationConfigDict.TryGetValue(boxTypeIndex, out List<GridPos3D> occupationData);
+        BoxOccupationConfigDict.TryGetValue(boxTypeIndex, out BoxOccupationData occupationData);
         return occupationData;
     }
 

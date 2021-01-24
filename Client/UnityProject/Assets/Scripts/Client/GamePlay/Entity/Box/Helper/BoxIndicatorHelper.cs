@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using BiangLibrary.GameDataFormat.Grid;
+﻿using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -9,7 +8,8 @@ using UnityEditor;
 
 public class BoxIndicatorHelper : BoxMonoHelper
 {
-    public List<GridPos3D> BoxIndicatorGPs = new List<GridPos3D>();
+    [LabelText("箱子占位信息")]
+    public BoxOccupationData BoxOccupationData = new BoxOccupationData();
 
     public override void OnHelperUsed()
     {
@@ -24,16 +24,15 @@ public class BoxIndicatorHelper : BoxMonoHelper
     }
 
 #if UNITY_EDITOR
-    [Button("刷新箱子占用位置坐标")]
     public void RefreshBoxIndicatorOccupationData()
     {
-        BoxIndicatorGPs.Clear();
+        BoxOccupationData.Clear();
         Collider[] colliders = GetComponentsInChildren<Collider>();
         bool validOccupation = false;
         foreach (Collider c in colliders)
         {
             GridPos3D gp = new GridPos3D(Mathf.RoundToInt(c.transform.position.x), Mathf.RoundToInt(c.transform.position.y), Mathf.RoundToInt(c.transform.position.z));
-            BoxIndicatorGPs.Add(gp);
+            BoxOccupationData.BoxIndicatorGPs.Add(gp);
             if (gp == GridPos3D.Zero) validOccupation = true;
         }
 
@@ -41,6 +40,26 @@ public class BoxIndicatorHelper : BoxMonoHelper
         {
             GameObject boxPrefab = PrefabUtility.GetNearestPrefabInstanceRoot(gameObject);
             Debug.LogError($"{boxPrefab.name}的箱子占位配置错误，必须要有一个BoxIndicator位于(0,0,0)");
+            BoxOccupationData.IsBoxShapeCuboid = false;
+            return;
+        }
+
+        BoxOccupationData.IsBoxShapeCuboid = false;
+        BoxOccupationData.BoundsInt = BoxOccupationData.BoxIndicatorGPs.GetBoundingRectFromListGridPos(GridPos3D.Zero);
+        bool[,,] occupationMatrix = new bool[BoxOccupationData.BoundsInt.size.x, BoxOccupationData.BoundsInt.size.y, BoxOccupationData.BoundsInt.size.z];
+        foreach (GridPos3D offset in BoxOccupationData.BoxIndicatorGPs)
+        {
+            occupationMatrix[offset.x - BoxOccupationData.BoundsInt.xMin, offset.y - BoxOccupationData.BoundsInt.yMin, offset.z - BoxOccupationData.BoundsInt.zMin] = true;
+        }
+
+        BoxOccupationData.IsBoxShapeCuboid = true;
+        foreach (bool b in occupationMatrix)
+        {
+            if (!b)
+            {
+                BoxOccupationData.IsBoxShapeCuboid = false;
+                break;
+            }
         }
     }
 #endif

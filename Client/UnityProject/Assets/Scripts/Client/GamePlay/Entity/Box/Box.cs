@@ -155,6 +155,11 @@ public partial class Box : Entity
     [LabelText("死亡延迟")]
     private float DeleteDelay = 0;
 
+    [SerializeField]
+    [FoldoutGroup("箱子属性")]
+    [LabelText("合并延迟")]
+    private float MergeDelay = 0;
+
     public float FinalWeight => Weight * ConfigManager.BoxWeightFactor_Cheat;
 
     [AssetsOnly]
@@ -220,10 +225,10 @@ public partial class Box : Entity
     /// 仅仅用于Box的Prefab编辑，以供导出成Occupation配置表，（未经旋转过的 )
     /// </summary>
     /// <returns></returns>
-    public List<GridPos3D> GetBoxOccupationGPs_Editor()
+    public BoxOccupationData GetBoxOccupationGPs_Editor()
     {
         BoxIndicatorHelper.RefreshBoxIndicatorOccupationData();
-        return BoxIndicatorHelper.BoxIndicatorGPs;
+        return BoxIndicatorHelper.BoxOccupationData;
     }
 
 #endif
@@ -231,17 +236,22 @@ public partial class Box : Entity
     // 旋转过的局部坐标
     public List<GridPos3D> GetBoxOccupationGPs_Rotated()
     {
-        List<GridPos3D> boxOccupation_transformed = GridPos3D.TransformOccupiedPositions_XZ(BoxOrientation, ConfigManager.GetBoxOccupationData(BoxTypeIndex));
+        List<GridPos3D> boxOccupation_transformed = GridPos3D.TransformOccupiedPositions_XZ(BoxOrientation, ConfigManager.GetBoxOccupationData(BoxTypeIndex).BoxIndicatorGPs);
         return boxOccupation_transformed;
     }
+
+    public bool IsBoxShapeCuboid()
+    {
+        return ConfigManager.GetBoxOccupationData(BoxTypeIndex).IsBoxShapeCuboid;
+    }
+
+    public BoundsInt BoxBoundsInt => BoxIndicatorHelper.BoxOccupationData.BoundsInt; // ConfigManager不能序列化这个字段，很奇怪
 
     // 获得支撑此Box的底部Box
     public HashSet<Box> GetBeneathBoxes()
     {
         return WorldManager.Instance.CurrentWorld.GetBeneathBoxes(this);
     }
-
-    public BoundsInt BoxBoundsInt => GetBoxOccupationGPs_Rotated().GetBoundingRectFromListGridPos(WorldGP);
 
     #region 箱子被动技能
 
@@ -1008,6 +1018,30 @@ public partial class Box : Entity
         foreach (BoxPassiveSkill bf in BoxPassiveSkills)
         {
             bf.OnDestroyBox();
+        }
+
+        // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
+        // BoxPassiveSkills.Clear(); 
+        WorldManager.Instance.CurrentWorld.DeleteBox(this);
+        callBack?.Invoke();
+    }
+
+    public void MergeBox(UnityAction callBack = null)
+    {
+        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+        {
+            bf.OnBeforeMergeBox();
+        }
+
+        StartCoroutine(Co_DelayMergeBox(callBack));
+    }
+
+    IEnumerator Co_DelayMergeBox(UnityAction callBack)
+    {
+        yield return new WaitForSeconds(MergeDelay);
+        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+        {
+            bf.OnMergeBox();
         }
 
         // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
