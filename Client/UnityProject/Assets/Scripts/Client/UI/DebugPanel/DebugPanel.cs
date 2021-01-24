@@ -303,10 +303,16 @@ public class DebugPanel : BaseUIPanel
         BattleManager.Instance.Player1.ActorStatPropSet.ActionPointRecovery.AddModifier(new Property.PlusModifier {Delta = 10});
     }
 
-    [DebugToggleButton("Log/ToggleMoveLog")]
-    public void ToggleMoveLog()
+    [DebugToggleButton("Log/ToggleActorMoveLog")]
+    public void ToggleActorMoveLog()
     {
         Actor.ENABLE_ACTOR_MOVE_LOG = !Actor.ENABLE_ACTOR_MOVE_LOG;
+    }
+
+    [DebugToggleButton("Log/ToggleBoxLog")]
+    public void ToggleBoxLog()
+    {
+        Box.ENABLE_BOX_MOVE_LOG = !Box.ENABLE_BOX_MOVE_LOG;
     }
 
     [DebugToggleButton("Log/ToggleAIPathFindingLog")]

@@ -16,7 +16,7 @@ using UnityEditor;
 
 public partial class Box : Entity
 {
-    public static bool ENABLE_BOX_MOVE_LOG = true;
+    public static bool ENABLE_BOX_MOVE_LOG = false;
 
     internal Rigidbody Rigidbody;
 

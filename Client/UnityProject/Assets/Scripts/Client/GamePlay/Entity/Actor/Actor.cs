@@ -14,7 +14,7 @@ public class Actor : Entity
 {
     public static bool ENABLE_ACTOR_MOVE_LOG =
 #if UNITY_EDITOR
-        true;
+        false;
 #else
         false;
 #endif
