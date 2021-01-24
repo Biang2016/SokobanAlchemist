@@ -106,7 +106,7 @@ public abstract class Stat
                 OnValueChanged?.Invoke(before, _value);
                 if (_value == _minValue) OnValueReachMin?.Invoke(_value);
                 if (_value == _maxValue) OnValueReachMax?.Invoke(_value);
-                if (_value == 0) OnValueReachZero?.Invoke();
+                if (before > 0 && _value <= 0) OnValueReachZero?.Invoke();
                 if (before < _value) OnValueIncrease?.Invoke(_value - before);
                 if (before > _value) OnValueDecrease?.Invoke(before - _value);
                 OnChanged?.Invoke(_value, _minValue, _maxValue);

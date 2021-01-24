@@ -13,7 +13,7 @@ public class BoxPassiveSkillAction_RadiusAddActorsBuff : BoxPassiveSkillAction, 
     public RelativeCamp EffectiveOnRelativeCamp;
 
     [LabelText("判定半径")]
-    public int AddBuffRadius = 2;
+    public float AddBuffRadius = 2;
 
     [SerializeReference]
     [HideLabel]
@@ -24,7 +24,7 @@ public class BoxPassiveSkillAction_RadiusAddActorsBuff : BoxPassiveSkillAction, 
         HashSet<uint> actorList = new HashSet<uint>();
         foreach (GridPos3D offset in Box.GetBoxOccupationGPs_Rotated())
         {
-            Vector3 boxIndicatorPos = Box.transform.position + offset;
+            Vector3 boxIndicatorPos = Box.WorldGP + offset;
             Collider[] colliders = Physics.OverlapSphere(boxIndicatorPos, AddBuffRadius, LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
             foreach (Collider collider in colliders)
             {

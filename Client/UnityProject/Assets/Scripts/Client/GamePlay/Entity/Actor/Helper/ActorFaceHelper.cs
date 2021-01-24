@@ -19,7 +19,7 @@ public class ActorFaceHelper : ActorMonoHelper
         Actor.PushState = Actor.PushStates.None;
         foreach (Box b in FacingBoxList)
         {
-            if (b.State == Box.States.PushingCanceling || b.State == Box.States.BeingPushed)
+            if (b.State == Box.States.BeingPushed)
             {
                 Actor.PushState = Actor.PushStates.Pushing;
             }

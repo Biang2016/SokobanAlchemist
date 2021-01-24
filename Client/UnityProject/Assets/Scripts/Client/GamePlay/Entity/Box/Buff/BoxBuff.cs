@@ -245,15 +245,23 @@ public class BoxBuff_InstantDamage : BoxBuff
 {
     protected override string Description => "瞬间伤害buff, 必须是【瞬时效果】. buff施加后, 不残留在Box身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
 
-    [LabelText("伤害")]
-    public int Damage;
+    [LabelText("碰撞耐久度伤害")]
+    public int Damage_CollideDurability;
+
+    [LabelText("爆炸耐久度伤害")]
+    public int Damage_ExplodeDurability;
+
+    [LabelText("燃烧耐久度伤害")]
+    public int Damage_FiringDurability;
 
     public override void OnAdded(Entity entity)
     {
         base.OnAdded(entity);
         Box box = (Box) entity;
         if (box.IsRecycled) return;
-        box.BoxStatPropSet.CommonDurability.Value -= Damage;
+        box.BoxStatPropSet.CollideDurability.Value -= Damage_CollideDurability;
+        box.BoxStatPropSet.ExplodeDurability.Value -= Damage_ExplodeDurability;
+        box.BoxStatPropSet.FiringDurability.Value -= Damage_FiringDurability;
     }
 
     protected override bool ValidateBuffAttribute(BuffAttribute boxBuffAttribute)
@@ -271,6 +279,8 @@ public class BoxBuff_InstantDamage : BoxBuff
     {
         base.ChildClone(newBuff);
         BoxBuff_InstantDamage buff = ((BoxBuff_InstantDamage) newBuff);
-        buff.Damage = Damage;
+        buff.Damage_CollideDurability = Damage_CollideDurability;
+        buff.Damage_ExplodeDurability = Damage_ExplodeDurability;
+        buff.Damage_FiringDurability = Damage_FiringDurability;
     }
 }

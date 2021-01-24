@@ -57,11 +57,10 @@ public partial class Box
 
     private bool CollideCalculate(Collider collider, out bool validCollision, BoxCollideType collideType)
     {
-        bool requireCommonDurabilityReduce = false;
         validCollision = false;
 
         // 和一般箱子相撞
-        if (BoxStatPropSet.CollideWithBoxDurability.Value > 0 &&
+        if (BoxStatPropSet.CollideDurability.Value > 0 &&
             (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box ||
              collider.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
         )
@@ -76,14 +75,13 @@ public partial class Box
                 }
                 else
                 {
-                    BoxStatPropSet.CollideWithBoxDurability.Value--;
-                    requireCommonDurabilityReduce = true;
+                    BoxStatPropSet.CollideDurability.Value--;
                 }
             }
         }
 
         // 和世界碰撞体相撞
-        if (BoxStatPropSet.CollideWithBoxDurability.Value > 0 &&
+        if (BoxStatPropSet.CollideDurability.Value > 0 &&
             (collider.gameObject.layer == LayerManager.Instance.Layer_Wall)
         )
         {
@@ -94,13 +92,12 @@ public partial class Box
             }
             else
             {
-                BoxStatPropSet.CollideWithBoxDurability.Value--;
-                requireCommonDurabilityReduce = true;
+                BoxStatPropSet.CollideDurability.Value--;
             }
         }
 
         // 和角色碰撞体相撞
-        if (BoxStatPropSet.CollideWithActorDurability.Value > 0 &&
+        if (BoxStatPropSet.CollideDurability.Value > 0 &&
             (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player ||
              collider.gameObject.layer == LayerManager.Instance.Layer_Player ||
              collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy ||
@@ -118,25 +115,20 @@ public partial class Box
                     }
                     else
                     {
-                        BoxStatPropSet.CollideWithActorDurability.Value--;
-                        requireCommonDurabilityReduce = true;
+                        BoxStatPropSet.CollideDurability.Value--;
                     }
                 }
             }
         }
 
-        if (requireCommonDurabilityReduce) BoxStatPropSet.CommonDurability.Value--;
-
         if (collideType == BoxCollideType.DropFromAir) // 坠落有一定几率直接消失
         {
             if (!(BoxStatPropSet.DropFromAirSurviveProbabilityPercent.Value / 100f).ProbabilityBool())
             {
-                BoxStatPropSet.CollideWithBoxDurability.Value = 0;
-                BoxStatPropSet.CollideWithActorDurability.Value = 0;
-                BoxStatPropSet.CommonDurability.Value = 0;
+                BoxStatPropSet.CollideDurability.Value = 0;
             }
         }
 
-        return BoxStatPropSet.CollideWithBoxDurability.Value > 0 && BoxStatPropSet.CollideWithActorDurability.Value > 0 && BoxStatPropSet.CommonDurability.Value > 0;
+        return BoxStatPropSet.CollideDurability.Value > 0;
     }
 }

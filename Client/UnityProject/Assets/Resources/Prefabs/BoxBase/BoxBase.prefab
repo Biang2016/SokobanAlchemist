@@ -559,22 +559,18 @@ MonoBehaviour:
   BoxTypeIndex: 0
   BoxFeature: 0
   RawBoxStatPropSet:
-    CommonDurability:
-      _value: 5
-      _minValue: 0
-      _maxValue: 99999
-    CollideWithBoxDurability:
-      _value: 5
-      _minValue: 0
-      _maxValue: 99999
-    CollideWithActorDurability:
-      _value: 5
-      _minValue: 0
-      _maxValue: 99999
+    CollideDurability:
+      _value: 1
+      _minValue: -1
+      _maxValue: 1000
     DropFromAirSurviveProbabilityPercent:
       _value: 0
       _minValue: 0
       _maxValue: 100
+    ExplodeDurability:
+      _value: 1
+      _minValue: -1
+      _maxValue: 1000
     FrozenResistance:
       BaseValue: 100
       ModifiedValue: 0
@@ -639,8 +635,8 @@ MonoBehaviour:
       _maxValue: 1000
     FiringDurability:
       _value: 10
-      _minValue: 0
-      _maxValue: 10
+      _minValue: -1
+      _maxValue: 1000
     FiringLevel:
       _value: 0
       _minValue: 0
@@ -674,19 +670,15 @@ MonoBehaviour:
     FiringBreakFX: Hit_YellowFireStar
     RawBoxDefaultBuffs: []
   BoxStatPropSet:
-    CommonDurability:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    CollideWithBoxDurability:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    CollideWithActorDurability:
+    CollideDurability:
       _value: 0
       _minValue: 0
       _maxValue: 0
     DropFromAirSurviveProbabilityPercent:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    ExplodeDurability:
       _value: 0
       _minValue: 0
       _maxValue: 0

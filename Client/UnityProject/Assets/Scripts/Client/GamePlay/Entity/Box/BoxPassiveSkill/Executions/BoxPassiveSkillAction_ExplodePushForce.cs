@@ -42,7 +42,7 @@ public class BoxPassiveSkillAction_ExplodePushForce : BoxPassiveSkillAction, Box
             {
                 if (!boxes.Contains(box))
                 {
-                    if (box.State == Box.States.BeingKicked || box.State == Box.States.BeingPushed || box.State == Box.States.PushingCanceling || box.State == Box.States.PushingCanceling)
+                    if (box.State == Box.States.BeingKicked || box.State == Box.States.BeingPushed)
                     {
                         Vector3 diff = box.transform.position - center;
                         if (diff.x > diff.z)

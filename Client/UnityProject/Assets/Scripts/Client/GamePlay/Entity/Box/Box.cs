@@ -314,7 +314,6 @@ public partial class Box : Entity
     {
         Static,
         BeingPushed,
-        PushingCanceling,
         BeingKicked,
         BeingLift,
         Lifted,
@@ -535,7 +534,7 @@ public partial class Box : Entity
 
     public void Push(Vector3 direction, Actor actor)
     {
-        if (state == States.Static || state == States.PushingCanceling)
+        if (state == States.Static)
         {
             SetModelSmoothMoveLerpTime(0);
             Vector3 targetPos = WorldGP + direction.normalized;
@@ -544,19 +543,6 @@ public partial class Box : Entity
             {
                 if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Push {WorldGP} -> {gp}");
                 WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, (gp - WorldGP).Normalized(), States.BeingPushed, true, false, actor.GUID);
-            }
-        }
-    }
-
-    public void PushCanceled()
-    {
-        if (state == States.BeingPushed)
-        {
-            if ((transform.localPosition - LocalGP).magnitude > (1 - Static_Inertia))
-            {
-                SetModelSmoothMoveLerpTime(0);
-                if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} PushCanceled {WorldGP} -> {LastWorldGP}");
-                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, (LastWorldGP - WorldGP).Normalized(), States.PushingCanceling);
             }
         }
     }
@@ -575,7 +561,7 @@ public partial class Box : Entity
 
     public void Kick(Vector3 direction, float velocity, Actor actor)
     {
-        if (state == States.BeingPushed || state == States.Flying || state == States.BeingKicked || state == States.Static || state == States.PushingCanceling)
+        if (state == States.BeingPushed || state == States.Flying || state == States.BeingKicked || state == States.Static)
         {
             SetModelSmoothMoveLerpTime(0);
             if (BoxEffectHelper == null)
@@ -617,7 +603,7 @@ public partial class Box : Entity
 
     public bool BeingLift(Actor actor)
     {
-        if (state == States.BeingPushed || state == States.Flying || state == States.BeingKicked || state == States.Static || state == States.PushingCanceling)
+        if (state == States.BeingPushed || state == States.Flying || state == States.BeingKicked || state == States.Static)
         {
             SetModelSmoothMoveLerpTime(0);
             DefaultRotBeforeLift = transform.rotation;

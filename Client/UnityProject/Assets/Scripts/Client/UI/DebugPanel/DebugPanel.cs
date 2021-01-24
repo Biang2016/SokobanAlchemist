@@ -340,12 +340,6 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugSlider("Boxes/Static_Inertia", 0.3f, 0, 1f, 10)]
-    public void ChangeBoxStaticInertia(float value)
-    {
-        Box.Static_Inertia = value;
-    }
-
     [DebugSlider("Boxes/ThrowFriction", 10f, 0, 20f, 10)]
     public void ChangeBoxThrowDrag(float value)
     {

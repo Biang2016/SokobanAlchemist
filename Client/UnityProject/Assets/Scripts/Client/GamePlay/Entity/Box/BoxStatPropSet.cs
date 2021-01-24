@@ -13,21 +13,17 @@ public class BoxStatPropSet
     public Dictionary<BoxStatType, BoxStat> StatDict = new Dictionary<BoxStatType, BoxStat>();
     public Dictionary<BoxPropertyType, BoxProperty> PropertyDict = new Dictionary<BoxPropertyType, BoxProperty>();
 
-    [BoxGroup("耐久")]
-    [LabelText("@\"公共碰撞耐久\t\"+CommonDurability")]
-    public BoxStat CommonDurability = new BoxStat(BoxStatType.CommonDurability);
+    [BoxGroup("撞击")]
+    [LabelText("@\"撞击耐久度\t\"+CollideDurability")]
+    public BoxStat CollideDurability = new BoxStat(BoxStatType.CollideDurability);
 
-    [BoxGroup("耐久")]
-    [LabelText("@\"撞击箱子损坏耐久\t\"+CollideWithBoxDurability")]
-    public BoxStat CollideWithBoxDurability = new BoxStat(BoxStatType.CollideWithBoxDurability);
-
-    [BoxGroup("耐久")]
-    [LabelText("@\"撞击角色损坏耐久\t\"+CollideWithActorDurability")]
-    public BoxStat CollideWithActorDurability = new BoxStat(BoxStatType.CollideWithActorDurability);
-
-    [BoxGroup("耐久")]
+    [BoxGroup("撞击")]
     [LabelText("@\"坠落留存率%\t\"+DropFromAirSurviveProbabilityPercent")]
     public BoxStat DropFromAirSurviveProbabilityPercent = new BoxStat(BoxStatType.DropFromAirSurviveProbabilityPercent);
+
+    [BoxGroup("爆炸")]
+    [LabelText("@\"爆炸耐久度\t\"+ExplodeDurability")]
+    public BoxStat ExplodeDurability = new BoxStat(BoxStatType.ExplodeDurability);
 
     [BoxGroup("冰冻")]
     [LabelText("@\"冰冻抗性\t\"+FrozenResistance")]
@@ -112,13 +108,11 @@ public class BoxStatPropSet
     {
         Box = box;
 
-        CommonDurability.OnValueReachZero += () => { box.BoxPassiveSkillMarkAsDeleted = true; };
-        CollideWithBoxDurability.OnValueReachZero += () => { box.BoxPassiveSkillMarkAsDeleted = true; };
-        CollideWithActorDurability.OnValueReachZero += () => { box.BoxPassiveSkillMarkAsDeleted = true; };
-        StatDict.Add(BoxStatType.CommonDurability, CommonDurability);
-        StatDict.Add(BoxStatType.CollideWithBoxDurability, CollideWithBoxDurability);
-        StatDict.Add(BoxStatType.CollideWithActorDurability, CollideWithActorDurability);
+        CollideDurability.OnValueReachZero += () => { box.BoxPassiveSkillMarkAsDeleted = true; };
+        StatDict.Add(BoxStatType.CollideDurability, CollideDurability);
         StatDict.Add(BoxStatType.DropFromAirSurviveProbabilityPercent, DropFromAirSurviveProbabilityPercent);
+        ExplodeDurability.OnValueReachZero += () => { box.BoxPassiveSkillMarkAsDeleted = true; };
+        StatDict.Add(BoxStatType.ExplodeDurability, ExplodeDurability);
 
         #region Frozen
 
@@ -169,17 +163,14 @@ public class BoxStatPropSet
         };
         StatDict.Add(BoxStatType.FiringValue, FiringValue);
 
-        FiringDurability.OnValueChanged += (before, after) =>
+        FiringDurability.OnValueReachZero += () =>
         {
-            if (after == 0)
+            foreach (GridPos3D offset in Box.GetBoxOccupationGPs_Rotated())
             {
-                foreach (GridPos3D offset in Box.GetBoxOccupationGPs_Rotated())
-                {
-                    FXManager.Instance.PlayFX(FiringBreakFX, Box.transform.position + offset, 1.5f);
-                }
-
-                box.DestroyBox();
+                FXManager.Instance.PlayFX(FiringBreakFX, Box.transform.position + offset, 1.5f);
             }
+
+            box.BoxPassiveSkillMarkAsDeleted = true;
         };
         StatDict.Add(BoxStatType.FiringDurability, FiringDurability);
 
@@ -245,10 +236,9 @@ public class BoxStatPropSet
 
     public void ApplyDataTo(BoxStatPropSet target)
     {
-        CommonDurability.ApplyDataTo(target.CommonDurability);
-        CollideWithBoxDurability.ApplyDataTo(target.CollideWithBoxDurability);
-        CollideWithActorDurability.ApplyDataTo(target.CollideWithActorDurability);
+        CollideDurability.ApplyDataTo(target.CollideDurability);
         DropFromAirSurviveProbabilityPercent.ApplyDataTo(target.DropFromAirSurviveProbabilityPercent);
+        ExplodeDurability.ApplyDataTo(target.ExplodeDurability);
         FrozenResistance.ApplyDataTo(target.FrozenResistance);
         FrozenRecovery.ApplyDataTo(target.FrozenRecovery);
         FrozenValue.ApplyDataTo(target.FrozenValue);
@@ -322,14 +312,14 @@ public class BoxStat : Stat
 
 public enum BoxStatType
 {
-    [LabelText("公共碰撞耐久(-1无限)")]
-    CommonDurability = 0,
+    [LabelText("--待定")]
+    PlaceHolder_0 = 0,
 
-    [LabelText("撞击箱子损坏耐久(-1无限)")]
-    CollideWithBoxDurability = 1,
+    [LabelText("撞击耐久度")]
+    CollideDurability = 1,
 
-    [LabelText("撞击角色损坏耐久(-1无限)")]
-    CollideWithActorDurability = 2,
+    [LabelText("爆炸耐久度")]
+    ExplodeDurability = 2,
 
     [LabelText("坠落留存率%")]
     DropFromAirSurviveProbabilityPercent = 3,

@@ -10,7 +10,7 @@ public class BoxPassiveSkillAction_RadiusAddBoxesBuff : BoxPassiveSkillAction, B
     protected override string Description => "箱子撞击爆炸AOE给Box施加Buff";
 
     [LabelText("判定半径")]
-    public int AddBuffRadius = 2;
+    public float AddBuffRadius = 2;
 
     [SerializeReference]
     [HideLabel]
@@ -21,10 +21,11 @@ public class BoxPassiveSkillAction_RadiusAddBoxesBuff : BoxPassiveSkillAction, B
         HashSet<uint> boxList = new HashSet<uint>();
         foreach (GridPos3D offset in Box.GetBoxOccupationGPs_Rotated())
         {
-            Vector3 boxIndicatorPos = Box.transform.position + offset;
+            Vector3 boxIndicatorPos = Box.WorldGP + offset;
             Collider[] colliders = Physics.OverlapSphere(boxIndicatorPos, AddBuffRadius, LayerManager.Instance.LayerMask_BoxIndicator);
             foreach (Collider collider in colliders)
             {
+                if ((collider.transform.position - boxIndicatorPos).magnitude > AddBuffRadius) continue;
                 Box targetBox = collider.gameObject.GetComponentInParent<Box>();
                 if (targetBox != null && !boxList.Contains(targetBox.GUID))
                 {
