@@ -412,14 +412,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b3cecb49b053044bbe9a0494dcb53ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsBoxShapeCuboid: 1
-  BoundsInt:
-    m_Position: {x: 0, y: 0, z: 0}
-    m_Size: {x: 1, y: 1, z: 1}
-  BoxIndicatorGPs:
-  - x: 0
-    y: 0
-    z: 0
+  BoxOccupationData:
+    IsBoxShapeCuboid: 0
+    BoundsInt:
+      m_Position: {x: 0, y: 0, z: 0}
+      m_Size: {x: 0, y: 0, z: 0}
+    BoxIndicatorGPs: []
 --- !u!1 &1424142300141441750
 GameObject:
   m_ObjectHideFlags: 0
@@ -749,12 +747,20 @@ MonoBehaviour:
     FiringBreakFX: 
     RawBoxDefaultBuffs: []
   DeleteDelay: 0
+  MergeDelay: 0.5
   CollideFX: None
   CollideFXScale: 1
   CollideDamageRadius: 0.5
   CollideDamage: 3
   ThawFX: Flash_CyanSlight
   FrozeFX: Hit_SnowFlake
+  MergeBox_MatchThree: None
+  MergeBox_MatchFour: None
+  MergeBox_MatchFive: None
+  MergeFX: Hit_YellowFireStar
+  MergeFXScale: 1.5
+  MergedFX: Hit_RainbowFlowerExplode
+  MergedFXScale: 2
   RawBoxPassiveSkills: []
   WorldGP:
     x: 0

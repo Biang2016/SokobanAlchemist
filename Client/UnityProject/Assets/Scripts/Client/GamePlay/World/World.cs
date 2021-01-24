@@ -680,24 +680,56 @@ public class World : PoolObject
         }
 
         HashSet<Box> mergedBoxes = new HashSet<Box>();
+        List<(GridPos3D, ushort, HashSet<Box>)> mergeTaskList = new List<(GridPos3D, ushort, HashSet<Box>)>();
         foreach (Box box_moveable in boxes_moveable)
         {
             if (mergedBoxes.Contains(box_moveable)) continue;
-            CheckMatchThree(box_moveable, mergedBoxes);
+            HashSet<Box> matchedBox = CheckMatchThree(box_moveable, mergedBoxes);
+            if (matchedBox != null && matchedBox.Count > 0)
+            {
+                ushort mergeBoxTypeIndex = box_moveable.GetMergeBoxTypeIndex(matchedBox.Count);
+                if (mergeBoxTypeIndex != 0)
+                {
+                    mergeTaskList.Add((box_moveable.WorldGP, box_moveable.GetMergeBoxTypeIndex(matchedBox.Count), matchedBox));
+                }
+            }
         }
 
-        foreach (Box mergedBox in mergedBoxes)
+        foreach ((GridPos3D, ushort, HashSet<Box>) task in mergeTaskList)
         {
-            if (mergedBox.IsRecycled) continue; // 有可能合并完就回收了
-            mergedBox.MergeBox();
+            GridPos3D mergeTargetBoxGP = task.Item1;
+            ushort mergeTargetBoxTypeIndex = task.Item2;
+            HashSet<Box> mergedSrcBoxes = task.Item3;
+            foreach (Box mergedSrcBox in mergedSrcBoxes)
+            {
+                if (mergedSrcBox.WorldGP == mergeTargetBoxGP)
+                {
+                    mergedSrcBox.MergeBox(mergeTargetBoxGP, delegate
+                    {
+                        WorldModule module = GetModuleByGridPosition(mergeTargetBoxGP);
+                        if (module != null)
+                        {
+                            Box box = module.GenerateBox(mergeTargetBoxTypeIndex, module.WorldGPToLocalGP(mergeTargetBoxGP), GridPosR.Orientation.Up);
+                            if (box != null)
+                            {
+                                FXManager.Instance.PlayFX(box.MergedFX, box.transform.position, box.MergedFXScale);
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    mergedSrcBox.MergeBox(mergeTargetBoxGP);
+                }
+            }
         }
 
         return true;
     }
 
-    private bool CheckMatchThree(Box srcBox, HashSet<Box> mergedBoxes)
+    private HashSet<Box> CheckMatchThree(Box srcBox, HashSet<Box> mergedBoxes)
     {
-        if (!srcBox.IsBoxShapeCuboid()) return false;
+        if (!srcBox.IsBoxShapeCuboid()) return null;
 
         BoundsInt boundsInt = srcBox.BoxBoundsInt;
         bool[] x_match_matrix = new bool[8] {true, true, true, true, true, true, true, true};
@@ -764,7 +796,7 @@ public class World : PoolObject
         int matchesOnZAxis = 1 + z_connect_positive + z_connect_negative;
         bool matchThreeOnZAxis = matchesOnZAxis >= 3;
 
-        if (!matchThreeOnXAxis && !matchThreeOnZAxis) return false;
+        if (!matchThreeOnXAxis && !matchThreeOnZAxis) return null;
 
         // 将单x轴上的消除数量限制在5个以内
         if (matchesOnXAxis > 5)
@@ -824,6 +856,7 @@ public class World : PoolObject
             }
         }
 
+        HashSet<Box> matchedBoxes = new HashSet<Box>(); // 这里指本次合成的箱子
         if (matchThreeOnXAxis)
         {
             for (int offsetUnit = -x_connect_negative; offsetUnit <= x_connect_positive; offsetUnit++)
@@ -831,7 +864,8 @@ public class World : PoolObject
                 GridPos3D targetGP = srcBox.WorldGP + GridPos3D.Right * offsetUnit * boundsInt.size.x; // 这里用Box.WorldGP是仅为了随便取一个grid
                 Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
                 Assert.IsNotNull(targetBox);
-                mergedBoxes.Add(targetBox);
+                matchedBoxes.Add(targetBox);
+                mergedBoxes.Add(targetBox); // 这是此次Move合成的所有箱子
             }
         }
 
@@ -842,11 +876,12 @@ public class World : PoolObject
                 GridPos3D targetGP = srcBox.WorldGP + GridPos3D.Forward * offsetUnit * boundsInt.size.z; // 这里用Box.WorldGP是仅为了随便取一个grid
                 Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
                 Assert.IsNotNull(targetBox);
+                matchedBoxes.Add(targetBox);
                 mergedBoxes.Add(targetBox);
             }
         }
 
-        return true;
+        return matchedBoxes;
     }
 
     public void RemoveBoxFromGrid(Box box)

@@ -98,6 +98,9 @@ public partial class Box : Entity
         BoxSkinHelper?.OnHelperRecycled();
         BoxIconSpriteHelper?.OnHelperRecycled();
         transform.DOPause();
+        ModelRoot.transform.DOPause();
+        ModelRoot.transform.localPosition = Vector3.zero;
+        ModelRoot.transform.localScale = Vector3.one;
         alreadyCollide = false;
         if (Rigidbody != null) Destroy(Rigidbody);
         if (LastTouchActor != null && LastTouchActor.CurrentLiftBox == this)
@@ -219,6 +222,54 @@ public partial class Box : Entity
     [LabelText("冻结特效")]
     [ValueDropdown("GetAllFXTypeNames")]
     public string FrozeFX;
+
+    [BoxName]
+    [FoldoutGroup("合成")]
+    [LabelText("三合一")]
+    [ValueDropdown("GetAllBoxTypeNames")]
+    public string MergeBox_MatchThree;
+
+    [BoxName]
+    [FoldoutGroup("合成")]
+    [LabelText("四合一")]
+    [ValueDropdown("GetAllBoxTypeNames")]
+    public string MergeBox_MatchFour;
+
+    [BoxName]
+    [FoldoutGroup("合成")]
+    [LabelText("五合一")]
+    [ValueDropdown("GetAllBoxTypeNames")]
+    public string MergeBox_MatchFive;
+
+    [FoldoutGroup("合成")]
+    [LabelText("合成特效")]
+    [ValueDropdown("GetAllFXTypeNames")]
+    public string MergeFX;
+
+    [FoldoutGroup("合成")]
+    [LabelText("合成特效尺寸")]
+    public float MergeFXScale = 1f;
+
+    [FoldoutGroup("合成")]
+    [LabelText("合成后特效")]
+    [ValueDropdown("GetAllFXTypeNames")]
+    public string MergedFX;
+
+    [FoldoutGroup("合成")]
+    [LabelText("合成后特效尺寸")]
+    public float MergedFXScale = 1f;
+
+    public ushort GetMergeBoxTypeIndex(int mergeCount)
+    {
+        switch (mergeCount)
+        {
+            case 3: return ConfigManager.GetBoxTypeIndex(MergeBox_MatchThree);
+            case 4: return ConfigManager.GetBoxTypeIndex(MergeBox_MatchFour);
+            case 5: return ConfigManager.GetBoxTypeIndex(MergeBox_MatchFive);
+        }
+
+        return 0;
+    }
 
 #if UNITY_EDITOR
     /// <summary>
@@ -1026,18 +1077,25 @@ public partial class Box : Entity
         callBack?.Invoke();
     }
 
-    public void MergeBox(UnityAction callBack = null)
+    public void MergeBox(GridPos3D mergeToWorldGP, UnityAction callBack = null)
     {
         foreach (BoxPassiveSkill bf in BoxPassiveSkills)
         {
             bf.OnBeforeMergeBox();
         }
 
-        StartCoroutine(Co_DelayMergeBox(callBack));
+        StartCoroutine(Co_DelayMergeBox(mergeToWorldGP, callBack));
     }
 
-    IEnumerator Co_DelayMergeBox(UnityAction callBack)
+    IEnumerator Co_DelayMergeBox(GridPos3D mergeToWorldGP, UnityAction callBack)
     {
+        foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
+        {
+            FXManager.Instance.PlayFX(MergeFX, transform.position + offset, MergeFXScale);
+        }
+
+        ModelRoot.transform.DOShakeScale(0.2f);
+        ModelRoot.transform.DOMove(mergeToWorldGP, MergeDelay * 1.2f);
         yield return new WaitForSeconds(MergeDelay);
         foreach (BoxPassiveSkill bf in BoxPassiveSkills)
         {
@@ -1107,6 +1165,27 @@ public partial class Box : Entity
     public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
     {
         bool isDirty = false;
+        if (MergeBox_MatchThree == srcBoxName)
+        {
+            info.Append($"替换{name}.MergeBox_MatchThree -> '{targetBoxName}'\n");
+            MergeBox_MatchThree = targetBoxName;
+            isDirty = true;
+        }
+
+        if (MergeBox_MatchFour == srcBoxName)
+        {
+            info.Append($"替换{name}.MergeBox_MatchFour -> '{targetBoxName}'\n");
+            MergeBox_MatchFour = targetBoxName;
+            isDirty = true;
+        }
+
+        if (MergeBox_MatchFive == srcBoxName)
+        {
+            info.Append($"替换{name}.MergeBox_MatchFive -> '{targetBoxName}'\n");
+            MergeBox_MatchFive = targetBoxName;
+            isDirty = true;
+        }
+
         foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
         {
             bool dirty = bf.RenameBoxTypeName(name, srcBoxName, targetBoxName, info, moduleSpecial, worldSpecial);
@@ -1119,6 +1198,26 @@ public partial class Box : Entity
     public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
     {
         bool isDirty = false;
+        if (MergeBox_MatchThree == srcBoxName)
+        {
+            info.Append($"替换{name}.MergeBox_MatchThree -> 'None'\n");
+            MergeBox_MatchThree = "None";
+            isDirty = true;
+        }
+
+        if (MergeBox_MatchFour == srcBoxName)
+        {
+            info.Append($"替换{name}.MergeBox_MatchFour -> 'None'\n");
+            MergeBox_MatchFour = "None";
+            isDirty = true;
+        }
+
+        if (MergeBox_MatchFive == srcBoxName)
+        {
+            info.Append($"替换{name}.MergeBox_MatchFive -> 'None'\n");
+            MergeBox_MatchFive = "None";
+            isDirty = true;
+        }
 
         foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
         {
