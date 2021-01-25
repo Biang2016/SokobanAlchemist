@@ -317,6 +317,7 @@ public class ActorStatPropSet
         {
             FiringLevel.Value = after / FiringValuePerLevel;
             if (FiringLevel.Value > 0) Actor.ActorBuffHelper.PlayAbnormalStatFX((int) ActorStatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 燃烧值变化时，播放一次特效
+            else if (after == 0) actor.ActorBuffHelper.RemoveAbnormalStatFX((int) BoxStatType.FiringValue);
         };
         StatDict.Add(ActorStatType.FiringValue, FiringValue);
 

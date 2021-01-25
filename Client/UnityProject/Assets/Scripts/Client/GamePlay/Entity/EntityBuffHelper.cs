@@ -253,7 +253,7 @@ public class EntityBuffHelper : EntityMonoHelper
                 fx.OnFXEnd = () =>
                 {
                     AbnormalBuffFXDict[statType].Remove(fx);
-                    PlayFX(position);
+                    if (!Entity.IsRecycled) PlayFX(Entity.transform.position);
                 };
             }
         }
