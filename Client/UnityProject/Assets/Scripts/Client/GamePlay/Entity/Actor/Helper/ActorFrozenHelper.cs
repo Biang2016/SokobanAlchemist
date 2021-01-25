@@ -43,7 +43,6 @@ public class ActorFrozenHelper : EntityFrozenHelper
                         foreach (BoxPassiveSkill abf in actorFrozenBoxPassiveSkills)
                         {
                             FrozenBox.AddNewPassiveSkill(abf);
-                            FrozenBox.BoxPassiveSkills.Add(abf);
                         }
 
                         FrozenBox.FrozenActor = actor;

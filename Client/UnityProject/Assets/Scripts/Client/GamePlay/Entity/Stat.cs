@@ -10,6 +10,18 @@ using UnityEngine.Events;
 [Serializable]
 public abstract class Stat
 {
+    public void OnRecycled()
+    {
+        Recovery = 0;
+        GrowthPercent = 0;
+        accumulatedRecovery = 0;
+        AbnormalStatResistance = 100;
+        _value = 0;
+        _minValue = 0;
+        _maxValue = 0;
+        ClearCallBacks();
+    }
+
     public void ClearCallBacks()
     {
         OnChanged = null;

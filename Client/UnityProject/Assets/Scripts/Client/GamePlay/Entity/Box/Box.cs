@@ -323,18 +323,15 @@ public partial class Box : Entity
         foreach (BoxPassiveSkill rawBF in RawBoxPassiveSkills)
         {
             if (rawBF is BoxPassiveSkill_LevelEventTriggerAppear) continue;
-            BoxPassiveSkills.Add(rawBF.Clone());
+            AddNewPassiveSkill(rawBF.Clone());
         }
 
         BoxPassiveSkillMarkAsDeleted = false;
-        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
-        {
-            AddNewPassiveSkill(bf);
-        }
     }
 
     public void AddNewPassiveSkill(BoxPassiveSkill bf)
     {
+        BoxPassiveSkills.Add(bf);
         bf.Box = this;
         bf.OnInit();
         bf.OnRegisterLevelEventID();
@@ -1142,8 +1139,7 @@ public partial class Box : Entity
             foreach (BoxPassiveSkill extraBF in boxExtraSerializeDataFromModule.BoxPassiveSkills)
             {
                 BoxPassiveSkill newPS = extraBF.Clone();
-                newPS.Box = this;
-                RawBoxPassiveSkills.Add(newPS);
+                AddNewPassiveSkill(newPS);
             }
         }
 
@@ -1152,8 +1148,7 @@ public partial class Box : Entity
             foreach (BoxPassiveSkill extraBF in boxExtraSerializeDataFromWorld.BoxPassiveSkills)
             {
                 BoxPassiveSkill newPS = extraBF.Clone();
-                newPS.Box = this;
-                RawBoxPassiveSkills.Add(newPS);
+                AddNewPassiveSkill(newPS);
             }
         }
     }

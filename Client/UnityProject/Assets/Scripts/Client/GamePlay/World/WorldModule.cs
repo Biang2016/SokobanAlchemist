@@ -261,9 +261,9 @@ public class WorldModule : PoolObject
             Box box = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(WorldModuleBoxRoot);
             string boxName = ConfigManager.GetBoxTypeName(boxTypeIndex);
             GridPos3D gp = new GridPos3D(x, y, z);
-            box.ApplyBoxExtraSerializeData(boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
             box.Setup(boxTypeIndex, orientation);
             box.Initialize(gp, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedBoxes); // 如果是TriggerAppear的箱子则不需要检查坠落
+            box.ApplyBoxExtraSerializeData(boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
             box.name = $"{boxName}_{gp}";
 
             foreach (GridPos3D gridPos3D in boxOccupation_rotated)

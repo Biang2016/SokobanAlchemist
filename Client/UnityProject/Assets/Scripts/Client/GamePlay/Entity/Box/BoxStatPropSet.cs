@@ -199,13 +199,13 @@ public class BoxStatPropSet
     {
         foreach (KeyValuePair<BoxStatType, BoxStat> kv in StatDict)
         {
-            kv.Value.ClearCallBacks();
+            kv.Value.OnRecycled();
         }
 
         StatDict.Clear();
         foreach (KeyValuePair<BoxPropertyType, BoxProperty> kv in PropertyDict)
         {
-            kv.Value.ClearCallBacks();
+            kv.Value.OnRecycled();
         }
 
         PropertyDict.Clear();
@@ -255,7 +255,7 @@ public class BoxStatPropSet
         target.FiringFX = FiringFX;
         target.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
         target.FiringBreakFX = FiringBreakFX;
-        target.RawBoxDefaultBuffs = RawBoxDefaultBuffs.Clone();
+        target.RawBoxDefaultBuffs = RawBoxDefaultBuffs; // 由于是干数据，此处不克隆！
     }
 
     #region Utils

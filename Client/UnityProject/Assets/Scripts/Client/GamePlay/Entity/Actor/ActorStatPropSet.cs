@@ -194,7 +194,7 @@ public class ActorStatPropSet
         {
             foreach (KeyValuePair<ActorSkillPropertyType, ActorProperty> kv in PropertyDict)
             {
-                kv.Value.ClearCallBacks();
+                kv.Value.OnRecycled();
             }
 
             PropertyDict.Clear();
@@ -339,13 +339,13 @@ public class ActorStatPropSet
     {
         foreach (KeyValuePair<ActorStatType, ActorStat> kv in StatDict)
         {
-            kv.Value.ClearCallBacks();
+            kv.Value.OnRecycled();
         }
 
         StatDict.Clear();
         foreach (KeyValuePair<ActorPropertyType, ActorProperty> kv in PropertyDict)
         {
-            kv.Value.ClearCallBacks();
+            kv.Value.OnRecycled();
         }
 
         PropertyDict.Clear();
@@ -403,7 +403,7 @@ public class ActorStatPropSet
         target.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
 
         target.SkillsPropertyCollections = SkillsPropertyCollections.Clone();
-        target.RawActorDefaultBuffs = RawActorDefaultBuffs.Clone();
+        target.RawActorDefaultBuffs = RawActorDefaultBuffs; // 由于是干数据，此处不克隆！
     }
 
     #region Utils

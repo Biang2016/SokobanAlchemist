@@ -16,6 +16,26 @@ public abstract class Property
         RefreshModifiedValue();
     }
 
+    public void OnRecycled()
+    {
+        BaseValue = 0;
+        ModifiedValue = 0;
+        foreach (KeyValuePair<uint, PlusModifier> kv in PlusModifiers_Value)
+        {
+            kv.Value.OnRecycled();
+        }
+
+        PlusModifiers_Value.Clear();
+
+        foreach (KeyValuePair<uint, MultiplyModifier> kv in MultiplyModifiers_Value)
+        {
+            kv.Value.OnRecycled();
+        }
+
+        MultiplyModifiers_Value.Clear();
+        ClearCallBacks();
+    }
+
     public void ClearCallBacks()
     {
         OnChanged = null;
@@ -221,6 +241,12 @@ public abstract class Property
         internal HashSet<uint> CoverModifiersGUID = new HashSet<uint>();
 
         public abstract bool CanCover(Modifier target);
+
+        public virtual void OnRecycled()
+        {
+            OnValueChanged = null;
+            CoverModifiersGUID.Clear();
+        }
     }
 
     [Serializable]
@@ -250,6 +276,12 @@ public abstract class Property
         {
             MultiplyModifier targetMultiplyModifier = (MultiplyModifier) target;
             return Mathf.Abs(Percent) >= Mathf.Abs(targetMultiplyModifier.Percent);
+        }
+
+        public override void OnRecycled()
+        {
+            base.OnRecycled();
+            percent = 0;
         }
     }
 
@@ -287,6 +319,12 @@ public abstract class Property
         {
             PlusModifier targetPlusModifier = (PlusModifier) target;
             return Mathf.Abs(Delta) >= Mathf.Abs(targetPlusModifier.Delta);
+        }
+
+        public override void OnRecycled()
+        {
+            base.OnRecycled();
+            delta = 0;
         }
     }
 }
