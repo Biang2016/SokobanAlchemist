@@ -21,7 +21,7 @@ public class BoxPassiveSkillAction_RadiusAddBoxesBuff : BoxPassiveSkillAction, B
         HashSet<uint> boxList = new HashSet<uint>();
         foreach (GridPos3D offset in Box.GetBoxOccupationGPs_Rotated())
         {
-            Vector3 boxIndicatorPos = Box.WorldGP + offset;
+            Vector3 boxIndicatorPos = Box.transform.position + offset;
             Collider[] colliders = Physics.OverlapSphere(boxIndicatorPos, AddBuffRadius, LayerManager.Instance.LayerMask_BoxIndicator);
             foreach (Collider collider in colliders)
             {

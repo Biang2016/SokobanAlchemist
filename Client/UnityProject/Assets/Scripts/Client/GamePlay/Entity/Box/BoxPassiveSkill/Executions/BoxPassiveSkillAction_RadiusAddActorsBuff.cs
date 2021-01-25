@@ -24,10 +24,11 @@ public class BoxPassiveSkillAction_RadiusAddActorsBuff : BoxPassiveSkillAction, 
         HashSet<uint> actorList = new HashSet<uint>();
         foreach (GridPos3D offset in Box.GetBoxOccupationGPs_Rotated())
         {
-            Vector3 boxIndicatorPos = Box.WorldGP + offset;
+            Vector3 boxIndicatorPos = Box.transform.position + offset;
             Collider[] colliders = Physics.OverlapSphere(boxIndicatorPos, AddBuffRadius, LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
             foreach (Collider collider in colliders)
             {
+                if ((collider.transform.position - boxIndicatorPos).magnitude > AddBuffRadius) continue;
                 Actor actor = collider.gameObject.GetComponentInParent<Actor>();
                 if (actor != null && !actorList.Contains(actor.GUID))
                 {
