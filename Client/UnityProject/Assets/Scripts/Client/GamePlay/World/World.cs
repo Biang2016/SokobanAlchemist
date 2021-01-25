@@ -250,7 +250,7 @@ public class World : PoolObject
                 box?.DestroyBox(); // 强行删除该格占用Box
                 if (module)
                 {
-                    module.GenerateBox(dataClone.BoxTypeIndex, localGP.x, localGP.y, localGP.z, data.BoxOrientation, true, false, null, dataClone.WorldSpecialBoxData.BoxExtraSerializeDataFromWorld);
+                    module.GenerateBox(dataClone.BoxTypeIndex, worldGP, data.BoxOrientation, true, false, null, dataClone.WorldSpecialBoxData.BoxExtraSerializeDataFromWorld);
 
                     // Box生成后此BoxPassiveSkill及注册的事件均作废
                     bf.ClearAndUnRegister();
@@ -267,7 +267,7 @@ public class World : PoolObject
             WorldModule module = GetModuleByGridPosition(worldGP);
             if (module != null)
             {
-                module.GenerateBox(worldSpecialBoxData.BoxTypeIndex, module.WorldGPToLocalGP(worldGP), worldSpecialBoxData.BoxOrientation, false, true, null, worldSpecialBoxData.BoxExtraSerializeDataFromWorld);
+                module.GenerateBox(worldSpecialBoxData.BoxTypeIndex, worldGP, worldSpecialBoxData.BoxOrientation, false, true, null, worldSpecialBoxData.BoxExtraSerializeDataFromWorld);
             }
         }
 
@@ -518,12 +518,8 @@ public class World : PoolObject
             if (module != null)
             {
                 dropBox = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);
-                string boxName = ConfigManager.GetBoxTypeName(boxTypeIndex);
-                GridPos3D gp = origin;
-                GridPos3D localGP = module.WorldGPToLocalGP(gp);
                 dropBox.Setup(boxTypeIndex, boxOrientation);
-                dropBox.Initialize(localGP, module, 0, false, Box.LerpType.DropFromAir);
-                dropBox.name = $"{boxName}_{gp}";
+                dropBox.Initialize(origin, module, 0, false, Box.LerpType.DropFromAir);
                 dropBox.DropFromAir();
                 return true;
             }
@@ -675,8 +671,8 @@ public class World : PoolObject
             box_moveable.State = sucState;
             WorldModule newModule = GetModuleByGridPosition(box_moveable.WorldGP + direction);
             Assert.IsNotNull(newModule);
-            GridPos3D localGP = newModule.WorldGPToLocalGP(box_moveable.WorldGP + direction);
-            box_moveable.Initialize(localGP, newModule, needLerp ? 0.2f : 0f, box_moveable.ArtOnly, Box.LerpType.Push, needLerpModel, false);
+            GridPos3D worldGP = box_moveable.WorldGP + direction;
+            box_moveable.Initialize(worldGP, newModule, needLerp ? 0.2f : 0f, box_moveable.ArtOnly, Box.LerpType.Push, needLerpModel, false);
         }
 
         HashSet<Box> mergedBoxes = new HashSet<Box>();
@@ -709,7 +705,7 @@ public class World : PoolObject
                         WorldModule module = GetModuleByGridPosition(mergeTargetBoxGP);
                         if (module != null)
                         {
-                            Box box = module.GenerateBox(mergeTargetBoxTypeIndex, module.WorldGPToLocalGP(mergeTargetBoxGP), GridPosR.Orientation.Up);
+                            Box box = module.GenerateBox(mergeTargetBoxTypeIndex, mergeTargetBoxGP, GridPosR.Orientation.Up);
                             if (box != null)
                             {
                                 FXManager.Instance.PlayFX(box.MergedFX, box.transform.position, box.MergedFXScale);
@@ -986,7 +982,7 @@ public class World : PoolObject
             }
 
             WorldModule module_box_core = GetModuleByGridPosition(worldGP);
-            box.Initialize(module_box_core.WorldGPToLocalGP(worldGP), module_box_core, 0.3f, box.ArtOnly, lerpType);
+            box.Initialize(worldGP, module_box_core, 0.3f, box.ArtOnly, lerpType);
             return true;
         }
     }
@@ -1082,7 +1078,7 @@ public class World : PoolObject
                     CheckDropAbove(box); // 递归，检查上方箱子是否坠落
                     GridPos3D boxNewWorldGP = box.WorldGP + GridPos3D.Down;
                     GetBoxByGridPosition(boxNewWorldGP, out WorldModule newModule, out GridPos3D localGP);
-                    box.Initialize(localGP, newModule, 0.1f, box.ArtOnly, Box.LerpType.Drop);
+                    box.Initialize(boxNewWorldGP, newModule, 0.1f, box.ArtOnly, Box.LerpType.Drop);
                 }
             }
         }

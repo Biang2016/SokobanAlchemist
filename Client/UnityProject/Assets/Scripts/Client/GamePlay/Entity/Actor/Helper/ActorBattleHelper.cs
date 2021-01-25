@@ -151,12 +151,9 @@ public class ActorBattleHelper : ActorMonoHelper
             if (Actor.DieDropBoxProbabilityPercent.ProbabilityBool())
             {
                 Box box = GameObjectPoolManager.Instance.BoxDict[boxIndex].AllocateGameObject<Box>(transform);
-                string boxName = Actor.DieDropBoxTypeName;
-                GridPos3D gp = Actor.CurWorldGP;
-                GridPos3D localGP = module.WorldGPToLocalGP(gp);
+                GridPos3D worldGP = Actor.CurWorldGP;
                 box.Setup(boxIndex, Actor.DieDropBoxOrientation);
-                box.Initialize(localGP, module, 0, false, Box.LerpType.DropFromDeadActor);
-                box.name = $"{boxName}_{gp}";
+                box.Initialize(worldGP, module, 0, false, Box.LerpType.DropFromDeadActor);
                 box.DropFromDeadActor();
             }
         }

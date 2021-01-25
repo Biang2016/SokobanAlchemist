@@ -36,7 +36,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
                 WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(actor.CurWorldGP);
                 if (module)
                 {
-                    FrozenBox = module.GenerateBox(ConfigManager.Box_EnemyFrozenBoxIndex, module.WorldGPToLocalGP(actor.CurWorldGP), GridPosR.Orientation.Up);
+                    FrozenBox = module.GenerateBox(ConfigManager.Box_EnemyFrozenBoxIndex, actor.CurWorldGP, GridPosR.Orientation.Up);
                     if (FrozenBox)
                     {
                         List<BoxPassiveSkill> actorFrozenBoxPassiveSkills = actor.RawFrozenBoxPassiveSkills.Clone();

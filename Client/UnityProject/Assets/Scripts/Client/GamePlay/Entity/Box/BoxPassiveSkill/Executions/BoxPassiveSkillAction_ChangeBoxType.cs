@@ -22,13 +22,13 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, BoxPas
             WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Box.WorldGP);
             if (module != null)
             {
-                GridPos3D localGP = Box.LocalGP;
                 ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
+                GridPos3D worldGP = Box.WorldGP;
                 Box.DestroyBox(delegate
                 {
                     if (boxTypeIndex != 0)
                     {
-                        module.GenerateBox(boxTypeIndex, localGP, BoxOrientation);
+                        module.GenerateBox(boxTypeIndex, worldGP, BoxOrientation);
                     }
                 });
             }

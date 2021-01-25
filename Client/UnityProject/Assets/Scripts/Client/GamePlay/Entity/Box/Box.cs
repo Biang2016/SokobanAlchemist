@@ -298,6 +298,8 @@ public partial class Box : Entity
 
     public BoundsInt BoxBoundsInt => BoxIndicatorHelper.BoxOccupationData.BoundsInt; // ConfigManager不能序列化这个字段，很奇怪
 
+    public string BoxTypeName => ConfigManager.GetBoxTypeName(BoxTypeIndex);
+
     // 获得支撑此Box的底部Box
     public HashSet<Box> GetBeneathBoxes()
     {
@@ -488,16 +490,18 @@ public partial class Box : Entity
         }
     }
 
-    public void Initialize(GridPos3D localGridPos3D, WorldModule module, float lerpTime, bool artOnly, LerpType lerpType, bool needLerpModel = false, bool needCheckDrop = true)
+    public void Initialize(GridPos3D worldGridPos3D, WorldModule module, float lerpTime, bool artOnly, LerpType lerpType, bool needLerpModel = false, bool needCheckDrop = true)
     {
-        if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Init LerpType:{lerpType} TargetGP:{module.LocalGPToWorldGP(localGridPos3D)}");
+        name = $"{BoxTypeName}_{worldGridPos3D}";
+
+        if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Init LerpType:{lerpType} TargetGP:{worldGridPos3D}");
         SetModelSmoothMoveLerpTime(0);
         ArtOnly = artOnly;
         LastTouchActor = null;
         LastWorldGP = WorldGP;
         WorldModule = module;
-        WorldGP = module.LocalGPToWorldGP(localGridPos3D);
-        LocalGP = localGridPos3D;
+        WorldGP = worldGridPos3D;
+        LocalGP = module.WorldGPToLocalGP(worldGridPos3D);
         transform.parent = module.transform;
         BoxColliderHelper.Initialize(Passable, artOnly, BoxFeature.HasFlag(BoxFeature.IsGround), lerpType == LerpType.Drop, lerpTime > 0);
         if (lerpTime > 0)
@@ -508,7 +512,7 @@ public partial class Box : Entity
             }
 
             transform.DOPause();
-            transform.DOLocalMove(localGridPos3D, lerpTime).SetEase(Ease.Linear).OnComplete(() =>
+            transform.DOLocalMove(LocalGP, lerpTime).SetEase(Ease.Linear).OnComplete(() =>
             {
                 State = States.Static;
                 IsInGridSystem = true;
@@ -522,7 +526,7 @@ public partial class Box : Entity
                     BoxColliderHelper.OnPushEnd();
                 }
 
-                if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Init LerpType:{lerpType} DOLerpGP:{localGridPos3D} finalPos:{transform.position}");
+                if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Init LerpType:{lerpType} DOLerpGP:{LocalGP} finalPos:{transform.position}");
             });
             transform.DOLocalRotate(Vector3.zero, lerpTime);
             switch (lerpType)
@@ -582,7 +586,7 @@ public partial class Box : Entity
             }
 
             if (needLerpModel) SetModelSmoothMoveLerpTime(0.2f);
-            transform.localPosition = localGridPos3D;
+            transform.localPosition = LocalGP;
             if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Init LerpType:{lerpType} NoLerpTime {transform.position}");
             transform.localRotation = Quaternion.identity;
         }
