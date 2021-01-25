@@ -59,6 +59,7 @@ public class DebugPanel : BaseUIPanel
                     {
                         UnityAction action = () => { m.Invoke(this, new object[] { }); };
                         AddButton(dba.ButtonName, dba.Shortcut, 0, DebugComponentDictTree, action, true);
+#if DEBUG || DEVELOPMENT_BUILD
                         if (dba.Shortcut != KeyCode.None)
                         {
                             OnShortcutKeyDown += () =>
@@ -69,6 +70,7 @@ public class DebugPanel : BaseUIPanel
                                 }
                             };
                         }
+#endif
                     }
                     else
                     {
@@ -356,5 +358,11 @@ public class DebugPanel : BaseUIPanel
     public void ChangeBoxWeight(float value)
     {
         ConfigManager.BoxWeightFactor_Cheat = value;
+    }
+
+    [DebugSlider("Game/TimeScale", 1f, 0, 1f)]
+    public void ChangeTimeScale(float value)
+    {
+        Time.timeScale = value;
     }
 }

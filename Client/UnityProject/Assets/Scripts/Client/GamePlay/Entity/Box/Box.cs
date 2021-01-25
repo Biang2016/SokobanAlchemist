@@ -625,6 +625,7 @@ public partial class Box : Entity
     {
         if (state == States.BeingPushed || state == States.Flying || state == States.BeingKicked || state == States.Static)
         {
+            transform.DOPause();
             SetModelSmoothMoveLerpTime(0);
             if (BoxEffectHelper == null)
             {
@@ -1080,6 +1081,8 @@ public partial class Box : Entity
 
     public void MergeBox(GridPos3D mergeToWorldGP, UnityAction callBack = null)
     {
+        BoxColliderHelper.OnMerge();
+        BoxIndicatorHelper.IsOn = false;
         foreach (BoxPassiveSkill bf in BoxPassiveSkills)
         {
             bf.OnBeforeMergeBox();

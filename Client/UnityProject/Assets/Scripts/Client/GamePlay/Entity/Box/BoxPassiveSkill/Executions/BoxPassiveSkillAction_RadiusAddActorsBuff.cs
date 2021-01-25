@@ -28,7 +28,6 @@ public class BoxPassiveSkillAction_RadiusAddActorsBuff : BoxPassiveSkillAction, 
             Collider[] colliders = Physics.OverlapSphere(boxIndicatorPos, AddBuffRadius, LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
             foreach (Collider collider in colliders)
             {
-                if ((collider.transform.position - boxIndicatorPos).magnitude > AddBuffRadius) continue;
                 Actor actor = collider.gameObject.GetComponentInParent<Actor>();
                 if (actor != null && !actorList.Contains(actor.GUID))
                 {

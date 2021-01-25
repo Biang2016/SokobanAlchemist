@@ -224,6 +224,14 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         BoxOnlyDynamicCollidersEnable = true;
     }
 
+    public void OnMerge()
+    {
+        StaticColliderEnable = true;
+        DynamicColliderEnable = false;
+        BoxOnlyDynamicCollidersEnable = false;
+        DynamicColliderDynamicFriction = 0f;
+    }
+
     public void OnRigidbodyStop()
     {
         StaticColliderEnable = true;

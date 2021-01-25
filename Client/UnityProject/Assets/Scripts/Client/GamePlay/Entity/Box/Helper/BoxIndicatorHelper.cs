@@ -14,13 +14,25 @@ public class BoxIndicatorHelper : BoxMonoHelper
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
-        gameObject.SetActive(true);
+        IsOn = true;
     }
 
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
-        gameObject.SetActive(false);
+        IsOn = false;
+    }
+
+    private bool isOn = true;
+
+    public bool IsOn
+    {
+        get { return isOn; }
+        set
+        {
+            isOn = value;
+            gameObject.SetActive(value);
+        }
     }
 
 #if UNITY_EDITOR
