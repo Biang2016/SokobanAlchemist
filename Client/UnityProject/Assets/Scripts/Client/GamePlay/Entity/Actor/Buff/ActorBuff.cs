@@ -262,21 +262,10 @@ public class ActorBuff_InstantHeal : ActorBuff
 [Serializable]
 public class ActorBuff_ChangeActorStatInstantly : ActorBuff
 {
-    protected override string Description => "瞬间更改角色异常状态累积值, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
+    protected override string Description => "瞬间更改角色状值, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
 
     [LabelText("角色属性类型")]
-    [ValidateInput("ValidateStatType", "请选择异常状态累积值")]
     public ActorStatType StatType;
-
-    private bool ValidateStatType(ActorStatType statType)
-    {
-        if (statType == ActorStatType.FrozenValue || statType == ActorStatType.FiringValue)
-        {
-            return true;
-        }
-
-        return false;
-    }
 
     [LabelText("变化量")]
     public int Delta;

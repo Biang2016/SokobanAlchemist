@@ -22,6 +22,12 @@ public abstract class Entity : PoolObject
 
     #endregion
 
+    #region Helpers
+
+    internal abstract EntityBuffHelper EntityBuffHelper { get; }
+
+    #endregion
+
     public override void OnRecycled()
     {
         base.OnRecycled();

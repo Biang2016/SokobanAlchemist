@@ -42,15 +42,15 @@ public abstract class ActorPassiveSkill : IClone<ActorPassiveSkill>
     {
     }
 
-    public virtual void OnThornTrapTriggerEnter(Collider collider)
+    public virtual void OnTriggerZoneEnter(Collider collider)
     {
     }
 
-    public virtual void OnThornTrapTriggerStay(Collider collider)
+    public virtual void OnTriggerZoneStay(Collider collider)
     {
     }
 
-    public virtual void OnThornTrapTriggerExit(Collider collider)
+    public virtual void OnTriggerZoneExit(Collider collider)
     {
     }
 

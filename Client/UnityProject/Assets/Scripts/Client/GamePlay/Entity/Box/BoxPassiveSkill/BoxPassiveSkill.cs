@@ -70,15 +70,15 @@ public abstract class BoxPassiveSkill : IClone<BoxPassiveSkill>
     {
     }
 
-    public virtual void OnBoxThornTrapTriggerEnter(Collider collider)
+    public virtual void OnBoxTriggerZoneEnter(Collider collider)
     {
     }
 
-    public virtual void OnBoxThornTrapTriggerStay(Collider collider)
+    public virtual void OnBoxTriggerZoneStay(Collider collider)
     {
     }
 
-    public virtual void OnBoxThornTrapTriggerExit(Collider collider)
+    public virtual void OnBoxTriggerZoneExit(Collider collider)
     {
     }
 

@@ -1,23 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
+using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 
+[assembly: BindTypeNameToType("BoxPassiveSkillAction_AddActorBuff", typeof(BoxPassiveSkillAction_AddEntityBuff))]
 [Serializable]
-public class BoxPassiveSkillAction_AddActorBuff : BoxPassiveSkillAction, BoxPassiveSkillAction.ICollideAction, BoxPassiveSkillAction.IActorOperationAction
+public class BoxPassiveSkillAction_AddEntityBuff : BoxPassiveSkillAction, BoxPassiveSkillAction.ICollideAction, BoxPassiveSkillAction.IActorOperationAction
 {
     protected override string Description => "给单个Actor施加Buff";
 
-    [LabelText("生效于相对阵营")]
+    [LabelText("生效于相对阵营(与角色交互时)")]
     public RelativeCamp EffectiveOnRelativeCamp;
 
-    [HideLabel]
+    [LabelText("Buff列表")]
     [SerializeReference]
-    public ActorBuff ActorBuff;
+    public List<EntityBuff> EntityBuffs = new List<EntityBuff>();
 
     public void OnCollide(Collision collision)
     {
-        Actor actor = collision.gameObject.GetComponentInParent<Actor>();
-        CoreAddBuff(actor);
+        Entity entity = collision.gameObject.GetComponentInParent<Entity>();
+        if (entity != null && !entity.IsRecycled) CoreAddBuff(entity);
     }
 
     public void OnOperation(Actor actor)
@@ -25,9 +29,9 @@ public class BoxPassiveSkillAction_AddActorBuff : BoxPassiveSkillAction, BoxPass
         CoreAddBuff(actor);
     }
 
-    private void CoreAddBuff(Actor actor)
+    private void CoreAddBuff(Entity entity)
     {
-        if (actor != null && !actor.IsRecycled)
+        if (entity is Actor actor)
         {
             Actor m_Actor = Box.LastTouchActor;
             if (m_Actor != null)
@@ -53,9 +57,14 @@ public class BoxPassiveSkillAction_AddActorBuff : BoxPassiveSkillAction, BoxPass
                 }
             }
 
-            if (!actor.ActorBuffHelper.AddBuff(ActorBuff.Clone()))
+          
+        }
+
+        foreach (EntityBuff entityBuff in EntityBuffs)
+        {
+            if (!entity.EntityBuffHelper.AddBuff(entityBuff.Clone()))
             {
-                Debug.Log($"Failed to AddBuff: {ActorBuff.GetType().Name} to {actor.name}");
+                Debug.Log($"Failed to AddBuff: {entityBuff.GetType().Name} to {entity.name}");
             }
         }
     }
@@ -63,16 +72,16 @@ public class BoxPassiveSkillAction_AddActorBuff : BoxPassiveSkillAction, BoxPass
     protected override void ChildClone(BoxPassiveSkillAction newAction)
     {
         base.ChildClone(newAction);
-        BoxPassiveSkillAction_AddActorBuff action = ((BoxPassiveSkillAction_AddActorBuff) newAction);
-        action.ActorBuff = (ActorBuff) ActorBuff.Clone();
+        BoxPassiveSkillAction_AddEntityBuff action = ((BoxPassiveSkillAction_AddEntityBuff) newAction);
+        action.EntityBuffs = EntityBuffs.Clone();
         action.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
     }
 
     public override void CopyDataFrom(BoxPassiveSkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        BoxPassiveSkillAction_AddActorBuff action = ((BoxPassiveSkillAction_AddActorBuff) srcData);
-        ActorBuff = (ActorBuff) action.ActorBuff.Clone();
+        BoxPassiveSkillAction_AddEntityBuff action = ((BoxPassiveSkillAction_AddEntityBuff) srcData);
+        EntityBuffs = action.EntityBuffs.Clone();
         EffectiveOnRelativeCamp = action.EffectiveOnRelativeCamp;
     }
 }

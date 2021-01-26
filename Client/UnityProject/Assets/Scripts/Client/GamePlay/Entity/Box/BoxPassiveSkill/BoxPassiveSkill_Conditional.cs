@@ -21,9 +21,9 @@ public class BoxPassiveSkill_Conditional : BoxPassiveSkill
         OnFlyingCollisionEnter = 1 << 4,
         OnBeingKickedCollisionEnter = 1 << 5,
         OnDroppingFromAirCollisionEnter = 1 << 6,
-        OnBoxThornTrapTriggerEnter = 1 << 7,
-        OnBoxThornTrapTriggerStay = 1 << 8,
-        OnBoxThornTrapTriggerExit = 1 << 9,
+        OnBoxTriggerZoneEnter = 1 << 7,
+        OnBoxTriggerZoneStay = 1 << 8,
+        OnBoxTriggerZoneExit = 1 << 9,
         OnBeforeDestroyBox = 1 << 10,
         OnDestroyBox = 1 << 11,
         OnLevelEvent = 1 << 12,
@@ -279,10 +279,10 @@ public class BoxPassiveSkill_Conditional : BoxPassiveSkill
         }
     }
 
-    public override void OnBoxThornTrapTriggerEnter(Collider collider)
+    public override void OnBoxTriggerZoneEnter(Collider collider)
     {
-        base.OnBoxThornTrapTriggerEnter(collider);
-        if (BoxPassiveSkillCondition.HasFlag(BoxPassiveSkillConditionType.OnBoxThornTrapTriggerEnter))
+        base.OnBoxTriggerZoneEnter(collider);
+        if (BoxPassiveSkillCondition.HasFlag(BoxPassiveSkillConditionType.OnBoxTriggerZoneEnter))
         {
             foreach (BoxPassiveSkillAction action in BoxPassiveSkillActions)
             {
@@ -299,10 +299,10 @@ public class BoxPassiveSkill_Conditional : BoxPassiveSkill
         }
     }
 
-    public override void OnBoxThornTrapTriggerStay(Collider collider)
+    public override void OnBoxTriggerZoneStay(Collider collider)
     {
-        base.OnBoxThornTrapTriggerStay(collider);
-        if (BoxPassiveSkillCondition.HasFlag(BoxPassiveSkillConditionType.OnBoxThornTrapTriggerStay))
+        base.OnBoxTriggerZoneStay(collider);
+        if (BoxPassiveSkillCondition.HasFlag(BoxPassiveSkillConditionType.OnBoxTriggerZoneStay))
         {
             foreach (BoxPassiveSkillAction action in BoxPassiveSkillActions)
             {
@@ -319,10 +319,10 @@ public class BoxPassiveSkill_Conditional : BoxPassiveSkill
         }
     }
 
-    public override void OnBoxThornTrapTriggerExit(Collider collider)
+    public override void OnBoxTriggerZoneExit(Collider collider)
     {
-        base.OnBoxThornTrapTriggerExit(collider);
-        if (BoxPassiveSkillCondition.HasFlag(BoxPassiveSkillConditionType.OnBoxThornTrapTriggerExit))
+        base.OnBoxTriggerZoneExit(collider);
+        if (BoxPassiveSkillCondition.HasFlag(BoxPassiveSkillConditionType.OnBoxTriggerZoneExit))
         {
             foreach (BoxPassiveSkillAction action in BoxPassiveSkillActions)
             {

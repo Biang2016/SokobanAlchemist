@@ -15,6 +15,8 @@ public class Box_LevelEditor : Entity
 {
     public GameObject ModelRoot;
 
+    internal override EntityBuffHelper EntityBuffHelper => null;
+
     #region 箱子Extra被动技能
 
     [FoldoutGroup("箱子Extra被动技能")]

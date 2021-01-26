@@ -28,6 +28,8 @@ public partial class Box : Entity
     [FoldoutGroup("组件")]
     public BoxBuffHelper BoxBuffHelper;
 
+    internal override EntityBuffHelper EntityBuffHelper => BoxBuffHelper;
+
     [FoldoutGroup("组件")]
     public BoxFrozenHelper BoxFrozenHelper;
 
@@ -40,7 +42,7 @@ public partial class Box : Entity
     public BoxIndicatorHelper BoxIndicatorHelper;
 
     [FoldoutGroup("组件")]
-    public BoxThornTrapTriggerHelper BoxThornTrapTriggerHelper;
+    public BoxTriggerZoneHelper BoxTriggerZoneHelper;
 
     [FoldoutGroup("组件")]
     public DoorBoxHelper DoorBoxHelper;
@@ -69,7 +71,7 @@ public partial class Box : Entity
         BoxFrozenHelper.OnHelperUsed();
         BoxColliderHelper.OnBoxUsed();
         BoxIndicatorHelper.OnHelperUsed();
-        BoxThornTrapTriggerHelper?.OnHelperUsed();
+        BoxTriggerZoneHelper?.OnHelperUsed();
         DoorBoxHelper?.OnHelperUsed();
         BoxSkinHelper?.OnHelperUsed();
         BoxIconSpriteHelper.OnHelperUsed();
@@ -93,7 +95,7 @@ public partial class Box : Entity
         BoxEffectHelper = null;
         BoxColliderHelper.OnBoxPoolRecycled();
         BoxIndicatorHelper.OnHelperRecycled();
-        BoxThornTrapTriggerHelper?.OnHelperRecycled();
+        BoxTriggerZoneHelper?.OnHelperRecycled();
         DoorBoxHelper?.OnHelperRecycled();
         BoxSkinHelper?.OnHelperRecycled();
         BoxIconSpriteHelper?.OnHelperRecycled();

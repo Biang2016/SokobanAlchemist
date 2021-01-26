@@ -26,6 +26,7 @@ public class Actor : Entity
 
     internal GameObject ActorMoveColliderRoot => ActorCommonHelpers.ActorMoveColliderRoot;
     internal ActorArtHelper ActorArtHelper => ActorCommonHelpers.ActorArtHelper;
+    internal override EntityBuffHelper EntityBuffHelper => ActorBuffHelper;
     internal ActorBuffHelper ActorBuffHelper => ActorCommonHelpers.ActorBuffHelper;
     internal ActorPushHelper ActorPushHelper => ActorCommonHelpers.ActorPushHelper;
     internal ActorFaceHelper ActorFaceHelper => ActorCommonHelpers.ActorFaceHelper;

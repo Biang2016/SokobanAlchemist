@@ -186,21 +186,10 @@ public class BoxBuff_BoxPropertyPlusModifier : BoxBuff
 [Serializable]
 public class BoxBuff_ChangeBoxStatInstantly : BoxBuff
 {
-    protected override string Description => "瞬间更改Box异常状态累积值, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
+    protected override string Description => "瞬间更改Box状态值, 必须是【瞬时效果】. buff施加后, 不残留在角色身上, 无移除的概念。但此buff有可能被既有buff免疫或抵消等";
 
     [LabelText("Box属性类型")]
-    [ValidateInput("ValidateStatType", "请选择异常状态累积值")]
     public BoxStatType StatType;
-
-    private bool ValidateStatType(BoxStatType statType)
-    {
-        if (statType == BoxStatType.FiringValue || statType == BoxStatType.FrozenValue)
-        {
-            return true;
-        }
-
-        return false;
-    }
 
     [LabelText("变化量")]
     public int Delta;
