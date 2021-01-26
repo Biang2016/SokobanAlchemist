@@ -123,7 +123,7 @@ public class WorldDesignHelper : MonoBehaviour
 
             // 关卡事件触发出现的Box序列化到单独的地方
             bool isLevelEventTriggerAppearBox = false;
-            foreach (BoxPassiveSkill bf in worldBox.RawBoxPassiveSkills)
+            foreach (EntityPassiveSkill bf in worldBox.RawBoxPassiveSkills)
             {
                 if (bf is BoxPassiveSkill_LevelEventTriggerAppear bf_leta)
                 {

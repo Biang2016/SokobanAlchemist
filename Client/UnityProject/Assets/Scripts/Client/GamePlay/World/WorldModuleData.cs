@@ -19,6 +19,7 @@ public class WorldModuleData : IClone<WorldModuleData>
     /// 模组上下层叠，底部模组Y为0，顶部Y为15
     /// </summary>
     public ushort[,,] BoxMatrix = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 仅作为箱子核心格的位置记录，不代表每一格实际是否有占用。（因为有Mega箱子尺寸不止一格）
+
     public GridPosR.Orientation[,,] BoxOrientationMatrix = new GridPosR.Orientation[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 箱子朝向矩阵记录，仅引用于对应核心格的箱子
     public ushort[,,] BoxMatrix_Temp_CheckOverlap = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 导出时 临时使用，为了检查箱子重叠
 

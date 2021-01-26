@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
-using FlowCanvas;
 using FlowCanvas.Nodes;
 using NodeCanvas.BehaviourTrees;
 using NodeCanvas.Framework;
@@ -30,7 +28,7 @@ public static class ActorAIAtoms
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
             Actor player = BattleManager.Instance.Player1;
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.CurWorldGP, KeepDistanceMin.value, KeepDistanceMax.value, false, ActorPathFinding.DestinationType.Actor);
+            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.WorldGP, KeepDistanceMin.value, KeepDistanceMax.value, false, ActorPathFinding.DestinationType.Actor);
             switch (retCode)
             {
                 case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
@@ -45,7 +43,7 @@ public static class ActorAIAtoms
                     for (int angle = 0; angle <= 360; angle += 10)
                     {
                         float radianAngle = Mathf.Deg2Rad * angle;
-                        Vector3 dest = player.CurWorldGP + new Vector3((KeepDistanceMin.value + 1) * Mathf.Sin(radianAngle), 0, (KeepDistanceMin.value + 1) * Mathf.Cos(radianAngle));
+                        Vector3 dest = player.WorldGP + new Vector3((KeepDistanceMin.value + 1) * Mathf.Sin(radianAngle), 0, (KeepDistanceMin.value + 1) * Mathf.Cos(radianAngle));
                         GridPos3D destGP = dest.ToGridPos3D();
                         runDestList.Add(destGP);
                     }
@@ -101,7 +99,7 @@ public static class ActorAIAtoms
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             Actor player = BattleManager.Instance.Player1;
             if ((player.transform.position - Actor.transform.position).magnitude > GuardingRange.value) return false;
-            bool suc = ActorPathFinding.FindPath(Actor.CurWorldGP, player.CurWorldGP, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor);
+            bool suc = ActorPathFinding.FindPath(Actor.WorldGP, player.WorldGP, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor);
             return suc;
         }
     }
@@ -141,7 +139,7 @@ public static class ActorAIAtoms
             }
 
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.CurWorldGP, IdleRadius.value, out GridPos3D destination);
+            bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.WorldGP, IdleRadius.value, out GridPos3D destination);
             if (suc)
             {
                 ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination, 0f, 0.5f, false, ActorPathFinding.DestinationType.EmptyGrid);
@@ -265,7 +263,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             if (Actor.ActorBattleHelper == null) return false;
-            return Actor.ActorStatPropSet.Health.Value >= LifeThreshold.value;
+            return Actor.EntityStatPropSet.HealthDurability.Value >= LifeThreshold.value;
         }
     }
 
@@ -281,7 +279,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             if (Actor.ActorBattleHelper == null) return false;
-            return Actor.ActorStatPropSet.Health.Value > LifeThreshold.value;
+            return Actor.EntityStatPropSet.HealthDurability.Value > LifeThreshold.value;
         }
     }
 
@@ -297,7 +295,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             if (Actor.ActorBattleHelper == null) return false;
-            return Actor.ActorStatPropSet.Health.Value > LifePercentThreshold.value / 100f * Actor.ActorStatPropSet.MaxHealth.GetModifiedValue;
+            return Actor.EntityStatPropSet.HealthDurability.Value > LifePercentThreshold.value / 100f * Actor.EntityStatPropSet.MaxHealthDurability.GetModifiedValue;
         }
     }
 
@@ -344,8 +342,8 @@ public static class ActorAIAtoms
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.IsFrozen) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            GridPos3D targetGP = BattleManager.Instance.Player1.CurWorldGP;
-            GridPos3D curGP = Actor.CurWorldGP;
+            GridPos3D targetGP = BattleManager.Instance.Player1.WorldGP;
+            GridPos3D curGP = Actor.WorldGP;
             GridPos3D diff = targetGP - curGP;
             Actor.CurForward = diff.Normalized();
             return Status.Success;
@@ -358,24 +356,24 @@ public static class ActorAIAtoms
     public class BT_Enemy_TriggerSkill : BTNode
     {
         [Name("技能编号")]
-        public BBParameter<ActorSkillIndex> ActorSkillIndex;
+        public BBParameter<EntitySkillIndex> EntitySkillIndex;
 
-        public override string name => $"释放技能 [{ActorSkillIndex.value}]";
+        public override string name => $"释放技能 [{EntitySkillIndex.value}]";
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            return TriggerSkill(Actor, ActorSkillIndex.value);
+            return TriggerSkill(Actor, EntitySkillIndex.value);
         }
 
-        public static Status TriggerSkill(Actor actor, ActorSkillIndex skillIndex)
+        public static Status TriggerSkill(Actor actor, EntitySkillIndex skillIndex)
         {
             if (actor == null || actor.ActorAIAgent == null) return Status.Failure;
             if (actor.IsFrozen) return Status.Failure;
-            if (actor.ActorActiveSkillDict.TryGetValue(skillIndex, out ActorActiveSkill aas))
+            if (actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
             {
                 actor.ActorAIAgent.TargetActor = BattleManager.Instance.Player1;
-                actor.ActorAIAgent.TargetActorGP = BattleManager.Instance.Player1.CurWorldGP;
-                bool triggerSuc = aas.TriggerActiveSkill();
+                actor.ActorAIAgent.TargetActorGP = BattleManager.Instance.Player1.WorldGP;
+                bool triggerSuc = eas.TriggerActiveSkill();
                 if (triggerSuc)
                 {
                     return Status.Success;
@@ -396,13 +394,13 @@ public static class ActorAIAtoms
     public class BT_Enemy_TriggerSkill_ConditionTask : ConditionTask
     {
         [Name("技能编号")]
-        public BBParameter<ActorSkillIndex> ActorSkillIndex;
+        public BBParameter<EntitySkillIndex> EntitySkillIndex;
 
-        protected override string info => $"释放技能且成功 [{ActorSkillIndex.value}]";
+        protected override string info => $"释放技能且成功 [{EntitySkillIndex.value}]";
 
         protected override bool OnCheck()
         {
-            Status status = BT_Enemy_TriggerSkill.TriggerSkill(Actor, ActorSkillIndex.value);
+            Status status = BT_Enemy_TriggerSkill.TriggerSkill(Actor, EntitySkillIndex.value);
             return status == Status.Success;
         }
     }
@@ -413,13 +411,13 @@ public static class ActorAIAtoms
     public class FL_Enemy_TriggerSkillAction : CallableActionNode
     {
         [Name("技能编号")]
-        public BBParameter<ActorSkillIndex> ActorSkillIndex;
+        public BBParameter<EntitySkillIndex> EntitySkillIndex;
 
-        public override string name => $"释放技能 [{ActorSkillIndex.value}]";
+        public override string name => $"释放技能 [{EntitySkillIndex.value}]";
 
         public override void Invoke()
         {
-            BT_Enemy_TriggerSkill.TriggerSkill(Actor, ActorSkillIndex.value);
+            BT_Enemy_TriggerSkill.TriggerSkill(Actor, EntitySkillIndex.value);
         }
     }
 
@@ -429,16 +427,16 @@ public static class ActorAIAtoms
     public class BT_Enemy_WaitSkillEnd : BTNode
     {
         [Name("技能编号")]
-        public BBParameter<ActorSkillIndex> ActorSkillIndex;
+        public BBParameter<EntitySkillIndex> EntitySkillIndex;
 
-        public override string name => $"等待技能结束 [{ActorSkillIndex.value}]";
+        public override string name => $"等待技能结束 [{EntitySkillIndex.value}]";
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
-            if (Actor.ActorActiveSkillDict.TryGetValue(ActorSkillIndex.value, out ActorActiveSkill aas))
+            if (Actor.EntityActiveSkillDict.TryGetValue(EntitySkillIndex.value, out EntityActiveSkill eas))
             {
-                if (aas.SkillPhase == ActiveSkillPhase.CoolingDown || aas.SkillPhase == ActiveSkillPhase.Ready)
+                if (eas.SkillPhase == ActiveSkillPhase.CoolingDown || eas.SkillPhase == ActiveSkillPhase.Ready)
                 {
                     return Status.Success;
                 }
@@ -458,16 +456,16 @@ public static class ActorAIAtoms
     public class FL_Enemy_WaitSkillEnd : WaitUntil
     {
         [Name("技能编号")]
-        public BBParameter<ActorSkillIndex> ActorSkillIndex;
+        public BBParameter<EntitySkillIndex> EntitySkillIndex;
 
-        public override string name => $"等待技能结束 [{ActorSkillIndex.value}]";
+        public override string name => $"等待技能结束 [{EntitySkillIndex.value}]";
 
         public override IEnumerator Invoke()
         {
             if (Actor == null || Actor.ActorAIAgent == null) yield return null;
-            if (Actor.ActorActiveSkillDict.TryGetValue(ActorSkillIndex.value, out ActorActiveSkill aas))
+            if (Actor.EntityActiveSkillDict.TryGetValue(EntitySkillIndex.value, out EntityActiveSkill eas))
             {
-                while (aas.SkillPhase != ActiveSkillPhase.CoolingDown && aas.SkillPhase != ActiveSkillPhase.Ready)
+                while (eas.SkillPhase != ActiveSkillPhase.CoolingDown && eas.SkillPhase != ActiveSkillPhase.Ready)
                 {
                     yield return null;
                 }
@@ -481,16 +479,16 @@ public static class ActorAIAtoms
     public class BT_Enemy_InterruptSkill : BTNode
     {
         [Name("技能编号")]
-        public BBParameter<ActorSkillIndex> ActorSkillIndex;
+        public BBParameter<EntitySkillIndex> EntitySkillIndex;
 
-        public override string name => $"强行打断技能 [{ActorSkillIndex.value}]";
+        public override string name => $"强行打断技能 [{EntitySkillIndex.value}]";
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
-            if (Actor.ActorActiveSkillDict.TryGetValue(ActorSkillIndex.value, out ActorActiveSkill aas))
+            if (Actor.EntityActiveSkillDict.TryGetValue(EntitySkillIndex.value, out EntityActiveSkill eas))
             {
-                aas.Interrupt();
+                eas.Interrupt();
                 return Status.Success;
             }
 

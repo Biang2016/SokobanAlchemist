@@ -9,9 +9,10 @@ public class ActorCommonHelpers : MonoBehaviour
     public ActorSkinHelper ActorSkinHelper;
     public ActorLaunchArcRendererHelper ActorLaunchArcRendererHelper;
     public ActorBattleHelper ActorBattleHelper;
-    public ActorSkillHelper ActorSkillHelper;
-    public ActorBuffHelper ActorBuffHelper;
+    public ActorBoxInteractHelper ActorBoxInteractHelper;
+    public EntityBuffHelper EntityBuffHelper;
     public ActorFrozenHelper ActorFrozenHelper;
+    public EntityTriggerZoneHelper EntityTriggerZoneHelper;
     public Transform LiftBoxPivot;
 
     private void Awake()

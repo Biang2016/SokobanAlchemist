@@ -122,8 +122,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     public ButtonState Common_Tab = new ButtonState() {ButtonName = ButtonNames.Common_Tab};
     public ButtonState Common_RestartGame = new ButtonState() {ButtonName = ButtonNames.Common_RestartGame};
     public ButtonState Common_PauseGame = new ButtonState() {ButtonName = ButtonNames.Common_Pause};
-    public ButtonState Common_ToggleUI = new ButtonState() {ButtonName = ButtonNames.Common_ToggleUI };
-    public ButtonState Common_ToggleDebugButton = new ButtonState() {ButtonName = ButtonNames.Common_ToggleDebugButton };
+    public ButtonState Common_ToggleUI = new ButtonState() {ButtonName = ButtonNames.Common_ToggleUI};
+    public ButtonState Common_ToggleDebugButton = new ButtonState() {ButtonName = ButtonNames.Common_ToggleDebugButton};
 
     #endregion
 

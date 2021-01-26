@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -25,6 +26,230 @@ public abstract class Entity : PoolObject
     #region Helpers
 
     internal abstract EntityBuffHelper EntityBuffHelper { get; }
+    internal abstract EntityFrozenHelper EntityFrozenHelper { get; }
+    internal abstract EntityTriggerZoneHelper EntityTriggerZoneHelper { get; }
+
+    #endregion
+
+    [FoldoutGroup("初始战斗数值")]
+    [HideLabel]
+    [DisableInPlayMode]
+    public EntityStatPropSet RawEntityStatPropSet; // 干数据，禁修改
+
+    [HideInEditorMode]
+    [FoldoutGroup("当前战斗数值")]
+    [HideLabel]
+    public EntityStatPropSet EntityStatPropSet; // 湿数据，随生命周期消亡
+
+    [LabelText("冻结")]
+    [FoldoutGroup("状态")]
+    [DisableInPlayMode]
+    [ShowInInspector]
+    public bool IsFrozen => EntityStatPropSet.IsFrozen;
+
+    internal bool EntityPassiveSkillMarkAsDeleted = false;
+
+    [DisplayAsString]
+    [ShowInInspector]
+    [LabelText("上帧世界坐标")]
+    [FoldoutGroup("状态")]
+    internal GridPos3D LastWorldGP;
+
+    [HideInEditorMode]
+    [ShowInInspector]
+    [LabelText("世界坐标")]
+    [FoldoutGroup("状态")]
+    public abstract GridPos3D WorldGP { get; set; }
+
+    public Vector3 CurForward
+    {
+        get { return transform.forward; }
+        set
+        {
+            if (value != Vector3.zero)
+            {
+                transform.forward = value;
+            }
+        }
+    }
+
+    [DisplayAsString]
+    [HideInEditorMode]
+    [LabelText("模组内坐标")]
+    [FoldoutGroup("状态")]
+    internal GridPos3D LocalGP;
+
+    #region 技能
+
+    #region 被动技能
+
+    [SerializeReference]
+    [FoldoutGroup("被动技能")]
+    [LabelText("被动技能列表")]
+    [ListDrawerSettings(ListElementLabelName = "Description")]
+    public List<EntityPassiveSkill> RawEntityPassiveSkills = new List<EntityPassiveSkill>(); // 干数据，禁修改
+
+    public List<EntityPassiveSkill> EntityPassiveSkills = new List<EntityPassiveSkill>(); // 湿数据，每个Entity生命周期开始前从干数据拷出，结束后清除
+
+    public Dictionary<string, EntityPassiveSkill> EntityPassiveSkillDict = new Dictionary<string, EntityPassiveSkill>(); // 便于寻找
+
+    internal bool PassiveSkillMarkAsDestroyed = false;
+
+    protected void InitPassiveSkills()
+    {
+        EntityPassiveSkills.Clear();
+        EntityPassiveSkillDict.Clear();
+        foreach (EntityPassiveSkill rawAPS in RawEntityPassiveSkills)
+        {
+            EntityPassiveSkills.Add(rawAPS.Clone());
+        }
+
+        PassiveSkillMarkAsDestroyed = false;
+        foreach (EntityPassiveSkill aps in EntityPassiveSkills)
+        {
+            AddNewPassiveSkill(aps);
+        }
+    }
+
+    public void AddNewPassiveSkill(EntityPassiveSkill eps)
+    {
+        eps.Entity = this;
+        eps.OnInit();
+        eps.OnRegisterLevelEventID();
+        string bfName = eps.GetType().Name;
+        if (!EntityPassiveSkillDict.ContainsKey(bfName))
+        {
+            EntityPassiveSkillDict.Add(bfName, eps);
+        }
+    }
+
+    protected void UnInitPassiveSkills()
+    {
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+        {
+            eps.OnUnRegisterLevelEventID();
+            eps.OnUnInit();
+        }
+
+        // 防止EntityPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
+        //EntityPassiveSkills.Clear();
+        //EntityPassiveSkillDict.Clear();
+        PassiveSkillMarkAsDestroyed = false;
+    }
+
+    #endregion
+
+    #region 主动技能
+
+    [SerializeReference]
+    [FoldoutGroup("主动技能")]
+    [LabelText("主动技能列表")]
+    [ListDrawerSettings(ListElementLabelName = "SkillAlias")]
+    public List<EntityActiveSkill> RawEntityActiveSkills = new List<EntityActiveSkill>(); // 干数据，禁修改
+
+    public List<EntityActiveSkill> EntityActiveSkills = new List<EntityActiveSkill>(); // 湿数据，每个Entity生命周期开始前从干数据拷出，结束后清除
+
+    public Dictionary<EntitySkillIndex, EntityActiveSkill> EntityActiveSkillDict = new Dictionary<EntitySkillIndex, EntityActiveSkill>(); // 便于寻找
+
+    internal bool ActiveSkillMarkAsDestroyed = false;
+
+    public bool ActiveSkillCanMove
+    {
+        get
+        {
+            foreach (EntityActiveSkill eas in EntityActiveSkills)
+            {
+                if (!eas.CurrentAllowMove) return false;
+            }
+
+            return true;
+        }
+    }
+
+    protected void InitActiveSkills()
+    {
+        EntityActiveSkills.Clear();
+        EntityActiveSkillDict.Clear();
+        foreach (EntityActiveSkill rawEAS in RawEntityActiveSkills)
+        {
+            EntityActiveSkills.Add(rawEAS.Clone());
+        }
+
+        ActiveSkillMarkAsDestroyed = false;
+        foreach (EntityActiveSkill eas in EntityActiveSkills)
+        {
+            AddNewActiveSkill(eas);
+        }
+    }
+
+    protected void AddNewActiveSkill(EntityActiveSkill eas)
+    {
+        eas.Entity = this;
+        eas.ParentActiveSkill = null;
+        eas.OnInit();
+        if (!EntityActiveSkillDict.ContainsKey(eas.EntitySkillIndex))
+        {
+            EntityActiveSkillDict.Add(eas.EntitySkillIndex, eas);
+        }
+        else
+        {
+            Debug.LogError($"[主动技能] {name} 主动技能编号重复: {eas.EntitySkillIndex}");
+        }
+    }
+
+    protected void UnInitActiveSkills()
+    {
+        foreach (EntityActiveSkill eas in EntityActiveSkills)
+        {
+            eas.OnUnInit();
+        }
+
+        // 防止EntityActiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
+        //EntityActiveSkills.Clear();
+        //EntityActiveSkillDict.Clear();
+        ActiveSkillMarkAsDestroyed = false;
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Camp
+
+    [LabelText("阵营")]
+    [FoldoutGroup("状态")]
+    [DisableInPlayMode]
+    public Camp Camp;
+
+    public bool IsPlayer => Camp == Camp.Player;
+    public bool IsPlayerOrFriend => Camp == Camp.Player || Camp == Camp.Friend;
+    public bool IsFriend => Camp == Camp.Friend;
+    public bool IsEnemy => Camp == Camp.Enemy;
+    public bool IsNeutral => Camp == Camp.Neutral;
+
+    public bool IsOpponentCampOf(Entity target)
+    {
+        if ((IsPlayerOrFriend) && target.IsEnemy) return true;
+        if ((target.IsPlayerOrFriend) && IsEnemy) return true;
+        return false;
+    }
+
+    public bool IsSameCampOf(Entity target)
+    {
+        return !IsOpponentCampOf(target);
+    }
+
+    public bool IsNeutralCampOf(Entity target)
+    {
+        if ((IsPlayerOrFriend) && target.IsNeutral) return true;
+        if ((target.IsPlayerOrFriend) && IsNeutral) return true;
+        return false;
+    }
+
+    public bool IsOpponentOrNeutralCampOf(Entity target)
+    {
+        return IsOpponentCampOf(target) || IsNeutralCampOf(target);
+    }
 
     #endregion
 

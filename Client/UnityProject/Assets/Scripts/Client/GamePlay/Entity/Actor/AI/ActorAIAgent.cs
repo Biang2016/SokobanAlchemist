@@ -66,7 +66,7 @@ public class ActorAIAgent
     public void FixedUpdateAfterMove()
     {
         if (isStop) return;
-        if (Actor.CurWorldGP == Actor.LastWorldGP && IsPathFinding)
+        if (Actor.WorldGP == Actor.LastWorldGP && IsPathFinding)
         {
             StuckWithNavTask_Tick += Time.fixedDeltaTime;
         }
@@ -131,7 +131,7 @@ public class ActorAIAgent
         KeepDistanceMin = keepDistanceMin;
         KeepDistanceMax = keepDistanceMax;
         LastNodeOccupied = lastNodeOccupied;
-        float dist = (Actor.CurWorldGP - currentDestination).magnitude;
+        float dist = (Actor.WorldGP - currentDestination).magnitude;
         if (dist <= KeepDistanceMax + (KeepDistanceMax.Equals(0) && LastNodeOccupied ? 1 : 0) && dist >= KeepDistanceMin)
         {
             bool interruptPathFinding = false;
@@ -163,7 +163,7 @@ public class ActorAIAgent
             return SetDestinationRetCode.TooClose;
         }
 
-        bool suc = ActorPathFinding.FindPath(Actor.CurWorldGP, currentDestination, CurrentPath, KeepDistanceMin, KeepDistanceMax, destinationType);
+        bool suc = ActorPathFinding.FindPath(Actor.WorldGP, currentDestination, CurrentPath, KeepDistanceMin, KeepDistanceMax, destinationType);
         if (IsPathFinding)
         {
             currentNode = CurrentPath.Count > 0 ? CurrentPath[0] : null;

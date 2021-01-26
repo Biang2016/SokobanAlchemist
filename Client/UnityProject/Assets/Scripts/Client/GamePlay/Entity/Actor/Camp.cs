@@ -2,10 +2,11 @@
 
 public enum Camp
 {
-    None = 0,
+    Neutral = 0,
     Player = 1,
     Enemy = 2,
     Friend = 3,
+    // todo Box的阵营划分目前先放在Neutral里面，待以后想清楚了再改
 }
 
 [Flags]

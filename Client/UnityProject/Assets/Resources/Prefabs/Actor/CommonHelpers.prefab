@@ -467,6 +467,49 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &5118345682467025926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5878818631365042301}
+  - component: {fileID: 6546876683496741681}
+  m_Layer: 13
+  m_Name: ActorTriggerZoneHelper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5878818631365042301
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5118345682467025926}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4842464350258294753}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6546876683496741681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5118345682467025926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f872e829d08a53e4c867952c11a6d9b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5191712123595643341
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,6 +913,7 @@ Transform:
   - {fileID: 3352962350586945292}
   - {fileID: 4143581407255531107}
   - {fileID: 2423020542915541692}
+  - {fileID: 5878818631365042301}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -892,9 +936,10 @@ MonoBehaviour:
   ActorSkinHelper: {fileID: 1321479151781057853}
   ActorLaunchArcRendererHelper: {fileID: 9120055890874861662}
   ActorBattleHelper: {fileID: 227926083524661705}
-  ActorSkillHelper: {fileID: 5217150889472423656}
-  ActorBuffHelper: {fileID: 1972265583874991119}
+  ActorBoxInteractHelper: {fileID: 5217150889472423656}
+  EntityBuffHelper: {fileID: 1972265583874991119}
   ActorFrozenHelper: {fileID: 6581660017646339835}
+  EntityTriggerZoneHelper: {fileID: 6546876683496741681}
   LiftBoxPivot: {fileID: 4143581407255531107}
 --- !u!1 &7781698662655902636
 GameObject:
@@ -998,7 +1043,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8406678266780540667}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0639474e0da215b448b0147864571b92, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e142b70bd0e5fe46a009bff14f9cde6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8627420964006559438
@@ -1012,7 +1057,7 @@ GameObject:
   - component: {fileID: 6648586943387575735}
   - component: {fileID: 5217150889472423656}
   m_Layer: 13
-  m_Name: ActorSkillHelper
+  m_Name: ActorBoxInteractHelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1044,7 +1089,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f952d45c6088a6b4780bf9180677737d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerCurrentGetKickAbility: 0
 --- !u!1 &8720766988145462653
 GameObject:
   m_ObjectHideFlags: 0

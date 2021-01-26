@@ -60,7 +60,7 @@ public partial class Box
         validCollision = false;
 
         // 和一般箱子相撞
-        if (BoxStatPropSet.CollideDurability.Value > 0 &&
+        if (EntityStatPropSet.HealthDurability.Value > 0 &&
             (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box ||
              collider.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
         )
@@ -69,35 +69,35 @@ public partial class Box
             if (box != null)
             {
                 validCollision = true;
-                if (BoxStatPropSet.FrozenLevel.Value >= 1)
+                if (EntityStatPropSet.FrozenLevel.Value >= 1)
                 {
-                    BoxStatPropSet.FrozenValue.Value = 0;
+                    EntityStatPropSet.FrozenValue.Value = 0;
                 }
                 else
                 {
-                    BoxStatPropSet.CollideDurability.Value--;
+                    EntityStatPropSet.HealthDurability.Value--;
                 }
             }
         }
 
         // 和世界碰撞体相撞
-        if (BoxStatPropSet.CollideDurability.Value > 0 &&
+        if (EntityStatPropSet.HealthDurability.Value > 0 &&
             (collider.gameObject.layer == LayerManager.Instance.Layer_Wall)
         )
         {
             validCollision = true;
-            if (BoxStatPropSet.FrozenLevel.Value >= 1)
+            if (EntityStatPropSet.FrozenLevel.Value >= 1)
             {
-                BoxStatPropSet.FrozenValue.Value = 0;
+                EntityStatPropSet.FrozenValue.Value = 0;
             }
             else
             {
-                BoxStatPropSet.CollideDurability.Value--;
+                EntityStatPropSet.HealthDurability.Value--;
             }
         }
 
         // 和角色碰撞体相撞
-        if (BoxStatPropSet.CollideDurability.Value > 0 &&
+        if (EntityStatPropSet.HealthDurability.Value > 0 &&
             (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player ||
              collider.gameObject.layer == LayerManager.Instance.Layer_Player ||
              collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy ||
@@ -109,13 +109,13 @@ public partial class Box
                 if (LastTouchActor != null && LastTouchActor.IsOpponentCampOf(actor))
                 {
                     validCollision = true;
-                    if (BoxStatPropSet.FrozenLevel.Value >= 1)
+                    if (EntityStatPropSet.FrozenLevel.Value >= 1)
                     {
-                        BoxStatPropSet.FrozenValue.Value = 0;
+                        EntityStatPropSet.FrozenValue.Value = 0;
                     }
                     else
                     {
-                        BoxStatPropSet.CollideDurability.Value--;
+                        EntityStatPropSet.HealthDurability.Value--;
                     }
                 }
             }
@@ -123,12 +123,12 @@ public partial class Box
 
         if (collideType == BoxCollideType.DropFromAir) // 坠落有一定几率直接消失
         {
-            if (!(BoxStatPropSet.DropFromAirSurviveProbabilityPercent.Value / 100f).ProbabilityBool())
+            if (!(EntityStatPropSet.DropFromAirSurviveProbabilityPercent.Value / 100f).ProbabilityBool())
             {
-                BoxStatPropSet.CollideDurability.Value = 0;
+                EntityStatPropSet.HealthDurability.Value = 0;
             }
         }
 
-        return BoxStatPropSet.CollideDurability.Value > 0;
+        return EntityStatPropSet.HealthDurability.Value > 0;
     }
 }

@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Text;
 using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.GamePlay;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using BiangLibrary.GamePlay;
 using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -25,10 +25,13 @@ public partial class Box : Entity
     [FoldoutGroup("组件")]
     public GameObject ModelRoot;
 
-    [FoldoutGroup("组件")]
-    public BoxBuffHelper BoxBuffHelper;
+    internal override EntityBuffHelper EntityBuffHelper => boxBuffHelper;
+    internal override EntityFrozenHelper EntityFrozenHelper => BoxFrozenHelper;
+    internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => BoxTriggerZoneHelper;
 
-    internal override EntityBuffHelper EntityBuffHelper => BoxBuffHelper;
+    [FoldoutGroup("组件")]
+    [SerializeField]
+    private EntityBuffHelper boxBuffHelper;
 
     [FoldoutGroup("组件")]
     public BoxFrozenHelper BoxFrozenHelper;
@@ -42,7 +45,7 @@ public partial class Box : Entity
     public BoxIndicatorHelper BoxIndicatorHelper;
 
     [FoldoutGroup("组件")]
-    public BoxTriggerZoneHelper BoxTriggerZoneHelper;
+    public EntityTriggerZoneHelper BoxTriggerZoneHelper;
 
     [FoldoutGroup("组件")]
     public DoorBoxHelper DoorBoxHelper;
@@ -67,7 +70,7 @@ public partial class Box : Entity
     {
         LastTouchActor = null;
         ArtOnly = true;
-        BoxBuffHelper.OnHelperUsed();
+        EntityBuffHelper.OnHelperUsed();
         BoxFrozenHelper.OnHelperUsed();
         BoxColliderHelper.OnBoxUsed();
         BoxIndicatorHelper.OnHelperUsed();
@@ -89,7 +92,7 @@ public partial class Box : Entity
         worldGP_WhenKicked = GridPos3D.Zero;
         LastState = States.Static;
         State = States.Static;
-        BoxBuffHelper.OnHelperRecycled();
+        EntityBuffHelper.OnHelperRecycled();
         BoxFrozenHelper.OnHelperRecycled();
         BoxEffectHelper?.OnBoxPoolRecycled();
         BoxEffectHelper = null;
@@ -112,7 +115,7 @@ public partial class Box : Entity
             LastTouchActor = null;
         }
 
-        BoxStatPropSet.OnRecycled();
+        EntityStatPropSet.OnRecycled();
 
         UnInitPassiveSkills();
         base.OnRecycled();
@@ -125,16 +128,6 @@ public partial class Box : Entity
     [LabelText("箱子特性")]
     [AssetsOnly]
     public BoxFeature BoxFeature;
-
-    [FoldoutGroup("初始战斗数值")]
-    [HideLabel]
-    [DisableInPlayMode]
-    public BoxStatPropSet RawBoxStatPropSet; // 干数据，禁修改
-
-    [HideInEditorMode]
-    [FoldoutGroup("当前战斗数值")]
-    [HideLabel]
-    public BoxStatPropSet BoxStatPropSet; // 湿数据，随生命周期消亡
 
     internal GridPosR.Orientation BoxOrientation { get; private set; }
 
@@ -308,64 +301,11 @@ public partial class Box : Entity
         return WorldManager.Instance.CurrentWorld.GetBeneathBoxes(this);
     }
 
-    #region 箱子被动技能
-
-    [SerializeReference]
-    [FoldoutGroup("箱子被动技能")]
-    [LabelText("箱子被动技能")]
-    [ListDrawerSettings(ListElementLabelName = "Description")]
-    public List<BoxPassiveSkill> RawBoxPassiveSkills = new List<BoxPassiveSkill>(); // 干数据，禁修改
-
-    [HideInInspector]
-    public List<BoxPassiveSkill> BoxPassiveSkills = new List<BoxPassiveSkill>(); // 湿数据，每个Box生命周期开始前从干数据拷出，结束后清除
-
-    internal bool BoxPassiveSkillMarkAsDeleted = false;
-
-    private void InitBoxPassiveSkills()
-    {
-        BoxPassiveSkills.Clear();
-        foreach (BoxPassiveSkill rawBF in RawBoxPassiveSkills)
-        {
-            if (rawBF is BoxPassiveSkill_LevelEventTriggerAppear) continue;
-            AddNewPassiveSkill(rawBF.Clone());
-        }
-
-        BoxPassiveSkillMarkAsDeleted = false;
-    }
-
-    public void AddNewPassiveSkill(BoxPassiveSkill bf)
-    {
-        BoxPassiveSkills.Add(bf);
-        bf.Box = this;
-        bf.OnInit();
-        bf.OnRegisterLevelEventID();
-    }
-
-    private void UnInitPassiveSkills()
-    {
-        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
-        {
-            bf.OnUnRegisterLevelEventID();
-        }
-
-        // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
-        //BoxPassiveSkills.Clear();
-        BoxPassiveSkillMarkAsDeleted = false;
-    }
-
-    #endregion
-
-    internal GridPos3D LastWorldGP;
-
-    [HideInEditorMode]
-    public GridPos3D WorldGP;
+    public override GridPos3D WorldGP { get; set; }
 
     private GridPos3D worldGP_WhenKicked = GridPos3D.Zero;
 
     internal bool IsInGridSystem;
-
-    [HideInEditorMode]
-    public GridPos3D LocalGP;
 
     [HideInEditorMode]
     public WorldModule WorldModule;
@@ -452,14 +392,14 @@ public partial class Box : Entity
     public void Setup(ushort boxTypeIndex, GridPosR.Orientation orientation)
     {
         BoxTypeIndex = boxTypeIndex;
-        InitBoxPassiveSkills();
+        InitPassiveSkills();
 
-        RawBoxStatPropSet.ApplyDataTo(BoxStatPropSet);
-        BoxStatPropSet.Initialize(this);
+        RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
+        EntityStatPropSet.Initialize(this);
 
         SwitchBoxOrientation(orientation);
 
-        if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorSkillHelper.GetInteractSkillType(BoxTypeIndex), BoxTypeIndex);
+        if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorBoxInteractHelper.GetInteractSkillType(BoxTypeIndex), BoxTypeIndex);
     }
 
     private void SetModelSmoothMoveLerpTime(float lerpTime)
@@ -634,9 +574,9 @@ public partial class Box : Entity
                 BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
             }
 
-            foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+            foreach (EntityPassiveSkill ps in EntityPassiveSkills)
             {
-                bf.OnBeingKicked(actor);
+                ps.OnBeingKicked(actor);
             }
 
             alreadyCollide = false;
@@ -674,9 +614,9 @@ public partial class Box : Entity
             DefaultRotBeforeLift = transform.rotation;
             alreadyCollide = false;
             LastTouchActor = actor;
-            foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+            foreach (EntityPassiveSkill ps in EntityPassiveSkills)
             {
-                bf.OnBeingLift(actor);
+                ps.OnBeingLift(actor);
             }
 
             WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this);
@@ -826,11 +766,11 @@ public partial class Box : Entity
         if (IsRecycled) return;
         if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate)
         {
-            BoxStatPropSet.FixedUpdate(1f);
-            BoxBuffHelper.BuffFixedUpdate();
-            foreach (BoxPassiveSkill boxPassiveSkill in BoxPassiveSkills)
+            EntityStatPropSet.FixedUpdate(1f);
+            EntityBuffHelper.BuffFixedUpdate();
+            foreach (EntityPassiveSkill ps in EntityPassiveSkills)
             {
-                boxPassiveSkill.OnTick(1f);
+                ps.OnTick(1f);
             }
         }
 
@@ -887,7 +827,7 @@ public partial class Box : Entity
             BoxEffectHelper?.Stop();
         }
 
-        if (BoxPassiveSkillMarkAsDeleted)
+        if (EntityPassiveSkillMarkAsDeleted)
         {
             DestroyBox();
         }
@@ -916,12 +856,12 @@ public partial class Box : Entity
                     CollideAOEDamage(CollideDamageRadius, CollideDamage);
                     PlayCollideFX();
 
-                    foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+                    foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                     {
-                        bf.OnFlyingCollisionEnter(collision);
+                        ps.OnFlyingCollisionEnter(collision);
                     }
 
-                    if (BoxPassiveSkillMarkAsDeleted && !IsRecycled)
+                    if (EntityPassiveSkillMarkAsDeleted && !IsRecycled)
                     {
                         DestroyBox();
                         return;
@@ -930,7 +870,7 @@ public partial class Box : Entity
                     if (!IsRecycled)
                     {
                         OnFlyingCollisionEnter(collision);
-                        if (BoxPassiveSkillMarkAsDeleted)
+                        if (EntityPassiveSkillMarkAsDeleted)
                         {
                             DestroyBox();
                             return;
@@ -949,12 +889,12 @@ public partial class Box : Entity
                         CollideAOEDamage(CollideDamageRadius, CollideDamage);
                         PlayCollideFX();
 
-                        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+                        foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                         {
-                            bf.OnBeingKickedCollisionEnter(collision);
+                            ps.OnBeingKickedCollisionEnter(collision);
                         }
 
-                        if (BoxPassiveSkillMarkAsDeleted && !IsRecycled)
+                        if (EntityPassiveSkillMarkAsDeleted && !IsRecycled)
                         {
                             DestroyBox();
                             return;
@@ -963,7 +903,7 @@ public partial class Box : Entity
                         if (!IsRecycled)
                         {
                             OnBeingKickedCollisionEnter(collision);
-                            if (BoxPassiveSkillMarkAsDeleted)
+                            if (EntityPassiveSkillMarkAsDeleted)
                             {
                                 DestroyBox();
                                 return;
@@ -983,13 +923,13 @@ public partial class Box : Entity
                     CollideAOEDamage(CollideDamageRadius, CollideDamage);
                     PlayCollideFX();
 
-                    foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+                    foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                     {
-                        bf.OnDroppingFromAirCollisionEnter(collision);
+                        ps.OnDroppingFromAirCollisionEnter(collision);
                     }
                 }
 
-                if (BoxPassiveSkillMarkAsDeleted && !IsRecycled)
+                if (EntityPassiveSkillMarkAsDeleted && !IsRecycled)
                 {
                     DestroyBox();
                     return;
@@ -998,7 +938,7 @@ public partial class Box : Entity
                 if (!IsRecycled)
                 {
                     OnDroppingFromAirCollisionEnter(collision);
-                    if (BoxPassiveSkillMarkAsDeleted)
+                    if (EntityPassiveSkillMarkAsDeleted)
                     {
                         DestroyBox();
                         return;
@@ -1059,9 +999,9 @@ public partial class Box : Entity
 
     public void DestroyBox(UnityAction callBack = null)
     {
-        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+        foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
-            bf.OnBeforeDestroyBox();
+            ps.OnBeforeDestroyEntity();
         }
 
         StartCoroutine(Co_DelayDestroyBox(callBack));
@@ -1070,9 +1010,9 @@ public partial class Box : Entity
     IEnumerator Co_DelayDestroyBox(UnityAction callBack)
     {
         yield return new WaitForSeconds(DeleteDelay);
-        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+        foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
-            bf.OnDestroyBox();
+            ps.OnDestroyEntity();
         }
 
         // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
@@ -1085,9 +1025,9 @@ public partial class Box : Entity
     {
         BoxColliderHelper.OnMerge();
         BoxIndicatorHelper.IsOn = false;
-        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+        foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
-            bf.OnBeforeMergeBox();
+            ps.OnBeforeMergeBox();
         }
 
         StartCoroutine(Co_DelayMergeBox(mergeToWorldGP, callBack));
@@ -1103,9 +1043,9 @@ public partial class Box : Entity
         ModelRoot.transform.DOShakeScale(0.2f);
         ModelRoot.transform.DOMove(mergeToWorldGP, MergeDelay * 1.2f);
         yield return new WaitForSeconds(MergeDelay);
-        foreach (BoxPassiveSkill bf in BoxPassiveSkills)
+        foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
-            bf.OnMergeBox();
+            ps.OnMergeBox();
         }
 
         // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
@@ -1145,18 +1085,18 @@ public partial class Box : Entity
     {
         if (boxExtraSerializeDataFromModule != null)
         {
-            foreach (BoxPassiveSkill extraBF in boxExtraSerializeDataFromModule.BoxPassiveSkills)
+            foreach (EntityPassiveSkill extraBF in boxExtraSerializeDataFromModule.BoxPassiveSkills)
             {
-                BoxPassiveSkill newPS = extraBF.Clone();
+                EntityPassiveSkill newPS = extraBF.Clone();
                 AddNewPassiveSkill(newPS);
             }
         }
 
         if (boxExtraSerializeDataFromWorld != null)
         {
-            foreach (BoxPassiveSkill extraBF in boxExtraSerializeDataFromWorld.BoxPassiveSkills)
+            foreach (EntityPassiveSkill extraBF in boxExtraSerializeDataFromWorld.BoxPassiveSkills)
             {
-                BoxPassiveSkill newPS = extraBF.Clone();
+                EntityPassiveSkill newPS = extraBF.Clone();
                 AddNewPassiveSkill(newPS);
             }
         }
@@ -1190,9 +1130,9 @@ public partial class Box : Entity
             isDirty = true;
         }
 
-        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+        foreach (EntityPassiveSkill ps in RawEntityPassiveSkills)
         {
-            bool dirty = bf.RenameBoxTypeName(name, srcBoxName, targetBoxName, info, moduleSpecial, worldSpecial);
+            bool dirty = ps.RenameBoxTypeName(name, srcBoxName, targetBoxName, info, moduleSpecial, worldSpecial);
             isDirty |= dirty;
         }
 
@@ -1223,9 +1163,9 @@ public partial class Box : Entity
             isDirty = true;
         }
 
-        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+        foreach (EntityPassiveSkill ps in RawEntityPassiveSkills)
         {
-            bool dirty = bf.DeleteBoxTypeName(name, srcBoxName, info, moduleSpecial, worldSpecial);
+            bool dirty = ps.DeleteBoxTypeName(name, srcBoxName, info, moduleSpecial, worldSpecial);
             isDirty |= dirty;
         }
 

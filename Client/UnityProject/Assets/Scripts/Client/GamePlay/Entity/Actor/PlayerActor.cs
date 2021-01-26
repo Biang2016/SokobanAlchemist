@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -8,17 +7,13 @@ using UnityEngine;
 public class PlayerActor : Actor
 {
     [LabelText("玩家编号")]
+    [FoldoutGroup("状态")]
     public PlayerNumber PlayerNumber;
 
     private ButtonState BS_Up;
     private ButtonState BS_Right;
     private ButtonState BS_Down;
     private ButtonState BS_Left;
-
-    private ButtonState BS_Up_Last;
-    private ButtonState BS_Right_Last;
-    private ButtonState BS_Down_Last;
-    private ButtonState BS_Left_Last;
 
     private ButtonState BS_Skill_0; // Space/RT
     private ButtonState BS_Skill_1;
@@ -44,11 +39,6 @@ public class PlayerActor : Actor
         BS_Down = ControlManager.Instance.Battle_MoveButtons[(int) PlayerNumber, (int) GridPosR.Orientation.Down];
         BS_Left = ControlManager.Instance.Battle_MoveButtons[(int) PlayerNumber, (int) GridPosR.Orientation.Left];
 
-        BS_Up_Last = ControlManager.Instance.Battle_MoveButtons_LastFrame[(int) PlayerNumber, (int) GridPosR.Orientation.Up];
-        BS_Right_Last = ControlManager.Instance.Battle_MoveButtons_LastFrame[(int) PlayerNumber, (int) GridPosR.Orientation.Right];
-        BS_Down_Last = ControlManager.Instance.Battle_MoveButtons_LastFrame[(int) PlayerNumber, (int) GridPosR.Orientation.Down];
-        BS_Left_Last = ControlManager.Instance.Battle_MoveButtons_LastFrame[(int) PlayerNumber, (int) GridPosR.Orientation.Left];
-
         BS_Skill_0 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0];
         BS_Skill_1 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1];
         BS_Skill_2 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 2];
@@ -69,10 +59,10 @@ public class PlayerActor : Actor
 
             // todo 转视角后按键映射问题
 
-            if (BS_Up.Down) lastMoveUpButtonDownWorldGP = CurWorldGP;
-            if (BS_Right.Down) lastMoveRightButtonDownWorldGP = CurWorldGP;
-            if (BS_Down.Down) lastMoveDownButtonDownWorldGP = CurWorldGP;
-            if (BS_Left.Down) lastMoveLeftButtonDownWorldGP = CurWorldGP;
+            if (BS_Up.Down) lastMoveUpButtonDownWorldGP = WorldGP;
+            if (BS_Right.Down) lastMoveRightButtonDownWorldGP = WorldGP;
+            if (BS_Down.Down) lastMoveDownButtonDownWorldGP = WorldGP;
+            if (BS_Left.Down) lastMoveLeftButtonDownWorldGP = WorldGP;
 
             if (BS_Up.Pressed) CurMoveAttempt.z += 1;
             if (BS_Right.Pressed) CurMoveAttempt.x += 1;
@@ -107,13 +97,13 @@ public class PlayerActor : Actor
                 {
                     Vector3 rotatedQuickMoveAttempt = RotateMoveDirectionByCameraRotation(quickMoveAttempt);
                     GridPos3D rotatedQuickMoveAttemptGP = rotatedQuickMoveAttempt.ToGridPos3D();
-                    GridPos3D targetPos = CurWorldGP + rotatedQuickMoveAttemptGP;
+                    GridPos3D targetPos = WorldGP + rotatedQuickMoveAttemptGP;
 
                     // Check is there any box occupies the grid
                     Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(targetPos, out WorldModule module, out GridPos3D _, true);
                     if ((!box && module)
                         || (box && box.Passable)
-                        || (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex) &&
+                        || (box && box.Pushable && ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex) &&
                             WorldManager.Instance.CurrentWorld.CheckCanMoveBoxColumn(box.WorldGP, rotatedQuickMoveAttemptGP, new HashSet<Box>()))) // 能走到才开启短按
                     {
                         // Check is there any actor occupies the grid
@@ -149,7 +139,7 @@ public class PlayerActor : Actor
                     QuickMoveDuration += Time.fixedDeltaTime;
                     float quickMoveSpeed = (transform.position - QuickMoveStartActorPosition).magnitude / QuickMoveDuration;
 
-                    if (quickMoveStartWorldGP == CurWorldGP // 自短按开始后角色该轴位置还未发生变化，则继续施加移动效果
+                    if (quickMoveStartWorldGP == WorldGP // 自短按开始后角色该轴位置还未发生变化，则继续施加移动效果
                         && !(QuickMoveDuration > 0.3f && quickMoveSpeed < 0.1f)) // 且短按期间的移动速度不能过低，否则判定为卡住
                     {
                         CurMoveAttempt = quickMoveAttempt;
@@ -303,7 +293,7 @@ public class PlayerActor : Actor
                     //CurThrowPointOffset += CurThrowMoveAttempt * Mathf.Max(ThrowAimMoveSpeed * Mathf.Sqrt(CurThrowPointOffset.magnitude), 2f) * Time.fixedDeltaTime;
                 }
 
-                if (!ActorSkillHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.BoxTypeIndex))
+                if (!ActorBoxInteractHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.BoxTypeIndex))
                 {
                     if (Mathf.Abs(CurThrowPointOffset.x) > Mathf.Abs(CurThrowPointOffset.z))
                     {

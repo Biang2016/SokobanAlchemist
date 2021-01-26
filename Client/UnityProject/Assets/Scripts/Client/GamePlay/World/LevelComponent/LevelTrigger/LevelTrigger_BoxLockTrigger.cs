@@ -2,7 +2,6 @@
 using BiangLibrary;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
 {

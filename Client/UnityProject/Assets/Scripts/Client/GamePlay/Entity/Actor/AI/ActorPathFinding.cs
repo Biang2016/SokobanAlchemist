@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using BiangLibrary;
-using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.ObjectPool;
 using UnityEngine;
@@ -351,14 +350,14 @@ public class ActorPathFinding
                 if (cached_OccupationUnionFind[offset.x + radius, offset.z + radius]) return;
                 foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
                 {
-                    if (enemy.CurWorldGP == gp)
+                    if (enemy.WorldGP == gp)
                     {
                         return;
                     }
                 }
 
-                if (BattleManager.Instance.Player1.CurWorldGP == gp) return;
-                if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.CurWorldGP == gp) return;
+                if (BattleManager.Instance.Player1.WorldGP == gp) return;
+                if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.WorldGP == gp) return;
 
                 Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gp, out WorldModule module, out GridPos3D _);
                 if (module != null && box == null)

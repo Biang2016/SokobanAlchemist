@@ -57,7 +57,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
             ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxName];
 
             bool isLevelEventTriggerAppearBox = false;
-            foreach (BoxPassiveSkill bf in box.RawBoxPassiveSkills)
+            foreach (EntityPassiveSkill bf in box.RawBoxPassiveSkills)
             {
                 if (bf is BoxPassiveSkill_LevelEventTriggerAppear bf_leta)
                 {

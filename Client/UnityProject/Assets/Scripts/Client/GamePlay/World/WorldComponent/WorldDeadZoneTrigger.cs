@@ -47,7 +47,7 @@ public class WorldDeadZoneTrigger : PoolObject
             if (actor && !actorFaceHelper)
             {
                 Debug.Log("Actor die in WorldDeadZone:" + name);
-                actor.ActorBattleHelper.LoseLife();
+                actor.ActorBattleHelper.Die();
             }
         }
     }

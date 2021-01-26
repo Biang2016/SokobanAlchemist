@@ -92,25 +92,21 @@ MonoBehaviour:
   GainLifeFXScale: 1
   DieFX: Hit_EvilBigGravBall
   DieFXScale: 2
-  RawActorStatPropSet:
-    Health:
+  RawEntityStatPropSet:
+    HealthDurability:
       _value: 35
       _minValue: 0
       _maxValue: 35
-    MaxHealth:
+    MaxHealthDurability:
       BaseValue: 35
       ModifiedValue: 0
       MinValue: 1
       MaxValue: 10000
-    HealthRecovery:
+    HealthDurabilityRecovery:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
-    Life:
-      _value: 1
-      _minValue: 0
-      _maxValue: 10
     MoveSpeed:
       BaseValue: 13
       ModifiedValue: 0
@@ -253,11 +249,6 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000
-      MaxTargetCount:
-        BaseValue: 5
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 100
       CastingRadius:
         BaseValue: 7
         ModifiedValue: 0
@@ -310,11 +301,6 @@ MonoBehaviour:
         MinValue: 0
         MaxValue: 0
       Attach_FrozenValue:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-      MaxTargetCount:
         BaseValue: 0
         ModifiedValue: 0
         MinValue: 0
@@ -375,11 +361,6 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 0
-      MaxTargetCount:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
       CastingRadius:
         BaseValue: 7
         ModifiedValue: 0
@@ -436,11 +417,6 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 0
-      MaxTargetCount:
-        BaseValue: 5
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 10
       CastingRadius:
         BaseValue: 7
         ModifiedValue: 0
@@ -497,11 +473,6 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 0
-      MaxTargetCount:
-        BaseValue: 5
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 5
       CastingRadius:
         BaseValue: 7
         ModifiedValue: 0
@@ -558,11 +529,6 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 0
-      MaxTargetCount:
-        BaseValue: 5
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 5
       CastingRadius:
         BaseValue: 5
         ModifiedValue: 0
@@ -664,117 +630,6 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 0
-    RawActorDefaultBuffs: []
-  ActorStatPropSet:
-    Health:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    MaxHealth:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    HealthRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    Life:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    MoveSpeed:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    MaxActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    ActionPoint:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    ActionPointRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    KickConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    DashConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    VaultConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FrozenLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FrozenFX: 
-    FrozenFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FiringResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringGrowthPercent:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FiringLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FiringFX: 
-    FiringFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    SkillsPropertyCollections: []
-    RawActorDefaultBuffs: []
   DashForce: 10
   Accelerate: 250
   ThrowAimMoveSpeed: 10
@@ -790,222 +645,6 @@ MonoBehaviour:
   CollideDamage: 0
   FrozeFX: Hit_SnowFlake
   ThawFX: Flash_CyanSlight
-  RawActorPassiveSkills: []
-  RawActorActiveSkills:
-  - id: 0
-  - id: 1
-  - id: 2
-  - id: 3
-  - id: 4
-  RawFrozenBoxPassiveSkills: []
-  MovementState: 0
-  PushState: 0
-  ThrowState: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: ActorActiveSkill_Attack, ns: , asm: Client}
-      data:
-        TargetCamp: 2
-        ActorSkillIndex: 0
-        SkillAlias: Poisonous Swamp
-        WingUpCanMove: 1
-        CastCanMove: 0
-        RecoverCanMove: 1
-        RawSubActiveSkillList: []
-        SubActiveSkillTriggerLogicList: []
-        InterruptSubActiveSkillsWhenInterrupted: 0
-        M_CastAreaType: 0
-        M_TargetInclination: 0
-        CastOnTopLayer: 0
-        FanAngle: 0
-        AccurateStandardDeviation: 0
-        BattleIndicatorTypeName: GridWarning
-        ProjectOffsetZMax: 3
-        ProjectOffsetZMin: -3
-        GridWarningColorFill: {r: 0.005695865, g: 0.9056604, b: 0.022281563, a: 0.7764706}
-        GridWarningColorBorderHighlight: {r: 0.57924354, g: 0.8113208, b: 0.14287403,
-          a: 0.7921569}
-        GridWarningColorBorderDim: {r: 0, g: 1, b: 0.018288612, a: 0.65882355}
-        CastFX: Flash_GreenPoisonous
-        CastFXScale: 1
-    00000001:
-      type: {class: ActorActiveSkill_ParentNode, ns: , asm: Client}
-      data:
-        TargetCamp: 2
-        ActorSkillIndex: 1
-        SkillAlias: Meteor
-        WingUpCanMove: 0
-        CastCanMove: 0
-        RecoverCanMove: 0
-        RawSubActiveSkillList:
-        - id: 5
-        SubActiveSkillTriggerLogicList:
-        - M_TriggerType: 2
-          SubSkillTriggerSequence: []
-          Duration: 5000
-          Times: 10
-          SubSkillAliasWithProbabilityList:
-          - SubSkillAlias: SingleMeteor
-            probability: 1
-            isSingleton: 0
-        InterruptSubActiveSkillsWhenInterrupted: 1
-    00000002:
-      type: {class: ActorActiveSkill_ParentNode, ns: , asm: Client}
-      data:
-        TargetCamp: 2
-        ActorSkillIndex: 2
-        SkillAlias: Blizzard
-        WingUpCanMove: 1
-        CastCanMove: 1
-        RecoverCanMove: 1
-        RawSubActiveSkillList:
-        - id: 6
-        SubActiveSkillTriggerLogicList:
-        - M_TriggerType: 2
-          SubSkillTriggerSequence: []
-          Duration: 5000
-          Times: 10
-          SubSkillAliasWithProbabilityList:
-          - SubSkillAlias: SingleBlizzard
-            probability: 1
-            isSingleton: 0
-        InterruptSubActiveSkillsWhenInterrupted: 1
-    00000003:
-      type: {class: ActorActiveSkill_AddEntityBuff, ns: , asm: Client}
-      data:
-        TargetCamp: 1
-        ActorSkillIndex: 5
-        SkillAlias: Heal
-        WingUpCanMove: 0
-        CastCanMove: 0
-        RecoverCanMove: 0
-        RawSubActiveSkillList: []
-        SubActiveSkillTriggerLogicList: []
-        InterruptSubActiveSkillsWhenInterrupted: 0
-        M_CastAreaType: 0
-        M_TargetInclination: 0
-        CastOnTopLayer: 0
-        FanAngle: 0
-        AccurateStandardDeviation: 0
-        BattleIndicatorTypeName: None
-        ProjectOffsetZMax: 0
-        ProjectOffsetZMin: 0
-        GridWarningColorFill: {r: 0, g: 0, b: 0, a: 0}
-        GridWarningColorBorderHighlight: {r: 0, g: 0, b: 0, a: 0}
-        GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
-        CastFX: None
-        CastFXScale: 2
-        RawEntityBuffs: []
-    00000004:
-      type: {class: ActorActiveSkill_AddEntityBuff, ns: , asm: Client}
-      data:
-        TargetCamp: 1
-        ActorSkillIndex: 6
-        SkillAlias: SpeedUp
-        WingUpCanMove: 1
-        CastCanMove: 1
-        RecoverCanMove: 1
-        RawSubActiveSkillList: []
-        SubActiveSkillTriggerLogicList: []
-        InterruptSubActiveSkillsWhenInterrupted: 0
-        M_CastAreaType: 0
-        M_TargetInclination: 2
-        CastOnTopLayer: 0
-        FanAngle: 0
-        AccurateStandardDeviation: 0
-        BattleIndicatorTypeName: None
-        ProjectOffsetZMax: 0
-        ProjectOffsetZMin: 0
-        GridWarningColorFill: {r: 0, g: 0, b: 0, a: 0}
-        GridWarningColorBorderHighlight: {r: 0, g: 0, b: 0, a: 0}
-        GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
-        CastFX: None
-        CastFXScale: 3
-        RawEntityBuffs:
-        - id: 7
-    00000005:
-      type: {class: ActorActiveSkill_SummonDropBox, ns: , asm: Client}
-      data:
-        TargetCamp: 2
-        ActorSkillIndex: 3
-        SkillAlias: SingleMeteor
-        WingUpCanMove: 1
-        CastCanMove: 1
-        RecoverCanMove: 1
-        RawSubActiveSkillList: []
-        SubActiveSkillTriggerLogicList: []
-        InterruptSubActiveSkillsWhenInterrupted: 0
-        M_CastAreaType: 0
-        M_TargetInclination: 0
-        CastOnTopLayer: 1
-        FanAngle: 0
-        AccurateStandardDeviation: 0
-        BattleIndicatorTypeName: GridWarning
-        ProjectOffsetZMax: 3
-        ProjectOffsetZMin: -3
-        GridWarningColorFill: {r: 1, g: 0.4480711, b: 0.019607842, a: 0.78431374}
-        GridWarningColorBorderHighlight: {r: 1, g: 0.10062885, b: 0.10062885, a: 0.7490196}
-        GridWarningColorBorderDim: {r: 1, g: 1, b: 1, a: 0.8352941}
-        CastFX: None
-        CastFXScale: 0
-        DropBoxList:
-        - BoxTypeName: FireBox
-          BoxOrientation: 0
-          probability: 9
-          isSingleton: 0
-        - BoxTypeName: LifeBox
-          BoxOrientation: 0
-          probability: 1
-          isSingleton: 1
-        DropFromHeightFromFloor: 5
-    00000006:
-      type: {class: ActorActiveSkill_SummonDropBox, ns: , asm: Client}
-      data:
-        TargetCamp: 2
-        ActorSkillIndex: 4
-        SkillAlias: SingleBlizzard
-        WingUpCanMove: 1
-        CastCanMove: 1
-        RecoverCanMove: 1
-        RawSubActiveSkillList: []
-        SubActiveSkillTriggerLogicList: []
-        InterruptSubActiveSkillsWhenInterrupted: 0
-        M_CastAreaType: 0
-        M_TargetInclination: 0
-        CastOnTopLayer: 1
-        FanAngle: 0
-        AccurateStandardDeviation: 0
-        BattleIndicatorTypeName: GridWarning
-        ProjectOffsetZMax: 3
-        ProjectOffsetZMin: -3
-        GridWarningColorFill: {r: 0.019607842, g: 0.9904165, b: 1, a: 0.78431374}
-        GridWarningColorBorderHighlight: {r: 0.10196078, g: 0.96453494, b: 1, a: 0.7490196}
-        GridWarningColorBorderDim: {r: 1, g: 1, b: 1, a: 0.8352941}
-        CastFX: None
-        CastFXScale: 0
-        DropBoxList:
-        - BoxTypeName: IceBox
-          BoxOrientation: 0
-          probability: 9
-          isSingleton: 0
-        - BoxTypeName: LifeBox
-          BoxOrientation: 0
-          probability: 1
-          isSingleton: 1
-        DropFromHeightFromFloor: 5
-    00000007:
-      type: {class: ActorBuff_ActorPropertyMultiplyModifier, ns: , asm: Client}
-      data:
-        GUID: 10587
-        BuffAttribute: 1
-        IsPermanent: 0
-        Duration: 3
-        BuffFX: Flash_EvilBigGravBall
-        BuffFXScale: 1
-        Percent: 50
-        LinearDecayInDuration: 0
-        PropertyType: 10
 --- !u!114 &8572106225310636948
 MonoBehaviour:
   m_ObjectHideFlags: 0

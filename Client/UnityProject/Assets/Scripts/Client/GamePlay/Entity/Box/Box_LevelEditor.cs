@@ -11,11 +11,9 @@ using UnityEditor;
 
 #endif
 
-public class Box_LevelEditor : Entity
+public class Box_LevelEditor : MonoBehaviour
 {
     public GameObject ModelRoot;
-
-    internal override EntityBuffHelper EntityBuffHelper => null;
 
     #region 箱子Extra被动技能
 
@@ -23,7 +21,7 @@ public class Box_LevelEditor : Entity
     [LabelText("箱子Extra被动技能")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     [SerializeReference]
-    public List<BoxPassiveSkill> RawBoxPassiveSkills = new List<BoxPassiveSkill>(); // 干数据，禁修改
+    public List<EntityPassiveSkill> RawBoxPassiveSkills = new List<EntityPassiveSkill>(); // 干数据，禁修改
 
     [LabelText("箱子朝向")]
     [OnValueChanged("RefreshOrientation")]
@@ -76,7 +74,7 @@ public class Box_LevelEditor : Entity
     {
         public GridPos3D LocalGP; // Box在Module内的GP
 
-        public List<BoxPassiveSkill> BoxPassiveSkills = new List<BoxPassiveSkill>();
+        public List<EntityPassiveSkill> BoxPassiveSkills = new List<EntityPassiveSkill>();
 
         public BoxExtraSerializeData Clone()
         {
@@ -91,11 +89,11 @@ public class Box_LevelEditor : Entity
     public BoxExtraSerializeData GetBoxExtraSerializeDataForWorld()
     {
         BoxExtraSerializeData data = new BoxExtraSerializeData();
-        data.BoxPassiveSkills = new List<BoxPassiveSkill>();
-        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+        data.BoxPassiveSkills = new List<EntityPassiveSkill>();
+        foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
         {
             if (bf is BoxPassiveSkill_LevelEventTriggerAppear) continue;
-            if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
+            if (bf.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
             {
                 data.BoxPassiveSkills.Add(bf.Clone());
             }
@@ -107,10 +105,10 @@ public class Box_LevelEditor : Entity
     public BoxExtraSerializeData GetBoxExtraSerializeDataForWorldOverrideWorldModule()
     {
         BoxExtraSerializeData data = new BoxExtraSerializeData();
-        data.BoxPassiveSkills = new List<BoxPassiveSkill>();
-        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+        data.BoxPassiveSkills = new List<EntityPassiveSkill>();
+        foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
         {
-            if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
+            if (bf.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
             {
                 data.BoxPassiveSkills.Add(bf.Clone());
             }
@@ -122,11 +120,11 @@ public class Box_LevelEditor : Entity
     public BoxExtraSerializeData GetBoxExtraSerializeDataForWorldModule()
     {
         BoxExtraSerializeData data = new BoxExtraSerializeData();
-        data.BoxPassiveSkills = new List<BoxPassiveSkill>();
-        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+        data.BoxPassiveSkills = new List<EntityPassiveSkill>();
+        foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
         {
             if (bf is BoxPassiveSkill_LevelEventTriggerAppear) continue;
-            if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
+            if (bf.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
             {
                 data.BoxPassiveSkills.Add(bf.Clone());
             }
@@ -139,32 +137,13 @@ public class Box_LevelEditor : Entity
 
 #if UNITY_EDITOR
 
-    public bool RequireHideInWorldForModuleBox
-    {
-        get
-        {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf is BoxPassiveSkill_Hide hide)
-                {
-                    if (hide.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-    }
-
     public bool RequireSerializePassiveSkillsIntoWorld
     {
         get
         {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+            foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
             {
-                if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
+                if (bf.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
                 {
                     return true;
                 }
@@ -178,9 +157,9 @@ public class Box_LevelEditor : Entity
     {
         get
         {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+            foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
             {
-                if (bf.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
+                if (bf.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
                 {
                     return true;
                 }
@@ -194,11 +173,11 @@ public class Box_LevelEditor : Entity
     {
         get
         {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+            foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
             {
                 if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear)
                 {
-                    if (appear.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
+                    if (appear.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
                     {
                         return true;
                     }
@@ -213,11 +192,11 @@ public class Box_LevelEditor : Entity
     {
         get
         {
-            foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+            foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
             {
                 if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear)
                 {
-                    if (appear.SpecialCaseType == BoxPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
+                    if (appear.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
                     {
                         return true;
                     }
@@ -237,11 +216,7 @@ public class Box_LevelEditor : Entity
                 transform.DrawSpecialTip(Vector3.left * 0.5f, "#0AFFF1".HTMLColorToColor(), Color.cyan, "模特");
             }
 
-            if (RequireHideInWorldForModuleBox)
-            {
-                transform.DrawSpecialTip(Vector3.left * 0.5f, "#FF8000".HTMLColorToColor(), Color.yellow, "世隐");
-            }
-            else if (RequireSerializePassiveSkillsIntoWorld || IsUnderWorldSpecialBoxesRoot)
+            if (RequireSerializePassiveSkillsIntoWorld || IsUnderWorldSpecialBoxesRoot)
             {
                 transform.DrawSpecialTip(Vector3.left * 0.5f, "#FF8000".HTMLColorToColor(), Color.yellow, "世特");
             }
@@ -271,6 +246,14 @@ public class Box_LevelEditor : Entity
             IsUnderWorldSpecialBoxesRoot = transform.HasAncestorName($"@_{WorldHierarchyRootType.WorldSpecialBoxesRoot}");
         }
     }
+
+    #region Utils
+
+    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
+    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
+
+    #endregion
+
 #endif
 
 #if UNITY_EDITOR
@@ -309,7 +292,7 @@ public class Box_LevelEditor : Entity
     public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
     {
         bool isDirty = false;
-        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+        foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
         {
             bool dirty = bf.RenameBoxTypeName(name, srcBoxName, targetBoxName, info, moduleSpecial, worldSpecial);
             isDirty |= dirty;
@@ -322,7 +305,7 @@ public class Box_LevelEditor : Entity
     {
         bool isDirty = false;
 
-        foreach (BoxPassiveSkill bf in RawBoxPassiveSkills)
+        foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
         {
             bool dirty = bf.DeleteBoxTypeName(name, srcBoxName, info, moduleSpecial, worldSpecial);
             isDirty |= dirty;

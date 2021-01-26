@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.Messenger;
 using BiangLibrary.ObjectPool;
@@ -138,7 +137,7 @@ public class WorldModule : PoolObject
             Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = worldExtraSerializeDataForOneModule[localGP.x, localGP.y, localGP.z]; // 这里可能有LevelEventTriggerBF的覆写信息
             if (boxExtraSerializeDataFromWorld != null)
             {
-                foreach (BoxPassiveSkill worldBF in boxExtraSerializeDataFromWorld.BoxPassiveSkills)
+                foreach (EntityPassiveSkill worldBF in boxExtraSerializeDataFromWorld.BoxPassiveSkills)
                 {
                     if (worldBF is BoxPassiveSkill_LevelEventTriggerAppear appear)
                     {
@@ -223,17 +222,6 @@ public class WorldModule : PoolObject
 
     public Box GenerateBox(ushort boxTypeIndex, GridPos3D worldGP, GridPosR.Orientation orientation, bool isTriggerAppear = false, bool isStartedBoxes = false, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
     {
-        if (boxExtraSerializeDataFromWorld != null)
-        {
-            foreach (BoxPassiveSkill bf in boxExtraSerializeDataFromWorld.BoxPassiveSkills)
-            {
-                if (bf is BoxPassiveSkill_Hide)
-                {
-                    return null;
-                }
-            }
-        }
-
         GridPos3D localGP = WorldGPToLocalGP(worldGP);
 
         if (BoxMatrix[localGP.x, localGP.y, localGP.z] != null)

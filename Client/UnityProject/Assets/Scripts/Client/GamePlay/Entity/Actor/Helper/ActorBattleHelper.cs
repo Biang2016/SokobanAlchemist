@@ -43,7 +43,7 @@ public class ActorBattleHelper : ActorMonoHelper
     {
         if (!Actor.IsRecycled)
         {
-            Actor.ActorStatPropSet.FixedUpdate(Time.fixedDeltaTime);
+            Actor.EntityStatPropSet.FixedUpdate(Time.fixedDeltaTime);
             if (immuneTimeAfterDamaged_Ticker > 0)
             {
                 immuneTimeAfterDamaged_Ticker -= Time.fixedDeltaTime;
@@ -61,7 +61,7 @@ public class ActorBattleHelper : ActorMonoHelper
         if (damage == 0) return;
         immuneTimeAfterDamaged_Ticker = Actor.ImmuneTimeAfterDamaged;
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
-        Actor.ActorStatPropSet.Health.Value -= damage;
+        Actor.EntityStatPropSet.HealthDurability.Value -= damage;
         OnDamaged?.Invoke(attacker, damage);
 
         FX injureFX = FXManager.Instance.PlayFX(Actor.InjureFX, Actor.transform.position);
@@ -79,7 +79,7 @@ public class ActorBattleHelper : ActorMonoHelper
     {
         if (addHealth == 0) return;
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(healer, Actor, addHealth, BattleTipType.AddHp, 0, 0));
-        Actor.ActorStatPropSet.Health.Value += addHealth;
+        Actor.EntityStatPropSet.HealthDurability.Value += addHealth;
         OnHealed?.Invoke(healer, addHealth);
 
         FX healFX = FXManager.Instance.PlayFX(Actor.HealFX, Actor.transform.position);
@@ -89,20 +89,6 @@ public class ActorBattleHelper : ActorMonoHelper
     public void Heal(Actor healer, float addHealth)
     {
         Heal(healer, Mathf.FloorToInt(addHealth));
-    }
-
-    public void AddLife(int addLife)
-    {
-        if (addLife == 0) return;
-        //ClientGameManager.Instance.BattleMessenger.Broadcast((uint)ENUM_BattleEvent.Battle_ActorAttackTip, new AttackData(attacker, Actor, damage, BattleTipType.Damage, 0, 0));
-        Actor.ActorStatPropSet.Life.Value += addLife;
-        FX gainLifeFX = FXManager.Instance.PlayFX(Actor.GainLifeFX, Actor.transform.position);
-        if (gainLifeFX) gainLifeFX.transform.localScale = Vector3.one * Actor.GainLifeFXScale;
-    }
-
-    public void LoseLife()
-    {
-        Actor.ActorStatPropSet.Life.Value--;
     }
 
     #endregion
@@ -143,7 +129,7 @@ public class ActorBattleHelper : ActorMonoHelper
 
     private void DropDieBox()
     {
-        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Actor.CurWorldGP);
+        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Actor.WorldGP);
         if (module)
         {
             ushort boxIndex = ConfigManager.GetBoxTypeIndex(Actor.DieDropBoxTypeName);
@@ -151,7 +137,7 @@ public class ActorBattleHelper : ActorMonoHelper
             if (Actor.DieDropBoxProbabilityPercent.ProbabilityBool())
             {
                 Box box = GameObjectPoolManager.Instance.BoxDict[boxIndex].AllocateGameObject<Box>(transform);
-                GridPos3D worldGP = Actor.CurWorldGP;
+                GridPos3D worldGP = Actor.WorldGP;
                 box.Setup(boxIndex, Actor.DieDropBoxOrientation);
                 box.Initialize(worldGP, module, 0, false, Box.LerpType.DropFromDeadActor);
                 box.DropFromDeadActor();

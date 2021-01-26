@@ -25,11 +25,11 @@ public class BuffEditorWindow : EditorWindow
 
     private void Init()
     {
-        int buffTypeEnumCount = Enum.GetValues(typeof(BuffAttribute)).Length;
+        int buffTypeEnumCount = Enum.GetValues(typeof(EntityBuffAttribute)).Length;
         string[] descriptionsOfBuffType = new string[buffTypeEnumCount];
 
         {
-            Type enumType = typeof(BuffAttribute);
+            Type enumType = typeof(EntityBuffAttribute);
             MemberInfo[] memberInfos = enumType.GetMembers();
             int descIndex = 0;
             foreach (MemberInfo mi in memberInfos)
@@ -49,10 +49,10 @@ public class BuffEditorWindow : EditorWindow
             }
         }
 
-        int relationshipEnumCount = Enum.GetValues(typeof(BuffAttributeRelationship)).Length;
+        int relationshipEnumCount = Enum.GetValues(typeof(EntityBuffAttributeRelationship)).Length;
         string[] descriptionsOfRelationship = new string[relationshipEnumCount];
         {
-            Type enumType = typeof(BuffAttributeRelationship);
+            Type enumType = typeof(EntityBuffAttributeRelationship);
             MemberInfo[] memberInfos = enumType.GetMembers();
             int descIndex = 0;
             foreach (MemberInfo mi in memberInfos)
@@ -72,7 +72,7 @@ public class BuffEditorWindow : EditorWindow
             }
         }
 
-        BuffAttributeRelationship[,] arr = ConfigManager.GetBuffAttributeMatrixAsset().BuffAttributeMatrix;
+        EntityBuffAttributeRelationship[,] arr = ConfigManager.GetBuffAttributeMatrixAsset().EntityBuffAttributeMatrix;
         if (arr != null)
         {
             this.table = GUITable.Create(
@@ -82,10 +82,10 @@ public class BuffEditorWindow : EditorWindow
                     if (x > y) return;
                     Rect left = new Rect(rect.x, rect.y, rect.width / 2f, rect.height);
                     Rect right = new Rect(rect.x + rect.width / 2f, rect.y, rect.width / 2f, rect.height);
-                    BuffAttributeRelationship newValue = (BuffAttributeRelationship) EditorGUI.EnumPopup(left, arr[x, y]);
-                    if (x != y && (newValue == BuffAttributeRelationship.MaxDominant))
+                    EntityBuffAttributeRelationship newValue = (EntityBuffAttributeRelationship) EditorGUI.EnumPopup(left, arr[x, y]);
+                    if (x != y && (newValue == EntityBuffAttributeRelationship.MaxDominant))
                     {
-                        Debug.LogError($"【Buff相克矩阵】{(BuffAttribute) x}和{(BuffAttribute) y}之间的关系有误，异种BuffAttribute之间的关系不允许选用{newValue}");
+                        Debug.LogError($"【Buff相克矩阵】{(EntityBuffAttribute) x}和{(EntityBuffAttribute) y}之间的关系有误，异种BuffAttribute之间的关系不允许选用{newValue}");
                     }
                     else
                     {
@@ -119,14 +119,14 @@ public class BuffEditorWindow : EditorWindow
 
         if (GUILayout.Button("加载 / 修改矩阵维度后先加载再保存，否则丢失数据"))
         {
-            ConfigManager.LoadBuffAttributeMatrix(DataFormat.Binary);
+            ConfigManager.LoadEntityBuffAttributeMatrix(DataFormat.Binary);
             Init();
         }
 
         if (GUILayout.Button("保存"))
         {
-            ConfigManager.ExportBuffAttributeMatrix(DataFormat.Binary);
-            ConfigManager.LoadBuffAttributeMatrix(DataFormat.Binary);
+            ConfigManager.ExportEntityBuffAttributeMatrix(DataFormat.Binary);
+            ConfigManager.LoadEntityBuffAttributeMatrix(DataFormat.Binary);
             Init();
         }
 

@@ -236,7 +236,7 @@ public abstract class Property
         internal bool Covered => CoverModifiersGUID.Count > 0;
 
         /// <summary>
-        /// 此Modifier被哪些Modifier用<see cref="BuffAttributeRelationship.MaxDominant"/>屏蔽了
+        /// 此Modifier被哪些Modifier用<see cref="EntityBuffAttributeRelationship.MaxDominant"/>屏蔽了
         /// </summary>
         internal HashSet<uint> CoverModifiersGUID = new HashSet<uint>();
 

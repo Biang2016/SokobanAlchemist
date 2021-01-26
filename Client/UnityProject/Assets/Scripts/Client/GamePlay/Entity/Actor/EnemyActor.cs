@@ -1,7 +1,4 @@
-﻿using NodeCanvas.Framework;
-using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
+﻿#if UNITY_EDITOR
 
 #endif
 public class EnemyActor : Actor

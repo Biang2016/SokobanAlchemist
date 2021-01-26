@@ -40,7 +40,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 251493133036993693}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 781ce0ce17cd7d94394de4119f4f7623, type: 3}
+  m_Script: {fileID: 11500000, guid: f872e829d08a53e4c867952c11a6d9b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &277291848338598467
@@ -591,143 +591,87 @@ MonoBehaviour:
   IsRecycled: 0
   GUID: 0
   GUID_Mod_FixedFrameRate: 0
-  ModelRoot: {fileID: 7302688255835713277}
-  BoxBuffHelper: {fileID: 2962941836236094511}
-  BoxFrozenHelper: {fileID: 7499738859985598480}
-  BoxColliderHelper: {fileID: 8570493542017088591}
-  BoxIndicatorHelper: {fileID: 5356314078954435621}
-  BoxTriggerZoneHelper: {fileID: 5293621569182175010}
-  DoorBoxHelper: {fileID: 0}
-  BoxSkinHelper: {fileID: 4108857161204591899}
-  BoxIconSpriteHelper: {fileID: 2878046515562270118}
-  BoxIconSpriteSmoothMove: {fileID: 5487221777558947811}
-  BoxModelSmoothMove: {fileID: 4907329536122643906}
-  BoxTypeIndex: 0
-  BoxFeature: 0
-  RawBoxStatPropSet:
-    CollideDurability:
-      _value: 1
-      _minValue: -1
-      _maxValue: 1000
-    DropFromAirSurviveProbabilityPercent:
+  RawEntityStatPropSet:
+    HealthDurability:
       _value: 0
       _minValue: 0
-      _maxValue: 100
-    ExplodeDurability:
-      _value: 1
-      _minValue: -1
-      _maxValue: 1000
-    FrozenResistance:
-      BaseValue: 100
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 200
-    FrozenRecovery:
-      BaseValue: 15
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 1000
-    FrozenValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 1000
-    FrozenLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 4
-    FrozenFX: None
-    FrozenFXScaleCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.7
-        inSlope: 0.325
-        outSlope: 0.325
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 4
-        value: 2
-        inSlope: 0.325
-        outSlope: 0.325
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FiringResistance:
-      BaseValue: 200
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 200
-    FiringRecovery:
-      BaseValue: 200
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 1000
-    FiringGrowthPercent:
+      _maxValue: 0
+    MaxHealthDurability:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 1000
-    FiringValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 1000
+      MaxValue: 0
+    HealthDurabilityRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     FiringDurability:
-      _value: 10
-      _minValue: -1
-      _maxValue: 1000
-    FiringLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 4
-    StartFiringFX: None
-    FiringFX: LoopFX_Burning
-    FiringFXScaleCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.4
-        inSlope: 0.15
-        outSlope: 0.15
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 4
-        value: 1
-        inSlope: 0.15
-        outSlope: 0.15
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FiringBreakFX: Hit_YellowFireStar
-    RawBoxDefaultBuffs: []
-  BoxStatPropSet:
-    CollideDurability:
       _value: 0
       _minValue: 0
       _maxValue: 0
-    DropFromAirSurviveProbabilityPercent:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
+    MaxFiringDurability:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringDurabilityRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     ExplodeDurability:
       _value: 0
       _minValue: 0
       _maxValue: 0
+    MaxExplodeDurability:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    ExplodeDurabilityRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    DropFromAirSurviveProbabilityPercent:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    MoveSpeed:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    MaxActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    ActionPoint:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    ActionPointRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    KickConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    DashConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    VaultConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     FrozenResistance:
       BaseValue: 0
       ModifiedValue: 0
@@ -772,15 +716,12 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 0
-    FiringDurability:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
     FiringLevel:
       _value: 0
       _minValue: 0
       _maxValue: 0
     StartFiringFX: 
+    StartFiringFXScale: 0
     FiringFX: 
     FiringFXScaleCurve:
       serializedVersion: 2
@@ -789,7 +730,167 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     FiringBreakFX: 
-    RawBoxDefaultBuffs: []
+    FiringBreakFXScale: 0
+    SkillsPropertyCollections: []
+    RawEntityDefaultBuffs: []
+  EntityStatPropSet:
+    HealthDurability:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    MaxHealthDurability:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    HealthDurabilityRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringDurability:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    MaxFiringDurability:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringDurabilityRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    ExplodeDurability:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    MaxExplodeDurability:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    ExplodeDurabilityRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    DropFromAirSurviveProbabilityPercent:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    MoveSpeed:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    MaxActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    ActionPoint:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    ActionPointRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    KickConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    DashConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    VaultConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FrozenResistance:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FrozenRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FrozenValue:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FrozenLevel:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FrozenFX: 
+    FrozenFXScaleCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    FiringResistance:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringGrowthPercent:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringValue:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FiringLevel:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    StartFiringFX: 
+    StartFiringFXScale: 0
+    FiringFX: 
+    FiringFXScaleCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    FiringBreakFX: 
+    FiringBreakFXScale: 0
+    SkillsPropertyCollections: []
+    RawEntityDefaultBuffs: []
+  RawEntityPassiveSkills: []
+  RawEntityActiveSkills: []
+  Camp: 0
+  ModelRoot: {fileID: 7302688255835713277}
+  boxBuffHelper: {fileID: 2962941836236094511}
+  BoxFrozenHelper: {fileID: 7499738859985598480}
+  BoxColliderHelper: {fileID: 8570493542017088591}
+  BoxIndicatorHelper: {fileID: 5356314078954435621}
+  BoxTriggerZoneHelper: {fileID: 5293621569182175010}
+  DoorBoxHelper: {fileID: 0}
+  BoxSkinHelper: {fileID: 4108857161204591899}
+  BoxIconSpriteHelper: {fileID: 2878046515562270118}
+  BoxIconSpriteSmoothMove: {fileID: 5487221777558947811}
+  BoxModelSmoothMove: {fileID: 4907329536122643906}
+  BoxTypeIndex: 0
+  BoxFeature: 0
   DeleteDelay: 0
   MergeDelay: 0.5
   CollideFX: None
@@ -805,15 +906,6 @@ MonoBehaviour:
   MergeFXScale: 1.5
   MergedFX: Hit_RainbowFlowerExplode
   MergedFXScale: 2
-  RawBoxPassiveSkills: []
-  WorldGP:
-    x: 0
-    y: 0
-    z: 0
-  LocalGP:
-    x: 0
-    y: 0
-    z: 0
   WorldModule: {fileID: 0}
   references:
     version: 1
@@ -1491,7 +1583,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5035177361514968551}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 452236e4a00f8314ea16d021f788bf53, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e142b70bd0e5fe46a009bff14f9cde6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5923138339813540772

@@ -108,25 +108,21 @@ MonoBehaviour:
   GainLifeFXScale: 1
   DieFX: Hit_EvilBigGravBall
   DieFXScale: 1
-  RawActorStatPropSet:
-    Health:
+  RawEntityStatPropSet:
+    HealthDurability:
       _value: 10
       _minValue: 0
       _maxValue: 10
-    MaxHealth:
+    MaxHealthDurability:
       BaseValue: 10
       ModifiedValue: 0
       MinValue: 1
       MaxValue: 10000
-    HealthRecovery:
+    HealthDurabilityRecovery:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
-    Life:
-      _value: 1
-      _minValue: 0
-      _maxValue: 10
     MoveSpeed:
       BaseValue: 50
       ModifiedValue: 0
@@ -252,118 +248,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    SkillsPropertyCollections: []
-    RawActorDefaultBuffs: []
-  ActorStatPropSet:
-    Health:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    MaxHealth:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    HealthRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    Life:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    MoveSpeed:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    MaxActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    ActionPoint:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    ActionPointRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    KickConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    DashConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    VaultConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FrozenLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FrozenFX: 
-    FrozenFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FiringResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringGrowthPercent:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FiringLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FiringFX: 
-    FiringFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    SkillsPropertyCollections: []
-    RawActorDefaultBuffs: []
   DashForce: 150
   Accelerate: 200
   ThrowAimMoveSpeed: 8
@@ -413,33 +297,10 @@ MonoBehaviour:
   CollideDamage: 0
   FrozeFX: None
   ThawFX: None
-  RawActorPassiveSkills:
-  - id: 0
-  RawActorActiveSkills: []
-  RawFrozenBoxPassiveSkills: []
   MovementState: 0
   PushState: 0
   ThrowState: 0
   PlayerNumber: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: ActorPassiveSkill_IceSlideSpeedUp, ns: , asm: Client}
-      data:
-        RawActorBuff:
-          id: 1
-    00000001:
-      type: {class: ActorBuff_ActorPropertyMultiplyModifier, ns: , asm: Client}
-      data:
-        GUID: 10019
-        BuffAttribute: 1
-        IsPermanent: 1
-        Duration: 0
-        BuffFX: None
-        BuffFXScale: 1
-        Percent: 50
-        LinearDecayInDuration: 0
-        PropertyType: 10
 --- !u!1 &8145695636727172613
 GameObject:
   m_ObjectHideFlags: 0

@@ -92,25 +92,21 @@ MonoBehaviour:
   GainLifeFXScale: 1
   DieFX: Hit_EvilBigGravBall
   DieFXScale: 2
-  RawActorStatPropSet:
-    Health:
+  RawEntityStatPropSet:
+    HealthDurability:
       _value: 2
       _minValue: 0
       _maxValue: 2
-    MaxHealth:
+    MaxHealthDurability:
       BaseValue: 2
       ModifiedValue: 0
       MinValue: 1
       MaxValue: 10000
-    HealthRecovery:
+    HealthDurabilityRecovery:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
-    Life:
-      _value: 1
-      _minValue: 0
-      _maxValue: 10
     MoveSpeed:
       BaseValue: 10
       ModifiedValue: 0
@@ -253,11 +249,6 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 0
-      MaxTargetCount:
-        BaseValue: 1
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1
       CastingRadius:
         BaseValue: 0
         ModifiedValue: 0
@@ -298,118 +289,6 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
-    RawActorDefaultBuffs:
-    - id: 0
-  ActorStatPropSet:
-    Health:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    MaxHealth:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    HealthRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    Life:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    MoveSpeed:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    MaxActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    ActionPoint:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    ActionPointRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    KickConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    DashConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    VaultConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FrozenLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FrozenFX: 
-    FrozenFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FiringResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringGrowthPercent:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FiringLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-    FiringFX: 
-    FiringFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    SkillsPropertyCollections: []
-    RawActorDefaultBuffs: []
   DashForce: 10
   Accelerate: 250
   ThrowAimMoveSpeed: 10
@@ -425,99 +304,9 @@ MonoBehaviour:
   CollideDamage: 0
   FrozeFX: Hit_SnowFlake
   ThawFX: Flash_CyanSlight
-  RawActorPassiveSkills: []
-  RawActorActiveSkills:
-  - id: 1
-  RawFrozenBoxPassiveSkills:
-  - id: 2
   MovementState: 0
   PushState: 0
   ThrowState: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: ActorBuff_AttributeLabel, ns: , asm: Client}
-      data:
-        GUID: 10030
-        BuffAttribute: 5
-        IsPermanent: 1
-        Duration: 0
-        BuffFX: None
-        BuffFXScale: 1
-    00000001:
-      type: {class: ActorActiveSkill_AddEntityBuff, ns: , asm: Client}
-      data:
-        TargetCamp: 2
-        ActorSkillIndex: 0
-        SkillAlias: StunAttack
-        WingUpCanMove: 0
-        CastCanMove: 0
-        RecoverCanMove: 0
-        RawSubActiveSkillList: []
-        SubActiveSkillTriggerLogicList: []
-        InterruptSubActiveSkillsWhenInterrupted: 0
-        M_CastAreaType: 2
-        M_TargetInclination: 2
-        CastOnTopLayer: 0
-        FanAngle: 0
-        AccurateStandardDeviation: 0
-        BattleIndicatorTypeName: GridWarning
-        ProjectOffsetZMax: 3
-        ProjectOffsetZMin: -3
-        GridWarningColorFill: {r: 1, g: 1, b: 1, a: 0.75686276}
-        GridWarningColorBorderHighlight: {r: 0.9339623, g: 0.9339623, b: 0.9339623,
-          a: 0.8352941}
-        GridWarningColorBorderDim: {r: 1, g: 1, b: 1, a: 0.7490196}
-        CastFX: Flash_WhiteLightening
-        CastFXScale: 2
-        RawEntityBuffs: []
-    00000002:
-      type: {class: BoxPassiveSkill_Conditional, ns: , asm: Client}
-      data:
-        SpecialCaseType: 0
-        BoxPassiveSkillCondition: 112
-        MultiEventTrigger: 0
-        ListenLevelEventAliasList: []
-        ListenLevelEventAlias: 
-        MaxTriggeredTimes: 1
-        RawBoxPassiveSkillActions:
-        - id: 3
-        - id: 4
-    00000003:
-      type: {class: BoxPassiveSkillAction_RadiusAddActorsBuff, ns: , asm: Client}
-      data:
-        EffectiveOnRelativeCamp: 2
-        AddBuffRadius: 1
-        ActorBuff:
-          id: 5
-    00000004:
-      type: {class: BoxPassiveSkillAction_RadiusAddActorsBuff, ns: , asm: Client}
-      data:
-        EffectiveOnRelativeCamp: 2
-        AddBuffRadius: 1
-        ActorBuff:
-          id: 6
-    00000005:
-      type: {class: ActorBuff_AttributeLabel, ns: , asm: Client}
-      data:
-        GUID: 10370
-        BuffAttribute: 4
-        IsPermanent: 0
-        Duration: 3
-        BuffFX: Hit_WhiteLightening
-        BuffFXScale: 1.5
-    00000006:
-      type: {class: ActorBuff_ActorPropertyMultiplyModifier, ns: , asm: Client}
-      data:
-        GUID: 10371
-        BuffAttribute: 3
-        IsPermanent: 0
-        Duration: 3
-        BuffFX: None
-        BuffFXScale: 1
-        Percent: -100
-        LinearDecayInDuration: 0
-        PropertyType: 10
 --- !u!114 &7861377238865694945
 MonoBehaviour:
   m_ObjectHideFlags: 0

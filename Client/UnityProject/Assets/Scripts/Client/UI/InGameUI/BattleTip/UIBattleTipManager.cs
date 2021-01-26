@@ -114,9 +114,9 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
                 {
                     case Camp.Player:
                     case Camp.Enemy:
-                    case Camp.None:
+                    case Camp.Neutral:
                     {
-                        if (info.ReceiverCamp == Camp.Enemy || info.ReceiverCamp == Camp.None)
+                        if (info.ReceiverCamp == Camp.Enemy || info.ReceiverCamp == Camp.Neutral)
                         {
                             btType = BattleTipPrefabType.UIBattleTip_PlayerAttack;
                         }
@@ -134,7 +134,7 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
 
                     case Camp.Friend:
                     {
-                        if (info.ReceiverCamp == Camp.Enemy || info.ReceiverCamp == Camp.None)
+                        if (info.ReceiverCamp == Camp.Enemy || info.ReceiverCamp == Camp.Neutral)
                         {
                             btType = BattleTipPrefabType.UIBattleTip_FriendAttack;
                         }
@@ -172,7 +172,7 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
                         btType = BattleTipPrefabType.UIBattleTip_EnemyGetHealed;
                         break;
                     }
-                    case Camp.None:
+                    case Camp.Neutral:
                     {
                         btType = BattleTipPrefabType.UIBattleTip_EnemyGetHealed;
                         break;

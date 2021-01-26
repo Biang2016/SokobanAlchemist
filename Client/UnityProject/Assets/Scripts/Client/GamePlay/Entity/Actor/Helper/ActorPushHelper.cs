@@ -14,7 +14,7 @@ public class ActorPushHelper : ActorMonoHelper
 
     public override void OnHelperRecycled()
     {
-        if (!Actor.ActorForbidPushBox) TriggerOut = false;
+        TriggerOut = false;
         ActorPushHelperTrigger.OnRecycled();
         base.OnHelperRecycled();
     }

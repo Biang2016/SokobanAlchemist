@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Sirenix.OdinInspector;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ActorPushHelperTrigger : MonoBehaviour
 {
@@ -35,7 +33,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
         if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
+            if (box && box.Pushable && ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
                 curPushingBox = box;
                 box.Push(ActorPushHelper.Actor.CurMoveAttempt, ActorPushHelper.Actor);
@@ -50,7 +48,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
         if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Pushable && ActorPushHelper.Actor.ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
+            if (box && box.Pushable && ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
                 //if (curPushingBox != null && curPushingBox == box)
                 //{

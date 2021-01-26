@@ -281,28 +281,28 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("Player/AddHealth*10")]
     public void AddHealth10()
     {
-        BattleManager.Instance.Player1.ActorStatPropSet.MaxHealth.AddModifier(new Property.PlusModifier {Delta = 10});
-        BattleManager.Instance.Player1.ActorStatPropSet.Health.Value += 10;
+        BattleManager.Instance.Player1.EntityStatPropSet.MaxHealthDurability.AddModifier(new Property.PlusModifier {Delta = 10});
+        BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value += 10;
     }
 
     [DebugButton("Player/AddHealth*100", KeyCode.H)]
     public void AddHealth100()
     {
-        BattleManager.Instance.Player1.ActorStatPropSet.MaxHealth.AddModifier(new Property.PlusModifier {Delta = 100});
-        BattleManager.Instance.Player1.ActorStatPropSet.Health.Value += 100;
+        BattleManager.Instance.Player1.EntityStatPropSet.MaxHealthDurability.AddModifier(new Property.PlusModifier {Delta = 100});
+        BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value += 100;
     }
 
     [DebugButton("Player/AddMaxAction*50", KeyCode.J)]
     public void AddMaxAction50()
     {
-        BattleManager.Instance.Player1.ActorStatPropSet.MaxActionPoint.AddModifier(new Property.PlusModifier {Delta = 50});
-        BattleManager.Instance.Player1.ActorStatPropSet.ActionPoint.Value += 50;
+        BattleManager.Instance.Player1.EntityStatPropSet.MaxActionPoint.AddModifier(new Property.PlusModifier {Delta = 50});
+        BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.Value += 50;
     }
 
     [DebugButton("Player/AddActionRecovery*10", KeyCode.L)]
     public void AddActionRecovery10()
     {
-        BattleManager.Instance.Player1.ActorStatPropSet.ActionPointRecovery.AddModifier(new Property.PlusModifier {Delta = 10});
+        BattleManager.Instance.Player1.EntityStatPropSet.ActionPointRecovery.AddModifier(new Property.PlusModifier {Delta = 10});
     }
 
     [DebugToggleButton("Log/ToggleActorMoveLog")]

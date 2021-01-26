@@ -58,13 +58,22 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
         Layer_BoxTriggerZone = LayerMask.NameToLayer("BoxTriggerZone");
     }
 
-    public int GetTargetActorLayerMask(Camp selfCamp, RelativeCamp relativeCamp)
+    public int GetTargetEntityLayerMask(Camp selfCamp, RelativeCamp relativeCamp)
     {
         switch (selfCamp)
         {
-            case Camp.None:
+            case Camp.Neutral:
             {
-                return 0;
+                switch (relativeCamp)
+                {
+                    case RelativeCamp.None: return 0;
+                    case RelativeCamp.FriendCamp: return LayerMask_HitBox_Box;
+                    case RelativeCamp.OpponentCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Player;
+                    case RelativeCamp.NeutralCamp: return LayerMask_HitBox_Box;
+                    case RelativeCamp.AllCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Player | LayerMask_HitBox_Box;
+                }
+
+                break;
             }
             case Camp.Player:
             {
@@ -73,8 +82,8 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
                     case RelativeCamp.None: return 0;
                     case RelativeCamp.FriendCamp: return LayerMask_HitBox_Player;
                     case RelativeCamp.OpponentCamp: return LayerMask_HitBox_Enemy;
-                    case RelativeCamp.NeutralCamp: return LayerMask_HitBox_Enemy;
-                    case RelativeCamp.AllCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Player;
+                    case RelativeCamp.NeutralCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Box;
+                    case RelativeCamp.AllCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Player | LayerMask_HitBox_Box;
                 }
 
                 break;
@@ -86,8 +95,8 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
                     case RelativeCamp.None: return 0;
                     case RelativeCamp.FriendCamp: return LayerMask_HitBox_Enemy;
                     case RelativeCamp.OpponentCamp: return LayerMask_HitBox_Player;
-                    case RelativeCamp.NeutralCamp: return LayerMask_HitBox_Enemy;
-                    case RelativeCamp.AllCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Player;
+                    case RelativeCamp.NeutralCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Box;
+                    case RelativeCamp.AllCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Player | LayerMask_HitBox_Box;
                 }
 
                 break;
@@ -99,11 +108,11 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
                     case RelativeCamp.None: return 0;
                     case RelativeCamp.FriendCamp: return LayerMask_HitBox_Player;
                     case RelativeCamp.OpponentCamp: return LayerMask_HitBox_Enemy;
-                    case RelativeCamp.NeutralCamp: return LayerMask_HitBox_Enemy;
-                    case RelativeCamp.AllCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Player;
+                    case RelativeCamp.NeutralCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Box;
+                    case RelativeCamp.AllCamp: return LayerMask_HitBox_Enemy | LayerMask_HitBox_Player | LayerMask_HitBox_Box;
                 }
 
-                    break;
+                break;
             }
         }
 

@@ -33,14 +33,14 @@ public class ActorFrozenHelper : EntityFrozenHelper
             else
             {
                 actor.SnapToGrid();
-                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(actor.CurWorldGP);
+                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(actor.WorldGP);
                 if (module)
                 {
-                    FrozenBox = module.GenerateBox(ConfigManager.Box_EnemyFrozenBoxIndex, actor.CurWorldGP, GridPosR.Orientation.Up);
+                    FrozenBox = module.GenerateBox(ConfigManager.Box_EnemyFrozenBoxIndex, actor.WorldGP, GridPosR.Orientation.Up);
                     if (FrozenBox)
                     {
-                        List<BoxPassiveSkill> actorFrozenBoxPassiveSkills = actor.RawFrozenBoxPassiveSkills.Clone();
-                        foreach (BoxPassiveSkill abf in actorFrozenBoxPassiveSkills)
+                        List<EntityPassiveSkill> actorFrozenBoxPassiveSkills = actor.RawFrozenBoxPassiveSkills.Clone();
+                        foreach (EntityPassiveSkill abf in actorFrozenBoxPassiveSkills)
                         {
                             FrozenBox.AddNewPassiveSkill(abf);
                         }
@@ -48,7 +48,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
                         FrozenBox.FrozenActor = actor;
                         actor.transform.parent = FrozenBox.transform;
                         actor.CurMoveAttempt = Vector3.zero;
-                        if (!actor.ActorForbidPushBox) actor.ActorPushHelper.TriggerOut = false;
+                        actor.ActorPushHelper.TriggerOut = false;
                         actor.MovementState = Actor.MovementStates.Frozen;
                         actor.RemoveRigidbody();
                         transform.rotation = Quaternion.identity;

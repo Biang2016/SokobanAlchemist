@@ -38,9 +38,9 @@ public class InGameHealthBar : PoolObject
         RectTransform.sizeDelta = new Vector2(length, height) * CameraManager.Instance.FieldCamera.InGameUISize;
         ActorBattleHelper = helper;
         SubSlider.value = 0;
-        ActorStatPropSet asps = helper.Actor.ActorStatPropSet;
-        SetHealthSliderValue(asps.Health.Value, asps.Health.MinValue, asps.Health.MaxValue);
-        asps.Health.OnChanged += SetHealthSliderValue;
+        EntityStatPropSet esps = helper.Actor.EntityStatPropSet;
+        SetHealthSliderValue(esps.HealthDurability.Value, esps.HealthDurability.MinValue, esps.HealthDurability.MaxValue);
+        esps.HealthDurability.OnChanged += SetHealthSliderValue;
     }
 
     public void SetHealthSliderValue(int currentHealth, int minHealth, int maxHealth)

@@ -8,7 +8,6 @@ public class PlayerStatHUD : MonoBehaviour
     public Animator HealthSliderHandleAnim;
     public Text HealthText;
     public Animator HealthTextAnim;
-    public Gradient HealthBarColorGradient;
 
     public Animator ActionPointSliderAnim;
     public Slider ActionPointSlider;
@@ -17,13 +16,11 @@ public class PlayerStatHUD : MonoBehaviour
 
     public void Initialize(ActorBattleHelper helper)
     {
-        ActorStatPropSet asps = helper.Actor.ActorStatPropSet;
-        SetHealth(asps.Health.Value, asps.Health.MinValue, asps.Health.MaxValue);
-        SetLife(asps.Life.Value, asps.Life.MinValue, asps.Life.MaxValue);
+        EntityStatPropSet asps = helper.Actor.EntityStatPropSet;
+        SetHealth(asps.HealthDurability.Value, asps.HealthDurability.MinValue, asps.HealthDurability.MaxValue);
         SetActionPoint(asps.ActionPoint.Value, asps.ActionPoint.MinValue, asps.ActionPoint.MaxValue);
         SetActionPointBar(asps.MaxActionPoint.GetModifiedValue, asps.MaxActionPoint.GetModifiedValue);
-        asps.Health.OnChanged += SetHealth;
-        asps.Life.OnChanged += SetLife;
+        asps.HealthDurability.OnChanged += SetHealth;
         asps.ActionPoint.OnChanged += SetActionPoint;
         asps.ActionPoint.OnMaxValueChanged += OnActionChangeNotice;
         asps.MaxActionPoint.OnValueChanged += SetActionPointBar;
@@ -43,11 +40,6 @@ public class PlayerStatHUD : MonoBehaviour
 
         HealthTextAnim.SetTrigger("Jump");
         HealthText.text = $"{current}/{max}";
-    }
-
-    public void SetLife(int current, int min, int max)
-    {
-        HealthSliderFillImage.color = HealthBarColorGradient.Evaluate((float) current / max);
     }
 
     private float actionPoint_SmoothDampVelocity;

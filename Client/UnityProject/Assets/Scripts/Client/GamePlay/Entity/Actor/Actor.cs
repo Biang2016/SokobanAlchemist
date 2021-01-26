@@ -19,21 +19,25 @@ public class Actor : Entity
         false;
 #endif
 
+    [FoldoutGroup("组件")]
     public Rigidbody RigidBody;
+
+    [FoldoutGroup("组件")]
     public ActorCommonHelpers ActorCommonHelpers;
 
     public Vector3 ArtPos => ActorSkinHelper.MainArtTransform.position;
 
     internal GameObject ActorMoveColliderRoot => ActorCommonHelpers.ActorMoveColliderRoot;
     internal ActorArtHelper ActorArtHelper => ActorCommonHelpers.ActorArtHelper;
-    internal override EntityBuffHelper EntityBuffHelper => ActorBuffHelper;
-    internal ActorBuffHelper ActorBuffHelper => ActorCommonHelpers.ActorBuffHelper;
+    internal override EntityBuffHelper EntityBuffHelper => ActorCommonHelpers.EntityBuffHelper;
+    internal override EntityFrozenHelper EntityFrozenHelper => ActorFrozenHelper;
+    internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => ActorCommonHelpers.EntityTriggerZoneHelper;
     internal ActorPushHelper ActorPushHelper => ActorCommonHelpers.ActorPushHelper;
     internal ActorFaceHelper ActorFaceHelper => ActorCommonHelpers.ActorFaceHelper;
     internal ActorSkinHelper ActorSkinHelper => ActorCommonHelpers.ActorSkinHelper;
     internal ActorLaunchArcRendererHelper ActorLaunchArcRendererHelper => ActorCommonHelpers.ActorLaunchArcRendererHelper;
     internal ActorBattleHelper ActorBattleHelper => ActorCommonHelpers.ActorBattleHelper;
-    internal ActorSkillHelper ActorSkillHelper => ActorCommonHelpers.ActorSkillHelper;
+    internal ActorBoxInteractHelper ActorBoxInteractHelper => ActorCommonHelpers.ActorBoxInteractHelper;
     internal ActorFrozenHelper ActorFrozenHelper => ActorCommonHelpers.ActorFrozenHelper;
     internal Transform LiftBoxPivot => ActorCommonHelpers.LiftBoxPivot;
 
@@ -43,54 +47,44 @@ public class Actor : Entity
     [ReadOnly]
     [DisplayAsString]
     [LabelText("角色分类")]
+    [FoldoutGroup("状态")]
     public ActorCategory ActorCategory;
 
     [ReadOnly]
     [DisplayAsString]
     [LabelText("角色类型")]
+    [FoldoutGroup("状态")]
     public string ActorType;
 
     [ReadOnly]
     [DisplayAsString]
     [LabelText("移动倾向")]
-    [FoldoutGroup("战斗状态")]
+    [FoldoutGroup("状态")]
     public Vector3 CurMoveAttempt;
 
     [ReadOnly]
     [DisplayAsString]
     [LabelText("上一帧移动倾向")]
-    [FoldoutGroup("战斗状态")]
+    [FoldoutGroup("状态")]
     public Vector3 LastMoveAttempt;
 
     [ReadOnly]
     [DisplayAsString]
     [LabelText("扔箱子瞄准点移动倾向")]
-    [FoldoutGroup("战斗状态")]
+    [FoldoutGroup("状态")]
     public Vector3 CurThrowMoveAttempt;
 
     [ReadOnly]
     [DisplayAsString]
     [LabelText("扔箱子瞄准点偏移")]
-    [FoldoutGroup("战斗状态")]
+    [FoldoutGroup("状态")]
     public Vector3 CurThrowPointOffset;
-
-    internal Vector3 CurForward
-    {
-        get { return transform.forward; }
-        set
-        {
-            if (value != Vector3.zero)
-            {
-                transform.forward = value;
-            }
-        }
-    }
 
     [DisplayAsString]
     [ShowInInspector]
     [LabelText("世界坐标")]
-    [FoldoutGroup("战斗状态")]
-    public GridPos3D CurWorldGP
+    [FoldoutGroup("状态")]
+    public override GridPos3D WorldGP
     {
         get { return curWorldGP; }
         set
@@ -105,26 +99,10 @@ public class Actor : Entity
 
     private GridPos3D curWorldGP;
 
-    [DisplayAsString]
-    [LabelText("上帧世界坐标")]
-    [FoldoutGroup("战斗状态")]
-    public GridPos3D LastWorldGP;
-
-    [LabelText("阵营")]
-    [FoldoutGroup("战斗状态")]
-    [DisableInPlayMode]
-    public Camp Camp;
-
-    [LabelText("冻结")]
-    [FoldoutGroup("战斗状态")]
-    [DisableInPlayMode]
-    [ShowInInspector]
-    public bool IsFrozen => ActorStatPropSet.IsFrozen;
-
     [ShowInInspector]
     [HideInEditorMode]
     [LabelText("受伤无敌时间")]
-    [FoldoutGroup("战斗状态")]
+    [FoldoutGroup("状态")]
     public float ImmuneTimeAfterDamaged = 0.4f;
 
     [FoldoutGroup("特效")]
@@ -175,16 +153,6 @@ public class Actor : Entity
     [FoldoutGroup("特效")]
     [LabelText("死亡特效尺寸")]
     public float DieFXScale = 1f;
-
-    [FoldoutGroup("初始战斗数值")]
-    [HideLabel]
-    [DisableInPlayMode]
-    public ActorStatPropSet RawActorStatPropSet = new ActorStatPropSet(); // 干数据，禁修改
-
-    [FoldoutGroup("当前战斗数值")]
-    [HideLabel]
-    [HideInEditorMode]
-    public ActorStatPropSet ActorStatPropSet; // 湿数据，每次Recycle置空，使用时从干数据拷贝
 
     [FoldoutGroup("手感")]
     [LabelText("Dash力度")]
@@ -260,156 +228,18 @@ public class Actor : Entity
     [ValueDropdown("GetAllFXTypeNames", IsUniqueList = true, DropdownTitle = "选择FX类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public string ThawFX;
 
-    #region Actor被动技能
-
-    [SerializeReference]
-    [FoldoutGroup("Actor被动技能")]
-    [LabelText("被动技能列表")]
-    [ListDrawerSettings(ListElementLabelName = "Description")]
-    public List<ActorPassiveSkill> RawActorPassiveSkills = new List<ActorPassiveSkill>(); // 干数据，禁修改
-
-    public List<ActorPassiveSkill> ActorPassiveSkills = new List<ActorPassiveSkill>(); // 湿数据，每个Actor生命周期开始前从干数据拷出，结束后清除
-
-    public Dictionary<string, ActorPassiveSkill> ActorPassiveSkillDict = new Dictionary<string, ActorPassiveSkill>(); // 便于寻找
-
-    internal bool ActorPassiveSkillMarkAsDied = false;
-
-    internal bool ActorForbidPushBox = false;
-
-    private void InitActorPassiveSkills()
-    {
-        ActorForbidPushBox = false;
-        ActorPassiveSkills.Clear();
-        ActorPassiveSkillDict.Clear();
-        foreach (ActorPassiveSkill rawAPS in RawActorPassiveSkills)
-        {
-            ActorPassiveSkills.Add(rawAPS.Clone());
-        }
-
-        ActorPassiveSkillMarkAsDied = false;
-        foreach (ActorPassiveSkill aps in ActorPassiveSkills)
-        {
-            AddNewPassiveSkill(aps);
-        }
-
-        actorPassiveSkillTicker = 0;
-    }
-
-    public void AddNewPassiveSkill(ActorPassiveSkill aps)
-    {
-        aps.Actor = this;
-        aps.OnInit();
-        aps.OnRegisterLevelEventID();
-        string bfName = aps.GetType().Name;
-        if (!ActorPassiveSkillDict.ContainsKey(bfName))
-        {
-            ActorPassiveSkillDict.Add(bfName, aps);
-        }
-
-        if (aps is ActorPassiveSkill_ForbidPushBox) ActorForbidPushBox = true;
-    }
-
-    private void UnInitPassiveSkills()
-    {
-        foreach (ActorPassiveSkill aps in ActorPassiveSkills)
-        {
-            aps.OnUnRegisterLevelEventID();
-            aps.OnUnInit();
-        }
-
-        actorPassiveSkillTicker = 0;
-
-        // 防止ActorPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
-        //ActorPassiveSkills.Clear();
-        //ActorPassiveSkillDict.Clear();
-        ActorPassiveSkillMarkAsDied = false;
-    }
-
-    #endregion
-
-    #region Actor主动技能
-
-    public bool ActorSkillCanMove
-    {
-        get
-        {
-            foreach (ActorActiveSkill aas in ActorActiveSkills)
-            {
-                if (!aas.CurrentAllowMove) return false;
-            }
-
-            return true;
-        }
-    }
-
-    [SerializeReference]
-    [FoldoutGroup("Actor主动技能")]
-    [LabelText("主动技能列表")]
-    [ListDrawerSettings(ListElementLabelName = "SkillAlias")]
-    public List<ActorActiveSkill> RawActorActiveSkills = new List<ActorActiveSkill>(); // 干数据，禁修改
-
-    public List<ActorActiveSkill> ActorActiveSkills = new List<ActorActiveSkill>(); // 湿数据，每个Actor生命周期开始前从干数据拷出，结束后清除
-
-    public Dictionary<ActorSkillIndex, ActorActiveSkill> ActorActiveSkillDict = new Dictionary<ActorSkillIndex, ActorActiveSkill>(); // 便于寻找
-
-    internal bool ActorActiveSkillMarkAsDied = false;
-
-    private void InitActorActiveSkills()
-    {
-        ActorActiveSkills.Clear();
-        ActorActiveSkillDict.Clear();
-        foreach (ActorActiveSkill rawAAS in RawActorActiveSkills)
-        {
-            ActorActiveSkills.Add(rawAAS.Clone());
-        }
-
-        ActorActiveSkillMarkAsDied = false;
-        foreach (ActorActiveSkill aas in ActorActiveSkills)
-        {
-            AddNewActiveSkill(aas);
-        }
-    }
-
-    public void AddNewActiveSkill(ActorActiveSkill aas)
-    {
-        aas.Actor = this;
-        aas.ParentActiveSkill = null;
-        aas.OnInit();
-        if (!ActorActiveSkillDict.ContainsKey(aas.ActorSkillIndex))
-        {
-            ActorActiveSkillDict.Add(aas.ActorSkillIndex, aas);
-        }
-        else
-        {
-            Debug.LogError($"[主动技能] {name} 角色主动技能编号重复: {aas.ActorSkillIndex}");
-        }
-    }
-
-    private void UnInitActiveSkills()
-    {
-        foreach (ActorActiveSkill aas in ActorActiveSkills)
-        {
-            aas.OnUnInit();
-        }
-
-        // 防止ActorActiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
-        //ActorActiveSkills.Clear();
-        //ActorActiveSkillDict.Clear();
-        ActorActiveSkillMarkAsDied = false;
-    }
-
-    #endregion
-
     [SerializeReference]
     [FoldoutGroup("冻结")]
     [LabelText("冻结的箱子被动技能")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
-    public List<BoxPassiveSkill> RawFrozenBoxPassiveSkills = new List<BoxPassiveSkill>(); // 干数据，禁修改
+    public List<EntityPassiveSkill> RawFrozenBoxPassiveSkills = new List<EntityPassiveSkill>(); // 干数据，禁修改
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 
     [DisableInEditorMode]
     [ShowInInspector]
+    [LabelText("当前举着的箱子")]
+    [FoldoutGroup("状态")]
     internal Box CurrentLiftBox = null;
 
     public enum MovementStates
@@ -420,7 +250,7 @@ public class Actor : Entity
     }
 
     [ReadOnly]
-    [FoldoutGroup("战斗状态")]
+    [FoldoutGroup("状态")]
     [LabelText("移动状态")]
     public MovementStates MovementState = MovementStates.Static;
 
@@ -431,7 +261,7 @@ public class Actor : Entity
     }
 
     [ReadOnly]
-    [FoldoutGroup("战斗状态")]
+    [FoldoutGroup("状态")]
     [LabelText("推箱子状态")]
     public PushStates PushState = PushStates.None;
 
@@ -444,7 +274,7 @@ public class Actor : Entity
     }
 
     [ReadOnly]
-    [FoldoutGroup("战斗状态")]
+    [FoldoutGroup("状态")]
     [LabelText("扔技能状态")]
     public ThrowStates ThrowState = ThrowStates.None;
 
@@ -462,7 +292,7 @@ public class Actor : Entity
         CurThrowMoveAttempt = Vector3.zero;
         CurThrowPointOffset = Vector3.zero;
         CurForward = Vector3.forward;
-        CurWorldGP = GridPos3D.Zero;
+        WorldGP = GridPos3D.Zero;
         LastWorldGP = GridPos3D.Zero;
         MovementState = MovementStates.Static;
         PushState = PushStates.None;
@@ -470,16 +300,17 @@ public class Actor : Entity
         ThrowWhenDie();
         ActorFrozenHelper.OnHelperRecycled();
         ActorArtHelper.OnHelperRecycled();
-        ActorBuffHelper.OnHelperRecycled();
+        EntityBuffHelper.OnHelperRecycled();
         ActorPushHelper.OnHelperRecycled();
         ActorFaceHelper.OnHelperRecycled();
         ActorSkinHelper.OnHelperRecycled();
         ActorLaunchArcRendererHelper.OnHelperRecycled();
         ActorBattleHelper.OnHelperRecycled();
-        ActorSkillHelper.OnHelperRecycled();
+        ActorBoxInteractHelper.OnHelperRecycled();
         UnInitActiveSkills();
         UnInitPassiveSkills();
-        ActorStatPropSet.OnRecycled();
+        actorPassiveSkillTicker = 0;
+        EntityStatPropSet.OnRecycled();
 
         ActorMoveColliderRoot.SetActive(false);
         SetModelSmoothMoveLerpTime(0);
@@ -491,13 +322,13 @@ public class Actor : Entity
         base.OnUsed();
         ActorFrozenHelper.OnHelperUsed();
         ActorArtHelper.OnHelperUsed();
-        ActorBuffHelper.OnHelperUsed();
+        EntityBuffHelper.OnHelperUsed();
         ActorPushHelper.OnHelperUsed();
         ActorFaceHelper.OnHelperUsed();
         ActorSkinHelper.OnHelperUsed();
         ActorLaunchArcRendererHelper.OnHelperUsed();
         ActorBattleHelper.OnHelperUsed();
-        ActorSkillHelper.OnHelperUsed();
+        ActorBoxInteractHelper.OnHelperUsed();
         ActorMoveColliderRoot.SetActive(true);
     }
 
@@ -533,16 +364,16 @@ public class Actor : Entity
         ActorType = actorType;
         ActorCategory = actorCategory;
         ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
-        RawActorStatPropSet.ApplyDataTo(ActorStatPropSet);
-        ActorStatPropSet.Initialize(this);
-        ActorStatPropSet.Life.OnValueReachZero += ActorBattleHelper.Die;
+        RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
+        EntityStatPropSet.Initialize(this);
         ActorBattleHelper.Initialize();
-        ActorSkillHelper.Initialize();
-        InitActorPassiveSkills();
-        InitActorActiveSkills();
+        ActorBoxInteractHelper.Initialize();
+        InitPassiveSkills();
+        actorPassiveSkillTicker = 0;
+        InitActiveSkills();
 
-        CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
-        LastWorldGP = CurWorldGP;
+        WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+        LastWorldGP = WorldGP;
         ActorAIAgent.Start();
         GUID = GetGUID();
 
@@ -588,45 +419,45 @@ public class Actor : Entity
             if (actorPassiveSkillTicker >= actorPassiveSkillTickInterval)
             {
                 actorPassiveSkillTicker -= actorPassiveSkillTickInterval;
-                foreach (ActorPassiveSkill aps in ActorPassiveSkills)
+                foreach (EntityPassiveSkill eps in EntityPassiveSkills)
                 {
-                    aps.OnTick(actorPassiveSkillTickInterval);
+                    eps.OnTick(actorPassiveSkillTickInterval);
                 }
             }
 
-            foreach (ActorActiveSkill aas in ActorActiveSkills)
+            foreach (EntityActiveSkill eas in EntityActiveSkills)
             {
-                aas.OnFixedUpdate(Time.fixedDeltaTime);
+                eas.OnFixedUpdate(Time.fixedDeltaTime);
             }
 
             actorActiveSkillTicker += Time.fixedDeltaTime;
             if (actorActiveSkillTicker >= actorActiveSkillTickInterval)
             {
                 actorActiveSkillTicker -= actorActiveSkillTickInterval;
-                foreach (ActorActiveSkill aas in ActorActiveSkills)
+                foreach (EntityActiveSkill eas in EntityActiveSkills)
                 {
-                    aas.OnTick(actorActiveSkillTickInterval);
+                    eas.OnTick(actorActiveSkillTickInterval);
                 }
             }
 
-            ActorBuffHelper.BuffFixedUpdate();
-            if (ENABLE_ACTOR_MOVE_LOG && CurWorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {CurWorldGP}");
-            LastWorldGP = CurWorldGP;
-            CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+            EntityBuffHelper.BuffFixedUpdate();
+            if (ENABLE_ACTOR_MOVE_LOG && WorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {WorldGP}");
+            LastWorldGP = WorldGP;
+            WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
         }
     }
 
     public void TransportPlayerGridPos(GridPos3D worldGP)
     {
         transform.position = worldGP;
-        LastWorldGP = CurWorldGP;
-        CurWorldGP = worldGP;
+        LastWorldGP = WorldGP;
+        WorldGP = worldGP;
     }
 
     protected virtual void MoveInternal()
     {
-        if (!ActorSkillCanMove) CurMoveAttempt = Vector3.zero;
-        if (!IsFrozen && !ActorBuffHelper.IsBeingRepulsed)
+        if (!ActiveSkillCanMove) CurMoveAttempt = Vector3.zero;
+        if (!IsFrozen && !EntityBuffHelper.IsBeingRepulsed)
         {
             if (CurMoveAttempt.magnitude > 0)
             {
@@ -638,7 +469,7 @@ public class Actor : Entity
 
                 Vector3 velDiff = CurMoveAttempt.normalized * Time.fixedDeltaTime * Accelerate;
                 Vector3 finalVel = RigidBody.velocity + velDiff;
-                float finalSpeed = ActorStatPropSet.MoveSpeed.GetModifiedValue / 10f;
+                float finalSpeed = EntityStatPropSet.MoveSpeed.GetModifiedValue / 10f;
                 if (finalVel.magnitude > finalSpeed)
                 {
                     finalVel = finalVel.normalized * finalSpeed;
@@ -647,14 +478,14 @@ public class Actor : Entity
                 RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);
 
                 CurForward = CurMoveAttempt.normalized;
-                if (!ActorForbidPushBox) ActorPushHelper.TriggerOut = true;
+                ActorPushHelper.TriggerOut = true;
             }
             else
             {
                 MovementState = MovementStates.Static;
                 RigidBody.drag = 100f;
                 RigidBody.mass = 1f;
-                if (!ActorForbidPushBox) ActorPushHelper.TriggerOut = false;
+                ActorPushHelper.TriggerOut = false;
             }
 
             if (CurMoveAttempt.x.Equals(0))
@@ -672,12 +503,12 @@ public class Actor : Entity
             CurMoveAttempt = Vector3.zero;
         }
 
-        CurWorldGP = transform.position.ToGridPos3D();
+        WorldGP = transform.position.ToGridPos3D();
 
         // 底部无Box则下落一格
         if (!IsFrozen)
         {
-            Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(CurWorldGP + new GridPos3D(0, -1, 0), out WorldModule _, out GridPos3D localGP, false);
+            Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(WorldGP + new GridPos3D(0, -1, 0), out WorldModule _, out GridPos3D localGP, false);
             if (!box)
             {
                 if (RigidBody.constraints.HasFlag(RigidbodyConstraints.FreezePositionY))
@@ -735,17 +566,17 @@ public class Actor : Entity
 
     public void SnapToGridX()
     {
-        transform.position = new Vector3(CurWorldGP.x, transform.position.y, transform.position.z);
+        transform.position = new Vector3(WorldGP.x, transform.position.y, transform.position.z);
     }
 
     public void SnapToGridY()
     {
-        transform.position = new Vector3(transform.position.x, CurWorldGP.y, transform.position.z);
+        transform.position = new Vector3(transform.position.x, WorldGP.y, transform.position.z);
     }
 
     public void SnapToGridZ()
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y, CurWorldGP.z);
+        transform.position = new Vector3(transform.position.x, transform.position.y, WorldGP.z);
     }
 
     private float ThrowChargeTick;
@@ -804,12 +635,12 @@ public class Actor : Entity
 
     private void Dash()
     {
-        if (ActorStatPropSet.ActionPoint.Value > ActorStatPropSet.DashConsumeActionPoint.GetModifiedValue)
+        if (EntityStatPropSet.ActionPoint.Value > EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue)
         {
-            ActorStatPropSet.ActionPoint.Value -= ActorStatPropSet.DashConsumeActionPoint.GetModifiedValue;
+            EntityStatPropSet.ActionPoint.Value -= EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue;
             if (IsFrozen)
             {
-                ActorStatPropSet.FrozenValue.Value -= 200;
+                EntityStatPropSet.FrozenValue.Value -= 200;
             }
             else
             {
@@ -824,12 +655,12 @@ public class Actor : Entity
 
     private void Vault()
     {
-        if (ActorStatPropSet.ActionPoint.Value > ActorStatPropSet.VaultConsumeActionPoint.GetModifiedValue)
+        if (EntityStatPropSet.ActionPoint.Value > EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue)
         {
-            ActorStatPropSet.ActionPoint.Value -= ActorStatPropSet.VaultConsumeActionPoint.GetModifiedValue;
+            EntityStatPropSet.ActionPoint.Value -= EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue;
             if (IsFrozen)
             {
-                ActorStatPropSet.FrozenValue.Value -= 200;
+                EntityStatPropSet.FrozenValue.Value -= 200;
             }
             else
             {
@@ -844,16 +675,16 @@ public class Actor : Entity
 
     public void Kick()
     {
-        if (ActorStatPropSet.ActionPoint.Value > ActorStatPropSet.KickConsumeActionPoint.GetModifiedValue)
+        if (EntityStatPropSet.ActionPoint.Value > EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue)
         {
             Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
             //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
             if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
             {
                 Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-                if (box && box.Kickable && ActorSkillHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
+                if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
                 {
-                    ActorStatPropSet.ActionPoint.Value -= ActorStatPropSet.KickConsumeActionPoint.GetModifiedValue;
+                    EntityStatPropSet.ActionPoint.Value -= EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue;
                     box.Kick(CurForward, KickForce, this);
                     FX kickFX = FXManager.Instance.PlayFX(KickFX, KickFXPivot.position);
                     if (kickFX) kickFX.transform.localScale = Vector3.one * KickFXScale;
@@ -874,7 +705,7 @@ public class Actor : Entity
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             GridPos3D actorSwapBoxMoveAttempt = (hit.collider.transform.position - transform.position).ToGridPos3D().Normalized();
-            if (box && box.Pushable && ActorSkillHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
+            if (box && box.Pushable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
                 box.ForceStopWhenSwapBox(this);
 
@@ -895,9 +726,9 @@ public class Actor : Entity
                 {
                     if (Box.ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {box.name} SwapBox {boxWorldGP_before} -> {box.WorldGP}");
                     transform.position = boxIndicatorGP;
-                    LastWorldGP = CurWorldGP;
-                    CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
-                    if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Actor] {name} Swap {LastWorldGP} -> {CurWorldGP}");
+                    LastWorldGP = WorldGP;
+                    WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+                    if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Actor] {name} Swap {LastWorldGP} -> {WorldGP}");
                 }
                 else
                 {
@@ -907,13 +738,13 @@ public class Actor : Entity
                     if (targetBox == null || targetBox.Passable)
                     {
                         transform.position = boxIndicatorGP + actorSwapBoxMoveAttempt;
-                        LastWorldGP = CurWorldGP;
-                        CurWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
-                        if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Actor] {name} SwapFailed MoveSuc {LastWorldGP} -> {CurWorldGP}");
+                        LastWorldGP = WorldGP;
+                        WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+                        if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Actor] {name} SwapFailed MoveSuc {LastWorldGP} -> {WorldGP}");
                     }
                     else
                     {
-                        if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Actor] {name} SwapFailed MoveFailed blocked by {targetBox.name} {LastWorldGP} -> {CurWorldGP}");
+                        if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Actor] {name} SwapFailed MoveFailed blocked by {targetBox.name} {LastWorldGP} -> {WorldGP}");
                     }
                 }
 
@@ -933,7 +764,7 @@ public class Actor : Entity
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Liftable && ActorSkillHelper.CanInteract(InteractSkillType.Lift, box.BoxTypeIndex))
+            if (box && box.Liftable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Lift, box.BoxTypeIndex))
             {
                 if (box.BeingLift(this))
                 {
@@ -989,7 +820,7 @@ public class Actor : Entity
     {
         if (CurrentLiftBox && ThrowState == ThrowStates.ThrowCharging)
         {
-            if (ActorSkillHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.BoxTypeIndex))
+            if (ActorBoxInteractHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.BoxTypeIndex))
             {
                 Throw();
             }
@@ -1041,35 +872,6 @@ public class Actor : Entity
 
             CurrentLiftBox = null;
         }
-    }
-
-    #endregion
-
-    #region Camp
-
-    public bool IsPlayer => Camp == Camp.Player;
-    public bool IsPlayerOrFriend => Camp == Camp.Player || Camp == Camp.Friend;
-    public bool IsFriend => Camp == Camp.Friend;
-    public bool IsEnemy => Camp == Camp.Enemy;
-    public bool IsNeutral => Camp == Camp.None;
-
-    public bool IsOpponentCampOf(Actor target)
-    {
-        if ((IsPlayerOrFriend) && target.IsEnemy) return true;
-        if ((target.IsPlayerOrFriend) && IsEnemy) return true;
-        return false;
-    }
-
-    public bool IsSameCampOf(Actor target)
-    {
-        return !IsOpponentCampOf(target);
-    }
-
-    public bool IsNeutralCampOf(Actor target)
-    {
-        if ((IsPlayerOrFriend) && target.IsNeutral) return true;
-        if ((target.IsPlayerOrFriend) && IsNeutral) return true;
-        return false;
     }
 
     #endregion
