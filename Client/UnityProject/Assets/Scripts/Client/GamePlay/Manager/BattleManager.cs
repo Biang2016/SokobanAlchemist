@@ -149,6 +149,41 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
     }
 
+    #region Buff
+
+    public void AddBuffToEntities(Vector3 center, Camp executeCamp, float radius, bool exactGPDistance, RelativeCamp effectiveOnRelativeCamp, List<EntityBuff> entityBuffs)
+    {
+        int layerMask = LayerManager.Instance.GetTargetEntityLayerMask(executeCamp, effectiveOnRelativeCamp);
+        HashSet<uint> entityGUIDSet = new HashSet<uint>();
+        Collider[] colliders = Physics.OverlapSphere(exactGPDistance ? center.ToGridPos3D() : center, radius, layerMask);
+        foreach (Collider collider in colliders)
+        {
+            if (exactGPDistance)
+            {
+                if ((collider.transform.position - center.ToGridPos3D()).magnitude > radius)
+                    continue;
+            }
+
+            Entity entity = collider.gameObject.GetComponentInParent<Entity>();
+            if (entity.IsNotNullAndAlive() && !entityGUIDSet.Contains(entity.GUID))
+            {
+                entityGUIDSet.Add(entity.GUID);
+                foreach (EntityBuff entityBuff in entityBuffs)
+                {
+                    if (entity.IsNotNullAndAlive())
+                    {
+                        if (!entity.EntityBuffHelper.AddBuff(entityBuff.Clone()))
+                        {
+                            //Debug.Log($"Failed to AddBuff: {entityBuff.GetType().Name} to {entity.name}");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #endregion
+
     public void LoseGame()
     {
         ClientGameManager.Instance.StartCoroutine(Co_LoseGame());

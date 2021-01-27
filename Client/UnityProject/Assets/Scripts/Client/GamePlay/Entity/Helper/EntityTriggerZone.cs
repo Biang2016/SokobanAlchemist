@@ -9,7 +9,7 @@ public class EntityTriggerZone : MonoBehaviour
     {
         foreach (EntityPassiveSkill ps in EntityTriggerZoneHelper.Entity.EntityPassiveSkills)
         {
-            ps.OnBoxTriggerZoneEnter(c);
+            ps.OnTriggerZoneEnter(c);
         }
     }
 
@@ -17,7 +17,7 @@ public class EntityTriggerZone : MonoBehaviour
     {
         foreach (EntityPassiveSkill ps in EntityTriggerZoneHelper.Entity.EntityPassiveSkills)
         {
-            ps.OnBoxTriggerZoneStay(c);
+            ps.OnTriggerZoneStay(c);
         }
     }
 
@@ -25,7 +25,7 @@ public class EntityTriggerZone : MonoBehaviour
     {
         foreach (EntityPassiveSkill ps in EntityTriggerZoneHelper.Entity.EntityPassiveSkills)
         {
-            ps.OnBoxTriggerZoneExit(c);
+            ps.OnTriggerZoneExit(c);
         }
     }
 }

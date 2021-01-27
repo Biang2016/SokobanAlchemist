@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class EntityBuffHelper : EntityMonoHelper
 {
+    public static HashSet<EntityPropertyType> BoxBuffEnums_Property = new HashSet<EntityPropertyType>();
+    public static HashSet<EntityStatType> BoxBuffEnums_Stat = new HashSet<EntityStatType>();
+    public static HashSet<EntityPropertyType> ActorBuffEnums_Property = new HashSet<EntityPropertyType>();
+    public static HashSet<EntityStatType> ActorBuffEnums_Stat = new HashSet<EntityStatType>();
+
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
@@ -71,14 +76,14 @@ public class EntityBuffHelper : EntityMonoHelper
         foreach (KeyValuePair<EntityBuffAttribute, List<EntityBuff>> kv in EntityBuffAttributeDict)
         {
             if (kv.Value.Count == 0) continue;
-            EntityBuffAttributeRelationship relationship = ConfigManager.EntityBuffAttributeMatrix[(int) kv.Key, (int) newBuff.EntityBuffAttribute];
+            EntityBuffAttributeRelationship relationship = ConfigManager.EntityBuffAttributeMatrix[(int) newBuff.EntityBuffAttribute, (int) kv.Key];
             switch (relationship)
             {
                 case EntityBuffAttributeRelationship.Compatible:
                 {
                     break;
                 }
-                case EntityBuffAttributeRelationship.Mutex:
+                case EntityBuffAttributeRelationship.Disperse:
                 {
                     foreach (EntityBuff oldBuff in kv.Value)
                     {
@@ -193,14 +198,66 @@ public class EntityBuffHelper : EntityMonoHelper
         }
     }
 
+    private void CalculateDefense(EntityBuff newBuff)
+    {
+        if (newBuff is EntityBuff_ChangeEntityStatInstantly buffType1)
+        {
+            if (buffType1.Delta < 0)
+            {
+                switch (buffType1.EntityBuffAttribute)
+                {
+                    case EntityBuffAttribute.CollideDamage:
+                    {
+                        if (Entity is Actor) buffType1.Delta = Mathf.Min(0, buffType1.Delta + Entity.EntityStatPropSet.ActorCollideDamageDefense.GetModifiedValue);
+                        break;
+                    }
+                    case EntityBuffAttribute.ExplodeDamage:
+                    {
+                        buffType1.Delta = Mathf.Min(0, buffType1.Delta + Entity.EntityStatPropSet.ExplodeDamageDefense.GetModifiedValue);
+                        break;
+                    }
+                    case EntityBuffAttribute.FiringDamage:
+                    {
+                        buffType1.Delta = Mathf.Min(0, buffType1.Delta + Entity.EntityStatPropSet.FiringDamageDefense.GetModifiedValue);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private bool CheckBuffPropertyTypeValid(EntityBuff newBuff)
+    {
+        if (newBuff is EntityBuff_ChangeEntityStatInstantly buffType1)
+        {
+            if (Entity is Box box) return BoxBuffEnums_Stat.Contains(buffType1.EntityStatType);
+            if (Entity is Actor actor) return ActorBuffEnums_Stat.Contains(buffType1.EntityStatType);
+        }
+
+        if (newBuff is EntityBuff_EntityPropertyMultiplyModifier buffType2)
+        {
+            if (Entity is Box box) return BoxBuffEnums_Property.Contains(buffType2.EntityPropertyType);
+            if (Entity is Actor actor) return ActorBuffEnums_Property.Contains(buffType2.EntityPropertyType);
+        }
+
+        if (newBuff is EntityBuff_EntityPropertyPlusModifier buffType3)
+        {
+            if (Entity is Box box) return BoxBuffEnums_Property.Contains(buffType3.EntityPropertyType);
+            if (Entity is Actor actor) return ActorBuffEnums_Property.Contains(buffType3.EntityPropertyType);
+        }
+
+        return true;
+    }
+
     public bool AddBuff(EntityBuff newBuff)
     {
-        bool suc = BuffRelationshipProcess(newBuff);
+        CalculateDefense(newBuff);
+        bool suc = BuffRelationshipProcess(newBuff) && CheckBuffPropertyTypeValid((newBuff));
         if (suc)
         {
             newBuff.OnAdded(Entity);
             PlayBuffFX(newBuff);
-            if (newBuff.EntityBuffAttribute != EntityBuffAttribute.InstantEffect)
+            if (newBuff.Duration > 0 || newBuff.IsPermanent)
             {
                 BuffDict.Add(newBuff.GUID, newBuff);
                 EntityBuffAttributeDict[newBuff.EntityBuffAttribute].Add(newBuff);
@@ -322,7 +379,7 @@ public class EntityBuffHelper : EntityMonoHelper
         if (buff.BuffFX == "None") return;
         FX fx = FXManager.Instance.PlayFX(buff.BuffFX, transform.position, buff.BuffFXScale);
         fx.transform.parent = Entity.transform;
-        if (buff.EntityBuffAttribute != EntityBuffAttribute.InstantEffect)
+        if (buff.Duration > 0 || buff.IsPermanent)
         {
             if (!BuffFXDict.ContainsKey(buff.GUID)) BuffFXDict.Add(buff.GUID, new List<FX>());
             BuffFXDict[buff.GUID].Add(fx);
@@ -344,15 +401,15 @@ public class EntityBuffHelper : EntityMonoHelper
 
     List<uint> removeKeys = new List<uint>();
 
-    public void BuffFixedUpdate()
+    public void BuffFixedUpdate(float fixedDeltaTime)
     {
         removeKeys.Clear();
         foreach (KeyValuePair<uint, EntityBuff> kv in BuffDict)
         {
             if (BuffRemainTimeDict.ContainsKey(kv.Key))
             {
-                BuffRemainTimeDict[kv.Key] -= Time.fixedDeltaTime;
-                BuffPassedTimeDict[kv.Key] += Time.fixedDeltaTime;
+                BuffRemainTimeDict[kv.Key] -= fixedDeltaTime;
+                BuffPassedTimeDict[kv.Key] += fixedDeltaTime;
                 kv.Value.OnFixedUpdate(Entity, BuffPassedTimeDict[kv.Key], BuffRemainTimeDict[kv.Key]);
                 if (BuffRemainTimeDict[kv.Key] <= 0)
                 {
@@ -365,5 +422,20 @@ public class EntityBuffHelper : EntityMonoHelper
         {
             RemoveBuff(removeKey);
         }
+    }
+
+    public void Damage(int damage, EntityBuffAttribute damageAttribute)
+    {
+        AddBuff(new EntityBuff_ChangeEntityStatInstantly
+        {
+            BuffFX = "None",
+            BuffFXScale = 1,
+            Delta = -damage,
+            Duration = 0,
+            EntityBuffAttribute = damageAttribute,
+            EntityStatType = EntityStatType.HealthDurability,
+            IsPermanent = false,
+            Percent = 0
+        });
     }
 }

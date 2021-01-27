@@ -47,8 +47,6 @@ public abstract class Entity : PoolObject
     [ShowInInspector]
     public bool IsFrozen => EntityStatPropSet.IsFrozen;
 
-    internal bool EntityPassiveSkillMarkAsDeleted = false;
-
     [DisplayAsString]
     [ShowInInspector]
     [LabelText("上帧世界坐标")]
@@ -91,36 +89,26 @@ public abstract class Entity : PoolObject
 
     public List<EntityPassiveSkill> EntityPassiveSkills = new List<EntityPassiveSkill>(); // 湿数据，每个Entity生命周期开始前从干数据拷出，结束后清除
 
-    public Dictionary<string, EntityPassiveSkill> EntityPassiveSkillDict = new Dictionary<string, EntityPassiveSkill>(); // 便于寻找
-
     internal bool PassiveSkillMarkAsDestroyed = false;
 
     protected void InitPassiveSkills()
     {
         EntityPassiveSkills.Clear();
-        EntityPassiveSkillDict.Clear();
         foreach (EntityPassiveSkill rawAPS in RawEntityPassiveSkills)
         {
-            EntityPassiveSkills.Add(rawAPS.Clone());
+            EntityPassiveSkill ps = rawAPS.Clone();
+            AddNewPassiveSkill(ps);
         }
 
         PassiveSkillMarkAsDestroyed = false;
-        foreach (EntityPassiveSkill aps in EntityPassiveSkills)
-        {
-            AddNewPassiveSkill(aps);
-        }
     }
 
     public void AddNewPassiveSkill(EntityPassiveSkill eps)
     {
+        EntityPassiveSkills.Add(eps);
         eps.Entity = this;
         eps.OnInit();
         eps.OnRegisterLevelEventID();
-        string bfName = eps.GetType().Name;
-        if (!EntityPassiveSkillDict.ContainsKey(bfName))
-        {
-            EntityPassiveSkillDict.Add(bfName, eps);
-        }
     }
 
     protected void UnInitPassiveSkills()
@@ -221,16 +209,17 @@ public abstract class Entity : PoolObject
     [DisableInPlayMode]
     public Camp Camp;
 
-    public bool IsPlayer => Camp == Camp.Player;
-    public bool IsPlayerOrFriend => Camp == Camp.Player || Camp == Camp.Friend;
-    public bool IsFriend => Camp == Camp.Friend;
-    public bool IsEnemy => Camp == Camp.Enemy;
-    public bool IsNeutral => Camp == Camp.Neutral;
+    public bool IsPlayerCamp => Camp == Camp.Player;
+    public bool IsPlayerOrFriendCamp => Camp == Camp.Player || Camp == Camp.Friend;
+    public bool IsFriendCamp => Camp == Camp.Friend;
+    public bool IsEnemyCamp => Camp == Camp.Enemy;
+    public bool IsNeutralCamp => Camp == Camp.Neutral || Camp == Camp.Box;
+    public bool IsBoxCamp => Camp == Camp.Box;
 
     public bool IsOpponentCampOf(Entity target)
     {
-        if ((IsPlayerOrFriend) && target.IsEnemy) return true;
-        if ((target.IsPlayerOrFriend) && IsEnemy) return true;
+        if ((IsPlayerOrFriendCamp) && target.IsEnemyCamp) return true;
+        if ((target.IsPlayerOrFriendCamp) && IsEnemyCamp) return true;
         return false;
     }
 
@@ -241,8 +230,8 @@ public abstract class Entity : PoolObject
 
     public bool IsNeutralCampOf(Entity target)
     {
-        if ((IsPlayerOrFriend) && target.IsNeutral) return true;
-        if ((target.IsPlayerOrFriend) && IsNeutral) return true;
+        if ((IsPlayerOrFriendCamp) && target.IsNeutralCamp) return true;
+        if ((target.IsPlayerOrFriendCamp) && IsNeutralCamp) return true;
         return false;
     }
 
@@ -278,4 +267,12 @@ public abstract class Entity : PoolObject
     private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
 
     #endregion
+}
+
+public static class EntityUtils
+{
+    public static bool IsNotNullAndAlive(this Entity entity)
+    {
+        return entity != null && !entity.IsRecycled && !entity.ActiveSkillMarkAsDestroyed && !entity.PassiveSkillMarkAsDestroyed;
+    }
 }

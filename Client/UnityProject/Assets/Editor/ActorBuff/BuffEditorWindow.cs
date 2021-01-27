@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using BiangLibrary;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using Sirenix.Utilities.Editor;
@@ -25,6 +27,15 @@ public class BuffEditorWindow : EditorWindow
 
     private void Init()
     {
+        RelationshipColorDict = new Dictionary<EntityBuffAttributeRelationship, Color>
+        {
+            {EntityBuffAttributeRelationship.Compatible, "#16C904".HTMLColorToColor()},
+            {EntityBuffAttributeRelationship.Disperse, "#23E4E8".HTMLColorToColor()},
+            {EntityBuffAttributeRelationship.Repel, "#BC8EF9".HTMLColorToColor()},
+            {EntityBuffAttributeRelationship.SetOff, "#A3A3A3".HTMLColorToColor()},
+            {EntityBuffAttributeRelationship.MaxDominant, "#F3CD5D".HTMLColorToColor()},
+        };
+
         int buffTypeEnumCount = Enum.GetValues(typeof(EntityBuffAttribute)).Length;
         string[] descriptionsOfBuffType = new string[buffTypeEnumCount];
 
@@ -72,6 +83,8 @@ public class BuffEditorWindow : EditorWindow
             }
         }
 
+        // 左侧标签为既有buff，顶部标签为新增buff
+        // x为顶部标签，水平向坐标，y为左侧标签，竖直向坐标
         EntityBuffAttributeRelationship[,] arr = ConfigManager.GetBuffAttributeMatrixAsset().EntityBuffAttributeMatrix;
         if (arr != null)
         {
@@ -79,19 +92,19 @@ public class BuffEditorWindow : EditorWindow
                 twoDimArray: arr,
                 drawElement: (rect, x, y) =>
                 {
-                    if (x > y) return;
                     Rect left = new Rect(rect.x, rect.y, rect.width / 2f, rect.height);
                     Rect right = new Rect(rect.x + rect.width / 2f, rect.y, rect.width / 2f, rect.height);
-                    EntityBuffAttributeRelationship newValue = (EntityBuffAttributeRelationship) EditorGUI.EnumPopup(left, arr[x, y]);
+                    EntityBuffAttributeRelationship newValue = (EntityBuffAttributeRelationship) EditorGUI.EnumPopup(left, arr[y, x]);
                     if (x != y && (newValue == EntityBuffAttributeRelationship.MaxDominant))
                     {
                         Debug.LogError($"【Buff相克矩阵】{(EntityBuffAttribute) x}和{(EntityBuffAttribute) y}之间的关系有误，异种BuffAttribute之间的关系不允许选用{newValue}");
                     }
                     else
                     {
-                        arr[x, y] = newValue;
                         arr[y, x] = newValue;
+                        GUI.color = RelationshipColorDict[newValue];
                         EditorGUI.LabelField(right, descriptionsOfRelationship[(int) newValue]);
+                        GUI.color = Color.white;
                     }
                 },
                 horizontalLabel: null, // horizontalLabel is optional and can be null.
@@ -106,9 +119,11 @@ public class BuffEditorWindow : EditorWindow
         }
     }
 
+    private Dictionary<EntityBuffAttributeRelationship, Color> RelationshipColorDict;
+
     private void OnGUI()
     {
-        EditorGUILayout.LabelField("Buff克制矩阵");
+        EditorGUILayout.LabelField("Buff克制矩阵, 左侧标签为既有buff，顶部标签为新增buff");
         try
         {
             table?.DrawTable();

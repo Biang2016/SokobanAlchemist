@@ -7,14 +7,20 @@ using UnityEngine.UI;
 
 public enum BattleTipPrefabType
 {
-    UIBattleTip_PlayerAttack,
-    UIBattleTip_PlayerCriticalAttack,
-    UIBattleTip_FriendAttack,
+    None,
+
     UIBattleTip_PlayerGetDamaged,
-    UIBattleTip_FriendGetDamaged,
+    UIBattleTip_PlayerGetGreatDamaged,
     UIBattleTip_PlayerGetHealed,
+
+    UIBattleTip_FriendGetDamaged,
+    UIBattleTip_FriendGetGreatDamaged,
     UIBattleTip_FriendGetHealed,
+
+    UIBattleTip_EnemyGetDamaged,
+    UIBattleTip_EnemyGetGreatDamaged,
     UIBattleTip_EnemyGetHealed,
+
     UIBattleTip_AttributeTip,
 }
 

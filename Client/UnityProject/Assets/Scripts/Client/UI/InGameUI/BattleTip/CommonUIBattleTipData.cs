@@ -1,13 +1,15 @@
-﻿public struct CommonUIBattleTipData
+﻿using UnityEngine;
+
+public struct CommonUIBattleTipData
 {
-    public Actor Caster;
-    public Actor Receiver;
+    public Camp Receiver;
+    public Vector3 ReceiverPosition;
     public BattleTipType BattleTipType;
 
-    public CommonUIBattleTipData(Actor caster, Actor receiver, BattleTipType battleTipType)
+    public CommonUIBattleTipData(Camp receiver, Vector3 receiverPosition, BattleTipType battleTipType)
     {
-        Caster = caster;
         Receiver = receiver;
+        ReceiverPosition = receiverPosition;
         BattleTipType = battleTipType;
     }
 }

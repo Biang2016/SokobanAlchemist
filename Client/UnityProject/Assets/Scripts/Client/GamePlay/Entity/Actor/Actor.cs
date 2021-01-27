@@ -99,12 +99,6 @@ public class Actor : Entity
 
     private GridPos3D curWorldGP;
 
-    [ShowInInspector]
-    [HideInEditorMode]
-    [LabelText("受伤无敌时间")]
-    [FoldoutGroup("状态")]
-    public float ImmuneTimeAfterDamaged = 0.4f;
-
     [FoldoutGroup("特效")]
     [LabelText("踢特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
@@ -213,10 +207,6 @@ public class Actor : Entity
     [FoldoutGroup("死亡")]
     [LabelText("死亡掉落箱子概率%")]
     public uint DieDropBoxProbabilityPercent;
-
-    [FoldoutGroup("敌兵专用")]
-    [LabelText("碰撞伤害")]
-    public int CollideDamage;
 
     [FoldoutGroup("冻结")]
     [LabelText("冻结特效")]
@@ -377,7 +367,7 @@ public class Actor : Entity
         ActorAIAgent.Start();
         GUID = GetGUID();
 
-        ActorBattleHelper.OnDamaged += (Actor, damage) =>
+        ActorBattleHelper.OnDamaged += (damage) =>
         {
             float distance = (BattleManager.Instance.Player1.transform.position - transform.position).magnitude;
             CameraManager.Instance.FieldCamera.CameraShake(damage, distance);
@@ -440,7 +430,7 @@ public class Actor : Entity
                 }
             }
 
-            EntityBuffHelper.BuffFixedUpdate();
+            EntityBuffHelper.BuffFixedUpdate(Time.deltaTime);
             if (ENABLE_ACTOR_MOVE_LOG && WorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {WorldGP}");
             LastWorldGP = WorldGP;
             WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);

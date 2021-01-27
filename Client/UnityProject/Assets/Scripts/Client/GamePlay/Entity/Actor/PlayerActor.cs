@@ -112,7 +112,7 @@ public class PlayerActor : Actor
                         foreach (Collider collider in colliders)
                         {
                             Actor actor = collider.GetComponentInParent<Actor>();
-                            if (actor != null && actor.GUID != GUID)
+                            if (actor.IsNotNullAndAlive() && actor.GUID != GUID)
                             {
                                 isActorOccupying = true;
                             }

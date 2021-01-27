@@ -20,9 +20,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         OnFlyingCollisionEnter = 1 << 4,
         OnBeingKickedCollisionEnter = 1 << 5,
         OnDroppingFromAirCollisionEnter = 1 << 6,
-        OnEntityTriggerZoneEnter = 1 << 7,
-        OnEntityTriggerZoneStay = 1 << 8,
-        OnEntityTriggerZoneExit = 1 << 9,
+        OnEntityTriggerZone = 1 << 7,
+
+
         OnBeforeDestroyEntity = 1 << 10,
         OnDestroyEntity = 1 << 11,
         OnLevelEvent = 1 << 12,
@@ -278,19 +278,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
     }
 
-    public override void OnBoxTriggerZoneEnter(Collider collider)
+    public override void OnTriggerZoneEnter(Collider collider)
     {
-        base.OnBoxTriggerZoneEnter(collider);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZoneEnter))
+        base.OnTriggerZoneEnter(collider);
+        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZone))
         {
             foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
-                {
-                    pureAction.Execute();
-                }
-
-                if (action is EntityPassiveSkillAction.ITriggerEnterAction collideAction)
+                if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
                 {
                     collideAction.OnTriggerEnter(collider);
                 }
@@ -298,19 +293,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
     }
 
-    public override void OnBoxTriggerZoneStay(Collider collider)
+    public override void OnTriggerZoneStay(Collider collider)
     {
-        base.OnBoxTriggerZoneStay(collider);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZoneStay))
+        base.OnTriggerZoneStay(collider);
+        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZone))
         {
             foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
-                {
-                    pureAction.Execute();
-                }
-
-                if (action is EntityPassiveSkillAction.ITriggerStayAction collideAction)
+                if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
                 {
                     collideAction.OnTriggerStay(collider);
                 }
@@ -318,19 +308,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
     }
 
-    public override void OnBoxTriggerZoneExit(Collider collider)
+    public override void OnTriggerZoneExit(Collider collider)
     {
-        base.OnBoxTriggerZoneExit(collider);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZoneExit))
+        base.OnTriggerZoneExit(collider);
+        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZone))
         {
             foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
-                {
-                    pureAction.Execute();
-                }
-
-                if (action is EntityPassiveSkillAction.ITriggerExitAction collideAction)
+                if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
                 {
                     collideAction.OnTriggerExit(collider);
                 }

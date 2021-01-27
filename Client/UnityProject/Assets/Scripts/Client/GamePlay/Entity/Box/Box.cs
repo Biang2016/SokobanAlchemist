@@ -108,7 +108,7 @@ public partial class Box : Entity
         ModelRoot.transform.localScale = Vector3.one;
         alreadyCollide = false;
         if (Rigidbody != null) Destroy(Rigidbody);
-        if (LastTouchActor != null && LastTouchActor.CurrentLiftBox == this)
+        if (LastTouchActor.IsNotNullAndAlive() && LastTouchActor.CurrentLiftBox == this)
         {
             LastTouchActor.ThrowState = Actor.ThrowStates.None;
             LastTouchActor.CurrentLiftBox = null;
@@ -160,34 +160,6 @@ public partial class Box : Entity
 
     public float FinalWeight => Weight * ConfigManager.BoxWeightFactor_Cheat;
 
-    [AssetsOnly]
-    [SerializeField]
-    [FoldoutGroup("碰撞")]
-    [LabelText("撞击特效")]
-    [ValueDropdown("GetAllFXTypeNames")]
-    private string CollideFX;
-
-    [AssetsOnly]
-    [SerializeField]
-    [FoldoutGroup("碰撞")]
-    [LabelText("撞击特效尺寸")]
-    private float CollideFXScale = 1f;
-
-    [AssetsOnly]
-    [SerializeField]
-    [ShowIf("KickOrThrowable")]
-    [FoldoutGroup("碰撞")]
-    [LabelText("碰撞伤害半径")]
-    private float CollideDamageRadius = 0.5f;
-
-    [AssetsOnly]
-    [SerializeField]
-    [ShowIf("KickOrThrowable")]
-    [FoldoutGroup("碰撞")]
-    [LabelText("碰撞伤害")]
-    [GUIColor(1.0f, 0, 1.0f)]
-    private float CollideDamage = 3f;
-
     /// <summary>
     /// 抗推力
     /// </summary>
@@ -208,16 +180,6 @@ public partial class Box : Entity
     /// </summary>
     internal float Dynamic_Drag = 0.5f;
 
-    [FoldoutGroup("冻结")]
-    [LabelText("解冻特效")]
-    [ValueDropdown("GetAllFXTypeNames")]
-    public string ThawFX;
-
-    [FoldoutGroup("冻结")]
-    [LabelText("冻结特效")]
-    [ValueDropdown("GetAllFXTypeNames")]
-    public string FrozeFX;
-
     [BoxName]
     [FoldoutGroup("合成")]
     [LabelText("三合一")]
@@ -236,24 +198,6 @@ public partial class Box : Entity
     [ValueDropdown("GetAllBoxTypeNames")]
     public string MergeBox_MatchFive;
 
-    [FoldoutGroup("合成")]
-    [LabelText("合成特效")]
-    [ValueDropdown("GetAllFXTypeNames")]
-    public string MergeFX;
-
-    [FoldoutGroup("合成")]
-    [LabelText("合成特效尺寸")]
-    public float MergeFXScale = 1f;
-
-    [FoldoutGroup("合成")]
-    [LabelText("合成后特效")]
-    [ValueDropdown("GetAllFXTypeNames")]
-    public string MergedFX;
-
-    [FoldoutGroup("合成")]
-    [LabelText("合成后特效尺寸")]
-    public float MergedFXScale = 1f;
-
     public ushort GetMergeBoxTypeIndex(int mergeCount)
     {
         switch (mergeCount)
@@ -265,6 +209,72 @@ public partial class Box : Entity
 
         return 0;
     }
+
+    [AssetsOnly]
+    [SerializeField]
+    [FoldoutGroup("特效")]
+    [LabelText("撞击特效")]
+    [ValueDropdown("GetAllFXTypeNames")]
+    public string CollideFX;
+
+    [AssetsOnly]
+    [SerializeField]
+    [FoldoutGroup("特效")]
+    [LabelText("撞击特效尺寸")]
+    public float CollideFXScale = 1f;
+
+    [AssetsOnly]
+    [SerializeField]
+    [FoldoutGroup("特效")]
+    [LabelText("死亡特效")]
+    [ValueDropdown("GetAllFXTypeNames")]
+    public string DestroyFX;
+
+    [AssetsOnly]
+    [SerializeField]
+    [FoldoutGroup("特效")]
+    [LabelText("死亡特效尺寸")]
+    public float DestroyFXScale = 1f;
+
+    [FoldoutGroup("特效")]
+    [LabelText("解冻特效")]
+    [ValueDropdown("GetAllFXTypeNames")]
+    public string ThawFX;
+
+    [AssetsOnly]
+    [SerializeField]
+    [FoldoutGroup("特效")]
+    [LabelText("解冻特效尺寸")]
+    public float ThawFXScale = 1f;
+
+    [FoldoutGroup("特效")]
+    [LabelText("冻结特效")]
+    [ValueDropdown("GetAllFXTypeNames")]
+    public string FrozeFX;
+
+    [AssetsOnly]
+    [SerializeField]
+    [FoldoutGroup("特效")]
+    [LabelText("冻结特效尺寸")]
+    public float FrozeFXScale = 1f;
+
+    [FoldoutGroup("特效")]
+    [LabelText("合成特效")]
+    [ValueDropdown("GetAllFXTypeNames")]
+    public string MergeFX;
+
+    [FoldoutGroup("特效")]
+    [LabelText("合成特效尺寸")]
+    public float MergeFXScale = 1f;
+
+    [FoldoutGroup("特效")]
+    [LabelText("合成后特效")]
+    [ValueDropdown("GetAllFXTypeNames")]
+    public string MergedFX;
+
+    [FoldoutGroup("特效")]
+    [LabelText("合成后特效尺寸")]
+    public float MergedFXScale = 1f;
 
 #if UNITY_EDITOR
     /// <summary>
@@ -638,7 +648,7 @@ public partial class Box : Entity
 
     public void LiftThenConsume()
     {
-        PlayCollideFX();
+        PlayFX(CollideFX, CollideFXScale);
         PoolRecycle();
     }
 
@@ -767,7 +777,7 @@ public partial class Box : Entity
         if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate)
         {
             EntityStatPropSet.FixedUpdate(1f);
-            EntityBuffHelper.BuffFixedUpdate();
+            EntityBuffHelper.BuffFixedUpdate(1f);
             foreach (EntityPassiveSkill ps in EntityPassiveSkills)
             {
                 ps.OnTick(1f);
@@ -827,7 +837,7 @@ public partial class Box : Entity
             BoxEffectHelper?.Stop();
         }
 
-        if (EntityPassiveSkillMarkAsDeleted)
+        if (PassiveSkillMarkAsDestroyed)
         {
             DestroyBox();
         }
@@ -836,7 +846,7 @@ public partial class Box : Entity
     protected override void OnCollisionEnter(Collision collision)
     {
         if (IsRecycled) return;
-        if (LastTouchActor != null && collision.gameObject == LastTouchActor.gameObject) return;
+        if (LastTouchActor.IsNotNullAndAlive() && collision.gameObject == LastTouchActor.gameObject) return;
 
         if (State == States.Putting)
         {
@@ -853,15 +863,15 @@ public partial class Box : Entity
             {
                 if (!alreadyCollide)
                 {
-                    CollideAOEDamage(CollideDamageRadius, CollideDamage);
-                    PlayCollideFX();
+                    DealCollideDamageToActors(collision.contacts[0].point);
+                    PlayFX(CollideFX, CollideFXScale);
 
                     foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                     {
                         ps.OnFlyingCollisionEnter(collision);
                     }
 
-                    if (EntityPassiveSkillMarkAsDeleted && !IsRecycled)
+                    if (PassiveSkillMarkAsDestroyed && !IsRecycled)
                     {
                         DestroyBox();
                         return;
@@ -870,7 +880,7 @@ public partial class Box : Entity
                     if (!IsRecycled)
                     {
                         OnFlyingCollisionEnter(collision);
-                        if (EntityPassiveSkillMarkAsDeleted)
+                        if (PassiveSkillMarkAsDestroyed)
                         {
                             DestroyBox();
                             return;
@@ -886,15 +896,15 @@ public partial class Box : Entity
                 {
                     if (!alreadyCollide)
                     {
-                        CollideAOEDamage(CollideDamageRadius, CollideDamage);
-                        PlayCollideFX();
+                        DealCollideDamageToActors(collision.contacts[0].point);
+                        PlayFX(CollideFX, CollideFXScale);
 
                         foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                         {
                             ps.OnBeingKickedCollisionEnter(collision);
                         }
 
-                        if (EntityPassiveSkillMarkAsDeleted && !IsRecycled)
+                        if (PassiveSkillMarkAsDestroyed && !IsRecycled)
                         {
                             DestroyBox();
                             return;
@@ -903,7 +913,7 @@ public partial class Box : Entity
                         if (!IsRecycled)
                         {
                             OnBeingKickedCollisionEnter(collision);
-                            if (EntityPassiveSkillMarkAsDeleted)
+                            if (PassiveSkillMarkAsDestroyed)
                             {
                                 DestroyBox();
                                 return;
@@ -920,8 +930,8 @@ public partial class Box : Entity
                 if (box != null && box.State == States.DroppingFromAir) return;
                 if (!alreadyCollide)
                 {
-                    CollideAOEDamage(CollideDamageRadius, CollideDamage);
-                    PlayCollideFX();
+                    DealCollideDamageToActors(collision.contacts[0].point);
+                    PlayFX(CollideFX, CollideFXScale);
 
                     foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                     {
@@ -929,7 +939,7 @@ public partial class Box : Entity
                     }
                 }
 
-                if (EntityPassiveSkillMarkAsDeleted && !IsRecycled)
+                if (PassiveSkillMarkAsDestroyed && !IsRecycled)
                 {
                     DestroyBox();
                     return;
@@ -938,7 +948,7 @@ public partial class Box : Entity
                 if (!IsRecycled)
                 {
                     OnDroppingFromAirCollisionEnter(collision);
-                    if (EntityPassiveSkillMarkAsDeleted)
+                    if (PassiveSkillMarkAsDestroyed)
                     {
                         DestroyBox();
                         return;
@@ -950,50 +960,61 @@ public partial class Box : Entity
         }
     }
 
-    private void CollideAOEDamage(float radius, float damage)
+    private void DealCollideDamageToActors(Vector3 contactPos)
     {
         alreadyCollide = true;
-        WorldFeature wf = WorldManager.Instance.CurrentWorld.WorldData.WorldFeature;
-        bool playerImmune = wf.HasFlag(WorldFeature.PlayerImmune);
-        bool pvp = wf.HasFlag(WorldFeature.PVP);
-        if (!playerImmune)
-        {
-            HashSet<Actor> damagedActors = new HashSet<Actor>();
-            foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
-            {
-                Vector3 boxIndicatorPos = transform.position + offset;
-                Collider[] colliders = Physics.OverlapSphere(boxIndicatorPos, radius, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
-                foreach (Collider collider in colliders)
-                {
-                    Actor actor = collider.GetComponentInParent<Actor>();
-                    if (actor && actor != LastTouchActor && actor.ActorBattleHelper && !damagedActors.Contains(actor))
-                    {
-                        if (actor.IsOpponentCampOf(LastTouchActor) || (pvp && actor.IsPlayer && LastTouchActor.IsPlayer))
-                        {
-                            actor.ActorBattleHelper.LastAttackBox = this;
-                            actor.ActorBattleHelper.Damage(LastTouchActor, damage);
-                            if (actor.RigidBody != null)
-                            {
-                                Vector3 force = (actor.transform.position - boxIndicatorPos).normalized;
-                                force = force.GetSingleDirectionVectorXZ();
-                                actor.RigidBody.velocity = Vector3.zero;
-                                actor.RigidBody.AddForce(force * 10f, ForceMode.VelocityChange);
-                            }
 
-                            damagedActors.Add(actor);
+        GridPos3D nearestBoxIndicator = GridPos3D.Zero;
+        float nearestDist = float.MaxValue;
+        foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
+        {
+            Vector3 boxIndicatorPos = transform.position + offset;
+            float distToContactPos = (boxIndicatorPos - contactPos).magnitude;
+            if (nearestDist > distToContactPos)
+            {
+                nearestDist = distToContactPos;
+                nearestBoxIndicator = offset;
+            }
+        }
+
+        Vector3 eachContactPosToBoxIndicatorOffset = contactPos - (transform.position + nearestBoxIndicator);
+
+        HashSet<Actor> damagedActors = new HashSet<Actor>();
+        foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
+        {
+            Vector3 boxIndicatorPos = transform.position + offset;
+            Vector3 boxIndicatorCollidePos = boxIndicatorPos + eachContactPosToBoxIndicatorOffset;
+            Collider[] colliders = Physics.OverlapSphere(boxIndicatorCollidePos, 0.3f, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
+            foreach (Collider collider in colliders)
+            {
+                Actor actor = collider.GetComponentInParent<Actor>();
+                if (actor && actor != LastTouchActor && !damagedActors.Contains(actor))
+                {
+                    if (actor.IsOpponentOrNeutralCampOf(LastTouchActor))
+                    {
+                        actor.ActorBattleHelper.LastAttackBox = this;
+                        actor.EntityBuffHelper.Damage(EntityStatPropSet.CollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage);
+                        if (actor.RigidBody != null)
+                        {
+                            Vector3 force = (actor.transform.position - boxIndicatorPos).normalized;
+                            force = force.GetSingleDirectionVectorXZ();
+                            actor.RigidBody.velocity = Vector3.zero;
+                            actor.RigidBody.AddForce(force * 10f, ForceMode.VelocityChange);
                         }
+
+                        damagedActors.Add(actor);
                     }
                 }
             }
         }
     }
 
-    public void PlayCollideFX()
+    public void PlayFX(string fxName, float scale)
     {
         foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
         {
-            FX hit = FXManager.Instance.PlayFX(CollideFX, transform.position + offset);
-            if (hit) hit.transform.localScale = Vector3.one * CollideFXScale;
+            FX hit = FXManager.Instance.PlayFX(fxName, transform.position + offset);
+            if (hit) hit.transform.localScale = Vector3.one * scale;
         }
     }
 
@@ -1017,6 +1038,7 @@ public partial class Box : Entity
 
         // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
         // BoxPassiveSkills.Clear(); 
+        PlayFX(DestroyFX, DestroyFXScale);
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
         callBack?.Invoke();
     }
@@ -1035,10 +1057,7 @@ public partial class Box : Entity
 
     IEnumerator Co_DelayMergeBox(GridPos3D mergeToWorldGP, UnityAction callBack)
     {
-        foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
-        {
-            FXManager.Instance.PlayFX(MergeFX, transform.position + offset, MergeFXScale);
-        }
+        PlayFX(MergeFX, MergeFXScale);
 
         ModelRoot.transform.DOShakeScale(0.2f);
         ModelRoot.transform.DOMove(mergeToWorldGP, MergeDelay * 1.2f);

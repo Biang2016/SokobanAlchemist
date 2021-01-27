@@ -35,7 +35,6 @@ public class WorldDeadZoneTrigger : PoolObject
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box)
             {
-                box.PlayCollideFX();
                 box.DestroyBox();
             }
         }

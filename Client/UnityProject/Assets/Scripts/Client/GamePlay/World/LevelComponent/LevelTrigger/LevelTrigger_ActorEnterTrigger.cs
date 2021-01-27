@@ -53,7 +53,7 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
             if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
             {
                 Actor actor = collider.gameObject.GetComponentInParent<Actor>();
-                if (actor != null)
+                if (actor.IsNotNullAndAlive())
                 {
                     if (actor.ActorType == childData.RequiredActorType)
                     {
@@ -116,7 +116,7 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
             if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
             {
                 Actor actor = collider.gameObject.GetComponentInParent<Actor>();
-                if (actor != null)
+                if (actor != null) // 此处不判断角色是否死亡
                 {
                     if (actor.ActorType == childData.RequiredActorType)
                     {

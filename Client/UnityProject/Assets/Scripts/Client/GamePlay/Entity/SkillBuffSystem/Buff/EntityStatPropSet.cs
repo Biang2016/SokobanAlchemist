@@ -28,31 +28,128 @@ public class EntityStatPropSet
     public EntityProperty HealthDurabilityRecovery = new EntityProperty(EntityPropertyType.HealthDurabilityRecovery);
 
     [BoxGroup("耐久")]
-    [LabelText("@\"燃烧耐久\t\"+FiringDurability")]
-    public EntityStat FiringDurability = new EntityStat(EntityStatType.FiringDurability);
-
-    [BoxGroup("耐久")]
-    [LabelText("@\"燃烧耐久上限\t\"+MaxFiringDurability")]
-    public EntityProperty MaxFiringDurability = new EntityProperty(EntityPropertyType.MaxFiringDurability);
-
-    [BoxGroup("耐久")]
-    [LabelText("@\"燃烧耐久回复速度*100\t\"+FiringDurabilityRecovery")]
-    public EntityProperty FiringDurabilityRecovery = new EntityProperty(EntityPropertyType.FiringDurabilityRecovery);
-
-    [BoxGroup("耐久")]
-    [LabelText("@\"爆炸耐久\t\"+ExplodeDurability")]
-    public EntityStat ExplodeDurability = new EntityStat(EntityStatType.ExplodeDurability);
-
-    [BoxGroup("耐久")]
-    [LabelText("@\"爆炸耐久上限\t\"+MaxExplodeDurability")]
-    public EntityProperty MaxExplodeDurability = new EntityProperty(EntityPropertyType.MaxExplodeDurability);
-
-    [BoxGroup("耐久")]
-    [LabelText("@\"爆炸耐久回复速度*100\t\"+FiringDurabilityRecovery")]
-    public EntityProperty ExplodeDurabilityRecovery = new EntityProperty(EntityPropertyType.ExplodeDurabilityRecovery);
-
     [LabelText("@\"坠落留存率%\t\"+DropFromAirSurviveProbabilityPercent")]
     public EntityStat DropFromAirSurviveProbabilityPercent = new EntityStat(EntityStatType.DropFromAirSurviveProbabilityPercent);
+
+    #endregion
+
+    #region 碰撞
+
+    [BoxGroup("碰撞")]
+    [LabelText("@\"角色碰撞伤害抵消\t\"+ActorCollideDamageDefense")]
+    public EntityProperty ActorCollideDamageDefense = new EntityProperty(EntityPropertyType.ActorCollideDamageDefense);
+
+    [BoxGroup("碰撞")]
+    [LabelText("@\"箱子碰撞减少自身耐久\t\"+BoxCollideDamageSelf")]
+    public EntityProperty BoxCollideDamageSelf = new EntityProperty(EntityPropertyType.BoxCollideDamageSelf);
+
+    [BoxGroup("碰撞")]
+    [LabelText("@\"碰撞伤害\t\"+CollideDamage")]
+    public EntityProperty CollideDamage = new EntityProperty(EntityPropertyType.CollideDamage);
+
+    #endregion
+
+    #region 爆炸
+
+    [BoxGroup("爆炸")]
+    [LabelText("@\"爆炸伤害抵消\t\"+ExplodeDamageDefense")]
+    public EntityProperty ExplodeDamageDefense = new EntityProperty(EntityPropertyType.ExplodeDamageDefense);
+
+    #endregion
+
+    #region 冰冻
+
+    [BoxGroup("冰冻")]
+    [LabelText("@\"冰冻抗性\t\"+FrozenResistance")]
+    public EntityProperty FrozenResistance = new EntityProperty(EntityPropertyType.FrozenResistance);
+
+    [BoxGroup("冰冻")]
+    [LabelText("@\"冰冻恢复/s\t\"+FrozenRecovery")]
+    public EntityProperty FrozenRecovery = new EntityProperty(EntityPropertyType.FrozenRecovery);
+
+    [BoxGroup("冰冻")]
+    [LabelText("@\"冰冻累积值\t\"+FrozenValue")]
+    public EntityStat FrozenValue = new EntityStat(EntityStatType.FrozenValue);
+
+    [BoxGroup("冰冻")]
+    [LabelText("冰冻等级")]
+    public EntityStat FrozenLevel = new EntityStat(EntityStatType.FrozenLevel);
+
+    internal int FrozenValuePerLevel => Mathf.RoundToInt(((float) FrozenValue.MaxValue / FrozenLevel.MaxValue));
+
+    public bool IsFrozen => FrozenLevel.Value > 0;
+
+    [BoxGroup("冰冻")]
+    [LabelText("冰冻持续特效")]
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
+    public string FrozenFX;
+
+    [BoxGroup("冰冻")]
+    [LabelText("冰冻持续特效尺寸(x->冰冻等级")]
+    public AnimationCurve FrozenFXScaleCurve;
+
+    #endregion
+
+    #region 燃烧
+
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧抗性\t\"+FiringResistance")]
+    public EntityProperty FiringResistance = new EntityProperty(EntityPropertyType.FiringResistance);
+
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧恢复/s\t\"+FiringRecovery")]
+    public EntityProperty FiringRecovery = new EntityProperty(EntityPropertyType.FiringRecovery);
+
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧增长率%/s\t\"+FiringGrowthPercent")]
+    public EntityProperty FiringGrowthPercent = new EntityProperty(EntityPropertyType.FiringGrowthPercent);
+
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧累积值\t\"+FiringValue")]
+    public EntityStat FiringValue = new EntityStat(EntityStatType.FiringValue);
+
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧等级")]
+    public EntityStat FiringLevel = new EntityStat(EntityStatType.FiringLevel);
+
+    internal int FiringValuePerLevel => Mathf.RoundToInt(((float) FiringValue.MaxValue / FiringLevel.MaxValue));
+
+    public bool IsFiring => FiringLevel.Value > 0;
+
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧蔓延率%/s\t\"+FiringSpreadPercent")]
+    public EntityProperty FiringSpreadPercent = new EntityProperty(EntityPropertyType.FiringSpreadPercent);
+
+    [BoxGroup("燃烧")]
+    [LabelText("@\"燃烧伤害抵消\t\"+FiringDamageDefense")]
+    public EntityProperty FiringDamageDefense = new EntityProperty(EntityPropertyType.FiringDamageDefense);
+
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧触发特效")]
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
+    public string StartFiringFX;
+
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧触发特效尺寸")]
+    public float StartFiringFXScale;
+
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧持续特效")]
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
+    public string FiringFX;
+
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧持续特效尺寸(x->燃烧等级")]
+    public AnimationCurve FiringFXScaleCurve;
+
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧毁坏特效")]
+    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
+    public string FiringBreakFX;
+
+    [BoxGroup("燃烧")]
+    [LabelText("燃烧毁坏特效尺寸")]
+    public float FiringBreakFXScale;
 
     #endregion
 
@@ -88,97 +185,10 @@ public class EntityStatPropSet
 
     #endregion
 
-    #region 冰冻
-
-    [BoxGroup("冰冻")]
-    [LabelText("@\"冰冻抗性\t\"+FrozenResistance")]
-    public EntityProperty FrozenResistance = new EntityProperty(EntityPropertyType.FrozenResistance);
-
-    [BoxGroup("冰冻")]
-    [LabelText("@\"冰冻恢复率\t\"+FrozenRecovery")]
-    public EntityProperty FrozenRecovery = new EntityProperty(EntityPropertyType.FrozenRecovery);
-
-    [BoxGroup("冰冻")]
-    [LabelText("@\"冰冻累积值\t\"+FrozenValue")]
-    public EntityStat FrozenValue = new EntityStat(EntityStatType.FrozenValue);
-
-    [BoxGroup("冰冻")]
-    [LabelText("冰冻等级")]
-    public EntityStat FrozenLevel = new EntityStat(EntityStatType.FrozenLevel);
-
-    internal int FrozenValuePerLevel => Mathf.RoundToInt(((float) FrozenValue.MaxValue / FrozenLevel.MaxValue));
-
-    public bool IsFrozen => FrozenLevel.Value > 1;
-
-    [BoxGroup("冰冻")]
-    [LabelText("冰冻持续特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
-    public string FrozenFX;
-
-    [BoxGroup("冰冻")]
-    [LabelText("冰冻持续特效尺寸(x->冰冻等级")]
-    public AnimationCurve FrozenFXScaleCurve;
-
-    #endregion
-
-    #region 燃烧
-
-    [BoxGroup("燃烧")]
-    [LabelText("@\"燃烧抗性\t\"+FiringResistance")]
-    public EntityProperty FiringResistance = new EntityProperty(EntityPropertyType.FiringResistance);
-
-    [BoxGroup("燃烧")]
-    [LabelText("@\"燃烧恢复率\t\"+FiringRecovery")]
-    public EntityProperty FiringRecovery = new EntityProperty(EntityPropertyType.FiringRecovery);
-
-    [BoxGroup("燃烧")]
-    [LabelText("@\"燃烧增长率\t\"+FiringGrowthPercent")]
-    public EntityProperty FiringGrowthPercent = new EntityProperty(EntityPropertyType.FiringGrowthPercent);
-
-    [BoxGroup("燃烧")]
-    [LabelText("@\"燃烧累积值\t\"+FiringValue")]
-    public EntityStat FiringValue = new EntityStat(EntityStatType.FiringValue);
-
-    [BoxGroup("燃烧")]
-    [LabelText("燃烧等级")]
-    public EntityStat FiringLevel = new EntityStat(EntityStatType.FiringLevel);
-
-    internal int FiringValuePerLevel => Mathf.RoundToInt(((float) FiringValue.MaxValue / FiringLevel.MaxValue));
-
-    public bool IsFiring => FiringLevel.Value > 0;
-
-    [BoxGroup("燃烧")]
-    [LabelText("燃烧触发特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
-    public string StartFiringFX;
-
-    [BoxGroup("燃烧")]
-    [LabelText("燃烧触发特效尺寸")]
-    public float StartFiringFXScale;
-
-    [BoxGroup("燃烧")]
-    [LabelText("燃烧持续特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
-    public string FiringFX;
-
-    [BoxGroup("燃烧")]
-    [LabelText("燃烧持续特效尺寸(x->燃烧等级")]
-    public AnimationCurve FiringFXScaleCurve;
-
-    [BoxGroup("燃烧")]
-    [LabelText("燃烧毁坏特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
-    public string FiringBreakFX;
-
-    [BoxGroup("燃烧")]
-    [LabelText("燃烧毁坏特效尺寸")]
-    public float FiringBreakFXScale;
-
-    #endregion
-
     #region 技能
 
     [LabelText("技能参数列表")]
+    [ListDrawerSettings(ListElementLabelName = "skillAlias")]
     public List<SkillPropertyCollection> SkillsPropertyCollections = new List<SkillPropertyCollection>();
 
     [Serializable]
@@ -285,31 +295,76 @@ public class EntityStatPropSet
     {
         Entity = entity;
 
-        // Property Initialize
+        #region Property初始化
+
+        #region 耐久
+
         MaxHealthDurability.Initialize();
         HealthDurabilityRecovery.Initialize();
-        MaxFiringDurability.Initialize();
-        FiringDurabilityRecovery.Initialize();
-        MaxExplodeDurability.Initialize();
-        ExplodeDurabilityRecovery.Initialize();
+
+        #endregion
+
+        #region 碰撞
+
+        ActorCollideDamageDefense.Initialize();
+        BoxCollideDamageSelf.Initialize();
+        CollideDamage.Initialize();
+
+        #endregion
+
+        #region 爆炸
+
+        ExplodeDamageDefense.Initialize();
+
+        #endregion
+
+        #region 冰冻
+
+        FrozenResistance.Initialize();
+        FrozenRecovery.Initialize();
+
+        #endregion
+
+        #region 燃烧
+
+        FiringResistance.Initialize();
+        FiringRecovery.Initialize();
+        FiringGrowthPercent.Initialize();
+        FiringSpreadPercent.Initialize();
+        FiringDamageDefense.Initialize();
+
+        #endregion
+
+        #region 操作
+
         MoveSpeed.Initialize();
         MaxActionPoint.Initialize();
         ActionPointRecovery.Initialize();
         KickConsumeActionPoint.Initialize();
         DashConsumeActionPoint.Initialize();
         VaultConsumeActionPoint.Initialize();
-        FrozenResistance.Initialize();
-        FrozenRecovery.Initialize();
-        FiringResistance.Initialize();
-        FiringRecovery.Initialize();
-        FiringGrowthPercent.Initialize();
+
+        #endregion
+
+        #endregion
 
         #region 耐久
 
         HealthDurability.MaxValue = MaxHealthDurability.GetModifiedValue;
+        HealthDurability.OnValueDecrease += (decrease) =>
+        {
+            if (entity is Actor actor)
+            {
+                actor.ActorBattleHelper.ShowDamageNumFX(decrease);
+            }
+        };
+        HealthDurability.OnValueIncrease += (increase) =>
+        {
+            if (entity is Actor actor) actor.ActorBattleHelper.ShowHealNumFX(increase);
+        };
         HealthDurability.OnValueReachZero += () =>
         {
-            entity.EntityPassiveSkillMarkAsDeleted = true;
+            entity.PassiveSkillMarkAsDestroyed = true;
             if (entity is Actor actor) actor.ActorBattleHelper.Die();
         };
         HealthDurability.Recovery = HealthDurabilityRecovery.GetModifiedValue / 100f;
@@ -319,62 +374,21 @@ public class EntityStatPropSet
         HealthDurabilityRecovery.OnValueChanged += (before, after) => { HealthDurability.Recovery = after / 100f; };
         PropertyDict.Add(EntityPropertyType.HealthDurabilityRecovery, HealthDurabilityRecovery);
 
-        FiringDurability.MaxValue = MaxFiringDurability.GetModifiedValue;
-        FiringDurability.OnValueReachZero += () =>
-        {
-            if (entity is Box box)
-            {
-                foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
-                {
-                    FXManager.Instance.PlayFX(FiringBreakFX, box.transform.position + offset, 1.5f);
-                }
-            }
-
-            entity.EntityPassiveSkillMarkAsDeleted = true;
-            if (entity is Actor actor) actor.ActorBattleHelper.Die();
-        };
-        FiringDurability.Recovery = FiringDurabilityRecovery.GetModifiedValue / 100f;
-        StatDict.Add(EntityStatType.FiringDurability, FiringDurability);
-        MaxFiringDurability.OnValueChanged += (before, after) => { FiringDurability.MaxValue = after; };
-        PropertyDict.Add(EntityPropertyType.MaxFiringDurability, MaxFiringDurability);
-        FiringDurabilityRecovery.OnValueChanged += (before, after) => { FiringDurability.Recovery = after / 100f; };
-        PropertyDict.Add(EntityPropertyType.FiringDurabilityRecovery, FiringDurabilityRecovery);
-
-        ExplodeDurability.MaxValue = MaxExplodeDurability.GetModifiedValue;
-        ExplodeDurability.OnValueReachZero += () =>
-        {
-            entity.EntityPassiveSkillMarkAsDeleted = true;
-            if (entity is Actor actor) actor.ActorBattleHelper.Die();
-        };
-        ExplodeDurability.Recovery = ExplodeDurabilityRecovery.GetModifiedValue / 100f;
-        StatDict.Add(EntityStatType.ExplodeDurability, ExplodeDurability);
-        MaxExplodeDurability.OnValueChanged += (before, after) => { ExplodeDurability.MaxValue = after; };
-        PropertyDict.Add(EntityPropertyType.MaxExplodeDurability, MaxExplodeDurability);
-        ExplodeDurabilityRecovery.OnValueChanged += (before, after) => { ExplodeDurability.Recovery = after / 100f; };
-        PropertyDict.Add(EntityPropertyType.ExplodeDurabilityRecovery, ExplodeDurabilityRecovery);
-
         StatDict.Add(EntityStatType.DropFromAirSurviveProbabilityPercent, DropFromAirSurviveProbabilityPercent);
 
         #endregion
 
-        #region 操作
+        #region 碰撞
 
-        PropertyDict.Add(EntityPropertyType.MoveSpeed, MoveSpeed);
+        PropertyDict.Add(EntityPropertyType.ActorCollideDamageDefense, ActorCollideDamageDefense);
+        PropertyDict.Add(EntityPropertyType.BoxCollideDamageSelf, BoxCollideDamageSelf);
+        PropertyDict.Add(EntityPropertyType.CollideDamage, CollideDamage);
 
-        MaxActionPoint.OnValueChanged += (before, after) => { ActionPoint.MaxValue = after; };
-        PropertyDict.Add(EntityPropertyType.MaxActionPoint, MaxActionPoint);
+        #endregion
 
-        ActionPoint.Recovery = ActionPointRecovery.GetModifiedValue;
-        StatDict.Add(EntityStatType.ActionPoint, ActionPoint);
+        #region 爆炸
 
-        ActionPointRecovery.OnValueChanged += (before, after) => { ActionPoint.Recovery = after; };
-        PropertyDict.Add(EntityPropertyType.ActionPointRecovery, ActionPointRecovery);
-
-        PropertyDict.Add(EntityPropertyType.KickConsumeActionPoint, KickConsumeActionPoint);
-
-        PropertyDict.Add(EntityPropertyType.DashConsumeActionPoint, DashConsumeActionPoint);
-
-        PropertyDict.Add(EntityPropertyType.VaultConsumeActionPoint, VaultConsumeActionPoint);
+        PropertyDict.Add(EntityPropertyType.ExplodeDamageDefense, ExplodeDamageDefense);
 
         #endregion
 
@@ -400,7 +414,7 @@ public class EntityStatPropSet
 
         #endregion
 
-        #region Firing
+        #region 燃烧
 
         FiringResistance.OnValueChanged += (before, after) => { FiringValue.AbnormalStatResistance = after; };
         PropertyDict.Add(EntityPropertyType.FiringResistance, FiringResistance);
@@ -411,7 +425,7 @@ public class EntityStatPropSet
         FiringGrowthPercent.OnValueChanged += (before, after) => { FiringValue.GrowthPercent = after; };
         PropertyDict.Add(EntityPropertyType.FiringGrowthPercent, FiringGrowthPercent);
 
-        FiringValue.Recovery = -FiringResistance.GetModifiedValue;
+        FiringValue.Recovery = -FiringRecovery.GetModifiedValue;
         FiringValue.AbnormalStatResistance = FiringResistance.GetModifiedValue;
         FiringValue.GrowthPercent = FiringGrowthPercent.GetModifiedValue;
         FiringValue.OnValueChanged += (before, after) =>
@@ -422,7 +436,44 @@ public class EntityStatPropSet
         };
         StatDict.Add(EntityStatType.FiringValue, FiringValue);
 
+        FiringLevel.OnValueChanged += (before, after) =>
+        {
+            if (before == 0 && after > 0)
+            {
+                if (entity is Box box)
+                {
+                    foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+                    {
+                        FX fx = FXManager.Instance.PlayFX(StartFiringFX, box.transform.position + Vector3.up * 0.5f + offset, StartFiringFXScale);
+                        if (fx) fx.transform.parent = box.transform;
+                    }
+                }
+            }
+        };
         StatDict.Add(EntityStatType.FiringLevel, FiringLevel);
+        PropertyDict.Add(EntityPropertyType.FiringSpreadPercent, FiringSpreadPercent);
+        PropertyDict.Add(EntityPropertyType.FiringDamageDefense, FiringDamageDefense);
+
+        #endregion
+
+        #region 操作
+
+        PropertyDict.Add(EntityPropertyType.MoveSpeed, MoveSpeed);
+
+        MaxActionPoint.OnValueChanged += (before, after) => { ActionPoint.MaxValue = after; };
+        PropertyDict.Add(EntityPropertyType.MaxActionPoint, MaxActionPoint);
+
+        ActionPoint.Recovery = ActionPointRecovery.GetModifiedValue;
+        StatDict.Add(EntityStatType.ActionPoint, ActionPoint);
+
+        ActionPointRecovery.OnValueChanged += (before, after) => { ActionPoint.Recovery = after; };
+        PropertyDict.Add(EntityPropertyType.ActionPointRecovery, ActionPointRecovery);
+
+        PropertyDict.Add(EntityPropertyType.KickConsumeActionPoint, KickConsumeActionPoint);
+
+        PropertyDict.Add(EntityPropertyType.DashConsumeActionPoint, DashConsumeActionPoint);
+
+        PropertyDict.Add(EntityPropertyType.VaultConsumeActionPoint, VaultConsumeActionPoint);
 
         #endregion
 
@@ -461,7 +512,7 @@ public class EntityStatPropSet
     private float abnormalStateAutoTick = 0f;
     private int abnormalStateAutoTickInterval = 1; // 异常状态值每秒降低
 
-    public void FixedUpdate(float fixedDeltaTime)
+    public void FixedUpdate(float fixedDeltaTime) // Actor更新频率为每帧，Box更新频率为每秒
     {
         foreach (KeyValuePair<EntityStatType, EntityStat> kv in StatDict)
         {
@@ -472,26 +523,20 @@ public class EntityStatPropSet
         if (abnormalStateAutoTick > abnormalStateAutoTickInterval)
         {
             abnormalStateAutoTick -= abnormalStateAutoTickInterval;
-
-            if (Entity is Actor actor)
+            if (FiringLevel.Value >= 1)
             {
-                actor.ActorBattleHelper.Damage(actor, FiringLevel.Value);
-            }
-        }
-
-        // 燃烧蔓延
-        if (FiringLevel.Value >= 1)
-        {
-            foreach (Box adjacentBox in WorldManager.Instance.CurrentWorld.GetAdjacentBox(Entity.WorldGP))
-            {
-                int diff = FiringValue.Value - adjacentBox.EntityStatPropSet.FiringValue.Value;
-                if (diff > 0)
+                // 燃烧蔓延
+                foreach (Box adjacentBox in WorldManager.Instance.CurrentWorld.GetAdjacentBox(Entity.WorldGP))
                 {
-                    adjacentBox.EntityStatPropSet.FiringValue.Value += Mathf.RoundToInt(diff * 0.66f);
+                    int diff = FiringValue.Value - adjacentBox.EntityStatPropSet.FiringValue.Value;
+                    if (diff > 0)
+                    {
+                        adjacentBox.EntityStatPropSet.FiringValue.Value += Mathf.RoundToInt(diff * FiringSpreadPercent.GetModifiedValue / 100f);
+                    }
                 }
-            }
 
-            FiringDurability.Value -= FiringLevel.Value;
+                Entity.EntityBuffHelper.Damage(FiringLevel.Value, EntityBuffAttribute.FiringDamage);
+            }
         }
     }
 
@@ -502,25 +547,21 @@ public class EntityStatPropSet
         HealthDurability.ApplyDataTo(target.HealthDurability);
         MaxHealthDurability.ApplyDataTo(target.MaxHealthDurability);
         HealthDurabilityRecovery.ApplyDataTo(target.HealthDurabilityRecovery);
-        FiringDurability.ApplyDataTo(target.FiringDurability);
-        MaxFiringDurability.ApplyDataTo(target.MaxFiringDurability);
-        FiringDurabilityRecovery.ApplyDataTo(target.FiringDurabilityRecovery);
-        ExplodeDurability.ApplyDataTo(target.ExplodeDurability);
-        MaxExplodeDurability.ApplyDataTo(target.MaxExplodeDurability);
-        ExplodeDurabilityRecovery.ApplyDataTo(target.ExplodeDurabilityRecovery);
         DropFromAirSurviveProbabilityPercent.ApplyDataTo(target.DropFromAirSurviveProbabilityPercent);
 
         #endregion
 
-        #region 操作
+        #region 碰撞
 
-        MoveSpeed.ApplyDataTo(target.MoveSpeed);
-        MaxActionPoint.ApplyDataTo(target.MaxActionPoint);
-        ActionPoint.ApplyDataTo(target.ActionPoint);
-        ActionPointRecovery.ApplyDataTo(target.ActionPointRecovery);
-        KickConsumeActionPoint.ApplyDataTo(target.KickConsumeActionPoint);
-        DashConsumeActionPoint.ApplyDataTo(target.DashConsumeActionPoint);
-        VaultConsumeActionPoint.ApplyDataTo(target.VaultConsumeActionPoint);
+        ActorCollideDamageDefense.ApplyDataTo(target.ActorCollideDamageDefense);
+        BoxCollideDamageSelf.ApplyDataTo(target.BoxCollideDamageSelf);
+        CollideDamage.ApplyDataTo(target.CollideDamage);
+
+        #endregion
+
+        #region 爆炸
+
+        ExplodeDamageDefense.ApplyDataTo(target.ExplodeDamageDefense);
 
         #endregion
 
@@ -542,12 +583,26 @@ public class EntityStatPropSet
         FiringGrowthPercent.ApplyDataTo(target.FiringGrowthPercent);
         FiringValue.ApplyDataTo(target.FiringValue);
         FiringLevel.ApplyDataTo(target.FiringLevel);
+        FiringSpreadPercent.ApplyDataTo(target.FiringSpreadPercent);
+        FiringDamageDefense.ApplyDataTo(target.FiringDamageDefense);
         target.StartFiringFX = StartFiringFX;
         target.StartFiringFXScale = StartFiringFXScale;
         target.FiringFX = FiringFX;
         target.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
         target.FiringBreakFX = FiringBreakFX;
         target.FiringBreakFXScale = FiringBreakFXScale;
+
+        #endregion
+
+        #region 操作
+
+        MoveSpeed.ApplyDataTo(target.MoveSpeed);
+        MaxActionPoint.ApplyDataTo(target.MaxActionPoint);
+        ActionPoint.ApplyDataTo(target.ActionPoint);
+        ActionPointRecovery.ApplyDataTo(target.ActionPointRecovery);
+        KickConsumeActionPoint.ApplyDataTo(target.KickConsumeActionPoint);
+        DashConsumeActionPoint.ApplyDataTo(target.DashConsumeActionPoint);
+        VaultConsumeActionPoint.ApplyDataTo(target.VaultConsumeActionPoint);
 
         #endregion
 

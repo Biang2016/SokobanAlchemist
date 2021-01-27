@@ -28,11 +28,11 @@ public class EntityStatAttribute : Attribute
 {
 }
 
-public class BoxStatAttribute : EntityStatAttribute
+public class BoxStatAttribute : Attribute
 {
 }
 
-public class ActorStatAttribute : EntityStatAttribute
+public class ActorStatAttribute : Attribute
 {
 }
 
@@ -41,14 +41,6 @@ public enum EntityStatType
     [EntityStat]
     [LabelText("血量耐久")]
     HealthDurability = 0,
-
-    [EntityStat]
-    [LabelText("爆炸耐久")]
-    ExplodeDurability = 1,
-
-    [EntityStat]
-    [LabelText("燃烧耐久")]
-    FiringDurability = 2,
 
     [ActorStat]
     [LabelText("当前行动力")]

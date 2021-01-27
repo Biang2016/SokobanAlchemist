@@ -474,21 +474,11 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         HashSet<Entity> entitySet = new HashSet<Entity>();
         foreach (GridPos3D gp in RealSkillEffectGPs)
         {
-            Camp camp = Camp.Neutral;
-            if (Entity is Actor actor)
-            {
-                camp = actor.Camp;
-            }
-            else if (Entity is Box box)
-            {
-                camp = Camp.Neutral;
-            }
-
-            Collider[] colliders_PlayerLayer = Physics.OverlapSphere(gp, 0.3f, LayerManager.Instance.GetTargetEntityLayerMask(camp, TargetCamp));
+            Collider[] colliders_PlayerLayer = Physics.OverlapSphere(gp, 0.3f, LayerManager.Instance.GetTargetEntityLayerMask(Entity.Camp, TargetCamp));
             foreach (Collider c in colliders_PlayerLayer)
             {
                 Actor targetActor = c.GetComponentInParent<Actor>();
-                if (targetActor != null && !entitySet.Contains(targetActor))
+                if (targetActor.IsNotNullAndAlive() && !entitySet.Contains(targetActor))
                 {
                     entitySet.Add(targetActor);
                 }

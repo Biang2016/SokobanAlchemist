@@ -74,15 +74,15 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
     {
     }
 
-    public virtual void OnBoxTriggerZoneEnter(Collider collider)
+    public virtual void OnTriggerZoneEnter(Collider collider)
     {
     }
 
-    public virtual void OnBoxTriggerZoneStay(Collider collider)
+    public virtual void OnTriggerZoneStay(Collider collider)
     {
     }
 
-    public virtual void OnBoxTriggerZoneExit(Collider collider)
+    public virtual void OnTriggerZoneExit(Collider collider)
     {
     }
 

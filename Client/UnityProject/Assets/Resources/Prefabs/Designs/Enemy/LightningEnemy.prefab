@@ -32,7 +32,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6281674361588409608}
-  - {fileID: 4195087216125132213}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -67,31 +66,6 @@ MonoBehaviour:
   IsRecycled: 0
   GUID: 0
   GUID_Mod_FixedFrameRate: 0
-  RigidBody: {fileID: 3522706739585230582}
-  ActorCommonHelpers: {fileID: 7234443338025959365}
-  ActorCategory: 0
-  ActorType: 
-  CurMoveAttempt: {x: 0, y: 0, z: 0}
-  LastMoveAttempt: {x: 0, y: 0, z: 0}
-  CurThrowMoveAttempt: {x: 0, y: 0, z: 0}
-  CurThrowPointOffset: {x: 0, y: 0, z: 0}
-  LastWorldGP:
-    x: 0
-    y: 0
-    z: 0
-  Camp: 2
-  ImmuneTimeAfterDamaged: 0.4
-  KickFX: Flash_SnowFlake
-  KickFXScale: 1
-  KickFXPivot: {fileID: 3872904913339084885}
-  InjureFX: Hit_BloodBlade
-  InjureFXScale: 2
-  HealFX: 
-  HealFXScale: 1
-  GainLifeFX: Hit_LoveHeart
-  GainLifeFXScale: 1
-  DieFX: Hit_EvilBigGravBall
-  DieFXScale: 2
   RawEntityStatPropSet:
     HealthDurability:
       _value: 2
@@ -107,40 +81,30 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
-    MoveSpeed:
-      BaseValue: 10
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 1000
-    MaxActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    ActionPoint:
+    DropFromAirSurviveProbabilityPercent:
       _value: 0
       _minValue: 0
       _maxValue: 0
-    ActionPointRecovery:
+    ActorCollideDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
-    KickConsumeActionPoint:
+      MaxValue: 1000
+    BoxCollideDamageSelf:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
-    DashConsumeActionPoint:
+      MaxValue: 1000
+    CollideDamage:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
-    VaultConsumeActionPoint:
+      MaxValue: 1000
+    ExplodeDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     FrozenResistance:
       BaseValue: 100
       ModifiedValue: 0
@@ -207,6 +171,18 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 4
+    FiringSpreadPercent:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringDamageDefense:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
+    StartFiringFX: None
+    StartFiringFXScale: 0
     FiringFX: Hit_Fire
     FiringFXScaleCurve:
       serializedVersion: 2
@@ -232,6 +208,42 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    FiringBreakFX: None
+    FiringBreakFXScale: 0
+    MoveSpeed:
+      BaseValue: 10
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
+    MaxActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    ActionPoint:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    ActionPointRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    KickConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    DashConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    VaultConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     SkillsPropertyCollections:
     - skillAlias: "\u666E\u901A\u653B\u51FB"
       Damage:
@@ -289,6 +301,175 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
+    RawEntityDefaultBuffs:
+    - id: 0
+  EntityStatPropSet:
+    HealthDurability:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    MaxHealthDurability:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    HealthDurabilityRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    DropFromAirSurviveProbabilityPercent:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    ActorCollideDamageDefense:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    BoxCollideDamageSelf:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    CollideDamage:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    ExplodeDamageDefense:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FrozenResistance:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FrozenRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FrozenValue:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FrozenLevel:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FrozenFX: 
+    FrozenFXScaleCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    FiringResistance:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringGrowthPercent:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringValue:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FiringLevel:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    FiringSpreadPercent:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    FiringDamageDefense:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    StartFiringFX: 
+    StartFiringFXScale: 0
+    FiringFX: 
+    FiringFXScaleCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    FiringBreakFX: 
+    FiringBreakFXScale: 0
+    MoveSpeed:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    MaxActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    ActionPoint:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+    ActionPointRecovery:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    KickConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    DashConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    VaultConsumeActionPoint:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    SkillsPropertyCollections: []
+    RawEntityDefaultBuffs: []
+  RawEntityPassiveSkills: []
+  RawEntityActiveSkills:
+  - id: 1
+  Camp: 2
+  RigidBody: {fileID: 3522706739585230582}
+  ActorCommonHelpers: {fileID: 7234443338025959365}
+  ActorCategory: 0
+  ActorType: 
+  CurMoveAttempt: {x: 0, y: 0, z: 0}
+  LastMoveAttempt: {x: 0, y: 0, z: 0}
+  CurThrowMoveAttempt: {x: 0, y: 0, z: 0}
+  CurThrowPointOffset: {x: 0, y: 0, z: 0}
+  KickFX: Flash_SnowFlake
+  KickFXScale: 1
+  KickFXPivot: {fileID: 3872904913339084885}
+  InjureFX: Hit_BloodBlade
+  InjureFXScale: 2
+  HealFX: None
+  HealFXScale: 1
+  GainLifeFX: Hit_LoveHeart
+  GainLifeFXScale: 1
+  DieFX: Hit_EvilBigGravBall
+  DieFXScale: 2
   DashForce: 10
   Accelerate: 250
   ThrowAimMoveSpeed: 10
@@ -301,12 +482,95 @@ MonoBehaviour:
   DieDropBoxTypeName: LightningBox
   DieDropBoxOrientation: 0
   DieDropBoxProbabilityPercent: 25
-  CollideDamage: 0
   FrozeFX: Hit_SnowFlake
   ThawFX: Flash_CyanSlight
+  RawFrozenBoxPassiveSkills:
+  - id: 2
   MovementState: 0
   PushState: 0
   ThrowState: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityBuff_AttributeLabel, ns: , asm: Client}
+      data:
+        GUID: 10270
+        EntityBuffAttribute: 38
+        IsPermanent: 1
+        Duration: 0
+        BuffFX: None
+        BuffFXScale: 1
+    00000001:
+      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      data:
+        TargetCamp: 7
+        EntitySkillIndex: 0
+        SkillAlias: "\u666E\u901A\u653B\u51FB"
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        M_CastAreaType: 2
+        M_TargetInclination: 2
+        CastOnTopLayer: 0
+        FanAngle: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName: GridWarning
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        GridWarningColorFill: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 0.90588236}
+        GridWarningColorBorderHighlight: {r: 0.8207547, g: 0.8207547, b: 0.8207547,
+          a: 0.7372549}
+        GridWarningColorBorderDim: {r: 0.8207547, g: 0.8207547, b: 0.8207547, a: 1}
+        CastFX: Hit_WhiteLightening
+        CastFXScale: 1
+        RawEntityBuffs:
+        - id: 3
+    00000002:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        SpecialCaseType: 0
+        PassiveSkillCondition: 112
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        RawEntityPassiveSkillActions:
+        - id: 4
+    00000003:
+      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
+      data:
+        GUID: 11297
+        EntityBuffAttribute: 36
+        IsPermanent: 0
+        Duration: 1
+        BuffFX: Hit_WhiteLightening
+        BuffFXScale: 1.3
+        Percent: -100
+        LinearDecayInDuration: 0
+        EntityPropertyType: 30
+    00000004:
+      type: {class: EntityPassiveSkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
+      data:
+        AddBuffRadius: 1.3
+        ExactGPDistance: 0
+        EffectiveOnRelativeCamp: 6
+        RawEntityBuffs:
+        - id: 5
+    00000005:
+      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
+      data:
+        GUID: 10009
+        EntityBuffAttribute: 6
+        IsPermanent: 0
+        Duration: 3
+        BuffFX: Hit_WhiteLightening
+        BuffFXScale: 1
+        Percent: -100
+        LinearDecayInDuration: 0
+        EntityPropertyType: 30
 --- !u!114 &7861377238865694945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -676,79 +940,4 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2423020542915541692, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
     type: 3}
   m_PrefabInstance: {fileID: 1449910759491668713}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &4776530439789386913
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 4892195723853597978}
-    m_Modifications:
-    - target: {fileID: 373920087716229716, guid: 95f3f66f331498a4d820b7651ed2cf51,
-        type: 3}
-      propertyPath: m_Name
-      value: EnemyDamageBoxHelper
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682470281078841620, guid: 95f3f66f331498a4d820b7651ed2cf51,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682470281078841620, guid: 95f3f66f331498a4d820b7651ed2cf51,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682470281078841620, guid: 95f3f66f331498a4d820b7651ed2cf51,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682470281078841620, guid: 95f3f66f331498a4d820b7651ed2cf51,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682470281078841620, guid: 95f3f66f331498a4d820b7651ed2cf51,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682470281078841620, guid: 95f3f66f331498a4d820b7651ed2cf51,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682470281078841620, guid: 95f3f66f331498a4d820b7651ed2cf51,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682470281078841620, guid: 95f3f66f331498a4d820b7651ed2cf51,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682470281078841620, guid: 95f3f66f331498a4d820b7651ed2cf51,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682470281078841620, guid: 95f3f66f331498a4d820b7651ed2cf51,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682470281078841620, guid: 95f3f66f331498a4d820b7651ed2cf51,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 95f3f66f331498a4d820b7651ed2cf51, type: 3}
---- !u!4 &4195087216125132213 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8682470281078841620, guid: 95f3f66f331498a4d820b7651ed2cf51,
-    type: 3}
-  m_PrefabInstance: {fileID: 4776530439789386913}
   m_PrefabAsset: {fileID: 0}

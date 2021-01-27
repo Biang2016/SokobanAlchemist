@@ -55,18 +55,16 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
     {
         if (!EnableUIBattleTip) return;
         if (data.MainNum == 0 && data.SubNum == 0) return;
-        Camp casterCamp = data.Caster ? data.Caster.Camp : data.Receiver.Camp;
         UIBattleTipInfo info = new UIBattleTipInfo(
             0,
             data.BattleTipType,
-            casterCamp,
-            data.Receiver.Camp,
+            data.Receiver,
             data.MainNum,
             data.SubNum,
             0.2f,
             data.SubNumType,
             "",
-            data.Receiver.transform.position + Vector3.up * 1.5f,
+            data.ReceiverPosition + Vector3.up * 1.5f,
             Vector2.zero,
             Vector2.one * 1f,
             0.5f);
@@ -76,18 +74,16 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
     private void HandleCommonTip(CommonUIBattleTipData data)
     {
         if (!EnableUIBattleTip) return;
-        Camp casterCamp = data.Caster ? data.Caster.Camp : data.Receiver.Camp;
         UIBattleTipInfo info = new UIBattleTipInfo(
             0,
             data.BattleTipType,
-            casterCamp,
-            data.Receiver.Camp,
+            data.Receiver,
             0,
             0,
             0.2f,
             0,
             "",
-            data.Receiver.transform.position + Vector3.up * 1.5f,
+            data.ReceiverPosition + Vector3.up * 1.5f,
             Vector2.zero,
             Vector2.one * 1f,
             0.5f);
@@ -105,48 +101,32 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
             }
         }
 
-        BattleTipPrefabType btType = BattleTipPrefabType.UIBattleTip_PlayerAttack;
+        BattleTipPrefabType btType = BattleTipPrefabType.UIBattleTip_PlayerGetDamaged;
         switch (info.BattleTipType)
         {
             case BattleTipType.Damage:
             {
-                switch (info.CasterCamp)
+                switch (info.ReceiverCamp)
                 {
                     case Camp.Player:
+                    {
+                        btType = info.DiffHP < 5 ? BattleTipPrefabType.UIBattleTip_PlayerGetDamaged : BattleTipPrefabType.UIBattleTip_PlayerGetGreatDamaged;
+                        break;
+                    }
+                    case Camp.Friend:
+                    {
+                        btType = info.DiffHP < 5 ? BattleTipPrefabType.UIBattleTip_FriendGetDamaged : BattleTipPrefabType.UIBattleTip_FriendGetGreatDamaged;
+                        break;
+                    }
                     case Camp.Enemy:
                     case Camp.Neutral:
                     {
-                        if (info.ReceiverCamp == Camp.Enemy || info.ReceiverCamp == Camp.Neutral)
-                        {
-                            btType = BattleTipPrefabType.UIBattleTip_PlayerAttack;
-                        }
-                        else if (info.ReceiverCamp == Camp.Friend)
-                        {
-                            btType = BattleTipPrefabType.UIBattleTip_FriendGetDamaged;
-                        }
-                        else if (info.ReceiverCamp == Camp.Player)
-                        {
-                            btType = BattleTipPrefabType.UIBattleTip_PlayerGetDamaged;
-                        }
-
+                        btType = info.DiffHP < 5 ? BattleTipPrefabType.UIBattleTip_EnemyGetDamaged : BattleTipPrefabType.UIBattleTip_EnemyGetGreatDamaged;
                         break;
                     }
-
-                    case Camp.Friend:
+                    case Camp.Box:
                     {
-                        if (info.ReceiverCamp == Camp.Enemy || info.ReceiverCamp == Camp.Neutral)
-                        {
-                            btType = BattleTipPrefabType.UIBattleTip_FriendAttack;
-                        }
-                        else if (info.ReceiverCamp == Camp.Friend)
-                        {
-                            btType = BattleTipPrefabType.UIBattleTip_FriendGetDamaged;
-                        }
-                        else if (info.ReceiverCamp == Camp.Player)
-                        {
-                            btType = BattleTipPrefabType.UIBattleTip_PlayerGetDamaged;
-                        }
-
+                        btType = BattleTipPrefabType.None;
                         break;
                     }
                 }
@@ -168,13 +148,14 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
                         break;
                     }
                     case Camp.Enemy:
+                    case Camp.Neutral:
                     {
                         btType = BattleTipPrefabType.UIBattleTip_EnemyGetHealed;
                         break;
                     }
-                    case Camp.Neutral:
+                    case Camp.Box:
                     {
-                        btType = BattleTipPrefabType.UIBattleTip_EnemyGetHealed;
+                        btType = BattleTipPrefabType.None;
                         break;
                     }
                 }
@@ -183,6 +164,7 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
             }
         }
 
+        if (btType == BattleTipPrefabType.None) return;
         ClientGameManager.Instance.StartCoroutine(Co_ShowUIBattleTip(btType, info, maxSortingOrder));
     }
 

@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using BiangLibrary;
 using BiangLibrary.GamePlay;
 using BiangLibrary.Singleton;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using Sirenix.Utilities;
 using UnityEngine;
 using Object = UnityEngine.Object;
 #if UNITY_EDITOR
@@ -37,7 +39,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     [ReadOnly]
     [ShowInInspector]
     [BoxGroup("角色Buff相克表")]
-    public static EntityBuffAttributeRelationship[,] EntityBuffAttributeMatrix;
+    public static EntityBuffAttributeRelationship[,] EntityBuffAttributeMatrix; // [老Buff, 新Buff], Value: Buff克制关系
 
     public class TypeDefineConfig<T> where T : Object
     {
@@ -354,20 +356,21 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         EntityBuffAttributeMatrixAsset configSSO = GetBuffAttributeMatrixAsset();
 
         SortedDictionary<string, SortedDictionary<string, string>> exportDict = new SortedDictionary<string, SortedDictionary<string, string>>();
+        // 左侧标签为既有buff，顶部标签为新增buff
         for (int y = 0; y < configSSO.EntityBuffAttributeMatrix.GetLength(0); y++)
         {
             for (int x = 0; x < configSSO.EntityBuffAttributeMatrix.GetLength(1); x++)
             {
-                EntityBuffAttribute rowType = (EntityBuffAttribute) y;
-                EntityBuffAttribute columnType = (EntityBuffAttribute) x;
-                if (!exportDict.ContainsKey(rowType.ToString()))
+                EntityBuffAttribute oldBuff = (EntityBuffAttribute) y; // 左侧竖直标签
+                EntityBuffAttribute newBuff = (EntityBuffAttribute) x; // 顶部水平标签
+                if (!exportDict.ContainsKey(oldBuff.ToString()))
                 {
-                    exportDict.Add(rowType.ToString(), new SortedDictionary<string, string>());
+                    exportDict.Add(oldBuff.ToString(), new SortedDictionary<string, string>());
                 }
 
-                if (!exportDict[rowType.ToString()].ContainsKey(columnType.ToString()))
+                if (!exportDict[oldBuff.ToString()].ContainsKey(newBuff.ToString()))
                 {
-                    exportDict[rowType.ToString()].Add(columnType.ToString(), configSSO.EntityBuffAttributeMatrix[y, x].ToString());
+                    exportDict[oldBuff.ToString()].Add(newBuff.ToString(), configSSO.EntityBuffAttributeMatrix[y, x].ToString());
                 }
             }
         }
@@ -498,12 +501,52 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         FXTypeDefineDict.LoadTypeNames();
         BattleIndicatorTypeDefineDict.LoadTypeNames();
 
+        LoadEntityBuffStatPropertyEnumReflection();
         LoadEntityBuffAttributeMatrix(dataFormat);
         LoadBoxOccupationDataConfig(dataFormat);
         LoadWorldDataConfig(dataFormat);
         LoadWorldModuleDataConfig(dataFormat);
 
         IsLoaded = true;
+    }
+
+    public static void LoadEntityBuffStatPropertyEnumReflection()
+    {
+        Type PT = typeof(EntityPropertyType);
+        foreach (EntityPropertyType ept in Enum.GetValues(PT))
+        {
+            object[] attributes_entity = PT.GetMember(ept.ToString())[0].GetCustomAttributes(typeof(EntityPropertyAttribute), false);
+            if (attributes_entity.Length > 0)
+            {
+                EntityBuffHelper.BoxBuffEnums_Property.Add(ept);
+                EntityBuffHelper.ActorBuffEnums_Property.Add(ept);
+            }
+            else
+            {
+                object[] attributes_box = PT.GetMember(ept.ToString())[0].GetCustomAttributes(typeof(BoxPropertyAttribute), false);
+                if (attributes_box.Length > 0) EntityBuffHelper.BoxBuffEnums_Property.Add(ept);
+                object[] attribute_actor = PT.GetMember(ept.ToString())[0].GetCustomAttributes(typeof(ActorPropertyAttribute), false);
+                if (attribute_actor.Length > 0) EntityBuffHelper.ActorBuffEnums_Property.Add(ept);
+            }
+        }
+
+        Type ST = typeof(EntityStatType);
+        foreach (EntityStatType est in Enum.GetValues(ST))
+        {
+            object[] attributes_entity = ST.GetMember(est.ToString())[0].GetCustomAttributes(typeof(EntityStatAttribute), false);
+            if (attributes_entity.Length > 0)
+            {
+                EntityBuffHelper.BoxBuffEnums_Stat.Add(est);
+                EntityBuffHelper.ActorBuffEnums_Stat.Add(est);
+            }
+            else
+            {
+                object[] attribute_box = ST.GetMember(est.ToString())[0].GetCustomAttributes(typeof(BoxStatAttribute), false);
+                if (attribute_box.Length > 0) EntityBuffHelper.BoxBuffEnums_Stat.Add(est);
+                object[] attribute_actor = ST.GetMember(est.ToString())[0].GetCustomAttributes(typeof(ActorStatAttribute), false);
+                if (attribute_actor.Length > 0) EntityBuffHelper.ActorBuffEnums_Stat.Add(est);
+            }
+        }
     }
 
     public static void LoadEntityBuffAttributeMatrix(DataFormat dataFormat)
@@ -520,13 +563,13 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             {
                 foreach (KeyValuePair<string, string> _kv in kv.Value)
                 {
-                    if (Enum.TryParse(kv.Key, out EntityBuffAttribute y))
+                    if (Enum.TryParse(kv.Key, out EntityBuffAttribute oldBuff))
                     {
-                        if (Enum.TryParse(_kv.Key, out EntityBuffAttribute x))
+                        if (Enum.TryParse(_kv.Key, out EntityBuffAttribute newBuff))
                         {
                             if (Enum.TryParse(_kv.Value, out EntityBuffAttributeRelationship value))
                             {
-                                EntityBuffAttributeMatrix[(int) y, (int) x] = value;
+                                EntityBuffAttributeMatrix[(int) oldBuff, (int) newBuff] = value;
                             }
                         }
                     }

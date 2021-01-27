@@ -59,6 +59,10 @@ public abstract class Stat
 
     public void FixedUpdate(float fixedDeltaTime)
     {
+        if (Value != 0 && GrowthPercent != 0)
+        {
+            int a = 0;
+        }
         accumulatedRecovery += fixedDeltaTime * Recovery;
         accumulatedRecovery += fixedDeltaTime * (Value * GrowthPercent / 100f);
 
@@ -114,13 +118,13 @@ public abstract class Stat
 
                 int before = _value;
                 _value = value;
-                OnValueChanged?.Invoke(before, _value);
                 if (_value == _minValue) OnValueReachMin?.Invoke(_value);
                 if (_value == _maxValue) OnValueReachMax?.Invoke(_value);
-                if (before > 0 && _value <= 0) OnValueReachZero?.Invoke();
+                OnValueChanged?.Invoke(before, _value);
+                OnChanged?.Invoke(_value, _minValue, _maxValue);
                 if (before < _value) OnValueIncrease?.Invoke(_value - before);
                 if (before > _value) OnValueDecrease?.Invoke(before - _value);
-                OnChanged?.Invoke(_value, _minValue, _maxValue);
+                if (before > 0 && _value <= 0) OnValueReachZero?.Invoke();
             }
         }
     }

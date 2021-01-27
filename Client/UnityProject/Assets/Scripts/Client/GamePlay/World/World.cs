@@ -540,7 +540,7 @@ public class World : PoolObject
             {
                 Collider result = actorOccupiedGridSphereOverlapTempResultCache[index];
                 Actor actor = result.GetComponentInParent<Actor>();
-                if (actor != null && actor.GUID != excludeActorGUID) return true;
+                if (actor.IsNotNullAndAlive() && actor.GUID != excludeActorGUID) return true;
             }
 
             return false;

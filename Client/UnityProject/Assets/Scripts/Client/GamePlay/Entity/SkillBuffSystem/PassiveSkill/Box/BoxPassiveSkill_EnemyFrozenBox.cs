@@ -14,30 +14,34 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
     public override void OnBeingKickedCollisionEnter(Collision collision)
     {
         base.OnBeingKickedCollisionEnter(collision);
-        if (Box.FrozenActor != null)
+        if (Box.FrozenActor.IsNotNullAndAlive())
         {
             if (collision.gameObject.layer == LayerManager.Instance.Layer_Enemy)
             {
                 Actor actor = collision.gameObject.GetComponentInParent<Actor>();
-                actor.ActorBattleHelper.Damage(Box.FrozenActor, Box.FrozenActor.CollideDamage);
-                Box.FrozenActor.ActorBattleHelper.Damage(Box.FrozenActor, 1);
+                actor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.CollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage);
+                Box.FrozenActor.EntityBuffHelper.Damage(1, EntityBuffAttribute.CollideDamage);
             }
             else if (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box || collision.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
             {
-                Box.FrozenActor.ActorBattleHelper.Damage(Box.FrozenActor, 1);
                 Box targetBox = collision.gameObject.GetComponentInParent<Box>();
-                if (targetBox.FrozenActor != null)
+                if (targetBox.FrozenActor.IsNotNullAndAlive())
                 {
-                    targetBox.FrozenActor.ActorBattleHelper.Damage(Box.FrozenActor, 1);
+                    targetBox.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.CollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage);
+                    Box.FrozenActor.EntityBuffHelper.Damage(targetBox.FrozenActor.EntityStatPropSet.CollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage);
+                }
+                else
+                {
+                    Box.FrozenActor.EntityBuffHelper.Damage(1, EntityBuffAttribute.CollideDamage);
                 }
             }
             else if (collision.gameObject.layer == LayerManager.Instance.Layer_Wall ||
                      collision.gameObject.layer == LayerManager.Instance.Layer_Ground)
             {
-                Box.FrozenActor.ActorBattleHelper.Damage(Box.FrozenActor, 1);
+                Box.FrozenActor.EntityBuffHelper.Damage(1, EntityBuffAttribute.CollideDamage);
             }
 
-            if (Box.FrozenActor != null && !Box.FrozenActor.IsRecycled)
+            if (Box.FrozenActor.IsNotNullAndAlive())
             {
                 Box.FrozenActor.EntityStatPropSet.FrozenValue.Value -= Box.FrozenActor.EntityStatPropSet.FrozenValuePerLevel;
             }

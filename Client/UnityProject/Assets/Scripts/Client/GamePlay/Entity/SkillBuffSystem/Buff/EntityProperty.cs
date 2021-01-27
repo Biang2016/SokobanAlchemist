@@ -32,11 +32,11 @@ public class EntityPropertyAttribute : Attribute
 {
 }
 
-public class BoxPropertyAttribute : EntityPropertyAttribute
+public class BoxPropertyAttribute : Attribute
 {
 }
 
-public class ActorPropertyAttribute : EntityPropertyAttribute
+public class ActorPropertyAttribute : Attribute
 {
 }
 
@@ -51,20 +51,24 @@ public enum EntityPropertyType
     HealthDurabilityRecovery = 1,
 
     [EntityProperty]
-    [LabelText("爆炸耐久上限")]
-    MaxExplodeDurability = 10,
+    [LabelText("燃烧伤害抵消")]
+    FiringDamageDefense = 10,
 
     [EntityProperty]
-    [LabelText("爆炸耐久回复速度")]
-    ExplodeDurabilityRecovery = 11,
+    [LabelText("爆炸伤害抵消")]
+    ExplodeDamageDefense = 11,
+
+    [ActorProperty]
+    [LabelText("角色碰撞伤害抵消")]
+    ActorCollideDamageDefense = 12,
+
+    [BoxProperty]
+    [LabelText("箱子碰撞减少自身耐久")]
+    BoxCollideDamageSelf = 13,
 
     [EntityProperty]
-    [LabelText("燃烧耐久上限")]
-    MaxFiringDurability = 20,
-
-    [EntityProperty]
-    [LabelText("燃烧耐久回复速度")]
-    FiringDurabilityRecovery = 21,
+    [LabelText("碰撞伤害")]
+    CollideDamage = 14,
 
     [ActorProperty]
     [LabelText("移动速度")]
@@ -109,6 +113,10 @@ public enum EntityPropertyType
     [EntityProperty]
     [LabelText("燃烧增长率")]
     FiringGrowthPercent = 301,
+
+    [EntityProperty]
+    [LabelText("燃烧蔓延率")]
+    FiringSpreadPercent = 401,
 }
 
 public enum EntitySkillPropertyType

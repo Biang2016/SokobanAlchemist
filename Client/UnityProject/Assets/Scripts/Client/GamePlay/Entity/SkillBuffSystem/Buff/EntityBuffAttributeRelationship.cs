@@ -5,8 +5,8 @@ public enum EntityBuffAttributeRelationship
     [LabelText("相容")]
     Compatible, // Buff相容
 
-    [LabelText("互斥")]
-    Mutex, // 直接替换
+    [LabelText("驱散")]
+    Disperse, // 后者替换前者
 
     [LabelText("排斥")]
     Repel, // 后者无法添加

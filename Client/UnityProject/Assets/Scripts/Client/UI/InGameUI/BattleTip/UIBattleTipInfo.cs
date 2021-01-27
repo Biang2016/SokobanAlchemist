@@ -5,7 +5,6 @@ public class UIBattleTipInfo : IClone<UIBattleTipInfo>
 {
     public uint HitMCB_GUID;
     public BattleTipType BattleTipType;
-    public Camp CasterCamp;
     public Camp ReceiverCamp;
     public int DiffHP;
     public int ElementHP;
@@ -17,12 +16,11 @@ public class UIBattleTipInfo : IClone<UIBattleTipInfo>
     public Vector2 RandomRange;
     public float DisappearTime = 1.5f;
 
-    public UIBattleTipInfo(uint hitMcbGuid, BattleTipType battleTipType, Camp casterCamp, Camp receiverCamp, int diffHp, int elementHp, float scale, int elementType,
+    public UIBattleTipInfo(uint hitMcbGuid, BattleTipType battleTipType, Camp receiverCamp, int diffHp, int elementHp, float scale, int elementType,
         string spriteImagePath, Vector3 startPos, Vector2 offset, Vector2 randomRange, float disappearTime)
     {
         HitMCB_GUID = hitMcbGuid;
         BattleTipType = battleTipType;
-        CasterCamp = casterCamp;
         ReceiverCamp = receiverCamp;
         DiffHP = diffHp;
         ElementHP = elementHp;
@@ -37,6 +35,6 @@ public class UIBattleTipInfo : IClone<UIBattleTipInfo>
 
     public UIBattleTipInfo Clone()
     {
-        return new UIBattleTipInfo(HitMCB_GUID, BattleTipType, CasterCamp, ReceiverCamp, DiffHP, ElementHP, Scale, ElementType, SpriteImagePath, StartPos, Offset, RandomRange, DisappearTime);
+        return new UIBattleTipInfo(HitMCB_GUID, BattleTipType, ReceiverCamp, DiffHP, ElementHP, Scale, ElementType, SpriteImagePath, StartPos, Offset, RandomRange, DisappearTime);
     }
 }

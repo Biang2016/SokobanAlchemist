@@ -338,7 +338,7 @@ public class DebugPanel : BaseUIPanel
     {
         foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
         {
-            enemy.ActorBattleHelper.Damage(enemy, 99999);
+            enemy.EntityStatPropSet.HealthDurability.Value -= 99999;
         }
     }
 

@@ -6,7 +6,7 @@ public enum Camp
     Player = 1,
     Enemy = 2,
     Friend = 3,
-    // todo Box的阵营划分目前先放在Neutral里面，待以后想清楚了再改
+    Box = 4,
 }
 
 [Flags]
@@ -16,5 +16,7 @@ public enum RelativeCamp
     FriendCamp = 1 << 0,
     OpponentCamp = 1 << 1,
     NeutralCamp = 1 << 2,
-    AllCamp = FriendCamp | OpponentCamp | NeutralCamp,
+    BoxCamp = 1 << 3,
+    AllActorCamp = FriendCamp | OpponentCamp | NeutralCamp,
+    AllCamp = AllActorCamp | BoxCamp,
 }

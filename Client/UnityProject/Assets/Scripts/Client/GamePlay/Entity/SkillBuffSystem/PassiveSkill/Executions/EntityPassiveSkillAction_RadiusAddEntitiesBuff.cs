@@ -13,119 +13,30 @@ public class EntityPassiveSkillAction_RadiusAddEntitiesBuff : EntityPassiveSkill
     [LabelText("判定半径")]
     public float AddBuffRadius = 2;
 
-    [LabelText("作用于箱子")]
-    public bool EnableToBoxes;
+    [LabelText("采用精准Grid距离")]
+    public bool ExactGPDistance = true;
 
-    [LabelText("作用于角色")]
-    public bool EnableToActors;
-
-    [ShowIf("EnableToActors")]
     [LabelText("生效于相对阵营")]
     public RelativeCamp EffectiveOnRelativeCamp;
 
     [SerializeReference]
     [LabelText("作用效果")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
-    public List<EntityBuff> EntityBuffs = new List<EntityBuff>();
+    public List<EntityBuff> RawEntityBuffs = new List<EntityBuff>(); // 干数据，禁修改
 
     public void Execute()
     {
-        if (EnableToBoxes)
+        if (Entity is Box box)
         {
-            HashSet<uint> boxList = new HashSet<uint>();
-            if (Entity is Box box)
+            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
             {
-                foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
-                {
-                    Vector3 boxIndicatorPos = Entity.transform.position + offset;
-                    ExertOnBoxes(boxIndicatorPos);
-                }
-            }
-            else if (Entity is Actor actor)
-            {
-                ExertOnBoxes(actor.transform.position);
-            }
-
-            void ExertOnBoxes(Vector3 center)
-            {
-                Collider[] colliders = Physics.OverlapSphere(center, AddBuffRadius, LayerManager.Instance.LayerMask_BoxIndicator);
-                foreach (Collider collider in colliders)
-                {
-                    if ((collider.transform.position - center).magnitude > AddBuffRadius) continue;
-                    Box targetBox = collider.gameObject.GetComponentInParent<Box>();
-                    if (targetBox != null && !boxList.Contains(targetBox.GUID))
-                    {
-                        boxList.Add(targetBox.GUID);
-                        foreach (EntityBuff entityBuff in EntityBuffs)
-                        {
-                            if (!targetBox.EntityBuffHelper.AddBuff(entityBuff.Clone()))
-                            {
-                                Debug.Log($"Failed to AddBuff: {entityBuff.GetType().Name} to {targetBox.name}");
-                            }
-                        }
-                    }
-                }
+                Vector3 boxIndicatorPos = Entity.transform.position + offset;
+                BattleManager.Instance.AddBuffToEntities(boxIndicatorPos, box.LastTouchActor.IsNotNullAndAlive() ? box.LastTouchActor.Camp : box.Camp, AddBuffRadius, ExactGPDistance, EffectiveOnRelativeCamp, RawEntityBuffs);
             }
         }
-
-        if (EnableToActors)
+        else if (Entity is Actor actor)
         {
-            HashSet<uint> actorList = new HashSet<uint>();
-            if (Entity is Box box)
-            {
-                foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
-                {
-                    Vector3 boxIndicatorPos = Entity.transform.position + offset;
-                    ExertOnActors(boxIndicatorPos, box.LastTouchActor);
-                }
-            }
-            else if (Entity is Actor actor)
-            {
-                ExertOnActors(actor.transform.position, actor);
-            }
-
-            void ExertOnActors(Vector3 center, Actor executeActor)
-            {
-                Collider[] colliders = Physics.OverlapSphere(center, AddBuffRadius, LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
-                foreach (Collider collider in colliders)
-                {
-                    Actor actor = collider.gameObject.GetComponentInParent<Actor>();
-                    if (actor != null && !actorList.Contains(actor.GUID))
-                    {
-                        actorList.Add(actor.GUID);
-                        if (executeActor != null)
-                        {
-                            if (EffectiveOnRelativeCamp == RelativeCamp.FriendCamp && !actor.IsSameCampOf(executeActor))
-                            {
-                                continue;
-                            }
-                            else if (EffectiveOnRelativeCamp == RelativeCamp.OpponentCamp && !actor.IsOpponentCampOf(executeActor))
-                            {
-                                continue;
-                            }
-                            else if (EffectiveOnRelativeCamp == RelativeCamp.NeutralCamp && !actor.IsNeutralCampOf(executeActor))
-                            {
-                                continue;
-                            }
-                            else if (EffectiveOnRelativeCamp == RelativeCamp.AllCamp)
-                            {
-                            }
-                            else if (EffectiveOnRelativeCamp == RelativeCamp.None)
-                            {
-                                continue;
-                            }
-                        }
-
-                        foreach (EntityBuff entityBuff in EntityBuffs)
-                        {
-                            if (!actor.EntityBuffHelper.AddBuff(entityBuff.Clone()))
-                            {
-                                Debug.Log($"Failed to AddBuff: {entityBuff.GetType().Name} to {actor.name}");
-                            }
-                        }
-                    }
-                }
-            }
+            BattleManager.Instance.AddBuffToEntities(actor.transform.position, actor.Camp, AddBuffRadius, ExactGPDistance, EffectiveOnRelativeCamp, RawEntityBuffs);
         }
     }
 
@@ -133,21 +44,19 @@ public class EntityPassiveSkillAction_RadiusAddEntitiesBuff : EntityPassiveSkill
     {
         base.ChildClone(newAction);
         EntityPassiveSkillAction_RadiusAddEntitiesBuff action = ((EntityPassiveSkillAction_RadiusAddEntitiesBuff) newAction);
-        action.EntityBuffs = EntityBuffs.Clone();
-        action.EnableToBoxes = EnableToBoxes;
-        action.EnableToActors = EnableToActors;
-        action.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
         action.AddBuffRadius = AddBuffRadius;
+        action.ExactGPDistance = ExactGPDistance;
+        action.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
+        action.RawEntityBuffs = RawEntityBuffs.Clone();
     }
 
     public override void CopyDataFrom(EntityPassiveSkillAction srcData)
     {
         base.CopyDataFrom(srcData);
         EntityPassiveSkillAction_RadiusAddEntitiesBuff action = ((EntityPassiveSkillAction_RadiusAddEntitiesBuff) srcData);
-        EntityBuffs = action.EntityBuffs.Clone();
-        EnableToBoxes = action.EnableToBoxes;
-        EnableToActors = action.EnableToActors;
-        EffectiveOnRelativeCamp = action.EffectiveOnRelativeCamp;
         AddBuffRadius = action.AddBuffRadius;
+        ExactGPDistance = action.ExactGPDistance;
+        EffectiveOnRelativeCamp = action.EffectiveOnRelativeCamp;
+        RawEntityBuffs = action.RawEntityBuffs.Clone();
     }
 }

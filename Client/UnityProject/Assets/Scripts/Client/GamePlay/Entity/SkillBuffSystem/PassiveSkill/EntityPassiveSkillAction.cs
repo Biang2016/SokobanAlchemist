@@ -23,18 +23,10 @@ public abstract class EntityPassiveSkillAction : IClone<EntityPassiveSkillAction
         void OnCollide(Collision collision);
     }
 
-    public interface ITriggerEnterAction
+    public interface ITriggerAction
     {
         void OnTriggerEnter(Collider collider);
-    }
-
-    public interface ITriggerStayAction
-    {
         void OnTriggerStay(Collider collider);
-    }
-
-    public interface ITriggerExitAction
-    {
         void OnTriggerExit(Collider collider);
     }
 

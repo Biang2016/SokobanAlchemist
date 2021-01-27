@@ -75,7 +75,7 @@ public partial class Box
                 }
                 else
                 {
-                    EntityStatPropSet.HealthDurability.Value--;
+                    EntityBuffHelper.Damage(EntityStatPropSet.BoxCollideDamageSelf.GetModifiedValue, EntityBuffAttribute.CollideDamage);
                 }
             }
         }
@@ -92,7 +92,7 @@ public partial class Box
             }
             else
             {
-                EntityStatPropSet.HealthDurability.Value--;
+                EntityBuffHelper.Damage(EntityStatPropSet.BoxCollideDamageSelf.GetModifiedValue, EntityBuffAttribute.CollideDamage);
             }
         }
 
@@ -104,9 +104,9 @@ public partial class Box
              collider.gameObject.layer == LayerManager.Instance.Layer_Enemy))
         {
             Actor actor = collider.gameObject.GetComponentInParent<Actor>();
-            if (actor != null)
+            if (actor != null) //此处不管Actor是否已经死亡都进行Box损伤计算
             {
-                if (LastTouchActor != null && LastTouchActor.IsOpponentCampOf(actor))
+                if (LastTouchActor != null && LastTouchActor.IsOpponentOrNeutralCampOf(actor))
                 {
                     validCollision = true;
                     if (EntityStatPropSet.FrozenLevel.Value >= 1)
@@ -115,7 +115,7 @@ public partial class Box
                     }
                     else
                     {
-                        EntityStatPropSet.HealthDurability.Value--;
+                        EntityBuffHelper.Damage(EntityStatPropSet.BoxCollideDamageSelf.GetModifiedValue, EntityBuffAttribute.CollideDamage);
                     }
                 }
             }
@@ -125,7 +125,7 @@ public partial class Box
         {
             if (!(EntityStatPropSet.DropFromAirSurviveProbabilityPercent.Value / 100f).ProbabilityBool())
             {
-                EntityStatPropSet.HealthDurability.Value = 0;
+                EntityBuffHelper.Damage(EntityStatPropSet.HealthDurability.Value, EntityBuffAttribute.CollideDamage);
             }
         }
 
