@@ -989,7 +989,7 @@ public partial class Box : Entity
             foreach (Collider collider in colliders)
             {
                 Actor actor = collider.GetComponentInParent<Actor>();
-                if (actor && actor != LastTouchActor && !damagedActors.Contains(actor))
+                if (actor.IsNotNullAndAlive() && actor != LastTouchActor && !damagedActors.Contains(actor))
                 {
                     if (actor.IsOpponentOrNeutralCampOf(LastTouchActor))
                     {

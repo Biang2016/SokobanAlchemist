@@ -68,23 +68,24 @@ MonoBehaviour:
   GUID_Mod_FixedFrameRate: 0
   RawEntityStatPropSet:
     HealthDurability:
-      _value: 1
+      _value: 4
       _minValue: 0
-      _maxValue: 1
+      _maxValue: 4
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 5000
     MaxHealthDurability:
-      BaseValue: 1
+      BaseValue: 4
       ModifiedValue: 0
       MinValue: 1
-      MaxValue: 10000
-    HealthDurabilityRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
       MaxValue: 10000
     DropFromAirSurviveProbabilityPercent:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     ActorCollideDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
@@ -110,19 +111,20 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 200
-    FrozenRecovery:
-      BaseValue: 100
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 1000
     FrozenValue:
       _value: 0
       _minValue: 0
       _maxValue: 1000
+      AutoChange: -30
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 300
     FrozenLevel:
       _value: 0
       _minValue: 0
       _maxValue: 5
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FrozenFX: None
     FrozenFXScaleCurve:
       serializedVersion: 2
@@ -153,24 +155,20 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 200
-    FiringRecovery:
-      BaseValue: 100
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 1000
-    FiringGrowthPercent:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 1000
     FiringValue:
       _value: 0
       _minValue: 0
       _maxValue: 1000
+      AutoChange: -30
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 300
     FiringLevel:
       _value: 0
       _minValue: 0
       _maxValue: 4
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FiringSpreadPercent:
       BaseValue: 0
       ModifiedValue: 0
@@ -211,7 +209,7 @@ MonoBehaviour:
     FiringBreakFX: None
     FiringBreakFXScale: 0
     MoveSpeed:
-      BaseValue: 15
+      BaseValue: 30
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 1000
@@ -224,6 +222,9 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     ActionPointRecovery:
       BaseValue: 0
       ModifiedValue: 0
@@ -277,7 +278,7 @@ MonoBehaviour:
         MinValue: 0
         MaxValue: 0
       Depth:
-        BaseValue: 1
+        BaseValue: 2
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 5
@@ -307,12 +308,10 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     MaxHealthDurability:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    HealthDurabilityRecovery:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
@@ -321,6 +320,9 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     ActorCollideDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
@@ -346,19 +348,20 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
-    FrozenRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
     FrozenValue:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FrozenLevel:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FrozenFX: 
     FrozenFXScaleCurve:
       serializedVersion: 2
@@ -371,24 +374,20 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
-    FiringRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringGrowthPercent:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
     FiringValue:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FiringLevel:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FiringSpreadPercent:
       BaseValue: 0
       ModifiedValue: 0
@@ -424,6 +423,9 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     ActionPointRecovery:
       BaseValue: 0
       ModifiedValue: 0
@@ -447,7 +449,8 @@ MonoBehaviour:
     SkillsPropertyCollections: []
     RawEntityDefaultBuffs: []
   RawEntityPassiveSkills: []
-  RawEntityActiveSkills: []
+  RawEntityActiveSkills:
+  - id: 0
   Camp: 2
   RigidBody: {fileID: 3522706739585230582}
   ActorCommonHelpers: {fileID: 5150927944716405211}
@@ -488,6 +491,33 @@ MonoBehaviour:
   ThrowState: 0
   references:
     version: 1
+    00000000:
+      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      data:
+        TargetCamp: 6
+        EntitySkillIndex: 0
+        SkillAlias: "\u666E\u901A\u653B\u51FB"
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        M_CastAreaType: 2
+        M_TargetInclination: 2
+        CastOnTopLayer: 0
+        FanAngle: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName: GridWarning
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        GridWarningColorFill: {r: 0.6978636, g: 0.36779106, b: 0.8962264, a: 0.6745098}
+        GridWarningColorBorderHighlight: {r: 0.8409599, g: 0.5913581, b: 0.9150943,
+          a: 0.92156863}
+        GridWarningColorBorderDim: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 0.4627451}
+        CastFX: None
+        CastFXScale: 0
+        RawEntityBuffs: []
 --- !u!114 &8572106225310636948
 MonoBehaviour:
   m_ObjectHideFlags: 0

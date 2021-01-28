@@ -71,20 +71,21 @@ MonoBehaviour:
       _value: 1
       _minValue: 0
       _maxValue: 1
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     MaxHealthDurability:
       BaseValue: 1
       ModifiedValue: 0
       MinValue: 1
       MaxValue: 10000
-    HealthDurabilityRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 10000
     DropFromAirSurviveProbabilityPercent:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     ActorCollideDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
@@ -110,19 +111,20 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 200
-    FrozenRecovery:
-      BaseValue: 100
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 1000
     FrozenValue:
       _value: 0
       _minValue: 0
       _maxValue: 1000
+      AutoChange: -30
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 300
     FrozenLevel:
       _value: 0
       _minValue: 0
       _maxValue: 5
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FrozenFX: None
     FrozenFXScaleCurve:
       serializedVersion: 2
@@ -153,24 +155,20 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 200
-    FiringRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 1000
-    FiringGrowthPercent:
-      BaseValue: 30
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 1000
     FiringValue:
       _value: 0
       _minValue: 0
       _maxValue: 1000
+      AutoChange: -30
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 300
     FiringLevel:
       _value: 0
       _minValue: 0
       _maxValue: 4
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FiringSpreadPercent:
       BaseValue: 0
       ModifiedValue: 0
@@ -224,6 +222,9 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     ActionPointRecovery:
       BaseValue: 0
       ModifiedValue: 0
@@ -307,12 +308,10 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     MaxHealthDurability:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    HealthDurabilityRecovery:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
@@ -321,6 +320,9 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     ActorCollideDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
@@ -346,19 +348,20 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
-    FrozenRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
     FrozenValue:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FrozenLevel:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FrozenFX: 
     FrozenFXScaleCurve:
       serializedVersion: 2
@@ -371,24 +374,20 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
-    FiringRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringGrowthPercent:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
     FiringValue:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FiringLevel:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FiringSpreadPercent:
       BaseValue: 0
       ModifiedValue: 0
@@ -424,6 +423,9 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     ActionPointRecovery:
       BaseValue: 0
       ModifiedValue: 0
@@ -515,20 +517,7 @@ MonoBehaviour:
         GridWarningColorBorderDim: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 0.69411767}
         CastFX: Flash_Leaves
         CastFXScale: 1
-        RawEntityBuffs:
-        - id: 1
-    00000001:
-      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
-      data:
-        GUID: 11107
-        EntityBuffAttribute: 31
-        IsPermanent: 0
-        Duration: 0
-        BuffFX: None
-        BuffFXScale: 1
-        EntityStatType: 0
-        Delta: -1
-        Percent: 0
+        RawEntityBuffs: []
 --- !u!114 &7861377238865694945
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -482,13 +482,9 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
                 {
                     entitySet.Add(targetActor);
                 }
-            }
 
-            Collider[] colliders_BoxLayer = Physics.OverlapSphere(gp, 0.3f, LayerManager.Instance.LayerMask_BoxIndicator);
-            foreach (Collider c in colliders_BoxLayer)
-            {
                 Box targetBox = c.GetComponentInParent<Box>();
-                if (targetBox != null && !entitySet.Contains(targetBox))
+                if (targetBox.IsNotNullAndAlive() && !entitySet.Contains(targetBox))
                 {
                     entitySet.Add(targetBox);
                 }

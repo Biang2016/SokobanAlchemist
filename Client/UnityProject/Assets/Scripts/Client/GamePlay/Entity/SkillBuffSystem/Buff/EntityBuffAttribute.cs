@@ -92,6 +92,15 @@ public enum EntityBuffAttribute
     [LabelText("碰撞免疫/虚无")]
     CollideImmune,
 
+    [LabelText("攻击")]
+    Attack,
+
+    [LabelText("攻击伤害")]
+    AttackDamage,
+
+    [LabelText("攻击免疫")]
+    AttackImmune,
+
     [LabelText("荆棘")]
     Thorn,
 

@@ -24,10 +24,6 @@ public class EntityStatPropSet
     public EntityProperty MaxHealthDurability = new EntityProperty(EntityPropertyType.MaxHealthDurability);
 
     [BoxGroup("耐久")]
-    [LabelText("@\"血量耐久回复速度*100\t\"+HealthDurabilityRecovery")]
-    public EntityProperty HealthDurabilityRecovery = new EntityProperty(EntityPropertyType.HealthDurabilityRecovery);
-
-    [BoxGroup("耐久")]
     [LabelText("@\"坠落留存率%\t\"+DropFromAirSurviveProbabilityPercent")]
     public EntityStat DropFromAirSurviveProbabilityPercent = new EntityStat(EntityStatType.DropFromAirSurviveProbabilityPercent);
 
@@ -64,10 +60,6 @@ public class EntityStatPropSet
     public EntityProperty FrozenResistance = new EntityProperty(EntityPropertyType.FrozenResistance);
 
     [BoxGroup("冰冻")]
-    [LabelText("@\"冰冻恢复/s\t\"+FrozenRecovery")]
-    public EntityProperty FrozenRecovery = new EntityProperty(EntityPropertyType.FrozenRecovery);
-
-    [BoxGroup("冰冻")]
     [LabelText("@\"冰冻累积值\t\"+FrozenValue")]
     public EntityStat FrozenValue = new EntityStat(EntityStatType.FrozenValue);
 
@@ -77,7 +69,7 @@ public class EntityStatPropSet
 
     internal int FrozenValuePerLevel => Mathf.RoundToInt(((float) FrozenValue.MaxValue / FrozenLevel.MaxValue));
 
-    public bool IsFrozen => FrozenLevel.Value > 0;
+    public bool IsFrozen => FrozenLevel.Value > 1; // 1级不算冰冻， 2级~4级冰冻对应三个模型
 
     [BoxGroup("冰冻")]
     [LabelText("冰冻持续特效")]
@@ -95,14 +87,6 @@ public class EntityStatPropSet
     [BoxGroup("燃烧")]
     [LabelText("@\"燃烧抗性\t\"+FiringResistance")]
     public EntityProperty FiringResistance = new EntityProperty(EntityPropertyType.FiringResistance);
-
-    [BoxGroup("燃烧")]
-    [LabelText("@\"燃烧恢复/s\t\"+FiringRecovery")]
-    public EntityProperty FiringRecovery = new EntityProperty(EntityPropertyType.FiringRecovery);
-
-    [BoxGroup("燃烧")]
-    [LabelText("@\"燃烧增长率%/s\t\"+FiringGrowthPercent")]
-    public EntityProperty FiringGrowthPercent = new EntityProperty(EntityPropertyType.FiringGrowthPercent);
 
     [BoxGroup("燃烧")]
     [LabelText("@\"燃烧累积值\t\"+FiringValue")]
@@ -168,7 +152,7 @@ public class EntityStatPropSet
     public EntityStat ActionPoint = new EntityStat(EntityStatType.ActionPoint);
 
     [BoxGroup("操作")]
-    [LabelText("@\"行动力回复速度\t\"+ActionPointRecovery")]
+    [LabelText("@\"行动力恢复速度\t\"+ActionPointRecovery")]
     public EntityProperty ActionPointRecovery = new EntityProperty(EntityPropertyType.ActionPointRecovery);
 
     [BoxGroup("操作")]
@@ -233,7 +217,6 @@ public class EntityStatPropSet
         [LabelText("@\"后摇/ms\t\"+Recovery")]
         public EntityProperty Recovery = new EntityProperty(EntitySkillPropertyType.Recovery);
 
-        [Button("初始化")]
         public void Initialize()
         {
             PropertyDict.Add(EntitySkillPropertyType.Damage, Damage);
@@ -300,7 +283,6 @@ public class EntityStatPropSet
         #region 耐久
 
         MaxHealthDurability.Initialize();
-        HealthDurabilityRecovery.Initialize();
 
         #endregion
 
@@ -321,15 +303,12 @@ public class EntityStatPropSet
         #region 冰冻
 
         FrozenResistance.Initialize();
-        FrozenRecovery.Initialize();
 
         #endregion
 
         #region 燃烧
 
         FiringResistance.Initialize();
-        FiringRecovery.Initialize();
-        FiringGrowthPercent.Initialize();
         FiringSpreadPercent.Initialize();
         FiringDamageDefense.Initialize();
 
@@ -367,12 +346,9 @@ public class EntityStatPropSet
             entity.PassiveSkillMarkAsDestroyed = true;
             if (entity is Actor actor) actor.ActorBattleHelper.Die();
         };
-        HealthDurability.Recovery = HealthDurabilityRecovery.GetModifiedValue / 100f;
         StatDict.Add(EntityStatType.HealthDurability, HealthDurability);
         MaxHealthDurability.OnValueChanged += (before, after) => { HealthDurability.MaxValue = after; };
         PropertyDict.Add(EntityPropertyType.MaxHealthDurability, MaxHealthDurability);
-        HealthDurabilityRecovery.OnValueChanged += (before, after) => { HealthDurability.Recovery = after / 100f; };
-        PropertyDict.Add(EntityPropertyType.HealthDurabilityRecovery, HealthDurabilityRecovery);
 
         StatDict.Add(EntityStatType.DropFromAirSurviveProbabilityPercent, DropFromAirSurviveProbabilityPercent);
 
@@ -397,10 +373,6 @@ public class EntityStatPropSet
         FrozenResistance.OnValueChanged += (before, after) => { FrozenValue.AbnormalStatResistance = after; };
         PropertyDict.Add(EntityPropertyType.FrozenResistance, FrozenResistance);
 
-        FrozenRecovery.OnValueChanged += (before, after) => { FrozenValue.Recovery = -after; };
-        PropertyDict.Add(EntityPropertyType.FrozenRecovery, FrozenRecovery);
-
-        FrozenValue.Recovery = -FrozenRecovery.GetModifiedValue;
         FrozenValue.AbnormalStatResistance = FrozenResistance.GetModifiedValue;
         FrozenValue.OnValueChanged += (before, after) =>
         {
@@ -419,15 +391,7 @@ public class EntityStatPropSet
         FiringResistance.OnValueChanged += (before, after) => { FiringValue.AbnormalStatResistance = after; };
         PropertyDict.Add(EntityPropertyType.FiringResistance, FiringResistance);
 
-        FiringRecovery.OnValueChanged += (before, after) => { FiringValue.Recovery = -after; };
-        PropertyDict.Add(EntityPropertyType.FiringRecovery, FiringRecovery);
-
-        FiringGrowthPercent.OnValueChanged += (before, after) => { FiringValue.GrowthPercent = after; };
-        PropertyDict.Add(EntityPropertyType.FiringGrowthPercent, FiringGrowthPercent);
-
-        FiringValue.Recovery = -FiringRecovery.GetModifiedValue;
         FiringValue.AbnormalStatResistance = FiringResistance.GetModifiedValue;
-        FiringValue.GrowthPercent = FiringGrowthPercent.GetModifiedValue;
         FiringValue.OnValueChanged += (before, after) =>
         {
             FiringLevel.Value = after / FiringValuePerLevel;
@@ -463,10 +427,11 @@ public class EntityStatPropSet
         MaxActionPoint.OnValueChanged += (before, after) => { ActionPoint.MaxValue = after; };
         PropertyDict.Add(EntityPropertyType.MaxActionPoint, MaxActionPoint);
 
-        ActionPoint.Recovery = ActionPointRecovery.GetModifiedValue;
+        ActionPoint.MaxValue = MaxActionPoint.GetModifiedValue;
+        ActionPoint.AutoChange = ActionPointRecovery.GetModifiedValue;
         StatDict.Add(EntityStatType.ActionPoint, ActionPoint);
 
-        ActionPointRecovery.OnValueChanged += (before, after) => { ActionPoint.Recovery = after; };
+        ActionPointRecovery.OnValueChanged += (before, after) => { ActionPoint.AutoChange = after; };
         PropertyDict.Add(EntityPropertyType.ActionPointRecovery, ActionPointRecovery);
 
         PropertyDict.Add(EntityPropertyType.KickConsumeActionPoint, KickConsumeActionPoint);
@@ -546,7 +511,6 @@ public class EntityStatPropSet
 
         HealthDurability.ApplyDataTo(target.HealthDurability);
         MaxHealthDurability.ApplyDataTo(target.MaxHealthDurability);
-        HealthDurabilityRecovery.ApplyDataTo(target.HealthDurabilityRecovery);
         DropFromAirSurviveProbabilityPercent.ApplyDataTo(target.DropFromAirSurviveProbabilityPercent);
 
         #endregion
@@ -568,7 +532,6 @@ public class EntityStatPropSet
         #region 冰冻
 
         FrozenResistance.ApplyDataTo(target.FrozenResistance);
-        FrozenRecovery.ApplyDataTo(target.FrozenRecovery);
         FrozenValue.ApplyDataTo(target.FrozenValue);
         FrozenLevel.ApplyDataTo(target.FrozenLevel);
         target.FrozenFX = FrozenFX;
@@ -579,8 +542,6 @@ public class EntityStatPropSet
         #region 燃烧
 
         FiringResistance.ApplyDataTo(target.FiringResistance);
-        FiringRecovery.ApplyDataTo(target.FiringRecovery);
-        FiringGrowthPercent.ApplyDataTo(target.FiringGrowthPercent);
         FiringValue.ApplyDataTo(target.FiringValue);
         FiringLevel.ApplyDataTo(target.FiringLevel);
         FiringSpreadPercent.ApplyDataTo(target.FiringSpreadPercent);

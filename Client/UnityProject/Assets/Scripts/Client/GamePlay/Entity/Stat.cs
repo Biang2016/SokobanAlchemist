@@ -11,13 +11,15 @@ public abstract class Stat
 {
     public void OnRecycled()
     {
-        Recovery = 0;
-        GrowthPercent = 0;
-        accumulatedRecovery = 0;
+        accumulatedAutoChange = 0;
+        autoChangeTimeIntervalTick = 0;
         AbnormalStatResistance = 100;
         _value = 0;
         _minValue = 0;
         _maxValue = 0;
+        AutoChange = 0;
+        AutoChangePercent = 0;
+        AutoChangeTimeInterval = float.MaxValue;
         ClearCallBacks();
     }
 
@@ -42,45 +44,6 @@ public abstract class Stat
     public UnityAction<int> OnValueReachMin;
     public UnityAction<int> OnValueReachMax;
     public UnityAction OnValueReachZero;
-
-    #region 自动恢复
-
-    /// <summary>
-    /// 每秒恢复率
-    /// </summary>
-    internal float Recovery = 0;
-
-    /// <summary>
-    /// 每秒增长率percent
-    /// </summary>
-    internal int GrowthPercent = 0;
-
-    private float accumulatedRecovery = 0;
-
-    public void FixedUpdate(float fixedDeltaTime)
-    {
-        if (Value != 0 && GrowthPercent != 0)
-        {
-            int a = 0;
-        }
-        accumulatedRecovery += fixedDeltaTime * Recovery;
-        accumulatedRecovery += fixedDeltaTime * (Value * GrowthPercent / 100f);
-
-        if (accumulatedRecovery > 1)
-        {
-            int round = Mathf.FloorToInt(accumulatedRecovery);
-            Value += round;
-            accumulatedRecovery -= round;
-        }
-        else if (accumulatedRecovery < -1)
-        {
-            int round = Mathf.CeilToInt(accumulatedRecovery);
-            Value += round;
-            accumulatedRecovery -= round;
-        }
-    }
-
-    #endregion
 
     #region 异常属性抗性
 
@@ -180,11 +143,58 @@ public abstract class Stat
         }
     }
 
+    #region 自动恢复及增长
+
+    [SerializeField]
+    [LabelText("自动变化量")]
+    public int AutoChange = 0;
+
+    [SerializeField]
+    [LabelText("自动变化率%")]
+    public int AutoChangePercent = 0;
+
+    [SerializeField]
+    [LabelText("变化间隔ms")]
+    public float AutoChangeTimeInterval = float.MaxValue;
+
+    private float accumulatedAutoChange = 0;
+    private float autoChangeTimeIntervalTick = 0;
+
+    public void FixedUpdate(float fixedDeltaTime)
+    {
+        autoChangeTimeIntervalTick += fixedDeltaTime;
+        if (autoChangeTimeIntervalTick > AutoChangeTimeInterval / 1000f)
+        {
+            autoChangeTimeIntervalTick = 0;
+
+            accumulatedAutoChange += AutoChange;
+            accumulatedAutoChange += Value * AutoChangePercent / 100f;
+
+            if (accumulatedAutoChange > 1)
+            {
+                int round = Mathf.FloorToInt(accumulatedAutoChange);
+                Value += round;
+                accumulatedAutoChange -= round;
+            }
+            else if (accumulatedAutoChange < -1)
+            {
+                int round = Mathf.CeilToInt(accumulatedAutoChange);
+                Value += round;
+                accumulatedAutoChange -= round;
+            }
+        }
+    }
+
+    #endregion
+
     public void ApplyDataTo(Stat target)
     {
         target._value = _value;
         target._minValue = _minValue;
         target._maxValue = _maxValue;
+        target.AutoChange = AutoChange;
+        target.AutoChangePercent = AutoChangePercent;
+        target.AutoChangeTimeInterval = AutoChangeTimeInterval;
         ChildApplyDataTo(target);
     }
 

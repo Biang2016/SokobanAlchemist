@@ -1109,13 +1109,8 @@ public class World : PoolObject
                 foreach (Collider collider in colliders)
                 {
                     Entity entityBeneath = collider.GetComponentInParent<Entity>();
-                    if (entityBeneath != null && entityBeneath.GUID != box.GUID)
+                    if (entityBeneath.IsNotNullAndAlive() && entityBeneath.GUID != box.GUID)
                     {
-                        if (entityBeneath is Actor)
-                        {
-                            int a = 0;
-                        }
-
                         spaceTempAvailable = false;
                         break;
                     }

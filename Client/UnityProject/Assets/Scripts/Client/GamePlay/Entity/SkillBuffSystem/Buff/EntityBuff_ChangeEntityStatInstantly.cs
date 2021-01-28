@@ -19,7 +19,7 @@ public class EntityBuff_ChangeEntityStatInstantly : EntityBuff
     public override void OnAdded(Entity entity)
     {
         base.OnAdded(entity);
-        if (entity.IsRecycled) return;
+        if (!entity.IsNotNullAndAlive()) return;
         float valueBefore = entity.EntityStatPropSet.StatDict[EntityStatType].Value;
         valueBefore += Delta;
         valueBefore *= (100 + Percent) / 100f;

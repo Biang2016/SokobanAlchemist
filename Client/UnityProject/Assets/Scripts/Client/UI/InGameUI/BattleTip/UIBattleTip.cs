@@ -1,6 +1,7 @@
 ﻿using BiangLibrary;
 using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,15 +28,14 @@ public enum BattleTipPrefabType
 public enum BattleTipType
 {
     None = 0,
-    Attack, //攻击 +/- xxx
-    CriticalAttack, //暴击-
-    Resist, //抵抗//这个无用的
-    Dodge, //躲闪
     Damage, //普通伤害-
+    CriticalDamage, //暴击-
+    Defense, // 伤害抵消
+    Heal, //加血 
+    Dodge, //躲闪
     Rampage, //暴走 //这个无用的-
     MeleeKillScore, //近身击杀得分//这个无用的-
     MpTip, //得到能量//这个无用的-
-    AddHp, //加血 //这个无用的-
 
     AddLife, //生命 +/- xxx
     Stun, //晕眩
@@ -43,7 +43,6 @@ public enum BattleTipType
     Hiding, //隐身
     SpeedUp, //加速
     SlowDown, //减速
-    Defense, //防御 +/- xxx
     Invincible, //无敌
     Frozen, // 冰冻
     Poison, //中毒
@@ -230,12 +229,14 @@ public class UIBattleTip : PoolObject
         transform.localPosition = UIBattleTipInfo.StartPos;
         ClientUtils.InGameUIFaceToCamera(transform);
 
+        bool needAddPlusSign = info.BattleTipType == BattleTipType.Heal;
+
         SetTextType(TextType);
-        SetTextContext(TextContent, info.DiffHP);
-        SetElementTextContext(TextElementContent, info.ElementHP);
+        SetTextContext(TextContent, needAddPlusSign ? $"+{info.DiffHP}" : info.DiffHP.ToString());
+        SetElementTextContext(TextElementContent, info.ElementHP == 0 ? "" : (needAddPlusSign ? $"+{info.ElementHP}" : info.ElementHP.ToString()));
 
         Animator.SetTrigger("Play");
-        float duration_ori = CommonUtils.GetClipLength(Animator, "AttackNumberTip");
+        float duration_ori = CommonUtils.GetClipLength(Animator, "Float");
         Animator.speed = Animator.speed * duration_ori / info.DisappearTime;
     }
 
@@ -246,23 +247,23 @@ public class UIBattleTip : PoolObject
         text.transform.localPosition = default_TextContextLocalPos + offsetPos;
     }
 
-    private void SetTextContext(TextMeshPro text, long diffHP)
+    private void SetTextContext(TextMeshPro text, string diffHP)
     {
-        text.text = diffHP.ToString();
+        text.text = diffHP;
         text.color = ColorDuringLife.Evaluate(0);
         text.transform.localPosition = default_TextContextLocalPos + offsetPos;
     }
 
-    private void SetElementTextContext(TextMeshPro text, long diffHP)
+    private void SetElementTextContext(TextMeshPro text, string diffHP)
     {
-        if (diffHP == 0)
+        if (diffHP.IsNullOrWhitespace())
         {
             text.gameObject.SetActive(false);
         }
         else
         {
             text.gameObject.SetActive(true);
-            text.text = diffHP.ToString();
+            text.text = diffHP;
         }
 
         text.color = ColorDuringLife.Evaluate(0);

@@ -29,9 +29,12 @@ public class EntityPassiveSkillAction_AddEntityBuff : EntityPassiveSkillAction, 
     {
         foreach (EntityBuff entityBuff in RawEntityBuffs)
         {
-            if (!entity.EntityBuffHelper.AddBuff(entityBuff.Clone()))
+            if (entity.IsNotNullAndAlive())
             {
-                Debug.Log($"Failed to AddBuff: {entityBuff.GetType().Name} to {entity.name}");
+                if (!entity.EntityBuffHelper.AddBuff(entityBuff.Clone()))
+                {
+                    Debug.Log($"Failed to AddBuff: {entityBuff.GetType().Name} to {entity.name}");
+                }
             }
         }
     }

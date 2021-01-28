@@ -233,13 +233,27 @@ public class WorldModule : PoolObject
         {
             List<GridPos3D> boxOccupation = ConfigManager.GetBoxOccupationData(boxTypeIndex).BoxIndicatorGPs;
             List<GridPos3D> boxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(orientation, boxOccupation);
-            foreach (GridPos3D gridPos3D in boxOccupation_rotated)
+
+            // 空位检查
+            foreach (GridPos3D offset in boxOccupation_rotated)
             {
-                GridPos3D gridPos = gridPos3D + localGP;
-                if (BoxMatrix[gridPos.x, gridPos.y, gridPos.z] != null)
+                GridPos3D gridPos = offset + localGP;
+                if (gridPos.InsideModule())
                 {
-                    //Debug.LogError($"世界模组{name}的局部坐标({gridPos})位置处已存在Box,请检查世界Box是否重叠放置于该模组已有的Box位置处");
-                    return null;
+                    if (BoxMatrix[gridPos.x, gridPos.y, gridPos.z] != null)
+                    {
+                        //Debug.LogError($"世界模组{name}的局部坐标({gridPos})位置处已存在Box,请检查世界Box是否重叠放置于该模组已有的Box位置处");
+                        return null;
+                    }
+                }
+                else // 如果合成的是异形箱子则需要考虑该箱子的一部分是否放到了其他模组里
+                {
+                    GridPos3D gridWorldGP = offset + worldGP;
+                    Box boxInOtherModule = World.GetBoxByGridPosition(gridWorldGP, out WorldModule otherModule, out GridPos3D _);
+                    if (otherModule != null && boxInOtherModule != null)
+                    {
+                        return null;
+                    }
                 }
             }
 
@@ -252,7 +266,19 @@ public class WorldModule : PoolObject
             foreach (GridPos3D offset in boxOccupation_rotated)
             {
                 GridPos3D gridPos = offset + localGP;
-                BoxMatrix[gridPos.x, gridPos.y, gridPos.z] = box;
+                if (gridPos.InsideModule())
+                {
+                    BoxMatrix[gridPos.x, gridPos.y, gridPos.z] = box;
+                }
+                else // 如果合成的是异形箱子则需要考虑该箱子的一部分是否放到了其他模组里
+                {
+                    GridPos3D gridWorldGP = offset + worldGP;
+                    Box boxInOtherModule = World.GetBoxByGridPosition(gridWorldGP, out WorldModule otherModule, out GridPos3D otherModuleLocalGP);
+                    if (otherModule != null && boxInOtherModule == null)
+                    {
+                        otherModule.BoxMatrix[otherModuleLocalGP.x, otherModuleLocalGP.y, otherModuleLocalGP.z] = box;
+                    }
+                }
             }
 
             return box;

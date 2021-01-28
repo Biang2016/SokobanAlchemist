@@ -75,6 +75,13 @@ public static class ClientUtils
         return new GridPos3D(Mathf.RoundToInt(vector3.x), Mathf.RoundToInt(vector3.y), Mathf.RoundToInt(vector3.z));
     }
 
+    public static bool InsideModule(this GridPos3D localGP)
+    {
+        return localGP.x >= 0 && localGP.x < WorldModule.MODULE_SIZE
+                              && localGP.y >= 0 && localGP.y < WorldModule.MODULE_SIZE
+                              && localGP.z >= 0 && localGP.z < WorldModule.MODULE_SIZE;
+    }
+
     public static int AStarHeuristicsDistance(GridPos3D start, GridPos3D end)
     {
         GridPos3D diff = start - end;

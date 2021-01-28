@@ -63,7 +63,7 @@ public class ActorBattleHelper : ActorMonoHelper
     public void ShowHealNumFX(int addHealth)
     {
         if (addHealth == 0) return;
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, addHealth, BattleTipType.AddHp, 0, 0));
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, addHealth, BattleTipType.Heal, 0, 0));
         OnHealed?.Invoke(addHealth);
 
         FX healFX = FXManager.Instance.PlayFX(Actor.HealFX, Actor.transform.position);

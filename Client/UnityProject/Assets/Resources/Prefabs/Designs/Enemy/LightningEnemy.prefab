@@ -68,20 +68,21 @@ MonoBehaviour:
   GUID_Mod_FixedFrameRate: 0
   RawEntityStatPropSet:
     HealthDurability:
-      _value: 2
+      AutoChange: 1
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3000
+      _value: 7
       _minValue: 0
-      _maxValue: 2
+      _maxValue: 7
     MaxHealthDurability:
-      BaseValue: 2
+      BaseValue: 7
       ModifiedValue: 0
       MinValue: 1
       MaxValue: 10000
-    HealthDurabilityRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 10000
     DropFromAirSurviveProbabilityPercent:
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
@@ -110,16 +111,17 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 200
-    FrozenRecovery:
-      BaseValue: 100
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 1000
     FrozenValue:
+      AutoChange: -30
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 300
       _value: 0
       _minValue: 0
       _maxValue: 1000
     FrozenLevel:
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 5
@@ -153,21 +155,17 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 200
-    FiringRecovery:
-      BaseValue: 100
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 1000
-    FiringGrowthPercent:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 1000
     FiringValue:
+      AutoChange: -30
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 300
       _value: 0
       _minValue: 0
       _maxValue: 1000
     FiringLevel:
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 4
@@ -221,6 +219,9 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 0
     ActionPoint:
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
@@ -305,6 +306,9 @@ MonoBehaviour:
     - id: 0
   EntityStatPropSet:
     HealthDurability:
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
@@ -313,12 +317,10 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
-    HealthDurabilityRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
     DropFromAirSurviveProbabilityPercent:
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
@@ -347,16 +349,17 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
-    FrozenRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
     FrozenValue:
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
     FrozenLevel:
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
@@ -372,21 +375,17 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
-    FiringRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringGrowthPercent:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
     FiringValue:
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
     FiringLevel:
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
@@ -422,6 +421,9 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 0
     ActionPoint:
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0

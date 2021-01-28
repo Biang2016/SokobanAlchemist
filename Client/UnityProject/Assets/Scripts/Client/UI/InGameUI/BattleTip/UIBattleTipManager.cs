@@ -133,7 +133,7 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
 
                 break;
             }
-            case BattleTipType.AddHp:
+            case BattleTipType.Heal:
             {
                 switch (info.ReceiverCamp)
                 {

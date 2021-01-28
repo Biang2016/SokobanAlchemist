@@ -257,6 +257,7 @@ public class EntityBuffHelper : EntityMonoHelper
         {
             newBuff.OnAdded(Entity);
             PlayBuffFX(newBuff);
+            if (!Entity.IsNotNullAndAlive()) return true;
             if (newBuff.Duration > 0 || newBuff.IsPermanent)
             {
                 BuffDict.Add(newBuff.GUID, newBuff);

@@ -27,7 +27,7 @@ public class EntityBuff_EntityPropertyPlusModifier : EntityBuff
     public override void OnAdded(Entity entity)
     {
         base.OnAdded(entity);
-        if (entity.IsRecycled) return;
+        if (!entity.IsNotNullAndAlive()) return;
         if (entity.EntityStatPropSet.PropertyDict.TryGetValue(EntityPropertyType, out EntityProperty property))
         {
             property.AddModifier(PlusModifier);
@@ -37,7 +37,7 @@ public class EntityBuff_EntityPropertyPlusModifier : EntityBuff
     public override void OnFixedUpdate(Entity entity, float passedTime, float remainTime)
     {
         base.OnFixedUpdate(entity, passedTime, remainTime);
-        if (entity.IsRecycled) return;
+        if (!entity.IsNotNullAndAlive()) return;
         if (!IsPermanent && LinearDecayInDuration)
         {
             PlusModifier.Delta = Mathf.RoundToInt(Delta * remainTime / Duration);
@@ -47,7 +47,7 @@ public class EntityBuff_EntityPropertyPlusModifier : EntityBuff
     public override void OnRemoved(Entity entity)
     {
         base.OnRemoved(entity);
-        if (entity.IsRecycled) return;
+        if (!entity.IsNotNullAndAlive()) return;
         if (entity.EntityStatPropSet.PropertyDict.TryGetValue(EntityPropertyType, out EntityProperty property))
         {
             if (!property.RemoveModifier(PlusModifier))

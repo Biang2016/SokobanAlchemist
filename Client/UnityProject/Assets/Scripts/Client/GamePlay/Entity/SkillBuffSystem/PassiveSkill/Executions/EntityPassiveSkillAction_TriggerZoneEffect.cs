@@ -35,7 +35,7 @@ public class EntityPassiveSkillAction_TriggerZoneEffect : EntityPassiveSkillActi
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {
             Entity target = collider.GetComponentInParent<Entity>();
-            if (target != null)
+            if (target.IsNotNullAndAlive())
             {
                 if (!Entity.EntityTriggerZoneHelper.ActorStayTimeDict.ContainsKey(target.GUID))
                 {
@@ -54,7 +54,7 @@ public class EntityPassiveSkillAction_TriggerZoneEffect : EntityPassiveSkillActi
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {
             Entity target = collider.GetComponentInParent<Entity>();
-            if (target != null)
+            if (target.IsNotNullAndAlive())
             {
                 if (Entity.EntityTriggerZoneHelper.ActorStayTimeDict.TryGetValue(target.GUID, out float duration))
                 {
@@ -81,7 +81,7 @@ public class EntityPassiveSkillAction_TriggerZoneEffect : EntityPassiveSkillActi
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {
             Entity target = collider.GetComponentInParent<Entity>();
-            if (target != null)
+            if (target.IsNotNullAndAlive())
             {
                 if (Entity.EntityTriggerZoneHelper.ActorStayTimeDict.ContainsKey(target.GUID))
                 {

@@ -51,6 +51,10 @@ public enum EntityPropertyType
     HealthDurabilityRecovery = 1,
 
     [EntityProperty]
+    [LabelText("血量耐久回复时间间隔")]
+    HealthDurabilityRecoveryTimeInterval = 2,
+
+    [EntityProperty]
     [LabelText("燃烧伤害抵消")]
     FiringDamageDefense = 10,
 
