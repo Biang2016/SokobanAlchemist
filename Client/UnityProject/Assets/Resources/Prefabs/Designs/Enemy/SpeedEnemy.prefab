@@ -248,7 +248,7 @@ MonoBehaviour:
     SkillsPropertyCollections:
     - skillAlias: "\u666E\u901A\u653B\u51FB"
       Damage:
-        BaseValue: 1
+        BaseValue: 0
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 100
@@ -517,7 +517,20 @@ MonoBehaviour:
         GridWarningColorBorderDim: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 0.4627451}
         CastFX: None
         CastFXScale: 0
-        RawEntityBuffs: []
+        RawEntityBuffs:
+        - id: 1
+    00000001:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 16993
+        EntityBuffAttribute: 37
+        IsPermanent: 0
+        Duration: 0
+        BuffFX: None
+        BuffFXScale: 1
+        EntityStatType: 0
+        Delta: -1
+        Percent: 0
 --- !u!114 &8572106225310636948
 MonoBehaviour:
   m_ObjectHideFlags: 0

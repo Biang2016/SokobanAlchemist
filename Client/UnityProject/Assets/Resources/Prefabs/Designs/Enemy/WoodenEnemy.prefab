@@ -248,7 +248,7 @@ MonoBehaviour:
     SkillsPropertyCollections:
     - skillAlias: "\u666E\u901A\u653B\u51FB"
       Damage:
-        BaseValue: 1
+        BaseValue: 0
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 100
@@ -494,7 +494,7 @@ MonoBehaviour:
     00000000:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
-        TargetCamp: 7
+        TargetCamp: 6
         EntitySkillIndex: 0
         SkillAlias: "\u666E\u901A\u653B\u51FB"
         WingUpCanMove: 0
@@ -517,7 +517,20 @@ MonoBehaviour:
         GridWarningColorBorderDim: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 0.69411767}
         CastFX: Flash_Leaves
         CastFXScale: 1
-        RawEntityBuffs: []
+        RawEntityBuffs:
+        - id: 1
+    00000001:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 17004
+        EntityBuffAttribute: 34
+        IsPermanent: 0
+        Duration: 0
+        BuffFX: None
+        BuffFXScale: 1
+        EntityStatType: 0
+        Delta: -1
+        Percent: 0
 --- !u!114 &7861377238865694945
 MonoBehaviour:
   m_ObjectHideFlags: 0
