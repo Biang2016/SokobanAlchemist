@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.Messenger;
 using BiangLibrary.ObjectPool;
@@ -675,55 +676,64 @@ public class World : PoolObject
         }
 
         HashSet<Box> mergedBoxes = new HashSet<Box>();
-        List<(GridPos3D, ushort, HashSet<Box>)> mergeTaskList = new List<(GridPos3D, ushort, HashSet<Box>)>();
+        List<(Box, ushort, HashSet<Box>, GridPosR.Orientation)> mergeTaskList = new List<(Box, ushort, HashSet<Box>, GridPosR.Orientation)>();
         foreach (Box box_moveable in boxes_moveable)
         {
             if (mergedBoxes.Contains(box_moveable)) continue;
-            HashSet<Box> matchedBox = CheckMatchThree(box_moveable, mergedBoxes);
-            if (matchedBox != null && matchedBox.Count > 0)
+            HashSet<Box> matchedBoxes = CheckMatchThree(box_moveable, mergedBoxes, out GridPosR.Orientation newBoxOrientation);
+            if (matchedBoxes != null && matchedBoxes.Count > 0)
             {
-                ushort mergeBoxTypeIndex = box_moveable.GetMergeBoxTypeIndex(matchedBox.Count);
-                if (mergeBoxTypeIndex != 0)
+                ushort newBoxTypeIndex = box_moveable.GetMergeBoxTypeIndex(matchedBoxes.Count);
+                if (newBoxTypeIndex != 0)
                 {
-                    mergeTaskList.Add((box_moveable.WorldGP, box_moveable.GetMergeBoxTypeIndex(matchedBox.Count), matchedBox));
+                    mergeTaskList.Add((box_moveable, newBoxTypeIndex, matchedBoxes, newBoxOrientation));
                 }
             }
         }
 
-        foreach ((GridPos3D, ushort, HashSet<Box>) task in mergeTaskList)
+        foreach ((Box, ushort, HashSet<Box>, GridPosR.Orientation) task in mergeTaskList)
         {
-            GridPos3D mergeTargetBoxGP = task.Item1;
-            ushort mergeTargetBoxTypeIndex = task.Item2;
-            HashSet<Box> mergedSrcBoxes = task.Item3;
-            foreach (Box mergedSrcBox in mergedSrcBoxes)
+            Box oldCoreBox = task.Item1;
+            ushort newBoxTypeIndex = task.Item2;
+            HashSet<Box> oldBoxes = task.Item3;
+            GridPosR.Orientation newBoxOrientation = task.Item4;
+            GridPos3D mergeTargetWorldGP = oldCoreBox.WorldGP;
+
+            List<GridPos3D> allPossibleMergeTargetWorldGP = new List<GridPos3D>();
+            List<GridPos3D> newBoxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(newBoxOrientation, ConfigManager.GetBoxOccupationData(newBoxTypeIndex).BoxIndicatorGPs);
+            foreach (GridPos3D offset in newBoxOccupation_rotated)
             {
-                if (mergedSrcBox.WorldGP == mergeTargetBoxGP)
-                {
-                    mergedSrcBox.MergeBox(mergeTargetBoxGP, delegate
-                    {
-                        WorldModule module = GetModuleByGridPosition(mergeTargetBoxGP);
-                        if (module != null)
-                        {
-                            Box box = module.GenerateBox(mergeTargetBoxTypeIndex, mergeTargetBoxGP, GridPosR.Orientation.Up);
-                            if (box != null)
-                            {
-                                FXManager.Instance.PlayFX(box.MergedFX, box.transform.position, box.MergedFXScale);
-                            }
-                        }
-                    });
-                }
-                else
-                {
-                    mergedSrcBox.MergeBox(mergeTargetBoxGP);
-                }
+                allPossibleMergeTargetWorldGP.Add(offset + mergeTargetWorldGP);
             }
+
+            foreach (Box oldBox in oldBoxes)
+            {
+                if (oldBox == oldCoreBox) continue;
+                GridPos3D nearestGP = GridPos3D.GetNearestGPFromList(oldBox.WorldGP, allPossibleMergeTargetWorldGP);
+                oldBox.MergeBox(nearestGP);
+            }
+
+            // 保证目标点的箱子最后合成，从而生成新箱子的时候不会与任何一个老箱子冲突
+            oldCoreBox.MergeBox(mergeTargetWorldGP, delegate
+            {
+                WorldModule module = GetModuleByGridPosition(mergeTargetWorldGP);
+                if (module != null)
+                {
+                    Box box = module.GenerateBox(newBoxTypeIndex, mergeTargetWorldGP, newBoxOrientation);
+                    if (box != null)
+                    {
+                        FXManager.Instance.PlayFX(box.MergedFX, box.transform.position, box.MergedFXScale);
+                    }
+                }
+            });
         }
 
         return true;
     }
 
-    private HashSet<Box> CheckMatchThree(Box srcBox, HashSet<Box> mergedBoxes)
+    private HashSet<Box> CheckMatchThree(Box srcBox, HashSet<Box> mergedBoxes, out GridPosR.Orientation newBoxOrientation)
     {
+        newBoxOrientation = GridPosR.Orientation.Up;
         if (!srcBox.IsBoxShapeCuboid()) return null;
 
         BoundsInt boundsInt = srcBox.BoxBoundsInt;
@@ -791,6 +801,7 @@ public class World : PoolObject
         int matchesOnZAxis = 1 + z_connect_positive + z_connect_negative;
         bool matchThreeOnZAxis = matchesOnZAxis >= 3;
 
+        List<GridPosR.Orientation> validOrientations = new List<GridPosR.Orientation>();
         if (!matchThreeOnXAxis && !matchThreeOnZAxis) return null;
 
         // 将单x轴上的消除数量限制在5个以内
@@ -831,11 +842,21 @@ public class World : PoolObject
             {
                 x_connect_positive = 1;
                 x_connect_negative = 1;
+                validOrientations.Add(GridPosR.Orientation.Left);
+                validOrientations.Add(GridPosR.Orientation.Right);
             }
             else
             {
-                if (x_connect_positive == 0) x_connect_negative = 2;
-                else if (x_connect_negative == 0) x_connect_positive = 2;
+                if (x_connect_positive == 0)
+                {
+                    x_connect_negative = 2;
+                    validOrientations.Add(GridPosR.Orientation.Left);
+                }
+                else if (x_connect_negative == 0)
+                {
+                    x_connect_positive = 2;
+                    validOrientations.Add(GridPosR.Orientation.Right);
+                }
             }
 
             // 将单z轴上的消除数量限制为2个
@@ -843,13 +864,58 @@ public class World : PoolObject
             {
                 z_connect_positive = 1;
                 z_connect_negative = 1;
+                validOrientations.Add(GridPosR.Orientation.Up);
+                validOrientations.Add(GridPosR.Orientation.Down);
             }
             else
             {
-                if (z_connect_positive == 0) z_connect_negative = 2;
-                else if (z_connect_negative == 0) z_connect_positive = 2;
+                if (z_connect_positive == 0)
+                {
+                    z_connect_negative = 2;
+                    validOrientations.Add(GridPosR.Orientation.Down);
+                }
+                else if (z_connect_negative == 0)
+                {
+                    z_connect_positive = 2;
+                    validOrientations.Add(GridPosR.Orientation.Up);
+                }
             }
         }
+
+        if (matchThreeOnXAxis && !matchThreeOnZAxis)
+        {
+            if (x_connect_positive > x_connect_negative)
+            {
+                validOrientations.Add(GridPosR.Orientation.Right);
+            }
+            else if (x_connect_positive < x_connect_negative)
+            {
+                validOrientations.Add(GridPosR.Orientation.Left);
+            }
+            else
+            {
+                validOrientations.Add(GridPosR.Orientation.Right);
+                validOrientations.Add(GridPosR.Orientation.Left);
+            }
+        }
+        else if (!matchThreeOnXAxis && matchThreeOnZAxis)
+        {
+            if (z_connect_positive > z_connect_negative)
+            {
+                validOrientations.Add(GridPosR.Orientation.Up);
+            }
+            else if (z_connect_positive < z_connect_negative)
+            {
+                validOrientations.Add(GridPosR.Orientation.Down);
+            }
+            else
+            {
+                validOrientations.Add(GridPosR.Orientation.Up);
+                validOrientations.Add(GridPosR.Orientation.Down);
+            }
+        }
+
+        newBoxOrientation = CommonUtils.GetRandomFromList(validOrientations);
 
         HashSet<Box> matchedBoxes = new HashSet<Box>(); // 这里指本次合成的箱子
         if (matchThreeOnXAxis)

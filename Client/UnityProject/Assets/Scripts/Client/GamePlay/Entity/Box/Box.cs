@@ -292,8 +292,8 @@ public partial class Box : Entity
     // 旋转过的局部坐标
     public List<GridPos3D> GetBoxOccupationGPs_Rotated()
     {
-        List<GridPos3D> boxOccupation_transformed = GridPos3D.TransformOccupiedPositions_XZ(BoxOrientation, ConfigManager.GetBoxOccupationData(BoxTypeIndex).BoxIndicatorGPs);
-        return boxOccupation_transformed;
+        List<GridPos3D> boxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(BoxOrientation, ConfigManager.GetBoxOccupationData(BoxTypeIndex).BoxIndicatorGPs);
+        return boxOccupation_rotated;
     }
 
     public bool IsBoxShapeCuboid()
