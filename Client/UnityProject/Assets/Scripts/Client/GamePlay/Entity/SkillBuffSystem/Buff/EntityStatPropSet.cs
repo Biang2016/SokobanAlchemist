@@ -152,7 +152,7 @@ public class EntityStatPropSet
     public EntityStat ActionPoint = new EntityStat(EntityStatType.ActionPoint);
 
     [BoxGroup("操作")]
-    [LabelText("@\"行动力恢复速度\t\"+ActionPointRecovery")]
+    [LabelText("@\"行动力恢复速度/100\t\"+ActionPointRecovery")]
     public EntityProperty ActionPointRecovery = new EntityProperty(EntityPropertyType.ActionPointRecovery);
 
     [BoxGroup("操作")]
@@ -428,10 +428,10 @@ public class EntityStatPropSet
         PropertyDict.Add(EntityPropertyType.MaxActionPoint, MaxActionPoint);
 
         ActionPoint.MaxValue = MaxActionPoint.GetModifiedValue;
-        ActionPoint.AutoChange = ActionPointRecovery.GetModifiedValue;
+        ActionPoint.AutoChange = ActionPointRecovery.GetModifiedValue / 100f;
         StatDict.Add(EntityStatType.ActionPoint, ActionPoint);
 
-        ActionPointRecovery.OnValueChanged += (before, after) => { ActionPoint.AutoChange = after; };
+        ActionPointRecovery.OnValueChanged += (before, after) => { ActionPoint.AutoChange = after / 100f; };
         PropertyDict.Add(EntityPropertyType.ActionPointRecovery, ActionPointRecovery);
 
         PropertyDict.Add(EntityPropertyType.KickConsumeActionPoint, KickConsumeActionPoint);

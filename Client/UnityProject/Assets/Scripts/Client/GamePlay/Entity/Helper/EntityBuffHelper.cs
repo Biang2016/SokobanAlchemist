@@ -251,6 +251,7 @@ public class EntityBuffHelper : EntityMonoHelper
 
     public bool AddBuff(EntityBuff newBuff)
     {
+        if (!Entity.IsNotNullAndAlive()) return false;
         CalculateDefense(newBuff);
         bool suc = BuffRelationshipProcess(newBuff) && CheckBuffPropertyTypeValid((newBuff));
         if (suc)

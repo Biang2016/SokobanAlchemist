@@ -292,6 +292,12 @@ public class DebugPanel : BaseUIPanel
         BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value += 100;
     }
 
+    [DebugButton("Player/TakeDamage*10", KeyCode.N)]
+    public void TakeDamage10()
+    {
+        BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value -= 10;
+    }
+
     [DebugButton("Player/AddMaxAction*50", KeyCode.J)]
     public void AddMaxAction50()
     {

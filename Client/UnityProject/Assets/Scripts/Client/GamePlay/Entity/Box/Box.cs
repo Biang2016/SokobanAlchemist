@@ -116,6 +116,7 @@ public partial class Box : Entity
         }
 
         EntityStatPropSet.OnRecycled();
+        MarkedAsMergedSourceBox = false;
 
         UnInitPassiveSkills();
         base.OnRecycled();
@@ -317,6 +318,7 @@ public partial class Box : Entity
     private GridPos3D worldGP_WhenKicked = GridPos3D.Zero;
 
     internal bool IsInGridSystem;
+    internal bool MarkedAsMergedSourceBox;
 
     [HideInEditorMode]
     public WorldModule WorldModule;
@@ -1046,6 +1048,7 @@ public partial class Box : Entity
 
     public void MergeBox(GridPos3D mergeToWorldGP, UnityAction callBack = null)
     {
+        MarkedAsMergedSourceBox = true;
         BoxColliderHelper.OnMerge();
         BoxIndicatorHelper.IsOn = false;
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)

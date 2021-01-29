@@ -647,7 +647,6 @@ public class Actor : Entity
     {
         if (EntityStatPropSet.ActionPoint.Value > EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue)
         {
-            EntityStatPropSet.ActionPoint.Value -= EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue;
             if (IsFrozen)
             {
                 EntityStatPropSet.FrozenValue.Value -= 200;
@@ -709,6 +708,8 @@ public class Actor : Entity
                 {
                     if (offset == boxIndicatorGP_behind - box.WorldGP) return;
                 }
+
+                EntityStatPropSet.ActionPoint.Value -= EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue; // 消耗行动力
 
                 GridPos3D boxWorldGP_before = box.WorldGP;
                 GridPos3D boxWorldGP_after = LastWorldGP - boxIndicatorGP + box.WorldGP;

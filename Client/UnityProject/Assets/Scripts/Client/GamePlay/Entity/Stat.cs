@@ -147,7 +147,7 @@ public abstract class Stat
 
     [SerializeField]
     [LabelText("自动变化量")]
-    public int AutoChange = 0;
+    public float AutoChange = 0;
 
     [SerializeField]
     [LabelText("自动变化率%")]

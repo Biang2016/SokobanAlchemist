@@ -1085,7 +1085,7 @@ public class World : PoolObject
 
     public void CheckDropSelf(Box box)
     {
-        if (box && box.Droppable && box.State != Box.States.DroppingFromAir)
+        if (box && box.Droppable && box.State != Box.States.DroppingFromAir && !box.MarkedAsMergedSourceBox)
         {
             bool spaceAvailable = true; // logically nothing beneath
             bool spaceTempAvailable = true; // there is not any entity moving/kicking beneath

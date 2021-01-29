@@ -8,6 +8,10 @@ using UnityEngine;
 [Serializable]
 public class EntityPassiveSkillAction_RadiusAddEntitiesBuff : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction
 {
+    public override void OnRecycled()
+    {
+    }
+
     protected override string Description => "给范围内Entity施加Buff";
 
     [LabelText("判定半径")]
@@ -26,17 +30,18 @@ public class EntityPassiveSkillAction_RadiusAddEntitiesBuff : EntityPassiveSkill
 
     public void Execute()
     {
+        HashSet<uint> entityGUIDSet = new HashSet<uint>();
         if (Entity is Box box)
         {
             foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
             {
                 Vector3 boxIndicatorPos = Entity.transform.position + offset;
-                BattleManager.Instance.AddBuffToEntities(boxIndicatorPos, box.LastTouchActor.IsNotNullAndAlive() ? box.LastTouchActor.Camp : box.Camp, AddBuffRadius, ExactGPDistance, EffectiveOnRelativeCamp, RawEntityBuffs);
+                BattleManager.Instance.AddBuffToEntities(boxIndicatorPos, box.LastTouchActor.IsNotNullAndAlive() ? box.LastTouchActor.Camp : box.Camp, AddBuffRadius, ExactGPDistance, EffectiveOnRelativeCamp, RawEntityBuffs, entityGUIDSet);
             }
         }
         else if (Entity is Actor actor)
         {
-            BattleManager.Instance.AddBuffToEntities(actor.transform.position, actor.Camp, AddBuffRadius, ExactGPDistance, EffectiveOnRelativeCamp, RawEntityBuffs);
+            BattleManager.Instance.AddBuffToEntities(actor.transform.position, actor.Camp, AddBuffRadius, ExactGPDistance, EffectiveOnRelativeCamp, RawEntityBuffs, entityGUIDSet);
         }
     }
 

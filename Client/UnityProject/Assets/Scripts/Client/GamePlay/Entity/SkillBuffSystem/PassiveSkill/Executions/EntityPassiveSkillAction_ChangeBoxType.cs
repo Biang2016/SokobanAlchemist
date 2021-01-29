@@ -5,6 +5,10 @@ using Sirenix.OdinInspector;
 [Serializable]
 public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, EntityPassiveSkillAction.IPureAction
 {
+    public override void OnRecycled()
+    {
+    }
+
     protected override string Description => "更改箱子类型(仅箱子使用)";
 
     [BoxName]

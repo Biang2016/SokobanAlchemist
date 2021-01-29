@@ -4,6 +4,10 @@ using Sirenix.OdinInspector;
 [Serializable]
 public class BoxPassiveSkillAction_DoorStateChange : BoxPassiveSkillAction, EntityPassiveSkillAction.IPureAction
 {
+    public override void OnRecycled()
+    {
+    }
+
     protected override string Description => "更改门开关状态";
 
     [BoxName]

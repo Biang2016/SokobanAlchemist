@@ -2,6 +2,10 @@
 [Serializable]
 public class EntityPassiveSkillAction_DestroySelf : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction
 {
+    public override void OnRecycled()
+    {
+    }
+
     protected override string Description => "毁灭自己";
 
     public void Execute()

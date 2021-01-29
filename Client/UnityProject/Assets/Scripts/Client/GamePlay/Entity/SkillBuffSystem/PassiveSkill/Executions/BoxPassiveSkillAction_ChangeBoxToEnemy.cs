@@ -5,6 +5,10 @@ using Sirenix.OdinInspector;
 [Serializable]
 public class BoxPassiveSkillAction_ChangeBoxToEnemy : BoxPassiveSkillAction, EntityPassiveSkillAction.IPureAction
 {
+    public override void OnRecycled()
+    {
+    }
+
     protected override string Description => "更改箱子为敌人";
 
     [LabelText("敌人类型")]

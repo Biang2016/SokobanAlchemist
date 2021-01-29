@@ -22,7 +22,6 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         OnDroppingFromAirCollisionEnter = 1 << 6,
         OnEntityTriggerZone = 1 << 7,
 
-
         OnBeforeDestroyEntity = 1 << 10,
         OnDestroyEntity = 1 << 11,
         OnLevelEvent = 1 << 12,
@@ -403,7 +402,13 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     private void InitBoxPassiveSkillActions()
     {
+        foreach (EntityPassiveSkillAction epsa in EntityPassiveSkillActions) // 放在Init里清空，避免在UnInit里出现Entity死亡而modify collection的情况
+        {
+            epsa.OnRecycled();
+        }
+
         EntityPassiveSkillActions.Clear();
+
         foreach (EntityPassiveSkillAction rawAction in RawEntityPassiveSkillActions)
         {
             EntityPassiveSkillActions.Add(rawAction.Clone());

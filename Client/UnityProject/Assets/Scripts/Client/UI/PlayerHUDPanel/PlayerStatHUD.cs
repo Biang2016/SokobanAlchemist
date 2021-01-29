@@ -61,7 +61,10 @@ public class PlayerStatHUD : MonoBehaviour
 
     private void OnActionChangeNotice(int before, int after)
     {
-        ActionPointSliderAnim.SetTrigger("JumpYellow");
+        if ((after - before) > 1)
+        {
+            ActionPointSliderAnim.SetTrigger("JumpYellow");
+        }
     }
 
     void Update()

@@ -17,13 +17,10 @@ public class EntityTriggerZoneHelper : EntityMonoHelper
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
-        ActorStayTimeDict.Clear();
     }
 
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
     }
-
-    public Dictionary<uint, float> ActorStayTimeDict = new Dictionary<uint, float>();
 }

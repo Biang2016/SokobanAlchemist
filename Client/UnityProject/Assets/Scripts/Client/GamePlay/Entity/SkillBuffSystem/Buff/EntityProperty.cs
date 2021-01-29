@@ -46,13 +46,13 @@ public enum EntityPropertyType
     [LabelText("血量耐久上限")]
     MaxHealthDurability = 0,
 
-    [EntityProperty]
-    [LabelText("血量耐久回复速度")]
-    HealthDurabilityRecovery = 1,
+    //[EntityProperty]
+    //[LabelText("血量耐久回复速度")]
+    //HealthDurabilityRecovery = 1,
 
-    [EntityProperty]
-    [LabelText("血量耐久回复时间间隔")]
-    HealthDurabilityRecoveryTimeInterval = 2,
+    //[EntityProperty]
+    //[LabelText("血量耐久回复时间间隔")]
+    //HealthDurabilityRecoveryTimeInterval = 2,
 
     [EntityProperty]
     [LabelText("燃烧伤害抵消")]
@@ -106,17 +106,17 @@ public enum EntityPropertyType
     [LabelText("燃烧抗性")]
     FiringResistance = 101,
 
-    [EntityProperty]
-    [LabelText("冰冻恢复率")]
-    FrozenRecovery = 200,
+    //[EntityProperty]
+    //[LabelText("冰冻恢复率")]
+    //FrozenRecovery = 200,
 
-    [EntityProperty]
-    [LabelText("燃烧恢复率")]
-    FiringRecovery = 201,
+    //[EntityProperty]
+    //[LabelText("燃烧恢复率")]
+    ////FiringRecovery = 201,
 
-    [EntityProperty]
-    [LabelText("燃烧增长率")]
-    FiringGrowthPercent = 301,
+    //[EntityProperty]
+    //[LabelText("燃烧增长率")]
+    //FiringGrowthPercent = 301,
 
     [EntityProperty]
     [LabelText("燃烧蔓延率")]

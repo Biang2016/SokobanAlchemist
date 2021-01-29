@@ -8,7 +8,11 @@ using UnityEngine.Serialization;
 [Serializable]
 public class EntityPassiveSkillAction_AddEntityBuff : EntityPassiveSkillAction, EntityPassiveSkillAction.ICollideAction, EntityPassiveSkillAction.IActorOperationAction
 {
-    protected override string Description => "给单个Entity施加Buff";
+    public override void OnRecycled()
+    {
+    }
+
+    protected override string Description => "碰撞时给撞击者Entity施加Buff，或被角色交互时给该角色Entity施加buff";
 
     [LabelText("Buff列表")]
     [SerializeReference]

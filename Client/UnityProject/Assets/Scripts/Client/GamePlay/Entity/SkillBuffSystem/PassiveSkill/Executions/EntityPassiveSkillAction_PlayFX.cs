@@ -6,12 +6,16 @@ using UnityEngine;
 [Serializable]
 public class EntityPassiveSkillAction_PlayFX : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction
 {
+    public override void OnRecycled()
+    {
+    }
+
     protected override string Description => "播放特效";
 
     [ValueDropdown("GetAllFXTypeNames")]
     public string FXTypeName;
 
-    public int FXScale = 1;
+    public float FXScale = 1;
 
     public void Execute()
     {

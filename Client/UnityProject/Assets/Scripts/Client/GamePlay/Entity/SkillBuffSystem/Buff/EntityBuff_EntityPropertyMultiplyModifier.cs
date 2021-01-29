@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class EntityBuff_EntityPropertyMultiplyModifier : EntityBuff
 {
-    protected override string Description => "属性乘法修正Buff, 必须是延时buff, buff结束后消除该修正值";
+    protected override string Description => "属性乘法修正Buff, buff结束后消除该修正值";
 
     public EntityBuff_EntityPropertyMultiplyModifier()
     {
