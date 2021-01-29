@@ -182,6 +182,10 @@ public partial class Box : Entity
     /// </summary>
     internal float Dynamic_Drag = 0.5f;
 
+    [FoldoutGroup("合成")]
+    [LabelText("合成产物是否多格")]
+    public bool MergeBoxFullOccupation = false;
+
     [BoxName]
     [FoldoutGroup("合成")]
     [LabelText("三合一")]

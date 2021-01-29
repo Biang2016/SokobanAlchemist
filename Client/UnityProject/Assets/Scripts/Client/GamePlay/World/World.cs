@@ -680,7 +680,7 @@ public class World : PoolObject
         foreach (Box box_moveable in boxes_moveable)
         {
             if (mergedBoxes.Contains(box_moveable)) continue;
-            HashSet<Box> matchedBoxes = CheckMatchThree(box_moveable, mergedBoxes, out GridPosR.Orientation newBoxOrientation);
+            HashSet<Box> matchedBoxes = CheckMatchThree(box_moveable, direction, mergedBoxes, !box_moveable.MergeBoxFullOccupation, out GridPosR.Orientation newBoxOrientation);
             if (matchedBoxes != null && matchedBoxes.Count > 0)
             {
                 ushort newBoxTypeIndex = box_moveable.GetMergeBoxTypeIndex(matchedBoxes.Count);
@@ -731,7 +731,7 @@ public class World : PoolObject
         return true;
     }
 
-    private HashSet<Box> CheckMatchThree(Box srcBox, HashSet<Box> mergedBoxes, out GridPosR.Orientation newBoxOrientation)
+    private HashSet<Box> CheckMatchThree(Box srcBox, GridPos3D srcBoxLastMoveDir, HashSet<Box> mergedBoxes, bool considerLastBoxInsertDirection, out GridPosR.Orientation newBoxOrientation)
     {
         newBoxOrientation = GridPosR.Orientation.Up;
         if (!srcBox.IsBoxShapeCuboid()) return null;
@@ -803,6 +803,7 @@ public class World : PoolObject
 
         List<GridPosR.Orientation> validOrientations = new List<GridPosR.Orientation>();
         if (!matchThreeOnXAxis && !matchThreeOnZAxis) return null;
+        bool lastBoxInsertIntoCenter = false;
 
         // 将单x轴上的消除数量限制在5个以内
         if (matchesOnXAxis > 5)
@@ -838,12 +839,10 @@ public class World : PoolObject
         if (matchThreeOnXAxis && matchThreeOnZAxis)
         {
             // 将单x轴上的消除数量限制为2个
-            if (x_connect_positive == 2 && x_connect_negative == 2)
+            if (x_connect_positive >= 1 && x_connect_negative >= 1)
             {
                 x_connect_positive = 1;
                 x_connect_negative = 1;
-                validOrientations.Add(GridPosR.Orientation.Left);
-                validOrientations.Add(GridPosR.Orientation.Right);
             }
             else
             {
@@ -860,12 +859,10 @@ public class World : PoolObject
             }
 
             // 将单z轴上的消除数量限制为2个
-            if (z_connect_positive == 2 && z_connect_negative == 2)
+            if (z_connect_positive >= 1 && z_connect_negative >= 1)
             {
                 z_connect_positive = 1;
                 z_connect_negative = 1;
-                validOrientations.Add(GridPosR.Orientation.Up);
-                validOrientations.Add(GridPosR.Orientation.Down);
             }
             else
             {
@@ -882,36 +879,51 @@ public class World : PoolObject
             }
         }
 
-        if (matchThreeOnXAxis && !matchThreeOnZAxis)
+        if ((x_connect_negative > 0 && x_connect_positive > 0) || (z_connect_negative > 0 && z_connect_positive > 0))
         {
-            if (x_connect_positive > x_connect_negative)
-            {
-                validOrientations.Add(GridPosR.Orientation.Right);
-            }
-            else if (x_connect_positive < x_connect_negative)
-            {
-                validOrientations.Add(GridPosR.Orientation.Left);
-            }
-            else
-            {
-                validOrientations.Add(GridPosR.Orientation.Right);
-                validOrientations.Add(GridPosR.Orientation.Left);
-            }
+            lastBoxInsertIntoCenter = true;
         }
-        else if (!matchThreeOnXAxis && matchThreeOnZAxis)
+
+        if (considerLastBoxInsertDirection && lastBoxInsertIntoCenter)
         {
-            if (z_connect_positive > z_connect_negative)
+            if (srcBoxLastMoveDir.x == 1) validOrientations.Add(GridPosR.Orientation.Right);
+            if (srcBoxLastMoveDir.x == -1) validOrientations.Add(GridPosR.Orientation.Left);
+            if (srcBoxLastMoveDir.z == 1) validOrientations.Add(GridPosR.Orientation.Up);
+            if (srcBoxLastMoveDir.z == -1) validOrientations.Add(GridPosR.Orientation.Down);
+        }
+        else
+        {
+            if (matchThreeOnXAxis && !matchThreeOnZAxis)
             {
-                validOrientations.Add(GridPosR.Orientation.Up);
+                if (x_connect_positive > x_connect_negative)
+                {
+                    validOrientations.Add(GridPosR.Orientation.Right);
+                }
+                else if (x_connect_positive < x_connect_negative)
+                {
+                    validOrientations.Add(GridPosR.Orientation.Left);
+                }
+                else
+                {
+                    validOrientations.Add(GridPosR.Orientation.Right);
+                    validOrientations.Add(GridPosR.Orientation.Left);
+                }
             }
-            else if (z_connect_positive < z_connect_negative)
+            else if (!matchThreeOnXAxis && matchThreeOnZAxis)
             {
-                validOrientations.Add(GridPosR.Orientation.Down);
-            }
-            else
-            {
-                validOrientations.Add(GridPosR.Orientation.Up);
-                validOrientations.Add(GridPosR.Orientation.Down);
+                if (z_connect_positive > z_connect_negative)
+                {
+                    validOrientations.Add(GridPosR.Orientation.Up);
+                }
+                else if (z_connect_positive < z_connect_negative)
+                {
+                    validOrientations.Add(GridPosR.Orientation.Down);
+                }
+                else
+                {
+                    validOrientations.Add(GridPosR.Orientation.Up);
+                    validOrientations.Add(GridPosR.Orientation.Down);
+                }
             }
         }
 
