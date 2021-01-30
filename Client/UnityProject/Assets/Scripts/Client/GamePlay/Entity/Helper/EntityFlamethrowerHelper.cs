@@ -91,7 +91,7 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZone
 
     public void TurnOnFire(FlamethrowerFuelData fuelData)
     {
-        if (FireOn) return; // todo 燃料叠加或替换？
+        //if (FireOn) return; // todo 燃料叠加或替换？
         FXDurationTick = 0;
         FireOn = true;
 
