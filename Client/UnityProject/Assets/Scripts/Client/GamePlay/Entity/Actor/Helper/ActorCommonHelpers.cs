@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class ActorCommonHelpers : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class ActorCommonHelpers : MonoBehaviour
     public EntityBuffHelper EntityBuffHelper;
     public ActorFrozenHelper ActorFrozenHelper;
     public EntityTriggerZoneHelper EntityTriggerZoneHelper;
+    public List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers;
     public Transform LiftBoxPivot;
 
     private void Awake()

@@ -28,6 +28,7 @@ public abstract class Entity : PoolObject
     internal abstract EntityBuffHelper EntityBuffHelper { get; }
     internal abstract EntityFrozenHelper EntityFrozenHelper { get; }
     internal abstract EntityTriggerZoneHelper EntityTriggerZoneHelper { get; }
+    internal abstract List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers { get; }
 
     #endregion
 
@@ -78,6 +79,11 @@ public abstract class Entity : PoolObject
     internal GridPos3D LocalGP;
 
     #region 技能
+
+    [SerializeReference]
+    [FoldoutGroup("作为喷火器燃料")]
+    [LabelText("燃料数据")]
+    public EntityFlamethrowerHelper.FlamethrowerFuelData RawFlamethrowerFuelData; // 干数据，禁修改
 
     #region 被动技能
 

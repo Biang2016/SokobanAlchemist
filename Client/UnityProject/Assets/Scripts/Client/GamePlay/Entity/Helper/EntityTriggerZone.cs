@@ -3,29 +3,22 @@
 public class EntityTriggerZone : MonoBehaviour
 {
     [HideInInspector]
-    public EntityTriggerZoneHelper EntityTriggerZoneHelper;
+    public IEntityTriggerZone IEntityTriggerZone;
+
+    public Collider Collider;
 
     public void OnTriggerEnter(Collider c)
     {
-        foreach (EntityPassiveSkill ps in EntityTriggerZoneHelper.Entity.EntityPassiveSkills)
-        {
-            ps.OnTriggerZoneEnter(c);
-        }
+        IEntityTriggerZone.OnTriggerZoneEnter(c);
     }
 
     public void OnTriggerStay(Collider c)
     {
-        foreach (EntityPassiveSkill ps in EntityTriggerZoneHelper.Entity.EntityPassiveSkills)
-        {
-            ps.OnTriggerZoneStay(c);
-        }
+        IEntityTriggerZone.OnTriggerZoneStay(c);
     }
 
     public void OnTriggerExit(Collider c)
     {
-        foreach (EntityPassiveSkill ps in EntityTriggerZoneHelper.Entity.EntityPassiveSkills)
-        {
-            ps.OnTriggerZoneExit(c);
-        }
+        IEntityTriggerZone.OnTriggerZoneExit(c);
     }
 }

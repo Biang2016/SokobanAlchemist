@@ -28,6 +28,7 @@ public partial class Box : Entity
     internal override EntityBuffHelper EntityBuffHelper => boxBuffHelper;
     internal override EntityFrozenHelper EntityFrozenHelper => BoxFrozenHelper;
     internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => BoxTriggerZoneHelper;
+    internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => entityFlamethrowerHelpers;
 
     [FoldoutGroup("组件")]
     [SerializeField]
@@ -57,6 +58,9 @@ public partial class Box : Entity
     public BoxIconSpriteHelper BoxIconSpriteHelper;
 
     [FoldoutGroup("组件")]
+    public List<EntityFlamethrowerHelper> entityFlamethrowerHelpers;
+
+    [FoldoutGroup("组件")]
     public SmoothMove BoxIconSpriteSmoothMove;
 
     [FoldoutGroup("组件")]
@@ -78,6 +82,10 @@ public partial class Box : Entity
         DoorBoxHelper?.OnHelperUsed();
         BoxSkinHelper?.OnHelperUsed();
         BoxIconSpriteHelper.OnHelperUsed();
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.OnHelperUsed();
+        }
 
         base.OnUsed();
     }
@@ -102,6 +110,11 @@ public partial class Box : Entity
         DoorBoxHelper?.OnHelperRecycled();
         BoxSkinHelper?.OnHelperRecycled();
         BoxIconSpriteHelper?.OnHelperRecycled();
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.OnHelperRecycled();
+        }
+
         transform.DOPause();
         ModelRoot.transform.DOPause();
         ModelRoot.transform.localPosition = Vector3.zero;

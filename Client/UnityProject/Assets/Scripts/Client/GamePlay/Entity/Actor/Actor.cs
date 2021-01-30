@@ -32,6 +32,7 @@ public class Actor : Entity
     internal override EntityBuffHelper EntityBuffHelper => ActorCommonHelpers.EntityBuffHelper;
     internal override EntityFrozenHelper EntityFrozenHelper => ActorFrozenHelper;
     internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => ActorCommonHelpers.EntityTriggerZoneHelper;
+    internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => ActorCommonHelpers.EntityFlamethrowerHelpers;
     internal ActorPushHelper ActorPushHelper => ActorCommonHelpers.ActorPushHelper;
     internal ActorFaceHelper ActorFaceHelper => ActorCommonHelpers.ActorFaceHelper;
     internal ActorSkinHelper ActorSkinHelper => ActorCommonHelpers.ActorSkinHelper;
@@ -297,6 +298,11 @@ public class Actor : Entity
         ActorLaunchArcRendererHelper.OnHelperRecycled();
         ActorBattleHelper.OnHelperRecycled();
         ActorBoxInteractHelper.OnHelperRecycled();
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.OnHelperRecycled();
+        }
+
         UnInitActiveSkills();
         UnInitPassiveSkills();
         actorPassiveSkillTicker = 0;
@@ -319,6 +325,11 @@ public class Actor : Entity
         ActorLaunchArcRendererHelper.OnHelperUsed();
         ActorBattleHelper.OnHelperUsed();
         ActorBoxInteractHelper.OnHelperUsed();
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.OnHelperUsed();
+        }
+
         ActorMoveColliderRoot.SetActive(true);
     }
 
