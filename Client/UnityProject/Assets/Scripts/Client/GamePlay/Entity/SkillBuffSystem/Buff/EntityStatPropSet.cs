@@ -43,6 +43,21 @@ public class EntityStatPropSet
     [LabelText("@\"碰撞伤害\t\"+CollideDamage")]
     public EntityProperty CollideDamage = new EntityProperty(EntityPropertyType.CollideDamage);
 
+    [BoxGroup("碰撞")]
+    [LabelText("@\"X轴碰撞伤害\t\"+CollideDamageX")]
+    public EntityProperty CollideDamageX = new EntityProperty(EntityPropertyType.CollideDamageX);
+
+    [BoxGroup("碰撞")]
+    [LabelText("@\"Z轴碰撞伤害\t\"+CollideDamageZ")]
+    public EntityProperty CollideDamageZ = new EntityProperty(EntityPropertyType.CollideDamageZ);
+
+    public EntityProperty GetCollideDamageByAxis(Box.KickLocalAxis axis)
+    {
+        if (axis == Box.KickLocalAxis.X) return CollideDamageX;
+        if (axis == Box.KickLocalAxis.Z) return CollideDamageZ;
+        else return CollideDamage;
+    }
+
     #endregion
 
     #region 爆炸
@@ -291,6 +306,8 @@ public class EntityStatPropSet
         ActorCollideDamageDefense.Initialize();
         BoxCollideDamageSelf.Initialize();
         CollideDamage.Initialize();
+        CollideDamageX.Initialize();
+        CollideDamageZ.Initialize();
 
         #endregion
 
@@ -359,6 +376,8 @@ public class EntityStatPropSet
         PropertyDict.Add(EntityPropertyType.ActorCollideDamageDefense, ActorCollideDamageDefense);
         PropertyDict.Add(EntityPropertyType.BoxCollideDamageSelf, BoxCollideDamageSelf);
         PropertyDict.Add(EntityPropertyType.CollideDamage, CollideDamage);
+        PropertyDict.Add(EntityPropertyType.CollideDamageX, CollideDamageX);
+        PropertyDict.Add(EntityPropertyType.CollideDamageZ, CollideDamageZ);
 
         #endregion
 
@@ -520,6 +539,8 @@ public class EntityStatPropSet
         ActorCollideDamageDefense.ApplyDataTo(target.ActorCollideDamageDefense);
         BoxCollideDamageSelf.ApplyDataTo(target.BoxCollideDamageSelf);
         CollideDamage.ApplyDataTo(target.CollideDamage);
+        CollideDamageX.ApplyDataTo(target.CollideDamageX);
+        CollideDamageZ.ApplyDataTo(target.CollideDamageZ);
 
         #endregion
 

@@ -186,6 +186,20 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         DynamicColliderDynamicFriction = 0f;
     }
 
+    public void OnKick_ToGrind() // 带有碾压性质的踢出
+    {
+        BoxOnlyDynamicColliderRoot.SetActive(true);
+        StaticColliderEnable = false;
+        DynamicColliderEnable = false;
+        BoxOnlyDynamicCollidersEnable = true;
+        DynamicColliderDynamicFriction = 0f;
+    }
+
+    public void OnKick_ToGrind_End()
+    {
+        BoxOnlyDynamicColliderRoot.SetActive(false);
+    }
+
     public void OnBeingLift()
     {
         StaticColliderEnable = true;
@@ -235,6 +249,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     {
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
-        BoxOnlyDynamicCollidersEnable = false;
+        BoxOnlyDynamicCollidersEnable = false; 
     }
 }

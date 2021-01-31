@@ -68,7 +68,7 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZone
         Entity entity = collider.GetComponentInParent<Entity>();
         if (entity.IsNotNullAndAlive() && entity is Box box)
         {
-            if (box.State == Box.States.BeingKicked) // 只有踢状态的箱子可以触发此功能
+            if (box.State == Box.States.BeingKicked || box.State == Box.States.BeingKickedToGrind) // 只有踢状态的箱子可以触发此功能
             {
                 if (box.FrozenActor != null)
                 {

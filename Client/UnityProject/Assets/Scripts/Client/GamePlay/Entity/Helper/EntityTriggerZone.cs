@@ -5,7 +5,20 @@ public class EntityTriggerZone : MonoBehaviour
     [HideInInspector]
     public IEntityTriggerZone IEntityTriggerZone;
 
-    public Collider Collider;
+    private Collider m_collider;
+
+    internal Collider Collider
+    {
+        get
+        {
+            if (m_collider) return m_collider;
+            else
+            {
+                m_collider = GetComponent<Collider>();
+                return m_collider;
+            }
+        }
+    }
 
     public void OnTriggerEnter(Collider c)
     {

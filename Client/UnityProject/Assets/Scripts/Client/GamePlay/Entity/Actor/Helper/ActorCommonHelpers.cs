@@ -14,6 +14,7 @@ public class ActorCommonHelpers : MonoBehaviour
     public EntityBuffHelper EntityBuffHelper;
     public ActorFrozenHelper ActorFrozenHelper;
     public EntityTriggerZoneHelper EntityTriggerZoneHelper;
+    public EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper;
     public List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers;
     public Transform LiftBoxPivot;
 

@@ -48,9 +48,9 @@ Rigidbody:
   m_AngularDrag: 20
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 2
   m_Constraints: 84
-  m_CollisionDetection: 3
+  m_CollisionDetection: 2
 --- !u!114 &2884598377431085198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,6 +97,16 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 1000
     CollideDamage:
+      BaseValue: 5
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
+    CollideDamageX:
+      BaseValue: 5
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
+    CollideDamageZ:
       BaseValue: 5
       ModifiedValue: 0
       MinValue: 0
@@ -674,6 +684,16 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
+    CollideDamageX:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    CollideDamageZ:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     ExplodeDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
@@ -784,14 +804,16 @@ MonoBehaviour:
       MaxValue: 0
     SkillsPropertyCollections: []
     RawEntityDefaultBuffs: []
+  RawFlamethrowerFuelData:
+    id: 0
   RawEntityPassiveSkills:
-  - id: 0
-  RawEntityActiveSkills:
   - id: 1
+  RawEntityActiveSkills:
   - id: 2
   - id: 3
   - id: 4
   - id: 5
+  - id: 6
   Camp: 2
   RigidBody: {fileID: 3522706739585230582}
   ActorCommonHelpers: {fileID: 5150927944716405211}
@@ -808,13 +830,10 @@ MonoBehaviour:
   InjureFXScale: 2
   HealFX: None
   HealFXScale: 1
-  GainLifeFX: Hit_LoveHeart
-  GainLifeFXScale: 1
   DieFX: Hit_EvilBigGravBall
   DieFXScale: 2
   DashForce: 10
   Accelerate: 250
-  ThrowAimMoveSpeed: 10
   KickForce: 5
   ThrowRadius: 10
   PushableBoxList: []
@@ -833,12 +852,14 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
+      type: {class: , ns: , asm: }
+    00000001:
       type: {class: ActorPassiveSkill_IceSlideSpeedUp, ns: , asm: Client}
       data:
         SpecialCaseType: 0
         RawEntityBuff:
-          id: 6
-    00000001:
+          id: 7
+    00000002:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
         TargetCamp: 15
@@ -865,34 +886,13 @@ MonoBehaviour:
         CastFX: Hit_GreenPoisonous
         CastFXScale: 1.2
         RawEntityBuffs:
-        - id: 7
-    00000002:
+        - id: 8
+    00000003:
       type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
       data:
         TargetCamp: 0
         EntitySkillIndex: 1
         SkillAlias: "\u9668\u77F3\u672F"
-        WingUpCanMove: 0
-        CastCanMove: 0
-        RecoverCanMove: 0
-        RawSubActiveSkillList:
-        - id: 8
-        SubActiveSkillTriggerLogicList:
-        - M_TriggerType: 2
-          SubSkillTriggerSequence: []
-          Duration: 5000
-          Times: 10
-          SubSkillAliasWithProbabilityList:
-          - SubSkillAlias: "\u9668\u77F3\u672F\u5355\u53D1"
-            probability: 1
-            isSingleton: 0
-        InterruptSubActiveSkillsWhenInterrupted: 0
-    00000003:
-      type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
-      data:
-        TargetCamp: 0
-        EntitySkillIndex: 2
-        SkillAlias: "\u66B4\u98CE\u96EA"
         WingUpCanMove: 0
         CastCanMove: 0
         RecoverCanMove: 0
@@ -904,11 +904,32 @@ MonoBehaviour:
           Duration: 5000
           Times: 10
           SubSkillAliasWithProbabilityList:
-          - SubSkillAlias: "\u66B4\u98CE\u96EA\u5355\u53D1"
+          - SubSkillAlias: "\u9668\u77F3\u672F\u5355\u53D1"
             probability: 1
             isSingleton: 0
         InterruptSubActiveSkillsWhenInterrupted: 0
     00000004:
+      type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
+      data:
+        TargetCamp: 0
+        EntitySkillIndex: 2
+        SkillAlias: "\u66B4\u98CE\u96EA"
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList:
+        - id: 10
+        SubActiveSkillTriggerLogicList:
+        - M_TriggerType: 2
+          SubSkillTriggerSequence: []
+          Duration: 5000
+          Times: 10
+          SubSkillAliasWithProbabilityList:
+          - SubSkillAlias: "\u66B4\u98CE\u96EA\u5355\u53D1"
+            probability: 1
+            isSingleton: 0
+        InterruptSubActiveSkillsWhenInterrupted: 0
+    00000005:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
         TargetCamp: 1
@@ -934,8 +955,8 @@ MonoBehaviour:
         CastFX: Hit_LoveHeart
         CastFXScale: 3
         RawEntityBuffs:
-        - id: 10
-    00000005:
+        - id: 11
+    00000006:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
         TargetCamp: 1
@@ -961,8 +982,8 @@ MonoBehaviour:
         CastFX: Hit_SpiralDrill
         CastFXScale: 3
         RawEntityBuffs:
-        - id: 11
-    00000006:
+        - id: 12
+    00000007:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 10000
@@ -974,7 +995,7 @@ MonoBehaviour:
         Percent: 50
         LinearDecayInDuration: 0
         EntityPropertyType: 30
-    00000007:
+    00000008:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10765
@@ -986,7 +1007,7 @@ MonoBehaviour:
         EntityStatType: 0
         Delta: -2
         Percent: 0
-    00000008:
+    00000009:
       type: {class: EntityActiveSkill_SummonDropBox, ns: , asm: Client}
       data:
         TargetCamp: 15
@@ -1022,7 +1043,7 @@ MonoBehaviour:
           probability: 1
           isSingleton: 1
         DropFromHeightFromFloor: 8
-    00000009:
+    0000000A:
       type: {class: EntityActiveSkill_SummonDropBox, ns: , asm: Client}
       data:
         TargetCamp: 15
@@ -1058,7 +1079,7 @@ MonoBehaviour:
           probability: 1
           isSingleton: 1
         DropFromHeightFromFloor: 8
-    0000000A:
+    0000000B:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10033
@@ -1070,7 +1091,7 @@ MonoBehaviour:
         EntityStatType: 0
         Delta: 15
         Percent: 0
-    0000000B:
+    0000000C:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 10035

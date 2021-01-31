@@ -13,8 +13,8 @@ public class BuffEditorWindow : EditorWindow
     [MenuItem("开发工具/配置/Buff克制编辑")]
     public static void ShowBuffEditorWindow()
     {
-        BuffEditorWindow window = new BuffEditorWindow();
-        window.ShowUtility();
+        BuffEditorWindow window = GetWindow<BuffEditorWindow>(false, "Buff克制编辑器");
+        window.Show();
     }
 
     void OnEnable()
@@ -92,9 +92,10 @@ public class BuffEditorWindow : EditorWindow
                 twoDimArray: arr,
                 drawElement: (rect, x, y) =>
                 {
-                    Rect left = new Rect(rect.x, rect.y, rect.width / 2f, rect.height);
-                    Rect right = new Rect(rect.x + rect.width / 2f, rect.y, rect.width / 2f, rect.height);
+                    Rect left = new Rect(rect.x, rect.y, rect.width, rect.height);
+                    GUI.color = RelationshipColorDict[arr[y, x]];
                     EntityBuffAttributeRelationship newValue = (EntityBuffAttributeRelationship) EditorGUI.EnumPopup(left, arr[y, x]);
+                    GUI.color = Color.white;
                     if (x != y && (newValue == EntityBuffAttributeRelationship.MaxDominant))
                     {
                         Debug.LogError($"【Buff相克矩阵】{(EntityBuffAttribute) x}和{(EntityBuffAttribute) y}之间的关系有误，异种BuffAttribute之间的关系不允许选用{newValue}");
@@ -102,9 +103,6 @@ public class BuffEditorWindow : EditorWindow
                     else
                     {
                         arr[y, x] = newValue;
-                        GUI.color = RelationshipColorDict[newValue];
-                        EditorGUI.LabelField(right, descriptionsOfRelationship[(int) newValue]);
-                        GUI.color = Color.white;
                     }
                 },
                 horizontalLabel: null, // horizontalLabel is optional and can be null.

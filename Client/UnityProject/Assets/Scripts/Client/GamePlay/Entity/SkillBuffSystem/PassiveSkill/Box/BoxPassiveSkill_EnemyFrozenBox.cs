@@ -11,15 +11,15 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
         base.OnFlyingCollisionEnter(collision);
     }
 
-    public override void OnBeingKickedCollisionEnter(Collision collision)
+    public override void OnBeingKickedCollisionEnter(Collision collision, Box.KickLocalAxis kickLocalAxis)
     {
-        base.OnBeingKickedCollisionEnter(collision);
+        base.OnBeingKickedCollisionEnter(collision, kickLocalAxis);
         if (Box.FrozenActor.IsNotNullAndAlive())
         {
             if (collision.gameObject.layer == LayerManager.Instance.Layer_Enemy)
             {
                 Actor actor = collision.gameObject.GetComponentInParent<Actor>();
-                actor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.CollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage);
+                actor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage);
                 Box.FrozenActor.EntityBuffHelper.Damage(1, EntityBuffAttribute.CollideDamage);
             }
             else if (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box || collision.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
@@ -27,8 +27,8 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
                 Box targetBox = collision.gameObject.GetComponentInParent<Box>();
                 if (targetBox.FrozenActor.IsNotNullAndAlive())
                 {
-                    targetBox.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.CollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage);
-                    Box.FrozenActor.EntityBuffHelper.Damage(targetBox.FrozenActor.EntityStatPropSet.CollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage);
+                    targetBox.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage);
+                    Box.FrozenActor.EntityBuffHelper.Damage(targetBox.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage);
                 }
                 else
                 {

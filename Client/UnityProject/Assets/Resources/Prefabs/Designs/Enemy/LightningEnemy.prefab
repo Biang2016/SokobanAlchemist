@@ -48,9 +48,9 @@ Rigidbody:
   m_AngularDrag: 20
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 2
   m_Constraints: 84
-  m_CollisionDetection: 3
+  m_CollisionDetection: 2
 --- !u!114 &2884598377431085198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,24 +68,24 @@ MonoBehaviour:
   GUID_Mod_FixedFrameRate: 0
   RawEntityStatPropSet:
     HealthDurability:
-      AutoChange: 1
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3000
       _value: 7
       _minValue: 0
       _maxValue: 7
+      AutoChange: 1
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3000
     MaxHealthDurability:
       BaseValue: 7
       ModifiedValue: 0
       MinValue: 1
       MaxValue: 10000
     DropFromAirSurviveProbabilityPercent:
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     ActorCollideDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
@@ -97,7 +97,17 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 1000
     CollideDamage:
-      BaseValue: 0
+      BaseValue: 1
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
+    CollideDamageX:
+      BaseValue: 1
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
+    CollideDamageZ:
+      BaseValue: 1
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 1000
@@ -112,19 +122,19 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 200
     FrozenValue:
-      AutoChange: -30
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 300
       _value: 0
       _minValue: 0
       _maxValue: 1000
-    FrozenLevel:
-      AutoChange: 0
+      AutoChange: -30
       AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
+      AutoChangeTimeInterval: 300
+    FrozenLevel:
       _value: 0
       _minValue: 0
       _maxValue: 5
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FrozenFX: None
     FrozenFXScaleCurve:
       serializedVersion: 2
@@ -156,19 +166,19 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 200
     FiringValue:
-      AutoChange: -30
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 300
       _value: 0
       _minValue: 0
       _maxValue: 1000
-    FiringLevel:
-      AutoChange: 0
+      AutoChange: -30
       AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
+      AutoChangeTimeInterval: 300
+    FiringLevel:
       _value: 0
       _minValue: 0
       _maxValue: 4
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FiringSpreadPercent:
       BaseValue: 0
       ModifiedValue: 0
@@ -219,12 +229,12 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 0
     ActionPoint:
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     ActionPointRecovery:
       BaseValue: 0
       ModifiedValue: 0
@@ -306,24 +316,24 @@ MonoBehaviour:
     - id: 0
   EntityStatPropSet:
     HealthDurability:
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     MaxHealthDurability:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
     DropFromAirSurviveProbabilityPercent:
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     ActorCollideDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
@@ -339,6 +349,16 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
+    CollideDamageX:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    CollideDamageZ:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     ExplodeDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
@@ -350,19 +370,19 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 0
     FrozenValue:
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FrozenLevel:
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FrozenFX: 
     FrozenFXScaleCurve:
       serializedVersion: 2
@@ -376,19 +396,19 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 0
     FiringValue:
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FiringLevel:
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     FiringSpreadPercent:
       BaseValue: 0
       ModifiedValue: 0
@@ -421,12 +441,12 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 0
     ActionPoint:
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
       _value: 0
       _minValue: 0
       _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     ActionPointRecovery:
       BaseValue: 0
       ModifiedValue: 0
@@ -449,9 +469,11 @@ MonoBehaviour:
       MaxValue: 0
     SkillsPropertyCollections: []
     RawEntityDefaultBuffs: []
+  RawFlamethrowerFuelData:
+    id: 1
   RawEntityPassiveSkills: []
   RawEntityActiveSkills:
-  - id: 1
+  - id: 2
   Camp: 2
   RigidBody: {fileID: 3522706739585230582}
   ActorCommonHelpers: {fileID: 7234443338025959365}
@@ -468,13 +490,10 @@ MonoBehaviour:
   InjureFXScale: 2
   HealFX: None
   HealFXScale: 1
-  GainLifeFX: Hit_LoveHeart
-  GainLifeFXScale: 1
   DieFX: Hit_EvilBigGravBall
   DieFXScale: 2
   DashForce: 10
   Accelerate: 250
-  ThrowAimMoveSpeed: 10
   KickForce: 5
   ThrowRadius: 10
   PushableBoxList: []
@@ -487,7 +506,7 @@ MonoBehaviour:
   FrozeFX: Hit_SnowFlake
   ThawFX: Flash_CyanSlight
   RawFrozenBoxPassiveSkills:
-  - id: 2
+  - id: 3
   MovementState: 0
   PushState: 0
   ThrowState: 0
@@ -503,6 +522,8 @@ MonoBehaviour:
         BuffFX: None
         BuffFXScale: 1
     00000001:
+      type: {class: , ns: , asm: }
+    00000002:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
         TargetCamp: 7
@@ -529,8 +550,8 @@ MonoBehaviour:
         CastFX: Hit_WhiteLightening
         CastFXScale: 1
         RawEntityBuffs:
-        - id: 3
-    00000002:
+        - id: 4
+    00000003:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         SpecialCaseType: 0
@@ -540,8 +561,8 @@ MonoBehaviour:
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
-        - id: 4
-    00000003:
+        - id: 5
+    00000004:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 11297
@@ -553,15 +574,15 @@ MonoBehaviour:
         Percent: -100
         LinearDecayInDuration: 0
         EntityPropertyType: 30
-    00000004:
+    00000005:
       type: {class: EntityPassiveSkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
       data:
         AddBuffRadius: 1.3
         ExactGPDistance: 0
         EffectiveOnRelativeCamp: 6
         RawEntityBuffs:
-        - id: 5
-    00000005:
+        - id: 6
+    00000006:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 10009

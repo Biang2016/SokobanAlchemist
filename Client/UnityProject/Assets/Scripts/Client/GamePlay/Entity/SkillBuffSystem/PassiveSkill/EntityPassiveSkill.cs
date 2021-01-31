@@ -66,7 +66,7 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
     {
     }
 
-    public virtual void OnBeingKickedCollisionEnter(Collision collision)
+    public virtual void OnBeingKickedCollisionEnter(Collision collision, Box.KickLocalAxis kickLocalAxis)
     {
     }
 
@@ -83,6 +83,18 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
     }
 
     public virtual void OnTriggerZoneExit(Collider collider)
+    {
+    }
+
+    public virtual void OnGrindTriggerZoneEnter(Collider collider)
+    {
+    }
+
+    public virtual void OnGrindTriggerZoneStay(Collider collider)
+    {
+    }
+
+    public virtual void OnGrindTriggerZoneExit(Collider collider)
     {
     }
 

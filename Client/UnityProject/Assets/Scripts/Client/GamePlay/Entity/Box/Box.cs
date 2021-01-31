@@ -25,17 +25,31 @@ public partial class Box : Entity
     [FoldoutGroup("组件")]
     public GameObject ModelRoot;
 
-    internal override EntityBuffHelper EntityBuffHelper => boxBuffHelper;
+    internal override EntityBuffHelper EntityBuffHelper => BoxBuffHelper;
     internal override EntityFrozenHelper EntityFrozenHelper => BoxFrozenHelper;
     internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => BoxTriggerZoneHelper;
-    internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => entityFlamethrowerHelpers;
+    internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => BoxGrindTriggerZoneHelper;
+    internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => BoxFlamethrowerHelpers;
 
     [FoldoutGroup("组件")]
     [SerializeField]
-    private EntityBuffHelper boxBuffHelper;
+    private EntityBuffHelper BoxBuffHelper;
 
     [FoldoutGroup("组件")]
-    public BoxFrozenHelper BoxFrozenHelper;
+    [SerializeField]
+    private BoxFrozenHelper BoxFrozenHelper;
+
+    [FoldoutGroup("组件")]
+    [SerializeField]
+    private EntityTriggerZoneHelper BoxTriggerZoneHelper;
+
+    [FoldoutGroup("组件")]
+    [SerializeField]
+    private EntityGrindTriggerZoneHelper BoxGrindTriggerZoneHelper;
+
+    [FoldoutGroup("组件")]
+    [SerializeField]
+    private List<EntityFlamethrowerHelper> BoxFlamethrowerHelpers;
 
     internal BoxEffectHelper BoxEffectHelper;
 
@@ -46,9 +60,6 @@ public partial class Box : Entity
     public BoxIndicatorHelper BoxIndicatorHelper;
 
     [FoldoutGroup("组件")]
-    public EntityTriggerZoneHelper BoxTriggerZoneHelper;
-
-    [FoldoutGroup("组件")]
     public DoorBoxHelper DoorBoxHelper;
 
     [FoldoutGroup("组件")]
@@ -56,9 +67,6 @@ public partial class Box : Entity
 
     [FoldoutGroup("组件")]
     public BoxIconSpriteHelper BoxIconSpriteHelper;
-
-    [FoldoutGroup("组件")]
-    public List<EntityFlamethrowerHelper> entityFlamethrowerHelpers;
 
     [FoldoutGroup("组件")]
     public SmoothMove BoxIconSpriteSmoothMove;
@@ -74,19 +82,21 @@ public partial class Box : Entity
     {
         LastTouchActor = null;
         ArtOnly = true;
+
         EntityBuffHelper.OnHelperUsed();
-        BoxFrozenHelper.OnHelperUsed();
-        BoxColliderHelper.OnBoxUsed();
-        BoxIndicatorHelper.OnHelperUsed();
-        BoxTriggerZoneHelper?.OnHelperUsed();
-        DoorBoxHelper?.OnHelperUsed();
-        BoxSkinHelper?.OnHelperUsed();
-        BoxIconSpriteHelper.OnHelperUsed();
+        EntityFrozenHelper.OnHelperUsed();
+        EntityTriggerZoneHelper?.OnHelperUsed();
+        EntityGrindTriggerZoneHelper?.OnHelperUsed();
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
             h.OnHelperUsed();
         }
 
+        BoxColliderHelper.OnBoxUsed();
+        BoxIndicatorHelper.OnHelperUsed();
+        DoorBoxHelper?.OnHelperUsed();
+        BoxSkinHelper?.OnHelperUsed();
+        BoxIconSpriteHelper.OnHelperUsed();
         base.OnUsed();
     }
 
@@ -100,26 +110,29 @@ public partial class Box : Entity
         worldGP_WhenKicked = GridPos3D.Zero;
         LastState = States.Static;
         State = States.Static;
+
         EntityBuffHelper.OnHelperRecycled();
-        BoxFrozenHelper.OnHelperRecycled();
-        BoxEffectHelper?.OnBoxPoolRecycled();
-        BoxEffectHelper = null;
-        BoxColliderHelper.OnBoxPoolRecycled();
-        BoxIndicatorHelper.OnHelperRecycled();
-        BoxTriggerZoneHelper?.OnHelperRecycled();
-        DoorBoxHelper?.OnHelperRecycled();
-        BoxSkinHelper?.OnHelperRecycled();
-        BoxIconSpriteHelper?.OnHelperRecycled();
+        EntityFrozenHelper.OnHelperRecycled();
+        EntityTriggerZoneHelper?.OnHelperRecycled();
+        EntityGrindTriggerZoneHelper?.OnHelperRecycled();
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
             h.OnHelperRecycled();
         }
 
+        BoxEffectHelper?.OnBoxPoolRecycled();
+        BoxEffectHelper = null;
+        BoxColliderHelper.OnBoxPoolRecycled();
+        BoxIndicatorHelper.OnHelperRecycled();
+        DoorBoxHelper?.OnHelperRecycled();
+        BoxSkinHelper?.OnHelperRecycled();
+        BoxIconSpriteHelper?.OnHelperRecycled();
+
         transform.DOPause();
         ModelRoot.transform.DOPause();
         ModelRoot.transform.localPosition = Vector3.zero;
         ModelRoot.transform.localScale = Vector3.one;
-        alreadyCollide = false;
+        alreadyCollidedActorSet.Clear();
         if (Rigidbody != null) Destroy(Rigidbody);
         if (LastTouchActor.IsNotNullAndAlive() && LastTouchActor.CurrentLiftBox == this)
         {
@@ -143,6 +156,8 @@ public partial class Box : Entity
     [AssetsOnly]
     public BoxFeature BoxFeature;
 
+    #region 旋转朝向
+
     internal GridPosR.Orientation BoxOrientation { get; private set; }
 
     private void SwitchBoxOrientation(GridPosR.Orientation boxOrientation)
@@ -152,8 +167,13 @@ public partial class Box : Entity
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), ModelRoot.transform, 1);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxFrozenHelper.FrozeModelRoot.transform, 1);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxIndicatorHelper.transform, 1);
-        if (BoxTriggerZoneHelper) GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxTriggerZoneHelper.transform, 1);
+        if (EntityTriggerZoneHelper) GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), EntityTriggerZoneHelper.transform, 1);
+        if (EntityGrindTriggerZoneHelper) GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), EntityGrindTriggerZoneHelper.transform, 1);
     }
+
+    #endregion
+
+    #region 手感  静态属性
 
     [ReadOnly]
     [AssetsOnly]
@@ -161,7 +181,62 @@ public partial class Box : Entity
     [ShowIf("Interactable")]
     [FoldoutGroup("箱子属性")]
     [LabelText("重量")]
-    private float Weight = 0.7f;
+    private const float Weight = 0.7f;
+
+    public float FinalWeight => Weight * ConfigManager.BoxWeightFactor_Cheat;
+
+    /// <summary>
+    /// 扔箱子落地Drag
+    /// </summary>
+    internal const float Throw_Drag = 10f;
+
+    /// <summary>
+    /// 扔箱子落地摩擦力
+    /// </summary>
+    internal const float Throw_Friction = 1;
+
+    /// <summary>
+    /// 踢箱子摩阻力
+    /// </summary>
+    internal const float Dynamic_Drag = 0.5f;
+
+    #endregion
+
+    #region 各向异性
+
+    [SerializeField]
+    [FoldoutGroup("箱子属性")]
+    [LabelText("X轴(Local)踢出速度倍率")]
+    private float KickForce_X = 1f;
+
+    [SerializeField]
+    [FoldoutGroup("箱子属性")]
+    [LabelText("Z轴(Local)踢出速度倍率")]
+    private float KickForce_Z = 1f;
+
+    [SerializeField]
+    [FoldoutGroup("箱子属性")]
+    [LabelText("X轴(Local)击退力")]
+    private float KickRepelForce_X = 10f;
+
+    [SerializeField]
+    [FoldoutGroup("箱子属性")]
+    [LabelText("Z轴(Local)击退力")]
+    private float KickRepelForce_Z = 10f;
+
+    [SerializeField]
+    [FoldoutGroup("箱子属性")]
+    [LabelText("X轴(Local)碾压")]
+    [SerializeReference]
+    private bool Grind_X;
+
+    [SerializeField]
+    [FoldoutGroup("箱子属性")]
+    [LabelText("Z轴(Local)碾压")]
+    [SerializeReference]
+    private bool Grind_Z;
+
+    #endregion
 
     [SerializeField]
     [FoldoutGroup("箱子属性")]
@@ -173,27 +248,7 @@ public partial class Box : Entity
     [LabelText("合并延迟")]
     private float MergeDelay = 0;
 
-    public float FinalWeight => Weight * ConfigManager.BoxWeightFactor_Cheat;
-
-    /// <summary>
-    /// 抗推力
-    /// </summary>
-    internal static float Static_Inertia = 0.3f;
-
-    /// <summary>
-    /// 扔箱子落地Drag
-    /// </summary>
-    internal float Throw_Drag = 10f;
-
-    /// <summary>
-    /// 扔箱子落地摩擦力
-    /// </summary>
-    internal float Throw_Friction = 1;
-
-    /// <summary>
-    /// 踢箱子摩阻力
-    /// </summary>
-    internal float Dynamic_Drag = 0.5f;
+    #region 合成
 
     [FoldoutGroup("合成")]
     [LabelText("合成产物是否多格")]
@@ -228,6 +283,8 @@ public partial class Box : Entity
 
         return 0;
     }
+
+    #endregion
 
     [AssetsOnly]
     [SerializeField]
@@ -340,13 +397,14 @@ public partial class Box : Entity
     [HideInEditorMode]
     public WorldModule WorldModule;
 
-    private bool alreadyCollide;
+    private HashSet<Actor> alreadyCollidedActorSet = new HashSet<Actor>();
 
     public enum States
     {
         Static,
         BeingPushed,
         BeingKicked,
+        BeingKickedToGrind,
         BeingLift,
         Lifted,
         Flying,
@@ -356,10 +414,18 @@ public partial class Box : Entity
         DroppingFromAir,
     }
 
+    public enum KickLocalAxis
+    {
+        None,
+        X,
+        Z
+    }
+
     public enum LerpType
     {
         Push,
         Kick,
+        KickToGrind,
         Throw,
         Put,
         Drop,
@@ -376,6 +442,9 @@ public partial class Box : Entity
     private States LastState = States.Static;
 
     private States state = States.Static;
+
+    private KickLocalAxis CurrentKickLocalAxis = KickLocalAxis.X;
+    private KickLocalAxis CurrentKickGlobalAxis = KickLocalAxis.X;
 
     [HideInPrefabAssets]
     [ReadOnly]
@@ -438,7 +507,7 @@ public partial class Box : Entity
         {
             BoxIconSpriteSmoothMove.enabled = false;
             BoxModelSmoothMove.enabled = false;
-            BoxFrozenHelper.IceBlockSmoothMove.enabled = false;
+            EntityFrozenHelper.IceBlockSmoothMove.enabled = false;
             if (FrozenActor)
             {
                 FrozenActor.ActorFrozenHelper.IceBlockSmoothMove.enabled = false;
@@ -451,12 +520,12 @@ public partial class Box : Entity
             BoxIconSpriteSmoothMove.SmoothTime = lerpTime;
             BoxModelSmoothMove.enabled = true;
             BoxModelSmoothMove.SmoothTime = lerpTime;
-            BoxFrozenHelper.IceBlockSmoothMove.enabled = true;
-            BoxFrozenHelper.IceBlockSmoothMove.SmoothTime = lerpTime;
+            EntityFrozenHelper.IceBlockSmoothMove.enabled = true;
+            EntityFrozenHelper.IceBlockSmoothMove.SmoothTime = lerpTime;
             if (FrozenActor)
             {
-                FrozenActor.ActorFrozenHelper.IceBlockSmoothMove.enabled = true;
-                FrozenActor.ActorFrozenHelper.IceBlockSmoothMove.SmoothTime = lerpTime;
+                FrozenActor.EntityFrozenHelper.IceBlockSmoothMove.enabled = true;
+                FrozenActor.EntityFrozenHelper.IceBlockSmoothMove.SmoothTime = lerpTime;
                 FrozenActor.SetModelSmoothMoveLerpTime(lerpTime);
             }
         }
@@ -513,6 +582,11 @@ public partial class Box : Entity
                     State = States.BeingKicked;
                     break;
                 }
+                case LerpType.KickToGrind:
+                {
+                    State = States.BeingKickedToGrind;
+                    break;
+                }
                 case LerpType.Throw:
                 {
                     State = States.Flying;
@@ -566,6 +640,8 @@ public partial class Box : Entity
         if (needCheckDrop) WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
     }
 
+    #region Actions: Push, Stop, Kick, Swap, Lift, Throw, Put, DropFromAir, DropFromDeadActor
+
     public void Push(Vector3 direction, Actor actor)
     {
         if (state == States.Static)
@@ -595,7 +671,7 @@ public partial class Box : Entity
 
     public void Kick(Vector3 direction, float velocity, Actor actor)
     {
-        if (state == States.BeingPushed || state == States.Flying || state == States.BeingKicked || state == States.Static)
+        if (state == States.BeingPushed || state == States.Flying || state == States.BeingKicked || state == States.BeingKickedToGrind || state == States.Static)
         {
             transform.DOPause();
             SetModelSmoothMoveLerpTime(0);
@@ -609,13 +685,11 @@ public partial class Box : Entity
                 ps.OnBeingKicked(actor);
             }
 
-            alreadyCollide = false;
+            alreadyCollidedActorSet.Clear();
             LastTouchActor = actor;
             worldGP_WhenKicked = WorldGP;
             //WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this); // 放在FixedUpdate里面判定如果坐标有变则移除，避免踢向墙壁时上方塌落导致bug
-            State = States.BeingKicked;
             transform.DOPause();
-            BoxColliderHelper.OnKick();
             Rigidbody = gameObject.GetComponent<Rigidbody>();
             if (Rigidbody == null) Rigidbody = gameObject.AddComponent<Rigidbody>();
             Rigidbody.mass = FinalWeight;
@@ -627,9 +701,45 @@ public partial class Box : Entity
             Rigidbody.useGravity = false;
             Rigidbody.angularVelocity = Vector3.zero;
             Rigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-            if (direction.x.Equals(0)) Rigidbody.constraints |= RigidbodyConstraints.FreezePositionX;
-            if (direction.z.Equals(0)) Rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
-            Rigidbody.velocity = direction.normalized * velocity;
+
+            GridPos3D dir_GP = direction.ToGridPos3D();
+            if (dir_GP.x == 0)
+            {
+                Rigidbody.constraints |= RigidbodyConstraints.FreezePositionX;
+            }
+            else
+            {
+                CurrentKickGlobalAxis = KickLocalAxis.X;
+                if (BoxOrientation == GridPosR.Orientation.Left || BoxOrientation == GridPosR.Orientation.Right) CurrentKickLocalAxis = KickLocalAxis.Z;
+                else CurrentKickLocalAxis = KickLocalAxis.X;
+            }
+
+            if (dir_GP.z == 0)
+            {
+                Rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
+            }
+            else
+            {
+                CurrentKickGlobalAxis = KickLocalAxis.Z;
+                if (BoxOrientation == GridPosR.Orientation.Left || BoxOrientation == GridPosR.Orientation.Right) CurrentKickLocalAxis = KickLocalAxis.X;
+                else CurrentKickLocalAxis = KickLocalAxis.Z;
+            }
+
+            if (CurrentKickLocalAxis == KickLocalAxis.X && Grind_X || CurrentKickLocalAxis == KickLocalAxis.Z && Grind_Z)
+            {
+                BoxGrindTriggerZoneHelper?.SetActive(true);
+                BoxColliderHelper.OnKick_ToGrind();
+                State = States.BeingKickedToGrind;
+            }
+            else
+            {
+                BoxGrindTriggerZoneHelper?.SetActive(false);
+                BoxColliderHelper.OnKick();
+                State = States.BeingKicked;
+            }
+
+            float kickForceMultiplier = CurrentKickLocalAxis == KickLocalAxis.X ? KickForce_X : (CurrentKickLocalAxis == KickLocalAxis.Z ? KickForce_Z : 1f);
+            Rigidbody.velocity = direction.normalized * velocity * kickForceMultiplier;
             transform.position = transform.position.ToGridPos3D();
         }
     }
@@ -638,11 +748,11 @@ public partial class Box : Entity
 
     public bool BeingLift(Actor actor)
     {
-        if (state == States.BeingPushed || state == States.Flying || state == States.BeingKicked || state == States.Static)
+        if (state == States.BeingPushed || state == States.Flying || state == States.BeingKicked || state == States.BeingKickedToGrind || state == States.Static)
         {
             SetModelSmoothMoveLerpTime(0);
             DefaultRotBeforeLift = transform.rotation;
-            alreadyCollide = false;
+            alreadyCollidedActorSet.Clear();
             LastTouchActor = actor;
             foreach (EntityPassiveSkill ps in EntityPassiveSkills)
             {
@@ -668,7 +778,7 @@ public partial class Box : Entity
 
     public void LiftThenConsume()
     {
-        PlayFX(CollideFX, CollideFXScale);
+        PlayFXOnEachGrid(CollideFX, CollideFXScale);
         PoolRecycle();
     }
 
@@ -677,7 +787,7 @@ public partial class Box : Entity
         if (state == States.Lifted)
         {
             SetModelSmoothMoveLerpTime(0);
-            alreadyCollide = false;
+            alreadyCollidedActorSet.Clear();
             if (BoxEffectHelper == null)
             {
                 BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
@@ -708,7 +818,7 @@ public partial class Box : Entity
         if (State == States.Lifted)
         {
             SetModelSmoothMoveLerpTime(0);
-            alreadyCollide = false;
+            alreadyCollidedActorSet.Clear();
             if (BoxEffectHelper == null)
             {
                 BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
@@ -742,7 +852,7 @@ public partial class Box : Entity
             BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
         }
 
-        alreadyCollide = false;
+        alreadyCollidedActorSet.Clear();
         LastTouchActor = null;
         State = States.DroppingFromDeadActor;
         transform.DOPause();
@@ -770,7 +880,7 @@ public partial class Box : Entity
             BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
         }
 
-        alreadyCollide = false;
+        alreadyCollidedActorSet.Clear();
         LastTouchActor = null;
         State = States.DroppingFromAir;
         transform.DOPause();
@@ -790,6 +900,8 @@ public partial class Box : Entity
         Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
     }
 
+    #endregion
+
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
@@ -804,7 +916,7 @@ public partial class Box : Entity
             }
         }
 
-        if (state == States.BeingKicked && IsInGridSystem)
+        if ((state == States.BeingKicked || state == States.BeingKickedToGrind) && IsInGridSystem)
         {
             if (transform.position.ToGridPos3D() != worldGP_WhenKicked)
             {
@@ -813,9 +925,9 @@ public partial class Box : Entity
             }
         }
 
-        if ((state == States.BeingKicked || state == States.Flying || state == States.DroppingFromDeadActor || state == States.DroppingFromAir || state == States.Putting) && Rigidbody)
+        if ((state == States.BeingKicked || state == States.BeingKickedToGrind || state == States.Flying || state == States.DroppingFromDeadActor || state == States.DroppingFromAir || state == States.Putting) && Rigidbody)
         {
-            if (state == States.BeingKicked)
+            if (state == States.BeingKicked || state == States.BeingKickedToGrind)
             {
                 bool isGrounded = Physics.Raycast(new Ray(transform.position, Vector3.down), 0.55f, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground);
                 Rigidbody.useGravity = !isGrounded;
@@ -836,10 +948,16 @@ public partial class Box : Entity
             {
                 LastTouchActor = null;
                 DestroyImmediate(Rigidbody);
+                if (state == States.BeingKickedToGrind)
+                {
+                    BoxColliderHelper.OnKick_ToGrind_End();
+                }
+
                 BoxColliderHelper.OnRigidbodyStop();
-                WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this); // 这里面已经做了“Box本来就在Grid系统里”的判定
                 BoxEffectHelper?.PoolRecycle();
                 BoxEffectHelper = null;
+                BoxGrindTriggerZoneHelper?.SetActive(false);
+                WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this); // 这里面已经做了“Box本来就在Grid系统里”的判定
             }
         }
 
@@ -863,32 +981,64 @@ public partial class Box : Entity
         }
     }
 
+    #region Collide & Trigger
+
     protected override void OnCollisionEnter(Collision collision)
     {
         if (IsRecycled) return;
-        if (LastTouchActor.IsNotNullAndAlive() && collision.gameObject == LastTouchActor.gameObject) return;
-
-        if (State == States.Putting)
-        {
-            Box box = collision.gameObject.GetComponentInParent<Box>();
-            if (box && !box.BoxFeature.HasFlag(BoxFeature.IsBorder))
-            {
-                Rigidbody.drag = Throw_Drag * ConfigManager.BoxThrowDragFactor_Cheat;
-            }
-        }
-
+        if (LastTouchActor.IsNotNullAndAlive() && collision.gameObject == LastTouchActor.gameObject) return; // todo 这里判定上一个碰的Actor有啥用?
         switch (State)
         {
+            case States.Putting:
+            {
+                Entity collidedEntity = collision.collider.GetComponentInParent<Entity>();
+                if (!collidedEntity && collidedEntity is Box collidedBox) // 此处不判定死亡
+                {
+                    if (!collidedBox.BoxFeature.HasFlag(BoxFeature.IsBorder))
+                    {
+                        Rigidbody.drag = Throw_Drag * ConfigManager.BoxThrowDragFactor_Cheat;
+                    }
+                }
+
+                break;
+            }
             case States.Flying:
             {
-                if (!alreadyCollide)
+                DealCollideDamageToActor(collision, KickLocalAxis.None);
+                PlayFXOnEachGrid(CollideFX, CollideFXScale);
+                foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                 {
-                    DealCollideDamageToActors(collision.contacts[0].point);
-                    PlayFX(CollideFX, CollideFXScale);
+                    ps.OnFlyingCollisionEnter(collision);
+                }
 
+                if (PassiveSkillMarkAsDestroyed && !IsRecycled)
+                {
+                    DestroyBox();
+                    return;
+                }
+
+                if (!IsRecycled)
+                {
+                    OnFlyingCollisionEnter(collision);
+                    if (PassiveSkillMarkAsDestroyed)
+                    {
+                        DestroyBox();
+                        return;
+                    }
+                }
+
+                break;
+            }
+            case States.BeingKicked:
+            case States.BeingKickedToGrind:
+            {
+                if (collision.gameObject.layer != LayerManager.Instance.Layer_Ground) // 避免在地上摩擦判定为碰撞
+                {
+                    if (State == States.BeingKicked) DealCollideDamageToActor(collision, CurrentKickLocalAxis);
+                    PlayFXOnEachGrid(CollideFX, CollideFXScale);
                     foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                     {
-                        ps.OnFlyingCollisionEnter(collision);
+                        ps.OnBeingKickedCollisionEnter(collision, CurrentKickLocalAxis);
                     }
 
                     if (PassiveSkillMarkAsDestroyed && !IsRecycled)
@@ -899,7 +1049,7 @@ public partial class Box : Entity
 
                     if (!IsRecycled)
                     {
-                        OnFlyingCollisionEnter(collision);
+                        OnBeingKickedCollisionEnter(collision);
                         if (PassiveSkillMarkAsDestroyed)
                         {
                             DestroyBox();
@@ -910,53 +1060,19 @@ public partial class Box : Entity
 
                 break;
             }
-            case States.BeingKicked:
-            {
-                if (collision.gameObject.layer != LayerManager.Instance.Layer_Ground)
-                {
-                    if (!alreadyCollide)
-                    {
-                        DealCollideDamageToActors(collision.contacts[0].point);
-                        PlayFX(CollideFX, CollideFXScale);
-
-                        foreach (EntityPassiveSkill ps in EntityPassiveSkills)
-                        {
-                            ps.OnBeingKickedCollisionEnter(collision);
-                        }
-
-                        if (PassiveSkillMarkAsDestroyed && !IsRecycled)
-                        {
-                            DestroyBox();
-                            return;
-                        }
-
-                        if (!IsRecycled)
-                        {
-                            OnBeingKickedCollisionEnter(collision);
-                            if (PassiveSkillMarkAsDestroyed)
-                            {
-                                DestroyBox();
-                                return;
-                            }
-                        }
-                    }
-                }
-
-                break;
-            }
             case States.DroppingFromAir:
             {
-                Box box = collision.gameObject.GetComponentInParent<Box>();
-                if (box != null && box.State == States.DroppingFromAir) return;
-                if (!alreadyCollide)
+                Entity collidedEntity = collision.collider.GetComponentInParent<Entity>();
+                if (!collidedEntity && collidedEntity is Box collidedBox)
                 {
-                    DealCollideDamageToActors(collision.contacts[0].point);
-                    PlayFX(CollideFX, CollideFXScale);
+                    if (collidedBox.State == States.DroppingFromAir) return; // 避免空中和其他坠落的箱子相撞
+                }
 
-                    foreach (EntityPassiveSkill ps in EntityPassiveSkills)
-                    {
-                        ps.OnDroppingFromAirCollisionEnter(collision);
-                    }
+                DealCollideDamageToActor(collision, KickLocalAxis.None);
+                PlayFXOnEachGrid(CollideFX, CollideFXScale);
+                foreach (EntityPassiveSkill ps in EntityPassiveSkills)
+                {
+                    ps.OnDroppingFromAirCollisionEnter(collision);
                 }
 
                 if (PassiveSkillMarkAsDestroyed && !IsRecycled)
@@ -980,56 +1096,50 @@ public partial class Box : Entity
         }
     }
 
-    private void DealCollideDamageToActors(Vector3 contactPos)
+    private bool DealCollideDamageToActor(Collision collision, KickLocalAxis kickLocalAxis)
     {
-        alreadyCollide = true;
+        Actor collidedActor = collision.collider.GetComponentInParent<Actor>();
+        if (collidedActor == null
+            || alreadyCollidedActorSet.Contains(collidedActor)
+            || !collidedActor.IsNotNullAndAlive()
+            || collidedActor == LastTouchActor
+            || !collidedActor.IsOpponentOrNeutralCampOf(LastTouchActor)
+        ) return false;
+        alreadyCollidedActorSet.Add(collidedActor);
 
-        GridPos3D nearestBoxIndicator = GridPos3D.Zero;
-        float nearestDist = float.MaxValue;
-        foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
+        collidedActor.ActorBattleHelper.LastAttackBox = this;
+        if (collidedActor.RigidBody != null)
         {
-            Vector3 boxIndicatorPos = transform.position + offset;
-            float distToContactPos = (boxIndicatorPos - contactPos).magnitude;
-            if (nearestDist > distToContactPos)
+            Vector3 nearestBoxIndicator = GridPos3D.Zero;
+            float nearestDist = float.MaxValue;
+            foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
             {
-                nearestDist = distToContactPos;
-                nearestBoxIndicator = offset;
-            }
-        }
-
-        Vector3 eachContactPosToBoxIndicatorOffset = contactPos - (transform.position + nearestBoxIndicator);
-
-        HashSet<Actor> damagedActors = new HashSet<Actor>();
-        foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
-        {
-            Vector3 boxIndicatorPos = transform.position + offset;
-            Vector3 boxIndicatorCollidePos = boxIndicatorPos + eachContactPosToBoxIndicatorOffset;
-            Collider[] colliders = Physics.OverlapSphere(boxIndicatorCollidePos, 0.3f, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
-            foreach (Collider collider in colliders)
-            {
-                Actor actor = collider.GetComponentInParent<Actor>();
-                if (actor.IsNotNullAndAlive() && actor != LastTouchActor && !damagedActors.Contains(actor))
+                Vector3 boxIndicatorPos = transform.position + offset;
+                float distToContactPos = (boxIndicatorPos - collision.contacts[0].point).magnitude;
+                if (nearestDist > distToContactPos)
                 {
-                    if (actor.IsOpponentOrNeutralCampOf(LastTouchActor))
-                    {
-                        actor.ActorBattleHelper.LastAttackBox = this;
-                        actor.EntityBuffHelper.Damage(EntityStatPropSet.CollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage);
-                        if (actor.RigidBody != null)
-                        {
-                            Vector3 force = (actor.transform.position - boxIndicatorPos).normalized;
-                            force = force.GetSingleDirectionVectorXZ();
-                            actor.RigidBody.velocity = Vector3.zero;
-                            actor.RigidBody.AddForce(force * 10f, ForceMode.VelocityChange);
-                        }
-
-                        damagedActors.Add(actor);
-                    }
+                    nearestDist = distToContactPos;
+                    nearestBoxIndicator = boxIndicatorPos;
                 }
             }
+
+            Vector3 force = (collidedActor.transform.position - nearestBoxIndicator).normalized;
+            force = CurrentKickGlobalAxis == KickLocalAxis.X ? new Vector3(force.x, 0, 0) : new Vector3(0, 0, force.z);
+
+            collidedActor.RigidBody.velocity = Vector3.zero;
+            Vector3 repelForce = force * (CurrentKickLocalAxis == KickLocalAxis.X ? KickRepelForce_X : KickRepelForce_Z); // 不同Local方向撞击击退力度不同
+            collidedActor.RigidBody.AddForce(repelForce, ForceMode.VelocityChange);
+            collidedActor.EntityBuffHelper.AddBuff(new EntityBuff_AttributeLabel {Duration = repelForce.magnitude / 30f, EntityBuffAttribute = EntityBuffAttribute.Repulse, IsPermanent = false});
+            collidedActor.EntityBuffHelper.Damage(EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage);
+            return true;
         }
+
+        return false;
     }
 
-    public void PlayFX(string fxName, float scale)
+    #endregion
+
+    public void PlayFXOnEachGrid(string fxName, float scale)
     {
         foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
         {
@@ -1037,6 +1147,8 @@ public partial class Box : Entity
             if (hit) hit.transform.localScale = Vector3.one * scale;
         }
     }
+
+    #region Destroy
 
     public void DestroyBox(UnityAction callBack = null)
     {
@@ -1058,10 +1170,14 @@ public partial class Box : Entity
 
         // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
         // BoxPassiveSkills.Clear(); 
-        PlayFX(DestroyFX, DestroyFXScale);
+        PlayFXOnEachGrid(DestroyFX, DestroyFXScale);
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
         callBack?.Invoke();
     }
+
+    #endregion
+
+    #region Merge
 
     public void MergeBox(GridPos3D mergeToWorldGP, UnityAction callBack = null)
     {
@@ -1078,7 +1194,7 @@ public partial class Box : Entity
 
     IEnumerator Co_DelayMergeBox(GridPos3D mergeToWorldGP, UnityAction callBack)
     {
-        PlayFX(MergeFX, MergeFXScale);
+        PlayFXOnEachGrid(MergeFX, MergeFXScale);
 
         ModelRoot.transform.DOShakeScale(0.2f);
         ModelRoot.transform.DOMove(mergeToWorldGP, MergeDelay * 1.2f);
@@ -1093,6 +1209,10 @@ public partial class Box : Entity
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
         callBack?.Invoke();
     }
+
+    #endregion
+
+    #region Drop
 
     private Coroutine KeepTryingDropSelfCoroutine;
 
@@ -1118,6 +1238,8 @@ public partial class Box : Entity
         WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
         KeepTryingDropSelfCoroutine = null;
     }
+
+    #endregion
 
     #region BoxExtraData
 

@@ -127,4 +127,13 @@ public enum EntityBuffAttribute
 
     [LabelText("电击免疫")]
     ShockImmune,
+
+    [LabelText("碾压")]
+    Grind,
+
+    [LabelText("碾压伤害")]
+    GrindDamage,
+
+    [LabelText("碾压免疫")]
+    GrindImmune,
 }

@@ -8,21 +8,33 @@ public class EntityTriggerZoneHelper : EntityMonoHelper, IEntityTriggerZone
 
     void Awake()
     {
-        EntityTriggerZones = GetComponentsInChildren<EntityTriggerZone>().ToList();
+        EntityTriggerZones = GetComponentsInChildren<EntityTriggerZone>(true).ToList();
         foreach (EntityTriggerZone zone in EntityTriggerZones)
         {
             zone.IEntityTriggerZone = this;
+        }
+
+        SetActive(false);
+    }
+
+    public void SetActive(bool active)
+    {
+        foreach (EntityTriggerZone zone in EntityTriggerZones)
+        {
+            zone.Collider.enabled = active;
         }
     }
 
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
+        SetActive(true);
     }
 
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
+        SetActive(false);
     }
 
     public void OnTriggerZoneEnter(Collider c)

@@ -27,12 +27,13 @@ public class Actor : Entity
 
     public Vector3 ArtPos => ActorSkinHelper.MainArtTransform.position;
 
-    internal GameObject ActorMoveColliderRoot => ActorCommonHelpers.ActorMoveColliderRoot;
-    internal ActorArtHelper ActorArtHelper => ActorCommonHelpers.ActorArtHelper;
     internal override EntityBuffHelper EntityBuffHelper => ActorCommonHelpers.EntityBuffHelper;
     internal override EntityFrozenHelper EntityFrozenHelper => ActorFrozenHelper;
     internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => ActorCommonHelpers.EntityTriggerZoneHelper;
+    internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => ActorCommonHelpers.EntityGrindTriggerZoneHelper;
     internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => ActorCommonHelpers.EntityFlamethrowerHelpers;
+    internal GameObject ActorMoveColliderRoot => ActorCommonHelpers.ActorMoveColliderRoot;
+    internal ActorArtHelper ActorArtHelper => ActorCommonHelpers.ActorArtHelper;
     internal ActorPushHelper ActorPushHelper => ActorCommonHelpers.ActorPushHelper;
     internal ActorFaceHelper ActorFaceHelper => ActorCommonHelpers.ActorFaceHelper;
     internal ActorSkinHelper ActorSkinHelper => ActorCommonHelpers.ActorSkinHelper;
@@ -132,15 +133,6 @@ public class Actor : Entity
     public float HealFXScale = 1f;
 
     [FoldoutGroup("特效")]
-    [LabelText("命数增加特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
-    public string GainLifeFX;
-
-    [FoldoutGroup("特效")]
-    [LabelText("命数增加特效尺寸")]
-    public float GainLifeFXScale = 1f;
-
-    [FoldoutGroup("特效")]
     [LabelText("死亡特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
     public string DieFX;
@@ -151,25 +143,21 @@ public class Actor : Entity
 
     [FoldoutGroup("手感")]
     [LabelText("Dash力度")]
-    public float DashForce = 10f;
+    public float DashForce = 150f;
 
     [FoldoutGroup("手感")]
     [LabelText("起步速度")]
-    public float Accelerate = 10f;
-
-    [FoldoutGroup("手感")]
-    [LabelText("瞄准点移动速度")]
-    public float ThrowAimMoveSpeed = 10f;
+    public float Accelerate = 200f;
 
     protected float ThrowRadiusMin = 0.75f;
 
     [FoldoutGroup("手感")]
     [LabelText("踢箱子力量")]
-    public float KickForce = 5;
+    public float KickForce = 30;
 
-    [FoldoutGroup("推踢扔举能力")]
+    [FoldoutGroup("手感")]
     [LabelText("扔半径")]
-    public float ThrowRadius = 10f;
+    public float ThrowRadius = 15f;
 
     [BoxNameList]
     [FoldoutGroup("推踢扔举能力")]
@@ -289,19 +277,23 @@ public class Actor : Entity
         PushState = PushStates.None;
         ThrowState = ThrowStates.None;
         ThrowWhenDie();
-        ActorFrozenHelper.OnHelperRecycled();
-        ActorArtHelper.OnHelperRecycled();
+
         EntityBuffHelper.OnHelperRecycled();
+        EntityFrozenHelper.OnHelperRecycled();
+        EntityTriggerZoneHelper?.OnHelperRecycled();
+        EntityGrindTriggerZoneHelper?.OnHelperRecycled();
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.OnHelperRecycled();
+        }
+
+        ActorArtHelper.OnHelperRecycled();
         ActorPushHelper.OnHelperRecycled();
         ActorFaceHelper.OnHelperRecycled();
         ActorSkinHelper.OnHelperRecycled();
         ActorLaunchArcRendererHelper.OnHelperRecycled();
         ActorBattleHelper.OnHelperRecycled();
         ActorBoxInteractHelper.OnHelperRecycled();
-        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
-        {
-            h.OnHelperRecycled();
-        }
 
         UnInitActiveSkills();
         UnInitPassiveSkills();
@@ -316,19 +308,22 @@ public class Actor : Entity
     public override void OnUsed()
     {
         base.OnUsed();
-        ActorFrozenHelper.OnHelperUsed();
-        ActorArtHelper.OnHelperUsed();
         EntityBuffHelper.OnHelperUsed();
+        EntityFrozenHelper.OnHelperUsed();
+        EntityTriggerZoneHelper?.OnHelperUsed();
+        EntityGrindTriggerZoneHelper?.OnHelperUsed();
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.OnHelperUsed();
+        }
+
+        ActorArtHelper.OnHelperUsed();
         ActorPushHelper.OnHelperUsed();
         ActorFaceHelper.OnHelperUsed();
         ActorSkinHelper.OnHelperUsed();
         ActorLaunchArcRendererHelper.OnHelperUsed();
         ActorBattleHelper.OnHelperUsed();
         ActorBoxInteractHelper.OnHelperUsed();
-        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
-        {
-            h.OnHelperUsed();
-        }
 
         ActorMoveColliderRoot.SetActive(true);
     }
@@ -458,7 +453,7 @@ public class Actor : Entity
     protected virtual void MoveInternal()
     {
         if (!ActiveSkillCanMove) CurMoveAttempt = Vector3.zero;
-        if (!IsFrozen && !EntityBuffHelper.IsBeingRepulsed)
+        if (!IsFrozen && !EntityBuffHelper.IsBeingRepulsed && !EntityBuffHelper.IsBeingGround)
         {
             if (CurMoveAttempt.magnitude > 0)
             {
@@ -501,6 +496,12 @@ public class Actor : Entity
         }
         else
         {
+            if (RigidBody != null)
+            {
+                RigidBody.drag = 0f;
+                RigidBody.mass = 1f;
+            }
+
             CurMoveAttempt = Vector3.zero;
         }
 

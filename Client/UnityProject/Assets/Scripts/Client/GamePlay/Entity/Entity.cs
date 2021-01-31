@@ -28,6 +28,7 @@ public abstract class Entity : PoolObject
     internal abstract EntityBuffHelper EntityBuffHelper { get; }
     internal abstract EntityFrozenHelper EntityFrozenHelper { get; }
     internal abstract EntityTriggerZoneHelper EntityTriggerZoneHelper { get; }
+    internal abstract EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper { get; }
     internal abstract List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers { get; }
 
     #endregion
@@ -42,22 +43,24 @@ public abstract class Entity : PoolObject
     [HideLabel]
     public EntityStatPropSet EntityStatPropSet; // 湿数据，随生命周期消亡
 
-    [LabelText("冻结")]
-    [FoldoutGroup("状态")]
     [DisableInPlayMode]
     [ShowInInspector]
+    [FoldoutGroup("状态")]
+    [LabelText("冻结")]
     public bool IsFrozen => EntityStatPropSet.IsFrozen;
 
     [DisplayAsString]
-    [ShowInInspector]
-    [LabelText("上帧世界坐标")]
-    [FoldoutGroup("状态")]
-    internal GridPos3D LastWorldGP;
-
     [HideInEditorMode]
     [ShowInInspector]
-    [LabelText("世界坐标")]
     [FoldoutGroup("状态")]
+    [LabelText("上帧世界坐标")]
+    internal GridPos3D LastWorldGP;
+
+    [DisplayAsString]
+    [HideInEditorMode]
+    [ShowInInspector]
+    [FoldoutGroup("状态")]
+    [LabelText("世界坐标")]
     public abstract GridPos3D WorldGP { get; set; }
 
     public Vector3 CurForward
@@ -74,8 +77,9 @@ public abstract class Entity : PoolObject
 
     [DisplayAsString]
     [HideInEditorMode]
-    [LabelText("模组内坐标")]
+    [ShowInInspector]
     [FoldoutGroup("状态")]
+    [LabelText("模组内坐标")]
     internal GridPos3D LocalGP;
 
     #region 技能

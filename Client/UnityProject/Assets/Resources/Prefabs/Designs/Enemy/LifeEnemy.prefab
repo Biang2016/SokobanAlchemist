@@ -48,9 +48,9 @@ Rigidbody:
   m_AngularDrag: 20
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 2
   m_Constraints: 84
-  m_CollisionDetection: 3
+  m_CollisionDetection: 2
 --- !u!114 &2884598377431085198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,6 +97,16 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 1000
     CollideDamage:
+      BaseValue: 1
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
+    CollideDamageX:
+      BaseValue: 1
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
+    CollideDamageZ:
       BaseValue: 1
       ModifiedValue: 0
       MinValue: 0
@@ -282,6 +292,16 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
+    CollideDamageX:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    CollideDamageZ:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     ExplodeDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
@@ -392,6 +412,8 @@ MonoBehaviour:
       MaxValue: 0
     SkillsPropertyCollections: []
     RawEntityDefaultBuffs: []
+  RawFlamethrowerFuelData:
+    id: 0
   RawEntityPassiveSkills: []
   RawEntityActiveSkills: []
   Camp: 2
@@ -410,13 +432,10 @@ MonoBehaviour:
   InjureFXScale: 2
   HealFX: None
   HealFXScale: 1
-  GainLifeFX: Hit_LoveHeart
-  GainLifeFXScale: 1
   DieFX: Hit_EvilBigGravBall
   DieFXScale: 2
   DashForce: 10
   Accelerate: 250
-  ThrowAimMoveSpeed: 10
   KickForce: 5
   ThrowRadius: 10
   PushableBoxList: []
@@ -429,13 +448,15 @@ MonoBehaviour:
   FrozeFX: Hit_SnowFlake
   ThawFX: Flash_CyanSlight
   RawFrozenBoxPassiveSkills:
-  - id: 0
+  - id: 1
   MovementState: 0
   PushState: 0
   ThrowState: 0
   references:
     version: 1
     00000000:
+      type: {class: , ns: , asm: }
+    00000001:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         SpecialCaseType: 0
@@ -445,14 +466,14 @@ MonoBehaviour:
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
-        - id: 1
-    00000001:
+        - id: 2
+    00000002:
       type: {class: EntityPassiveSkillAction_AddEntityBuff, ns: , asm: Client}
       data:
         RawEntityBuffs:
-        - id: 2
         - id: 3
-    00000002:
+        - id: 4
+    00000003:
       type: {class: EntityBuff_EntityPropertyPlusModifier, ns: , asm: Client}
       data:
         GUID: 10271
@@ -464,7 +485,7 @@ MonoBehaviour:
         EntityPropertyType: 0
         Delta: 3
         LinearDecayInDuration: 0
-    00000003:
+    00000004:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10267
