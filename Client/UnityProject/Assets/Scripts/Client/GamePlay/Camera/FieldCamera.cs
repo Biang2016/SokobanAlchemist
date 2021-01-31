@@ -186,7 +186,7 @@ public class FieldCamera : MonoBehaviour
 
     void Awake()
     {
-        Distance_Level = 2;
+        Distance_Level = 3;
         SetTargetConfigData(TargetConfigData);
     }
 
