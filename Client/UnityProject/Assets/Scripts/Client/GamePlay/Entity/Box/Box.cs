@@ -1036,6 +1036,7 @@ public partial class Box : Entity
                 {
                     if (State == States.BeingKicked) DealCollideDamageToActor(collision, CurrentKickLocalAxis);
                     PlayFXOnEachGrid(CollideFX, CollideFXScale);
+                    if (Rigidbody) Rigidbody.velocity = Vector3.zero;
                     foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                     {
                         ps.OnBeingKickedCollisionEnter(collision, CurrentKickLocalAxis);
