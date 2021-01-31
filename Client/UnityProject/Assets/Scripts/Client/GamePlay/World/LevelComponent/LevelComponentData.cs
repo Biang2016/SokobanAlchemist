@@ -6,11 +6,6 @@ using Sirenix.OdinInspector;
 public class LevelComponentData : IClone<LevelComponentData>
 {
     [ReadOnly]
-    [HideInEditorMode]
-    [LabelText("从属")]
-    public LevelComponentBelongsTo LevelComponentBelongsTo;
-
-    [ReadOnly]
     public GridPos3D WorldGP;
 
     [ReadOnly]
@@ -20,7 +15,6 @@ public class LevelComponentData : IClone<LevelComponentData>
     {
         Type type = GetType();
         LevelComponentData data = (LevelComponentData) Activator.CreateInstance(type);
-        data.LevelComponentBelongsTo = LevelComponentBelongsTo;
         data.WorldGP = WorldGP;
         data.LocalGP = LocalGP;
         ChildClone(data);
@@ -30,10 +24,4 @@ public class LevelComponentData : IClone<LevelComponentData>
     protected virtual void ChildClone(LevelComponentData newData)
     {
     }
-}
-
-public enum LevelComponentBelongsTo
-{
-    World,
-    WorldModule,
 }

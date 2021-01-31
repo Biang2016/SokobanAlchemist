@@ -1268,7 +1268,7 @@ public partial class Box : Entity
 
 #if UNITY_EDITOR
 
-    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
+    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false)
     {
         bool isDirty = false;
         if (MergeBox_MatchThree == srcBoxName)
@@ -1294,14 +1294,14 @@ public partial class Box : Entity
 
         foreach (EntityPassiveSkill ps in RawEntityPassiveSkills)
         {
-            bool dirty = ps.RenameBoxTypeName(name, srcBoxName, targetBoxName, info, moduleSpecial, worldSpecial);
+            bool dirty = ps.RenameBoxTypeName(name, srcBoxName, targetBoxName, info, moduleSpecial);
             isDirty |= dirty;
         }
 
         return isDirty;
     }
 
-    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
+    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false)
     {
         bool isDirty = false;
         if (MergeBox_MatchThree == srcBoxName)
@@ -1327,7 +1327,7 @@ public partial class Box : Entity
 
         foreach (EntityPassiveSkill ps in RawEntityPassiveSkills)
         {
-            bool dirty = ps.DeleteBoxTypeName(name, srcBoxName, info, moduleSpecial, worldSpecial);
+            bool dirty = ps.DeleteBoxTypeName(name, srcBoxName, info, moduleSpecial);
             isDirty |= dirty;
         }
 

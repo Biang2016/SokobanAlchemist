@@ -49,99 +49,6 @@ public class WorldDesignHelper : MonoBehaviour
             ushort worldModuleTypeIndex = ConfigManager.WorldModuleTypeDefineDict.TypeIndexDict[worldModulePrefab.name];
             worldData.ModuleMatrix[gp.x, gp.y, gp.z] = worldModuleTypeIndex;
             worldData.WorldModuleGPOrder.Add(gp);
-
-            // Box ExtraSerializeData
-            List<Box_LevelEditor> boxes = module.transform.GetComponentsInChildren<Box_LevelEditor>().ToList();
-            foreach (Box_LevelEditor box in boxes)
-            {
-                GridPos3D boxModuleGP = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
-                if (box.RequireSerializePassiveSkillsIntoWorld)
-                {
-                    Box_LevelEditor.BoxExtraSerializeData data = box.GetBoxExtraSerializeDataForWorldOverrideWorldModule();
-                    data.LocalGP = boxModuleGP;
-                    worldData.ModuleBoxExtraSerializeDataMatrix[gp.x, gp.y, gp.z].Add(data);
-                }
-            }
-        }
-
-        List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
-        foreach (BornPointDesignHelper bp in bornPoints)
-        {
-            if (bp.transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleBornPointsRoot}")) continue;
-            BornPointData data = (BornPointData) bp.BornPointData.Clone();
-            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(bp.transform, 1);
-            gp -= zeroPoint * WorldModule.MODULE_SIZE;
-            data.WorldGP = gp;
-            data.LevelComponentBelongsTo = LevelComponentBelongsTo.World;
-            if (data.ActorCategory == ActorCategory.Player)
-            {
-                worldData.WorldBornPointGroupData.WorldSpecialBornPointGroupData.PlayerBornPoints.Add(data.BornPointAlias, data);
-            }
-            else
-            {
-                worldData.WorldBornPointGroupData.WorldSpecialBornPointGroupData.EnemyBornPoints.Add(data);
-            }
-        }
-
-        List<WorldCameraPOI> cameraPOIs = GetComponentsInChildren<WorldCameraPOI>().ToList();
-        foreach (WorldCameraPOI poi in cameraPOIs)
-        {
-            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(poi.transform, 1);
-            gp -= zeroPoint * WorldModule.MODULE_SIZE;
-            worldData.WorldCameraPOIData.POIs.Add(gp);
-        }
-
-        List<LevelTriggerBase> levelTriggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
-        foreach (LevelTriggerBase trigger in levelTriggers)
-        {
-            if (trigger.transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot}")) continue;
-            WorldModuleDesignHelper module = trigger.transform.GetComponentInParent<WorldModuleDesignHelper>();
-            if (module) continue;
-            LevelTriggerBase.Data data = (LevelTriggerBase.Data) trigger.TriggerData.Clone();
-            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(trigger.transform, 1);
-            gp -= zeroPoint * WorldModule.MODULE_SIZE;
-            data.WorldGP = gp;
-            data.LevelComponentBelongsTo = LevelComponentBelongsTo.World;
-            GameObject levelTriggerPrefab = PrefabUtility.GetCorrespondingObjectFromSource(trigger.gameObject);
-            ushort levelTriggerTypeIndex = ConfigManager.LevelTriggerTypeDefineDict.TypeIndexDict[levelTriggerPrefab.name];
-            data.LevelTriggerTypeIndex = levelTriggerTypeIndex;
-            worldData.WorldLevelTriggerGroupData.TriggerDataList.Add(data);
-        }
-
-        // 世界SpecialBox
-        List<Box_LevelEditor> worldBoxes = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot).GetComponentsInChildren<Box_LevelEditor>().ToList();
-        foreach (Box_LevelEditor worldBox in worldBoxes)
-        {
-            GameObject boxPrefab = PrefabUtility.GetCorrespondingObjectFromSource(worldBox.gameObject);
-            ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxPrefab.name.Replace("_LevelEditor", "")];
-            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(worldBox.transform, 1);
-            gp -= zeroPoint * WorldModule.MODULE_SIZE;
-            Box_LevelEditor.WorldSpecialBoxData worldSpecialBoxData = worldBox.GetBoxSerializeInWorldData();
-            worldSpecialBoxData.WorldGP = gp;
-            worldSpecialBoxData.BoxTypeIndex = boxTypeIndex;
-            worldSpecialBoxData.BoxOrientation = worldBox.BoxOrientation;
-
-            // 关卡事件触发出现的Box序列化到单独的地方
-            bool isLevelEventTriggerAppearBox = false;
-            foreach (EntityPassiveSkill bf in worldBox.RawBoxPassiveSkills)
-            {
-                if (bf is BoxPassiveSkill_LevelEventTriggerAppear bf_leta)
-                {
-                    BoxPassiveSkill_LevelEventTriggerAppear.Data data = new BoxPassiveSkill_LevelEventTriggerAppear.Data();
-                    data.WorldGP = gp;
-                    data.LevelComponentBelongsTo = LevelComponentBelongsTo.World;
-                    data.BoxTypeIndex = boxTypeIndex;
-                    data.BoxOrientation = worldBox.BoxOrientation;
-                    data.BoxPassiveSkill_LevelEventTriggerAppear = (BoxPassiveSkill_LevelEventTriggerAppear) bf_leta.Clone();
-                    data.WorldSpecialBoxData = worldSpecialBoxData; // 世界维度LevelEventTriggerAppear的箱子自己处理自己的ExtraSerializeData
-                    worldData.WorldSpecialBoxEventTriggerAppearBoxDataList.Add(data); // 序列到这里
-                    isLevelEventTriggerAppearBox = true;
-                    break;
-                }
-            }
-
-            // LevelEventTriggerAppear的箱子不记录到此列表中
-            if (!isLevelEventTriggerAppearBox) worldData.WorldSpecialBoxDataList.Add(worldSpecialBoxData);
         }
 
         return worldData;
@@ -153,9 +60,6 @@ public class WorldDesignHelper : MonoBehaviour
         dirty |= ArrangeAllRoots();
         dirty |= FormatAllWorldModuleName_Editor();
         dirty |= FormatAllBornPointName_Editor();
-        dirty |= FormatAllWorldCameraPOIName_Editor();
-        dirty |= FormatAllLevelTriggerName_Editor();
-        dirty |= FormatAllBoxName_Editor();
         return dirty;
     }
 
@@ -183,58 +87,6 @@ public class WorldDesignHelper : MonoBehaviour
         foreach (BornPointDesignHelper bp in bornPoints)
         {
             dirty |= bp.FormatAllName_Editor();
-        }
-
-        return dirty;
-    }
-
-    private bool FormatAllWorldCameraPOIName_Editor()
-    {
-        bool dirty = false;
-        List<WorldCameraPOI> cameraPOIs = GetComponentsInChildren<WorldCameraPOI>().ToList();
-        foreach (WorldCameraPOI poi in cameraPOIs)
-        {
-            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(poi.gameObject);
-            if (poi.name != prefab.name)
-            {
-                poi.name = prefab.name;
-                dirty = true;
-            }
-        }
-
-        return dirty;
-    }
-
-    private bool FormatAllLevelTriggerName_Editor()
-    {
-        bool dirty = false;
-        List<LevelTriggerBase> levelTriggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
-        foreach (LevelTriggerBase trigger in levelTriggers)
-        {
-            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(trigger.gameObject);
-            if (trigger.name != prefab.name)
-            {
-                trigger.name = prefab.name;
-                dirty = true;
-            }
-        }
-
-        return dirty;
-    }
-
-    private bool FormatAllBoxName_Editor()
-    {
-        bool dirty = false;
-        List<Box_LevelEditor> worldBoxes = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot).GetComponentsInChildren<Box_LevelEditor>().ToList();
-        foreach (Box_LevelEditor worldBox in worldBoxes)
-        {
-            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(worldBox.gameObject);
-            string prefabName = prefab.name.Replace("_LevelEditor", "");
-            if (worldBox.name != prefabName)
-            {
-                worldBox.name = prefabName;
-                dirty = true;
-            }
         }
 
         return dirty;
@@ -302,58 +154,6 @@ public class WorldDesignHelper : MonoBehaviour
             }
         }
 
-        List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
-        foreach (BornPointDesignHelper bornPoint in bornPoints)
-        {
-            WorldModuleDesignHelper module = bornPoint.transform.GetComponentInParent<WorldModuleDesignHelper>();
-            if (module) continue;
-            Transform root = GetRoot(WorldHierarchyRootType.WorldBornPointsRoot);
-            if (!bornPoint.transform.IsChildOf(root))
-            {
-                bornPoint.transform.parent = root;
-                dirty = true;
-            }
-        }
-
-        List<WorldCameraPOI> pois = GetComponentsInChildren<WorldCameraPOI>().ToList();
-        foreach (WorldCameraPOI poi in pois)
-        {
-            Transform root = GetRoot(WorldHierarchyRootType.WorldCameraPOIsRoot);
-            if (!poi.transform.IsChildOf(root))
-            {
-                poi.transform.parent = root;
-                dirty = true;
-            }
-        }
-
-        List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
-        foreach (LevelTriggerBase trigger in triggers)
-        {
-            WorldModuleDesignHelper module = trigger.transform.GetComponentInParent<WorldModuleDesignHelper>();
-            if (module) continue;
-            Transform root = GetRoot(WorldHierarchyRootType.WorldLevelTriggersRoot);
-            if (!trigger.transform.IsChildOf(root))
-            {
-                trigger.transform.parent = root;
-                dirty = true;
-            }
-
-            trigger.RefreshIsUnderWorldOrModuleBoxesRoot();
-        }
-
-        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
-        foreach (Box_LevelEditor box in boxes)
-        {
-            WorldModuleDesignHelper module = box.transform.GetComponentInParent<WorldModuleDesignHelper>();
-            if (module) continue;
-            Transform worldSpecialBoxesRoot = GetRoot(WorldHierarchyRootType.WorldSpecialBoxesRoot);
-            if (!box.transform.IsChildOf(worldSpecialBoxesRoot))
-            {
-                box.transform.parent = worldSpecialBoxesRoot;
-                dirty = true;
-            }
-        }
-
         return dirty;
     }
 
@@ -369,21 +169,6 @@ public class WorldDesignHelper : MonoBehaviour
             WorldModuleDesignHelper module = trigger.transform.GetComponentInParent<WorldModuleDesignHelper>();
             if (module) continue;
             isDirty |= trigger.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo);
-        }
-
-        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
-        foreach (Box_LevelEditor box in boxes)
-        {
-            if (box.RequireSerializePassiveSkillsIntoWorld)
-            {
-                isDirty |= box.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo, false, true);
-            }
-            else
-            {
-                WorldModuleDesignHelper module = box.transform.GetComponentInParent<WorldModuleDesignHelper>();
-                if (module) continue;
-                isDirty |= box.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo, false, true);
-            }
         }
 
         localInfo.Append($"WorldEnd: {name} ------------\n");
@@ -405,21 +190,6 @@ public class WorldDesignHelper : MonoBehaviour
             isDirty |= trigger.DeleteBoxTypeName(srcBoxName, localInfo);
         }
 
-        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
-        foreach (Box_LevelEditor box in boxes)
-        {
-            if (box.RequireSerializePassiveSkillsIntoWorld)
-            {
-                isDirty |= box.DeleteBoxTypeName(srcBoxName, localInfo, false, true);
-            }
-            else
-            {
-                WorldModuleDesignHelper module = box.transform.GetComponentInParent<WorldModuleDesignHelper>();
-                if (module) continue;
-                isDirty |= box.DeleteBoxTypeName(srcBoxName, localInfo, false, true);
-            }
-        }
-
         localInfo.Append($"WorldEnd: {name} ------------\n");
         if (isDirty) info.Append(localInfo);
         return isDirty;
@@ -433,8 +203,4 @@ public enum WorldHierarchyRootType
     WallModulesRoot = 1,
     DeadZoneModulesRoot = 2,
     GroundModulesRoot = 3,
-    WorldBornPointsRoot = 4,
-    WorldCameraPOIsRoot = 5,
-    WorldSpecialBoxesRoot = 6,
-    WorldLevelTriggersRoot = 7,
 }

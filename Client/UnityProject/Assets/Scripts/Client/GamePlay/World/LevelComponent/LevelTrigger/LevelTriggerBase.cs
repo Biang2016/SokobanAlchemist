@@ -190,16 +190,10 @@ public abstract class LevelTriggerBase : PoolObject
             {
                 transform.DrawSpecialTip(Vector3.left * 0.5f, "#0AFFF1".HTMLColorToColor(), Color.cyan, "模特");
             }
-
-            if (IsUnderWorldSpecialBoxesRoot)
-            {
-                transform.DrawSpecialTip(Vector3.left * 0.5f, "#FF8000".HTMLColorToColor(), Color.yellow, "世特");
-            }
         }
     }
 
     private bool IsUnderWorldModuleSpecialBoxesRoot = false;
-    private bool IsUnderWorldSpecialBoxesRoot = false;
 
     void OnTransformParentChanged()
     {
@@ -210,8 +204,7 @@ public abstract class LevelTriggerBase : PoolObject
     {
         if (!Application.isPlaying)
         {
-            IsUnderWorldSpecialBoxesRoot = transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot}");
-            IsUnderWorldSpecialBoxesRoot = transform.HasAncestorName($"@_{WorldHierarchyRootType.WorldLevelTriggersRoot}");
+            IsUnderWorldModuleSpecialBoxesRoot = transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot}");
         }
     }
 

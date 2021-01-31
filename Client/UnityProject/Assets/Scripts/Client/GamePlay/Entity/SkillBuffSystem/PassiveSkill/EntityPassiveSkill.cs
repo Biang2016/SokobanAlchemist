@@ -27,9 +27,6 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
 
         [LabelText("模组特例")]
         Module,
-
-        [LabelText("模组特例")]
-        World,
     }
 
     #region Conditions
@@ -136,10 +133,9 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
 
 #if UNITY_EDITOR
 
-    public bool RenameBoxTypeName(string boxInstanceName, string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
+    public bool RenameBoxTypeName(string boxInstanceName, string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false)
     {
         if (moduleSpecial && SpecialCaseType != BoxPassiveSkillBaseSpecialCaseType.Module) return false;
-        if (worldSpecial && SpecialCaseType != BoxPassiveSkillBaseSpecialCaseType.World) return false;
         bool isDirty = false;
         foreach (FieldInfo fi in GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
         {
@@ -181,10 +177,9 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
         return isDirty;
     }
 
-    public bool DeleteBoxTypeName(string boxInstanceName, string srcBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
+    public bool DeleteBoxTypeName(string boxInstanceName, string srcBoxName, StringBuilder info, bool moduleSpecial = false)
     {
         if (moduleSpecial && SpecialCaseType != BoxPassiveSkillBaseSpecialCaseType.Module) return false;
-        if (worldSpecial && SpecialCaseType != BoxPassiveSkillBaseSpecialCaseType.World) return false;
         bool isDirty = false;
 
         foreach (FieldInfo fi in GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))

@@ -29,7 +29,6 @@ public class BoxPassiveSkillAction_ChangeBoxToEnemy : BoxPassiveSkillAction, Ent
                 {
                     BornPointData newBornPointData = new BornPointData();
                     newBornPointData.LocalGP = localGP;
-                    newBornPointData.WorldGP = module.LocalGPToWorldGP(localGP);
                     newBornPointData.ActorType = ChangeBoxToEnemyType;
                     BattleManager.Instance.CreateActorByBornPointData(newBornPointData);
                 }

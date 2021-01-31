@@ -63,7 +63,6 @@ public class WorldModuleDesignHelper : MonoBehaviour
                 {
                     BoxPassiveSkill_LevelEventTriggerAppear.Data data = new BoxPassiveSkill_LevelEventTriggerAppear.Data();
                     data.LocalGP = gp;
-                    data.LevelComponentBelongsTo = LevelComponentBelongsTo.WorldModule;
                     data.BoxTypeIndex = boxTypeIndex;
                     data.BoxOrientation = box.BoxOrientation;
                     data.BoxPassiveSkill_LevelEventTriggerAppear = (BoxPassiveSkill_LevelEventTriggerAppear) bf_leta.Clone();
@@ -120,7 +119,6 @@ public class WorldModuleDesignHelper : MonoBehaviour
             data.LevelTriggerTypeIndex = levelTriggerTypeIndex;
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(trigger.transform, 1);
             data.LocalGP = gp;
-            data.LevelComponentBelongsTo = LevelComponentBelongsTo.WorldModule;
             worldModuleData.WorldModuleLevelTriggerGroupData.TriggerDataList.Add(data);
         }
 
@@ -130,7 +128,6 @@ public class WorldModuleDesignHelper : MonoBehaviour
             BornPointData data = (BornPointData) bp.BornPointData.Clone();
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(bp.transform, 1);
             data.LocalGP = gp;
-            data.LevelComponentBelongsTo = LevelComponentBelongsTo.WorldModule;
             if (data.ActorCategory == ActorCategory.Player)
             {
                 worldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints.Add(name + (string.IsNullOrEmpty(data.BornPointAlias) ? "" : "_" + data.BornPointAlias), data);
@@ -345,8 +342,6 @@ public class WorldModuleDesignHelper : MonoBehaviour
                 box.transform.parent = root;
                 dirty = true;
             }
-
-            box.RefreshIsUnderWorldSpecialBoxesRoot();
         }
 
         return dirty;
@@ -368,7 +363,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
         {
             if (box.RequireSerializePassiveSkillsIntoWorldModule)
             {
-                isDirty |= box.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo, true, false);
+                isDirty |= box.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo, true);
             }
         }
 
@@ -393,7 +388,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
         {
             if (box.RequireSerializePassiveSkillsIntoWorldModule)
             {
-                isDirty |= box.DeleteBoxTypeName(srcBoxName, localInfo, true, false);
+                isDirty |= box.DeleteBoxTypeName(srcBoxName, localInfo, true);
             }
         }
 

@@ -258,12 +258,12 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("SwitchBornPoint/{0}", "GetAllWorldPlayerBornPoints", -9)]
     public void ChangeWorldPlayerBornPoint(string playerBornPointAlias)
     {
-        BattleManager.Instance.Player1.TransportPlayerGridPos(WorldManager.Instance.CurrentWorld.WorldData.WorldBornPointGroupData.PlayerBornPointDataAliasDict[playerBornPointAlias].WorldGP);
+        BattleManager.Instance.Player1.TransportPlayerGridPos(WorldManager.Instance.CurrentWorld.WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[playerBornPointAlias].WorldGP);
     }
 
     public List<string> GetAllWorldPlayerBornPoints()
     {
-        return WorldManager.Instance.CurrentWorld.WorldData.WorldBornPointGroupData.PlayerBornPointDataAliasDict.Keys.ToList();
+        return WorldManager.Instance.CurrentWorld.WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Keys.ToList();
     }
 
     [DebugSlider("Player/KickForce", 15, 0, 1000)]

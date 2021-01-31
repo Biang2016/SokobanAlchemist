@@ -19,17 +19,10 @@ public class World : PoolObject
 
     public WorldModule[,,] BorderWorldModuleMatrix = new WorldModule[WORLD_SIZE + 2, WORLD_HEIGHT + 2, WORLD_SIZE + 2];
 
-    private List<WorldCameraPOI> POIs = new List<WorldCameraPOI>();
-    private List<LevelTriggerBase> WorldLevelTriggers = new List<LevelTriggerBase>();
-
-    public List<BoxPassiveSkill_LevelEventTriggerAppear> EventTriggerAppearBoxPassiveSkillList = new List<BoxPassiveSkill_LevelEventTriggerAppear>();
-
     #region Root
 
     private Transform WorldModuleRoot;
     private Transform BorderWorldModuleRoot;
-    private Transform WorldCameraPOIRoot;
-    private Transform WorldLevelTriggerRoot;
 
     #endregion
 
@@ -39,10 +32,6 @@ public class World : PoolObject
         WorldModuleRoot.parent = transform;
         BorderWorldModuleRoot = new GameObject("BorderWorldModuleRoot").transform;
         BorderWorldModuleRoot.parent = transform;
-        WorldCameraPOIRoot = new GameObject("WorldCameraPOIRoot").transform;
-        WorldCameraPOIRoot.parent = transform;
-        WorldLevelTriggerRoot = new GameObject("WorldLevelTriggerRoot").transform;
-        WorldLevelTriggerRoot.parent = transform;
     }
 
     public void Clear()
@@ -72,29 +61,10 @@ public class World : PoolObject
                 }
             }
         }
-
-        foreach (WorldCameraPOI poi in POIs)
-        {
-            poi.PoolRecycle();
-        }
-
-        POIs.Clear();
-        foreach (LevelTriggerBase trigger in WorldLevelTriggers)
-        {
-            trigger.PoolRecycle();
-        }
-
-        WorldLevelTriggers.Clear();
-        foreach (BoxPassiveSkill_LevelEventTriggerAppear bf in EventTriggerAppearBoxPassiveSkillList)
-        {
-            bf.ClearAndUnRegister();
-        }
-
-        EventTriggerAppearBoxPassiveSkillList.Clear();
         WorldData = null;
     }
 
-    public void Initialize(WorldData worldData)
+    public virtual void Initialize(WorldData worldData)
     {
         WorldData = worldData;
         for (int x = 0; x < WorldData.ModuleMatrix.GetLength(0); x++)
@@ -106,7 +76,7 @@ public class World : PoolObject
                     ushort worldModuleTypeIndex = WorldData.ModuleMatrix[x, y, z];
                     if (worldModuleTypeIndex != 0)
                     {
-                        GenerateWorldModule(worldModuleTypeIndex, x, y, z, WorldData.ModuleBoxExtraSerializeDataMatrix[x, y, z]);
+                        GenerateWorldModule(worldModuleTypeIndex, x, y, z);
                     }
                 }
             }
@@ -209,84 +179,15 @@ public class World : PoolObject
 
         #endregion
 
-        foreach (GridPos3D gp in WorldData.WorldCameraPOIData.POIs)
-        {
-            WorldCameraPOI poi = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldCameraPOI].AllocateGameObject<WorldCameraPOI>(WorldCameraPOIRoot);
-            GridPos3D.ApplyGridPosToLocalTrans(gp, poi.transform, 1);
-            POIs.Add(poi);
-            ClientGameManager.Instance.BattleMessenger.Broadcast((uint) Enum_Events.OnWorldCameraPOILoaded, poi);
-        }
-
-        foreach (LevelTriggerBase.Data triggerData in WorldData.WorldLevelTriggerGroupData.TriggerDataList)
-        {
-            LevelTriggerBase.Data dataClone = (LevelTriggerBase.Data) triggerData.Clone();
-            if (string.IsNullOrEmpty(dataClone.AppearLevelEventAlias))
-            {
-                GenerateLevelTrigger(dataClone);
-            }
-            else
-            {
-                Callback<string> cb = null;
-                cb = (eventAlias) =>
-                {
-                    if (eventAlias.Equals(dataClone.AppearLevelEventAlias))
-                    {
-                        GenerateLevelTrigger(dataClone);
-                        ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, cb);
-                    }
-                };
-                ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, cb);
-            }
-        }
-
-        foreach (BoxPassiveSkill_LevelEventTriggerAppear.Data data in WorldData.WorldSpecialBoxEventTriggerAppearBoxDataList)
-        {
-            BoxPassiveSkill_LevelEventTriggerAppear.Data dataClone = (BoxPassiveSkill_LevelEventTriggerAppear.Data) data.Clone();
-            BoxPassiveSkill_LevelEventTriggerAppear bf = dataClone.BoxPassiveSkill_LevelEventTriggerAppear;
-            bf.GenerateBoxAction = () =>
-            {
-                GridPos3D worldGP = data.WorldGP;
-                Box box = GetBoxByGridPosition(worldGP, out WorldModule module, out GridPos3D localGP);
-                box?.DestroyBox(); // 强行删除该格占用Box
-                if (module)
-                {
-                    module.GenerateBox(dataClone.BoxTypeIndex, worldGP, data.BoxOrientation, true, false, null, dataClone.WorldSpecialBoxData.BoxExtraSerializeDataFromWorld);
-
-                    // Box生成后此BoxPassiveSkill及注册的事件均作废
-                    bf.ClearAndUnRegister();
-                    EventTriggerAppearBoxPassiveSkillList.Remove(bf);
-                }
-            };
-            bf.OnRegisterLevelEventID();
-            EventTriggerAppearBoxPassiveSkillList.Add(bf);
-        }
-
-        foreach (Box_LevelEditor.WorldSpecialBoxData worldSpecialBoxData in WorldData.WorldSpecialBoxDataList)
-        {
-            GridPos3D worldGP = worldSpecialBoxData.WorldGP;
-            WorldModule module = GetModuleByGridPosition(worldGP);
-            if (module != null)
-            {
-                module.GenerateBox(worldSpecialBoxData.BoxTypeIndex, worldGP, worldSpecialBoxData.BoxOrientation, false, true, null, worldSpecialBoxData.BoxExtraSerializeDataFromWorld);
-            }
-        }
-
         //todo 未来加卸载模组时需要跑一遍这里
-        WorldData.WorldBornPointGroupData.InitTempData();
+        WorldData.WorldBornPointGroupData_Runtime.InitTempData();
         foreach (GridPos3D worldModuleGP in WorldData.WorldModuleGPOrder)
         {
             WorldModule module = WorldModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
-            if (module != null) WorldData.WorldBornPointGroupData.AddModuleData(module, worldModuleGP);
+            if (module != null) WorldData.WorldBornPointGroupData_Runtime.AddModuleData(module, worldModuleGP);
         }
 
-        BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData, WorldData.DefaultWorldActorBornPointAlias);
-    }
-
-    public void GenerateLevelTrigger(LevelTriggerBase.Data dataClone)
-    {
-        LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[dataClone.LevelTriggerTypeIndex].AllocateGameObject<LevelTriggerBase>(WorldLevelTriggerRoot);
-        trigger.InitializeInWorld(dataClone);
-        WorldLevelTriggers.Add(trigger);
+        BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData_Runtime, WorldData.DefaultWorldActorBornPointAlias);
     }
 
     private void GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, List<Box_LevelEditor.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)
@@ -508,25 +409,6 @@ public class World : PoolObject
 
     #endregion
 
-    public bool DropBoxOnTopLayer(ushort boxTypeIndex, GridPosR.Orientation boxOrientation, GridPos3D dir, GridPos3D origin, int maxDistance, out Box dropBox)
-    {
-        dropBox = null;
-        if (boxTypeIndex == 0) return false;
-        if (BoxProject(dir, origin, maxDistance, false, out _, out Box _))
-        {
-            WorldModule module = GetModuleByGridPosition(origin, true);
-            if (module != null)
-            {
-                dropBox = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);
-                dropBox.Setup(boxTypeIndex, boxOrientation);
-                dropBox.Initialize(origin, module, 0, false, Box.LerpType.DropFromAir);
-                dropBox.DropFromAir();
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     #region MoveBox Calculators
 
@@ -1098,6 +980,25 @@ public class World : PoolObject
                 }
             }
         }
+    }
+    public bool DropBoxOnTopLayer(ushort boxTypeIndex, GridPosR.Orientation boxOrientation, GridPos3D dir, GridPos3D origin, int maxDistance, out Box dropBox)
+    {
+        dropBox = null;
+        if (boxTypeIndex == 0) return false;
+        if (BoxProject(dir, origin, maxDistance, false, out _, out Box _))
+        {
+            WorldModule module = GetModuleByGridPosition(origin, true);
+            if (module != null)
+            {
+                dropBox = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);
+                dropBox.Setup(boxTypeIndex, boxOrientation);
+                dropBox.Initialize(origin, module, 0, false, Box.LerpType.DropFromAir);
+                dropBox.DropFromAir();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void CheckDropSelf(Box box)

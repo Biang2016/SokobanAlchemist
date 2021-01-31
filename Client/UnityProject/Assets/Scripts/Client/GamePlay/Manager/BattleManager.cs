@@ -73,7 +73,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         CameraManager.Instance.FieldCamera.InitFocus();
     }
 
-    public void CreateActorsByBornPointGroupData(WorldBornPointGroupData data, string firstPlayerBornPointAlias)
+    public void CreateActorsByBornPointGroupData(WorldBornPointGroupData_Runtime data, string firstPlayerBornPointAlias)
     {
         CreateActorByBornPointData(data.PlayerBornPointDataAliasDict[firstPlayerBornPointAlias]); // Create Player At First Player BornPoint (world)
         foreach (BornPointData bpd in data.AllEnemyBornPointDataList)
@@ -89,7 +89,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     private void OnTriggerLevelEventCreateActor(string eventAlias)
     {
-        WorldBornPointGroupData data = WorldManager.Instance.CurrentWorld.WorldData.WorldBornPointGroupData;
+        WorldBornPointGroupData_Runtime data = WorldManager.Instance.CurrentWorld.WorldData.WorldBornPointGroupData_Runtime;
         if (data.EnemyBornPointDataAliasDict.TryGetValue(eventAlias, out BornPointData bp))
         {
             CreateActorByBornPointData(bp);

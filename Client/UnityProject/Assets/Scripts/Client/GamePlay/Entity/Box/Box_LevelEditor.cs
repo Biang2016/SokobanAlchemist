@@ -39,35 +39,6 @@ public class Box_LevelEditor : MonoBehaviour
 
     #endregion
 
-    #region BoxSerializeInWorldData
-
-    public class WorldSpecialBoxData : IClone<WorldSpecialBoxData>
-    {
-        public GridPos3D WorldGP;
-        public ushort BoxTypeIndex;
-        public GridPosR.Orientation BoxOrientation;
-        public BoxExtraSerializeData BoxExtraSerializeDataFromWorld; // 序列化到世界中的Box自己处理自己的ExtraData
-
-        public WorldSpecialBoxData Clone()
-        {
-            WorldSpecialBoxData newData = new WorldSpecialBoxData();
-            newData.WorldGP = WorldGP;
-            newData.BoxTypeIndex = BoxTypeIndex;
-            newData.BoxOrientation = BoxOrientation;
-            newData.BoxExtraSerializeDataFromWorld = BoxExtraSerializeDataFromWorld.Clone();
-            return newData;
-        }
-    }
-
-    public WorldSpecialBoxData GetBoxSerializeInWorldData()
-    {
-        WorldSpecialBoxData data = new WorldSpecialBoxData();
-        data.BoxExtraSerializeDataFromWorld = GetBoxExtraSerializeDataForWorld();
-        return data;
-    }
-
-    #endregion
-
     #region BoxExtraData
 
     public class BoxExtraSerializeData : IClone<BoxExtraSerializeData>
@@ -84,37 +55,6 @@ public class Box_LevelEditor : MonoBehaviour
                 BoxPassiveSkills = BoxPassiveSkills.Clone()
             };
         }
-    }
-
-    public BoxExtraSerializeData GetBoxExtraSerializeDataForWorld()
-    {
-        BoxExtraSerializeData data = new BoxExtraSerializeData();
-        data.BoxPassiveSkills = new List<EntityPassiveSkill>();
-        foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
-        {
-            if (bf is BoxPassiveSkill_LevelEventTriggerAppear) continue;
-            if (bf.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-            {
-                data.BoxPassiveSkills.Add(bf.Clone());
-            }
-        }
-
-        return data;
-    }
-
-    public BoxExtraSerializeData GetBoxExtraSerializeDataForWorldOverrideWorldModule()
-    {
-        BoxExtraSerializeData data = new BoxExtraSerializeData();
-        data.BoxPassiveSkills = new List<EntityPassiveSkill>();
-        foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
-        {
-            if (bf.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-            {
-                data.BoxPassiveSkills.Add(bf.Clone());
-            }
-        }
-
-        return data;
     }
 
     public BoxExtraSerializeData GetBoxExtraSerializeDataForWorldModule()
@@ -136,22 +76,6 @@ public class Box_LevelEditor : MonoBehaviour
     #endregion
 
 #if UNITY_EDITOR
-
-    public bool RequireSerializePassiveSkillsIntoWorld
-    {
-        get
-        {
-            foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
 
     public bool RequireSerializePassiveSkillsIntoWorldModule
     {
@@ -188,25 +112,6 @@ public class Box_LevelEditor : MonoBehaviour
         }
     }
 
-    public bool LevelEventTriggerAppearInWorld
-    {
-        get
-        {
-            foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear)
-                {
-                    if (appear.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.World)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-    }
-
     void OnDrawGizmos()
     {
         if (!Application.isPlaying)
@@ -216,34 +121,10 @@ public class Box_LevelEditor : MonoBehaviour
                 transform.DrawSpecialTip(Vector3.left * 0.5f, "#0AFFF1".HTMLColorToColor(), Color.cyan, "模特");
             }
 
-            if (RequireSerializePassiveSkillsIntoWorld || IsUnderWorldSpecialBoxesRoot)
-            {
-                transform.DrawSpecialTip(Vector3.left * 0.5f, "#FF8000".HTMLColorToColor(), Color.yellow, "世特");
-            }
-
             if (LevelEventTriggerAppearInWorldModule)
             {
                 transform.DrawSpecialTip(Vector3.left * 0.5f + Vector3.forward * 0.5f, Color.clear, "#B30AFF".HTMLColorToColor(), "模预隐");
             }
-            else if (LevelEventTriggerAppearInWorld)
-            {
-                transform.DrawSpecialTip(Vector3.left * 0.5f + Vector3.forward * 0.5f, Color.clear, "#FF0A69".HTMLColorToColor(), "世预隐");
-            }
-        }
-    }
-
-    private bool IsUnderWorldSpecialBoxesRoot = false;
-
-    void OnTransformParentChanged()
-    {
-        RefreshIsUnderWorldSpecialBoxesRoot();
-    }
-
-    internal void RefreshIsUnderWorldSpecialBoxesRoot()
-    {
-        if (!Application.isPlaying)
-        {
-            IsUnderWorldSpecialBoxesRoot = transform.HasAncestorName($"@_{WorldHierarchyRootType.WorldSpecialBoxesRoot}");
         }
     }
 
@@ -289,25 +170,25 @@ public class Box_LevelEditor : MonoBehaviour
         DestroyImmediate(gameObject);
     }
 
-    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
+    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false)
     {
         bool isDirty = false;
         foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
         {
-            bool dirty = bf.RenameBoxTypeName(name, srcBoxName, targetBoxName, info, moduleSpecial, worldSpecial);
+            bool dirty = bf.RenameBoxTypeName(name, srcBoxName, targetBoxName, info, moduleSpecial);
             isDirty |= dirty;
         }
 
         return isDirty;
     }
 
-    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false, bool worldSpecial = false)
+    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false)
     {
         bool isDirty = false;
 
         foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
         {
-            bool dirty = bf.DeleteBoxTypeName(name, srcBoxName, info, moduleSpecial, worldSpecial);
+            bool dirty = bf.DeleteBoxTypeName(name, srcBoxName, info, moduleSpecial);
             isDirty |= dirty;
         }
 

@@ -18,28 +18,9 @@ public class WorldData : IClone<WorldData>
     /// </summary>
     public ushort[,,] ModuleMatrix = new ushort[World.WORLD_SIZE, World.WORLD_HEIGHT, World.WORLD_SIZE];
 
-    public WorldBornPointGroupData WorldBornPointGroupData = new WorldBornPointGroupData();
-    public WorldCameraPOIData WorldCameraPOIData = new WorldCameraPOIData();
-    public LevelTriggerGroupData WorldLevelTriggerGroupData = new LevelTriggerGroupData();
-    public List<Box_LevelEditor.WorldSpecialBoxData> WorldSpecialBoxDataList = new List<Box_LevelEditor.WorldSpecialBoxData>(); // LevelEventTriggerAppear的箱子不记录到此列表中
-    public List<Box_LevelEditor.BoxExtraSerializeData>[,,] ModuleBoxExtraSerializeDataMatrix = new List<Box_LevelEditor.BoxExtraSerializeData>[World.WORLD_SIZE, World.WORLD_HEIGHT, World.WORLD_SIZE];
-    public List<BoxPassiveSkill_LevelEventTriggerAppear.Data> WorldSpecialBoxEventTriggerAppearBoxDataList = new List<BoxPassiveSkill_LevelEventTriggerAppear.Data>(); // 覆盖模组特例的世界特例不序列化在此，序列化在ModuleBoxExtraSerializeDataMatrix中
+    public WorldBornPointGroupData_Runtime WorldBornPointGroupData_Runtime = new WorldBornPointGroupData_Runtime();
 
     public List<GridPos3D> WorldModuleGPOrder = new List<GridPos3D>();
-
-    public WorldData()
-    {
-        for (int x = 0; x < ModuleMatrix.GetLength(0); x++)
-        {
-            for (int y = 0; y < ModuleMatrix.GetLength(1); y++)
-            {
-                for (int z = 0; z < ModuleMatrix.GetLength(2); z++)
-                {
-                    ModuleBoxExtraSerializeDataMatrix[x, y, z] = new List<Box_LevelEditor.BoxExtraSerializeData>();
-                }
-            }
-        }
-    }
 
     public WorldData Clone()
     {
@@ -55,16 +36,10 @@ public class WorldData : IClone<WorldData>
                 for (int z = 0; z < ModuleMatrix.GetLength(2); z++)
                 {
                     data.ModuleMatrix[x, y, z] = ModuleMatrix[x, y, z];
-                    data.ModuleBoxExtraSerializeDataMatrix[x, y, z] = ModuleBoxExtraSerializeDataMatrix[x, y, z].Clone();
                 }
             }
         }
 
-        data.WorldBornPointGroupData = WorldBornPointGroupData.Clone();
-        data.WorldCameraPOIData = WorldCameraPOIData.Clone();
-        data.WorldLevelTriggerGroupData = WorldLevelTriggerGroupData.Clone();
-        data.WorldSpecialBoxDataList = WorldSpecialBoxDataList.Clone();
-        data.WorldSpecialBoxEventTriggerAppearBoxDataList = WorldSpecialBoxEventTriggerAppearBoxDataList.Clone();
         data.WorldModuleGPOrder = WorldModuleGPOrder.Clone();
         return data;
     }
@@ -80,4 +55,7 @@ public enum WorldFeature
 
     [LabelText("PVP")]
     PVP = 1 << 1,
+
+    [LabelText("开放世界")]
+    OpenWorld = 1 << 2,
 }
