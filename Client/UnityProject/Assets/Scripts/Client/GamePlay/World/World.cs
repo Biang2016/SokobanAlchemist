@@ -9,7 +9,7 @@ using UnityEngine.Assertions;
 
 public class World : PoolObject
 {
-    public const int WORLD_SIZE = 16;
+    public const int WORLD_SIZE = 128;
     public const int WORLD_HEIGHT = 8;
 
     public WorldData WorldData;
@@ -21,8 +21,8 @@ public class World : PoolObject
 
     #region Root
 
-    private Transform WorldModuleRoot;
-    private Transform BorderWorldModuleRoot;
+    protected Transform WorldModuleRoot;
+    protected Transform BorderWorldModuleRoot;
 
     #endregion
 
@@ -61,6 +61,7 @@ public class World : PoolObject
                 }
             }
         }
+
         WorldData = null;
     }
 
@@ -190,11 +191,11 @@ public class World : PoolObject
         BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData_Runtime, WorldData.DefaultWorldActorBornPointAlias);
     }
 
-    private void GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, List<Box_LevelEditor.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)
+    protected void GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z)
     {
         bool isBorderModule = worldModuleTypeIndex == ConfigManager.WorldModule_DeadZoneIndex || worldModuleTypeIndex == ConfigManager.WorldModule_HiddenWallIndex;
         if (isBorderModule && BorderWorldModuleMatrix[x + 1, y + 1, z + 1] != null) return;
-        WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(isBorderModule ? BorderWorldModuleRoot : WorldModuleRoot);
+        WorldModule wm = GameObjectPoolManager.Instance.PoolDict[worldModuleTypeIndex == ConfigManager.WorldModule_OpenWorldModule ? GameObjectPoolManager.PrefabNames.OpenWorldModule : GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(isBorderModule ? BorderWorldModuleRoot : WorldModuleRoot);
         WorldModuleData data = ConfigManager.GetWorldModuleDataConfig(worldModuleTypeIndex);
 
         wm.name = $"WM_{data.WorldModuleTypeName}({x}, {y}, {z})";
@@ -209,7 +210,17 @@ public class World : PoolObject
 
         GridPos3D gp = new GridPos3D(x, y, z);
         GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);
-        wm.Initialize(data, gp, this, worldBoxExtraSerializeDataList);
+        wm.Initialize(data, gp, this);
+    }
+
+    protected void GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z)
+    {
+        WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.OpenWorldModule].AllocateGameObject<WorldModule>(WorldModuleRoot);
+        wm.name = $"WM_{data.WorldModuleTypeName}({x}, {y}, {z})";
+        WorldModuleMatrix[x, y, z] = wm;
+        GridPos3D gp = new GridPos3D(x, y, z);
+        GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);
+        wm.Initialize(data, gp, this);
     }
 
     #region Utils
@@ -409,10 +420,9 @@ public class World : PoolObject
 
     #endregion
 
-
     #region MoveBox Calculators
 
-    private Collider[] actorOccupiedGridSphereOverlapTempResultCache = new Collider[100];
+    protected Collider[] actorOccupiedGridSphereOverlapTempResultCache = new Collider[100];
 
     public bool CheckActorOccupiedGrid(GridPos3D targetGP, uint excludeActorGUID = 0)
     {
@@ -613,7 +623,7 @@ public class World : PoolObject
         return true;
     }
 
-    private HashSet<Box> CheckMatchThree(Box srcBox, GridPos3D srcBoxLastMoveDir, HashSet<Box> mergedBoxes, bool considerLastBoxInsertDirection, out GridPosR.Orientation newBoxOrientation)
+    protected HashSet<Box> CheckMatchThree(Box srcBox, GridPos3D srcBoxLastMoveDir, HashSet<Box> mergedBoxes, bool considerLastBoxInsertDirection, out GridPosR.Orientation newBoxOrientation)
     {
         newBoxOrientation = GridPosR.Orientation.Up;
         if (!srcBox.IsBoxShapeCuboid()) return null;
@@ -965,7 +975,7 @@ public class World : PoolObject
         return beneathBoxes;
     }
 
-    private void GetBeneathBoxesCore(Box box, HashSet<Box> beneathBoxes, Queue<Box> beneathBoxesQueue)
+    protected void GetBeneathBoxesCore(Box box, HashSet<Box> beneathBoxes, Queue<Box> beneathBoxesQueue)
     {
         if (box.State == Box.States.Static)
         {
@@ -981,6 +991,7 @@ public class World : PoolObject
             }
         }
     }
+
     public bool DropBoxOnTopLayer(ushort boxTypeIndex, GridPosR.Orientation boxOrientation, GridPos3D dir, GridPos3D origin, int maxDistance, out Box dropBox)
     {
         dropBox = null;

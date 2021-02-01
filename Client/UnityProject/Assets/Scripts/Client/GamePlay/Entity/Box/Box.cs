@@ -1244,20 +1244,11 @@ public partial class Box : Entity
 
     #region BoxExtraData
 
-    public void ApplyBoxExtraSerializeData(Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    public void ApplyBoxExtraSerializeData(Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null)
     {
         if (boxExtraSerializeDataFromModule != null)
         {
             foreach (EntityPassiveSkill extraBF in boxExtraSerializeDataFromModule.BoxPassiveSkills)
-            {
-                EntityPassiveSkill newPS = extraBF.Clone();
-                AddNewPassiveSkill(newPS);
-            }
-        }
-
-        if (boxExtraSerializeDataFromWorld != null)
-        {
-            foreach (EntityPassiveSkill extraBF in boxExtraSerializeDataFromWorld.BoxPassiveSkills)
             {
                 EntityPassiveSkill newPS = extraBF.Clone();
                 AddNewPassiveSkill(newPS);

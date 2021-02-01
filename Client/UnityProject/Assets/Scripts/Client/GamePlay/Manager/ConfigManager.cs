@@ -674,6 +674,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static ushort WorldModule_DeadZoneIndex => GetWorldModuleTypeIndex("Common_DeadZone");
     public static ushort WorldModule_HiddenWallIndex => GetWorldModuleTypeIndex("Common_Wall_Hidden");
+    public static ushort WorldModule_OpenWorldModule => GetWorldModuleTypeIndex("OpenWorldModule");
+    public static ushort WorldModule_GroundIndex => GetWorldModuleTypeIndex("Common_Ground");
     public static ushort Box_EnemyFrozenBoxIndex => GetBoxTypeIndex("EnemyFrozenBox");
 
     #endregion

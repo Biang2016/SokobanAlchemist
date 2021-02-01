@@ -24,7 +24,7 @@ public class WorldModule : PoolObject
     public WorldDeadZoneTrigger WorldDeadZoneTrigger;
     public WorldWallCollider WorldWallCollider;
     public WorldGroundCollider WorldGroundCollider;
-    private List<LevelTriggerBase> WorldModuleLevelTriggers = new List<LevelTriggerBase>();
+    protected List<LevelTriggerBase> WorldModuleLevelTriggers = new List<LevelTriggerBase>();
 
     public List<BoxPassiveSkill_LevelEventTriggerAppear> EventTriggerAppearBoxPassiveSkillList = new List<BoxPassiveSkill_LevelEventTriggerAppear>();
 
@@ -33,14 +33,14 @@ public class WorldModule : PoolObject
 
     #region Roots
 
-    private Transform WorldModuleBoxRoot;
-    private Transform WorldModuleTriggerRoot;
-    private Transform WorldModuleLevelTriggerRoot;
+    protected Transform WorldModuleBoxRoot;
+    protected Transform WorldModuleTriggerRoot;
+    protected Transform WorldModuleLevelTriggerRoot;
 
     #endregion
 
     [SerializeField]
-    private FlowScriptController FlowScriptController;
+    protected FlowScriptController FlowScriptController;
 
     void Awake()
     {
@@ -92,7 +92,7 @@ public class WorldModule : PoolObject
         FlowScriptController.graph = null;
     }
 
-    public void Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, List<Box_LevelEditor.BoxExtraSerializeData> worldBoxExtraSerializeDataList = null)
+    public virtual void Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world)
     {
         ModuleGP = moduleGP;
         World = world;
@@ -118,39 +118,16 @@ public class WorldModule : PoolObject
             WorldGroundCollider.Initialize(moduleGP);
         }
 
-        // Get world box extra serialize data
-        Box_LevelEditor.BoxExtraSerializeData[,,] worldExtraSerializeDataForOneModule = new Box_LevelEditor.BoxExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
-        if (worldBoxExtraSerializeDataList != null)
-        {
-            foreach (Box_LevelEditor.BoxExtraSerializeData worldBoxExtraData in worldBoxExtraSerializeDataList)
-            {
-                worldExtraSerializeDataForOneModule[worldBoxExtraData.LocalGP.x, worldBoxExtraData.LocalGP.y, worldBoxExtraData.LocalGP.z] = worldBoxExtraData;
-            }
-        }
-
         foreach (BoxPassiveSkill_LevelEventTriggerAppear.Data data in worldModuleData.EventTriggerAppearBoxDataList)
         {
             BoxPassiveSkill_LevelEventTriggerAppear.Data dataClone = (BoxPassiveSkill_LevelEventTriggerAppear.Data) data.Clone();
             BoxPassiveSkill_LevelEventTriggerAppear bf = dataClone.BoxPassiveSkill_LevelEventTriggerAppear;
             GridPos3D localGP = data.LocalGP;
             Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[localGP.x, localGP.y, localGP.z]; // 这里没有LevelEventTriggerBF的覆写信息
-            Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = worldExtraSerializeDataForOneModule[localGP.x, localGP.y, localGP.z]; // 这里可能有LevelEventTriggerBF的覆写信息
-            if (boxExtraSerializeDataFromWorld != null)
-            {
-                foreach (EntityPassiveSkill worldBF in boxExtraSerializeDataFromWorld.BoxPassiveSkills)
-                {
-                    if (worldBF is BoxPassiveSkill_LevelEventTriggerAppear appear)
-                    {
-                        bf.CopyDataFrom(appear); // 此处仅拷贝这个BF的数据，其他BF在GenerateBox的时候再拷贝
-                        break;
-                    }
-                }
-            }
-
             bf.GenerateBoxAction = () =>
             {
                 BoxMatrix[localGP.x, localGP.y, localGP.z]?.DestroyBox(); // 强行删除该格占用Box
-                Box box = GenerateBox(dataClone.BoxTypeIndex, LocalGPToWorldGP(localGP), data.BoxOrientation, true, false, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
+                Box box = GenerateBox(dataClone.BoxTypeIndex, LocalGPToWorldGP(localGP), data.BoxOrientation, true, false, boxExtraSerializeDataFromModule);
                 box.name = box.name + "_Generated";
 
                 // Box生成后此BoxPassiveSkill及注册的事件均作废
@@ -172,8 +149,7 @@ public class WorldModule : PoolObject
                     if (boxTypeIndex != 0)
                     {
                         Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[x, y, z];
-                        Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = worldExtraSerializeDataForOneModule[x, y, z];
-                        GenerateBox(boxTypeIndex, LocalGPToWorldGP(new GridPos3D(x, y, z)), boxOrientation, false, true, boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
+                        GenerateBox(boxTypeIndex, LocalGPToWorldGP(new GridPos3D(x, y, z)), boxOrientation, false, true, boxExtraSerializeDataFromModule);
                     }
                 }
             }
@@ -220,7 +196,7 @@ public class WorldModule : PoolObject
         WorldModuleLevelTriggers.Add(trigger);
     }
 
-    public Box GenerateBox(ushort boxTypeIndex, GridPos3D worldGP, GridPosR.Orientation orientation, bool isTriggerAppear = false, bool isStartedBoxes = false, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromWorld = null)
+    public Box GenerateBox(ushort boxTypeIndex, GridPos3D worldGP, GridPosR.Orientation orientation, bool isTriggerAppear = false, bool isStartedBoxes = false, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null)
     {
         GridPos3D localGP = WorldGPToLocalGP(worldGP);
 
@@ -261,7 +237,7 @@ public class WorldModule : PoolObject
 
             box.Setup(boxTypeIndex, orientation);
             box.Initialize(worldGP, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedBoxes); // 如果是TriggerAppear的箱子则不需要检查坠落
-            box.ApplyBoxExtraSerializeData(boxExtraSerializeDataFromModule, boxExtraSerializeDataFromWorld);
+            box.ApplyBoxExtraSerializeData(boxExtraSerializeDataFromModule);
 
             foreach (GridPos3D offset in boxOccupation_rotated)
             {

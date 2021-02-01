@@ -50,7 +50,15 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
 
     public void Initialize(WorldData worldData)
     {
-        CurrentWorld = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.World].AllocateGameObject<World>(WorldRoot);
+        if (worldData.WorldFeature.HasFlag(WorldFeature.OpenWorld))
+        {
+            CurrentWorld = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.OpenWorld].AllocateGameObject<OpenWorld>(WorldRoot);
+        }
+        else
+        {
+            CurrentWorld = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.World].AllocateGameObject<World>(WorldRoot);
+        }
+
         CurrentWorld.name = worldData.WorldTypeName;
         CurrentWorld.Initialize(worldData);
     }
