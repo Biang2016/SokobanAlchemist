@@ -2,7 +2,7 @@
 using BiangLibrary.GameDataFormat;
 using UnityEngine;
 
-public class MapGenerator
+public class CellularAutomataMapGenerator
 {
     public int Width;
     public int Height;
@@ -13,7 +13,7 @@ public class MapGenerator
 
     public ushort this[int x, int y] => map[x, y];
 
-    public MapGenerator(int width, int height, int randomFillPercent, int smoothTimes, bool useRandomSeed, uint seed)
+    public CellularAutomataMapGenerator(int width, int height, int randomFillPercent, int smoothTimes, bool useRandomSeed, uint seed)
     {
         Seed = useRandomSeed ? (ushort) Time.time.ToString().GetHashCode() : seed;
         SRandom = new SRandom(Seed);

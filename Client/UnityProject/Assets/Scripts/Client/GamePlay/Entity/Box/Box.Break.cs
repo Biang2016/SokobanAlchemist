@@ -71,7 +71,7 @@ public partial class Box
                 validCollision = true;
                 if (EntityStatPropSet.FrozenLevel.Value >= 1)
                 {
-                    EntityStatPropSet.FrozenValue.Value = 0;
+                    EntityStatPropSet.FrozenValue.SetValue(0, "CollideWithBox");
                 }
                 else
                 {
@@ -88,7 +88,7 @@ public partial class Box
             validCollision = true;
             if (EntityStatPropSet.FrozenLevel.Value >= 1)
             {
-                EntityStatPropSet.FrozenValue.Value = 0;
+                EntityStatPropSet.FrozenValue.SetValue(0, "CollideWithWorldCollider");
             }
             else
             {
@@ -111,7 +111,7 @@ public partial class Box
                     validCollision = true;
                     if (EntityStatPropSet.FrozenLevel.Value >= 1)
                     {
-                        EntityStatPropSet.FrozenValue.Value = 0;
+                        EntityStatPropSet.FrozenValue.SetValue(0, "CollideWithActor");
                     }
                     else
                     {

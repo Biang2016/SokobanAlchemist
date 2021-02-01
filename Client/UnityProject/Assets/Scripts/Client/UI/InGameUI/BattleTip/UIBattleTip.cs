@@ -23,6 +23,7 @@ public enum BattleTipPrefabType
     UIBattleTip_EnemyGetHealed,
 
     UIBattleTip_AttributeTip,
+    UIBattleTip_GainGoldTip,
 }
 
 public enum BattleTipType
@@ -32,12 +33,8 @@ public enum BattleTipType
     CriticalDamage, //暴击-
     Defense, // 伤害抵消
     Heal, //加血 
+    Gold, //获得金子 
     Dodge, //躲闪
-    Rampage, //暴走 //这个无用的-
-    MeleeKillScore, //近身击杀得分//这个无用的-
-    MpTip, //得到能量//这个无用的-
-
-    AddLife, //生命 +/- xxx
     Stun, //晕眩
     Shield, //护盾
     Hiding, //隐身
@@ -229,7 +226,7 @@ public class UIBattleTip : PoolObject
         transform.localPosition = UIBattleTipInfo.StartPos;
         ClientUtils.InGameUIFaceToCamera(transform);
 
-        bool needAddPlusSign = info.BattleTipType == BattleTipType.Heal;
+        bool needAddPlusSign = info.BattleTipType == BattleTipType.Heal || info.BattleTipType == BattleTipType.Gold;
 
         SetTextType(TextType);
         SetTextContext(TextContent, needAddPlusSign ? $"+{info.DiffHP}" : info.DiffHP.ToString());

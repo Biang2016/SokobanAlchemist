@@ -13,6 +13,14 @@ public class EntityStatPropSet
     public Dictionary<EntityStatType, EntityStat> StatDict = new Dictionary<EntityStatType, EntityStat>();
     public Dictionary<EntityPropertyType, EntityProperty> PropertyDict = new Dictionary<EntityPropertyType, EntityProperty>();
 
+    #region 财产
+
+    [BoxGroup("耐久")]
+    [LabelText("@\"当前金子\t\"+Gold")]
+    public EntityStat Gold = new EntityStat(EntityStatType.Gold);
+
+    #endregion
+
     #region 耐久
 
     [BoxGroup("耐久")]
@@ -344,6 +352,20 @@ public class EntityStatPropSet
 
         #endregion
 
+        #region 财产
+
+        StatDict.Add(EntityStatType.Gold, Gold);
+
+        Gold.OnValueIncrease += (increase) =>
+        {
+            if (entity is Actor actor)
+            {
+                actor.ActorBattleHelper.ShowGainGoldNumFX(increase);
+            }
+        };
+
+        #endregion
+
         #region 耐久
 
         HealthDurability.MaxValue = MaxHealthDurability.GetModifiedValue;
@@ -358,7 +380,7 @@ public class EntityStatPropSet
         {
             if (entity is Actor actor) actor.ActorBattleHelper.ShowHealNumFX(increase);
         };
-        HealthDurability.OnValueReachZero += () =>
+        HealthDurability.OnValueReachZero += (changeInfo) =>
         {
             entity.PassiveSkillMarkAsDestroyed = true;
             if (entity is Actor actor) actor.ActorBattleHelper.Die();
@@ -395,7 +417,7 @@ public class EntityStatPropSet
         FrozenValue.AbnormalStatResistance = FrozenResistance.GetModifiedValue;
         FrozenValue.OnValueChanged += (before, after) =>
         {
-            FrozenLevel.Value = after / FrozenValuePerLevel;
+            FrozenLevel.SetValue(after / FrozenValuePerLevel, "FrozenValueChange");
             if (FrozenLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FrozenValue, FrozenFX, FrozenFXScaleCurve.Evaluate(FrozenLevel.Value)); // 冰冻值变化时，播放一次特效
         };
         StatDict.Add(EntityStatType.FrozenValue, FrozenValue);
@@ -413,7 +435,7 @@ public class EntityStatPropSet
         FiringValue.AbnormalStatResistance = FiringResistance.GetModifiedValue;
         FiringValue.OnValueChanged += (before, after) =>
         {
-            FiringLevel.Value = after / FiringValuePerLevel;
+            FiringLevel.SetValue(after / FiringValuePerLevel, "FiringValueChange");
             if (FiringLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 燃烧值变化时，播放一次特效
             else if (after == 0) Entity.EntityBuffHelper.RemoveAbnormalStatFX((int) EntityStatType.FiringValue);
         };
@@ -515,7 +537,7 @@ public class EntityStatPropSet
                     int diff = FiringValue.Value - adjacentBox.EntityStatPropSet.FiringValue.Value;
                     if (diff > 0)
                     {
-                        adjacentBox.EntityStatPropSet.FiringValue.Value += Mathf.RoundToInt(diff * FiringSpreadPercent.GetModifiedValue / 100f);
+                        adjacentBox.EntityStatPropSet.FiringValue.SetValue(adjacentBox.EntityStatPropSet.FiringValue.Value + Mathf.RoundToInt(diff * FiringSpreadPercent.GetModifiedValue / 100f), "FiringSpread");
                     }
                 }
 
@@ -526,6 +548,12 @@ public class EntityStatPropSet
 
     public void ApplyDataTo(EntityStatPropSet target)
     {
+        #region 财产
+
+        Gold.ApplyDataTo(target.Gold);
+
+        #endregion
+
         #region 耐久
 
         HealthDurability.ApplyDataTo(target.HealthDurability);

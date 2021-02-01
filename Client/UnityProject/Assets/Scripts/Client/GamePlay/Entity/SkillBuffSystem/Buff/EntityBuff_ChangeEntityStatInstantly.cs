@@ -23,7 +23,8 @@ public class EntityBuff_ChangeEntityStatInstantly : EntityBuff
         float valueBefore = entity.EntityStatPropSet.StatDict[EntityStatType].Value;
         valueBefore += Delta;
         valueBefore *= (100 + Percent) / 100f;
-        entity.EntityStatPropSet.StatDict[EntityStatType].Value = Mathf.RoundToInt(valueBefore);
+
+        entity.EntityStatPropSet.StatDict[EntityStatType].SetValue(Mathf.RoundToInt(valueBefore), "ChangeEntityStatInstantly");
     }
 
     protected override void ChildClone(EntityBuff newBuff)

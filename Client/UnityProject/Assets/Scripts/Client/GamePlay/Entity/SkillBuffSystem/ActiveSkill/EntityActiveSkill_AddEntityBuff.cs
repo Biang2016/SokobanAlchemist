@@ -31,8 +31,9 @@ public class EntityActiveSkill_AddEntityBuff : EntityActiveSkill_AreaCast
         foreach (Entity entity in GetTargetEntities())
         {
             entity.EntityBuffHelper.Damage(GetValue(EntitySkillPropertyType.Damage), EntityBuffAttribute.AttackDamage);
-            entity.EntityStatPropSet.FiringValue.Value += GetValue(EntitySkillPropertyType.Attach_FiringValue);
-            entity.EntityStatPropSet.FrozenValue.Value += GetValue(EntitySkillPropertyType.Attach_FrozenValue);
+
+            entity.EntityStatPropSet.FiringValue.SetValue(entity.EntityStatPropSet.FiringValue.Value + GetValue(EntitySkillPropertyType.Attach_FiringValue), "AddEntityBuffDamageCast");
+            entity.EntityStatPropSet.FrozenValue.SetValue(entity.EntityStatPropSet.FrozenValue.Value + GetValue(EntitySkillPropertyType.Attach_FrozenValue), "AddEntityBuffDamageCast");
             foreach (EntityBuff buff in RawEntityBuffs)
             {
                 entity.EntityBuffHelper.AddBuff(buff.Clone());

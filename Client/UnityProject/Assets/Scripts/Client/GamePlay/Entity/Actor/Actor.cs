@@ -162,31 +162,31 @@ public class Actor : Entity
     [BoxNameList]
     [FoldoutGroup("推踢扔举能力")]
     [LabelText("推箱子类型")]
-    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = true)]
     public List<string> PushableBoxList = new List<string>();
 
     [BoxNameList]
     [FoldoutGroup("推踢扔举能力")]
     [LabelText("踢箱子类型")]
-    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = true)]
     public List<string> KickableBoxList = new List<string>();
 
     [BoxNameList]
     [FoldoutGroup("推踢扔举能力")]
     [LabelText("举箱子类型")]
-    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = true)]
     public List<string> LiftableBoxList = new List<string>();
 
     [BoxNameList]
     [FoldoutGroup("推踢扔举能力")]
     [LabelText("扔箱子类型")]
-    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = true)]
     public List<string> ThrowableBoxList = new List<string>();
 
     [BoxName]
     [FoldoutGroup("死亡")]
     [LabelText("死亡掉落箱子")]
-    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    [ValueDropdown("GetAllBoxTypeNames")]
     public string DieDropBoxTypeName = "None";
 
     [FoldoutGroup("死亡")]
@@ -639,10 +639,10 @@ public class Actor : Entity
     {
         if (EntityStatPropSet.ActionPoint.Value > EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue)
         {
-            EntityStatPropSet.ActionPoint.Value -= EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue;
+            EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue, "Dash");
             if (IsFrozen)
             {
-                EntityStatPropSet.FrozenValue.Value -= 200;
+                EntityStatPropSet.FrozenValue.SetValue(EntityStatPropSet.FrozenValue.Value - 200, "Dash");
             }
             else
             {
@@ -661,7 +661,7 @@ public class Actor : Entity
         {
             if (IsFrozen)
             {
-                EntityStatPropSet.FrozenValue.Value -= 200;
+                EntityStatPropSet.FrozenValue.SetValue(EntityStatPropSet.FrozenValue.Value - 200, "Vault");
             }
             else
             {
@@ -685,7 +685,7 @@ public class Actor : Entity
                 Box box = hit.collider.gameObject.GetComponentInParent<Box>();
                 if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
                 {
-                    EntityStatPropSet.ActionPoint.Value -= EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue;
+                    EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue, "Kick");
                     box.Kick(CurForward, KickForce, this);
                     FX kickFX = FXManager.Instance.PlayFX(KickFX, KickFXPivot.position);
                     if (kickFX) kickFX.transform.localScale = Vector3.one * KickFXScale;
@@ -721,7 +721,7 @@ public class Actor : Entity
                     if (offset == boxIndicatorGP_behind - box.WorldGP) return;
                 }
 
-                EntityStatPropSet.ActionPoint.Value -= EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue; // 消耗行动力
+                EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue, "SwapBox"); // 消耗行动力
 
                 GridPos3D boxWorldGP_before = box.WorldGP;
                 GridPos3D boxWorldGP_after = LastWorldGP - boxIndicatorGP + box.WorldGP;

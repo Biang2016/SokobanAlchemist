@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerStatHUD : MonoBehaviour
 {
+    public Gradient HealthSliderFillImageGradient;
     public Image HealthSliderFillImage;
     public Slider HealthSlider;
     public Animator HealthSliderHandleAnim;
@@ -14,17 +16,24 @@ public class PlayerStatHUD : MonoBehaviour
     public RectTransform ActionPointSliderRectTransform;
     private float actionPointRatio;
 
+    public TextMeshProUGUI GoldText;
+
     public void Initialize(ActorBattleHelper helper)
     {
         EntityStatPropSet asps = helper.Actor.EntityStatPropSet;
         SetHealth(asps.HealthDurability.Value, asps.HealthDurability.MinValue, asps.HealthDurability.MaxValue);
         SetActionPoint(asps.ActionPoint.Value, asps.ActionPoint.MinValue, asps.ActionPoint.MaxValue);
         SetActionPointBar(asps.MaxActionPoint.GetModifiedValue, asps.MaxActionPoint.GetModifiedValue);
+        SetGold(asps.Gold.Value);
+
         asps.HealthDurability.OnChanged += SetHealth;
         asps.ActionPoint.OnChanged += SetActionPoint;
         asps.ActionPoint.OnMaxValueChanged += OnActionChangeNotice;
         asps.MaxActionPoint.OnValueChanged += SetActionPointBar;
+        asps.Gold.OnChanged += (value, min, max) => SetGold(value);
     }
+
+    #region Health
 
     public void SetHealth(int current, int min, int max)
     {
@@ -38,9 +47,14 @@ public class PlayerStatHUD : MonoBehaviour
             HealthSliderHandleAnim.SetTrigger("Jump");
         }
 
+        HealthSliderFillImage.color = HealthSliderFillImageGradient.Evaluate((float) current / max);
         HealthTextAnim.SetTrigger("Jump");
         HealthText.text = $"{current}/{max}";
     }
+
+    #endregion
+
+    #region ActionPoint
 
     private float actionPoint_SmoothDampVelocity;
 
@@ -71,4 +85,15 @@ public class PlayerStatHUD : MonoBehaviour
     {
         ActionPointSlider.value = Mathf.SmoothDamp(ActionPointSlider.value, actionPointRatio, ref actionPoint_SmoothDampVelocity, 0.1f, 1, Time.deltaTime);
     }
+
+    #endregion
+
+    #region Gold
+
+    public void SetGold(int current)
+    {
+        GoldText.text = $"Gold: {current}";
+    }
+
+    #endregion
 }

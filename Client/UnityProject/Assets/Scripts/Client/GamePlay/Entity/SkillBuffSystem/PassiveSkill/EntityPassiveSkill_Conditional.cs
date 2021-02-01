@@ -28,6 +28,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         OnLevelEvent = 1 << 12,
         OnBeforeMergeBox = 1 << 13,
         OnMergeBox = 1 << 14,
+        OnDestroyEntityByFire = 1 << 15,
     }
 
     public PassiveSkillConditionType PassiveSkillCondition;
@@ -419,6 +420,23 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     {
         base.OnMergeBox();
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnMergeBox))
+        {
+            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            {
+                if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                {
+                    pureAction.Execute();
+                }
+            }
+        }
+
+        UnInitPassiveSkillActions();
+    }
+
+    public override void OnDestroyEntityByFire()
+    {
+        base.OnMergeBox();
+        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnDestroyEntityByFire))
         {
             foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
             {

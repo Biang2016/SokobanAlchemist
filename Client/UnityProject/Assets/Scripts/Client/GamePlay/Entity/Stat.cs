@@ -43,7 +43,7 @@ public abstract class Stat
     public UnityAction<int> OnValueDecrease;
     public UnityAction<int> OnValueReachMin;
     public UnityAction<int> OnValueReachMax;
-    public UnityAction OnValueReachZero;
+    public UnityAction<string> OnValueReachZero;
 
     #region 异常属性抗性
 
@@ -60,35 +60,33 @@ public abstract class Stat
     [LabelText("当前值")]
     private int _value;
 
-    public int Value
-    {
-        get { return _value; }
-        set
-        {
-            value = Mathf.Clamp(value, _minValue, _maxValue);
-            if (_value != value)
-            {
-                // 对异常状态累积值而言:
-                // 抗性低则积累快，抗性高则积累慢，免疫则不积累。消退速度不受抗性影响
-                if (IsAbnormalStat)
-                {
-                    if (_value < value)
-                    {
-                        value = Mathf.RoundToInt((value - _value) * (200f - AbnormalStatResistance) / 100f) + _value;
-                        value = Mathf.Clamp(value, _minValue, _maxValue);
-                    }
-                }
+    public int Value => _value;
 
-                int before = _value;
-                _value = value;
-                if (_value == _minValue) OnValueReachMin?.Invoke(_value);
-                if (_value == _maxValue) OnValueReachMax?.Invoke(_value);
-                OnValueChanged?.Invoke(before, _value);
-                OnChanged?.Invoke(_value, _minValue, _maxValue);
-                if (before < _value) OnValueIncrease?.Invoke(_value - before);
-                if (before > _value) OnValueDecrease?.Invoke(before - _value);
-                if (before > 0 && _value <= 0) OnValueReachZero?.Invoke();
+    public void SetValue(int value, string changeInfo = null)
+    {
+        value = Mathf.Clamp(value, _minValue, _maxValue);
+        if (_value != value)
+        {
+            // 对异常状态累积值而言:
+            // 抗性低则积累快，抗性高则积累慢，免疫则不积累。消退速度不受抗性影响
+            if (IsAbnormalStat)
+            {
+                if (_value < value)
+                {
+                    value = Mathf.RoundToInt((value - _value) * (200f - AbnormalStatResistance) / 100f) + _value;
+                    value = Mathf.Clamp(value, _minValue, _maxValue);
+                }
             }
+
+            int before = _value;
+            _value = value;
+            if (_value == _minValue) OnValueReachMin?.Invoke(_value);
+            if (_value == _maxValue) OnValueReachMax?.Invoke(_value);
+            OnValueChanged?.Invoke(before, _value);
+            OnChanged?.Invoke(_value, _minValue, _maxValue);
+            if (before < _value) OnValueIncrease?.Invoke(_value - before);
+            if (before > _value) OnValueDecrease?.Invoke(before - _value);
+            if (before > 0 && _value <= 0) OnValueReachZero?.Invoke(changeInfo);
         }
     }
 
@@ -111,7 +109,7 @@ public abstract class Stat
             value = Mathf.Clamp(value, 0, _maxValue);
             if (_minValue != value)
             {
-                if (_value < value) Value = value;
+                if (_value < value) SetValue(value, "MinValueChange");
                 int before = _minValue;
                 _minValue = value;
                 OnMinValueChanged?.Invoke(before, _minValue);
@@ -173,13 +171,13 @@ public abstract class Stat
             if (accumulatedAutoChange > 1)
             {
                 int round = Mathf.FloorToInt(accumulatedAutoChange);
-                Value += round;
+                SetValue(Value + round, "AccumulatedAutoChange");
                 accumulatedAutoChange -= round;
             }
             else if (accumulatedAutoChange < -1)
             {
                 int round = Mathf.CeilToInt(accumulatedAutoChange);
-                Value += round;
+                SetValue(Value + round, "AccumulatedAutoChange");
                 accumulatedAutoChange -= round;
             }
         }

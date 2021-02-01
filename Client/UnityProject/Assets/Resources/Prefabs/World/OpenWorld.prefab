@@ -44,18 +44,134 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsRecycled: 0
-  WorldSize_X: 5
+  WorldSize_X: 4
   WorldSize_Z: 2
   GenerateBoxLayerDataList:
   - BoxTypeName: BorderBox
+    AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 0
     FillPercent: 20
     SmoothTimes: 5
-    m_GenerateAlgorithm: 0
+    BoxCountPerThousandGrid: 20
   - BoxTypeName: BrickBox
-    FillPercent: 47
-    SmoothTimes: 5
+    AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
+    FillPercent: 46
+    SmoothTimes: 5
+    BoxCountPerThousandGrid: 20
   - BoxTypeName: WoodenBox
-    FillPercent: 50
-    SmoothTimes: 5
+    AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
+    FillPercent: 48
+    SmoothTimes: 5
+    BoxCountPerThousandGrid: 20
+  - BoxTypeName: LightningBox
+    AllowReplacedBoxTypeNames:
+    - WoodenBox
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    FillPercent: 40
+    SmoothTimes: 20
+    BoxCountPerThousandGrid: 10
+  - BoxTypeName: FireBox
+    AllowReplacedBoxTypeNames:
+    - WoodenBox
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    FillPercent: 40
+    SmoothTimes: 20
+    BoxCountPerThousandGrid: 15
+  - BoxTypeName: IceBox
+    AllowReplacedBoxTypeNames:
+    - WoodenBox
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    FillPercent: 40
+    SmoothTimes: 20
+    BoxCountPerThousandGrid: 12
+  - BoxTypeName: TNTBox
+    AllowReplacedBoxTypeNames:
+    - WoodenBox
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    FillPercent: 40
+    SmoothTimes: 20
+    BoxCountPerThousandGrid: 2
+  - BoxTypeName: LifeBox
+    AllowReplacedBoxTypeNames:
+    - WoodenBox
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    FillPercent: 40
+    SmoothTimes: 20
+    BoxCountPerThousandGrid: 7
+  - BoxTypeName: GoldenBox
+    AllowReplacedBoxTypeNames:
+    - BrickBox
+    OnlyOverrideAnyBox: 1
+    m_GenerateAlgorithm: 2
+    FillPercent: 40
+    SmoothTimes: 20
+    BoxCountPerThousandGrid: 25
+  - BoxTypeName: Golden3Box
+    AllowReplacedBoxTypeNames:
+    - BrickBox
+    OnlyOverrideAnyBox: 1
+    m_GenerateAlgorithm: 2
+    FillPercent: 40
+    SmoothTimes: 20
+    BoxCountPerThousandGrid: 8
+  - BoxTypeName: ActionBox
+    AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 1
+    m_GenerateAlgorithm: 2
+    FillPercent: 40
+    SmoothTimes: 20
+    BoxCountPerThousandGrid: 12
+  GenerateActorLayerDataList:
+  - ActorTypeName: Player1
+    AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    ActorCountPerThousandGrid: 1000
+  - ActorTypeName: FireEnemy
+    AllowReplacedBoxTypeNames:
+    - BrickBox
+    - WoodenBox
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    ActorCountPerThousandGrid: 3
+  - ActorTypeName: IceEnemy
+    AllowReplacedBoxTypeNames:
+    - BrickBox
+    - WoodenBox
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    ActorCountPerThousandGrid: 3
+  - ActorTypeName: SpeedEnemy
+    AllowReplacedBoxTypeNames:
+    - BrickBox
+    - WoodenBox
+    OnlyOverrideAnyBox: 1
+    m_GenerateAlgorithm: 2
+    ActorCountPerThousandGrid: 4
+  - ActorTypeName: LifeEnemy
+    AllowReplacedBoxTypeNames:
+    - WoodenBox
+    - BrickBox
+    OnlyOverrideAnyBox: 1
+    m_GenerateAlgorithm: 2
+    ActorCountPerThousandGrid: 2
+  - ActorTypeName: LightningEnemy
+    AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    ActorCountPerThousandGrid: 3
+  - ActorTypeName: BossEnemy
+    AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    ActorCountPerThousandGrid: 1

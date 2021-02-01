@@ -125,4 +125,17 @@ public class ActorBattleHelper : ActorMonoHelper
     }
 
     #endregion
+
+    #region Money
+
+    public UnityAction<int> OnGainGold;
+
+    public void ShowGainGoldNumFX(int gold)
+    {
+        if (gold == 0) return;
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gold, BattleTipType.Gold, 0, 0));
+        OnGainGold?.Invoke(gold);
+    }
+
+    #endregion
 }

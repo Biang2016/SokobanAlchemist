@@ -18,9 +18,12 @@ public class WorldBornPointGroupData_Runtime
     {
         foreach (KeyValuePair<string, BornPointData> kv in module.WorldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints)
         {
-            BornPointData newData = (BornPointData) kv.Value.Clone();
-            newData.WorldGP = module.LocalGPToWorldGP(newData.LocalGP);
-            PlayerBornPointDataAliasDict.Add(kv.Key, newData);
+            if (!PlayerBornPointDataAliasDict.ContainsKey(kv.Key))
+            {
+                BornPointData newData = (BornPointData)kv.Value.Clone();
+                newData.WorldGP = module.LocalGPToWorldGP(newData.LocalGP);
+                PlayerBornPointDataAliasDict.Add(kv.Key, newData);
+            }
         }
 
         foreach (BornPointData bp in module.WorldModuleData.WorldModuleBornPointGroupData.EnemyBornPoints)

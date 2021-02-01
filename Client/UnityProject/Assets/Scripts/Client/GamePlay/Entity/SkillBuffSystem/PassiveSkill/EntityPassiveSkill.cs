@@ -111,6 +111,10 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
     {
     }
 
+    public virtual void OnDestroyEntityByFire()
+    {
+    }
+
     #endregion
 
     public EntityPassiveSkill Clone()

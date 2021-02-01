@@ -65,4 +65,8 @@ public enum EntityStatType
     [BoxStat]
     [LabelText("坠落留存率%")]
     DropFromAirSurviveProbabilityPercent = 500,
+
+    [EntityStat]
+    [LabelText("当前金子")]
+    Gold = 1000,
 }

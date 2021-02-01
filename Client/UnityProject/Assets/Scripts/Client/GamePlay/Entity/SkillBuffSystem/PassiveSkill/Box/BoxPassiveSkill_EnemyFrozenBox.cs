@@ -43,7 +43,7 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
 
             if (Box.FrozenActor.IsNotNullAndAlive())
             {
-                Box.FrozenActor.EntityStatPropSet.FrozenValue.Value -= Box.FrozenActor.EntityStatPropSet.FrozenValuePerLevel;
+                Box.FrozenActor.EntityStatPropSet.FrozenValue.SetValue(Box.FrozenActor.EntityStatPropSet.FrozenValue.Value - Box.FrozenActor.EntityStatPropSet.FrozenValuePerLevel, "FrozenValueDecreaseByCollide");
             }
         }
     }

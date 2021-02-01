@@ -162,6 +162,11 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
 
                 break;
             }
+            case BattleTipType.Gold:
+            {
+                btType = BattleTipPrefabType.UIBattleTip_GainGoldTip;
+                break;
+            }
         }
 
         if (btType == BattleTipPrefabType.None) return;

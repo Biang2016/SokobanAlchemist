@@ -282,27 +282,27 @@ public class DebugPanel : BaseUIPanel
     public void AddHealth10()
     {
         BattleManager.Instance.Player1.EntityStatPropSet.MaxHealthDurability.AddModifier(new Property.PlusModifier {Delta = 10});
-        BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value += 10;
+        BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value + 10, "DebugPanelAddHealth10");
     }
 
     [DebugButton("Player/AddHealth*100", KeyCode.H)]
     public void AddHealth100()
     {
         BattleManager.Instance.Player1.EntityStatPropSet.MaxHealthDurability.AddModifier(new Property.PlusModifier {Delta = 100});
-        BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value += 100;
+        BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value + 100, "DebugPanelAddHealth100");
     }
 
     [DebugButton("Player/TakeDamage*10", KeyCode.N)]
     public void TakeDamage10()
     {
-        BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value -= 10;
+        BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value - 10, "DebugPanelTakeDamage10");
     }
 
     [DebugButton("Player/AddMaxAction*50", KeyCode.J)]
     public void AddMaxAction50()
     {
         BattleManager.Instance.Player1.EntityStatPropSet.MaxActionPoint.AddModifier(new Property.PlusModifier {Delta = 50});
-        BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.Value += 50;
+        BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.Value + 50, "DebugPanelAddMaxAction50");
     }
 
     [DebugButton("Player/AddActionRecovery*10", KeyCode.L)]
@@ -344,7 +344,7 @@ public class DebugPanel : BaseUIPanel
     {
         foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
         {
-            enemy.EntityStatPropSet.HealthDurability.Value -= 99999;
+            enemy.EntityStatPropSet.HealthDurability.SetValue(enemy.EntityStatPropSet.HealthDurability.Value - 99999, "DebugPanelKillAllEnemy");
         }
     }
 

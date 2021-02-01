@@ -512,6 +512,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static void LoadEntityBuffStatPropertyEnumReflection()
     {
+
+
         Type PT = typeof(EntityPropertyType);
         foreach (EntityPropertyType ept in Enum.GetValues(PT))
         {
