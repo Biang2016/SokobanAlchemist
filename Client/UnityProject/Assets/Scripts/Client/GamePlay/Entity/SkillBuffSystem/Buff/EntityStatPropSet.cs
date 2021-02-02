@@ -383,6 +383,14 @@ public class EntityStatPropSet
         HealthDurability.OnValueReachZero += (changeInfo) =>
         {
             entity.PassiveSkillMarkAsDestroyed = true;
+            if (changeInfo.Equals($"ChangeEntityStatInstantly-{EntityBuffAttribute.FiringDamage}"))
+            {
+                foreach (EntityPassiveSkill eps in entity.EntityPassiveSkills)
+                {
+                    eps.OnDestroyEntityByFire();
+                }
+            }
+
             if (entity is Actor actor) actor.ActorBattleHelper.Die();
         };
         StatDict.Add(EntityStatType.HealthDurability, HealthDurability);
@@ -420,6 +428,7 @@ public class EntityStatPropSet
             FrozenLevel.SetValue(after / FrozenValuePerLevel, "FrozenValueChange");
             if (FrozenLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FrozenValue, FrozenFX, FrozenFXScaleCurve.Evaluate(FrozenLevel.Value)); // 冰冻值变化时，播放一次特效
         };
+        FrozenValue.OnValueIncrease += (increase) => { FiringValue.SetValue(0); };
         StatDict.Add(EntityStatType.FrozenValue, FrozenValue);
 
         FrozenLevel.OnValueChanged += Entity.EntityFrozenHelper.FrozeIntoIceBlock;
@@ -439,6 +448,8 @@ public class EntityStatPropSet
             if (FiringLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 燃烧值变化时，播放一次特效
             else if (after == 0) Entity.EntityBuffHelper.RemoveAbnormalStatFX((int) EntityStatType.FiringValue);
         };
+        FiringValue.OnValueIncrease += (increase) => { FrozenValue.SetValue(FrozenValue.Value - increase); };
+
         StatDict.Add(EntityStatType.FiringValue, FiringValue);
 
         FiringLevel.OnValueChanged += (before, after) =>

@@ -132,7 +132,7 @@ public class OpenWorld : World
             {
                 case GenerateAlgorithm.CellularAutomata:
                 {
-                    CellularAutomataMapGenerator MapGenerator = new CellularAutomataMapGenerator(WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, boxLayerData.FillPercent, boxLayerData.SmoothTimes, true, Seed);
+                    CellularAutomataMapGenerator MapGenerator = new CellularAutomataMapGenerator(WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, boxLayerData.FillPercent, boxLayerData.SmoothTimes, SRandom);
                     for (int module_x = 0; module_x < WorldSize_X; module_x++)
                     for (int module_z = 0; module_z < WorldSize_Z; module_z++)
                     {

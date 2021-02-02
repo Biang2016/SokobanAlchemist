@@ -7,7 +7,7 @@ public class EntityBuff_DestroySelf : EntityBuff
 {
     protected override string Description => "毁灭自己";
 
-    public override void OnAdded(Entity entity)
+    public override void OnAdded(Entity entity, string extraInfo)
     {
         base.OnAdded(entity);
         if (!entity.IsNotNullAndAlive()) return;

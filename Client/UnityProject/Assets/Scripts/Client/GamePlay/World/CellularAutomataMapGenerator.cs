@@ -1,22 +1,18 @@
-﻿using System.Collections.Generic;
-using BiangLibrary.GameDataFormat;
-using UnityEngine;
+﻿using BiangLibrary.GameDataFormat;
 
 public class CellularAutomataMapGenerator
 {
     public int Width;
     public int Height;
-    public uint Seed;
     public int RandomFillPercent;
     private SRandom SRandom;
     public ushort[,] map;
 
     public ushort this[int x, int y] => map[x, y];
 
-    public CellularAutomataMapGenerator(int width, int height, int randomFillPercent, int smoothTimes, bool useRandomSeed, uint seed)
+    public CellularAutomataMapGenerator(int width, int height, int randomFillPercent, int smoothTimes, SRandom _SRandom)
     {
-        Seed = useRandomSeed ? (ushort) Time.time.ToString().GetHashCode() : seed;
-        SRandom = new SRandom(Seed);
+        SRandom = _SRandom;
 
         Width = width;
         Height = height;

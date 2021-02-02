@@ -24,7 +24,7 @@ public class EntityBuff_EntityPropertyMultiplyModifier : EntityBuff
 
     internal Property.MultiplyModifier MultiplyModifier;
 
-    public override void OnAdded(Entity entity)
+    public override void OnAdded(Entity entity, string extraInfo)
     {
         base.OnAdded(entity);
         if (!entity.IsNotNullAndAlive()) return;

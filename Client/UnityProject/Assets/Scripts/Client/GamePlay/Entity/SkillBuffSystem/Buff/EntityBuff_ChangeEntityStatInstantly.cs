@@ -16,7 +16,7 @@ public class EntityBuff_ChangeEntityStatInstantly : EntityBuff
     [LabelText("增加比率%")]
     public int Percent;
 
-    public override void OnAdded(Entity entity)
+    public override void OnAdded(Entity entity, string extraInfo)
     {
         base.OnAdded(entity);
         if (!entity.IsNotNullAndAlive()) return;
@@ -24,7 +24,7 @@ public class EntityBuff_ChangeEntityStatInstantly : EntityBuff
         valueBefore += Delta;
         valueBefore *= (100 + Percent) / 100f;
 
-        entity.EntityStatPropSet.StatDict[EntityStatType].SetValue(Mathf.RoundToInt(valueBefore), "ChangeEntityStatInstantly");
+        entity.EntityStatPropSet.StatDict[EntityStatType].SetValue(Mathf.RoundToInt(valueBefore), $"ChangeEntityStatInstantly-{extraInfo}");
     }
 
     protected override void ChildClone(EntityBuff newBuff)

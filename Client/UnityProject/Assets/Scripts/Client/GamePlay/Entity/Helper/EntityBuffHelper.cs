@@ -245,14 +245,14 @@ public class EntityBuffHelper : EntityMonoHelper
         return true;
     }
 
-    public bool AddBuff(EntityBuff newBuff)
+    public bool AddBuff(EntityBuff newBuff, string extraInfo = null)
     {
         if (!Entity.IsNotNullAndAlive()) return false;
         CalculateDefense(newBuff);
         bool suc = BuffRelationshipProcess(newBuff) && CheckBuffPropertyTypeValid((newBuff));
         if (suc)
         {
-            newBuff.OnAdded(Entity);
+            newBuff.OnAdded(Entity, extraInfo);
             PlayBuffFX(newBuff);
             if (!Entity.IsNotNullAndAlive()) return true;
             if (newBuff.Duration > 0 || newBuff.IsPermanent)
@@ -434,6 +434,6 @@ public class EntityBuffHelper : EntityMonoHelper
             EntityStatType = EntityStatType.HealthDurability,
             IsPermanent = false,
             Percent = 0
-        });
+        }, damageAttribute.ToString());
     }
 }

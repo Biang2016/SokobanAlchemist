@@ -61,7 +61,7 @@ public abstract class EntityBuff : IClone<EntityBuff>
         GUID = GetGUID();
     }
 
-    public virtual void OnAdded(Entity entity)
+    public virtual void OnAdded(Entity entity, string extraInfo = null)
     {
     }
 

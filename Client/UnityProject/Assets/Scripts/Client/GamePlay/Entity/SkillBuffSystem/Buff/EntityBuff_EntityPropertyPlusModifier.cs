@@ -24,7 +24,7 @@ public class EntityBuff_EntityPropertyPlusModifier : EntityBuff
 
     internal Property.PlusModifier PlusModifier;
 
-    public override void OnAdded(Entity entity)
+    public override void OnAdded(Entity entity, string extraInfo)
     {
         base.OnAdded(entity);
         if (!entity.IsNotNullAndAlive()) return;
