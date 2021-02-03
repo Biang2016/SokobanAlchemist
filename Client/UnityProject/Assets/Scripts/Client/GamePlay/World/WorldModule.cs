@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.Messenger;
 using BiangLibrary.ObjectPool;
@@ -92,7 +93,7 @@ public class WorldModule : PoolObject
         FlowScriptController.graph = null;
     }
 
-    public virtual void Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world)
+    public virtual IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadBoxNumPerFrame)
     {
         ModuleGP = moduleGP;
         World = world;
@@ -138,6 +139,7 @@ public class WorldModule : PoolObject
             EventTriggerAppearBoxPassiveSkillList.Add(bf);
         }
 
+        int loadBoxCount = 0;
         for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
         {
             for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
@@ -150,6 +152,12 @@ public class WorldModule : PoolObject
                     {
                         Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[x, y, z];
                         GenerateBox(boxTypeIndex, LocalGPToWorldGP(new GridPos3D(x, y, z)), boxOrientation, false, true, boxExtraSerializeDataFromModule);
+                        loadBoxCount++;
+                        if (loadBoxCount >= loadBoxNumPerFrame)
+                        {
+                            loadBoxCount = 0;
+                            yield return null;
+                        }
                     }
                 }
             }

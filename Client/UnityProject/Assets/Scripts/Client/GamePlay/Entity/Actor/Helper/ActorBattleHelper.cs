@@ -108,7 +108,7 @@ public class ActorBattleHelper : ActorMonoHelper
 
     private void DropDieBox()
     {
-        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Actor.WorldGP);
+        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(Actor.WorldGP);
         if (module)
         {
             ushort boxIndex = ConfigManager.GetBoxTypeIndex(Actor.DieDropBoxTypeName);

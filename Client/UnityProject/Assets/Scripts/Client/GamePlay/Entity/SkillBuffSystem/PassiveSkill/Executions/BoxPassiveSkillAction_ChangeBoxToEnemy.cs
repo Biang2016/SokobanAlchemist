@@ -19,7 +19,7 @@ public class BoxPassiveSkillAction_ChangeBoxToEnemy : BoxPassiveSkillAction, Ent
     {
         if (Box.State == Box.States.Static)
         {
-            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Box.WorldGP);
+            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(Box.WorldGP);
             if (module != null)
             {
                 GridPos3D localGP = Box.LocalGP;

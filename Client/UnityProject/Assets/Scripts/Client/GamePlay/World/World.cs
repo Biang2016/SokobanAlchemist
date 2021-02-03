@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.Messenger;
@@ -65,7 +66,7 @@ public class World : PoolObject
         WorldData = null;
     }
 
-    public virtual void Initialize(WorldData worldData)
+    public virtual IEnumerator Initialize(WorldData worldData)
     {
         WorldData = worldData;
         for (int x = 0; x < WorldData.ModuleMatrix.GetLength(0); x++)
@@ -77,7 +78,7 @@ public class World : PoolObject
                     ushort worldModuleTypeIndex = WorldData.ModuleMatrix[x, y, z];
                     if (worldModuleTypeIndex != 0)
                     {
-                        GenerateWorldModule(worldModuleTypeIndex, x, y, z);
+                        yield return GenerateWorldModule(worldModuleTypeIndex, x, y, z);
                     }
                 }
             }
@@ -95,22 +96,22 @@ public class World : PoolObject
                     ushort index_before = WorldData.ModuleMatrix[x, y, z - 1];
                     if (index == 0 && index_before != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
                     }
 
                     if (index != 0 && index_before == 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z - 1);
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z - 1);
                     }
 
                     if (z == 1 && index_before != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, -1);
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, -1);
                     }
 
                     if (z == WORLD_SIZE - 1 && index != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, WORLD_SIZE);
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, WORLD_SIZE);
                     }
                 }
             }
@@ -126,22 +127,22 @@ public class World : PoolObject
                     ushort index_before = WorldData.ModuleMatrix[x, y - 1, z];
                     if (index == 0 && index_before != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, z);
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, z);
                     }
 
                     if (index != 0 && index_before == 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y - 1, z);
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y - 1, z);
                     }
 
                     if (y == 1 && index_before != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, -1, z);
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, -1, z);
                     }
 
                     if (y == WORLD_HEIGHT - 1 && index != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, WORLD_HEIGHT, z);
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, WORLD_HEIGHT, z);
                     }
                 }
             }
@@ -157,22 +158,22 @@ public class World : PoolObject
                     ushort index_before = WorldData.ModuleMatrix[x - 1, y, z];
                     if (index == 0 && index_before != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
                     }
 
                     if (index != 0 && index_before == 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x - 1, y, z);
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x - 1, y, z);
                     }
 
                     if (x == 1 && index_before != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, -1, y, z);
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, -1, y, z);
                     }
 
                     if (x == WORLD_SIZE - 1 && index != 0)
                     {
-                        GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, WORLD_SIZE, y, z);
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, WORLD_SIZE, y, z);
                     }
                 }
             }
@@ -191,10 +192,10 @@ public class World : PoolObject
         BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData_Runtime, WorldData.DefaultWorldActorBornPointAlias);
     }
 
-    protected void GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z)
+    protected virtual IEnumerator GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, int loadBoxNumPerFrame = 99999)
     {
         bool isBorderModule = worldModuleTypeIndex == ConfigManager.WorldModule_DeadZoneIndex || worldModuleTypeIndex == ConfigManager.WorldModule_HiddenWallIndex;
-        if (isBorderModule && BorderWorldModuleMatrix[x + 1, y + 1, z + 1] != null) return;
+        if (isBorderModule && BorderWorldModuleMatrix[x + 1, y + 1, z + 1] != null) yield break;
         WorldModule wm = GameObjectPoolManager.Instance.PoolDict[worldModuleTypeIndex == ConfigManager.WorldModule_OpenWorldModule ? GameObjectPoolManager.PrefabNames.OpenWorldModule : GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(isBorderModule ? BorderWorldModuleRoot : WorldModuleRoot);
         WorldModuleData data = ConfigManager.GetWorldModuleDataConfig(worldModuleTypeIndex);
 
@@ -210,24 +211,24 @@ public class World : PoolObject
 
         GridPos3D gp = new GridPos3D(x, y, z);
         GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);
-        wm.Initialize(data, gp, this);
+        yield return wm.Initialize(data, gp, this, loadBoxNumPerFrame);
     }
 
-    protected void GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z)
+    protected virtual IEnumerator GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z, int loadBoxNumPerFrame)
     {
         WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.OpenWorldModule].AllocateGameObject<WorldModule>(WorldModuleRoot);
         wm.name = $"WM_{data.WorldModuleTypeName}({x}, {y}, {z})";
         WorldModuleMatrix[x, y, z] = wm;
         GridPos3D gp = new GridPos3D(x, y, z);
         GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);
-        wm.Initialize(data, gp, this);
+        yield return wm.Initialize(data, gp, this, loadBoxNumPerFrame);
     }
 
     #region Utils
 
     public Box GetBoxByGridPosition(GridPos3D gp, out WorldModule module, out GridPos3D localGP, bool ignoreUnaccessibleModule = true)
     {
-        module = GetModuleByGridPosition(gp, ignoreUnaccessibleModule);
+        module = GetModuleByWorldGP(gp, ignoreUnaccessibleModule);
         if (module != null && (!ignoreUnaccessibleModule || module.IsAccessible))
         {
             localGP = module.WorldGPToLocalGP(gp);
@@ -240,9 +241,15 @@ public class World : PoolObject
         }
     }
 
-    public WorldModule GetModuleByGridPosition(GridPos3D gp, bool ignoreUnaccessibleModule = true)
+    public GridPos3D GetModuleGPByWorldGP(GridPos3D worldGP)
     {
-        GridPos3D gp_module = new GridPos3D(Mathf.FloorToInt((float) gp.x / WorldModule.MODULE_SIZE), Mathf.FloorToInt((float) gp.y / WorldModule.MODULE_SIZE), Mathf.FloorToInt((float) gp.z / WorldModule.MODULE_SIZE));
+        GridPos3D gp_module = new GridPos3D(Mathf.FloorToInt((float) worldGP.x / WorldModule.MODULE_SIZE), Mathf.FloorToInt((float) worldGP.y / WorldModule.MODULE_SIZE), Mathf.FloorToInt((float) worldGP.z / WorldModule.MODULE_SIZE));
+        return gp_module;
+    }
+
+    public WorldModule GetModuleByWorldGP(GridPos3D worldGP, bool ignoreUnaccessibleModule = true)
+    {
+        GridPos3D gp_module = GetModuleGPByWorldGP(worldGP);
         if (gp_module.x >= 0 && gp_module.x < WORLD_SIZE && gp_module.y >= 0 && gp_module.y < WORLD_HEIGHT && gp_module.z >= 0 && gp_module.z < WORLD_SIZE)
         {
             WorldModule module = WorldModuleMatrix[gp_module.x, gp_module.y, gp_module.z];
@@ -561,7 +568,7 @@ public class World : PoolObject
             }
 
             box_moveable.State = sucState;
-            WorldModule newModule = GetModuleByGridPosition(box_moveable.WorldGP + direction);
+            WorldModule newModule = GetModuleByWorldGP(box_moveable.WorldGP + direction);
             Assert.IsNotNull(newModule);
             GridPos3D worldGP = box_moveable.WorldGP + direction;
             box_moveable.Initialize(worldGP, newModule, needLerp ? 0.2f : 0f, box_moveable.ArtOnly, Box.LerpType.Push, needLerpModel, false);
@@ -608,7 +615,7 @@ public class World : PoolObject
             // 保证目标点的箱子最后合成，从而生成新箱子的时候不会与任何一个老箱子冲突
             oldCoreBox.MergeBox(mergeTargetWorldGP, delegate
             {
-                WorldModule module = GetModuleByGridPosition(mergeTargetWorldGP);
+                WorldModule module = GetModuleByWorldGP(mergeTargetWorldGP);
                 if (module != null)
                 {
                     Box box = module.GenerateBox(newBoxTypeIndex, mergeTargetWorldGP, newBoxOrientation);
@@ -955,7 +962,7 @@ public class World : PoolObject
                 }
             }
 
-            WorldModule module_box_core = GetModuleByGridPosition(worldGP);
+            WorldModule module_box_core = GetModuleByWorldGP(worldGP);
             box.Initialize(worldGP, module_box_core, 0.3f, box.ArtOnly, lerpType);
             return true;
         }
@@ -998,7 +1005,7 @@ public class World : PoolObject
         if (boxTypeIndex == 0) return false;
         if (BoxProject(dir, origin, maxDistance, false, out _, out Box _))
         {
-            WorldModule module = GetModuleByGridPosition(origin, true);
+            WorldModule module = GetModuleByWorldGP(origin, true);
             if (module != null)
             {
                 dropBox = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);

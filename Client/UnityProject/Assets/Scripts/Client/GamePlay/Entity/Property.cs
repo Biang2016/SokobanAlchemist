@@ -52,8 +52,8 @@ public abstract class Property
 
     #region Modifiers
 
-    private SortedDictionary<uint, PlusModifier> PlusModifiers_Value = new SortedDictionary<uint, PlusModifier>();
-    private SortedDictionary<uint, MultiplyModifier> MultiplyModifiers_Value = new SortedDictionary<uint, MultiplyModifier>();
+    private Dictionary<uint, PlusModifier> PlusModifiers_Value = new Dictionary<uint, PlusModifier>();
+    private Dictionary<uint, MultiplyModifier> MultiplyModifiers_Value = new Dictionary<uint, MultiplyModifier>();
 
     public bool AddModifier(PlusModifier modifier)
     {

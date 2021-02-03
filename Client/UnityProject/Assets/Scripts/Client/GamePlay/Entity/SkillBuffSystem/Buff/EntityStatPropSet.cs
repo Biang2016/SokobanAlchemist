@@ -199,7 +199,7 @@ public class EntityStatPropSet
     public List<SkillPropertyCollection> SkillsPropertyCollections = new List<SkillPropertyCollection>();
 
     [Serializable]
-    public class SkillPropertyCollection : IClone<SkillPropertyCollection>
+    public class SkillPropertyCollection
     {
         public Dictionary<EntitySkillPropertyType, EntityProperty> PropertyDict = new Dictionary<EntitySkillPropertyType, EntityProperty>();
 
@@ -240,20 +240,26 @@ public class EntityStatPropSet
         [LabelText("@\"后摇/ms\t\"+Recovery")]
         public EntityProperty Recovery = new EntityProperty(EntitySkillPropertyType.Recovery);
 
+        public void Setup()
+        {
+            if (PropertyDict.Count != 0)
+            {
+                PropertyDict.Add(EntitySkillPropertyType.Damage, Damage);
+                PropertyDict.Add(EntitySkillPropertyType.Attach_FiringValue, Attach_FiringValue);
+                PropertyDict.Add(EntitySkillPropertyType.Attach_FrozenValue, Attach_FrozenValue);
+                PropertyDict.Add(EntitySkillPropertyType.CastingRadius, CastingRadius);
+                PropertyDict.Add(EntitySkillPropertyType.EffectRadius, EffectRadius);
+                PropertyDict.Add(EntitySkillPropertyType.Width, Width);
+                PropertyDict.Add(EntitySkillPropertyType.Depth, Depth);
+                PropertyDict.Add(EntitySkillPropertyType.Cooldown, Cooldown);
+                PropertyDict.Add(EntitySkillPropertyType.WingUp, WingUp);
+                PropertyDict.Add(EntitySkillPropertyType.CastDuration, CastDuration);
+                PropertyDict.Add(EntitySkillPropertyType.Recovery, Recovery);
+            }
+        }
+
         public void Initialize()
         {
-            PropertyDict.Add(EntitySkillPropertyType.Damage, Damage);
-            PropertyDict.Add(EntitySkillPropertyType.Attach_FiringValue, Attach_FiringValue);
-            PropertyDict.Add(EntitySkillPropertyType.Attach_FrozenValue, Attach_FrozenValue);
-            PropertyDict.Add(EntitySkillPropertyType.CastingRadius, CastingRadius);
-            PropertyDict.Add(EntitySkillPropertyType.EffectRadius, EffectRadius);
-            PropertyDict.Add(EntitySkillPropertyType.Width, Width);
-            PropertyDict.Add(EntitySkillPropertyType.Depth, Depth);
-            PropertyDict.Add(EntitySkillPropertyType.Cooldown, Cooldown);
-            PropertyDict.Add(EntitySkillPropertyType.WingUp, WingUp);
-            PropertyDict.Add(EntitySkillPropertyType.CastDuration, CastDuration);
-            PropertyDict.Add(EntitySkillPropertyType.Recovery, Recovery);
-
             foreach (KeyValuePair<EntitySkillPropertyType, EntityProperty> kv in PropertyDict)
             {
                 kv.Value.Initialize();
@@ -266,26 +272,21 @@ public class EntityStatPropSet
             {
                 kv.Value.OnRecycled();
             }
-
-            PropertyDict.Clear();
         }
 
-        public SkillPropertyCollection Clone()
+        public void ApplyDataTo(SkillPropertyCollection target)
         {
-            SkillPropertyCollection newSPC = new SkillPropertyCollection();
-            newSPC.skillAlias = skillAlias;
-            Damage.ApplyDataTo(newSPC.Damage);
-            Attach_FiringValue.ApplyDataTo(newSPC.Attach_FiringValue);
-            Attach_FrozenValue.ApplyDataTo(newSPC.Attach_FrozenValue);
-            CastingRadius.ApplyDataTo(newSPC.CastingRadius);
-            EffectRadius.ApplyDataTo(newSPC.EffectRadius);
-            Width.ApplyDataTo(newSPC.Width);
-            Depth.ApplyDataTo(newSPC.Depth);
-            Cooldown.ApplyDataTo(newSPC.Cooldown);
-            WingUp.ApplyDataTo(newSPC.WingUp);
-            CastDuration.ApplyDataTo(newSPC.CastDuration);
-            Recovery.ApplyDataTo(newSPC.Recovery);
-            return newSPC;
+            Damage.ApplyDataTo(target.Damage);
+            Attach_FiringValue.ApplyDataTo(target.Attach_FiringValue);
+            Attach_FrozenValue.ApplyDataTo(target.Attach_FrozenValue);
+            CastingRadius.ApplyDataTo(target.CastingRadius);
+            EffectRadius.ApplyDataTo(target.EffectRadius);
+            Width.ApplyDataTo(target.Width);
+            Depth.ApplyDataTo(target.Depth);
+            Cooldown.ApplyDataTo(target.Cooldown);
+            WingUp.ApplyDataTo(target.WingUp);
+            CastDuration.ApplyDataTo(target.CastDuration);
+            Recovery.ApplyDataTo(target.Recovery);
         }
     }
 
@@ -627,7 +628,14 @@ public class EntityStatPropSet
 
         #endregion
 
-        target.SkillsPropertyCollections = SkillsPropertyCollections.Clone();
+        // 性能考虑，进行数据拷贝
+        for (int i = 0; i < target.SkillsPropertyCollections.Count; i++)
+        {
+            SkillPropertyCollection spc = target.SkillsPropertyCollections[i];
+            SkillsPropertyCollections[i].Setup();
+            SkillsPropertyCollections[i].ApplyDataTo(spc);
+        }
+
         target.RawEntityDefaultBuffs = RawEntityDefaultBuffs; // 由于是干数据，此处不克隆！
     }
 

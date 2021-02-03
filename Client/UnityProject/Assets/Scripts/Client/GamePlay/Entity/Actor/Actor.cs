@@ -93,7 +93,7 @@ public class Actor : Entity
         {
             if (curWorldGP != value)
             {
-                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(value, true);
+                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(value, true);
                 if (module) curWorldGP = value;
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
@@ -9,6 +10,8 @@ public class OpenWorld : World
 {
     public int WorldSize_X = 2;
     public int WorldSize_Z = 2;
+
+    public int PlayerScopeRadius = 3;
 
     [Serializable]
     public class GenerateBoxLayerData
@@ -36,7 +39,11 @@ public class OpenWorld : World
 
         [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
         [LabelText("迭代次数")]
-        public int SmoothTimes = 20;
+        public int SmoothTimes = 4;
+
+        [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
+        [LabelText("空地生墙迭代次数")]
+        public int SmoothTimes_GenerateWallInOpenSpace = 3;
 
         [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.Random)]
         [LabelText("比率：每千格约有多少个")]
@@ -89,8 +96,10 @@ public class OpenWorld : World
     // 关卡流式加载需要平移世界模组矩阵
 
     // todo 由Perlin Noise来确定每个Module的Seed，即可保证无限地图
-    public override void Initialize(WorldData worldData)
+    public override IEnumerator Initialize(WorldData worldData)
     {
+        m_LevelCacheData = new LevelCacheData(WorldSize_X, WorldSize_Z);
+
         void TryWriteBoxIndexTypeIntoMatrix(WorldModuleData moduleData, GenerateBoxLayerData boxLayerData, ushort boxTypeIndex, ushort existedBoxTypeIndex, int x, int z)
         {
             if (existedBoxTypeIndex != 0)
@@ -114,12 +123,10 @@ public class OpenWorld : World
         WorldData.WorldBornPointGroupData_Runtime.InitTempData();
         WorldData.DefaultWorldActorBornPointAlias = "PlayerBP";
 
-        WorldModuleData[,] worldModuleDataMatrix = new WorldModuleData[WorldSize_X, WorldSize_Z];
-
         for (int module_x = 0; module_x < WorldSize_X; module_x++)
         for (int module_z = 0; module_z < WorldSize_Z; module_z++)
         {
-            worldModuleDataMatrix[module_x, module_z] = new WorldModuleData();
+            m_LevelCacheData.WorldModuleDataMatrix[module_x, module_z] = new WorldModuleData();
         }
 
         ushort Seed = (ushort) Time.time.ToString().GetHashCode();
@@ -132,11 +139,13 @@ public class OpenWorld : World
             {
                 case GenerateAlgorithm.CellularAutomata:
                 {
-                    CellularAutomataMapGenerator MapGenerator = new CellularAutomataMapGenerator(WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, boxLayerData.FillPercent, boxLayerData.SmoothTimes, SRandom);
+                    CellularAutomataMapGenerator MapGenerator = new CellularAutomataMapGenerator(WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, boxLayerData.FillPercent, boxLayerData.SmoothTimes, boxLayerData.SmoothTimes_GenerateWallInOpenSpace, SRandom);
+                    m_LevelCacheData.CurrentGenerators.Add(MapGenerator); // 所有层级的信息全部存储
+
                     for (int module_x = 0; module_x < WorldSize_X; module_x++)
                     for (int module_z = 0; module_z < WorldSize_Z; module_z++)
                     {
-                        WorldModuleData moduleData = worldModuleDataMatrix[module_x, module_z];
+                        WorldModuleData moduleData = m_LevelCacheData.WorldModuleDataMatrix[module_x, module_z];
                         for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
                         for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
                         {
@@ -161,7 +170,7 @@ public class OpenWorld : World
                     for (int module_x = 0; module_x < WorldSize_X; module_x++)
                     for (int module_z = 0; module_z < WorldSize_Z; module_z++)
                     {
-                        WorldModuleData moduleData = worldModuleDataMatrix[module_x, module_z];
+                        WorldModuleData moduleData = m_LevelCacheData.WorldModuleDataMatrix[module_x, module_z];
                         for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
                         for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
                         {
@@ -184,11 +193,13 @@ public class OpenWorld : World
             for (int module_x = 0; module_x < WorldSize_X; module_x++)
             for (int module_z = 0; module_z < WorldSize_Z; module_z++)
             {
-                WorldModuleData moduleData = worldModuleDataMatrix[module_x, module_z];
+                WorldModuleData moduleData = m_LevelCacheData.WorldModuleDataMatrix[module_x, module_z];
                 for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
                 for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
                 {
-                    string bornPointAlias = actorLayerData.ActorTypeName.Equals("Player1") ? WorldData.DefaultWorldActorBornPointAlias : "";
+                    bool isPlayer = actorLayerData.ActorTypeName.Equals("Player1");
+                    string bornPointAlias = isPlayer ? WorldData.DefaultWorldActorBornPointAlias : "";
+                    if (!isPlayer) continue; // todo 做关卡流式加载暂时关闭怪物加载
                     switch (actorLayerData.m_GenerateAlgorithm)
                     {
                         case GenerateAlgorithm.Random:
@@ -244,11 +255,11 @@ public class OpenWorld : World
             }
         }
 
-        for (int module_x = 0; module_x < WorldSize_X; module_x++)
-        for (int module_z = 0; module_z < WorldSize_Z; module_z++)
+        for (int module_x = 0; module_x < PlayerScopeRadius; module_x++)
+        for (int module_z = 0; module_z < PlayerScopeRadius; module_z++)
         {
-            WorldModuleData moduleData = worldModuleDataMatrix[module_x, module_z];
-            GenerateWorldModuleByCustomizedData(moduleData, module_x, 1, module_z);
+            WorldModuleData moduleData = m_LevelCacheData.WorldModuleDataMatrix[module_x, module_z];
+            yield return GenerateWorldModuleByCustomizedData(moduleData, module_x, 1, module_z, 99999);
             WorldData.WorldBornPointGroupData_Runtime.AddModuleData(WorldModuleMatrix[module_x, 1, module_z], new GridPos3D(0, 1, 0));
         }
 
@@ -262,12 +273,113 @@ public class OpenWorld : World
         }
 
         // Ground
-        for (int module_x = 0; module_x < WorldSize_X; module_x++)
-        for (int module_z = 0; module_z < WorldSize_Z; module_z++)
+        for (int module_x = 0; module_x < PlayerScopeRadius; module_x++)
+        for (int module_z = 0; module_z < PlayerScopeRadius; module_z++)
         {
-            GenerateWorldModule(ConfigManager.WorldModule_GroundIndex, module_x, 0, module_z);
+            yield return GenerateWorldModule(ConfigManager.WorldModule_GroundIndex, module_x, 0, module_z);
         }
 
         BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData_Runtime, WorldData.DefaultWorldActorBornPointAlias);
+    }
+
+    protected override IEnumerator GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, int loadBoxNumPerFrame = 99999)
+    {
+        m_LevelCacheData.CurrentShowModuleGPs.Add(new GridPos3D(x, y, z));
+        return base.GenerateWorldModule(worldModuleTypeIndex, x, y, z, loadBoxNumPerFrame);
+    }
+
+    protected override IEnumerator GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z, int loadBoxNumPerFrame)
+    {
+        m_LevelCacheData.CurrentShowModuleGPs.Add(new GridPos3D(x, y, z));
+        return base.GenerateWorldModuleByCustomizedData(data, x, y, z, loadBoxNumPerFrame);
+    }
+
+    #region Level Streaming
+
+    public class LevelCacheData
+    {
+        public List<CellularAutomataMapGenerator> CurrentGenerators = new List<CellularAutomataMapGenerator>(); // 按箱子layer记录的地图生成信息，未走过的地图或离开很久之后重置的模组按这个数据加载出来
+
+        public WorldModuleData[,] WorldModuleDataMatrix;
+
+        public List<GridPos3D> CurrentShowModuleGPs = new List<GridPos3D>();
+
+        // 怪物处理方式另外研究，先研究地图
+        public LevelCacheData(int worldSize_X, int worldSize_Z)
+        {
+            WorldModuleDataMatrix = new WorldModuleData[worldSize_X, worldSize_Z];
+        }
+    }
+
+    private LevelCacheData m_LevelCacheData;
+
+    #endregion
+
+    private float CheckRefreshModuleInterval = 0.2f;
+    private float CheckRefreshModuleTick = 0;
+
+    void FixedUpdate()
+    {
+        if (!IsRecycled)
+        {
+            if (GameStateManager.Instance.GetState() == GameState.Fighting)
+            {
+                CheckRefreshModuleTick += Time.fixedDeltaTime;
+                if (CheckRefreshModuleTick > CheckRefreshModuleInterval)
+                {
+                    StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP));
+                    CheckRefreshModuleTick = 0;
+                }
+            }
+            else
+            {
+                StopAllCoroutines();
+            }
+        }
+    }
+
+    public IEnumerator RefreshScopeModules(GridPos3D playerWorldGP)
+    {
+        GridPos3D moduleGP = GetModuleGPByWorldGP(playerWorldGP);
+
+        List<GridPos3D> hideModuleGPs = new List<GridPos3D>();
+        foreach (GridPos3D currentShowModuleGP in m_LevelCacheData.CurrentShowModuleGPs)
+        {
+            GridPos3D diff = moduleGP - currentShowModuleGP;
+            if (Mathf.Abs(diff.x) >= PlayerScopeRadius || Mathf.Abs(diff.z) >= PlayerScopeRadius)
+            {
+                WorldModule worldModule = WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z];
+                if (worldModule != null)
+                {
+                    worldModule.Clear();
+                    worldModule.PoolRecycle();
+                    WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
+                }
+
+                hideModuleGPs.Add(currentShowModuleGP);
+            }
+        }
+
+        foreach (GridPos3D hideModuleGP in hideModuleGPs)
+        {
+            m_LevelCacheData.CurrentShowModuleGPs.Remove(hideModuleGP);
+        }
+
+        for (int module_x = moduleGP.x - (PlayerScopeRadius - 1); module_x <= moduleGP.x + (PlayerScopeRadius - 1); module_x++)
+        for (int module_z = moduleGP.z - (PlayerScopeRadius - 1); module_z <= moduleGP.z + (PlayerScopeRadius - 1); module_z++)
+        {
+            if (module_x >= 0 && module_x < WorldSize_X && module_z >= 0 && module_z < WorldSize_Z)
+            {
+                WorldModule module = WorldModuleMatrix[module_x, 1, module_z];
+                if (module == null)
+                {
+                    WorldModuleData worldModuleData = m_LevelCacheData.WorldModuleDataMatrix[module_x, module_z];
+                    yield return GenerateWorldModuleByCustomizedData(worldModuleData, module_x, 1, module_z, 16);
+                    yield return GenerateWorldModule(ConfigManager.WorldModule_GroundIndex, module_x, 0, module_z, 64);
+                }
+            }
+        }
+
+        yield return null;
     }
 }

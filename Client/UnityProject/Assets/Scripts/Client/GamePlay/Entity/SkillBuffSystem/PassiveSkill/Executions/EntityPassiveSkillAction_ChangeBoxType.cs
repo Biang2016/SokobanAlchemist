@@ -23,7 +23,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
     {
         if (Box.State == Box.States.Static)
         {
-            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(Box.WorldGP);
+            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(Box.WorldGP);
             if (module != null)
             {
                 ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);

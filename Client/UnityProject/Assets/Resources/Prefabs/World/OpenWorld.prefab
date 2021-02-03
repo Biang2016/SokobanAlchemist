@@ -44,8 +44,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsRecycled: 0
-  WorldSize_X: 4
-  WorldSize_Z: 2
+  WorldSize_X: 5
+  WorldSize_Z: 5
+  PlayerScopeRadius: 2
   GenerateBoxLayerDataList:
   - BoxTypeName: BorderBox
     AllowReplacedBoxTypeNames: []
@@ -53,20 +54,23 @@ MonoBehaviour:
     m_GenerateAlgorithm: 0
     FillPercent: 20
     SmoothTimes: 5
+    SmoothTimes_GenerateWallInOpenSpace: 0
     BoxCountPerThousandGrid: 20
   - BoxTypeName: BrickBox
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
     FillPercent: 46
-    SmoothTimes: 5
+    SmoothTimes: 3
+    SmoothTimes_GenerateWallInOpenSpace: 4
     BoxCountPerThousandGrid: 20
   - BoxTypeName: WoodenBox
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
-    FillPercent: 48
-    SmoothTimes: 5
+    FillPercent: 47
+    SmoothTimes: 3
+    SmoothTimes_GenerateWallInOpenSpace: 4
     BoxCountPerThousandGrid: 20
   - BoxTypeName: LightningBox
     AllowReplacedBoxTypeNames:
@@ -75,6 +79,7 @@ MonoBehaviour:
     m_GenerateAlgorithm: 2
     FillPercent: 40
     SmoothTimes: 20
+    SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 10
   - BoxTypeName: FireBox
     AllowReplacedBoxTypeNames:
@@ -83,6 +88,7 @@ MonoBehaviour:
     m_GenerateAlgorithm: 2
     FillPercent: 40
     SmoothTimes: 20
+    SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 15
   - BoxTypeName: IceBox
     AllowReplacedBoxTypeNames:
@@ -91,6 +97,7 @@ MonoBehaviour:
     m_GenerateAlgorithm: 2
     FillPercent: 40
     SmoothTimes: 20
+    SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 12
   - BoxTypeName: TNTBox
     AllowReplacedBoxTypeNames:
@@ -99,6 +106,7 @@ MonoBehaviour:
     m_GenerateAlgorithm: 2
     FillPercent: 40
     SmoothTimes: 20
+    SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 2
   - BoxTypeName: LifeBox
     AllowReplacedBoxTypeNames:
@@ -107,6 +115,7 @@ MonoBehaviour:
     m_GenerateAlgorithm: 2
     FillPercent: 40
     SmoothTimes: 20
+    SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 7
   - BoxTypeName: GoldenBox
     AllowReplacedBoxTypeNames:
@@ -115,6 +124,7 @@ MonoBehaviour:
     m_GenerateAlgorithm: 2
     FillPercent: 40
     SmoothTimes: 20
+    SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 25
   - BoxTypeName: Golden3Box
     AllowReplacedBoxTypeNames:
@@ -123,6 +133,7 @@ MonoBehaviour:
     m_GenerateAlgorithm: 2
     FillPercent: 40
     SmoothTimes: 20
+    SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 8
   - BoxTypeName: ActionBox
     AllowReplacedBoxTypeNames: []
@@ -130,6 +141,7 @@ MonoBehaviour:
     m_GenerateAlgorithm: 2
     FillPercent: 40
     SmoothTimes: 20
+    SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 12
   GenerateActorLayerDataList:
   - ActorTypeName: Player1

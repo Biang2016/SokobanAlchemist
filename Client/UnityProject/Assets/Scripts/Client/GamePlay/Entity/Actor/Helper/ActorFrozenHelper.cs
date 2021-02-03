@@ -33,7 +33,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
             else
             {
                 actor.SnapToGrid();
-                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByGridPosition(actor.WorldGP);
+                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(actor.WorldGP);
                 if (module)
                 {
                     FrozenBox = module.GenerateBox(ConfigManager.Box_EnemyFrozenBoxIndex, actor.WorldGP, GridPosR.Orientation.Up);
