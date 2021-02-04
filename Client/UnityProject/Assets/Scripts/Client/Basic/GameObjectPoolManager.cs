@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay;
 using BiangLibrary.ObjectPool;
 using BiangLibrary.Singleton;
@@ -11,7 +12,6 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     {
         Player,
         InGameHealthBar,
-        WorldCameraPOI,
         WorldModule,
         World,
         OpenWorldModule,
@@ -30,7 +30,6 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     {
         {PrefabNames.Player, 1},
         {PrefabNames.InGameHealthBar, 10},
-        {PrefabNames.WorldCameraPOI, 2},
         {PrefabNames.WorldModule, 16},
         {PrefabNames.World, 1},
         {PrefabNames.OpenWorldModule, 1},
@@ -43,6 +42,14 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         {PrefabNames.DebugPanelColumn, 4},
         {PrefabNames.DebugPanelButton, 4},
         {PrefabNames.DebugPanelSlider, 4},
+    };
+
+    public Dictionary<string, int> WarmUpBoxConfig = new Dictionary<string, int>
+    {
+        {"GroundBox", 9 * 256},
+        {"BrickBox", 200},
+        {"WoodenBox", 200},
+        {"BorderBox", 100},
     };
 
     public Dictionary<PrefabNames, int> PoolWarmUpDict = new Dictionary<PrefabNames, int>
@@ -96,8 +103,29 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 GameObjectPool pool = go.AddComponent<GameObjectPool>();
                 pool.transform.SetParent(Root);
                 BoxDict.Add(kv.Key, pool);
-                PoolObject po = go_Prefab.GetComponent<PoolObject>();
-                pool.Initiate(po, 20);
+                Box box = go_Prefab.GetComponent<Box>();
+                int warmUpNum = 0;
+                if (WarmUpBoxConfig.ContainsKey(kv.Value))
+                {
+                    warmUpNum = WarmUpBoxConfig[kv.Value];
+                }
+                else
+                {
+                    warmUpNum = 20;
+                }
+
+                pool.Initiate(box, warmUpNum);
+                Box[] warmUpBoxes = new Box[warmUpNum];
+                for (int i = 0; i < warmUpNum; i++)
+                {
+                    Box warmUpBox = pool.AllocateGameObject<Box>(pool.transform);
+                    warmUpBoxes[i] = warmUpBox;
+                }
+
+                for (int i = 0; i < warmUpNum; i++)
+                {
+                    warmUpBoxes[i].PoolRecycle();
+                }
             }
         }
 

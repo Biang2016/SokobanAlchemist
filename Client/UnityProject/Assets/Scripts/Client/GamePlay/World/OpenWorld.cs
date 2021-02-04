@@ -315,8 +315,10 @@ public class OpenWorld : World
 
     #endregion
 
-    private float CheckRefreshModuleInterval = 0.2f;
+    private float CheckRefreshModuleInterval = 0.1f;
     private float CheckRefreshModuleTick = 0;
+
+    private Coroutine RefreshScopeModulesCoroutine;
 
     void FixedUpdate()
     {
@@ -324,11 +326,14 @@ public class OpenWorld : World
         {
             if (GameStateManager.Instance.GetState() == GameState.Fighting)
             {
-                CheckRefreshModuleTick += Time.fixedDeltaTime;
-                if (CheckRefreshModuleTick > CheckRefreshModuleInterval)
+                if (RefreshScopeModulesCoroutine == null)
                 {
-                    StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP));
-                    CheckRefreshModuleTick = 0;
+                    CheckRefreshModuleTick += Time.fixedDeltaTime;
+                    if (CheckRefreshModuleTick > CheckRefreshModuleInterval)
+                    {
+                        RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP));
+                        CheckRefreshModuleTick = 0;
+                    }
                 }
             }
             else
@@ -370,16 +375,21 @@ public class OpenWorld : World
         {
             if (module_x >= 0 && module_x < WorldSize_X && module_z >= 0 && module_z < WorldSize_Z)
             {
+                WorldModule groundModule = WorldModuleMatrix[module_x, 0, module_z];
+                if (groundModule == null)
+                {
+                    yield return GenerateWorldModule(ConfigManager.WorldModule_GroundIndex, module_x, 0, module_z, 64);
+                }
+
                 WorldModule module = WorldModuleMatrix[module_x, 1, module_z];
                 if (module == null)
                 {
                     WorldModuleData worldModuleData = m_LevelCacheData.WorldModuleDataMatrix[module_x, module_z];
-                    yield return GenerateWorldModuleByCustomizedData(worldModuleData, module_x, 1, module_z, 16);
-                    yield return GenerateWorldModule(ConfigManager.WorldModule_GroundIndex, module_x, 0, module_z, 64);
+                    yield return GenerateWorldModuleByCustomizedData(worldModuleData, module_x, 1, module_z, 32);
                 }
             }
         }
 
-        yield return null;
+        RefreshScopeModulesCoroutine = null;
     }
 }
