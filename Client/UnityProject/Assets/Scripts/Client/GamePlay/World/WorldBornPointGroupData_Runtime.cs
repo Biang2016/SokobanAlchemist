@@ -14,7 +14,7 @@ public class WorldBornPointGroupData_Runtime
         AllEnemyBornPointDataList.Clear();
     }
 
-    public void AddModuleData(WorldModule module, GridPos3D worldModuleGP)
+    public void AddModuleData(WorldModule module)
     {
         foreach (KeyValuePair<string, BornPointData> kv in module.WorldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints)
         {
@@ -36,5 +36,18 @@ public class WorldBornPointGroupData_Runtime
                 EnemyBornPointDataAliasDict.Add(newData.BornPointAlias, newData);
             }
         }
+    }
+
+    public void RemoveModuleData(WorldModule module)
+    {
+        foreach (KeyValuePair<string, BornPointData> kv in module.WorldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints)
+        {
+            if (PlayerBornPointDataAliasDict.ContainsKey(kv.Key))
+            {
+                PlayerBornPointDataAliasDict.Remove(kv.Key);
+            }
+        }
+
+        // todo remove enemydata
     }
 }

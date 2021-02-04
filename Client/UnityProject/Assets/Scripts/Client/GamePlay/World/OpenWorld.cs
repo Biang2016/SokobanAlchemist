@@ -11,7 +11,8 @@ public class OpenWorld : World
     public int WorldSize_X = 2;
     public int WorldSize_Z = 2;
 
-    public int PlayerScopeRadius = 3;
+    public int PlayerScopeRadiusX = 3;
+    public int PlayerScopeRadiusZ = 2;
 
     [Serializable]
     public class GenerateBoxLayerData
@@ -98,102 +99,46 @@ public class OpenWorld : World
     // todo 由Perlin Noise来确定每个Module的Seed，即可保证无限地图
     public override IEnumerator Initialize(WorldData worldData)
     {
-        m_LevelCacheData = new LevelCacheData(WorldSize_X, WorldSize_Z);
-
-        void TryWriteBoxIndexTypeIntoMatrix(WorldModuleData moduleData, GenerateBoxLayerData boxLayerData, ushort boxTypeIndex, ushort existedBoxTypeIndex, int x, int z)
-        {
-            if (existedBoxTypeIndex != 0)
-            {
-                if (boxLayerData.AllowReplacedBoxTypeNames.Contains(ConfigManager.GetBoxTypeName(existedBoxTypeIndex)))
-                {
-                    moduleData.BoxMatrix[x, 0, z] = boxTypeIndex;
-                }
-            }
-            else
-            {
-                if (!boxLayerData.OnlyOverrideAnyBox)
-                {
-                    moduleData.BoxMatrix[x, 0, z] = boxTypeIndex;
-                }
-            }
-        }
-
+        m_LevelCacheData = new LevelCacheData();
         WorldData = worldData;
 
         WorldData.WorldBornPointGroupData_Runtime.InitTempData();
         WorldData.DefaultWorldActorBornPointAlias = "PlayerBP";
 
-        for (int module_x = 0; module_x < WorldSize_X; module_x++)
-        for (int module_z = 0; module_z < WorldSize_Z; module_z++)
-        {
-            m_LevelCacheData.WorldModuleDataMatrix[module_x, module_z] = new WorldModuleData();
-        }
-
         ushort Seed = (ushort) Time.time.ToString().GetHashCode();
         SRandom SRandom = new SRandom(Seed);
 
-        foreach (GenerateBoxLayerData boxLayerData in GenerateBoxLayerDataList) // 按层生成关卡Box数据
+        foreach (GenerateBoxLayerData boxLayerData in GenerateBoxLayerDataList) // 初始化所有层的关卡生成器
         {
-            ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxLayerData.BoxTypeName);
+            MapGenerator generator = null;
             switch (boxLayerData.m_GenerateAlgorithm)
             {
                 case GenerateAlgorithm.CellularAutomata:
                 {
-                    CellularAutomataMapGenerator MapGenerator = new CellularAutomataMapGenerator(WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, boxLayerData.FillPercent, boxLayerData.SmoothTimes, boxLayerData.SmoothTimes_GenerateWallInOpenSpace, SRandom);
-                    m_LevelCacheData.CurrentGenerators.Add(MapGenerator); // 所有层级的信息全部存储
-
-                    for (int module_x = 0; module_x < WorldSize_X; module_x++)
-                    for (int module_z = 0; module_z < WorldSize_Z; module_z++)
-                    {
-                        WorldModuleData moduleData = m_LevelCacheData.WorldModuleDataMatrix[module_x, module_z];
-                        for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
-                        for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
-                        {
-                            bool genSuc = MapGenerator[x + WorldModule.MODULE_SIZE * module_x, z + WorldModule.MODULE_SIZE * module_z] == 1;
-                            if (genSuc)
-                            {
-                                ushort existedBoxTypeIndex = moduleData.BoxMatrix[x, 0, z];
-                                TryWriteBoxIndexTypeIntoMatrix(moduleData, boxLayerData, boxTypeIndex, existedBoxTypeIndex, x, z);
-                            }
-                        }
-                    }
-
+                    generator = new CellularAutomataMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, boxLayerData.FillPercent, boxLayerData.SmoothTimes, boxLayerData.SmoothTimes_GenerateWallInOpenSpace, SRandom.Next((uint) 9999));
                     break;
                 }
                 case GenerateAlgorithm.PerlinNoise:
                 {
-                    // todo 
                     break;
                 }
                 case GenerateAlgorithm.Random:
                 {
-                    for (int module_x = 0; module_x < WorldSize_X; module_x++)
-                    for (int module_z = 0; module_z < WorldSize_Z; module_z++)
-                    {
-                        WorldModuleData moduleData = m_LevelCacheData.WorldModuleDataMatrix[module_x, module_z];
-                        for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
-                        for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
-                        {
-                            bool genSuc = SRandom.Range(0, 1000) < boxLayerData.BoxCountPerThousandGrid;
-                            if (genSuc)
-                            {
-                                ushort existedBoxTypeIndex = moduleData.BoxMatrix[x, 0, z];
-                                TryWriteBoxIndexTypeIntoMatrix(moduleData, boxLayerData, boxTypeIndex, existedBoxTypeIndex, x, z);
-                            }
-                        }
-                    }
-
+                    generator = new RandomMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999));
                     break;
                 }
             }
+
+            m_LevelCacheData.CurrentGenerators.Add(generator);
         }
 
+        /*
         foreach (GenerateActorLayerData actorLayerData in GenerateActorLayerDataList) // 按层生成关卡Actor数据
         {
-            for (int module_x = 0; module_x < WorldSize_X; module_x++)
-            for (int module_z = 0; module_z < WorldSize_Z; module_z++)
+            for (int module_x = 0; module_x < PlayerScopeRadius; module_x++)
+            for (int module_z = 0; module_z < PlayerScopeRadius; module_z++)
             {
-                WorldModuleData moduleData = m_LevelCacheData.WorldModuleDataMatrix[module_x, module_z];
+                WorldModuleData moduleData = m_LevelCacheData.WorldModuleDataDict[new GridPos3D(module_x, 1, module_z)];
                 for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
                 for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
                 {
@@ -254,61 +199,43 @@ public class OpenWorld : World
                 }
             }
         }
+        */
 
-        for (int module_x = 0; module_x < PlayerScopeRadius; module_x++)
-        for (int module_z = 0; module_z < PlayerScopeRadius; module_z++)
-        {
-            WorldModuleData moduleData = m_LevelCacheData.WorldModuleDataMatrix[module_x, module_z];
-            yield return GenerateWorldModuleByCustomizedData(moduleData, module_x, 1, module_z, 99999);
-            WorldData.WorldBornPointGroupData_Runtime.AddModuleData(WorldModuleMatrix[module_x, 1, module_z], new GridPos3D(0, 1, 0));
-        }
+        yield return RefreshScopeModules(new GridPos3D(0, 16, 0)); // 按关卡生成器和角色位置初始化需要的模组
 
         if (WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Count == 0) // 实在没有主角出生点
         {
-            Debug.LogError("No space for Player1 to spawn");
+            //Debug.LogError("No space for Player1 to spawn");
             GridPos3D playerBPLocal = new GridPos3D(10, 0, 10);
             GridPos3D playerBPWorld = new GridPos3D(10, WorldModule.MODULE_SIZE, 10);
             BornPointData bp = new BornPointData {ActorType = "Player1", BornPointAlias = "PlayerBP", LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorld};
             WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Add(bp.BornPointAlias, bp);
         }
 
-        // Ground
-        for (int module_x = 0; module_x < PlayerScopeRadius; module_x++)
-        for (int module_z = 0; module_z < PlayerScopeRadius; module_z++)
-        {
-            yield return GenerateWorldModule(ConfigManager.WorldModule_GroundIndex, module_x, 0, module_z);
-        }
-
         BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData_Runtime, WorldData.DefaultWorldActorBornPointAlias);
     }
 
-    protected override IEnumerator GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, int loadBoxNumPerFrame = 99999)
+    protected override IEnumerator GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, int loadBoxNumPerFrame = 99999, GridPosR.Orientation generateOrder = GridPosR.Orientation.Right)
     {
         m_LevelCacheData.CurrentShowModuleGPs.Add(new GridPos3D(x, y, z));
-        return base.GenerateWorldModule(worldModuleTypeIndex, x, y, z, loadBoxNumPerFrame);
+        yield return base.GenerateWorldModule(worldModuleTypeIndex, x, y, z, loadBoxNumPerFrame, generateOrder);
     }
 
-    protected override IEnumerator GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z, int loadBoxNumPerFrame)
+    protected override IEnumerator GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z, int loadBoxNumPerFrame, GridPosR.Orientation generateOrder)
     {
         m_LevelCacheData.CurrentShowModuleGPs.Add(new GridPos3D(x, y, z));
-        return base.GenerateWorldModuleByCustomizedData(data, x, y, z, loadBoxNumPerFrame);
+        yield return base.GenerateWorldModuleByCustomizedData(data, x, y, z, loadBoxNumPerFrame, generateOrder);
     }
 
     #region Level Streaming
 
     public class LevelCacheData
     {
-        public List<CellularAutomataMapGenerator> CurrentGenerators = new List<CellularAutomataMapGenerator>(); // 按箱子layer记录的地图生成信息，未走过的地图或离开很久之后重置的模组按这个数据加载出来
+        public List<MapGenerator> CurrentGenerators = new List<MapGenerator>(); // 按箱子layer记录的地图生成信息，未走过的地图或离开很久之后重置的模组按这个数据加载出来
 
-        public WorldModuleData[,] WorldModuleDataMatrix;
+        public Dictionary<GridPos3D, WorldModuleData> WorldModuleDataDict = new Dictionary<GridPos3D, WorldModuleData>();
 
         public List<GridPos3D> CurrentShowModuleGPs = new List<GridPos3D>();
-
-        // 怪物处理方式另外研究，先研究地图
-        public LevelCacheData(int worldSize_X, int worldSize_Z)
-        {
-            WorldModuleDataMatrix = new WorldModuleData[worldSize_X, worldSize_Z];
-        }
     }
 
     private LevelCacheData m_LevelCacheData;
@@ -336,29 +263,33 @@ public class OpenWorld : World
                     }
                 }
             }
-            else
-            {
-                StopAllCoroutines();
-            }
+
+            //else
+            //{
+            //    StopAllCoroutines();
+            //}
         }
     }
 
     public IEnumerator RefreshScopeModules(GridPos3D playerWorldGP)
     {
-        GridPos3D moduleGP = GetModuleGPByWorldGP(playerWorldGP);
+        GridPos3D playerOnModuleGP = GetModuleGPByWorldGP(playerWorldGP);
 
         List<GridPos3D> hideModuleGPs = new List<GridPos3D>();
         foreach (GridPos3D currentShowModuleGP in m_LevelCacheData.CurrentShowModuleGPs)
         {
-            GridPos3D diff = moduleGP - currentShowModuleGP;
-            if (Mathf.Abs(diff.x) >= PlayerScopeRadius || Mathf.Abs(diff.z) >= PlayerScopeRadius)
+            GridPos3D diff = playerOnModuleGP - currentShowModuleGP;
+            if (Mathf.Abs(diff.x) >= PlayerScopeRadiusX || Mathf.Abs(diff.z) >= PlayerScopeRadiusZ)
             {
                 WorldModule worldModule = WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z];
                 if (worldModule != null)
                 {
+                    WorldData.WorldBornPointGroupData_Runtime.RemoveModuleData(worldModule);
+
                     worldModule.Clear();
                     worldModule.PoolRecycle();
                     WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
+                    m_LevelCacheData.WorldModuleDataDict.Remove(currentShowModuleGP);
                 }
 
                 hideModuleGPs.Add(currentShowModuleGP);
@@ -370,26 +301,74 @@ public class OpenWorld : World
             m_LevelCacheData.CurrentShowModuleGPs.Remove(hideModuleGP);
         }
 
-        for (int module_x = moduleGP.x - (PlayerScopeRadius - 1); module_x <= moduleGP.x + (PlayerScopeRadius - 1); module_x++)
-        for (int module_z = moduleGP.z - (PlayerScopeRadius - 1); module_z <= moduleGP.z + (PlayerScopeRadius - 1); module_z++)
+        generateModuleFinished.Clear();
+        for (int module_x = playerOnModuleGP.x - (PlayerScopeRadiusX - 1); module_x <= playerOnModuleGP.x + (PlayerScopeRadiusX - 1); module_x++)
+        for (int module_z = playerOnModuleGP.z - (PlayerScopeRadiusZ - 1); module_z <= playerOnModuleGP.z + (PlayerScopeRadiusZ - 1); module_z++)
         {
             if (module_x >= 0 && module_x < WorldSize_X && module_z >= 0 && module_z < WorldSize_Z)
             {
+                GridPosR.Orientation generateOrientation = GridPosR.Orientation.Up;
+                GridPos3D diff = new GridPos3D(module_x, 1, module_z) - playerOnModuleGP;
+                if (diff.z > 0) generateOrientation = GridPosR.Orientation.Up;
+                else if (diff.z < 0) generateOrientation = GridPosR.Orientation.Down;
+                else if (diff.x > 0) generateOrientation = GridPosR.Orientation.Right;
+                else if (diff.x < 0) generateOrientation = GridPosR.Orientation.Left;
+
                 WorldModule groundModule = WorldModuleMatrix[module_x, 0, module_z];
                 if (groundModule == null)
                 {
-                    yield return GenerateWorldModule(ConfigManager.WorldModule_GroundIndex, module_x, 0, module_z, 64);
+                    generateModuleFinished.Add(false);
+                    StartCoroutine(Co_GenerateGroundModule(module_x, module_z, generateOrientation, generateModuleFinished.Count - 1));
                 }
 
                 WorldModule module = WorldModuleMatrix[module_x, 1, module_z];
                 if (module == null)
                 {
-                    WorldModuleData worldModuleData = m_LevelCacheData.WorldModuleDataMatrix[module_x, module_z];
-                    yield return GenerateWorldModuleByCustomizedData(worldModuleData, module_x, 1, module_z, 32);
+                    GridPos3D targetModuleGP = new GridPos3D(module_x, 1, module_z);
+                    if (!m_LevelCacheData.WorldModuleDataDict.ContainsKey(targetModuleGP))
+                    {
+                        WorldModuleData moduleData = new WorldModuleData();
+                        m_LevelCacheData.WorldModuleDataDict.Add(targetModuleGP, moduleData);
+                        foreach (MapGenerator generator in m_LevelCacheData.CurrentGenerators)
+                        {
+                            generator.WriteMapInfoIntoWorldModuleData(moduleData, module_x, module_z);
+                        }
+                    }
+
+                    generateModuleFinished.Add(false);
+                    StartCoroutine(Co_GenerateModule(targetModuleGP, module_x, module_z, generateOrientation, generateModuleFinished.Count - 1));
                 }
             }
         }
 
+        while (true)
+        {
+            bool allFinished = true;
+            foreach (bool b in generateModuleFinished)
+            {
+                if (!b) allFinished = false;
+            }
+
+            if (allFinished) break;
+            else yield return null;
+        }
+
+        generateModuleFinished.Clear();
         RefreshScopeModulesCoroutine = null;
+    }
+
+    List<bool> generateModuleFinished = new List<bool>();
+
+    IEnumerator Co_GenerateModule(GridPos3D targetModuleGP, int module_x, int module_z, GridPosR.Orientation generateOrientation, int boolIndex)
+    {
+        yield return GenerateWorldModuleByCustomizedData(m_LevelCacheData.WorldModuleDataDict[targetModuleGP], module_x, 1, module_z, 8, generateOrientation);
+        WorldData.WorldBornPointGroupData_Runtime.AddModuleData(WorldModuleMatrix[module_x, 1, module_z]);
+        generateModuleFinished[boolIndex] = true;
+    }
+
+    IEnumerator Co_GenerateGroundModule(int module_x, int module_z, GridPosR.Orientation generateOrientation, int boolIndex)
+    {
+        yield return GenerateWorldModule(ConfigManager.WorldModule_GroundIndex, module_x, 0, module_z, 16, generateOrientation);
+        generateModuleFinished[boolIndex] = true;
     }
 }

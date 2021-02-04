@@ -93,7 +93,7 @@ public class WorldModule : PoolObject
         FlowScriptController.graph = null;
     }
 
-    public virtual IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadBoxNumPerFrame)
+    public virtual IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadBoxNumPerFrame, GridPosR.Orientation generatorOrder = GridPosR.Orientation.Right)
     {
         ModuleGP = moduleGP;
         World = world;
@@ -140,27 +140,114 @@ public class WorldModule : PoolObject
         }
 
         int loadBoxCount = 0;
-        for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
+        switch (generatorOrder)
         {
-            for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
+            case GridPosR.Orientation.Right:
             {
-                for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
+                for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
                 {
-                    ushort boxTypeIndex = worldModuleData.BoxMatrix[x, y, z];
-                    GridPosR.Orientation boxOrientation = worldModuleData.BoxOrientationMatrix[x, y, z];
-                    if (boxTypeIndex != 0)
+                    for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
                     {
-                        Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[x, y, z];
-                        GenerateBox(boxTypeIndex, LocalGPToWorldGP(new GridPos3D(x, y, z)), boxOrientation, false, true, boxExtraSerializeDataFromModule);
-                        loadBoxCount++;
-                        if (loadBoxCount >= loadBoxNumPerFrame)
+                        for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
                         {
-                            loadBoxCount = 0;
-                            yield return null;
+                            if (generateBox(x, y, z))
+                            {
+                                loadBoxCount++;
+                                if (loadBoxCount >= loadBoxNumPerFrame)
+                                {
+                                    loadBoxCount = 0;
+                                    yield return null;
+                                }
+                            }
                         }
                     }
                 }
+
+                break;
             }
+            case GridPosR.Orientation.Left:
+            {
+                for (int x = worldModuleData.BoxMatrix.GetLength(0) - 1; x >= 0; x--)
+                {
+                    for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
+                    {
+                        for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
+                        {
+                            if (generateBox(x, y, z))
+                            {
+                                loadBoxCount++;
+                                if (loadBoxCount >= loadBoxNumPerFrame)
+                                {
+                                    loadBoxCount = 0;
+                                    yield return null;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                break;
+            }
+            case GridPosR.Orientation.Up:
+            {
+                for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
+                {
+                    for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
+                    {
+                        for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
+                        {
+                            if (generateBox(x, y, z))
+                            {
+                                loadBoxCount++;
+                                if (loadBoxCount >= loadBoxNumPerFrame)
+                                {
+                                    loadBoxCount = 0;
+                                    yield return null;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                break;
+            }
+            case GridPosR.Orientation.Down:
+            {
+                for (int z = worldModuleData.BoxMatrix.GetLength(2) - 1; z >= 0; z--)
+                {
+                    for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
+                    {
+                        for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
+                        {
+                            if (generateBox(x, y, z))
+                            {
+                                loadBoxCount++;
+                                if (loadBoxCount >= loadBoxNumPerFrame)
+                                {
+                                    loadBoxCount = 0;
+                                    yield return null;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                break;
+            }
+        }
+
+        bool generateBox(int x, int y, int z)
+        {
+            ushort boxTypeIndex = worldModuleData.BoxMatrix[x, y, z];
+            GridPosR.Orientation boxOrientation = worldModuleData.BoxOrientationMatrix[x, y, z];
+            if (boxTypeIndex != 0)
+            {
+                Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[x, y, z];
+                this.GenerateBox(boxTypeIndex, LocalGPToWorldGP(new GridPos3D(x, y, z)), boxOrientation, false, true, boxExtraSerializeDataFromModule);
+                return true;
+            }
+
+            return false;
         }
 
         foreach (LevelTriggerBase.Data triggerData in worldModuleData.WorldModuleLevelTriggerGroupData.TriggerDataList)

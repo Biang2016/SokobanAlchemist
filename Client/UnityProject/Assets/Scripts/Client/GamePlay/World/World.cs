@@ -186,13 +186,13 @@ public class World : PoolObject
         foreach (GridPos3D worldModuleGP in WorldData.WorldModuleGPOrder)
         {
             WorldModule module = WorldModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
-            if (module != null) WorldData.WorldBornPointGroupData_Runtime.AddModuleData(module, worldModuleGP);
+            if (module != null) WorldData.WorldBornPointGroupData_Runtime.AddModuleData(module);
         }
 
         BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData_Runtime, WorldData.DefaultWorldActorBornPointAlias);
     }
 
-    protected virtual IEnumerator GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, int loadBoxNumPerFrame = 99999)
+    protected virtual IEnumerator GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, int loadBoxNumPerFrame = 99999, GridPosR.Orientation generateOrder = GridPosR.Orientation.Right)
     {
         bool isBorderModule = worldModuleTypeIndex == ConfigManager.WorldModule_DeadZoneIndex || worldModuleTypeIndex == ConfigManager.WorldModule_HiddenWallIndex;
         if (isBorderModule && BorderWorldModuleMatrix[x + 1, y + 1, z + 1] != null) yield break;
@@ -211,17 +211,17 @@ public class World : PoolObject
 
         GridPos3D gp = new GridPos3D(x, y, z);
         GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);
-        yield return wm.Initialize(data, gp, this, loadBoxNumPerFrame);
+        yield return wm.Initialize(data, gp, this, loadBoxNumPerFrame, generateOrder);
     }
 
-    protected virtual IEnumerator GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z, int loadBoxNumPerFrame)
+    protected virtual IEnumerator GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z, int loadBoxNumPerFrame, GridPosR.Orientation generateOrder = GridPosR.Orientation.Right)
     {
         WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.OpenWorldModule].AllocateGameObject<WorldModule>(WorldModuleRoot);
         wm.name = $"WM_{data.WorldModuleTypeName}({x}, {y}, {z})";
         WorldModuleMatrix[x, y, z] = wm;
         GridPos3D gp = new GridPos3D(x, y, z);
         GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);
-        yield return wm.Initialize(data, gp, this, loadBoxNumPerFrame);
+        yield return wm.Initialize(data, gp, this, loadBoxNumPerFrame, generateOrder);
     }
 
     #region Utils
