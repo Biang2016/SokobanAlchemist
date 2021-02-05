@@ -81,13 +81,17 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public static string DebugChangeWorldBornPointAlias = null;
 
     internal int FixedFrameRate;
+    internal int FixedFrameRate_2X;
     internal int CurrentFixedFrameCount;
     internal int CurrentFixedFrameCount_Mod_FixedFrameRate;
+    internal int CurrentFixedFrameCount_Mod_FixedFrameRate_2X;
 
     private void Awake()
     {
+        Instance = this;
         CurrentFixedFrameCount = 0;
         FixedFrameRate = Mathf.RoundToInt(1f / Time.fixedDeltaTime);
+        FixedFrameRate_2X = FixedFrameRate * 2;
         UIManager.Init(
             (prefabName) => Instantiate(PrefabManager.GetPrefab(prefabName)),
             Debug.LogError,
@@ -149,6 +153,9 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     private IEnumerator Co_StartGame()
     {
+        yield return new WaitForSeconds(0.1f);
+        GameObjectPoolManager.WarmUpPool();
+
         yield return WorldManager.StartGame();
 
         BattleManager.Instance.StartBattle();
@@ -203,6 +210,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     {
         CurrentFixedFrameCount++;
         CurrentFixedFrameCount_Mod_FixedFrameRate = CurrentFixedFrameCount % FixedFrameRate;
+        CurrentFixedFrameCount_Mod_FixedFrameRate_2X = CurrentFixedFrameCount % FixedFrameRate_2X;
         ControlManager.FixedUpdate(Time.fixedDeltaTime);
         if (ControlManager.Common_RestartGame.Up)
         {

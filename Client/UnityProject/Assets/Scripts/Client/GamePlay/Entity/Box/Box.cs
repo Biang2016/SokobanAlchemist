@@ -18,6 +18,7 @@ public partial class Box : Entity
 {
     public static bool ENABLE_BOX_MOVE_LOG = false;
 
+    internal bool hasRigidbody;
     internal Rigidbody Rigidbody;
 
     internal Actor LastTouchActor;
@@ -133,7 +134,7 @@ public partial class Box : Entity
         ModelRoot.transform.localPosition = Vector3.zero;
         ModelRoot.transform.localScale = Vector3.one;
         alreadyCollidedActorSet.Clear();
-        if (Rigidbody != null) Destroy(Rigidbody);
+        if (hasRigidbody) Destroy(Rigidbody);
         if (LastTouchActor.IsNotNullAndAlive() && LastTouchActor.CurrentLiftBox == this)
         {
             LastTouchActor.ThrowState = Actor.ThrowStates.None;
@@ -464,10 +465,10 @@ public partial class Box : Entity
         }
     }
 
-    protected virtual void Awake()
+    protected virtual void Start()
     {
         GUID = GetGUID();
-        GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
+        GUID_Mod_FixedFrameRate = BoxFeature.HasFlag(BoxFeature.SlowTick) ? ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_2X : ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
     }
 
     private void OnPlayerInteractSkillChanged(InteractSkillType interactSkillType, ushort boxTypeIndex)
@@ -691,7 +692,12 @@ public partial class Box : Entity
             //WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this); // 放在FixedUpdate里面判定如果坐标有变则移除，避免踢向墙壁时上方塌落导致bug
             transform.DOPause();
             Rigidbody = gameObject.GetComponent<Rigidbody>();
-            if (Rigidbody == null) Rigidbody = gameObject.AddComponent<Rigidbody>();
+            if (!hasRigidbody)
+            {
+                Rigidbody = gameObject.AddComponent<Rigidbody>();
+                hasRigidbody = true;
+            }
+
             Rigidbody.mass = FinalWeight;
             Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -763,9 +769,10 @@ public partial class Box : Entity
             State = States.BeingLift;
             transform.DOPause();
             BoxColliderHelper.OnBeingLift();
-            if (Rigidbody != null)
+            if (hasRigidbody)
             {
                 DestroyImmediate(Rigidbody);
+                hasRigidbody = false;
             }
 
             BoxEffectHelper?.PoolRecycle();
@@ -799,7 +806,12 @@ public partial class Box : Entity
             transform.parent = WorldManager.Instance.CurrentWorld.transform;
             BoxColliderHelper.OnThrow();
             Rigidbody = gameObject.GetComponent<Rigidbody>();
-            if (Rigidbody == null) Rigidbody = gameObject.AddComponent<Rigidbody>();
+            if (!hasRigidbody)
+            {
+                Rigidbody = gameObject.AddComponent<Rigidbody>();
+                hasRigidbody = true;
+            }
+
             Rigidbody.mass = FinalWeight;
             Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -830,7 +842,12 @@ public partial class Box : Entity
             transform.parent = WorldManager.Instance.CurrentWorld.transform;
             BoxColliderHelper.OnPut();
             Rigidbody = gameObject.GetComponent<Rigidbody>();
-            if (Rigidbody == null) Rigidbody = gameObject.AddComponent<Rigidbody>();
+            if (!hasRigidbody)
+            {
+                Rigidbody = gameObject.AddComponent<Rigidbody>();
+                hasRigidbody = true;
+            }
+
             Rigidbody.mass = FinalWeight;
             Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -859,7 +876,12 @@ public partial class Box : Entity
         transform.parent = WorldManager.Instance.CurrentWorld.transform;
         BoxColliderHelper.OnDropFromDeadActor();
         Rigidbody = gameObject.GetComponent<Rigidbody>();
-        if (Rigidbody == null) Rigidbody = gameObject.AddComponent<Rigidbody>();
+        if (!hasRigidbody)
+        {
+            Rigidbody = gameObject.AddComponent<Rigidbody>();
+            hasRigidbody = true;
+        }
+
         Rigidbody.mass = FinalWeight;
         Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -887,7 +909,12 @@ public partial class Box : Entity
         transform.parent = WorldManager.Instance.CurrentWorld.transform;
         BoxColliderHelper.OnDropFromAir();
         Rigidbody = gameObject.GetComponent<Rigidbody>();
-        if (Rigidbody == null) Rigidbody = gameObject.AddComponent<Rigidbody>();
+        if (!hasRigidbody)
+        {
+            Rigidbody = gameObject.AddComponent<Rigidbody>();
+            hasRigidbody = true;
+        }
+
         Rigidbody.mass = FinalWeight;
         Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -906,13 +933,28 @@ public partial class Box : Entity
     {
         base.FixedUpdate();
         if (IsRecycled) return;
-        if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate)
+        if (BoxFeature.HasFlag(BoxFeature.SlowTick)) // 减慢Tick
         {
-            EntityStatPropSet.FixedUpdate(1f);
-            EntityBuffHelper.BuffFixedUpdate(1f);
-            foreach (EntityPassiveSkill ps in EntityPassiveSkills)
+            if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_2X)
             {
-                ps.OnTick(1f);
+                EntityStatPropSet.FixedUpdate(2f);
+                EntityBuffHelper.BuffFixedUpdate(2f);
+                foreach (EntityPassiveSkill ps in EntityPassiveSkills)
+                {
+                    ps.OnTick(2f);
+                }
+            }
+        }
+        else
+        {
+            if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate)
+            {
+                EntityStatPropSet.FixedUpdate(1f);
+                EntityBuffHelper.BuffFixedUpdate(1f);
+                foreach (EntityPassiveSkill ps in EntityPassiveSkills)
+                {
+                    ps.OnTick(1f);
+                }
             }
         }
 
@@ -925,7 +967,7 @@ public partial class Box : Entity
             }
         }
 
-        if ((state == States.BeingKicked || state == States.BeingKickedToGrind || state == States.Flying || state == States.DroppingFromDeadActor || state == States.DroppingFromAir || state == States.Putting) && Rigidbody)
+        if ((state == States.BeingKicked || state == States.BeingKickedToGrind || state == States.Flying || state == States.DroppingFromDeadActor || state == States.DroppingFromAir || state == States.Putting) && hasRigidbody)
         {
             if (state == States.BeingKicked || state == States.BeingKickedToGrind)
             {
@@ -948,6 +990,7 @@ public partial class Box : Entity
             {
                 LastTouchActor = null;
                 DestroyImmediate(Rigidbody);
+                hasRigidbody = false;
                 if (state == States.BeingKickedToGrind)
                 {
                     BoxColliderHelper.OnKick_ToGrind_End();
@@ -966,7 +1009,7 @@ public partial class Box : Entity
             transform.rotation = DefaultRotBeforeLift;
         }
 
-        if (Rigidbody != null && Rigidbody.velocity.magnitude > 1f)
+        if (hasRigidbody && Rigidbody.velocity.magnitude > 1f)
         {
             BoxEffectHelper?.Play();
         }
@@ -1036,7 +1079,7 @@ public partial class Box : Entity
                 {
                     if (State == States.BeingKicked) DealCollideDamageToActor(collision, CurrentKickLocalAxis);
                     PlayFXOnEachGrid(CollideFX, CollideFXScale);
-                    if (Rigidbody) Rigidbody.velocity = Vector3.zero;
+                    if (hasRigidbody) Rigidbody.velocity = Vector3.zero;
                     foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                     {
                         ps.OnBeingKickedCollisionEnter(collision, CurrentKickLocalAxis);
@@ -1429,4 +1472,7 @@ public enum BoxFeature
 
     [LabelText("举起就消失")]
     LiftThenDisappear = 1 << 11,
+
+    [LabelText("缓慢Tick")]
+    SlowTick = 1 << 12,
 }

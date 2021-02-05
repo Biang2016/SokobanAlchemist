@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay;
@@ -115,17 +116,6 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 }
 
                 pool.Initiate(box, warmUpNum);
-                Box[] warmUpBoxes = new Box[warmUpNum];
-                for (int i = 0; i < warmUpNum; i++)
-                {
-                    Box warmUpBox = pool.AllocateGameObject<Box>(pool.transform);
-                    warmUpBoxes[i] = warmUpBox;
-                }
-
-                for (int i = 0; i < warmUpNum; i++)
-                {
-                    warmUpBoxes[i].PoolRecycle();
-                }
             }
         }
 
@@ -237,8 +227,34 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         IsInit = true;
     }
 
-    public void WarmUpPool()
+    public IEnumerator WarmUpPool()
     {
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.BoxTypeDefineDict.TypeNameDict)
+        {
+            GameObjectPool pool = BoxDict[kv.Key];
+            int warmUpNum = 0;
+            if (WarmUpBoxConfig.ContainsKey(kv.Value))
+            {
+                warmUpNum = WarmUpBoxConfig[kv.Value];
+            }
+            else
+            {
+                warmUpNum = 20;
+            }
+
+            int count = 0;
+            for (int i = 0; i < warmUpNum; i++)
+            {
+                Box warmUpBox = pool.AllocateGameObject<Box>(pool.transform);
+                warmUpBox.PoolRecycle();
+                count++;
+                if (count > 8)
+                {
+                    count = 0;
+                    yield return null;
+                }
+            }
+        }
     }
 
     public void OptimizeAllGameObjectPools()

@@ -527,34 +527,26 @@ public class EntityStatPropSet
         }
     }
 
-    private float abnormalStateAutoTick = 0f;
-    private int abnormalStateAutoTickInterval = 1; // 异常状态值每秒降低
-
-    public void FixedUpdate(float fixedDeltaTime) // Actor更新频率为每帧，Box更新频率为每秒
+    public void FixedUpdate(float fixedDeltaTime) // Actor更新频率为每帧，Box更新频率为每秒, 带SlowTick标签的Box更新频率为每2秒
     {
         foreach (KeyValuePair<EntityStatType, EntityStat> kv in StatDict)
         {
             kv.Value.FixedUpdate(fixedDeltaTime);
         }
 
-        abnormalStateAutoTick += fixedDeltaTime;
-        if (abnormalStateAutoTick > abnormalStateAutoTickInterval)
+        if (FiringLevel.Value >= 1)
         {
-            abnormalStateAutoTick -= abnormalStateAutoTickInterval;
-            if (FiringLevel.Value >= 1)
+            // 燃烧蔓延
+            foreach (Box adjacentBox in WorldManager.Instance.CurrentWorld.GetAdjacentBox(Entity.WorldGP))
             {
-                // 燃烧蔓延
-                foreach (Box adjacentBox in WorldManager.Instance.CurrentWorld.GetAdjacentBox(Entity.WorldGP))
+                int diff = FiringValue.Value - adjacentBox.EntityStatPropSet.FiringValue.Value;
+                if (diff > 0)
                 {
-                    int diff = FiringValue.Value - adjacentBox.EntityStatPropSet.FiringValue.Value;
-                    if (diff > 0)
-                    {
-                        adjacentBox.EntityStatPropSet.FiringValue.SetValue(adjacentBox.EntityStatPropSet.FiringValue.Value + Mathf.RoundToInt(diff * FiringSpreadPercent.GetModifiedValue / 100f), "FiringSpread");
-                    }
+                    adjacentBox.EntityStatPropSet.FiringValue.SetValue(adjacentBox.EntityStatPropSet.FiringValue.Value + Mathf.RoundToInt(diff * FiringSpreadPercent.GetModifiedValue / 100f), "FiringSpread");
                 }
-
-                Entity.EntityBuffHelper.Damage(FiringLevel.Value, EntityBuffAttribute.FiringDamage);
             }
+
+            Entity.EntityBuffHelper.Damage(FiringLevel.Value, EntityBuffAttribute.FiringDamage);
         }
     }
 
