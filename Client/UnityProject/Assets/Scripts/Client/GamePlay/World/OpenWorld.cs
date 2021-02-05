@@ -116,6 +116,7 @@ public class OpenWorld : World
                 case GenerateAlgorithm.CellularAutomata:
                 {
                     generator = new CellularAutomataMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, boxLayerData.FillPercent, boxLayerData.SmoothTimes, boxLayerData.SmoothTimes_GenerateWallInOpenSpace, SRandom.Next((uint) 9999));
+                    yield return null;
                     break;
                 }
                 case GenerateAlgorithm.PerlinNoise:
@@ -215,12 +216,6 @@ public class OpenWorld : World
         BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData_Runtime, WorldData.DefaultWorldActorBornPointAlias);
     }
 
-    protected override IEnumerator GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, int loadBoxNumPerFrame = 99999, GridPosR.Orientation generateOrder = GridPosR.Orientation.Right)
-    {
-        m_LevelCacheData.CurrentShowModuleGPs.Add(new GridPos3D(x, y, z));
-        yield return base.GenerateWorldModule(worldModuleTypeIndex, x, y, z, loadBoxNumPerFrame, generateOrder);
-    }
-
     protected override IEnumerator GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z, int loadBoxNumPerFrame, GridPosR.Orientation generateOrder)
     {
         m_LevelCacheData.CurrentShowModuleGPs.Add(new GridPos3D(x, y, z));
@@ -271,10 +266,16 @@ public class OpenWorld : World
         }
     }
 
+    List<bool> generateModuleFinished = new List<bool>();
+    List<bool> recycleModuleFinished = new List<bool>();
+
     public IEnumerator RefreshScopeModules(GridPos3D playerWorldGP)
     {
         GridPos3D playerOnModuleGP = GetModuleGPByWorldGP(playerWorldGP);
 
+        #region Recycle Modules
+
+        recycleModuleFinished.Clear();
         List<GridPos3D> hideModuleGPs = new List<GridPos3D>();
         foreach (GridPos3D currentShowModuleGP in m_LevelCacheData.CurrentShowModuleGPs)
         {
@@ -284,22 +285,36 @@ public class OpenWorld : World
                 WorldModule worldModule = WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z];
                 if (worldModule != null)
                 {
-                    WorldData.WorldBornPointGroupData_Runtime.RemoveModuleData(worldModule);
-
-                    worldModule.Clear();
-                    worldModule.PoolRecycle();
-                    WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
-                    m_LevelCacheData.WorldModuleDataDict.Remove(currentShowModuleGP);
+                    recycleModuleFinished.Add(false);
+                    StartCoroutine(Co_RecycleModule(worldModule, currentShowModuleGP, recycleModuleFinished.Count - 1));
                 }
 
                 hideModuleGPs.Add(currentShowModuleGP);
             }
         }
 
+        while (true)
+        {
+            bool allFinished = true;
+            foreach (bool b in recycleModuleFinished)
+            {
+                if (!b) allFinished = false;
+            }
+
+            if (allFinished) break;
+            else yield return null;
+        }
+
+        recycleModuleFinished.Clear();
+
         foreach (GridPos3D hideModuleGP in hideModuleGPs)
         {
             m_LevelCacheData.CurrentShowModuleGPs.Remove(hideModuleGP);
         }
+
+        #endregion
+
+        #region Generate Modules
 
         generateModuleFinished.Clear();
         for (int module_x = playerOnModuleGP.x - (PlayerScopeRadiusX - 1); module_x <= playerOnModuleGP.x + (PlayerScopeRadiusX - 1); module_x++)
@@ -317,17 +332,28 @@ public class OpenWorld : World
                 WorldModule groundModule = WorldModuleMatrix[module_x, 0, module_z];
                 if (groundModule == null)
                 {
+                    GridPos3D targetModuleGP = new GridPos3D(module_x, 0, module_z);
+                    WorldModuleData moduleData = new WorldModuleData();
+                    for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
+                    for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
+                    {
+                        moduleData.BoxMatrix[x, 15, z] = ConfigManager.Box_GroundBoxIndex;
+                    }
+
+                    moduleData.WorldModuleFeature = WorldModuleFeature.Ground;
+
                     generateModuleFinished.Add(false);
-                    StartCoroutine(Co_GenerateGroundModule(module_x, module_z, generateOrientation, generateModuleFinished.Count - 1));
+                    StartCoroutine(Co_GenerateModule(moduleData, targetModuleGP, generateOrientation, generateModuleFinished.Count - 1));
                 }
 
                 WorldModule module = WorldModuleMatrix[module_x, 1, module_z];
                 if (module == null)
                 {
+                    WorldModuleData moduleData = null;
                     GridPos3D targetModuleGP = new GridPos3D(module_x, 1, module_z);
-                    if (!m_LevelCacheData.WorldModuleDataDict.ContainsKey(targetModuleGP))
+                    if (!m_LevelCacheData.WorldModuleDataDict.TryGetValue(targetModuleGP, out moduleData))
                     {
-                        WorldModuleData moduleData = new WorldModuleData();
+                        moduleData = new WorldModuleData();
                         m_LevelCacheData.WorldModuleDataDict.Add(targetModuleGP, moduleData);
                         foreach (MapGenerator generator in m_LevelCacheData.CurrentGenerators)
                         {
@@ -336,7 +362,7 @@ public class OpenWorld : World
                     }
 
                     generateModuleFinished.Add(false);
-                    StartCoroutine(Co_GenerateModule(targetModuleGP, module_x, module_z, generateOrientation, generateModuleFinished.Count - 1));
+                    StartCoroutine(Co_GenerateModule(moduleData, targetModuleGP, generateOrientation, generateModuleFinished.Count - 1));
                 }
             }
         }
@@ -354,21 +380,26 @@ public class OpenWorld : World
         }
 
         generateModuleFinished.Clear();
+
+        #endregion
+
         RefreshScopeModulesCoroutine = null;
     }
 
-    List<bool> generateModuleFinished = new List<bool>();
-
-    IEnumerator Co_GenerateModule(GridPos3D targetModuleGP, int module_x, int module_z, GridPosR.Orientation generateOrientation, int boolIndex)
+    IEnumerator Co_GenerateModule(WorldModuleData moduleData, GridPos3D targetModuleGP, GridPosR.Orientation generateOrientation, int boolIndex)
     {
-        yield return GenerateWorldModuleByCustomizedData(m_LevelCacheData.WorldModuleDataDict[targetModuleGP], module_x, 1, module_z, 8, generateOrientation);
-        WorldData.WorldBornPointGroupData_Runtime.AddModuleData(WorldModuleMatrix[module_x, 1, module_z]);
+        yield return GenerateWorldModuleByCustomizedData(moduleData, targetModuleGP.x, targetModuleGP.y, targetModuleGP.z, 8, generateOrientation);
+        WorldData.WorldBornPointGroupData_Runtime.AddModuleData(WorldModuleMatrix[targetModuleGP.x, 1, targetModuleGP.z]);
         generateModuleFinished[boolIndex] = true;
     }
 
-    IEnumerator Co_GenerateGroundModule(int module_x, int module_z, GridPosR.Orientation generateOrientation, int boolIndex)
+    IEnumerator Co_RecycleModule(WorldModule worldModule, GridPos3D currentShowModuleGP, int boolIndex)
     {
-        yield return GenerateWorldModule(ConfigManager.WorldModule_GroundIndex, module_x, 0, module_z, 16, generateOrientation);
-        generateModuleFinished[boolIndex] = true;
+        WorldData.WorldBornPointGroupData_Runtime.RemoveModuleData(worldModule);
+        yield return worldModule.Clear();
+        worldModule.PoolRecycle();
+        WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
+        m_LevelCacheData.WorldModuleDataDict.Remove(currentShowModuleGP);
+        recycleModuleFinished[boolIndex] = true;
     }
 }

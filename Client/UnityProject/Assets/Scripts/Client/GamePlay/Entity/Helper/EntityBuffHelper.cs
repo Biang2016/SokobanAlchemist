@@ -10,10 +10,22 @@ public class EntityBuffHelper : EntityMonoHelper
     public static HashSet<EntityPropertyType> ActorBuffEnums_Property = new HashSet<EntityPropertyType>();
     public static HashSet<EntityStatType> ActorBuffEnums_Stat = new HashSet<EntityStatType>();
 
+    void Start()
+    {
+        foreach (EntityBuffAttribute attribute in ConfigManager.GetAllBuffAttributeTypes())
+        {
+            EntityBuffAttributeDict.Add(attribute, new List<EntityBuff>());
+        }
+    }
+
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
-        EntityBuffAttributeDict.Clear();
+        foreach (KeyValuePair<EntityBuffAttribute, List<EntityBuff>> kv in EntityBuffAttributeDict)
+        {
+            kv.Value.Clear();
+        }
+
         foreach (KeyValuePair<uint, List<FX>> kv in BuffFXDict)
         {
             foreach (FX fx in kv.Value)
@@ -42,10 +54,6 @@ public class EntityBuffHelper : EntityMonoHelper
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
-        foreach (EntityBuffAttribute attribute in ConfigManager.GetAllBuffAttributeTypes())
-        {
-            EntityBuffAttributeDict.Add(attribute, new List<EntityBuff>());
-        }
     }
 
     protected Dictionary<EntityBuffAttribute, List<EntityBuff>> EntityBuffAttributeDict = new Dictionary<EntityBuffAttribute, List<EntityBuff>>();

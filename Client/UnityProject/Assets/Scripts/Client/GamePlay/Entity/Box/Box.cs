@@ -534,7 +534,7 @@ public partial class Box : Entity
 
     public void Initialize(GridPos3D worldGridPos3D, WorldModule module, float lerpTime, bool artOnly, LerpType lerpType, bool needLerpModel = false, bool needCheckDrop = true)
     {
-        name = $"{BoxTypeName}_{worldGridPos3D}";
+        //name = $"{BoxTypeName}_{worldGridPos3D}";
 
         if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Init LerpType:{lerpType} TargetGP:{worldGridPos3D}");
         SetModelSmoothMoveLerpTime(0);

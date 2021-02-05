@@ -10,6 +10,27 @@ public class OpenWorldModule : WorldModule
         World = world;
         WorldModuleData = worldModuleData; // 这个Data数据是空的，此函数的目的就是填满这个Data数据
 
+        if (WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.DeadZone))
+        {
+            WorldDeadZoneTrigger = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldDeadZoneTrigger].AllocateGameObject<WorldDeadZoneTrigger>(WorldModuleTriggerRoot);
+            WorldDeadZoneTrigger.name = $"{nameof(WorldDeadZoneTrigger)}_{ModuleGP}";
+            WorldDeadZoneTrigger.Initialize(moduleGP);
+        }
+
+        if (WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Wall))
+        {
+            WorldWallCollider = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldWallCollider].AllocateGameObject<WorldWallCollider>(WorldModuleTriggerRoot);
+            WorldWallCollider.name = $"{nameof(WorldWallCollider)}_{ModuleGP}";
+            WorldWallCollider.Initialize(moduleGP);
+        }
+
+        if (WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Ground))
+        {
+            WorldGroundCollider = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldGroundCollider].AllocateGameObject<WorldGroundCollider>(WorldModuleTriggerRoot);
+            WorldGroundCollider.name = $"{nameof(WorldGroundCollider)}_{ModuleGP}";
+            WorldGroundCollider.Initialize(moduleGP);
+        }
+
         int loadBoxCount = 0;
         switch (generatorOrder)
         {
@@ -17,15 +38,18 @@ public class OpenWorldModule : WorldModule
             {
                 for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
                 {
-                    for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
+                    for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
                     {
-                        if (generateBox(x, 0, z))
+                        for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
                         {
-                            loadBoxCount++;
-                            if (loadBoxCount >= loadBoxNumPerFrame)
+                            if (generateBox(x, y, z))
                             {
-                                loadBoxCount = 0;
-                                yield return null;
+                                loadBoxCount++;
+                                if (loadBoxCount >= loadBoxNumPerFrame)
+                                {
+                                    loadBoxCount = 0;
+                                    yield return null;
+                                }
                             }
                         }
                     }
@@ -37,15 +61,18 @@ public class OpenWorldModule : WorldModule
             {
                 for (int x = worldModuleData.BoxMatrix.GetLength(0) - 1; x >= 0; x--)
                 {
-                    for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
+                    for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
                     {
-                        if (generateBox(x, 0, z))
+                        for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
                         {
-                            loadBoxCount++;
-                            if (loadBoxCount >= loadBoxNumPerFrame)
+                            if (generateBox(x, y, z))
                             {
-                                loadBoxCount = 0;
-                                yield return null;
+                                loadBoxCount++;
+                                if (loadBoxCount >= loadBoxNumPerFrame)
+                                {
+                                    loadBoxCount = 0;
+                                    yield return null;
+                                }
                             }
                         }
                     }
@@ -57,15 +84,18 @@ public class OpenWorldModule : WorldModule
             {
                 for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
                 {
-                    for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
+                    for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
                     {
-                        if (generateBox(x, 0, z))
+                        for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
                         {
-                            loadBoxCount++;
-                            if (loadBoxCount >= loadBoxNumPerFrame)
+                            if (generateBox(x, y, z))
                             {
-                                loadBoxCount = 0;
-                                yield return null;
+                                loadBoxCount++;
+                                if (loadBoxCount >= loadBoxNumPerFrame)
+                                {
+                                    loadBoxCount = 0;
+                                    yield return null;
+                                }
                             }
                         }
                     }
@@ -77,15 +107,18 @@ public class OpenWorldModule : WorldModule
             {
                 for (int z = worldModuleData.BoxMatrix.GetLength(2) - 1; z >= 0; z--)
                 {
-                    for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
+                    for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
                     {
-                        if (generateBox(x, 0, z))
+                        for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
                         {
-                            loadBoxCount++;
-                            if (loadBoxCount >= loadBoxNumPerFrame)
+                            if (generateBox(x, y, z))
                             {
-                                loadBoxCount = 0;
-                                yield return null;
+                                loadBoxCount++;
+                                if (loadBoxCount >= loadBoxNumPerFrame)
+                                {
+                                    loadBoxCount = 0;
+                                    yield return null;
+                                }
                             }
                         }
                     }

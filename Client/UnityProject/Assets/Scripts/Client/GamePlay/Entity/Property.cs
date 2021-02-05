@@ -20,16 +20,16 @@ public abstract class Property
     {
         BaseValue = 0;
         ModifiedValue = 0;
-        foreach (KeyValuePair<uint, PlusModifier> kv in PlusModifiers_Value)
+        foreach (PlusModifier pm in PlusModifiers_Value)
         {
-            kv.Value.OnRecycled();
+            pm.OnRecycled();
         }
 
         PlusModifiers_Value.Clear();
 
-        foreach (KeyValuePair<uint, MultiplyModifier> kv in MultiplyModifiers_Value)
+        foreach (MultiplyModifier mm in MultiplyModifiers_Value)
         {
-            kv.Value.OnRecycled();
+            mm.OnRecycled();
         }
 
         MultiplyModifiers_Value.Clear();
@@ -52,27 +52,20 @@ public abstract class Property
 
     #region Modifiers
 
-    private Dictionary<uint, PlusModifier> PlusModifiers_Value = new Dictionary<uint, PlusModifier>();
-    private Dictionary<uint, MultiplyModifier> MultiplyModifiers_Value = new Dictionary<uint, MultiplyModifier>();
+    private List<PlusModifier> PlusModifiers_Value = new List<PlusModifier>();
+    private List<MultiplyModifier> MultiplyModifiers_Value = new List<MultiplyModifier>();
 
     public bool AddModifier(PlusModifier modifier)
     {
-        if (!PlusModifiers_Value.ContainsKey(modifier.GUID))
-        {
-            PlusModifiers_Value.Add(modifier.GUID, modifier);
-            modifier.OnValueChanged += (before, after) => { RefreshModifiedValue(); };
-            RefreshModifiedValue();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        PlusModifiers_Value.Add(modifier);
+        modifier.OnValueChanged += (before, after) => { RefreshModifiedValue(); };
+        RefreshModifiedValue();
+        return true;
     }
 
     public bool RemoveModifier(PlusModifier modifier)
     {
-        if (PlusModifiers_Value.Remove(modifier.GUID))
+        if (PlusModifiers_Value.Remove(modifier))
         {
             modifier.OnValueChanged = null;
             RefreshModifiedValue();
@@ -86,26 +79,19 @@ public abstract class Property
 
     public bool AddModifier(MultiplyModifier modifier)
     {
-        if (!MultiplyModifiers_Value.ContainsKey(modifier.GUID))
-        {
-            MultiplyModifiers_Value.Add(modifier.GUID, modifier);
-            modifier.OnValueChanged += (before, after) => { RefreshModifiedValue(); };
-            RefreshModifiedValue();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        MultiplyModifiers_Value.Add(modifier);
+        modifier.OnValueChanged += (before, after) => { RefreshModifiedValue(); };
+        RefreshModifiedValue();
+        return true;
     }
 
     public bool RemoveModifier(MultiplyModifier modifier)
     {
-        if (MultiplyModifiers_Value.Remove(modifier.GUID))
+        if (MultiplyModifiers_Value.Remove(modifier))
         {
-            foreach (KeyValuePair<uint, MultiplyModifier> kv in MultiplyModifiers_Value)
+            foreach (MultiplyModifier mm in MultiplyModifiers_Value)
             {
-                kv.Value.CoverModifiersGUID.Remove(modifier.GUID);
+                mm.CoverModifiersGUID.Remove(modifier.GUID);
             }
 
             modifier.OnValueChanged = null;
@@ -136,16 +122,16 @@ public abstract class Property
     public void RefreshModifiedValue()
     {
         float finalValue = BaseValue;
-        foreach (KeyValuePair<uint, PlusModifier> kv in PlusModifiers_Value)
+        foreach (PlusModifier pm in PlusModifiers_Value)
         {
-            if (kv.Value.Covered) continue;
-            finalValue += kv.Value.Delta;
+            if (pm.Covered) continue;
+            finalValue += pm.Delta;
         }
 
-        foreach (KeyValuePair<uint, MultiplyModifier> kv in MultiplyModifiers_Value)
+        foreach (MultiplyModifier mm in MultiplyModifiers_Value)
         {
-            if (kv.Value.Covered) continue;
-            finalValue *= (100 + kv.Value.Percent) / 100f;
+            if (mm.Covered) continue;
+            finalValue *= (100 + mm.Percent) / 100f;
         }
 
         int finalValue_Int = Mathf.RoundToInt(finalValue);
@@ -191,17 +177,17 @@ public abstract class Property
         sb.Append(BaseValue);
         if (PlusModifiers_Value.Count > 0)
         {
-            foreach (KeyValuePair<uint, PlusModifier> kv in PlusModifiers_Value)
+            foreach (PlusModifier pm in PlusModifiers_Value)
             {
-                sb.Append(kv.Value);
+                sb.Append(pm);
             }
 
             sb.Append(")");
         }
 
-        foreach (KeyValuePair<uint, MultiplyModifier> kv in MultiplyModifiers_Value)
+        foreach (MultiplyModifier mm in MultiplyModifiers_Value)
         {
-            sb.Append(kv.Value);
+            sb.Append(mm);
         }
 
         sb.Append($" = {ModifiedValue} ~ [{MinValue}, {MaxValue}]");

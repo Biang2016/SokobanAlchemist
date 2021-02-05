@@ -48,6 +48,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
         List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
 
         WorldModuleData worldModuleData = new WorldModuleData();
+        worldModuleData.InitNormalModuleData();
         worldModuleData.WorldModuleFeature = WorldModuleFeature;
         foreach (Box_LevelEditor box in boxes)
         {

@@ -96,21 +96,27 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnRegisterLevelEventID()
     {
         base.OnRegisterLevelEventID();
-        triggeredTimes = 0;
-        ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnEvent);
-        multiTriggerFlags.Clear();
-        foreach (string alias in ListenLevelEventAliasList)
+        if (IsEventTrigger)
         {
-            multiTriggerFlags.Add(false);
+            triggeredTimes = 0;
+            ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnEvent);
+            multiTriggerFlags.Clear();
+            foreach (string alias in ListenLevelEventAliasList)
+            {
+                multiTriggerFlags.Add(false);
+            }
         }
     }
 
     public override void OnUnRegisterLevelEventID()
     {
         base.OnUnRegisterLevelEventID();
-        triggeredTimes = 0;
-        ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnEvent);
-        multiTriggerFlags.Clear();
+        if (IsEventTrigger)
+        {
+            triggeredTimes = 0;
+            ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnEvent);
+            multiTriggerFlags.Clear();
+        }
     }
 
     private void OnEvent(string eventAlias)

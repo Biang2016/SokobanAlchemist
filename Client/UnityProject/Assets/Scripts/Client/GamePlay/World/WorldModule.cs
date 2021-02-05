@@ -53,16 +53,27 @@ public class WorldModule : PoolObject
         WorldModuleLevelTriggerRoot.parent = transform;
     }
 
-    public void Clear()
+    public IEnumerator Clear()
     {
+        int count = 0;
         for (int x = 0; x < BoxMatrix.GetLength(0); x++)
         {
             for (int y = 0; y < BoxMatrix.GetLength(1); y++)
             {
                 for (int z = 0; z < BoxMatrix.GetLength(2); z++)
                 {
-                    BoxMatrix[x, y, z]?.PoolRecycle();
-                    BoxMatrix[x, y, z] = null;
+                    Box box = BoxMatrix[x, y, z];
+                    if (box != null)
+                    {
+                        box.PoolRecycle();
+                        BoxMatrix[x, y, z] = null;
+                        count++;
+                        if (count > 64)
+                        {
+                            count = 0;
+                            yield return null;
+                        }
+                    }
                 }
             }
         }

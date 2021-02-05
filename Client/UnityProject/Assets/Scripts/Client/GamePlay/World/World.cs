@@ -35,7 +35,7 @@ public class World : PoolObject
         BorderWorldModuleRoot.parent = transform;
     }
 
-    public void Clear()
+    public IEnumerator Clear()
     {
         for (int x = 0; x < WorldModuleMatrix.GetLength(0); x++)
         {
@@ -43,9 +43,13 @@ public class World : PoolObject
             {
                 for (int z = 0; z < WorldModuleMatrix.GetLength(2); z++)
                 {
-                    WorldModuleMatrix[x, y, z]?.Clear();
-                    WorldModuleMatrix[x, y, z]?.PoolRecycle();
-                    WorldModuleMatrix[x, y, z] = null;
+                    WorldModule module = WorldModuleMatrix[x, y, z];
+                    if (module != null)
+                    {
+                        yield return module.Clear();
+                        module.PoolRecycle();
+                        WorldModuleMatrix[x, y, z] = null;
+                    }
                 }
             }
         }
@@ -56,9 +60,13 @@ public class World : PoolObject
             {
                 for (int z = 0; z < BorderWorldModuleMatrix.GetLength(2); z++)
                 {
-                    BorderWorldModuleMatrix[x, y, z]?.Clear();
-                    BorderWorldModuleMatrix[x, y, z]?.PoolRecycle();
-                    BorderWorldModuleMatrix[x, y, z] = null;
+                    WorldModule module = BorderWorldModuleMatrix[x, y, z];
+                    if (module != null)
+                    {
+                        yield return module.Clear();
+                        module.PoolRecycle();
+                        BorderWorldModuleMatrix[x, y, z] = null;
+                    }
                 }
             }
         }
