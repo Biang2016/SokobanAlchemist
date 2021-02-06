@@ -2,9 +2,11 @@
 
 public class ActorArtHelper : ActorMonoHelper
 {
-    public Animator ActorArtRootAnim;
+    [SerializeField]
+    private Animator ActorArtRootAnim;
 
-    public Animator ActorModelAnim;
+    [SerializeField]
+    private Animator ActorModelAnim;
 
     public void Vault()
     {
@@ -23,6 +25,14 @@ public class ActorArtHelper : ActorMonoHelper
         Actor.SwapBox();
     }
 
+    /// <summary>
+    /// Executed by animation
+    /// </summary>
+    public void VaultEnd()
+    {
+        Actor.SetModelSmoothMoveLerpTime(0.02f);
+    }
+
     public void Kick()
     {
         if (ActorArtRootAnim != null)
@@ -39,11 +49,27 @@ public class ActorArtHelper : ActorMonoHelper
         Actor.KickBox();
     }
 
-    /// <summary>
-    /// Executed by animation
-    /// </summary>
-    public void VaultEnd()
+    public void SetIsWalking(bool isWalking)
     {
-        Actor.SetModelSmoothMoveLerpTime(0.02f);
+        if (ActorModelAnim != null)
+        {
+            ActorModelAnim.SetBool("IsWalking", isWalking);
+        }
+    }
+
+    public void SetIsPushing(bool isPushing)
+    {
+        if (ActorModelAnim != null)
+        {
+            ActorModelAnim.SetBool("IsPushing", isPushing);
+        }
+    }
+
+    public void Dash()
+    {
+        if (ActorArtRootAnim != null)
+        {
+            ActorArtRootAnim.SetTrigger("Dash");
+        }
     }
 }

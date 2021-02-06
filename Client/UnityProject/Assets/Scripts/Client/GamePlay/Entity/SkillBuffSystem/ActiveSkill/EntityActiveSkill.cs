@@ -40,17 +40,27 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
         }
     }
 
-    protected void BindEntityProperty(EntityPropertyValue epv, EntitySkillPropertyType entitySkillPropertyType)
+    protected void BindEntityProperty(EntitySkillPropertyType entitySkillPropertyType)
     {
-        EntityProperty ep = Entity.EntityStatPropSet.SkillsPropertyCollections[(int) EntitySkillIndex].PropertyDict[entitySkillPropertyType];
-        epv.Value = ep.GetModifiedValue;
-        ep.OnValueChanged += epv.OnValueChangedHandle;
+        if (Entity.EntityStatPropSet.SkillsPropertyCollections.Count > (int) EntitySkillIndex)
+        {
+            EntityPropertyValue epv = new EntityPropertyValue();
+
+            EntityProperty ep = Entity.EntityStatPropSet.SkillsPropertyCollections[(int) EntitySkillIndex].PropertyDict[entitySkillPropertyType];
+            epv.Value = ep.GetModifiedValue;
+            ep.OnValueChanged += epv.OnValueChangedHandle;
+
+            EntityPropertyValueDict.Add(entitySkillPropertyType, epv);
+        }
     }
 
     protected void UnBindActorProperty(EntityPropertyValue epv, EntitySkillPropertyType actorSkillPropertyType)
     {
-        EntityProperty ep = Entity.EntityStatPropSet.SkillsPropertyCollections[(int) EntitySkillIndex].PropertyDict[actorSkillPropertyType];
-        ep.OnValueChanged -= epv.OnValueChangedHandle;
+        if (Entity.EntityStatPropSet.SkillsPropertyCollections.Count > (int) EntitySkillIndex)
+        {
+            EntityProperty ep = Entity.EntityStatPropSet.SkillsPropertyCollections[(int) EntitySkillIndex].PropertyDict[actorSkillPropertyType];
+            ep.OnValueChanged -= epv.OnValueChangedHandle;
+        }
     }
 
     #endregion
@@ -217,9 +227,7 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
         EntityPropertyValueDict.Clear();
         foreach (EntitySkillPropertyType espt in Enum.GetValues(typeof(EntitySkillPropertyType)))
         {
-            EntityPropertyValue apv = new EntityPropertyValue();
-            BindEntityProperty(apv, espt);
-            EntityPropertyValueDict.Add(espt, apv);
+            BindEntityProperty(espt);
         }
 
         SubActiveSkillDict.Clear();

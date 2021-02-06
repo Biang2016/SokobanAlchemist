@@ -37,7 +37,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
             {
                 curPushingBox = box;
                 box.Push(ActorPushHelper.Actor.CurMoveAttempt, ActorPushHelper.Actor);
-                ActorPushHelper.Actor.ActorArtHelper.ActorModelAnim?.SetBool("IsPushing", true);
+                ActorPushHelper.Actor.ActorArtHelper.SetIsPushing(true);
                 //Debug.Log("BoxPush " + Mathf.RoundToInt(Time.fixedTime / Time.fixedDeltaTime));
             }
         }
@@ -51,7 +51,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Pushable && ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
             {
-                ActorPushHelper.Actor.ActorArtHelper.ActorModelAnim?.SetBool("IsPushing", false);
+                ActorPushHelper.Actor.ActorArtHelper.SetIsPushing(false);
                 //if (curPushingBox != null && curPushingBox == box)
                 //{
                 //    box.PushCanceled();

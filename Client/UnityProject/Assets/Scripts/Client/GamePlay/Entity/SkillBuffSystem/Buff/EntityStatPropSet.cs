@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
@@ -242,7 +243,7 @@ public class EntityStatPropSet
 
         public void Setup()
         {
-            if (PropertyDict.Count != 0)
+            if (PropertyDict.Count == 0)
             {
                 PropertyDict.Add(EntitySkillPropertyType.Damage, Damage);
                 PropertyDict.Add(EntitySkillPropertyType.Attach_FiringValue, Attach_FiringValue);
@@ -527,6 +528,9 @@ public class EntityStatPropSet
         }
     }
 
+    private float abnormalStateAutoTick = 0f;
+    private int abnormalStateAutoTickInterval = 1; // 异常状态值每秒降低
+
     public void FixedUpdate(float fixedDeltaTime) // Actor更新频率为每帧，Box更新频率为每秒, 带SlowTick标签的Box更新频率为每2秒
     {
         foreach (KeyValuePair<EntityStatType, EntityStat> kv in StatDict)
@@ -534,19 +538,24 @@ public class EntityStatPropSet
             kv.Value.FixedUpdate(fixedDeltaTime);
         }
 
-        if (FiringLevel.Value >= 1)
+        abnormalStateAutoTick += fixedDeltaTime;
+        if (abnormalStateAutoTick > abnormalStateAutoTickInterval)
         {
-            // 燃烧蔓延
-            foreach (Box adjacentBox in WorldManager.Instance.CurrentWorld.GetAdjacentBox(Entity.WorldGP))
+            abnormalStateAutoTick -= abnormalStateAutoTickInterval;
+            if (FiringLevel.Value >= 1)
             {
-                int diff = FiringValue.Value - adjacentBox.EntityStatPropSet.FiringValue.Value;
-                if (diff > 0)
+                // 燃烧蔓延
+                foreach (Box adjacentBox in WorldManager.Instance.CurrentWorld.GetAdjacentBox(Entity.WorldGP))
                 {
-                    adjacentBox.EntityStatPropSet.FiringValue.SetValue(adjacentBox.EntityStatPropSet.FiringValue.Value + Mathf.RoundToInt(diff * FiringSpreadPercent.GetModifiedValue / 100f), "FiringSpread");
+                    int diff = FiringValue.Value - adjacentBox.EntityStatPropSet.FiringValue.Value;
+                    if (diff > 0)
+                    {
+                        adjacentBox.EntityStatPropSet.FiringValue.SetValue(adjacentBox.EntityStatPropSet.FiringValue.Value + Mathf.RoundToInt(diff * FiringSpreadPercent.GetModifiedValue / 100f), "FiringSpread");
+                    }
                 }
-            }
 
-            Entity.EntityBuffHelper.Damage(FiringLevel.Value, EntityBuffAttribute.FiringDamage);
+                Entity.EntityBuffHelper.Damage(FiringLevel.Value, EntityBuffAttribute.FiringDamage);
+            }
         }
     }
 
@@ -621,11 +630,35 @@ public class EntityStatPropSet
         #endregion
 
         // 性能考虑，进行数据拷贝
-        for (int i = 0; i < target.SkillsPropertyCollections.Count; i++)
+
+        if (target.SkillsPropertyCollections.Count == 0)
         {
-            SkillPropertyCollection spc = target.SkillsPropertyCollections[i];
-            SkillsPropertyCollections[i].Setup();
-            SkillsPropertyCollections[i].ApplyDataTo(spc);
+            for (int i = 0; i < SkillsPropertyCollections.Count; i++)
+            {
+                SkillPropertyCollection targetSRC = new SkillPropertyCollection();
+                target.SkillsPropertyCollections.Add(targetSRC);
+                SkillsPropertyCollections[i].Setup();
+                targetSRC.Setup();
+                SkillsPropertyCollections[i].ApplyDataTo(targetSRC);
+            }
+        }
+        else
+        {
+            if (target.SkillsPropertyCollections.Count == SkillsPropertyCollections.Count)
+            {
+                // 性能考虑，进行数据拷贝
+                for (int i = 0; i < SkillsPropertyCollections.Count; i++)
+                {
+                    SkillPropertyCollection targetSRC = target.SkillsPropertyCollections[i];
+                    SkillsPropertyCollections[i].Setup();
+                    targetSRC.Setup();
+                    SkillsPropertyCollections[i].ApplyDataTo(targetSRC);
+                }
+            }
+            else
+            {
+                Debug.Log("技能属性数据，源数据和目标数据数量不符");
+            }
         }
 
         target.RawEntityDefaultBuffs = RawEntityDefaultBuffs; // 由于是干数据，此处不克隆！
