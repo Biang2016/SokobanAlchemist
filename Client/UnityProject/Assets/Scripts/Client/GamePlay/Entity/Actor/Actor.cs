@@ -368,6 +368,9 @@ public class Actor : Entity
         actorPassiveSkillTicker = 0;
         InitActiveSkills();
 
+        ActorArtHelper.ActorModelAnim?.SetBool("IsWalking", false);
+        ActorArtHelper.ActorModelAnim?.SetBool("IsPushing", false);
+
         WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
         LastWorldGP = WorldGP;
         ActorAIAgent.Start();
@@ -460,6 +463,7 @@ public class Actor : Entity
                 if (CurMoveAttempt.x.Equals(0)) RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
                 if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
                 MovementState = MovementStates.Moving;
+                ActorArtHelper.ActorModelAnim?.SetBool("IsWalking", true);
                 RigidBody.drag = 0;
                 RigidBody.mass = 1f;
 
@@ -474,10 +478,15 @@ public class Actor : Entity
                 RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);
 
                 CurForward = CurMoveAttempt.normalized;
+
                 ActorPushHelper.TriggerOut = true;
+                bool isBoxOnFront = Physics.Raycast(transform.position, transform.forward, 1f, LayerManager.Instance.LayerMask_BoxIndicator);
+                ActorArtHelper.ActorModelAnim?.SetBool("IsPushing", isBoxOnFront);
             }
             else
             {
+                ActorArtHelper.ActorModelAnim?.SetBool("IsWalking", false);
+                ActorArtHelper.ActorModelAnim?.SetBool("IsPushing", false);
                 MovementState = MovementStates.Static;
                 RigidBody.drag = 100f;
                 RigidBody.mass = 1f;
@@ -496,6 +505,7 @@ public class Actor : Entity
         }
         else
         {
+            ActorArtHelper.ActorModelAnim?.SetBool("IsWalking", false);
             if (RigidBody != null)
             {
                 RigidBody.drag = 0f;

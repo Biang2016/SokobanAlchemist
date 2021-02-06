@@ -3,13 +3,15 @@
 public class ActorArtHelper : ActorMonoHelper
 {
     [SerializeField]
-    private Animator ActorArtAnimator;
+    private Animator ActorArtRootAnim;
+
+    public Animator ActorModelAnim;
 
     public void Vault()
     {
-        if (ActorArtAnimator != null)
+        if (ActorArtRootAnim != null)
         {
-            ActorArtAnimator.SetTrigger("Vault");
+            ActorArtRootAnim.SetTrigger("Vault");
             Actor.SetModelSmoothMoveLerpTime(0f);
         }
     }
