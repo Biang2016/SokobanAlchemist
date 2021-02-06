@@ -134,7 +134,11 @@ public partial class Box : Entity
         ModelRoot.transform.localPosition = Vector3.zero;
         ModelRoot.transform.localScale = Vector3.one;
         alreadyCollidedActorSet.Clear();
-        if (hasRigidbody) Destroy(Rigidbody);
+        if (hasRigidbody)
+        {
+            Destroy(Rigidbody);
+            hasRigidbody = false;
+        }
         if (LastTouchActor.IsNotNullAndAlive() && LastTouchActor.CurrentLiftBox == this)
         {
             LastTouchActor.ThrowState = Actor.ThrowStates.None;

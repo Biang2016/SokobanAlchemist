@@ -656,6 +656,7 @@ public class Actor : Entity
             }
             else
             {
+                ActorArtHelper.ActorArtRootAnim.SetTrigger("Dash");
                 RigidBody.AddForce(CurForward * DashForce, ForceMode.VelocityChange);
             }
         }
@@ -689,16 +690,12 @@ public class Actor : Entity
         if (EntityStatPropSet.ActionPoint.Value > EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue)
         {
             Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
-            //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
             if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
             {
                 Box box = hit.collider.gameObject.GetComponentInParent<Box>();
                 if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
                 {
-                    EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue, "Kick");
-                    box.Kick(CurForward, KickForce, this);
-                    FX kickFX = FXManager.Instance.PlayFX(KickFX, KickFXPivot.position);
-                    if (kickFX) kickFX.transform.localScale = Vector3.one * KickFXScale;
+                    ActorArtHelper.Kick();
                 }
             }
         }
@@ -708,10 +705,25 @@ public class Actor : Entity
         }
     }
 
+    public void KickBox()
+    {
+        Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
+        {
+            Box box = hit.collider.gameObject.GetComponentInParent<Box>();
+            if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
+            {
+                EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue, "Kick");
+                box.Kick(CurForward, KickForce, this);
+                FX kickFX = FXManager.Instance.PlayFX(KickFX, KickFXPivot.position);
+                if (kickFX) kickFX.transform.localScale = Vector3.one * KickFXScale;
+            }
+        }
+    }
+
     public void SwapBox()
     {
         Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
-        //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();

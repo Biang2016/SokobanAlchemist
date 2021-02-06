@@ -2,8 +2,7 @@
 
 public class ActorArtHelper : ActorMonoHelper
 {
-    [SerializeField]
-    private Animator ActorArtRootAnim;
+    public Animator ActorArtRootAnim;
 
     public Animator ActorModelAnim;
 
@@ -22,6 +21,22 @@ public class ActorArtHelper : ActorMonoHelper
     public void SwapBox()
     {
         Actor.SwapBox();
+    }
+
+    public void Kick()
+    {
+        if (ActorArtRootAnim != null)
+        {
+            ActorArtRootAnim.SetTrigger("Kick");
+        }
+    }
+
+    /// <summary>
+    /// Executed by animation
+    /// </summary>
+    public void KickBox()
+    {
+        Actor.KickBox();
     }
 
     /// <summary>

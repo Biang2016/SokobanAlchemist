@@ -386,13 +386,6 @@ public class OpenWorld : World
         RefreshScopeModulesCoroutine = null;
     }
 
-    IEnumerator Co_GenerateModule(WorldModuleData moduleData, GridPos3D targetModuleGP, GridPosR.Orientation generateOrientation, int boolIndex)
-    {
-        yield return GenerateWorldModuleByCustomizedData(moduleData, targetModuleGP.x, targetModuleGP.y, targetModuleGP.z, 8, generateOrientation);
-        WorldData.WorldBornPointGroupData_Runtime.AddModuleData(WorldModuleMatrix[targetModuleGP.x, 1, targetModuleGP.z]);
-        generateModuleFinished[boolIndex] = true;
-    }
-
     IEnumerator Co_RecycleModule(WorldModule worldModule, GridPos3D currentShowModuleGP, int boolIndex)
     {
         WorldData.WorldBornPointGroupData_Runtime.RemoveModuleData(worldModule);
@@ -401,5 +394,12 @@ public class OpenWorld : World
         WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
         m_LevelCacheData.WorldModuleDataDict.Remove(currentShowModuleGP);
         recycleModuleFinished[boolIndex] = true;
+    }
+
+    IEnumerator Co_GenerateModule(WorldModuleData moduleData, GridPos3D targetModuleGP, GridPosR.Orientation generateOrientation, int boolIndex)
+    {
+        yield return GenerateWorldModuleByCustomizedData(moduleData, targetModuleGP.x, targetModuleGP.y, targetModuleGP.z, 8, generateOrientation);
+        WorldData.WorldBornPointGroupData_Runtime.AddModuleData(WorldModuleMatrix[targetModuleGP.x, 1, targetModuleGP.z]);
+        generateModuleFinished[boolIndex] = true;
     }
 }
