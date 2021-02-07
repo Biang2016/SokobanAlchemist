@@ -604,6 +604,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 Dictionary<ushort, BoxOccupationData> data = SerializationUtility.DeserializeValue<Dictionary<ushort, BoxOccupationData>>(bytes, dataFormat);
                 foreach (KeyValuePair<ushort, BoxOccupationData> kv in data)
                 {
+                    kv.Value.CalculateEveryOrientationOccupationGPs();
                     BoxOccupationConfigDict.Add(kv.Key, kv.Value);
                 }
             }

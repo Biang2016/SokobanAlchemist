@@ -334,6 +334,7 @@ public class Actor : Entity
         GraphOwner = GetComponent<GraphOwner>();
         SmoothMoves = GetComponentsInChildren<SmoothMove>().ToList();
         SetModelSmoothMoveLerpTime(0);
+        EntityStatPropSet = new EntityStatPropSet();
     }
 
     public void SetModelSmoothMoveLerpTime(float lerpTime)

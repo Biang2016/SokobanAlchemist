@@ -22,6 +22,10 @@ public class GameStateManager : TSingletonBaseManager<GameStateManager>
                 {
                     break;
                 }
+                case GameState.ShutDown:
+                {
+                    break;
+                }
             }
 
             state = newState;
@@ -42,6 +46,11 @@ public class GameStateManager : TSingletonBaseManager<GameStateManager>
                     Pause();
                     break;
                 }
+                case GameState.ShutDown:
+                {
+                    Pause();
+                    break;
+                }
             }
         }
     }
@@ -58,6 +67,12 @@ public class GameStateManager : TSingletonBaseManager<GameStateManager>
     private void Resume()
     {
     }
+
+    public override void ShutDown()
+    {
+        base.ShutDown();
+        SetState(GameState.ShutDown);
+    }
 }
 
 public enum GameState
@@ -66,4 +81,5 @@ public enum GameState
     Fighting,
     Building,
     ESC,
+    ShutDown,
 }

@@ -544,10 +544,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ac4a6407de701d40a887db92495a7da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PoolIndex: 0
   IsRecycled: 0
   GUID: 0
   GUID_Mod_FixedFrameRate: 0
   RawEntityStatPropSet:
+    Gold:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     HealthDurability:
       _value: 1
       _minValue: 0
@@ -642,7 +650,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     FiringResistance:
-      BaseValue: 100
+      BaseValue: 200
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 200
@@ -739,6 +747,13 @@ MonoBehaviour:
     SkillsPropertyCollections: []
     RawEntityDefaultBuffs: []
   EntityStatPropSet:
+    Gold:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     HealthDurability:
       _value: 0
       _minValue: 0

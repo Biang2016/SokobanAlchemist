@@ -63,10 +63,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e6f6946ed2c704ab30f00932716e7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PoolIndex: 0
   IsRecycled: 0
   GUID: 0
   GUID_Mod_FixedFrameRate: 0
   RawEntityStatPropSet:
+    Gold:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     HealthDurability:
       _value: 20
       _minValue: 0
@@ -180,10 +188,10 @@ MonoBehaviour:
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     FiringSpreadPercent:
-      BaseValue: 0
+      BaseValue: 30
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 100
     FiringDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
@@ -315,6 +323,13 @@ MonoBehaviour:
     RawEntityDefaultBuffs:
     - id: 0
   EntityStatPropSet:
+    Gold:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
     HealthDurability:
       _value: 0
       _minValue: 0

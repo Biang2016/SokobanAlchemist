@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.OleDb;
-using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Profiling;
 
 [Serializable]
 public class EntityStatPropSet
 {
+    public EntityStatPropSet()
+    {
+        InitDelegates();
+    }
+
     internal Entity Entity;
 
-    public Dictionary<EntityStatType, EntityStat> StatDict = new Dictionary<EntityStatType, EntityStat>();
-    public Dictionary<EntityPropertyType, EntityProperty> PropertyDict = new Dictionary<EntityPropertyType, EntityProperty>();
+    public Dictionary<EntityStatType, EntityStat> StatDict = new Dictionary<EntityStatType, EntityStat>(20);
+    public Dictionary<EntityPropertyType, EntityProperty> PropertyDict = new Dictionary<EntityPropertyType, EntityProperty>(20);
 
     #region 财产
 
@@ -301,6 +306,7 @@ public class EntityStatPropSet
 
     public void Initialize(Entity entity)
     {
+        Profiler.BeginSample("ESPS #1");
         Entity = entity;
 
         #region Property初始化
@@ -354,54 +360,43 @@ public class EntityStatPropSet
 
         #endregion
 
+        Profiler.EndSample();
+        Profiler.BeginSample("ESPS #2");
+
+        Profiler.BeginSample("ESPS #2-1");
+
         #region 财产
 
         StatDict.Add(EntityStatType.Gold, Gold);
-
-        Gold.OnValueIncrease += (increase) =>
-        {
-            if (entity is Actor actor)
-            {
-                actor.ActorBattleHelper.ShowGainGoldNumFX(increase);
-            }
-        };
+        if (entity is Actor) Gold.OnValueIncrease = OnGoldIncreaseAction;
 
         #endregion
+
+        Profiler.EndSample();
+
+        Profiler.BeginSample("ESPS #2-2");
 
         #region 耐久
 
         HealthDurability.MaxValue = MaxHealthDurability.GetModifiedValue;
-        HealthDurability.OnValueDecrease += (decrease) =>
+        if (entity is Actor)
         {
-            if (entity is Actor actor)
-            {
-                actor.ActorBattleHelper.ShowDamageNumFX(decrease);
-            }
-        };
-        HealthDurability.OnValueIncrease += (increase) =>
-        {
-            if (entity is Actor actor) actor.ActorBattleHelper.ShowHealNumFX(increase);
-        };
-        HealthDurability.OnValueReachZero += (changeInfo) =>
-        {
-            entity.PassiveSkillMarkAsDestroyed = true;
-            if (changeInfo.Equals($"ChangeEntityStatInstantly-{EntityBuffAttribute.FiringDamage}"))
-            {
-                foreach (EntityPassiveSkill eps in entity.EntityPassiveSkills)
-                {
-                    eps.OnDestroyEntityByFire();
-                }
-            }
+            HealthDurability.OnValueDecrease = OnHealthDurabilityDecreaseAction;
+            HealthDurability.OnValueIncrease = OnHealthDurabilityIncreaseAction;
+        }
 
-            if (entity is Actor actor) actor.ActorBattleHelper.Die();
-        };
+        HealthDurability.OnValueReachZero = OnHealthDurabilityReachZeroAction;
         StatDict.Add(EntityStatType.HealthDurability, HealthDurability);
-        MaxHealthDurability.OnValueChanged += (before, after) => { HealthDurability.MaxValue = after; };
+        MaxHealthDurability.OnValueChanged = OnMaxHealthDurabilityChangedAction;
         PropertyDict.Add(EntityPropertyType.MaxHealthDurability, MaxHealthDurability);
 
         StatDict.Add(EntityStatType.DropFromAirSurviveProbabilityPercent, DropFromAirSurviveProbabilityPercent);
 
         #endregion
+
+        Profiler.EndSample();
+
+        Profiler.BeginSample("ESPS #2-3");
 
         #region 碰撞
 
@@ -413,79 +408,78 @@ public class EntityStatPropSet
 
         #endregion
 
+        Profiler.EndSample();
+
+        Profiler.BeginSample("ESPS #2-4");
+
         #region 爆炸
 
         PropertyDict.Add(EntityPropertyType.ExplodeDamageDefense, ExplodeDamageDefense);
 
         #endregion
 
+        Profiler.EndSample();
+
+        Profiler.BeginSample("ESPS #2-5");
+
         #region 冰冻
 
-        FrozenResistance.OnValueChanged += (before, after) => { FrozenValue.AbnormalStatResistance = after; };
+        FrozenResistance.OnValueChanged = OnFrozenResistanceChangedAction;
         PropertyDict.Add(EntityPropertyType.FrozenResistance, FrozenResistance);
 
         FrozenValue.AbnormalStatResistance = FrozenResistance.GetModifiedValue;
-        FrozenValue.OnValueChanged += (before, after) =>
+        if (FrozenValue.AbnormalStatResistance < 200)
         {
-            FrozenLevel.SetValue(after / FrozenValuePerLevel, "FrozenValueChange");
-            if (FrozenLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FrozenValue, FrozenFX, FrozenFXScaleCurve.Evaluate(FrozenLevel.Value)); // 冰冻值变化时，播放一次特效
-        };
-        FrozenValue.OnValueIncrease += (increase) => { FiringValue.SetValue(0); };
-        StatDict.Add(EntityStatType.FrozenValue, FrozenValue);
+            FrozenValue.OnValueChanged = OnFrozenValueChangedAction;
+            FrozenValue.OnValueIncrease = OnFrozenValueIncreaseAction;
+            FrozenLevel.OnValueChanged = Entity.EntityFrozenHelper.OnFrozeIntoIceBlockAction;
+        }
 
-        FrozenLevel.OnValueChanged += Entity.EntityFrozenHelper.FrozeIntoIceBlock;
+        StatDict.Add(EntityStatType.FrozenValue, FrozenValue);
         StatDict.Add(EntityStatType.FrozenLevel, FrozenLevel);
 
         #endregion
 
+        Profiler.EndSample();
+
+        Profiler.BeginSample("ESPS #2-6");
+
         #region 燃烧
 
-        FiringResistance.OnValueChanged += (before, after) => { FiringValue.AbnormalStatResistance = after; };
+        FiringResistance.OnValueChanged = OnFiringResistanceChangedAction;
         PropertyDict.Add(EntityPropertyType.FiringResistance, FiringResistance);
 
         FiringValue.AbnormalStatResistance = FiringResistance.GetModifiedValue;
-        FiringValue.OnValueChanged += (before, after) =>
+        if (FiringValue.AbnormalStatResistance < 200)
         {
-            FiringLevel.SetValue(after / FiringValuePerLevel, "FiringValueChange");
-            if (FiringLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 燃烧值变化时，播放一次特效
-            else if (after == 0) Entity.EntityBuffHelper.RemoveAbnormalStatFX((int) EntityStatType.FiringValue);
-        };
-        FiringValue.OnValueIncrease += (increase) => { FrozenValue.SetValue(FrozenValue.Value - increase); };
+            FiringValue.OnValueChanged = OnFiringValueChangedAction;
+            FiringValue.OnValueIncrease = OnFiringValueIncreaseAction;
+            FiringLevel.OnValueChanged = OnFiringLevelChangedAction;
+        }
 
         StatDict.Add(EntityStatType.FiringValue, FiringValue);
-
-        FiringLevel.OnValueChanged += (before, after) =>
-        {
-            if (before == 0 && after > 0)
-            {
-                if (entity is Box box)
-                {
-                    foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
-                    {
-                        FX fx = FXManager.Instance.PlayFX(StartFiringFX, box.transform.position + Vector3.up * 0.5f + offset, StartFiringFXScale);
-                        if (fx) fx.transform.parent = box.transform;
-                    }
-                }
-            }
-        };
         StatDict.Add(EntityStatType.FiringLevel, FiringLevel);
         PropertyDict.Add(EntityPropertyType.FiringSpreadPercent, FiringSpreadPercent);
         PropertyDict.Add(EntityPropertyType.FiringDamageDefense, FiringDamageDefense);
 
         #endregion
 
+        Profiler.EndSample();
+
+        Profiler.BeginSample("ESPS #2-7");
+
         #region 操作
 
         PropertyDict.Add(EntityPropertyType.MoveSpeed, MoveSpeed);
 
-        MaxActionPoint.OnValueChanged += (before, after) => { ActionPoint.MaxValue = after; };
+        if (entity is Actor) MaxActionPoint.OnValueChanged = OnMaxActionPointChanged;
         PropertyDict.Add(EntityPropertyType.MaxActionPoint, MaxActionPoint);
 
         ActionPoint.MaxValue = MaxActionPoint.GetModifiedValue;
         ActionPoint.AutoChange = ActionPointRecovery.GetModifiedValue / 100f;
         StatDict.Add(EntityStatType.ActionPoint, ActionPoint);
 
-        ActionPointRecovery.OnValueChanged += (before, after) => { ActionPoint.AutoChange = after / 100f; };
+        if (entity is Actor) ActionPointRecovery.OnValueChanged = OnActionPointRecoveryChangedAction;
         PropertyDict.Add(EntityPropertyType.ActionPointRecovery, ActionPointRecovery);
 
         PropertyDict.Add(EntityPropertyType.KickConsumeActionPoint, KickConsumeActionPoint);
@@ -496,16 +490,177 @@ public class EntityStatPropSet
 
         #endregion
 
+        Profiler.EndSample();
+        Profiler.EndSample();
+
+        Profiler.BeginSample("ESPS #3");
         foreach (SkillPropertyCollection spc in SkillsPropertyCollections)
         {
             spc.Initialize();
         }
 
+        Profiler.EndSample();
+
+        Profiler.BeginSample("ESPS #4");
         foreach (EntityBuff rawEntityDefaultBuff in RawEntityDefaultBuffs)
         {
             Entity.EntityBuffHelper.AddBuff(rawEntityDefaultBuff.Clone());
         }
+
+        Profiler.EndSample();
     }
+
+    #region Delegates
+
+    private void InitDelegates()
+    {
+        OnGoldIncreaseAction = OnGoldIncrease;
+        OnHealthDurabilityDecreaseAction = OnHealthDurabilityDecrease;
+        OnHealthDurabilityIncreaseAction = OnHealthDurabilityIncrease;
+        OnHealthDurabilityReachZeroAction = OnHealthDurabilityReachZero;
+        OnMaxHealthDurabilityChangedAction = OnMaxHealthDurabilityChanged;
+        OnFrozenResistanceChangedAction = OnFrozenResistanceChanged;
+        OnFrozenValueChangedAction = OnFrozenValueChanged;
+        OnFrozenValueIncreaseAction = OnFrozenValueIncrease;
+        OnFiringResistanceChangedAction = OnFiringResistanceChanged;
+        OnFiringValueChangedAction = OnFiringValueChanged;
+        OnFiringValueIncreaseAction = OnFiringValueIncrease;
+        OnFiringLevelChangedAction = OnFiringLevelChanged;
+        OnActionPointRecoveryChangedAction = OnActionPointRecoveryChanged;
+        OnMaxActionPointChangedAction = OnMaxActionPointChanged;
+    }
+
+    private UnityAction<int> OnGoldIncreaseAction;
+
+    private void OnGoldIncrease(int increase)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowGainGoldNumFX(increase);
+        }
+    }
+
+    private UnityAction<int> OnHealthDurabilityDecreaseAction;
+
+    private void OnHealthDurabilityDecrease(int decrease)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowDamageNumFX(decrease);
+        }
+    }
+
+    private UnityAction<int> OnHealthDurabilityIncreaseAction;
+
+    private void OnHealthDurabilityIncrease(int increase)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowHealNumFX(increase);
+        }
+    }
+
+    private UnityAction<string> OnHealthDurabilityReachZeroAction;
+
+    private void OnHealthDurabilityReachZero(string changeInfo)
+    {
+        Entity.PassiveSkillMarkAsDestroyed = true;
+        if (changeInfo.Equals($"ChangeEntityStatInstantly-{EntityBuffAttribute.FiringDamage}"))
+        {
+            foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+            {
+                eps.OnDestroyEntityByFire();
+            }
+        }
+
+        if (Entity is Actor actor) actor.ActorBattleHelper.Die();
+    }
+
+    private UnityAction<int, int> OnMaxHealthDurabilityChangedAction;
+
+    private void OnMaxHealthDurabilityChanged(int before, int after)
+    {
+        HealthDurability.MaxValue = after;
+    }
+
+    private UnityAction<int, int> OnFrozenResistanceChangedAction;
+
+    private void OnFrozenResistanceChanged(int before, int after)
+    {
+        FrozenValue.AbnormalStatResistance = after;
+    }
+
+    private UnityAction<int, int> OnFrozenValueChangedAction;
+
+    private void OnFrozenValueChanged(int before, int after)
+    {
+        FrozenLevel.SetValue(after / FrozenValuePerLevel, "FrozenValueChange");
+        if (FrozenLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FrozenValue, FrozenFX, FrozenFXScaleCurve.Evaluate(FrozenLevel.Value)); // 冰冻值变化时，播放一次特效
+    }
+
+    private UnityAction<int> OnFrozenValueIncreaseAction;
+
+    private void OnFrozenValueIncrease(int increase)
+    {
+        FiringValue.SetValue(0);
+    }
+
+    private UnityAction<int, int> OnFiringResistanceChangedAction;
+
+    private void OnFiringResistanceChanged(int before, int after)
+    {
+        FiringValue.AbnormalStatResistance = after;
+    }
+
+    private UnityAction<int, int> OnFiringValueChangedAction;
+
+    private void OnFiringValueChanged(int before, int after)
+    {
+        FiringLevel.SetValue(after / FiringValuePerLevel, "FiringValueChange");
+        if (FiringLevel.Value > 0)
+            Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 燃烧值变化时，播放一次特效
+        else if (after == 0) Entity.EntityBuffHelper.RemoveAbnormalStatFX((int) EntityStatType.FiringValue);
+    }
+
+    private UnityAction<int> OnFiringValueIncreaseAction;
+
+    private void OnFiringValueIncrease(int increase)
+    {
+        FrozenValue.SetValue(FrozenValue.Value - increase);
+    }
+
+    private UnityAction<int, int> OnFiringLevelChangedAction;
+
+    private void OnFiringLevelChanged(int before, int after)
+    {
+        if (before == 0 && after > 0)
+        {
+            if (Entity is Box box)
+            {
+                foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+                {
+                    FX fx = FXManager.Instance.PlayFX(StartFiringFX, box.transform.position + Vector3.up * 0.5f + offset, StartFiringFXScale);
+                    if (fx) fx.transform.parent = box.transform;
+                }
+            }
+        }
+    }
+
+    private UnityAction<int, int> OnActionPointRecoveryChangedAction;
+
+    private void OnActionPointRecoveryChanged(int before, int after)
+    {
+        ActionPoint.AutoChange = after / 100f;
+    }
+
+    private UnityAction<int, int> OnMaxActionPointChangedAction;
+
+    private void OnMaxActionPointChanged(int before, int after)
+    {
+        ActionPoint.MaxValue = after;
+    }
+
+    #endregion
 
     public void OnRecycled()
     {

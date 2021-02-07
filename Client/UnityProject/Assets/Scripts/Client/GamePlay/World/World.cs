@@ -607,7 +607,7 @@ public class World : PoolObject
             GridPos3D mergeTargetWorldGP = oldCoreBox.WorldGP;
 
             List<GridPos3D> allPossibleMergeTargetWorldGP = new List<GridPos3D>();
-            List<GridPos3D> newBoxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(newBoxOrientation, ConfigManager.GetBoxOccupationData(newBoxTypeIndex).BoxIndicatorGPs);
+            List<GridPos3D> newBoxOccupation_rotated = ConfigManager.GetBoxOccupationData(newBoxTypeIndex).BoxIndicatorGPs_RotatedDict[newBoxOrientation];
             foreach (GridPos3D offset in newBoxOccupation_rotated)
             {
                 allPossibleMergeTargetWorldGP.Add(offset + mergeTargetWorldGP);

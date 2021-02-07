@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
 
-public class WorldModuleData : IClone<WorldModuleData>
+public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldModuleData>
 {
+    public static ClassObjectPool<WorldModuleData> WorldModuleDataFactory = new ClassObjectPool<WorldModuleData>(16);
+
     #region ConfigData
 
     public ushort WorldModuleTypeIndex;
@@ -41,7 +44,7 @@ public class WorldModuleData : IClone<WorldModuleData>
 
     public WorldModuleData Clone()
     {
-        WorldModuleData data = new WorldModuleData();
+        WorldModuleData data = WorldModuleDataFactory.Alloc();
         data.InitNormalModuleData();
         data.WorldModuleTypeIndex = WorldModuleTypeIndex;
         data.WorldModuleTypeName = WorldModuleTypeName;
@@ -56,8 +59,8 @@ public class WorldModuleData : IClone<WorldModuleData>
                 for (int z = 0; z < BoxMatrix.GetLength(2); z++)
                 {
                     data.BoxMatrix[x, y, z] = BoxMatrix[x, y, z];
-                    data.BoxOrientationMatrix[x, y, z] = BoxOrientationMatrix[x, y, z];
-                    if (BoxExtraSerializeDataMatrix[x, y, z] != null)
+                    if (BoxOrientationMatrix != null) data.BoxOrientationMatrix[x, y, z] = BoxOrientationMatrix[x, y, z];
+                    if (BoxExtraSerializeDataMatrix?[x, y, z] != null)
                     {
                         data.BoxExtraSerializeDataMatrix[x, y, z] = BoxExtraSerializeDataMatrix[x, y, z].Clone();
                     }
@@ -65,8 +68,58 @@ public class WorldModuleData : IClone<WorldModuleData>
             }
         }
 
-        data.EventTriggerAppearBoxDataList = EventTriggerAppearBoxDataList.Clone();
+        if (EventTriggerAppearBoxDataList != null) data.EventTriggerAppearBoxDataList = EventTriggerAppearBoxDataList.Clone();
         return data;
+    }
+
+    #endregion
+
+    #region IClassPoolObject
+
+    public WorldModuleData Create()
+    {
+        return WorldModuleDataFactory.Alloc();
+    }
+
+    public void OnUsed()
+    {
+        for (int x = 0; x < BoxMatrix.GetLength(0); x++)
+        {
+            for (int y = 0; y < BoxMatrix.GetLength(1); y++)
+            {
+                for (int z = 0; z < BoxMatrix.GetLength(2); z++)
+                {
+                    BoxMatrix[x, y, z] = 0;
+                    if (BoxOrientationMatrix != null) BoxOrientationMatrix[x, y, z] = GridPosR.Orientation.Up;
+                }
+            }
+        }
+
+        WorldModuleBornPointGroupData = new BornPointGroupData();
+        WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();
+    }
+
+    public void OnRelease()
+    {
+        WorldModuleBornPointGroupData = null;
+        WorldModuleLevelTriggerGroupData = null;
+    }
+
+    public void Release()
+    {
+        WorldModuleDataFactory.Release(this);
+    }
+
+    private int PoolIndex;
+
+    public void SetPoolIndex(int index)
+    {
+        PoolIndex = index;
+    }
+
+    public int GetPoolIndex()
+    {
+        return PoolIndex;
     }
 
     #endregion

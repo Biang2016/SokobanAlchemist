@@ -267,6 +267,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     private void ShutDownGame()
     {
+        GameStateManager.ShutDown(); // 设置游戏状态为ShutDown
+
         ControlManager.ShutDown();
 
         ActiveSkillAgent.StopAllCoroutines();
@@ -279,7 +281,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
         DebugConsole.OnDebugConsoleToggleHandler = null;
         DebugConsole.OnDebugConsoleKeyDownHandler = null;
-        GameStateManager.ShutDown();
         RoutineManager.ShutDown();
 
         GameObjectPoolManager.ShutDown();

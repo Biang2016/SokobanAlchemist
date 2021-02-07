@@ -22,9 +22,12 @@ public class OpenWorld : World
         [ValueDropdown("GetAllBoxTypeNames")]
         public string BoxTypeName = "None";
 
+        [SerializeField]
         [LabelText("允许覆盖的箱子类型")]
         [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DrawDropdownForListElements = true)]
-        public List<string> AllowReplacedBoxTypeNames = new List<string>();
+        private List<string> AllowReplacedBoxTypeNames = new List<string>();
+
+        public HashSet<string> AllowReplacedBoxTypeNameSet = new HashSet<string>();
 
         [LabelText("只允许覆盖上述箱子上")]
         public bool OnlyOverrideAnyBox = false;
@@ -49,6 +52,14 @@ public class OpenWorld : World
         [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.Random)]
         [LabelText("比率：每千格约有多少个")]
         public int BoxCountPerThousandGrid = 20;
+
+        public void Init()
+        {
+            foreach (string allowReplacedBoxTypeName in AllowReplacedBoxTypeNames)
+            {
+                AllowReplacedBoxTypeNameSet.Add(allowReplacedBoxTypeName);
+            }
+        }
     }
 
     [LabelText("地图生成层级配置")]
@@ -63,9 +74,12 @@ public class OpenWorld : World
         [ValueDropdown("GetAllActorTypeNames")]
         public string ActorTypeName = "None";
 
+        [SerializeField]
         [LabelText("允许覆盖的箱子类型")]
         [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DrawDropdownForListElements = true)]
-        public List<string> AllowReplacedBoxTypeNames = new List<string>();
+        private List<string> AllowReplacedBoxTypeNames = new List<string>();
+
+        public HashSet<string> AllowReplacedBoxTypeNameSet = new HashSet<string>();
 
         [LabelText("只允许覆盖上述箱子上")]
         public bool OnlyOverrideAnyBox = false;
@@ -79,6 +93,14 @@ public class OpenWorld : World
         [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.Random)]
         [LabelText("比率：每千格约有多少个")]
         public int ActorCountPerThousandGrid = 20;
+
+        public void Init()
+        {
+            foreach (string allowReplacedBoxTypeName in AllowReplacedBoxTypeNames)
+            {
+                AllowReplacedBoxTypeNameSet.Add(allowReplacedBoxTypeName);
+            }
+        }
     }
 
     public enum GenerateAlgorithm
@@ -110,6 +132,7 @@ public class OpenWorld : World
 
         foreach (GenerateBoxLayerData boxLayerData in GenerateBoxLayerDataList) // 初始化所有层的关卡生成器
         {
+            boxLayerData.Init();
             MapGenerator generator = null;
             switch (boxLayerData.m_GenerateAlgorithm)
             {
@@ -202,7 +225,7 @@ public class OpenWorld : World
         }
         */
 
-        yield return RefreshScopeModules(new GridPos3D(0, 16, 0)); // 按关卡生成器和角色位置初始化需要的模组
+        yield return RefreshScopeModules(new GridPos3D((PlayerScopeRadiusX - 1) * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, (PlayerScopeRadiusZ - 1) * WorldModule.MODULE_SIZE)); // 按关卡生成器和角色位置初始化需要的模组
 
         if (WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Count == 0) // 实在没有主角出生点
         {
@@ -264,6 +287,10 @@ public class OpenWorld : World
             //    StopAllCoroutines();
             //}
         }
+        else
+        {
+            StopAllCoroutines();
+        }
     }
 
     List<bool> generateModuleFinished = new List<bool>();
@@ -280,13 +307,18 @@ public class OpenWorld : World
         foreach (GridPos3D currentShowModuleGP in m_LevelCacheData.CurrentShowModuleGPs)
         {
             GridPos3D diff = playerOnModuleGP - currentShowModuleGP;
+            GridPosR.Orientation generateOrientation = GridPosR.Orientation.Up;
+            if (diff.z > 0) generateOrientation = GridPosR.Orientation.Up;
+            else if (diff.z < 0) generateOrientation = GridPosR.Orientation.Down;
+            else if (diff.x > 0) generateOrientation = GridPosR.Orientation.Right;
+            else if (diff.x < 0) generateOrientation = GridPosR.Orientation.Left;
             if (Mathf.Abs(diff.x) >= PlayerScopeRadiusX || Mathf.Abs(diff.z) >= PlayerScopeRadiusZ)
             {
                 WorldModule worldModule = WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z];
                 if (worldModule != null)
                 {
                     recycleModuleFinished.Add(false);
-                    StartCoroutine(Co_RecycleModule(worldModule, currentShowModuleGP, recycleModuleFinished.Count - 1));
+                    StartCoroutine(Co_RecycleModule(worldModule, currentShowModuleGP, generateOrientation, recycleModuleFinished.Count - 1));
                 }
 
                 hideModuleGPs.Add(currentShowModuleGP);
@@ -322,8 +354,8 @@ public class OpenWorld : World
         {
             if (module_x >= 0 && module_x < WorldSize_X && module_z >= 0 && module_z < WorldSize_Z)
             {
-                GridPosR.Orientation generateOrientation = GridPosR.Orientation.Up;
                 GridPos3D diff = new GridPos3D(module_x, 1, module_z) - playerOnModuleGP;
+                GridPosR.Orientation generateOrientation = GridPosR.Orientation.Up;
                 if (diff.z > 0) generateOrientation = GridPosR.Orientation.Up;
                 else if (diff.z < 0) generateOrientation = GridPosR.Orientation.Down;
                 else if (diff.x > 0) generateOrientation = GridPosR.Orientation.Right;
@@ -333,7 +365,7 @@ public class OpenWorld : World
                 if (groundModule == null)
                 {
                     GridPos3D targetModuleGP = new GridPos3D(module_x, 0, module_z);
-                    WorldModuleData moduleData = new WorldModuleData();
+                    WorldModuleData moduleData = WorldModuleData.WorldModuleDataFactory.Alloc();
                     for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
                     for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
                     {
@@ -353,7 +385,7 @@ public class OpenWorld : World
                     GridPos3D targetModuleGP = new GridPos3D(module_x, 1, module_z);
                     if (!m_LevelCacheData.WorldModuleDataDict.TryGetValue(targetModuleGP, out moduleData))
                     {
-                        moduleData = new WorldModuleData();
+                        moduleData = WorldModuleData.WorldModuleDataFactory.Alloc();
                         m_LevelCacheData.WorldModuleDataDict.Add(targetModuleGP, moduleData);
                         foreach (MapGenerator generator in m_LevelCacheData.CurrentGenerators)
                         {
@@ -386,10 +418,10 @@ public class OpenWorld : World
         RefreshScopeModulesCoroutine = null;
     }
 
-    IEnumerator Co_RecycleModule(WorldModule worldModule, GridPos3D currentShowModuleGP, int boolIndex)
+    IEnumerator Co_RecycleModule(WorldModule worldModule, GridPos3D currentShowModuleGP, GridPosR.Orientation generateOrientation, int boolIndex)
     {
         WorldData.WorldBornPointGroupData_Runtime.RemoveModuleData(worldModule);
-        yield return worldModule.Clear();
+        yield return worldModule.Clear(16, generateOrientation);
         worldModule.PoolRecycle();
         WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
         m_LevelCacheData.WorldModuleDataDict.Remove(currentShowModuleGP);

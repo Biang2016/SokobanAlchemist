@@ -27,7 +27,7 @@ public abstract class MapGenerator
     {
         if (existedBoxTypeIndex != 0)
         {
-            if (GenerateBoxLayerData.AllowReplacedBoxTypeNames.Contains(ConfigManager.GetBoxTypeName(existedBoxTypeIndex)))
+            if (GenerateBoxLayerData.AllowReplacedBoxTypeNameSet.Contains(ConfigManager.GetBoxTypeName(existedBoxTypeIndex)))
             {
                 moduleData.BoxMatrix[x, 0, z] = BoxTypeIndex;
             }

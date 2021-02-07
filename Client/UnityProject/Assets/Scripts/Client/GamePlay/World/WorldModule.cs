@@ -53,28 +53,114 @@ public class WorldModule : PoolObject
         WorldModuleLevelTriggerRoot.parent = transform;
     }
 
-    public IEnumerator Clear()
+    public IEnumerator Clear(int clearBoxNumPerFrame = 256, GridPosR.Orientation direction = GridPosR.Orientation.Right)
     {
         int count = 0;
-        for (int x = 0; x < BoxMatrix.GetLength(0); x++)
+        switch (direction)
         {
-            for (int y = 0; y < BoxMatrix.GetLength(1); y++)
+            case GridPosR.Orientation.Right:
             {
-                for (int z = 0; z < BoxMatrix.GetLength(2); z++)
+                for (int x = 0; x < BoxMatrix.GetLength(0); x++)
                 {
-                    Box box = BoxMatrix[x, y, z];
-                    if (box != null)
+                    for (int y = 0; y < BoxMatrix.GetLength(1); y++)
                     {
-                        box.PoolRecycle();
-                        BoxMatrix[x, y, z] = null;
-                        count++;
-                        if (count > 64)
+                        for (int z = 0; z < BoxMatrix.GetLength(2); z++)
                         {
-                            count = 0;
-                            yield return null;
+                            Box box = BoxMatrix[x, y, z];
+                            if (box != null)
+                            {
+                                box.PoolRecycle();
+                                BoxMatrix[x, y, z] = null;
+                                count++;
+                                if (count > clearBoxNumPerFrame)
+                                {
+                                    count = 0;
+                                    yield return null;
+                                }
+                            }
                         }
                     }
                 }
+
+                break;
+            }
+            case GridPosR.Orientation.Left:
+            {
+                for (int x = BoxMatrix.GetLength(0) - 1; x >= 0; x--)
+                {
+                    for (int y = 0; y < BoxMatrix.GetLength(1); y++)
+                    {
+                        for (int z = 0; z < BoxMatrix.GetLength(2); z++)
+                        {
+                            Box box = BoxMatrix[x, y, z];
+                            if (box != null)
+                            {
+                                box.PoolRecycle();
+                                BoxMatrix[x, y, z] = null;
+                                count++;
+                                if (count > 16)
+                                {
+                                    count = 0;
+                                    yield return null;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                break;
+            }
+            case GridPosR.Orientation.Up:
+            {
+                for (int z = 0; z < BoxMatrix.GetLength(2); z++)
+                {
+                    for (int x = 0; x < BoxMatrix.GetLength(0); x++)
+                    {
+                        for (int y = 0; y < BoxMatrix.GetLength(1); y++)
+                        {
+                            Box box = BoxMatrix[x, y, z];
+                            if (box != null)
+                            {
+                                box.PoolRecycle();
+                                BoxMatrix[x, y, z] = null;
+                                count++;
+                                if (count > 16)
+                                {
+                                    count = 0;
+                                    yield return null;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                break;
+            }
+            case GridPosR.Orientation.Down:
+            {
+                for (int z = BoxMatrix.GetLength(2) - 1; z >= 0; z--)
+                {
+                    for (int x = 0; x < BoxMatrix.GetLength(0); x++)
+                    {
+                        for (int y = 0; y < BoxMatrix.GetLength(1); y++)
+                        {
+                            Box box = BoxMatrix[x, y, z];
+                            if (box != null)
+                            {
+                                box.PoolRecycle();
+                                BoxMatrix[x, y, z] = null;
+                                count++;
+                                if (count > 16)
+                                {
+                                    count = 0;
+                                    yield return null;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                break;
             }
         }
 
@@ -93,6 +179,7 @@ public class WorldModule : PoolObject
         EventTriggerAppearBoxPassiveSkillList.Clear();
 
         World = null;
+        WorldModuleData.Release();
         WorldModuleData = null;
         WorldDeadZoneTrigger?.PoolRecycle();
         WorldDeadZoneTrigger = null;
@@ -313,8 +400,7 @@ public class WorldModule : PoolObject
         }
         else
         {
-            List<GridPos3D> boxOccupation = ConfigManager.GetBoxOccupationData(boxTypeIndex).BoxIndicatorGPs;
-            List<GridPos3D> boxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(orientation, boxOccupation);
+            List<GridPos3D> boxOccupation_rotated = ConfigManager.GetBoxOccupationData(boxTypeIndex).BoxIndicatorGPs_RotatedDict[orientation];
 
             // 空位检查
             foreach (GridPos3D offset in boxOccupation_rotated)

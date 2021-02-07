@@ -79,6 +79,11 @@ public partial class Box : Entity
 
     internal bool ArtOnly;
 
+    void Awake()
+    {
+        EntityStatPropSet = new EntityStatPropSet();
+    }
+
     public override void OnUsed()
     {
         LastTouchActor = null;
@@ -139,6 +144,7 @@ public partial class Box : Entity
             Destroy(Rigidbody);
             hasRigidbody = false;
         }
+
         if (LastTouchActor.IsNotNullAndAlive() && LastTouchActor.CurrentLiftBox == this)
         {
             LastTouchActor.ThrowState = Actor.ThrowStates.None;
@@ -373,7 +379,7 @@ public partial class Box : Entity
     // 旋转过的局部坐标
     public List<GridPos3D> GetBoxOccupationGPs_Rotated()
     {
-        List<GridPos3D> boxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(BoxOrientation, ConfigManager.GetBoxOccupationData(BoxTypeIndex).BoxIndicatorGPs);
+        List<GridPos3D> boxOccupation_rotated = ConfigManager.GetBoxOccupationData(BoxTypeIndex).BoxIndicatorGPs_RotatedDict[BoxOrientation];
         return boxOccupation_rotated;
     }
 
@@ -1479,4 +1485,7 @@ public enum BoxFeature
 
     [LabelText("缓慢Tick")]
     SlowTick = 1 << 12,
+
+    [LabelText("不受BUff影响")]
+    BuffImmune = 1 << 13,
 }

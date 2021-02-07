@@ -1,5 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EntityFrozenHelper : EntityMonoHelper
 {
@@ -13,6 +14,11 @@ public class EntityFrozenHelper : EntityMonoHelper
 
     public SmoothMove IceBlockSmoothMove;
 
+    void Awake()
+    {
+        OnFrozeIntoIceBlockAction = FrozeIntoIceBlock;
+    }
+
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
@@ -25,6 +31,7 @@ public class EntityFrozenHelper : EntityMonoHelper
         Thaw();
     }
 
+    public UnityAction<int, int> OnFrozeIntoIceBlockAction;
     public virtual void FrozeIntoIceBlock(int beforeFrozenLevel, int afterFrozenLevel)
     {
     }

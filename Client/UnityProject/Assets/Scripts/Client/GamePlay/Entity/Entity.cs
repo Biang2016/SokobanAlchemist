@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
@@ -41,6 +42,8 @@ public abstract class Entity : PoolObject
     [HideInEditorMode]
     [FoldoutGroup("当前战斗数值")]
     [HideLabel]
+    [NonSerialized]
+    [ShowInInspector]
     public EntityStatPropSet EntityStatPropSet; // 湿数据，随生命周期消亡
 
     [DisableInPlayMode]
@@ -92,11 +95,15 @@ public abstract class Entity : PoolObject
     #region 被动技能
 
     [SerializeReference]
-    [FoldoutGroup("被动技能")]
-    [LabelText("被动技能列表")]
+    [FoldoutGroup("初始被动技能")]
+    [LabelText("初始被动技能列表")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<EntityPassiveSkill> RawEntityPassiveSkills = new List<EntityPassiveSkill>(); // 干数据，禁修改
 
+    [NonSerialized]
+    [ShowInInspector]
+    [FoldoutGroup("当前被动技能")]
+    [LabelText("当前被动技能列表")]
     public List<EntityPassiveSkill> EntityPassiveSkills = new List<EntityPassiveSkill>(); // 湿数据，每个Entity生命周期开始前从干数据拷出，结束后清除
 
     internal bool PassiveSkillMarkAsDestroyed = false;
@@ -145,6 +152,7 @@ public abstract class Entity : PoolObject
     [ListDrawerSettings(ListElementLabelName = "SkillAlias")]
     public List<EntityActiveSkill> RawEntityActiveSkills = new List<EntityActiveSkill>(); // 干数据，禁修改
 
+    [NonSerialized]
     public List<EntityActiveSkill> EntityActiveSkills = new List<EntityActiveSkill>(); // 湿数据，每个Entity生命周期开始前从干数据拷出，结束后清除
 
     public Dictionary<EntitySkillIndex, EntityActiveSkill> EntityActiveSkillDict = new Dictionary<EntitySkillIndex, EntityActiveSkill>(); // 便于寻找
