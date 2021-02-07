@@ -125,7 +125,7 @@ public class OpenWorld : World
         WorldData = worldData;
 
         WorldData.WorldBornPointGroupData_Runtime.InitTempData();
-        WorldData.DefaultWorldActorBornPointAlias = "PlayerBP";
+        WorldData.DefaultWorldActorBornPointAlias = "PlayerBP_0_0";
 
         ushort Seed = (ushort) Time.time.ToString().GetHashCode();
         SRandom SRandom = new SRandom(Seed);
@@ -234,12 +234,12 @@ public class OpenWorld : World
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.41f, "Loading Boxes");
         yield return RefreshScopeModules(new GridPos3D(10, WorldModule.MODULE_SIZE, 10), PlayerScopeRadiusX, PlayerScopeRadiusZ); // 按关卡生成器和角色位置初始化需要的模组
 
-        if (WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Count == 0) // 实在没有主角出生点
+        for (int module_x = 0; module_x < WorldSize_X; module_x++)
+        for (int module_z = 0; module_z < WorldSize_Z; module_z++)
         {
-            //Debug.LogError("No space for Player1 to spawn");
             GridPos3D playerBPLocal = new GridPos3D(10, 0, 10);
-            GridPos3D playerBPWorld = new GridPos3D(10, WorldModule.MODULE_SIZE, 10);
-            BornPointData bp = new BornPointData {ActorType = "Player1", BornPointAlias = "PlayerBP", LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorld};
+            GridPos3D playerBPWorld = new GridPos3D(10 + module_x * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, 10 + module_z * WorldModule.MODULE_SIZE);
+            BornPointData bp = new BornPointData {ActorType = "Player1", BornPointAlias = $"PlayerBP_{module_x}_{module_z}", LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorld};
             WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Add(bp.BornPointAlias, bp);
         }
 
@@ -352,11 +352,7 @@ public class OpenWorld : World
                 {
                     GridPos3D targetModuleGP = new GridPos3D(module_x, 0, module_z);
                     WorldModuleData moduleData = WorldModuleData.WorldModuleDataFactory.Alloc();
-                    for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
-                    for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
-                    {
-                        moduleData.BoxMatrix[x, 15, z] = ConfigManager.Box_GroundBoxIndex;
-                    }
+                    moduleData.BoxMatrix[0, 15, 0] = ConfigManager.Box_CombinedGroundBoxIndex;
 
                     moduleData.WorldModuleFeature = WorldModuleFeature.Ground;
 

@@ -681,6 +681,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort WorldModule_GroundIndex => GetWorldModuleTypeIndex("Common_Ground");
     public static ushort Box_EnemyFrozenBoxIndex => GetBoxTypeIndex("EnemyFrozenBox");
     public static ushort Box_GroundBoxIndex => GetBoxTypeIndex("GroundBox");
+    public static ushort Box_CombinedGroundBoxIndex => GetBoxTypeIndex("CombinedGroundBox");
 
     #endregion
 

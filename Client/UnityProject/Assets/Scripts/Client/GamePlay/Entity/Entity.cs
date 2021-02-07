@@ -46,10 +46,6 @@ public abstract class Entity : PoolObject
     [ShowInInspector]
     public EntityStatPropSet EntityStatPropSet; // 湿数据，随生命周期消亡
 
-    [DisableInPlayMode]
-    [ShowInInspector]
-    [FoldoutGroup("状态")]
-    [LabelText("冻结")]
     public bool IsFrozen => EntityStatPropSet.IsFrozen;
 
     [DisplayAsString]

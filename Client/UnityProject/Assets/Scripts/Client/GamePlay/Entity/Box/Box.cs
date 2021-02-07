@@ -948,6 +948,7 @@ public partial class Box : Entity
     {
         base.FixedUpdate();
         if (IsRecycled) return;
+        if (BoxFeature.HasFlag(BoxFeature.SlowTick)) return;
         if (BoxFeature.HasFlag(BoxFeature.SlowTick)) // 减慢Tick
         {
             if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_5X)
