@@ -245,7 +245,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             Box[] warmUpBoxes = new Box[warmUpNum];
             for (int i = 0; i < warmUpNum; i++)
             {
-                Box warmUpBox = pool.AllocateGameObject<Box>(pool.transform);
+                Box warmUpBox = pool.AllocateGameObject<Box>(null);
                 warmUpBoxes[i] = warmUpBox;
                 warmUpBox.BoxColliderHelper.OnBoxPoolRecycled(); // 防止Collider过多重叠
                 count++;
@@ -272,10 +272,11 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         for (int i = 0; i < 20; i++)
         {
             GameObjectPool pool = PoolDict[PrefabNames.WorldModule];
-            WorldModule module = pool.AllocateGameObject<WorldModule>(pool.transform);
+            WorldModule module = pool.AllocateGameObject<WorldModule>(null);
             worldModule[i] = module;
         }
 
+        yield return null;
         for (int i = 0; i < 20; i++)
         {
             worldModule[i].PoolRecycle();
