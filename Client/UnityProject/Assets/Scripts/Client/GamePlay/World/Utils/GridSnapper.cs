@@ -5,12 +5,10 @@ using UnityEngine;
 public class GridSnapper : MonoBehaviour
 {
     public int SnapperGridSize = 1;
-    public bool EnableInRuntime = true;
-    public bool EnableInEditor = true;
 
     void LateUpdate()
     {
-        if ((EnableInRuntime && Application.isPlaying) || (EnableInEditor && !Application.isPlaying))
+        if (!Application.isPlaying)
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(transform, SnapperGridSize);
             transform.localPosition = new Vector3(gp.x * SnapperGridSize, gp.y * SnapperGridSize, gp.z * SnapperGridSize);

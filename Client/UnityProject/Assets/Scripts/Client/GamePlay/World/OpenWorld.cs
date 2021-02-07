@@ -297,6 +297,7 @@ public class OpenWorld : World
 
     List<Vector3> cachedModuleCornerPoints = new List<Vector3>(8);
     Plane[] cachedPlanes = new Plane[6];
+    public float ExtendScope = 4f;
 
     public IEnumerator RefreshScopeModules(GridPos3D playerWorldGP, int scopeX, int scopeZ)
     {
@@ -306,24 +307,23 @@ public class OpenWorld : World
 
         bool CheckModuleCanBeSeenByCamera(GridPos3D moduleGP, bool checkBottom, bool checkTop)
         {
-            float extendScope = 4f;
             cachedModuleCornerPoints.Clear();
             GeometryUtility.CalculateFrustumPlanes(CameraManager.Instance.MainCamera, cachedPlanes);
             if (checkBottom && checkTop)
             {
-                Bounds bounds = new Bounds(moduleGP * WorldModule.MODULE_SIZE + (WorldModule.MODULE_SIZE - 1) / 2f * Vector3.one, Vector3.one * (WorldModule.MODULE_SIZE + extendScope));
+                Bounds bounds = new Bounds(moduleGP * WorldModule.MODULE_SIZE + (WorldModule.MODULE_SIZE - 1) / 2f * Vector3.one, Vector3.one * (WorldModule.MODULE_SIZE + ExtendScope));
                 return GeometryUtility.TestPlanesAABB(cachedPlanes, bounds);
             }
             else
             {
                 if (checkBottom)
                 {
-                    Bounds bounds = new Bounds(moduleGP * WorldModule.MODULE_SIZE + (WorldModule.MODULE_SIZE - 1) / 2f * new Vector3(1, 0, 1), new Vector3(WorldModule.MODULE_SIZE + extendScope, 1, WorldModule.MODULE_SIZE + extendScope));
+                    Bounds bounds = new Bounds(moduleGP * WorldModule.MODULE_SIZE + (WorldModule.MODULE_SIZE - 1) / 2f * new Vector3(1, 0, 1), new Vector3(WorldModule.MODULE_SIZE + ExtendScope, 1, WorldModule.MODULE_SIZE + ExtendScope));
                     return GeometryUtility.TestPlanesAABB(cachedPlanes, bounds);
                 }
                 else if (checkTop)
                 {
-                    Bounds bounds = new Bounds(moduleGP * WorldModule.MODULE_SIZE + (WorldModule.MODULE_SIZE - 1) / 2f * new Vector3(1, 2, 1), new Vector3(WorldModule.MODULE_SIZE + extendScope, 1, WorldModule.MODULE_SIZE + extendScope));
+                    Bounds bounds = new Bounds(moduleGP * WorldModule.MODULE_SIZE + (WorldModule.MODULE_SIZE - 1) / 2f * new Vector3(1, 2, 1), new Vector3(WorldModule.MODULE_SIZE + ExtendScope, 1, WorldModule.MODULE_SIZE + ExtendScope));
                     return GeometryUtility.TestPlanesAABB(cachedPlanes, bounds);
                 }
                 else
