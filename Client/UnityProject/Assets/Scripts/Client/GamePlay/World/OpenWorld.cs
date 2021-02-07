@@ -130,6 +130,8 @@ public class OpenWorld : World
         ushort Seed = (ushort) Time.time.ToString().GetHashCode();
         SRandom SRandom = new SRandom(Seed);
 
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.2f, "Loading Open World");
+        int generatorCount = 0;
         foreach (GenerateBoxLayerData boxLayerData in GenerateBoxLayerDataList) // 初始化所有层的关卡生成器
         {
             boxLayerData.Init();
@@ -154,7 +156,11 @@ public class OpenWorld : World
             }
 
             m_LevelCacheData.CurrentGenerators.Add(generator);
+            generatorCount++;
+            ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.2f + 0.2f * generatorCount / GenerateBoxLayerDataList.Count, "Generating Map");
         }
+
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.4f, "Generating Map Completed");
 
         /*
         foreach (GenerateActorLayerData actorLayerData in GenerateActorLayerDataList) // 按层生成关卡Actor数据
@@ -225,6 +231,7 @@ public class OpenWorld : World
         }
         */
 
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.41f, "Loading Boxes");
         yield return RefreshScopeModules(new GridPos3D(10, WorldModule.MODULE_SIZE, 10), PlayerScopeRadiusX, PlayerScopeRadiusZ); // 按关卡生成器和角色位置初始化需要的模组
 
         if (WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Count == 0) // 实在没有主角出生点
@@ -391,11 +398,13 @@ public class OpenWorld : World
         }
 
         generateModuleFinished.Clear();
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.6f, "Loading Boxes Completed");
 
         #endregion
 
         #region Recycle Modules
 
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.61f, "Recycling Useless Boxes");
         recycleModuleFinished.Clear();
         List<GridPos3D> hideModuleGPs = new List<GridPos3D>();
         foreach (GridPos3D currentShowModuleGP in m_LevelCacheData.CurrentShowModuleGPs)
@@ -435,6 +444,8 @@ public class OpenWorld : World
         {
             m_LevelCacheData.CurrentShowModuleGPs.Remove(hideModuleGP);
         }
+
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.8f, "Recycling Useless Boxes Completed");
 
         #endregion
 

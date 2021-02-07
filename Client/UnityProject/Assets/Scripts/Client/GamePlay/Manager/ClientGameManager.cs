@@ -63,6 +63,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     public DebugConsole DebugConsole;
     public DebugPanel DebugPanel;
+    public LoadingMapPanel LoadingMapPanel;
 
     [LabelText("开局世界类型")]
     [ValueDropdown("GetAllWorldNames")]
@@ -153,12 +154,18 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     private IEnumerator Co_StartGame()
     {
+        LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
+        LoadingMapPanel.SetProgress(0, "Start Loading");
         yield return new WaitForSeconds(0.1f);
+        LoadingMapPanel.SetProgress(0.01f, "Warm Up Pool");
         yield return GameObjectPoolManager.WarmUpPool();
 
+        LoadingMapPanel.SetProgress(0.2f, "StartGame");
         yield return WorldManager.StartGame();
 
+        LoadingMapPanel.SetProgress(1f, "Completed");
         BattleManager.Instance.StartBattle();
+        LoadingMapPanel.CloseUIForm();
 
         DebugPanel = UIManager.Instance.ShowUIForms<DebugPanel>();
 
