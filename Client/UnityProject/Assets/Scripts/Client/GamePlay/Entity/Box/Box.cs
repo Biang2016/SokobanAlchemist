@@ -1304,7 +1304,7 @@ public partial class Box : Entity
             foreach (EntityPassiveSkill extraBF in boxExtraSerializeDataFromModule.BoxPassiveSkills)
             {
                 EntityPassiveSkill newPS = extraBF.Clone();
-                AddNewPassiveSkill(newPS);
+                AddNewPassiveSkill(newPS, true);
             }
         }
     }

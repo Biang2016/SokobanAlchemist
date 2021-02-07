@@ -11,6 +11,8 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
 {
     internal Entity Entity;
 
+    public bool IsAddedDuringGamePlay = false; // 是否是在游戏过程中添加的，以便在回收之后判断要不要清掉
+
     [LabelText("技能描述")]
     [ShowInInspector]
     [PropertyOrder(-1)]

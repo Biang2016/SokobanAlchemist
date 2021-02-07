@@ -108,21 +108,59 @@ public abstract class Entity : PoolObject
 
     internal bool PassiveSkillMarkAsDestroyed = false;
 
+    private List<EntityPassiveSkill> cachedRemoveList = new List<EntityPassiveSkill>(5);
+
     protected void InitPassiveSkills()
     {
-        EntityPassiveSkills.Clear();
-        foreach (EntityPassiveSkill rawAPS in RawEntityPassiveSkills)
+        if (EntityPassiveSkills.Count > 0)
         {
-            EntityPassiveSkill ps = rawAPS.Clone();
-            AddNewPassiveSkill(ps);
+            cachedRemoveList.Clear();
+            foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+            {
+                if (eps.IsAddedDuringGamePlay)
+                {
+                    cachedRemoveList.Add(eps);
+                }
+            }
+
+            foreach (EntityPassiveSkill eps in cachedRemoveList)
+            {
+                EntityPassiveSkills.Remove(eps);
+            }
+
+            if (EntityPassiveSkills.Count == RawEntityPassiveSkills.Count)
+            {
+                for (int i = 0; i < RawEntityPassiveSkills.Count; i++)
+                {
+                    EntityPassiveSkill eps = EntityPassiveSkills[i];
+                    eps.IsAddedDuringGamePlay = false; // 从Raw里面拷出来的都即为非动态添加的技能
+                    eps.CopyDataFrom(RawEntityPassiveSkills[i]);
+                    eps.OnInit();
+                    eps.OnRegisterLevelEventID();
+                }
+            }
+            else
+            {
+                Debug.Log("EntityPassiveSkills的数量和RawEntityPassiveSkills不一致，请检查临时EPS添加情况");
+            }
+        }
+
+        else
+        {
+            foreach (EntityPassiveSkill rawAPS in RawEntityPassiveSkills)
+            {
+                EntityPassiveSkill ps = rawAPS.Clone();
+                AddNewPassiveSkill(ps, false);
+            }
         }
 
         PassiveSkillMarkAsDestroyed = false;
     }
 
-    public void AddNewPassiveSkill(EntityPassiveSkill eps)
+    public void AddNewPassiveSkill(EntityPassiveSkill eps, bool isAddedDuringGamePlay)
     {
         EntityPassiveSkills.Add(eps);
+        eps.IsAddedDuringGamePlay = isAddedDuringGamePlay;
         eps.Entity = this;
         eps.OnInit();
         eps.OnRegisterLevelEventID();
@@ -136,9 +174,6 @@ public abstract class Entity : PoolObject
             eps.OnUnInit();
         }
 
-        // 防止EntityPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
-        //EntityPassiveSkills.Clear();
-        //EntityPassiveSkillDict.Clear();
         PassiveSkillMarkAsDestroyed = false;
     }
 
@@ -146,7 +181,8 @@ public abstract class Entity : PoolObject
 
     #region 主动技能
 
-    [SerializeReference]
+    [
+        SerializeReference]
     [FoldoutGroup("主动技能")]
     [LabelText("主动技能列表")]
     [ListDrawerSettings(ListElementLabelName = "SkillAlias")]
