@@ -11,9 +11,16 @@ using UnityEngine.Events;
 [Serializable]
 public abstract class Property
 {
+    private bool isDirty = true;
+
     public void Initialize()
     {
-        RefreshModifiedValue();
+        if (isDirty)
+        {
+            RefreshModifiedValue();
+        }
+
+        isDirty = false;
     }
 
     public void OnRecycled()
@@ -57,6 +64,7 @@ public abstract class Property
 
     public bool AddModifier(PlusModifier modifier)
     {
+        isDirty = true;
         PlusModifiers_Value.Add(modifier);
         modifier.OnValueChanged += (before, after) => { RefreshModifiedValue(); };
         RefreshModifiedValue();
@@ -65,6 +73,7 @@ public abstract class Property
 
     public bool RemoveModifier(PlusModifier modifier)
     {
+        isDirty = true;
         if (PlusModifiers_Value.Remove(modifier))
         {
             modifier.OnValueChanged = null;
@@ -79,6 +88,7 @@ public abstract class Property
 
     public bool AddModifier(MultiplyModifier modifier)
     {
+        isDirty = true;
         MultiplyModifiers_Value.Add(modifier);
         modifier.OnValueChanged += (before, after) => { RefreshModifiedValue(); };
         RefreshModifiedValue();
@@ -87,6 +97,7 @@ public abstract class Property
 
     public bool RemoveModifier(MultiplyModifier modifier)
     {
+        isDirty = true;
         if (MultiplyModifiers_Value.Remove(modifier))
         {
             foreach (MultiplyModifier mm in MultiplyModifiers_Value)

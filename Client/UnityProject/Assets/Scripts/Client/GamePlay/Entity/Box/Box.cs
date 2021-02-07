@@ -9,6 +9,7 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Profiling;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -565,6 +566,7 @@ public partial class Box : Entity
                 BoxColliderHelper.OnPush();
             }
 
+            Profiler.BeginSample("Box.Initialize DOTween GC Check");
             transform.DOPause();
             transform.DOLocalMove(LocalGP, lerpTime).SetEase(Ease.Linear).OnComplete(() =>
             {
@@ -583,6 +585,7 @@ public partial class Box : Entity
                 if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Init LerpType:{lerpType} DOLerpGP:{LocalGP} finalPos:{transform.position}");
             });
             transform.DOLocalRotate(Vector3.zero, lerpTime);
+            Profiler.EndSample();
             switch (lerpType)
             {
                 case LerpType.Push:
