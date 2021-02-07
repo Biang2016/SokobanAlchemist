@@ -480,7 +480,7 @@ public partial class Box : Entity
     protected virtual void Start()
     {
         GUID = GetGUID();
-        GUID_Mod_FixedFrameRate = BoxFeature.HasFlag(BoxFeature.SlowTick) ? ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_2X : ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
+        GUID_Mod_FixedFrameRate = BoxFeature.HasFlag(BoxFeature.SlowTick) ? ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_5X : ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
     }
 
     private void OnPlayerInteractSkillChanged(InteractSkillType interactSkillType, ushort boxTypeIndex)
@@ -947,13 +947,13 @@ public partial class Box : Entity
         if (IsRecycled) return;
         if (BoxFeature.HasFlag(BoxFeature.SlowTick)) // 减慢Tick
         {
-            if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_2X)
+            if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_5X)
             {
-                EntityStatPropSet.FixedUpdate(2f);
-                EntityBuffHelper.BuffFixedUpdate(2f);
+                EntityStatPropSet.FixedUpdate(5f);
+                EntityBuffHelper.BuffFixedUpdate(5f);
                 foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                 {
-                    ps.OnTick(2f);
+                    ps.OnTick(5f);
                 }
             }
         }

@@ -1,20 +1,8 @@
 ﻿using System.Collections;
-using System.Runtime.InteropServices.WindowsRuntime;
 using BiangLibrary.GameDataFormat.Grid;
 
 public class OpenWorldModule : WorldModule
 {
-    public override void OnRecycled()
-    {
-        base.OnRecycled();
-        WorldDeadZoneTrigger?.PoolRecycle();
-        WorldDeadZoneTrigger = null;
-        WorldWallCollider?.PoolRecycle();
-        WorldWallCollider = null;
-        WorldGroundCollider?.PoolRecycle();
-        WorldGroundCollider = null;
-    }
-
     public override IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadBoxNumPerFrame, GridPosR.Orientation generatorOrder)
     {
         ModuleGP = moduleGP;

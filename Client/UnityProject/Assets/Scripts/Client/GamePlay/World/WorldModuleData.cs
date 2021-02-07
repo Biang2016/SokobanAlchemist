@@ -76,11 +76,6 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     #region IClassPoolObject
 
-    public WorldModuleData Create()
-    {
-        return WorldModuleDataFactory.Alloc();
-    }
-
     public void OnUsed()
     {
         for (int x = 0; x < BoxMatrix.GetLength(0); x++)
@@ -95,6 +90,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
             }
         }
 
+        WorldModuleFeature = WorldModuleFeature.None;
         WorldModuleBornPointGroupData = new BornPointGroupData();
         WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();
     }
@@ -103,6 +99,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     {
         WorldModuleBornPointGroupData = null;
         WorldModuleLevelTriggerGroupData = null;
+        WorldModuleFeature = WorldModuleFeature.None;
     }
 
     public void Release()

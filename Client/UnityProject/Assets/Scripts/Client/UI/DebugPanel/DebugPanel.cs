@@ -308,7 +308,7 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("Player/AddActionRecovery*10", KeyCode.L)]
     public void AddActionRecovery10()
     {
-        BattleManager.Instance.Player1.EntityStatPropSet.ActionPointRecovery.AddModifier(new Property.PlusModifier {Delta = 10});
+        BattleManager.Instance.Player1.EntityStatPropSet.ActionPointRecovery.AddModifier(new Property.PlusModifier {Delta = 1000});
     }
 
     [DebugToggleButton("Log/ToggleActorMoveLog")]

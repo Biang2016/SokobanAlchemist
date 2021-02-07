@@ -15,11 +15,6 @@ public class ActorPathFinding
         public int G; // 从起点到该点的路径长度
         public int H; // 从该点到终点的估计路程
 
-        public Node Create()
-        {
-            return new Node();
-        }
-
         public void OnUsed()
         {
         }

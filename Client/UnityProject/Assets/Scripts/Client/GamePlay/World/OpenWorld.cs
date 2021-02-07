@@ -454,7 +454,7 @@ public class OpenWorld : World
     IEnumerator Co_GenerateModule(WorldModuleData moduleData, GridPos3D targetModuleGP, GridPosR.Orientation generateOrientation, int boolIndex)
     {
         yield return GenerateWorldModuleByCustomizedData(moduleData, targetModuleGP.x, targetModuleGP.y, targetModuleGP.z, 32, generateOrientation);
-        WorldData.WorldBornPointGroupData_Runtime.AddModuleData(WorldModuleMatrix[targetModuleGP.x, 1, targetModuleGP.z]);
+        WorldData.WorldBornPointGroupData_Runtime.AddModuleData(WorldModuleMatrix[targetModuleGP.x, targetModuleGP.y, targetModuleGP.z]);
         generateModuleFinished[boolIndex] = true;
     }
 
