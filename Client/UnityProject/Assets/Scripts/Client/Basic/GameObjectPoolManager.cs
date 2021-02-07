@@ -249,7 +249,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 warmUpBoxes[i] = warmUpBox;
                 warmUpBox.BoxColliderHelper.OnBoxPoolRecycled(); // 防止Collider过多重叠
                 count++;
-                if (count > 64)
+                if (count > 256)
                 {
                     count = 0;
                     yield return null;
@@ -260,7 +260,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             {
                 warmUpBoxes[i].PoolRecycle();
                 count++;
-                if (count > 64)
+                if (count > 256)
                 {
                     count = 0;
                     yield return null;
