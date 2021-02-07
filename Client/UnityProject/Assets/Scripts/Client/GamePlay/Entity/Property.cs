@@ -171,6 +171,16 @@ public abstract class Property
         target.BaseValue = BaseValue;
         target.MinValue = MinValue;
         target.MaxValue = MaxValue;
+        if (target.PlusModifiers_Value.Count == 0 && target.MultiplyModifiers_Value.Count == 0)
+        {
+            target.ModifiedValue = target.BaseValue;
+            target.isDirty = false;
+        }
+        else
+        {
+            target.isDirty = true;
+        }
+
         ChildApplyDataTo(target);
     }
 

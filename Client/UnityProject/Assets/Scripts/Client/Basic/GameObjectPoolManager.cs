@@ -267,6 +267,19 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 }
             }
         }
+
+        WorldModule[] worldModule = new WorldModule[20];
+        for (int i = 0; i < 20; i++)
+        {
+            GameObjectPool pool = PoolDict[PrefabNames.WorldModule];
+            WorldModule module = pool.AllocateGameObject<WorldModule>(pool.transform);
+            worldModule[i] = module;
+        }
+
+        for (int i = 0; i < 20; i++)
+        {
+            worldModule[i].PoolRecycle();
+        }
     }
 
     public void OptimizeAllGameObjectPools()
