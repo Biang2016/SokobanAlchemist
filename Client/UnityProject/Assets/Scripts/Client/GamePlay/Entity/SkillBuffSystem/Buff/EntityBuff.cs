@@ -90,6 +90,15 @@ public abstract class EntityBuff : IClone<EntityBuff>
     {
     }
 
+    public virtual void CopyDataFrom(EntityBuff srcData)
+    {
+        EntityBuffAttribute = srcData.EntityBuffAttribute;
+        IsPermanent = srcData.IsPermanent;
+        Duration = srcData.Duration;
+        BuffFX = srcData.BuffFX;
+        BuffFXScale = srcData.BuffFXScale;
+    }
+
     #region Utils
 
     private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();

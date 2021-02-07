@@ -47,9 +47,8 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
 
     public Dictionary<string, int> WarmUpBoxConfig = new Dictionary<string, int>
     {
-        {"GroundBox", 9 * 256},
-        {"BrickBox", 200},
-        {"WoodenBox", 200},
+        {"BrickBox", 500},
+        {"WoodenBox", 500},
         {"BorderBox", 100},
     };
 
@@ -229,6 +228,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
 
     public IEnumerator WarmUpPool()
     {
+        int count = 0;
         foreach (KeyValuePair<ushort, string> kv in ConfigManager.BoxTypeDefineDict.TypeNameDict)
         {
             GameObjectPool pool = BoxDict[kv.Key];
@@ -239,16 +239,28 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             }
             else
             {
-                warmUpNum = 20;
+                warmUpNum = 50;
             }
 
-            int count = 0;
+            Box[] warmUpBoxes = new Box[warmUpNum];
             for (int i = 0; i < warmUpNum; i++)
             {
                 Box warmUpBox = pool.AllocateGameObject<Box>(pool.transform);
-                warmUpBox.PoolRecycle();
+                warmUpBoxes[i] = warmUpBox;
+                warmUpBox.BoxColliderHelper.OnBoxPoolRecycled(); // 防止Collider过多重叠
                 count++;
-                if (count > 8)
+                if (count > 64)
+                {
+                    count = 0;
+                    yield return null;
+                }
+            }
+
+            for (int i = 0; i < warmUpNum; i++)
+            {
+                warmUpBoxes[i].PoolRecycle();
+                count++;
+                if (count > 64)
                 {
                     count = 0;
                     yield return null;

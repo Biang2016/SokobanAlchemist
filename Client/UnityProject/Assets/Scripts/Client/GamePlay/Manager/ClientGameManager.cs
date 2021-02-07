@@ -154,7 +154,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     private IEnumerator Co_StartGame()
     {
         yield return new WaitForSeconds(0.1f);
-        GameObjectPoolManager.WarmUpPool();
+        yield return GameObjectPoolManager.WarmUpPool();
 
         yield return WorldManager.StartGame();
 

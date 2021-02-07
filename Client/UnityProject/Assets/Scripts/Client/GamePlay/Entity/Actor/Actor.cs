@@ -302,11 +302,13 @@ public class Actor : Entity
 
         ActorMoveColliderRoot.SetActive(false);
         SetModelSmoothMoveLerpTime(0);
+        gameObject.SetActive(false);
         base.OnRecycled();
     }
 
     public override void OnUsed()
     {
+        gameObject.SetActive(true);
         base.OnUsed();
         EntityBuffHelper.OnHelperUsed();
         EntityFrozenHelper.OnHelperUsed();
@@ -413,38 +415,36 @@ public class Actor : Entity
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        if (!IsRecycled)
+        if (IsRecycled) return;
+        actorPassiveSkillTicker += Time.fixedDeltaTime;
+        if (actorPassiveSkillTicker >= actorPassiveSkillTickInterval)
         {
-            actorPassiveSkillTicker += Time.fixedDeltaTime;
-            if (actorPassiveSkillTicker >= actorPassiveSkillTickInterval)
+            actorPassiveSkillTicker -= actorPassiveSkillTickInterval;
+            foreach (EntityPassiveSkill eps in EntityPassiveSkills)
             {
-                actorPassiveSkillTicker -= actorPassiveSkillTickInterval;
-                foreach (EntityPassiveSkill eps in EntityPassiveSkills)
-                {
-                    eps.OnTick(actorPassiveSkillTickInterval);
-                }
+                eps.OnTick(actorPassiveSkillTickInterval);
             }
+        }
 
+        foreach (EntityActiveSkill eas in EntityActiveSkills)
+        {
+            eas.OnFixedUpdate(Time.fixedDeltaTime);
+        }
+
+        actorActiveSkillTicker += Time.fixedDeltaTime;
+        if (actorActiveSkillTicker >= actorActiveSkillTickInterval)
+        {
+            actorActiveSkillTicker -= actorActiveSkillTickInterval;
             foreach (EntityActiveSkill eas in EntityActiveSkills)
             {
-                eas.OnFixedUpdate(Time.fixedDeltaTime);
+                eas.OnTick(actorActiveSkillTickInterval);
             }
-
-            actorActiveSkillTicker += Time.fixedDeltaTime;
-            if (actorActiveSkillTicker >= actorActiveSkillTickInterval)
-            {
-                actorActiveSkillTicker -= actorActiveSkillTickInterval;
-                foreach (EntityActiveSkill eas in EntityActiveSkills)
-                {
-                    eas.OnTick(actorActiveSkillTickInterval);
-                }
-            }
-
-            EntityBuffHelper.BuffFixedUpdate(Time.deltaTime);
-            if (ENABLE_ACTOR_MOVE_LOG && WorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {WorldGP}");
-            LastWorldGP = WorldGP;
-            WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
         }
+
+        EntityBuffHelper.BuffFixedUpdate(Time.deltaTime);
+        if (ENABLE_ACTOR_MOVE_LOG && WorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {WorldGP}");
+        LastWorldGP = WorldGP;
+        WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
     }
 
     public void TransportPlayerGridPos(GridPos3D worldGP)

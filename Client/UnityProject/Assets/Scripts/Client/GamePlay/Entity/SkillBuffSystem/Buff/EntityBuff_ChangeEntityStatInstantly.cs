@@ -35,4 +35,13 @@ public class EntityBuff_ChangeEntityStatInstantly : EntityBuff
         buff.Delta = Delta;
         buff.Percent = Percent;
     }
+
+    public override void CopyDataFrom(EntityBuff srcData)
+    {
+        base.CopyDataFrom(srcData);
+        EntityBuff_ChangeEntityStatInstantly srcBuff = ((EntityBuff_ChangeEntityStatInstantly)srcData);
+        EntityStatType = srcBuff.EntityStatType;
+        Delta = srcBuff.Delta;
+        Percent = srcBuff.Percent;
+    }
 }

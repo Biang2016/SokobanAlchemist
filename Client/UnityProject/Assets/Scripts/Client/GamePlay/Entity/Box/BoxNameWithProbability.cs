@@ -53,4 +53,12 @@ public class BoxNameWithProbability : Probability, IClone<BoxNameWithProbability
     {
         return (BoxNameWithProbability) ProbabilityClone();
     }
+
+    public void CopyDataFrom(BoxNameWithProbability src)
+    {
+        BoxTypeName = src.BoxTypeName;
+        BoxOrientation = src.BoxOrientation;
+        probability = src.probability;
+        isSingleton = src.isSingleton;
+    }
 }

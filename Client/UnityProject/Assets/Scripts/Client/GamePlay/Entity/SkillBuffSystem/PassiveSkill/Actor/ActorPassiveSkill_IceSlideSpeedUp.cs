@@ -62,6 +62,6 @@ public class ActorPassiveSkill_IceSlideSpeedUp : ActorPassiveSkill
     {
         base.CopyDataFrom(srcData);
         ActorPassiveSkill_IceSlideSpeedUp ps = ((ActorPassiveSkill_IceSlideSpeedUp) srcData);
-        RawEntityBuff = ps.RawEntityBuff.Clone();
+        RawEntityBuff.CopyDataFrom(ps.RawEntityBuff);
     }
 }

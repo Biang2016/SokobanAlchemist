@@ -5,6 +5,7 @@ using BiangLibrary;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 [Serializable]
 public class EntityActiveSkill_SummonDropBox : EntityActiveSkill_AreaCast
@@ -54,7 +55,18 @@ public class EntityActiveSkill_SummonDropBox : EntityActiveSkill_AreaCast
     {
         base.CopyDataFrom(srcData);
         EntityActiveSkill_SummonDropBox srcEAS = (EntityActiveSkill_SummonDropBox) srcData;
-        DropBoxList = srcEAS.DropBoxList.Clone();
+        if (DropBoxList.Count != srcEAS.DropBoxList.Count)
+        {
+            Debug.LogError("EntityActiveSkill_SummonDropBox CopyDataFrom DropBoxList数量不一致");
+        }
+        else
+        {
+            for (int i = 0; i < DropBoxList.Count; i++)
+            {
+                DropBoxList[i].CopyDataFrom(srcEAS.DropBoxList[i]);
+            }
+        }
+
         DropFromHeightFromFloor = srcEAS.DropFromHeightFromFloor;
     }
 }

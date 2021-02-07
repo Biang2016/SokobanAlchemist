@@ -68,4 +68,14 @@ public class EntityBuff_EntityPropertyPlusModifier : EntityBuff
         buff.LinearDecayInDuration = LinearDecayInDuration;
         buff.PlusModifier = new Property.PlusModifier {Delta = Delta};
     }
+
+    public override void CopyDataFrom(EntityBuff srcData)
+    {
+        base.CopyDataFrom(srcData);
+        EntityBuff_EntityPropertyPlusModifier srcBuff = ((EntityBuff_EntityPropertyPlusModifier) srcData);
+        Delta = srcBuff.Delta;
+        EntityPropertyType = srcBuff.EntityPropertyType;
+        LinearDecayInDuration = srcBuff.LinearDecayInDuration;
+        PlusModifier = new Property.PlusModifier {Delta = srcBuff.Delta};
+    }
 }

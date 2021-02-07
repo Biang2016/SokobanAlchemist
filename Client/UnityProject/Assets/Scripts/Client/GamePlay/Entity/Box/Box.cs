@@ -86,6 +86,7 @@ public partial class Box : Entity
 
     public override void OnUsed()
     {
+        gameObject.SetActive(true);
         LastTouchActor = null;
         ArtOnly = true;
 
@@ -156,6 +157,7 @@ public partial class Box : Entity
         MarkedAsMergedSourceBox = false;
 
         UnInitPassiveSkills();
+        gameObject.SetActive(false);
         base.OnRecycled();
     }
 

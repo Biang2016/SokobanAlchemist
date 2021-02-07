@@ -54,6 +54,16 @@ public class EntityPassiveSkillAction_AddEntityBuff : EntityPassiveSkillAction, 
     {
         base.CopyDataFrom(srcData);
         EntityPassiveSkillAction_AddEntityBuff action = ((EntityPassiveSkillAction_AddEntityBuff) srcData);
-        RawEntityBuffs = action.RawEntityBuffs.Clone();
+        if (RawEntityBuffs.Count != action.RawEntityBuffs.Count)
+        {
+            Debug.LogError("EntityPassiveSkillAction_AddEntityBuff CopyDataFrom() RawEntityBuffs数量不一致");
+        }
+        else
+        {
+            for (int i = 0; i < RawEntityBuffs.Count; i++)
+            {
+                RawEntityBuffs[i].CopyDataFrom(action.RawEntityBuffs[i]);
+            }
+        }
     }
 }

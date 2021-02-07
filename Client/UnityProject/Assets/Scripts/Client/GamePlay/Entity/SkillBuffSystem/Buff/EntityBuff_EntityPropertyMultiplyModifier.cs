@@ -68,4 +68,14 @@ public class EntityBuff_EntityPropertyMultiplyModifier : EntityBuff
         buff.EntityPropertyType = EntityPropertyType;
         buff.MultiplyModifier = new Property.MultiplyModifier {Percent = Percent};
     }
+
+    public override void CopyDataFrom(EntityBuff srcData)
+    {
+        base.CopyDataFrom(srcData);
+        EntityBuff_EntityPropertyMultiplyModifier srcBuff = ((EntityBuff_EntityPropertyMultiplyModifier) srcData);
+        Percent = srcBuff.Percent;
+        LinearDecayInDuration = srcBuff.LinearDecayInDuration;
+        EntityPropertyType = srcBuff.EntityPropertyType;
+        MultiplyModifier = new Property.MultiplyModifier {Percent = srcBuff.Percent};
+    }
 }

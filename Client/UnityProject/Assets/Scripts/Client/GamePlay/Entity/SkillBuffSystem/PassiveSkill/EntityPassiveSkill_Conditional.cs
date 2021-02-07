@@ -38,7 +38,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnInit()
     {
         base.OnInit();
-        InitBoxPassiveSkillActions();
+        InitPassiveSkillActions();
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnInit))
         {
             foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
@@ -458,7 +458,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     #endregion
 
-    #region 箱子被动技能行为部分
+    #region 被动技能行为部分
 
     [SerializeReference]
     [LabelText("具体内容")]
@@ -466,34 +466,53 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public List<EntityPassiveSkillAction> RawEntityPassiveSkillActions = new List<EntityPassiveSkillAction>(); // 干数据，禁修改
 
     [HideInInspector]
-    public List<EntityPassiveSkillAction> EntityPassiveSkillActions = new List<EntityPassiveSkillAction>(); // 湿数据，每个Entity生命周期开始前从干数据拷出，结束后清除
+    public List<EntityPassiveSkillAction> EntityPassiveSkillActions = new List<EntityPassiveSkillAction>(); // 湿数据，每个Entity生命周期开始前从干数据数据拷贝，数量永远和干数据相等
 
     internal bool EntityPassiveSkillActionsMarkAsDeleted = false;
 
-    private void InitBoxPassiveSkillActions()
+    private void InitPassiveSkillActions()
     {
-        foreach (EntityPassiveSkillAction epsa in EntityPassiveSkillActions) // 放在Init里清空，避免在UnInit里出现Entity死亡而modify collection的情况
+        if (EntityPassiveSkillActions.Count > 0)
         {
-            epsa.OnRecycled();
+            foreach (EntityPassiveSkillAction epsa in EntityPassiveSkillActions) // 放在Init里清空，避免在UnInit里出现Entity死亡而modify collection的情况
+            {
+                epsa.OnRecycled();
+            }
+
+            if (EntityPassiveSkillActions.Count == RawEntityPassiveSkillActions.Count)
+            {
+                for (int i = 0; i < RawEntityPassiveSkillActions.Count; i++)
+                {
+                    EntityPassiveSkillAction epsa = EntityPassiveSkillActions[i];
+                    epsa.Entity = Entity;
+                    epsa.CopyDataFrom(RawEntityPassiveSkillActions[i]);
+                }
+            }
+            else
+            {
+                Debug.Log("EntityPassiveSkillActions的数量和RawEntityPassiveSkillActions不一致，请检查临时EPSA添加情况");
+            }
         }
-
-        EntityPassiveSkillActions.Clear();
-
-        foreach (EntityPassiveSkillAction rawAction in RawEntityPassiveSkillActions)
+        else
         {
-            EntityPassiveSkillActions.Add(rawAction.Clone());
+            foreach (EntityPassiveSkillAction rawAction in RawEntityPassiveSkillActions)
+            {
+                EntityPassiveSkillAction epsa = rawAction.Clone();
+                epsa.Entity = Entity;
+                EntityPassiveSkillActions.Add(epsa);
+            }
         }
 
         EntityPassiveSkillActionsMarkAsDeleted = false;
-        foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
-        {
-            action.Entity = Entity;
-        }
     }
 
     private void UnInitPassiveSkillActions()
     {
         EntityPassiveSkillActionsMarkAsDeleted = false;
+        foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+        {
+            action.Entity = null;
+        }
     }
 
     #endregion
@@ -510,7 +529,8 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         newPSC.PassiveSkillCondition = PassiveSkillCondition;
         foreach (EntityPassiveSkillAction rawBoxPassiveSkillAction in RawEntityPassiveSkillActions)
         {
-            newPSC.RawEntityPassiveSkillActions.Add(rawBoxPassiveSkillAction.Clone());
+            EntityPassiveSkillAction newEPSA = rawBoxPassiveSkillAction.Clone();
+            newPSC.RawEntityPassiveSkillActions.Add(newEPSA);
         }
     }
 
@@ -519,15 +539,26 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.CopyDataFrom(srcData);
         EntityPassiveSkill_Conditional srcPSC = (EntityPassiveSkill_Conditional) srcData;
         MultiEventTrigger = srcPSC.MultiEventTrigger;
-        ListenLevelEventAliasList = srcPSC.ListenLevelEventAliasList.Clone();
+        ListenLevelEventAliasList.Clear();
+        foreach (string s in srcPSC.ListenLevelEventAliasList)
+        {
+            ListenLevelEventAliasList.Add(s);
+        }
+
         ListenLevelEventAlias = srcPSC.ListenLevelEventAlias;
         MaxTriggeredTimes = srcPSC.MaxTriggeredTimes;
 
         PassiveSkillCondition = srcPSC.PassiveSkillCondition;
-        RawEntityPassiveSkillActions.Clear();
-        foreach (EntityPassiveSkillAction rawBoxPassiveSkillAction in srcPSC.RawEntityPassiveSkillActions)
+        if (srcPSC.RawEntityPassiveSkillActions.Count != RawEntityPassiveSkillActions.Count)
         {
-            RawEntityPassiveSkillActions.Add(rawBoxPassiveSkillAction.Clone());
+            Debug.LogError("EPS_Conditional CopyDataFrom() Action数量不一致");
+        }
+        else
+        {
+            for (int i = 0; i < srcPSC.RawEntityPassiveSkillActions.Count; i++)
+            {
+                RawEntityPassiveSkillActions[i].CopyDataFrom(srcPSC.RawEntityPassiveSkillActions[i]);
+            }
         }
     }
 }

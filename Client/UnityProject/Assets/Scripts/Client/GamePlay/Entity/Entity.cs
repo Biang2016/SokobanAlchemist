@@ -104,26 +104,26 @@ public abstract class Entity : PoolObject
     [ShowInInspector]
     [FoldoutGroup("当前被动技能")]
     [LabelText("当前被动技能列表")]
-    public List<EntityPassiveSkill> EntityPassiveSkills = new List<EntityPassiveSkill>(); // 湿数据，每个Entity生命周期开始前从干数据拷出，结束后清除
+    public List<EntityPassiveSkill> EntityPassiveSkills = new List<EntityPassiveSkill>(); // 湿数据，每个Entity生命周期开始前从干数据进行数据拷贝
 
     internal bool PassiveSkillMarkAsDestroyed = false;
 
-    private List<EntityPassiveSkill> cachedRemoveList = new List<EntityPassiveSkill>(5);
+    private List<EntityPassiveSkill> cachedRemoveList_EntityPassiveSkill = new List<EntityPassiveSkill>(5);
 
     protected void InitPassiveSkills()
     {
+        cachedRemoveList_EntityPassiveSkill.Clear();
         if (EntityPassiveSkills.Count > 0)
         {
-            cachedRemoveList.Clear();
             foreach (EntityPassiveSkill eps in EntityPassiveSkills)
             {
                 if (eps.IsAddedDuringGamePlay)
                 {
-                    cachedRemoveList.Add(eps);
+                    cachedRemoveList_EntityPassiveSkill.Add(eps);
                 }
             }
 
-            foreach (EntityPassiveSkill eps in cachedRemoveList)
+            foreach (EntityPassiveSkill eps in cachedRemoveList_EntityPassiveSkill)
             {
                 EntityPassiveSkills.Remove(eps);
             }
@@ -144,7 +144,6 @@ public abstract class Entity : PoolObject
                 Debug.Log("EntityPassiveSkills的数量和RawEntityPassiveSkills不一致，请检查临时EPS添加情况");
             }
         }
-
         else
         {
             foreach (EntityPassiveSkill rawAPS in RawEntityPassiveSkills)
@@ -181,8 +180,7 @@ public abstract class Entity : PoolObject
 
     #region 主动技能
 
-    [
-        SerializeReference]
+    [SerializeReference]
     [FoldoutGroup("主动技能")]
     [LabelText("主动技能列表")]
     [ListDrawerSettings(ListElementLabelName = "SkillAlias")]
@@ -192,6 +190,8 @@ public abstract class Entity : PoolObject
     public List<EntityActiveSkill> EntityActiveSkills = new List<EntityActiveSkill>(); // 湿数据，每个Entity生命周期开始前从干数据拷出，结束后清除
 
     public Dictionary<EntitySkillIndex, EntityActiveSkill> EntityActiveSkillDict = new Dictionary<EntitySkillIndex, EntityActiveSkill>(); // 便于寻找
+
+    private List<EntityActiveSkill> cachedRemoveList_EntityActiveSkill = new List<EntityActiveSkill>(5);
 
     internal bool ActiveSkillMarkAsDestroyed = false;
 
@@ -210,23 +210,57 @@ public abstract class Entity : PoolObject
 
     protected void InitActiveSkills()
     {
-        EntityActiveSkills.Clear();
-        EntityActiveSkillDict.Clear();
-        foreach (EntityActiveSkill rawEAS in RawEntityActiveSkills)
+        cachedRemoveList_EntityActiveSkill.Clear();
+        if (EntityActiveSkills.Count > 0)
         {
-            EntityActiveSkills.Add(rawEAS.Clone());
+            foreach (EntityActiveSkill eas in EntityActiveSkills)
+            {
+                if (eas.IsAddedDuringGamePlay)
+                {
+                    cachedRemoveList_EntityActiveSkill.Add(eas);
+                }
+            }
+
+            foreach (EntityActiveSkill eas in cachedRemoveList_EntityActiveSkill)
+            {
+                EntityActiveSkills.Remove(eas);
+                EntityActiveSkillDict.Remove(eas.EntitySkillIndex);
+            }
+
+            if (EntityActiveSkills.Count == RawEntityActiveSkills.Count)
+            {
+                for (int i = 0; i < RawEntityActiveSkills.Count; i++)
+                {
+                    EntityActiveSkill eas = EntityActiveSkills[i];
+                    eas.CopyDataFrom(RawEntityActiveSkills[i]);
+                    eas.Entity = this;
+                    eas.IsAddedDuringGamePlay = false; // 从Raw里面拷出来的都即为非动态添加的技能
+                    eas.ParentActiveSkill = null;
+                    eas.OnInit();
+                }
+            }
+            else
+            {
+                Debug.Log("EntityActiveSkills的数量和RawEntityActiveSkills不一致，请检查临时EAS添加情况");
+            }
+        }
+        else
+        {
+            foreach (EntityActiveSkill rawEAS in RawEntityActiveSkills)
+            {
+                EntityActiveSkill eas = rawEAS.Clone();
+                AddNewActiveSkill(eas, false);
+            }
         }
 
         ActiveSkillMarkAsDestroyed = false;
-        foreach (EntityActiveSkill eas in EntityActiveSkills)
-        {
-            AddNewActiveSkill(eas);
-        }
     }
 
-    protected void AddNewActiveSkill(EntityActiveSkill eas)
+    protected void AddNewActiveSkill(EntityActiveSkill eas, bool isAddedDuringGamePlay)
     {
+        EntityActiveSkills.Add(eas);
         eas.Entity = this;
+        eas.IsAddedDuringGamePlay = isAddedDuringGamePlay;
         eas.ParentActiveSkill = null;
         eas.OnInit();
         if (!EntityActiveSkillDict.ContainsKey(eas.EntitySkillIndex))
@@ -246,9 +280,6 @@ public abstract class Entity : PoolObject
             eas.OnUnInit();
         }
 
-        // 防止EntityActiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在使用时清空即可
-        //EntityActiveSkills.Clear();
-        //EntityActiveSkillDict.Clear();
         ActiveSkillMarkAsDestroyed = false;
     }
 

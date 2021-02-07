@@ -62,6 +62,17 @@ public class EntityPassiveSkillAction_RadiusAddEntitiesBuff : EntityPassiveSkill
         AddBuffRadius = action.AddBuffRadius;
         ExactGPDistance = action.ExactGPDistance;
         EffectiveOnRelativeCamp = action.EffectiveOnRelativeCamp;
-        RawEntityBuffs = action.RawEntityBuffs.Clone();
+
+        if (RawEntityBuffs.Count != action.RawEntityBuffs.Count)
+        {
+            Debug.LogError("EntityPassiveSkillAction_RadiusAddEntitiesBuff CopyDataFrom RawEntityBuffs数量不一致");
+        }
+        else
+        {
+            for (int i = 0; i < RawEntityBuffs.Count; i++)
+            {
+                RawEntityBuffs[i].CopyDataFrom(action.RawEntityBuffs[i]);
+            }
+        }
     }
 }

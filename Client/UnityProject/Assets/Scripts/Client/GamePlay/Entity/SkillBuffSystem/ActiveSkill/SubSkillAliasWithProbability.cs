@@ -41,4 +41,11 @@ public class SubSkillAliasWithProbability : Probability, IClone<SubSkillAliasWit
     {
         return (SubSkillAliasWithProbability) ProbabilityClone();
     }
+
+    public void CopyDataFrom(SubSkillAliasWithProbability src)
+    {
+        SubSkillAlias = src.SubSkillAlias;
+        probability = src.probability;
+        isSingleton = src.isSingleton;
+    }
 }

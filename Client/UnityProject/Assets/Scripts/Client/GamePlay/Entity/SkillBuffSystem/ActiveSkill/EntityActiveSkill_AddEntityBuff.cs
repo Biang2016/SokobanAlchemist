@@ -54,6 +54,16 @@ public class EntityActiveSkill_AddEntityBuff : EntityActiveSkill_AreaCast
     {
         base.CopyDataFrom(srcData);
         EntityActiveSkill_AddEntityBuff srcAAS = (EntityActiveSkill_AddEntityBuff) srcData;
-        RawEntityBuffs = srcAAS.RawEntityBuffs.Clone();
+        if (RawEntityBuffs.Count != srcAAS.RawEntityBuffs.Count)
+        {
+            Debug.LogError("EntityActiveSkill_AddEntityBuff CopyDataFrom RawEntityBuffs数量不一致");
+        }
+        else
+        {
+            for (int i = 0; i < RawEntityBuffs.Count; i++)
+            {
+                RawEntityBuffs[i].CopyDataFrom(srcAAS.RawEntityBuffs[i]);
+            }
+        }
     }
 }

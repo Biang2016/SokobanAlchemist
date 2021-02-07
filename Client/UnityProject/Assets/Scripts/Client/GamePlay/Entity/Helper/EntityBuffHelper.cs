@@ -55,15 +55,15 @@ public class EntityBuffHelper : EntityMonoHelper
         }
     }
 
-    protected Dictionary<EntityBuffAttribute, List<EntityBuff>> EntityBuffAttributeDict = new Dictionary<EntityBuffAttribute, List<EntityBuff>>();
-    protected Dictionary<int, List<FX>> AbnormalBuffFXDict = new Dictionary<int, List<FX>>();
-    protected Dictionary<uint, List<FX>> BuffFXDict = new Dictionary<uint, List<FX>>();
+    protected Dictionary<EntityBuffAttribute, List<EntityBuff>> EntityBuffAttributeDict = new Dictionary<EntityBuffAttribute, List<EntityBuff>>(30);
+    protected Dictionary<int, List<FX>> AbnormalBuffFXDict = new Dictionary<int, List<FX>>(10);
+    protected Dictionary<uint, List<FX>> BuffFXDict = new Dictionary<uint, List<FX>>(10);
 
     [ShowInInspector]
-    protected Dictionary<uint, EntityBuff> BuffDict = new Dictionary<uint, EntityBuff>();
+    protected Dictionary<uint, EntityBuff> BuffDict = new Dictionary<uint, EntityBuff>(10);
 
-    protected Dictionary<uint, float> BuffRemainTimeDict = new Dictionary<uint, float>();
-    protected Dictionary<uint, float> BuffPassedTimeDict = new Dictionary<uint, float>();
+    protected Dictionary<uint, float> BuffRemainTimeDict = new Dictionary<uint, float>(10);
+    protected Dictionary<uint, float> BuffPassedTimeDict = new Dictionary<uint, float>(10);
 
     public bool IsStun => HasBuff(EntityBuffAttribute.Stun);
     public bool IsHiding => HasBuff(EntityBuffAttribute.Hiding);

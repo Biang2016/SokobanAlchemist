@@ -19,4 +19,10 @@ public class EntityBuff_DestroySelf : EntityBuff
         base.ChildClone(newBuff);
         EntityBuff_DestroySelf buff = ((EntityBuff_DestroySelf) newBuff);
     }
+
+    public override void CopyDataFrom(EntityBuff srcData)
+    {
+        base.CopyDataFrom(srcData);
+        EntityBuff_DestroySelf srcBuff = ((EntityBuff_DestroySelf)srcData);
+    }
 }

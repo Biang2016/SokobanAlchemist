@@ -170,11 +170,45 @@ public class EntityPassiveSkillAction_TriggerZoneEffect : EntityPassiveSkillActi
         base.CopyDataFrom(srcData);
         EntityPassiveSkillAction_TriggerZoneEffect action = ((EntityPassiveSkillAction_TriggerZoneEffect) srcData);
         EffectiveOnRelativeCamp = action.EffectiveOnRelativeCamp;
-        RawEntityBuffs_Enter = action.RawEntityBuffs_Enter.Clone();
+
+        if (RawEntityBuffs_Enter.Count != action.RawEntityBuffs_Enter.Count)
+        {
+            Debug.LogError("EntityPassiveSkillAction_TriggerZoneEffect CopyDataFrom RawEntityBuffs_Enter数量不一致");
+        }
+        else
+        {
+            for (int i = 0; i < RawEntityBuffs_Enter.Count; i++)
+            {
+                RawEntityBuffs_Enter[i].CopyDataFrom(action.RawEntityBuffs_Enter[i]);
+            }
+        }
+
         RemoveEnterBuffWhenExit = action.RemoveEnterBuffWhenExit;
-        RawEntityBuffs_Stay = action.RawEntityBuffs_Stay.Clone();
+
+        if (RawEntityBuffs_Stay.Count != action.RawEntityBuffs_Stay.Count)
+        {
+            Debug.LogError("EntityPassiveSkillAction_TriggerZoneEffect CopyDataFrom RawEntityBuffs_Stay数量不一致");
+        }
+        else
+        {
+            for (int i = 0; i < RawEntityBuffs_Stay.Count; i++)
+            {
+                RawEntityBuffs_Stay[i].CopyDataFrom(action.RawEntityBuffs_Stay[i]);
+            }
+        }
+
         RemoveStayBuffWhenExit = action.RemoveStayBuffWhenExit;
         EffectInterval = action.EffectInterval;
-        RawEntityBuffs_Exit = action.RawEntityBuffs_Exit.Clone();
+        if (RawEntityBuffs_Exit.Count != action.RawEntityBuffs_Exit.Count)
+        {
+            Debug.LogError("EntityPassiveSkillAction_TriggerZoneEffect CopyDataFrom RawEntityBuffs_Exit数量不一致");
+        }
+        else
+        {
+            for (int i = 0; i < RawEntityBuffs_Exit.Count; i++)
+            {
+                RawEntityBuffs_Exit[i].CopyDataFrom(action.RawEntityBuffs_Exit[i]);
+            }
+        }
     }
 }

@@ -37,4 +37,9 @@ public class BoxPassiveSkill_LevelEventTriggerAppear : EntityPassiveSkill_Condit
             data.BoxPassiveSkill_LevelEventTriggerAppear = (BoxPassiveSkill_LevelEventTriggerAppear) BoxPassiveSkill_LevelEventTriggerAppear.Clone(); // 此处慎重Clone，因为GenerateBoxAction没有深拷贝
         }
     }
+
+    public override void CopyDataFrom(EntityPassiveSkill srcData)
+    {
+        base.CopyDataFrom(srcData);
+    }
 }

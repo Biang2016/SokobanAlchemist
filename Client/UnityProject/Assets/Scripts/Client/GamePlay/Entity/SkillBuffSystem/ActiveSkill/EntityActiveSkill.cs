@@ -12,6 +12,7 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
 {
     internal EntityActiveSkill ParentActiveSkill;
     internal Entity Entity;
+    public bool IsAddedDuringGamePlay = false; // 是否是在游戏过程中添加的，以便在回收之后判断要不要清掉
 
     [LabelText("作用阵营")]
     public RelativeCamp TargetCamp;
@@ -206,6 +207,25 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
             newLogic.Times = Times;
             newLogic.SubSkillAliasWithProbabilityList = SubSkillAliasWithProbabilityList.Clone();
             return newLogic;
+        }
+
+        public void CopyDataFrom(SubActiveSkillTriggerLogic src)
+        {
+            M_TriggerType = src.M_TriggerType;
+            SubSkillTriggerSequence = src.SubSkillTriggerSequence.Clone();
+            Duration = src.Duration;
+            Times = src.Times;
+            if (SubSkillAliasWithProbabilityList.Count != src.SubSkillAliasWithProbabilityList.Count)
+            {
+                Debug.LogError("SubActiveSkillTriggerLogic CopyDataFrom SubSkillAliasWithProbabilityList数量不一致");
+            }
+            else
+            {
+                for (int i = 0; i < SubSkillAliasWithProbabilityList.Count; i++)
+                {
+                    SubSkillAliasWithProbabilityList[i].CopyDataFrom(src.SubSkillAliasWithProbabilityList[i]);
+                }
+            }
         }
     }
 
@@ -600,6 +620,9 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
         Type type = GetType();
         EntityActiveSkill newEAS = (EntityActiveSkill) Activator.CreateInstance(type);
         newEAS.TargetCamp = TargetCamp;
+        newEAS.WingUpCanMove = WingUpCanMove;
+        newEAS.CastCanMove = CastCanMove;
+        newEAS.RecoverCanMove = RecoverCanMove;
         newEAS.EntitySkillIndex = EntitySkillIndex;
         newEAS.SkillAlias = SkillAlias;
         newEAS.RawSubActiveSkillList = RawSubActiveSkillList.Clone();
@@ -616,10 +639,35 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
     public virtual void CopyDataFrom(EntityActiveSkill srcData)
     {
         TargetCamp = srcData.TargetCamp;
+        WingUpCanMove = srcData.WingUpCanMove;
+        CastCanMove = srcData.CastCanMove;
+        RecoverCanMove = srcData.RecoverCanMove;
         EntitySkillIndex = srcData.EntitySkillIndex;
         SkillAlias = srcData.SkillAlias;
-        RawSubActiveSkillList = srcData.RawSubActiveSkillList.Clone();
-        SubActiveSkillTriggerLogicList = srcData.SubActiveSkillTriggerLogicList.Clone();
+        if (RawSubActiveSkillList.Count != srcData.RawSubActiveSkillList.Count)
+        {
+            Debug.LogError("EAS CopyDataFrom RawSubActiveSkillList数量不一致");
+        }
+        else
+        {
+            for (int i = 0; i < RawSubActiveSkillList.Count; i++)
+            {
+                RawSubActiveSkillList[i].CopyDataFrom(srcData.RawSubActiveSkillList[i]);
+            }
+        }
+
+        if (SubActiveSkillTriggerLogicList.Count != srcData.SubActiveSkillTriggerLogicList.Count)
+        {
+            Debug.LogError("EAS CopyDataFrom SubActiveSkillTriggerLogicList数量不一致");
+        }
+        else
+        {
+            for (int i = 0; i < SubActiveSkillTriggerLogicList.Count; i++)
+            {
+                SubActiveSkillTriggerLogicList[i].CopyDataFrom(srcData.SubActiveSkillTriggerLogicList[i]);
+            }
+        }
+
         InterruptSubActiveSkillsWhenInterrupted = srcData.InterruptSubActiveSkillsWhenInterrupted;
     }
 
