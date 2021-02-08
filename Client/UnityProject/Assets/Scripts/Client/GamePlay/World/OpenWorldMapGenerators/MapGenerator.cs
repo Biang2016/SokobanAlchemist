@@ -29,6 +29,7 @@ public abstract class MapGenerator
         {
             if (GenerateBoxLayerData.AllowReplacedBoxTypeNameSet.Contains(ConfigManager.GetBoxTypeName(existedBoxTypeIndex)))
             {
+                moduleData.RawBoxMatrix[x, 0, z] = BoxTypeIndex;
                 moduleData.BoxMatrix[x, 0, z] = BoxTypeIndex;
             }
         }
@@ -36,6 +37,7 @@ public abstract class MapGenerator
         {
             if (!GenerateBoxLayerData.OnlyOverrideAnyBox)
             {
+                moduleData.RawBoxMatrix[x, 0, z] = BoxTypeIndex;
                 moduleData.BoxMatrix[x, 0, z] = BoxTypeIndex;
             }
         }

@@ -23,9 +23,32 @@ public class LoadingMapPanel : BaseUIPanel
     [SerializeField]
     private Slider ProgressBar;
 
+    private float progressRatio;
+    private float progressRatio_SmoothDampVelocity;
+    private string currentText;
+
+    public void Clear()
+    {
+        ProgressBar.value = 0;
+        currentText = "";
+    }
+
     public void SetProgress(float progress, string text)
     {
+        progressRatio = progress;
         ProgressBar.value = progress;
-        InformationText.text = $" {(progress * 100):##.#}%" + text;
+        currentText = text;
+        Refresh();
+    }
+
+    void FixedUpdate()
+    {
+        Refresh();
+    }
+
+    public void Refresh()
+    {
+        ProgressBar.value = Mathf.SmoothDamp(ProgressBar.value, progressRatio, ref progressRatio_SmoothDampVelocity, 0.5f, 1, Time.deltaTime);
+        InformationText.text = $"{(ProgressBar.value * 100):##.#}%  " + currentText;
     }
 }

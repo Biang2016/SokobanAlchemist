@@ -35,13 +35,13 @@ public class OpenWorldModule : WorldModule
         {
             case GridPosR.Orientation.Right:
             {
-                for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
+                for (int x = 0; x < MODULE_SIZE; x++)
                 {
-                    for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
+                    for (int y = 0; y < MODULE_SIZE; y++)
                     {
-                        for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
+                        for (int z = 0; z < MODULE_SIZE; z++)
                         {
-                            if (generateBox(x, y, z))
+                            if (generateBox(x, y, z, worldModuleData.BoxOrientationMatrix[x, y, z]))
                             {
                                 loadBoxCount++;
                                 if (loadBoxCount >= loadBoxNumPerFrame)
@@ -58,13 +58,13 @@ public class OpenWorldModule : WorldModule
             }
             case GridPosR.Orientation.Left:
             {
-                for (int x = worldModuleData.BoxMatrix.GetLength(0) - 1; x >= 0; x--)
+                for (int x = MODULE_SIZE - 1; x >= 0; x--)
                 {
-                    for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
+                    for (int y = 0; y < MODULE_SIZE; y++)
                     {
-                        for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
+                        for (int z = 0; z < MODULE_SIZE; z++)
                         {
-                            if (generateBox(x, y, z))
+                            if (generateBox(x, y, z, worldModuleData.BoxOrientationMatrix[x, y, z]))
                             {
                                 loadBoxCount++;
                                 if (loadBoxCount >= loadBoxNumPerFrame)
@@ -81,13 +81,13 @@ public class OpenWorldModule : WorldModule
             }
             case GridPosR.Orientation.Up:
             {
-                for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
+                for (int z = 0; z < MODULE_SIZE; z++)
                 {
-                    for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
+                    for (int y = 0; y < MODULE_SIZE; y++)
                     {
-                        for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
+                        for (int x = 0; x < MODULE_SIZE; x++)
                         {
-                            if (generateBox(x, y, z))
+                            if (generateBox(x, y, z, worldModuleData.BoxOrientationMatrix[x, y, z]))
                             {
                                 loadBoxCount++;
                                 if (loadBoxCount >= loadBoxNumPerFrame)
@@ -104,13 +104,13 @@ public class OpenWorldModule : WorldModule
             }
             case GridPosR.Orientation.Down:
             {
-                for (int z = worldModuleData.BoxMatrix.GetLength(2) - 1; z >= 0; z--)
+                for (int z = MODULE_SIZE - 1; z >= 0; z--)
                 {
-                    for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
+                    for (int y = 0; y < MODULE_SIZE; y++)
                     {
-                        for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
+                        for (int x = 0; x < MODULE_SIZE; x++)
                         {
-                            if (generateBox(x, y, z))
+                            if (generateBox(x, y, z, worldModuleData.BoxOrientationMatrix[x, y, z]))
                             {
                                 loadBoxCount++;
                                 if (loadBoxCount >= loadBoxNumPerFrame)
@@ -127,13 +127,12 @@ public class OpenWorldModule : WorldModule
             }
         }
 
-        bool generateBox(int x, int y, int z)
+        bool generateBox(int x, int y, int z, GridPosR.Orientation orientation)
         {
             ushort boxTypeIndex = worldModuleData.BoxMatrix[x, y, z];
-            GridPosR.Orientation boxOrientation = GridPosR.Orientation.Up;
             if (boxTypeIndex != 0)
             {
-                GenerateBox(boxTypeIndex, LocalGPToWorldGP(new GridPos3D(x, y, z)), boxOrientation, false, true, null);
+                GenerateBox(boxTypeIndex, LocalGPToWorldGP(new GridPos3D(x, y, z)), orientation, false, true, null);
                 return true;
             }
 

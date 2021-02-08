@@ -18,7 +18,7 @@ public class RandomMapGenerator : MapGenerator
             bool genSuc = SRandom.Range(0, 1000) < GenerateBoxLayerData.BoxCountPerThousandGrid;
             if (genSuc)
             {
-                ushort existedBoxTypeIndex = moduleData.BoxMatrix[x, 0, z];
+                ushort existedBoxTypeIndex = moduleData.RawBoxMatrix[x, 0, z];
                 TryOverrideBoxInfoOnMap(moduleData, existedBoxTypeIndex, x, z);
             }
         }

@@ -30,7 +30,46 @@ public class WorldModule : PoolObject
     public List<BoxPassiveSkill_LevelEventTriggerAppear> EventTriggerAppearBoxPassiveSkillList = new List<BoxPassiveSkill_LevelEventTriggerAppear>();
 
     [HideInInspector]
-    public Box[,,] BoxMatrix = new Box[MODULE_SIZE, MODULE_SIZE, MODULE_SIZE];
+    private Box[,,] BoxMatrix = new Box[MODULE_SIZE, MODULE_SIZE, MODULE_SIZE];
+
+    public Box this[int x, int y, int z] => BoxMatrix[x, y, z];
+
+    public Box this[int x, int y, int z, bool isCore, GridPosR.Orientation orientation]
+    {
+        set
+        {
+            BoxMatrix[x, y, z] = value;
+
+            if (WorldModuleData.Modification != null && WorldModuleData.Modification.Enable)
+            {
+                GridPos3D localGP = new GridPos3D(x, y, z);
+                if (!isCore) return; // 异形箱子会对Matrix每一格设置一个引用，因此需要排除掉非核心格
+                ushort boxTypeIndex = 0;
+                GridPosR.Orientation boxOrientation = orientation;
+                if (value != null)
+                {
+                    boxTypeIndex = value.BoxTypeIndex;
+                }
+
+                WorldModuleDataModification.BoxModification mod = new WorldModuleDataModification.BoxModification(boxTypeIndex, boxOrientation);
+                if (WorldModuleData.RawBoxMatrix[x, y, z] == boxTypeIndex && WorldModuleData.RawBoxOrientationMatrix[x, y, z] == boxOrientation) // 和初始数据一致，则将改动抹除
+                {
+                    WorldModuleData.Modification.ModificationDict.Remove(localGP);
+                }
+                else
+                {
+                    if (WorldModuleData.Modification.ModificationDict.ContainsKey(localGP))
+                    {
+                        WorldModuleData.Modification.ModificationDict[localGP] = mod;
+                    }
+                    else
+                    {
+                        WorldModuleData.Modification.ModificationDict.Add(localGP, mod);
+                    }
+                }
+            }
+        }
+    }
 
     #region Roots
 
@@ -242,11 +281,11 @@ public class WorldModule : PoolObject
         {
             case GridPosR.Orientation.Right:
             {
-                for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
+                for (int x = 0; x < MODULE_SIZE; x++)
                 {
-                    for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
+                    for (int y = 0; y < MODULE_SIZE; y++)
                     {
-                        for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
+                        for (int z = 0; z < MODULE_SIZE; z++)
                         {
                             if (generateBox(x, y, z))
                             {
@@ -265,11 +304,11 @@ public class WorldModule : PoolObject
             }
             case GridPosR.Orientation.Left:
             {
-                for (int x = worldModuleData.BoxMatrix.GetLength(0) - 1; x >= 0; x--)
+                for (int x = MODULE_SIZE - 1; x >= 0; x--)
                 {
-                    for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
+                    for (int y = 0; y < MODULE_SIZE; y++)
                     {
-                        for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
+                        for (int z = 0; z < MODULE_SIZE; z++)
                         {
                             if (generateBox(x, y, z))
                             {
@@ -288,11 +327,11 @@ public class WorldModule : PoolObject
             }
             case GridPosR.Orientation.Up:
             {
-                for (int z = 0; z < worldModuleData.BoxMatrix.GetLength(2); z++)
+                for (int z = 0; z < MODULE_SIZE; z++)
                 {
-                    for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
+                    for (int x = 0; x < MODULE_SIZE; x++)
                     {
-                        for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
+                        for (int y = 0; y < MODULE_SIZE; y++)
                         {
                             if (generateBox(x, y, z))
                             {
@@ -311,11 +350,11 @@ public class WorldModule : PoolObject
             }
             case GridPosR.Orientation.Down:
             {
-                for (int z = worldModuleData.BoxMatrix.GetLength(2) - 1; z >= 0; z--)
+                for (int z = MODULE_SIZE - 1; z >= 0; z--)
                 {
-                    for (int x = 0; x < worldModuleData.BoxMatrix.GetLength(0); x++)
+                    for (int x = 0; x < MODULE_SIZE; x++)
                     {
-                        for (int y = 0; y < worldModuleData.BoxMatrix.GetLength(1); y++)
+                        for (int y = 0; y < MODULE_SIZE; y++)
                         {
                             if (generateBox(x, y, z))
                             {
@@ -436,7 +475,14 @@ public class WorldModule : PoolObject
                 GridPos3D gridPos = offset + localGP;
                 if (gridPos.InsideModule())
                 {
-                    BoxMatrix[gridPos.x, gridPos.y, gridPos.z] = box;
+                    if (isStartedBoxes)
+                    {
+                        BoxMatrix[gridPos.x, gridPos.y, gridPos.z] = box;
+                    }
+                    else
+                    {
+                        this[gridPos.x, gridPos.y, gridPos.z, offset == GridPos3D.Zero, orientation] = box;
+                    }
                 }
                 else // 如果合成的是异形箱子则需要考虑该箱子的一部分是否放到了其他模组里
                 {
@@ -444,7 +490,14 @@ public class WorldModule : PoolObject
                     Box boxInOtherModule = World.GetBoxByGridPosition(gridWorldGP, out WorldModule otherModule, out GridPos3D otherModuleLocalGP);
                     if (otherModule != null && boxInOtherModule == null)
                     {
-                        otherModule.BoxMatrix[otherModuleLocalGP.x, otherModuleLocalGP.y, otherModuleLocalGP.z] = box;
+                        if (isStartedBoxes)
+                        {
+                            otherModule.BoxMatrix[otherModuleLocalGP.x, otherModuleLocalGP.y, otherModuleLocalGP.z] = box;
+                        }
+                        else
+                        {
+                            otherModule[otherModuleLocalGP.x, otherModuleLocalGP.y, otherModuleLocalGP.z, offset == GridPos3D.Zero, orientation] = box;
+                        }
                     }
                 }
             }

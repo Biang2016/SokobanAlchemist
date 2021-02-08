@@ -91,8 +91,8 @@ public class WorldModuleDesignHelper : MonoBehaviour
 
                 if (spaceAvailable)
                 {
-                    worldModuleData.BoxMatrix[gp.x, gp.y, gp.z] = boxTypeIndex;
-                    worldModuleData.BoxOrientationMatrix[gp.x, gp.y, gp.z] = box.BoxOrientation;
+                    worldModuleData.RawBoxMatrix[gp.x, gp.y, gp.z] = boxTypeIndex;
+                    worldModuleData.RawBoxOrientationMatrix[gp.x, gp.y, gp.z] = box.BoxOrientation;
                     foreach (GridPos3D gridPos3D in boxOccupation_rotated)
                     {
                         GridPos3D gridPos = gridPos3D + gp;

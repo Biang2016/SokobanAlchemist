@@ -108,7 +108,7 @@
             bool genSuc = map_1[x + WorldModule.MODULE_SIZE * module_x, z + WorldModule.MODULE_SIZE * module_z];
             if (genSuc)
             {
-                ushort existedBoxTypeIndex = moduleData.BoxMatrix[x, 0, z];
+                ushort existedBoxTypeIndex = moduleData.RawBoxMatrix[x, 0, z];
                 TryOverrideBoxInfoOnMap(moduleData, existedBoxTypeIndex, x, z);
             }
         }
