@@ -203,6 +203,7 @@ public class FieldCamera : MonoBehaviour
     private void AddTargetActor(Actor actor)
     {
         targetList.Add(actor.transform);
+        CameraLerp(false);
     }
 
     public float GetScaleForBattleUI()

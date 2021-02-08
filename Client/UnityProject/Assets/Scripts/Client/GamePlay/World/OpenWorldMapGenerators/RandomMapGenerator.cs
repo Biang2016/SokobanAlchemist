@@ -1,9 +1,10 @@
 ﻿using System;
 using BiangLibrary.GameDataFormat;
+using BiangLibrary.GameDataFormat.Grid;
 
 public class RandomMapGenerator : MapGenerator
 {
-    public RandomMapGenerator(OpenWorld.GenerateBoxLayerData boxLayerData, int width, int height, uint seed) : base(boxLayerData, width, height, seed)
+    public RandomMapGenerator(OpenWorld.GenerateBoxLayerData boxLayerData, int width, int height, uint seed, GridPos leaveSpaceForPlayerBP) : base(boxLayerData, width, height, seed, leaveSpaceForPlayerBP)
     {
     }
 
@@ -15,6 +16,7 @@ public class RandomMapGenerator : MapGenerator
         for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
         for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
         {
+            if (x == LeaveSpaceForPlayerBP.x && z == LeaveSpaceForPlayerBP.z) continue;
             bool genSuc = SRandom.Range(0, 1000) < GenerateBoxLayerData.BoxCountPerThousandGrid;
             if (genSuc)
             {

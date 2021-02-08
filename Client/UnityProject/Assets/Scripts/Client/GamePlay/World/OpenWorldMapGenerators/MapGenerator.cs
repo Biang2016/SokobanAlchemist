@@ -1,4 +1,5 @@
 ﻿using BiangLibrary.GameDataFormat;
+using BiangLibrary.GameDataFormat.Grid;
 
 public abstract class MapGenerator
 {
@@ -9,14 +10,16 @@ public abstract class MapGenerator
 
     protected int Width;
     protected int Height;
+    protected GridPos LeaveSpaceForPlayerBP;
 
-    protected MapGenerator(OpenWorld.GenerateBoxLayerData boxLayerData, int width, int height, uint seed)
+    protected MapGenerator(OpenWorld.GenerateBoxLayerData boxLayerData, int width, int height, uint seed, GridPos leaveSpaceForPlayerBP)
     {
         SRandom = new SRandom(seed);
         GenerateBoxLayerData = boxLayerData;
         BoxTypeIndex = ConfigManager.GetBoxTypeIndex(boxLayerData.BoxTypeName);
         Width = width;
         Height = height;
+        LeaveSpaceForPlayerBP = leaveSpaceForPlayerBP;
     }
 
     public virtual void WriteMapInfoIntoWorldModuleData(WorldModuleData moduleData, int module_x, int module_z)

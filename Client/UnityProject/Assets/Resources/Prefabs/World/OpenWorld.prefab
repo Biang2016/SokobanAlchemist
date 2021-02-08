@@ -46,34 +46,41 @@ MonoBehaviour:
   PoolIndex: 0
   IsRecycled: 0
   WorldGUID: 
-  WorldSize_X: 64
-  WorldSize_Z: 64
+  WorldSize_X: 16
+  WorldSize_Z: 16
   PlayerScopeRadiusX: 5
   PlayerScopeRadiusZ: 5
   UseCertainSeed: 0
   GivenSeed: 1396197886
   GenerateBoxLayerDataList:
-  - BoxTypeName: BorderBox
-    AllowReplacedBoxTypeNames: []
-    OnlyOverrideAnyBox: 0
-    m_GenerateAlgorithm: 0
-    FillPercent: 0
-    SmoothTimes: 1
-    SmoothTimes_GenerateWallInOpenSpace: 0
-    BoxCountPerThousandGrid: 20
   - BoxTypeName: BrickBox
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
-    FillPercent: 61
+    FillPercent: 63
+    CaveConnectPercent: 35
+    DeterminePlayerBP: 1
     SmoothTimes: 3
     SmoothTimes_GenerateWallInOpenSpace: 4
+    BoxCountPerThousandGrid: 20
+  - BoxTypeName: BorderBox
+    AllowReplacedBoxTypeNames:
+    - BrickBox
+    OnlyOverrideAnyBox: 1
+    m_GenerateAlgorithm: 0
+    FillPercent: 0
+    CaveConnectPercent: 0
+    DeterminePlayerBP: 0
+    SmoothTimes: 1
+    SmoothTimes_GenerateWallInOpenSpace: 0
     BoxCountPerThousandGrid: 20
   - BoxTypeName: WoodenBox
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
     FillPercent: 51
+    CaveConnectPercent: 0
+    DeterminePlayerBP: 0
     SmoothTimes: 5
     SmoothTimes_GenerateWallInOpenSpace: 0
     BoxCountPerThousandGrid: 20
@@ -83,6 +90,8 @@ MonoBehaviour:
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     FillPercent: 40
+    CaveConnectPercent: 40
+    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 10
@@ -92,6 +101,8 @@ MonoBehaviour:
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     FillPercent: 40
+    CaveConnectPercent: 40
+    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 15
@@ -101,6 +112,8 @@ MonoBehaviour:
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     FillPercent: 40
+    CaveConnectPercent: 40
+    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 12
@@ -110,6 +123,8 @@ MonoBehaviour:
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     FillPercent: 40
+    CaveConnectPercent: 40
+    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 2
@@ -119,6 +134,8 @@ MonoBehaviour:
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     FillPercent: 40
+    CaveConnectPercent: 40
+    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 7
@@ -128,6 +145,8 @@ MonoBehaviour:
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
     FillPercent: 40
+    CaveConnectPercent: 40
+    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 25
@@ -137,6 +156,8 @@ MonoBehaviour:
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
     FillPercent: 40
+    CaveConnectPercent: 40
+    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 8
@@ -145,6 +166,8 @@ MonoBehaviour:
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
     FillPercent: 40
+    CaveConnectPercent: 40
+    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
     BoxCountPerThousandGrid: 12
@@ -192,4 +215,4 @@ MonoBehaviour:
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     ActorCountPerThousandGrid: 1
-  ExtendScope: 52
+  ExtendScope: 8

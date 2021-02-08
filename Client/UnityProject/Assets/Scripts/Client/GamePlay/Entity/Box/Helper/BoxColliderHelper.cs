@@ -38,28 +38,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         }
     }
 
-    private float StaticColliderStaticFriction
-    {
-        set
-        {
-            foreach (Collider sc in StaticColliders)
-            {
-                sc.material.staticFriction = value;
-            }
-        }
-    }
-
-    private float StaticColliderDynamicFriction
-    {
-        set
-        {
-            foreach (Collider sc in StaticColliders)
-            {
-                sc.material.dynamicFriction = value;
-            }
-        }
-    }
-
     private bool dynamicColliderEnable;
 
     private bool DynamicColliderEnable
@@ -71,28 +49,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
             foreach (Collider dc in DynamicColliders)
             {
                 dc.enabled = value;
-            }
-        }
-    }
-
-    private float DynamicColliderStaticFriction
-    {
-        set
-        {
-            foreach (Collider dc in DynamicColliders)
-            {
-                dc.material.staticFriction = value;
-            }
-        }
-    }
-
-    private float DynamicColliderDynamicFriction
-    {
-        set
-        {
-            foreach (Collider dc in DynamicColliders)
-            {
-                dc.material.dynamicFriction = value;
             }
         }
     }
@@ -148,11 +104,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
             BoxOnlyDynamicCollidersEnable = true;
             StaticColliderEnable = true;
         }
-
-        StaticColliderStaticFriction = 0;
-        StaticColliderDynamicFriction = 0;
-        DynamicColliderStaticFriction = 0;
-        DynamicColliderDynamicFriction = 0;
     }
 
     public void OnDropComplete()
@@ -167,7 +118,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = true;
         DynamicColliderEnable = true;
         BoxOnlyDynamicCollidersEnable = true;
-        DynamicColliderDynamicFriction = 0f;
     }
 
     public void OnPushEnd()
@@ -175,7 +125,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = true;
-        DynamicColliderDynamicFriction = 0f;
     }
 
     public void OnKick()
@@ -183,7 +132,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
         BoxOnlyDynamicCollidersEnable = true;
-        DynamicColliderDynamicFriction = 0f;
     }
 
     public void OnKick_ToGrind() // 带有碾压性质的踢出
@@ -192,7 +140,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = true;
-        DynamicColliderDynamicFriction = 0f;
     }
 
     public void OnKick_ToGrind_End()
@@ -212,7 +159,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
         BoxOnlyDynamicCollidersEnable = true;
-        DynamicColliderDynamicFriction = Box.Throw_Friction;
     }
 
     public void OnPut()
@@ -220,7 +166,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
         BoxOnlyDynamicCollidersEnable = true;
-        DynamicColliderDynamicFriction = Box.Throw_Friction;
     }
 
     public void OnDropFromDeadActor()
@@ -242,7 +187,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = false;
-        DynamicColliderDynamicFriction = 0f;
     }
 
     public void OnRigidbodyStop()

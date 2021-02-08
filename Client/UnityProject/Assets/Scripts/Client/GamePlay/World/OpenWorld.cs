@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 
 public class OpenWorld : World
@@ -33,6 +32,7 @@ public class OpenWorld : World
         [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DrawDropdownForListElements = true)]
         private List<string> AllowReplacedBoxTypeNames = new List<string>();
 
+        [HideInInspector]
         public HashSet<string> AllowReplacedBoxTypeNameSet = new HashSet<string>();
 
         [LabelText("只允许覆盖上述箱子上")]
@@ -46,6 +46,14 @@ public class OpenWorld : World
         [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
         [LabelText("初始填充比率")]
         public int FillPercent = 40;
+
+        [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
+        [LabelText("洞穴联通率")]
+        public int CaveConnectPercent = 0;
+
+        [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
+        [LabelText("决定玩家出生点")]
+        public bool DeterminePlayerBP = false;
 
         [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
         [LabelText("迭代次数")]
@@ -120,11 +128,6 @@ public class OpenWorld : World
     [ListDrawerSettings(ListElementLabelName = "ActorTypeName")]
     public List<GenerateActorLayerData> GenerateActorLayerDataList = new List<GenerateActorLayerData>();
 
-    // 生成世界的基本思路是，使用一个随机数种子，以及若干个调节参数（最初阶的如怪物密度，各个箱子密度，等），能够生成一个确定的无限世界
-    // 暂时先不管数据存储问题，先能够实时生成这个世界，然后做成关卡流式加载即可
-    // 关卡流式加载需要平移世界模组矩阵
-
-    // todo 由Perlin Noise来确定每个Module的Seed，即可保证无限地图
     public override IEnumerator Initialize(WorldData worldData)
     {
         uint Seed = 0;
@@ -144,11 +147,13 @@ public class OpenWorld : World
         WorldData = worldData;
 
         WorldData.WorldBornPointGroupData_Runtime.InitTempData();
-        WorldData.DefaultWorldActorBornPointAlias = "PlayerBP_0_0";
+        WorldData.DefaultWorldActorBornPointAlias = "PlayerBP";
 
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.2f, "Loading Open World");
         yield return null;
         int generatorCount = 0;
+        GridPos3D playerBPWorld = new GridPos3D(-1, -1, -1);
+
         foreach (GenerateBoxLayerData boxLayerData in GenerateBoxLayerDataList) // 初始化所有层的关卡生成器
         {
             boxLayerData.Init();
@@ -157,7 +162,16 @@ public class OpenWorld : World
             {
                 case GenerateAlgorithm.CellularAutomata:
                 {
-                    generator = new CellularAutomataMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, boxLayerData.FillPercent, boxLayerData.SmoothTimes, boxLayerData.SmoothTimes_GenerateWallInOpenSpace, SRandom.Next((uint) 9999));
+                    generator = new CellularAutomataMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), new GridPos(playerBPWorld.x, playerBPWorld.z));
+                    if (boxLayerData.DeterminePlayerBP)
+                    {
+                        GridPos playerBP = ((CellularAutomataMapGenerator) generator).ValidPlayerPosInConnectedCaves;
+                        playerBPWorld = new GridPos3D(playerBP.x, WorldModule.MODULE_SIZE, playerBP.z);
+                        GridPos3D playerBPLocal = new GridPos3D(playerBP.x % WorldModule.MODULE_SIZE, 0, playerBP.z % WorldModule.MODULE_SIZE);
+                        BornPointData bp = new BornPointData {ActorType = "Player1", BornPointAlias = $"PlayerBP", LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorld};
+                        WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Add(bp.BornPointAlias, bp);
+                    }
+
                     break;
                 }
                 case GenerateAlgorithm.PerlinNoise:
@@ -166,7 +180,7 @@ public class OpenWorld : World
                 }
                 case GenerateAlgorithm.Random:
                 {
-                    generator = new RandomMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999));
+                    generator = new RandomMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), new GridPos(playerBPWorld.x, playerBPWorld.z));
                     break;
                 }
             }
@@ -251,16 +265,7 @@ public class OpenWorld : World
 
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.71f, "Loading Boxes");
         yield return null;
-        yield return RefreshScopeModules(new GridPos3D(10, WorldModule.MODULE_SIZE, 10), PlayerScopeRadiusX, PlayerScopeRadiusZ); // 按关卡生成器和角色位置初始化需要的模组
-
-        for (int module_x = 0; module_x < WorldSize_X; module_x++)
-        for (int module_z = 0; module_z < WorldSize_Z; module_z++)
-        {
-            GridPos3D playerBPLocal = new GridPos3D(10, 0, 10);
-            GridPos3D playerBPWorld = new GridPos3D(10 + module_x * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, 10 + module_z * WorldModule.MODULE_SIZE);
-            BornPointData bp = new BornPointData {ActorType = "Player1", BornPointAlias = $"PlayerBP_{module_x}_{module_z}", LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorld};
-            WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Add(bp.BornPointAlias, bp);
-        }
+        yield return RefreshScopeModules(playerBPWorld, PlayerScopeRadiusX, PlayerScopeRadiusZ, true); // 按关卡生成器和角色位置初始化需要的模组
 
         BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData_Runtime, WorldData.DefaultWorldActorBornPointAlias);
     }
@@ -299,7 +304,7 @@ public class OpenWorld : World
                     CheckRefreshModuleTick += Time.fixedDeltaTime;
                     if (CheckRefreshModuleTick > CheckRefreshModuleInterval)
                     {
-                        RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
+                        RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP, PlayerScopeRadiusX, PlayerScopeRadiusZ, false));
                         CheckRefreshModuleTick = 0;
                     }
                 }
@@ -317,7 +322,7 @@ public class OpenWorld : World
     Plane[] cachedPlanes = new Plane[6];
     public float ExtendScope = 4f;
 
-    public IEnumerator RefreshScopeModules(GridPos3D playerWorldGP, int scopeX, int scopeZ)
+    public IEnumerator RefreshScopeModules(GridPos3D playerWorldGP, int scopeX, int scopeZ, bool ignoreCamera)
     {
         GridPos3D playerOnModuleGP = GetModuleGPByWorldGP(playerWorldGP);
 
@@ -325,6 +330,7 @@ public class OpenWorld : World
 
         bool CheckModuleCanBeSeenByCamera(GridPos3D moduleGP, bool checkBottom, bool checkTop)
         {
+            if (ignoreCamera) return true;
             GeometryUtility.CalculateFrustumPlanes(CameraManager.Instance.MainCamera, cachedPlanes);
             if (checkBottom && checkTop)
             {
@@ -425,23 +431,15 @@ public class OpenWorld : World
             }
 
             if (allFinished) break;
-            else
-            {
-                ClientGameManager.Instance.LoadingMapPanel.Refresh();
-                yield return null;
-            }
+            else yield return null;
         }
 
         generateModuleFinished.Clear();
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.8f, "Loading Boxes Completed");
-        yield return null;
 
         #endregion
 
         #region Recycle Modules
 
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.81f, "Recycling Useless Boxes");
-        yield return null;
         recycleModuleFinished.Clear();
         List<GridPos3D> hideModuleGPs = new List<GridPos3D>();
         foreach (GridPos3D currentShowModuleGP in m_LevelCacheData.CurrentShowModuleGPs)
@@ -486,7 +484,6 @@ public class OpenWorld : World
             m_LevelCacheData.CurrentShowModuleGPs.Remove(hideModuleGP);
         }
 
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.9f, "Recycling Useless Boxes Completed");
         yield return null;
 
         #endregion

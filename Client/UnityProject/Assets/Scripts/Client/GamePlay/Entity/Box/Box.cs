@@ -205,11 +205,6 @@ public partial class Box : Entity
     internal const float Throw_Drag = 10f;
 
     /// <summary>
-    /// 扔箱子落地摩擦力
-    /// </summary>
-    internal const float Throw_Friction = 1;
-
-    /// <summary>
     /// 踢箱子摩阻力
     /// </summary>
     internal const float Dynamic_Drag = 0.5f;
@@ -948,7 +943,6 @@ public partial class Box : Entity
     {
         base.FixedUpdate();
         if (IsRecycled) return;
-        if (BoxFeature.HasFlag(BoxFeature.SlowTick)) return;
         if (BoxFeature.HasFlag(BoxFeature.SlowTick)) // 减慢Tick
         {
             if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_5X)
