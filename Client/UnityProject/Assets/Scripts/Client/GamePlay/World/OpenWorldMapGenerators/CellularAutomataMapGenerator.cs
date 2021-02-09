@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class CellularAutomataMapGenerator : MapGenerator
 {
@@ -9,6 +10,13 @@ public class CellularAutomataMapGenerator : MapGenerator
     public int[,] CaveIndexMap;
 
     public GridPos ValidPlayerPosInConnectedCaves = GridPos.Zero;
+
+    public static bool CAVE_GEN_DEBUG_LOG
+#if UNITY_EDITOR
+        = false;
+#else
+        = false;
+#endif
 
     public bool this[int x, int y] => map_1[x, y];
 
@@ -145,15 +153,15 @@ public class CellularAutomataMapGenerator : MapGenerator
         {
             floodQueue.Clear();
             floodQueue.Enqueue(new GridPos(x, y));
-            Flood(caveIndex);
+            Flood(caveIndex, out int area);
             caveIndex++;
             CaveConnectPoints.Add(new List<GridPos> {cavePointMax_X, cavePointMin_X, cavePointMax_Y, cavePointMin_Y});
+            if (determinePlayerBP) ValidPlayerPosInConnectedCaves = cavePointMin_X; // 处在洞穴中的玩家位置,随便取一个作为初始，避免只有单洞穴情况后面没有赋值
 
             cavePointMax_X = new GridPos(-1, 0);
             cavePointMin_X = new GridPos(int.MaxValue, 0);
             cavePointMax_Y = new GridPos(0, -1);
             cavePointMin_Y = new GridPos(0, int.MaxValue);
-            if (determinePlayerBP) ValidPlayerPosInConnectedCaves = cavePointMin_X; // 处在洞穴中的玩家位置,随便取一个作为初始，避免只有单洞穴情况后面没有赋值
         }
 
         bool PickStartPoint(out int x, out int y)
@@ -174,8 +182,9 @@ public class CellularAutomataMapGenerator : MapGenerator
             return false;
         }
 
-        void Flood(int _caveIndex)
+        void Flood(int _caveIndex, out int caveArea)
         {
+            caveArea = 0;
             while (floodQueue.Count > 0)
             {
                 GridPos center = floodQueue.Dequeue();
@@ -185,6 +194,7 @@ public class CellularAutomataMapGenerator : MapGenerator
                 if (map_1[x, y]) continue;
                 if (CaveIndexMap[x, y] == _caveIndex) continue;
                 CaveIndexMap[x, y] = _caveIndex;
+                caveArea++;
                 if (cavePointMax_X.x < x) cavePointMax_X = new GridPos(x, y);
                 if (cavePointMin_X.x > x) cavePointMin_X = new GridPos(x, y);
                 if (cavePointMax_Y.z < y) cavePointMax_Y = new GridPos(x, y);
@@ -200,17 +210,18 @@ public class CellularAutomataMapGenerator : MapGenerator
 
         #region 最小生成树Prim算法计算最短联通边
 
-        int caveCount = caveIndex;
-        if (caveCount == 0)
+        int initialCaveCount = caveIndex;
+        Log($"InitialCaveCount: {initialCaveCount}");
+        if (initialCaveCount == 0)
         {
-            Debug.Log("OpenWorld Generator: No Caves!");
+            Log("No Initial Caves!");
             return;
         }
 
-        if (caveCount == 1) return;
+        if (initialCaveCount == 1) return;
 
         List<int> connectedCaveIndexArray = new List<int>();
-        for (int i = 0; i < caveCount; i++)
+        for (int i = 0; i < initialCaveCount; i++)
         {
             if (SRandom.Range(0, 100) < connectCavePercent)
             {
@@ -230,13 +241,15 @@ public class CellularAutomataMapGenerator : MapGenerator
             Graph[b, a] = cost;
         }
 
+        Log($"ConnectCaveCount: {connectCaveCount}");
+
         HashSet<int> caveInGraph_graphIndex = new HashSet<int>();
         int rootCave_graphIndex = SRandom.Range(0, connectCaveCount);
+        int rootCaveIndex = connectedCaveIndexArray[rootCave_graphIndex];
 
         // Choose Player Position
         if (determinePlayerBP)
         {
-            int rootCaveIndex = connectedCaveIndexArray[rootCave_graphIndex];
             for (int x = 0; x < Width; x++)
             {
                 bool found = false;
@@ -246,6 +259,7 @@ public class CellularAutomataMapGenerator : MapGenerator
                     {
                         ValidPlayerPosInConnectedCaves = new GridPos(x, y);
                         found = true;
+                        Log($"PlayerBP found: ({x},{y}) CaveIndex: {rootCaveIndex} CaveIndex; {CaveIndexMap[x, y]}");
                         break;
                     }
                 }
@@ -323,54 +337,149 @@ public class CellularAutomataMapGenerator : MapGenerator
                 }
             }
 
+            Assert.IsFalse(map_1[cp_A.x, cp_A.z]);
+            Assert.IsFalse(map_1[cp_B.x, cp_B.z]);
+
             int xMin = Mathf.Min(cp_A.x, cp_B.x);
             int xMax = Mathf.Max(cp_A.x, cp_B.x);
             int yMin = Mathf.Min(cp_A.z, cp_B.z);
             int yMax = Mathf.Max(cp_A.z, cp_B.z);
 
             int cur_X = xMin;
-            int cur_Y = yMin;
+            bool revDiagonal = (cp_A.x - cp_B.x) * (cp_A.z - cp_B.z) < 0; // 左上到右下
+            int cur_Y = revDiagonal ? yMax : yMin;
 
-            while (cur_X != xMax || cur_Y != yMax)
+            int tunnelCount = 0;
+            if (!revDiagonal)
             {
-                bool goX = false;
-                if (cur_X == xMax)
+                while (cur_X != xMax || cur_Y != yMax)
                 {
-                    goX = false;
-                }
-                else if (cur_Y == yMax)
-                {
-                    goX = true;
-                }
-                else
-                {
-                    goX = SRandom.Range(0, 2) == 0;
-                }
-
-                if (goX)
-                {
-                    int diffX = SRandom.Range(0, xMax - cur_X + 1);
-                    for (int dx = 1; dx <= diffX; dx++)
+                    Assert.IsFalse(cur_X > xMax || cur_Y > yMax);
+                    bool goX = false;
+                    if (cur_X == xMax)
                     {
-                        map_1[cur_X + dx, cur_Y] = false;
+                        goX = false;
+                    }
+                    else if (cur_Y == yMax)
+                    {
+                        goX = true;
+                    }
+                    else
+                    {
+                        goX = SRandom.Range(0, 2) == 0;
                     }
 
-                    cur_X += diffX;
-                }
-                else
-                {
-                    int diffY = SRandom.Range(0, yMax - cur_Y + 1);
-                    for (int dy = 1; dy <= diffY; dy++)
+                    if (goX)
                     {
-                        map_1[cur_X, cur_Y + dy] = false;
-                    }
+                        int diffX = Mathf.Max(1, SRandom.Range(1, (xMax - cur_X + 1) / 2 + 1));
+                        for (int dx = 1; dx <= diffX; dx++)
+                        {
+                            map_1[cur_X + dx, cur_Y] = false;
+                            tunnelCount++;
+                        }
 
-                    cur_Y += diffY;
+                        cur_X += diffX;
+                    }
+                    else
+                    {
+                        int diffY = Mathf.Max(1, SRandom.Range(1, (yMax - cur_Y + 1) / 2 + 1));
+                        for (int dy = 1; dy <= diffY; dy++)
+                        {
+                            map_1[cur_X, cur_Y + dy] = false;
+                            tunnelCount++;
+                        }
+
+                        cur_Y += diffY;
+                    }
                 }
             }
+            else
+            {
+                while (cur_X != xMax || cur_Y != yMin)
+                {
+                    Assert.IsFalse(cur_X > xMax || cur_Y < yMin);
+                    bool goX = false;
+                    if (cur_X == xMax)
+                    {
+                        goX = false;
+                    }
+                    else if (cur_Y == yMin)
+                    {
+                        goX = true;
+                    }
+                    else
+                    {
+                        goX = SRandom.Range(0, 2) == 0;
+                    }
+
+                    if (goX)
+                    {
+                        int diffX = Mathf.Max(1, SRandom.Range(1, (xMax - cur_X + 1) / 2 + 1));
+                        for (int dx = 1; dx <= diffX; dx++)
+                        {
+                            map_1[cur_X + dx, cur_Y] = false;
+                            tunnelCount++;
+                        }
+
+                        cur_X += diffX;
+                    }
+                    else
+                    {
+                        int diffY = Mathf.Max(1, SRandom.Range(1, (cur_Y - yMin + 1) / 2 + 1));
+                        for (int dy = 1; dy <= diffY; dy++)
+                        {
+                            map_1[cur_X, cur_Y - dy] = false;
+                            tunnelCount++;
+                        }
+
+                        cur_Y -= diffY;
+                    }
+                }
+            }
+
+            //Log($"Make Tunnel from {cp_A} to {cp_B} by TunnelGridCount {tunnelCount}");
         }
 
         #endregion
+
+        if (CAVE_GEN_DEBUG_LOG) // 统计、验证、日志
+        {
+            // 重新对洞穴进行标记
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    CaveIndexMap[x, y] = -1;
+                }
+            }
+
+            caveIndex = 0;
+            List<int> caveAreaArray = new List<int>(initialCaveCount - connectCaveCount + 1);
+            while (PickStartPoint(out int x, out int y))
+            {
+                floodQueue.Clear();
+                floodQueue.Enqueue(new GridPos(x, y));
+                Flood(caveIndex, out int caveArea);
+                Assert.IsTrue(caveIndex < initialCaveCount - connectCaveCount + 1);
+                caveAreaArray.Add(caveArea);
+                caveIndex++;
+            }
+
+            int caveTotalArea = 0;
+            foreach (int a in caveAreaArray)
+            {
+                caveTotalArea += a;
+            }
+
+            float caveRatio = (float) caveTotalArea / (Width * Height) * 100;
+            float caveConnectRatio = (float) (initialCaveCount - caveIndex + 1) / initialCaveCount * 100;
+
+            Log($"FinalCaveCount: {caveIndex}. TotalCaveArea: {caveTotalArea}, CaveRatio: {caveRatio:##.#}%, CaveConnectRatio: {caveConnectRatio:##.#}%");
+
+            int playerCaveIndex = CaveIndexMap[ValidPlayerPosInConnectedCaves.x, ValidPlayerPosInConnectedCaves.z];
+            float playerCaveAreaRatio = (float) caveAreaArray[playerCaveIndex] / caveTotalArea * 100;
+            Log($"PlayerCaveArea: {caveAreaArray[playerCaveIndex]} PlayerCaveAreaRatio: {playerCaveAreaRatio:##.#}%");
+        }
     }
 
     public override void WriteMapInfoIntoWorldModuleData(WorldModuleData moduleData, int module_x, int module_z)
@@ -385,5 +494,10 @@ public class CellularAutomataMapGenerator : MapGenerator
                 TryOverrideBoxInfoOnMap(moduleData, existedBoxTypeIndex, x, z);
             }
         }
+    }
+
+    public void Log(string log)
+    {
+        if (CAVE_GEN_DEBUG_LOG) Debug.Log("CaveGenerator: " + log);
     }
 }

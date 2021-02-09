@@ -321,168 +321,6 @@ MonoBehaviour:
         MinValue: 0
         MaxValue: 1000000
     RawEntityDefaultBuffs: []
-  EntityStatPropSet:
-    Gold:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    HealthDurability:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    MaxHealthDurability:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    DropFromAirSurviveProbabilityPercent:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    ActorCollideDamageDefense:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    BoxCollideDamageSelf:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    CollideDamage:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    CollideDamageX:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    CollideDamageZ:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    ExplodeDamageDefense:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    FrozenLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    FrozenFX: 
-    FrozenFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FiringResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    FiringLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    FiringSpreadPercent:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringDamageDefense:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    StartFiringFX: 
-    StartFiringFXScale: 0
-    FiringFX: 
-    FiringFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FiringBreakFX: 
-    FiringBreakFXScale: 0
-    MoveSpeed:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    MaxActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    ActionPoint:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    ActionPointRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    KickConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    DashConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    VaultConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    SkillsPropertyCollections: []
-    RawEntityDefaultBuffs: []
   RawFlamethrowerFuelData:
     id: 0
   RawEntityPassiveSkills: []
@@ -530,6 +368,7 @@ MonoBehaviour:
     00000001:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
+        IsAddedDuringGamePlay: 0
         TargetCamp: 6
         EntitySkillIndex: 0
         SkillAlias: "\u666E\u901A\u653B\u51FB"
@@ -800,6 +639,12 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 2201888099521843234, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 3486283718170090183, guid: 9b23c939c159f7e47822bc9983abc924,
+        type: 3}
     - target: {fileID: 2451151313383746207, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
         type: 3}
       propertyPath: MainSwitchSkin

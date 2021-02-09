@@ -63,6 +63,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e6f6946ed2c704ab30f00932716e7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PoolIndex: 0
   IsRecycled: 0
   GUID: 0
   GUID_Mod_FixedFrameRate: 0
@@ -656,168 +657,6 @@ MonoBehaviour:
         MinValue: 0
         MaxValue: 0
     RawEntityDefaultBuffs: []
-  EntityStatPropSet:
-    Gold:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    HealthDurability:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    MaxHealthDurability:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    DropFromAirSurviveProbabilityPercent:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    ActorCollideDamageDefense:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    BoxCollideDamageSelf:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    CollideDamage:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    CollideDamageX:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    CollideDamageZ:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    ExplodeDamageDefense:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    FrozenLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    FrozenFX: 
-    FrozenFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FiringResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    FiringLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    FiringSpreadPercent:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringDamageDefense:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    StartFiringFX: 
-    StartFiringFXScale: 0
-    FiringFX: 
-    FiringFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FiringBreakFX: 
-    FiringBreakFXScale: 0
-    MoveSpeed:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    MaxActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    ActionPoint:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    ActionPointRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    KickConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    DashConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    VaultConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    SkillsPropertyCollections: []
-    RawEntityDefaultBuffs: []
   RawFlamethrowerFuelData:
     id: 0
   RawEntityPassiveSkills:
@@ -870,12 +709,14 @@ MonoBehaviour:
     00000001:
       type: {class: ActorPassiveSkill_IceSlideSpeedUp, ns: , asm: Client}
       data:
+        IsAddedDuringGamePlay: 0
         SpecialCaseType: 0
         RawEntityBuff:
           id: 7
     00000002:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
+        IsAddedDuringGamePlay: 0
         TargetCamp: 15
         EntitySkillIndex: 0
         SkillAlias: "\u6BD2\u6DB2\u6CBC\u6CFD"
@@ -904,6 +745,7 @@ MonoBehaviour:
     00000003:
       type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
       data:
+        IsAddedDuringGamePlay: 0
         TargetCamp: 0
         EntitySkillIndex: 1
         SkillAlias: "\u9668\u77F3\u672F"
@@ -925,6 +767,7 @@ MonoBehaviour:
     00000004:
       type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
       data:
+        IsAddedDuringGamePlay: 0
         TargetCamp: 0
         EntitySkillIndex: 2
         SkillAlias: "\u66B4\u98CE\u96EA"
@@ -946,6 +789,7 @@ MonoBehaviour:
     00000005:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
+        IsAddedDuringGamePlay: 0
         TargetCamp: 1
         EntitySkillIndex: 5
         SkillAlias: "\u81EA\u6108"
@@ -973,6 +817,7 @@ MonoBehaviour:
     00000006:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
+        IsAddedDuringGamePlay: 0
         TargetCamp: 1
         EntitySkillIndex: 6
         SkillAlias: "\u5C0F\u52A0\u901F"
@@ -1024,6 +869,7 @@ MonoBehaviour:
     00000009:
       type: {class: EntityActiveSkill_SummonDropBox, ns: , asm: Client}
       data:
+        IsAddedDuringGamePlay: 0
         TargetCamp: 15
         EntitySkillIndex: 3
         SkillAlias: "\u9668\u77F3\u672F\u5355\u53D1"
@@ -1060,6 +906,7 @@ MonoBehaviour:
     0000000A:
       type: {class: EntityActiveSkill_SummonDropBox, ns: , asm: Client}
       data:
+        IsAddedDuringGamePlay: 0
         TargetCamp: 15
         EntitySkillIndex: 4
         SkillAlias: "\u66B4\u98CE\u96EA\u5355\u53D1"
@@ -1334,6 +1181,12 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 2201888099521843234, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 5515100593422748408, guid: f87716d8314393243b4170e19ad4003e,
+        type: 3}
     - target: {fileID: 2451151313383746207, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
         type: 3}
       propertyPath: MainSwitchSkin
