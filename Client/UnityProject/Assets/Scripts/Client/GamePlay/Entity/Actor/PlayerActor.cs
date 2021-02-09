@@ -334,7 +334,7 @@ public class PlayerActor : Actor
 
             if (BS_Skill_2.Down)
             {
-                VaultOrDash();
+                VaultOrDash(BS_Up.Pressed || BS_Down.Pressed || BS_Left.Pressed || BS_Right.Pressed);
             }
 
             if (BS_Skill_0.Down)

@@ -623,7 +623,7 @@ public class Actor : Entity
 
     #region Skills
 
-    public void VaultOrDash()
+    public void VaultOrDash(bool directionKeyDown)
     {
         if (ThrowState != ThrowStates.None) return;
         Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
@@ -637,12 +637,12 @@ public class Actor : Entity
             }
             else
             {
-                Dash();
+                if (directionKeyDown) Dash();
             }
         }
         else
         {
-            Dash();
+            if (directionKeyDown) Dash();
         }
     }
 
