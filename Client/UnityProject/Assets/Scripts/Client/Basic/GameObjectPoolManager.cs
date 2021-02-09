@@ -267,6 +267,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 Box warmUpBox = pool.AllocateGameObject<Box>(null);
                 warmUpBoxes[i] = warmUpBox;
                 warmUpBox.BoxColliderHelper.OnBoxPoolRecycled(); // 防止Collider过多重叠
+                warmUpBox.BoxIndicatorHelper.OnHelperRecycled(); // 防止Collider过多重叠
                 boxWarmUpPerFrame++;
                 totalWarmUpTaskCount++;
                 if (boxWarmUpPerFrame > 256)

@@ -1,4 +1,6 @@
-﻿using BiangLibrary.GameDataFormat.Grid;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -11,7 +13,14 @@ public class BoxIndicatorHelper : BoxMonoHelper
     [LabelText("箱子占位信息")]
     public BoxOccupationData BoxOccupationData = new BoxOccupationData();
 
+    private List<Collider> IndicatorColliders = new List<Collider>();
+
     public bool IsSpecialBoxIndicator = false;
+
+    void Awake()
+    {
+        IndicatorColliders = GetComponentsInChildren<Collider>().ToList();
+    }
 
     public override void OnHelperUsed()
     {
@@ -33,7 +42,11 @@ public class BoxIndicatorHelper : BoxMonoHelper
         set
         {
             isOn = value;
-            gameObject.SetActive(value);
+            foreach (Collider ic in IndicatorColliders)
+            {
+                ic.enabled = value;
+                gameObject.SetActive(value);
+            }
         }
     }
 

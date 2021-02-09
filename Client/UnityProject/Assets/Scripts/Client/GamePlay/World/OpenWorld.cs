@@ -265,7 +265,7 @@ public class OpenWorld : World
 
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.71f, "Loading Boxes");
         yield return null;
-        yield return RefreshScopeModules(playerBPWorld, PlayerScopeRadiusX, PlayerScopeRadiusZ, true); // 按关卡生成器和角色位置初始化需要的模组
+        yield return RefreshScopeModules(playerBPWorld, 1, 1, true); // 按关卡生成器和角色位置初始化需要的模组
 
         BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData_Runtime, WorldData.DefaultWorldActorBornPointAlias);
     }
@@ -301,11 +301,11 @@ public class OpenWorld : World
             {
                 if (RefreshScopeModulesCoroutine == null)
                 {
-                    CheckRefreshModuleTick += Time.fixedDeltaTime;
-                    if (CheckRefreshModuleTick > CheckRefreshModuleInterval)
+                    //CheckRefreshModuleTick += Time.fixedDeltaTime;
+                    //if (CheckRefreshModuleTick > CheckRefreshModuleInterval)
                     {
                         RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP, PlayerScopeRadiusX, PlayerScopeRadiusZ, false));
-                        CheckRefreshModuleTick = 0;
+                        //CheckRefreshModuleTick = 0;
                     }
                 }
             }
@@ -317,10 +317,12 @@ public class OpenWorld : World
     }
 
     List<bool> generateModuleFinished = new List<bool>();
-    List<bool> recycleModuleFinished = new List<bool>();
+    //List<bool> recycleModuleFinished = new List<bool>();
 
     Plane[] cachedPlanes = new Plane[6];
-    public float ExtendScope = 4f;
+    public float ExtendScope_Load = 4f; //提前加载
+    public float ExtendScope_Recycle = 20; // 推迟回收
+    public float ExtendScope_Recycle_Ground = 32; // 推迟回收
 
     public IEnumerator RefreshScopeModules(GridPos3D playerWorldGP, int scopeX, int scopeZ, bool ignoreCamera)
     {
@@ -328,25 +330,25 @@ public class OpenWorld : World
 
         #region Generate Modules
 
-        bool CheckModuleCanBeSeenByCamera(GridPos3D moduleGP, bool checkBottom, bool checkTop)
+        bool CheckModuleCanBeSeenByCamera(GridPos3D moduleGP, bool checkBottom, bool checkTop, float extendScope)
         {
             if (ignoreCamera) return true;
             GeometryUtility.CalculateFrustumPlanes(CameraManager.Instance.MainCamera, cachedPlanes);
             if (checkBottom && checkTop)
             {
-                Bounds bounds = new Bounds(moduleGP * WorldModule.MODULE_SIZE + (WorldModule.MODULE_SIZE - 1) / 2f * Vector3.one, Vector3.one * (WorldModule.MODULE_SIZE + ExtendScope));
+                Bounds bounds = new Bounds(moduleGP * WorldModule.MODULE_SIZE + (WorldModule.MODULE_SIZE - 1) / 2f * Vector3.one, Vector3.one * (WorldModule.MODULE_SIZE + extendScope));
                 return GeometryUtility.TestPlanesAABB(cachedPlanes, bounds);
             }
             else
             {
                 if (checkBottom)
                 {
-                    Bounds bounds = new Bounds(moduleGP * WorldModule.MODULE_SIZE + (WorldModule.MODULE_SIZE - 1) / 2f * new Vector3(1, 0, 1), new Vector3(WorldModule.MODULE_SIZE + ExtendScope, 1, WorldModule.MODULE_SIZE + ExtendScope));
+                    Bounds bounds = new Bounds(moduleGP * WorldModule.MODULE_SIZE + (WorldModule.MODULE_SIZE - 1) / 2f * new Vector3(1, 0, 1), new Vector3(WorldModule.MODULE_SIZE + extendScope, 1, WorldModule.MODULE_SIZE + extendScope));
                     return GeometryUtility.TestPlanesAABB(cachedPlanes, bounds);
                 }
                 else if (checkTop)
                 {
-                    Bounds bounds = new Bounds(moduleGP * WorldModule.MODULE_SIZE + (WorldModule.MODULE_SIZE - 1) / 2f * new Vector3(1, 2, 1), new Vector3(WorldModule.MODULE_SIZE + ExtendScope, 1, WorldModule.MODULE_SIZE + ExtendScope));
+                    Bounds bounds = new Bounds(moduleGP * WorldModule.MODULE_SIZE + (WorldModule.MODULE_SIZE - 1) / 2f * new Vector3(1, 2, 1) + Vector3.up, new Vector3(WorldModule.MODULE_SIZE + extendScope, 1, WorldModule.MODULE_SIZE + extendScope));
                     return GeometryUtility.TestPlanesAABB(cachedPlanes, bounds);
                 }
                 else
@@ -362,7 +364,7 @@ public class OpenWorld : World
         {
             if (module_x >= 0 && module_x < WorldSize_X && module_z >= 0 && module_z < WorldSize_Z)
             {
-                if (!CheckModuleCanBeSeenByCamera(new GridPos3D(module_x, 1, module_z), true, false)) continue;
+                if (!CheckModuleCanBeSeenByCamera(new GridPos3D(module_x, 1, module_z), true, false, ExtendScope_Load)) continue;
                 GridPos3D diff = new GridPos3D(module_x, 1, module_z) - playerOnModuleGP;
                 GridPosR.Orientation generateOrientation = GridPosR.Orientation.Up;
                 if (diff.z > 0) generateOrientation = GridPosR.Orientation.Up;
@@ -440,11 +442,12 @@ public class OpenWorld : World
 
         #region Recycle Modules
 
-        recycleModuleFinished.Clear();
+        //recycleModuleFinished.Clear();
         List<GridPos3D> hideModuleGPs = new List<GridPos3D>();
         foreach (GridPos3D currentShowModuleGP in m_LevelCacheData.CurrentShowModuleGPs)
         {
-            if (CheckModuleCanBeSeenByCamera(currentShowModuleGP, currentShowModuleGP.y != 0, currentShowModuleGP.y == 0)) continue;
+            bool isGround = currentShowModuleGP.y == 0;
+            if (CheckModuleCanBeSeenByCamera(currentShowModuleGP, !isGround, isGround, isGround ? ExtendScope_Recycle_Ground : ExtendScope_Recycle)) continue;
             GridPos3D diff = currentShowModuleGP - playerOnModuleGP;
             GridPosR.Orientation generateOrientation = GridPosR.Orientation.Up;
             if (diff.z > 0) generateOrientation = GridPosR.Orientation.Down;
@@ -454,30 +457,31 @@ public class OpenWorld : World
             WorldModule worldModule = WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z];
             if (worldModule != null)
             {
-                recycleModuleFinished.Add(false);
-                StartCoroutine(Co_RecycleModule(worldModule, currentShowModuleGP, generateOrientation, recycleModuleFinished.Count - 1));
+                //recycleModuleFinished.Add(false);
+                yield return Co_RecycleModule(worldModule, currentShowModuleGP, generateOrientation, 0);
+                //StartCoroutine(Co_RecycleModule(worldModule, currentShowModuleGP, generateOrientation, recycleModuleFinished.Count - 1));
             }
 
             hideModuleGPs.Add(currentShowModuleGP);
         }
 
-        while (true)
-        {
-            bool allFinished = true;
-            foreach (bool b in recycleModuleFinished)
-            {
-                if (!b) allFinished = false;
-            }
+        //while (true)
+        //{
+        //    bool allFinished = true;
+        //    foreach (bool b in recycleModuleFinished)
+        //    {
+        //        if (!b) allFinished = false;
+        //    }
 
-            if (allFinished) break;
-            else
-            {
-                ClientGameManager.Instance.LoadingMapPanel.Refresh();
-                yield return null;
-            }
-        }
+        //    if (allFinished) break;
+        //    else
+        //    {
+        //        ClientGameManager.Instance.LoadingMapPanel.Refresh();
+        //        yield return null;
+        //    }
+        //}
 
-        recycleModuleFinished.Clear();
+        //recycleModuleFinished.Clear();
 
         foreach (GridPos3D hideModuleGP in hideModuleGPs)
         {
@@ -495,11 +499,11 @@ public class OpenWorld : World
     {
         worldModule.WorldModuleData.Modification?.SaveData(worldModule.ModuleGP);
         WorldData.WorldBornPointGroupData_Runtime.RemoveModuleData(worldModule);
-        yield return worldModule.Clear(16, generateOrientation);
+        yield return worldModule.Clear(256, generateOrientation);
         worldModule.PoolRecycle();
         WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
         m_LevelCacheData.WorldModuleDataDict.Remove(currentShowModuleGP);
-        recycleModuleFinished[boolIndex] = true;
+        //recycleModuleFinished[boolIndex] = true;
     }
 
     IEnumerator Co_GenerateModule(WorldModuleData moduleData, GridPos3D targetModuleGP, GridPosR.Orientation generateOrientation, int boolIndex)

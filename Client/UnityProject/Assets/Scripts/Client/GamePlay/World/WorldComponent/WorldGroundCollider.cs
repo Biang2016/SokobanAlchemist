@@ -6,6 +6,20 @@ public class WorldGroundCollider : PoolObject
 {
     private BoxCollider BoxCollider;
 
+    public override void OnUsed()
+    {
+        base.OnUsed();
+        BoxCollider.enabled = true;
+        gameObject.SetActive(true);
+    }
+
+    public override void OnRecycled()
+    {
+        base.OnRecycled();
+        BoxCollider.enabled = false;
+        gameObject.SetActive(false);
+    }
+
     void Awake()
     {
         BoxCollider = GetComponent<BoxCollider>();

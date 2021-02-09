@@ -58,7 +58,7 @@ MonoBehaviour:
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
     FillPercent: 63
-    CaveConnectPercent: 35
+    CaveConnectPercent: 100
     DeterminePlayerBP: 1
     SmoothTimes: 3
     SmoothTimes_GenerateWallInOpenSpace: 4
@@ -78,10 +78,10 @@ MonoBehaviour:
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
-    FillPercent: 51
+    FillPercent: 0
     CaveConnectPercent: 0
     DeterminePlayerBP: 0
-    SmoothTimes: 5
+    SmoothTimes: 0
     SmoothTimes_GenerateWallInOpenSpace: 0
     BoxCountPerThousandGrid: 20
   - BoxTypeName: LightningBox
@@ -215,4 +215,6 @@ MonoBehaviour:
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     ActorCountPerThousandGrid: 1
-  ExtendScope: 8
+  ExtendScope_Load: 4
+  ExtendScope_Recycle: 20
+  ExtendScope_Recycle_Ground: 52

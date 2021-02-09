@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using BiangLibrary.Singleton;
 using Sirenix.Serialization;
 using UnityEngine;
@@ -32,7 +33,7 @@ public class GameSaveManager : TSingletonBaseManager<GameSaveManager>
         return filePath;
     }
 
-    public void SaveData<T>(string dataGroup, string dataKey, SaveDataType saveDataType, T data, DataFormat dataFormat = DataFormat.Binary)
+    public async void Async_SaveData<T>(string dataGroup, string dataKey, SaveDataType saveDataType, T data, DataFormat dataFormat = DataFormat.Binary)
     {
         string filePath = GetFilePath(dataGroup, dataKey, saveDataType);
         if (File.Exists(filePath))
@@ -41,8 +42,28 @@ public class GameSaveManager : TSingletonBaseManager<GameSaveManager>
         }
 
         byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
-        File.WriteAllBytes(filePath, bytes);
+        using (FileStream stream = File.Open(filePath, FileMode.Create))
+        {
+            await stream.WriteAsync(bytes, 0, bytes.Length);
+        }
     }
+
+    //public async Task<T> Async_LoadData<T>(string dataGroup, string dataKey, SaveDataType saveDataType, DataFormat dataFormat = DataFormat.Binary)
+    //{
+    //    string filePath = GetFilePath(dataGroup, dataKey, saveDataType);
+    //    if (File.Exists(filePath))
+    //    {
+    //        using (FileStream stream = File.Open(filePath, FileMode.Open))
+    //        {
+    //            byte[] bytes = new byte[stream.Length];
+    //            await stream.ReadAsync(bytes, 0, bytes.Length);
+    //            T data = SerializationUtility.DeserializeValue<T>(bytes, dataFormat);
+    //            return data;
+    //        }
+    //    }
+
+    //    return default;
+    //}
 
     public T LoadData<T>(string dataGroup, string dataKey, SaveDataType saveDataType, DataFormat dataFormat = DataFormat.Binary)
     {
