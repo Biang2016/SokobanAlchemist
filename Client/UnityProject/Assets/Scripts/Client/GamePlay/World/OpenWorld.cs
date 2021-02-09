@@ -288,8 +288,8 @@ public class OpenWorld : World
     }
 
     private LevelCacheData m_LevelCacheData;
-    private float CheckRefreshModuleInterval = 0.1f;
-    private float CheckRefreshModuleTick = 0;
+    //private float CheckRefreshModuleInterval = 0.1f;
+    //private float CheckRefreshModuleTick = 0;
 
     private Coroutine RefreshScopeModulesCoroutine;
 
@@ -459,7 +459,6 @@ public class OpenWorld : World
             if (worldModule != null)
             {
                 recycleModuleFinished.Add(false);
-                //yield return Co_RecycleModule(worldModule, currentShowModuleGP, generateOrientation, 0);
                 StartCoroutine(Co_RecycleModule(worldModule, currentShowModuleGP, generateOrientation, recycleModuleFinished.Count - 1));
             }
 
