@@ -55,7 +55,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     {
         if (Modification == null)
         {
-            Modification = new WorldModuleDataModification();
+            Modification = WorldModuleDataModification.Factory.Alloc();
         }
 
         Modification.Enable = needSaveModification;
@@ -120,7 +120,8 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     public void OnRelease()
     {
-        Modification?.Clear();
+        Modification?.Release();
+        Modification = null;
         WorldModuleBornPointGroupData = null;
         WorldModuleLevelTriggerGroupData = null;
         WorldModuleFeature = WorldModuleFeature.None;
@@ -146,8 +147,10 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     #endregion
 }
 
-public class WorldModuleDataModification
+public class WorldModuleDataModification : IClone<WorldModuleDataModification>, IClassPoolObject<WorldModuleDataModification>
 {
+    public static ClassObjectPool<WorldModuleDataModification> Factory = new ClassObjectPool<WorldModuleDataModification>(20);
+
     public bool Enable = true; // 对不需要记录更改的模组不生效
 
     public struct BoxModification
@@ -168,19 +171,61 @@ public class WorldModuleDataModification
     {
         if (ModificationDict.Count > 0)
         {
-            GameSaveManager.Instance.Async_SaveData(WorldManager.Instance.CurrentWorld.WorldGUID, moduleGP.ToString(), GameSaveManager.SaveDataType.GameProgress, this, DataFormat.JSON);
+            GameSaveManager.Instance.SaveData(WorldManager.Instance.CurrentWorld.WorldGUID, moduleGP.ToString(), GameSaveManager.SaveDataType.GameProgress, this, DataFormat.JSON);
         }
     }
 
     public static WorldModuleDataModification LoadData(GridPos3D moduleGP)
     {
-        WorldModuleDataModification mod = GameSaveManager.Instance.LoadData<WorldModuleDataModification>(WorldManager.Instance.CurrentWorld.WorldGUID, moduleGP.ToString(), GameSaveManager.SaveDataType.GameProgress, DataFormat.JSON);
+        WorldModuleDataModification mod = GameSaveManager.Instance.LoadData(WorldManager.Instance.CurrentWorld.WorldGUID, moduleGP.ToString(), GameSaveManager.SaveDataType.GameProgress, DataFormat.JSON);
         return mod;
     }
 
     public void Clear()
     {
         ModificationDict.Clear();
+    }
+
+    #region IClassPoolObject
+
+    public void OnUsed()
+    {
+    }
+
+    public void OnRelease()
+    {
+        ModificationDict.Clear();
+    }
+
+    public void Release()
+    {
+        Factory.Release(this);
+    }
+
+    private int PoolIndex;
+
+    public void SetPoolIndex(int index)
+    {
+        PoolIndex = index;
+    }
+
+    public int GetPoolIndex()
+    {
+        return PoolIndex;
+    }
+
+    #endregion
+
+    public WorldModuleDataModification Clone()
+    {
+        WorldModuleDataModification newData = Factory.Alloc();
+        newData.Enable = Enable;
+        foreach (KeyValuePair<GridPos3D, BoxModification> kv in ModificationDict)
+        {
+            newData.ModificationDict.Add(kv.Key, kv.Value);
+        }
+
+        return newData;
     }
 }
 

@@ -317,7 +317,7 @@ public class OpenWorld : World
     }
 
     List<bool> generateModuleFinished = new List<bool>();
-    //List<bool> recycleModuleFinished = new List<bool>();
+    List<bool> recycleModuleFinished = new List<bool>();
 
     Plane[] cachedPlanes = new Plane[6];
     public float ExtendScope_Load = 4f; //提前加载
@@ -415,6 +415,7 @@ public class OpenWorld : World
                             moduleData.BoxOrientationMatrix[kv.Key.x, kv.Key.y, kv.Key.z] = kv.Value.BoxOrientation;
                         }
 
+                        moduleData.Modification.Release();
                         moduleData.Modification = modification;
                     }
 
@@ -442,7 +443,7 @@ public class OpenWorld : World
 
         #region Recycle Modules
 
-        //recycleModuleFinished.Clear();
+        recycleModuleFinished.Clear();
         List<GridPos3D> hideModuleGPs = new List<GridPos3D>();
         foreach (GridPos3D currentShowModuleGP in m_LevelCacheData.CurrentShowModuleGPs)
         {
@@ -457,31 +458,31 @@ public class OpenWorld : World
             WorldModule worldModule = WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z];
             if (worldModule != null)
             {
-                //recycleModuleFinished.Add(false);
-                yield return Co_RecycleModule(worldModule, currentShowModuleGP, generateOrientation, 0);
-                //StartCoroutine(Co_RecycleModule(worldModule, currentShowModuleGP, generateOrientation, recycleModuleFinished.Count - 1));
+                recycleModuleFinished.Add(false);
+                //yield return Co_RecycleModule(worldModule, currentShowModuleGP, generateOrientation, 0);
+                StartCoroutine(Co_RecycleModule(worldModule, currentShowModuleGP, generateOrientation, recycleModuleFinished.Count - 1));
             }
 
             hideModuleGPs.Add(currentShowModuleGP);
         }
 
-        //while (true)
-        //{
-        //    bool allFinished = true;
-        //    foreach (bool b in recycleModuleFinished)
-        //    {
-        //        if (!b) allFinished = false;
-        //    }
+        while (true)
+        {
+            bool allFinished = true;
+            foreach (bool b in recycleModuleFinished)
+            {
+                if (!b) allFinished = false;
+            }
 
-        //    if (allFinished) break;
-        //    else
-        //    {
-        //        ClientGameManager.Instance.LoadingMapPanel.Refresh();
-        //        yield return null;
-        //    }
-        //}
+            if (allFinished) break;
+            else
+            {
+                ClientGameManager.Instance.LoadingMapPanel.Refresh();
+                yield return null;
+            }
+        }
 
-        //recycleModuleFinished.Clear();
+        recycleModuleFinished.Clear();
 
         foreach (GridPos3D hideModuleGP in hideModuleGPs)
         {
@@ -503,7 +504,7 @@ public class OpenWorld : World
         worldModule.PoolRecycle();
         WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
         m_LevelCacheData.WorldModuleDataDict.Remove(currentShowModuleGP);
-        //recycleModuleFinished[boolIndex] = true;
+        recycleModuleFinished[boolIndex] = true;
     }
 
     IEnumerator Co_GenerateModule(WorldModuleData moduleData, GridPos3D targetModuleGP, GridPosR.Orientation generateOrientation, int boolIndex)

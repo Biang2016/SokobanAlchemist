@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using BiangLibrary.Singleton;
 using Sirenix.Serialization;
@@ -13,6 +14,17 @@ public class GameSaveManager : TSingletonBaseManager<GameSaveManager>
     public enum SaveDataType
     {
         GameProgress,
+    }
+
+    public override void Awake()
+    {
+        base.Awake();
+    }
+
+    public override void ShutDown()
+    {
+        base.ShutDown();
+        MDict.Clear();
     }
 
     private string GetFilePath(string dataGroup, string dataKey, SaveDataType saveDataType)
@@ -33,19 +45,27 @@ public class GameSaveManager : TSingletonBaseManager<GameSaveManager>
         return filePath;
     }
 
-    public async void Async_SaveData<T>(string dataGroup, string dataKey, SaveDataType saveDataType, T data, DataFormat dataFormat = DataFormat.Binary)
+    public Dictionary<string, WorldModuleDataModification> MDict = new Dictionary<string, WorldModuleDataModification>();
+
+    public void SaveData(string dataGroup, string dataKey, SaveDataType saveDataType, WorldModuleDataModification data, DataFormat dataFormat = DataFormat.Binary)
     {
-        string filePath = GetFilePath(dataGroup, dataKey, saveDataType);
-        if (File.Exists(filePath))
+        if (MDict.ContainsKey(dataGroup + dataKey))
         {
-            File.Delete(filePath);
+            MDict.Remove(dataGroup + dataKey);
         }
 
-        byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
-        using (FileStream stream = File.Open(filePath, FileMode.Create))
-        {
-            await stream.WriteAsync(bytes, 0, bytes.Length);
-        }
+        MDict.Add(dataGroup + dataKey, data.Clone());
+        //string filePath = GetFilePath(dataGroup, dataKey, saveDataType);
+        //if (File.Exists(filePath))
+        //{
+        //    File.Delete(filePath);
+        //}
+
+        //byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
+        //using (FileStream stream = File.Open(filePath, FileMode.Create))
+        //{
+        //    await stream.WriteAsync(bytes, 0, bytes.Length);
+        //}
     }
 
     //public async Task<T> Async_LoadData<T>(string dataGroup, string dataKey, SaveDataType saveDataType, DataFormat dataFormat = DataFormat.Binary)
@@ -65,16 +85,25 @@ public class GameSaveManager : TSingletonBaseManager<GameSaveManager>
     //    return default;
     //}
 
-    public T LoadData<T>(string dataGroup, string dataKey, SaveDataType saveDataType, DataFormat dataFormat = DataFormat.Binary)
+    public WorldModuleDataModification LoadData(string dataGroup, string dataKey, SaveDataType saveDataType, DataFormat dataFormat = DataFormat.Binary)
     {
-        string filePath = GetFilePath(dataGroup, dataKey, saveDataType);
-        if (File.Exists(filePath))
+        if (MDict.TryGetValue(dataGroup + dataKey, out WorldModuleDataModification data))
         {
-            byte[] bytes = File.ReadAllBytes(filePath);
-            T data = SerializationUtility.DeserializeValue<T>(bytes, dataFormat);
-            return data;
+            return data.Clone();
+        }
+        else
+        {
+            return null;
         }
 
-        return default;
+        //string filePath = GetFilePath(dataGroup, dataKey, saveDataType);
+        //if (File.Exists(filePath))
+        //{
+        //    byte[] bytes = File.ReadAllBytes(filePath);
+        //    T data = SerializationUtility.DeserializeValue<T>(bytes, dataFormat);
+        //    return data;
+        //}
+
+        //return default;
     }
 }

@@ -49,6 +49,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     private WorldManager WorldManager => WorldManager.Instance;
     private ProjectileManager ProjectileManager => ProjectileManager.Instance;
     private UIBattleTipManager UIBattleTipManager => UIBattleTipManager.Instance;
+    private GameSaveManager GameSaveManager => GameSaveManager.Instance;
     public Messenger BattleMessenger => BattleManager.BattleMessenger;
 
     private FXManager FXManager => FXManager.Instance;
@@ -127,6 +128,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         ProjectileManager.Awake();
         ProjectileManager.Init(new GameObject("ProjectileRoot").transform);
         UIBattleTipManager.Awake();
+        GameSaveManager.Awake();
         FXManager.Awake();
         FXManager.Init(new GameObject("FXRoot").transform);
     }
@@ -147,6 +149,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         WorldManager.Start();
         ProjectileManager.Start();
         UIBattleTipManager.Start();
+        GameSaveManager.Start();
         FXManager.Start();
 
         StartCoroutine(Co_StartGame());
@@ -192,6 +195,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         WorldManager.Update(Time.deltaTime);
         ProjectileManager.Update(Time.deltaTime);
         UIBattleTipManager.Update(Time.deltaTime);
+        GameSaveManager.Update(Time.deltaTime);
         FXManager.Update(Time.deltaTime);
     }
 
@@ -211,6 +215,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         WorldManager.LateUpdate(Time.deltaTime);
         ProjectileManager.LateUpdate(Time.deltaTime);
         UIBattleTipManager.LateUpdate(Time.deltaTime);
+        GameSaveManager.LateUpdate(Time.deltaTime);
         FXManager.LateUpdate(Time.deltaTime);
     }
 
@@ -258,6 +263,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         WorldManager.FixedUpdate(Time.fixedDeltaTime);
         ProjectileManager.FixedUpdate(Time.fixedDeltaTime);
         UIBattleTipManager.FixedUpdate(Time.fixedDeltaTime);
+        GameSaveManager.FixedUpdate(Time.fixedDeltaTime);
         FXManager.FixedUpdate(Time.fixedDeltaTime);
     }
 
@@ -282,6 +288,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         ActiveSkillAgent.StopAllCoroutines();
 
         FXManager.ShutDown();
+        GameSaveManager.ShutDown();
         UIBattleTipManager.ShutDown();
         ProjectileManager.ShutDown();
         BattleManager.ShutDown();
@@ -290,7 +297,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         DebugConsole.OnDebugConsoleToggleHandler = null;
         DebugConsole.OnDebugConsoleKeyDownHandler = null;
         RoutineManager.ShutDown();
-
         GameObjectPoolManager.ShutDown();
         PrefabManager.ShutDown();
         LayerManager.ShutDown();
