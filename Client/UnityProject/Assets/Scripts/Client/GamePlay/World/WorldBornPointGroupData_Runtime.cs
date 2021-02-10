@@ -1,53 +1,150 @@
 ﻿using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
+using UnityEngine;
 
 public class WorldBornPointGroupData_Runtime
 {
-    public Dictionary<string, BornPointData> PlayerBornPointDataAliasDict = new Dictionary<string, BornPointData>(); // 和模组数据整合后的带花名的玩家出生点词典
-    public Dictionary<string, BornPointData> EnemyBornPointDataAliasDict = new Dictionary<string, BornPointData>(); // 和模组数据整合后的带花名的敌人出生点词典
-    public List<BornPointData> AllEnemyBornPointDataList = new List<BornPointData>(); // 和模组数据整合后的敌人出生点列表
+    private Dictionary<GridPos3D, List<BornPointData>> ActorBP_ModuleDict = new Dictionary<GridPos3D, List<BornPointData>>(512); // All Data
+
+    // Current loaded BPs:
+    public Dictionary<string, BornPointData> PlayerBornPointDataAliasDict = new Dictionary<string, BornPointData>(); // 带花名的玩家出生点词典
+    public Dictionary<string, BornPointData> EnemyBornPointDataAliasDict = new Dictionary<string, BornPointData>(); // 带花名的敌人出生点词典
 
     public void InitTempData()
     {
         PlayerBornPointDataAliasDict.Clear();
         EnemyBornPointDataAliasDict.Clear();
-        AllEnemyBornPointDataList.Clear();
     }
 
-    public void AddModuleData(WorldModule module)
+    public List<BornPointData> TryLoadModuleBPData(GridPos3D moduleGP)
     {
-        foreach (KeyValuePair<string, BornPointData> kv in module.WorldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints)
+        if (ActorBP_ModuleDict.TryGetValue(moduleGP, out List<BornPointData> data))
         {
-            if (!PlayerBornPointDataAliasDict.ContainsKey(kv.Key))
-            {
-                BornPointData newData = (BornPointData)kv.Value.Clone();
-                newData.WorldGP = module.LocalGPToWorldGP(newData.LocalGP);
-                PlayerBornPointDataAliasDict.Add(kv.Key, newData);
-            }
+            return data;
         }
-
-        foreach (BornPointData bp in module.WorldModuleData.WorldModuleBornPointGroupData.EnemyBornPoints)
+        else
         {
-            BornPointData newData = (BornPointData) bp.Clone();
-            newData.WorldGP = module.LocalGPToWorldGP(newData.LocalGP);
-            AllEnemyBornPointDataList.Add(newData);
-            if (!string.IsNullOrEmpty(newData.BornPointAlias))
-            {
-                EnemyBornPointDataAliasDict.Add(newData.BornPointAlias, newData);
-            }
+            return null;
         }
     }
 
-    public void RemoveModuleData(WorldModule module)
+    public void SetDefaultPlayerBP(BornPointData bp)
     {
-        foreach (KeyValuePair<string, BornPointData> kv in module.WorldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints)
+        GridPos3D moduleGP = WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(bp.WorldGP);
+        if (!ActorBP_ModuleDict.ContainsKey(moduleGP))
         {
-            if (PlayerBornPointDataAliasDict.ContainsKey(kv.Key))
+            ActorBP_ModuleDict.Add(moduleGP, new List<BornPointData>());
+        }
+
+        ActorBP_ModuleDict[moduleGP].Add(bp);
+        PlayerBornPointDataAliasDict.Add(bp.BornPointAlias, bp);
+    }
+
+    public void Init_LoadModuleData(GridPos3D moduleGP, WorldModuleData moduleData)
+    {
+        if (!ActorBP_ModuleDict.ContainsKey(moduleGP))
+        {
+            ActorBP_ModuleDict.Add(moduleGP, new List<BornPointData>());
+        }
+
+        foreach (KeyValuePair<string, BornPointData> kv in moduleData.WorldModuleBornPointGroupData.PlayerBornPoints)
+        {
+            BornPointData playerBP = (BornPointData) kv.Value.Clone();
+            playerBP.WorldGP = playerBP.LocalGP + moduleGP * WorldModule.MODULE_SIZE;
+            ActorBP_ModuleDict[moduleGP].Add(playerBP);
+        }
+
+        foreach (BornPointData bp in moduleData.WorldModuleBornPointGroupData.EnemyBornPoints)
+        {
+            BornPointData enemyBP = (BornPointData) bp.Clone();
+            enemyBP.WorldGP = enemyBP.LocalGP + moduleGP * WorldModule.MODULE_SIZE;
+            ActorBP_ModuleDict[moduleGP].Add(enemyBP);
+        }
+    }
+
+    public void UnInit_UnloadModuleData(GridPos3D moduleGP)
+    {
+        List<BornPointData> moduleBPs = TryLoadModuleBPData(moduleGP);
+        if (moduleBPs != null)
+        {
+            foreach (BornPointData bp in moduleBPs)
             {
-                PlayerBornPointDataAliasDict.Remove(kv.Key);
+                if (bp.ActorCategory == ActorCategory.Player)
+                {
+                    PlayerBornPointDataAliasDict.Remove(bp.BornPointAlias);
+                }
+                else
+                {
+                    EnemyBornPointDataAliasDict.Remove(bp.BornPointAlias);
+                }
+            }
+
+            ActorBP_ModuleDict.Remove(moduleGP);
+        }
+    }
+
+    public void Dynamic_LoadModuleData(GridPos3D moduleGP)
+    {
+        List<BornPointData> moduleBPs = TryLoadModuleBPData(moduleGP);
+        if (moduleBPs != null)
+        {
+            foreach (BornPointData bp in moduleBPs)
+            {
+                if (bp.ActorCategory == ActorCategory.Creature)
+                {
+                    AddEnemyBP(bp);
+                }
+            }
+
+            BattleManager.Instance.CreateActorByBornPointDataList(moduleBPs);
+        }
+    }
+
+    public void Dynamic_UnloadModuleData(GridPos3D moduleGP)
+    {
+        List<BornPointData> moduleBPs = TryLoadModuleBPData(moduleGP);
+        if (moduleBPs != null)
+        {
+            foreach (BornPointData bp in moduleBPs)
+            {
+                if (bp.ActorCategory == ActorCategory.Player)
+                {
+                    PlayerBornPointDataAliasDict.Remove(bp.BornPointAlias);
+                }
+                else
+                {
+                    EnemyBornPointDataAliasDict.Remove(bp.BornPointAlias);
+                }
             }
         }
 
-        // todo remove enemydata
+        BattleManager.Instance.DestroyActorByModuleGP(moduleGP);
+    }
+
+    private void AddPlayerBP(BornPointData bp)
+    {
+        if (!PlayerBornPointDataAliasDict.ContainsKey(bp.BornPointAlias))
+        {
+            PlayerBornPointDataAliasDict.Add(bp.BornPointAlias, bp);
+        }
+        else
+        {
+            Debug.Log($"主角出生点花名重复: {bp.BornPointAlias}");
+        }
+    }
+
+    private void AddEnemyBP(BornPointData bp)
+    {
+        if (!string.IsNullOrEmpty(bp.BornPointAlias))
+        {
+            if (!EnemyBornPointDataAliasDict.ContainsKey(bp.BornPointAlias))
+            {
+                EnemyBornPointDataAliasDict.Add(bp.BornPointAlias, bp);
+            }
+            else
+            {
+                Debug.Log($"敌人出生点花名重复: {bp.BornPointAlias}");
+            }
+        }
     }
 }

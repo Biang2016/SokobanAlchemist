@@ -66,25 +66,12 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         LoadActors();
         NoticePanel = UIManager.Instance.ShowUIForms<NoticePanel>();
         GameStateManager.Instance.SetState(GameState.Fighting);
+        ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnTriggerLevelEventCreateActor);
     }
 
     private void LoadActors()
     {
         CameraManager.Instance.FieldCamera.InitFocus();
-    }
-
-    public void CreateActorsByBornPointGroupData(WorldBornPointGroupData_Runtime data, string firstPlayerBornPointAlias)
-    {
-        CreateActorByBornPointData(data.PlayerBornPointDataAliasDict[firstPlayerBornPointAlias]); // Create Player At First Player BornPoint (world)
-        foreach (BornPointData bpd in data.AllEnemyBornPointDataList)
-        {
-            if (string.IsNullOrEmpty(bpd.SpawnLevelEventAlias))
-            {
-                CreateActorByBornPointData(bpd);
-            }
-        }
-
-        ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnTriggerLevelEventCreateActor);
     }
 
     private void OnTriggerLevelEventCreateActor(string eventAlias)
@@ -94,6 +81,36 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         {
             CreateActorByBornPointData(bp);
         }
+    }
+
+    public void CreateActorByBornPointDataList(List<BornPointData> bps, bool ignorePlayer = true)
+    {
+        foreach (BornPointData bp in bps)
+        {
+            if (ignorePlayer && bp.ActorCategory == ActorCategory.Player) continue;
+            CreateActorByBornPointData(bp);
+        }
+    }
+
+    private List<Actor> cachedDyingActors = new List<Actor>(32);
+
+    public void DestroyActorByModuleGP(GridPos3D moduleGP)
+    {
+        foreach (KeyValuePair<uint, Actor> kv in ActorDict)
+        {
+            GridPos3D actorModuleGP = WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(kv.Value.WorldGP);
+            if (actorModuleGP == moduleGP)
+            {
+                cachedDyingActors.Add(kv.Value);
+            }
+        }
+
+        foreach (Actor cachedDyingActor in cachedDyingActors)
+        {
+            cachedDyingActor.ActorBattleHelper.Die();
+        }
+
+        cachedDyingActors.Clear();
     }
 
     public void CreateActorByBornPointData(BornPointData bpd)

@@ -482,7 +482,7 @@ public class CellularAutomataMapGenerator : MapGenerator
         }
     }
 
-    public override void WriteMapInfoIntoWorldModuleData(WorldModuleData moduleData, int module_x, int module_z)
+    public override void ApplyGeneratorToWorldModuleData(WorldModuleData moduleData, int module_x, int module_z)
     {
         for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
         for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
@@ -491,7 +491,7 @@ public class CellularAutomataMapGenerator : MapGenerator
             if (genSuc)
             {
                 ushort existedBoxTypeIndex = moduleData.RawBoxMatrix[x, 0, z];
-                TryOverrideBoxInfoOnMap(moduleData, existedBoxTypeIndex, x, z);
+                TryOverrideBoxInfoOnMap(moduleData, existedBoxTypeIndex, x, z, module_x, module_z);
             }
         }
     }

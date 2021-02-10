@@ -3,7 +3,7 @@ using BiangLibrary.GameDataFormat.Grid;
 
 public class OpenWorldModule : WorldModule
 {
-    public override IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadBoxNumPerFrame, GridPosR.Orientation generatorOrder)
+    public override IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadBoxNumPerFrame)
     {
         ModuleGP = moduleGP;
         World = world;
@@ -31,101 +31,24 @@ public class OpenWorldModule : WorldModule
         }
 
         int loadBoxCount = 0;
-        switch (generatorOrder)
+
+        for (int x = 0; x < MODULE_SIZE; x++)
         {
-            default:
-            //case GridPosR.Orientation.Right:
+            for (int y = 0; y < MODULE_SIZE; y++)
             {
-                for (int x = 0; x < MODULE_SIZE; x++)
+                for (int z = 0; z < MODULE_SIZE; z++)
                 {
-                    for (int y = 0; y < MODULE_SIZE; y++)
+                    if (generateBox(x, y, z, worldModuleData.BoxOrientationMatrix[x, y, z]))
                     {
-                        for (int z = 0; z < MODULE_SIZE; z++)
+                        loadBoxCount++;
+                        if (loadBoxCount >= loadBoxNumPerFrame)
                         {
-                            if (generateBox(x, y, z, worldModuleData.BoxOrientationMatrix[x, y, z]))
-                            {
-                                loadBoxCount++;
-                                if (loadBoxCount >= loadBoxNumPerFrame)
-                                {
-                                    loadBoxCount = 0;
-                                    yield return null;
-                                }
-                            }
+                            loadBoxCount = 0;
+                            yield return null;
                         }
                     }
                 }
-
-                break;
             }
-            //case GridPosR.Orientation.Left:
-            //{
-            //    for (int x = MODULE_SIZE - 1; x >= 0; x--)
-            //    {
-            //        for (int y = 0; y < MODULE_SIZE; y++)
-            //        {
-            //            for (int z = 0; z < MODULE_SIZE; z++)
-            //            {
-            //                if (generateBox(x, y, z, worldModuleData.BoxOrientationMatrix[x, y, z]))
-            //                {
-            //                    loadBoxCount++;
-            //                    if (loadBoxCount >= loadBoxNumPerFrame)
-            //                    {
-            //                        loadBoxCount = 0;
-            //                        yield return null;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    break;
-            //}
-            //case GridPosR.Orientation.Up:
-            //{
-            //    for (int z = 0; z < MODULE_SIZE; z++)
-            //    {
-            //        for (int y = 0; y < MODULE_SIZE; y++)
-            //        {
-            //            for (int x = 0; x < MODULE_SIZE; x++)
-            //            {
-            //                if (generateBox(x, y, z, worldModuleData.BoxOrientationMatrix[x, y, z]))
-            //                {
-            //                    loadBoxCount++;
-            //                    if (loadBoxCount >= loadBoxNumPerFrame)
-            //                    {
-            //                        loadBoxCount = 0;
-            //                        yield return null;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    break;
-            //}
-            //case GridPosR.Orientation.Down:
-            //{
-            //    for (int z = MODULE_SIZE - 1; z >= 0; z--)
-            //    {
-            //        for (int y = 0; y < MODULE_SIZE; y++)
-            //        {
-            //            for (int x = 0; x < MODULE_SIZE; x++)
-            //            {
-            //                if (generateBox(x, y, z, worldModuleData.BoxOrientationMatrix[x, y, z]))
-            //                {
-            //                    loadBoxCount++;
-            //                    if (loadBoxCount >= loadBoxNumPerFrame)
-            //                    {
-            //                        loadBoxCount = 0;
-            //                        yield return null;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    break;
-            //}
         }
 
         bool generateBox(int x, int y, int z, GridPosR.Orientation orientation)

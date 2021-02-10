@@ -98,7 +98,7 @@ public class WorldModule : PoolObject
         switch (direction)
         {
             default:
-            //case GridPosR.Orientation.Right:
+                //case GridPosR.Orientation.Right:
             {
                 for (int x = 0; x < MODULE_SIZE; x++)
                 {
@@ -124,84 +124,6 @@ public class WorldModule : PoolObject
 
                 break;
             }
-            //case GridPosR.Orientation.Left:
-            //{
-            //    for (int x = MODULE_SIZE - 1; x >= 0; x--)
-            //    {
-            //        for (int y = 0; y < MODULE_SIZE; y++)
-            //        {
-            //            for (int z = 0; z < MODULE_SIZE; z++)
-            //            {
-            //                Box box = BoxMatrix[x, y, z];
-            //                if (box != null)
-            //                {
-            //                    box.PoolRecycle();
-            //                    BoxMatrix[x, y, z] = null;
-            //                    count++;
-            //                    if (count > clearBoxNumPerFrame)
-            //                    {
-            //                        count = 0;
-            //                        yield return null;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    break;
-            //}
-            //case GridPosR.Orientation.Up:
-            //{
-            //    for (int z = 0; z < MODULE_SIZE; z++)
-            //    {
-            //        for (int x = 0; x < MODULE_SIZE; x++)
-            //        {
-            //            for (int y = 0; y < MODULE_SIZE; y++)
-            //            {
-            //                Box box = BoxMatrix[x, y, z];
-            //                if (box != null)
-            //                {
-            //                    box.PoolRecycle();
-            //                    BoxMatrix[x, y, z] = null;
-            //                    count++;
-            //                    if (count > clearBoxNumPerFrame)
-            //                    {
-            //                        count = 0;
-            //                        yield return null;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    break;
-            //}
-            //case GridPosR.Orientation.Down:
-            //{
-            //    for (int z = MODULE_SIZE - 1; z >= 0; z--)
-            //    {
-            //        for (int x = 0; x < MODULE_SIZE; x++)
-            //        {
-            //            for (int y = 0; y < MODULE_SIZE; y++)
-            //            {
-            //                Box box = BoxMatrix[x, y, z];
-            //                if (box != null)
-            //                {
-            //                    box.PoolRecycle();
-            //                    BoxMatrix[x, y, z] = null;
-            //                    count++;
-            //                    if (count > clearBoxNumPerFrame)
-            //                    {
-            //                        count = 0;
-            //                        yield return null;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    break;
-            //}
         }
 
         foreach (LevelTriggerBase trigger in WorldModuleLevelTriggers)
@@ -231,7 +153,7 @@ public class WorldModule : PoolObject
         FlowScriptController.graph = null;
     }
 
-    public virtual IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadBoxNumPerFrame, GridPosR.Orientation generatorOrder = GridPosR.Orientation.Right)
+    public virtual IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadBoxNumPerFrame)
     {
         ModuleGP = moduleGP;
         World = world;
@@ -278,101 +200,23 @@ public class WorldModule : PoolObject
         }
 
         int loadBoxCount = 0;
-        switch (generatorOrder)
+        for (int x = 0; x < MODULE_SIZE; x++)
         {
-            default:
-            //case GridPosR.Orientation.Right:
+            for (int y = 0; y < MODULE_SIZE; y++)
             {
-                for (int x = 0; x < MODULE_SIZE; x++)
+                for (int z = 0; z < MODULE_SIZE; z++)
                 {
-                    for (int y = 0; y < MODULE_SIZE; y++)
+                    if (generateBox(x, y, z))
                     {
-                        for (int z = 0; z < MODULE_SIZE; z++)
+                        loadBoxCount++;
+                        if (loadBoxCount >= loadBoxNumPerFrame)
                         {
-                            if (generateBox(x, y, z))
-                            {
-                                loadBoxCount++;
-                                if (loadBoxCount >= loadBoxNumPerFrame)
-                                {
-                                    loadBoxCount = 0;
-                                    yield return null;
-                                }
-                            }
+                            loadBoxCount = 0;
+                            yield return null;
                         }
                     }
                 }
-
-                break;
             }
-            //case GridPosR.Orientation.Left:
-            //{
-            //    for (int x = MODULE_SIZE - 1; x >= 0; x--)
-            //    {
-            //        for (int y = 0; y < MODULE_SIZE; y++)
-            //        {
-            //            for (int z = 0; z < MODULE_SIZE; z++)
-            //            {
-            //                if (generateBox(x, y, z))
-            //                {
-            //                    loadBoxCount++;
-            //                    if (loadBoxCount >= loadBoxNumPerFrame)
-            //                    {
-            //                        loadBoxCount = 0;
-            //                        yield return null;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    break;
-            //}
-            //case GridPosR.Orientation.Up:
-            //{
-            //    for (int z = 0; z < MODULE_SIZE; z++)
-            //    {
-            //        for (int x = 0; x < MODULE_SIZE; x++)
-            //        {
-            //            for (int y = 0; y < MODULE_SIZE; y++)
-            //            {
-            //                if (generateBox(x, y, z))
-            //                {
-            //                    loadBoxCount++;
-            //                    if (loadBoxCount >= loadBoxNumPerFrame)
-            //                    {
-            //                        loadBoxCount = 0;
-            //                        yield return null;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    break;
-            //}
-            //case GridPosR.Orientation.Down:
-            //{
-            //    for (int z = MODULE_SIZE - 1; z >= 0; z--)
-            //    {
-            //        for (int x = 0; x < MODULE_SIZE; x++)
-            //        {
-            //            for (int y = 0; y < MODULE_SIZE; y++)
-            //            {
-            //                if (generateBox(x, y, z))
-            //                {
-            //                    loadBoxCount++;
-            //                    if (loadBoxCount >= loadBoxNumPerFrame)
-            //                    {
-            //                        loadBoxCount = 0;
-            //                        yield return null;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    break;
-            //}
         }
 
         bool generateBox(int x, int y, int z)

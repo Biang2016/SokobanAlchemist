@@ -193,18 +193,24 @@ public class World : PoolObject
 
         #endregion
 
-        //todo 未来加卸载模组时需要跑一遍这里
         WorldData.WorldBornPointGroupData_Runtime.InitTempData();
         foreach (GridPos3D worldModuleGP in WorldData.WorldModuleGPOrder)
         {
             WorldModule module = WorldModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
-            if (module != null) WorldData.WorldBornPointGroupData_Runtime.AddModuleData(module);
+            if (module != null) WorldData.WorldBornPointGroupData_Runtime.Init_LoadModuleData(worldModuleGP, module.WorldModuleData);
         }
 
-        BattleManager.Instance.CreateActorsByBornPointGroupData(WorldData.WorldBornPointGroupData_Runtime, WorldData.DefaultWorldActorBornPointAlias);
+        // 非大世界，一次性全部创建角色
+        foreach (GridPos3D worldModuleGP in WorldData.WorldModuleGPOrder)
+        {
+            WorldModule module = WorldModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
+            if (module != null) WorldData.WorldBornPointGroupData_Runtime.Dynamic_LoadModuleData(worldModuleGP);
+        }
+
+        BattleManager.Instance.CreateActorByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias]); // 生成主角
     }
 
-    protected virtual IEnumerator GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, int loadBoxNumPerFrame = 99999, GridPosR.Orientation generateOrder = GridPosR.Orientation.Right)
+    protected virtual IEnumerator GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, int loadBoxNumPerFrame = 99999)
     {
         bool isBorderModule = worldModuleTypeIndex == ConfigManager.WorldModule_DeadZoneIndex || worldModuleTypeIndex == ConfigManager.WorldModule_HiddenWallIndex;
         if (isBorderModule && BorderWorldModuleMatrix[x + 1, y + 1, z + 1] != null) yield break;
@@ -223,17 +229,17 @@ public class World : PoolObject
 
         GridPos3D gp = new GridPos3D(x, y, z);
         GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);
-        yield return wm.Initialize(data, gp, this, loadBoxNumPerFrame, generateOrder);
+        yield return wm.Initialize(data, gp, this, loadBoxNumPerFrame);
     }
 
-    protected virtual IEnumerator GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z, int loadBoxNumPerFrame, GridPosR.Orientation generateOrder = GridPosR.Orientation.Right)
+    protected virtual IEnumerator GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z, int loadBoxNumPerFrame)
     {
         WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.OpenWorldModule].AllocateGameObject<WorldModule>(WorldModuleRoot);
         wm.name = $"WM_{data.WorldModuleTypeName}({x}, {y}, {z})";
         WorldModuleMatrix[x, y, z] = wm;
         GridPos3D gp = new GridPos3D(x, y, z);
         GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);
-        yield return wm.Initialize(data, gp, this, loadBoxNumPerFrame, generateOrder);
+        yield return wm.Initialize(data, gp, this, loadBoxNumPerFrame);
     }
 
     #region Utils

@@ -30,7 +30,7 @@ public class BornPointDesignHelper : MonoBehaviour
     void OnDrawGizmos()
     {
         Color gizmosColor;
-        if (BornPointData.ActorType == "Player1")
+        if (BornPointData.ActorCategory == ActorCategory.Player)
         {
             gizmosColor = "#FF133A".HTMLColorToColor();
         }

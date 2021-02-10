@@ -53,168 +53,163 @@ MonoBehaviour:
   UseCertainSeed: 0
   GivenSeed: 1396197886
   GenerateBoxLayerDataList:
-  - BoxTypeName: BrickBox
-    AllowReplacedBoxTypeNames: []
+  - AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
+    CountPerThousandGrid: 20
+    BoxTypeName: BrickBox
     FillPercent: 63
     CaveConnectPercent: 10
     DeterminePlayerBP: 1
     SmoothTimes: 3
     SmoothTimes_GenerateWallInOpenSpace: 4
-    BoxCountPerThousandGrid: 20
-  - BoxTypeName: BorderBox
-    AllowReplacedBoxTypeNames:
+  - AllowReplacedBoxTypeNames:
     - BrickBox
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 0
+    CountPerThousandGrid: 20
+    BoxTypeName: BorderBox
     FillPercent: 0
     CaveConnectPercent: 0
     DeterminePlayerBP: 0
     SmoothTimes: 1
     SmoothTimes_GenerateWallInOpenSpace: 0
-    BoxCountPerThousandGrid: 20
-  - BoxTypeName: WoodenBox
-    AllowReplacedBoxTypeNames: []
+  - AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
+    CountPerThousandGrid: 20
+    BoxTypeName: WoodenBox
     FillPercent: 52
     CaveConnectPercent: 0
     DeterminePlayerBP: 0
     SmoothTimes: 5
     SmoothTimes_GenerateWallInOpenSpace: 0
-    BoxCountPerThousandGrid: 20
-  - BoxTypeName: LightningBox
-    AllowReplacedBoxTypeNames:
+  - AllowReplacedBoxTypeNames:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CountPerThousandGrid: 20
+    BoxTypeName: LightningBox
     FillPercent: 40
     CaveConnectPercent: 40
     DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-    BoxCountPerThousandGrid: 10
-  - BoxTypeName: FireBox
-    AllowReplacedBoxTypeNames:
+  - AllowReplacedBoxTypeNames:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CountPerThousandGrid: 20
+    BoxTypeName: FireBox
     FillPercent: 40
     CaveConnectPercent: 40
     DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-    BoxCountPerThousandGrid: 15
-  - BoxTypeName: IceBox
-    AllowReplacedBoxTypeNames:
+  - AllowReplacedBoxTypeNames:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CountPerThousandGrid: 20
+    BoxTypeName: IceBox
     FillPercent: 40
     CaveConnectPercent: 40
     DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-    BoxCountPerThousandGrid: 12
-  - BoxTypeName: TNTBox
-    AllowReplacedBoxTypeNames:
+  - AllowReplacedBoxTypeNames:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CountPerThousandGrid: 20
+    BoxTypeName: TNTBox
     FillPercent: 40
     CaveConnectPercent: 40
     DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-    BoxCountPerThousandGrid: 2
-  - BoxTypeName: LifeBox
-    AllowReplacedBoxTypeNames:
+  - AllowReplacedBoxTypeNames:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CountPerThousandGrid: 20
+    BoxTypeName: LifeBox
     FillPercent: 40
     CaveConnectPercent: 40
     DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-    BoxCountPerThousandGrid: 7
-  - BoxTypeName: GoldenBox
-    AllowReplacedBoxTypeNames:
+  - AllowReplacedBoxTypeNames:
     - BrickBox
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
+    CountPerThousandGrid: 20
+    BoxTypeName: GoldenBox
     FillPercent: 40
     CaveConnectPercent: 40
     DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-    BoxCountPerThousandGrid: 25
-  - BoxTypeName: Golden3Box
-    AllowReplacedBoxTypeNames:
+  - AllowReplacedBoxTypeNames:
     - BrickBox
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
+    CountPerThousandGrid: 20
+    BoxTypeName: Golden3Box
     FillPercent: 40
     CaveConnectPercent: 40
     DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-    BoxCountPerThousandGrid: 8
-  - BoxTypeName: ActionBox
-    AllowReplacedBoxTypeNames: []
+  - AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
+    CountPerThousandGrid: 20
+    BoxTypeName: ActionBox
     FillPercent: 40
     CaveConnectPercent: 40
     DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-    BoxCountPerThousandGrid: 12
   GenerateActorLayerDataList:
-  - ActorTypeName: Player1
-    AllowReplacedBoxTypeNames: []
-    OnlyOverrideAnyBox: 0
-    m_GenerateAlgorithm: 2
-    ActorCountPerThousandGrid: 1000
-  - ActorTypeName: FireEnemy
-    AllowReplacedBoxTypeNames:
+  - AllowReplacedBoxTypeNames:
     - BrickBox
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    ActorCountPerThousandGrid: 3
-  - ActorTypeName: IceEnemy
-    AllowReplacedBoxTypeNames:
+    CountPerThousandGrid: 20
+    ActorTypeName: FireEnemy
+  - AllowReplacedBoxTypeNames:
     - BrickBox
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    ActorCountPerThousandGrid: 3
-  - ActorTypeName: SpeedEnemy
-    AllowReplacedBoxTypeNames:
+    CountPerThousandGrid: 20
+    ActorTypeName: IceEnemy
+  - AllowReplacedBoxTypeNames:
     - BrickBox
     - WoodenBox
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
-    ActorCountPerThousandGrid: 4
-  - ActorTypeName: LifeEnemy
-    AllowReplacedBoxTypeNames:
+    CountPerThousandGrid: 20
+    ActorTypeName: SpeedEnemy
+  - AllowReplacedBoxTypeNames:
     - WoodenBox
     - BrickBox
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
-    ActorCountPerThousandGrid: 2
-  - ActorTypeName: LightningEnemy
-    AllowReplacedBoxTypeNames: []
+    CountPerThousandGrid: 20
+    ActorTypeName: LifeEnemy
+  - AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    ActorCountPerThousandGrid: 3
-  - ActorTypeName: BossEnemy
-    AllowReplacedBoxTypeNames: []
+    CountPerThousandGrid: 20
+    ActorTypeName: LightningEnemy
+  - AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    ActorCountPerThousandGrid: 1
+    CountPerThousandGrid: 1
+    ActorTypeName: BossEnemy
   ExtendScope_Load: 4
   ExtendScope_Recycle: 20
   ExtendScope_Recycle_Ground: 52
