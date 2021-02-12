@@ -330,14 +330,18 @@ public class FieldCamera : MonoBehaviour
     {
         if (Application.isPlaying)
         {
-            if (ControlManager.Instance.Battle_MouseWheel.y < 0)
+            bool IsMouseOverGameWindow = !(0 > Input.mousePosition.x || 0 > Input.mousePosition.y || Screen.width < Input.mousePosition.x || Screen.height < Input.mousePosition.y);
+            if (IsMouseOverGameWindow)
             {
-                Distance_Level++;
-            }
+                if (ControlManager.Instance.Battle_MouseWheel.y < 0)
+                {
+                    Distance_Level++;
+                }
 
-            if (ControlManager.Instance.Battle_MouseWheel.y > 0)
-            {
-                Distance_Level--;
+                if (ControlManager.Instance.Battle_MouseWheel.y > 0)
+                {
+                    Distance_Level--;
+                }
             }
         }
     }

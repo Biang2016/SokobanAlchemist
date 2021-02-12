@@ -1204,14 +1204,21 @@ public partial class Box : Entity
 
     #region Destroy
 
-    public void DestroyBox(UnityAction callBack = null)
+    public void DestroyBox(UnityAction callBack = null, bool forModuleRecycle = false)
     {
-        foreach (EntityPassiveSkill ps in EntityPassiveSkills)
+        if (!forModuleRecycle)
         {
-            ps.OnBeforeDestroyEntity();
-        }
+            foreach (EntityPassiveSkill ps in EntityPassiveSkills)
+            {
+                ps.OnBeforeDestroyEntity();
+            }
 
-        StartCoroutine(Co_DelayDestroyBox(callBack));
+            StartCoroutine(Co_DelayDestroyBox(callBack));
+        }
+        else
+        {
+            WorldManager.Instance.CurrentWorld.DeleteBox(this);
+        }
     }
 
     IEnumerator Co_DelayDestroyBox(UnityAction callBack)

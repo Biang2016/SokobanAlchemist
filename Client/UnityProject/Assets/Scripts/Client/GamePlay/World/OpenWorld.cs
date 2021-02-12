@@ -445,9 +445,9 @@ public class OpenWorld : World
     {
         worldModule.WorldModuleData.Modification?.SaveData(worldModule.ModuleGP);
         WorldData.WorldBornPointGroupData_Runtime.Dynamic_UnloadModuleData(currentShowModuleGP);
+        WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
         yield return worldModule.Clear(256);
         worldModule.PoolRecycle();
-        WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
         m_LevelCacheData.WorldModuleDataDict.Remove(currentShowModuleGP);
         recycleModuleFinished[boolIndex] = true;
     }

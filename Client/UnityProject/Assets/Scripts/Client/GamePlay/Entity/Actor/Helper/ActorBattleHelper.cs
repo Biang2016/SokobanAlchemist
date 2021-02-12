@@ -76,9 +76,9 @@ public class ActorBattleHelper : ActorMonoHelper
 
     public bool IsDead = false;
 
-    public void Die()
+    public void Die(bool forModuleRecycle = false)
     {
-        DropDieBox();
+        if (!forModuleRecycle) DropDieBox();
         IsDead = true;
         if (Actor.IsPlayerCamp)
         {
@@ -100,8 +100,12 @@ public class ActorBattleHelper : ActorMonoHelper
                 Actor.ActorFrozenHelper.FrozenBox = null;
             }
 
-            FX hit = FXManager.Instance.PlayFX(Actor.DieFX, transform.position);
-            if (hit) hit.transform.localScale = Vector3.one * Actor.DieFXScale;
+            if (!forModuleRecycle)
+            {
+                FX hit = FXManager.Instance.PlayFX(Actor.DieFX, transform.position);
+                if (hit) hit.transform.localScale = Vector3.one * Actor.DieFXScale;
+            }
+
             Actor.PoolRecycle();
         }
     }

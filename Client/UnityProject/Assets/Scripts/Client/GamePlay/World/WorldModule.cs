@@ -92,37 +92,29 @@ public class WorldModule : PoolObject
         WorldModuleLevelTriggerRoot.parent = transform;
     }
 
-    public IEnumerator Clear(int clearBoxNumPerFrame = 256, GridPosR.Orientation direction = GridPosR.Orientation.Right)
+    public IEnumerator Clear(int clearBoxNumPerFrame = 256)
     {
         int count = 0;
-        switch (direction)
+
+        for (int x = 0; x < MODULE_SIZE; x++)
         {
-            default:
-                //case GridPosR.Orientation.Right:
+            for (int y = 0; y < MODULE_SIZE; y++)
             {
-                for (int x = 0; x < MODULE_SIZE; x++)
+                for (int z = 0; z < MODULE_SIZE; z++)
                 {
-                    for (int y = 0; y < MODULE_SIZE; y++)
+                    Box box = BoxMatrix[x, y, z];
+                    if (box != null)
                     {
-                        for (int z = 0; z < MODULE_SIZE; z++)
+                        box.PoolRecycle();
+                        BoxMatrix[x, y, z] = null;
+                        count++;
+                        if (count > clearBoxNumPerFrame)
                         {
-                            Box box = BoxMatrix[x, y, z];
-                            if (box != null)
-                            {
-                                box.PoolRecycle();
-                                BoxMatrix[x, y, z] = null;
-                                count++;
-                                if (count > clearBoxNumPerFrame)
-                                {
-                                    count = 0;
-                                    yield return null;
-                                }
-                            }
+                            count = 0;
+                            yield return null;
                         }
                     }
                 }
-
-                break;
             }
         }
 

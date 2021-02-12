@@ -107,7 +107,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
         foreach (Actor cachedDyingActor in cachedDyingActors)
         {
-            cachedDyingActor.ActorBattleHelper.Die();
+            cachedDyingActor.ActorBattleHelper.Die(true);
         }
 
         cachedDyingActors.Clear();

@@ -207,6 +207,23 @@ public class World : PoolObject
             if (module != null) WorldData.WorldBornPointGroupData_Runtime.Dynamic_LoadModuleData(worldModuleGP);
         }
 
+        // 加载模组默认玩家BP
+        foreach (GridPos3D worldModuleGP in WorldData.WorldModuleGPOrder)
+        {
+            foreach (BornPointData bp in WorldData.WorldBornPointGroupData_Runtime.TryLoadModuleBPData(worldModuleGP))
+            {
+                if (bp.ActorCategory == ActorCategory.Player)
+                {
+                    WorldModule module = WorldModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
+                    string playerBPAlias = module.WorldModuleData.WorldModuleTypeName;
+                    if (!WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.ContainsKey(playerBPAlias))
+                    {
+                        WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Add(playerBPAlias, bp);
+                    }
+                }
+            }
+        }
+
         BattleManager.Instance.CreateActorByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias]); // 生成主角
     }
 
