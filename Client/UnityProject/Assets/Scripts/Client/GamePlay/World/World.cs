@@ -204,7 +204,7 @@ public class World : PoolObject
         foreach (GridPos3D worldModuleGP in WorldData.WorldModuleGPOrder)
         {
             WorldModule module = WorldModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
-            if (module != null) WorldData.WorldBornPointGroupData_Runtime.Dynamic_LoadModuleData(worldModuleGP);
+            if (module != null) yield return WorldData.WorldBornPointGroupData_Runtime.Dynamic_LoadModuleData(worldModuleGP);
         }
 
         // 加载模组默认玩家BP

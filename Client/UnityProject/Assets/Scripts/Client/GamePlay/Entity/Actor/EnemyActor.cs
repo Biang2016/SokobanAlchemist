@@ -6,6 +6,12 @@ public class EnemyActor : Actor
     internal int AIUpdateInterval = 10;
     private int AIUpdateIntervalTick = 0;
 
+    public override void OnUsed()
+    {
+        base.OnUsed();
+        AIUpdateIntervalTick = 0;
+    }
+
     protected override void FixedUpdate()
     {
         if (!IsRecycled)
@@ -31,17 +37,21 @@ public class EnemyActor : Actor
                 }
             }
 
-            if (AIUpdateIntervalTick < AIUpdateInterval)
+            if (BattleManager.Instance.IsStart)
             {
-                AIUpdateIntervalTick++;
-            }
-            else
-            {
-                GraphOwner.UpdateBehaviour();
-                AIUpdateIntervalTick = 0;
+                if (AIUpdateIntervalTick < AIUpdateInterval)
+                {
+                    AIUpdateIntervalTick++;
+                }
+                else
+                {
+                    GraphOwner.UpdateBehaviour();
+                    AIUpdateIntervalTick = 0;
+                }
+
+                ActorAIAgent.FixedUpdate();
             }
 
-            ActorAIAgent.FixedUpdate();
             MoveInternal();
             ActorAIAgent.FixedUpdateAfterMove();
         }

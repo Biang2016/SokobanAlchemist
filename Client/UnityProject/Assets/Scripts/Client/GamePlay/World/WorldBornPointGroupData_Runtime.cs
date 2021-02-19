@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
 using UnityEngine;
 
@@ -83,7 +84,7 @@ public class WorldBornPointGroupData_Runtime
         }
     }
 
-    public void Dynamic_LoadModuleData(GridPos3D moduleGP)
+    public IEnumerator Dynamic_LoadModuleData(GridPos3D moduleGP)
     {
         List<BornPointData> moduleBPs = TryLoadModuleBPData(moduleGP);
         if (moduleBPs != null)
@@ -96,7 +97,7 @@ public class WorldBornPointGroupData_Runtime
                 }
             }
 
-            BattleManager.Instance.CreateActorByBornPointDataList(moduleBPs);
+            yield return BattleManager.Instance.CreateActorByBornPointDataList(moduleBPs);
         }
     }
 

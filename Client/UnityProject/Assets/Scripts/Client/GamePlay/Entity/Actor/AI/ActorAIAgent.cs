@@ -59,7 +59,6 @@ public class ActorAIAgent
     public void FixedUpdate()
     {
         if (isStop) return;
-        if (!BattleManager.Instance.IsStart) return;
         if (!Actor.GraphOwner.isRunning) Actor.GraphOwner?.StartBehaviour();
         MoveToDestination();
     }

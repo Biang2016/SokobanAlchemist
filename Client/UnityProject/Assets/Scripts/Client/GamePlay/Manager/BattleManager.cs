@@ -86,12 +86,13 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
     }
 
-    public void CreateActorByBornPointDataList(List<BornPointData> bps, bool ignorePlayer = true)
+    public IEnumerator CreateActorByBornPointDataList(List<BornPointData> bps, bool ignorePlayer = true)
     {
         foreach (BornPointData bp in bps)
         {
             if (ignorePlayer && bp.ActorCategory == ActorCategory.Player) continue;
             CreateActorByBornPointData(bp);
+            yield return null;
         }
     }
 

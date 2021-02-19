@@ -17,6 +17,18 @@ public class RandomMapGenerator : MapGenerator
         for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
         {
             if (x == LeaveSpaceForPlayerBP.x && z == LeaveSpaceForPlayerBP.z) continue;
+            bool isOverlapWithOtherActor = false;
+            foreach (BornPointData enemyBornPoint in moduleData.WorldModuleBornPointGroupData.EnemyBornPoints)
+            {
+                if (enemyBornPoint.LocalGP.x == x && enemyBornPoint.LocalGP.z == z)
+                {
+                    isOverlapWithOtherActor = true;
+                    break;
+                }
+            }
+
+            if (isOverlapWithOtherActor) continue;
+
             bool genSuc = SRandom.Range(0, 1000) < GenerateLayerData.CountPerThousandGrid;
             if (genSuc)
             {
