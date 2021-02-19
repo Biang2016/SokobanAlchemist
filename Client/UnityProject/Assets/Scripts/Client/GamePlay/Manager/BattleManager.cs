@@ -53,6 +53,8 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         NavTrackMarkerRoot = new GameObject("NavTrackMarkerRoot").transform;
     }
 
+    public bool IsStart = false;
+
     public override void Start()
     {
     }
@@ -67,6 +69,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         NoticePanel = UIManager.Instance.ShowUIForms<NoticePanel>();
         GameStateManager.Instance.SetState(GameState.Fighting);
         ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnTriggerLevelEventCreateActor);
+        IsStart = true;
     }
 
     private void LoadActors()
@@ -227,6 +230,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     public override void ShutDown()
     {
         base.ShutDown();
+        IsStart = false;
         Clear();
     }
 }

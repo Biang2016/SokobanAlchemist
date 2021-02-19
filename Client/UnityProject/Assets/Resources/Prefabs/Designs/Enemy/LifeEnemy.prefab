@@ -265,168 +265,6 @@ MonoBehaviour:
       MaxValue: 0
     SkillsPropertyCollections: []
     RawEntityDefaultBuffs: []
-  EntityStatPropSet:
-    Gold:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    HealthDurability:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    MaxHealthDurability:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    DropFromAirSurviveProbabilityPercent:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    ActorCollideDamageDefense:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    BoxCollideDamageSelf:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    CollideDamage:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    CollideDamageX:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    CollideDamageZ:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    ExplodeDamageDefense:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FrozenValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    FrozenLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    FrozenFX: 
-    FrozenFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FiringResistance:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringValue:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    FiringLevel:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    FiringSpreadPercent:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    FiringDamageDefense:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    StartFiringFX: 
-    StartFiringFXScale: 0
-    FiringFX: 
-    FiringFXScaleCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FiringBreakFX: 
-    FiringBreakFXScale: 0
-    MoveSpeed:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    MaxActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    ActionPoint:
-      _value: 0
-      _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
-      AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
-    ActionPointRecovery:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    KickConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    DashConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    VaultConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    SkillsPropertyCollections: []
-    RawEntityDefaultBuffs: []
   RawFlamethrowerFuelData:
     id: 0
   RawEntityPassiveSkills: []
@@ -474,6 +312,7 @@ MonoBehaviour:
     00000001:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
+        IsAddedDuringGamePlay: 0
         SpecialCaseType: 0
         PassiveSkillCondition: 12
         MultiEventTrigger: 0
@@ -534,7 +373,7 @@ MonoBehaviour:
     _translation: {x: 0, y: 0}
     _zoomFactor: 1
   _firstActivation: 0
-  _enableAction: 0
+  _enableAction: 1
   _disableAction: 0
   _lockBoundGraphPrefabOverrides: 1
   _preInitializeSubGraphs: 0
