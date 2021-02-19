@@ -60,7 +60,7 @@ public class ActorAIAgent
     {
         if (isStop) return;
         if (!BattleManager.Instance.IsStart) return;
-        if (!Actor.GraphOwner.isRunning) Actor.GraphOwner?.RestartBehaviour();
+        if (!Actor.GraphOwner.isRunning) Actor.GraphOwner?.StartBehaviour();
         MoveToDestination();
     }
 
@@ -220,7 +220,7 @@ public class ActorAIAgent
                 else
                 {
                     Vector3 diff = nextNode.GridPos3D - Actor.transform.position;
-                    if (diff.magnitude < 0.02f)
+                    if (diff.magnitude < 0.1f)
                     {
                         int nextNodeIndex = CurrentPath.IndexOf(nextNode);
                         ActorPathFinding.Node nextNodeAfterNextNode = CurrentPath.Count > nextNodeIndex + 1 ? CurrentPath[nextNodeIndex + 1] : null;
