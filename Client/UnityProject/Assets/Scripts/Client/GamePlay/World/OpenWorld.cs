@@ -19,6 +19,8 @@ public class OpenWorld : World
     [ShowIf("UseCertainSeed")]
     public uint GivenSeed = 0;
 
+    #region GenerateLayerData
+
     [Serializable]
     public abstract class GenerateLayerData
     {
@@ -50,7 +52,22 @@ public class OpenWorld : World
 
         private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames(false);
         private IEnumerable<string> GetAllActorTypeNames => ConfigManager.GetAllActorNames(false);
+        private IEnumerable<string> GetAllStaticLayoutTypeNames => ConfigManager.GetAllStaticLayoutNames(false);
     }
+
+    [Serializable]
+    public class GenerateStaticLayoutLayerData : GenerateLayerData
+    {
+        [BoxName]
+        [LabelText("静态布局类型")]
+        [ValueDropdown("GetAllStaticLayoutTypeNames")]
+        public string StaticLayoutTypeName = "None";
+    }
+
+    [FoldoutGroup("地图生成")]
+    [LabelText("静态布局层级配置")]
+    [ListDrawerSettings(ListElementLabelName = "StaticLayoutTypeName")]
+    public List<GenerateStaticLayoutLayerData> GenerateStaticLayoutLayerDataList = new List<GenerateStaticLayoutLayerData>();
 
     [Serializable]
     public class GenerateBoxLayerData : GenerateLayerData
@@ -81,7 +98,8 @@ public class OpenWorld : World
         public int SmoothTimes_GenerateWallInOpenSpace = 3;
     }
 
-    [LabelText("地图生成层级配置")]
+    [FoldoutGroup("地图生成")]
+    [LabelText("Box层级配置")]
     [ListDrawerSettings(ListElementLabelName = "BoxTypeName")]
     public List<GenerateBoxLayerData> GenerateBoxLayerDataList = new List<GenerateBoxLayerData>();
 
@@ -116,9 +134,12 @@ public class OpenWorld : World
         Random,
     }
 
-    [LabelText("地图生成Actor配置")]
+    [FoldoutGroup("地图生成")]
+    [LabelText("Actor层级配置")]
     [ListDrawerSettings(ListElementLabelName = "ActorTypeName")]
     public List<GenerateActorLayerData> GenerateActorLayerDataList = new List<GenerateActorLayerData>();
+
+    #endregion
 
     public override IEnumerator Initialize(WorldData worldData)
     {
