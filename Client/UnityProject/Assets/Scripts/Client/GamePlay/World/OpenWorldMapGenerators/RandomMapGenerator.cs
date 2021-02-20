@@ -1,39 +1,30 @@
-﻿using System;
-using BiangLibrary.GameDataFormat;
-using BiangLibrary.GameDataFormat.Grid;
+﻿using BiangLibrary.GameDataFormat;
 
-public class RandomMapGenerator : MapGenerator
+public sealed class RandomMapGenerator : MapGenerator
 {
-    public RandomMapGenerator(OpenWorld.GenerateLayerData layerData, int width, int height, uint seed, GridPos leaveSpaceForPlayerBP) : base(layerData, width, height, seed, leaveSpaceForPlayerBP)
+    public RandomMapGenerator(OpenWorld.GenerateLayerData layerData, int width, int height, uint seed, OpenWorld openWorld) : base(layerData, width, height, seed, openWorld)
     {
     }
 
-    public override void ApplyGeneratorToWorldModuleData(WorldModuleData moduleData, int module_x, int module_z)
+    public override void ApplyToWorldMap()
     {
-        base.ApplyGeneratorToWorldModuleData(moduleData, module_x, module_z);
-        SRandom = new SRandom(Seed); // 确保每次写入时随机数序列都与最初相同
-
-        for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
-        for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
+        if (GenerateLayerData.m_GenerateAlgorithm == OpenWorld.GenerateAlgorithm.Random && GenerateLayerData.CountPerThousandGrid == 0) return; // 避免大量运算
+        for (int module_x = 0; module_x < Width / WorldModule.MODULE_SIZE; module_x++)
+        for (int module_z = 0; module_z < Height / WorldModule.MODULE_SIZE; module_z++)
         {
-            if (x == LeaveSpaceForPlayerBP.x && z == LeaveSpaceForPlayerBP.z) continue;
-            bool isOverlapWithOtherActor = false;
-            foreach (BornPointData enemyBornPoint in moduleData.WorldModuleBornPointGroupData.EnemyBornPoints)
+            uint module_Seed = (uint) (Seed + module_x * 100 + module_z); // 每个模组的Seed独一无二
+            SRandom = new SRandom(module_Seed);
+
+            for (int local_x = 0; local_x < WorldModule.MODULE_SIZE; local_x++)
+            for (int local_z = 0; local_z < WorldModule.MODULE_SIZE; local_z++)
             {
-                if (enemyBornPoint.LocalGP.x == x && enemyBornPoint.LocalGP.z == z)
+                bool genSuc = SRandom.Range(0, 1000) < GenerateLayerData.CountPerThousandGrid;
+                if (genSuc)
                 {
-                    isOverlapWithOtherActor = true;
-                    break;
+                    int world_x = module_x * WorldModule.MODULE_SIZE + local_x;
+                    int world_z = module_z * WorldModule.MODULE_SIZE + local_z;
+                    TryOverrideToWorldMap(world_x, world_z);
                 }
-            }
-
-            if (isOverlapWithOtherActor) continue;
-
-            bool genSuc = SRandom.Range(0, 1000) < GenerateLayerData.CountPerThousandGrid;
-            if (genSuc)
-            {
-                ushort existedBoxTypeIndex = moduleData.RawBoxMatrix[x, 0, z];
-                TryOverrideBoxInfoOnMap(moduleData, existedBoxTypeIndex, x, z, module_x, module_z);
             }
         }
     }

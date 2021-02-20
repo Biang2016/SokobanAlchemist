@@ -51,6 +51,11 @@ public class ConfigPreviewerWindow : OdinEditorWindow
     public List<WorldModuleData> WorldModuleDataConfigDict => ConfigManager.WorldModuleDataConfigDict.Values.ToList();
 
     [ShowInInspector]
+    [LabelText("静态布局配置表")]
+    [TableList]
+    public List<WorldModuleData> StaticLayoutDataConfigDict => ConfigManager.StaticLayoutDataConfigDict.Values.ToList();
+
+    [ShowInInspector]
     [LabelText("世界配置表")]
     [TableList]
     public List<WorldData> WorldDataConfigDict => ConfigManager.WorldDataConfigDict.Values.ToList();

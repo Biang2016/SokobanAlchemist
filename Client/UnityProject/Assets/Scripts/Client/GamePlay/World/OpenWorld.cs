@@ -19,6 +19,10 @@ public class OpenWorld : World
     [ShowIf("UseCertainSeed")]
     public uint GivenSeed = 0;
 
+    public ushort[,] WorldMap; // 地图元素放置
+    public ushort[,] WorldMap_Occupied; // 地图元素占位
+    public ushort[,] WorldMap_StaticLayoutOccupied; // 地图静态布局占位
+
     #region GenerateLayerData
 
     [Serializable]
@@ -141,6 +145,14 @@ public class OpenWorld : World
 
     #endregion
 
+    public override void OnRecycled()
+    {
+        base.OnRecycled();
+        WorldMap = null;
+        WorldMap_Occupied = null;
+        WorldMap_StaticLayoutOccupied = null;
+    }
+
     public override IEnumerator Initialize(WorldData worldData)
     {
         uint Seed = 0;
@@ -155,6 +167,10 @@ public class OpenWorld : World
 
         SRandom SRandom = new SRandom(Seed);
 
+        WorldMap = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMap_Occupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMap_StaticLayoutOccupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+
         WorldGUID = Seed + "_" + Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
         m_LevelCacheData = new LevelCacheData();
         WorldData = worldData;
@@ -165,12 +181,44 @@ public class OpenWorld : World
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.2f, "Loading Open World");
         yield return null;
 
+        #region GenerateStaticLayoutLayer
+
+        int generatorCount_staticLayoutLayer = 0;
+
+        foreach (GenerateStaticLayoutLayerData staticLayoutLayerData in GenerateStaticLayoutLayerDataList) // 按层生成关卡静态布局数据
+        {
+            staticLayoutLayerData.Init();
+            MapGenerator generator = null;
+            switch (staticLayoutLayerData.m_GenerateAlgorithm)
+            {
+                case GenerateAlgorithm.Random:
+                {
+                    generator = new RandomMapGenerator(staticLayoutLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
+                    break;
+                }
+            }
+
+            if (generator != null)
+            {
+                generator.ApplyToWorldMap();
+                m_LevelCacheData.CurrentGenerator_StaticLayouts.Add(generator);
+                generatorCount_staticLayoutLayer++;
+                ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.2f + 0.1f * generatorCount_staticLayoutLayer / GenerateStaticLayoutLayerDataList.Count, "Generating Map Static Layouts");
+                yield return null;
+            }
+        }
+
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.3f, "Generating Map Static Layouts Completed");
+        yield return null;
+
+        #endregion
+
         #region GenerateBoxLayer
 
         int generatorCount_boxLayer = 0;
         GridPos3D playerBPWorld = new GridPos3D(-1, -1, -1);
 
-        foreach (GenerateBoxLayerData boxLayerData in GenerateBoxLayerDataList) // 初始化所有层的关卡生成器
+        foreach (GenerateBoxLayerData boxLayerData in GenerateBoxLayerDataList) // 按层生成关卡Box数据
         {
             boxLayerData.Init();
             MapGenerator generator = null;
@@ -178,14 +226,15 @@ public class OpenWorld : World
             {
                 case GenerateAlgorithm.CellularAutomata:
                 {
-                    generator = new CellularAutomataMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), new GridPos(playerBPWorld.x, playerBPWorld.z));
-                    if (boxLayerData.DeterminePlayerBP)
+                    generator = new CellularAutomataMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
+                    if (boxLayerData.DeterminePlayerBP) // 细胞自动机的地图决定了玩家落点，位于联通的洞穴中
                     {
                         GridPos playerBP = ((CellularAutomataMapGenerator) generator).ValidPlayerPosInConnectedCaves;
                         playerBPWorld = new GridPos3D(playerBP.x, WorldModule.MODULE_SIZE, playerBP.z);
                         GridPos3D playerBPLocal = new GridPos3D(playerBP.x % WorldModule.MODULE_SIZE, 0, playerBP.z % WorldModule.MODULE_SIZE);
                         BornPointData bp = new BornPointData {ActorType = "Player1", BornPointAlias = $"PlayerBP", LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorld};
                         WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP(bp);
+                        WorldMap[playerBPWorld.x, playerBPWorld.z] = (ushort) ConfigManager.TypeStartIndex.Player;
                     }
 
                     break;
@@ -196,15 +245,19 @@ public class OpenWorld : World
                 }
                 case GenerateAlgorithm.Random:
                 {
-                    generator = new RandomMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), new GridPos(playerBPWorld.x, playerBPWorld.z));
+                    generator = new RandomMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
                     break;
                 }
             }
 
-            m_LevelCacheData.CurrentGenerators_Boxes.Add(generator);
-            generatorCount_boxLayer++;
-            ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.2f + 0.35f * generatorCount_boxLayer / GenerateBoxLayerDataList.Count, "Generating Map Boxes");
-            yield return null;
+            if (generator != null)
+            {
+                generator.ApplyToWorldMap();
+                m_LevelCacheData.CurrentGenerators_Boxes.Add(generator);
+                generatorCount_boxLayer++;
+                ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.3f + 0.25f * generatorCount_boxLayer / GenerateBoxLayerDataList.Count, "Generating Map Boxes");
+                yield return null;
+            }
         }
 
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.55f, "Generating Map Boxes Completed");
@@ -223,15 +276,19 @@ public class OpenWorld : World
             {
                 case GenerateAlgorithm.Random:
                 {
-                    generator = new RandomMapGenerator(actorLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), new GridPos(playerBPWorld.x, playerBPWorld.z));
+                    generator = new RandomMapGenerator(actorLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999),this);
                     break;
                 }
             }
 
-            m_LevelCacheData.CurrentGenerators_Actors.Add(generator);
-            generatorCount_actorLayer++;
-            ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.55f + 0.15f * generatorCount_actorLayer / GenerateActorLayerDataList.Count, "Generating Map Actors");
-            yield return null;
+            if (generator != null)
+            {
+                generator.ApplyToWorldMap();
+                m_LevelCacheData.CurrentGenerators_Actors.Add(generator);
+                generatorCount_actorLayer++;
+                ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.55f + 0.15f * generatorCount_actorLayer / GenerateActorLayerDataList.Count, "Generating Map Actors");
+                yield return null;
+            }
         }
 
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.7f, "Generating Map Actors Completed");
@@ -254,6 +311,7 @@ public class OpenWorld : World
 
     public class LevelCacheData
     {
+        public List<MapGenerator> CurrentGenerator_StaticLayouts = new List<MapGenerator>(); // 按静态布局layer记录的地图生成信息，未走过的地图或离开很久之后重置的模组按这个数据加载出来
         public List<MapGenerator> CurrentGenerators_Boxes = new List<MapGenerator>(); // 按箱子layer记录的地图生成信息，未走过的地图或离开很久之后重置的模组按这个数据加载出来
         public List<MapGenerator> CurrentGenerators_Actors = new List<MapGenerator>(); // 按角色layer记录的生成信息，未走过的地图或离开很久之后重置的模组按这个数据加载出来
 
@@ -351,7 +409,7 @@ public class OpenWorld : World
                     StartCoroutine(Co_GenerateModule(moduleData, targetModuleGP, generateModuleFinished.Count - 1));
                 }
 
-                // Other Modules (以随机数生成的为模板，将diff应用上去)
+                // Other Modules (以WorldMap为模板，将diff应用上去)
                 WorldModule module = WorldModuleMatrix[module_x, 1, module_z];
                 if (module == null)
                 {
@@ -362,14 +420,35 @@ public class OpenWorld : World
                         moduleData = WorldModuleData.WorldModuleDataFactory.Alloc();
                         moduleData.InitOpenWorldModuleData(true);
                         m_LevelCacheData.WorldModuleDataDict.Add(targetModuleGP, moduleData);
-                        foreach (MapGenerator generator in m_LevelCacheData.CurrentGenerators_Boxes)
+                        for (int world_x = targetModuleGP.x * WorldModule.MODULE_SIZE; world_x < (targetModuleGP.x + 1) * WorldModule.MODULE_SIZE; world_x++)
+                        for (int world_z = targetModuleGP.z * WorldModule.MODULE_SIZE; world_z < (targetModuleGP.z + 1) * WorldModule.MODULE_SIZE; world_z++)
                         {
-                            generator.ApplyGeneratorToWorldModuleData(moduleData, module_x, module_z);
-                        }
-
-                        foreach (MapGenerator generator in m_LevelCacheData.CurrentGenerators_Actors)
-                        {
-                            generator.ApplyGeneratorToWorldModuleData(moduleData, module_x, module_z);
+                            int local_x = world_x - targetModuleGP.x * WorldModule.MODULE_SIZE;
+                            int local_z = world_z - targetModuleGP.z * WorldModule.MODULE_SIZE;
+                            ushort existedIndex = WorldMap[world_x, world_z];
+                            ConfigManager.TypeStartIndex indexType = existedIndex.ConvertToTypeStartIndex();
+                            switch (indexType)
+                            {
+                                case ConfigManager.TypeStartIndex.Box:
+                                {
+                                    moduleData.RawBoxMatrix[local_x, 0, local_z] = existedIndex;
+                                    moduleData.BoxMatrix[local_x, 0, local_z] = existedIndex;
+                                    break;
+                                }
+                                case ConfigManager.TypeStartIndex.Enemy:
+                                {
+                                    string actorTypeName = ConfigManager.GetEnemyTypeName(existedIndex);
+                                    moduleData.WorldModuleBornPointGroupData.EnemyBornPoints.Add(
+                                        new BornPointData
+                                        {
+                                            ActorType = actorTypeName,
+                                            LocalGP = new GridPos3D(local_x, 0, local_z),
+                                            BornPointAlias = "",
+                                            WorldGP = new GridPos3D(world_x, WorldModule.MODULE_SIZE, world_z)
+                                        });
+                                    break;
+                                }
+                            }
                         }
 
                         WorldData.WorldBornPointGroupData_Runtime.Init_LoadModuleData(targetModuleGP, moduleData);

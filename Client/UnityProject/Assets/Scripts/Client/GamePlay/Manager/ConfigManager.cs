@@ -41,6 +41,21 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     [BoxGroup("角色Buff相克表")]
     public static EntityBuffAttributeRelationship[,] EntityBuffAttributeMatrix; // [老Buff, 新Buff], Value: Buff克制关系
 
+    public enum TypeStartIndex
+    {
+        None = 0,
+        Box = 1,
+        BoxIcon = 10000,
+        Enemy = 11000,
+        LevelTrigger = 12000,
+        WorldModule = 13000,
+        StaticLayout = 20000,
+        World = 30000,
+        FX = 31000,
+        BattleIndicator = 32000,
+        Player = 65535,
+    }
+
     public class TypeDefineConfig<T> where T : Object
     {
         public TypeDefineConfig(string typeNamePrefix, string prefabFolder, bool includeSubFolder, TypeStartIndex typeStartIndex)
@@ -49,19 +64,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             PrefabFolder_Relative = prefabFolder;
             IncludeSubFolder = includeSubFolder;
             m_TypeStartIndex = typeStartIndex;
-        }
-
-        public enum TypeStartIndex
-        {
-            Box = 1,
-            BoxIcon = 10000,
-            Enemy = 11000,
-            LevelTrigger = 12000,
-            WorldModule = 13000,
-            StaticLayout = 20000,
-            World = 30000,
-            FX = 31000,
-            BattleIndicator = 32000,
         }
 
         private string TypeNamePrefix;
@@ -189,51 +191,55 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     [ShowInInspector]
     [LabelText("箱子类型表")]
-    public static readonly TypeDefineConfig<Box> BoxTypeDefineDict = new TypeDefineConfig<Box>("Box", "/Resources/Prefabs/Designs/Box", true, TypeDefineConfig<Box>.TypeStartIndex.Box);
+    public static readonly TypeDefineConfig<Box> BoxTypeDefineDict = new TypeDefineConfig<Box>("Box", "/Resources/Prefabs/Designs/Box", true, ConfigManager.TypeStartIndex.Box);
 
     [ShowInInspector]
     [LabelText("箱子Icon类型表")]
-    public static readonly TypeDefineConfig<Texture2D> BoxIconTypeDefineDict = new TypeDefineConfig<Texture2D>("BoxIcon", "/Resources/BoxIcons", true, TypeDefineConfig<Texture2D>.TypeStartIndex.BoxIcon);
+    public static readonly TypeDefineConfig<Texture2D> BoxIconTypeDefineDict = new TypeDefineConfig<Texture2D>("BoxIcon", "/Resources/BoxIcons", true, ConfigManager.TypeStartIndex.BoxIcon);
 
     [ShowInInspector]
     [LabelText("敌人类型表")]
-    public static readonly TypeDefineConfig<EnemyActor> EnemyTypeDefineDict = new TypeDefineConfig<EnemyActor>("Enemy", "/Resources/Prefabs/Designs/Enemy", true, TypeDefineConfig<EnemyActor>.TypeStartIndex.Enemy);
+    public static readonly TypeDefineConfig<EnemyActor> EnemyTypeDefineDict = new TypeDefineConfig<EnemyActor>("Enemy", "/Resources/Prefabs/Designs/Enemy", true, ConfigManager.TypeStartIndex.Enemy);
 
     [ShowInInspector]
     [LabelText("关卡Trigger类型表")]
-    public static readonly TypeDefineConfig<LevelTriggerBase> LevelTriggerTypeDefineDict = new TypeDefineConfig<LevelTriggerBase>("LevelTrigger", "/Resources/Prefabs/Designs/LevelTrigger", true, TypeDefineConfig<LevelTriggerBase>.TypeStartIndex.LevelTrigger);
+    public static readonly TypeDefineConfig<LevelTriggerBase> LevelTriggerTypeDefineDict = new TypeDefineConfig<LevelTriggerBase>("LevelTrigger", "/Resources/Prefabs/Designs/LevelTrigger", true, ConfigManager.TypeStartIndex.LevelTrigger);
 
     [ShowInInspector]
     [LabelText("世界模组类型表")]
-    public static readonly TypeDefineConfig<WorldModuleDesignHelper> WorldModuleTypeDefineDict = new TypeDefineConfig<WorldModuleDesignHelper>("WorldModule", "/Designs/WorldModule", true, TypeDefineConfig<WorldModuleDesignHelper>.TypeStartIndex.WorldModule);
+    public static readonly TypeDefineConfig<WorldModuleDesignHelper> WorldModuleTypeDefineDict = new TypeDefineConfig<WorldModuleDesignHelper>("WorldModule", "/Designs/WorldModule", true, ConfigManager.TypeStartIndex.WorldModule);
 
     [ShowInInspector]
     [LabelText("静态布局类型表")]
-    public static readonly TypeDefineConfig<WorldModuleDesignHelper> StaticLayoutTypeDefineDict = new TypeDefineConfig<WorldModuleDesignHelper>("StaticLayout", "/Designs/StaticLayout", true, TypeDefineConfig<WorldModuleDesignHelper>.TypeStartIndex.StaticLayout);
+    public static readonly TypeDefineConfig<WorldModuleDesignHelper> StaticLayoutTypeDefineDict = new TypeDefineConfig<WorldModuleDesignHelper>("StaticLayout", "/Designs/StaticLayout", true, ConfigManager.TypeStartIndex.StaticLayout);
 
     [ShowInInspector]
     [LabelText("世界类型表")]
-    public static readonly TypeDefineConfig<WorldDesignHelper> WorldTypeDefineDict = new TypeDefineConfig<WorldDesignHelper>("World", "/Designs/Worlds", true, TypeDefineConfig<WorldDesignHelper>.TypeStartIndex.World);
+    public static readonly TypeDefineConfig<WorldDesignHelper> WorldTypeDefineDict = new TypeDefineConfig<WorldDesignHelper>("World", "/Designs/Worlds", true, ConfigManager.TypeStartIndex.World);
 
     [ShowInInspector]
     [LabelText("FX类型表")]
-    public static readonly TypeDefineConfig<FX> FXTypeDefineDict = new TypeDefineConfig<FX>("FX", "/Resources/Prefabs/FX", true, TypeDefineConfig<FX>.TypeStartIndex.FX);
+    public static readonly TypeDefineConfig<FX> FXTypeDefineDict = new TypeDefineConfig<FX>("FX", "/Resources/Prefabs/FX", true, ConfigManager.TypeStartIndex.FX);
 
     [ShowInInspector]
     [LabelText("BattleIndicator类型表")]
-    public static readonly TypeDefineConfig<BattleIndicator> BattleIndicatorTypeDefineDict = new TypeDefineConfig<BattleIndicator>("BattleIndicator", "/Resources/Prefabs/BattleIndicator", true, TypeDefineConfig<BattleIndicator>.TypeStartIndex.BattleIndicator);
+    public static readonly TypeDefineConfig<BattleIndicator> BattleIndicatorTypeDefineDict = new TypeDefineConfig<BattleIndicator>("BattleIndicator", "/Resources/Prefabs/BattleIndicator", true, ConfigManager.TypeStartIndex.BattleIndicator);
 
     [ShowInInspector]
     [LabelText("箱子占位配置表")]
     public static readonly Dictionary<ushort, BoxOccupationData> BoxOccupationConfigDict = new Dictionary<ushort, BoxOccupationData>();
 
     [ShowInInspector]
-    [LabelText("世界配置表")]
-    public static readonly Dictionary<ushort, WorldData> WorldDataConfigDict = new Dictionary<ushort, WorldData>();
-
-    [ShowInInspector]
     [LabelText("世界模组配置表")]
     public static readonly SortedDictionary<ushort, WorldModuleData> WorldModuleDataConfigDict = new SortedDictionary<ushort, WorldModuleData>();
+
+    [ShowInInspector]
+    [LabelText("静态布局配置表")]
+    public static readonly SortedDictionary<ushort, WorldModuleData> StaticLayoutDataConfigDict = new SortedDictionary<ushort, WorldModuleData>();
+
+    [ShowInInspector]
+    [LabelText("世界配置表")]
+    public static readonly Dictionary<ushort, WorldData> WorldDataConfigDict = new Dictionary<ushort, WorldData>();
 
     public static string DesignRoot = "/Designs/";
     public static string ResourcesPrefabDesignRoot = "/Resources/Prefabs/Designs/";
@@ -269,8 +275,9 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         FXTypeDefineDict.Clear();
         BattleIndicatorTypeDefineDict.Clear();
         BoxOccupationConfigDict.Clear();
-        WorldDataConfigDict.Clear();
         WorldModuleDataConfigDict.Clear();
+        StaticLayoutDataConfigDict.Clear();
+        WorldDataConfigDict.Clear();
     }
 
     #region Export
@@ -583,8 +590,9 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         LoadEntityBuffStatPropertyEnumReflection();
         LoadEntityBuffAttributeMatrix(dataFormat);
         LoadBoxOccupationDataConfig(dataFormat);
-        LoadWorldDataConfig(dataFormat);
         LoadWorldModuleDataConfig(dataFormat);
+        LoadStaticLayoutDataConfig(dataFormat);
+        LoadWorldDataConfig(dataFormat);
 
         IsLoaded = true;
     }
@@ -692,33 +700,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
-    private static void LoadWorldDataConfig(DataFormat dataFormat)
-    {
-        WorldDataConfigDict.Clear();
-
-        DirectoryInfo di = new DirectoryInfo(WorldDataConfigFolder_Build);
-        if (di.Exists)
-        {
-            foreach (FileInfo fi in di.GetFiles("*.config", SearchOption.AllDirectories))
-            {
-                byte[] bytes = File.ReadAllBytes(fi.FullName);
-                WorldData data = SerializationUtility.DeserializeValue<WorldData>(bytes, dataFormat);
-                if (WorldDataConfigDict.ContainsKey(data.WorldTypeIndex))
-                {
-                    Debug.LogError($"世界重名:{data.WorldTypeIndex}");
-                }
-                else
-                {
-                    WorldDataConfigDict.Add(data.WorldTypeIndex, data);
-                }
-            }
-        }
-        else
-        {
-            Debug.LogError("世界配置表不存在");
-        }
-    }
-
     private static void LoadWorldModuleDataConfig(DataFormat dataFormat)
     {
         WorldModuleDataConfigDict.Clear();
@@ -743,6 +724,60 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         else
         {
             Debug.LogError("世界模组配置表不存在");
+        }
+    }
+
+    private static void LoadStaticLayoutDataConfig(DataFormat dataFormat)
+    {
+        StaticLayoutDataConfigDict.Clear();
+
+        DirectoryInfo di = new DirectoryInfo(StaticLayoutDataConfigFolder_Build);
+        if (di.Exists)
+        {
+            foreach (FileInfo fi in di.GetFiles("*.config", SearchOption.AllDirectories))
+            {
+                byte[] bytes = File.ReadAllBytes(fi.FullName);
+                WorldModuleData data = SerializationUtility.DeserializeValue<WorldModuleData>(bytes, dataFormat);
+                if (StaticLayoutDataConfigDict.ContainsKey(data.WorldModuleTypeIndex))
+                {
+                    Debug.LogError($"静态布局重名:{data.WorldModuleTypeIndex}");
+                }
+                else
+                {
+                    StaticLayoutDataConfigDict.Add(data.WorldModuleTypeIndex, data);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("静态布局配置表不存在");
+        }
+    }
+
+    private static void LoadWorldDataConfig(DataFormat dataFormat)
+    {
+        WorldDataConfigDict.Clear();
+
+        DirectoryInfo di = new DirectoryInfo(WorldDataConfigFolder_Build);
+        if (di.Exists)
+        {
+            foreach (FileInfo fi in di.GetFiles("*.config", SearchOption.AllDirectories))
+            {
+                byte[] bytes = File.ReadAllBytes(fi.FullName);
+                WorldData data = SerializationUtility.DeserializeValue<WorldData>(bytes, dataFormat);
+                if (WorldDataConfigDict.ContainsKey(data.WorldTypeIndex))
+                {
+                    Debug.LogError($"世界重名:{data.WorldTypeIndex}");
+                }
+                else
+                {
+                    WorldDataConfigDict.Add(data.WorldTypeIndex, data);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("世界配置表不存在");
         }
     }
 
@@ -942,13 +977,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return worldModuleTypeName;
     }
 
-    public static string GetStaticLayoutName(ushort worldModuleTypeIndex)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        StaticLayoutTypeDefineDict.TypeNameDict.TryGetValue(worldModuleTypeIndex, out string worldModuleTypeName);
-        return worldModuleTypeName;
-    }
-
     public static ushort GetWorldModuleTypeIndex(string worldModuleTypeName)
     {
         if (!IsLoaded) LoadAllConfigs();
@@ -960,6 +988,26 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         WorldModuleTypeDefineDict.TypeIndexDict.TryGetValue(worldModuleTypeName, out ushort worldModuleTypeIndex);
         return worldModuleTypeIndex;
+    }
+
+    public static string GetStaticLayoutName(ushort staticLayoutTypeIndex)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        StaticLayoutTypeDefineDict.TypeNameDict.TryGetValue(staticLayoutTypeIndex, out string staticLayoutTypeName);
+        return staticLayoutTypeName;
+    }
+
+    public static ushort GetStaticLayoutTypeIndex(string staticLayoutTypeName)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        if (string.IsNullOrEmpty(staticLayoutTypeName))
+        {
+            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的静态布局Prefab", "#D100BC", staticLayoutTypeName));
+            return 0;
+        }
+
+        StaticLayoutTypeDefineDict.TypeIndexDict.TryGetValue(staticLayoutTypeName, out ushort staticLayoutTypeIndex);
+        return staticLayoutTypeIndex;
     }
 
     public static string GetWorldName(ushort worldTypeIndex)
@@ -1029,18 +1077,32 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return occupationData;
     }
 
-    public static WorldData GetWorldDataConfig(ushort worldTypeIndex)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        WorldDataConfigDict.TryGetValue(worldTypeIndex, out WorldData worldData);
-        return worldData?.Clone();
-    }
-
     public static WorldModuleData GetWorldModuleDataConfig(ushort worldModuleTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
         WorldModuleDataConfigDict.TryGetValue(worldModuleTypeIndex, out WorldModuleData worldModuleData);
         return worldModuleData?.Clone();
+    }
+
+    public static WorldModuleData GetStaticLayoutDataConfig(ushort staticLayoutTypeIndex, bool clone)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        StaticLayoutDataConfigDict.TryGetValue(staticLayoutTypeIndex, out WorldModuleData worldModuleData);
+        if (clone)
+        {
+            return worldModuleData?.Clone();
+        }
+        else
+        {
+            return worldModuleData;
+        }
+    }
+
+    public static WorldData GetWorldDataConfig(ushort worldTypeIndex)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        WorldDataConfigDict.TryGetValue(worldTypeIndex, out WorldData worldData);
+        return worldData?.Clone();
     }
 
     #endregion

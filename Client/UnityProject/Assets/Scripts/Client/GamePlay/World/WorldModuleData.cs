@@ -6,6 +6,7 @@ using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using UnityEngine;
 
 public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldModuleData>
 {
@@ -30,6 +31,8 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     public GridPosR.Orientation[,,] RawBoxOrientationMatrix = new GridPosR.Orientation[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
     public GridPosR.Orientation[,,] BoxOrientationMatrix = new GridPosR.Orientation[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 箱子朝向矩阵记录，仅引用于对应核心格的箱子
     public ushort[,,] BoxMatrix_Temp_CheckOverlap; // 导出时临时使用，为了检查箱子重叠
+
+    public Grid3DBounds BoxBounds;
 
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
     public LevelTriggerGroupData WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();
@@ -88,6 +91,8 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
                 }
             }
         }
+
+        data.BoxBounds = BoxBounds;
 
         if (EventTriggerAppearBoxDataList != null) data.EventTriggerAppearBoxDataList = EventTriggerAppearBoxDataList.Clone();
         return data;

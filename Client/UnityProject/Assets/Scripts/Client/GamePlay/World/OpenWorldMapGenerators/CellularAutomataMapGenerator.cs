@@ -3,7 +3,7 @@ using BiangLibrary.GameDataFormat.Grid;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class CellularAutomataMapGenerator : MapGenerator
+public sealed class CellularAutomataMapGenerator : MapGenerator
 {
     public bool[,] map_1;
     public bool[,] map_2;
@@ -20,8 +20,8 @@ public class CellularAutomataMapGenerator : MapGenerator
 
     public bool this[int x, int y] => map_1[x, y];
 
-    public CellularAutomataMapGenerator(OpenWorld.GenerateBoxLayerData boxLayerData, int width, int height, uint seed, GridPos leaveSpaceForPlayerBP)
-        : base(boxLayerData, width, height, seed, leaveSpaceForPlayerBP)
+    public CellularAutomataMapGenerator(OpenWorld.GenerateBoxLayerData boxLayerData, int width, int height, uint seed, OpenWorld openWorld)
+        : base(boxLayerData, width, height, seed, openWorld)
     {
         map_1 = new bool[Width, Height];
         map_2 = new bool[Width, Height];
@@ -49,74 +49,60 @@ public class CellularAutomataMapGenerator : MapGenerator
 
         // 联通洞穴
         ConnectCave(boxLayerData.CaveConnectPercent, boxLayerData.DeterminePlayerBP);
-
-        if (!boxLayerData.DeterminePlayerBP)
-        {
-            if (leaveSpaceForPlayerBP.x >= 0 && leaveSpaceForPlayerBP.x < Width && leaveSpaceForPlayerBP.z >= 0 && leaveSpaceForPlayerBP.z < Height)
-            {
-                map_1[leaveSpaceForPlayerBP.x, leaveSpaceForPlayerBP.z] = false;
-            }
-        }
     }
 
     private void InitRandomFillMap(int randomFillPercent)
     {
-        for (int x = 0; x < Width; x++)
+        for (int world_x = 0; world_x < Width; world_x++)
+        for (int world_z = 0; world_z < Height; world_z++)
         {
-            for (int y = 0; y < Height; y++)
+            bool fill = false;
+            if (world_x == 0 || world_x == Width - 1 || world_z == 0 || world_z == Height - 1)
             {
-                bool fill = false;
-                if (x == 0 || x == Width - 1 || y == 0 || y == Height - 1)
-                {
-                    fill = true;
-                }
-                else
-                {
-                    fill = SRandom.Range(0, 100) < randomFillPercent;
-                }
-
-                map_1[x, y] = fill;
+                fill = true;
             }
+            else
+            {
+                fill = SRandom.Range(0, 100) < randomFillPercent;
+            }
+
+            map_1[world_x, world_z] = fill;
         }
     }
 
     private void SmoothMap(bool[,] oldMap, bool[,] newMap)
     {
-        for (int x = 0; x < Width; x++)
+        for (int world_x = 0; world_x < Width; world_x++)
+        for (int world_z = 0; world_z < Height; world_z++)
         {
-            for (int y = 0; y < Height; y++)
-            {
-                int neighborWallCount = GetSurroundingWallCount(oldMap, x, y, 1);
-                newMap[x, y] = neighborWallCount >= 5;
-            }
+            int neighborWallCount = GetSurroundingWallCount(oldMap, world_x, world_z, 1);
+            newMap[world_x, world_z] = neighborWallCount >= 5;
         }
     }
 
     private void SmoothMapGenerateWallInOpenSpace(bool[,] oldMap, bool[,] newMap)
     {
-        for (int x = 0; x < Width; x++)
+        for (int world_x = 0; world_x < Width; world_x++)
+        for (int world_z = 0; world_z < Height; world_z++)
         {
-            for (int y = 0; y < Height; y++)
-            {
-                int neighborWallCount = GetSurroundingWallCount(oldMap, x, y, 1);
-                int neighborWallCount_2x = GetSurroundingWallCount(oldMap, x, y, 2);
-                newMap[x, y] = neighborWallCount >= 5 || neighborWallCount_2x <= 2;
-            }
+            int neighborWallCount = GetSurroundingWallCount(oldMap, world_x, world_z, 1);
+            int neighborWallCount_2x = GetSurroundingWallCount(oldMap, world_x, world_z, 2);
+            newMap[world_x, world_z] = neighborWallCount >= 5 || neighborWallCount_2x <= 2;
         }
     }
 
-    private int GetSurroundingWallCount(bool[,] oldMap, int gridX, int gridY, int rounds)
+    private int GetSurroundingWallCount(bool[,] oldMap, int world_x, int world_z, int rounds)
     {
         int wallCount = 0;
-        for (int neighborX = gridX - rounds; neighborX <= gridX + rounds; neighborX++)
+        for (int neighborX = world_x - rounds; neighborX <= world_x + rounds; neighborX++)
         {
-            for (int neighborY = gridY - rounds; neighborY <= gridY + rounds; neighborY++)
+            for (int neighborZ = world_z - rounds; neighborZ <= world_z + rounds; neighborZ++)
             {
-                if (neighborX >= 0 && neighborX < Width && neighborY >= 0 && neighborY < Height)
+                if (neighborX >= 0 && neighborX < Width && neighborZ >= 0 && neighborZ < Height)
                 {
-                    if (neighborX != gridX || neighborY != gridY)
+                    if (neighborX != world_x || neighborZ != world_z)
                     {
-                        wallCount += oldMap[neighborX, neighborY] ? 1 : 0;
+                        wallCount += oldMap[neighborX, neighborZ] ? 1 : 0;
                     }
                 }
                 else
@@ -133,9 +119,9 @@ public class CellularAutomataMapGenerator : MapGenerator
     {
         if (connectCavePercent <= 0) return;
         CaveIndexMap = new int[Width, Height];
-        for (int x = 0; x < Width; x++)
-        for (int y = 0; y < Height; y++)
-            CaveIndexMap[x, y] = -1;
+        for (int world_x = 0; world_x < Width; world_x++)
+        for (int world_z = 0; world_z < Height; world_z++)
+            CaveIndexMap[world_x, world_z] = -1;
 
         #region Indentify caves
 
@@ -143,36 +129,36 @@ public class CellularAutomataMapGenerator : MapGenerator
 
         GridPos cavePointMax_X = new GridPos(-1, 0);
         GridPos cavePointMin_X = new GridPos(int.MaxValue, 0);
-        GridPos cavePointMax_Y = new GridPos(0, -1);
-        GridPos cavePointMin_Y = new GridPos(0, int.MaxValue);
+        GridPos cavePointMax_Z = new GridPos(0, -1);
+        GridPos cavePointMin_Z = new GridPos(0, int.MaxValue);
 
         List<List<GridPos>> CaveConnectPoints = new List<List<GridPos>>();
         Queue<GridPos> floodQueue = new Queue<GridPos>(200);
 
-        while (PickStartPoint(out int x, out int y))
+        while (PickStartPoint(out int world_x, out int world_z))
         {
             floodQueue.Clear();
-            floodQueue.Enqueue(new GridPos(x, y));
+            floodQueue.Enqueue(new GridPos(world_x, world_z));
             Flood(caveIndex, out int area);
             caveIndex++;
-            CaveConnectPoints.Add(new List<GridPos> {cavePointMax_X, cavePointMin_X, cavePointMax_Y, cavePointMin_Y});
+            CaveConnectPoints.Add(new List<GridPos> {cavePointMax_X, cavePointMin_X, cavePointMax_Z, cavePointMin_Z});
             if (determinePlayerBP) ValidPlayerPosInConnectedCaves = cavePointMin_X; // 处在洞穴中的玩家位置,随便取一个作为初始，避免只有单洞穴情况后面没有赋值
 
             cavePointMax_X = new GridPos(-1, 0);
             cavePointMin_X = new GridPos(int.MaxValue, 0);
-            cavePointMax_Y = new GridPos(0, -1);
-            cavePointMin_Y = new GridPos(0, int.MaxValue);
+            cavePointMax_Z = new GridPos(0, -1);
+            cavePointMin_Z = new GridPos(0, int.MaxValue);
         }
 
-        bool PickStartPoint(out int x, out int y)
+        bool PickStartPoint(out int world_x, out int world_z)
         {
-            x = 0;
-            y = 0;
-            for (x = 0; x < Width; x++)
+            world_x = 0;
+            world_z = 0;
+            for (world_x = 0; world_x < Width; world_x++)
             {
-                for (y = 0; y < Height; y++)
+                for (world_z = 0; world_z < Height; world_z++)
                 {
-                    if (!map_1[x, y] && CaveIndexMap[x, y] == -1)
+                    if (!map_1[world_x, world_z] && CaveIndexMap[world_x, world_z] == -1)
                     {
                         return true;
                     }
@@ -188,21 +174,21 @@ public class CellularAutomataMapGenerator : MapGenerator
             while (floodQueue.Count > 0)
             {
                 GridPos center = floodQueue.Dequeue();
-                int x = center.x;
-                int y = center.z;
-                if (x < 0 || x >= Width || y < 0 || y >= Height) continue;
-                if (map_1[x, y]) continue;
-                if (CaveIndexMap[x, y] == _caveIndex) continue;
-                CaveIndexMap[x, y] = _caveIndex;
+                int world_x = center.x;
+                int world_z = center.z;
+                if (world_x < 0 || world_x >= Width || world_z < 0 || world_z >= Height) continue;
+                if (map_1[world_x, world_z]) continue;
+                if (CaveIndexMap[world_x, world_z] == _caveIndex) continue;
+                CaveIndexMap[world_x, world_z] = _caveIndex;
                 caveArea++;
-                if (cavePointMax_X.x < x) cavePointMax_X = new GridPos(x, y);
-                if (cavePointMin_X.x > x) cavePointMin_X = new GridPos(x, y);
-                if (cavePointMax_Y.z < y) cavePointMax_Y = new GridPos(x, y);
-                if (cavePointMin_Y.z > y) cavePointMin_Y = new GridPos(x, y);
-                floodQueue.Enqueue(new GridPos(x - 1, y));
-                floodQueue.Enqueue(new GridPos(x, y - 1));
-                floodQueue.Enqueue(new GridPos(x + 1, y));
-                floodQueue.Enqueue(new GridPos(x, y + 1));
+                if (cavePointMax_X.x < world_x) cavePointMax_X = new GridPos(world_x, world_z);
+                if (cavePointMin_X.x > world_x) cavePointMin_X = new GridPos(world_x, world_z);
+                if (cavePointMax_Z.z < world_z) cavePointMax_Z = new GridPos(world_x, world_z);
+                if (cavePointMin_Z.z > world_z) cavePointMin_Z = new GridPos(world_x, world_z);
+                floodQueue.Enqueue(new GridPos(world_x - 1, world_z));
+                floodQueue.Enqueue(new GridPos(world_x, world_z - 1));
+                floodQueue.Enqueue(new GridPos(world_x + 1, world_z));
+                floodQueue.Enqueue(new GridPos(world_x, world_z + 1));
             }
         }
 
@@ -253,13 +239,13 @@ public class CellularAutomataMapGenerator : MapGenerator
             for (int x = 0; x < Width; x++)
             {
                 bool found = false;
-                for (int y = 0; y < Height; y++)
+                for (int z = 0; z < Height; z++)
                 {
-                    if (CaveIndexMap[x, y] == rootCaveIndex)
+                    if (CaveIndexMap[x, z] == rootCaveIndex)
                     {
-                        ValidPlayerPosInConnectedCaves = new GridPos(x, y);
+                        ValidPlayerPosInConnectedCaves = new GridPos(x, z);
                         found = true;
-                        Log($"PlayerBP found: ({x},{y}) CaveIndex: {rootCaveIndex} CaveIndex; {CaveIndexMap[x, y]}");
+                        Log($"PlayerBP found: ({x},{z}) CaveIndex: {rootCaveIndex} CaveIndex; {CaveIndexMap[x, z]}");
                         break;
                     }
                 }
@@ -342,25 +328,25 @@ public class CellularAutomataMapGenerator : MapGenerator
 
             int xMin = Mathf.Min(cp_A.x, cp_B.x);
             int xMax = Mathf.Max(cp_A.x, cp_B.x);
-            int yMin = Mathf.Min(cp_A.z, cp_B.z);
-            int yMax = Mathf.Max(cp_A.z, cp_B.z);
+            int zMin = Mathf.Min(cp_A.z, cp_B.z);
+            int zMax = Mathf.Max(cp_A.z, cp_B.z);
 
             int cur_X = xMin;
             bool revDiagonal = (cp_A.x - cp_B.x) * (cp_A.z - cp_B.z) < 0; // 左上到右下
-            int cur_Y = revDiagonal ? yMax : yMin;
+            int cur_Z = revDiagonal ? zMax : zMin;
 
             int tunnelCount = 0;
             if (!revDiagonal)
             {
-                while (cur_X != xMax || cur_Y != yMax)
+                while (cur_X != xMax || cur_Z != zMax)
                 {
-                    Assert.IsFalse(cur_X > xMax || cur_Y > yMax);
+                    Assert.IsFalse(cur_X > xMax || cur_Z > zMax);
                     bool goX = false;
                     if (cur_X == xMax)
                     {
                         goX = false;
                     }
-                    else if (cur_Y == yMax)
+                    else if (cur_Z == zMax)
                     {
                         goX = true;
                     }
@@ -374,7 +360,7 @@ public class CellularAutomataMapGenerator : MapGenerator
                         int diffX = Mathf.Max(1, SRandom.Range(1, (xMax - cur_X + 1) / 2 + 1));
                         for (int dx = 1; dx <= diffX; dx++)
                         {
-                            map_1[cur_X + dx, cur_Y] = false;
+                            map_1[cur_X + dx, cur_Z] = false;
                             tunnelCount++;
                         }
 
@@ -382,28 +368,28 @@ public class CellularAutomataMapGenerator : MapGenerator
                     }
                     else
                     {
-                        int diffY = Mathf.Max(1, SRandom.Range(1, (yMax - cur_Y + 1) / 2 + 1));
-                        for (int dy = 1; dy <= diffY; dy++)
+                        int diffZ = Mathf.Max(1, SRandom.Range(1, (zMax - cur_Z + 1) / 2 + 1));
+                        for (int dy = 1; dy <= diffZ; dy++)
                         {
-                            map_1[cur_X, cur_Y + dy] = false;
+                            map_1[cur_X, cur_Z + dy] = false;
                             tunnelCount++;
                         }
 
-                        cur_Y += diffY;
+                        cur_Z += diffZ;
                     }
                 }
             }
             else
             {
-                while (cur_X != xMax || cur_Y != yMin)
+                while (cur_X != xMax || cur_Z != zMin)
                 {
-                    Assert.IsFalse(cur_X > xMax || cur_Y < yMin);
+                    Assert.IsFalse(cur_X > xMax || cur_Z < zMin);
                     bool goX = false;
                     if (cur_X == xMax)
                     {
                         goX = false;
                     }
-                    else if (cur_Y == yMin)
+                    else if (cur_Z == zMin)
                     {
                         goX = true;
                     }
@@ -417,7 +403,7 @@ public class CellularAutomataMapGenerator : MapGenerator
                         int diffX = Mathf.Max(1, SRandom.Range(1, (xMax - cur_X + 1) / 2 + 1));
                         for (int dx = 1; dx <= diffX; dx++)
                         {
-                            map_1[cur_X + dx, cur_Y] = false;
+                            map_1[cur_X + dx, cur_Z] = false;
                             tunnelCount++;
                         }
 
@@ -425,14 +411,14 @@ public class CellularAutomataMapGenerator : MapGenerator
                     }
                     else
                     {
-                        int diffY = Mathf.Max(1, SRandom.Range(1, (cur_Y - yMin + 1) / 2 + 1));
-                        for (int dy = 1; dy <= diffY; dy++)
+                        int diffZ = Mathf.Max(1, SRandom.Range(1, (cur_Z - zMin + 1) / 2 + 1));
+                        for (int dy = 1; dy <= diffZ; dy++)
                         {
-                            map_1[cur_X, cur_Y - dy] = false;
+                            map_1[cur_X, cur_Z - dy] = false;
                             tunnelCount++;
                         }
 
-                        cur_Y -= diffY;
+                        cur_Z -= diffZ;
                     }
                 }
             }
@@ -445,11 +431,11 @@ public class CellularAutomataMapGenerator : MapGenerator
         if (CAVE_GEN_DEBUG_LOG) // 统计、验证、日志
         {
             // 重新对洞穴进行标记
-            for (int x = 0; x < Width; x++)
+            for (int world_x = 0; world_x < Width; world_x++)
             {
-                for (int y = 0; y < Height; y++)
+                for (int world_z = 0; world_z < Height; world_z++)
                 {
-                    CaveIndexMap[x, y] = -1;
+                    CaveIndexMap[world_x, world_z] = -1;
                 }
             }
 
@@ -482,16 +468,15 @@ public class CellularAutomataMapGenerator : MapGenerator
         }
     }
 
-    public override void ApplyGeneratorToWorldModuleData(WorldModuleData moduleData, int module_x, int module_z)
+    public override void ApplyToWorldMap()
     {
-        for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
-        for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
+        for (int world_x = 0; world_x < Width; world_x++)
+        for (int world_z = 0; world_z < Height; world_z++)
         {
-            bool genSuc = map_1[x + WorldModule.MODULE_SIZE * module_x, z + WorldModule.MODULE_SIZE * module_z];
+            bool genSuc = map_1[world_x, world_z];
             if (genSuc)
             {
-                ushort existedBoxTypeIndex = moduleData.RawBoxMatrix[x, 0, z];
-                TryOverrideBoxInfoOnMap(moduleData, existedBoxTypeIndex, x, z, module_x, module_z);
+                TryOverrideToWorldMap(world_x, world_z);
             }
         }
     }

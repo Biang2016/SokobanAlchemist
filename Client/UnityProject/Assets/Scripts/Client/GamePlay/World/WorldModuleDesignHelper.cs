@@ -50,6 +50,14 @@ public class WorldModuleDesignHelper : MonoBehaviour
         WorldModuleData worldModuleData = new WorldModuleData();
         worldModuleData.InitNormalModuleData();
         worldModuleData.WorldModuleFeature = WorldModuleFeature;
+
+        Grid3DBounds boxBounds = new Grid3DBounds();
+        int xMin = int.MaxValue;
+        int xMax = int.MinValue;
+        int yMin = int.MaxValue;
+        int yMax = int.MinValue;
+        int zMin = int.MaxValue;
+        int zMax = int.MinValue;
         foreach (Box_LevelEditor box in boxes)
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
@@ -91,6 +99,17 @@ public class WorldModuleDesignHelper : MonoBehaviour
 
                 if (spaceAvailable)
                 {
+                    foreach (GridPos3D gridPos3D in boxOccupation_rotated)
+                    {
+                        GridPos3D gridPos = gridPos3D + gp;
+                        xMin = Mathf.Min(xMin, gridPos.x);
+                        xMax = Mathf.Max(xMax, gridPos.x);
+                        yMin = Mathf.Min(yMin, gridPos.y);
+                        yMax = Mathf.Max(yMax, gridPos.y);
+                        zMin = Mathf.Min(zMin, gridPos.z);
+                        zMax = Mathf.Max(zMax, gridPos.z);
+                    }
+
                     worldModuleData.RawBoxMatrix[gp.x, gp.y, gp.z] = boxTypeIndex;
                     worldModuleData.RawBoxOrientationMatrix[gp.x, gp.y, gp.z] = box.BoxOrientation;
                     foreach (GridPos3D gridPos3D in boxOccupation_rotated)
@@ -109,6 +128,10 @@ public class WorldModuleDesignHelper : MonoBehaviour
                 worldModuleData.BoxExtraSerializeDataMatrix[gp.x, gp.y, gp.z] = data;
             }
         }
+
+        boxBounds.position = new GridPos3D(xMin, yMin, zMin);
+        boxBounds.size = new GridPos3D(xMax - xMin + 1, yMax - yMin + 1, zMax - zMin + 1);
+        worldModuleData.BoxBounds = boxBounds;
 
         List<LevelTriggerBase> levelTriggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
         foreach (LevelTriggerBase trigger in levelTriggers)
