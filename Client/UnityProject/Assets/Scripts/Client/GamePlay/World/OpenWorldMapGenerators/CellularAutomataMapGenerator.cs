@@ -54,19 +54,26 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
     private void InitRandomFillMap(int randomFillPercent)
     {
         for (int world_x = 0; world_x < Width; world_x++)
-        for (int world_z = 0; world_z < Height; world_z++)
         {
-            bool fill = false;
-            if (world_x == 0 || world_x == Width - 1 || world_z == 0 || world_z == Height - 1)
+            for (int world_z = 0; world_z < Height; world_z++)
             {
-                fill = true;
-            }
-            else
-            {
-                fill = SRandom.Range(0, 100) < randomFillPercent;
-            }
+                bool isStaticLayout = WorldMap_StaticLayoutOccupied[world_x, world_z] != 0; // 识别静态布局
+                bool fill = false;
+                if (world_x == 0 || world_x == Width - 1 || world_z == 0 || world_z == Height - 1)
+                {
+                    fill = true;
+                }
+                else if (isStaticLayout)
+                {
+                    fill = WorldMap[world_x, world_z] == BoxTypeIndex;
+                }
+                else
+                {
+                    fill = SRandom.Range(0, 100) < randomFillPercent;
+                }
 
-            map_1[world_x, world_z] = fill;
+                map_1[world_x, world_z] = fill;
+            }
         }
     }
 
@@ -75,6 +82,8 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
         for (int world_x = 0; world_x < Width; world_x++)
         for (int world_z = 0; world_z < Height; world_z++)
         {
+            bool isStaticLayout = WorldMap_StaticLayoutOccupied[world_x, world_z] != 0; // 识别静态布局
+            if (isStaticLayout) continue; // 静态布局内不受影响
             int neighborWallCount = GetSurroundingWallCount(oldMap, world_x, world_z, 1);
             newMap[world_x, world_z] = neighborWallCount >= 5;
         }
@@ -85,6 +94,8 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
         for (int world_x = 0; world_x < Width; world_x++)
         for (int world_z = 0; world_z < Height; world_z++)
         {
+            bool isStaticLayout = WorldMap_StaticLayoutOccupied[world_x, world_z] != 0; // 识别静态布局
+            if (isStaticLayout) continue; // 静态布局内不受影响
             int neighborWallCount = GetSurroundingWallCount(oldMap, world_x, world_z, 1);
             int neighborWallCount_2x = GetSurroundingWallCount(oldMap, world_x, world_z, 2);
             newMap[world_x, world_z] = neighborWallCount >= 5 || neighborWallCount_2x <= 2;
@@ -102,7 +113,8 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                 {
                     if (neighborX != world_x || neighborZ != world_z)
                     {
-                        wallCount += oldMap[neighborX, neighborZ] ? 1 : 0;
+                        bool isWall = oldMap[neighborX, neighborZ];
+                        wallCount += isWall ? 1 : 0;
                     }
                 }
                 else
@@ -360,6 +372,8 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                         int diffX = Mathf.Max(1, SRandom.Range(1, (xMax - cur_X + 1) / 2 + 1));
                         for (int dx = 1; dx <= diffX; dx++)
                         {
+                            bool isStaticLayout = WorldMap_StaticLayoutOccupied[cur_X + dx, cur_Z] != 0; // 识别静态布局
+                            if (isStaticLayout) continue; // 静态布局内不受影响
                             map_1[cur_X + dx, cur_Z] = false;
                             tunnelCount++;
                         }
@@ -371,6 +385,8 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                         int diffZ = Mathf.Max(1, SRandom.Range(1, (zMax - cur_Z + 1) / 2 + 1));
                         for (int dy = 1; dy <= diffZ; dy++)
                         {
+                            bool isStaticLayout = WorldMap_StaticLayoutOccupied[cur_X, cur_Z + dy] != 0; // 识别静态布局
+                            if (isStaticLayout) continue; // 静态布局内不受影响
                             map_1[cur_X, cur_Z + dy] = false;
                             tunnelCount++;
                         }
@@ -403,6 +419,8 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                         int diffX = Mathf.Max(1, SRandom.Range(1, (xMax - cur_X + 1) / 2 + 1));
                         for (int dx = 1; dx <= diffX; dx++)
                         {
+                            bool isStaticLayout = WorldMap_StaticLayoutOccupied[cur_X + dx, cur_Z] != 0; // 识别静态布局
+                            if (isStaticLayout) continue; // 静态布局内不受影响
                             map_1[cur_X + dx, cur_Z] = false;
                             tunnelCount++;
                         }
@@ -414,6 +432,8 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                         int diffZ = Mathf.Max(1, SRandom.Range(1, (cur_Z - zMin + 1) / 2 + 1));
                         for (int dy = 1; dy <= diffZ; dy++)
                         {
+                            bool isStaticLayout = WorldMap_StaticLayoutOccupied[cur_X, cur_Z - dy] != 0; // 识别静态布局
+                            if (isStaticLayout) continue; // 静态布局内不受影响
                             map_1[cur_X, cur_Z - dy] = false;
                             tunnelCount++;
                         }
