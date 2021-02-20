@@ -56,13 +56,43 @@ MonoBehaviour:
   - AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 1
-    StaticLayoutTypeName: LayoutTest
+    CountPer10KGrid: 10
+    StaticLayoutTypeName: FireEnemyTNTGate
+  - AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    CountPer10KGrid: 5
+    StaticLayoutTypeName: BossFireBox
+  - AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    CountPer10KGrid: 10
+    StaticLayoutTypeName: ThornTrapBoxCave
+  - AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    CountPer10KGrid: 5
+    StaticLayoutTypeName: LifeBoxCave
+  - AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    CountPer10KGrid: 5
+    StaticLayoutTypeName: ActionBoxCave
+  - AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    CountPer10KGrid: 15
+    StaticLayoutTypeName: CharcoalMine
+  - AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    CountPer10KGrid: 15
+    StaticLayoutTypeName: IceBoxCave
   GenerateBoxLayerDataList:
   - AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
-    CountPerThousandGrid: 20
+    CountPer10KGrid: 20
     BoxTypeName: BrickBox
     FillPercent: 63
     CaveConnectPercent: 10
@@ -73,7 +103,7 @@ MonoBehaviour:
     - BrickBox
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 0
-    CountPerThousandGrid: 20
+    CountPer10KGrid: 20
     BoxTypeName: BorderBox
     FillPercent: 0
     CaveConnectPercent: 0
@@ -83,7 +113,7 @@ MonoBehaviour:
   - AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
-    CountPerThousandGrid: 20
+    CountPer10KGrid: 20
     BoxTypeName: WoodenBox
     FillPercent: 52
     CaveConnectPercent: 0
@@ -94,7 +124,7 @@ MonoBehaviour:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 3
+    CountPer10KGrid: 15
     BoxTypeName: LightningBox
     FillPercent: 40
     CaveConnectPercent: 40
@@ -105,7 +135,7 @@ MonoBehaviour:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 3
+    CountPer10KGrid: 20
     BoxTypeName: FireBox
     FillPercent: 40
     CaveConnectPercent: 40
@@ -116,7 +146,7 @@ MonoBehaviour:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 3
+    CountPer10KGrid: 10
     BoxTypeName: IceBox
     FillPercent: 40
     CaveConnectPercent: 40
@@ -127,7 +157,7 @@ MonoBehaviour:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 1
+    CountPer10KGrid: 8
     BoxTypeName: TNTBox
     FillPercent: 40
     CaveConnectPercent: 40
@@ -138,7 +168,7 @@ MonoBehaviour:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 1
+    CountPer10KGrid: 2
     BoxTypeName: LifeBox
     FillPercent: 40
     CaveConnectPercent: 40
@@ -149,7 +179,7 @@ MonoBehaviour:
     - BrickBox
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 3
+    CountPer10KGrid: 6
     BoxTypeName: GoldenBox
     FillPercent: 40
     CaveConnectPercent: 40
@@ -160,7 +190,7 @@ MonoBehaviour:
     - BrickBox
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 1
+    CountPer10KGrid: 1
     BoxTypeName: Golden3Box
     FillPercent: 40
     CaveConnectPercent: 40
@@ -170,7 +200,7 @@ MonoBehaviour:
   - AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 1
+    CountPer10KGrid: 2
     BoxTypeName: ActionBox
     FillPercent: 40
     CaveConnectPercent: 40
@@ -183,38 +213,38 @@ MonoBehaviour:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 1
+    CountPer10KGrid: 3
     ActorTypeName: FireEnemy
   - AllowReplacedBoxTypeNames:
     - BrickBox
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 1
+    CountPer10KGrid: 3
     ActorTypeName: IceEnemy
   - AllowReplacedBoxTypeNames:
     - BrickBox
     - WoodenBox
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 1
+    CountPer10KGrid: 3
     ActorTypeName: SpeedEnemy
   - AllowReplacedBoxTypeNames:
     - WoodenBox
     - BrickBox
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 1
+    CountPer10KGrid: 3
     ActorTypeName: LifeEnemy
   - AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 1
+    CountPer10KGrid: 3
     ActorTypeName: LightningEnemy
   - AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    CountPerThousandGrid: 1
+    CountPer10KGrid: 2
     ActorTypeName: BossEnemy
   ExtendScope_Load: 4
   ExtendScope_Recycle: 20

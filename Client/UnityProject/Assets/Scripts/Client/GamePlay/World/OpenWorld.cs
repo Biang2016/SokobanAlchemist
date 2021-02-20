@@ -5,6 +5,7 @@ using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class OpenWorld : World
 {
@@ -43,8 +44,8 @@ public class OpenWorld : World
         public GenerateAlgorithm m_GenerateAlgorithm = GenerateAlgorithm.CellularAutomata;
 
         [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.Random)]
-        [LabelText("比率：每千格约有多少个")]
-        public int CountPerThousandGrid = 20;
+        [LabelText("比率：每万格约有多少个")]
+        public int CountPer10KGrid = 20;
 
         public void Init()
         {
@@ -276,7 +277,7 @@ public class OpenWorld : World
             {
                 case GenerateAlgorithm.Random:
                 {
-                    generator = new RandomMapGenerator(actorLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999),this);
+                    generator = new RandomMapGenerator(actorLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
                     break;
                 }
             }
@@ -546,9 +547,9 @@ public class OpenWorld : World
         worldModule.WorldModuleData.Modification?.SaveData(worldModule.ModuleGP);
         WorldData.WorldBornPointGroupData_Runtime.Dynamic_UnloadModuleData(currentShowModuleGP);
         WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
-        yield return worldModule.Clear(256);
+        yield return worldModule.Clear(false, 256);
         worldModule.PoolRecycle();
-        m_LevelCacheData.WorldModuleDataDict.Remove(currentShowModuleGP);
+        //m_LevelCacheData.WorldModuleDataDict.Remove(currentShowModuleGP);
         recycleModuleFinished[boolIndex] = true;
     }
 

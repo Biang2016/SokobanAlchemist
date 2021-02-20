@@ -49,7 +49,7 @@ public class World : PoolObject
                     WorldModule module = WorldModuleMatrix[x, y, z];
                     if (module != null)
                     {
-                        yield return module.Clear();
+                        yield return module.Clear(true);
                         module.PoolRecycle();
                         WorldModuleMatrix[x, y, z] = null;
                     }
@@ -66,7 +66,7 @@ public class World : PoolObject
                     WorldModule module = BorderWorldModuleMatrix[x, y, z];
                     if (module != null)
                     {
-                        yield return module.Clear();
+                        yield return module.Clear(true);
                         module.PoolRecycle();
                         BorderWorldModuleMatrix[x, y, z] = null;
                     }

@@ -92,7 +92,7 @@ public class WorldModule : PoolObject
         WorldModuleLevelTriggerRoot.parent = transform;
     }
 
-    public IEnumerator Clear(int clearBoxNumPerFrame = 256)
+    public IEnumerator Clear(bool releaseWorldModuleData, int clearBoxNumPerFrame = 256)
     {
         int count = 0;
 
@@ -133,7 +133,7 @@ public class WorldModule : PoolObject
         EventTriggerAppearBoxPassiveSkillList.Clear();
 
         World = null;
-        WorldModuleData.Release();
+        if (releaseWorldModuleData) WorldModuleData.Release();
         WorldModuleData = null;
         WorldDeadZoneTrigger?.PoolRecycle();
         WorldDeadZoneTrigger = null;
