@@ -133,9 +133,18 @@ public abstract class MapGenerator
                             WorldMap_StaticLayoutOccupied[layoutOccupied_world_x, layoutOccupied_world_z] = staticLayoutTypeIndex;
                         }
                     }
+
+                    foreach (BornPointData enemyBornPoint in staticLayoutData.WorldModuleBornPointGroupData.EnemyBornPoints)
+                    {
+                        ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(enemyBornPoint.ActorType);
+                        if (enemyTypeIndex != 0)
+                        {
+                            WorldMap[world_x + enemyBornPoint.LocalGP.x, world_z + enemyBornPoint.LocalGP.z] = enemyTypeIndex;
+                            WorldMap_Occupied[world_x + enemyBornPoint.LocalGP.x, world_z + enemyBornPoint.LocalGP.z] = enemyTypeIndex;
+                        }
+                    }
                 }
 
-                // todo Actors
                 break;
             }
 
