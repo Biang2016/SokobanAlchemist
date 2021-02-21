@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6253759951657837377}
   - component: {fileID: 5626164730563883413}
   - component: {fileID: 2110681053998196479}
-  - component: {fileID: 3924534087071820407}
   m_Layer: 9
   m_Name: Model (1)
   m_TagString: Untagged
@@ -84,19 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3924534087071820407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7326445431447523267}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcb1a9e73a61b2e49ac28078fa620b50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SmoothTime: 0.3
 --- !u!1001 &900010142717741254
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -170,6 +156,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6532508685850981849, guid: e47b2bdf4d8c13643adfbade5852ae42,
         type: 3}
+    - target: {fileID: 4907329536122643906, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5356314078954435621, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: BoxOccupationData.IsBoxShapeCuboid
