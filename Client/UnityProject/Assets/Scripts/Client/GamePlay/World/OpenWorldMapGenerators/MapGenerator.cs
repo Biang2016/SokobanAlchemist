@@ -15,6 +15,7 @@ public abstract class MapGenerator
 
     protected OpenWorld m_OpenWorld;
     protected ushort[,,] WorldMap => m_OpenWorld.WorldMap;
+    protected GridPosR.Orientation[,,] WorldMapOrientation => m_OpenWorld.WorldMapOrientation;
     protected ushort[,,] WorldMap_Occupied => m_OpenWorld.WorldMap_Occupied;
     protected ushort[,,] WorldMap_StaticLayoutOccupied => m_OpenWorld.WorldMap_StaticLayoutOccupied;
 
@@ -145,7 +146,10 @@ public abstract class MapGenerator
                         ushort boxTypeIndex = staticLayoutData.RawBoxMatrix[rot_local_x, sl_local_y, rot_local_z];
                         if (boxTypeIndex != 0)
                         {
-                            WorldMap[world_x + sl_local_x, world_y + sl_local_y - Height, world_z + sl_local_z] = boxTypeIndex;
+                            int box_world_x = world_x + sl_local_x;
+                            int box_world_y = world_y + sl_local_y;
+                            int box_world_z = world_z + sl_local_z;
+                            WorldMap[box_world_x, box_world_y - Height, box_world_z] = boxTypeIndex;
                             BoxOccupationData occupation = ConfigManager.GetBoxOccupationData(boxTypeIndex);
                             GridPosR.Orientation rot = staticLayoutData.RawBoxOrientationMatrix[rot_local_x, sl_local_y, rot_local_z];
                             for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
@@ -153,11 +157,12 @@ public abstract class MapGenerator
                                 rot = GridPosR.RotateOrientationClockwise90(rot);
                             }
 
+                            WorldMapOrientation[box_world_x, box_world_y - Height, box_world_z] = rot;
                             foreach (GridPos3D gridPos in occupation.BoxIndicatorGPs_RotatedDict[rot])
                             {
-                                int box_grid_world_x = world_x + sl_local_x + gridPos.x;
-                                int box_grid_world_y = world_y + sl_local_y + gridPos.y;
-                                int box_grid_world_z = world_z + sl_local_z + gridPos.z;
+                                int box_grid_world_x = box_world_x + gridPos.x;
+                                int box_grid_world_y = box_world_y + gridPos.y;
+                                int box_grid_world_z = box_world_z + gridPos.z;
                                 WorldMap_Occupied[box_grid_world_x, box_grid_world_y - Height, box_grid_world_z] = boxTypeIndex;
                             }
                         }
@@ -248,6 +253,7 @@ public abstract class MapGenerator
                 if (spaceAvailable)
                 {
                     WorldMap[world_x, 0, world_z] = BoxTypeIndex;
+                    WorldMapOrientation[world_x, 0, world_z] = GridPosR.Orientation.Up;
                     foreach (GridPos3D gridPos in occupation.BoxIndicatorGPs_RotatedDict[GridPosR.Orientation.Up]) // todo Orientation Random
                     {
                         int box_grid_world_x = world_x + gridPos.x;

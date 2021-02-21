@@ -21,6 +21,7 @@ public class OpenWorld : World
     public uint GivenSeed = 0;
 
     public ushort[,,] WorldMap; // 地图元素放置  Y轴缩小16
+    public GridPosR.Orientation[,,] WorldMapOrientation; // 地图元素放置朝向  Y轴缩小16
     public ushort[,,] WorldMap_Occupied; // 地图元素占位  Y轴缩小16
     public ushort[,,] WorldMap_StaticLayoutOccupied; // 地图静态布局占位  Y轴缩小16
 
@@ -29,6 +30,9 @@ public class OpenWorld : World
     [Serializable]
     public abstract class GenerateLayerData
     {
+        [LabelText("生效")]
+        public bool Enable = true;
+
         [SerializeField]
         [LabelText("允许覆盖的箱子类型")]
         [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DrawDropdownForListElements = true)]
@@ -150,6 +154,7 @@ public class OpenWorld : World
     {
         base.OnRecycled();
         WorldMap = null;
+        WorldMapOrientation = null;
         WorldMap_Occupied = null;
         WorldMap_StaticLayoutOccupied = null;
     }
@@ -169,6 +174,7 @@ public class OpenWorld : World
         SRandom SRandom = new SRandom(Seed);
 
         WorldMap = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMapOrientation = new GridPosR.Orientation[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_Occupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_StaticLayoutOccupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
 
@@ -188,6 +194,7 @@ public class OpenWorld : World
 
         foreach (GenerateStaticLayoutLayerData staticLayoutLayerData in GenerateStaticLayoutLayerDataList) // 按层生成关卡静态布局数据
         {
+            if (!staticLayoutLayerData.Enable) continue;
             staticLayoutLayerData.Init();
             MapGenerator generator = null;
             switch (staticLayoutLayerData.m_GenerateAlgorithm)
@@ -221,6 +228,7 @@ public class OpenWorld : World
 
         foreach (GenerateBoxLayerData boxLayerData in GenerateBoxLayerDataList) // 按层生成关卡Box数据
         {
+            if (!boxLayerData.Enable) continue;
             boxLayerData.Init();
             MapGenerator generator = null;
             switch (boxLayerData.m_GenerateAlgorithm)
@@ -271,6 +279,7 @@ public class OpenWorld : World
         int generatorCount_actorLayer = 0;
         foreach (GenerateActorLayerData actorLayerData in GenerateActorLayerDataList) // 按层生成关卡Actor数据
         {
+            if (!actorLayerData.Enable) continue;
             actorLayerData.Init();
             MapGenerator generator = null;
             switch (actorLayerData.m_GenerateAlgorithm)
@@ -436,6 +445,8 @@ public class OpenWorld : World
                                 {
                                     moduleData.RawBoxMatrix[local_x, local_y, local_z] = existedIndex;
                                     moduleData.BoxMatrix[local_x, local_y, local_z] = existedIndex;
+                                    moduleData.RawBoxOrientationMatrix[local_x, local_y, local_z] = WorldMapOrientation[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
+                                    moduleData.BoxOrientationMatrix[local_x, local_y, local_z] = WorldMapOrientation[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
                                     break;
                                 }
                                 case ConfigManager.TypeStartIndex.Enemy:
