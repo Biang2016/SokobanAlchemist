@@ -155,15 +155,6 @@ public class EntityStatPropSet
     [LabelText("燃烧持续特效尺寸(x->燃烧等级")]
     public AnimationCurve FiringFXScaleCurve;
 
-    [BoxGroup("燃烧")]
-    [LabelText("燃烧毁坏特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
-    public string FiringBreakFX;
-
-    [BoxGroup("燃烧")]
-    [LabelText("燃烧毁坏特效尺寸")]
-    public float FiringBreakFXScale;
-
     #endregion
 
     #region 操作
@@ -767,8 +758,6 @@ public class EntityStatPropSet
         target.StartFiringFXScale = StartFiringFXScale;
         target.FiringFX = FiringFX;
         target.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
-        target.FiringBreakFX = FiringBreakFX;
-        target.FiringBreakFXScale = FiringBreakFXScale;
 
         #endregion
 

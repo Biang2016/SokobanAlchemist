@@ -214,6 +214,26 @@ public class BoxEditorWindow : EditorWindow
                 }
             }
 
+            List<string> staticLayoutNames = ConfigManager.GetAllStaticLayoutNames();
+            foreach (string staticLayoutName in staticLayoutNames)
+            {
+                GameObject staticLayoutPrefab = ConfigManager.FindStaticLayoutPrefabByName(staticLayoutName);
+                bool isDirty = false;
+                if (staticLayoutPrefab)
+                {
+                    WorldModuleDesignHelper module = staticLayoutPrefab.GetComponent<WorldModuleDesignHelper>();
+                    if (module)
+                    {
+                        isDirty = module.RenameBoxTypeName(srcBoxName, tarBoxName, info);
+                    }
+                }
+
+                if (isDirty)
+                {
+                    PrefabUtility.SavePrefabAsset(staticLayoutPrefab);
+                }
+            }
+
             // Ref in Worlds
             List<string> worldNames = ConfigManager.GetAllWorldNames();
             foreach (string worldName in worldNames)
@@ -374,6 +394,27 @@ public class BoxEditorWindow : EditorWindow
                 if (isDirty)
                 {
                     PrefabUtility.SavePrefabAsset(worldModulePrefab);
+                }
+            }
+
+            // Ref in StaticLayouts
+            List<string> staticLayoutNames = ConfigManager.GetAllStaticLayoutNames();
+            foreach (string staticLayoutName in staticLayoutNames)
+            {
+                GameObject staticLayoutPrefab = ConfigManager.FindStaticLayoutPrefabByName(staticLayoutName);
+                bool isDirty = false;
+                if (staticLayoutPrefab)
+                {
+                    WorldModuleDesignHelper module = staticLayoutPrefab.GetComponent<WorldModuleDesignHelper>();
+                    if (module)
+                    {
+                        isDirty = module.DeleteBoxTypeName(srcBoxName, info);
+                    }
+                }
+
+                if (isDirty)
+                {
+                    PrefabUtility.SavePrefabAsset(staticLayoutPrefab);
                 }
             }
 

@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZone
 {
-    public Collider FuelTrigger;
+    public EntityFlamethrowerFuelTrigger EntityFlamethrowerFuelTrigger;
 
-    public ParticleSystem FirePS; // Main
-    public ParticleSystem SmokePS;
-    public ParticleSystem SparkPS;
-    public Light FireLight;
-
-    public EntityTriggerZone EntityTriggerZone_Flame;
+    public List<EntityFlamethrower> EntityFlamethrowers = new List<EntityFlamethrower>();
 
     [LabelText("技能容器")]
     public EntityPassiveSkill_Conditional FlamethrowerPassiveSkill_Raw;
@@ -29,15 +23,20 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZone
 
     void Awake()
     {
-        EntityTriggerZone_Flame.IEntityTriggerZone = this;
-        FuelTrigger.enabled = false;
+        foreach (EntityFlamethrower ef in EntityFlamethrowers)
+        {
+            ef.EntityTriggerZone_Flame.IEntityTriggerZone = this;
+        }
+
+        EntityFlamethrowerFuelTrigger.Init();
+        EntityFlamethrowerFuelTrigger.EnableTrigger(false);
         TurnOffFire(true);
     }
 
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
-        FuelTrigger.enabled = false;
+        EntityFlamethrowerFuelTrigger.EnableTrigger(false);
         TurnOffFire(false);
     }
 
@@ -45,7 +44,7 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZone
     {
         base.OnHelperUsed();
         FXDurationTick = 0;
-        FuelTrigger.enabled = true;
+        EntityFlamethrowerFuelTrigger.EnableTrigger(true);
     }
 
     private float FXDurationTick = 0f;
@@ -62,31 +61,6 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZone
         }
     }
 
-    private void OnTriggerEnter(Collider collider)
-    {
-        if (!Entity.IsNotNullAndAlive()) return;
-        Entity entity = collider.GetComponentInParent<Entity>();
-        if (entity.IsNotNullAndAlive() && entity is Box box)
-        {
-            if (box.State == Box.States.BeingKicked || box.State == Box.States.BeingKickedToGrind) // 只有踢状态的箱子可以触发此功能
-            {
-                if (box.FrozenActor != null)
-                {
-                    // todo 特例，冻结敌人的箱子推入，还没想好逻辑
-                }
-                else
-                {
-                    // 从对象配置里面读取关联的被动技能行为，并拷贝作为本技能的行为
-                    if (box.RawFlamethrowerFuelData?.RawEntityPassiveSkillActions_ForFlamethrower != null && box.RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Count > 0)
-                    {
-                        TurnOnFire(box.RawFlamethrowerFuelData.Clone());
-                        box.DestroyBox();
-                    }
-                }
-            }
-        }
-    }
-
     private bool FireOn = false;
 
     public void TurnOnFire(FlamethrowerFuelData fuelData)
@@ -95,7 +69,11 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZone
         FXDurationTick = 0;
         FireOn = true;
 
-        EntityTriggerZone_Flame.Collider.enabled = true;
+        foreach (EntityFlamethrower ef in EntityFlamethrowers)
+        {
+            ef.EntityTriggerZone_Flame.Collider.enabled = true;
+        }
+
         CurrentFlamethrowerFuelData = fuelData;
 
         // 将上一次设好的技能全部清空
@@ -107,32 +85,35 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZone
         FlamethrowerPassiveSkill.OnInit();
         FlamethrowerPassiveSkill.OnRegisterLevelEventID();
 
-        ParticleSystem.MainModule main = FirePS.main;
+        foreach (EntityFlamethrower ef in EntityFlamethrowers)
+        {
+            ParticleSystem.MainModule main = ef.FirePS.main;
 
-        // 改变火焰粒子长度
-        main.startSpeed = new ParticleSystem.MinMaxCurve(fuelData.FlameLength * 0.9f, fuelData.FlameLength * 1.65f);
-        // 改变火焰粒子颜色
+            // 改变火焰粒子长度
+            main.startSpeed = new ParticleSystem.MinMaxCurve(fuelData.FlameLength * 0.9f, fuelData.FlameLength * 1.65f);
+            // 改变火焰粒子颜色
 
-        ParticleSystem.ColorOverLifetimeModule colorOverLifetime = FirePS.colorOverLifetime;
-        colorOverLifetime.color = CurrentFlamethrowerFuelData.FlameColor;
+            ParticleSystem.ColorOverLifetimeModule colorOverLifetime = ef.FirePS.colorOverLifetime;
+            colorOverLifetime.color = CurrentFlamethrowerFuelData.FlameColor;
 
-        // 改变烟雾位置
-        SmokePS.transform.localPosition = new Vector3(fuelData.FlameLength - 0.8f, SmokePS.transform.localPosition.y, SmokePS.transform.localPosition.z);
+            // 改变烟雾位置
+            ef.SmokePS.transform.localPosition = new Vector3(fuelData.FlameLength - 0.8f, ef.SmokePS.transform.localPosition.y, ef.SmokePS.transform.localPosition.z);
 
-        // 改变伤害框大小
-        Vector3 damageColliderCenter = ((BoxCollider) EntityTriggerZone_Flame.Collider).center;
-        Vector3 damageColliderSize = ((BoxCollider) EntityTriggerZone_Flame.Collider).size;
-        ((BoxCollider) EntityTriggerZone_Flame.Collider).center = new Vector3(damageColliderCenter.x, damageColliderCenter.y, fuelData.FlameLength / 2f + 0.5f);
-        ((BoxCollider) EntityTriggerZone_Flame.Collider).size = new Vector3(damageColliderSize.x, damageColliderSize.y, fuelData.FlameLength - 0.5f);
+            // 改变伤害框大小
+            Vector3 damageColliderCenter = ((BoxCollider) ef.EntityTriggerZone_Flame.Collider).center;
+            Vector3 damageColliderSize = ((BoxCollider) ef.EntityTriggerZone_Flame.Collider).size;
+            ((BoxCollider) ef.EntityTriggerZone_Flame.Collider).center = new Vector3(damageColliderCenter.x, damageColliderCenter.y, fuelData.FlameLength / 2f + 0.5f);
+            ((BoxCollider) ef.EntityTriggerZone_Flame.Collider).size = new Vector3(damageColliderSize.x, damageColliderSize.y, fuelData.FlameLength - 0.5f);
 
-        // 改变火焰喷射粒子密度
-        ParticleSystem.EmissionModule emission = FirePS.emission;
-        emission.rateOverTime = fuelData.FlameLength / 2f * 15f;
-        ParticleSystem.EmissionModule emission_smoke = SmokePS.emission;
-        emission_smoke.rateOverTime = Mathf.Sqrt(fuelData.FlameLength) * 2.5f;
+            // 改变火焰喷射粒子密度
+            ParticleSystem.EmissionModule emission = ef.FirePS.emission;
+            emission.rateOverTime = fuelData.FlameLength / 2f * 15f;
+            ParticleSystem.EmissionModule emission_smoke = ef.SmokePS.emission;
+            emission_smoke.rateOverTime = Mathf.Sqrt(fuelData.FlameLength) * 2.5f;
 
-        FirePS.Play(true);
-        FireLight.gameObject.SetActive(true);
+            ef.FirePS.Play(true);
+            ef.FireLight.gameObject.SetActive(true);
+        }
     }
 
     public void TurnOffFire(bool forced)
@@ -148,10 +129,12 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZone
         }
 
         CurrentFlamethrowerFuelData = null;
-        EntityTriggerZone_Flame.Collider.enabled = false;
-
-        FirePS.Stop(true);
-        FireLight.gameObject.SetActive(false);
+        foreach (EntityFlamethrower ef in EntityFlamethrowers)
+        {
+            ef.EntityTriggerZone_Flame.Collider.enabled = false;
+            ef.FirePS.Stop(true);
+            ef.FireLight.gameObject.SetActive(false);
+        }
     }
 
     // todo 此处有风险，两个Trigger进出次序如果很极限的话，有可能exit不触发就换技能了

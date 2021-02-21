@@ -20,9 +20,9 @@ public class OpenWorld : World
     [ShowIf("UseCertainSeed")]
     public uint GivenSeed = 0;
 
-    public ushort[,] WorldMap; // 地图元素放置
-    public ushort[,] WorldMap_Occupied; // 地图元素占位
-    public ushort[,] WorldMap_StaticLayoutOccupied; // 地图静态布局占位
+    public ushort[,,] WorldMap; // 地图元素放置  Y轴缩小16
+    public ushort[,,] WorldMap_Occupied; // 地图元素占位  Y轴缩小16
+    public ushort[,,] WorldMap_StaticLayoutOccupied; // 地图静态布局占位  Y轴缩小16
 
     #region GenerateLayerData
 
@@ -168,9 +168,9 @@ public class OpenWorld : World
 
         SRandom SRandom = new SRandom(Seed);
 
-        WorldMap = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        WorldMap_Occupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        WorldMap_StaticLayoutOccupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMap = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMap_Occupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMap_StaticLayoutOccupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
 
         WorldGUID = Seed + "_" + Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
         m_LevelCacheData = new LevelCacheData();
@@ -235,7 +235,7 @@ public class OpenWorld : World
                         GridPos3D playerBPLocal = new GridPos3D(playerBP.x % WorldModule.MODULE_SIZE, 0, playerBP.z % WorldModule.MODULE_SIZE);
                         BornPointData bp = new BornPointData {ActorType = "Player1", BornPointAlias = $"PlayerBP", LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorld};
                         WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP(bp);
-                        WorldMap[playerBPWorld.x, playerBPWorld.z] = (ushort) ConfigManager.TypeStartIndex.Player;
+                        WorldMap[playerBPWorld.x, playerBPWorld.y - WorldModule.MODULE_SIZE, playerBPWorld.z] = (ushort) ConfigManager.TypeStartIndex.Player;
                     }
 
                     break;
@@ -422,18 +422,20 @@ public class OpenWorld : World
                         moduleData.InitOpenWorldModuleData(true);
                         m_LevelCacheData.WorldModuleDataDict.Add(targetModuleGP, moduleData);
                         for (int world_x = targetModuleGP.x * WorldModule.MODULE_SIZE; world_x < (targetModuleGP.x + 1) * WorldModule.MODULE_SIZE; world_x++)
+                        for (int world_y = targetModuleGP.y * WorldModule.MODULE_SIZE; world_y < (targetModuleGP.y + 1) * WorldModule.MODULE_SIZE; world_y++)
                         for (int world_z = targetModuleGP.z * WorldModule.MODULE_SIZE; world_z < (targetModuleGP.z + 1) * WorldModule.MODULE_SIZE; world_z++)
                         {
                             int local_x = world_x - targetModuleGP.x * WorldModule.MODULE_SIZE;
+                            int local_y = world_y - targetModuleGP.y * WorldModule.MODULE_SIZE;
                             int local_z = world_z - targetModuleGP.z * WorldModule.MODULE_SIZE;
-                            ushort existedIndex = WorldMap[world_x, world_z];
+                            ushort existedIndex = WorldMap[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
                             ConfigManager.TypeStartIndex indexType = existedIndex.ConvertToTypeStartIndex();
                             switch (indexType)
                             {
                                 case ConfigManager.TypeStartIndex.Box:
                                 {
-                                    moduleData.RawBoxMatrix[local_x, 0, local_z] = existedIndex;
-                                    moduleData.BoxMatrix[local_x, 0, local_z] = existedIndex;
+                                    moduleData.RawBoxMatrix[local_x, local_y, local_z] = existedIndex;
+                                    moduleData.BoxMatrix[local_x, local_y, local_z] = existedIndex;
                                     break;
                                 }
                                 case ConfigManager.TypeStartIndex.Enemy:
@@ -443,9 +445,9 @@ public class OpenWorld : World
                                         new BornPointData
                                         {
                                             ActorType = actorTypeName,
-                                            LocalGP = new GridPos3D(local_x, 0, local_z),
+                                            LocalGP = new GridPos3D(local_x, local_y, local_z),
                                             BornPointAlias = "",
-                                            WorldGP = new GridPos3D(world_x, WorldModule.MODULE_SIZE, world_z)
+                                            WorldGP = new GridPos3D(world_x, world_y, world_z)
                                         });
                                     break;
                                 }

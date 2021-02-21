@@ -1183,16 +1183,16 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return WorldModuleTypeDefineDict.GetTypeAssetDataBasePath(worldModuleName);
     }
 
-    public static GameObject FindStaticLayoutPrefabByName(string worldModuleName)
+    public static GameObject FindStaticLayoutPrefabByName(string staticLayoutName)
     {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(FindStaticLayoutPrefabPathByName(worldModuleName));
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(FindStaticLayoutPrefabPathByName(staticLayoutName));
         return prefab;
     }
 
-    public static string FindStaticLayoutPrefabPathByName(string worldModuleName)
+    public static string FindStaticLayoutPrefabPathByName(string staticLayoutName)
     {
         StaticLayoutTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
-        return StaticLayoutTypeDefineDict.GetTypeAssetDataBasePath(worldModuleName);
+        return StaticLayoutTypeDefineDict.GetTypeAssetDataBasePath(staticLayoutName);
     }
 
     public static GameObject FindWorldPrefabByName(string worldName)

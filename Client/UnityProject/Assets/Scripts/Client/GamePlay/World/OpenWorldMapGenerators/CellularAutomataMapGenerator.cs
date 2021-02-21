@@ -20,11 +20,11 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
 
     public bool this[int x, int y] => map_1[x, y];
 
-    public CellularAutomataMapGenerator(OpenWorld.GenerateBoxLayerData boxLayerData, int width, int height, uint seed, OpenWorld openWorld)
-        : base(boxLayerData, width, height, seed, openWorld)
+    public CellularAutomataMapGenerator(OpenWorld.GenerateBoxLayerData boxLayerData, int width, int depth, uint seed, OpenWorld openWorld)
+        : base(boxLayerData, width, depth, seed, openWorld)
     {
-        map_1 = new bool[Width, Height];
-        map_2 = new bool[Width, Height];
+        map_1 = new bool[Width, Depth];
+        map_2 = new bool[Width, Depth];
 
         // 初始化：随机填充
         InitRandomFillMap(boxLayerData.FillPercent);
@@ -55,17 +55,17 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
     {
         for (int world_x = 0; world_x < Width; world_x++)
         {
-            for (int world_z = 0; world_z < Height; world_z++)
+            for (int world_z = 0; world_z < Depth; world_z++)
             {
-                bool isStaticLayout = WorldMap_StaticLayoutOccupied[world_x, world_z] != 0; // 识别静态布局
+                bool isStaticLayout = WorldMap_StaticLayoutOccupied[world_x, 0, world_z] != 0; // 识别静态布局
                 bool fill = false;
-                if (world_x == 0 || world_x == Width - 1 || world_z == 0 || world_z == Height - 1)
+                if (world_x == 0 || world_x == Width - 1 || world_z == 0 || world_z == Depth - 1)
                 {
                     fill = true;
                 }
                 else if (isStaticLayout)
                 {
-                    fill = WorldMap[world_x, world_z] == BoxTypeIndex;
+                    fill = WorldMap[world_x, 0, world_z] == BoxTypeIndex;
                 }
                 else
                 {
@@ -80,9 +80,9 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
     private void SmoothMap(bool[,] oldMap, bool[,] newMap)
     {
         for (int world_x = 0; world_x < Width; world_x++)
-        for (int world_z = 0; world_z < Height; world_z++)
+        for (int world_z = 0; world_z < Depth; world_z++)
         {
-            bool isStaticLayout = WorldMap_StaticLayoutOccupied[world_x, world_z] != 0; // 识别静态布局
+            bool isStaticLayout = WorldMap_StaticLayoutOccupied[world_x, 0, world_z] != 0; // 识别静态布局
             if (isStaticLayout) continue; // 静态布局内不受影响
             int neighborWallCount = GetSurroundingWallCount(oldMap, world_x, world_z, 1);
             newMap[world_x, world_z] = neighborWallCount >= 5;
@@ -92,9 +92,9 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
     private void SmoothMapGenerateWallInOpenSpace(bool[,] oldMap, bool[,] newMap)
     {
         for (int world_x = 0; world_x < Width; world_x++)
-        for (int world_z = 0; world_z < Height; world_z++)
+        for (int world_z = 0; world_z < Depth; world_z++)
         {
-            bool isStaticLayout = WorldMap_StaticLayoutOccupied[world_x, world_z] != 0; // 识别静态布局
+            bool isStaticLayout = WorldMap_StaticLayoutOccupied[world_x, 0, world_z] != 0; // 识别静态布局
             if (isStaticLayout) continue; // 静态布局内不受影响
             int neighborWallCount = GetSurroundingWallCount(oldMap, world_x, world_z, 1);
             int neighborWallCount_2x = GetSurroundingWallCount(oldMap, world_x, world_z, 2);
@@ -109,7 +109,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
         {
             for (int neighborZ = world_z - rounds; neighborZ <= world_z + rounds; neighborZ++)
             {
-                if (neighborX >= 0 && neighborX < Width && neighborZ >= 0 && neighborZ < Height)
+                if (neighborX >= 0 && neighborX < Width && neighborZ >= 0 && neighborZ < Depth)
                 {
                     if (neighborX != world_x || neighborZ != world_z)
                     {
@@ -130,9 +130,9 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
     private void ConnectCave(int connectCavePercent, bool determinePlayerBP)
     {
         if (connectCavePercent <= 0) return;
-        CaveIndexMap = new int[Width, Height];
+        CaveIndexMap = new int[Width, Depth];
         for (int world_x = 0; world_x < Width; world_x++)
-        for (int world_z = 0; world_z < Height; world_z++)
+        for (int world_z = 0; world_z < Depth; world_z++)
             CaveIndexMap[world_x, world_z] = -1;
 
         #region Indentify caves
@@ -168,7 +168,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
             world_z = 0;
             for (world_x = 0; world_x < Width; world_x++)
             {
-                for (world_z = 0; world_z < Height; world_z++)
+                for (world_z = 0; world_z < Depth; world_z++)
                 {
                     if (!map_1[world_x, world_z] && CaveIndexMap[world_x, world_z] == -1)
                     {
@@ -188,7 +188,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                 GridPos center = floodQueue.Dequeue();
                 int world_x = center.x;
                 int world_z = center.z;
-                if (world_x < 0 || world_x >= Width || world_z < 0 || world_z >= Height) continue;
+                if (world_x < 0 || world_x >= Width || world_z < 0 || world_z >= Depth) continue;
                 if (map_1[world_x, world_z]) continue;
                 if (CaveIndexMap[world_x, world_z] == _caveIndex) continue;
                 CaveIndexMap[world_x, world_z] = _caveIndex;
@@ -251,7 +251,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
             for (int x = 0; x < Width; x++)
             {
                 bool found = false;
-                for (int z = 0; z < Height; z++)
+                for (int z = 0; z < Depth; z++)
                 {
                     if (CaveIndexMap[x, z] == rootCaveIndex)
                     {
@@ -372,7 +372,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                         int diffX = Mathf.Max(1, SRandom.Range(1, (xMax - cur_X + 1) / 2 + 1));
                         for (int dx = 1; dx <= diffX; dx++)
                         {
-                            bool isStaticLayout = WorldMap_StaticLayoutOccupied[cur_X + dx, cur_Z] != 0; // 识别静态布局
+                            bool isStaticLayout = WorldMap_StaticLayoutOccupied[cur_X + dx, 0, cur_Z] != 0; // 识别静态布局
                             if (isStaticLayout) continue; // 静态布局内不受影响
                             map_1[cur_X + dx, cur_Z] = false;
                             tunnelCount++;
@@ -385,7 +385,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                         int diffZ = Mathf.Max(1, SRandom.Range(1, (zMax - cur_Z + 1) / 2 + 1));
                         for (int dy = 1; dy <= diffZ; dy++)
                         {
-                            bool isStaticLayout = WorldMap_StaticLayoutOccupied[cur_X, cur_Z + dy] != 0; // 识别静态布局
+                            bool isStaticLayout = WorldMap_StaticLayoutOccupied[cur_X, 0, cur_Z + dy] != 0; // 识别静态布局
                             if (isStaticLayout) continue; // 静态布局内不受影响
                             map_1[cur_X, cur_Z + dy] = false;
                             tunnelCount++;
@@ -419,7 +419,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                         int diffX = Mathf.Max(1, SRandom.Range(1, (xMax - cur_X + 1) / 2 + 1));
                         for (int dx = 1; dx <= diffX; dx++)
                         {
-                            bool isStaticLayout = WorldMap_StaticLayoutOccupied[cur_X + dx, cur_Z] != 0; // 识别静态布局
+                            bool isStaticLayout = WorldMap_StaticLayoutOccupied[cur_X + dx, 0, cur_Z] != 0; // 识别静态布局
                             if (isStaticLayout) continue; // 静态布局内不受影响
                             map_1[cur_X + dx, cur_Z] = false;
                             tunnelCount++;
@@ -432,7 +432,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                         int diffZ = Mathf.Max(1, SRandom.Range(1, (cur_Z - zMin + 1) / 2 + 1));
                         for (int dy = 1; dy <= diffZ; dy++)
                         {
-                            bool isStaticLayout = WorldMap_StaticLayoutOccupied[cur_X, cur_Z - dy] != 0; // 识别静态布局
+                            bool isStaticLayout = WorldMap_StaticLayoutOccupied[cur_X, 0, cur_Z - dy] != 0; // 识别静态布局
                             if (isStaticLayout) continue; // 静态布局内不受影响
                             map_1[cur_X, cur_Z - dy] = false;
                             tunnelCount++;
@@ -453,7 +453,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
             // 重新对洞穴进行标记
             for (int world_x = 0; world_x < Width; world_x++)
             {
-                for (int world_z = 0; world_z < Height; world_z++)
+                for (int world_z = 0; world_z < Depth; world_z++)
                 {
                     CaveIndexMap[world_x, world_z] = -1;
                 }
@@ -477,7 +477,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                 caveTotalArea += a;
             }
 
-            float caveRatio = (float) caveTotalArea / (Width * Height) * 100;
+            float caveRatio = (float) caveTotalArea / (Width * Depth) * 100;
             float caveConnectRatio = (float) (initialCaveCount - caveIndex + 1) / initialCaveCount * 100;
 
             Log($"FinalCaveCount: {caveIndex}. TotalCaveArea: {caveTotalArea}, CaveRatio: {caveRatio:##.#}%, CaveConnectRatio: {caveConnectRatio:##.#}%");
@@ -491,12 +491,12 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
     public override void ApplyToWorldMap()
     {
         for (int world_x = 0; world_x < Width; world_x++)
-        for (int world_z = 0; world_z < Height; world_z++)
+        for (int world_z = 0; world_z < Depth; world_z++)
         {
             bool genSuc = map_1[world_x, world_z];
             if (genSuc)
             {
-                TryOverrideToWorldMap(world_x, world_z);
+                TryOverrideToWorldMap(world_x, Height, world_z);
             }
         }
     }

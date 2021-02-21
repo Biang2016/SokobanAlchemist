@@ -132,6 +132,7 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
         BoxOnlyDynamicCollidersEnable = true;
+        Box.BoxIndicatorHelper.IsOn = false;
     }
 
     public void OnKick_ToGrind() // 带有碾压性质的踢出
@@ -140,6 +141,7 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = true;
+        Box.BoxIndicatorHelper.IsOn = false;
     }
 
     public void OnKick_ToGrind_End()
@@ -152,6 +154,7 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = true;
+        Box.BoxIndicatorHelper.IsOn = false;
     }
 
     public void OnThrow()
@@ -159,6 +162,7 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
         BoxOnlyDynamicCollidersEnable = true;
+        Box.BoxIndicatorHelper.IsOn = false;
     }
 
     public void OnPut()
@@ -173,6 +177,7 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
         BoxOnlyDynamicCollidersEnable = true;
+        Box.BoxIndicatorHelper.IsOn = false;
     }
 
     public void OnDropFromAir()
@@ -180,6 +185,7 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
         BoxOnlyDynamicCollidersEnable = true;
+        Box.BoxIndicatorHelper.IsOn = false;
     }
 
     public void OnMerge()
@@ -187,6 +193,7 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = false;
+        Box.BoxIndicatorHelper.IsOn = false;
     }
 
     public void OnRigidbodyStop()
@@ -194,5 +201,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = false; 
+        Box.BoxIndicatorHelper.IsOn = true;
     }
 }
