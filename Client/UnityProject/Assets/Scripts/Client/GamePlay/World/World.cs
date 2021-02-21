@@ -891,7 +891,7 @@ public class World : PoolObject
         return matchedBoxes;
     }
 
-    public void RemoveBoxFromGrid(Box box)
+    public void RemoveBoxFromGrid(Box box, bool checkDrop = true)
     {
         if (box.WorldModule)
         {
@@ -907,7 +907,7 @@ public class World : PoolObject
                 }
             }
 
-            CheckDropAbove(box);
+            if (checkDrop) CheckDropAbove(box);
             box.WorldModule = null;
             box.IsInGridSystem = false;
 
@@ -918,9 +918,9 @@ public class World : PoolObject
         }
     }
 
-    public void DeleteBox(Box box)
+    public void DeleteBox(Box box, bool checkDrop = true)
     {
-        RemoveBoxFromGrid(box);
+        RemoveBoxFromGrid(box, checkDrop);
         WorldManager.Instance.OtherBoxDict.Remove(box.GUID);
         box.PoolRecycle();
     }

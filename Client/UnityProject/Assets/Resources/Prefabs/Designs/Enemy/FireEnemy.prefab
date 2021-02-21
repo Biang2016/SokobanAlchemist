@@ -318,12 +318,13 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
-    RawEntityDefaultBuffs: []
+    RawEntityDefaultBuffs:
+    - id: 0
   RawFlamethrowerFuelData:
-    id: 0
+    id: 1
   RawEntityPassiveSkills: []
   RawEntityActiveSkills:
-  - id: 1
+  - id: 2
   Camp: 2
   RigidBody: {fileID: 3522706739585230582}
   ActorCommonHelpers: {fileID: 5150927944716405211}
@@ -356,19 +357,28 @@ MonoBehaviour:
   FrozeFX: Hit_SnowFlake
   ThawFX: Flash_CyanSlight
   RawFrozenBoxPassiveSkills:
-  - id: 2
+  - id: 3
   MovementState: 0
   PushState: 0
   ThrowState: 0
   references:
     version: 1
     00000000:
-      type: {class: , ns: , asm: }
+      type: {class: EntityBuff_AttributeLabel, ns: , asm: Client}
+      data:
+        GUID: 13436
+        EntityBuffAttribute: 19
+        IsPermanent: 1
+        Duration: 0
+        BuffFX: None
+        BuffFXScale: 1
     00000001:
+      type: {class: , ns: , asm: }
+    00000002:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
-        TargetCamp: 7
+        TargetCamp: 15
         EntitySkillIndex: 0
         SkillAlias: "\u9762\u524D\u6A2A\u5411\u4E09\u683C\u706B\u7130\u653B\u51FB"
         WingUpCanMove: 0
@@ -391,9 +401,8 @@ MonoBehaviour:
         GridWarningColorBorderDim: {r: 0.9716981, g: 0.5271004, b: 0.5271004, a: 0.65882355}
         CastFX: Hit_LittleFireUp
         CastFXScale: 1.5
-        RawEntityBuffs:
-        - id: 3
-    00000002:
+        RawEntityBuffs: []
+    00000003:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
@@ -405,18 +414,6 @@ MonoBehaviour:
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
         - id: 4
-    00000003:
-      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
-      data:
-        GUID: 16966
-        EntityBuffAttribute: 18
-        IsPermanent: 0
-        Duration: 0
-        BuffFX: None
-        BuffFXScale: 1
-        EntityStatType: 0
-        Delta: -2
-        Percent: 0
     00000004:
       type: {class: EntityPassiveSkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
       data:

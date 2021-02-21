@@ -1267,7 +1267,7 @@ public partial class Box : Entity
 
         // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
         // BoxPassiveSkills.Clear(); 
-        WorldManager.Instance.CurrentWorld.DeleteBox(this);
+        WorldManager.Instance.CurrentWorld.DeleteBox(this, callBack == null); // 有callback的是oldBoxCore，要避免上面box落下导致新箱子合成不出来
         callBack?.Invoke();
     }
 
