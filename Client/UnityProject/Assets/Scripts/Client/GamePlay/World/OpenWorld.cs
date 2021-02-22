@@ -161,6 +161,8 @@ public class OpenWorld : World
 
     public override IEnumerator Initialize(WorldData worldData)
     {
+        AudioManager.Instance.BGMFadeIn("bgm/CoolSwing", 1f, 1f, true);
+
         uint Seed = 0;
         if (UseCertainSeed)
         {

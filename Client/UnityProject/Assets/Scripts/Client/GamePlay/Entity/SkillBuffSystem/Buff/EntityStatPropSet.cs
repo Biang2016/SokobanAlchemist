@@ -125,7 +125,7 @@ public class EntityStatPropSet
     [LabelText("燃烧等级")]
     public EntityStat FiringLevel = new EntityStat(EntityStatType.FiringLevel);
 
-    internal int FiringValuePerLevel => Mathf.RoundToInt(((float) FiringValue.MaxValue / FiringLevel.MaxValue));
+    internal float FiringValuePerLevel => ((float) FiringValue.MaxValue / FiringLevel.MaxValue);
 
     public bool IsFiring => FiringLevel.Value > 0;
 
@@ -607,7 +607,7 @@ public class EntityStatPropSet
 
     private void OnFiringValueChanged(int before, int after)
     {
-        FiringLevel.SetValue(after / FiringValuePerLevel, "FiringValueChange");
+        FiringLevel.SetValue(Mathf.RoundToInt(after / FiringValuePerLevel), "FiringValueChange");
         if (FiringLevel.Value > 0)
             Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 燃烧值变化时，播放一次特效
         else if (after == 0) Entity.EntityBuffHelper.RemoveAbnormalStatFX((int) EntityStatType.FiringValue);

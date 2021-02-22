@@ -708,6 +708,11 @@ public partial class Box : Entity
                 hasRigidbody = true;
             }
 
+            foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+            {
+                h.OnMoving();
+            }
+
             Rigidbody.mass = FinalWeight;
             Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -822,6 +827,11 @@ public partial class Box : Entity
                 hasRigidbody = true;
             }
 
+            foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+            {
+                h.OnMoving();
+            }
+
             Rigidbody.mass = FinalWeight;
             Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -858,6 +868,11 @@ public partial class Box : Entity
                 hasRigidbody = true;
             }
 
+            foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+            {
+                h.OnMoving();
+            }
+
             Rigidbody.mass = FinalWeight;
             Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -892,6 +907,11 @@ public partial class Box : Entity
             hasRigidbody = true;
         }
 
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.OnMoving();
+        }
+
         Rigidbody.mass = FinalWeight;
         Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -923,6 +943,11 @@ public partial class Box : Entity
         {
             Rigidbody = gameObject.AddComponent<Rigidbody>();
             hasRigidbody = true;
+        }
+
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.OnMoving();
         }
 
         Rigidbody.mass = FinalWeight;
@@ -1010,6 +1035,12 @@ public partial class Box : Entity
                 BoxEffectHelper?.PoolRecycle();
                 BoxEffectHelper = null;
                 BoxGrindTriggerZoneHelper?.SetActive(false);
+
+                foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+                {
+                    h.OnRigidbodyStop();
+                }
+
                 WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this); // 这里面已经做了“Box本来就在Grid系统里”的判定
             }
         }

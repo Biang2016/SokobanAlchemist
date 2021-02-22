@@ -47,6 +47,16 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZone
         EntityFlamethrowerFuelTrigger.EnableTrigger(true);
     }
 
+    public void OnMoving()
+    {
+        EntityFlamethrowerFuelTrigger.EnableTrigger(false);
+    }
+
+    public void OnRigidbodyStop()
+    {
+        EntityFlamethrowerFuelTrigger.EnableTrigger(true);
+    }
+
     private float FXDurationTick = 0f;
 
     void FixedUpdate()
