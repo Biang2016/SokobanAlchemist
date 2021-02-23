@@ -155,8 +155,11 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         StartCoroutine(Co_StartGame());
     }
 
+    public bool IsGameLoading = false;
+
     private IEnumerator Co_StartGame()
     {
+        IsGameLoading = true;
         LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetProgress(0, "Start Loading");
@@ -177,6 +180,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         UIManager.Instance.CloseUIForm<DebugPanel>();
 #endif
         UIManager.Instance.ShowUIForms<InGameUIPanel>();
+        IsGameLoading = false;
     }
 
     private void Update()
@@ -225,7 +229,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         CurrentFixedFrameCount_Mod_FixedFrameRate = CurrentFixedFrameCount % FixedFrameRate;
         CurrentFixedFrameCount_Mod_FixedFrameRate_5X = CurrentFixedFrameCount % FixedFrameRate_5X;
         ControlManager.FixedUpdate(Time.fixedDeltaTime);
-        if (ControlManager.Common_RestartGame.Up)
+        if (ControlManager.Common_RestartGame.Up && !IsGameLoading)
         {
             ReloadGame();
             return;

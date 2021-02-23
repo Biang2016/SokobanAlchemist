@@ -1131,4 +1131,9 @@ public class World : PoolObject
     }
 
     #endregion
+
+    public virtual void ShutDown()
+    {
+        StopAllCoroutines();
+    }
 }

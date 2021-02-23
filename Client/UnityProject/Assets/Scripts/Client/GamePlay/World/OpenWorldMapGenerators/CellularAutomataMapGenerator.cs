@@ -256,6 +256,8 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                     if (CaveIndexMap[x, z] == rootCaveIndex)
                     {
                         ValidPlayerPosInConnectedCaves = new GridPos(x, z);
+                        WorldMap[x, 0, z] = (ushort) ConfigManager.TypeStartIndex.Player;
+                        WorldMap_Occupied[x, 0, z] = (ushort) ConfigManager.TypeStartIndex.Player;
                         found = true;
                         Log($"PlayerBP found: ({x},{z}) CaveIndex: {rootCaveIndex} CaveIndex; {CaveIndexMap[x, z]}");
                         break;

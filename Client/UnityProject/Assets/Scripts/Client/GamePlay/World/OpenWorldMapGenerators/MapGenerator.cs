@@ -237,10 +237,9 @@ public abstract class MapGenerator
                         {
                             case ConfigManager.TypeStartIndex.Box when !GenerateLayerData.AllowReplacedBoxTypeNameSet.Contains(ConfigManager.GetBoxTypeName(occupiedIndex)):
                             case ConfigManager.TypeStartIndex.None when GenerateLayerData.OnlyOverrideAnyBox:
-                            {
+                            case ConfigManager.TypeStartIndex.Player:
                                 spaceAvailable = false;
                                 break;
-                            }
                         }
                     }
                     else
@@ -273,6 +272,7 @@ public abstract class MapGenerator
                 {
                     case ConfigManager.TypeStartIndex.Box when !GenerateLayerData.AllowReplacedBoxTypeNameSet.Contains(ConfigManager.GetBoxTypeName(existedIndex)):
                     case ConfigManager.TypeStartIndex.None when GenerateLayerData.OnlyOverrideAnyBox:
+                    case ConfigManager.TypeStartIndex.Player:
                         spaceAvailable = false;
                         break;
                 }
