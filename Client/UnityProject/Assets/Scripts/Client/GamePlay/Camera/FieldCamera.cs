@@ -192,7 +192,7 @@ public class FieldCamera : MonoBehaviour
 
     void Start()
     {
-        ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, AddTargetActor);
+        ClientGameManager.Instance?.BattleMessenger?.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, AddTargetActor);
     }
 
     public void InitFocus()

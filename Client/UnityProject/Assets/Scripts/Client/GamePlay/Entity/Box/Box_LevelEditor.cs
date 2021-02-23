@@ -14,6 +14,7 @@ using UnityEditor;
 public class Box_LevelEditor : MonoBehaviour
 {
     public GameObject ModelRoot;
+    public GameObject BoxIndicatorHelperGO;
 
     #region 箱子Extra被动技能
 
@@ -28,13 +29,20 @@ public class Box_LevelEditor : MonoBehaviour
     [EnumToggleButtons]
     public GridPosR.Orientation BoxOrientation;
 
-    private void RefreshOrientation()
+    public bool RefreshOrientation()
     {
-        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, BoxOrientation), ModelRoot.transform, 1);
+        bool dirty = Math.Abs(ModelRoot.transform.rotation.eulerAngles.y - (int) BoxOrientation * 90f) > 1f;
+        if (dirty)
+        {
+            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, BoxOrientation), ModelRoot.transform, 1);
+            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, BoxOrientation), BoxIndicatorHelperGO.transform, 1);
 #if UNITY_EDITOR
-        EditorWindow view = EditorWindow.GetWindow<SceneView>();
-        view.Repaint();
+            EditorWindow view = EditorWindow.GetWindow<SceneView>();
+            view.Repaint();
 #endif
+        }
+
+        return dirty;
     }
 
     #endregion

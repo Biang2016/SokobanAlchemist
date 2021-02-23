@@ -270,6 +270,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
         foreach (Box_LevelEditor box in boxes)
         {
             GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
+            dirty |= box.RefreshOrientation();
             string prefabName = prefab.name.Replace("_LevelEditor", "");
             if (box.name != prefabName)
             {

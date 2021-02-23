@@ -1425,6 +1425,7 @@ public partial class Box : Entity
         GameObject box_Instance = Instantiate(gameObject); // 这是实例化一个无链接的prefab实例（unpacked completely）
         Box box = box_Instance.GetComponent<Box>();
         GameObject modelRoot = box.ModelRoot;
+        GameObject boxIndicatorHelperGO = box.BoxIndicatorHelper.gameObject;
 
         GameObject boxLevelEditorPrefab = ConfigManager.FindBoxLevelEditorPrefabByName(name);
         if (boxLevelEditorPrefab)
@@ -1432,10 +1433,14 @@ public partial class Box : Entity
             string box_LevelEditor_Prefab_Path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(boxLevelEditorPrefab);
             GameObject box_LevelEditor_Instance = PrefabUtility.LoadPrefabContents(box_LevelEditor_Prefab_Path); // 这是实例化一个在预览场景里的prefab实例，为了能够顺利删除子GameObject
 
-            modelRoot.transform.parent = box_LevelEditor_Instance.transform;
             Box_LevelEditor box_LevelEditor = box_LevelEditor_Instance.GetComponent<Box_LevelEditor>();
+            modelRoot.transform.parent = box_LevelEditor_Instance.transform;
             if (box_LevelEditor.ModelRoot) DestroyImmediate(box_LevelEditor.ModelRoot);
             box_LevelEditor.ModelRoot = modelRoot;
+
+            boxIndicatorHelperGO.transform.parent = box_LevelEditor_Instance.transform;
+            if (box_LevelEditor.BoxIndicatorHelperGO) DestroyImmediate(box_LevelEditor.BoxIndicatorHelperGO);
+            box_LevelEditor.BoxIndicatorHelperGO = boxIndicatorHelperGO;
 
             PrefabUtility.SaveAsPrefabAsset(box_LevelEditor_Instance, box_LevelEditor_Prefab_Path, out bool suc); // 保存回改Prefab的Asset
             DestroyImmediate(box_LevelEditor_Instance);
@@ -1446,10 +1451,14 @@ public partial class Box : Entity
             GameObject BoxBase_LevelEditor_Prefab = PrefabManager.Instance.GetPrefab("BoxBase_LevelEditor");
             GameObject box_LevelEditor_Instance = (GameObject) PrefabUtility.InstantiatePrefab(BoxBase_LevelEditor_Prefab); // 这是实例化一个在当前场景里的prefab实例（有链接），为了能够顺利保存成Variant
 
-            modelRoot.transform.parent = box_LevelEditor_Instance.transform;
             Box_LevelEditor box_LevelEditor = box_LevelEditor_Instance.GetComponent<Box_LevelEditor>();
+            modelRoot.transform.parent = box_LevelEditor_Instance.transform;
             if (box_LevelEditor.ModelRoot) DestroyImmediate(box_LevelEditor.ModelRoot);
             box_LevelEditor.ModelRoot = modelRoot;
+           
+            boxIndicatorHelperGO.transform.parent = box_LevelEditor_Instance.transform;
+            if (box_LevelEditor.BoxIndicatorHelperGO) DestroyImmediate(box_LevelEditor.BoxIndicatorHelperGO);
+            box_LevelEditor.BoxIndicatorHelperGO = boxIndicatorHelperGO;
 
             string box_LevelEditor_PrefabPath = ConfigManager.FindBoxLevelEditorPrefabPathByName(name); // 保存成Variant
             PrefabUtility.SaveAsPrefabAsset(box_LevelEditor_Instance, box_LevelEditor_PrefabPath, out bool suc);
