@@ -266,14 +266,14 @@ public class WorldModule : PoolObject
         WorldModuleLevelTriggers.Add(trigger);
     }
 
-    public Box GenerateBox(ushort boxTypeIndex, GridPos3D worldGP, GridPosR.Orientation orientation, bool isTriggerAppear = false, bool isStartedBoxes = false, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null)
+    public Box GenerateBox(ushort boxTypeIndex, GridPos3D worldGP, GridPosR.Orientation orientation, bool isTriggerAppear = false, bool isStartedBoxes = false, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, bool findSpaceUpward = false)
     {
         GridPos3D localGP = WorldGPToLocalGP(worldGP);
+        bool valid = true;
 
         if (BoxMatrix[localGP.x, localGP.y, localGP.z] != null)
         {
-            //Debug.LogError($"世界模组{name}的局部坐标({localGP})位置处已存在Box,请检查世界Box是否重叠放置于该模组已有的Box位置处");
-            return null;
+            valid = false;
         }
         else
         {
@@ -287,8 +287,7 @@ public class WorldModule : PoolObject
                 {
                     if (BoxMatrix[gridPos.x, gridPos.y, gridPos.z] != null)
                     {
-                        //Debug.LogError($"世界模组{name}的局部坐标({gridPos})位置处已存在Box,请检查世界Box是否重叠放置于该模组已有的Box位置处");
-                        return null;
+                        valid = false;
                     }
                 }
                 else // 如果合成的是异形箱子则需要考虑该箱子的一部分是否放到了其他模组里
@@ -297,50 +296,71 @@ public class WorldModule : PoolObject
                     Box boxInOtherModule = World.GetBoxByGridPosition(gridWorldGP, out WorldModule otherModule, out GridPos3D _);
                     if (otherModule != null && boxInOtherModule != null)
                     {
-                        return null;
+                        valid = false;
                     }
                 }
             }
 
-            Box box = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(WorldModuleBoxRoot);
-
-            box.Setup(boxTypeIndex, orientation);
-            box.Initialize(worldGP, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedBoxes); // 如果是TriggerAppear的箱子则不需要检查坠落
-            box.ApplyBoxExtraSerializeData(boxExtraSerializeDataFromModule);
-
-            foreach (GridPos3D offset in boxOccupation_rotated)
+            if (valid)
             {
-                GridPos3D gridPos = offset + localGP;
-                if (gridPos.InsideModule())
+                Box box = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(WorldModuleBoxRoot);
+
+                box.Setup(boxTypeIndex, orientation);
+                box.Initialize(worldGP, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedBoxes); // 如果是TriggerAppear的箱子则不需要检查坠落
+                box.ApplyBoxExtraSerializeData(boxExtraSerializeDataFromModule);
+
+                foreach (GridPos3D offset in boxOccupation_rotated)
                 {
-                    if (isStartedBoxes)
-                    {
-                        BoxMatrix[gridPos.x, gridPos.y, gridPos.z] = box;
-                    }
-                    else
-                    {
-                        this[gridPos.x, gridPos.y, gridPos.z, offset == GridPos3D.Zero, orientation] = box;
-                    }
-                }
-                else // 如果合成的是异形箱子则需要考虑该箱子的一部分是否放到了其他模组里
-                {
-                    GridPos3D gridWorldGP = offset + worldGP;
-                    Box boxInOtherModule = World.GetBoxByGridPosition(gridWorldGP, out WorldModule otherModule, out GridPos3D otherModuleLocalGP);
-                    if (otherModule != null && boxInOtherModule == null)
+                    GridPos3D gridPos = offset + localGP;
+                    if (gridPos.InsideModule())
                     {
                         if (isStartedBoxes)
                         {
-                            otherModule.BoxMatrix[otherModuleLocalGP.x, otherModuleLocalGP.y, otherModuleLocalGP.z] = box;
+                            BoxMatrix[gridPos.x, gridPos.y, gridPos.z] = box;
                         }
                         else
                         {
-                            otherModule[otherModuleLocalGP.x, otherModuleLocalGP.y, otherModuleLocalGP.z, offset == GridPos3D.Zero, orientation] = box;
+                            this[gridPos.x, gridPos.y, gridPos.z, offset == GridPos3D.Zero, orientation] = box;
+                        }
+                    }
+                    else // 如果合成的是异形箱子则需要考虑该箱子的一部分是否放到了其他模组里
+                    {
+                        GridPos3D gridWorldGP = offset + worldGP;
+                        Box boxInOtherModule = World.GetBoxByGridPosition(gridWorldGP, out WorldModule otherModule, out GridPos3D otherModuleLocalGP);
+                        if (otherModule != null && boxInOtherModule == null)
+                        {
+                            if (isStartedBoxes)
+                            {
+                                otherModule.BoxMatrix[otherModuleLocalGP.x, otherModuleLocalGP.y, otherModuleLocalGP.z] = box;
+                            }
+                            else
+                            {
+                                otherModule[otherModuleLocalGP.x, otherModuleLocalGP.y, otherModuleLocalGP.z, offset == GridPos3D.Zero, orientation] = box;
+                            }
                         }
                     }
                 }
-            }
 
-            return box;
+                return box;
+            }
+        }
+
+        if (findSpaceUpward)
+        {
+            worldGP += GridPos3D.Up;
+            WorldModule module = World.GetModuleByWorldGP(worldGP);
+            if (module != null)
+            {
+                return module.GenerateBox(boxTypeIndex, worldGP, orientation, isTriggerAppear, isStartedBoxes, boxExtraSerializeDataFromModule, findSpaceUpward);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            return null;
         }
     }
 

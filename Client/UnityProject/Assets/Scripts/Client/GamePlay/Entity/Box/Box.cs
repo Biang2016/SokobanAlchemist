@@ -260,38 +260,7 @@ public partial class Box : Entity
     #region 合成
 
     [FoldoutGroup("合成")]
-    [LabelText("合成产物是否多格")]
-    public bool MergeBoxFullOccupation = false;
-
-    [BoxName]
-    [FoldoutGroup("合成")]
-    [LabelText("三合一")]
-    [ValueDropdown("GetAllBoxTypeNames")]
-    public string MergeBox_MatchThree;
-
-    [BoxName]
-    [FoldoutGroup("合成")]
-    [LabelText("四合一")]
-    [ValueDropdown("GetAllBoxTypeNames")]
-    public string MergeBox_MatchFour;
-
-    [BoxName]
-    [FoldoutGroup("合成")]
-    [LabelText("五合一")]
-    [ValueDropdown("GetAllBoxTypeNames")]
-    public string MergeBox_MatchFive;
-
-    public ushort GetMergeBoxTypeIndex(int mergeCount)
-    {
-        switch (mergeCount)
-        {
-            case 3: return ConfigManager.GetBoxTypeIndex(MergeBox_MatchThree);
-            case 4: return ConfigManager.GetBoxTypeIndex(MergeBox_MatchFour);
-            case 5: return ConfigManager.GetBoxTypeIndex(MergeBox_MatchFive);
-        }
-
-        return 0;
-    }
+    public BoxMergeConfig BoxMergeConfig;
 
     #endregion
 
@@ -1354,25 +1323,14 @@ public partial class Box : Entity
     public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false)
     {
         bool isDirty = false;
-        if (MergeBox_MatchThree == srcBoxName)
+        foreach (BoxMergeConfigData data in BoxMergeConfig.BoxMergeConfigDataList)
         {
-            info.Append($"替换{name}.MergeBox_MatchThree -> '{targetBoxName}'\n");
-            MergeBox_MatchThree = targetBoxName;
-            isDirty = true;
-        }
-
-        if (MergeBox_MatchFour == srcBoxName)
-        {
-            info.Append($"替换{name}.MergeBox_MatchFour -> '{targetBoxName}'\n");
-            MergeBox_MatchFour = targetBoxName;
-            isDirty = true;
-        }
-
-        if (MergeBox_MatchFive == srcBoxName)
-        {
-            info.Append($"替换{name}.MergeBox_MatchFive -> '{targetBoxName}'\n");
-            MergeBox_MatchFive = targetBoxName;
-            isDirty = true;
+            if (data.MergeBoxTypeName == srcBoxName)
+            {
+                info.Append($"替换{name}.MergeBox_{data.MergeCount} -> '{targetBoxName}'\n");
+                data.MergeBoxTypeName = targetBoxName;
+                isDirty = true;
+            }
         }
 
         foreach (EntityPassiveSkill ps in RawEntityPassiveSkills)
@@ -1387,25 +1345,15 @@ public partial class Box : Entity
     public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false)
     {
         bool isDirty = false;
-        if (MergeBox_MatchThree == srcBoxName)
-        {
-            info.Append($"替换{name}.MergeBox_MatchThree -> 'None'\n");
-            MergeBox_MatchThree = "None";
-            isDirty = true;
-        }
 
-        if (MergeBox_MatchFour == srcBoxName)
+        foreach (BoxMergeConfigData data in BoxMergeConfig.BoxMergeConfigDataList)
         {
-            info.Append($"替换{name}.MergeBox_MatchFour -> 'None'\n");
-            MergeBox_MatchFour = "None";
-            isDirty = true;
-        }
-
-        if (MergeBox_MatchFive == srcBoxName)
-        {
-            info.Append($"替换{name}.MergeBox_MatchFive -> 'None'\n");
-            MergeBox_MatchFive = "None";
-            isDirty = true;
+            if (data.MergeBoxTypeName == srcBoxName)
+            {
+                info.Append($"替换{name}.MergeBox_{data.MergeCount} -> 'None'\n");
+                data.MergeBoxTypeName = "None";
+                isDirty = true;
+            }
         }
 
         foreach (EntityPassiveSkill ps in RawEntityPassiveSkills)
@@ -1455,7 +1403,7 @@ public partial class Box : Entity
             modelRoot.transform.parent = box_LevelEditor_Instance.transform;
             if (box_LevelEditor.ModelRoot) DestroyImmediate(box_LevelEditor.ModelRoot);
             box_LevelEditor.ModelRoot = modelRoot;
-           
+
             boxIndicatorHelperGO.transform.parent = box_LevelEditor_Instance.transform;
             if (box_LevelEditor.BoxIndicatorHelperGO) DestroyImmediate(box_LevelEditor.BoxIndicatorHelperGO);
             box_LevelEditor.BoxIndicatorHelperGO = boxIndicatorHelperGO;

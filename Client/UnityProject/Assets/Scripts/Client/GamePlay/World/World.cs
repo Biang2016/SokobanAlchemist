@@ -610,28 +610,29 @@ public class World : PoolObject
         }
 
         HashSet<Box> mergedBoxes = new HashSet<Box>();
-        List<(Box, ushort, HashSet<Box>, GridPosR.Orientation)> mergeTaskList = new List<(Box, ushort, HashSet<Box>, GridPosR.Orientation)>();
+        List<(Box, ushort, HashSet<Box>, GridPosR.Orientation, GridPos3D)> mergeTaskList = new List<(Box, ushort, HashSet<Box>, GridPosR.Orientation, GridPos3D)>();
         foreach (Box box_moveable in boxes_moveable)
         {
             if (mergedBoxes.Contains(box_moveable)) continue;
-            HashSet<Box> matchedBoxes = CheckMatchThree(box_moveable, direction, mergedBoxes, !box_moveable.MergeBoxFullOccupation, out GridPosR.Orientation newBoxOrientation);
+            HashSet<Box> matchedBoxes = CheckMatchN(box_moveable, direction, mergedBoxes, box_moveable.BoxMergeConfig, out MergeOrientation mergeOrientation, out GridPosR.Orientation newBoxOrientation, out GridPos3D newBoxOffset);
             if (matchedBoxes != null && matchedBoxes.Count > 0)
             {
-                ushort newBoxTypeIndex = box_moveable.GetMergeBoxTypeIndex(matchedBoxes.Count);
+                ushort newBoxTypeIndex = box_moveable.BoxMergeConfig.GetMergeBoxTypeIndex(matchedBoxes.Count, mergeOrientation);
                 if (newBoxTypeIndex != 0)
                 {
-                    mergeTaskList.Add((box_moveable, newBoxTypeIndex, matchedBoxes, newBoxOrientation));
+                    mergeTaskList.Add((box_moveable, newBoxTypeIndex, matchedBoxes, newBoxOrientation, newBoxOffset));
                 }
             }
         }
 
-        foreach ((Box, ushort, HashSet<Box>, GridPosR.Orientation) task in mergeTaskList)
+        foreach ((Box, ushort, HashSet<Box>, GridPosR.Orientation, GridPos3D) task in mergeTaskList)
         {
             Box oldCoreBox = task.Item1;
             ushort newBoxTypeIndex = task.Item2;
             HashSet<Box> oldBoxes = task.Item3;
             GridPosR.Orientation newBoxOrientation = task.Item4;
-            GridPos3D mergeTargetWorldGP = oldCoreBox.WorldGP;
+            GridPos3D newBoxOffset = task.Item5;
+            GridPos3D mergeTargetWorldGP = oldCoreBox.WorldGP + newBoxOffset;
 
             List<GridPos3D> allPossibleMergeTargetWorldGP = new List<GridPos3D>();
             List<GridPos3D> newBoxOccupation_rotated = ConfigManager.GetBoxOccupationData(newBoxTypeIndex).BoxIndicatorGPs_RotatedDict[newBoxOrientation];
@@ -647,13 +648,14 @@ public class World : PoolObject
                 oldBox.MergeBox(nearestGP);
             }
 
-            // 保证目标点的箱子最后合成，从而生成新箱子的时候不会与任何一个老箱子冲突
-            oldCoreBox.MergeBox(mergeTargetWorldGP, delegate
+            // 保证目标点的箱子最后合成消失，从而生成新箱子的时候不会与任何一个老箱子冲突
+            GridPos3D nearestGP_Core = GridPos3D.GetNearestGPFromList(oldCoreBox.WorldGP, allPossibleMergeTargetWorldGP);
+            oldCoreBox.MergeBox(nearestGP_Core, delegate
             {
                 WorldModule module = GetModuleByWorldGP(mergeTargetWorldGP);
                 if (module != null)
                 {
-                    Box box = module.GenerateBox(newBoxTypeIndex, mergeTargetWorldGP, newBoxOrientation);
+                    Box box = module.GenerateBox(newBoxTypeIndex, mergeTargetWorldGP, newBoxOrientation, false, false, null, true); // 合成生成的箱子允许往上方堆
                     if (box != null)
                     {
                         FXManager.Instance.PlayFX(box.MergedFX, box.transform.position, box.MergedFXScale);
@@ -665,42 +667,80 @@ public class World : PoolObject
         return true;
     }
 
-    protected HashSet<Box> CheckMatchThree(Box srcBox, GridPos3D srcBoxLastMoveDir, HashSet<Box> mergedBoxes, bool considerLastBoxInsertDirection, out GridPosR.Orientation newBoxOrientation)
+    /// <summary>
+    /// 检查能否多消
+    /// </summary>
+    /// <param name="srcBox">移动的箱子（核心）</param>
+    /// <param name="srcBoxLastMoveDir">最后一次移动方向</param>
+    /// <param name="mergedBoxes">此次Move所有已经标记为正在合成的箱子</param>
+    /// <param name="boxMergeConfig">合并配置</param>
+    /// <param name="newBoxOrientation"></param>
+    /// <param name="newBoxOffset"></param>
+    /// <returns>此函数计算出的需要合并的箱子集</returns>
+    protected HashSet<Box> CheckMatchN(Box srcBox, GridPos3D srcBoxLastMoveDir, HashSet<Box> mergedBoxes, BoxMergeConfig boxMergeConfig, out MergeOrientation mergeOrientation, out GridPosR.Orientation newBoxOrientation, out GridPos3D newBoxOffset)
     {
         newBoxOrientation = GridPosR.Orientation.Up;
-        if (!srcBox.IsBoxShapeCuboid()) return null;
+        newBoxOffset = GridPos3D.Zero;
+        mergeOrientation = MergeOrientation.X;
+        //if (!srcBox.IsBoxShapeCuboid()) return null; // todo 移除此限制
 
         BoundsInt boundsInt = srcBox.BoxBoundsInt;
-        bool[] x_match_matrix = new bool[8] {true, true, true, true, true, true, true, true};
-        bool[] z_match_matrix = new bool[8] {true, true, true, true, true, true, true, true};
+        bool XZRev = srcBox.BoxOrientation == GridPosR.Orientation.Left || srcBox.BoxOrientation == GridPosR.Orientation.Right;
+        if (XZRev) boundsInt = new BoundsInt(boundsInt.zMin, boundsInt.yMin, boundsInt.xMin, boundsInt.size.z, boundsInt.size.y, boundsInt.size.x);
+
+        int maxMergeCount_x = int.MinValue;
+        int maxMergeCount_z = int.MinValue;
+        List<int> validMergeCounts_x = boxMergeConfig.GetAllValidMergeCounts(XZRev ? MergeOrientation.Z : MergeOrientation.X);
+        List<int> validMergeCounts_z = boxMergeConfig.GetAllValidMergeCounts(XZRev ? MergeOrientation.X : MergeOrientation.Z);
+        foreach (int vmc in validMergeCounts_x) maxMergeCount_x = Mathf.Max(vmc, maxMergeCount_x);
+        foreach (int vmc in validMergeCounts_z) maxMergeCount_z = Mathf.Max(vmc, maxMergeCount_z);
+
+        bool canMerge_x = maxMergeCount_x >= 3;
+        bool canMerge_z = maxMergeCount_z >= 3;
+        if (!canMerge_x && !canMerge_z) return null;
+        int N_x = maxMergeCount_x - 1;
+        int N_z = maxMergeCount_z - 1;
+        bool[] x_match_matrix = null;
+        bool[] z_match_matrix = null;
+        if (canMerge_x) x_match_matrix = new bool[N_x * 2];
+        if (canMerge_z) z_match_matrix = new bool[N_z * 2];
+        if (canMerge_x)
+            for (int i = 0; i < N_x * 2; i++)
+                x_match_matrix[i] = true;
+        if (canMerge_z)
+            for (int i = 0; i < N_z * 2; i++)
+                z_match_matrix[i] = true;
+
         foreach (GridPos3D offset in srcBox.GetBoxOccupationGPs_Rotated())
         {
             GridPos3D alignRefGP = srcBox.WorldGP + offset; // 取每个点来作为基准，都要在相隔同样距离处找到同种箱子
 
-            // 依次找x轴左右各4格，和z轴前后各4格
-            for (int i = -4; i <= 4; i++)
-            {
-                if (i == 0) continue;
-                int matrixIndex = i > 0 ? i + 3 : i + 4;
-                GridPos3D targetGP = alignRefGP + GridPos3D.Right * i * boundsInt.size.x;
-                Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
-                if (targetBox == null || targetBox == srcBox || targetBox.BoxTypeIndex != srcBox.BoxTypeIndex)
+            // 依次找x轴左右各N格，和z轴前后各N格
+            if (canMerge_x)
+                for (int i = -N_x; i <= N_x; i++)
                 {
-                    x_match_matrix[matrixIndex] = false;
+                    if (i == 0) continue;
+                    int matrixIndex = i > 0 ? i + N_x - 1 : i + N_x;
+                    GridPos3D targetGP = alignRefGP + GridPos3D.Right * i * boundsInt.size.x;
+                    Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
+                    if (targetBox == null || targetBox == srcBox || targetBox.BoxTypeIndex != srcBox.BoxTypeIndex)
+                    {
+                        x_match_matrix[matrixIndex] = false;
+                    }
                 }
-            }
 
-            for (int i = -4; i <= 4; i++)
-            {
-                if (i == 0) continue;
-                int matrixIndex = i > 0 ? i + 3 : i + 4;
-                GridPos3D targetGP = alignRefGP + GridPos3D.Forward * i * boundsInt.size.z;
-                Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
-                if (targetBox == null || targetBox == srcBox || targetBox.BoxTypeIndex != srcBox.BoxTypeIndex)
+            if (canMerge_z)
+                for (int i = -N_z; i <= N_z; i++)
                 {
-                    z_match_matrix[matrixIndex] = false;
+                    if (i == 0) continue;
+                    int matrixIndex = i > 0 ? i + N_z - 1 : i + N_z;
+                    GridPos3D targetGP = alignRefGP + GridPos3D.Forward * i * boundsInt.size.z;
+                    Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
+                    if (targetBox == null || targetBox == srcBox || targetBox.BoxTypeIndex != srcBox.BoxTypeIndex)
+                    {
+                        z_match_matrix[matrixIndex] = false;
+                    }
                 }
-            }
         }
 
         int x_connect_positive = 1;
@@ -708,163 +748,98 @@ public class World : PoolObject
         int z_connect_positive = 1;
         int z_connect_negative = 1;
 
-        for (; x_connect_positive <= 4; x_connect_positive++)
-            if (!x_match_matrix[x_connect_positive + 3])
-                break;
+        if (canMerge_x)
+            for (; x_connect_positive <= N_x; x_connect_positive++)
+                if (!x_match_matrix[x_connect_positive + N_x - 1])
+                    break;
 
-        for (; x_connect_negative <= 4; x_connect_negative++)
-            if (!x_match_matrix[4 - x_connect_negative])
-                break;
+        if (canMerge_x)
+            for (; x_connect_negative <= N_x; x_connect_negative++)
+                if (!x_match_matrix[N_x - x_connect_negative])
+                    break;
 
-        for (; z_connect_positive <= 4; z_connect_positive++)
-            if (!z_match_matrix[z_connect_positive + 3])
-                break;
+        if (canMerge_z)
+            for (; z_connect_positive <= N_z; z_connect_positive++)
+                if (!z_match_matrix[z_connect_positive + N_z - 1])
+                    break;
 
-        for (; z_connect_negative <= 4; z_connect_negative++)
-            if (!z_match_matrix[4 - z_connect_negative])
-                break;
+        if (canMerge_z)
+            for (; z_connect_negative <= N_z; z_connect_negative++)
+                if (!z_match_matrix[N_z - z_connect_negative])
+                    break;
 
         x_connect_positive--;
         x_connect_negative--;
         z_connect_positive--;
         z_connect_negative--;
 
-        int matchesOnXAxis = 1 + x_connect_positive + x_connect_negative;
-        bool matchThreeOnXAxis = matchesOnXAxis >= 3;
-
-        int matchesOnZAxis = 1 + z_connect_positive + z_connect_negative;
-        bool matchThreeOnZAxis = matchesOnZAxis >= 3;
-
-        List<GridPosR.Orientation> validOrientations = new List<GridPosR.Orientation>();
-        if (!matchThreeOnXAxis && !matchThreeOnZAxis) return null;
-        bool lastBoxInsertIntoCenter = false;
-
-        // 将单x轴上的消除数量限制在5个以内
-        if (matchesOnXAxis > 5)
+        int matchCountOnXAxis = 1 + x_connect_positive + x_connect_negative;
+        bool matchOnXAxis = false;
+        foreach (int vmc in validMergeCounts_x)
         {
-            if (x_connect_positive > 2 && x_connect_negative > 2)
+            if (matchCountOnXAxis == vmc)
             {
-                x_connect_positive = 2;
-                x_connect_negative = 2;
+                matchOnXAxis = true;
+                break;
             }
-            else
+
+            if (matchCountOnXAxis > vmc) // 向下兼容
             {
-                if (x_connect_positive <= 2) x_connect_negative = 5 - 1 - x_connect_positive;
-                else if (x_connect_negative <= 2) x_connect_positive = 5 - 1 - x_connect_negative;
+                matchCountOnXAxis = vmc;
+                matchOnXAxis = true;
             }
         }
 
-        // 将单z轴上的消除数量限制在5个以内
-        if (matchesOnZAxis > 5)
+        int matchCountOnZAxis = 1 + z_connect_positive + z_connect_negative;
+        bool matchOnZAxis = false;
+        foreach (int vmc in validMergeCounts_z)
         {
-            if (z_connect_positive > 2 && z_connect_negative > 2)
+            if (matchCountOnZAxis == vmc)
             {
-                z_connect_positive = 2;
-                z_connect_negative = 2;
+                matchOnZAxis = true;
+                break;
             }
-            else
+
+            if (matchCountOnZAxis > vmc) // 向下兼容
             {
-                if (z_connect_positive <= 2) z_connect_negative = 5 - 1 - z_connect_positive;
-                else if (z_connect_negative <= 2) z_connect_positive = 5 - 1 - z_connect_negative;
+                matchCountOnZAxis = vmc;
+                matchOnZAxis = true;
             }
         }
 
-        // 双轴同时满足，平均分配5个消除的箱子到两轴上
-        if (matchThreeOnXAxis && matchThreeOnZAxis)
-        {
-            // 将单x轴上的消除数量限制为2个
-            if (x_connect_positive >= 1 && x_connect_negative >= 1)
-            {
-                x_connect_positive = 1;
-                x_connect_negative = 1;
-            }
-            else
-            {
-                if (x_connect_positive == 0)
-                {
-                    x_connect_negative = 2;
-                    validOrientations.Add(GridPosR.Orientation.Left);
-                }
-                else if (x_connect_negative == 0)
-                {
-                    x_connect_positive = 2;
-                    validOrientations.Add(GridPosR.Orientation.Right);
-                }
-            }
+        if (!matchOnXAxis && !matchOnZAxis) return null;
 
-            // 将单z轴上的消除数量限制为2个
-            if (z_connect_positive >= 1 && z_connect_negative >= 1)
+        // 若双向同时match，舍弃一向
+        if (matchOnXAxis && matchOnZAxis)
+        {
+            if (srcBoxLastMoveDir == GridPos3D.Forward || srcBoxLastMoveDir == GridPos3D.Back) matchOnXAxis = false;
+            if (srcBoxLastMoveDir == GridPos3D.Left || srcBoxLastMoveDir == GridPos3D.Right) matchOnZAxis = false;
+        }
+
+        Assert.IsFalse(matchOnXAxis && matchOnZAxis);
+
+        // 如果connect的箱子超出了合成需要，修剪较长的一个方向
+        if (matchOnXAxis)
+        {
+            while (matchCountOnXAxis < 1 + x_connect_positive + x_connect_negative)
             {
-                z_connect_positive = 1;
-                z_connect_negative = 1;
-            }
-            else
-            {
-                if (z_connect_positive == 0)
-                {
-                    z_connect_negative = 2;
-                    validOrientations.Add(GridPosR.Orientation.Down);
-                }
-                else if (z_connect_negative == 0)
-                {
-                    z_connect_positive = 2;
-                    validOrientations.Add(GridPosR.Orientation.Up);
-                }
+                if (x_connect_positive > x_connect_negative) x_connect_positive--;
+                else x_connect_negative--;
             }
         }
 
-        if ((x_connect_negative > 0 && x_connect_positive > 0) || (z_connect_negative > 0 && z_connect_positive > 0))
+        if (matchOnZAxis)
         {
-            lastBoxInsertIntoCenter = true;
-        }
-
-        if (considerLastBoxInsertDirection && lastBoxInsertIntoCenter)
-        {
-            if (srcBoxLastMoveDir.x == 1) validOrientations.Add(GridPosR.Orientation.Right);
-            if (srcBoxLastMoveDir.x == -1) validOrientations.Add(GridPosR.Orientation.Left);
-            if (srcBoxLastMoveDir.z == 1) validOrientations.Add(GridPosR.Orientation.Up);
-            if (srcBoxLastMoveDir.z == -1) validOrientations.Add(GridPosR.Orientation.Down);
-        }
-        else
-        {
-            if (matchThreeOnXAxis && !matchThreeOnZAxis)
+            while (matchCountOnZAxis < 1 + z_connect_positive + z_connect_negative)
             {
-                if (x_connect_positive > x_connect_negative)
-                {
-                    validOrientations.Add(GridPosR.Orientation.Right);
-                }
-                else if (x_connect_positive < x_connect_negative)
-                {
-                    validOrientations.Add(GridPosR.Orientation.Left);
-                }
-                else
-                {
-                    validOrientations.Add(GridPosR.Orientation.Right);
-                    validOrientations.Add(GridPosR.Orientation.Left);
-                }
-            }
-            else if (!matchThreeOnXAxis && matchThreeOnZAxis)
-            {
-                if (z_connect_positive > z_connect_negative)
-                {
-                    validOrientations.Add(GridPosR.Orientation.Up);
-                }
-                else if (z_connect_positive < z_connect_negative)
-                {
-                    validOrientations.Add(GridPosR.Orientation.Down);
-                }
-                else
-                {
-                    validOrientations.Add(GridPosR.Orientation.Up);
-                    validOrientations.Add(GridPosR.Orientation.Down);
-                }
+                if (z_connect_positive > z_connect_negative) z_connect_positive--;
+                else z_connect_negative--;
             }
         }
 
-        newBoxOrientation = CommonUtils.GetRandomFromList(validOrientations);
-
+        // 记录合成
         HashSet<Box> matchedBoxes = new HashSet<Box>(); // 这里指本次合成的箱子
-        if (matchThreeOnXAxis)
+        if (matchOnXAxis)
         {
             for (int offsetUnit = -x_connect_negative; offsetUnit <= x_connect_positive; offsetUnit++)
             {
@@ -874,9 +849,11 @@ public class World : PoolObject
                 matchedBoxes.Add(targetBox);
                 mergedBoxes.Add(targetBox); // 这是此次Move合成的所有箱子
             }
+
+            mergeOrientation = XZRev ? MergeOrientation.Z : MergeOrientation.X;
         }
 
-        if (matchThreeOnZAxis)
+        if (matchOnZAxis)
         {
             for (int offsetUnit = -z_connect_negative; offsetUnit <= z_connect_positive; offsetUnit++)
             {
@@ -885,6 +862,101 @@ public class World : PoolObject
                 Assert.IsNotNull(targetBox);
                 matchedBoxes.Add(targetBox);
                 mergedBoxes.Add(targetBox);
+            }
+
+            mergeOrientation = XZRev ? MergeOrientation.X : MergeOrientation.Z;
+        }
+
+        // 决定合并后的箱子朝向和偏移
+        BoxOccupationData boxOccupationData = ConfigManager.GetBoxOccupationData(matchOnXAxis ? boxMergeConfig.GetMergeBoxTypeIndex(matchCountOnXAxis, XZRev ? MergeOrientation.Z : MergeOrientation.X) : boxMergeConfig.GetMergeBoxTypeIndex(matchCountOnZAxis, XZRev ? MergeOrientation.X : MergeOrientation.Z));
+
+        // 默认朝向定为箱子推进的前方
+        if (srcBoxLastMoveDir.x == 1) newBoxOrientation = GridPosR.Orientation.Right;
+        if (srcBoxLastMoveDir.x == -1) newBoxOrientation = GridPosR.Orientation.Left;
+        if (srcBoxLastMoveDir.z == 1) newBoxOrientation = GridPosR.Orientation.Up;
+        if (srcBoxLastMoveDir.z == -1) newBoxOrientation = GridPosR.Orientation.Down;
+
+        // 当产物为Mega箱子时，需要考虑占位问题
+        if (boxOccupationData.BoxIndicatorGPs.Count > 1)
+        {
+            List<GridPos3D> availableGPs = new List<GridPos3D>(16);
+            foreach (Box mergedBox in mergedBoxes)
+            {
+                foreach (GridPos3D gridPos in mergedBox.GetBoxOccupationGPs_Rotated())
+                {
+                    availableGPs.Add(mergedBox.WorldGP + gridPos);
+                }
+            }
+
+            bool valid = false;
+            int best_offset_x = 0;
+            int best_offset_z = 0;
+            int max_overlapGridCount = int.MinValue;
+            GridPosR.Orientation best_ori = GridPosR.Orientation.Up;
+            // 有偏移，其他朝向全部试一遍，范围正负5格
+            for (int offset_x = 1; offset_x <= 10; offset_x++)
+            {
+                if (valid) break;
+                int offset_x_signed = offset_x / 2 * (offset_x % 2 == 1 ? 1 : -1);
+                for (int offset_z = 1; offset_z <= 10; offset_z++)
+                {
+                    if (valid) break;
+                    int offset_z_signed = offset_z / 2 * (offset_z % 2 == 1 ? 1 : -1);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        GridPosR.Orientation rot = (GridPosR.Orientation) i;
+                        GridPos3D offset = new GridPos3D(offset_x_signed, 0, offset_z_signed);
+                        valid = CheckSpaceAvailable((GridPosR.Orientation) i, offset, out int overlapGridCount);
+                        if (valid)
+                        {
+                            newBoxOrientation = (GridPosR.Orientation) i;
+                            newBoxOffset = offset;
+                            break;
+                        }
+                        else
+                        {
+                            if (overlapGridCount > max_overlapGridCount)
+                            {
+                                max_overlapGridCount = overlapGridCount;
+                                best_offset_x = offset_x_signed;
+                                best_offset_z = offset_z_signed;
+                                best_ori = rot;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!valid) // 找不到时，取重叠覆盖最多的方案
+            {
+                //Debug.Log($"Notfound space, use {max_overlapGridCount}");
+                newBoxOrientation = best_ori;
+                newBoxOffset = new GridPos3D(best_offset_x, 0, best_offset_z);
+            }
+
+            bool CheckSpaceAvailable(GridPosR.Orientation orientation, GridPos3D offset, out int overlapGridCount)
+            {
+                overlapGridCount = 0;
+                List<GridPos3D> rotatedGPs = boxOccupationData.BoxIndicatorGPs_RotatedDict[orientation];
+                foreach (GridPos3D gridPos in rotatedGPs)
+                {
+                    GridPos3D wGP = srcBox.WorldGP + gridPos + offset;
+                    foreach (GridPos3D availableGP in availableGPs)
+                    {
+                        if (wGP == availableGP)
+                        {
+                            overlapGridCount++;
+                            break;
+                        }
+                    }
+                }
+
+                return rotatedGPs.Count == overlapGridCount;
+            }
+
+            if (!valid)
+            {
+                // 则堆在最顶上
             }
         }
 
