@@ -1057,9 +1057,9 @@ public class World : PoolObject
                     lerpType = Box.LerpType.KickToGrind;
                     break;
                 }
-                case Box.States.DroppingFromDeadActor:
+                case Box.States.DroppingFromEntity:
                 {
-                    lerpType = Box.LerpType.DropFromDeadActor;
+                    lerpType = Box.LerpType.DropFromEntity;
                     break;
                 }
                 case Box.States.Putting:

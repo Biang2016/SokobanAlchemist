@@ -32,6 +32,7 @@ public partial class Box : Entity
     internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => BoxTriggerZoneHelper;
     internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => BoxGrindTriggerZoneHelper;
     internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => BoxFlamethrowerHelpers;
+    internal override List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers => BoxLightningGeneratorHelpers;
 
     [FoldoutGroup("组件")]
     [SerializeField]
@@ -52,6 +53,10 @@ public partial class Box : Entity
     [FoldoutGroup("组件")]
     [SerializeField]
     private List<EntityFlamethrowerHelper> BoxFlamethrowerHelpers;
+
+    [FoldoutGroup("组件")]
+    [SerializeField]
+    private List<EntityLightningGeneratorHelper> BoxLightningGeneratorHelpers;
 
     internal BoxEffectHelper BoxEffectHelper;
 
@@ -100,6 +105,11 @@ public partial class Box : Entity
             h.OnHelperUsed();
         }
 
+        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
+        {
+            h.OnHelperUsed();
+        }
+
         BoxColliderHelper.OnBoxUsed();
         BoxIndicatorHelper.OnHelperUsed();
         DoorBoxHelper?.OnHelperUsed();
@@ -124,6 +134,11 @@ public partial class Box : Entity
         EntityTriggerZoneHelper?.OnHelperRecycled();
         EntityGrindTriggerZoneHelper?.OnHelperRecycled();
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.OnHelperRecycled();
+        }
+
+        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
         {
             h.OnHelperRecycled();
         }
@@ -387,7 +402,7 @@ public partial class Box : Entity
         Lifted,
         Flying,
         Putting,
-        DroppingFromDeadActor,
+        DroppingFromEntity,
         Dropping,
         DroppingFromAir,
     }
@@ -407,7 +422,7 @@ public partial class Box : Entity
         Throw,
         Put,
         Drop,
-        DropFromDeadActor,
+        DropFromEntity,
         DropFromAir,
         Create,
     }
@@ -594,9 +609,9 @@ public partial class Box : Entity
             IsInGridSystem = true;
             switch (lerpType)
             {
-                case LerpType.DropFromDeadActor:
+                case LerpType.DropFromEntity:
                 {
-                    State = States.DroppingFromDeadActor;
+                    State = States.DroppingFromEntity;
                     break;
                 }
                 case LerpType.DropFromAir:
@@ -855,7 +870,7 @@ public partial class Box : Entity
         }
     }
 
-    public void DropFromDeadActor()
+    public void DropFromEntity(Vector3 startVelocity)
     {
         SetModelSmoothMoveLerpTime(0);
         if (BoxEffectHelper == null)
@@ -865,10 +880,10 @@ public partial class Box : Entity
 
         alreadyCollidedActorSet.Clear();
         LastTouchActor = null;
-        State = States.DroppingFromDeadActor;
+        State = States.DroppingFromEntity;
         transform.DOPause();
         transform.parent = WorldManager.Instance.CurrentWorld.transform;
-        BoxColliderHelper.OnDropFromDeadActor();
+        BoxColliderHelper.OnDropFromEntity();
         Rigidbody = gameObject.GetComponent<Rigidbody>();
         if (!hasRigidbody)
         {
@@ -888,7 +903,7 @@ public partial class Box : Entity
         Rigidbody.drag = 0;
         Rigidbody.angularDrag = 0;
         Rigidbody.useGravity = true;
-        Rigidbody.velocity = Vector3.up * 10f;
+        Rigidbody.velocity = startVelocity;
         Rigidbody.angularVelocity = Vector3.zero;
         Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
     }
@@ -971,7 +986,7 @@ public partial class Box : Entity
             }
         }
 
-        if ((state == States.BeingKicked || state == States.BeingKickedToGrind || state == States.Flying || state == States.DroppingFromDeadActor || state == States.DroppingFromAir || state == States.Putting) && hasRigidbody)
+        if ((state == States.BeingKicked || state == States.BeingKickedToGrind || state == States.Flying || state == States.DroppingFromEntity || state == States.DroppingFromAir || state == States.Putting) && hasRigidbody)
         {
             if (state == States.BeingKicked || state == States.BeingKickedToGrind)
             {
@@ -992,25 +1007,39 @@ public partial class Box : Entity
 
             if (Rigidbody.velocity.magnitude < 1f)
             {
-                LastTouchActor = null;
-                DestroyImmediate(Rigidbody);
-                hasRigidbody = false;
-                if (state == States.BeingKickedToGrind)
+                bool isGrounded = false;
+                foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
                 {
-                    BoxColliderHelper.OnKick_ToGrind_End();
+                    bool hitGround = Physics.Raycast(transform.position + offset, Vector3.down, 1, LayerManager.Instance.LayerMask_HitBox_Box | LayerManager.Instance.LayerMask_Ground);
+                    if (hitGround)
+                    {
+                        isGrounded = true;
+                        break;
+                    }
                 }
 
-                BoxColliderHelper.OnRigidbodyStop();
-                BoxEffectHelper?.PoolRecycle();
-                BoxEffectHelper = null;
-                BoxGrindTriggerZoneHelper?.SetActive(false);
-
-                foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+                if (isGrounded)
                 {
-                    h.OnRigidbodyStop();
-                }
+                    LastTouchActor = null;
+                    DestroyImmediate(Rigidbody);
+                    hasRigidbody = false;
+                    if (state == States.BeingKickedToGrind)
+                    {
+                        BoxColliderHelper.OnKick_ToGrind_End();
+                    }
 
-                WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this); // 这里面已经做了“Box本来就在Grid系统里”的判定
+                    BoxColliderHelper.OnRigidbodyStop();
+                    BoxEffectHelper?.PoolRecycle();
+                    BoxEffectHelper = null;
+                    BoxGrindTriggerZoneHelper?.SetActive(false);
+
+                    foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+                    {
+                        h.OnRigidbodyStop();
+                    }
+
+                    WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this); // 这里面已经做了“Box本来就在Grid系统里”的判定
+                }
             }
         }
 

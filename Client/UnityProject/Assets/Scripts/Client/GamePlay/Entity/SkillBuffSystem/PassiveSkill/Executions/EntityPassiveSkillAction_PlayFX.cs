@@ -46,6 +46,6 @@ public class EntityPassiveSkillAction_PlayFX : EntityPassiveSkillAction, EntityP
         base.CopyDataFrom(srcData);
         EntityPassiveSkillAction_PlayFX action = ((EntityPassiveSkillAction_PlayFX) srcData);
         FXTypeName = action.FXTypeName;
-        action.FXScale = FXScale;
+        FXScale = action.FXScale;
     }
 }

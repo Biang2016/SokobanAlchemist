@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public interface IEntityTriggerZone
+public interface IEntityTriggerZoneHelper
 {
     void OnTriggerZoneEnter(Collider c);
 

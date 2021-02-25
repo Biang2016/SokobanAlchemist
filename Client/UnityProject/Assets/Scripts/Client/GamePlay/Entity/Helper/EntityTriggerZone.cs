@@ -3,7 +3,7 @@
 public class EntityTriggerZone : MonoBehaviour
 {
     [HideInInspector]
-    public IEntityTriggerZone IEntityTriggerZone;
+    public IEntityTriggerZoneHelper IEntityTriggerZone;
 
     private Collider m_collider;
 

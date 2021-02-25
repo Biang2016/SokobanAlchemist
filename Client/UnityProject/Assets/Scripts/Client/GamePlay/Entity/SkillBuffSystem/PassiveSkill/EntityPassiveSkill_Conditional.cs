@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangLibrary;
 using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -31,7 +32,11 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         OnDestroyEntityByFire = 1 << 15,
     }
 
+    [LabelText("触发时机")]
     public PassiveSkillConditionType PassiveSkillCondition;
+
+    [LabelText("触发概率")]
+    public uint TriggerProbabilityPercent = 100;
 
     #region Conditions
 
@@ -41,11 +46,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         InitPassiveSkillActions();
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnInit))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    pureAction.Execute();
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
                 }
             }
         }
@@ -56,11 +64,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnTick(deltaTime);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnTick))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    pureAction.Execute();
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
                 }
             }
         }
@@ -140,7 +151,10 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
             if (trigger)
             {
-                ExecuteFunction();
+                if (TriggerProbabilityPercent.ProbabilityBool())
+                {
+                    ExecuteFunction();
+                }
             }
         }
         else
@@ -149,7 +163,10 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             {
                 if (ListenLevelEventAlias.Equals(eventAlias))
                 {
-                    ExecuteFunction();
+                    if (TriggerProbabilityPercent.ProbabilityBool())
+                    {
+                        ExecuteFunction();
+                    }
                 }
             }
         }
@@ -162,11 +179,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             OnEventExecute();
             if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnLevelEvent))
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                if (TriggerProbabilityPercent.ProbabilityBool())
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                     {
-                        pureAction.Execute();
+                        if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                        {
+                            pureAction.Execute();
+                        }
                     }
                 }
             }
@@ -190,16 +210,19 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnBeingLift(actor);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingLift))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    pureAction.Execute();
-                }
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
 
-                if (action is EntityPassiveSkillAction.IActorOperationAction actorOperationAction)
-                {
-                    actorOperationAction.OnOperation(actor);
+                    if (action is EntityPassiveSkillAction.IActorOperationAction actorOperationAction)
+                    {
+                        actorOperationAction.OnOperation(actor);
+                    }
                 }
             }
         }
@@ -210,16 +233,19 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnBeingKicked(actor);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingKicked))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    pureAction.Execute();
-                }
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
 
-                if (action is EntityPassiveSkillAction.IActorOperationAction actorOperationAction)
-                {
-                    actorOperationAction.OnOperation(actor);
+                    if (action is EntityPassiveSkillAction.IActorOperationAction actorOperationAction)
+                    {
+                        actorOperationAction.OnOperation(actor);
+                    }
                 }
             }
         }
@@ -230,16 +256,19 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnFlyingCollisionEnter(collision);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnFlyingCollisionEnter))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    pureAction.Execute();
-                }
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
 
-                if (action is EntityPassiveSkillAction.ICollideAction collideAction)
-                {
-                    collideAction.OnCollide(collision);
+                    if (action is EntityPassiveSkillAction.ICollideAction collideAction)
+                    {
+                        collideAction.OnCollide(collision);
+                    }
                 }
             }
         }
@@ -250,16 +279,19 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnBeingKickedCollisionEnter(collision, kickLocalAxis);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingKickedCollisionEnter))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    pureAction.Execute();
-                }
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
 
-                if (action is EntityPassiveSkillAction.ICollideAction collideAction)
-                {
-                    collideAction.OnCollide(collision);
+                    if (action is EntityPassiveSkillAction.ICollideAction collideAction)
+                    {
+                        collideAction.OnCollide(collision);
+                    }
                 }
             }
         }
@@ -270,16 +302,19 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnDroppingFromAirCollisionEnter(collision);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnDroppingFromAirCollisionEnter))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    pureAction.Execute();
-                }
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
 
-                if (action is EntityPassiveSkillAction.ICollideAction collideAction)
-                {
-                    collideAction.OnCollide(collision);
+                    if (action is EntityPassiveSkillAction.ICollideAction collideAction)
+                    {
+                        collideAction.OnCollide(collision);
+                    }
                 }
             }
         }
@@ -290,11 +325,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnTriggerZoneEnter(collider);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZone))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    collideAction.OnTriggerEnter(collider);
+                    if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                    {
+                        collideAction.OnTriggerEnter(collider);
+                    }
                 }
             }
         }
@@ -305,11 +343,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnTriggerZoneStay(collider);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZone))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    collideAction.OnTriggerStay(collider);
+                    if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                    {
+                        collideAction.OnTriggerStay(collider);
+                    }
                 }
             }
         }
@@ -320,11 +361,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnTriggerZoneExit(collider);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZone))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    collideAction.OnTriggerExit(collider);
+                    if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                    {
+                        collideAction.OnTriggerExit(collider);
+                    }
                 }
             }
         }
@@ -335,11 +379,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnTriggerZoneEnter(collider);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityGrindTriggerZone))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    collideAction.OnTriggerEnter(collider);
+                    if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                    {
+                        collideAction.OnTriggerEnter(collider);
+                    }
                 }
             }
         }
@@ -350,11 +397,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnTriggerZoneStay(collider);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityGrindTriggerZone))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    collideAction.OnTriggerStay(collider);
+                    if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                    {
+                        collideAction.OnTriggerStay(collider);
+                    }
                 }
             }
         }
@@ -365,11 +415,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnTriggerZoneExit(collider);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityGrindTriggerZone))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    collideAction.OnTriggerExit(collider);
+                    if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                    {
+                        collideAction.OnTriggerExit(collider);
+                    }
                 }
             }
         }
@@ -380,11 +433,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnBeforeDestroyEntity();
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeforeDestroyEntity))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    pureAction.Execute();
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
                 }
             }
         }
@@ -395,11 +451,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnDestroyEntity();
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnDestroyEntity))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    pureAction.Execute();
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
                 }
             }
         }
@@ -412,11 +471,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnBeforeMergeBox();
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeforeMergeBox))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    pureAction.Execute();
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
                 }
             }
         }
@@ -427,11 +489,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnMergeBox();
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnMergeBox))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    pureAction.Execute();
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
                 }
             }
         }
@@ -444,11 +509,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.OnMergeBox();
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnDestroyEntityByFire))
         {
-            foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+            if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                 {
-                    pureAction.Execute();
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
                 }
             }
         }
@@ -521,6 +589,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     {
         base.ChildClone(newPS);
         EntityPassiveSkill_Conditional newPSC = (EntityPassiveSkill_Conditional) newPS;
+        newPSC.TriggerProbabilityPercent = TriggerProbabilityPercent;
         newPSC.MultiEventTrigger = MultiEventTrigger;
         newPSC.ListenLevelEventAliasList = ListenLevelEventAliasList.Clone();
         newPSC.ListenLevelEventAlias = ListenLevelEventAlias;
@@ -538,6 +607,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     {
         base.CopyDataFrom(srcData);
         EntityPassiveSkill_Conditional srcPSC = (EntityPassiveSkill_Conditional) srcData;
+        TriggerProbabilityPercent = srcPSC.TriggerProbabilityPercent;
         MultiEventTrigger = srcPSC.MultiEventTrigger;
         ListenLevelEventAliasList.Clear();
         foreach (string s in srcPSC.ListenLevelEventAliasList)

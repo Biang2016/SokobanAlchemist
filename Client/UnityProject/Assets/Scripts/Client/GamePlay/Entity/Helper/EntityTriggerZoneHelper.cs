@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class EntityTriggerZoneHelper : EntityMonoHelper, IEntityTriggerZone
+public class EntityTriggerZoneHelper : EntityMonoHelper, IEntityTriggerZoneHelper
 {
     private List<EntityTriggerZone> EntityTriggerZones;
 

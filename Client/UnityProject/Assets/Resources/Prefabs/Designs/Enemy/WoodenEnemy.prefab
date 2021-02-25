@@ -224,8 +224,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    FiringBreakFX: None
-    FiringBreakFXScale: 0
     MoveSpeed:
       BaseValue: 10
       ModifiedValue: 0
@@ -323,9 +321,10 @@ MonoBehaviour:
     RawEntityDefaultBuffs: []
   RawFlamethrowerFuelData:
     id: 0
-  RawEntityPassiveSkills: []
-  RawEntityActiveSkills:
+  RawEntityPassiveSkills:
   - id: 1
+  RawEntityActiveSkills:
+  - id: 2
   Camp: 2
   RigidBody: {fileID: 3522706739585230582}
   ActorCommonHelpers: {fileID: 7234443338025959365}
@@ -366,6 +365,19 @@ MonoBehaviour:
     00000000:
       type: {class: , ns: , asm: }
     00000001:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        IsAddedDuringGamePlay: 0
+        SpecialCaseType: 0
+        PassiveSkillCondition: 1024
+        TriggerProbabilityPercent: 100
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        RawEntityPassiveSkillActions:
+        - id: 3
+    00000002:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
@@ -393,8 +405,20 @@ MonoBehaviour:
         CastFX: Flash_Leaves
         CastFXScale: 1
         RawEntityBuffs:
-        - id: 2
-    00000002:
+        - id: 4
+    00000003:
+      type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
+      data:
+        DropBoxList:
+        - BoxTypeName: WoodenBox
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        DropBoxCountMin: 1
+        DropBoxCountMax: 1
+        DropConeAngle: 0
+        DropVelocity: 12
+    00000004:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 17004

@@ -265,7 +265,8 @@ MonoBehaviour:
     RawEntityDefaultBuffs: []
   RawFlamethrowerFuelData:
     id: 0
-  RawEntityPassiveSkills: []
+  RawEntityPassiveSkills:
+  - id: 1
   RawEntityActiveSkills: []
   Camp: 2
   RigidBody: {fileID: 3522706739585230582}
@@ -299,7 +300,7 @@ MonoBehaviour:
   FrozeFX: Hit_SnowFlake
   ThawFX: Flash_CyanSlight
   RawFrozenBoxPassiveSkills:
-  - id: 1
+  - id: 2
   MovementState: 0
   PushState: 0
   ThrowState: 0
@@ -312,20 +313,46 @@ MonoBehaviour:
       data:
         IsAddedDuringGamePlay: 0
         SpecialCaseType: 0
-        PassiveSkillCondition: 12
+        PassiveSkillCondition: 1024
+        TriggerProbabilityPercent: 100
         MultiEventTrigger: 0
         ListenLevelEventAliasList: []
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
-        - id: 2
+        - id: 3
     00000002:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        IsAddedDuringGamePlay: 0
+        SpecialCaseType: 0
+        PassiveSkillCondition: 12
+        TriggerProbabilityPercent: 100
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        RawEntityPassiveSkillActions:
+        - id: 4
+    00000003:
+      type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
+      data:
+        DropBoxList:
+        - BoxTypeName: LifeBox
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        DropBoxCountMin: 1
+        DropBoxCountMax: 1
+        DropConeAngle: 0
+        DropVelocity: 12
+    00000004:
       type: {class: EntityPassiveSkillAction_AddEntityBuff, ns: , asm: Client}
       data:
         RawEntityBuffs:
-        - id: 3
-        - id: 4
-    00000003:
+        - id: 5
+        - id: 6
+    00000005:
       type: {class: EntityBuff_EntityPropertyPlusModifier, ns: , asm: Client}
       data:
         GUID: 10271
@@ -337,7 +364,7 @@ MonoBehaviour:
         EntityPropertyType: 0
         Delta: 3
         LinearDecayInDuration: 0
-    00000004:
+    00000006:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10267

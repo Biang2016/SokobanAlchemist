@@ -85,12 +85,15 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         BoxOnlyDynamicColliderRoot.SetActive(false);
     }
 
+    private bool defaultBoxOnlyDynamicColliderRootActive;
+
     public void Initialize(bool passable, bool artOnly, bool isGround, bool drop, bool lerp)
     {
         NormalColliderRoot.SetActive(!passable);
         StaticColliderRoot.SetActive(!artOnly);
         DynamicColliderRoot.gameObject.SetActive(!artOnly);
-        BoxOnlyDynamicColliderRoot.SetActive(!artOnly && passable);
+        defaultBoxOnlyDynamicColliderRootActive = !artOnly && passable;
+        BoxOnlyDynamicColliderRoot.SetActive(defaultBoxOnlyDynamicColliderRootActive);
 
         if (lerp)
         {
@@ -146,7 +149,7 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
 
     public void OnKick_ToGrind_End()
     {
-        BoxOnlyDynamicColliderRoot.SetActive(false);
+        BoxOnlyDynamicColliderRoot.SetActive(defaultBoxOnlyDynamicColliderRootActive);
     }
 
     public void OnBeingLift()
@@ -172,20 +175,22 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         BoxOnlyDynamicCollidersEnable = true;
     }
 
-    public void OnDropFromDeadActor()
+    public void OnDropFromEntity()
     {
         StaticColliderEnable = false;
-        DynamicColliderEnable = true;
+        DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = true;
         Box.BoxIndicatorHelper.IsOn = false;
+        BoxOnlyDynamicColliderRoot.SetActive(true);
     }
 
     public void OnDropFromAir()
     {
         StaticColliderEnable = false;
-        DynamicColliderEnable = true;
+        DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = true;
         Box.BoxIndicatorHelper.IsOn = false;
+        BoxOnlyDynamicColliderRoot.SetActive(true);
     }
 
     public void OnMerge()
@@ -202,5 +207,6 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = false; 
         Box.BoxIndicatorHelper.IsOn = true;
+        BoxOnlyDynamicColliderRoot.SetActive(defaultBoxOnlyDynamicColliderRootActive);
     }
 }

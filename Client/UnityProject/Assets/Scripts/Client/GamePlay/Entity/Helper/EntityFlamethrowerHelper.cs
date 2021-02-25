@@ -4,7 +4,7 @@ using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZone
+public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelper
 {
     public EntityFlamethrowerFuelTrigger EntityFlamethrowerFuelTrigger;
 
@@ -15,10 +15,12 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZone
 
     [LabelText("技能容器实时")]
     [ShowInInspector]
+    [HideInEditorMode]
     public EntityPassiveSkill_Conditional FlamethrowerPassiveSkill;
 
     [LabelText("燃料数据实时")]
     [ShowInInspector]
+    [HideInEditorMode]
     private FlamethrowerFuelData CurrentFlamethrowerFuelData;
 
     void Awake()

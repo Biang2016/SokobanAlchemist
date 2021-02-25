@@ -564,7 +564,7 @@ public class EntityStatPropSet
             }
         }
 
-        if (Entity is Actor actor) actor.ActorBattleHelper.Die();
+        if (Entity is Actor actor) actor.ActorBattleHelper.DestroyActor();
     }
 
     private UnityAction<int, int> OnMaxHealthDurabilityChangedAction;

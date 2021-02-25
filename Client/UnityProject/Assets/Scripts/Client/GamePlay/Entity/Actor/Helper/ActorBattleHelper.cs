@@ -1,4 +1,5 @@
-﻿using BiangLibrary;
+﻿using System.Collections;
+using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay.UI;
 using UnityEngine;
@@ -76,10 +77,28 @@ public class ActorBattleHelper : ActorMonoHelper
 
     public bool IsDead = false;
 
-    public void Die(bool forModuleRecycle = false)
+    public void DestroyActor(UnityAction callBack = null, bool forModuleRecycle = false)
     {
-        if (!forModuleRecycle) DropDieBox();
         IsDead = true;
+        if (!forModuleRecycle)
+        {
+            foreach (EntityPassiveSkill ps in Actor.EntityPassiveSkills)
+            {
+                ps.OnBeforeDestroyEntity();
+            }
+
+            StartCoroutine(Co_DelayDestroyActor(callBack, forModuleRecycle));
+        }
+    }
+
+    IEnumerator Co_DelayDestroyActor(UnityAction callBack, bool forModuleRecycle = false)
+    {
+        yield return new WaitForSeconds(0.1f);
+        foreach (EntityPassiveSkill ps in Actor.EntityPassiveSkills)
+        {
+            ps.OnDestroyEntity();
+        }
+
         if (Actor.IsPlayerCamp)
         {
             BattleManager.Instance.LoseGame();
@@ -96,7 +115,7 @@ public class ActorBattleHelper : ActorMonoHelper
 
             if (Actor.ActorFrozenHelper.FrozenBox)
             {
-                Actor.ActorFrozenHelper.FrozenBox.DestroyBox();
+                Actor.ActorFrozenHelper.FrozenBox.DestroyBox(null, forModuleRecycle);
                 Actor.ActorFrozenHelper.FrozenBox = null;
             }
 
@@ -108,24 +127,8 @@ public class ActorBattleHelper : ActorMonoHelper
 
             Actor.PoolRecycle();
         }
-    }
 
-    private void DropDieBox()
-    {
-        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(Actor.WorldGP);
-        if (module)
-        {
-            ushort boxIndex = ConfigManager.GetBoxTypeIndex(Actor.DieDropBoxTypeName);
-            if (boxIndex == 0) return;
-            if (Actor.DieDropBoxProbabilityPercent.ProbabilityBool())
-            {
-                Box box = GameObjectPoolManager.Instance.BoxDict[boxIndex].AllocateGameObject<Box>(transform);
-                GridPos3D worldGP = Actor.WorldGP;
-                box.Setup(boxIndex, Actor.DieDropBoxOrientation);
-                box.Initialize(worldGP, module, 0, false, Box.LerpType.DropFromDeadActor);
-                box.DropFromDeadActor();
-            }
-        }
+        callBack?.Invoke();
     }
 
     #endregion

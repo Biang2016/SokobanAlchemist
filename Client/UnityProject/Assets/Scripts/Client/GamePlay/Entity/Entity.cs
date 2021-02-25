@@ -31,6 +31,7 @@ public abstract class Entity : PoolObject
     internal abstract EntityTriggerZoneHelper EntityTriggerZoneHelper { get; }
     internal abstract EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper { get; }
     internal abstract List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers { get; }
+    internal abstract List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers { get; }
 
     #endregion
 

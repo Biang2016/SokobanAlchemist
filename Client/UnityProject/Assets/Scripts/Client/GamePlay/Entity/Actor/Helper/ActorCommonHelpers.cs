@@ -16,6 +16,7 @@ public class ActorCommonHelpers : MonoBehaviour
     public EntityTriggerZoneHelper EntityTriggerZoneHelper;
     public EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper;
     public List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers;
+    public List<EntityLightningGeneratorHelper> ActorLightningGeneratorHelpers;
     public Transform LiftBoxPivot;
 
     private void Awake()

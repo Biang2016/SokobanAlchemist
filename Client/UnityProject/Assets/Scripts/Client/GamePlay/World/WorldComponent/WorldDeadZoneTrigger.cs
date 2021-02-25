@@ -60,7 +60,7 @@ public class WorldDeadZoneTrigger : PoolObject
             if (actor.IsNotNullAndAlive() && !actorFaceHelper)
             {
                 Debug.Log("Actor die in WorldDeadZone:" + name);
-                actor.ActorBattleHelper.Die();
+                actor.ActorBattleHelper.DestroyActor();
             }
         }
     }

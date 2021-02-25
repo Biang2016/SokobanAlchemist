@@ -4,13 +4,13 @@ using UnityEngine;
 public class LayerManager : TSingletonBaseManager<LayerManager>
 {
     public int LayerMask_UI;
-    public int LayerMask_Player;
-    public int LayerMask_Enemy;
-    public int LayerMask_Friend;
+    public int LayerMask_Player; // 用于运动碰撞检测等
+    public int LayerMask_Enemy; // 用于运动碰撞检测等
+    public int LayerMask_Friend; // 用于运动碰撞检测等
     public int LayerMask_BoxIndicator; // 用于各种操作识别Box位置
-    public int LayerMask_HitBox_Player;
-    public int LayerMask_HitBox_Enemy;
-    public int LayerMask_HitBox_Friend;
+    public int LayerMask_HitBox_Player; // 用于战斗碰撞检测、Cast识别等
+    public int LayerMask_HitBox_Enemy; // 用于战斗碰撞检测、Cast识别等
+    public int LayerMask_HitBox_Friend; // 用于战斗碰撞检测、Cast识别等
     public int LayerMask_HitBox_Box; // 用于物理碰撞和各种伤害检测
     public int LayerMask_BoxOnlyDynamicCollider;
     public int LayerMask_Ground;
@@ -19,14 +19,14 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
     public int LayerMask_BoxTriggerZone;
 
     public int Layer_UI;
-    public int Layer_Player;
-    public int Layer_Enemy;
-    public int Layer_Friend;
+    public int Layer_Player; // 用于运动碰撞检测等
+    public int Layer_Enemy; // 用于运动碰撞检测等
+    public int Layer_Friend; // 用于运动碰撞检测等
     public int Layer_BoxIndicator;
-    public int Layer_HitBox_Player;
-    public int Layer_HitBox_Enemy;
-    public int Layer_HitBox_Friend;
-    public int Layer_HitBox_Box;
+    public int Layer_HitBox_Player; // 用于战斗碰撞检测、Cast识别等
+    public int Layer_HitBox_Enemy; // 用于战斗碰撞检测、Cast识别等
+    public int Layer_HitBox_Friend; // 用于战斗碰撞检测、Cast识别等
+    public int Layer_HitBox_Box; // 用于物理碰撞和各种伤害检测
     public int Layer_BoxOnlyDynamicCollider;
     public int Layer_Ground;
     public int Layer_Wall;

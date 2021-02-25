@@ -1,5 +1,126 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &925624621983401523
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4312989340942635508}
+  m_Layer: 20
+  m_Name: LightningStartPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4312989340942635508
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925624621983401523}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4856790464264491016}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1267744896230557022
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4856790464264491016}
+  - component: {fileID: 5493950490796493808}
+  m_Layer: 20
+  m_Name: EntityLightningGeneratorHelper (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4856790464264491016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267744896230557022}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4312989340942635508}
+  m_Father: {fileID: 4895478766167816576}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5493950490796493808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267744896230557022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e193f67511a4618bf060d8cf3cbff69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LightningPassiveSkill:
+    IsAddedDuringGamePlay: 0
+    SpecialCaseType: 0
+    PassiveSkillCondition: 128
+    TriggerProbabilityPercent: 100
+    MultiEventTrigger: 0
+    ListenLevelEventAliasList: []
+    ListenLevelEventAlias: 
+    MaxTriggeredTimes: 1
+    RawEntityPassiveSkillActions:
+    - id: 0
+  LightningStartPivot: {fileID: 4312989340942635508}
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkillAction_TriggerZoneEffect, ns: , asm: Client}
+      data:
+        EffectiveOnRelativeCamp: 15
+        RawEntityBuffs_Enter: []
+        RemoveEnterBuffWhenExit: 0
+        RawEntityBuffs_Stay:
+        - id: 1
+        - id: 2
+        RemoveStayBuffWhenExit: 0
+        EffectInterval: 1
+        RawEntityBuffs_Exit: []
+    00000001:
+      type: {class: EntityBuff_AttributeLabel, ns: , asm: Client}
+      data:
+        GUID: 10087
+        EntityBuffAttribute: 39
+        IsPermanent: 0
+        Duration: 1
+        BuffFX: Flash_WhiteLightening
+        BuffFXScale: 1
+    00000002:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10106
+        EntityBuffAttribute: 40
+        IsPermanent: 0
+        Duration: 0
+        BuffFX: None
+        BuffFXScale: 1
+        EntityStatType: 0
+        Delta: -2
+        Percent: 0
 --- !u!1001 &6111338068042501410
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56,6 +177,11 @@ PrefabInstance:
         type: 3}
       propertyPath: RawFlamethrowerFuelData.FlameDuration
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: BoxLightningGeneratorHelpers.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -304,6 +430,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: BoxLightningGeneratorHelpers.Array.data[0]
+      value: 
+      objectReference: {fileID: 5493950490796493808}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: RawEntityStatPropSet.HealthDurability._value
       value: 2
       objectReference: {fileID: 0}
@@ -316,6 +447,11 @@ PrefabInstance:
         type: 3}
       propertyPath: RawEntityStatPropSet.FrozenResistance.BaseValue
       value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: BoxMergeConfig.BoxMergeConfigDataList.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -361,6 +497,26 @@ PrefabInstance:
         type: 3}
       propertyPath: RawEntityPassiveSkills.Array.data[0].PassiveSkillCondition
       value: 112
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: BoxMergeConfig.BoxMergeConfigDataList.Array.data[0].MergeCount
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].TriggerProbabilityPercent
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: BoxMergeConfig.BoxMergeConfigDataList.Array.data[0].MergeBoxTypeName
+      value: LightningTowerBox
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: BoxMergeConfig.BoxMergeConfigDataList.Array.data[0].MergeOrientation
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -811,3 +967,9 @@ PrefabInstance:
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6cecbe5753a1cb5479294bf6cec13ba1, type: 3}
+--- !u!4 &4895478766167816576 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1675314425065157794, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+    type: 3}
+  m_PrefabInstance: {fileID: 6111338068042501410}
+  m_PrefabAsset: {fileID: 0}

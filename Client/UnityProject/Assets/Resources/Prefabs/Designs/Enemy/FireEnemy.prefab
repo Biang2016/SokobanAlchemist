@@ -322,9 +322,10 @@ MonoBehaviour:
     - id: 0
   RawFlamethrowerFuelData:
     id: 1
-  RawEntityPassiveSkills: []
-  RawEntityActiveSkills:
+  RawEntityPassiveSkills:
   - id: 2
+  RawEntityActiveSkills:
+  - id: 3
   Camp: 2
   RigidBody: {fileID: 3522706739585230582}
   ActorCommonHelpers: {fileID: 5150927944716405211}
@@ -357,7 +358,7 @@ MonoBehaviour:
   FrozeFX: Hit_SnowFlake
   ThawFX: Flash_CyanSlight
   RawFrozenBoxPassiveSkills:
-  - id: 3
+  - id: 4
   MovementState: 0
   PushState: 0
   ThrowState: 0
@@ -375,6 +376,19 @@ MonoBehaviour:
     00000001:
       type: {class: , ns: , asm: }
     00000002:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        IsAddedDuringGamePlay: 0
+        SpecialCaseType: 0
+        PassiveSkillCondition: 1024
+        TriggerProbabilityPercent: 100
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        RawEntityPassiveSkillActions:
+        - id: 5
+    00000003:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
@@ -402,27 +416,40 @@ MonoBehaviour:
         CastFX: Hit_LittleFireUp
         CastFXScale: 1.5
         RawEntityBuffs: []
-    00000003:
+    00000004:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
         SpecialCaseType: 0
         PassiveSkillCondition: 112
+        TriggerProbabilityPercent: 100
         MultiEventTrigger: 0
         ListenLevelEventAliasList: []
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
-        - id: 4
-    00000004:
+        - id: 6
+    00000005:
+      type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
+      data:
+        DropBoxList:
+        - BoxTypeName: FireBox
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        DropBoxCountMin: 1
+        DropBoxCountMax: 1
+        DropConeAngle: 0
+        DropVelocity: 12
+    00000006:
       type: {class: EntityPassiveSkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
       data:
         AddBuffRadius: 1.3
         ExactGPDistance: 0
         EffectiveOnRelativeCamp: 14
         RawEntityBuffs:
-        - id: 5
-    00000005:
+        - id: 7
+    00000007:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10004

@@ -32,6 +32,7 @@ public class Actor : Entity
     internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => ActorCommonHelpers.EntityTriggerZoneHelper;
     internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => ActorCommonHelpers.EntityGrindTriggerZoneHelper;
     internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => ActorCommonHelpers.EntityFlamethrowerHelpers;
+    internal override List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers => ActorCommonHelpers.ActorLightningGeneratorHelpers;
     internal GameObject ActorMoveColliderRoot => ActorCommonHelpers.ActorMoveColliderRoot;
     internal ActorArtHelper ActorArtHelper => ActorCommonHelpers.ActorArtHelper;
     internal ActorPushHelper ActorPushHelper => ActorCommonHelpers.ActorPushHelper;
@@ -287,6 +288,11 @@ public class Actor : Entity
             h.OnHelperRecycled();
         }
 
+        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
+        {
+            h.OnHelperRecycled();
+        }
+
         ActorArtHelper.OnHelperRecycled();
         ActorPushHelper.OnHelperRecycled();
         ActorFaceHelper.OnHelperRecycled();
@@ -315,6 +321,11 @@ public class Actor : Entity
         EntityTriggerZoneHelper?.OnHelperUsed();
         EntityGrindTriggerZoneHelper?.OnHelperUsed();
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.OnHelperUsed();
+        }
+
+        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
         {
             h.OnHelperUsed();
         }
