@@ -122,24 +122,16 @@ public class BuffEditorWindow : EditorWindow
     private void OnGUI()
     {
         EditorGUILayout.LabelField("Buff克制矩阵, 左侧标签为既有buff，顶部标签为新增buff");
-        try
-        {
-            table?.DrawTable();
-        }
-        catch
-        {
-        }
-
         if (GUILayout.Button("加载 / 修改矩阵维度后先加载再保存，否则丢失数据"))
         {
-            ConfigManager.LoadEntityBuffAttributeMatrix(DataFormat.Binary);
+            ConfigManager.LoadEntityBuffAttributeMatrix(DataFormat.Binary, true);
             Init();
         }
 
         if (GUILayout.Button("保存"))
         {
             ConfigManager.ExportEntityBuffAttributeMatrix(DataFormat.Binary);
-            ConfigManager.LoadEntityBuffAttributeMatrix(DataFormat.Binary);
+            ConfigManager.LoadEntityBuffAttributeMatrix(DataFormat.Binary, true);
             Init();
         }
 
@@ -149,6 +141,14 @@ public class BuffEditorWindow : EditorWindow
             {
                 ConfigManager.CreateNewBuffAttributeMatrixAsset();
             }
+        }
+
+        try
+        {
+            table?.DrawTable();
+        }
+        catch
+        {
         }
     }
 }

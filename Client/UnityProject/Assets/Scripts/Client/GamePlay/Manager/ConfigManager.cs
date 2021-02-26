@@ -588,7 +588,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         BattleIndicatorTypeDefineDict.LoadTypeNames();
 
         LoadEntityBuffStatPropertyEnumReflection();
-        LoadEntityBuffAttributeMatrix(dataFormat);
+        LoadEntityBuffAttributeMatrix(dataFormat,false);
         LoadBoxOccupationDataConfig(dataFormat);
         LoadWorldModuleDataConfig(dataFormat);
         LoadStaticLayoutDataConfig(dataFormat);
@@ -636,7 +636,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
-    public static void LoadEntityBuffAttributeMatrix(DataFormat dataFormat)
+    public static void LoadEntityBuffAttributeMatrix(DataFormat dataFormat, bool fromBuffEditorWindow)
     {
         string file = $"{EntityBuffAttributeMatrixConfigFolder_Build}/EntityBuffAttributeMatrix.config";
         FileInfo fi = new FileInfo(file);
@@ -663,16 +663,20 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 }
             }
 
-#if UNITY_EDITOR
-            EntityBuffAttributeMatrixAsset configSSO = GetBuffAttributeMatrixAsset();
-            configSSO.EntityBuffAttributeMatrix = EntityBuffAttributeMatrix;
-            AssetDatabase.Refresh();
+            if (fromBuffEditorWindow)
+            {
+                EntityBuffAttributeMatrixAsset configSSO = GetBuffAttributeMatrixAsset();
+                configSSO.EntityBuffAttributeMatrix = EntityBuffAttributeMatrix;
+                AssetDatabase.Refresh();
+            }
         }
         else
         {
-            ExportEntityBuffAttributeMatrix(dataFormat);
-            LoadEntityBuffAttributeMatrix(dataFormat);
-#endif
+            if (fromBuffEditorWindow)
+            {
+                ExportEntityBuffAttributeMatrix(dataFormat);
+                LoadEntityBuffAttributeMatrix(dataFormat, fromBuffEditorWindow);
+            }
         }
     }
 

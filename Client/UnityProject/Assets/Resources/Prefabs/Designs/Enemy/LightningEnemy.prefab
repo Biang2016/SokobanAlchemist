@@ -368,7 +368,7 @@ MonoBehaviour:
       type: {class: EntityBuff_AttributeLabel, ns: , asm: Client}
       data:
         GUID: 10270
-        EntityBuffAttribute: 38
+        EntityBuffAttribute: 41
         IsPermanent: 1
         Duration: 0
         BuffFX: None
@@ -560,6 +560,143 @@ MonoBehaviour:
   - _json: '{"_value":10.0,"_name":"BoxDropAngleRange","_id":"2f2b1a72-7fc2-4381-9a86-1f9fbf51f358","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
+--- !u!1 &6094450246337355769
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 477688324335781868}
+  - component: {fileID: 4419741532420462389}
+  m_Layer: 14
+  m_Name: EntityLightningGeneratorHelper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &477688324335781868
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6094450246337355769}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8274062543837088590}
+  m_Father: {fileID: 6281674361588409608}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4419741532420462389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6094450246337355769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e193f67511a4618bf060d8cf3cbff69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LightningPassiveSkill:
+    IsAddedDuringGamePlay: 0
+    SpecialCaseType: 0
+    PassiveSkillCondition: 128
+    TriggerProbabilityPercent: 100
+    MultiEventTrigger: 0
+    ListenLevelEventAliasList: []
+    ListenLevelEventAlias: 
+    MaxTriggeredTimes: 1
+    RawEntityPassiveSkillActions:
+    - id: 0
+  LightningStartPivot: {fileID: 8274062543837088590}
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkillAction_TriggerZoneEffect, ns: , asm: Client}
+      data:
+        EffectiveOnRelativeCamp: 15
+        RawEntityBuffs_Enter:
+        - id: 1
+        RemoveEnterBuffWhenExit: 0
+        RawEntityBuffs_Stay:
+        - id: 2
+        - id: 3
+        RemoveStayBuffWhenExit: 0
+        EffectInterval: 0.3
+        RawEntityBuffs_Exit: []
+    00000001:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 13925
+        EntityBuffAttribute: 40
+        IsPermanent: 0
+        Duration: 0
+        BuffFX: None
+        BuffFXScale: 1
+        EntityStatType: 0
+        Delta: -1
+        Percent: 0
+    00000002:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10106
+        EntityBuffAttribute: 40
+        IsPermanent: 0
+        Duration: 0
+        BuffFX: None
+        BuffFXScale: 1
+        EntityStatType: 0
+        Delta: -1
+        Percent: 0
+    00000003:
+      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
+      data:
+        GUID: 14544
+        EntityBuffAttribute: 39
+        IsPermanent: 0
+        Duration: 0.3
+        BuffFX: Flash_WhiteLightening
+        BuffFXScale: 3
+        Percent: -100
+        LinearDecayInDuration: 0
+        EntityPropertyType: 30
+--- !u!1 &8910496410718971391
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8274062543837088590}
+  m_Layer: 14
+  m_Name: LightningStartPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8274062543837088590
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8910496410718971391}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 477688324335781868}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &522068281804682140
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -802,6 +939,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 19
       objectReference: {fileID: 0}
+    - target: {fileID: 8105065106078889260, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+        type: 3}
+      propertyPath: ActorLightningGeneratorHelpers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8105065106078889260, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+        type: 3}
+      propertyPath: ActorLightningGeneratorHelpers.Array.data[0]
+      value: 
+      objectReference: {fileID: 4419741532420462389}
     - target: {fileID: 8502247525430864726, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
         type: 3}
       propertyPath: m_Layer
