@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 4856790464264491016}
   - component: {fileID: 5493950490796493808}
   m_Layer: 20
-  m_Name: EntityLightningGeneratorHelper (1)
+  m_Name: EntityLightningGeneratorHelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -92,23 +92,27 @@ MonoBehaviour:
       type: {class: EntityPassiveSkillAction_TriggerZoneEffect, ns: , asm: Client}
       data:
         EffectiveOnRelativeCamp: 15
-        RawEntityBuffs_Enter: []
+        RawEntityBuffs_Enter:
+        - id: 1
         RemoveEnterBuffWhenExit: 0
         RawEntityBuffs_Stay:
-        - id: 1
         - id: 2
+        - id: 3
         RemoveStayBuffWhenExit: 0
-        EffectInterval: 1
+        EffectInterval: 0.3
         RawEntityBuffs_Exit: []
     00000001:
-      type: {class: EntityBuff_AttributeLabel, ns: , asm: Client}
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
-        GUID: 10087
-        EntityBuffAttribute: 39
+        GUID: 13925
+        EntityBuffAttribute: 40
         IsPermanent: 0
-        Duration: 1
-        BuffFX: Flash_WhiteLightening
+        Duration: 0
+        BuffFX: None
         BuffFXScale: 1
+        EntityStatType: 0
+        Delta: -1
+        Percent: 0
     00000002:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
@@ -119,8 +123,20 @@ MonoBehaviour:
         BuffFX: None
         BuffFXScale: 1
         EntityStatType: 0
-        Delta: -2
+        Delta: -1
         Percent: 0
+    00000003:
+      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
+      data:
+        GUID: 14544
+        EntityBuffAttribute: 39
+        IsPermanent: 0
+        Duration: 0.3
+        BuffFX: Flash_WhiteLightening
+        BuffFXScale: 3
+        Percent: -100
+        LinearDecayInDuration: 0
+        EntityPropertyType: 30
 --- !u!1001 &6111338068042501410
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -436,7 +452,7 @@ PrefabInstance:
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: RawEntityStatPropSet.HealthDurability._value
-      value: 2
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -446,12 +462,22 @@ PrefabInstance:
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: RawEntityStatPropSet.FrozenResistance.BaseValue
-      value: 200
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityStatPropSet.HealthDurability._maxValue
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: BoxMergeConfig.BoxMergeConfigDataList.Array.size
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityStatPropSet.HealthDurability.AutoChange
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -465,8 +491,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: RawEntityStatPropSet.MaxHealthDurability.BaseValue
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: RawEntityStatPropSet.BoxCollideDamageSelf.BaseValue
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -500,13 +531,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: RawEntityStatPropSet.HealthDurability.AutoChangeTimeInterval
+      value: 2000
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: BoxMergeConfig.BoxMergeConfigDataList.Array.data[0].MergeCount
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: RawEntityPassiveSkills.Array.data[0].TriggerProbabilityPercent
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}

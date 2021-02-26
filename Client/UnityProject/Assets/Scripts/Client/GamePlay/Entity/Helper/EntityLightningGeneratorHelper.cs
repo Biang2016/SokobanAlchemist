@@ -79,6 +79,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
                 Entity entity = c.GetComponentInParent<Entity>();
                 if (entity != null && entity != Entity && entity.EntityLightningGeneratorHelpers != null && entity.EntityLightningGeneratorHelpers.Count > 0)
                 {
+                    if (entity.GUID < Entity.GUID) continue; // 每个电塔只连接GUID更大的
                     foreach (EntityLightningGeneratorHelper helper in entity.EntityLightningGeneratorHelpers)
                     {
                         bool alreadyConnect = false;
