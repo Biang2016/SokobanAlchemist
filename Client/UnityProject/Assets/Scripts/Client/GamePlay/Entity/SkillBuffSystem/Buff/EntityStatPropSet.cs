@@ -493,6 +493,10 @@ public class EntityStatPropSet
         Profiler.EndSample();
 
         Profiler.BeginSample("ESPS #4");
+        if (Entity.name.Contains("LightningEnemy"))
+        {
+            int a = 0;
+        }
         foreach (EntityBuff rawEntityDefaultBuff in RawEntityDefaultBuffs)
         {
             Entity.EntityBuffHelper.AddBuff(rawEntityDefaultBuff.Clone());

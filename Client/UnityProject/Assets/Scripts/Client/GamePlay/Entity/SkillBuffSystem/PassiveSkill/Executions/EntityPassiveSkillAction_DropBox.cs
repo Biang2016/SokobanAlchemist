@@ -12,6 +12,7 @@ public class EntityPassiveSkillAction_DropBox : EntityPassiveSkillAction, Entity
 {
     [BoxNameList]
     [LabelText("箱子类型概率")]
+    [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<BoxNameWithProbability> DropBoxList = new List<BoxNameWithProbability>();
 
     public int DropBoxCountMin;

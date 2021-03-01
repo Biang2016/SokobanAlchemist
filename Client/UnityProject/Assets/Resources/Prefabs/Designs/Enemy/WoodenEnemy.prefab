@@ -76,14 +76,14 @@ MonoBehaviour:
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     HealthDurability:
-      _value: 1
+      _value: 2
       _minValue: 0
-      _maxValue: 1
+      _maxValue: 2
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     MaxHealthDurability:
-      BaseValue: 1
+      BaseValue: 2
       ModifiedValue: 0
       MinValue: 1
       MaxValue: 10000
@@ -373,7 +373,7 @@ MonoBehaviour:
         SpecialCaseType: 0
         PassiveSkillCondition: 32768
         TriggerProbabilityPercent: 100
-        DestroyEntityByElementDamageType: 27
+        DestroyEntityByElementDamageTypeList: 22000000280000001f0000001b00000025000000
         MultiEventTrigger: 0
         ListenLevelEventAliasList: []
         ListenLevelEventAlias: 
@@ -387,7 +387,7 @@ MonoBehaviour:
         SpecialCaseType: 0
         PassiveSkillCondition: 32768
         TriggerProbabilityPercent: 100
-        DestroyEntityByElementDamageType: 18
+        DestroyEntityByElementDamageTypeList: 12000000
         MultiEventTrigger: 0
         ListenLevelEventAliasList: []
         ListenLevelEventAlias: 
@@ -401,7 +401,7 @@ MonoBehaviour:
         SpecialCaseType: 0
         PassiveSkillCondition: 32768
         TriggerProbabilityPercent: 100
-        DestroyEntityByElementDamageType: 24
+        DestroyEntityByElementDamageTypeList: 2b00000018000000
         MultiEventTrigger: 0
         ListenLevelEventAliasList: []
         ListenLevelEventAlias: 
@@ -450,10 +450,17 @@ MonoBehaviour:
         DropConeAngle: 0
         DropVelocity: 13
     00000006:
-      type: {class: BoxPassiveSkillAction_ChangeBoxType, ns: , asm: Client}
+      type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
       data:
-        ChangeBoxTypeTo: CharcoalBox
-        BoxOrientation: 0
+        DropBoxList:
+        - BoxTypeName: CharcoalBox
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        DropBoxCountMin: 1
+        DropBoxCountMax: 1
+        DropConeAngle: 0
+        DropVelocity: 13
     00000007:
       type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
       data:

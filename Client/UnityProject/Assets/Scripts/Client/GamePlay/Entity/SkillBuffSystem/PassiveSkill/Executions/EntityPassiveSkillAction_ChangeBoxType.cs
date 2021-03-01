@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 
@@ -19,15 +20,42 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
     [LabelText("更改的箱子的朝向")]
     public GridPosR.Orientation BoxOrientation;
 
+    [LabelText("每一格都生成一个箱子")]
+    public bool ChangeForEveryGrid = false;
+
     public void Execute()
     {
+        GridPos3D worldGP = GridPos3D.Zero;
         if (Box.State == Box.States.Static)
         {
-            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(Box.WorldGP);
-            if (module != null)
+            worldGP = Box.WorldGP;
+        }
+        else
+        {
+            worldGP = Box.transform.position.ToGridPos3D();
+        }
+
+        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(Box.WorldGP);
+        if (module != null)
+        {
+            ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
+            if (ChangeForEveryGrid)
             {
-                ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
-                GridPos3D worldGP = Box.WorldGP;
+                List<GridPos3D> occupations = Box.GetBoxOccupationGPs_Rotated();
+                Box.DestroyBox(delegate
+                {
+                    if (boxTypeIndex != 0)
+                    {
+                        foreach (GridPos3D gridPos in occupations)
+                        {
+                            GridPos3D gridWorldGP = worldGP + gridPos;
+                            module.GenerateBox(boxTypeIndex, gridWorldGP, BoxOrientation);
+                        }
+                    }
+                });
+            }
+            else
+            {
                 Box.DestroyBox(delegate
                 {
                     if (boxTypeIndex != 0)
@@ -45,6 +73,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
         BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType) newAction);
         action.ChangeBoxTypeTo = ChangeBoxTypeTo;
         action.BoxOrientation = BoxOrientation;
+        action.ChangeForEveryGrid = ChangeForEveryGrid;
     }
 
     public override void CopyDataFrom(EntityPassiveSkillAction srcData)
@@ -53,5 +82,6 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
         BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType) srcData);
         ChangeBoxTypeTo = action.ChangeBoxTypeTo;
         BoxOrientation = action.BoxOrientation;
+        ChangeForEveryGrid = action.ChangeForEveryGrid;
     }
 }

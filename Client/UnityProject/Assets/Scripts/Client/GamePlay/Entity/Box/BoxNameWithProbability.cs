@@ -9,6 +9,8 @@ using UnityEngine;
 [Serializable]
 public class BoxNameWithProbability : Probability, IClone<BoxNameWithProbability>
 {
+    public string Description => $"{BoxTypeName}";
+
     [BoxNameList]
     [ValueDropdown("GetAllBoxTypeNames", DropdownTitle = "选择箱子类型")]
     public string BoxTypeName;
