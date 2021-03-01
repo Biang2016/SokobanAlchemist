@@ -665,7 +665,7 @@ public class World : PoolObject
                     if (box != null)
                     {
                         FXManager.Instance.PlayFX(box.MergedFX, box.transform.position, box.MergedFXScale);
-                        TryMerge(direction, new HashSet<Box>{ box });
+                        TryMerge(direction, new HashSet<Box> {box});
                     }
                 }
             });
@@ -1002,7 +1002,7 @@ public class World : PoolObject
         box.PoolRecycle();
     }
 
-    public void BoxReturnToWorldFromPhysics(Box box)
+    public void BoxReturnToWorldFromPhysics(Box box, bool checkMerge, GridPos3D kickDir)
     {
         WorldManager.Instance.OtherBoxDict.Remove(box.GUID);
         GridPos3D gp = GridPos3D.GetGridPosByTrans(box.transform, 1);
@@ -1076,6 +1076,7 @@ public class World : PoolObject
 
             WorldModule module_box_core = GetModuleByWorldGP(worldGP);
             box.Initialize(worldGP, module_box_core, 0.3f, box.ArtOnly, lerpType);
+            TryMerge(kickDir, new HashSet<Box> {box});
             return true;
         }
     }

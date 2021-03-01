@@ -292,7 +292,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
     }
 
-    public override void OnBeingKickedCollisionEnter(Collision collision, Box.KickLocalAxis kickLocalAxis)
+    public override void OnBeingKickedCollisionEnter(Collision collision, Box.KickAxis kickLocalAxis)
     {
         base.OnBeingKickedCollisionEnter(collision, kickLocalAxis);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingKickedCollisionEnter))

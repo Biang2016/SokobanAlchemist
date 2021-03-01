@@ -65,10 +65,10 @@ public class EntityStatPropSet
     [LabelText("@\"Z轴碰撞伤害\t\"+CollideDamageZ")]
     public EntityProperty CollideDamageZ = new EntityProperty(EntityPropertyType.CollideDamageZ);
 
-    public EntityProperty GetCollideDamageByAxis(Box.KickLocalAxis axis)
+    public EntityProperty GetCollideDamageByAxis(Box.KickAxis axis)
     {
-        if (axis == Box.KickLocalAxis.X) return CollideDamageX;
-        if (axis == Box.KickLocalAxis.Z) return CollideDamageZ;
+        if (axis == Box.KickAxis.X) return CollideDamageX;
+        if (axis == Box.KickAxis.Z) return CollideDamageZ;
         else return CollideDamage;
     }
 

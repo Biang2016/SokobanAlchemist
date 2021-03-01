@@ -11,7 +11,7 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
         base.OnFlyingCollisionEnter(collision);
     }
 
-    public override void OnBeingKickedCollisionEnter(Collision collision, Box.KickLocalAxis kickLocalAxis)
+    public override void OnBeingKickedCollisionEnter(Collision collision, Box.KickAxis kickLocalAxis)
     {
         base.OnBeingKickedCollisionEnter(collision, kickLocalAxis);
         if (Box.FrozenActor.IsNotNullAndAlive())

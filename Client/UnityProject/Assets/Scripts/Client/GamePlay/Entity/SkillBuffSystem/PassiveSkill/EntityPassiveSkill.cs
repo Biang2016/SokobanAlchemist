@@ -65,7 +65,7 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
     {
     }
 
-    public virtual void OnBeingKickedCollisionEnter(Collision collision, Box.KickLocalAxis kickLocalAxis)
+    public virtual void OnBeingKickedCollisionEnter(Collision collision, Box.KickAxis kickLocalAxis)
     {
     }
 

@@ -151,7 +151,6 @@ public partial class Box : Entity
         DoorBoxHelper?.OnHelperRecycled();
         BoxSkinHelper?.OnHelperRecycled();
         BoxIconSpriteHelper?.OnHelperRecycled();
-        
 
         transform.DOPause();
         ModelRoot.transform.DOPause();
@@ -173,6 +172,10 @@ public partial class Box : Entity
 
         EntityStatPropSet.OnRecycled();
         MarkedAsMergedSourceBox = false;
+
+        CurrentKickGlobalAxis = KickAxis.None;
+        CurrentKickLocalAxis = KickAxis.None;
+        CurrentKickGlobalDir = GridPos3D.Zero;
 
         UnInitPassiveSkills();
         gameObject.SetActive(false);
@@ -410,7 +413,7 @@ public partial class Box : Entity
         DroppingFromAir,
     }
 
-    public enum KickLocalAxis
+    public enum KickAxis
     {
         None,
         X,
@@ -439,8 +442,9 @@ public partial class Box : Entity
 
     private States state = States.Static;
 
-    private KickLocalAxis CurrentKickLocalAxis = KickLocalAxis.X;
-    private KickLocalAxis CurrentKickGlobalAxis = KickLocalAxis.X;
+    private KickAxis CurrentKickLocalAxis = KickAxis.X;
+    private KickAxis CurrentKickGlobalAxis = KickAxis.X;
+    private GridPos3D CurrentKickGlobalDir = GridPos3D.Zero;
 
     [HideInPrefabAssets]
     [ReadOnly]
@@ -710,30 +714,30 @@ public partial class Box : Entity
             Rigidbody.angularVelocity = Vector3.zero;
             Rigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 
-            GridPos3D dir_GP = direction.ToGridPos3D();
-            if (dir_GP.x == 0)
+            CurrentKickGlobalDir = direction.ToGridPos3D();
+            if (CurrentKickGlobalDir.x == 0)
             {
                 Rigidbody.constraints |= RigidbodyConstraints.FreezePositionX;
             }
             else
             {
-                CurrentKickGlobalAxis = KickLocalAxis.X;
-                if (BoxOrientation == GridPosR.Orientation.Left || BoxOrientation == GridPosR.Orientation.Right) CurrentKickLocalAxis = KickLocalAxis.Z;
-                else CurrentKickLocalAxis = KickLocalAxis.X;
+                CurrentKickGlobalAxis = KickAxis.X;
+                if (BoxOrientation == GridPosR.Orientation.Left || BoxOrientation == GridPosR.Orientation.Right) CurrentKickLocalAxis = KickAxis.Z;
+                else CurrentKickLocalAxis = KickAxis.X;
             }
 
-            if (dir_GP.z == 0)
+            if (CurrentKickGlobalDir.z == 0)
             {
                 Rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
             }
             else
             {
-                CurrentKickGlobalAxis = KickLocalAxis.Z;
-                if (BoxOrientation == GridPosR.Orientation.Left || BoxOrientation == GridPosR.Orientation.Right) CurrentKickLocalAxis = KickLocalAxis.X;
-                else CurrentKickLocalAxis = KickLocalAxis.Z;
+                CurrentKickGlobalAxis = KickAxis.Z;
+                if (BoxOrientation == GridPosR.Orientation.Left || BoxOrientation == GridPosR.Orientation.Right) CurrentKickLocalAxis = KickAxis.X;
+                else CurrentKickLocalAxis = KickAxis.Z;
             }
 
-            if (CurrentKickLocalAxis == KickLocalAxis.X && Grind_X || CurrentKickLocalAxis == KickLocalAxis.Z && Grind_Z)
+            if (CurrentKickLocalAxis == KickAxis.X && Grind_X || CurrentKickLocalAxis == KickAxis.Z && Grind_Z)
             {
                 BoxGrindTriggerZoneHelper?.SetActive(true);
                 BoxColliderHelper.OnKick_ToGrind();
@@ -746,7 +750,7 @@ public partial class Box : Entity
                 State = States.BeingKicked;
             }
 
-            float kickForceMultiplier = CurrentKickLocalAxis == KickLocalAxis.X ? KickForce_X : (CurrentKickLocalAxis == KickLocalAxis.Z ? KickForce_Z : 1f);
+            float kickForceMultiplier = CurrentKickLocalAxis == KickAxis.X ? KickForce_X : (CurrentKickLocalAxis == KickAxis.Z ? KickForce_Z : 1f);
             Rigidbody.velocity = direction.normalized * velocity * kickForceMultiplier;
             transform.position = transform.position.ToGridPos3D();
         }
@@ -1023,6 +1027,7 @@ public partial class Box : Entity
 
                 if (isGrounded)
                 {
+                    bool checkMerge = state == States.BeingKicked || state == States.BeingKickedToGrind && LastTouchActor != null && LastTouchActor == BattleManager.Instance.Player1;
                     LastTouchActor = null;
                     DestroyImmediate(Rigidbody);
                     hasRigidbody = false;
@@ -1041,7 +1046,8 @@ public partial class Box : Entity
                         h.OnRigidbodyStop();
                     }
 
-                    WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this); // 这里面已经做了“Box本来就在Grid系统里”的判定
+                    WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this, checkMerge, CurrentKickGlobalDir); // 这里面已经做了“Box本来就在Grid系统里”的判定
+                    CurrentKickGlobalDir = GridPos3D.Zero;
                 }
             }
         }
@@ -1089,7 +1095,7 @@ public partial class Box : Entity
             }
             case States.Flying:
             {
-                DealCollideDamageToActor(collision, KickLocalAxis.None);
+                DealCollideDamageToActor(collision, KickAxis.None);
                 PlayFXOnEachGrid(CollideFX, CollideFXScale);
                 foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                 {
@@ -1154,7 +1160,7 @@ public partial class Box : Entity
                     if (collidedBox.State == States.DroppingFromAir) return; // 避免空中和其他坠落的箱子相撞
                 }
 
-                DealCollideDamageToActor(collision, KickLocalAxis.None);
+                DealCollideDamageToActor(collision, KickAxis.None);
                 PlayFXOnEachGrid(CollideFX, CollideFXScale);
                 foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                 {
@@ -1182,7 +1188,7 @@ public partial class Box : Entity
         }
     }
 
-    private bool DealCollideDamageToActor(Collision collision, KickLocalAxis kickLocalAxis)
+    private bool DealCollideDamageToActor(Collision collision, KickAxis kickLocalAxis)
     {
         Actor collidedActor = collision.collider.GetComponentInParent<Actor>();
         if (collidedActor == null
@@ -1210,10 +1216,10 @@ public partial class Box : Entity
             }
 
             Vector3 force = (collidedActor.transform.position - nearestBoxIndicator).normalized;
-            force = CurrentKickGlobalAxis == KickLocalAxis.X ? new Vector3(force.x, 0, 0) : new Vector3(0, 0, force.z);
+            force = CurrentKickGlobalAxis == KickAxis.X ? new Vector3(force.x, 0, 0) : new Vector3(0, 0, force.z);
 
             collidedActor.RigidBody.velocity = Vector3.zero;
-            Vector3 repelForce = force * (CurrentKickLocalAxis == KickLocalAxis.X ? KickRepelForce_X : KickRepelForce_Z); // 不同Local方向撞击击退力度不同
+            Vector3 repelForce = force * (CurrentKickLocalAxis == KickAxis.X ? KickRepelForce_X : KickRepelForce_Z); // 不同Local方向撞击击退力度不同
             collidedActor.RigidBody.AddForce(repelForce, ForceMode.VelocityChange);
             collidedActor.EntityBuffHelper.AddBuff(new EntityBuff_AttributeLabel {Duration = repelForce.magnitude / 30f, EntityBuffAttribute = EntityBuffAttribute.Repulse, IsPermanent = false});
             collidedActor.EntityBuffHelper.Damage(EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage);
@@ -1237,6 +1243,7 @@ public partial class Box : Entity
     #region Destroy
 
     private bool isDestroying = false;
+
     public void DestroyBox(UnityAction callBack = null, bool forModuleRecycle = false)
     {
         if (isDestroying) return;
