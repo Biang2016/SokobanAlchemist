@@ -556,11 +556,14 @@ public class EntityStatPropSet
     private void OnHealthDurabilityReachZero(string changeInfo)
     {
         Entity.PassiveSkillMarkAsDestroyed = true;
-        if (changeInfo.Equals($"ChangeEntityStatInstantly-{EntityBuffAttribute.FiringDamage}"))
+        foreach (EntityBuffAttribute attribute in Enum.GetValues(typeof(EntityBuffAttribute)))
         {
-            foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+            if (changeInfo.Contains($"Damage-{attribute}"))
             {
-                eps.OnDestroyEntityByFire();
+                foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+                {
+                    eps.OnDestroyEntityByElementDamage(attribute);
+                }
             }
         }
 

@@ -549,7 +549,7 @@ public class Actor : Entity
             }
         }
 
-        if (ActorBattleHelper.IsDead)
+        if (ActorBattleHelper.IsDestroying)
         {
             if (RigidBody != null) RigidBody.constraints |= RigidbodyConstraints.FreezePositionY;
             SnapToGridY();

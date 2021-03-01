@@ -128,6 +128,7 @@ public partial class Box : Entity
         worldGP_WhenKicked = GridPos3D.Zero;
         LastState = States.Static;
         State = States.Static;
+        isDestroying = false;
 
         EntityBuffHelper.OnHelperRecycled();
         EntityFrozenHelper.OnHelperRecycled();
@@ -150,6 +151,7 @@ public partial class Box : Entity
         DoorBoxHelper?.OnHelperRecycled();
         BoxSkinHelper?.OnHelperRecycled();
         BoxIconSpriteHelper?.OnHelperRecycled();
+        
 
         transform.DOPause();
         ModelRoot.transform.DOPause();
@@ -174,6 +176,7 @@ public partial class Box : Entity
 
         UnInitPassiveSkills();
         gameObject.SetActive(false);
+
         base.OnRecycled();
     }
 
@@ -1233,8 +1236,11 @@ public partial class Box : Entity
 
     #region Destroy
 
+    private bool isDestroying = false;
     public void DestroyBox(UnityAction callBack = null, bool forModuleRecycle = false)
     {
+        if (isDestroying) return;
+        isDestroying = true;
         if (!forModuleRecycle)
         {
             foreach (EntityPassiveSkill ps in EntityPassiveSkills)

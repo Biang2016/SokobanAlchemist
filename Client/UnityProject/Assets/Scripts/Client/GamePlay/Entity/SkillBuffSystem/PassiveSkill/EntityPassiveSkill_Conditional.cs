@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using BiangLibrary;
 using BiangLibrary.CloneVariant;
@@ -29,7 +30,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         OnLevelEvent = 1 << 12,
         OnBeforeMergeBox = 1 << 13,
         OnMergeBox = 1 << 14,
-        OnDestroyEntityByFire = 1 << 15,
+        OnDestroyEntityByElementDamage = 1 << 15,
     }
 
     [LabelText("触发时机")]
@@ -37,6 +38,15 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     [LabelText("触发概率")]
     public uint TriggerProbabilityPercent = 100;
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnDestroyEntityByElementDamage)]
+    [LabelText("死亡原因")]
+    [ValueDropdown("GetAllBuffAttributeTypes", IsUniqueList = true, DropdownTitle = "选择死亡原因", DrawDropdownForListElements = true)]
+    public List<EntityBuffAttribute> DestroyEntityByElementDamageTypeList = new List<EntityBuffAttribute>();
+
+    private HashSet<EntityBuffAttribute> DestroyEntityByElementDamageTypeSet = new HashSet<EntityBuffAttribute>();
+
+    private IEnumerable GetAllBuffAttributeTypes => ConfigManager.GetAllBuffAttributeTypes();
 
     #region Conditions
 
@@ -55,6 +65,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                         pureAction.Execute();
                     }
                 }
+            }
+        }
+
+        if (DestroyEntityByElementDamageTypeSet.Count == 0)
+        {
+            foreach (EntityBuffAttribute attribute in DestroyEntityByElementDamageTypeList)
+            {
+                DestroyEntityByElementDamageTypeSet.Add(attribute);
             }
         }
     }
@@ -504,24 +522,25 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         UnInitPassiveSkillActions();
     }
 
-    public override void OnDestroyEntityByFire()
+    public override void OnDestroyEntityByElementDamage(EntityBuffAttribute entityBuffAttribute)
     {
         base.OnMergeBox();
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnDestroyEntityByFire))
+        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnDestroyEntityByElementDamage))
         {
-            if (TriggerProbabilityPercent.ProbabilityBool())
+            if (DestroyEntityByElementDamageTypeSet.Contains(entityBuffAttribute))
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                if (TriggerProbabilityPercent.ProbabilityBool())
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                     {
-                        pureAction.Execute();
+                        if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                        {
+                            pureAction.Execute();
+                        }
                     }
                 }
             }
         }
-
-        UnInitPassiveSkillActions();
     }
 
     #endregion
@@ -596,6 +615,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         newPSC.MaxTriggeredTimes = MaxTriggeredTimes;
 
         newPSC.PassiveSkillCondition = PassiveSkillCondition;
+        newPSC.DestroyEntityByElementDamageTypeList = DestroyEntityByElementDamageTypeList.Clone();
         foreach (EntityPassiveSkillAction rawBoxPassiveSkillAction in RawEntityPassiveSkillActions)
         {
             EntityPassiveSkillAction newEPSA = rawBoxPassiveSkillAction.Clone();
@@ -619,6 +639,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         MaxTriggeredTimes = srcPSC.MaxTriggeredTimes;
 
         PassiveSkillCondition = srcPSC.PassiveSkillCondition;
+        DestroyEntityByElementDamageTypeList = srcPSC.DestroyEntityByElementDamageTypeList.Clone();
         if (srcPSC.RawEntityPassiveSkillActions.Count != RawEntityPassiveSkillActions.Count)
         {
             Debug.LogError("EPS_Conditional CopyDataFrom() Action数量不一致");

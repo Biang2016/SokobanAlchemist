@@ -113,7 +113,7 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
     {
     }
 
-    public virtual void OnDestroyEntityByFire()
+    public virtual void OnDestroyEntityByElementDamage(EntityBuffAttribute entityBuffAttribute)
     {
     }
 

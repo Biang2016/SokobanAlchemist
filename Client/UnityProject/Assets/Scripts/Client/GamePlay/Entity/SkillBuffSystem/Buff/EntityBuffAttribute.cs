@@ -137,3 +137,25 @@ public enum EntityBuffAttribute
     [LabelText("碾压免疫")]
     GrindImmune,
 }
+
+public static class EntityBuffAttributeExtension
+{
+    public static bool IsDamageBuff(this EntityBuffAttribute attribute)
+    {
+        if (
+            attribute == EntityBuffAttribute.FiringDamage
+            || attribute == EntityBuffAttribute.FrozenDamage
+            || attribute == EntityBuffAttribute.ExplodeDamage
+            || attribute == EntityBuffAttribute.CollideDamage
+            || attribute == EntityBuffAttribute.AttackDamage
+            || attribute == EntityBuffAttribute.ThornDamage
+            || attribute == EntityBuffAttribute.PoisonousDamage
+            || attribute == EntityBuffAttribute.ShockDamage
+            || attribute == EntityBuffAttribute.GrindDamage
+        ) return true;
+        else
+        {
+            return false;
+        }
+    }
+}

@@ -201,29 +201,26 @@ public class EntityBuffHelper : EntityMonoHelper
         }
     }
 
-    private void CalculateDefense(EntityBuff newBuff)
+    private void CalculateDefense(EntityBuff_ChangeEntityStatInstantly newBuff)
     {
-        if (newBuff is EntityBuff_ChangeEntityStatInstantly buffType1)
+        if (newBuff.Delta < 0)
         {
-            if (buffType1.Delta < 0)
+            switch (newBuff.EntityBuffAttribute)
             {
-                switch (buffType1.EntityBuffAttribute)
+                case EntityBuffAttribute.CollideDamage:
                 {
-                    case EntityBuffAttribute.CollideDamage:
-                    {
-                        if (Entity is Actor) buffType1.Delta = Mathf.Min(0, buffType1.Delta + Entity.EntityStatPropSet.ActorCollideDamageDefense.GetModifiedValue);
-                        break;
-                    }
-                    case EntityBuffAttribute.ExplodeDamage:
-                    {
-                        buffType1.Delta = Mathf.Min(0, buffType1.Delta + Entity.EntityStatPropSet.ExplodeDamageDefense.GetModifiedValue);
-                        break;
-                    }
-                    case EntityBuffAttribute.FiringDamage:
-                    {
-                        buffType1.Delta = Mathf.Min(0, buffType1.Delta + Entity.EntityStatPropSet.FiringDamageDefense.GetModifiedValue);
-                        break;
-                    }
+                    if (Entity is Actor) newBuff.Delta = Mathf.Min(0, newBuff.Delta + Entity.EntityStatPropSet.ActorCollideDamageDefense.GetModifiedValue);
+                    break;
+                }
+                case EntityBuffAttribute.ExplodeDamage:
+                {
+                    newBuff.Delta = Mathf.Min(0, newBuff.Delta + Entity.EntityStatPropSet.ExplodeDamageDefense.GetModifiedValue);
+                    break;
+                }
+                case EntityBuffAttribute.FiringDamage:
+                {
+                    newBuff.Delta = Mathf.Min(0, newBuff.Delta + Entity.EntityStatPropSet.FiringDamageDefense.GetModifiedValue);
+                    break;
                 }
             }
         }
@@ -255,7 +252,15 @@ public class EntityBuffHelper : EntityMonoHelper
     public bool AddBuff(EntityBuff newBuff, string extraInfo = null)
     {
         if (!Entity.IsNotNullAndAlive()) return false;
-        CalculateDefense(newBuff);
+        if (newBuff is EntityBuff_ChangeEntityStatInstantly statBuff)
+        {
+            if (statBuff.EntityBuffAttribute.IsDamageBuff())
+            {
+                extraInfo = $"Damage-{statBuff.EntityBuffAttribute}";
+                CalculateDefense(statBuff);
+            }
+        }
+
         bool suc = BuffRelationshipProcess(newBuff) && CheckBuffPropertyTypeValid((newBuff));
         if (suc)
         {
@@ -441,6 +446,6 @@ public class EntityBuffHelper : EntityMonoHelper
             EntityStatType = EntityStatType.HealthDurability,
             IsPermanent = false,
             Percent = 0
-        }, damageAttribute.ToString());
+        });
     }
 }

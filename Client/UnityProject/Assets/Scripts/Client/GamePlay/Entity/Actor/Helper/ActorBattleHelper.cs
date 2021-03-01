@@ -20,14 +20,14 @@ public class ActorBattleHelper : ActorMonoHelper
         BoxCollider.enabled = false;
         InGameHealthBar?.PoolRecycle();
         InGameHealthBar = null;
-        IsDead = false;
+        IsDestroying = false;
         base.OnHelperRecycled();
     }
 
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
-        IsDead = false;
+        IsDestroying = false;
     }
 
     public void Initialize()
@@ -75,11 +75,12 @@ public class ActorBattleHelper : ActorMonoHelper
 
     #region Die
 
-    public bool IsDead = false;
+    public bool IsDestroying = false;
 
     public void DestroyActor(UnityAction callBack = null, bool forModuleRecycle = false)
     {
-        IsDead = true;
+        if (IsDestroying) return;
+        IsDestroying = true;
         if (!forModuleRecycle)
         {
             foreach (EntityPassiveSkill ps in Actor.EntityPassiveSkills)
