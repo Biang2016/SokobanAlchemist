@@ -175,7 +175,7 @@ public partial class Box : Entity
 
         CurrentKickGlobalAxis = KickAxis.None;
         CurrentKickLocalAxis = KickAxis.None;
-        CurrentKickGlobalDir = GridPos3D.Zero;
+        CurrentMoveGlobalPlanerDir = GridPos3D.Zero;
 
         UnInitPassiveSkills();
         gameObject.SetActive(false);
@@ -444,7 +444,7 @@ public partial class Box : Entity
 
     private KickAxis CurrentKickLocalAxis = KickAxis.X;
     private KickAxis CurrentKickGlobalAxis = KickAxis.X;
-    private GridPos3D CurrentKickGlobalDir = GridPos3D.Zero;
+    private GridPos3D CurrentMoveGlobalPlanerDir = GridPos3D.Zero;
 
     [HideInPrefabAssets]
     [ReadOnly]
@@ -654,7 +654,8 @@ public partial class Box : Entity
             if (gp != WorldGP)
             {
                 if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Push {WorldGP} -> {gp}");
-                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, (gp - WorldGP).Normalized(), States.BeingPushed, true, false, actor.GUID);
+                CurrentMoveGlobalPlanerDir = (gp - WorldGP).Normalized();
+                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.BeingPushed, true, false, actor.GUID);
             }
         }
     }
@@ -667,7 +668,8 @@ public partial class Box : Entity
         if (moveDirection != GridPos3D.Zero)
         {
             if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] Box] {name} ForceCancelPush {WorldGP} -> {targetGP}");
-            WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, moveDirection, States.Static, false, true, actor.GUID);
+            CurrentMoveGlobalPlanerDir = moveDirection;
+            WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.Static, false, true, actor.GUID);
         }
     }
 
@@ -690,7 +692,6 @@ public partial class Box : Entity
             alreadyCollidedActorSet.Clear();
             LastTouchActor = actor;
             worldGP_WhenKicked = WorldGP;
-            //WorldManager.Instance.CurrentWorld.RemoveBoxFromGrid(this); // 放在FixedUpdate里面判定如果坐标有变则移除，避免踢向墙壁时上方塌落导致bug
             transform.DOPause();
             Rigidbody = gameObject.GetComponent<Rigidbody>();
             if (!hasRigidbody)
@@ -714,8 +715,8 @@ public partial class Box : Entity
             Rigidbody.angularVelocity = Vector3.zero;
             Rigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 
-            CurrentKickGlobalDir = direction.ToGridPos3D();
-            if (CurrentKickGlobalDir.x == 0)
+            CurrentMoveGlobalPlanerDir = direction.ToGridPos3D();
+            if (CurrentMoveGlobalPlanerDir.x == 0)
             {
                 Rigidbody.constraints |= RigidbodyConstraints.FreezePositionX;
             }
@@ -726,7 +727,7 @@ public partial class Box : Entity
                 else CurrentKickLocalAxis = KickAxis.X;
             }
 
-            if (CurrentKickGlobalDir.z == 0)
+            if (CurrentMoveGlobalPlanerDir.z == 0)
             {
                 Rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
             }
@@ -872,6 +873,8 @@ public partial class Box : Entity
             Rigidbody.angularDrag = 0;
             Rigidbody.useGravity = true;
             Rigidbody.velocity = direction.normalized * velocity;
+            CurrentMoveGlobalPlanerDir = direction.normalized.ToGridPos3D();
+            CurrentMoveGlobalPlanerDir.y = 0;
             Rigidbody.angularVelocity = Vector3.zero;
             Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         }
@@ -1046,8 +1049,8 @@ public partial class Box : Entity
                         h.OnRigidbodyStop();
                     }
 
-                    WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this, checkMerge, CurrentKickGlobalDir); // 这里面已经做了“Box本来就在Grid系统里”的判定
-                    CurrentKickGlobalDir = GridPos3D.Zero;
+                    WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this, checkMerge, CurrentMoveGlobalPlanerDir); // 这里面已经做了“Box本来就在Grid系统里”的判定
+                    CurrentMoveGlobalPlanerDir = GridPos3D.Zero;
                 }
             }
         }
