@@ -609,6 +609,12 @@ public class World : PoolObject
             box_moveable.Initialize(worldGP, newModule, needLerp ? 0.2f : 0f, box_moveable.ArtOnly, Box.LerpType.Push, needLerpModel, false);
         }
 
+        TryMerge(direction, boxes_moveable);
+        return true;
+    }
+
+    private void TryMerge(GridPos3D direction, HashSet<Box> boxes_moveable)
+    {
         HashSet<Box> mergedBoxes = new HashSet<Box>();
         List<(Box, ushort, HashSet<Box>, GridPosR.Orientation, GridPos3D)> mergeTaskList = new List<(Box, ushort, HashSet<Box>, GridPosR.Orientation, GridPos3D)>();
         foreach (Box box_moveable in boxes_moveable)
@@ -659,12 +665,11 @@ public class World : PoolObject
                     if (box != null)
                     {
                         FXManager.Instance.PlayFX(box.MergedFX, box.transform.position, box.MergedFXScale);
+                        TryMerge(direction, new HashSet<Box>{ box });
                     }
                 }
             });
         }
-
-        return true;
     }
 
     /// <summary>
