@@ -399,7 +399,10 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
             }
             else
             {
-                SubSkillManageCoroutines_CanNotInterrupt.Add(ActiveSkillAgent.Instance.StartCoroutine(CastSubActiveSkills()));
+                if (ActiveSkillAgent.Instance != null)
+                {
+                    SubSkillManageCoroutines_CanNotInterrupt.Add(ActiveSkillAgent.Instance.StartCoroutine(CastSubActiveSkills()));
+                }
             }
         }
 
