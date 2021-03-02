@@ -496,6 +496,7 @@ public class Actor : Entity
                 if (CurMoveAttempt.x.Equals(0)) RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
                 if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
                 MovementState = MovementStates.Moving;
+                if (this == BattleManager.Instance.Player1) ActorBehaviourState = ActorBehaviourStates.Walk;
                 if (ActorBehaviourState == ActorBehaviourStates.Walk)
                 {
                     ActorArtHelper.SetIsWalking(true);

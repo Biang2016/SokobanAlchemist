@@ -87,9 +87,9 @@ public class ActorBattleHelper : ActorMonoHelper
             {
                 ps.OnBeforeDestroyEntity();
             }
-
-            StartCoroutine(Co_DelayDestroyActor(callBack, forModuleRecycle));
         }
+
+        StartCoroutine(Co_DelayDestroyActor(callBack, forModuleRecycle));
     }
 
     IEnumerator Co_DelayDestroyActor(UnityAction callBack, bool forModuleRecycle = false)

@@ -96,10 +96,9 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
     }
 
-    private List<Actor> cachedDyingActors = new List<Actor>(32);
-
     public void DestroyActorByModuleGP(GridPos3D moduleGP)
     {
+        List<Actor> cachedDyingActors = new List<Actor>(32);
         foreach (KeyValuePair<uint, Actor> kv in ActorDict)
         {
             GridPos3D actorModuleGP = WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(kv.Value.WorldGP);
