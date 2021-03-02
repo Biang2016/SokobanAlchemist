@@ -1049,7 +1049,7 @@ public partial class Box : Entity
                         h.OnRigidbodyStop();
                     }
 
-                    WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this, checkMerge, CurrentMoveGlobalPlanerDir); // 这里面已经做了“Box本来就在Grid系统里”的判定
+                    if (!isDestroying) WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this, checkMerge, CurrentMoveGlobalPlanerDir); // 这里面已经做了“Box本来就在Grid系统里”的判定
                     CurrentMoveGlobalPlanerDir = GridPos3D.Zero;
                 }
             }

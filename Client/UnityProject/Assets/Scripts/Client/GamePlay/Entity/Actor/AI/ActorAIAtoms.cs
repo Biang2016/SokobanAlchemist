@@ -10,6 +10,28 @@ using WaitUntil = FlowCanvas.Nodes.WaitUntil;
 
 public static class ActorAIAtoms
 {
+    #region 状态
+
+    [Category("敌兵/状态")]
+    [Name("更改状态")]
+    [Description("更改状态")]
+    public class BT_Enemy_SetEnemyBehaviourState : BTNode
+    {
+        public override string name => $"状态设为 [{ActorBehaviourState.value}]";
+
+        [Name("更改为状态")]
+        public BBParameter<Actor.ActorBehaviourStates> ActorBehaviourState;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            Actor.ActorBehaviourState = ActorBehaviourState.value;
+            return Status.Success;
+        }
+    }
+
+    #endregion
+
     #region 寻路
 
     [Category("敌兵/寻路")]
@@ -376,6 +398,7 @@ public static class ActorAIAtoms
                 bool triggerSuc = eas.TriggerActiveSkill();
                 if (triggerSuc)
                 {
+                    actor.ActorArtHelper.SetIsAttacking();
                     return Status.Success;
                 }
                 else

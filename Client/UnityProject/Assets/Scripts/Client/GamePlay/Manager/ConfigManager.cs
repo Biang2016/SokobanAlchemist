@@ -665,11 +665,13 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
+#if UNITY_EDITOR
     public static void LoadEntityBuffAttributeMatrixFromAsset()
     {
         EntityBuffAttributeMatrixAsset configSSO = GetBuffAttributeMatrixAsset();
         EntityBuffAttributeMatrix = configSSO.EntityBuffAttributeMatrix;
     }
+#endif
 
     private static void LoadBoxOccupationDataConfig(DataFormat dataFormat)
     {

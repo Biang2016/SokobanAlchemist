@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -222,6 +223,25 @@ public class Actor : Entity
     [FoldoutGroup("状态")]
     internal Box CurrentLiftBox = null;
 
+    public enum ActorBehaviourStates
+    {
+        Idle,
+        Frozen,
+        Walk,
+        Chase,
+        Attack,
+        Push,
+        Dash,
+        Vault,
+        Kick,
+        Escape,
+    }
+
+    [ReadOnly]
+    [FoldoutGroup("状态")]
+    [LabelText("行为状态")]
+    public ActorBehaviourStates ActorBehaviourState = ActorBehaviourStates.Idle;
+
     public enum MovementStates
     {
         Static,
@@ -265,6 +285,7 @@ public class Actor : Entity
         RigidBody.drag = 100f;
         RigidBody.velocity = Vector3.zero;
 
+        ActorBehaviourState = ActorBehaviourStates.Idle;
         GraphOwner?.StopBehaviour();
         ActorAIAgent.Stop();
         CurMoveAttempt = Vector3.zero;
@@ -475,7 +496,17 @@ public class Actor : Entity
                 if (CurMoveAttempt.x.Equals(0)) RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
                 if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
                 MovementState = MovementStates.Moving;
-                ActorArtHelper.SetIsWalking(true);
+                if (ActorBehaviourState == ActorBehaviourStates.Walk)
+                {
+                    ActorArtHelper.SetIsWalking(true);
+                    ActorArtHelper.SetIsChasing(false);
+                }
+                else if (ActorBehaviourState == ActorBehaviourStates.Chase)
+                {
+                    ActorArtHelper.SetIsWalking(false);
+                    ActorArtHelper.SetIsChasing(true);
+                }
+
                 RigidBody.drag = 0;
                 RigidBody.mass = 1f;
 
@@ -498,6 +529,7 @@ public class Actor : Entity
             else
             {
                 ActorArtHelper.SetIsWalking(false);
+                ActorArtHelper.SetIsChasing(false);
                 ActorArtHelper.SetIsPushing(false);
                 MovementState = MovementStates.Static;
                 RigidBody.drag = 100f;
@@ -517,7 +549,10 @@ public class Actor : Entity
         }
         else
         {
+            ActorBehaviourState = ActorBehaviourStates.Idle;
             ActorArtHelper.SetIsWalking(false);
+            ActorArtHelper.SetIsChasing(false);
+            ActorArtHelper.SetIsPushing(false);
             if (RigidBody != null)
             {
                 RigidBody.drag = 0f;

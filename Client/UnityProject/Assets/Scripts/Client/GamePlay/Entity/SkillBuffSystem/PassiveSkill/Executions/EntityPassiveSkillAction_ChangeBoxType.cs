@@ -61,7 +61,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
             {
                 if (boxTypeIndex != 0)
                 {
-                    WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(Box.WorldGP);
+                    WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(worldGP);
                     if (module != null)
                     {
                         module.GenerateBox(boxTypeIndex, worldGP, BoxOrientation);

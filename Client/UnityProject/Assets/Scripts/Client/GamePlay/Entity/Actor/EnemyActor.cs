@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using UnityEngine;
+
+#if UNITY_EDITOR
 
 #endif
 public class EnemyActor : Actor
@@ -45,7 +47,7 @@ public class EnemyActor : Actor
                 }
                 else
                 {
-                    GraphOwner.UpdateBehaviour();
+                    GraphOwner.graph.UpdateGraph(AIUpdateInterval * Time.fixedDeltaTime);
                     AIUpdateIntervalTick = 0;
                 }
 

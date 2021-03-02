@@ -8,6 +8,25 @@ public class ActorArtHelper : ActorMonoHelper
     [SerializeField]
     private Animator ActorModelAnim;
 
+    public override void OnHelperRecycled()
+    {
+        base.OnHelperRecycled();
+        if (ActorModelAnim != null)
+        {
+            foreach (AnimatorControllerParameter parameter in ActorModelAnim.parameters)
+            {
+                if (parameter.type == AnimatorControllerParameterType.Bool)
+                    ActorModelAnim.SetBool(parameter.name, false);
+                if (parameter.type == AnimatorControllerParameterType.Float)
+                    ActorModelAnim.SetFloat(parameter.name, 0);
+                if (parameter.type == AnimatorControllerParameterType.Int)
+                    ActorModelAnim.SetInteger(parameter.name, 0);
+                if (parameter.type == AnimatorControllerParameterType.Trigger)
+                    ActorModelAnim.ResetTrigger(parameter.name);
+            }
+        }
+    }
+
     public void Vault()
     {
         if (ActorArtRootAnim != null)
@@ -49,11 +68,34 @@ public class ActorArtHelper : ActorMonoHelper
         Actor.KickBox();
     }
 
-    public void SetIsWalking(bool isWalking)
+    public void Dash()
+    {
+        if (ActorArtRootAnim != null)
+        {
+            ActorArtRootAnim.SetTrigger("Dash");
+        }
+    }
+
+    #region 第一优先级
+
+    public void SetIsFrozen(bool isFrozen)
     {
         if (ActorModelAnim != null)
         {
-            ActorModelAnim.SetBool("IsWalking", isWalking);
+            ActorModelAnim.SetBool("IsFrozen", isFrozen);
+        }
+    }
+
+    #endregion
+
+    #region 第二优先级
+
+    public void SetIsAttacking()
+    {
+        if (ActorModelAnim != null)
+        {
+            ActorModelAnim.SetTrigger("Action");
+            ActorModelAnim.SetTrigger("Attack");
         }
     }
 
@@ -65,11 +107,33 @@ public class ActorArtHelper : ActorMonoHelper
         }
     }
 
-    public void Dash()
+    #endregion
+
+    #region 第三优先级
+
+    public void SetIsChasing(bool isChasing)
     {
-        if (ActorArtRootAnim != null)
+        if (ActorModelAnim != null)
         {
-            ActorArtRootAnim.SetTrigger("Dash");
+            ActorModelAnim.SetBool("IsChasing", isChasing);
         }
     }
+
+    public void SetIsWalking(bool isWalking)
+    {
+        if (ActorModelAnim != null)
+        {
+            ActorModelAnim.SetBool("IsWalking", isWalking);
+        }
+    }
+
+    public void SetIsEscaping(bool isEscaping)
+    {
+        if (ActorModelAnim != null)
+        {
+            ActorModelAnim.SetBool("IsEscaping", isEscaping);
+        }
+    }
+
+    #endregion
 }
