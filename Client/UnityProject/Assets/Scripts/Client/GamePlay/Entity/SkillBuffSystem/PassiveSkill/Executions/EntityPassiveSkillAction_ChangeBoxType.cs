@@ -35,35 +35,39 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
             worldGP = Box.transform.position.ToGridPos3D();
         }
 
-        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(Box.WorldGP);
-        if (module != null)
+        ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
+        if (ChangeForEveryGrid)
         {
-            ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
-            if (ChangeForEveryGrid)
+            List<GridPos3D> occupations = Box.GetBoxOccupationGPs_Rotated();
+            Box.DestroyBox(delegate
             {
-                List<GridPos3D> occupations = Box.GetBoxOccupationGPs_Rotated();
-                Box.DestroyBox(delegate
+                if (boxTypeIndex != 0)
                 {
-                    if (boxTypeIndex != 0)
+                    foreach (GridPos3D gridPos in occupations)
                     {
-                        foreach (GridPos3D gridPos in occupations)
+                        GridPos3D gridWorldGP = worldGP + gridPos;
+                        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridWorldGP);
+                        if (module != null)
                         {
-                            GridPos3D gridWorldGP = worldGP + gridPos;
                             module.GenerateBox(boxTypeIndex, gridWorldGP, BoxOrientation);
                         }
                     }
-                });
-            }
-            else
+                }
+            });
+        }
+        else
+        {
+            Box.DestroyBox(delegate
             {
-                Box.DestroyBox(delegate
+                if (boxTypeIndex != 0)
                 {
-                    if (boxTypeIndex != 0)
+                    WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(Box.WorldGP);
+                    if (module != null)
                     {
                         module.GenerateBox(boxTypeIndex, worldGP, BoxOrientation);
                     }
-                });
-            }
+                }
+            });
         }
     }
 

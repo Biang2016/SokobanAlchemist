@@ -48,10 +48,11 @@ public class EntityLightning : PoolObject
             if (StartPivot != null && EndPivot != null)
             {
                 transform.position = (StartPivot.position + EndPivot.position) / 2f;
-                
+
                 // 闪电及伤害框尺寸不随Model节点缩放
-                float scale = (StartPivot.position - EndPivot.position).magnitude / 13f;
-                LightningPS.transform.localScale = new Vector3(scale / LightningPS.transform.parent.lossyScale.x, scale / LightningPS.transform.parent.lossyScale.y, scale / LightningPS.transform.parent.lossyScale.z); 
+                float scale = (StartPivot.position - EndPivot.position).magnitude;
+                float lightningPSDefaultScale = 13f;
+                LightningPS.transform.localScale = new Vector3(scale / LightningPS.transform.parent.lossyScale.x / lightningPSDefaultScale, scale / LightningPS.transform.parent.lossyScale.y / lightningPSDefaultScale, scale / LightningPS.transform.parent.lossyScale.z / lightningPSDefaultScale);
                 BoxCollider boxCollider = (BoxCollider) EntityTriggerZone_Lightning.Collider;
                 boxCollider.size = new Vector3(0.2f / EntityTriggerZone_Lightning.transform.lossyScale.x, 0.2f / EntityTriggerZone_Lightning.transform.lossyScale.y, scale / EntityTriggerZone_Lightning.transform.lossyScale.z);
                 transform.LookAt(EndPivot);

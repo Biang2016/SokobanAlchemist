@@ -79,7 +79,7 @@ public class ActorBattleHelper : ActorMonoHelper
 
     public void DestroyActor(UnityAction callBack = null, bool forModuleRecycle = false)
     {
-        if (IsDestroying) return;
+        //if (IsDestroying) return;
         IsDestroying = true;
         if (!forModuleRecycle)
         {
