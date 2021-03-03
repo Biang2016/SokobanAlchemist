@@ -44,6 +44,8 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
 
     private List<EntityLightning> cached_removeLightnings = new List<EntityLightning>(4);
 
+    private static Collider[] cached_Colliders = new Collider[256];
+
     void FixedUpdate()
     {
         if (Entity.IsNotNullAndAlive())
@@ -73,9 +75,10 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
             }
 
             // 寻找新的连接
-            Collider[] colliders = Physics.OverlapSphere(LightningStartPivot.position, 5f, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
-            foreach (Collider c in colliders)
+            int length = Physics.OverlapSphereNonAlloc(LightningStartPivot.position, 5f, cached_Colliders, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
+            for (int i = 0; i < length; i++)
             {
+                Collider c = cached_Colliders[i];
                 Entity entity = c.GetComponentInParent<Entity>();
                 if (entity != null && entity != Entity && entity.EntityLightningGeneratorHelpers != null && entity.EntityLightningGeneratorHelpers.Count > 0)
                 {

@@ -89,7 +89,10 @@ public class ActorBattleHelper : ActorMonoHelper
             }
         }
 
-        StartCoroutine(Co_DelayDestroyActor(callBack, forModuleRecycle));
+        if (gameObject.activeInHierarchy)
+        {
+            StartCoroutine(Co_DelayDestroyActor(callBack, forModuleRecycle));
+        }
     }
 
     IEnumerator Co_DelayDestroyActor(UnityAction callBack, bool forModuleRecycle = false)

@@ -40,6 +40,10 @@ public abstract class EntityPassiveSkillAction : IClone<EntityPassiveSkillAction
 
     private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
 
+    private IEnumerable<string> GetAllWorldModuleNames => ConfigManager.GetAllWorldModuleNames();
+
+    private IEnumerable<string> GetAllWorldNames => ConfigManager.GetAllWorldNames();
+
     public EntityPassiveSkillAction Clone()
     {
         Type type = GetType();

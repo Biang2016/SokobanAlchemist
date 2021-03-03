@@ -157,6 +157,7 @@ public class OpenWorld : World
         WorldMapOrientation = null;
         WorldMap_Occupied = null;
         WorldMap_StaticLayoutOccupied = null;
+        IsInsideMicroModules = false;
     }
 
     public override IEnumerator Initialize(WorldData worldData)
@@ -244,7 +245,7 @@ public class OpenWorld : World
                         playerBPWorld = new GridPos3D(playerBP.x, WorldModule.MODULE_SIZE, playerBP.z);
                         GridPos3D playerBPLocal = new GridPos3D(playerBP.x % WorldModule.MODULE_SIZE, 0, playerBP.z % WorldModule.MODULE_SIZE);
                         BornPointData bp = new BornPointData {ActorType = "Player1", BornPointAlias = $"PlayerBP", LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorld};
-                        WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP(bp);
+                        WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP_OpenWorld(bp);
                         WorldMap[playerBPWorld.x, playerBPWorld.y - WorldModule.MODULE_SIZE, playerBPWorld.z] = (ushort) ConfigManager.TypeStartIndex.Player;
                     }
 
@@ -321,6 +322,8 @@ public class OpenWorld : World
 
     #region Level Streaming
 
+    public bool IsInsideMicroModules = false;
+
     public class LevelCacheData
     {
         public List<MapGenerator> CurrentGenerator_StaticLayouts = new List<MapGenerator>(); // 按静态布局layer记录的地图生成信息，未走过的地图或离开很久之后重置的模组按这个数据加载出来
@@ -370,6 +373,7 @@ public class OpenWorld : World
 
         bool CheckModuleCanBeSeenByCamera(GridPos3D moduleGP, bool checkBottom, bool checkTop, float extendScope)
         {
+            if (IsInsideMicroModules) return moduleGP.y >= WORLD_HEIGHT/2; // 当角色在解谜关卡时，隐藏其它模组，且恒定显示解谜模组 todo 此处粗暴地使用了模组坐标来判断是否在解谜关卡，未来需要处理
             if (isInit) return true; // 初始化的时候无视相机位置，因为主角还没加载，相机位置还没确定
             GeometryUtility.CalculateFrustumPlanes(CameraManager.Instance.MainCamera, cachedPlanes);
             if (checkBottom && checkTop)

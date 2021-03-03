@@ -29,7 +29,7 @@ public class WorldBornPointGroupData_Runtime
         }
     }
 
-    public void SetDefaultPlayerBP(BornPointData bp)
+    public void SetDefaultPlayerBP_OpenWorld(BornPointData bp)
     {
         GridPos3D moduleGP = WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(bp.WorldGP);
         if (!ActorBP_ModuleDict.ContainsKey(moduleGP))

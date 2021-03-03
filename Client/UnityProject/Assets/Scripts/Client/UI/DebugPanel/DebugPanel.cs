@@ -32,6 +32,28 @@ public class DebugPanel : BaseUIPanel
 
     void Start()
     {
+        Init();
+    }
+
+    public void Clear()
+    {
+        foreach (KeyValuePair<string, DebugPanelComponent> kv in DebugComponentDictTree)
+        {
+            kv.Value.PoolRecycle();
+        }
+
+        DebugComponentDictTree.Clear();
+
+        foreach (DebugPanelColumn column in DebugButtonColumns)
+        {
+            column.PoolRecycle();
+        }
+
+        DebugButtonColumns.Clear();
+    }
+
+    public void Init()
+    {
         IsButtonsShow = false;
         Type type = typeof(DebugPanel);
         List<(MethodInfo, DebugControllerAttribute)> dcas = new List<(MethodInfo, DebugControllerAttribute)>();
