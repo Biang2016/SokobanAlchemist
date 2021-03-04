@@ -50,6 +50,7 @@ public class WorldModule : PoolObject
 
     public Box this[int x, int y, int z] => BoxMatrix[x, y, z];
 
+    // 此索引仅仅用于战斗时的Set，不可用于Recycle时候置空 
     public Box this[int x, int y, int z, bool isCore, GridPosR.Orientation orientation]
     {
         set
@@ -121,15 +122,31 @@ public class WorldModule : PoolObject
                     Box box = BoxMatrix[x, y, z];
                     if (box != null)
                     {
-                        box.PoolRecycle();
-                        BoxMatrix[x, y, z] = null;
-                        count++;
-                        if (count > clearBoxNumPerFrame)
+                        if (box.WorldGP == LocalGPToWorldGP(new GridPos3D(x, y, z))) // 不是核心格所在的模组无权卸载该Box
                         {
-                            count = 0;
-                            yield return null;
+                            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+                            {
+                                GridPos3D gridWorldGP = offset + box.WorldGP;
+                                if (World.GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP) == box)
+                                {
+                                    if (module.BoxMatrix[localGP.x, localGP.y, localGP.z] == box)
+                                    {
+                                        module.BoxMatrix[localGP.x, localGP.y, localGP.z] = null;
+                                    }
+                                }
+                            }
+
+                            box.PoolRecycle();
+                            count++;
+                            if (count > clearBoxNumPerFrame)
+                            {
+                                count = 0;
+                                yield return null;
+                            }
                         }
                     }
+
+                    BoxMatrix[x, y, z] = null;
                 }
             }
         }
