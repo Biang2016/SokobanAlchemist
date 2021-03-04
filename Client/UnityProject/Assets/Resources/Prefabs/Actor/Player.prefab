@@ -266,19 +266,19 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 1000
     MaxActionPoint:
-      BaseValue: 50
+      BaseValue: 4
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 100
     ActionPoint:
-      _value: 50
+      _value: 4
       _minValue: 0
-      _maxValue: 50
+      _maxValue: 4
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 100
     ActionPointRecovery:
-      BaseValue: 110
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
@@ -288,12 +288,12 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 100
     DashConsumeActionPoint:
-      BaseValue: 5
+      BaseValue: 1
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 100
     VaultConsumeActionPoint:
-      BaseValue: 12
+      BaseValue: 1
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 100
@@ -385,6 +385,8 @@ MonoBehaviour:
   FrozeFX: None
   ThawFX: None
   RawFrozenBoxPassiveSkills: []
+  IsInMicroWorld: 0
+  ActorBehaviourState: 0
   MovementState: 0
   PushState: 0
   ThrowState: 0
@@ -455,6 +457,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -537,6 +540,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1

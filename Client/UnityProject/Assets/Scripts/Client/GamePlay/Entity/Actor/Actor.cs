@@ -729,7 +729,7 @@ public class Actor : Entity
 
     private void Dash()
     {
-        if (EntityStatPropSet.ActionPoint.Value > EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue)
+        if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue)
         {
             EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue, "Dash");
             if (IsFrozen)
@@ -750,7 +750,7 @@ public class Actor : Entity
 
     private void Vault()
     {
-        if (EntityStatPropSet.ActionPoint.Value > EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue)
+        if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue)
         {
             if (IsFrozen)
             {
@@ -769,7 +769,7 @@ public class Actor : Entity
 
     public void Kick()
     {
-        if (EntityStatPropSet.ActionPoint.Value > EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue)
+        if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue)
         {
             Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
             if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))

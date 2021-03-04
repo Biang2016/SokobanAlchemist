@@ -247,10 +247,11 @@ MonoBehaviour:
     SmoothTimes_GenerateWallInOpenSpace: 3
   - ConsiderStaticLayout: 0
     Enable: 1
-    AllowReplacedBoxTypeNames: []
-    OnlyOverrideAnyBox: 1
+    AllowReplacedBoxTypeNames:
+    - BrickBox
+    OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    CountPer10KGrid: 2
+    CountPer10KGrid: 60
     BoxTypeName: ActionBox
     FillPercent: 40
     CaveConnectPercent: 40

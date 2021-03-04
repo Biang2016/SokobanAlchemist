@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,25 +12,15 @@ public class PlayerStatHUD : MonoBehaviour
     public TextMeshProUGUI HealthText;
     public Animator HealthTextAnim;
 
-    public Animator ActionPointSliderAnim;
-    public Slider ActionPointSlider;
-    public RectTransform ActionPointSliderRectTransform;
-    private float actionPointRatio;
-
-    public TextMeshProUGUI GoldText;
-
     public void Initialize(ActorBattleHelper helper)
     {
         EntityStatPropSet asps = helper.Actor.EntityStatPropSet;
         SetHealth(asps.HealthDurability.Value, asps.HealthDurability.MinValue, asps.HealthDurability.MaxValue);
         SetActionPoint(asps.ActionPoint.Value, asps.ActionPoint.MinValue, asps.ActionPoint.MaxValue);
-        SetActionPointBar(asps.MaxActionPoint.GetModifiedValue, asps.MaxActionPoint.GetModifiedValue);
         SetGold(asps.Gold.Value);
 
         asps.HealthDurability.OnChanged += SetHealth;
         asps.ActionPoint.OnChanged += SetActionPoint;
-        asps.ActionPoint.OnMaxValueChanged += OnActionChangeNotice;
-        asps.MaxActionPoint.OnValueChanged += SetActionPointBar;
         asps.Gold.OnChanged += (value, min, max) => SetGold(value);
     }
 
@@ -56,39 +47,48 @@ public class PlayerStatHUD : MonoBehaviour
 
     #region ActionPoint
 
-    private float actionPoint_SmoothDampVelocity;
+    public Transform ActionPointsContainer;
+    private List<ActionPointIndicator> ActionPointIndicators = new List<ActionPointIndicator>();
 
     public void SetActionPoint(int current, int min, int max)
     {
-        actionPointRatio = (float) current / max;
-    }
+        if (ActionPointIndicators.Count > max)
+        {
+            while (ActionPointIndicators.Count != max)
+            {
+                ActionPointIndicators[ActionPointIndicators.Count - 1].PoolRecycle();
+                ActionPointIndicators.RemoveAt(ActionPointIndicators.Count - 1);
+            }
+        }
+        else if (ActionPointIndicators.Count < max)
+        {
+            while (ActionPointIndicators.Count != max)
+            {
+                ActionPointIndicator indicator = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.ActionPointIndicator].AllocateGameObject<ActionPointIndicator>(ActionPointsContainer);
+                indicator.Available = false;
+                ActionPointIndicators.Add(indicator);
+            }
+        }
 
-    public void SetActionPointBar(int before, int after)
-    {
-        ActionPointSliderRectTransform.sizeDelta = new Vector2(after / 50f * 600f, ActionPointSliderRectTransform.sizeDelta.y);
+        for (int i = 0; i < ActionPointIndicators.Count; i++)
+        {
+            ActionPointIndicators[i].Available = i < current;
+        }
     }
 
     public void OnActionLowWarning()
     {
-        ActionPointSliderAnim.SetTrigger("JumpRed");
-    }
-
-    private void OnActionChangeNotice(int before, int after)
-    {
-        if ((after - before) > 1)
+        foreach (ActionPointIndicator indicator in ActionPointIndicators)
         {
-            ActionPointSliderAnim.SetTrigger("JumpYellow");
+            indicator.JumpRed();
         }
-    }
-
-    void Update()
-    {
-        ActionPointSlider.value = Mathf.SmoothDamp(ActionPointSlider.value, actionPointRatio, ref actionPoint_SmoothDampVelocity, 0.1f, 1, Time.deltaTime);
     }
 
     #endregion
 
     #region Gold
+
+    public TextMeshProUGUI GoldText;
 
     public void SetGold(int current)
     {
