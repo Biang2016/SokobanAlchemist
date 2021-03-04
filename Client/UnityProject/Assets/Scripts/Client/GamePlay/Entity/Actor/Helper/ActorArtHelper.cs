@@ -49,7 +49,7 @@ public class ActorArtHelper : ActorMonoHelper
     /// </summary>
     public void VaultEnd()
     {
-        Actor.SetModelSmoothMoveLerpTime(0.02f);
+        Actor.SetModelSmoothMoveLerpTime(Actor.DefaultSmoothMoveLerpTime);
     }
 
     public void Kick()

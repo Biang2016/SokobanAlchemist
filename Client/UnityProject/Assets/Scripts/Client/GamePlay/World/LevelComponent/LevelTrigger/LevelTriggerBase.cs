@@ -10,6 +10,8 @@ using UnityEngine;
 
 public abstract class LevelTriggerBase : PoolObject
 {
+    internal uint WorldModuleGUID;
+
     public abstract Data TriggerData { get; set; }
 
     public BoxCollider Trigger;
@@ -100,6 +102,7 @@ public abstract class LevelTriggerBase : PoolObject
     public override void OnRecycled()
     {
         base.OnRecycled();
+        WorldModuleGUID = 0;
         HasTriggeredTimes = 0;
         UnRegisterEvent();
         SetShown(true);
@@ -112,17 +115,9 @@ public abstract class LevelTriggerBase : PoolObject
         Renderer.enabled = shown;
     }
 
-    public void InitializeInWorld(Data data)
+    public void InitializeInWorldModule(Data data, uint worldModuleGUID)
     {
-        HasTriggeredTimes = 0;
-        TriggerData = data;
-        GridPos3D.ApplyGridPosToLocalTrans(data.WorldGP, transform, 1);
-        InitializeColor();
-        RegisterEvent();
-    }
-
-    public void InitializeInWorldModule(Data data)
-    {
+        WorldModuleGUID = worldModuleGUID;
         HasTriggeredTimes = 0;
         TriggerData = data;
         GridPos3D.ApplyGridPosToLocalTrans(data.LocalGP, transform, 1);
@@ -172,13 +167,20 @@ public abstract class LevelTriggerBase : PoolObject
             ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, TriggerData.TriggerEmitEventAlias);
         }
 
-        if (!IsRecycled && !TriggerData.isTriggerSetStateAliasEmpty) BattleManager.Instance.SetStateBool(TriggerData.TriggerSetStateAlias, true);
+        if (!IsRecycled && !TriggerData.isTriggerSetStateAliasEmpty)
+        {
+            BattleManager.Instance.SetStateBool(WorldModuleGUID, TriggerData.TriggerSetStateAlias, true);
+        }
+
         //Debug.Log("LevelTriggerEventAlias:" + TriggerData.TriggerEmitEventAlias);
     }
 
     protected virtual void CancelStateValue()
     {
-        if (!IsRecycled && !TriggerData.isTriggerSetStateAliasEmpty) BattleManager.Instance.SetStateBool(TriggerData.TriggerSetStateAlias, false);
+        if (!IsRecycled && !TriggerData.isTriggerSetStateAliasEmpty)
+        {
+            BattleManager.Instance.SetStateBool(WorldModuleGUID, TriggerData.TriggerSetStateAlias, false);
+        }
     }
 
 #if UNITY_EDITOR

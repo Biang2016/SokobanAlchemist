@@ -25,6 +25,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 {
     public enum GUID_Separator
     {
+        WorldModule = 500,
         Entity = 1000,
         Buff = 10000,
         PropertyModifier = 100000,

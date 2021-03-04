@@ -12,8 +12,8 @@ public class ActorFrozenHelper : EntityFrozenHelper
         Actor actor = (Actor) Entity;
         if (afterFrozenLevel <= 1)
         {
-            actor.AddRigidbody();
-            actor.SetModelSmoothMoveLerpTime(0.02f);
+            actor.ForbidAction = false;
+            actor.SetModelSmoothMoveLerpTime(actor.DefaultSmoothMoveLerpTime);
             if (FrozenBox)
             {
                 actor.transform.parent = BattleManager.Instance.ActorContainerRoot;
@@ -50,7 +50,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
                         actor.CurMoveAttempt = Vector3.zero;
                         actor.ActorPushHelper.TriggerOut = false;
                         actor.MovementState = Actor.MovementStates.Frozen;
-                        actor.RemoveRigidbody();
+                        actor.ForbidAction = true;
                         transform.rotation = Quaternion.identity;
                         FrozeModelRoot.SetActive(true);
                     }

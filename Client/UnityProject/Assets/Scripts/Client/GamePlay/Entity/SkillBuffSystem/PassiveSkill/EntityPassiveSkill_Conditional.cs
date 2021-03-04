@@ -573,6 +573,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                     EntityPassiveSkillAction epsa = EntityPassiveSkillActions[i];
                     epsa.Entity = Entity;
                     epsa.CopyDataFrom(RawEntityPassiveSkillActions[i]);
+                    epsa.Init();
                 }
             }
             else
@@ -587,6 +588,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 EntityPassiveSkillAction epsa = rawAction.Clone();
                 epsa.Entity = Entity;
                 EntityPassiveSkillActions.Add(epsa);
+                epsa.Init();
             }
         }
 
@@ -599,6 +601,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
         {
             action.Entity = null;
+            action.UnInit();
         }
     }
 

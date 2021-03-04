@@ -50,6 +50,19 @@ public class ModuleAIAtoms
         }
     }
 
+    [Name("开放世界/返回开放世界")]
+    [Category("OpenWorld/ReturnToOpenWorld")]
+    public class Flow_ReturnToOpenWorld : CallableActionNode
+    {
+        public override void Invoke()
+        {
+            if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+            {
+                openWorld.ReturnToOpenWorldFormMicroWorld();
+            }
+        }
+    }
+
     [Name("读取战场状态")]
     [Category("States")]
     public class Flow_GetBattleState : CallableFunctionNode<bool>
@@ -118,7 +131,7 @@ public class ModuleAIAtoms
 
         public override void Invoke()
         {
-            BattleManager.Instance.SetStateBool(BattleStateAlias.value, BattleStateValue.value);
+            BattleManager.Instance.SetStateBool(WorldModule.GUID, BattleStateAlias.value, BattleStateValue.value);
         }
     }
 

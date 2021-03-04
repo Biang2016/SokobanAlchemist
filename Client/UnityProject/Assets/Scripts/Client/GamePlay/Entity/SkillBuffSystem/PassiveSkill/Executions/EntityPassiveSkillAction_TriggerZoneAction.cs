@@ -14,6 +14,68 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
         ActorStayTimeDict.Clear();
     }
 
+    public override void Init()
+    {
+        base.Init();
+        foreach (IPureAction pureAction in EntityActions_Enter)
+        {
+            if (pureAction is EntityPassiveSkillAction action)
+            {
+                action.Entity = Entity;
+                action.Init();
+            }
+        }
+
+        foreach (IPureAction pureAction in EntityActions_Stay)
+        {
+            if (pureAction is EntityPassiveSkillAction action)
+            {
+                action.Entity = Entity;
+                action.Init();
+            }
+        }
+
+        foreach (IPureAction pureAction in EntityActions_Exit)
+        {
+            if (pureAction is EntityPassiveSkillAction action)
+            {
+                action.Entity = Entity;
+                action.Init();
+            }
+        }
+    }
+
+    public override void UnInit()
+    {
+        base.UnInit();
+        foreach (IPureAction pureAction in EntityActions_Enter)
+        {
+            if (pureAction is EntityPassiveSkillAction action)
+            {
+                action.Entity = null;
+                action.UnInit();
+            }
+        }
+
+        foreach (IPureAction pureAction in EntityActions_Stay)
+        {
+            if (pureAction is EntityPassiveSkillAction action)
+            {
+                action.Entity = null;
+                action.UnInit();
+            }
+        }
+
+        foreach (IPureAction pureAction in EntityActions_Exit)
+        {
+            if (pureAction is EntityPassiveSkillAction action)
+            {
+                action.Entity = null;
+                action.UnInit();
+            }
+        }
+    }
+
     protected override string Description => "箱子范围触发行为";
 
     [LabelText("生效于相对阵营")]

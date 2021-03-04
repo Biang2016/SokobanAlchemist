@@ -20,6 +20,30 @@ public class Actor : Entity
         false;
 #endif
 
+    private bool forbidAction = false;
+
+    internal bool ForbidAction
+    {
+        get { return forbidAction; }
+        set
+        {
+            if (forbidAction != value)
+            {
+                forbidAction = value;
+                if (forbidAction)
+                {
+                    RemoveRigidbody();
+                }
+                else
+                {
+                    AddRigidbody();
+                }
+            }
+        }
+    }
+
+    internal bool HasRigidbody = true;
+
     [FoldoutGroup("组件")]
     public Rigidbody RigidBody;
 
@@ -280,8 +304,7 @@ public class Actor : Entity
 
     public override void OnRecycled()
     {
-        if (!RigidBody) AddRigidbody();
-
+        ForbidAction = true;
         RigidBody.drag = 100f;
         RigidBody.velocity = Vector3.zero;
 
@@ -371,6 +394,8 @@ public class Actor : Entity
         EntityStatPropSet = new EntityStatPropSet();
     }
 
+    internal float DefaultSmoothMoveLerpTime = 0.02f;
+
     public void SetModelSmoothMoveLerpTime(float lerpTime)
     {
         if (lerpTime.Equals(0))
@@ -416,6 +441,8 @@ public class Actor : Entity
             float distance = (BattleManager.Instance.Player1.transform.position - transform.position).magnitude;
             CameraManager.Instance.FieldCamera.CameraShake(damage, distance);
         };
+
+        ForbidAction = false;
     }
 
     private void Update()
@@ -430,7 +457,7 @@ public class Actor : Entity
     {
         if (actor == this)
         {
-            SetModelSmoothMoveLerpTime(0.02f);
+            SetModelSmoothMoveLerpTime(DefaultSmoothMoveLerpTime);
         }
     }
 
@@ -481,15 +508,17 @@ public class Actor : Entity
 
     public void TransportPlayerGridPos(GridPos3D worldGP)
     {
+        SetModelSmoothMoveLerpTime(0);
         transform.position = worldGP;
         LastWorldGP = WorldGP;
         WorldGP = worldGP;
+        SetModelSmoothMoveLerpTime(DefaultSmoothMoveLerpTime);
     }
 
     protected virtual void MoveInternal()
     {
         if (!ActiveSkillCanMove) CurMoveAttempt = Vector3.zero;
-        if (!IsFrozen && !EntityBuffHelper.IsBeingRepulsed && !EntityBuffHelper.IsBeingGround)
+        if (!IsFrozen && !EntityBuffHelper.IsBeingRepulsed && !EntityBuffHelper.IsBeingGround && HasRigidbody)
         {
             if (CurMoveAttempt.magnitude > 0)
             {
@@ -554,7 +583,7 @@ public class Actor : Entity
             ActorArtHelper.SetIsWalking(false);
             ActorArtHelper.SetIsChasing(false);
             ActorArtHelper.SetIsPushing(false);
-            if (RigidBody != null)
+            if (HasRigidbody)
             {
                 RigidBody.drag = 0f;
                 RigidBody.mass = 1f;
@@ -566,7 +595,7 @@ public class Actor : Entity
         WorldGP = transform.position.ToGridPos3D();
 
         // 底部无Box则下落一格
-        if (!IsFrozen)
+        if (!IsFrozen && HasRigidbody)
         {
             Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(WorldGP + new GridPos3D(0, -1, 0), out WorldModule _, out GridPos3D localGP, false);
             if (!box)
@@ -587,17 +616,18 @@ public class Actor : Entity
 
         if (ActorBattleHelper.IsDestroying)
         {
-            if (RigidBody != null) RigidBody.constraints |= RigidbodyConstraints.FreezePositionY;
+            if (HasRigidbody) RigidBody.constraints |= RigidbodyConstraints.FreezePositionY;
             SnapToGridY();
         }
 
         LastMoveAttempt = CurMoveAttempt;
     }
 
-    public void AddRigidbody()
+    private void AddRigidbody()
     {
-        if (!RigidBody)
+        if (!HasRigidbody)
         {
+            HasRigidbody = true;
             RigidBody = gameObject.AddComponent<Rigidbody>();
             RigidBody.velocity = Vector3.zero;
             RigidBody.mass = 1f;
@@ -610,11 +640,12 @@ public class Actor : Entity
         }
     }
 
-    public void RemoveRigidbody()
+    private void RemoveRigidbody()
     {
-        if (RigidBody)
+        if (HasRigidbody)
         {
             Destroy(RigidBody);
+            HasRigidbody = false;
         }
     }
 

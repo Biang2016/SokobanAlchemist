@@ -25,5 +25,5 @@ public class BattleStateEditorWindow : OdinEditorWindow
     }
 
     [ShowInInspector]
-    public Dictionary<string, bool> BattleStateBoolDict => BattleManager.Instance != null ? BattleManager.Instance.BattleStateBoolDict : null;
+    public Dictionary<string, BattleManager.BattleStateBool> BattleStateBoolDict => BattleManager.Instance != null ? BattleManager.Instance.BattleStateBoolDict : null;
 }

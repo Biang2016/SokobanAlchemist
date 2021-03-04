@@ -110,6 +110,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
         foreach (Actor cachedDyingActor in cachedDyingActors)
         {
+            if (cachedDyingActor == Player1 || cachedDyingActor == Player2) continue;
             cachedDyingActor.ActorBattleHelper.DestroyActor(null, true);
         }
 

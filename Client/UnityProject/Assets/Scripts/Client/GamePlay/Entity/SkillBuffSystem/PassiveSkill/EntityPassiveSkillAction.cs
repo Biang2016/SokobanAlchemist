@@ -8,6 +8,9 @@ public abstract class EntityPassiveSkillAction : IClone<EntityPassiveSkillAction
 {
     public abstract void OnRecycled();
 
+    public virtual void Init() { }
+    public virtual void UnInit() { }
+
     protected virtual string Description => "Entity被动技能行为基类";
 
     public interface IPureAction

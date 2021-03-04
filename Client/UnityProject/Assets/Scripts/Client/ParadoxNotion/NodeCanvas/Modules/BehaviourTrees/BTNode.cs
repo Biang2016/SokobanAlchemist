@@ -21,6 +21,21 @@ namespace NodeCanvas.BehaviourTrees
             }
         }
 
+        private WorldModule worldModule;
+
+        internal WorldModule WorldModule
+        {
+            get
+            {
+                if (worldModule == null)
+                {
+                    worldModule = graph.agent.GetComponent<WorldModule>();
+                }
+
+                return worldModule;
+            }
+        }
+
         sealed public override System.Type outConnectionType { get { return typeof(BTConnection); } }
         sealed public override bool allowAsPrime { get { return true; } }
         sealed public override bool canSelfConnect { get { return false; } }

@@ -4,6 +4,7 @@ using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.Messenger;
 using BiangLibrary.ObjectPool;
 using FlowCanvas;
+using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -12,6 +13,21 @@ using UnityEditor;
 
 public class WorldModule : PoolObject
 {
+    #region GUID
+
+    [ReadOnly]
+    [HideInEditorMode]
+    public uint GUID;
+
+    private static uint guidGenerator = (uint) ConfigManager.GUID_Separator.WorldModule;
+
+    protected uint GetGUID()
+    {
+        return guidGenerator++;
+    }
+
+    #endregion
+
     public const int MODULE_SIZE = 16;
     public World World;
 
@@ -131,6 +147,7 @@ public class WorldModule : PoolObject
         }
 
         EventTriggerAppearBoxPassiveSkillList.Clear();
+        BattleManager.Instance.OnRecycleWorldModule(GUID);
 
         World = null;
         if (releaseWorldModuleData) WorldModuleData.Release();
@@ -147,6 +164,7 @@ public class WorldModule : PoolObject
 
     public virtual IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadBoxNumPerFrame)
     {
+        GUID = GetGUID();
         ModuleGP = moduleGP;
         World = world;
         WorldModuleData = worldModuleData;
@@ -262,7 +280,7 @@ public class WorldModule : PoolObject
     public void GenerateLevelTrigger(LevelTriggerBase.Data dataClone)
     {
         LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[dataClone.LevelTriggerTypeIndex].AllocateGameObject<LevelTriggerBase>(WorldModuleLevelTriggerRoot);
-        trigger.InitializeInWorldModule(dataClone);
+        trigger.InitializeInWorldModule(dataClone, GUID);
         WorldModuleLevelTriggers.Add(trigger);
     }
 

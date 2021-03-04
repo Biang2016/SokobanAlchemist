@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.GamePlay.UI;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -157,7 +159,7 @@ public class OpenWorld : World
         WorldMapOrientation = null;
         WorldMap_Occupied = null;
         WorldMap_StaticLayoutOccupied = null;
-        IsInsideMicroModules = false;
+        IsInsideMicroWorld = false;
     }
 
     public override IEnumerator Initialize(WorldData worldData)
@@ -311,7 +313,11 @@ public class OpenWorld : World
 
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.71f, "Loading Maps");
         yield return null;
-        yield return RefreshScopeModules(playerBPWorld, 1, 1, true); // 按关卡生成器和角色位置初始化需要的模组
+        BattleManager.Instance.CreateActorByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias]);
+        BattleManager.Instance.Player1.ForbidAction = true;
+        CameraManager.Instance.FieldCamera.InitFocus();
+        yield return RefreshScopeModules(playerBPWorld, 1, 1); // 按关卡生成器和角色位置初始化需要的模组
+        BattleManager.Instance.Player1.ForbidAction = false;
     }
 
     protected override IEnumerator GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z, int loadBoxNumPerFrame)
@@ -321,8 +327,6 @@ public class OpenWorld : World
     }
 
     #region Level Streaming
-
-    public bool IsInsideMicroModules = false;
 
     public class LevelCacheData
     {
@@ -343,11 +347,11 @@ public class OpenWorld : World
     {
         if (!IsRecycled)
         {
-            if (GameStateManager.Instance.GetState() == GameState.Fighting)
+            if (GameStateManager.Instance.GetState() == GameState.Fighting && !IsInsideMicroWorld)
             {
                 if (RefreshScopeModulesCoroutine == null)
                 {
-                    RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP, PlayerScopeRadiusX, PlayerScopeRadiusZ, false));
+                    RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
                 }
             }
         }
@@ -365,7 +369,7 @@ public class OpenWorld : World
     public float ExtendScope_Recycle = 20; // 推迟回收
     public float ExtendScope_Recycle_Ground = 32; // 推迟回收
 
-    public IEnumerator RefreshScopeModules(GridPos3D playerWorldGP, int scopeX, int scopeZ, bool isInit)
+    public IEnumerator RefreshScopeModules(GridPos3D playerWorldGP, int scopeX, int scopeZ)
     {
         GridPos3D playerOnModuleGP = GetModuleGPByWorldGP(playerWorldGP);
 
@@ -373,8 +377,7 @@ public class OpenWorld : World
 
         bool CheckModuleCanBeSeenByCamera(GridPos3D moduleGP, bool checkBottom, bool checkTop, float extendScope)
         {
-            if (IsInsideMicroModules) return moduleGP.y >= WORLD_HEIGHT/2; // 当角色在解谜关卡时，隐藏其它模组，且恒定显示解谜模组 todo 此处粗暴地使用了模组坐标来判断是否在解谜关卡，未来需要处理
-            if (isInit) return true; // 初始化的时候无视相机位置，因为主角还没加载，相机位置还没确定
+            if (IsInsideMicroWorld) return moduleGP.y >= WORLD_HEIGHT / 2; // 当角色在解谜关卡时，隐藏其它模组，且恒定显示解谜模组 todo 此处粗暴地使用了模组坐标来判断是否在解谜关卡，未来需要处理
             GeometryUtility.CalculateFrustumPlanes(CameraManager.Instance.MainCamera, cachedPlanes);
             if (checkBottom && checkTop)
             {
@@ -508,8 +511,6 @@ public class OpenWorld : World
 
         generateModuleFinished.Clear();
 
-        if (isInit) BattleManager.Instance.CreateActorByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias]);
-
         #endregion
 
         #region Recycle Modules
@@ -569,14 +570,156 @@ public class OpenWorld : World
         yield return worldModule.Clear(false, 256);
         worldModule.PoolRecycle();
         //m_LevelCacheData.WorldModuleDataDict.Remove(currentShowModuleGP);
-        recycleModuleFinished[boolIndex] = true;
+        if (boolIndex >= 0)
+        {
+            if (boolIndex >= recycleModuleFinished.Count)
+            {
+                Debug.Log(recycleModuleFinished.Count);
+            }
+
+            recycleModuleFinished[boolIndex] = true;
+        }
     }
 
     IEnumerator Co_GenerateModule(WorldModuleData moduleData, GridPos3D targetModuleGP, int boolIndex)
     {
         yield return GenerateWorldModuleByCustomizedData(moduleData, targetModuleGP.x, targetModuleGP.y, targetModuleGP.z, 32);
         yield return WorldData.WorldBornPointGroupData_Runtime.Dynamic_LoadModuleData(targetModuleGP);
-        generateModuleFinished[boolIndex] = true;
+        if (boolIndex >= 0)
+        {
+            if (boolIndex >= generateModuleFinished.Count)
+            {
+                Debug.Log(generateModuleFinished.Count);
+            }
+
+            generateModuleFinished[boolIndex] = true;
+        }
+    }
+
+    #endregion
+
+    #region MicroWorld
+
+    internal bool IsInsideMicroWorld = false;
+    internal GridPos3D LastLeaveOpenWorldPlayerGP = GridPos3D.Zero;
+    private List<WorldModule> MicroWorldModules = new List<WorldModule>();
+
+    public void TransportPlayerToMicroWorld(ushort worldTypeIndex)
+    {
+        StartCoroutine(Co_TransportPlayerToMicroWorld(worldTypeIndex));
+    }
+
+    IEnumerator Co_TransportPlayerToMicroWorld(ushort worldTypeIndex)
+    {
+        BattleManager.Instance.Player1.ForbidAction = true;
+        LoadingMapPanel LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
+        LoadingMapPanel.Clear();
+        LoadingMapPanel.SetBackgroundAlpha(1);
+        LoadingMapPanel.SetProgress(0, "Loading Level");
+        WorldData microWorldData = ConfigManager.GetWorldDataConfig(worldTypeIndex);
+        GridPos3D transportPlayerBornPoint = GridPos3D.Zero;
+        int totalModuleNum = microWorldData.WorldModuleGPOrder.Count;
+        int loadingModuleCount = 0;
+        foreach (GridPos3D worldModuleGP in microWorldData.WorldModuleGPOrder)
+        {
+            ushort worldModuleTypeIndex = microWorldData.ModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
+            GridPos3D realModuleGP = new GridPos3D(worldModuleGP.x, World.WORLD_HEIGHT / 2 + worldModuleGP.y, worldModuleGP.z);
+            if (worldModuleTypeIndex != 0)
+            {
+                if (worldModuleGP.y >= World.WORLD_HEIGHT / 2)
+                {
+                    Debug.LogError($"静态世界不允许超过{World.WORLD_HEIGHT / 2}个模组高度");
+                    continue;
+                }
+                else
+                {
+                    yield return GenerateWorldModule(worldModuleTypeIndex, realModuleGP.x, realModuleGP.y, realModuleGP.z);
+                    WorldModule module = WorldModuleMatrix[realModuleGP.x, realModuleGP.y, realModuleGP.z];
+                    MicroWorldModules.Add(module);
+                    WorldData.WorldBornPointGroupData_Runtime.Init_LoadModuleData(realModuleGP, module.WorldModuleData);
+                    yield return WorldData.WorldBornPointGroupData_Runtime.Dynamic_LoadModuleData(realModuleGP);
+                    SortedDictionary<string, BornPointData> playerBornPoints = module.WorldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints;
+                    if (playerBornPoints.Count > 0)
+                    {
+                        if (transportPlayerBornPoint == GridPos3D.Zero) transportPlayerBornPoint = module.LocalGPToWorldGP(playerBornPoints[playerBornPoints.Keys.ToList()[0]].LocalGP);
+                    }
+
+                    List<BornPointData> moduleBPData = WorldData.WorldBornPointGroupData_Runtime.TryLoadModuleBPData(realModuleGP);
+                    if (moduleBPData != null)
+                    {
+                        foreach (BornPointData bp in moduleBPData)
+                        {
+                            if (bp.ActorCategory == ActorCategory.Player)
+                            {
+                                string playerBPAlias = module.WorldModuleData.WorldModuleTypeName;
+                                if (!WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.ContainsKey(playerBPAlias))
+                                {
+                                    WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Add(playerBPAlias, bp);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            loadingModuleCount++;
+            LoadingMapPanel.SetProgress(0 + 80f * loadingModuleCount / totalModuleNum, "Loading Level");
+        }
+
+        if (transportPlayerBornPoint == GridPos3D.Zero)
+        {
+            Debug.LogWarning("传送的模组没有默认玩家出生点");
+        }
+
+        IsInsideMicroWorld = true;
+        LastLeaveOpenWorldPlayerGP = BattleManager.Instance.Player1.WorldGP;
+
+        BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint);
+        CameraManager.Instance.FieldCamera.InitFocus();
+
+        ClientGameManager.Instance.DebugPanel.Clear();
+        ClientGameManager.Instance.DebugPanel.Init();
+
+        yield return RefreshScopeModules(BattleManager.Instance.Player1.WorldGP, PlayerScopeRadiusX, PlayerScopeRadiusZ);
+        LoadingMapPanel.SetProgress(100f, "Loading Level");
+        yield return new WaitForSeconds(1f);
+        LoadingMapPanel.CloseUIForm();
+        BattleManager.Instance.Player1.ForbidAction = false;
+    }
+
+    public void ReturnToOpenWorldFormMicroWorld()
+    {
+        StartCoroutine(Co_ReturnToOpenWorldFormMicroWorld());
+    }
+
+    public IEnumerator Co_ReturnToOpenWorldFormMicroWorld()
+    {
+        BattleManager.Instance.Player1.ForbidAction = true;
+        LoadingMapPanel LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
+        LoadingMapPanel.Clear();
+        LoadingMapPanel.SetBackgroundAlpha(1);
+        LoadingMapPanel.SetProgress(0, "Returning to Open World");
+        while (RefreshScopeModulesCoroutine != null) yield return null;
+        BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP);
+        CameraManager.Instance.FieldCamera.InitFocus();
+        IsInsideMicroWorld = false;
+        RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(LastLeaveOpenWorldPlayerGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
+        while (RefreshScopeModulesCoroutine != null) yield return null;
+        LoadingMapPanel.SetProgress(50f, "Returning to Open World");
+        int totalRecycleModuleNumber = MicroWorldModules.Count;
+        int recycledModuleCount = 0;
+        foreach (WorldModule microWorldModule in MicroWorldModules)
+        {
+            yield return Co_RecycleModule(microWorldModule, microWorldModule.ModuleGP, -1);
+            recycledModuleCount++;
+            LoadingMapPanel.SetProgress(50f + 50f * recycledModuleCount / totalRecycleModuleNumber, "Returning to Open World");
+        }
+
+        MicroWorldModules.Clear();
+        LoadingMapPanel.SetProgress(100f, "Returning to Open World");
+        yield return new WaitForSeconds(1f);
+        LoadingMapPanel.CloseUIForm();
+        BattleManager.Instance.Player1.ForbidAction = false;
     }
 
     #endregion

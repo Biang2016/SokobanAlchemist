@@ -162,6 +162,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         IsGameLoading = true;
         LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
+        LoadingMapPanel.SetBackgroundAlpha(0.5f);
         LoadingMapPanel.SetProgress(0, "Start Loading");
         yield return new WaitForSeconds(0.1f);
         LoadingMapPanel.SetProgress(0.01f, "Warm Up Pool");

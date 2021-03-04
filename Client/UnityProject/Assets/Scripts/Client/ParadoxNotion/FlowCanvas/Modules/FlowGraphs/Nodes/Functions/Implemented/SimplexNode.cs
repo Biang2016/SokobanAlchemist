@@ -26,6 +26,21 @@ namespace FlowCanvas.Nodes
             }
         }
 
+        private WorldModule worldModule;
+
+        internal WorldModule WorldModule
+        {
+            get
+            {
+                if (worldModule == null)
+                {
+                    worldModule = parentNode.graph.agent.GetComponent<WorldModule>();
+                }
+
+                return worldModule;
+            }
+        }
+
         [System.NonSerialized]
         private string _name;
         [System.NonSerialized]

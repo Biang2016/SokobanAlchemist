@@ -18,6 +18,9 @@ public class LoadingMapPanel : BaseUIPanel
     }
 
     [SerializeField]
+    private Image BackgroundImage;
+
+    [SerializeField]
     private Text InformationText;
 
     [SerializeField]
@@ -29,26 +32,41 @@ public class LoadingMapPanel : BaseUIPanel
 
     public void Clear()
     {
+        progressRatio = 0;
+        progressRatio_SmoothDampVelocity = 0;
         ProgressBar.value = 0;
         currentText = "";
+        RefreshTick = 0;
+    }
+
+    public void SetBackgroundAlpha(float alpha)
+    {
+        BackgroundImage.color = new Color(BackgroundImage.color.r, BackgroundImage.color.g, BackgroundImage.color.b, alpha);
     }
 
     public void SetProgress(float progress, string text)
     {
         progressRatio = progress;
-        ProgressBar.value = progress;
         currentText = text;
         Refresh();
     }
 
+    private float RefreshInterval = 0.2f;
+    private float RefreshTick = 0.2f;
+
     void FixedUpdate()
     {
-        Refresh();
+        RefreshTick += Time.fixedDeltaTime;
+        if (RefreshTick > RefreshInterval)
+        {
+            RefreshTick -= RefreshInterval;
+            Refresh();
+        }
     }
 
     public void Refresh()
     {
-        ProgressBar.value = Mathf.SmoothDamp(ProgressBar.value, progressRatio, ref progressRatio_SmoothDampVelocity, 0.5f, 1, Time.deltaTime);
+        ProgressBar.value = Mathf.SmoothDamp(ProgressBar.value, progressRatio, ref progressRatio_SmoothDampVelocity, 0.5f, 1, Time.fixedDeltaTime);
         InformationText.text = $"{(ProgressBar.value * 100):##.#}%  " + currentText;
     }
 }
