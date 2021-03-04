@@ -32,6 +32,9 @@ public class OpenWorld : World
     [Serializable]
     public abstract class GenerateLayerData
     {
+        [LabelText("是否考虑静态布局的影响")]
+        public bool ConsiderStaticLayout = false;
+
         [LabelText("生效")]
         public bool Enable = true;
 
@@ -316,7 +319,7 @@ public class OpenWorld : World
         BattleManager.Instance.CreateActorByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias]);
         BattleManager.Instance.Player1.ForbidAction = true;
         CameraManager.Instance.FieldCamera.InitFocus();
-        RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(playerBPWorld, 1, 1)); // 按关卡生成器和角色位置初始化需要的模组
+        RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(playerBPWorld, PlayerScopeRadiusX, PlayerScopeRadiusZ)); // 按关卡生成器和角色位置初始化需要的模组
         while (RefreshScopeModulesCoroutine != null) yield return null;
         BattleManager.Instance.Player1.ForbidAction = false;
     }

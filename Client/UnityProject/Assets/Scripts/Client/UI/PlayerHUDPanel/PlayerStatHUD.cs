@@ -8,7 +8,7 @@ public class PlayerStatHUD : MonoBehaviour
     public Image HealthSliderFillImage;
     public Slider HealthSlider;
     public Animator HealthSliderHandleAnim;
-    public Text HealthText;
+    public TextMeshProUGUI HealthText;
     public Animator HealthTextAnim;
 
     public Animator ActionPointSliderAnim;
@@ -49,7 +49,7 @@ public class PlayerStatHUD : MonoBehaviour
 
         HealthSliderFillImage.color = HealthSliderFillImageGradient.Evaluate((float) current / max);
         HealthTextAnim.SetTrigger("Jump");
-        HealthText.text = $"{current}/{max}";
+        HealthText.text = current.ToString();
     }
 
     #endregion
@@ -92,7 +92,7 @@ public class PlayerStatHUD : MonoBehaviour
 
     public void SetGold(int current)
     {
-        GoldText.text = $"Gold: {current}";
+        GoldText.text = current.ToString();
     }
 
     #endregion

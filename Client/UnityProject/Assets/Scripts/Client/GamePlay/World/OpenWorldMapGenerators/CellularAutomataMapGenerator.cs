@@ -116,16 +116,20 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                         bool isWall = oldMap[neighborX, neighborZ];
 
                         // 静态布局中的所有Hill、BorderBox、BrickBox都算作既有墙
-                        ushort existedIndex = WorldMap_Occupied[neighborX, 0, neighborZ];
-                        ConfigManager.TypeStartIndex typeStartIndex = existedIndex.ConvertToTypeStartIndex();
-                        if (typeStartIndex == ConfigManager.TypeStartIndex.Box)
+                        if (GenerateLayerData.ConsiderStaticLayout)
                         {
-                            string boxTypeName = ConfigManager.GetBoxTypeName(existedIndex);
-                            if (boxTypeName.StartsWith("Hill") || boxTypeName.Equals("BrickBox") || boxTypeName.Equals("BorderBox"))
+                            ushort existedIndex = WorldMap_Occupied[neighborX, 0, neighborZ];
+                            ConfigManager.TypeStartIndex typeStartIndex = existedIndex.ConvertToTypeStartIndex();
+                            if (typeStartIndex == ConfigManager.TypeStartIndex.Box)
                             {
-                                isWall = true;
+                                string boxTypeName = ConfigManager.GetBoxTypeName(existedIndex);
+                                if (boxTypeName.StartsWith("Hill") || boxTypeName.Equals("BrickBox") || boxTypeName.Equals("BorderBox"))
+                                {
+                                    isWall = true;
+                                }
                             }
                         }
+                        
 
                         wallCount += isWall ? 1 : 0;
                     }

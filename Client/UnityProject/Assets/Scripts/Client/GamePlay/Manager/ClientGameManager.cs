@@ -162,19 +162,21 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         IsGameLoading = true;
         LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
-        LoadingMapPanel.SetBackgroundAlpha(0.5f);
+        LoadingMapPanel.SetBackgroundAlpha(0f);
         LoadingMapPanel.SetProgress(0, "Start Loading");
         yield return new WaitForSeconds(0.1f);
         LoadingMapPanel.SetProgress(0.01f, "Warm Up Pool");
         yield return GameObjectPoolManager.WarmUpPool();
 
+        LoadingMapPanel.SetBackgroundAlpha(1f);
         LoadingMapPanel.SetProgress(0.5f, "StartGame");
         yield return WorldManager.StartGame();
 
         LoadingMapPanel.SetProgress(1f, "Completed");
+        yield return new WaitForSeconds(0.1f);
         BattleManager.Instance.StartBattle();
         LoadingMapPanel.CloseUIForm();
-
+        UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>();
         DebugPanel = UIManager.Instance.ShowUIForms<DebugPanel>();
 
 #if !DEBUG

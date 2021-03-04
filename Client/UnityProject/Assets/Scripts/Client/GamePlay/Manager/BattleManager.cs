@@ -129,6 +129,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             MainPlayers[(int) playerNumber] = player;
             AddActor(player);
             UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>().Initialize();
+            UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
         }
         else
         {
