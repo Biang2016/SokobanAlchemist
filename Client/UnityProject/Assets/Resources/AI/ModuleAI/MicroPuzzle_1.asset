@@ -18,21 +18,19 @@ MonoBehaviour:
     Space to kick box"},"TipPositionType":{"_value":4},"Duration":{"_value":1.0}},"_position":{"x":750.0,"y":90.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
     Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"6"},{"LevelEventAlias":{"_value":"Toturial_1_ArrowKeyMoveTip"},"_position":{"x":405.0,"y":165.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"7"},{"_simplexNode":{"NoticeTip":{"_value":"\u2191\u2193\u2190\u2192
     to move"},"TipPositionType":{"_value":4},"Duration":{"_value":1.0}},"_position":{"x":750.0,"y":165.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"8"},{"LevelEventAlias":{"_value":"MicroPuzzle_1_Over"},"_color":{"r":1.0,"g":0.3607843,"b":0.3607843,"a":1.0},"_position":{"x":405.0,"y":420.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"9"},{"_simplexNode":{},"_position":{"x":705.0,"y":420.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ReturnToOpenWorld,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"10"}],"connections":[{"_sourcePortName":"Out","_targetPortName":"
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"8"}],"connections":[{"_sourcePortName":"Out","_targetPortName":"
     ","_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Value","_targetPortName":"Condition","_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"FlowCanvas.BinderConnection`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},{"_sourcePortName":"
     ","_targetPortName":"In","_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"True","_targetPortName":"In","_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Out","_targetPortName":"
     ","_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"4"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
     ","_sourceNode":{"$ref":"5"},"_targetNode":{"$ref":"6"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
-    ","_sourceNode":{"$ref":"7"},"_targetNode":{"$ref":"8"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
-    ","_sourceNode":{"$ref":"9"},"_targetNode":{"$ref":"10"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
+    ","_sourceNode":{"$ref":"7"},"_targetNode":{"$ref":"8"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
   _objectReferences: []
   _graphSource:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: -353, y: 104}
+    _translation: {x: -265, y: -12}
     _zoomFactor: 0.99859506
   _haltSerialization: 0
 #---GRAPH_START---
@@ -157,34 +155,6 @@ MonoBehaviour:
 #            },
 #            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
 #            "$id": "8"
-#        },
-#        {
-#            "LevelEventAlias": {
-#                "_value": "MicroPuzzle_1_Over"
-#            },
-#            "_color": {
-#                "r": 1.0,
-#                "g": 0.3607843,
-#                "b": 0.3607843,
-#                "a": 1.0
-#            },
-#            "_position": {
-#                "x": 405.0,
-#                "y": 420.0
-#            },
-#            "$type": "ModuleAIAtoms+Flow_OnLevelEventTrigger",
-#            "$id": "9"
-#        },
-#        {
-#            "_simplexNode": {
-#
-#            },
-#            "_position": {
-#                "x": 705.0,
-#                "y": 420.0
-#            },
-#            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ReturnToOpenWorld, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-#            "$id": "10"
 #        }
 #    ],
 #    "connections": [
@@ -262,17 +232,6 @@ MonoBehaviour:
 #            },
 #            "_targetNode": {
 #                "$ref": "8"
-#            },
-#            "$type": "FlowCanvas.BinderConnection"
-#        },
-#        {
-#            "_sourcePortName": "OnTriggered",
-#            "_targetPortName": " ",
-#            "_sourceNode": {
-#                "$ref": "9"
-#            },
-#            "_targetNode": {
-#                "$ref": "10"
 #            },
 #            "$type": "FlowCanvas.BinderConnection"
 #        }

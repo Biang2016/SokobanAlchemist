@@ -168,7 +168,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         LoadingMapPanel.SetProgress(0.01f, "Warm Up Pool");
         yield return GameObjectPoolManager.WarmUpPool();
 
-        LoadingMapPanel.SetProgress(0.2f, "StartGame");
+        LoadingMapPanel.SetProgress(0.5f, "StartGame");
         yield return WorldManager.StartGame();
 
         LoadingMapPanel.SetProgress(1f, "Completed");

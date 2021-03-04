@@ -481,7 +481,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + DesignRoot + WorldModuleDataConfigFolder_Relative);
-        foreach (FileInfo fi in di.GetFiles("*.prefab"))
+        foreach (FileInfo fi in di.GetFiles("*.prefab", SearchOption.AllDirectories))
         {
             string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
             GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
@@ -509,7 +509,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + DesignRoot + StaticLayoutDataConfigFolder_Relative);
-        foreach (FileInfo fi in di.GetFiles("*.prefab"))
+        foreach (FileInfo fi in di.GetFiles("*.prefab", SearchOption.AllDirectories))
         {
             string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
             GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
@@ -537,7 +537,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + DesignRoot + WorldDataConfigFolder_Relative);
-        foreach (FileInfo fi in di.GetFiles("*.prefab"))
+        foreach (FileInfo fi in di.GetFiles("*.prefab", SearchOption.AllDirectories))
         {
             string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
             GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);

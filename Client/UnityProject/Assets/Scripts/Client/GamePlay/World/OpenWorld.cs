@@ -190,7 +190,7 @@ public class OpenWorld : World
         WorldData.WorldBornPointGroupData_Runtime.InitTempData();
         WorldData.DefaultWorldActorBornPointAlias = "PlayerBP";
 
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.2f, "Loading Open World");
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.5f, "Loading Open World");
         yield return null;
 
         #region GenerateStaticLayoutLayer
@@ -216,12 +216,12 @@ public class OpenWorld : World
                 generator.ApplyToWorldMap();
                 m_LevelCacheData.CurrentGenerator_StaticLayouts.Add(generator);
                 generatorCount_staticLayoutLayer++;
-                ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.2f + 0.1f * generatorCount_staticLayoutLayer / GenerateStaticLayoutLayerDataList.Count, "Generating Map Static Layouts");
+                ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.5f + 0.1f * generatorCount_staticLayoutLayer / GenerateStaticLayoutLayerDataList.Count, "Generating Map Static Layouts");
                 yield return null;
             }
         }
 
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.3f, "Generating Map Static Layouts Completed");
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.6f, "Generating Map Static Layouts Completed");
         yield return null;
 
         #endregion
@@ -269,12 +269,12 @@ public class OpenWorld : World
                 generator.ApplyToWorldMap();
                 m_LevelCacheData.CurrentGenerators_Boxes.Add(generator);
                 generatorCount_boxLayer++;
-                ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.3f + 0.25f * generatorCount_boxLayer / GenerateBoxLayerDataList.Count, "Generating Map Boxes");
+                ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.6f + 0.2f * generatorCount_boxLayer / GenerateBoxLayerDataList.Count, "Generating Map Boxes");
                 yield return null;
             }
         }
 
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.55f, "Generating Map Boxes Completed");
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.8f, "Generating Map Boxes Completed");
         yield return null;
 
         #endregion
@@ -301,22 +301,23 @@ public class OpenWorld : World
                 generator.ApplyToWorldMap();
                 m_LevelCacheData.CurrentGenerators_Actors.Add(generator);
                 generatorCount_actorLayer++;
-                ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.55f + 0.15f * generatorCount_actorLayer / GenerateActorLayerDataList.Count, "Generating Map Actors");
+                ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.8f + 0.1f * generatorCount_actorLayer / GenerateActorLayerDataList.Count, "Generating Map Actors");
                 yield return null;
             }
         }
 
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.7f, "Generating Map Actors Completed");
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.9f, "Generating Map Actors Completed");
         yield return null;
 
         #endregion
 
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.71f, "Loading Maps");
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.91f, "Loading Maps");
         yield return null;
         BattleManager.Instance.CreateActorByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias]);
         BattleManager.Instance.Player1.ForbidAction = true;
         CameraManager.Instance.FieldCamera.InitFocus();
-        yield return RefreshScopeModules(playerBPWorld, 1, 1); // 按关卡生成器和角色位置初始化需要的模组
+        RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(playerBPWorld, 1, 1)); // 按关卡生成器和角色位置初始化需要的模组
+        while (RefreshScopeModulesCoroutine != null) yield return null;
         BattleManager.Instance.Player1.ForbidAction = false;
     }
 
@@ -614,12 +615,14 @@ public class OpenWorld : World
         BattleManager.Instance.Player1.ForbidAction = true;
         LoadingMapPanel LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
+        LoadingMapPanel.SetMinimumLoadingDuration(2);
         LoadingMapPanel.SetBackgroundAlpha(1);
         LoadingMapPanel.SetProgress(0, "Loading Level");
         WorldData microWorldData = ConfigManager.GetWorldDataConfig(worldTypeIndex);
         GridPos3D transportPlayerBornPoint = GridPos3D.Zero;
         int totalModuleNum = microWorldData.WorldModuleGPOrder.Count;
         int loadingModuleCount = 0;
+        while (RefreshScopeModulesCoroutine != null) yield return null;
         foreach (GridPos3D worldModuleGP in microWorldData.WorldModuleGPOrder)
         {
             ushort worldModuleTypeIndex = microWorldData.ModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
@@ -680,9 +683,10 @@ public class OpenWorld : World
         ClientGameManager.Instance.DebugPanel.Clear();
         ClientGameManager.Instance.DebugPanel.Init();
 
-        yield return RefreshScopeModules(BattleManager.Instance.Player1.WorldGP, PlayerScopeRadiusX, PlayerScopeRadiusZ);
+        RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
+        while (RefreshScopeModulesCoroutine != null) yield return null;
         LoadingMapPanel.SetProgress(100f, "Loading Level");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(LoadingMapPanel.GetRemainingLoadingDuration());
         LoadingMapPanel.CloseUIForm();
         BattleManager.Instance.Player1.ForbidAction = false;
     }
@@ -697,6 +701,7 @@ public class OpenWorld : World
         BattleManager.Instance.Player1.ForbidAction = true;
         LoadingMapPanel LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
+        LoadingMapPanel.SetMinimumLoadingDuration(2);
         LoadingMapPanel.SetBackgroundAlpha(1);
         LoadingMapPanel.SetProgress(0, "Returning to Open World");
         while (RefreshScopeModulesCoroutine != null) yield return null;
@@ -705,19 +710,19 @@ public class OpenWorld : World
         IsInsideMicroWorld = false;
         RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(LastLeaveOpenWorldPlayerGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
         while (RefreshScopeModulesCoroutine != null) yield return null;
-        LoadingMapPanel.SetProgress(50f, "Returning to Open World");
+        LoadingMapPanel.SetProgress(80f, "Returning to Open World");
         int totalRecycleModuleNumber = MicroWorldModules.Count;
         int recycledModuleCount = 0;
         foreach (WorldModule microWorldModule in MicroWorldModules)
         {
             yield return Co_RecycleModule(microWorldModule, microWorldModule.ModuleGP, -1);
             recycledModuleCount++;
-            LoadingMapPanel.SetProgress(50f + 50f * recycledModuleCount / totalRecycleModuleNumber, "Returning to Open World");
+            LoadingMapPanel.SetProgress(80f + 20f * recycledModuleCount / totalRecycleModuleNumber, "Returning to Open World");
         }
 
         MicroWorldModules.Clear();
         LoadingMapPanel.SetProgress(100f, "Returning to Open World");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(LoadingMapPanel.GetRemainingLoadingDuration());
         LoadingMapPanel.CloseUIForm();
         BattleManager.Instance.Player1.ForbidAction = false;
     }

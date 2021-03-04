@@ -275,7 +275,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 if (boxWarmUpPerFrame > 256)
                 {
                     boxWarmUpPerFrame = 0;
-                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.19f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
                     yield return null;
                 }
             }
@@ -288,7 +288,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 if (boxWarmUpPerFrame > 256)
                 {
                     boxWarmUpPerFrame = 0;
-                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.19f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
                     yield return null;
                 }
             }
@@ -303,7 +303,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             totalWarmUpTaskCount++;
         }
 
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.19f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
         yield return null;
         for (int i = 0; i < worldModuleWarmUpCount; i++)
         {
@@ -311,7 +311,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             totalWarmUpTaskCount++;
         }
 
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.19f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
         yield return null;
         alreadyWarmedUp = true;
     }

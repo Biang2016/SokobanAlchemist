@@ -247,6 +247,8 @@ public class Actor : Entity
     [FoldoutGroup("状态")]
     internal Box CurrentLiftBox = null;
 
+    public bool IsInMicroWorld = false;
+
     public enum ActorBehaviourStates
     {
         Idle,
@@ -304,6 +306,7 @@ public class Actor : Entity
 
     public override void OnRecycled()
     {
+        IsInMicroWorld = false;
         ForbidAction = true;
         RigidBody.drag = 100f;
         RigidBody.velocity = Vector3.zero;
