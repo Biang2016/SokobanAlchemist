@@ -41,7 +41,6 @@ public class ActionPointIndicator : PoolObject
     public override void OnUsed()
     {
         base.OnUsed();
-        Available = true;
     }
 
     public void Jump()

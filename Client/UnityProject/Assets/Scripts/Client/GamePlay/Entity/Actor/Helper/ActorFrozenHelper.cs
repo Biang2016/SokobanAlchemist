@@ -14,6 +14,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
         {
             actor.ForbidAction = false;
             actor.SetModelSmoothMoveLerpTime(actor.DefaultSmoothMoveLerpTime);
+            actor.ActorArtHelper.SetIsFrozen(false);
             if (FrozenBox)
             {
                 actor.transform.parent = BattleManager.Instance.ActorContainerRoot;
@@ -45,6 +46,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
                             FrozenBox.AddNewPassiveSkill(abf, true);
                         }
 
+                        actor.ActorArtHelper.SetIsFrozen(true);
                         FrozenBox.FrozenActor = actor;
                         actor.transform.parent = FrozenBox.transform;
                         actor.CurMoveAttempt = Vector3.zero;

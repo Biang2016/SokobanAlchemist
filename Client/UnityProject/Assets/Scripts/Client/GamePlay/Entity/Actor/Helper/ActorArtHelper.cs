@@ -82,7 +82,7 @@ public class ActorArtHelper : ActorMonoHelper
     {
         if (ActorModelAnim != null)
         {
-            ActorModelAnim.SetBool("IsFrozen", isFrozen);
+            ActorModelAnim.speed = isFrozen ? 0 : 1;
         }
     }
 
