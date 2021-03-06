@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-2871314540507426967
+--- !u!114 &-6648233908837251696
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FlamethrowerBox1
+  m_Name: IceEnemy
   m_Shader: {fileID: 4800000, guid: 6bf4d5db274c84835bb5db0370254ee1, type: 3}
   m_ShaderKeywords: _NORMALMAP_TANGENT_SPACE
   m_LightmapFlags: 4
@@ -110,7 +110,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Main_tex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 0534cc89a9ac35d45af963eca5ec9701, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
@@ -169,6 +169,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _AORemapMax: 1
     - _AORemapMin: 0
@@ -229,7 +230,7 @@ Material:
     - _Fresnel_fanwei: 1
     - _Gloss: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0
+    - _Glossiness: 0.17
     - _GlossyReflections: 1
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
@@ -246,12 +247,12 @@ Material:
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 0
     - _MaterialID: 1
-    - _Metallic: 0.182
+    - _Metallic: 0
     - _Mode: 0
     - _NormalMapSpace: 0
     - _NormalScale: 1
     - _OcclusionStrength: 1
-    - _Outline_Width: 0
+    - _Outline_Width: 0.01
     - _PPDLodThreshold: 5
     - _PPDMaxSamples: 15
     - _PPDMinSamples: 5
@@ -262,8 +263,8 @@ Material:
     - _ReceivesSSR: 1
     - _RefractionModel: 0
     - _SSRefractionProjectionModel: 0
-    - _Smoothness: 0.55
-    - _SmoothnessRemapMax: 0.42
+    - _Smoothness: 0
+    - _SmoothnessRemapMax: 0.389
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularAAScreenSpaceVariance: 0.1
@@ -311,22 +312,22 @@ Material:
     - _liangdu: 1
     m_Colors:
     - _ASEOutlineColor: {r: 0, g: 0, b: 0, a: 0}
-    - _BaseColor: {r: 1, g: 0.78368926, b: 0, a: 1}
+    - _BaseColor: {r: 0.09927912, g: 0.77643174, b: 0.9150943, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 1, g: 0.47044256, b: 0.24056602, a: 1}
+    - _Color: {r: 0.2663314, g: 0.86869967, b: 0.990566, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _Emission: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissiveColor: {r: 0.9622641, g: 0.9622641, b: 0.9622641, a: 1}
-    - _EmissiveColorLDR: {r: 0.9622641, g: 0.9622641, b: 0.9622641, a: 1}
-    - _Fresnel_Color: {r: 0.31617647, g: 0.5755578, b: 1, a: 1}
+    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissiveColorLDR: {r: 0, g: 0, b: 0, a: 1}
+    - _Fresnel_Color: {r: 0, g: 0, b: 0, a: 1}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _Outline_Color: {r: 0, g: 0, b: 0, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _Tint: {r: 0.7169812, g: 0.40326685, b: 0.11836952, a: 1}
+    - _Tint: {r: 0.049439307, g: 0.85688835, b: 0.9528302, a: 1}
     - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}

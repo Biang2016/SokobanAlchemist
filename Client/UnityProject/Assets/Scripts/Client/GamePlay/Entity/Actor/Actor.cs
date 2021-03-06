@@ -308,6 +308,7 @@ public class Actor : Entity
     {
         IsInMicroWorld = false;
         ForbidAction = true;
+        if (!HasRigidbody) AddRigidbody();
         RigidBody.drag = 100f;
         RigidBody.velocity = Vector3.zero;
 
