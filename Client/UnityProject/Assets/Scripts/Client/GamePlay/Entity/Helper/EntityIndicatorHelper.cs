@@ -64,6 +64,7 @@ public class EntityIndicatorHelper : EntityMonoHelper
             }
 
             EntityOccupationData.IsShapeCuboid = true;
+            EntityOccupationData.IsShapePlanSquare = true;
             EntityOccupationData.BoundsInt = EntityOccupationData.EntityIndicatorGPs.GetBoundingRectFromListGridPos(GridPos3D.Zero);
         }
         else
@@ -82,10 +83,12 @@ public class EntityIndicatorHelper : EntityMonoHelper
                 Entity entity = gameObject.GetComponentInParent<Entity>();
                 Debug.LogError($"{entity.name}的占位配置错误，必须要有一个EntityIndicator位于(0,0,0)");
                 EntityOccupationData.IsShapeCuboid = false;
+                EntityOccupationData.IsShapePlanSquare = false;
                 return;
             }
 
             EntityOccupationData.IsShapeCuboid = false;
+            EntityOccupationData.IsShapePlanSquare = false;
             EntityOccupationData.BoundsInt = EntityOccupationData.EntityIndicatorGPs.GetBoundingRectFromListGridPos(GridPos3D.Zero);
             bool[,,] occupationMatrix = new bool[EntityOccupationData.BoundsInt.size.x, EntityOccupationData.BoundsInt.size.y, EntityOccupationData.BoundsInt.size.z];
             foreach (GridPos3D offset in EntityOccupationData.EntityIndicatorGPs)
@@ -94,11 +97,13 @@ public class EntityIndicatorHelper : EntityMonoHelper
             }
 
             EntityOccupationData.IsShapeCuboid = true;
+            EntityOccupationData.IsShapePlanSquare = EntityOccupationData.BoundsInt.size.x == EntityOccupationData.BoundsInt.size.z;
             foreach (bool b in occupationMatrix)
             {
                 if (!b)
                 {
                     EntityOccupationData.IsShapeCuboid = false;
+                    EntityOccupationData.IsShapePlanSquare = false;
                     break;
                 }
             }

@@ -10,6 +10,9 @@ public class EntityOccupationData : IClone<EntityOccupationData>
 {
     [LabelText("长方体外形")]
     public bool IsShapeCuboid = false;
+ 
+    [LabelText("正方形底面")]
+    public bool IsShapePlanSquare = false;
 
     [LabelText("包围尺寸")]
     [SerializeField]
@@ -24,6 +27,7 @@ public class EntityOccupationData : IClone<EntityOccupationData>
     public void Clear()
     {
         IsShapeCuboid = false;
+        IsShapePlanSquare = false;
         BoundsInt = default;
         EntityIndicatorGPs.Clear();
     }
@@ -42,6 +46,7 @@ public class EntityOccupationData : IClone<EntityOccupationData>
     {
         EntityOccupationData newData = new EntityOccupationData();
         newData.IsShapeCuboid = IsShapeCuboid;
+        newData.IsShapePlanSquare = IsShapePlanSquare;
         newData.BoundsInt = BoundsInt;
         newData.EntityIndicatorGPs = EntityIndicatorGPs.Clone();
         return newData;

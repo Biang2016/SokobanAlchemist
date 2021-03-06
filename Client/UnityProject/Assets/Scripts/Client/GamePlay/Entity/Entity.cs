@@ -69,12 +69,31 @@ public abstract class Entity : PoolObject
 
     public Vector3 CurForward
     {
-        get { return transform.forward; }
+        get
+        {
+            switch (EntityOrientation)
+            {
+                case GridPosR.Orientation.Up:
+                    return GridPos3D.Forward;
+                case GridPosR.Orientation.Right:
+                    return GridPos3D.Right;
+                case GridPosR.Orientation.Down:
+                    return GridPos3D.Back;
+                case GridPosR.Orientation.Left:
+                    return GridPos3D.Left;
+            }
+
+            return Vector3.up;
+        }
         set
         {
             if (value != Vector3.zero)
             {
-                transform.forward = value;
+                if (value == Vector3.forward) SwitchEntityOrientation(GridPosR.Orientation.Up);
+                else if (value == Vector3.back) SwitchEntityOrientation(GridPosR.Orientation.Down);
+                else if (value == Vector3.right) SwitchEntityOrientation(GridPosR.Orientation.Right);
+                else if (value == Vector3.left) SwitchEntityOrientation(GridPosR.Orientation.Left);
+                else Debug.LogWarning($"CurForward invalid: {value}");
             }
         }
     }
@@ -120,6 +139,11 @@ public abstract class Entity : PoolObject
     }
 
     public bool IsShapeCuboid()
+    {
+        return ConfigManager.GetEntityOccupationData(EntityTypeIndex).IsShapeCuboid;
+    }
+
+    public bool IsShapePlanSquare()
     {
         return ConfigManager.GetEntityOccupationData(EntityTypeIndex).IsShapeCuboid;
     }

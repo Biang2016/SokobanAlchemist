@@ -121,7 +121,7 @@ public static class ActorAIAtoms
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             Actor player = BattleManager.Instance.Player1;
             if ((player.transform.position - Actor.transform.position).magnitude > GuardingRange.value) return false;
-            bool suc = ActorPathFinding.FindPath(Actor.WorldGP, player.WorldGP, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor);
+            bool suc = ActorPathFinding.FindPath(Actor.WorldGP, player.WorldGP, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor, Actor.ActorWidth, Actor.ActorHeight);
             return suc;
         }
     }
@@ -161,10 +161,10 @@ public static class ActorAIAtoms
             }
 
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.WorldGP, IdleRadius.value, out GridPos3D destination);
+            bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.WorldGP, IdleRadius.value, out GridPos3D destination_PF, Actor.ActorWidth, Actor.ActorHeight);
             if (suc)
             {
-                ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination, 0f, 0.5f, false, ActorPathFinding.DestinationType.EmptyGrid);
+                ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination_PF, 0f, 0.5f, false, ActorPathFinding.DestinationType.EmptyGrid);
                 switch (retCode)
                 {
                     case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:

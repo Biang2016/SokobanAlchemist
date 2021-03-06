@@ -179,6 +179,7 @@ public partial class Box : Entity
         CurrentMoveGlobalPlanerDir = GridPos3D.Zero;
 
         UnInitPassiveSkills();
+        SwitchEntityOrientation(GridPosR.Orientation.Up);
         gameObject.SetActive(false);
 
         base.OnRecycled();

@@ -80,7 +80,7 @@ public class ActorAIAgent
     private float KeepDistanceMax;
     private bool LastNodeOccupied;
     public bool IsPathFinding => CurrentPath.Count > 0;
-    private GridPos3D currentDestination;
+    private GridPos3D currentDestination_PF;
 
     [NotNull]
     public List<ActorPathFinding.Node> CurrentPath = new List<ActorPathFinding.Node>(50);
@@ -113,7 +113,7 @@ public class ActorAIAgent
         currentNode = null;
         nextNode = null;
         Actor.CurMoveAttempt = Vector3.zero;
-        currentDestination = GridPos3D.Zero;
+        currentDestination_PF = GridPos3D.Zero;
         if (ENABLE_ACTOR_AI_AGENT_LOG) Debug.Log($"{Actor.name} [AIAgent] ClearPathFinding");
     }
 
@@ -125,13 +125,13 @@ public class ActorAIAgent
         Failed,
     }
 
-    public SetDestinationRetCode SetDestination(GridPos3D dest, float keepDistanceMin, float keepDistanceMax, bool lastNodeOccupied, ActorPathFinding.DestinationType destinationType)
+    public SetDestinationRetCode SetDestination(GridPos3D destination_PF, float keepDistanceMin, float keepDistanceMax, bool lastNodeOccupied, ActorPathFinding.DestinationType destinationType)
     {
-        currentDestination = dest;
+        currentDestination_PF = destination_PF;
         KeepDistanceMin = keepDistanceMin;
         KeepDistanceMax = keepDistanceMax;
         LastNodeOccupied = lastNodeOccupied;
-        float dist = (Actor.WorldGP - currentDestination).magnitude;
+        float dist = (Actor.WorldGP_PF - currentDestination_PF).magnitude;
         if (dist <= KeepDistanceMax + (KeepDistanceMax.Equals(0) && LastNodeOccupied ? 1 : 0) && dist >= KeepDistanceMin)
         {
             bool interruptPathFinding = false;
@@ -146,7 +146,7 @@ public class ActorAIAgent
 
             if (interruptPathFinding)
             {
-                Vector3 forward = dest - Actor.transform.position;
+                Vector3 forward = destination_PF - Actor.WorldGP_PF;
                 if (forward.normalized.magnitude > 0)
                 {
                     Actor.CurForward = forward.normalized;
@@ -163,7 +163,7 @@ public class ActorAIAgent
             return SetDestinationRetCode.TooClose;
         }
 
-        bool suc = ActorPathFinding.FindPath(Actor.WorldGP, currentDestination, CurrentPath, KeepDistanceMin, KeepDistanceMax, destinationType);
+        bool suc = ActorPathFinding.FindPath(Actor.WorldGP, currentDestination_PF, CurrentPath, KeepDistanceMin, KeepDistanceMax, destinationType, Actor.ActorWidth, Actor.ActorHeight);
         if (IsPathFinding)
         {
             currentNode = CurrentPath.Count > 0 ? CurrentPath[0] : null;
@@ -255,6 +255,6 @@ public class ActorAIAgent
 
     public GridPos3D GetCurrentPathFindingDestination()
     {
-        return currentDestination;
+        return currentDestination_PF;
     }
 }

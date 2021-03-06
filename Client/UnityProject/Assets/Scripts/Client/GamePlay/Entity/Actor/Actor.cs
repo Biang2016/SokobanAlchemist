@@ -130,6 +130,27 @@ public class Actor : Entity
 
     private GridPos3D curWorldGP;
 
+    /// <summary>
+    /// 这是寻路专用节点坐标，和世界坐标略有偏差，Y坐标为角色基底那层的Y坐标
+    /// </summary>
+    public GridPos3D WorldGP_PF
+    {
+        get
+        {
+            int xmin = int.MaxValue;
+            int ymin = int.MaxValue;
+            int zmin = int.MaxValue;
+            foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+            {
+                if (offset.x < xmin) xmin = offset.x;
+                if (offset.y < ymin) ymin = offset.y;
+                if (offset.z < zmin) zmin = offset.z;
+            }
+
+            return WorldGP + new GridPos3D((ActorWidth - 1) / 2 + xmin, ymin, (ActorWidth - 1) / 2 + zmin);
+        }
+    }
+
     [DisableInEditorMode]
     [ShowInInspector]
     [FoldoutGroup("状态")]
@@ -140,10 +161,46 @@ public class Actor : Entity
 
     #region 旋转朝向
 
-    protected override void SwitchEntityOrientation(GridPosR.Orientation boxOrientation)
+    protected override void SwitchEntityOrientation(GridPosR.Orientation newOrientation)
     {
-        base.SwitchEntityOrientation(boxOrientation);
+        if (EntityOrientation == newOrientation) return;
+
+        // Actor由于限制死平面必须是正方形，因此可以用左下角坐标相减得到核心坐标偏移量；在旋转时应用此偏移量，可以保证平面正方形仍在老位置
+        int x_min_beforeRotate = int.MaxValue;
+        int z_min_beforeRotate = int.MaxValue;
+        foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+        {
+            if (offset.x < x_min_beforeRotate) x_min_beforeRotate = offset.x;
+            if (offset.z < z_min_beforeRotate) z_min_beforeRotate = offset.z;
+        }
+
+        base.SwitchEntityOrientation(newOrientation);
+
+        int x_min_afterRotate = int.MaxValue;
+        int z_min_afterRotate = int.MaxValue;
+        foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+        {
+            if (offset.x < x_min_afterRotate) x_min_afterRotate = offset.x;
+            if (offset.z < z_min_afterRotate) z_min_afterRotate = offset.z;
+        }
+
+        int delta_x = x_min_beforeRotate - x_min_afterRotate;
+        int delta_z = z_min_beforeRotate - z_min_afterRotate;
+
+        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(delta_x + curWorldGP.x, delta_z + curWorldGP.z, newOrientation), transform, 1);
     }
+
+    #endregion
+
+    #region Occupation
+
+    [FoldoutGroup("占位")]
+    [LabelText("角色体宽")]
+    public int ActorWidth = 1;
+
+    [FoldoutGroup("占位")]
+    [LabelText("角色体宽")]
+    public int ActorHeight = 1;
 
     #endregion
 
@@ -390,6 +447,7 @@ public class Actor : Entity
 
         ActorMoveColliderRoot.SetActive(false);
         SetModelSmoothMoveLerpTime(0);
+        SwitchEntityOrientation(GridPosR.Orientation.Up);
         gameObject.SetActive(false);
         base.OnRecycled();
     }
@@ -455,6 +513,15 @@ public class Actor : Entity
 
     public void Initialize(string actorType, ActorCategory actorCategory)
     {
+        if (actorCategory == ActorCategory.Creature)
+        {
+            EntityTypeIndex = ConfigManager.GetEnemyTypeIndex(actorType);
+        }
+        else if (actorCategory == ActorCategory.Player)
+        {
+            EntityTypeIndex = (ushort) ConfigManager.TypeStartIndex.Player;
+        }
+
         ActorType = actorType;
         ActorCategory = actorCategory;
         ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
@@ -682,7 +749,7 @@ public class Actor : Entity
     {
         if (HasRigidbody)
         {
-            Destroy(RigidBody);
+            DestroyImmediate(RigidBody);
             HasRigidbody = false;
         }
     }

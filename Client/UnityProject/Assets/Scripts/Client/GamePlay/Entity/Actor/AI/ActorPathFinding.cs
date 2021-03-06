@@ -50,7 +50,7 @@ public class ActorPathFinding
     private static List<Node> OpenList = new List<Node>();
     private static List<Node> CloseList = new List<Node>();
 
-    public static bool FindPath(GridPos3D ori, GridPos3D dest, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType)
+    public static bool FindPath(GridPos3D ori, GridPos3D dest, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight)
     {
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori, out WorldModule oriModule, out GridPos3D _);
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(dest, out WorldModule destModule, out GridPos3D _);
@@ -60,28 +60,28 @@ public class ActorPathFinding
             oriNode.GridPos3D = ori;
             Node destNode = NodeFactory.Alloc();
             destNode.GridPos3D = dest;
-            return FindPath(oriNode, destNode, resPath, keepDistanceMin, keepDistanceMax, destinationType);
+            return FindPath(oriNode, destNode, resPath, keepDistanceMin, keepDistanceMax, destinationType, actorWidth, actorHeight);
         }
 
         return false;
     }
 
-    public static bool FindRandomAccessibleDestination(GridPos3D ori, float rangeRadius, out GridPos3D gp)
+    public static bool FindRandomAccessibleDestination(GridPos3D ori, float rangeRadius, out GridPos3D destination_PF, int actorWidth, int actorHeight)
     {
-        gp = GridPos3D.Zero;
+        destination_PF = GridPos3D.Zero;
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori, out WorldModule oriModule, out GridPos3D _);
         if (oriModule != null)
         {
-            List<GridPos3D> validNodes = UnionFindNodes(ori, rangeRadius);
+            List<GridPos3D> validNodes = UnionFindNodes(ori, rangeRadius, actorWidth, actorHeight);
             if (validNodes.Count == 0) return false;
-            gp = CommonUtils.GetRandomFromList(validNodes);
+            destination_PF = CommonUtils.GetRandomFromList(validNodes);
             return true;
         }
 
         return false;
     }
 
-    private static bool FindPath(Node ori, Node dest, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType)
+    private static bool FindPath(Node ori, Node dest, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight)
     {
         OpenList.Clear();
         CloseList.Clear();
@@ -103,7 +103,7 @@ public class ActorPathFinding
 
             OpenList.Remove(minFNode);
             CloseList.Add(minFNode);
-            List<Node> adjacentNodes = GetAdjacentNodesForAStar(minFNode, dest.GridPos3D, destinationType);
+            List<Node> adjacentNodes = GetAdjacentNodesForAStar(minFNode, dest.GridPos3D, destinationType, actorWidth);
             List<Node> uselessAdjacentNodes = cached_adjacentNodesList_clone; // 对象引用仍为同一个,此list只是为了避免modify collection inside foreach
             foreach (Node node in adjacentNodes)
             {
@@ -221,7 +221,7 @@ public class ActorPathFinding
     private static List<Node> cached_adjacentNodesList = new List<Node>(4);
     private static List<Node> cached_adjacentNodesList_clone = new List<Node>(4);
 
-    private static List<Node> GetAdjacentNodesForAStar(Node node, GridPos3D destGP, DestinationType destinationType)
+    private static List<Node> GetAdjacentNodesForAStar(Node node, GridPos3D destGP, DestinationType destinationType, int actorWidth)
     {
         cached_adjacentNodesList.Clear();
         cached_adjacentNodesList_clone.Clear();
@@ -304,12 +304,12 @@ public class ActorPathFinding
 
     #region UnionFind
 
-    private static List<GridPos3D> cached_UnionFindNodeList = new List<GridPos3D>(100);
+    private static List<GridPos3D> cached_UnionFindNodeList = new List<GridPos3D>(256);
 
-    private static Queue<GridPos3D> cached_QueueUnionFind = new Queue<GridPos3D>(50);
-    private static bool[,] cached_OccupationUnionFind = new bool[20, 20];
+    private static Queue<GridPos3D> cached_QueueUnionFind = new Queue<GridPos3D>(256);
+    private static bool[,] cached_OccupationUnionFind = new bool[30, 30];
 
-    private static List<GridPos3D> UnionFindNodes(GridPos3D center, float rangeRadius)
+    private static List<GridPos3D> UnionFindNodes(GridPos3D center_PF, float rangeRadius, int actorWidth, int actorHeight)
     {
         cached_UnionFindNodeList.Clear();
         int radius = Mathf.RoundToInt(rangeRadius);
@@ -323,9 +323,9 @@ public class ActorPathFinding
         }
 
         cached_QueueUnionFind.Clear();
-        cached_QueueUnionFind.Enqueue(center);
-        cached_OccupationUnionFind[0 + radius, 0 + radius] = true;
-        cached_UnionFindNodeList.Add(center);
+        cached_QueueUnionFind.Enqueue(center_PF);
+        cached_OccupationUnionFind[0 + radius, 0 + radius] = true; // 从中心开始UnionFind
+        cached_UnionFindNodeList.Add(center_PF);
         while (cached_QueueUnionFind.Count > 0)
         {
             GridPos3D head = cached_QueueUnionFind.Dequeue();
@@ -338,27 +338,15 @@ public class ActorPathFinding
             tryAddNode(head + new GridPos3D(0, 0, -1));
             tryAddNode(head + new GridPos3D(0, 0, 1));
 
-            void tryAddNode(GridPos3D gp)
+            void tryAddNode(GridPos3D pathFindingNodeGP)
             {
-                if ((gp - center).magnitude > radius) return;
-                GridPos3D offset = gp - center;
+                if ((pathFindingNodeGP - center_PF).magnitude > radius) return;
+                GridPos3D offset = pathFindingNodeGP - center_PF;
                 if (cached_OccupationUnionFind[offset.x + radius, offset.z + radius]) return;
-                foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
+                if (CheckSpaceAvailableForActorOccupation(pathFindingNodeGP, actorWidth, actorHeight))
                 {
-                    if (enemy.WorldGP == gp)
-                    {
-                        return;
-                    }
-                }
-
-                if (BattleManager.Instance.Player1.WorldGP == gp) return;
-                if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.WorldGP == gp) return;
-
-                Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gp, out WorldModule module, out GridPos3D _);
-                if (module != null && box == null)
-                {
-                    cached_QueueUnionFind.Enqueue(gp);
-                    cached_UnionFindNodeList.Add(gp);
+                    cached_QueueUnionFind.Enqueue(pathFindingNodeGP);
+                    cached_UnionFindNodeList.Add(pathFindingNodeGP);
                     cached_OccupationUnionFind[offset.x + radius, offset.z + radius] = true;
                 }
             }
@@ -368,4 +356,37 @@ public class ActorPathFinding
     }
 
     #endregion
+
+    /// <summary>
+    /// 检查某寻路节点是否能放得下此角色
+    /// </summary>
+    /// <param name="center_PF">寻路节点坐标，非真实世界坐标，有可能位于半格处，取决于角色身宽</param>
+    /// <param name="actorWidth"></param>
+    /// <param name="actorHeight"></param>
+    /// <returns></returns>
+    private static bool CheckSpaceAvailableForActorOccupation(GridPos3D center_PF, int actorWidth, int actorHeight)
+    {
+        for (int occupied_x = 0; occupied_x <= actorWidth; occupied_x++)
+        for (int occupied_y = 0; occupied_y < actorHeight; occupied_y++)
+        for (int occupied_z = 0; occupied_z <= actorWidth; occupied_z++)
+        {
+            GridPos3D gridPos = center_PF + new GridPos3D(occupied_x, occupied_y, occupied_z);
+
+            // 该范围内无Actor占位
+            foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
+            {
+                foreach (GridPos3D offset in enemy.GetEntityOccupationGPs_Rotated())
+                {
+                    if (enemy.WorldGP + offset == gridPos) return false;
+                }
+            }
+
+            if (BattleManager.Instance.Player1.WorldGP == gridPos) return false;
+            if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.WorldGP == gridPos) return false;
+            Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos, out WorldModule module, out GridPos3D _);
+            if (box != null) return false;
+        }
+
+        return true;
+    }
 }

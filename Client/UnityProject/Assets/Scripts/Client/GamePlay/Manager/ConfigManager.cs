@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using BiangLibrary;
+using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay;
 using BiangLibrary.Singleton;
 using Newtonsoft.Json;
@@ -446,6 +447,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
         if (File.Exists(file)) File.Delete(file);
 
+        // Box's occupation
         List<string> boxNames = BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
         foreach (string boxName in boxNames)
         {
@@ -471,6 +473,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             PrefabUtility.UnloadPrefabContents(boxPrefab);
         }
 
+        // Enemy's occupation
         List<string> enemyNames = EnemyTypeDefineDict.TypeIndexDict.Keys.ToList();
         foreach (string enemyName in enemyNames)
         {
@@ -495,6 +498,14 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
             PrefabUtility.UnloadPrefabContents(enemyPrefab);
         }
+
+        // Player's occupation
+        EntityOccupationData playerOccupationData = new EntityOccupationData();
+        playerOccupationData.EntityIndicatorGPs.Add(GridPos3D.Zero);
+        playerOccupationData.IsShapeCuboid = true;
+        playerOccupationData.IsShapePlanSquare = true;
+        playerOccupationData.BoundsInt = playerOccupationData.EntityIndicatorGPs.GetBoundingRectFromListGridPos(GridPos3D.Zero);
+        EntityOccupationConfigDict.Add((ushort) TypeStartIndex.Player, playerOccupationData);
 
         byte[] bytes = SerializationUtility.SerializeValue(EntityOccupationConfigDict, dataFormat);
         File.WriteAllBytes(file, bytes);
