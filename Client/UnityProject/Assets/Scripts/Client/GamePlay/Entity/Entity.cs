@@ -26,6 +26,7 @@ public abstract class Entity : PoolObject
 
     #region Helpers
 
+    internal abstract EntityIndicatorHelper EntityIndicatorHelper { get; }
     internal abstract EntityBuffHelper EntityBuffHelper { get; }
     internal abstract EntityFrozenHelper EntityFrozenHelper { get; }
     internal abstract EntityTriggerZoneHelper EntityTriggerZoneHelper { get; }
@@ -34,6 +35,9 @@ public abstract class Entity : PoolObject
     internal abstract List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers { get; }
 
     #endregion
+
+    [HideInInspector]
+    public ushort EntityTypeIndex;
 
     [FoldoutGroup("初始战斗数值")]
     [HideLabel]
@@ -81,6 +85,48 @@ public abstract class Entity : PoolObject
     [FoldoutGroup("状态")]
     [LabelText("模组内坐标")]
     internal GridPos3D LocalGP;
+
+    #region 旋转朝向
+
+    public GridPosR.Orientation EntityOrientation { get; protected set; }
+
+    protected virtual void SwitchEntityOrientation(GridPosR.Orientation boxOrientation)
+    {
+        EntityOrientation = boxOrientation;
+    }
+
+    #endregion
+
+    #region Occupation
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// 仅仅用于Entity的Prefab编辑，以供导出成Occupation配置表，（未经旋转过的 )
+    /// </summary>
+    /// <returns></returns>
+    public EntityOccupationData GetEntityOccupationGPs_Editor()
+    {
+        EntityIndicatorHelper.RefreshEntityIndicatorOccupationData();
+        return EntityIndicatorHelper.EntityOccupationData;
+    }
+
+#endif
+
+    // 旋转过的局部坐标
+    public List<GridPos3D> GetEntityOccupationGPs_Rotated()
+    {
+        List<GridPos3D> occupation_rotated = ConfigManager.GetEntityOccupationData(EntityTypeIndex).BoxIndicatorGPs_RotatedDict[EntityOrientation];
+        return occupation_rotated;
+    }
+
+    public bool IsShapeCuboid()
+    {
+        return ConfigManager.GetEntityOccupationData(EntityTypeIndex).IsShapeCuboid;
+    }
+
+    public BoundsInt EntityBoundsInt => EntityIndicatorHelper.EntityOccupationData.BoundsInt; // ConfigManager不能序列化这个字段，很奇怪
+
+    #endregion
 
     #region 技能
 

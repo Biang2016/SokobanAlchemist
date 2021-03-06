@@ -96,7 +96,7 @@ public abstract class MapGenerator
                             ushort boxTypeIndex = staticLayoutData.RawBoxMatrix[rot_local_x, sl_local_y, rot_local_z];
                             if (boxTypeIndex != 0)
                             {
-                                BoxOccupationData occupation = ConfigManager.GetBoxOccupationData(boxTypeIndex);
+                                EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(boxTypeIndex);
                                 GridPosR.Orientation rot = staticLayoutData.RawBoxOrientationMatrix[rot_local_x, sl_local_y, rot_local_z];
                                 for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
                                 {
@@ -150,7 +150,7 @@ public abstract class MapGenerator
                             int box_world_y = world_y + sl_local_y;
                             int box_world_z = world_z + sl_local_z;
                             WorldMap[box_world_x, box_world_y - Height, box_world_z] = boxTypeIndex;
-                            BoxOccupationData occupation = ConfigManager.GetBoxOccupationData(boxTypeIndex);
+                            EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(boxTypeIndex);
                             GridPosR.Orientation rot = staticLayoutData.RawBoxOrientationMatrix[rot_local_x, sl_local_y, rot_local_z];
                             for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
                             {
@@ -216,7 +216,7 @@ public abstract class MapGenerator
             case MapGeneratorType.Box:
             {
                 bool spaceAvailable = true;
-                BoxOccupationData occupation = ConfigManager.GetBoxOccupationData(BoxTypeIndex);
+                EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(BoxTypeIndex);
                 foreach (GridPos3D gridPos in occupation.BoxIndicatorGPs_RotatedDict[GridPosR.Orientation.Up]) // todo Orientation Random
                 {
                     if (!spaceAvailable) break;

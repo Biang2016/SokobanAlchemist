@@ -27,6 +27,7 @@ public partial class Box : Entity
     [FoldoutGroup("组件")]
     public GameObject ModelRoot;
 
+    internal override EntityIndicatorHelper EntityIndicatorHelper => BoxIndicatorHelper;
     internal override EntityBuffHelper EntityBuffHelper => BoxBuffHelper;
     internal override EntityFrozenHelper EntityFrozenHelper => BoxFrozenHelper;
     internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => BoxTriggerZoneHelper;
@@ -64,7 +65,7 @@ public partial class Box : Entity
     public BoxColliderHelper BoxColliderHelper;
 
     [FoldoutGroup("组件")]
-    public BoxIndicatorHelper BoxIndicatorHelper;
+    public EntityIndicatorHelper BoxIndicatorHelper;
 
     [FoldoutGroup("组件")]
     public DoorBoxHelper DoorBoxHelper;
@@ -183,9 +184,6 @@ public partial class Box : Entity
         base.OnRecycled();
     }
 
-    [HideInInspector]
-    public ushort BoxTypeIndex;
-
     [FoldoutGroup("箱子属性")]
     [LabelText("箱子特性")]
     [AssetsOnly]
@@ -193,11 +191,9 @@ public partial class Box : Entity
 
     #region 旋转朝向
 
-    internal GridPosR.Orientation BoxOrientation { get; private set; }
-
-    private void SwitchBoxOrientation(GridPosR.Orientation boxOrientation)
+    protected override void SwitchEntityOrientation(GridPosR.Orientation boxOrientation)
     {
-        BoxOrientation = boxOrientation;
+        base.SwitchEntityOrientation(boxOrientation);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxColliderHelper.transform, 1);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), ModelRoot.transform, 1);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxFrozenHelper.FrozeModelRoot.transform, 1);
@@ -351,34 +347,7 @@ public partial class Box : Entity
     [LabelText("合成后特效尺寸")]
     public float MergedFXScale = 1f;
 
-#if UNITY_EDITOR
-    /// <summary>
-    /// 仅仅用于Box的Prefab编辑，以供导出成Occupation配置表，（未经旋转过的 )
-    /// </summary>
-    /// <returns></returns>
-    public BoxOccupationData GetBoxOccupationGPs_Editor()
-    {
-        BoxIndicatorHelper.RefreshBoxIndicatorOccupationData();
-        return BoxIndicatorHelper.BoxOccupationData;
-    }
-
-#endif
-
-    // 旋转过的局部坐标
-    public List<GridPos3D> GetBoxOccupationGPs_Rotated()
-    {
-        List<GridPos3D> boxOccupation_rotated = ConfigManager.GetBoxOccupationData(BoxTypeIndex).BoxIndicatorGPs_RotatedDict[BoxOrientation];
-        return boxOccupation_rotated;
-    }
-
-    public bool IsBoxShapeCuboid()
-    {
-        return ConfigManager.GetBoxOccupationData(BoxTypeIndex).IsBoxShapeCuboid;
-    }
-
-    public BoundsInt BoxBoundsInt => BoxIndicatorHelper.BoxOccupationData.BoundsInt; // ConfigManager不能序列化这个字段，很奇怪
-
-    public string BoxTypeName => ConfigManager.GetBoxTypeName(BoxTypeIndex);
+    public string BoxTypeName => ConfigManager.GetBoxTypeName(EntityTypeIndex);
 
     // 获得支撑此Box的底部Box
     public HashSet<Box> GetBeneathBoxes()
@@ -472,7 +441,7 @@ public partial class Box : Entity
 
     private void OnPlayerInteractSkillChanged(InteractSkillType interactSkillType, ushort boxTypeIndex)
     {
-        if (boxTypeIndex == BoxTypeIndex)
+        if (boxTypeIndex == EntityTypeIndex)
         {
             if (BoxSkinHelper)
             {
@@ -490,15 +459,15 @@ public partial class Box : Entity
 
     public void Setup(ushort boxTypeIndex, GridPosR.Orientation orientation)
     {
-        BoxTypeIndex = boxTypeIndex;
+        EntityTypeIndex = boxTypeIndex;
         InitPassiveSkills();
 
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
 
-        SwitchBoxOrientation(orientation);
+        SwitchEntityOrientation(orientation);
 
-        if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorBoxInteractHelper.GetInteractSkillType(BoxTypeIndex), BoxTypeIndex);
+        if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorBoxInteractHelper.GetInteractSkillType(EntityTypeIndex), EntityTypeIndex);
     }
 
     private void SetModelSmoothMoveLerpTime(float lerpTime)
@@ -723,7 +692,7 @@ public partial class Box : Entity
             else
             {
                 CurrentKickGlobalAxis = KickAxis.X;
-                if (BoxOrientation == GridPosR.Orientation.Left || BoxOrientation == GridPosR.Orientation.Right) CurrentKickLocalAxis = KickAxis.Z;
+                if (EntityOrientation == GridPosR.Orientation.Left || EntityOrientation == GridPosR.Orientation.Right) CurrentKickLocalAxis = KickAxis.Z;
                 else CurrentKickLocalAxis = KickAxis.X;
             }
 
@@ -734,7 +703,7 @@ public partial class Box : Entity
             else
             {
                 CurrentKickGlobalAxis = KickAxis.Z;
-                if (BoxOrientation == GridPosR.Orientation.Left || BoxOrientation == GridPosR.Orientation.Right) CurrentKickLocalAxis = KickAxis.X;
+                if (EntityOrientation == GridPosR.Orientation.Left || EntityOrientation == GridPosR.Orientation.Right) CurrentKickLocalAxis = KickAxis.X;
                 else CurrentKickLocalAxis = KickAxis.Z;
             }
 
@@ -1018,7 +987,7 @@ public partial class Box : Entity
             if (Rigidbody.velocity.magnitude < 1f)
             {
                 bool isGrounded = false;
-                foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
+                foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
                 {
                     bool hitGround = Physics.Raycast(transform.position + offset, Vector3.down, 1, LayerManager.Instance.LayerMask_HitBox_Box | LayerManager.Instance.LayerMask_Ground);
                     if (hitGround)
@@ -1207,7 +1176,7 @@ public partial class Box : Entity
         {
             Vector3 nearestBoxIndicator = GridPos3D.Zero;
             float nearestDist = float.MaxValue;
-            foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
+            foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
             {
                 Vector3 boxIndicatorPos = transform.position + offset;
                 float distToContactPos = (boxIndicatorPos - collision.contacts[0].point).magnitude;
@@ -1236,7 +1205,7 @@ public partial class Box : Entity
 
     public void PlayFXOnEachGrid(string fxName, float scale)
     {
-        foreach (GridPos3D offset in GetBoxOccupationGPs_Rotated())
+        foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
         {
             FX hit = FXManager.Instance.PlayFX(fxName, transform.position + offset);
             if (hit) hit.transform.localScale = Vector3.one * scale;

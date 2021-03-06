@@ -52,6 +52,7 @@ public class Actor : Entity
 
     public Vector3 ArtPos => ActorSkinHelper.MainArtTransform.position;
 
+    internal override EntityIndicatorHelper EntityIndicatorHelper => ActorCommonHelpers.EntityIndicatorHelper;
     internal override EntityBuffHelper EntityBuffHelper => ActorCommonHelpers.EntityBuffHelper;
     internal override EntityFrozenHelper EntityFrozenHelper => ActorFrozenHelper;
     internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => ActorCommonHelpers.EntityTriggerZoneHelper;
@@ -72,46 +73,48 @@ public class Actor : Entity
     internal GraphOwner GraphOwner;
     internal ActorAIAgent ActorAIAgent;
 
+    #region 状态
+
     [ReadOnly]
     [DisplayAsString]
-    [LabelText("角色分类")]
     [FoldoutGroup("状态")]
+    [LabelText("角色分类")]
     public ActorCategory ActorCategory;
 
     [ReadOnly]
     [DisplayAsString]
-    [LabelText("角色类型")]
     [FoldoutGroup("状态")]
+    [LabelText("角色类型")]
     public string ActorType;
 
     [ReadOnly]
     [DisplayAsString]
-    [LabelText("移动倾向")]
     [FoldoutGroup("状态")]
+    [LabelText("移动倾向")]
     public Vector3 CurMoveAttempt;
 
     [ReadOnly]
     [DisplayAsString]
-    [LabelText("上一帧移动倾向")]
     [FoldoutGroup("状态")]
+    [LabelText("上一帧移动倾向")]
     public Vector3 LastMoveAttempt;
 
     [ReadOnly]
     [DisplayAsString]
-    [LabelText("扔箱子瞄准点移动倾向")]
     [FoldoutGroup("状态")]
+    [LabelText("扔箱子瞄准点移动倾向")]
     public Vector3 CurThrowMoveAttempt;
 
     [ReadOnly]
     [DisplayAsString]
-    [LabelText("扔箱子瞄准点偏移")]
     [FoldoutGroup("状态")]
+    [LabelText("扔箱子瞄准点偏移")]
     public Vector3 CurThrowPointOffset;
 
     [DisplayAsString]
     [ShowInInspector]
-    [LabelText("世界坐标")]
     [FoldoutGroup("状态")]
+    [LabelText("世界坐标")]
     public override GridPos3D WorldGP
     {
         get { return curWorldGP; }
@@ -126,6 +129,25 @@ public class Actor : Entity
     }
 
     private GridPos3D curWorldGP;
+
+    [DisableInEditorMode]
+    [ShowInInspector]
+    [FoldoutGroup("状态")]
+    [LabelText("当前举着的箱子")]
+    internal Box CurrentLiftBox = null;
+
+    #endregion
+
+    #region 旋转朝向
+
+    protected override void SwitchEntityOrientation(GridPosR.Orientation boxOrientation)
+    {
+        base.SwitchEntityOrientation(boxOrientation);
+    }
+
+    #endregion
+
+    #region 特效
 
     [FoldoutGroup("特效")]
     [LabelText("踢特效")]
@@ -167,6 +189,10 @@ public class Actor : Entity
     [LabelText("死亡特效尺寸")]
     public float DieFXScale = 1f;
 
+    #endregion
+
+    #region 手感
+
     [FoldoutGroup("手感")]
     [LabelText("Dash力度")]
     public float DashForce = 150f;
@@ -184,6 +210,10 @@ public class Actor : Entity
     [FoldoutGroup("手感")]
     [LabelText("扔半径")]
     public float ThrowRadius = 15f;
+
+    #endregion
+
+    #region 推踢扔举能力
 
     [BoxNameList]
     [FoldoutGroup("推踢扔举能力")]
@@ -209,6 +239,10 @@ public class Actor : Entity
     [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = true)]
     public List<string> ThrowableBoxList = new List<string>();
 
+    #endregion
+
+    #region 死亡
+
     [BoxName]
     [FoldoutGroup("死亡")]
     [LabelText("死亡掉落箱子")]
@@ -222,6 +256,10 @@ public class Actor : Entity
     [FoldoutGroup("死亡")]
     [LabelText("死亡掉落箱子概率%")]
     public uint DieDropBoxProbabilityPercent;
+
+    #endregion
+
+    #region 冻结
 
     [FoldoutGroup("冻结")]
     [LabelText("冻结特效")]
@@ -239,13 +277,9 @@ public class Actor : Entity
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<EntityPassiveSkill> RawFrozenBoxPassiveSkills = new List<EntityPassiveSkill>(); // 干数据，禁修改
 
-    private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
+    #endregion
 
-    [DisableInEditorMode]
-    [ShowInInspector]
-    [LabelText("当前举着的箱子")]
-    [FoldoutGroup("状态")]
-    internal Box CurrentLiftBox = null;
+    private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 
     public bool IsInMicroWorld = false;
 
@@ -776,7 +810,7 @@ public class Actor : Entity
             if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
             {
                 Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-                if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
+                if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.EntityTypeIndex))
                 {
                     ActorArtHelper.Kick();
                 }
@@ -794,7 +828,7 @@ public class Actor : Entity
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.BoxTypeIndex))
+            if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.EntityTypeIndex))
             {
                 EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue, "Kick");
                 box.Kick(CurForward, KickForce, this);
@@ -811,7 +845,7 @@ public class Actor : Entity
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             GridPos3D actorSwapBoxMoveAttempt = (hit.collider.transform.position - transform.position).ToGridPos3D().Normalized();
-            if (box && box.Pushable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
+            if (box && box.Pushable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.EntityTypeIndex))
             {
                 box.ForceStopWhenSwapBox(this);
 
@@ -821,7 +855,7 @@ public class Actor : Entity
 
                 // 如果角色面朝方向Box的厚度大于一格，则无法swap
                 GridPos3D boxIndicatorGP_behind = boxIndicatorGP + actorSwapBoxMoveAttempt;
-                foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+                foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
                 {
                     if (offset == boxIndicatorGP_behind - box.WorldGP) return;
                 }
@@ -872,7 +906,7 @@ public class Actor : Entity
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Liftable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Lift, box.BoxTypeIndex))
+            if (box && box.Liftable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Lift, box.EntityTypeIndex))
             {
                 if (box.BeingLift(this))
                 {
@@ -928,7 +962,7 @@ public class Actor : Entity
     {
         if (CurrentLiftBox && ThrowState == ThrowStates.ThrowCharging)
         {
-            if (ActorBoxInteractHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.BoxTypeIndex))
+            if (ActorBoxInteractHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.EntityTypeIndex))
             {
                 Throw();
             }

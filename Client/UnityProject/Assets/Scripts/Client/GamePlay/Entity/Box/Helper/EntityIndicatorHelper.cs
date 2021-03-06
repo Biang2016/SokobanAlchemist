@@ -8,14 +8,14 @@ using UnityEditor;
 
 #endif
 
-public class BoxIndicatorHelper : BoxMonoHelper
+public class EntityIndicatorHelper : EntityMonoHelper
 {
-    [LabelText("箱子占位信息")]
-    public BoxOccupationData BoxOccupationData = new BoxOccupationData();
+    [LabelText("占位信息")]
+    public EntityOccupationData EntityOccupationData = new EntityOccupationData();
 
     private List<Collider> IndicatorColliders = new List<Collider>();
 
-    public bool IsSpecialBoxIndicator = false;
+    public bool IsSpecialBoxIndicator = false; // MegaGroundBox 专用，为了减少Indicator数量而采取的合并措施
 
     void Awake()
     {
@@ -51,20 +51,20 @@ public class BoxIndicatorHelper : BoxMonoHelper
     }
 
 #if UNITY_EDITOR
-    public void RefreshBoxIndicatorOccupationData()
+    public void RefreshEntityIndicatorOccupationData()
     {
-        BoxOccupationData.Clear();
+        EntityOccupationData.Clear();
         if (IsSpecialBoxIndicator)
         {
             for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
             for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
             {
                 GridPos3D gp = new GridPos3D(x, 0, z);
-                BoxOccupationData.BoxIndicatorGPs.Add(gp);
+                EntityOccupationData.EntityIndicatorGPs.Add(gp);
             }
 
-            BoxOccupationData.IsBoxShapeCuboid = true;
-            BoxOccupationData.BoundsInt = BoxOccupationData.BoxIndicatorGPs.GetBoundingRectFromListGridPos(GridPos3D.Zero);
+            EntityOccupationData.IsShapeCuboid = true;
+            EntityOccupationData.BoundsInt = EntityOccupationData.EntityIndicatorGPs.GetBoundingRectFromListGridPos(GridPos3D.Zero);
         }
         else
         {
@@ -73,32 +73,32 @@ public class BoxIndicatorHelper : BoxMonoHelper
             foreach (Collider c in colliders)
             {
                 GridPos3D gp = new GridPos3D(Mathf.RoundToInt(c.transform.position.x), Mathf.RoundToInt(c.transform.position.y), Mathf.RoundToInt(c.transform.position.z));
-                BoxOccupationData.BoxIndicatorGPs.Add(gp);
+                EntityOccupationData.EntityIndicatorGPs.Add(gp);
                 if (gp == GridPos3D.Zero) validOccupation = true;
             }
 
             if (!validOccupation)
             {
-                GameObject boxPrefab = PrefabUtility.GetNearestPrefabInstanceRoot(gameObject);
-                Debug.LogError($"{boxPrefab.name}的箱子占位配置错误，必须要有一个BoxIndicator位于(0,0,0)");
-                BoxOccupationData.IsBoxShapeCuboid = false;
+                Entity entity = gameObject.GetComponentInParent<Entity>();
+                Debug.LogError($"{entity.name}的占位配置错误，必须要有一个EntityIndicator位于(0,0,0)");
+                EntityOccupationData.IsShapeCuboid = false;
                 return;
             }
 
-            BoxOccupationData.IsBoxShapeCuboid = false;
-            BoxOccupationData.BoundsInt = BoxOccupationData.BoxIndicatorGPs.GetBoundingRectFromListGridPos(GridPos3D.Zero);
-            bool[,,] occupationMatrix = new bool[BoxOccupationData.BoundsInt.size.x, BoxOccupationData.BoundsInt.size.y, BoxOccupationData.BoundsInt.size.z];
-            foreach (GridPos3D offset in BoxOccupationData.BoxIndicatorGPs)
+            EntityOccupationData.IsShapeCuboid = false;
+            EntityOccupationData.BoundsInt = EntityOccupationData.EntityIndicatorGPs.GetBoundingRectFromListGridPos(GridPos3D.Zero);
+            bool[,,] occupationMatrix = new bool[EntityOccupationData.BoundsInt.size.x, EntityOccupationData.BoundsInt.size.y, EntityOccupationData.BoundsInt.size.z];
+            foreach (GridPos3D offset in EntityOccupationData.EntityIndicatorGPs)
             {
-                occupationMatrix[offset.x - BoxOccupationData.BoundsInt.xMin, offset.y - BoxOccupationData.BoundsInt.yMin, offset.z - BoxOccupationData.BoundsInt.zMin] = true;
+                occupationMatrix[offset.x - EntityOccupationData.BoundsInt.xMin, offset.y - EntityOccupationData.BoundsInt.yMin, offset.z - EntityOccupationData.BoundsInt.zMin] = true;
             }
 
-            BoxOccupationData.IsBoxShapeCuboid = true;
+            EntityOccupationData.IsShapeCuboid = true;
             foreach (bool b in occupationMatrix)
             {
                 if (!b)
                 {
-                    BoxOccupationData.IsBoxShapeCuboid = false;
+                    EntityOccupationData.IsShapeCuboid = false;
                     break;
                 }
             }

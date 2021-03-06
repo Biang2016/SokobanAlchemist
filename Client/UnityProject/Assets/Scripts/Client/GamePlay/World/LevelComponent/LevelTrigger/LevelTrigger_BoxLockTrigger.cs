@@ -53,7 +53,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
                 Box box = collider.gameObject.GetComponentInParent<Box>();
                 if (box != null)
                 {
-                    if (ConfigManager.GetBoxTypeName(box.BoxTypeIndex) == childData.RequireBoxTypeName)
+                    if (ConfigManager.GetBoxTypeName(box.EntityTypeIndex) == childData.RequireBoxTypeName)
                     {
                         StayBox = box;
                         StayBoxTick = 0;
@@ -94,7 +94,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
                 Box box = collider.gameObject.GetComponentInParent<Box>();
                 if (box != null)
                 {
-                    if (ConfigManager.GetBoxTypeName(box.BoxTypeIndex) == childData.RequireBoxTypeName)
+                    if (ConfigManager.GetBoxTypeName(box.EntityTypeIndex) == childData.RequireBoxTypeName)
                     {
                         if (StayBox == box)
                         {

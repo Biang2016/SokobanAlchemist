@@ -84,7 +84,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
             if (!isLevelEventTriggerAppearBox)
             {
                 bool spaceAvailable = true;
-                List<GridPos3D> boxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(box.BoxOrientation, ConfigManager.BoxOccupationConfigDict[boxTypeIndex].BoxIndicatorGPs);
+                List<GridPos3D> boxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(box.BoxOrientation, ConfigManager.EntityOccupationConfigDict[boxTypeIndex].EntityIndicatorGPs);
                 foreach (GridPos3D gridPos3D in boxOccupation_rotated)
                 {
                     GridPos3D gridPos = gridPos3D + gp;

@@ -227,8 +227,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static readonly TypeDefineConfig<BattleIndicator> BattleIndicatorTypeDefineDict = new TypeDefineConfig<BattleIndicator>("BattleIndicator", "/Resources/Prefabs/BattleIndicator", true, ConfigManager.TypeStartIndex.BattleIndicator);
 
     [ShowInInspector]
-    [LabelText("箱子占位配置表")]
-    public static readonly Dictionary<ushort, BoxOccupationData> BoxOccupationConfigDict = new Dictionary<ushort, BoxOccupationData>();
+    [LabelText("Entity占位配置表")]
+    public static readonly Dictionary<ushort, EntityOccupationData> EntityOccupationConfigDict = new Dictionary<ushort, EntityOccupationData>();
 
     [ShowInInspector]
     [LabelText("世界模组配置表")]
@@ -247,14 +247,14 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static string EntityBuffAttributeMatrixAssetPath_Relative = "Buff/EntityBuffAttributeMatrixAsset.asset";
     public static string EntityBuffAttributeMatrixConfigFolder_Relative = "EntityBuffAttributeMatrix";
-    public static string BoxOccupationConfigDictFolder_Relative = "Box";
+    public static string EntityOccupationConfigDictFolder_Relative = "Entity";
     public static string WorldModuleDataConfigFolder_Relative = "WorldModule";
     public static string StaticLayoutDataConfigFolder_Relative = "StaticLayout";
     public static string WorldDataConfigFolder_Relative = "Worlds";
 
     public static string ConfigFolder_Build = Application.streamingAssetsPath + "/Configs/";
     public static string EntityBuffAttributeMatrixConfigFolder_Build = ConfigFolder_Build + EntityBuffAttributeMatrixConfigFolder_Relative + "/";
-    public static string BoxOccupationConfigDictFolder_Build = ConfigFolder_Build + BoxOccupationConfigDictFolder_Relative + "/";
+    public static string EntityOccupationConfigDictFolder_Build = ConfigFolder_Build + EntityOccupationConfigDictFolder_Relative + "/";
     public static string WorldModuleDataConfigFolder_Build = ConfigFolder_Build + WorldModuleDataConfigFolder_Relative + "s/";
     public static string StaticLayoutDataConfigFolder_Build = ConfigFolder_Build + StaticLayoutDataConfigFolder_Relative + "s/";
     public static string WorldDataConfigFolder_Build = ConfigFolder_Build + WorldDataConfigFolder_Relative + "/";
@@ -275,7 +275,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         WorldTypeDefineDict.Clear();
         FXTypeDefineDict.Clear();
         BattleIndicatorTypeDefineDict.Clear();
-        BoxOccupationConfigDict.Clear();
+        EntityOccupationConfigDict.Clear();
         WorldModuleDataConfigDict.Clear();
         StaticLayoutDataConfigDict.Clear();
         WorldDataConfigDict.Clear();
@@ -313,7 +313,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         SortStaticLayouts();
         SortWorld();
         ExportEntityBuffAttributeMatrix(dataFormat);
-        ExportBoxOccupationDataConfig(dataFormat);
+        ExportEntityOccupationDataConfig(dataFormat);
         ExportWorldModuleDataConfig(dataFormat);
         ExportStaticLayoutDataConfig(dataFormat);
         ExportWorldDataConfig(dataFormat);
@@ -438,11 +438,11 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         AssetDatabase.Refresh();
     }
 
-    private static void ExportBoxOccupationDataConfig(DataFormat dataFormat)
+    private static void ExportEntityOccupationDataConfig(DataFormat dataFormat)
     {
-        BoxOccupationConfigDict.Clear();
-        string folder = BoxOccupationConfigDictFolder_Build;
-        string file = folder + "BoxOccupation.config";
+        EntityOccupationConfigDict.Clear();
+        string folder = EntityOccupationConfigDictFolder_Build;
+        string file = folder + "EntityOccupation.config";
         if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
         if (File.Exists(file)) File.Delete(file);
 
@@ -456,12 +456,12 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 Box box = boxPrefab.GetComponent<Box>();
                 if (box)
                 {
-                    box.BoxIndicatorHelper.RefreshBoxIndicatorOccupationData();
-                    BoxOccupationData occupationData = box.GetBoxOccupationGPs_Editor().Clone();
-                    ushort boxTypeIndex = BoxTypeDefineDict.TypeIndexDict[box.name];
-                    if (boxTypeIndex != 0)
+                    box.BoxIndicatorHelper.RefreshEntityIndicatorOccupationData();
+                    EntityOccupationData occupationData = box.GetEntityOccupationGPs_Editor().Clone();
+                    ushort entityTypeIndex = BoxTypeDefineDict.TypeIndexDict[box.name];
+                    if (entityTypeIndex != 0)
                     {
-                        BoxOccupationConfigDict.Add(boxTypeIndex, occupationData);
+                        EntityOccupationConfigDict.Add(entityTypeIndex, occupationData);
                     }
 
                     PrefabUtility.SaveAsPrefabAsset(boxPrefab, prefabPath);
@@ -471,7 +471,32 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             PrefabUtility.UnloadPrefabContents(boxPrefab);
         }
 
-        byte[] bytes = SerializationUtility.SerializeValue(BoxOccupationConfigDict, dataFormat);
+        List<string> enemyNames = EnemyTypeDefineDict.TypeIndexDict.Keys.ToList();
+        foreach (string enemyName in enemyNames)
+        {
+            string prefabPath = EnemyTypeDefineDict.GetTypeAssetDataBasePath(enemyName);
+            GameObject enemyPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
+            if (enemyPrefab)
+            {
+                EnemyActor enemy = enemyPrefab.GetComponent<EnemyActor>();
+                if (enemy)
+                {
+                    enemy.EntityIndicatorHelper.RefreshEntityIndicatorOccupationData();
+                    EntityOccupationData occupationData = enemy.GetEntityOccupationGPs_Editor().Clone();
+                    ushort entityTypeIndex = EnemyTypeDefineDict.TypeIndexDict[enemy.name];
+                    if (entityTypeIndex != 0)
+                    {
+                        EntityOccupationConfigDict.Add(entityTypeIndex, occupationData);
+                    }
+
+                    PrefabUtility.SaveAsPrefabAsset(enemyPrefab, prefabPath);
+                }
+            }
+
+            PrefabUtility.UnloadPrefabContents(enemyPrefab);
+        }
+
+        byte[] bytes = SerializationUtility.SerializeValue(EntityOccupationConfigDict, dataFormat);
         File.WriteAllBytes(file, bytes);
     }
 
@@ -590,7 +615,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         LoadEntityBuffStatPropertyEnumReflection();
         LoadEntityBuffAttributeMatrixFromConfig(dataFormat);
-        LoadBoxOccupationDataConfig(dataFormat);
+        LoadEntityOccupationDataConfig(dataFormat);
         LoadWorldModuleDataConfig(dataFormat);
         LoadStaticLayoutDataConfig(dataFormat);
         LoadWorldDataConfig(dataFormat);
@@ -674,27 +699,27 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     }
 #endif
 
-    private static void LoadBoxOccupationDataConfig(DataFormat dataFormat)
+    private static void LoadEntityOccupationDataConfig(DataFormat dataFormat)
     {
-        BoxOccupationConfigDict.Clear();
+        EntityOccupationConfigDict.Clear();
 
-        DirectoryInfo di = new DirectoryInfo(BoxOccupationConfigDictFolder_Build);
+        DirectoryInfo di = new DirectoryInfo(EntityOccupationConfigDictFolder_Build);
         if (di.Exists)
         {
             foreach (FileInfo fi in di.GetFiles("*.config", SearchOption.AllDirectories))
             {
                 byte[] bytes = File.ReadAllBytes(fi.FullName);
-                Dictionary<ushort, BoxOccupationData> data = SerializationUtility.DeserializeValue<Dictionary<ushort, BoxOccupationData>>(bytes, dataFormat);
-                foreach (KeyValuePair<ushort, BoxOccupationData> kv in data)
+                Dictionary<ushort, EntityOccupationData> data = SerializationUtility.DeserializeValue<Dictionary<ushort, EntityOccupationData>>(bytes, dataFormat);
+                foreach (KeyValuePair<ushort, EntityOccupationData> kv in data)
                 {
                     kv.Value.CalculateEveryOrientationOccupationGPs();
-                    BoxOccupationConfigDict.Add(kv.Key, kv.Value);
+                    EntityOccupationConfigDict.Add(kv.Key, kv.Value);
                 }
             }
         }
         else
         {
-            Debug.LogError("箱子占位配置表不存在");
+            Debug.LogError("Entity占位配置表不存在");
         }
     }
 
@@ -1069,10 +1094,10 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return battleIndicatorTypeIndex;
     }
 
-    public static BoxOccupationData GetBoxOccupationData(ushort boxTypeIndex)
+    public static EntityOccupationData GetEntityOccupationData(ushort entityTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
-        BoxOccupationConfigDict.TryGetValue(boxTypeIndex, out BoxOccupationData occupationData);
+        EntityOccupationConfigDict.TryGetValue(entityTypeIndex, out EntityOccupationData occupationData);
         return occupationData;
     }
 

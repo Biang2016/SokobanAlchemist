@@ -491,7 +491,7 @@ public class World : PoolObject
     {
         Box box_src = GetBoxByGridPosition(srcGP, out WorldModule module_src, out GridPos3D localGP_src);
         if (box_src == null) return true;
-        foreach (GridPos3D offset in box_src.GetBoxOccupationGPs_Rotated())
+        foreach (GridPos3D offset in box_src.GetEntityOccupationGPs_Rotated())
         {
             GridPos3D gridGP = offset + box_src.WorldGP;
             GridPos3D gridGP_after = gridGP + direction;
@@ -525,7 +525,7 @@ public class World : PoolObject
         boxes_moveable.Add(box_src);
 
         List<Box> aboveNearestBoxList = new List<Box>();
-        foreach (GridPos3D offset in box_src.GetBoxOccupationGPs_Rotated())
+        foreach (GridPos3D offset in box_src.GetEntityOccupationGPs_Rotated())
         {
             GridPos3D gridGP = offset + box_src.WorldGP;
 
@@ -547,12 +547,12 @@ public class World : PoolObject
         }
 
         // 先检查推动方向坐标最大的那个格子
-        if (direction.x == 1) aboveNearestBoxList.Sort((a, b) => -a.BoxBoundsInt.xMax.CompareTo(b.BoxBoundsInt.xMax));
-        if (direction.x == -1) aboveNearestBoxList.Sort((a, b) => a.BoxBoundsInt.xMin.CompareTo(b.BoxBoundsInt.xMin));
-        if (direction.y == 1) aboveNearestBoxList.Sort((a, b) => -a.BoxBoundsInt.yMax.CompareTo(b.BoxBoundsInt.yMax));
-        if (direction.y == -1) aboveNearestBoxList.Sort((a, b) => a.BoxBoundsInt.yMin.CompareTo(b.BoxBoundsInt.yMin));
-        if (direction.z == 1) aboveNearestBoxList.Sort((a, b) => -a.BoxBoundsInt.zMax.CompareTo(b.BoxBoundsInt.zMax));
-        if (direction.z == -1) aboveNearestBoxList.Sort((a, b) => a.BoxBoundsInt.zMin.CompareTo(b.BoxBoundsInt.zMin));
+        if (direction.x == 1) aboveNearestBoxList.Sort((a, b) => -a.EntityBoundsInt.xMax.CompareTo(b.EntityBoundsInt.xMax));
+        if (direction.x == -1) aboveNearestBoxList.Sort((a, b) => a.EntityBoundsInt.xMin.CompareTo(b.EntityBoundsInt.xMin));
+        if (direction.y == 1) aboveNearestBoxList.Sort((a, b) => -a.EntityBoundsInt.yMax.CompareTo(b.EntityBoundsInt.yMax));
+        if (direction.y == -1) aboveNearestBoxList.Sort((a, b) => a.EntityBoundsInt.yMin.CompareTo(b.EntityBoundsInt.yMin));
+        if (direction.z == 1) aboveNearestBoxList.Sort((a, b) => -a.EntityBoundsInt.zMax.CompareTo(b.EntityBoundsInt.zMax));
+        if (direction.z == -1) aboveNearestBoxList.Sort((a, b) => a.EntityBoundsInt.zMin.CompareTo(b.EntityBoundsInt.zMin));
 
         foreach (Box aboveNearestBox in aboveNearestBoxList)
         {
@@ -583,7 +583,7 @@ public class World : PoolObject
         // 先将矩阵对应格子清空
         foreach (Box box_moveable in boxes_moveable)
         {
-            foreach (GridPos3D offset in box_moveable.GetBoxOccupationGPs_Rotated())
+            foreach (GridPos3D offset in box_moveable.GetEntityOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP;
                 GetBoxByGridPosition(gridWorldGP_before, out WorldModule module_before, out GridPos3D boxGridLocalGP_before);
@@ -594,12 +594,12 @@ public class World : PoolObject
         // 再往矩阵填入引用，不可在一个循环内完成，否则后面的Box会将前面的引用置空
         foreach (Box box_moveable in boxes_moveable)
         {
-            foreach (GridPos3D offset in box_moveable.GetBoxOccupationGPs_Rotated())
+            foreach (GridPos3D offset in box_moveable.GetEntityOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP;
                 GridPos3D gridWorldGP_after = gridWorldGP_before + direction;
                 GetBoxByGridPosition(gridWorldGP_after, out WorldModule module_after, out GridPos3D boxGridLocalGP_after);
-                module_after[boxGridLocalGP_after.x, boxGridLocalGP_after.y, boxGridLocalGP_after.z, offset == GridPos3D.Zero, box_moveable.BoxOrientation] = box_moveable;
+                module_after[boxGridLocalGP_after.x, boxGridLocalGP_after.y, boxGridLocalGP_after.z, offset == GridPos3D.Zero, box_moveable.EntityOrientation] = box_moveable;
             }
 
             box_moveable.State = sucState;
@@ -641,7 +641,7 @@ public class World : PoolObject
             GridPos3D mergeTargetWorldGP = oldCoreBox.WorldGP + newBoxOffset;
 
             List<GridPos3D> allPossibleMergeTargetWorldGP = new List<GridPos3D>();
-            List<GridPos3D> newBoxOccupation_rotated = ConfigManager.GetBoxOccupationData(newBoxTypeIndex).BoxIndicatorGPs_RotatedDict[newBoxOrientation];
+            List<GridPos3D> newBoxOccupation_rotated = ConfigManager.GetEntityOccupationData(newBoxTypeIndex).BoxIndicatorGPs_RotatedDict[newBoxOrientation];
             foreach (GridPos3D offset in newBoxOccupation_rotated)
             {
                 allPossibleMergeTargetWorldGP.Add(offset + mergeTargetWorldGP);
@@ -689,8 +689,8 @@ public class World : PoolObject
         mergeOrientation = MergeOrientation.X;
         //if (!srcBox.IsBoxShapeCuboid()) return null; // todo 移除此限制
 
-        BoundsInt boundsInt = srcBox.BoxBoundsInt;
-        bool XZRev = srcBox.BoxOrientation == GridPosR.Orientation.Left || srcBox.BoxOrientation == GridPosR.Orientation.Right;
+        BoundsInt boundsInt = srcBox.EntityBoundsInt;
+        bool XZRev = srcBox.EntityOrientation == GridPosR.Orientation.Left || srcBox.EntityOrientation == GridPosR.Orientation.Right;
         if (XZRev) boundsInt = new BoundsInt(boundsInt.zMin, boundsInt.yMin, boundsInt.xMin, boundsInt.size.z, boundsInt.size.y, boundsInt.size.x);
 
         int maxMergeCount_x = int.MinValue;
@@ -716,7 +716,7 @@ public class World : PoolObject
             for (int i = 0; i < N_z * 2; i++)
                 z_match_matrix[i] = true;
 
-        foreach (GridPos3D offset in srcBox.GetBoxOccupationGPs_Rotated())
+        foreach (GridPos3D offset in srcBox.GetEntityOccupationGPs_Rotated())
         {
             GridPos3D alignRefGP = srcBox.WorldGP + offset; // 取每个点来作为基准，都要在相隔同样距离处找到同种箱子
 
@@ -728,7 +728,7 @@ public class World : PoolObject
                     int matrixIndex = i > 0 ? i + N_x - 1 : i + N_x;
                     GridPos3D targetGP = alignRefGP + GridPos3D.Right * i * boundsInt.size.x;
                     Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
-                    if (targetBox == null || targetBox == srcBox || targetBox.BoxTypeIndex != srcBox.BoxTypeIndex)
+                    if (targetBox == null || targetBox == srcBox || targetBox.EntityTypeIndex != srcBox.EntityTypeIndex)
                     {
                         x_match_matrix[matrixIndex] = false;
                     }
@@ -741,7 +741,7 @@ public class World : PoolObject
                     int matrixIndex = i > 0 ? i + N_z - 1 : i + N_z;
                     GridPos3D targetGP = alignRefGP + GridPos3D.Forward * i * boundsInt.size.z;
                     Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
-                    if (targetBox == null || targetBox == srcBox || targetBox.BoxTypeIndex != srcBox.BoxTypeIndex)
+                    if (targetBox == null || targetBox == srcBox || targetBox.EntityTypeIndex != srcBox.EntityTypeIndex)
                     {
                         z_match_matrix[matrixIndex] = false;
                     }
@@ -873,7 +873,7 @@ public class World : PoolObject
         }
 
         // 决定合并后的箱子朝向和偏移
-        BoxOccupationData boxOccupationData = ConfigManager.GetBoxOccupationData(matchOnXAxis ? boxMergeConfig.GetMergeBoxTypeIndex(matchCountOnXAxis, XZRev ? MergeOrientation.Z : MergeOrientation.X) : boxMergeConfig.GetMergeBoxTypeIndex(matchCountOnZAxis, XZRev ? MergeOrientation.X : MergeOrientation.Z));
+        EntityOccupationData boxOccupationData = ConfigManager.GetEntityOccupationData(matchOnXAxis ? boxMergeConfig.GetMergeBoxTypeIndex(matchCountOnXAxis, XZRev ? MergeOrientation.Z : MergeOrientation.X) : boxMergeConfig.GetMergeBoxTypeIndex(matchCountOnZAxis, XZRev ? MergeOrientation.X : MergeOrientation.Z));
 
         // 默认朝向定为箱子推进的前方
         if (srcBoxLastMoveDir.x == 1) newBoxOrientation = GridPosR.Orientation.Right;
@@ -882,12 +882,12 @@ public class World : PoolObject
         if (srcBoxLastMoveDir.z == -1) newBoxOrientation = GridPosR.Orientation.Down;
 
         // 当产物为Mega箱子时，需要考虑占位问题
-        if (boxOccupationData.BoxIndicatorGPs.Count > 1)
+        if (boxOccupationData.EntityIndicatorGPs.Count > 1)
         {
             List<GridPos3D> availableGPs = new List<GridPos3D>(16);
             foreach (Box mergedBox in mergedBoxes)
             {
-                foreach (GridPos3D gridPos in mergedBox.GetBoxOccupationGPs_Rotated())
+                foreach (GridPos3D gridPos in mergedBox.GetEntityOccupationGPs_Rotated())
                 {
                     availableGPs.Add(mergedBox.WorldGP + gridPos);
                 }
@@ -972,7 +972,7 @@ public class World : PoolObject
     {
         if (box.WorldModule)
         {
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP = offset + box.WorldGP;
                 if (GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP) == box)
@@ -1020,7 +1020,7 @@ public class World : PoolObject
 
         bool tryPutBox(GridPos3D worldGP)
         {
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP = offset + worldGP;
                 Box existBox = GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP);
@@ -1037,11 +1037,11 @@ public class World : PoolObject
                 }
             }
 
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP = offset + worldGP;
                 GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP);
-                module[localGP.x, localGP.y, localGP.z, offset == GridPos3D.Zero, box.BoxOrientation] = box;
+                module[localGP.x, localGP.y, localGP.z, offset == GridPos3D.Zero, box.EntityOrientation] = box;
             }
 
             Box.LerpType lerpType = Box.LerpType.Throw;
@@ -1099,7 +1099,7 @@ public class World : PoolObject
     {
         if (box.State == Box.States.Static)
         {
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 GridPos3D gridGP = box.WorldGP + offset;
                 Box beneathBox = GetBoxByGridPosition(gridGP + GridPos3D.Down, out WorldModule _, out GridPos3D _);
@@ -1138,7 +1138,7 @@ public class World : PoolObject
         {
             bool spaceAvailable = true; // logically nothing beneath
             bool spaceTempAvailable = true; // there is not any entity moving/kicking beneath
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP = offset + box.WorldGP;
                 GridPos3D beneathBoxGridWorldGP = gridWorldGP + GridPos3D.Down;
@@ -1151,7 +1151,7 @@ public class World : PoolObject
                 }
             }
 
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 Vector3 gridWorldPos = offset + box.WorldGP;
                 Collider[] colliders = Physics.OverlapBox(gridWorldPos + Vector3.down * 0.5f, Vector3.one * 0.4f, Quaternion.identity, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
@@ -1174,14 +1174,14 @@ public class World : PoolObject
                 }
                 else
                 {
-                    foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+                    foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
                     {
                         GridPos3D gridWorldGP = offset + box.WorldGP;
                         GridPos3D beneathBoxGridWorldGP = gridWorldGP + GridPos3D.Down;
                         GetBoxByGridPosition(gridWorldGP, out WorldModule module_before, out GridPos3D boxGridLocalGP_before);
                         GetBoxByGridPosition(beneathBoxGridWorldGP, out WorldModule module_after, out GridPos3D boxGridLocalGP_after);
                         module_before[boxGridLocalGP_before.x, boxGridLocalGP_before.y, boxGridLocalGP_before.z, offset == GridPos3D.Zero, GridPosR.Orientation.Up] = null;
-                        module_after[boxGridLocalGP_after.x, boxGridLocalGP_after.y, boxGridLocalGP_after.z, offset == GridPos3D.Zero, box.BoxOrientation] = box;
+                        module_after[boxGridLocalGP_after.x, boxGridLocalGP_after.y, boxGridLocalGP_after.z, offset == GridPos3D.Zero, box.EntityOrientation] = box;
                     }
 
                     CheckDropAbove(box); // 递归，检查上方箱子是否坠落
@@ -1196,7 +1196,7 @@ public class World : PoolObject
     public void CheckDropAbove(Box box)
     {
         HashSet<Box> boxSet = new HashSet<Box>(); // 避免上方的箱子也是Mega箱子，从而导致验算两遍
-        foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+        foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
         {
             GridPos3D gridWorldGP = offset + box.WorldGP + GridPos3D.Up;
             Box boxAbove = GetBoxByGridPosition(gridWorldGP, out WorldModule _, out GridPos3D _);

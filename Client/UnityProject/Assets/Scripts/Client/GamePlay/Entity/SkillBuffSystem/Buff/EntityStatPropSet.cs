@@ -635,7 +635,7 @@ public class EntityStatPropSet
         {
             if (Entity is Box box)
             {
-                foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+                foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
                 {
                     FX fx = FXManager.Instance.PlayFX(StartFiringFX, box.transform.position + Vector3.up * 0.5f + offset, StartFiringFXScale);
                     if (fx) fx.transform.parent = box.transform;

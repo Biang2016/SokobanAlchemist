@@ -33,7 +33,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
         if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Pushable && ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
+            if (box && box.Pushable && ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.EntityTypeIndex))
             {
                 curPushingBox = box;
                 box.Push(ActorPushHelper.Actor.CurMoveAttempt, ActorPushHelper.Actor);
@@ -49,7 +49,7 @@ public class ActorPushHelperTrigger : MonoBehaviour
         if (collider.gameObject.layer == LayerManager.Instance.Layer_BoxIndicator)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Pushable && ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex))
+            if (box && box.Pushable && ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.EntityTypeIndex))
             {
                 ActorPushHelper.Actor.ActorArtHelper.SetIsPushing(false);
                 //if (curPushingBox != null && curPushingBox == box)

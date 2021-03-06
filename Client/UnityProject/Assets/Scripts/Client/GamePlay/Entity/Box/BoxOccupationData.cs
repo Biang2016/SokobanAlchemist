@@ -6,10 +6,10 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public class BoxOccupationData : IClone<BoxOccupationData>
+public class EntityOccupationData : IClone<EntityOccupationData>
 {
     [LabelText("长方体外形")]
-    public bool IsBoxShapeCuboid = false;
+    public bool IsShapeCuboid = false;
 
     [LabelText("包围尺寸")]
     [SerializeField]
@@ -17,33 +17,33 @@ public class BoxOccupationData : IClone<BoxOccupationData>
 
     [LabelText("格子占位信息")]
     [ListDrawerSettings(ListElementLabelName = "ToString")]
-    public List<GridPos3D> BoxIndicatorGPs = new List<GridPos3D>();
+    public List<GridPos3D> EntityIndicatorGPs = new List<GridPos3D>();
 
     public Dictionary<GridPosR.Orientation, List<GridPos3D>> BoxIndicatorGPs_RotatedDict;
 
     public void Clear()
     {
-        IsBoxShapeCuboid = false;
+        IsShapeCuboid = false;
         BoundsInt = default;
-        BoxIndicatorGPs.Clear();
+        EntityIndicatorGPs.Clear();
     }
 
     public void CalculateEveryOrientationOccupationGPs()
     {
         if (BoxIndicatorGPs_RotatedDict == null) BoxIndicatorGPs_RotatedDict = new Dictionary<GridPosR.Orientation, List<GridPos3D>>();
         BoxIndicatorGPs_RotatedDict.Clear();
-        BoxIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Up, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Up, BoxIndicatorGPs));
-        BoxIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Right, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Right, BoxIndicatorGPs));
-        BoxIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Down, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Down, BoxIndicatorGPs));
-        BoxIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Left, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Left, BoxIndicatorGPs));
+        BoxIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Up, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Up, EntityIndicatorGPs));
+        BoxIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Right, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Right, EntityIndicatorGPs));
+        BoxIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Down, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Down, EntityIndicatorGPs));
+        BoxIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Left, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Left, EntityIndicatorGPs));
     }
 
-    public BoxOccupationData Clone()
+    public EntityOccupationData Clone()
     {
-        BoxOccupationData newData = new BoxOccupationData();
-        newData.IsBoxShapeCuboid = IsBoxShapeCuboid;
+        EntityOccupationData newData = new EntityOccupationData();
+        newData.IsShapeCuboid = IsShapeCuboid;
         newData.BoundsInt = BoundsInt;
-        newData.BoxIndicatorGPs = BoxIndicatorGPs.Clone();
+        newData.EntityIndicatorGPs = EntityIndicatorGPs.Clone();
         return newData;
     }
 }

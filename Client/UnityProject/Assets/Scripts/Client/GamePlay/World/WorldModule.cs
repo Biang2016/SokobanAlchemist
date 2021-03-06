@@ -65,7 +65,7 @@ public class WorldModule : PoolObject
                 GridPosR.Orientation boxOrientation = orientation;
                 if (value != null)
                 {
-                    boxTypeIndex = value.BoxTypeIndex;
+                    boxTypeIndex = value.EntityTypeIndex;
                 }
 
                 WorldModuleDataModification.BoxModification mod = new WorldModuleDataModification.BoxModification(boxTypeIndex, boxOrientation);
@@ -124,7 +124,7 @@ public class WorldModule : PoolObject
                     {
                         if (box.WorldGP == LocalGPToWorldGP(new GridPos3D(x, y, z))) // 不是核心格所在的模组无权卸载该Box
                         {
-                            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+                            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
                             {
                                 GridPos3D gridWorldGP = offset + box.WorldGP;
                                 if (World.GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP) == box)
@@ -312,7 +312,7 @@ public class WorldModule : PoolObject
         }
         else
         {
-            List<GridPos3D> boxOccupation_rotated = ConfigManager.GetBoxOccupationData(boxTypeIndex).BoxIndicatorGPs_RotatedDict[orientation];
+            List<GridPos3D> boxOccupation_rotated = ConfigManager.GetEntityOccupationData(boxTypeIndex).BoxIndicatorGPs_RotatedDict[orientation];
 
             // 空位检查
             foreach (GridPos3D offset in boxOccupation_rotated)

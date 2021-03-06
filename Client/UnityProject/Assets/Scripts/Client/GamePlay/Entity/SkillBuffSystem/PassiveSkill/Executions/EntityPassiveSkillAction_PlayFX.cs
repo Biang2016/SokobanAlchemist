@@ -21,7 +21,7 @@ public class EntityPassiveSkillAction_PlayFX : EntityPassiveSkillAction, EntityP
     {
         if (Entity is Box box)
         {
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 Vector3 boxIndicatorPos = box.transform.position + offset;
                 FXManager.Instance.PlayFX(FXTypeName, boxIndicatorPos, FXScale);

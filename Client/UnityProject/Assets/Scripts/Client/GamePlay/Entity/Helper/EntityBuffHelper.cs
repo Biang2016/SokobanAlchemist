@@ -340,7 +340,7 @@ public class EntityBuffHelper : EntityMonoHelper
 
         if (Entity is Box box)
         {
-            foreach (GridPos3D offset in box.GetBoxOccupationGPs_Rotated())
+            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 PlayFX(transform.position + offset);
             }

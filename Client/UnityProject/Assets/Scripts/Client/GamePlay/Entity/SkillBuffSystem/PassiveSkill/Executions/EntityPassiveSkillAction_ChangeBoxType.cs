@@ -38,7 +38,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
         ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
         if (ChangeForEveryGrid)
         {
-            List<GridPos3D> occupations = Box.GetBoxOccupationGPs_Rotated();
+            List<GridPos3D> occupations = Box.GetEntityOccupationGPs_Rotated();
             Box.DestroyBox(delegate
             {
                 if (boxTypeIndex != 0)

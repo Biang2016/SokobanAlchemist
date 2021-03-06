@@ -103,7 +103,7 @@ public class PlayerActor : Actor
                     Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(targetPos, out WorldModule module, out GridPos3D _, true);
                     if ((!box && module)
                         || (box && box.Passable)
-                        || (box && box.Pushable && ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.BoxTypeIndex) &&
+                        || (box && box.Pushable && ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.EntityTypeIndex) &&
                             WorldManager.Instance.CurrentWorld.CheckCanMoveBoxColumn(box.WorldGP, rotatedQuickMoveAttemptGP, new HashSet<Box>()))) // 能走到才开启短按
                     {
                         // Check is there any actor occupies the grid
@@ -293,7 +293,7 @@ public class PlayerActor : Actor
                     //CurThrowPointOffset += CurThrowMoveAttempt * Mathf.Max(ThrowAimMoveSpeed * Mathf.Sqrt(CurThrowPointOffset.magnitude), 2f) * Time.fixedDeltaTime;
                 }
 
-                if (!ActorBoxInteractHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.BoxTypeIndex))
+                if (!ActorBoxInteractHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.EntityTypeIndex))
                 {
                     if (Mathf.Abs(CurThrowPointOffset.x) > Mathf.Abs(CurThrowPointOffset.z))
                     {
