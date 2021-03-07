@@ -133,6 +133,10 @@ public class Actor : Entity
     /// <summary>
     /// 这是寻路专用节点坐标，和世界坐标略有偏差，Y坐标为角色基底那层的Y坐标
     /// </summary>
+    [DisplayAsString]
+    [HideInEditorMode]
+    [FoldoutGroup("状态")]
+    [LabelText("寻路节点坐标")]
     public GridPos3D WorldGP_PF
     {
         get
@@ -151,6 +155,12 @@ public class Actor : Entity
         }
     }
 
+    [DisplayAsString]
+    [HideInEditorMode]
+    [FoldoutGroup("状态")]
+    [LabelText("角色形心坐标")]
+    public Vector3 ActorOccupationCenter => WorldGP_PF.ConvertPathFindingNodeGPToWorldPosition(ActorWidth);
+
     [DisableInEditorMode]
     [ShowInInspector]
     [FoldoutGroup("状态")]
@@ -160,6 +170,12 @@ public class Actor : Entity
     #endregion
 
     #region 旋转朝向
+
+    [Button("SwitchEntityOrientation")]
+    public void Rotate()
+    {
+        SwitchEntityOrientation(GridPosR.RotateOrientationClockwise90(EntityOrientation));
+    }
 
     protected override void SwitchEntityOrientation(GridPosR.Orientation newOrientation)
     {
@@ -188,6 +204,7 @@ public class Actor : Entity
         int delta_z = z_min_beforeRotate - z_min_afterRotate;
 
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(delta_x + curWorldGP.x, delta_z + curWorldGP.z, newOrientation), transform, 1);
+        WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
     }
 
     #endregion

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using FlowCanvas.Nodes;
 using NodeCanvas.BehaviourTrees;
@@ -50,7 +51,7 @@ public static class ActorAIAtoms
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
             Actor player = BattleManager.Instance.Player1;
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.WorldGP, KeepDistanceMin.value, KeepDistanceMax.value, false, ActorPathFinding.DestinationType.Actor);
+            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.ActorOccupationCenter.ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), KeepDistanceMin.value, KeepDistanceMax.value, false, ActorPathFinding.DestinationType.Actor);
             switch (retCode)
             {
                 case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
@@ -65,21 +66,21 @@ public static class ActorAIAtoms
                     for (int angle = 0; angle <= 360; angle += 10)
                     {
                         float radianAngle = Mathf.Deg2Rad * angle;
-                        Vector3 dest = player.WorldGP + new Vector3((KeepDistanceMin.value + 1) * Mathf.Sin(radianAngle), 0, (KeepDistanceMin.value + 1) * Mathf.Cos(radianAngle));
+                        Vector3 dest = player.ActorOccupationCenter + new Vector3((KeepDistanceMin.value + 1) * Mathf.Sin(radianAngle), 0, (KeepDistanceMin.value + 1) * Mathf.Cos(radianAngle));
                         GridPos3D destGP = dest.ToGridPos3D();
                         runDestList.Add(destGP);
                     }
 
                     runDestList.Sort((gp1, gp2) =>
                     {
-                        float dist1 = (gp1 + player.transform.position - Actor.transform.position).magnitude;
-                        float dist2 = (gp2 + player.transform.position - Actor.transform.position).magnitude;
+                        float dist1 = (gp1 + player.ActorOccupationCenter - Actor.ActorOccupationCenter).magnitude;
+                        float dist2 = (gp2 + player.ActorOccupationCenter - Actor.ActorOccupationCenter).magnitude;
                         return dist1.CompareTo(dist2);
                     });
 
                     foreach (GridPos3D gp in runDestList)
                     {
-                        ActorAIAgent.SetDestinationRetCode rc = Actor.ActorAIAgent.SetDestination(gp, 0, 1, false, ActorPathFinding.DestinationType.EmptyGrid);
+                        ActorAIAgent.SetDestinationRetCode rc = Actor.ActorAIAgent.SetDestination(((Vector3) gp).ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), 0, 1, false, ActorPathFinding.DestinationType.EmptyGrid);
                         if (rc == ActorAIAgent.SetDestinationRetCode.Suc)
                         {
                             return Status.Running;
@@ -120,8 +121,8 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
             Actor player = BattleManager.Instance.Player1;
-            if ((player.transform.position - Actor.transform.position).magnitude > GuardingRange.value) return false;
-            bool suc = ActorPathFinding.FindPath(Actor.WorldGP, player.WorldGP, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor, Actor.ActorWidth, Actor.ActorHeight);
+            if ((player.ActorOccupationCenter - Actor.ActorOccupationCenter).magnitude > GuardingRange.value) return false;
+            bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, player.ActorOccupationCenter.ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
             return suc;
         }
     }
@@ -138,7 +139,7 @@ public static class ActorAIAtoms
         {
             if (Actor == null || Actor.ActorAIAgent == null || !Actor.ActorAIAgent.IsPathFinding) return false;
             Actor player = BattleManager.Instance.Player1;
-            return ((player.transform.position - Actor.ActorAIAgent.GetCurrentPathFindingDestination()).magnitude <= ToleranceRadius.value);
+            return ((player.ActorOccupationCenter - Actor.ActorAIAgent.GetCurrentPathFindingDestination().ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth)).magnitude <= ToleranceRadius.value);
         }
     }
 
@@ -161,7 +162,7 @@ public static class ActorAIAtoms
             }
 
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.WorldGP, IdleRadius.value, out GridPos3D destination_PF, Actor.ActorWidth, Actor.ActorHeight);
+            bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.WorldGP_PF, IdleRadius.value, out GridPos3D destination_PF, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
             if (suc)
             {
                 ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination_PF, 0f, 0.5f, false, ActorPathFinding.DestinationType.EmptyGrid);
@@ -332,7 +333,7 @@ public static class ActorAIAtoms
         protected override bool OnCheck()
         {
             if (Actor == null || Actor.ActorAIAgent == null) return false;
-            return (BattleManager.Instance.Player1.transform.position - Actor.transform.position).magnitude <= RangeRadius.value;
+            return (BattleManager.Instance.Player1.ActorOccupationCenter - Actor.ActorOccupationCenter).magnitude <= RangeRadius.value;
         }
     }
 
@@ -347,7 +348,7 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
-            bool inside = (BattleManager.Instance.Player1.transform.position - Actor.transform.position).magnitude <= RangeRadius.value;
+            bool inside = (BattleManager.Instance.Player1.ActorOccupationCenter - Actor.ActorOccupationCenter).magnitude <= RangeRadius.value;
             return inside ? Status.Success : Status.Failure;
         }
     }
@@ -364,10 +365,10 @@ public static class ActorAIAtoms
             if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.IsFrozen) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            GridPos3D targetGP = BattleManager.Instance.Player1.WorldGP;
-            GridPos3D curGP = Actor.WorldGP;
-            GridPos3D diff = targetGP - curGP;
-            Actor.CurForward = diff.Normalized();
+            Vector3 targetGP = BattleManager.Instance.Player1.ActorOccupationCenter;
+            Vector3 curGP = Actor.ActorOccupationCenter;
+            Vector3 diff = targetGP - curGP;
+            Actor.CurForward = diff.GetSingleDirectionVectorXZ();
             return Status.Success;
         }
     }
