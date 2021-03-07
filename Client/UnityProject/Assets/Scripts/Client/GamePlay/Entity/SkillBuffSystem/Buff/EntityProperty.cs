@@ -82,6 +82,10 @@ public enum EntityPropertyType
     [LabelText("Z轴碰撞伤害")]
     CollideDamageZ = 16,
 
+    [EntityProperty]
+    [LabelText("被碰撞硬直")]
+    BeCollidedHitStopDuration = 17,
+
     [ActorProperty]
     [LabelText("移动速度")]
     MoveSpeed = 30,

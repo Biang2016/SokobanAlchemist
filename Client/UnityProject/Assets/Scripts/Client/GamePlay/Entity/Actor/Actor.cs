@@ -550,7 +550,7 @@ public class Actor : Entity
         actorPassiveSkillTicker = 0;
         InitActiveSkills();
 
-        ActorArtHelper.SetIsWalking(false);
+        ActorArtHelper.SetWalkingSpeed(0);
         ActorArtHelper.SetIsPushing(false);
 
         WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
@@ -650,12 +650,12 @@ public class Actor : Entity
                 if (this == BattleManager.Instance.Player1) ActorBehaviourState = ActorBehaviourStates.Walk;
                 if (ActorBehaviourState == ActorBehaviourStates.Walk)
                 {
-                    ActorArtHelper.SetIsWalking(true);
+                    ActorArtHelper.SetWalkingSpeed(1);
                     ActorArtHelper.SetIsChasing(false);
                 }
                 else if (ActorBehaviourState == ActorBehaviourStates.Chase)
                 {
-                    ActorArtHelper.SetIsWalking(false);
+                    ActorArtHelper.SetWalkingSpeed(0);
                     ActorArtHelper.SetIsChasing(true);
                 }
 
@@ -680,7 +680,7 @@ public class Actor : Entity
             }
             else
             {
-                ActorArtHelper.SetIsWalking(false);
+                ActorArtHelper.SetWalkingSpeed(0);
                 ActorArtHelper.SetIsChasing(false);
                 ActorArtHelper.SetIsPushing(false);
                 MovementState = MovementStates.Static;
@@ -702,7 +702,7 @@ public class Actor : Entity
         else
         {
             ActorBehaviourState = ActorBehaviourStates.Idle;
-            ActorArtHelper.SetIsWalking(false);
+            ActorArtHelper.SetWalkingSpeed(0);
             ActorArtHelper.SetIsChasing(false);
             ActorArtHelper.SetIsPushing(false);
             if (HasRigidbody)

@@ -65,6 +65,10 @@ public class EntityStatPropSet
     [LabelText("@\"Z轴碰撞伤害\t\"+CollideDamageZ")]
     public EntityProperty CollideDamageZ = new EntityProperty(EntityPropertyType.CollideDamageZ);
 
+    [BoxGroup("碰撞")]
+    [LabelText("@\"被碰撞硬直ms\t\"+BeCollidedHitStopDuration")]
+    public EntityProperty BeCollidedHitStopDuration = new EntityProperty(EntityPropertyType.BeCollidedHitStopDuration);
+
     public EntityProperty GetCollideDamageByAxis(Box.KickAxis axis)
     {
         if (axis == Box.KickAxis.X) return CollideDamageX;
@@ -319,6 +323,7 @@ public class EntityStatPropSet
         CollideDamage.Initialize();
         CollideDamageX.Initialize();
         CollideDamageZ.Initialize();
+        BeCollidedHitStopDuration.Initialize();
 
         #endregion
 
@@ -400,6 +405,7 @@ public class EntityStatPropSet
         PropertyDict.Add(EntityPropertyType.CollideDamage, CollideDamage);
         PropertyDict.Add(EntityPropertyType.CollideDamageX, CollideDamageX);
         PropertyDict.Add(EntityPropertyType.CollideDamageZ, CollideDamageZ);
+        PropertyDict.Add(EntityPropertyType.BeCollidedHitStopDuration, BeCollidedHitStopDuration);
 
         #endregion
 
@@ -739,6 +745,7 @@ public class EntityStatPropSet
         CollideDamage.ApplyDataTo(target.CollideDamage);
         CollideDamageX.ApplyDataTo(target.CollideDamageX);
         CollideDamageZ.ApplyDataTo(target.CollideDamageZ);
+        BeCollidedHitStopDuration.ApplyDataTo(target.BeCollidedHitStopDuration);
 
         #endregion
 

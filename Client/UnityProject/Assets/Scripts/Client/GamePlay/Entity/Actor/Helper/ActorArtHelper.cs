@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 
 public class ActorArtHelper : ActorMonoHelper
 {
@@ -76,7 +77,58 @@ public class ActorArtHelper : ActorMonoHelper
         }
     }
 
+    void FixedUpdate()
+    {
+        if (Actor.IsNotNullAndAlive())
+        {
+            if (IsHitStop)
+            {
+                HitStopTick += Time.fixedDeltaTime;
+                float beCollidedHitStopDuration = Actor.EntityStatPropSet.BeCollidedHitStopDuration.GetModifiedValue / 1000f;
+                if (HitStopTick >= beCollidedHitStopDuration)
+                {
+                    HitStopTick = 0;
+                    IsHitStop = false;
+                }
+            }
+            else
+            {
+                HitStopTick = 0;
+            }
+        }
+    }
+
     #region 第一优先级
+
+    private float HitStopTick = 0;
+    private bool isHitStop = false;
+
+    public bool IsHitStop
+    {
+        get { return isHitStop; }
+        set
+        {
+            if (isHitStop != value)
+            {
+                if (value)
+                {
+                    if (ActorModelAnim != null)
+                    {
+                        ActorModelAnim.speed = 0;
+                    }
+                }
+                else
+                {
+                    if (ActorModelAnim != null)
+                    {
+                        ActorModelAnim.speed = 1;
+                    }
+                }
+
+                isHitStop = value;
+            }
+        }
+    }
 
     public void SetIsFrozen(bool isFrozen)
     {
@@ -119,11 +171,12 @@ public class ActorArtHelper : ActorMonoHelper
         }
     }
 
-    public void SetIsWalking(bool isWalking)
+    public void SetWalkingSpeed(int walkGridSpeed)
     {
         if (ActorModelAnim != null)
         {
-            ActorModelAnim.SetBool("IsWalking", isWalking);
+            ActorModelAnim.SetBool("IsWalking", walkGridSpeed > 0);
+            ActorModelAnim.SetInteger("WalkingGridSpeed", walkGridSpeed);
         }
     }
 
