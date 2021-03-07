@@ -250,7 +250,7 @@ public static class ActorPathFinding
                 }
             }
 
-            if (CheckSpaceAvailableForActorOccupation(destGP_PF, actorWidth, actorHeight, exceptActorGUID))
+            if (CheckSpaceAvailableForActorOccupation(node.GridPos3D_PF, actorWidth, actorHeight, exceptActorGUID))
             {
                 OnSearchForward();
                 if (gp_PF == destGP_PF) arriveDestGP_PF = true;
@@ -367,9 +367,12 @@ public static class ActorPathFinding
             if (BattleManager.Instance.Player1.GUID != exceptActorGUID && BattleManager.Instance.Player1.WorldGP == gridPos) return false;
             if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.GUID != exceptActorGUID && BattleManager.Instance.Player2.WorldGP == gridPos) return false;
             Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos, out WorldModule _, out GridPos3D _, false);
-            Box box_beneath = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos + GridPos3D.Down, out WorldModule _, out GridPos3D _, false);
             if (box != null && !box.Passable) return false;
-            if (box_beneath != null && !box_beneath.Passable) isBoxBeneath = true; // 下方要至少要有一格有支撑箱子
+            if (occupied_y == 0)
+            {
+                Box box_beneath = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos + GridPos3D.Down, out WorldModule _, out GridPos3D _, false);
+                if (box_beneath != null && !box_beneath.Passable) isBoxBeneath = true; // 下方要至少要有一格有支撑箱子
+            }
         }
 
         if (!isBoxBeneath) return false;

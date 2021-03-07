@@ -219,6 +219,9 @@ public class EntityStatPropSet
         [LabelText("@\"效果半径\t\"+EffectRadius")]
         public EntityProperty EffectRadius = new EntityProperty(EntitySkillPropertyType.EffectRadius);
 
+        [LabelText("释放区域偏移")]
+        public GridPos3D Offset = GridPos3D.Zero;
+
         [LabelText("@\"宽度X\t\"+Width")]
         public EntityProperty Width = new EntityProperty(EntitySkillPropertyType.Width);
 
@@ -277,6 +280,7 @@ public class EntityStatPropSet
             Attach_FiringValue.ApplyDataTo(target.Attach_FiringValue);
             Attach_FrozenValue.ApplyDataTo(target.Attach_FrozenValue);
             CastingRadius.ApplyDataTo(target.CastingRadius);
+            target.Offset = Offset;
             EffectRadius.ApplyDataTo(target.EffectRadius);
             Width.ApplyDataTo(target.Width);
             Depth.ApplyDataTo(target.Depth);

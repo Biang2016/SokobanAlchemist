@@ -157,6 +157,9 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         int effectRadius = GetValue(EntitySkillPropertyType.EffectRadius);
         int width = GetValue(EntitySkillPropertyType.Width);
         int depth = GetValue(EntitySkillPropertyType.Depth);
+        GridPos3D offset = Entity.EntityStatPropSet.SkillsPropertyCollections[(int) EntitySkillIndex].Offset;
+        GridPos rotated_offset = GridPos.RotateGridPos(new GridPos(offset.x, offset.z), Entity.EntityOrientation);
+        GridPos3D rotated_offset3D = new GridPos3D(rotated_offset.x, offset.y, rotated_offset.z);
 
         int xMin_SkillCastPos = castingRect.x_min;
         int xMax_SkillCastPos = castingRect.x_max;
@@ -244,11 +247,11 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
                 int zSign = Mathf.RoundToInt(Entity.CurForward.z);
                 if (xSign == 0)
                 {
-                    for (int xDiff = -(effectRadius - 1); xDiff <= (effectRadius - 1); xDiff++)
+                    for (int xDiff = 0; xDiff < width; xDiff++)
                     {
                         for (int zDiff = 1 * zSign; Mathf.Abs(zDiff) <= depth; zDiff += zSign)
                         {
-                            GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff);
+                            GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff) + rotated_offset3D;
                             AddGP(gp);
                         }
                     }
@@ -257,9 +260,9 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
                 {
                     for (int xDiff = 1 * xSign; Mathf.Abs(xDiff) <= depth; xDiff += xSign)
                     {
-                        for (int zDiff = -(effectRadius - 1); zDiff <= (effectRadius - 1); zDiff++)
+                        for (int zDiff = 0; zDiff < width; zDiff++)
                         {
-                            GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff);
+                            GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff) + rotated_offset3D;
                             AddGP(gp);
                         }
                     }
@@ -273,13 +276,14 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
                 int zSign = Mathf.RoundToInt(Entity.CurForward.z);
                 if (xSign == 0)
                 {
-                    for (int xDiff = -(effectRadius - 1); xDiff <= (effectRadius - 1); xDiff++)
+                    for (int xDiff = -(effectRadius - 1); xDiff <= (effectRadius - 1) + (width - 1); xDiff++)
                     {
                         for (int zDiff = 1 * zSign; Mathf.Abs(zDiff) <= effectRadius; zDiff += zSign)
                         {
-                            if (Mathf.Abs(xDiff) < Mathf.Abs(zDiff))
+                            int xDiff_IgnoreWidth = xDiff <= 0 ? xDiff : (xDiff < width ? 0 : xDiff - (width - 1));
+                            if (Mathf.Abs(xDiff_IgnoreWidth) < Mathf.Abs(zDiff))
                             {
-                                GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff);
+                                GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff) + rotated_offset3D;
                                 AddGP(gp);
                             }
                         }
@@ -289,11 +293,12 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
                 {
                     for (int xDiff = 1 * xSign; Mathf.Abs(xDiff) <= effectRadius; xDiff += xSign)
                     {
-                        for (int zDiff = -(effectRadius - 1); zDiff <= (effectRadius - 1); zDiff++)
+                        for (int zDiff = -(effectRadius - 1); zDiff <= (effectRadius - 1) + (width - 1); zDiff++)
                         {
-                            if (Mathf.Abs(zDiff) < Mathf.Abs(xDiff))
+                            int zDiff_IgnoreWidth = zDiff <= 0 ? zDiff : (zDiff < width ? 0 : zDiff - (width - 1));
+                            if (Mathf.Abs(zDiff_IgnoreWidth) < Mathf.Abs(xDiff))
                             {
-                                GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff);
+                                GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff) + rotated_offset3D;
                                 AddGP(gp);
                             }
                         }
@@ -308,13 +313,14 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
                 int zSign = Mathf.RoundToInt(Entity.CurForward.z);
                 if (xSign == 0)
                 {
-                    for (int xDiff = -(effectRadius - 1); xDiff <= (effectRadius - 1); xDiff++)
+                    for (int xDiff = -(effectRadius - 1); xDiff <= (effectRadius - 1) + (width - 1); xDiff++)
                     {
                         for (int zDiff = 1 * zSign; Mathf.Abs(zDiff) <= effectRadius; zDiff += zSign)
                         {
-                            if (Mathf.Abs(xDiff) + Mathf.Abs(zDiff) <= effectRadius)
+                            int xDiff_IgnoreWidth = xDiff <= 0 ? xDiff : (xDiff < width ? 0 : xDiff - (width - 1));
+                            if (Mathf.Abs(xDiff_IgnoreWidth) + Mathf.Abs(zDiff) <= effectRadius)
                             {
-                                GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff);
+                                GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff) + rotated_offset3D;
                                 AddGP(gp);
                             }
                         }
@@ -324,11 +330,12 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
                 {
                     for (int xDiff = 1 * xSign; Mathf.Abs(xDiff) <= effectRadius; xDiff += xSign)
                     {
-                        for (int zDiff = -(effectRadius - 1); zDiff <= (effectRadius - 1); zDiff++)
+                        for (int zDiff = -(effectRadius - 1); zDiff <= (effectRadius - 1) + (width - 1); zDiff++)
                         {
-                            if (Mathf.Abs(xDiff) + Mathf.Abs(zDiff) <= effectRadius)
+                            int zDiff_IgnoreWidth = zDiff <= 0 ? zDiff : (zDiff < width ? 0 : zDiff - (width - 1));
+                            if (Mathf.Abs(xDiff) + Mathf.Abs(zDiff_IgnoreWidth) <= effectRadius)
                             {
-                                GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff);
+                                GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff) + rotated_offset3D;
                                 AddGP(gp);
                             }
                         }
