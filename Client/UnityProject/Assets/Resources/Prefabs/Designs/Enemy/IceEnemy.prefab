@@ -269,21 +269,6 @@ MonoBehaviour:
       MaxValue: 0
     SkillsPropertyCollections:
     - skillAlias: "\u524D\u65B9\u7EBF\u6027\u51B0\u51BB"
-      Damage:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-      Attach_FiringValue:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-      Attach_FrozenValue:
-        BaseValue: 300
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000
       CastingRadius:
         BaseValue: 0
         ModifiedValue: 0
@@ -309,7 +294,7 @@ MonoBehaviour:
         MinValue: 0
         MaxValue: 10
       Cooldown:
-        BaseValue: 3000
+        BaseValue: 8000
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
@@ -328,6 +313,51 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
+    - skillAlias: "\u7838\u5730\u677F"
+      CastingRadius:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
+      EffectRadius:
+        BaseValue: 3
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 5
+      Offset:
+        x: 0
+        y: 0
+        z: 0
+      Width:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
+      Depth:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
+      Cooldown:
+        BaseValue: 6000
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 99999
+      WingUp:
+        BaseValue: 500
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 99999
+      CastDuration:
+        BaseValue: 200
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 99999
+      Recovery:
+        BaseValue: 200
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 99999
     RawEntityDefaultBuffs:
     - id: 0
   RawFlamethrowerFuelData:
@@ -337,6 +367,7 @@ MonoBehaviour:
   - id: 3
   RawEntityActiveSkills:
   - id: 4
+  - id: 5
   Camp: 2
   RigidBody: {fileID: 3522706739585230582}
   ActorCommonHelpers: {fileID: 7930101442428437132}
@@ -371,7 +402,7 @@ MonoBehaviour:
   FrozeFX: Hit_SnowFlake
   ThawFX: Flash_CyanSlight
   RawFrozenBoxPassiveSkills:
-  - id: 5
+  - id: 6
   IsInMicroWorld: 0
   ActorBehaviourState: 0
   MovementState: 0
@@ -396,7 +427,7 @@ MonoBehaviour:
         IsAddedDuringGamePlay: 0
         SpecialCaseType: 0
         RawEntityBuff:
-          id: 6
+          id: 7
     00000003:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
@@ -410,7 +441,7 @@ MonoBehaviour:
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
-        - id: 7
+        - id: 8
     00000004:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
@@ -424,10 +455,45 @@ MonoBehaviour:
         RawSubActiveSkillList: []
         SubActiveSkillTriggerLogicList: []
         InterruptSubActiveSkillsWhenInterrupted: 0
-        M_CastAreaType: 2
+        CastAreaGridPosList:
+        - x: 7
+          y: 0
+          z: 14
+        - x: 7
+          y: 0
+          z: 13
+        - x: 7
+          y: 0
+          z: 12
+        - x: 7
+          y: 0
+          z: 11
+        - x: 7
+          y: 0
+          z: 10
+        - x: 7
+          y: 0
+          z: 9
+        - x: 8
+          y: 0
+          z: 14
+        - x: 8
+          y: 0
+          z: 13
+        - x: 8
+          y: 0
+          z: 12
+        - x: 8
+          y: 0
+          z: 11
+        - x: 8
+          y: 0
+          z: 10
+        - x: 8
+          y: 0
+          z: 9
         M_TargetInclination: 2
         CastOnTopLayer: 0
-        FanAngle: 0
         AccurateStandardDeviation: 0
         BattleIndicatorTypeName: GridWarning
         ProjectOffsetZMax: 0
@@ -439,8 +505,110 @@ MonoBehaviour:
         CastFX: Hit_Freeze
         CastFXScale: 1.5
         RawEntityBuffs:
-        - id: 8
+        - id: 9
+        - id: 10
     00000005:
+      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      data:
+        IsAddedDuringGamePlay: 0
+        TargetCamp: 15
+        EntitySkillIndex: 1
+        SkillAlias: "\u7838\u5730\u677F"
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 5
+          y: 0
+          z: 8
+        - x: 5
+          y: 0
+          z: 7
+        - x: 6
+          y: 0
+          z: 9
+        - x: 6
+          y: 0
+          z: 8
+        - x: 6
+          y: 0
+          z: 7
+        - x: 6
+          y: 0
+          z: 6
+        - x: 7
+          y: 0
+          z: 10
+        - x: 7
+          y: 0
+          z: 9
+        - x: 7
+          y: 0
+          z: 8
+        - x: 7
+          y: 0
+          z: 7
+        - x: 7
+          y: 0
+          z: 6
+        - x: 7
+          y: 0
+          z: 5
+        - x: 8
+          y: 0
+          z: 10
+        - x: 8
+          y: 0
+          z: 9
+        - x: 8
+          y: 0
+          z: 8
+        - x: 8
+          y: 0
+          z: 7
+        - x: 8
+          y: 0
+          z: 6
+        - x: 8
+          y: 0
+          z: 5
+        - x: 9
+          y: 0
+          z: 9
+        - x: 9
+          y: 0
+          z: 8
+        - x: 9
+          y: 0
+          z: 7
+        - x: 9
+          y: 0
+          z: 6
+        - x: 10
+          y: 0
+          z: 8
+        - x: 10
+          y: 0
+          z: 7
+        M_TargetInclination: 2
+        CastOnTopLayer: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName: GridWarning
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        GridWarningColorFill: {r: 0, g: 0.9256196, b: 1, a: 0.80784315}
+        GridWarningColorBorderHighlight: {r: 0.112362035, g: 0.6459774, b: 0.9528302,
+          a: 0.6745098}
+        GridWarningColorBorderDim: {r: 0.46431115, g: 0.68667376, b: 0.6981132, a: 0.7176471}
+        CastFX: Hit_Freeze
+        CastFXScale: 1.5
+        RawEntityBuffs:
+        - id: 11
+        - id: 12
+    00000006:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
@@ -453,8 +621,8 @@ MonoBehaviour:
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
-        - id: 9
-    00000006:
+        - id: 13
+    00000007:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 12938
@@ -466,7 +634,7 @@ MonoBehaviour:
         Percent: 50
         LinearDecayInDuration: 0
         EntityPropertyType: 30
-    00000007:
+    00000008:
       type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
       data:
         DropBoxList:
@@ -478,7 +646,7 @@ MonoBehaviour:
         DropBoxCountMax: 1
         DropConeAngle: 0
         DropVelocity: 12
-    00000008:
+    00000009:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 11255
@@ -487,19 +655,55 @@ MonoBehaviour:
         Duration: 2
         BuffFX: Hit_Freeze
         BuffFXScale: 1
-        Percent: -30
+        Percent: -50
         LinearDecayInDuration: 1
         EntityPropertyType: 30
-    00000009:
+    0000000A:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10323
+        EntityBuffAttribute: 20
+        IsPermanent: 0
+        Duration: 0
+        BuffFX: None
+        BuffFXScale: 1
+        EntityStatType: 100
+        Delta: 400
+        Percent: 0
+    0000000B:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 14220
+        EntityBuffAttribute: 21
+        IsPermanent: 0
+        Duration: 0
+        BuffFX: None
+        BuffFXScale: 1
+        EntityStatType: 0
+        Delta: -2
+        Percent: 0
+    0000000C:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10429
+        EntityBuffAttribute: 0
+        IsPermanent: 0
+        Duration: 0
+        BuffFX: None
+        BuffFXScale: 1
+        EntityStatType: 100
+        Delta: 400
+        Percent: 0
+    0000000D:
       type: {class: EntityPassiveSkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
       data:
         AddBuffRadius: 1
         ExactGPDistance: 0
         EffectiveOnRelativeCamp: 14
         RawEntityBuffs:
-        - id: 10
-        - id: 11
-    0000000A:
+        - id: 14
+        - id: 15
+    0000000E:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10254
@@ -511,7 +715,7 @@ MonoBehaviour:
         EntityStatType: 100
         Delta: 300
         Percent: 0
-    0000000B:
+    0000000F:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 10699
@@ -638,6 +842,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Actor: {fileID: 2884598377431085198}
   Anim: {fileID: 8100149066918074825}
+--- !u!114 &8797521612815223964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5668223282776311998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 997eb2c1d09a10745af0e0be0d195b86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActorArtHelper: {fileID: 0}
 --- !u!1001 &2195391545392002976
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1256,17 +1473,17 @@ PrefabInstance:
     - target: {fileID: -8326383414374177087, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.000002824545
+      value: -28.123514
       objectReference: {fileID: 0}
     - target: {fileID: -8326383414374177087, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.0000014152273
+      value: 39.443226
       objectReference: {fileID: 0}
     - target: {fileID: -8326383414374177087, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 179.34108
+      value: 172.14793
       objectReference: {fileID: 0}
     - target: {fileID: -6627265635460366252, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
@@ -1276,57 +1493,57 @@ PrefabInstance:
     - target: {fileID: -6596629675466879577, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0.0000010567438
+      value: 11.961652
       objectReference: {fileID: 0}
     - target: {fileID: -6596629675466879577, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -180
+      value: -155.15028
       objectReference: {fileID: 0}
     - target: {fileID: -6596629675466879577, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0.06189012
+      value: 5.5577903
       objectReference: {fileID: 0}
     - target: {fileID: -6228371850010936831, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0.42366228
+      value: 0.42366174
       objectReference: {fileID: 0}
     - target: {fileID: -6039284208594721666, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.0000049114346
+      value: 12.875202
       objectReference: {fileID: 0}
     - target: {fileID: -6039284208594721666, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.000005772126
+      value: -56.498947
       objectReference: {fileID: 0}
     - target: {fileID: -6039284208594721666, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -164.18553
+      value: -171.12424
       objectReference: {fileID: 0}
     - target: {fileID: -4759387369780644526, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0.00000008306645
+      value: 8.098562
       objectReference: {fileID: 0}
     - target: {fileID: -4759387369780644526, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: -142.52512
       objectReference: {fileID: 0}
     - target: {fileID: -4759387369780644526, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -14.4458685
+      value: -9.533977
       objectReference: {fileID: 0}
     - target: {fileID: -2280105265974746415, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 3.662554e-15
+      value: 4.6372034e-15
       objectReference: {fileID: 0}
     - target: {fileID: -2280105265974746415, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
@@ -1341,32 +1558,32 @@ PrefabInstance:
     - target: {fileID: -2106484690631561005, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.00000040792392
+      value: -13.135164
       objectReference: {fileID: 0}
     - target: {fileID: -2106484690631561005, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -180
+      value: -143.39883
       objectReference: {fileID: 0}
     - target: {fileID: -2106484690631561005, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.97193897
+      value: -9.0341625
       objectReference: {fileID: 0}
     - target: {fileID: 514809758540281654, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0.0000001749564
+      value: 45.10524
       objectReference: {fileID: 0}
     - target: {fileID: 514809758540281654, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -180
+      value: -2.3856812
       objectReference: {fileID: 0}
     - target: {fileID: 514809758540281654, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 164.8952
+      value: 108.836464
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
@@ -1376,32 +1593,32 @@ PrefabInstance:
     - target: {fileID: 2012768398569866503, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 89.51421
+      value: 89.514626
       objectReference: {fileID: 0}
     - target: {fileID: 2012768398569866503, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -90.00009
+      value: -89.99995
       objectReference: {fileID: 0}
     - target: {fileID: 2012768398569866503, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 25.142267
+      value: -24.67545
       objectReference: {fileID: 0}
     - target: {fileID: 3975766383519575832, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.0000006774423
+      value: -38.132175
       objectReference: {fileID: 0}
     - target: {fileID: 3975766383519575832, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 179.99998
+      value: -141.41635
       objectReference: {fileID: 0}
     - target: {fileID: 3975766383519575832, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 163.21358
+      value: 74.908104
       objectReference: {fileID: 0}
     - target: {fileID: 4918753458281921464, guid: de153a3bad4138e42b407c0a8a00a507,
         type: 3}

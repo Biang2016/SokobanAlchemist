@@ -137,15 +137,6 @@ public enum EntityPropertyType
 
 public enum EntitySkillPropertyType
 {
-    [LabelText("伤害")]
-    Damage = 10001,
-
-    [LabelText("附加燃烧值")]
-    Attach_FiringValue = 10011,
-
-    [LabelText("附加冰冻值")]
-    Attach_FrozenValue = 10021,
-
     [LabelText("施法正方形范围边长")]
     CastingRadius = 10110,
 

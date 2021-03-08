@@ -208,15 +208,6 @@ public class EntityStatPropSet
         [LabelText("技能名备注")]
         private string skillAlias = "";
 
-        [LabelText("@\"伤害\t\"+Damage")]
-        public EntityProperty Damage = new EntityProperty(EntitySkillPropertyType.Damage);
-
-        [LabelText("@\"附加燃烧值\t\"+Attach_FiringValue")]
-        public EntityProperty Attach_FiringValue = new EntityProperty(EntitySkillPropertyType.Attach_FiringValue);
-
-        [LabelText("@\"附加冰冻值\t\"+Attach_FrozenValue")]
-        public EntityProperty Attach_FrozenValue = new EntityProperty(EntitySkillPropertyType.Attach_FrozenValue);
-
         [LabelText("@\"施法正方形范围边长\t\"+CastingRadius")]
         public EntityProperty CastingRadius = new EntityProperty(EntitySkillPropertyType.CastingRadius);
 
@@ -248,9 +239,6 @@ public class EntityStatPropSet
         {
             if (PropertyDict.Count == 0)
             {
-                PropertyDict.Add(EntitySkillPropertyType.Damage, Damage);
-                PropertyDict.Add(EntitySkillPropertyType.Attach_FiringValue, Attach_FiringValue);
-                PropertyDict.Add(EntitySkillPropertyType.Attach_FrozenValue, Attach_FrozenValue);
                 PropertyDict.Add(EntitySkillPropertyType.CastingRadius, CastingRadius);
                 PropertyDict.Add(EntitySkillPropertyType.EffectRadius, EffectRadius);
                 PropertyDict.Add(EntitySkillPropertyType.Width, Width);
@@ -280,9 +268,6 @@ public class EntityStatPropSet
 
         public void ApplyDataTo(SkillPropertyCollection target)
         {
-            Damage.ApplyDataTo(target.Damage);
-            Attach_FiringValue.ApplyDataTo(target.Attach_FiringValue);
-            Attach_FrozenValue.ApplyDataTo(target.Attach_FrozenValue);
             CastingRadius.ApplyDataTo(target.CastingRadius);
             target.Offset = Offset;
             EffectRadius.ApplyDataTo(target.EffectRadius);

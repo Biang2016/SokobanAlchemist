@@ -142,12 +142,22 @@ public class ActorArtHelper : ActorMonoHelper
 
     #region 第二优先级
 
-    public void SetIsAttacking()
+    public void PlaySkill(EntitySkillIndex skillIndex)
     {
         if (ActorModelAnim != null)
         {
-            ActorModelAnim.SetTrigger("Action");
-            ActorModelAnim.SetTrigger("Attack");
+            ActorModelAnim.SetTrigger(skillIndex.ToString());
+        }
+    }
+
+    /// <summary>
+    /// Executed by animation
+    /// </summary>
+    public void TriggerSkill(EntitySkillIndex skillIndex)
+    {
+        if (Actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
+        {
+            eas.TriggerActiveSkill();
         }
     }
 
@@ -171,12 +181,19 @@ public class ActorArtHelper : ActorMonoHelper
         }
     }
 
-    public void SetWalkingSpeed(int walkGridSpeed)
+    public void SetIsWalking(bool isWalking)
     {
         if (ActorModelAnim != null)
         {
-            ActorModelAnim.SetBool("IsWalking", walkGridSpeed > 0);
-            ActorModelAnim.SetInteger("WalkingGridSpeed", walkGridSpeed);
+            ActorModelAnim.SetBool("IsWalking", isWalking);
+        }
+    }
+
+    public void SetPFMoveGridSpeed(int PFMoveGridSpeed)
+    {
+        if (ActorModelAnim != null)
+        {
+            ActorModelAnim.SetInteger("PFMoveGridSpeed", PFMoveGridSpeed);
         }
     }
 

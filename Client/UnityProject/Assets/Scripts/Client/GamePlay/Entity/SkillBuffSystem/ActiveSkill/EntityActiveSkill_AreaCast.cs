@@ -2,8 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using BiangLibrary;
+using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -25,38 +27,77 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         PurelyRandom, // 当施法目标不存在时按纯随机施法
     }
 
-    [LabelText("判定范围类型")]
-    public CastAreaType M_CastAreaType;
+    #region 施法范围
+
+    public const int CastAreaMatrixExtend = 7;
+
+    [ShowInInspector]
+    [LabelText("施法范围")]
+    [PropertyOrder(1)]
+    [TableMatrix(DrawElementMethod = "DrawColoredEnumElement", ResizableColumns = false, SquareCells = true, RowHeight = 20)]
+    private bool[,] CastAreaMatrix_Editor = new bool[CastAreaMatrixExtend * 2 + 1, CastAreaMatrixExtend * 2 + 1];
+
+    [PropertyOrder(1)]
+    [ButtonGroup("施法范围")]
+    [Button("显示施法范围", ButtonSizes.Medium), GUIColor(0, 1f, 0)]
+    private void ShowCastArea()
+    {
+        for (int x = 0; x < CastAreaMatrix_Editor.GetLength(0); x++)
+        for (int z = 0; z < CastAreaMatrix_Editor.GetLength(1); z++)
+        {
+            CastAreaMatrix_Editor[x, z] = false;
+        }
+
+        foreach (GridPos3D gridPos3D in CastAreaGridPosList)
+        {
+            CastAreaMatrix_Editor[gridPos3D.x, CastAreaMatrixExtend * 2 - gridPos3D.z] = true;
+        }
+    }
+
+    [PropertyOrder(1)]
+    [ButtonGroup("施法范围")]
+    [Button("保存施法范围", ButtonSizes.Medium), GUIColor(0.4f, 0.8f, 1)]
+    private void SaveCastArea()
+    {
+        CastAreaGridPosList.Clear();
+        for (int x = 0; x < CastAreaMatrix_Editor.GetLength(0); x++)
+        for (int z = 0; z < CastAreaMatrix_Editor.GetLength(1); z++)
+        {
+            if (CastAreaMatrix_Editor[x, z])
+            {
+                CastAreaGridPosList.Add(new GridPos3D(x, 0, CastAreaMatrixExtend * 2 - z));
+            }
+        }
+    }
+
+    [HideInInspector]
+    public List<GridPos3D> CastAreaGridPosList = new List<GridPos3D>();
+
+#if UNITY_EDITOR
+    private static bool DrawColoredEnumElement(Rect rect, bool value)
+    {
+        if (Event.current.type == EventType.MouseDown && rect.Contains(Event.current.mousePosition))
+        {
+            value = !value;
+            GUI.changed = true;
+            Event.current.Use();
+        }
+
+        UnityEditor.EditorGUI.DrawRect(rect.Padding(1), value ? CommonUtils.HTMLColorToColor("#5AFF00") : CommonUtils.HTMLColorToColor("#000000"));
+
+        return value;
+    }
+#endif
+
+    #endregion
 
     [LabelText("施法偏好")]
-    [ValidateInput("ValidateCastAreaTypeAndTargetInclination", "当前施法偏好和判定范围类型不兼容")]
     public TargetInclination M_TargetInclination;
 
     internal EntityPropertyValue MaxTargetCount = new EntityPropertyValue();
 
-    private bool ValidateCastAreaTypeAndTargetInclination(TargetInclination newValue)
-    {
-        if (M_CastAreaType == CastAreaType.FrontRectCast || M_CastAreaType == CastAreaType.FrontFanCast || M_CastAreaType == CastAreaType.FrontTriangleCast)
-        {
-            if (newValue == TargetInclination.TargetCenteredNormalDistribution)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private bool DontNeedCastingArea => M_CastAreaType == CastAreaType.FrontRectCast || M_CastAreaType == CastAreaType.FrontFanCast || M_CastAreaType == CastAreaType.FrontTriangleCast;
-
     [LabelText("施法于地表")]
     public bool CastOnTopLayer;
-
-    [LabelText("扇形角度90/180/270")]
-    [ShowIf("NeedFanAngle")]
-    public int FanAngle;
-
-    private bool NeedFanAngle => M_CastAreaType == CastAreaType.FrontFanCast;
 
     [LabelText("准度标准差/格")]
     public float AccurateStandardDeviation;
@@ -94,19 +135,6 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     private List<GridPos3D> SkillAreaGPs = new List<GridPos3D>(16);
     protected List<GridPos3D> RealSkillEffectGPs = new List<GridPos3D>(16);
 
-    protected override bool ValidateSkillTrigger()
-    {
-        if (!base.ValidateSkillTrigger()) return false;
-        GridPos3D targetGP = GetTargetGP();
-        GridRect castingRect = GetCastingRect();
-        if (!DontNeedCastingArea && !castingRect.Contains(targetGP))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
     private GridPos3D GetTargetGP()
     {
         GridPos3D targetGP = GridPos3D.Zero;
@@ -141,8 +169,8 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     private GridRect GetCastingRect()
     {
         int castingRadius = GetValue(EntitySkillPropertyType.CastingRadius);
-        int xMin = Entity.WorldGP.x - (castingRadius - 1);
-        int zMin = Entity.WorldGP.z - (castingRadius - 1);
+        int xMin = Entity.WorldGP.x - castingRadius;
+        int zMin = Entity.WorldGP.z - castingRadius;
         return new GridRect(xMin, zMin, castingRadius * 2 + 1, castingRadius * 2 + 1);
     }
 
@@ -165,14 +193,6 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         int xMax_SkillCastPos = castingRect.x_max;
         int zMin_SkillCastPos = castingRect.z_min;
         int zMax_SkillCastPos = castingRect.z_max;
-
-        if (M_CastAreaType == CastAreaType.RectCast)
-        {
-            xMin_SkillCastPos += width / 2 - 1;
-            xMax_SkillCastPos -= width / 2 + 1 - 1;
-            zMin_SkillCastPos += width / 2 - 1;
-            zMax_SkillCastPos -= width / 2 + 1 - 1;
-        }
 
         switch (M_TargetInclination)
         {
@@ -210,140 +230,12 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
             }
         }
 
-        switch (M_CastAreaType)
+        foreach (GridPos3D matrixOffset in CastAreaGridPosList)
         {
-            case CastAreaType.CircleCast:
-            {
-                for (int xDiff = -(effectRadius - 1); xDiff <= (effectRadius - 1); xDiff++)
-                {
-                    for (int zDiff = -(effectRadius - 1); zDiff <= (effectRadius - 1); zDiff++)
-                    {
-                        if (Mathf.Abs(xDiff) + Mathf.Abs(zDiff) < effectRadius)
-                        {
-                            GridPos3D gp = skillCastPosition + new GridPos3D(xDiff, 0, zDiff);
-                            AddGP(gp);
-                        }
-                    }
-                }
-
-                break;
-            }
-            case CastAreaType.RectCast:
-            {
-                for (int xDiff = -(width - 1) / 2; xDiff <= width / 2; xDiff++)
-                {
-                    for (int zDiff = -(width - 1) / 2; zDiff <= width / 2; zDiff++)
-                    {
-                        GridPos3D gp = skillCastPosition + new GridPos3D(xDiff, 0, zDiff);
-                        AddGP(gp);
-                    }
-                }
-
-                break;
-            }
-            case CastAreaType.FrontRectCast:
-            {
-                int xSign = Mathf.RoundToInt(Entity.CurForward.x);
-                int zSign = Mathf.RoundToInt(Entity.CurForward.z);
-                if (xSign == 0)
-                {
-                    for (int xDiff = 0; xDiff < width; xDiff++)
-                    {
-                        for (int zDiff = 1 * zSign; Mathf.Abs(zDiff) <= depth; zDiff += zSign)
-                        {
-                            GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff) + rotated_offset3D;
-                            AddGP(gp);
-                        }
-                    }
-                }
-                else if (zSign == 0)
-                {
-                    for (int xDiff = 1 * xSign; Mathf.Abs(xDiff) <= depth; xDiff += xSign)
-                    {
-                        for (int zDiff = 0; zDiff < width; zDiff++)
-                        {
-                            GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff) + rotated_offset3D;
-                            AddGP(gp);
-                        }
-                    }
-                }
-
-                break;
-            }
-            case CastAreaType.FrontFanCast:
-            {
-                int xSign = Mathf.RoundToInt(Entity.CurForward.x);
-                int zSign = Mathf.RoundToInt(Entity.CurForward.z);
-                if (xSign == 0)
-                {
-                    for (int xDiff = -(effectRadius - 1); xDiff <= (effectRadius - 1) + (width - 1); xDiff++)
-                    {
-                        for (int zDiff = 1 * zSign; Mathf.Abs(zDiff) <= effectRadius; zDiff += zSign)
-                        {
-                            int xDiff_IgnoreWidth = xDiff <= 0 ? xDiff : (xDiff < width ? 0 : xDiff - (width - 1));
-                            if (Mathf.Abs(xDiff_IgnoreWidth) < Mathf.Abs(zDiff))
-                            {
-                                GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff) + rotated_offset3D;
-                                AddGP(gp);
-                            }
-                        }
-                    }
-                }
-                else if (zSign == 0)
-                {
-                    for (int xDiff = 1 * xSign; Mathf.Abs(xDiff) <= effectRadius; xDiff += xSign)
-                    {
-                        for (int zDiff = -(effectRadius - 1); zDiff <= (effectRadius - 1) + (width - 1); zDiff++)
-                        {
-                            int zDiff_IgnoreWidth = zDiff <= 0 ? zDiff : (zDiff < width ? 0 : zDiff - (width - 1));
-                            if (Mathf.Abs(zDiff_IgnoreWidth) < Mathf.Abs(xDiff))
-                            {
-                                GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff) + rotated_offset3D;
-                                AddGP(gp);
-                            }
-                        }
-                    }
-                }
-
-                break;
-            }
-            case CastAreaType.FrontTriangleCast:
-            {
-                int xSign = Mathf.RoundToInt(Entity.CurForward.x);
-                int zSign = Mathf.RoundToInt(Entity.CurForward.z);
-                if (xSign == 0)
-                {
-                    for (int xDiff = -(effectRadius - 1); xDiff <= (effectRadius - 1) + (width - 1); xDiff++)
-                    {
-                        for (int zDiff = 1 * zSign; Mathf.Abs(zDiff) <= effectRadius; zDiff += zSign)
-                        {
-                            int xDiff_IgnoreWidth = xDiff <= 0 ? xDiff : (xDiff < width ? 0 : xDiff - (width - 1));
-                            if (Mathf.Abs(xDiff_IgnoreWidth) + Mathf.Abs(zDiff) <= effectRadius)
-                            {
-                                GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff) + rotated_offset3D;
-                                AddGP(gp);
-                            }
-                        }
-                    }
-                }
-                else if (zSign == 0)
-                {
-                    for (int xDiff = 1 * xSign; Mathf.Abs(xDiff) <= effectRadius; xDiff += xSign)
-                    {
-                        for (int zDiff = -(effectRadius - 1); zDiff <= (effectRadius - 1) + (width - 1); zDiff++)
-                        {
-                            int zDiff_IgnoreWidth = zDiff <= 0 ? zDiff : (zDiff < width ? 0 : zDiff - (width - 1));
-                            if (Mathf.Abs(xDiff) + Mathf.Abs(zDiff_IgnoreWidth) <= effectRadius)
-                            {
-                                GridPos3D gp = Entity.WorldGP + new GridPos3D(xDiff, 0, zDiff) + rotated_offset3D;
-                                AddGP(gp);
-                            }
-                        }
-                    }
-                }
-
-                break;
-            }
+            GridPos3D localOffset = new GridPos3D(matrixOffset.x - CastAreaMatrixExtend, matrixOffset.y, matrixOffset.z - CastAreaMatrixExtend);
+            GridPos rotatedGrid = GridPosR.TransformOccupiedPosition(new GridPosR(skillCastPosition.x, skillCastPosition.z, Entity.EntityOrientation), new GridPos(localOffset.x, localOffset.z));
+            GridPos3D rotatedGrid3D = new GridPos3D(rotatedGrid.x, skillCastPosition.y, rotatedGrid.z);
+            AddGP(rotatedGrid3D);
         }
 
         void AddGP(GridPos3D gp)
@@ -505,11 +397,10 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     {
         base.ChildClone(cloneData);
         EntityActiveSkill_AreaCast newEAS = (EntityActiveSkill_AreaCast) cloneData;
-        newEAS.M_CastAreaType = M_CastAreaType;
         newEAS.M_TargetInclination = M_TargetInclination;
         newEAS.MaxTargetCount = MaxTargetCount;
         newEAS.CastOnTopLayer = CastOnTopLayer;
-        newEAS.FanAngle = FanAngle;
+        newEAS.CastAreaGridPosList = CastAreaGridPosList.Clone();
         newEAS.AccurateStandardDeviation = AccurateStandardDeviation;
         newEAS.BattleIndicatorTypeName = BattleIndicatorTypeName;
         newEAS.ProjectOffsetZMax = ProjectOffsetZMax;
@@ -525,11 +416,10 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     {
         base.CopyDataFrom(srcData);
         EntityActiveSkill_AreaCast srcEAS = (EntityActiveSkill_AreaCast) srcData;
-        M_CastAreaType = srcEAS.M_CastAreaType;
         M_TargetInclination = srcEAS.M_TargetInclination;
         MaxTargetCount = srcEAS.MaxTargetCount;
         CastOnTopLayer = srcEAS.CastOnTopLayer;
-        FanAngle = srcEAS.FanAngle;
+        CastAreaGridPosList = srcEAS.CastAreaGridPosList.Clone();
         AccurateStandardDeviation = srcEAS.AccurateStandardDeviation;
         BattleIndicatorTypeName = srcEAS.BattleIndicatorTypeName;
         ProjectOffsetZMax = srcEAS.ProjectOffsetZMax;

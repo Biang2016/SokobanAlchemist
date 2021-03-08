@@ -88,6 +88,8 @@ public class ActorAIAgent
     private ActorPathFinding.Node currentNode;
     private ActorPathFinding.Node nextNode;
 
+    internal int NextStraightNodeCount = 1;
+
     public void InterruptCurrentPathFinding()
     {
         if (!IsPathFinding) return;
@@ -97,6 +99,8 @@ public class ActorAIAgent
             lastNode.Release();
             CurrentPath.RemoveAt(CurrentPath.Count - 1);
         }
+
+        NextStraightNodeCount = 0;
     }
 
     /// <summary>
@@ -114,6 +118,7 @@ public class ActorAIAgent
         nextNode = null;
         Actor.CurMoveAttempt = Vector3.zero;
         currentDestination_PF = GridPos3D.Zero;
+        NextStraightNodeCount = 0;
         if (ENABLE_ACTOR_AI_AGENT_LOG) Debug.Log($"{Actor.name} [AIAgent] ClearPathFinding");
     }
 
@@ -168,6 +173,7 @@ public class ActorAIAgent
         {
             currentNode = CurrentPath.Count > 0 ? CurrentPath[0] : null;
             nextNode = CurrentPath.Count > 1 ? CurrentPath[1] : null;
+            RecalculateNextStraightNodeCount();
 
             // 绘制Debug寻路点
             ClearNavTrackMarkers();
@@ -191,6 +197,25 @@ public class ActorAIAgent
         {
             InterruptCurrentPathFinding();
             return SetDestinationRetCode.Failed;
+        }
+    }
+
+    private void RecalculateNextStraightNodeCount()
+    {
+        NextStraightNodeCount = 0;
+        if (currentNode == null || nextNode == null) return;
+        GridPos3D diff = nextNode.GridPos3D_PF - currentNode.GridPos3D_PF;
+        int nextNodeIndex = CurrentPath.IndexOf(nextNode);
+        for (int i = nextNodeIndex; i < CurrentPath.Count; i++)
+        {
+            if (CurrentPath[i].GridPos3D_PF - CurrentPath[i - 1].GridPos3D_PF == diff)
+            {
+                NextStraightNodeCount++;
+            }
+            else
+            {
+                break;
+            }
         }
     }
 
@@ -235,6 +260,7 @@ public class ActorAIAgent
 
                         currentNode = nextNode;
                         nextNode = nextNodeAfterNextNode;
+                        RecalculateNextStraightNodeCount();
                     }
                     else if (diff.magnitude > 1 + arriveThreshold && !diff.x.Equals(0) && !diff.z.Equals(0)) // 由于某些意外，下一个路径点和目前离得较远，会发生角色原地打转不寻路的bug，此处强行重置
                     {

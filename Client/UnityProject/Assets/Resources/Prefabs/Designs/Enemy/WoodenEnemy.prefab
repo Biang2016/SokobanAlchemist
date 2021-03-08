@@ -120,6 +120,11 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 1000
+    BeCollidedHitStopDuration:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     ExplodeDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
@@ -264,21 +269,6 @@ MonoBehaviour:
       MaxValue: 0
     SkillsPropertyCollections:
     - skillAlias: "\u666E\u901A\u653B\u51FB"
-      Damage:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 100
-      Attach_FiringValue:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-      Attach_FrozenValue:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
       CastingRadius:
         BaseValue: 0
         ModifiedValue: 0
@@ -291,6 +281,7 @@ MonoBehaviour:
         MaxValue: 3
       Offset:
         x: 0
+        y: 0
         z: 0
       Width:
         BaseValue: 1
@@ -429,10 +420,12 @@ MonoBehaviour:
         RawSubActiveSkillList: []
         SubActiveSkillTriggerLogicList: []
         InterruptSubActiveSkillsWhenInterrupted: 0
-        M_CastAreaType: 4
+        CastAreaGridPosList:
+        - x: 7
+          y: 0
+          z: 8
         M_TargetInclination: 2
         CastOnTopLayer: 0
-        FanAngle: 0
         AccurateStandardDeviation: 0
         BattleIndicatorTypeName: GridWarning
         ProjectOffsetZMax: 0

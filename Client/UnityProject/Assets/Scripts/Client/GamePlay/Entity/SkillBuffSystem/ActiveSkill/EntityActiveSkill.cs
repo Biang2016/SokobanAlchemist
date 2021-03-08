@@ -310,20 +310,26 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
         OnSkillFinishedCallback = null;
     }
 
-    public virtual bool TriggerActiveSkill()
+    public bool CheckCanTriggerSkill()
     {
         if (!ValidateSkillTrigger())
         {
             OnValidateFailed?.Invoke();
             return false;
         }
+        else
+        {
+            return true;
+        }
+    }
 
+    public virtual void TriggerActiveSkill()
+    {
         SkillCoroutine = Entity.StartCoroutine(Co_CastSkill(
             GetValue(EntitySkillPropertyType.WingUp),
             GetValue(EntitySkillPropertyType.CastDuration),
             GetValue(EntitySkillPropertyType.Recovery),
             GetValue(EntitySkillPropertyType.Cooldown)));
-        return true;
     }
 
     protected virtual bool ValidateSkillTrigger()
@@ -437,7 +443,10 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
             subSkillClone.Entity = Entity;
             subSkillClone.ParentActiveSkill = ParentActiveSkill;
             subSkillClone.OnInit();
-            subSkillClone.TriggerActiveSkill();
+            if (subSkillClone.CheckCanTriggerSkill())
+            {
+                subSkillClone.TriggerActiveSkill();
+            }
         }
 
         foreach (SubActiveSkillTriggerLogic logic in SubActiveSkillTriggerLogicList)

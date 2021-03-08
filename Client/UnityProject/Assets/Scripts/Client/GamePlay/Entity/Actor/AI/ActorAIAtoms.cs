@@ -396,10 +396,10 @@ public static class ActorAIAtoms
             {
                 actor.ActorAIAgent.TargetActor = BattleManager.Instance.Player1;
                 actor.ActorAIAgent.TargetActorGP = BattleManager.Instance.Player1.WorldGP;
-                bool triggerSuc = eas.TriggerActiveSkill();
+                bool triggerSuc = eas.CheckCanTriggerSkill();
                 if (triggerSuc)
                 {
-                    actor.ActorArtHelper.SetIsAttacking();
+                    eas.TriggerActiveSkill();
                     return Status.Success;
                 }
                 else
@@ -409,6 +409,45 @@ public static class ActorAIAtoms
             }
 
             return Status.Failure;
+        }
+    }
+
+    [Category("敌兵/战斗")]
+    [Name("按动画释放技能")]
+    [Description("按动画释放技能")]
+    public class BT_Enemy_TriggerSkillByAnimation : BTNode
+    {
+        [Name("技能编号")]
+        public BBParameter<EntitySkillIndex> EntitySkillIndex;
+
+        public override string name => $"按动画释放技能 [{EntitySkillIndex.value}]";
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            return TriggerSkill(Actor, EntitySkillIndex.value);
+        }
+
+        public static Status TriggerSkill(Actor actor, EntitySkillIndex skillIndex)
+        {
+            if (actor == null || actor.ActorAIAgent == null) return Status.Failure;
+            if (actor.IsFrozen) return Status.Failure;
+            if (actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
+            {
+                actor.ActorAIAgent.TargetActor = BattleManager.Instance.Player1;
+                actor.ActorAIAgent.TargetActorGP = BattleManager.Instance.Player1.WorldGP;
+                bool triggerSuc = eas.CheckCanTriggerSkill();
+                if (triggerSuc)
+                {
+                    actor.ActorArtHelper.PlaySkill(skillIndex);
+                    return Status.Success;
+                }
+                else
+                {
+                    return Status.Failure;
+                }
+            }
+
+            return Status.Success;
         }
     }
 
