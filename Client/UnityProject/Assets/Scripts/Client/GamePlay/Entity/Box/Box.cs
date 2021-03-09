@@ -275,6 +275,11 @@ public partial class Box : Entity
     [LabelText("合并延迟")]
     private float MergeDelay = 0;
 
+    [SerializeField]
+    [FoldoutGroup("箱子属性")]
+    [LabelText("是否永远朝向相机")]
+    private bool FaceToCameraForever = false;
+
     #region 合成
 
     [FoldoutGroup("合成")]
@@ -955,6 +960,11 @@ public partial class Box : Entity
                     ps.OnTick(1f);
                 }
             }
+        }
+
+        if (FaceToCameraForever)
+        {
+            SwitchEntityOrientation(CameraManager.Instance.FieldCamera.RotateDirection);
         }
 
         if ((state == States.BeingKicked || state == States.BeingKickedToGrind) && IsInGridSystem)
