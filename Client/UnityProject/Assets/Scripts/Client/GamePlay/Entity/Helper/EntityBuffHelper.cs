@@ -222,6 +222,11 @@ public class EntityBuffHelper : EntityMonoHelper
                     newBuff.Delta = Mathf.Min(0, newBuff.Delta + Entity.EntityStatPropSet.FiringDamageDefense.GetModifiedValue);
                     break;
                 }
+                case EntityBuffAttribute.FrozenDamage:
+                {
+                    newBuff.Delta = Mathf.Min(0, newBuff.Delta + Entity.EntityStatPropSet.FrozenDamageDefense.GetModifiedValue);
+                    break;
+                }
             }
         }
     }

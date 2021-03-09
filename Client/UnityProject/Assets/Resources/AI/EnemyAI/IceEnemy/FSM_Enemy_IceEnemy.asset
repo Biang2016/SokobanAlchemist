@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f945e777233a59f4aba40aeca29093a6, type: 3}
-  m_Name: FSM_Enemy_Common
+  m_Name: FSM_Enemy_IceEnemy
   m_EditorClassIdentifier: 
   _serializedGraph: '{"type":"NodeCanvas.StateMachines.FSM","nodes":[{"_nestedBT":{"_value":1},"_name":"Idling","_position":{"x":780.0,"y":75.0},"$type":"NodeCanvas.StateMachines.NestedBTState","$id":"0"},{"_nestedBT":{"_value":2},"_name":"Chasing","_position":{"x":540.0,"y":-90.0},"$type":"NodeCanvas.StateMachines.NestedBTState","$id":"1"},{"_nestedBT":{"_value":3},"_variablesMap":[],"_name":"Attacking","_position":{"x":855.0,"y":-285.0},"$type":"NodeCanvas.StateMachines.NestedBTState","$id":"2"},{"_flowScript":{"_value":4},"_position":{"x":660.0,"y":-210.0},"$type":"NodeCanvas.StateMachines.FlowScriptState","$id":"3"},{"_position":{"x":990.0,"y":-105.0},"$type":"NodeCanvas.StateMachines.AnyState","$id":"4"},{"_nestedBT":{"_value":5},"_name":"Escaping","_position":{"x":1020.0,"y":180.0},"$type":"NodeCanvas.StateMachines.NestedBTState","$id":"5"}],"connections":[{"_condition":{"conditions":[{"RangeRadius":{"_name":"GuardRange","_targetVariableID":"31e68abb-9456-4d93-9c19-e1255b4debfa"},"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},{"KeepDistanceMin":{"_name":"KeepDistanceMin","_targetVariableID":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"},"KeepDistanceMax":{"_name":"KeepDistanceMax","_targetVariableID":"f4670f67-b504-4764-ac45-263d9b4a165b"},"GuardingRange":{"_name":"GuardRange","_targetVariableID":"31e68abb-9456-4d93-9c19-e1255b4debfa"},"$type":"ActorAIAtoms+BT_Enemy_CheckCanMoveToMainPlayer"}],"$type":"NodeCanvas.Framework.ConditionList"},"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"checkMode":1,"conditions":[{"RangeRadius":{"_name":"ChasingRange","_targetVariableID":"93fd230d-bfe4-4b6f-87dc-63c1c7248307"},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},{"KeepDistanceMin":{"_name":"KeepDistanceMin","_targetVariableID":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"},"KeepDistanceMax":{"_name":"KeepDistanceMax","_targetVariableID":"f4670f67-b504-4764-ac45-263d9b4a165b"},"GuardingRange":{"_name":"GuardRange","_targetVariableID":"31e68abb-9456-4d93-9c19-e1255b4debfa"},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_CheckCanMoveToMainPlayer"}],"$type":"NodeCanvas.Framework.ConditionList"},"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"0"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"RangeRadius":{"_name":"KeepDistanceMax","_targetVariableID":"f4670f67-b504-4764-ac45-263d9b4a165b"},"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"RangeRadius":{"_name":"KeepDistanceMax","_targetVariableID":"f4670f67-b504-4764-ac45-263d9b4a165b"},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"conditions":[{"LifeThreshold":{"_name":"EscapeLowHealth","_targetVariableID":"1cb38a05-fd42-4a92-af45-375f465e1e7a"},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_LifeCondition"},{"RangeRadius":{"_name":"GuardRange","_targetVariableID":"31e68abb-9456-4d93-9c19-e1255b4debfa"},"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"}],"$type":"NodeCanvas.Framework.ConditionList"},"_sourceNode":{"$ref":"4"},"_targetNode":{"$ref":"5"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"StuckTime":{"_value":3000},"$type":"ActorAIAtoms+BT_Enemy_StuckWithNavTask"},"_sourceNode":{"$ref":"4"},"_targetNode":{"$ref":"0"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"checkMode":1,"conditions":[{"LifeThreshold":{"_name":"EscapeLowHealth","_targetVariableID":"1cb38a05-fd42-4a92-af45-375f465e1e7a"},"$type":"ActorAIAtoms+BT_Enemy_LifeCondition"},{"RangeRadius":{"_name":"GuardRange","_targetVariableID":"31e68abb-9456-4d93-9c19-e1255b4debfa"},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"}],"$type":"NodeCanvas.Framework.ConditionList"},"_sourceNode":{"$ref":"5"},"_targetNode":{"$ref":"0"},"$type":"NodeCanvas.StateMachines.FSMConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
   _objectReferences:
   - {fileID: 0}
-  - {fileID: 11400000, guid: b12ce59e40ff9f342b36c3c233ee4ea5, type: 2}
-  - {fileID: 11400000, guid: 1b8a82413f86bd84e8b043cd10066d8b, type: 2}
-  - {fileID: 11400000, guid: 461ed445ecab97543af8435bf8069e83, type: 2}
-  - {fileID: 11400000, guid: c2407a999f970f448a5419b9f8d3a4d7, type: 2}
-  - {fileID: 11400000, guid: 8f2113b08ca2d384cb73c08dab46f837, type: 2}
+  - {fileID: 11400000, guid: f583ed3b7ddfb9a46a7737dda6cf5e92, type: 2}
+  - {fileID: 11400000, guid: c7f97550ce1d9934ba016beacb4f12be, type: 2}
+  - {fileID: 11400000, guid: 721c92f06c04d1a44b80d2c0614b78f7, type: 2}
+  - {fileID: 11400000, guid: b9d90fd54096cc446991a162c4228e5a, type: 2}
+  - {fileID: 11400000, guid: e4a4782fd18e4cd4b80acaaa1d50441d, type: 2}
   _graphSource:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: -187, y: 357}
-    _zoomFactor: 0.75000834
+    _translation: {x: -227, y: 379}
+    _zoomFactor: 1
   _haltSerialization: 0
 #---GRAPH_START---
 #The pretty formatted json serialization bellow is only a reference to help in version control diff. Other than that it is not used at all.

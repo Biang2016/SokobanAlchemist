@@ -105,6 +105,10 @@ public class EntityStatPropSet
     public bool IsFrozen => FrozenLevel.Value > 1; // 1级不算冰冻， 2级~4级冰冻对应三个模型
 
     [BoxGroup("冰冻")]
+    [LabelText("@\"冰冻伤害抵消\t\"+FrozenDamageDefense")]
+    public EntityProperty FrozenDamageDefense = new EntityProperty(EntityPropertyType.FrozenDamageDefense);
+
+    [BoxGroup("冰冻")]
     [LabelText("冰冻持续特效")]
     [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
     public string FrozenFX;
@@ -321,6 +325,7 @@ public class EntityStatPropSet
         #region 冰冻
 
         FrozenResistance.Initialize();
+        FrozenDamageDefense.Initialize();
 
         #endregion
 
@@ -412,6 +417,7 @@ public class EntityStatPropSet
 
         FrozenResistance.OnValueChanged = OnFrozenResistanceChangedAction;
         PropertyDict.Add(EntityPropertyType.FrozenResistance, FrozenResistance);
+        PropertyDict.Add(EntityPropertyType.FrozenDamageDefense, FrozenDamageDefense);
 
         FrozenValue.AbnormalStatResistance = FrozenResistance.GetModifiedValue;
         if (FrozenValue.AbnormalStatResistance < 200)
@@ -492,6 +498,7 @@ public class EntityStatPropSet
         {
             int a = 0;
         }
+
         foreach (EntityBuff rawEntityDefaultBuff in RawEntityDefaultBuffs)
         {
             Entity.EntityBuffHelper.AddBuff(rawEntityDefaultBuff.Clone());
@@ -745,6 +752,7 @@ public class EntityStatPropSet
         FrozenResistance.ApplyDataTo(target.FrozenResistance);
         FrozenValue.ApplyDataTo(target.FrozenValue);
         FrozenLevel.ApplyDataTo(target.FrozenLevel);
+        FrozenDamageDefense.ApplyDataTo(target.FrozenDamageDefense);
         target.FrozenFX = FrozenFX;
         target.FrozenFXScaleCurve = FrozenFXScaleCurve; // 风险，此处没有深拷贝
 

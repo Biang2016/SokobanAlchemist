@@ -100,7 +100,7 @@ public class ActorAIAgent
             CurrentPath.RemoveAt(CurrentPath.Count - 1);
         }
 
-        NextStraightNodeCount = 0;
+        RecalculateNextStraightNodeCount();
     }
 
     /// <summary>
@@ -119,6 +119,7 @@ public class ActorAIAgent
         Actor.CurMoveAttempt = Vector3.zero;
         currentDestination_PF = GridPos3D.Zero;
         NextStraightNodeCount = 0;
+        ClearNavTrackMarkers();
         if (ENABLE_ACTOR_AI_AGENT_LOG) Debug.Log($"{Actor.name} [AIAgent] ClearPathFinding");
     }
 

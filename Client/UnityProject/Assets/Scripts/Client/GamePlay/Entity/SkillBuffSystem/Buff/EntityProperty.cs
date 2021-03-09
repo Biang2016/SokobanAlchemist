@@ -46,25 +46,21 @@ public enum EntityPropertyType
     [LabelText("血量耐久上限")]
     MaxHealthDurability = 0,
 
-    //[EntityProperty]
-    //[LabelText("血量耐久回复速度")]
-    //HealthDurabilityRecovery = 1,
-
-    //[EntityProperty]
-    //[LabelText("血量耐久回复时间间隔")]
-    //HealthDurabilityRecoveryTimeInterval = 2,
-
     [EntityProperty]
     [LabelText("燃烧伤害抵消")]
-    FiringDamageDefense = 10,
+    FiringDamageDefense = 1,
 
     [EntityProperty]
     [LabelText("爆炸伤害抵消")]
-    ExplodeDamageDefense = 11,
+    ExplodeDamageDefense = 2,
 
     [ActorProperty]
     [LabelText("角色碰撞伤害抵消")]
-    ActorCollideDamageDefense = 12,
+    ActorCollideDamageDefense = 3,
+
+    [ActorProperty]
+    [LabelText("冰冻伤害抵消")]
+    FrozenDamageDefense = 4,
 
     [BoxProperty]
     [LabelText("箱子碰撞减少自身耐久")]

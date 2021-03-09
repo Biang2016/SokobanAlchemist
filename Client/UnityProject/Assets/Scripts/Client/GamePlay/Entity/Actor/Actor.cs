@@ -216,7 +216,7 @@ public class Actor : Entity
     public int ActorWidth = 1;
 
     [FoldoutGroup("占位")]
-    [LabelText("角色体宽")]
+    [LabelText("角色身高")]
     public int ActorHeight = 1;
 
     #endregion
