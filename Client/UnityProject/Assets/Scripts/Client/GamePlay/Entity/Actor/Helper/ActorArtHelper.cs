@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class ActorArtHelper : ActorMonoHelper
@@ -12,6 +13,7 @@ public class ActorArtHelper : ActorMonoHelper
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
+        CanTurn = true;
         if (ActorModelAnim != null)
         {
             foreach (AnimatorControllerParameter parameter in ActorModelAnim.parameters)
@@ -26,6 +28,12 @@ public class ActorArtHelper : ActorMonoHelper
                     ActorModelAnim.ResetTrigger(parameter.name);
             }
         }
+    }
+
+    public override void OnHelperUsed()
+    {
+        base.OnHelperUsed();
+        CanTurn = true;
     }
 
     public void Vault()
@@ -172,6 +180,8 @@ public class ActorArtHelper : ActorMonoHelper
     #endregion
 
     #region 第三优先级
+
+    internal bool CanTurn = true;
 
     public void SetIsChasing(bool isChasing)
     {

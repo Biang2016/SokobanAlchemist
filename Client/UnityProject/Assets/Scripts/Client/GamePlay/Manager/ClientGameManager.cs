@@ -238,6 +238,15 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             return;
         }
 
+        if (Input.GetKey(KeyCode.Equals))
+        {
+            Time.timeScale = 0.1f;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
+
         if (ControlManager.Battle_LeftRotateCamera.Up)
         {
             CameraManager.Instance.FieldCamera.CameraLeftRotate();

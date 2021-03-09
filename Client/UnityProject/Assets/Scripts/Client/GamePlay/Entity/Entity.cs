@@ -87,6 +87,11 @@ public abstract class Entity : PoolObject
         }
         set
         {
+            if (this is Actor actor && !actor.ActorArtHelper.CanTurn)
+            {
+                return;
+            }
+
             if (value != Vector3.zero)
             {
                 if (value == Vector3.forward) SwitchEntityOrientation(GridPosR.Orientation.Up);
@@ -109,9 +114,9 @@ public abstract class Entity : PoolObject
 
     public GridPosR.Orientation EntityOrientation { get; protected set; }
 
-    protected virtual void SwitchEntityOrientation(GridPosR.Orientation boxOrientation)
+    protected virtual void SwitchEntityOrientation(GridPosR.Orientation entityOrientation)
     {
-        EntityOrientation = boxOrientation;
+        EntityOrientation = entityOrientation;
     }
 
     #endregion

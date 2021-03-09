@@ -671,15 +671,18 @@ public class Actor : Entity
                 RigidBody.drag = 0;
                 RigidBody.mass = 1f;
 
-                Vector3 velDiff = CurMoveAttempt.normalized * Time.fixedDeltaTime * Accelerate;
-                Vector3 finalVel = RigidBody.velocity + velDiff;
-                float finalSpeed = EntityStatPropSet.MoveSpeed.GetModifiedValue / 10f;
-                if (finalVel.magnitude > finalSpeed)
+                if (EntityStatPropSet.MoveSpeed.GetModifiedValue != 0)
                 {
-                    finalVel = finalVel.normalized * finalSpeed;
-                }
+                    Vector3 velDiff = CurMoveAttempt.normalized * Time.fixedDeltaTime * Accelerate;
+                    Vector3 finalVel = RigidBody.velocity + velDiff;
+                    float finalSpeed = EntityStatPropSet.MoveSpeed.GetModifiedValue / 10f;
+                    if (finalVel.magnitude > finalSpeed)
+                    {
+                        finalVel = finalVel.normalized * finalSpeed;
+                    }
 
-                RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);
+                    RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);
+                }
 
                 CurForward = CurMoveAttempt.normalized;
 
@@ -775,7 +778,7 @@ public class Actor : Entity
 
     private void RemoveRigidbody()
     {
-        if (HasRigidbody && RigidBody!=null)
+        if (HasRigidbody && RigidBody != null)
         {
             Destroy(RigidBody);
             HasRigidbody = false;

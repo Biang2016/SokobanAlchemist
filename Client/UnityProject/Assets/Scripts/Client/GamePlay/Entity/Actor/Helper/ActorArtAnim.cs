@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ActorArtAnim : MonoBehaviour
 {
@@ -40,5 +39,21 @@ public class ActorArtAnim : MonoBehaviour
     public void TriggerSkill(EntitySkillIndex skillIndex)
     {
         ActorArtHelper.TriggerSkill(skillIndex);
+    }
+
+    /// <summary>
+    /// Executed by animation
+    /// </summary>
+    public void SetCanTurn()
+    {
+        ActorArtHelper.CanTurn = true;
+    }
+
+    /// <summary>
+    /// Executed by animation
+    /// </summary>
+    public void SetCannotTurn()
+    {
+        ActorArtHelper.CanTurn = false;
     }
 }
