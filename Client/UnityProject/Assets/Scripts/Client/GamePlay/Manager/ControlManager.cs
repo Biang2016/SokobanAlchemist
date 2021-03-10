@@ -124,6 +124,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     public ButtonState Common_PauseGame = new ButtonState() {ButtonName = ButtonNames.Common_Pause};
     public ButtonState Common_ToggleUI = new ButtonState() {ButtonName = ButtonNames.Common_ToggleUI};
     public ButtonState Common_ToggleDebugButton = new ButtonState() {ButtonName = ButtonNames.Common_ToggleDebugButton};
+    public ButtonState Common_InteractiveKey = new ButtonState() {ButtonName = ButtonNames.Common_InteractiveKey };
 
     #endregion
 
@@ -226,6 +227,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         Common_PauseGame.GetStateCallbackFromContext_UpDownPress(CommonInputActions.PauseGame);
         Common_ToggleUI.GetStateCallbackFromContext_UpDownPress(CommonInputActions.ToggleUI);
         Common_ToggleDebugButton.GetStateCallbackFromContext_UpDownPress(CommonInputActions.ToggleDebugButton);
+        Common_InteractiveKey.GetStateCallbackFromContext_UpDownPress(CommonInputActions.InteractiveKey);
 
         PlayerInput.Enable();
         CommonInputActions.Enable();

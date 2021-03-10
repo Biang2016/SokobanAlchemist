@@ -1299,6 +1299,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "InteractiveKey",
+                    "type": "Button",
+                    "id": "2a2737b3-6adb-4d9c-ab7c-96f34dd805db",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
                 }
             ],
             "bindings": [
@@ -1464,6 +1472,17 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "ToggleDebugButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "07a95fc5-987a-4f13-a436-67b3a7c561cc",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "InteractiveKey",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

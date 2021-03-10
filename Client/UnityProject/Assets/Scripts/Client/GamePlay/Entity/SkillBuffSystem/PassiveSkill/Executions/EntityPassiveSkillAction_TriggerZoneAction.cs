@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
+using Google.Protobuf.WellKnownTypes;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -89,7 +90,20 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
     [LabelText("停留触发事件")]
     public List<IPureAction> EntityActions_Stay = new List<IPureAction>();
 
+    [LabelText("停留时按交互键触发")]
+    public bool EffectiveWhenInteractiveKeyDown = false;
+
+    [LabelText("交互提示语")]
+    public string InteractiveKeyNotice = "";
+
+    [LabelText("交互提示语位置")]
+    public NoticePanel.TipPositionType TipPositionType = NoticePanel.TipPositionType.RightCenter;
+
+    [LabelText("交互提示语持续时间")]
+    public float InteractiveKeyNoticeDuration = 0.5f;
+
     [LabelText("停留时重复触发间隔时间/s")]
+    [HideIf("EffectiveWhenInteractiveKeyDown")]
     public float ActionInterval = 1f;
 
     [SerializeReference]
@@ -103,6 +117,11 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
             Entity target = collider.GetComponentInParent<Entity>();
             if (target.IsNotNullAndAlive())
             {
+                if (EffectiveWhenInteractiveKeyDown)
+                {
+                    BattleManager.Instance.NoticePanel.ShowTip(InteractiveKeyNotice, TipPositionType, InteractiveKeyNoticeDuration);
+                }
+
                 if (!ActorStayTimeDict.ContainsKey(target.GUID))
                 {
                     ActorStayTimeDict.Add(target.GUID, 0);
@@ -122,20 +141,33 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
             Entity target = collider.GetComponentInParent<Entity>();
             if (target.IsNotNullAndAlive())
             {
-                if (ActorStayTimeDict.TryGetValue(target.GUID, out float duration))
+                if (EffectiveWhenInteractiveKeyDown)
                 {
-                    if (duration > ActionInterval)
+                    if (ControlManager.Instance.Common_InteractiveKey.Down)
                     {
                         foreach (IPureAction action in EntityActions_Stay)
                         {
                             action.Execute();
                         }
-
-                        ActorStayTimeDict[target.GUID] = 0;
                     }
-                    else
+                }
+                else
+                {
+                    if (ActorStayTimeDict.TryGetValue(target.GUID, out float duration))
                     {
-                        ActorStayTimeDict[target.GUID] += Time.fixedDeltaTime;
+                        if (duration > ActionInterval)
+                        {
+                            foreach (IPureAction action in EntityActions_Stay)
+                            {
+                                action.Execute();
+                            }
+
+                            ActorStayTimeDict[target.GUID] = 0;
+                        }
+                        else
+                        {
+                            ActorStayTimeDict[target.GUID] += Time.fixedDeltaTime;
+                        }
                     }
                 }
             }
@@ -149,6 +181,11 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
             Entity target = collider.GetComponentInParent<Entity>();
             if (target.IsNotNullAndAlive())
             {
+                if (EffectiveWhenInteractiveKeyDown)
+                {
+                    BattleManager.Instance.NoticePanel.HideTip();
+                }
+
                 if (ActorStayTimeDict.ContainsKey(target.GUID))
                 {
                     ActorStayTimeDict.Remove(target.GUID);
@@ -168,6 +205,10 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
         action.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
         action.EntityActions_Enter = EntityActions_Enter.Clone();
         action.EntityActions_Stay = EntityActions_Stay.Clone();
+        action.EffectiveWhenInteractiveKeyDown = EffectiveWhenInteractiveKeyDown;
+        action.InteractiveKeyNotice = InteractiveKeyNotice;
+        action.TipPositionType = TipPositionType;
+        action.InteractiveKeyNoticeDuration = InteractiveKeyNoticeDuration;
         action.ActionInterval = ActionInterval;
         action.EntityActions_Exit = EntityActions_Exit.Clone();
     }
@@ -179,6 +220,10 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
         EffectiveOnRelativeCamp = action.EffectiveOnRelativeCamp;
         EntityActions_Enter = action.EntityActions_Enter.Clone();
         EntityActions_Stay = action.EntityActions_Stay.Clone();
+        EffectiveWhenInteractiveKeyDown = action.EffectiveWhenInteractiveKeyDown;
+        InteractiveKeyNotice = action.InteractiveKeyNotice;
+        TipPositionType = action.TipPositionType;
+        InteractiveKeyNoticeDuration = action.InteractiveKeyNoticeDuration;
         ActionInterval = action.ActionInterval;
         EntityActions_Exit = action.EntityActions_Exit.Clone();
     }

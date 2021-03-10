@@ -1312,6 +1312,14 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""InteractiveKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""2a2737b3-6adb-4d9c-ab7c-96f34dd805db"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
                 }
             ],
             ""bindings"": [
@@ -1477,6 +1485,17 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""ToggleDebugButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""07a95fc5-987a-4f13-a436-67b3a7c561cc"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""InteractiveKey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1647,6 +1666,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_Common_PauseGame = m_Common.FindAction("PauseGame", throwIfNotFound: true);
         m_Common_ToggleUI = m_Common.FindAction("ToggleUI", throwIfNotFound: true);
         m_Common_ToggleDebugButton = m_Common.FindAction("ToggleDebugButton", throwIfNotFound: true);
+        m_Common_InteractiveKey = m_Common.FindAction("InteractiveKey", throwIfNotFound: true);
         // Editor
         m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
         m_Editor_MousePosition = m_Editor.FindAction("MousePosition", throwIfNotFound: true);
@@ -1989,6 +2009,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Common_PauseGame;
     private readonly InputAction m_Common_ToggleUI;
     private readonly InputAction m_Common_ToggleDebugButton;
+    private readonly InputAction m_Common_InteractiveKey;
     public struct CommonActions
     {
         private @PlayerInput m_Wrapper;
@@ -2006,6 +2027,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @PauseGame => m_Wrapper.m_Common_PauseGame;
         public InputAction @ToggleUI => m_Wrapper.m_Common_ToggleUI;
         public InputAction @ToggleDebugButton => m_Wrapper.m_Common_ToggleDebugButton;
+        public InputAction @InteractiveKey => m_Wrapper.m_Common_InteractiveKey;
         public InputActionMap Get() { return m_Wrapper.m_Common; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -2054,6 +2076,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @ToggleDebugButton.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleDebugButton;
                 @ToggleDebugButton.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleDebugButton;
                 @ToggleDebugButton.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleDebugButton;
+                @InteractiveKey.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnInteractiveKey;
+                @InteractiveKey.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnInteractiveKey;
+                @InteractiveKey.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnInteractiveKey;
             }
             m_Wrapper.m_CommonActionsCallbackInterface = instance;
             if (instance != null)
@@ -2097,6 +2122,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @ToggleDebugButton.started += instance.OnToggleDebugButton;
                 @ToggleDebugButton.performed += instance.OnToggleDebugButton;
                 @ToggleDebugButton.canceled += instance.OnToggleDebugButton;
+                @InteractiveKey.started += instance.OnInteractiveKey;
+                @InteractiveKey.performed += instance.OnInteractiveKey;
+                @InteractiveKey.canceled += instance.OnInteractiveKey;
             }
         }
     }
@@ -2233,6 +2261,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnPauseGame(InputAction.CallbackContext context);
         void OnToggleUI(InputAction.CallbackContext context);
         void OnToggleDebugButton(InputAction.CallbackContext context);
+        void OnInteractiveKey(InputAction.CallbackContext context);
     }
     public interface IEditorActions
     {

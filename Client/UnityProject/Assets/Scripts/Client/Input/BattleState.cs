@@ -126,6 +126,7 @@ public enum ButtonNames
     Common_Pause,
     Common_ToggleUI,
     Common_ToggleDebugButton,
+    Common_InteractiveKey,
 
     COMMON_MAX_FLAG = 600,
 }

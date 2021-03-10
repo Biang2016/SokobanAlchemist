@@ -14,6 +14,8 @@ public class NoticePanel : BaseUIPanel
     [SerializeField]
     private Animator TipAnim;
 
+    internal bool NoticeShown = false;
+
     void Awake()
     {
         UIType.InitUIType(
@@ -49,56 +51,65 @@ public class NoticePanel : BaseUIPanel
         {
             case TipPositionType.Center:
             {
+                TipTextContainer.anchorMin = new Vector2(0.5f, 0.5f);
+                TipTextContainer.anchorMax = new Vector2(0.5f, 0.5f);
                 TipTextContainer.pivot = new Vector2(0.5f, 0.5f);
-                TipTextContainer.anchoredPosition = new Vector2(0, 0);
                 break;
             }
             case TipPositionType.LeftCenterHigher:
             {
+                TipTextContainer.anchorMin = new Vector2(0f, 0.7f);
+                TipTextContainer.anchorMax = new Vector2(0f, 0.7f);
                 TipTextContainer.pivot = new Vector2(0f, 0.5f);
-                TipTextContainer.anchoredPosition = new Vector2(0, 200f);
                 break;
             }
             case TipPositionType.LeftCenter:
             {
+                TipTextContainer.anchorMin = new Vector2(0f, 0.5f);
+                TipTextContainer.anchorMax = new Vector2(0f, 0.5f);
                 TipTextContainer.pivot = new Vector2(0f, 0.5f);
-                TipTextContainer.anchoredPosition = new Vector2(0, 0f);
                 break;
             }
             case TipPositionType.LeftCenterLower:
             {
+                TipTextContainer.anchorMin = new Vector2(0f, 0.3f);
+                TipTextContainer.anchorMax = new Vector2(0f, 0.3f);
                 TipTextContainer.pivot = new Vector2(0f, 0.5f);
-                TipTextContainer.anchoredPosition = new Vector2(0, -200f);
                 break;
             }
             case TipPositionType.RightCenterHigher:
             {
+                TipTextContainer.anchorMin = new Vector2(1f, 0.7f);
+                TipTextContainer.anchorMax = new Vector2(1f, 0.7f);
                 TipTextContainer.pivot = new Vector2(1f, 0.5f);
-                TipTextContainer.anchoredPosition = new Vector2(0, 200f);
                 break;
             }
             case TipPositionType.RightCenter:
             {
+                TipTextContainer.anchorMin = new Vector2(1f, 0.5f);
+                TipTextContainer.anchorMax = new Vector2(1f, 0.5f);
                 TipTextContainer.pivot = new Vector2(1f, 0.5f);
-                TipTextContainer.anchoredPosition = new Vector2(0, 0);
                 break;
             }
             case TipPositionType.RightCenterLower:
             {
+                TipTextContainer.anchorMin = new Vector2(1f, 0.3f);
+                TipTextContainer.anchorMax = new Vector2(1f, 0.3f);
                 TipTextContainer.pivot = new Vector2(1f, 0.5f);
-                TipTextContainer.anchoredPosition = new Vector2(0, -200f);
                 break;
             }
             case TipPositionType.TopCenter:
             {
+                TipTextContainer.anchorMin = new Vector2(0.5f, 1f);
+                TipTextContainer.anchorMax = new Vector2(0.5f, 1f);
                 TipTextContainer.pivot = new Vector2(0.5f, 1f);
-                TipTextContainer.anchoredPosition = new Vector2(0, 0);
                 break;
             }
             case TipPositionType.BottomCenter:
             {
+                TipTextContainer.anchorMin = new Vector2(0.5f, 0f);
+                TipTextContainer.anchorMax = new Vector2(0.5f, 0f);
                 TipTextContainer.pivot = new Vector2(0.5f, 0f);
-                TipTextContainer.anchoredPosition = new Vector2(0, 0);
                 break;
             }
         }
@@ -108,7 +119,7 @@ public class NoticePanel : BaseUIPanel
 
     IEnumerator Co_HideTip()
     {
-        while (tipShowDuration>0)
+        while (tipShowDuration > 0)
         {
             yield return null;
             tipShowDuration -= Time.deltaTime;
@@ -119,6 +130,7 @@ public class NoticePanel : BaseUIPanel
 
     public void HideTip()
     {
+        if (!NoticeShown) return;
         if (hideTipCoroutine != null) StopCoroutine(hideTipCoroutine);
         TipAnim.SetTrigger("Hide");
         TipText.text = "";
