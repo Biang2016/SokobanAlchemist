@@ -536,6 +536,11 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
 
     public virtual void OnCastPhaseComplete()
     {
+        int cameraShakeEquivalentDamage = GetValue(EntitySkillPropertyType.CameraShakeEquivalentDamage);
+        if (cameraShakeEquivalentDamage > 0)
+        {
+            CameraManager.Instance.FieldCamera.CameraShake(cameraShakeEquivalentDamage, (Entity.transform.position - BattleManager.Instance.Player1.transform.position).magnitude);
+        }
     }
 
     protected virtual IEnumerator Recover(float recoveryTime)

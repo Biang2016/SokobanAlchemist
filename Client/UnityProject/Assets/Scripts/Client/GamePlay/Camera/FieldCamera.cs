@@ -272,9 +272,9 @@ public class FieldCamera : MonoBehaviour
         CurrentConfigData.Distance = _distance;
     }
 
-    public void CameraShake(int damage, float distanceFromPlayer)
+    public void CameraShake(int equivalentDamage, float distanceFromPlayer)
     {
-        Camera.transform.DOShakePosition(0.1f, CameraShakeStrengthCurve.Evaluate(damage) * CameraShakeAttenuationByDistanceCurve.Evaluate(distanceFromPlayer), 10, 90f);
+        Camera.transform.DOShakePosition(0.1f, CameraShakeStrengthCurve.Evaluate(equivalentDamage) * CameraShakeAttenuationByDistanceCurve.Evaluate(distanceFromPlayer), 10, 90f);
     }
 
     public void CameraShake(float duration, float strength, float distanceFromPlayer)

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using BiangLibrary.ObjectPool;
+﻿using BiangLibrary.ObjectPool;
 using UnityEngine;
 
 public class EntityLightning : PoolObject

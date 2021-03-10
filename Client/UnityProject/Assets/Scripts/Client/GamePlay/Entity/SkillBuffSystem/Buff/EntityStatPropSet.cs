@@ -215,18 +215,6 @@ public class EntityStatPropSet
         [LabelText("@\"施法正方形范围边长\t\"+CastingRadius")]
         public EntityProperty CastingRadius = new EntityProperty(EntitySkillPropertyType.CastingRadius);
 
-        [LabelText("@\"效果半径\t\"+EffectRadius")]
-        public EntityProperty EffectRadius = new EntityProperty(EntitySkillPropertyType.EffectRadius);
-
-        [LabelText("释放区域偏移")]
-        public GridPos3D Offset = GridPos3D.Zero;
-
-        [LabelText("@\"宽度X\t\"+Width")]
-        public EntityProperty Width = new EntityProperty(EntitySkillPropertyType.Width);
-
-        [LabelText("@\"深度Z\t\"+Depth")]
-        public EntityProperty Depth = new EntityProperty(EntitySkillPropertyType.Depth);
-
         [LabelText("@\"冷却时间/ms\t\"+Cooldown")]
         public EntityProperty Cooldown = new EntityProperty(EntitySkillPropertyType.Cooldown);
 
@@ -239,18 +227,19 @@ public class EntityStatPropSet
         [LabelText("@\"后摇/ms\t\"+Recovery")]
         public EntityProperty Recovery = new EntityProperty(EntitySkillPropertyType.Recovery);
 
+        [LabelText("@\"震屏伤害当量\t\"+CameraShakeEquivalentDamage")]
+        public EntityProperty CameraShakeEquivalentDamage = new EntityProperty(EntitySkillPropertyType.CameraShakeEquivalentDamage);
+
         public void Setup()
         {
             if (PropertyDict.Count == 0)
             {
                 PropertyDict.Add(EntitySkillPropertyType.CastingRadius, CastingRadius);
-                PropertyDict.Add(EntitySkillPropertyType.EffectRadius, EffectRadius);
-                PropertyDict.Add(EntitySkillPropertyType.Width, Width);
-                PropertyDict.Add(EntitySkillPropertyType.Depth, Depth);
                 PropertyDict.Add(EntitySkillPropertyType.Cooldown, Cooldown);
                 PropertyDict.Add(EntitySkillPropertyType.WingUp, WingUp);
                 PropertyDict.Add(EntitySkillPropertyType.CastDuration, CastDuration);
                 PropertyDict.Add(EntitySkillPropertyType.Recovery, Recovery);
+                PropertyDict.Add(EntitySkillPropertyType.CameraShakeEquivalentDamage, CameraShakeEquivalentDamage);
             }
         }
 
@@ -273,14 +262,11 @@ public class EntityStatPropSet
         public void ApplyDataTo(SkillPropertyCollection target)
         {
             CastingRadius.ApplyDataTo(target.CastingRadius);
-            target.Offset = Offset;
-            EffectRadius.ApplyDataTo(target.EffectRadius);
-            Width.ApplyDataTo(target.Width);
-            Depth.ApplyDataTo(target.Depth);
             Cooldown.ApplyDataTo(target.Cooldown);
             WingUp.ApplyDataTo(target.WingUp);
             CastDuration.ApplyDataTo(target.CastDuration);
             Recovery.ApplyDataTo(target.Recovery);
+            CameraShakeEquivalentDamage.ApplyDataTo(target.CameraShakeEquivalentDamage);
         }
     }
 

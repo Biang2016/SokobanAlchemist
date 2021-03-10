@@ -1,5 +1,4 @@
-﻿using BiangLibrary.GameDataFormat.Grid;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BoxFrozenHelper : EntityFrozenHelper
 {

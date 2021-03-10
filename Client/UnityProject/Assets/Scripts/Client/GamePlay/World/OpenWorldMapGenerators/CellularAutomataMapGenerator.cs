@@ -129,7 +129,6 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                                 }
                             }
                         }
-                        
 
                         wallCount += isWall ? 1 : 0;
                     }

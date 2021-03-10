@@ -32,6 +32,7 @@ public class EntityFrozenHelper : EntityMonoHelper
     }
 
     public UnityAction<int, int> OnFrozeIntoIceBlockAction;
+
     public virtual void FrozeIntoIceBlock(int beforeFrozenLevel, int afterFrozenLevel)
     {
     }

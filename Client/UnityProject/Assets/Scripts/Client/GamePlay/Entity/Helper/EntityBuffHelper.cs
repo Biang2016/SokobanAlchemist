@@ -79,7 +79,7 @@ public class EntityBuffHelper : EntityMonoHelper
         foreach (KeyValuePair<EntityBuffAttribute, List<EntityBuff>> kv in EntityBuffAttributeDict)
         {
             if (kv.Value.Count == 0) continue;
-            EntityBuffAttributeRelationship relationship = ConfigManager.EntityBuffAttributeMatrix[(int) kv.Key, (int)newBuff.EntityBuffAttribute];
+            EntityBuffAttributeRelationship relationship = ConfigManager.EntityBuffAttributeMatrix[(int) kv.Key, (int) newBuff.EntityBuffAttribute];
             switch (relationship)
             {
                 case EntityBuffAttributeRelationship.Compatible:
@@ -271,6 +271,7 @@ public class EntityBuffHelper : EntityMonoHelper
         {
             int a = 0;
         }
+
         if (suc)
         {
             newBuff.OnAdded(Entity, extraInfo);

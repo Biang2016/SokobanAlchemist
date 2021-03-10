@@ -10,7 +10,7 @@ public class EntityOccupationData : IClone<EntityOccupationData>
 {
     [LabelText("长方体外形")]
     public bool IsShapeCuboid = false;
- 
+
     [LabelText("正方形底面")]
     public bool IsShapePlanSquare = false;
 

@@ -182,13 +182,6 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         GridPos3D targetGP = GetTargetGP();
         GridRect castingRect = GetCastingRect();
 
-        int effectRadius = GetValue(EntitySkillPropertyType.EffectRadius);
-        int width = GetValue(EntitySkillPropertyType.Width);
-        int depth = GetValue(EntitySkillPropertyType.Depth);
-        GridPos3D offset = Entity.EntityStatPropSet.SkillsPropertyCollections[(int) EntitySkillIndex].Offset;
-        GridPos rotated_offset = GridPos.RotateGridPos(new GridPos(offset.x, offset.z), Entity.EntityOrientation);
-        GridPos3D rotated_offset3D = new GridPos3D(rotated_offset.x, offset.y, rotated_offset.z);
-
         int xMin_SkillCastPos = castingRect.x_min;
         int xMax_SkillCastPos = castingRect.x_max;
         int zMin_SkillCastPos = castingRect.z_min;

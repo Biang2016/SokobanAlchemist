@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [Serializable]
 public class EntityPassiveSkillAction_AddEntityBuff : EntityPassiveSkillAction, EntityPassiveSkillAction.ICollideAction, EntityPassiveSkillAction.IActorOperationAction

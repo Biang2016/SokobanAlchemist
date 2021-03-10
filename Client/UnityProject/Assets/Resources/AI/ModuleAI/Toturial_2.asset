@@ -20,17 +20,20 @@ MonoBehaviour:
     Lightningbox to shock enemy"},"TipPositionType":{"_value":4},"Duration":{"_value":1.0}},"_position":{"x":555.0,"y":240.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
     Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"5"},{"LevelEventAlias":{"_value":"Toturial_2_IceBoxTip"},"_position":{"x":180.0,"y":315.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"6"},{"_simplexNode":{"NoticeTip":{"_value":"Kick
     Icebox to freeze enemy"},"TipPositionType":{"_value":4},"Duration":{"_value":1.0}},"_position":{"x":555.0,"y":315.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"7"}],"connections":[{"_sourcePortName":"OnTriggered","_targetPortName":"
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"7"},{"LevelEventAlias":{"_value":"Toturial_2_MultiKickTip"},"_color":{"r":1.0,"g":0.3607843,"b":0.3607843,"a":1.0},"_position":{"x":180.0,"y":390.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"8"},{"_simplexNode":{"NoticeTip":{"_value":"Keep
+    kicking the Log to break it"},"TipPositionType":{"_value":4},"Duration":{"_value":1.0}},"_position":{"x":555.0,"y":390.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"9"}],"connections":[{"_sourcePortName":"OnTriggered","_targetPortName":"
     ","_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
     ","_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
     ","_sourceNode":{"$ref":"4"},"_targetNode":{"$ref":"5"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
-    ","_sourceNode":{"$ref":"6"},"_targetNode":{"$ref":"7"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
+    ","_sourceNode":{"$ref":"6"},"_targetNode":{"$ref":"7"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
+    ","_sourceNode":{"$ref":"8"},"_targetNode":{"$ref":"9"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
   _objectReferences: []
   _graphSource:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: 73, y: -152}
+    _translation: {x: -51, y: -10}
     _zoomFactor: 1
   _haltSerialization: 0
 #---GRAPH_START---
@@ -157,6 +160,42 @@ MonoBehaviour:
 #            },
 #            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
 #            "$id": "7"
+#        },
+#        {
+#            "LevelEventAlias": {
+#                "_value": "Toturial_2_MultiKickTip"
+#            },
+#            "_color": {
+#                "r": 1.0,
+#                "g": 0.3607843,
+#                "b": 0.3607843,
+#                "a": 1.0
+#            },
+#            "_position": {
+#                "x": 180.0,
+#                "y": 390.0
+#            },
+#            "$type": "ModuleAIAtoms+Flow_OnLevelEventTrigger",
+#            "$id": "8"
+#        },
+#        {
+#            "_simplexNode": {
+#                "NoticeTip": {
+#                    "_value": "Keep kicking the Log to break it"
+#                },
+#                "TipPositionType": {
+#                    "_value": 4
+#                },
+#                "Duration": {
+#                    "_value": 1.0
+#                }
+#            },
+#            "_position": {
+#                "x": 555.0,
+#                "y": 390.0
+#            },
+#            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+#            "$id": "9"
 #        }
 #    ],
 #    "connections": [
@@ -201,6 +240,17 @@ MonoBehaviour:
 #            },
 #            "_targetNode": {
 #                "$ref": "7"
+#            },
+#            "$type": "FlowCanvas.BinderConnection"
+#        },
+#        {
+#            "_sourcePortName": "OnTriggered",
+#            "_targetPortName": " ",
+#            "_sourceNode": {
+#                "$ref": "8"
+#            },
+#            "_targetNode": {
+#                "$ref": "9"
 #            },
 #            "$type": "FlowCanvas.BinderConnection"
 #        }

@@ -1,6 +1,4 @@
 ﻿using System;
-using Sirenix.OdinInspector;
-using UnityEngine;
 
 [Serializable]
 public class EntityBuff_DestroySelf : EntityBuff
@@ -23,6 +21,6 @@ public class EntityBuff_DestroySelf : EntityBuff
     public override void CopyDataFrom(EntityBuff srcData)
     {
         base.CopyDataFrom(srcData);
-        EntityBuff_DestroySelf srcBuff = ((EntityBuff_DestroySelf)srcData);
+        EntityBuff_DestroySelf srcBuff = ((EntityBuff_DestroySelf) srcData);
     }
 }

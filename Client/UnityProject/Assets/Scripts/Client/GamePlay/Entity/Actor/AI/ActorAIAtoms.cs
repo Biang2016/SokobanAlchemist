@@ -560,4 +560,27 @@ public static class ActorAIAtoms
     }
 
     #endregion
+
+    #region 通用
+
+    [Category("通用")]
+    [Name("震屏")]
+    [Description("震屏")]
+    public class BT_Enemy_CameraShake : BTNode
+    {
+        [Name("伤害当量")]
+        public BBParameter<int> EquivalentDamage;
+
+        public override string name => $"震屏";
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            float distanceFromPlayer = (Actor.transform.position - BattleManager.Instance.Player1.transform.position).magnitude;
+            CameraManager.Instance.FieldCamera.CameraShake(EquivalentDamage.value, distanceFromPlayer);
+            return Status.Success;
+        }
+    }
+
+    #endregion
 }

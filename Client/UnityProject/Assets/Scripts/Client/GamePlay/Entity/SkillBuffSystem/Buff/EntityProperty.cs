@@ -136,15 +136,6 @@ public enum EntitySkillPropertyType
     [LabelText("施法正方形范围边长")]
     CastingRadius = 10110,
 
-    [LabelText("效果半径")]
-    EffectRadius = 10111,
-
-    [LabelText("宽度X")]
-    Width = 10112,
-
-    [LabelText("深度Z")]
-    Depth = 10113,
-
     [LabelText("冷却时间")]
     Cooldown = 10120,
 
@@ -156,4 +147,7 @@ public enum EntitySkillPropertyType
 
     [LabelText("后摇")]
     Recovery = 10123,
+
+    [LabelText("后摇震屏伤害当量")]
+    CameraShakeEquivalentDamage = 10124,
 }

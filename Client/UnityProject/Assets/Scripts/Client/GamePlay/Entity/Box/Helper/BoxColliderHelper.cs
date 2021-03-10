@@ -205,7 +205,7 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
     {
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
-        BoxOnlyDynamicCollidersEnable = false; 
+        BoxOnlyDynamicCollidersEnable = false;
         Box.BoxIndicatorHelper.IsOn = true;
         BoxOnlyDynamicColliderRoot.SetActive(defaultBoxOnlyDynamicColliderRootActive);
     }
