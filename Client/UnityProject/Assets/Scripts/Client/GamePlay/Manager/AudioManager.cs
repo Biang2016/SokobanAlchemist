@@ -27,9 +27,9 @@ public class AudioManager : MonoSingleton<AudioManager>
 
     void Start()
     {
-        AudioMixer.SetFloat("MasterVolume", 0f);
-        AudioMixer.SetFloat("SoundVolume", 0f);
-        AudioMixer.SetFloat("BGMVolume", 0f);
+        AudioMixer.SetFloat("MasterVolume", 0);
+        AudioMixer.SetFloat("SoundVolume", 0);
+        AudioMixer.SetFloat("BGMVolume", 0);
     }
 
     public void SoundPlay(string audioName)

@@ -387,4 +387,10 @@ public class DebugPanel : BaseUIPanel
     {
         Time.timeScale = value;
     }
+
+    [DebugSlider("Audio/BGM", 1, 0, 1)]
+    public void BGM_Volume(float value)
+    {
+        AudioManager.Instance.BGMSetVolume(value);
+    }
 }
