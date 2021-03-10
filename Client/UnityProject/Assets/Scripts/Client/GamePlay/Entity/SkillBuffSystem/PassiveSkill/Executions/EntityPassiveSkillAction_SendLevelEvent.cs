@@ -16,6 +16,7 @@ public class EntityPassiveSkillAction_SendLevelEvent : EntityPassiveSkillAction,
     [LabelText("触发时设置战场状态花名")]
     public string SetStateAlias;
 
+    [LabelText("战场状态值")]
     public bool SetStateAliasValue = false;
 
     public void Execute()

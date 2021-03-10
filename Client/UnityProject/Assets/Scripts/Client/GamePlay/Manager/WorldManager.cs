@@ -64,6 +64,14 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
         yield return CurrentWorld.Initialize(worldData);
     }
 
+    public IEnumerator OnAfterStartGame()
+    {
+        if (CurrentWorld is OpenWorld openWorld)
+        {
+            yield return openWorld.OnAfterInitialize();
+        }
+    }
+
     public override void Update(float deltaTime)
     {
     }

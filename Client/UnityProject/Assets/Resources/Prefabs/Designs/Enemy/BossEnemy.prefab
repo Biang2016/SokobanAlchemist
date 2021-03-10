@@ -299,6 +299,11 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
+      CameraShakeEquivalentDamage:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
     - skillAlias: "\u9668\u77F3\u672F"
       CastingRadius:
         BaseValue: 7
@@ -325,6 +330,11 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
+      CameraShakeEquivalentDamage:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
     - skillAlias: "\u66B4\u98CE\u96EA"
       CastingRadius:
         BaseValue: 7
@@ -351,6 +361,11 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
+      CameraShakeEquivalentDamage:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
     - skillAlias: "\u9668\u77F3\u672F\u5355\u53D1"
       CastingRadius:
         BaseValue: 7
@@ -377,6 +392,11 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
+      CameraShakeEquivalentDamage:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
     - skillAlias: "\u66B4\u98CE\u96EA\u5355\u53D1"
       CastingRadius:
         BaseValue: 7
@@ -403,6 +423,11 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
+      CameraShakeEquivalentDamage:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
     - skillAlias: "\u81EA\u6108"
       CastingRadius:
         BaseValue: 5
@@ -429,6 +454,11 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
+      CameraShakeEquivalentDamage:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
     - skillAlias: "\u5C0F\u52A0\u901F"
       CastingRadius:
         BaseValue: 5
@@ -451,6 +481,11 @@ MonoBehaviour:
         MinValue: 0
         MaxValue: 0
       Recovery:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
+      CameraShakeEquivalentDamage:
         BaseValue: 0
         ModifiedValue: 0
         MinValue: 0
@@ -514,14 +549,12 @@ MonoBehaviour:
       type: {class: ActorPassiveSkill_IceSlideSpeedUp, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
-        SpecialCaseType: 0
         RawEntityBuff:
           id: 8
     00000002:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
-        SpecialCaseType: 0
         PassiveSkillCondition: 1024
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 

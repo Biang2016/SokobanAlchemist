@@ -51,7 +51,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -133,7 +132,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -246,7 +244,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -328,7 +325,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -600,7 +596,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -682,7 +677,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -2258,7 +2252,7 @@ PrefabInstance:
     - target: {fileID: 3046544561379591748, guid: a62e66ce954cf344ea8bc17350e139d1,
         type: 3}
       propertyPath: RawBoxPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0]
-      value: Client BoxPassiveSkillAction_ChangeBoxToEnemy
+      value: Client BoxPassiveSkillAction_ChangeBoxType
       objectReference: {fileID: 0}
     - target: {fileID: 3046544561379591748, guid: a62e66ce954cf344ea8bc17350e139d1,
         type: 3}
@@ -2267,8 +2261,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3046544561379591748, guid: a62e66ce954cf344ea8bc17350e139d1,
         type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].BoxOrientation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3046544561379591748, guid: a62e66ce954cf344ea8bc17350e139d1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].ChangeBoxTypeTo
+      value: None
+      objectReference: {fileID: 0}
+    - target: {fileID: 3046544561379591748, guid: a62e66ce954cf344ea8bc17350e139d1,
+        type: 3}
+      propertyPath: RawBoxPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].ChangeForEveryGrid
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3046544561379591748, guid: a62e66ce954cf344ea8bc17350e139d1,
+        type: 3}
       propertyPath: RawBoxPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].ChangeBoxToEnemyType
-      value: IceEnemy
+      value: None
       objectReference: {fileID: 0}
     - target: {fileID: 8847913909878057691, guid: a62e66ce954cf344ea8bc17350e139d1,
         type: 3}

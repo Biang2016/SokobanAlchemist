@@ -36,7 +36,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     [LabelText("触发时机")]
     public PassiveSkillConditionType PassiveSkillCondition;
 
-    [LabelText("触发概率")]
+    [LabelText("触发概率%")]
     public uint TriggerProbabilityPercent = 100;
 
     [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnDestroyEntityByElementDamage)]

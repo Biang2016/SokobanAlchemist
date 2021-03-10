@@ -331,6 +331,11 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
+      CameraShakeEquivalentDamage:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
     RawEntityDefaultBuffs:
     - id: 0
   RawFlamethrowerFuelData:
@@ -396,7 +401,6 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
-        SpecialCaseType: 0
         PassiveSkillCondition: 1024
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
@@ -465,7 +469,6 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
-        SpecialCaseType: 0
         PassiveSkillCondition: 112
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 

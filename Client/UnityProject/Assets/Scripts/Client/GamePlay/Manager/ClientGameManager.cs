@@ -183,6 +183,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         UIManager.Instance.CloseUIForm<DebugPanel>();
 #endif
         UIManager.Instance.ShowUIForms<InGameUIPanel>();
+        yield return WorldManager.OnAfterStartGame();
         IsGameLoading = false;
     }
 

@@ -133,10 +133,12 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
         else
         {
+            
             ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.ActorType);
             EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
             GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, enemy.transform, 1);
             enemy.Initialize(bpd.ActorType, bpd.ActorCategory);
+            enemy.ApplyActorExtraEntityPassiveSkill(bpd.RawBoxPassiveSkills);
             Enemies.Add(enemy);
             AddActor(enemy);
         }

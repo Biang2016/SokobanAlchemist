@@ -330,6 +330,11 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
+      CameraShakeEquivalentDamage:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
     - skillAlias: "\u7838\u5730\u677F"
       CastingRadius:
         BaseValue: 0
@@ -356,6 +361,11 @@ MonoBehaviour:
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 99999
+      CameraShakeEquivalentDamage:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
     RawEntityDefaultBuffs:
     - id: 0
   RawFlamethrowerFuelData:
@@ -423,14 +433,12 @@ MonoBehaviour:
       type: {class: ActorPassiveSkill_IceSlideSpeedUp, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
-        SpecialCaseType: 0
         RawEntityBuff:
           id: 7
     00000003:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
-        SpecialCaseType: 0
         PassiveSkillCondition: 1024
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
@@ -610,7 +618,6 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
-        SpecialCaseType: 0
         PassiveSkillCondition: 112
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 

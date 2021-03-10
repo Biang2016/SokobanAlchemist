@@ -1333,9 +1333,9 @@ public partial class Box : Entity
     {
         if (boxExtraSerializeDataFromModule != null)
         {
-            foreach (EntityPassiveSkill extraBF in boxExtraSerializeDataFromModule.BoxPassiveSkills)
+            foreach (EntityPassiveSkill extraPS in boxExtraSerializeDataFromModule.BoxPassiveSkills)
             {
-                EntityPassiveSkill newPS = extraBF.Clone();
+                EntityPassiveSkill newPS = extraPS.Clone();
                 AddNewPassiveSkill(newPS, true);
             }
         }
@@ -1345,7 +1345,7 @@ public partial class Box : Entity
 
 #if UNITY_EDITOR
 
-    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false)
+    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)
     {
         bool isDirty = false;
         foreach (BoxMergeConfigData data in BoxMergeConfig.BoxMergeConfigDataList)
@@ -1360,7 +1360,7 @@ public partial class Box : Entity
 
         foreach (EntityPassiveSkill ps in RawEntityPassiveSkills)
         {
-            bool dirty = ps.RenameBoxTypeName(name, srcBoxName, targetBoxName, info, moduleSpecial);
+            bool dirty = ps.RenameBoxTypeName(name, srcBoxName, targetBoxName, info);
             isDirty |= dirty;
         }
 
@@ -1383,7 +1383,7 @@ public partial class Box : Entity
 
         foreach (EntityPassiveSkill ps in RawEntityPassiveSkills)
         {
-            bool dirty = ps.DeleteBoxTypeName(name, srcBoxName, info, moduleSpecial);
+            bool dirty = ps.DeleteBoxTypeName(name, srcBoxName, info);
             isDirty |= dirty;
         }
 

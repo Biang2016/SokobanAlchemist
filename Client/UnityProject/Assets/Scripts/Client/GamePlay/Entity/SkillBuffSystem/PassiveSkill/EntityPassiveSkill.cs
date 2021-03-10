@@ -18,19 +18,6 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
     [PropertyOrder(-1)]
     protected abstract string Description { get; }
 
-    [LabelText("特例类型(仅针对箱子)")]
-    [EnumToggleButtons]
-    public BoxPassiveSkillBaseSpecialCaseType SpecialCaseType = BoxPassiveSkillBaseSpecialCaseType.None;
-
-    public enum BoxPassiveSkillBaseSpecialCaseType
-    {
-        [LabelText("无")]
-        None,
-
-        [LabelText("模组特例")]
-        Module,
-    }
-
     #region Conditions
 
     public virtual void OnInit()
@@ -123,7 +110,6 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
     {
         Type type = GetType();
         EntityPassiveSkill newPS = (EntityPassiveSkill) Activator.CreateInstance(type);
-        newPS.SpecialCaseType = SpecialCaseType;
         ChildClone(newPS);
         return newPS;
     }
@@ -134,14 +120,12 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
 
     public virtual void CopyDataFrom(EntityPassiveSkill srcData)
     {
-        SpecialCaseType = srcData.SpecialCaseType;
     }
 
 #if UNITY_EDITOR
 
-    public bool RenameBoxTypeName(string boxInstanceName, string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false)
+    public bool RenameBoxTypeName(string boxInstanceName, string srcBoxName, string targetBoxName, StringBuilder info)
     {
-        if (moduleSpecial && SpecialCaseType != BoxPassiveSkillBaseSpecialCaseType.Module) return false;
         bool isDirty = false;
         foreach (FieldInfo fi in GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
         {
@@ -183,11 +167,9 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
         return isDirty;
     }
 
-    public bool DeleteBoxTypeName(string boxInstanceName, string srcBoxName, StringBuilder info, bool moduleSpecial = false)
+    public bool DeleteBoxTypeName(string boxInstanceName, string srcBoxName, StringBuilder info)
     {
-        if (moduleSpecial && SpecialCaseType != BoxPassiveSkillBaseSpecialCaseType.Module) return false;
         bool isDirty = false;
-
         foreach (FieldInfo fi in GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
         {
             foreach (Attribute a in fi.GetCustomAttributes(false))

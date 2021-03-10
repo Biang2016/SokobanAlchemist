@@ -850,6 +850,11 @@ MonoBehaviour:
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
+    FrozenDamageDefense:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     FrozenFX: None
     FrozenFXScaleCurve:
       serializedVersion: 2
@@ -949,7 +954,7 @@ MonoBehaviour:
       AutoChangePercent: 0
       AutoChangeTimeInterval: 1000
     ActionPointRecovery:
-      BaseValue: 99
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
@@ -1023,6 +1028,7 @@ MonoBehaviour:
   - CrazyLongLogBox
   - CrazyMediumLogBox
   - MediumWoodenBoardBox
+  - TrainingBox
   KickableBoxList:
   - WoodenBox
   - WoodenTrapBox
@@ -1049,6 +1055,7 @@ MonoBehaviour:
   - MediumWoodenBoardBox
   - LifeTowerBox
   - MetalTrapBox
+  - TrainingBox
   LiftableBoxList:
   - WoodenTrapBox
   - FlagBox
@@ -1074,7 +1081,6 @@ MonoBehaviour:
       type: {class: ActorPassiveSkill_IceSlideSpeedUp, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
-        SpecialCaseType: 0
         RawEntityBuff:
           id: 2
     00000002:

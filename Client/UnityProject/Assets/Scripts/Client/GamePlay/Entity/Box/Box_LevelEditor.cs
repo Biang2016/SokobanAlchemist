@@ -72,10 +72,7 @@ public class Box_LevelEditor : MonoBehaviour
         foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
         {
             if (bf is BoxPassiveSkill_LevelEventTriggerAppear) continue;
-            if (bf.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
-            {
-                data.BoxPassiveSkills.Add(bf.Clone());
-            }
+            data.BoxPassiveSkills.Add(bf.Clone());
         }
 
         return data;
@@ -85,21 +82,7 @@ public class Box_LevelEditor : MonoBehaviour
 
 #if UNITY_EDITOR
 
-    public bool RequireSerializePassiveSkillsIntoWorldModule
-    {
-        get
-        {
-            foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
-            {
-                if (bf.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
+    public bool RequireSerializePassiveSkillsIntoWorldModule => RawBoxPassiveSkills.Count > 0;
 
     public bool LevelEventTriggerAppearInWorldModule
     {
@@ -107,13 +90,7 @@ public class Box_LevelEditor : MonoBehaviour
         {
             foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
             {
-                if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear)
-                {
-                    if (appear.SpecialCaseType == EntityPassiveSkill.BoxPassiveSkillBaseSpecialCaseType.Module)
-                    {
-                        return true;
-                    }
-                }
+                if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear) return true;
             }
 
             return false;
@@ -178,25 +155,25 @@ public class Box_LevelEditor : MonoBehaviour
         DestroyImmediate(gameObject);
     }
 
-    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info, bool moduleSpecial = false)
+    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)
     {
         bool isDirty = false;
         foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
         {
-            bool dirty = bf.RenameBoxTypeName(name, srcBoxName, targetBoxName, info, moduleSpecial);
+            bool dirty = bf.RenameBoxTypeName(name, srcBoxName, targetBoxName, info);
             isDirty |= dirty;
         }
 
         return isDirty;
     }
 
-    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false)
+    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info)
     {
         bool isDirty = false;
 
         foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
         {
-            bool dirty = bf.DeleteBoxTypeName(name, srcBoxName, info, moduleSpecial);
+            bool dirty = bf.DeleteBoxTypeName(name, srcBoxName, info);
             isDirty |= dirty;
         }
 

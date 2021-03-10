@@ -26,6 +26,12 @@ public class OpenWorld : World
     public ushort[,,] WorldMap_Occupied; // 地图元素占位  Y轴缩小16
     public ushort[,,] WorldMap_StaticLayoutOccupied; // 地图静态布局占位  Y轴缩小16
 
+    [LabelText("起始MicroWorld")]
+    [ValueDropdown("GetAllWorldNames", IsUniqueList = true, DropdownTitle = "选择世界", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
+    public string StartMicroWorldTypeName = "None";
+
+    private IEnumerable<string> GetAllWorldNames => ConfigManager.GetAllWorldNames();
+
     #region GenerateLayerData
 
     [Serializable]
@@ -320,7 +326,19 @@ public class OpenWorld : World
         CameraManager.Instance.FieldCamera.InitFocus();
         RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(playerBPWorld, PlayerScopeRadiusX, PlayerScopeRadiusZ)); // 按关卡生成器和角色位置初始化需要的模组
         while (RefreshScopeModulesCoroutine != null) yield return null;
+
         BattleManager.Instance.Player1.ForbidAction = false;
+    }
+
+    public IEnumerator OnAfterInitialize()
+    {
+        ushort startMicroWorldTypeIndex = ConfigManager.GetWorldTypeIndex(StartMicroWorldTypeName);
+        if (startMicroWorldTypeIndex != 0)
+        {
+            yield return Co_TransportPlayerToMicroWorld(startMicroWorldTypeIndex);
+        }
+
+        yield return null;
     }
 
     protected override IEnumerator GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z, int loadBoxNumPerFrame)

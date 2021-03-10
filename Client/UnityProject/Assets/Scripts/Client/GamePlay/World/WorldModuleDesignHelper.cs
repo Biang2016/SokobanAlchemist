@@ -387,7 +387,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
         {
             if (box.RequireSerializePassiveSkillsIntoWorldModule)
             {
-                isDirty |= box.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo, true);
+                isDirty |= box.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo);
             }
         }
 
@@ -412,7 +412,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
         {
             if (box.RequireSerializePassiveSkillsIntoWorldModule)
             {
-                isDirty |= box.DeleteBoxTypeName(srcBoxName, localInfo, true);
+                isDirty |= box.DeleteBoxTypeName(srcBoxName, localInfo);
             }
         }
 

@@ -566,6 +566,23 @@ public class Actor : Entity
         ForbidAction = false;
     }
 
+
+    #region ActorExtraData
+
+    public void ApplyActorExtraEntityPassiveSkill(List<EntityPassiveSkill> extraEntityPassiveSkills = null)
+    {
+        if (extraEntityPassiveSkills != null)
+        {
+            foreach (EntityPassiveSkill extraPS in extraEntityPassiveSkills)
+            {
+                EntityPassiveSkill newPS = extraPS.Clone();
+                AddNewPassiveSkill(newPS, true);
+            }
+        }
+    }
+
+    #endregion
+
     private void Update()
     {
         if (!IsRecycled)

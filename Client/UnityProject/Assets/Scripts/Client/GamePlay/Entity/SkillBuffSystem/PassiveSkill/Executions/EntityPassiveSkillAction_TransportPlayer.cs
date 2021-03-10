@@ -21,7 +21,6 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
     [LabelText("传送类型")]
     public TransportType m_TransportType = TransportType.TransportToMicroWorld;
 
-    [BoxName]
     [LabelText("传送至新世界")]
     [ShowIf("m_TransportType", TransportType.TransportToMicroWorld)]
     [ValueDropdown("GetAllWorldNames", IsUniqueList = true, DropdownTitle = "选择世界", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
