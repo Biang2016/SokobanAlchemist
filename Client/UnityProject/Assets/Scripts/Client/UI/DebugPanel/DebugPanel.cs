@@ -327,6 +327,12 @@ public class DebugPanel : BaseUIPanel
         BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.Value + 10, "DebugPanelAddAction10");
     }
 
+    [DebugButton("Player/AddActionRecover*100", KeyCode.L)]
+    public void AddActionRecover100()
+    {
+        BattleManager.Instance.Player1.EntityStatPropSet.ActionPointRecovery.AddModifier(new Property.PlusModifier {Delta = 100});
+    }
+
     [DebugToggleButton("Log/ToggleActorMoveLog")]
     public void ToggleActorMoveLog()
     {

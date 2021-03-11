@@ -54,6 +54,8 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     /// </summary>
     public void InitOpenWorldModuleData(bool needSaveModification)
     {
+        BoxExtraSerializeDataMatrix = new EntityExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+        EventTriggerAppearBoxDataList = new List<BoxPassiveSkill_LevelEventTriggerAppear.Data>();
         if (Modification == null)
         {
             Modification = WorldModuleDataModification.Factory.Alloc();

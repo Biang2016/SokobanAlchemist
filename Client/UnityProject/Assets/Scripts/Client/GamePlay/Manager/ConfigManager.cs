@@ -68,7 +68,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         private string TypeNamePrefix;
         private string TypeNamesConfig_File => $"{TypeNamesConfigFolder_Build}/{TypeNamePrefix}Names.config";
-        private string TypeNamesConfigFolder_Build => ConfigFolder_Build + "/TypeNames";
         private string PrefabFolder_Relative;
         private bool IncludeSubFolder;
         private TypeStartIndex m_TypeStartIndex;
@@ -252,6 +251,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static string WorldDataConfigFolder_Relative = "Worlds";
 
     public static string ConfigFolder_Build = Application.streamingAssetsPath + "/Configs/";
+    public static string TypeNamesConfigFolder_Build = ConfigFolder_Build + "/TypeNames";
     public static string EntityBuffAttributeMatrixConfigFolder_Build = ConfigFolder_Build + EntityBuffAttributeMatrixConfigFolder_Relative + "/";
     public static string EntityOccupationConfigDictFolder_Build = ConfigFolder_Build + EntityOccupationConfigDictFolder_Relative + "/";
     public static string WorldModuleDataConfigFolder_Build = ConfigFolder_Build + WorldModuleDataConfigFolder_Relative + "s/";
@@ -321,6 +321,29 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         IsLoaded = false;
         LoadAllConfigs();
         if (dialogShow) EditorUtility.DisplayDialog("提示", "序列化成功", "确定");
+    }
+
+    [MenuItem("开发工具/配置/快速序列化类型")]
+    public static void QuickExportConfigs_TypeDefines()
+    {
+        if (Directory.Exists(TypeNamesConfigFolder_Build)) Directory.Delete(TypeNamesConfigFolder_Build, true);
+        Directory.CreateDirectory(TypeNamesConfigFolder_Build);
+
+        // 时序，先导出类型表
+        BoxTypeDefineDict.ExportTypeNames();
+        BoxIconTypeDefineDict.ExportTypeNames();
+        EnemyTypeDefineDict.ExportTypeNames();
+        LevelTriggerTypeDefineDict.ExportTypeNames();
+        WorldModuleTypeDefineDict.ExportTypeNames();
+        StaticLayoutTypeDefineDict.ExportTypeNames();
+        WorldTypeDefineDict.ExportTypeNames();
+        FXTypeDefineDict.ExportTypeNames();
+        BattleIndicatorTypeDefineDict.ExportTypeNames();
+
+        AssetDatabase.Refresh();
+        IsLoaded = false;
+        LoadAllConfigs();
+        EditorUtility.DisplayDialog("提示", "快速序列化类型成功", "确定");
     }
 
     private static void SortWorldModule()

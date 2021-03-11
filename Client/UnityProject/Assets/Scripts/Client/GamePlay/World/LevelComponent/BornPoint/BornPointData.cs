@@ -65,6 +65,6 @@ public class BornPointData : LevelComponentData
         data.SpawnLevelEventAlias = SpawnLevelEventAlias;
         data.ActorType = ActorType;
         data.BornPointAlias = BornPointAlias;
-        data.RawEntityExtraSerializeData = RawEntityExtraSerializeData.Clone();
+        data.RawEntityExtraSerializeData = RawEntityExtraSerializeData?.Clone();
     }
 }

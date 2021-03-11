@@ -166,6 +166,7 @@ public class WorldModule : PoolObject
         EventTriggerAppearBoxPassiveSkillList.Clear();
         BattleManager.Instance.OnRecycleWorldModule(GUID);
 
+        if (!(this is OpenWorldModule)) World.WorldData.WorldBornPointGroupData_Runtime.UnInit_UnloadModuleData(ModuleGP);
         World = null;
         if (releaseWorldModuleData) WorldModuleData.Release();
         WorldModuleData = null;
@@ -313,7 +314,7 @@ public class WorldModule : PoolObject
         }
         else
         {
-            List<GridPos3D> boxOccupation_rotated = ConfigManager.GetEntityOccupationData(boxTypeIndex).BoxIndicatorGPs_RotatedDict[orientation];
+            List<GridPos3D> boxOccupation_rotated = ConfigManager.GetEntityOccupationData(boxTypeIndex).EntityIndicatorGPs_RotatedDict[orientation];
 
             // 空位检查
             foreach (GridPos3D offset in boxOccupation_rotated)

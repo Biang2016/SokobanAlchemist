@@ -639,7 +639,7 @@ public class World : PoolObject
             GridPos3D mergeTargetWorldGP = oldCoreBox.WorldGP + newBoxOffset;
 
             List<GridPos3D> allPossibleMergeTargetWorldGP = new List<GridPos3D>();
-            List<GridPos3D> newBoxOccupation_rotated = ConfigManager.GetEntityOccupationData(newBoxTypeIndex).BoxIndicatorGPs_RotatedDict[newBoxOrientation];
+            List<GridPos3D> newBoxOccupation_rotated = ConfigManager.GetEntityOccupationData(newBoxTypeIndex).EntityIndicatorGPs_RotatedDict[newBoxOrientation];
             foreach (GridPos3D offset in newBoxOccupation_rotated)
             {
                 allPossibleMergeTargetWorldGP.Add(offset + mergeTargetWorldGP);
@@ -940,7 +940,7 @@ public class World : PoolObject
             bool CheckSpaceAvailable(GridPosR.Orientation orientation, GridPos3D offset, out int overlapGridCount)
             {
                 overlapGridCount = 0;
-                List<GridPos3D> rotatedGPs = boxOccupationData.BoxIndicatorGPs_RotatedDict[orientation];
+                List<GridPos3D> rotatedGPs = boxOccupationData.EntityIndicatorGPs_RotatedDict[orientation];
                 foreach (GridPos3D gridPos in rotatedGPs)
                 {
                     GridPos3D wGP = srcBox.WorldGP + gridPos + offset;

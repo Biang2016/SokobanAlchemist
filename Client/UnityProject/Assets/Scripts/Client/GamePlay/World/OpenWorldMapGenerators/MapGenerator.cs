@@ -1,5 +1,7 @@
-﻿using BiangLibrary.GameDataFormat;
+﻿using System.Collections.Generic;
+using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
+using FlowCanvas.Nodes;
 
 public abstract class MapGenerator
 {
@@ -9,12 +11,12 @@ public abstract class MapGenerator
 
     protected MapGeneratorType MapGeneratorType;
 
-    protected ushort BoxTypeIndex;
-    protected ushort EnemyTypeIndex;
+    protected ushort EntityTypeIndex;
     protected ushort StaticLayoutTypeIndex;
 
     protected OpenWorld m_OpenWorld;
     protected ushort[,,] WorldMap => m_OpenWorld.WorldMap;
+    protected EntityExtraSerializeData[,,] WorldMap_EntityExtraSerializeData => m_OpenWorld.WorldMap_EntityExtraSerializeData; // 仅针对静态布局生效
     protected GridPosR.Orientation[,,] WorldMapOrientation => m_OpenWorld.WorldMapOrientation;
     protected ushort[,,] WorldMap_Occupied => m_OpenWorld.WorldMap_Occupied;
     protected ushort[,,] WorldMap_StaticLayoutOccupied => m_OpenWorld.WorldMap_StaticLayoutOccupied;
@@ -39,14 +41,14 @@ public abstract class MapGenerator
             }
             case OpenWorld.GenerateBoxLayerData boxLayerData:
             {
-                MapGeneratorType = MapGeneratorType.Box;
-                BoxTypeIndex = ConfigManager.GetBoxTypeIndex(boxLayerData.BoxTypeName);
+                MapGeneratorType = MapGeneratorType.Entity;
+                EntityTypeIndex = ConfigManager.GetBoxTypeIndex(boxLayerData.BoxTypeName);
                 break;
             }
             case OpenWorld.GenerateActorLayerData actorLayerData:
             {
-                MapGeneratorType = MapGeneratorType.Actor;
-                EnemyTypeIndex = ConfigManager.GetEnemyTypeIndex(actorLayerData.ActorTypeName);
+                MapGeneratorType = MapGeneratorType.Entity;
+                EntityTypeIndex = ConfigManager.GetEnemyTypeIndex(actorLayerData.ActorTypeName);
                 break;
             }
         }
@@ -57,11 +59,12 @@ public abstract class MapGenerator
 
     public abstract void ApplyToWorldMap();
 
-    protected void TryOverrideToWorldMap(int world_x, int world_y, int world_z)
+    protected bool TryOverrideToWorldMap(int world_x, int world_y, int world_z)
     {
+        bool overrideSuc = false;
         ushort existedIndex = WorldMap[world_x, world_y - Height, world_z];
         ushort existedIndex_StaticLayoutIndex = WorldMap_StaticLayoutOccupied[world_x, world_y - Height, world_z];
-        if (existedIndex_StaticLayoutIndex != 0) return; // 不能覆盖在静态布局上
+        if (existedIndex_StaticLayoutIndex != 0) return false; // 不能覆盖在静态布局上
         ConfigManager.TypeStartIndex existedIndexType = existedIndex.ConvertToTypeStartIndex();
         switch (MapGeneratorType)
         {
@@ -103,7 +106,7 @@ public abstract class MapGenerator
                                     rot = GridPosR.RotateOrientationClockwise90(rot);
                                 }
 
-                                foreach (GridPos3D gridPos in occupation.BoxIndicatorGPs_RotatedDict[rot])
+                                foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                                 {
                                     int box_grid_world_x = world_x + sl_local_x + gridPos.x;
                                     int box_grid_world_y = world_y + sl_local_y + gridPos.y;
@@ -150,6 +153,7 @@ public abstract class MapGenerator
                             int box_world_y = world_y + sl_local_y;
                             int box_world_z = world_z + sl_local_z;
                             WorldMap[box_world_x, box_world_y - Height, box_world_z] = boxTypeIndex;
+                            WorldMap_EntityExtraSerializeData[box_world_x, box_world_y - Height, box_world_z] = staticLayoutData.BoxExtraSerializeDataMatrix[rot_local_x, sl_local_y, rot_local_z]?.Clone();
                             EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(boxTypeIndex);
                             GridPosR.Orientation rot = staticLayoutData.RawBoxOrientationMatrix[rot_local_x, sl_local_y, rot_local_z];
                             for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
@@ -158,7 +162,7 @@ public abstract class MapGenerator
                             }
 
                             WorldMapOrientation[box_world_x, box_world_y - Height, box_world_z] = rot;
-                            foreach (GridPos3D gridPos in occupation.BoxIndicatorGPs_RotatedDict[rot])
+                            foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                             {
                                 int box_grid_world_x = box_world_x + gridPos.x;
                                 int box_grid_world_y = box_world_y + gridPos.y;
@@ -168,6 +172,7 @@ public abstract class MapGenerator
                         }
                     }
 
+                    // 将Layout大致占领区域都标记为Layout，避免其他生成因素插进来
                     for (int sl_local_x = staticLayoutData.BoxBounds.x_min; sl_local_x <= staticLayoutData.BoxBounds.x_max; sl_local_x++)
                     for (int sl_local_y = staticLayoutData.BoxBounds.y_min; sl_local_y <= staticLayoutData.BoxBounds.y_max; sl_local_y++)
                     for (int sl_local_z = staticLayoutData.BoxBounds.z_min; sl_local_z <= staticLayoutData.BoxBounds.z_max; sl_local_z++)
@@ -205,19 +210,51 @@ public abstract class MapGenerator
                             int y = world_y + enemyGP_rotated.y;
                             int z = world_z + enemyGP_rotated.z;
                             WorldMap[x, y - Height, z] = enemyTypeIndex;
+                            WorldMap_EntityExtraSerializeData[x, y - Height, z] = enemyBornPoint.RawEntityExtraSerializeData?.Clone();
                             WorldMap_Occupied[x, y - Height, z] = enemyTypeIndex;
                         }
                     }
+
+                    if (GenerateLayerData.DeterminePlayerBP)
+                    {
+                        if (m_OpenWorld.InitialPlayerBP == GridPos3D.Zero)
+                        {
+                            if (staticLayoutData.WorldModuleBornPointGroupData.PlayerBornPoints.Count > 0)
+                            {
+                                foreach (KeyValuePair<string, BornPointData> kv in staticLayoutData.WorldModuleBornPointGroupData.PlayerBornPoints)
+                                {
+                                    BornPointData playerBPD = kv.Value;
+                                    int rot_local_x = playerBPD.LocalGP.x;
+                                    int rot_local_z = playerBPD.LocalGP.z;
+                                    for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
+                                    {
+                                        int temp_x = rot_local_x;
+                                        rot_local_x = rot_local_z;
+                                        rot_local_z = WorldModule.MODULE_SIZE - 1 - temp_x;
+                                    }
+
+                                    GridPos3D playerBPWorldGP = new GridPos3D(world_x + rot_local_x, WorldModule.MODULE_SIZE, world_z + rot_local_z);
+                                    GridPos3D playerBPLocal = new GridPos3D(playerBPWorldGP.x % WorldModule.MODULE_SIZE, 0, playerBPWorldGP.z % WorldModule.MODULE_SIZE);
+                                    BornPointData bp = new BornPointData {ActorType = "Player1", BornPointAlias = OpenWorld.PLAYER_DEFAULT_BP, LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorldGP};
+                                    m_OpenWorld.WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP_OpenWorld(bp);
+                                    m_OpenWorld.InitialPlayerBP = playerBPWorldGP;
+                                    WorldMap[playerBPWorldGP.x, playerBPWorldGP.y - WorldModule.MODULE_SIZE, playerBPWorldGP.z] = (ushort) ConfigManager.TypeStartIndex.Player;
+                                }
+                            }
+                        }
+                    }
+
+                    overrideSuc = true;
                 }
 
                 break;
             }
 
-            case MapGeneratorType.Box:
+            case MapGeneratorType.Entity:
             {
                 bool spaceAvailable = true;
-                EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(BoxTypeIndex);
-                foreach (GridPos3D gridPos in occupation.BoxIndicatorGPs_RotatedDict[GridPosR.Orientation.Up]) // todo Orientation Random
+                EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(EntityTypeIndex);
+                foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[GridPosR.Orientation.Up]) // todo Orientation Random
                 {
                     if (!spaceAvailable) break;
                     int box_grid_world_x = world_x + gridPos.x;
@@ -251,47 +288,28 @@ public abstract class MapGenerator
 
                 if (spaceAvailable)
                 {
-                    WorldMap[world_x, 0, world_z] = BoxTypeIndex;
+                    WorldMap[world_x, 0, world_z] = EntityTypeIndex;
                     WorldMapOrientation[world_x, 0, world_z] = GridPosR.Orientation.Up;
-                    foreach (GridPos3D gridPos in occupation.BoxIndicatorGPs_RotatedDict[GridPosR.Orientation.Up]) // todo Orientation Random
+                    foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[GridPosR.Orientation.Up]) // todo Orientation Random
                     {
                         int box_grid_world_x = world_x + gridPos.x;
                         int box_grid_world_z = world_z + gridPos.z;
-                        WorldMap_Occupied[box_grid_world_x, 0, box_grid_world_z] = BoxTypeIndex;
+                        WorldMap_Occupied[box_grid_world_x, 0, box_grid_world_z] = EntityTypeIndex;
                     }
-                }
 
-                break;
-            }
-            case MapGeneratorType.Actor:
-            {
-                if (WorldMap_StaticLayoutOccupied[world_x, 0, world_z] != 0) break;
-
-                bool spaceAvailable = true;
-                switch (existedIndexType)
-                {
-                    case ConfigManager.TypeStartIndex.Box when !GenerateLayerData.AllowReplacedBoxTypeNameSet.Contains(ConfigManager.GetBoxTypeName(existedIndex)):
-                    case ConfigManager.TypeStartIndex.None when GenerateLayerData.OnlyOverrideAnyBox:
-                    case ConfigManager.TypeStartIndex.Player:
-                        spaceAvailable = false;
-                        break;
-                }
-
-                if (spaceAvailable)
-                {
-                    WorldMap[world_x, 0, world_z] = EnemyTypeIndex;
-                    WorldMap_Occupied[world_x, 0, world_z] = EnemyTypeIndex;
+                    overrideSuc = true;
                 }
 
                 break;
             }
         }
+
+        return overrideSuc;
     }
 }
 
 public enum MapGeneratorType
 {
     StaticLayout,
-    Box,
-    Actor,
+    Entity,
 }

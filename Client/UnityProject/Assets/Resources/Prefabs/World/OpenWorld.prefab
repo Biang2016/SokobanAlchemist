@@ -53,81 +53,124 @@ MonoBehaviour:
   UseCertainSeed: 0
   GivenSeed: 1396197886
   StartMicroWorldTypeName: TutorialWorld
+  InitialPlayerBP:
+    x: 0
+    y: 0
+    z: 0
   GenerateStaticLayoutLayerDataList:
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    CountPer10KGrid: 4
-    StaticLayoutTypeName: FireEnemyCave
+    CertainNumber: 1
+    Count: 1
+    CountPer10KGrid: 20
+    DeterminePlayerBP: 1
+    StaticLayoutTypeName: PlayerStarterCamp
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 1
+    DeterminePlayerBP: 0
     StaticLayoutTypeName: BossSlimeCave
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 10
+    DeterminePlayerBP: 0
     StaticLayoutTypeName: ThornTrapBoxCorrider
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 4
+    DeterminePlayerBP: 0
     StaticLayoutTypeName: LifeBoxTower
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 5
+    DeterminePlayerBP: 0
     StaticLayoutTypeName: ActionBoxMine
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 15
+    DeterminePlayerBP: 0
     StaticLayoutTypeName: CharcoalMine
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 3
+    DeterminePlayerBP: 0
     StaticLayoutTypeName: IceEnemyCave
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 15
+    DeterminePlayerBP: 0
     StaticLayoutTypeName: WoodenEnemyCave
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 2
+    DeterminePlayerBP: 0
     StaticLayoutTypeName: LightningEnemyCave
+  - ConsiderStaticLayout: 0
+    Enable: 1
+    AllowReplacedBoxTypeNames: []
+    OnlyOverrideAnyBox: 0
+    m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
+    CountPer10KGrid: 4
+    DeterminePlayerBP: 0
+    StaticLayoutTypeName: FireEnemyCave
   GenerateBoxLayerDataList:
   - ConsiderStaticLayout: 1
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 20
+    DeterminePlayerBP: 0
     BoxTypeName: BrickBox
     FillPercent: 63
     CaveConnectPercent: 30
-    DeterminePlayerBP: 1
     SmoothTimes: 3
     SmoothTimes_GenerateWallInOpenSpace: 4
   - ConsiderStaticLayout: 0
@@ -136,11 +179,13 @@ MonoBehaviour:
     - BrickBox
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 0
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 20
+    DeterminePlayerBP: 0
     BoxTypeName: BorderBox
     FillPercent: 0
     CaveConnectPercent: 0
-    DeterminePlayerBP: 0
     SmoothTimes: 1
     SmoothTimes_GenerateWallInOpenSpace: 0
   - ConsiderStaticLayout: 0
@@ -148,11 +193,13 @@ MonoBehaviour:
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 20
+    DeterminePlayerBP: 0
     BoxTypeName: WoodenBox
     FillPercent: 52
     CaveConnectPercent: 0
-    DeterminePlayerBP: 0
     SmoothTimes: 5
     SmoothTimes_GenerateWallInOpenSpace: 0
   - ConsiderStaticLayout: 0
@@ -161,11 +208,13 @@ MonoBehaviour:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 15
+    DeterminePlayerBP: 0
     BoxTypeName: LightningBox
     FillPercent: 40
     CaveConnectPercent: 40
-    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
   - ConsiderStaticLayout: 0
@@ -174,11 +223,13 @@ MonoBehaviour:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 20
+    DeterminePlayerBP: 0
     BoxTypeName: FireBox
     FillPercent: 40
     CaveConnectPercent: 40
-    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
   - ConsiderStaticLayout: 0
@@ -187,11 +238,13 @@ MonoBehaviour:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 10
+    DeterminePlayerBP: 0
     BoxTypeName: IceBox
     FillPercent: 40
     CaveConnectPercent: 40
-    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
   - ConsiderStaticLayout: 0
@@ -200,11 +253,13 @@ MonoBehaviour:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 8
+    DeterminePlayerBP: 0
     BoxTypeName: TNTBox
     FillPercent: 40
     CaveConnectPercent: 40
-    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
   - ConsiderStaticLayout: 0
@@ -213,11 +268,13 @@ MonoBehaviour:
     - WoodenBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
-    CountPer10KGrid: 20
+    CertainNumber: 0
+    Count: 1
+    CountPer10KGrid: 10
+    DeterminePlayerBP: 0
     BoxTypeName: LifeBox
     FillPercent: 40
     CaveConnectPercent: 40
-    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
   - ConsiderStaticLayout: 0
@@ -226,11 +283,13 @@ MonoBehaviour:
     - BrickBox
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 6
+    DeterminePlayerBP: 0
     BoxTypeName: GoldenBox
     FillPercent: 40
     CaveConnectPercent: 40
-    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
   - ConsiderStaticLayout: 0
@@ -239,11 +298,13 @@ MonoBehaviour:
     - BrickBox
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 1
+    DeterminePlayerBP: 0
     BoxTypeName: StackingGoldenBox
     FillPercent: 40
     CaveConnectPercent: 40
-    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
   - ConsiderStaticLayout: 0
@@ -252,11 +313,13 @@ MonoBehaviour:
     - BrickBox
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 60
+    DeterminePlayerBP: 0
     BoxTypeName: ActionBox
     FillPercent: 40
     CaveConnectPercent: 40
-    DeterminePlayerBP: 0
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
   GenerateActorLayerDataList:
@@ -265,35 +328,50 @@ MonoBehaviour:
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 3
+    DeterminePlayerBP: 0
     ActorTypeName: FireEnemy
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 3
+    DeterminePlayerBP: 0
     ActorTypeName: IceEnemy
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 3
+    DeterminePlayerBP: 0
     ActorTypeName: SpeedEnemy
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 3
+    DeterminePlayerBP: 0
     ActorTypeName: LifeEnemy
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
+    CertainNumber: 0
+    Count: 1
     CountPer10KGrid: 3
+    DeterminePlayerBP: 0
     ActorTypeName: LightningEnemy
   ExtendScope_Load: 4
   ExtendScope_Recycle: 20

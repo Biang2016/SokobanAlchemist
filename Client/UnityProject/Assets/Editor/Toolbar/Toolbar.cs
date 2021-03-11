@@ -62,8 +62,12 @@ namespace UnityToolbarExtender
         private static void OnRightToolbarGUI()
         {
             GUILayout.FlexibleSpace();
+            if (GUILayout.Button(new GUIContent("快速序列化类型"), ToolbarStyles.toolbarbuttonLeft))
+            {
+                ConfigManager.QuickExportConfigs_TypeDefines();
+            }
 
-            if (GUILayout.Button(new GUIContent("序列化配置"), ToolbarStyles.toolbarbutton))
+            if (GUILayout.Button(new GUIContent("序列化配置"), ToolbarStyles.toolbarbuttonRight))
             {
                 ConfigManager.ExportConfigs();
             }

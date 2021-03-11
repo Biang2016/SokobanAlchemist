@@ -9,8 +9,6 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
     public bool[,] map_2;
     public int[,] CaveIndexMap;
 
-    public GridPos ValidPlayerPosInConnectedCaves = GridPos.Zero;
-
     public static bool CAVE_GEN_DEBUG_LOG
 #if UNITY_EDITOR
         = false;
@@ -48,7 +46,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
         }
 
         // 联通洞穴
-        ConnectCave(boxLayerData.CaveConnectPercent, boxLayerData.DeterminePlayerBP);
+        ConnectCave(boxLayerData.CaveConnectPercent);
     }
 
     private void InitRandomFillMap(int randomFillPercent)
@@ -65,7 +63,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                 }
                 else if (isStaticLayout)
                 {
-                    fill = WorldMap[world_x, 0, world_z] == BoxTypeIndex;
+                    fill = WorldMap[world_x, 0, world_z] == EntityTypeIndex;
                 }
                 else
                 {
@@ -143,7 +141,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
         return wallCount;
     }
 
-    private void ConnectCave(int connectCavePercent, bool determinePlayerBP)
+    private void ConnectCave(int connectCavePercent)
     {
         if (connectCavePercent <= 0) return;
         CaveIndexMap = new int[Width, Depth];
@@ -170,7 +168,6 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
             Flood(caveIndex, out int area);
             caveIndex++;
             CaveConnectPoints.Add(new List<GridPos> {cavePointMax_X, cavePointMin_X, cavePointMax_Z, cavePointMin_Z});
-            if (determinePlayerBP) ValidPlayerPosInConnectedCaves = cavePointMin_X; // 处在洞穴中的玩家位置,随便取一个作为初始，避免只有单洞穴情况后面没有赋值
 
             cavePointMax_X = new GridPos(-1, 0);
             cavePointMin_X = new GridPos(int.MaxValue, 0);
@@ -258,29 +255,21 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
         Log($"ConnectCaveCount: {connectCaveCount}");
 
         HashSet<int> caveInGraph_graphIndex = new HashSet<int>();
-        int rootCave_graphIndex = SRandom.Range(0, connectCaveCount);
-        int rootCaveIndex = connectedCaveIndexArray[rootCave_graphIndex];
-
-        // Choose Player Position
-        if (determinePlayerBP)
+        int rootCave_graphIndex = 0;
+        int rootCaveIndex = CaveIndexMap[m_OpenWorld.InitialPlayerBP.x, m_OpenWorld.InitialPlayerBP.z];
+        if (rootCaveIndex == -1)
         {
-            for (int x = 0; x < Width; x++)
+            Debug.LogError("OpenWorld玩家初始坐标处在非洞穴区域");
+        }
+        else
+        {
+            for (int i = 0; i < connectedCaveIndexArray.Count; i++)
             {
-                bool found = false;
-                for (int z = 0; z < Depth; z++)
+                if (connectedCaveIndexArray[i] == rootCaveIndex)
                 {
-                    if (CaveIndexMap[x, z] == rootCaveIndex)
-                    {
-                        ValidPlayerPosInConnectedCaves = new GridPos(x, z);
-                        WorldMap[x, 0, z] = (ushort) ConfigManager.TypeStartIndex.Player;
-                        WorldMap_Occupied[x, 0, z] = (ushort) ConfigManager.TypeStartIndex.Player;
-                        found = true;
-                        Log($"PlayerBP found: ({x},{z}) CaveIndex: {rootCaveIndex} CaveIndex; {CaveIndexMap[x, z]}");
-                        break;
-                    }
+                    rootCave_graphIndex = i;
+                    break;
                 }
-
-                if (found) break;
             }
         }
 
@@ -500,9 +489,8 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
 
             Log($"FinalCaveCount: {caveIndex}. TotalCaveArea: {caveTotalArea}, CaveRatio: {caveRatio:##.#}%, CaveConnectRatio: {caveConnectRatio:##.#}%");
 
-            int playerCaveIndex = CaveIndexMap[ValidPlayerPosInConnectedCaves.x, ValidPlayerPosInConnectedCaves.z];
-            float playerCaveAreaRatio = (float) caveAreaArray[playerCaveIndex] / caveTotalArea * 100;
-            Log($"PlayerCaveArea: {caveAreaArray[playerCaveIndex]} PlayerCaveAreaRatio: {playerCaveAreaRatio:##.#}%");
+            float playerCaveAreaRatio = (float) caveAreaArray[rootCaveIndex] / caveTotalArea * 100;
+            Log($"PlayerCaveArea: {caveAreaArray[rootCaveIndex]} PlayerCaveAreaRatio: {playerCaveAreaRatio:##.#}%");
         }
     }
 

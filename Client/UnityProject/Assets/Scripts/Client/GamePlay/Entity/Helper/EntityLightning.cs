@@ -17,6 +17,7 @@ public class EntityLightning : PoolObject
     public override void OnRecycled()
     {
         base.OnRecycled();
+        EntityTriggerZone_Lightning.gameObject.SetActive(false);
         LightningPS.Stop(true);
         LightningLight.gameObject.SetActive(false);
         StartGeneratorHelper = null;
@@ -26,6 +27,7 @@ public class EntityLightning : PoolObject
     public override void OnUsed()
     {
         base.OnUsed();
+        EntityTriggerZone_Lightning.gameObject.SetActive(true);
     }
 
     private Transform StartPivot;

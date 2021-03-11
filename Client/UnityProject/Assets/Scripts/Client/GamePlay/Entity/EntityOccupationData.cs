@@ -22,7 +22,7 @@ public class EntityOccupationData : IClone<EntityOccupationData>
     [ListDrawerSettings(ListElementLabelName = "ToString")]
     public List<GridPos3D> EntityIndicatorGPs = new List<GridPos3D>();
 
-    public Dictionary<GridPosR.Orientation, List<GridPos3D>> BoxIndicatorGPs_RotatedDict;
+    public Dictionary<GridPosR.Orientation, List<GridPos3D>> EntityIndicatorGPs_RotatedDict;
 
     public void Clear()
     {
@@ -34,12 +34,12 @@ public class EntityOccupationData : IClone<EntityOccupationData>
 
     public void CalculateEveryOrientationOccupationGPs()
     {
-        if (BoxIndicatorGPs_RotatedDict == null) BoxIndicatorGPs_RotatedDict = new Dictionary<GridPosR.Orientation, List<GridPos3D>>();
-        BoxIndicatorGPs_RotatedDict.Clear();
-        BoxIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Up, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Up, EntityIndicatorGPs));
-        BoxIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Right, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Right, EntityIndicatorGPs));
-        BoxIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Down, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Down, EntityIndicatorGPs));
-        BoxIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Left, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Left, EntityIndicatorGPs));
+        if (EntityIndicatorGPs_RotatedDict == null) EntityIndicatorGPs_RotatedDict = new Dictionary<GridPosR.Orientation, List<GridPos3D>>();
+        EntityIndicatorGPs_RotatedDict.Clear();
+        EntityIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Up, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Up, EntityIndicatorGPs));
+        EntityIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Right, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Right, EntityIndicatorGPs));
+        EntityIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Down, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Down, EntityIndicatorGPs));
+        EntityIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Left, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Left, EntityIndicatorGPs));
     }
 
     public EntityOccupationData Clone()

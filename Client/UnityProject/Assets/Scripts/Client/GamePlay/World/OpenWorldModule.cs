@@ -54,9 +54,10 @@ public class OpenWorldModule : WorldModule
         bool generateBox(int x, int y, int z, GridPosR.Orientation orientation)
         {
             ushort boxTypeIndex = worldModuleData.BoxMatrix[x, y, z];
+            EntityExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[x, y, z];
             if (boxTypeIndex != 0)
             {
-                GenerateBox(boxTypeIndex, LocalGPToWorldGP(new GridPos3D(x, y, z)), orientation, false, true, null);
+                GenerateBox(boxTypeIndex, LocalGPToWorldGP(new GridPos3D(x, y, z)), orientation, false, true, boxExtraSerializeDataFromModule);
                 return true;
             }
 

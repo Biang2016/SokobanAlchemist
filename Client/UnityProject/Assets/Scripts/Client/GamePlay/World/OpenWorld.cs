@@ -22,6 +22,7 @@ public class OpenWorld : World
     public uint GivenSeed = 0;
 
     public ushort[,,] WorldMap; // 地图元素放置  Y轴缩小16
+    public EntityExtraSerializeData[,,] WorldMap_EntityExtraSerializeData; // 地图元素放置  Y轴缩小16
     public GridPosR.Orientation[,,] WorldMapOrientation; // 地图元素放置朝向  Y轴缩小16
     public ushort[,,] WorldMap_Occupied; // 地图元素占位  Y轴缩小16
     public ushort[,,] WorldMap_StaticLayoutOccupied; // 地图静态布局占位  Y轴缩小16
@@ -29,6 +30,8 @@ public class OpenWorld : World
     [LabelText("起始MicroWorld")]
     [ValueDropdown("GetAllWorldNames", IsUniqueList = true, DropdownTitle = "选择世界", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
     public string StartMicroWorldTypeName = "None";
+
+    public GridPos3D InitialPlayerBP = GridPos3D.Zero;
 
     private IEnumerable<string> GetAllWorldNames => ConfigManager.GetAllWorldNames();
 
@@ -57,9 +60,21 @@ public class OpenWorld : World
         [LabelText("生成算法")]
         public GenerateAlgorithm m_GenerateAlgorithm = GenerateAlgorithm.CellularAutomata;
 
+        [LabelText("数量确定")]
+        public bool CertainNumber = false;
+
+        [ShowIf("CertainNumber")]
+        [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.Random)]
+        [LabelText("数量")]
+        public int Count = 1;
+
+        [HideIf("CertainNumber")]
         [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.Random)]
         [LabelText("比率：每万格约有多少个")]
         public int CountPer10KGrid = 20;
+
+        [LabelText("决定玩家出生点")]
+        public bool DeterminePlayerBP = false;
 
         public void Init()
         {
@@ -103,10 +118,6 @@ public class OpenWorld : World
         [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
         [LabelText("洞穴联通率")]
         public int CaveConnectPercent = 0;
-
-        [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
-        [LabelText("决定玩家出生点")]
-        public bool DeterminePlayerBP = false;
 
         [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
         [LabelText("迭代次数")]
@@ -160,14 +171,18 @@ public class OpenWorld : World
 
     #endregion
 
+    public const string PLAYER_DEFAULT_BP = "OpenWorldPlayerBP";
+
     public override void OnRecycled()
     {
         base.OnRecycled();
         WorldMap = null;
+        WorldMap_EntityExtraSerializeData = null;
         WorldMapOrientation = null;
         WorldMap_Occupied = null;
         WorldMap_StaticLayoutOccupied = null;
         IsInsideMicroWorld = false;
+        InitialPlayerBP = GridPos3D.Zero;
     }
 
     public override IEnumerator Initialize(WorldData worldData)
@@ -187,6 +202,7 @@ public class OpenWorld : World
         SRandom SRandom = new SRandom(Seed);
 
         WorldMap = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMap_EntityExtraSerializeData = new EntityExtraSerializeData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMapOrientation = new GridPosR.Orientation[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_Occupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_StaticLayoutOccupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
@@ -196,7 +212,7 @@ public class OpenWorld : World
         WorldData = worldData;
 
         WorldData.WorldBornPointGroupData_Runtime.InitTempData();
-        WorldData.DefaultWorldActorBornPointAlias = "PlayerBP";
+        WorldData.DefaultWorldActorBornPointAlias = PLAYER_DEFAULT_BP;
 
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.5f, "Loading Open World");
         yield return null;
@@ -249,16 +265,6 @@ public class OpenWorld : World
                 case GenerateAlgorithm.CellularAutomata:
                 {
                     generator = new CellularAutomataMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
-                    if (boxLayerData.DeterminePlayerBP) // 细胞自动机的地图决定了玩家落点，位于联通的洞穴中
-                    {
-                        GridPos playerBP = ((CellularAutomataMapGenerator) generator).ValidPlayerPosInConnectedCaves;
-                        playerBPWorld = new GridPos3D(playerBP.x, WorldModule.MODULE_SIZE, playerBP.z);
-                        GridPos3D playerBPLocal = new GridPos3D(playerBP.x % WorldModule.MODULE_SIZE, 0, playerBP.z % WorldModule.MODULE_SIZE);
-                        BornPointData bp = new BornPointData {ActorType = "Player1", BornPointAlias = $"PlayerBP", LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorld};
-                        WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP_OpenWorld(bp);
-                        WorldMap[playerBPWorld.x, playerBPWorld.y - WorldModule.MODULE_SIZE, playerBPWorld.z] = (ushort) ConfigManager.TypeStartIndex.Player;
-                    }
-
                     break;
                 }
                 case GenerateAlgorithm.PerlinNoise:
@@ -483,18 +489,21 @@ public class OpenWorld : World
                                     moduleData.BoxMatrix[local_x, local_y, local_z] = existedIndex;
                                     moduleData.RawBoxOrientationMatrix[local_x, local_y, local_z] = WorldMapOrientation[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
                                     moduleData.BoxOrientationMatrix[local_x, local_y, local_z] = WorldMapOrientation[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
+                                    moduleData.BoxExtraSerializeDataMatrix[local_x, local_y, local_z] = WorldMap_EntityExtraSerializeData[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
                                     break;
                                 }
                                 case ConfigManager.TypeStartIndex.Enemy:
                                 {
                                     string actorTypeName = ConfigManager.GetEnemyTypeName(existedIndex);
+                                    EntityExtraSerializeData actorExtraData = WorldMap_EntityExtraSerializeData[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
                                     moduleData.WorldModuleBornPointGroupData.EnemyBornPoints.Add(
                                         new BornPointData
                                         {
                                             ActorType = actorTypeName,
                                             LocalGP = new GridPos3D(local_x, local_y, local_z),
                                             BornPointAlias = "",
-                                            WorldGP = new GridPos3D(world_x, world_y, world_z)
+                                            WorldGP = new GridPos3D(world_x, world_y, world_z),
+                                            RawEntityExtraSerializeData = actorExtraData
                                         });
                                     break;
                                 }
