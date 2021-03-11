@@ -12,19 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d31b62ec9d586a4e94389d9071559ca, type: 3}
   m_Name: M_1
   m_EditorClassIdentifier: 
-  _serializedGraph: '{"type":"FlowCanvas.FlowScript","nodes":[{"_position":{"x":495.0,"y":480.0},"$type":"FlowCanvas.Nodes.FixedUpdateEvent","$id":"0"},{"_simplexNode":{"BattleStateAliasList":{"_value":["M_1_Unlock1","M_1_Unlock2"]},"And":{"_value":true}},"_position":{"x":720.0,"y":480.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_GetMultiBattleStateAnd,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"1"},{"_position":{"x":960.0,"y":480.0},"$type":"FlowCanvas.Nodes.SwitchBool","$id":"2"},{"_position":{"x":1140.0,"y":480.0},"$type":"FlowCanvas.Nodes.DoOnce","$id":"3"},{"_simplexNode":{"LevelEventAlias":{"_value":"M_1_LockOpen"}},"_position":{"x":1290.0,"y":480.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_BroadcastLevelEvent,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"4"}],"connections":[{"_sourcePortName":"Out","_targetPortName":"
-    ","_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"
-    ","_targetPortName":"In","_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Value","_targetPortName":"Condition","_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"FlowCanvas.BinderConnection`1[[System.Boolean,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},{"_sourcePortName":"True","_targetPortName":"In","_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Out","_targetPortName":"
-    ","_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"4"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
+  _serializedGraph: '{"type":"FlowCanvas.FlowScript","nodes":[{"LevelEventAlias":{"_value":"M_1_TaskTip"},"_position":{"x":570.0,"y":480.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"0"},{"_simplexNode":{"NoticeTip":{"_value":"\u51fb\u8d25\u6240\u6709\u654c\u4eba"},"TipPositionType":{},"Duration":{"_value":3.0}},"_position":{"x":900.0,"y":480.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"1"}],"connections":[{"_sourcePortName":"OnTriggered","_targetPortName":"
+    ","_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
   _objectReferences: []
   _graphSource:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: -409, y: -280}
+    _translation: {x: -375, y: -301}
     _zoomFactor: 1
   _haltSerialization: 0
 #---GRAPH_START---
@@ -33,115 +29,45 @@ MonoBehaviour:
 #    "type": "FlowCanvas.FlowScript",
 #    "nodes": [
 #        {
+#            "LevelEventAlias": {
+#                "_value": "M_1_TaskTip"
+#            },
 #            "_position": {
-#                "x": 495.0,
+#                "x": 570.0,
 #                "y": 480.0
 #            },
-#            "$type": "FlowCanvas.Nodes.FixedUpdateEvent",
+#            "$type": "ModuleAIAtoms+Flow_OnLevelEventTrigger",
 #            "$id": "0"
 #        },
 #        {
 #            "_simplexNode": {
-#                "BattleStateAliasList": {
-#                    "_value": [
-#                        "M_1_Unlock1",
-#                        "M_1_Unlock2"
-#                    ]
+#                "NoticeTip": {
+#                    "_value": "\u51fb\u8d25\u6240\u6709\u654c\u4eba"
 #                },
-#                "And": {
-#                    "_value": true
+#                "TipPositionType": {
+#
+#                },
+#                "Duration": {
+#                    "_value": 3.0
 #                }
 #            },
 #            "_position": {
-#                "x": 720.0,
+#                "x": 900.0,
 #                "y": 480.0
 #            },
-#            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_GetMultiBattleStateAnd, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+#            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
 #            "$id": "1"
-#        },
-#        {
-#            "_position": {
-#                "x": 960.0,
-#                "y": 480.0
-#            },
-#            "$type": "FlowCanvas.Nodes.SwitchBool",
-#            "$id": "2"
-#        },
-#        {
-#            "_position": {
-#                "x": 1140.0,
-#                "y": 480.0
-#            },
-#            "$type": "FlowCanvas.Nodes.DoOnce",
-#            "$id": "3"
-#        },
-#        {
-#            "_simplexNode": {
-#                "LevelEventAlias": {
-#                    "_value": "M_1_LockOpen"
-#                }
-#            },
-#            "_position": {
-#                "x": 1290.0,
-#                "y": 480.0
-#            },
-#            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_BroadcastLevelEvent, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-#            "$id": "4"
 #        }
 #    ],
 #    "connections": [
 #        {
-#            "_sourcePortName": "Out",
+#            "_sourcePortName": "OnTriggered",
 #            "_targetPortName": " ",
 #            "_sourceNode": {
 #                "$ref": "0"
 #            },
 #            "_targetNode": {
 #                "$ref": "1"
-#            },
-#            "$type": "FlowCanvas.BinderConnection"
-#        },
-#        {
-#            "_sourcePortName": " ",
-#            "_targetPortName": "In",
-#            "_sourceNode": {
-#                "$ref": "1"
-#            },
-#            "_targetNode": {
-#                "$ref": "2"
-#            },
-#            "$type": "FlowCanvas.BinderConnection"
-#        },
-#        {
-#            "_sourcePortName": "Value",
-#            "_targetPortName": "Condition",
-#            "_sourceNode": {
-#                "$ref": "1"
-#            },
-#            "_targetNode": {
-#                "$ref": "2"
-#            },
-#            "$type": "FlowCanvas.BinderConnection`1[[System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"
-#        },
-#        {
-#            "_sourcePortName": "True",
-#            "_targetPortName": "In",
-#            "_sourceNode": {
-#                "$ref": "2"
-#            },
-#            "_targetNode": {
-#                "$ref": "3"
-#            },
-#            "$type": "FlowCanvas.BinderConnection"
-#        },
-#        {
-#            "_sourcePortName": "Out",
-#            "_targetPortName": " ",
-#            "_sourceNode": {
-#                "$ref": "3"
-#            },
-#            "_targetNode": {
-#                "$ref": "4"
 #            },
 #            "$type": "FlowCanvas.BinderConnection"
 #        }

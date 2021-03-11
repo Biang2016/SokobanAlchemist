@@ -324,10 +324,16 @@ public class OpenWorld : World
         BattleManager.Instance.CreateActorByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias]);
         BattleManager.Instance.Player1.ForbidAction = true;
         CameraManager.Instance.FieldCamera.InitFocus();
-        RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(playerBPWorld, PlayerScopeRadiusX, PlayerScopeRadiusZ)); // 按关卡生成器和角色位置初始化需要的模组
-        while (RefreshScopeModulesCoroutine != null) yield return null;
 
-        BattleManager.Instance.Player1.ForbidAction = false;
+        // 没有起始关卡就直接进入大世界，有起始关卡则避免加载了又卸载
+        ushort startMicroWorldTypeIndex = ConfigManager.GetWorldTypeIndex(StartMicroWorldTypeName);
+        if (startMicroWorldTypeIndex == 0)
+        {
+            RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(playerBPWorld, PlayerScopeRadiusX, PlayerScopeRadiusZ)); // 按关卡生成器和角色位置初始化需要的模组
+            while (RefreshScopeModulesCoroutine != null) yield return null;
+
+            BattleManager.Instance.Player1.ForbidAction = false;
+        }
     }
 
     public IEnumerator OnAfterInitialize()
@@ -695,7 +701,7 @@ public class OpenWorld : World
         }
 
         IsInsideMicroWorld = true;
-        LastLeaveOpenWorldPlayerGP = BattleManager.Instance.Player1.WorldGP;
+        LastLeaveOpenWorldPlayerGP = BattleManager.Instance.Player1.transform.position.ToGridPos3D();
 
         BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint);
         CameraManager.Instance.FieldCamera.InitFocus();
@@ -713,6 +719,7 @@ public class OpenWorld : World
 
     public void ReturnToOpenWorldFormMicroWorld()
     {
+        if (!IsInsideMicroWorld) return;
         StartCoroutine(Co_ReturnToOpenWorldFormMicroWorld());
     }
 

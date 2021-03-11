@@ -16,13 +16,8 @@ public class Box_LevelEditor : MonoBehaviour
     public GameObject ModelRoot;
     public GameObject BoxIndicatorHelperGO;
 
-    #region 箱子Extra被动技能
-
-    [FoldoutGroup("箱子Extra被动技能")]
-    [LabelText("箱子Extra被动技能")]
-    [ListDrawerSettings(ListElementLabelName = "Description")]
-    [SerializeReference]
-    public List<EntityPassiveSkill> RawBoxPassiveSkills = new List<EntityPassiveSkill>(); // 干数据，禁修改
+    [LabelText("箱子额外数据")]
+    public EntityExtraSerializeData RawEntityExtraSerializeData = new EntityExtraSerializeData(); // 干数据，禁修改
 
     [LabelText("箱子朝向")]
     [OnValueChanged("RefreshOrientation")]
@@ -45,50 +40,28 @@ public class Box_LevelEditor : MonoBehaviour
         return dirty;
     }
 
-    #endregion
-
-    #region BoxExtraData
-
-    public class BoxExtraSerializeData : IClone<BoxExtraSerializeData>
+    public EntityExtraSerializeData GetBoxExtraSerializeData()
     {
-        public GridPos3D LocalGP; // Box在Module内的GP
-
-        public List<EntityPassiveSkill> BoxPassiveSkills = new List<EntityPassiveSkill>();
-
-        public BoxExtraSerializeData Clone()
-        {
-            return new BoxExtraSerializeData
-            {
-                LocalGP = LocalGP,
-                BoxPassiveSkills = BoxPassiveSkills.Clone()
-            };
-        }
-    }
-
-    public BoxExtraSerializeData GetBoxExtraSerializeDataForWorldModule()
-    {
-        BoxExtraSerializeData data = new BoxExtraSerializeData();
-        data.BoxPassiveSkills = new List<EntityPassiveSkill>();
-        foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
+        EntityExtraSerializeData data = new EntityExtraSerializeData();
+        data.EntityPassiveSkills = new List<EntityPassiveSkill>();
+        foreach (EntityPassiveSkill bf in RawEntityExtraSerializeData.EntityPassiveSkills)
         {
             if (bf is BoxPassiveSkill_LevelEventTriggerAppear) continue;
-            data.BoxPassiveSkills.Add(bf.Clone());
+            data.EntityPassiveSkills.Add(bf.Clone());
         }
 
         return data;
     }
 
-    #endregion
-
 #if UNITY_EDITOR
 
-    public bool RequireSerializePassiveSkillsIntoWorldModule => RawBoxPassiveSkills.Count > 0;
+    public bool RequireSerializePassiveSkillsIntoWorldModule => RawEntityExtraSerializeData.EntityPassiveSkills.Count > 0;
 
     public bool LevelEventTriggerAppearInWorldModule
     {
         get
         {
-            foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
+            foreach (EntityPassiveSkill bf in RawEntityExtraSerializeData.EntityPassiveSkills)
             {
                 if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear) return true;
             }
@@ -158,7 +131,7 @@ public class Box_LevelEditor : MonoBehaviour
     public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)
     {
         bool isDirty = false;
-        foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
+        foreach (EntityPassiveSkill bf in RawEntityExtraSerializeData.EntityPassiveSkills)
         {
             bool dirty = bf.RenameBoxTypeName(name, srcBoxName, targetBoxName, info);
             isDirty |= dirty;
@@ -171,13 +144,22 @@ public class Box_LevelEditor : MonoBehaviour
     {
         bool isDirty = false;
 
-        foreach (EntityPassiveSkill bf in RawBoxPassiveSkills)
+        foreach (EntityPassiveSkill bf in RawEntityExtraSerializeData.EntityPassiveSkills)
         {
             bool dirty = bf.DeleteBoxTypeName(name, srcBoxName, info);
             isDirty |= dirty;
         }
 
         return isDirty;
+    }
+
+    /// <summary>
+    /// 专门作为工具使用，有时需要批量migrate数据
+    /// </summary>
+    /// <returns></returns>
+    public bool RefreshData()
+    {
+        return false;
     }
 
 #endif

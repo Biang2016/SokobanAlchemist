@@ -66,7 +66,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
             ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxName];
 
             bool isLevelEventTriggerAppearBox = false;
-            foreach (EntityPassiveSkill eps in box.RawBoxPassiveSkills)
+            foreach (EntityPassiveSkill eps in box.RawEntityExtraSerializeData.EntityPassiveSkills)
             {
                 if (eps is BoxPassiveSkill_LevelEventTriggerAppear bf_leta)
                 {
@@ -123,8 +123,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
             // 就算是LevelEventTriggerAppear的Box，模组特例数据也按原样序列化，箱子生成时到Matrix里面读取ExtraSerializeData
             if (box.RequireSerializePassiveSkillsIntoWorldModule)
             {
-                Box_LevelEditor.BoxExtraSerializeData data = box.GetBoxExtraSerializeDataForWorldModule();
-                data.LocalGP = gp;
+                EntityExtraSerializeData data = box.GetBoxExtraSerializeData();
                 worldModuleData.BoxExtraSerializeDataMatrix[gp.x, gp.y, gp.z] = data;
             }
         }
@@ -418,6 +417,18 @@ public class WorldModuleDesignHelper : MonoBehaviour
 
         localInfo.Append($"ModuleEnd: {name} ------------\n");
         if (isDirty) info.Append(localInfo);
+        return isDirty;
+    }
+
+    public bool RefreshBoxLevelEditor()
+    {
+        bool isDirty = false;
+        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
+        foreach (Box_LevelEditor box in boxes)
+        {
+            isDirty |= box.RefreshData();
+        }
+
         return isDirty;
     }
 

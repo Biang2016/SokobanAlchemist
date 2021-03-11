@@ -11,6 +11,10 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 {
     protected override string Description => "条件触发的箱子被动技能";
 
+    [ReadOnly]
+    [HideInEditorMode]
+    public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
+
     [Flags]
     public enum PassiveSkillConditionType
     {
@@ -53,6 +57,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnInit()
     {
         base.OnInit();
+        InitWorldModuleGUID = Entity.InitWorldModuleGUID;
         InitPassiveSkillActions();
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnInit))
         {
@@ -148,14 +153,27 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
     }
 
-    private void OnEvent(string eventAlias)
+    private void OnEvent(string incomingEventAlias)
     {
+        bool CheckEventAlias(string waitingEventAlias)
+        {
+            if (waitingEventAlias.Contains("{WorldModule}"))
+            {
+                string formatWaitingEventAlias = waitingEventAlias.Replace("{WorldModule}", InitWorldModuleGUID.ToString());
+                return formatWaitingEventAlias.Equals(incomingEventAlias);
+            }
+            else
+            {
+                return !string.IsNullOrEmpty(waitingEventAlias) && waitingEventAlias.Equals(incomingEventAlias);
+            }
+        }
+
         if (MultiEventTrigger)
         {
             for (int index = 0; index < ListenLevelEventAliasList.Count; index++)
             {
                 string alias = ListenLevelEventAliasList[index];
-                if (eventAlias == alias && !multiTriggerFlags[index])
+                if (CheckEventAlias(alias) && !multiTriggerFlags[index])
                 {
                     multiTriggerFlags[index] = true;
                 }
@@ -177,14 +195,11 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
         else
         {
-            if (!string.IsNullOrEmpty(ListenLevelEventAlias))
+            if (CheckEventAlias(ListenLevelEventAlias))
             {
-                if (ListenLevelEventAlias.Equals(eventAlias))
+                if (TriggerProbabilityPercent.ProbabilityBool())
                 {
-                    if (TriggerProbabilityPercent.ProbabilityBool())
-                    {
-                        ExecuteFunction();
-                    }
+                    ExecuteFunction();
                 }
             }
         }

@@ -40,7 +40,7 @@ public class EntityPassiveSkillAction_DropBox : EntityPassiveSkillAction, Entity
                 if (boxIndex == 0) return;
                 Box box = GameObjectPoolManager.Instance.BoxDict[boxIndex].AllocateGameObject<Box>(null);
                 GridPos3D worldGP = Entity.WorldGP;
-                box.Setup(boxIndex, (GridPosR.Orientation) Random.Range(0, 4));
+                box.Setup(boxIndex, (GridPosR.Orientation) Random.Range(0, 4), Entity.InitWorldModuleGUID);
                 box.Initialize(worldGP, module, 0, false, Box.LerpType.DropFromEntity);
                 Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(DropConeAngle * Mathf.Deg2Rad);
                 Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);

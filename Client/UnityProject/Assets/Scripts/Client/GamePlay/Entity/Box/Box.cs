@@ -462,8 +462,9 @@ public partial class Box : Entity
         }
     }
 
-    public void Setup(ushort boxTypeIndex, GridPosR.Orientation orientation)
+    public void Setup(ushort boxTypeIndex, GridPosR.Orientation orientation, uint initWorldModuleGUID)
     {
+        base.Setup(initWorldModuleGUID);
         EntityTypeIndex = boxTypeIndex;
         InitPassiveSkills();
 
@@ -1326,23 +1327,7 @@ public partial class Box : Entity
     }
 
     #endregion
-
-    #region BoxExtraData
-
-    public void ApplyBoxExtraSerializeData(Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null)
-    {
-        if (boxExtraSerializeDataFromModule != null)
-        {
-            foreach (EntityPassiveSkill extraPS in boxExtraSerializeDataFromModule.BoxPassiveSkills)
-            {
-                EntityPassiveSkill newPS = extraPS.Clone();
-                AddNewPassiveSkill(newPS, true);
-            }
-        }
-    }
-
-    #endregion
-
+    
 #if UNITY_EDITOR
 
     public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using BiangLibrary;
+using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -21,10 +24,10 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
     [LabelText("传送类型")]
     public TransportType m_TransportType = TransportType.TransportToMicroWorld;
 
-    [LabelText("传送至新世界")]
+    [BoxNameList]
     [ShowIf("m_TransportType", TransportType.TransportToMicroWorld)]
-    [ValueDropdown("GetAllWorldNames", IsUniqueList = true, DropdownTitle = "选择世界", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string TransportPlayerToWorld = "None";
+    [LabelText("世界类型概率")]
+    public List<WorldNameWithProbability> WorldProbList = new List<WorldNameWithProbability>();
 
     public void Execute()
     {
@@ -36,7 +39,8 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
                 {
                     if ((WorldManager.Instance.CurrentWorld is OpenWorld openWorld))
                     {
-                        ushort worldTypeIndex = ConfigManager.GetWorldTypeIndex(TransportPlayerToWorld);
+                        WorldNameWithProbability randomResult = CommonUtils.GetRandomFromList(WorldProbList);
+                        ushort worldTypeIndex = ConfigManager.GetWorldTypeIndex(randomResult.WorldTypeName);
                         if (worldTypeIndex != 0)
                         {
                             openWorld.TransportPlayerToMicroWorld(worldTypeIndex);
@@ -77,7 +81,7 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
         base.ChildClone(newAction);
         EntityPassiveSkillAction_TransportPlayer action = ((EntityPassiveSkillAction_TransportPlayer) newAction);
         action.m_TransportType = m_TransportType;
-        action.TransportPlayerToWorld = TransportPlayerToWorld;
+        action.WorldProbList = WorldProbList.Clone();
     }
 
     public override void CopyDataFrom(EntityPassiveSkillAction srcData)
@@ -85,6 +89,6 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
         base.CopyDataFrom(srcData);
         EntityPassiveSkillAction_TransportPlayer action = ((EntityPassiveSkillAction_TransportPlayer) srcData);
         m_TransportType = action.m_TransportType;
-        TransportPlayerToWorld = action.TransportPlayerToWorld;
+        WorldProbList = action.WorldProbList.Clone();
     }
 }

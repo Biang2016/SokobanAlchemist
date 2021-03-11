@@ -20,6 +20,52 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     internal List<EnemyActor> Enemies = new List<EnemyActor>();
     internal SortedDictionary<uint, Actor> ActorDict = new SortedDictionary<uint, Actor>();
 
+    #region 分模组记录模组所属的Actor信息
+
+    internal Dictionary<uint, HashSet<uint>> WorldModuleActorDict = new Dictionary<uint, HashSet<uint>>(); // Key: WorldModuleGUID, Value: HashSet<ActorGUID>
+
+    private void RegisterEnemyToWorldModule(uint worldModuleGUID, uint actorGUID)
+    {
+        if (!WorldModuleActorDict.ContainsKey(worldModuleGUID))
+        {
+            WorldModuleActorDict.Add(worldModuleGUID, new HashSet<uint>());
+        }
+
+        WorldModuleActorDict[worldModuleGUID].Add(actorGUID);
+    }
+
+    private void UnregisterEnemyToWorldModule(uint actorGUID)
+    {
+        if (ActorDict.TryGetValue(actorGUID, out Actor actor))
+        {
+            if (WorldModuleActorDict.TryGetValue(actor.InitWorldModuleGUID, out HashSet<uint> dict))
+            {
+                if (dict.Remove(actorGUID))
+                {
+                    if (dict.Count == 0)
+                    {
+                        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, $"WorldModule_{actor.InitWorldModuleGUID}_EnemyClear");
+                        WorldModuleActorDict.Remove(actor.InitWorldModuleGUID);
+                    }
+                }
+                else
+                {
+                    Debug.LogError("角色未注册进世界模组字典");
+                }
+            }
+            else
+            {
+                Debug.LogError("未注册过的世界模组GUID");
+            }
+        }
+        else
+        {
+            Debug.LogError("未注册过角色");
+        }
+    }
+
+    #endregion
+
     public Transform ActorContainerRoot;
     public Transform NavTrackMarkerRoot;
 
@@ -41,6 +87,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
 
         ActorDict.Clear();
+        WorldModuleActorDict.Clear();
 
         BattleMessenger.Cleanup();
         BattleStateBoolDict.Clear();
@@ -96,6 +143,10 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
     }
 
+    /// <summary>
+    /// 按地理位置销毁角色
+    /// </summary>
+    /// <param name="moduleGP"></param>
     public void DestroyActorByModuleGP(GridPos3D moduleGP)
     {
         List<Actor> cachedDyingActors = new List<Actor>(32);
@@ -124,33 +175,40 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             PlayerNumber playerNumber = (PlayerNumber) Enum.Parse(typeof(PlayerNumber), bpd.ActorType);
             PlayerActor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
             GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
-            player.Initialize(bpd.ActorType, bpd.ActorCategory, playerNumber);
+            player.WorldGP = bpd.WorldGP;
+            player.Setup(bpd.ActorType, bpd.ActorCategory, playerNumber, 0);
             BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
             MainPlayers[(int) playerNumber] = player;
-            AddActor(player);
+            AddActor(null, player);
             UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>().Initialize();
             UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
         }
         else
         {
-            
-            ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.ActorType);
-            EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
-            GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, enemy.transform, 1);
-            enemy.Initialize(bpd.ActorType, bpd.ActorCategory);
-            enemy.ApplyActorExtraEntityPassiveSkill(bpd.RawBoxPassiveSkills);
-            Enemies.Add(enemy);
-            AddActor(enemy);
+            WorldModule worldModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(bpd.WorldGP);
+            if (worldModule != null)
+            {
+                ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.ActorType);
+                EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
+                GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, enemy.transform, 1);
+                enemy.Setup(bpd.ActorType, bpd.ActorCategory, worldModule.GUID);
+                enemy.WorldGP = bpd.WorldGP;
+                enemy.ApplyBoxExtraSerializeData(bpd.RawEntityExtraSerializeData);
+                Enemies.Add(enemy);
+                AddActor(worldModule, enemy);
+            }
         }
     }
 
-    private void AddActor(Actor actor)
+    private void AddActor(WorldModule worldModule, Actor actor)
     {
+        if (actor is EnemyActor enemy) RegisterEnemyToWorldModule(worldModule.GUID, enemy.GUID);
         ActorDict.Add(actor.GUID, actor);
     }
 
-    private void RemoveActor(Actor actor)
+    public void RemoveActor(Actor actor)
     {
+        if (actor is EnemyActor enemy) UnregisterEnemyToWorldModule(enemy.GUID);
         ActorDict.Remove(actor.GUID);
     }
 

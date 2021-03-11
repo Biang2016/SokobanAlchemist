@@ -122,6 +122,11 @@ public class BoxEditorWindow : EditorWindow
         {
             DeleteBox(srcBoxName);
         }
+
+        if (GUILayout.Button("(工具)刷新"))
+        {
+            RefreshBoxLevelEditor();
+        }
     }
 
     private void RenameBox(string srcBoxName, string tarBoxName)
@@ -491,6 +496,51 @@ public class BoxEditorWindow : EditorWindow
         else
         {
             return;
+        }
+    }
+
+    private void RefreshBoxLevelEditor()
+    {
+        // Ref in WorldModules
+        List<string> worldModuleNames = ConfigManager.GetAllWorldModuleNames();
+        foreach (string worldModuleName in worldModuleNames)
+        {
+            GameObject worldModulePrefab = ConfigManager.FindWorldModulePrefabByName(worldModuleName);
+            bool isDirty = false;
+            if (worldModulePrefab)
+            {
+                WorldModuleDesignHelper module = worldModulePrefab.GetComponent<WorldModuleDesignHelper>();
+                if (module)
+                {
+                    isDirty = module.RefreshBoxLevelEditor();
+                }
+            }
+
+            if (isDirty)
+            {
+                PrefabUtility.SavePrefabAsset(worldModulePrefab);
+            }
+        }
+
+        // Ref in StaticLayouts
+        List<string> staticLayoutNames = ConfigManager.GetAllStaticLayoutNames();
+        foreach (string staticLayoutName in staticLayoutNames)
+        {
+            GameObject staticLayoutPrefab = ConfigManager.FindStaticLayoutPrefabByName(staticLayoutName);
+            bool isDirty = false;
+            if (staticLayoutPrefab)
+            {
+                WorldModuleDesignHelper module = staticLayoutPrefab.GetComponent<WorldModuleDesignHelper>();
+                if (module)
+                {
+                    isDirty = module.RefreshBoxLevelEditor();
+                }
+            }
+
+            if (isDirty)
+            {
+                PrefabUtility.SavePrefabAsset(staticLayoutPrefab);
+            }
         }
     }
 }

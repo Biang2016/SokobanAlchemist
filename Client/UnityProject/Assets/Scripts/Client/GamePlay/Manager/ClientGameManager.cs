@@ -239,6 +239,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             return;
         }
 
+#if DEBUG
         if (Input.GetKey(KeyCode.Equals))
         {
             Time.timeScale = 0.1f;
@@ -247,6 +248,15 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         {
             Time.timeScale = 1f;
         }
+
+        if (Input.GetKey(KeyCode.B))
+        {
+            if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+            {
+                openWorld.ReturnToOpenWorldFormMicroWorld();
+            }
+        }
+#endif
 
         if (ControlManager.Battle_LeftRotateCamera.Up)
         {

@@ -29,9 +29,9 @@ public class PlayerActor : Actor
     private GridPos3D quickMoveStartWorldGP = GridPos3D.Zero; // 记录短按开始时的角色坐标（按上一次down键的世界坐标取值）
     private Vector3 quickMoveAttempt = Vector3.zero; // 记录当前短按的移动方向，zero为无短按
 
-    public void Initialize(string actorType, ActorCategory actorCategory, PlayerNumber playerNumber)
+    public void Setup(string actorType, ActorCategory actorCategory, PlayerNumber playerNumber, uint initWorldModuleGUID)
     {
-        base.Initialize(actorType, actorCategory);
+        base.Setup(actorType, actorCategory, initWorldModuleGUID);
         PlayerNumber = playerNumber;
         ActorSkinHelper.Initialize(playerNumber);
         BS_Up = ControlManager.Instance.Battle_MoveButtons[(int) PlayerNumber, (int) GridPosR.Orientation.Up];

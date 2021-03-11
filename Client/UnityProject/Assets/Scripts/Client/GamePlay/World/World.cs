@@ -1120,7 +1120,7 @@ public class World : PoolObject
             if (module != null)
             {
                 dropBox = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);
-                dropBox.Setup(boxTypeIndex, boxOrientation);
+                dropBox.Setup(boxTypeIndex, boxOrientation, module.GUID);
                 dropBox.Initialize(origin, module, 0, false, Box.LerpType.DropFromAir);
                 dropBox.DropFromAir();
                 return true;

@@ -19,11 +19,8 @@ public class BornPointData : LevelComponentData
     [ValidateInput("ValidateBornPointAlias", "请保证此项非空时是唯一的；且一个模组只允许有一个玩家出生点花名为空")]
     public string BornPointAlias = "";
 
-    [FoldoutGroup("敌兵Extra被动技能")]
-    [LabelText("敌兵Extra被动技能")]
-    [ListDrawerSettings(ListElementLabelName = "Description")]
-    [SerializeReference]
-    public List<EntityPassiveSkill> RawBoxPassiveSkills = new List<EntityPassiveSkill>(); // 干数据，禁修改
+    [LabelText("角色额外数据")]
+    public EntityExtraSerializeData RawEntityExtraSerializeData = new EntityExtraSerializeData(); // 干数据，禁修改
 
     public bool ValidateBornPointAlias(string alias)
     {
@@ -68,6 +65,6 @@ public class BornPointData : LevelComponentData
         data.SpawnLevelEventAlias = SpawnLevelEventAlias;
         data.ActorType = ActorType;
         data.BornPointAlias = BornPointAlias;
-        data.RawBoxPassiveSkills = RawBoxPassiveSkills.Clone();
+        data.RawEntityExtraSerializeData = RawEntityExtraSerializeData.Clone();
     }
 }

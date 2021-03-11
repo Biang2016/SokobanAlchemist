@@ -34,7 +34,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
     public LevelTriggerGroupData WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();
-    public Box_LevelEditor.BoxExtraSerializeData[,,] BoxExtraSerializeDataMatrix; // 不含LevelEventTriggerBoxPassiveSkill，但含该Box的其他BF信息
+    public EntityExtraSerializeData[,,] BoxExtraSerializeDataMatrix; // 不含LevelEventTriggerBoxPassiveSkill，但含该Box的其他BF信息
     public List<BoxPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearBoxDataList;
 
     public WorldModuleDataModification Modification;
@@ -45,7 +45,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     public void InitNormalModuleData()
     {
         BoxMatrix_Temp_CheckOverlap = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
-        BoxExtraSerializeDataMatrix = new Box_LevelEditor.BoxExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+        BoxExtraSerializeDataMatrix = new EntityExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
         EventTriggerAppearBoxDataList = new List<BoxPassiveSkill_LevelEventTriggerAppear.Data>();
     }
 

@@ -22,6 +22,10 @@ public abstract class Entity : PoolObject
         return guidGenerator++;
     }
 
+    [ReadOnly]
+    [HideInEditorMode]
+    public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
+
     #endregion
 
     #region Helpers
@@ -157,6 +161,22 @@ public abstract class Entity : PoolObject
 
     #endregion
 
+    #region BoxExtraData
+
+    public void ApplyBoxExtraSerializeData(EntityExtraSerializeData boxExtraSerializeDataFromModule = null)
+    {
+        if (boxExtraSerializeDataFromModule != null)
+        {
+            foreach (EntityPassiveSkill extraPS in boxExtraSerializeDataFromModule.EntityPassiveSkills)
+            {
+                EntityPassiveSkill newPS = extraPS.Clone();
+                AddNewPassiveSkill(newPS, true);
+            }
+        }
+    }
+
+    #endregion
+
     #region 技能
 
     [SerializeReference]
@@ -205,6 +225,7 @@ public abstract class Entity : PoolObject
                 for (int i = 0; i < RawEntityPassiveSkills.Count; i++)
                 {
                     EntityPassiveSkill eps = EntityPassiveSkills[i];
+                    eps.Entity = this;
                     eps.IsAddedDuringGamePlay = false; // 从Raw里面拷出来的都即为非动态添加的技能
                     eps.CopyDataFrom(RawEntityPassiveSkills[i]);
                     eps.OnInit();
@@ -403,6 +424,12 @@ public abstract class Entity : PoolObject
     {
         base.OnRecycled();
         StopAllCoroutines();
+        InitWorldModuleGUID = 0;
+    }
+
+    public void Setup(uint initWorldModuleGUID)
+    {
+        InitWorldModuleGUID = initWorldModuleGUID;
     }
 
     protected virtual void FixedUpdate()

@@ -211,7 +211,7 @@ public class WorldModule : PoolObject
             BoxPassiveSkill_LevelEventTriggerAppear.Data dataClone = (BoxPassiveSkill_LevelEventTriggerAppear.Data) data.Clone();
             BoxPassiveSkill_LevelEventTriggerAppear bf = dataClone.BoxPassiveSkill_LevelEventTriggerAppear;
             GridPos3D localGP = data.LocalGP;
-            Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[localGP.x, localGP.y, localGP.z]; // 这里没有LevelEventTriggerBF的覆写信息
+            EntityExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[localGP.x, localGP.y, localGP.z]; // 这里没有LevelEventTriggerBF的覆写信息
             bf.GenerateBoxAction = () =>
             {
                 BoxMatrix[localGP.x, localGP.y, localGP.z]?.DestroyBox(null, true); // 强行删除该格占用Box
@@ -222,7 +222,8 @@ public class WorldModule : PoolObject
                 bf.ClearAndUnRegister();
                 EventTriggerAppearBoxPassiveSkillList.Remove(bf);
             };
-            bf.OnRegisterLevelEventID();
+            bf.InitWorldModuleGUID = GUID; // 这里特例处理了这个类型的PassiveSkill，因为它没有依托的Entity，所以无法从Entity中取GUID，只能外界传进去
+            bf.OnRegisterLevelEventID(); // 特例不调用OnInit()
             EventTriggerAppearBoxPassiveSkillList.Add(bf);
         }
 
@@ -252,7 +253,7 @@ public class WorldModule : PoolObject
             GridPosR.Orientation boxOrientation = worldModuleData.BoxOrientationMatrix[x, y, z];
             if (boxTypeIndex != 0)
             {
-                Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[x, y, z];
+                EntityExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[x, y, z];
                 this.GenerateBox(boxTypeIndex, LocalGPToWorldGP(new GridPos3D(x, y, z)), boxOrientation, false, true, boxExtraSerializeDataFromModule);
                 return true;
             }
@@ -301,7 +302,7 @@ public class WorldModule : PoolObject
         WorldModuleLevelTriggers.Add(trigger);
     }
 
-    public Box GenerateBox(ushort boxTypeIndex, GridPos3D worldGP, GridPosR.Orientation orientation, bool isTriggerAppear = false, bool isStartedBoxes = false, Box_LevelEditor.BoxExtraSerializeData boxExtraSerializeDataFromModule = null, bool findSpaceUpward = false)
+    public Box GenerateBox(ushort boxTypeIndex, GridPos3D worldGP, GridPosR.Orientation orientation, bool isTriggerAppear = false, bool isStartedBoxes = false, EntityExtraSerializeData boxExtraSerializeDataFromModule = null, bool findSpaceUpward = false)
     {
         GridPos3D localGP = WorldGPToLocalGP(worldGP);
         bool valid = true;
@@ -339,8 +340,7 @@ public class WorldModule : PoolObject
             if (valid)
             {
                 Box box = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(WorldModuleBoxRoot);
-
-                box.Setup(boxTypeIndex, orientation);
+                box.Setup(boxTypeIndex, orientation, GUID);
                 box.Initialize(worldGP, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedBoxes); // 如果是TriggerAppear的箱子则不需要检查坠落
                 box.ApplyBoxExtraSerializeData(boxExtraSerializeDataFromModule);
 

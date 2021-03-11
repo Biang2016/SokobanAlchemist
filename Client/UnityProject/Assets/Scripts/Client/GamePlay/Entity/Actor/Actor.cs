@@ -465,6 +465,7 @@ public class Actor : Entity
         SetModelSmoothMoveLerpTime(0);
         SwitchEntityOrientation(GridPosR.Orientation.Up);
         gameObject.SetActive(false);
+        BattleManager.Instance.RemoveActor(this);
         base.OnRecycled();
     }
 
@@ -527,8 +528,10 @@ public class Actor : Entity
         }
     }
 
-    public void Initialize(string actorType, ActorCategory actorCategory)
+    public void Setup(string actorType, ActorCategory actorCategory, uint initWorldModuleGUID)
     {
+        base.Setup(initWorldModuleGUID);
+        GUID = GetGUID();
         if (actorCategory == ActorCategory.Creature)
         {
             EntityTypeIndex = ConfigManager.GetEnemyTypeIndex(actorType);
@@ -536,11 +539,11 @@ public class Actor : Entity
         else if (actorCategory == ActorCategory.Player)
         {
             EntityTypeIndex = (ushort) ConfigManager.TypeStartIndex.Player;
+            ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
         }
 
         ActorType = actorType;
         ActorCategory = actorCategory;
-        ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
         ActorBattleHelper.Initialize();
@@ -555,7 +558,6 @@ public class Actor : Entity
         WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
         LastWorldGP = WorldGP;
         ActorAIAgent.Start();
-        GUID = GetGUID();
 
         ActorBattleHelper.OnDamaged += (damage) =>
         {
@@ -565,23 +567,6 @@ public class Actor : Entity
 
         ForbidAction = false;
     }
-
-
-    #region ActorExtraData
-
-    public void ApplyActorExtraEntityPassiveSkill(List<EntityPassiveSkill> extraEntityPassiveSkills = null)
-    {
-        if (extraEntityPassiveSkills != null)
-        {
-            foreach (EntityPassiveSkill extraPS in extraEntityPassiveSkills)
-            {
-                EntityPassiveSkill newPS = extraPS.Clone();
-                AddNewPassiveSkill(newPS, true);
-            }
-        }
-    }
-
-    #endregion
 
     private void Update()
     {
