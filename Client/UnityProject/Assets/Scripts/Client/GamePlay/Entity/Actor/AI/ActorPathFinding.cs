@@ -50,7 +50,7 @@ public static class ActorPathFinding
     private static List<Node> OpenList = new List<Node>();
     private static List<Node> CloseList = new List<Node>();
 
-    public static bool FindPath(GridPos3D ori, GridPos3D dest, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
+    public static bool FindPath(GridPos3D ori, GridPos3D dest,Vector3 actorPos, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori, out WorldModule oriModule, out GridPos3D _);
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(dest, out WorldModule destModule, out GridPos3D _);
@@ -60,19 +60,19 @@ public static class ActorPathFinding
             oriNode.GridPos3D_PF = ori;
             Node destNode = NodeFactory.Alloc();
             destNode.GridPos3D_PF = dest;
-            return FindPath(oriNode, destNode, resPath, keepDistanceMin, keepDistanceMax, destinationType, actorWidth, actorHeight, exceptActorGUID);
+            return FindPath(oriNode, destNode, actorPos, resPath, keepDistanceMin, keepDistanceMax, destinationType, actorWidth, actorHeight, exceptActorGUID);
         }
 
         return false;
     }
 
-    public static bool FindRandomAccessibleDestination(GridPos3D ori_PF, float rangeRadius, out GridPos3D destination_PF, int actorWidth, int actorHeight, uint exceptActorGUID)
+    public static bool FindRandomAccessibleDestination(GridPos3D ori_PF, Vector3 actorPos, float rangeRadius, out GridPos3D destination_PF, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         destination_PF = GridPos3D.Zero;
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori_PF.ConvertPathFindingNodeGPToWorldPosition(actorWidth).ToGridPos3D(), out WorldModule oriModule, out GridPos3D _);
         if (oriModule != null)
         {
-            List<GridPos3D> validNodes = UnionFindNodes(ori_PF, rangeRadius, actorWidth, actorHeight, exceptActorGUID);
+            List<GridPos3D> validNodes = UnionFindNodes(ori_PF, actorPos,rangeRadius, actorWidth, actorHeight, exceptActorGUID);
             if (validNodes.Count == 0) return false;
             destination_PF = CommonUtils.GetRandomFromList(validNodes);
             return true;
@@ -81,7 +81,7 @@ public static class ActorPathFinding
         return false;
     }
 
-    private static bool FindPath(Node ori, Node dest, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
+    private static bool FindPath(Node ori, Node dest,Vector3 actorPos, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         OpenList.Clear();
         CloseList.Clear();
@@ -103,7 +103,7 @@ public static class ActorPathFinding
 
             OpenList.Remove(minFNode);
             CloseList.Add(minFNode);
-            List<Node> adjacentNodes = GetAdjacentNodesForAStar(minFNode, dest.GridPos3D_PF, destinationType, actorWidth, actorHeight, exceptActorGUID);
+            List<Node> adjacentNodes = GetAdjacentNodesForAStar(minFNode, actorPos, dest.GridPos3D_PF, destinationType, actorWidth, actorHeight, exceptActorGUID);
             List<Node> uselessAdjacentNodes = cached_adjacentNodesList_clone; // 对象引用仍为同一个,此list只是为了避免modify collection inside foreach
             foreach (Node node in adjacentNodes)
             {
@@ -221,11 +221,11 @@ public static class ActorPathFinding
     private static List<Node> cached_adjacentNodesList = new List<Node>(4);
     private static List<Node> cached_adjacentNodesList_clone = new List<Node>(4);
 
-    private static List<Node> GetAdjacentNodesForAStar(Node node, GridPos3D destGP_PF, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
+    private static List<Node> GetAdjacentNodesForAStar(Node node,Vector3 actorPos, GridPos3D destGP_PF, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         cached_adjacentNodesList.Clear();
         cached_adjacentNodesList_clone.Clear();
-        if (!CheckSpaceAvailableForActorOccupation(node.GridPos3D_PF, actorWidth, actorHeight, exceptActorGUID)) return cached_adjacentNodesList;
+        if (!CheckSpaceAvailableForActorOccupation(node.GridPos3D_PF, actorPos,actorWidth, actorHeight, exceptActorGUID)) return cached_adjacentNodesList;
 
         bool arriveDestGP_PF = false;
 
@@ -250,7 +250,7 @@ public static class ActorPathFinding
                 }
             }
 
-            if (CheckSpaceAvailableForActorOccupation(node.GridPos3D_PF, actorWidth, actorHeight, exceptActorGUID))
+            if (CheckSpaceAvailableForActorOccupation(node.GridPos3D_PF, actorPos, actorWidth, actorHeight, exceptActorGUID))
             {
                 OnSearchForward();
                 if (gp_PF == destGP_PF) arriveDestGP_PF = true;
@@ -289,7 +289,7 @@ public static class ActorPathFinding
     private static Queue<GridPos3D> cached_QueueUnionFind = new Queue<GridPos3D>(256);
     private static bool[,] cached_OccupationUnionFind = new bool[30, 30];
 
-    private static List<GridPos3D> UnionFindNodes(GridPos3D center_PF, float rangeRadius, int actorWidth, int actorHeight, uint exceptActorGUID)
+    private static List<GridPos3D> UnionFindNodes(GridPos3D center_PF,Vector3 actorPos, float rangeRadius, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         cached_UnionFindNodeList.Clear();
         int radius = Mathf.RoundToInt(rangeRadius);
@@ -323,7 +323,7 @@ public static class ActorPathFinding
                 if ((pathFindingNodeGP - center_PF).magnitude > radius) return;
                 GridPos3D offset = pathFindingNodeGP - center_PF;
                 if (cached_OccupationUnionFind[offset.x + radius, offset.z + radius]) return;
-                if (CheckSpaceAvailableForActorOccupation(pathFindingNodeGP, actorWidth, actorHeight, exceptActorGUID))
+                if (CheckSpaceAvailableForActorOccupation(pathFindingNodeGP, actorPos, actorWidth, actorHeight, exceptActorGUID))
                 {
                     cached_QueueUnionFind.Enqueue(pathFindingNodeGP);
                     cached_UnionFindNodeList.Add(pathFindingNodeGP);
@@ -341,11 +341,12 @@ public static class ActorPathFinding
     /// 检查某寻路节点是否能放得下此角色
     /// </summary>
     /// <param name="center_PF">寻路节点坐标，非真实世界坐标，有可能位于半格处，取决于角色身宽</param>
+    /// <param name="actorPos"></param>
     /// <param name="actorWidth"></param>
     /// <param name="actorHeight"></param>
     /// <param name="exceptActorGUID">寻路排除的占位Actor对象</param>
     /// <returns></returns>
-    public static bool CheckSpaceAvailableForActorOccupation(GridPos3D center_PF, int actorWidth, int actorHeight, uint exceptActorGUID)
+    public static bool CheckSpaceAvailableForActorOccupation(GridPos3D center_PF, Vector3 actorPos, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         bool isBoxBeneath = false;
         for (int occupied_x = 0; occupied_x < actorWidth; occupied_x++)
@@ -358,6 +359,7 @@ public static class ActorPathFinding
             foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
             {
                 if (enemy.GUID == exceptActorGUID) continue;
+                if ((enemy.transform.position - actorPos).magnitude > 2f * (enemy.ActorWidth + actorWidth)) continue; // 太远的敌人略过不处理，减少计算量
                 foreach (GridPos3D offset in enemy.GetEntityOccupationGPs_Rotated())
                 {
                     if (enemy.WorldGP + offset == gridPos) return false;

@@ -112,16 +112,25 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
     // todo 此处有风险，两个Trigger进出次序如果很极限的话，有可能exit不触发就换技能了
     public void OnTriggerZoneEnter(Collider c)
     {
-        LightningPassiveSkill?.OnTriggerZoneEnter(c);
+        if (Entity.IsNotNullAndAlive())
+        {
+            LightningPassiveSkill?.OnTriggerZoneEnter(c);
+        }
     }
 
     public void OnTriggerZoneStay(Collider c)
     {
-        LightningPassiveSkill?.OnTriggerZoneStay(c);
+        if (Entity.IsNotNullAndAlive())
+        {
+            LightningPassiveSkill?.OnTriggerZoneStay(c);
+        }
     }
 
     public void OnTriggerZoneExit(Collider c)
     {
-        LightningPassiveSkill?.OnTriggerZoneExit(c);
+        if (Entity.IsNotNullAndAlive())
+        {
+            LightningPassiveSkill?.OnTriggerZoneExit(c);
+        }
     }
 }

@@ -17,6 +17,7 @@ public class EntityLightning : PoolObject
     public override void OnRecycled()
     {
         base.OnRecycled();
+        EntityTriggerZone_Lightning.IEntityTriggerZone = null;
         EntityTriggerZone_Lightning.gameObject.SetActive(false);
         LightningPS.Stop(true);
         LightningLight.gameObject.SetActive(false);

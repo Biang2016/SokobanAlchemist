@@ -169,7 +169,7 @@ public class ActorAIAgent
             return SetDestinationRetCode.TooClose;
         }
 
-        bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, currentDestination_PF, CurrentPath, KeepDistanceMin, KeepDistanceMax, destinationType, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
+        bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, currentDestination_PF, Actor.transform.position, CurrentPath, KeepDistanceMin, KeepDistanceMax, destinationType, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
         if (IsPathFinding)
         {
             currentNode = CurrentPath.Count > 0 ? CurrentPath[0] : null;
@@ -228,7 +228,7 @@ public class ActorAIAgent
         {
             if (nextNode != null)
             {
-                if (!ActorPathFinding.CheckSpaceAvailableForActorOccupation(nextNode.GridPos3D_PF, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID)) // 有箱子或Actor挡路，停止寻路
+                if (!ActorPathFinding.CheckSpaceAvailableForActorOccupation(nextNode.GridPos3D_PF, Actor.transform.position, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID)) // 有箱子或Actor挡路，停止寻路
                 {
                     Vector3 diff = currentNode.GridPos3D_PF - Actor.WorldGP_PF;
                     if (diff.magnitude < arriveThreshold)

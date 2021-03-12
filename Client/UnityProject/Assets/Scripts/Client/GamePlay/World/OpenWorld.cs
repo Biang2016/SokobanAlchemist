@@ -737,6 +737,7 @@ public class OpenWorld : World
 
     public IEnumerator Co_ReturnToOpenWorldFormMicroWorld(bool rebornPlayer)
     {
+        AudioManager.Instance.BGMFadeIn("bgm/CoolSwing", 1f, 1f, true);
         BattleManager.Instance.Player1.ForbidAction = true;
         LoadingMapPanel LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
