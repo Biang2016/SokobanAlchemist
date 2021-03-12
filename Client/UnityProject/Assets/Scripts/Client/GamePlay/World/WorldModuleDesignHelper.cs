@@ -221,8 +221,8 @@ public class WorldModuleDesignHelper : MonoBehaviour
             Debug.LogError("此功能只能在世界编辑器中使用");
             return;
         }
-
-        GameObject prefab = (GameObject) AssetDatabase.LoadAssetAtPath<Object>("Assets/Designs/WorldModule/" + ReplaceWorldModuleTypeName + ".prefab");
+        
+        GameObject prefab = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(ConfigManager.FindWorldModulePrefabPathByName(ReplaceWorldModuleTypeName));
         GameObject go = (GameObject) PrefabUtility.InstantiatePrefab(prefab, transform.parent);
         go.transform.position = transform.position;
         go.transform.rotation = Quaternion.identity;

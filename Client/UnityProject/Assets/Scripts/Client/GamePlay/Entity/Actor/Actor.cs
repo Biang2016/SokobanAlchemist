@@ -330,6 +330,15 @@ public class Actor : Entity
     [LabelText("死亡掉落箱子概率%")]
     public uint DieDropBoxProbabilityPercent;
 
+    public void Reborn()
+    {
+        ActiveSkillMarkAsDestroyed = false;
+        PassiveSkillMarkAsDestroyed = false;
+        ActorBattleHelper.IsDestroying = false;
+        EntityBuffHelper.Heal(99999, EntityBuffAttribute.Healing);
+        EntityBuffHelper.RefillActionPoints(99999, EntityBuffAttribute.ActionPointPositive);
+    }
+
     #endregion
 
     #region 冻结
@@ -846,7 +855,7 @@ public class Actor : Entity
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box)
+            if (box && !box.Passable)
             {
                 Vault();
             }

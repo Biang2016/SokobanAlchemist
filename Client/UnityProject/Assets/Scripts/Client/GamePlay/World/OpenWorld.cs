@@ -726,13 +726,16 @@ public class OpenWorld : World
         BattleManager.Instance.Player1.ForbidAction = false;
     }
 
-    public void ReturnToOpenWorldFormMicroWorld()
+    public void ReturnToOpenWorldFormMicroWorld(bool rebornPlayer = false)
     {
-        if (!IsInsideMicroWorld) return;
-        StartCoroutine(Co_ReturnToOpenWorldFormMicroWorld());
+        if (!rebornPlayer)
+        {
+            if (!IsInsideMicroWorld) return;
+        }
+        StartCoroutine(Co_ReturnToOpenWorldFormMicroWorld(rebornPlayer));
     }
 
-    public IEnumerator Co_ReturnToOpenWorldFormMicroWorld()
+    public IEnumerator Co_ReturnToOpenWorldFormMicroWorld(bool rebornPlayer)
     {
         BattleManager.Instance.Player1.ForbidAction = true;
         LoadingMapPanel LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
@@ -741,7 +744,16 @@ public class OpenWorld : World
         LoadingMapPanel.SetBackgroundAlpha(1);
         LoadingMapPanel.SetProgress(0, "Returning to Open World");
         while (RefreshScopeModulesCoroutine != null) yield return null;
-        BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP);
+        if (rebornPlayer)
+        {
+            BattleManager.Instance.Player1.TransportPlayerGridPos(InitialPlayerBP);
+            BattleManager.Instance.Player1.Reborn();
+        }
+        else
+        {
+            BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP);
+        }
+
         CameraManager.Instance.FieldCamera.InitFocus();
         IsInsideMicroWorld = false;
         RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(LastLeaveOpenWorldPlayerGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));

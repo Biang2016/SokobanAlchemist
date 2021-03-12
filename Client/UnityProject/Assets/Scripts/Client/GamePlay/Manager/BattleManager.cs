@@ -277,9 +277,18 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     IEnumerator Co_LoseGame()
     {
+        Player1.ForbidAction = true;
         WinLosePanel panel = UIManager.Instance.ShowUIForms<WinLosePanel>();
         yield return panel.Co_LoseGame();
-        ClientGameManager.Instance.ReloadGame();
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            openWorld.ReturnToOpenWorldFormMicroWorld(true);
+        }
+        else
+        {
+            Player1.ForbidAction = true;
+            ClientGameManager.Instance.ReloadGame();
+        }
     }
 
     IEnumerator Co_WinGame()

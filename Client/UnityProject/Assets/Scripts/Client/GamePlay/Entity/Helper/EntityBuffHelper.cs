@@ -267,11 +267,6 @@ public class EntityBuffHelper : EntityMonoHelper
         }
 
         bool suc = BuffRelationshipProcess(newBuff) && CheckBuffPropertyTypeValid((newBuff));
-        if (Entity.name.Contains("LightningEnemy") && !suc)
-        {
-            int a = 0;
-        }
-
         if (suc)
         {
             newBuff.OnAdded(Entity, extraInfo);
@@ -454,6 +449,36 @@ public class EntityBuffHelper : EntityMonoHelper
             Duration = 0,
             EntityBuffAttribute = damageAttribute,
             EntityStatType = EntityStatType.HealthDurability,
+            IsPermanent = false,
+            Percent = 0
+        });
+    }
+
+    public void Heal(int health, EntityBuffAttribute healAttribute)
+    {
+        AddBuff(new EntityBuff_ChangeEntityStatInstantly
+        {
+            BuffFX = "None",
+            BuffFXScale = 1,
+            Delta = health,
+            Duration = 0,
+            EntityBuffAttribute = healAttribute,
+            EntityStatType = EntityStatType.HealthDurability,
+            IsPermanent = false,
+            Percent = 0
+        });
+    }
+
+    public void RefillActionPoints(int actionPoints, EntityBuffAttribute attribute)
+    {
+        AddBuff(new EntityBuff_ChangeEntityStatInstantly
+        {
+            BuffFX = "None",
+            BuffFXScale = 1,
+            Delta = actionPoints,
+            Duration = 0,
+            EntityBuffAttribute = attribute,
+            EntityStatType = EntityStatType.ActionPoint,
             IsPermanent = false,
             Percent = 0
         });

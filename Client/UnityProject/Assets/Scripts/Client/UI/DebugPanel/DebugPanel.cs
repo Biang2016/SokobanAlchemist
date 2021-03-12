@@ -323,7 +323,9 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("Player/AddAction*10", KeyCode.J)]
     public void AddAction10()
     {
-        BattleManager.Instance.Player1.EntityStatPropSet.MaxActionPoint.AddModifier(new Property.PlusModifier {Delta = BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.Value + 10 - BattleManager.Instance.Player1.EntityStatPropSet.MaxActionPoint.GetModifiedValue});
+        int maxActionPointDelta = BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.Value + 10 - BattleManager.Instance.Player1.EntityStatPropSet.MaxActionPoint.GetModifiedValue;
+        maxActionPointDelta = Mathf.Max(0, maxActionPointDelta);
+        BattleManager.Instance.Player1.EntityStatPropSet.MaxActionPoint.AddModifier(new Property.PlusModifier {Delta = maxActionPointDelta });
         BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.Value + 10, "DebugPanelAddAction10");
     }
 
