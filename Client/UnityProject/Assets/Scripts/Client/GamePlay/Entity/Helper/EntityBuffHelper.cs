@@ -271,7 +271,6 @@ public class EntityBuffHelper : EntityMonoHelper
         {
             newBuff.OnAdded(Entity, extraInfo);
             PlayBuffFX(newBuff);
-            if (!Entity.IsNotNullAndAlive()) return true;
             if (newBuff.Duration > 0 || newBuff.IsPermanent)
             {
                 BuffDict.Add(newBuff.GUID, newBuff);
@@ -282,6 +281,8 @@ public class EntityBuffHelper : EntityMonoHelper
                     BuffPassedTimeDict.Add(newBuff.GUID, 0);
                 }
             }
+
+            if (!Entity.IsNotNullAndAlive()) return true;
         }
 
         return suc;

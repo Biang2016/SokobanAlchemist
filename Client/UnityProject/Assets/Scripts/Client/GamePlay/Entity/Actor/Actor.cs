@@ -332,11 +332,16 @@ public class Actor : Entity
 
     public void Reborn()
     {
+        EntityStatPropSet.OnRecycled();
+        RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
+        EntityStatPropSet.Initialize(this);
+        ActorBattleHelper.InGameHealthBar.Initialize(ActorBattleHelper, 100, 30);
+        UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().Initialize();
         ActiveSkillMarkAsDestroyed = false;
         PassiveSkillMarkAsDestroyed = false;
         ActorBattleHelper.IsDestroying = false;
-        EntityBuffHelper.Heal(99999, EntityBuffAttribute.Healing);
-        EntityBuffHelper.RefillActionPoints(99999, EntityBuffAttribute.ActionPointPositive);
+        //EntityBuffHelper.Heal(99999, EntityBuffAttribute.Healing);
+        //EntityBuffHelper.RefillActionPoints(99999, EntityBuffAttribute.ActionPointPositive);
     }
 
     #endregion
