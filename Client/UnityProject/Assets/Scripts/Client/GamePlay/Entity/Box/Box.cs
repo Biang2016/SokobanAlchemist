@@ -76,6 +76,9 @@ public partial class Box : Entity
     public BoxIconSpriteHelper BoxIconSpriteHelper;
 
     [FoldoutGroup("组件")]
+    public BoxFrozenBoxHelper BoxFrozenBoxHelper;
+
+    [FoldoutGroup("组件")]
     public SmoothMove BoxIconSpriteSmoothMove;
 
     [FoldoutGroup("组件")]
@@ -115,6 +118,7 @@ public partial class Box : Entity
         DoorBoxHelper?.OnHelperUsed();
         BoxSkinHelper?.OnHelperUsed();
         BoxIconSpriteHelper.OnHelperUsed();
+        BoxFrozenBoxHelper?.OnHelperUsed();
         base.OnUsed();
     }
 
@@ -151,6 +155,7 @@ public partial class Box : Entity
         DoorBoxHelper?.OnHelperRecycled();
         BoxSkinHelper?.OnHelperRecycled();
         BoxIconSpriteHelper?.OnHelperRecycled();
+        BoxFrozenBoxHelper?.OnHelperRecycled();
 
         transform.DOPause();
         ModelRoot.transform.DOPause();

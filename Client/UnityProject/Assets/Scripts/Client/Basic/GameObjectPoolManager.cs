@@ -13,6 +13,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     {
         Player,
         InGameHealthBar,
+        BoxIndicator,
         WorldModule,
         World,
         OpenWorldModule,
@@ -33,6 +34,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     {
         {PrefabNames.Player, 1},
         {PrefabNames.InGameHealthBar, 10},
+        {PrefabNames.BoxIndicator, 20},
         {PrefabNames.WorldModule, 16},
         {PrefabNames.World, 1},
         {PrefabNames.OpenWorldModule, 1},
