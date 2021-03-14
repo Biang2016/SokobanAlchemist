@@ -118,7 +118,7 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
             {
                 if (EffectiveWhenInteractiveKeyDown)
                 {
-                    BattleManager.Instance.NoticePanel.ShowTip(InteractiveKeyNotice, TipPositionType, InteractiveKeyNoticeDuration);
+                    ClientGameManager.Instance.NoticePanel.ShowTip(InteractiveKeyNotice, TipPositionType, InteractiveKeyNoticeDuration);
                 }
 
                 if (!ActorStayTimeDict.ContainsKey(target.GUID))
@@ -182,7 +182,7 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
             {
                 if (EffectiveWhenInteractiveKeyDown)
                 {
-                    BattleManager.Instance.NoticePanel.HideTip();
+                    ClientGameManager.Instance.NoticePanel.HideTip();
                 }
 
                 if (ActorStayTimeDict.ContainsKey(target.GUID))

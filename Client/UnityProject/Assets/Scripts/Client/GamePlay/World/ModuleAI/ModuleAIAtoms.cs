@@ -155,7 +155,7 @@ public class ModuleAIAtoms
 
         public override void Invoke()
         {
-            BattleManager.Instance.NoticePanel.ShowTip(NoticeTip.value, TipPositionType.value, Duration.value);
+            ClientGameManager.Instance.NoticePanel.ShowTip(NoticeTip.value, TipPositionType.value, Duration.value);
         }
     }
 
@@ -167,7 +167,7 @@ public class ModuleAIAtoms
 
         public override void Invoke()
         {
-            BattleManager.Instance.NoticePanel.HideTip();
+            ClientGameManager.Instance.NoticePanel.HideTip();
         }
     }
 

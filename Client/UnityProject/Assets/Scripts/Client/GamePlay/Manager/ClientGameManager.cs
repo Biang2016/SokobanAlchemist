@@ -65,6 +65,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public DebugConsole DebugConsole;
     public DebugPanel DebugPanel;
     public LoadingMapPanel LoadingMapPanel;
+    public NoticePanel NoticePanel;
 
     [LabelText("开局世界类型")]
     [ValueDropdown("GetAllWorldNames")]
@@ -160,6 +161,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     private IEnumerator Co_StartGame()
     {
         IsGameLoading = true;
+        NoticePanel = UIManager.Instance.ShowUIForms<NoticePanel>();
         LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetBackgroundAlpha(0f);

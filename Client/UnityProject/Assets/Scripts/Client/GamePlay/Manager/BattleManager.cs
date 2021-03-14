@@ -69,8 +69,6 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     public Transform ActorContainerRoot;
     public Transform NavTrackMarkerRoot;
 
-    public NoticePanel NoticePanel;
-
     public void Clear()
     {
         foreach (EnemyActor enemy in Enemies)
@@ -113,7 +111,6 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     public void StartBattle()
     {
         LoadActors();
-        NoticePanel = UIManager.Instance.ShowUIForms<NoticePanel>();
         GameStateManager.Instance.SetState(GameState.Fighting);
         ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnTriggerLevelEventCreateActor);
         IsStart = true;

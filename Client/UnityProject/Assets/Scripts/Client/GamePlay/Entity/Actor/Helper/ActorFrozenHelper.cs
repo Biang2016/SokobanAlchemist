@@ -53,7 +53,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
                         actor.ActorPushHelper.TriggerOut = false;
                         actor.MovementState = Actor.MovementStates.Frozen;
                         actor.ForbidAction = true;
-                        transform.rotation = Quaternion.identity;
+                        transform.localRotation = Quaternion.identity;
                         FrozeModelRoot.SetActive(true);
                     }
                     else
