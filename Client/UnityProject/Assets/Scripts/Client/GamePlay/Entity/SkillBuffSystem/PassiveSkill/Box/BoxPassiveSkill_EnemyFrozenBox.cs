@@ -20,7 +20,7 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
             {
                 Actor actor = collision.gameObject.GetComponentInParent<Actor>();
                 actor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage);
-                Box.FrozenActor.EntityBuffHelper.Damage(1, EntityBuffAttribute.CollideDamage);
+                Box.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.FrozenBeCollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage);
             }
             else if (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box || collision.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
             {
@@ -32,7 +32,7 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
                 }
                 else
                 {
-                    Box.FrozenActor.EntityBuffHelper.Damage(1, EntityBuffAttribute.CollideDamage);
+                    Box.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.FrozenBeCollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage);
                 }
             }
             else if (collision.gameObject.layer == LayerManager.Instance.Layer_Wall ||

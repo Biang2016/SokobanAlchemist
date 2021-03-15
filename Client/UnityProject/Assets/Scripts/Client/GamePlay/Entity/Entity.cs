@@ -141,7 +141,7 @@ public abstract class Entity : PoolObject
 #endif
 
     // 旋转过的局部坐标
-    public List<GridPos3D> GetEntityOccupationGPs_Rotated()
+    public virtual List<GridPos3D> GetEntityOccupationGPs_Rotated()
     {
         List<GridPos3D> occupation_rotated = ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[EntityOrientation];
         return occupation_rotated;

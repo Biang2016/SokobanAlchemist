@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class BoxFrozenBoxHelper : BoxMonoHelper
 {
+    internal Actor FrozenActor; // EnemyFrozenBox将敌人冻住包裹
+
+    internal List<GridPos3D> FrozenBoxOccupation = new List<GridPos3D>();
+
     private List<BoxIndicator> FrozenBoxIndicators = new List<BoxIndicator>();
 
     public override void OnHelperRecycled()
@@ -16,6 +20,7 @@ public class BoxFrozenBoxHelper : BoxMonoHelper
         }
 
         FrozenBoxIndicators.Clear();
+        FrozenBoxOccupation = null;
     }
 
     public override void OnHelperUsed()

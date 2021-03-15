@@ -78,13 +78,23 @@ public partial class Box : Entity
     [FoldoutGroup("组件")]
     public BoxFrozenBoxHelper BoxFrozenBoxHelper;
 
+    internal Actor FrozenActor
+    {
+        get { return BoxFrozenBoxHelper != null ? BoxFrozenBoxHelper.FrozenActor : null; }
+        set
+        {
+            if (BoxFrozenBoxHelper != null)
+            {
+                BoxFrozenBoxHelper.FrozenActor = value;
+            }
+        }
+    }
+
     [FoldoutGroup("组件")]
     public SmoothMove BoxIconSpriteSmoothMove;
 
     [FoldoutGroup("组件")]
     public SmoothMove BoxModelSmoothMove;
-
-    internal Actor FrozenActor; // EnemyFrozenBox将敌人冻住包裹
 
     internal bool ArtOnly;
 
@@ -205,6 +215,20 @@ public partial class Box : Entity
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxIndicatorHelper.transform, 1);
         if (EntityTriggerZoneHelper) GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), EntityTriggerZoneHelper.transform, 1);
         if (EntityGrindTriggerZoneHelper) GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), EntityGrindTriggerZoneHelper.transform, 1);
+    }
+
+    #endregion
+
+    #region 占位
+
+    public override List<GridPos3D> GetEntityOccupationGPs_Rotated()
+    {
+        if (BoxFrozenBoxHelper != null)
+        {
+            return BoxFrozenBoxHelper.FrozenBoxOccupation;
+        }
+
+        return base.GetEntityOccupationGPs_Rotated();
     }
 
     #endregion
@@ -488,10 +512,10 @@ public partial class Box : Entity
             BoxIconSpriteSmoothMove.enabled = false;
             BoxModelSmoothMove.enabled = false;
             EntityFrozenHelper.IceBlockSmoothMove.enabled = false;
-            if (FrozenActor)
+            if (BoxFrozenBoxHelper != null && BoxFrozenBoxHelper.FrozenActor != null)
             {
-                FrozenActor.ActorFrozenHelper.IceBlockSmoothMove.enabled = false;
-                FrozenActor.SetModelSmoothMoveLerpTime(0f);
+                BoxFrozenBoxHelper.FrozenActor.ActorFrozenHelper.IceBlockSmoothMove.enabled = false;
+                BoxFrozenBoxHelper.FrozenActor.SetModelSmoothMoveLerpTime(0f);
             }
         }
         else
@@ -502,11 +526,11 @@ public partial class Box : Entity
             BoxModelSmoothMove.SmoothTime = lerpTime;
             EntityFrozenHelper.IceBlockSmoothMove.enabled = true;
             EntityFrozenHelper.IceBlockSmoothMove.SmoothTime = lerpTime;
-            if (FrozenActor)
+            if (BoxFrozenBoxHelper != null && BoxFrozenBoxHelper.FrozenActor != null)
             {
-                FrozenActor.EntityFrozenHelper.IceBlockSmoothMove.enabled = true;
-                FrozenActor.EntityFrozenHelper.IceBlockSmoothMove.SmoothTime = lerpTime;
-                FrozenActor.SetModelSmoothMoveLerpTime(lerpTime);
+                BoxFrozenBoxHelper.FrozenActor.EntityFrozenHelper.IceBlockSmoothMove.enabled = true;
+                BoxFrozenBoxHelper.FrozenActor.EntityFrozenHelper.IceBlockSmoothMove.SmoothTime = lerpTime;
+                BoxFrozenBoxHelper.FrozenActor.SetModelSmoothMoveLerpTime(lerpTime);
             }
         }
     }
@@ -1332,7 +1356,7 @@ public partial class Box : Entity
     }
 
     #endregion
-    
+
 #if UNITY_EDITOR
 
     public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)

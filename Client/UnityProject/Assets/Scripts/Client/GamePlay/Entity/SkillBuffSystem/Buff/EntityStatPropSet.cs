@@ -58,6 +58,10 @@ public class EntityStatPropSet
     public EntityProperty CollideDamage = new EntityProperty(EntityPropertyType.CollideDamage);
 
     [BoxGroup("碰撞")]
+    [LabelText("@\"被冻结后碰撞伤害\t\"+FrozenBeCollideDamage")]
+    public EntityProperty FrozenBeCollideDamage = new EntityProperty(EntityPropertyType.FrozenBeCollideDamage);
+
+    [BoxGroup("碰撞")]
     [LabelText("@\"X轴碰撞伤害\t\"+CollideDamageX")]
     public EntityProperty CollideDamageX = new EntityProperty(EntityPropertyType.CollideDamageX);
 
@@ -296,6 +300,7 @@ public class EntityStatPropSet
         ActorCollideDamageDefense.Initialize();
         BoxCollideDamageSelf.Initialize();
         CollideDamage.Initialize();
+        FrozenBeCollideDamage.Initialize();
         CollideDamageX.Initialize();
         CollideDamageZ.Initialize();
         BeCollidedHitStopDuration.Initialize();
@@ -379,6 +384,7 @@ public class EntityStatPropSet
         PropertyDict.Add(EntityPropertyType.ActorCollideDamageDefense, ActorCollideDamageDefense);
         PropertyDict.Add(EntityPropertyType.BoxCollideDamageSelf, BoxCollideDamageSelf);
         PropertyDict.Add(EntityPropertyType.CollideDamage, CollideDamage);
+        PropertyDict.Add(EntityPropertyType.FrozenBeCollideDamage, FrozenBeCollideDamage);
         PropertyDict.Add(EntityPropertyType.CollideDamageX, CollideDamageX);
         PropertyDict.Add(EntityPropertyType.CollideDamageZ, CollideDamageZ);
         PropertyDict.Add(EntityPropertyType.BeCollidedHitStopDuration, BeCollidedHitStopDuration);
@@ -721,6 +727,7 @@ public class EntityStatPropSet
         ActorCollideDamageDefense.ApplyDataTo(target.ActorCollideDamageDefense);
         BoxCollideDamageSelf.ApplyDataTo(target.BoxCollideDamageSelf);
         CollideDamage.ApplyDataTo(target.CollideDamage);
+        FrozenBeCollideDamage.ApplyDataTo(target.FrozenBeCollideDamage);
         CollideDamageX.ApplyDataTo(target.CollideDamageX);
         CollideDamageZ.ApplyDataTo(target.CollideDamageZ);
         BeCollidedHitStopDuration.ApplyDataTo(target.BeCollidedHitStopDuration);

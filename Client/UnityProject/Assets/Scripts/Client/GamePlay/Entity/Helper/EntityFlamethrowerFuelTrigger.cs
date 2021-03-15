@@ -27,7 +27,7 @@ public class EntityFlamethrowerFuelTrigger : MonoBehaviour
         {
             if (box.State == Box.States.BeingKicked || box.State == Box.States.BeingKickedToGrind) // 只有踢状态的箱子可以触发此功能
             {
-                if (box.FrozenActor != null)
+                if (box.BoxFrozenBoxHelper?.FrozenActor != null)
                 {
                     // todo 特例，冻结敌人的箱子推入，还没想好逻辑
                 }

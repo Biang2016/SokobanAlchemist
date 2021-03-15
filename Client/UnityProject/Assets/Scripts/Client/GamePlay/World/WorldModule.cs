@@ -303,7 +303,7 @@ public class WorldModule : PoolObject
         WorldModuleLevelTriggers.Add(trigger);
     }
 
-    public Box GenerateBox(ushort boxTypeIndex, GridPos3D worldGP, GridPosR.Orientation orientation, bool isTriggerAppear = false, bool isStartedBoxes = false, EntityExtraSerializeData boxExtraSerializeDataFromModule = null, bool findSpaceUpward = false)
+    public Box GenerateBox(ushort boxTypeIndex, GridPos3D worldGP, GridPosR.Orientation orientation, bool isTriggerAppear = false, bool isStartedBoxes = false, EntityExtraSerializeData boxExtraSerializeDataFromModule = null, bool findSpaceUpward = false, List<GridPos3D> overrideOccupation = null)
     {
         GridPos3D localGP = WorldGPToLocalGP(worldGP);
         bool valid = true;
@@ -314,7 +314,15 @@ public class WorldModule : PoolObject
         }
         else
         {
-            List<GridPos3D> boxOccupation_rotated = ConfigManager.GetEntityOccupationData(boxTypeIndex).EntityIndicatorGPs_RotatedDict[orientation];
+            List<GridPos3D> boxOccupation_rotated = null;
+            if (overrideOccupation != null)
+            {
+                boxOccupation_rotated = overrideOccupation;
+            }
+            else
+            {
+                boxOccupation_rotated = ConfigManager.GetEntityOccupationData(boxTypeIndex).EntityIndicatorGPs_RotatedDict[orientation];
+            }
 
             // 空位检查
             foreach (GridPos3D offset in boxOccupation_rotated)
@@ -341,6 +349,11 @@ public class WorldModule : PoolObject
             if (valid)
             {
                 Box box = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(WorldModuleBoxRoot);
+                if (box.BoxFrozenBoxHelper != null)
+                {
+                    box.BoxFrozenBoxHelper.FrozenBoxOccupation = boxOccupation_rotated;
+                }
+
                 box.Setup(boxTypeIndex, orientation, GUID);
                 box.Initialize(worldGP, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedBoxes); // 如果是TriggerAppear的箱子则不需要检查坠落
                 box.ApplyBoxExtraSerializeData(boxExtraSerializeDataFromModule);

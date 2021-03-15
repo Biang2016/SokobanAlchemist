@@ -82,6 +82,10 @@ public enum EntityPropertyType
     [LabelText("被碰撞硬直")]
     BeCollidedHitStopDuration = 17,
 
+    [EntityProperty]
+    [LabelText("碰撞伤害")]
+    FrozenBeCollideDamage = 18,
+
     [ActorProperty]
     [LabelText("移动速度")]
     MoveSpeed = 30,
