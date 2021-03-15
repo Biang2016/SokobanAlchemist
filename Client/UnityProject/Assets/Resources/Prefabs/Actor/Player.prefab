@@ -812,6 +812,11 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
+    FrozenBeCollideDamage:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     CollideDamageX:
       BaseValue: 0
       ModifiedValue: 0
@@ -974,13 +979,45 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 100
-    SkillsPropertyCollections: []
+    SkillsPropertyCollections:
+    - skillAlias: "\u539F\u5730\u7206\u70B8"
+      CastingRadius:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
+      Cooldown:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
+      WingUp:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
+      CastDuration:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
+      Recovery:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
+      CameraShakeEquivalentDamage:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
     RawEntityDefaultBuffs: []
   RawFlamethrowerFuelData:
     id: 0
   RawEntityPassiveSkills:
   - id: 1
-  RawEntityActiveSkills: []
+  RawEntityActiveSkills:
+  - id: 2
   Camp: 1
   RigidBody: {fileID: 3522706739585230582}
   ActorCommonHelpers: {fileID: 1526363832739594291}
@@ -1085,8 +1122,71 @@ MonoBehaviour:
       data:
         IsAddedDuringGamePlay: 0
         RawEntityBuff:
-          id: 2
+          id: 3
     00000002:
+      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      data:
+        IsAddedDuringGamePlay: 0
+        TargetCamp: 14
+        EntitySkillIndex: 0
+        SkillAlias: "\u539F\u5730\u7206\u70B8"
+        WingUpCanMove: 1
+        CastCanMove: 1
+        RecoverCanMove: 1
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 5
+          y: 0
+          z: 7
+        - x: 6
+          y: 0
+          z: 8
+        - x: 6
+          y: 0
+          z: 7
+        - x: 6
+          y: 0
+          z: 6
+        - x: 7
+          y: 0
+          z: 9
+        - x: 7
+          y: 0
+          z: 8
+        - x: 7
+          y: 0
+          z: 6
+        - x: 7
+          y: 0
+          z: 5
+        - x: 8
+          y: 0
+          z: 8
+        - x: 8
+          y: 0
+          z: 7
+        - x: 8
+          y: 0
+          z: 6
+        - x: 9
+          y: 0
+          z: 7
+        M_TargetInclination: 2
+        CastOnTopLayer: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName: None
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        GridWarningColorFill: {r: 0, g: 0, b: 0, a: 0}
+        GridWarningColorBorderHighlight: {r: 0, g: 0, b: 0, a: 0}
+        GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
+        CastFX: Hit_FireExplodeSmoke
+        CastFXScale: 1
+        RawEntityBuffs:
+        - id: 4
+    00000003:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 10000
@@ -1098,6 +1198,18 @@ MonoBehaviour:
         Percent: 50
         LinearDecayInDuration: 0
         EntityPropertyType: 30
+    00000004:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 14342
+        EntityBuffAttribute: 24
+        IsPermanent: 0
+        Duration: 0
+        BuffFX: None
+        BuffFXScale: 1
+        EntityStatType: 0
+        Delta: -50
+        Percent: 0
 --- !u!1 &5046329032598709785
 GameObject:
   m_ObjectHideFlags: 0

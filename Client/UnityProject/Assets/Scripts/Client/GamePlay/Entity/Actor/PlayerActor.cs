@@ -342,6 +342,11 @@ public class PlayerActor : Actor
                 Kick();
             }
 
+            if (BS_Skill_1.Down)
+            {
+                TriggerSkill(EntitySkillIndex.Skill_0);
+            }
+
             #endregion
         }
 
@@ -397,6 +402,26 @@ public class PlayerActor : Actor
     private void SwitchAvatar()
     {
         ActorSkinHelper.Initialize(SwitchAvatarPlayerNumber);
+    }
+
+    private bool TriggerSkill(EntitySkillIndex skillIndex)
+    {
+        if (IsFrozen) return false;
+        if (EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
+        {
+            bool triggerSuc = eas.CheckCanTriggerSkill();
+            if (triggerSuc)
+            {
+                eas.TriggerActiveSkill();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return false;
     }
 }
 
