@@ -253,8 +253,9 @@ public abstract class MapGenerator
             case MapGeneratorType.Entity:
             {
                 bool spaceAvailable = true;
+                GridPosR.Orientation entityOrientation = (GridPosR.Orientation) SRandom.Range(0, 4);
                 EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(EntityTypeIndex);
-                foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[GridPosR.Orientation.Up]) // todo Orientation Random
+                foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[entityOrientation]) // todo Orientation Random
                 {
                     if (!spaceAvailable) break;
                     int box_grid_world_x = world_x + gridPos.x;
@@ -289,8 +290,8 @@ public abstract class MapGenerator
                 if (spaceAvailable)
                 {
                     WorldMap[world_x, 0, world_z] = EntityTypeIndex;
-                    WorldMapOrientation[world_x, 0, world_z] = GridPosR.Orientation.Up;
-                    foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[GridPosR.Orientation.Up]) // todo Orientation Random
+                    WorldMapOrientation[world_x, 0, world_z] = entityOrientation;
+                    foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[entityOrientation]) // todo Orientation Random
                     {
                         int box_grid_world_x = world_x + gridPos.x;
                         int box_grid_world_z = world_z + gridPos.z;

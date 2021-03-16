@@ -12,6 +12,7 @@ public class ActorCommonHelpers : MonoBehaviour
     public ActorBattleHelper ActorBattleHelper;
     public ActorBoxInteractHelper ActorBoxInteractHelper;
     public EntityIndicatorHelper EntityIndicatorHelper;
+    public EntityModelHelper EntityModelHelper;
     public EntityBuffHelper EntityBuffHelper;
     public ActorFrozenHelper ActorFrozenHelper;
     public EntityTriggerZoneHelper EntityTriggerZoneHelper;

@@ -80,7 +80,7 @@ public class EntityIndicatorHelper : EntityMonoHelper
             if (!validOccupation)
             {
                 Entity entity = gameObject.GetComponentInParent<Entity>();
-                Debug.LogError($"{entity.name}的占位配置错误，必须要有一个EntityIndicator位于(0,0,0)");
+                Debug.LogWarning($"{entity.name}的占位配置错误，必须要有一个EntityIndicator位于(0,0,0)");
                 EntityOccupationData.IsShapeCuboid = false;
                 EntityOccupationData.IsShapePlanSquare = false;
                 return;

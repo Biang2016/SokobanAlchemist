@@ -30,6 +30,7 @@ public abstract class Entity : PoolObject
 
     #region Helpers
 
+    internal abstract EntityModelHelper EntityModelHelper { get; }
     internal abstract EntityIndicatorHelper EntityIndicatorHelper { get; }
     internal abstract EntityBuffHelper EntityBuffHelper { get; }
     internal abstract EntityFrozenHelper EntityFrozenHelper { get; }

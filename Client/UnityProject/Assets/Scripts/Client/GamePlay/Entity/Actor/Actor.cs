@@ -51,6 +51,7 @@ public class Actor : Entity
 
     public Vector3 ArtPos => ActorSkinHelper.MainArtTransform.position;
 
+    internal override EntityModelHelper EntityModelHelper => ActorCommonHelpers.EntityModelHelper;
     internal override EntityIndicatorHelper EntityIndicatorHelper => ActorCommonHelpers.EntityIndicatorHelper;
     internal override EntityBuffHelper EntityBuffHelper => ActorCommonHelpers.EntityBuffHelper;
     internal override EntityFrozenHelper EntityFrozenHelper => ActorFrozenHelper;

@@ -26,6 +26,7 @@ public partial class Box : Entity
     [FoldoutGroup("组件")]
     public GameObject ModelRoot;
 
+    internal override EntityModelHelper EntityModelHelper => BoxModelHelper;
     internal override EntityIndicatorHelper EntityIndicatorHelper => BoxIndicatorHelper;
     internal override EntityBuffHelper EntityBuffHelper => BoxBuffHelper;
     internal override EntityFrozenHelper EntityFrozenHelper => BoxFrozenHelper;
@@ -33,6 +34,12 @@ public partial class Box : Entity
     internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => BoxGrindTriggerZoneHelper;
     internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => BoxFlamethrowerHelpers;
     internal override List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers => BoxLightningGeneratorHelpers;
+
+    [FoldoutGroup("组件")]
+    public EntityModelHelper BoxModelHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityIndicatorHelper BoxIndicatorHelper;
 
     [FoldoutGroup("组件")]
     [SerializeField]
@@ -62,9 +69,6 @@ public partial class Box : Entity
 
     [FoldoutGroup("组件")]
     public BoxColliderHelper BoxColliderHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityIndicatorHelper BoxIndicatorHelper;
 
     [FoldoutGroup("组件")]
     public DoorBoxHelper DoorBoxHelper;
@@ -1024,7 +1028,7 @@ public partial class Box : Entity
                 }
             }
 
-            if (Rigidbody.velocity.magnitude < 1f)
+            if (hasRigidbody && Rigidbody.velocity.magnitude < 1f)
             {
                 bool isGrounded = false;
                 foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
@@ -1076,6 +1080,15 @@ public partial class Box : Entity
         else
         {
             BoxEffectHelper?.Stop();
+        }
+
+        if (hasRigidbody && Rigidbody.velocity.magnitude > 20f)
+        {
+            EntityModelHelper.SetVelocity(Rigidbody.velocity.x, Rigidbody.velocity.z);
+        }
+        else
+        {
+            EntityModelHelper.SetVelocity(0, 0);
         }
 
         if (PassiveSkillMarkAsDestroyed)
