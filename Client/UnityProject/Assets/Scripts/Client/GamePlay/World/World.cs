@@ -336,7 +336,7 @@ public class World : PoolObject
         }
 
         Box downBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, -1, 0), out WorldModule _, out GridPos3D _);
-        if (rightBox)
+        if (downBox)
         {
             if (!addedBoxes.Contains(downBox))
             {
