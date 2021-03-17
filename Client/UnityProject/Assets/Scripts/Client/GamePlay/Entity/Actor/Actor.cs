@@ -12,6 +12,14 @@ using UnityEngine;
 
 public class Actor : Entity
 {
+    #region GUID
+
+    [ReadOnly]
+    [HideInEditorMode]
+    public uint BornPointDataGUID; // 出生点GUID
+
+    #endregion
+
     public static bool ENABLE_ACTOR_MOVE_LOG =
 #if UNITY_EDITOR
         false;
@@ -123,7 +131,7 @@ public class Actor : Entity
             if (curWorldGP != value)
             {
                 WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(value, true);
-                if (module) curWorldGP = value;
+                if (module) curWorldGP = value; // 此处判空可防止角色走入空模组
             }
         }
     }
@@ -177,7 +185,7 @@ public class Actor : Entity
         SwitchEntityOrientation(GridPosR.RotateOrientationClockwise90(EntityOrientation));
     }
 
-    protected override void SwitchEntityOrientation(GridPosR.Orientation newOrientation)
+    internal override void SwitchEntityOrientation(GridPosR.Orientation newOrientation)
     {
         if (EntityOrientation == newOrientation) return;
 
@@ -543,7 +551,7 @@ public class Actor : Entity
         }
     }
 
-    public void Setup(string actorType, ActorCategory actorCategory, uint initWorldModuleGUID)
+    public void Setup(string actorType, ActorCategory actorCategory, GridPosR.Orientation actorOrientation, uint initWorldModuleGUID)
     {
         base.Setup(initWorldModuleGUID);
         GUID = GetGUID();
@@ -556,6 +564,7 @@ public class Actor : Entity
             EntityTypeIndex = (ushort) ConfigManager.TypeStartIndex.Player;
             ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
         }
+
 
         ActorType = actorType;
         ActorCategory = actorCategory;
@@ -570,8 +579,9 @@ public class Actor : Entity
         ActorArtHelper.SetPFMoveGridSpeed(0);
         ActorArtHelper.SetIsPushing(false);
 
-        WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+        curWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
         LastWorldGP = WorldGP;
+        SwitchEntityOrientation(actorOrientation);
         ActorAIAgent.Start();
 
         ActorBattleHelper.OnDamaged += (damage) =>

@@ -301,93 +301,6 @@ public class World : PoolObject
         }
     }
 
-    public List<Box> GetAroundBox(GridPos3D worldGP)
-    {
-        HashSet<Box> addedBoxes = new HashSet<Box>();
-        List<Box> boxes = new List<Box>();
-        Box leftBox = GetBoxByGridPosition(worldGP + new GridPos3D(-1, 0, 0), out WorldModule _, out GridPos3D _);
-        if (leftBox)
-        {
-            if (!addedBoxes.Contains(leftBox))
-            {
-                boxes.Add(leftBox);
-                addedBoxes.Add(leftBox);
-            }
-        }
-
-        Box rightBox = GetBoxByGridPosition(worldGP + new GridPos3D(1, 0, 0), out WorldModule _, out GridPos3D _);
-        if (rightBox)
-        {
-            if (!addedBoxes.Contains(rightBox))
-            {
-                boxes.Add(rightBox);
-                addedBoxes.Add(rightBox);
-            }
-        }
-
-        Box frontBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 0, 1), out WorldModule _, out GridPos3D _);
-        if (frontBox)
-        {
-            if (!addedBoxes.Contains(frontBox))
-            {
-                boxes.Add(frontBox);
-                addedBoxes.Add(frontBox);
-            }
-        }
-
-        Box backBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 0, -1), out WorldModule _, out GridPos3D _);
-        if (backBox)
-        {
-            if (!addedBoxes.Contains(backBox))
-            {
-                boxes.Add(backBox);
-                addedBoxes.Add(backBox);
-            }
-        }
-
-        Box leftFrontBox = GetBoxByGridPosition(worldGP + new GridPos3D(-1, 0, 1), out WorldModule _, out GridPos3D _);
-        if (leftFrontBox)
-        {
-            if (!addedBoxes.Contains(leftFrontBox))
-            {
-                boxes.Add(leftFrontBox);
-                addedBoxes.Add(leftFrontBox);
-            }
-        }
-
-        Box rightFrontBox = GetBoxByGridPosition(worldGP + new GridPos3D(1, 0, 1), out WorldModule _, out GridPos3D _);
-        if (rightFrontBox)
-        {
-            if (!addedBoxes.Contains(rightFrontBox))
-            {
-                boxes.Add(rightFrontBox);
-                addedBoxes.Add(rightFrontBox);
-            }
-        }
-
-        Box leftBackBox = GetBoxByGridPosition(worldGP + new GridPos3D(-1, 0, -1), out WorldModule _, out GridPos3D _);
-        if (leftBackBox)
-        {
-            if (!addedBoxes.Contains(leftBackBox))
-            {
-                boxes.Add(leftBackBox);
-                addedBoxes.Add(leftBackBox);
-            }
-        }
-
-        Box rightBackBox = GetBoxByGridPosition(worldGP + new GridPos3D(1, 0, -1), out WorldModule _, out GridPos3D _);
-        if (rightBackBox)
-        {
-            if (!addedBoxes.Contains(rightBackBox))
-            {
-                boxes.Add(rightBackBox);
-                addedBoxes.Add(rightBackBox);
-            }
-        }
-
-        return boxes;
-    }
-
     public List<Box> GetAdjacentBox(GridPos3D worldGP)
     {
         HashSet<Box> addedBoxes = new HashSet<Box>();
@@ -409,6 +322,26 @@ public class World : PoolObject
             {
                 boxes.Add(rightBox);
                 addedBoxes.Add(rightBox);
+            }
+        }
+
+        Box upBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 1, 0), out WorldModule _, out GridPos3D _);
+        if (upBox)
+        {
+            if (!addedBoxes.Contains(upBox))
+            {
+                boxes.Add(upBox);
+                addedBoxes.Add(upBox);
+            }
+        }
+
+        Box downBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, -1, 0), out WorldModule _, out GridPos3D _);
+        if (rightBox)
+        {
+            if (!addedBoxes.Contains(downBox))
+            {
+                boxes.Add(downBox);
+                addedBoxes.Add(downBox);
             }
         }
 
@@ -488,13 +421,14 @@ public class World : PoolObject
         uint excludeActorGUID = 0)
     {
         Box box_src = GetBoxByGridPosition(srcGP, out WorldModule module_src, out GridPos3D localGP_src);
-        if (box_src == null) return true;
+        if (box_src == null || !module_src.IsNotNullAndAvailable()) return true;
         foreach (GridPos3D offset in box_src.GetEntityOccupationGPs_Rotated())
         {
             GridPos3D gridGP = offset + box_src.WorldGP;
             GridPos3D gridGP_after = gridGP + direction;
             Box box_after = GetBoxByGridPosition(gridGP_after, out WorldModule module_after, out GridPos3D localGP_after);
 
+            if (!module_after.IsNotNullAndAvailable()) return false;
             bool beBlockedByOtherBox = box_after != null && box_after != box_src && !boxes_moveable.Contains(box_after);
             if (beBlockedByOtherBox)
             {
@@ -1022,7 +956,7 @@ public class World : PoolObject
             {
                 GridPos3D gridWorldGP = offset + worldGP;
                 Box existBox = GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP);
-                if (module != null)
+                if (module.IsNotNullAndAvailable())
                 {
                     if (existBox != null && existBox != box)
                     {
@@ -1142,7 +1076,7 @@ public class World : PoolObject
                 GridPos3D beneathBoxGridWorldGP = gridWorldGP + GridPos3D.Down;
 
                 Box boxBeneath = GetBoxByGridPosition(beneathBoxGridWorldGP, out WorldModule module, out GridPos3D localGP);
-                if (module == null || (boxBeneath != null && boxBeneath != box))
+                if (!module.IsNotNullAndAvailable() || (boxBeneath != null && boxBeneath != box))
                 {
                     spaceAvailable = false;
                     break;

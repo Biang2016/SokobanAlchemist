@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay.UI;
@@ -18,7 +19,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     internal PlayerActor Player2 => MainPlayers[(int) PlayerNumber.Player2];
 
     internal List<EnemyActor> Enemies = new List<EnemyActor>();
-    internal SortedDictionary<uint, Actor> ActorDict = new SortedDictionary<uint, Actor>();
+    internal SortedDictionary<uint, Actor> ActorDict = new SortedDictionary<uint, Actor>(); // Key: ActorGUID
 
     #region 分模组记录模组所属的Actor信息
 
@@ -34,7 +35,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         WorldModuleActorDict[worldModuleGUID].Add(actorGUID);
     }
 
-    private void UnregisterEnemyToWorldModule(uint actorGUID)
+    private void UnregisterEnemyFromWorldModule(uint actorGUID)
     {
         if (ActorDict.TryGetValue(actorGUID, out Actor actor))
         {
@@ -71,7 +72,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     public void Clear()
     {
-        foreach (EnemyActor enemy in Enemies)
+        foreach (EnemyActor enemy in Enemies.ToArray().ToList())
         {
             enemy.PoolRecycle();
         }
@@ -140,31 +141,6 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
     }
 
-    /// <summary>
-    /// 按地理位置销毁角色
-    /// </summary>
-    /// <param name="moduleGP"></param>
-    public void DestroyActorByModuleGP(GridPos3D moduleGP)
-    {
-        List<Actor> cachedDyingActors = new List<Actor>(32);
-        foreach (KeyValuePair<uint, Actor> kv in ActorDict)
-        {
-            GridPos3D actorModuleGP = WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(kv.Value.WorldGP);
-            if (actorModuleGP == moduleGP)
-            {
-                cachedDyingActors.Add(kv.Value);
-            }
-        }
-
-        foreach (Actor cachedDyingActor in cachedDyingActors)
-        {
-            if (cachedDyingActor == Player1 || cachedDyingActor == Player2) continue;
-            cachedDyingActor.ActorBattleHelper.DestroyActor(null, true);
-        }
-
-        cachedDyingActors.Clear();
-    }
-
     public void CreateActorByBornPointData(BornPointData bpd)
     {
         if (bpd.ActorCategory == ActorCategory.Player)
@@ -172,6 +148,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             PlayerNumber playerNumber = (PlayerNumber) Enum.Parse(typeof(PlayerNumber), bpd.ActorType);
             PlayerActor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
             GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
+            player.BornPointDataGUID = bpd.GUID;
             player.WorldGP = bpd.WorldGP;
             player.Setup(bpd.ActorType, bpd.ActorCategory, playerNumber, 0);
             BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
@@ -188,13 +165,37 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
                 ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.ActorType);
                 EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
                 GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, enemy.transform, 1);
-                enemy.Setup(bpd.ActorType, bpd.ActorCategory, worldModule.GUID);
+                enemy.BornPointDataGUID = bpd.GUID;
                 enemy.WorldGP = bpd.WorldGP;
+                enemy.Setup(bpd.ActorType, bpd.ActorCategory, bpd.ActorOrientation, worldModule.GUID);
                 enemy.ApplyBoxExtraSerializeData(bpd.RawEntityExtraSerializeData);
                 Enemies.Add(enemy);
                 AddActor(worldModule, enemy);
             }
         }
+    }
+
+    /// <summary>
+    /// 按地理位置销毁角色，非死亡
+    /// </summary>
+    /// <param name="moduleGP"></param>
+    public void DestroyActorByModuleGP_OpenWorldModuleRecycle(GridPos3D moduleGP)
+    {
+        WorldModule module = WorldManager.Instance.CurrentWorld.WorldModuleMatrix[moduleGP.x, moduleGP.y, moduleGP.z];
+        List<Actor> cachedDyingActors = new List<Actor>(32);
+        foreach (EnemyActor enemy in Enemies)
+        {
+            GridPos3D actorModuleGP = WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(enemy.WorldGP);
+            if (actorModuleGP == moduleGP) cachedDyingActors.Add(enemy);
+        }
+
+        foreach (Actor cachedDyingActor in cachedDyingActors)
+        {
+            if (cachedDyingActor == Player1 || cachedDyingActor == Player2) continue;
+            cachedDyingActor.ActorBattleHelper.DestroyActor(null, true);
+        }
+
+        cachedDyingActors.Clear();
     }
 
     private void AddActor(WorldModule worldModule, Actor actor)
@@ -203,16 +204,19 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         ActorDict.Add(actor.GUID, actor);
     }
 
+    /// <summary>
+    /// 死亡
+    /// </summary>
+    /// <param name="actor"></param>
     public void RemoveActor(Actor actor)
     {
-        if (actor is EnemyActor enemy) UnregisterEnemyToWorldModule(enemy.GUID);
-        ActorDict.Remove(actor.GUID);
-    }
+        if (actor is EnemyActor enemy)
+        {
+            UnregisterEnemyFromWorldModule(enemy.GUID);
+            Enemies.Remove(enemy);
+        }
 
-    public Actor FindActor(uint actorGUID)
-    {
-        ActorDict.TryGetValue(actorGUID, out Actor actor);
-        return actor;
+        ActorDict.Remove(actor.GUID);
     }
 
     public void SetAllActorShown(bool shown)

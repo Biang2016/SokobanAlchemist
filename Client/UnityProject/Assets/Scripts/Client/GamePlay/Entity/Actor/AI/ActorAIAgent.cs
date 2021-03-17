@@ -12,6 +12,9 @@ public class ActorAIAgent
     private List<Marker> NavTrackMarkers = new List<Marker>();
 
     public Actor TargetActor;
+    public GridPos3D GuardGP; //保卫的坐标
+    public Actor GuardActor; // 保卫的对象
+    public Actor FollowActor; // 跟随的对象
     public GridPos3D TargetActorGP;
 
     public float StuckWithNavTask_Tick = 0;

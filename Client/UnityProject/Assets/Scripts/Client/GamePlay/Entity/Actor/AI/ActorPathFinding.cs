@@ -54,7 +54,7 @@ public static class ActorPathFinding
     {
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori, out WorldModule oriModule, out GridPos3D _);
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(dest, out WorldModule destModule, out GridPos3D _);
-        if (oriModule != null && destModule != null)
+        if (oriModule.IsNotNullAndAvailable() && destModule.IsNotNullAndAvailable())
         {
             Node oriNode = NodeFactory.Alloc();
             oriNode.GridPos3D_PF = ori;
@@ -70,7 +70,7 @@ public static class ActorPathFinding
     {
         destination_PF = GridPos3D.Zero;
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori_PF.ConvertPathFindingNodeGPToWorldPosition(actorWidth).ToGridPos3D(), out WorldModule oriModule, out GridPos3D _);
-        if (oriModule != null)
+        if (oriModule.IsNotNullAndAvailable())
         {
             List<GridPos3D> validNodes = UnionFindNodes(ori_PF, actorPos,rangeRadius, actorWidth, actorHeight, exceptActorGUID);
             if (validNodes.Count == 0) return false;
@@ -310,7 +310,7 @@ public static class ActorPathFinding
         {
             GridPos3D head = cached_QueueUnionFind.Dequeue();
             WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(head, out WorldModule curModule, out GridPos3D _);
-            if (curModule == null) return cached_UnionFindNodeList;
+            if (!curModule.IsNotNullAndAvailable()) return cached_UnionFindNodeList;
 
             // 四邻边
             tryAddNode(head + new GridPos3D(-1, 0, 0));
@@ -368,7 +368,8 @@ public static class ActorPathFinding
 
             if (BattleManager.Instance.Player1.GUID != exceptActorGUID && BattleManager.Instance.Player1.WorldGP == gridPos) return false;
             if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.GUID != exceptActorGUID && BattleManager.Instance.Player2.WorldGP == gridPos) return false;
-            Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos, out WorldModule _, out GridPos3D _, false);
+            Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos, out WorldModule module, out GridPos3D _, false);
+            if (!module.IsNotNullAndAvailable()) return false;
             if (box != null && !box.Passable) return false;
             if (occupied_y == 0)
             {

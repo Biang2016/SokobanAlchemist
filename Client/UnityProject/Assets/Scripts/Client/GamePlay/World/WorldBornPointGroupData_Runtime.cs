@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class WorldBornPointGroupData_Runtime
 {
-    private Dictionary<GridPos3D, List<BornPointData>> ActorBP_ModuleDict = new Dictionary<GridPos3D, List<BornPointData>>(512); // All Data
+    private Dictionary<GridPos3D, List<BornPointData>> ActorBP_ModuleDict = new Dictionary<GridPos3D, List<BornPointData>>(512); // Key: ModuleGP, All Data
+    private Dictionary<uint, BornPointData> BornPointDataGUIDDict = new Dictionary<uint, BornPointData>(); // Key: BornPointDataGUID
 
     // Current loaded BPs:
     public Dictionary<string, BornPointData> PlayerBornPointDataAliasDict = new Dictionary<string, BornPointData>(); // 带花名的玩家出生点词典
-    public Dictionary<string, BornPointData> EnemyBornPointDataAliasDict = new Dictionary<string, BornPointData>(); // 带花名的敌人出生点词典
+    public Dictionary<string, BornPointData> EnemyBornPointDataAliasDict = new Dictionary<string, BornPointData>(); //  带花名的敌兵出生点词典
 
     public void InitTempData()
     {
@@ -38,6 +39,12 @@ public class WorldBornPointGroupData_Runtime
         }
 
         ActorBP_ModuleDict[moduleGP].Add(bp);
+
+        if (!BornPointDataGUIDDict.ContainsKey(bp.GUID))
+        {
+            BornPointDataGUIDDict.Add(bp.GUID, bp);
+        }
+
         PlayerBornPointDataAliasDict.Add(bp.BornPointAlias, bp);
     }
 
@@ -51,15 +58,25 @@ public class WorldBornPointGroupData_Runtime
         foreach (KeyValuePair<string, BornPointData> kv in moduleData.WorldModuleBornPointGroupData.PlayerBornPoints)
         {
             BornPointData playerBP = (BornPointData) kv.Value.Clone();
+            playerBP.InitGUID();
             playerBP.WorldGP = playerBP.LocalGP + moduleGP * WorldModule.MODULE_SIZE;
             ActorBP_ModuleDict[moduleGP].Add(playerBP);
+            if (!BornPointDataGUIDDict.ContainsKey(playerBP.GUID))
+            {
+                BornPointDataGUIDDict.Add(playerBP.GUID, playerBP);
+            }
         }
 
         foreach (BornPointData bp in moduleData.WorldModuleBornPointGroupData.EnemyBornPoints)
         {
             BornPointData enemyBP = (BornPointData) bp.Clone();
+            enemyBP.InitGUID();
             enemyBP.WorldGP = enemyBP.LocalGP + moduleGP * WorldModule.MODULE_SIZE;
             ActorBP_ModuleDict[moduleGP].Add(enemyBP);
+            if (!BornPointDataGUIDDict.ContainsKey(enemyBP.GUID))
+            {
+                BornPointDataGUIDDict.Add(enemyBP.GUID, enemyBP);
+            }
         }
     }
 
@@ -78,6 +95,8 @@ public class WorldBornPointGroupData_Runtime
                 {
                     EnemyBornPointDataAliasDict.Remove(bp.BornPointAlias);
                 }
+
+                BornPointDataGUIDDict.Remove(bp.GUID);
             }
 
             ActorBP_ModuleDict.Remove(moduleGP);
@@ -119,7 +138,7 @@ public class WorldBornPointGroupData_Runtime
             }
         }
 
-        BattleManager.Instance.DestroyActorByModuleGP(moduleGP);
+        BattleManager.Instance.DestroyActorByModuleGP_OpenWorldModuleRecycle(moduleGP);
     }
 
     private void AddPlayerBP(BornPointData bp)
@@ -146,6 +165,48 @@ public class WorldBornPointGroupData_Runtime
             {
                 Debug.Log($"敌人出生点花名重复: {bp.BornPointAlias}");
             }
+        }
+    }
+
+    public BornPointData GetBornPointDataByGUID(uint bornPointDataGUID)
+    {
+        if (BornPointDataGUIDDict.TryGetValue(bornPointDataGUID, out BornPointData bp))
+        {
+            return bp;
+        }
+
+        return null;
+    }
+
+    public void UnRegisterBornPointData_OpenWorldEnemyDied(uint bornPointDataGUID)
+    {
+        if (BornPointDataGUIDDict.TryGetValue(bornPointDataGUID, out BornPointData bp))
+        {
+            BornPointDataGUIDDict.Remove(bornPointDataGUID);
+            GridPos3D moduleGP = WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(bp.WorldGP);
+            if (ActorBP_ModuleDict.TryGetValue(moduleGP, out List<BornPointData> bpList))
+            {
+                bpList.Remove(bp);
+            }
+        }
+    }
+
+    public void ChangeBornPointDataBetweenModules_ForOpenWorldModule(uint bornPointDataGUID, GridPos3D oriModuleGP, GridPos3D destModuleGP)
+    {
+        if (oriModuleGP == destModuleGP) return;
+        if (BornPointDataGUIDDict.TryGetValue(bornPointDataGUID, out BornPointData bp))
+        {
+            if (ActorBP_ModuleDict.TryGetValue(oriModuleGP, out List<BornPointData> bpList))
+            {
+                bpList.Remove(bp);
+            }
+
+            if (!ActorBP_ModuleDict.ContainsKey(destModuleGP))
+            {
+                ActorBP_ModuleDict.Add(destModuleGP, new List<BornPointData>());
+            }
+
+            ActorBP_ModuleDict[destModuleGP].Add(bp);
         }
     }
 }

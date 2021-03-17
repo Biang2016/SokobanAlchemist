@@ -23,9 +23,6 @@ public partial class Box : Entity
 
     internal Actor LastTouchActor;
 
-    [FoldoutGroup("组件")]
-    public GameObject ModelRoot;
-
     internal override EntityModelHelper EntityModelHelper => BoxModelHelper;
     internal override EntityIndicatorHelper EntityIndicatorHelper => BoxIndicatorHelper;
     internal override EntityBuffHelper EntityBuffHelper => BoxBuffHelper;
@@ -172,9 +169,9 @@ public partial class Box : Entity
         BoxFrozenBoxHelper?.OnHelperRecycled();
 
         transform.DOPause();
-        ModelRoot.transform.DOPause();
-        ModelRoot.transform.localPosition = Vector3.zero;
-        ModelRoot.transform.localScale = Vector3.one;
+        EntityModelHelper.transform.DOPause();
+        EntityModelHelper.transform.localPosition = Vector3.zero;
+        EntityModelHelper.transform.localScale = Vector3.one;
         alreadyCollidedActorSet.Clear();
         if (hasRigidbody)
         {
@@ -210,11 +207,11 @@ public partial class Box : Entity
 
     #region 旋转朝向
 
-    protected override void SwitchEntityOrientation(GridPosR.Orientation boxOrientation)
+    internal override void SwitchEntityOrientation(GridPosR.Orientation boxOrientation)
     {
         base.SwitchEntityOrientation(boxOrientation);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxColliderHelper.transform, 1);
-        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), ModelRoot.transform, 1);
+        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), EntityModelHelper.transform, 1);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxFrozenHelper.FrozeModelRoot.transform, 1);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxIndicatorHelper.transform, 1);
         if (EntityTriggerZoneHelper) GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), EntityTriggerZoneHelper.transform, 1);
@@ -1325,8 +1322,8 @@ public partial class Box : Entity
     {
         PlayFXOnEachGrid(MergeFX, MergeFXScale);
 
-        ModelRoot.transform.DOShakeScale(0.2f);
-        ModelRoot.transform.DOMove(mergeToWorldGP, MergeDelay * 1.2f);
+        EntityModelHelper.transform.DOShakeScale(0.2f);
+        EntityModelHelper.transform.DOMove(mergeToWorldGP, MergeDelay * 1.2f);
         yield return new WaitForSeconds(MergeDelay);
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
@@ -1424,7 +1421,7 @@ public partial class Box : Entity
     {
         GameObject box_Instance = Instantiate(gameObject); // 这是实例化一个无链接的prefab实例（unpacked completely）
         Box box = box_Instance.GetComponent<Box>();
-        GameObject modelRoot = box.ModelRoot;
+        GameObject modelRoot = box.EntityModelHelper.gameObject;
         GameObject boxIndicatorHelperGO = box.BoxIndicatorHelper.gameObject;
 
         GameObject boxLevelEditorPrefab = ConfigManager.FindBoxLevelEditorPrefabByName(name);

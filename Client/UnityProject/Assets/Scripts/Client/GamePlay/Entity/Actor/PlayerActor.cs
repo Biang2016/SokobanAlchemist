@@ -31,7 +31,7 @@ public class PlayerActor : Actor
 
     public void Setup(string actorType, ActorCategory actorCategory, PlayerNumber playerNumber, uint initWorldModuleGUID)
     {
-        base.Setup(actorType, actorCategory, initWorldModuleGUID);
+        base.Setup(actorType, actorCategory, GridPosR.Orientation.Down, initWorldModuleGUID);
         PlayerNumber = playerNumber;
         ActorSkinHelper.Initialize(playerNumber);
         BS_Up = ControlManager.Instance.Battle_MoveButtons[(int) PlayerNumber, (int) GridPosR.Orientation.Up];
@@ -101,7 +101,7 @@ public class PlayerActor : Actor
 
                     // Check is there any box occupies the grid
                     Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(targetPos, out WorldModule module, out GridPos3D _, true);
-                    if ((!box && module)
+                    if ((!box && module.IsNotNullAndAvailable())
                         || (box && box.Passable)
                         || (box && box.Pushable && ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.EntityTypeIndex) &&
                             WorldManager.Instance.CurrentWorld.CheckCanMoveBoxColumn(box.WorldGP, rotatedQuickMoveAttemptGP, new HashSet<Box>()))) // 能走到才开启短按

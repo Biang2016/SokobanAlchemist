@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -84,6 +85,46 @@ public class ActorBattleHelper : ActorMonoHelper
             foreach (EntityPassiveSkill ps in Actor.EntityPassiveSkills)
             {
                 ps.OnBeforeDestroyEntity();
+            }
+        }
+
+        if (Actor is EnemyActor && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            GridPos3D actorModuleGP = WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(Actor.WorldGP);
+            WorldModule module = WorldManager.Instance.CurrentWorld.WorldModuleMatrix[actorModuleGP.x, actorModuleGP.y, actorModuleGP.z];
+            BornPointData mBornPointData = WorldManager.Instance.CurrentWorld.WorldData.WorldBornPointGroupData_Runtime.GetBornPointDataByGUID(Actor.BornPointDataGUID);
+            if (module is OpenWorldModule)
+            {
+                if (forModuleRecycle)
+                {
+                    // Enemy没死，但迁移到了其他模组，需要将出生点数据转移
+                    if (mBornPointData == null)
+                    {
+                        Debug.LogError("角色未死亡但BornPointData已经遗失");
+                    }
+                    else
+                    {
+                        if (Actor.name.Contains("IceEnemy"))
+                        {
+                            int a = 0;
+                        }
+
+                        mBornPointData.ActorOrientation = Actor.EntityOrientation;
+                        Actor.SwitchEntityOrientation(GridPosR.Orientation.Up); // 需要将Actor的朝向转回正，才能读取到原WorldGP
+                        GridPos3D actorFaceUpWorldGP = Actor.WorldGP;
+                        Actor.SwitchEntityOrientation(mBornPointData.ActorOrientation); // 复原朝向
+                        GridPos3D oriModuleGP = openWorld.GetModuleGPByWorldGP(mBornPointData.WorldGP);
+                        GridPos3D destModuleGP = openWorld.GetModuleGPByWorldGP(actorFaceUpWorldGP);
+                        openWorld.WorldData.WorldBornPointGroupData_Runtime.ChangeBornPointDataBetweenModules_ForOpenWorldModule(mBornPointData.GUID, oriModuleGP, destModuleGP);
+                        mBornPointData.WorldGP = actorFaceUpWorldGP;
+                        mBornPointData.LocalGP = mBornPointData.WorldGP - destModuleGP * WorldModule.MODULE_SIZE;
+                    }
+                }
+                else
+                {
+                    // Enemy死亡，移除出生点数据
+                    openWorld.WorldData.WorldBornPointGroupData_Runtime.UnRegisterBornPointData_OpenWorldEnemyDied(mBornPointData.GUID);
+                }
             }
         }
 

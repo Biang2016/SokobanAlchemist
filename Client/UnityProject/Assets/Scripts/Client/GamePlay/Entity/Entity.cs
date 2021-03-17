@@ -119,7 +119,7 @@ public abstract class Entity : PoolObject
 
     public GridPosR.Orientation EntityOrientation { get; protected set; }
 
-    protected virtual void SwitchEntityOrientation(GridPosR.Orientation entityOrientation)
+    internal virtual void SwitchEntityOrientation(GridPosR.Orientation entityOrientation)
     {
         EntityOrientation = entityOrientation;
     }

@@ -71,17 +71,17 @@ public class WorldModule : PoolObject
                 WorldModuleDataModification.BoxModification mod = new WorldModuleDataModification.BoxModification(boxTypeIndex, boxOrientation);
                 if (WorldModuleData.RawBoxMatrix[x, y, z] == boxTypeIndex && WorldModuleData.RawBoxOrientationMatrix[x, y, z] == boxOrientation) // 和初始数据一致，则将改动抹除
                 {
-                    WorldModuleData.Modification.ModificationDict.Remove(localGP);
+                    WorldModuleData.Modification.BoxModificationDict.Remove(localGP);
                 }
                 else
                 {
-                    if (WorldModuleData.Modification.ModificationDict.ContainsKey(localGP))
+                    if (WorldModuleData.Modification.BoxModificationDict.ContainsKey(localGP))
                     {
-                        WorldModuleData.Modification.ModificationDict[localGP] = mod;
+                        WorldModuleData.Modification.BoxModificationDict[localGP] = mod;
                     }
                     else
                     {
-                        WorldModuleData.Modification.ModificationDict.Add(localGP, mod);
+                        WorldModuleData.Modification.BoxModificationDict.Add(localGP, mod);
                     }
                 }
             }
@@ -109,8 +109,12 @@ public class WorldModule : PoolObject
         WorldModuleLevelTriggerRoot.parent = transform;
     }
 
+    [HideInEditorMode]
+    public bool IsGeneratingOrRecycling;
+
     public IEnumerator Clear(bool releaseWorldModuleData, int clearBoxNumPerFrame = 256)
     {
+        IsGeneratingOrRecycling = true;
         int count = 0;
 
         for (int x = 0; x < MODULE_SIZE; x++)
@@ -178,10 +182,12 @@ public class WorldModule : PoolObject
         WorldGroundCollider = null;
         FlowScriptController.StopBehaviour();
         FlowScriptController.graph = null;
+        IsGeneratingOrRecycling = false;
     }
 
     public virtual IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadBoxNumPerFrame)
     {
+        IsGeneratingOrRecycling = true;
         GUID = GetGUID();
         ModuleGP = moduleGP;
         World = world;
@@ -294,6 +300,8 @@ public class WorldModule : PoolObject
                 FlowScriptController.StartBehaviour();
             }
         }
+
+        IsGeneratingOrRecycling = false;
     }
 
     public void GenerateLevelTrigger(LevelTriggerBase.Data dataClone)
@@ -440,4 +448,12 @@ public class WorldModule : PoolObject
         }
     }
 #endif
+}
+
+public static class WorldModuleUtils
+{
+    public static bool IsNotNullAndAvailable(this WorldModule module)
+    {
+        return module != null && !module.IsRecycled && !module.IsGeneratingOrRecycling;
+    }
 }

@@ -272,14 +272,20 @@ public class FieldCamera : MonoBehaviour
         CurrentConfigData.Distance = _distance;
     }
 
+    private bool IsShaking = false;
+
     public void CameraShake(int equivalentDamage, float distanceFromPlayer)
     {
-        Camera.transform.DOShakePosition(0.1f, CameraShakeStrengthCurve.Evaluate(equivalentDamage) * CameraShakeAttenuationByDistanceCurve.Evaluate(distanceFromPlayer), 10, 90f);
+        if (IsShaking) return;
+        IsShaking = true;
+        Camera.transform.DOShakePosition(0.1f, CameraShakeStrengthCurve.Evaluate(equivalentDamage) * CameraShakeAttenuationByDistanceCurve.Evaluate(distanceFromPlayer), 10, 90f).OnComplete(() => { IsShaking = false; });
     }
 
     public void CameraShake(float duration, float strength, float distanceFromPlayer)
     {
-        Camera.transform.DOShakePosition(duration, strength * CameraShakeAttenuationByDistanceCurve.Evaluate(distanceFromPlayer), 10, 90f);
+        if (IsShaking) return;
+        IsShaking = true;
+        Camera.transform.DOShakePosition(duration, strength * CameraShakeAttenuationByDistanceCurve.Evaluate(distanceFromPlayer), 10, 90f).OnComplete(() => { IsShaking = false; });
     }
 
     public void CameraLeftRotate()

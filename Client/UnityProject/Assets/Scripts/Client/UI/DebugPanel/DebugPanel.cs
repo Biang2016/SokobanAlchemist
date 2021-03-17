@@ -50,6 +50,7 @@ public class DebugPanel : BaseUIPanel
         }
 
         DebugButtonColumns.Clear();
+        OnShortcutKeyDown = null;
     }
 
     public void Init()
@@ -325,7 +326,7 @@ public class DebugPanel : BaseUIPanel
     {
         int maxActionPointDelta = BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.Value + 10 - BattleManager.Instance.Player1.EntityStatPropSet.MaxActionPoint.GetModifiedValue;
         maxActionPointDelta = Mathf.Max(0, maxActionPointDelta);
-        BattleManager.Instance.Player1.EntityStatPropSet.MaxActionPoint.AddModifier(new Property.PlusModifier {Delta = maxActionPointDelta });
+        BattleManager.Instance.Player1.EntityStatPropSet.MaxActionPoint.AddModifier(new Property.PlusModifier {Delta = maxActionPointDelta});
         BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.Value + 10, "DebugPanelAddAction10");
     }
 

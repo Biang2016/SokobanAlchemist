@@ -161,20 +161,20 @@ public class WorldModuleDataModification : IClone<WorldModuleDataModification>, 
     public struct BoxModification
     {
         public ushort BoxTypeIndex;
-        public GridPosR.Orientation BoxOrientation;
+        public GridPosR.Orientation EntityOrientation;
 
         public BoxModification(ushort boxTypeIndex, GridPosR.Orientation boxOrientation)
         {
             BoxTypeIndex = boxTypeIndex;
-            BoxOrientation = boxOrientation;
+            EntityOrientation = boxOrientation;
         }
     }
 
-    public Dictionary<GridPos3D, BoxModification> ModificationDict = new Dictionary<GridPos3D, BoxModification>(16);
+    public Dictionary<GridPos3D, BoxModification> BoxModificationDict = new Dictionary<GridPos3D, BoxModification>(16);
 
     public void SaveData(GridPos3D moduleGP)
     {
-        if (ModificationDict.Count > 0)
+        if (BoxModificationDict.Count > 0)
         {
             GameSaveManager.Instance.SaveData(WorldManager.Instance.CurrentWorld.WorldGUID, moduleGP.ToString(), GameSaveManager.SaveDataType.GameProgress, this, DataFormat.JSON);
         }
@@ -188,7 +188,7 @@ public class WorldModuleDataModification : IClone<WorldModuleDataModification>, 
 
     public void Clear()
     {
-        ModificationDict.Clear();
+        BoxModificationDict.Clear();
     }
 
     #region IClassPoolObject
@@ -199,7 +199,7 @@ public class WorldModuleDataModification : IClone<WorldModuleDataModification>, 
 
     public void OnRelease()
     {
-        ModificationDict.Clear();
+        BoxModificationDict.Clear();
     }
 
     public void Release()
@@ -225,9 +225,9 @@ public class WorldModuleDataModification : IClone<WorldModuleDataModification>, 
     {
         WorldModuleDataModification newData = Factory.Alloc();
         newData.Enable = Enable;
-        foreach (KeyValuePair<GridPos3D, BoxModification> kv in ModificationDict)
+        foreach (KeyValuePair<GridPos3D, BoxModification> kv in BoxModificationDict)
         {
-            newData.ModificationDict.Add(kv.Key, kv.Value);
+            newData.BoxModificationDict.Add(kv.Key, kv.Value);
         }
 
         return newData;

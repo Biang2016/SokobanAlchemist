@@ -132,6 +132,7 @@ public class BuffEditorWindow : EditorWindow
         {
             ConfigManager.ExportEntityBuffAttributeMatrix(DataFormat.Binary);
             ConfigManager.LoadEntityBuffAttributeMatrixFromAsset();
+            ConfigManager.UpgradeEntityBuffAttributeMatrixAssetVersion();
             Init();
         }
 

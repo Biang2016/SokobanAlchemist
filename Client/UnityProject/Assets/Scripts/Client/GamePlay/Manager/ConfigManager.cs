@@ -27,6 +27,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         WorldModule = 500,
         Entity = 1000,
         Buff = 10000,
+        BornPointData = 90000,
         PropertyModifier = 100000,
     }
 
@@ -728,6 +729,15 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     {
         EntityBuffAttributeMatrixAsset configSSO = GetBuffAttributeMatrixAsset();
         EntityBuffAttributeMatrix = configSSO.EntityBuffAttributeMatrix;
+    }
+
+    public static void UpgradeEntityBuffAttributeMatrixAssetVersion()
+    {
+        EntityBuffAttributeMatrixAsset configSSO = GetBuffAttributeMatrixAsset();
+        configSSO.version += 1;
+        EditorUtility.SetDirty(configSSO);
+        AssetDatabase.Refresh();
+        AssetDatabase.SaveAssets();
     }
 #endif
 

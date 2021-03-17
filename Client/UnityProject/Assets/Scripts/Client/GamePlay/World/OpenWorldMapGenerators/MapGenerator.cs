@@ -236,6 +236,7 @@ public abstract class MapGenerator
                                     GridPos3D playerBPWorldGP = new GridPos3D(world_x + rot_local_x, WorldModule.MODULE_SIZE, world_z + rot_local_z);
                                     GridPos3D playerBPLocal = new GridPos3D(playerBPWorldGP.x % WorldModule.MODULE_SIZE, 0, playerBPWorldGP.z % WorldModule.MODULE_SIZE);
                                     BornPointData bp = new BornPointData {ActorType = "Player1", BornPointAlias = OpenWorld.PLAYER_DEFAULT_BP, LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorldGP};
+                                    bp.InitGUID();
                                     m_OpenWorld.WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP_OpenWorld(bp);
                                     m_OpenWorld.InitialPlayerBP = playerBPWorldGP;
                                     WorldMap[playerBPWorldGP.x, playerBPWorldGP.y - WorldModule.MODULE_SIZE, playerBPWorldGP.z] = (ushort) ConfigManager.TypeStartIndex.Player;

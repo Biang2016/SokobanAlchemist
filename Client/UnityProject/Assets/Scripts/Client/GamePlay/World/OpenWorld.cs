@@ -443,7 +443,6 @@ public class OpenWorld : World
             if (module_x >= 0 && module_x < WorldSize_X && module_z >= 0 && module_z < WorldSize_Z)
             {
                 if (!CheckModuleCanBeSeenByCamera(new GridPos3D(module_x, 1, module_z), true, false, ExtendScope_Load)) continue;
-                GridPos3D diff = new GridPos3D(module_x, 1, module_z) - playerOnModuleGP;
 
                 // Ground Modules
                 WorldModule groundModule = WorldModuleMatrix[module_x, 0, module_z];
@@ -469,6 +468,7 @@ public class OpenWorld : World
                     GridPos3D targetModuleGP = new GridPos3D(module_x, 1, module_z);
                     if (!m_LevelCacheData.WorldModuleDataDict.TryGetValue(targetModuleGP, out moduleData))
                     {
+                        // 从未加载过的模组，通过generator来计算
                         moduleData = WorldModuleData.WorldModuleDataFactory.Alloc();
                         moduleData.InitOpenWorldModuleData(true);
                         m_LevelCacheData.WorldModuleDataDict.Add(targetModuleGP, moduleData);
@@ -517,10 +517,11 @@ public class OpenWorld : World
                     WorldModuleDataModification modification = WorldModuleDataModification.LoadData(targetModuleGP);
                     if (modification != null)
                     {
-                        foreach (KeyValuePair<GridPos3D, WorldModuleDataModification.BoxModification> kv in modification.ModificationDict)
+                        foreach (KeyValuePair<GridPos3D, WorldModuleDataModification.BoxModification> kv in modification.BoxModificationDict)
                         {
+                            // 此部分不可使用Module[x,y,z]来赋值，否则又会触发Modification
                             moduleData.BoxMatrix[kv.Key.x, kv.Key.y, kv.Key.z] = kv.Value.BoxTypeIndex;
-                            moduleData.BoxOrientationMatrix[kv.Key.x, kv.Key.y, kv.Key.z] = kv.Value.BoxOrientation;
+                            moduleData.BoxOrientationMatrix[kv.Key.x, kv.Key.y, kv.Key.z] = kv.Value.EntityOrientation;
                         }
 
                         moduleData.Modification.Release();
@@ -600,8 +601,8 @@ public class OpenWorld : World
 
     IEnumerator Co_RecycleModule(WorldModule worldModule, GridPos3D currentShowModuleGP, int boolIndex)
     {
-        worldModule.WorldModuleData.Modification?.SaveData(worldModule.ModuleGP);
         WorldData.WorldBornPointGroupData_Runtime.Dynamic_UnloadModuleData(currentShowModuleGP);
+        worldModule.WorldModuleData.Modification?.SaveData(worldModule.ModuleGP);
         WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
         yield return worldModule.Clear(false, 256);
         worldModule.PoolRecycle();
@@ -732,6 +733,7 @@ public class OpenWorld : World
         {
             if (!IsInsideMicroWorld) return;
         }
+
         StartCoroutine(Co_ReturnToOpenWorldFormMicroWorld(rebornPlayer));
     }
 
