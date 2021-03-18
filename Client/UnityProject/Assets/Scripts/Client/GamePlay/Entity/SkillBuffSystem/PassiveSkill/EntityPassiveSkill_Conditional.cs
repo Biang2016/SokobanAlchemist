@@ -11,10 +11,6 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 {
     protected override string Description => "条件触发的箱子被动技能";
 
-    [ReadOnly]
-    [HideInEditorMode]
-    public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
-
     [Flags]
     public enum PassiveSkillConditionType
     {

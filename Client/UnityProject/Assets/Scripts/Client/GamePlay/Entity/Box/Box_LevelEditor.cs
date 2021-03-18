@@ -57,6 +57,19 @@ public class Box_LevelEditor : MonoBehaviour
 
     public bool RequireSerializePassiveSkillsIntoWorldModule => RawEntityExtraSerializeData.EntityPassiveSkills.Count > 0;
 
+    public uint ProbablyShow
+    {
+        get
+        {
+            foreach (EntityPassiveSkill eps in RawEntityExtraSerializeData.EntityPassiveSkills)
+            {
+                if (eps is EntityPassiveSkill_ProbablyShow ps) return ps.ShowProbabilityPercent;
+            }
+
+            return 100;
+        }
+    }
+
     public bool LevelEventTriggerAppearInWorldModule
     {
         get
@@ -76,12 +89,17 @@ public class Box_LevelEditor : MonoBehaviour
         {
             if (RequireSerializePassiveSkillsIntoWorldModule)
             {
-                transform.DrawSpecialTip(Vector3.left * 0.5f, "#0AFFF1".HTMLColorToColor(), Color.cyan, "模特");
+                transform.DrawSpecialTip(Vector3.left * 0.5f + Vector3.forward * -0.2f, "#0AFFF1".HTMLColorToColor(), Color.cyan, "特殊");
+            }
+
+            if (ProbablyShow < 100)
+            {
+                transform.DrawSpecialTip(Vector3.left * 0.5f + Vector3.forward * 0.05f, Color.clear, Color.yellow, $"{ProbablyShow}%现");
             }
 
             if (LevelEventTriggerAppearInWorldModule)
             {
-                transform.DrawSpecialTip(Vector3.left * 0.5f + Vector3.forward * 0.5f, Color.clear, "#B30AFF".HTMLColorToColor(), "模预隐");
+                transform.DrawSpecialTip(Vector3.left * 0.5f + Vector3.forward * 0.3f, Color.clear, Color.grey, "预隐");
             }
         }
     }

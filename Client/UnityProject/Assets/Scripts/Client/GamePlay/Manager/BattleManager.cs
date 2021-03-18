@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using BiangLibrary;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay.UI;
@@ -143,6 +144,17 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     public void CreateActorByBornPointData(BornPointData bpd)
     {
+        if (bpd.RawEntityExtraSerializeData != null)
+        {
+            foreach (EntityPassiveSkill eps in bpd.RawEntityExtraSerializeData.EntityPassiveSkills)
+            {
+                if (eps is EntityPassiveSkill_ProbablyShow ps)
+                {
+                    if (!ps.ShowProbabilityPercent.ProbabilityBool()) return;
+                }
+            }
+        }
+
         if (bpd.ActorCategory == ActorCategory.Player)
         {
             PlayerNumber playerNumber = (PlayerNumber) Enum.Parse(typeof(PlayerNumber), bpd.ActorTypeName);

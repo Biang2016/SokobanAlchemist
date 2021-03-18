@@ -30,6 +30,12 @@ Transform:
   - {fileID: 6527933545109499072}
   - {fileID: 492134664192403332}
   - {fileID: 475268026004737916}
+  - {fileID: 6717270566721755586}
+  - {fileID: 8415276253623710014}
+  - {fileID: 1633960815557571799}
+  - {fileID: 9154961712725105423}
+  - {fileID: 7288960112056740696}
+  - {fileID: 5393229139672076057}
   m_Father: {fileID: 7729307243981049466}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -153,9 +159,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 121011767925278307}
-  - {fileID: 1361498894278951088}
-  - {fileID: 2499313976493958234}
-  - {fileID: 306054209422481529}
   - {fileID: 3742022380757968905}
   - {fileID: 4397305959134569953}
   - {fileID: 1156504700020559174}
@@ -169,7 +172,6 @@ Transform:
   - {fileID: 1200960263134462424}
   - {fileID: 3644642050055872002}
   - {fileID: 3345392674901047532}
-  - {fileID: 6383234410902047412}
   - {fileID: 3690194285198433690}
   - {fileID: 7971145318397391850}
   - {fileID: 1334848800244076736}
@@ -177,6 +179,16 @@ Transform:
   - {fileID: 6018309892937717594}
   - {fileID: 6140018774617422598}
   - {fileID: 4420324879265719561}
+  - {fileID: 5137083956865321777}
+  - {fileID: 3377461631777005562}
+  - {fileID: 1577128196758584034}
+  - {fileID: 7016872692682575589}
+  - {fileID: 6118716686801252616}
+  - {fileID: 7132131568013505291}
+  - {fileID: 2826124778207605141}
+  - {fileID: 2477177176338564102}
+  - {fileID: 4163152885264124647}
+  - {fileID: 8385069388609225692}
   m_Father: {fileID: 7729307243981049466}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -195,7 +207,7 @@ PrefabInstance:
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
@@ -247,6 +259,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
 --- !u!4 &6781526323970076794 stripped
@@ -262,10 +299,35 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7387839599002250699}
     m_Modifications:
+    - target: {fileID: 2236431300374853258, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236431300374853258, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236431300374853258, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236431300374853258, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236431300374853258, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 4095771654170433249, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4095771654170433249, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
         type: 3}
@@ -330,6 +392,171 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 808764576971800296}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &821241277432551890
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1983357061677681433}
+    m_Modifications:
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818950748850363364, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_Name
+      value: BornPoint_FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorTypeName
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MaxTriggeredTimes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MultiEventTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAlias
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].PassiveSkillCondition
+      value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].TriggerProbabilityPercent
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAliasList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0]
+      value: Client EntityPassiveSkillAction_PlayFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].DestroyEntityByElementDamageTypeList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].FXScale
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].FXTypeName
+      value: Flash_GreenPoisonous
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
+--- !u!4 &5393229139672076057 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+    type: 3}
+  m_PrefabInstance: {fileID: 821241277432551890}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &888558113149853535
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -345,7 +572,7 @@ PrefabInstance:
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
       propertyPath: m_RootOrder
-      value: 23
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
@@ -397,6 +624,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 35
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
 --- !u!4 &6140018774617422598 stripped
@@ -415,12 +667,17 @@ PrefabInstance:
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
       propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
       propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
       value: Client EntityPassiveSkill_Conditional
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1]
+      value: Client EntityPassiveSkill_ProbablyShow
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
@@ -439,6 +696,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
       propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
       value: 0
       objectReference: {fileID: 0}
@@ -451,6 +713,16 @@ PrefabInstance:
         type: 3}
       propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].PassiveSkillCondition
       value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1].ShowProbabilityPercent
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
@@ -570,7 +842,7 @@ PrefabInstance:
     - target: {fileID: 3516584908323160470, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
       propertyPath: m_RootOrder
-      value: 24
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3516584908323160470, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
@@ -650,7 +922,7 @@ PrefabInstance:
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
@@ -702,6 +974,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
 --- !u!4 &5611044007840945065 stripped
@@ -709,6 +1006,151 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
     type: 3}
   m_PrefabInstance: {fileID: 1494947298913548272}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1681484736480704287
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7387839599002250699}
+    m_Modifications:
+    - target: {fileID: 100983515208201486, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_Name
+      value: Hill222FireBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120858157529997846, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120858157529997846, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120858157529997846, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120858157529997846, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694763727442665694, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694763727442665694, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694763727442665694, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694763727442665694, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: BoxOrientation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b39265bb34837d848984a8b8e672dafe, type: 3}
+--- !u!4 &7016872692682575589 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
+    type: 3}
+  m_PrefabInstance: {fileID: 1681484736480704287}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1957618046435228171
 PrefabInstance:
@@ -784,13 +1226,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
+      propertyPath: BornPointData.ActorTypeName
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
       propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
-      value: Client EntityPassiveSkill_Conditional
+      value: Client EntityPassiveSkill_ProbablyShow
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
@@ -821,6 +1268,11 @@ PrefabInstance:
         type: 3}
       propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].PassiveSkillCondition
       value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
@@ -865,7 +1317,377 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1957618046435228171}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &3359940531114898254
+--- !u!1001 &2055244764652162825
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1983357061677681433}
+    m_Modifications:
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818950748850363364, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_Name
+      value: BornPoint_FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorTypeName
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MaxTriggeredTimes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MultiEventTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAlias
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].PassiveSkillCondition
+      value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].TriggerProbabilityPercent
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAliasList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0]
+      value: Client EntityPassiveSkillAction_PlayFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].DestroyEntityByElementDamageTypeList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].FXScale
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].FXTypeName
+      value: Flash_GreenPoisonous
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
+--- !u!4 &6717270566721755586 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+    type: 3}
+  m_PrefabInstance: {fileID: 2055244764652162825}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2191333611600099520
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7387839599002250699}
+    m_Modifications:
+    - target: {fileID: 1109863487817283472, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.00000004371139
+      objectReference: {fileID: 0}
+    - target: {fileID: 1109863487817283472, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1109863487817283472, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1109863487817283472, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1918476028091851936, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.00000004371139
+      objectReference: {fileID: 0}
+    - target: {fileID: 1918476028091851936, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1918476028091851936, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1918476028091851936, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293808725691877151, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293808725691877151, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293808725691877151, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293808725691877151, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3346278907181334277, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_Name
+      value: Hill333FireBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 5299933194163454203, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5299933194163454203, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5299933194163454203, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5299933194163454203, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8342248746340623177, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8342248746340623177, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8342248746340623177, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8342248746340623177, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: BoxOrientation
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 35
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 340003f4f4f3eca4cb3859f6509c6eea, type: 3}
+--- !u!4 &5137083956865321777 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+    type: 3}
+  m_PrefabInstance: {fileID: 2191333611600099520}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2512772834915027186
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -877,15 +1699,85 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hill222FireBox
       objectReference: {fileID: 0}
+    - target: {fileID: 4120858157529997846, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120858157529997846, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120858157529997846, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120858157529997846, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694763727442665694, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694763727442665694, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694763727442665694, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694763727442665694, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: BoxOrientation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 35
+      objectReference: {fileID: 0}
     - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
         type: 3}
       propertyPath: m_RootOrder
-      value: 17
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
         type: 3}
@@ -895,7 +1787,7 @@ PrefabInstance:
     - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
         type: 3}
@@ -934,11 +1826,546 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b39265bb34837d848984a8b8e672dafe, type: 3}
---- !u!4 &6383234410902047412 stripped
+--- !u!4 &6118716686801252616 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
     type: 3}
-  m_PrefabInstance: {fileID: 3359940531114898254}
+  m_PrefabInstance: {fileID: 2512772834915027186}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2637611154156027283
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1983357061677681433}
+    m_Modifications:
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818950748850363364, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_Name
+      value: BornPoint_FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorTypeName
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MaxTriggeredTimes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MultiEventTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAlias
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].PassiveSkillCondition
+      value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].TriggerProbabilityPercent
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAliasList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0]
+      value: Client EntityPassiveSkillAction_PlayFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].DestroyEntityByElementDamageTypeList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].FXScale
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].FXTypeName
+      value: Flash_GreenPoisonous
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
+--- !u!4 &7288960112056740696 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+    type: 3}
+  m_PrefabInstance: {fileID: 2637611154156027283}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3278190369574154285
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7387839599002250699}
+    m_Modifications:
+    - target: {fileID: 1109863487817283472, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1109863487817283472, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1109863487817283472, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1109863487817283472, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1918476028091851936, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1918476028091851936, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1918476028091851936, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1918476028091851936, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293808725691877151, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293808725691877151, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293808725691877151, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293808725691877151, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3346278907181334277, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_Name
+      value: Hill333FireBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 5299933194163454203, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5299933194163454203, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5299933194163454203, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5299933194163454203, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8342248746340623177, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8342248746340623177, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8342248746340623177, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8342248746340623177, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: BoxOrientation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 80
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 340003f4f4f3eca4cb3859f6509c6eea, type: 3}
+--- !u!4 &8385069388609225692 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+    type: 3}
+  m_PrefabInstance: {fileID: 3278190369574154285}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3851750784713926645
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1983357061677681433}
+    m_Modifications:
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818950748850363364, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_Name
+      value: BornPoint_FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorTypeName
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MaxTriggeredTimes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MultiEventTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAlias
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].PassiveSkillCondition
+      value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].TriggerProbabilityPercent
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAliasList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0]
+      value: Client EntityPassiveSkillAction_PlayFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].DestroyEntityByElementDamageTypeList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].FXScale
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].FXTypeName
+      value: Flash_GreenPoisonous
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
+--- !u!4 &8415276253623710014 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+    type: 3}
+  m_PrefabInstance: {fileID: 3851750784713926645}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4034734888698664883
 PrefabInstance:
@@ -955,7 +2382,7 @@ PrefabInstance:
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
       propertyPath: m_RootOrder
-      value: 19
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
@@ -1007,6 +2434,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
 --- !u!4 &7971145318397391850 stripped
@@ -1022,6 +2474,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7387839599002250699}
     m_Modifications:
+    - target: {fileID: 2236431300374853258, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236431300374853258, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236431300374853258, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236431300374853258, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236431300374853258, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 4095771654170433249, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
         type: 3}
       propertyPath: m_RootOrder
@@ -1089,6 +2566,271 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4095771654170433249, guid: 7ca66930e8bfe6b489e3f8b4a7bcd99e,
     type: 3}
   m_PrefabInstance: {fileID: 4141887865575788674}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4295057119420421970
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7387839599002250699}
+    m_Modifications:
+    - target: {fileID: 3328888460410513581, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_Name
+      value: Hill111FireBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 35
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
+--- !u!4 &7132131568013505291 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+    type: 3}
+  m_PrefabInstance: {fileID: 4295057119420421970}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4517619401309670852
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1983357061677681433}
+    m_Modifications:
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818950748850363364, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_Name
+      value: BornPoint_FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorTypeName
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MaxTriggeredTimes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MultiEventTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAlias
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].PassiveSkillCondition
+      value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].TriggerProbabilityPercent
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAliasList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0]
+      value: Client EntityPassiveSkillAction_PlayFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].DestroyEntityByElementDamageTypeList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].FXScale
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].FXTypeName
+      value: Flash_GreenPoisonous
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
+--- !u!4 &9154961712725105423 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+    type: 3}
+  m_PrefabInstance: {fileID: 4517619401309670852}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5126580736663280055
 PrefabInstance:
@@ -1164,13 +2906,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
+      propertyPath: BornPointData.ActorTypeName
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
       propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
-      value: Client EntityPassiveSkill_Conditional
+      value: Client EntityPassiveSkill_ProbablyShow
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
@@ -1201,6 +2948,11 @@ PrefabInstance:
         type: 3}
       propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].PassiveSkillCondition
       value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
@@ -1319,13 +3071,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
+      propertyPath: BornPointData.ActorTypeName
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
       propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
-      value: Client EntityPassiveSkill_Conditional
+      value: Client EntityPassiveSkill_ProbablyShow
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
@@ -1356,6 +3113,11 @@ PrefabInstance:
         type: 3}
       propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].PassiveSkillCondition
       value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
@@ -1430,7 +3192,7 @@ PrefabInstance:
     - target: {fileID: 1940726228586515952, guid: ef45eb5458d02e341802ac6817de9ad0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 22
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 1940726228586515952, guid: ef45eb5458d02e341802ac6817de9ad0,
         type: 3}
@@ -1487,6 +3249,31 @@ PrefabInstance:
       propertyPath: BoxOrientation
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4409205238485478811, guid: ef45eb5458d02e341802ac6817de9ad0,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4409205238485478811, guid: ef45eb5458d02e341802ac6817de9ad0,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 4409205238485478811, guid: ef45eb5458d02e341802ac6817de9ad0,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4409205238485478811, guid: ef45eb5458d02e341802ac6817de9ad0,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4409205238485478811, guid: ef45eb5458d02e341802ac6817de9ad0,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 5457841885057797768, guid: ef45eb5458d02e341802ac6817de9ad0,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -1535,7 +3322,7 @@ PrefabInstance:
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
@@ -1650,7 +3437,7 @@ PrefabInstance:
     - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
         type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
         type: 3}
@@ -1727,6 +3514,31 @@ PrefabInstance:
       propertyPath: BoxOrientation
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 340003f4f4f3eca4cb3859f6509c6eea, type: 3}
 --- !u!4 &1200960263134462424 stripped
@@ -1750,7 +3562,7 @@ PrefabInstance:
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
       propertyPath: m_RootOrder
-      value: 20
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
@@ -1802,6 +3614,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
 --- !u!4 &1334848800244076736 stripped
@@ -1809,6 +3646,106 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
     type: 3}
   m_PrefabInstance: {fileID: 5469381535972848793}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5513080851083452091
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7387839599002250699}
+    m_Modifications:
+    - target: {fileID: 3328888460410513581, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_Name
+      value: Hill111FireBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 35
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
+--- !u!4 &1577128196758584034 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+    type: 3}
+  m_PrefabInstance: {fileID: 5513080851083452091}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5811823493908587202
 PrefabInstance:
@@ -1840,7 +3777,7 @@ PrefabInstance:
     - target: {fileID: 1940726228586515952, guid: ef45eb5458d02e341802ac6817de9ad0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 21
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 1940726228586515952, guid: ef45eb5458d02e341802ac6817de9ad0,
         type: 3}
@@ -1897,6 +3834,31 @@ PrefabInstance:
       propertyPath: BoxOrientation
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4409205238485478811, guid: ef45eb5458d02e341802ac6817de9ad0,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4409205238485478811, guid: ef45eb5458d02e341802ac6817de9ad0,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 4409205238485478811, guid: ef45eb5458d02e341802ac6817de9ad0,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4409205238485478811, guid: ef45eb5458d02e341802ac6817de9ad0,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4409205238485478811, guid: ef45eb5458d02e341802ac6817de9ad0,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 5457841885057797768, guid: ef45eb5458d02e341802ac6817de9ad0,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -1945,7 +3907,7 @@ PrefabInstance:
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
@@ -2020,7 +3982,7 @@ PrefabInstance:
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
@@ -2072,6 +4034,86 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1]
+      value: Client BoxPassiveSkill_LevelEventTriggerAppear
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1].MaxTriggeredTimes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1].MultiEventTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1].ListenLevelEventAlias
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1].PassiveSkillCondition
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1].TriggerProbabilityPercent
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1].ListenLevelEventAliasList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1].RawEntityPassiveSkillActions.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[1].DestroyEntityByElementDamageTypeList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
 --- !u!4 &600531905060134214 stripped
@@ -2080,80 +4122,170 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5851571178002430239}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &6310720976574408848
+--- !u!1001 &6274012843583382044
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7387839599002250699}
+    m_TransformParent: {fileID: 1983357061677681433}
     m_Modifications:
-    - target: {fileID: 173548701736075326, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_Name
-      value: WoodenBox
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12
+      value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
+    - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7818950748850363364, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: m_Name
+      value: BornPoint_FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorType
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.ActorTypeName
+      value: FireEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MaxTriggeredTimes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MultiEventTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAlias
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].PassiveSkillCondition
+      value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].TriggerProbabilityPercent
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAliasList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0]
+      value: Client EntityPassiveSkillAction_PlayFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].DestroyEntityByElementDamageTypeList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].FXScale
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].FXTypeName
+      value: Flash_GreenPoisonous
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2f152ab4ef18ef2479215e77c468fd99, type: 3}
---- !u!4 &2499313976493958234 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
+--- !u!4 &1633960815557571799 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
+  m_CorrespondingSourceObject: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
     type: 3}
-  m_PrefabInstance: {fileID: 6310720976574408848}
+  m_PrefabInstance: {fileID: 6274012843583382044}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6667055084987295308
 PrefabInstance:
@@ -2170,7 +4302,7 @@ PrefabInstance:
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
@@ -2230,6 +4362,106 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6667055084987295308}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6964549727632617150
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7387839599002250699}
+    m_Modifications:
+    - target: {fileID: 3328888460410513581, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_Name
+      value: Hill111FireBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 29
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 80
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
+--- !u!4 &4163152885264124647 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+    type: 3}
+  m_PrefabInstance: {fileID: 6964549727632617150}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7039479802675169380
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2242,10 +4474,35 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hill222FireBox
       objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902909633345788305, guid: b39265bb34837d848984a8b8e672dafe,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
         type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8517756034576005626, guid: b39265bb34837d848984a8b8e672dafe,
         type: 3}
@@ -2320,7 +4577,7 @@ PrefabInstance:
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
@@ -2372,6 +4629,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
 --- !u!4 &4397305959134569953 stripped
@@ -2379,81 +4661,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
     type: 3}
   m_PrefabInstance: {fileID: 7234802002465046968}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &7484546748108508282
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 7387839599002250699}
-    m_Modifications:
-    - target: {fileID: 173548701736075326, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_Name
-      value: WoodenBox
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2f152ab4ef18ef2479215e77c468fd99, type: 3}
---- !u!4 &1361498894278951088 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-    type: 3}
-  m_PrefabInstance: {fileID: 7484546748108508282}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7662668369685363139
 PrefabInstance:
@@ -2470,7 +4677,7 @@ PrefabInstance:
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
@@ -2521,6 +4728,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 60
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
@@ -2625,7 +4857,7 @@ PrefabInstance:
     - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
         type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
         type: 3}
@@ -2702,6 +4934,31 @@ PrefabInstance:
       propertyPath: BoxOrientation
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150685652239897498, guid: 340003f4f4f3eca4cb3859f6509c6eea,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 35
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 340003f4f4f3eca4cb3859f6509c6eea, type: 3}
 --- !u!4 &3644642050055872002 stripped
@@ -2709,81 +4966,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6423180813312783345, guid: 340003f4f4f3eca4cb3859f6509c6eea,
     type: 3}
   m_PrefabInstance: {fileID: 7761925685992812019}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &8143674938455643315
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 7387839599002250699}
-    m_Modifications:
-    - target: {fileID: 173548701736075326, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_Name
-      value: WoodenBox
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2f152ab4ef18ef2479215e77c468fd99, type: 3}
---- !u!4 &306054209422481529 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8447477034510552266, guid: 2f152ab4ef18ef2479215e77c468fd99,
-    type: 3}
-  m_PrefabInstance: {fileID: 8143674938455643315}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8578311139093503157
 PrefabInstance:
@@ -2800,7 +4982,7 @@ PrefabInstance:
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
@@ -2852,6 +5034,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
 --- !u!4 &3345392674901047532 stripped
@@ -2859,6 +5066,106 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
     type: 3}
   m_PrefabInstance: {fileID: 8578311139093503157}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8628429712169778083
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7387839599002250699}
+    m_Modifications:
+    - target: {fileID: 3328888460410513581, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_Name
+      value: Hill111FireBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 35
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
+--- !u!4 &3377461631777005562 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+    type: 3}
+  m_PrefabInstance: {fileID: 8628429712169778083}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8828983035385394589
 PrefabInstance:
@@ -2875,7 +5182,7 @@ PrefabInstance:
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
         type: 3}
@@ -2927,6 +5234,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
 --- !u!4 &2587222486517207492 stripped
@@ -2934,4 +5266,204 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
     type: 3}
   m_PrefabInstance: {fileID: 8828983035385394589}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8863580952883355743
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7387839599002250699}
+    m_Modifications:
+    - target: {fileID: 3328888460410513581, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_Name
+      value: Hill111FireBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 35
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
+--- !u!4 &2477177176338564102 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+    type: 3}
+  m_PrefabInstance: {fileID: 8863580952883355743}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &9104336627809129932
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7387839599002250699}
+    m_Modifications:
+    - target: {fileID: 3328888460410513581, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_Name
+      value: Hill111FireBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 27
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_ProbablyShow
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133032430922581042, guid: dd79945ccc3672243a0da3cdf741da42,
+        type: 3}
+      propertyPath: RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
+      value: 35
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dd79945ccc3672243a0da3cdf741da42, type: 3}
+--- !u!4 &2826124778207605141 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6440552560936510553, guid: dd79945ccc3672243a0da3cdf741da42,
+    type: 3}
+  m_PrefabInstance: {fileID: 9104336627809129932}
   m_PrefabAsset: {fileID: 0}

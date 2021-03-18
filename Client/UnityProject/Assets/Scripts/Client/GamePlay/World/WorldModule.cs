@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.Messenger;
 using BiangLibrary.ObjectPool;
@@ -316,12 +317,24 @@ public class WorldModule : PoolObject
         GridPos3D localGP = WorldGPToLocalGP(worldGP);
         bool valid = true;
 
-        if (BoxMatrix[localGP.x, localGP.y, localGP.z] != null)
+        if (BoxMatrix[localGP.x, localGP.y, localGP.z] == null)
         {
-            valid = false;
-        }
-        else
-        {
+            // Probability Check
+            if (boxExtraSerializeDataFromModule != null)
+            {
+                uint probabilityShow = 100;
+                foreach (EntityPassiveSkill eps in boxExtraSerializeDataFromModule.EntityPassiveSkills)
+                {
+                    if (eps is EntityPassiveSkill_ProbablyShow ps)
+                    {
+                        probabilityShow = ps.ShowProbabilityPercent;
+                        break;
+                    }
+                }
+
+                if (!probabilityShow.ProbabilityBool()) return null;
+            }
+
             List<GridPos3D> boxOccupation_rotated = null;
             if (overrideOccupation != null)
             {

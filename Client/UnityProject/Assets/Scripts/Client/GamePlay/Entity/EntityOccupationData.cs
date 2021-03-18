@@ -14,6 +14,12 @@ public class EntityOccupationData : IClone<EntityOccupationData>
     [LabelText("正方形底面")]
     public bool IsShapePlanSquare = false;
 
+    [LabelText("角色体宽")]
+    public int ActorWidth = 1;
+
+    [LabelText("角色身高")]
+    public int ActorHeight = 1;
+
     [LabelText("包围尺寸")]
     [SerializeField]
     public BoundsInt BoundsInt;
@@ -58,6 +64,8 @@ public class EntityOccupationData : IClone<EntityOccupationData>
         EntityOccupationData newData = new EntityOccupationData();
         newData.IsShapeCuboid = IsShapeCuboid;
         newData.IsShapePlanSquare = IsShapePlanSquare;
+        newData.ActorWidth = ActorWidth;
+        newData.ActorHeight = ActorHeight;
         newData.BoundsInt = BoundsInt;
         newData.LocalGeometryCenter = LocalGeometryCenter;
         newData.EntityIndicatorGPs = EntityIndicatorGPs.Clone();

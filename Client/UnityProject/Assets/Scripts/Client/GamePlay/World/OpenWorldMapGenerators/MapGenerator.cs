@@ -209,6 +209,11 @@ public abstract class MapGenerator
                             int x = world_x + enemyGP_rotated.x;
                             int y = world_y + enemyGP_rotated.y;
                             int z = world_z + enemyGP_rotated.z;
+
+                            EntityOccupationData occupationData = ConfigManager.GetEntityOccupationData(enemyTypeIndex);
+                            GridPos actorRotOffset = Actor.ActorRotateWorldGPOffset(occupationData.ActorWidth, staticLayoutOrientation);
+                            x -= actorRotOffset.x;
+                            z -= actorRotOffset.z;
                             WorldMap[x, y - Height, z] = enemyTypeIndex;
                             WorldMap_EntityExtraSerializeData[x, y - Height, z] = enemyBornPoint.RawEntityExtraSerializeData?.Clone();
                             WorldMap_Occupied[x, y - Height, z] = enemyTypeIndex;

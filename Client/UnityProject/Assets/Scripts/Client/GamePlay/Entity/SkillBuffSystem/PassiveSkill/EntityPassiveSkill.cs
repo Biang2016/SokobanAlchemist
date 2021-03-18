@@ -13,6 +13,10 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
 
     public bool IsAddedDuringGamePlay = false; // 是否是在游戏过程中添加的，以便在回收之后判断要不要清掉
 
+    [ReadOnly]
+    [HideInEditorMode]
+    public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
+
     [LabelText("技能描述")]
     [ShowInInspector]
     [PropertyOrder(-1)]
