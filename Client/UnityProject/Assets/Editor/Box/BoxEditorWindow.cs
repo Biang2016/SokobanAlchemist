@@ -13,6 +13,21 @@ public class BoxEditorWindow : EditorWindow
         window.ShowUtility();
     }
 
+    [MenuItem("开发工具/配置/测试高斯随机数")]
+    public static void TestGaussianRandom()
+    {
+        GaussianRandom gRandom = new GaussianRandom();
+        float sum = 0;
+        for (int i = 0; i < 500; i++)
+        {
+            float value = gRandom.Range(5, 3);
+            sum += value;
+            Debug.Log(value);
+        }
+
+        Debug.Log(sum/ 500);
+    }
+
     //[MenuItem("开发工具/配置/关卡编辑器箱子替换成纯美术体")]
     //public static void ReplaceBoxToPureArt()
     //{

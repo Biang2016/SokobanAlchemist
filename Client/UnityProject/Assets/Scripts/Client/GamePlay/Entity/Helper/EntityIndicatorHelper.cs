@@ -3,6 +3,7 @@ using System.Linq;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
+
 #if UNITY_EDITOR
 
 #endif
@@ -64,6 +65,7 @@ public class EntityIndicatorHelper : EntityMonoHelper
 
             EntityOccupationData.IsShapeCuboid = true;
             EntityOccupationData.IsShapePlanSquare = true;
+            EntityOccupationData.LocalGeometryCenter = Vector3.zero;
             EntityOccupationData.BoundsInt = EntityOccupationData.EntityIndicatorGPs.GetBoundingRectFromListGridPos(GridPos3D.Zero);
         }
         else
@@ -89,6 +91,14 @@ public class EntityIndicatorHelper : EntityMonoHelper
             EntityOccupationData.IsShapeCuboid = false;
             EntityOccupationData.IsShapePlanSquare = false;
             EntityOccupationData.BoundsInt = EntityOccupationData.EntityIndicatorGPs.GetBoundingRectFromListGridPos(GridPos3D.Zero);
+            Vector3 localGeometryCenter = Vector3.zero;
+            foreach (GridPos3D offset in EntityOccupationData.EntityIndicatorGPs)
+            {
+                localGeometryCenter += offset;
+            }
+
+            EntityOccupationData.LocalGeometryCenter = localGeometryCenter / EntityOccupationData.EntityIndicatorGPs.Count;
+
             bool[,,] occupationMatrix = new bool[EntityOccupationData.BoundsInt.size.x, EntityOccupationData.BoundsInt.size.y, EntityOccupationData.BoundsInt.size.z];
             foreach (GridPos3D offset in EntityOccupationData.EntityIndicatorGPs)
             {

@@ -22,7 +22,11 @@ public class EntityOccupationData : IClone<EntityOccupationData>
     [ListDrawerSettings(ListElementLabelName = "ToString")]
     public List<GridPos3D> EntityIndicatorGPs = new List<GridPos3D>();
 
+    [LabelText("形心局部坐标")]
+    public Vector3 LocalGeometryCenter = Vector3.zero;
+
     public Dictionary<GridPosR.Orientation, List<GridPos3D>> EntityIndicatorGPs_RotatedDict;
+    public Dictionary<GridPosR.Orientation, Vector3> LocalGeometryCenter_RotatedDict;
 
     public void Clear()
     {
@@ -40,6 +44,13 @@ public class EntityOccupationData : IClone<EntityOccupationData>
         EntityIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Right, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Right, EntityIndicatorGPs));
         EntityIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Down, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Down, EntityIndicatorGPs));
         EntityIndicatorGPs_RotatedDict.Add(GridPosR.Orientation.Left, GridPos3D.TransformOccupiedPositions_XZ(GridPosR.Orientation.Left, EntityIndicatorGPs));
+
+        if (LocalGeometryCenter_RotatedDict == null) LocalGeometryCenter_RotatedDict = new Dictionary<GridPosR.Orientation, Vector3>();
+        LocalGeometryCenter_RotatedDict.Clear();
+        LocalGeometryCenter_RotatedDict.Add(GridPosR.Orientation.Up, LocalGeometryCenter);
+        LocalGeometryCenter_RotatedDict.Add(GridPosR.Orientation.Right, new Vector3(LocalGeometryCenter.x, -LocalGeometryCenter.z));
+        LocalGeometryCenter_RotatedDict.Add(GridPosR.Orientation.Down, new Vector3(-LocalGeometryCenter.x, -LocalGeometryCenter.z));
+        LocalGeometryCenter_RotatedDict.Add(GridPosR.Orientation.Left, new Vector3(LocalGeometryCenter.x, LocalGeometryCenter.z));
     }
 
     public EntityOccupationData Clone()
@@ -48,6 +59,7 @@ public class EntityOccupationData : IClone<EntityOccupationData>
         newData.IsShapeCuboid = IsShapeCuboid;
         newData.IsShapePlanSquare = IsShapePlanSquare;
         newData.BoundsInt = BoundsInt;
+        newData.LocalGeometryCenter = LocalGeometryCenter;
         newData.EntityIndicatorGPs = EntityIndicatorGPs.Clone();
         return newData;
     }

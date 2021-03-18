@@ -21,7 +21,20 @@ public partial class Box : Entity
     internal bool hasRigidbody;
     internal Rigidbody Rigidbody;
 
-    internal Actor LastTouchActor;
+    internal uint LastInteractActorGUID;
+
+    internal Actor LastInteractActor
+    {
+        get
+        {
+            if (BattleManager.Instance.ActorDict.TryGetValue(LastInteractActorGUID, out Actor actor))
+            {
+                return actor;
+            }
+
+            return null;
+        }
+    }
 
     internal override EntityModelHelper EntityModelHelper => BoxModelHelper;
     internal override EntityIndicatorHelper EntityIndicatorHelper => BoxIndicatorHelper;
@@ -107,7 +120,7 @@ public partial class Box : Entity
     public override void OnUsed()
     {
         gameObject.SetActive(true);
-        LastTouchActor = null;
+        LastInteractActorGUID = 0;
         ArtOnly = true;
 
         EntityBuffHelper.OnHelperUsed();
@@ -179,11 +192,11 @@ public partial class Box : Entity
             hasRigidbody = false;
         }
 
-        if (LastTouchActor.IsNotNullAndAlive() && LastTouchActor.CurrentLiftBox == this)
+        if (LastInteractActor.IsNotNullAndAlive() && LastInteractActor.CurrentLiftBox == this)
         {
-            LastTouchActor.ThrowState = Actor.ThrowStates.None;
-            LastTouchActor.CurrentLiftBox = null;
-            LastTouchActor = null;
+            LastInteractActor.ThrowState = Actor.ThrowStates.None;
+            LastInteractActor.CurrentLiftBox = null;
+            LastInteractActorGUID = 0;
         }
 
         EntityStatPropSet.OnRecycled();
@@ -543,7 +556,7 @@ public partial class Box : Entity
         if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Init LerpType:{lerpType} TargetGP:{worldGridPos3D}");
         SetModelSmoothMoveLerpTime(0);
         ArtOnly = artOnly;
-        LastTouchActor = null;
+        LastInteractActorGUID = 0;
         LastWorldGP = WorldGP;
         WorldModule = module;
         WorldGP = worldGridPos3D;
@@ -695,7 +708,7 @@ public partial class Box : Entity
             }
 
             alreadyCollidedActorSet.Clear();
-            LastTouchActor = actor;
+            LastInteractActorGUID = actor.GUID;
             worldGP_WhenKicked = WorldGP;
             transform.DOPause();
             Rigidbody = gameObject.GetComponent<Rigidbody>();
@@ -771,7 +784,7 @@ public partial class Box : Entity
             SetModelSmoothMoveLerpTime(0);
             DefaultRotBeforeLift = transform.rotation;
             alreadyCollidedActorSet.Clear();
-            LastTouchActor = actor;
+            LastInteractActorGUID = actor.GUID;
             foreach (EntityPassiveSkill ps in EntityPassiveSkills)
             {
                 ps.OnBeingLift(actor);
@@ -812,7 +825,7 @@ public partial class Box : Entity
                 BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
             }
 
-            LastTouchActor = actor;
+            LastInteractActorGUID = actor.GUID;
             State = States.Flying;
             transform.DOPause();
             transform.parent = WorldManager.Instance.CurrentWorld.transform;
@@ -853,7 +866,7 @@ public partial class Box : Entity
                 BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
             }
 
-            LastTouchActor = actor;
+            LastInteractActorGUID = actor.GUID;
             State = States.Putting;
             transform.DOPause();
             transform.parent = WorldManager.Instance.CurrentWorld.transform;
@@ -894,7 +907,7 @@ public partial class Box : Entity
         }
 
         alreadyCollidedActorSet.Clear();
-        LastTouchActor = null;
+        LastInteractActorGUID = 0;
         State = States.DroppingFromEntity;
         transform.DOPause();
         transform.parent = WorldManager.Instance.CurrentWorld.transform;
@@ -932,7 +945,7 @@ public partial class Box : Entity
         }
 
         alreadyCollidedActorSet.Clear();
-        LastTouchActor = null;
+        LastInteractActorGUID = 0;
         State = States.DroppingFromAir;
         transform.DOPause();
         transform.parent = WorldManager.Instance.CurrentWorld.transform;
@@ -1040,8 +1053,8 @@ public partial class Box : Entity
 
                 if (isGrounded)
                 {
-                    bool checkMerge = state == States.BeingKicked || state == States.BeingKickedToGrind && LastTouchActor != null && LastTouchActor == BattleManager.Instance.Player1;
-                    LastTouchActor = null;
+                    bool checkMerge = state == States.BeingKicked || state == States.BeingKickedToGrind && LastInteractActor != null && LastInteractActor == BattleManager.Instance.Player1;
+                    LastInteractActorGUID = 0;
                     DestroyImmediate(Rigidbody);
                     hasRigidbody = false;
                     if (state == States.BeingKickedToGrind)
@@ -1099,7 +1112,7 @@ public partial class Box : Entity
     protected override void OnCollisionEnter(Collision collision)
     {
         if (IsRecycled) return;
-        if (LastTouchActor.IsNotNullAndAlive() && collision.gameObject == LastTouchActor.gameObject) return; // todo 这里判定上一个碰的Actor有啥用?
+        if (LastInteractActor.IsNotNullAndAlive() && collision.gameObject == LastInteractActor.gameObject) return; // todo 这里判定上一个碰的Actor有啥用?
         switch (State)
         {
             case States.Putting:
@@ -1216,8 +1229,8 @@ public partial class Box : Entity
         if (collidedActor == null
             || alreadyCollidedActorSet.Contains(collidedActor)
             || !collidedActor.IsNotNullAndAlive()
-            || collidedActor == LastTouchActor
-            || !collidedActor.IsOpponentOrNeutralCampOf(LastTouchActor)
+            || collidedActor == LastInteractActor
+            || !collidedActor.IsOpponentOrNeutralCampOf(LastInteractActor)
         ) return false;
         alreadyCollidedActorSet.Add(collidedActor);
 
@@ -1243,8 +1256,8 @@ public partial class Box : Entity
             collidedActor.RigidBody.velocity = Vector3.zero;
             Vector3 repelForce = force * (CurrentKickLocalAxis == KickAxis.X ? KickRepelForce_X : KickRepelForce_Z); // 不同Local方向撞击击退力度不同
             collidedActor.RigidBody.AddForce(repelForce, ForceMode.VelocityChange);
-            collidedActor.EntityBuffHelper.AddBuff(new EntityBuff_AttributeLabel {Duration = repelForce.magnitude / 30f, EntityBuffAttribute = EntityBuffAttribute.Repulse, IsPermanent = false});
-            collidedActor.EntityBuffHelper.Damage(EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage);
+            collidedActor.EntityBuffHelper.AddBuff(new EntityBuff_AttributeLabel {CasterActorGUID = LastInteractActorGUID, Duration = repelForce.magnitude / 30f, EntityBuffAttribute = EntityBuffAttribute.Repulse, IsPermanent = false});
+            collidedActor.EntityBuffHelper.Damage(EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, LastInteractActorGUID);
             collidedActor.ActorArtHelper.IsHitStop = true;
             return true;
         }

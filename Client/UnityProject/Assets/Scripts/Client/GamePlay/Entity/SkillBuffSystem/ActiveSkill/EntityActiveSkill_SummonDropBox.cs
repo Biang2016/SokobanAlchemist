@@ -33,7 +33,7 @@ public class EntityActiveSkill_SummonDropBox : EntityActiveSkill_AreaCast
                     {
                         if (Entity is Actor actor)
                         {
-                            dropBox.LastTouchActor = actor;
+                            dropBox.LastInteractActorGUID = actor.GUID;
                         }
                     }
                 }

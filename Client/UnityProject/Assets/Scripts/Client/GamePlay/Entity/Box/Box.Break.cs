@@ -75,7 +75,7 @@ public partial class Box
                 }
                 else
                 {
-                    EntityBuffHelper.Damage(EntityStatPropSet.BoxCollideDamageSelf.GetModifiedValue, EntityBuffAttribute.CollideDamage);
+                    EntityBuffHelper.Damage(EntityStatPropSet.BoxCollideDamageSelf.GetModifiedValue, EntityBuffAttribute.CollideDamage, LastInteractActorGUID);
                 }
             }
         }
@@ -92,7 +92,7 @@ public partial class Box
             }
             else
             {
-                EntityBuffHelper.Damage(EntityStatPropSet.BoxCollideDamageSelf.GetModifiedValue, EntityBuffAttribute.CollideDamage);
+                EntityBuffHelper.Damage(EntityStatPropSet.BoxCollideDamageSelf.GetModifiedValue, EntityBuffAttribute.CollideDamage, LastInteractActorGUID);
             }
         }
 
@@ -106,7 +106,7 @@ public partial class Box
             Actor actor = collider.gameObject.GetComponentInParent<Actor>();
             if (actor != null) //此处不管Actor是否已经死亡都进行Box损伤计算
             {
-                if (LastTouchActor != null && LastTouchActor.IsOpponentOrNeutralCampOf(actor))
+                if (LastInteractActor != null && LastInteractActor.IsOpponentOrNeutralCampOf(actor))
                 {
                     validCollision = true;
                     if (EntityStatPropSet.FrozenLevel.Value >= 1)
@@ -115,7 +115,7 @@ public partial class Box
                     }
                     else
                     {
-                        EntityBuffHelper.Damage(EntityStatPropSet.BoxCollideDamageSelf.GetModifiedValue, EntityBuffAttribute.CollideDamage);
+                        EntityBuffHelper.Damage(EntityStatPropSet.BoxCollideDamageSelf.GetModifiedValue, EntityBuffAttribute.CollideDamage, LastInteractActorGUID);
                     }
                 }
             }
@@ -125,7 +125,7 @@ public partial class Box
         {
             if (!(EntityStatPropSet.DropFromAirSurviveProbabilityPercent.Value / 100f).ProbabilityBool())
             {
-                EntityBuffHelper.Damage(EntityStatPropSet.HealthDurability.Value, EntityBuffAttribute.CollideDamage);
+                EntityBuffHelper.Damage(EntityStatPropSet.HealthDurability.Value, EntityBuffAttribute.CollideDamage, LastInteractActorGUID);
             }
         }
 

@@ -163,12 +163,6 @@ public class Actor : Entity
         }
     }
 
-    [DisplayAsString]
-    [HideInEditorMode]
-    [FoldoutGroup("状态")]
-    [LabelText("角色形心坐标")]
-    public Vector3 ActorOccupationCenter => WorldGP_PF.ConvertPathFindingNodeGPToWorldPosition(ActorWidth);
-
     [DisableInEditorMode]
     [ShowInInspector]
     [FoldoutGroup("状态")]

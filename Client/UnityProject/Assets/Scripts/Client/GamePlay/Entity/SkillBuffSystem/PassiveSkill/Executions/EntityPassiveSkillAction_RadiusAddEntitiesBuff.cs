@@ -36,7 +36,7 @@ public class EntityPassiveSkillAction_RadiusAddEntitiesBuff : EntityPassiveSkill
             foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 Vector3 boxIndicatorPos = Entity.transform.position + offset;
-                BattleManager.Instance.AddBuffToEntities(boxIndicatorPos, box.LastTouchActor.IsNotNullAndAlive() ? box.LastTouchActor.Camp : box.Camp, AddBuffRadius, ExactGPDistance, EffectiveOnRelativeCamp, RawEntityBuffs, entityGUIDSet);
+                BattleManager.Instance.AddBuffToEntities(boxIndicatorPos, box.LastInteractActor.IsNotNullAndAlive() ? box.LastInteractActor.Camp : box.Camp, AddBuffRadius, ExactGPDistance, EffectiveOnRelativeCamp, RawEntityBuffs, entityGUIDSet);
             }
         }
         else if (Entity is Actor actor)

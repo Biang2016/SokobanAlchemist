@@ -2,22 +2,13 @@
 using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using JetBrains.Annotations;
+using NodeCanvas.Framework;
 using UnityEngine;
 
 public class ActorAIAgent
 {
-    internal static bool ENABLE_ACTOR_AI_AGENT_LOG = false;
-
     internal Actor Actor;
-    private List<Marker> NavTrackMarkers = new List<Marker>();
-
-    public Actor TargetActor;
-    public GridPos3D GuardGP; //保卫的坐标
-    public Actor GuardActor; // 保卫的对象
-    public Actor FollowActor; // 跟随的对象
-    public GridPos3D TargetActorGP;
-
-    public float StuckWithNavTask_Tick = 0;
+    internal static bool ENABLE_ACTOR_AI_AGENT_LOG = false;
 
     public ActorAIAgent(Actor actor)
     {
@@ -25,16 +16,140 @@ public class ActorAIAgent
         Stop();
     }
 
-    private bool isStop = false;
+    public void Start()
+    {
+        isStop = false;
+    }
+
+    public void FixedUpdate()
+    {
+        if (isStop) return;
+        if (!Actor.GraphOwner.isRunning) Actor.GraphOwner?.StartBehaviour();
+        RefreshTargetGP();
+        RefreshThreatEntityRank();
+        MoveToDestination();
+    }
+
+    public void FixedUpdateAfterMove()
+    {
+        if (isStop) return;
+        if (Actor.WorldGP == Actor.LastWorldGP && IsPathFinding)
+        {
+            StuckWithNavTask_Tick += Time.fixedDeltaTime;
+        }
+        else
+        {
+            StuckWithNavTask_Tick = 0;
+        }
+    }
+
+    private bool isStop;
 
     public void Stop()
     {
         isStop = true;
-        TargetActor = null;
-        TargetActorGP = GridPos3D.Zero;
+
+        foreach (KeyValuePair<TargetEntityType, AIAgentTarget> kv in AIAgentTargetDict)
+        {
+            kv.Value.Clear();
+        }
+
         ClearPathFinding();
         ClearNavTrackMarkers();
     }
+
+    #region 目标搜索
+
+    public enum TargetEntityType
+    {
+        Navigate,
+        Attack,
+        Guard,
+        Follow,
+    }
+
+    public class AIAgentTarget
+    {
+        public Entity TargetEntity;
+        public GridPos3D TargetGP;
+
+        public void RefreshTargetGP()
+        {
+            if (TargetEntity.IsNotNullAndAlive())
+            {
+                TargetGP = TargetEntity.WorldGP;
+            }
+            else
+            {
+                TargetEntity = null;
+                TargetGP = GridPos3D.Zero;
+            }
+        }
+
+        public void Clear()
+        {
+            TargetEntity = null;
+            TargetGP = GridPos3D.Zero;
+        }
+    }
+
+    public Dictionary<TargetEntityType, AIAgentTarget> AIAgentTargetDict = new Dictionary<TargetEntityType, AIAgentTarget>
+    {
+        {TargetEntityType.Navigate, new AIAgentTarget()},
+        {TargetEntityType.Attack, new AIAgentTarget()},
+        {TargetEntityType.Guard, new AIAgentTarget()},
+        {TargetEntityType.Follow, new AIAgentTarget()},
+    };
+
+    public Dictionary<Actor, int> ThreatActorRank = new Dictionary<Actor, int>();
+    private List<Actor> removeActorsFromThreatEntityRank = new List<Actor>(4);
+
+    public void RefreshTargetGP()
+    {
+        foreach (KeyValuePair<TargetEntityType, AIAgentTarget> kv in AIAgentTargetDict)
+        {
+            kv.Value.RefreshTargetGP();
+        }
+    }
+
+    public void RefreshThreatEntityRank()
+    {
+        removeActorsFromThreatEntityRank.Clear();
+        foreach (KeyValuePair<Actor, int> kv in ThreatActorRank)
+        {
+            if (!kv.Key.IsNotNullAndAlive()) removeActorsFromThreatEntityRank.Add(kv.Key);
+        }
+
+        foreach (Actor ator in removeActorsFromThreatEntityRank)
+        {
+            ThreatActorRank.Remove(ator);
+        }
+    }
+
+    public Actor GetThreatActor()
+    {
+        int maxThreat = int.MinValue;
+        Actor threatActor = null;
+        foreach (KeyValuePair<Actor, int> kv in ThreatActorRank)
+        {
+            if (kv.Key.IsNotNullAndAlive())
+            {
+                if (kv.Value > maxThreat)
+                {
+                    maxThreat = kv.Value;
+                    threatActor = kv.Key;
+                }
+            }
+        }
+
+        return threatActor;
+    }
+
+    #endregion
+
+    #region NavTrackMarkers
+
+    private List<Marker> NavTrackMarkers = new List<Marker>();
 
     private void ClearNavTrackMarkers()
     {
@@ -54,33 +169,31 @@ public class ActorAIAgent
         }
     }
 
-    public void Start()
+    /// <summary>
+    /// 绘制Debug寻路点
+    /// </summary>
+    private void DrawNavTrackMarkers()
     {
-        isStop = false;
-    }
-
-    public void FixedUpdate()
-    {
-        if (isStop) return;
-        if (!Actor.GraphOwner.isRunning) Actor.GraphOwner?.StartBehaviour();
-        MoveToDestination();
-    }
-
-    public void FixedUpdateAfterMove()
-    {
-        if (isStop) return;
-        if (Actor.WorldGP == Actor.LastWorldGP && IsPathFinding)
+        ClearNavTrackMarkers();
+        if (ConfigManager.ShowEnemyPathFinding)
         {
-            StuckWithNavTask_Tick += Time.fixedDeltaTime;
-        }
-        else
-        {
-            StuckWithNavTask_Tick = 0;
+            int count = 0;
+            foreach (ActorPathFinding.Node node in CurrentPath)
+            {
+                MarkerType mt = count == CurrentPath.Count - 1 ? MarkerType.NavTrackMarker_Final : MarkerType.NavTrackMarker;
+                count++;
+                Marker marker = Marker.BaseInitialize(mt, BattleManager.Instance.NavTrackMarkerRoot);
+                marker.transform.position = node.GridPos3D_PF.ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth);
+                NavTrackMarkers.Add(marker);
+            }
         }
     }
 
-    private float KeepDistanceMin;
-    private float KeepDistanceMax;
+    #endregion
+
+    #region PathFinding
+
+    public float StuckWithNavTask_Tick;
     private bool LastNodeOccupied;
     public bool IsPathFinding => CurrentPath.Count > 0;
     private GridPos3D currentDestination_PF;
@@ -134,14 +247,65 @@ public class ActorAIAgent
         Failed,
     }
 
+    public Status SetDestinationToWorldGP(GridPos3D worldGP, float keepDistanceMin, float keepDistanceMax)
+    {
+        SetDestinationRetCode retCode = SetDestination(((Vector3) worldGP).ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), keepDistanceMin, keepDistanceMax, false, ActorPathFinding.DestinationType.Actor);
+        switch (retCode)
+        {
+            case SetDestinationRetCode.AlreadyArrived:
+            {
+                return Status.Success;
+            }
+            case SetDestinationRetCode.TooClose:
+            {
+                // 逃脱寻路
+                List<GridPos3D> runDestList = new List<GridPos3D>();
+
+                for (int angle = 0; angle <= 360; angle += 10)
+                {
+                    float radianAngle = Mathf.Deg2Rad * angle;
+                    Vector3 dest = ((Vector3)worldGP) + new Vector3((keepDistanceMin + 1) * Mathf.Sin(radianAngle), 0, (keepDistanceMin + 1) * Mathf.Cos(radianAngle));
+                    GridPos3D destGP = dest.ToGridPos3D();
+                    runDestList.Add(destGP);
+                }
+
+                runDestList.Sort((gp1, gp2) =>
+                {
+                    float dist1 = (gp1 + ((Vector3)worldGP) - Actor.EntityBaseCenter).magnitude;
+                    float dist2 = (gp2 + ((Vector3)worldGP) - Actor.EntityBaseCenter).magnitude;
+                    return dist1.CompareTo(dist2);
+                });
+
+                foreach (GridPos3D gp in runDestList)
+                {
+                    SetDestinationRetCode rc = SetDestination(((Vector3) gp).ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), 0, 1, false, ActorPathFinding.DestinationType.EmptyGrid);
+                    if (rc == SetDestinationRetCode.Suc)
+                    {
+                        return Status.Running;
+                    }
+                }
+
+                return Status.Failure;
+            }
+            case SetDestinationRetCode.Suc:
+            {
+                return Status.Success;
+            }
+            case SetDestinationRetCode.Failed:
+            {
+                return Status.Failure;
+            }
+        }
+
+        return Status.Failure;
+    }
+
     public SetDestinationRetCode SetDestination(GridPos3D destination_PF, float keepDistanceMin, float keepDistanceMax, bool lastNodeOccupied, ActorPathFinding.DestinationType destinationType)
     {
         currentDestination_PF = destination_PF;
-        KeepDistanceMin = keepDistanceMin;
-        KeepDistanceMax = keepDistanceMax;
         LastNodeOccupied = lastNodeOccupied;
         float dist = (Actor.WorldGP_PF - currentDestination_PF).magnitude;
-        if (dist <= KeepDistanceMax + (KeepDistanceMax.Equals(0) && LastNodeOccupied ? 1 : 0) && dist >= KeepDistanceMin)
+        if (dist <= keepDistanceMax + (keepDistanceMax.Equals(0) && LastNodeOccupied ? 1 : 0) && dist >= keepDistanceMin)
         {
             bool interruptPathFinding = false;
             if (dist - keepDistanceMin >= 1)
@@ -166,34 +330,19 @@ public class ActorAIAgent
             }
         }
 
-        if (dist <= KeepDistanceMin)
+        if (dist <= keepDistanceMin)
         {
             InterruptCurrentPathFinding();
             return SetDestinationRetCode.TooClose;
         }
 
-        bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, currentDestination_PF, Actor.transform.position, CurrentPath, KeepDistanceMin, KeepDistanceMax, destinationType, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
+        bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, currentDestination_PF, Actor.transform.position, CurrentPath, keepDistanceMin, keepDistanceMax, destinationType, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
         if (IsPathFinding)
         {
             currentNode = CurrentPath.Count > 0 ? CurrentPath[0] : null;
             nextNode = CurrentPath.Count > 1 ? CurrentPath[1] : null;
             RecalculateNextStraightNodeCount();
-
-            // 绘制Debug寻路点
-            ClearNavTrackMarkers();
-            if (ConfigManager.ShowEnemyPathFinding)
-            {
-                int count = 0;
-                foreach (ActorPathFinding.Node node in CurrentPath)
-                {
-                    MarkerType mt = count == CurrentPath.Count - 1 ? MarkerType.NavTrackMarker_Final : MarkerType.NavTrackMarker;
-                    count++;
-                    Marker marker = Marker.BaseInitialize(mt, BattleManager.Instance.NavTrackMarkerRoot);
-                    marker.transform.position = node.GridPos3D_PF.ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth);
-                    NavTrackMarkers.Add(marker);
-                }
-            }
-
+            DrawNavTrackMarkers();
             StuckWithNavTask_Tick = 0;
             return SetDestinationRetCode.Suc;
         }
@@ -204,6 +353,9 @@ public class ActorAIAgent
         }
     }
 
+    /// <summary>
+    /// 计算当前面前的直线行走节点数量
+    /// </summary>
     private void RecalculateNextStraightNodeCount()
     {
         NextStraightNodeCount = 0;
@@ -285,4 +437,6 @@ public class ActorAIAgent
     {
         return currentDestination_PF;
     }
+
+    #endregion
 }

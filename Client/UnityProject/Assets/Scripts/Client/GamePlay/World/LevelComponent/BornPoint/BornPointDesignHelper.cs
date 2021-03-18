@@ -20,7 +20,7 @@ public class BornPointDesignHelper : MonoBehaviour
             return false;
         }
 
-        string goName = "BornPoint_" + BornPointData.ActorType;
+        string goName = "BornPoint_" + BornPointData.ActorTypeName;
         goName += string.IsNullOrEmpty(BornPointData.BornPointAlias) ? "" : "_" + BornPointData.BornPointAlias;
         dirty = !gameObject.name.Equals(goName);
         gameObject.name = goName;
@@ -41,7 +41,7 @@ public class BornPointDesignHelper : MonoBehaviour
 
         Gizmos.color = gizmosColor;
         Gizmos.DrawSphere(transform.position + Vector3.left * 0.25f + Vector3.forward * 0.25f, 0.25f);
-        transform.DrawSpecialTip(Vector3.up + Vector3.left * 0.15f, gizmosColor, gizmosColor, BornPointData.ActorType.Replace("Enemy", ""));
+        transform.DrawSpecialTip(Vector3.up + Vector3.left * 0.15f, gizmosColor, gizmosColor, BornPointData.ActorTypeName.Replace("Enemy", ""));
     }
 #endif
 }

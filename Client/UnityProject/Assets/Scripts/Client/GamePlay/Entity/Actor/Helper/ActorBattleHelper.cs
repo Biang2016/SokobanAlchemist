@@ -148,9 +148,9 @@ public class ActorBattleHelper : ActorMonoHelper
         }
         else
         {
-            if (LastAttackBox != null && LastAttackBox.LastTouchActor.IsNotNullAndAlive())
+            if (LastAttackBox != null && LastAttackBox.LastInteractActor.IsNotNullAndAlive())
             {
-                if (LastAttackBox.LastTouchActor.IsPlayerCamp)
+                if (LastAttackBox.LastInteractActor.IsPlayerCamp)
                 {
                     // todo 玩家击杀
                 }

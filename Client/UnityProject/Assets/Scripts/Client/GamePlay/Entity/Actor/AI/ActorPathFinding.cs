@@ -50,16 +50,16 @@ public static class ActorPathFinding
     private static List<Node> OpenList = new List<Node>();
     private static List<Node> CloseList = new List<Node>();
 
-    public static bool FindPath(GridPos3D ori, GridPos3D dest,Vector3 actorPos, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
+    public static bool FindPath(GridPos3D ori_PF, GridPos3D dest_PF, Vector3 actorPos, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
-        WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori, out WorldModule oriModule, out GridPos3D _);
-        WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(dest, out WorldModule destModule, out GridPos3D _);
+        WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori_PF, out WorldModule oriModule, out GridPos3D _);
+        WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(dest_PF, out WorldModule destModule, out GridPos3D _);
         if (oriModule.IsNotNullAndAvailable() && destModule.IsNotNullAndAvailable())
         {
             Node oriNode = NodeFactory.Alloc();
-            oriNode.GridPos3D_PF = ori;
+            oriNode.GridPos3D_PF = ori_PF;
             Node destNode = NodeFactory.Alloc();
-            destNode.GridPos3D_PF = dest;
+            destNode.GridPos3D_PF = dest_PF;
             return FindPath(oriNode, destNode, actorPos, resPath, keepDistanceMin, keepDistanceMax, destinationType, actorWidth, actorHeight, exceptActorGUID);
         }
 
@@ -72,7 +72,7 @@ public static class ActorPathFinding
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori_PF.ConvertPathFindingNodeGPToWorldPosition(actorWidth).ToGridPos3D(), out WorldModule oriModule, out GridPos3D _);
         if (oriModule.IsNotNullAndAvailable())
         {
-            List<GridPos3D> validNodes = UnionFindNodes(ori_PF, actorPos,rangeRadius, actorWidth, actorHeight, exceptActorGUID);
+            List<GridPos3D> validNodes = UnionFindNodes(ori_PF, actorPos, rangeRadius, actorWidth, actorHeight, exceptActorGUID);
             if (validNodes.Count == 0) return false;
             destination_PF = CommonUtils.GetRandomFromList(validNodes);
             return true;
@@ -81,7 +81,7 @@ public static class ActorPathFinding
         return false;
     }
 
-    private static bool FindPath(Node ori, Node dest,Vector3 actorPos, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
+    private static bool FindPath(Node ori, Node dest, Vector3 actorPos, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         OpenList.Clear();
         CloseList.Clear();
@@ -221,11 +221,11 @@ public static class ActorPathFinding
     private static List<Node> cached_adjacentNodesList = new List<Node>(4);
     private static List<Node> cached_adjacentNodesList_clone = new List<Node>(4);
 
-    private static List<Node> GetAdjacentNodesForAStar(Node node,Vector3 actorPos, GridPos3D destGP_PF, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
+    private static List<Node> GetAdjacentNodesForAStar(Node node, Vector3 actorPos, GridPos3D destGP_PF, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         cached_adjacentNodesList.Clear();
         cached_adjacentNodesList_clone.Clear();
-        if (!CheckSpaceAvailableForActorOccupation(node.GridPos3D_PF, actorPos,actorWidth, actorHeight, exceptActorGUID)) return cached_adjacentNodesList;
+        if (!CheckSpaceAvailableForActorOccupation(node.GridPos3D_PF, actorPos, actorWidth, actorHeight, exceptActorGUID)) return cached_adjacentNodesList;
 
         bool arriveDestGP_PF = false;
 
@@ -277,7 +277,13 @@ public static class ActorPathFinding
 
     private static int AStarHeuristicsDistance(Node start, Node end)
     {
-        return ClientUtils.AStarHeuristicsDistance(start.GridPos3D_PF, end.GridPos3D_PF);
+        return AStarHeuristicsDistance(start.GridPos3D_PF, end.GridPos3D_PF);
+    }
+
+    public static int AStarHeuristicsDistance(GridPos3D start, GridPos3D end)
+    {
+        GridPos3D diff = start - end;
+        return Mathf.Abs(diff.x) + Mathf.Abs(diff.z);
     }
 
     #endregion
@@ -289,7 +295,7 @@ public static class ActorPathFinding
     private static Queue<GridPos3D> cached_QueueUnionFind = new Queue<GridPos3D>(256);
     private static bool[,] cached_OccupationUnionFind = new bool[30, 30];
 
-    private static List<GridPos3D> UnionFindNodes(GridPos3D center_PF,Vector3 actorPos, float rangeRadius, int actorWidth, int actorHeight, uint exceptActorGUID)
+    private static List<GridPos3D> UnionFindNodes(GridPos3D center_PF, Vector3 actorPos, float rangeRadius, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         cached_UnionFindNodeList.Clear();
         int radius = Mathf.RoundToInt(rangeRadius);

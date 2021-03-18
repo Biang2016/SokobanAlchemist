@@ -25,8 +25,106 @@ public static class ActorAIAtoms
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             Actor.ActorBehaviourState = ActorBehaviourState.value;
+            return Status.Success;
+        }
+    }
+
+    #endregion
+
+    #region 目标搜索
+
+    [Category("敌兵/目标搜索")]
+    [Name("是否有目标")]
+    [Description("是否有目标")]
+    public class BT_Enemy_CheckHasTargetEntity : ConditionTask
+    {
+        protected override string info
+        {
+            get
+            {
+                string targetEntityTypeDesc = "";
+                if (TargetEntityTypes.value != null)
+                {
+                    foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
+                    {
+                        targetEntityTypeDesc += "[" + targetEntityType + "]";
+                    }
+                }
+
+                return $"是否有{targetEntityTypeDesc}目标";
+            }
+        }
+
+        [Name("哪种目标")]
+        public BBParameter<List<ActorAIAgent.TargetEntityType>> TargetEntityTypes;
+
+        protected override bool OnCheck()
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
+            bool res = true;
+            if (TargetEntityTypes.value != null)
+            {
+                foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
+                {
+                    res &= Actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].TargetEntity.IsNotNullAndAlive();
+                }
+            }
+
+            return res;
+        }
+    }
+
+    [Category("敌兵/目标搜索")]
+    [Name("设置目标")]
+    [Description("设置目标")]
+    public class BT_Enemy_SetTargetEntity : BTNode
+    {
+        public override string name
+        {
+            get
+            {
+                string actorDesc = string.IsNullOrWhiteSpace(ActorTypeName.value) ? "全部角色" : ActorTypeName.value;
+                string targetEntityTypeDesc = "";
+                if (TargetEntityTypes.value != null)
+                {
+                    foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
+                    {
+                        targetEntityTypeDesc += "[" + targetEntityType + "]";
+                    }
+                }
+
+                return $"范围{string.Format(SearchRadius.value.ToString("F1"))}中搜索{actorDesc}，并设置为{targetEntityTypeDesc}目标";
+            }
+        }
+
+        [Name("搜索范围")]
+        public BBParameter<float> SearchRadius;
+
+        [Name("相对阵营")]
+        public BBParameter<RelativeCamp> RelativeCamp;
+
+        [Name("角色类型指定(空则都可)")]
+        public BBParameter<string> ActorTypeName;
+
+        [Name("设为哪种目标")]
+        public BBParameter<List<ActorAIAgent.TargetEntityType>> TargetEntityTypes;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            Actor target = BattleManager.Instance.SearchNearestActor(Actor.EntityBaseCenter, Actor.Camp, SearchRadius.value, RelativeCamp.value, ActorTypeName.value);
+            if (!target.IsNotNullAndAlive()) return Status.Failure;
+            if (TargetEntityTypes.value != null)
+            {
+                foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
+                {
+                    Actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].TargetEntity = target;
+                    Actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].RefreshTargetGP();
+                }
+            }
+
             return Status.Success;
         }
     }
@@ -36,78 +134,12 @@ public static class ActorAIAtoms
     #region 寻路
 
     [Category("敌兵/寻路")]
-    [Name("设定目的地为玩家")]
-    [Description("设定目的地为玩家")]
-    public class BT_Enemy_SetDestinationToMainPlayer : BTNode
-    {
-        [Name("保持最小距离")]
-        public BBParameter<float> KeepDistanceMin;
-
-        [Name("保持最大距离")]
-        public BBParameter<float> KeepDistanceMax;
-
-        protected override Status OnExecute(Component agent, IBlackboard blackboard)
-        {
-            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
-            if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            Actor player = BattleManager.Instance.Player1;
-            ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(player.ActorOccupationCenter.ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), KeepDistanceMin.value, KeepDistanceMax.value, false, ActorPathFinding.DestinationType.Actor);
-            switch (retCode)
-            {
-                case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
-                {
-                    return Status.Success;
-                }
-                case ActorAIAgent.SetDestinationRetCode.TooClose:
-                {
-                    // 逃脱寻路
-                    List<GridPos3D> runDestList = new List<GridPos3D>();
-
-                    for (int angle = 0; angle <= 360; angle += 10)
-                    {
-                        float radianAngle = Mathf.Deg2Rad * angle;
-                        Vector3 dest = player.ActorOccupationCenter + new Vector3((KeepDistanceMin.value + 1) * Mathf.Sin(radianAngle), 0, (KeepDistanceMin.value + 1) * Mathf.Cos(radianAngle));
-                        GridPos3D destGP = dest.ToGridPos3D();
-                        runDestList.Add(destGP);
-                    }
-
-                    runDestList.Sort((gp1, gp2) =>
-                    {
-                        float dist1 = (gp1 + player.ActorOccupationCenter - Actor.ActorOccupationCenter).magnitude;
-                        float dist2 = (gp2 + player.ActorOccupationCenter - Actor.ActorOccupationCenter).magnitude;
-                        return dist1.CompareTo(dist2);
-                    });
-
-                    foreach (GridPos3D gp in runDestList)
-                    {
-                        ActorAIAgent.SetDestinationRetCode rc = Actor.ActorAIAgent.SetDestination(((Vector3) gp).ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), 0, 1, false, ActorPathFinding.DestinationType.EmptyGrid);
-                        if (rc == ActorAIAgent.SetDestinationRetCode.Suc)
-                        {
-                            return Status.Running;
-                        }
-                    }
-
-                    return Status.Failure;
-                }
-                case ActorAIAgent.SetDestinationRetCode.Suc:
-                {
-                    return Status.Success;
-                }
-                case ActorAIAgent.SetDestinationRetCode.Failed:
-                {
-                    return Status.Failure;
-                }
-            }
-
-            return Status.Failure;
-        }
-    }
-
-    [Category("敌兵/寻路")]
-    [Name("是否能够移动到玩家")]
-    [Description("是否能够移动到玩家")]
+    [Name("是否能够移动到目标")]
+    [Description("是否能够移动到目标")]
     public class BT_Enemy_CheckCanMoveToMainPlayer : ConditionTask
     {
+        protected override string info => $"是否能够移动到{TargetEntityType.value}目标";
+
         [Name("保持最小距离")]
         public BBParameter<float> KeepDistanceMin;
 
@@ -117,29 +149,62 @@ public static class ActorAIAtoms
         [Name("警戒距离")]
         public BBParameter<float> GuardingRange;
 
+        [Name("哪种目标")]
+        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+
         protected override bool OnCheck()
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return false;
-            Actor player = BattleManager.Instance.Player1;
-            if ((player.ActorOccupationCenter - Actor.ActorOccupationCenter).magnitude > GuardingRange.value) return false;
-            bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, player.ActorOccupationCenter.ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), Actor.transform.position, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
+            if (Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity.GetGridDistanceTo(Actor) > GuardingRange.value) return false;
+            bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity.EntityBaseCenter.ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), Actor.transform.position, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
             return suc;
         }
     }
 
     [Category("敌兵/寻路")]
-    [Name("寻路终点是否是玩家坐标")]
-    [Description("寻路终点是否是玩家坐标")]
+    [Name("寻路至目标")]
+    [Description("寻路至目标")]
+    public class BT_Enemy_SetDestinationToMainPlayer : BTNode
+    {
+        public override string name => $"寻路至{TargetEntityType.value}目标";
+
+        [Name("保持最小距离")]
+        public BBParameter<float> KeepDistanceMin;
+
+        [Name("保持最大距离")]
+        public BBParameter<float> KeepDistanceMax;
+
+        [Name("哪种目标")]
+        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
+            GridPos3D targetWorldGP = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetGP;
+            return Actor.ActorAIAgent.SetDestinationToWorldGP(targetWorldGP, KeepDistanceMin.value, KeepDistanceMax.value);
+        }
+    }
+
+    [Category("敌兵/寻路")]
+    [Name("寻路终点是否是目标坐标")]
+    [Description("寻路终点是否是目标坐标")]
     public class BT_Enemy_CheckDestIsMainPlayer : ConditionTask
     {
+        protected override string info => $"寻路终点是否是{TargetEntityType.value}目标坐标";
+
         [Name("容许偏差半径")]
         public BBParameter<float> ToleranceRadius;
 
+        [Name("哪种目标")]
+        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+
         protected override bool OnCheck()
         {
-            if (Actor == null || Actor.ActorAIAgent == null || !Actor.ActorAIAgent.IsPathFinding) return false;
-            Actor player = BattleManager.Instance.Player1;
-            return ((player.ActorOccupationCenter - Actor.ActorAIAgent.GetCurrentPathFindingDestination().ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth)).magnitude <= ToleranceRadius.value);
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null || !Actor.ActorAIAgent.IsPathFinding) return false;
+            Entity targetEntity = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity;
+            if (!targetEntity.IsNotNullAndAlive()) return false;
+            return ((targetEntity.EntityBaseCenter - Actor.ActorAIAgent.GetCurrentPathFindingDestination().ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth)).magnitude <= ToleranceRadius.value);
         }
     }
 
@@ -153,7 +218,7 @@ public static class ActorAIAtoms
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ThrowState == Actor.ThrowStates.Lifting && Actor.CurrentLiftBox != null)
             {
                 Actor.ThrowCharge();
@@ -199,7 +264,7 @@ public static class ActorAIAtoms
     {
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding)
             {
                 Actor.ActorAIAgent.InterruptCurrentPathFinding();
@@ -216,7 +281,7 @@ public static class ActorAIAtoms
     {
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding)
             {
                 Actor.ActorAIAgent.ClearPathFinding();
@@ -233,7 +298,7 @@ public static class ActorAIAtoms
     {
         public override void Invoke()
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return;
             if (Actor.ActorAIAgent.IsPathFinding)
             {
                 Actor.ActorAIAgent.InterruptCurrentPathFinding();
@@ -248,7 +313,7 @@ public static class ActorAIAtoms
     {
         public override void Invoke()
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return;
             if (Actor.ActorAIAgent.IsPathFinding)
             {
                 Actor.ActorAIAgent.ClearPathFinding();
@@ -266,15 +331,60 @@ public static class ActorAIAtoms
 
         protected override bool OnCheck()
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return false;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
             if (!Actor.ActorAIAgent.IsPathFinding) return false;
             return Actor.ActorAIAgent.StuckWithNavTask_Tick > (StuckTime.value / 1000f);
         }
     }
 
+    [Category("敌兵/寻路")]
+    [Name("目标在距离内")]
+    [Description("目标在距离内")]
+    public class BT_Enemy_PlayerInGuardRangeCondition : ConditionTask
+    {
+        protected override string info => $"[{TargetEntityType.value}]目标在距离内";
+
+        [Name("阈值")]
+        public BBParameter<float> RangeRadius;
+
+        [Name("哪种目标")]
+        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+
+        protected override bool OnCheck()
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
+            Entity targetEntity = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity;
+            if (!targetEntity.IsNotNullAndAlive()) return false;
+            return (targetEntity.EntityBaseCenter - Actor.EntityBaseCenter).magnitude <= RangeRadius.value;
+        }
+    }
+
+    [Category("敌兵/寻路")]
+    [Name("目标在距离内")]
+    [Description("目标在距离内")]
+    public class BT_Enemy_PlayerInGuardRangeConditionBTNode : BTNode
+    {
+        public override string name => $"[{TargetEntityType.value}]目标在距离内";
+
+        [Name("阈值")]
+        public BBParameter<float> RangeRadius;
+
+        [Name("哪种目标")]
+        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            Entity targetEntity = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity;
+            if (!targetEntity.IsNotNullAndAlive()) return Status.Failure;
+            bool inside = targetEntity.GetGridDistanceTo(Actor) <= RangeRadius.value;
+            return inside ? Status.Success : Status.Failure;
+        }
+    }
+
     #endregion
 
-    [Category("敌兵")]
+    [Category("敌兵/生命")]
     [Name("生命值大等于")]
     [Description("生命值大等于")]
     public class BT_Enemy_LifeCondition : ConditionTask
@@ -284,13 +394,13 @@ public static class ActorAIAtoms
 
         protected override bool OnCheck()
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return false;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
             if (Actor.ActorBattleHelper == null) return false;
             return Actor.EntityStatPropSet.HealthDurability.Value >= LifeThreshold.value;
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/生命")]
     [Name("生命值大于")]
     [Description("生命值大于")]
     public class BT_Enemy_LifeConditionLargerThan : ConditionTask
@@ -300,13 +410,13 @@ public static class ActorAIAtoms
 
         protected override bool OnCheck()
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return false;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
             if (Actor.ActorBattleHelper == null) return false;
             return Actor.EntityStatPropSet.HealthDurability.Value > LifeThreshold.value;
         }
     }
 
-    [Category("敌兵")]
+    [Category("敌兵/生命")]
     [Name("生命值大于%")]
     [Description("生命值大于%")]
     public class BT_Enemy_LifeConditionLargerThanPercent : ConditionTask
@@ -316,58 +426,30 @@ public static class ActorAIAtoms
 
         protected override bool OnCheck()
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return false;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
             if (Actor.ActorBattleHelper == null) return false;
             return Actor.EntityStatPropSet.HealthDurability.Value > LifePercentThreshold.value / 100f * Actor.EntityStatPropSet.MaxHealthDurability.GetModifiedValue;
-        }
-    }
-
-    [Category("敌兵")]
-    [Name("玩家在距离内")]
-    [Description("玩家在距离内")]
-    public class BT_Enemy_PlayerInGuardRangeCondition : ConditionTask
-    {
-        [Name("阈值")]
-        public BBParameter<float> RangeRadius;
-
-        protected override bool OnCheck()
-        {
-            if (Actor == null || Actor.ActorAIAgent == null) return false;
-            return (BattleManager.Instance.Player1.ActorOccupationCenter - Actor.ActorOccupationCenter).magnitude <= RangeRadius.value;
-        }
-    }
-
-    [Category("敌兵")]
-    [Name("玩家在距离内")]
-    [Description("玩家在距离内")]
-    public class BT_Enemy_PlayerInGuardRangeConditionBTNode : BTNode
-    {
-        [Name("阈值")]
-        public BBParameter<float> RangeRadius;
-
-        protected override Status OnExecute(Component agent, IBlackboard blackboard)
-        {
-            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
-            bool inside = (BattleManager.Instance.Player1.ActorOccupationCenter - Actor.ActorOccupationCenter).magnitude <= RangeRadius.value;
-            return inside ? Status.Success : Status.Failure;
         }
     }
 
     #region 战斗
 
     [Category("敌兵/战斗")]
-    [Name("面向玩家")]
-    [Description("面向玩家")]
+    [Name("面向目标")]
+    [Description("面向目标")]
     public class BT_Enemy_FaceToPlayer : BTNode
     {
+        public override string name => $"面向{TargetEntityType.value}目标";
+
+        [Name("哪种目标")]
+        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.IsFrozen) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            Vector3 targetGP = BattleManager.Instance.Player1.ActorOccupationCenter;
-            Vector3 curGP = Actor.ActorOccupationCenter;
-            Vector3 diff = targetGP - curGP;
+            Vector3 diff = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetGP - Actor.EntityBaseCenter;
             Actor.CurForward = diff.GetSingleDirectionVectorXZ();
             return Status.Success;
         }
@@ -378,24 +460,27 @@ public static class ActorAIAtoms
     [Description("释放技能")]
     public class BT_Enemy_TriggerSkill : BTNode
     {
+        public override string name => $"向{TargetEntityType.value}目标释放技能 [{EntitySkillIndex.value}]";
+
         [Name("技能编号")]
         public BBParameter<EntitySkillIndex> EntitySkillIndex;
 
-        public override string name => $"释放技能 [{EntitySkillIndex.value}]";
+        [Name("哪种目标")]
+        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            return TriggerSkill(Actor, EntitySkillIndex.value);
+            return TriggerSkill(Actor, EntitySkillIndex.value, TargetEntityType.value);
         }
 
-        public static Status TriggerSkill(Actor actor, EntitySkillIndex skillIndex)
+        public static Status TriggerSkill(Actor actor, EntitySkillIndex skillIndex, ActorAIAgent.TargetEntityType targetEntityType)
         {
-            if (actor == null || actor.ActorAIAgent == null) return Status.Failure;
+            if (!actor.IsNotNullAndAlive() || actor.ActorAIAgent == null) return Status.Failure;
             if (actor.IsFrozen) return Status.Failure;
+            Entity targetEntity = actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].TargetEntity;
+            if (!targetEntity.IsNotNullAndAlive()) return Status.Failure;
             if (actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
             {
-                actor.ActorAIAgent.TargetActor = BattleManager.Instance.Player1;
-                actor.ActorAIAgent.TargetActorGP = BattleManager.Instance.Player1.WorldGP;
                 bool triggerSuc = eas.CheckCanTriggerSkill();
                 if (triggerSuc)
                 {
@@ -429,12 +514,10 @@ public static class ActorAIAtoms
 
         public static Status TriggerSkill(Actor actor, EntitySkillIndex skillIndex)
         {
-            if (actor == null || actor.ActorAIAgent == null) return Status.Failure;
+            if (!actor.IsNotNullAndAlive() || actor.ActorAIAgent == null) return Status.Failure;
             if (actor.IsFrozen) return Status.Failure;
             if (actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
             {
-                actor.ActorAIAgent.TargetActor = BattleManager.Instance.Player1;
-                actor.ActorAIAgent.TargetActorGP = BattleManager.Instance.Player1.WorldGP;
                 bool triggerSuc = eas.CheckCanTriggerSkill();
                 if (triggerSuc)
                 {
@@ -456,14 +539,17 @@ public static class ActorAIAtoms
     [Description("释放技能+确认")]
     public class BT_Enemy_TriggerSkill_ConditionTask : ConditionTask
     {
+        protected override string info => $"向{TargetEntityType.value}目标释放技能 [{EntitySkillIndex.value}]且成功";
+
         [Name("技能编号")]
         public BBParameter<EntitySkillIndex> EntitySkillIndex;
 
-        protected override string info => $"释放技能且成功 [{EntitySkillIndex.value}]";
+        [Name("哪种目标")]
+        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
 
         protected override bool OnCheck()
         {
-            Status status = BT_Enemy_TriggerSkill.TriggerSkill(Actor, EntitySkillIndex.value);
+            Status status = BT_Enemy_TriggerSkill.TriggerSkill(Actor, EntitySkillIndex.value, TargetEntityType.value);
             return status == Status.Success;
         }
     }
@@ -473,14 +559,17 @@ public static class ActorAIAtoms
     [Description("释放技能")]
     public class FL_Enemy_TriggerSkillAction : CallableActionNode
     {
+        public override string name => $"向{TargetEntityType.value}目标释放技能 [{EntitySkillIndex.value}]";
+
         [Name("技能编号")]
         public BBParameter<EntitySkillIndex> EntitySkillIndex;
 
-        public override string name => $"释放技能 [{EntitySkillIndex.value}]";
+        [Name("哪种目标")]
+        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
 
         public override void Invoke()
         {
-            BT_Enemy_TriggerSkill.TriggerSkill(Actor, EntitySkillIndex.value);
+            BT_Enemy_TriggerSkill.TriggerSkill(Actor, EntitySkillIndex.value, TargetEntityType.value);
         }
     }
 
@@ -496,7 +585,7 @@ public static class ActorAIAtoms
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.EntityActiveSkillDict.TryGetValue(EntitySkillIndex.value, out EntityActiveSkill eas))
             {
                 if (eas.SkillPhase == ActiveSkillPhase.CoolingDown || eas.SkillPhase == ActiveSkillPhase.Ready)
@@ -525,7 +614,7 @@ public static class ActorAIAtoms
 
         public override IEnumerator Invoke()
         {
-            if (Actor == null || Actor.ActorAIAgent == null) yield return null;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) yield return null;
             if (Actor.EntityActiveSkillDict.TryGetValue(EntitySkillIndex.value, out EntityActiveSkill eas))
             {
                 while (eas.SkillPhase != ActiveSkillPhase.CoolingDown && eas.SkillPhase != ActiveSkillPhase.Ready)
@@ -548,7 +637,7 @@ public static class ActorAIAtoms
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.EntityActiveSkillDict.TryGetValue(EntitySkillIndex.value, out EntityActiveSkill eas))
             {
                 eas.Interrupt();
@@ -575,8 +664,8 @@ public static class ActorAIAtoms
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            if (Actor == null || Actor.ActorAIAgent == null) return Status.Failure;
-            float distanceFromPlayer = (Actor.transform.position - BattleManager.Instance.Player1.transform.position).magnitude;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            float distanceFromPlayer = Actor.GetGridDistanceTo(BattleManager.Instance.Player1);
             CameraManager.Instance.FieldCamera.CameraShake(EquivalentDamage.value, distanceFromPlayer);
             return Status.Success;
         }

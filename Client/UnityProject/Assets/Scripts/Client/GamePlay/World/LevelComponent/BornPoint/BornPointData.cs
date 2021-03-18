@@ -4,6 +4,7 @@ using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [Serializable]
 public class BornPointData : LevelComponentData
@@ -38,7 +39,8 @@ public class BornPointData : LevelComponentData
 
     [ValueDropdown("GetAllActorNames")]
     [LabelText("角色类型")]
-    public string ActorType = "None";
+    [FormerlySerializedAs("ActorType")]
+    public string ActorTypeName = "None";
 
     [LabelText("角色朝向")]
     [EnumToggleButtons]
@@ -75,7 +77,7 @@ public class BornPointData : LevelComponentData
     {
         get
         {
-            if (ActorType.StartsWith("Player"))
+            if (ActorTypeName.StartsWith("Player"))
             {
                 return ActorCategory.Player;
             }
@@ -93,7 +95,7 @@ public class BornPointData : LevelComponentData
         base.ChildClone(newData);
         BornPointData data = ((BornPointData) newData);
         data.SpawnLevelEventAlias = SpawnLevelEventAlias;
-        data.ActorType = ActorType;
+        data.ActorTypeName = ActorTypeName;
         data.ActorOrientation = ActorOrientation;
         data.BornPointAlias = BornPointAlias;
         data.RawEntityExtraSerializeData = RawEntityExtraSerializeData?.Clone();

@@ -499,7 +499,7 @@ public class OpenWorld : World
                                     moduleData.WorldModuleBornPointGroupData.EnemyBornPoints.Add(
                                         new BornPointData
                                         {
-                                            ActorType = actorTypeName,
+                                            ActorTypeName = actorTypeName,
                                             LocalGP = new GridPos3D(local_x, local_y, local_z),
                                             BornPointAlias = "",
                                             WorldGP = new GridPos3D(world_x, world_y, world_z),

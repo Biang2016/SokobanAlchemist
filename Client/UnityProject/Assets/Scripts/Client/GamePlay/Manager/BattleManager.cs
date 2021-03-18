@@ -145,12 +145,12 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     {
         if (bpd.ActorCategory == ActorCategory.Player)
         {
-            PlayerNumber playerNumber = (PlayerNumber) Enum.Parse(typeof(PlayerNumber), bpd.ActorType);
+            PlayerNumber playerNumber = (PlayerNumber) Enum.Parse(typeof(PlayerNumber), bpd.ActorTypeName);
             PlayerActor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
             GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
             player.BornPointDataGUID = bpd.GUID;
             player.WorldGP = bpd.WorldGP;
-            player.Setup(bpd.ActorType, bpd.ActorCategory, playerNumber, 0);
+            player.Setup(bpd.ActorTypeName, bpd.ActorCategory, playerNumber, 0);
             BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
             MainPlayers[(int) playerNumber] = player;
             AddActor(null, player);
@@ -162,12 +162,12 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             WorldModule worldModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(bpd.WorldGP);
             if (worldModule != null)
             {
-                ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.ActorType);
+                ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.ActorTypeName);
                 EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
                 GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, enemy.transform, 1);
                 enemy.BornPointDataGUID = bpd.GUID;
                 enemy.WorldGP = bpd.WorldGP;
-                enemy.Setup(bpd.ActorType, bpd.ActorCategory, bpd.ActorOrientation, worldModule.GUID);
+                enemy.Setup(bpd.ActorTypeName, bpd.ActorCategory, bpd.ActorOrientation, worldModule.GUID);
                 enemy.ApplyBoxExtraSerializeData(bpd.RawEntityExtraSerializeData);
                 Enemies.Add(enemy);
                 AddActor(worldModule, enemy);
@@ -230,6 +230,53 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         {
             enemy.SetShown(shown);
         }
+    }
+
+    private List<Actor> cachedSearchActorList = new List<Actor>(32);
+
+    public Actor SearchNearestActor(Vector3 center, Camp executeCamp, float radius, RelativeCamp effectiveOnRelativeCamp, string actorTypeName = "")
+    {
+        float minDist = float.MaxValue;
+        Actor nearestActor = null;
+        int layerMask = LayerManager.Instance.GetTargetEntityLayerMask(executeCamp, effectiveOnRelativeCamp);
+        Collider[] colliders = Physics.OverlapSphere(center, radius, layerMask);
+        foreach (Collider collider in colliders)
+        {
+            Actor actor = collider.gameObject.GetComponentInParent<Actor>();
+            if (actor.IsNotNullAndAlive())
+            {
+                if (!string.IsNullOrWhiteSpace(actorTypeName))
+                {
+                    if (actor.ActorType != actorTypeName)
+                    {
+                        continue;
+                    }
+                }
+
+                float dist = (actor.EntityBaseCenter - center).magnitude;
+                if (minDist > dist)
+                {
+                    minDist = dist;
+                    nearestActor = actor;
+                }
+            }
+        }
+
+        return nearestActor;
+    }
+
+    public List<Actor> SearchActors(Vector3 center, Camp executeCamp, float radius, RelativeCamp effectiveOnRelativeCamp)
+    {
+        cachedSearchActorList.Clear();
+        int layerMask = LayerManager.Instance.GetTargetEntityLayerMask(executeCamp, effectiveOnRelativeCamp);
+        Collider[] colliders = Physics.OverlapSphere(center, radius, layerMask);
+        foreach (Collider collider in colliders)
+        {
+            Actor actor = collider.gameObject.GetComponentInParent<Actor>();
+            if (actor.IsNotNullAndAlive()) cachedSearchActorList.Add(actor);
+        }
+
+        return cachedSearchActorList;
     }
 
     #region Buff

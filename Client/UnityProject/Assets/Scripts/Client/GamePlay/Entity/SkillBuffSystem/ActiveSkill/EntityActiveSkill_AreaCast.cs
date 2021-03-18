@@ -94,6 +94,10 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     [LabelText("施法偏好")]
     public TargetInclination M_TargetInclination;
 
+    [LabelText("施法目标")]
+    [ShowIf("M_TargetInclination", TargetInclination.TargetCenteredNormalDistribution)]
+    public ActorAIAgent.TargetEntityType TargetEntityType;
+
     internal EntityPropertyValue MaxTargetCount = new EntityPropertyValue();
 
     [LabelText("施法于地表")]
@@ -145,7 +149,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
             {
                 if (Entity is Actor actor)
                 {
-                    targetGP = actor.ActorAIAgent.TargetActorGP;
+                    targetGP = actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType].TargetGP;
                 }
                 else if (Entity is Box box)
                 {
@@ -391,6 +395,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         base.ChildClone(cloneData);
         EntityActiveSkill_AreaCast newEAS = (EntityActiveSkill_AreaCast) cloneData;
         newEAS.M_TargetInclination = M_TargetInclination;
+        newEAS.TargetEntityType = TargetEntityType;
         newEAS.MaxTargetCount = MaxTargetCount;
         newEAS.CastOnTopLayer = CastOnTopLayer;
         newEAS.CastAreaGridPosList = CastAreaGridPosList.Clone();
@@ -410,6 +415,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         base.CopyDataFrom(srcData);
         EntityActiveSkill_AreaCast srcEAS = (EntityActiveSkill_AreaCast) srcData;
         M_TargetInclination = srcEAS.M_TargetInclination;
+        TargetEntityType = srcEAS.TargetEntityType;
         MaxTargetCount = srcEAS.MaxTargetCount;
         CastOnTopLayer = srcEAS.CastOnTopLayer;
         CastAreaGridPosList = srcEAS.CastAreaGridPosList.Clone();

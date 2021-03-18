@@ -82,12 +82,6 @@ public static class ClientUtils
                               && localGP.z >= 0 && localGP.z < WorldModule.MODULE_SIZE;
     }
 
-    public static int AStarHeuristicsDistance(GridPos3D start, GridPos3D end)
-    {
-        GridPos3D diff = start - end;
-        return Mathf.Abs(diff.x) + Mathf.Abs(diff.z);
-    }
-
     public static void InGameUIFaceToCamera(Transform transform)
     {
         Vector3 diff = transform.position - CameraManager.Instance.MainCamera.transform.position;
