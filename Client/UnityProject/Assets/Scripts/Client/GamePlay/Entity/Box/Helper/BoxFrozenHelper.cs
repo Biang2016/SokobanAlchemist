@@ -8,7 +8,7 @@ public class BoxFrozenHelper : EntityFrozenHelper
         if (afterFrozenLevel == 0)
         {
             Thaw();
-            box.PlayFXOnEachGrid(box.ThawFX, box.ThawFXScale);
+            box.PlayFXOnEachGrid(box.ThawFX);
         }
         else
         {
@@ -20,7 +20,7 @@ public class BoxFrozenHelper : EntityFrozenHelper
                 frozeModel.SetActive(index == afterFrozenLevel - 1);
             }
 
-            box.PlayFXOnEachGrid(beforeFrozenLevel < afterFrozenLevel ? box.FrozeFX : box.ThawFX, beforeFrozenLevel < afterFrozenLevel ? box.FrozeFXScale : box.ThawFXScale);
+            box.PlayFXOnEachGrid(beforeFrozenLevel < afterFrozenLevel ? box.FrozeFX : box.ThawFX);
         }
     }
 }

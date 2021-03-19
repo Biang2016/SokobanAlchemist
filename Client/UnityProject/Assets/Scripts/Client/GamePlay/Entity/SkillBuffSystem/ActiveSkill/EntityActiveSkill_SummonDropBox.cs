@@ -12,7 +12,6 @@ public class EntityActiveSkill_SummonDropBox : EntityActiveSkill_AreaCast
 {
     protected override string Description => "天降箱子";
 
-    [BoxNameList]
     [LabelText("箱子类型概率")]
     public List<BoxNameWithProbability> DropBoxList = new List<BoxNameWithProbability>();
 
@@ -26,7 +25,7 @@ public class EntityActiveSkill_SummonDropBox : EntityActiveSkill_AreaCast
             BoxNameWithProbability randomResult = CommonUtils.GetRandomWithProbabilityFromList(DropBoxList);
             if (randomResult != null)
             {
-                ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(randomResult.BoxTypeName);
+                ushort boxTypeIndex = ConfigManager.GetTypeIndex( TypeDefineType.Box,randomResult.BoxTypeName.TypeName);
                 if (boxTypeIndex != 0)
                 {
                     if (WorldManager.Instance.CurrentWorld.DropBoxOnTopLayer(boxTypeIndex, randomResult.BoxOrientation, GridPos3D.Down, gp + GridPos3D.Up * DropFromHeightFromFloor, DropFromHeightFromFloor + 3, out Box dropBox))

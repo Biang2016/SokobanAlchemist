@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using BiangLibrary;
-using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -104,13 +103,6 @@ public class Box_LevelEditor : MonoBehaviour
         }
     }
 
-    #region Utils
-
-    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
-    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
-
-    #endregion
-
 #endif
 
 #if UNITY_EDITOR
@@ -120,8 +112,7 @@ public class Box_LevelEditor : MonoBehaviour
     [NonSerialized]
     [FoldoutGroup("快速替换")]
     [LabelText("替换Box类型")]
-    [ValueDropdown("GetAllBoxTypeNames")]
-    private string ReplaceBoxTypeName = "None";
+    private TypeSelectHelper ReplaceBoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
     [HideInPlayMode]
     [HideInPrefabAssets]
@@ -139,36 +130,11 @@ public class Box_LevelEditor : MonoBehaviour
             return;
         }
 
-        GameObject prefab = (GameObject) Resources.Load("Prefabs/Designs/Box_LevelEditor/" + ReplaceBoxTypeName + "_LevelEditor");
+        GameObject prefab = (GameObject) Resources.Load("Prefabs/Designs/Box_LevelEditor/" + ReplaceBoxTypeName.TypeName + "_LevelEditor");
         GameObject go = (GameObject) PrefabUtility.InstantiatePrefab(prefab, transform.parent);
         go.transform.position = transform.position;
         go.transform.rotation = Quaternion.identity;
         DestroyImmediate(gameObject);
-    }
-
-    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)
-    {
-        bool isDirty = false;
-        foreach (EntityPassiveSkill bf in RawEntityExtraSerializeData.EntityPassiveSkills)
-        {
-            bool dirty = bf.RenameBoxTypeName(name, srcBoxName, targetBoxName, info);
-            isDirty |= dirty;
-        }
-
-        return isDirty;
-    }
-
-    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info)
-    {
-        bool isDirty = false;
-
-        foreach (EntityPassiveSkill bf in RawEntityExtraSerializeData.EntityPassiveSkills)
-        {
-            bool dirty = bf.DeleteBoxTypeName(name, srcBoxName, info);
-            isDirty |= dirty;
-        }
-
-        return isDirty;
     }
 
     /// <summary>
@@ -177,6 +143,23 @@ public class Box_LevelEditor : MonoBehaviour
     /// <returns></returns>
     public bool RefreshData()
     {
+        //bool isDirty = false;
+        //foreach (EntityPassiveSkill bf in RawEntityExtraSerializeData.EntityPassiveSkills)
+        //{
+        //    if (bf is EntityPassiveSkill_Conditional condition)
+        //    {
+        //        foreach (EntityPassiveSkillAction action in condition.RawEntityPassiveSkillActions)
+        //        {
+        //            if (action is BoxPassiveSkillAction_ChangeBoxToEnemy cbt)
+        //            {
+        //                //cbt.RefreshABC();
+        //                isDirty = true;
+        //            }
+        //        }
+        //    }
+        //}
+
+        //return isDirty;
         return false;
     }
 

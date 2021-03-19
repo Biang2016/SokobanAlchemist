@@ -47,11 +47,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d845ce0036b36d4292ece34a1937da3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PoolIndex: 0
   IsRecycled: 0
   Trigger: {fileID: 3593645129036904678}
   Renderer: {fileID: 9000911640552907456}
   childData:
-    LevelComponentBelongsTo: 0
     WorldGP:
       x: 0
       y: 0
@@ -60,16 +60,30 @@ MonoBehaviour:
       x: 0
       y: 0
       z: 0
+    LevelTriggerTypeIndex: 0
     AppearLevelEventAlias: 
     DisappearLevelEventAlias: 
-    LevelTriggerType: 1
     TriggerEmitEventAlias: 
     MaxTriggerTime: 1
     KeepTriggering: 0
-    TriggerFX: None
-    TriggerFXScale: 1
+    TriggerFX:
+      FXType:
+        TypeDefineType: 7
+        TypeGUID: 
+      UseCurve: 0
+      FXScale: 1
+      AnimationCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    TriggerSetStateAlias: 
     TriggerColor: {r: 0, g: 0, b: 0, a: 0}
-    RequiredActorType: Player1
+    IsPlayer: 1
+    RequiredActorType:
+      TypeDefineType: 2
+      TypeGUID: 
     RequiredStayDuration: 1
 --- !u!65 &3593645129036904678
 BoxCollider:

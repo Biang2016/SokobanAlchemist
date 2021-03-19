@@ -192,31 +192,18 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
-    FrozenFX: None
-    FrozenFXScaleCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.7
-        inSlope: 0.325
-        outSlope: 0.325
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 4
-        value: 2
-        inSlope: 0.325
-        outSlope: 0.325
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
+    FrozenFX:
+      FXType:
+        TypeDefineType: 7
+        TypeGUID: 
+      UseCurve: 0
+      FXScale: 0
+      AnimationCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
     FiringResistance:
       BaseValue: 200
       ModifiedValue: 0
@@ -246,33 +233,30 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 1000
-    StartFiringFX: None
-    StartFiringFXScale: 0
-    FiringFX: Hit_Fire
-    FiringFXScaleCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.7
-        inSlope: 0.325
-        outSlope: 0.325
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 4
-        value: 2
-        inSlope: 0.325
-        outSlope: 0.325
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
+    StartFiringFX:
+      FXType:
+        TypeDefineType: 7
+        TypeGUID: 
+      UseCurve: 0
+      FXScale: 0
+      AnimationCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    FiringFX:
+      FXType:
+        TypeDefineType: 7
+        TypeGUID: 
+      UseCurve: 0
+      FXScale: 0
+      AnimationCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
     MoveSpeed:
       BaseValue: 10
       ModifiedValue: 0
@@ -360,15 +344,55 @@ MonoBehaviour:
   LastMoveAttempt: {x: 0, y: 0, z: 0}
   CurThrowMoveAttempt: {x: 0, y: 0, z: 0}
   CurThrowPointOffset: {x: 0, y: 0, z: 0}
-  KickFX: Flash_SnowFlake
-  KickFXScale: 1
+  KickFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: 
+    UseCurve: 0
+    FXScale: 0
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   KickFXPivot: {fileID: 1630707899577583179}
-  InjureFX: Hit_BloodBlade
-  InjureFXScale: 2
-  HealFX: None
-  HealFXScale: 1
-  DieFX: Hit_EvilBigGravBall
-  DieFXScale: 2
+  InjureFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: (ce3a827b-7df7-4a62-ad01-ced312be7a9d)
+    UseCurve: 0
+    FXScale: 1
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  HealFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: 
+    UseCurve: 0
+    FXScale: 0
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  DieFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: (b8941754-d9a0-4817-bec1-c2ac26335d54)
+    UseCurve: 0
+    FXScale: 2
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   DashForce: 10
   Accelerate: 250
   KickForce: 5
@@ -377,11 +401,30 @@ MonoBehaviour:
   KickableBoxList: []
   LiftableBoxList: []
   ThrowableBoxList: []
-  DieDropBoxTypeName: FireBox
-  DieDropBoxOrientation: 0
-  DieDropBoxProbabilityPercent: 100
-  FrozeFX: Hit_SnowFlake
-  ThawFX: Flash_CyanSlight
+  FrozeFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: 
+    UseCurve: 0
+    FXScale: 0
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  ThawFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: 
+    UseCurve: 0
+    FXScale: 0
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   RawFrozenBoxPassiveSkills:
   - id: 4
   IsInMicroWorld: 0
@@ -398,8 +441,18 @@ MonoBehaviour:
         EntityBuffAttribute: 19
         IsPermanent: 1
         Duration: 0
-        BuffFX: None
-        BuffFXScale: 1
+        BuffFX:
+          FXType:
+            TypeDefineType: 0
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
     00000001:
       type: {class: , ns: , asm: }
     00000002:
@@ -461,15 +514,27 @@ MonoBehaviour:
         TargetEntityType: 0
         CastOnTopLayer: 0
         AccurateStandardDeviation: 0
-        BattleIndicatorTypeName: GridWarning
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
         ProjectOffsetZMax: 0
         ProjectOffsetZMin: 0
         GridWarningColorFill: {r: 1, g: 0.11792451, b: 0.11792451, a: 0.6392157}
         GridWarningColorBorderHighlight: {r: 0.9433962, g: 0.4988594, b: 0.12904951,
           a: 0.68235296}
         GridWarningColorBorderDim: {r: 0.9716981, g: 0.5271004, b: 0.5271004, a: 0.65882355}
-        CastFX: Hit_LittleFireUp
-        CastFXScale: 1.5
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (496e4d78-62a6-4066-bbc6-b75bf11aa688)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
         RawEntityBuffs:
         - id: 6
     00000004:
@@ -490,7 +555,9 @@ MonoBehaviour:
       type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
       data:
         DropBoxList:
-        - BoxTypeName: FireBox
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (65e613ca-1b8c-4002-84d1-0c49ea3b0903)
           BoxOrientation: 0
           probability: 1
           isSingleton: 0
@@ -505,8 +572,18 @@ MonoBehaviour:
         EntityBuffAttribute: 17
         IsPermanent: 0
         Duration: 0
-        BuffFX: None
-        BuffFXScale: 1
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
         EntityStatType: 101
         Delta: 350
         Percent: 0
@@ -525,8 +602,18 @@ MonoBehaviour:
         EntityBuffAttribute: 17
         IsPermanent: 0
         Duration: 0
-        BuffFX: None
-        BuffFXScale: 1
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
         EntityStatType: 101
         Delta: 300
         Percent: 0

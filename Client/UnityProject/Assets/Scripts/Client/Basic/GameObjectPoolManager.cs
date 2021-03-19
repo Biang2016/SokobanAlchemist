@@ -99,7 +99,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             }
         }
 
-        foreach (KeyValuePair<ushort, string> kv in ConfigManager.BoxTypeDefineDict.TypeNameDict)
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict)
         {
             string prefabName = kv.Value;
             GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
@@ -124,7 +124,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             }
         }
 
-        foreach (KeyValuePair<ushort, string> kv in ConfigManager.EnemyTypeDefineDict.TypeNameDict)
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.Enemy].TypeNameDict)
         {
             string prefabName = kv.Value;
             GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
@@ -139,7 +139,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             }
         }
 
-        foreach (KeyValuePair<ushort, string> kv in ConfigManager.LevelTriggerTypeDefineDict.TypeNameDict)
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.LevelTrigger].TypeNameDict)
         {
             string prefabName = kv.Value;
             GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
@@ -154,7 +154,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             }
         }
 
-        foreach (KeyValuePair<ushort, string> kv in ConfigManager.BattleIndicatorTypeDefineDict.TypeNameDict)
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.BattleIndicator].TypeNameDict)
         {
             string prefabName = kv.Value;
             GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
@@ -169,7 +169,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             }
         }
 
-        foreach (KeyValuePair<ushort, string> kv in ConfigManager.FXTypeDefineDict.TypeNameDict)
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.FX].TypeNameDict)
         {
             string prefabName = kv.Value;
             GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
@@ -256,14 +256,14 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         int boxWarmUpPerFrame = 0;
         int totalWarmUpTask = 0;
         int totalWarmUpTaskCount = 0;
-        foreach (KeyValuePair<ushort, string> kv in ConfigManager.BoxTypeDefineDict.TypeNameDict)
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict)
         {
             totalWarmUpTask += GetBoxWarmUpNum(kv) * 2;
         }
 
         totalWarmUpTask += worldModuleWarmUpCount * 2;
 
-        foreach (KeyValuePair<ushort, string> kv in ConfigManager.BoxTypeDefineDict.TypeNameDict)
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict)
         {
             GameObjectPool pool = BoxDict[kv.Key];
             int warmUpNum = GetBoxWarmUpNum(kv);

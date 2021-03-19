@@ -135,7 +135,7 @@ namespace BiangLibrary
             string[] coloredStrings = new string[args.Length];
             for (int i = 0; i < args.Length; i++)
             {
-                coloredStrings[i] = "<" + color + ">" + args[i] + "</color>";
+                coloredStrings[i] = "<color=" + color + ">" + args[i] + "</color>";
             }
 
             return String.Format(src, coloredStrings);

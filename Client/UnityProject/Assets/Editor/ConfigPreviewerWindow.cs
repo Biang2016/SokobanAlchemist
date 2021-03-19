@@ -15,35 +15,35 @@ public class ConfigPreviewerWindow : OdinEditorWindow
 
     [ShowInInspector]
     [LabelText("箱子类型表")]
-    public SortedDictionary<ushort, string> BoxTypeNameDict => ConfigManager.BoxTypeDefineDict.TypeNameDict;
+    public SortedDictionary<ushort, string> BoxTypeNameDict => ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict;
 
     [ShowInInspector]
     [LabelText("箱子icon类型表")]
-    public SortedDictionary<ushort, string> BoxIconTypeNameDict => ConfigManager.BoxIconTypeDefineDict.TypeNameDict;
+    public SortedDictionary<ushort, string> BoxIconTypeNameDict => ConfigManager.TypeDefineConfigs[TypeDefineType.BoxIcon].TypeNameDict;
 
     [ShowInInspector]
     [LabelText("敌人类型表")]
-    public SortedDictionary<ushort, string> EnemyTypeNameDict => ConfigManager.EnemyTypeDefineDict.TypeNameDict;
+    public SortedDictionary<ushort, string> EnemyTypeNameDict => ConfigManager.TypeDefineConfigs[TypeDefineType.Enemy].TypeNameDict;
 
     [ShowInInspector]
     [LabelText("关卡Trigger类型表")]
-    public SortedDictionary<ushort, string> LevelTriggerTypeNameDict => ConfigManager.LevelTriggerTypeDefineDict.TypeNameDict;
+    public SortedDictionary<ushort, string> LevelTriggerTypeNameDict => ConfigManager.TypeDefineConfigs[TypeDefineType.LevelTrigger].TypeNameDict;
 
     [ShowInInspector]
     [LabelText("世界模组类型表")]
-    public SortedDictionary<ushort, string> WorldModuleTypeNameDict => ConfigManager.WorldModuleTypeDefineDict.TypeNameDict;
+    public SortedDictionary<ushort, string> WorldModuleTypeNameDict => ConfigManager.TypeDefineConfigs[TypeDefineType.WorldModule].TypeNameDict;
 
     [ShowInInspector]
     [LabelText("世界类型表")]
-    public SortedDictionary<ushort, string> WorldTypeNameDict => ConfigManager.WorldTypeDefineDict.TypeNameDict;
+    public SortedDictionary<ushort, string> WorldTypeNameDict => ConfigManager.TypeDefineConfigs[TypeDefineType.World].TypeNameDict;
 
     [ShowInInspector]
     [LabelText("FX类型表")]
-    public SortedDictionary<ushort, string> FXTypeDefineDict => ConfigManager.FXTypeDefineDict.TypeNameDict;
+    public SortedDictionary<ushort, string> FXTypeDefineDict => ConfigManager.TypeDefineConfigs[TypeDefineType.FX].TypeNameDict;
 
     [ShowInInspector]
     [LabelText("BattleIndicator类型表")]
-    public SortedDictionary<ushort, string> BattleIndicatorTypeDefineDict => ConfigManager.BattleIndicatorTypeDefineDict.TypeNameDict;
+    public SortedDictionary<ushort, string> BattleIndicatorTypeDefineDict => ConfigManager.TypeDefineConfigs[TypeDefineType.BattleIndicator].TypeNameDict;
 
     [ShowInInspector]
     [LabelText("世界模组配置表")]

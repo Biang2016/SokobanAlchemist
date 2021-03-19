@@ -37,7 +37,7 @@ public class BornPointDesignHelper : MonoBehaviour
             return false;
         }
 
-        string goName = "BornPoint_" + BornPointData.ActorTypeName;
+        string goName = BornPointData.IsPlayer ? PlayerNumber.Player1.ToString() : ("BornPoint_" + BornPointData.EnemyType.TypeName);
         goName += string.IsNullOrEmpty(BornPointData.BornPointAlias) ? "" : "_" + BornPointData.BornPointAlias;
         dirty = !gameObject.name.Equals(goName);
         gameObject.name = goName;
@@ -60,7 +60,15 @@ public class BornPointDesignHelper : MonoBehaviour
 
             Gizmos.color = gizmosColor;
             Gizmos.DrawSphere(transform.position + Vector3.left * 0.25f + Vector3.forward * 0.25f, 0.1f);
-            transform.DrawSpecialTip(Vector3.up + Vector3.left * 0.15f + Vector3.forward * -0.2f, gizmosColor, gizmosColor, BornPointData.ActorTypeName.Replace("Enemy", ""));
+            if (BornPointData.IsPlayer)
+            {
+                transform.DrawSpecialTip(Vector3.up + Vector3.left * 0.15f + Vector3.forward * -0.2f, gizmosColor, gizmosColor, PlayerNumber.Player1.ToString());
+            }
+            else
+            {
+                transform.DrawSpecialTip(Vector3.up + Vector3.left * 0.15f + Vector3.forward * -0.2f, gizmosColor, gizmosColor, BornPointData.EnemyType.TypeName.Replace("Enemy", ""));
+            }
+
             if (ProbablyShow < 100)
             {
                 transform.DrawSpecialTip(Vector3.left * 0.5f + Vector3.forward * 0.05f, Color.clear, Color.yellow, $"{ProbablyShow}%现");

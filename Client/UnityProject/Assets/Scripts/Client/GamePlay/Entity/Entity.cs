@@ -492,13 +492,6 @@ public abstract class Entity : PoolObject
     {
         return GUID.GetHashCode();
     }
-
-    #region Utils
-
-    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
-    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
-
-    #endregion
 }
 
 public static class EntityUtils

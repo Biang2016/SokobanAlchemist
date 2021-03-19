@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Profiling;
+using UnityEngine.Serialization;
 
 [Serializable]
 public class EntityStatPropSet
@@ -114,12 +115,7 @@ public class EntityStatPropSet
 
     [BoxGroup("冰冻")]
     [LabelText("冰冻持续特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
-    public string FrozenFX;
-
-    [BoxGroup("冰冻")]
-    [LabelText("冰冻持续特效尺寸(x->冰冻等级")]
-    public AnimationCurve FrozenFXScaleCurve;
+    public FXConfig FrozenFX = new FXConfig();
 
     #endregion
 
@@ -151,21 +147,11 @@ public class EntityStatPropSet
 
     [BoxGroup("燃烧")]
     [LabelText("燃烧触发特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
-    public string StartFiringFX;
-
-    [BoxGroup("燃烧")]
-    [LabelText("燃烧触发特效尺寸")]
-    public float StartFiringFXScale;
+    public FXConfig StartFiringFX = new FXConfig();
 
     [BoxGroup("燃烧")]
     [LabelText("燃烧持续特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
-    public string FiringFX;
-
-    [BoxGroup("燃烧")]
-    [LabelText("燃烧持续特效尺寸(x->燃烧等级")]
-    public AnimationCurve FiringFXScaleCurve;
+    public FXConfig FiringFX = new FXConfig();
 
     #endregion
 
@@ -587,7 +573,7 @@ public class EntityStatPropSet
     private void OnFrozenValueChanged(int before, int after)
     {
         FrozenLevel.SetValue(after / FrozenValuePerLevel, "FrozenValueChange");
-        if (FrozenLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FrozenValue, FrozenFX, FrozenFXScaleCurve.Evaluate(FrozenLevel.Value)); // 冰冻值变化时，播放一次特效
+        if (FrozenLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FrozenValue, FrozenFX, FrozenLevel.Value); // 冰冻值变化时，播放一次特效
     }
 
     private UnityAction<int> OnFrozenValueIncreaseAction;
@@ -610,7 +596,7 @@ public class EntityStatPropSet
     {
         FiringLevel.SetValue(Mathf.RoundToInt(after / FiringValuePerLevel), "FiringValueChange");
         if (FiringLevel.Value > 0)
-            Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FiringValue, FiringFX, FiringFXScaleCurve.Evaluate(FiringLevel.Value)); // 燃烧值变化时，播放一次特效
+            Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FiringValue, FiringFX, FiringLevel.Value); // 燃烧值变化时，播放一次特效
         else if (after == 0) Entity.EntityBuffHelper.RemoveAbnormalStatFX((int) EntityStatType.FiringValue);
     }
 
@@ -631,7 +617,7 @@ public class EntityStatPropSet
             {
                 foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
                 {
-                    FX fx = FXManager.Instance.PlayFX(StartFiringFX, box.transform.position + Vector3.up * 0.5f + offset, StartFiringFXScale);
+                    FX fx = FXManager.Instance.PlayFX(StartFiringFX, box.transform.position + Vector3.up * 0.5f + offset);
                     if (fx) fx.transform.parent = box.transform;
                 }
             }
@@ -746,8 +732,7 @@ public class EntityStatPropSet
         FrozenValue.ApplyDataTo(target.FrozenValue);
         FrozenLevel.ApplyDataTo(target.FrozenLevel);
         FrozenDamageDefense.ApplyDataTo(target.FrozenDamageDefense);
-        target.FrozenFX = FrozenFX;
-        target.FrozenFXScaleCurve = FrozenFXScaleCurve; // 风险，此处没有深拷贝
+        target.FrozenFX.CopyDataFrom(FrozenFX);
 
         #endregion
 
@@ -758,10 +743,8 @@ public class EntityStatPropSet
         FiringLevel.ApplyDataTo(target.FiringLevel);
         FiringSpreadPercent.ApplyDataTo(target.FiringSpreadPercent);
         FiringDamageDefense.ApplyDataTo(target.FiringDamageDefense);
-        target.StartFiringFX = StartFiringFX;
-        target.StartFiringFXScale = StartFiringFXScale;
-        target.FiringFX = FiringFX;
-        target.FiringFXScaleCurve = FiringFXScaleCurve; // 风险，此处没有深拷贝
+        target.StartFiringFX.CopyDataFrom(StartFiringFX); 
+        target.FiringFX.CopyDataFrom(FiringFX); 
 
         #endregion
 
@@ -811,12 +794,6 @@ public class EntityStatPropSet
 
         target.RawEntityDefaultBuffs = RawEntityDefaultBuffs; // 由于是干数据，此处不克隆！
     }
-
-    #region Utils
-
-    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
-
-    #endregion
 }
 
 public enum EntitySkillIndex

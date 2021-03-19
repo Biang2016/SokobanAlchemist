@@ -34,6 +34,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: CollideFX.FXScale
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: MergeBox_MatchFive
       value: FlamethrowerBox
       objectReference: {fileID: 0}
@@ -54,8 +59,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: CollideFX_Test.TypeGUID
+      value: (ea39ef27-ca6b-4f0b-8407-618bd99d1b3a)
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: DestroyFX_Test.TypeGUID
+      value: (3d268a16-ced0-4df0-9de1-cc359d9664d7)
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: RawFlamethrowerFuelData
       value: Client EntityFlamethrowerHelper/FlamethrowerFuelData
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: CollideFX.FXType.TypeGUID
+      value: (ea39ef27-ca6b-4f0b-8407-618bd99d1b3a)
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -449,6 +469,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: BoxMergeConfig.BoxMergeConfigDataList.Array.data[0].MergeBox.TypeGUID
+      value: (a3c58376-afc3-4c2b-87e9-66bc1e3e2392)
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: RawEntityPassiveSkills.Array.data[0].ListenLevelEventAliasList.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -619,6 +644,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX.FXScale
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].EntityStatType
       value: 101
       objectReference: {fileID: 0}
@@ -631,6 +661,11 @@ PrefabInstance:
         type: 3}
       propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX
       value: None
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX.UseCurve
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -684,8 +719,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX_Config.FXScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX.FXType.TypeGUID
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX_Config.UseCurve
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX.FXScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].EntityStatType
       value: 101
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX.FXScale
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -694,13 +754,218 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX.UseCurve
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX.UseCurve
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].EntityBuffAttribute
       value: 17
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX.FXType.TypeDefineType
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].EntityBuffAttribute
       value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX_Config.FXType.TypeGUID
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX_Config.FXScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX_Config.FXScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX.FXType.TypeGUID
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX_Config.UseCurve
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX.FXType.TypeGUID
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX_Config.UseCurve
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX.AnimationCurve.m_PreInfinity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX_Config.FXType.TypeDefineType
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX.AnimationCurve.m_PostInfinity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX.FXType.TypeDefineType
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX.AnimationCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX.FXType.TypeDefineType
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX_Config.FXType.TypeGUID
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX_Config.FXType.TypeGUID
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX.AnimationCurve.m_Curve.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX_Config.AnimationCurve.m_PreInfinity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX_Config.AnimationCurve.m_PostInfinity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX.AnimationCurve.m_PreInfinity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX_Config.FXType.TypeDefineType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX_Config.AnimationCurve.m_RotationOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX.AnimationCurve.m_PreInfinity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX_Config.FXType.TypeDefineType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX.AnimationCurve.m_PostInfinity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX.AnimationCurve.m_PostInfinity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX.AnimationCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX.AnimationCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX_Config.AnimationCurve.m_Curve.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX.AnimationCurve.m_Curve.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX.AnimationCurve.m_Curve.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX_Config.AnimationCurve.m_PreInfinity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX_Config.AnimationCurve.m_PreInfinity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX_Config.AnimationCurve.m_PostInfinity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX_Config.AnimationCurve.m_PostInfinity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX_Config.AnimationCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX_Config.AnimationCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Stay.Array.data[0].BuffFX_Config.AnimationCurve.m_Curve.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX_Config.AnimationCurve.m_Curve.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 570053385983063175, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}

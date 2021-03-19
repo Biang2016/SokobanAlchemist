@@ -48,7 +48,7 @@ namespace UnityToolbarExtender
         {
             if (GUILayout.Button(new GUIContent("箱子编辑器"), ToolbarStyles.toolbarbutton))
             {
-                BoxEditorWindow.ShowBoxEditorWindow();
+                EntityEditorWindow.ShowBoxEditorWindow();
             }
 
             if (GUILayout.Button(new GUIContent("Buff克制编辑"), ToolbarStyles.toolbarbutton))

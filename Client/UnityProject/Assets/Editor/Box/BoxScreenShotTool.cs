@@ -19,12 +19,12 @@ public class BoxScreenShotTool : Editor
         CameraManager.Instance.FieldCamera.TargetConfigData.FOV = 10;
 
         bool cancel = false;
-        int totalCount = (ConfigManager.BoxTypeDefineDict.TypeIndexDict.Count - 2) * 12;
+        int totalCount = (ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeIndexDict.Count - 2) * 12;
         int count = 0;
         cancel = EditorUtility.DisplayCancelableProgressBar("拍照中", $"准备开始", 0);
         if (!cancel)
         {
-            foreach (KeyValuePair<string, ushort> kv in ConfigManager.BoxTypeDefineDict.TypeIndexDict)
+            foreach (KeyValuePair<string, ushort> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeIndexDict)
             {
                 if (cancel) break;
                 if (kv.Key.Equals("BorderBox_Hidden")) continue;

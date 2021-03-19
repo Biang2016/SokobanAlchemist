@@ -10,7 +10,6 @@ using Random = UnityEngine.Random;
 [Serializable]
 public class EntityPassiveSkillAction_DropBox : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction
 {
-    [BoxNameList]
     [LabelText("箱子类型概率")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<BoxNameWithProbability> DropBoxList = new List<BoxNameWithProbability>();
@@ -36,7 +35,7 @@ public class EntityPassiveSkillAction_DropBox : EntityPassiveSkillAction, Entity
             for (int i = 0; i < dropBoxCount; i++)
             {
                 BoxNameWithProbability bp = CommonUtils.GetRandomWithProbabilityFromList(DropBoxList);
-                ushort boxIndex = ConfigManager.GetBoxTypeIndex(bp.BoxTypeName);
+                ushort boxIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, bp.BoxTypeName.TypeName);
                 if (boxIndex == 0) return;
                 Box box = GameObjectPoolManager.Instance.BoxDict[boxIndex].AllocateGameObject<Box>(null);
                 GridPos3D worldGP = Entity.WorldGP;

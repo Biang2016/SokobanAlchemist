@@ -36,19 +36,19 @@ public abstract class MapGenerator
             case OpenWorld.GenerateStaticLayoutLayerData staticLayoutLayerData:
             {
                 MapGeneratorType = MapGeneratorType.StaticLayout;
-                StaticLayoutTypeIndex = ConfigManager.GetStaticLayoutTypeIndex(staticLayoutLayerData.StaticLayoutTypeName);
+                StaticLayoutTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.StaticLayout, staticLayoutLayerData.StaticLayoutTypeName.TypeName);
                 break;
             }
             case OpenWorld.GenerateBoxLayerData boxLayerData:
             {
                 MapGeneratorType = MapGeneratorType.Entity;
-                EntityTypeIndex = ConfigManager.GetBoxTypeIndex(boxLayerData.BoxTypeName);
+                EntityTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, boxLayerData.BoxTypeName.TypeName);
                 break;
             }
             case OpenWorld.GenerateActorLayerData actorLayerData:
             {
                 MapGeneratorType = MapGeneratorType.Entity;
-                EntityTypeIndex = ConfigManager.GetEnemyTypeIndex(actorLayerData.ActorTypeName);
+                EntityTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Enemy, actorLayerData.ActorTypeName.TypeName);
                 break;
             }
         }
@@ -71,7 +71,7 @@ public abstract class MapGenerator
             case MapGeneratorType.StaticLayout:
             {
                 OpenWorld.GenerateStaticLayoutLayerData staticLayoutLayerData = (OpenWorld.GenerateStaticLayoutLayerData) GenerateLayerData;
-                ushort staticLayoutTypeIndex = ConfigManager.GetStaticLayoutTypeIndex(staticLayoutLayerData.StaticLayoutTypeName);
+                ushort staticLayoutTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.StaticLayout, staticLayoutLayerData.StaticLayoutTypeName.TypeName);
                 WorldModuleData staticLayoutData = ConfigManager.GetStaticLayoutDataConfig(staticLayoutTypeIndex, false); // 不拷贝，只读数据，避免运行时动态加载GC
                 GridPosR.Orientation staticLayoutOrientation = (GridPosR.Orientation) SRandom.Next(4);
 
@@ -197,7 +197,7 @@ public abstract class MapGenerator
 
                     foreach (BornPointData enemyBornPoint in staticLayoutData.WorldModuleBornPointGroupData.EnemyBornPoints)
                     {
-                        ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(enemyBornPoint.ActorTypeName);
+                        ushort enemyTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Enemy, enemyBornPoint.EnemyType.TypeName);
                         if (enemyTypeIndex != 0)
                         {
                             GridPos3D enemyGP_rotated = enemyBornPoint.LocalGP;
@@ -240,7 +240,7 @@ public abstract class MapGenerator
 
                                     GridPos3D playerBPWorldGP = new GridPos3D(world_x + rot_local_x, WorldModule.MODULE_SIZE, world_z + rot_local_z);
                                     GridPos3D playerBPLocal = new GridPos3D(playerBPWorldGP.x % WorldModule.MODULE_SIZE, 0, playerBPWorldGP.z % WorldModule.MODULE_SIZE);
-                                    BornPointData bp = new BornPointData {ActorTypeName = "Player1", BornPointAlias = OpenWorld.PLAYER_DEFAULT_BP, LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorldGP};
+                                    BornPointData bp = new BornPointData {IsPlayer = true, EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy}, BornPointAlias = OpenWorld.PLAYER_DEFAULT_BP, LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorldGP};
                                     bp.InitGUID();
                                     m_OpenWorld.WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP_OpenWorld(bp);
                                     m_OpenWorld.InitialPlayerBP = playerBPWorldGP;
@@ -279,7 +279,7 @@ public abstract class MapGenerator
                         ConfigManager.TypeStartIndex occupiedIndexType = occupiedIndex.ConvertToTypeStartIndex();
                         switch (occupiedIndexType)
                         {
-                            case ConfigManager.TypeStartIndex.Box when !GenerateLayerData.AllowReplacedBoxTypeNameSet.Contains(ConfigManager.GetBoxTypeName(occupiedIndex)):
+                            case ConfigManager.TypeStartIndex.Box when !GenerateLayerData.AllowReplacedBoxTypeNameSet.Contains(ConfigManager.GetTypeName(TypeDefineType.Box, occupiedIndex)):
                             case ConfigManager.TypeStartIndex.None when GenerateLayerData.OnlyOverrideAnyBox:
                             case ConfigManager.TypeStartIndex.Player:
                                 spaceAvailable = false;

@@ -12,10 +12,8 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
 
     protected override string Description => "更改箱子类型(仅箱子使用)";
 
-    [BoxName]
-    [LabelText("更改箱子类型为")]
-    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string ChangeBoxTypeTo = "None";
+    [LabelText("更改箱子为")]
+    public TypeSelectHelper ChangeBoxTypeToBoxName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
     [LabelText("更改的箱子的朝向")]
     public GridPosR.Orientation BoxOrientation;
@@ -35,7 +33,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
             worldGP = Box.transform.position.ToGridPos3D();
         }
 
-        ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(ChangeBoxTypeTo);
+        ushort boxTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, ChangeBoxTypeToBoxName.TypeName);
         if (ChangeForEveryGrid)
         {
             List<GridPos3D> occupations = Box.GetEntityOccupationGPs_Rotated();
@@ -75,7 +73,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
     {
         base.ChildClone(newAction);
         BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType) newAction);
-        action.ChangeBoxTypeTo = ChangeBoxTypeTo;
+        action.ChangeBoxTypeToBoxName = ChangeBoxTypeToBoxName.Clone();
         action.BoxOrientation = BoxOrientation;
         action.ChangeForEveryGrid = ChangeForEveryGrid;
     }
@@ -84,7 +82,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
     {
         base.CopyDataFrom(srcData);
         BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType) srcData);
-        ChangeBoxTypeTo = action.ChangeBoxTypeTo;
+        ChangeBoxTypeToBoxName.CopyDataFrom(action.ChangeBoxTypeToBoxName);
         BoxOrientation = action.BoxOrientation;
         ChangeForEveryGrid = action.ChangeForEveryGrid;
     }

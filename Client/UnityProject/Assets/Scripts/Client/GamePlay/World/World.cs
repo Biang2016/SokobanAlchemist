@@ -596,7 +596,7 @@ public class World : PoolObject
                     Box box = module.GenerateBox(newBoxTypeIndex, mergeTargetWorldGP, newBoxOrientation, false, false, null, true); // 合成生成的箱子允许往上方堆
                     if (box != null)
                     {
-                        FXManager.Instance.PlayFX(box.MergedFX, box.transform.position, box.MergedFXScale);
+                        FXManager.Instance.PlayFX(box.MergedFX, box.transform.position);
                         TryMerge(direction, new HashSet<Box> {box});
                     }
                 }

@@ -63,7 +63,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
             GameObject boxEditorPrefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
             string boxName = boxEditorPrefab.name.Replace("_LevelEditor", "");
-            ushort boxTypeIndex = ConfigManager.BoxTypeDefineDict.TypeIndexDict[boxName];
+            ushort boxTypeIndex = ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeIndexDict[boxName];
 
             bool isLevelEventTriggerAppearBox = false;
             foreach (EntityPassiveSkill eps in box.RawEntityExtraSerializeData.EntityPassiveSkills)
@@ -91,8 +91,8 @@ public class WorldModuleDesignHelper : MonoBehaviour
                     if (worldModuleData.BoxMatrix_Temp_CheckOverlap[gridPos.x, gridPos.y, gridPos.z] != 0)
                     {
                         spaceAvailable = false;
-                        string box1Name = ConfigManager.BoxTypeDefineDict.TypeNameDict[worldModuleData.BoxMatrix_Temp_CheckOverlap[gridPos.x, gridPos.y, gridPos.z]];
-                        string box2Name = ConfigManager.BoxTypeDefineDict.TypeNameDict[boxTypeIndex];
+                        string box1Name = ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict[worldModuleData.BoxMatrix_Temp_CheckOverlap[gridPos.x, gridPos.y, gridPos.z]];
+                        string box2Name = ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict[boxTypeIndex];
                         Debug.Log($"世界模组[{name}]的{gridPos}位置处存在重叠箱子{box1Name}和{box2Name},已忽略后者");
                     }
                 }
@@ -137,7 +137,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
         {
             LevelTriggerBase.Data data = (LevelTriggerBase.Data) trigger.TriggerData.Clone();
             GameObject levelTriggerPrefab = PrefabUtility.GetCorrespondingObjectFromSource(trigger.gameObject);
-            ushort levelTriggerTypeIndex = ConfigManager.LevelTriggerTypeDefineDict.TypeIndexDict[levelTriggerPrefab.name];
+            ushort levelTriggerTypeIndex = ConfigManager.TypeDefineConfigs[TypeDefineType.LevelTrigger].TypeIndexDict[levelTriggerPrefab.name];
             data.LevelTriggerTypeIndex = levelTriggerTypeIndex;
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(trigger.transform, 1);
             data.LocalGP = gp;
@@ -221,8 +221,8 @@ public class WorldModuleDesignHelper : MonoBehaviour
             Debug.LogError("此功能只能在世界编辑器中使用");
             return;
         }
-        
-        GameObject prefab = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(ConfigManager.FindWorldModulePrefabPathByName(ReplaceWorldModuleTypeName));
+
+        GameObject prefab = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(ConfigManager.FindWorldModulePrefabPathByName(ReplaceWorldModuleTypeName.TypeName));
         GameObject go = (GameObject) PrefabUtility.InstantiatePrefab(prefab, transform.parent);
         go.transform.position = transform.position;
         go.transform.rotation = Quaternion.identity;
@@ -235,15 +235,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
     [NonSerialized]
     [BoxGroup("世界编辑器")]
     [LabelText("替换世界模组类型")]
-    [ValueDropdown("GetAllWorldModuleTypeNames")]
-    private string ReplaceWorldModuleTypeName;
-
-    private IEnumerable<string> GetAllWorldModuleTypeNames()
-    {
-        ConfigManager.LoadAllConfigs();
-        List<string> res = ConfigManager.WorldModuleTypeDefineDict.TypeIndexDict.Keys.ToList();
-        return res;
-    }
+    private TypeSelectHelper ReplaceWorldModuleTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.WorldModule};
 
     public bool SortModule()
     {
@@ -370,56 +362,6 @@ public class WorldModuleDesignHelper : MonoBehaviour
         return dirty;
     }
 
-    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)
-    {
-        bool isDirty = false;
-        StringBuilder localInfo = new StringBuilder();
-        localInfo.Append($"------------ ModuleStart: {name}\n");
-        List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
-        foreach (LevelTriggerBase trigger in triggers)
-        {
-            isDirty |= trigger.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo);
-        }
-
-        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
-        foreach (Box_LevelEditor box in boxes)
-        {
-            if (box.RequireSerializePassiveSkillsIntoWorldModule)
-            {
-                isDirty |= box.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo);
-            }
-        }
-
-        localInfo.Append($"ModuleEnd: {name} ------------\n");
-        if (isDirty) info.Append(localInfo);
-        return isDirty;
-    }
-
-    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info)
-    {
-        bool isDirty = false;
-        StringBuilder localInfo = new StringBuilder();
-        localInfo.Append($"------------ ModuleStart: {name}\n");
-        List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
-        foreach (LevelTriggerBase trigger in triggers)
-        {
-            isDirty |= trigger.DeleteBoxTypeName(srcBoxName, localInfo);
-        }
-
-        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
-        foreach (Box_LevelEditor box in boxes)
-        {
-            if (box.RequireSerializePassiveSkillsIntoWorldModule)
-            {
-                isDirty |= box.DeleteBoxTypeName(srcBoxName, localInfo);
-            }
-        }
-
-        localInfo.Append($"ModuleEnd: {name} ------------\n");
-        if (isDirty) info.Append(localInfo);
-        return isDirty;
-    }
-
     public bool RefreshBoxLevelEditor()
     {
         bool isDirty = false;
@@ -430,6 +372,19 @@ public class WorldModuleDesignHelper : MonoBehaviour
         }
 
         return isDirty;
+    }
+
+    public bool RefreshBornPointDesignHelper()
+    {
+        //bool isDirty = false;
+        //List<BornPointDesignHelper> bps = GetComponentsInChildren<BornPointDesignHelper>().ToList();
+        //foreach (BornPointDesignHelper bp in bps)
+        //{
+        //    isDirty |= bp.RefreshData();
+        //}
+
+        //return isDirty;
+        return false;
     }
 
 #endif

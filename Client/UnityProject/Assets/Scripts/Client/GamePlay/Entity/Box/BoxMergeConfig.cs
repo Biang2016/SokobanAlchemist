@@ -14,7 +14,7 @@ public class BoxMergeConfig
         {
             if (data.MergeCount == mergeCount && (data.MergeOrientation & mergeOrientation) != 0)
             {
-                return ConfigManager.GetBoxTypeIndex(data.MergeBoxTypeName);
+                return ConfigManager.GetTypeIndex(TypeDefineType.Box, data.MergeBox.TypeName);
             }
         }
 
@@ -40,17 +40,13 @@ public class BoxMergeConfig
 [Serializable]
 public class BoxMergeConfigData
 {
-    public string Description => $"{MergeOrientation} Merge_{MergeCount}->{MergeBoxTypeName}";
+    public string Description => $"{MergeOrientation} Merge_{MergeCount}->{MergeBox.TypeName}";
 
     public int MergeCount = 3;
 
     public MergeOrientation MergeOrientation = MergeOrientation.XZ;
 
-    [BoxName]
-    [ValueDropdown("GetAllBoxTypeNames")]
-    public string MergeBoxTypeName;
-
-    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
+    public TypeSelectHelper MergeBox = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 }
 
 [Flags]

@@ -9,6 +9,7 @@ using DG.Tweening;
 using NodeCanvas.Framework;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Actor : Entity
 {
@@ -223,11 +224,11 @@ public class Actor : Entity
             case GridPosR.Orientation.Up:
                 return GridPos.Zero;
             case GridPosR.Orientation.Right:
-                return new GridPos(0, actorWidth-1);
+                return new GridPos(0, actorWidth - 1);
             case GridPosR.Orientation.Down:
-                return new GridPos(actorWidth-1, actorWidth-1);
+                return new GridPos(actorWidth - 1, actorWidth - 1);
             case GridPosR.Orientation.Left:
-                return new GridPos(actorWidth-1, 0);
+                return new GridPos(actorWidth - 1, 0);
         }
 
         return GridPos.Zero;
@@ -246,12 +247,7 @@ public class Actor : Entity
 
     [FoldoutGroup("特效")]
     [LabelText("踢特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
-    public string KickFX;
-
-    [FoldoutGroup("特效")]
-    [LabelText("踢特效尺寸")]
-    public float KickFXScale = 1f;
+    public FXConfig KickFX = new FXConfig();
 
     [FoldoutGroup("特效")]
     [LabelText("踢特效锚点")]
@@ -259,30 +255,15 @@ public class Actor : Entity
 
     [FoldoutGroup("特效")]
     [LabelText("受伤特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
-    public string InjureFX;
-
-    [FoldoutGroup("特效")]
-    [LabelText("受伤特效尺寸")]
-    public float InjureFXScale = 1f;
+    public FXConfig InjureFX = new FXConfig();
 
     [FoldoutGroup("特效")]
     [LabelText("生命恢复特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
-    public string HealFX;
-
-    [FoldoutGroup("特效")]
-    [LabelText("生命恢复特效尺寸")]
-    public float HealFXScale = 1f;
+    public FXConfig HealFX = new FXConfig();
 
     [FoldoutGroup("特效")]
     [LabelText("死亡特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择FX类型")]
-    public string DieFX;
-
-    [FoldoutGroup("特效")]
-    [LabelText("死亡特效尺寸")]
-    public float DieFXScale = 1f;
+    public FXConfig DieFX = new FXConfig();
 
     #endregion
 
@@ -310,47 +291,29 @@ public class Actor : Entity
 
     #region 推踢扔举能力
 
-    [BoxNameList]
     [FoldoutGroup("推踢扔举能力")]
     [LabelText("推箱子类型")]
-    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = true)]
-    public List<string> PushableBoxList = new List<string>();
+    [ListDrawerSettings(ListElementLabelName = "TypeName")]
+    public List<TypeSelectHelper> PushableBoxList = new List<TypeSelectHelper>();
 
-    [BoxNameList]
     [FoldoutGroup("推踢扔举能力")]
     [LabelText("踢箱子类型")]
-    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = true)]
-    public List<string> KickableBoxList = new List<string>();
+    [ListDrawerSettings(ListElementLabelName = "TypeName")]
+    public List<TypeSelectHelper> KickableBoxList = new List<TypeSelectHelper>();
 
-    [BoxNameList]
     [FoldoutGroup("推踢扔举能力")]
     [LabelText("举箱子类型")]
-    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = true)]
-    public List<string> LiftableBoxList = new List<string>();
+    [ListDrawerSettings(ListElementLabelName = "TypeName")]
+    public List<TypeSelectHelper> LiftableBoxList = new List<TypeSelectHelper>();
 
-    [BoxNameList]
     [FoldoutGroup("推踢扔举能力")]
     [LabelText("扔箱子类型")]
-    [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DropdownTitle = "选择箱子类型", DrawDropdownForListElements = true)]
-    public List<string> ThrowableBoxList = new List<string>();
+    [ListDrawerSettings(ListElementLabelName = "TypeName")]
+    public List<TypeSelectHelper> ThrowableBoxList = new List<TypeSelectHelper>();
 
     #endregion
 
     #region 死亡
-
-    [BoxName]
-    [FoldoutGroup("死亡")]
-    [LabelText("死亡掉落箱子")]
-    [ValueDropdown("GetAllBoxTypeNames")]
-    public string DieDropBoxTypeName = "None";
-
-    [FoldoutGroup("死亡")]
-    [LabelText("死亡掉落箱子朝向")]
-    public GridPosR.Orientation DieDropBoxOrientation;
-
-    [FoldoutGroup("死亡")]
-    [LabelText("死亡掉落箱子概率%")]
-    public uint DieDropBoxProbabilityPercent;
 
     public void Reborn()
     {
@@ -372,13 +335,11 @@ public class Actor : Entity
 
     [FoldoutGroup("冻结")]
     [LabelText("冻结特效")]
-    [ValueDropdown("GetAllFXTypeNames", IsUniqueList = true, DropdownTitle = "选择FX类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string FrozeFX;
+    public FXConfig FrozeFX = new FXConfig();
 
     [FoldoutGroup("冻结")]
     [LabelText("解冻特效")]
-    [ValueDropdown("GetAllFXTypeNames", IsUniqueList = true, DropdownTitle = "选择FX类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string ThawFX;
+    public FXConfig ThawFX = new FXConfig();
 
     [SerializeReference]
     [FoldoutGroup("冻结")]
@@ -570,7 +531,7 @@ public class Actor : Entity
         GUID = GetGUID();
         if (actorCategory == ActorCategory.Creature)
         {
-            EntityTypeIndex = ConfigManager.GetEnemyTypeIndex(actorType);
+            EntityTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Enemy, actorType);
         }
         else if (actorCategory == ActorCategory.Player)
         {
@@ -969,7 +930,6 @@ public class Actor : Entity
                 EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue, "Kick");
                 box.Kick(CurForward, KickForce, this);
                 FX kickFX = FXManager.Instance.PlayFX(KickFX, KickFXPivot.position);
-                if (kickFX) kickFX.transform.localScale = Vector3.one * KickFXScale;
             }
         }
     }
@@ -1153,139 +1113,4 @@ public class Actor : Entity
     }
 
     #endregion
-
-#if UNITY_EDITOR
-    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)
-    {
-        bool isDirty = false;
-        foreach (FieldInfo fi in GetType().GetFields(BindingFlags.Instance | BindingFlags.Public))
-        {
-            foreach (Attribute a in fi.GetCustomAttributes(false))
-            {
-                if (a is BoxNameAttribute)
-                {
-                    if (fi.FieldType == typeof(string))
-                    {
-                        string fieldValue = (string) fi.GetValue(this);
-                        if (fieldValue == srcBoxName)
-                        {
-                            isDirty = true;
-                            info.Append($"替换{name}.{fi.Name} -> '{targetBoxName}'\n");
-                            fi.SetValue(this, targetBoxName);
-                        }
-                    }
-                }
-                else if (a is BoxNameListAttribute)
-                {
-                    if (fi.FieldType == typeof(List<string>))
-                    {
-                        List<string> fieldValueList = (List<string>) fi.GetValue(this);
-                        for (int i = 0; i < fieldValueList.Count; i++)
-                        {
-                            string fieldValue = fieldValueList[i];
-                            if (fieldValue == srcBoxName)
-                            {
-                                isDirty = true;
-                                info.Append($"替换于{name}.{fi.Name}\n");
-                                fieldValueList[i] = targetBoxName;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (this is EnemyActor enemyActor)
-        {
-            NodeCanvas.Framework.GraphOwner tempGraphOwner = GetComponent<GraphOwner>();
-            if (tempGraphOwner)
-            {
-                Variable<List<string>> liftBoxTypeNames = tempGraphOwner.blackboard.GetVariable<List<string>>("LiftBoxTypeNames");
-                if (liftBoxTypeNames != null)
-                {
-                    for (int index = 0; index < liftBoxTypeNames.value.Count; index++)
-                    {
-                        string boxTypeName = liftBoxTypeNames.value[index];
-                        if (boxTypeName == srcBoxName)
-                        {
-                            isDirty = true;
-                            info.Append($"替换于{name}.FSM.BB.LiftBoxTypeNames\n");
-                            liftBoxTypeNames.value[index] = targetBoxName;
-                        }
-                    }
-                }
-            }
-        }
-
-        return isDirty;
-    }
-
-    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info)
-    {
-        bool isDirty = false;
-        foreach (FieldInfo fi in GetType().GetFields(BindingFlags.Instance | BindingFlags.Public))
-        {
-            foreach (Attribute a in fi.GetCustomAttributes(false))
-            {
-                if (a is BoxNameAttribute)
-                {
-                    if (fi.FieldType == typeof(string))
-                    {
-                        string fieldValue = (string) fi.GetValue(this);
-                        if (fieldValue == srcBoxName)
-                        {
-                            isDirty = true;
-                            info.Append($"替换{name}.{fi.Name} -> 'None'\n");
-                            fi.SetValue(this, "None");
-                        }
-                    }
-                }
-                else if (a is BoxNameListAttribute)
-                {
-                    if (fi.FieldType == typeof(List<string>))
-                    {
-                        List<string> fieldValueList = (List<string>) fi.GetValue(this);
-                        for (int i = 0; i < fieldValueList.Count; i++)
-                        {
-                            string fieldValue = fieldValueList[i];
-                            if (fieldValue == srcBoxName)
-                            {
-                                isDirty = true;
-                                info.Append($"移除自{name}.{fi.Name}\n");
-                                fieldValueList.RemoveAt(i);
-                                i--;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (this is EnemyActor enemyActor)
-        {
-            GraphOwner tempGraphOwner = GetComponent<GraphOwner>();
-            if (tempGraphOwner)
-            {
-                Variable<List<string>> liftBoxTypeNames = tempGraphOwner.blackboard.GetVariable<List<string>>("LiftBoxTypeNames");
-                if (liftBoxTypeNames != null)
-                {
-                    for (int index = 0; index < liftBoxTypeNames.value.Count; index++)
-                    {
-                        string boxTypeName = liftBoxTypeNames.value[index];
-                        if (boxTypeName == srcBoxName)
-                        {
-                            isDirty = true;
-                            info.Append($"移除自{name}.FSM.BB.LiftBoxTypeNames\n");
-                            liftBoxTypeNames.value.RemoveAt(index);
-                            index--;
-                        }
-                    }
-                }
-            }
-        }
-
-        return isDirty;
-    }
-
-#endif
 }

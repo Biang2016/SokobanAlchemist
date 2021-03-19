@@ -275,7 +275,7 @@ public class DebugPanel : BaseUIPanel
 
     public List<string> GetAllWorldNames()
     {
-        return ConfigManager.GetAllWorldNames(false);
+        return ConfigManager.GetAllTypeNames(TypeDefineType.World, false);
     }
 
     [DebugButton("SwitchBornPoint/{0}", "GetAllWorldPlayerBornPoints", -9)]

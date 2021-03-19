@@ -7,6 +7,7 @@ using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 [Serializable]
@@ -107,10 +108,9 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     public float AccurateStandardDeviation;
 
     [LabelText("技能范围标识类型")]
-    [ValueDropdown("GetAllBattleIndicatorNames", DropdownTitle = "选择技能范围标识类型")]
-    public string BattleIndicatorTypeName;
+    public TypeSelectHelper BattleIndicatorTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.BattleIndicator};
 
-    private ushort BattleIndicatorTypeIndex => ConfigManager.GetBattleIndicatorTypeIndex(BattleIndicatorTypeName);
+    private ushort BattleIndicatorTypeIndex => ConfigManager.GetTypeIndex(TypeDefineType.BattleIndicator, BattleIndicatorTypeName.TypeName);
 
     [LabelText("技能投影最高Z偏移")]
     public int ProjectOffsetZMax;
@@ -128,11 +128,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     public Color GridWarningColorBorderDim;
 
     [LabelText("释放特效")]
-    [ValueDropdown("GetAllFXTypeNames", DropdownTitle = "选择技能释放特效")]
-    public string CastFX;
-
-    [LabelText("释放特效尺寸")]
-    public float CastFXScale;
+    public FXConfig CastFX = new FXConfig();
 
     internal Dictionary<GridPos3D, GridWarning> GridWarningDict = new Dictionary<GridPos3D, GridWarning>();
 
@@ -283,15 +279,11 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     protected override IEnumerator Cast(float castDuration)
     {
         UpdateSkillEffectRealPositions();
-        if (!string.IsNullOrWhiteSpace(CastFX))
+        if (!CastFX.Empty)
         {
-            ushort fxTypeIndex = ConfigManager.GetFXTypeIndex(CastFX);
-            if (fxTypeIndex != 0)
+            foreach (GridPos3D gp in RealSkillEffectGPs)
             {
-                foreach (GridPos3D gp in RealSkillEffectGPs)
-                {
-                    FX fx = FXManager.Instance.PlayFX(CastFX, gp, CastFXScale);
-                }
+                FX fx = FXManager.Instance.PlayFX(CastFX, gp);
             }
         }
 
@@ -406,8 +398,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         newEAS.GridWarningColorFill = GridWarningColorFill;
         newEAS.GridWarningColorBorderHighlight = GridWarningColorBorderHighlight;
         newEAS.GridWarningColorBorderDim = GridWarningColorBorderDim;
-        newEAS.CastFX = CastFX;
-        newEAS.CastFXScale = CastFXScale;
+        newEAS.CastFX = CastFX.Clone();
     }
 
     public override void CopyDataFrom(EntityActiveSkill srcData)
@@ -426,7 +417,6 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         GridWarningColorFill = srcEAS.GridWarningColorFill;
         GridWarningColorBorderHighlight = srcEAS.GridWarningColorBorderHighlight;
         GridWarningColorBorderDim = srcEAS.GridWarningColorBorderDim;
-        CastFX = srcEAS.CastFX;
-        CastFXScale = srcEAS.CastFXScale;
+        CastFX.CopyDataFrom(srcEAS.CastFX);
     }
 }

@@ -10,7 +10,6 @@ public class BoxPassiveSkillAction_DoorStateChange : BoxPassiveSkillAction, Enti
 
     protected override string Description => "更改门开关状态";
 
-    [BoxName]
     [LabelText("切换开关门状态")]
     public bool ToggleDoor;
 

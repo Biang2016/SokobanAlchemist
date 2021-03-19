@@ -41,11 +41,11 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
     {
         if (string.IsNullOrEmpty(ClientGameManager.DebugChangeWorldName))
         {
-            yield return Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetWorldTypeIndex(ClientGameManager.Instance.StartWorldName)));
+            yield return Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetTypeIndex(TypeDefineType.World, ClientGameManager.Instance.StartWorldName.TypeName)));
         }
         else
         {
-            yield return Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetWorldTypeIndex(ClientGameManager.DebugChangeWorldName)));
+            yield return Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetTypeIndex(TypeDefineType.World, ClientGameManager.DebugChangeWorldName)));
         }
     }
 

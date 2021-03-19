@@ -15,6 +15,9 @@ public class Projectile : PoolObject
     public string FlashFXName;
     public string HitFXName;
 
+    private FXConfig FXConfig_Flash;
+    private FXConfig FXConfig_Hit;
+
     [Button("生成Hit和Flash名称")]
     private void GenerateHitAndFlashName()
     {
@@ -39,6 +42,9 @@ public class Projectile : PoolObject
         Rigidbody = GetComponent<Rigidbody>();
         ProjectileColliderRoot = GetComponentInChildren<ProjectileColliderRoot>();
         ParticleSystem = GetComponentInChildren<ParticleSystem>();
+
+        FXConfig_Flash = new FXConfig(FlashFXName, 1f);
+        FXConfig_Hit = new FXConfig(HitFXName, 1f);
     }
 
     void Start()
@@ -109,7 +115,7 @@ public class Projectile : PoolObject
 
     public void PlayFlashEffect(Transform dummyPos)
     {
-        FX fx = FXManager.Instance.PlayFX(FlashFXName, dummyPos.position);
+        FX fx = FXManager.Instance.PlayFX(FXConfig_Flash, dummyPos.position);
         if (fx)
         {
             fx.transform.parent = dummyPos;
@@ -121,7 +127,7 @@ public class Projectile : PoolObject
 
     public void PlayHitEffect(Vector3 position, Vector3 direction)
     {
-        FX fx = FXManager.Instance.PlayFX(HitFXName, position);
+        FX fx = FXManager.Instance.PlayFX(FXConfig_Hit, position);
         if (fx)
         {
             fx.transform.localScale = Vector3.one * Scale;

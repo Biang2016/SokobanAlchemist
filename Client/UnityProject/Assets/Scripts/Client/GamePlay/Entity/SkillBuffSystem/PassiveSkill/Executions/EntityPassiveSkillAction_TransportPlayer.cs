@@ -24,7 +24,6 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
     [LabelText("传送类型")]
     public TransportType m_TransportType = TransportType.TransportToMicroWorld;
 
-    [BoxNameList]
     [ShowIf("m_TransportType", TransportType.TransportToMicroWorld)]
     [LabelText("世界类型概率")]
     public List<WorldNameWithProbability> WorldProbList = new List<WorldNameWithProbability>();
@@ -40,7 +39,7 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
                     if ((WorldManager.Instance.CurrentWorld is OpenWorld openWorld))
                     {
                         WorldNameWithProbability randomResult = CommonUtils.GetRandomFromList(WorldProbList);
-                        ushort worldTypeIndex = ConfigManager.GetWorldTypeIndex(randomResult.WorldTypeName);
+                        ushort worldTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, randomResult.WorldTypeName.TypeName);
                         if (worldTypeIndex != 0)
                         {
                             openWorld.TransportPlayerToMicroWorld(worldTypeIndex);

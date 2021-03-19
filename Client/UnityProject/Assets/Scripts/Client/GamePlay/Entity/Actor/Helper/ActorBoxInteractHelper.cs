@@ -13,32 +13,32 @@ public class ActorBoxInteractHelper : ActorMonoHelper
 
     public void Initialize()
     {
-        foreach (KeyValuePair<ushort, string> kv in ConfigManager.BoxTypeDefineDict.TypeNameDict)
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict)
         {
             InteractSkillDict.Add(kv.Key, 0);
         }
 
-        foreach (string boxName in Actor.PushableBoxList)
+        foreach (TypeSelectHelper boxName in Actor.PushableBoxList)
         {
-            ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
+            ushort boxTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, boxName.TypeName);
             InteractSkillDict[boxTypeIndex] |= InteractSkillType.Push;
         }
 
-        foreach (string boxName in Actor.KickableBoxList)
+        foreach (TypeSelectHelper boxName in Actor.KickableBoxList)
         {
-            ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
+            ushort boxTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, boxName.TypeName);
             InteractSkillDict[boxTypeIndex] |= InteractSkillType.Kick;
         }
 
-        foreach (string boxName in Actor.LiftableBoxList)
+        foreach (TypeSelectHelper boxName in Actor.LiftableBoxList)
         {
-            ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
+            ushort boxTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, boxName.TypeName);
             InteractSkillDict[boxTypeIndex] |= InteractSkillType.Lift;
         }
 
-        foreach (string boxName in Actor.ThrowableBoxList)
+        foreach (TypeSelectHelper boxName in Actor.ThrowableBoxList)
         {
-            ushort boxTypeIndex = ConfigManager.GetBoxTypeIndex(boxName);
+            ushort boxTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, boxName.TypeName);
             InteractSkillDict[boxTypeIndex] |= InteractSkillType.Throw;
         }
     }

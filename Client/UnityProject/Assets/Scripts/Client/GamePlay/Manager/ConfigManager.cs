@@ -42,6 +42,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     [BoxGroup("角色Buff相克表")]
     public static EntityBuffAttributeRelationship[,] EntityBuffAttributeMatrix; // [老Buff, 新Buff], Value: Buff克制关系
 
+    public static Dictionary<TypeDefineType, TypeGUIDMappingAsset.Mapping> TypeGUIDMappings = new Dictionary<TypeDefineType, TypeGUIDMappingAsset.Mapping>();
+
     public enum TypeStartIndex
     {
         None = 0,
@@ -57,7 +59,27 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         Player = 65535,
     }
 
-    public class TypeDefineConfig<T> where T : Object
+    public abstract class TypeDefineConfig
+    {
+        public Dictionary<string, ushort> TypeIndexDict = new Dictionary<string, ushort>();
+        public SortedDictionary<ushort, string> TypeNameDict = new SortedDictionary<ushort, string>();
+
+        public Dictionary<string, string> TypeAssetDataBasePathDict = new Dictionary<string, string>();
+
+        public abstract string AssetDataBaseFolderPath { get; }
+
+        public abstract string GetTypeAssetDataBasePath(string assetName);
+#if UNITY_EDITOR
+
+        public abstract void ExportTypeNames();
+
+#endif
+
+        public abstract void LoadTypeNames();
+        public abstract void Clear();
+    }
+
+    public class TypeDefineConfig<T> : TypeDefineConfig where T : Object
     {
         public TypeDefineConfig(string typeNamePrefix, string prefabFolder, bool includeSubFolder, TypeStartIndex typeStartIndex)
         {
@@ -73,14 +95,9 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         private bool IncludeSubFolder;
         private TypeStartIndex m_TypeStartIndex;
 
-        public Dictionary<string, ushort> TypeIndexDict = new Dictionary<string, ushort>();
-        public SortedDictionary<ushort, string> TypeNameDict = new SortedDictionary<ushort, string>();
+        public override string AssetDataBaseFolderPath => "Assets" + PrefabFolder_Relative;
 
-        public Dictionary<string, string> TypeAssetDataBasePathDict = new Dictionary<string, string>();
-
-        public string AssetDataBaseFolderPath => "Assets" + PrefabFolder_Relative;
-
-        public string GetTypeAssetDataBasePath(string assetName)
+        public override string GetTypeAssetDataBasePath(string assetName)
         {
             if (TypeAssetDataBasePathDict.TryGetValue(assetName, out string assetDataBasePath))
             {
@@ -93,7 +110,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
 
 #if UNITY_EDITOR
-        public void ExportTypeNames()
+        public override void ExportTypeNames()
         {
             Clear();
             TypeAssetDataBasePathDict.Clear();
@@ -164,7 +181,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
 #endif
 
-        public void LoadTypeNames()
+        public override void LoadTypeNames()
         {
             FileInfo fi = new FileInfo(TypeNamesConfig_File);
             if (fi.Exists)
@@ -182,48 +199,25 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             }
         }
 
-        public void Clear()
+        public override void Clear()
         {
             TypeIndexDict.Clear();
             TypeNameDict.Clear();
         }
     }
 
-    [ShowInInspector]
-    [LabelText("箱子类型表")]
-    public static readonly TypeDefineConfig<Box> BoxTypeDefineDict = new TypeDefineConfig<Box>("Box", "/Resources/Prefabs/Designs/Box", true, ConfigManager.TypeStartIndex.Box);
-
-    [ShowInInspector]
-    [LabelText("箱子Icon类型表")]
-    public static readonly TypeDefineConfig<Texture2D> BoxIconTypeDefineDict = new TypeDefineConfig<Texture2D>("BoxIcon", "/Resources/BoxIcons", true, ConfigManager.TypeStartIndex.BoxIcon);
-
-    [ShowInInspector]
-    [LabelText("敌人类型表")]
-    public static readonly TypeDefineConfig<EnemyActor> EnemyTypeDefineDict = new TypeDefineConfig<EnemyActor>("Enemy", "/Resources/Prefabs/Designs/Enemy", true, ConfigManager.TypeStartIndex.Enemy);
-
-    [ShowInInspector]
-    [LabelText("关卡Trigger类型表")]
-    public static readonly TypeDefineConfig<LevelTriggerBase> LevelTriggerTypeDefineDict = new TypeDefineConfig<LevelTriggerBase>("LevelTrigger", "/Resources/Prefabs/Designs/LevelTrigger", true, ConfigManager.TypeStartIndex.LevelTrigger);
-
-    [ShowInInspector]
-    [LabelText("世界模组类型表")]
-    public static readonly TypeDefineConfig<WorldModuleDesignHelper> WorldModuleTypeDefineDict = new TypeDefineConfig<WorldModuleDesignHelper>("WorldModule", "/Designs/WorldModule", true, ConfigManager.TypeStartIndex.WorldModule);
-
-    [ShowInInspector]
-    [LabelText("静态布局类型表")]
-    public static readonly TypeDefineConfig<WorldModuleDesignHelper> StaticLayoutTypeDefineDict = new TypeDefineConfig<WorldModuleDesignHelper>("StaticLayout", "/Designs/StaticLayout", true, ConfigManager.TypeStartIndex.StaticLayout);
-
-    [ShowInInspector]
-    [LabelText("世界类型表")]
-    public static readonly TypeDefineConfig<WorldDesignHelper> WorldTypeDefineDict = new TypeDefineConfig<WorldDesignHelper>("World", "/Designs/Worlds", true, ConfigManager.TypeStartIndex.World);
-
-    [ShowInInspector]
-    [LabelText("FX类型表")]
-    public static readonly TypeDefineConfig<FX> FXTypeDefineDict = new TypeDefineConfig<FX>("FX", "/Resources/Prefabs/FX", true, ConfigManager.TypeStartIndex.FX);
-
-    [ShowInInspector]
-    [LabelText("BattleIndicator类型表")]
-    public static readonly TypeDefineConfig<BattleIndicator> BattleIndicatorTypeDefineDict = new TypeDefineConfig<BattleIndicator>("BattleIndicator", "/Resources/Prefabs/BattleIndicator", true, ConfigManager.TypeStartIndex.BattleIndicator);
+    public static Dictionary<TypeDefineType, TypeDefineConfig> TypeDefineConfigs = new Dictionary<TypeDefineType, TypeDefineConfig>
+    {
+        {TypeDefineType.Box, new TypeDefineConfig<Box>("Box", "/Resources/Prefabs/Designs/Box", true, ConfigManager.TypeStartIndex.Box)},
+        {TypeDefineType.BoxIcon, new TypeDefineConfig<Texture2D>("BoxIcon", "/Resources/BoxIcons", true, ConfigManager.TypeStartIndex.BoxIcon)},
+        {TypeDefineType.Enemy, new TypeDefineConfig<EnemyActor>("Enemy", "/Resources/Prefabs/Designs/Enemy", true, ConfigManager.TypeStartIndex.Enemy)},
+        {TypeDefineType.LevelTrigger, new TypeDefineConfig<LevelTriggerBase>("LevelTrigger", "/Resources/Prefabs/Designs/LevelTrigger", true, ConfigManager.TypeStartIndex.LevelTrigger)},
+        {TypeDefineType.WorldModule, new TypeDefineConfig<WorldModuleDesignHelper>("WorldModule", "/Designs/WorldModule", true, ConfigManager.TypeStartIndex.WorldModule)},
+        {TypeDefineType.StaticLayout, new TypeDefineConfig<WorldModuleDesignHelper>("StaticLayout", "/Designs/StaticLayout", true, ConfigManager.TypeStartIndex.StaticLayout)},
+        {TypeDefineType.World, new TypeDefineConfig<WorldDesignHelper>("World", "/Designs/Worlds", true, ConfigManager.TypeStartIndex.World)},
+        {TypeDefineType.FX, new TypeDefineConfig<FX>("FX", "/Resources/Prefabs/FX", true, ConfigManager.TypeStartIndex.FX)},
+        {TypeDefineType.BattleIndicator, new TypeDefineConfig<BattleIndicator>("BattleIndicator", "/Resources/Prefabs/BattleIndicator", true, ConfigManager.TypeStartIndex.BattleIndicator)},
+    };
 
     [ShowInInspector]
     [LabelText("Entity占位配置表")]
@@ -246,6 +240,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static string EntityBuffAttributeMatrixAssetPath_Relative = "Buff/EntityBuffAttributeMatrixAsset.asset";
     public static string EntityBuffAttributeMatrixConfigFolder_Relative = "EntityBuffAttributeMatrix";
+    public static string TypeGUIDMappingAssetPath_Relative = "TypeGUIDMapping/TypeGUIDMappingAsset.asset";
+    public static string TypeGUIDMappingConfigFolder_Relative = "TypeGUIDMapping";
     public static string EntityOccupationConfigDictFolder_Relative = "Entity";
     public static string WorldModuleDataConfigFolder_Relative = "WorldModule";
     public static string StaticLayoutDataConfigFolder_Relative = "StaticLayout";
@@ -254,6 +250,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static string ConfigFolder_Build = Application.streamingAssetsPath + "/Configs/";
     public static string TypeNamesConfigFolder_Build = ConfigFolder_Build + "/TypeNames";
     public static string EntityBuffAttributeMatrixConfigFolder_Build = ConfigFolder_Build + EntityBuffAttributeMatrixConfigFolder_Relative + "/";
+    public static string TypeGUIDMappingConfigFolder_Build = ConfigFolder_Build + TypeGUIDMappingConfigFolder_Relative + "/";
     public static string EntityOccupationConfigDictFolder_Build = ConfigFolder_Build + EntityOccupationConfigDictFolder_Relative + "/";
     public static string WorldModuleDataConfigFolder_Build = ConfigFolder_Build + WorldModuleDataConfigFolder_Relative + "s/";
     public static string StaticLayoutDataConfigFolder_Build = ConfigFolder_Build + StaticLayoutDataConfigFolder_Relative + "s/";
@@ -266,15 +263,11 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     private static void Clear()
     {
-        BoxTypeDefineDict.Clear();
-        BoxIconTypeDefineDict.Clear();
-        EnemyTypeDefineDict.Clear();
-        LevelTriggerTypeDefineDict.Clear();
-        WorldModuleTypeDefineDict.Clear();
-        StaticLayoutTypeDefineDict.Clear();
-        WorldTypeDefineDict.Clear();
-        FXTypeDefineDict.Clear();
-        BattleIndicatorTypeDefineDict.Clear();
+        foreach (KeyValuePair<TypeDefineType, TypeDefineConfig> kv in TypeDefineConfigs)
+        {
+            kv.Value.Clear();
+        }
+
         EntityOccupationConfigDict.Clear();
         WorldModuleDataConfigDict.Clear();
         StaticLayoutDataConfigDict.Clear();
@@ -299,15 +292,19 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         Directory.CreateDirectory(ConfigFolder_Build);
 
         // 时序，先导出类型表
-        BoxTypeDefineDict.ExportTypeNames();
-        BoxIconTypeDefineDict.ExportTypeNames();
-        EnemyTypeDefineDict.ExportTypeNames();
-        LevelTriggerTypeDefineDict.ExportTypeNames();
-        WorldModuleTypeDefineDict.ExportTypeNames();
-        StaticLayoutTypeDefineDict.ExportTypeNames();
-        WorldTypeDefineDict.ExportTypeNames();
-        FXTypeDefineDict.ExportTypeNames();
-        BattleIndicatorTypeDefineDict.ExportTypeNames();
+        TypeGUIDMappingAsset typeMapping = GetTypeGUIDMappingAsset();
+        foreach (KeyValuePair<TypeDefineType, TypeDefineConfig> kv in TypeDefineConfigs)
+        {
+            kv.Value.ExportTypeNames();
+            foreach (KeyValuePair<string, ushort> _kv in kv.Value.TypeIndexDict)
+            {
+                typeMapping.TypeGUIDMappings[kv.Key].TryAddNewType(_kv.Key);
+            }
+        }
+
+        // 时序，后面的导出都需要映射表，因此映射表先导出并加载
+        ExportTypeGUIDMappingAsset(dataFormat);
+        LoadTypeGUIDMappingFromConfig(dataFormat);
 
         SortWorldModule();
         SortStaticLayouts();
@@ -331,15 +328,19 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         Directory.CreateDirectory(TypeNamesConfigFolder_Build);
 
         // 时序，先导出类型表
-        BoxTypeDefineDict.ExportTypeNames();
-        BoxIconTypeDefineDict.ExportTypeNames();
-        EnemyTypeDefineDict.ExportTypeNames();
-        LevelTriggerTypeDefineDict.ExportTypeNames();
-        WorldModuleTypeDefineDict.ExportTypeNames();
-        StaticLayoutTypeDefineDict.ExportTypeNames();
-        WorldTypeDefineDict.ExportTypeNames();
-        FXTypeDefineDict.ExportTypeNames();
-        BattleIndicatorTypeDefineDict.ExportTypeNames();
+        TypeGUIDMappingAsset typeMapping = GetTypeGUIDMappingAsset();
+        foreach (KeyValuePair<TypeDefineType, TypeDefineConfig> kv in TypeDefineConfigs)
+        {
+            kv.Value.ExportTypeNames();
+            foreach (KeyValuePair<string, ushort> _kv in kv.Value.TypeIndexDict)
+            {
+                typeMapping.TypeGUIDMappings[kv.Key].TryAddNewType(_kv.Key);
+            }
+        }
+
+        // 时序，后面的导出都需要映射表，因此映射表先导出并加载
+        ExportTypeGUIDMappingAsset(DataFormat.Binary);
+        LoadTypeGUIDMappingFromConfig(DataFormat.Binary);
 
         AssetDatabase.Refresh();
         IsLoaded = false;
@@ -347,12 +348,45 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         EditorUtility.DisplayDialog("提示", "快速序列化类型成功", "确定");
     }
 
+    public static TypeGUIDMappingAsset GetTypeGUIDMappingAsset()
+    {
+        FileInfo assetFile = new FileInfo(Application.dataPath + DesignRoot + TypeGUIDMappingAssetPath_Relative);
+        string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(assetFile.FullName);
+        Object configObj = AssetDatabase.LoadAssetAtPath<Object>(relativePath);
+        TypeGUIDMappingAsset configSSO = (TypeGUIDMappingAsset) configObj;
+        return configSSO;
+    }
+
+    public static void ExportTypeGUIDMappingAsset(DataFormat dataFormat)
+    {
+        string folder = TypeGUIDMappingConfigFolder_Build;
+        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+        string file = $"{folder}/TypeGUIDMapping.config";
+        if (File.Exists(file)) File.Delete(file);
+
+        TypeGUIDMappingAsset configSSO = GetTypeGUIDMappingAsset();
+
+        Dictionary<string, Dictionary<string, string>> exportDict = new Dictionary<string, Dictionary<string, string>>();
+        foreach (KeyValuePair<TypeDefineType, TypeGUIDMappingAsset.Mapping> kv in configSSO.TypeGUIDMappings)
+        {
+            exportDict.Add(kv.Key.ToString(), new Dictionary<string, string>());
+            foreach (KeyValuePair<string, string> _kv in kv.Value.Type_GUIDDict)
+            {
+                exportDict[kv.Key.ToString()].Add(_kv.Key, _kv.Value);
+            }
+        }
+
+        byte[] bytes = SerializationUtility.SerializeValue(exportDict, DataFormat.JSON);
+        File.WriteAllBytes(file, bytes);
+        AssetDatabase.Refresh();
+    }
+
     private static void SortWorldModule()
     {
-        List<string> worldModuleNames = WorldModuleTypeDefineDict.TypeIndexDict.Keys.ToList();
+        List<string> worldModuleNames = TypeDefineConfigs[TypeDefineType.WorldModule].TypeIndexDict.Keys.ToList();
         foreach (string worldModuleName in worldModuleNames)
         {
-            string prefabPath = WorldModuleTypeDefineDict.GetTypeAssetDataBasePath(worldModuleName);
+            string prefabPath = TypeDefineConfigs[TypeDefineType.WorldModule].GetTypeAssetDataBasePath(worldModuleName);
             GameObject worldModulePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
             if (worldModulePrefab)
             {
@@ -370,10 +404,10 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     private static void SortStaticLayouts()
     {
-        List<string> staticLayoutNames = StaticLayoutTypeDefineDict.TypeIndexDict.Keys.ToList();
+        List<string> staticLayoutNames = TypeDefineConfigs[TypeDefineType.StaticLayout].TypeIndexDict.Keys.ToList();
         foreach (string staticLayoutName in staticLayoutNames)
         {
-            string prefabPath = StaticLayoutTypeDefineDict.GetTypeAssetDataBasePath(staticLayoutName);
+            string prefabPath = TypeDefineConfigs[TypeDefineType.StaticLayout].GetTypeAssetDataBasePath(staticLayoutName);
             GameObject staticLayoutPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
             if (staticLayoutPrefab)
             {
@@ -391,10 +425,10 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     private static void SortWorld()
     {
-        List<string> worldNames = WorldTypeDefineDict.TypeIndexDict.Keys.ToList();
+        List<string> worldNames = TypeDefineConfigs[TypeDefineType.World].TypeIndexDict.Keys.ToList();
         foreach (string worldName in worldNames)
         {
-            string prefabPath = WorldTypeDefineDict.GetTypeAssetDataBasePath(worldName);
+            string prefabPath = TypeDefineConfigs[TypeDefineType.World].GetTypeAssetDataBasePath(worldName);
             GameObject worldPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
             if (worldPrefab)
             {
@@ -470,10 +504,10 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         if (File.Exists(file)) File.Delete(file);
 
         // Box's occupation
-        List<string> boxNames = BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
+        List<string> boxNames = TypeDefineConfigs[TypeDefineType.Box].TypeIndexDict.Keys.ToList();
         foreach (string boxName in boxNames)
         {
-            string prefabPath = BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName);
+            string prefabPath = TypeDefineConfigs[TypeDefineType.Box].GetTypeAssetDataBasePath(boxName);
             GameObject boxPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
             if (boxPrefab)
             {
@@ -482,7 +516,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 {
                     box.BoxIndicatorHelper.RefreshEntityIndicatorOccupationData();
                     EntityOccupationData occupationData = box.GetEntityOccupationGPs_Editor().Clone();
-                    ushort entityTypeIndex = BoxTypeDefineDict.TypeIndexDict[box.name];
+                    ushort entityTypeIndex = TypeDefineConfigs[TypeDefineType.Box].TypeIndexDict[box.name];
                     if (entityTypeIndex != 0)
                     {
                         EntityOccupationConfigDict.Add(entityTypeIndex, occupationData);
@@ -496,10 +530,10 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
 
         // Enemy's occupation
-        List<string> enemyNames = EnemyTypeDefineDict.TypeIndexDict.Keys.ToList();
+        List<string> enemyNames = TypeDefineConfigs[TypeDefineType.Enemy].TypeIndexDict.Keys.ToList();
         foreach (string enemyName in enemyNames)
         {
-            string prefabPath = EnemyTypeDefineDict.GetTypeAssetDataBasePath(enemyName);
+            string prefabPath = TypeDefineConfigs[TypeDefineType.Enemy].GetTypeAssetDataBasePath(enemyName);
             GameObject enemyPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
             if (enemyPrefab)
             {
@@ -508,7 +542,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 {
                     enemy.EntityIndicatorHelper.RefreshEntityIndicatorOccupationData();
                     EntityOccupationData occupationData = enemy.GetEntityOccupationGPs_Editor().Clone();
-                    ushort entityTypeIndex = EnemyTypeDefineDict.TypeIndexDict[enemy.name];
+                    ushort entityTypeIndex = TypeDefineConfigs[TypeDefineType.Enemy].TypeIndexDict[enemy.name];
                     if (entityTypeIndex != 0)
                     {
                         EntityOccupationConfigDict.Add(entityTypeIndex, occupationData);
@@ -545,7 +579,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
             WorldModuleDesignHelper module = obj.GetComponent<WorldModuleDesignHelper>();
             WorldModuleData data = module.ExportWorldModuleData();
-            WorldModuleTypeDefineDict.TypeIndexDict.TryGetValue(module.name, out ushort worldModuleTypeIndex);
+            TypeDefineConfigs[TypeDefineType.WorldModule].TypeIndexDict.TryGetValue(module.name, out ushort worldModuleTypeIndex);
             if (worldModuleTypeIndex != 0)
             {
                 data.WorldModuleTypeIndex = worldModuleTypeIndex;
@@ -573,7 +607,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
             WorldModuleDesignHelper module = obj.GetComponent<WorldModuleDesignHelper>();
             WorldModuleData data = module.ExportWorldModuleData();
-            StaticLayoutTypeDefineDict.TypeIndexDict.TryGetValue(module.name, out ushort worldModuleTypeIndex);
+            TypeDefineConfigs[TypeDefineType.StaticLayout].TypeIndexDict.TryGetValue(module.name, out ushort worldModuleTypeIndex);
             if (worldModuleTypeIndex != 0)
             {
                 data.WorldModuleTypeIndex = worldModuleTypeIndex;
@@ -601,7 +635,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
             WorldDesignHelper world = obj.GetComponent<WorldDesignHelper>();
             WorldData data = world.ExportWorldData();
-            WorldTypeDefineDict.TypeIndexDict.TryGetValue(world.name, out ushort worldTypeIndex);
+            TypeDefineConfigs[TypeDefineType.World].TypeIndexDict.TryGetValue(world.name, out ushort worldTypeIndex);
             if (worldTypeIndex != 0)
             {
                 data.WorldTypeIndex = worldTypeIndex;
@@ -636,16 +670,12 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         AllBuffAttributeTypes = Enum.GetValues(typeof(EntityBuffAttribute));
 
-        BoxTypeDefineDict.LoadTypeNames();
-        BoxIconTypeDefineDict.LoadTypeNames();
-        EnemyTypeDefineDict.LoadTypeNames();
-        LevelTriggerTypeDefineDict.LoadTypeNames();
-        WorldModuleTypeDefineDict.LoadTypeNames();
-        StaticLayoutTypeDefineDict.LoadTypeNames();
-        WorldTypeDefineDict.LoadTypeNames();
-        FXTypeDefineDict.LoadTypeNames();
-        BattleIndicatorTypeDefineDict.LoadTypeNames();
+        foreach (KeyValuePair<TypeDefineType, TypeDefineConfig> kv in TypeDefineConfigs)
+        {
+            kv.Value.LoadTypeNames();
+        }
 
+        LoadTypeGUIDMappingFromConfig(dataFormat);
         LoadEntityBuffStatPropertyEnumReflection();
         LoadEntityBuffAttributeMatrixFromConfig(dataFormat);
         LoadEntityOccupationDataConfig(dataFormat);
@@ -654,6 +684,29 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         LoadWorldDataConfig(dataFormat);
 
         IsLoaded = true;
+    }
+
+    public static void LoadTypeGUIDMappingFromConfig(DataFormat dataFormat)
+    {
+        string file = $"{TypeGUIDMappingConfigFolder_Build}/TypeGUIDMapping.config";
+        FileInfo fi = new FileInfo(file);
+        if (fi.Exists)
+        {
+            byte[] bytes = File.ReadAllBytes(fi.FullName);
+            TypeGUIDMappings.Clear();
+            Dictionary<string, Dictionary<string, string>> loadDict = SerializationUtility.DeserializeValue<Dictionary<string, Dictionary<string, string>>>(bytes, DataFormat.JSON);
+            foreach (KeyValuePair<string, Dictionary<string, string>> kv in loadDict)
+            {
+                if (Enum.TryParse(kv.Key, out TypeDefineType typeDefineType))
+                {
+                    TypeGUIDMappings.Add(typeDefineType, new TypeGUIDMappingAsset.Mapping());
+                    foreach (KeyValuePair<string, string> _kv in kv.Value)
+                    {
+                        TypeGUIDMappings[typeDefineType].LoadData(_kv.Key, _kv.Value);
+                    }
+                }
+            }
+        }
     }
 
     public static void LoadEntityBuffStatPropertyEnumReflection()
@@ -852,14 +905,14 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static IEnumerable AllBuffAttributeTypes;
 
-    public static ushort WorldModule_DeadZoneIndex => GetWorldModuleTypeIndex("Common_DeadZone");
-    public static ushort WorldModule_HiddenWallIndex => GetWorldModuleTypeIndex("Common_Wall_Hidden");
-    public static ushort WorldModule_OpenWorldModule => GetWorldModuleTypeIndex("OpenWorldModule");
-    public static ushort WorldModule_GroundIndex => GetWorldModuleTypeIndex("Common_Ground");
-    public static ushort Box_EnemyFrozenBoxIndex => GetBoxTypeIndex("EnemyFrozenBox");
-    public static ushort Box_GroundBoxIndex => GetBoxTypeIndex("GroundBox");
-    public static ushort Box_BrickBoxIndex => GetBoxTypeIndex("BrickBox");
-    public static ushort Box_CombinedGroundBoxIndex => GetBoxTypeIndex("CombinedGroundBox");
+    public static ushort WorldModule_DeadZoneIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_DeadZone");
+    public static ushort WorldModule_HiddenWallIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_Wall_Hidden");
+    public static ushort WorldModule_OpenWorldModule => GetTypeIndex(TypeDefineType.WorldModule, "OpenWorldModule");
+    public static ushort WorldModule_GroundIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_Ground");
+    public static ushort Box_EnemyFrozenBoxIndex => GetTypeIndex(TypeDefineType.Box, "EnemyFrozenBox");
+    public static ushort Box_GroundBoxIndex => GetTypeIndex(TypeDefineType.Box, "GroundBox");
+    public static ushort Box_BrickBoxIndex => GetTypeIndex(TypeDefineType.Box, "BrickBox");
+    public static ushort Box_CombinedGroundBoxIndex => GetTypeIndex(TypeDefineType.Box, "CombinedGroundBox");
 
     #endregion
 
@@ -870,270 +923,32 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return AllBuffAttributeTypes;
     }
 
-    // -------- Get All Type Names Starts--------
-
-    public static List<string> GetAllWorldModuleNames(bool withNone = true)
+    public static List<string> GetAllTypeNames(TypeDefineType typeDefineType, bool withNone = true)
     {
         LoadAllConfigs();
-        List<string> res = WorldModuleTypeDefineDict.TypeIndexDict.Keys.ToList();
+        List<string> res = TypeDefineConfigs[typeDefineType].TypeIndexDict.Keys.ToList();
         if (withNone) res.Insert(0, "None");
         return res;
     }
 
-    public static List<string> GetAllStaticLayoutNames(bool withNone = true)
-    {
-        LoadAllConfigs();
-        List<string> res = StaticLayoutTypeDefineDict.TypeIndexDict.Keys.ToList();
-        if (withNone) res.Insert(0, "None");
-        return res;
-    }
-
-    public static List<string> GetAllWorldNames(bool withNone = true)
-    {
-        LoadAllConfigs();
-        List<string> res = WorldTypeDefineDict.TypeIndexDict.Keys.ToList();
-        if (withNone) res.Insert(0, "None");
-        return res;
-    }
-
-    public static List<string> GetAllBoxTypeNames(bool withNone = true)
-    {
-        LoadAllConfigs();
-        List<string> res = BoxTypeDefineDict.TypeIndexDict.Keys.ToList();
-        if (withNone) res.Insert(0, "None");
-        return res;
-    }
-
-    public static List<string> GetAllBoxIconTypeNames(bool withNone = true)
-    {
-        LoadAllConfigs();
-        List<string> res = BoxIconTypeDefineDict.TypeIndexDict.Keys.ToList();
-        if (withNone) res.Insert(0, "None");
-        return res;
-    }
-
-    public static List<string> GetAllFXTypeNames(bool withNone = true)
-    {
-        LoadAllConfigs();
-        List<string> res = FXTypeDefineDict.TypeIndexDict.Keys.ToList();
-        if (withNone) res.Insert(0, "None");
-        return res;
-    }
-
-    public static List<string> GetAllBattleIndicatorTypeNames(bool withNone = true)
-    {
-        LoadAllConfigs();
-        List<string> res = BattleIndicatorTypeDefineDict.TypeIndexDict.Keys.ToList();
-        if (withNone) res.Insert(0, "None");
-        return res;
-    }
-
-    public static List<string> GetAllEnemyNames(bool withNone = true)
-    {
-        List<string> res = new List<string>();
-        res = EnemyTypeDefineDict.TypeIndexDict.Keys.ToList();
-        if (withNone) res.Insert(0, "None");
-        return res;
-    }
-
-    public static List<string> GetAllActorNames(bool withNone = true)
-    {
-        LoadAllConfigs();
-        List<string> res = new List<string>();
-        res = EnemyTypeDefineDict.TypeIndexDict.Keys.ToList();
-        res.Insert(0, "Player1");
-        if (withNone) res.Insert(0, "None");
-        return res;
-    }
-
-    public static List<string> GetAllLevelTriggerNames(bool withNone = true)
-    {
-        List<string> res = new List<string>();
-        res = LevelTriggerTypeDefineDict.TypeIndexDict.Keys.ToList();
-        if (withNone) res.Insert(0, "None");
-        return res;
-    }
-
-    // -------- Get All Type Names Ends --------
-
-    public static string GetBoxTypeName(ushort boxTypeIndex)
+    public static string GetTypeName(TypeDefineType typeDefineType, ushort typeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
-        BoxTypeDefineDict.TypeNameDict.TryGetValue(boxTypeIndex, out string boxTypeName);
-        return boxTypeName;
+        TypeDefineConfigs[typeDefineType].TypeNameDict.TryGetValue(typeIndex, out string typeName);
+        return typeName;
     }
 
-    public static ushort GetBoxTypeIndex(string boxTypeName)
+    public static ushort GetTypeIndex(TypeDefineType typeDefineType, string typeName)
     {
         if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(boxTypeName))
+        if (string.IsNullOrEmpty(typeName))
         {
-            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的箱子Prefab", "#00A9D1", boxTypeName));
+            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的{1}的资源", "#00A9D1", typeName, typeDefineType));
             return 0;
         }
 
-        BoxTypeDefineDict.TypeIndexDict.TryGetValue(boxTypeName, out ushort boxTypeIndex);
-        return boxTypeIndex;
-    }
-
-    public static string GetBoxIconTypeName(ushort boxIconTypeIndex)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        BoxIconTypeDefineDict.TypeNameDict.TryGetValue(boxIconTypeIndex, out string boxIconTypeName);
-        return boxIconTypeName;
-    }
-
-    public static ushort GetBoxIconTypeIndex(string boxIconTypeName)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(boxIconTypeName))
-        {
-            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的箱子Icon", "#0DD100", boxIconTypeName));
-            return 0;
-        }
-
-        BoxIconTypeDefineDict.TypeIndexDict.TryGetValue(boxIconTypeName, out ushort boxIconTypeIndex);
-        return boxIconTypeIndex;
-    }
-
-    public static string GetEnemyTypeName(ushort enemyTypeIndex)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        EnemyTypeDefineDict.TypeNameDict.TryGetValue(enemyTypeIndex, out string enemyTypeName);
-        return enemyTypeName;
-    }
-
-    public static ushort GetEnemyTypeIndex(string enemyTypeName)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(enemyTypeName))
-        {
-            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的敌兵Prefab", "#8600D1", enemyTypeName));
-            return 0;
-        }
-
-        EnemyTypeDefineDict.TypeIndexDict.TryGetValue(enemyTypeName, out ushort enemyTypeIndex);
-        return enemyTypeIndex;
-    }
-
-    public static string GetLevelTriggerTypeName(ushort levelTriggerTypeIndex)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        LevelTriggerTypeDefineDict.TypeNameDict.TryGetValue(levelTriggerTypeIndex, out string levelTriggerTypeName);
-        return levelTriggerTypeName;
-    }
-
-    public static ushort GetLevelTriggerTypeIndex(string levelTriggerTypeName)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(levelTriggerTypeName))
-        {
-            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的LevelTrigger Prefab", "#6DF707", levelTriggerTypeName));
-            return 0;
-        }
-
-        LevelTriggerTypeDefineDict.TypeIndexDict.TryGetValue(levelTriggerTypeName, out ushort levelTriggerTypeIndex);
-        return levelTriggerTypeIndex;
-    }
-
-    public static string GetWorldModuleName(ushort worldModuleTypeIndex)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        WorldModuleTypeDefineDict.TypeNameDict.TryGetValue(worldModuleTypeIndex, out string worldModuleTypeName);
-        return worldModuleTypeName;
-    }
-
-    public static ushort GetWorldModuleTypeIndex(string worldModuleTypeName)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(worldModuleTypeName))
-        {
-            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的世界模组Prefab", "#D100BC", worldModuleTypeName));
-            return 0;
-        }
-
-        WorldModuleTypeDefineDict.TypeIndexDict.TryGetValue(worldModuleTypeName, out ushort worldModuleTypeIndex);
-        return worldModuleTypeIndex;
-    }
-
-    public static string GetStaticLayoutName(ushort staticLayoutTypeIndex)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        StaticLayoutTypeDefineDict.TypeNameDict.TryGetValue(staticLayoutTypeIndex, out string staticLayoutTypeName);
-        return staticLayoutTypeName;
-    }
-
-    public static ushort GetStaticLayoutTypeIndex(string staticLayoutTypeName)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(staticLayoutTypeName))
-        {
-            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的静态布局Prefab", "#D100BC", staticLayoutTypeName));
-            return 0;
-        }
-
-        StaticLayoutTypeDefineDict.TypeIndexDict.TryGetValue(staticLayoutTypeName, out ushort staticLayoutTypeIndex);
-        return staticLayoutTypeIndex;
-    }
-
-    public static string GetWorldName(ushort worldTypeIndex)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        WorldTypeDefineDict.TypeNameDict.TryGetValue(worldTypeIndex, out string worldTypeName);
-        return worldTypeName;
-    }
-
-    public static ushort GetWorldTypeIndex(string worldTypeName)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(worldTypeName))
-        {
-            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的世界Prefab", "#009CD1", worldTypeName));
-            return 0;
-        }
-
-        WorldTypeDefineDict.TypeIndexDict.TryGetValue(worldTypeName, out ushort worldTypeIndex);
-        return worldTypeIndex;
-    }
-
-    public static string GetFXName(ushort fxTypeIndex)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        FXTypeDefineDict.TypeNameDict.TryGetValue(fxTypeIndex, out string fxTypeName);
-        return fxTypeName;
-    }
-
-    public static ushort GetFXTypeIndex(string fxTypeName)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(fxTypeName))
-        {
-            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的FX Prefab", "#D1004D", fxTypeName));
-            return 0;
-        }
-
-        FXTypeDefineDict.TypeIndexDict.TryGetValue(fxTypeName, out ushort fxTypeIndex);
-        return fxTypeIndex;
-    }
-
-    public static string GetBattleIndicatorName(ushort battleIndicatorTypeIndex)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        BattleIndicatorTypeDefineDict.TypeNameDict.TryGetValue(battleIndicatorTypeIndex, out string battleIndicatorTypeName);
-        return battleIndicatorTypeName;
-    }
-
-    public static ushort GetBattleIndicatorTypeIndex(string battleIndicatorTypeName)
-    {
-        if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(battleIndicatorTypeName))
-        {
-            Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的BattleIndicator Prefab", "#D1004D", battleIndicatorTypeName));
-            return 0;
-        }
-
-        BattleIndicatorTypeDefineDict.TypeIndexDict.TryGetValue(battleIndicatorTypeName, out ushort battleIndicatorTypeIndex);
-        return battleIndicatorTypeIndex;
+        TypeDefineConfigs[typeDefineType].TypeIndexDict.TryGetValue(typeName, out ushort typeIndex);
+        return typeIndex;
     }
 
     public static EntityOccupationData GetEntityOccupationData(ushort entityTypeIndex)
@@ -1178,8 +993,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 #if UNITY_EDITOR
     public static GameObject FindBoxPrefabByName(string boxName)
     {
-        BoxTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName));
+        TypeDefineConfigs[TypeDefineType.Box].ExportTypeNames(); // todo 判断是否要删掉此行
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(TypeDefineConfigs[TypeDefineType.Box].GetTypeAssetDataBasePath(boxName));
         return prefab;
     }
 
@@ -1191,15 +1006,15 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static string FindBoxLevelEditorPrefabPathByName(string boxName)
     {
-        BoxTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
-        string boxPrefabPath = BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName);
+        TypeDefineConfigs[TypeDefineType.Box].ExportTypeNames(); // todo 判断是否要删掉此行
+        string boxPrefabPath = TypeDefineConfigs[TypeDefineType.Box].GetTypeAssetDataBasePath(boxName);
         return boxPrefabPath.Replace("/Box/", "/Box_LevelEditor/").Replace(boxName, boxName + "_LevelEditor");
     }
 
     public static bool DeleteBoxPrefabByName(string boxName)
     {
-        BoxTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
-        string boxPrefabPath = BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName);
+        TypeDefineConfigs[TypeDefineType.Box].ExportTypeNames(); // todo 判断是否要删掉此行
+        string boxPrefabPath = TypeDefineConfigs[TypeDefineType.Box].GetTypeAssetDataBasePath(boxName);
         string boxLevelEditorPrefabPath = boxPrefabPath.Replace("/Box/", "/Box_LevelEditor/").Replace(boxName, boxName + "_LevelEditor");
         bool res_1 = AssetDatabase.DeleteAsset(boxPrefabPath);
         bool res_2 = AssetDatabase.DeleteAsset(boxLevelEditorPrefabPath);
@@ -1208,8 +1023,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static string RenameBoxPrefabByName(string boxName, string targetBoxName)
     {
-        BoxTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
-        string boxPrefabPath = BoxTypeDefineDict.GetTypeAssetDataBasePath(boxName);
+        TypeDefineConfigs[TypeDefineType.Box].ExportTypeNames(); // todo 判断是否要删掉此行
+        string boxPrefabPath = TypeDefineConfigs[TypeDefineType.Box].GetTypeAssetDataBasePath(boxName);
         string boxLevelEditorPrefabPath = boxPrefabPath.Replace("/Box/", "/Box_LevelEditor/").Replace(boxName, boxName + "_LevelEditor");
         string res_1 = AssetDatabase.RenameAsset(boxPrefabPath, targetBoxName);
         string res_2 = AssetDatabase.RenameAsset(boxLevelEditorPrefabPath, targetBoxName + "_LevelEditor");
@@ -1225,14 +1040,14 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
         else
         {
-            GameObject enemyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(EnemyTypeDefineDict.GetTypeAssetDataBasePath(actorName));
+            GameObject enemyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(TypeDefineConfigs[TypeDefineType.Enemy].GetTypeAssetDataBasePath(actorName));
             return enemyPrefab;
         }
     }
 
     public static GameObject FindLevelTriggerPrefabByName(string levelTriggerName)
     {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(LevelTriggerTypeDefineDict.GetTypeAssetDataBasePath(levelTriggerName));
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(TypeDefineConfigs[TypeDefineType.LevelTrigger].GetTypeAssetDataBasePath(levelTriggerName));
         return prefab;
     }
 
@@ -1244,8 +1059,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static string FindWorldModulePrefabPathByName(string worldModuleName)
     {
-        WorldModuleTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
-        return WorldModuleTypeDefineDict.GetTypeAssetDataBasePath(worldModuleName);
+        TypeDefineConfigs[TypeDefineType.WorldModule].ExportTypeNames(); // todo 判断是否要删掉此行
+        return TypeDefineConfigs[TypeDefineType.WorldModule].GetTypeAssetDataBasePath(worldModuleName);
     }
 
     public static GameObject FindStaticLayoutPrefabByName(string staticLayoutName)
@@ -1256,8 +1071,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static string FindStaticLayoutPrefabPathByName(string staticLayoutName)
     {
-        StaticLayoutTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
-        return StaticLayoutTypeDefineDict.GetTypeAssetDataBasePath(staticLayoutName);
+        TypeDefineConfigs[TypeDefineType.StaticLayout].ExportTypeNames(); // todo 判断是否要删掉此行
+        return TypeDefineConfigs[TypeDefineType.StaticLayout].GetTypeAssetDataBasePath(staticLayoutName);
     }
 
     public static GameObject FindWorldPrefabByName(string worldName)
@@ -1268,8 +1083,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static string FindWorldPrefabPathByName(string worldName)
     {
-        WorldTypeDefineDict.ExportTypeNames(); // todo 判断是否要删掉此行
-        return WorldTypeDefineDict.GetTypeAssetDataBasePath(worldName);
+        TypeDefineConfigs[TypeDefineType.World].ExportTypeNames(); // todo 判断是否要删掉此行
+        return TypeDefineConfigs[TypeDefineType.World].GetTypeAssetDataBasePath(worldName);
     }
 #endif
 

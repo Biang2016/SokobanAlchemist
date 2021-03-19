@@ -1,4 +1,7 @@
-﻿using BiangLibrary.ObjectPool;
+﻿using System;
+using BiangLibrary.CloneVariant;
+using BiangLibrary.ObjectPool;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -42,5 +45,53 @@ public class FX : PoolObject
     public void Stop()
     {
         ParticleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+    }
+}
+
+[Serializable]
+public class FXConfig : IClone<FXConfig>
+{
+    [SerializeField]
+    private TypeSelectHelper FXType = new TypeSelectHelper {TypeDefineType = TypeDefineType.FX};
+
+    [SerializeField]
+    private bool UseCurve = false;
+
+    [SerializeField]
+    private float FXScale = 1.0f;
+
+    [SerializeField]
+    private AnimationCurve AnimationCurve = new AnimationCurve();
+
+    public FXConfig(string defaultFXTypeName = "None", float fxScale = 1f, bool useCurve = false, AnimationCurve animationCurve = null)
+    {
+        FXScale = fxScale;
+        UseCurve = useCurve;
+        if (useCurve) AnimationCurve = animationCurve;
+        FXType.TypeSelection = defaultFXTypeName;
+        FXType.RefreshGUID();
+    }
+
+    public bool Empty => string.IsNullOrEmpty(FXType.TypeName) || FXType.TypeName == "None" || (!UseCurve && FXScale.Equals(0));
+    public string TypeName => FXType.TypeName;
+
+    public float GetScale(float evaluator = 0f)
+    {
+        if (UseCurve) return AnimationCurve.Evaluate(evaluator);
+        else return FXScale;
+    }
+
+    public FXConfig Clone()
+    {
+        FXConfig newConfig = new FXConfig(FXType.TypeName, FXScale, UseCurve, AnimationCurve);
+        return newConfig;
+    }
+
+    public void CopyDataFrom(FXConfig srcData)
+    {
+        FXType.CopyDataFrom(srcData.FXType);
+        UseCurve = srcData.UseCurve;
+        FXScale = srcData.FXScale;
+        AnimationCurve = srcData.AnimationCurve;
     }
 }

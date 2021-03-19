@@ -15,7 +15,7 @@ public class BornPointData : LevelComponentData
     [HideInEditorMode]
     public uint GUID;
 
-    private static uint guidGenerator = (uint)ConfigManager.GUID_Separator.BornPointData;
+    private static uint guidGenerator = (uint) ConfigManager.GUID_Separator.BornPointData;
 
     protected uint GetGUID()
     {
@@ -32,15 +32,15 @@ public class BornPointData : LevelComponentData
 
     #endregion
 
-
     [BoxGroup("监听事件")]
     [LabelText("收到事件后刷怪(空则开场刷怪)")]
     public string SpawnLevelEventAlias;
 
-    [ValueDropdown("GetAllActorNames")]
+    public bool IsPlayer = false;
+
     [LabelText("角色类型")]
-    [FormerlySerializedAs("ActorType")]
-    public string ActorTypeName = "None";
+    [HideIf("IsPlayer")]
+    public TypeSelectHelper EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy};
 
     [LabelText("角色朝向")]
     [EnumToggleButtons]
@@ -49,7 +49,6 @@ public class BornPointData : LevelComponentData
     [LabelText("出生点花名")]
     [ValidateInput("ValidateBornPointAlias", "请保证此项非空时是唯一的；且一个模组只允许有一个玩家出生点花名为空")]
     public string BornPointAlias = "";
-
 
     [LabelText("角色额外数据")]
     public EntityExtraSerializeData RawEntityExtraSerializeData = new EntityExtraSerializeData(); // 干数据，禁修改
@@ -77,7 +76,7 @@ public class BornPointData : LevelComponentData
     {
         get
         {
-            if (ActorTypeName.StartsWith("Player"))
+            if (IsPlayer)
             {
                 return ActorCategory.Player;
             }
@@ -88,14 +87,13 @@ public class BornPointData : LevelComponentData
         }
     }
 
-    private IEnumerable<string> GetAllActorNames => ConfigManager.GetAllActorNames();
-
     protected override void ChildClone(LevelComponentData newData)
     {
         base.ChildClone(newData);
         BornPointData data = ((BornPointData) newData);
         data.SpawnLevelEventAlias = SpawnLevelEventAlias;
-        data.ActorTypeName = ActorTypeName;
+        data.IsPlayer = IsPlayer;
+        data.EnemyType = EnemyType.Clone();
         data.ActorOrientation = ActorOrientation;
         data.BornPointAlias = BornPointAlias;
         data.RawEntityExtraSerializeData = RawEntityExtraSerializeData?.Clone();

@@ -46,7 +46,7 @@ public class WorldDesignHelper : MonoBehaviour
             }
 
             GameObject worldModulePrefab = PrefabUtility.GetCorrespondingObjectFromSource(module.gameObject);
-            ushort worldModuleTypeIndex = ConfigManager.WorldModuleTypeDefineDict.TypeIndexDict[worldModulePrefab.name];
+            ushort worldModuleTypeIndex = ConfigManager.TypeDefineConfigs[TypeDefineType.WorldModule].TypeIndexDict[worldModulePrefab.name];
             worldData.ModuleMatrix[gp.x, gp.y, gp.z] = worldModuleTypeIndex;
             worldData.WorldModuleGPOrder.Add(gp);
         }
@@ -157,43 +157,6 @@ public class WorldDesignHelper : MonoBehaviour
         return dirty;
     }
 
-    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)
-    {
-        bool isDirty = false;
-        StringBuilder localInfo = new StringBuilder();
-        localInfo.Append($"------------ WorldStart: {name}\n");
-        List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
-        foreach (LevelTriggerBase trigger in triggers)
-        {
-            if (trigger.transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot}")) continue;
-            WorldModuleDesignHelper module = trigger.transform.GetComponentInParent<WorldModuleDesignHelper>();
-            if (module) continue;
-            isDirty |= trigger.RenameBoxTypeName(srcBoxName, targetBoxName, localInfo);
-        }
-
-        localInfo.Append($"WorldEnd: {name} ------------\n");
-        if (isDirty) info.Append(localInfo);
-        return isDirty;
-    }
-
-    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info)
-    {
-        bool isDirty = false;
-        StringBuilder localInfo = new StringBuilder();
-        localInfo.Append($"------------ WorldStart: {name}\n");
-        List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
-        foreach (LevelTriggerBase trigger in triggers)
-        {
-            if (trigger.transform.HasAncestorName($"@_{WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot}")) continue;
-            WorldModuleDesignHelper module = trigger.transform.GetComponentInParent<WorldModuleDesignHelper>();
-            if (module) continue;
-            isDirty |= trigger.DeleteBoxTypeName(srcBoxName, localInfo);
-        }
-
-        localInfo.Append($"WorldEnd: {name} ------------\n");
-        if (isDirty) info.Append(localInfo);
-        return isDirty;
-    }
 #endif
 }
 

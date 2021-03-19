@@ -68,17 +68,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public NoticePanel NoticePanel;
 
     [LabelText("开局世界类型")]
-    [ValueDropdown("GetAllWorldNames")]
-    public string StartWorldName = "None";
-
-    [Button("刷新世界名称列表")]
-    private void RefreshWorldNameList()
-    {
-        ConfigManager.LoadAllConfigs();
-        GetAllWorldNames = ConfigManager.GetAllWorldNames();
-    }
-
-    private IEnumerable<string> GetAllWorldNames;
+    public TypeSelectHelper StartWorldName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
 
     public static string DebugChangeWorldName = null;
     public static string DebugChangeWorldBornPointAlias = null;

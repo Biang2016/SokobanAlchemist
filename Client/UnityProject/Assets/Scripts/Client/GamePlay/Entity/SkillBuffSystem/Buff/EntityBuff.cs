@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 [Serializable]
 public abstract class EntityBuff : IClone<EntityBuff>
@@ -50,13 +51,8 @@ public abstract class EntityBuff : IClone<EntityBuff>
         return true;
     }
 
-    [ValueDropdown("GetAllFXTypeNames")]
     [LabelText("Buff特效")]
-    public string BuffFX;
-
-    [LabelText("Buff特效尺寸")]
-    [HideIf("BuffFX", "None")]
-    public float BuffFXScale = 1.0f;
+    public FXConfig BuffFX = new FXConfig();
 
     protected EntityBuff()
     {
@@ -83,7 +79,6 @@ public abstract class EntityBuff : IClone<EntityBuff>
         newBuff.IsPermanent = IsPermanent;
         newBuff.Duration = Duration;
         newBuff.BuffFX = BuffFX;
-        newBuff.BuffFXScale = BuffFXScale;
         ChildClone(newBuff);
         return newBuff;
     }
@@ -98,14 +93,5 @@ public abstract class EntityBuff : IClone<EntityBuff>
         IsPermanent = srcData.IsPermanent;
         Duration = srcData.Duration;
         BuffFX = srcData.BuffFX;
-        BuffFXScale = srcData.BuffFXScale;
     }
-
-    #region Utils
-
-    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
-
-    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
-
-    #endregion
 }

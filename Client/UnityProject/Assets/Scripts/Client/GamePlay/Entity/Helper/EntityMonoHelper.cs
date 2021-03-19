@@ -25,12 +25,4 @@ public abstract class EntityMonoHelper : MonoBehaviour
     public virtual void OnHelperRecycled()
     {
     }
-
-    #region Utils
-
-    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
-    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
-    private IEnumerable<string> GetAllBoxIconTypeNames => ConfigManager.GetAllBoxIconTypeNames();
-
-    #endregion
 }

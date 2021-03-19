@@ -11,15 +11,7 @@ public class WorldNameWithProbability : Probability, IClone<WorldNameWithProbabi
 {
     public string Description => $"{WorldTypeName}";
 
-    [BoxNameList]
-    [ValueDropdown("GetAllWorldNames", DropdownTitle = "选择世界")]
-    public string WorldTypeName;
-
-    #region Utils
-
-    private IEnumerable<string> GetAllWorldNames => ConfigManager.GetAllWorldNames();
-
-    #endregion
+    public TypeSelectHelper WorldTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
 
     [SerializeField]
     private int probability;
@@ -42,7 +34,7 @@ public class WorldNameWithProbability : Probability, IClone<WorldNameWithProbabi
     public Probability ProbabilityClone()
     {
         WorldNameWithProbability newData = new WorldNameWithProbability();
-        newData.WorldTypeName = WorldTypeName;
+        newData.WorldTypeName = WorldTypeName.Clone();
         newData.probability = probability;
         newData.isSingleton = isSingleton;
         return newData;
@@ -55,7 +47,7 @@ public class WorldNameWithProbability : Probability, IClone<WorldNameWithProbabi
 
     public void CopyDataFrom(WorldNameWithProbability src)
     {
-        WorldTypeName = src.WorldTypeName;
+        WorldTypeName.CopyDataFrom(src.WorldTypeName);
         probability = src.probability;
         isSingleton = src.isSingleton;
     }

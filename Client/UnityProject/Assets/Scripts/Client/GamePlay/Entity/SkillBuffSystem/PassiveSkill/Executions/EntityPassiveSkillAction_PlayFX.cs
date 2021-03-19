@@ -2,6 +2,7 @@
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [Serializable]
 public class EntityPassiveSkillAction_PlayFX : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction
@@ -12,10 +13,7 @@ public class EntityPassiveSkillAction_PlayFX : EntityPassiveSkillAction, EntityP
 
     protected override string Description => "播放特效";
 
-    [ValueDropdown("GetAllFXTypeNames")]
-    public string FXTypeName;
-
-    public float FXScale = 1;
+    public FXConfig FX = new FXConfig();
 
     public void Execute()
     {
@@ -24,12 +22,12 @@ public class EntityPassiveSkillAction_PlayFX : EntityPassiveSkillAction, EntityP
             foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 Vector3 boxIndicatorPos = box.transform.position + offset;
-                FXManager.Instance.PlayFX(FXTypeName, boxIndicatorPos, FXScale);
+                FXManager.Instance.PlayFX(FX, boxIndicatorPos);
             }
         }
         else if (Entity is Actor actor)
         {
-            FXManager.Instance.PlayFX(FXTypeName, actor.transform.position, FXScale);
+            FXManager.Instance.PlayFX(FX, actor.transform.position);
         }
     }
 
@@ -37,15 +35,13 @@ public class EntityPassiveSkillAction_PlayFX : EntityPassiveSkillAction, EntityP
     {
         base.ChildClone(newAction);
         EntityPassiveSkillAction_PlayFX action = ((EntityPassiveSkillAction_PlayFX) newAction);
-        action.FXTypeName = FXTypeName;
-        action.FXScale = FXScale;
+        action.FX = FX.Clone();
     }
 
     public override void CopyDataFrom(EntityPassiveSkillAction srcData)
     {
         base.CopyDataFrom(srcData);
         EntityPassiveSkillAction_PlayFX action = ((EntityPassiveSkillAction_PlayFX) srcData);
-        FXTypeName = action.FXTypeName;
-        FXScale = action.FXScale;
+        FX.CopyDataFrom(action.FX);
     }
 }

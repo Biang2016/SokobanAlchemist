@@ -18,11 +18,11 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
     [Serializable]
     public new class Data : LevelTriggerBase.Data
     {
-        [ValueDropdown("GetAllActorNames")]
-        [LabelText("角色类型")]
-        public string RequiredActorType = "None";
+        public bool IsPlayer = false;
 
-        private IEnumerable<string> GetAllActorNames => ConfigManager.GetAllActorNames();
+        [LabelText("角色类型")]
+        [HideIf("IsPlayer")]
+        public TypeSelectHelper RequiredActorType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy};
 
         [LabelText("角色至少停留时间/s")]
         public float RequiredStayDuration;
@@ -31,7 +31,8 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
         {
             base.ChildClone(newData);
             Data data = ((Data) newData);
-            data.RequiredActorType = RequiredActorType;
+            data.IsPlayer = IsPlayer;
+            data.RequiredActorType = RequiredActorType.Clone();
             data.RequiredStayDuration = RequiredStayDuration;
         }
     }
@@ -55,7 +56,8 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
                 Actor actor = collider.gameObject.GetComponentInParent<Actor>();
                 if (actor.IsNotNullAndAlive())
                 {
-                    if (actor.ActorType == childData.RequiredActorType)
+                    if (childData.IsPlayer && actor.ActorType.Equals(PlayerNumber.Player1.ToString())
+                        || (actor.ActorType == childData.RequiredActorType.TypeName))
                     {
                         if (!StayActorList.Contains(actor))
                         {
@@ -118,7 +120,8 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
                 Actor actor = collider.gameObject.GetComponentInParent<Actor>();
                 if (actor != null) // 此处不判断角色是否死亡
                 {
-                    if (actor.ActorType == childData.RequiredActorType)
+                    if (childData.IsPlayer && actor.ActorType.Equals(PlayerNumber.Player1.ToString())
+                        || (actor.ActorType == childData.RequiredActorType.TypeName))
                     {
                         StayActorList.Remove(actor);
                         StayActorTimeDict.Remove(actor.GUID);

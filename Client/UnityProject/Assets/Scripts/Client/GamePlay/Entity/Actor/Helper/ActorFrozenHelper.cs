@@ -24,7 +24,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
             }
 
             Thaw();
-            FXManager.Instance.PlayFX(actor.ThawFX, transform.position, 1f);
+            FXManager.Instance.PlayFX(actor.ThawFX, transform.position);
         }
         else
         {
@@ -74,7 +74,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
                 frozeModel.SetActive(index == afterFrozenLevel - 1);
             }
 
-            FXManager.Instance.PlayFX(beforeFrozenLevel < afterFrozenLevel ? actor.FrozeFX : actor.ThawFX, transform.position, 1f);
+            FXManager.Instance.PlayFX(beforeFrozenLevel < afterFrozenLevel ? actor.FrozeFX : actor.ThawFX, transform.position);
         }
     }
 }

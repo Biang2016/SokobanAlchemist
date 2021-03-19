@@ -160,31 +160,18 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
-    FrozenFX: None
-    FrozenFXScaleCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.7
-        inSlope: 0.325
-        outSlope: 0.325
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 4
-        value: 2
-        inSlope: 0.325
-        outSlope: 0.325
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
+    FrozenFX:
+      FXType:
+        TypeDefineType: 7
+        TypeGUID: 
+      UseCurve: 0
+      FXScale: 0
+      AnimationCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
     FiringResistance:
       BaseValue: 100
       ModifiedValue: 0
@@ -214,33 +201,48 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 1000
-    StartFiringFX: None
-    StartFiringFXScale: 0
-    FiringFX: Hit_Fire
-    FiringFXScaleCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.7
-        inSlope: 0.325
-        outSlope: 0.325
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 4
-        value: 2
-        inSlope: 0.325
-        outSlope: 0.325
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
+    StartFiringFX:
+      FXType:
+        TypeDefineType: 0
+        TypeGUID: 
+      UseCurve: 0
+      FXScale: 0
+      AnimationCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    FiringFX:
+      FXType:
+        TypeDefineType: 7
+        TypeGUID: (ea39ef27-ca6b-4f0b-8407-618bd99d1b3a)
+      UseCurve: 1
+      FXScale: 0
+      AnimationCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0.7
+          inSlope: 0.325
+          outSlope: 0.325
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 4
+          value: 2
+          inSlope: 0.325
+          outSlope: 0.325
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
     MoveSpeed:
       BaseValue: 10
       ModifiedValue: 0
@@ -518,15 +520,55 @@ MonoBehaviour:
   LastMoveAttempt: {x: 0, y: 0, z: 0}
   CurThrowMoveAttempt: {x: 0, y: 0, z: 0}
   CurThrowPointOffset: {x: 0, y: 0, z: 0}
-  KickFX: Flash_SnowFlake
-  KickFXScale: 1
+  KickFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: (ce01f26e-4b00-4b76-bef3-72a60663efa0)
+    UseCurve: 0
+    FXScale: 1
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   KickFXPivot: {fileID: 1630707899577583179}
-  InjureFX: Hit_BloodBlade
-  InjureFXScale: 2
-  HealFX: None
-  HealFXScale: 1
-  DieFX: Hit_EvilBigGravBall
-  DieFXScale: 2
+  InjureFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: (ce3a827b-7df7-4a62-ad01-ced312be7a9d)
+    UseCurve: 0
+    FXScale: 2
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  HealFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: 
+    UseCurve: 0
+    FXScale: 0
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  DieFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: (6bcb3555-553c-4f5a-bc38-46a83bdd5d29)
+    UseCurve: 0
+    FXScale: 2
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   DashForce: 10
   Accelerate: 250
   KickForce: 5
@@ -535,11 +577,30 @@ MonoBehaviour:
   KickableBoxList: []
   LiftableBoxList: []
   ThrowableBoxList: []
-  DieDropBoxTypeName: TrophyBox
-  DieDropBoxOrientation: 0
-  DieDropBoxProbabilityPercent: 100
-  FrozeFX: Hit_SnowFlake
-  ThawFX: Flash_CyanSlight
+  FrozeFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: 
+    UseCurve: 0
+    FXScale: 0
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  ThawFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: 
+    UseCurve: 0
+    FXScale: 0
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   RawFrozenBoxPassiveSkills: []
   IsInMicroWorld: 0
   ActorBehaviourState: 0
@@ -628,15 +689,27 @@ MonoBehaviour:
         TargetEntityType: 1
         CastOnTopLayer: 0
         AccurateStandardDeviation: 0
-        BattleIndicatorTypeName: GridWarning
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
         ProjectOffsetZMax: 0
         ProjectOffsetZMin: 0
         GridWarningColorFill: {r: 0.24542293, g: 0.8396226, b: 0.07524917, a: 0.7529412}
         GridWarningColorBorderHighlight: {r: 0.40472588, g: 0.8018868, b: 0.6014624,
           a: 0.7176471}
         GridWarningColorBorderDim: {r: 0.6975347, g: 0.8962264, b: 0.8508797, a: 0.78039217}
-        CastFX: Hit_GreenPoisonous
-        CastFXScale: 1.2
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (6b85310e-f4c9-4818-b682-4d1846b2638c)
+          UseCurve: 0
+          FXScale: 1.2
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
         RawEntityBuffs:
         - id: 10
     00000004:
@@ -704,14 +777,26 @@ MonoBehaviour:
         TargetEntityType: 1
         CastOnTopLayer: 0
         AccurateStandardDeviation: 0
-        BattleIndicatorTypeName: None
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: 
         ProjectOffsetZMax: 0
         ProjectOffsetZMin: 0
         GridWarningColorFill: {r: 0, g: 0, b: 0, a: 0}
         GridWarningColorBorderHighlight: {r: 0, g: 0, b: 0, a: 0}
         GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
-        CastFX: Hit_LoveHeart
-        CastFXScale: 3
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (e597fb9a-7751-46ac-8eb0-0eb1811827c2)
+          UseCurve: 0
+          FXScale: 3
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
         RawEntityBuffs:
         - id: 13
     00000007:
@@ -735,14 +820,26 @@ MonoBehaviour:
         TargetEntityType: 0
         CastOnTopLayer: 0
         AccurateStandardDeviation: 0
-        BattleIndicatorTypeName: None
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: 
         ProjectOffsetZMax: 0
         ProjectOffsetZMin: 0
         GridWarningColorFill: {r: 0, g: 0, b: 0, a: 0}
         GridWarningColorBorderHighlight: {r: 0, g: 0, b: 0, a: 0}
         GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
-        CastFX: Hit_SpiralDrill
-        CastFXScale: 3
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (e9aaa995-68e2-4e7e-af31-6238c26a29bf)
+          UseCurve: 0
+          FXScale: 3
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
         RawEntityBuffs:
         - id: 14
     00000008:
@@ -752,8 +849,18 @@ MonoBehaviour:
         EntityBuffAttribute: 1
         IsPermanent: 1
         Duration: 0
-        BuffFX: None
-        BuffFXScale: 1
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
         Percent: 50
         LinearDecayInDuration: 0
         EntityPropertyType: 30
@@ -761,7 +868,9 @@ MonoBehaviour:
       type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
       data:
         DropBoxList:
-        - BoxTypeName: TrophyBox
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (72613c50-a87a-49bf-a141-627b227d5989)
           BoxOrientation: 0
           probability: 1
           isSingleton: 0
@@ -776,8 +885,18 @@ MonoBehaviour:
         EntityBuffAttribute: 34
         IsPermanent: 0
         Duration: 0
-        BuffFX: None
-        BuffFXScale: 1
+        BuffFX:
+          FXType:
+            TypeDefineType: 0
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
         EntityStatType: 0
         Delta: -2
         Percent: 0
@@ -802,21 +921,37 @@ MonoBehaviour:
         TargetEntityType: 1
         CastOnTopLayer: 1
         AccurateStandardDeviation: 0
-        BattleIndicatorTypeName: GridWarning
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
         ProjectOffsetZMax: 3
         ProjectOffsetZMin: -3
         GridWarningColorFill: {r: 0.9622642, g: 0.57834196, b: 0.11347453, a: 0.84313726}
         GridWarningColorBorderHighlight: {r: 0.9811321, g: 0.5507298, b: 0.5507298,
           a: 0.8509804}
         GridWarningColorBorderDim: {r: 0.9811321, g: 0.9771839, b: 0.18974723, a: 0.6039216}
-        CastFX: None
-        CastFXScale: 0
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
         DropBoxList:
-        - BoxTypeName: FireBox
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (65e613ca-1b8c-4002-84d1-0c49ea3b0903)
           BoxOrientation: 0
           probability: 9
           isSingleton: 0
-        - BoxTypeName: LifeBox
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (096dcca9-e0d2-439e-9304-94a00bb4f36b)
           BoxOrientation: 0
           probability: 1
           isSingleton: 1
@@ -842,21 +977,37 @@ MonoBehaviour:
         TargetEntityType: 1
         CastOnTopLayer: 1
         AccurateStandardDeviation: 0
-        BattleIndicatorTypeName: GridWarning
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
         ProjectOffsetZMax: 3
         ProjectOffsetZMin: -3
         GridWarningColorFill: {r: 0.11372546, g: 0.9443634, b: 0.9607843, a: 0.84313726}
         GridWarningColorBorderHighlight: {r: 0.54901963, g: 0.9070726, b: 0.98039216,
           a: 0.8509804}
         GridWarningColorBorderDim: {r: 0.18823527, g: 0.65997756, b: 0.98039216, a: 0.6039216}
-        CastFX: None
-        CastFXScale: 0
+        CastFX:
+          FXType:
+            TypeDefineType: 0
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
         DropBoxList:
-        - BoxTypeName: IceBox
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (c9630278-8f6d-416f-b6de-620573dfb81a)
           BoxOrientation: 0
           probability: 9
           isSingleton: 0
-        - BoxTypeName: LifeBox
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (096dcca9-e0d2-439e-9304-94a00bb4f36b)
           BoxOrientation: 0
           probability: 1
           isSingleton: 1
@@ -868,8 +1019,18 @@ MonoBehaviour:
         EntityBuffAttribute: 13
         IsPermanent: 0
         Duration: 0
-        BuffFX: None
-        BuffFXScale: 1
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
         EntityStatType: 0
         Delta: 15
         Percent: 0
@@ -880,8 +1041,18 @@ MonoBehaviour:
         EntityBuffAttribute: 1
         IsPermanent: 0
         Duration: 5
-        BuffFX: Hit_SpiralDrill
-        BuffFXScale: 2
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
         Percent: 100
         LinearDecayInDuration: 0
         EntityPropertyType: 30

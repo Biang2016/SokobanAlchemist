@@ -120,7 +120,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                             ConfigManager.TypeStartIndex typeStartIndex = existedIndex.ConvertToTypeStartIndex();
                             if (typeStartIndex == ConfigManager.TypeStartIndex.Box)
                             {
-                                string boxTypeName = ConfigManager.GetBoxTypeName(existedIndex);
+                                string boxTypeName = ConfigManager.GetTypeName(TypeDefineType.Box, existedIndex);
                                 if (boxTypeName.StartsWith("Hill") || boxTypeName.Equals("BrickBox") || boxTypeName.Equals("BorderBox"))
                                 {
                                     isWall = true;

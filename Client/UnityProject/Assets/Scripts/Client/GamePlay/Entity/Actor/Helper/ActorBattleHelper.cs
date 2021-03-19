@@ -55,7 +55,6 @@ public class ActorBattleHelper : ActorMonoHelper
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, damage, BattleTipType.Damage, 0, 0));
         OnDamaged?.Invoke(damage);
         FX injureFX = FXManager.Instance.PlayFX(Actor.InjureFX, Actor.transform.position);
-        if (injureFX) injureFX.transform.localScale = Vector3.one * Actor.InjureFXScale;
     }
 
     public UnityAction<int> OnHealed;
@@ -67,7 +66,6 @@ public class ActorBattleHelper : ActorMonoHelper
         OnHealed?.Invoke(addHealth);
 
         FX healFX = FXManager.Instance.PlayFX(Actor.HealFX, Actor.transform.position);
-        if (healFX) healFX.transform.localScale = Vector3.one * Actor.HealFXScale;
     }
 
     #endregion
@@ -165,7 +163,6 @@ public class ActorBattleHelper : ActorMonoHelper
             if (!forModuleRecycle)
             {
                 FX hit = FXManager.Instance.PlayFX(Actor.DieFX, transform.position);
-                if (hit) hit.transform.localScale = Vector3.one * Actor.DieFXScale;
             }
 
             Actor.PoolRecycle();

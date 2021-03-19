@@ -415,10 +415,13 @@ MonoBehaviour:
   EntityOccupationData:
     IsShapeCuboid: 0
     IsShapePlanSquare: 0
+    ActorWidth: 1
+    ActorHeight: 1
     BoundsInt:
       m_Position: {x: 0, y: 0, z: 0}
       m_Size: {x: 0, y: 0, z: 0}
     EntityIndicatorGPs: []
+    LocalGeometryCenter: {x: 0, y: 0, z: 0}
   IsSpecialBoxIndicator: 0
 --- !u!1 &1424142300141441750
 GameObject:
@@ -643,31 +646,36 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
-    FrozenFX: None
-    FrozenFXScaleCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.7
-        inSlope: 0.325
-        outSlope: 0.325
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 4
-        value: 2
-        inSlope: 0.325
-        outSlope: 0.325
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
+    FrozenFX:
+      FXType:
+        TypeDefineType: 7
+        TypeGUID: 
+      UseCurve: 0
+      FXScale: 1
+      AnimationCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0.7
+          inSlope: 0.325
+          outSlope: 0.325
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 4
+          value: 2
+          inSlope: 0.325
+          outSlope: 0.325
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
     FiringResistance:
       BaseValue: 200
       ModifiedValue: 0
@@ -697,33 +705,48 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 1000
-    StartFiringFX: Hit_LittleFireUp
-    StartFiringFXScale: 1
-    FiringFX: LoopFX_Burning
-    FiringFXScaleCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.6
-        inSlope: 0.099999994
-        outSlope: 0.099999994
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 4
-        value: 1
-        inSlope: 0.099999994
-        outSlope: 0.099999994
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
+    StartFiringFX:
+      FXType:
+        TypeDefineType: 7
+        TypeGUID: (496e4d78-62a6-4066-bbc6-b75bf11aa688)
+      UseCurve: 0
+      FXScale: 1
+      AnimationCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    FiringFX:
+      FXType:
+        TypeDefineType: 7
+        TypeGUID: (26449e78-3051-4378-8c2f-5bd1a6dcb7b6)
+      UseCurve: 1
+      FXScale: 0
+      AnimationCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0.7
+          inSlope: 0.325
+          outSlope: 0.325
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 4
+          value: 2
+          inSlope: 0.325
+          outSlope: 0.325
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
     MoveSpeed:
       BaseValue: 0
       ModifiedValue: 0
@@ -768,7 +791,6 @@ MonoBehaviour:
   RawEntityPassiveSkills: []
   RawEntityActiveSkills: []
   Camp: 4
-  ModelRoot: {fileID: 7302688255835713277}
   BoxModelHelper: {fileID: 943596953443006337}
   BoxIndicatorHelper: {fileID: 5356314078954435621}
   BoxBuffHelper: {fileID: 2962941836236094511}
@@ -796,18 +818,78 @@ MonoBehaviour:
   FaceToCameraForever: 0
   BoxMergeConfig:
     BoxMergeConfigDataList: []
-  CollideFX: None
-  CollideFXScale: 1
-  DestroyFX: Flash_ArrowsFly
-  DestroyFXScale: 1
-  ThawFX: Flash_CyanSlight
-  ThawFXScale: 1
-  FrozeFX: Hit_SnowFlake
-  FrozeFXScale: 1
-  MergeFX: Hit_YellowFireStar
-  MergeFXScale: 1.5
-  MergedFX: Hit_RainbowFlowerExplode
-  MergedFXScale: 2
+  CollideFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: 
+    UseCurve: 0
+    FXScale: 1
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  DestroyFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: (2ae1cac4-83be-4028-ae2e-b48691239cb8)
+    UseCurve: 0
+    FXScale: 1
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  ThawFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: (7c69dcd2-fe26-45ae-9826-663d2bdb391e)
+    UseCurve: 0
+    FXScale: 1
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  FrozeFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: (f5cbf8e1-58b1-46ad-b330-6d8ac332d914)
+    UseCurve: 0
+    FXScale: 1
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  MergeFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: (de8dab0b-9229-4ee2-b448-8bc21fb38cf7)
+    UseCurve: 0
+    FXScale: 1.5
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  MergedFX:
+    FXType:
+      TypeDefineType: 7
+      TypeGUID: (2ffe2270-3562-4ca9-aee0-583315db835a)
+    UseCurve: 0
+    FXScale: 2
+    AnimationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   WorldModule: {fileID: 0}
   references:
     version: 1

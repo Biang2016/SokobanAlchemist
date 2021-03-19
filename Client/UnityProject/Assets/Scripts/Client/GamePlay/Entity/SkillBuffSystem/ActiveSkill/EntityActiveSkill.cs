@@ -687,18 +687,6 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
 
         InterruptSubActiveSkillsWhenInterrupted = srcData.InterruptSubActiveSkillsWhenInterrupted;
     }
-
-    #region Utils
-
-    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
-
-    private IEnumerable<string> GetAllEnemyNames => ConfigManager.GetAllEnemyNames();
-
-    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
-
-    private IEnumerable<string> GetAllBattleIndicatorNames => ConfigManager.GetAllBattleIndicatorTypeNames();
-
-    #endregion
 }
 
 public enum ActiveSkillPhase

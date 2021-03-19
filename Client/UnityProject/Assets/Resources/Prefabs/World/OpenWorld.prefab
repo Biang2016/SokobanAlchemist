@@ -52,7 +52,9 @@ MonoBehaviour:
   PlayerScopeRadiusZ: 5
   UseCertainSeed: 0
   GivenSeed: 1396197886
-  StartMicroWorldTypeName: TutorialWorld
+  StartMicroWorldTypeName:
+    TypeDefineType: 6
+    TypeGUID: (771eff8e-d068-434d-beac-727617fb70ba)
   InitialPlayerBP:
     x: 0
     y: 0
@@ -67,7 +69,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 20
     DeterminePlayerBP: 1
-    StaticLayoutTypeName: PlayerStarterCamp
+    StaticLayoutTypeName:
+      TypeDefineType: 5
+      TypeGUID: (8819739c-7ad7-4d7d-bd75-255b0038e2d8)
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
@@ -77,7 +81,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 2
     DeterminePlayerBP: 0
-    StaticLayoutTypeName: BossSlimeCave
+    StaticLayoutTypeName:
+      TypeDefineType: 5
+      TypeGUID: (7ae818ba-6c18-4106-8815-234a98f97580)
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
@@ -87,7 +93,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 10
     DeterminePlayerBP: 0
-    StaticLayoutTypeName: ThornTrapBoxCorrider
+    StaticLayoutTypeName:
+      TypeDefineType: 5
+      TypeGUID: (e6408bf5-bcda-4d2f-94c8-588b7fd6b998)
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
@@ -97,7 +105,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 2
     DeterminePlayerBP: 0
-    StaticLayoutTypeName: LifeBoxTower
+    StaticLayoutTypeName:
+      TypeDefineType: 5
+      TypeGUID: (b481c9b8-a20d-4314-97ae-60f93f3db6ce)
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
@@ -107,7 +117,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 5
     DeterminePlayerBP: 0
-    StaticLayoutTypeName: ActionBoxMine
+    StaticLayoutTypeName:
+      TypeDefineType: 5
+      TypeGUID: (0fcdb09b-2521-4665-8915-d844d47d953b)
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
@@ -117,7 +129,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 15
     DeterminePlayerBP: 0
-    StaticLayoutTypeName: CharcoalMine
+    StaticLayoutTypeName:
+      TypeDefineType: 5
+      TypeGUID: (60751a0d-62c6-494f-8a63-839b997354d8)
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
@@ -127,7 +141,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 5
     DeterminePlayerBP: 0
-    StaticLayoutTypeName: IceEnemyCave
+    StaticLayoutTypeName:
+      TypeDefineType: 5
+      TypeGUID: (b19d18fc-02bd-4106-9849-7d3bd1100f2e)
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
@@ -137,7 +153,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 8
     DeterminePlayerBP: 0
-    StaticLayoutTypeName: WoodenEnemyCave
+    StaticLayoutTypeName:
+      TypeDefineType: 5
+      TypeGUID: (776f7c31-418b-493e-a6e4-58b565c4d89e)
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
@@ -147,7 +165,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 4
     DeterminePlayerBP: 0
-    StaticLayoutTypeName: LightningEnemyCave
+    StaticLayoutTypeName:
+      TypeDefineType: 5
+      TypeGUID: (ca83b903-d4a2-4eea-9ecd-a1d5e9be4bae)
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
@@ -157,7 +177,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 5
     DeterminePlayerBP: 0
-    StaticLayoutTypeName: FireEnemyCave
+    StaticLayoutTypeName:
+      TypeDefineType: 5
+      TypeGUID: (51f0450e-5177-4bef-a394-9017e13a76b2)
   GenerateBoxLayerDataList:
   - ConsiderStaticLayout: 1
     Enable: 1
@@ -168,7 +190,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 20
     DeterminePlayerBP: 0
-    BoxTypeName: BrickBox
+    BoxTypeName:
+      TypeDefineType: 0
+      TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
     FillPercent: 63
     CaveConnectPercent: 30
     SmoothTimes: 3
@@ -176,14 +200,17 @@ MonoBehaviour:
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames:
-    - BrickBox
+    - TypeDefineType: 0
+      TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 0
     CertainNumber: 0
     Count: 1
     CountPer10KGrid: 20
     DeterminePlayerBP: 0
-    BoxTypeName: BorderBox
+    BoxTypeName:
+      TypeDefineType: 0
+      TypeGUID: (7e973885-895e-4dea-8632-ae2b3fdbac68)
     FillPercent: 0
     CaveConnectPercent: 0
     SmoothTimes: 1
@@ -197,7 +224,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 20
     DeterminePlayerBP: 0
-    BoxTypeName: WoodenBox
+    BoxTypeName:
+      TypeDefineType: 0
+      TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
     FillPercent: 52
     CaveConnectPercent: 0
     SmoothTimes: 5
@@ -205,14 +234,17 @@ MonoBehaviour:
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames:
-    - WoodenBox
+    - TypeDefineType: 0
+      TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
     CountPer10KGrid: 15
     DeterminePlayerBP: 0
-    BoxTypeName: LightningBox
+    BoxTypeName:
+      TypeDefineType: 0
+      TypeGUID: (392aec17-1844-43c8-92d3-826cc62fa4bb)
     FillPercent: 40
     CaveConnectPercent: 40
     SmoothTimes: 20
@@ -220,14 +252,17 @@ MonoBehaviour:
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames:
-    - WoodenBox
+    - TypeDefineType: 0
+      TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
     CountPer10KGrid: 20
     DeterminePlayerBP: 0
-    BoxTypeName: FireBox
+    BoxTypeName:
+      TypeDefineType: 0
+      TypeGUID: (65e613ca-1b8c-4002-84d1-0c49ea3b0903)
     FillPercent: 40
     CaveConnectPercent: 40
     SmoothTimes: 20
@@ -235,14 +270,17 @@ MonoBehaviour:
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames:
-    - WoodenBox
+    - TypeDefineType: 0
+      TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
     CountPer10KGrid: 10
     DeterminePlayerBP: 0
-    BoxTypeName: IceBox
+    BoxTypeName:
+      TypeDefineType: 0
+      TypeGUID: (c9630278-8f6d-416f-b6de-620573dfb81a)
     FillPercent: 40
     CaveConnectPercent: 40
     SmoothTimes: 20
@@ -250,14 +288,17 @@ MonoBehaviour:
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames:
-    - WoodenBox
+    - TypeDefineType: 0
+      TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
     CountPer10KGrid: 8
     DeterminePlayerBP: 0
-    BoxTypeName: TNTBox
+    BoxTypeName:
+      TypeDefineType: 0
+      TypeGUID: (aa389c3d-3837-4c6e-b19a-8f3fc11b5831)
     FillPercent: 40
     CaveConnectPercent: 40
     SmoothTimes: 20
@@ -265,14 +306,17 @@ MonoBehaviour:
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames:
-    - WoodenBox
+    - TypeDefineType: 0
+      TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
     CountPer10KGrid: 10
     DeterminePlayerBP: 0
-    BoxTypeName: LifeBox
+    BoxTypeName:
+      TypeDefineType: 0
+      TypeGUID: (096dcca9-e0d2-439e-9304-94a00bb4f36b)
     FillPercent: 40
     CaveConnectPercent: 40
     SmoothTimes: 20
@@ -280,14 +324,17 @@ MonoBehaviour:
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames:
-    - BrickBox
+    - TypeDefineType: 0
+      TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
     CountPer10KGrid: 6
     DeterminePlayerBP: 0
-    BoxTypeName: GoldenBox
+    BoxTypeName:
+      TypeDefineType: 0
+      TypeGUID: (b21d38f9-143e-43a6-9094-f1a790641d96)
     FillPercent: 40
     CaveConnectPercent: 40
     SmoothTimes: 20
@@ -295,14 +342,17 @@ MonoBehaviour:
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames:
-    - BrickBox
+    - TypeDefineType: 0
+      TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
     CountPer10KGrid: 1
     DeterminePlayerBP: 0
-    BoxTypeName: StackingGoldenBox
+    BoxTypeName:
+      TypeDefineType: 0
+      TypeGUID: (374e935f-27dc-4ac2-aeed-c78fd70ae29e)
     FillPercent: 40
     CaveConnectPercent: 40
     SmoothTimes: 20
@@ -310,14 +360,17 @@ MonoBehaviour:
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames:
-    - BrickBox
+    - TypeDefineType: 0
+      TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
     CountPer10KGrid: 60
     DeterminePlayerBP: 0
-    BoxTypeName: ActionBox
+    BoxTypeName:
+      TypeDefineType: 0
+      TypeGUID: (1fd4d701-1e6c-4bdf-a28d-2f7bf02e7bb9)
     FillPercent: 40
     CaveConnectPercent: 40
     SmoothTimes: 20
@@ -332,7 +385,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 3
     DeterminePlayerBP: 0
-    ActorTypeName: FireEnemy
+    ActorTypeName:
+      TypeDefineType: 2
+      TypeGUID: (1a445359-a04c-45b6-b196-0dba2f8f1b77)
   - ConsiderStaticLayout: 0
     Enable: 0
     AllowReplacedBoxTypeNames: []
@@ -342,7 +397,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 6
     DeterminePlayerBP: 0
-    ActorTypeName: IceEnemy
+    ActorTypeName:
+      TypeDefineType: 2
+      TypeGUID: (ad35ea7c-81f7-4dff-8a10-c37b4bf74855)
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
@@ -352,7 +409,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 6
     DeterminePlayerBP: 0
-    ActorTypeName: SpeedEnemy
+    ActorTypeName:
+      TypeDefineType: 2
+      TypeGUID: (7f30448e-8f28-4fe7-8d2c-4762cdc7b2b1)
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
@@ -362,7 +421,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 8
     DeterminePlayerBP: 0
-    ActorTypeName: LifeEnemy
+    ActorTypeName:
+      TypeDefineType: 2
+      TypeGUID: (0ef8812f-12f3-4b3b-9fa3-f1f0603c8e60)
   - ConsiderStaticLayout: 0
     Enable: 1
     AllowReplacedBoxTypeNames: []
@@ -372,7 +433,9 @@ MonoBehaviour:
     Count: 1
     CountPer10KGrid: 8
     DeterminePlayerBP: 0
-    ActorTypeName: LightningEnemy
+    ActorTypeName:
+      TypeDefineType: 2
+      TypeGUID: (195bdc7b-11cd-4a1e-9db0-eadcfa1baec1)
   ExtendScope_Load: 4
   ExtendScope_Recycle: 20
   ExtendScope_Recycle_Ground: 52

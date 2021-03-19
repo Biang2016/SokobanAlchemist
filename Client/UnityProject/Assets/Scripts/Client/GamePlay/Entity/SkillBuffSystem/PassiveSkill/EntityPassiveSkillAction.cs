@@ -42,16 +42,6 @@ public abstract class EntityPassiveSkillAction : IClone<EntityPassiveSkillAction
 
     internal Entity Entity;
 
-    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
-
-    private IEnumerable<string> GetAllEnemyNames => ConfigManager.GetAllEnemyNames();
-
-    private IEnumerable<string> GetAllFXTypeNames => ConfigManager.GetAllFXTypeNames();
-
-    private IEnumerable<string> GetAllWorldModuleNames => ConfigManager.GetAllWorldModuleNames();
-
-    private IEnumerable<string> GetAllWorldNames => ConfigManager.GetAllWorldNames();
-
     public EntityPassiveSkillAction Clone()
     {
         Type type = GetType();

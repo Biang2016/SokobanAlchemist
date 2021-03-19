@@ -9,6 +9,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Profiling;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -333,69 +334,31 @@ public partial class Box : Entity
     [SerializeField]
     [FoldoutGroup("特效")]
     [LabelText("撞击特效")]
-    [ValueDropdown("GetAllFXTypeNames")]
-    public string CollideFX;
-
-    [AssetsOnly]
-    [SerializeField]
-    [FoldoutGroup("特效")]
-    [LabelText("撞击特效尺寸")]
-    public float CollideFXScale = 1f;
+    public FXConfig CollideFX = new FXConfig();
 
     [AssetsOnly]
     [SerializeField]
     [FoldoutGroup("特效")]
     [LabelText("死亡特效")]
-    [ValueDropdown("GetAllFXTypeNames")]
-    public string DestroyFX;
-
-    [AssetsOnly]
-    [SerializeField]
-    [FoldoutGroup("特效")]
-    [LabelText("死亡特效尺寸")]
-    public float DestroyFXScale = 1f;
+    public FXConfig DestroyFX = new FXConfig();
 
     [FoldoutGroup("特效")]
     [LabelText("解冻特效")]
-    [ValueDropdown("GetAllFXTypeNames")]
-    public string ThawFX;
-
-    [AssetsOnly]
-    [SerializeField]
-    [FoldoutGroup("特效")]
-    [LabelText("解冻特效尺寸")]
-    public float ThawFXScale = 1f;
+    public FXConfig ThawFX = new FXConfig();
 
     [FoldoutGroup("特效")]
     [LabelText("冻结特效")]
-    [ValueDropdown("GetAllFXTypeNames")]
-    public string FrozeFX;
-
-    [AssetsOnly]
-    [SerializeField]
-    [FoldoutGroup("特效")]
-    [LabelText("冻结特效尺寸")]
-    public float FrozeFXScale = 1f;
+    public FXConfig FrozeFX = new FXConfig();
 
     [FoldoutGroup("特效")]
     [LabelText("合成特效")]
-    [ValueDropdown("GetAllFXTypeNames")]
-    public string MergeFX;
-
-    [FoldoutGroup("特效")]
-    [LabelText("合成特效尺寸")]
-    public float MergeFXScale = 1f;
+    public FXConfig MergeFX = new FXConfig();
 
     [FoldoutGroup("特效")]
     [LabelText("合成后特效")]
-    [ValueDropdown("GetAllFXTypeNames")]
-    public string MergedFX;
+    public FXConfig MergedFX = new FXConfig();
 
-    [FoldoutGroup("特效")]
-    [LabelText("合成后特效尺寸")]
-    public float MergedFXScale = 1f;
-
-    public string BoxTypeName => ConfigManager.GetBoxTypeName(EntityTypeIndex);
+    public string BoxTypeName => ConfigManager.GetTypeName(TypeDefineType.Box, EntityTypeIndex);
 
     // 获得支撑此Box的底部Box
     public HashSet<Box> GetBeneathBoxes()
@@ -810,7 +773,7 @@ public partial class Box : Entity
 
     public void LiftThenConsume()
     {
-        PlayFXOnEachGrid(CollideFX, CollideFXScale);
+        PlayFXOnEachGrid(CollideFX);
         PoolRecycle();
     }
 
@@ -1131,7 +1094,7 @@ public partial class Box : Entity
             case States.Flying:
             {
                 DealCollideDamageToActor(collision, KickAxis.None);
-                PlayFXOnEachGrid(CollideFX, CollideFXScale);
+                PlayFXOnEachGrid(CollideFX);
                 foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                 {
                     ps.OnFlyingCollisionEnter(collision);
@@ -1161,7 +1124,7 @@ public partial class Box : Entity
                 if (collision.gameObject.layer != LayerManager.Instance.Layer_Ground) // 避免在地上摩擦判定为碰撞
                 {
                     if (State == States.BeingKicked) DealCollideDamageToActor(collision, CurrentKickLocalAxis);
-                    PlayFXOnEachGrid(CollideFX, CollideFXScale);
+                    PlayFXOnEachGrid(CollideFX);
                     if (hasRigidbody) Rigidbody.velocity = Vector3.zero;
                     foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                     {
@@ -1196,7 +1159,7 @@ public partial class Box : Entity
                 }
 
                 DealCollideDamageToActor(collision, KickAxis.None);
-                PlayFXOnEachGrid(CollideFX, CollideFXScale);
+                PlayFXOnEachGrid(CollideFX);
                 foreach (EntityPassiveSkill ps in EntityPassiveSkills)
                 {
                     ps.OnDroppingFromAirCollisionEnter(collision);
@@ -1267,12 +1230,11 @@ public partial class Box : Entity
 
     #endregion
 
-    public void PlayFXOnEachGrid(string fxName, float scale)
+    public void PlayFXOnEachGrid(FXConfig fxConfig)
     {
         foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
         {
-            FX hit = FXManager.Instance.PlayFX(fxName, transform.position + offset);
-            if (hit) hit.transform.localScale = Vector3.one * scale;
+            FX hit = FXManager.Instance.PlayFX(fxConfig, transform.position + offset);
         }
     }
 
@@ -1309,7 +1271,7 @@ public partial class Box : Entity
 
         // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
         // BoxPassiveSkills.Clear(); 
-        PlayFXOnEachGrid(DestroyFX, DestroyFXScale);
+        PlayFXOnEachGrid(DestroyFX);
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
         callBack?.Invoke();
     }
@@ -1333,7 +1295,7 @@ public partial class Box : Entity
 
     IEnumerator Co_DelayMergeBox(GridPos3D mergeToWorldGP, UnityAction callBack)
     {
-        PlayFXOnEachGrid(MergeFX, MergeFXScale);
+        PlayFXOnEachGrid(MergeFX);
 
         EntityModelHelper.transform.DOShakeScale(0.2f);
         EntityModelHelper.transform.DOMove(mergeToWorldGP, MergeDelay * 1.2f);
@@ -1381,51 +1343,6 @@ public partial class Box : Entity
     #endregion
 
 #if UNITY_EDITOR
-
-    public bool RenameBoxTypeName(string srcBoxName, string targetBoxName, StringBuilder info)
-    {
-        bool isDirty = false;
-        foreach (BoxMergeConfigData data in BoxMergeConfig.BoxMergeConfigDataList)
-        {
-            if (data.MergeBoxTypeName == srcBoxName)
-            {
-                info.Append($"替换{name}.MergeBox_{data.MergeCount} -> '{targetBoxName}'\n");
-                data.MergeBoxTypeName = targetBoxName;
-                isDirty = true;
-            }
-        }
-
-        foreach (EntityPassiveSkill ps in RawEntityPassiveSkills)
-        {
-            bool dirty = ps.RenameBoxTypeName(name, srcBoxName, targetBoxName, info);
-            isDirty |= dirty;
-        }
-
-        return isDirty;
-    }
-
-    public bool DeleteBoxTypeName(string srcBoxName, StringBuilder info, bool moduleSpecial = false)
-    {
-        bool isDirty = false;
-
-        foreach (BoxMergeConfigData data in BoxMergeConfig.BoxMergeConfigDataList)
-        {
-            if (data.MergeBoxTypeName == srcBoxName)
-            {
-                info.Append($"替换{name}.MergeBox_{data.MergeCount} -> 'None'\n");
-                data.MergeBoxTypeName = "None";
-                isDirty = true;
-            }
-        }
-
-        foreach (EntityPassiveSkill ps in RawEntityPassiveSkills)
-        {
-            bool dirty = ps.DeleteBoxTypeName(name, srcBoxName, info);
-            isDirty |= dirty;
-        }
-
-        return isDirty;
-    }
 
     [AssetsOnly]
     [Button("刷新关卡编辑器中该箱子的形态", ButtonSizes.Large)]

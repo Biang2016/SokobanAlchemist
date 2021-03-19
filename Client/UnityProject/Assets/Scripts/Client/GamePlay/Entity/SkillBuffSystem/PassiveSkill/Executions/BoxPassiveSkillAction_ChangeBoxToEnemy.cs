@@ -12,8 +12,7 @@ public class BoxPassiveSkillAction_ChangeBoxToEnemy : BoxPassiveSkillAction, Ent
     protected override string Description => "更改箱子为敌人";
 
     [LabelText("敌人类型")]
-    [ValueDropdown("GetAllEnemyNames", IsUniqueList = true, DropdownTitle = "选择敌人类型", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string ChangeBoxToEnemyType = "None";
+    public TypeSelectHelper ChangeBoxToEnemyTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy};
 
     public void Execute()
     {
@@ -24,13 +23,13 @@ public class BoxPassiveSkillAction_ChangeBoxToEnemy : BoxPassiveSkillAction, Ent
             {
                 GridPos3D localGP = Box.LocalGP;
                 Box.DestroyBox();
-                ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(ChangeBoxToEnemyType);
+                ushort enemyTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Enemy, ChangeBoxToEnemyTypeName.TypeName);
                 if (enemyTypeIndex != 0)
                 {
                     BornPointData newBornPointData = new BornPointData();
                     newBornPointData.LocalGP = localGP;
                     newBornPointData.WorldGP = module.LocalGPToWorldGP(localGP);
-                    newBornPointData.ActorTypeName = ChangeBoxToEnemyType;
+                    newBornPointData.EnemyType = ChangeBoxToEnemyTypeName.Clone();
                     BattleManager.Instance.CreateActorByBornPointData(newBornPointData);
                 }
             }
@@ -41,13 +40,13 @@ public class BoxPassiveSkillAction_ChangeBoxToEnemy : BoxPassiveSkillAction, Ent
     {
         base.ChildClone(newAction);
         BoxPassiveSkillAction_ChangeBoxToEnemy bf = ((BoxPassiveSkillAction_ChangeBoxToEnemy) newAction);
-        bf.ChangeBoxToEnemyType = ChangeBoxToEnemyType;
+        bf.ChangeBoxToEnemyTypeName = ChangeBoxToEnemyTypeName.Clone();
     }
 
     public override void CopyDataFrom(EntityPassiveSkillAction srcData)
     {
         base.CopyDataFrom(srcData);
         BoxPassiveSkillAction_ChangeBoxToEnemy bf = ((BoxPassiveSkillAction_ChangeBoxToEnemy) srcData);
-        ChangeBoxToEnemyType = bf.ChangeBoxToEnemyType;
+        ChangeBoxToEnemyTypeName.CopyDataFrom(bf.ChangeBoxToEnemyTypeName);
     }
 }

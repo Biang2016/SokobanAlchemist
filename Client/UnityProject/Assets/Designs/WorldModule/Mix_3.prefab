@@ -27,9 +27,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 3936053792715135938}
-  - {fileID: 8341850253115581761}
   - {fileID: 6775591110839784195}
+  - {fileID: 8341850253115581761}
+  - {fileID: 3936053792715135938}
   - {fileID: 1392024370161827221}
   - {fileID: 1851322445980176191}
   - {fileID: 6214752823108374449}
@@ -1366,6 +1366,11 @@ PrefabInstance:
       propertyPath: BornPointData.BornPointType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.EnemyType.TypeGUID
+      value: (ad35ea7c-81f7-4dff-8a10-c37b4bf74855)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
 --- !u!4 &6214752823108374449 stripped
@@ -1684,7 +1689,7 @@ PrefabInstance:
     - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
@@ -1743,6 +1748,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
+      propertyPath: BornPointData.IsPlayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
       propertyPath: BornPointData.ActorType
       value: LightningEnemy
       objectReference: {fileID: 0}
@@ -1755,6 +1765,11 @@ PrefabInstance:
         type: 3}
       propertyPath: BornPointData.BornPointType
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.EnemyType.TypeGUID
+      value: (195bdc7b-11cd-4a1e-9db0-eadcfa1baec1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
@@ -2671,6 +2686,11 @@ PrefabInstance:
       propertyPath: BornPointData.BornPointType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.EnemyType.TypeGUID
+      value: (195bdc7b-11cd-4a1e-9db0-eadcfa1baec1)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
 --- !u!4 &8341850253115581761 stripped
@@ -3316,6 +3336,11 @@ PrefabInstance:
       propertyPath: BornPointData.BornPointType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.EnemyType.TypeGUID
+      value: (ad35ea7c-81f7-4dff-8a10-c37b4bf74855)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
 --- !u!4 &8917998223629431333 stripped
@@ -3914,7 +3939,12 @@ PrefabInstance:
     - target: {fileID: 7818950748850363364, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_Name
-      value: BornPoint_Player1
+      value: Player1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.IsPlayer
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
@@ -4546,6 +4576,11 @@ PrefabInstance:
       propertyPath: BornPointData.BornPointType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.EnemyType.TypeGUID
+      value: (1a445359-a04c-45b6-b196-0dba2f8f1b77)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
 --- !u!4 &1392024370161827221 stripped
@@ -4635,6 +4670,11 @@ PrefabInstance:
         type: 3}
       propertyPath: BornPointData.BornPointType
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.EnemyType.TypeGUID
+      value: (ad35ea7c-81f7-4dff-8a10-c37b4bf74855)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
@@ -6154,7 +6194,7 @@ PrefabInstance:
     - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4737008099522631371, guid: 7d03921d29aa14442a6fdc55423bb5aa,
         type: 3}
@@ -6225,6 +6265,11 @@ PrefabInstance:
         type: 3}
       propertyPath: BornPointData.BornPointType
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603199367269735301, guid: 7d03921d29aa14442a6fdc55423bb5aa,
+        type: 3}
+      propertyPath: BornPointData.EnemyType.TypeGUID
+      value: (1a445359-a04c-45b6-b196-0dba2f8f1b77)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d03921d29aa14442a6fdc55423bb5aa, type: 3}
@@ -6560,6 +6605,11 @@ PrefabInstance:
         type: 3}
       propertyPath: childData.TriggerEmitEventAlias
       value: Mix_3_LockOpen
+      objectReference: {fileID: 0}
+    - target: {fileID: 5666251240290953977, guid: 764652e7e0033704a9bf185bcdc0ddfa,
+        type: 3}
+      propertyPath: childData.RequireBoxTypeName.TypeGUID
+      value: (67d3ef54-afc4-4973-9c6b-4594f89fcb57)
       objectReference: {fileID: 0}
     - target: {fileID: 6566653740014015075, guid: 764652e7e0033704a9bf185bcdc0ddfa,
         type: 3}

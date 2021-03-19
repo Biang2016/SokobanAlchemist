@@ -28,12 +28,9 @@ public class OpenWorld : World
     public ushort[,,] WorldMap_StaticLayoutOccupied; // 地图静态布局占位  Y轴缩小16
 
     [LabelText("起始MicroWorld")]
-    [ValueDropdown("GetAllWorldNames", IsUniqueList = true, DropdownTitle = "选择世界", DrawDropdownForListElements = false, ExcludeExistingValuesInList = true)]
-    public string StartMicroWorldTypeName = "None";
+    public TypeSelectHelper StartMicroWorldTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
 
-    public GridPos3D InitialPlayerBP = GridPos3D.Zero;
-
-    private IEnumerable<string> GetAllWorldNames => ConfigManager.GetAllWorldNames();
+    internal GridPos3D InitialPlayerBP = GridPos3D.Zero;
 
     #region GenerateLayerData
 
@@ -48,8 +45,8 @@ public class OpenWorld : World
 
         [SerializeField]
         [LabelText("允许覆盖的箱子类型")]
-        [ValueDropdown("GetAllBoxTypeNames", IsUniqueList = true, DrawDropdownForListElements = true)]
-        private List<string> AllowReplacedBoxTypeNames = new List<string>();
+        [ListDrawerSettings(ListElementLabelName = "TypeName")]
+        private List<TypeSelectHelper> AllowReplacedBoxTypeNames = new List<TypeSelectHelper>();
 
         [HideInInspector]
         public HashSet<string> AllowReplacedBoxTypeNameSet = new HashSet<string>();
@@ -78,24 +75,18 @@ public class OpenWorld : World
 
         public void Init()
         {
-            foreach (string allowReplacedBoxTypeName in AllowReplacedBoxTypeNames)
+            foreach (TypeSelectHelper allowReplacedBoxTypeName in AllowReplacedBoxTypeNames)
             {
-                AllowReplacedBoxTypeNameSet.Add(allowReplacedBoxTypeName);
+                AllowReplacedBoxTypeNameSet.Add(allowReplacedBoxTypeName.TypeName);
             }
         }
-
-        private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames(false);
-        private IEnumerable<string> GetAllActorTypeNames => ConfigManager.GetAllActorNames(false);
-        private IEnumerable<string> GetAllStaticLayoutTypeNames => ConfigManager.GetAllStaticLayoutNames(false);
     }
 
     [Serializable]
     public class GenerateStaticLayoutLayerData : GenerateLayerData
     {
-        [BoxName]
         [LabelText("静态布局类型")]
-        [ValueDropdown("GetAllStaticLayoutTypeNames")]
-        public string StaticLayoutTypeName = "None";
+        public TypeSelectHelper StaticLayoutTypeName = new TypeSelectHelper { TypeDefineType = TypeDefineType.StaticLayout };
     }
 
     [FoldoutGroup("地图生成")]
@@ -106,10 +97,8 @@ public class OpenWorld : World
     [Serializable]
     public class GenerateBoxLayerData : GenerateLayerData
     {
-        [BoxName]
         [LabelText("箱子类型")]
-        [ValueDropdown("GetAllBoxTypeNames")]
-        public string BoxTypeName = "None";
+        public TypeSelectHelper BoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
         [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
         [LabelText("初始填充比率")]
@@ -136,25 +125,8 @@ public class OpenWorld : World
     [Serializable]
     public class GenerateActorLayerData : GenerateLayerData
     {
-        [BoxName]
         [LabelText("Actor类型")]
-        [ValueDropdown("GetAllActorTypeNames")]
-        public string ActorTypeName = "None";
-
-        public ActorCategory ActorCategory
-        {
-            get
-            {
-                if (ActorTypeName.StartsWith("Player"))
-                {
-                    return ActorCategory.Player;
-                }
-                else
-                {
-                    return ActorCategory.Creature;
-                }
-            }
-        }
+        public TypeSelectHelper ActorTypeName = new TypeSelectHelper { TypeDefineType = TypeDefineType.Enemy };
     }
 
     public enum GenerateAlgorithm
@@ -332,7 +304,7 @@ public class OpenWorld : World
         CameraManager.Instance.FieldCamera.InitFocus();
 
         // 没有起始关卡就直接进入大世界，有起始关卡则避免加载了又卸载
-        ushort startMicroWorldTypeIndex = ConfigManager.GetWorldTypeIndex(StartMicroWorldTypeName);
+        ushort startMicroWorldTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, StartMicroWorldTypeName.TypeName);
         if (startMicroWorldTypeIndex == 0)
         {
             RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(playerBPWorld, PlayerScopeRadiusX, PlayerScopeRadiusZ)); // 按关卡生成器和角色位置初始化需要的模组
@@ -344,7 +316,7 @@ public class OpenWorld : World
 
     public IEnumerator OnAfterInitialize()
     {
-        ushort startMicroWorldTypeIndex = ConfigManager.GetWorldTypeIndex(StartMicroWorldTypeName);
+        ushort startMicroWorldTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, StartMicroWorldTypeName.TypeName);
         if (startMicroWorldTypeIndex != 0)
         {
             yield return Co_TransportPlayerToMicroWorld(startMicroWorldTypeIndex);
@@ -494,12 +466,12 @@ public class OpenWorld : World
                                 }
                                 case ConfigManager.TypeStartIndex.Enemy:
                                 {
-                                    string actorTypeName = ConfigManager.GetEnemyTypeName(existedIndex);
+                                    string enemyTypeName = ConfigManager.GetTypeName(TypeDefineType.Enemy, existedIndex);
                                     EntityExtraSerializeData actorExtraData = WorldMap_EntityExtraSerializeData[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
                                     moduleData.WorldModuleBornPointGroupData.EnemyBornPoints.Add(
                                         new BornPointData
                                         {
-                                            ActorTypeName = actorTypeName,
+                                            EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy, TypeSelection = enemyTypeName },
                                             LocalGP = new GridPos3D(local_x, local_y, local_z),
                                             BornPointAlias = "",
                                             WorldGP = new GridPos3D(world_x, world_y, world_z),

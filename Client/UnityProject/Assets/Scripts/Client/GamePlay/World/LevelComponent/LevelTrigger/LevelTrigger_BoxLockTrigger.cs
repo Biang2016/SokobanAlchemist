@@ -17,10 +17,8 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
     [Serializable]
     public new class Data : LevelTriggerBase.Data
     {
-        [BoxName]
         [LabelText("指定箱子类型")]
-        [ValueDropdown("GetAllBoxTypeNames", DropdownTitle = "选择箱子类型")]
-        public string RequireBoxTypeName = "None";
+        public TypeSelectHelper RequireBoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
         [LabelText("箱子至少停留时间/s")]
         public float RequiredStayDuration;
@@ -29,7 +27,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
         {
             base.ChildClone(newData);
             Data data = ((Data) newData);
-            data.RequireBoxTypeName = RequireBoxTypeName;
+            data.RequireBoxTypeName = RequireBoxTypeName.Clone();
             data.RequiredStayDuration = RequiredStayDuration;
         }
     }
@@ -53,7 +51,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
                 Box box = collider.gameObject.GetComponentInParent<Box>();
                 if (box != null)
                 {
-                    if (ConfigManager.GetBoxTypeName(box.EntityTypeIndex) == childData.RequireBoxTypeName)
+                    if (ConfigManager.GetTypeName(TypeDefineType.Box, box.EntityTypeIndex) == childData.RequireBoxTypeName.TypeName)
                     {
                         StayBox = box;
                         StayBoxTick = 0;
@@ -94,7 +92,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
                 Box box = collider.gameObject.GetComponentInParent<Box>();
                 if (box != null)
                 {
-                    if (ConfigManager.GetBoxTypeName(box.EntityTypeIndex) == childData.RequireBoxTypeName)
+                    if (ConfigManager.GetTypeName(TypeDefineType.Box, box.EntityTypeIndex) == childData.RequireBoxTypeName.TypeName)
                     {
                         if (StayBox == box)
                         {
@@ -118,5 +116,6 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
         Gizmos.DrawWireCube(transform.position, Vector3.one * 0.5f);
         Gizmos.DrawSphere(transform.position + Vector3.right * 0.25f + Vector3.forward * 0.25f, 0.15f);
     }
+
 #endif
 }

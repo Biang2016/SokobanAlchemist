@@ -11,17 +11,9 @@ public class BoxNameWithProbability : Probability, IClone<BoxNameWithProbability
 {
     public string Description => $"{BoxTypeName}";
 
-    [BoxNameList]
-    [ValueDropdown("GetAllBoxTypeNames", DropdownTitle = "选择箱子类型")]
-    public string BoxTypeName;
+    public TypeSelectHelper BoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
     public GridPosR.Orientation BoxOrientation;
-
-    #region Utils
-
-    private IEnumerable<string> GetAllBoxTypeNames => ConfigManager.GetAllBoxTypeNames();
-
-    #endregion
 
     [SerializeField]
     private int probability;
@@ -44,7 +36,7 @@ public class BoxNameWithProbability : Probability, IClone<BoxNameWithProbability
     public Probability ProbabilityClone()
     {
         BoxNameWithProbability newData = new BoxNameWithProbability();
-        newData.BoxTypeName = BoxTypeName;
+        newData.BoxTypeName = BoxTypeName.Clone();
         newData.BoxOrientation = BoxOrientation;
         newData.probability = probability;
         newData.isSingleton = isSingleton;
@@ -58,7 +50,7 @@ public class BoxNameWithProbability : Probability, IClone<BoxNameWithProbability
 
     public void CopyDataFrom(BoxNameWithProbability src)
     {
-        BoxTypeName = src.BoxTypeName;
+        BoxTypeName.CopyDataFrom(src.BoxTypeName);
         BoxOrientation = src.BoxOrientation;
         probability = src.probability;
         isSingleton = src.isSingleton;

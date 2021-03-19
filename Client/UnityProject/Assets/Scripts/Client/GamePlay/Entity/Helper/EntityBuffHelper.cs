@@ -326,15 +326,14 @@ public class EntityBuffHelper : EntityMonoHelper
         return false;
     }
 
-    public void PlayAbnormalStatFX(int statType, string fxName, float scale)
+    public void PlayAbnormalStatFX(int statType, FXConfig fxConfig, float evaluator = 0f)
     {
-        if (string.IsNullOrEmpty(fxName)) return;
-        if (fxName == "None") return;
+        if (fxConfig == null || fxConfig.Empty) return;
         if (AbnormalBuffFXDict.TryGetValue(statType, out List<FX> fxs))
         {
             foreach (FX fx in fxs)
             {
-                fx.transform.localScale = Vector3.one * scale;
+                fx.transform.localScale = Vector3.one * fxConfig.GetScale(evaluator);
             }
 
             if (fxs.Count > 0) return;
@@ -354,7 +353,7 @@ public class EntityBuffHelper : EntityMonoHelper
 
         void PlayFX(Vector3 position)
         {
-            FX fx = FXManager.Instance.PlayFX(fxName, position, scale);
+            FX fx = FXManager.Instance.PlayFX(fxConfig, position);
             fx.transform.parent = Entity.transform;
             if (!AbnormalBuffFXDict.ContainsKey(statType)) AbnormalBuffFXDict.Add(statType, new List<FX>());
             AbnormalBuffFXDict[statType].Add(fx);
@@ -391,9 +390,8 @@ public class EntityBuffHelper : EntityMonoHelper
 
     private void PlayBuffFX(EntityBuff buff)
     {
-        if (string.IsNullOrEmpty(buff.BuffFX)) return;
-        if (buff.BuffFX == "None") return;
-        FX fx = FXManager.Instance.PlayFX(buff.BuffFX, transform.position, buff.BuffFXScale);
+        if (buff.BuffFX == null || buff.BuffFX.Empty) return;
+        FX fx = FXManager.Instance.PlayFX(buff.BuffFX, transform.position);
         fx.transform.parent = Entity.transform;
         if (buff.Duration > 0 || buff.IsPermanent)
         {
@@ -445,8 +443,7 @@ public class EntityBuffHelper : EntityMonoHelper
         AddBuff(new EntityBuff_ChangeEntityStatInstantly
         {
             CasterActorGUID = lastInteractActorGUID,
-            BuffFX = "None",
-            BuffFXScale = 1,
+            BuffFX = null,
             Delta = -damage,
             Duration = 0,
             EntityBuffAttribute = damageAttribute,
@@ -460,8 +457,7 @@ public class EntityBuffHelper : EntityMonoHelper
     {
         AddBuff(new EntityBuff_ChangeEntityStatInstantly
         {
-            BuffFX = "None",
-            BuffFXScale = 1,
+            BuffFX = null,
             Delta = health,
             Duration = 0,
             EntityBuffAttribute = healAttribute,
@@ -475,8 +471,7 @@ public class EntityBuffHelper : EntityMonoHelper
     {
         AddBuff(new EntityBuff_ChangeEntityStatInstantly
         {
-            BuffFX = "None",
-            BuffFXScale = 1,
+            BuffFX = null,
             Delta = actionPoints,
             Duration = 0,
             EntityBuffAttribute = attribute,

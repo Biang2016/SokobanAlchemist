@@ -157,14 +157,13 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
         if (bpd.ActorCategory == ActorCategory.Player)
         {
-            PlayerNumber playerNumber = (PlayerNumber) Enum.Parse(typeof(PlayerNumber), bpd.ActorTypeName);
             PlayerActor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
             GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
             player.BornPointDataGUID = bpd.GUID;
             player.WorldGP = bpd.WorldGP;
-            player.Setup(bpd.ActorTypeName, bpd.ActorCategory, playerNumber, 0);
+            player.Setup(PlayerNumber.Player1.ToString(), bpd.ActorCategory, PlayerNumber.Player1, 0);
             BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
-            MainPlayers[(int) playerNumber] = player;
+            MainPlayers[0] = player;
             AddActor(null, player);
             UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>().Initialize();
             UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
@@ -174,12 +173,12 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             WorldModule worldModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(bpd.WorldGP);
             if (worldModule != null)
             {
-                ushort enemyTypeIndex = ConfigManager.GetEnemyTypeIndex(bpd.ActorTypeName);
+                ushort enemyTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Enemy, bpd.EnemyType.TypeName);
                 EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
                 GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, enemy.transform, 1);
                 enemy.BornPointDataGUID = bpd.GUID;
                 enemy.WorldGP = bpd.WorldGP;
-                enemy.Setup(bpd.ActorTypeName, bpd.ActorCategory, bpd.ActorOrientation, worldModule.GUID);
+                enemy.Setup(bpd.EnemyType.TypeName, bpd.ActorCategory, bpd.ActorOrientation, worldModule.GUID);
                 enemy.ApplyBoxExtraSerializeData(bpd.RawEntityExtraSerializeData);
                 Enemies.Add(enemy);
                 AddActor(worldModule, enemy);
