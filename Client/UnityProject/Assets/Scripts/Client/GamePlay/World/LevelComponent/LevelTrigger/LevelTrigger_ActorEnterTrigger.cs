@@ -20,7 +20,7 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
     {
         public bool IsPlayer = false;
 
-        [LabelText("角色类型")]
+        [LabelText("@\"角色类型\t\"+RequiredActorType")]
         [HideIf("IsPlayer")]
         public TypeSelectHelper RequiredActorType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy};
 

@@ -17,7 +17,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
     [Serializable]
     public new class Data : LevelTriggerBase.Data
     {
-        [LabelText("指定箱子类型")]
+        [LabelText("@\"指定箱子类型\t\"+RequireBoxTypeName")]
         public TypeSelectHelper RequireBoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
         [LabelText("箱子至少停留时间/s")]

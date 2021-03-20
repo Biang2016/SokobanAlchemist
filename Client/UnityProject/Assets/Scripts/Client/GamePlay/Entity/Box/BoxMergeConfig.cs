@@ -46,6 +46,7 @@ public class BoxMergeConfigData
 
     public MergeOrientation MergeOrientation = MergeOrientation.XZ;
 
+    [LabelText("@\"合成类型\t\"+MergeBox")]
     public TypeSelectHelper MergeBox = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 }
 

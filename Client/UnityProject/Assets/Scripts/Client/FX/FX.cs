@@ -51,16 +51,25 @@ public class FX : PoolObject
 [Serializable]
 public class FXConfig : IClone<FXConfig>
 {
+    public override string ToString()
+    {
+        return FXType.TypeName;
+    }
+
     [SerializeField]
+    [LabelText("@\"特效类型\t\"+FXType")]
     private TypeSelectHelper FXType = new TypeSelectHelper {TypeDefineType = TypeDefineType.FX};
 
     [SerializeField]
+    [LabelText("使用曲线")]
     private bool UseCurve = false;
 
     [SerializeField]
+    [LabelText("固定尺寸")]
     private float FXScale = 1.0f;
 
     [SerializeField]
+    [LabelText("尺寸(曲线)")]
     private AnimationCurve AnimationCurve = new AnimationCurve();
 
     public FXConfig(string defaultFXTypeName = "None", float fxScale = 1f, bool useCurve = false, AnimationCurve animationCurve = null)

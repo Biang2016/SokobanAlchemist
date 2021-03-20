@@ -27,7 +27,7 @@ public class OpenWorld : World
     public ushort[,,] WorldMap_Occupied; // 地图元素占位  Y轴缩小16
     public ushort[,,] WorldMap_StaticLayoutOccupied; // 地图静态布局占位  Y轴缩小16
 
-    [LabelText("起始MicroWorld")]
+    [LabelText("@\"起始MicroWorld\t\"+StartMicroWorldTypeName")]
     public TypeSelectHelper StartMicroWorldTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
 
     internal GridPos3D InitialPlayerBP = GridPos3D.Zero;
@@ -85,8 +85,8 @@ public class OpenWorld : World
     [Serializable]
     public class GenerateStaticLayoutLayerData : GenerateLayerData
     {
-        [LabelText("静态布局类型")]
-        public TypeSelectHelper StaticLayoutTypeName = new TypeSelectHelper { TypeDefineType = TypeDefineType.StaticLayout };
+        [LabelText("@\"静态布局类型\t\"+StaticLayoutTypeName")]
+        public TypeSelectHelper StaticLayoutTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.StaticLayout};
     }
 
     [FoldoutGroup("地图生成")]
@@ -97,7 +97,7 @@ public class OpenWorld : World
     [Serializable]
     public class GenerateBoxLayerData : GenerateLayerData
     {
-        [LabelText("箱子类型")]
+        [LabelText("@\"箱子类型\t\"+BoxTypeName")]
         public TypeSelectHelper BoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
         [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
@@ -125,8 +125,8 @@ public class OpenWorld : World
     [Serializable]
     public class GenerateActorLayerData : GenerateLayerData
     {
-        [LabelText("Actor类型")]
-        public TypeSelectHelper ActorTypeName = new TypeSelectHelper { TypeDefineType = TypeDefineType.Enemy };
+        [LabelText("@\"Actor类型\t\"+ActorTypeName")]
+        public TypeSelectHelper ActorTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy};
     }
 
     public enum GenerateAlgorithm
@@ -471,7 +471,7 @@ public class OpenWorld : World
                                     moduleData.WorldModuleBornPointGroupData.EnemyBornPoints.Add(
                                         new BornPointData
                                         {
-                                            EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy, TypeSelection = enemyTypeName },
+                                            EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy, TypeSelection = enemyTypeName},
                                             LocalGP = new GridPos3D(local_x, local_y, local_z),
                                             BornPointAlias = "",
                                             WorldGP = new GridPos3D(world_x, world_y, world_z),

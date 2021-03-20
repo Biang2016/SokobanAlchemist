@@ -82,7 +82,9 @@ public class TypeSelectHelper : IClone<TypeSelectHelper>
     {
         if (!string.IsNullOrWhiteSpace(TypeGUID))
         {
-            //ConfigManager.LoadAllConfigs();
+#if UNITY_EDITOR
+            ConfigManager.LoadAllConfigs();
+#endif
             if (ConfigManager.TypeGUIDMappings[TypeDefineType].GUID_TypeDict.TryGetValue(TypeGUID, out string typeName))
             {
                 TypeSelection = typeName;
@@ -123,6 +125,7 @@ public class TypeSelectHelper : IClone<TypeSelectHelper>
         {
             int a = 0;
         }
+
         if (ConfigManager.TypeGUIDMappings.TryGetValue(TypeDefineType, out TypeGUIDMappingAsset.Mapping mapping))
         {
             if (mapping.Type_GUIDDict.TryGetValue(TypeSelection, out string guid))

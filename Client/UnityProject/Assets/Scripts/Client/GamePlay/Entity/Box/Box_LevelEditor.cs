@@ -111,7 +111,7 @@ public class Box_LevelEditor : MonoBehaviour
     [ShowInInspector]
     [NonSerialized]
     [FoldoutGroup("快速替换")]
-    [LabelText("替换Box类型")]
+    [LabelText("@\"替换Box类型\t\"+ReplaceBoxTypeName")]
     private TypeSelectHelper ReplaceBoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
     [HideInPlayMode]

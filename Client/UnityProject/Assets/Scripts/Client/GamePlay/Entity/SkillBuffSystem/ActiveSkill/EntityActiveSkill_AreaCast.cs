@@ -107,7 +107,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     [LabelText("准度标准差/格")]
     public float AccurateStandardDeviation;
 
-    [LabelText("技能范围标识类型")]
+    [LabelText("@\"技能范围标识类型\t\"+BattleIndicatorTypeName")]
     public TypeSelectHelper BattleIndicatorTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.BattleIndicator};
 
     private ushort BattleIndicatorTypeIndex => ConfigManager.GetTypeIndex(TypeDefineType.BattleIndicator, BattleIndicatorTypeName.TypeName);
@@ -127,7 +127,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     [LabelText("技能范围标识描边色模糊")]
     public Color GridWarningColorBorderDim;
 
-    [LabelText("释放特效")]
+    [LabelText("@\"释放特效\t\"+CastFX")]
     public FXConfig CastFX = new FXConfig();
 
     internal Dictionary<GridPos3D, GridWarning> GridWarningDict = new Dictionary<GridPos3D, GridWarning>();

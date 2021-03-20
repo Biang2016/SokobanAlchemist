@@ -246,7 +246,7 @@ public class Actor : Entity
     #region 特效
 
     [FoldoutGroup("特效")]
-    [LabelText("踢特效")]
+    [LabelText("@\"踢特效\t\"+KickFX")]
     public FXConfig KickFX = new FXConfig();
 
     [FoldoutGroup("特效")]
@@ -254,15 +254,15 @@ public class Actor : Entity
     public Transform KickFXPivot;
 
     [FoldoutGroup("特效")]
-    [LabelText("受伤特效")]
+    [LabelText("@\"受伤特效\t\"+InjureFX")]
     public FXConfig InjureFX = new FXConfig();
 
     [FoldoutGroup("特效")]
-    [LabelText("生命恢复特效")]
+    [LabelText("@\"生命恢复特效\t\"+HealFX")]
     public FXConfig HealFX = new FXConfig();
 
     [FoldoutGroup("特效")]
-    [LabelText("死亡特效")]
+    [LabelText("@\"死亡特效\t\"+DieFX")]
     public FXConfig DieFX = new FXConfig();
 
     #endregion
@@ -334,11 +334,11 @@ public class Actor : Entity
     #region 冻结
 
     [FoldoutGroup("冻结")]
-    [LabelText("冻结特效")]
+    [LabelText("@\"冻结特效\t\"+FrozeFX")]
     public FXConfig FrozeFX = new FXConfig();
 
     [FoldoutGroup("冻结")]
-    [LabelText("解冻特效")]
+    [LabelText("@\"解冻特效\t\"+ThawFX")]
     public FXConfig ThawFX = new FXConfig();
 
     [SerializeReference]

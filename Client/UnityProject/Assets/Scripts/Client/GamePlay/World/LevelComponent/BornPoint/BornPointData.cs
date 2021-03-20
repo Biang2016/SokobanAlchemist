@@ -38,7 +38,7 @@ public class BornPointData : LevelComponentData
 
     public bool IsPlayer = false;
 
-    [LabelText("角色类型")]
+    [LabelText("@\"角色类型\t\"+EnemyType")]
     [HideIf("IsPlayer")]
     public TypeSelectHelper EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy};
 

@@ -941,14 +941,16 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort GetTypeIndex(TypeDefineType typeDefineType, string typeName)
     {
         if (!IsLoaded) LoadAllConfigs();
-        if (string.IsNullOrEmpty(typeName))
+        if (typeName == "None" || string.IsNullOrEmpty(typeName)) return 0;
+        if (TypeDefineConfigs[typeDefineType].TypeIndexDict.TryGetValue(typeName, out ushort typeIndex))
+        {
+            return typeIndex;
+        }
+        else
         {
             Debug.Log(CommonUtils.HighlightStringFormat("无法找到名为{0}的{1}的资源", "#00A9D1", typeName, typeDefineType));
             return 0;
         }
-
-        TypeDefineConfigs[typeDefineType].TypeIndexDict.TryGetValue(typeName, out ushort typeIndex);
-        return typeIndex;
     }
 
     public static EntityOccupationData GetEntityOccupationData(ushort entityTypeIndex)

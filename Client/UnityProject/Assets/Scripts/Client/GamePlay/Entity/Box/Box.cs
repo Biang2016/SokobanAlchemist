@@ -326,6 +326,7 @@ public partial class Box : Entity
     #region 合成
 
     [FoldoutGroup("合成")]
+    [HideLabel]
     public BoxMergeConfig BoxMergeConfig;
 
     #endregion
@@ -333,29 +334,29 @@ public partial class Box : Entity
     [AssetsOnly]
     [SerializeField]
     [FoldoutGroup("特效")]
-    [LabelText("撞击特效")]
+    [LabelText("@\"撞击特效\t\"+CollideFX")]
     public FXConfig CollideFX = new FXConfig();
 
     [AssetsOnly]
     [SerializeField]
     [FoldoutGroup("特效")]
-    [LabelText("死亡特效")]
+    [LabelText("@\"死亡特效\t\"+DestroyFX")]
     public FXConfig DestroyFX = new FXConfig();
 
     [FoldoutGroup("特效")]
-    [LabelText("解冻特效")]
+    [LabelText("@\"解冻特效\t\"+ThawFX")]
     public FXConfig ThawFX = new FXConfig();
 
     [FoldoutGroup("特效")]
-    [LabelText("冻结特效")]
+    [LabelText("@\"冻结特效\t\"+FrozeFX")]
     public FXConfig FrozeFX = new FXConfig();
 
     [FoldoutGroup("特效")]
-    [LabelText("合成特效")]
+    [LabelText("@\"合成特效\t\"+MergeFX")]
     public FXConfig MergeFX = new FXConfig();
 
     [FoldoutGroup("特效")]
-    [LabelText("合成后特效")]
+    [LabelText("@\"合成后特效\t\"+MergedFX")]
     public FXConfig MergedFX = new FXConfig();
 
     public string BoxTypeName => ConfigManager.GetTypeName(TypeDefineType.Box, EntityTypeIndex);

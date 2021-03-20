@@ -11,6 +11,7 @@ public class WorldNameWithProbability : Probability, IClone<WorldNameWithProbabi
 {
     public string Description => $"{WorldTypeName}";
 
+    [LabelText("@\"世界类型\t\"+WorldTypeName")]
     public TypeSelectHelper WorldTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
 
     [SerializeField]

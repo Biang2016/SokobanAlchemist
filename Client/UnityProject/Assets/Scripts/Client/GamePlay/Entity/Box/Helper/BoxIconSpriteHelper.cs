@@ -14,7 +14,7 @@ public class BoxIconSpriteHelper : BoxMonoHelper
     }
 
     [OnValueChanged("ChangeSprite")]
-    [LabelText("图标类型")]
+    [LabelText("@\"图标类型\t\"+BoxIconType")]
     public TypeSelectHelper BoxIconType = new TypeSelectHelper {TypeDefineType = TypeDefineType.BoxIcon};
 
     [OnValueChanged("ChangeColor")]

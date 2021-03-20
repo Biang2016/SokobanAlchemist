@@ -67,7 +67,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public LoadingMapPanel LoadingMapPanel;
     public NoticePanel NoticePanel;
 
-    [LabelText("开局世界类型")]
+    [LabelText("@\"开局世界类型\t\"+StartWorldName")]
     public TypeSelectHelper StartWorldName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
 
     public static string DebugChangeWorldName = null;

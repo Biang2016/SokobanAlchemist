@@ -49,7 +49,7 @@ public abstract class LevelTriggerBase : PoolObject
         public bool KeepTriggering = false;
 
         [BoxGroup("触发事件并发送")]
-        [LabelText("触发特效")]
+        [LabelText("@\"触发特效\t\"+TriggerFX")]
         public FXConfig TriggerFX = new FXConfig();
 
         [BoxGroup("设置战场状态")]

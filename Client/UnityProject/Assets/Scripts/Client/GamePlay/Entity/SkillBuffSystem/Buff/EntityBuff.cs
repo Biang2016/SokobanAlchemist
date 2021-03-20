@@ -51,7 +51,7 @@ public abstract class EntityBuff : IClone<EntityBuff>
         return true;
     }
 
-    [LabelText("Buff特效")]
+    [LabelText("@\"Buff特效\t\t\"+BuffFX")]
     public FXConfig BuffFX = new FXConfig();
 
     protected EntityBuff()

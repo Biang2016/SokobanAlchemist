@@ -114,7 +114,7 @@ public class EntityStatPropSet
     public EntityProperty FrozenDamageDefense = new EntityProperty(EntityPropertyType.FrozenDamageDefense);
 
     [BoxGroup("冰冻")]
-    [LabelText("冰冻持续特效")]
+    [LabelText("@\"冰冻持续特效\t\"+FrozenFX")]
     public FXConfig FrozenFX = new FXConfig();
 
     #endregion
@@ -146,11 +146,11 @@ public class EntityStatPropSet
     public EntityProperty FiringDamageDefense = new EntityProperty(EntityPropertyType.FiringDamageDefense);
 
     [BoxGroup("燃烧")]
-    [LabelText("燃烧触发特效")]
+    [LabelText("@\"燃烧触发特效\t\"+StartFiringFX")]
     public FXConfig StartFiringFX = new FXConfig();
 
     [BoxGroup("燃烧")]
-    [LabelText("燃烧持续特效")]
+    [LabelText("@\"燃烧持续特效\t\"+FiringFX")]
     public FXConfig FiringFX = new FXConfig();
 
     #endregion

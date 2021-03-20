@@ -13,6 +13,7 @@ public class EntityPassiveSkillAction_PlayFX : EntityPassiveSkillAction, EntityP
 
     protected override string Description => "播放特效";
 
+    [LabelText("@\"特效\t\"+FX")]
     public FXConfig FX = new FXConfig();
 
     public void Execute()

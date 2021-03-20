@@ -11,7 +11,7 @@ public class BoxPassiveSkillAction_ChangeBoxToEnemy : BoxPassiveSkillAction, Ent
 
     protected override string Description => "更改箱子为敌人";
 
-    [LabelText("敌人类型")]
+    [LabelText("@\"敌人类型\t\"+ChangeBoxToEnemyTypeName")]
     public TypeSelectHelper ChangeBoxToEnemyTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy};
 
     public void Execute()

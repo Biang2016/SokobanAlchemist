@@ -12,7 +12,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
 
     protected override string Description => "更改箱子类型(仅箱子使用)";
 
-    [LabelText("更改箱子为")]
+    [LabelText("@\"更改箱子为\t\"+ChangeBoxTypeToBoxName")]
     public TypeSelectHelper ChangeBoxTypeToBoxName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
     [LabelText("更改的箱子的朝向")]

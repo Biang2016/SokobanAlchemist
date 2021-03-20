@@ -234,7 +234,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
     [ShowInInspector]
     [NonSerialized]
     [BoxGroup("世界编辑器")]
-    [LabelText("替换世界模组类型")]
+    [LabelText("@\"替换世界模组类型\t\"+ReplaceWorldModuleTypeName")]
     private TypeSelectHelper ReplaceWorldModuleTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.WorldModule};
 
     public bool SortModule()
