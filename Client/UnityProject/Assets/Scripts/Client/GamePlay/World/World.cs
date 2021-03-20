@@ -229,7 +229,7 @@ public class World : PoolObject
     {
         bool isBorderModule = worldModuleTypeIndex == ConfigManager.WorldModule_DeadZoneIndex || worldModuleTypeIndex == ConfigManager.WorldModule_HiddenWallIndex;
         if (isBorderModule && BorderWorldModuleMatrix[x + 1, y + 1, z + 1] != null) yield break;
-        WorldModule wm = GameObjectPoolManager.Instance.PoolDict[worldModuleTypeIndex == ConfigManager.WorldModule_OpenWorldModule ? GameObjectPoolManager.PrefabNames.OpenWorldModule : GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(isBorderModule ? BorderWorldModuleRoot : WorldModuleRoot);
+        WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(isBorderModule ? BorderWorldModuleRoot : WorldModuleRoot);
         WorldModuleData data = ConfigManager.GetWorldModuleDataConfig(worldModuleTypeIndex);
 
         wm.name = $"WM_{data.WorldModuleTypeName}({x}, {y}, {z})";

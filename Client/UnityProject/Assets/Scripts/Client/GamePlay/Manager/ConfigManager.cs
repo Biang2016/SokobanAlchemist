@@ -283,8 +283,11 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         ExportConfigs(true);
     }
 
+    public static bool IsExporting = false;
+
     public static void ExportConfigs(bool dialogShow = true)
     {
+        IsExporting = true;
         // http://www.sirenix.net/odininspector/faq?Search=&t-11=on#faq
         DataFormat dataFormat = DataFormat.Binary;
 
@@ -317,6 +320,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         AssetDatabase.Refresh();
         IsLoaded = false;
+        IsExporting = false;
         LoadAllConfigs();
         if (dialogShow) EditorUtility.DisplayDialog("提示", "序列化成功", "确定");
     }
@@ -369,6 +373,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         Dictionary<string, Dictionary<string, string>> exportDict = new Dictionary<string, Dictionary<string, string>>();
         foreach (KeyValuePair<TypeDefineType, TypeGUIDMappingAsset.Mapping> kv in configSSO.TypeGUIDMappings)
         {
+            kv.Value.RefreshGUID_TypeDict();
             exportDict.Add(kv.Key.ToString(), new Dictionary<string, string>());
             foreach (KeyValuePair<string, string> _kv in kv.Value.Type_GUIDDict)
             {
@@ -665,6 +670,9 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static void LoadAllConfigs()
     {
         if (IsLoaded) return;
+#if UNITY_EDITOR
+        if (IsExporting) return;
+#endif
         Clear();
         DataFormat dataFormat = DataFormat.Binary;
 
@@ -907,7 +915,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static ushort WorldModule_DeadZoneIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_DeadZone");
     public static ushort WorldModule_HiddenWallIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_Wall_Hidden");
-    public static ushort WorldModule_OpenWorldModule => GetTypeIndex(TypeDefineType.WorldModule, "OpenWorldModule");
     public static ushort WorldModule_GroundIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_Ground");
     public static ushort Box_EnemyFrozenBoxIndex => GetTypeIndex(TypeDefineType.Box, "EnemyFrozenBox");
     public static ushort Box_GroundBoxIndex => GetTypeIndex(TypeDefineType.Box, "GroundBox");

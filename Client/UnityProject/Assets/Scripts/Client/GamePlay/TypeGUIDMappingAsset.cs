@@ -36,6 +36,15 @@ public class TypeGUIDMappingAsset : SerializedScriptableObject
             Type_GUIDDict.Add(typeName, guid);
             GUID_TypeDict.Add(guid, typeName);
         }
+
+        public void RefreshGUID_TypeDict()
+        {
+            GUID_TypeDict.Clear();
+            foreach (KeyValuePair<string, string> kv in Type_GUIDDict)
+            {
+                GUID_TypeDict.Add(kv.Value, kv.Key);
+            }
+        }
     }
 
     [OdinSerialize]
@@ -82,9 +91,7 @@ public class TypeSelectHelper : IClone<TypeSelectHelper>
     {
         if (!string.IsNullOrWhiteSpace(TypeGUID))
         {
-#if UNITY_EDITOR
             ConfigManager.LoadAllConfigs();
-#endif
             if (ConfigManager.TypeGUIDMappings[TypeDefineType].GUID_TypeDict.TryGetValue(TypeGUID, out string typeName))
             {
                 TypeSelection = typeName;
