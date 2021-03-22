@@ -295,14 +295,45 @@ MonoBehaviour:
       MinValue: 0
       MaxValue: 0
     SkillsPropertyCollections:
-    - skillAlias: "\u9762\u524D\u5927\u8303\u56F4\u706B\u7130\u653B\u51FB"
+    - skillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB"
       CastingRadius:
         BaseValue: 0
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 0
       Cooldown:
-        BaseValue: 2000
+        BaseValue: 3500
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 1000000
+      WingUp:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 1000000
+      CastDuration:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 1000000
+      Recovery:
+        BaseValue: 1000
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 1000000
+      CameraShakeEquivalentDamage:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
+    - skillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E00\u6BB5"
+      CastingRadius:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
+      Cooldown:
+        BaseValue: 0
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
@@ -317,15 +348,77 @@ MonoBehaviour:
         MinValue: 0
         MaxValue: 1000000
       Recovery:
-        BaseValue: 350
+        BaseValue: 0
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 1000000
       CameraShakeEquivalentDamage:
+        BaseValue: 1
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 10
+    - skillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E8C\u6BB5"
+      CastingRadius:
         BaseValue: 0
         ModifiedValue: 0
         MinValue: 0
         MaxValue: 0
+      Cooldown:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 1000000
+      WingUp:
+        BaseValue: 450
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 1000000
+      CastDuration:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 1000000
+      Recovery:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 1000000
+      CameraShakeEquivalentDamage:
+        BaseValue: 1
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 10
+    - skillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E09\u6BB5"
+      CastingRadius:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 0
+      Cooldown:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 1000000
+      WingUp:
+        BaseValue: 450
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 1000000
+      CastDuration:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 1000000
+      Recovery:
+        BaseValue: 0
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 1000000
+      CameraShakeEquivalentDamage:
+        BaseValue: 3
+        ModifiedValue: 0
+        MinValue: 0
+        MaxValue: 10
     RawEntityDefaultBuffs:
     - id: 0
   RawFlamethrowerFuelData:
@@ -470,12 +563,67 @@ MonoBehaviour:
         RawEntityPassiveSkillActions:
         - id: 5
     00000003:
+      type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
+      data:
+        IsAddedDuringGamePlay: 0
+        TargetCamp: 0
+        EntitySkillIndex: 0
+        SkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB"
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList:
+        - id: 6
+        - id: 7
+        - id: 8
+        SubActiveSkillTriggerLogicList:
+        - M_TriggerType: 0
+          SubSkillTriggerSequence:
+          - SubSkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E00\u6BB5"
+            SubActiveSkillTimePoint: 0
+          - SubSkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E8C\u6BB5"
+            SubActiveSkillTimePoint: 450
+          - SubSkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E09\u6BB5"
+            SubActiveSkillTimePoint: 800
+          Duration: 0
+          Times: 0
+          SubSkillAliasWithProbabilityList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+    00000004:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        IsAddedDuringGamePlay: 0
+        InitWorldModuleGUID: 0
+        PassiveSkillCondition: 112
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        RawEntityPassiveSkillActions:
+        - id: 9
+    00000005:
+      type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
+      data:
+        DropBoxList:
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (65e613ca-1b8c-4002-84d1-0c49ea3b0903)
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        DropBoxCountMin: 1
+        DropBoxCountMax: 1
+        DropConeAngle: 0
+        DropVelocity: 12
+    00000006:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
         TargetCamp: 15
-        EntitySkillIndex: 0
-        SkillAlias: "\u9762\u524D\u5927\u8303\u56F4\u706B\u7130\u653B\u51FB"
+        EntitySkillIndex: 1
+        SkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E00\u6BB5"
         WingUpCanMove: 0
         CastCanMove: 0
         RecoverCanMove: 0
@@ -483,82 +631,28 @@ MonoBehaviour:
         SubActiveSkillTriggerLogicList: []
         InterruptSubActiveSkillsWhenInterrupted: 0
         CastAreaGridPosList:
-        - x: 4
-          y: 0
-          z: 8
-        - x: 5
-          y: 0
-          z: 9
-        - x: 5
-          y: 0
-          z: 8
-        - x: 5
-          y: 0
-          z: 7
-        - x: 6
-          y: 0
-          z: 10
         - x: 6
           y: 0
           z: 9
         - x: 6
           y: 0
           z: 8
-        - x: 6
-          y: 0
-          z: 7
-        - x: 6
-          y: 0
-          z: 6
-        - x: 7
-          y: 0
-          z: 11
         - x: 7
           y: 0
           z: 10
         - x: 7
           y: 0
           z: 9
-        - x: 7
-          y: 0
-          z: 6
-        - x: 8
-          y: 0
-          z: 11
         - x: 8
           y: 0
           z: 10
         - x: 8
           y: 0
           z: 9
-        - x: 8
-          y: 0
-          z: 6
-        - x: 9
-          y: 0
-          z: 10
         - x: 9
           y: 0
           z: 9
         - x: 9
-          y: 0
-          z: 8
-        - x: 9
-          y: 0
-          z: 7
-        - x: 9
-          y: 0
-          z: 6
-        - x: 10
-          y: 0
-          z: 9
-        - x: 10
-          y: 0
-          z: 8
-        - x: 10
-          y: 0
-          z: 7
-        - x: 11
           y: 0
           z: 8
         M_TargetInclination: 2
@@ -587,36 +681,170 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
-        - id: 6
-    00000004:
-      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+        - id: 10
+    00000007:
+      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
-        InitWorldModuleGUID: 0
-        PassiveSkillCondition: 112
-        TriggerProbabilityPercent: 100
-        DestroyEntityByElementDamageTypeList: 
-        MultiEventTrigger: 0
-        ListenLevelEventAliasList: []
-        ListenLevelEventAlias: 
-        MaxTriggeredTimes: 1
-        RawEntityPassiveSkillActions:
-        - id: 7
-    00000005:
-      type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
+        TargetCamp: 15
+        EntitySkillIndex: 2
+        SkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E8C\u6BB5"
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 5
+          y: 0
+          z: 10
+        - x: 5
+          y: 0
+          z: 9
+        - x: 6
+          y: 0
+          z: 11
+        - x: 6
+          y: 0
+          z: 10
+        - x: 7
+          y: 0
+          z: 12
+        - x: 7
+          y: 0
+          z: 11
+        - x: 8
+          y: 0
+          z: 12
+        - x: 8
+          y: 0
+          z: 11
+        - x: 9
+          y: 0
+          z: 11
+        - x: 9
+          y: 0
+          z: 10
+        - x: 10
+          y: 0
+          z: 10
+        - x: 10
+          y: 0
+          z: 9
+        M_TargetInclination: 2
+        TargetEntityType: 0
+        CastOnTopLayer: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        GridWarningColorFill: {r: 1, g: 0.11792451, b: 0.11792451, a: 0.6392157}
+        GridWarningColorBorderHighlight: {r: 0.9433962, g: 0.4988594, b: 0.12904951,
+          a: 0.68235296}
+        GridWarningColorBorderDim: {r: 0.9716981, g: 0.5271004, b: 0.5271004, a: 0.65882355}
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (496e4d78-62a6-4066-bbc6-b75bf11aa688)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        RawEntityBuffs:
+        - id: 11
+    00000008:
+      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
-        DropBoxList:
-        - BoxTypeName:
-            TypeDefineType: 0
-            TypeGUID: (65e613ca-1b8c-4002-84d1-0c49ea3b0903)
-          BoxOrientation: 0
-          probability: 1
-          isSingleton: 0
-        DropBoxCountMin: 1
-        DropBoxCountMax: 1
-        DropConeAngle: 0
-        DropVelocity: 12
-    00000006:
+        IsAddedDuringGamePlay: 0
+        TargetCamp: 15
+        EntitySkillIndex: 3
+        SkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E09\u6BB5"
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 5
+          y: 0
+          z: 12
+        - x: 5
+          y: 0
+          z: 11
+        - x: 6
+          y: 0
+          z: 13
+        - x: 6
+          y: 0
+          z: 12
+        - x: 7
+          y: 0
+          z: 14
+        - x: 7
+          y: 0
+          z: 13
+        - x: 8
+          y: 0
+          z: 14
+        - x: 8
+          y: 0
+          z: 13
+        - x: 9
+          y: 0
+          z: 13
+        - x: 9
+          y: 0
+          z: 12
+        - x: 10
+          y: 0
+          z: 12
+        - x: 10
+          y: 0
+          z: 11
+        M_TargetInclination: 2
+        TargetEntityType: 0
+        CastOnTopLayer: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        GridWarningColorFill: {r: 1, g: 0.11792451, b: 0.11792451, a: 0.6392157}
+        GridWarningColorBorderHighlight: {r: 0.9433962, g: 0.4988594, b: 0.12904951,
+          a: 0.68235296}
+        GridWarningColorBorderDim: {r: 0.9716981, g: 0.5271004, b: 0.5271004, a: 0.65882355}
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (496e4d78-62a6-4066-bbc6-b75bf11aa688)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        RawEntityBuffs:
+        - id: 12
+    00000009:
+      type: {class: EntityPassiveSkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
+      data:
+        AddBuffRadius: 1.3
+        ExactGPDistance: 0
+        EffectiveOnRelativeCamp: 14
+        RawEntityBuffs:
+        - id: 13
+    0000000A:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10237
@@ -638,15 +866,51 @@ MonoBehaviour:
         EntityStatType: 101
         Delta: 350
         Percent: 0
-    00000007:
-      type: {class: EntityPassiveSkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
+    0000000B:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
-        AddBuffRadius: 1.3
-        ExactGPDistance: 0
-        EffectiveOnRelativeCamp: 14
-        RawEntityBuffs:
-        - id: 8
-    00000008:
+        GUID: 10237
+        EntityBuffAttribute: 17
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 101
+        Delta: 350
+        Percent: 0
+    0000000C:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10237
+        EntityBuffAttribute: 17
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 101
+        Delta: 350
+        Percent: 0
+    0000000D:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10004
@@ -709,33 +973,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98a6db0b653f764eac834f85857a9dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _serializedBlackboard: '{"_variables":{"KeepDistanceMin":{"_value":1.0,"_name":"KeepDistanceMin","_id":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax":{"_value":3.0,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+  _serializedBlackboard: '{"_variables":{"KeepDistanceMin":{"_value":2.0,"_name":"KeepDistanceMin","_id":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax":{"_value":6.0,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"EscapeLowHealth":{"_value":1,"_name":"EscapeLowHealth","_id":"74c211c5-974d-49c6-845f-ae296a7f86d4","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"GuardRange":{"_value":6.0,"_name":"GuardRange","_id":"1e4fc14c-3815-4279-a6ee-25a727bd3bb0","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"ChasingRange":{"_value":13.0,"_name":"ChasingRange","_id":"dcaf01a2-8a92-4b8d-b523-e1a0efdcfefd","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IdleRadius":{"_value":5,"_name":"IdleRadius","_id":"26c88988-5b11-46e7-b0ba-b46818aa2ab6","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"GuardRange":{"_value":12.0,"_name":"GuardRange","_id":"1e4fc14c-3815-4279-a6ee-25a727bd3bb0","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"ChasingRange":{"_value":18.0,"_name":"ChasingRange","_id":"dcaf01a2-8a92-4b8d-b523-e1a0efdcfefd","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IdleRadius":{"_value":8,"_name":"IdleRadius","_id":"26c88988-5b11-46e7-b0ba-b46818aa2ab6","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"EscapeDistanceFromPlayer":{"_value":7.0,"_name":"EscapeDistanceFromPlayer","_id":"f18ffcd4-c5c4-41f5-a058-c6678f296949","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IdleInterval":{"_value":3.0,"_name":"IdleInterval","_id":"5f636e77-300a-4d85-a506-0c252d259cff","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
   _objectReferences: []
   _serializedVariables:
-  - _json: '{"_value":1.0,"_name":"KeepDistanceMin","_id":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+  - _json: '{"_value":2.0,"_name":"KeepDistanceMin","_id":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
-  - _json: '{"_value":3.0,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+  - _json: '{"_value":6.0,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
   - _json: '{"_value":1,"_name":"EscapeLowHealth","_id":"74c211c5-974d-49c6-845f-ae296a7f86d4","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
-  - _json: '{"_value":6.0,"_name":"GuardRange","_id":"1e4fc14c-3815-4279-a6ee-25a727bd3bb0","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+  - _json: '{"_value":12.0,"_name":"GuardRange","_id":"1e4fc14c-3815-4279-a6ee-25a727bd3bb0","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
-  - _json: '{"_value":13.0,"_name":"ChasingRange","_id":"dcaf01a2-8a92-4b8d-b523-e1a0efdcfefd","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+  - _json: '{"_value":18.0,"_name":"ChasingRange","_id":"dcaf01a2-8a92-4b8d-b523-e1a0efdcfefd","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
-  - _json: '{"_value":5,"_name":"IdleRadius","_id":"26c88988-5b11-46e7-b0ba-b46818aa2ab6","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
+  - _json: '{"_value":8,"_name":"IdleRadius","_id":"26c88988-5b11-46e7-b0ba-b46818aa2ab6","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
   - _json: '{"_value":7.0,"_name":"EscapeDistanceFromPlayer","_id":"f18ffcd4-c5c4-41f5-a058-c6678f296949","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
@@ -961,7 +1225,7 @@ PrefabInstance:
     - target: {fileID: -8965811294570246362, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -11.665444
+      value: 24.325577
       objectReference: {fileID: 0}
     - target: {fileID: -8965811294570246362, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
@@ -1041,7 +1305,7 @@ PrefabInstance:
     - target: {fileID: -5107054126005254486, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 12.634111
+      value: -26.591589
       objectReference: {fileID: 0}
     - target: {fileID: -4703240672606485102, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
@@ -1056,7 +1320,7 @@ PrefabInstance:
     - target: {fileID: -1988110456980081605, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 17.67193
+      value: -24.677052
       objectReference: {fileID: 0}
     - target: {fileID: -1988110456980081605, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
@@ -1071,17 +1335,17 @@ PrefabInstance:
     - target: {fileID: -1241058847572682039, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.062510505
+      value: -16.367588
       objectReference: {fileID: 0}
     - target: {fileID: -1241058847572682039, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -13.731403
+      value: 12.133688
       objectReference: {fileID: 0}
     - target: {fileID: -1241058847572682039, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.25581205
+      value: 12.252469
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
@@ -1091,37 +1355,37 @@ PrefabInstance:
     - target: {fileID: 2726568780636716469, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.0028232653
+      value: 0.0006141493
       objectReference: {fileID: 0}
     - target: {fileID: 2726568780636716469, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -166.31738
+      value: 165.15785
       objectReference: {fileID: 0}
     - target: {fileID: 2726568780636716469, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -179.73686
+      value: -179.73671
       objectReference: {fileID: 0}
     - target: {fileID: 6267903781763099404, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 8.747061
+      value: -25.937218
       objectReference: {fileID: 0}
     - target: {fileID: 6267903781763099404, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -36.803806
+      value: -11.410627
       objectReference: {fileID: 0}
     - target: {fileID: 6267903781763099404, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -33.724323
+      value: -15.276912
       objectReference: {fileID: 0}
     - target: {fileID: 7178581637816246140, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 9.037523e-15
+      value: 5.0201474e-15
       objectReference: {fileID: 0}
     - target: {fileID: 7178581637816246140, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
@@ -1926,6 +2190,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6478483873594561397, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+        type: 3}
+      propertyPath: m_Height
+      value: 1.7735746
+      objectReference: {fileID: 0}
+    - target: {fileID: 6478483873594561397, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.79999995
+      objectReference: {fileID: 0}
+    - target: {fileID: 6478483873594561397, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+        type: 3}
+      propertyPath: m_Center.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6478483873594561397, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.58678734
+      objectReference: {fileID: 0}
+    - target: {fileID: 6478483873594561397, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6610831801066951149, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
         type: 3}
