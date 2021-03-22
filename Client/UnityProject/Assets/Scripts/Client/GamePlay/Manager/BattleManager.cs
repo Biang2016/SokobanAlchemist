@@ -134,7 +134,13 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     public IEnumerator CreateActorByBornPointDataList(List<BornPointData> bps, bool ignorePlayer = true)
     {
+        List<BornPointData> addingBornPointDataList = new List<BornPointData>(32);
         foreach (BornPointData bp in bps)
+        {
+            addingBornPointDataList.Add(bp);
+        }
+
+        foreach (BornPointData bp in addingBornPointDataList)
         {
             if (ignorePlayer && bp.ActorCategory == ActorCategory.Player) continue;
             CreateActorByBornPointData(bp);
