@@ -51,7 +51,7 @@ public class PlayerActor : Actor
 
     protected override void FixedUpdate()
     {
-        if (!IsRecycled)
+        if (this.IsNotNullAndAlive())
         {
             #region Move
 

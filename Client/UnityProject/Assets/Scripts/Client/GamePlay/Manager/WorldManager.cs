@@ -78,7 +78,7 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
 
     public override void ShutDown()
     {
-        CurrentWorld.ShutDown();
+        CurrentWorld?.ShutDown();
         base.ShutDown();
         Clear();
     }

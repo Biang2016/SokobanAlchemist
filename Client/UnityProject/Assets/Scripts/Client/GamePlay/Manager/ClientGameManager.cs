@@ -227,11 +227,23 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         ControlManager.FixedUpdate(Time.fixedDeltaTime);
         if (ControlManager.Common_RestartGame.Up && !IsGameLoading)
         {
+            if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+            {
+                if (openWorld.IsInsideMicroWorld)
+                {
+                    openWorld.RestartMicroWorld(false);
+                    return;
+                }
+            }
+        }
+
+#if DEBUG
+        if (Input.GetKeyUp(KeyCode.F10) && !IsGameLoading)
+        {
             ReloadGame();
             return;
         }
 
-#if DEBUG
         if (Input.GetKey(KeyCode.Equals))
         {
             Time.timeScale = 0.1f;
@@ -245,7 +257,10 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         {
             if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
             {
-                openWorld.ReturnToOpenWorldFormMicroWorld();
+                if (openWorld.IsInsideMicroWorld)
+                {
+                    openWorld.ReturnToOpenWorldFormMicroWorld();
+                }
             }
         }
 #endif

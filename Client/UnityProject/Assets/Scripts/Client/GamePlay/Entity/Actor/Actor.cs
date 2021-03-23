@@ -686,8 +686,23 @@ public class Actor : Entity
                 CurForward = CurMoveAttempt.normalized;
 
                 ActorPushHelper.TriggerOut = true;
-                bool isBoxOnFront = Physics.Raycast(transform.position, transform.forward, 1f, LayerManager.Instance.LayerMask_BoxIndicator);
-                ActorArtHelper.SetIsPushing(isBoxOnFront);
+                bool isBoxOnFront = Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, 1f, LayerManager.Instance.LayerMask_BoxIndicator);
+                if (isBoxOnFront)
+                {
+                    Box box = hit.collider.GetComponentInParent<Box>();
+                    if (box && !box.Passable)
+                    {
+                        ActorArtHelper.SetIsPushing(true);
+                    }
+                    else
+                    {
+                        ActorArtHelper.SetIsPushing(false);
+                    }
+                }
+                else
+                {
+                    ActorArtHelper.SetIsPushing(false);
+                }
             }
             else
             {

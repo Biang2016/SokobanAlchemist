@@ -58,7 +58,10 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
             {
                 if ((WorldManager.Instance.CurrentWorld is OpenWorld openWorld))
                 {
-                    openWorld.ReturnToOpenWorldFormMicroWorld();
+                    if (openWorld.IsInsideMicroWorld)
+                    {
+                        openWorld.ReturnToOpenWorldFormMicroWorld();
+                    }
                 }
                 else
                 {

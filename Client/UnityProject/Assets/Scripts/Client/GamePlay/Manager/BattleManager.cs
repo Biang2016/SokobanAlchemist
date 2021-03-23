@@ -134,7 +134,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     public IEnumerator CreateActorByBornPointDataList(List<BornPointData> bps, bool ignorePlayer = true)
     {
-        foreach (BornPointData bp in bps)
+        foreach (BornPointData bp in bps.ToArray())
         {
             if (ignorePlayer && bp.ActorCategory == ActorCategory.Player) continue;
             CreateActorByBornPointData(bp);
@@ -341,7 +341,14 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         yield return panel.Co_LoseGame();
         if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
-            openWorld.ReturnToOpenWorldFormMicroWorld(true);
+            if (openWorld.IsInsideMicroWorld)
+            {
+                openWorld.RestartMicroWorld(true);
+            }
+            else
+            {
+                openWorld.ReturnToOpenWorldFormMicroWorld(true);
+            }
         }
         else
         {
