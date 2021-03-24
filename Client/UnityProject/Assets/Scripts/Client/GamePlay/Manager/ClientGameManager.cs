@@ -11,6 +11,8 @@ using UnityEngine.SceneManagement;
 
 public class ClientGameManager : MonoSingleton<ClientGameManager>
 {
+    public BoxMarchingTextureConfigMatrix BoxMarchingTextureConfigMatrix;
+
     #region Managers
 
     #region Mono

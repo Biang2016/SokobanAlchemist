@@ -10,6 +10,7 @@ using UnityEngine;
 
 public class OpenWorld : World
 {
+    private LoadingMapPanel LoadingMapPanel;
     public int WorldSize_X = 2;
     public int WorldSize_Z = 2;
 
@@ -17,6 +18,8 @@ public class OpenWorld : World
     public int PlayerScopeRadiusZ = 2;
 
     public bool UseCertainSeed = false;
+
+    public bool TestTerrain = false;
 
     [ShowIf("UseCertainSeed")]
     public uint GivenSeed = 0;
@@ -26,6 +29,7 @@ public class OpenWorld : World
     public GridPosR.Orientation[,,] WorldMapOrientation; // 地图元素放置朝向  Y轴缩小16
     public ushort[,,] WorldMap_Occupied; // 地图元素占位  Y轴缩小16
     public ushort[,,] WorldMap_StaticLayoutOccupied; // 地图静态布局占位  Y轴缩小16
+    public TerrainType[,] WorldMap_TerrainType; // 地图地形分布
 
     [LabelText("@\"起始MicroWorld\t\"+StartMicroWorldTypeName")]
     public TypeSelectHelper StartMicroWorldTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
@@ -34,14 +38,24 @@ public class OpenWorld : World
 
     #region GenerateLayerData
 
+    [LabelText("地形生成配置")]
+    public GenerateTerrainData m_GenerateTerrainData = new GenerateTerrainData();
+
+    [Serializable]
+    public class GenerateTerrainData
+    {
+        [SerializeReference]
+        public List<Pass> ProcessingPassList = new List<Pass>();
+    }
+
     [Serializable]
     public abstract class GenerateLayerData
     {
-        [LabelText("是否考虑静态布局的影响")]
-        public bool ConsiderStaticLayout = false;
-
         [LabelText("生效")]
         public bool Enable = true;
+
+        [LabelText("是否考虑静态布局的影响")]
+        public bool ConsiderStaticLayout = false;
 
         [SerializeField]
         [LabelText("允许覆盖的箱子类型")]
@@ -87,6 +101,9 @@ public class OpenWorld : World
     {
         [LabelText("@\"静态布局类型\t\"+StaticLayoutTypeName")]
         public TypeSelectHelper StaticLayoutTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.StaticLayout};
+
+        [LabelText("完整布局")]
+        public bool RequireCompleteLayout = true;
     }
 
     [FoldoutGroup("地图生成")]
@@ -153,6 +170,7 @@ public class OpenWorld : World
         WorldMapOrientation = null;
         WorldMap_Occupied = null;
         WorldMap_StaticLayoutOccupied = null;
+        WorldMap_TerrainType = null;
         IsInsideMicroWorld = false;
         InitialPlayerBP = GridPos3D.Zero;
         transportingPlayerToMicroWorld = false;
@@ -162,6 +180,7 @@ public class OpenWorld : World
 
     public override IEnumerator Initialize(WorldData worldData)
     {
+        LoadingMapPanel = UIManager.Instance.GetBaseUIForm<LoadingMapPanel>();
         AudioManager.Instance.BGMFadeIn("bgm/CoolSwing", 1f, 1f, true);
 
         uint Seed = 0;
@@ -181,6 +200,7 @@ public class OpenWorld : World
         WorldMapOrientation = new GridPosR.Orientation[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_Occupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_StaticLayoutOccupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMap_TerrainType = new TerrainType[WorldSize_X * WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
 
         WorldGUID = Seed + "_" + Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
         m_LevelCacheData = new LevelCacheData();
@@ -192,6 +212,13 @@ public class OpenWorld : World
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.5f, "Loading Open World");
         yield return null;
 
+        #region GenerateTerrain
+
+        m_LevelCacheData.TerrainGenerator = new CellularAutomataTerrainGenerator(m_GenerateTerrainData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
+        m_LevelCacheData.TerrainGenerator.ApplyToWorldTerrainMap();
+
+        #endregion
+
         #region GenerateStaticLayoutLayer
 
         int generatorCount_staticLayoutLayer = 0;
@@ -199,6 +226,7 @@ public class OpenWorld : World
         foreach (GenerateStaticLayoutLayerData staticLayoutLayerData in GenerateStaticLayoutLayerDataList) // 按层生成关卡静态布局数据
         {
             if (!staticLayoutLayerData.Enable) continue;
+            if (!staticLayoutLayerData.DeterminePlayerBP && TestTerrain) continue;
             staticLayoutLayerData.Init();
             MapGenerator generator = null;
             switch (staticLayoutLayerData.m_GenerateAlgorithm)
@@ -233,6 +261,7 @@ public class OpenWorld : World
         foreach (GenerateBoxLayerData boxLayerData in GenerateBoxLayerDataList) // 按层生成关卡Box数据
         {
             if (!boxLayerData.Enable) continue;
+            if (TestTerrain) continue;
             boxLayerData.Init();
             MapGenerator generator = null;
             switch (boxLayerData.m_GenerateAlgorithm)
@@ -274,6 +303,7 @@ public class OpenWorld : World
         foreach (GenerateActorLayerData actorLayerData in GenerateActorLayerDataList) // 按层生成关卡Actor数据
         {
             if (!actorLayerData.Enable) continue;
+            if (TestTerrain) continue;
             actorLayerData.Init();
             MapGenerator generator = null;
             switch (actorLayerData.m_GenerateAlgorithm)
@@ -338,6 +368,7 @@ public class OpenWorld : World
 
     public class LevelCacheData
     {
+        public CellularAutomataTerrainGenerator TerrainGenerator;
         public List<MapGenerator> CurrentGenerator_StaticLayouts = new List<MapGenerator>(); // 按静态布局layer记录的地图生成信息，未走过的地图或离开很久之后重置的模组按这个数据加载出来
         public List<MapGenerator> CurrentGenerators_Boxes = new List<MapGenerator>(); // 按箱子layer记录的地图生成信息，未走过的地图或离开很久之后重置的模组按这个数据加载出来
         public List<MapGenerator> CurrentGenerators_Actors = new List<MapGenerator>(); // 按角色layer记录的生成信息，未走过的地图或离开很久之后重置的模组按这个数据加载出来
@@ -533,7 +564,6 @@ public class OpenWorld : World
         {
             bool isGround = currentShowModuleGP.y == 0;
             if (CheckModuleCanBeSeenByCamera(currentShowModuleGP, !isGround, isGround, isGround ? ExtendScope_Recycle_Ground : ExtendScope_Recycle)) continue;
-            GridPos3D diff = currentShowModuleGP - playerOnModuleGP;
             WorldModule worldModule = WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z];
             if (worldModule != null)
             {
@@ -555,7 +585,7 @@ public class OpenWorld : World
             if (allFinished) break;
             else
             {
-                ClientGameManager.Instance.LoadingMapPanel.Refresh();
+                LoadingMapPanel.Refresh();
                 yield return null;
             }
         }
@@ -622,7 +652,6 @@ public class OpenWorld : World
         if (transportingPlayerToMicroWorld) return;
         if (returningToOpenWorldFormMicroWorld) return;
         if (restartingMicroWorld) return;
-        if (IsInsideMicroWorld) return;
         StartCoroutine(Co_TransportPlayerToMicroWorld(worldTypeIndex));
     }
 
@@ -633,13 +662,31 @@ public class OpenWorld : World
         transportingPlayerToMicroWorld = true;
         CurrentMicroWorldTypeIndex = worldTypeIndex;
         BattleManager.Instance.Player1.ForbidAction = true;
-        LoadingMapPanel LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
+        UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetMinimumLoadingDuration(2);
         LoadingMapPanel.SetBackgroundAlpha(1);
         LoadingMapPanel.SetProgress(0, "Loading Level");
+
         WorldData microWorldData = ConfigManager.GetWorldDataConfig(worldTypeIndex);
         GridPos3D transportPlayerBornPoint = GridPos3D.Zero;
+
+        // Recycling Micro World Modules
+        if (IsInsideMicroWorld)
+        {
+            int totalRecycleModuleNumber = MicroWorldModules.Count;
+            int recycledModuleCount = 0;
+            foreach (WorldModule microWorldModule in MicroWorldModules)
+            {
+                yield return Co_RecycleModule(microWorldModule, microWorldModule.ModuleGP, -1);
+                recycledModuleCount++;
+                LoadingMapPanel.SetProgress(20f * recycledModuleCount / totalRecycleModuleNumber, "Destroying the dungeon");
+            }
+
+            MicroWorldModules.Clear();
+        }
+
+        // Loading Micro World Modules
         int totalModuleNum = microWorldData.WorldModuleGPOrder.Count;
         int loadingModuleCount = 0;
         while (RefreshScopeModulesCoroutine != null) yield return null;
@@ -686,7 +733,7 @@ public class OpenWorld : World
             }
 
             loadingModuleCount++;
-            LoadingMapPanel.SetProgress(0 + 80f * loadingModuleCount / totalModuleNum, "Loading Level");
+            LoadingMapPanel.SetProgress(20f + 60f * loadingModuleCount / totalModuleNum, "Loading Level");
         }
 
         if (transportPlayerBornPoint == GridPos3D.Zero)
@@ -694,9 +741,12 @@ public class OpenWorld : World
             Debug.LogWarning("传送的模组没有默认玩家出生点");
         }
 
-        IsInsideMicroWorld = true;
-        LastLeaveOpenWorldPlayerGP = BattleManager.Instance.Player1.transform.position.ToGridPos3D();
+        if (!IsInsideMicroWorld)
+        {
+            LastLeaveOpenWorldPlayerGP = BattleManager.Instance.Player1.transform.position.ToGridPos3D();
+        }
 
+        IsInsideMicroWorld = true;
         BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint);
         CameraManager.Instance.FieldCamera.InitFocus();
 
@@ -729,11 +779,13 @@ public class OpenWorld : World
         CurrentMicroWorldTypeIndex = 0;
         AudioManager.Instance.BGMFadeIn("bgm/CoolSwing", 1f, 1f, true);
         BattleManager.Instance.Player1.ForbidAction = true;
-        LoadingMapPanel LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
+        UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetMinimumLoadingDuration(2);
         LoadingMapPanel.SetBackgroundAlpha(1);
         LoadingMapPanel.SetProgress(0, "Returning to Open World");
+
+        // Recycling the Open World
         while (RefreshScopeModulesCoroutine != null) yield return null;
         if (rebornPlayer)
         {
@@ -749,6 +801,8 @@ public class OpenWorld : World
         IsInsideMicroWorld = false;
         RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(LastLeaveOpenWorldPlayerGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
         while (RefreshScopeModulesCoroutine != null) yield return null;
+
+        // Loading Micro World Modules
         LoadingMapPanel.SetProgress(80f, "Returning to Open World");
         int totalRecycleModuleNumber = MicroWorldModules.Count;
         int recycledModuleCount = 0;
@@ -761,6 +815,7 @@ public class OpenWorld : World
 
         MicroWorldModules.Clear();
         LoadingMapPanel.SetProgress(100f, "Returning to Open World");
+
         yield return new WaitForSeconds(LoadingMapPanel.GetRemainingLoadingDuration());
         LoadingMapPanel.CloseUIForm();
         BattleManager.Instance.Player1.ForbidAction = false;
@@ -782,28 +837,31 @@ public class OpenWorld : World
     {
         restartingMicroWorld = true;
         BattleManager.Instance.Player1.ForbidAction = true;
-        LoadingMapPanel LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
+        UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetMinimumLoadingDuration(2);
         LoadingMapPanel.SetBackgroundAlpha(1);
         LoadingMapPanel.SetProgress(0, "Loading Level");
         WorldData microWorldData = ConfigManager.GetWorldDataConfig(CurrentMicroWorldTypeIndex);
         GridPos3D transportPlayerBornPoint = GridPos3D.Zero;
-        int totalModuleNum = microWorldData.WorldModuleGPOrder.Count;
-        int loadingModuleCount = 0;
+
         while (RefreshScopeModulesCoroutine != null) yield return null;
 
+        // Recycling Micro World Modules
         int totalRecycleModuleNumber = MicroWorldModules.Count;
         int recycledModuleCount = 0;
         foreach (WorldModule microWorldModule in MicroWorldModules)
         {
             yield return Co_RecycleModule(microWorldModule, microWorldModule.ModuleGP, -1);
             recycledModuleCount++;
-            LoadingMapPanel.SetProgress(80f + 20f * recycledModuleCount / totalRecycleModuleNumber, "Returning to Open World");
+            LoadingMapPanel.SetProgress(50f * recycledModuleCount / totalRecycleModuleNumber, "Destroying the dungeon");
         }
 
         MicroWorldModules.Clear();
 
+        // Loading Micro World Modules
+        int totalModuleNum = microWorldData.WorldModuleGPOrder.Count;
+        int loadingModuleCount = 0;
         foreach (GridPos3D worldModuleGP in microWorldData.WorldModuleGPOrder)
         {
             ushort worldModuleTypeIndex = microWorldData.ModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
@@ -847,7 +905,7 @@ public class OpenWorld : World
             }
 
             loadingModuleCount++;
-            LoadingMapPanel.SetProgress(0 + 80f * loadingModuleCount / totalModuleNum, "Loading Level");
+            LoadingMapPanel.SetProgress(50f + 50f * loadingModuleCount / totalModuleNum, "Rebuilding the dungeon");
         }
 
         if (transportPlayerBornPoint == GridPos3D.Zero)
@@ -873,4 +931,49 @@ public class OpenWorld : World
     }
 
     #endregion
+}
+
+[Serializable]
+public abstract class Pass
+{
+}
+
+[Serializable]
+public class RandomFillPass : Pass
+{
+    [LabelText("填充几率")]
+    public int FillPercent = 40;
+
+    [LabelText("填充地形类型")]
+    public TerrainType TerrainType = TerrainType.Earth;
+
+    [LabelText("只覆盖某地形")]
+    public bool OnlyOverrideSomeTerrain = false;
+
+    [LabelText("覆盖哪种地形")]
+    [ShowIf("OnlyOverrideSomeTerrain")]
+    public TerrainType OverrideTerrainType = TerrainType.Earth;
+}
+
+[Serializable]
+public class SmoothPass : Pass
+{
+    [LabelText("迭代次数")]
+    public int SmoothTimes = 1;
+
+    [LabelText("迭代规则")]
+    public List<NeighborIteration> NeighborIterations = new List<NeighborIteration>();
+
+    [Serializable]
+    public class NeighborIteration
+    {
+        [LabelText("邻居类型")]
+        public TerrainType NeighborTerrainType = TerrainType.Earth;
+
+        [LabelText("邻居类型数量超过此值时")]
+        public int Threshold = 4;
+
+        [LabelText("变换地形")]
+        public TerrainType ChangeTerrainTypeTo = TerrainType.Earth;
+    }
 }

@@ -44,6 +44,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static Dictionary<TypeDefineType, TypeGUIDMappingAsset.Mapping> TypeGUIDMappings = new Dictionary<TypeDefineType, TypeGUIDMappingAsset.Mapping>();
 
+    public static Dictionary<TerrainType, Dictionary<MarchingTextureCase, Texture>> TerrainMarchingTextureDict = new Dictionary<TerrainType, Dictionary<MarchingTextureCase, Texture>>();
+
     public enum TypeStartIndex
     {
         None = 0,
@@ -683,6 +685,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             kv.Value.LoadTypeNames();
         }
 
+        LoadBoxMarchingTextureConfigMatrix();
         LoadTypeGUIDMappingFromConfig(dataFormat);
         LoadEntityBuffStatPropertyEnumReflection();
         LoadEntityBuffAttributeMatrixFromConfig(dataFormat);
@@ -692,6 +695,23 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         LoadWorldDataConfig(dataFormat);
 
         IsLoaded = true;
+    }
+
+    public static void LoadBoxMarchingTextureConfigMatrix()
+    {
+        TerrainMarchingTextureDict = new Dictionary<TerrainType, Dictionary<MarchingTextureCase, Texture>>();
+        foreach (TerrainType transitTerrain in Enum.GetValues(typeof(TerrainType)))
+        {
+            TerrainMarchingTextureDict.Add(transitTerrain, new Dictionary<MarchingTextureCase, Texture>());
+            BoxMarchingTextureConfigSSO config = ClientGameManager.Instance.BoxMarchingTextureConfigMatrix.Matrix[transitTerrain];
+            if (config != null && config.TextureDict != null)
+            {
+                foreach (KeyValuePair<MarchingTextureCase, Texture> kv in config.TextureDict)
+                {
+                    TerrainMarchingTextureDict[transitTerrain].Add(kv.Key, kv.Value);
+                }
+            }
+        }
     }
 
     public static void LoadTypeGUIDMappingFromConfig(DataFormat dataFormat)
@@ -916,6 +936,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort WorldModule_DeadZoneIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_DeadZone");
     public static ushort WorldModule_HiddenWallIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_Wall_Hidden");
     public static ushort WorldModule_GroundIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_Ground");
+    public static ushort World_OpenWorldIndex => GetTypeIndex(TypeDefineType.World, "OpenWorld");
     public static ushort Box_EnemyFrozenBoxIndex => GetTypeIndex(TypeDefineType.Box, "EnemyFrozenBox");
     public static ushort Box_GroundBoxIndex => GetTypeIndex(TypeDefineType.Box, "GroundBox");
     public static ushort Box_BrickBoxIndex => GetTypeIndex(TypeDefineType.Box, "BrickBox");

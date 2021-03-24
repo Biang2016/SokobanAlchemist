@@ -14,67 +14,30 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
 
     protected override string Description => "传送玩家";
 
-    public enum TransportType
-    {
-        TransportToMicroWorld,
-        TransportBackToOpenWorld,
-        ResetTransportState,
-    }
-
-    [LabelText("传送类型")]
-    public TransportType m_TransportType = TransportType.TransportToMicroWorld;
-
-    [ShowIf("m_TransportType", TransportType.TransportToMicroWorld)]
     [LabelText("世界类型概率")]
     public List<WorldNameWithProbability> WorldProbList = new List<WorldNameWithProbability>();
 
     public void Execute()
     {
-        switch (m_TransportType)
+        if ((WorldManager.Instance.CurrentWorld is OpenWorld openWorld))
         {
-            case TransportType.TransportToMicroWorld:
+            WorldNameWithProbability randomResult = CommonUtils.GetRandomFromList(WorldProbList);
+            ushort worldTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, randomResult.WorldTypeName.TypeName);
+            if (worldTypeIndex != 0)
             {
-                if (!BattleManager.Instance.Player1.IsInMicroWorld)
+                if (worldTypeIndex == ConfigManager.World_OpenWorldIndex)
                 {
-                    if ((WorldManager.Instance.CurrentWorld is OpenWorld openWorld))
-                    {
-                        WorldNameWithProbability randomResult = CommonUtils.GetRandomFromList(WorldProbList);
-                        ushort worldTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, randomResult.WorldTypeName.TypeName);
-                        if (worldTypeIndex != 0)
-                        {
-                            openWorld.TransportPlayerToMicroWorld(worldTypeIndex);
-                            BattleManager.Instance.Player1.IsInMicroWorld = true;
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogWarning("传送功能暂时只能用于OpenWorld");
-                    }
-                }
-
-                break;
-            }
-            case TransportType.TransportBackToOpenWorld:
-            {
-                if ((WorldManager.Instance.CurrentWorld is OpenWorld openWorld))
-                {
-                    if (openWorld.IsInsideMicroWorld)
-                    {
-                        openWorld.ReturnToOpenWorldFormMicroWorld();
-                    }
+                    openWorld.ReturnToOpenWorldFormMicroWorld(false);
                 }
                 else
                 {
-                    Debug.LogWarning("传送功能暂时只能用于OpenWorld");
+                    openWorld.TransportPlayerToMicroWorld(worldTypeIndex);
                 }
-
-                break;
             }
-            case TransportType.ResetTransportState:
-            {
-                BattleManager.Instance.Player1.IsInMicroWorld = false;
-                break;
-            }
+        }
+        else
+        {
+            Debug.LogWarning("传送功能暂时只能用于OpenWorld");
         }
     }
 
@@ -82,7 +45,6 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
     {
         base.ChildClone(newAction);
         EntityPassiveSkillAction_TransportPlayer action = ((EntityPassiveSkillAction_TransportPlayer) newAction);
-        action.m_TransportType = m_TransportType;
         action.WorldProbList = WorldProbList.Clone();
     }
 
@@ -90,7 +52,6 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
     {
         base.CopyDataFrom(srcData);
         EntityPassiveSkillAction_TransportPlayer action = ((EntityPassiveSkillAction_TransportPlayer) srcData);
-        m_TransportType = action.m_TransportType;
         WorldProbList = action.WorldProbList.Clone();
     }
 }

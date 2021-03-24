@@ -52,7 +52,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
 
         foreach (GridPos3D gridPos3D in CastAreaGridPosList)
         {
-            CastAreaMatrix_Editor[gridPos3D.x+8, CastAreaMatrixExtend * 2 - gridPos3D.z] = true;
+            CastAreaMatrix_Editor[gridPos3D.x, CastAreaMatrixExtend * 2 - gridPos3D.z] = true;
         }
     }
 

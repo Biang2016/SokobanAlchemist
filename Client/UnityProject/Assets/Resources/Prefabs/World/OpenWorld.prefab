@@ -51,13 +51,18 @@ MonoBehaviour:
   PlayerScopeRadiusX: 5
   PlayerScopeRadiusZ: 5
   UseCertainSeed: 0
+  TestTerrain: 1
   GivenSeed: 1396197886
   StartMicroWorldTypeName:
     TypeDefineType: 6
-    TypeGUID: (771eff8e-d068-434d-beac-727617fb70ba)
+    TypeGUID: 
+  m_GenerateTerrainData:
+    ProcessingPassList:
+    - id: 0
+    - id: 1
   GenerateStaticLayoutLayerDataList:
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
@@ -68,8 +73,9 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (8819739c-7ad7-4d7d-bd75-255b0038e2d8)
-  - ConsiderStaticLayout: 0
-    Enable: 1
+    RequireCompleteLayout: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
@@ -80,56 +86,61 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (7ae818ba-6c18-4106-8815-234a98f97580)
-  - ConsiderStaticLayout: 0
-    Enable: 1
+    RequireCompleteLayout: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
-    CountPer10KGrid: 8
+    CountPer10KGrid: 1
     DeterminePlayerBP: 0
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (776f7c31-418b-493e-a6e4-58b565c4d89e)
-  - ConsiderStaticLayout: 0
-    Enable: 1
+    RequireCompleteLayout: 0
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
-    CountPer10KGrid: 10
+    CountPer10KGrid: 1
     DeterminePlayerBP: 0
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (51f0450e-5177-4bef-a394-9017e13a76b2)
-  - ConsiderStaticLayout: 0
-    Enable: 1
+    RequireCompleteLayout: 0
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
-    CountPer10KGrid: 5
+    CountPer10KGrid: 1
     DeterminePlayerBP: 0
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (b19d18fc-02bd-4106-9849-7d3bd1100f2e)
-  - ConsiderStaticLayout: 0
-    Enable: 1
+    RequireCompleteLayout: 0
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
-    CountPer10KGrid: 4
+    CountPer10KGrid: 1
     DeterminePlayerBP: 0
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (ca83b903-d4a2-4eea-9ecd-a1d5e9be4bae)
-  - ConsiderStaticLayout: 0
-    Enable: 1
+    RequireCompleteLayout: 0
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
@@ -140,8 +151,9 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (60751a0d-62c6-494f-8a63-839b997354d8)
-  - ConsiderStaticLayout: 0
-    Enable: 1
+    RequireCompleteLayout: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
@@ -152,8 +164,9 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (e6408bf5-bcda-4d2f-94c8-588b7fd6b998)
-  - ConsiderStaticLayout: 0
-    Enable: 1
+    RequireCompleteLayout: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
@@ -164,8 +177,9 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (b481c9b8-a20d-4314-97ae-60f93f3db6ce)
-  - ConsiderStaticLayout: 0
-    Enable: 1
+    RequireCompleteLayout: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
@@ -176,9 +190,10 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (0fcdb09b-2521-4665-8915-d844d47d953b)
+    RequireCompleteLayout: 1
   GenerateBoxLayerDataList:
-  - ConsiderStaticLayout: 1
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
@@ -193,8 +208,8 @@ MonoBehaviour:
     CaveConnectPercent: 30
     SmoothTimes: 3
     SmoothTimes_GenerateWallInOpenSpace: 4
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames:
     - TypeDefineType: 0
       TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
@@ -211,8 +226,8 @@ MonoBehaviour:
     CaveConnectPercent: 0
     SmoothTimes: 1
     SmoothTimes_GenerateWallInOpenSpace: 0
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 0
@@ -227,8 +242,8 @@ MonoBehaviour:
     CaveConnectPercent: 0
     SmoothTimes: 5
     SmoothTimes_GenerateWallInOpenSpace: 0
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames:
     - TypeDefineType: 0
       TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
@@ -245,8 +260,8 @@ MonoBehaviour:
     CaveConnectPercent: 40
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames:
     - TypeDefineType: 0
       TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
@@ -263,8 +278,8 @@ MonoBehaviour:
     CaveConnectPercent: 40
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames:
     - TypeDefineType: 0
       TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
@@ -281,8 +296,8 @@ MonoBehaviour:
     CaveConnectPercent: 40
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames:
     - TypeDefineType: 0
       TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
@@ -299,8 +314,8 @@ MonoBehaviour:
     CaveConnectPercent: 40
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames:
     - TypeDefineType: 0
       TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
@@ -317,8 +332,8 @@ MonoBehaviour:
     CaveConnectPercent: 40
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames:
     - TypeDefineType: 0
       TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
@@ -335,8 +350,8 @@ MonoBehaviour:
     CaveConnectPercent: 40
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames:
     - TypeDefineType: 0
       TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
@@ -353,8 +368,8 @@ MonoBehaviour:
     CaveConnectPercent: 40
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames:
     - TypeDefineType: 0
       TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
@@ -372,8 +387,8 @@ MonoBehaviour:
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
   GenerateActorLayerDataList:
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
@@ -384,8 +399,8 @@ MonoBehaviour:
     ActorTypeName:
       TypeDefineType: 2
       TypeGUID: (1a445359-a04c-45b6-b196-0dba2f8f1b77)
-  - ConsiderStaticLayout: 0
-    Enable: 0
+  - Enable: 0
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
@@ -396,8 +411,8 @@ MonoBehaviour:
     ActorTypeName:
       TypeDefineType: 2
       TypeGUID: (ad35ea7c-81f7-4dff-8a10-c37b4bf74855)
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
@@ -408,8 +423,8 @@ MonoBehaviour:
     ActorTypeName:
       TypeDefineType: 2
       TypeGUID: (7f30448e-8f28-4fe7-8d2c-4762cdc7b2b1)
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 1
     m_GenerateAlgorithm: 2
@@ -420,8 +435,8 @@ MonoBehaviour:
     ActorTypeName:
       TypeDefineType: 2
       TypeGUID: (0ef8812f-12f3-4b3b-9fa3-f1f0603c8e60)
-  - ConsiderStaticLayout: 0
-    Enable: 1
+  - Enable: 1
+    ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     m_GenerateAlgorithm: 2
@@ -435,3 +450,20 @@ MonoBehaviour:
   ExtendScope_Load: 4
   ExtendScope_Recycle: 20
   ExtendScope_Recycle_Ground: 52
+  references:
+    version: 1
+    00000000:
+      type: {class: RandomFillPass, ns: , asm: Client}
+      data:
+        FillPercent: 60
+        TerrainType: 2
+        OnlyOverrideSomeTerrain: 0
+        OverrideTerrainType: 0
+    00000001:
+      type: {class: SmoothPass, ns: , asm: Client}
+      data:
+        SmoothTimes: 4
+        NeighborIterations:
+        - NeighborTerrainType: 2
+          Threshold: 4
+          ChangeTerrainTypeTo: 1

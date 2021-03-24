@@ -93,6 +93,9 @@ public partial class Box : Entity
     [FoldoutGroup("组件")]
     public BoxFrozenBoxHelper BoxFrozenBoxHelper;
 
+    [FoldoutGroup("组件")]
+    public BoxMarchingTextureHelper BoxMarchingTextureHelper;
+
     internal Actor FrozenActor
     {
         get { return BoxFrozenBoxHelper != null ? BoxFrozenBoxHelper.FrozenActor : null; }
@@ -144,6 +147,7 @@ public partial class Box : Entity
         BoxSkinHelper?.OnHelperUsed();
         BoxIconSpriteHelper.OnHelperUsed();
         BoxFrozenBoxHelper?.OnHelperUsed();
+        BoxMarchingTextureHelper?.OnHelperUsed();
         base.OnUsed();
     }
 
@@ -181,6 +185,7 @@ public partial class Box : Entity
         BoxSkinHelper?.OnHelperRecycled();
         BoxIconSpriteHelper?.OnHelperRecycled();
         BoxFrozenBoxHelper?.OnHelperRecycled();
+        BoxMarchingTextureHelper?.OnHelperRecycled();
 
         transform.DOPause();
         EntityModelHelper.transform.DOPause();
@@ -621,6 +626,7 @@ public partial class Box : Entity
             transform.localRotation = Quaternion.identity;
         }
 
+        BoxMarchingTextureHelper?.Initialize();
         if (needCheckDrop) WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
     }
 
