@@ -44,7 +44,7 @@ public class OpenWorld : World
     [HideLabel]
     public GenerateTerrainData m_GenerateTerrainData = new GenerateTerrainData();
 
-    [FoldoutGroup("地图生成")]
+    [FoldoutGroup("放置物")]
     [LabelText("静态布局层级配置")]
     [ListDrawerSettings(ListElementLabelName = "StaticLayoutTypeName")]
     public List<GenerateStaticLayoutLayerData> GenerateStaticLayoutLayerDataList = new List<GenerateStaticLayoutLayerData>();
@@ -54,7 +54,7 @@ public class OpenWorld : World
     [ListDrawerSettings(ListElementLabelName = "BoxTypeName")]
     public List<GenerateBoxLayerData> GenerateBoxLayerDataList = new List<GenerateBoxLayerData>();
 
-    [FoldoutGroup("地图生成")]
+    [FoldoutGroup("放置物")]
     [LabelText("Actor层级配置")]
     [ListDrawerSettings(ListElementLabelName = "ActorTypeName")]
     public List<GenerateActorLayerData> GenerateActorLayerDataList = new List<GenerateActorLayerData>();

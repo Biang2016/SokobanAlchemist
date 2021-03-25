@@ -65,7 +65,6 @@ public abstract class MapGenerator
     protected bool TryOverrideToWorldMap(int world_x, int world_y, int world_z)
     {
         bool overrideSuc = false;
-        ushort existedIndex_StaticLayoutIndex_IntactForStaticLayout = WorldMap_StaticLayoutOccupied_IntactForStaticLayout[world_x, world_y - Height, world_z];
         ushort existedIndex_StaticLayoutIndex_IntactForBox = WorldMap_StaticLayoutOccupied_IntactForBox[world_x, world_y - Height, world_z];
         switch (MapGeneratorType)
         {
@@ -171,6 +170,12 @@ public abstract class MapGenerator
                                 int box_grid_world_z = box_world_z + gridPos.z;
                                 if (box_grid_world_x > 0 && box_grid_world_x < Width - 1 && box_grid_world_y - Height >= 0 && box_grid_world_y - Height < Height && box_grid_world_z > 0 && box_grid_world_z < Depth - 1) // 静态布局不要贴边
                                 {
+                                    if (WorldMap_StaticLayoutOccupied_IntactForStaticLayout[box_grid_world_x, box_grid_world_y - Height, box_grid_world_z] != 0)
+                                    {
+                                        spaceAvailableForBox = false;
+                                        break;
+                                    }
+
                                     if (WorldMap_Occupied[box_grid_world_x, box_grid_world_y - Height, box_grid_world_z] != 0)
                                     {
                                         spaceAvailableForBox = false;
@@ -267,6 +272,12 @@ public abstract class MapGenerator
                                 int actor_grid_world_z = z + gridPos.z + actorRotOffset.z;
                                 if (actor_grid_world_x > 0 && actor_grid_world_x < Width - 1 && actor_grid_world_y - Height >= 0 && actor_grid_world_y - Height < Height && actor_grid_world_z > 0 && actor_grid_world_z < Depth - 1) // 静态布局不要贴边
                                 {
+                                    if (WorldMap_StaticLayoutOccupied_IntactForStaticLayout[actor_grid_world_x, actor_grid_world_y - Height, actor_grid_world_z] != 0)
+                                    {
+                                        spaceAvailableForActor = false;
+                                        break;
+                                    }
+
                                     if (WorldMap_Occupied[actor_grid_world_x, actor_grid_world_y - Height, actor_grid_world_z] != 0)
                                     {
                                         spaceAvailableForActor = false;
@@ -368,8 +379,15 @@ public abstract class MapGenerator
                                 break;
                         }
 
-                        if (GenerateLayerData.OnlyAllowPutOnTerrain && !GenerateLayerData.AllowPlaceOnTerrainTypeSet.Contains(terrainType)) spaceAvailable = false;
-                        if (!GenerateLayerData.OnlyAllowPutOnTerrain && GenerateLayerData.ForbidPlaceOnTerrainTypeSet.Contains(terrainType)) spaceAvailable = false;
+                        if (GenerateLayerData.OnlyAllowPutOnTerrain && !GenerateLayerData.AllowPlaceOnTerrainTypeSet.Contains(terrainType))
+                        {
+                            spaceAvailable = false;
+                        }
+
+                        if (!GenerateLayerData.OnlyAllowPutOnTerrain && GenerateLayerData.ForbidPlaceOnTerrainTypeSet.Contains(terrainType))
+                        {
+                            spaceAvailable = false;
+                        }
                     }
                     else
                     {

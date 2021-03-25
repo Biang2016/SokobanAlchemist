@@ -15,6 +15,9 @@ public class GenerateTerrainData
 [Serializable]
 public abstract class TerrainProcessPass
 {
+    [LabelText("生效")]
+    public bool Enable = true;
+
     public abstract string Description { get; }
 }
 
@@ -25,14 +28,26 @@ public class TerrainProcessPass_RandomFill : TerrainProcessPass
     {
         get
         {
+            string enable = Enable ? "√ " : "X ";
             string desc = OnlyOverrideSomeTerrain ? $"对于{OverrideTerrainType}地貌的格子" : "任何格子";
             string prob = $"有{FillPercent}%概率填充为{TerrainType}";
-            return desc + prob;
+            return enable + desc + prob;
         }
     }
 
+    [BoxGroup("PerlinNoise")]
     [LabelText("使用PerlinNoise来控制几率")]
     public bool ControlFillPercentWithPerlinNoise = false;
+
+    [BoxGroup("PerlinNoise")]
+    [LabelText("阈值")]
+    [ShowIf("ControlFillPercentWithPerlinNoise")]
+    public float PerlinNoiseThreshold = 0.4f;
+
+    [BoxGroup("PerlinNoise")]
+    [LabelText("尺度")]
+    [ShowIf("ControlFillPercentWithPerlinNoise")]
+    public float PerlinNoiseScale = 2.156f;
 
     [LabelText("填充几率")]
     public int FillPercent = 40;
@@ -51,7 +66,14 @@ public class TerrainProcessPass_RandomFill : TerrainProcessPass
 [Serializable]
 public class TerrainProcessPass_Smooth : TerrainProcessPass
 {
-    public override string Description => $"细胞自动机平滑{SmoothTimes}次";
+    public override string Description
+    {
+        get
+        {
+            string enable = Enable ? "√ " : "X ";
+            return enable + $"细胞自动机平滑{SmoothTimes}次";
+        }
+    }
 
     [LabelText("迭代次数")]
     public int SmoothTimes = 1;

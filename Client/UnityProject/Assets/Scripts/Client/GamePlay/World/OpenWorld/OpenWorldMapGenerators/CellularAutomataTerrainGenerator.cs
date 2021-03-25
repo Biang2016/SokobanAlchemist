@@ -42,6 +42,7 @@ public sealed class CellularAutomataTerrainGenerator
 
         foreach (TerrainProcessPass pass in data.ProcessingPassList)
         {
+            if (!pass.Enable) continue;
             switch (pass)
             {
                 case TerrainProcessPass_RandomFill randomFillPass:
@@ -60,6 +61,8 @@ public sealed class CellularAutomataTerrainGenerator
 
     private void InitRandomFillMap(TerrainProcessPass_RandomFill randomFillPass)
     {
+        int offset_x = SRandom.Range(0, 1024);
+        int offset_y = SRandom.Range(0, 1024);
         for (int world_x = 0; world_x < Width; world_x++)
         {
             for (int world_z = 0; world_z < Depth; world_z++)
@@ -74,10 +77,12 @@ public sealed class CellularAutomataTerrainGenerator
                     int fillPercent = randomFillPass.FillPercent;
                     if (randomFillPass.ControlFillPercentWithPerlinNoise)
                     {
-                        float per_x = world_x * 19f / 7f;
-                        float per_z = world_z * 19f / 7f;
+                        float per_x = (world_x + offset_x) * randomFillPass.PerlinNoiseScale;
+                        float per_z = (world_z + offset_y) * randomFillPass.PerlinNoiseScale;
                         float perlinValue = Perlin.Noise(per_x, per_z);
-                        fillPercent = Mathf.FloorToInt((perlinValue + 1f) / 2f * 100);
+                        float normalizedPerlinValue = (perlinValue + 1f) / 2f;
+                        bool overThreshold = normalizedPerlinValue - randomFillPass.PerlinNoiseThreshold > 0;
+                        fillPercent = overThreshold ? randomFillPass.FillPercent : 0;
                     }
 
                     fill = SRandom.Range(0, 100) < fillPercent;
