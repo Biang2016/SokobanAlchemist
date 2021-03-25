@@ -128,11 +128,6 @@ public class TypeSelectHelper : IClone<TypeSelectHelper>
 
     public void RefreshGUID()
     {
-        if (TypeSelection == null)
-        {
-            int a = 0;
-        }
-
         if (ConfigManager.TypeGUIDMappings.TryGetValue(TypeDefineType, out TypeGUIDMappingAsset.Mapping mapping))
         {
             if (mapping.Type_GUIDDict.TryGetValue(TypeSelection, out string guid))
@@ -143,10 +138,6 @@ public class TypeSelectHelper : IClone<TypeSelectHelper>
             {
                 TypeGUID = "";
             }
-        }
-        else
-        {
-            int a = 0;
         }
     }
 }

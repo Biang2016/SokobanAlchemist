@@ -303,14 +303,14 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         ExportTypeGUIDMappingAsset(dataFormat);
         LoadTypeGUIDMappingFromConfig(dataFormat);
 
-        SortWorldModule();
-        SortStaticLayouts();
-        SortWorlds();
+        SortAllWorldModules();
+        SortAllStaticLayouts();
+        SortAllWorlds();
         ExportEntityBuffAttributeMatrix(dataFormat);
         ExportEntityOccupationDataConfig(dataFormat);
-        ExportWorldModuleDataConfig(dataFormat);
-        ExportStaticLayoutDataConfig(dataFormat);
-        ExportWorldDataConfig(dataFormat);
+        ExportAllWorldModuleDataConfigs(dataFormat);
+        ExportAllStaticLayoutDataConfigs(dataFormat);
+        ExportAllWorldDataConfigs(dataFormat);
 
         AssetDatabase.Refresh();
         IsLoaded = false;
@@ -338,6 +338,16 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         EditorUtility.DisplayDialog("提示", "快速序列化类型成功", "确定");
     }
 
+    [MenuItem("Assets/序列化选中模组或世界", priority = -50)]
+    public static void ExportConfigsForSelectedAssets()
+    {
+        GameObject[] selectedGOs = Selection.gameObjects;
+        foreach (GameObject go in selectedGOs)
+        {
+            Debug.Log(go.name);
+        }
+    }
+
     private static void ExportTypeGUIDMapping()
     {
         TypeGUIDMappingAsset typeMapping = GetTypeGUIDMappingAsset();
@@ -363,6 +373,11 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 typeMapping.TypeGUIDMappings[kv.Key].Type_GUIDDict.Remove(key);
             }
         }
+
+        typeMapping.version += 1;
+        EditorUtility.SetDirty(typeMapping);
+        AssetDatabase.Refresh();
+        AssetDatabase.SaveAssets();
     }
 
     public static TypeGUIDMappingAsset GetTypeGUIDMappingAsset()
@@ -399,7 +414,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         AssetDatabase.Refresh();
     }
 
-    private static void SortWorldModule()
+    private static void SortAllWorldModules()
     {
         List<string> worldModuleNames = TypeDefineConfigs[TypeDefineType.WorldModule].TypeIndexDict.Keys.ToList();
         foreach (string worldModuleName in worldModuleNames)
@@ -425,7 +440,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         PrefabUtility.UnloadPrefabContents(worldModulePrefab);
     }
 
-    private static void SortStaticLayouts()
+    private static void SortAllStaticLayouts()
     {
         List<string> staticLayoutNames = TypeDefineConfigs[TypeDefineType.StaticLayout].TypeIndexDict.Keys.ToList();
         foreach (string staticLayoutName in staticLayoutNames)
@@ -451,7 +466,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         PrefabUtility.UnloadPrefabContents(staticLayoutPrefab);
     }
 
-    private static void SortWorlds()
+    private static void SortAllWorlds()
     {
         List<string> worldNames = TypeDefineConfigs[TypeDefineType.World].TypeIndexDict.Keys.ToList();
         foreach (string worldName in worldNames)
@@ -600,7 +615,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         File.WriteAllBytes(file, bytes);
     }
 
-    private static void ExportWorldModuleDataConfig(DataFormat dataFormat)
+    private static void ExportAllWorldModuleDataConfigs(DataFormat dataFormat)
     {
         string folder = WorldModuleDataConfigFolder_Build;
         if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
@@ -628,7 +643,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
-    private static void ExportStaticLayoutDataConfig(DataFormat dataFormat)
+    private static void ExportAllStaticLayoutDataConfigs(DataFormat dataFormat)
     {
         string folder = StaticLayoutDataConfigFolder_Build;
         if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
@@ -656,7 +671,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
-    private static void ExportWorldDataConfig(DataFormat dataFormat)
+    private static void ExportAllWorldDataConfigs(DataFormat dataFormat)
     {
         string folder = WorldDataConfigFolder_Build;
         if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
