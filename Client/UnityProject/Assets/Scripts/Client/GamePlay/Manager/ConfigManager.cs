@@ -299,10 +299,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         // 时序，先导出类型表
         ExportTypeGUIDMapping();
 
-        // 时序，后面的导出都需要映射表，因此映射表先导出并加载
-        ExportTypeGUIDMappingAsset(dataFormat);
-        LoadTypeGUIDMappingFromConfig(dataFormat);
-
         SortAllWorldModules();
         SortAllStaticLayouts();
         SortAllWorlds();
@@ -328,10 +324,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         // 时序，先导出类型表
         ExportTypeGUIDMapping();
 
-        // 时序，后面的导出都需要映射表，因此映射表先导出并加载
-        ExportTypeGUIDMappingAsset(DataFormat.Binary);
-        LoadTypeGUIDMappingFromConfig(DataFormat.Binary);
-
         AssetDatabase.Refresh();
         IsLoaded = false;
         LoadAllConfigs();
@@ -341,10 +333,23 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     [MenuItem("Assets/序列化选中模组或世界", priority = -50)]
     public static void ExportConfigsForSelectedAssets()
     {
+        LoadAllConfigs();
+        DataFormat dataFormat = DataFormat.Binary;
+        ExportTypeGUIDMapping();
         GameObject[] selectedGOs = Selection.gameObjects;
         foreach (GameObject go in selectedGOs)
         {
-            Debug.Log(go.name);
+            if (go.GetComponent<WorldModuleDesignHelper>())
+            {
+                SortWorldModule(go.name);
+                ExportWorldModuleDataConfig(dataFormat, go.name);
+                ExportStaticLayoutDataConfig(dataFormat, go.name);
+            }
+            else if (go.GetComponent<WorldDesignHelper>())
+            {
+                SortWorld(go.name);
+                ExportWorldDataConfig(dataFormat, go.name);
+            }
         }
     }
 
@@ -378,6 +383,9 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         EditorUtility.SetDirty(typeMapping);
         AssetDatabase.Refresh();
         AssetDatabase.SaveAssets();
+
+        ExportTypeGUIDMappingAsset(DataFormat.Binary);
+        LoadTypeGUIDMappingFromConfig(DataFormat.Binary);
     }
 
     public static TypeGUIDMappingAsset GetTypeGUIDMappingAsset()
@@ -623,23 +631,44 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + DesignRoot + WorldModuleDataConfigFolder_Relative);
         foreach (FileInfo fi in di.GetFiles("*.prefab", SearchOption.AllDirectories))
         {
-            string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
-            GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
-            WorldModuleDesignHelper module = obj.GetComponent<WorldModuleDesignHelper>();
-            WorldModuleData data = module.ExportWorldModuleData();
-            TypeDefineConfigs[TypeDefineType.WorldModule].TypeIndexDict.TryGetValue(module.name, out ushort worldModuleTypeIndex);
-            if (worldModuleTypeIndex != 0)
+            ExportWorldModuleDataConfigCore(dataFormat, fi, folder);
+        }
+    }
+
+    private static void ExportWorldModuleDataConfig(DataFormat dataFormat, string worldModuleName)
+    {
+        string folder = WorldModuleDataConfigFolder_Build;
+        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + DesignRoot + WorldModuleDataConfigFolder_Relative);
+        foreach (FileInfo fi in di.GetFiles("*.prefab", SearchOption.AllDirectories))
+        {
+            if (fi.Name.Equals(worldModuleName + ".prefab"))
             {
-                data.WorldModuleTypeIndex = worldModuleTypeIndex;
-                data.WorldModuleTypeName = module.name;
-                string path = folder + module.name + ".config";
-                byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
-                File.WriteAllBytes(path, bytes);
+                ExportWorldModuleDataConfigCore(dataFormat, fi, folder);
+                Debug.Log($"[世界模组] 序列化成功: {worldModuleName}");
             }
-            else
-            {
-                Debug.LogError($"WorldModuleTypeDefineDict 中无{module.name}");
-            }
+        }
+    }
+
+    private static void ExportWorldModuleDataConfigCore(DataFormat dataFormat, FileInfo fi, string folder)
+    {
+        string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
+        GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
+        WorldModuleDesignHelper module = obj.GetComponent<WorldModuleDesignHelper>();
+        WorldModuleData data = module.ExportWorldModuleData();
+        TypeDefineConfigs[TypeDefineType.WorldModule].TypeIndexDict.TryGetValue(module.name, out ushort worldModuleTypeIndex);
+        if (worldModuleTypeIndex != 0)
+        {
+            data.WorldModuleTypeIndex = worldModuleTypeIndex;
+            data.WorldModuleTypeName = module.name;
+            string path = folder + module.name + ".config";
+            byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
+            File.WriteAllBytes(path, bytes);
+        }
+        else
+        {
+            Debug.LogError($"WorldModuleTypeDefineDict 中无{module.name}");
         }
     }
 
@@ -651,23 +680,44 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + DesignRoot + StaticLayoutDataConfigFolder_Relative);
         foreach (FileInfo fi in di.GetFiles("*.prefab", SearchOption.AllDirectories))
         {
-            string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
-            GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
-            WorldModuleDesignHelper module = obj.GetComponent<WorldModuleDesignHelper>();
-            WorldModuleData data = module.ExportWorldModuleData();
-            TypeDefineConfigs[TypeDefineType.StaticLayout].TypeIndexDict.TryGetValue(module.name, out ushort worldModuleTypeIndex);
-            if (worldModuleTypeIndex != 0)
+            ExportStaticLayoutDataConfigCore(dataFormat, fi, folder);
+        }
+    }
+
+    private static void ExportStaticLayoutDataConfig(DataFormat dataFormat, string staticLayoutName)
+    {
+        string folder = StaticLayoutDataConfigFolder_Build;
+        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + DesignRoot + StaticLayoutDataConfigFolder_Relative);
+        foreach (FileInfo fi in di.GetFiles("*.prefab", SearchOption.AllDirectories))
+        {
+            if (fi.Name.Equals(staticLayoutName + ".prefab"))
             {
-                data.WorldModuleTypeIndex = worldModuleTypeIndex;
-                data.WorldModuleTypeName = module.name;
-                string path = folder + module.name + ".config";
-                byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
-                File.WriteAllBytes(path, bytes);
+                ExportStaticLayoutDataConfigCore(dataFormat, fi, folder);
+                Debug.Log($"[静态布局] 序列化成功: {staticLayoutName}");
             }
-            else
-            {
-                Debug.LogError($"StaticLayoutTypeDefineDict 中无{module.name}");
-            }
+        }
+    }
+
+    private static void ExportStaticLayoutDataConfigCore(DataFormat dataFormat, FileInfo fi, string folder)
+    {
+        string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
+        GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
+        WorldModuleDesignHelper module = obj.GetComponent<WorldModuleDesignHelper>();
+        WorldModuleData data = module.ExportWorldModuleData();
+        TypeDefineConfigs[TypeDefineType.StaticLayout].TypeIndexDict.TryGetValue(module.name, out ushort worldModuleTypeIndex);
+        if (worldModuleTypeIndex != 0)
+        {
+            data.WorldModuleTypeIndex = worldModuleTypeIndex;
+            data.WorldModuleTypeName = module.name;
+            string path = folder + module.name + ".config";
+            byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
+            File.WriteAllBytes(path, bytes);
+        }
+        else
+        {
+            Debug.LogError($"StaticLayoutTypeDefineDict 中无{module.name}");
         }
     }
 
@@ -679,23 +729,44 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + DesignRoot + WorldDataConfigFolder_Relative);
         foreach (FileInfo fi in di.GetFiles("*.prefab", SearchOption.AllDirectories))
         {
-            string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
-            GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
-            WorldDesignHelper world = obj.GetComponent<WorldDesignHelper>();
-            WorldData data = world.ExportWorldData();
-            TypeDefineConfigs[TypeDefineType.World].TypeIndexDict.TryGetValue(world.name, out ushort worldTypeIndex);
-            if (worldTypeIndex != 0)
+            ExportWorldDataConfigCore(dataFormat, fi, folder);
+        }
+    }
+
+    private static void ExportWorldDataConfig(DataFormat dataFormat, string worldName)
+    {
+        string folder = WorldDataConfigFolder_Build;
+        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + DesignRoot + WorldDataConfigFolder_Relative);
+        foreach (FileInfo fi in di.GetFiles("*.prefab", SearchOption.AllDirectories))
+        {
+            if (fi.Name.Equals(worldName + ".prefab"))
             {
-                data.WorldTypeIndex = worldTypeIndex;
-                data.WorldTypeName = world.name;
-                string path = folder + world.name + ".config";
-                byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
-                File.WriteAllBytes(path, bytes);
+                ExportWorldDataConfigCore(dataFormat, fi, folder);
+                Debug.Log($"[世界] 序列化成功: {worldName}");
             }
-            else
-            {
-                Debug.LogError($"WorldTypeDefineDict 中无{world.name}");
-            }
+        }
+    }
+
+    private static void ExportWorldDataConfigCore(DataFormat dataFormat, FileInfo fi, string folder)
+    {
+        string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
+        GameObject obj = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(relativePath);
+        WorldDesignHelper world = obj.GetComponent<WorldDesignHelper>();
+        WorldData data = world.ExportWorldData();
+        TypeDefineConfigs[TypeDefineType.World].TypeIndexDict.TryGetValue(world.name, out ushort worldTypeIndex);
+        if (worldTypeIndex != 0)
+        {
+            data.WorldTypeIndex = worldTypeIndex;
+            data.WorldTypeName = world.name;
+            string path = folder + world.name + ".config";
+            byte[] bytes = SerializationUtility.SerializeValue(data, dataFormat);
+            File.WriteAllBytes(path, bytes);
+        }
+        else
+        {
+            Debug.LogError($"WorldTypeDefineDict 中无{world.name}");
         }
     }
 
