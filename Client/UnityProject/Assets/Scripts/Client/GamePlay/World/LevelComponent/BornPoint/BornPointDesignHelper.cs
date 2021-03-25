@@ -1,4 +1,5 @@
 ﻿using BiangLibrary;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -7,6 +8,8 @@ using UnityEngine;
 
 public class BornPointDesignHelper : MonoBehaviour
 {
+    [HideLabel]
+    [BoxGroup("出生点配置")]
     public BornPointData BornPointData;
 
 #if UNITY_EDITOR

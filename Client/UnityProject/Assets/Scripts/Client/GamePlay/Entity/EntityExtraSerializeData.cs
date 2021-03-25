@@ -7,8 +7,8 @@ using UnityEngine;
 [Serializable]
 public class EntityExtraSerializeData : IClone<EntityExtraSerializeData>
 {
-    [BoxGroup("Extra被动技能")]
-    [LabelText("Extra被动技能")]
+    [BoxGroup("额外被动技能")]
+    [LabelText("额外被动技能")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     [SerializeReference] 
     public List<EntityPassiveSkill> EntityPassiveSkills = new List<EntityPassiveSkill>();

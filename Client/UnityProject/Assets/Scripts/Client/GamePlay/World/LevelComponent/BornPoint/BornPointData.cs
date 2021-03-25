@@ -36,9 +36,12 @@ public class BornPointData : LevelComponentData
     [LabelText("收到事件后刷怪(空则开场刷怪)")]
     public string SpawnLevelEventAlias;
 
+    [BoxGroup("角色类型")]
+    [LabelText("是主角")]
     public bool IsPlayer = false;
 
-    [LabelText("角色类型")]
+    [BoxGroup("角色类型")]
+    [LabelText("敌兵类型")]
     [HideIf("IsPlayer")]
     public TypeSelectHelper EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy};
 
