@@ -305,7 +305,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         SortWorldModule();
         SortStaticLayouts();
-        SortWorld();
+        SortWorlds();
         ExportEntityBuffAttributeMatrix(dataFormat);
         ExportEntityOccupationDataConfig(dataFormat);
         ExportWorldModuleDataConfig(dataFormat);
@@ -404,20 +404,25 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         List<string> worldModuleNames = TypeDefineConfigs[TypeDefineType.WorldModule].TypeIndexDict.Keys.ToList();
         foreach (string worldModuleName in worldModuleNames)
         {
-            string prefabPath = TypeDefineConfigs[TypeDefineType.WorldModule].GetTypeAssetDataBasePath(worldModuleName);
-            GameObject worldModulePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
-            if (worldModulePrefab)
-            {
-                WorldModuleDesignHelper module = worldModulePrefab.GetComponent<WorldModuleDesignHelper>();
-                if (module)
-                {
-                    bool isDirty = module.SortModule();
-                    if (isDirty) PrefabUtility.SaveAsPrefabAsset(worldModulePrefab, prefabPath);
-                }
-            }
-
-            PrefabUtility.UnloadPrefabContents(worldModulePrefab);
+            SortWorldModule(worldModuleName);
         }
+    }
+
+    private static void SortWorldModule(string worldModuleName)
+    {
+        string prefabPath = TypeDefineConfigs[TypeDefineType.WorldModule].GetTypeAssetDataBasePath(worldModuleName);
+        GameObject worldModulePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
+        if (worldModulePrefab)
+        {
+            WorldModuleDesignHelper module = worldModulePrefab.GetComponent<WorldModuleDesignHelper>();
+            if (module)
+            {
+                bool isDirty = module.SortModule();
+                if (isDirty) PrefabUtility.SaveAsPrefabAsset(worldModulePrefab, prefabPath);
+            }
+        }
+
+        PrefabUtility.UnloadPrefabContents(worldModulePrefab);
     }
 
     private static void SortStaticLayouts()
@@ -425,41 +430,51 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         List<string> staticLayoutNames = TypeDefineConfigs[TypeDefineType.StaticLayout].TypeIndexDict.Keys.ToList();
         foreach (string staticLayoutName in staticLayoutNames)
         {
-            string prefabPath = TypeDefineConfigs[TypeDefineType.StaticLayout].GetTypeAssetDataBasePath(staticLayoutName);
-            GameObject staticLayoutPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
-            if (staticLayoutPrefab)
-            {
-                WorldModuleDesignHelper module = staticLayoutPrefab.GetComponent<WorldModuleDesignHelper>();
-                if (module)
-                {
-                    bool isDirty = module.SortModule();
-                    if (isDirty) PrefabUtility.SaveAsPrefabAsset(staticLayoutPrefab, prefabPath);
-                }
-            }
-
-            PrefabUtility.UnloadPrefabContents(staticLayoutPrefab);
+            SortStaticLayout(staticLayoutName);
         }
     }
 
-    private static void SortWorld()
+    private static void SortStaticLayout(string staticLayoutName)
+    {
+        string prefabPath = TypeDefineConfigs[TypeDefineType.StaticLayout].GetTypeAssetDataBasePath(staticLayoutName);
+        GameObject staticLayoutPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
+        if (staticLayoutPrefab)
+        {
+            WorldModuleDesignHelper module = staticLayoutPrefab.GetComponent<WorldModuleDesignHelper>();
+            if (module)
+            {
+                bool isDirty = module.SortModule();
+                if (isDirty) PrefabUtility.SaveAsPrefabAsset(staticLayoutPrefab, prefabPath);
+            }
+        }
+
+        PrefabUtility.UnloadPrefabContents(staticLayoutPrefab);
+    }
+
+    private static void SortWorlds()
     {
         List<string> worldNames = TypeDefineConfigs[TypeDefineType.World].TypeIndexDict.Keys.ToList();
         foreach (string worldName in worldNames)
         {
-            string prefabPath = TypeDefineConfigs[TypeDefineType.World].GetTypeAssetDataBasePath(worldName);
-            GameObject worldPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
-            if (worldPrefab)
-            {
-                WorldDesignHelper world = worldPrefab.GetComponent<WorldDesignHelper>();
-                if (world)
-                {
-                    bool isDirty = world.SortWorld();
-                    if (isDirty) PrefabUtility.SaveAsPrefabAsset(worldPrefab, prefabPath);
-                }
-            }
-
-            PrefabUtility.UnloadPrefabContents(worldPrefab);
+            SortWorld(worldName);
         }
+    }
+
+    private static void SortWorld(string worldName)
+    {
+        string prefabPath = TypeDefineConfigs[TypeDefineType.World].GetTypeAssetDataBasePath(worldName);
+        GameObject worldPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
+        if (worldPrefab)
+        {
+            WorldDesignHelper world = worldPrefab.GetComponent<WorldDesignHelper>();
+            if (world)
+            {
+                bool isDirty = world.SortWorld();
+                if (isDirty) PrefabUtility.SaveAsPrefabAsset(worldPrefab, prefabPath);
+            }
+        }
+
+        PrefabUtility.UnloadPrefabContents(worldPrefab);
     }
 
     public static EntityBuffAttributeMatrixAsset GetBuffAttributeMatrixAsset()
