@@ -69,6 +69,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public LoadingMapPanel LoadingMapPanel;
     public NoticePanel NoticePanel;
 
+    public bool WarmUpPool_Editor = true;
+
     [LabelText("@\"开局世界类型\t\"+StartWorldName")]
     public TypeSelectHelper StartWorldName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
 
@@ -159,8 +161,15 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         LoadingMapPanel.SetBackgroundAlpha(0f);
         LoadingMapPanel.SetProgress(0, "Start Loading");
         yield return new WaitForSeconds(0.1f);
-        LoadingMapPanel.SetProgress(0.01f, "Warm Up Pool");
-        yield return GameObjectPoolManager.WarmUpPool();
+#if UNITY_EDITOR
+        if (WarmUpPool_Editor)
+        {
+#endif
+            LoadingMapPanel.SetProgress(0.01f, "Warm Up Pool");
+            yield return GameObjectPoolManager.WarmUpPool();
+#if UNITY_EDITOR
+        }
+#endif
 
         LoadingMapPanel.SetBackgroundAlpha(1f);
         LoadingMapPanel.SetProgress(0.5f, "StartGame");

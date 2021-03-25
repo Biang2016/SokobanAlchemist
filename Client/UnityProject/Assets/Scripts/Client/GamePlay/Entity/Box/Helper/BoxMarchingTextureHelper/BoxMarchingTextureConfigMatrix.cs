@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
@@ -11,7 +10,9 @@ public class BoxMarchingTextureConfigMatrix : SerializedScriptableObject
     [OdinSerialize]
     [NonSerialized]
     [TableMatrix(SquareCells = true)]
-    public SortedDictionary<TerrainType, BoxMarchingTextureConfigSSO> Matrix = new SortedDictionary<TerrainType, BoxMarchingTextureConfigSSO>();
+    public BoxMarchingTextureConfigSSO[,] Matrix = new BoxMarchingTextureConfigSSO[10, 10];
+
+    public Texture2D[] PureTerrain = new Texture2D[10];
 
     private string Tips
     {

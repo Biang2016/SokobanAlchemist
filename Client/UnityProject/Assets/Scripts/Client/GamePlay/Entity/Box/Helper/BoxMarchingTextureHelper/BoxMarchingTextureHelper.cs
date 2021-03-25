@@ -42,7 +42,7 @@ public class BoxMarchingTextureHelper : BoxMonoHelper
                 TerrainType tt_RB = GetTerrainType(x + 1, z);
                 TerrainType tt_RT = GetTerrainType(x + 1, z + 1);
                 TerrainType tt_LT = GetTerrainType(x, z + 1);
-                BoxMarchingTextureTile.MarchingSquareData data = new BoxMarchingTextureTile.MarchingSquareData(TerrainType.Earth, tt_LB, tt_RB, tt_RT, tt_LT);
+                BoxMarchingTextureTile.MarchingSquareData data = new BoxMarchingTextureTile.MarchingSquareData(tt_LB, tt_RB, tt_RT, tt_LT);
                 return data;
             }
 
@@ -58,63 +58,72 @@ public class BoxMarchingTextureHelper : BoxMonoHelper
                     marchingSquareDataMatrix[x, z] = data;
                 }
 
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
+                    for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
+                    {
+                        BoxMarchingTextureTile.MarchingSquareData thisData = marchingSquareDataMatrix[x, z];
+                        for (int delta_x = -1; delta_x <= 1; delta_x++)
+                        for (int delta_z = -1; delta_z <= 1; delta_z++)
+                        {
+                            if (delta_x == 0 && delta_z == 0) continue;
+                            BoxMarchingTextureTile.MarchingSquareData surroundingTTData;
+                            if (x + delta_x >= 0 && x + delta_x < WorldModule.MODULE_SIZE && z + delta_z >= 0 && z + delta_z < WorldModule.MODULE_SIZE)
+                            {
+                                surroundingTTData = marchingSquareDataMatrix[x + delta_x, z + delta_z];
+                            }
+                            else
+                            {
+                                GridPos3D worldGP = Box.WorldModule.LocalGPToWorldGP(new GridPos3D(x + delta_x, WorldModule.MODULE_SIZE - 1, z + delta_z));
+                                surroundingTTData = CalculateMarchingSquareData(worldGP.x, worldGP.z);
+                            }
+
+                            if (surroundingTTData.ForceEmpty)
+                            {
+                                if (delta_x == -1 && delta_z == -1) thisData.Terrain_LB = TerrainType.Earth;
+                                if (delta_x == -1 && delta_z == 0)
+                                {
+                                    thisData.Terrain_LB = TerrainType.Earth;
+                                    thisData.Terrain_LT = TerrainType.Earth;
+                                }
+
+                                if (delta_x == -1 && delta_z == 1) thisData.Terrain_LT = TerrainType.Earth;
+
+                                if (delta_x == 0 && delta_z == -1)
+                                {
+                                    thisData.Terrain_LB = TerrainType.Earth;
+                                    thisData.Terrain_RB = TerrainType.Earth;
+                                }
+
+                                if (delta_x == 0 && delta_z == 1)
+                                {
+                                    thisData.Terrain_LT = TerrainType.Earth;
+                                    thisData.Terrain_RT = TerrainType.Earth;
+                                }
+
+                                if (delta_x == 1 && delta_z == -1) thisData.Terrain_RB = TerrainType.Earth;
+                                if (delta_x == 1 && delta_z == 0)
+                                {
+                                    thisData.Terrain_RB = TerrainType.Earth;
+                                    thisData.Terrain_RT = TerrainType.Earth;
+                                }
+
+                                if (delta_x == 1 && delta_z == 1) thisData.Terrain_RT = TerrainType.Earth;
+                            }
+                        }
+
+                        thisData.InitData();
+                        marchingSquareDataMatrix[x, z] = thisData;
+                    }
+                }
+
                 for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
                 for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
                 {
-                    BoxMarchingTextureTile.MarchingSquareData thisData = marchingSquareDataMatrix[x, z];
-                    for (int delta_x = -1; delta_x <= 1; delta_x++)
-                    for (int delta_z = -1; delta_z <= 1; delta_z++)
-                    {
-                        if (delta_x == 0 && delta_z == 0) continue;
-                        BoxMarchingTextureTile.MarchingSquareData surroundingTTData;
-                        if (x + delta_x >= 0 && x + delta_x < WorldModule.MODULE_SIZE && z + delta_z >= 0 && z + delta_z < WorldModule.MODULE_SIZE)
-                        {
-                            surroundingTTData = marchingSquareDataMatrix[x + delta_x, z + delta_z];
-                        }
-                        else
-                        {
-                            GridPos3D worldGP = Box.WorldModule.LocalGPToWorldGP(new GridPos3D(x + delta_x, WorldModule.MODULE_SIZE - 1, z + delta_z));
-                            surroundingTTData = CalculateMarchingSquareData(worldGP.x, worldGP.z);
-                        }
-
-                        if (surroundingTTData.ForceEmpty)
-                        {
-                            if (delta_x == -1 && delta_z == -1) thisData.Terrain_LB = TerrainType.Earth;
-                            if (delta_x == -1 && delta_z == 0)
-                            {
-                                thisData.Terrain_LB = TerrainType.Earth;
-                                thisData.Terrain_LT = TerrainType.Earth;
-                            }
-
-                            if (delta_x == -1 && delta_z == 1) thisData.Terrain_LT = TerrainType.Earth;
-
-                            if (delta_x == 0 && delta_z == -1)
-                            {
-                                thisData.Terrain_LB = TerrainType.Earth;
-                                thisData.Terrain_RB = TerrainType.Earth;
-                            }
-
-                            if (delta_x == 0 && delta_z == 1)
-                            {
-                                thisData.Terrain_LT = TerrainType.Earth;
-                                thisData.Terrain_RT = TerrainType.Earth;
-                            }
-
-                            if (delta_x == 1 && delta_z == -1) thisData.Terrain_RB = TerrainType.Earth;
-                            if (delta_x == 1 && delta_z == 0)
-                            {
-                                thisData.Terrain_RB = TerrainType.Earth;
-                                thisData.Terrain_RT = TerrainType.Earth;
-                            }
-
-                            if (delta_x == 1 && delta_z == 1) thisData.Terrain_RT = TerrainType.Earth;
-                        }
-                    }
-
-                    thisData.InitData();
-
+                    BoxMarchingTextureTile.MarchingSquareData data = marchingSquareDataMatrix[x, z];
                     BoxMarchingTextureTile tt = BoxMarchingTextureTileMatrix[x, z];
-                    tt.Initialize(thisData);
+                    tt.Initialize(data);
                     tt.transform.localPosition = new Vector3(x, 0, z);
                 }
             }

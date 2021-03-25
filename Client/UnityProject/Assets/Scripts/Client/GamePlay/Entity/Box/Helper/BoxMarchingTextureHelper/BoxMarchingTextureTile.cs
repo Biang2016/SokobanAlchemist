@@ -14,10 +14,9 @@ public class BoxMarchingTextureTile : PoolObject
 
     public void Initialize(MarchingSquareData data)
     {
-        TerrainType terrain_0 = TerrainType.Earth;
         if (mpb == null) mpb = new MaterialPropertyBlock();
         MarchingTextureCase = data.GetMarchingTextureCase();
-        Dictionary<MarchingTextureCase, Texture> dict = ConfigManager.TerrainMarchingTextureDict[data.TransitTerrain];
+        Dictionary<MarchingTextureCase, Texture> dict = ConfigManager.TerrainMarchingTextureDict[(int) data.BasicTerrain, (int) data.TransitTerrain];
         if (dict.TryGetValue(MarchingTextureCase, out Texture texture))
         {
             MeshRenderer.GetPropertyBlock(mpb);
@@ -28,6 +27,7 @@ public class BoxMarchingTextureTile : PoolObject
 
     public struct MarchingSquareData
     {
+        // BasicTerrain <= TransitTerrain
         public TerrainType BasicTerrain;
         public TerrainType TransitTerrain;
 
@@ -38,9 +38,8 @@ public class BoxMarchingTextureTile : PoolObject
 
         public bool ForceEmpty;
 
-        public MarchingSquareData(TerrainType basicTerrain, TerrainType terrainLB, TerrainType terrainRB, TerrainType terrainRT, TerrainType terrainLT) : this()
+        public MarchingSquareData(TerrainType terrainLB, TerrainType terrainRB, TerrainType terrainRT, TerrainType terrainLT) : this()
         {
-            BasicTerrain = basicTerrain;
             Terrain_LB = terrainLB;
             Terrain_RB = terrainRB;
             Terrain_RT = terrainRT;
@@ -58,36 +57,58 @@ public class BoxMarchingTextureTile : PoolObject
             return (MarchingTextureCase) (((LB ? 1 : 0) << 0) + ((RB ? 1 : 0) << 1) + ((RT ? 1 : 0) << 2) + ((LT ? 1 : 0) << 3));
         }
 
-        public bool InitData()
+        private static HashSet<TerrainType> temp_TerrainTypeSet = new HashSet<TerrainType>();
+
+        public void InitData()
         {
             ForceEmpty = false;
-            TransitTerrain = TerrainType.Earth;
-            if (Terrain_LB != TerrainType.Earth)
+            temp_TerrainTypeSet.Clear();
+            temp_TerrainTypeSet.Add(Terrain_LB);
+            temp_TerrainTypeSet.Add(Terrain_RB);
+            temp_TerrainTypeSet.Add(Terrain_RT);
+            temp_TerrainTypeSet.Add(Terrain_LT);
+            if (temp_TerrainTypeSet.Count > 2) // 三种以上混合则强制为Earth过度
             {
-                if (TransitTerrain != TerrainType.Earth && TransitTerrain != Terrain_LB) ForceEmpty = true;
+                ForceEmpty = true;
+                BasicTerrain = TerrainType.Earth;
+                TransitTerrain = TerrainType.Earth;
+            }
+            else if (temp_TerrainTypeSet.Count == 2)
+            {
+                int index = 0;
+                foreach (TerrainType tt in temp_TerrainTypeSet)
+                {
+                    if (index == 0)
+                    {
+                        BasicTerrain = tt;
+                    }
+                    else
+                    {
+                        TransitTerrain = tt;
+                    }
+
+                    index++;
+                }
+
+                if ((int) BasicTerrain > (int) TransitTerrain)
+                {
+                    TerrainType swap = BasicTerrain;
+                    BasicTerrain = TransitTerrain;
+                    TransitTerrain = swap;
+                }
+
+                if (ConfigManager.TerrainMarchingTextureDict[(int) BasicTerrain, (int) TransitTerrain] == null) // 两种混合，如果配置里面无此类贴图，则强制为Earth过度
+                {
+                    ForceEmpty = true;
+                    BasicTerrain = TerrainType.Earth;
+                    TransitTerrain = TerrainType.Earth;
+                }
+            }
+            else
+            {
+                BasicTerrain = Terrain_LB;
                 TransitTerrain = Terrain_LB;
             }
-
-            if (Terrain_RB != TerrainType.Earth)
-            {
-                if (TransitTerrain != TerrainType.Earth && TransitTerrain != Terrain_RB) ForceEmpty = true;
-                TransitTerrain = Terrain_RB;
-            }
-
-            if (Terrain_RT != TerrainType.Earth)
-            {
-                if (TransitTerrain != TerrainType.Earth && TransitTerrain != Terrain_RT) ForceEmpty = true;
-                TransitTerrain = Terrain_RT;
-            }
-
-            if (Terrain_LT != TerrainType.Earth)
-            {
-                if (TransitTerrain != TerrainType.Earth && TransitTerrain != Terrain_LT) ForceEmpty = true;
-                TransitTerrain = Terrain_LT;
-            }
-
-            if (ForceEmpty) TransitTerrain = TerrainType.Earth;
-            return ForceEmpty;
         }
     }
 }

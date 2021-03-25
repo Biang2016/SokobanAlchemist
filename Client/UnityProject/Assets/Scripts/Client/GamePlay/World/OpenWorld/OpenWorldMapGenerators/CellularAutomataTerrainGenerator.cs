@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BiangLibrary.GameDataFormat;
+using UnityEngine;
 
 public sealed class CellularAutomataTerrainGenerator
 {
@@ -18,7 +19,7 @@ public sealed class CellularAutomataTerrainGenerator
     private Dictionary<TerrainType, int> cached_SurroundingTerrainTypeCountDict = new Dictionary<TerrainType, int>();
     private Dictionary<TerrainType, int> cached_SurroundingTerrainTypeCountDict_2x = new Dictionary<TerrainType, int>();
 
-    public CellularAutomataTerrainGenerator(OpenWorld.GenerateTerrainData data, int width, int depth, uint seed, OpenWorld openWorld)
+    public CellularAutomataTerrainGenerator(GenerateTerrainData data, int width, int depth, uint seed, OpenWorld openWorld)
     {
         SRandom = new SRandom(seed);
         Width = width;
@@ -39,16 +40,16 @@ public sealed class CellularAutomataTerrainGenerator
             cached_SurroundingTerrainTypeCountDict_2x.Add(terrainType, 0);
         }
 
-        foreach (Pass pass in data.ProcessingPassList)
+        foreach (TerrainProcessPass pass in data.ProcessingPassList)
         {
             switch (pass)
             {
-                case RandomFillPass randomFillPass:
+                case TerrainProcessPass_RandomFill randomFillPass:
                 {
                     InitRandomFillMap(randomFillPass);
                     break;
                 }
-                case SmoothPass smoothPass:
+                case TerrainProcessPass_Smooth smoothPass:
                 {
                     SmoothMap(smoothPass);
                     break;
@@ -57,7 +58,7 @@ public sealed class CellularAutomataTerrainGenerator
         }
     }
 
-    private void InitRandomFillMap(RandomFillPass randomFillPass)
+    private void InitRandomFillMap(TerrainProcessPass_RandomFill randomFillPass)
     {
         for (int world_x = 0; world_x < Width; world_x++)
         {
@@ -70,7 +71,16 @@ public sealed class CellularAutomataTerrainGenerator
                 }
                 else
                 {
-                    fill = SRandom.Range(0, 100) < randomFillPass.FillPercent;
+                    int fillPercent = randomFillPass.FillPercent;
+                    if (randomFillPass.ControlFillPercentWithPerlinNoise)
+                    {
+                        float per_x = world_x * 19f / 7f;
+                        float per_z = world_z * 19f / 7f;
+                        float perlinValue = Perlin.Noise(per_x, per_z);
+                        fillPercent = Mathf.FloorToInt((perlinValue + 1f) / 2f * 100);
+                    }
+
+                    fill = SRandom.Range(0, 100) < fillPercent;
                     if (randomFillPass.OnlyOverrideSomeTerrain)
                     {
                         if (map_1[world_x, world_z] != randomFillPass.OverrideTerrainType)
@@ -84,15 +94,11 @@ public sealed class CellularAutomataTerrainGenerator
                 {
                     map_1[world_x, world_z] = randomFillPass.TerrainType;
                 }
-                else
-                {
-                    map_1[world_x, world_z] = TerrainType.Earth;
-                }
             }
         }
     }
 
-    private void SmoothMap(SmoothPass smoothPass)
+    private void SmoothMap(TerrainProcessPass_Smooth smoothPass)
     {
         for (int i = 0; i < smoothPass.SmoothTimes; i++)
         {
@@ -101,12 +107,31 @@ public sealed class CellularAutomataTerrainGenerator
             {
                 bool isStaticLayout = WorldMap_TerrainType[world_x, world_z] != 0; // 识别静态布局
                 if (isStaticLayout) continue; // 静态布局内不受影响
+
                 Dictionary<TerrainType, int> neighborCount = GetSurroundingWallCount(map_1, world_x, world_z, 1);
 
                 // 核心逻辑
-                foreach (SmoothPass.NeighborIteration iteration in smoothPass.NeighborIterations)
+                foreach (TerrainProcessPass_Smooth.NeighborIteration iteration in smoothPass.NeighborIterations)
                 {
-                    if (neighborCount[iteration.NeighborTerrainType] >= iteration.Threshold) map_2[world_x, world_z] = iteration.ChangeTerrainTypeTo;
+                    if (iteration.LimitSelfType && iteration.SelfTerrainType != map_2[world_x, world_z]) continue;
+                    switch (iteration.Operator)
+                    {
+                        case TerrainProcessPass_Smooth.Operator.LessEquals:
+                        {
+                            if (neighborCount[iteration.NeighborTerrainType] <= iteration.Threshold) map_2[world_x, world_z] = iteration.ChangeTerrainTypeTo;
+                            break;
+                        }
+                        case TerrainProcessPass_Smooth.Operator.Equals:
+                        {
+                            if (neighborCount[iteration.NeighborTerrainType] == iteration.Threshold) map_2[world_x, world_z] = iteration.ChangeTerrainTypeTo;
+                            break;
+                        }
+                        case TerrainProcessPass_Smooth.Operator.GreaterEquals:
+                        {
+                            if (neighborCount[iteration.NeighborTerrainType] >= iteration.Threshold) map_2[world_x, world_z] = iteration.ChangeTerrainTypeTo;
+                            break;
+                        }
+                    }
                 }
             }
 

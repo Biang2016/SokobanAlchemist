@@ -44,7 +44,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static Dictionary<TypeDefineType, TypeGUIDMappingAsset.Mapping> TypeGUIDMappings = new Dictionary<TypeDefineType, TypeGUIDMappingAsset.Mapping>();
 
-    public static Dictionary<TerrainType, Dictionary<MarchingTextureCase, Texture>> TerrainMarchingTextureDict = new Dictionary<TerrainType, Dictionary<MarchingTextureCase, Texture>>();
+    public static Dictionary<MarchingTextureCase, Texture>[,] TerrainMarchingTextureDict = new Dictionary<MarchingTextureCase, Texture>[10, 10]; // 上三角矩阵 index_0 <= index_1
 
     public enum TypeStartIndex
     {
@@ -297,15 +297,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         Directory.CreateDirectory(ConfigFolder_Build);
 
         // 时序，先导出类型表
-        TypeGUIDMappingAsset typeMapping = GetTypeGUIDMappingAsset();
-        foreach (KeyValuePair<TypeDefineType, TypeDefineConfig> kv in TypeDefineConfigs)
-        {
-            kv.Value.ExportTypeNames();
-            foreach (KeyValuePair<string, ushort> _kv in kv.Value.TypeIndexDict)
-            {
-                typeMapping.TypeGUIDMappings[kv.Key].TryAddNewType(_kv.Key);
-            }
-        }
+        ExportTypeGUIDMapping();
 
         // 时序，后面的导出都需要映射表，因此映射表先导出并加载
         ExportTypeGUIDMappingAsset(dataFormat);
@@ -334,15 +326,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         Directory.CreateDirectory(TypeNamesConfigFolder_Build);
 
         // 时序，先导出类型表
-        TypeGUIDMappingAsset typeMapping = GetTypeGUIDMappingAsset();
-        foreach (KeyValuePair<TypeDefineType, TypeDefineConfig> kv in TypeDefineConfigs)
-        {
-            kv.Value.ExportTypeNames();
-            foreach (KeyValuePair<string, ushort> _kv in kv.Value.TypeIndexDict)
-            {
-                typeMapping.TypeGUIDMappings[kv.Key].TryAddNewType(_kv.Key);
-            }
-        }
+        ExportTypeGUIDMapping();
 
         // 时序，后面的导出都需要映射表，因此映射表先导出并加载
         ExportTypeGUIDMappingAsset(DataFormat.Binary);
@@ -352,6 +336,33 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         IsLoaded = false;
         LoadAllConfigs();
         EditorUtility.DisplayDialog("提示", "快速序列化类型成功", "确定");
+    }
+
+    private static void ExportTypeGUIDMapping()
+    {
+        TypeGUIDMappingAsset typeMapping = GetTypeGUIDMappingAsset();
+        foreach (KeyValuePair<TypeDefineType, TypeDefineConfig> kv in TypeDefineConfigs)
+        {
+            kv.Value.ExportTypeNames();
+            foreach (KeyValuePair<string, ushort> _kv in kv.Value.TypeIndexDict)
+            {
+                typeMapping.TypeGUIDMappings[kv.Key].TryAddNewType(_kv.Key);
+            }
+
+            List<string> removeList = new List<string>();
+            foreach (KeyValuePair<string, string> _kv in typeMapping.TypeGUIDMappings[kv.Key].Type_GUIDDict)
+            {
+                if (!kv.Value.TypeIndexDict.ContainsKey(_kv.Key))
+                {
+                    removeList.Add(_kv.Key);
+                }
+            }
+
+            foreach (string key in removeList)
+            {
+                typeMapping.TypeGUIDMappings[kv.Key].Type_GUIDDict.Remove(key);
+            }
+        }
     }
 
     public static TypeGUIDMappingAsset GetTypeGUIDMappingAsset()
@@ -699,16 +710,30 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static void LoadBoxMarchingTextureConfigMatrix()
     {
-        TerrainMarchingTextureDict = new Dictionary<TerrainType, Dictionary<MarchingTextureCase, Texture>>();
-        foreach (TerrainType transitTerrain in Enum.GetValues(typeof(TerrainType)))
+        TerrainMarchingTextureDict = new Dictionary<MarchingTextureCase, Texture>[10, 10];
+        foreach (TerrainType basicTerrain in Enum.GetValues(typeof(TerrainType)))
         {
-            TerrainMarchingTextureDict.Add(transitTerrain, new Dictionary<MarchingTextureCase, Texture>());
-            BoxMarchingTextureConfigSSO config = ClientGameManager.Instance.BoxMarchingTextureConfigMatrix.Matrix[transitTerrain];
-            if (config != null && config.TextureDict != null)
+            foreach (TerrainType transitTerrain in Enum.GetValues(typeof(TerrainType)))
             {
-                foreach (KeyValuePair<MarchingTextureCase, Texture> kv in config.TextureDict)
+                if ((int) basicTerrain > (int) transitTerrain) continue;
+                TerrainMarchingTextureDict[(int) basicTerrain, (int) transitTerrain] = new Dictionary<MarchingTextureCase, Texture>();
+                if (basicTerrain == transitTerrain)
                 {
-                    TerrainMarchingTextureDict[transitTerrain].Add(kv.Key, kv.Value);
+                    foreach (MarchingTextureCase marchingTextureCase in Enum.GetValues(typeof(MarchingTextureCase)))
+                    {
+                        TerrainMarchingTextureDict[(int) basicTerrain, (int) transitTerrain].Add(marchingTextureCase, ClientGameManager.Instance.BoxMarchingTextureConfigMatrix.PureTerrain[(int) basicTerrain]);
+                    }
+                }
+                else
+                {
+                    BoxMarchingTextureConfigSSO config = ClientGameManager.Instance.BoxMarchingTextureConfigMatrix.Matrix[(int) basicTerrain, (int) transitTerrain];
+                    if (config != null && config.TextureDict != null)
+                    {
+                        foreach (KeyValuePair<MarchingTextureCase, Texture> kv in config.TextureDict)
+                        {
+                            TerrainMarchingTextureDict[(int) basicTerrain, (int) transitTerrain].Add(kv.Key, kv.Value);
+                        }
+                    }
                 }
             }
         }

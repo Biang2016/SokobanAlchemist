@@ -28,130 +28,31 @@ public class OpenWorld : World
     public EntityExtraSerializeData[,,] WorldMap_EntityExtraSerializeData; // 地图元素放置  Y轴缩小16
     public GridPosR.Orientation[,,] WorldMapOrientation; // 地图元素放置朝向  Y轴缩小16
     public ushort[,,] WorldMap_Occupied; // 地图元素占位  Y轴缩小16
-    public ushort[,,] WorldMap_StaticLayoutOccupied; // 地图静态布局占位  Y轴缩小16
+    public ushort[,,] WorldMap_StaticLayoutOccupied_IntactForStaticLayout; // 地图静态布局占位，禁止其他静态布局影响  Y轴缩小16
+    public ushort[,,] WorldMap_StaticLayoutOccupied_IntactForBox; // 地图静态布局占位，禁止其他箱子影响  Y轴缩小16
     public TerrainType[,] WorldMap_TerrainType; // 地图地形分布
 
-    [LabelText("@\"起始MicroWorld\t\"+StartMicroWorldTypeName")]
+    [BoxGroup("@\"起始MicroWorld\t\"+StartMicroWorldTypeName")]
+    [HideLabel]
     public TypeSelectHelper StartMicroWorldTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
 
     internal GridPos3D InitialPlayerBP = GridPos3D.Zero;
 
     #region GenerateLayerData
 
-    [LabelText("地形生成配置")]
+    [BoxGroup("地形生成配置")]
+    [HideLabel]
     public GenerateTerrainData m_GenerateTerrainData = new GenerateTerrainData();
-
-    [Serializable]
-    public class GenerateTerrainData
-    {
-        [SerializeReference]
-        public List<Pass> ProcessingPassList = new List<Pass>();
-    }
-
-    [Serializable]
-    public abstract class GenerateLayerData
-    {
-        [LabelText("生效")]
-        public bool Enable = true;
-
-        [LabelText("是否考虑静态布局的影响")]
-        public bool ConsiderStaticLayout = false;
-
-        [SerializeField]
-        [LabelText("允许覆盖的箱子类型")]
-        [ListDrawerSettings(ListElementLabelName = "TypeName")]
-        private List<TypeSelectHelper> AllowReplacedBoxTypeNames = new List<TypeSelectHelper>();
-
-        [HideInInspector]
-        public HashSet<string> AllowReplacedBoxTypeNameSet = new HashSet<string>();
-
-        [LabelText("只允许覆盖上述箱子上")]
-        public bool OnlyOverrideAnyBox = false;
-
-        [LabelText("生成算法")]
-        public GenerateAlgorithm m_GenerateAlgorithm = GenerateAlgorithm.CellularAutomata;
-
-        [LabelText("数量确定")]
-        public bool CertainNumber = false;
-
-        [ShowIf("CertainNumber")]
-        [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.Random)]
-        [LabelText("数量")]
-        public int Count = 1;
-
-        [HideIf("CertainNumber")]
-        [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.Random)]
-        [LabelText("比率：每万格约有多少个")]
-        public int CountPer10KGrid = 20;
-
-        [LabelText("决定玩家出生点")]
-        public bool DeterminePlayerBP = false;
-
-        public void Init()
-        {
-            foreach (TypeSelectHelper allowReplacedBoxTypeName in AllowReplacedBoxTypeNames)
-            {
-                AllowReplacedBoxTypeNameSet.Add(allowReplacedBoxTypeName.TypeName);
-            }
-        }
-    }
-
-    [Serializable]
-    public class GenerateStaticLayoutLayerData : GenerateLayerData
-    {
-        [LabelText("@\"静态布局类型\t\"+StaticLayoutTypeName")]
-        public TypeSelectHelper StaticLayoutTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.StaticLayout};
-
-        [LabelText("完整布局")]
-        public bool RequireCompleteLayout = true;
-    }
 
     [FoldoutGroup("地图生成")]
     [LabelText("静态布局层级配置")]
     [ListDrawerSettings(ListElementLabelName = "StaticLayoutTypeName")]
     public List<GenerateStaticLayoutLayerData> GenerateStaticLayoutLayerDataList = new List<GenerateStaticLayoutLayerData>();
 
-    [Serializable]
-    public class GenerateBoxLayerData : GenerateLayerData
-    {
-        [LabelText("@\"箱子类型\t\"+BoxTypeName")]
-        public TypeSelectHelper BoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
-
-        [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
-        [LabelText("初始填充比率")]
-        public int FillPercent = 40;
-
-        [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
-        [LabelText("洞穴联通率")]
-        public int CaveConnectPercent = 0;
-
-        [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
-        [LabelText("迭代次数")]
-        public int SmoothTimes = 4;
-
-        [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
-        [LabelText("空地生墙迭代次数")]
-        public int SmoothTimes_GenerateWallInOpenSpace = 3;
-    }
-
-    [FoldoutGroup("地图生成")]
+    [FoldoutGroup("放置物")]
     [LabelText("Box层级配置")]
     [ListDrawerSettings(ListElementLabelName = "BoxTypeName")]
     public List<GenerateBoxLayerData> GenerateBoxLayerDataList = new List<GenerateBoxLayerData>();
-
-    [Serializable]
-    public class GenerateActorLayerData : GenerateLayerData
-    {
-        [LabelText("@\"Actor类型\t\"+ActorTypeName")]
-        public TypeSelectHelper ActorTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy};
-    }
-
-    public enum GenerateAlgorithm
-    {
-        CellularAutomata,
-        PerlinNoise,
-        Random,
-    }
 
     [FoldoutGroup("地图生成")]
     [LabelText("Actor层级配置")]
@@ -169,7 +70,8 @@ public class OpenWorld : World
         WorldMap_EntityExtraSerializeData = null;
         WorldMapOrientation = null;
         WorldMap_Occupied = null;
-        WorldMap_StaticLayoutOccupied = null;
+        WorldMap_StaticLayoutOccupied_IntactForStaticLayout = null;
+        WorldMap_StaticLayoutOccupied_IntactForBox = null;
         WorldMap_TerrainType = null;
         IsInsideMicroWorld = false;
         InitialPlayerBP = GridPos3D.Zero;
@@ -199,7 +101,8 @@ public class OpenWorld : World
         WorldMap_EntityExtraSerializeData = new EntityExtraSerializeData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMapOrientation = new GridPosR.Orientation[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_Occupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        WorldMap_StaticLayoutOccupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMap_StaticLayoutOccupied_IntactForStaticLayout = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMap_StaticLayoutOccupied_IntactForBox = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_TerrainType = new TerrainType[WorldSize_X * WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
 
         WorldGUID = Seed + "_" + Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
@@ -931,49 +834,4 @@ public class OpenWorld : World
     }
 
     #endregion
-}
-
-[Serializable]
-public abstract class Pass
-{
-}
-
-[Serializable]
-public class RandomFillPass : Pass
-{
-    [LabelText("填充几率")]
-    public int FillPercent = 40;
-
-    [LabelText("填充地形类型")]
-    public TerrainType TerrainType = TerrainType.Earth;
-
-    [LabelText("只覆盖某地形")]
-    public bool OnlyOverrideSomeTerrain = false;
-
-    [LabelText("覆盖哪种地形")]
-    [ShowIf("OnlyOverrideSomeTerrain")]
-    public TerrainType OverrideTerrainType = TerrainType.Earth;
-}
-
-[Serializable]
-public class SmoothPass : Pass
-{
-    [LabelText("迭代次数")]
-    public int SmoothTimes = 1;
-
-    [LabelText("迭代规则")]
-    public List<NeighborIteration> NeighborIterations = new List<NeighborIteration>();
-
-    [Serializable]
-    public class NeighborIteration
-    {
-        [LabelText("邻居类型")]
-        public TerrainType NeighborTerrainType = TerrainType.Earth;
-
-        [LabelText("邻居类型数量超过此值时")]
-        public int Threshold = 4;
-
-        [LabelText("变换地形")]
-        public TerrainType ChangeTerrainTypeTo = TerrainType.Earth;
-    }
 }

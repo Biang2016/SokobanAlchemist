@@ -55,16 +55,23 @@ MonoBehaviour:
   GivenSeed: 1396197886
   StartMicroWorldTypeName:
     TypeDefineType: 6
-    TypeGUID: (593ca315-edbe-4be6-b320-663f75798284)
+    TypeGUID: 
   m_GenerateTerrainData:
     ProcessingPassList:
     - id: 0
     - id: 1
+    - id: 2
+    - id: 3
+    - id: 4
+    - id: 5
   GenerateStaticLayoutLayerDataList:
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 1
     Count: 1
@@ -73,11 +80,16 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (8819739c-7ad7-4d7d-bd75-255b0038e2d8)
-    RequireCompleteLayout: 1
+    AllowFragment: 0
+    LayoutIntactForOtherStaticLayout: 1
+    LayoutIntactForOtherBoxes: 1
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 1
     Count: 3
@@ -86,11 +98,16 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (7ae818ba-6c18-4106-8815-234a98f97580)
-    RequireCompleteLayout: 1
+    AllowFragment: 0
+    LayoutIntactForOtherStaticLayout: 1
+    LayoutIntactForOtherBoxes: 1
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 0100000003000000
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -99,37 +116,52 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (776f7c31-418b-493e-a6e4-58b565c4d89e)
-    RequireCompleteLayout: 0
+    AllowFragment: 1
+    LayoutIntactForOtherStaticLayout: 0
+    LayoutIntactForOtherBoxes: 1
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 1
+    AllowPlaceOnTerrainTypes: 03000000
+    ForbidPlaceOnTerrainTypes: 0100000002000000
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
-    CountPer10KGrid: 1
+    CountPer10KGrid: 100
     DeterminePlayerBP: 0
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (51f0450e-5177-4bef-a394-9017e13a76b2)
-    RequireCompleteLayout: 0
+    AllowFragment: 1
+    LayoutIntactForOtherStaticLayout: 0
+    LayoutIntactForOtherBoxes: 1
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 1
+    AllowPlaceOnTerrainTypes: 01000000
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
-    CountPer10KGrid: 1
+    CountPer10KGrid: 100
     DeterminePlayerBP: 0
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (b19d18fc-02bd-4106-9849-7d3bd1100f2e)
-    RequireCompleteLayout: 0
+    AllowFragment: 1
+    LayoutIntactForOtherStaticLayout: 0
+    LayoutIntactForOtherBoxes: 1
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 00000000
+    ForbidPlaceOnTerrainTypes: 010000000200000003000000
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -138,11 +170,16 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (ca83b903-d4a2-4eea-9ecd-a1d5e9be4bae)
-    RequireCompleteLayout: 0
+    AllowFragment: 1
+    LayoutIntactForOtherStaticLayout: 0
+    LayoutIntactForOtherBoxes: 1
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 1
+    AllowPlaceOnTerrainTypes: 00000000
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -151,11 +188,16 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (60751a0d-62c6-494f-8a63-839b997354d8)
-    RequireCompleteLayout: 1
+    AllowFragment: 1
+    LayoutIntactForOtherStaticLayout: 0
+    LayoutIntactForOtherBoxes: 1
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 1
+    AllowPlaceOnTerrainTypes: 00000000
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -164,11 +206,16 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (e6408bf5-bcda-4d2f-94c8-588b7fd6b998)
-    RequireCompleteLayout: 1
+    AllowFragment: 1
+    LayoutIntactForOtherStaticLayout: 0
+    LayoutIntactForOtherBoxes: 0
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -177,11 +224,16 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (b481c9b8-a20d-4314-97ae-60f93f3db6ce)
-    RequireCompleteLayout: 1
+    AllowFragment: 0
+    LayoutIntactForOtherStaticLayout: 0
+    LayoutIntactForOtherBoxes: 1
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -190,12 +242,17 @@ MonoBehaviour:
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (0fcdb09b-2521-4665-8915-d844d47d953b)
-    RequireCompleteLayout: 1
+    AllowFragment: 0
+    LayoutIntactForOtherStaticLayout: 0
+    LayoutIntactForOtherBoxes: 1
   GenerateBoxLayerDataList:
   - Enable: 1
     ConsiderStaticLayout: 1
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 1
+    AllowPlaceOnTerrainTypes: 00000000
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 0
     CertainNumber: 0
     Count: 1
@@ -214,6 +271,9 @@ MonoBehaviour:
     - TypeDefineType: 0
       TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
     OnlyOverrideAnyBox: 1
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 0
     CertainNumber: 0
     Count: 1
@@ -230,6 +290,9 @@ MonoBehaviour:
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 0
     CertainNumber: 0
     Count: 1
@@ -248,6 +311,9 @@ MonoBehaviour:
     - TypeDefineType: 0
       TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -266,6 +332,9 @@ MonoBehaviour:
     - TypeDefineType: 0
       TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 0100000002000000
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -284,6 +353,9 @@ MonoBehaviour:
     - TypeDefineType: 0
       TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 1
+    AllowPlaceOnTerrainTypes: 0100000002000000
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -302,6 +374,9 @@ MonoBehaviour:
     - TypeDefineType: 0
       TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -320,6 +395,9 @@ MonoBehaviour:
     - TypeDefineType: 0
       TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -338,6 +416,9 @@ MonoBehaviour:
     - TypeDefineType: 0
       TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
     OnlyOverrideAnyBox: 1
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -356,6 +437,9 @@ MonoBehaviour:
     - TypeDefineType: 0
       TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
     OnlyOverrideAnyBox: 1
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -374,6 +458,9 @@ MonoBehaviour:
     - TypeDefineType: 0
       TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
     OnlyOverrideAnyBox: 0
+    OnlyAllowPutOnTerrain: 0
+    AllowPlaceOnTerrainTypes: 
+    ForbidPlaceOnTerrainTypes: 
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
@@ -386,84 +473,84 @@ MonoBehaviour:
     CaveConnectPercent: 40
     SmoothTimes: 20
     SmoothTimes_GenerateWallInOpenSpace: 3
-  GenerateActorLayerDataList:
-  - Enable: 1
-    ConsiderStaticLayout: 0
-    AllowReplacedBoxTypeNames: []
-    OnlyOverrideAnyBox: 0
-    m_GenerateAlgorithm: 2
-    CertainNumber: 0
-    Count: 1
-    CountPer10KGrid: 3
-    DeterminePlayerBP: 0
-    ActorTypeName:
-      TypeDefineType: 2
-      TypeGUID: (1a445359-a04c-45b6-b196-0dba2f8f1b77)
-  - Enable: 0
-    ConsiderStaticLayout: 0
-    AllowReplacedBoxTypeNames: []
-    OnlyOverrideAnyBox: 0
-    m_GenerateAlgorithm: 2
-    CertainNumber: 0
-    Count: 1
-    CountPer10KGrid: 6
-    DeterminePlayerBP: 0
-    ActorTypeName:
-      TypeDefineType: 2
-      TypeGUID: (ad35ea7c-81f7-4dff-8a10-c37b4bf74855)
-  - Enable: 1
-    ConsiderStaticLayout: 0
-    AllowReplacedBoxTypeNames: []
-    OnlyOverrideAnyBox: 1
-    m_GenerateAlgorithm: 2
-    CertainNumber: 0
-    Count: 1
-    CountPer10KGrid: 6
-    DeterminePlayerBP: 0
-    ActorTypeName:
-      TypeDefineType: 2
-      TypeGUID: (7f30448e-8f28-4fe7-8d2c-4762cdc7b2b1)
-  - Enable: 1
-    ConsiderStaticLayout: 0
-    AllowReplacedBoxTypeNames: []
-    OnlyOverrideAnyBox: 1
-    m_GenerateAlgorithm: 2
-    CertainNumber: 0
-    Count: 1
-    CountPer10KGrid: 8
-    DeterminePlayerBP: 0
-    ActorTypeName:
-      TypeDefineType: 2
-      TypeGUID: (0ef8812f-12f3-4b3b-9fa3-f1f0603c8e60)
-  - Enable: 1
-    ConsiderStaticLayout: 0
-    AllowReplacedBoxTypeNames: []
-    OnlyOverrideAnyBox: 0
-    m_GenerateAlgorithm: 2
-    CertainNumber: 0
-    Count: 1
-    CountPer10KGrid: 8
-    DeterminePlayerBP: 0
-    ActorTypeName:
-      TypeDefineType: 2
-      TypeGUID: (195bdc7b-11cd-4a1e-9db0-eadcfa1baec1)
+  GenerateActorLayerDataList: []
   ExtendScope_Load: 4
   ExtendScope_Recycle: 20
   ExtendScope_Recycle_Ground: 52
   references:
     version: 1
     00000000:
-      type: {class: RandomFillPass, ns: , asm: Client}
+      type: {class: TerrainProcessPass_RandomFill, ns: , asm: Client}
       data:
-        FillPercent: 60
+        ControlFillPercentWithPerlinNoise: 1
+        FillPercent: 70
         TerrainType: 2
         OnlyOverrideSomeTerrain: 0
         OverrideTerrainType: 0
     00000001:
-      type: {class: SmoothPass, ns: , asm: Client}
+      type: {class: TerrainProcessPass_Smooth, ns: , asm: Client}
       data:
-        SmoothTimes: 4
+        SmoothTimes: 5
         NeighborIterations:
-        - NeighborTerrainType: 2
+        - LimitSelfType: 1
+          SelfTerrainType: 0
+          NeighborTerrainType: 2
+          Operator: 2
+          Threshold: 5
+          ChangeTerrainTypeTo: 2
+        - LimitSelfType: 1
+          SelfTerrainType: 2
+          NeighborTerrainType: 2
+          Operator: 0
           Threshold: 4
+          ChangeTerrainTypeTo: 0
+    00000002:
+      type: {class: TerrainProcessPass_RandomFill, ns: , asm: Client}
+      data:
+        ControlFillPercentWithPerlinNoise: 1
+        FillPercent: 25
+        TerrainType: 1
+        OnlyOverrideSomeTerrain: 1
+        OverrideTerrainType: 2
+    00000003:
+      type: {class: TerrainProcessPass_Smooth, ns: , asm: Client}
+      data:
+        SmoothTimes: 3
+        NeighborIterations:
+        - LimitSelfType: 1
+          SelfTerrainType: 2
+          NeighborTerrainType: 1
+          Operator: 2
+          Threshold: 3
           ChangeTerrainTypeTo: 1
+        - LimitSelfType: 1
+          SelfTerrainType: 1
+          NeighborTerrainType: 0
+          Operator: 2
+          Threshold: 1
+          ChangeTerrainTypeTo: 2
+    00000004:
+      type: {class: TerrainProcessPass_RandomFill, ns: , asm: Client}
+      data:
+        ControlFillPercentWithPerlinNoise: 1
+        FillPercent: 40
+        TerrainType: 3
+        OnlyOverrideSomeTerrain: 1
+        OverrideTerrainType: 0
+    00000005:
+      type: {class: TerrainProcessPass_Smooth, ns: , asm: Client}
+      data:
+        SmoothTimes: 5
+        NeighborIterations:
+        - LimitSelfType: 1
+          SelfTerrainType: 0
+          NeighborTerrainType: 3
+          Operator: 2
+          Threshold: 3
+          ChangeTerrainTypeTo: 3
+        - LimitSelfType: 1
+          SelfTerrainType: 3
+          NeighborTerrainType: 3
+          Operator: 0
+          Threshold: 3
+          ChangeTerrainTypeTo: 0

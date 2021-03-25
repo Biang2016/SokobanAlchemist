@@ -2,14 +2,14 @@
 
 public sealed class RandomMapGenerator : MapGenerator
 {
-    public RandomMapGenerator(OpenWorld.GenerateLayerData layerData, int width, int depth, uint seed, OpenWorld openWorld) : base(layerData, width, depth, seed, openWorld)
+    public RandomMapGenerator(GenerateLayerData layerData, int width, int depth, uint seed, OpenWorld openWorld) : base(layerData, width, depth, seed, openWorld)
     {
     }
 
     public override void ApplyToWorldMap()
     {
-        if (GenerateLayerData.m_GenerateAlgorithm == OpenWorld.GenerateAlgorithm.Random && !GenerateLayerData.CertainNumber && GenerateLayerData.CountPer10KGrid == 0) return; // 避免大量运算
-        if (GenerateLayerData.m_GenerateAlgorithm == OpenWorld.GenerateAlgorithm.Random && GenerateLayerData.CertainNumber && GenerateLayerData.Count == 0) return; // 避免大量运算
+        if (GenerateLayerData.m_GenerateAlgorithm == GenerateAlgorithm.Random && !GenerateLayerData.CertainNumber && GenerateLayerData.CountPer10KGrid == 0) return; // 避免大量运算
+        if (GenerateLayerData.m_GenerateAlgorithm == GenerateAlgorithm.Random && GenerateLayerData.CertainNumber && GenerateLayerData.Count == 0) return; // 避免大量运算
 
         if (GenerateLayerData.CertainNumber)
         {
