@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
 {
-    [LabelText("配置")]
+    [BoxGroup("Trigger配置")]
+    [HideLabel]
     public Data childData = new Data();
 
     public override LevelTriggerBase.Data TriggerData
@@ -18,13 +19,17 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
     [Serializable]
     public new class Data : LevelTriggerBase.Data
     {
+        [PropertyOrder(-1)]
+        [LabelText("仅玩家触发")]
         public bool IsPlayer = false;
 
         [LabelText("@\"角色类型\t\"+RequiredActorType")]
+        [PropertyOrder(-1)]
         [HideIf("IsPlayer")]
         public TypeSelectHelper RequiredActorType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy};
 
         [LabelText("角色至少停留时间/s")]
+        [PropertyOrder(-1)]
         public float RequiredStayDuration;
 
         protected override void ChildClone(LevelComponentData newData)

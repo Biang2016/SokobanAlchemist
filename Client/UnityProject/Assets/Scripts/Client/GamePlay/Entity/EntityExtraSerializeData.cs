@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class EntityExtraSerializeData : IClone<EntityExtraSerializeData>
 {
-    [FoldoutGroup("Extra被动技能")]
+    [BoxGroup("Extra被动技能")]
     [LabelText("Extra被动技能")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
     [SerializeReference] 

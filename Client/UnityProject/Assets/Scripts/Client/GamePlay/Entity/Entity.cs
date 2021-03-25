@@ -11,9 +11,13 @@ public abstract class Entity : PoolObject
 
     [ReadOnly]
     [HideInEditorMode]
-    public uint GUID;
+    [ShowInInspector]
+    internal uint GUID;
 
-    public int GUID_Mod_FixedFrameRate;
+    [ReadOnly]
+    [HideInEditorMode]
+    [ShowInInspector]
+    internal int GUID_Mod_FixedFrameRate;
 
     private static uint guidGenerator = (uint) ConfigManager.GUID_Separator.Entity;
 
@@ -46,11 +50,11 @@ public abstract class Entity : PoolObject
 
     [FoldoutGroup("初始战斗数值")]
     [HideLabel]
-    [DisableInPlayMode]
+    [HideInPlayMode]
     public EntityStatPropSet RawEntityStatPropSet; // 干数据，禁修改
 
     [HideInEditorMode]
-    [FoldoutGroup("当前战斗数值")]
+    [FoldoutGroup("实时战斗数值")]
     [HideLabel]
     [NonSerialized]
     [ShowInInspector]
@@ -238,8 +242,8 @@ public abstract class Entity : PoolObject
 
     [NonSerialized]
     [ShowInInspector]
-    [FoldoutGroup("当前被动技能")]
-    [LabelText("当前被动技能列表")]
+    [FoldoutGroup("实时被动技能")]
+    [LabelText("实时被动技能列表")]
     public List<EntityPassiveSkill> EntityPassiveSkills = new List<EntityPassiveSkill>(); // 湿数据，每个Entity生命周期开始前从干数据进行数据拷贝
 
     internal bool PassiveSkillMarkAsDestroyed = false;

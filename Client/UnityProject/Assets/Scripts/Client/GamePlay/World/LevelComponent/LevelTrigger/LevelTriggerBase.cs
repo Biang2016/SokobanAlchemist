@@ -28,6 +28,26 @@ public abstract class LevelTriggerBase : PoolObject
         [HideInInspector]
         public ushort LevelTriggerTypeIndex;
 
+        [BoxGroup("触发时, 发送事件")]
+        [LabelText("事件花名")]
+        public string TriggerEmitEventAlias;
+
+        [BoxGroup("触发时, 发送事件")]
+        [LabelText("最大触发次数")]
+        public int MaxTriggerTime;
+
+        [BoxGroup("触发时, 发送事件")]
+        [LabelText("Stay持续触发")]
+        public bool KeepTriggering = false;
+
+        [BoxGroup("触发时, 发送事件")]
+        [LabelText("@\"触发特效\t\"+TriggerFX")]
+        public FXConfig TriggerFX = new FXConfig();
+
+        [BoxGroup("触发时, 设置战场状态")]
+        [LabelText("战场状态花名(进入设为True, 离开设为False)")]
+        public string TriggerSetStateAlias;
+
         [BoxGroup("监听事件")]
         [LabelText("收到事件后出现(空则默认出现)")]
         public string AppearLevelEventAlias;
@@ -36,30 +56,9 @@ public abstract class LevelTriggerBase : PoolObject
         [LabelText("收到事件后消失(空则不会消失)")]
         public string DisappearLevelEventAlias;
 
-        [BoxGroup("触发事件并发送")]
-        [LabelText("触发时发送事件花名")]
-        public string TriggerEmitEventAlias;
-
-        [BoxGroup("触发事件并发送")]
-        [LabelText("最大触发次数")]
-        public int MaxTriggerTime;
-
-        [BoxGroup("触发事件并发送")]
-        [LabelText("Stay持续触发")]
-        public bool KeepTriggering = false;
-
-        [BoxGroup("触发事件并发送")]
-        [LabelText("@\"触发特效\t\"+TriggerFX")]
-        public FXConfig TriggerFX = new FXConfig();
-
-        [BoxGroup("设置战场状态")]
-        [InfoBox("进入设为True离开设为False")]
-        [LabelText("触发时设置战场状态花名")]
-        public string TriggerSetStateAlias;
-
         internal bool isTriggerSetStateAliasEmpty => string.IsNullOrWhiteSpace(TriggerSetStateAlias);
 
-        [LabelText("材质颜色")]
+        [LabelText("Trigger颜色")]
         public Color TriggerColor;
 
         protected override void ChildClone(LevelComponentData newData)
@@ -67,13 +66,13 @@ public abstract class LevelTriggerBase : PoolObject
             base.ChildClone(newData);
             Data data = ((Data) newData);
             data.LevelTriggerTypeIndex = LevelTriggerTypeIndex;
-            data.AppearLevelEventAlias = AppearLevelEventAlias;
-            data.DisappearLevelEventAlias = DisappearLevelEventAlias;
             data.TriggerEmitEventAlias = TriggerEmitEventAlias;
-            data.TriggerSetStateAlias = TriggerSetStateAlias;
             data.MaxTriggerTime = MaxTriggerTime;
             data.KeepTriggering = KeepTriggering;
             data.TriggerFX = TriggerFX;
+            data.TriggerSetStateAlias = TriggerSetStateAlias;
+            data.AppearLevelEventAlias = AppearLevelEventAlias;
+            data.DisappearLevelEventAlias = DisappearLevelEventAlias;
             data.TriggerColor = TriggerColor;
         }
     }

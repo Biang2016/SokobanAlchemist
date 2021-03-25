@@ -6,9 +6,11 @@ using Sirenix.OdinInspector;
 public class LevelComponentData : IClone<LevelComponentData>
 {
     [ReadOnly]
+    [HideInEditorMode]
     public GridPos3D WorldGP;
 
     [ReadOnly]
+    [HideInEditorMode]
     public GridPos3D LocalGP;
 
     public LevelComponentData Clone()

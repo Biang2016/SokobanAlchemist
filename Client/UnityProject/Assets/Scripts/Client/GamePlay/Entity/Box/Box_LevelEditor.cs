@@ -15,7 +15,8 @@ public class Box_LevelEditor : MonoBehaviour
     public GameObject ModelRoot;
     public GameObject BoxIndicatorHelperGO;
 
-    [LabelText("箱子额外数据")]
+    [BoxGroup("箱子额外数据")]
+    [HideLabel]
     public EntityExtraSerializeData RawEntityExtraSerializeData = new EntityExtraSerializeData(); // 干数据，禁修改
 
     [LabelText("箱子朝向")]
@@ -110,13 +111,13 @@ public class Box_LevelEditor : MonoBehaviour
     [HideInPrefabAssets]
     [ShowInInspector]
     [NonSerialized]
-    [FoldoutGroup("快速替换")]
+    [BoxGroup("快速替换")]
     [LabelText("@\"替换Box类型\t\"+ReplaceBoxTypeName")]
     private TypeSelectHelper ReplaceBoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
     [HideInPlayMode]
     [HideInPrefabAssets]
-    [FoldoutGroup("快速替换")]
+    [BoxGroup("快速替换")]
     [Button("替换Box", ButtonSizes.Large)]
     [GUIColor(0f, 1f, 1f)]
     private void ReplaceBox_Editor()

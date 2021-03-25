@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
 {
-    [LabelText("配置")]
+    [BoxGroup("Trigger配置")]
+    [HideLabel]
     public Data childData = new Data();
 
     public override LevelTriggerBase.Data TriggerData
@@ -17,10 +18,12 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
     [Serializable]
     public new class Data : LevelTriggerBase.Data
     {
-        [LabelText("@\"指定箱子类型\t\"+RequireBoxTypeName")]
+        [LabelText("@\"指定推入的箱子类型\t\"+RequireBoxTypeName")]
+        [PropertyOrder(-1)]
         public TypeSelectHelper RequireBoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
-        [LabelText("箱子至少停留时间/s")]
+        [LabelText("箱子至少停留时间后触发/s")]
+        [PropertyOrder(-1)]
         public float RequiredStayDuration;
 
         protected override void ChildClone(LevelComponentData newData)

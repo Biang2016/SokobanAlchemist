@@ -102,7 +102,7 @@ public class EntityStatPropSet
     public EntityStat FrozenValue = new EntityStat(EntityStatType.FrozenValue);
 
     [BoxGroup("冰冻")]
-    [LabelText("冰冻等级")]
+    [LabelText("@\"冰冻等级\t\"+FrozenLevel")]
     public EntityStat FrozenLevel = new EntityStat(EntityStatType.FrozenLevel);
 
     internal int FrozenValuePerLevel => Mathf.RoundToInt(((float) FrozenValue.MaxValue / FrozenLevel.MaxValue));
@@ -130,7 +130,7 @@ public class EntityStatPropSet
     public EntityStat FiringValue = new EntityStat(EntityStatType.FiringValue);
 
     [BoxGroup("燃烧")]
-    [LabelText("燃烧等级")]
+    [LabelText("@\"燃烧等级\t\"+FiringLevel")]
     public EntityStat FiringLevel = new EntityStat(EntityStatType.FiringLevel);
 
     internal float FiringValuePerLevel => ((float) FiringValue.MaxValue / FiringLevel.MaxValue);

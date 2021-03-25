@@ -50,7 +50,8 @@ public class BornPointData : LevelComponentData
     [ValidateInput("ValidateBornPointAlias", "请保证此项非空时是唯一的；且一个模组只允许有一个玩家出生点花名为空")]
     public string BornPointAlias = "";
 
-    [LabelText("角色额外数据")]
+    [BoxGroup("角色额外数据")]
+    [HideLabel]
     public EntityExtraSerializeData RawEntityExtraSerializeData = new EntityExtraSerializeData(); // 干数据，禁修改
 
     public bool ValidateBornPointAlias(string alias)

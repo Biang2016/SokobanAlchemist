@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 [Serializable]
 public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, EntityPassiveSkillAction.IPureAction
@@ -12,13 +13,20 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
 
     protected override string Description => "更改箱子类型(仅箱子使用)";
 
-    [LabelText("@\"更改箱子为\t\"+ChangeBoxTypeToBoxName")]
-    public TypeSelectHelper ChangeBoxTypeToBoxName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
+    [LabelText("@\"更改箱子为(Box/Enemy)\t\"+ChangeBoxTypeToEntityName")]
+    [FormerlySerializedAs("ChangeBoxTypeToBoxName")]
+    [ValidateInput("CheckType", "只能在Box或者Enemy中选择")]
+    public TypeSelectHelper ChangeBoxTypeToEntityName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
-    [LabelText("更改的箱子的朝向")]
-    public GridPosR.Orientation BoxOrientation;
+    private bool CheckType(TypeSelectHelper value)
+    {
+        return value.TypeDefineType == TypeDefineType.Box || value.TypeDefineType == TypeDefineType.Enemy;
+    }
 
-    [LabelText("每一格都生成一个箱子")]
+    [LabelText("生成的朝向")]
+    public GridPosR.Orientation ResultOrientation;
+
+    [LabelText("每一格都生成一个")]
     public bool ChangeForEveryGrid = false;
 
     public void Execute()
@@ -33,13 +41,13 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
             worldGP = Box.transform.position.ToGridPos3D();
         }
 
-        ushort boxTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, ChangeBoxTypeToBoxName.TypeName);
+        ushort entityTypeIndex = ConfigManager.GetTypeIndex(ChangeBoxTypeToEntityName.TypeDefineType, ChangeBoxTypeToEntityName.TypeName);
         if (ChangeForEveryGrid)
         {
             List<GridPos3D> occupations = Box.GetEntityOccupationGPs_Rotated();
             Box.DestroyBox(delegate
             {
-                if (boxTypeIndex != 0)
+                if (entityTypeIndex != 0)
                 {
                     foreach (GridPos3D gridPos in occupations)
                     {
@@ -47,7 +55,18 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
                         WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridWorldGP);
                         if (module != null)
                         {
-                            module.GenerateBox(boxTypeIndex, gridWorldGP, BoxOrientation);
+                            if (ChangeBoxTypeToEntityName.TypeDefineType == TypeDefineType.Box)
+                            {
+                                module.GenerateBox(entityTypeIndex, gridWorldGP, ResultOrientation);
+                            }
+                            else if (ChangeBoxTypeToEntityName.TypeDefineType == TypeDefineType.Enemy)
+                            {
+                                BornPointData newBornPointData = new BornPointData();
+                                newBornPointData.LocalGP = module.WorldGPToLocalGP(gridWorldGP);
+                                newBornPointData.WorldGP = gridWorldGP;
+                                newBornPointData.EnemyType = ChangeBoxTypeToEntityName.Clone();
+                                BattleManager.Instance.CreateActorByBornPointData(newBornPointData);
+                            }
                         }
                     }
                 }
@@ -57,12 +76,23 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
         {
             Box.DestroyBox(delegate
             {
-                if (boxTypeIndex != 0)
+                if (entityTypeIndex != 0)
                 {
                     WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(worldGP);
                     if (module != null)
                     {
-                        module.GenerateBox(boxTypeIndex, worldGP, BoxOrientation);
+                        if (ChangeBoxTypeToEntityName.TypeDefineType == TypeDefineType.Box)
+                        {
+                            module.GenerateBox(entityTypeIndex, worldGP, ResultOrientation);
+                        }
+                        else if (ChangeBoxTypeToEntityName.TypeDefineType == TypeDefineType.Enemy)
+                        {
+                            BornPointData newBornPointData = new BornPointData();
+                            newBornPointData.LocalGP = module.WorldGPToLocalGP(worldGP);
+                            newBornPointData.WorldGP = worldGP;
+                            newBornPointData.EnemyType = ChangeBoxTypeToEntityName.Clone();
+                            BattleManager.Instance.CreateActorByBornPointData(newBornPointData);
+                        }
                     }
                 }
             });
@@ -73,8 +103,8 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
     {
         base.ChildClone(newAction);
         BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType) newAction);
-        action.ChangeBoxTypeToBoxName = ChangeBoxTypeToBoxName.Clone();
-        action.BoxOrientation = BoxOrientation;
+        action.ChangeBoxTypeToEntityName = ChangeBoxTypeToEntityName.Clone();
+        action.ResultOrientation = ResultOrientation;
         action.ChangeForEveryGrid = ChangeForEveryGrid;
     }
 
@@ -82,8 +112,8 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
     {
         base.CopyDataFrom(srcData);
         BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType) srcData);
-        ChangeBoxTypeToBoxName.CopyDataFrom(action.ChangeBoxTypeToBoxName);
-        BoxOrientation = action.BoxOrientation;
+        ChangeBoxTypeToEntityName.CopyDataFrom(action.ChangeBoxTypeToEntityName);
+        ResultOrientation = action.ResultOrientation;
         ChangeForEveryGrid = action.ChangeForEveryGrid;
     }
 }

@@ -174,12 +174,6 @@ public class Actor : Entity
 
     #region 旋转朝向
 
-    [Button("SwitchEntityOrientation")]
-    public void Rotate()
-    {
-        SwitchEntityOrientation(GridPosR.RotateOrientationClockwise90(EntityOrientation));
-    }
-
     internal override void SwitchEntityOrientation(GridPosR.Orientation newOrientation)
     {
         if (EntityOrientation == newOrientation) return;
@@ -351,7 +345,9 @@ public class Actor : Entity
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 
-    public bool IsInMicroWorld = false;
+    [ShowInInspector]
+    [HideInEditorMode]
+    internal bool IsInMicroWorld = false;
 
     public enum ActorBehaviourStates
     {
