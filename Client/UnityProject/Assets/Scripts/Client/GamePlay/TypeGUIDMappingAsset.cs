@@ -21,14 +21,17 @@ public class TypeGUIDMappingAsset : SerializedScriptableObject
         /// Call by ConfigManager when serialize config
         /// </summary>
         /// <param name="typeName"></param>
-        public void TryAddNewType(string typeName)
+        public bool TryAddNewType(string typeName)
         {
             if (!Type_GUIDDict.ContainsKey(typeName))
             {
                 string guid = Guid.NewGuid().ToString("P");
                 Type_GUIDDict.Add(typeName, guid);
                 GUID_TypeDict.Add(guid, typeName);
+                return true;
             }
+
+            return false;
         }
 
         public void LoadData(string typeName, string guid)

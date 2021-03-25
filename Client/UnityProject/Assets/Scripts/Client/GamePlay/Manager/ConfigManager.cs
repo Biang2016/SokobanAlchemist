@@ -358,12 +358,13 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     private static void ExportTypeGUIDMapping()
     {
         TypeGUIDMappingAsset typeMapping = GetTypeGUIDMappingAsset();
+        bool dirty = false;
         foreach (KeyValuePair<TypeDefineType, TypeDefineConfig> kv in TypeDefineConfigs)
         {
             kv.Value.ExportTypeNames();
             foreach (KeyValuePair<string, ushort> _kv in kv.Value.TypeIndexDict)
             {
-                typeMapping.TypeGUIDMappings[kv.Key].TryAddNewType(_kv.Key);
+                dirty |= typeMapping.TypeGUIDMappings[kv.Key].TryAddNewType(_kv.Key);
             }
 
             List<string> removeList = new List<string>();
@@ -377,14 +378,18 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
             foreach (string key in removeList)
             {
+                dirty = true;
                 typeMapping.TypeGUIDMappings[kv.Key].Type_GUIDDict.Remove(key);
             }
         }
 
-        typeMapping.version += 1;
-        EditorUtility.SetDirty(typeMapping);
-        AssetDatabase.Refresh();
-        AssetDatabase.SaveAssets();
+        if (dirty)
+        {
+            typeMapping.version += 1;
+            EditorUtility.SetDirty(typeMapping);
+            AssetDatabase.Refresh();
+            AssetDatabase.SaveAssets();
+        }
 
         ExportTypeGUIDMappingAsset(DataFormat.Binary);
         LoadTypeGUIDMappingFromConfig(DataFormat.Binary);
