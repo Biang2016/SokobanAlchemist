@@ -351,6 +351,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 ExportWorldDataConfig(dataFormat, go.name);
             }
         }
+
+        EditorUtility.DisplayDialog("提示", "序列化选中模组或世界成功", "确定");
     }
 
     private static void ExportTypeGUIDMapping()
