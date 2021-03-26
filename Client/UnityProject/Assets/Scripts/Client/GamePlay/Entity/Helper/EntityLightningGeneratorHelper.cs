@@ -42,65 +42,76 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
 
     private static Collider[] cached_Colliders = new Collider[256];
 
+    private int FixedUpdateInterval = 10;
+    private int FixedUpdateIntervalTick = 0;
+
     void FixedUpdate()
     {
-        if (Entity.IsNotNullAndAlive())
+        if (FixedUpdateIntervalTick < FixedUpdateInterval)
         {
-            cached_removeLightnings.Clear();
-
-            // 删除无法连接的闪电
-            foreach (EntityLightning lightning in EntityLightnings)
+            FixedUpdateIntervalTick++;
+        }
+        else
+        {
+            FixedUpdateIntervalTick = 0;
+            if (Entity.IsNotNullAndAlive())
             {
-                if (!lightning.EndGeneratorHelper.Entity.IsNotNullAndAlive())
+                cached_removeLightnings.Clear();
+
+                // 删除无法连接的闪电
+                foreach (EntityLightning lightning in EntityLightnings)
                 {
-                    cached_removeLightnings.Add(lightning);
-                }
-                else
-                {
-                    if ((lightning.EndGeneratorHelper.LightningStartPivot.position - LightningStartPivot.position).magnitude > 5f)
+                    if (!lightning.EndGeneratorHelper.Entity.IsNotNullAndAlive())
                     {
                         cached_removeLightnings.Add(lightning);
                     }
-                }
-            }
-
-            foreach (EntityLightning generator in cached_removeLightnings)
-            {
-                EntityLightnings.Remove(generator);
-                generator.PoolRecycle();
-            }
-
-            // 寻找新的连接
-            int length = Physics.OverlapSphereNonAlloc(LightningStartPivot.position, 5f, cached_Colliders, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
-            for (int i = 0; i < length; i++)
-            {
-                Collider c = cached_Colliders[i];
-                Entity entity = c.GetComponentInParent<Entity>();
-                if (entity != null && entity != Entity && entity.EntityLightningGeneratorHelpers != null && entity.EntityLightningGeneratorHelpers.Count > 0)
-                {
-                    if (entity.GUID < Entity.GUID) continue; // 每个电塔只连接GUID更大的
-                    foreach (EntityLightningGeneratorHelper helper in entity.EntityLightningGeneratorHelpers)
+                    else
                     {
-                        bool alreadyConnect = false;
-                        foreach (EntityLightning lightning in EntityLightnings)
+                        if ((lightning.EndGeneratorHelper.LightningStartPivot.position - LightningStartPivot.position).magnitude > 5f)
                         {
-                            if (lightning.EndGeneratorHelper == helper)
-                            {
-                                alreadyConnect = true;
-                                break;
-                            }
+                            cached_removeLightnings.Add(lightning);
                         }
+                    }
+                }
 
-                        if (!alreadyConnect)
+                foreach (EntityLightning generator in cached_removeLightnings)
+                {
+                    EntityLightnings.Remove(generator);
+                    generator.PoolRecycle();
+                }
+
+                // 寻找新的连接
+                int length = Physics.OverlapSphereNonAlloc(LightningStartPivot.position, 5f, cached_Colliders, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
+                for (int i = 0; i < length; i++)
+                {
+                    Collider c = cached_Colliders[i];
+                    Entity entity = c.GetComponentInParent<Entity>();
+                    if (entity != null && entity != Entity && entity.EntityLightningGeneratorHelpers != null && entity.EntityLightningGeneratorHelpers.Count > 0)
+                    {
+                        if (entity.GUID < Entity.GUID) continue; // 每个电塔只连接GUID更大的
+                        foreach (EntityLightningGeneratorHelper helper in entity.EntityLightningGeneratorHelpers)
                         {
-                            if ((helper.LightningStartPivot.position - LightningStartPivot.position).magnitude <= 5f)
+                            bool alreadyConnect = false;
+                            foreach (EntityLightning lightning in EntityLightnings)
                             {
-                                EntityLightning lightning = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntityLightning].AllocateGameObject<EntityLightning>(transform);
-                                lightning.Initialize(LightningStartPivot, helper.LightningStartPivot);
-                                lightning.EntityTriggerZone_Lightning.IEntityTriggerZone = this;
-                                lightning.StartGeneratorHelper = this;
-                                lightning.EndGeneratorHelper = helper;
-                                EntityLightnings.Add(lightning);
+                                if (lightning.EndGeneratorHelper == helper)
+                                {
+                                    alreadyConnect = true;
+                                    break;
+                                }
+                            }
+
+                            if (!alreadyConnect)
+                            {
+                                if ((helper.LightningStartPivot.position - LightningStartPivot.position).magnitude <= 5f)
+                                {
+                                    EntityLightning lightning = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntityLightning].AllocateGameObject<EntityLightning>(transform);
+                                    lightning.Initialize(LightningStartPivot, helper.LightningStartPivot);
+                                    lightning.EntityTriggerZone_Lightning.IEntityTriggerZone = this;
+                                    lightning.StartGeneratorHelper = this;
+                                    lightning.EndGeneratorHelper = helper;
+                                    EntityLightnings.Add(lightning);
+                                }
                             }
                         }
                     }

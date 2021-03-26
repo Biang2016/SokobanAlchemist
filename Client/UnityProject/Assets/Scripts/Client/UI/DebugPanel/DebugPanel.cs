@@ -269,8 +269,16 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("SwitchWorld/{0}", "GetAllWorldNames", -10)]
     public void ChangeWorld(string worldName)
     {
-        ClientGameManager.DebugChangeWorldName = worldName;
-        ClientGameManager.Instance.ReloadGame();
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            ushort worldNameIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, worldName);
+            openWorld.TransportPlayerToMicroWorld(worldNameIndex);
+        }
+        else
+        {
+            ClientGameManager.DebugChangeWorldName = worldName;
+            ClientGameManager.Instance.ReloadGame();
+        }
     }
 
     public List<string> GetAllWorldNames()

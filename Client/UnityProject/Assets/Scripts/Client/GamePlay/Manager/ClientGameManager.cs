@@ -264,6 +264,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             Time.timeScale = 1f;
         }
 
+#endif
         if (Input.GetKey(KeyCode.B))
         {
             if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
@@ -274,7 +275,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                 }
             }
         }
-#endif
 
         if (ControlManager.Battle_LeftRotateCamera.Up)
         {

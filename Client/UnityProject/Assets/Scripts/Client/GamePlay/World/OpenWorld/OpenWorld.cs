@@ -670,7 +670,6 @@ public class OpenWorld : World
         if (transportingPlayerToMicroWorld) return;
         if (returningToOpenWorldFormMicroWorld) return;
         if (restartingMicroWorld) return;
-        if (!IsInsideMicroWorld) return;
         StartCoroutine(Co_ReturnToOpenWorldFormMicroWorld(rebornPlayer));
     }
 

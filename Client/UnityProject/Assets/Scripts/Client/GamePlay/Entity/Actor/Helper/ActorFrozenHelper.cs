@@ -49,6 +49,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
                         actor.ActorArtHelper.SetIsFrozen(true);
                         FrozenBox.FrozenActor = actor;
                         FrozenBox.BoxFrozenBoxHelper.GenerateBoxIndicatorForFrozenActor(actor);
+                        FrozenBox.BoxFrozenBoxHelper.SetColliderSize_ForFrozenEnemyBox(actor.ActorWidth);
                         actor.transform.parent = FrozenBox.transform;
                         actor.CurMoveAttempt = Vector3.zero;
                         actor.ActorPushHelper.TriggerOut = false;

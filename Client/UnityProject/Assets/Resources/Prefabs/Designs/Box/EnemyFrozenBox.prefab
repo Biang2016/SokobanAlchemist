@@ -43,6 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf9cd1162b31cf04f96fe628b3d3da89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StaticBoxCollider_OnlyForEnemyFrozenBox: {fileID: 5304230133542813981}
+  DynamicBoxCollider_OnlyForEnemyFrozenBox: {fileID: 4976512397831714542}
+  BoxOnlyDynamicCollider_OnlyForEnemyFrozenBox: {fileID: 3215081047175677547}
 --- !u!1001 &702783562159748423
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -235,6 +238,24 @@ PrefabInstance:
 --- !u!4 &1020616608575685056 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 570053385983063175, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+    type: 3}
+  m_PrefabInstance: {fileID: 702783562159748423}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &5304230133542813981 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 4637758571029591130, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+    type: 3}
+  m_PrefabInstance: {fileID: 702783562159748423}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &4976512397831714542 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 5535159536523264937, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+    type: 3}
+  m_PrefabInstance: {fileID: 702783562159748423}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &3215081047175677547 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 2692742187614778156, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
     type: 3}
   m_PrefabInstance: {fileID: 702783562159748423}
   m_PrefabAsset: {fileID: 0}

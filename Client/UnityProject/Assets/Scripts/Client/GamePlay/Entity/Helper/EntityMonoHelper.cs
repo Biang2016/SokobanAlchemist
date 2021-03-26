@@ -3,15 +3,17 @@ using UnityEngine;
 
 public abstract class EntityMonoHelper : MonoBehaviour
 {
+    private bool hasEntity = false;
     private Entity entity;
 
     internal Entity Entity
     {
         get
         {
-            if (entity == null)
+            if (!hasEntity)
             {
                 entity = GetComponentInParent<Entity>();
+                hasEntity = true;
             }
 
             return entity;

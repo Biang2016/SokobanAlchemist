@@ -52,13 +52,13 @@ public class EntityModelHelper : EntityMonoHelper
     {
         if (Entity.EntityOrientation == GridPosR.Orientation.Left || Entity.EntityOrientation == GridPosR.Orientation.Right)
         {
-            X_Stretch = Mathf.Abs(z) > 0.5f;
-            Z_Stretch = Mathf.Abs(x) > 0.5f;
+            X_Stretch = z > 0.5f || z < -0.5f;
+            Z_Stretch = x > 0.5f || x < -0.5f;
         }
         else
         {
-            X_Stretch = Mathf.Abs(x) > 0.5f;
-            Z_Stretch = Mathf.Abs(z) > 0.5f;
+            X_Stretch = x > 0.5f || x < -0.5f;
+            Z_Stretch = z > 0.5f || z < -0.5f;
         }
     }
 }
