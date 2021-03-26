@@ -78,14 +78,14 @@ namespace BiangLibrary.GameDataFormat.Grid
             transform.localRotation = Quaternion.Euler(0, rotY, 0);
         }
 
-        public static Orientation RotateOrientationClockwise90(Orientation orientation)
+        public static Orientation RotateOrientationClockwise90(Orientation orientation, int times = 1)
         {
-            return (Orientation) (((int) orientation + 1) % 4);
+            return (Orientation) (((int) orientation + times) % 4);
         }
 
-        public static Orientation RotateOrientationAntiClockwise90(Orientation orientation)
+        public static Orientation RotateOrientationAntiClockwise90(Orientation orientation, int times = 1)
         {
-            return (Orientation) (((int) orientation - 1 + 4) % 4);
+            return (Orientation) (((int) orientation + 3 * times) % 4);
         }
 
         public static List<GridPos> TransformOccupiedPositions(GridPosR localGridPos, List<GridPos> ori_OccupiedPositions)

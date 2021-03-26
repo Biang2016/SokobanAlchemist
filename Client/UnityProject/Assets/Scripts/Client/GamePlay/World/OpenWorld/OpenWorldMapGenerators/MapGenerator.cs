@@ -75,6 +75,12 @@ public abstract class MapGenerator
                 WorldModuleData staticLayoutData = ConfigManager.GetStaticLayoutDataConfig(staticLayoutTypeIndex, false); // 不拷贝，只读数据，避免运行时动态加载GC
                 GridPosR.Orientation staticLayoutOrientation = (GridPosR.Orientation) SRandom.Next(4);
 
+                // world: 静态布局Pivot点的世界坐标
+                // sl_local: 静态布局Config中未旋转的坐标
+                // rot_local: 静态布局旋转后对应的坐标
+                // box_world: 静态布局旋转后对应的世界坐标
+                // box_grid_world: 旋转后的静态布局中的箱子的每一格对应的世界坐标
+
                 // 检查范围内是否允许放置静态布局
                 bool allowPut = true;
                 if (!staticLayoutLayerData.AllowFragment)
@@ -89,30 +95,26 @@ public abstract class MapGenerator
                             {
                                 if (!allowPut) break;
                                 int rot_local_x = sl_local_x;
+                                int rot_local_y = sl_local_y;
                                 int rot_local_z = sl_local_z;
                                 for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
                                 {
-                                    // 注意此处是逆向旋转的
-                                    int temp_z = rot_local_z;
-                                    rot_local_z = rot_local_x;
-                                    rot_local_x = WorldModule.MODULE_SIZE - 1 - temp_z;
+                                    int temp_x = rot_local_x;
+                                    rot_local_x = rot_local_z;
+                                    rot_local_z = WorldModule.MODULE_SIZE - 1 - temp_x;
                                 }
 
-                                ushort boxTypeIndex = staticLayoutData.RawBoxMatrix[rot_local_x, sl_local_y, rot_local_z];
+                                ushort boxTypeIndex = staticLayoutData.RawBoxMatrix[sl_local_x, sl_local_y, sl_local_z];
+                                GridPosR.Orientation rot = staticLayoutData.RawBoxOrientationMatrix[sl_local_x, sl_local_y, sl_local_z];
                                 if (boxTypeIndex != 0)
                                 {
                                     EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(boxTypeIndex);
-                                    GridPosR.Orientation rot = staticLayoutData.RawBoxOrientationMatrix[rot_local_x, sl_local_y, rot_local_z];
-                                    for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
-                                    {
-                                        rot = GridPosR.RotateOrientationClockwise90(rot);
-                                    }
-
+                                    rot = GridPosR.RotateOrientationClockwise90(rot, (int) staticLayoutOrientation);
                                     foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                                     {
-                                        int box_grid_world_x = world_x + sl_local_x + gridPos.x;
-                                        int box_grid_world_y = world_y + sl_local_y + gridPos.y;
-                                        int box_grid_world_z = world_z + sl_local_z + gridPos.z;
+                                        int box_grid_world_x = world_x + rot_local_x + gridPos.x;
+                                        int box_grid_world_y = world_y + rot_local_y + gridPos.y;
+                                        int box_grid_world_z = world_z + rot_local_z + gridPos.z;
                                         if (box_grid_world_x > 0 && box_grid_world_x < Width - 1 && box_grid_world_y - Height >= 0 && box_grid_world_y - Height < Height && box_grid_world_z > 0 && box_grid_world_z < Depth - 1) // 静态布局不要贴边
                                         {
                                             if (WorldMap_Occupied[box_grid_world_x, box_grid_world_y - Height, box_grid_world_z] != 0)
@@ -140,28 +142,24 @@ public abstract class MapGenerator
                     for (int sl_local_z = 0; sl_local_z < WorldModule.MODULE_SIZE; sl_local_z++)
                     {
                         int rot_local_x = sl_local_x;
+                        int rot_local_y = sl_local_y;
                         int rot_local_z = sl_local_z;
                         for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
                         {
-                            // 为了读取旋转后的坐标上原来应该是哪个Box，注意此处是逆向旋转的
-                            int temp_z = rot_local_z;
-                            rot_local_z = rot_local_x;
-                            rot_local_x = WorldModule.MODULE_SIZE - 1 - temp_z;
+                            int temp_x = rot_local_x;
+                            rot_local_x = rot_local_z;
+                            rot_local_z = WorldModule.MODULE_SIZE - 1 - temp_x;
                         }
 
-                        ushort boxTypeIndex = staticLayoutData.RawBoxMatrix[rot_local_x, sl_local_y, rot_local_z];
+                        ushort boxTypeIndex = staticLayoutData.RawBoxMatrix[sl_local_x, sl_local_y, sl_local_z];
+                        GridPosR.Orientation rot = staticLayoutData.RawBoxOrientationMatrix[sl_local_x, sl_local_y, sl_local_z];
                         if (boxTypeIndex != 0)
                         {
-                            int box_world_x = world_x + sl_local_x;
-                            int box_world_y = world_y + sl_local_y;
-                            int box_world_z = world_z + sl_local_z;
+                            int box_world_x = world_x + rot_local_x;
+                            int box_world_y = world_y + rot_local_y;
+                            int box_world_z = world_z + rot_local_z;
                             EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(boxTypeIndex);
-                            GridPosR.Orientation rot = staticLayoutData.RawBoxOrientationMatrix[rot_local_x, sl_local_y, rot_local_z];
-                            for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
-                            {
-                                rot = GridPosR.RotateOrientationClockwise90(rot);
-                            }
-
+                            rot = GridPosR.RotateOrientationClockwise90(rot, (int) staticLayoutOrientation);
                             bool spaceAvailableForBox = true;
                             foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                             {
@@ -213,7 +211,7 @@ public abstract class MapGenerator
                                 }
 
                                 WorldMap[box_world_x, box_world_y - Height, box_world_z] = boxTypeIndex;
-                                WorldMap_EntityExtraSerializeData[box_world_x, box_world_y - Height, box_world_z] = staticLayoutData.BoxExtraSerializeDataMatrix[rot_local_x, sl_local_y, rot_local_z]?.Clone();
+                                WorldMap_EntityExtraSerializeData[box_world_x, box_world_y - Height, box_world_z] = staticLayoutData.BoxExtraSerializeDataMatrix[sl_local_x, sl_local_y, sl_local_z]?.Clone();
                                 WorldMapOrientation[box_world_x, box_world_y - Height, box_world_z] = rot;
                             }
                         }
@@ -222,29 +220,37 @@ public abstract class MapGenerator
                     foreach (BornPointData enemyBornPoint in staticLayoutData.WorldModuleBornPointGroupData.EnemyBornPoints)
                     {
                         ushort enemyTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Enemy, enemyBornPoint.EnemyType.TypeName);
+                        GridPos3D enemyGP_rotated = enemyBornPoint.LocalGP;
+                        int sl_local_x = enemyBornPoint.LocalGP.x;
+                        int sl_local_y = enemyBornPoint.LocalGP.y;
+                        int sl_local_z = enemyBornPoint.LocalGP.z;
+                        int rot_local_x = enemyBornPoint.LocalGP.x;
+                        int rot_local_y = enemyBornPoint.LocalGP.y;
+                        int rot_local_z = enemyBornPoint.LocalGP.z;
+                        for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
+                        {
+                            int temp_x = rot_local_x;
+                            rot_local_x = rot_local_z;
+                            rot_local_z = WorldModule.MODULE_SIZE - 1 - temp_x;
+                        }
+
                         if (enemyTypeIndex != 0)
                         {
-                            GridPos3D enemyGP_rotated = enemyBornPoint.LocalGP;
-                            for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
-                            {
-                                enemyGP_rotated = new GridPos3D(enemyGP_rotated.z, enemyGP_rotated.y, WorldModule.MODULE_SIZE - 1 - enemyGP_rotated.x);
-                            }
-
-                            int x = world_x + enemyGP_rotated.x;
-                            int y = world_y + enemyGP_rotated.y;
-                            int z = world_z + enemyGP_rotated.z;
+                            int actor_world_x = world_x + rot_local_x;
+                            int actor_world_y = world_y + rot_local_y;
+                            int actor_world_z = world_z + rot_local_z;
 
                             EntityOccupationData occupationData = ConfigManager.GetEntityOccupationData(enemyTypeIndex);
                             GridPos actorRotOffset = Actor.ActorRotateWorldGPOffset(occupationData.ActorWidth, staticLayoutOrientation); // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
-                            x -= actorRotOffset.x;
-                            z -= actorRotOffset.z;
+                            actor_world_x -= actorRotOffset.x;
+                            actor_world_z -= actorRotOffset.z;
 
                             bool spaceAvailableForActor = true;
                             foreach (GridPos3D gridPos in occupationData.EntityIndicatorGPs_RotatedDict[staticLayoutOrientation])
                             {
-                                int actor_grid_world_x = x + gridPos.x + actorRotOffset.x;
-                                int actor_grid_world_y = y + gridPos.y;
-                                int actor_grid_world_z = z + gridPos.z + actorRotOffset.z;
+                                int actor_grid_world_x = actor_world_x + gridPos.x + actorRotOffset.x; // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
+                                int actor_grid_world_y = actor_world_y + gridPos.y;
+                                int actor_grid_world_z = actor_world_z + gridPos.z + actorRotOffset.z; // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
                                 if (actor_grid_world_x > 0 && actor_grid_world_x < Width - 1 && actor_grid_world_y - Height >= 0 && actor_grid_world_y - Height < Height && actor_grid_world_z > 0 && actor_grid_world_z < Depth - 1) // 静态布局不要贴边
                                 {
                                     if (WorldMap_StaticLayoutOccupied_IntactForStaticLayout[actor_grid_world_x, actor_grid_world_y - Height, actor_grid_world_z] != 0)
@@ -283,14 +289,14 @@ public abstract class MapGenerator
                             {
                                 foreach (GridPos3D gridPos in occupationData.EntityIndicatorGPs_RotatedDict[staticLayoutOrientation])
                                 {
-                                    int actor_grid_world_x = x + gridPos.x + actorRotOffset.x; // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
-                                    int actor_grid_world_y = y + gridPos.y;
-                                    int actor_grid_world_z = z + gridPos.z + actorRotOffset.z; // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
+                                    int actor_grid_world_x = actor_world_x + gridPos.x + actorRotOffset.x; // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
+                                    int actor_grid_world_y = actor_world_y + gridPos.y;
+                                    int actor_grid_world_z = actor_world_z + gridPos.z + actorRotOffset.z; // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
                                     WorldMap_Occupied[actor_grid_world_x, actor_grid_world_y - Height, actor_grid_world_z] = enemyTypeIndex;
                                 }
 
-                                WorldMap[x, y - Height, z] = enemyTypeIndex;
-                                WorldMap_EntityExtraSerializeData[x, y - Height, z] = enemyBornPoint.RawEntityExtraSerializeData?.Clone();
+                                WorldMap[actor_world_x, actor_world_y - Height, actor_world_z] = enemyTypeIndex;
+                                WorldMap_EntityExtraSerializeData[actor_world_x, actor_world_y - Height, actor_world_z] = enemyBornPoint.RawEntityExtraSerializeData?.Clone();
                             }
                         }
                     }
@@ -320,6 +326,7 @@ public abstract class MapGenerator
                                     m_OpenWorld.WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP_OpenWorld(bp);
                                     m_OpenWorld.InitialPlayerBP = playerBPWorldGP;
                                     WorldMap[playerBPWorldGP.x, playerBPWorldGP.y - WorldModule.MODULE_SIZE, playerBPWorldGP.z] = (ushort) ConfigManager.TypeStartIndex.Player;
+                                    break;
                                 }
                             }
                         }
