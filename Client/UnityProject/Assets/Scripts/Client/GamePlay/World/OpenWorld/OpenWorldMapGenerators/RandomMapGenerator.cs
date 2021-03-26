@@ -1,4 +1,5 @@
 ﻿using BiangLibrary.GameDataFormat;
+using BiangLibrary.GameDataFormat.Grid;
 
 public sealed class RandomMapGenerator : MapGenerator
 {
@@ -28,7 +29,7 @@ public sealed class RandomMapGenerator : MapGenerator
                         if (genCount >= GenerateLayerData.Count) break;
                         int world_x = module_x * WorldModule.MODULE_SIZE + local_x;
                         int world_z = module_z * WorldModule.MODULE_SIZE + local_z;
-                        if (TryOverrideToWorldMap(world_x, Height, world_z))
+                        if (TryOverrideToWorldMap(new GridPos3D(world_x, Height, world_z)))
                         {
                             genCount++;
                         }
@@ -52,7 +53,7 @@ public sealed class RandomMapGenerator : MapGenerator
                     {
                         int world_x = module_x * WorldModule.MODULE_SIZE + local_x;
                         int world_z = module_z * WorldModule.MODULE_SIZE + local_z;
-                        TryOverrideToWorldMap(world_x, Height, world_z);
+                        TryOverrideToWorldMap(new GridPos3D(world_x, Height, world_z));
                     }
                 }
             }

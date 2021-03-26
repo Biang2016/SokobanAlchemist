@@ -502,7 +502,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
             bool genSuc = map_1[world_x, world_z];
             if (genSuc)
             {
-                TryOverrideToWorldMap(world_x, Height, world_z);
+                TryOverrideToWorldMap(new GridPos3D(world_x, Height, world_z));
             }
         }
     }

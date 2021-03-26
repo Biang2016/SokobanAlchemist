@@ -62,10 +62,15 @@ public abstract class MapGenerator
 
     public abstract void ApplyToWorldMap();
 
-    protected bool TryOverrideToWorldMap(int world_x, int world_y, int world_z)
+    protected bool TryOverrideToWorldMap(GridPos3D worldGP)
     {
+        bool CheckGridInsideWorldRange(GridPos3D _worldGP)
+        {
+            return _worldGP.x > 0 && _worldGP.x < Width - 1 && _worldGP.y - Height >= 0 && _worldGP.y - Height < Height && _worldGP.z > 0 && _worldGP.z < Depth - 1;
+        }
+
         bool overrideSuc = false;
-        ushort existedIndex_StaticLayoutIndex_IntactForBox = WorldMap_StaticLayoutOccupied_IntactForBox[world_x, world_y - Height, world_z];
+        ushort existedIndex_StaticLayoutIndex_IntactForBox = WorldMap_StaticLayoutOccupied_IntactForBox[worldGP.x, worldGP.y - Height, worldGP.z];
         switch (MapGeneratorType)
         {
             case MapGeneratorType.StaticLayout:
@@ -94,30 +99,26 @@ public abstract class MapGenerator
                             for (int sl_local_z = 0; sl_local_z < WorldModule.MODULE_SIZE; sl_local_z++)
                             {
                                 if (!allowPut) break;
-                                int rot_local_x = sl_local_x;
-                                int rot_local_y = sl_local_y;
-                                int rot_local_z = sl_local_z;
+                                GridPos3D sl_local = new GridPos3D(sl_local_x, sl_local_y, sl_local_z);
+                                GridPos3D rot_local = sl_local;
                                 for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
                                 {
-                                    int temp_x = rot_local_x;
-                                    rot_local_x = rot_local_z;
-                                    rot_local_z = WorldModule.MODULE_SIZE - 1 - temp_x;
+                                    rot_local = new GridPos3D(rot_local.z, rot_local.y, WorldModule.MODULE_SIZE - 1 - rot_local.x);
                                 }
 
-                                ushort boxTypeIndex = staticLayoutData.RawBoxMatrix[sl_local_x, sl_local_y, sl_local_z];
-                                GridPosR.Orientation rot = staticLayoutData.RawBoxOrientationMatrix[sl_local_x, sl_local_y, sl_local_z];
+                                ushort boxTypeIndex = staticLayoutData.GetRawBoxTypeIndex(sl_local);
+                                GridPosR.Orientation rot = staticLayoutData.GetRawBoxOrientation(sl_local);
                                 if (boxTypeIndex != 0)
                                 {
+                                    GridPos3D box_world = worldGP + rot_local;
                                     EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(boxTypeIndex);
                                     rot = GridPosR.RotateOrientationClockwise90(rot, (int) staticLayoutOrientation);
                                     foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                                     {
-                                        int box_grid_world_x = world_x + rot_local_x + gridPos.x;
-                                        int box_grid_world_y = world_y + rot_local_y + gridPos.y;
-                                        int box_grid_world_z = world_z + rot_local_z + gridPos.z;
-                                        if (box_grid_world_x > 0 && box_grid_world_x < Width - 1 && box_grid_world_y - Height >= 0 && box_grid_world_y - Height < Height && box_grid_world_z > 0 && box_grid_world_z < Depth - 1) // 静态布局不要贴边
+                                        GridPos3D box_grid_world = box_world + gridPos;
+                                        if (CheckGridInsideWorldRange(box_grid_world))
                                         {
-                                            if (WorldMap_Occupied[box_grid_world_x, box_grid_world_y - Height, box_grid_world_z] != 0)
+                                            if (WorldMap_Occupied[box_grid_world.x, box_grid_world.y - Height, box_grid_world.z] != 0)
                                             {
                                                 allowPut = false;
                                                 break;
@@ -141,193 +142,162 @@ public abstract class MapGenerator
                     for (int sl_local_y = 0; sl_local_y < WorldModule.MODULE_SIZE; sl_local_y++)
                     for (int sl_local_z = 0; sl_local_z < WorldModule.MODULE_SIZE; sl_local_z++)
                     {
-                        int rot_local_x = sl_local_x;
-                        int rot_local_y = sl_local_y;
-                        int rot_local_z = sl_local_z;
+                        GridPos3D sl_local = new GridPos3D(sl_local_x, sl_local_y, sl_local_z);
+                        GridPos3D rot_local = sl_local;
                         for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
                         {
-                            int temp_x = rot_local_x;
-                            rot_local_x = rot_local_z;
-                            rot_local_z = WorldModule.MODULE_SIZE - 1 - temp_x;
+                            rot_local = new GridPos3D(rot_local.z, rot_local.y, WorldModule.MODULE_SIZE - 1 - rot_local.x);
                         }
 
-                        ushort boxTypeIndex = staticLayoutData.RawBoxMatrix[sl_local_x, sl_local_y, sl_local_z];
-                        GridPosR.Orientation rot = staticLayoutData.RawBoxOrientationMatrix[sl_local_x, sl_local_y, sl_local_z];
-                        if (boxTypeIndex != 0)
+                        ushort entityTypeIndex = staticLayoutData.GetRawBoxTypeIndex(sl_local);
+                        GridPosR.Orientation rot = staticLayoutData.GetRawBoxOrientation(sl_local);
+                        if (entityTypeIndex != 0)
                         {
-                            int box_world_x = world_x + rot_local_x;
-                            int box_world_y = world_y + rot_local_y;
-                            int box_world_z = world_z + rot_local_z;
-                            EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(boxTypeIndex);
+                            GridPos3D entity_world = worldGP + rot_local;
+                            EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(entityTypeIndex);
                             rot = GridPosR.RotateOrientationClockwise90(rot, (int) staticLayoutOrientation);
-                            bool spaceAvailableForBox = true;
+                            bool spaceAvailableForEntity = true;
                             foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                             {
-                                int box_grid_world_x = box_world_x + gridPos.x;
-                                int box_grid_world_y = box_world_y + gridPos.y;
-                                int box_grid_world_z = box_world_z + gridPos.z;
-                                if (box_grid_world_x > 0 && box_grid_world_x < Width - 1 && box_grid_world_y - Height >= 0 && box_grid_world_y - Height < Height && box_grid_world_z > 0 && box_grid_world_z < Depth - 1) // 静态布局不要贴边
+                                GridPos3D entity_grid_world = entity_world + gridPos;
+                                if (CheckGridInsideWorldRange(entity_grid_world))
                                 {
-                                    if (WorldMap_StaticLayoutOccupied_IntactForStaticLayout[box_grid_world_x, box_grid_world_y - Height, box_grid_world_z] != 0)
+                                    if (WorldMap_StaticLayoutOccupied_IntactForStaticLayout[entity_grid_world.x, entity_grid_world.y - Height, entity_grid_world.z] != 0)
                                     {
-                                        spaceAvailableForBox = false;
+                                        spaceAvailableForEntity = false;
                                         break;
                                     }
 
-                                    if (WorldMap_Occupied[box_grid_world_x, box_grid_world_y - Height, box_grid_world_z] != 0)
+                                    if (WorldMap_Occupied[entity_grid_world.x, entity_grid_world.y - Height, entity_grid_world.z] != 0)
                                     {
-                                        spaceAvailableForBox = false;
+                                        spaceAvailableForEntity = false;
                                         break;
                                     }
 
-                                    TerrainType terrainType = WorldMap_TerrainType[box_grid_world_x, box_grid_world_z];
+                                    TerrainType terrainType = WorldMap_TerrainType[entity_grid_world.x, entity_grid_world.z];
                                     if (GenerateLayerData.OnlyAllowPutOnTerrain && !GenerateLayerData.AllowPlaceOnTerrainTypeSet.Contains(terrainType))
                                     {
-                                        spaceAvailableForBox = false;
+                                        spaceAvailableForEntity = false;
                                         break;
                                     }
 
                                     if (!GenerateLayerData.OnlyAllowPutOnTerrain && GenerateLayerData.ForbidPlaceOnTerrainTypeSet.Contains(terrainType))
                                     {
-                                        spaceAvailableForBox = false;
+                                        spaceAvailableForEntity = false;
                                         break;
                                     }
                                 }
                                 else
                                 {
-                                    spaceAvailableForBox = false;
+                                    spaceAvailableForEntity = false;
                                     break;
                                 }
                             }
 
-                            if (spaceAvailableForBox)
+                            if (spaceAvailableForEntity)
                             {
                                 foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                                 {
-                                    int box_grid_world_x = box_world_x + gridPos.x;
-                                    int box_grid_world_y = box_world_y + gridPos.y;
-                                    int box_grid_world_z = box_world_z + gridPos.z;
-                                    WorldMap_Occupied[box_grid_world_x, box_grid_world_y - Height, box_grid_world_z] = boxTypeIndex;
+                                    GridPos3D box_grid_world = entity_world + gridPos;
+                                    WorldMap_Occupied[box_grid_world.x, box_grid_world.y - Height, box_grid_world.z] = entityTypeIndex;
                                 }
 
-                                WorldMap[box_world_x, box_world_y - Height, box_world_z] = boxTypeIndex;
-                                WorldMap_EntityExtraSerializeData[box_world_x, box_world_y - Height, box_world_z] = staticLayoutData.BoxExtraSerializeDataMatrix[sl_local_x, sl_local_y, sl_local_z]?.Clone();
-                                WorldMapOrientation[box_world_x, box_world_y - Height, box_world_z] = rot;
+                                WorldMap[entity_world.x, entity_world.y - Height, entity_world.z] = entityTypeIndex;
+                                WorldMap_EntityExtraSerializeData[entity_world.x, entity_world.y - Height, entity_world.z] = staticLayoutData.BoxExtraSerializeDataMatrix[sl_local_x, sl_local_y, sl_local_z]?.Clone();
+                                WorldMapOrientation[entity_world.x, entity_world.y - Height, entity_world.z] = rot;
                             }
                         }
                     }
 
                     foreach (BornPointData enemyBornPoint in staticLayoutData.WorldModuleBornPointGroupData.EnemyBornPoints)
                     {
-                        ushort enemyTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Enemy, enemyBornPoint.EnemyType.TypeName);
-                        GridPos3D enemyGP_rotated = enemyBornPoint.LocalGP;
-                        int sl_local_x = enemyBornPoint.LocalGP.x;
-                        int sl_local_y = enemyBornPoint.LocalGP.y;
-                        int sl_local_z = enemyBornPoint.LocalGP.z;
-                        int rot_local_x = enemyBornPoint.LocalGP.x;
-                        int rot_local_y = enemyBornPoint.LocalGP.y;
-                        int rot_local_z = enemyBornPoint.LocalGP.z;
+                        ushort entityTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Enemy, enemyBornPoint.EnemyType.TypeName);
+                        GridPos3D sl_local = enemyBornPoint.LocalGP;
+                        GridPos3D rot_local = sl_local;
                         for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
                         {
-                            int temp_x = rot_local_x;
-                            rot_local_x = rot_local_z;
-                            rot_local_z = WorldModule.MODULE_SIZE - 1 - temp_x;
+                            rot_local = new GridPos3D(rot_local.z, rot_local.y, WorldModule.MODULE_SIZE - 1 - rot_local.x);
                         }
 
-                        if (enemyTypeIndex != 0)
+                        if (entityTypeIndex != 0)
                         {
-                            int actor_world_x = world_x + rot_local_x;
-                            int actor_world_y = world_y + rot_local_y;
-                            int actor_world_z = world_z + rot_local_z;
+                            GridPos3D entity_world = worldGP + rot_local;
+                            EntityOccupationData occupationData = ConfigManager.GetEntityOccupationData(entityTypeIndex);
 
-                            EntityOccupationData occupationData = ConfigManager.GetEntityOccupationData(enemyTypeIndex);
-                            GridPos actorRotOffset = Actor.ActorRotateWorldGPOffset(occupationData.ActorWidth, staticLayoutOrientation); // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
-                            actor_world_x -= actorRotOffset.x;
-                            actor_world_z -= actorRotOffset.z;
-
-                            bool spaceAvailableForActor = true;
+                            bool spaceAvailableForEntity = true;
                             foreach (GridPos3D gridPos in occupationData.EntityIndicatorGPs_RotatedDict[staticLayoutOrientation])
                             {
-                                int actor_grid_world_x = actor_world_x + gridPos.x + actorRotOffset.x; // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
-                                int actor_grid_world_y = actor_world_y + gridPos.y;
-                                int actor_grid_world_z = actor_world_z + gridPos.z + actorRotOffset.z; // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
-                                if (actor_grid_world_x > 0 && actor_grid_world_x < Width - 1 && actor_grid_world_y - Height >= 0 && actor_grid_world_y - Height < Height && actor_grid_world_z > 0 && actor_grid_world_z < Depth - 1) // 静态布局不要贴边
+                                GridPos3D entity_grid_world = entity_world + gridPos;
+                                if (CheckGridInsideWorldRange(entity_grid_world))
                                 {
-                                    if (WorldMap_StaticLayoutOccupied_IntactForStaticLayout[actor_grid_world_x, actor_grid_world_y - Height, actor_grid_world_z] != 0)
+                                    if (WorldMap_StaticLayoutOccupied_IntactForStaticLayout[entity_grid_world.x, entity_grid_world.y - Height, entity_grid_world.z] != 0)
                                     {
-                                        spaceAvailableForActor = false;
+                                        spaceAvailableForEntity = false;
                                         break;
                                     }
 
-                                    if (WorldMap_Occupied[actor_grid_world_x, actor_grid_world_y - Height, actor_grid_world_z] != 0)
+                                    if (WorldMap_Occupied[entity_grid_world.x, entity_grid_world.y - Height, entity_grid_world.z] != 0)
                                     {
-                                        spaceAvailableForActor = false;
+                                        spaceAvailableForEntity = false;
                                         break;
                                     }
 
-                                    TerrainType terrainType = WorldMap_TerrainType[actor_grid_world_x, actor_grid_world_z];
+                                    TerrainType terrainType = WorldMap_TerrainType[entity_grid_world.x, entity_grid_world.z];
                                     if (GenerateLayerData.OnlyAllowPutOnTerrain && !GenerateLayerData.AllowPlaceOnTerrainTypeSet.Contains(terrainType))
                                     {
-                                        spaceAvailableForActor = false;
+                                        spaceAvailableForEntity = false;
                                         break;
                                     }
 
                                     if (!GenerateLayerData.OnlyAllowPutOnTerrain && GenerateLayerData.ForbidPlaceOnTerrainTypeSet.Contains(terrainType))
                                     {
-                                        spaceAvailableForActor = false;
+                                        spaceAvailableForEntity = false;
                                         break;
                                     }
                                 }
                                 else
                                 {
-                                    spaceAvailableForActor = false;
+                                    spaceAvailableForEntity = false;
                                     break;
                                 }
                             }
 
-                            if (spaceAvailableForActor)
+                            if (spaceAvailableForEntity)
                             {
                                 foreach (GridPos3D gridPos in occupationData.EntityIndicatorGPs_RotatedDict[staticLayoutOrientation])
                                 {
-                                    int actor_grid_world_x = actor_world_x + gridPos.x + actorRotOffset.x; // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
-                                    int actor_grid_world_y = actor_world_y + gridPos.y;
-                                    int actor_grid_world_z = actor_world_z + gridPos.z + actorRotOffset.z; // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
-                                    WorldMap_Occupied[actor_grid_world_x, actor_grid_world_y - Height, actor_grid_world_z] = enemyTypeIndex;
+                                    GridPos3D entity_grid_world = entity_world + gridPos;
+                                    WorldMap_Occupied[entity_grid_world.x, entity_grid_world.y - Height, entity_grid_world.z] = entityTypeIndex;
                                 }
 
-                                WorldMap[actor_world_x, actor_world_y - Height, actor_world_z] = enemyTypeIndex;
-                                WorldMap_EntityExtraSerializeData[actor_world_x, actor_world_y - Height, actor_world_z] = enemyBornPoint.RawEntityExtraSerializeData?.Clone();
+                                GridPos actorRotOffset = Actor.ActorRotateWorldGPOffset(occupationData.ActorWidth, staticLayoutOrientation); // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
+                                WorldMap[entity_world.x - actorRotOffset.x, entity_world.y - Height, entity_world.z - actorRotOffset.z] = entityTypeIndex;
+                                WorldMap_EntityExtraSerializeData[entity_world.x - actorRotOffset.x, entity_world.y - Height, entity_world.z - actorRotOffset.z] = enemyBornPoint.RawEntityExtraSerializeData?.Clone();
                             }
                         }
                     }
 
-                    if (GenerateLayerData.DeterminePlayerBP)
+                    if (GenerateLayerData.DeterminePlayerBP && m_OpenWorld.InitialPlayerBP == GridPos3D.Zero)
                     {
-                        if (m_OpenWorld.InitialPlayerBP == GridPos3D.Zero)
+                        if (staticLayoutData.WorldModuleBornPointGroupData.PlayerBornPoints.Count > 0)
                         {
-                            if (staticLayoutData.WorldModuleBornPointGroupData.PlayerBornPoints.Count > 0)
+                            foreach (KeyValuePair<string, BornPointData> kv in staticLayoutData.WorldModuleBornPointGroupData.PlayerBornPoints)
                             {
-                                foreach (KeyValuePair<string, BornPointData> kv in staticLayoutData.WorldModuleBornPointGroupData.PlayerBornPoints)
+                                GridPos3D sl_local = kv.Value.LocalGP;
+                                GridPos3D rot_local = sl_local;
+                                for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
                                 {
-                                    BornPointData playerBPD = kv.Value;
-                                    int rot_local_x = playerBPD.LocalGP.x;
-                                    int rot_local_z = playerBPD.LocalGP.z;
-                                    for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
-                                    {
-                                        int temp_x = rot_local_x;
-                                        rot_local_x = rot_local_z;
-                                        rot_local_z = WorldModule.MODULE_SIZE - 1 - temp_x;
-                                    }
-
-                                    GridPos3D playerBPWorldGP = new GridPos3D(world_x + rot_local_x, WorldModule.MODULE_SIZE, world_z + rot_local_z);
-                                    GridPos3D playerBPLocal = new GridPos3D(playerBPWorldGP.x % WorldModule.MODULE_SIZE, 0, playerBPWorldGP.z % WorldModule.MODULE_SIZE);
-                                    BornPointData bp = new BornPointData {IsPlayer = true, EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy}, BornPointAlias = OpenWorld.PLAYER_DEFAULT_BP, LocalGP = playerBPLocal, SpawnLevelEventAlias = "", WorldGP = playerBPWorldGP};
-                                    bp.InitGUID();
-                                    m_OpenWorld.WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP_OpenWorld(bp);
-                                    m_OpenWorld.InitialPlayerBP = playerBPWorldGP;
-                                    WorldMap[playerBPWorldGP.x, playerBPWorldGP.y - WorldModule.MODULE_SIZE, playerBPWorldGP.z] = (ushort) ConfigManager.TypeStartIndex.Player;
-                                    break;
+                                    rot_local = new GridPos3D(rot_local.z, rot_local.y, WorldModule.MODULE_SIZE - 1 - rot_local.x);
                                 }
+
+                                GridPos3D entity_world = worldGP + rot_local;
+                                GridPos3D entity_local = new GridPos3D(entity_world.x % WorldModule.MODULE_SIZE, 0, entity_world.z % WorldModule.MODULE_SIZE);
+                                BornPointData bp = new BornPointData {IsPlayer = true, EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy}, BornPointAlias = OpenWorld.PLAYER_DEFAULT_BP, LocalGP = entity_local, SpawnLevelEventAlias = "", WorldGP = entity_world };
+                                bp.InitGUID();
+                                m_OpenWorld.WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP_OpenWorld(bp);
+                                m_OpenWorld.InitialPlayerBP = entity_world;
+                                WorldMap[entity_world.x, entity_world.y - WorldModule.MODULE_SIZE, entity_world.z] = (ushort) ConfigManager.TypeStartIndex.Player;
+                                break;
                             }
                         }
                     }
@@ -341,34 +311,31 @@ public abstract class MapGenerator
                             for (int sl_local_y = staticLayoutData.BoxBounds.y_min; sl_local_y <= staticLayoutData.BoxBounds.y_max; sl_local_y++)
                             for (int sl_local_z = staticLayoutData.BoxBounds.z_min; sl_local_z <= staticLayoutData.BoxBounds.z_max; sl_local_z++)
                             {
-                                int rot_local_x = sl_local_x;
-                                int rot_local_z = sl_local_z;
+                                GridPos3D sl_local = new GridPos3D(sl_local_x, sl_local_y, sl_local_z);
+                                GridPos3D rot_local = sl_local;
                                 for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
                                 {
-                                    int temp_x = rot_local_x;
-                                    rot_local_x = rot_local_z;
-                                    rot_local_z = WorldModule.MODULE_SIZE - 1 - temp_x;
+                                    rot_local = new GridPos3D(rot_local.z, rot_local.y, WorldModule.MODULE_SIZE - 1 - rot_local.x);
                                 }
 
-                                int layoutOccupied_world_x = world_x + rot_local_x;
-                                int layoutOccupied_world_y = world_y + sl_local_y;
-                                int layoutOccupied_world_z = world_z + rot_local_z;
-                                if (layoutOccupied_world_x >= 0 && layoutOccupied_world_x < Width && layoutOccupied_world_y - Height >= 0 && layoutOccupied_world_y - Height < Height && layoutOccupied_world_z >= 0 && layoutOccupied_world_z < Depth)
+                                GridPos3D layoutOccupied_world = worldGP + rot_local;
+                                if (CheckGridInsideWorldRange(layoutOccupied_world))
                                 {
                                     if (staticLayoutLayerData.LayoutIntactForOtherStaticLayout)
                                     {
-                                        WorldMap_StaticLayoutOccupied_IntactForStaticLayout[layoutOccupied_world_x, layoutOccupied_world_y - Height, layoutOccupied_world_z] = staticLayoutTypeIndex;
+                                        WorldMap_StaticLayoutOccupied_IntactForStaticLayout[layoutOccupied_world.x, layoutOccupied_world.y - Height, layoutOccupied_world.z] = staticLayoutTypeIndex;
                                     }
 
                                     if (staticLayoutLayerData.LayoutIntactForOtherBoxes)
                                     {
-                                        WorldMap_StaticLayoutOccupied_IntactForBox[layoutOccupied_world_x, layoutOccupied_world_y - Height, layoutOccupied_world_z] = staticLayoutTypeIndex;
+                                        WorldMap_StaticLayoutOccupied_IntactForBox[layoutOccupied_world.x, layoutOccupied_world.y - Height, layoutOccupied_world.z] = staticLayoutTypeIndex;
                                     }
                                 }
                             }
                         }
                         else // 允许布局破损情况下，对布局内所有放置成功的Entity及其外扩一格的占领区域标记为Layout已占用
                         {
+
                         }
                     }
 
@@ -384,22 +351,20 @@ public abstract class MapGenerator
                 bool spaceAvailable = true;
                 GridPosR.Orientation entityOrientation = (GridPosR.Orientation) SRandom.Range(0, 4);
                 EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(EntityTypeIndex);
-                foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[entityOrientation]) // todo Orientation Random
+                foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[entityOrientation])
                 {
                     if (!spaceAvailable) break;
-                    int box_grid_world_x = world_x + gridPos.x;
-                    int box_grid_world_y = world_y + gridPos.y;
-                    int box_grid_world_z = world_z + gridPos.z;
-                    if (box_grid_world_x >= 0 && box_grid_world_x < Width && box_grid_world_y - Height >= 0 && box_grid_world_y - Height < Height && box_grid_world_z >= 0 && box_grid_world_z < Depth)
+                    GridPos3D box_grid_world = worldGP + gridPos;
+                    if (CheckGridInsideWorldRange(box_grid_world))
                     {
-                        if (WorldMap_StaticLayoutOccupied_IntactForBox[box_grid_world_x, box_grid_world_y - Height, box_grid_world_z] != 0)
+                        if (WorldMap_StaticLayoutOccupied_IntactForBox[box_grid_world.x, box_grid_world.y - Height, box_grid_world.z] != 0)
                         {
                             spaceAvailable = false;
                             break;
                         }
 
-                        ushort occupiedIndex = WorldMap_Occupied[box_grid_world_x, box_grid_world_y - Height, box_grid_world_z];
-                        TerrainType terrainType = WorldMap_TerrainType[box_grid_world_x, box_grid_world_z];
+                        ushort occupiedIndex = WorldMap_Occupied[box_grid_world.x, box_grid_world.y - Height, box_grid_world.z];
+                        TerrainType terrainType = WorldMap_TerrainType[box_grid_world.x, box_grid_world.z];
                         ConfigManager.TypeStartIndex occupiedIndexType = occupiedIndex.ConvertToTypeStartIndex();
                         switch (occupiedIndexType)
                         {
@@ -429,13 +394,12 @@ public abstract class MapGenerator
 
                 if (spaceAvailable)
                 {
-                    WorldMap[world_x, 0, world_z] = EntityTypeIndex;
-                    WorldMapOrientation[world_x, 0, world_z] = entityOrientation;
-                    foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[entityOrientation]) // todo Orientation Random
+                    WorldMap[worldGP.x, 0, worldGP.z] = EntityTypeIndex;
+                    WorldMapOrientation[worldGP.x, 0, worldGP.z] = entityOrientation;
+                    foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[entityOrientation])
                     {
-                        int box_grid_world_x = world_x + gridPos.x;
-                        int box_grid_world_z = world_z + gridPos.z;
-                        WorldMap_Occupied[box_grid_world_x, 0, box_grid_world_z] = EntityTypeIndex;
+                        GridPos3D box_grid_world = worldGP + gridPos;
+                        WorldMap_Occupied[box_grid_world.x, box_grid_world.y - Height, box_grid_world.z] = EntityTypeIndex;
                     }
 
                     overrideSuc = true;

@@ -39,6 +39,26 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     public WorldModuleDataModification Modification;
 
+    public ushort GetRawBoxTypeIndex(GridPos3D gp)
+    {
+        return RawBoxMatrix[gp.x, gp.y, gp.z];
+    }
+
+    public ushort GetBoxTypeIndex(GridPos3D gp)
+    {
+        return BoxMatrix[gp.x, gp.y, gp.z];
+    }
+
+    public GridPosR.Orientation GetRawBoxOrientation(GridPos3D gp)
+    {
+        return RawBoxOrientationMatrix[gp.x, gp.y, gp.z];
+    }
+
+    public GridPosR.Orientation GetBoxOrientation(GridPos3D gp)
+    {
+        return BoxOrientationMatrix[gp.x, gp.y, gp.z];
+    }
+
     /// <summary>
     /// 初始化序列化出的模组数据（开放世界模组考虑性能，不对这些数据初始化）
     /// </summary>

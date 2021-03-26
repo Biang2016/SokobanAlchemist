@@ -51,6 +51,11 @@ public class WorldModule : PoolObject
 
     public Box this[int x, int y, int z] => BoxMatrix[x, y, z];
 
+    public Box this[GridPos3D gp, bool isCore, GridPosR.Orientation orientation]
+    {
+        set => this[gp.x, gp.y, gp.z, isCore, orientation] = value;
+    }
+
     // 此索引仅仅用于战斗时的Set，不可用于Recycle时候置空 
     public Box this[int x, int y, int z, bool isCore, GridPosR.Orientation orientation]
     {
@@ -87,6 +92,11 @@ public class WorldModule : PoolObject
                 }
             }
         }
+    }
+
+    public Box GetBox(GridPos3D gp)
+    {
+        return BoxMatrix[gp.x, gp.y, gp.z];
     }
 
     #region Roots
@@ -390,7 +400,7 @@ public class WorldModule : PoolObject
                         }
                         else
                         {
-                            this[gridPos.x, gridPos.y, gridPos.z, offset == GridPos3D.Zero, orientation] = box;
+                            this[gridPos, offset == GridPos3D.Zero, orientation] = box;
                         }
                     }
                     else // 如果合成的是异形箱子则需要考虑该箱子的一部分是否放到了其他模组里
@@ -405,7 +415,7 @@ public class WorldModule : PoolObject
                             }
                             else
                             {
-                                otherModule[otherModuleLocalGP.x, otherModuleLocalGP.y, otherModuleLocalGP.z, offset == GridPos3D.Zero, orientation] = box;
+                                otherModule[otherModuleLocalGP, offset == GridPos3D.Zero, orientation] = box;
                             }
                         }
                     }
