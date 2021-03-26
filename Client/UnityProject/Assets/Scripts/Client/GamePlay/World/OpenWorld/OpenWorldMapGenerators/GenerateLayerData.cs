@@ -102,9 +102,10 @@ public class GenerateStaticLayoutLayerData : GenerateLayerData
     public bool AllowFragment = false;
 
     [LabelText("保证布局完整不受其他布局破坏")]
+    [HideIf("AllowFragment")]
     public bool LayoutIntactForOtherStaticLayout = false;
 
-    [LabelText("保证布局完整不受随机Box植入")]
+    [LabelText("保证布局内不受随机Box植入")]
     public bool LayoutIntactForOtherBoxes = false;
 }
 

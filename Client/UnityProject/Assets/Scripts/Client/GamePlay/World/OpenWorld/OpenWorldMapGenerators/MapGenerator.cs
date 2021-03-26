@@ -75,7 +75,7 @@ public abstract class MapGenerator
                 WorldModuleData staticLayoutData = ConfigManager.GetStaticLayoutDataConfig(staticLayoutTypeIndex, false); // 不拷贝，只读数据，避免运行时动态加载GC
                 GridPosR.Orientation staticLayoutOrientation = (GridPosR.Orientation) SRandom.Next(4);
 
-                // Check Space
+                // 检查范围内是否允许放置静态布局
                 bool allowPut = true;
                 if (!staticLayoutLayerData.AllowFragment)
                 {
@@ -133,7 +133,7 @@ public abstract class MapGenerator
                     }
                 }
 
-                if (allowPut)
+                if (allowPut) // 对于允许布局破损的情况，默认是允许放置的，但能够成功放置多少Entity就要依据实际情况了
                 {
                     for (int sl_local_x = 0; sl_local_x < WorldModule.MODULE_SIZE; sl_local_x++)
                     for (int sl_local_y = 0; sl_local_y < WorldModule.MODULE_SIZE; sl_local_y++)
@@ -143,7 +143,7 @@ public abstract class MapGenerator
                         int rot_local_z = sl_local_z;
                         for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
                         {
-                            // 注意此处是逆向旋转的
+                            // 为了读取旋转后的坐标上原来应该是哪个Box，注意此处是逆向旋转的
                             int temp_z = rot_local_z;
                             rot_local_z = rot_local_x;
                             rot_local_x = WorldModule.MODULE_SIZE - 1 - temp_z;
@@ -183,8 +183,17 @@ public abstract class MapGenerator
                                     }
 
                                     TerrainType terrainType = WorldMap_TerrainType[box_grid_world_x, box_grid_world_z];
-                                    if (GenerateLayerData.OnlyAllowPutOnTerrain && !GenerateLayerData.AllowPlaceOnTerrainTypeSet.Contains(terrainType)) spaceAvailableForBox = false;
-                                    if (!GenerateLayerData.OnlyAllowPutOnTerrain && GenerateLayerData.ForbidPlaceOnTerrainTypeSet.Contains(terrainType)) spaceAvailableForBox = false;
+                                    if (GenerateLayerData.OnlyAllowPutOnTerrain && !GenerateLayerData.AllowPlaceOnTerrainTypeSet.Contains(terrainType))
+                                    {
+                                        spaceAvailableForBox = false;
+                                        break;
+                                    }
+
+                                    if (!GenerateLayerData.OnlyAllowPutOnTerrain && GenerateLayerData.ForbidPlaceOnTerrainTypeSet.Contains(terrainType))
+                                    {
+                                        spaceAvailableForBox = false;
+                                        break;
+                                    }
                                 }
                                 else
                                 {
@@ -210,40 +219,6 @@ public abstract class MapGenerator
                         }
                     }
 
-                    // 将Layout大致占领区域都标记为Layout，避免其他生成因素插进来
-                    if (staticLayoutLayerData.LayoutIntactForOtherStaticLayout || staticLayoutLayerData.LayoutIntactForOtherBoxes)
-                    {
-                        for (int sl_local_x = staticLayoutData.BoxBounds.x_min; sl_local_x <= staticLayoutData.BoxBounds.x_max; sl_local_x++)
-                        for (int sl_local_y = staticLayoutData.BoxBounds.y_min; sl_local_y <= staticLayoutData.BoxBounds.y_max; sl_local_y++)
-                        for (int sl_local_z = staticLayoutData.BoxBounds.z_min; sl_local_z <= staticLayoutData.BoxBounds.z_max; sl_local_z++)
-                        {
-                            int rot_local_x = sl_local_x;
-                            int rot_local_z = sl_local_z;
-                            for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
-                            {
-                                int temp_x = rot_local_x;
-                                rot_local_x = rot_local_z;
-                                rot_local_z = WorldModule.MODULE_SIZE - 1 - temp_x;
-                            }
-
-                            int layoutOccupied_world_x = world_x + rot_local_x;
-                            int layoutOccupied_world_y = world_y + sl_local_y;
-                            int layoutOccupied_world_z = world_z + rot_local_z;
-                            if (layoutOccupied_world_x >= 0 && layoutOccupied_world_x < Width && layoutOccupied_world_y - Height >= 0 && layoutOccupied_world_y - Height < Height && layoutOccupied_world_z >= 0 && layoutOccupied_world_z < Depth)
-                            {
-                                if (staticLayoutLayerData.LayoutIntactForOtherStaticLayout)
-                                {
-                                    WorldMap_StaticLayoutOccupied_IntactForStaticLayout[layoutOccupied_world_x, layoutOccupied_world_y - Height, layoutOccupied_world_z] = staticLayoutTypeIndex;
-                                }
-
-                                if (staticLayoutLayerData.LayoutIntactForOtherBoxes)
-                                {
-                                    WorldMap_StaticLayoutOccupied_IntactForBox[layoutOccupied_world_x, layoutOccupied_world_y - Height, layoutOccupied_world_z] = staticLayoutTypeIndex;
-                                }
-                            }
-                        }
-                    }
-
                     foreach (BornPointData enemyBornPoint in staticLayoutData.WorldModuleBornPointGroupData.EnemyBornPoints)
                     {
                         ushort enemyTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Enemy, enemyBornPoint.EnemyType.TypeName);
@@ -260,7 +235,7 @@ public abstract class MapGenerator
                             int z = world_z + enemyGP_rotated.z;
 
                             EntityOccupationData occupationData = ConfigManager.GetEntityOccupationData(enemyTypeIndex);
-                            GridPos actorRotOffset = Actor.ActorRotateWorldGPOffset(occupationData.ActorWidth, staticLayoutOrientation);
+                            GridPos actorRotOffset = Actor.ActorRotateWorldGPOffset(occupationData.ActorWidth, staticLayoutOrientation); // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
                             x -= actorRotOffset.x;
                             z -= actorRotOffset.z;
 
@@ -285,8 +260,17 @@ public abstract class MapGenerator
                                     }
 
                                     TerrainType terrainType = WorldMap_TerrainType[actor_grid_world_x, actor_grid_world_z];
-                                    if (GenerateLayerData.OnlyAllowPutOnTerrain && !GenerateLayerData.AllowPlaceOnTerrainTypeSet.Contains(terrainType)) spaceAvailableForActor = false;
-                                    if (!GenerateLayerData.OnlyAllowPutOnTerrain && GenerateLayerData.ForbidPlaceOnTerrainTypeSet.Contains(terrainType)) spaceAvailableForActor = false;
+                                    if (GenerateLayerData.OnlyAllowPutOnTerrain && !GenerateLayerData.AllowPlaceOnTerrainTypeSet.Contains(terrainType))
+                                    {
+                                        spaceAvailableForActor = false;
+                                        break;
+                                    }
+
+                                    if (!GenerateLayerData.OnlyAllowPutOnTerrain && GenerateLayerData.ForbidPlaceOnTerrainTypeSet.Contains(terrainType))
+                                    {
+                                        spaceAvailableForActor = false;
+                                        break;
+                                    }
                                 }
                                 else
                                 {
@@ -299,9 +283,9 @@ public abstract class MapGenerator
                             {
                                 foreach (GridPos3D gridPos in occupationData.EntityIndicatorGPs_RotatedDict[staticLayoutOrientation])
                                 {
-                                    int actor_grid_world_x = x + gridPos.x + actorRotOffset.x;
+                                    int actor_grid_world_x = x + gridPos.x + actorRotOffset.x; // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
                                     int actor_grid_world_y = y + gridPos.y;
-                                    int actor_grid_world_z = z + gridPos.z + actorRotOffset.z;
+                                    int actor_grid_world_z = z + gridPos.z + actorRotOffset.z; // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
                                     WorldMap_Occupied[actor_grid_world_x, actor_grid_world_y - Height, actor_grid_world_z] = enemyTypeIndex;
                                 }
 
@@ -338,6 +322,46 @@ public abstract class MapGenerator
                                     WorldMap[playerBPWorldGP.x, playerBPWorldGP.y - WorldModule.MODULE_SIZE, playerBPWorldGP.z] = (ushort) ConfigManager.TypeStartIndex.Player;
                                 }
                             }
+                        }
+                    }
+
+                    // 将Layout占领区域标记为Layout已占用，避免其他布局或随机Box插进来
+                    if (staticLayoutLayerData.LayoutIntactForOtherStaticLayout || staticLayoutLayerData.LayoutIntactForOtherBoxes)
+                    {
+                        if (!staticLayoutLayerData.AllowFragment) // 不允许布局破损情况下，需对整个Layout大致占领区域都标记为已占用
+                        {
+                            for (int sl_local_x = staticLayoutData.BoxBounds.x_min; sl_local_x <= staticLayoutData.BoxBounds.x_max; sl_local_x++)
+                            for (int sl_local_y = staticLayoutData.BoxBounds.y_min; sl_local_y <= staticLayoutData.BoxBounds.y_max; sl_local_y++)
+                            for (int sl_local_z = staticLayoutData.BoxBounds.z_min; sl_local_z <= staticLayoutData.BoxBounds.z_max; sl_local_z++)
+                            {
+                                int rot_local_x = sl_local_x;
+                                int rot_local_z = sl_local_z;
+                                for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++)
+                                {
+                                    int temp_x = rot_local_x;
+                                    rot_local_x = rot_local_z;
+                                    rot_local_z = WorldModule.MODULE_SIZE - 1 - temp_x;
+                                }
+
+                                int layoutOccupied_world_x = world_x + rot_local_x;
+                                int layoutOccupied_world_y = world_y + sl_local_y;
+                                int layoutOccupied_world_z = world_z + rot_local_z;
+                                if (layoutOccupied_world_x >= 0 && layoutOccupied_world_x < Width && layoutOccupied_world_y - Height >= 0 && layoutOccupied_world_y - Height < Height && layoutOccupied_world_z >= 0 && layoutOccupied_world_z < Depth)
+                                {
+                                    if (staticLayoutLayerData.LayoutIntactForOtherStaticLayout)
+                                    {
+                                        WorldMap_StaticLayoutOccupied_IntactForStaticLayout[layoutOccupied_world_x, layoutOccupied_world_y - Height, layoutOccupied_world_z] = staticLayoutTypeIndex;
+                                    }
+
+                                    if (staticLayoutLayerData.LayoutIntactForOtherBoxes)
+                                    {
+                                        WorldMap_StaticLayoutOccupied_IntactForBox[layoutOccupied_world_x, layoutOccupied_world_y - Height, layoutOccupied_world_z] = staticLayoutTypeIndex;
+                                    }
+                                }
+                            }
+                        }
+                        else // 允许布局破损情况下，对布局内所有放置成功的Entity及其外扩一格的占领区域标记为Layout已占用
+                        {
                         }
                     }
 
