@@ -7,7 +7,7 @@ using UnityEngine;
 public abstract class GenerateLayerData
 {
     [LabelText("生效")]
-    [PropertyOrder(10)]
+    [PropertyOrder(-10)]
     public bool Enable = true;
 
     [LabelText("是否考虑静态布局的影响")]
@@ -67,7 +67,7 @@ public abstract class GenerateLayerData
     [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.Random)]
     [LabelText("比率：每万格约有多少个")]
     [PropertyOrder(10)]
-    public int CountPer10KGrid = 20;
+    public float CountPer10KGrid = 20;
 
     [LabelText("决定玩家出生点")]
     [PropertyOrder(10)]

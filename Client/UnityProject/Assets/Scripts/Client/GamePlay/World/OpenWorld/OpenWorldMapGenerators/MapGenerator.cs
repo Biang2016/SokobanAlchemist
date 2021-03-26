@@ -62,6 +62,8 @@ public abstract class MapGenerator
 
     public abstract void ApplyToWorldMap();
 
+    private static List<GridPos3D> cached_IntactGPs_World = new List<GridPos3D>(1024); // 静态布局内所有的Y值为0的成功放置的箱子的LocalGP
+
     protected bool TryOverrideToWorldMap(GridPos3D worldGP)
     {
         bool CheckGridInsideWorldRange(GridPos3D _worldGP)
@@ -138,6 +140,7 @@ public abstract class MapGenerator
 
                 if (allowPut) // 对于允许布局破损的情况，默认是允许放置的，但能够成功放置多少Entity就要依据实际情况了
                 {
+                    cached_IntactGPs_World.Clear();
                     for (int sl_local_x = 0; sl_local_x < WorldModule.MODULE_SIZE; sl_local_x++)
                     for (int sl_local_y = 0; sl_local_y < WorldModule.MODULE_SIZE; sl_local_y++)
                     for (int sl_local_z = 0; sl_local_z < WorldModule.MODULE_SIZE; sl_local_z++)
@@ -198,8 +201,27 @@ public abstract class MapGenerator
                             {
                                 foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                                 {
-                                    GridPos3D box_grid_world = entity_world + gridPos;
-                                    WorldMap_Occupied[box_grid_world.x, box_grid_world.y - Height, box_grid_world.z] = entityTypeIndex;
+                                    GridPos3D entity_grid_world = entity_world + gridPos;
+                                    WorldMap_Occupied[entity_grid_world.x, entity_grid_world.y - Height, entity_grid_world.z] = entityTypeIndex;
+
+                                    // 将Layout占领区域标记为Layout已占用，避免其他布局或随机Box插进来
+                                    // 允许布局破损情况下，对布局内所有放置成功的Entity及其外扩一格的占领区域标记为Layout已占用
+                                    if (staticLayoutLayerData.LayoutIntactForOtherStaticLayout || staticLayoutLayerData.LayoutIntactForOtherBoxes)
+                                    {
+                                        if (staticLayoutLayerData.AllowFragment)
+                                        {
+                                            for (int delta_x = -1; delta_x <= 1; delta_x++)
+                                            for (int delta_y = -1; delta_y <= 1; delta_y++)
+                                            for (int delta_z = -1; delta_z <= 1; delta_z++)
+                                            {
+                                                GridPos3D entity_grid_around_world = entity_grid_world + new GridPos3D(delta_x, delta_y, delta_z);
+                                                if (CheckGridInsideWorldRange(entity_grid_around_world))
+                                                {
+                                                    cached_IntactGPs_World.Add(entity_grid_around_world);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
 
                                 WorldMap[entity_world.x, entity_world.y - Height, entity_world.z] = entityTypeIndex;
@@ -268,6 +290,25 @@ public abstract class MapGenerator
                                 {
                                     GridPos3D entity_grid_world = entity_world + gridPos;
                                     WorldMap_Occupied[entity_grid_world.x, entity_grid_world.y - Height, entity_grid_world.z] = entityTypeIndex;
+
+                                    // 将Layout占领区域标记为Layout已占用，避免其他布局或随机Box插进来
+                                    // 允许布局破损情况下，对布局内所有放置成功的Entity及其外扩一格的占领区域标记为Layout已占用
+                                    if (staticLayoutLayerData.LayoutIntactForOtherStaticLayout || staticLayoutLayerData.LayoutIntactForOtherBoxes)
+                                    {
+                                        if (staticLayoutLayerData.AllowFragment)
+                                        {
+                                            for (int delta_x = -1; delta_x <= 1; delta_x++)
+                                            for (int delta_y = -1; delta_y <= 1; delta_y++)
+                                            for (int delta_z = -1; delta_z <= 1; delta_z++)
+                                            {
+                                                GridPos3D entity_grid_around_world = entity_grid_world + new GridPos3D(delta_x, delta_y, delta_z);
+                                                if (CheckGridInsideWorldRange(entity_grid_around_world))
+                                                {
+                                                    cached_IntactGPs_World.Add(entity_grid_around_world);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
 
                                 GridPos actorRotOffset = Actor.ActorRotateWorldGPOffset(occupationData.ActorWidth, staticLayoutOrientation); // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
@@ -292,7 +333,7 @@ public abstract class MapGenerator
 
                                 GridPos3D entity_world = worldGP + rot_local;
                                 GridPos3D entity_local = new GridPos3D(entity_world.x % WorldModule.MODULE_SIZE, 0, entity_world.z % WorldModule.MODULE_SIZE);
-                                BornPointData bp = new BornPointData {IsPlayer = true, EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy}, BornPointAlias = OpenWorld.PLAYER_DEFAULT_BP, LocalGP = entity_local, SpawnLevelEventAlias = "", WorldGP = entity_world };
+                                BornPointData bp = new BornPointData {IsPlayer = true, EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy}, BornPointAlias = OpenWorld.PLAYER_DEFAULT_BP, LocalGP = entity_local, SpawnLevelEventAlias = "", WorldGP = entity_world};
                                 bp.InitGUID();
                                 m_OpenWorld.WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP_OpenWorld(bp);
                                 m_OpenWorld.InitialPlayerBP = entity_world;
@@ -335,7 +376,21 @@ public abstract class MapGenerator
                         }
                         else // 允许布局破损情况下，对布局内所有放置成功的Entity及其外扩一格的占领区域标记为Layout已占用
                         {
+                            foreach (GridPos3D intactGP_world in cached_IntactGPs_World)
+                            {
+                                if (CheckGridInsideWorldRange(intactGP_world))
+                                {
+                                    if (staticLayoutLayerData.LayoutIntactForOtherStaticLayout)
+                                    {
+                                        WorldMap_StaticLayoutOccupied_IntactForStaticLayout[intactGP_world.x, intactGP_world.y - Height, intactGP_world.z] = staticLayoutTypeIndex;
+                                    }
 
+                                    if (staticLayoutLayerData.LayoutIntactForOtherBoxes)
+                                    {
+                                        WorldMap_StaticLayoutOccupied_IntactForBox[intactGP_world.x, intactGP_world.y - Height, intactGP_world.z] = staticLayoutTypeIndex;
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -409,6 +464,7 @@ public abstract class MapGenerator
             }
         }
 
+        cached_IntactGPs_World.Clear();
         return overrideSuc;
     }
 }

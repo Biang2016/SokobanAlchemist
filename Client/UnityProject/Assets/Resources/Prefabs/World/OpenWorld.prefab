@@ -55,7 +55,7 @@ MonoBehaviour:
   GivenSeed: 1396197886
   StartMicroWorldTypeName:
     TypeDefineType: 6
-    TypeGUID: 
+    TypeGUID: (9df819f3-6aa6-48cf-937d-c1129a079def)
   m_GenerateTerrainData:
     ProcessingPassList:
     - id: 0
@@ -111,14 +111,14 @@ MonoBehaviour:
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
-    CountPer10KGrid: 1
+    CountPer10KGrid: 0.2
     DeterminePlayerBP: 0
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (776f7c31-418b-493e-a6e4-58b565c4d89e)
     AllowFragment: 1
     LayoutIntactForOtherStaticLayout: 0
-    LayoutIntactForOtherBoxes: 0
+    LayoutIntactForOtherBoxes: 1
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
@@ -136,7 +136,7 @@ MonoBehaviour:
       TypeGUID: (51f0450e-5177-4bef-a394-9017e13a76b2)
     AllowFragment: 1
     LayoutIntactForOtherStaticLayout: 0
-    LayoutIntactForOtherBoxes: 0
+    LayoutIntactForOtherBoxes: 1
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
@@ -154,7 +154,7 @@ MonoBehaviour:
       TypeGUID: (b19d18fc-02bd-4106-9849-7d3bd1100f2e)
     AllowFragment: 1
     LayoutIntactForOtherStaticLayout: 0
-    LayoutIntactForOtherBoxes: 0
+    LayoutIntactForOtherBoxes: 1
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
@@ -165,14 +165,14 @@ MonoBehaviour:
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
-    CountPer10KGrid: 1
+    CountPer10KGrid: 0.2
     DeterminePlayerBP: 0
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (ca83b903-d4a2-4eea-9ecd-a1d5e9be4bae)
     AllowFragment: 1
     LayoutIntactForOtherStaticLayout: 0
-    LayoutIntactForOtherBoxes: 0
+    LayoutIntactForOtherBoxes: 1
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
@@ -183,7 +183,7 @@ MonoBehaviour:
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
-    CountPer10KGrid: 15
+    CountPer10KGrid: 50
     DeterminePlayerBP: 0
     StaticLayoutTypeName:
       TypeDefineType: 5
@@ -201,14 +201,14 @@ MonoBehaviour:
     m_GenerateAlgorithm: 2
     CertainNumber: 0
     Count: 1
-    CountPer10KGrid: 10
+    CountPer10KGrid: 0.5
     DeterminePlayerBP: 0
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (e6408bf5-bcda-4d2f-94c8-588b7fd6b998)
     AllowFragment: 1
     LayoutIntactForOtherStaticLayout: 0
-    LayoutIntactForOtherBoxes: 0
+    LayoutIntactForOtherBoxes: 1
   - Enable: 1
     ConsiderStaticLayout: 0
     AllowReplacedBoxTypeNames: []
@@ -261,7 +261,7 @@ MonoBehaviour:
     BoxTypeName:
       TypeDefineType: 0
       TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
-    FillPercent: 55
+    FillPercent: 65
     CaveConnectPercent: 50
     SmoothTimes: 5
     SmoothTimes_GenerateWallInOpenSpace: 0
@@ -484,9 +484,9 @@ MonoBehaviour:
       data:
         Enable: 1
         ControlFillPercentWithPerlinNoise: 1
-        PerlinNoiseThreshold: 0.65
+        PerlinNoiseThreshold: 0.7
         PerlinNoiseScale: 0.05125647
-        FillPercent: 50
+        FillPercent: 40
         TerrainType: 2
         OnlyOverrideSomeTerrain: 0
         OverrideTerrainType: 0
@@ -542,7 +542,7 @@ MonoBehaviour:
       data:
         Enable: 1
         ControlFillPercentWithPerlinNoise: 1
-        PerlinNoiseThreshold: 0.63
+        PerlinNoiseThreshold: 0.7
         PerlinNoiseScale: 0.04373
         FillPercent: 40
         TerrainType: 3
@@ -564,5 +564,5 @@ MonoBehaviour:
           SelfTerrainType: 3
           NeighborTerrainType: 3
           Operator: 0
-          Threshold: 3
+          Threshold: 2
           ChangeTerrainTypeTo: 0

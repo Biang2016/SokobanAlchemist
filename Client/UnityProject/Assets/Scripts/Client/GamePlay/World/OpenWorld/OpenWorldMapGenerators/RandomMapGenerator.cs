@@ -9,8 +9,8 @@ public sealed class RandomMapGenerator : MapGenerator
 
     public override void ApplyToWorldMap()
     {
-        if (GenerateLayerData.m_GenerateAlgorithm == GenerateAlgorithm.Random && !GenerateLayerData.CertainNumber && GenerateLayerData.CountPer10KGrid == 0) return; // 避免大量运算
-        if (GenerateLayerData.m_GenerateAlgorithm == GenerateAlgorithm.Random && GenerateLayerData.CertainNumber && GenerateLayerData.Count == 0) return; // 避免大量运算
+        if (GenerateLayerData.m_GenerateAlgorithm == GenerateAlgorithm.Random && !GenerateLayerData.CertainNumber && GenerateLayerData.CountPer10KGrid <= 0) return; // 避免大量运算
+        if (GenerateLayerData.m_GenerateAlgorithm == GenerateAlgorithm.Random && GenerateLayerData.CertainNumber && GenerateLayerData.Count <= 0) return; // 避免大量运算
 
         if (GenerateLayerData.CertainNumber)
         {
@@ -48,7 +48,7 @@ public sealed class RandomMapGenerator : MapGenerator
                 for (int local_x = 0; local_x < WorldModule.MODULE_SIZE; local_x++)
                 for (int local_z = 0; local_z < WorldModule.MODULE_SIZE; local_z++)
                 {
-                    bool genSuc = SRandom.Range(0, 10000) < GenerateLayerData.CountPer10KGrid;
+                    bool genSuc = (SRandom.Range(0, 10000000) / 1000f) < GenerateLayerData.CountPer10KGrid;
                     if (genSuc)
                     {
                         int world_x = module_x * WorldModule.MODULE_SIZE + local_x;
