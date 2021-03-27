@@ -6,6 +6,46 @@ using UnityEngine;
 
 public static class ActorPathFinding
 {
+    #region 占位缓存，加速寻路搜索
+
+    private static byte[,,] SpaceAvailableForActorHeight;
+
+    public static void InitializeSpaceAvailableForActorHeight(int worldGridSize_x, int worldGridSize_y, int worldGridSize_z)
+    {
+        SpaceAvailableForActorHeight = new byte[worldGridSize_x, worldGridSize_y, worldGridSize_z];
+    }
+
+    public static bool GetSpaceAvailableForActorHeight(GridPos3D worldGP, int actorHeight)
+    {
+        if (worldGP.x < 0 || worldGP.x >= SpaceAvailableForActorHeight.GetLength(0) ||
+            worldGP.y < 0 || worldGP.y >= SpaceAvailableForActorHeight.GetLength(1) ||
+            worldGP.z < 0 || worldGP.z >= SpaceAvailableForActorHeight.GetLength(2)) return false;
+        byte curValue = SpaceAvailableForActorHeight[worldGP.x, worldGP.y, worldGP.z];
+        byte compare = (byte) (1 << (actorHeight - 1));
+        return (curValue & compare) == compare;
+    }
+
+    public static void SetSpaceAvailableForActorHeight(GridPos3D worldGP, int actorHeight, bool available)
+    {
+        if (worldGP.x < 0 || worldGP.x >= SpaceAvailableForActorHeight.GetLength(0) ||
+            worldGP.y < 0 || worldGP.y >= SpaceAvailableForActorHeight.GetLength(1) ||
+            worldGP.z < 0 || worldGP.z >= SpaceAvailableForActorHeight.GetLength(2)) return;
+        byte curValue = SpaceAvailableForActorHeight[worldGP.x, worldGP.y, worldGP.z];
+        byte resValue = 0;
+        if (available)
+        {
+            resValue = (byte) (curValue | (1 << (actorHeight - 1)));
+        }
+        else
+        {
+            resValue = (byte) (curValue & ~(1 << (actorHeight - 1)));
+        }
+
+        SpaceAvailableForActorHeight[worldGP.x, worldGP.y, worldGP.z] = resValue;
+    }
+
+    #endregion
+
     public class Node : IClassPoolObject<Node>
     {
         public int PoolIndex;

@@ -232,6 +232,7 @@ public class Actor : Entity
 
     #region Occupation
 
+    public const int ACTOR_MAX_HEIGHT = 4;
     public int ActorWidth => EntityIndicatorHelper.EntityOccupationData.ActorWidth;
     public int ActorHeight => EntityIndicatorHelper.EntityOccupationData.ActorHeight;
 

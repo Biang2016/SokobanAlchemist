@@ -62,10 +62,10 @@ public class WorldModule : PoolObject
         set
         {
             BoxMatrix[x, y, z] = value;
-
+            GridPos3D localGP = new GridPos3D(x, y, z);
+            World.RefreshActorPathFindingSpaceAvailableCache(LocalGPToWorldGP(localGP), value);
             if (WorldModuleData.Modification != null && WorldModuleData.Modification.Enable)
             {
-                GridPos3D localGP = new GridPos3D(x, y, z);
                 if (!isCore) return; // 异形箱子会对Matrix每一格设置一个引用，因此需要排除掉非核心格
                 ushort boxTypeIndex = 0;
                 GridPosR.Orientation boxOrientation = orientation;
@@ -137,6 +137,7 @@ public class WorldModule : PoolObject
                     Box box = BoxMatrix[x, y, z];
                     if (box != null)
                     {
+                        GridPos3D worldGP = box.WorldGP;
                         if (box.WorldGP == LocalGPToWorldGP(new GridPos3D(x, y, z))) // 不是核心格所在的模组无权卸载该Box
                         {
                             foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
@@ -158,10 +159,13 @@ public class WorldModule : PoolObject
                                 count = 0;
                                 yield return null;
                             }
-                        }
-                    }
 
-                    BoxMatrix[x, y, z] = null;
+                            World.RefreshActorPathFindingSpaceAvailableCache(worldGP, null);
+                        }
+
+                        BoxMatrix[x, y, z] = null;
+                        World.RefreshActorPathFindingSpaceAvailableCache(worldGP, null);
+                    }
                 }
             }
         }
@@ -397,6 +401,7 @@ public class WorldModule : PoolObject
                         if (isStartedBoxes)
                         {
                             BoxMatrix[gridPos.x, gridPos.y, gridPos.z] = box;
+                            World.RefreshActorPathFindingSpaceAvailableCache(LocalGPToWorldGP(gridPos), box);
                         }
                         else
                         {

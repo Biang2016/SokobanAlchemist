@@ -77,6 +77,8 @@ public class World : PoolObject
 
     public virtual IEnumerator Initialize(WorldData worldData)
     {
+        ActorPathFinding.InitializeSpaceAvailableForActorHeight(WorldModuleMatrix.GetLength(0) * WorldModule.MODULE_SIZE, WorldModuleMatrix.GetLength(1) * WorldModule.MODULE_SIZE, WorldModuleMatrix.GetLength(2) * WorldModule.MODULE_SIZE);
+
         WorldGUID = Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
         WorldData = worldData;
         for (int x = 0; x < WorldData.ModuleMatrix.GetLength(0); x++)
@@ -258,6 +260,134 @@ public class World : PoolObject
     }
 
     #region Utils
+
+    private bool[] cached_occupyBeneath = new bool[Actor.ACTOR_MAX_HEIGHT];
+    private bool[] cached_occupyAbove = new bool[Actor.ACTOR_MAX_HEIGHT];
+
+    public void RefreshActorPathFindingSpaceAvailableCache(GridPos3D worldGP, Box newBox)
+    {
+        bool thisOccupy = newBox != null;
+        cached_occupyBeneath = new bool[Actor.ACTOR_MAX_HEIGHT];
+        for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++)
+        {
+            cached_occupyBeneath[i - 1] = BoxEmptyOrPassable(worldGP + GridPos3D.Down * i);
+        }
+
+        cached_occupyAbove = new bool[Actor.ACTOR_MAX_HEIGHT];
+        for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++)
+        {
+            cached_occupyAbove[i - 1] = BoxEmptyOrPassable(worldGP + GridPos3D.Up * i);
+        }
+
+        if (thisOccupy)
+        {
+            // 上方检查
+            for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++)
+            {
+                bool aboveAvailable = true;
+                for (int j = 1; j <= i; j++)
+                {
+                    if (cached_occupyAbove[j - 1])
+                    {
+                        aboveAvailable = false;
+                        break;
+                    }
+                }
+
+                ActorPathFinding.SetSpaceAvailableForActorHeight(worldGP + GridPos3D.Up, i, aboveAvailable); // 上方一个格子有了地板，重新检查各种高度Actor能否站立
+            }
+
+            // 自己检查
+            for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++)
+            {
+                ActorPathFinding.SetSpaceAvailableForActorHeight(worldGP, i, false); // 自己设为false
+            }
+
+            // 下方检查
+            for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT - 1; i++) // 下方若干个格子
+            {
+                for (int k = i + 1; k <= Actor.ACTOR_MAX_HEIGHT; k++) // 超过一定高度的Actor就记为false了
+                {
+                    ActorPathFinding.SetSpaceAvailableForActorHeight(worldGP + GridPos3D.Down * i, k, false);
+                }
+            }
+        }
+        else
+        {
+            // 上方检查
+            for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++) // 上方一个格子没了地板，无法站Actor
+            {
+                ActorPathFinding.SetSpaceAvailableForActorHeight(worldGP + GridPos3D.Up, i, false);
+            }
+
+            // 自己检查
+            if (cached_occupyBeneath[0])
+            {
+                for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++)
+                {
+                    bool thisAvailable = true;
+                    for (int j = 1; j <= i; j++)
+                    {
+                        if (cached_occupyAbove[i - 1])
+                        {
+                            thisAvailable = false;
+                            break;
+                        }
+                    }
+
+                    ActorPathFinding.SetSpaceAvailableForActorHeight(worldGP, i, thisAvailable); // 有了地板，重新检查各种高度Actor能否站立
+                }
+            }
+            else //下方无地板，直接全部标为False
+            {
+                for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++)
+                {
+                    ActorPathFinding.SetSpaceAvailableForActorHeight(worldGP, i, false);
+                }
+            }
+
+            // 下方检查
+            for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT - 1; i++)
+            {
+                bool hasFloor = cached_occupyBeneath[i];
+                if (!hasFloor) continue; // 没有Floor说明原来就是False
+                if (cached_occupyBeneath[i - 1]) continue; // 自己就是Occupy的说明原来就是False
+                for (int k = i + 1; k <= Actor.ACTOR_MAX_HEIGHT; k++) // 超过一定高度的Actor就记为false了
+                {
+                    bool beneathAvailable = true;
+                    for (int j = 0; j < i - 1; j++)
+                    {
+                        if (cached_occupyBeneath[j])
+                        {
+                            beneathAvailable = false;
+                            break;
+                        }
+                    }
+
+                    if (beneathAvailable)
+                    {
+                        for (int j = 0; j < (k - i) - 1; j++)
+                        {
+                            if (cached_occupyAbove[j])
+                            {
+                                beneathAvailable = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    ActorPathFinding.SetSpaceAvailableForActorHeight(worldGP + GridPos3D.Down * i, k, beneathAvailable);
+                }
+            }
+        }
+    }
+
+    private bool BoxEmptyOrPassable(GridPos3D worldGP)
+    {
+        Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(worldGP, out WorldModule _, out GridPos3D _, false);
+        if (box != null && !box.Passable) return false;
+        return true;
+    }
 
     public Box GetBoxByGridPosition(GridPos3D gp, out WorldModule module, out GridPos3D localGP, bool ignoreUnaccessibleModule = true)
     {
