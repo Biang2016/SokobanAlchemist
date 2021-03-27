@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using BiangLibrary;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
@@ -244,31 +245,36 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     }
 
     private List<Actor> cachedSearchActorList = new List<Actor>(32);
+    private Collider[] cachedColliders = new Collider[128];
 
     public Actor SearchNearestActor(Vector3 center, Camp executeCamp, float radius, RelativeCamp effectiveOnRelativeCamp, string actorTypeName = "")
     {
         float minDist = float.MaxValue;
         Actor nearestActor = null;
         int layerMask = LayerManager.Instance.GetTargetEntityLayerMask(executeCamp, effectiveOnRelativeCamp);
-        Collider[] colliders = Physics.OverlapSphere(center, radius, layerMask);
-        foreach (Collider collider in colliders)
+        int count = Physics.OverlapSphereNonAlloc(center, radius, cachedColliders, layerMask);
+        for (int i = 0; i < count; i++)
         {
-            Actor actor = collider.gameObject.GetComponentInParent<Actor>();
-            if (actor.IsNotNullAndAlive())
+            Collider collider = cachedColliders[count];
+            if (collider != null)
             {
-                if (!string.IsNullOrWhiteSpace(actorTypeName))
+                Actor actor = collider.gameObject.GetComponentInParent<Actor>();
+                if (actor.IsNotNullAndAlive())
                 {
-                    if (actor.ActorType != actorTypeName)
+                    if (!string.IsNullOrWhiteSpace(actorTypeName))
                     {
-                        continue;
+                        if (actor.ActorType != actorTypeName)
+                        {
+                            continue;
+                        }
                     }
-                }
 
-                float dist = (actor.EntityBaseCenter - center).magnitude;
-                if (minDist > dist)
-                {
-                    minDist = dist;
-                    nearestActor = actor;
+                    float dist = (actor.EntityBaseCenter - center).magnitude;
+                    if (minDist > dist)
+                    {
+                        minDist = dist;
+                        nearestActor = actor;
+                    }
                 }
             }
         }

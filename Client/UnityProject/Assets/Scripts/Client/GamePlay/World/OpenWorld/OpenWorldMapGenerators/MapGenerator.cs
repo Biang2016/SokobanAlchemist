@@ -66,9 +66,9 @@ public abstract class MapGenerator
 
     protected bool TryOverrideToWorldMap(GridPos3D worldGP)
     {
-        bool CheckGridInsideWorldRange(GridPos3D _worldGP)
+        bool CheckGridInsideWorldRange(GridPos3D _worldGP, int borderThickness)
         {
-            return _worldGP.x > 0 && _worldGP.x < Width - 1 && _worldGP.y - Height >= 0 && _worldGP.y - Height < Height && _worldGP.z > 0 && _worldGP.z < Depth - 1;
+            return _worldGP.x >= borderThickness && _worldGP.x < Width - borderThickness && _worldGP.y - Height >= 0 && _worldGP.y - Height < Height && _worldGP.z >= borderThickness && _worldGP.z < Depth - borderThickness;
         }
 
         bool overrideSuc = false;
@@ -118,7 +118,7 @@ public abstract class MapGenerator
                                     foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                                     {
                                         GridPos3D box_grid_world = box_world + gridPos;
-                                        if (CheckGridInsideWorldRange(box_grid_world))
+                                        if (CheckGridInsideWorldRange(box_grid_world, 1))
                                         {
                                             if (WorldMap_Occupied[box_grid_world.x, box_grid_world.y - Height, box_grid_world.z] != 0)
                                             {
@@ -163,7 +163,7 @@ public abstract class MapGenerator
                             foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                             {
                                 GridPos3D entity_grid_world = entity_world + gridPos;
-                                if (CheckGridInsideWorldRange(entity_grid_world))
+                                if (CheckGridInsideWorldRange(entity_grid_world, 1))
                                 {
                                     if (WorldMap_StaticLayoutOccupied_IntactForStaticLayout[entity_grid_world.x, entity_grid_world.y - Height, entity_grid_world.z] != 0)
                                     {
@@ -215,7 +215,7 @@ public abstract class MapGenerator
                                             for (int delta_z = -1; delta_z <= 1; delta_z++)
                                             {
                                                 GridPos3D entity_grid_around_world = entity_grid_world + new GridPos3D(delta_x, delta_y, delta_z);
-                                                if (CheckGridInsideWorldRange(entity_grid_around_world))
+                                                if (CheckGridInsideWorldRange(entity_grid_around_world, 1))
                                                 {
                                                     cached_IntactGPs_World.Add(entity_grid_around_world);
                                                 }
@@ -250,7 +250,7 @@ public abstract class MapGenerator
                             foreach (GridPos3D gridPos in occupationData.EntityIndicatorGPs_RotatedDict[staticLayoutOrientation])
                             {
                                 GridPos3D entity_grid_world = entity_world + gridPos;
-                                if (CheckGridInsideWorldRange(entity_grid_world))
+                                if (CheckGridInsideWorldRange(entity_grid_world, 1))
                                 {
                                     if (WorldMap_StaticLayoutOccupied_IntactForStaticLayout[entity_grid_world.x, entity_grid_world.y - Height, entity_grid_world.z] != 0)
                                     {
@@ -302,7 +302,7 @@ public abstract class MapGenerator
                                             for (int delta_z = -1; delta_z <= 1; delta_z++)
                                             {
                                                 GridPos3D entity_grid_around_world = entity_grid_world + new GridPos3D(delta_x, delta_y, delta_z);
-                                                if (CheckGridInsideWorldRange(entity_grid_around_world))
+                                                if (CheckGridInsideWorldRange(entity_grid_around_world, 1))
                                                 {
                                                     cached_IntactGPs_World.Add(entity_grid_around_world);
                                                 }
@@ -318,7 +318,7 @@ public abstract class MapGenerator
                         }
                     }
 
-                    if (GenerateLayerData.DeterminePlayerBP && m_OpenWorld.InitialPlayerBP == GridPos3D.Zero)
+                    if (staticLayoutLayerData.DeterminePlayerBP && m_OpenWorld.InitialPlayerBP == GridPos3D.Zero)
                     {
                         if (staticLayoutData.WorldModuleBornPointGroupData.PlayerBornPoints.Count > 0)
                         {
@@ -360,7 +360,7 @@ public abstract class MapGenerator
                                 }
 
                                 GridPos3D layoutOccupied_world = worldGP + rot_local;
-                                if (CheckGridInsideWorldRange(layoutOccupied_world))
+                                if (CheckGridInsideWorldRange(layoutOccupied_world, 1))
                                 {
                                     if (staticLayoutLayerData.LayoutIntactForOtherStaticLayout)
                                     {
@@ -378,7 +378,7 @@ public abstract class MapGenerator
                         {
                             foreach (GridPos3D intactGP_world in cached_IntactGPs_World)
                             {
-                                if (CheckGridInsideWorldRange(intactGP_world))
+                                if (CheckGridInsideWorldRange(intactGP_world, 1))
                                 {
                                     if (staticLayoutLayerData.LayoutIntactForOtherStaticLayout)
                                     {
@@ -410,7 +410,7 @@ public abstract class MapGenerator
                 {
                     if (!spaceAvailable) break;
                     GridPos3D box_grid_world = worldGP + gridPos;
-                    if (CheckGridInsideWorldRange(box_grid_world))
+                    if (CheckGridInsideWorldRange(box_grid_world, 0))
                     {
                         if (WorldMap_StaticLayoutOccupied_IntactForBox[box_grid_world.x, box_grid_world.y - Height, box_grid_world.z] != 0)
                         {

@@ -6,13 +6,17 @@ using UnityEngine;
 [Serializable]
 public abstract class GenerateLayerData
 {
+    public abstract string Description { get; }
+
     [LabelText("生效")]
     [PropertyOrder(-10)]
     public bool Enable = true;
 
-    [LabelText("是否考虑静态布局的影响")]
-    [PropertyOrder(10)]
-    public bool ConsiderStaticLayout = false;
+    [LabelText("生成算法")]
+    [PropertyOrder(-10)]
+    public GenerateAlgorithm m_GenerateAlgorithm = GenerateAlgorithm.CellularAutomata;
+
+    #region 白名单黑名单
 
     [SerializeField]
     [LabelText("允许覆盖的箱子类型")]
@@ -49,12 +53,16 @@ public abstract class GenerateLayerData
     [HideInInspector]
     public HashSet<TerrainType> ForbidPlaceOnTerrainTypeSet = new HashSet<TerrainType>();
 
-    [LabelText("生成算法")]
+    #endregion
+
+    [LabelText("是否考虑静态布局的影响")]
     [PropertyOrder(10)]
-    public GenerateAlgorithm m_GenerateAlgorithm = GenerateAlgorithm.CellularAutomata;
+    [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
+    public bool ConsiderStaticLayout = false;
 
     [LabelText("数量确定")]
     [PropertyOrder(10)]
+    [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.Random)]
     public bool CertainNumber = false;
 
     [ShowIf("CertainNumber")]
@@ -68,10 +76,6 @@ public abstract class GenerateLayerData
     [LabelText("比率：每万格约有多少个")]
     [PropertyOrder(10)]
     public float CountPer10KGrid = 20;
-
-    [LabelText("决定玩家出生点")]
-    [PropertyOrder(10)]
-    public bool DeterminePlayerBP = false;
 
     public void Init()
     {
@@ -107,6 +111,11 @@ public class GenerateStaticLayoutLayerData : GenerateLayerData
 
     [LabelText("保证布局内不受随机Box植入")]
     public bool LayoutIntactForOtherBoxes = false;
+
+    [LabelText("决定玩家出生点")]
+    public bool DeterminePlayerBP = false;
+
+    public override string Description => $"{StaticLayoutTypeName}\t\t{m_GenerateAlgorithm}";
 }
 
 [Serializable]
@@ -130,6 +139,8 @@ public class GenerateBoxLayerData : GenerateLayerData
     [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
     [LabelText("空地生墙迭代次数")]
     public int SmoothTimes_GenerateWallInOpenSpace = 3;
+
+    public override string Description => $"{BoxTypeName}\t\t{m_GenerateAlgorithm}";
 }
 
 [Serializable]
@@ -137,6 +148,8 @@ public class GenerateActorLayerData : GenerateLayerData
 {
     [LabelText("@\"Actor类型\t\"+ActorTypeName")]
     public TypeSelectHelper ActorTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy};
+
+    public override string Description => $"{ActorTypeName}\t\t{m_GenerateAlgorithm}";
 }
 
 public enum GenerateAlgorithm
@@ -144,4 +157,5 @@ public enum GenerateAlgorithm
     CellularAutomata,
     PerlinNoise,
     Random,
+    Around,
 }

@@ -9,8 +9,8 @@ public sealed class RandomMapGenerator : MapGenerator
 
     public override void ApplyToWorldMap()
     {
-        if (GenerateLayerData.m_GenerateAlgorithm == GenerateAlgorithm.Random && !GenerateLayerData.CertainNumber && GenerateLayerData.CountPer10KGrid <= 0) return; // 避免大量运算
-        if (GenerateLayerData.m_GenerateAlgorithm == GenerateAlgorithm.Random && GenerateLayerData.CertainNumber && GenerateLayerData.Count <= 0) return; // 避免大量运算
+        if (!GenerateLayerData.CertainNumber && GenerateLayerData.CountPer10KGrid <= 0) return; // 避免大量运算
+        if (GenerateLayerData.CertainNumber && GenerateLayerData.Count <= 0) return; // 避免大量运算
 
         if (GenerateLayerData.CertainNumber)
         {

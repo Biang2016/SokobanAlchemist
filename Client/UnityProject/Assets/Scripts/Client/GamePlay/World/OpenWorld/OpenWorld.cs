@@ -46,17 +46,17 @@ public class OpenWorld : World
 
     [FoldoutGroup("放置物")]
     [LabelText("静态布局层级配置")]
-    [ListDrawerSettings(ListElementLabelName = "StaticLayoutTypeName")]
+    [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<GenerateStaticLayoutLayerData> GenerateStaticLayoutLayerDataList = new List<GenerateStaticLayoutLayerData>();
 
     [FoldoutGroup("放置物")]
     [LabelText("Box层级配置")]
-    [ListDrawerSettings(ListElementLabelName = "BoxTypeName")]
+    [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<GenerateBoxLayerData> GenerateBoxLayerDataList = new List<GenerateBoxLayerData>();
 
     [FoldoutGroup("放置物")]
     [LabelText("Actor层级配置")]
-    [ListDrawerSettings(ListElementLabelName = "ActorTypeName")]
+    [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<GenerateActorLayerData> GenerateActorLayerDataList = new List<GenerateActorLayerData>();
 
     #endregion
@@ -183,6 +183,11 @@ public class OpenWorld : World
                 case GenerateAlgorithm.Random:
                 {
                     generator = new RandomMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
+                    break;
+                }
+                case GenerateAlgorithm.Around:
+                {
+                    generator = new AroundMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
                     break;
                 }
             }
