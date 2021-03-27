@@ -3,6 +3,7 @@ using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.ObjectPool;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public static class ActorPathFinding
 {
@@ -112,7 +113,9 @@ public static class ActorPathFinding
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori_PF.ConvertPathFindingNodeGPToWorldPosition(actorWidth).ToGridPos3D(), out WorldModule oriModule, out GridPos3D _);
         if (oriModule.IsNotNullAndAvailable())
         {
+            Profiler.BeginSample("UnionFindNodes");
             List<GridPos3D> validNodes = UnionFindNodes(ori_PF, actorPos, rangeRadius, actorWidth, actorHeight, exceptActorGUID);
+            Profiler.EndSample();
             if (validNodes.Count == 0) return false;
             destination_PF = CommonUtils.GetRandomFromList(validNodes);
             return true;
@@ -394,7 +397,18 @@ public static class ActorPathFinding
     /// <returns></returns>
     public static bool CheckSpaceAvailableForActorOccupation(GridPos3D center_PF, Vector3 actorPos, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
-        bool isBoxBeneath = false;
+        Profiler.BeginSample("AISA");
+        for (int occupied_x = 0; occupied_x < actorWidth; occupied_x++)
+        for (int occupied_z = 0; occupied_z < actorWidth; occupied_z++)
+        {
+            GridPos3D gridPos = center_PF + new GridPos3D(occupied_x, 0, occupied_z);
+            if (!GetSpaceAvailableForActorHeight(gridPos, actorHeight))
+            {
+                Profiler.EndSample();
+                return false;
+            }
+        }
+
         for (int occupied_x = 0; occupied_x < actorWidth; occupied_x++)
         for (int occupied_y = 0; occupied_y < actorHeight; occupied_y++)
         for (int occupied_z = 0; occupied_z < actorWidth; occupied_z++)
@@ -408,23 +422,28 @@ public static class ActorPathFinding
                 if ((enemy.transform.position - actorPos).magnitude > 2f * (enemy.ActorWidth + actorWidth)) continue; // 太远的敌人略过不处理，减少计算量
                 foreach (GridPos3D offset in enemy.GetEntityOccupationGPs_Rotated())
                 {
-                    if (enemy.WorldGP + offset == gridPos) return false;
+                    if (enemy.WorldGP + offset == gridPos)
+                    {
+                        Profiler.EndSample();
+                        return false;
+                    }
                 }
             }
 
-            if (BattleManager.Instance.Player1.GUID != exceptActorGUID && BattleManager.Instance.Player1.WorldGP == gridPos) return false;
-            if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.GUID != exceptActorGUID && BattleManager.Instance.Player2.WorldGP == gridPos) return false;
-            Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos, out WorldModule module, out GridPos3D _, false);
-            if (!module.IsNotNullAndAvailable()) return false;
-            if (box != null && !box.Passable) return false;
-            if (occupied_y == 0)
+            if (BattleManager.Instance.Player1.GUID != exceptActorGUID && BattleManager.Instance.Player1.WorldGP == gridPos)
             {
-                Box box_beneath = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos + GridPos3D.Down, out WorldModule _, out GridPos3D _, false);
-                if (box_beneath != null && !box_beneath.Passable) isBoxBeneath = true; // 下方要至少要有一格有支撑箱子
+                Profiler.EndSample();
+                return false;
+            }
+
+            if (BattleManager.Instance.Player2 != null && BattleManager.Instance.Player2.GUID != exceptActorGUID && BattleManager.Instance.Player2.WorldGP == gridPos)
+            {
+                Profiler.EndSample();
+                return false;
             }
         }
 
-        if (!isBoxBeneath) return false;
+        Profiler.EndSample();
         return true;
     }
 

@@ -7,6 +7,7 @@ using NodeCanvas.BehaviourTrees;
 using NodeCanvas.Framework;
 using ParadoxNotion.Design;
 using UnityEngine;
+using UnityEngine.Profiling;
 using WaitUntil = FlowCanvas.Nodes.WaitUntil;
 
 public static class ActorAIAtoms
@@ -156,7 +157,9 @@ public static class ActorAIAtoms
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
             if (Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity.GetGridDistanceTo(Actor) > GuardingRange.value) return false;
+            Profiler.BeginSample("FindPath");
             bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity.EntityBaseCenter.ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), Actor.transform.position, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
+            Profiler.EndSample();
             return suc;
         }
     }

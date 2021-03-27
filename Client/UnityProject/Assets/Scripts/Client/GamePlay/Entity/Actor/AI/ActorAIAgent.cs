@@ -4,6 +4,7 @@ using BiangLibrary.GameDataFormat.Grid;
 using JetBrains.Annotations;
 using NodeCanvas.Framework;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class ActorAIAgent
 {
@@ -336,7 +337,9 @@ public class ActorAIAgent
             return SetDestinationRetCode.TooClose;
         }
 
+        Profiler.BeginSample("FindPath");
         bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, currentDestination_PF, Actor.transform.position, CurrentPath, keepDistanceMin, keepDistanceMax, destinationType, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
+        Profiler.EndSample();
         if (IsPathFinding)
         {
             currentNode = CurrentPath.Count > 0 ? CurrentPath[0] : null;

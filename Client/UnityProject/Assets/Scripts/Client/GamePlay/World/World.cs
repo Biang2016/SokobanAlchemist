@@ -267,16 +267,14 @@ public class World : PoolObject
     public void RefreshActorPathFindingSpaceAvailableCache(GridPos3D worldGP, Box newBox)
     {
         bool thisOccupy = newBox != null;
-        cached_occupyBeneath = new bool[Actor.ACTOR_MAX_HEIGHT];
         for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++)
         {
-            cached_occupyBeneath[i - 1] = BoxEmptyOrPassable(worldGP + GridPos3D.Down * i);
+            cached_occupyBeneath[i - 1] = BoxOccupy(worldGP + GridPos3D.Down * i);
         }
 
-        cached_occupyAbove = new bool[Actor.ACTOR_MAX_HEIGHT];
         for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++)
         {
-            cached_occupyAbove[i - 1] = BoxEmptyOrPassable(worldGP + GridPos3D.Up * i);
+            cached_occupyAbove[i - 1] = BoxOccupy(worldGP + GridPos3D.Up * i);
         }
 
         if (thisOccupy)
@@ -382,11 +380,11 @@ public class World : PoolObject
         }
     }
 
-    private bool BoxEmptyOrPassable(GridPos3D worldGP)
+    private bool BoxOccupy(GridPos3D worldGP)
     {
         Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(worldGP, out WorldModule _, out GridPos3D _, false);
-        if (box != null && !box.Passable) return false;
-        return true;
+        if (box != null && !box.Passable) return true;
+        return false;
     }
 
     public Box GetBoxByGridPosition(GridPos3D gp, out WorldModule module, out GridPos3D localGP, bool ignoreUnaccessibleModule = true)
