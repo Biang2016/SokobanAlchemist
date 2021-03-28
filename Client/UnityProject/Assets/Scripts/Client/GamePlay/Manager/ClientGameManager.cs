@@ -11,6 +11,9 @@ using UnityEngine.SceneManagement;
 
 public class ClientGameManager : MonoSingleton<ClientGameManager>
 {
+    public Material BoxMarchingSquareTerrainMat;
+    public BoxMarchingTextureConfigMatrix BoxMarchingTextureConfigMatrix;
+
     #region Managers
 
     #region Mono
@@ -128,6 +131,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     private void Start()
     {
+        CreateTextureArray();
         ControlManager.Start();
 
         ConfigManager.Start();
@@ -146,6 +150,25 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         FXManager.Start();
 
         StartCoroutine(Co_StartGame());
+    }
+
+    public void CreateTextureArray()
+    {
+        TextureFormat tf = BoxMarchingTextureConfigMatrix.Matrix[0, 0].format;
+        Texture2DArray array = new Texture2DArray(2048, 2048, 55, tf, false);
+        int index = 0;
+        for (int i = 0; i < BoxMarchingTextureConfigMatrix.Matrix.GetLength(0); i++)
+        for (int j = 0; j < BoxMarchingTextureConfigMatrix.Matrix.GetLength(1); j++)
+        {
+            Texture2D texture = BoxMarchingTextureConfigMatrix.Matrix[i, j];
+            if (texture != null)
+            {
+                Graphics.CopyTexture(texture, 0, 0, array, index, 0);
+                index++;
+            }
+        }
+
+        BoxMarchingSquareTerrainMat.SetTexture("_Albedo", array);
     }
 
     public bool IsGameLoading = false;

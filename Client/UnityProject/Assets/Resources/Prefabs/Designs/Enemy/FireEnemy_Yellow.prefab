@@ -466,6 +466,7 @@ MonoBehaviour:
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
         - id: 5
+        - id: 6
     00000003:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
@@ -533,7 +534,7 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
-        - id: 6
+        - id: 7
     00000004:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
@@ -547,7 +548,7 @@ MonoBehaviour:
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
-        - id: 7
+        - id: 8
     00000005:
       type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
       data:
@@ -563,6 +564,20 @@ MonoBehaviour:
         DropConeAngle: 0
         DropVelocity: 12
     00000006:
+      type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
+      data:
+        DropBoxList:
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (b21d38f9-143e-43a6-9094-f1a790641d96)
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        DropBoxCountMin: 0
+        DropBoxCountMax: 1
+        DropConeAngle: 0
+        DropVelocity: 13
+    00000007:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10237
@@ -584,15 +599,15 @@ MonoBehaviour:
         EntityStatType: 101
         Delta: 350
         Percent: 0
-    00000007:
+    00000008:
       type: {class: EntityPassiveSkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
       data:
         AddBuffRadius: 1.3
         ExactGPDistance: 0
         EffectiveOnRelativeCamp: 14
         RawEntityBuffs:
-        - id: 8
-    00000008:
+        - id: 9
+    00000009:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10004

@@ -1,4 +1,5 @@
-﻿using BiangLibrary.GameDataFormat.Grid;
+﻿
+using BiangLibrary.GameDataFormat.Grid;
 using UnityEngine;
 
 public class BoxMarchingTextureHelper : BoxMonoHelper

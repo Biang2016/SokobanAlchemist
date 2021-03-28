@@ -523,6 +523,7 @@ MonoBehaviour:
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
         - id: 8
+        - id: 9
     00000004:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
@@ -635,8 +636,8 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
-        - id: 9
         - id: 10
+        - id: 11
     00000005:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
@@ -785,8 +786,8 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
-        - id: 11
         - id: 12
+        - id: 13
     00000006:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
@@ -800,7 +801,7 @@ MonoBehaviour:
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
-        - id: 13
+        - id: 14
     00000007:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
@@ -835,12 +836,6 @@ MonoBehaviour:
           isSingleton: 0
         - BoxTypeName:
             TypeDefineType: 0
-            TypeGUID: (ea62bcfe-806f-49bb-af18-c47cf821c618)
-          BoxOrientation: 0
-          probability: 3
-          isSingleton: 0
-        - BoxTypeName:
-            TypeDefineType: 0
             TypeGUID: (1fd4d701-1e6c-4bdf-a28d-2f7bf02e7bb9)
           BoxOrientation: 0
           probability: 2
@@ -851,11 +846,37 @@ MonoBehaviour:
           BoxOrientation: 0
           probability: 1
           isSingleton: 0
-        DropBoxCountMin: 1
-        DropBoxCountMax: 4
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (b21d38f9-143e-43a6-9094-f1a790641d96)
+          BoxOrientation: 0
+          probability: 3
+          isSingleton: 0
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (374e935f-27dc-4ac2-aeed-c78fd70ae29e)
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        DropBoxCountMin: 3
+        DropBoxCountMax: 6
         DropConeAngle: 20
         DropVelocity: 12
     00000009:
+      type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
+      data:
+        DropBoxList:
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (ea62bcfe-806f-49bb-af18-c47cf821c618)
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        DropBoxCountMin: 1
+        DropBoxCountMax: 3
+        DropConeAngle: 15
+        DropVelocity: 13
+    0000000A:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 11255
@@ -877,7 +898,7 @@ MonoBehaviour:
         Percent: -50
         LinearDecayInDuration: 1
         EntityPropertyType: 30
-    0000000A:
+    0000000B:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10323
@@ -899,7 +920,7 @@ MonoBehaviour:
         EntityStatType: 100
         Delta: 400
         Percent: 0
-    0000000B:
+    0000000C:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 14220
@@ -921,7 +942,7 @@ MonoBehaviour:
         EntityStatType: 0
         Delta: -2
         Percent: 0
-    0000000C:
+    0000000D:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10429
@@ -943,16 +964,16 @@ MonoBehaviour:
         EntityStatType: 100
         Delta: 400
         Percent: 0
-    0000000D:
+    0000000E:
       type: {class: EntityPassiveSkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
       data:
         AddBuffRadius: 1
         ExactGPDistance: 0
         EffectiveOnRelativeCamp: 14
         RawEntityBuffs:
-        - id: 14
         - id: 15
-    0000000E:
+        - id: 16
+    0000000F:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10254
@@ -974,7 +995,7 @@ MonoBehaviour:
         EntityStatType: 100
         Delta: 300
         Percent: 0
-    0000000F:
+    00000010:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 10699

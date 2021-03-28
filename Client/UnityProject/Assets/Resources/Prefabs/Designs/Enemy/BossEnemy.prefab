@@ -629,6 +629,7 @@ MonoBehaviour:
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
         - id: 9
+        - id: 10
     00000003:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
@@ -708,7 +709,7 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
-        - id: 10
+        - id: 11
     00000004:
       type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
       data:
@@ -720,7 +721,7 @@ MonoBehaviour:
         CastCanMove: 0
         RecoverCanMove: 0
         RawSubActiveSkillList:
-        - id: 11
+        - id: 12
         SubActiveSkillTriggerLogicList:
         - M_TriggerType: 2
           SubSkillTriggerSequence: []
@@ -742,7 +743,7 @@ MonoBehaviour:
         CastCanMove: 0
         RecoverCanMove: 0
         RawSubActiveSkillList:
-        - id: 12
+        - id: 13
         SubActiveSkillTriggerLogicList:
         - M_TriggerType: 2
           SubSkillTriggerSequence: []
@@ -795,7 +796,7 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
-        - id: 13
+        - id: 14
     00000007:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
@@ -838,7 +839,7 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
-        - id: 14
+        - id: 15
     00000008:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
@@ -876,6 +877,26 @@ MonoBehaviour:
         DropConeAngle: 0
         DropVelocity: 12
     0000000A:
+      type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
+      data:
+        DropBoxList:
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (374e935f-27dc-4ac2-aeed-c78fd70ae29e)
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (b21d38f9-143e-43a6-9094-f1a790641d96)
+          BoxOrientation: 0
+          probability: 3
+          isSingleton: 0
+        DropBoxCountMin: 1
+        DropBoxCountMax: 4
+        DropConeAngle: 15
+        DropVelocity: 13
+    0000000B:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10765
@@ -897,7 +918,7 @@ MonoBehaviour:
         EntityStatType: 0
         Delta: -2
         Percent: 0
-    0000000B:
+    0000000C:
       type: {class: EntityActiveSkill_SummonDropBox, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
@@ -953,7 +974,7 @@ MonoBehaviour:
           probability: 1
           isSingleton: 1
         DropFromHeightFromFloor: 8
-    0000000C:
+    0000000D:
       type: {class: EntityActiveSkill_SummonDropBox, ns: , asm: Client}
       data:
         IsAddedDuringGamePlay: 0
@@ -1009,7 +1030,7 @@ MonoBehaviour:
           probability: 1
           isSingleton: 1
         DropFromHeightFromFloor: 8
-    0000000D:
+    0000000E:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10033
@@ -1031,7 +1052,7 @@ MonoBehaviour:
         EntityStatType: 0
         Delta: 15
         Percent: 0
-    0000000E:
+    0000000F:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 10035

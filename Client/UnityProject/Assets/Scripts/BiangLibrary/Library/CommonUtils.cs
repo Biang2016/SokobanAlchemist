@@ -274,11 +274,11 @@ namespace BiangLibrary
             while (res.Count < number)
             {
                 int index = Random.Range(0, accu);
-                foreach (int key in resDict_GetRandomWithProbabilityFromList.Keys)
+                foreach (KeyValuePair<int, Probability> kv in resDict_GetRandomWithProbabilityFromList)
                 {
-                    if (key >= index)
+                    if (kv.Key >= index)
                     {
-                        T pr = (T) resDict_GetRandomWithProbabilityFromList[key];
+                        T pr = (T) kv.Value;
                         if (!res.Contains(pr))
                         {
                             res.Add(pr);
