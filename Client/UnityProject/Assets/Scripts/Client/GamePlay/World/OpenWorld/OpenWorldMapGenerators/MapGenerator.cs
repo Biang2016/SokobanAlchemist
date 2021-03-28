@@ -64,7 +64,7 @@ public abstract class MapGenerator
 
     private static List<GridPos3D> cached_IntactGPs_World = new List<GridPos3D>(1024); // 静态布局内所有的Y值为0的成功放置的箱子的LocalGP
 
-    protected bool TryOverrideToWorldMap(GridPos3D worldGP)
+    protected bool TryOverrideToWorldMap(GridPos3D worldGP, ushort writeEntityTypeIndex, GridPosR.Orientation writeOrientation)
     {
         bool CheckGridInsideWorldRange(GridPos3D _worldGP, int borderThickness)
         {
@@ -80,7 +80,7 @@ public abstract class MapGenerator
                 GenerateStaticLayoutLayerData staticLayoutLayerData = (GenerateStaticLayoutLayerData) GenerateLayerData;
                 ushort staticLayoutTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.StaticLayout, staticLayoutLayerData.StaticLayoutTypeName.TypeName);
                 WorldModuleData staticLayoutData = ConfigManager.GetStaticLayoutDataConfig(staticLayoutTypeIndex, false); // 不拷贝，只读数据，避免运行时动态加载GC
-                GridPosR.Orientation staticLayoutOrientation = (GridPosR.Orientation) SRandom.Next(4);
+                GridPosR.Orientation staticLayoutOrientation = writeOrientation;
 
                 // world: 静态布局Pivot点的世界坐标
                 // sl_local: 静态布局Config中未旋转的坐标
@@ -404,9 +404,8 @@ public abstract class MapGenerator
             {
                 if (existedIndex_StaticLayoutIndex_IntactForBox != 0) return false; // 不能覆盖在静态布局上
                 bool spaceAvailable = true;
-                GridPosR.Orientation entityOrientation = (GridPosR.Orientation) SRandom.Range(0, 4);
                 EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(EntityTypeIndex);
-                foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[entityOrientation])
+                foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[writeOrientation])
                 {
                     if (!spaceAvailable) break;
                     GridPos3D box_grid_world = worldGP + gridPos;
@@ -449,12 +448,12 @@ public abstract class MapGenerator
 
                 if (spaceAvailable)
                 {
-                    WorldMap[worldGP.x, 0, worldGP.z] = EntityTypeIndex;
-                    WorldMapOrientation[worldGP.x, 0, worldGP.z] = entityOrientation;
-                    foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[entityOrientation])
+                    WorldMap[worldGP.x, 0, worldGP.z] = writeEntityTypeIndex;
+                    WorldMapOrientation[worldGP.x, 0, worldGP.z] = writeOrientation;
+                    foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[writeOrientation])
                     {
                         GridPos3D box_grid_world = worldGP + gridPos;
-                        WorldMap_Occupied[box_grid_world.x, box_grid_world.y - Height, box_grid_world.z] = EntityTypeIndex;
+                        WorldMap_Occupied[box_grid_world.x, box_grid_world.y - Height, box_grid_world.z] = writeEntityTypeIndex;
                     }
 
                     overrideSuc = true;

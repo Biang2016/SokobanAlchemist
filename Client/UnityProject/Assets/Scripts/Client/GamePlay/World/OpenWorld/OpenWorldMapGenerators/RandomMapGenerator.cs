@@ -29,7 +29,7 @@ public sealed class RandomMapGenerator : MapGenerator
                         if (genCount >= GenerateLayerData.Count) break;
                         int world_x = module_x * WorldModule.MODULE_SIZE + local_x;
                         int world_z = module_z * WorldModule.MODULE_SIZE + local_z;
-                        if (TryOverrideToWorldMap(new GridPos3D(world_x, Height, world_z)))
+                        if (TryOverrideToWorldMap(new GridPos3D(world_x, Height, world_z), EntityTypeIndex, (GridPosR.Orientation) SRandom.Range(0, 4)))
                         {
                             genCount++;
                         }
@@ -53,7 +53,7 @@ public sealed class RandomMapGenerator : MapGenerator
                     {
                         int world_x = module_x * WorldModule.MODULE_SIZE + local_x;
                         int world_z = module_z * WorldModule.MODULE_SIZE + local_z;
-                        TryOverrideToWorldMap(new GridPos3D(world_x, Height, world_z));
+                        TryOverrideToWorldMap(new GridPos3D(world_x, Height, world_z), EntityTypeIndex, (GridPosR.Orientation) SRandom.Range(0, 4));
                     }
                 }
             }

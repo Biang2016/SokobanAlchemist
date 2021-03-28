@@ -496,13 +496,95 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
 
     public override void ApplyToWorldMap()
     {
-        for (int world_x = 0; world_x < Width; world_x++)
-        for (int world_z = 0; world_z < Depth; world_z++)
+        GenerateBoxLayerData bld = (GenerateBoxLayerData) GenerateLayerData;
+        if (!bld.MergeBoxesIntoMegaBox)
         {
-            bool genSuc = map_1[world_x, world_z];
-            if (genSuc)
+            for (int world_x = 0; world_x < Width; world_x++)
+            for (int world_z = 0; world_z < Depth; world_z++)
             {
-                TryOverrideToWorldMap(new GridPos3D(world_x, Height, world_z));
+                bool genSuc = map_1[world_x, world_z];
+                if (genSuc)
+                {
+                    TryOverrideToWorldMap(new GridPos3D(world_x, Height, world_z), EntityTypeIndex, (GridPosR.Orientation) SRandom.Range(0, 4));
+                }
+            }
+        }
+        else
+        {
+            MergeBoxesIntoMegaBox();
+        }
+    }
+
+    private void MergeBoxesIntoMegaBox()
+    {
+        bool CheckInsideMapRange(int world_x, int world_z)
+        {
+            return world_x >= 0 && world_x < map_1.GetLength(0) && world_z >= 0 && world_z < map_1.GetLength(1);
+        }
+
+        GenerateBoxLayerData bld = (GenerateBoxLayerData) GenerateLayerData;
+        ushort[] mergeBoxTypeIndices = new ushort[5];
+        EntityOccupationData[] mergeBoxOccupationDataList = new EntityOccupationData[5];
+
+        for (int i = 0; i < bld.MergeBoxesIntoMegaBoxConfigList.Count; i++)
+        {
+            ushort boxTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, bld.MergeBoxesIntoMegaBoxConfigList[i].TypeName);
+            mergeBoxTypeIndices[i] = boxTypeIndex;
+            if (boxTypeIndex != 0) mergeBoxOccupationDataList[i] = ConfigManager.GetEntityOccupationData(boxTypeIndex);
+        }
+
+        for (int size = mergeBoxTypeIndices.Length; size >= 1; size--)
+        {
+            ushort boxTypeIndex = mergeBoxTypeIndices[size - 1];
+            if (boxTypeIndex == 0) continue;
+
+            for (int world_x = 0; world_x < Width; world_x++)
+            for (int world_z = 0; world_z < Depth; world_z++)
+            {
+                bool genSuc = map_1[world_x, world_z];
+                if (genSuc)
+                {
+                    EntityOccupationData eod = mergeBoxOccupationDataList[size - 1];
+                    GridPosR.Orientation randomRot = (GridPosR.Orientation) SRandom.Range(0, 4);
+                    List<GridPos3D> offsets = eod.EntityIndicatorGPs_RotatedDict[randomRot];
+                    bool mergeSuc = true;
+                    foreach (GridPos3D offset in offsets)
+                    {
+                        if (offset.y == eod.BoundsInt.yMin)
+                        {
+                            int offset_world_x = world_x + offset.x;
+                            int offset_world_z = world_z + offset.z;
+                            if (CheckInsideMapRange(offset_world_x, offset_world_z))
+                            {
+                                if (!map_1[offset_world_x, offset_world_z])
+                                {
+                                    mergeSuc = false;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                mergeSuc = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (mergeSuc)
+                    {
+                        foreach (GridPos3D offset in offsets)
+                        {
+                            if (offset.y == eod.BoundsInt.yMin)
+                            {
+                                int offset_world_x = world_x + offset.x;
+                                int offset_world_z = world_z + offset.z;
+                                map_1[offset_world_x, offset_world_z] = false;
+                            }
+                        }
+
+                        TryOverrideToWorldMap(new GridPos3D(world_x, Height, world_z), boxTypeIndex, randomRot);
+                    }
+                }
             }
         }
     }

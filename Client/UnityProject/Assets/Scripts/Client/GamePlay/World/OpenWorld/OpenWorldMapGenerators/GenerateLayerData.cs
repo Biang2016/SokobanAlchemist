@@ -140,6 +140,15 @@ public class GenerateBoxLayerData : GenerateLayerData
     [LabelText("空地生墙迭代次数")]
     public int SmoothTimes_GenerateWallInOpenSpace = 3;
 
+    [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
+    [LabelText("是否自动融合为大Box")]
+    public bool MergeBoxesIntoMegaBox = false;
+
+    [ShowIf("m_GenerateAlgorithm", GenerateAlgorithm.CellularAutomata)]
+    [ShowIf("MergeBoxesIntoMegaBox")]
+    [ListDrawerSettings(ListElementLabelName = "TypeName")]
+    public List<TypeSelectHelper> MergeBoxesIntoMegaBoxConfigList = new List<TypeSelectHelper>();
+
     public override string Description => $"{BoxTypeName}\t\t{m_GenerateAlgorithm}";
 }
 
