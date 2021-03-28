@@ -4,7 +4,7 @@ using UnityEngine;
 public class BoxMarchingTextureHelper : BoxMonoHelper
 {
     public Transform BoxMarchingTextureTileContainer;
-    public BoxMarchingTextureTile[,] BoxMarchingTextureTileMatrix = new BoxMarchingTextureTile[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+    public MarchingSquareTerrainTile[,] BoxMarchingTextureTileMatrix = new MarchingSquareTerrainTile[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
 
     public override void OnHelperRecycled()
     {
@@ -22,7 +22,7 @@ public class BoxMarchingTextureHelper : BoxMonoHelper
         base.OnHelperUsed();
     }
 
-    private BoxMarchingTextureTile.MarchingSquareData[,] marchingSquareDataMatrix = new BoxMarchingTextureTile.MarchingSquareData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+    private MarchingSquareTerrainTile.MarchingSquareData[,] marchingSquareDataMatrix = new MarchingSquareTerrainTile.MarchingSquareData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
 
     public void Initialize()
     {
@@ -36,13 +36,13 @@ public class BoxMarchingTextureHelper : BoxMonoHelper
                 return terrainType;
             }
 
-            BoxMarchingTextureTile.MarchingSquareData CalculateMarchingSquareData(int x, int z)
+            MarchingSquareTerrainTile.MarchingSquareData CalculateMarchingSquareData(int x, int z)
             {
                 TerrainType tt_LB = GetTerrainType(x, z);
                 TerrainType tt_RB = GetTerrainType(x + 1, z);
                 TerrainType tt_RT = GetTerrainType(x + 1, z + 1);
                 TerrainType tt_LT = GetTerrainType(x, z + 1);
-                BoxMarchingTextureTile.MarchingSquareData data = new BoxMarchingTextureTile.MarchingSquareData(tt_LB, tt_RB, tt_RT, tt_LT);
+                MarchingSquareTerrainTile.MarchingSquareData data = new MarchingSquareTerrainTile.MarchingSquareData(tt_LB, tt_RB, tt_RT, tt_LT);
                 return data;
             }
 
@@ -51,10 +51,10 @@ public class BoxMarchingTextureHelper : BoxMonoHelper
                 for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
                 for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
                 {
-                    BoxMarchingTextureTile tt = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxMarchingTextureTile].AllocateGameObject<BoxMarchingTextureTile>(BoxMarchingTextureTileContainer);
+                    MarchingSquareTerrainTile tt = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.MarchingSquareTerrainTile].AllocateGameObject<MarchingSquareTerrainTile>(BoxMarchingTextureTileContainer);
                     BoxMarchingTextureTileMatrix[x, z] = tt;
                     GridPos3D worldGP = Box.WorldModule.LocalGPToWorldGP(new GridPos3D(x, WorldModule.MODULE_SIZE - 1, z));
-                    BoxMarchingTextureTile.MarchingSquareData data = CalculateMarchingSquareData(worldGP.x, worldGP.z);
+                    MarchingSquareTerrainTile.MarchingSquareData data = CalculateMarchingSquareData(worldGP.x, worldGP.z);
                     marchingSquareDataMatrix[x, z] = data;
                 }
 
@@ -63,12 +63,12 @@ public class BoxMarchingTextureHelper : BoxMonoHelper
                     for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
                     for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
                     {
-                        BoxMarchingTextureTile.MarchingSquareData thisData = marchingSquareDataMatrix[x, z];
+                        MarchingSquareTerrainTile.MarchingSquareData thisData = marchingSquareDataMatrix[x, z];
                         for (int delta_x = -1; delta_x <= 1; delta_x++)
                         for (int delta_z = -1; delta_z <= 1; delta_z++)
                         {
                             if (delta_x == 0 && delta_z == 0) continue;
-                            BoxMarchingTextureTile.MarchingSquareData surroundingTTData;
+                            MarchingSquareTerrainTile.MarchingSquareData surroundingTTData;
                             if (x + delta_x >= 0 && x + delta_x < WorldModule.MODULE_SIZE && z + delta_z >= 0 && z + delta_z < WorldModule.MODULE_SIZE)
                             {
                                 surroundingTTData = marchingSquareDataMatrix[x + delta_x, z + delta_z];
@@ -121,8 +121,8 @@ public class BoxMarchingTextureHelper : BoxMonoHelper
                 for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
                 for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
                 {
-                    BoxMarchingTextureTile.MarchingSquareData data = marchingSquareDataMatrix[x, z];
-                    BoxMarchingTextureTile tt = BoxMarchingTextureTileMatrix[x, z];
+                    MarchingSquareTerrainTile.MarchingSquareData data = marchingSquareDataMatrix[x, z];
+                    MarchingSquareTerrainTile tt = BoxMarchingTextureTileMatrix[x, z];
                     tt.Initialize(data);
                     tt.transform.localPosition = new Vector3(x, 0, z);
                 }

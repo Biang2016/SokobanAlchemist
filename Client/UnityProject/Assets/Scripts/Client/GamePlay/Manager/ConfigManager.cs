@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
+using UnityEngine.U2D;
 using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -44,7 +45,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static Dictionary<TypeDefineType, TypeGUIDMappingAsset.Mapping> TypeGUIDMappings = new Dictionary<TypeDefineType, TypeGUIDMappingAsset.Mapping>();
 
-    public static Dictionary<MarchingTextureCase, Texture>[,] TerrainMarchingTextureDict = new Dictionary<MarchingTextureCase, Texture>[10, 10]; // 上三角矩阵 index_0 <= index_1
+    public const int TERRAIN_TYPE_COUNT = 10;
 
     public enum TypeStartIndex
     {
@@ -804,7 +805,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             kv.Value.LoadTypeNames();
         }
 
-        LoadBoxMarchingTextureConfigMatrix();
         LoadTypeGUIDMappingFromConfig(dataFormat);
         LoadEntityBuffStatPropertyEnumReflection();
         LoadEntityBuffAttributeMatrixFromConfig(dataFormat);
@@ -814,37 +814,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         LoadWorldDataConfig(dataFormat);
 
         IsLoaded = true;
-    }
-
-    public static void LoadBoxMarchingTextureConfigMatrix()
-    {
-        TerrainMarchingTextureDict = new Dictionary<MarchingTextureCase, Texture>[10, 10];
-        foreach (TerrainType basicTerrain in Enum.GetValues(typeof(TerrainType)))
-        {
-            foreach (TerrainType transitTerrain in Enum.GetValues(typeof(TerrainType)))
-            {
-                if ((int) basicTerrain > (int) transitTerrain) continue;
-                TerrainMarchingTextureDict[(int) basicTerrain, (int) transitTerrain] = new Dictionary<MarchingTextureCase, Texture>();
-                if (basicTerrain == transitTerrain)
-                {
-                    foreach (MarchingTextureCase marchingTextureCase in Enum.GetValues(typeof(MarchingTextureCase)))
-                    {
-                        TerrainMarchingTextureDict[(int) basicTerrain, (int) transitTerrain].Add(marchingTextureCase, ClientGameManager.Instance.BoxMarchingTextureConfigMatrix.PureTerrain[(int) basicTerrain]);
-                    }
-                }
-                else
-                {
-                    BoxMarchingTextureConfigSSO config = ClientGameManager.Instance.BoxMarchingTextureConfigMatrix.Matrix[(int) basicTerrain, (int) transitTerrain];
-                    if (config != null && config.TextureDict != null)
-                    {
-                        foreach (KeyValuePair<MarchingTextureCase, Texture> kv in config.TextureDict)
-                        {
-                            TerrainMarchingTextureDict[(int) basicTerrain, (int) transitTerrain].Add(kv.Key, kv.Value);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public static void LoadTypeGUIDMappingFromConfig(DataFormat dataFormat)
