@@ -12,8 +12,8 @@ using UnityEditor;
 public class BoxMarchingTextureConfigMatrix : SerializedScriptableObject
 {
     [InfoBox("$Tips")]
-    [OdinSerialize]
-    [NonSerialized]
+    //[OdinSerialize]
+    //[NonSerialized]
     [TableMatrix(SquareCells = true)]
     public Texture2D[,] Matrix = new Texture2D[10, 10];
 
