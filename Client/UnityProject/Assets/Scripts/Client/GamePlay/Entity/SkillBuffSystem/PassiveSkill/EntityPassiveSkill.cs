@@ -108,6 +108,10 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
     {
     }
 
+    public virtual void OnBeingFueled()
+    {
+    }
+
     #endregion
 
     public EntityPassiveSkill Clone()

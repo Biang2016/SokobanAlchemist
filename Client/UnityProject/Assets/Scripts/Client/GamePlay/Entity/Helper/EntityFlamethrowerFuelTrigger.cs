@@ -37,7 +37,7 @@ public class EntityFlamethrowerFuelTrigger : MonoBehaviour
                     if (box.RawFlamethrowerFuelData?.RawEntityPassiveSkillActions_ForFlamethrower != null && box.RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Count > 0)
                     {
                         EntityFlamethrowerHelper.TurnOnFire(box.RawFlamethrowerFuelData.Clone());
-                        box.DestroyBox();
+                        box.FuelBox();
                     }
                 }
             }

@@ -1320,6 +1320,16 @@ public partial class Box : Entity
 
     #endregion
 
+    public void FuelBox()
+    {
+        foreach (EntityPassiveSkill ps in EntityPassiveSkills)
+        {
+            ps.OnBeingFueled();
+        }
+
+        DestroyBox();
+    }
+
     #region Drop
 
     private Coroutine KeepTryingDropSelfCoroutine;

@@ -29,6 +29,9 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
     [LabelText("每一格都生成一个")]
     public bool ChangeForEveryGrid = false;
 
+    [LabelText("对象额外数据")]
+    public EntityExtraSerializeData RawEntityExtraSerializeData = new EntityExtraSerializeData(); // 干数据，禁修改
+
     public void Execute()
     {
         GridPos3D worldGP = GridPos3D.Zero;
@@ -42,6 +45,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
         }
 
         ushort entityTypeIndex = ConfigManager.GetTypeIndex(ChangeBoxTypeToEntityName.TypeDefineType, ChangeBoxTypeToEntityName.TypeName);
+        EntityExtraSerializeData entityExtraSerializeData = RawEntityExtraSerializeData.Clone();
         if (ChangeForEveryGrid)
         {
             List<GridPos3D> occupations = Box.GetEntityOccupationGPs_Rotated();
@@ -57,7 +61,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
                         {
                             if (ChangeBoxTypeToEntityName.TypeDefineType == TypeDefineType.Box)
                             {
-                                module.GenerateBox(entityTypeIndex, gridWorldGP, ResultOrientation);
+                                module.GenerateBox(entityTypeIndex, gridWorldGP, ResultOrientation, boxExtraSerializeDataFromModule: entityExtraSerializeData);
                             }
                             else if (ChangeBoxTypeToEntityName.TypeDefineType == TypeDefineType.Enemy)
                             {
@@ -65,6 +69,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
                                 newBornPointData.LocalGP = module.WorldGPToLocalGP(gridWorldGP);
                                 newBornPointData.WorldGP = gridWorldGP;
                                 newBornPointData.EnemyType = ChangeBoxTypeToEntityName.Clone();
+                                newBornPointData.RawEntityExtraSerializeData = entityExtraSerializeData;
                                 BattleManager.Instance.CreateActorByBornPointData(newBornPointData);
                             }
                         }
@@ -83,7 +88,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
                     {
                         if (ChangeBoxTypeToEntityName.TypeDefineType == TypeDefineType.Box)
                         {
-                            module.GenerateBox(entityTypeIndex, worldGP, ResultOrientation);
+                            module.GenerateBox(entityTypeIndex, worldGP, ResultOrientation, boxExtraSerializeDataFromModule: entityExtraSerializeData);
                         }
                         else if (ChangeBoxTypeToEntityName.TypeDefineType == TypeDefineType.Enemy)
                         {
@@ -91,6 +96,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
                             newBornPointData.LocalGP = module.WorldGPToLocalGP(worldGP);
                             newBornPointData.WorldGP = worldGP;
                             newBornPointData.EnemyType = ChangeBoxTypeToEntityName.Clone();
+                            newBornPointData.RawEntityExtraSerializeData = entityExtraSerializeData;
                             BattleManager.Instance.CreateActorByBornPointData(newBornPointData);
                         }
                     }
@@ -106,6 +112,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
         action.ChangeBoxTypeToEntityName = ChangeBoxTypeToEntityName.Clone();
         action.ResultOrientation = ResultOrientation;
         action.ChangeForEveryGrid = ChangeForEveryGrid;
+        action.RawEntityExtraSerializeData = RawEntityExtraSerializeData.Clone();
     }
 
     public override void CopyDataFrom(EntityPassiveSkillAction srcData)
@@ -115,5 +122,6 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
         ChangeBoxTypeToEntityName.CopyDataFrom(action.ChangeBoxTypeToEntityName);
         ResultOrientation = action.ResultOrientation;
         ChangeForEveryGrid = action.ChangeForEveryGrid;
+        RawEntityExtraSerializeData = action.RawEntityExtraSerializeData.Clone();
     }
 }

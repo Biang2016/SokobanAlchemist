@@ -12,7 +12,8 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
 {
     internal EntityActiveSkill ParentActiveSkill;
     internal Entity Entity;
-    public bool IsAddedDuringGamePlay = false; // 是否是在游戏过程中添加的，以便在回收之后判断要不要清掉
+
+    internal bool IsAddedDuringGamePlay = false; // 是否是在游戏过程中添加的，以便在回收之后判断要不要清掉
 
     [LabelText("作用阵营")]
     public RelativeCamp TargetCamp;
