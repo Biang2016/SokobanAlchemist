@@ -276,8 +276,7 @@ public class DebugPanel : BaseUIPanel
         }
         else
         {
-            ClientGameManager.DebugChangeWorldName = worldName;
-            ClientGameManager.Instance.ReloadGame();
+            ClientGameManager.Instance.SwitchWorld(worldName);
         }
     }
 

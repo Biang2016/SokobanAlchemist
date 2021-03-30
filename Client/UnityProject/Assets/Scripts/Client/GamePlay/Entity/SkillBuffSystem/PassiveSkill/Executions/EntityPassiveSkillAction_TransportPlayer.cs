@@ -19,9 +19,9 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
 
     public void Execute()
     {
+        WorldNameWithProbability randomResult = CommonUtils.GetRandomFromList(WorldProbList);
         if ((WorldManager.Instance.CurrentWorld is OpenWorld openWorld))
         {
-            WorldNameWithProbability randomResult = CommonUtils.GetRandomFromList(WorldProbList);
             ushort worldTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, randomResult.WorldTypeName.TypeName);
             if (worldTypeIndex != 0)
             {
@@ -37,7 +37,7 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
         }
         else
         {
-            Debug.LogWarning("传送功能暂时只能用于OpenWorld");
+            ClientGameManager.Instance.SwitchWorld(randomResult.WorldTypeName.TypeName);
         }
     }
 

@@ -304,7 +304,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         SortAllStaticLayouts();
         SortAllWorlds();
         ExportEntityBuffAttributeMatrix(dataFormat);
-        ExportEntityOccupationDataConfig(dataFormat);
+        ExportAllEntityOccupationDataConfigs(dataFormat);
         ExportAllWorldModuleDataConfigs(dataFormat);
         ExportAllStaticLayoutDataConfigs(dataFormat);
         ExportAllWorldDataConfigs(dataFormat);
@@ -324,6 +324,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         // 时序，先导出类型表
         ExportTypeGUIDMapping();
+        ExportAllEntityOccupationDataConfigs(DataFormat.Binary);
 
         AssetDatabase.Refresh();
         IsLoaded = false;
@@ -559,7 +560,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         AssetDatabase.Refresh();
     }
 
-    private static void ExportEntityOccupationDataConfig(DataFormat dataFormat)
+    private static void ExportAllEntityOccupationDataConfigs(DataFormat dataFormat)
     {
         EntityOccupationConfigDict.Clear();
         string folder = EntityOccupationConfigDictFolder_Build;
@@ -808,7 +809,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         LoadTypeGUIDMappingFromConfig(dataFormat);
         LoadEntityBuffStatPropertyEnumReflection();
         LoadEntityBuffAttributeMatrixFromConfig(dataFormat);
-        LoadEntityOccupationDataConfig(dataFormat);
+        LoadAllEntityOccupationDataConfigs(dataFormat);
         LoadWorldModuleDataConfig(dataFormat);
         LoadStaticLayoutDataConfig(dataFormat);
         LoadWorldDataConfig(dataFormat);
@@ -924,7 +925,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     }
 #endif
 
-    private static void LoadEntityOccupationDataConfig(DataFormat dataFormat)
+    private static void LoadAllEntityOccupationDataConfigs(DataFormat dataFormat)
     {
         EntityOccupationConfigDict.Clear();
 

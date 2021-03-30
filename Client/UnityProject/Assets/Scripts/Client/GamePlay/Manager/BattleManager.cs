@@ -255,7 +255,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         int count = Physics.OverlapSphereNonAlloc(center, radius, cachedColliders, layerMask);
         for (int i = 0; i < count; i++)
         {
-            Collider collider = cachedColliders[count];
+            Collider collider = cachedColliders[i];
             if (collider != null)
             {
                 Actor actor = collider.gameObject.GetComponentInParent<Actor>();

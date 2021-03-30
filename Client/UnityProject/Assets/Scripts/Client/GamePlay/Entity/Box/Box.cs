@@ -477,6 +477,7 @@ public partial class Box : Entity
     public void Setup(ushort boxTypeIndex, GridPosR.Orientation orientation, uint initWorldModuleGUID)
     {
         base.Setup(initWorldModuleGUID);
+        if (IsHidden) BoxModelHelper.gameObject.SetActive(false);
         EntityTypeIndex = boxTypeIndex;
         InitPassiveSkills();
 
@@ -1431,6 +1432,8 @@ public partial class Box : Entity
     public bool Droppable => BoxFeature.HasFlag(BoxFeature.Droppable);
 
     public bool Consumable => BoxFeature.HasFlag(BoxFeature.LiftThenDisappear);
+
+    public bool IsHidden => BoxFeature.HasFlag(BoxFeature.Hidden);
 }
 
 [Flags]
@@ -1479,4 +1482,7 @@ public enum BoxFeature
 
     [LabelText("不受BUff影响")]
     BuffImmune = 1 << 13,
+
+    [LabelText("隐藏的")]
+    Hidden = 1 << 14,
 }

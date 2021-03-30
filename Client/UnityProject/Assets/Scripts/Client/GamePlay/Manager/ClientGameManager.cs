@@ -333,6 +333,12 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         FXManager.FixedUpdate(Time.fixedDeltaTime);
     }
 
+    public void SwitchWorld(string worldName)
+    {
+        ClientGameManager.DebugChangeWorldName = worldName;
+        ClientGameManager.Instance.ReloadGame();
+    }
+
     public void ReloadGame()
     {
         OnReloadScene();
