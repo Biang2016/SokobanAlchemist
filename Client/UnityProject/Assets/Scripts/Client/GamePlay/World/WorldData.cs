@@ -10,7 +10,6 @@ public class WorldData : IClone<WorldData>
     public string WorldTypeName;
 
     public WorldFeature WorldFeature;
-
     public string DefaultWorldActorBornPointAlias;
 
     /// <summary>
@@ -21,6 +20,9 @@ public class WorldData : IClone<WorldData>
     public WorldBornPointGroupData_Runtime WorldBornPointGroupData_Runtime = new WorldBornPointGroupData_Runtime();
 
     public List<GridPos3D> WorldModuleGPOrder = new List<GridPos3D>();
+
+    public bool UseSpecialPlayerEnterESPS = false;
+    public EntityStatPropSet Raw_PlayerEnterESPS = new EntityStatPropSet(); // 干数据
 
     public WorldData Clone()
     {
@@ -41,6 +43,8 @@ public class WorldData : IClone<WorldData>
         }
 
         data.WorldModuleGPOrder = WorldModuleGPOrder.Clone();
+        data.UseSpecialPlayerEnterESPS = UseSpecialPlayerEnterESPS;
+        Raw_PlayerEnterESPS.ApplyDataTo(data.Raw_PlayerEnterESPS);
         return data;
     }
 }

@@ -73,6 +73,51 @@ public class EntityBuffHelper : EntityMonoHelper
     private bool BuffRelationshipProcess(EntityBuff newBuff)
     {
         bool canAdd = true;
+
+        // 黑白名单
+        if (newBuff.EnableWhiteBlackList)
+        {
+            if (newBuff.AllowAddBuffAliasList.Count != 0)
+            {
+                bool foundMatchBuff = false;
+                foreach (KeyValuePair<uint, EntityBuff> kv in BuffDict)
+                {
+                    foreach (string allowedBuffAlias in newBuff.AllowAddBuffAliasList)
+                    {
+                        if (!string.IsNullOrWhiteSpace(allowedBuffAlias) && !string.IsNullOrWhiteSpace(kv.Value.BuffAlias))
+                        {
+                            if (allowedBuffAlias == kv.Value.BuffAlias)
+                            {
+                                foundMatchBuff = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (foundMatchBuff) break;
+                }
+
+                if (!foundMatchBuff) return false;
+            }
+
+            if (newBuff.ForbidAddBuffAliasList.Count != 0)
+            {
+                foreach (KeyValuePair<uint, EntityBuff> kv in BuffDict)
+                {
+                    foreach (string forbiddenBuffAlias in newBuff.ForbidAddBuffAliasList)
+                    {
+                        if (!string.IsNullOrWhiteSpace(forbiddenBuffAlias) && !string.IsNullOrWhiteSpace(kv.Value.BuffAlias))
+                        {
+                            if (forbiddenBuffAlias == kv.Value.BuffAlias)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         bool canAddButSetOff = false;
         List<EntityBuff> buffsNeedToRemove = new List<EntityBuff>();
         List<EntityBuff> buffsNeedToSetOff = new List<EntityBuff>();

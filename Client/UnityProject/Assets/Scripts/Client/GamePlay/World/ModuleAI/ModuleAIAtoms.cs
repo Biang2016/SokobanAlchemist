@@ -60,7 +60,7 @@ public class ModuleAIAtoms
             {
                 if (openWorld.IsInsideMicroWorld)
                 {
-                    openWorld.ReturnToOpenWorldFormMicroWorld();
+                    openWorld.ReturnToOpenWorldFormMicroWorld(false);
                 }
             }
         }

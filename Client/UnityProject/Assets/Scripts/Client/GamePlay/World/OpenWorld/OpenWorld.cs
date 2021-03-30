@@ -286,6 +286,8 @@ public class OpenWorld : World
         public Dictionary<GridPos3D, WorldModuleData> WorldModuleDataDict = new Dictionary<GridPos3D, WorldModuleData>();
 
         public List<GridPos3D> CurrentShowModuleGPs = new List<GridPos3D>();
+
+        public EntityStatPropSet PlayerCurrentESPS = new EntityStatPropSet();
     }
 
     private LevelCacheData m_LevelCacheData;
@@ -553,6 +555,7 @@ public class OpenWorld : World
     #region MicroWorld
 
     internal bool IsInsideMicroWorld = false;
+    internal bool IsUsingSpecialESPSInsideMicroWorld = false;
     internal ushort CurrentMicroWorldTypeIndex = 0;
     internal GridPos3D LastLeaveOpenWorldPlayerGP = GridPos3D.Zero;
     private List<WorldModule> MicroWorldModules = new List<WorldModule>();
@@ -657,7 +660,11 @@ public class OpenWorld : World
         }
 
         IsInsideMicroWorld = true;
+        IsUsingSpecialESPSInsideMicroWorld = microWorldData.UseSpecialPlayerEnterESPS;
+        BattleManager.Instance.Player1.EntityStatPropSet.ApplyDataTo(m_LevelCacheData.PlayerCurrentESPS);
+        if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(microWorldData.Raw_PlayerEnterESPS);
         BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint);
+
         CameraManager.Instance.FieldCamera.InitFocus();
 
         ClientGameManager.Instance.DebugPanel.Clear();
@@ -672,7 +679,7 @@ public class OpenWorld : World
         transportingPlayerToMicroWorld = false;
     }
 
-    public void ReturnToOpenWorldFormMicroWorld(bool rebornPlayer = false)
+    public void ReturnToOpenWorldFormMicroWorld(bool rebornPlayer)
     {
         if (transportingPlayerToMicroWorld) return;
         if (returningToOpenWorldFormMicroWorld) return;
@@ -704,6 +711,7 @@ public class OpenWorld : World
         else
         {
             BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP);
+            if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(m_LevelCacheData.PlayerCurrentESPS);
         }
 
         CameraManager.Instance.FieldCamera.InitFocus();
@@ -823,7 +831,11 @@ public class OpenWorld : World
         }
 
         BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint);
-        if (rebornPlayer) BattleManager.Instance.Player1.Reborn();
+        if (rebornPlayer)
+        {
+            BattleManager.Instance.Player1.Reborn();
+            if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(microWorldData.Raw_PlayerEnterESPS);
+        }
 
         CameraManager.Instance.FieldCamera.InitFocus();
 

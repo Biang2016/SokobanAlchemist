@@ -1251,7 +1251,7 @@ public partial class Box : Entity
 
     public void DestroyBox(UnityAction callBack = null, bool forModuleRecycle = false)
     {
-        if (isDestroying) return;
+        if (isDestroying || IsRecycled) return;
         isDestroying = true;
         if (!forModuleRecycle)
         {

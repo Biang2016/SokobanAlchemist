@@ -292,7 +292,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             {
                 if (openWorld.IsInsideMicroWorld)
                 {
-                    openWorld.ReturnToOpenWorldFormMicroWorld();
+                    openWorld.ReturnToOpenWorldFormMicroWorld(false);
                 }
             }
         }

@@ -16,8 +16,8 @@ MonoBehaviour:
     Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"1"},{"_position":{"x":660.0,"y":495.0},"$type":"FlowCanvas.Nodes.SwitchBool","$id":"2"},{"_position":{"x":855.0,"y":495.0},"$type":"FlowCanvas.Nodes.DoOnce","$id":"3"},{"_simplexNode":{"LevelEventAlias":{"_value":"Tutorial_0_8_Lock1Open"}},"_position":{"x":1020.0,"y":495.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_BroadcastLevelEvent,
     Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"4"},{"LevelEventAlias":{"_value":"Tutorial_0_8_FireMergeTip"},"_tag":"Tutorial_0_6_KillTheEnemyTip","_position":{"x":240.0,"y":615.0},"_comment":"Tutorial_0_7_KillTheEnemyTip","$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"5"},{"_simplexNode":{"NoticeTip":{"_value":"Merge
     The Fire Boxes!"},"TipPositionType":{"_value":4},"Duration":{"_value":3.0}},"_position":{"x":615.0,"y":615.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"6"},{"LevelEventAlias":{"_value":"Tutorial_0_8_OnFireBoxMerged"},"_tag":"Tutorial_0_6_KillTheEnemyTip","_position":{"x":240.0,"y":720.0},"_comment":"Tutorial_0_7_KillTheEnemyTip","$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"7"},{"_simplexNode":{"NoticeTip":{"_value":"You
-    succeed in merging the fire box!"},"TipPositionType":{"_value":4},"Duration":{"_value":3.0}},"_position":{"x":615.0,"y":720.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"6"},{"LevelEventAlias":{"_value":"Tutorial_0_8_OnFireBoxMerged"},"_tag":"Tutorial_0_6_KillTheEnemyTip","_position":{"x":240.0,"y":720.0},"_comment":"Tutorial_0_7_KillTheEnemyTip","$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"7"},{"_simplexNode":{"NoticeTip":{"_value":"Kick
+    the Wooden Box into the Flamethrower"},"TipPositionType":{"_value":4},"Duration":{"_value":5.0}},"_position":{"x":615.0,"y":720.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
     Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"8"},{"LevelEventAlias":{"_value":"Tutorial_0_8_OnWoodenBoxBeingFueled"},"_tag":"Tutorial_0_6_KillTheEnemyTip","_position":{"x":240.0,"y":825.0},"_comment":"Tutorial_0_7_KillTheEnemyTip","$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"9"},{"_simplexNode":{"NoticeTip":{"_value":"You
     succeed in filling the fuel!"},"TipPositionType":{"_value":4},"Duration":{"_value":3.0}},"_position":{"x":660.0,"y":825.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
     Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"10"}],"connections":[{"_sourcePortName":"Out","_targetPortName":"
@@ -33,7 +33,7 @@ MonoBehaviour:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: 332, y: -58}
+    _translation: {x: 369, y: -48}
     _zoomFactor: 1
   _haltSerialization: 0
 #---GRAPH_START---
@@ -145,13 +145,13 @@ MonoBehaviour:
 #        {
 #            "_simplexNode": {
 #                "NoticeTip": {
-#                    "_value": "You succeed in merging the fire box!"
+#                    "_value": "Kick the Wooden Box into the Flamethrower"
 #                },
 #                "TipPositionType": {
 #                    "_value": 4
 #                },
 #                "Duration": {
-#                    "_value": 3.0
+#                    "_value": 5.0
 #                }
 #            },
 #            "_position": {

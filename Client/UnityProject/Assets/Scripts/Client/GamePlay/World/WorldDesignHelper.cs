@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -14,10 +12,20 @@ using UnityEditor;
 [ExecuteInEditMode]
 public class WorldDesignHelper : MonoBehaviour
 {
+    [LabelText("世界特性")]
     public WorldFeature WorldFeature;
 
     [LabelText("默认出生点花名")]
     public string DefaultWorldActorBornPointAlias;
+
+    [BoxGroup("开局数据")]
+    [LabelText("是否使用特殊开局数据")]
+    public bool UseSpecialPlayerEnterESPS = false;
+
+    [BoxGroup("开局数据")]
+    [LabelText("玩家特殊开局数据")]
+    [ShowIf("UseSpecialPlayerEnterESPS")]
+    public EntityStatPropSet Raw_PlayerEnterESPS = new EntityStatPropSet(); // 干数据
 
 #if UNITY_EDITOR
     public WorldData ExportWorldData()
@@ -35,6 +43,8 @@ public class WorldDesignHelper : MonoBehaviour
         WorldData worldData = new WorldData();
         worldData.WorldFeature = WorldFeature;
         worldData.DefaultWorldActorBornPointAlias = DefaultWorldActorBornPointAlias;
+        worldData.UseSpecialPlayerEnterESPS = UseSpecialPlayerEnterESPS;
+        Raw_PlayerEnterESPS.ApplyDataTo(worldData.Raw_PlayerEnterESPS);
         foreach (WorldModuleDesignHelper module in modules)
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(module.transform, WorldModule.MODULE_SIZE);
