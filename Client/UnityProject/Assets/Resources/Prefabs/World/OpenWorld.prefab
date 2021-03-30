@@ -105,9 +105,9 @@ MonoBehaviour:
     m_GenerateAlgorithm: 2
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
-    OnlyAllowPutOnTerrain: 0
-    AllowPlaceOnTerrainTypes: 
-    ForbidPlaceOnTerrainTypes: 010000000300000002000000
+    OnlyAllowPutOnTerrain: 1
+    AllowPlaceOnTerrainTypes: 0100000002000000
+    ForbidPlaceOnTerrainTypes: 
     ConsiderStaticLayout: 0
     CertainNumber: 0
     Count: 1
@@ -124,7 +124,7 @@ MonoBehaviour:
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     OnlyAllowPutOnTerrain: 1
-    AllowPlaceOnTerrainTypes: 03000000
+    AllowPlaceOnTerrainTypes: 05000000
     ForbidPlaceOnTerrainTypes: 0100000002000000
     ConsiderStaticLayout: 0
     CertainNumber: 0
@@ -142,7 +142,7 @@ MonoBehaviour:
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     OnlyAllowPutOnTerrain: 1
-    AllowPlaceOnTerrainTypes: 0100000002000000
+    AllowPlaceOnTerrainTypes: 0300000004000000
     ForbidPlaceOnTerrainTypes: 
     ConsiderStaticLayout: 0
     CertainNumber: 0
@@ -161,7 +161,7 @@ MonoBehaviour:
     OnlyOverrideAnyBox: 0
     OnlyAllowPutOnTerrain: 0
     AllowPlaceOnTerrainTypes: 00000000
-    ForbidPlaceOnTerrainTypes: 010000000200000003000000
+    ForbidPlaceOnTerrainTypes: 030000000400000005000000
     ConsiderStaticLayout: 0
     CertainNumber: 0
     Count: 1
@@ -506,7 +506,7 @@ MonoBehaviour:
         PerlinNoiseThreshold: 0.7
         PerlinNoiseScale: 0.05125647
         FillPercent: 40
-        TerrainType: 2
+        TerrainType: 4
         OnlyOverrideSomeTerrain: 0
         OverrideTerrainType: 0
     00000001:
@@ -517,13 +517,13 @@ MonoBehaviour:
         NeighborIterations:
         - LimitSelfType: 1
           SelfTerrainType: 0
-          NeighborTerrainType: 2
+          NeighborTerrainType: 4
           Operator: 2
           Threshold: 3
-          ChangeTerrainTypeTo: 2
+          ChangeTerrainTypeTo: 4
         - LimitSelfType: 1
-          SelfTerrainType: 2
-          NeighborTerrainType: 2
+          SelfTerrainType: 4
+          NeighborTerrainType: 4
           Operator: 0
           Threshold: 2
           ChangeTerrainTypeTo: 0
@@ -535,9 +535,9 @@ MonoBehaviour:
         PerlinNoiseThreshold: 0.4
         PerlinNoiseScale: 2.156
         FillPercent: 25
-        TerrainType: 1
+        TerrainType: 3
         OnlyOverrideSomeTerrain: 1
-        OverrideTerrainType: 2
+        OverrideTerrainType: 4
     00000003:
       type: {class: TerrainProcessPass_Smooth, ns: , asm: Client}
       data:
@@ -546,16 +546,16 @@ MonoBehaviour:
         NeighborIterations:
         - LimitSelfType: 0
           SelfTerrainType: 2
-          NeighborTerrainType: 1
+          NeighborTerrainType: 3
           Operator: 2
           Threshold: 3
-          ChangeTerrainTypeTo: 1
+          ChangeTerrainTypeTo: 3
         - LimitSelfType: 1
-          SelfTerrainType: 1
+          SelfTerrainType: 3
           NeighborTerrainType: 0
           Operator: 2
           Threshold: 1
-          ChangeTerrainTypeTo: 2
+          ChangeTerrainTypeTo: 4
     00000004:
       type: {class: TerrainProcessPass_RandomFill, ns: , asm: Client}
       data:
@@ -564,7 +564,7 @@ MonoBehaviour:
         PerlinNoiseThreshold: 0.7
         PerlinNoiseScale: 0.04373
         FillPercent: 40
-        TerrainType: 3
+        TerrainType: 5
         OnlyOverrideSomeTerrain: 1
         OverrideTerrainType: 0
     00000005:
@@ -575,13 +575,13 @@ MonoBehaviour:
         NeighborIterations:
         - LimitSelfType: 1
           SelfTerrainType: 0
-          NeighborTerrainType: 3
+          NeighborTerrainType: 5
           Operator: 2
           Threshold: 3
-          ChangeTerrainTypeTo: 3
+          ChangeTerrainTypeTo: 5
         - LimitSelfType: 1
-          SelfTerrainType: 3
-          NeighborTerrainType: 3
+          SelfTerrainType: 5
+          NeighborTerrainType: 5
           Operator: 0
           Threshold: 2
           ChangeTerrainTypeTo: 0

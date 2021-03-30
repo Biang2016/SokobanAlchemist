@@ -45,7 +45,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static Dictionary<TypeDefineType, TypeGUIDMappingAsset.Mapping> TypeGUIDMappings = new Dictionary<TypeDefineType, TypeGUIDMappingAsset.Mapping>();
 
-    public const int TERRAIN_TYPE_COUNT = 10;
+    public const int TERRAIN_TYPE_COUNT = 12;
 
     public enum TypeStartIndex
     {

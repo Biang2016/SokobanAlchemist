@@ -155,10 +155,10 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public void CreateTextureArray()
     {
         TextureFormat tf = BoxMarchingTextureConfigMatrix.Matrix[0, 0].format;
-        Texture2DArray array = new Texture2DArray(2048, 2048, 55, tf, false);
+        Texture2DArray array = new Texture2DArray(1024, 1024, (1 + ConfigManager.TERRAIN_TYPE_COUNT) * ConfigManager.TERRAIN_TYPE_COUNT / 2, tf, false);
         int index = 0;
-        for (int i = 0; i < BoxMarchingTextureConfigMatrix.Matrix.GetLength(0); i++)
-        for (int j = 0; j < BoxMarchingTextureConfigMatrix.Matrix.GetLength(1); j++)
+        for (int i = 0; i < ConfigManager.TERRAIN_TYPE_COUNT; i++)
+        for (int j = 0; j < ConfigManager.TERRAIN_TYPE_COUNT; j++)
         {
             Texture2D texture = BoxMarchingTextureConfigMatrix.Matrix[i, j];
             if (texture != null)

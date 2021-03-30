@@ -3,6 +3,8 @@
 public enum TerrainType
 {
     Earth,
+    GrassYellow,
+    GrassGreen,
     Ice,
     Snow,
     Fire,
