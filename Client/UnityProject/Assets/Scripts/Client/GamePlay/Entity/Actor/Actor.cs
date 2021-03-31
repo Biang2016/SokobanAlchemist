@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay.UI;
 using DG.Tweening;
 using NodeCanvas.Framework;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Actor : Entity
 {
@@ -179,30 +175,8 @@ public class Actor : Entity
         if (EntityOrientation == newOrientation) return;
 
         // Actor由于限制死平面必须是正方形，因此可以用左下角坐标相减得到核心坐标偏移量；在旋转时应用此偏移量，可以保证平面正方形仍在老位置
-
         GridPos offset = ActorRotateWorldGPOffset(ActorWidth, newOrientation) - ActorRotateWorldGPOffset(ActorWidth, EntityOrientation);
         base.SwitchEntityOrientation(newOrientation);
-
-        //int x_min_beforeRotate = int.MaxValue;
-        //int z_min_beforeRotate = int.MaxValue;
-        //foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
-        //{
-        //    if (offset.x < x_min_beforeRotate) x_min_beforeRotate = offset.x;
-        //    if (offset.z < z_min_beforeRotate) z_min_beforeRotate = offset.z;
-        //}
-
-        //base.SwitchEntityOrientation(newOrientation);
-
-        //int x_min_afterRotate = int.MaxValue;
-        //int z_min_afterRotate = int.MaxValue;
-        //foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
-        //{
-        //    if (offset.x < x_min_afterRotate) x_min_afterRotate = offset.x;
-        //    if (offset.z < z_min_afterRotate) z_min_afterRotate = offset.z;
-        ////}
-
-        //int delta_x = x_min_beforeRotate - x_min_afterRotate;
-        //int delta_z = z_min_beforeRotate - z_min_afterRotate;
 
         int delta_x = offset.x;
         int delta_z = offset.z;
@@ -455,7 +429,6 @@ public class Actor : Entity
 
         UnInitActiveSkills();
         UnInitPassiveSkills();
-        actorPassiveSkillTicker = 0;
         EntityStatPropSet.OnRecycled();
 
         ActorMoveColliderRoot.SetActive(false);
@@ -529,7 +502,6 @@ public class Actor : Entity
     public void Setup(string actorType, ActorCategory actorCategory, GridPosR.Orientation actorOrientation, uint initWorldModuleGUID)
     {
         base.Setup(initWorldModuleGUID);
-        GUID = GetGUID();
         if (actorCategory == ActorCategory.Creature)
         {
             EntityTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Enemy, actorType);
@@ -547,7 +519,6 @@ public class Actor : Entity
         ActorBattleHelper.Initialize();
         ActorBoxInteractHelper.Initialize();
         InitPassiveSkills();
-        actorPassiveSkillTicker = 0;
         InitActiveSkills();
 
         ActorArtHelper.SetPFMoveGridSpeed(0);
@@ -587,9 +558,6 @@ public class Actor : Entity
     {
     }
 
-    private float actorPassiveSkillTicker = 0f;
-    private float actorPassiveSkillTickInterval = 0.3f;
-
     private float actorActiveSkillTicker = 0f;
     private float actorActiveSkillTickInterval = 0.1f;
 
@@ -597,32 +565,6 @@ public class Actor : Entity
     {
         base.FixedUpdate();
         if (IsRecycled) return;
-        actorPassiveSkillTicker += Time.fixedDeltaTime;
-        if (actorPassiveSkillTicker >= actorPassiveSkillTickInterval)
-        {
-            actorPassiveSkillTicker -= actorPassiveSkillTickInterval;
-            foreach (EntityPassiveSkill eps in EntityPassiveSkills)
-            {
-                eps.OnTick(actorPassiveSkillTickInterval);
-            }
-        }
-
-        foreach (EntityActiveSkill eas in EntityActiveSkills)
-        {
-            eas.OnFixedUpdate(Time.fixedDeltaTime);
-        }
-
-        actorActiveSkillTicker += Time.fixedDeltaTime;
-        if (actorActiveSkillTicker >= actorActiveSkillTickInterval)
-        {
-            actorActiveSkillTicker -= actorActiveSkillTickInterval;
-            foreach (EntityActiveSkill eas in EntityActiveSkills)
-            {
-                eas.OnTick(actorActiveSkillTickInterval);
-            }
-        }
-
-        EntityBuffHelper.BuffFixedUpdate(Time.deltaTime);
         if (ENABLE_ACTOR_MOVE_LOG && WorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {WorldGP}");
         LastWorldGP = WorldGP;
         WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);

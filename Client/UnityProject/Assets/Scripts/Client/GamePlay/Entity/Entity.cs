@@ -19,6 +19,9 @@ public abstract class Entity : PoolObject
     [ShowInInspector]
     internal int GUID_Mod_FixedFrameRate;
 
+    [FoldoutGroup("属性")]
+    public bool SlowlyTick = false;
+
     private static uint guidGenerator = (uint) ConfigManager.GUID_Separator.Entity;
 
     protected uint GetGUID()
@@ -504,10 +507,74 @@ public abstract class Entity : PoolObject
     public void Setup(uint initWorldModuleGUID)
     {
         InitWorldModuleGUID = initWorldModuleGUID;
+        if (GUID == 0)
+        {
+            GUID = GetGUID();
+            if (IsBoxCamp)
+            {
+                if (SlowlyTick)
+                {
+                    GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_5X;
+                }
+                else
+                {
+                    GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
+                }
+            }
+            else
+            {
+                GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_03X;
+            }
+        }
     }
 
     protected virtual void FixedUpdate()
     {
+        void Tick(float deltaTime)
+        {
+            EntityStatPropSet.Tick(deltaTime);
+            EntityBuffHelper.BuffTick(deltaTime);
+            foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+            {
+                eps.OnTick(deltaTime);
+            }
+
+            foreach (EntityActiveSkill eas in EntityActiveSkills)
+            {
+                eas.OnTick(deltaTime);
+            }
+        }
+
+        if (IsRecycled) return;
+        if (IsBoxCamp)
+        {
+            if (SlowlyTick)
+            {
+                if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_5X) // SlowTick Box 5秒一次
+                {
+                    Tick(5f);
+                }
+            }
+            else
+            {
+                if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate) // Box 1秒一次
+                {
+                    Tick(1f);
+                }
+            }
+        }
+        else
+        {
+            if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_03X) // Actor 0.3秒一次
+            {
+                Tick(0.3f);
+            }
+        }
+
+        foreach (EntityActiveSkill eas in EntityActiveSkills)
+        {
+            eas.OnFixedUpdate(Time.fixedDeltaTime);
+        }
     }
 
     protected virtual void OnCollisionEnter(Collision collision)

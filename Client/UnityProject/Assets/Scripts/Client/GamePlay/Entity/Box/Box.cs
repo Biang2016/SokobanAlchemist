@@ -220,7 +220,7 @@ public partial class Box : Entity
         base.OnRecycled();
     }
 
-    [FoldoutGroup("箱子属性")]
+    [FoldoutGroup("属性")]
     [LabelText("箱子特性")]
     [AssetsOnly]
     public BoxFeature BoxFeature;
@@ -260,7 +260,7 @@ public partial class Box : Entity
     [AssetsOnly]
     [ShowInInspector]
     [ShowIf("Interactable")]
-    [FoldoutGroup("箱子属性")]
+    [FoldoutGroup("属性")]
     [LabelText("重量")]
     private const float Weight = 0.7f;
 
@@ -281,33 +281,33 @@ public partial class Box : Entity
     #region 各向异性
 
     [SerializeField]
-    [FoldoutGroup("箱子属性")]
+    [FoldoutGroup("属性")]
     [LabelText("X轴(Local)踢出速度倍率")]
     private float KickForce_X = 1f;
 
     [SerializeField]
-    [FoldoutGroup("箱子属性")]
+    [FoldoutGroup("属性")]
     [LabelText("Z轴(Local)踢出速度倍率")]
     private float KickForce_Z = 1f;
 
     [SerializeField]
-    [FoldoutGroup("箱子属性")]
+    [FoldoutGroup("属性")]
     [LabelText("X轴(Local)击退力")]
     private float KickRepelForce_X = 10f;
 
     [SerializeField]
-    [FoldoutGroup("箱子属性")]
+    [FoldoutGroup("属性")]
     [LabelText("Z轴(Local)击退力")]
     private float KickRepelForce_Z = 10f;
 
     [SerializeField]
-    [FoldoutGroup("箱子属性")]
+    [FoldoutGroup("属性")]
     [LabelText("X轴(Local)碾压")]
     [SerializeReference]
     private bool Grind_X;
 
     [SerializeField]
-    [FoldoutGroup("箱子属性")]
+    [FoldoutGroup("属性")]
     [LabelText("Z轴(Local)碾压")]
     [SerializeReference]
     private bool Grind_Z;
@@ -315,17 +315,17 @@ public partial class Box : Entity
     #endregion
 
     [SerializeField]
-    [FoldoutGroup("箱子属性")]
+    [FoldoutGroup("属性")]
     [LabelText("死亡延迟")]
     private float DeleteDelay = 0;
 
     [SerializeField]
-    [FoldoutGroup("箱子属性")]
+    [FoldoutGroup("属性")]
     [LabelText("合并延迟")]
     private float MergeDelay = 0;
 
     [SerializeField]
-    [FoldoutGroup("箱子属性")]
+    [FoldoutGroup("属性")]
     [LabelText("是否永远朝向相机")]
     private bool FaceToCameraForever = false;
 
@@ -453,11 +453,6 @@ public partial class Box : Entity
 
     protected virtual void Start()
     {
-        if (GUID == 0)
-        {
-            GUID = GetGUID();
-            GUID_Mod_FixedFrameRate = BoxFeature.HasFlag(BoxFeature.SlowTick) ? ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_5X : ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
-        }
     }
 
     private void OnPlayerInteractSkillChanged(InteractSkillType interactSkillType, ushort boxTypeIndex)
@@ -483,11 +478,6 @@ public partial class Box : Entity
         base.Setup(initWorldModuleGUID);
         if (IsHidden) BoxModelHelper.gameObject.SetActive(false);
         EntityTypeIndex = boxTypeIndex;
-        if (GUID == 0)
-        {
-            GUID = GetGUID();
-            GUID_Mod_FixedFrameRate = BoxFeature.HasFlag(BoxFeature.SlowTick) ? ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_5X : ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
-        }
 
         InitPassiveSkills();
 
@@ -961,31 +951,6 @@ public partial class Box : Entity
     {
         base.FixedUpdate();
         if (IsRecycled) return;
-        if (BoxFeature.HasFlag(BoxFeature.SlowTick)) // 减慢Tick
-        {
-            if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_5X)
-            {
-                EntityStatPropSet.FixedUpdate(5f);
-                EntityBuffHelper.BuffFixedUpdate(5f);
-                foreach (EntityPassiveSkill ps in EntityPassiveSkills)
-                {
-                    ps.OnTick(5f);
-                }
-            }
-        }
-        else
-        {
-            if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate)
-            {
-                EntityStatPropSet.FixedUpdate(1f);
-                EntityBuffHelper.BuffFixedUpdate(1f);
-                foreach (EntityPassiveSkill ps in EntityPassiveSkills)
-                {
-                    ps.OnTick(1f);
-                }
-            }
-        }
-
         if (FaceToCameraForever)
         {
             SwitchEntityOrientation(CameraManager.Instance.FieldCamera.RotateDirection);
@@ -1483,8 +1448,8 @@ public enum BoxFeature
     [LabelText("举起就消失")]
     LiftThenDisappear = 1 << 11,
 
-    [LabelText("缓慢Tick")]
-    SlowTick = 1 << 12,
+    [LabelText("--空--")]
+    EmptyEmptyPlaceHolder = 1 << 12,
 
     [LabelText("不受BUff影响")]
     BuffImmune = 1 << 13,

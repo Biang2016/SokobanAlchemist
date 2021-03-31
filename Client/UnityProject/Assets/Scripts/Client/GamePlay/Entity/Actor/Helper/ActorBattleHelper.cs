@@ -39,10 +39,6 @@ public class ActorBattleHelper : ActorMonoHelper
 
     void FixedUpdate()
     {
-        if (!Actor.IsRecycled)
-        {
-            Actor.EntityStatPropSet.FixedUpdate(Time.fixedDeltaTime);
-        }
     }
 
     #region Life & Health

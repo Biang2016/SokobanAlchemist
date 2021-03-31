@@ -460,15 +460,15 @@ public class EntityBuffHelper : EntityMonoHelper
 
     List<uint> removeKeys = new List<uint>();
 
-    public void BuffFixedUpdate(float fixedDeltaTime)
+    public void BuffTick(float deltaTime)
     {
         removeKeys.Clear();
         foreach (KeyValuePair<uint, EntityBuff> kv in BuffDict)
         {
             if (BuffRemainTimeDict.ContainsKey(kv.Key))
             {
-                BuffRemainTimeDict[kv.Key] -= fixedDeltaTime;
-                BuffPassedTimeDict[kv.Key] += fixedDeltaTime;
+                BuffRemainTimeDict[kv.Key] -= deltaTime;
+                BuffPassedTimeDict[kv.Key] += deltaTime;
                 kv.Value.OnFixedUpdate(Entity, BuffPassedTimeDict[kv.Key], BuffRemainTimeDict[kv.Key]);
                 if (BuffRemainTimeDict[kv.Key] <= 0)
                 {

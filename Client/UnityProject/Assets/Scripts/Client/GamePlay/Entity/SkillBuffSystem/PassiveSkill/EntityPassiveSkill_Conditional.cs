@@ -33,6 +33,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         OnDestroyEntityByElementDamage = 1 << 15,
         OnBeingFueled = 1 << 16,
         OnEntityStatValueChange = 1 << 17,
+        OnEntityPropertyValueChange = 1 << 18,
     }
 
     [LabelText("触发时机")]
@@ -49,10 +50,37 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     private HashSet<EntityBuffAttribute> DestroyEntityByElementDamageTypeSet = new HashSet<EntityBuffAttribute>();
 
     [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
-    [LabelText("EntityStat种类")]
-    public List<EntityStatType> EntityStatChangeTypeList = new List<EntityStatType>();
+    [LabelText("状态值种类")]
+    public EntityStatType EntityStatChangeType;
 
-    private HashSet<EntityStatType> EntityStatChangeTypeSet = new HashSet<EntityStatType>();
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
+    [LabelText("状态值阈值")]
+    public int EntityStatChangeThreshold;
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
+    [HideLabel]
+    [EnumToggleButtons]
+    public Operator EntityStatChangeThresholdOperator;
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityPropertyValueChange)]
+    [LabelText("属性值种类")]
+    public EntityPropertyType EntityPropertyChangeType;
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityPropertyValueChange)]
+    [LabelText("属性值阈值")]
+    public int EntityPropertyChangeThreshold;
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityPropertyValueChange)]
+    [HideLabel]
+    [EnumToggleButtons]
+    public Operator EntityPropertyChangeThresholdOperator;
+
+    public enum Operator
+    {
+        LessEquals,
+        Equals,
+        GreaterEquals,
+    }
 
     private IEnumerable GetAllBuffAttributeTypes => ConfigManager.GetAllBuffAttributeTypes();
 
@@ -82,14 +110,6 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             foreach (EntityBuffAttribute attribute in DestroyEntityByElementDamageTypeList)
             {
                 DestroyEntityByElementDamageTypeSet.Add(attribute);
-            }
-        }
-
-        if (EntityStatChangeTypeSet.Count == 0)
-        {
-            foreach (EntityStatType est in EntityStatChangeTypeList)
-            {
-                EntityStatChangeTypeSet.Add(est);
             }
         }
     }
@@ -588,14 +608,76 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
     }
 
-    public override void OnElementValueChange(EntityStatType entityStatType)
+    public override void OnEntityStatValueChange(EntityStatType entityStatType)
     {
-        base.OnElementValueChange(entityStatType);
+        base.OnEntityStatValueChange(entityStatType);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityStatValueChange))
         {
-            if (EntityStatChangeTypeSet.Contains(entityStatType))
+            if (EntityStatChangeType == entityStatType)
             {
-                if (TriggerProbabilityPercent.ProbabilityBool())
+                EntityStat stat = Entity.EntityStatPropSet.StatDict[EntityStatChangeType];
+                bool trigger = false;
+                switch (EntityStatChangeThresholdOperator)
+                {
+                    case Operator.LessEquals:
+                    {
+                        trigger = stat.Value <= EntityStatChangeThreshold;
+                        break;
+                    }
+                    case Operator.Equals:
+                    {
+                        trigger = stat.Value == EntityStatChangeThreshold;
+                        break;
+                    }
+                    case Operator.GreaterEquals:
+                    {
+                        trigger = stat.Value >= EntityStatChangeThreshold;
+                        break;
+                    }
+                }
+
+                if (trigger && TriggerProbabilityPercent.ProbabilityBool())
+                {
+                    foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                    {
+                        if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                        {
+                            pureAction.Execute();
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public override void OnEntityPropertyValueChange(EntityPropertyType entityPropertyType)
+    {
+        base.OnEntityPropertyValueChange(entityPropertyType);
+        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityPropertyValueChange))
+        {
+            if (EntityPropertyChangeType == entityPropertyType)
+            {
+                EntityProperty property = Entity.EntityStatPropSet.PropertyDict[EntityPropertyChangeType];
+                bool trigger = false;
+                switch (EntityPropertyChangeThresholdOperator)
+                {
+                    case Operator.LessEquals:
+                    {
+                        trigger = property.GetModifiedValue <= EntityPropertyChangeThreshold;
+                        break;
+                    }
+                    case Operator.Equals:
+                    {
+                        trigger = property.GetModifiedValue == EntityPropertyChangeThreshold;
+                        break;
+                    }
+                    case Operator.GreaterEquals:
+                    {
+                        trigger = property.GetModifiedValue >= EntityPropertyChangeThreshold;
+                        break;
+                    }
+                }
+
+                if (trigger && TriggerProbabilityPercent.ProbabilityBool())
                 {
                     foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
                     {
@@ -685,7 +767,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
         newPSC.PassiveSkillCondition = PassiveSkillCondition;
         newPSC.DestroyEntityByElementDamageTypeList = DestroyEntityByElementDamageTypeList.Clone();
-        newPSC.EntityStatChangeTypeList = EntityStatChangeTypeList.Clone();
+        newPSC.EntityStatChangeType = EntityStatChangeType;
         foreach (EntityPassiveSkillAction rawBoxPassiveSkillAction in RawEntityPassiveSkillActions)
         {
             EntityPassiveSkillAction newEPSA = rawBoxPassiveSkillAction.Clone();
@@ -710,7 +792,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
         PassiveSkillCondition = srcPSC.PassiveSkillCondition;
         DestroyEntityByElementDamageTypeList = srcPSC.DestroyEntityByElementDamageTypeList.Clone();
-        EntityStatChangeTypeList = srcPSC.EntityStatChangeTypeList.Clone();
+        EntityStatChangeType = srcPSC.EntityStatChangeType;
         if (srcPSC.RawEntityPassiveSkillActions.Count != RawEntityPassiveSkillActions.Count)
         {
             Debug.LogError("EPS_Conditional CopyDataFrom() Action数量不一致");

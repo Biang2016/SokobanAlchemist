@@ -10,6 +10,9 @@ using UnityEngine.Serialization;
 [Serializable]
 public class EntityStatPropSet
 {
+    public static List<EntityStatType> EntityStatTypeEnumList = new List<EntityStatType>();
+    public static List<EntityPropertyType> EntityPropertyTypeEnumList = new List<EntityPropertyType>();
+
     public EntityStatPropSet()
     {
         InitDelegates();
@@ -335,7 +338,6 @@ public class EntityStatPropSet
         #region 财产
 
         StatDict.Add(EntityStatType.Gold, Gold);
-        if (entity is Actor) Gold.OnValueIncrease = OnGoldIncreaseAction;
 
         #endregion
 
@@ -346,15 +348,7 @@ public class EntityStatPropSet
         #region 耐久
 
         HealthDurability.MaxValue = MaxHealthDurability.GetModifiedValue;
-        if (entity is Actor)
-        {
-            HealthDurability.OnValueDecrease = OnHealthDurabilityDecreaseAction;
-            HealthDurability.OnValueIncrease = OnHealthDurabilityIncreaseAction;
-        }
-
-        HealthDurability.OnValueReachZero = OnHealthDurabilityReachZeroAction;
         StatDict.Add(EntityStatType.HealthDurability, HealthDurability);
-        MaxHealthDurability.OnValueChanged = OnMaxHealthDurabilityChangedAction;
         PropertyDict.Add(EntityPropertyType.MaxHealthDurability, MaxHealthDurability);
 
         StatDict.Add(EntityStatType.DropFromAirSurviveProbabilityPercent, DropFromAirSurviveProbabilityPercent);
@@ -393,18 +387,10 @@ public class EntityStatPropSet
 
         #region 冰冻
 
-        FrozenResistance.OnValueChanged = OnFrozenResistanceChangedAction;
         PropertyDict.Add(EntityPropertyType.FrozenResistance, FrozenResistance);
         PropertyDict.Add(EntityPropertyType.FrozenDamageDefense, FrozenDamageDefense);
 
         FrozenValue.AbnormalStatResistance = FrozenResistance.GetModifiedValue;
-        if (FrozenValue.AbnormalStatResistance < 200)
-        {
-            FrozenValue.OnValueChanged = OnFrozenValueChangedAction;
-            FrozenValue.OnValueIncrease = OnFrozenValueIncreaseAction;
-            FrozenLevel.OnValueChanged = Entity.EntityFrozenHelper.OnFrozeIntoIceBlockAction;
-            FrozenLevel.OnValueChanged += OnFrozenLevelChangedAction;
-        }
 
         StatDict.Add(EntityStatType.FrozenValue, FrozenValue);
         StatDict.Add(EntityStatType.FrozenLevel, FrozenLevel);
@@ -417,16 +403,9 @@ public class EntityStatPropSet
 
         #region 燃烧
 
-        FiringResistance.OnValueChanged = OnFiringResistanceChangedAction;
         PropertyDict.Add(EntityPropertyType.FiringResistance, FiringResistance);
 
         FiringValue.AbnormalStatResistance = FiringResistance.GetModifiedValue;
-        if (FiringValue.AbnormalStatResistance < 200)
-        {
-            FiringValue.OnValueChanged = OnFiringValueChangedAction;
-            FiringValue.OnValueIncrease = OnFiringValueIncreaseAction;
-            FiringLevel.OnValueChanged = OnFiringLevelChangedAction;
-        }
 
         StatDict.Add(EntityStatType.FiringValue, FiringValue);
         StatDict.Add(EntityStatType.FiringLevel, FiringLevel);
@@ -443,14 +422,12 @@ public class EntityStatPropSet
 
         PropertyDict.Add(EntityPropertyType.MoveSpeed, MoveSpeed);
 
-        if (entity is Actor) MaxActionPoint.OnValueChanged = OnMaxActionPointChanged;
         PropertyDict.Add(EntityPropertyType.MaxActionPoint, MaxActionPoint);
 
         ActionPoint.MaxValue = MaxActionPoint.GetModifiedValue;
         ActionPoint.AutoChange = ActionPointRecovery.GetModifiedValue / 100f;
         StatDict.Add(EntityStatType.ActionPoint, ActionPoint);
 
-        if (entity is Actor) ActionPointRecovery.OnValueChanged = OnActionPointRecoveryChangedAction;
         PropertyDict.Add(EntityPropertyType.ActionPointRecovery, ActionPointRecovery);
 
         PropertyDict.Add(EntityPropertyType.KickConsumeActionPoint, KickConsumeActionPoint);
@@ -473,10 +450,6 @@ public class EntityStatPropSet
         Profiler.EndSample();
 
         Profiler.BeginSample("ESPS #4");
-        if (Entity.name.Contains("LightningEnemy"))
-        {
-            int a = 0;
-        }
 
         foreach (EntityBuff rawEntityDefaultBuff in RawEntityDefaultBuffs)
         {
@@ -484,30 +457,66 @@ public class EntityStatPropSet
         }
 
         Profiler.EndSample();
+
+        foreach (KeyValuePair<EntityStatType, EntityStat> kv in StatDict)
+        {
+            kv.Value.m_NotifyActionSet.RegisterCallBacks(StatNotifyActionSetDict[kv.Key]);
+        }
+
+        foreach (KeyValuePair<EntityPropertyType, EntityProperty> kv in PropertyDict)
+        {
+            kv.Value.m_NotifyActionSet.RegisterCallBacks(PropertyNotifyActionSetDict[kv.Key]);
+        }
+
+        FrozenLevel.m_NotifyActionSet.OnValueChanged += Entity.EntityFrozenHelper.OnFrozeIntoIceBlockAction;
     }
 
     #region Delegates
 
+    private Dictionary<EntityStatType, Stat.NotifyActionSet> StatNotifyActionSetDict = new Dictionary<EntityStatType, Stat.NotifyActionSet>();
+    private Dictionary<EntityPropertyType, Property.NotifyActionSet> PropertyNotifyActionSetDict = new Dictionary<EntityPropertyType, Property.NotifyActionSet>();
+
     private void InitDelegates()
     {
-        OnGoldIncreaseAction = OnGoldIncrease;
-        OnHealthDurabilityDecreaseAction = OnHealthDurabilityDecrease;
-        OnHealthDurabilityIncreaseAction = OnHealthDurabilityIncrease;
-        OnHealthDurabilityReachZeroAction = OnHealthDurabilityReachZero;
-        OnMaxHealthDurabilityChangedAction = OnMaxHealthDurabilityChanged;
-        OnFrozenResistanceChangedAction = OnFrozenResistanceChanged;
-        OnFrozenValueChangedAction = OnFrozenValueChanged;
-        OnFrozenValueIncreaseAction = OnFrozenValueIncrease;
-        OnFrozenLevelChangedAction = OnFrozenLevelChanged;
-        OnFiringResistanceChangedAction = OnFiringResistanceChanged;
-        OnFiringValueChangedAction = OnFiringValueChanged;
-        OnFiringValueIncreaseAction = OnFiringValueIncrease;
-        OnFiringLevelChangedAction = OnFiringLevelChanged;
-        OnActionPointRecoveryChangedAction = OnActionPointRecoveryChanged;
-        OnMaxActionPointChangedAction = OnMaxActionPointChanged;
-    }
+        foreach (EntityStatType est in Enum.GetValues(typeof(EntityStatType)))
+        {
+            StatNotifyActionSetDict.Add(est, new Stat.NotifyActionSet());
+            StatNotifyActionSetDict[est].OnValueChanged += delegate
+            {
+                foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+                {
+                    eps.OnEntityStatValueChange(est);
+                }
+            };
+        }
 
-    private UnityAction<int> OnGoldIncreaseAction;
+        StatNotifyActionSetDict[EntityStatType.Gold].OnValueIncrease += OnGoldIncrease;
+        StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueDecrease += OnHealthDurabilityDecrease;
+        StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueIncrease += OnHealthDurabilityIncrease;
+        StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueReachZero += OnHealthDurabilityReachZero;
+        StatNotifyActionSetDict[EntityStatType.FrozenValue].OnValueChanged += OnFrozenValueChanged;
+        StatNotifyActionSetDict[EntityStatType.FiringValue].OnValueChanged += OnFiringValueChanged;
+        StatNotifyActionSetDict[EntityStatType.FiringValue].OnValueIncrease += OnFiringValueIncrease;
+        StatNotifyActionSetDict[EntityStatType.FiringLevel].OnValueChanged += OnFiringLevelChanged;
+
+        foreach (EntityPropertyType ept in Enum.GetValues(typeof(EntityPropertyType)))
+        {
+            PropertyNotifyActionSetDict.Add(ept, new Property.NotifyActionSet());
+            PropertyNotifyActionSetDict[ept].OnValueChanged += delegate
+            {
+                foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+                {
+                    eps.OnEntityPropertyValueChange(ept);
+                }
+            };
+        }
+
+        PropertyNotifyActionSetDict[EntityPropertyType.MaxHealthDurability].OnValueChanged += OnMaxHealthDurabilityChanged;
+        PropertyNotifyActionSetDict[EntityPropertyType.FrozenResistance].OnValueChanged += OnFrozenResistanceChanged;
+        PropertyNotifyActionSetDict[EntityPropertyType.FiringResistance].OnValueChanged += OnFiringResistanceChanged;
+        PropertyNotifyActionSetDict[EntityPropertyType.ActionPointRecovery].OnValueChanged += OnActionPointRecoveryChanged;
+        PropertyNotifyActionSetDict[EntityPropertyType.MaxActionPoint].OnValueChanged += OnMaxActionPointChanged;
+    }
 
     private void OnGoldIncrease(int increase)
     {
@@ -515,14 +524,7 @@ public class EntityStatPropSet
         {
             actor.ActorBattleHelper.ShowGainGoldNumFX(increase);
         }
-
-        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
-        {
-            eps.OnElementValueChange(EntityStatType.Gold);
-        }
     }
-
-    private UnityAction<int> OnHealthDurabilityDecreaseAction;
 
     private void OnHealthDurabilityDecrease(int decrease)
     {
@@ -530,14 +532,7 @@ public class EntityStatPropSet
         {
             actor.ActorBattleHelper.ShowDamageNumFX(decrease);
         }
-
-        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
-        {
-            eps.OnElementValueChange(EntityStatType.HealthDurability);
-        }
     }
-
-    private UnityAction<int> OnHealthDurabilityIncreaseAction;
 
     private void OnHealthDurabilityIncrease(int increase)
     {
@@ -545,14 +540,7 @@ public class EntityStatPropSet
         {
             actor.ActorBattleHelper.ShowHealNumFX(increase);
         }
-
-        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
-        {
-            eps.OnElementValueChange(EntityStatType.HealthDurability);
-        }
     }
-
-    private UnityAction<string> OnHealthDurabilityReachZeroAction;
 
     private void OnHealthDurabilityReachZero(string changeInfo)
     {
@@ -571,58 +559,26 @@ public class EntityStatPropSet
         if (Entity is Actor actor) actor.ActorBattleHelper.DestroyActor();
     }
 
-    private UnityAction<int, int> OnMaxHealthDurabilityChangedAction;
-
     private void OnMaxHealthDurabilityChanged(int before, int after)
     {
         HealthDurability.MaxValue = after;
     }
-
-    private UnityAction<int, int> OnFrozenResistanceChangedAction;
 
     private void OnFrozenResistanceChanged(int before, int after)
     {
         FrozenValue.AbnormalStatResistance = after;
     }
 
-    private UnityAction<int, int> OnFrozenValueChangedAction;
-
     private void OnFrozenValueChanged(int before, int after)
     {
         FrozenLevel.SetValue(after / FrozenValuePerLevel, "FrozenValueChange");
         if (FrozenLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FrozenValue, FrozenFX, FrozenLevel.Value); // 冰冻值变化时，播放一次特效
-
-        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
-        {
-            eps.OnElementValueChange(EntityStatType.FrozenValue);
-        }
     }
-
-    private UnityAction<int> OnFrozenValueIncreaseAction;
-
-    private void OnFrozenValueIncrease(int increase)
-    {
-        FiringValue.SetValue(0);
-    }
-
-    private UnityAction<int, int> OnFrozenLevelChangedAction;
-
-    private void OnFrozenLevelChanged(int before, int after)
-    {
-        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
-        {
-            eps.OnElementValueChange(EntityStatType.FrozenLevel);
-        }
-    }
-
-    private UnityAction<int, int> OnFiringResistanceChangedAction;
 
     private void OnFiringResistanceChanged(int before, int after)
     {
         FiringValue.AbnormalStatResistance = after;
     }
-
-    private UnityAction<int, int> OnFiringValueChangedAction;
 
     private void OnFiringValueChanged(int before, int after)
     {
@@ -630,21 +586,12 @@ public class EntityStatPropSet
         if (FiringLevel.Value > 0)
             Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FiringValue, FiringFX, FiringLevel.Value); // 燃烧值变化时，播放一次特效
         else if (after == 0) Entity.EntityBuffHelper.RemoveAbnormalStatFX((int) EntityStatType.FiringValue);
-
-        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
-        {
-            eps.OnElementValueChange(EntityStatType.FiringValue);
-        }
     }
-
-    private UnityAction<int> OnFiringValueIncreaseAction;
 
     private void OnFiringValueIncrease(int increase)
     {
         FrozenValue.SetValue(FrozenValue.Value - increase);
     }
-
-    private UnityAction<int, int> OnFiringLevelChangedAction;
 
     private void OnFiringLevelChanged(int before, int after)
     {
@@ -659,21 +606,12 @@ public class EntityStatPropSet
                 }
             }
         }
-
-        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
-        {
-            eps.OnElementValueChange(EntityStatType.FiringLevel);
-        }
     }
-
-    private UnityAction<int, int> OnActionPointRecoveryChangedAction;
 
     private void OnActionPointRecoveryChanged(int before, int after)
     {
         ActionPoint.AutoChange = after / 100f;
     }
-
-    private UnityAction<int, int> OnMaxActionPointChangedAction;
 
     private void OnMaxActionPointChanged(int before, int after)
     {
@@ -706,14 +644,14 @@ public class EntityStatPropSet
     private float abnormalStateAutoTick = 0f;
     private int abnormalStateAutoTickInterval = 1; // 异常状态值每秒降低
 
-    public void FixedUpdate(float fixedDeltaTime) // Actor更新频率为每帧，Box更新频率为每秒, 带SlowTick标签的Box更新频率为每2秒
+    public void Tick(float deltaTime)
     {
         foreach (KeyValuePair<EntityStatType, EntityStat> kv in StatDict)
         {
-            kv.Value.FixedUpdate(fixedDeltaTime);
+            kv.Value.FixedUpdate(deltaTime);
         }
 
-        abnormalStateAutoTick += fixedDeltaTime;
+        abnormalStateAutoTick += deltaTime;
         if (abnormalStateAutoTick > abnormalStateAutoTickInterval)
         {
             abnormalStateAutoTick -= abnormalStateAutoTickInterval;

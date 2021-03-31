@@ -11,9 +11,6 @@ public class ActorAIAgent
     internal Actor Actor;
     internal static bool ENABLE_ACTOR_AI_AGENT_LOG = false;
 
-    private float CheckSpaceAvailableForActorOccupationInterval = 0.3f;
-    private float CheckSpaceAvailableForActorOccupationTick = 0f;
-
     public ActorAIAgent(Actor actor)
     {
         Actor = actor;
@@ -32,9 +29,7 @@ public class ActorAIAgent
         RefreshTargetGP();
         RefreshThreatEntityRank();
 
-        CheckSpaceAvailableForActorOccupationTick += Time.fixedDeltaTime;
-        MoveToDestination(CheckSpaceAvailableForActorOccupationTick > CheckSpaceAvailableForActorOccupationInterval);
-        if (CheckSpaceAvailableForActorOccupationTick > CheckSpaceAvailableForActorOccupationInterval) CheckSpaceAvailableForActorOccupationTick -= CheckSpaceAvailableForActorOccupationInterval;
+        MoveToDestination();
     }
 
     public void FixedUpdateAfterMove()
@@ -384,15 +379,16 @@ public class ActorAIAgent
         }
     }
 
-    public void MoveToDestination(bool checkSpaceAvailableForActorOccupation)
+    private float arriveThreshold = 0.2f;
+
+    public void RecheckPathFindingPassable()
     {
-        float arriveThreshold = 0.2f;
         Actor.CurMoveAttempt = Vector3.zero;
         if (IsPathFinding)
         {
             if (nextNode != null)
             {
-                if (checkSpaceAvailableForActorOccupation && !ActorPathFinding.CheckSpaceAvailableForActorOccupation(nextNode.GridPos3D_PF, Actor.transform.position, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID)) // 有箱子或Actor挡路，停止寻路
+                if (!ActorPathFinding.CheckSpaceAvailableForActorOccupation(nextNode.GridPos3D_PF, Actor.transform.position, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID)) // 有箱子或Actor挡路，停止寻路
                 {
                     Vector3 diff = currentNode.GridPos3D_PF - Actor.WorldGP_PF;
                     if (diff.magnitude < arriveThreshold)
@@ -404,39 +400,47 @@ public class ActorAIAgent
                         InterruptCurrentPathFinding(); // 未到达 -> 打断
                     }
                 }
-                else
-                {
-                    Vector3 diff = nextNode.GridPos3D_PF - Actor.WorldGP_PF;
-                    if (diff.magnitude < arriveThreshold) // 已经到达下一节点
-                    {
-                        int nextNodeIndex = CurrentPath.IndexOf(nextNode);
-                        ActorPathFinding.Node nextNodeAfterNextNode = CurrentPath.Count > nextNodeIndex + 1 ? CurrentPath[nextNodeIndex + 1] : null;
-                        bool checkArriveDest = nextNode == CurrentPath[CurrentPath.Count - 1] || (LastNodeOccupied && nextNodeAfterNextNode == CurrentPath[CurrentPath.Count - 1]);
-                        if (checkArriveDest)
-                        {
-                            if (LastNodeOccupied && nextNodeAfterNextNode != null && nextNodeAfterNextNode == CurrentPath[CurrentPath.Count - 1])
-                            {
-                                Actor.CurForward = (nextNodeAfterNextNode.GridPos3D_PF - nextNode.GridPos3D_PF).Normalized();
-                            }
+            }
+        }
+    }
 
-                            ClearPathFinding();
-                            return;
+    public void MoveToDestination()
+    {
+        Actor.CurMoveAttempt = Vector3.zero;
+        if (IsPathFinding)
+        {
+            if (nextNode != null)
+            {
+                Vector3 diff = nextNode.GridPos3D_PF - Actor.WorldGP_PF;
+                if (diff.magnitude < arriveThreshold) // 已经到达下一节点
+                {
+                    int nextNodeIndex = CurrentPath.IndexOf(nextNode);
+                    ActorPathFinding.Node nextNodeAfterNextNode = CurrentPath.Count > nextNodeIndex + 1 ? CurrentPath[nextNodeIndex + 1] : null;
+                    bool checkArriveDest = nextNode == CurrentPath[CurrentPath.Count - 1] || (LastNodeOccupied && nextNodeAfterNextNode == CurrentPath[CurrentPath.Count - 1]);
+                    if (checkArriveDest)
+                    {
+                        if (LastNodeOccupied && nextNodeAfterNextNode != null && nextNodeAfterNextNode == CurrentPath[CurrentPath.Count - 1])
+                        {
+                            Actor.CurForward = (nextNodeAfterNextNode.GridPos3D_PF - nextNode.GridPos3D_PF).Normalized();
                         }
 
-                        currentNode = nextNode;
-                        nextNode = nextNodeAfterNextNode;
-                        RecalculateNextStraightNodeCount();
-                    }
-                    else if (diff.magnitude > 1 + arriveThreshold && !diff.x.Equals(0) && !diff.z.Equals(0)) // 由于某些意外，下一个路径点和目前离得较远，会发生角色原地打转不寻路的bug，此处强行重置
-                    {
                         ClearPathFinding();
+                        return;
                     }
 
-                    if (nextNode != null)
-                    {
-                        Actor.CurMoveAttempt = (nextNode.GridPos3D_PF - Actor.WorldGP_PF).Normalized();
-                        Actor.CurMoveAttempt = Actor.CurMoveAttempt.GetSingleDirectionVectorXZ();
-                    }
+                    currentNode = nextNode;
+                    nextNode = nextNodeAfterNextNode;
+                    RecalculateNextStraightNodeCount();
+                }
+                else if (diff.magnitude > 1 + arriveThreshold && !diff.x.Equals(0) && !diff.z.Equals(0)) // 由于某些意外，下一个路径点和目前离得较远，会发生角色原地打转不寻路的bug，此处强行重置
+                {
+                    ClearPathFinding();
+                }
+
+                if (nextNode != null)
+                {
+                    Actor.CurMoveAttempt = (nextNode.GridPos3D_PF - Actor.WorldGP_PF).Normalized();
+                    Actor.CurMoveAttempt = Actor.CurMoveAttempt.GetSingleDirectionVectorXZ();
                 }
             }
         }

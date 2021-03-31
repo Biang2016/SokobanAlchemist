@@ -25,25 +25,49 @@ public abstract class Stat
 
     public void ClearCallBacks()
     {
-        OnChanged = null;
-        OnValueChanged = null;
-        OnValueIncrease = null;
-        OnValueDecrease = null;
-        OnValueReachMin = null;
-        OnValueReachMax = null;
-        OnValueReachZero = null;
-        OnMinValueChanged = null;
-        OnMaxValueChanged = null;
+        m_NotifyActionSet.ClearCallBacks();
     }
 
-    public UnityAction<int, int, int> OnChanged;
+    public NotifyActionSet m_NotifyActionSet = new NotifyActionSet();
 
-    public UnityAction<int, int> OnValueChanged;
-    public UnityAction<int> OnValueIncrease;
-    public UnityAction<int> OnValueDecrease;
-    public UnityAction<int> OnValueReachMin;
-    public UnityAction<int> OnValueReachMax;
-    public UnityAction<string> OnValueReachZero;
+    public class NotifyActionSet
+    {
+        public UnityAction<int, int, int> OnChanged;
+        public UnityAction<int, int> OnValueChanged;
+        public UnityAction<int> OnValueIncrease;
+        public UnityAction<int> OnValueDecrease;
+        public UnityAction<int> OnValueReachMin;
+        public UnityAction<int> OnValueReachMax;
+        public UnityAction<string> OnValueReachZero;
+        public UnityAction<int, int> OnMinValueChanged;
+        public UnityAction<int, int> OnMaxValueChanged;
+
+        public void RegisterCallBacks(NotifyActionSet target)
+        {
+            OnChanged = target.OnChanged;
+            OnValueChanged = target.OnValueChanged;
+            OnValueIncrease = target.OnValueIncrease;
+            OnValueDecrease = target.OnValueDecrease;
+            OnValueReachMin = target.OnValueReachMin;
+            OnValueReachMax = target.OnValueReachMax;
+            OnValueReachZero = target.OnValueReachZero;
+            OnMinValueChanged = target.OnMinValueChanged;
+            OnMaxValueChanged = target.OnMaxValueChanged;
+        }
+
+        public void ClearCallBacks()
+        {
+            OnChanged = null;
+            OnValueChanged = null;
+            OnValueIncrease = null;
+            OnValueDecrease = null;
+            OnValueReachMin = null;
+            OnValueReachMax = null;
+            OnValueReachZero = null;
+            OnMinValueChanged = null;
+            OnMaxValueChanged = null;
+        }
+    }
 
     #region 异常属性抗性
 
@@ -80,13 +104,13 @@ public abstract class Stat
 
             int before = _value;
             _value = value;
-            if (_value == _minValue) OnValueReachMin?.Invoke(_value);
-            if (_value == _maxValue) OnValueReachMax?.Invoke(_value);
-            OnValueChanged?.Invoke(before, _value);
-            OnChanged?.Invoke(_value, _minValue, _maxValue);
-            if (before < _value) OnValueIncrease?.Invoke(_value - before);
-            if (before > _value) OnValueDecrease?.Invoke(before - _value);
-            if (before > 0 && _value <= 0) OnValueReachZero?.Invoke(changeInfo);
+            if (_value == _minValue) m_NotifyActionSet.OnValueReachMin?.Invoke(_value);
+            if (_value == _maxValue) m_NotifyActionSet.OnValueReachMax?.Invoke(_value);
+            m_NotifyActionSet.OnValueChanged?.Invoke(before, _value);
+            m_NotifyActionSet.OnChanged?.Invoke(_value, _minValue, _maxValue);
+            if (before < _value) m_NotifyActionSet.OnValueIncrease?.Invoke(_value - before);
+            if (before > _value) m_NotifyActionSet.OnValueDecrease?.Invoke(before - _value);
+            if (before > 0 && _value <= 0) m_NotifyActionSet.OnValueReachZero?.Invoke(changeInfo);
         }
     }
 
@@ -94,8 +118,6 @@ public abstract class Stat
     {
         _value = Mathf.Clamp(_value + delta, _minValue, _maxValue);
     }
-
-    public UnityAction<int, int> OnMinValueChanged;
 
     [SerializeField]
     [LabelText("最小值")]
@@ -112,13 +134,11 @@ public abstract class Stat
                 if (_value < value) SetValue(value, "MinValueChange");
                 int before = _minValue;
                 _minValue = value;
-                OnMinValueChanged?.Invoke(before, _minValue);
-                OnChanged?.Invoke(_value, _minValue, _maxValue);
+                m_NotifyActionSet.OnMinValueChanged?.Invoke(before, _minValue);
+                m_NotifyActionSet.OnChanged?.Invoke(_value, _minValue, _maxValue);
             }
         }
     }
-
-    public UnityAction<int, int> OnMaxValueChanged;
 
     [SerializeField]
     [LabelText("最大值")]
@@ -135,8 +155,8 @@ public abstract class Stat
                 if (_value > value) _value = value;
                 int before = _maxValue;
                 _maxValue = value;
-                OnMaxValueChanged?.Invoke(before, _maxValue);
-                OnChanged?.Invoke(_value, _minValue, _maxValue);
+                m_NotifyActionSet.OnMaxValueChanged?.Invoke(before, _maxValue);
+                m_NotifyActionSet.OnChanged?.Invoke(_value, _minValue, _maxValue);
             }
         }
     }

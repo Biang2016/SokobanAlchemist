@@ -112,7 +112,11 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
     {
     }
 
-    public virtual void OnElementValueChange(EntityStatType entityStatType)
+    public virtual void OnEntityStatValueChange(EntityStatType entityStatType)
+    {
+    }
+
+    public virtual void OnEntityPropertyValueChange(EntityPropertyType entityPropertyType)
     {
     }
 

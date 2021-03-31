@@ -19,9 +19,9 @@ public class PlayerStatHUD : MonoBehaviour
         SetActionPoint(asps.ActionPoint.Value, asps.ActionPoint.MinValue, asps.ActionPoint.MaxValue);
         SetGold(asps.Gold.Value);
 
-        asps.HealthDurability.OnChanged += SetHealth;
-        asps.ActionPoint.OnChanged += SetActionPoint;
-        asps.Gold.OnChanged += (value, min, max) => SetGold(value);
+        asps.HealthDurability.m_NotifyActionSet.OnChanged += SetHealth;
+        asps.ActionPoint.m_NotifyActionSet.OnChanged += SetActionPoint;
+        asps.Gold.m_NotifyActionSet.OnChanged += (value, min, max) => SetGold(value);
     }
 
     #region Health

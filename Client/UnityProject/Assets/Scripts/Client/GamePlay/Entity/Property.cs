@@ -45,17 +45,34 @@ public abstract class Property
 
     public void ClearCallBacks()
     {
-        OnChanged = null;
-        OnValueChanged = null;
-        OnValueIncrease = null;
-        OnValueDecrease = null;
+        m_NotifyActionSet.ClearCallBacks();
     }
 
-    public UnityAction<int, int, int> OnChanged;
+    public NotifyActionSet m_NotifyActionSet = new NotifyActionSet();
 
-    public UnityAction<int, int> OnValueChanged;
-    public UnityAction<int> OnValueIncrease;
-    public UnityAction<int> OnValueDecrease;
+    public class NotifyActionSet
+    {
+        public UnityAction<int, int, int> OnChanged;
+        public UnityAction<int, int> OnValueChanged;
+        public UnityAction<int> OnValueIncrease;
+        public UnityAction<int> OnValueDecrease;
+
+        public void RegisterCallBacks(NotifyActionSet target)
+        {
+            OnChanged = target.OnChanged;
+            OnValueChanged = target.OnValueChanged;
+            OnValueIncrease = target.OnValueIncrease;
+            OnValueDecrease = target.OnValueDecrease;
+        }
+
+        public void ClearCallBacks()
+        {
+            OnChanged = null;
+            OnValueChanged = null;
+            OnValueIncrease = null;
+            OnValueDecrease = null;
+        }
+    }
 
     #region Modifiers
 
@@ -151,10 +168,10 @@ public abstract class Property
         {
             int before = ModifiedValue;
             ModifiedValue = finalValue_Int;
-            OnValueChanged?.Invoke(before, ModifiedValue);
-            if (before < ModifiedValue) OnValueIncrease?.Invoke(ModifiedValue - before);
-            if (before > ModifiedValue) OnValueDecrease?.Invoke(before - ModifiedValue);
-            OnChanged?.Invoke(ModifiedValue, MinValue, MaxValue);
+            m_NotifyActionSet.OnValueChanged?.Invoke(before, ModifiedValue);
+            if (before < ModifiedValue) m_NotifyActionSet.OnValueIncrease?.Invoke(ModifiedValue - before);
+            if (before > ModifiedValue) m_NotifyActionSet.OnValueDecrease?.Invoke(before - ModifiedValue);
+            m_NotifyActionSet.OnChanged?.Invoke(ModifiedValue, MinValue, MaxValue);
         }
     }
 

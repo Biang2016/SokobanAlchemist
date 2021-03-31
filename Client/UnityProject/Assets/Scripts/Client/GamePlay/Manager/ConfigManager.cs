@@ -807,6 +807,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
 
         LoadTypeGUIDMappingFromConfig(dataFormat);
+        LoadEntityStatPropertyEnumList();
         LoadEntityBuffStatPropertyEnumReflection();
         LoadEntityBuffAttributeMatrixFromConfig(dataFormat);
         LoadAllEntityOccupationDataConfigs(dataFormat);
@@ -837,6 +838,19 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                     }
                 }
             }
+        }
+    }
+
+    public static void LoadEntityStatPropertyEnumList()
+    {
+        foreach (EntityStatType est in Enum.GetValues(typeof(EntityStatType)))
+        {
+            EntityStatPropSet.EntityStatTypeEnumList.Add(est);
+        }
+
+        foreach (EntityPropertyType ept in Enum.GetValues(typeof(EntityPropertyType)))
+        {
+            EntityStatPropSet.EntityPropertyTypeEnumList.Add(ept);
         }
     }
 

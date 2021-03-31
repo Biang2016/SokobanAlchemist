@@ -40,7 +40,7 @@ public class InGameHealthBar : PoolObject
         SubSlider.value = 0;
         EntityStatPropSet esps = helper.Actor.EntityStatPropSet;
         SetHealthSliderValue(esps.HealthDurability.Value, esps.HealthDurability.MinValue, esps.HealthDurability.MaxValue);
-        esps.HealthDurability.OnChanged += SetHealthSliderValue;
+        esps.HealthDurability.m_NotifyActionSet.OnChanged += SetHealthSliderValue;
     }
 
     public void SetHealthSliderValue(int currentHealth, int minHealth, int maxHealth)

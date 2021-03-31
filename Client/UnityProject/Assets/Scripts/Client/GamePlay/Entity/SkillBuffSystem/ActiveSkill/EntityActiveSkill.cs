@@ -50,7 +50,7 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
 
             EntityProperty ep = Entity.EntityStatPropSet.SkillsPropertyCollections[(int) EntitySkillIndex].PropertyDict[entitySkillPropertyType];
             epv.Value = ep.GetModifiedValue;
-            ep.OnValueChanged += epv.OnValueChangedHandle;
+            ep.m_NotifyActionSet.OnValueChanged += epv.OnValueChangedHandle;
 
             EntityPropertyValueDict.Add(entitySkillPropertyType, epv);
         }
@@ -61,7 +61,7 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
         if (Entity.EntityStatPropSet.SkillsPropertyCollections.Count > (int) EntitySkillIndex)
         {
             EntityProperty ep = Entity.EntityStatPropSet.SkillsPropertyCollections[(int) EntitySkillIndex].PropertyDict[actorSkillPropertyType];
-            ep.OnValueChanged -= epv.OnValueChangedHandle;
+            ep.m_NotifyActionSet.OnValueChanged -= epv.OnValueChangedHandle;
         }
     }
 

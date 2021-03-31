@@ -48,6 +48,7 @@ public class EnemyActor : Actor
                 else
                 {
                     GraphOwner.graph.UpdateGraph(AIUpdateInterval * Time.fixedDeltaTime);
+                    ActorAIAgent.RecheckPathFindingPassable();
                     AIUpdateIntervalTick = 0;
                 }
 
