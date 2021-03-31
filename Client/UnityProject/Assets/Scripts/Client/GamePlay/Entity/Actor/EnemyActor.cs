@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 
-#if UNITY_EDITOR
-
-#endif
 public class EnemyActor : Actor
 {
     internal int AIUpdateInterval = 10;
