@@ -2,8 +2,8 @@
 
 public class EnemyActor : Actor
 {
-    internal int AIUpdateInterval = 10;
-    private int AIUpdateIntervalTick = 0;
+    internal float AIUpdateInterval = 0.3f;
+    private float AIUpdateIntervalTick = 0;
 
     public override void OnUsed()
     {
@@ -11,7 +11,7 @@ public class EnemyActor : Actor
         AIUpdateIntervalTick = 0;
     }
 
-    protected override void FixedUpdate()
+    protected override void Tick(float interval) // for Actor: interval = 0.3s
     {
         if (!IsRecycled)
         {
@@ -20,19 +20,15 @@ public class EnemyActor : Actor
                 float distanceFromMainPlayer = (transform.position - BattleManager.Instance.Player1.transform.position).magnitude;
                 if (distanceFromMainPlayer > 30f)
                 {
-                    AIUpdateInterval = 50;
+                    AIUpdateInterval = 1f;
                 }
                 else if (distanceFromMainPlayer > 20f)
                 {
-                    AIUpdateInterval = 20;
-                }
-                else if (distanceFromMainPlayer > 10)
-                {
-                    AIUpdateInterval = 15;
+                    AIUpdateInterval = 0.4f;
                 }
                 else
                 {
-                    AIUpdateInterval = 10;
+                    AIUpdateInterval = 0.3f;
                 }
             }
 
@@ -40,23 +36,23 @@ public class EnemyActor : Actor
             {
                 if (AIUpdateIntervalTick < AIUpdateInterval)
                 {
-                    AIUpdateIntervalTick++;
+                    AIUpdateIntervalTick += interval;
                 }
                 else
                 {
-                    GraphOwner.graph.UpdateGraph(AIUpdateInterval * Time.fixedDeltaTime);
-                    ActorAIAgent.RecheckPathFindingPassable();
-                    AIUpdateIntervalTick = 0;
+                    GraphOwner.graph.UpdateGraph(AIUpdateInterval);
+                    ActorAIAgent.AITick(AIUpdateInterval);
+                    AIUpdateIntervalTick -= AIUpdateInterval;
                 }
 
-                ActorAIAgent.FixedUpdate();
+                ActorAIAgent.ActorTick(interval);
             }
 
             MoveInternal();
-            ActorAIAgent.FixedUpdateAfterMove();
+            ActorAIAgent.ActorTickAfterMove(interval);
         }
 
-        base.FixedUpdate();
+        base.Tick(interval);
     }
 
 #if UNITY_EDITOR

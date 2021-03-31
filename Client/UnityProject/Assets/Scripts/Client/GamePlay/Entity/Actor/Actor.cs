@@ -558,9 +558,6 @@ public class Actor : Entity
     {
     }
 
-    private float actorActiveSkillTicker = 0f;
-    private float actorActiveSkillTickInterval = 0.1f;
-
     protected override void FixedUpdate()
     {
         base.FixedUpdate();

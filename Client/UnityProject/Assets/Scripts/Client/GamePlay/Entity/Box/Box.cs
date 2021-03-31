@@ -947,6 +947,11 @@ public partial class Box : Entity
 
     #endregion
 
+    protected override void Tick(float interval)
+    {
+        base.Tick(interval);
+    }
+
     protected override void FixedUpdate()
     {
         base.FixedUpdate();

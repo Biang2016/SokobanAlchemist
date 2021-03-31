@@ -22,7 +22,7 @@ public class ActorAIAgent
         isStop = false;
     }
 
-    public void FixedUpdate()
+    public void ActorTick(float interval)
     {
         if (isStop) return;
         if (!Actor.GraphOwner.isRunning) Actor.GraphOwner?.StartBehaviour();
@@ -32,17 +32,22 @@ public class ActorAIAgent
         MoveToDestination();
     }
 
-    public void FixedUpdateAfterMove()
+    public void ActorTickAfterMove(float interval)
     {
         if (isStop) return;
         if (Actor.WorldGP == Actor.LastWorldGP && IsPathFinding)
         {
-            StuckWithNavTask_Tick += Time.fixedDeltaTime;
+            StuckWithNavTask_Tick += interval;
         }
         else
         {
             StuckWithNavTask_Tick = 0;
         }
+    }
+
+    public void AITick(float interval)
+    {
+        RecheckPathFindingPassable();
     }
 
     private bool isStop;

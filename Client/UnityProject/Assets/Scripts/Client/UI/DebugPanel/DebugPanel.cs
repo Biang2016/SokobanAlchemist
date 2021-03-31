@@ -272,7 +272,14 @@ public class DebugPanel : BaseUIPanel
         if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
             ushort worldNameIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, worldName);
-            openWorld.TransportPlayerToMicroWorld(worldNameIndex);
+            if (worldNameIndex == ConfigManager.World_OpenWorldIndex)
+            {
+                openWorld.ReturnToOpenWorldFormMicroWorld(false);
+            }
+            else
+            {
+                openWorld.TransportPlayerToMicroWorld(worldNameIndex);
+            }
         }
         else
         {

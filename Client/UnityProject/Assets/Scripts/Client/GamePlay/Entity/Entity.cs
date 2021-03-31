@@ -530,21 +530,6 @@ public abstract class Entity : PoolObject
 
     protected virtual void FixedUpdate()
     {
-        void Tick(float deltaTime)
-        {
-            EntityStatPropSet.Tick(deltaTime);
-            EntityBuffHelper.BuffTick(deltaTime);
-            foreach (EntityPassiveSkill eps in EntityPassiveSkills)
-            {
-                eps.OnTick(deltaTime);
-            }
-
-            foreach (EntityActiveSkill eas in EntityActiveSkills)
-            {
-                eas.OnTick(deltaTime);
-            }
-        }
-
         if (IsRecycled) return;
         if (IsBoxCamp)
         {
@@ -574,6 +559,21 @@ public abstract class Entity : PoolObject
         foreach (EntityActiveSkill eas in EntityActiveSkills)
         {
             eas.OnFixedUpdate(Time.fixedDeltaTime);
+        }
+    }
+
+    protected virtual void Tick(float interval)
+    {
+        EntityStatPropSet.Tick(interval);
+        EntityBuffHelper.BuffTick(interval);
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+        {
+            eps.OnTick(interval);
+        }
+
+        foreach (EntityActiveSkill eas in EntityActiveSkills)
+        {
+            eas.OnTick(interval);
         }
     }
 

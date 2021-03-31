@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4892195723853597978}
   - component: {fileID: 3522706739585230582}
-  - component: {fileID: 2884598377431085198}
+  - component: {fileID: 3930333583270982989}
   - component: {fileID: 8572106225310636948}
   - component: {fileID: -6048773597420499849}
   m_Layer: 14
@@ -51,7 +51,7 @@ Rigidbody:
   m_Interpolate: 2
   m_Constraints: 84
   m_CollisionDetection: 2
---- !u!114 &2884598377431085198
+--- !u!114 &3930333583270982989
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -60,11 +60,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4892195723853597974}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80e6f6946ed2c704ab30f00932716e7d, type: 3}
+  m_Script: {fileID: 11500000, guid: 203b4aa40b99e6947af813dd9c6cbbbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PoolIndex: 0
   IsRecycled: 0
+  SlowlyTick: 0
   InitWorldModuleGUID: 0
   EntityTypeIndex: 0
   RawEntityStatPropSet:
@@ -76,17 +77,17 @@ MonoBehaviour:
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     HealthDurability:
-      _value: 40
+      _value: 1000
       _minValue: 0
-      _maxValue: 40
-      AutoChange: 5
+      _maxValue: 1000
+      AutoChange: 0
       AutoChangePercent: 0
-      AutoChangeTimeInterval: 20000
+      AutoChangeTimeInterval: 3.4028235e+38
     MaxHealthDurability:
-      BaseValue: 40
+      BaseValue: 1000
       ModifiedValue: 0
-      MinValue: 1
-      MaxValue: 10000
+      MinValue: 0
+      MaxValue: 1000000
     DropFromAirSurviveProbabilityPercent:
       _value: 0
       _minValue: 0
@@ -95,45 +96,45 @@ MonoBehaviour:
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     ActorCollideDamageDefense:
-      BaseValue: 1
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 1000
+      MaxValue: 0
     BoxCollideDamageSelf:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 1000
+      MaxValue: 0
     CollideDamage:
-      BaseValue: 5
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 1000
+      MaxValue: 0
     FrozenBeCollideDamage:
-      BaseValue: 3
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 10
+      MaxValue: 0
     CollideDamageX:
-      BaseValue: 5
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 1000
+      MaxValue: 0
     CollideDamageZ:
-      BaseValue: 5
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 1000
+      MaxValue: 0
     BeCollidedHitStopDuration:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
     ExplodeDamageDefense:
-      BaseValue: 40
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 1000
+      MaxValue: 0
     FrozenResistance:
       BaseValue: 100
       ModifiedValue: 0
@@ -143,13 +144,13 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 1000
-      AutoChange: -10
+      AutoChange: 0
       AutoChangePercent: 0
-      AutoChangeTimeInterval: 300
+      AutoChangeTimeInterval: 3.4028235e+38
     FrozenLevel:
       _value: 0
       _minValue: 0
-      _maxValue: 5
+      _maxValue: 4
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
@@ -163,7 +164,7 @@ MonoBehaviour:
         TypeDefineType: 7
         TypeGUID: 
       UseCurve: 0
-      FXScale: 0
+      FXScale: 1
       AnimationCurve:
         serializedVersion: 2
         m_Curve: []
@@ -179,32 +180,32 @@ MonoBehaviour:
       _value: 0
       _minValue: 0
       _maxValue: 1000
-      AutoChange: -30
+      AutoChange: 0
       AutoChangePercent: 0
-      AutoChangeTimeInterval: 300
+      AutoChangeTimeInterval: 3.4028235e+38
     FiringLevel:
       _value: 0
       _minValue: 0
-      _maxValue: 8
+      _maxValue: 4
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     FiringSpreadPercent:
-      BaseValue: 50
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 50
+      MaxValue: 0
     FiringDamageDefense:
-      BaseValue: 1
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 1000
+      MaxValue: 0
     StartFiringFX:
       FXType:
-        TypeDefineType: 0
+        TypeDefineType: 7
         TypeGUID: 
       UseCurve: 0
-      FXScale: 0
+      FXScale: 1
       AnimationCurve:
         serializedVersion: 2
         m_Curve: []
@@ -278,236 +279,12 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
-    SkillsPropertyCollections:
-    - skillAlias: "\u6BD2\u6DB2\u6CBC\u6CFD"
-      CastingRadius:
-        BaseValue: 7
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 20
-      Cooldown:
-        BaseValue: 4000
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      WingUp:
-        BaseValue: 1000
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      CastDuration:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      Recovery:
-        BaseValue: 200
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      CameraShakeEquivalentDamage:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-    - skillAlias: "\u9668\u77F3\u672F"
-      CastingRadius:
-        BaseValue: 7
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 7
-      Cooldown:
-        BaseValue: 10000
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      WingUp:
-        BaseValue: 300
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      CastDuration:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      Recovery:
-        BaseValue: 200
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      CameraShakeEquivalentDamage:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-    - skillAlias: "\u66B4\u98CE\u96EA"
-      CastingRadius:
-        BaseValue: 7
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 7
-      Cooldown:
-        BaseValue: 20000
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      WingUp:
-        BaseValue: 300
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      CastDuration:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      Recovery:
-        BaseValue: 200
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      CameraShakeEquivalentDamage:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-    - skillAlias: "\u9668\u77F3\u672F\u5355\u53D1"
-      CastingRadius:
-        BaseValue: 7
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 10
-      Cooldown:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      WingUp:
-        BaseValue: 800
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      CastDuration:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      Recovery:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      CameraShakeEquivalentDamage:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-    - skillAlias: "\u66B4\u98CE\u96EA\u5355\u53D1"
-      CastingRadius:
-        BaseValue: 7
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 10
-      Cooldown:
-        BaseValue: 400
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      WingUp:
-        BaseValue: 500
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      CastDuration:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      Recovery:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      CameraShakeEquivalentDamage:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-    - skillAlias: "\u81EA\u6108"
-      CastingRadius:
-        BaseValue: 5
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 5
-      Cooldown:
-        BaseValue: 15000
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      WingUp:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      CastDuration:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      Recovery:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 1000000
-      CameraShakeEquivalentDamage:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-    - skillAlias: "\u5C0F\u52A0\u901F"
-      CastingRadius:
-        BaseValue: 5
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 5
-      Cooldown:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-      WingUp:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-      CastDuration:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-      Recovery:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-      CameraShakeEquivalentDamage:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
+    SkillsPropertyCollections: []
     RawEntityDefaultBuffs: []
   RawFlamethrowerFuelData:
     id: 0
-  RawEntityPassiveSkills:
-  - id: 1
-  - id: 2
-  RawEntityActiveSkills:
-  - id: 3
-  - id: 4
-  - id: 5
-  - id: 6
-  - id: 7
+  RawEntityPassiveSkills: []
+  RawEntityActiveSkills: []
   Camp: 2
   BornPointDataGUID: 0
   RigidBody: {fileID: 3522706739585230582}
@@ -548,7 +325,7 @@ MonoBehaviour:
       TypeDefineType: 7
       TypeGUID: 
     UseCurve: 0
-    FXScale: 0
+    FXScale: 1
     AnimationCurve:
       serializedVersion: 2
       m_Curve: []
@@ -567,10 +344,10 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  DashForce: 10
-  Accelerate: 250
-  KickForce: 5
-  ThrowRadius: 10
+  DashForce: 150
+  Accelerate: 200
+  KickForce: 30
+  ThrowRadius: 15
   PushableBoxList: []
   KickableBoxList: []
   LiftableBoxList: []
@@ -580,7 +357,7 @@ MonoBehaviour:
       TypeDefineType: 7
       TypeGUID: 
     UseCurve: 0
-    FXScale: 0
+    FXScale: 1
     AnimationCurve:
       serializedVersion: 2
       m_Curve: []
@@ -592,7 +369,7 @@ MonoBehaviour:
       TypeDefineType: 7
       TypeGUID: 
     UseCurve: 0
-    FXScale: 0
+    FXScale: 1
     AnimationCurve:
       serializedVersion: 2
       m_Curve: []
@@ -608,482 +385,6 @@ MonoBehaviour:
     version: 1
     00000000:
       type: {class: , ns: , asm: }
-    00000001:
-      type: {class: ActorPassiveSkill_IceSlideSpeedUp, ns: , asm: Client}
-      data:
-        IsAddedDuringGamePlay: 0
-        InitWorldModuleGUID: 0
-        RawEntityBuff:
-          id: 8
-    00000002:
-      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
-      data:
-        IsAddedDuringGamePlay: 0
-        InitWorldModuleGUID: 0
-        PassiveSkillCondition: 1024
-        TriggerProbabilityPercent: 100
-        DestroyEntityByElementDamageTypeList: 
-        EntityStatChangeTypeList: 
-        MultiEventTrigger: 0
-        ListenLevelEventAliasList: []
-        ListenLevelEventAlias: 
-        MaxTriggeredTimes: 1
-        RawEntityPassiveSkillActions:
-        - id: 9
-        - id: 10
-    00000003:
-      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
-      data:
-        TargetCamp: 15
-        EntitySkillIndex: 0
-        SkillAlias: "\u6BD2\u6DB2\u6CBC\u6CFD"
-        WingUpCanMove: 1
-        CastCanMove: 0
-        RecoverCanMove: 1
-        RawSubActiveSkillList: []
-        SubActiveSkillTriggerLogicList: []
-        InterruptSubActiveSkillsWhenInterrupted: 0
-        CastAreaGridPosList:
-        - x: 13
-          y: 0
-          z: 15
-        - x: 14
-          y: 0
-          z: 16
-        - x: 14
-          y: 0
-          z: 15
-        - x: 14
-          y: 0
-          z: 14
-        - x: 15
-          y: 0
-          z: 17
-        - x: 15
-          y: 0
-          z: 16
-        - x: 15
-          y: 0
-          z: 15
-        - x: 15
-          y: 0
-          z: 14
-        - x: 15
-          y: 0
-          z: 13
-        - x: 16
-          y: 0
-          z: 16
-        - x: 16
-          y: 0
-          z: 15
-        - x: 16
-          y: 0
-          z: 14
-        - x: 17
-          y: 0
-          z: 15
-        M_TargetInclination: 0
-        TargetEntityType: 1
-        CastOnTopLayer: 0
-        AccurateStandardDeviation: 0
-        BattleIndicatorTypeName:
-          TypeDefineType: 8
-          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
-        ProjectOffsetZMax: 0
-        ProjectOffsetZMin: 0
-        GridWarningColorFill: {r: 0.24542293, g: 0.8396226, b: 0.07524917, a: 0.7529412}
-        GridWarningColorBorderHighlight: {r: 0.40472588, g: 0.8018868, b: 0.6014624,
-          a: 0.7176471}
-        GridWarningColorBorderDim: {r: 0.6975347, g: 0.8962264, b: 0.8508797, a: 0.78039217}
-        CastFX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: (6b85310e-f4c9-4818-b682-4d1846b2638c)
-          UseCurve: 0
-          FXScale: 1.2
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        RawEntityBuffs:
-        - id: 11
-    00000004:
-      type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
-      data:
-        TargetCamp: 0
-        EntitySkillIndex: 1
-        SkillAlias: "\u9668\u77F3\u672F"
-        WingUpCanMove: 0
-        CastCanMove: 0
-        RecoverCanMove: 0
-        RawSubActiveSkillList:
-        - id: 12
-        SubActiveSkillTriggerLogicList:
-        - M_TriggerType: 2
-          SubSkillTriggerSequence: []
-          Duration: 5000
-          Times: 10
-          SubSkillAliasWithProbabilityList:
-          - SubSkillAlias: "\u9668\u77F3\u672F\u5355\u53D1"
-            probability: 1
-            isSingleton: 0
-        InterruptSubActiveSkillsWhenInterrupted: 0
-    00000005:
-      type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
-      data:
-        TargetCamp: 0
-        EntitySkillIndex: 2
-        SkillAlias: "\u66B4\u98CE\u96EA"
-        WingUpCanMove: 0
-        CastCanMove: 0
-        RecoverCanMove: 0
-        RawSubActiveSkillList:
-        - id: 13
-        SubActiveSkillTriggerLogicList:
-        - M_TriggerType: 2
-          SubSkillTriggerSequence: []
-          Duration: 5000
-          Times: 10
-          SubSkillAliasWithProbabilityList:
-          - SubSkillAlias: "\u66B4\u98CE\u96EA\u5355\u53D1"
-            probability: 1
-            isSingleton: 0
-        InterruptSubActiveSkillsWhenInterrupted: 0
-    00000006:
-      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
-      data:
-        TargetCamp: 1
-        EntitySkillIndex: 5
-        SkillAlias: "\u81EA\u6108"
-        WingUpCanMove: 1
-        CastCanMove: 1
-        RecoverCanMove: 1
-        RawSubActiveSkillList: []
-        SubActiveSkillTriggerLogicList: []
-        InterruptSubActiveSkillsWhenInterrupted: 0
-        CastAreaGridPosList:
-        - x: 15
-          y: 0
-          z: 15
-        M_TargetInclination: 2
-        TargetEntityType: 1
-        CastOnTopLayer: 0
-        AccurateStandardDeviation: 0
-        BattleIndicatorTypeName:
-          TypeDefineType: 8
-          TypeGUID: 
-        ProjectOffsetZMax: 0
-        ProjectOffsetZMin: 0
-        GridWarningColorFill: {r: 0, g: 0, b: 0, a: 0}
-        GridWarningColorBorderHighlight: {r: 0, g: 0, b: 0, a: 0}
-        GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
-        CastFX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: (e597fb9a-7751-46ac-8eb0-0eb1811827c2)
-          UseCurve: 0
-          FXScale: 3
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        RawEntityBuffs:
-        - id: 14
-    00000007:
-      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
-      data:
-        TargetCamp: 1
-        EntitySkillIndex: 6
-        SkillAlias: "\u5C0F\u52A0\u901F"
-        WingUpCanMove: 1
-        CastCanMove: 1
-        RecoverCanMove: 1
-        RawSubActiveSkillList: []
-        SubActiveSkillTriggerLogicList: []
-        InterruptSubActiveSkillsWhenInterrupted: 0
-        CastAreaGridPosList:
-        - x: 15
-          y: 0
-          z: 15
-        M_TargetInclination: 2
-        TargetEntityType: 0
-        CastOnTopLayer: 0
-        AccurateStandardDeviation: 0
-        BattleIndicatorTypeName:
-          TypeDefineType: 8
-          TypeGUID: 
-        ProjectOffsetZMax: 0
-        ProjectOffsetZMin: 0
-        GridWarningColorFill: {r: 0, g: 0, b: 0, a: 0}
-        GridWarningColorBorderHighlight: {r: 0, g: 0, b: 0, a: 0}
-        GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
-        CastFX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: (e9aaa995-68e2-4e7e-af31-6238c26a29bf)
-          UseCurve: 0
-          FXScale: 3
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        RawEntityBuffs:
-        - id: 15
-    00000008:
-      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
-      data:
-        GUID: 10000
-        BuffAlias: 
-        EntityBuffAttribute: 1
-        EnableWhiteBlackList: 0
-        AllowAddBuffAliasList: []
-        ForbidAddBuffAliasList: []
-        IsPermanent: 1
-        Duration: 0
-        BuffFX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: 
-          UseCurve: 0
-          FXScale: 0
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        Percent: 50
-        LinearDecayInDuration: 0
-        EntityPropertyType: 30
-    00000009:
-      type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
-      data:
-        DropBoxList:
-        - BoxTypeName:
-            TypeDefineType: 0
-            TypeGUID: (72613c50-a87a-49bf-a141-627b227d5989)
-          BoxOrientation: 0
-          probability: 1
-          isSingleton: 0
-        DropBoxCountMin: 1
-        DropBoxCountMax: 1
-        DropConeAngle: 0
-        DropVelocity: 12
-    0000000A:
-      type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
-      data:
-        DropBoxList:
-        - BoxTypeName:
-            TypeDefineType: 0
-            TypeGUID: (374e935f-27dc-4ac2-aeed-c78fd70ae29e)
-          BoxOrientation: 0
-          probability: 1
-          isSingleton: 0
-        - BoxTypeName:
-            TypeDefineType: 0
-            TypeGUID: (b21d38f9-143e-43a6-9094-f1a790641d96)
-          BoxOrientation: 0
-          probability: 3
-          isSingleton: 0
-        DropBoxCountMin: 1
-        DropBoxCountMax: 4
-        DropConeAngle: 15
-        DropVelocity: 13
-    0000000B:
-      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
-      data:
-        GUID: 10765
-        BuffAlias: 
-        EntityBuffAttribute: 34
-        EnableWhiteBlackList: 0
-        AllowAddBuffAliasList: []
-        ForbidAddBuffAliasList: []
-        IsPermanent: 0
-        Duration: 0
-        BuffFX:
-          FXType:
-            TypeDefineType: 0
-            TypeGUID: 
-          UseCurve: 0
-          FXScale: 0
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        EntityStatType: 0
-        Delta: -2
-        Percent: 0
-    0000000C:
-      type: {class: EntityActiveSkill_SummonDropBox, ns: , asm: Client}
-      data:
-        TargetCamp: 15
-        EntitySkillIndex: 3
-        SkillAlias: "\u9668\u77F3\u672F\u5355\u53D1"
-        WingUpCanMove: 1
-        CastCanMove: 1
-        RecoverCanMove: 1
-        RawSubActiveSkillList: []
-        SubActiveSkillTriggerLogicList: []
-        InterruptSubActiveSkillsWhenInterrupted: 0
-        CastAreaGridPosList:
-        - x: 15
-          y: 0
-          z: 15
-        M_TargetInclination: 0
-        TargetEntityType: 1
-        CastOnTopLayer: 1
-        AccurateStandardDeviation: 0
-        BattleIndicatorTypeName:
-          TypeDefineType: 8
-          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
-        ProjectOffsetZMax: 3
-        ProjectOffsetZMin: -3
-        GridWarningColorFill: {r: 0.9622642, g: 0.57834196, b: 0.11347453, a: 0.84313726}
-        GridWarningColorBorderHighlight: {r: 0.9811321, g: 0.5507298, b: 0.5507298,
-          a: 0.8509804}
-        GridWarningColorBorderDim: {r: 0.9811321, g: 0.9771839, b: 0.18974723, a: 0.6039216}
-        CastFX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: 
-          UseCurve: 0
-          FXScale: 0
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        DropBoxList:
-        - BoxTypeName:
-            TypeDefineType: 0
-            TypeGUID: (65e613ca-1b8c-4002-84d1-0c49ea3b0903)
-          BoxOrientation: 0
-          probability: 9
-          isSingleton: 0
-        - BoxTypeName:
-            TypeDefineType: 0
-            TypeGUID: (096dcca9-e0d2-439e-9304-94a00bb4f36b)
-          BoxOrientation: 0
-          probability: 1
-          isSingleton: 1
-        DropFromHeightFromFloor: 8
-    0000000D:
-      type: {class: EntityActiveSkill_SummonDropBox, ns: , asm: Client}
-      data:
-        TargetCamp: 15
-        EntitySkillIndex: 4
-        SkillAlias: "\u66B4\u98CE\u96EA\u5355\u53D1"
-        WingUpCanMove: 1
-        CastCanMove: 1
-        RecoverCanMove: 1
-        RawSubActiveSkillList: []
-        SubActiveSkillTriggerLogicList: []
-        InterruptSubActiveSkillsWhenInterrupted: 0
-        CastAreaGridPosList:
-        - x: 15
-          y: 0
-          z: 15
-        M_TargetInclination: 0
-        TargetEntityType: 1
-        CastOnTopLayer: 1
-        AccurateStandardDeviation: 0
-        BattleIndicatorTypeName:
-          TypeDefineType: 8
-          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
-        ProjectOffsetZMax: 3
-        ProjectOffsetZMin: -3
-        GridWarningColorFill: {r: 0.11372546, g: 0.9443634, b: 0.9607843, a: 0.84313726}
-        GridWarningColorBorderHighlight: {r: 0.54901963, g: 0.9070726, b: 0.98039216,
-          a: 0.8509804}
-        GridWarningColorBorderDim: {r: 0.18823527, g: 0.65997756, b: 0.98039216, a: 0.6039216}
-        CastFX:
-          FXType:
-            TypeDefineType: 0
-            TypeGUID: 
-          UseCurve: 0
-          FXScale: 0
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        DropBoxList:
-        - BoxTypeName:
-            TypeDefineType: 0
-            TypeGUID: (c9630278-8f6d-416f-b6de-620573dfb81a)
-          BoxOrientation: 0
-          probability: 9
-          isSingleton: 0
-        - BoxTypeName:
-            TypeDefineType: 0
-            TypeGUID: (096dcca9-e0d2-439e-9304-94a00bb4f36b)
-          BoxOrientation: 0
-          probability: 1
-          isSingleton: 1
-        DropFromHeightFromFloor: 8
-    0000000E:
-      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
-      data:
-        GUID: 10033
-        BuffAlias: 
-        EntityBuffAttribute: 13
-        EnableWhiteBlackList: 0
-        AllowAddBuffAliasList: []
-        ForbidAddBuffAliasList: []
-        IsPermanent: 0
-        Duration: 0
-        BuffFX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: 
-          UseCurve: 0
-          FXScale: 0
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        EntityStatType: 0
-        Delta: 15
-        Percent: 0
-    0000000F:
-      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
-      data:
-        GUID: 10035
-        BuffAlias: 
-        EntityBuffAttribute: 1
-        EnableWhiteBlackList: 0
-        AllowAddBuffAliasList: []
-        ForbidAddBuffAliasList: []
-        IsPermanent: 0
-        Duration: 5
-        BuffFX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: 
-          UseCurve: 0
-          FXScale: 0
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        Percent: 100
-        LinearDecayInDuration: 0
-        EntityPropertyType: 30
 --- !u!114 &8572106225310636948
 MonoBehaviour:
   m_ObjectHideFlags: 0
