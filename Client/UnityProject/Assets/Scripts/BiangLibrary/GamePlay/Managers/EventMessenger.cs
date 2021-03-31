@@ -6,7 +6,6 @@
 
 //对于ds，比较单纯，生命周期只单局内。
 
-
 //#define LOG_ALL_MESSAGES
 //#define LOG_ADD_LISTENER
 //#define LOG_BROADCAST_MESSAGE
@@ -30,7 +29,6 @@ namespace BiangLibrary.Messenger
     public delegate void Callback<T, U, V, UValue>(T arg1, U arg2, V arg3, UValue arg4);
 
     public delegate void Callback<T, U, V, UValue, VValue>(T arg1, U arg2, V arg3, UValue arg4, VValue arg5);
-
 
     public class Messenger
     {
@@ -59,7 +57,7 @@ namespace BiangLibrary.Messenger
             public virtual void Execute()
             {
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
-            strLog = "MESSENGER EXCUTE\t" + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\tInvoking \t\"" + eventID + "\"";
+                strLog = "MESSENGER EXCUTE\t" + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\tInvoking \t\"" + eventID + "\"";
 #endif
             }
 
@@ -99,7 +97,8 @@ namespace BiangLibrary.Messenger
                         strLog += "\n" + "{" + cb_tmp.Target + " -> " + cb_tmp.Method + "}";
                     }
                 }
-                 Logger.Log(strLog);
+
+                Debug.Log(strLog);
 #endif
                 cb();
             }
@@ -141,7 +140,8 @@ namespace BiangLibrary.Messenger
                         strLog += "\n" + "{" + cb_tmp.Target + " -> " + cb_tmp.Method + "}";
                     }
                 }
-                 Logger.Log(strLog);
+
+                Debug.Log(strLog);
 #endif
                 cb(param1);
             }
@@ -174,7 +174,7 @@ namespace BiangLibrary.Messenger
                 base.Execute();
 
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
-                 Logger.Log("[Param1]" + param1.ToString() + " [param2]" + param2.ToString());
+                Debug.Log("[Param1]" + param1.ToString() + " [param2]" + param2.ToString());
 
                 Delegate d = cb as Delegate;
                 if (d != null)
@@ -182,7 +182,7 @@ namespace BiangLibrary.Messenger
                     Delegate[] cb_list = d.GetInvocationList();
                     foreach (Delegate cb_tmp in cb_list)
                     {
-                         Logger.Log("{" + cb_tmp.Target + " -> " + cb_tmp.Method + "}");
+                        Debug.Log("{" + cb_tmp.Target + " -> " + cb_tmp.Method + "}");
                     }
                 }
 #endif
@@ -219,7 +219,7 @@ namespace BiangLibrary.Messenger
                 base.Execute();
 
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
-                Logger.Log("[Param1]" + param1.ToString() + " [param2]" + param2.ToString() + " [param3]" + param3.ToString());
+                Debug.Log("[Param1]" + param1.ToString() + " [param2]" + param2.ToString() + " [param3]" + param3.ToString());
 
                 Delegate d = cb as Delegate;
                 if (d != null)
@@ -227,7 +227,7 @@ namespace BiangLibrary.Messenger
                     Delegate[] cb_list = d.GetInvocationList();
                     foreach (Delegate cb_tmp in cb_list)
                     {
-                         Logger.Log("{" + cb_tmp.Target + " -> " + cb_tmp.Method + "}");
+                        Debug.Log("{" + cb_tmp.Target + " -> " + cb_tmp.Method + "}");
                     }
                 }
 #endif
@@ -266,7 +266,7 @@ namespace BiangLibrary.Messenger
                 base.Execute();
 
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
-                Logger.Log("[Param1]" + param1.ToString() + " [param2]" + param2.ToString() + " [param3]" + param3.ToString()+ " [param4]" + param4.ToString());
+                Debug.Log("[Param1]" + param1.ToString() + " [param2]" + param2.ToString() + " [param3]" + param3.ToString() + " [param4]" + param4.ToString());
 
                 Delegate d = cb as Delegate;
                 if (d != null)
@@ -274,7 +274,7 @@ namespace BiangLibrary.Messenger
                     Delegate[] cb_list = d.GetInvocationList();
                     foreach (Delegate cb_tmp in cb_list)
                     {
-                         Logger.Log("{" + cb_tmp.Target + " -> " + cb_tmp.Method + "}");
+                        Debug.Log("{" + cb_tmp.Target + " -> " + cb_tmp.Method + "}");
                     }
                 }
 #endif
@@ -315,7 +315,7 @@ namespace BiangLibrary.Messenger
                 base.Execute();
 
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
-                Logger.Log("[Param1]" + param1.ToString() + " [param2]" + param2.ToString() + " [param3]" + param3.ToString()+ " [param4]" + param4.ToString() + " [param5]" + param5.ToString());
+                Debug.Log("[Param1]" + param1.ToString() + " [param2]" + param2.ToString() + " [param3]" + param3.ToString() + " [param4]" + param4.ToString() + " [param5]" + param5.ToString());
 
                 Delegate d = cb as Delegate;
                 if (d != null)
@@ -323,7 +323,7 @@ namespace BiangLibrary.Messenger
                     Delegate[] cb_list = d.GetInvocationList();
                     foreach (Delegate cb_tmp in cb_list)
                     {
-                         Logger.Log("{" + cb_tmp.Target + " -> " + cb_tmp.Method + "}");
+                        Debug.Log("{" + cb_tmp.Target + " -> " + cb_tmp.Method + "}");
                     }
                 }
 #endif
@@ -357,16 +357,15 @@ namespace BiangLibrary.Messenger
         public void MarkAsPermanent(uint eventID)
         {
 #if LOG_ALL_MESSAGES
-	 Logger.Log("Messenger MarkAsPermanent \t\"" + eventID + "\"");
+            Debug.Log("Messenger MarkAsPermanent \t\"" + eventID + "\"");
 #endif
             permanentMessages.Add(eventID);
         }
 
-
         public void Cleanup()
         {
 #if LOG_ALL_MESSAGES
-	 Logger.Log("MESSENGER Cleanup. Make sure that none of necessary listeners are removed.");
+            Debug.Log("MESSENGER Cleanup. Make sure that none of necessary listeners are removed.");
 #endif
 
             List<uint> messagesToRemove = new List<uint>();
@@ -418,7 +417,7 @@ namespace BiangLibrary.Messenger
         public void OnListenerAdding(uint eventID, Delegate listenerBeingAdded)
         {
 #if LOG_ALL_MESSAGES || LOG_ADD_LISTENER
-	 Logger.Log("MESSENGER OnListenerAdding \"" + eventID + "\"{" + listenerBeingAdded.Target + " -> " + listenerBeingAdded.Method + "}");
+            Debug.Log("MESSENGER OnListenerAdding \"" + eventID + "\"{" + listenerBeingAdded.Target + " -> " + listenerBeingAdded.Method + "}");
 #endif
 
             if (!EventListenTable.ContainsKey(eventID))
@@ -438,7 +437,7 @@ namespace BiangLibrary.Messenger
         public bool OnListenerRemoving(uint eventID, Delegate listenerBeingRemoved)
         {
 #if LOG_ALL_MESSAGES
-	 Logger.Log("MESSENGER OnListenerRemoving \t\"" + eventID + "\"\t{" + listenerBeingRemoved.Target + " -> " + listenerBeingRemoved.Method + "}");
+            Debug.Log("MESSENGER OnListenerRemoving \t\"" + eventID + "\"\t{" + listenerBeingRemoved.Target + " -> " + listenerBeingRemoved.Method + "}");
 #endif
 
             if (EventListenTable.ContainsKey(eventID))
@@ -466,7 +465,7 @@ namespace BiangLibrary.Messenger
         public void OnBroadcasting(uint eventID, bool bAsync)
         {
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
-         Logger.Log("MESSENGER SEND " + (bAsync ? "ASYNC\t" : "\t") + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\tInvoking \t\"" + eventID + "\"");
+            Debug.Log("MESSENGER SEND " + (bAsync ? "ASYNC\t" : "\t") + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\tInvoking \t\"" + eventID + "\"");
 #endif
 
 #if REQUIRE_LISTENER
@@ -792,7 +791,7 @@ namespace BiangLibrary.Messenger
                     else
                     {
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
-                     Logger.LogError("MESSENGER ASYNC EXCUTE FAIL:has unlistened\t" + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\tInvoking \t\"" + eventTypeList[i].eventID + "\"");
+                        Debug.LogError("MESSENGER ASYNC EXCUTE FAIL:has unlistened\t" + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\tInvoking \t\"" + eventTypeList[i].eventID + "\"");
 #endif
                     }
                 }

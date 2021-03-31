@@ -461,6 +461,7 @@ public class Actor : Entity
         ActorMoveColliderRoot.SetActive(false);
         SetModelSmoothMoveLerpTime(0);
         SwitchEntityOrientation(GridPosR.Orientation.Up);
+        StopAllCoroutines();
         gameObject.SetActive(false);
         BattleManager.Instance.RemoveActor(this);
         base.OnRecycled();

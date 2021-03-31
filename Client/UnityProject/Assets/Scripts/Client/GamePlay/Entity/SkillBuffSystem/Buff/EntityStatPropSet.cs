@@ -403,6 +403,7 @@ public class EntityStatPropSet
             FrozenValue.OnValueChanged = OnFrozenValueChangedAction;
             FrozenValue.OnValueIncrease = OnFrozenValueIncreaseAction;
             FrozenLevel.OnValueChanged = Entity.EntityFrozenHelper.OnFrozeIntoIceBlockAction;
+            FrozenLevel.OnValueChanged += OnFrozenLevelChangedAction;
         }
 
         StatDict.Add(EntityStatType.FrozenValue, FrozenValue);
@@ -497,6 +498,7 @@ public class EntityStatPropSet
         OnFrozenResistanceChangedAction = OnFrozenResistanceChanged;
         OnFrozenValueChangedAction = OnFrozenValueChanged;
         OnFrozenValueIncreaseAction = OnFrozenValueIncrease;
+        OnFrozenLevelChangedAction = OnFrozenLevelChanged;
         OnFiringResistanceChangedAction = OnFiringResistanceChanged;
         OnFiringValueChangedAction = OnFiringValueChanged;
         OnFiringValueIncreaseAction = OnFiringValueIncrease;
@@ -513,6 +515,11 @@ public class EntityStatPropSet
         {
             actor.ActorBattleHelper.ShowGainGoldNumFX(increase);
         }
+
+        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+        {
+            eps.OnElementValueChange(EntityStatType.Gold);
+        }
     }
 
     private UnityAction<int> OnHealthDurabilityDecreaseAction;
@@ -523,6 +530,11 @@ public class EntityStatPropSet
         {
             actor.ActorBattleHelper.ShowDamageNumFX(decrease);
         }
+
+        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+        {
+            eps.OnElementValueChange(EntityStatType.HealthDurability);
+        }
     }
 
     private UnityAction<int> OnHealthDurabilityIncreaseAction;
@@ -532,6 +544,11 @@ public class EntityStatPropSet
         if (Entity is Actor actor)
         {
             actor.ActorBattleHelper.ShowHealNumFX(increase);
+        }
+
+        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+        {
+            eps.OnElementValueChange(EntityStatType.HealthDurability);
         }
     }
 
@@ -574,6 +591,11 @@ public class EntityStatPropSet
     {
         FrozenLevel.SetValue(after / FrozenValuePerLevel, "FrozenValueChange");
         if (FrozenLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FrozenValue, FrozenFX, FrozenLevel.Value); // 冰冻值变化时，播放一次特效
+
+        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+        {
+            eps.OnElementValueChange(EntityStatType.FrozenValue);
+        }
     }
 
     private UnityAction<int> OnFrozenValueIncreaseAction;
@@ -581,6 +603,16 @@ public class EntityStatPropSet
     private void OnFrozenValueIncrease(int increase)
     {
         FiringValue.SetValue(0);
+    }
+
+    private UnityAction<int, int> OnFrozenLevelChangedAction;
+
+    private void OnFrozenLevelChanged(int before, int after)
+    {
+        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+        {
+            eps.OnElementValueChange(EntityStatType.FrozenLevel);
+        }
     }
 
     private UnityAction<int, int> OnFiringResistanceChangedAction;
@@ -598,6 +630,11 @@ public class EntityStatPropSet
         if (FiringLevel.Value > 0)
             Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FiringValue, FiringFX, FiringLevel.Value); // 燃烧值变化时，播放一次特效
         else if (after == 0) Entity.EntityBuffHelper.RemoveAbnormalStatFX((int) EntityStatType.FiringValue);
+
+        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+        {
+            eps.OnElementValueChange(EntityStatType.FiringValue);
+        }
     }
 
     private UnityAction<int> OnFiringValueIncreaseAction;
@@ -621,6 +658,11 @@ public class EntityStatPropSet
                     if (fx) fx.transform.parent = box.transform;
                 }
             }
+        }
+
+        foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+        {
+            eps.OnElementValueChange(EntityStatType.FiringLevel);
         }
     }
 
@@ -743,8 +785,8 @@ public class EntityStatPropSet
         FiringLevel.ApplyDataTo(target.FiringLevel);
         FiringSpreadPercent.ApplyDataTo(target.FiringSpreadPercent);
         FiringDamageDefense.ApplyDataTo(target.FiringDamageDefense);
-        target.StartFiringFX.CopyDataFrom(StartFiringFX); 
-        target.FiringFX.CopyDataFrom(FiringFX); 
+        target.StartFiringFX.CopyDataFrom(StartFiringFX);
+        target.FiringFX.CopyDataFrom(FiringFX);
 
         #endregion
 

@@ -55,7 +55,7 @@ MonoBehaviour:
   GivenSeed: 1396197886
   StartMicroWorldTypeName:
     TypeDefineType: 6
-    TypeGUID: (9df819f3-6aa6-48cf-937d-c1129a079def)
+    TypeGUID: 
   m_GenerateTerrainData:
     ProcessingPassList:
     - id: 0
@@ -64,6 +64,9 @@ MonoBehaviour:
     - id: 3
     - id: 4
     - id: 5
+    - id: 6
+    - id: 7
+    - id: 8
   GenerateStaticLayoutLayerDataList:
   - Enable: 1
     m_GenerateAlgorithm: 2
@@ -106,18 +109,18 @@ MonoBehaviour:
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     OnlyAllowPutOnTerrain: 1
-    AllowPlaceOnTerrainTypes: 0100000002000000
+    AllowPlaceOnTerrainTypes: 01000000
     ForbidPlaceOnTerrainTypes: 
     ConsiderStaticLayout: 0
     CertainNumber: 0
     Count: 1
-    CountPer10KGrid: 0.2
+    CountPer10KGrid: 30
     StaticLayoutTypeName:
       TypeDefineType: 5
       TypeGUID: (776f7c31-418b-493e-a6e4-58b565c4d89e)
     AllowFragment: 1
     LayoutIntactForOtherStaticLayout: 0
-    LayoutIntactForOtherBoxes: 1
+    LayoutIntactForOtherBoxes: 0
     DeterminePlayerBP: 0
   - Enable: 1
     m_GenerateAlgorithm: 2
@@ -178,7 +181,7 @@ MonoBehaviour:
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
     OnlyAllowPutOnTerrain: 1
-    AllowPlaceOnTerrainTypes: 00000000
+    AllowPlaceOnTerrainTypes: 05000000
     ForbidPlaceOnTerrainTypes: 
     ConsiderStaticLayout: 0
     CertainNumber: 0
@@ -280,7 +283,7 @@ MonoBehaviour:
     BoxTypeName:
       TypeDefineType: 0
       TypeGUID: (0f9504a7-aa14-418f-bee3-360463c5819f)
-    FillPercent: 65
+    FillPercent: 62
     CaveConnectPercent: 50
     SmoothTimes: 5
     SmoothTimes_GenerateWallInOpenSpace: 0
@@ -300,8 +303,8 @@ MonoBehaviour:
     m_GenerateAlgorithm: 0
     AllowReplacedBoxTypeNames: []
     OnlyOverrideAnyBox: 0
-    OnlyAllowPutOnTerrain: 0
-    AllowPlaceOnTerrainTypes: 
+    OnlyAllowPutOnTerrain: 1
+    AllowPlaceOnTerrainTypes: 02000000
     ForbidPlaceOnTerrainTypes: 
     ConsiderStaticLayout: 0
     CertainNumber: 0
@@ -585,3 +588,49 @@ MonoBehaviour:
           Operator: 0
           Threshold: 2
           ChangeTerrainTypeTo: 0
+    00000006:
+      type: {class: TerrainProcessPass_RandomFill, ns: , asm: Client}
+      data:
+        Enable: 1
+        ControlFillPercentWithPerlinNoise: 1
+        PerlinNoiseThreshold: 0.65
+        PerlinNoiseScale: 0.0323
+        FillPercent: 70
+        TerrainType: 2
+        OnlyOverrideSomeTerrain: 1
+        OverrideTerrainType: 0
+    00000007:
+      type: {class: TerrainProcessPass_RandomFill, ns: , asm: Client}
+      data:
+        Enable: 1
+        ControlFillPercentWithPerlinNoise: 0
+        PerlinNoiseThreshold: 0.4
+        PerlinNoiseScale: 2.156
+        FillPercent: 10
+        TerrainType: 1
+        OnlyOverrideSomeTerrain: 1
+        OverrideTerrainType: 2
+    00000008:
+      type: {class: TerrainProcessPass_Smooth, ns: , asm: Client}
+      data:
+        Enable: 1
+        SmoothTimes: 1
+        NeighborIterations:
+        - LimitSelfType: 1
+          SelfTerrainType: 0
+          NeighborTerrainType: 2
+          Operator: 2
+          Threshold: 5
+          ChangeTerrainTypeTo: 2
+        - LimitSelfType: 1
+          SelfTerrainType: 2
+          NeighborTerrainType: 2
+          Operator: 0
+          Threshold: 4
+          ChangeTerrainTypeTo: 0
+        - LimitSelfType: 1
+          SelfTerrainType: 0
+          NeighborTerrainType: 2
+          Operator: 2
+          Threshold: 1
+          ChangeTerrainTypeTo: 1

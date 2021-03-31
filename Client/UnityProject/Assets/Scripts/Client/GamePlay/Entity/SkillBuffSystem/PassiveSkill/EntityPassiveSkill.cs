@@ -112,6 +112,10 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
     {
     }
 
+    public virtual void OnElementValueChange(EntityStatType entityStatType)
+    {
+    }
+
     #endregion
 
     public EntityPassiveSkill Clone()

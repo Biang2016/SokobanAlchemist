@@ -11,6 +11,9 @@ public class ActorAIAgent
     internal Actor Actor;
     internal static bool ENABLE_ACTOR_AI_AGENT_LOG = false;
 
+    private float CheckSpaceAvailableForActorOccupationInterval = 0.3f;
+    private float CheckSpaceAvailableForActorOccupationTick = 0f;
+
     public ActorAIAgent(Actor actor)
     {
         Actor = actor;
@@ -28,7 +31,10 @@ public class ActorAIAgent
         if (!Actor.GraphOwner.isRunning) Actor.GraphOwner?.StartBehaviour();
         RefreshTargetGP();
         RefreshThreatEntityRank();
-        MoveToDestination();
+
+        CheckSpaceAvailableForActorOccupationTick += Time.fixedDeltaTime;
+        MoveToDestination(CheckSpaceAvailableForActorOccupationTick > CheckSpaceAvailableForActorOccupationInterval);
+        if (CheckSpaceAvailableForActorOccupationTick > CheckSpaceAvailableForActorOccupationInterval) CheckSpaceAvailableForActorOccupationTick -= CheckSpaceAvailableForActorOccupationInterval;
     }
 
     public void FixedUpdateAfterMove()
@@ -265,15 +271,15 @@ public class ActorAIAgent
                 for (int angle = 0; angle <= 360; angle += 10)
                 {
                     float radianAngle = Mathf.Deg2Rad * angle;
-                    Vector3 dest = ((Vector3)worldGP) + new Vector3((keepDistanceMin + 1) * Mathf.Sin(radianAngle), 0, (keepDistanceMin + 1) * Mathf.Cos(radianAngle));
+                    Vector3 dest = ((Vector3) worldGP) + new Vector3((keepDistanceMin + 1) * Mathf.Sin(radianAngle), 0, (keepDistanceMin + 1) * Mathf.Cos(radianAngle));
                     GridPos3D destGP = dest.ToGridPos3D();
                     runDestList.Add(destGP);
                 }
 
                 runDestList.Sort((gp1, gp2) =>
                 {
-                    float dist1 = (gp1 + ((Vector3)worldGP) - Actor.EntityBaseCenter).magnitude;
-                    float dist2 = (gp2 + ((Vector3)worldGP) - Actor.EntityBaseCenter).magnitude;
+                    float dist1 = (gp1 + ((Vector3) worldGP) - Actor.EntityBaseCenter).magnitude;
+                    float dist2 = (gp2 + ((Vector3) worldGP) - Actor.EntityBaseCenter).magnitude;
                     return dist1.CompareTo(dist2);
                 });
 
@@ -378,7 +384,7 @@ public class ActorAIAgent
         }
     }
 
-    public void MoveToDestination()
+    public void MoveToDestination(bool checkSpaceAvailableForActorOccupation)
     {
         float arriveThreshold = 0.2f;
         Actor.CurMoveAttempt = Vector3.zero;
@@ -386,7 +392,7 @@ public class ActorAIAgent
         {
             if (nextNode != null)
             {
-                if (!ActorPathFinding.CheckSpaceAvailableForActorOccupation(nextNode.GridPos3D_PF, Actor.transform.position, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID)) // 有箱子或Actor挡路，停止寻路
+                if (checkSpaceAvailableForActorOccupation && !ActorPathFinding.CheckSpaceAvailableForActorOccupation(nextNode.GridPos3D_PF, Actor.transform.position, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID)) // 有箱子或Actor挡路，停止寻路
                 {
                     Vector3 diff = currentNode.GridPos3D_PF - Actor.WorldGP_PF;
                     if (diff.magnitude < arriveThreshold)

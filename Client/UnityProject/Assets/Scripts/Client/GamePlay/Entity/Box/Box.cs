@@ -153,7 +153,6 @@ public partial class Box : Entity
 
     public override void OnRecycled()
     {
-        if (KeepTryingDropSelfCoroutine != null) StopCoroutine(KeepTryingDropSelfCoroutine);
         ArtOnly = true;
         WorldModule = null;
         WorldGP = GridPos3D.Zero;
@@ -187,6 +186,9 @@ public partial class Box : Entity
         BoxFrozenBoxHelper?.OnHelperRecycled();
         BoxMarchingTextureHelper?.OnHelperRecycled();
 
+        UnInitPassiveSkills();
+        UnInitActiveSkills();
+
         transform.DOPause();
         EntityModelHelper.transform.DOPause();
         EntityModelHelper.transform.localPosition = Vector3.zero;
@@ -212,7 +214,6 @@ public partial class Box : Entity
         CurrentKickLocalAxis = KickAxis.None;
         CurrentMoveGlobalPlanerDir = GridPos3D.Zero;
 
-        UnInitPassiveSkills();
         SwitchEntityOrientation(GridPosR.Orientation.Up);
         gameObject.SetActive(false);
 
@@ -452,8 +453,11 @@ public partial class Box : Entity
 
     protected virtual void Start()
     {
-        GUID = GetGUID();
-        GUID_Mod_FixedFrameRate = BoxFeature.HasFlag(BoxFeature.SlowTick) ? ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_5X : ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
+        if (GUID == 0)
+        {
+            GUID = GetGUID();
+            GUID_Mod_FixedFrameRate = BoxFeature.HasFlag(BoxFeature.SlowTick) ? ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_5X : ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
+        }
     }
 
     private void OnPlayerInteractSkillChanged(InteractSkillType interactSkillType, ushort boxTypeIndex)
@@ -479,6 +483,12 @@ public partial class Box : Entity
         base.Setup(initWorldModuleGUID);
         if (IsHidden) BoxModelHelper.gameObject.SetActive(false);
         EntityTypeIndex = boxTypeIndex;
+        if (GUID == 0)
+        {
+            GUID = GetGUID();
+            GUID_Mod_FixedFrameRate = BoxFeature.HasFlag(BoxFeature.SlowTick) ? ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_5X : ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
+        }
+
         InitPassiveSkills();
 
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
@@ -1277,8 +1287,6 @@ public partial class Box : Entity
             ps.OnDestroyEntity();
         }
 
-        // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
-        // BoxPassiveSkills.Clear(); 
         PlayFXOnEachGrid(DestroyFX);
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
         callBack?.Invoke();
@@ -1313,8 +1321,6 @@ public partial class Box : Entity
             ps.OnMergeBox();
         }
 
-        // 防止BoxPassiveSkills里面的效果导致箱子损坏，从而造成CollectionModified的异常。仅在OnUsed使用时InitBoxPassiveSkills清空即可
-        // BoxPassiveSkills.Clear(); 
         WorldManager.Instance.CurrentWorld.DeleteBox(this, callBack == null); // 有callback的是oldBoxCore，要避免上面box落下导致新箱子合成不出来
         callBack?.Invoke();
     }

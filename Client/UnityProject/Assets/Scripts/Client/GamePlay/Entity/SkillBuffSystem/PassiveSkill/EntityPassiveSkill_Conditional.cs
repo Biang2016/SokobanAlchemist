@@ -32,6 +32,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         OnMergeBox = 1 << 14,
         OnDestroyEntityByElementDamage = 1 << 15,
         OnBeingFueled = 1 << 16,
+        OnEntityStatValueChange = 1 << 17,
     }
 
     [LabelText("触发时机")]
@@ -46,6 +47,12 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public List<EntityBuffAttribute> DestroyEntityByElementDamageTypeList = new List<EntityBuffAttribute>();
 
     private HashSet<EntityBuffAttribute> DestroyEntityByElementDamageTypeSet = new HashSet<EntityBuffAttribute>();
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
+    [LabelText("EntityStat种类")]
+    public List<EntityStatType> EntityStatChangeTypeList = new List<EntityStatType>();
+
+    private HashSet<EntityStatType> EntityStatChangeTypeSet = new HashSet<EntityStatType>();
 
     private IEnumerable GetAllBuffAttributeTypes => ConfigManager.GetAllBuffAttributeTypes();
 
@@ -75,6 +82,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             foreach (EntityBuffAttribute attribute in DestroyEntityByElementDamageTypeList)
             {
                 DestroyEntityByElementDamageTypeSet.Add(attribute);
+            }
+        }
+
+        if (EntityStatChangeTypeSet.Count == 0)
+        {
+            foreach (EntityStatType est in EntityStatChangeTypeList)
+            {
+                EntityStatChangeTypeSet.Add(est);
             }
         }
     }
@@ -406,7 +421,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     public override void OnGrindTriggerZoneEnter(Collider collider)
     {
-        base.OnTriggerZoneEnter(collider);
+        base.OnGrindTriggerZoneEnter(collider);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityGrindTriggerZone))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
@@ -424,7 +439,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     public override void OnGrindTriggerZoneStay(Collider collider)
     {
-        base.OnTriggerZoneStay(collider);
+        base.OnGrindTriggerZoneStay(collider);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityGrindTriggerZone))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
@@ -442,7 +457,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     public override void OnGrindTriggerZoneExit(Collider collider)
     {
-        base.OnTriggerZoneExit(collider);
+        base.OnGrindTriggerZoneExit(collider);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityGrindTriggerZone))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
@@ -536,7 +551,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     public override void OnDestroyEntityByElementDamage(EntityBuffAttribute entityBuffAttribute)
     {
-        base.OnMergeBox();
+        base.OnDestroyEntityByElementDamage(entityBuffAttribute);
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnDestroyEntityByElementDamage))
         {
             if (DestroyEntityByElementDamageTypeSet.Contains(entityBuffAttribute))
@@ -567,6 +582,27 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                     if (action is EntityPassiveSkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
+                    }
+                }
+            }
+        }
+    }
+
+    public override void OnElementValueChange(EntityStatType entityStatType)
+    {
+        base.OnElementValueChange(entityStatType);
+        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityStatValueChange))
+        {
+            if (EntityStatChangeTypeSet.Contains(entityStatType))
+            {
+                if (TriggerProbabilityPercent.ProbabilityBool())
+                {
+                    foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                    {
+                        if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                        {
+                            pureAction.Execute();
+                        }
                     }
                 }
             }
@@ -649,6 +685,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
         newPSC.PassiveSkillCondition = PassiveSkillCondition;
         newPSC.DestroyEntityByElementDamageTypeList = DestroyEntityByElementDamageTypeList.Clone();
+        newPSC.EntityStatChangeTypeList = EntityStatChangeTypeList.Clone();
         foreach (EntityPassiveSkillAction rawBoxPassiveSkillAction in RawEntityPassiveSkillActions)
         {
             EntityPassiveSkillAction newEPSA = rawBoxPassiveSkillAction.Clone();
@@ -673,6 +710,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
         PassiveSkillCondition = srcPSC.PassiveSkillCondition;
         DestroyEntityByElementDamageTypeList = srcPSC.DestroyEntityByElementDamageTypeList.Clone();
+        EntityStatChangeTypeList = srcPSC.EntityStatChangeTypeList.Clone();
         if (srcPSC.RawEntityPassiveSkillActions.Count != RawEntityPassiveSkillActions.Count)
         {
             Debug.LogError("EPS_Conditional CopyDataFrom() Action数量不一致");

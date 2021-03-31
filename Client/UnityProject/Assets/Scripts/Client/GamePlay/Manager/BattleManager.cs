@@ -117,6 +117,10 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         GameStateManager.Instance.SetState(GameState.Fighting);
         ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnTriggerLevelEventCreateActor);
         IsStart = true;
+        if (WorldManager.Instance.CurrentWorld.WorldData.UseSpecialPlayerEnterESPS)
+        {
+            Player1.ReloadESPS(WorldManager.Instance.CurrentWorld.WorldData.Raw_PlayerEnterESPS);
+        }
     }
 
     private void LoadActors()

@@ -252,6 +252,47 @@ public abstract class Entity : PoolObject
 
     protected void InitPassiveSkills()
     {
+        if (GUID == 2218)
+        {
+            int a = 0;
+        }
+
+        PassiveSkillMarkAsDestroyed = false;
+        if (EntityPassiveSkills.Count == 0)
+        {
+            foreach (EntityPassiveSkill rawAPS in RawEntityPassiveSkills)
+            {
+                EntityPassiveSkill ps = rawAPS.Clone();
+                EntityPassiveSkills.Add(ps);
+                ps.IsAddedDuringGamePlay = false;
+                ps.Entity = this;
+            }
+        }
+
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+        {
+            eps.OnInit();
+            eps.OnRegisterLevelEventID();
+        }
+    }
+
+    public void AddNewPassiveSkill(EntityPassiveSkill eps, bool isAddedDuringGamePlay)
+    {
+        EntityPassiveSkills.Add(eps);
+        eps.IsAddedDuringGamePlay = isAddedDuringGamePlay;
+        eps.Entity = this;
+        eps.OnInit();
+        eps.OnRegisterLevelEventID();
+    }
+
+    protected void UnInitPassiveSkills()
+    {
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+        {
+            eps.OnUnRegisterLevelEventID();
+            eps.OnUnInit();
+        }
+
         cachedRemoveList_EntityPassiveSkill.Clear();
         if (EntityPassiveSkills.Count > 0)
         {
@@ -276,8 +317,6 @@ public abstract class Entity : PoolObject
                     eps.Entity = this;
                     eps.IsAddedDuringGamePlay = false; // 从Raw里面拷出来的都即为非动态添加的技能
                     eps.CopyDataFrom(RawEntityPassiveSkills[i]);
-                    eps.OnInit();
-                    eps.OnRegisterLevelEventID();
                 }
             }
             else
@@ -290,30 +329,13 @@ public abstract class Entity : PoolObject
             foreach (EntityPassiveSkill rawAPS in RawEntityPassiveSkills)
             {
                 EntityPassiveSkill ps = rawAPS.Clone();
-                AddNewPassiveSkill(ps, false);
+                EntityPassiveSkills.Add(ps);
+                ps.IsAddedDuringGamePlay = false;
+                ps.Entity = this;
             }
         }
 
-        PassiveSkillMarkAsDestroyed = false;
-    }
-
-    public void AddNewPassiveSkill(EntityPassiveSkill eps, bool isAddedDuringGamePlay)
-    {
-        EntityPassiveSkills.Add(eps);
-        eps.IsAddedDuringGamePlay = isAddedDuringGamePlay;
-        eps.Entity = this;
-        eps.OnInit();
-        eps.OnRegisterLevelEventID();
-    }
-
-    protected void UnInitPassiveSkills()
-    {
-        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
-        {
-            eps.OnUnRegisterLevelEventID();
-            eps.OnUnInit();
-        }
-
+        cachedRemoveList_EntityPassiveSkill.Clear();
         PassiveSkillMarkAsDestroyed = false;
     }
 
