@@ -1204,7 +1204,6 @@ public partial class Box : Entity
             collidedActor.RigidBody.AddForce(repelForce, ForceMode.VelocityChange);
             collidedActor.EntityBuffHelper.AddBuff(new EntityBuff_AttributeLabel {CasterActorGUID = LastInteractActorGUID, Duration = repelForce.magnitude / 30f, EntityBuffAttribute = EntityBuffAttribute.Repulse, IsPermanent = false});
             collidedActor.EntityBuffHelper.Damage(EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, LastInteractActorGUID);
-            collidedActor.ActorArtHelper.IsHitStop = true;
             return true;
         }
 

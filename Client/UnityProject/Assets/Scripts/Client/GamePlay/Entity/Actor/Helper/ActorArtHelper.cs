@@ -87,34 +87,20 @@ public class ActorArtHelper : ActorMonoHelper
     {
         if (Actor.IsNotNullAndAlive())
         {
-            if (IsHitStop)
-            {
-                HitStopTick += Time.fixedDeltaTime;
-                float beCollidedHitStopDuration = Actor.EntityStatPropSet.BeCollidedHitStopDuration.GetModifiedValue / 1000f;
-                if (HitStopTick >= beCollidedHitStopDuration)
-                {
-                    HitStopTick = 0;
-                    IsHitStop = false;
-                }
-            }
-            else
-            {
-                HitStopTick = 0;
-            }
+            IsAnimFreeze = Actor.IsFrozen || Actor.EntityBuffHelper.IsShocking || Actor.EntityBuffHelper.IsStun || Actor.EntityBuffHelper.IsBeingGround || Actor.EntityBuffHelper.IsBeingRepulsed;
         }
     }
 
     #region 第一优先级
 
-    private float HitStopTick = 0;
-    private bool isHitStop = false;
+    private bool isAnimFreeze = false;
 
-    public bool IsHitStop
+    private bool IsAnimFreeze
     {
-        get { return isHitStop; }
+        get { return isAnimFreeze; }
         set
         {
-            if (isHitStop != value)
+            if (isAnimFreeze != value)
             {
                 if (value)
                 {
@@ -131,16 +117,8 @@ public class ActorArtHelper : ActorMonoHelper
                     }
                 }
 
-                isHitStop = value;
+                isAnimFreeze = value;
             }
-        }
-    }
-
-    public void SetIsFrozen(bool isFrozen)
-    {
-        if (ActorModelAnim != null)
-        {
-            ActorModelAnim.speed = isFrozen ? 0 : 1;
         }
     }
 

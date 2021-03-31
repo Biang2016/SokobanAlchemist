@@ -14,7 +14,6 @@ public class ActorFrozenHelper : EntityFrozenHelper
         {
             actor.ForbidAction = false;
             actor.SetModelSmoothMoveLerpTime(actor.DefaultSmoothMoveLerpTime);
-            actor.ActorArtHelper.SetIsFrozen(false);
             if (FrozenBox)
             {
                 actor.transform.parent = BattleManager.Instance.ActorContainerRoot;
@@ -46,7 +45,6 @@ public class ActorFrozenHelper : EntityFrozenHelper
                             FrozenBox.AddNewPassiveSkill(abf, true);
                         }
 
-                        actor.ActorArtHelper.SetIsFrozen(true);
                         FrozenBox.FrozenActor = actor;
                         FrozenBox.BoxFrozenBoxHelper.GenerateBoxIndicatorForFrozenActor(actor);
                         FrozenBox.BoxFrozenBoxHelper.SetColliderSize_ForFrozenEnemyBox(actor.ActorWidth);

@@ -479,7 +479,7 @@ public static class ActorAIAtoms
         public static Status TriggerSkill(Actor actor, EntitySkillIndex skillIndex, ActorAIAgent.TargetEntityType targetEntityType)
         {
             if (!actor.IsNotNullAndAlive() || actor.ActorAIAgent == null) return Status.Failure;
-            if (actor.IsFrozen) return Status.Failure;
+            if (actor.IsFrozen || actor.EntityBuffHelper.IsBeingGround || actor.EntityBuffHelper.IsBeingRepulsed || actor.EntityBuffHelper.IsStun || actor.EntityBuffHelper.IsShocking) return Status.Failure;
             Entity targetEntity = actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].TargetEntity;
             if (!targetEntity.IsNotNullAndAlive()) return Status.Failure;
             if (actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
@@ -518,7 +518,7 @@ public static class ActorAIAtoms
         public static Status TriggerSkill(Actor actor, EntitySkillIndex skillIndex)
         {
             if (!actor.IsNotNullAndAlive() || actor.ActorAIAgent == null) return Status.Failure;
-            if (actor.IsFrozen) return Status.Failure;
+            if (actor.IsFrozen || actor.EntityBuffHelper.IsBeingGround || actor.EntityBuffHelper.IsBeingRepulsed || actor.EntityBuffHelper.IsStun || actor.EntityBuffHelper.IsShocking) return Status.Failure;
             if (actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
             {
                 bool triggerSuc = eas.CheckCanTriggerSkill();

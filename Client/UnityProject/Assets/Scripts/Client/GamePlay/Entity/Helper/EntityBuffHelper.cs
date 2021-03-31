@@ -65,6 +65,7 @@ public class EntityBuffHelper : EntityMonoHelper
     protected Dictionary<uint, float> BuffRemainTimeDict = new Dictionary<uint, float>(10);
     protected Dictionary<uint, float> BuffPassedTimeDict = new Dictionary<uint, float>(10);
 
+    public bool IsShocking => HasBuff(EntityBuffAttribute.Shocking);
     public bool IsStun => HasBuff(EntityBuffAttribute.Stun);
     public bool IsHiding => HasBuff(EntityBuffAttribute.Hiding);
     public bool IsBeingRepulsed => HasBuff(EntityBuffAttribute.Repulse);
