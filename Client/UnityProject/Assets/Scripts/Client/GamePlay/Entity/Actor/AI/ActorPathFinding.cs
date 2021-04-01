@@ -93,6 +93,7 @@ public static class ActorPathFinding
 
     public static bool FindPath(GridPos3D ori_PF, GridPos3D dest_PF, Vector3 actorPos, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
+        if (ori_PF.y != dest_PF.y) return false;
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori_PF, out WorldModule oriModule, out GridPos3D _);
         WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(dest_PF, out WorldModule destModule, out GridPos3D _);
         if (oriModule.IsNotNullAndAvailable() && destModule.IsNotNullAndAvailable())
@@ -126,6 +127,7 @@ public static class ActorPathFinding
 
     private static bool FindPath(Node ori, Node dest, Vector3 actorPos, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
+        if (ori.GridPos3D_PF.y != dest.GridPos3D_PF.y) return false;
         OpenList.Clear();
         CloseList.Clear();
         OpenList.Add(ori);

@@ -2,6 +2,8 @@
 
 public class EnemyActor : Actor
 {
+    public bool FrequentUpdate = false;
+
     internal float AIUpdateInterval = 0.3f;
     private float AIUpdateIntervalTick = 0;
 
@@ -11,25 +13,33 @@ public class EnemyActor : Actor
         AIUpdateIntervalTick = 0;
     }
 
-    protected override void Tick(float interval) // for Actor: interval = 0.3s
+    protected override void Tick(float interval)
     {
         if (!IsRecycled)
         {
             if (BattleManager.Instance.Player1 != null)
             {
                 float distanceFromMainPlayer = (transform.position - BattleManager.Instance.Player1.transform.position).magnitude;
-                if (distanceFromMainPlayer > 30f)
+                if (FrequentUpdate)
                 {
-                    AIUpdateInterval = 1f;
-                }
-                else if (distanceFromMainPlayer > 20f)
-                {
-                    AIUpdateInterval = 0.4f;
+                    AIUpdateInterval = 0.1f;
                 }
                 else
                 {
-                    AIUpdateInterval = 0.3f;
+                    if (distanceFromMainPlayer > 30f)
+                    {
+                        AIUpdateInterval = 1f;
+                    }
+                    else if (distanceFromMainPlayer > 20f)
+                    {
+                        AIUpdateInterval = 0.4f;
+                    }
+                    else
+                    {
+                        AIUpdateInterval = 0.3f;
+                    }
                 }
+              
             }
 
             if (BattleManager.Instance.IsStart)

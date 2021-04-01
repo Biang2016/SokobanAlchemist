@@ -79,11 +79,11 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public static string DebugChangeWorldBornPointAlias = null;
 
     internal int FixedFrameRate;
-    internal int FixedFrameRate_03X;
+    internal int FixedFrameRate_01X;
     internal int FixedFrameRate_5X;
     internal int CurrentFixedFrameCount;
     internal int CurrentFixedFrameCount_Mod_FixedFrameRate;
-    internal int CurrentFixedFrameCount_Mod_FixedFrameRate_03X;
+    internal int CurrentFixedFrameCount_Mod_FixedFrameRate_01X;
     internal int CurrentFixedFrameCount_Mod_FixedFrameRate_5X;
 
     private void Awake()
@@ -91,7 +91,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         Instance = this;
         CurrentFixedFrameCount = 0;
         FixedFrameRate = Mathf.RoundToInt(1f / Time.fixedDeltaTime);
-        FixedFrameRate_03X = Mathf.RoundToInt(FixedFrameRate * 0.3f);
+        FixedFrameRate_01X = Mathf.RoundToInt(FixedFrameRate * 0.1f);
         FixedFrameRate_5X = FixedFrameRate * 5;
         UIManager.Init(
             (prefabName) => Instantiate(PrefabManager.GetPrefab(prefabName)),
@@ -258,7 +258,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     {
         CurrentFixedFrameCount++;
         CurrentFixedFrameCount_Mod_FixedFrameRate = CurrentFixedFrameCount % FixedFrameRate;
-        CurrentFixedFrameCount_Mod_FixedFrameRate_03X = CurrentFixedFrameCount % FixedFrameRate_03X;
+        CurrentFixedFrameCount_Mod_FixedFrameRate_01X = CurrentFixedFrameCount % FixedFrameRate_01X;
         CurrentFixedFrameCount_Mod_FixedFrameRate_5X = CurrentFixedFrameCount % FixedFrameRate_5X;
         ControlManager.FixedUpdate(Time.fixedDeltaTime);
         if (ControlManager.Common_RestartGame.Up && !IsGameLoading)

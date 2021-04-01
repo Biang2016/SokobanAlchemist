@@ -8,6 +8,7 @@ using NodeCanvas.Framework;
 using ParadoxNotion.Design;
 using UnityEngine;
 using UnityEngine.Profiling;
+using Random = UnityEngine.Random;
 using WaitUntil = FlowCanvas.Nodes.WaitUntil;
 
 public static class ActorAIAtoms
@@ -156,7 +157,7 @@ public static class ActorAIAtoms
         protected override bool OnCheck()
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
-            if (Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity.GetGridDistanceTo(Actor) > GuardingRange.value) return false;
+            if (Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity.GetGridDistanceTo(Actor, false) > GuardingRange.value) return false;
             Profiler.BeginSample("FindPath");
             bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity.EntityBaseCenter.ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), Actor.transform.position, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
             Profiler.EndSample();
@@ -353,12 +354,15 @@ public static class ActorAIAtoms
         [Name("哪种目标")]
         public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
 
+        [Name("无视Y坐标")]
+        public BBParameter<bool> IgnoreY;
+
         protected override bool OnCheck()
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
             Entity targetEntity = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity;
             if (!targetEntity.IsNotNullAndAlive()) return false;
-            return (targetEntity.EntityBaseCenter - Actor.EntityBaseCenter).magnitude <= RangeRadius.value;
+            return targetEntity.GetBaseCenterDistanceTo(Actor, IgnoreY.value) <= RangeRadius.value;
         }
     }
 
@@ -375,12 +379,15 @@ public static class ActorAIAtoms
         [Name("哪种目标")]
         public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
 
+        [Name("忽略Y轴")]
+        public BBParameter<bool> Y_Ignore;
+
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             Entity targetEntity = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity;
             if (!targetEntity.IsNotNullAndAlive()) return Status.Failure;
-            bool inside = targetEntity.GetGridDistanceTo(Actor) <= RangeRadius.value;
+            bool inside = targetEntity.GetGridDistanceTo(Actor, Y_Ignore.value) <= RangeRadius.value;
             return inside ? Status.Success : Status.Failure;
         }
     }
@@ -656,16 +663,40 @@ public static class ActorAIAtoms
     [Description("原地起跳")]
     public class BT_Enemy_JumpUp : BTNode
     {
+        [Name("起跳力度")]
+        public BBParameter<float> JumpForce;
+
         [Name("起跳高度（格）")]
         public BBParameter<int> JumpHeight;
 
-        public override string name => $"原地起跳{JumpHeight.value}格";
+        public override string name => $"按{JumpForce.value}力度原地起跳{JumpHeight.value}格";
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            Actor.JumpUp(JumpHeight.value);
-            return Status.Failure;
+            if (Actor.IsJumping && Actor.JumpReachClimax) return Status.Success;
+            Actor.JumpUp(JumpForce.value, JumpHeight.value);
+            return Status.Success;
+        }
+    }
+
+    [Category("敌兵/战斗")]
+    [Name("起跳完成")]
+    [Description("起跳完成")]
+    public class BT_Enemy_ConfirmJumpUpToClimax : ConditionTask
+    {
+        protected override string info => $"起跳完成";
+
+        protected override bool OnCheck()
+        {
+            if (Actor.IsJumping && Actor.JumpReachClimax)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 
@@ -674,16 +705,92 @@ public static class ActorAIAtoms
     [Description("身体下砸")]
     public class BT_Enemy_SmashDown : BTNode
     {
-        [Name("砸下速度")]
-        public BBParameter<float> Speed;
+        [Name("砸下力度")]
+        public BBParameter<float> SmashDownForce;
 
-        public override string name => $"身体以{Speed.value}速度下砸";
+        public override string name => $"身体以{SmashDownForce.value}力度下砸";
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            
-            return Status.Failure;
+            if (Actor.IsJumping && Actor.JumpReachClimax)
+            {
+                Actor.SmashDown(SmashDownForce.value);
+                return Status.Success;
+            }
+
+            return Status.Running;
+        }
+    }
+
+    [Category("敌兵/战斗")]
+    [Name("落地完成")]
+    [Description("落地完成")]
+    public class BT_Enemy_ConfirmGround : ConditionTask
+    {
+        protected override string info => $"落地完成";
+
+        protected override bool OnCheck()
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
+            if (Actor.IsGrounded)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    [Category("敌兵/战斗")]
+    [Name("设置悬空移动目标点")]
+    [Description("设置悬空移动目标点")]
+    public class BT_Enemy_InAirSetMoveTargetTop : BTNode
+    {
+        [Name("目标类型")]
+        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+
+        [Name("距离偏差容错")]
+        public BBParameter<float> Tolerance;
+
+        [Name("移动速度")]
+        public BBParameter<float> MoveSpeed;
+
+        public override string name => $"设置:悬空速度{MoveSpeed.value}移到[{TargetEntityType.value}]头顶{Tolerance.value}范围";
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            if (!Actor.IsJumping) return Status.Failure;
+            Entity targetEntity = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity;
+            if (!targetEntity.IsNotNullAndAlive()) return Status.Failure;
+            Vector3 randomTolerance = Random.insideUnitSphere * Tolerance.value;
+            randomTolerance.y = 0;
+            Vector3 targetPos = targetEntity.EntityBaseCenter + randomTolerance;
+            targetPos.y = Actor.transform.position.y;
+            Actor.InAirSetMoveTargetPos(targetPos, MoveSpeed.value);
+            return Status.Success;
+        }
+    }
+
+    [Category("敌兵/战斗")]
+    [Name("悬空移动")]
+    [Description("悬空移动")]
+    public class BT_Enemy_InAirMoveToTargetPos : BTNode
+    {
+        public override string name => $"悬空移动";
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            if (!Actor.IsJumping) return Status.Failure;
+            Actor.InAirMoveToTargetPos();
+            Vector3 distanceXZ = Actor.transform.position - Actor.InAirMoveTargetPos;
+            distanceXZ.y = 0;
+            if (distanceXZ.magnitude <= 0.5f) return Status.Success;
+            return Status.Running;
         }
     }
 
@@ -699,12 +806,20 @@ public static class ActorAIAtoms
         [Name("伤害当量")]
         public BBParameter<int> EquivalentDamage;
 
+        [Name("考虑和玩家的距离")]
+        public BBParameter<bool> ConsiderDistanceToPlayer;
+
         public override string name => $"震屏";
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            float distanceFromPlayer = Actor.GetGridDistanceTo(BattleManager.Instance.Player1);
+            float distanceFromPlayer = 0f;
+            if (ConsiderDistanceToPlayer.value)
+            {
+                distanceFromPlayer = Actor.GetGridDistanceTo(BattleManager.Instance.Player1, true);
+            }
+
             CameraManager.Instance.FieldCamera.CameraShake(EquivalentDamage.value, distanceFromPlayer);
             return Status.Success;
         }

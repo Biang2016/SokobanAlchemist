@@ -351,7 +351,7 @@ public class PlayerActor : Actor
 
             if (BS_Skill_3.Down)
             {
-                JumpUp(1);
+                JumpUp(JumpForce, 1);
             }
 
             #endregion

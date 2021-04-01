@@ -185,12 +185,20 @@ public abstract class Entity : PoolObject
     [LabelText("Entity底盘形心坐标")]
     public Vector3 EntityBaseCenter => new Vector3(EntityGeometryCenter.x, transform.position.y, EntityGeometryCenter.z);
 
+    public float GetBaseCenterDistanceTo(Entity target, bool ignoreY)
+    {
+        Vector3 diff = EntityBaseCenter - target.EntityBaseCenter;
+        if (ignoreY) diff.y = 0;
+        return diff.magnitude;
+    }
+
     /// <summary>
     /// Grid对Grid的最近距离
     /// </summary>
     /// <param name="target"></param>
+    /// <param name="ignoreY"></param>
     /// <returns></returns>
-    public float GetGridDistanceTo(Entity target)
+    public float GetGridDistanceTo(Entity target, bool ignoreY)
     {
         float minDistance = float.MaxValue;
         foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
@@ -199,6 +207,7 @@ public abstract class Entity : PoolObject
             foreach (GridPos3D offset_target in target.GetEntityOccupationGPs_Rotated())
             {
                 GridPos3D gridPos_target = target.WorldGP + offset_target;
+                if (ignoreY) gridPos_target.y = gridPos.y;
                 float dist = (gridPos - gridPos_target).magnitude;
                 if (minDistance > dist)
                 {
@@ -523,7 +532,7 @@ public abstract class Entity : PoolObject
             }
             else
             {
-                GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_03X;
+                GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_01X;
             }
         }
     }
@@ -550,10 +559,10 @@ public abstract class Entity : PoolObject
         }
         else
         {
-            if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_03X) // Actor 0.3秒一次
-            {
-                Tick(0.3f);
-            }
+            //if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_01X) // Actor 0.1秒一次
+            //{
+            Tick(0.02f);
+            //}
         }
 
         foreach (EntityActiveSkill eas in EntityActiveSkills)
