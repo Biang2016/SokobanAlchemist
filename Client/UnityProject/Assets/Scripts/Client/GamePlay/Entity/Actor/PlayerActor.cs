@@ -406,7 +406,7 @@ public class PlayerActor : Actor
 
     private bool TriggerSkill(EntitySkillIndex skillIndex)
     {
-        if (IsFrozen) return false;
+        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return false;
         if (EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
         {
             bool triggerSuc = eas.CheckCanTriggerSkill();

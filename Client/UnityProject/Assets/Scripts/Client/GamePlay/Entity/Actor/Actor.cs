@@ -816,6 +816,7 @@ public class Actor : Entity
 
     private void Dash()
     {
+        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
         if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue)
         {
             EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue, "Dash");
@@ -837,6 +838,7 @@ public class Actor : Entity
 
     private void Vault()
     {
+        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
         if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue)
         {
             if (IsFrozen)
@@ -856,6 +858,7 @@ public class Actor : Entity
 
     public void Kick()
     {
+        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
         if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue)
         {
             Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
@@ -891,6 +894,7 @@ public class Actor : Entity
 
     public void SwapBox()
     {
+        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
         Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
@@ -953,6 +957,7 @@ public class Actor : Entity
     public void Lift()
     {
         if (CurrentLiftBox) return;
+        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
         Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
@@ -1011,6 +1016,7 @@ public class Actor : Entity
 
     public void ThrowOrPut()
     {
+        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
         if (CurrentLiftBox && ThrowState == ThrowStates.ThrowCharging)
         {
             if (ActorBoxInteractHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.EntityTypeIndex))
