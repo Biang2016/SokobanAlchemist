@@ -388,6 +388,7 @@ public class ActorAIAgent
 
     public void RecheckPathFindingPassable()
     {
+        Profiler.BeginSample("AISA_RecheckPathFindingPassable");
         Actor.CurMoveAttempt = Vector3.zero;
         if (IsPathFinding)
         {
@@ -407,6 +408,8 @@ public class ActorAIAgent
                 }
             }
         }
+
+        Profiler.EndSample();
     }
 
     public void MoveToDestination()

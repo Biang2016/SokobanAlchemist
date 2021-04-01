@@ -239,6 +239,10 @@ public class Actor : Entity
     #region 手感
 
     [FoldoutGroup("手感")]
+    [LabelText("起跳力度")]
+    public float JumpUpForce = 150f;
+
+    [FoldoutGroup("手感")]
     [LabelText("Dash力度")]
     public float DashForce = 150f;
 
@@ -339,35 +343,13 @@ public class Actor : Entity
         Vault,
         Kick,
         Escape,
+        Jump,
     }
 
     [ReadOnly]
     [FoldoutGroup("状态")]
     [LabelText("行为状态")]
     public ActorBehaviourStates ActorBehaviourState = ActorBehaviourStates.Idle;
-
-    public enum MovementStates
-    {
-        Static,
-        Moving,
-        Frozen,
-    }
-
-    [ReadOnly]
-    [FoldoutGroup("状态")]
-    [LabelText("移动状态")]
-    public MovementStates MovementState = MovementStates.Static;
-
-    public enum PushStates
-    {
-        None,
-        Pushing,
-    }
-
-    [ReadOnly]
-    [FoldoutGroup("状态")]
-    [LabelText("推箱子状态")]
-    public PushStates PushState = PushStates.None;
 
     public enum ThrowStates
     {
@@ -400,8 +382,6 @@ public class Actor : Entity
         CurForward = Vector3.forward;
         WorldGP = GridPos3D.Zero;
         LastWorldGP = GridPos3D.Zero;
-        MovementState = MovementStates.Static;
-        PushState = PushStates.None;
         ThrowState = ThrowStates.None;
         ThrowWhenDie();
 
@@ -585,7 +565,6 @@ public class Actor : Entity
             {
                 if (CurMoveAttempt.x.Equals(0)) RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
                 if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
-                MovementState = MovementStates.Moving;
                 if (this is EnemyActor enemyActor)
                 {
                     ActorArtHelper.SetPFMoveGridSpeed(enemyActor.ActorAIAgent.NextStraightNodeCount);
@@ -650,7 +629,6 @@ public class Actor : Entity
                 ActorArtHelper.SetIsWalking(false);
                 ActorArtHelper.SetIsChasing(false);
                 ActorArtHelper.SetIsPushing(false);
-                MovementState = MovementStates.Static;
                 RigidBody.drag = 100f;
                 RigidBody.mass = 1f;
                 ActorPushHelper.TriggerOut = false;
@@ -685,24 +663,23 @@ public class Actor : Entity
         WorldGP = transform.position.ToGridPos3D();
 
         // 底部无Box则下落一格
-        if (!IsFrozen && HasRigidbody)
+        if (!IsFrozen && HasRigidbody && !(IsJumping && !JumpReachClimax))
         {
             Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(WorldGP + new GridPos3D(0, -1, 0), out WorldModule _, out GridPos3D localGP, false);
             if (!box)
             {
-                if (RigidBody.constraints.HasFlag(RigidbodyConstraints.FreezePositionY))
-                {
-                    RigidBody.constraints -= RigidbodyConstraints.FreezePositionY;
-                }
-
+                RigidBody.constraints &= ~RigidbodyConstraints.FreezePositionY;
                 RigidBody.drag = 0f;
             }
             else
             {
+                IsJumping = false;
                 RigidBody.constraints |= RigidbodyConstraints.FreezePositionY;
                 SnapToGridY();
             }
         }
+
+        CheckJumpState();
 
         if (ActorBattleHelper.IsDestroying)
         {
@@ -1032,6 +1009,7 @@ public class Actor : Entity
 
     public void Throw()
     {
+        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
         if (CurrentLiftBox && CurrentLiftBox.Throwable && ThrowState == ThrowStates.ThrowCharging)
         {
             float velocity = ActorLaunchArcRendererHelper.CalculateVelocityByOffset(CurThrowPointOffset, 45);
@@ -1044,6 +1022,7 @@ public class Actor : Entity
 
     public void Put()
     {
+        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
         if (CurrentLiftBox && ThrowState == ThrowStates.Lifting || ThrowState == ThrowStates.ThrowCharging)
         {
             float velocity = ActorLaunchArcRendererHelper.CalculateVelocityByOffset(CurThrowPointOffset, 45);
@@ -1072,6 +1051,57 @@ public class Actor : Entity
             CurrentLiftBox = null;
         }
     }
+
+    #region Jump
+
+    private bool IsJumping = false;
+    private bool JumpReachClimax = false;
+    private int JumpHeight = 0;
+    private GridPos3D JumpStartWorldGP = GridPos3D.Zero;
+
+    public void JumpUp(int jumpHeight)
+    {
+        if (IsJumping) return;
+        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
+        if (HasRigidbody)
+        {
+            JumpHeight = jumpHeight;
+            ActorBehaviourState = ActorBehaviourStates.Jump;
+            IsJumping = true;
+            JumpStartWorldGP = WorldGP;
+            JumpReachClimax = false;
+            RigidBody.constraints &= ~RigidbodyConstraints.FreezePositionY;
+            RigidBody.drag = 0;
+            RigidBody.AddForce(Vector3.up * JumpUpForce, ForceMode.VelocityChange);
+        }
+    }
+
+    private void CheckJumpState()
+    {
+        if (IsJumping)
+        {
+            if ((WorldGP - JumpStartWorldGP).y >= JumpHeight)
+            {
+                JumpReachClimax = true;
+            }
+            else
+            {
+                if (HasRigidbody)
+                {
+                    if (RigidBody.velocity.y <= 0)
+                    {
+                        JumpReachClimax = true;
+                    }
+                }
+                else
+                {
+                    JumpReachClimax = true;
+                }
+            }
+        }
+    }
+
+    #endregion
 
     #endregion
 }

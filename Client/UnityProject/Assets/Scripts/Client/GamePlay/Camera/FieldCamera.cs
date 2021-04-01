@@ -218,6 +218,7 @@ public class FieldCamera : MonoBehaviour
 
     private void LateUpdate()
     {
+        TargetConfigData.ApplyTo(CurrentConfigData, false);
         CameraLerp(true);
     }
 

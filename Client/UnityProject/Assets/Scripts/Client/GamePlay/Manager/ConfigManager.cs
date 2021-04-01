@@ -343,9 +343,18 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         {
             if (go.GetComponent<WorldModuleDesignHelper>())
             {
-                SortWorldModule(go.name);
-                ExportWorldModuleDataConfig(dataFormat, go.name);
-                ExportStaticLayoutDataConfig(dataFormat, go.name);
+                if (SortWorldModule(go.name))
+                {
+                    SortWorldModule(go.name);
+                    ExportWorldModuleDataConfig(dataFormat, go.name);
+                }
+                else
+                {
+                    if (SortStaticLayout(go.name))
+                    {
+                        ExportStaticLayoutDataConfig(dataFormat, go.name);
+                    }
+                }
             }
             else if (go.GetComponent<WorldDesignHelper>())
             {
@@ -440,9 +449,10 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
-    private static void SortWorldModule(string worldModuleName)
+    private static bool SortWorldModule(string worldModuleName)
     {
         string prefabPath = TypeDefineConfigs[TypeDefineType.WorldModule].GetTypeAssetDataBasePath(worldModuleName);
+        if (string.IsNullOrEmpty(prefabPath)) return false;
         GameObject worldModulePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
         if (worldModulePrefab)
         {
@@ -455,6 +465,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
 
         PrefabUtility.UnloadPrefabContents(worldModulePrefab);
+        return true;
     }
 
     private static void SortAllStaticLayouts()
@@ -466,9 +477,10 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
-    private static void SortStaticLayout(string staticLayoutName)
+    private static bool SortStaticLayout(string staticLayoutName)
     {
         string prefabPath = TypeDefineConfigs[TypeDefineType.StaticLayout].GetTypeAssetDataBasePath(staticLayoutName);
+        if (string.IsNullOrEmpty(prefabPath)) return false;
         GameObject staticLayoutPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
         if (staticLayoutPrefab)
         {
@@ -481,6 +493,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
 
         PrefabUtility.UnloadPrefabContents(staticLayoutPrefab);
+        return true;
     }
 
     private static void SortAllWorlds()

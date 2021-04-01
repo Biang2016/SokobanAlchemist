@@ -651,6 +651,42 @@ public static class ActorAIAtoms
         }
     }
 
+    [Category("敌兵/战斗")]
+    [Name("原地起跳")]
+    [Description("原地起跳")]
+    public class BT_Enemy_JumpUp : BTNode
+    {
+        [Name("起跳高度（格）")]
+        public BBParameter<int> JumpHeight;
+
+        public override string name => $"原地起跳{JumpHeight.value}格";
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            Actor.JumpUp(JumpHeight.value);
+            return Status.Failure;
+        }
+    }
+
+    [Category("敌兵/战斗")]
+    [Name("身体下砸")]
+    [Description("身体下砸")]
+    public class BT_Enemy_SmashDown : BTNode
+    {
+        [Name("砸下速度")]
+        public BBParameter<float> Speed;
+
+        public override string name => $"身体以{Speed.value}速度下砸";
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            
+            return Status.Failure;
+        }
+    }
+
     #endregion
 
     #region 通用

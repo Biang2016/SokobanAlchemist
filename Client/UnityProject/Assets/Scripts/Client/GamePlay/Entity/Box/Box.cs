@@ -982,10 +982,7 @@ public partial class Box : Entity
                 }
                 else // 踢出地面时允许抛物线向下落
                 {
-                    if ((Rigidbody.constraints & RigidbodyConstraints.FreezePositionY) != 0)
-                    {
-                        Rigidbody.constraints -= RigidbodyConstraints.FreezePositionY;
-                    }
+                    Rigidbody.constraints &= ~RigidbodyConstraints.FreezePositionY;
                 }
             }
 

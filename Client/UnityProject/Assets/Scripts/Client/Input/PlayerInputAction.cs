@@ -67,6 +67,46 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)""
                 },
                 {
+                    ""name"": ""Skill_3_Player1"",
+                    ""type"": ""Button"",
+                    ""id"": ""f3ab6494-6327-40d1-bce5-c244d4718670"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Skill_4_Player1"",
+                    ""type"": ""Button"",
+                    ""id"": ""e35f817b-28af-4fc8-aa2c-fb0cb6e5a65f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Skill_5_Player1"",
+                    ""type"": ""Button"",
+                    ""id"": ""8a0f370f-ffce-474c-9fcd-8d988b7e0fb0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Skill_6_Player1"",
+                    ""type"": ""Button"",
+                    ""id"": ""53becb5b-a8ee-4368-8952-2432e1d63610"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Skill_7_Player1"",
+                    ""type"": ""Button"",
+                    ""id"": ""d855dc9c-abcd-410a-9e78-2d49126a218d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
                     ""name"": ""Skill_0_Player2"",
                     ""type"": ""Button"",
                     ""id"": ""f027c168-eca3-48e2-be31-6edf44e526b2"",
@@ -86,6 +126,46 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""name"": ""Skill_2_Player2"",
                     ""type"": ""Button"",
                     ""id"": ""f7ea5b2e-833b-4a59-830b-a0433cf111ba"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Skill_3_Player2"",
+                    ""type"": ""Button"",
+                    ""id"": ""dbe2b26f-d074-4dc0-9ecf-76019d3c0a63"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Skill_4_Player2"",
+                    ""type"": ""Button"",
+                    ""id"": ""04b493f3-2ff4-4924-be4e-c7bedbe130d3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Skill_5_Player2"",
+                    ""type"": ""Button"",
+                    ""id"": ""f82f503d-3265-4198-b09c-7e2484872305"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Skill_6_Player2"",
+                    ""type"": ""Button"",
+                    ""id"": ""1ef5ea9d-a594-4b09-a103-c0e45c69be8c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Skill_7_Player2"",
+                    ""type"": ""Button"",
+                    ""id"": ""b93337c7-ac97-4889-9698-68ee4ed80901"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
@@ -235,22 +315,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Player2_Move"",
-                    ""type"": ""Value"",
-                    ""id"": ""aa33bbb9-0b58-4323-9720-decb690a7265"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Player2_RightStick"",
-                    ""type"": ""Value"",
-                    ""id"": ""83a1b127-8522-46ed-9cf7-b8e16d0651d6"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""LeftRotateCamera"",
                     ""type"": ""Button"",
                     ""id"": ""4c0ad541-70b9-4323-b90a-f89bd96489f9"",
@@ -282,33 +346,11 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f9a3469e-bf26-401d-bd90-5b657d01ce7e"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Skill_0_Player1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c6bae345-756c-4b79-9f20-2a60951a487a"",
-                    ""path"": ""<Keyboard>/enter"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Skill_0_Player2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3817b7ce-ae5b-4aba-b3bd-082722b4cd9a"",
-                    ""path"": ""<XInputController>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Skill_0_Player2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -359,44 +401,11 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""dd014788-5e27-4daf-9256-adfce84e4ba7"",
-                    ""path"": ""<Keyboard>/x"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Skill_1_Player1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""25f8da1f-8500-41ca-9480-d4b803e16970"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Skill_1_Player1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c1deb210-99ec-4ab0-886c-aa4c3b44578c"",
-                    ""path"": ""<Keyboard>/rightShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Skill_1_Player2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e3d5732d-a9b3-4198-9978-5c29a5a30341"",
-                    ""path"": ""<XInputController>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Skill_1_Player2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -962,83 +971,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Arrows"",
-                    ""id"": ""0848bc1d-c24c-443f-9c4e-ce8ab5fe91ba"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Player2_Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""01f4dc9b-b62f-47ca-8a67-b8cb5ba9a22e"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Player2_Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""2fd2d29e-3fe7-4d59-9bb3-d18157c814ce"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Player2_Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""3f8b841e-dd08-4125-bb2e-79a129ad9859"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Player2_Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""35fe9c26-0e6b-4f7a-9973-a72593680417"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Player2_Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1e809f72-9970-4fca-843a-dd747f335638"",
-                    ""path"": ""<Gamepad>/leftStick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Player2_Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fe69d644-20d7-4d7c-adf2-8b8814f6ce4a"",
-                    ""path"": ""<Gamepad>/rightStick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Player2_RightStick"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
                     ""name"": """",
                     ""id"": ""bb7a45e9-abe3-4220-bd4a-d31e251e0abc"",
                     ""path"": ""<Keyboard>/#(Q)"",
@@ -1085,7 +1017,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""015bf92c-095b-4c0e-92a1-88d5782565e0"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""path"": ""<Keyboard>/z"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -1095,23 +1027,12 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ec90f968-9f44-44fb-83b5-eb6f1b4edfb2"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Skill_2_Player1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4616c434-9000-4f70-8253-572be137f1cc"",
-                    ""path"": ""<Keyboard>/slash"",
+                    ""id"": ""5b02d28f-f1a0-4ef3-9507-eec407c0ce55"",
+                    ""path"": ""<Keyboard>/j"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Skill_2_Player2"",
+                    ""action"": ""Skill_2_Player1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1200,6 +1121,127 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Player1_Move_Right_M"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""718f90b8-f176-4d4b-848e-aa69b6c02d8f"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Skill_3_Player1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""045f97e4-150e-4a25-b7a3-4684bbe95a18"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Skill_3_Player1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8838878-13ab-429b-b78f-d6b7ebdb196c"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Skill_3_Player1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9ef8093c-940d-4b60-b23b-b59abc80ecb9"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Skill_4_Player1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d2e019b6-c4b5-420c-98d3-5148a59ac8ac"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Skill_4_Player1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""599fcc54-119c-4666-bc60-6572744f05c4"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Skill_4_Player1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d66d5fc7-9e2f-4971-9ff2-ce2baf6236f7"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Skill_5_Player1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a1139f59-ee57-4e63-9661-a469d3488e8d"",
+                    ""path"": ""<Keyboard>/semicolon"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Skill_5_Player1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c91b635c-363f-474f-a8e1-8fedb1fe46a5"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Skill_5_Player1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ec90f968-9f44-44fb-83b5-eb6f1b4edfb2"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Skill_1_Player1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""25f8da1f-8500-41ca-9480-d4b803e16970"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Skill_2_Player1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1626,9 +1668,19 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_BattleInput_Skill_0_Player1 = m_BattleInput.FindAction("Skill_0_Player1", throwIfNotFound: true);
         m_BattleInput_Skill_1_Player1 = m_BattleInput.FindAction("Skill_1_Player1", throwIfNotFound: true);
         m_BattleInput_Skill_2_Player1 = m_BattleInput.FindAction("Skill_2_Player1", throwIfNotFound: true);
+        m_BattleInput_Skill_3_Player1 = m_BattleInput.FindAction("Skill_3_Player1", throwIfNotFound: true);
+        m_BattleInput_Skill_4_Player1 = m_BattleInput.FindAction("Skill_4_Player1", throwIfNotFound: true);
+        m_BattleInput_Skill_5_Player1 = m_BattleInput.FindAction("Skill_5_Player1", throwIfNotFound: true);
+        m_BattleInput_Skill_6_Player1 = m_BattleInput.FindAction("Skill_6_Player1", throwIfNotFound: true);
+        m_BattleInput_Skill_7_Player1 = m_BattleInput.FindAction("Skill_7_Player1", throwIfNotFound: true);
         m_BattleInput_Skill_0_Player2 = m_BattleInput.FindAction("Skill_0_Player2", throwIfNotFound: true);
         m_BattleInput_Skill_1_Player2 = m_BattleInput.FindAction("Skill_1_Player2", throwIfNotFound: true);
         m_BattleInput_Skill_2_Player2 = m_BattleInput.FindAction("Skill_2_Player2", throwIfNotFound: true);
+        m_BattleInput_Skill_3_Player2 = m_BattleInput.FindAction("Skill_3_Player2", throwIfNotFound: true);
+        m_BattleInput_Skill_4_Player2 = m_BattleInput.FindAction("Skill_4_Player2", throwIfNotFound: true);
+        m_BattleInput_Skill_5_Player2 = m_BattleInput.FindAction("Skill_5_Player2", throwIfNotFound: true);
+        m_BattleInput_Skill_6_Player2 = m_BattleInput.FindAction("Skill_6_Player2", throwIfNotFound: true);
+        m_BattleInput_Skill_7_Player2 = m_BattleInput.FindAction("Skill_7_Player2", throwIfNotFound: true);
         m_BattleInput_ToggleBattleTip = m_BattleInput.FindAction("ToggleBattleTip", throwIfNotFound: true);
         m_BattleInput_Player1_Move_Up = m_BattleInput.FindAction("Player1_Move_Up", throwIfNotFound: true);
         m_BattleInput_Player1_Move_Up_M = m_BattleInput.FindAction("Player1_Move_Up_M", throwIfNotFound: true);
@@ -1647,8 +1699,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_BattleInput_Player2_Move_Right = m_BattleInput.FindAction("Player2_Move_Right", throwIfNotFound: true);
         m_BattleInput_Player2_Move_Right_M = m_BattleInput.FindAction("Player2_Move_Right_M", throwIfNotFound: true);
         m_BattleInput_Player1_Move = m_BattleInput.FindAction("Player1_Move", throwIfNotFound: true);
-        m_BattleInput_Player2_Move = m_BattleInput.FindAction("Player2_Move", throwIfNotFound: true);
-        m_BattleInput_Player2_RightStick = m_BattleInput.FindAction("Player2_RightStick", throwIfNotFound: true);
         m_BattleInput_LeftRotateCamera = m_BattleInput.FindAction("LeftRotateCamera", throwIfNotFound: true);
         m_BattleInput_RightRotateCamera = m_BattleInput.FindAction("RightRotateCamera", throwIfNotFound: true);
         // Common
@@ -1729,9 +1779,19 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_BattleInput_Skill_0_Player1;
     private readonly InputAction m_BattleInput_Skill_1_Player1;
     private readonly InputAction m_BattleInput_Skill_2_Player1;
+    private readonly InputAction m_BattleInput_Skill_3_Player1;
+    private readonly InputAction m_BattleInput_Skill_4_Player1;
+    private readonly InputAction m_BattleInput_Skill_5_Player1;
+    private readonly InputAction m_BattleInput_Skill_6_Player1;
+    private readonly InputAction m_BattleInput_Skill_7_Player1;
     private readonly InputAction m_BattleInput_Skill_0_Player2;
     private readonly InputAction m_BattleInput_Skill_1_Player2;
     private readonly InputAction m_BattleInput_Skill_2_Player2;
+    private readonly InputAction m_BattleInput_Skill_3_Player2;
+    private readonly InputAction m_BattleInput_Skill_4_Player2;
+    private readonly InputAction m_BattleInput_Skill_5_Player2;
+    private readonly InputAction m_BattleInput_Skill_6_Player2;
+    private readonly InputAction m_BattleInput_Skill_7_Player2;
     private readonly InputAction m_BattleInput_ToggleBattleTip;
     private readonly InputAction m_BattleInput_Player1_Move_Up;
     private readonly InputAction m_BattleInput_Player1_Move_Up_M;
@@ -1750,8 +1810,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_BattleInput_Player2_Move_Right;
     private readonly InputAction m_BattleInput_Player2_Move_Right_M;
     private readonly InputAction m_BattleInput_Player1_Move;
-    private readonly InputAction m_BattleInput_Player2_Move;
-    private readonly InputAction m_BattleInput_Player2_RightStick;
     private readonly InputAction m_BattleInput_LeftRotateCamera;
     private readonly InputAction m_BattleInput_RightRotateCamera;
     public struct BattleInputActions
@@ -1764,9 +1822,19 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @Skill_0_Player1 => m_Wrapper.m_BattleInput_Skill_0_Player1;
         public InputAction @Skill_1_Player1 => m_Wrapper.m_BattleInput_Skill_1_Player1;
         public InputAction @Skill_2_Player1 => m_Wrapper.m_BattleInput_Skill_2_Player1;
+        public InputAction @Skill_3_Player1 => m_Wrapper.m_BattleInput_Skill_3_Player1;
+        public InputAction @Skill_4_Player1 => m_Wrapper.m_BattleInput_Skill_4_Player1;
+        public InputAction @Skill_5_Player1 => m_Wrapper.m_BattleInput_Skill_5_Player1;
+        public InputAction @Skill_6_Player1 => m_Wrapper.m_BattleInput_Skill_6_Player1;
+        public InputAction @Skill_7_Player1 => m_Wrapper.m_BattleInput_Skill_7_Player1;
         public InputAction @Skill_0_Player2 => m_Wrapper.m_BattleInput_Skill_0_Player2;
         public InputAction @Skill_1_Player2 => m_Wrapper.m_BattleInput_Skill_1_Player2;
         public InputAction @Skill_2_Player2 => m_Wrapper.m_BattleInput_Skill_2_Player2;
+        public InputAction @Skill_3_Player2 => m_Wrapper.m_BattleInput_Skill_3_Player2;
+        public InputAction @Skill_4_Player2 => m_Wrapper.m_BattleInput_Skill_4_Player2;
+        public InputAction @Skill_5_Player2 => m_Wrapper.m_BattleInput_Skill_5_Player2;
+        public InputAction @Skill_6_Player2 => m_Wrapper.m_BattleInput_Skill_6_Player2;
+        public InputAction @Skill_7_Player2 => m_Wrapper.m_BattleInput_Skill_7_Player2;
         public InputAction @ToggleBattleTip => m_Wrapper.m_BattleInput_ToggleBattleTip;
         public InputAction @Player1_Move_Up => m_Wrapper.m_BattleInput_Player1_Move_Up;
         public InputAction @Player1_Move_Up_M => m_Wrapper.m_BattleInput_Player1_Move_Up_M;
@@ -1785,8 +1853,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @Player2_Move_Right => m_Wrapper.m_BattleInput_Player2_Move_Right;
         public InputAction @Player2_Move_Right_M => m_Wrapper.m_BattleInput_Player2_Move_Right_M;
         public InputAction @Player1_Move => m_Wrapper.m_BattleInput_Player1_Move;
-        public InputAction @Player2_Move => m_Wrapper.m_BattleInput_Player2_Move;
-        public InputAction @Player2_RightStick => m_Wrapper.m_BattleInput_Player2_RightStick;
         public InputAction @LeftRotateCamera => m_Wrapper.m_BattleInput_LeftRotateCamera;
         public InputAction @RightRotateCamera => m_Wrapper.m_BattleInput_RightRotateCamera;
         public InputActionMap Get() { return m_Wrapper.m_BattleInput; }
@@ -1816,6 +1882,21 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Skill_2_Player1.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_2_Player1;
                 @Skill_2_Player1.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_2_Player1;
                 @Skill_2_Player1.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_2_Player1;
+                @Skill_3_Player1.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_3_Player1;
+                @Skill_3_Player1.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_3_Player1;
+                @Skill_3_Player1.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_3_Player1;
+                @Skill_4_Player1.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_4_Player1;
+                @Skill_4_Player1.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_4_Player1;
+                @Skill_4_Player1.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_4_Player1;
+                @Skill_5_Player1.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_5_Player1;
+                @Skill_5_Player1.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_5_Player1;
+                @Skill_5_Player1.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_5_Player1;
+                @Skill_6_Player1.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_6_Player1;
+                @Skill_6_Player1.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_6_Player1;
+                @Skill_6_Player1.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_6_Player1;
+                @Skill_7_Player1.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_7_Player1;
+                @Skill_7_Player1.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_7_Player1;
+                @Skill_7_Player1.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_7_Player1;
                 @Skill_0_Player2.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_0_Player2;
                 @Skill_0_Player2.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_0_Player2;
                 @Skill_0_Player2.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_0_Player2;
@@ -1825,6 +1906,21 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Skill_2_Player2.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_2_Player2;
                 @Skill_2_Player2.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_2_Player2;
                 @Skill_2_Player2.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_2_Player2;
+                @Skill_3_Player2.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_3_Player2;
+                @Skill_3_Player2.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_3_Player2;
+                @Skill_3_Player2.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_3_Player2;
+                @Skill_4_Player2.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_4_Player2;
+                @Skill_4_Player2.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_4_Player2;
+                @Skill_4_Player2.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_4_Player2;
+                @Skill_5_Player2.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_5_Player2;
+                @Skill_5_Player2.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_5_Player2;
+                @Skill_5_Player2.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_5_Player2;
+                @Skill_6_Player2.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_6_Player2;
+                @Skill_6_Player2.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_6_Player2;
+                @Skill_6_Player2.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_6_Player2;
+                @Skill_7_Player2.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_7_Player2;
+                @Skill_7_Player2.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_7_Player2;
+                @Skill_7_Player2.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnSkill_7_Player2;
                 @ToggleBattleTip.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnToggleBattleTip;
                 @ToggleBattleTip.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnToggleBattleTip;
                 @ToggleBattleTip.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnToggleBattleTip;
@@ -1879,12 +1975,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Player1_Move.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move;
                 @Player1_Move.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move;
                 @Player1_Move.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move;
-                @Player2_Move.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move;
-                @Player2_Move.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move;
-                @Player2_Move.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_Move;
-                @Player2_RightStick.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_RightStick;
-                @Player2_RightStick.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_RightStick;
-                @Player2_RightStick.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer2_RightStick;
                 @LeftRotateCamera.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnLeftRotateCamera;
                 @LeftRotateCamera.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnLeftRotateCamera;
                 @LeftRotateCamera.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnLeftRotateCamera;
@@ -1913,6 +2003,21 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Skill_2_Player1.started += instance.OnSkill_2_Player1;
                 @Skill_2_Player1.performed += instance.OnSkill_2_Player1;
                 @Skill_2_Player1.canceled += instance.OnSkill_2_Player1;
+                @Skill_3_Player1.started += instance.OnSkill_3_Player1;
+                @Skill_3_Player1.performed += instance.OnSkill_3_Player1;
+                @Skill_3_Player1.canceled += instance.OnSkill_3_Player1;
+                @Skill_4_Player1.started += instance.OnSkill_4_Player1;
+                @Skill_4_Player1.performed += instance.OnSkill_4_Player1;
+                @Skill_4_Player1.canceled += instance.OnSkill_4_Player1;
+                @Skill_5_Player1.started += instance.OnSkill_5_Player1;
+                @Skill_5_Player1.performed += instance.OnSkill_5_Player1;
+                @Skill_5_Player1.canceled += instance.OnSkill_5_Player1;
+                @Skill_6_Player1.started += instance.OnSkill_6_Player1;
+                @Skill_6_Player1.performed += instance.OnSkill_6_Player1;
+                @Skill_6_Player1.canceled += instance.OnSkill_6_Player1;
+                @Skill_7_Player1.started += instance.OnSkill_7_Player1;
+                @Skill_7_Player1.performed += instance.OnSkill_7_Player1;
+                @Skill_7_Player1.canceled += instance.OnSkill_7_Player1;
                 @Skill_0_Player2.started += instance.OnSkill_0_Player2;
                 @Skill_0_Player2.performed += instance.OnSkill_0_Player2;
                 @Skill_0_Player2.canceled += instance.OnSkill_0_Player2;
@@ -1922,6 +2027,21 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Skill_2_Player2.started += instance.OnSkill_2_Player2;
                 @Skill_2_Player2.performed += instance.OnSkill_2_Player2;
                 @Skill_2_Player2.canceled += instance.OnSkill_2_Player2;
+                @Skill_3_Player2.started += instance.OnSkill_3_Player2;
+                @Skill_3_Player2.performed += instance.OnSkill_3_Player2;
+                @Skill_3_Player2.canceled += instance.OnSkill_3_Player2;
+                @Skill_4_Player2.started += instance.OnSkill_4_Player2;
+                @Skill_4_Player2.performed += instance.OnSkill_4_Player2;
+                @Skill_4_Player2.canceled += instance.OnSkill_4_Player2;
+                @Skill_5_Player2.started += instance.OnSkill_5_Player2;
+                @Skill_5_Player2.performed += instance.OnSkill_5_Player2;
+                @Skill_5_Player2.canceled += instance.OnSkill_5_Player2;
+                @Skill_6_Player2.started += instance.OnSkill_6_Player2;
+                @Skill_6_Player2.performed += instance.OnSkill_6_Player2;
+                @Skill_6_Player2.canceled += instance.OnSkill_6_Player2;
+                @Skill_7_Player2.started += instance.OnSkill_7_Player2;
+                @Skill_7_Player2.performed += instance.OnSkill_7_Player2;
+                @Skill_7_Player2.canceled += instance.OnSkill_7_Player2;
                 @ToggleBattleTip.started += instance.OnToggleBattleTip;
                 @ToggleBattleTip.performed += instance.OnToggleBattleTip;
                 @ToggleBattleTip.canceled += instance.OnToggleBattleTip;
@@ -1976,12 +2096,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Player1_Move.started += instance.OnPlayer1_Move;
                 @Player1_Move.performed += instance.OnPlayer1_Move;
                 @Player1_Move.canceled += instance.OnPlayer1_Move;
-                @Player2_Move.started += instance.OnPlayer2_Move;
-                @Player2_Move.performed += instance.OnPlayer2_Move;
-                @Player2_Move.canceled += instance.OnPlayer2_Move;
-                @Player2_RightStick.started += instance.OnPlayer2_RightStick;
-                @Player2_RightStick.performed += instance.OnPlayer2_RightStick;
-                @Player2_RightStick.canceled += instance.OnPlayer2_RightStick;
                 @LeftRotateCamera.started += instance.OnLeftRotateCamera;
                 @LeftRotateCamera.performed += instance.OnLeftRotateCamera;
                 @LeftRotateCamera.canceled += instance.OnLeftRotateCamera;
@@ -2220,9 +2334,19 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnSkill_0_Player1(InputAction.CallbackContext context);
         void OnSkill_1_Player1(InputAction.CallbackContext context);
         void OnSkill_2_Player1(InputAction.CallbackContext context);
+        void OnSkill_3_Player1(InputAction.CallbackContext context);
+        void OnSkill_4_Player1(InputAction.CallbackContext context);
+        void OnSkill_5_Player1(InputAction.CallbackContext context);
+        void OnSkill_6_Player1(InputAction.CallbackContext context);
+        void OnSkill_7_Player1(InputAction.CallbackContext context);
         void OnSkill_0_Player2(InputAction.CallbackContext context);
         void OnSkill_1_Player2(InputAction.CallbackContext context);
         void OnSkill_2_Player2(InputAction.CallbackContext context);
+        void OnSkill_3_Player2(InputAction.CallbackContext context);
+        void OnSkill_4_Player2(InputAction.CallbackContext context);
+        void OnSkill_5_Player2(InputAction.CallbackContext context);
+        void OnSkill_6_Player2(InputAction.CallbackContext context);
+        void OnSkill_7_Player2(InputAction.CallbackContext context);
         void OnToggleBattleTip(InputAction.CallbackContext context);
         void OnPlayer1_Move_Up(InputAction.CallbackContext context);
         void OnPlayer1_Move_Up_M(InputAction.CallbackContext context);
@@ -2241,8 +2365,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnPlayer2_Move_Right(InputAction.CallbackContext context);
         void OnPlayer2_Move_Right_M(InputAction.CallbackContext context);
         void OnPlayer1_Move(InputAction.CallbackContext context);
-        void OnPlayer2_Move(InputAction.CallbackContext context);
-        void OnPlayer2_RightStick(InputAction.CallbackContext context);
         void OnLeftRotateCamera(InputAction.CallbackContext context);
         void OnRightRotateCamera(InputAction.CallbackContext context);
     }

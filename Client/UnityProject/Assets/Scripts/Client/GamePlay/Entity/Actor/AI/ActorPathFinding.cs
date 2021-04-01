@@ -146,7 +146,7 @@ public static class ActorPathFinding
 
             OpenList.Remove(minFNode);
             CloseList.Add(minFNode);
-            List<Node> adjacentNodes = GetAdjacentNodesForAStar(minFNode, actorPos, dest.GridPos3D_PF, destinationType, actorWidth, actorHeight, exceptActorGUID);
+            List<Node> adjacentNodes = GetAdjacentNodesForAStar(minFNode, actorPos, dest.GridPos3D_PF, destinationType, actorWidth, actorHeight, exceptActorGUID, CloseList);
             List<Node> uselessAdjacentNodes = cached_adjacentNodesList_clone; // 对象引用仍为同一个,此list只是为了避免modify collection inside foreach
             foreach (Node node in adjacentNodes)
             {
@@ -175,6 +175,7 @@ public static class ActorPathFinding
                 int newG = AStarHeuristicsDistance(node, minFNode) + minFNode.G;
                 if (inOpenList)
                 {
+                    // 最短线路优化,Reparent
                     if (newG < node.G)
                     {
                         node.G = newG;
@@ -264,11 +265,14 @@ public static class ActorPathFinding
     private static List<Node> cached_adjacentNodesList = new List<Node>(4);
     private static List<Node> cached_adjacentNodesList_clone = new List<Node>(4);
 
-    private static List<Node> GetAdjacentNodesForAStar(Node node, Vector3 actorPos, GridPos3D destGP_PF, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
+    private static List<Node> GetAdjacentNodesForAStar(Node node, Vector3 actorPos, GridPos3D destGP_PF, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID, List<Node> ref_CloseList)
     {
         cached_adjacentNodesList.Clear();
         cached_adjacentNodesList_clone.Clear();
-        if (!CheckSpaceAvailableForActorOccupation(node.GridPos3D_PF, actorPos, actorWidth, actorHeight, exceptActorGUID)) return cached_adjacentNodesList;
+        Profiler.BeginSample("AISA_GetAdjacentNodesForAStar");
+        bool available = CheckSpaceAvailableForActorOccupation(node.GridPos3D_PF, actorPos, actorWidth, actorHeight, exceptActorGUID);
+        Profiler.EndSample();
+        if (!available) return cached_adjacentNodesList;
 
         bool arriveDestGP_PF = false;
 
@@ -283,6 +287,11 @@ public static class ActorPathFinding
                 cached_adjacentNodesList_clone.Add(leftNode);
             }
 
+            foreach (Node closeNode in ref_CloseList) // 性能优化，避免反复搜索Close节点
+            {
+                if (gp_PF == closeNode.GridPos3D_PF) return;
+            }
+
             if (destinationType == DestinationType.Box || destinationType == DestinationType.Actor) // 如果目的地是个箱子或者Actor，那么走到前一格就可以停了 todo 没考虑自身和目标角色的身宽
             {
                 if (gp_PF == destGP_PF)
@@ -293,7 +302,10 @@ public static class ActorPathFinding
                 }
             }
 
-            if (CheckSpaceAvailableForActorOccupation(node.GridPos3D_PF, actorPos, actorWidth, actorHeight, exceptActorGUID))
+            Profiler.BeginSample("AISA_tryAddNode");
+            bool available = CheckSpaceAvailableForActorOccupation(node.GridPos3D_PF, actorPos, actorWidth, actorHeight, exceptActorGUID);
+            Profiler.EndSample();
+            if (available)
             {
                 OnSearchForward();
                 if (gp_PF == destGP_PF) arriveDestGP_PF = true;
@@ -372,7 +384,11 @@ public static class ActorPathFinding
                 if ((pathFindingNodeGP - center_PF).magnitude > radius) return;
                 GridPos3D offset = pathFindingNodeGP - center_PF;
                 if (cached_OccupationUnionFind[offset.x + radius, offset.z + radius]) return;
-                if (CheckSpaceAvailableForActorOccupation(pathFindingNodeGP, actorPos, actorWidth, actorHeight, exceptActorGUID))
+
+                Profiler.BeginSample("AISA_UnionFindNodes");
+                bool available = CheckSpaceAvailableForActorOccupation(pathFindingNodeGP, actorPos, actorWidth, actorHeight, exceptActorGUID);
+                Profiler.EndSample();
+                if (available)
                 {
                     cached_QueueUnionFind.Enqueue(pathFindingNodeGP);
                     cached_UnionFindNodeList.Add(pathFindingNodeGP);

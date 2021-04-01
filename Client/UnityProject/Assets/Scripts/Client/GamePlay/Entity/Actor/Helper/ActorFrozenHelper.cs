@@ -51,7 +51,6 @@ public class ActorFrozenHelper : EntityFrozenHelper
                         actor.transform.parent = FrozenBox.transform;
                         actor.CurMoveAttempt = Vector3.zero;
                         actor.ActorPushHelper.TriggerOut = false;
-                        actor.MovementState = Actor.MovementStates.Frozen;
                         actor.ForbidAction = true;
                         transform.localRotation = Quaternion.identity;
                         FrozeModelRoot.SetActive(true);

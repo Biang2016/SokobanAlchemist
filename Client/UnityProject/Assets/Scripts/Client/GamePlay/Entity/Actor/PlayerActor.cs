@@ -15,9 +15,10 @@ public class PlayerActor : Actor
     private ButtonState BS_Down;
     private ButtonState BS_Left;
 
-    private ButtonState BS_Skill_0; // Space/RT
-    private ButtonState BS_Skill_1;
-    private ButtonState BS_Skill_2; // Shift/South
+    private ButtonState BS_Skill_0; // Space/South
+    private ButtonState BS_Skill_1; // Shift/East
+    private ButtonState BS_Skill_2; // Z/LeftTrigger
+    private ButtonState BS_Skill_3; // X/RightTrigger
 
     // 短按逻辑：短按最优先，短按过程中不接受其他短按，短按那个按键down时记录该轴位置，当位置变化时结束短按，短按结束后短按数据清空
     private bool isQuickMoving = false;
@@ -42,6 +43,7 @@ public class PlayerActor : Actor
         BS_Skill_0 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0];
         BS_Skill_1 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1];
         BS_Skill_2 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 2];
+        BS_Skill_3 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 3];
     }
 
     private float Skill_1_PressDuration;
@@ -314,25 +316,25 @@ public class PlayerActor : Actor
 
             #region Skill
 
-            if (BS_Skill_2.Down)
+            if (BS_Skill_1.Down)
             {
                 Lift();
                 Skill_1_PressDuration = 0;
             }
 
-            if (BS_Skill_2.Pressed)
+            if (BS_Skill_1.Pressed)
             {
                 ThrowCharge();
                 Skill_1_PressDuration += Time.fixedDeltaTime;
             }
 
-            if (BS_Skill_2.Up)
+            if (BS_Skill_1.Up)
             {
                 Skill_1_PressDuration = 0;
                 ThrowOrPut();
             }
 
-            if (BS_Skill_2.Down)
+            if (BS_Skill_1.Down)
             {
                 VaultOrDash(BS_Up.Pressed || BS_Down.Pressed || BS_Left.Pressed || BS_Right.Pressed);
             }
@@ -342,9 +344,14 @@ public class PlayerActor : Actor
                 Kick();
             }
 
-            if (BS_Skill_1.Down)
+            if (BS_Skill_2.Down)
             {
                 TriggerSkill(EntitySkillIndex.Skill_0);
+            }
+
+            if (BS_Skill_3.Down)
+            {
+                JumpUp(2);
             }
 
             #endregion

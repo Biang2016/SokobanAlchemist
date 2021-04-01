@@ -16,14 +16,6 @@ public class ActorFaceHelper : ActorMonoHelper
     void FixedUpdate()
     {
         if (Actor.IsRecycled) return;
-        Actor.PushState = Actor.PushStates.None;
-        foreach (Box b in FacingBoxList)
-        {
-            if (b.State == Box.States.BeingPushed)
-            {
-                Actor.PushState = Actor.PushStates.Pushing;
-            }
-        }
     }
 
     void OnTriggerEnter(Collider collider)
