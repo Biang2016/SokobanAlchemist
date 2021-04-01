@@ -766,8 +766,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PoolIndex: 0
   IsRecycled: 0
-  GUID: 0
-  GUID_Mod_FixedFrameRate: 0
+  SlowlyTick: 0
   InitWorldModuleGUID: 0
   EntityTypeIndex: 0
   RawEntityStatPropSet:
@@ -1134,6 +1133,36 @@ MonoBehaviour:
     TypeGUID: (23fe85b5-7332-4ac2-89e5-ac45d7bb7b92)
   - TypeDefineType: 0
     TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
+  - TypeDefineType: 0
+    TypeGUID: (87e2a74d-1653-453b-93cf-a7abae57614b)
+  - TypeDefineType: 0
+    TypeGUID: (2cd52b8f-c317-424f-a8fa-bbe2d34dee46)
+  - TypeDefineType: 0
+    TypeGUID: (a2086c05-0f2a-450f-8a64-7ce2b66cea21)
+  - TypeDefineType: 0
+    TypeGUID: (a70294a1-e40c-492f-a596-da864174039d)
+  - TypeDefineType: 0
+    TypeGUID: (4e768e0e-edbc-4e60-bffb-7a68cd57c098)
+  - TypeDefineType: 0
+    TypeGUID: (c47a38df-48a7-4681-b876-9564f3688516)
+  - TypeDefineType: 0
+    TypeGUID: (897b8f19-8ace-440c-ae61-abbd88e8264c)
+  - TypeDefineType: 0
+    TypeGUID: (4b2a8a57-faa2-4882-bf0d-d8e6417bf9f7)
+  - TypeDefineType: 0
+    TypeGUID: (b4445927-7980-4194-adb9-1773918b8a42)
+  - TypeDefineType: 0
+    TypeGUID: (34e45f5f-4412-498d-aae3-c4fcdf4f520c)
+  - TypeDefineType: 0
+    TypeGUID: (987326cd-820c-4d85-a676-b668838e170e)
+  - TypeDefineType: 0
+    TypeGUID: (f75f41cf-d202-4b94-83f4-5226760242aa)
+  - TypeDefineType: 0
+    TypeGUID: (ac1af788-7e67-4ee7-9dd3-881b4c80790b)
+  - TypeDefineType: 0
+    TypeGUID: (2f5ec7dc-ad7c-4716-93a0-c73b4c963747)
+  - TypeDefineType: 0
+    TypeGUID: (0dcf64e1-c8fe-41fd-b335-e8285b9967f6)
   KickableBoxList:
   - TypeDefineType: 0
     TypeGUID: (1fd4d701-1e6c-4bdf-a28d-2f7bf02e7bb9)
@@ -1224,7 +1253,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   RawFrozenBoxPassiveSkills: []
-  IsInMicroWorld: 0
   ActorBehaviourState: 0
   MovementState: 0
   PushState: 0
@@ -1244,7 +1272,6 @@ MonoBehaviour:
     00000002:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
-        IsAddedDuringGamePlay: 0
         TargetCamp: 14
         EntitySkillIndex: 0
         SkillAlias: "\u539F\u5730\u7206\u70B8"
@@ -1342,7 +1369,11 @@ MonoBehaviour:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 10000
+        BuffAlias: 
         EntityBuffAttribute: 1
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
         IsPermanent: 1
         Duration: 0
         BuffFX:
@@ -1364,7 +1395,11 @@ MonoBehaviour:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 14342
+        BuffAlias: 
         EntityBuffAttribute: 24
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
         IsPermanent: 0
         Duration: 0
         BuffFX:

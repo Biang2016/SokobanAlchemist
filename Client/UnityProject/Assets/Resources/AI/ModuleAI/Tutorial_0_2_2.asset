@@ -12,19 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d31b62ec9d586a4e94389d9071559ca, type: 3}
   m_Name: Tutorial_0_2_2
   m_EditorClassIdentifier: 
-  _serializedGraph: '{"type":"FlowCanvas.FlowScript","nodes":[{"LevelEventAlias":{"_value":"Tutorial_0_2_2_Dash"},"_position":{"x":500.0,"y":479.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"0"},{"_simplexNode":{"NoticeTip":{"_value":"Press
-    Left Shift To Dash!"},"TipPositionType":{"_value":4},"Duration":{"_value":4.0}},"_position":{"x":875.0,"y":479.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"1"},{"LevelEventAlias":{"_value":"Tutorial_0_2_2_DashDamage"},"_position":{"x":500.0,"y":570.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"2"},{"_simplexNode":{"NoticeTip":{"_value":"Dash
-    can damage enemies."},"TipPositionType":{"_value":4},"Duration":{"_value":4.0}},"_position":{"x":875.0,"y":569.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"3"}],"connections":[{"_sourcePortName":"OnTriggered","_targetPortName":"
-    ","_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"OnTriggered","_targetPortName":"
-    ","_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
+  _serializedGraph: '{"type":"FlowCanvas.FlowScript","nodes":[{"LevelEventAlias":{"_value":"Tutorial_0_2_2_Dash"},"_position":{"x":495.0,"y":480.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"0"},{"_simplexNode":{"NoticeTip":{"_value":"Press
+    Left Shift To Dash!"},"TipPositionType":{"_value":4},"Duration":{"_value":4.0}},"_position":{"x":870.0,"y":480.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"1"}],"connections":[{"_sourcePortName":"OnTriggered","_targetPortName":"
+    ","_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
   _objectReferences: []
   _graphSource:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: 0, y: 0}
+    _translation: {x: 42, y: 61}
     _zoomFactor: 1
   _haltSerialization: 0
 #---GRAPH_START---
@@ -37,8 +34,8 @@ MonoBehaviour:
 #                "_value": "Tutorial_0_2_2_Dash"
 #            },
 #            "_position": {
-#                "x": 500.0,
-#                "y": 479.0
+#                "x": 495.0,
+#                "y": 480.0
 #            },
 #            "$type": "ModuleAIAtoms+Flow_OnLevelEventTrigger",
 #            "$id": "0"
@@ -56,41 +53,11 @@ MonoBehaviour:
 #                }
 #            },
 #            "_position": {
-#                "x": 875.0,
-#                "y": 479.0
+#                "x": 870.0,
+#                "y": 480.0
 #            },
 #            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
 #            "$id": "1"
-#        },
-#        {
-#            "LevelEventAlias": {
-#                "_value": "Tutorial_0_2_2_DashDamage"
-#            },
-#            "_position": {
-#                "x": 500.0,
-#                "y": 570.0
-#            },
-#            "$type": "ModuleAIAtoms+Flow_OnLevelEventTrigger",
-#            "$id": "2"
-#        },
-#        {
-#            "_simplexNode": {
-#                "NoticeTip": {
-#                    "_value": "Dash can damage enemies."
-#                },
-#                "TipPositionType": {
-#                    "_value": 4
-#                },
-#                "Duration": {
-#                    "_value": 4.0
-#                }
-#            },
-#            "_position": {
-#                "x": 875.0,
-#                "y": 569.0
-#            },
-#            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-#            "$id": "3"
 #        }
 #    ],
 #    "connections": [
@@ -102,17 +69,6 @@ MonoBehaviour:
 #            },
 #            "_targetNode": {
 #                "$ref": "1"
-#            },
-#            "$type": "FlowCanvas.BinderConnection"
-#        },
-#        {
-#            "_sourcePortName": "OnTriggered",
-#            "_targetPortName": " ",
-#            "_sourceNode": {
-#                "$ref": "2"
-#            },
-#            "_targetNode": {
-#                "$ref": "3"
 #            },
 #            "$type": "FlowCanvas.BinderConnection"
 #        }
