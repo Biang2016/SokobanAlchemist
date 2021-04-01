@@ -565,6 +565,7 @@ MonoBehaviour:
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
         - id: 8
+        - id: 9
     00000005:
       type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
       data:
@@ -622,12 +623,27 @@ MonoBehaviour:
     00000008:
       type: {class: EntityPassiveSkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
       data:
-        AddBuffRadius: 1.3
-        ExactGPDistance: 0
+        AddBuffRadius: 1.5
+        ExactGPDistance: 1
         EffectiveOnRelativeCamp: 14
         RawEntityBuffs:
-        - id: 9
+        - id: 10
     00000009:
+      type: {class: EntityPassiveSkillAction_PlayFX, ns: , asm: Client}
+      data:
+        FX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (ea39ef27-ca6b-4f0b-8407-618bd99d1b3a)
+          UseCurve: 0
+          FXScale: 2
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+    0000000A:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10004

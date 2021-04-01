@@ -685,6 +685,7 @@ MonoBehaviour:
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
         - id: 12
+        - id: 13
     00000005:
       type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
       data:
@@ -794,7 +795,7 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
-        - id: 13
+        - id: 14
     00000008:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
@@ -876,7 +877,7 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
-        - id: 14
+        - id: 15
     00000009:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
@@ -958,7 +959,7 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
-        - id: 15
+        - id: 16
     0000000A:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
@@ -1040,7 +1041,7 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
-        - id: 16
+        - id: 17
     0000000B:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
@@ -1122,41 +1123,30 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
-        - id: 17
+        - id: 18
     0000000C:
       type: {class: EntityPassiveSkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
       data:
-        AddBuffRadius: 1.3
-        ExactGPDistance: 0
+        AddBuffRadius: 3.5
+        ExactGPDistance: 1
         EffectiveOnRelativeCamp: 14
         RawEntityBuffs:
-        - id: 18
+        - id: 19
     0000000D:
-      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      type: {class: EntityPassiveSkillAction_PlayFX, ns: , asm: Client}
       data:
-        GUID: 10237
-        BuffAlias: 
-        EntityBuffAttribute: 17
-        EnableWhiteBlackList: 0
-        AllowAddBuffAliasList: []
-        ForbidAddBuffAliasList: []
-        IsPermanent: 0
-        Duration: 0
-        BuffFX:
+        FX:
           FXType:
             TypeDefineType: 7
-            TypeGUID: 
+            TypeGUID: (ea39ef27-ca6b-4f0b-8407-618bd99d1b3a)
           UseCurve: 0
-          FXScale: 0
+          FXScale: 2
           AnimationCurve:
             serializedVersion: 2
             m_Curve: []
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-        EntityStatType: 101
-        Delta: 350
-        Percent: 0
     0000000E:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
@@ -1262,6 +1252,32 @@ MonoBehaviour:
         Delta: 350
         Percent: 0
     00000012:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10237
+        BuffAlias: 
+        EntityBuffAttribute: 17
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 101
+        Delta: 350
+        Percent: 0
+    00000013:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10004

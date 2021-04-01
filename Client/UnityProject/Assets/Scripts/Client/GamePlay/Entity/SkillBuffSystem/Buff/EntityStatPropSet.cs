@@ -494,6 +494,7 @@ public class EntityStatPropSet
         StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueDecrease += OnHealthDurabilityDecrease;
         StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueIncrease += OnHealthDurabilityIncrease;
         StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueReachZero += OnHealthDurabilityReachZero;
+        StatNotifyActionSetDict[EntityStatType.FrozenValue].OnValueIncrease += OnFrozenValueIncrease;
         StatNotifyActionSetDict[EntityStatType.FrozenValue].OnValueChanged += OnFrozenValueChanged;
         StatNotifyActionSetDict[EntityStatType.FiringValue].OnValueChanged += OnFiringValueChanged;
         StatNotifyActionSetDict[EntityStatType.FiringValue].OnValueIncrease += OnFiringValueIncrease;
@@ -567,6 +568,11 @@ public class EntityStatPropSet
     private void OnFrozenResistanceChanged(int before, int after)
     {
         FrozenValue.AbnormalStatResistance = after;
+    }
+
+    private void OnFrozenValueIncrease(int increase)
+    {
+        FiringValue.SetValue(0);
     }
 
     private void OnFrozenValueChanged(int before, int after)

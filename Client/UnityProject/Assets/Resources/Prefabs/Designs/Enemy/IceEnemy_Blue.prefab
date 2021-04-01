@@ -474,8 +474,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  RawFrozenBoxPassiveSkills:
-  - id: 6
+  RawFrozenBoxPassiveSkills: []
   ActorBehaviourState: 0
   MovementState: 0
   PushState: 0
@@ -513,7 +512,7 @@ MonoBehaviour:
         IsAddedDuringGamePlay: 0
         InitWorldModuleGUID: 0
         RawEntityBuff:
-          id: 7
+          id: 6
     00000003:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
@@ -533,8 +532,8 @@ MonoBehaviour:
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
         RawEntityPassiveSkillActions:
+        - id: 7
         - id: 8
-        - id: 9
     00000004:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
@@ -646,8 +645,8 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
+        - id: 9
         - id: 10
-        - id: 11
     00000005:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
@@ -795,29 +794,9 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         RawEntityBuffs:
+        - id: 11
         - id: 12
-        - id: 13
     00000006:
-      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
-      data:
-        IsAddedDuringGamePlay: 0
-        InitWorldModuleGUID: 0
-        PassiveSkillCondition: 112
-        TriggerProbabilityPercent: 100
-        DestroyEntityByElementDamageTypeList: 
-        EntityStatChangeType: 0
-        EntityStatChangeThreshold: 0
-        EntityStatChangeThresholdOperator: 0
-        EntityPropertyChangeType: 0
-        EntityPropertyChangeThreshold: 0
-        EntityPropertyChangeThresholdOperator: 0
-        MultiEventTrigger: 0
-        ListenLevelEventAliasList: []
-        ListenLevelEventAlias: 
-        MaxTriggeredTimes: 1
-        RawEntityPassiveSkillActions:
-        - id: 14
-    00000007:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 12938
@@ -843,7 +822,7 @@ MonoBehaviour:
         Percent: 50
         LinearDecayInDuration: 0
         EntityPropertyType: 30
-    00000008:
+    00000007:
       type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
       data:
         DropBoxList:
@@ -881,7 +860,7 @@ MonoBehaviour:
         DropBoxCountMax: 6
         DropConeAngle: 20
         DropVelocity: 12
-    00000009:
+    00000008:
       type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
       data:
         DropBoxList:
@@ -895,7 +874,7 @@ MonoBehaviour:
         DropBoxCountMax: 3
         DropConeAngle: 15
         DropVelocity: 13
-    0000000A:
+    00000009:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 11255
@@ -921,7 +900,7 @@ MonoBehaviour:
         Percent: -50
         LinearDecayInDuration: 1
         EntityPropertyType: 30
-    0000000B:
+    0000000A:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10323
@@ -947,7 +926,7 @@ MonoBehaviour:
         EntityStatType: 100
         Delta: 400
         Percent: 0
-    0000000C:
+    0000000B:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 14220
@@ -973,7 +952,7 @@ MonoBehaviour:
         EntityStatType: 0
         Delta: -2
         Percent: 0
-    0000000D:
+    0000000C:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10429
@@ -999,67 +978,6 @@ MonoBehaviour:
         EntityStatType: 100
         Delta: 400
         Percent: 0
-    0000000E:
-      type: {class: EntityPassiveSkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
-      data:
-        AddBuffRadius: 1
-        ExactGPDistance: 0
-        EffectiveOnRelativeCamp: 14
-        RawEntityBuffs:
-        - id: 15
-        - id: 16
-    0000000F:
-      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
-      data:
-        GUID: 10254
-        BuffAlias: 
-        EntityBuffAttribute: 20
-        EnableWhiteBlackList: 0
-        AllowAddBuffAliasList: []
-        ForbidAddBuffAliasList: []
-        IsPermanent: 0
-        Duration: 0
-        BuffFX:
-          FXType:
-            TypeDefineType: 0
-            TypeGUID: 
-          UseCurve: 0
-          FXScale: 0
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        EntityStatType: 100
-        Delta: 300
-        Percent: 0
-    00000010:
-      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
-      data:
-        GUID: 10699
-        BuffAlias: 
-        EntityBuffAttribute: 2
-        EnableWhiteBlackList: 0
-        AllowAddBuffAliasList: []
-        ForbidAddBuffAliasList: []
-        IsPermanent: 0
-        Duration: 3
-        BuffFX:
-          FXType:
-            TypeDefineType: 0
-            TypeGUID: 
-          UseCurve: 0
-          FXScale: 0
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        Percent: -50
-        LinearDecayInDuration: 1
-        EntityPropertyType: 30
 --- !u!114 &7861377238865694945
 MonoBehaviour:
   m_ObjectHideFlags: 0
