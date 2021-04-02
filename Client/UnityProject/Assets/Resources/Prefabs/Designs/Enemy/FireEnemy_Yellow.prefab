@@ -427,9 +427,21 @@ MonoBehaviour:
   RawFrozenBoxPassiveSkills:
   - id: 4
   ActorBehaviourState: 0
-  MovementState: 0
-  PushState: 0
   ThrowState: 0
+  IsJumping: 0
+  IsInAirMoving: 0
+  JumpReachClimax: 0
+  JumpHeight: 0
+  JumpStartWorldGP:
+    x: 0
+    y: 0
+    z: 0
+  JumpForce: 10
+  FallForce: 0.1
+  InAirMoveTargetPos: {x: 0, y: 0, z: 0}
+  InAirMoveSpeed: 0
+  InAirMoveTolerance: 0
+  FrequentUpdate: 0
   references:
     version: 1
     00000000:
@@ -847,6 +859,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: 2100000, guid: 7bf8c16fed126cc4987882c238196659, type: 2}
+    - target: {fileID: -3634075551012627591, guid: 853720391eadd2b418febb3d3309705f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: abcf42a3035bd6d4d873a70df14aa8de, type: 2}
     - target: {fileID: -1988110456980081605, guid: 853720391eadd2b418febb3d3309705f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1003,6 +1020,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4784697908349020688, guid: 49579f62da0aee447a31081859650b38,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1ceb3dd425929b44dba59618b775566e, type: 2}
     - target: {fileID: 4784697908349020689, guid: 49579f62da0aee447a31081859650b38,
         type: 3}
       propertyPath: moveWithTransform
