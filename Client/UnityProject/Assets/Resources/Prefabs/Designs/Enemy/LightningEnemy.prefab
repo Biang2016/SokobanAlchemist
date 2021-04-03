@@ -665,6 +665,8 @@ MonoBehaviour:
   Accelerate: 250
   KickForce: 5
   ThrowRadius: 10
+  ActiveJumpForce: 10
+  FallForce: 0.1
   PushableBoxList: []
   KickableBoxList: []
   LiftableBoxList: []
@@ -696,9 +698,21 @@ MonoBehaviour:
   RawFrozenBoxPassiveSkills:
   - id: 7
   ActorBehaviourState: 0
-  MovementState: 0
-  PushState: 0
   ThrowState: 0
+  JumpHeight: 0
+  JumpStartWorldGP:
+    x: 0
+    y: 0
+    z: 0
+  CurrentJumpForce: 0
+  KeepAddingJumpForce: 0
+  JumpReachClimax: 0
+  SmashDownTargetPos: {x: 0, y: 0, z: 0}
+  SmashForce: 0
+  SmashReachTarget: 0
+  InAirMoveTargetPos: {x: 0, y: 0, z: 0}
+  InAirMoveSpeed: 0
+  FrequentUpdate: 0
   references:
     version: 1
     00000000:
@@ -1832,8 +1846,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 8274062543837088590}
+  m_Children: []
   m_Father: {fileID: 6281674361588409608}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1984,11 +1997,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8910496410718971391}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.19736326, y: 0.0013918076, z: 0.00042308395, w: 0.9803294}
+  m_LocalPosition: {x: 0.00001, y: 0.0002, z: -0.00012}
+  m_LocalScale: {x: 0.02, y: 0.020000001, z: 0.020000001}
   m_Children: []
-  m_Father: {fileID: 477688324335781868}
+  m_Father: {fileID: 5376542001497158278}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1449910759491668713
@@ -3297,6 +3310,12 @@ PrefabInstance:
 --- !u!1 &3535011950621634448 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d5214637f6a293647b4af7d2c8dc0766,
+    type: 3}
+  m_PrefabInstance: {fileID: 4453931879000511169}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5376542001497158278 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8598175453035470919, guid: d5214637f6a293647b4af7d2c8dc0766,
     type: 3}
   m_PrefabInstance: {fileID: 4453931879000511169}
   m_PrefabAsset: {fileID: 0}
