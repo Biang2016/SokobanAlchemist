@@ -351,7 +351,7 @@ public class PlayerActor : Actor
 
             if (BS_Skill_3.Down)
             {
-                JumpUp(JumpForce, 1);
+                SetJumpUpTargetHeight(ActiveJumpForce, 1);
             }
 
             #endregion
@@ -413,7 +413,7 @@ public class PlayerActor : Actor
 
     private bool TriggerSkill(EntitySkillIndex skillIndex)
     {
-        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return false;
+        if (CannotAct) return false;
         if (EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
         {
             bool triggerSuc = eas.CheckCanTriggerSkill();

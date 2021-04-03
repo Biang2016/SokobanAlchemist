@@ -396,6 +396,8 @@ MonoBehaviour:
   Accelerate: 250
   KickForce: 5
   ThrowRadius: 10
+  ActiveJumpForce: 10
+  FallForce: 0.1
   PushableBoxList: []
   KickableBoxList: []
   LiftableBoxList: []
@@ -428,19 +430,19 @@ MonoBehaviour:
   - id: 4
   ActorBehaviourState: 0
   ThrowState: 0
-  IsJumping: 0
-  IsInAirMoving: 0
-  JumpReachClimax: 0
   JumpHeight: 0
   JumpStartWorldGP:
     x: 0
     y: 0
     z: 0
-  JumpForce: 10
-  FallForce: 0.1
+  CurrentJumpForce: 0
+  JumpReachClimax: 0
+  SmashDownTargetPos: {x: 0, y: 0, z: 0}
+  SmashForce: 0
+  SmashReachTarget: 0
   InAirMoveTargetPos: {x: 0, y: 0, z: 0}
   InAirMoveSpeed: 0
-  InAirMoveTolerance: 0
+  InAirMoveReachTarget: 0
   FrequentUpdate: 0
   references:
     version: 1
@@ -1024,7 +1026,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 1ceb3dd425929b44dba59618b775566e, type: 2}
+      objectReference: {fileID: 2100000, guid: c3b36b67920c18a4a8df7edba245e809, type: 2}
     - target: {fileID: 4784697908349020689, guid: 49579f62da0aee447a31081859650b38,
         type: 3}
       propertyPath: moveWithTransform

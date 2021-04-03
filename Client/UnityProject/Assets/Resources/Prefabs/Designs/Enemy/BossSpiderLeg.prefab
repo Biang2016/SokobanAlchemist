@@ -505,6 +505,8 @@ MonoBehaviour:
   Accelerate: 200
   KickForce: 30
   ThrowRadius: 15
+  ActiveJumpForce: 10
+  FallForce: 2
   PushableBoxList: []
   KickableBoxList: []
   LiftableBoxList: []
@@ -536,19 +538,19 @@ MonoBehaviour:
   RawFrozenBoxPassiveSkills: []
   ActorBehaviourState: 0
   ThrowState: 0
-  IsJumping: 0
-  IsInAirMoving: 0
-  JumpReachClimax: 0
   JumpHeight: 0
   JumpStartWorldGP:
     x: 0
     y: 0
     z: 0
-  JumpForce: 10
-  FallForce: 0.1
+  CurrentJumpForce: 0
+  JumpReachClimax: 0
+  SmashDownTargetPos: {x: 0, y: 0, z: 0}
+  SmashForce: 0
+  SmashReachTarget: 0
   InAirMoveTargetPos: {x: 0, y: 0, z: 0}
   InAirMoveSpeed: 0
-  InAirMoveTolerance: 0
+  InAirMoveReachTarget: 0
   FrequentUpdate: 1
   references:
     version: 1
@@ -607,13 +609,13 @@ MonoBehaviour:
           z: 15
         M_TargetInclination: 2
         TargetEntityType: 0
-        CastOnTopLayer: 0
+        CastOnTopLayer: 1
         AccurateStandardDeviation: 0
         BattleIndicatorTypeName:
           TypeDefineType: 8
           TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
         ProjectOffsetZMax: 3
-        ProjectOffsetZMin: -10
+        ProjectOffsetZMin: -15
         GridWarningColorFill: {r: 0.41509432, g: 0.14776357, b: 0, a: 1}
         GridWarningColorBorderHighlight: {r: 1, g: 1, b: 1, a: 1}
         GridWarningColorBorderDim: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
@@ -682,13 +684,13 @@ MonoBehaviour:
           z: 15
         M_TargetInclination: 2
         TargetEntityType: 0
-        CastOnTopLayer: 0
+        CastOnTopLayer: 1
         AccurateStandardDeviation: 0
         BattleIndicatorTypeName:
           TypeDefineType: 8
           TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
         ProjectOffsetZMax: 3
-        ProjectOffsetZMin: -10
+        ProjectOffsetZMin: -15
         GridWarningColorFill: {r: 0.41509432, g: 0.14776357, b: 0, a: 1}
         GridWarningColorBorderHighlight: {r: 1, g: 1, b: 1, a: 1}
         GridWarningColorBorderDim: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
@@ -763,7 +765,7 @@ MonoBehaviour:
           TypeDefineType: 8
           TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
         ProjectOffsetZMax: 3
-        ProjectOffsetZMin: -10
+        ProjectOffsetZMin: -15
         GridWarningColorFill: {r: 0.41509432, g: 0.14776357, b: 0, a: 1}
         GridWarningColorBorderHighlight: {r: 1, g: 1, b: 1, a: 1}
         GridWarningColorBorderDim: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
@@ -844,13 +846,13 @@ MonoBehaviour:
           z: 15
         M_TargetInclination: 2
         TargetEntityType: 0
-        CastOnTopLayer: 0
+        CastOnTopLayer: 1
         AccurateStandardDeviation: 0
         BattleIndicatorTypeName:
           TypeDefineType: 8
           TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
         ProjectOffsetZMax: 3
-        ProjectOffsetZMin: -10
+        ProjectOffsetZMin: -15
         GridWarningColorFill: {r: 0.41509432, g: 0.14776357, b: 0, a: 1}
         GridWarningColorBorderHighlight: {r: 1, g: 1, b: 1, a: 1}
         GridWarningColorBorderDim: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
@@ -2048,7 +2050,7 @@ PrefabInstance:
     - target: {fileID: 6478483873594561397, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
         type: 3}
       propertyPath: m_Height
-      value: 3.810514
+      value: 8.273317
       objectReference: {fileID: 0}
     - target: {fileID: 6478483873594561397, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
         type: 3}
@@ -2068,7 +2070,7 @@ PrefabInstance:
     - target: {fileID: 6478483873594561397, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
         type: 3}
       propertyPath: m_Center.y
-      value: 1.4582722
+      value: 3.6896734
       objectReference: {fileID: 0}
     - target: {fileID: 6478483873594561397, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
         type: 3}

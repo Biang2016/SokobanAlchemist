@@ -65,6 +65,11 @@ public abstract class Entity : PoolObject
 
     public bool IsFrozen => EntityStatPropSet.IsFrozen;
 
+    /// <summary>
+    /// （受各种控制技能影响）无法动弹
+    /// </summary>
+    public bool CannotAct => IsFrozen || EntityBuffHelper.IsShocking || EntityBuffHelper.IsStun || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed;
+
     [DisplayAsString]
     [HideInEditorMode]
     [ShowInInspector]

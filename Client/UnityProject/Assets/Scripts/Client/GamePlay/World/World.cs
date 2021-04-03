@@ -502,15 +502,17 @@ public class World : PoolObject
         worldGP = GridPos3D.Zero;
         if (maxDistance < 0) return false;
         int distance = 0;
+        GridPos3D currentCastGP = origin;
         do
         {
-            firstBox = GetBoxByGridPosition(origin + distance * dir, out WorldModule _, out GridPos3D _, false);
+            currentCastGP += dir;
+            firstBox = GetBoxByGridPosition(currentCastGP, out WorldModule _, out GridPos3D _, false);
             distance++;
         } while (firstBox == null && distance <= maxDistance);
 
         if (firstBox != null)
         {
-            worldGP = touchBox ? firstBox.WorldGP : firstBox.WorldGP - dir;
+            worldGP = touchBox ? currentCastGP : currentCastGP - dir;
             return true;
         }
         else

@@ -1078,11 +1078,12 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  JumpUpForce: 70
   DashForce: 100
   Accelerate: 200
   KickForce: 30
   ThrowRadius: 15
+  ActiveJumpForce: 18
+  FallForce: 2
   PushableBoxList:
   - TypeDefineType: 0
     TypeGUID: (1fd4d701-1e6c-4bdf-a28d-2f7bf02e7bb9)
@@ -1256,6 +1257,19 @@ MonoBehaviour:
   RawFrozenBoxPassiveSkills: []
   ActorBehaviourState: 0
   ThrowState: 0
+  JumpHeight: 0
+  JumpStartWorldGP:
+    x: 0
+    y: 0
+    z: 0
+  CurrentJumpForce: 0
+  JumpReachClimax: 0
+  SmashDownTargetPos: {x: 0, y: 0, z: 0}
+  SmashForce: 0
+  SmashReachTarget: 0
+  InAirMoveTargetPos: {x: 0, y: 0, z: 0}
+  InAirMoveSpeed: 0
+  InAirMoveReachTarget: 0
   PlayerNumber: 0
   references:
     version: 1

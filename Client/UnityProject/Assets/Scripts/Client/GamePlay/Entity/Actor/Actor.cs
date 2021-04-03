@@ -216,6 +216,47 @@ public class Actor : Entity
     public int ActorWidth => EntityIndicatorHelper.EntityOccupationData.ActorWidth;
     public int ActorHeight => EntityIndicatorHelper.EntityOccupationData.ActorHeight;
 
+    public bool CheckIsGrounded(float checkDistance)
+    {
+        foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+        {
+            bool hitGround = Physics.Raycast(transform.position + offset, Vector3.down, out RaycastHit hit, checkDistance, LayerManager.Instance.LayerMask_HitBox_Box | LayerManager.Instance.LayerMask_Ground);
+            if (hitGround)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private RaycastHit[] cachedRaycastHits = new RaycastHit[128];
+
+    public bool CheckNearestGroundGPBelow(out GridPos3D nearestGroundGP, out float minDistance)
+    {
+        bool foundGround = false;
+        minDistance = float.MaxValue;
+        nearestGroundGP = GridPos3D.Zero;
+        foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+        {
+            Vector3 gridPos = transform.position + offset;
+            int count = Physics.RaycastNonAlloc(gridPos, Vector3.down, cachedRaycastHits, 20f, LayerManager.Instance.LayerMask_HitBox_Box | LayerManager.Instance.LayerMask_Ground);
+            for (int i = 0; i < count; i++)
+            {
+                RaycastHit hit = cachedRaycastHits[i];
+                foundGround = true;
+                float distance = (hit.collider.transform.position - gridPos).magnitude;
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestGroundGP = hit.collider.transform.position.ToGridPos3D();
+                }
+            }
+        }
+
+        return foundGround;
+    }
+
     #endregion
 
     #region 特效
@@ -261,6 +302,14 @@ public class Actor : Entity
     [FoldoutGroup("手感")]
     [LabelText("扔半径")]
     public float ThrowRadius = 15f;
+
+    [FoldoutGroup("手感")]
+    [LabelText("跳跃力")]
+    public float ActiveJumpForce = 10f;
+
+    [FoldoutGroup("手感")]
+    [LabelText("坠落力")]
+    public float FallForce = 0.1f;
 
     #endregion
 
@@ -347,6 +396,7 @@ public class Actor : Entity
         Escape,
         Jump,
         SmashDown,
+        InAirMoving,
     }
 
     [ReadOnly]
@@ -562,7 +612,7 @@ public class Actor : Entity
     protected virtual void MoveInternal()
     {
         if (!ActiveSkillCanMove) CurMoveAttempt = Vector3.zero;
-        if (!IsFrozen && !EntityBuffHelper.IsBeingRepulsed && !EntityBuffHelper.IsBeingGround && HasRigidbody)
+        if (!CannotAct && HasRigidbody)
         {
             if (CurMoveAttempt.magnitude > 0)
             {
@@ -577,16 +627,27 @@ public class Actor : Entity
                     ActorArtHelper.SetPFMoveGridSpeed(1);
                 }
 
-                if (this == BattleManager.Instance.Player1) ActorBehaviourState = ActorBehaviourStates.Walk;
-                if (ActorBehaviourState == ActorBehaviourStates.Walk)
+                if (this is PlayerActor)
                 {
-                    ActorArtHelper.SetIsWalking(true);
-                    ActorArtHelper.SetIsChasing(false);
+                    if (!IsExecutingAirSkills())
+                    {
+                        ActorBehaviourState = ActorBehaviourStates.Walk;
+                        ActorArtHelper.SetIsWalking(true);
+                        ActorArtHelper.SetIsChasing(false);
+                    }
                 }
-                else if (ActorBehaviourState == ActorBehaviourStates.Chase)
+                else
                 {
-                    ActorArtHelper.SetIsWalking(false);
-                    ActorArtHelper.SetIsChasing(true);
+                    if (ActorBehaviourState == ActorBehaviourStates.Walk)
+                    {
+                        ActorArtHelper.SetIsWalking(true);
+                        ActorArtHelper.SetIsChasing(false);
+                    }
+                    else if (ActorBehaviourState == ActorBehaviourStates.Chase)
+                    {
+                        ActorArtHelper.SetIsWalking(false);
+                        ActorArtHelper.SetIsChasing(true);
+                    }
                 }
 
                 RigidBody.drag = 0;
@@ -629,7 +690,7 @@ public class Actor : Entity
             }
             else
             {
-                if (!IsJumping)
+                if (!IsExecutingAirSkills())
                 {
                     ActorArtHelper.SetPFMoveGridSpeed(0);
                     ActorArtHelper.SetIsWalking(false);
@@ -641,7 +702,7 @@ public class Actor : Entity
                 }
             }
 
-            if (!IsInAirMoving)
+            if (!IsExecutingAirSkills())
             {
                 if (CurMoveAttempt.x.Equals(0))
                 {
@@ -673,27 +734,22 @@ public class Actor : Entity
         WorldGP = transform.position.ToGridPos3D();
 
         // 着地判定
-        Box beneathBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(WorldGP + new GridPos3D(0, -1, 0), out WorldModule _, out GridPos3D localGP, false);
-        IsGrounded = beneathBox != null && !beneathBox.Passable;
-        CheckJumpState();
-        if (!(IsJumping && !JumpReachClimax))
+        IsGrounded = CheckIsGrounded(0.55f);
+        JumpingUpTick();
+        if (!IsExecutingAirSkills() || (ActorBehaviourState == ActorBehaviourStates.Jump && JumpReachClimax))
         {
-            if (!IsFrozen && HasRigidbody)
+            if (!CannotAct && HasRigidbody)
             {
                 if (IsGrounded)
                 {
-                    IsJumping = false;
                     RigidBody.constraints |= RigidbodyConstraints.FreezePositionY;
                     SnapToGridY();
                 }
                 else
                 {
-                    if (!IsInAirMoving)
-                    {
-                        RigidBody.constraints &= ~RigidbodyConstraints.FreezePositionY;
-                        RigidBody.drag = 0f;
-                        RigidBody.AddForce(Vector3.down * FallForce, ForceMode.VelocityChange);
-                    }
+                    RigidBody.constraints &= ~RigidbodyConstraints.FreezePositionY;
+                    RigidBody.drag = 0f;
+                    RigidBody.AddForce(Vector3.down * FallForce, ForceMode.VelocityChange);
                 }
             }
         }
@@ -810,7 +866,7 @@ public class Actor : Entity
 
     private void Dash()
     {
-        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
+        if (CannotAct) return;
         if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue)
         {
             EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue, "Dash");
@@ -832,7 +888,7 @@ public class Actor : Entity
 
     private void Vault()
     {
-        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
+        if (CannotAct) return;
         if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue)
         {
             if (IsFrozen)
@@ -852,7 +908,7 @@ public class Actor : Entity
 
     public void Kick()
     {
-        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
+        if (CannotAct) return;
         if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue)
         {
             Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
@@ -888,7 +944,7 @@ public class Actor : Entity
 
     public void SwapBox()
     {
-        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
+        if (CannotAct) return;
         Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
@@ -951,7 +1007,7 @@ public class Actor : Entity
     public void Lift()
     {
         if (CurrentLiftBox) return;
-        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
+        if (CannotAct) return;
         Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
@@ -1010,7 +1066,7 @@ public class Actor : Entity
 
     public void ThrowOrPut()
     {
-        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
+        if (CannotAct) return;
         if (CurrentLiftBox && ThrowState == ThrowStates.ThrowCharging)
         {
             if (ActorBoxInteractHelper.CanInteract(InteractSkillType.Throw, CurrentLiftBox.EntityTypeIndex))
@@ -1026,7 +1082,7 @@ public class Actor : Entity
 
     public void Throw()
     {
-        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
+        if (CannotAct) return;
         if (CurrentLiftBox && CurrentLiftBox.Throwable && ThrowState == ThrowStates.ThrowCharging)
         {
             float velocity = ActorLaunchArcRendererHelper.CalculateVelocityByOffset(CurThrowPointOffset, 45);
@@ -1039,7 +1095,7 @@ public class Actor : Entity
 
     public void Put()
     {
-        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
+        if (CannotAct) return;
         if (CurrentLiftBox && ThrowState == ThrowStates.Lifting || ThrowState == ThrowStates.ThrowCharging)
         {
             float velocity = ActorLaunchArcRendererHelper.CalculateVelocityByOffset(CurThrowPointOffset, 45);
@@ -1071,127 +1127,167 @@ public class Actor : Entity
 
     #region Jump
 
-    [FoldoutGroup("状态")]
-    [LabelText("跳跃中")]
-    public bool IsJumping = false;
-
-    [FoldoutGroup("状态")]
-    [LabelText("正在空中移动")]
-    public bool IsInAirMoving = false;
-
-    [FoldoutGroup("状态")]
-    [LabelText("跳跃是否抵达最高点")]
-    public bool JumpReachClimax = false;
-
-    [FoldoutGroup("状态")]
+    [FoldoutGroup("跳跃")]
     [LabelText("跳跃目标高度")]
     public int JumpHeight = 0;
 
-    [FoldoutGroup("状态")]
+    [FoldoutGroup("跳跃")]
     [LabelText("起跳坐标")]
     [DisplayAsString]
     public GridPos3D JumpStartWorldGP = GridPos3D.Zero;
 
-    [FoldoutGroup("手感")]
-    [LabelText("跳跃力")]
-    public float JumpForce = 10f;
+    [FoldoutGroup("跳跃")]
+    [LabelText("起跳力度")]
+    [DisplayAsString]
+    public float CurrentJumpForce = 0f;
 
-    [FoldoutGroup("手感")]
-    [LabelText("坠落力")]
-    public float FallForce = 0.1f;
+    [FoldoutGroup("跳跃")]
+    [LabelText("跳跃是否抵达最高点")]
+    public bool JumpReachClimax = false;
 
-    [FoldoutGroup("状态")]
+    [FoldoutGroup("跳跃")]
+    [LabelText("下砸目标坐标")]
+    [DisplayAsString]
+    public Vector3 SmashDownTargetPos = Vector3.zero;
+
+    [FoldoutGroup("跳跃")]
+    [LabelText("下砸力度")]
+    [DisplayAsString]
+    public float SmashForce = 0f;
+
+    [FoldoutGroup("跳跃")]
+    [LabelText("下砸是否抵达目标")]
+    public bool SmashReachTarget = false;
+
+    [FoldoutGroup("跳跃")]
     [LabelText("悬空追击目标坐标")]
     [DisplayAsString]
     public Vector3 InAirMoveTargetPos = Vector3.zero;
 
-    [FoldoutGroup("状态")]
+    [FoldoutGroup("跳跃")]
     [LabelText("悬空追击移速")]
     [DisplayAsString]
     public float InAirMoveSpeed = 0f;
 
-    [FoldoutGroup("状态")]
-    [LabelText("悬空追击距离容错")]
-    [DisplayAsString]
-    public float InAirMoveTolerance = 0f;
+    [FoldoutGroup("跳跃")]
+    [LabelText("悬空追击是否抵达目标")]
+    public bool InAirMoveReachTarget = false;
 
-    public void JumpUp(float jumpForce, int jumpHeight)
+    public bool IsExecutingAirSkills()
     {
-        if (IsJumping) return;
-        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
+        return ActorBehaviourState == ActorBehaviourStates.Jump || ActorBehaviourState == ActorBehaviourStates.InAirMoving || ActorBehaviourState == ActorBehaviourStates.SmashDown;
+    }
+
+    public void SetJumpUpTargetHeight(float jumpForce, int jumpHeight)
+    {
+        if (ActorBehaviourState == ActorBehaviourStates.Jump || ActorBehaviourState == ActorBehaviourStates.InAirMoving || ActorBehaviourState == ActorBehaviourStates.SmashDown) return;
+        if (CannotAct) return;
         if (HasRigidbody)
         {
             JumpHeight = jumpHeight;
-            ActorBehaviourState = ActorBehaviourStates.Jump;
-            IsJumping = true;
             JumpStartWorldGP = WorldGP;
+            CurrentJumpForce = jumpForce;
+            ActorBehaviourState = ActorBehaviourStates.Jump;
             JumpReachClimax = false;
-            IsInAirMoving = false;
             RigidBody.constraints &= ~RigidbodyConstraints.FreezePositionY;
             RigidBody.drag = 0;
-            RigidBody.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+            RigidBody.AddForce(Vector3.up * CurrentJumpForce, ForceMode.VelocityChange);
         }
     }
 
-    private void CheckJumpState()
+    public void JumpingUpTick()
     {
-        if (IsJumping)
+        if (ActorBehaviourState == ActorBehaviourStates.Jump)
         {
-            if ((WorldGP - JumpStartWorldGP).y >= JumpHeight)
+            if (CannotAct) return;
+            if (HasRigidbody)
             {
-                JumpReachClimax = true;
-            }
-            else
-            {
-                if (HasRigidbody)
+                //if (!JumpReachClimax)
+                //{
+                //    RigidBody.AddForce(Vector3.up * CurrentJumpForce, ForceMode.VelocityChange);
+                //}
+
+                if ((WorldGP - JumpStartWorldGP).y >= JumpHeight)
                 {
-                    if (RigidBody.velocity.y < -0.1f)
+                    JumpReachClimax = true;
+                }
+                else
+                {
+                    if (HasRigidbody)
+                    {
+                        if (RigidBody.velocity.y < -1f)
+                        {
+                            JumpReachClimax = true;
+                        }
+                    }
+                    else
                     {
                         JumpReachClimax = true;
                     }
                 }
-                else
-                {
-                    JumpReachClimax = true;
-                }
+
+                if (JumpReachClimax && IsGrounded) ActorBehaviourState = ActorBehaviourStates.Idle;
             }
         }
     }
 
-    public void SmashDown(float smashDownForce)
+    public void SetSmashDownTargetPos(Vector3 targetPos, float smashForce)
     {
-        if (!IsJumping) return;
-        if (IsFrozen || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed || EntityBuffHelper.IsStun || EntityBuffHelper.IsShocking) return;
+        if (ActorBehaviourState == ActorBehaviourStates.Jump || ActorBehaviourState == ActorBehaviourStates.InAirMoving)
+        {
+            if (CannotAct) return;
+            if (HasRigidbody)
+            {
+                SmashDownTargetPos = targetPos;
+                SmashForce = smashForce;
+                ActorBehaviourState = ActorBehaviourStates.SmashDown;
+                JumpReachClimax = true;
+                SmashReachTarget = false;
+                RigidBody.constraints &= ~RigidbodyConstraints.FreezePositionY;
+                RigidBody.drag = 0;
+            }
+        }
+    }
+
+    public void SmashingDownTick()
+    {
+        if (ActorBehaviourState != ActorBehaviourStates.SmashDown) return;
+        if (CannotAct) return;
         if (HasRigidbody)
         {
-            ActorBehaviourState = ActorBehaviourStates.SmashDown;
-            JumpReachClimax = true;
-            IsInAirMoving = false;
-            RigidBody.constraints &= ~RigidbodyConstraints.FreezePositionY;
-            RigidBody.drag = 0;
-            RigidBody.AddForce(Vector3.down * smashDownForce, ForceMode.VelocityChange);
+            if (SmashDownTargetPos.y > transform.position.y + 1f)
+            {
+                RigidBody.AddForce(Vector3.down * SmashForce, ForceMode.VelocityChange);
+            }
+
+            if (IsGrounded) ActorBehaviourState = ActorBehaviourStates.Idle;
         }
     }
 
     public void InAirSetMoveTargetPos(Vector3 targetPos, float moveSpeed)
     {
-        if (!IsJumping) return;
-        if (HasRigidbody)
+        if (ActorBehaviourState == ActorBehaviourStates.Jump)
         {
-            IsInAirMoving = true;
-            InAirMoveTargetPos = targetPos;
-            InAirMoveSpeed = moveSpeed;
+            if (CannotAct) return;
+            if (HasRigidbody)
+            {
+                InAirMoveTargetPos = targetPos;
+                InAirMoveSpeed = moveSpeed;
+                ActorBehaviourState = ActorBehaviourStates.InAirMoving;
+            }
         }
     }
 
-    public void InAirMoveToTargetPos()
+    public void InAirMovingToTargetPosTick()
     {
-        if (!IsJumping) return;
-        if (HasRigidbody)
+        if (ActorBehaviourState == ActorBehaviourStates.InAirMoving)
         {
-            Vector3 diff = InAirMoveTargetPos - transform.position;
-            RigidBody.velocity = Vector3.zero;
-            RigidBody.AddForce(diff.normalized * InAirMoveSpeed, ForceMode.VelocityChange);
+            if (HasRigidbody)
+            {
+                Vector3 diff = InAirMoveTargetPos - transform.position;
+                RigidBody.velocity = Vector3.zero;
+                RigidBody.AddForce(diff.normalized * InAirMoveSpeed, ForceMode.VelocityChange);
+            }
         }
     }
 

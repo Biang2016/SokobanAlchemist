@@ -87,7 +87,7 @@ public class ActorArtHelper : ActorMonoHelper
     {
         if (Actor.IsNotNullAndAlive())
         {
-            IsAnimFreeze = Actor.IsFrozen || Actor.EntityBuffHelper.IsShocking || Actor.EntityBuffHelper.IsStun || Actor.EntityBuffHelper.IsBeingGround || Actor.EntityBuffHelper.IsBeingRepulsed;
+            IsAnimFreeze = Actor.CannotAct;
         }
     }
 

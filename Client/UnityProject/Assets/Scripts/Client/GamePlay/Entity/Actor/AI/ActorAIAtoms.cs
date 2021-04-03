@@ -486,7 +486,7 @@ public static class ActorAIAtoms
         public static Status TriggerSkill(Actor actor, EntitySkillIndex skillIndex, ActorAIAgent.TargetEntityType targetEntityType)
         {
             if (!actor.IsNotNullAndAlive() || actor.ActorAIAgent == null) return Status.Failure;
-            if (actor.IsFrozen || actor.EntityBuffHelper.IsBeingGround || actor.EntityBuffHelper.IsBeingRepulsed || actor.EntityBuffHelper.IsStun || actor.EntityBuffHelper.IsShocking) return Status.Failure;
+            if (actor.CannotAct) return Status.Failure;
             Entity targetEntity = actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].TargetEntity;
             if (!targetEntity.IsNotNullAndAlive()) return Status.Failure;
             if (actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
@@ -525,7 +525,7 @@ public static class ActorAIAtoms
         public static Status TriggerSkill(Actor actor, EntitySkillIndex skillIndex)
         {
             if (!actor.IsNotNullAndAlive() || actor.ActorAIAgent == null) return Status.Failure;
-            if (actor.IsFrozen || actor.EntityBuffHelper.IsBeingGround || actor.EntityBuffHelper.IsBeingRepulsed || actor.EntityBuffHelper.IsStun || actor.EntityBuffHelper.IsShocking) return Status.Failure;
+            if (actor.CannotAct) return Status.Failure;
             if (actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
             {
                 bool triggerSuc = eas.CheckCanTriggerSkill();
@@ -659,8 +659,8 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵/战斗")]
-    [Name("原地起跳")]
-    [Description("原地起跳")]
+    [Name("设置原地起跳参数")]
+    [Description("设置原地起跳参数")]
     public class BT_Enemy_JumpUp : BTNode
     {
         [Name("起跳力度")]
@@ -669,33 +669,35 @@ public static class ActorAIAtoms
         [Name("起跳高度（格）")]
         public BBParameter<int> JumpHeight;
 
-        public override string name => $"按{JumpForce.value}力度原地起跳{JumpHeight.value}格";
+        public override string name => $"[设置]按{JumpForce.value}力度原地起跳{JumpHeight.value}格";
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            if (Actor.IsJumping && Actor.JumpReachClimax) return Status.Success;
-            Actor.JumpUp(JumpForce.value, JumpHeight.value);
+            if (Actor.CannotAct && !Actor.IsGrounded) return Status.Failure;
+            Actor.SetJumpUpTargetHeight(JumpForce.value, JumpHeight.value);
             return Status.Success;
         }
     }
 
     [Category("敌兵/战斗")]
-    [Name("起跳完成")]
-    [Description("起跳完成")]
-    public class BT_Enemy_ConfirmJumpUpToClimax : ConditionTask
+    [Name("原地起跳Update")]
+    [Description("原地起跳Update")]
+    public class BT_Enemy_JumpingUpTick : BTNode
     {
-        protected override string info => $"起跳完成";
+        public override string name => $"原地起跳Update";
 
-        protected override bool OnCheck()
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            if (Actor.IsJumping && Actor.JumpReachClimax)
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.CannotAct) return Status.Failure;
+            if (Actor.ActorBehaviourState == Actor.ActorBehaviourStates.Jump && Actor.JumpReachClimax)
             {
-                return true;
+                return Status.Success;
             }
             else
             {
-                return false;
+                return Status.Running;
             }
         }
     }
@@ -708,38 +710,47 @@ public static class ActorAIAtoms
         [Name("砸下力度")]
         public BBParameter<float> SmashDownForce;
 
-        public override string name => $"身体以{SmashDownForce.value}力度下砸";
+        public override string name => $"[设置]身体以{SmashDownForce.value}力度下砸";
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            if (Actor.IsJumping && Actor.JumpReachClimax)
+            if ((Actor.ActorBehaviourState == Actor.ActorBehaviourStates.Jump && Actor.JumpReachClimax) || Actor.ActorBehaviourState == Actor.ActorBehaviourStates.InAirMoving)
             {
-                Actor.SmashDown(SmashDownForce.value);
-                return Status.Success;
+                if (Actor.CheckNearestGroundGPBelow(out GridPos3D nearestGroundGP, out float minDistance))
+                {
+                    Actor.SetSmashDownTargetPos(nearestGroundGP + GridPos3D.Up, SmashDownForce.value);
+                    return Status.Success;
+                }
+                else
+                {
+                    return Status.Failure;
+                }
             }
 
-            return Status.Running;
+            return Status.Failure;
         }
     }
 
     [Category("敌兵/战斗")]
-    [Name("落地完成")]
-    [Description("落地完成")]
-    public class BT_Enemy_ConfirmGround : ConditionTask
+    [Name("身体下砸Update")]
+    [Description("身体下砸Update")]
+    public class BT_Enemy_SmashingDownTick : BTNode
     {
-        protected override string info => $"落地完成";
+        public override string name => $"身体下砸Update";
 
-        protected override bool OnCheck()
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ActorBehaviourState != Actor.ActorBehaviourStates.SmashDown) return Status.Failure;
+            Actor.SmashingDownTick();
             if (Actor.IsGrounded)
             {
-                return true;
+                return Status.Success;
             }
             else
             {
-                return false;
+                return Status.Running;
             }
         }
     }
@@ -758,12 +769,12 @@ public static class ActorAIAtoms
         [Name("移动速度")]
         public BBParameter<float> MoveSpeed;
 
-        public override string name => $"设置:悬空速度{MoveSpeed.value}移到[{TargetEntityType.value}]头顶{Tolerance.value}范围";
+        public override string name => $"[设置]悬空速度{MoveSpeed.value}移到[{TargetEntityType.value}]头顶{Tolerance.value}范围";
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            if (!Actor.IsJumping) return Status.Failure;
+            if (Actor.ActorBehaviourState != Actor.ActorBehaviourStates.Jump) return Status.Failure;
             Entity targetEntity = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity;
             if (!targetEntity.IsNotNullAndAlive()) return Status.Failure;
             Vector3 randomTolerance = Random.insideUnitSphere * Tolerance.value;
@@ -776,17 +787,17 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵/战斗")]
-    [Name("悬空移动")]
-    [Description("悬空移动")]
+    [Name("悬空移动Update")]
+    [Description("悬空移动Update")]
     public class BT_Enemy_InAirMoveToTargetPos : BTNode
     {
-        public override string name => $"悬空移动";
+        public override string name => $"悬空移动Update";
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            if (!Actor.IsJumping) return Status.Failure;
-            Actor.InAirMoveToTargetPos();
+            if (Actor.ActorBehaviourState != Actor.ActorBehaviourStates.InAirMoving) return Status.Failure;
+            Actor.InAirMovingToTargetPosTick();
             Vector3 distanceXZ = Actor.transform.position - Actor.InAirMoveTargetPos;
             distanceXZ.y = 0;
             if (distanceXZ.magnitude <= 0.5f) return Status.Success;

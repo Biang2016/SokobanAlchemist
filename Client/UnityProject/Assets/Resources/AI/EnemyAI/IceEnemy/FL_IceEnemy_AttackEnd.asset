@@ -12,17 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d31b62ec9d586a4e94389d9071559ca, type: 3}
   m_Name: FL_IceEnemy_AttackEnd
   m_EditorClassIdentifier: 
-  _serializedGraph: '{"type":"FlowCanvas.FlowScript","nodes":[{"_position":{"x":495.0,"y":480.0},"$type":"FlowCanvas.Nodes.EnableEvent","$id":"0"},{"_portCount":2,"_position":{"x":675.0,"y":480.0},"$type":"FlowCanvas.Nodes.Split","$id":"1"},{"_simplexNode":{"EntitySkillIndex":{}},"_position":{"x":855.0,"y":465.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ActorAIAtoms+FL_Enemy_WaitSkillEnd,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"2"},{"_position":{"x":1095.0,"y":465.0},"$type":"FlowCanvas.Nodes.AwaitAll","$id":"3"},{"_inputPortValues":{"Success":{"$content":true,"$type":"System.Boolean"}},"_position":{"x":1260.0,"y":465.0},"$type":"FlowCanvas.Nodes.Finish","$id":"4"},{"_simplexNode":{},"_position":{"x":885.0,"y":570.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ActorAIAtoms+FL_Enemy_ForceTerminatePathFinding,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"5"}],"connections":[{"_sourcePortName":"Out","_targetPortName":"In","_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"0","_targetPortName":"In","_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"1","_targetPortName":"
-    ","_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"5"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Done","_targetPortName":"0","_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Out","_targetPortName":"In","_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"4"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"
-    ","_targetPortName":"1","_sourceNode":{"$ref":"5"},"_targetNode":{"$ref":"3"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
+  _serializedGraph: '{"type":"FlowCanvas.FlowScript","nodes":[{"_position":{"x":495.0,"y":480.0},"$type":"FlowCanvas.Nodes.EnableEvent","$id":"0"},{"_portCount":3,"_position":{"x":675.0,"y":480.0},"$type":"FlowCanvas.Nodes.Split","$id":"1"},{"_simplexNode":{"EntitySkillIndex":{}},"_position":{"x":870.0,"y":375.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ActorAIAtoms+FL_Enemy_WaitSkillEnd,
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"2"},{"_portCount":3,"_position":{"x":1095.0,"y":465.0},"$type":"FlowCanvas.Nodes.AwaitAll","$id":"3"},{"_inputPortValues":{"Success":{"$content":true,"$type":"System.Boolean"}},"_position":{"x":1260.0,"y":465.0},"$type":"FlowCanvas.Nodes.Finish","$id":"4"},{"_simplexNode":{},"_position":{"x":885.0,"y":570.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ActorAIAtoms+FL_Enemy_ForceTerminatePathFinding,
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"5"},{"_simplexNode":{"EntitySkillIndex":{"_value":1}},"_position":{"x":870.0,"y":465.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ActorAIAtoms+FL_Enemy_WaitSkillEnd,
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"6"}],"connections":[{"_sourcePortName":"Out","_targetPortName":"In","_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"0","_targetPortName":"In","_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"2","_targetPortName":"
+    ","_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"5"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"1","_targetPortName":"In","_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"6"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Done","_targetPortName":"0","_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Out","_targetPortName":"In","_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"4"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"
+    ","_targetPortName":"2","_sourceNode":{"$ref":"5"},"_targetNode":{"$ref":"3"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Done","_targetPortName":"1","_sourceNode":{"$ref":"6"},"_targetNode":{"$ref":"3"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
   _objectReferences: []
   _graphSource:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: -49, y: -92}
+    _translation: {x: -62, y: 106}
     _zoomFactor: 1
   _haltSerialization: 0
 #---GRAPH_START---
@@ -39,7 +40,7 @@ MonoBehaviour:
 #            "$id": "0"
 #        },
 #        {
-#            "_portCount": 2,
+#            "_portCount": 3,
 #            "_position": {
 #                "x": 675.0,
 #                "y": 480.0
@@ -54,13 +55,14 @@ MonoBehaviour:
 #                }
 #            },
 #            "_position": {
-#                "x": 855.0,
-#                "y": 465.0
+#                "x": 870.0,
+#                "y": 375.0
 #            },
 #            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ActorAIAtoms+FL_Enemy_WaitSkillEnd, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
 #            "$id": "2"
 #        },
 #        {
+#            "_portCount": 3,
 #            "_position": {
 #                "x": 1095.0,
 #                "y": 465.0
@@ -92,6 +94,19 @@ MonoBehaviour:
 #            },
 #            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ActorAIAtoms+FL_Enemy_ForceTerminatePathFinding, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
 #            "$id": "5"
+#        },
+#        {
+#            "_simplexNode": {
+#                "EntitySkillIndex": {
+#                    "_value": 1
+#                }
+#            },
+#            "_position": {
+#                "x": 870.0,
+#                "y": 465.0
+#            },
+#            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ActorAIAtoms+FL_Enemy_WaitSkillEnd, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+#            "$id": "6"
 #        }
 #    ],
 #    "connections": [
@@ -118,13 +133,24 @@ MonoBehaviour:
 #            "$type": "FlowCanvas.BinderConnection"
 #        },
 #        {
-#            "_sourcePortName": "1",
+#            "_sourcePortName": "2",
 #            "_targetPortName": " ",
 #            "_sourceNode": {
 #                "$ref": "1"
 #            },
 #            "_targetNode": {
 #                "$ref": "5"
+#            },
+#            "$type": "FlowCanvas.BinderConnection"
+#        },
+#        {
+#            "_sourcePortName": "1",
+#            "_targetPortName": "In",
+#            "_sourceNode": {
+#                "$ref": "1"
+#            },
+#            "_targetNode": {
+#                "$ref": "6"
 #            },
 #            "$type": "FlowCanvas.BinderConnection"
 #        },
@@ -152,9 +178,20 @@ MonoBehaviour:
 #        },
 #        {
 #            "_sourcePortName": " ",
-#            "_targetPortName": "1",
+#            "_targetPortName": "2",
 #            "_sourceNode": {
 #                "$ref": "5"
+#            },
+#            "_targetNode": {
+#                "$ref": "3"
+#            },
+#            "$type": "FlowCanvas.BinderConnection"
+#        },
+#        {
+#            "_sourcePortName": "Done",
+#            "_targetPortName": "1",
+#            "_sourceNode": {
+#                "$ref": "6"
 #            },
 #            "_targetNode": {
 #                "$ref": "3"
