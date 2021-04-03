@@ -55,7 +55,7 @@ public static class ActorAIAtoms
                     }
                 }
 
-                return $"是否有{targetEntityTypeDesc}目标";
+                return $"有{targetEntityTypeDesc}目标";
             }
         }
 
@@ -157,9 +157,11 @@ public static class ActorAIAtoms
         protected override bool OnCheck()
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
-            if (Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity.GetGridDistanceTo(Actor, false) > GuardingRange.value) return false;
+            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            if (!target.TargetEntity.IsNotNullAndAlive()) return false;
+            if (target.TargetEntity.GetGridDistanceTo(Actor, false) > GuardingRange.value) return false;
             Profiler.BeginSample("FindPath");
-            bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity.EntityBaseCenter.ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), Actor.transform.position, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
+            bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, target.TargetEntity.EntityBaseCenter.ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), Actor.transform.position, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
             Profiler.EndSample();
             return suc;
         }
@@ -185,7 +187,9 @@ public static class ActorAIAtoms
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            GridPos3D targetWorldGP = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetGP;
+            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            if (!target.TargetEntity.IsNotNullAndAlive()) return Status.Failure;
+            GridPos3D targetWorldGP = target.TargetGP;
             return Actor.ActorAIAgent.SetDestinationToWorldGP(targetWorldGP, KeepDistanceMin.value, KeepDistanceMax.value);
         }
     }
@@ -338,6 +342,34 @@ public static class ActorAIAtoms
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
             if (!Actor.ActorAIAgent.IsPathFinding) return false;
             return Actor.ActorAIAgent.StuckWithNavTask_Tick > (StuckTime.value / 1000f);
+        }
+    }
+
+    [Category("敌兵/寻路")]
+    [Name("卡在Box里")]
+    [Description("卡在Box里")]
+    public class BT_Enemy_StuckWithBoxes : ConditionTask
+    {
+        [Name("卡住时长/ms")]
+        public BBParameter<int> StuckTime;
+
+        protected override bool OnCheck()
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
+            return Actor.ActorAIAgent.StuckWithBoxesDuration > StuckTime.value / 1000f;
+        }
+    }
+
+    [Category("敌兵/寻路")]
+    [Name("销毁卡住的Boxes")]
+    [Description("销毁卡住的Boxes")]
+    public class BT_Enemy_DestroyStuckBoxes : BTNode
+    {
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            Actor.ActorAIAgent.DestroyStuckBoxes();
+            return Status.Success;
         }
     }
 
@@ -675,7 +707,8 @@ public static class ActorAIAtoms
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.CannotAct && !Actor.IsGrounded) return Status.Failure;
-            Actor.SetJumpUpTargetHeight(JumpForce.value, JumpHeight.value);
+            if (Actor.IsExecutingAirSkills()) return Status.Success;
+            Actor.SetJumpUpTargetHeight(JumpForce.value, JumpHeight.value, true);
             return Status.Success;
         }
     }
@@ -742,8 +775,7 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            if (Actor.ActorBehaviourState != Actor.ActorBehaviourStates.SmashDown) return Status.Failure;
-            Actor.SmashingDownTick();
+            if (Actor.ActorBehaviourState != Actor.ActorBehaviourStates.SmashDown) return Status.Success;
             if (Actor.IsGrounded)
             {
                 return Status.Success;
@@ -797,7 +829,6 @@ public static class ActorAIAtoms
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorBehaviourState != Actor.ActorBehaviourStates.InAirMoving) return Status.Failure;
-            Actor.InAirMovingToTargetPosTick();
             Vector3 distanceXZ = Actor.transform.position - Actor.InAirMoveTargetPos;
             distanceXZ.y = 0;
             if (distanceXZ.magnitude <= 0.5f) return Status.Success;

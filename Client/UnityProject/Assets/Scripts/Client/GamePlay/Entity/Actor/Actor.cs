@@ -220,10 +220,16 @@ public class Actor : Entity
     {
         foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
         {
-            bool hitGround = Physics.Raycast(transform.position + offset, Vector3.down, out RaycastHit hit, checkDistance, LayerManager.Instance.LayerMask_HitBox_Box | LayerManager.Instance.LayerMask_Ground);
-            if (hitGround)
+            GridPos3D curGrid = (transform.position + offset).ToGridPos3D();
+            int startGridY = curGrid.y;
+            GridPos3D lowerGrid = (transform.position + offset + Vector3.down * checkDistance).ToGridPos3D();
+            int endGridY = lowerGrid.y;
+            if (startGridY == endGridY) return false;
+            for (int y = startGridY - 1; y >= endGridY; y--)
             {
-                return true;
+                GridPos3D grid = new GridPos3D(curGrid.x, y, curGrid.z);
+                Box lowerBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(grid, out WorldModule _, out GridPos3D _, false);
+                if (lowerBox != null && !lowerBox.Passable) return true;
             }
         }
 
@@ -736,6 +742,8 @@ public class Actor : Entity
         // 着地判定
         IsGrounded = CheckIsGrounded(0.55f);
         JumpingUpTick();
+        InAirMovingToTargetPosTick();
+        SmashingDownTick();
         if (!IsExecutingAirSkills() || (ActorBehaviourState == ActorBehaviourStates.Jump && JumpReachClimax))
         {
             if (!CannotAct && HasRigidbody)
@@ -1142,6 +1150,10 @@ public class Actor : Entity
     public float CurrentJumpForce = 0f;
 
     [FoldoutGroup("跳跃")]
+    [LabelText("持续施加起跳力")]
+    public bool KeepAddingJumpForce = false;
+
+    [FoldoutGroup("跳跃")]
     [LabelText("跳跃是否抵达最高点")]
     public bool JumpReachClimax = false;
 
@@ -1178,7 +1190,7 @@ public class Actor : Entity
         return ActorBehaviourState == ActorBehaviourStates.Jump || ActorBehaviourState == ActorBehaviourStates.InAirMoving || ActorBehaviourState == ActorBehaviourStates.SmashDown;
     }
 
-    public void SetJumpUpTargetHeight(float jumpForce, int jumpHeight)
+    public void SetJumpUpTargetHeight(float jumpForce, int jumpHeight, bool keepAddingForce)
     {
         if (ActorBehaviourState == ActorBehaviourStates.Jump || ActorBehaviourState == ActorBehaviourStates.InAirMoving || ActorBehaviourState == ActorBehaviourStates.SmashDown) return;
         if (CannotAct) return;
@@ -1187,10 +1199,12 @@ public class Actor : Entity
             JumpHeight = jumpHeight;
             JumpStartWorldGP = WorldGP;
             CurrentJumpForce = jumpForce;
+            KeepAddingJumpForce = keepAddingForce;
             ActorBehaviourState = ActorBehaviourStates.Jump;
             JumpReachClimax = false;
             RigidBody.constraints &= ~RigidbodyConstraints.FreezePositionY;
             RigidBody.drag = 0;
+            RigidBody.velocity = Vector3.zero;
             RigidBody.AddForce(Vector3.up * CurrentJumpForce, ForceMode.VelocityChange);
         }
     }
@@ -1202,10 +1216,10 @@ public class Actor : Entity
             if (CannotAct) return;
             if (HasRigidbody)
             {
-                //if (!JumpReachClimax)
-                //{
-                //    RigidBody.AddForce(Vector3.up * CurrentJumpForce, ForceMode.VelocityChange);
-                //}
+                if (KeepAddingJumpForce && !JumpReachClimax)
+                {
+                    RigidBody.AddForce(Vector3.up * CurrentJumpForce, ForceMode.VelocityChange);
+                }
 
                 if ((WorldGP - JumpStartWorldGP).y >= JumpHeight)
                 {
@@ -1245,6 +1259,7 @@ public class Actor : Entity
                 SmashReachTarget = false;
                 RigidBody.constraints &= ~RigidbodyConstraints.FreezePositionY;
                 RigidBody.drag = 0;
+                RigidBody.velocity = Vector3.zero;
             }
         }
     }
@@ -1255,7 +1270,7 @@ public class Actor : Entity
         if (CannotAct) return;
         if (HasRigidbody)
         {
-            if (SmashDownTargetPos.y > transform.position.y + 1f)
+            if (transform.position.y > SmashDownTargetPos.y + 1f)
             {
                 RigidBody.AddForce(Vector3.down * SmashForce, ForceMode.VelocityChange);
             }
@@ -1274,6 +1289,7 @@ public class Actor : Entity
                 InAirMoveTargetPos = targetPos;
                 InAirMoveSpeed = moveSpeed;
                 ActorBehaviourState = ActorBehaviourStates.InAirMoving;
+                RigidBody.velocity = Vector3.zero;
             }
         }
     }

@@ -28,6 +28,7 @@ public class ActorAIAgent
         if (!Actor.GraphOwner.isRunning) Actor.GraphOwner?.StartBehaviour();
         RefreshTargetGP();
         RefreshThreatEntityRank();
+        RefreshExceptionJudgment(interval);
 
         MoveToDestination();
     }
@@ -63,6 +64,7 @@ public class ActorAIAgent
 
         ClearPathFinding();
         ClearNavTrackMarkers();
+        ClearExceptionJudgment();
     }
 
     #region 目标搜索
@@ -457,6 +459,60 @@ public class ActorAIAgent
     public GridPos3D GetCurrentPathFindingDestination()
     {
         return currentDestination_PF;
+    }
+
+    #endregion
+
+    #region Exceptions
+
+    internal bool IsStuckWithBoxes;
+    internal float StuckWithBoxesDuration;
+
+    public void ClearExceptionJudgment()
+    {
+        IsStuckWithBoxes = false;
+        StuckWithBoxesDuration = 0;
+    }
+
+    private void RefreshExceptionJudgment(float interval)
+    {
+        CheckIsStuckWithBoxes();
+        if (IsStuckWithBoxes)
+        {
+            StuckWithBoxesDuration += interval;
+        }
+        else
+        {
+            StuckWithBoxesDuration = 0;
+        }
+    }
+
+    public bool CheckIsStuckWithBoxes()
+    {
+        foreach (GridPos3D offset in Actor.GetEntityOccupationGPs_Rotated())
+        {
+            GridPos3D gridPos = Actor.WorldGP + offset;
+            Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos, out WorldModule _, out GridPos3D _, false);
+            if (box.IsNotNullAndAlive() && !box.Passable)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void DestroyStuckBoxes()
+    {
+        foreach (GridPos3D offset in Actor.GetEntityOccupationGPs_Rotated())
+        {
+            GridPos3D gridPos = Actor.WorldGP + offset;
+            Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos, out WorldModule _, out GridPos3D _, false);
+            if (box.IsNotNullAndAlive() && !box.Passable)
+            {
+                box.DestroyBox(null, true);
+            }
+        }
     }
 
     #endregion

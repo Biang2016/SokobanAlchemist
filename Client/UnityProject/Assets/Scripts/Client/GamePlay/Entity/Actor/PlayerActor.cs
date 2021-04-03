@@ -351,7 +351,7 @@ public class PlayerActor : Actor
 
             if (BS_Skill_3.Down)
             {
-                SetJumpUpTargetHeight(ActiveJumpForce, 1);
+                SetJumpUpTargetHeight(ActiveJumpForce, 1, false);
             }
 
             #endregion
