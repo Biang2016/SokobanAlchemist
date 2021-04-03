@@ -379,6 +379,8 @@ namespace BiangLibrary.GameDataFormat.Grid
         public int y;
         public int z;
 
+        private static readonly GridPos3D oneGP = new GridPos3D(1, 1, 1);
+        public static GridPos3D One => oneGP;
         private static readonly GridPos3D zeroGP = new GridPos3D(0, 0, 0);
         public static GridPos3D Zero => zeroGP;
         private static readonly GridPos3D rightGP = new GridPos3D(1, 0, 0);

@@ -6,6 +6,7 @@ using FlowCanvas.Nodes;
 using NodeCanvas.BehaviourTrees;
 using NodeCanvas.Framework;
 using ParadoxNotion.Design;
+using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Profiling;
 using Random = UnityEngine.Random;
@@ -33,6 +34,22 @@ public static class ActorAIAtoms
         }
     }
 
+    [Category("敌兵/状态")]
+    [Name("检查行为状态")]
+    [Description("检查行为状态")]
+    public class BT_Enemy_IsJumping_ConditionTask : ConditionTask
+    {
+        [Name("行为状态")]
+        public BBParameter<Actor.ActorBehaviourStates> ActorBehaviourState;
+
+        protected override string info => $"是{ActorBehaviourState.value}状态";
+
+        protected override bool OnCheck()
+        {
+            return Actor.ActorBehaviourState == ActorBehaviourState.value;
+        }
+    }
+
     #endregion
 
     #region 目标搜索
@@ -40,7 +57,7 @@ public static class ActorAIAtoms
     [Category("敌兵/目标搜索")]
     [Name("是否有目标")]
     [Description("是否有目标")]
-    public class BT_Enemy_CheckHasTargetEntity : ConditionTask
+    public class BT_Enemy_CheckHasTarget : ConditionTask
     {
         protected override string info
         {
@@ -55,12 +72,20 @@ public static class ActorAIAtoms
                     }
                 }
 
+                if (NeedEntity.value)
+                {
+                    targetEntityTypeDesc += "实体";
+                }
+
                 return $"有{targetEntityTypeDesc}目标";
             }
         }
 
         [Name("哪种目标")]
         public BBParameter<List<ActorAIAgent.TargetEntityType>> TargetEntityTypes;
+
+        [Name("是否实体")]
+        public BBParameter<bool> NeedEntity;
 
         protected override bool OnCheck()
         {
@@ -70,7 +95,14 @@ public static class ActorAIAtoms
             {
                 foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
                 {
-                    res &= Actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].TargetEntity.IsNotNullAndAlive();
+                    if (NeedEntity.value)
+                    {
+                        res &= Actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].TargetEntity.IsNotNullAndAlive();
+                    }
+                    else
+                    {
+                        res &= Actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].HasTarget;
+                    }
                 }
             }
 
@@ -79,8 +111,8 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵/目标搜索")]
-    [Name("设置目标")]
-    [Description("设置目标")]
+    [Name("搜索并设置目标")]
+    [Description("搜索并设置目标")]
     public class BT_Enemy_SetTargetEntity : BTNode
     {
         public override string name
@@ -113,18 +145,70 @@ public static class ActorAIAtoms
         [Name("设为哪种目标")]
         public BBParameter<List<ActorAIAgent.TargetEntityType>> TargetEntityTypes;
 
+        [Name("忽略Y轴")]
+        public BBParameter<bool> Y_Ignore;
+
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            Actor target = BattleManager.Instance.SearchNearestActor(Actor.EntityBaseCenter, Actor.Camp, SearchRadius.value, RelativeCamp.value, ActorTypeName.value);
+            Actor target = null;
+            if (Y_Ignore.value)
+            {
+                bool groundBeneath = Actor.CheckIsGrounded(20f, out GridPos3D nearestGround);
+                if (groundBeneath)
+                {
+                    target = BattleManager.Instance.SearchNearestActor(nearestGround, Actor.Camp, SearchRadius.value, RelativeCamp.value, ActorTypeName.value);
+                }
+            }
+            else
+            {
+                target = BattleManager.Instance.SearchNearestActor(Actor.EntityBaseCenter, Actor.Camp, SearchRadius.value, RelativeCamp.value, ActorTypeName.value);
+            }
+
             if (!target.IsNotNullAndAlive()) return Status.Failure;
             if (TargetEntityTypes.value != null)
             {
                 foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
                 {
                     Actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].TargetEntity = target;
-                    Actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].RefreshTargetGP();
                 }
+            }
+
+            return Status.Success;
+        }
+    }
+
+    [Category("敌兵/目标搜索")]
+    [Name("删除目标")]
+    [Description("删除目标")]
+    public class BT_Enemy_ClearTargetEntity : BTNode
+    {
+        public override string name
+        {
+            get
+            {
+                string targetEntityTypeDesc = "";
+                if (TargetEntityTypes.value != null)
+                {
+                    foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
+                    {
+                        targetEntityTypeDesc += "[" + targetEntityType + "]";
+                    }
+                }
+
+                return $"删除{targetEntityTypeDesc}目标";
+            }
+        }
+
+        [Name("哪种目标")]
+        public BBParameter<List<ActorAIAgent.TargetEntityType>> TargetEntityTypes;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
+            {
+                Actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].ClearTarget();
             }
 
             return Status.Success;
@@ -158,10 +242,11 @@ public static class ActorAIAtoms
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
             ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
-            if (!target.TargetEntity.IsNotNullAndAlive()) return false;
-            if (target.TargetEntity.GetGridDistanceTo(Actor, false) > GuardingRange.value) return false;
+            if (!target.HasTarget) return false;
+            GridPos3D targetGP = target.TargetGP;
+            if (Actor.GetGridDistanceTo(targetGP, false) > GuardingRange.value) return false;
             Profiler.BeginSample("FindPath");
-            bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, target.TargetEntity.EntityBaseCenter.ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), Actor.transform.position, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
+            bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, ((Vector3) targetGP).ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), Actor.transform.position, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
             Profiler.EndSample();
             return suc;
         }
@@ -188,9 +273,9 @@ public static class ActorAIAtoms
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
             ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
-            if (!target.TargetEntity.IsNotNullAndAlive()) return Status.Failure;
-            GridPos3D targetWorldGP = target.TargetGP;
-            return Actor.ActorAIAgent.SetDestinationToWorldGP(targetWorldGP, KeepDistanceMin.value, KeepDistanceMax.value);
+            if (!target.HasTarget) return Status.Failure;
+            GridPos3D targetGP = target.TargetGP;
+            return Actor.ActorAIAgent.SetDestinationToWorldGP(targetGP, KeepDistanceMin.value, KeepDistanceMax.value);
         }
     }
 
@@ -210,9 +295,10 @@ public static class ActorAIAtoms
         protected override bool OnCheck()
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null || !Actor.ActorAIAgent.IsPathFinding) return false;
-            Entity targetEntity = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity;
-            if (!targetEntity.IsNotNullAndAlive()) return false;
-            return ((targetEntity.EntityBaseCenter - Actor.ActorAIAgent.GetCurrentPathFindingDestination().ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth)).magnitude <= ToleranceRadius.value);
+            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            if (!target.HasTarget) return false;
+            GridPos3D targetGP = target.TargetGP;
+            return ((targetGP - Actor.ActorAIAgent.GetCurrentPathFindingDestination().ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth)).magnitude <= ToleranceRadius.value);
         }
     }
 
@@ -238,6 +324,8 @@ public static class ActorAIAtoms
             bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.WorldGP_PF, Actor.transform.position, IdleRadius.value, out GridPos3D destination_PF, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
             if (suc)
             {
+                destination_PF.ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth);
+                Actor.ActorAIAgent.AIAgentTargetDict[ActorAIAgent.TargetEntityType.Navigate].TargetGP = destination_PF.ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth).ToGridPos3D();
                 ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination_PF, 0f, 0.5f, false, ActorPathFinding.DestinationType.EmptyGrid);
                 switch (retCode)
                 {
@@ -330,6 +418,18 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵/寻路")]
+    [Name("有寻路任务")]
+    [Description("有寻路任务")]
+    public class BT_Enemy_HasNavTask : ConditionTask
+    {
+        protected override bool OnCheck()
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
+            return Actor.ActorAIAgent.IsPathFinding;
+        }
+    }
+
+    [Category("敌兵/寻路")]
     [Name("有寻路任务但卡在一个地方")]
     [Description("有寻路任务但卡在一个地方")]
     public class BT_Enemy_StuckWithNavTask : ConditionTask
@@ -386,15 +486,16 @@ public static class ActorAIAtoms
         [Name("哪种目标")]
         public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
 
-        [Name("无视Y坐标")]
-        public BBParameter<bool> IgnoreY;
+        [Name("忽略Y轴")]
+        public BBParameter<bool> Y_Ignore;
 
         protected override bool OnCheck()
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
-            Entity targetEntity = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity;
-            if (!targetEntity.IsNotNullAndAlive()) return false;
-            return targetEntity.GetBaseCenterDistanceTo(Actor, IgnoreY.value) <= RangeRadius.value;
+            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            if (!target.HasTarget) return false;
+            GridPos3D targetGP = target.TargetGP;
+            return Actor.GetGridDistanceTo(targetGP, Y_Ignore.value) <= RangeRadius.value;
         }
     }
 
@@ -417,9 +518,10 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            Entity targetEntity = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity;
-            if (!targetEntity.IsNotNullAndAlive()) return Status.Failure;
-            bool inside = targetEntity.GetGridDistanceTo(Actor, Y_Ignore.value) <= RangeRadius.value;
+            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            if (!target.HasTarget) return Status.Failure;
+            GridPos3D targetGP = target.TargetGP;
+            bool inside = Actor.GetGridDistanceTo(targetGP, Y_Ignore.value) <= RangeRadius.value;
             return inside ? Status.Success : Status.Failure;
         }
     }
@@ -491,7 +593,9 @@ public static class ActorAIAtoms
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.IsFrozen) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            Vector3 diff = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetGP - Actor.EntityBaseCenter;
+            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            if (!target.HasTarget) return Status.Failure;
+            Vector3 diff = target.TargetGP - Actor.EntityBaseCenter;
             Actor.CurForward = diff.GetSingleDirectionVectorXZ();
             return Status.Success;
         }
@@ -707,7 +811,7 @@ public static class ActorAIAtoms
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.CannotAct && !Actor.IsGrounded) return Status.Failure;
-            if (Actor.IsExecutingAirSkills()) return Status.Success;
+            if (Actor.IsExecutingAirSkills()) return Status.Running;
             Actor.SetJumpUpTargetHeight(JumpForce.value, JumpHeight.value, true);
             return Status.Success;
         }
@@ -724,20 +828,27 @@ public static class ActorAIAtoms
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.CannotAct) return Status.Failure;
-            if (Actor.ActorBehaviourState == Actor.ActorBehaviourStates.Jump && Actor.JumpReachClimax)
+            if (Actor.ActorBehaviourState == Actor.ActorBehaviourStates.Jump)
             {
-                return Status.Success;
+                if (!Actor.JumpReachClimax)
+                {
+                    return Status.Running;
+                }
+                else
+                {
+                    return Status.Success;
+                }
             }
             else
             {
-                return Status.Running;
+                return Status.Failure;
             }
         }
     }
 
     [Category("敌兵/战斗")]
-    [Name("身体下砸")]
-    [Description("身体下砸")]
+    [Name("设置身体下砸")]
+    [Description("[设置]身体下砸")]
     public class BT_Enemy_SmashDown : BTNode
     {
         [Name("砸下力度")]
@@ -750,7 +861,7 @@ public static class ActorAIAtoms
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if ((Actor.ActorBehaviourState == Actor.ActorBehaviourStates.Jump && Actor.JumpReachClimax) || Actor.ActorBehaviourState == Actor.ActorBehaviourStates.InAirMoving)
             {
-                if (Actor.CheckNearestGroundGPBelow(out GridPos3D nearestGroundGP, out float minDistance))
+                if (Actor.CheckIsGrounded(20f, out GridPos3D nearestGroundGP))
                 {
                     Actor.SetSmashDownTargetPos(nearestGroundGP + GridPos3D.Up, SmashDownForce.value);
                     return Status.Success;
@@ -806,12 +917,12 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            if (Actor.ActorBehaviourState != Actor.ActorBehaviourStates.Jump) return Status.Failure;
-            Entity targetEntity = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value].TargetEntity;
-            if (!targetEntity.IsNotNullAndAlive()) return Status.Failure;
+            if (Actor.ActorBehaviourState != Actor.ActorBehaviourStates.Jump && Actor.ActorBehaviourState != Actor.ActorBehaviourStates.InAirMoving) return Status.Failure;
+            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            if (!target.HasTarget) return Status.Failure;
             Vector3 randomTolerance = Random.insideUnitSphere * Tolerance.value;
             randomTolerance.y = 0;
-            Vector3 targetPos = targetEntity.EntityBaseCenter + randomTolerance;
+            Vector3 targetPos = target.TargetGP + randomTolerance;
             targetPos.y = Actor.transform.position.y;
             Actor.InAirSetMoveTargetPos(targetPos, MoveSpeed.value);
             return Status.Success;

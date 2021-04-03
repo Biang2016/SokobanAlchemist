@@ -59,7 +59,7 @@ public class ActorAIAgent
 
         foreach (KeyValuePair<TargetEntityType, AIAgentTarget> kv in AIAgentTargetDict)
         {
-            kv.Value.Clear();
+            kv.Value.ClearTarget();
         }
 
         ClearPathFinding();
@@ -79,26 +79,51 @@ public class ActorAIAgent
 
     public class AIAgentTarget
     {
-        public Entity TargetEntity;
-        public GridPos3D TargetGP;
-
-        public void RefreshTargetGP()
+        public Entity TargetEntity
         {
-            if (TargetEntity.IsNotNullAndAlive())
+            get { return targetEntity; }
+            set
             {
-                TargetGP = TargetEntity.WorldGP;
-            }
-            else
-            {
-                TargetEntity = null;
-                TargetGP = GridPos3D.Zero;
+                targetEntity = value;
+                if (value != null)
+                {
+                    targetGP = targetEntity.EntityBaseCenter.ToGridPos3D();
+                }
             }
         }
 
-        public void Clear()
+        private Entity targetEntity;
+
+        public GridPos3D TargetGP
         {
-            TargetEntity = null;
-            TargetGP = GridPos3D.Zero;
+            get { return targetGP; }
+            set
+            {
+                targetGP = value;
+                targetEntity = null;
+            }
+        }
+
+        private GridPos3D targetGP;
+
+        public bool HasTarget => targetEntity.IsNotNullAndAlive() || targetGP != GridPos3D.One * -1;
+
+        public void RefreshTargetGP()
+        {
+            if (targetEntity.IsNotNullAndAlive())
+            {
+                targetGP = targetEntity.EntityBaseCenter.ToGridPos3D();
+            }
+            else
+            {
+                targetEntity = null;
+            }
+        }
+
+        public void ClearTarget()
+        {
+            targetEntity = null;
+            targetGP = GridPos3D.One * -1;
         }
     }
 
@@ -510,7 +535,7 @@ public class ActorAIAgent
             Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos, out WorldModule _, out GridPos3D _, false);
             if (box.IsNotNullAndAlive() && !box.Passable)
             {
-                box.DestroyBox(null, true);
+                box.EntityBuffHelper.Damage(10000, EntityBuffAttribute.ExplodeDamage, 0);
             }
         }
     }

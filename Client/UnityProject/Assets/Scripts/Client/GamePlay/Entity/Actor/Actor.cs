@@ -216,8 +216,9 @@ public class Actor : Entity
     public int ActorWidth => EntityIndicatorHelper.EntityOccupationData.ActorWidth;
     public int ActorHeight => EntityIndicatorHelper.EntityOccupationData.ActorHeight;
 
-    public bool CheckIsGrounded(float checkDistance)
+    public bool CheckIsGrounded(float checkDistance, out GridPos3D nearestGroundGP)
     {
+        nearestGroundGP = GridPos3D.Zero;
         foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
         {
             GridPos3D curGrid = (transform.position + offset).ToGridPos3D();
@@ -229,38 +230,15 @@ public class Actor : Entity
             {
                 GridPos3D grid = new GridPos3D(curGrid.x, y, curGrid.z);
                 Box lowerBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(grid, out WorldModule _, out GridPos3D _, false);
-                if (lowerBox != null && !lowerBox.Passable) return true;
-            }
-        }
-
-        return false;
-    }
-
-    private RaycastHit[] cachedRaycastHits = new RaycastHit[128];
-
-    public bool CheckNearestGroundGPBelow(out GridPos3D nearestGroundGP, out float minDistance)
-    {
-        bool foundGround = false;
-        minDistance = float.MaxValue;
-        nearestGroundGP = GridPos3D.Zero;
-        foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
-        {
-            Vector3 gridPos = transform.position + offset;
-            int count = Physics.RaycastNonAlloc(gridPos, Vector3.down, cachedRaycastHits, 20f, LayerManager.Instance.LayerMask_HitBox_Box | LayerManager.Instance.LayerMask_Ground);
-            for (int i = 0; i < count; i++)
-            {
-                RaycastHit hit = cachedRaycastHits[i];
-                foundGround = true;
-                float distance = (hit.collider.transform.position - gridPos).magnitude;
-                if (distance < minDistance)
+                if (lowerBox != null && !lowerBox.Passable)
                 {
-                    minDistance = distance;
-                    nearestGroundGP = hit.collider.transform.position.ToGridPos3D();
+                    nearestGroundGP = grid;
+                    return true;
                 }
             }
         }
 
-        return foundGround;
+        return false;
     }
 
     #endregion
@@ -442,6 +420,7 @@ public class Actor : Entity
         WorldGP = GridPos3D.Zero;
         LastWorldGP = GridPos3D.Zero;
         ThrowState = ThrowStates.None;
+        ClearJumpParams();
         ThrowWhenDie();
 
         EntityBuffHelper.OnHelperRecycled();
@@ -740,7 +719,7 @@ public class Actor : Entity
         WorldGP = transform.position.ToGridPos3D();
 
         // 着地判定
-        IsGrounded = CheckIsGrounded(0.55f);
+        IsGrounded = CheckIsGrounded(0.55f, out GridPos3D _);
         JumpingUpTick();
         InAirMovingToTargetPosTick();
         SmashingDownTick();
@@ -1135,6 +1114,20 @@ public class Actor : Entity
 
     #region Jump
 
+    private void ClearJumpParams()
+    {
+        JumpHeight = 0;
+        JumpStartWorldGP = GridPos3D.Zero;
+        CurrentJumpForce = 0;
+        KeepAddingJumpForce = false;
+        JumpReachClimax = false;
+        SmashDownTargetPos = Vector3.zero;
+        SmashForce = 0;
+        SmashReachTarget = false;
+        InAirMoveTargetPos = Vector3.zero;
+        InAirMoveSpeed = 0;
+    }
+
     [FoldoutGroup("跳跃")]
     [LabelText("跳跃目标高度")]
     public int JumpHeight = 0;
@@ -1181,10 +1174,6 @@ public class Actor : Entity
     [DisplayAsString]
     public float InAirMoveSpeed = 0f;
 
-    [FoldoutGroup("跳跃")]
-    [LabelText("悬空追击是否抵达目标")]
-    public bool InAirMoveReachTarget = false;
-
     public bool IsExecutingAirSkills()
     {
         return ActorBehaviourState == ActorBehaviourStates.Jump || ActorBehaviourState == ActorBehaviourStates.InAirMoving || ActorBehaviourState == ActorBehaviourStates.SmashDown;
@@ -1218,7 +1207,7 @@ public class Actor : Entity
             {
                 if (KeepAddingJumpForce && !JumpReachClimax)
                 {
-                    RigidBody.AddForce(Vector3.up * CurrentJumpForce, ForceMode.VelocityChange);
+                    RigidBody.AddForce(Vector3.up * (CurrentJumpForce - RigidBody.velocity.y), ForceMode.VelocityChange);
                 }
 
                 if ((WorldGP - JumpStartWorldGP).y >= JumpHeight)
@@ -1272,7 +1261,7 @@ public class Actor : Entity
         {
             if (transform.position.y > SmashDownTargetPos.y + 1f)
             {
-                RigidBody.AddForce(Vector3.down * SmashForce, ForceMode.VelocityChange);
+                RigidBody.AddForce(Vector3.up * (-SmashForce - RigidBody.velocity.y), ForceMode.VelocityChange);
             }
 
             if (IsGrounded) ActorBehaviourState = ActorBehaviourStates.Idle;
@@ -1281,7 +1270,7 @@ public class Actor : Entity
 
     public void InAirSetMoveTargetPos(Vector3 targetPos, float moveSpeed)
     {
-        if (ActorBehaviourState == ActorBehaviourStates.Jump)
+        if (ActorBehaviourState == ActorBehaviourStates.Jump || ActorBehaviourState == ActorBehaviourStates.InAirMoving)
         {
             if (CannotAct) return;
             if (HasRigidbody)
@@ -1303,6 +1292,10 @@ public class Actor : Entity
                 Vector3 diff = InAirMoveTargetPos - transform.position;
                 RigidBody.velocity = Vector3.zero;
                 RigidBody.AddForce(diff.normalized * InAirMoveSpeed, ForceMode.VelocityChange);
+                if (RigidBody.velocity.magnitude > InAirMoveSpeed)
+                {
+                    RigidBody.velocity = RigidBody.velocity.normalized * InAirMoveSpeed;
+                }
             }
         }
     }

@@ -224,6 +224,29 @@ public abstract class Entity : PoolObject
         return minDistance;
     }
 
+    /// <summary>
+    /// Grid对Grid的最近距离
+    /// </summary>
+    /// <param name="targetGP"></param>
+    /// <param name="ignoreY"></param>
+    /// <returns></returns>
+    public float GetGridDistanceTo(GridPos3D targetGP, bool ignoreY)
+    {
+        float minDistance = float.MaxValue;
+        foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+        {
+            GridPos3D gridPos = WorldGP + offset;
+            if (ignoreY) targetGP.y = gridPos.y;
+            float dist = (gridPos - targetGP).magnitude;
+            if (minDistance > dist)
+            {
+                minDistance = dist;
+            }
+        }
+
+        return minDistance;
+    }
+
     #endregion
 
     #region BoxExtraData
