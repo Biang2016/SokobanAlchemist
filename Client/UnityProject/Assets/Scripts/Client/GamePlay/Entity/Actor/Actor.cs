@@ -56,6 +56,7 @@ public class Actor : Entity
 
     public Vector3 ArtPos => ActorSkinHelper.MainArtTransform.position;
 
+    internal override EntityArtHelper EntityArtHelper => ActorCommonHelpers.ActorArtHelper;
     internal override EntityModelHelper EntityModelHelper => ActorCommonHelpers.EntityModelHelper;
     internal override EntityIndicatorHelper EntityIndicatorHelper => ActorCommonHelpers.EntityIndicatorHelper;
     internal override EntityBuffHelper EntityBuffHelper => ActorCommonHelpers.EntityBuffHelper;
@@ -422,6 +423,9 @@ public class Actor : Entity
         ClearJumpParams();
         ThrowWhenDie();
 
+        EntityArtHelper?.OnHelperRecycled();
+        EntityModelHelper.OnHelperRecycled();
+        EntityIndicatorHelper.OnHelperRecycled();
         EntityBuffHelper.OnHelperRecycled();
         EntityFrozenHelper.OnHelperRecycled();
         EntityTriggerZoneHelper?.OnHelperRecycled();
@@ -436,7 +440,6 @@ public class Actor : Entity
             h.OnHelperRecycled();
         }
 
-        ActorArtHelper.OnHelperRecycled();
         ActorPushHelper.OnHelperRecycled();
         ActorFaceHelper.OnHelperRecycled();
         ActorSkinHelper.OnHelperRecycled();
@@ -461,6 +464,9 @@ public class Actor : Entity
     {
         gameObject.SetActive(true);
         base.OnUsed();
+        EntityArtHelper?.OnHelperUsed();
+        EntityModelHelper.OnHelperUsed();
+        EntityIndicatorHelper.OnHelperUsed();
         EntityBuffHelper.OnHelperUsed();
         EntityFrozenHelper.OnHelperUsed();
         EntityTriggerZoneHelper?.OnHelperUsed();
@@ -475,7 +481,6 @@ public class Actor : Entity
             h.OnHelperUsed();
         }
 
-        ActorArtHelper.OnHelperUsed();
         ActorPushHelper.OnHelperUsed();
         ActorFaceHelper.OnHelperUsed();
         ActorSkinHelper.OnHelperUsed();

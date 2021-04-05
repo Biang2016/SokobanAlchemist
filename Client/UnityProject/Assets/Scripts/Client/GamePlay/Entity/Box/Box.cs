@@ -37,6 +37,7 @@ public partial class Box : Entity
         }
     }
 
+    internal override EntityArtHelper EntityArtHelper => BoxArtHelper;
     internal override EntityModelHelper EntityModelHelper => BoxModelHelper;
     internal override EntityIndicatorHelper EntityIndicatorHelper => BoxIndicatorHelper;
     internal override EntityBuffHelper EntityBuffHelper => BoxBuffHelper;
@@ -45,6 +46,9 @@ public partial class Box : Entity
     internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => BoxGrindTriggerZoneHelper;
     internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => BoxFlamethrowerHelpers;
     internal override List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers => BoxLightningGeneratorHelpers;
+
+    [FoldoutGroup("组件")]
+    public BoxArtHelper BoxArtHelper;
 
     [FoldoutGroup("组件")]
     public EntityModelHelper BoxModelHelper;
@@ -127,6 +131,9 @@ public partial class Box : Entity
         LastInteractActorGUID = 0;
         ArtOnly = true;
 
+        EntityArtHelper?.OnHelperUsed();
+        EntityModelHelper.OnHelperUsed();
+        EntityIndicatorHelper.OnHelperUsed();
         EntityBuffHelper.OnHelperUsed();
         EntityFrozenHelper.OnHelperUsed();
         EntityTriggerZoneHelper?.OnHelperUsed();
@@ -142,7 +149,6 @@ public partial class Box : Entity
         }
 
         BoxColliderHelper.OnBoxUsed();
-        BoxIndicatorHelper.OnHelperUsed();
         DoorBoxHelper?.OnHelperUsed();
         BoxSkinHelper?.OnHelperUsed();
         BoxIconSpriteHelper.OnHelperUsed();
@@ -162,6 +168,9 @@ public partial class Box : Entity
         State = States.Static;
         isDestroying = false;
 
+        EntityArtHelper?.OnHelperRecycled();
+        EntityModelHelper.OnHelperRecycled();
+        EntityIndicatorHelper.OnHelperRecycled();
         EntityBuffHelper.OnHelperRecycled();
         EntityFrozenHelper.OnHelperRecycled();
         EntityTriggerZoneHelper?.OnHelperRecycled();
@@ -179,7 +188,6 @@ public partial class Box : Entity
         BoxEffectHelper?.OnBoxPoolRecycled();
         BoxEffectHelper = null;
         BoxColliderHelper.OnBoxPoolRecycled();
-        BoxIndicatorHelper.OnHelperRecycled();
         DoorBoxHelper?.OnHelperRecycled();
         BoxSkinHelper?.OnHelperRecycled();
         BoxIconSpriteHelper?.OnHelperRecycled();

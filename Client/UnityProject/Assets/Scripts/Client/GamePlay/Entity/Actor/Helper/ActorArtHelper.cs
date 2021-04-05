@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ActorArtHelper : ActorMonoHelper
+public class ActorArtHelper : EntityArtHelper
 {
     [SerializeField]
     private Animator ActorArtRootAnim;
@@ -39,7 +39,7 @@ public class ActorArtHelper : ActorMonoHelper
         if (ActorArtRootAnim != null)
         {
             ActorArtRootAnim.SetTrigger("Vault");
-            Actor.SetModelSmoothMoveLerpTime(0f);
+            ((Actor) Entity).SetModelSmoothMoveLerpTime(0f);
         }
     }
 
@@ -48,7 +48,7 @@ public class ActorArtHelper : ActorMonoHelper
     /// </summary>
     public void SwapBox()
     {
-        Actor.SwapBox();
+        ((Actor) Entity).SwapBox();
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public class ActorArtHelper : ActorMonoHelper
     /// </summary>
     public void VaultEnd()
     {
-        Actor.SetModelSmoothMoveLerpTime(Actor.DefaultSmoothMoveLerpTime);
+        ((Actor) Entity).SetModelSmoothMoveLerpTime(((Actor) Entity).DefaultSmoothMoveLerpTime);
     }
 
     public void Kick()
@@ -72,7 +72,7 @@ public class ActorArtHelper : ActorMonoHelper
     /// </summary>
     public void KickBox()
     {
-        Actor.KickBox();
+        ((Actor) Entity).KickBox();
     }
 
     public void Dash()
@@ -85,9 +85,9 @@ public class ActorArtHelper : ActorMonoHelper
 
     void FixedUpdate()
     {
-        if (Actor.IsNotNullAndAlive())
+        if (Entity.IsNotNullAndAlive())
         {
-            IsAnimFreeze = Actor.CannotAct;
+            IsAnimFreeze = ((Actor) Entity).CannotAct;
         }
     }
 
@@ -139,7 +139,7 @@ public class ActorArtHelper : ActorMonoHelper
     /// </summary>
     public void TriggerSkill(EntitySkillIndex skillIndex)
     {
-        if (Actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
+        if (((Actor) Entity).EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
         {
             eas.TriggerActiveSkill();
         }
