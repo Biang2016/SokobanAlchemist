@@ -572,6 +572,8 @@ MonoBehaviour:
   Accelerate: 250
   KickForce: 5
   ThrowRadius: 10
+  ActiveJumpForce: 10
+  FallForce: 0.1
   PushableBoxList: []
   KickableBoxList: []
   LiftableBoxList: []
@@ -602,9 +604,21 @@ MonoBehaviour:
       m_RotationOrder: 4
   RawFrozenBoxPassiveSkills: []
   ActorBehaviourState: 0
-  MovementState: 0
-  PushState: 0
   ThrowState: 0
+  JumpHeight: 0
+  JumpStartWorldGP:
+    x: 0
+    y: 0
+    z: 0
+  CurrentJumpForce: 0
+  KeepAddingJumpForce: 0
+  JumpReachClimax: 0
+  SmashDownTargetPos: {x: 0, y: 0, z: 0}
+  SmashForce: 0
+  SmashReachTarget: 0
+  InAirMoveTargetPos: {x: 0, y: 0, z: 0}
+  InAirMoveSpeed: 0
+  FrequentUpdate: 0
   references:
     version: 1
     00000000:
@@ -1136,6 +1150,7 @@ MonoBehaviour:
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"GuardRange":{"_value":10.0,"_name":"GuardRange","_id":"1e4fc14c-3815-4279-a6ee-25a727bd3bb0","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"ChasingRange":{"_value":12.0,"_name":"ChasingRange","_id":"dcaf01a2-8a92-4b8d-b523-e1a0efdcfefd","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IdleRadius":{"_value":8,"_name":"IdleRadius","_id":"26c88988-5b11-46e7-b0ba-b46818aa2ab6","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IdleInterval":{"_value":3.0,"_name":"IdleInterval","_id":"d77d9828-19d3-4615-972e-e8a7fbefc740","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"Phase":{"_value":1,"_name":"Phase","_id":"4604a815-720e-48aa-98a8-d4672fb230d9","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"Phase2LifePercent":{"_value":65,"_name":"Phase2LifePercent","_id":"f227978d-4ba7-4568-958f-bcc11b4e7b8e","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"Phase3LifePercent":{"_value":30,"_name":"Phase3LifePercent","_id":"0bc40e7d-7e9e-4867-a643-847427f9a8cf","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
@@ -1144,7 +1159,6 @@ MonoBehaviour:
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"MeteorSkillStartCastPlayerDistance":{"_value":5.0,"_name":"MeteorSkillStartCastPlayerDistance","_id":"d33710d3-ec78-40f2-ac65-d2093818d348","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"BlizzardSkillStartCastPlayerDistance":{"_value":4.0,"_name":"BlizzardSkillStartCastPlayerDistance","_id":"79329c6a-a971-4075-8d60-8ff8398b470e","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"PoisonousSwampSkillStartCastPlayerDistance":{"_value":6,"_name":"PoisonousSwampSkillStartCastPlayerDistance","_id":"10e16ac4-8b84-427f-96a3-812c4271f9ff","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IdleInterval":{"_value":3.0,"_name":"IdleInterval","_id":"d77d9828-19d3-4615-972e-e8a7fbefc740","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
   _objectReferences: []
   _serializedVariables:
@@ -1161,6 +1175,9 @@ MonoBehaviour:
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
   - _json: '{"_value":8,"_name":"IdleRadius","_id":"26c88988-5b11-46e7-b0ba-b46818aa2ab6","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
+      mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+    _references: []
+  - _json: '{"_value":3.0,"_name":"IdleInterval","_id":"d77d9828-19d3-4615-972e-e8a7fbefc740","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
   - _json: '{"_value":1,"_name":"Phase","_id":"4604a815-720e-48aa-98a8-d4672fb230d9","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
@@ -1185,9 +1202,6 @@ MonoBehaviour:
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
   - _json: '{"_value":6,"_name":"PoisonousSwampSkillStartCastPlayerDistance","_id":"10e16ac4-8b84-427f-96a3-812c4271f9ff","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
-      mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
-    _references: []
-  - _json: '{"_value":3.0,"_name":"IdleInterval","_id":"d77d9828-19d3-4615-972e-e8a7fbefc740","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
 --- !u!1001 &1523254040421617537

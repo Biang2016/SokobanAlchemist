@@ -287,39 +287,9 @@ public class ActorAIAgent
         switch (retCode)
         {
             case SetDestinationRetCode.AlreadyArrived:
-            {
-                return Status.Success;
-            }
             case SetDestinationRetCode.TooClose:
             {
-                // 逃脱寻路
-                List<GridPos3D> runDestList = new List<GridPos3D>();
-
-                for (int angle = 0; angle <= 360; angle += 10)
-                {
-                    float radianAngle = Mathf.Deg2Rad * angle;
-                    Vector3 dest = ((Vector3) worldGP) + new Vector3((keepDistanceMin + 1) * Mathf.Sin(radianAngle), 0, (keepDistanceMin + 1) * Mathf.Cos(radianAngle));
-                    GridPos3D destGP = dest.ToGridPos3D();
-                    runDestList.Add(destGP);
-                }
-
-                runDestList.Sort((gp1, gp2) =>
-                {
-                    float dist1 = (gp1 + ((Vector3) worldGP) - Actor.EntityBaseCenter).magnitude;
-                    float dist2 = (gp2 + ((Vector3) worldGP) - Actor.EntityBaseCenter).magnitude;
-                    return dist1.CompareTo(dist2);
-                });
-
-                foreach (GridPos3D gp in runDestList)
-                {
-                    SetDestinationRetCode rc = SetDestination(((Vector3) gp).ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), 0, 1, false, ActorPathFinding.DestinationType.EmptyGrid);
-                    if (rc == SetDestinationRetCode.Suc)
-                    {
-                        return Status.Running;
-                    }
-                }
-
-                return Status.Failure;
+                return Status.Success;
             }
             case SetDestinationRetCode.Suc:
             {
@@ -367,11 +337,18 @@ public class ActorAIAgent
         if (dist <= keepDistanceMin)
         {
             InterruptCurrentPathFinding();
-            return SetDestinationRetCode.TooClose;
+            return SetDestinationRetCode.AlreadyArrived;
         }
 
         Profiler.BeginSample("FindPath");
+        //string pathFindingDesc = $"nav to {destination_PF}";
+        //ActorPathFinding.InvokeTimes = 0;
         bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, currentDestination_PF, Actor.transform.position, CurrentPath, keepDistanceMin, keepDistanceMax, destinationType, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
+        //if (ActorPathFinding.InvokeTimes > 500)
+        //{
+            //Debug.Log($"{Actor.name} ActorPathFinding.InvokeTimes: {ActorPathFinding.InvokeTimes} {pathFindingDesc}");
+        //}
+
         Profiler.EndSample();
         if (IsPathFinding)
         {
@@ -501,7 +478,7 @@ public class ActorAIAgent
 
     private void RefreshExceptionJudgment(float interval)
     {
-        CheckIsStuckWithBoxes();
+        IsStuckWithBoxes = CheckIsStuckWithBoxes();
         if (IsStuckWithBoxes)
         {
             StuckWithBoxesDuration += interval;
@@ -514,6 +491,7 @@ public class ActorAIAgent
 
     public bool CheckIsStuckWithBoxes()
     {
+        if (Actor.IsFrozen) return false;
         foreach (GridPos3D offset in Actor.GetEntityOccupationGPs_Rotated())
         {
             GridPos3D gridPos = Actor.WorldGP + offset;

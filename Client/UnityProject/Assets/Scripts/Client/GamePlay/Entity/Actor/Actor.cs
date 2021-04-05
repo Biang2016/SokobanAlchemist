@@ -218,27 +218,26 @@ public class Actor : Entity
 
     public bool CheckIsGrounded(float checkDistance, out GridPos3D nearestGroundGP)
     {
+        bool isGrounded = false;
         nearestGroundGP = GridPos3D.Zero;
+        float nearestDistance = float.MaxValue;
         foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
         {
-            GridPos3D curGrid = (transform.position + offset).ToGridPos3D();
-            int startGridY = curGrid.y;
-            GridPos3D lowerGrid = (transform.position + offset + Vector3.down * checkDistance).ToGridPos3D();
-            int endGridY = lowerGrid.y;
-            if (startGridY == endGridY) return false;
-            for (int y = startGridY - 1; y >= endGridY; y--)
+            Vector3 startPos = transform.position + offset;
+            bool gridGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(startPos, checkDistance, out GridPos3D groundGP);
+            isGrounded |= gridGrounded;
+            if (gridGrounded)
             {
-                GridPos3D grid = new GridPos3D(curGrid.x, y, curGrid.z);
-                Box lowerBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(grid, out WorldModule _, out GridPos3D _, false);
-                if (lowerBox != null && !lowerBox.Passable)
+                float dist = (nearestGroundGP - startPos).magnitude;
+                if (nearestDistance > dist)
                 {
-                    nearestGroundGP = grid;
-                    return true;
+                    nearestDistance = dist;
+                    nearestGroundGP = groundGP;
                 }
             }
         }
 
-        return false;
+        return isGrounded;
     }
 
     #endregion

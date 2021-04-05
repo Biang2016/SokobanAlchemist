@@ -246,7 +246,14 @@ public static class ActorAIAtoms
             GridPos3D targetGP = target.TargetGP;
             if (Actor.GetGridDistanceTo(targetGP, false) > GuardingRange.value) return false;
             Profiler.BeginSample("FindPath");
+            ActorPathFinding.InvokeTimes = 0;
+            string pathFindingDesc = $"nav to {targetGP}";
             bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, ((Vector3) targetGP).ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), Actor.transform.position, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
+            if (ActorPathFinding.InvokeTimes > 500)
+            {
+                Debug.Log($"{Actor.name} ActorPathFinding.InvokeTimes_AIAtom: {ActorPathFinding.InvokeTimes} {pathFindingDesc}");
+            }
+
             Profiler.EndSample();
             return suc;
         }
@@ -310,6 +317,9 @@ public static class ActorAIAtoms
         [Name("闲逛半径")]
         public BBParameter<int> IdleRadius;
 
+        [Name("忽略阻挡")]
+        public BBParameter<bool> IgnoreBarrier;
+
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
@@ -321,34 +331,48 @@ public static class ActorAIAtoms
             }
 
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.WorldGP_PF, Actor.transform.position, IdleRadius.value, out GridPos3D destination_PF, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
-            if (suc)
+            if (!IgnoreBarrier.value)
             {
-                destination_PF.ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth);
-                Actor.ActorAIAgent.AIAgentTargetDict[ActorAIAgent.TargetEntityType.Navigate].TargetGP = destination_PF.ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth).ToGridPos3D();
-                ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination_PF, 0f, 0.5f, false, ActorPathFinding.DestinationType.EmptyGrid);
-                switch (retCode)
+                bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.WorldGP_PF, Actor.transform.position, IdleRadius.value, out GridPos3D destination_PF, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
+                if (suc)
                 {
-                    case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
-                    case ActorAIAgent.SetDestinationRetCode.TooClose:
+                    destination_PF.ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth);
+                    Actor.ActorAIAgent.AIAgentTargetDict[ActorAIAgent.TargetEntityType.Navigate].TargetGP = destination_PF.ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth).ToGridPos3D();
+                    ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination_PF, 0f, 0.5f, false, ActorPathFinding.DestinationType.EmptyGrid);
+                    switch (retCode)
                     {
-                        return Status.Success;
+                        case ActorAIAgent.SetDestinationRetCode.AlreadyArrived:
+                        {
+                            return Status.Success;
+                        }
+                        case ActorAIAgent.SetDestinationRetCode.Suc:
+                        {
+                            return Status.Success;
+                        }
+                        case ActorAIAgent.SetDestinationRetCode.Failed:
+                        {
+                            return Status.Failure;
+                        }
                     }
-                    case ActorAIAgent.SetDestinationRetCode.Suc:
-                    {
-                        return Status.Success;
-                    }
-                    case ActorAIAgent.SetDestinationRetCode.Failed:
-                    {
-                        return Status.Failure;
-                    }
-                }
 
-                return Status.Success;
+                    return Status.Success;
+                }
+                else
+                {
+                    return Status.Failure;
+                }
             }
             else
             {
-                return Status.Failure;
+                Vector2 randomRange = Random.insideUnitCircle * IdleRadius.value;
+                Vector3 dest = Actor.EntityBaseCenter + new Vector3(randomRange.x, 10f, randomRange.y);
+                if (WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(dest, 20f, out GridPos3D nearestGroundGP))
+                {
+                    Actor.ActorAIAgent.AIAgentTargetDict[ActorAIAgent.TargetEntityType.Navigate].TargetGP = nearestGroundGP;
+                    return Status.Success;
+                }
+
+                return Status.Running;
             }
         }
     }

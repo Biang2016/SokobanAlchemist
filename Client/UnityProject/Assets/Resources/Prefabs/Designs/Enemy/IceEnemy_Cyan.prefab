@@ -446,6 +446,8 @@ MonoBehaviour:
   Accelerate: 250
   KickForce: 5
   ThrowRadius: 10
+  ActiveJumpForce: 10
+  FallForce: 0.1
   PushableBoxList: []
   KickableBoxList: []
   LiftableBoxList: []
@@ -476,9 +478,21 @@ MonoBehaviour:
       m_RotationOrder: 4
   RawFrozenBoxPassiveSkills: []
   ActorBehaviourState: 0
-  MovementState: 0
-  PushState: 0
   ThrowState: 0
+  JumpHeight: 0
+  JumpStartWorldGP:
+    x: 0
+    y: 0
+    z: 0
+  CurrentJumpForce: 0
+  KeepAddingJumpForce: 0
+  JumpReachClimax: 0
+  SmashDownTargetPos: {x: 0, y: 0, z: 0}
+  SmashForce: 0
+  SmashReachTarget: 0
+  InAirMoveTargetPos: {x: 0, y: 0, z: 0}
+  InAirMoveSpeed: 0
+  FrequentUpdate: 0
   references:
     version: 1
     00000000:

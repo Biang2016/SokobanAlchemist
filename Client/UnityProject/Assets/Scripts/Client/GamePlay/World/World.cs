@@ -1272,6 +1272,28 @@ public class World : PoolObject
 
     #endregion
 
+    public bool CheckIsGroundByPos(Vector3 startPos, float checkDistance, out GridPos3D nearestGroundGP)
+    {
+        nearestGroundGP = GridPos3D.Zero;
+        GridPos3D curGrid = (startPos).ToGridPos3D();
+        int startGridY = curGrid.y;
+        GridPos3D lowerGrid = (startPos + Vector3.down * checkDistance).ToGridPos3D();
+        int endGridY = lowerGrid.y;
+        if (startGridY == endGridY) return false;
+        for (int y = startGridY - 1; y >= endGridY; y--)
+        {
+            GridPos3D grid = new GridPos3D(curGrid.x, y, curGrid.z);
+            Box lowerBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(grid, out WorldModule _, out GridPos3D _, false);
+            if (lowerBox != null && !lowerBox.Passable)
+            {
+                nearestGroundGP = grid;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public virtual void ShutDown()
     {
         StopAllCoroutines();

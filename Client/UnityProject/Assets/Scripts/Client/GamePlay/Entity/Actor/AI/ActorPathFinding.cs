@@ -52,9 +52,9 @@ public static class ActorPathFinding
         public int PoolIndex;
         public Node ParentNode;
         public GridPos3D GridPos3D_PF;
-        public int F => G + H; // G+H
-        public int G; // 从起点到该点的路径长度
-        public int H; // 从该点到终点的估计路程
+        public float F => G + H; // G+H
+        public float G; // 从起点到该点的路径长度
+        public float H; // 从该点到终点的估计路程
 
         public void OnUsed()
         {
@@ -86,6 +86,8 @@ public static class ActorPathFinding
 
     private static ClassObjectPool<Node> NodeFactory = new ClassObjectPool<Node>(100);
 
+    internal static int InvokeTimes = 0;
+
     #region AStar PathFinding
 
     private static List<Node> OpenList = new List<Node>();
@@ -102,7 +104,7 @@ public static class ActorPathFinding
             oriNode.GridPos3D_PF = ori_PF;
             Node destNode = NodeFactory.Alloc();
             destNode.GridPos3D_PF = dest_PF;
-            return FindPath(oriNode, destNode, actorPos, resPath, keepDistanceMin, keepDistanceMax, destinationType, actorWidth, actorHeight, exceptActorGUID);
+            return FindPath(oriNode, destNode, actorPos, resPath, keepDistanceMin, keepDistanceMax, (ori_PF - dest_PF).magnitude * 1.8f, destinationType, actorWidth, actorHeight, exceptActorGUID);
         }
 
         return false;
@@ -125,7 +127,7 @@ public static class ActorPathFinding
         return false;
     }
 
-    private static bool FindPath(Node ori, Node dest, Vector3 actorPos, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
+    private static bool FindPath(Node ori, Node dest, Vector3 actorPos, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, float pathFindingRadius, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         if (ori.GridPos3D_PF.y != dest.GridPos3D_PF.y) return false;
         OpenList.Clear();
@@ -135,7 +137,7 @@ public static class ActorPathFinding
         ori.H = AStarHeuristicsDistance(ori, dest);
         while (OpenList.Count > 0)
         {
-            int minF = int.MaxValue;
+            float minF = float.MaxValue;
             Node minFNode = OpenList[0];
             foreach (Node node in OpenList)
             {
@@ -174,7 +176,7 @@ public static class ActorPathFinding
                     }
                 }
 
-                int newG = AStarHeuristicsDistance(node, minFNode) + minFNode.G;
+                float newG = AStarHeuristicsDistance(node, minFNode) + minFNode.G;
                 if (inOpenList)
                 {
                     // 最短线路优化,Reparent
@@ -271,6 +273,8 @@ public static class ActorPathFinding
     {
         cached_adjacentNodesList.Clear();
         cached_adjacentNodesList_clone.Clear();
+
+        InvokeTimes++;
         Profiler.BeginSample("AISA_GetAdjacentNodesForAStar");
         bool available = CheckSpaceAvailableForActorOccupation(node.GridPos3D_PF, actorPos, actorWidth, actorHeight, exceptActorGUID);
         Profiler.EndSample();
@@ -289,6 +293,20 @@ public static class ActorPathFinding
                 cached_adjacentNodesList_clone.Add(leftNode);
             }
 
+            Vector3 v_dest = destGP_PF - actorPos;
+            Vector3 v_search = gp_PF - actorPos;
+            float theta = Vector3.Angle(v_dest, v_search);
+            float searchDistanceRatio = 1f;
+            if (theta >= 0 && theta < 90f)
+            {
+                searchDistanceRatio = Mathf.Lerp(1.5f, 1, theta / 90f);
+            }
+            else if (theta >= 90f && theta <= 180f)
+            {
+                searchDistanceRatio = Mathf.Lerp(1f, 0.5f, (theta - 90f) / 90f);
+            }
+
+            if ((gp_PF - actorPos).magnitude > searchDistanceRatio * (destGP_PF - actorPos).magnitude) return; // 寻路到太远(超出目标距离若干倍数)则停止
             foreach (Node closeNode in ref_CloseList) // 性能优化，避免反复搜索Close节点
             {
                 if (gp_PF == closeNode.GridPos3D_PF) return;
@@ -304,6 +322,7 @@ public static class ActorPathFinding
                 }
             }
 
+            InvokeTimes++;
             Profiler.BeginSample("AISA_tryAddNode");
             bool available = CheckSpaceAvailableForActorOccupation(node.GridPos3D_PF, actorPos, actorWidth, actorHeight, exceptActorGUID);
             Profiler.EndSample();
@@ -332,15 +351,15 @@ public static class ActorPathFinding
         Actor,
     }
 
-    private static int AStarHeuristicsDistance(Node start, Node end)
+    private static float AStarHeuristicsDistance(Node start, Node end)
     {
         return AStarHeuristicsDistance(start.GridPos3D_PF, end.GridPos3D_PF);
     }
 
-    public static int AStarHeuristicsDistance(GridPos3D start, GridPos3D end)
+    public static float AStarHeuristicsDistance(GridPos3D start, GridPos3D end)
     {
         GridPos3D diff = start - end;
-        return Mathf.Abs(diff.x) + Mathf.Abs(diff.z);
+        return diff.magnitude;
     }
 
     #endregion
@@ -350,13 +369,12 @@ public static class ActorPathFinding
     private static List<GridPos3D> cached_UnionFindNodeList = new List<GridPos3D>(256);
 
     private static Queue<GridPos3D> cached_QueueUnionFind = new Queue<GridPos3D>(256);
-    private static bool[,] cached_OccupationUnionFind = new bool[30, 30];
+    private static bool[,] cached_OccupationUnionFind = new bool[256, 256];
 
-    private static List<GridPos3D> UnionFindNodes(GridPos3D center_PF, Vector3 actorPos, float rangeRadius, int actorWidth, int actorHeight, uint exceptActorGUID)
+    public static List<GridPos3D> UnionFindNodes(GridPos3D center_PF, Vector3 actorPos, float rangeRadius, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         cached_UnionFindNodeList.Clear();
         int radius = Mathf.RoundToInt(rangeRadius);
-        int matrixSize = radius * 2 + 1;
         for (int i = 0; i < cached_OccupationUnionFind.GetLength(0); i++)
         {
             for (int j = 0; j < cached_OccupationUnionFind.GetLength(1); j++)
@@ -387,6 +405,7 @@ public static class ActorPathFinding
                 GridPos3D offset = pathFindingNodeGP - center_PF;
                 if (cached_OccupationUnionFind[offset.x + radius, offset.z + radius]) return;
 
+                InvokeTimes++;
                 Profiler.BeginSample("AISA_UnionFindNodes");
                 bool available = CheckSpaceAvailableForActorOccupation(pathFindingNodeGP, actorPos, actorWidth, actorHeight, exceptActorGUID);
                 Profiler.EndSample();
@@ -415,6 +434,7 @@ public static class ActorPathFinding
     /// <returns></returns>
     public static bool CheckSpaceAvailableForActorOccupation(GridPos3D center_PF, Vector3 actorPos, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
+        InvokeTimes++;
         Profiler.BeginSample("AISA");
         for (int occupied_x = 0; occupied_x < actorWidth; occupied_x++)
         for (int occupied_z = 0; occupied_z < actorWidth; occupied_z++)
