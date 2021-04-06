@@ -246,13 +246,13 @@ public static class ActorAIAtoms
             GridPos3D targetGP = target.TargetGP;
             if (Actor.GetGridDistanceTo(targetGP, false) > GuardingRange.value) return false;
             Profiler.BeginSample("FindPath");
-            ActorPathFinding.InvokeTimes = 0;
-            string pathFindingDesc = $"nav to {targetGP}";
+            //ActorPathFinding.InvokeTimes = 0;
+            //string pathFindingDesc = $"nav to {targetGP}";
             bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, ((Vector3) targetGP).ConvertWorldPositionToPathFindingNodeGP(Actor.ActorWidth), Actor.transform.position, null, KeepDistanceMin.value, KeepDistanceMax.value, ActorPathFinding.DestinationType.Actor, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
-            if (ActorPathFinding.InvokeTimes > 500)
-            {
-                Debug.Log($"{Actor.name} ActorPathFinding.InvokeTimes_AIAtom: {ActorPathFinding.InvokeTimes} {pathFindingDesc}");
-            }
+            //if (ActorPathFinding.InvokeTimes > 500)
+            //{
+            //    Debug.Log($"{Actor.name} ActorPathFinding.InvokeTimes_AIAtom: {ActorPathFinding.InvokeTimes} {pathFindingDesc}");
+            //}
 
             Profiler.EndSample();
             return suc;

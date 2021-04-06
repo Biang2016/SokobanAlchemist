@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
-using UnityEngine;
-using UnityEngine.Serialization;
 
 [Serializable]
 public class BornPointData : LevelComponentData
@@ -34,7 +30,11 @@ public class BornPointData : LevelComponentData
 
     [BoxGroup("监听事件")]
     [LabelText("收到事件后刷怪(空则开场刷怪)")]
-    public string SpawnLevelEventAlias;
+    public string SpawnLevelTriggerEventAlias = "";
+
+    [BoxGroup("监听事件")]
+    [LabelText("事件刷怪次数上限")]
+    public int TriggerSpawnMultipleTimes = 1;
 
     [BoxGroup("角色类型")]
     [LabelText("是主角")]
@@ -95,7 +95,8 @@ public class BornPointData : LevelComponentData
     {
         base.ChildClone(newData);
         BornPointData data = ((BornPointData) newData);
-        data.SpawnLevelEventAlias = SpawnLevelEventAlias;
+        data.SpawnLevelTriggerEventAlias = SpawnLevelTriggerEventAlias;
+        data.TriggerSpawnMultipleTimes = TriggerSpawnMultipleTimes;
         data.IsPlayer = IsPlayer;
         data.EnemyType = EnemyType.Clone();
         data.ActorOrientation = ActorOrientation;

@@ -11,11 +11,13 @@ public class WorldBornPointGroupData_Runtime
     // Current loaded BPs:
     public Dictionary<string, BornPointData> PlayerBornPointDataAliasDict = new Dictionary<string, BornPointData>(); // 带花名的玩家出生点词典
     public Dictionary<string, BornPointData> EnemyBornPointDataAliasDict = new Dictionary<string, BornPointData>(); //  带花名的敌兵出生点词典
+    public Dictionary<string, List<BornPointData>> EventTriggerBornPointDataAliasDict = new Dictionary<string, List<BornPointData>>(); // 监听事件触发的刷怪
 
     public void InitTempData()
     {
         PlayerBornPointDataAliasDict.Clear();
         EnemyBornPointDataAliasDict.Clear();
+        EventTriggerBornPointDataAliasDict.Clear();
     }
 
     public List<BornPointData> TryLoadModuleBPData(GridPos3D moduleGP)
@@ -134,6 +136,7 @@ public class WorldBornPointGroupData_Runtime
                 else
                 {
                     EnemyBornPointDataAliasDict.Remove(bp.BornPointAlias);
+                    EventTriggerBornPointDataAliasDict[bp.SpawnLevelTriggerEventAlias].Remove(bp);
                 }
             }
         }
@@ -164,6 +167,48 @@ public class WorldBornPointGroupData_Runtime
             else
             {
                 Debug.Log($"敌人出生点花名重复: {bp.BornPointAlias}");
+            }
+        }
+
+        if (!string.IsNullOrEmpty(bp.SpawnLevelTriggerEventAlias))
+        {
+            if (!EventTriggerBornPointDataAliasDict.ContainsKey(bp.SpawnLevelTriggerEventAlias))
+            {
+                EventTriggerBornPointDataAliasDict.Add(bp.SpawnLevelTriggerEventAlias, new List<BornPointData>());
+            }
+            else
+            {
+                Debug.Log($"敌人出生点监听事件花名重复: {bp.BornPointAlias}");
+            }
+
+            EventTriggerBornPointDataAliasDict[bp.SpawnLevelTriggerEventAlias].Add(bp);
+        }
+    }
+
+    public void SpawnFromLevelEventTriggerBP(string eventAlias)
+    {
+        if (EventTriggerBornPointDataAliasDict.TryGetValue(eventAlias, out List<BornPointData> bps))
+        {
+            List<BornPointData> removeList = new List<BornPointData>();
+            foreach (BornPointData bp in bps)
+            {
+                if (bp.TriggerSpawnMultipleTimes > 0)
+                {
+                    bp.TriggerSpawnMultipleTimes--;
+                    if (bp.TriggerSpawnMultipleTimes == 0) removeList.Add(bp);
+                }
+
+                BornPointData bp_clone = (BornPointData) bp.Clone();
+                bp_clone.SpawnLevelTriggerEventAlias = "";
+                bp_clone.TriggerSpawnMultipleTimes = 0;
+                ActorBP_ModuleDict[WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(bp.WorldGP)].Add(bp_clone);
+                BornPointDataGUIDDict.Add(bp_clone.GUID, bp);
+                BattleManager.Instance.CreateActorByBornPointData(bp_clone, true);
+            }
+
+            foreach (BornPointData removeBP in removeList)
+            {
+                bps.Remove(removeBP);
             }
         }
     }

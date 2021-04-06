@@ -70,7 +70,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
                                 newBornPointData.WorldGP = gridWorldGP;
                                 newBornPointData.EnemyType = ChangeBoxTypeToEntityName.Clone();
                                 newBornPointData.RawEntityExtraSerializeData = entityExtraSerializeData;
-                                BattleManager.Instance.CreateActorByBornPointData(newBornPointData);
+                                BattleManager.Instance.CreateActorByBornPointData(newBornPointData, false);
                             }
                         }
                     }
@@ -97,7 +97,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
                             newBornPointData.WorldGP = worldGP;
                             newBornPointData.EnemyType = ChangeBoxTypeToEntityName.Clone();
                             newBornPointData.RawEntityExtraSerializeData = entityExtraSerializeData;
-                            BattleManager.Instance.CreateActorByBornPointData(newBornPointData);
+                            BattleManager.Instance.CreateActorByBornPointData(newBornPointData, false);
                         }
                     }
                 }

@@ -17,7 +17,7 @@ public abstract class MapGenerator
 
     protected OpenWorld m_OpenWorld;
     protected ushort[,,] WorldMap => m_OpenWorld.WorldMap;
-    protected EntityExtraSerializeData[,,] WorldMap_EntityExtraSerializeData => m_OpenWorld.WorldMap_EntityExtraSerializeData; // 仅针对静态布局生效
+    protected EntityExtraSerializeData[,,] WorldMap_EntityExtraSerializeData => m_OpenWorld.WorldMap_BoxExtraSerializeData; // 仅针对静态布局生效
     protected GridPosR.Orientation[,,] WorldMapOrientation => m_OpenWorld.WorldMapOrientation;
     protected ushort[,,] WorldMap_Occupied => m_OpenWorld.WorldMap_Occupied;
     protected TerrainType[,] WorldMap_TerrainType => m_OpenWorld.WorldMap_TerrainType;
@@ -333,7 +333,7 @@ public abstract class MapGenerator
 
                                 GridPos3D entity_world = worldGP + rot_local;
                                 GridPos3D entity_local = new GridPos3D(entity_world.x % WorldModule.MODULE_SIZE, 0, entity_world.z % WorldModule.MODULE_SIZE);
-                                BornPointData bp = new BornPointData {IsPlayer = true, EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy}, BornPointAlias = OpenWorld.PLAYER_DEFAULT_BP, LocalGP = entity_local, SpawnLevelEventAlias = "", WorldGP = entity_world};
+                                BornPointData bp = new BornPointData {IsPlayer = true, EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy}, BornPointAlias = OpenWorld.PLAYER_DEFAULT_BP, LocalGP = entity_local, SpawnLevelTriggerEventAlias = "", WorldGP = entity_world};
                                 bp.InitGUID();
                                 m_OpenWorld.WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP_OpenWorld(bp);
                                 m_OpenWorld.InitialPlayerBP = entity_world;

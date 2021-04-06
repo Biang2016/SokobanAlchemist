@@ -22,17 +22,20 @@ public class EntityActiveSkill_SummonDropBox : EntityActiveSkill_AreaCast
     {
         foreach (GridPos3D gp in RealSkillEffectGPs)
         {
-            BoxNameWithProbability randomResult = CommonUtils.GetRandomWithProbabilityFromList(DropBoxList);
-            if (randomResult != null)
+            if (gp != -GridPos3D.One)
             {
-                ushort boxTypeIndex = ConfigManager.GetTypeIndex( TypeDefineType.Box,randomResult.BoxTypeName.TypeName);
-                if (boxTypeIndex != 0)
+                BoxNameWithProbability randomResult = CommonUtils.GetRandomWithProbabilityFromList(DropBoxList);
+                if (randomResult != null)
                 {
-                    if (WorldManager.Instance.CurrentWorld.DropBoxOnTopLayer(boxTypeIndex, randomResult.BoxOrientation, GridPos3D.Down, gp + GridPos3D.Up * DropFromHeightFromFloor, DropFromHeightFromFloor + 3, out Box dropBox))
+                    ushort boxTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, randomResult.BoxTypeName.TypeName);
+                    if (boxTypeIndex != 0)
                     {
-                        if (Entity is Actor actor)
+                        if (WorldManager.Instance.CurrentWorld.DropBoxOnTopLayer(boxTypeIndex, randomResult.BoxOrientation, GridPos3D.Down, gp + GridPos3D.Up * DropFromHeightFromFloor, DropFromHeightFromFloor + 3, out Box dropBox))
                         {
-                            dropBox.LastInteractActorGUID = actor.GUID;
+                            if (Entity is Actor actor)
+                            {
+                                dropBox.LastInteractActorGUID = actor.GUID;
+                            }
                         }
                     }
                 }

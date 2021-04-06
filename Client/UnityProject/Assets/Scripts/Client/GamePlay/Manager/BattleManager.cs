@@ -115,7 +115,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     {
         LoadActors();
         GameStateManager.Instance.SetState(GameState.Fighting);
-        ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnTriggerLevelEventCreateActor);
+        ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnCreateEnemyByLevelTriggerEvent);
         IsStart = true;
         if (WorldManager.Instance.CurrentWorld.WorldData.UseSpecialPlayerEnterESPS)
         {
@@ -128,13 +128,10 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         CameraManager.Instance.FieldCamera.InitFocus();
     }
 
-    private void OnTriggerLevelEventCreateActor(string eventAlias)
+    private void OnCreateEnemyByLevelTriggerEvent(string eventAlias)
     {
         WorldBornPointGroupData_Runtime data = WorldManager.Instance.CurrentWorld.WorldData.WorldBornPointGroupData_Runtime;
-        if (data.EnemyBornPointDataAliasDict.TryGetValue(eventAlias, out BornPointData bp))
-        {
-            CreateActorByBornPointData(bp);
-        }
+        data.SpawnFromLevelEventTriggerBP(eventAlias);
     }
 
     public IEnumerator CreateActorByBornPointDataList(List<BornPointData> bps, bool ignorePlayer = true)
@@ -142,13 +139,19 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         foreach (BornPointData bp in bps.ToArray())
         {
             if (ignorePlayer && bp.ActorCategory == ActorCategory.Player) continue;
-            CreateActorByBornPointData(bp);
+            CreateActorByBornPointData(bp, false);
             yield return null;
         }
     }
 
-    public void CreateActorByBornPointData(BornPointData bpd)
+    public void CreateActorByBornPointData(BornPointData bpd, bool onLevelEvent)
     {
+        if (string.IsNullOrEmpty(bpd.SpawnLevelTriggerEventAlias) && onLevelEvent) return;
+        if (!string.IsNullOrEmpty(bpd.SpawnLevelTriggerEventAlias) && !onLevelEvent) return;
+        if (!string.IsNullOrEmpty(bpd.SpawnLevelTriggerEventAlias))
+        {
+            int a = 0;
+        }
         if (bpd.RawEntityExtraSerializeData != null)
         {
             foreach (EntityPassiveSkill eps in bpd.RawEntityExtraSerializeData.EntityPassiveSkills)

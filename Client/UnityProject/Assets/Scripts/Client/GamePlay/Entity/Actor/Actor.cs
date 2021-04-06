@@ -1214,7 +1214,7 @@ public class Actor : Entity
                     RigidBody.AddForce(Vector3.up * (CurrentJumpForce - RigidBody.velocity.y), ForceMode.VelocityChange);
                 }
 
-                if ((WorldGP - JumpStartWorldGP).y >= JumpHeight)
+                if ((transform.position - JumpStartWorldGP).y >= JumpHeight)
                 {
                     JumpReachClimax = true;
                 }
@@ -1268,7 +1268,14 @@ public class Actor : Entity
                 RigidBody.AddForce(Vector3.up * (-SmashForce - RigidBody.velocity.y), ForceMode.VelocityChange);
             }
 
-            if (IsGrounded) ActorBehaviourState = ActorBehaviourStates.Idle;
+            if (IsGrounded)
+            {
+                ActorBehaviourState = ActorBehaviourStates.Idle;
+            }
+            else if (RigidBody.velocity.y <= 0.1f)
+            {
+                ActorBehaviourState = ActorBehaviourStates.Idle;
+            }
         }
     }
 

@@ -347,6 +347,7 @@ public class PlayerActor : Actor
             if (BS_Skill_2.Down)
             {
                 TriggerSkill(EntitySkillIndex.Skill_0);
+                ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, "OnBossSpiderLegAppear");
             }
 
             if (BS_Skill_3.Down)

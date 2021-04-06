@@ -105,6 +105,9 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     [LabelText("施法于地表")]
     public bool CastOnTopLayer;
 
+    [LabelText("施法同时作用于下方n层")]
+    public int CastOnNLayersBeneath;
+
     [LabelText("准度标准差/格")]
     public float AccurateStandardDeviation;
 
@@ -118,6 +121,9 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
 
     [LabelText("技能投影最低Z偏移")]
     public int ProjectOffsetZMin;
+
+    [LabelText("技能投影分布高度差范围")]
+    public int ProjectHeightDeltaRange = 999;
 
     [LabelText("技能范围标识填充色")]
     public Color GridWarningColorFill;
@@ -192,6 +198,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         {
             case TargetInclination.TargetCenteredNormalDistribution:
             {
+                GaussianRandom gRandom = new GaussianRandom();
                 int xRadius = Mathf.Min(Mathf.Abs(xMin_SkillCastPos - targetGP.x), Mathf.Abs(xMax_SkillCastPos - targetGP.x));
                 int zRadius = Mathf.Min(Mathf.Abs(zMin_SkillCastPos - targetGP.z), Mathf.Abs(zMax_SkillCastPos - targetGP.z));
                 skillCastPosition = new GridPos3D(CommonUtils.RandomGaussianInt(targetGP.x - xRadius, targetGP.x + xRadius), targetGP.y, CommonUtils.RandomGaussianInt(targetGP.z - zRadius, targetGP.z + zRadius));
@@ -229,36 +236,50 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
             GridPos3D localOffset = new GridPos3D(matrixOffset.x - CastAreaMatrixExtend, matrixOffset.y, matrixOffset.z - CastAreaMatrixExtend);
             GridPos rotatedGrid = GridPosR.TransformOccupiedPosition(new GridPosR(skillCastPosition.x, skillCastPosition.z, Entity.EntityOrientation), new GridPos(localOffset.x, localOffset.z));
             GridPos3D rotatedGrid3D = new GridPos3D(rotatedGrid.x, skillCastPosition.y, rotatedGrid.z);
-            AddGP(rotatedGrid3D);
+            SkillAreaGPs.Add(rotatedGrid3D);
         }
 
-        void AddGP(GridPos3D gp)
-        {
-            SkillAreaGPs.Add(gp);
-            if (CheckAreaGPValid(gp, out GridPos3D realGP))
-            {
-                RealSkillEffectGPs.Add(realGP);
-            }
-        }
+        RefreshRealSkillEffectGPs();
     }
 
-    private bool CheckAreaGPValid(GridPos3D gp, out GridPos3D worldGP)
+    private void RefreshRealSkillEffectGPs()
     {
-        if (!CastOnTopLayer) // 如果没有施法于地表的要求，则原GP即可满足要求
+        int highestY = int.MinValue;
+        RealSkillEffectGPs.Clear();
+        foreach (GridPos3D skillAreaGP in SkillAreaGPs)
         {
-            worldGP = gp;
-            return true;
+            if (!CastOnTopLayer) // 如果没有施法于地表的要求，则原GP即可满足要求
+            {
+                RealSkillEffectGPs.Add(skillAreaGP);
+            }
+            else
+            {
+                if (WorldManager.Instance.CurrentWorld.BoxProject(GridPos3D.Down,
+                    skillAreaGP + GridPos3D.Up * ProjectOffsetZMax,
+                    ProjectOffsetZMax - ProjectOffsetZMin + 1,
+                    false, out GridPos3D worldGP, out Box _))
+                {
+                    if (highestY < worldGP.y) highestY = worldGP.y;
+                    RealSkillEffectGPs.Add(worldGP);
+                }
+                else
+                {
+                    RealSkillEffectGPs.Add(-GridPos3D.One);
+                }
+            }
         }
 
-        if (WorldManager.Instance.CurrentWorld.BoxProject(GridPos3D.Down,
-            gp + GridPos3D.Up * ProjectOffsetZMax,
-            ProjectOffsetZMax - ProjectOffsetZMin + 1,
-            false, out worldGP, out Box _))
+        if (CastOnTopLayer)
         {
-            return true;
+            for (int i = 0; i < RealSkillEffectGPs.Count; i++)
+            {
+                GridPos3D realSkillAreaGP = RealSkillEffectGPs[i];
+                if (realSkillAreaGP.y <= highestY - ProjectHeightDeltaRange) // 在高差限定范围之外的GP不合法
+                {
+                    RealSkillEffectGPs[i] = -GridPos3D.One;
+                }
+            }
         }
-
-        return false;
     }
 
     protected override IEnumerator WingUp(float wingUpTime)
@@ -284,7 +305,10 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         {
             foreach (GridPos3D gp in RealSkillEffectGPs)
             {
-                FX fx = FXManager.Instance.PlayFX(CastFX, gp);
+                if (gp != -GridPos3D.One)
+                {
+                    FX fx = FXManager.Instance.PlayFX(CastFX, gp);
+                }
             }
         }
 
@@ -334,15 +358,19 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
 
     private void UpdateSkillEffectRealPositions()
     {
-        RealSkillEffectGPs.Clear();
-        foreach (GridPos3D gp in SkillAreaGPs)
+        RefreshRealSkillEffectGPs();
+        for (int i = 0; i < SkillAreaGPs.Count; i++)
         {
-            bool valid = CheckAreaGPValid(gp, out GridPos3D realGP);
-            if (valid) RealSkillEffectGPs.Add(realGP);
-            if (GridWarningDict.TryGetValue(gp, out GridWarning gridWarning))
+            GridPos3D skillAreaGP = SkillAreaGPs[i];
+            GridPos3D realSkillAreaGP = RealSkillEffectGPs[i];
+            bool valid = realSkillAreaGP != -GridPos3D.One;
+            if (GridWarningDict.TryGetValue(skillAreaGP, out GridWarning gridWarning))
             {
                 gridWarning.SetShown(valid);
-                gridWarning.transform.position = realGP;
+                if (valid)
+                {
+                    gridWarning.transform.position = realSkillAreaGP;
+                }
             }
         }
     }
@@ -363,19 +391,26 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         HashSet<Entity> entitySet = new HashSet<Entity>();
         foreach (GridPos3D gp in RealSkillEffectGPs)
         {
-            Collider[] colliders_PlayerLayer = Physics.OverlapSphere(gp, 0.3f, LayerManager.Instance.GetTargetEntityLayerMask(Entity.Camp, TargetCamp));
-            foreach (Collider c in colliders_PlayerLayer)
+            if (gp != -GridPos3D.One)
             {
-                Actor targetActor = c.GetComponentInParent<Actor>();
-                if (targetActor.IsNotNullAndAlive() && !entitySet.Contains(targetActor))
+                for (int i = 0; i <= CastOnNLayersBeneath; i++)
                 {
-                    entitySet.Add(targetActor);
-                }
+                    GridPos3D buffCenterGP = gp + GridPos3D.Down * i;
+                    Collider[] colliders_PlayerLayer = Physics.OverlapSphere(buffCenterGP, 0.3f, LayerManager.Instance.GetTargetEntityLayerMask(Entity.Camp, TargetCamp));
+                    foreach (Collider c in colliders_PlayerLayer)
+                    {
+                        Actor targetActor = c.GetComponentInParent<Actor>();
+                        if (targetActor.IsNotNullAndAlive() && !entitySet.Contains(targetActor))
+                        {
+                            entitySet.Add(targetActor);
+                        }
 
-                Box targetBox = c.GetComponentInParent<Box>();
-                if (targetBox.IsNotNullAndAlive() && !entitySet.Contains(targetBox))
-                {
-                    entitySet.Add(targetBox);
+                        Box targetBox = c.GetComponentInParent<Box>();
+                        if (targetBox.IsNotNullAndAlive() && !entitySet.Contains(targetBox))
+                        {
+                            entitySet.Add(targetBox);
+                        }
+                    }
                 }
             }
         }
@@ -391,11 +426,13 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         newEAS.TargetEntityType = TargetEntityType;
         newEAS.MaxTargetCount = MaxTargetCount;
         newEAS.CastOnTopLayer = CastOnTopLayer;
+        newEAS.CastOnNLayersBeneath = CastOnNLayersBeneath;
         newEAS.CastAreaGridPosList = CastAreaGridPosList.Clone();
         newEAS.AccurateStandardDeviation = AccurateStandardDeviation;
         newEAS.BattleIndicatorTypeName = BattleIndicatorTypeName;
         newEAS.ProjectOffsetZMax = ProjectOffsetZMax;
         newEAS.ProjectOffsetZMin = ProjectOffsetZMin;
+        newEAS.ProjectHeightDeltaRange = ProjectHeightDeltaRange;
         newEAS.GridWarningColorFill = GridWarningColorFill;
         newEAS.GridWarningColorBorderHighlight = GridWarningColorBorderHighlight;
         newEAS.GridWarningColorBorderDim = GridWarningColorBorderDim;
@@ -410,11 +447,13 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         TargetEntityType = srcEAS.TargetEntityType;
         MaxTargetCount = srcEAS.MaxTargetCount;
         CastOnTopLayer = srcEAS.CastOnTopLayer;
+        CastOnNLayersBeneath = srcEAS.CastOnNLayersBeneath;
         CastAreaGridPosList = srcEAS.CastAreaGridPosList.Clone();
         AccurateStandardDeviation = srcEAS.AccurateStandardDeviation;
         BattleIndicatorTypeName = srcEAS.BattleIndicatorTypeName;
         ProjectOffsetZMax = srcEAS.ProjectOffsetZMax;
         ProjectOffsetZMin = srcEAS.ProjectOffsetZMin;
+        ProjectHeightDeltaRange = srcEAS.ProjectHeightDeltaRange;
         GridWarningColorFill = srcEAS.GridWarningColorFill;
         GridWarningColorBorderHighlight = srcEAS.GridWarningColorBorderHighlight;
         GridWarningColorBorderDim = srcEAS.GridWarningColorBorderDim;

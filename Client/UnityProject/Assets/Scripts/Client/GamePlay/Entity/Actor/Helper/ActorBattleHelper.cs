@@ -98,11 +98,6 @@ public class ActorBattleHelper : ActorMonoHelper
                     }
                     else
                     {
-                        if (Actor.name.Contains("IceEnemy"))
-                        {
-                            int a = 0;
-                        }
-
                         mBornPointData.ActorOrientation = Actor.EntityOrientation;
                         Actor.SwitchEntityOrientation(GridPosR.Orientation.Up); // 需要将Actor的朝向转回正，才能读取到原WorldGP
                         GridPos3D actorFaceUpWorldGP = Actor.WorldGP;

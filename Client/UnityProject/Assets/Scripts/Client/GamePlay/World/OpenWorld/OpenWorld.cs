@@ -25,7 +25,8 @@ public class OpenWorld : World
     public uint GivenSeed = 0;
 
     public ushort[,,] WorldMap; // 地图元素放置  Y轴缩小16
-    public EntityExtraSerializeData[,,] WorldMap_EntityExtraSerializeData; // 地图元素放置  Y轴缩小16
+    public BornPointData[,,] WorldBornPointData; // 地图出生点数据  Y轴缩小16
+    public EntityExtraSerializeData[,,] WorldMap_BoxExtraSerializeData; // 地图箱子的额外数据  Y轴缩小16
     public GridPosR.Orientation[,,] WorldMapOrientation; // 地图元素放置朝向  Y轴缩小16
     public ushort[,,] WorldMap_Occupied; // 地图元素占位  Y轴缩小16
     public ushort[,,] WorldMap_StaticLayoutOccupied_IntactForStaticLayout; // 地图静态布局占位，禁止其他静态布局影响  Y轴缩小16
@@ -67,7 +68,7 @@ public class OpenWorld : World
     {
         base.OnRecycled();
         WorldMap = null;
-        WorldMap_EntityExtraSerializeData = null;
+        WorldMap_BoxExtraSerializeData = null;
         WorldMapOrientation = null;
         WorldMap_Occupied = null;
         WorldMap_StaticLayoutOccupied_IntactForStaticLayout = null;
@@ -100,7 +101,8 @@ public class OpenWorld : World
         SRandom SRandom = new SRandom(Seed);
 
         WorldMap = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        WorldMap_EntityExtraSerializeData = new EntityExtraSerializeData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldBornPointData = new BornPointData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMap_BoxExtraSerializeData = new EntityExtraSerializeData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMapOrientation = new GridPosR.Orientation[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_Occupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_StaticLayoutOccupied_IntactForStaticLayout = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
@@ -242,7 +244,7 @@ public class OpenWorld : World
 
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.91f, "Loading Maps");
         yield return null;
-        BattleManager.Instance.CreateActorByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias]);
+        BattleManager.Instance.CreateActorByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias], false);
         BattleManager.Instance.Player1.ForbidAction = true;
         CameraManager.Instance.FieldCamera.InitFocus();
 
@@ -407,16 +409,18 @@ public class OpenWorld : World
                                     moduleData.BoxMatrix[local_x, local_y, local_z] = existedIndex;
                                     moduleData.RawBoxOrientationMatrix[local_x, local_y, local_z] = WorldMapOrientation[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
                                     moduleData.BoxOrientationMatrix[local_x, local_y, local_z] = WorldMapOrientation[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
-                                    moduleData.BoxExtraSerializeDataMatrix[local_x, local_y, local_z] = WorldMap_EntityExtraSerializeData[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
+                                    moduleData.BoxExtraSerializeDataMatrix[local_x, local_y, local_z] = WorldMap_BoxExtraSerializeData[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
                                     break;
                                 }
                                 case ConfigManager.TypeStartIndex.Enemy:
                                 {
                                     string enemyTypeName = ConfigManager.GetTypeName(TypeDefineType.Enemy, existedIndex);
-                                    EntityExtraSerializeData actorExtraData = WorldMap_EntityExtraSerializeData[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
+                                    EntityExtraSerializeData actorExtraData = WorldMap_BoxExtraSerializeData[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
                                     moduleData.WorldModuleBornPointGroupData.EnemyBornPoints.Add(
                                         new BornPointData
                                         {
+                                            SpawnLevelTriggerEventAlias = "",
+                                            TriggerSpawnMultipleTimes = 1,
                                             EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy, TypeSelection = enemyTypeName},
                                             LocalGP = new GridPos3D(local_x, local_y, local_z),
                                             BornPointAlias = "",
