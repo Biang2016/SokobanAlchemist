@@ -359,24 +359,41 @@ public class WorldModule : PoolObject
                 boxOccupation_rotated = ConfigManager.GetEntityOccupationData(boxTypeIndex).EntityIndicatorGPs_RotatedDict[orientation];
             }
 
-            // 空位检查
+            // 空位检查，if isTriggerAppear则摧毁原先箱子
             foreach (GridPos3D offset in boxOccupation_rotated)
             {
                 GridPos3D gridPos = offset + localGP;
                 if (gridPos.InsideModule())
                 {
-                    if (BoxMatrix[gridPos.x, gridPos.y, gridPos.z] != null)
+                    Box box = BoxMatrix[gridPos.x, gridPos.y, gridPos.z];
+                    if (box != null)
                     {
-                        valid = false;
+                        if (isTriggerAppear)
+                        {
+                            valid = true;
+                            box.DestroyBox(null, true);
+                        }
+                        else
+                        {
+                            valid = false;
+                        }
                     }
                 }
                 else // 如果合成的是异形箱子则需要考虑该箱子的一部分是否放到了其他模组里
                 {
                     GridPos3D gridWorldGP = offset + worldGP;
                     Box boxInOtherModule = World.GetBoxByGridPosition(gridWorldGP, out WorldModule otherModule, out GridPos3D _);
-                    if (otherModule != null && boxInOtherModule != null)
+                    if (boxInOtherModule != null)
                     {
-                        valid = false;
+                        if (isTriggerAppear)
+                        {
+                            valid = true;
+                            boxInOtherModule.DestroyBox(null, true);
+                        }
+                        else
+                        {
+                            valid = false;
+                        }
                     }
                 }
             }
