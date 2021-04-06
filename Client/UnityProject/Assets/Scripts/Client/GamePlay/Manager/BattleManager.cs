@@ -153,11 +153,6 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     {
         if (string.IsNullOrEmpty(bpd.SpawnLevelTriggerEventAlias) && onLevelEvent) return;
         if (!string.IsNullOrEmpty(bpd.SpawnLevelTriggerEventAlias) && !onLevelEvent) return;
-        if (!string.IsNullOrEmpty(bpd.SpawnLevelTriggerEventAlias))
-        {
-            int a = 0;
-        }
-
         if (bpd.RawEntityExtraSerializeData != null)
         {
             foreach (EntityPassiveSkill eps in bpd.RawEntityExtraSerializeData.EntityPassiveSkills)

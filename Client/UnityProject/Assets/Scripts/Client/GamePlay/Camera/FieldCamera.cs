@@ -17,6 +17,9 @@ public class FieldCamera : MonoBehaviour
     private Camera BattleUICamera;
 
     [SerializeField]
+    private Camera BackgroundCamera;
+
+    [SerializeField]
     private Transform CamRoot;
 
     private Vector3 CamRootPos
@@ -489,7 +492,7 @@ public class FieldCamera : MonoBehaviour
 
     #region Post Processing
 
-    public PostProcessVolume PostProcessVolume;
+    public PostProcessVolume PostProcessVolume => CameraManager.Instance.PostProcessVolume;
 
     private Bloom PPV_Bloom;
     private DepthOfField PPV_DepthOfField;

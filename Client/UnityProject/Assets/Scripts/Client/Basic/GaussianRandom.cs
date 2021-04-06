@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GaussianRandom
 {
+    private static GaussianRandom instance = new GaussianRandom();
+
     private ulong Seed;
 
     public GaussianRandom()
@@ -15,7 +17,7 @@ public class GaussianRandom
         Seed = seed;
     }
 
-    public float Range(float mean, float p100)
+    public float Next(float mean, float radius)
     {
         double sum = 0;
         for (int i = 0; i < 3; i++)
@@ -28,6 +30,11 @@ public class GaussianRandom
             sum += (double) r * (1.0f / long.MaxValue);
         }
 
-        return (float) sum / 3 * p100 + mean;
+        return (float) sum / 3 * radius + mean;
+    }
+
+    public static float Range(float mean, float radius)
+    {
+        return instance.Next(mean, radius);
     }
 }

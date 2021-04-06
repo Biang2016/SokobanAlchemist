@@ -195,13 +195,12 @@ public class WorldBornPointGroupData_Runtime
                 {
                     bp.TriggerSpawnMultipleTimes--;
                     if (bp.TriggerSpawnMultipleTimes == 0) removeList.Add(bp);
+                    BornPointData bp_clone = (BornPointData) bp.Clone();
+                    bp_clone.InitGUID();
+                    ActorBP_ModuleDict[WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(bp_clone.WorldGP)].Add(bp_clone);
+                    BornPointDataGUIDDict.Add(bp_clone.GUID, bp_clone);
+                    BattleManager.Instance.CreateActorByBornPointData(bp_clone, true);
                 }
-
-                BornPointData bp_clone = (BornPointData) bp.Clone();
-                bp_clone.InitGUID();
-                ActorBP_ModuleDict[WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(bp_clone.WorldGP)].Add(bp_clone);
-                BornPointDataGUIDDict.Add(bp_clone.GUID, bp_clone);
-                BattleManager.Instance.CreateActorByBornPointData(bp_clone, true);
             }
 
             foreach (BornPointData removeBP in removeList)

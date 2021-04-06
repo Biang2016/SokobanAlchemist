@@ -20,7 +20,7 @@ public class EntityEditorWindow : EditorWindow
         float sum = 0;
         for (int i = 0; i < 500; i++)
         {
-            float value = gRandom.Range(5, 3);
+            float value = gRandom.Next(5, 3);
             sum += value;
             Debug.Log(value);
         }
