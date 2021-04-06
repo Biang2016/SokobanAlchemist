@@ -280,6 +280,11 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             return;
         }
 
+        if (Input.GetKeyUp(KeyCode.P))
+        {
+            BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, "OnBossSpiderLegAppear");
+        }
+
         if (Input.GetKey(KeyCode.Equals))
         {
             Time.timeScale = 0.1f;

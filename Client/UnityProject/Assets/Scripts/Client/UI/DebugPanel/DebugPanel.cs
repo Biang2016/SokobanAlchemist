@@ -322,20 +322,20 @@ public class DebugPanel : BaseUIPanel
         BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value + 10, "DebugPanelAddHealth10");
     }
 
-    [DebugButton("Player/AddHealth*100", KeyCode.H)]
+    [DebugButton("Player/AddHealth*100", KeyCode.Alpha7)]
     public void AddHealth100()
     {
         BattleManager.Instance.Player1.EntityStatPropSet.MaxHealthDurability.AddModifier(new Property.PlusModifier {Delta = 100});
         BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value + 100, "DebugPanelAddHealth100");
     }
 
-    [DebugButton("Player/TakeDamage*10", KeyCode.N)]
+    [DebugButton("Player/TakeDamage*10", KeyCode.Alpha6)]
     public void TakeDamage10()
     {
         BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value - 10, "DebugPanelTakeDamage10");
     }
 
-    [DebugButton("Player/AddAction*10", KeyCode.J)]
+    [DebugButton("Player/AddAction*10", KeyCode.Alpha8)]
     public void AddAction10()
     {
         int maxActionPointDelta = BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.Value + 10 - BattleManager.Instance.Player1.EntityStatPropSet.MaxActionPoint.GetModifiedValue;
@@ -344,7 +344,7 @@ public class DebugPanel : BaseUIPanel
         BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.ActionPoint.Value + 10, "DebugPanelAddAction10");
     }
 
-    [DebugButton("Player/AddActionRecover*100", KeyCode.L)]
+    [DebugButton("Player/AddActionRecover*100", KeyCode.Alpha0)]
     public void AddActionRecover100()
     {
         BattleManager.Instance.Player1.EntityStatPropSet.ActionPointRecovery.AddModifier(new Property.PlusModifier {Delta = 100});
@@ -378,7 +378,7 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugButton("Enemy/KillAllEnemy", KeyCode.K)]
+    [DebugButton("Enemy/KillAllEnemy", KeyCode.Alpha9)]
     public void KillAllEnemy()
     {
         foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
