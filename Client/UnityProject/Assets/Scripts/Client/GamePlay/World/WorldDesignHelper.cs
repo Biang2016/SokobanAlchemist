@@ -27,6 +27,15 @@ public class WorldDesignHelper : MonoBehaviour
     [ShowIf("UseSpecialPlayerEnterESPS")]
     public EntityStatPropSet Raw_PlayerEnterESPS = new EntityStatPropSet(); // 干数据
 
+    [BoxGroup("相机配置")]
+    [LabelText("是否使用特殊相机配置")]
+    public bool UseSpecialCameraConfig = false;
+
+    [BoxGroup("相机配置")]
+    [LabelText("特殊相机配置")]
+    [ShowIf("UseSpecialCameraConfig")]
+    public FieldCamera.CameraConfigData CameraConfigData = new FieldCamera.CameraConfigData();
+
 #if UNITY_EDITOR
     public WorldData ExportWorldData()
     {
@@ -45,6 +54,8 @@ public class WorldDesignHelper : MonoBehaviour
         worldData.DefaultWorldActorBornPointAlias = DefaultWorldActorBornPointAlias;
         worldData.UseSpecialPlayerEnterESPS = UseSpecialPlayerEnterESPS;
         Raw_PlayerEnterESPS.ApplyDataTo(worldData.Raw_PlayerEnterESPS);
+        worldData.UseSpecialCameraConfig = UseSpecialCameraConfig;
+        CameraConfigData.ApplyTo(worldData.CameraConfigData, true);
         foreach (WorldModuleDesignHelper module in modules)
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(module.transform, WorldModule.MODULE_SIZE);

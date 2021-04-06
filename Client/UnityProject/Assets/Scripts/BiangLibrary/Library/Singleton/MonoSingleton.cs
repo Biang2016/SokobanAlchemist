@@ -40,7 +40,7 @@ namespace BiangLibrary.Singleton
             }
         }
 
-        public void OnReloadScene()
+        public static void OnReloadScene()
         {
             hasInstance = false;
         }

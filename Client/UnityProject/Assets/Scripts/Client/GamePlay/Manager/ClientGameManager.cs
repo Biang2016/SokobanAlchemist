@@ -345,13 +345,13 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     public void ReloadGame()
     {
-        OnReloadScene();
-        UIMaskMgr.Instance.OnReloadScene();
-        UIManager.Instance.OnReloadScene();
-        CameraManager.Instance.OnReloadScene();
-        AudioManager.Instance.OnReloadScene();
-        ActiveSkillAgent.Instance.OnReloadScene();
         ShutDownGame();
+        OnReloadScene();
+        UIMaskMgr.OnReloadScene();
+        UIManager.OnReloadScene();
+        CameraManager.OnReloadScene();
+        AudioManager.OnReloadScene();
+        ActiveSkillAgent.OnReloadScene();
         SceneManager.LoadScene("MainScene");
     }
 

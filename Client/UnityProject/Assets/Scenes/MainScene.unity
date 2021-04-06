@@ -168,6 +168,81 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &412853749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 556797029e73b2347956b6579e77e05b, type: 3}
+  m_Name: DepthOfField(Clone)
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  focusDistance:
+    overrideState: 1
+    value: 21.25
+  aperture:
+    overrideState: 1
+    value: 4.5
+  focalLength:
+    overrideState: 1
+    value: 176
+  kernelSize:
+    overrideState: 1
+    value: 3
+--- !u!114 &804039791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48a79b01ea5641d4aa6daa2e23605641, type: 3}
+  m_Name: Bloom(Clone)
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  intensity:
+    overrideState: 1
+    value: 15
+  threshold:
+    overrideState: 1
+    value: 1.15
+  softKnee:
+    overrideState: 0
+    value: 0.5
+  clamp:
+    overrideState: 0
+    value: 65472
+  diffusion:
+    overrideState: 0
+    value: 7
+  anamorphicRatio:
+    overrideState: 0
+    value: 0
+  color:
+    overrideState: 0
+    value: {r: 1, g: 1, b: 1, a: 1}
+  fastMode:
+    overrideState: 0
+    value: 0
+  dirtTexture:
+    overrideState: 0
+    value: {fileID: 0}
+    defaultState: 1
+  dirtIntensity:
+    overrideState: 0
+    value: 0
 --- !u!1001 &995470728
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -184,8 +259,24 @@ PrefabInstance:
       value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 1662110492, guid: 776f29a684a9a412eb9b5171aa4742bd, type: 3}
+      propertyPath: PPV_Bloom
+      value: 
+      objectReference: {fileID: 804039791}
+    - target: {fileID: 1662110492, guid: 776f29a684a9a412eb9b5171aa4742bd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662110492, guid: 776f29a684a9a412eb9b5171aa4742bd, type: 3}
+      propertyPath: PPV_DepthOfField
+      value: 
+      objectReference: {fileID: 412853749}
+    - target: {fileID: 1662110492, guid: 776f29a684a9a412eb9b5171aa4742bd, type: 3}
+      propertyPath: PostProcessVolume
+      value: 
+      objectReference: {fileID: 1780064411}
+    - target: {fileID: 1662110492, guid: 776f29a684a9a412eb9b5171aa4742bd, type: 3}
       propertyPath: LastConfigData.Distance
-      value: 24.992207
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1662110492, guid: 776f29a684a9a412eb9b5171aa4742bd, type: 3}
       propertyPath: LastConfigData.VerAngle
@@ -193,7 +284,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1662110492, guid: 776f29a684a9a412eb9b5171aa4742bd, type: 3}
       propertyPath: CurrentConfigData.Distance
-      value: 25.000002
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662110492, guid: 776f29a684a9a412eb9b5171aa4742bd, type: 3}
+      propertyPath: LastConfigData.DampPosTime
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 1662110492, guid: 776f29a684a9a412eb9b5171aa4742bd, type: 3}
       propertyPath: TargetConfigData.DampPosTime
@@ -206,12 +301,12 @@ PrefabInstance:
     - target: {fileID: 2180581897189703316, guid: 776f29a684a9a412eb9b5171aa4742bd,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 19.151114
+      value: 19.15111
       objectReference: {fileID: 0}
     - target: {fileID: 2180581897189703316, guid: 776f29a684a9a412eb9b5171aa4742bd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.06969
+      value: -16.069687
       objectReference: {fileID: 0}
     - target: {fileID: 5980882136729047177, guid: 776f29a684a9a412eb9b5171aa4742bd,
         type: 3}

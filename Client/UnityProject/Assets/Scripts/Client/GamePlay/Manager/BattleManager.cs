@@ -121,6 +121,11 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         {
             Player1.ReloadESPS(WorldManager.Instance.CurrentWorld.WorldData.Raw_PlayerEnterESPS);
         }
+
+        if (WorldManager.Instance.CurrentWorld.WorldData.UseSpecialCameraConfig)
+        {
+            CameraManager.Instance.FieldCamera.SetTargetConfigData(WorldManager.Instance.CurrentWorld.WorldData.CameraConfigData);
+        }
     }
 
     private void LoadActors()
@@ -152,6 +157,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         {
             int a = 0;
         }
+
         if (bpd.RawEntityExtraSerializeData != null)
         {
             foreach (EntityPassiveSkill eps in bpd.RawEntityExtraSerializeData.EntityPassiveSkills)

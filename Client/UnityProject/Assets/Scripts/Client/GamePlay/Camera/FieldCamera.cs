@@ -4,6 +4,7 @@ using BiangLibrary.GameDataFormat.Grid;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 [ExecuteInEditMode]
 public class FieldCamera : MonoBehaviour
@@ -68,7 +69,7 @@ public class FieldCamera : MonoBehaviour
     [LabelText("目标参数")]
     public CameraConfigData TargetConfigData = new CameraConfigData();
 
-    private void SetTargetConfigData(CameraConfigData newData)
+    public void SetTargetConfigData(CameraConfigData newData)
     {
         newData.ApplyTo(TargetConfigData, true); // TargetConfigData立即同步，反映在面板上，体现目前相机被影响了
         CurrentConfigData.ApplyTo(LastConfigData, true);
@@ -108,9 +109,15 @@ public class FieldCamera : MonoBehaviour
 
         [SerializeField]
         [BoxGroup("基本属性")]
-        [LabelText("目标距离")]
-        [Range(0, 50)]
-        public float Distance = 13.5f;
+        [LabelText("目标距离系数")]
+        [Range(0, 3)]
+        public float DistanceFactor = 1f;
+
+        [SerializeField]
+        [BoxGroup("基本属性")]
+        [LabelText("景深焦距比例系数")]
+        [Range(0, 2)]
+        public float DepthOfFieldFactor = 0.9f;
 
         [SerializeField]
         [BoxGroup("基本属性")]
@@ -143,10 +150,11 @@ public class FieldCamera : MonoBehaviour
                 targetConfig.VerAngle = VerAngle;
                 targetConfig.ScreenAngle = ScreenAngle;
                 targetConfig.FOV = FOV;
-                targetConfig.Distance = Distance;
                 targetConfig.Offset = Offset;
             }
 
+            targetConfig.DistanceFactor = DistanceFactor;
+            targetConfig.DepthOfFieldFactor = DepthOfFieldFactor;
             targetConfig.DampPosTime = DampPosTime;
             targetConfig.DampRotTime = DampRotTime;
             targetConfig.DampFOVTime = DampFOVTime;
@@ -156,6 +164,7 @@ public class FieldCamera : MonoBehaviour
     #region SmoothDamp变量的变化速度、平滑时间、相机和相机墙的约束关系等，勿乱用
 
     private float tempChangeSpeed_Pos_Distance;
+    private float tempChangeSpeed_DepthOfField;
     private Vector3 tempChangeSpeed_Pos_Offset;
     private Vector3 tempChangeSpeed_Pos_TargetPos;
     private float tempChangeSpeed_RotH;
@@ -166,6 +175,7 @@ public class FieldCamera : MonoBehaviour
     private void ResetLerpSpeed()
     {
         tempChangeSpeed_Pos_Distance = 0;
+        tempChangeSpeed_DepthOfField = 0;
         tempChangeSpeed_Pos_Offset = Vector3.zero;
         tempChangeSpeed_Pos_TargetPos = Vector3.zero;
         tempChangeSpeed_RotH = 0;
@@ -186,6 +196,7 @@ public class FieldCamera : MonoBehaviour
 
     void Awake()
     {
+        Awake_PostProcessing();
         Distance_Level = 3;
         SetTargetConfigData(TargetConfigData);
     }
@@ -235,7 +246,9 @@ public class FieldCamera : MonoBehaviour
         float _verAngle = lerp ? Mathf.SmoothDamp(CurrentConfigData.VerAngle, TargetConfigData.VerAngle, ref tempChangeSpeed_RotV, CurrentConfigData.DampRotTime, 9999) : TargetConfigData.VerAngle;
         float _screenAngle = lerp ? Mathf.SmoothDamp(CurrentConfigData.ScreenAngle, TargetConfigData.ScreenAngle, ref tempChangeSpeed_RotS, CurrentConfigData.DampRotTime, 9999) : TargetConfigData.ScreenAngle;
         Vector3 _offset = lerp ? Vector3.SmoothDamp(CurrentConfigData.Offset, TargetConfigData.Offset, ref tempChangeSpeed_Pos_Offset, CurrentConfigData.DampPosTime, 9999) : (Vector3) TargetConfigData.Offset;
-        float _distance = lerp ? Mathf.SmoothDamp(CurrentConfigData.Distance, TargetConfigData.Distance, ref tempChangeSpeed_Pos_Distance, CurrentConfigData.DampPosTime, 9999) : TargetConfigData.Distance;
+        float _distance = lerp ? Mathf.SmoothDamp(CurrentLerpingDistance, BaseDistance * TargetConfigData.DistanceFactor, ref tempChangeSpeed_Pos_Distance, CurrentConfigData.DampPosTime, 9999) : BaseDistance * TargetConfigData.DistanceFactor;
+        float _depthOfField = lerp ? Mathf.SmoothDamp(CurrentConfigData.DepthOfFieldFactor, TargetConfigData.DepthOfFieldFactor, ref tempChangeSpeed_DepthOfField, CurrentConfigData.DampPosTime, 9999) : BaseDistance * TargetConfigData.DepthOfFieldFactor;
+        PPV_DepthOfField.focusDistance.value = _distance * _depthOfField;
 
         // TargetPos计算（不带偏移）
         Vector3 _targetPos = Vector3.zero;
@@ -270,7 +283,8 @@ public class FieldCamera : MonoBehaviour
         CurrentConfigData.VerAngle = _verAngle;
         CurrentConfigData.ScreenAngle = _screenAngle;
         CurrentConfigData.Offset = _offset;
-        CurrentConfigData.Distance = _distance;
+        CurrentConfigData.DepthOfFieldFactor = _depthOfField;
+        CurrentLerpingDistance = _distance;
     }
 
     private bool IsShaking = false;
@@ -303,6 +317,10 @@ public class FieldCamera : MonoBehaviour
 
     #region Distance Levels
 
+    private float CurrentLerpingDistance;
+
+    private float BaseDistance => DistanceLevels[Distance_Level];
+
     private int _distance_Level = 0;
 
     internal int Distance_Level
@@ -313,10 +331,7 @@ public class FieldCamera : MonoBehaviour
             if (_distance_Level != value)
             {
                 _distance_Level = Mathf.Clamp(value, 0, DistanceLevels.Length - 1);
-                TargetConfigData.Distance = DistanceLevels[_distance_Level];
                 InGameUISize = InGameUISizeLevels[_distance_Level];
-                Camera.orthographicSize = OrthographicSizeLevels[_distance_Level];
-                BattleUICamera.orthographicSize = OrthographicSizeLevels[_distance_Level];
             }
         }
     }
@@ -327,14 +342,12 @@ public class FieldCamera : MonoBehaviour
     [LabelText("距离等级表-战斗飘字UI")]
     public float[] DistanceLevels_ScaleForBattleUI = new float[] {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 
-    [LabelText("正交大小等级表")]
-    public float[] OrthographicSizeLevels = new float[] {5, 7, 9, 10, 11, 12, 13, 15};
-
     [LabelText("InGameUI大小等级")]
     public float[] InGameUISizeLevels = new float[] {2f, 1.5f, 1, 0.8f, 0.65f, 0.5f, 0.3f, 0.2f};
 
     void UpdateFOVLevel()
     {
+#if DEVELOPMENT_BUILD || DEBUG
         if (Application.isPlaying)
         {
             bool IsMouseOverGameWindow = !(0 > Input.mousePosition.x || 0 > Input.mousePosition.y || Screen.width < Input.mousePosition.x || Screen.height < Input.mousePosition.y);
@@ -351,6 +364,7 @@ public class FieldCamera : MonoBehaviour
                 }
             }
         }
+#endif
     }
 
     #endregion
@@ -398,7 +412,7 @@ public class FieldCamera : MonoBehaviour
 
     private Vector3 GetTargetPosFromCamPos(Vector3 cameraPos, Quaternion cameraRot)
     {
-        return cameraPos + cameraRot * Vector3.forward * CurrentConfigData.Distance;
+        return cameraPos + cameraRot * Vector3.forward * CurrentConfigData.DistanceFactor * BaseDistance;
     }
 
     #endregion
@@ -407,8 +421,8 @@ public class FieldCamera : MonoBehaviour
 
     private void RefreshFrustum()
     {
-        FrustumWidth = GetFrustumWidth(Camera.fieldOfView, Camera.aspect, CurrentConfigData.HorAngle, CurrentConfigData.Distance);
-        FrustumHeight = GetFrustumHeight(Camera.fieldOfView, CurrentConfigData.VerAngle, CurrentConfigData.Distance);
+        FrustumWidth = GetFrustumWidth(Camera.fieldOfView, Camera.aspect, CurrentConfigData.HorAngle, CurrentConfigData.DistanceFactor * BaseDistance);
+        FrustumHeight = GetFrustumHeight(Camera.fieldOfView, CurrentConfigData.VerAngle, CurrentConfigData.DistanceFactor * BaseDistance);
     }
 
     /// <summary>
@@ -469,6 +483,21 @@ public class FieldCamera : MonoBehaviour
         return viewportPoint.x >= 0.0f && viewportPoint.x <= 1.0f
                                        && viewportPoint.y >= 0.0f && viewportPoint.y <= 1.0f
                                        && viewportPoint.z >= Camera.nearClipPlane && viewportPoint.z <= Camera.farClipPlane;
+    }
+
+    #endregion
+
+    #region Post Processing
+
+    public PostProcessVolume PostProcessVolume;
+
+    private Bloom PPV_Bloom;
+    private DepthOfField PPV_DepthOfField;
+
+    private void Awake_PostProcessing()
+    {
+        PPV_Bloom = PostProcessVolume.sharedProfile.GetSetting<Bloom>();
+        PPV_DepthOfField = PostProcessVolume.sharedProfile.GetSetting<DepthOfField>();
     }
 
     #endregion

@@ -549,6 +549,7 @@ public class OpenWorld : World
 
     internal bool IsInsideMicroWorld = false;
     internal bool IsUsingSpecialESPSInsideMicroWorld = false;
+    internal bool IsUsingSpecialCameraConfigInsideMicroWorld = false;
     internal ushort CurrentMicroWorldTypeIndex = 0;
     internal GridPos3D LastLeaveOpenWorldPlayerGP = GridPos3D.Zero;
     private List<WorldModule> MicroWorldModules = new List<WorldModule>();
@@ -652,10 +653,15 @@ public class OpenWorld : World
             LastLeaveOpenWorldPlayerGP = BattleManager.Instance.Player1.transform.position.ToGridPos3D();
         }
 
+        // MicroWorld Special Settings
         IsInsideMicroWorld = true;
         IsUsingSpecialESPSInsideMicroWorld = microWorldData.UseSpecialPlayerEnterESPS;
         BattleManager.Instance.Player1.EntityStatPropSet.ApplyDataTo(m_LevelCacheData.PlayerCurrentESPS);
         if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(microWorldData.Raw_PlayerEnterESPS);
+
+        IsUsingSpecialCameraConfigInsideMicroWorld = microWorldData.UseSpecialCameraConfig;
+        if (IsUsingSpecialCameraConfigInsideMicroWorld) CameraManager.Instance.FieldCamera.SetTargetConfigData(microWorldData.CameraConfigData);
+
         BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint);
 
         CameraManager.Instance.FieldCamera.InitFocus();
@@ -706,6 +712,8 @@ public class OpenWorld : World
             BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP);
             if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(m_LevelCacheData.PlayerCurrentESPS);
         }
+
+        if (IsUsingSpecialCameraConfigInsideMicroWorld) CameraManager.Instance.FieldCamera.SetTargetConfigData(WorldData.CameraConfigData);
 
         CameraManager.Instance.FieldCamera.InitFocus();
         IsInsideMicroWorld = false;
