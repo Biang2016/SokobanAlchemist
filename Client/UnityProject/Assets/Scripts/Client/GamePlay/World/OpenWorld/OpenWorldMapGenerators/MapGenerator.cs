@@ -312,11 +312,11 @@ public abstract class MapGenerator
                                     }
                                 }
 
-                                GridPos actorRotOffset = Actor.ActorRotateWorldGPOffset(occupationData.ActorWidth, staticLayoutOrientation); // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
-                                WorldMap[entity_world.x - actorRotOffset.x, entity_world.y - Height, entity_world.z - actorRotOffset.z] = entityTypeIndex;
+                                WorldMap[entity_world.x, entity_world.y - Height, entity_world.z] = entityTypeIndex;
                                 BornPointData bp = (BornPointData) enemyBornPoint.Clone();
+                                bp.ActorOrientation = staticLayoutOrientation;
                                 bp.InitGUID();
-                                WorldBornPointData[entity_world.x - actorRotOffset.x, entity_world.y - Height, entity_world.z - actorRotOffset.z] = bp;
+                                WorldBornPointData[entity_world.x, entity_world.y - Height, entity_world.z] = bp;
                             }
                         }
                     }
