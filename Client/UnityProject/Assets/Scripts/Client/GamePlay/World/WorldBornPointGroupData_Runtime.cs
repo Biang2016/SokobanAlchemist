@@ -136,7 +136,10 @@ public class WorldBornPointGroupData_Runtime
                 else
                 {
                     EnemyBornPointDataAliasDict.Remove(bp.BornPointAlias);
-                    EventTriggerBornPointDataAliasDict[bp.SpawnLevelTriggerEventAlias].Remove(bp);
+                    if (!string.IsNullOrEmpty(bp.SpawnLevelTriggerEventAlias))
+                    {
+                        EventTriggerBornPointDataAliasDict[bp.SpawnLevelTriggerEventAlias].Remove(bp);
+                    }
                 }
             }
         }
@@ -176,10 +179,6 @@ public class WorldBornPointGroupData_Runtime
             {
                 EventTriggerBornPointDataAliasDict.Add(bp.SpawnLevelTriggerEventAlias, new List<BornPointData>());
             }
-            else
-            {
-                Debug.Log($"敌人出生点监听事件花名重复: {bp.BornPointAlias}");
-            }
 
             EventTriggerBornPointDataAliasDict[bp.SpawnLevelTriggerEventAlias].Add(bp);
         }
@@ -199,10 +198,9 @@ public class WorldBornPointGroupData_Runtime
                 }
 
                 BornPointData bp_clone = (BornPointData) bp.Clone();
-                bp_clone.SpawnLevelTriggerEventAlias = "";
-                bp_clone.TriggerSpawnMultipleTimes = 0;
-                ActorBP_ModuleDict[WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(bp.WorldGP)].Add(bp_clone);
-                BornPointDataGUIDDict.Add(bp_clone.GUID, bp);
+                bp_clone.InitGUID();
+                ActorBP_ModuleDict[WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(bp_clone.WorldGP)].Add(bp_clone);
+                BornPointDataGUIDDict.Add(bp_clone.GUID, bp_clone);
                 BattleManager.Instance.CreateActorByBornPointData(bp_clone, true);
             }
 

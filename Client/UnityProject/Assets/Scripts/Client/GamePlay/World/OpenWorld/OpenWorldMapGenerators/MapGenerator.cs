@@ -17,6 +17,7 @@ public abstract class MapGenerator
 
     protected OpenWorld m_OpenWorld;
     protected ushort[,,] WorldMap => m_OpenWorld.WorldMap;
+    protected BornPointData[,,] WorldBornPointData => m_OpenWorld.WorldBornPointData;
     protected EntityExtraSerializeData[,,] WorldMap_EntityExtraSerializeData => m_OpenWorld.WorldMap_BoxExtraSerializeData; // 仅针对静态布局生效
     protected GridPosR.Orientation[,,] WorldMapOrientation => m_OpenWorld.WorldMapOrientation;
     protected ushort[,,] WorldMap_Occupied => m_OpenWorld.WorldMap_Occupied;
@@ -313,7 +314,9 @@ public abstract class MapGenerator
 
                                 GridPos actorRotOffset = Actor.ActorRotateWorldGPOffset(occupationData.ActorWidth, staticLayoutOrientation); // 由于Actor放置和旋转的特殊性，此处需要加一个偏移值
                                 WorldMap[entity_world.x - actorRotOffset.x, entity_world.y - Height, entity_world.z - actorRotOffset.z] = entityTypeIndex;
-                                WorldMap_EntityExtraSerializeData[entity_world.x - actorRotOffset.x, entity_world.y - Height, entity_world.z - actorRotOffset.z] = enemyBornPoint.RawEntityExtraSerializeData?.Clone();
+                                BornPointData bp = (BornPointData) enemyBornPoint.Clone();
+                                bp.InitGUID();
+                                WorldBornPointData[entity_world.x - actorRotOffset.x, entity_world.y - Height, entity_world.z - actorRotOffset.z] = bp;
                             }
                         }
                     }
@@ -448,6 +451,24 @@ public abstract class MapGenerator
 
                 if (spaceAvailable)
                 {
+                    ConfigManager.TypeStartIndex typeStartIndex = writeEntityTypeIndex.ConvertToTypeStartIndex();
+                    if (typeStartIndex == ConfigManager.TypeStartIndex.Enemy)
+                    {
+                        string enemyTypeName = ConfigManager.GetTypeName(TypeDefineType.Enemy, writeEntityTypeIndex);
+                        WorldBornPointData[worldGP.x, 0, worldGP.z] = new BornPointData
+                        {
+                            ActorOrientation = writeOrientation,
+                            BornPointAlias = "",
+                            EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy, TypeSelection = enemyTypeName},
+                            IsPlayer = false,
+                            LocalGP = new GridPos3D(worldGP.x % WorldModule.MODULE_SIZE, 0, worldGP.z % WorldModule.MODULE_SIZE),
+                            WorldGP = worldGP,
+                            RawEntityExtraSerializeData = null,
+                            TriggerSpawnMultipleTimes = 0,
+                            SpawnLevelTriggerEventAlias = "",
+                        };
+                    }
+
                     WorldMap[worldGP.x, 0, worldGP.z] = writeEntityTypeIndex;
                     WorldMapOrientation[worldGP.x, 0, worldGP.z] = writeOrientation;
                     foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[writeOrientation])

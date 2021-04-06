@@ -414,19 +414,8 @@ public class OpenWorld : World
                                 }
                                 case ConfigManager.TypeStartIndex.Enemy:
                                 {
-                                    string enemyTypeName = ConfigManager.GetTypeName(TypeDefineType.Enemy, existedIndex);
-                                    EntityExtraSerializeData actorExtraData = WorldMap_BoxExtraSerializeData[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
-                                    moduleData.WorldModuleBornPointGroupData.EnemyBornPoints.Add(
-                                        new BornPointData
-                                        {
-                                            SpawnLevelTriggerEventAlias = "",
-                                            TriggerSpawnMultipleTimes = 1,
-                                            EnemyType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy, TypeSelection = enemyTypeName},
-                                            LocalGP = new GridPos3D(local_x, local_y, local_z),
-                                            BornPointAlias = "",
-                                            WorldGP = new GridPos3D(world_x, world_y, world_z),
-                                            RawEntityExtraSerializeData = actorExtraData
-                                        });
+                                    BornPointData bpd = WorldBornPointData[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
+                                    if (bpd != null) moduleData.WorldModuleBornPointGroupData.EnemyBornPoints.Add(bpd);
                                     break;
                                 }
                             }
