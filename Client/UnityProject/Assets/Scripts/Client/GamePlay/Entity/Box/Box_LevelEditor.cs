@@ -5,32 +5,21 @@ using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 
 #endif
 
-public class Box_LevelEditor : MonoBehaviour
+public class Box_LevelEditor : Entity_LevelEditor
 {
-    public GameObject ModelRoot;
-    public GameObject BoxIndicatorHelperGO;
-
-    [BoxGroup("箱子额外数据")]
-    [HideLabel]
-    public EntityExtraSerializeData RawEntityExtraSerializeData = new EntityExtraSerializeData(); // 干数据，禁修改
-
-    [LabelText("箱子朝向")]
-    [OnValueChanged("RefreshOrientation")]
-    [EnumToggleButtons]
-    public GridPosR.Orientation BoxOrientation;
-
-    public bool RefreshOrientation()
+    public override bool RefreshOrientation()
     {
-        bool dirty = Math.Abs(ModelRoot.transform.rotation.eulerAngles.y - (int) BoxOrientation * 90f) > 1f;
+        bool dirty = Math.Abs(ModelRoot.transform.rotation.eulerAngles.y - (int) EntityData.EntityOrientation * 90f) > 1f;
         if (dirty)
         {
-            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, BoxOrientation), ModelRoot.transform, 1);
-            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, BoxOrientation), BoxIndicatorHelperGO.transform, 1);
+            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, EntityData.EntityOrientation), ModelRoot.transform, 1);
+            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, EntityData.EntityOrientation), IndicatorHelperGO.transform, 1);
 #if UNITY_EDITOR
             EditorWindow view = EditorWindow.GetWindow<SceneView>();
             view.Repaint();
@@ -44,7 +33,7 @@ public class Box_LevelEditor : MonoBehaviour
     {
         EntityExtraSerializeData data = new EntityExtraSerializeData();
         data.EntityPassiveSkills = new List<EntityPassiveSkill>();
-        foreach (EntityPassiveSkill bf in RawEntityExtraSerializeData.EntityPassiveSkills)
+        foreach (EntityPassiveSkill bf in EntityData.RawEntityExtraSerializeData.EntityPassiveSkills)
         {
             if (bf is BoxPassiveSkill_LevelEventTriggerAppear) continue;
             data.EntityPassiveSkills.Add(bf.Clone());
@@ -55,13 +44,13 @@ public class Box_LevelEditor : MonoBehaviour
 
 #if UNITY_EDITOR
 
-    public bool RequireSerializePassiveSkillsIntoWorldModule => RawEntityExtraSerializeData.EntityPassiveSkills.Count > 0;
+    public bool RequireSerializePassiveSkillsIntoWorldModule => EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Count > 0;
 
     public uint ProbablyShow
     {
         get
         {
-            foreach (EntityPassiveSkill eps in RawEntityExtraSerializeData.EntityPassiveSkills)
+            foreach (EntityPassiveSkill eps in EntityData.RawEntityExtraSerializeData.EntityPassiveSkills)
             {
                 if (eps is EntityPassiveSkill_ProbablyShow ps) return ps.ShowProbabilityPercent;
             }
@@ -74,7 +63,7 @@ public class Box_LevelEditor : MonoBehaviour
     {
         get
         {
-            foreach (EntityPassiveSkill bf in RawEntityExtraSerializeData.EntityPassiveSkills)
+            foreach (EntityPassiveSkill bf in EntityData.RawEntityExtraSerializeData.EntityPassiveSkills)
             {
                 if (bf is BoxPassiveSkill_LevelEventTriggerAppear appear) return true;
             }
@@ -161,7 +150,7 @@ public class Box_LevelEditor : MonoBehaviour
         //}
 
         //return isDirty;
-        return false;
+        return true;
     }
 
 #endif

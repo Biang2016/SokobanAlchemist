@@ -66,14 +66,14 @@ public class WorldModuleDesignHelper : MonoBehaviour
             ushort boxTypeIndex = ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeIndexDict[boxName];
 
             bool isLevelEventTriggerAppearBox = false;
-            foreach (EntityPassiveSkill eps in box.RawEntityExtraSerializeData.EntityPassiveSkills)
+            foreach (EntityPassiveSkill eps in box.EntityData.RawEntityExtraSerializeData.EntityPassiveSkills)
             {
                 if (eps is BoxPassiveSkill_LevelEventTriggerAppear bf_leta)
                 {
                     BoxPassiveSkill_LevelEventTriggerAppear.Data data = new BoxPassiveSkill_LevelEventTriggerAppear.Data();
                     data.LocalGP = gp;
                     data.BoxTypeIndex = boxTypeIndex;
-                    data.BoxOrientation = box.BoxOrientation;
+                    data.BoxOrientation = box.EntityData.EntityOrientation;
                     data.BoxPassiveSkill_LevelEventTriggerAppear = (BoxPassiveSkill_LevelEventTriggerAppear) bf_leta.Clone();
                     worldModuleData.EventTriggerAppearBoxDataList.Add(data);
                     isLevelEventTriggerAppearBox = true;
@@ -84,7 +84,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
             if (!isLevelEventTriggerAppearBox)
             {
                 bool spaceAvailable = true;
-                List<GridPos3D> boxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(box.BoxOrientation, ConfigManager.EntityOccupationConfigDict[boxTypeIndex].EntityIndicatorGPs);
+                List<GridPos3D> boxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(box.EntityData.EntityOrientation, ConfigManager.EntityOccupationConfigDict[boxTypeIndex].EntityIndicatorGPs);
                 foreach (GridPos3D gridPos3D in boxOccupation_rotated)
                 {
                     GridPos3D gridPos = gridPos3D + gp;
@@ -111,7 +111,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
                     }
 
                     worldModuleData.RawBoxMatrix[gp.x, gp.y, gp.z] = boxTypeIndex;
-                    worldModuleData.RawBoxOrientationMatrix[gp.x, gp.y, gp.z] = box.BoxOrientation;
+                    worldModuleData.RawBoxOrientationMatrix[gp.x, gp.y, gp.z] = box.EntityData.EntityOrientation;
                     foreach (GridPos3D gridPos3D in boxOccupation_rotated)
                     {
                         GridPos3D gridPos = gridPos3D + gp;

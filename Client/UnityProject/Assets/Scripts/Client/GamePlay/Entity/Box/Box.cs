@@ -1367,8 +1367,8 @@ public partial class Box : Entity
             box_LevelEditor.ModelRoot = modelRoot;
 
             boxIndicatorHelperGO.transform.parent = box_LevelEditor_Instance.transform;
-            if (box_LevelEditor.BoxIndicatorHelperGO) DestroyImmediate(box_LevelEditor.BoxIndicatorHelperGO);
-            box_LevelEditor.BoxIndicatorHelperGO = boxIndicatorHelperGO;
+            if (box_LevelEditor.IndicatorHelperGO) DestroyImmediate(box_LevelEditor.IndicatorHelperGO);
+            box_LevelEditor.IndicatorHelperGO = boxIndicatorHelperGO;
 
             PrefabUtility.SaveAsPrefabAsset(box_LevelEditor_Instance, box_LevelEditor_Prefab_Path, out bool suc); // 保存回改Prefab的Asset
             DestroyImmediate(box_LevelEditor_Instance);
@@ -1385,8 +1385,8 @@ public partial class Box : Entity
             box_LevelEditor.ModelRoot = modelRoot;
 
             boxIndicatorHelperGO.transform.parent = box_LevelEditor_Instance.transform;
-            if (box_LevelEditor.BoxIndicatorHelperGO) DestroyImmediate(box_LevelEditor.BoxIndicatorHelperGO);
-            box_LevelEditor.BoxIndicatorHelperGO = boxIndicatorHelperGO;
+            if (box_LevelEditor.IndicatorHelperGO) DestroyImmediate(box_LevelEditor.IndicatorHelperGO);
+            box_LevelEditor.IndicatorHelperGO = boxIndicatorHelperGO;
 
             string box_LevelEditor_PrefabPath = ConfigManager.FindBoxLevelEditorPrefabPathByName(name); // 保存成Variant
             PrefabUtility.SaveAsPrefabAsset(box_LevelEditor_Instance, box_LevelEditor_PrefabPath, out bool suc);
