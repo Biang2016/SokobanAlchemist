@@ -224,6 +224,11 @@ public class World : PoolObject
             }
         }
 
+        if (!WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.ContainsKey(WorldData.DefaultWorldActorBornPointAlias))
+        {
+            Debug.LogError("世界默认出生点花名配置有误");
+        }
+
         BattleManager.Instance.CreateActorByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias], false); // 生成主角
     }
 
