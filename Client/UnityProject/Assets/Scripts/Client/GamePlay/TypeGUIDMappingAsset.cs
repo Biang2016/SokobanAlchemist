@@ -124,7 +124,6 @@ public class TypeSelectHelper : IClone<TypeSelectHelper>
     [SerializeField]
     [ReadOnly]
     [LabelText("类型GUID")]
-    //[HideInInspector]
     private string TypeGUID;
 
     private IEnumerable<string> GetAllTypeNames => ConfigManager.GetAllTypeNames(TypeDefineType);

@@ -54,24 +54,29 @@ public class OpenWorld : World
             if (WorldMap_Occupied_BetweenBoxes[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] != 0
                 || WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] != 0)
             {
-                return false;
+                return true;
             }
         }
         else if (entityType == TypeDefineType.Actor)
         {
             if (WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] != 0)
             {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     public void SetOccupied(TypeDefineType entityType, ushort typeIndex, GridPos3D worldGP, bool occupied)
     {
         if (entityType == TypeDefineType.Box)
         {
+            EntityOccupationData eod = ConfigManager.GetEntityOccupationData(typeIndex);
+            if (eod == null)
+            {
+                int a = 0;
+            }
             bool passable = ConfigManager.GetEntityOccupationData(typeIndex).Passable;
             WorldMap_Occupied_BetweenBoxes[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort) (occupied ? typeIndex : 0);
             if (!passable) WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort) (occupied ? typeIndex : 0);
@@ -425,14 +430,16 @@ public class OpenWorld : World
                     GridPos3D targetModuleGP = new GridPos3D(module_x, 0, module_z);
                     GridPos3D localGP = new GridPos3D(0, 15, 0);
                     WorldModuleData moduleData = WorldModuleData.WorldModuleDataFactory.Alloc();
+                    TypeSelectHelper entityType = new TypeSelectHelper
+                    {
+                        TypeDefineType = TypeDefineType.Box,
+                        TypeSelection = ConfigManager.GetTypeName(TypeDefineType.Box, ConfigManager.Box_CombinedGroundBoxIndex)
+                    };
+                    entityType.RefreshGUID();
                     moduleData[TypeDefineType.Box, localGP] =
                         new EntityData
                         {
-                            EntityType = new TypeSelectHelper
-                            {
-                                TypeDefineType = TypeDefineType.Box,
-                                TypeSelection = ConfigManager.GetTypeName(TypeDefineType.Box, ConfigManager.Box_CombinedGroundBoxIndex)
-                            },
+                            EntityType = entityType,
                             EntityOrientation = GridPosR.Orientation.Up,
                             RawEntityExtraSerializeData = null,
                         };
@@ -460,7 +467,7 @@ public class OpenWorld : World
                             {
                                 GridPos3D worldGP = new GridPos3D(world_x, world_y, world_z);
                                 GridPos3D localGP = worldGP - targetModuleGP * WorldModule.MODULE_SIZE;
-                                moduleData[kv.Key, localGP] = WorldMap_EntityDataMatrix[kv.Key][world_x, world_y - WorldModule.MODULE_SIZE, world_z].Clone();
+                                moduleData[kv.Key, localGP] = WorldMap_EntityDataMatrix[kv.Key][world_x, world_y - WorldModule.MODULE_SIZE, world_z]?.Clone();
                             }
                         }
 

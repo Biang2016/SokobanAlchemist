@@ -73,7 +73,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
                     isLevelEventTriggerAppearEntity = true;
                     EntityPassiveSkill_LevelEventTriggerAppear.Data data = new EntityPassiveSkill_LevelEventTriggerAppear.Data();
                     data.LocalGP = gp;
-                    data.EntityData = new EntityData(entityTypeIndex, entity.EntityData.EntityOrientation);
+                    data.EntityData = entity.EntityData.Clone();
                     data.EntityPassiveSkill_LevelEventTriggerAppear = (EntityPassiveSkill_LevelEventTriggerAppear) appear.Clone();
                     worldModuleData.EventTriggerAppearEntityDataList.Add(data);
                     break;

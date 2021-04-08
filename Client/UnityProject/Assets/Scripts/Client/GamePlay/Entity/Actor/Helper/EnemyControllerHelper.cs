@@ -9,10 +9,11 @@ public class EnemyControllerHelper : ActorMonoHelper
     internal float AIUpdateInterval = 0.3f;
     private float AIUpdateIntervalTick = 0;
 
-    void Start()
+    public void OnSetup()
     {
         ActorAIAgent = new ActorAIAgent(Actor);
         GraphOwner = Actor.GetComponent<GraphOwner>();
+        ActorAIAgent.Start();
     }
 
     public override void OnHelperUsed()

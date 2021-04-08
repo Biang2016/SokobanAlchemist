@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
 
 public class OpenWorldModule : WorldModule
@@ -31,7 +32,7 @@ public class OpenWorldModule : WorldModule
         }
 
         int loadEntityCount = 0;
-        foreach (TypeDefineType entityType in worldModuleData.EntityDataMatrixKeys)
+        foreach (KeyValuePair<TypeDefineType, int> kv in WorldModuleData.EntityDataMatrixKeys)
         {
             for (int x = 0; x < MODULE_SIZE; x++)
             {
@@ -40,8 +41,8 @@ public class OpenWorldModule : WorldModule
                     for (int z = 0; z < MODULE_SIZE; z++)
                     {
                         GridPos3D localGP = new GridPos3D(x, y, z);
-                        EntityData entityData = worldModuleData[entityType, localGP];
-                        Entity entity = GenerateEntity(entityData, localGP, false, true);
+                        EntityData entityData = worldModuleData[kv.Key, localGP];
+                        Entity entity = GenerateEntity(entityData, LocalGPToWorldGP(localGP), false, true);
                         if (entity != null)
                         {
                             loadEntityCount++;

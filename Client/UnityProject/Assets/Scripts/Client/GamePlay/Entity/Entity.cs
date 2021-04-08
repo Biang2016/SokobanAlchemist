@@ -252,13 +252,13 @@ public abstract class Entity : PoolObject
 
     #endregion
 
-    #region BoxExtraData
+    #region EntityExtraData
 
-    public void ApplyBoxExtraSerializeData(EntityExtraSerializeData boxExtraSerializeDataFromModule = null)
+    public void ApplyEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeDataFromModule = null)
     {
-        if (boxExtraSerializeDataFromModule != null)
+        if (entityExtraSerializeDataFromModule != null)
         {
-            foreach (EntityPassiveSkill extraPS in boxExtraSerializeDataFromModule.EntityPassiveSkills)
+            foreach (EntityPassiveSkill extraPS in entityExtraSerializeDataFromModule.EntityPassiveSkills)
             {
                 EntityPassiveSkill newPS = extraPS.Clone();
                 AddNewPassiveSkill(newPS, true);

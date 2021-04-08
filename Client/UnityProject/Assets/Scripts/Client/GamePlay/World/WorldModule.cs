@@ -302,7 +302,7 @@ public class WorldModule : PoolObject
         }
 
         int loadEntityCount = 0;
-        foreach (TypeDefineType entityType in worldModuleData.EntityDataMatrixKeys)
+        foreach (KeyValuePair<TypeDefineType, int> kv in WorldModuleData.EntityDataMatrixKeys)
         {
             for (int x = 0; x < MODULE_SIZE; x++)
             {
@@ -311,8 +311,8 @@ public class WorldModule : PoolObject
                     for (int z = 0; z < MODULE_SIZE; z++)
                     {
                         GridPos3D localGP = new GridPos3D(x, y, z);
-                        EntityData entityData = worldModuleData[entityType, localGP];
-                        Entity entity = GenerateEntity(entityData, localGP, false, true);
+                        EntityData entityData = worldModuleData[kv.Key, localGP];
+                        Entity entity = GenerateEntity(entityData, LocalGPToWorldGP(localGP), false, true);
                         if (entity != null)
                         {
                             loadEntityCount++;
@@ -456,9 +456,8 @@ public class WorldModule : PoolObject
                             box.BoxFrozenBoxHelper.FrozenBoxOccupation = boxOccupation_rotated;
                         }
 
-                        box.Setup(entityData.EntityTypeIndex, entityData.EntityOrientation, GUID);
+                        box.Setup(entityData, GUID);
                         box.Initialize(worldGP, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedEntities); // 如果是TriggerAppear的箱子则不需要检查坠落
-                        box.ApplyBoxExtraSerializeData(entityData.RawEntityExtraSerializeData);
 
                         foreach (GridPos3D offset in boxOccupation_rotated)
                         {

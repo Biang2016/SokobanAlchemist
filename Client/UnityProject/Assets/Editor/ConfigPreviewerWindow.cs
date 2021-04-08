@@ -27,9 +27,4 @@ public class ConfigPreviewerWindow : OdinEditorWindow
     [LabelText("世界配置表")]
     [TableList]
     public List<WorldData> WorldDataConfigDict => ConfigManager.WorldDataConfigDict.Values.ToList();
-
-    [ReadOnly]
-    [ShowInInspector]
-    [LabelText("角色Buff相克表")]
-    public EntityBuffAttributeRelationship[,] ActorBuffAttributeMatrix => ConfigManager.EntityBuffAttributeMatrix;
 }

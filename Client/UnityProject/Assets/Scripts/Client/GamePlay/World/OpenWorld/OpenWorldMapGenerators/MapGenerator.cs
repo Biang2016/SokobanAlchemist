@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
+using Debug = UnityEngine.Debug;
 
 public abstract class MapGenerator
 {
@@ -78,9 +79,9 @@ public abstract class MapGenerator
                                     rot_local = new GridPos3D(rot_local.z, rot_local.y, WorldModule.MODULE_SIZE - 1 - rot_local.x);
                                 }
 
-                                foreach (TypeDefineType entityType in staticLayoutData.EntityDataMatrixKeys)
+                                foreach (KeyValuePair<TypeDefineType, int> kv in WorldModuleData.EntityDataMatrixKeys)
                                 {
-                                    EntityData raw_StaticLayoutEntityData = staticLayoutData[entityType, sl_local];
+                                    EntityData raw_StaticLayoutEntityData = staticLayoutData[kv.Key, sl_local];
                                     if (raw_StaticLayoutEntityData != null)
                                     {
                                         GridPos3D box_world = worldGP + rot_local;
@@ -91,7 +92,7 @@ public abstract class MapGenerator
                                             GridPos3D box_grid_world = box_world + gridPos;
                                             if (CheckGridInsideWorldRange(box_grid_world, 1))
                                             {
-                                                if (m_OpenWorld.CheckOccupied(entityType, box_grid_world))
+                                                if (m_OpenWorld.CheckOccupied(kv.Key, box_grid_world))
                                                 {
                                                     allowPut = false;
                                                     break;
@@ -124,9 +125,9 @@ public abstract class MapGenerator
                             rot_local = new GridPos3D(rot_local.z, rot_local.y, WorldModule.MODULE_SIZE - 1 - rot_local.x);
                         }
 
-                        foreach (TypeDefineType entityType in staticLayoutData.EntityDataMatrixKeys)
+                        foreach (KeyValuePair<TypeDefineType, int> kv in WorldModuleData.EntityDataMatrixKeys)
                         {
-                            EntityData staticLayoutEntityData = staticLayoutData[entityType, sl_local].Clone();
+                            EntityData staticLayoutEntityData = staticLayoutData[kv.Key, sl_local]?.Clone();
                             if (staticLayoutEntityData != null)
                             {
                                 GridPos3D entity_world = worldGP + rot_local;
@@ -144,7 +145,7 @@ public abstract class MapGenerator
                                             break;
                                         }
 
-                                        if (m_OpenWorld.CheckOccupied(entityType, entity_grid_world))
+                                        if (m_OpenWorld.CheckOccupied(kv.Key, entity_grid_world))
                                         {
                                             spaceAvailableForEntity = false;
                                             break;
@@ -175,7 +176,7 @@ public abstract class MapGenerator
                                     foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                                     {
                                         GridPos3D entity_grid_world = entity_world + gridPos;
-                                        m_OpenWorld.SetOccupied(staticLayoutEntityData.EntityType.TypeDefineType, TypeIndex, entity_grid_world, true);
+                                        m_OpenWorld.SetOccupied(staticLayoutEntityData.EntityType.TypeDefineType, staticLayoutEntityData.EntityTypeIndex, entity_grid_world, true);
 
                                         // 将Layout占领区域标记为Layout已占用，避免其他布局或随机Box插进来
                                         // 允许布局破损情况下，对布局内所有放置成功的Entity及其外扩一格的占领区域标记为Layout已占用

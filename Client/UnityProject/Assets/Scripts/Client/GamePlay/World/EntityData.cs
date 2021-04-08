@@ -46,12 +46,14 @@ public class EntityData : IClone<EntityData>
                 {
                     EntityType.TypeDefineType = TypeDefineType.Box;
                     EntityType.TypeSelection = ConfigManager.GetTypeName(TypeDefineType.Box, value);
+                    EntityType.RefreshGUID();
                     break;
                 }
                 case ConfigManager.TypeStartIndex.Actor:
                 {
                     EntityType.TypeDefineType = TypeDefineType.Actor;
                     EntityType.TypeSelection = ConfigManager.GetTypeName(TypeDefineType.Actor, value);
+                    EntityType.RefreshGUID();
                     break;
                 }
             }
@@ -75,6 +77,7 @@ public class EntityData : IClone<EntityData>
         EntityTypeIndex = entityTypeIndex;
         EntityOrientation = entityOrientation;
         RawEntityExtraSerializeData = rawEntityExtraSerializeData ?? RawEntityExtraSerializeData;
+        EntityType.RefreshGUID();
     }
 
     public EntityData Clone()

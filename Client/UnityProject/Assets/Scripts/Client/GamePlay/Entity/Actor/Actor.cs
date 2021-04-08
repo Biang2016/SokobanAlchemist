@@ -466,7 +466,7 @@ public class Actor : Entity
 
         ActorBehaviourState = ActorBehaviourStates.Idle;
         GraphOwner?.StopBehaviour();
-        ActorAIAgent.Stop();
+        ActorAIAgent?.Stop();
         CurMoveAttempt = Vector3.zero;
         LastMoveAttempt = Vector3.zero;
         CurThrowMoveAttempt = Vector3.zero;
@@ -598,8 +598,8 @@ public class Actor : Entity
         curWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
         LastWorldGP = WorldGP;
         SwitchEntityOrientation(entityData.EntityOrientation);
-        ActorAIAgent.Start();
-
+        PlayerControllerHelper?.OnSetup(PlayerNumber.Player1);
+        EnemyControllerHelper?.OnSetup();
         ActorBattleHelper.OnDamaged += (damage) =>
         {
             float distance = (BattleManager.Instance.Player1.transform.position - transform.position).magnitude;
@@ -607,8 +607,7 @@ public class Actor : Entity
         };
 
         ForbidAction = false;
-
-        PlayerControllerHelper?.OnSetup(PlayerNumber.Player1);
+        ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
     }
 
     private void Update()

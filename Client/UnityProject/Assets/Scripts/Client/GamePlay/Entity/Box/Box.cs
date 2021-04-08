@@ -481,11 +481,11 @@ public partial class Box : Entity
         }
     }
 
-    public void Setup(ushort boxTypeIndex, GridPosR.Orientation orientation, uint initWorldModuleGUID)
+    public void Setup(EntityData entityData, uint initWorldModuleGUID)
     {
         base.Setup(initWorldModuleGUID);
         if (IsHidden) BoxModelHelper.gameObject.SetActive(false);
-        EntityTypeIndex = boxTypeIndex;
+        EntityTypeIndex = entityData.EntityTypeIndex;
 
         InitPassiveSkills();
 
@@ -494,10 +494,11 @@ public partial class Box : Entity
 
         if (BoxArtHelper == null || !BoxArtHelper.UseRandomOrientation)
         {
-            SwitchEntityOrientation(orientation);
+            SwitchEntityOrientation(entityData.EntityOrientation);
         }
 
         if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorBoxInteractHelper.GetInteractSkillType(EntityTypeIndex), EntityTypeIndex);
+        ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
     }
 
     private void SetModelSmoothMoveLerpTime(float lerpTime)
