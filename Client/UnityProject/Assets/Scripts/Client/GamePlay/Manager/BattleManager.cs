@@ -13,7 +13,6 @@ using UnityEngine;
 
 public partial class BattleManager : TSingletonBaseManager<BattleManager>
 {
-    public SRandom SRandom = new SRandom(12345);
     public Messenger BattleMessenger = new Messenger();
 
     internal Actor[] MainPlayers = new Actor[2];
@@ -137,35 +136,12 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         Actor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<Actor>(ActorContainerRoot);
         GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
         player.WorldGP = bpd.WorldGP;
-        player.Setup(PlayerNumber.Player1.ToString(), ActorCategory.Player, GridPosR.Orientation.Up, 0);
+        player.Setup(new EntityData(ConfigManager.Actor_PlayerIndex, GridPosR.Orientation.Up), ActorCategory.Player, 0);
         BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
         MainPlayers[0] = player;
         AddActor(null, player);
         UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>().Initialize();
         UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
-    }
-
-    /// <summary>
-    /// 按地理位置销毁角色，非死亡
-    /// </summary>
-    /// <param name="moduleGP"></param>
-    public void DestroyActorByModuleGP_OpenWorldModuleRecycle(GridPos3D moduleGP)
-    {
-        WorldModule module = WorldManager.Instance.CurrentWorld.WorldModuleMatrix[moduleGP.x, moduleGP.y, moduleGP.z];
-        List<Actor> cachedDyingActors = new List<Actor>(32);
-        foreach (Actor enemy in Enemies)
-        {
-            GridPos3D actorModuleGP = WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(enemy.WorldGP);
-            if (actorModuleGP == moduleGP) cachedDyingActors.Add(enemy);
-        }
-
-        foreach (Actor cachedDyingActor in cachedDyingActors)
-        {
-            if (cachedDyingActor == Player1 || cachedDyingActor == Player2) continue;
-            cachedDyingActor.ActorBattleHelper.DestroyActor(null, true);
-        }
-
-        cachedDyingActors.Clear();
     }
 
     public void AddActor(WorldModule worldModule, Actor actor)

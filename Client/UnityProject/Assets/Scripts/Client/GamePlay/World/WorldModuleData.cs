@@ -41,7 +41,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
     public LevelTriggerGroupData WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();
-    public List<EntityPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearEntityDataList;
+    public List<EntityPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearEntityDataList = new List<EntityPassiveSkill_LevelEventTriggerAppear.Data>();
 
     public EntityData this[TypeDefineType entityType, GridPos3D localGP]
     {
@@ -58,15 +58,6 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
         EntityDataMatrix_Temp_CheckOverlap_BetweenBoxes = new EntityData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
         EntityDataMatrix_Temp_CheckOverlap_BoxAndActor = new EntityData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
 #endif
-        EventTriggerAppearEntityDataList = new List<EntityPassiveSkill_LevelEventTriggerAppear.Data>();
-    }
-
-    /// <summary>
-    /// 开放世界模组专用，记录模组信息变化
-    /// </summary>
-    public void InitOpenWorldModuleData(bool needSaveModification)
-    {
-        EventTriggerAppearEntityDataList = new List<EntityPassiveSkill_LevelEventTriggerAppear.Data>();
     }
 
     public WorldModuleData Clone() // 理论上只有NormalModule会用到，开放世界模组不能用此Clone，否则会造成不必要的内存占用
@@ -79,24 +70,17 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
         data.WorldModuleFeature = WorldModuleFeature;
         data.WorldModuleBornPointGroupData = WorldModuleBornPointGroupData.Clone();
         data.WorldModuleLevelTriggerGroupData = WorldModuleLevelTriggerGroupData.Clone();
-        for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
-        {
-            for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
-            {
-                for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
-                {
-                    data.EntityDataMatrix[TypeDefineType.Box][x, y, z] = EntityDataMatrix[TypeDefineType.Box][x, y, z].Clone();
-                }
-            }
-        }
 
-        for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
+        foreach (TypeDefineType entityType in EntityDataMatrixKeys)
         {
-            for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
+            for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
             {
-                for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
+                for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
                 {
-                    data.EntityDataMatrix[TypeDefineType.Actor][x, y, z] = EntityDataMatrix[TypeDefineType.Actor][x, y, z].Clone();
+                    for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
+                    {
+                        data.EntityDataMatrix[entityType][x, y, z] = EntityDataMatrix[entityType][x, y, z].Clone();
+                    }
                 }
             }
         }
@@ -137,6 +121,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
         WorldModuleBornPointGroupData = null;
         WorldModuleLevelTriggerGroupData = null;
         WorldModuleFeature = WorldModuleFeature.None;
+        EventTriggerAppearEntityDataList.Clear();
     }
 
     public void Release()

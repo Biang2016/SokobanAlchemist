@@ -578,12 +578,12 @@ public class Actor : Entity
         }
     }
 
-    public void Setup(string actorType, ActorCategory actorCategory, GridPosR.Orientation actorOrientation, uint initWorldModuleGUID)
+    public void Setup(EntityData entityData, ActorCategory actorCategory, uint initWorldModuleGUID)
     {
         base.Setup(initWorldModuleGUID);
-        EntityTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Actor, actorType);
+        EntityTypeIndex = entityData.EntityTypeIndex;
         if (actorCategory == ActorCategory.Player) ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
-        ActorType = actorType;
+        ActorType = entityData.EntityType.TypeName;
         ActorCategory = actorCategory;
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
@@ -597,7 +597,7 @@ public class Actor : Entity
 
         curWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
         LastWorldGP = WorldGP;
-        SwitchEntityOrientation(actorOrientation);
+        SwitchEntityOrientation(entityData.EntityOrientation);
         ActorAIAgent.Start();
 
         ActorBattleHelper.OnDamaged += (damage) =>

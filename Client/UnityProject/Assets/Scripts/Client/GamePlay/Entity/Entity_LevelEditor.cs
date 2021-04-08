@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -17,20 +18,25 @@ public abstract class Entity_LevelEditor : MonoBehaviour
     [LabelText("旋转朝向")]
     [EnumToggleButtons]
     [OnValueChanged("RefreshOrientation")]
-    [NonSerialized]
-    public GridPosR.Orientation EntityOrientation;
+    [PropertyOrder(1)]
+    [ShowInInspector]
+    public GridPosR.Orientation EntityOrientation
+    {
+        get { return EntityData.EntityOrientation; }
+        set { EntityData.EntityOrientation = value; }
+    }
 
+    [LabelText("实体数据")]
+    [PropertyOrder(2)]
     public EntityData EntityData = new EntityData();
 
     public bool RefreshOrientation()
     {
-        bool dirty = EntityData.EntityOrientation != EntityOrientation;
-        EntityData.EntityOrientation = EntityOrientation;
-        dirty |= Math.Abs(ModelRoot.transform.rotation.eulerAngles.y - (int) EntityData.EntityOrientation * 90f) > 1f;
+        bool dirty = Math.Abs(ModelRoot.transform.rotation.eulerAngles.y - (int)EntityOrientation * 90f) > 1f;
         if (dirty)
         {
-            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, EntityData.EntityOrientation), ModelRoot.transform, 1);
-            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, EntityData.EntityOrientation), IndicatorHelperGO.transform, 1);
+            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, EntityOrientation), ModelRoot.transform, 1);
+            GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, EntityOrientation), IndicatorHelperGO.transform, 1);
 #if UNITY_EDITOR
             EditorWindow view = EditorWindow.GetWindow<SceneView>();
             view.Repaint();
@@ -101,6 +107,7 @@ public abstract class Entity_LevelEditor : MonoBehaviour
     [BoxGroup("快速替换")]
     [LabelText("@\"替换实体类型\t\"+ReplaceEntityTypeName")]
     [ValidateInput("ValidateReplaceEntityTypeName", "只能选择Box或者Actor")]
+    [PropertyOrder(3)]
     private TypeSelectHelper ReplaceEntityTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
     private bool ValidateReplaceEntityTypeName(TypeSelectHelper value)
@@ -114,6 +121,7 @@ public abstract class Entity_LevelEditor : MonoBehaviour
     [BoxGroup("快速替换")]
     [Button("替换实体", ButtonSizes.Large)]
     [GUIColor(0f, 1f, 1f)]
+    [PropertyOrder(3)]
     private void ReplaceEntity_Editor()
     {
         WorldModuleDesignHelper module = GetComponentInParent<WorldModuleDesignHelper>();

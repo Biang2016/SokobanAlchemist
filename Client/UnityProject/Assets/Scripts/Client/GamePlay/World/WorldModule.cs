@@ -67,7 +67,17 @@ public class WorldModule : PoolObject
             }
             else
             {
-                WorldModuleData[TypeDefineType.Box, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                EntityData entityData = WorldModuleData[TypeDefineType.Box, localGP];
+                if (entityData != null)
+                {
+                    entityData.EntityTypeIndex = value.EntityTypeIndex;
+                    entityData.EntityOrientation = value.EntityOrientation;
+                }
+                else
+                {
+                    WorldModuleData[TypeDefineType.Box, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                }
+
                 if (!value.Passable) EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = value;
             }
 
@@ -490,8 +500,7 @@ public class WorldModule : PoolObject
                         Actor actor = GameObjectPoolManager.Instance.ActorDict[entityData.EntityTypeIndex].AllocateGameObject<Actor>(BattleManager.Instance.ActorContainerRoot);
                         GridPos3D.ApplyGridPosToLocalTrans(worldGP, actor.transform, 1);
                         actor.WorldGP = worldGP;
-                        actor.Setup(entityData.EntityType.TypeName, ActorCategory.Creature, entityData.EntityOrientation, GUID);
-                        actor.ApplyBoxExtraSerializeData(entityData.RawEntityExtraSerializeData);
+                        actor.Setup(entityData, ActorCategory.Creature, GUID);
                         BattleManager.Instance.AddActor(this, actor);
                         return actor;
                     }

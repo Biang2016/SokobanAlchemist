@@ -32,6 +32,18 @@ public class BornPointData : LevelComponentData
     [ValidateInput("ValidateBornPointAlias", "请保证此项非空时是唯一的；且一个模组只允许有一个玩家出生点花名为空")]
     public string BornPointAlias = "";
 
+    public bool ValidateBornPointAlias(string alias)
+    {
+        if (string.IsNullOrEmpty(alias))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     protected override void ChildClone(LevelComponentData newData)
     {
         base.ChildClone(newData);

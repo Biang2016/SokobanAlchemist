@@ -62,10 +62,8 @@ public class WorldModuleDesignHelper : MonoBehaviour
         foreach (Entity_LevelEditor entity in entities)
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(entity.transform, 1);
-            GameObject entityEditorPrefab = PrefabUtility.GetCorrespondingObjectFromSource(entity.gameObject);
-            string entityName = entityEditorPrefab.name.Replace("_LevelEditor", "");
-            ushort entityTypeIndex = ConfigManager.TypeDefineConfigs[entity.EntityData.EntityType.TypeDefineType].TypeIndexDict[entityName];
-            EntityData entityData = new EntityData(entityTypeIndex, entity.EntityOrientation);
+            EntityData entityData = entity.EntityData.Clone();
+            ushort entityTypeIndex = entityData.EntityTypeIndex;
 
             bool isLevelEventTriggerAppearEntity = false;
             foreach (EntityPassiveSkill eps in entity.EntityData.RawEntityExtraSerializeData.EntityPassiveSkills)
@@ -120,7 +118,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
                         {
                             spaceAvailable = false;
                             string entity1Name = ConfigManager.TypeDefineConfigs[overlapEntityData.EntityType.TypeDefineType].TypeNameDict[overlapEntityData.EntityTypeIndex];
-                            string entity2Name = ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict[entityTypeIndex];
+                            string entity2Name = ConfigManager.TypeDefineConfigs[TypeDefineType.Actor].TypeNameDict[entityTypeIndex];
                             Debug.Log($"世界模组[{name}]的{gridPos}位置处存在重叠实体{entity1Name}和{entity2Name},已忽略后者");
                         }
                     }

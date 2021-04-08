@@ -73,12 +73,12 @@ public class OpenWorld : World
         if (entityType == TypeDefineType.Box)
         {
             bool passable = ConfigManager.GetEntityOccupationData(typeIndex).Passable;
-            WorldMap_Occupied_BetweenBoxes[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort)(occupied ? typeIndex : 0);
-            if (!passable) WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort)(occupied ? typeIndex : 0);
+            WorldMap_Occupied_BetweenBoxes[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort) (occupied ? typeIndex : 0);
+            if (!passable) WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort) (occupied ? typeIndex : 0);
         }
         else if (entityType == TypeDefineType.Actor)
         {
-            WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort)(occupied ? typeIndex : 0);
+            WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort) (occupied ? typeIndex : 0);
         }
     }
 
@@ -217,7 +217,6 @@ public class OpenWorld : World
         #region GenerateBoxLayer
 
         int generatorCount_boxLayer = 0;
-        GridPos3D playerBPWorld = new GridPos3D(-1, -1, -1);
 
         foreach (GenerateBoxLayerData boxLayerData in GenerateBoxLayerDataList) // 按层生成关卡Box数据
         {
@@ -306,6 +305,7 @@ public class OpenWorld : World
         ushort startMicroWorldTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, StartMicroWorldTypeName.TypeName);
         if (startMicroWorldTypeIndex == 0)
         {
+            GridPos3D playerBPWorld = new GridPos3D(-1, -1, -1);
             RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(playerBPWorld, PlayerScopeRadiusX, PlayerScopeRadiusZ)); // 按关卡生成器和角色位置初始化需要的模组
             while (RefreshScopeModulesCoroutine != null) yield return null;
 
@@ -335,9 +335,9 @@ public class OpenWorld : World
     public class LevelCacheData
     {
         public CellularAutomataTerrainGenerator TerrainGenerator;
-        public List<MapGenerator> CurrentGenerator_StaticLayouts = new List<MapGenerator>(); // 按静态布局layer记录的地图生成信息，未走过的地图或离开很久之后重置的模组按这个数据加载出来
-        public List<MapGenerator> CurrentGenerators_Boxes = new List<MapGenerator>(); // 按箱子layer记录的地图生成信息，未走过的地图或离开很久之后重置的模组按这个数据加载出来
-        public List<MapGenerator> CurrentGenerators_Actors = new List<MapGenerator>(); // 按角色layer记录的生成信息，未走过的地图或离开很久之后重置的模组按这个数据加载出来
+        public List<MapGenerator> CurrentGenerator_StaticLayouts = new List<MapGenerator>(); // 按静态布局layer记录的地图生成信息，未走过的地图模组按这个数据加载出来
+        public List<MapGenerator> CurrentGenerators_Boxes = new List<MapGenerator>(); // 按箱子layer记录的地图生成信息，未走过的地图模组按这个数据加载出来
+        public List<MapGenerator> CurrentGenerators_Actors = new List<MapGenerator>(); // 按角色layer记录的生成信息，未走过的地图模组按这个数据加载出来
 
         public Dictionary<GridPos3D, WorldModuleData> WorldModuleDataDict = new Dictionary<GridPos3D, WorldModuleData>();
 
@@ -437,13 +437,12 @@ public class OpenWorld : World
                             RawEntityExtraSerializeData = null,
                         };
                     moduleData.WorldModuleFeature = WorldModuleFeature.Ground;
-                    moduleData.InitOpenWorldModuleData(true);
 
                     generateModuleFinished.Add(false);
                     StartCoroutine(Co_GenerateModule(moduleData, targetModuleGP, generateModuleFinished.Count - 1));
                 }
 
-                // Other Modules (以WorldMap为模板，将diff应用上去)
+                // Other Modules
                 WorldModule module = WorldModuleMatrix[module_x, 1, module_z];
                 if (module == null)
                 {
@@ -452,7 +451,6 @@ public class OpenWorld : World
                     {
                         // 从未加载过的模组，通过generator来计算
                         moduleData = WorldModuleData.WorldModuleDataFactory.Alloc();
-                        moduleData.InitOpenWorldModuleData(true);
                         m_LevelCacheData.WorldModuleDataDict.Add(targetModuleGP, moduleData);
                         foreach (KeyValuePair<TypeDefineType, EntityData[,,]> kv in WorldMap_EntityDataMatrix)
                         {
@@ -545,7 +543,6 @@ public class OpenWorld : World
         WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
         yield return worldModule.Clear(false, 256);
         worldModule.PoolRecycle();
-        //m_LevelCacheData.WorldModuleDataDict.Remove(currentShowModuleGP);
         if (boolIndex >= 0)
         {
             if (boolIndex >= recycleModuleFinished.Count)
@@ -807,12 +804,12 @@ public class OpenWorld : World
         foreach (GridPos3D worldModuleGP in microWorldData.WorldModuleGPOrder)
         {
             ushort worldModuleTypeIndex = microWorldData.ModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
-            GridPos3D realModuleGP = new GridPos3D(worldModuleGP.x, World.WORLD_HEIGHT / 2 + worldModuleGP.y, worldModuleGP.z);
+            GridPos3D realModuleGP = new GridPos3D(worldModuleGP.x, WORLD_HEIGHT / 2 + worldModuleGP.y, worldModuleGP.z);
             if (worldModuleTypeIndex != 0)
             {
-                if (worldModuleGP.y >= World.WORLD_HEIGHT / 2)
+                if (worldModuleGP.y >= WORLD_HEIGHT / 2)
                 {
-                    Debug.LogError($"静态世界不允许超过{World.WORLD_HEIGHT / 2}个模组高度");
+                    Debug.LogError($"静态世界不允许超过{WORLD_HEIGHT / 2}个模组高度");
                     continue;
                 }
                 else

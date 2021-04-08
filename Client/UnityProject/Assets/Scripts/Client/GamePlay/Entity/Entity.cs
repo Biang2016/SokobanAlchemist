@@ -653,8 +653,22 @@ public abstract class Entity : PoolObject
         {
             string entity_LevelEditor_Prefab_Path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(entityLevelEditorPrefab);
             GameObject entity_LevelEditor_Instance = PrefabUtility.LoadPrefabContents(entity_LevelEditor_Prefab_Path); // 这是实例化一个在预览场景里的prefab实例，为了能够顺利删除子GameObject
-
             Entity_LevelEditor entity_LevelEditor = entity_LevelEditor_Instance.GetComponent<Entity_LevelEditor>();
+
+            entity_LevelEditor.ModelRoot = null;
+            entity_LevelEditor.IndicatorHelperGO = null;
+            List<Transform> children = new List<Transform>();
+            for (int i = 0; i < entity_LevelEditor.transform.childCount; i++)
+            {
+                Transform child = entity_LevelEditor.transform.GetChild(i);
+                children.Add(child);
+            }
+
+            foreach (Transform child in children)
+            {
+                DestroyImmediate(child.gameObject);
+            }
+
             modelRoot.transform.parent = entity_LevelEditor_Instance.transform;
             if (entity_LevelEditor.ModelRoot) DestroyImmediate(entity_LevelEditor.ModelRoot);
             entity_LevelEditor.ModelRoot = modelRoot;
@@ -664,6 +678,8 @@ public abstract class Entity : PoolObject
             entity_LevelEditor.IndicatorHelperGO = entityIndicatorHelperGO;
 
             entity_LevelEditor.EntityData.EntityType.TypeDefineType = entityType;
+            entity_LevelEditor.EntityData.EntityType.TypeSelection = name;
+            entity_LevelEditor.EntityData.EntityType.RefreshGUID();
 
             PrefabUtility.SaveAsPrefabAsset(entity_LevelEditor_Instance, entity_LevelEditor_Prefab_Path, out bool suc); // 保存回改Prefab的Asset
             DestroyImmediate(entity_LevelEditor_Instance);
@@ -682,6 +698,10 @@ public abstract class Entity : PoolObject
             entityIndicatorHelperGO.transform.parent = entity_LevelEditor_Instance.transform;
             if (entity_LevelEditor.IndicatorHelperGO) DestroyImmediate(entity_LevelEditor.IndicatorHelperGO);
             entity_LevelEditor.IndicatorHelperGO = entityIndicatorHelperGO;
+
+            entity_LevelEditor.EntityData.EntityType.TypeDefineType = entityType;
+            entity_LevelEditor.EntityData.EntityType.TypeSelection = name;
+            entity_LevelEditor.EntityData.EntityType.RefreshGUID();
 
             string entity_LevelEditor_PrefabPath = ConfigManager.FindEntityLevelEditorPrefabPathByName(entityType, name); // 保存成Variant
             PrefabUtility.SaveAsPrefabAsset(entity_LevelEditor_Instance, entity_LevelEditor_PrefabPath, out bool suc);
