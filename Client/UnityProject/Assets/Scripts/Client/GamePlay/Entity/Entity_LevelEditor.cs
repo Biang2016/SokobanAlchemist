@@ -19,7 +19,6 @@ public abstract class Entity_LevelEditor : MonoBehaviour
     [OnValueChanged("RefreshOrientation")]
     public GridPosR.Orientation EntityOrientation;
 
-    [HideInInspector]
     public EntityData EntityData = new EntityData();
 
     public bool RefreshOrientation()
