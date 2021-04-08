@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.GamePlay;
 using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 public abstract class Entity : PoolObject
@@ -494,7 +496,7 @@ public abstract class Entity : PoolObject
     #region Camp
 
     [LabelText("阵营")]
-    [FoldoutGroup("状态")]
+    [FoldoutGroup("属性")]
     [DisableInPlayMode]
     public Camp Camp;
 
@@ -623,6 +625,64 @@ public abstract class Entity : PoolObject
     {
         return GUID.GetHashCode();
     }
+
+#if UNITY_EDITOR
+
+    [AssetsOnly]
+    [Button("刷新关卡编辑器中该实体的形态", ButtonSizes.Large)]
+    [GUIColor(0, 1, 0)]
+    public void CreateEntityLevelEditor()
+    {
+        GameObject box_Instance = Instantiate(gameObject); // 这是实例化一个无链接的prefab实例（unpacked completely）
+        Box box = box_Instance.GetComponent<Box>();
+        GameObject modelRoot = box.EntityModelHelper.gameObject;
+        GameObject boxIndicatorHelperGO = box.BoxIndicatorHelper.gameObject;
+
+        GameObject boxLevelEditorPrefab = ConfigManager.FindBoxLevelEditorPrefabByName(name);
+        if (boxLevelEditorPrefab)
+        {
+            string box_LevelEditor_Prefab_Path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(boxLevelEditorPrefab);
+            GameObject box_LevelEditor_Instance = PrefabUtility.LoadPrefabContents(box_LevelEditor_Prefab_Path); // 这是实例化一个在预览场景里的prefab实例，为了能够顺利删除子GameObject
+
+            Box_LevelEditor box_LevelEditor = box_LevelEditor_Instance.GetComponent<Box_LevelEditor>();
+            modelRoot.transform.parent = box_LevelEditor_Instance.transform;
+            if (box_LevelEditor.ModelRoot) DestroyImmediate(box_LevelEditor.ModelRoot);
+            box_LevelEditor.ModelRoot = modelRoot;
+
+            boxIndicatorHelperGO.transform.parent = box_LevelEditor_Instance.transform;
+            if (box_LevelEditor.IndicatorHelperGO) DestroyImmediate(box_LevelEditor.IndicatorHelperGO);
+            box_LevelEditor.IndicatorHelperGO = boxIndicatorHelperGO;
+
+            box_LevelEditor.EntityData.EntityType.TypeDefineType = TypeDefineType.Box;
+
+            PrefabUtility.SaveAsPrefabAsset(box_LevelEditor_Instance, box_LevelEditor_Prefab_Path, out bool suc); // 保存回改Prefab的Asset
+            DestroyImmediate(box_LevelEditor_Instance);
+        }
+        else
+        {
+            PrefabManager.Instance.LoadPrefabs(); // todo delete this line
+            GameObject BoxBase_LevelEditor_Prefab = PrefabManager.Instance.GetPrefab("BoxBase_LevelEditor");
+            GameObject box_LevelEditor_Instance = (GameObject)PrefabUtility.InstantiatePrefab(BoxBase_LevelEditor_Prefab); // 这是实例化一个在当前场景里的prefab实例（有链接），为了能够顺利保存成Variant
+
+            Box_LevelEditor box_LevelEditor = box_LevelEditor_Instance.GetComponent<Box_LevelEditor>();
+            modelRoot.transform.parent = box_LevelEditor_Instance.transform;
+            if (box_LevelEditor.ModelRoot) DestroyImmediate(box_LevelEditor.ModelRoot);
+            box_LevelEditor.ModelRoot = modelRoot;
+
+            boxIndicatorHelperGO.transform.parent = box_LevelEditor_Instance.transform;
+            if (box_LevelEditor.IndicatorHelperGO) DestroyImmediate(box_LevelEditor.IndicatorHelperGO);
+            box_LevelEditor.IndicatorHelperGO = boxIndicatorHelperGO;
+
+            string box_LevelEditor_PrefabPath = ConfigManager.FindBoxLevelEditorPrefabPathByName(name); // 保存成Variant
+            PrefabUtility.SaveAsPrefabAsset(box_LevelEditor_Instance, box_LevelEditor_PrefabPath, out bool suc);
+            DestroyImmediate(box_LevelEditor_Instance);
+        }
+
+        DestroyImmediate(box_Instance);
+    }
+
+#endif
+
 }
 
 public static class EntityUtils

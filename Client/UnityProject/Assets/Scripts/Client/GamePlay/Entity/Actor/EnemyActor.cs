@@ -2,8 +2,6 @@
 
 public class EnemyActor : Actor
 {
-    public bool FrequentUpdate = false;
-
     internal float AIUpdateInterval = 0.3f;
     private float AIUpdateIntervalTick = 0;
 

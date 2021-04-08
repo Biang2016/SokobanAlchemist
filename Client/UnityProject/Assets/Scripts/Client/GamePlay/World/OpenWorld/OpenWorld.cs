@@ -24,14 +24,69 @@ public class OpenWorld : World
     [ShowIf("UseCertainSeed")]
     public uint GivenSeed = 0;
 
-    public ushort[,,] WorldMap; // 地图元素放置  Y轴缩小16
-    public BornPointData[,,] WorldBornPointData; // 地图出生点数据  Y轴缩小16
-    public EntityExtraSerializeData[,,] WorldMap_BoxExtraSerializeData; // 地图箱子的额外数据  Y轴缩小16
-    public GridPosR.Orientation[,,] WorldMapOrientation; // 地图元素放置朝向  Y轴缩小16
-    public ushort[,,] WorldMap_Occupied; // 地图元素占位  Y轴缩小16
-    public ushort[,,] WorldMap_StaticLayoutOccupied_IntactForStaticLayout; // 地图静态布局占位，禁止其他静态布局影响  Y轴缩小16
-    public ushort[,,] WorldMap_StaticLayoutOccupied_IntactForBox; // 地图静态布局占位，禁止其他箱子影响  Y轴缩小16
-    public TerrainType[,] WorldMap_TerrainType; // 地图地形分布
+    public Dictionary<TypeDefineType, EntityData[,,]> WorldMap_EntityDataMatrix = new Dictionary<TypeDefineType, EntityData[,,]>(); // 地图元素放置, Y轴缩小16
+
+    #region Occupy
+
+    private ushort[,,] WorldMap_Occupied_BetweenBoxes; // Y轴缩小16
+    private ushort[,,] WorldMap_Occupied_BoxAndActor; // 为了检查重叠. Box写入时只写入非Passable的，这样就允许Actor和Passable的Box初始可以重叠, Y轴缩小16
+    public ushort[,,] WorldMap_StaticLayoutOccupied_IntactForStaticLayout; // 地图静态布局占位，禁止其他静态布局影响, Y轴缩小16
+    public ushort[,,] WorldMap_StaticLayoutOccupied_IntactForBox; // 地图静态布局占位，禁止其他箱子影响, Y轴缩小16
+
+    public ushort GetOccupy(TypeDefineType entityType, GridPos3D worldGP)
+    {
+        if (entityType == TypeDefineType.Box)
+        {
+            return WorldMap_Occupied_BetweenBoxes[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z];
+        }
+        else if (entityType == TypeDefineType.Enemy)
+        {
+            return WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z];
+        }
+
+        return 0;
+    }
+
+    public bool CheckOccupied(TypeDefineType entityType, GridPos3D worldGP)
+    {
+        if (entityType == TypeDefineType.Box)
+        {
+            if (WorldMap_Occupied_BetweenBoxes[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] != 0
+                || WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] != 0)
+            {
+                return false;
+            }
+        }
+        else if (entityType == TypeDefineType.Enemy)
+        {
+            if (WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] != 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void SetOccupied(TypeDefineType entityType, ushort typeIndex, GridPos3D worldGP, bool occupied)
+    {
+        if (entityType == TypeDefineType.Box)
+        {
+            bool passable = ConfigManager.GetEntityOccupationData(typeIndex).Passable;
+            WorldMap_Occupied_BetweenBoxes[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort)(occupied ? typeIndex : 0);
+            if (!passable) WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort)(occupied ? typeIndex : 0);
+        }
+        else if (entityType == TypeDefineType.Enemy)
+        {
+            WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort)(occupied ? typeIndex : 0);
+        }
+    }
+
+    #endregion
+
+    public TerrainType[,] WorldMap_TerrainType; // 地图地形分布，Y为0
+
+    public BornPointData[,,] WorldBornPointData; // 地图出生点数据, Y轴缩小16
 
     [BoxGroup("@\"起始MicroWorld\t\"+StartMicroWorldTypeName")]
     [HideLabel]
@@ -67,10 +122,9 @@ public class OpenWorld : World
     public override void OnRecycled()
     {
         base.OnRecycled();
-        WorldMap = null;
-        WorldMap_BoxExtraSerializeData = null;
-        WorldMapOrientation = null;
-        WorldMap_Occupied = null;
+        WorldMap_EntityDataMatrix = null;
+        WorldMap_Occupied_BetweenBoxes = null;
+        WorldMap_Occupied_BoxAndActor = null;
         WorldMap_StaticLayoutOccupied_IntactForStaticLayout = null;
         WorldMap_StaticLayoutOccupied_IntactForBox = null;
         WorldMap_TerrainType = null;
@@ -100,20 +154,20 @@ public class OpenWorld : World
 
         SRandom SRandom = new SRandom(Seed);
 
-        WorldMap = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        WorldBornPointData = new BornPointData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        WorldMap_BoxExtraSerializeData = new EntityExtraSerializeData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        WorldMapOrientation = new GridPosR.Orientation[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        WorldMap_Occupied = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMap_EntityDataMatrix.Add(TypeDefineType.Box, new EntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE]);
+        WorldMap_EntityDataMatrix.Add(TypeDefineType.Enemy, new EntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE]);
+        WorldMap_Occupied_BetweenBoxes = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMap_Occupied_BoxAndActor = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_StaticLayoutOccupied_IntactForStaticLayout = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_StaticLayoutOccupied_IntactForBox = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_TerrainType = new TerrainType[WorldSize_X * WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldBornPointData = new BornPointData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
 
         WorldGUID = Seed + "_" + Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
         m_LevelCacheData = new LevelCacheData();
         WorldData = worldData;
 
-        WorldData.WorldBornPointGroupData_Runtime.InitTempData();
+        WorldData.WorldBornPointGroupData_Runtime.Init();
         WorldData.DefaultWorldActorBornPointAlias = PLAYER_DEFAULT_BP;
 
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.5f, "Loading Open World");
@@ -244,7 +298,7 @@ public class OpenWorld : World
 
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.91f, "Loading Maps");
         yield return null;
-        BattleManager.Instance.CreateActorByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias], false);
+        BattleManager.Instance.CreatePlayerByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias]);
         BattleManager.Instance.Player1.ForbidAction = true;
         CameraManager.Instance.FieldCamera.InitFocus();
 
@@ -369,10 +423,19 @@ public class OpenWorld : World
                 if (groundModule == null)
                 {
                     GridPos3D targetModuleGP = new GridPos3D(module_x, 0, module_z);
+                    GridPos3D localGP = new GridPos3D(0, 15, 0);
                     WorldModuleData moduleData = WorldModuleData.WorldModuleDataFactory.Alloc();
-                    moduleData.BoxMatrix[0, 15, 0] = ConfigManager.Box_CombinedGroundBoxIndex;
-                    moduleData.RawBoxMatrix[0, 15, 0] = ConfigManager.Box_CombinedGroundBoxIndex;
-
+                    moduleData[TypeDefineType.Box, localGP] =
+                        new EntityData
+                        {
+                            EntityType = new TypeSelectHelper
+                            {
+                                TypeDefineType = TypeDefineType.Box,
+                                TypeSelection = ConfigManager.GetTypeName(TypeDefineType.Box, ConfigManager.Box_CombinedGroundBoxIndex)
+                            },
+                            EntityOrientation = GridPosR.Orientation.Up,
+                            RawEntityExtraSerializeData = null,
+                        };
                     moduleData.WorldModuleFeature = WorldModuleFeature.Ground;
                     moduleData.InitOpenWorldModuleData(true);
 
@@ -384,59 +447,26 @@ public class OpenWorld : World
                 WorldModule module = WorldModuleMatrix[module_x, 1, module_z];
                 if (module == null)
                 {
-                    WorldModuleData moduleData = null;
                     GridPos3D targetModuleGP = new GridPos3D(module_x, 1, module_z);
-                    if (!m_LevelCacheData.WorldModuleDataDict.TryGetValue(targetModuleGP, out moduleData))
+                    if (!m_LevelCacheData.WorldModuleDataDict.TryGetValue(targetModuleGP, out WorldModuleData moduleData))
                     {
                         // 从未加载过的模组，通过generator来计算
                         moduleData = WorldModuleData.WorldModuleDataFactory.Alloc();
                         moduleData.InitOpenWorldModuleData(true);
                         m_LevelCacheData.WorldModuleDataDict.Add(targetModuleGP, moduleData);
-                        for (int world_x = targetModuleGP.x * WorldModule.MODULE_SIZE; world_x < (targetModuleGP.x + 1) * WorldModule.MODULE_SIZE; world_x++)
-                        for (int world_y = targetModuleGP.y * WorldModule.MODULE_SIZE; world_y < (targetModuleGP.y + 1) * WorldModule.MODULE_SIZE; world_y++)
-                        for (int world_z = targetModuleGP.z * WorldModule.MODULE_SIZE; world_z < (targetModuleGP.z + 1) * WorldModule.MODULE_SIZE; world_z++)
+                        foreach (KeyValuePair<TypeDefineType, EntityData[,,]> kv in WorldMap_EntityDataMatrix)
                         {
-                            int local_x = world_x - targetModuleGP.x * WorldModule.MODULE_SIZE;
-                            int local_y = world_y - targetModuleGP.y * WorldModule.MODULE_SIZE;
-                            int local_z = world_z - targetModuleGP.z * WorldModule.MODULE_SIZE;
-                            ushort existedIndex = WorldMap[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
-                            ConfigManager.TypeStartIndex indexType = existedIndex.ConvertToTypeStartIndex();
-                            switch (indexType)
+                            for (int world_x = targetModuleGP.x * WorldModule.MODULE_SIZE; world_x < (targetModuleGP.x + 1) * WorldModule.MODULE_SIZE; world_x++)
+                            for (int world_y = targetModuleGP.y * WorldModule.MODULE_SIZE; world_y < (targetModuleGP.y + 1) * WorldModule.MODULE_SIZE; world_y++)
+                            for (int world_z = targetModuleGP.z * WorldModule.MODULE_SIZE; world_z < (targetModuleGP.z + 1) * WorldModule.MODULE_SIZE; world_z++)
                             {
-                                case ConfigManager.TypeStartIndex.Box:
-                                {
-                                    moduleData.RawBoxMatrix[local_x, local_y, local_z] = existedIndex;
-                                    moduleData.BoxMatrix[local_x, local_y, local_z] = existedIndex;
-                                    moduleData.RawBoxOrientationMatrix[local_x, local_y, local_z] = WorldMapOrientation[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
-                                    moduleData.BoxOrientationMatrix[local_x, local_y, local_z] = WorldMapOrientation[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
-                                    moduleData.BoxExtraSerializeDataMatrix[local_x, local_y, local_z] = WorldMap_BoxExtraSerializeData[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
-                                    break;
-                                }
-                                case ConfigManager.TypeStartIndex.Enemy:
-                                {
-                                    BornPointData bpd = WorldBornPointData[world_x, world_y - WorldModule.MODULE_SIZE, world_z];
-                                    if (bpd != null) moduleData.WorldModuleBornPointGroupData.EnemyBornPoints.Add(bpd);
-                                    break;
-                                }
+                                GridPos3D worldGP = new GridPos3D(world_x, world_y, world_z);
+                                GridPos3D localGP = worldGP - targetModuleGP * WorldModule.MODULE_SIZE;
+                                moduleData[kv.Key, localGP] = WorldMap_EntityDataMatrix[kv.Key][world_x, world_y - WorldModule.MODULE_SIZE, world_z].Clone();
                             }
                         }
 
                         WorldData.WorldBornPointGroupData_Runtime.Init_LoadModuleData(targetModuleGP, moduleData);
-                    }
-
-                    // 加载模组修改
-                    WorldModuleDataModification modification = WorldModuleDataModification.LoadData(targetModuleGP);
-                    if (modification != null)
-                    {
-                        foreach (KeyValuePair<GridPos3D, WorldModuleDataModification.BoxModification> kv in modification.BoxModificationDict)
-                        {
-                            // 此部分不可使用Module[x,y,z]来赋值，否则又会触发Modification
-                            moduleData.BoxMatrix[kv.Key.x, kv.Key.y, kv.Key.z] = kv.Value.BoxTypeIndex;
-                            moduleData.BoxOrientationMatrix[kv.Key.x, kv.Key.y, kv.Key.z] = kv.Value.EntityOrientation;
-                        }
-
-                        moduleData.Modification.Release();
-                        moduleData.Modification = modification;
                     }
 
                     generateModuleFinished.Add(false);
@@ -512,7 +542,6 @@ public class OpenWorld : World
     IEnumerator Co_RecycleModule(WorldModule worldModule, GridPos3D currentShowModuleGP, int boolIndex)
     {
         WorldData.WorldBornPointGroupData_Runtime.Dynamic_UnloadModuleData(currentShowModuleGP);
-        worldModule.WorldModuleData.Modification?.SaveData(worldModule.ModuleGP);
         WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
         yield return worldModule.Clear(false, 256);
         worldModule.PoolRecycle();
@@ -531,7 +560,6 @@ public class OpenWorld : World
     IEnumerator Co_GenerateModule(WorldModuleData moduleData, GridPos3D targetModuleGP, int boolIndex)
     {
         yield return GenerateWorldModuleByCustomizedData(moduleData, targetModuleGP.x, targetModuleGP.y, targetModuleGP.z, 32);
-        yield return WorldData.WorldBornPointGroupData_Runtime.Dynamic_LoadModuleData(targetModuleGP);
         if (boolIndex >= 0)
         {
             if (boolIndex >= generateModuleFinished.Count)
@@ -614,7 +642,6 @@ public class OpenWorld : World
                     WorldModule module = WorldModuleMatrix[realModuleGP.x, realModuleGP.y, realModuleGP.z];
                     MicroWorldModules.Add(module);
                     WorldData.WorldBornPointGroupData_Runtime.Init_LoadModuleData(realModuleGP, module.WorldModuleData);
-                    yield return WorldData.WorldBornPointGroupData_Runtime.Dynamic_LoadModuleData(realModuleGP);
                     SortedDictionary<string, BornPointData> playerBornPoints = module.WorldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints;
                     if (playerBornPoints.Count > 0)
                     {
@@ -626,13 +653,10 @@ public class OpenWorld : World
                     {
                         foreach (BornPointData bp in moduleBPData)
                         {
-                            if (bp.ActorCategory == ActorCategory.Player)
+                            string playerBPAlias = module.WorldModuleData.WorldModuleTypeName;
+                            if (!WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.ContainsKey(playerBPAlias))
                             {
-                                string playerBPAlias = module.WorldModuleData.WorldModuleTypeName;
-                                if (!WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.ContainsKey(playerBPAlias))
-                                {
-                                    WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Add(playerBPAlias, bp);
-                                }
+                                WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Add(playerBPAlias, bp);
                             }
                         }
                     }
@@ -797,7 +821,6 @@ public class OpenWorld : World
                     WorldModule module = WorldModuleMatrix[realModuleGP.x, realModuleGP.y, realModuleGP.z];
                     MicroWorldModules.Add(module);
                     WorldData.WorldBornPointGroupData_Runtime.Init_LoadModuleData(realModuleGP, module.WorldModuleData);
-                    yield return WorldData.WorldBornPointGroupData_Runtime.Dynamic_LoadModuleData(realModuleGP);
                     SortedDictionary<string, BornPointData> playerBornPoints = module.WorldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints;
                     if (playerBornPoints.Count > 0)
                     {
@@ -809,13 +832,10 @@ public class OpenWorld : World
                     {
                         foreach (BornPointData bp in moduleBPData)
                         {
-                            if (bp.ActorCategory == ActorCategory.Player)
+                            string playerBPAlias = module.WorldModuleData.WorldModuleTypeName;
+                            if (!WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.ContainsKey(playerBPAlias))
                             {
-                                string playerBPAlias = module.WorldModuleData.WorldModuleTypeName;
-                                if (!WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.ContainsKey(playerBPAlias))
-                                {
-                                    WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Add(playerBPAlias, bp);
-                                }
+                                WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Add(playerBPAlias, bp);
                             }
                         }
                     }

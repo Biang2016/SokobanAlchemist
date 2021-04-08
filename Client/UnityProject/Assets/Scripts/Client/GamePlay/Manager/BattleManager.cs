@@ -115,7 +115,6 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     {
         LoadActors();
         GameStateManager.Instance.SetState(GameState.Fighting);
-        ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnCreateEnemyByLevelTriggerEvent);
         IsStart = true;
         if (WorldManager.Instance.CurrentWorld.WorldData.UseSpecialPlayerEnterESPS)
         {
@@ -133,66 +132,17 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         CameraManager.Instance.FieldCamera.InitFocus();
     }
 
-    private void OnCreateEnemyByLevelTriggerEvent(string eventAlias)
+    public void CreatePlayerByBornPointData(BornPointData bpd)
     {
-        WorldBornPointGroupData_Runtime data = WorldManager.Instance.CurrentWorld.WorldData.WorldBornPointGroupData_Runtime;
-        data.SpawnFromLevelEventTriggerBP(eventAlias);
-    }
-
-    public IEnumerator CreateActorByBornPointDataList(List<BornPointData> bps, bool ignorePlayer = true)
-    {
-        foreach (BornPointData bp in bps.ToArray())
-        {
-            if (ignorePlayer && bp.ActorCategory == ActorCategory.Player) continue;
-            CreateActorByBornPointData(bp, false);
-            yield return null;
-        }
-    }
-
-    public void CreateActorByBornPointData(BornPointData bpd, bool onLevelEvent)
-    {
-        if (string.IsNullOrEmpty(bpd.SpawnLevelTriggerEventAlias) && onLevelEvent) return;
-        if (!string.IsNullOrEmpty(bpd.SpawnLevelTriggerEventAlias) && !onLevelEvent) return;
-        if (bpd.RawEntityExtraSerializeData != null)
-        {
-            foreach (EntityPassiveSkill eps in bpd.RawEntityExtraSerializeData.EntityPassiveSkills)
-            {
-                if (eps is EntityPassiveSkill_ProbablyShow ps)
-                {
-                    if (!ps.ShowProbabilityPercent.ProbabilityBool()) return;
-                }
-            }
-        }
-
-        if (bpd.ActorCategory == ActorCategory.Player)
-        {
-            PlayerActor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
-            GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
-            player.BornPointDataGUID = bpd.GUID;
-            player.WorldGP = bpd.WorldGP;
-            player.Setup(PlayerNumber.Player1.ToString(), bpd.ActorCategory, PlayerNumber.Player1, 0);
-            BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
-            MainPlayers[0] = player;
-            AddActor(null, player);
-            UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>().Initialize();
-            UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
-        }
-        else
-        {
-            WorldModule worldModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(bpd.WorldGP);
-            if (worldModule != null)
-            {
-                ushort enemyTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Enemy, bpd.EnemyType.TypeName);
-                EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[enemyTypeIndex].AllocateGameObject<EnemyActor>(ActorContainerRoot);
-                GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, enemy.transform, 1);
-                enemy.BornPointDataGUID = bpd.GUID;
-                enemy.WorldGP = bpd.WorldGP;
-                enemy.Setup(bpd.EnemyType.TypeName, bpd.ActorCategory, bpd.ActorOrientation, worldModule.GUID);
-                enemy.ApplyBoxExtraSerializeData(bpd.RawEntityExtraSerializeData);
-                Enemies.Add(enemy);
-                AddActor(worldModule, enemy);
-            }
-        }
+        PlayerActor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
+        GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
+        player.WorldGP = bpd.WorldGP;
+        player.Setup(PlayerNumber.Player1.ToString(), ActorCategory.Player, PlayerNumber.Player1, 0);
+        BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
+        MainPlayers[0] = player;
+        AddActor(null, player);
+        UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>().Initialize();
+        UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
     }
 
     /// <summary>
@@ -218,9 +168,14 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         cachedDyingActors.Clear();
     }
 
-    private void AddActor(WorldModule worldModule, Actor actor)
+    public void AddActor(WorldModule worldModule, Actor actor)
     {
-        if (actor is EnemyActor enemy) RegisterEnemyToWorldModule(worldModule.GUID, enemy.GUID);
+        if (actor is EnemyActor enemy)
+        {
+            Enemies.Add(enemy);
+            RegisterEnemyToWorldModule(worldModule.GUID, enemy.GUID);
+        }
+
         ActorDict.Add(actor.GUID, actor);
     }
 

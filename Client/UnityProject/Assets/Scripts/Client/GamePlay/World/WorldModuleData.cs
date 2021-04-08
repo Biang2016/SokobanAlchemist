@@ -18,45 +18,35 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     public WorldModuleFeature WorldModuleFeature;
 
-    public ushort[,,] RawBoxMatrix = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+    public Dictionary<TypeDefineType, EntityData[,,]>.KeyCollection EntityDataMatrixKeys => EntityDataMatrix.Keys;
 
     /// <summary>
     /// 世界模组制作规范，一个模组容量为16x16x16
     /// 模组上下层叠，底部模组Y为0，顶部Y为15
+    /// 仅作为Entity核心格的位置记录，不代表每一格实际是否有占用。（因为有大型实体尺寸不止一格）
     /// </summary>
-    public ushort[,,] BoxMatrix = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 仅作为箱子核心格的位置记录，不代表每一格实际是否有占用。（因为有Mega箱子尺寸不止一格）
+    private Dictionary<TypeDefineType, EntityData[,,]> EntityDataMatrix = new Dictionary<TypeDefineType, EntityData[,,]>
+    {
+        {TypeDefineType.Box, new EntityData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]},
+        {TypeDefineType.Enemy, new EntityData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]}
+    };
 
-    public GridPosR.Orientation[,,] RawBoxOrientationMatrix = new GridPosR.Orientation[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
-    public GridPosR.Orientation[,,] BoxOrientationMatrix = new GridPosR.Orientation[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]; // 箱子朝向矩阵记录，仅引用于对应核心格的箱子
-    public ushort[,,] BoxMatrix_Temp_CheckOverlap; // 导出时临时使用，为了检查箱子重叠
+#if UNITY_EDITOR
+
+    public EntityData[,,] EntityDataMatrix_Temp_CheckOverlap_BetweenBoxes; // 导出时临时使用，为了检查重叠
+    public EntityData[,,] EntityDataMatrix_Temp_CheckOverlap_BoxAndActor; // 导出时临时使用，为了检查重叠. Box写入时只写入非Passable的，这样就允许Actor和Passable的Box初始可以重叠
+#endif
 
     public Grid3DBounds BoxBounds;
 
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
     public LevelTriggerGroupData WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();
-    public EntityExtraSerializeData[,,] BoxExtraSerializeDataMatrix; // 不含LevelEventTriggerBoxPassiveSkill，但含该Box的其他BF信息
-    public List<BoxPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearBoxDataList;
+    public List<EntityPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearEntityDataList;
 
-    public WorldModuleDataModification Modification;
-
-    public ushort GetRawBoxTypeIndex(GridPos3D gp)
+    public EntityData this[TypeDefineType entityType, GridPos3D localGP]
     {
-        return RawBoxMatrix[gp.x, gp.y, gp.z];
-    }
-
-    public ushort GetBoxTypeIndex(GridPos3D gp)
-    {
-        return BoxMatrix[gp.x, gp.y, gp.z];
-    }
-
-    public GridPosR.Orientation GetRawBoxOrientation(GridPos3D gp)
-    {
-        return RawBoxOrientationMatrix[gp.x, gp.y, gp.z];
-    }
-
-    public GridPosR.Orientation GetBoxOrientation(GridPos3D gp)
-    {
-        return BoxOrientationMatrix[gp.x, gp.y, gp.z];
+        get => EntityDataMatrix[entityType][localGP.x, localGP.y, localGP.z];
+        set => EntityDataMatrix[entityType][localGP.x, localGP.y, localGP.z] = value;
     }
 
     /// <summary>
@@ -64,9 +54,11 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     /// </summary>
     public void InitNormalModuleData()
     {
-        BoxMatrix_Temp_CheckOverlap = new ushort[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
-        BoxExtraSerializeDataMatrix = new EntityExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
-        EventTriggerAppearBoxDataList = new List<BoxPassiveSkill_LevelEventTriggerAppear.Data>();
+#if UNITY_EDITOR
+        EntityDataMatrix_Temp_CheckOverlap_BetweenBoxes = new EntityData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+        EntityDataMatrix_Temp_CheckOverlap_BoxAndActor = new EntityData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+#endif
+        EventTriggerAppearEntityDataList = new List<EntityPassiveSkill_LevelEventTriggerAppear.Data>();
     }
 
     /// <summary>
@@ -74,14 +66,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     /// </summary>
     public void InitOpenWorldModuleData(bool needSaveModification)
     {
-        BoxExtraSerializeDataMatrix = new EntityExtraSerializeData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
-        EventTriggerAppearBoxDataList = new List<BoxPassiveSkill_LevelEventTriggerAppear.Data>();
-        if (Modification == null)
-        {
-            Modification = WorldModuleDataModification.Factory.Alloc();
-        }
-
-        Modification.Enable = needSaveModification;
+        EventTriggerAppearEntityDataList = new List<EntityPassiveSkill_LevelEventTriggerAppear.Data>();
     }
 
     public WorldModuleData Clone() // 理论上只有NormalModule会用到，开放世界模组不能用此Clone，否则会造成不必要的内存占用
@@ -94,27 +79,31 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
         data.WorldModuleFeature = WorldModuleFeature;
         data.WorldModuleBornPointGroupData = WorldModuleBornPointGroupData.Clone();
         data.WorldModuleLevelTriggerGroupData = WorldModuleLevelTriggerGroupData.Clone();
-        for (int x = 0; x < BoxMatrix.GetLength(0); x++)
+        for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
         {
-            for (int y = 0; y < BoxMatrix.GetLength(1); y++)
+            for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
             {
-                for (int z = 0; z < BoxMatrix.GetLength(2); z++)
+                for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
                 {
-                    data.RawBoxMatrix[x, y, z] = RawBoxMatrix[x, y, z];
-                    data.BoxMatrix[x, y, z] = RawBoxMatrix[x, y, z];
-                    data.RawBoxOrientationMatrix[x, y, z] = RawBoxOrientationMatrix[x, y, z];
-                    data.BoxOrientationMatrix[x, y, z] = RawBoxOrientationMatrix[x, y, z];
-                    if (BoxExtraSerializeDataMatrix?[x, y, z] != null)
-                    {
-                        data.BoxExtraSerializeDataMatrix[x, y, z] = BoxExtraSerializeDataMatrix[x, y, z].Clone();
-                    }
+                    data.EntityDataMatrix[TypeDefineType.Box][x, y, z] = EntityDataMatrix[TypeDefineType.Box][x, y, z].Clone();
+                }
+            }
+        }
+
+        for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
+        {
+            for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
+            {
+                for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
+                {
+                    data.EntityDataMatrix[TypeDefineType.Enemy][x, y, z] = EntityDataMatrix[TypeDefineType.Enemy][x, y, z].Clone();
                 }
             }
         }
 
         data.BoxBounds = BoxBounds;
 
-        if (EventTriggerAppearBoxDataList != null) data.EventTriggerAppearBoxDataList = EventTriggerAppearBoxDataList.Clone();
+        if (EventTriggerAppearEntityDataList != null) data.EventTriggerAppearEntityDataList = EventTriggerAppearEntityDataList.Clone();
         return data;
     }
 
@@ -124,16 +113,16 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     public void OnUsed()
     {
-        for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
+        foreach (KeyValuePair<TypeDefineType, EntityData[,,]> kv in EntityDataMatrix)
         {
-            for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
+            for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
             {
-                for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
+                for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
                 {
-                    RawBoxMatrix[x, y, z] = 0;
-                    BoxMatrix[x, y, z] = 0;
-                    RawBoxOrientationMatrix[x, y, z] = GridPosR.Orientation.Up;
-                    BoxOrientationMatrix[x, y, z] = GridPosR.Orientation.Up;
+                    for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
+                    {
+                        kv.Value[x, y, z] = null;
+                    }
                 }
             }
         }
@@ -145,8 +134,6 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     public void OnRelease()
     {
-        Modification?.Release();
-        Modification = null;
         WorldModuleBornPointGroupData = null;
         WorldModuleLevelTriggerGroupData = null;
         WorldModuleFeature = WorldModuleFeature.None;
@@ -170,88 +157,6 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     }
 
     #endregion
-}
-
-public class WorldModuleDataModification : IClone<WorldModuleDataModification>, IClassPoolObject<WorldModuleDataModification>
-{
-    public static ClassObjectPool<WorldModuleDataModification> Factory = new ClassObjectPool<WorldModuleDataModification>(20);
-
-    public bool Enable = true; // 对不需要记录更改的模组不生效
-
-    public struct BoxModification
-    {
-        public ushort BoxTypeIndex;
-        public GridPosR.Orientation EntityOrientation;
-
-        public BoxModification(ushort boxTypeIndex, GridPosR.Orientation boxOrientation)
-        {
-            BoxTypeIndex = boxTypeIndex;
-            EntityOrientation = boxOrientation;
-        }
-    }
-
-    public Dictionary<GridPos3D, BoxModification> BoxModificationDict = new Dictionary<GridPos3D, BoxModification>(16);
-
-    public void SaveData(GridPos3D moduleGP)
-    {
-        if (BoxModificationDict.Count > 0)
-        {
-            GameSaveManager.Instance.SaveData(WorldManager.Instance.CurrentWorld.WorldGUID, moduleGP.ToString(), GameSaveManager.SaveDataType.GameProgress, this, DataFormat.JSON);
-        }
-    }
-
-    public static WorldModuleDataModification LoadData(GridPos3D moduleGP)
-    {
-        WorldModuleDataModification mod = GameSaveManager.Instance.LoadData(WorldManager.Instance.CurrentWorld.WorldGUID, moduleGP.ToString(), GameSaveManager.SaveDataType.GameProgress, DataFormat.JSON);
-        return mod;
-    }
-
-    public void Clear()
-    {
-        BoxModificationDict.Clear();
-    }
-
-    #region IClassPoolObject
-
-    public void OnUsed()
-    {
-    }
-
-    public void OnRelease()
-    {
-        BoxModificationDict.Clear();
-    }
-
-    public void Release()
-    {
-        Factory.Release(this);
-    }
-
-    private int PoolIndex;
-
-    public void SetPoolIndex(int index)
-    {
-        PoolIndex = index;
-    }
-
-    public int GetPoolIndex()
-    {
-        return PoolIndex;
-    }
-
-    #endregion
-
-    public WorldModuleDataModification Clone()
-    {
-        WorldModuleDataModification newData = Factory.Alloc();
-        newData.Enable = Enable;
-        foreach (KeyValuePair<GridPos3D, BoxModification> kv in BoxModificationDict)
-        {
-            newData.BoxModificationDict.Add(kv.Key, kv.Value);
-        }
-
-        return newData;
-    }
 }
 
 [Flags]

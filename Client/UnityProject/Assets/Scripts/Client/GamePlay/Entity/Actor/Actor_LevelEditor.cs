@@ -11,8 +11,4 @@ using UnityEditor;
 #endif
 public class Actor_LevelEditor : Entity_LevelEditor
 {
-    public override bool RefreshOrientation()
-    {
-        return true;
-    }
 }

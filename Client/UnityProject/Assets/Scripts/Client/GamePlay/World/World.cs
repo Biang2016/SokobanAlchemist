@@ -193,18 +193,11 @@ public class World : PoolObject
 
         #endregion
 
-        WorldData.WorldBornPointGroupData_Runtime.InitTempData();
+        WorldData.WorldBornPointGroupData_Runtime.Init();
         foreach (GridPos3D worldModuleGP in WorldData.WorldModuleGPOrder)
         {
             WorldModule module = WorldModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
             if (module != null) WorldData.WorldBornPointGroupData_Runtime.Init_LoadModuleData(worldModuleGP, module.WorldModuleData);
-        }
-
-        // 非大世界，一次性全部创建角色
-        foreach (GridPos3D worldModuleGP in WorldData.WorldModuleGPOrder)
-        {
-            WorldModule module = WorldModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
-            if (module != null) yield return WorldData.WorldBornPointGroupData_Runtime.Dynamic_LoadModuleData(worldModuleGP);
         }
 
         // 加载模组默认玩家BP
@@ -212,14 +205,11 @@ public class World : PoolObject
         {
             foreach (BornPointData bp in WorldData.WorldBornPointGroupData_Runtime.TryLoadModuleBPData(worldModuleGP))
             {
-                if (bp.ActorCategory == ActorCategory.Player)
+                WorldModule module = WorldModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
+                string playerBPAlias = module.WorldModuleData.WorldModuleTypeName;
+                if (!WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.ContainsKey(playerBPAlias))
                 {
-                    WorldModule module = WorldModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
-                    string playerBPAlias = module.WorldModuleData.WorldModuleTypeName;
-                    if (!WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.ContainsKey(playerBPAlias))
-                    {
-                        WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Add(playerBPAlias, bp);
-                    }
+                    WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict.Add(playerBPAlias, bp);
                 }
             }
         }
@@ -229,7 +219,7 @@ public class World : PoolObject
             Debug.LogError("世界默认出生点花名配置有误");
         }
 
-        BattleManager.Instance.CreateActorByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias], false); // 生成主角
+        BattleManager.Instance.CreatePlayerByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias]); // 生成主角
     }
 
     public virtual IEnumerator GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, int loadBoxNumPerFrame = 99999)
@@ -254,14 +244,14 @@ public class World : PoolObject
         yield return wm.Initialize(data, gp, this, loadBoxNumPerFrame);
     }
 
-    protected virtual IEnumerator GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z, int loadBoxNumPerFrame)
+    protected virtual IEnumerator GenerateWorldModuleByCustomizedData(WorldModuleData data, int x, int y, int z, int loadEntityNumPerFrame)
     {
         WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.OpenWorldModule].AllocateGameObject<WorldModule>(WorldModuleRoot);
         wm.name = $"WM_{data.WorldModuleTypeName}({x}, {y}, {z})";
         WorldModuleMatrix[x, y, z] = wm;
         GridPos3D gp = new GridPos3D(x, y, z);
         GridPos3D.ApplyGridPosToLocalTrans(gp, wm.transform, WorldModule.MODULE_SIZE);
-        yield return wm.Initialize(data, gp, this, loadBoxNumPerFrame);
+        yield return wm.Initialize(data, gp, this, loadEntityNumPerFrame);
     }
 
     #region Utils
@@ -398,13 +388,33 @@ public class World : PoolObject
         if (module != null && (!ignoreUnaccessibleModule || module.IsAccessible))
         {
             localGP = module.WorldGPToLocalGP(gp);
-            return module[localGP.x, localGP.y, localGP.z];
+            return module[localGP];
         }
         else
         {
             localGP = GridPos3D.Zero;
             return null;
         }
+    }
+
+    public Actor GetActorByGridPosition(GridPos3D gp, out WorldModule module, out GridPos3D localGP)
+    {
+        module = GetModuleByWorldGP(gp);
+        if (module != null && module.IsAccessible)
+        {
+            localGP = module.WorldGPToLocalGP(gp);
+            return module.GetActorOccupation(localGP);
+        }
+        else
+        {
+            localGP = GridPos3D.Zero;
+            return null;
+        }
+    }
+
+    public GridPos3D GetWorldGPByModuleGP(GridPos3D moduleGP, GridPos3D localGP)
+    {
+        return new GridPos3D(moduleGP.x * WorldModule.MODULE_SIZE + localGP.x, moduleGP.y * WorldModule.MODULE_SIZE + localGP.y, moduleGP.z * WorldModule.MODULE_SIZE + localGP.z);
     }
 
     public GridPos3D GetModuleGPByWorldGP(GridPos3D worldGP)
@@ -654,7 +664,7 @@ public class World : PoolObject
             {
                 GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP;
                 GetBoxByGridPosition(gridWorldGP_before, out WorldModule module_before, out GridPos3D boxGridLocalGP_before);
-                module_before[boxGridLocalGP_before, offset == GridPos3D.Zero, GridPosR.Orientation.Up] = null;
+                module_before[boxGridLocalGP_before] = null;
             }
         }
 
@@ -666,7 +676,7 @@ public class World : PoolObject
                 GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP;
                 GridPos3D gridWorldGP_after = gridWorldGP_before + direction;
                 GetBoxByGridPosition(gridWorldGP_after, out WorldModule module_after, out GridPos3D boxGridLocalGP_after);
-                module_after[boxGridLocalGP_after, offset == GridPos3D.Zero, box_moveable.EntityOrientation] = box_moveable;
+                module_after[boxGridLocalGP_after] = box_moveable;
             }
 
             box_moveable.State = sucState;
@@ -728,7 +738,8 @@ public class World : PoolObject
                 WorldModule module = GetModuleByWorldGP(mergeTargetWorldGP);
                 if (module != null)
                 {
-                    Box box = module.GenerateBox(newBoxTypeIndex, mergeTargetWorldGP, newBoxOrientation, false, false, null, true); // 合成生成的箱子允许往上方堆
+                    EntityData entityData = new EntityData(newBoxTypeIndex, newBoxOrientation);
+                    Box box = (Box) module.GenerateEntity(entityData, mergeTargetWorldGP, false, false, true); // 合成生成的箱子允许往上方堆
                     if (box != null)
                     {
                         FXManager.Instance.PlayFX(box.MergedFX, box.transform.position);
@@ -1044,9 +1055,9 @@ public class World : PoolObject
                 GridPos3D gridWorldGP = offset + box.WorldGP;
                 if (GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP) == box)
                 {
-                    if (module.GetBox(localGP) == box)
+                    if (module[localGP] == box)
                     {
-                        module[localGP, offset == GridPos3D.Zero, GridPosR.Orientation.Up] = null;
+                        module[localGP] = null;
                     }
                 }
             }
@@ -1108,7 +1119,7 @@ public class World : PoolObject
             {
                 GridPos3D gridWorldGP = offset + worldGP;
                 GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP);
-                module[localGP, offset == GridPos3D.Zero, box.EntityOrientation] = box;
+                module[localGP] = box;
             }
 
             Box.LerpType lerpType = Box.LerpType.Throw;
@@ -1247,8 +1258,8 @@ public class World : PoolObject
                         GridPos3D beneathBoxGridWorldGP = gridWorldGP + GridPos3D.Down;
                         GetBoxByGridPosition(gridWorldGP, out WorldModule module_before, out GridPos3D boxGridLocalGP_before);
                         GetBoxByGridPosition(beneathBoxGridWorldGP, out WorldModule module_after, out GridPos3D boxGridLocalGP_after);
-                        module_before[boxGridLocalGP_before, offset == GridPos3D.Zero, GridPosR.Orientation.Up] = null;
-                        module_after[boxGridLocalGP_after, offset == GridPos3D.Zero, box.EntityOrientation] = box;
+                        module_before[boxGridLocalGP_before] = null;
+                        module_after[boxGridLocalGP_after] = box;
                     }
 
                     CheckDropAbove(box); // 递归，检查上方箱子是否坠落

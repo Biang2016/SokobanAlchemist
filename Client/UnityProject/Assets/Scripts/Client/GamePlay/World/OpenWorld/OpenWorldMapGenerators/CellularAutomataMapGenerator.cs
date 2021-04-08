@@ -63,7 +63,8 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                 }
                 else if (isStaticLayout)
                 {
-                    fill = WorldMap[world_x, 0, world_z] == EntityTypeIndex;
+                    EntityData existedEntityData = WorldMap_EntityDataMatrix[GenerateLayerData.TypeName.TypeDefineType][world_x, 0, world_z];
+                    fill = existedEntityData != null && existedEntityData.EntityTypeIndex == TypeIndex;
                 }
                 else
                 {
@@ -116,7 +117,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                         // 静态布局中的所有Hill、BorderBox、BrickBox都算作既有墙
                         if (GenerateLayerData.ConsiderStaticLayout)
                         {
-                            ushort existedIndex = WorldMap_Occupied[neighborX, 0, neighborZ];
+                            ushort existedIndex = m_OpenWorld.GetOccupy(TypeDefineType.Box, new GridPos3D(neighborX, Height, neighborZ));
                             ConfigManager.TypeStartIndex typeStartIndex = existedIndex.ConvertToTypeStartIndex();
                             if (typeStartIndex == ConfigManager.TypeStartIndex.Box)
                             {
@@ -505,7 +506,7 @@ public sealed class CellularAutomataMapGenerator : MapGenerator
                 bool genSuc = map_1[world_x, world_z];
                 if (genSuc)
                 {
-                    TryOverrideToWorldMap(new GridPos3D(world_x, Height, world_z), EntityTypeIndex, (GridPosR.Orientation) SRandom.Range(0, 4));
+                    TryOverrideToWorldMap(new GridPos3D(world_x, Height, world_z), TypeIndex, (GridPosR.Orientation) SRandom.Range(0, 4));
                 }
             }
         }

@@ -14,22 +14,6 @@ public class BornPointDesignHelper : MonoBehaviour
 
 #if UNITY_EDITOR
 
-    public uint ProbablyShow
-    {
-        get
-        {
-            if (BornPointData.RawEntityExtraSerializeData != null)
-            {
-                foreach (EntityPassiveSkill eps in BornPointData.RawEntityExtraSerializeData.EntityPassiveSkills)
-                {
-                    if (eps is EntityPassiveSkill_ProbablyShow ps) return ps.ShowProbabilityPercent;
-                }
-            }
-
-            return 100;
-        }
-    }
-
     public bool FormatAllName_Editor()
     {
         bool dirty = false;
@@ -40,7 +24,7 @@ public class BornPointDesignHelper : MonoBehaviour
             return false;
         }
 
-        string goName = BornPointData.IsPlayer ? PlayerNumber.Player1.ToString() : ("BornPoint_" + BornPointData.EnemyType.TypeName);
+        string goName = PlayerNumber.Player1.ToString();
         goName += string.IsNullOrEmpty(BornPointData.BornPointAlias) ? "" : "_" + BornPointData.BornPointAlias;
         dirty = !gameObject.name.Equals(goName);
         gameObject.name = goName;
@@ -51,31 +35,10 @@ public class BornPointDesignHelper : MonoBehaviour
     {
         if (!Application.isPlaying)
         {
-            Color gizmosColor;
-            if (BornPointData.ActorCategory == ActorCategory.Player)
-            {
-                gizmosColor = "#FF133A".HTMLColorToColor();
-            }
-            else
-            {
-                gizmosColor = "#9DFF01".HTMLColorToColor();
-            }
-
+            Color gizmosColor = "#FF133A".HTMLColorToColor();
             Gizmos.color = gizmosColor;
             Gizmos.DrawSphere(transform.position + Vector3.left * 0.25f + Vector3.forward * 0.25f, 0.1f);
-            if (BornPointData.IsPlayer)
-            {
-                transform.DrawSpecialTip(Vector3.up + Vector3.left * 0.15f + Vector3.forward * -0.2f, gizmosColor, gizmosColor, PlayerNumber.Player1.ToString());
-            }
-            else
-            {
-                transform.DrawSpecialTip(Vector3.up + Vector3.left * 0.15f + Vector3.forward * -0.2f, gizmosColor, gizmosColor, BornPointData.EnemyType.TypeName.Replace("Enemy", ""));
-            }
-
-            if (ProbablyShow < 100)
-            {
-                transform.DrawSpecialTip(Vector3.left * 0.5f + Vector3.forward * 0.05f, Color.clear, Color.yellow, $"{ProbablyShow}%现");
-            }
+            transform.DrawSpecialTip(Vector3.up + Vector3.left * 0.15f + Vector3.forward * -0.2f, gizmosColor, gizmosColor, PlayerNumber.Player1.ToString());
         }
     }
 

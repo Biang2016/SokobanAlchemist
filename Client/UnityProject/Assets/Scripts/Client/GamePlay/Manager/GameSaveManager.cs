@@ -22,7 +22,6 @@ public class GameSaveManager : TSingletonBaseManager<GameSaveManager>
     public override void ShutDown()
     {
         base.ShutDown();
-        MDict.Clear();
     }
 
     private string GetFilePath(string dataGroup, string dataKey, SaveDataType saveDataType)
@@ -43,16 +42,9 @@ public class GameSaveManager : TSingletonBaseManager<GameSaveManager>
         return filePath;
     }
 
-    public Dictionary<string, WorldModuleDataModification> MDict = new Dictionary<string, WorldModuleDataModification>();
-
-    public void SaveData(string dataGroup, string dataKey, SaveDataType saveDataType, WorldModuleDataModification data, DataFormat dataFormat = DataFormat.Binary)
+    public void SaveData(string dataGroup, string dataKey, SaveDataType saveDataType, DataFormat dataFormat = DataFormat.Binary)
     {
-        if (MDict.ContainsKey(dataGroup + dataKey))
-        {
-            MDict.Remove(dataGroup + dataKey);
-        }
-
-        MDict.Add(dataGroup + dataKey, data.Clone());
+     
         //string filePath = GetFilePath(dataGroup, dataKey, saveDataType);
         //if (File.Exists(filePath))
         //{
@@ -83,25 +75,25 @@ public class GameSaveManager : TSingletonBaseManager<GameSaveManager>
     //    return default;
     //}
 
-    public WorldModuleDataModification LoadData(string dataGroup, string dataKey, SaveDataType saveDataType, DataFormat dataFormat = DataFormat.Binary)
-    {
-        if (MDict.TryGetValue(dataGroup + dataKey, out WorldModuleDataModification data))
-        {
-            return data.Clone();
-        }
-        else
-        {
-            return null;
-        }
+    //public WorldModuleDataModification LoadData(string dataGroup, string dataKey, SaveDataType saveDataType, DataFormat dataFormat = DataFormat.Binary)
+    //{
+    //    if (MDict.TryGetValue(dataGroup + dataKey, out WorldModuleDataModification data))
+    //    {
+    //        return data.Clone();
+    //    }
+    //    else
+    //    {
+    //        return null;
+    //    }
 
-        //string filePath = GetFilePath(dataGroup, dataKey, saveDataType);
-        //if (File.Exists(filePath))
-        //{
-        //    byte[] bytes = File.ReadAllBytes(filePath);
-        //    T data = SerializationUtility.DeserializeValue<T>(bytes, dataFormat);
-        //    return data;
-        //}
+    //    //string filePath = GetFilePath(dataGroup, dataKey, saveDataType);
+    //    //if (File.Exists(filePath))
+    //    //{
+    //    //    byte[] bytes = File.ReadAllBytes(filePath);
+    //    //    T data = SerializationUtility.DeserializeValue<T>(bytes, dataFormat);
+    //    //    return data;
+    //    //}
 
-        //return default;
-    }
+    //    //return default;
+    //}
 }

@@ -3,7 +3,7 @@ using BiangLibrary.GameDataFormat.Grid;
 
 public class OpenWorldModule : WorldModule
 {
-    public override IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadBoxNumPerFrame)
+    public override IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadEntityNumPerFrame)
     {
         ModuleGP = moduleGP;
         World = world;
@@ -30,38 +30,30 @@ public class OpenWorldModule : WorldModule
             WorldGroundCollider.Initialize(moduleGP);
         }
 
-        int loadBoxCount = 0;
-
-        for (int x = 0; x < MODULE_SIZE; x++)
+        int loadEntityCount = 0;
+        foreach (TypeDefineType entityType in worldModuleData.EntityDataMatrixKeys)
         {
-            for (int y = 0; y < MODULE_SIZE; y++)
+            for (int x = 0; x < MODULE_SIZE; x++)
             {
-                for (int z = 0; z < MODULE_SIZE; z++)
+                for (int y = 0; y < MODULE_SIZE; y++)
                 {
-                    if (generateBox(x, y, z, worldModuleData.BoxOrientationMatrix[x, y, z]))
+                    for (int z = 0; z < MODULE_SIZE; z++)
                     {
-                        loadBoxCount++;
-                        if (loadBoxCount >= loadBoxNumPerFrame)
+                        GridPos3D localGP = new GridPos3D(x, y, z);
+                        EntityData entityData = worldModuleData[entityType, localGP];
+                        Entity entity = GenerateEntity(entityData, localGP, false, true);
+                        if (entity != null)
                         {
-                            loadBoxCount = 0;
-                            yield return null;
+                            loadEntityCount++;
+                            if (loadEntityCount >= loadEntityNumPerFrame)
+                            {
+                                loadEntityCount = 0;
+                                yield return null;
+                            }
                         }
                     }
                 }
             }
-        }
-
-        bool generateBox(int x, int y, int z, GridPosR.Orientation orientation)
-        {
-            ushort boxTypeIndex = worldModuleData.BoxMatrix[x, y, z];
-            EntityExtraSerializeData boxExtraSerializeDataFromModule = worldModuleData.BoxExtraSerializeDataMatrix[x, y, z];
-            if (boxTypeIndex != 0)
-            {
-                GenerateBox(boxTypeIndex, LocalGPToWorldGP(new GridPos3D(x, y, z)), orientation, false, true, boxExtraSerializeDataFromModule);
-                return true;
-            }
-
-            return false;
         }
     }
 }

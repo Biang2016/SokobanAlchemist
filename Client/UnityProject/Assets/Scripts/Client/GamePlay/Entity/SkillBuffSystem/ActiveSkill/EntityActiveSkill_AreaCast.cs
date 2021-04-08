@@ -5,6 +5,7 @@ using BiangLibrary;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
@@ -37,10 +38,10 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     [LabelText("施法范围")]
     [PropertyOrder(1)]
     [TableMatrix(DrawElementMethod = "DrawColoredEnumElement", ResizableColumns = false, SquareCells = true, RowHeight = 20)]
+    [OdinSerialize]
     private bool[,] CastAreaMatrix_Editor = new bool[CastAreaMatrixExtend * 2 + 1, CastAreaMatrixExtend * 2 + 1];
 
     [PropertyOrder(1)]
-    [ButtonGroup("施法范围")]
     [Button("显示施法范围", ButtonSizes.Medium), GUIColor(0, 1f, 0)]
     private void ShowCastArea()
     {
@@ -57,7 +58,6 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     }
 
     [PropertyOrder(1)]
-    [ButtonGroup("施法范围")]
     [Button("保存施法范围", ButtonSizes.Medium), GUIColor(0.4f, 0.8f, 1)]
     private void SaveCastArea()
     {

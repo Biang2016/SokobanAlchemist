@@ -16,6 +16,8 @@ public abstract class GenerateLayerData
     [PropertyOrder(-10)]
     public GenerateAlgorithm m_GenerateAlgorithm = GenerateAlgorithm.CellularAutomata;
 
+    public abstract TypeSelectHelper TypeName { get; }
+
     #region 白名单黑名单
 
     [SerializeField]
@@ -99,6 +101,8 @@ public abstract class GenerateLayerData
 [Serializable]
 public class GenerateStaticLayoutLayerData : GenerateLayerData
 {
+    public override TypeSelectHelper TypeName => StaticLayoutTypeName;
+
     [LabelText("@\"静态布局类型\t\"+StaticLayoutTypeName")]
     public TypeSelectHelper StaticLayoutTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.StaticLayout};
 
@@ -121,6 +125,8 @@ public class GenerateStaticLayoutLayerData : GenerateLayerData
 [Serializable]
 public class GenerateBoxLayerData : GenerateLayerData
 {
+    public override TypeSelectHelper TypeName => BoxTypeName;
+
     [LabelText("@\"箱子类型\t\"+BoxTypeName")]
     public TypeSelectHelper BoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
@@ -155,6 +161,8 @@ public class GenerateBoxLayerData : GenerateLayerData
 [Serializable]
 public class GenerateActorLayerData : GenerateLayerData
 {
+    public override TypeSelectHelper TypeName => ActorTypeName;
+
     [LabelText("@\"Actor类型\t\"+ActorTypeName")]
     public TypeSelectHelper ActorTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy};
 

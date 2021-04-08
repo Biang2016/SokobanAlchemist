@@ -134,17 +134,14 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
     #region 子技能
 
     [SerializeReference]
-    [FoldoutGroup("子技能")]
     [LabelText("子技能列表")]
     public List<EntityActiveSkill> RawSubActiveSkillList = new List<EntityActiveSkill>(); // 干数据，运行时使用副本来触发技能
 
     private Dictionary<string, EntityActiveSkill> SubActiveSkillDict = new Dictionary<string, EntityActiveSkill>();
 
-    [FoldoutGroup("子技能")]
     [LabelText("子技能触发逻辑配置(依序执行)")]
     public List<SubActiveSkillTriggerLogic> SubActiveSkillTriggerLogicList = new List<SubActiveSkillTriggerLogic>();
 
-    [FoldoutGroup("子技能")]
     [LabelText("母技能被打断同时打断子技能")]
     public bool InterruptSubActiveSkillsWhenInterrupted;
 

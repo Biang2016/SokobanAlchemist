@@ -13,24 +13,11 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
 
     protected override string Description => "更改箱子类型(仅箱子使用)";
 
-    [LabelText("@\"更改箱子为(Box/Enemy)\t\"+ChangeBoxTypeToEntityName")]
-    [FormerlySerializedAs("ChangeBoxTypeToBoxName")]
-    [ValidateInput("CheckType", "只能在Box或者Enemy中选择")]
-    public TypeSelectHelper ChangeBoxTypeToEntityName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
-
-    private bool CheckType(TypeSelectHelper value)
-    {
-        return value.TypeDefineType == TypeDefineType.Box || value.TypeDefineType == TypeDefineType.Enemy;
-    }
-
-    [LabelText("生成的朝向")]
-    public GridPosR.Orientation ResultOrientation;
+    [LabelText("@\"更改箱子为\t\"+EntityData")]
+    public EntityData EntityData = new EntityData();
 
     [LabelText("每一格都生成一个")]
     public bool ChangeForEveryGrid = false;
-
-    [LabelText("对象额外数据")]
-    public EntityExtraSerializeData RawEntityExtraSerializeData = new EntityExtraSerializeData(); // 干数据，禁修改
 
     public void Execute()
     {
@@ -44,36 +31,16 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
             worldGP = Box.transform.position.ToGridPos3D();
         }
 
-        ushort entityTypeIndex = ConfigManager.GetTypeIndex(ChangeBoxTypeToEntityName.TypeDefineType, ChangeBoxTypeToEntityName.TypeName);
-        EntityExtraSerializeData entityExtraSerializeData = RawEntityExtraSerializeData.Clone();
         if (ChangeForEveryGrid)
         {
             List<GridPos3D> occupations = Box.GetEntityOccupationGPs_Rotated();
             Box.DestroyBox(delegate
             {
-                if (entityTypeIndex != 0)
+                foreach (GridPos3D gridPos in occupations)
                 {
-                    foreach (GridPos3D gridPos in occupations)
-                    {
-                        GridPos3D gridWorldGP = worldGP + gridPos;
-                        WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridWorldGP);
-                        if (module != null)
-                        {
-                            if (ChangeBoxTypeToEntityName.TypeDefineType == TypeDefineType.Box)
-                            {
-                                module.GenerateBox(entityTypeIndex, gridWorldGP, ResultOrientation, boxExtraSerializeDataFromModule: entityExtraSerializeData);
-                            }
-                            else if (ChangeBoxTypeToEntityName.TypeDefineType == TypeDefineType.Enemy)
-                            {
-                                BornPointData newBornPointData = new BornPointData();
-                                newBornPointData.LocalGP = module.WorldGPToLocalGP(gridWorldGP);
-                                newBornPointData.WorldGP = gridWorldGP;
-                                newBornPointData.EnemyType = ChangeBoxTypeToEntityName.Clone();
-                                newBornPointData.RawEntityExtraSerializeData = entityExtraSerializeData;
-                                BattleManager.Instance.CreateActorByBornPointData(newBornPointData, false);
-                            }
-                        }
-                    }
+                    GridPos3D gridWorldGP = worldGP + gridPos;
+                    WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridWorldGP);
+                    if (module != null) module.GenerateEntity(EntityData.Clone(), gridWorldGP);
                 }
             });
         }
@@ -81,26 +48,8 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
         {
             Box.DestroyBox(delegate
             {
-                if (entityTypeIndex != 0)
-                {
-                    WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(worldGP);
-                    if (module != null)
-                    {
-                        if (ChangeBoxTypeToEntityName.TypeDefineType == TypeDefineType.Box)
-                        {
-                            module.GenerateBox(entityTypeIndex, worldGP, ResultOrientation, boxExtraSerializeDataFromModule: entityExtraSerializeData);
-                        }
-                        else if (ChangeBoxTypeToEntityName.TypeDefineType == TypeDefineType.Enemy)
-                        {
-                            BornPointData newBornPointData = new BornPointData();
-                            newBornPointData.LocalGP = module.WorldGPToLocalGP(worldGP);
-                            newBornPointData.WorldGP = worldGP;
-                            newBornPointData.EnemyType = ChangeBoxTypeToEntityName.Clone();
-                            newBornPointData.RawEntityExtraSerializeData = entityExtraSerializeData;
-                            BattleManager.Instance.CreateActorByBornPointData(newBornPointData, false);
-                        }
-                    }
-                }
+                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(worldGP);
+                    if (module != null) module.GenerateEntity(EntityData.Clone(), worldGP);
             });
         }
     }
@@ -109,19 +58,15 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
     {
         base.ChildClone(newAction);
         BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType) newAction);
-        action.ChangeBoxTypeToEntityName = ChangeBoxTypeToEntityName.Clone();
-        action.ResultOrientation = ResultOrientation;
+        action.EntityData = EntityData.Clone();
         action.ChangeForEveryGrid = ChangeForEveryGrid;
-        action.RawEntityExtraSerializeData = RawEntityExtraSerializeData.Clone();
     }
 
     public override void CopyDataFrom(EntityPassiveSkillAction srcData)
     {
         base.CopyDataFrom(srcData);
         BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType) srcData);
-        ChangeBoxTypeToEntityName.CopyDataFrom(action.ChangeBoxTypeToEntityName);
-        ResultOrientation = action.ResultOrientation;
+        EntityData = action.EntityData.Clone();
         ChangeForEveryGrid = action.ChangeForEveryGrid;
-        RawEntityExtraSerializeData = action.RawEntityExtraSerializeData.Clone();
     }
 }

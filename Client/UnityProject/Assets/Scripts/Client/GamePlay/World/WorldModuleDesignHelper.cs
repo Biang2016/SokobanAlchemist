@@ -12,6 +12,7 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEngine.Assertions;
 
 #endif
 
@@ -45,7 +46,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
 
     public WorldModuleData ExportWorldModuleData()
     {
-        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
+        List<Entity_LevelEditor> entities = GetComponentsInChildren<Entity_LevelEditor>().ToList();
 
         WorldModuleData worldModuleData = new WorldModuleData();
         worldModuleData.InitNormalModuleData();
@@ -58,48 +59,76 @@ public class WorldModuleDesignHelper : MonoBehaviour
         int yMax = int.MinValue;
         int zMin = int.MaxValue;
         int zMax = int.MinValue;
-        foreach (Box_LevelEditor box in boxes)
+        foreach (Entity_LevelEditor entity in entities)
         {
-            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(box.transform, 1);
-            GameObject boxEditorPrefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
-            string boxName = boxEditorPrefab.name.Replace("_LevelEditor", "");
-            ushort boxTypeIndex = ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeIndexDict[boxName];
+            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(entity.transform, 1);
+            GameObject entityEditorPrefab = PrefabUtility.GetCorrespondingObjectFromSource(entity.gameObject);
+            string entityName = entityEditorPrefab.name.Replace("_LevelEditor", "");
+            ushort entityTypeIndex = ConfigManager.TypeDefineConfigs[entity.EntityData.EntityType.TypeDefineType].TypeIndexDict[entityName];
+            EntityData entityData = new EntityData(entityTypeIndex, entity.EntityOrientation);
 
-            bool isLevelEventTriggerAppearBox = false;
-            foreach (EntityPassiveSkill eps in box.EntityData.RawEntityExtraSerializeData.EntityPassiveSkills)
+            bool isLevelEventTriggerAppearEntity = false;
+            foreach (EntityPassiveSkill eps in entity.EntityData.RawEntityExtraSerializeData.EntityPassiveSkills)
             {
-                if (eps is BoxPassiveSkill_LevelEventTriggerAppear bf_leta)
+                if (eps is EntityPassiveSkill_LevelEventTriggerAppear appear)
                 {
-                    BoxPassiveSkill_LevelEventTriggerAppear.Data data = new BoxPassiveSkill_LevelEventTriggerAppear.Data();
+                    isLevelEventTriggerAppearEntity = true;
+                    EntityPassiveSkill_LevelEventTriggerAppear.Data data = new EntityPassiveSkill_LevelEventTriggerAppear.Data();
                     data.LocalGP = gp;
-                    data.BoxTypeIndex = boxTypeIndex;
-                    data.BoxOrientation = box.EntityData.EntityOrientation;
-                    data.BoxPassiveSkill_LevelEventTriggerAppear = (BoxPassiveSkill_LevelEventTriggerAppear) bf_leta.Clone();
-                    worldModuleData.EventTriggerAppearBoxDataList.Add(data);
-                    isLevelEventTriggerAppearBox = true;
+                    data.EntityData = new EntityData(entityTypeIndex, entity.EntityData.EntityOrientation);
+                    data.EntityPassiveSkill_LevelEventTriggerAppear = (EntityPassiveSkill_LevelEventTriggerAppear) appear.Clone();
+                    worldModuleData.EventTriggerAppearEntityDataList.Add(data);
                     break;
                 }
             }
 
-            if (!isLevelEventTriggerAppearBox)
+            if (!isLevelEventTriggerAppearEntity)
             {
                 bool spaceAvailable = true;
-                List<GridPos3D> boxOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(box.EntityData.EntityOrientation, ConfigManager.EntityOccupationConfigDict[boxTypeIndex].EntityIndicatorGPs);
-                foreach (GridPos3D gridPos3D in boxOccupation_rotated)
+                EntityOccupationData entityOccupationData = ConfigManager.EntityOccupationConfigDict[entityTypeIndex];
+                List<GridPos3D> entityOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(entity.EntityOrientation, entityOccupationData.EntityIndicatorGPs);
+                foreach (GridPos3D gridPos3D in entityOccupation_rotated)
                 {
                     GridPos3D gridPos = gridPos3D + gp;
-                    if (worldModuleData.BoxMatrix_Temp_CheckOverlap[gridPos.x, gridPos.y, gridPos.z] != 0)
+                    if (entityData.EntityType.TypeDefineType == TypeDefineType.Box)
                     {
-                        spaceAvailable = false;
-                        string box1Name = ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict[worldModuleData.BoxMatrix_Temp_CheckOverlap[gridPos.x, gridPos.y, gridPos.z]];
-                        string box2Name = ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict[boxTypeIndex];
-                        Debug.Log($"世界模组[{name}]的{gridPos}位置处存在重叠箱子{box1Name}和{box2Name},已忽略后者");
+                        EntityData overlapEntityData = worldModuleData.EntityDataMatrix_Temp_CheckOverlap_BetweenBoxes[gridPos.x, gridPos.y, gridPos.z];
+                        if (overlapEntityData != null)
+                        {
+                            spaceAvailable = false;
+                            string entity1Name = ConfigManager.TypeDefineConfigs[overlapEntityData.EntityType.TypeDefineType].TypeNameDict[overlapEntityData.EntityTypeIndex];
+                            string entity2Name = ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict[entityTypeIndex];
+                            Debug.Log($"世界模组[{name}]的{gridPos}位置处存在重叠实体{entity1Name}和{entity2Name},已忽略后者");
+                        }
+
+                        if (!entityOccupationData.Passable)
+                        {
+                            overlapEntityData = worldModuleData.EntityDataMatrix_Temp_CheckOverlap_BoxAndActor[gridPos.x, gridPos.y, gridPos.z];
+                            if (overlapEntityData != null)
+                            {
+                                spaceAvailable = false;
+                                string entity1Name = ConfigManager.TypeDefineConfigs[overlapEntityData.EntityType.TypeDefineType].TypeNameDict[overlapEntityData.EntityTypeIndex];
+                                string entity2Name = ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict[entityTypeIndex];
+                                Debug.Log($"世界模组[{name}]的{gridPos}位置处存在重叠实体{entity1Name}和{entity2Name},已忽略后者");
+                            }
+                        }
+                    }
+                    else if (entityData.EntityType.TypeDefineType == TypeDefineType.Enemy)
+                    {
+                        EntityData overlapEntityData = worldModuleData.EntityDataMatrix_Temp_CheckOverlap_BoxAndActor[gridPos.x, gridPos.y, gridPos.z];
+                        if (overlapEntityData != null)
+                        {
+                            spaceAvailable = false;
+                            string entity1Name = ConfigManager.TypeDefineConfigs[overlapEntityData.EntityType.TypeDefineType].TypeNameDict[overlapEntityData.EntityTypeIndex];
+                            string entity2Name = ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict[entityTypeIndex];
+                            Debug.Log($"世界模组[{name}]的{gridPos}位置处存在重叠实体{entity1Name}和{entity2Name},已忽略后者");
+                        }
                     }
                 }
 
                 if (spaceAvailable)
                 {
-                    foreach (GridPos3D gridPos3D in boxOccupation_rotated)
+                    foreach (GridPos3D gridPos3D in entityOccupation_rotated)
                     {
                         GridPos3D gridPos = gridPos3D + gp;
                         xMin = Mathf.Min(xMin, gridPos.x);
@@ -110,21 +139,21 @@ public class WorldModuleDesignHelper : MonoBehaviour
                         zMax = Mathf.Max(zMax, gridPos.z);
                     }
 
-                    worldModuleData.RawBoxMatrix[gp.x, gp.y, gp.z] = boxTypeIndex;
-                    worldModuleData.RawBoxOrientationMatrix[gp.x, gp.y, gp.z] = box.EntityData.EntityOrientation;
-                    foreach (GridPos3D gridPos3D in boxOccupation_rotated)
+                    worldModuleData[entityData.EntityType.TypeDefineType, gp] = entityData;
+                    foreach (GridPos3D gridPos3D in entityOccupation_rotated)
                     {
                         GridPos3D gridPos = gridPos3D + gp;
-                        worldModuleData.BoxMatrix_Temp_CheckOverlap[gridPos.x, gridPos.y, gridPos.z] = boxTypeIndex;
+                        if (entityData.EntityType.TypeDefineType == TypeDefineType.Enemy)
+                        {
+                            worldModuleData.EntityDataMatrix_Temp_CheckOverlap_BoxAndActor[gridPos.x, gridPos.y, gridPos.z] = entityData;
+                        }
+                        else if (entityData.EntityType.TypeDefineType == TypeDefineType.Box)
+                        {
+                            if (!entityOccupationData.Passable) worldModuleData.EntityDataMatrix_Temp_CheckOverlap_BoxAndActor[gridPos.x, gridPos.y, gridPos.z] = entityData;
+                            worldModuleData.EntityDataMatrix_Temp_CheckOverlap_BetweenBoxes[gridPos.x, gridPos.y, gridPos.z] = entityData;
+                        }
                     }
                 }
-            }
-
-            // 就算是LevelEventTriggerAppear的Box，模组特例数据也按原样序列化，箱子生成时到Matrix里面读取ExtraSerializeData
-            if (box.RequireSerializePassiveSkillsIntoWorldModule)
-            {
-                EntityExtraSerializeData data = box.GetBoxExtraSerializeData();
-                worldModuleData.BoxExtraSerializeDataMatrix[gp.x, gp.y, gp.z] = data;
             }
         }
 
@@ -150,14 +179,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
             BornPointData data = (BornPointData) bp.BornPointData.Clone();
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(bp.transform, 1);
             data.LocalGP = gp;
-            if (data.ActorCategory == ActorCategory.Player)
-            {
-                worldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints.Add(name + (string.IsNullOrEmpty(data.BornPointAlias) ? "" : "_" + data.BornPointAlias), data);
-            }
-            else
-            {
-                worldModuleData.WorldModuleBornPointGroupData.EnemyBornPoints.Add(data);
-            }
+            worldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints.Add(name + (string.IsNullOrEmpty(data.BornPointAlias) ? "" : "_" + data.BornPointAlias), data);
         }
 
         worldModuleData.WorldModuleFlowAssetPath = "";
@@ -248,24 +270,24 @@ public class WorldModuleDesignHelper : MonoBehaviour
 
         bool dirty = false;
         dirty |= ArrangeAllRoots();
-        dirty |= FormatAllBoxName_Editor();
+        dirty |= FormatAllEntityName_Editor();
         dirty |= FormatAllBornPointName_Editor();
         dirty |= FormatAllLevelTriggerName_Editor();
         return dirty;
     }
 
-    private bool FormatAllBoxName_Editor()
+    private bool FormatAllEntityName_Editor()
     {
         bool dirty = false;
-        List<Box_LevelEditor> boxes = GetComponentsInChildren<Box_LevelEditor>().ToList();
-        foreach (Box_LevelEditor box in boxes)
+        List<Entity_LevelEditor> entities = GetComponentsInChildren<Entity_LevelEditor>().ToList();
+        foreach (Entity_LevelEditor entity in entities)
         {
-            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(box.gameObject);
-            dirty |= box.RefreshOrientation();
+            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(entity.gameObject);
+            dirty |= entity.RefreshOrientation();
             string prefabName = prefab.name.Replace("_LevelEditor", "");
-            if (box.name != prefabName)
+            if (entity.name != prefabName)
             {
-                box.name = prefabName;
+                entity.name = prefabName;
                 dirty = true;
             }
         }
@@ -359,6 +381,17 @@ public class WorldModuleDesignHelper : MonoBehaviour
             }
         }
 
+        List<Actor_LevelEditor> actors = GetComponentsInChildren<Actor_LevelEditor>().ToList();
+        root = GetRoot(WorldModuleHierarchyRootType.ActorsRoot);
+        foreach (Actor_LevelEditor actor in actors)
+        {
+            if (!actor.transform.IsChildOf(root))
+            {
+                actor.transform.parent = root;
+                dirty = true;
+            }
+        }
+
         return dirty;
     }
 
@@ -393,6 +426,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
 public enum WorldModuleHierarchyRootType
 {
     BoxesRoot = 0,
-    WorldModuleLevelTriggersRoot = 1,
-    WorldModuleBornPointsRoot = 2,
+    ActorsRoot = 1,
+    WorldModuleLevelTriggersRoot = 2,
+    WorldModuleBornPointsRoot = 3,
 }

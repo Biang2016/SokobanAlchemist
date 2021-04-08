@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -76,7 +77,10 @@ public abstract class Property
 
     #region Modifiers
 
+    [OdinSerialize]
     private List<PlusModifier> PlusModifiers_Value = new List<PlusModifier>();
+
+    [OdinSerialize]
     private List<MultiplyModifier> MultiplyModifiers_Value = new List<MultiplyModifier>();
 
     public bool AddModifier(PlusModifier modifier)

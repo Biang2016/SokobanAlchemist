@@ -1020,9 +1020,24 @@ MonoBehaviour:
   RawEntityActiveSkills:
   - id: 2
   Camp: 1
-  BornPointDataGUID: 0
   RigidBody: {fileID: 3522706739585230582}
-  ActorCommonHelpers: {fileID: 1526363832739594291}
+  ActorMoveColliderRoot: {fileID: 0}
+  ActorArtHelper: {fileID: 0}
+  ActorPushHelper: {fileID: 0}
+  ActorFaceHelper: {fileID: 0}
+  ActorSkinHelper: {fileID: 0}
+  ActorLaunchArcRendererHelper: {fileID: 0}
+  ActorBattleHelper: {fileID: 0}
+  ActorBoxInteractHelper: {fileID: 0}
+  ActorIndicatorHelper: {fileID: 0}
+  ActorModelHelper: {fileID: 0}
+  ActorBuffHelper: {fileID: 0}
+  ActorFrozenHelper: {fileID: 0}
+  ActorTriggerZoneHelper: {fileID: 0}
+  ActorGrindTriggerZoneHelper: {fileID: 0}
+  ActorFlamethrowerHelpers: []
+  ActorLightningGeneratorHelpers: []
+  LiftBoxPivot: {fileID: 0}
   ActorCategory: 0
   ActorType: 
   CurMoveAttempt: {x: 0, y: 0, z: 0}
@@ -1331,12 +1346,14 @@ MonoBehaviour:
         M_TargetInclination: 2
         TargetEntityType: 0
         CastOnTopLayer: 0
+        CastOnNLayersBeneath: 0
         AccurateStandardDeviation: 0
         BattleIndicatorTypeName:
           TypeDefineType: 8
           TypeGUID: 
         ProjectOffsetZMax: 0
         ProjectOffsetZMin: 0
+        ProjectHeightDeltaRange: 999
         GridWarningColorFill: {r: 0, g: 0, b: 0, a: 0}
         GridWarningColorBorderHighlight: {r: 0, g: 0, b: 0, a: 0}
         GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
@@ -2748,34 +2765,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2451151313383746207, guid: a6f30ba90cf2d0c4b97b27346c610fc5, type: 3}
+    - {fileID: 8105065106078889260, guid: a6f30ba90cf2d0c4b97b27346c610fc5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a6f30ba90cf2d0c4b97b27346c610fc5, type: 3}
---- !u!4 &5202888738938988597 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3269645944699411754, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+--- !u!1 &1827032584461508356 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8939274040882244123, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
     type: 3}
   m_PrefabInstance: {fileID: 7301533550099854623}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1526363832739594291 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8105065106078889260, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
-    type: 3}
-  m_PrefabInstance: {fileID: 7301533550099854623}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18bd7d632ec2b094e8c43111b37d693b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2767358340637858558 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4842464350258294753, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
     type: 3}
   m_PrefabInstance: {fileID: 7301533550099854623}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1827032584461508356 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8939274040882244123, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
+--- !u!4 &5202888738938988597 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3269645944699411754, guid: a6f30ba90cf2d0c4b97b27346c610fc5,
     type: 3}
   m_PrefabInstance: {fileID: 7301533550099854623}
   m_PrefabAsset: {fileID: 0}

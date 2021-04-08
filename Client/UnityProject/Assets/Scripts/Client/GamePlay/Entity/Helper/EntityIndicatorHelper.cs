@@ -4,10 +4,6 @@ using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-#if UNITY_EDITOR
-
-#endif
-
 public class EntityIndicatorHelper : EntityMonoHelper
 {
     [LabelText("占位信息")]

@@ -1346,9 +1346,9 @@ public partial class Box : Entity
 #if UNITY_EDITOR
 
     [AssetsOnly]
-    [Button("刷新关卡编辑器中该箱子的形态", ButtonSizes.Large)]
+    [Button("刷新关卡编辑器中该实体的形态", ButtonSizes.Large)]
     [GUIColor(0, 1, 0)]
-    public void CreateBoxLevelEditor()
+    public void CreateEntityLevelEditor()
     {
         GameObject box_Instance = Instantiate(gameObject); // 这是实例化一个无链接的prefab实例（unpacked completely）
         Box box = box_Instance.GetComponent<Box>();
@@ -1369,6 +1369,8 @@ public partial class Box : Entity
             boxIndicatorHelperGO.transform.parent = box_LevelEditor_Instance.transform;
             if (box_LevelEditor.IndicatorHelperGO) DestroyImmediate(box_LevelEditor.IndicatorHelperGO);
             box_LevelEditor.IndicatorHelperGO = boxIndicatorHelperGO;
+
+            box_LevelEditor.EntityData.EntityType.TypeDefineType = TypeDefineType.Box;
 
             PrefabUtility.SaveAsPrefabAsset(box_LevelEditor_Instance, box_LevelEditor_Prefab_Path, out bool suc); // 保存回改Prefab的Asset
             DestroyImmediate(box_LevelEditor_Instance);
@@ -1410,7 +1412,7 @@ public partial class Box : Entity
 
     public bool Interactable => Pushable || Kickable || Liftable || Throwable;
 
-    public bool Passable => BoxFeature.HasFlag(BoxFeature.Passable);
+    public bool Passable => EntityIndicatorHelper.EntityOccupationData.Passable;
 
     public bool Droppable => BoxFeature.HasFlag(BoxFeature.Droppable);
 
@@ -1439,8 +1441,8 @@ public enum BoxFeature
     [LabelText("会塌落")]
     Droppable = 1 << 4,
 
-    [LabelText("可穿过")]
-    Passable = 1 << 5,
+    [LabelText("--占位0--")]
+    Other0 = 1 << 5,
 
     [LabelText("--占位1--")]
     Other1 = 1 << 6,
@@ -1460,8 +1462,8 @@ public enum BoxFeature
     [LabelText("举起就消失")]
     LiftThenDisappear = 1 << 11,
 
-    [LabelText("--空--")]
-    EmptyEmptyPlaceHolder = 1 << 12,
+    [LabelText("--占位4--")]
+    Other4 = 1 << 12,
 
     [LabelText("不受BUff影响")]
     BuffImmune = 1 << 13,

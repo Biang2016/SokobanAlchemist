@@ -1,22 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.GamePlay;
 using BiangLibrary.GamePlay.UI;
 using DG.Tweening;
 using NodeCanvas.Framework;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 public class Actor : Entity
 {
-    #region GUID
-
-    [ReadOnly]
-    [HideInEditorMode]
-    public uint BornPointDataGUID; // 出生点GUID
-
-    #endregion
-
     public static bool ENABLE_ACTOR_MOVE_LOG =
 #if UNITY_EDITOR
         false;
@@ -52,29 +46,67 @@ public class Actor : Entity
     public Rigidbody RigidBody;
 
     [FoldoutGroup("组件")]
-    public ActorCommonHelpers ActorCommonHelpers;
+    public GameObject ActorMoveColliderRoot;
+
+    [FoldoutGroup("组件")]
+    public ActorArtHelper ActorArtHelper;
+
+    [FoldoutGroup("组件")]
+    public ActorPushHelper ActorPushHelper;
+
+    [FoldoutGroup("组件")]
+    public ActorFaceHelper ActorFaceHelper;
+
+    [FoldoutGroup("组件")]
+    public ActorSkinHelper ActorSkinHelper;
+
+    [FoldoutGroup("组件")]
+    public ActorLaunchArcRendererHelper ActorLaunchArcRendererHelper;
+
+    [FoldoutGroup("组件")]
+    public ActorBattleHelper ActorBattleHelper;
+
+    [FoldoutGroup("组件")]
+    public ActorBoxInteractHelper ActorBoxInteractHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityIndicatorHelper ActorIndicatorHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityModelHelper ActorModelHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityBuffHelper ActorBuffHelper;
+
+    [FoldoutGroup("组件")]
+    public ActorFrozenHelper ActorFrozenHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityTriggerZoneHelper ActorTriggerZoneHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityGrindTriggerZoneHelper ActorGrindTriggerZoneHelper;
+
+    [FoldoutGroup("组件")]
+    public List<EntityFlamethrowerHelper> ActorFlamethrowerHelpers;
+
+    [FoldoutGroup("组件")]
+    public List<EntityLightningGeneratorHelper> ActorLightningGeneratorHelpers;
+
+    [FoldoutGroup("组件")]
+    public Transform LiftBoxPivot;
 
     public Vector3 ArtPos => ActorSkinHelper.MainArtTransform.position;
 
-    internal override EntityArtHelper EntityArtHelper => ActorCommonHelpers.ActorArtHelper;
-    internal override EntityModelHelper EntityModelHelper => ActorCommonHelpers.EntityModelHelper;
-    internal override EntityIndicatorHelper EntityIndicatorHelper => ActorCommonHelpers.EntityIndicatorHelper;
-    internal override EntityBuffHelper EntityBuffHelper => ActorCommonHelpers.EntityBuffHelper;
+    internal override EntityArtHelper EntityArtHelper => ActorArtHelper;
+    internal override EntityModelHelper EntityModelHelper => ActorModelHelper;
+    internal override EntityIndicatorHelper EntityIndicatorHelper => ActorIndicatorHelper;
+    internal override EntityBuffHelper EntityBuffHelper => ActorBuffHelper;
     internal override EntityFrozenHelper EntityFrozenHelper => ActorFrozenHelper;
-    internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => ActorCommonHelpers.EntityTriggerZoneHelper;
-    internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => ActorCommonHelpers.EntityGrindTriggerZoneHelper;
-    internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => ActorCommonHelpers.EntityFlamethrowerHelpers;
-    internal override List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers => ActorCommonHelpers.ActorLightningGeneratorHelpers;
-    internal GameObject ActorMoveColliderRoot => ActorCommonHelpers.ActorMoveColliderRoot;
-    internal ActorArtHelper ActorArtHelper => ActorCommonHelpers.ActorArtHelper;
-    internal ActorPushHelper ActorPushHelper => ActorCommonHelpers.ActorPushHelper;
-    internal ActorFaceHelper ActorFaceHelper => ActorCommonHelpers.ActorFaceHelper;
-    internal ActorSkinHelper ActorSkinHelper => ActorCommonHelpers.ActorSkinHelper;
-    internal ActorLaunchArcRendererHelper ActorLaunchArcRendererHelper => ActorCommonHelpers.ActorLaunchArcRendererHelper;
-    internal ActorBattleHelper ActorBattleHelper => ActorCommonHelpers.ActorBattleHelper;
-    internal ActorBoxInteractHelper ActorBoxInteractHelper => ActorCommonHelpers.ActorBoxInteractHelper;
-    internal ActorFrozenHelper ActorFrozenHelper => ActorCommonHelpers.ActorFrozenHelper;
-    internal Transform LiftBoxPivot => ActorCommonHelpers.LiftBoxPivot;
+    internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => ActorTriggerZoneHelper;
+    internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => ActorGrindTriggerZoneHelper;
+    internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => ActorFlamethrowerHelpers;
+    internal override List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers => ActorLightningGeneratorHelpers;
 
     internal GraphOwner GraphOwner;
     internal ActorAIAgent ActorAIAgent;
@@ -117,6 +149,7 @@ public class Actor : Entity
     [LabelText("扔箱子瞄准点偏移")]
     public Vector3 CurThrowPointOffset;
 
+    [ReadOnly]
     [DisplayAsString]
     [ShowInInspector]
     [FoldoutGroup("状态")]
@@ -266,6 +299,10 @@ public class Actor : Entity
     public FXConfig DieFX = new FXConfig();
 
     #endregion
+
+    [FoldoutGroup("属性")]
+    [LabelText("频繁更新")]
+    public bool FrequentUpdate = false;
 
     #region 手感
 
