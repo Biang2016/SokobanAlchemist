@@ -22,10 +22,6 @@ public abstract class Entity_LevelEditor : MonoBehaviour
     [HideInInspector]
     public EntityData EntityData = new EntityData();
 
-    [BoxGroup("额外数据")]
-    [HideLabel]
-    public EntityExtraSerializeData RawEntityExtraSerializeData = new EntityExtraSerializeData(); // 干数据，禁修改
-
     public bool RefreshOrientation()
     {
         bool dirty = EntityData.EntityOrientation != EntityOrientation;
