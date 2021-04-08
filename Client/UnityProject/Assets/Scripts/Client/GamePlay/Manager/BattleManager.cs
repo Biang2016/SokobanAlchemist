@@ -135,8 +135,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     {
         Actor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<Actor>(ActorContainerRoot);
         GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
-        player.WorldGP = bpd.WorldGP;
-        player.Setup(new EntityData(ConfigManager.Actor_PlayerIndex, GridPosR.Orientation.Up), ActorCategory.Player, 0);
+        player.Setup(new EntityData(ConfigManager.Actor_PlayerIndex, GridPosR.Orientation.Up), bpd.WorldGP, ActorCategory.Player, 0);
         BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
         MainPlayers[0] = player;
         AddActor(null, player);

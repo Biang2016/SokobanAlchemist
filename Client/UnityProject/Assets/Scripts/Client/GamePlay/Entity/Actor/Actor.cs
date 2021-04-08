@@ -179,8 +179,35 @@ public class Actor : Entity
         {
             if (curWorldGP != value)
             {
-                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(value, true);
-                if (module) curWorldGP = value; // 此处判空可防止角色走入空模组
+                foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+                {
+                    GridPos3D gridPos = value + offset;
+                    Box targetGridBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos, out WorldModule targetGridModule, out GridPos3D localGP, true);
+                    Actor targetGridActor = WorldManager.Instance.CurrentWorld.GetActorByGridPosition(gridPos, out WorldModule _, out GridPos3D _);
+                    if (targetGridModule == null) return; // 防止角色走入空模组
+                    if (targetGridBox != null && !targetGridBox.Passable) return; // 防止角色和Box卡住
+                    if (targetGridActor != null) return; // 防止角色和其他Actor卡住
+                }
+
+                // 进行旧模组数据注销
+                foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+                {
+                    GridPos3D gridPos = curWorldGP + offset;
+                    WorldModule currentGridModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridPos, true);
+                    GridPos3D currentGridLocalGP = currentGridModule.WorldGPToLocalGP(gridPos);
+                    currentGridModule[TypeDefineType.Actor, currentGridLocalGP] = null;
+                }
+
+                curWorldGP = value;
+
+                // 进行新模组数据登记
+                foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+                {
+                    GridPos3D gridPos = curWorldGP + offset;
+                    WorldModule currentGridModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridPos, true);
+                    GridPos3D currentGridLocalGP = currentGridModule.WorldGPToLocalGP(gridPos);
+                    currentGridModule[TypeDefineType.Actor, currentGridLocalGP] = this;
+                }
             }
         }
     }
@@ -578,11 +605,12 @@ public class Actor : Entity
         }
     }
 
-    public void Setup(EntityData entityData, ActorCategory actorCategory, uint initWorldModuleGUID)
+    public void Setup(EntityData entityData, GridPos3D worldGP, ActorCategory actorCategory, uint initWorldModuleGUID)
     {
         base.Setup(initWorldModuleGUID);
-        EntityTypeIndex = entityData.EntityTypeIndex;
+
         if (actorCategory == ActorCategory.Player) ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
+        EntityTypeIndex = entityData.EntityTypeIndex;
         ActorType = entityData.EntityType.TypeName;
         ActorCategory = actorCategory;
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
@@ -595,7 +623,8 @@ public class Actor : Entity
         ActorArtHelper.SetPFMoveGridSpeed(0);
         ActorArtHelper.SetIsPushing(false);
 
-        curWorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+        curWorldGP = worldGP; // 避免刚Setup就进行占位查询
+        WorldGP = worldGP; // 避免刚Setup就进行占位查询
         LastWorldGP = WorldGP;
         SwitchEntityOrientation(entityData.EntityOrientation);
         PlayerControllerHelper?.OnSetup(PlayerNumber.Player1);
@@ -666,6 +695,10 @@ public class Actor : Entity
                 if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
                 if (ActorCategory == ActorCategory.Creature)
                 {
+                    if (ActorAIAgent == null)
+                    {
+                        int a = 0;
+                    }
                     ActorArtHelper.SetPFMoveGridSpeed(ActorAIAgent.NextStraightNodeCount);
                 }
                 else

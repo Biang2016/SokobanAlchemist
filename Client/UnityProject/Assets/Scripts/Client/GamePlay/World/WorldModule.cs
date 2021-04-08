@@ -7,6 +7,7 @@ using BiangLibrary.ObjectPool;
 using FlowCanvas;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Assertions;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -53,35 +54,93 @@ public class WorldModule : PoolObject
     private Entity[,,] EntityMatrix_CheckOverlap_BoxAndActor = new Entity[MODULE_SIZE, MODULE_SIZE, MODULE_SIZE]; // 实体占位矩阵，包括!Passable的箱子和所有Actor
 
     // 此索引仅仅用于战斗时的Set，不可用于Recycle时候置空 
-    public Box this[GridPos3D localGP]
+    public Entity this[TypeDefineType entityType, GridPos3D localGP]
     {
-        get { return BoxMatrix[localGP.x, localGP.y, localGP.z]; }
+        get
+        {
+            if (entityType == TypeDefineType.Box)
+            {
+                return BoxMatrix[localGP.x, localGP.y, localGP.z];
+            }
+            else if (entityType == TypeDefineType.Actor)
+            {
+                Entity entity = EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z];
+                if (entity != null && entity is Actor) return entity;
+            }
+
+            return null;
+        }
         set
         {
-            BoxMatrix[localGP.x, localGP.y, localGP.z] = value;
-            if (value == null)
+            if (entityType == TypeDefineType.Box)
             {
-                WorldModuleData[TypeDefineType.Box, localGP] = null;
-                Box boxInOverlapMatrix = (Box) EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z];
-                if (boxInOverlapMatrix != null && !boxInOverlapMatrix.Passable) EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = null;
-            }
-            else
-            {
-                EntityData entityData = WorldModuleData[TypeDefineType.Box, localGP];
-                if (entityData != null)
+#if UNITY_EDITOR
+                Assert.IsTrue(value == null || value is Box);
+#endif
+                Box boxValue = (Box) value;
+                BoxMatrix[localGP.x, localGP.y, localGP.z] = boxValue;
+                if (value == null)
                 {
-                    entityData.EntityTypeIndex = value.EntityTypeIndex;
-                    entityData.EntityOrientation = value.EntityOrientation;
+                    WorldModuleData[TypeDefineType.Box, localGP] = null;
+                    Entity entityInOverlapMatrix = EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z];
+                    if (entityInOverlapMatrix != null && entityInOverlapMatrix is Box boxInOverlapMatrix && boxInOverlapMatrix.Passable)
+                    {
+                        EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = null;
+                    }
                 }
                 else
                 {
-                    WorldModuleData[TypeDefineType.Box, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                    EntityData entityData = WorldModuleData[TypeDefineType.Box, localGP];
+                    if (entityData != null)
+                    {
+                        entityData.EntityTypeIndex = value.EntityTypeIndex;
+                        entityData.EntityOrientation = value.EntityOrientation;
+                        entityData.EntityType.RefreshGUID();
+                    }
+                    else
+                    {
+                        WorldModuleData[TypeDefineType.Box, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                    }
+
+                    if (!((Box) value).Passable) EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = value;
                 }
 
-                if (!value.Passable) EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = value;
+                World.RefreshActorPathFindingSpaceAvailableCache(LocalGPToWorldGP(localGP), value);
             }
+            else if (entityType == TypeDefineType.Actor)
+            {
+#if UNITY_EDITOR
+                Assert.IsTrue(value == null || value is Actor);
+#endif
+                Actor actorValue = (Actor) value;
+                if (value == null)
+                {
+                    WorldModuleData[TypeDefineType.Actor, localGP] = null;
+                    Entity entityInOverlapMatrix = EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z];
+                    if (entityInOverlapMatrix != null && entityInOverlapMatrix is Actor)
+                    {
+                        EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = null;
+                    }
+                }
+                else
+                {
+                    EntityData entityData = WorldModuleData[TypeDefineType.Actor, localGP];
+                    if (entityData != null)
+                    {
+                        entityData.EntityTypeIndex = value.EntityTypeIndex;
+                        entityData.EntityOrientation = value.EntityOrientation;
+                        entityData.EntityType.RefreshGUID();
+                    }
+                    else
+                    {
+                        WorldModuleData[TypeDefineType.Actor, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                    }
 
-            World.RefreshActorPathFindingSpaceAvailableCache(LocalGPToWorldGP(localGP), value);
+                    EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = value;
+                }
+
+                //World.RefreshActorPathFindingSpaceAvailableCache(LocalGPToWorldGP(localGP), value); // Actor暂时不参与寻路缓存刷新
+            }
         }
     }
 
@@ -395,18 +454,18 @@ public class WorldModule : PoolObject
                 if (!probabilityShow.ProbabilityBool()) return null;
             }
 
-            List<GridPos3D> boxOccupation_rotated = null;
+            List<GridPos3D> entityOccupation_rotated = null;
             if (overrideOccupation != null)
             {
-                boxOccupation_rotated = overrideOccupation;
+                entityOccupation_rotated = overrideOccupation;
             }
             else
             {
-                boxOccupation_rotated = ConfigManager.GetEntityOccupationData(entityData.EntityTypeIndex).EntityIndicatorGPs_RotatedDict[entityData.EntityOrientation];
+                entityOccupation_rotated = ConfigManager.GetEntityOccupationData(entityData.EntityTypeIndex).EntityIndicatorGPs_RotatedDict[entityData.EntityOrientation];
             }
 
             // 空位检查，if isTriggerAppear则摧毁原先箱子
-            foreach (GridPos3D offset in boxOccupation_rotated)
+            foreach (GridPos3D offset in entityOccupation_rotated)
             {
                 GridPos3D gridPos = offset + localGP;
                 if (gridPos.InsideModule())
@@ -414,14 +473,16 @@ public class WorldModule : PoolObject
                     Box box = BoxMatrix[gridPos.x, gridPos.y, gridPos.z];
                     if (box != null)
                     {
+                        bool canOverlap = entityData.EntityType.TypeDefineType == TypeDefineType.Actor && box.Passable;
                         if (isTriggerAppear)
                         {
                             valid = true;
-                            box.DestroyBox(null, true);
+                            if (!canOverlap) box.DestroyBox(null, true);
                         }
                         else
                         {
-                            valid = false;
+                            if (canOverlap) valid = true;
+                            else valid = false;
                         }
                     }
                 }
@@ -431,14 +492,16 @@ public class WorldModule : PoolObject
                     Box boxInOtherModule = World.GetBoxByGridPosition(gridWorldGP, out WorldModule otherModule, out GridPos3D _);
                     if (boxInOtherModule != null)
                     {
+                        bool canOverlap = entityData.EntityType.TypeDefineType == TypeDefineType.Actor && boxInOtherModule.Passable;
                         if (isTriggerAppear)
                         {
                             valid = true;
-                            boxInOtherModule.DestroyBox(null, true);
+                            if (!canOverlap) boxInOtherModule.DestroyBox(null, true);
                         }
                         else
                         {
-                            valid = false;
+                            if (canOverlap) valid = true;
+                            else valid = false;
                         }
                     }
                 }
@@ -453,13 +516,13 @@ public class WorldModule : PoolObject
                         Box box = GameObjectPoolManager.Instance.BoxDict[entityData.EntityTypeIndex].AllocateGameObject<Box>(WorldModuleBoxRoot);
                         if (box.BoxFrozenBoxHelper != null)
                         {
-                            box.BoxFrozenBoxHelper.FrozenBoxOccupation = boxOccupation_rotated;
+                            box.BoxFrozenBoxHelper.FrozenBoxOccupation = entityOccupation_rotated;
                         }
 
                         box.Setup(entityData, GUID);
                         box.Initialize(worldGP, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedEntities); // 如果是TriggerAppear的箱子则不需要检查坠落
 
-                        foreach (GridPos3D offset in boxOccupation_rotated)
+                        foreach (GridPos3D offset in entityOccupation_rotated)
                         {
                             GridPos3D gridPos = offset + localGP;
                             if (gridPos.InsideModule())
@@ -471,7 +534,7 @@ public class WorldModule : PoolObject
                                 }
                                 else
                                 {
-                                    this[gridPos] = box;
+                                    this[TypeDefineType.Box, gridPos] = box;
                                 }
                             }
                             else // 如果合成的是异形箱子则需要考虑该箱子的一部分是否放到了其他模组里
@@ -483,10 +546,11 @@ public class WorldModule : PoolObject
                                     if (isStartedEntities)
                                     {
                                         otherModule.BoxMatrix[otherModuleLocalGP.x, otherModuleLocalGP.y, otherModuleLocalGP.z] = box;
+                                        World.RefreshActorPathFindingSpaceAvailableCache(gridWorldGP, box);
                                     }
                                     else
                                     {
-                                        otherModule[otherModuleLocalGP] = box;
+                                        otherModule[TypeDefineType.Box, otherModuleLocalGP] = box;
                                     }
                                 }
                             }
@@ -498,9 +562,43 @@ public class WorldModule : PoolObject
                     {
                         Actor actor = GameObjectPoolManager.Instance.ActorDict[entityData.EntityTypeIndex].AllocateGameObject<Actor>(BattleManager.Instance.ActorContainerRoot);
                         GridPos3D.ApplyGridPosToLocalTrans(worldGP, actor.transform, 1);
-                        actor.WorldGP = worldGP;
-                        actor.Setup(entityData, ActorCategory.Creature, GUID);
+                        actor.Setup(entityData, worldGP, ActorCategory.Creature, GUID);
                         BattleManager.Instance.AddActor(this, actor);
+
+                        foreach (GridPos3D offset in entityOccupation_rotated)
+                        {
+                            GridPos3D gridPos = offset + localGP;
+                            if (gridPos.InsideModule())
+                            {
+                                if (isStartedEntities)
+                                {
+                                    EntityMatrix_CheckOverlap_BoxAndActor[gridPos.x, gridPos.y, gridPos.z] = actor;
+                                    //World.RefreshActorPathFindingSpaceAvailableCache(LocalGPToWorldGP(gridPos), actor);
+                                }
+                                else
+                                {
+                                    this[TypeDefineType.Actor, gridPos] = actor;
+                                }
+                            }
+                            else // 如果合成的是异形箱子则需要考虑该箱子的一部分是否放到了其他模组里
+                            {
+                                GridPos3D gridWorldGP = offset + worldGP;
+                                Box boxInOtherModule = World.GetBoxByGridPosition(gridWorldGP, out WorldModule otherModule, out GridPos3D otherModuleLocalGP);
+                                if (otherModule != null && boxInOtherModule == null)
+                                {
+                                    if (isStartedEntities)
+                                    {
+                                        otherModule.EntityMatrix_CheckOverlap_BoxAndActor[otherModuleLocalGP.x, otherModuleLocalGP.y, otherModuleLocalGP.z] = actor;
+                                        //World.RefreshActorPathFindingSpaceAvailableCache(gridWorldGP, actor);
+                                    }
+                                    else
+                                    {
+                                        otherModule[TypeDefineType.Actor, otherModuleLocalGP] = actor;
+                                    }
+                                }
+                            }
+                        }
+
                         return actor;
                     }
                 }

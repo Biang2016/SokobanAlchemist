@@ -259,9 +259,10 @@ public class World : PoolObject
     private bool[] cached_occupyBeneath = new bool[Actor.ACTOR_MAX_HEIGHT];
     private bool[] cached_occupyAbove = new bool[Actor.ACTOR_MAX_HEIGHT];
 
-    public void RefreshActorPathFindingSpaceAvailableCache(GridPos3D worldGP, Box newBox)
+    public void RefreshActorPathFindingSpaceAvailableCache(GridPos3D worldGP, Entity newEntity)
     {
-        bool thisOccupy = newBox != null;
+        bool thisOccupy = newEntity != null;
+        if (newEntity != null && (newEntity is Box {Passable: true})) thisOccupy = false;
         for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++)
         {
             cached_occupyBeneath[i - 1] = BoxOccupy(worldGP + GridPos3D.Down * i);
@@ -388,7 +389,7 @@ public class World : PoolObject
         if (module != null && (!ignoreUnaccessibleModule || module.IsAccessible))
         {
             localGP = module.WorldGPToLocalGP(gp);
-            return module[localGP];
+            return (Box) module[TypeDefineType.Box, localGP];
         }
         else
         {
@@ -664,7 +665,7 @@ public class World : PoolObject
             {
                 GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP;
                 GetBoxByGridPosition(gridWorldGP_before, out WorldModule module_before, out GridPos3D boxGridLocalGP_before);
-                module_before[boxGridLocalGP_before] = null;
+                module_before[TypeDefineType.Box, boxGridLocalGP_before] = null;
             }
         }
 
@@ -676,7 +677,7 @@ public class World : PoolObject
                 GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP;
                 GridPos3D gridWorldGP_after = gridWorldGP_before + direction;
                 GetBoxByGridPosition(gridWorldGP_after, out WorldModule module_after, out GridPos3D boxGridLocalGP_after);
-                module_after[boxGridLocalGP_after] = box_moveable;
+                module_after[TypeDefineType.Box, boxGridLocalGP_after] = box_moveable;
             }
 
             box_moveable.State = sucState;
@@ -1055,9 +1056,9 @@ public class World : PoolObject
                 GridPos3D gridWorldGP = offset + box.WorldGP;
                 if (GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP) == box)
                 {
-                    if (module[localGP] == box)
+                    if (module[TypeDefineType.Box, localGP] == box)
                     {
-                        module[localGP] = null;
+                        module[TypeDefineType.Box, localGP] = null;
                     }
                 }
             }
@@ -1119,7 +1120,7 @@ public class World : PoolObject
             {
                 GridPos3D gridWorldGP = offset + worldGP;
                 GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP);
-                module[localGP] = box;
+                module[TypeDefineType.Box, localGP] = box;
             }
 
             Box.LerpType lerpType = Box.LerpType.Throw;
@@ -1259,8 +1260,8 @@ public class World : PoolObject
                         GridPos3D beneathBoxGridWorldGP = gridWorldGP + GridPos3D.Down;
                         GetBoxByGridPosition(gridWorldGP, out WorldModule module_before, out GridPos3D boxGridLocalGP_before);
                         GetBoxByGridPosition(beneathBoxGridWorldGP, out WorldModule module_after, out GridPos3D boxGridLocalGP_after);
-                        module_before[boxGridLocalGP_before] = null;
-                        module_after[boxGridLocalGP_after] = box;
+                        module_before[TypeDefineType.Box, boxGridLocalGP_before] = null;
+                        module_after[TypeDefineType.Box, boxGridLocalGP_after] = box;
                     }
 
                     CheckDropAbove(box); // 递归，检查上方箱子是否坠落
