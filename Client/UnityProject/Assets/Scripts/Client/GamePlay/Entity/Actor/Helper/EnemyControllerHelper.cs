@@ -1,24 +1,34 @@
-﻿using UnityEngine;
+﻿using NodeCanvas.Framework;
+using UnityEngine;
 
-public class EnemyActor : Actor
+public class EnemyControllerHelper : ActorMonoHelper
 {
+    internal GraphOwner GraphOwner;
+    internal ActorAIAgent ActorAIAgent;
+
     internal float AIUpdateInterval = 0.3f;
     private float AIUpdateIntervalTick = 0;
 
-    public override void OnUsed()
+    void Start()
     {
-        base.OnUsed();
+        ActorAIAgent = new ActorAIAgent(Actor);
+        GraphOwner = Actor.GetComponent<GraphOwner>();
+    }
+
+    public override void OnHelperUsed()
+    {
+        base.OnHelperUsed();
         AIUpdateIntervalTick = 0;
     }
 
-    protected override void Tick(float interval)
+    public void OnTick(float interval)
     {
-        if (!IsRecycled)
+        if (!Actor.IsRecycled)
         {
             if (BattleManager.Instance.Player1 != null)
             {
                 float distanceFromMainPlayer = (transform.position - BattleManager.Instance.Player1.transform.position).magnitude;
-                if (FrequentUpdate)
+                if (Actor.FrequentUpdate)
                 {
                     AIUpdateInterval = 0.1f;
                 }
@@ -37,7 +47,6 @@ public class EnemyActor : Actor
                         AIUpdateInterval = 0.3f;
                     }
                 }
-              
             }
 
             if (BattleManager.Instance.IsStart)
@@ -56,11 +65,9 @@ public class EnemyActor : Actor
                 ActorAIAgent.ActorTick(interval);
             }
 
-            MoveInternal();
+            Actor.MoveInternal();
             ActorAIAgent.ActorTickAfterMove(interval);
         }
-
-        base.Tick(interval);
     }
 
 #if UNITY_EDITOR

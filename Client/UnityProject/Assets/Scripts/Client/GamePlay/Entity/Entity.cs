@@ -633,56 +633,65 @@ public abstract class Entity : PoolObject
     [GUIColor(0, 1, 0)]
     public void CreateEntityLevelEditor()
     {
-        GameObject box_Instance = Instantiate(gameObject); // 这是实例化一个无链接的prefab实例（unpacked completely）
-        Box box = box_Instance.GetComponent<Box>();
-        GameObject modelRoot = box.EntityModelHelper.gameObject;
-        GameObject boxIndicatorHelperGO = box.BoxIndicatorHelper.gameObject;
+        GameObject entity_Instance = Instantiate(gameObject); // 这是实例化一个无链接的prefab实例（unpacked completely）
+        Entity entity = entity_Instance.GetComponent<Entity>();
+        GameObject modelRoot = entity.EntityModelHelper.gameObject;
+        GameObject entityIndicatorHelperGO = entity.EntityIndicatorHelper.gameObject;
 
-        GameObject boxLevelEditorPrefab = ConfigManager.FindBoxLevelEditorPrefabByName(name);
-        if (boxLevelEditorPrefab)
+        TypeDefineType entityType = TypeDefineType.Actor;
+        if (this is Actor)
         {
-            string box_LevelEditor_Prefab_Path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(boxLevelEditorPrefab);
-            GameObject box_LevelEditor_Instance = PrefabUtility.LoadPrefabContents(box_LevelEditor_Prefab_Path); // 这是实例化一个在预览场景里的prefab实例，为了能够顺利删除子GameObject
+            entityType = TypeDefineType.Actor;
+        }
+        else if (this is Box)
+        {
+            entityType = TypeDefineType.Box;
+        }
 
-            Box_LevelEditor box_LevelEditor = box_LevelEditor_Instance.GetComponent<Box_LevelEditor>();
-            modelRoot.transform.parent = box_LevelEditor_Instance.transform;
-            if (box_LevelEditor.ModelRoot) DestroyImmediate(box_LevelEditor.ModelRoot);
-            box_LevelEditor.ModelRoot = modelRoot;
+        GameObject entityLevelEditorPrefab = ConfigManager.FindEntityLevelEditorPrefabByName(entityType, name);
+        if (entityLevelEditorPrefab)
+        {
+            string entity_LevelEditor_Prefab_Path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(entityLevelEditorPrefab);
+            GameObject entity_LevelEditor_Instance = PrefabUtility.LoadPrefabContents(entity_LevelEditor_Prefab_Path); // 这是实例化一个在预览场景里的prefab实例，为了能够顺利删除子GameObject
 
-            boxIndicatorHelperGO.transform.parent = box_LevelEditor_Instance.transform;
-            if (box_LevelEditor.IndicatorHelperGO) DestroyImmediate(box_LevelEditor.IndicatorHelperGO);
-            box_LevelEditor.IndicatorHelperGO = boxIndicatorHelperGO;
+            Entity_LevelEditor entity_LevelEditor = entity_LevelEditor_Instance.GetComponent<Entity_LevelEditor>();
+            modelRoot.transform.parent = entity_LevelEditor_Instance.transform;
+            if (entity_LevelEditor.ModelRoot) DestroyImmediate(entity_LevelEditor.ModelRoot);
+            entity_LevelEditor.ModelRoot = modelRoot;
 
-            box_LevelEditor.EntityData.EntityType.TypeDefineType = TypeDefineType.Box;
+            entityIndicatorHelperGO.transform.parent = entity_LevelEditor_Instance.transform;
+            if (entity_LevelEditor.IndicatorHelperGO) DestroyImmediate(entity_LevelEditor.IndicatorHelperGO);
+            entity_LevelEditor.IndicatorHelperGO = entityIndicatorHelperGO;
 
-            PrefabUtility.SaveAsPrefabAsset(box_LevelEditor_Instance, box_LevelEditor_Prefab_Path, out bool suc); // 保存回改Prefab的Asset
-            DestroyImmediate(box_LevelEditor_Instance);
+            entity_LevelEditor.EntityData.EntityType.TypeDefineType = entityType;
+
+            PrefabUtility.SaveAsPrefabAsset(entity_LevelEditor_Instance, entity_LevelEditor_Prefab_Path, out bool suc); // 保存回改Prefab的Asset
+            DestroyImmediate(entity_LevelEditor_Instance);
         }
         else
         {
             PrefabManager.Instance.LoadPrefabs(); // todo delete this line
-            GameObject BoxBase_LevelEditor_Prefab = PrefabManager.Instance.GetPrefab("BoxBase_LevelEditor");
-            GameObject box_LevelEditor_Instance = (GameObject)PrefabUtility.InstantiatePrefab(BoxBase_LevelEditor_Prefab); // 这是实例化一个在当前场景里的prefab实例（有链接），为了能够顺利保存成Variant
+            GameObject EntityBase_LevelEditor_Prefab = PrefabManager.Instance.GetPrefab($"{entityType}Base_LevelEditor");
+            GameObject entity_LevelEditor_Instance = (GameObject) PrefabUtility.InstantiatePrefab(EntityBase_LevelEditor_Prefab); // 这是实例化一个在当前场景里的prefab实例（有链接），为了能够顺利保存成Variant
 
-            Box_LevelEditor box_LevelEditor = box_LevelEditor_Instance.GetComponent<Box_LevelEditor>();
-            modelRoot.transform.parent = box_LevelEditor_Instance.transform;
-            if (box_LevelEditor.ModelRoot) DestroyImmediate(box_LevelEditor.ModelRoot);
-            box_LevelEditor.ModelRoot = modelRoot;
+            Entity_LevelEditor entity_LevelEditor = entity_LevelEditor_Instance.GetComponent<Entity_LevelEditor>();
+            modelRoot.transform.parent = entity_LevelEditor_Instance.transform;
+            if (entity_LevelEditor.ModelRoot) DestroyImmediate(entity_LevelEditor.ModelRoot);
+            entity_LevelEditor.ModelRoot = modelRoot;
 
-            boxIndicatorHelperGO.transform.parent = box_LevelEditor_Instance.transform;
-            if (box_LevelEditor.IndicatorHelperGO) DestroyImmediate(box_LevelEditor.IndicatorHelperGO);
-            box_LevelEditor.IndicatorHelperGO = boxIndicatorHelperGO;
+            entityIndicatorHelperGO.transform.parent = entity_LevelEditor_Instance.transform;
+            if (entity_LevelEditor.IndicatorHelperGO) DestroyImmediate(entity_LevelEditor.IndicatorHelperGO);
+            entity_LevelEditor.IndicatorHelperGO = entityIndicatorHelperGO;
 
-            string box_LevelEditor_PrefabPath = ConfigManager.FindBoxLevelEditorPrefabPathByName(name); // 保存成Variant
-            PrefabUtility.SaveAsPrefabAsset(box_LevelEditor_Instance, box_LevelEditor_PrefabPath, out bool suc);
-            DestroyImmediate(box_LevelEditor_Instance);
+            string entity_LevelEditor_PrefabPath = ConfigManager.FindEntityLevelEditorPrefabPathByName(entityType, name); // 保存成Variant
+            PrefabUtility.SaveAsPrefabAsset(entity_LevelEditor_Instance, entity_LevelEditor_PrefabPath, out bool suc);
+            DestroyImmediate(entity_LevelEditor_Instance);
         }
 
-        DestroyImmediate(box_Instance);
+        DestroyImmediate(entity_Instance);
     }
 
 #endif
-
 }
 
 public static class EntityUtils

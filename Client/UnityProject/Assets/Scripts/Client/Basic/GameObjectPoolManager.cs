@@ -66,7 +66,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
 
     public Dictionary<PrefabNames, GameObjectPool> PoolDict = new Dictionary<PrefabNames, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> BoxDict = new Dictionary<ushort, GameObjectPool>();
-    public Dictionary<ushort, GameObjectPool> EnemyDict = new Dictionary<ushort, GameObjectPool>();
+    public Dictionary<ushort, GameObjectPool> ActorDict = new Dictionary<ushort, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> LevelTriggerDict = new Dictionary<ushort, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> FXDict = new Dictionary<ushort, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> BattleIndicatorDict = new Dictionary<ushort, GameObjectPool>();
@@ -126,7 +126,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             }
         }
 
-        foreach (KeyValuePair<ushort, string> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.Enemy].TypeNameDict)
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.Actor].TypeNameDict)
         {
             string prefabName = kv.Value;
             GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
@@ -135,7 +135,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 GameObject go = new GameObject("Pool_" + prefabName);
                 GameObjectPool pool = go.AddComponent<GameObjectPool>();
                 pool.transform.SetParent(Root);
-                EnemyDict.Add(kv.Key, pool);
+                ActorDict.Add(kv.Key, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
                 pool.Initiate(po, 20);
             }

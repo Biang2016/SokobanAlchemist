@@ -310,7 +310,7 @@ public class DebugPanel : BaseUIPanel
             i < BattleManager.Instance.MainPlayers.Length;
             i++)
         {
-            PlayerActor player = BattleManager.Instance.MainPlayers[i];
+            Actor player = BattleManager.Instance.MainPlayers[i];
             if (player != null) player.KickForce = value;
         }
     }
@@ -372,7 +372,7 @@ public class DebugPanel : BaseUIPanel
     public void ToggleEnemyPathFinding()
     {
         ConfigManager.ShowEnemyPathFinding = !ConfigManager.ShowEnemyPathFinding;
-        foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
+        foreach (Actor enemy in BattleManager.Instance.Enemies)
         {
             enemy.ActorAIAgent.SetNavTrackMarkersShown(ConfigManager.ShowEnemyPathFinding);
         }
@@ -381,7 +381,7 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("Enemy/KillAllEnemy", KeyCode.Alpha9)]
     public void KillAllEnemy()
     {
-        foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
+        foreach (Actor enemy in BattleManager.Instance.Enemies)
         {
             enemy.EntityStatPropSet.HealthDurability.SetValue(enemy.EntityStatPropSet.HealthDurability.Value - 99999, "DebugPanelKillAllEnemy");
         }

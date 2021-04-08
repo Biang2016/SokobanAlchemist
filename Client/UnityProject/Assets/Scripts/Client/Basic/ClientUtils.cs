@@ -94,14 +94,13 @@ public static class ClientUtils
 
     public static ConfigManager.TypeStartIndex ConvertToTypeStartIndex(this ushort index)
     {
-        if (index >= (ushort) ConfigManager.TypeStartIndex.Player) return ConfigManager.TypeStartIndex.Player;
         if (index >= (ushort) ConfigManager.TypeStartIndex.BattleIndicator) return ConfigManager.TypeStartIndex.BattleIndicator;
         if (index >= (ushort) ConfigManager.TypeStartIndex.FX) return ConfigManager.TypeStartIndex.FX;
         if (index >= (ushort) ConfigManager.TypeStartIndex.World) return ConfigManager.TypeStartIndex.World;
         if (index >= (ushort) ConfigManager.TypeStartIndex.StaticLayout) return ConfigManager.TypeStartIndex.StaticLayout;
         if (index >= (ushort) ConfigManager.TypeStartIndex.WorldModule) return ConfigManager.TypeStartIndex.WorldModule;
         if (index >= (ushort) ConfigManager.TypeStartIndex.LevelTrigger) return ConfigManager.TypeStartIndex.LevelTrigger;
-        if (index >= (ushort) ConfigManager.TypeStartIndex.Enemy) return ConfigManager.TypeStartIndex.Enemy;
+        if (index >= (ushort) ConfigManager.TypeStartIndex.Actor) return ConfigManager.TypeStartIndex.Actor;
         if (index >= (ushort) ConfigManager.TypeStartIndex.BoxIcon) return ConfigManager.TypeStartIndex.BoxIcon;
         if (index >= (ushort) ConfigManager.TypeStartIndex.Box) return ConfigManager.TypeStartIndex.Box;
         return ConfigManager.TypeStartIndex.None;

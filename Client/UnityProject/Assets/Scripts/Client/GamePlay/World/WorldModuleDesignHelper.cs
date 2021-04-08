@@ -113,7 +113,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
                             }
                         }
                     }
-                    else if (entityData.EntityType.TypeDefineType == TypeDefineType.Enemy)
+                    else if (entityData.EntityType.TypeDefineType == TypeDefineType.Actor)
                     {
                         EntityData overlapEntityData = worldModuleData.EntityDataMatrix_Temp_CheckOverlap_BoxAndActor[gridPos.x, gridPos.y, gridPos.z];
                         if (overlapEntityData != null)
@@ -143,14 +143,14 @@ public class WorldModuleDesignHelper : MonoBehaviour
                     foreach (GridPos3D gridPos3D in entityOccupation_rotated)
                     {
                         GridPos3D gridPos = gridPos3D + gp;
-                        if (entityData.EntityType.TypeDefineType == TypeDefineType.Enemy)
-                        {
-                            worldModuleData.EntityDataMatrix_Temp_CheckOverlap_BoxAndActor[gridPos.x, gridPos.y, gridPos.z] = entityData;
-                        }
-                        else if (entityData.EntityType.TypeDefineType == TypeDefineType.Box)
+                        if (entityData.EntityType.TypeDefineType == TypeDefineType.Box)
                         {
                             if (!entityOccupationData.Passable) worldModuleData.EntityDataMatrix_Temp_CheckOverlap_BoxAndActor[gridPos.x, gridPos.y, gridPos.z] = entityData;
                             worldModuleData.EntityDataMatrix_Temp_CheckOverlap_BetweenBoxes[gridPos.x, gridPos.y, gridPos.z] = entityData;
+                        }
+                        else if (entityData.EntityType.TypeDefineType == TypeDefineType.Actor)
+                        {
+                            worldModuleData.EntityDataMatrix_Temp_CheckOverlap_BoxAndActor[gridPos.x, gridPos.y, gridPos.z] = entityData;
                         }
                     }
                 }
@@ -244,7 +244,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
             return;
         }
 
-        GameObject prefab = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(ConfigManager.FindWorldModulePrefabPathByName(ReplaceWorldModuleTypeName.TypeName));
+        GameObject prefab = (GameObject) AssetDatabase.LoadAssetAtPath<Object>(ConfigManager.FindWorldModulePrefabPathByName(TypeDefineType.WorldModule, ReplaceWorldModuleTypeName.TypeName));
         GameObject go = (GameObject) PrefabUtility.InstantiatePrefab(prefab, transform.parent);
         go.transform.position = transform.position;
         go.transform.rotation = Quaternion.identity;

@@ -286,7 +286,7 @@ public abstract class MapGenerator
             }
 
             case TypeDefineType.Box:
-            case TypeDefineType.Enemy:
+            case TypeDefineType.Actor:
             {
                 if (existedIndex_StaticLayoutIndex_IntactForBox != 0) return false; // 不能覆盖在静态布局上
                 bool spaceAvailable = true;
@@ -304,7 +304,7 @@ public abstract class MapGenerator
                         }
 
                         ushort occupiedBoxTypeIndex = m_OpenWorld.GetOccupy(TypeDefineType.Box, box_grid_world);
-                        ushort occupiedEnemyTypeIndex = m_OpenWorld.GetOccupy(TypeDefineType.Box, box_grid_world);
+                        ushort occupiedEnemyTypeIndex = m_OpenWorld.GetOccupy(TypeDefineType.Actor, box_grid_world);
                         TerrainType terrainType = WorldMap_TerrainType[box_grid_world.x, box_grid_world.z];
 
                         if (occupiedBoxTypeIndex != 0 && !GenerateLayerData.AllowReplacedBoxTypeNameSet.Contains(ConfigManager.GetTypeName(TypeDefineType.Box, occupiedBoxTypeIndex)))
@@ -319,11 +319,11 @@ public abstract class MapGenerator
                             break;
                         }
 
-                        //if (isPlayer)
-                        //{
-                        //    spaceAvailable = false;
-                        //    break;
-                        //}
+                        if (occupiedEnemyTypeIndex == ConfigManager.Actor_PlayerIndex)
+                        {
+                            spaceAvailable = false;
+                            break;
+                        }
 
                         if (GenerateLayerData.OnlyAllowPutOnTerrain && !GenerateLayerData.AllowPlaceOnTerrainTypeSet.Contains(terrainType))
                         {

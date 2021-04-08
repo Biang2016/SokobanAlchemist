@@ -28,7 +28,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     private Dictionary<TypeDefineType, EntityData[,,]> EntityDataMatrix = new Dictionary<TypeDefineType, EntityData[,,]>
     {
         {TypeDefineType.Box, new EntityData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]},
-        {TypeDefineType.Enemy, new EntityData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]}
+        {TypeDefineType.Actor, new EntityData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE]}
     };
 
 #if UNITY_EDITOR
@@ -96,7 +96,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
             {
                 for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
                 {
-                    data.EntityDataMatrix[TypeDefineType.Enemy][x, y, z] = EntityDataMatrix[TypeDefineType.Enemy][x, y, z].Clone();
+                    data.EntityDataMatrix[TypeDefineType.Actor][x, y, z] = EntityDataMatrix[TypeDefineType.Actor][x, y, z].Clone();
                 }
             }
         }

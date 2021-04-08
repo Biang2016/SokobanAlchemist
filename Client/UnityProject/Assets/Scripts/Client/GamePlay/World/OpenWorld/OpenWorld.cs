@@ -39,7 +39,7 @@ public class OpenWorld : World
         {
             return WorldMap_Occupied_BetweenBoxes[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z];
         }
-        else if (entityType == TypeDefineType.Enemy)
+        else if (entityType == TypeDefineType.Actor)
         {
             return WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z];
         }
@@ -57,7 +57,7 @@ public class OpenWorld : World
                 return false;
             }
         }
-        else if (entityType == TypeDefineType.Enemy)
+        else if (entityType == TypeDefineType.Actor)
         {
             if (WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] != 0)
             {
@@ -76,7 +76,7 @@ public class OpenWorld : World
             WorldMap_Occupied_BetweenBoxes[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort)(occupied ? typeIndex : 0);
             if (!passable) WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort)(occupied ? typeIndex : 0);
         }
-        else if (entityType == TypeDefineType.Enemy)
+        else if (entityType == TypeDefineType.Actor)
         {
             WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort)(occupied ? typeIndex : 0);
         }
@@ -155,7 +155,7 @@ public class OpenWorld : World
         SRandom SRandom = new SRandom(Seed);
 
         WorldMap_EntityDataMatrix.Add(TypeDefineType.Box, new EntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE]);
-        WorldMap_EntityDataMatrix.Add(TypeDefineType.Enemy, new EntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE]);
+        WorldMap_EntityDataMatrix.Add(TypeDefineType.Actor, new EntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE]);
         WorldMap_Occupied_BetweenBoxes = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_Occupied_BoxAndActor = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_StaticLayoutOccupied_IntactForStaticLayout = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];

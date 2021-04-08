@@ -83,7 +83,7 @@ public class ActorBattleHelper : ActorMonoHelper
             }
         }
 
-        if (Actor is EnemyActor && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        if (Actor.ActorCategory == ActorCategory.Creature && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
             GridPos3D actorModuleGP = WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(Actor.WorldGP);
             WorldModule module = WorldManager.Instance.CurrentWorld.WorldModuleMatrix[actorModuleGP.x, actorModuleGP.y, actorModuleGP.z];
@@ -92,9 +92,9 @@ public class ActorBattleHelper : ActorMonoHelper
                 if (forModuleRecycle)
                 {
                     GridPos3D localGP = module.WorldGPToLocalGP(Actor.WorldGP);
-                    EntityData entityData = module.WorldModuleData[TypeDefineType.Enemy, localGP];
-                    Assert.IsTrue(entityData != null && entityData.EntityType.TypeName == ConfigManager.GetTypeName(TypeDefineType.Enemy, Actor.EntityTypeIndex) && entityData.EntityOrientation == Actor.EntityOrientation);
-                    module.WorldModuleData[TypeDefineType.Enemy, localGP] = null;
+                    EntityData entityData = module.WorldModuleData[TypeDefineType.Actor, localGP];
+                    Assert.IsTrue(entityData != null && entityData.EntityType.TypeName == ConfigManager.GetTypeName(TypeDefineType.Actor, Actor.EntityTypeIndex) && entityData.EntityOrientation == Actor.EntityOrientation);
+                    module.WorldModuleData[TypeDefineType.Actor, localGP] = null;
                 }
             }
         }

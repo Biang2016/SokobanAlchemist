@@ -133,7 +133,7 @@ public class EntityEditorWindow : EditorWindow
         List<string> worldModuleNames = ConfigManager.GetAllTypeNames(TypeDefineType.WorldModule);
         foreach (string worldModuleName in worldModuleNames)
         {
-            GameObject worldModulePrefab = ConfigManager.FindWorldModulePrefabByName(worldModuleName);
+            GameObject worldModulePrefab = ConfigManager.FindWorldModulePrefabByName(TypeDefineType.WorldModule, worldModuleName);
             bool isDirty = false;
             if (worldModulePrefab)
             {
@@ -154,7 +154,7 @@ public class EntityEditorWindow : EditorWindow
         List<string> staticLayoutNames = ConfigManager.GetAllTypeNames(TypeDefineType.StaticLayout);
         foreach (string staticLayoutName in staticLayoutNames)
         {
-            GameObject staticLayoutPrefab = ConfigManager.FindStaticLayoutPrefabByName(staticLayoutName);
+            GameObject staticLayoutPrefab = ConfigManager.FindWorldModulePrefabByName(TypeDefineType.StaticLayout, staticLayoutName);
             bool isDirty = false;
             if (staticLayoutPrefab)
             {
@@ -178,7 +178,7 @@ public class EntityEditorWindow : EditorWindow
         List<string> worldModuleNames = ConfigManager.GetAllTypeNames(TypeDefineType.WorldModule);
         foreach (string worldModuleName in worldModuleNames)
         {
-            GameObject worldModulePrefab = ConfigManager.FindWorldModulePrefabByName(worldModuleName);
+            GameObject worldModulePrefab = ConfigManager.FindWorldModulePrefabByName(TypeDefineType.WorldModule, worldModuleName);
             bool isDirty = false;
             if (worldModulePrefab)
             {
@@ -199,7 +199,7 @@ public class EntityEditorWindow : EditorWindow
         List<string> staticLayoutNames = ConfigManager.GetAllTypeNames(TypeDefineType.StaticLayout);
         foreach (string staticLayoutName in staticLayoutNames)
         {
-            GameObject staticLayoutPrefab = ConfigManager.FindStaticLayoutPrefabByName(staticLayoutName);
+            GameObject staticLayoutPrefab = ConfigManager.FindWorldModulePrefabByName(TypeDefineType.StaticLayout, staticLayoutName);
             bool isDirty = false;
             if (staticLayoutPrefab)
             {

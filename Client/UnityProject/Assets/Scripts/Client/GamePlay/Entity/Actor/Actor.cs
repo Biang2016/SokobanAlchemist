@@ -49,7 +49,10 @@ public class Actor : Entity
     public GameObject ActorMoveColliderRoot;
 
     [FoldoutGroup("组件")]
-    public ActorArtHelper ActorArtHelper;
+    public PlayerControllerHelper PlayerControllerHelper;
+
+    [FoldoutGroup("组件")]
+    public EnemyControllerHelper EnemyControllerHelper;
 
     [FoldoutGroup("组件")]
     public ActorPushHelper ActorPushHelper;
@@ -70,46 +73,61 @@ public class Actor : Entity
     public ActorBoxInteractHelper ActorBoxInteractHelper;
 
     [FoldoutGroup("组件")]
-    public EntityIndicatorHelper ActorIndicatorHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityModelHelper ActorModelHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityBuffHelper ActorBuffHelper;
-
-    [FoldoutGroup("组件")]
-    public ActorFrozenHelper ActorFrozenHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityTriggerZoneHelper ActorTriggerZoneHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityGrindTriggerZoneHelper ActorGrindTriggerZoneHelper;
-
-    [FoldoutGroup("组件")]
-    public List<EntityFlamethrowerHelper> ActorFlamethrowerHelpers;
-
-    [FoldoutGroup("组件")]
-    public List<EntityLightningGeneratorHelper> ActorLightningGeneratorHelpers;
-
-    [FoldoutGroup("组件")]
     public Transform LiftBoxPivot;
 
     public Vector3 ArtPos => ActorSkinHelper.MainArtTransform.position;
 
+    #region EntityHelpers
+
     internal override EntityArtHelper EntityArtHelper => ActorArtHelper;
+
+    [FoldoutGroup("组件")]
+    public ActorArtHelper ActorArtHelper;
+
     internal override EntityModelHelper EntityModelHelper => ActorModelHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityModelHelper ActorModelHelper;
+
     internal override EntityIndicatorHelper EntityIndicatorHelper => ActorIndicatorHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityIndicatorHelper ActorIndicatorHelper;
+
     internal override EntityBuffHelper EntityBuffHelper => ActorBuffHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityBuffHelper ActorBuffHelper;
+
     internal override EntityFrozenHelper EntityFrozenHelper => ActorFrozenHelper;
+
+    [FoldoutGroup("组件")]
+    public ActorFrozenHelper ActorFrozenHelper;
+
     internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => ActorTriggerZoneHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityTriggerZoneHelper ActorTriggerZoneHelper;
+
     internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => ActorGrindTriggerZoneHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityGrindTriggerZoneHelper ActorGrindTriggerZoneHelper;
+
     internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => ActorFlamethrowerHelpers;
+
+    [FoldoutGroup("组件")]
+    public List<EntityFlamethrowerHelper> ActorFlamethrowerHelpers;
+
     internal override List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers => ActorLightningGeneratorHelpers;
 
-    internal GraphOwner GraphOwner;
-    internal ActorAIAgent ActorAIAgent;
+    [FoldoutGroup("组件")]
+    public List<EntityLightningGeneratorHelper> ActorLightningGeneratorHelpers;
+
+    #endregion
+
+    internal GraphOwner GraphOwner => EnemyControllerHelper != null ? EnemyControllerHelper.GraphOwner : null;
+    internal ActorAIAgent ActorAIAgent => EnemyControllerHelper != null ? EnemyControllerHelper.ActorAIAgent : null;
 
     #region 状态
 
@@ -314,7 +332,7 @@ public class Actor : Entity
     [LabelText("起步速度")]
     public float Accelerate = 200f;
 
-    protected float ThrowRadiusMin = 0.75f;
+    internal float ThrowRadiusMin = 0.75f;
 
     [FoldoutGroup("手感")]
     [LabelText("踢箱子力量")]
@@ -477,6 +495,8 @@ public class Actor : Entity
             h.OnHelperRecycled();
         }
 
+        PlayerControllerHelper?.OnHelperRecycled();
+        EnemyControllerHelper?.OnHelperRecycled();
         ActorPushHelper.OnHelperRecycled();
         ActorFaceHelper.OnHelperRecycled();
         ActorSkinHelper.OnHelperRecycled();
@@ -518,6 +538,8 @@ public class Actor : Entity
             h.OnHelperUsed();
         }
 
+        PlayerControllerHelper?.OnHelperUsed();
+        EnemyControllerHelper?.OnHelperUsed();
         ActorPushHelper.OnHelperUsed();
         ActorFaceHelper.OnHelperUsed();
         ActorSkinHelper.OnHelperUsed();
@@ -530,8 +552,6 @@ public class Actor : Entity
 
     void Awake()
     {
-        ActorAIAgent = new ActorAIAgent(this);
-        GraphOwner = GetComponent<GraphOwner>();
         SmoothMoves = GetComponentsInChildren<SmoothMove>().ToList();
         SetModelSmoothMoveLerpTime(0);
         EntityStatPropSet = new EntityStatPropSet();
@@ -561,16 +581,8 @@ public class Actor : Entity
     public void Setup(string actorType, ActorCategory actorCategory, GridPosR.Orientation actorOrientation, uint initWorldModuleGUID)
     {
         base.Setup(initWorldModuleGUID);
-        if (actorCategory == ActorCategory.Creature)
-        {
-            EntityTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Enemy, actorType);
-        }
-        else if (actorCategory == ActorCategory.Player)
-        {
-            EntityTypeIndex = (ushort) ConfigManager.TypeStartIndex.Player;
-            ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
-        }
-
+        EntityTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Actor, actorType);
+        if (actorCategory == ActorCategory.Player) ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
         ActorType = actorType;
         ActorCategory = actorCategory;
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
@@ -595,6 +607,8 @@ public class Actor : Entity
         };
 
         ForbidAction = false;
+
+        PlayerControllerHelper?.OnSetup(PlayerNumber.Player1);
     }
 
     private void Update()
@@ -603,6 +617,12 @@ public class Actor : Entity
         {
             UpdateThrowParabolaLine();
         }
+    }
+
+    protected override void Tick(float interval)
+    {
+        EnemyControllerHelper?.OnTick(interval);
+        base.Tick(interval);
     }
 
     public void OnLoaded(Actor actor)
@@ -619,6 +639,7 @@ public class Actor : Entity
 
     protected override void FixedUpdate()
     {
+        PlayerControllerHelper?.OnFixedUpdate();
         base.FixedUpdate();
         if (IsRecycled) return;
         if (ENABLE_ACTOR_MOVE_LOG && WorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {WorldGP}");
@@ -635,7 +656,7 @@ public class Actor : Entity
         SetModelSmoothMoveLerpTime(DefaultSmoothMoveLerpTime);
     }
 
-    protected virtual void MoveInternal()
+    internal virtual void MoveInternal()
     {
         if (!ActiveSkillCanMove) CurMoveAttempt = Vector3.zero;
         if (!CannotAct && HasRigidbody)
@@ -644,16 +665,16 @@ public class Actor : Entity
             {
                 if (CurMoveAttempt.x.Equals(0)) RigidBody.velocity = new Vector3(0, RigidBody.velocity.y, RigidBody.velocity.z);
                 if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
-                if (this is EnemyActor enemyActor)
+                if (ActorCategory == ActorCategory.Creature)
                 {
-                    ActorArtHelper.SetPFMoveGridSpeed(enemyActor.ActorAIAgent.NextStraightNodeCount);
+                    ActorArtHelper.SetPFMoveGridSpeed(ActorAIAgent.NextStraightNodeCount);
                 }
                 else
                 {
                     ActorArtHelper.SetPFMoveGridSpeed(1);
                 }
 
-                if (this is PlayerActor)
+                if (ActorCategory == ActorCategory.Player)
                 {
                     if (!IsExecutingAirSkills())
                     {
@@ -841,7 +862,7 @@ public class Actor : Entity
     private float ThrowChargeTick;
     internal float ThrowChargeMax = 1.5f;
 
-    protected virtual void ThrowChargeAimInternal()
+    internal virtual void ThrowChargeAimInternal()
     {
         if (ThrowState == ThrowStates.ThrowCharging)
         {

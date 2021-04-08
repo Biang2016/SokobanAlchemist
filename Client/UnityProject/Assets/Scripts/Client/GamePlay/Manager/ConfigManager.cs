@@ -52,14 +52,13 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         None = 0,
         Box = 1,
         BoxIcon = 10000,
-        Enemy = 11000,
+        Actor = 11000,
         LevelTrigger = 12000,
         WorldModule = 13000,
         StaticLayout = 20000,
         World = 30000,
         FX = 31000,
         BattleIndicator = 32000,
-        Player = 65535,
     }
 
     public abstract class TypeDefineConfig
@@ -213,7 +212,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     {
         {TypeDefineType.Box, new TypeDefineConfig<Box>("Box", "/Resources/Prefabs/Designs/Box", true, ConfigManager.TypeStartIndex.Box)},
         {TypeDefineType.BoxIcon, new TypeDefineConfig<Texture2D>("BoxIcon", "/Resources/BoxIcons", true, ConfigManager.TypeStartIndex.BoxIcon)},
-        {TypeDefineType.Enemy, new TypeDefineConfig<EnemyActor>("Enemy", "/Resources/Prefabs/Designs/Enemy", true, ConfigManager.TypeStartIndex.Enemy)},
+        {TypeDefineType.Actor, new TypeDefineConfig<Actor>("Actor", "/Resources/Prefabs/Designs/Actor", true, ConfigManager.TypeStartIndex.Actor)},
         {TypeDefineType.LevelTrigger, new TypeDefineConfig<LevelTriggerBase>("LevelTrigger", "/Resources/Prefabs/Designs/LevelTrigger", true, ConfigManager.TypeStartIndex.LevelTrigger)},
         {TypeDefineType.WorldModule, new TypeDefineConfig<WorldModuleDesignHelper>("WorldModule", "/Designs/WorldModule", true, ConfigManager.TypeStartIndex.WorldModule)},
         {TypeDefineType.StaticLayout, new TypeDefineConfig<WorldModuleDesignHelper>("StaticLayout", "/Designs/StaticLayout", true, ConfigManager.TypeStartIndex.StaticLayout)},
@@ -607,39 +606,31 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             PrefabUtility.UnloadPrefabContents(boxPrefab);
         }
 
-        // Enemy's occupation
-        List<string> enemyNames = TypeDefineConfigs[TypeDefineType.Enemy].TypeIndexDict.Keys.ToList();
-        foreach (string enemyName in enemyNames)
+        // Actor's occupation
+        List<string> actorNames = TypeDefineConfigs[TypeDefineType.Actor].TypeIndexDict.Keys.ToList();
+        foreach (string actorName in actorNames)
         {
-            string prefabPath = TypeDefineConfigs[TypeDefineType.Enemy].GetTypeAssetDataBasePath(enemyName);
-            GameObject enemyPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
-            if (enemyPrefab)
+            string prefabPath = TypeDefineConfigs[TypeDefineType.Actor].GetTypeAssetDataBasePath(actorName);
+            GameObject actorPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
+            if (actorPrefab)
             {
-                EnemyActor enemy = enemyPrefab.GetComponent<EnemyActor>();
-                if (enemy)
+                Actor actor = actorPrefab.GetComponent<Actor>();
+                if (actor)
                 {
-                    enemy.EntityIndicatorHelper.RefreshEntityIndicatorOccupationData();
-                    EntityOccupationData occupationData = enemy.GetEntityOccupationGPs_Editor().Clone();
-                    ushort entityTypeIndex = TypeDefineConfigs[TypeDefineType.Enemy].TypeIndexDict[enemy.name];
+                    actor.EntityIndicatorHelper.RefreshEntityIndicatorOccupationData();
+                    EntityOccupationData occupationData = actor.GetEntityOccupationGPs_Editor().Clone();
+                    ushort entityTypeIndex = TypeDefineConfigs[TypeDefineType.Actor].TypeIndexDict[actor.name];
                     if (entityTypeIndex != 0)
                     {
                         EntityOccupationConfigDict.Add(entityTypeIndex, occupationData);
                     }
 
-                    PrefabUtility.SaveAsPrefabAsset(enemyPrefab, prefabPath);
+                    PrefabUtility.SaveAsPrefabAsset(actorPrefab, prefabPath);
                 }
             }
 
-            PrefabUtility.UnloadPrefabContents(enemyPrefab);
+            PrefabUtility.UnloadPrefabContents(actorPrefab);
         }
-
-        // Player's occupation
-        EntityOccupationData playerOccupationData = new EntityOccupationData();
-        playerOccupationData.EntityIndicatorGPs.Add(GridPos3D.Zero);
-        playerOccupationData.IsShapeCuboid = true;
-        playerOccupationData.IsShapePlanSquare = true;
-        playerOccupationData.BoundsInt = playerOccupationData.EntityIndicatorGPs.GetBoundingRectFromListGridPos(GridPos3D.Zero);
-        EntityOccupationConfigDict.Add((ushort) TypeStartIndex.Player, playerOccupationData);
 
         byte[] bytes = SerializationUtility.SerializeValue(EntityOccupationConfigDict, dataFormat);
         File.WriteAllBytes(file, bytes);
@@ -1071,6 +1062,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort Box_GroundBoxIndex => GetTypeIndex(TypeDefineType.Box, "GroundBox");
     public static ushort Box_BrickBoxIndex => GetTypeIndex(TypeDefineType.Box, "BrickBox");
     public static ushort Box_CombinedGroundBoxIndex => GetTypeIndex(TypeDefineType.Box, "CombinedGroundBox");
+    public static ushort Actor_PlayerIndex => GetTypeIndex(TypeDefineType.Actor, "Player");
 
     #endregion
 
@@ -1158,51 +1150,26 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return prefab;
     }
 
-    public static GameObject FindBoxLevelEditorPrefabByName(string boxName)
+    public static GameObject FindEntityLevelEditorPrefabByName(TypeDefineType entityType, string entityName)
     {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(FindBoxLevelEditorPrefabPathByName(boxName));
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(FindEntityLevelEditorPrefabPathByName(entityType, entityName));
         return prefab;
     }
 
-    public static string FindBoxLevelEditorPrefabPathByName(string boxName)
+    public static string FindEntityLevelEditorPrefabPathByName(TypeDefineType entityType, string entityName)
     {
-        TypeDefineConfigs[TypeDefineType.Box].ExportTypeNames(); // todo 判断是否要删掉此行
-        string boxPrefabPath = TypeDefineConfigs[TypeDefineType.Box].GetTypeAssetDataBasePath(boxName);
-        return boxPrefabPath.Replace("/Box/", "/Box_LevelEditor/").Replace(boxName, boxName + "_LevelEditor");
-    }
-
-    public static bool DeleteBoxPrefabByName(string boxName)
-    {
-        TypeDefineConfigs[TypeDefineType.Box].ExportTypeNames(); // todo 判断是否要删掉此行
-        string boxPrefabPath = TypeDefineConfigs[TypeDefineType.Box].GetTypeAssetDataBasePath(boxName);
-        string boxLevelEditorPrefabPath = boxPrefabPath.Replace("/Box/", "/Box_LevelEditor/").Replace(boxName, boxName + "_LevelEditor");
-        bool res_1 = AssetDatabase.DeleteAsset(boxPrefabPath);
-        bool res_2 = AssetDatabase.DeleteAsset(boxLevelEditorPrefabPath);
-        return res_1; // 源Box的Prefab删除就算成功
-    }
-
-    public static string RenameBoxPrefabByName(string boxName, string targetBoxName)
-    {
-        TypeDefineConfigs[TypeDefineType.Box].ExportTypeNames(); // todo 判断是否要删掉此行
-        string boxPrefabPath = TypeDefineConfigs[TypeDefineType.Box].GetTypeAssetDataBasePath(boxName);
-        string boxLevelEditorPrefabPath = boxPrefabPath.Replace("/Box/", "/Box_LevelEditor/").Replace(boxName, boxName + "_LevelEditor");
-        string res_1 = AssetDatabase.RenameAsset(boxPrefabPath, targetBoxName);
-        string res_2 = AssetDatabase.RenameAsset(boxLevelEditorPrefabPath, targetBoxName + "_LevelEditor");
-        return res_1 + "\t" + res_2;
-    }
-
-    public static GameObject FindActorPrefabByName(string actorName)
-    {
-        if (actorName.StartsWith("Player"))
+        TypeDefineConfigs[entityType].ExportTypeNames(); // todo 判断是否要删掉此行
+        string boxPrefabPath = TypeDefineConfigs[entityType].GetTypeAssetDataBasePath(entityName);
+        if (entityType == TypeDefineType.Box)
         {
-            PrefabManager.Instance.LoadPrefabs();
-            return PrefabManager.Instance.GetPrefab("Player");
+            return boxPrefabPath.Replace($"/{entityType}/", $"/{entityType}_LevelEditor/").Replace(entityName, entityName + "_LevelEditor");
         }
-        else
+        else if (entityType == TypeDefineType.Actor)
         {
-            GameObject enemyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(TypeDefineConfigs[TypeDefineType.Enemy].GetTypeAssetDataBasePath(actorName));
-            return enemyPrefab;
+            return boxPrefabPath.Replace($"/{entityType}/", $"/{entityType}_LevelEditor/").Replace(entityName, entityName + "_LevelEditor");
         }
+
+        return null;
     }
 
     public static GameObject FindLevelTriggerPrefabByName(string levelTriggerName)
@@ -1211,28 +1178,16 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return prefab;
     }
 
-    public static GameObject FindWorldModulePrefabByName(string worldModuleName)
+    public static GameObject FindWorldModulePrefabByName(TypeDefineType worldModuleType, string worldModuleName)
     {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(FindWorldModulePrefabPathByName(worldModuleName));
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(FindWorldModulePrefabPathByName(worldModuleType, worldModuleName));
         return prefab;
     }
 
-    public static string FindWorldModulePrefabPathByName(string worldModuleName)
+    public static string FindWorldModulePrefabPathByName(TypeDefineType worldModuleType, string worldModuleName)
     {
-        TypeDefineConfigs[TypeDefineType.WorldModule].ExportTypeNames(); // todo 判断是否要删掉此行
-        return TypeDefineConfigs[TypeDefineType.WorldModule].GetTypeAssetDataBasePath(worldModuleName);
-    }
-
-    public static GameObject FindStaticLayoutPrefabByName(string staticLayoutName)
-    {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(FindStaticLayoutPrefabPathByName(staticLayoutName));
-        return prefab;
-    }
-
-    public static string FindStaticLayoutPrefabPathByName(string staticLayoutName)
-    {
-        TypeDefineConfigs[TypeDefineType.StaticLayout].ExportTypeNames(); // todo 判断是否要删掉此行
-        return TypeDefineConfigs[TypeDefineType.StaticLayout].GetTypeAssetDataBasePath(staticLayoutName);
+        TypeDefineConfigs[worldModuleType].ExportTypeNames(); // todo 判断是否要删掉此行
+        return TypeDefineConfigs[worldModuleType].GetTypeAssetDataBasePath(worldModuleName);
     }
 
     public static GameObject FindWorldPrefabByName(string worldName)

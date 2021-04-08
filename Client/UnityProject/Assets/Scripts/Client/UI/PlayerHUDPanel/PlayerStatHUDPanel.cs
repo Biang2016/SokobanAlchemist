@@ -20,7 +20,7 @@ public class PlayerStatHUDPanel : BaseUIPanel
         for (int i = 0; i < PlayerStatHUDs_Player.Length; i++)
         {
             PlayerStatHUD hud = PlayerStatHUDs_Player[i];
-            PlayerActor player = BattleManager.Instance.MainPlayers[i];
+            Actor player = BattleManager.Instance.MainPlayers[i];
             hud.gameObject.SetActive(player != null);
             if (player != null)
             {

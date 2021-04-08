@@ -55,7 +55,7 @@ public class TypeGUIDMappingAsset : SerializedScriptableObject
     {
         {TypeDefineType.Box, new Mapping()},
         {TypeDefineType.BoxIcon, new Mapping()},
-        {TypeDefineType.Enemy, new Mapping()},
+        {TypeDefineType.Actor, new Mapping()},
         {TypeDefineType.LevelTrigger, new Mapping()},
         {TypeDefineType.WorldModule, new Mapping()},
         {TypeDefineType.StaticLayout, new Mapping()},
@@ -149,7 +149,7 @@ public enum TypeDefineType
 {
     Box,
     BoxIcon,
-    Enemy,
+    Actor,
     LevelTrigger,
     WorldModule,
     StaticLayout,

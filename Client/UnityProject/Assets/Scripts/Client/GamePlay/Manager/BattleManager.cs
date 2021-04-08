@@ -16,11 +16,11 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     public SRandom SRandom = new SRandom(12345);
     public Messenger BattleMessenger = new Messenger();
 
-    internal PlayerActor[] MainPlayers = new PlayerActor[2];
-    internal PlayerActor Player1 => MainPlayers[(int) PlayerNumber.Player1];
-    internal PlayerActor Player2 => MainPlayers[(int) PlayerNumber.Player2];
+    internal Actor[] MainPlayers = new Actor[2];
+    internal Actor Player1 => MainPlayers[(int) PlayerNumber.Player1];
+    internal Actor Player2 => MainPlayers[(int) PlayerNumber.Player2];
 
-    internal List<EnemyActor> Enemies = new List<EnemyActor>();
+    internal List<Actor> Enemies = new List<Actor>();
     internal SortedDictionary<uint, Actor> ActorDict = new SortedDictionary<uint, Actor>(); // Key: ActorGUID
 
     #region 分模组记录模组所属的Actor信息
@@ -74,7 +74,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     public void Clear()
     {
-        foreach (EnemyActor enemy in Enemies.ToArray().ToList())
+        foreach (Actor enemy in Enemies.ToArray().ToList())
         {
             enemy.PoolRecycle();
         }
@@ -134,10 +134,10 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     public void CreatePlayerByBornPointData(BornPointData bpd)
     {
-        PlayerActor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<PlayerActor>(ActorContainerRoot);
+        Actor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<Actor>(ActorContainerRoot);
         GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
         player.WorldGP = bpd.WorldGP;
-        player.Setup(PlayerNumber.Player1.ToString(), ActorCategory.Player, PlayerNumber.Player1, 0);
+        player.Setup(PlayerNumber.Player1.ToString(), ActorCategory.Player, GridPosR.Orientation.Up, 0);
         BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
         MainPlayers[0] = player;
         AddActor(null, player);
@@ -153,7 +153,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     {
         WorldModule module = WorldManager.Instance.CurrentWorld.WorldModuleMatrix[moduleGP.x, moduleGP.y, moduleGP.z];
         List<Actor> cachedDyingActors = new List<Actor>(32);
-        foreach (EnemyActor enemy in Enemies)
+        foreach (Actor enemy in Enemies)
         {
             GridPos3D actorModuleGP = WorldManager.Instance.CurrentWorld.GetModuleGPByWorldGP(enemy.WorldGP);
             if (actorModuleGP == moduleGP) cachedDyingActors.Add(enemy);
@@ -170,10 +170,10 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     public void AddActor(WorldModule worldModule, Actor actor)
     {
-        if (actor is EnemyActor enemy)
+        if (actor.ActorCategory == ActorCategory.Creature)
         {
-            Enemies.Add(enemy);
-            RegisterEnemyToWorldModule(worldModule.GUID, enemy.GUID);
+            Enemies.Add(actor);
+            RegisterEnemyToWorldModule(worldModule.GUID, actor.GUID);
         }
 
         ActorDict.Add(actor.GUID, actor);
@@ -185,10 +185,10 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     /// <param name="actor"></param>
     public void RemoveActor(Actor actor)
     {
-        if (actor is EnemyActor enemy)
+        if (actor.ActorCategory == ActorCategory.Creature)
         {
-            UnregisterEnemyFromWorldModule(enemy.GUID);
-            Enemies.Remove(enemy);
+            UnregisterEnemyFromWorldModule(actor.GUID);
+            Enemies.Remove(actor);
         }
 
         ActorDict.Remove(actor.GUID);
@@ -201,7 +201,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             MainPlayers[i]?.SetShown(shown);
         }
 
-        foreach (EnemyActor enemy in Enemies)
+        foreach (Actor enemy in Enemies)
         {
             enemy.SetShown(shown);
         }

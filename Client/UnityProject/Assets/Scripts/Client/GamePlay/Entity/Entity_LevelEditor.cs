@@ -17,6 +17,7 @@ public abstract class Entity_LevelEditor : MonoBehaviour
     [LabelText("旋转朝向")]
     [EnumToggleButtons]
     [OnValueChanged("RefreshOrientation")]
+    [NonSerialized]
     public GridPosR.Orientation EntityOrientation;
 
     public EntityData EntityData = new EntityData();
@@ -99,12 +100,12 @@ public abstract class Entity_LevelEditor : MonoBehaviour
     [NonSerialized]
     [BoxGroup("快速替换")]
     [LabelText("@\"替换实体类型\t\"+ReplaceEntityTypeName")]
-    [ValidateInput("ValidateReplaceEntityTypeName", "只能选择Box或者Enemy")]
+    [ValidateInput("ValidateReplaceEntityTypeName", "只能选择Box或者Actor")]
     private TypeSelectHelper ReplaceEntityTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
     private bool ValidateReplaceEntityTypeName(TypeSelectHelper value)
     {
-        if (value.TypeDefineType == TypeDefineType.Box || value.TypeDefineType == TypeDefineType.Enemy) return true;
+        if (value.TypeDefineType == TypeDefineType.Box || value.TypeDefineType == TypeDefineType.Actor) return true;
         return false;
     }
 
@@ -132,9 +133,9 @@ public abstract class Entity_LevelEditor : MonoBehaviour
             go.transform.rotation = Quaternion.identity;
             DestroyImmediate(gameObject);
         }
-        else if (ReplaceEntityTypeName.TypeDefineType == TypeDefineType.Enemy)
+        else if (ReplaceEntityTypeName.TypeDefineType == TypeDefineType.Actor)
         {
-            GameObject prefab = (GameObject) Resources.Load("Prefabs/Designs/Enemy_LevelEditor/" + ReplaceEntityTypeName.TypeName + "_LevelEditor");
+            GameObject prefab = (GameObject) Resources.Load("Prefabs/Designs/Actor_LevelEditor/" + ReplaceEntityTypeName.TypeName + "_LevelEditor");
             GameObject go = (GameObject) PrefabUtility.InstantiatePrefab(prefab, transform.parent);
             go.transform.position = transform.position;
             go.transform.rotation = Quaternion.identity;

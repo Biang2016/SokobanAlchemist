@@ -164,7 +164,7 @@ public class GenerateActorLayerData : GenerateLayerData
     public override TypeSelectHelper TypeName => ActorTypeName;
 
     [LabelText("@\"Actor类型\t\"+ActorTypeName")]
-    public TypeSelectHelper ActorTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Enemy};
+    public TypeSelectHelper ActorTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Actor};
 
     public override string Description => $"{ActorTypeName}\t\t{m_GenerateAlgorithm}";
 }

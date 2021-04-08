@@ -454,7 +454,7 @@ public static class ActorPathFinding
             GridPos3D gridPos = center_PF + new GridPos3D(occupied_x, occupied_y, occupied_z);
 
             // 该范围内无Actor占位
-            foreach (EnemyActor enemy in BattleManager.Instance.Enemies)
+            foreach (Actor enemy in BattleManager.Instance.Enemies)
             {
                 if (enemy.GUID == exceptActorGUID) continue;
                 if ((enemy.transform.position - actorPos).magnitude > 2f * (enemy.ActorWidth + actorWidth)) continue; // 太远的敌人略过不处理，减少计算量

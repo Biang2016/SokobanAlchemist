@@ -29,9 +29,9 @@ public class EntityData : IClone<EntityData>
                 {
                     return ConfigManager.GetTypeIndex(TypeDefineType.Box, EntityType.TypeName);
                 }
-                case TypeDefineType.Enemy:
+                case TypeDefineType.Actor:
                 {
-                    return ConfigManager.GetTypeIndex(TypeDefineType.Enemy, EntityType.TypeName);
+                    return ConfigManager.GetTypeIndex(TypeDefineType.Actor, EntityType.TypeName);
                 }
             }
 
@@ -48,10 +48,10 @@ public class EntityData : IClone<EntityData>
                     EntityType.TypeSelection = ConfigManager.GetTypeName(TypeDefineType.Box, value);
                     break;
                 }
-                case ConfigManager.TypeStartIndex.Enemy:
+                case ConfigManager.TypeStartIndex.Actor:
                 {
-                    EntityType.TypeDefineType = TypeDefineType.Enemy;
-                    EntityType.TypeSelection = ConfigManager.GetTypeName(TypeDefineType.Enemy, value);
+                    EntityType.TypeDefineType = TypeDefineType.Actor;
+                    EntityType.TypeSelection = ConfigManager.GetTypeName(TypeDefineType.Actor, value);
                     break;
                 }
             }

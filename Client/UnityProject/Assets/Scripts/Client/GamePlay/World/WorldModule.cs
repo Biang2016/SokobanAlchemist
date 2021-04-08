@@ -128,24 +128,24 @@ public class WorldModule : PoolObject
                 for (int z = 0; z < MODULE_SIZE; z++)
                 {
                     Entity entity = EntityMatrix_CheckOverlap_BoxAndActor[x, y, z];
-                    if (entity != null && entity is EnemyActor enemy)
+                    if (entity != null && entity is Actor actor)
                     {
-                        GridPos3D worldGP = enemy.WorldGP;
-                        if (enemy.WorldGP == LocalGPToWorldGP(new GridPos3D(x, y, z))) // 不是核心格所在的模组无权卸载该Entity
+                        GridPos3D worldGP = actor.WorldGP;
+                        if (actor.WorldGP == LocalGPToWorldGP(new GridPos3D(x, y, z))) // 不是核心格所在的模组无权卸载该Entity
                         {
-                            foreach (GridPos3D offset in enemy.GetEntityOccupationGPs_Rotated())
+                            foreach (GridPos3D offset in actor.GetEntityOccupationGPs_Rotated())
                             {
-                                GridPos3D gridWorldGP = offset + enemy.WorldGP;
-                                if (World.GetActorByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP) == enemy)
+                                GridPos3D gridWorldGP = offset + actor.WorldGP;
+                                if (World.GetActorByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP) == actor)
                                 {
-                                    if (module.EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] == enemy)
+                                    if (module.EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] == actor)
                                     {
                                         module.EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = null;
                                     }
                                 }
                             }
 
-                            enemy.ActorBattleHelper.DestroyActor(null, true);
+                            actor.ActorBattleHelper.DestroyActor(null, true);
                             count++;
                             if (count > clearEntityNumPerFrame)
                             {
@@ -485,15 +485,15 @@ public class WorldModule : PoolObject
 
                         return box;
                     }
-                    case TypeDefineType.Enemy:
+                    case TypeDefineType.Actor:
                     {
-                        EnemyActor enemy = GameObjectPoolManager.Instance.EnemyDict[entityData.EntityTypeIndex].AllocateGameObject<EnemyActor>(BattleManager.Instance.ActorContainerRoot);
-                        GridPos3D.ApplyGridPosToLocalTrans(worldGP, enemy.transform, 1);
-                        enemy.WorldGP = worldGP;
-                        enemy.Setup(entityData.EntityType.TypeName, ActorCategory.Creature, entityData.EntityOrientation, GUID);
-                        enemy.ApplyBoxExtraSerializeData(entityData.RawEntityExtraSerializeData);
-                        BattleManager.Instance.AddActor(this, enemy);
-                        return enemy;
+                        Actor actor = GameObjectPoolManager.Instance.ActorDict[entityData.EntityTypeIndex].AllocateGameObject<Actor>(BattleManager.Instance.ActorContainerRoot);
+                        GridPos3D.ApplyGridPosToLocalTrans(worldGP, actor.transform, 1);
+                        actor.WorldGP = worldGP;
+                        actor.Setup(entityData.EntityType.TypeName, ActorCategory.Creature, entityData.EntityOrientation, GUID);
+                        actor.ApplyBoxExtraSerializeData(entityData.RawEntityExtraSerializeData);
+                        BattleManager.Instance.AddActor(this, actor);
+                        return actor;
                     }
                 }
             }
