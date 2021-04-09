@@ -397,7 +397,7 @@ public class World : PoolObject
 
     public Entity GetImpassableEntityByGridPosition(GridPos3D gp, uint ignoreActorGUID, out WorldModule module, out GridPos3D localGP)
     {
-        return GetEntityByGridPositionCore(gp, ignoreActorGUID, out module, out localGP, true, true);
+        return GetEntityByGridPositionCore(gp, ignoreActorGUID, out module, out localGP, false, true);
     }
 
     private Entity GetEntityByGridPositionCore(GridPos3D gp, uint ignoreActorGUID, out WorldModule module, out GridPos3D localGP, bool ignoreUnaccessibleModule = true, bool ignorePassableBox = false)

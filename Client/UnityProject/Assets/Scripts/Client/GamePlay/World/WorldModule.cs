@@ -517,7 +517,6 @@ public class WorldModule : PoolObject
                                 else
                                 {
                                     module[TypeDefineType.Box, gridLocalGP] = box;
-                                    if (!box.Passable) module[TypeDefineType.Actor, gridLocalGP] = box;
                                 }
                             }
                         }

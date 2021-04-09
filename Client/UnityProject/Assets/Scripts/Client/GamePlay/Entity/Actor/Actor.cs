@@ -1091,8 +1091,8 @@ public class Actor : Entity
                 {
                     if (Box.ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {box.name} SwapBox MoveFailed {boxWorldGP_before} -> {boxWorldGP_after}");
                     GridPos3D actorTargetGP = boxIndicatorGP + actorSwapBoxMoveAttempt;
-                    Entity targetEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(actorTargetGP, GUID, out WorldModule _, out GridPos3D _);
-                    if (targetEntity == null)
+                    Entity targetEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(actorTargetGP, GUID, out WorldModule targetModule, out GridPos3D _);
+                    if (targetEntity == null || !targetModule.IsNotNullAndAvailable())
                     {
                         transform.position = boxIndicatorGP + actorSwapBoxMoveAttempt;
                         LastWorldGP = WorldGP;
@@ -1448,7 +1448,7 @@ public class Actor : Entity
             ActorFrozenHelper.FrozenBox = null;
         }
 
-        PoolRecycle();
+        if (this != BattleManager.Instance.Player1) PoolRecycle();
         IsDestroying = false;
     }
 
@@ -1487,9 +1487,9 @@ public class Actor : Entity
 
             FXManager.Instance.PlayFX(DieFX, transform.position);
             callBack?.Invoke();
+            PoolRecycle();
         }
 
-        PoolRecycle();
         IsDestroying = false;
     }
 
