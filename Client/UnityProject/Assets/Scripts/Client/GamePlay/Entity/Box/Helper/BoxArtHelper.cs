@@ -1,10 +1,17 @@
-﻿using BiangLibrary.GameDataFormat.Grid;
+﻿using System;
+using System.Collections.Generic;
+using BiangLibrary;
+using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class BoxArtHelper : EntityArtHelper
 {
+    public Transform Pivot;
+
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
@@ -16,22 +23,18 @@ public class BoxArtHelper : EntityArtHelper
         base.OnHelperUsed();
         if (UseModelVariants)
         {
-            int showIndex = Random.Range(0, ModelVariants.Length);
-            for (int i = 0; i < ModelVariants.Length; i++)
+            ModelVariantProbability randomMV = CommonUtils.GetRandomWithProbabilityFromList(ModelVariants);
+            if (randomMV != null)
             {
-                ModelVariants[i].SetActive(i == showIndex);
+                foreach (ModelVariantProbability mv in ModelVariants)
+                {
+                    mv.GameObject.SetActive(mv == randomMV);
+                }
             }
         }
 
-        if (UseRandomScale)
-        {
-            transform.localScale = new Vector3(GaussianRandom.Range(RandomScaleMean.x, RandomScaleRadius.x), GaussianRandom.Range(RandomScaleMean.y, RandomScaleRadius.y), GaussianRandom.Range(RandomScaleMean.z, RandomScaleRadius.z));
-        }
-
-        if (UseRandomOrientation)
-        {
-            Entity.SwitchEntityOrientation((GridPosR.Orientation) Random.Range(0, 4));
-        }
+        if (UseRandomScale) Pivot.localScale = new Vector3(GaussianRandom.Range(RandomScaleMean.x, RandomScaleRadius.x), GaussianRandom.Range(RandomScaleMean.y, RandomScaleRadius.y), GaussianRandom.Range(RandomScaleMean.z, RandomScaleRadius.z));
+        if (UseRandomOrientation) Pivot.localRotation = Quaternion.Euler(0, 90f * Random.Range(0, 4), 0);
     }
 
     [BoxGroup("模型变种")]
@@ -41,7 +44,8 @@ public class BoxArtHelper : EntityArtHelper
     [BoxGroup("模型变种")]
     [LabelText("模型变种类型")]
     [ShowIf("UseModelVariants")]
-    public GameObject[] ModelVariants = new GameObject[1];
+    [ListDrawerSettings(ShowIndexLabels = false)]
+    public List<ModelVariantProbability> ModelVariants = new List<ModelVariantProbability>();
 
     [BoxGroup("随机尺寸")]
     [LabelText("随机尺寸")]
@@ -60,4 +64,44 @@ public class BoxArtHelper : EntityArtHelper
     [BoxGroup("随机朝向")]
     [LabelText("随机朝向")]
     public bool UseRandomOrientation = false;
+}
+
+[Serializable]
+[InlineProperty]
+public class ModelVariantProbability : Probability, IClone<ModelVariantProbability>
+{
+    [HideLabel]
+    public GameObject GameObject;
+
+    [SerializeField]
+    private int probability;
+
+    public int Probability
+    {
+        get { return probability; }
+        set { probability = value; }
+    }
+
+    [SerializeField]
+    private bool isSingleton;
+
+    public bool IsSingleton
+    {
+        get { return isSingleton; }
+        set { isSingleton = value; }
+    }
+
+    public Probability ProbabilityClone()
+    {
+        ModelVariantProbability newData = new ModelVariantProbability();
+        newData.GameObject = GameObject;
+        newData.probability = probability;
+        newData.isSingleton = isSingleton;
+        return newData;
+    }
+
+    public ModelVariantProbability Clone()
+    {
+        return (ModelVariantProbability) ProbabilityClone();
+    }
 }

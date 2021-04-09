@@ -230,9 +230,28 @@ public class WorldModuleDesignHelper : MonoBehaviour
 
     [HideInPlayMode]
     [HideInPrefabAssets]
-    [BoxGroup("世界编辑器")]
+    [ShowInInspector]
+    [NonSerialized]
+    [BoxGroup("快速替换")]
+    [InlineProperty]
+    [HideLabel]
+    [ValidateInput("ValidateReplaceWorldModuleTypeName", "只能选择WorldModule")]
+    [PropertyOrder(3)]
+    [GUIColor(0.7f, 0.7f, 0.7f)]
+    private TypeSelectHelper ReplaceWorldModuleTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.WorldModule};
+
+    private bool ValidateReplaceWorldModuleTypeName(TypeSelectHelper value)
+    {
+        if (value.TypeDefineType == TypeDefineType.WorldModule) return true;
+        return false;
+    }
+
+    [HideInPlayMode]
+    [HideInPrefabAssets]
+    [BoxGroup("快速替换")]
     [Button("替换世界模组", ButtonSizes.Large)]
     [GUIColor(0f, 1f, 1f)]
+    [PropertyOrder(3)]
     private void ReplaceWorldModule_Editor()
     {
         WorldDesignHelper world = GetComponentInParent<WorldDesignHelper>();
@@ -248,14 +267,6 @@ public class WorldModuleDesignHelper : MonoBehaviour
         go.transform.rotation = Quaternion.identity;
         DestroyImmediate(gameObject);
     }
-
-    [HideInPlayMode]
-    [HideInPrefabAssets]
-    [ShowInInspector]
-    [NonSerialized]
-    [BoxGroup("世界编辑器")]
-    [LabelText("@\"替换世界模组类型\t\"+ReplaceWorldModuleTypeName")]
-    private TypeSelectHelper ReplaceWorldModuleTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.WorldModule};
 
     public bool SortModule()
     {
