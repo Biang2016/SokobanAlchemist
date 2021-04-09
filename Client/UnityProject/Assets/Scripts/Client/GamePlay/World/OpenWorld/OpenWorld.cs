@@ -24,7 +24,8 @@ public class OpenWorld : World
     [ShowIf("UseCertainSeed")]
     public uint GivenSeed = 0;
 
-    public Dictionary<TypeDefineType, EntityData[,,]> WorldMap_EntityDataMatrix = new Dictionary<TypeDefineType, EntityData[,,]>(); // 地图元素放置, Y轴缩小16
+    internal Dictionary<TypeDefineType, EntityData[,,]> WorldMap_EntityDataMatrix = new Dictionary<TypeDefineType, EntityData[,,]>(); // 地图元素放置, Y轴缩小16
+    internal List<EntityPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearEntityDataList = new List<EntityPassiveSkill_LevelEventTriggerAppear.Data>();
 
     #region Occupy
 
@@ -124,6 +125,7 @@ public class OpenWorld : World
     {
         base.OnRecycled();
         WorldMap_EntityDataMatrix = null;
+        EventTriggerAppearEntityDataList.Clear();
         WorldMap_Occupied_BetweenBoxes = null;
         WorldMap_Occupied_BoxAndActor = null;
         WorldMap_StaticLayoutOccupied_IntactForStaticLayout = null;
@@ -463,6 +465,14 @@ public class OpenWorld : World
                                 GridPos3D worldGP = new GridPos3D(world_x, world_y, world_z);
                                 GridPos3D localGP = worldGP - targetModuleGP * WorldModule.MODULE_SIZE;
                                 moduleData[kv.Key, localGP] = WorldMap_EntityDataMatrix[kv.Key][world_x, world_y - WorldModule.MODULE_SIZE, world_z]?.Clone();
+                            }
+                        }
+
+                        foreach (EntityPassiveSkill_LevelEventTriggerAppear.Data data in EventTriggerAppearEntityDataList)
+                        {
+                            if (GetModuleGPByWorldGP(data.WorldGP) == targetModuleGP)
+                            {
+                                moduleData.EventTriggerAppearEntityDataList.Add((EntityPassiveSkill_LevelEventTriggerAppear.Data) data.Clone());
                             }
                         }
 

@@ -349,6 +349,7 @@ public class WorldModule : PoolObject
             {
                 BoxMatrix[localGP.x, localGP.y, localGP.z]?.DestroyBox(null, true); // 强行删除该格占用Box
                 EntityData entityData = dataClone.EntityData.Clone();
+                entityData.RemoveAllLevelEventTriggerAppearPassiveSkill();
                 Entity entity = GenerateEntity(entityData, LocalGPToWorldGP(localGP), true, false);
                 entity.name = entity.name + "_Generated";
 

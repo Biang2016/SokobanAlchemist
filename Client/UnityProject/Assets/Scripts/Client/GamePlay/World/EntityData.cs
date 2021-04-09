@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
@@ -81,6 +82,23 @@ public class EntityData : IClone<EntityData>
         EntityOrientation = entityOrientation;
         RawEntityExtraSerializeData = rawEntityExtraSerializeData ?? RawEntityExtraSerializeData;
         EntityType.RefreshGUID();
+    }
+
+    public void RemoveAllLevelEventTriggerAppearPassiveSkill()
+    {
+        List<EntityPassiveSkill> removeEPSList = new List<EntityPassiveSkill>();
+        foreach (EntityPassiveSkill eps in RawEntityExtraSerializeData.EntityPassiveSkills)   
+        {
+            if (eps is EntityPassiveSkill_LevelEventTriggerAppear)
+            {
+                removeEPSList.Add(eps);
+            }
+        }
+
+        foreach (EntityPassiveSkill eps in removeEPSList)
+        {
+            RawEntityExtraSerializeData.EntityPassiveSkills.Remove(eps);
+        }
     }
 
     public EntityData Clone()

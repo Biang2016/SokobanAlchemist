@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
 using Debug = UnityEngine.Debug;
@@ -203,6 +204,23 @@ public abstract class MapGenerator
                                 }
                             }
                         }
+                    }
+
+                    List<EntityPassiveSkill_LevelEventTriggerAppear.Data> etaList = staticLayoutData.EventTriggerAppearEntityDataList.Clone();
+                    foreach (EntityPassiveSkill_LevelEventTriggerAppear.Data data in etaList)
+                    {
+                        GridPos3D sl_local = data.LocalGP;
+                        GridPos3D rot_local = sl_local;
+                        for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++) // 旋转
+                        {
+                            rot_local = new GridPos3D(rot_local.z, rot_local.y, WorldModule.MODULE_SIZE - 1 - rot_local.x);
+                        }
+
+                        GridPos3D appear_world = worldGP + rot_local;
+                        GridPos3D appear_local = new GridPos3D(appear_world.x % WorldModule.MODULE_SIZE, 0, appear_world.z % WorldModule.MODULE_SIZE);
+                        data.WorldGP = appear_world;
+                        data.LocalGP = appear_local;
+                        m_OpenWorld.EventTriggerAppearEntityDataList.Add(data);
                     }
 
                     if (staticLayoutLayerData.DeterminePlayerBP && m_OpenWorld.InitialPlayerBP == GridPos3D.Zero)
