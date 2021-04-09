@@ -17,6 +17,7 @@ public class EntityData : IClone<EntityData>
     }
 
     [LabelText("实体类型")]
+    [HideIf("hideOrientationInEntityLevelEditorInspector")]
     public TypeSelectHelper EntityType = new TypeSelectHelper(); // 在关卡编辑器中不赋值，在Export到Config时数据中自行判断是那种Entity并赋值
 
     internal ushort EntityTypeIndex
@@ -62,9 +63,11 @@ public class EntityData : IClone<EntityData>
 
     [LabelText("朝向")]
     [EnumToggleButtons]
+    [HideIf("hideOrientationInEntityLevelEditorInspector")]
     public GridPosR.Orientation EntityOrientation = GridPosR.Orientation.Up;
 
-    [BoxGroup("额外数据")]
+    internal bool hideOrientationInEntityLevelEditorInspector = false;
+
     [HideLabel]
     public EntityExtraSerializeData RawEntityExtraSerializeData = new EntityExtraSerializeData(); // 干数据，禁修改
 

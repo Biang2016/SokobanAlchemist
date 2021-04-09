@@ -592,14 +592,15 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 if (box)
                 {
                     box.BoxIndicatorHelper.RefreshEntityIndicatorOccupationData();
-                    EntityOccupationData occupationData = box.GetEntityOccupationGPs_Editor().Clone();
+                    EditorUtility.SetDirty(boxPrefab);
+                    EntityOccupationData occupationData = box.BoxIndicatorHelper.EntityOccupationData.Clone();
                     ushort entityTypeIndex = TypeDefineConfigs[TypeDefineType.Box].TypeIndexDict[box.name];
                     if (entityTypeIndex != 0)
                     {
                         EntityOccupationConfigDict.Add(entityTypeIndex, occupationData);
                     }
 
-                    PrefabUtility.SaveAsPrefabAsset(boxPrefab, prefabPath);
+                    PrefabUtility.SaveAsPrefabAsset(boxPrefab, prefabPath, out bool suc);
                 }
             }
 
@@ -618,14 +619,15 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 if (actor)
                 {
                     actor.EntityIndicatorHelper.RefreshEntityIndicatorOccupationData();
-                    EntityOccupationData occupationData = actor.GetEntityOccupationGPs_Editor().Clone();
+                    EditorUtility.SetDirty(actorPrefab);
+                    EntityOccupationData occupationData = actor.ActorIndicatorHelper.EntityOccupationData.Clone();
                     ushort entityTypeIndex = TypeDefineConfigs[TypeDefineType.Actor].TypeIndexDict[actor.name];
                     if (entityTypeIndex != 0)
                     {
                         EntityOccupationConfigDict.Add(entityTypeIndex, occupationData);
                     }
 
-                    PrefabUtility.SaveAsPrefabAsset(actorPrefab, prefabPath);
+                    PrefabUtility.SaveAsPrefabAsset(actorPrefab, prefabPath, out bool suc);
                 }
             }
 

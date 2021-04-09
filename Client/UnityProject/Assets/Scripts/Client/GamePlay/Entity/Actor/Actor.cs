@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay;
 using BiangLibrary.GamePlay.UI;
@@ -8,6 +10,7 @@ using NodeCanvas.Framework;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Actor : Entity
 {
@@ -167,6 +170,18 @@ public class Actor : Entity
     [LabelText("扔箱子瞄准点偏移")]
     public Vector3 CurThrowPointOffset;
 
+    [DisableInEditorMode]
+    [ShowInInspector]
+    [FoldoutGroup("状态")]
+    [LabelText("当前举着的箱子")]
+    internal Box CurrentLiftBox = null;
+
+    [DisableInEditorMode]
+    [ShowInInspector]
+    [FoldoutGroup("状态")]
+    [LabelText("是否着地")]
+    internal bool IsGrounded = false;
+
     [ReadOnly]
     [DisplayAsString]
     [ShowInInspector]
@@ -182,32 +197,14 @@ public class Actor : Entity
                 foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
                 {
                     GridPos3D gridPos = value + offset;
-                    Box targetGridBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos, out WorldModule targetGridModule, out GridPos3D localGP, true);
-                    Actor targetGridActor = WorldManager.Instance.CurrentWorld.GetActorByGridPosition(gridPos, out WorldModule _, out GridPos3D _);
+                    Entity targetGridEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridPos, GUID, out WorldModule targetGridModule, out GridPos3D _);
                     if (targetGridModule == null) return; // 防止角色走入空模组
-                    if (targetGridBox != null && !targetGridBox.Passable) return; // 防止角色和Box卡住
-                    if (targetGridActor != null) return; // 防止角色和其他Actor卡住
+                    if (targetGridEntity != null) return; // 防止角色和其他Entity卡住
                 }
 
-                // 进行旧模组数据注销
-                foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
-                {
-                    GridPos3D gridPos = curWorldGP + offset;
-                    WorldModule currentGridModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridPos, true);
-                    GridPos3D currentGridLocalGP = currentGridModule.WorldGPToLocalGP(gridPos);
-                    currentGridModule[TypeDefineType.Actor, currentGridLocalGP] = null;
-                }
-
+                UnRegisterFromModule(curWorldGP, EntityOrientation);
                 curWorldGP = value;
-
-                // 进行新模组数据登记
-                foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
-                {
-                    GridPos3D gridPos = curWorldGP + offset;
-                    WorldModule currentGridModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridPos, true);
-                    GridPos3D currentGridLocalGP = currentGridModule.WorldGPToLocalGP(gridPos);
-                    currentGridModule[TypeDefineType.Actor, currentGridLocalGP] = this;
-                }
+                RegisterInModule(curWorldGP, EntityOrientation);
             }
         }
     }
@@ -239,35 +236,60 @@ public class Actor : Entity
         }
     }
 
-    [DisableInEditorMode]
-    [ShowInInspector]
-    [FoldoutGroup("状态")]
-    [LabelText("当前举着的箱子")]
-    internal Box CurrentLiftBox = null;
+    private void UnRegisterFromModule(GridPos3D oldWorldGP, GridPosR.Orientation oldOrientation)
+    {
+        if (IsRecycling) return;
+        List<GridPos3D> occupationData_Rotated = ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[oldOrientation];
+        foreach (GridPos3D offset in occupationData_Rotated)
+        {
+            GridPos3D gridPos = oldWorldGP + offset;
+            WorldModule currentGridModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridPos, true);
+            if (currentGridModule != null)
+            {
+                GridPos3D currentGridLocalGP = currentGridModule.WorldGPToLocalGP(gridPos);
+                currentGridModule[TypeDefineType.Actor, currentGridLocalGP] = null;
+            }
+        }
+    }
 
-    [DisableInEditorMode]
-    [ShowInInspector]
-    [FoldoutGroup("状态")]
-    [LabelText("是否着地")]
-    internal bool IsGrounded = false;
+    private void RegisterInModule(GridPos3D newWorldGP, GridPosR.Orientation newOrientation)
+    {
+        if (IsRecycling) return;
+        foreach (GridPos3D offset in ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[newOrientation])
+        {
+            GridPos3D gridPos = newWorldGP + offset;
+            WorldModule currentGridModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridPos, true);
+            if (currentGridModule != null)
+            {
+                GridPos3D currentGridLocalGP = currentGridModule.WorldGPToLocalGP(gridPos);
+                currentGridModule[TypeDefineType.Actor, currentGridLocalGP] = this;
+            }
+        }
+    }
 
     #endregion
 
     #region 旋转朝向
 
-    internal override void SwitchEntityOrientation(GridPosR.Orientation newOrientation)
+    internal override void SwitchEntityOrientation(GridPosR.Orientation newOrientation, bool forSetup = false)
     {
         if (EntityOrientation == newOrientation) return;
 
         // Actor由于限制死平面必须是正方形，因此可以用左下角坐标相减得到核心坐标偏移量；在旋转时应用此偏移量，可以保证平面正方形仍在老位置
         GridPos offset = ActorRotateWorldGPOffset(ActorWidth, newOrientation) - ActorRotateWorldGPOffset(ActorWidth, EntityOrientation);
-        base.SwitchEntityOrientation(newOrientation);
+        if (!forSetup) UnRegisterFromModule(curWorldGP, EntityOrientation);
+        base.SwitchEntityOrientation(newOrientation, forSetup);
+        if (!forSetup) RegisterInModule(curWorldGP, newOrientation);
 
-        int delta_x = offset.x;
-        int delta_z = offset.z;
-
-        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(delta_x + curWorldGP.x, delta_z + curWorldGP.z, newOrientation), transform, 1);
-        WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(offset.x + curWorldGP.x, offset.z + curWorldGP.z, newOrientation), transform, 1);
+        if (forSetup)
+        {
+            curWorldGP = GridPos3D.GetGridPosByTrans(transform, 1); // Setup避免触发占位查询和登记，相关操作WorldModule已经代劳
+        }
+        else
+        {
+            WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+        }
     }
 
     public static GridPos ActorRotateWorldGPOffset(int actorWidth, GridPosR.Orientation orientation) // todo 这里的先决条件是所有的Actor都以左下角作为原点
@@ -303,7 +325,7 @@ public class Actor : Entity
         foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
         {
             Vector3 startPos = transform.position + offset;
-            bool gridGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(startPos, checkDistance, out GridPos3D groundGP);
+            bool gridGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(startPos, checkDistance, true, out GridPos3D groundGP);
             isGrounded |= gridGrounded;
             if (gridGrounded)
             {
@@ -419,7 +441,6 @@ public class Actor : Entity
         UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().Initialize();
         ActiveSkillMarkAsDestroyed = false;
         PassiveSkillMarkAsDestroyed = false;
-        ActorBattleHelper.IsDestroying = false;
     }
 
     #endregion
@@ -483,8 +504,11 @@ public class Actor : Entity
     [LabelText("扔技能状态")]
     public ThrowStates ThrowState = ThrowStates.None;
 
+    public bool IsRecycling = false;
+
     public override void OnRecycled()
     {
+        IsRecycling = true;
         IsInMicroWorld = false;
         ForbidAction = true;
         if (!HasRigidbody) AddRigidbody();
@@ -542,6 +566,7 @@ public class Actor : Entity
         gameObject.SetActive(false);
         BattleManager.Instance.RemoveActor(this);
         base.OnRecycled();
+        IsRecycling = false;
     }
 
     public override void OnUsed()
@@ -605,35 +630,36 @@ public class Actor : Entity
         }
     }
 
-    public void Setup(EntityData entityData, GridPos3D worldGP, ActorCategory actorCategory, uint initWorldModuleGUID)
+    public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
     {
         base.Setup(initWorldModuleGUID);
-
-        if (actorCategory == ActorCategory.Player) ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
         EntityTypeIndex = entityData.EntityTypeIndex;
         ActorType = entityData.EntityType.TypeName;
-        ActorCategory = actorCategory;
+        ActorCategory = entityData.EntityTypeIndex == ConfigManager.Actor_PlayerIndex ? ActorCategory.Player : ActorCategory.Creature;
+        if (ActorCategory == ActorCategory.Player) ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
+
+        curWorldGP = worldGP; // 避免刚Setup就进行占位查询和登记，相关操作WorldModule已经代劳
+        WorldGP = worldGP; // 避免刚Setup就进行占位查询和登记，相关操作WorldModule已经代劳
+        LastWorldGP = WorldGP;
+        SwitchEntityOrientation(entityData.EntityOrientation, true);
+
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
         ActorBattleHelper.Initialize();
         ActorBoxInteractHelper.Initialize();
-        InitPassiveSkills();
-        InitActiveSkills();
-
         ActorArtHelper.SetPFMoveGridSpeed(0);
         ActorArtHelper.SetIsPushing(false);
-
-        curWorldGP = worldGP; // 避免刚Setup就进行占位查询
-        WorldGP = worldGP; // 避免刚Setup就进行占位查询
-        LastWorldGP = WorldGP;
-        SwitchEntityOrientation(entityData.EntityOrientation);
-        PlayerControllerHelper?.OnSetup(PlayerNumber.Player1);
-        EnemyControllerHelper?.OnSetup();
         ActorBattleHelper.OnDamaged += (damage) =>
         {
             float distance = (BattleManager.Instance.Player1.transform.position - transform.position).magnitude;
             CameraManager.Instance.FieldCamera.CameraShake(damage, distance);
         };
+
+        InitPassiveSkills();
+        InitActiveSkills();
+
+        PlayerControllerHelper?.OnSetup(PlayerNumber.Player1);
+        EnemyControllerHelper?.OnSetup();
 
         ForbidAction = false;
         ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
@@ -680,6 +706,7 @@ public class Actor : Entity
         SetModelSmoothMoveLerpTime(0);
         transform.position = worldGP;
         LastWorldGP = WorldGP;
+        curWorldGP = worldGP; // 强行移动
         WorldGP = worldGP;
         SetModelSmoothMoveLerpTime(DefaultSmoothMoveLerpTime);
     }
@@ -695,10 +722,6 @@ public class Actor : Entity
                 if (CurMoveAttempt.z.Equals(0)) RigidBody.velocity = new Vector3(RigidBody.velocity.x, RigidBody.velocity.y, 0);
                 if (ActorCategory == ActorCategory.Creature)
                 {
-                    if (ActorAIAgent == null)
-                    {
-                        int a = 0;
-                    }
                     ActorArtHelper.SetPFMoveGridSpeed(ActorAIAgent.NextStraightNodeCount);
                 }
                 else
@@ -810,6 +833,7 @@ public class Actor : Entity
             CurMoveAttempt = Vector3.zero;
         }
 
+        SnapToOrientation();
         WorldGP = transform.position.ToGridPos3D();
 
         // 着地判定
@@ -835,7 +859,7 @@ public class Actor : Entity
             }
         }
 
-        if (ActorBattleHelper.IsDestroying)
+        if (IsDestroying)
         {
             if (HasRigidbody) RigidBody.constraints |= RigidbodyConstraints.FreezePositionY;
             SnapToGridY();
@@ -889,6 +913,11 @@ public class Actor : Entity
     public void SnapToGridZ()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, WorldGP.z);
+    }
+
+    public void SnapToOrientation()
+    {
+        transform.localRotation = Quaternion.Euler(0, 90f * (int) EntityOrientation, 0);
     }
 
     private float ThrowChargeTick;
@@ -947,7 +976,7 @@ public class Actor : Entity
 
     private void Dash()
     {
-        if (CannotAct) return;
+        if (CannotAct && !IsFrozen) return;
         if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue)
         {
             EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue, "Dash");
@@ -1062,8 +1091,8 @@ public class Actor : Entity
                 {
                     if (Box.ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {box.name} SwapBox MoveFailed {boxWorldGP_before} -> {boxWorldGP_after}");
                     GridPos3D actorTargetGP = boxIndicatorGP + actorSwapBoxMoveAttempt;
-                    Box targetBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(actorTargetGP, out WorldModule _, out GridPos3D _, false);
-                    if (targetBox == null || targetBox.Passable)
+                    Entity targetEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(actorTargetGP, GUID, out WorldModule _, out GridPos3D _);
+                    if (targetEntity == null)
                     {
                         transform.position = boxIndicatorGP + actorSwapBoxMoveAttempt;
                         LastWorldGP = WorldGP;
@@ -1072,7 +1101,7 @@ public class Actor : Entity
                     }
                     else
                     {
-                        if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Actor] {name} SwapFailed MoveFailed blocked by {targetBox.name} {LastWorldGP} -> {WorldGP}");
+                        if (ENABLE_ACTOR_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Actor] {name} SwapFailed MoveFailed blocked by {targetEntity.name} {LastWorldGP} -> {WorldGP}");
                     }
                 }
 
@@ -1402,6 +1431,67 @@ public class Actor : Entity
     }
 
     #endregion
+
+    #endregion
+
+    #region Die
+
+    public bool IsDestroying = false;
+
+    public void DestroyActorForModuleRecycle()
+    {
+        if (IsDestroying) return;
+        IsDestroying = true;
+        if (ActorFrozenHelper.FrozenBox)
+        {
+            ActorFrozenHelper.FrozenBox.DestroyBox(null, true);
+            ActorFrozenHelper.FrozenBox = null;
+        }
+
+        PoolRecycle();
+        IsDestroying = false;
+    }
+
+    public void DestroyActor(UnityAction callBack = null)
+    {
+        if (IsDestroying) return;
+        IsDestroying = true;
+        UnRegisterFromModule(WorldGP, EntityOrientation);
+        foreach (EntityPassiveSkill ps in EntityPassiveSkills)
+        {
+            ps.OnBeforeDestroyEntity();
+        }
+
+        ActiveSkillAgent.Instance.StartCoroutine(Co_DelayDestroyActor(callBack));
+    }
+
+    IEnumerator Co_DelayDestroyActor(UnityAction callBack)
+    {
+        yield return null;
+        foreach (EntityPassiveSkill ps in EntityPassiveSkills)
+        {
+            ps.OnDestroyEntity();
+        }
+
+        if (IsPlayerCamp)
+        {
+            BattleManager.Instance.LoseGame();
+        }
+        else
+        {
+            if (ActorFrozenHelper.FrozenBox)
+            {
+                ActorFrozenHelper.FrozenBox.DestroyBox(null, false);
+                ActorFrozenHelper.FrozenBox = null;
+            }
+
+            FXManager.Instance.PlayFX(DieFX, transform.position);
+            callBack?.Invoke();
+        }
+
+        PoolRecycle();
+        IsDestroying = false;
+    }
 
     #endregion
 }

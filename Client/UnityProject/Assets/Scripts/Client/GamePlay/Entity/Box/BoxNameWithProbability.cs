@@ -11,9 +11,10 @@ public class BoxNameWithProbability : Probability, IClone<BoxNameWithProbability
 {
     public string Description => $"{BoxTypeName}";
 
-    [LabelText("@\"箱子类型\t\"+BoxTypeName")]
+    [HideLabel]
     public TypeSelectHelper BoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
+    [EnumToggleButtons]
     public GridPosR.Orientation BoxOrientation;
 
     [SerializeField]

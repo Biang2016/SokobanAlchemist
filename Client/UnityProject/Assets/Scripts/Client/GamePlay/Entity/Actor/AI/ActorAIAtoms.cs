@@ -366,7 +366,7 @@ public static class ActorAIAtoms
             {
                 Vector2 randomRange = Random.insideUnitCircle * IdleRadius.value;
                 Vector3 dest = Actor.EntityBaseCenter + new Vector3(randomRange.x, 10f, randomRange.y);
-                if (WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(dest, 20f, out GridPos3D nearestGroundGP))
+                if (WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(dest, 20f, true, out GridPos3D nearestGroundGP))
                 {
                     Actor.ActorAIAgent.AIAgentTargetDict[ActorAIAgent.TargetEntityType.Navigate].TargetGP = nearestGroundGP;
                     return Status.Success;

@@ -134,7 +134,7 @@ public abstract class Entity : PoolObject
 
     public GridPosR.Orientation EntityOrientation { get; protected set; }
 
-    internal virtual void SwitchEntityOrientation(GridPosR.Orientation entityOrientation)
+    internal virtual void SwitchEntityOrientation(GridPosR.Orientation entityOrientation, bool forSetup = false)
     {
         EntityOrientation = entityOrientation;
     }
@@ -142,19 +142,6 @@ public abstract class Entity : PoolObject
     #endregion
 
     #region Occupation
-
-#if UNITY_EDITOR
-    /// <summary>
-    /// 仅仅用于Entity的Prefab编辑，以供导出成Occupation配置表，（未经旋转过的 )
-    /// </summary>
-    /// <returns></returns>
-    public EntityOccupationData GetEntityOccupationGPs_Editor()
-    {
-        EntityIndicatorHelper.RefreshEntityIndicatorOccupationData();
-        return EntityIndicatorHelper.EntityOccupationData;
-    }
-
-#endif
 
     // 旋转过的局部坐标
     public virtual List<GridPos3D> GetEntityOccupationGPs_Rotated()

@@ -101,10 +101,9 @@ public class PlayerControllerHelper : ActorMonoHelper
                     GridPos3D targetPos = Actor.WorldGP + rotatedQuickMoveAttemptGP;
 
                     // Check is there any box occupies the grid
-                    Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(targetPos, out WorldModule module, out GridPos3D _, true);
-                    if ((!box && module.IsNotNullAndAvailable())
-                        || (box && box.Passable)
-                        || (box && box.Pushable && Actor.ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.EntityTypeIndex) &&
+                    Entity entity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(targetPos, Actor.GUID, out WorldModule module, out GridPos3D _);
+                    if ((entity == null && module.IsNotNullAndAvailable())
+                        || (entity is Box box && box.Pushable && Actor.ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.EntityTypeIndex) &&
                             WorldManager.Instance.CurrentWorld.CheckCanMoveBoxColumn(box.WorldGP, rotatedQuickMoveAttemptGP, new HashSet<Box>()))) // 能走到才开启短按
                     {
                         // Check is there any actor occupies the grid

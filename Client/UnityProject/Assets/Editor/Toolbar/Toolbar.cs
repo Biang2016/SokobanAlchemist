@@ -46,12 +46,12 @@ namespace UnityToolbarExtender
 
         private static void OnLeftToolbarGUI()
         {
-            if (GUILayout.Button(new GUIContent("箱子编辑器"), ToolbarStyles.toolbarbutton))
-            {
-                EntityEditorWindow.ShowBoxEditorWindow();
-            }
+            //if (GUILayout.Button(new GUIContent("箱子编辑器"), ToolbarStyles.toolbarbutton))
+            //{
+            //    EntityEditorWindow.ShowBoxEditorWindow();
+            //}
 
-            if (GUILayout.Button(new GUIContent("Buff克制编辑"), ToolbarStyles.toolbarbutton))
+            if (GUILayout.Button(new GUIContent("BuffMatrix"), ToolbarStyles.toolbarbutton))
             {
                 BuffEditorWindow.ShowBuffEditorWindow();
             }
@@ -62,12 +62,12 @@ namespace UnityToolbarExtender
         private static void OnRightToolbarGUI()
         {
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button(new GUIContent("快速序列化类型"), ToolbarStyles.toolbarbuttonLeft))
+            if (GUILayout.Button(new GUIContent("QuickSerializeTypes"), ToolbarStyles.toolbarbuttonLeft))
             {
                 ConfigManager.QuickExportConfigs_TypeDefines();
             }
 
-            if (GUILayout.Button(new GUIContent("序列化配置"), ToolbarStyles.toolbarbuttonRight))
+            if (GUILayout.Button(new GUIContent("SerializeConfig"), ToolbarStyles.toolbarbuttonRight))
             {
                 ConfigManager.ExportConfigs();
             }

@@ -346,7 +346,7 @@ public class ActorAIAgent
         bool suc = ActorPathFinding.FindPath(Actor.WorldGP_PF, currentDestination_PF, Actor.transform.position, CurrentPath, keepDistanceMin, keepDistanceMax, destinationType, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
         //if (ActorPathFinding.InvokeTimes > 500)
         //{
-            //Debug.Log($"{Actor.name} ActorPathFinding.InvokeTimes: {ActorPathFinding.InvokeTimes} {pathFindingDesc}");
+        //Debug.Log($"{Actor.name} ActorPathFinding.InvokeTimes: {ActorPathFinding.InvokeTimes} {pathFindingDesc}");
         //}
 
         Profiler.EndSample();
@@ -495,8 +495,8 @@ public class ActorAIAgent
         foreach (GridPos3D offset in Actor.GetEntityOccupationGPs_Rotated())
         {
             GridPos3D gridPos = Actor.WorldGP + offset;
-            Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos, out WorldModule _, out GridPos3D _, false);
-            if (box.IsNotNullAndAlive() && !box.Passable)
+            Entity entity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridPos, Actor.GUID, out WorldModule _, out GridPos3D _);
+            if (entity is Box && entity.IsNotNullAndAlive())
             {
                 return true;
             }
@@ -510,10 +510,10 @@ public class ActorAIAgent
         foreach (GridPos3D offset in Actor.GetEntityOccupationGPs_Rotated())
         {
             GridPos3D gridPos = Actor.WorldGP + offset;
-            Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridPos, out WorldModule _, out GridPos3D _, false);
-            if (box.IsNotNullAndAlive() && !box.Passable)
+            Entity entity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridPos, Actor.GUID, out WorldModule _, out GridPos3D _);
+            if (entity is Box && entity.IsNotNullAndAlive())
             {
-                box.EntityBuffHelper.Damage(10000, EntityBuffAttribute.ExplodeDamage, 0);
+                entity.EntityBuffHelper.Damage(10000, EntityBuffAttribute.ExplodeDamage, 0);
             }
         }
     }

@@ -68,8 +68,13 @@ public class TypeGUIDMappingAsset : SerializedScriptableObject
 }
 
 [Serializable]
+[InlineProperty]
 public class TypeSelectHelper : IClone<TypeSelectHelper>
 {
+    public TypeSelectHelper()
+    {
+    }
+
     [ShowInInspector]
     [LabelText("类型名称")]
     public string TypeName => ToString();
@@ -123,6 +128,7 @@ public class TypeSelectHelper : IClone<TypeSelectHelper>
 
     [SerializeField]
     [ReadOnly]
+    [HideInInspector]
     [LabelText("类型GUID")]
     private string TypeGUID;
 

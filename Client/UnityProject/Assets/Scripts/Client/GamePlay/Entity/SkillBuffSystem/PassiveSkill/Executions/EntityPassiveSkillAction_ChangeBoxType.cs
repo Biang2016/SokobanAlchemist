@@ -13,7 +13,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
 
     protected override string Description => "更改箱子类型(仅箱子使用)";
 
-    [LabelText("@\"更改箱子为\t\"+EntityData")]
+    [HideLabel]
     public EntityData EntityData = new EntityData();
 
     [LabelText("每一格都生成一个")]

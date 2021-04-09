@@ -111,7 +111,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     [LabelText("准度标准差/格")]
     public float AccurateStandardDeviation;
 
-    [LabelText("@\"技能范围标识类型\t\"+BattleIndicatorTypeName")]
+    [HideLabel]
     public TypeSelectHelper BattleIndicatorTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.BattleIndicator};
 
     private ushort BattleIndicatorTypeIndex => ConfigManager.GetTypeIndex(TypeDefineType.BattleIndicator, BattleIndicatorTypeName.TypeName);

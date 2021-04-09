@@ -96,8 +96,8 @@ public static class ActorPathFinding
     public static bool FindPath(GridPos3D ori_PF, GridPos3D dest_PF, Vector3 actorPos, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         if (ori_PF.y != dest_PF.y) return false;
-        WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori_PF, out WorldModule oriModule, out GridPos3D _);
-        WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(dest_PF, out WorldModule destModule, out GridPos3D _);
+        WorldModule oriModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(ori_PF.ConvertPathFindingNodeGPToWorldPosition(actorWidth).ToGridPos3D());
+        WorldModule destModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(dest_PF.ConvertPathFindingNodeGPToWorldPosition(actorWidth).ToGridPos3D());
         if (oriModule.IsNotNullAndAvailable() && destModule.IsNotNullAndAvailable())
         {
             Node oriNode = NodeFactory.Alloc();
@@ -113,7 +113,7 @@ public static class ActorPathFinding
     public static bool FindRandomAccessibleDestination(GridPos3D ori_PF, Vector3 actorPos, float rangeRadius, out GridPos3D destination_PF, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         destination_PF = GridPos3D.Zero;
-        WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(ori_PF.ConvertPathFindingNodeGPToWorldPosition(actorWidth).ToGridPos3D(), out WorldModule oriModule, out GridPos3D _);
+        WorldModule oriModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(ori_PF.ConvertPathFindingNodeGPToWorldPosition(actorWidth).ToGridPos3D());
         if (oriModule.IsNotNullAndAvailable())
         {
             Profiler.BeginSample("UnionFindNodes");
@@ -390,7 +390,7 @@ public static class ActorPathFinding
         while (cached_QueueUnionFind.Count > 0)
         {
             GridPos3D head = cached_QueueUnionFind.Dequeue();
-            WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(head, out WorldModule curModule, out GridPos3D _);
+            WorldModule curModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(head.ConvertPathFindingNodeGPToWorldPosition(actorWidth).ToGridPos3D());
             if (!curModule.IsNotNullAndAvailable()) return cached_UnionFindNodeList;
 
             // 四邻边

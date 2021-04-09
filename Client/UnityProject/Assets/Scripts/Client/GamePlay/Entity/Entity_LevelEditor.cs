@@ -9,12 +9,16 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+[ExecuteInEditMode]
 public abstract class Entity_LevelEditor : MonoBehaviour
 {
+    [HideInPrefabInstances]
     public GameObject ModelRoot;
 
+    [HideInPrefabInstances]
     public GameObject IndicatorHelperGO;
 
+    [HideInPrefabAssets]
     [LabelText("旋转朝向")]
     [EnumToggleButtons]
     [OnValueChanged("RefreshOrientation")]
@@ -26,13 +30,19 @@ public abstract class Entity_LevelEditor : MonoBehaviour
         set { EntityData.EntityOrientation = value; }
     }
 
-    [LabelText("实体数据")]
+    [HideInPrefabAssets]
+    [HideLabel]
     [PropertyOrder(2)]
     public EntityData EntityData = new EntityData();
 
+    void Awake()
+    {
+        EntityData.hideOrientationInEntityLevelEditorInspector = true;
+    }
+
     public bool RefreshOrientation()
     {
-        bool dirty = Math.Abs(ModelRoot.transform.rotation.eulerAngles.y - (int)EntityOrientation * 90f) > 1f;
+        bool dirty = Math.Abs(ModelRoot.transform.rotation.eulerAngles.y - (int) EntityOrientation * 90f) > 1f;
         if (dirty)
         {
             GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, EntityOrientation), ModelRoot.transform, 1);
@@ -105,9 +115,11 @@ public abstract class Entity_LevelEditor : MonoBehaviour
     [ShowInInspector]
     [NonSerialized]
     [BoxGroup("快速替换")]
-    [LabelText("@\"替换实体类型\t\"+ReplaceEntityTypeName")]
+    [InlineProperty]
+    [HideLabel]
     [ValidateInput("ValidateReplaceEntityTypeName", "只能选择Box或者Actor")]
     [PropertyOrder(3)]
+    [GUIColor(0.7f, 0.7f, 0.7f)]
     private TypeSelectHelper ReplaceEntityTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
     private bool ValidateReplaceEntityTypeName(TypeSelectHelper value)

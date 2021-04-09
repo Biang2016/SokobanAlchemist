@@ -73,11 +73,7 @@ public class OpenWorld : World
         if (entityType == TypeDefineType.Box)
         {
             EntityOccupationData eod = ConfigManager.GetEntityOccupationData(typeIndex);
-            if (eod == null)
-            {
-                int a = 0;
-            }
-            bool passable = ConfigManager.GetEntityOccupationData(typeIndex).Passable;
+            bool passable = eod.Passable;
             WorldMap_Occupied_BetweenBoxes[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort) (occupied ? typeIndex : 0);
             if (!passable) WorldMap_Occupied_BoxAndActor[worldGP.x, worldGP.y - WorldModule.MODULE_SIZE, worldGP.z] = (ushort) (occupied ? typeIndex : 0);
         }
@@ -303,7 +299,7 @@ public class OpenWorld : World
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.91f, "Loading Maps");
         yield return null;
         BattleManager.Instance.CreatePlayerByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias]);
-        BattleManager.Instance.Player1.ForbidAction = true;
+        BattleManager.Instance.IsStart = false;
         CameraManager.Instance.FieldCamera.InitFocus();
 
         // 没有起始关卡就直接进入大世界，有起始关卡则避免加载了又卸载
@@ -313,8 +309,7 @@ public class OpenWorld : World
             GridPos3D playerBPWorld = new GridPos3D(-1, -1, -1);
             RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(playerBPWorld, PlayerScopeRadiusX, PlayerScopeRadiusZ)); // 按关卡生成器和角色位置初始化需要的模组
             while (RefreshScopeModulesCoroutine != null) yield return null;
-
-            BattleManager.Instance.Player1.ForbidAction = false;
+            BattleManager.Instance.IsStart = true;
         }
     }
 
@@ -547,7 +542,7 @@ public class OpenWorld : World
     IEnumerator Co_RecycleModule(WorldModule worldModule, GridPos3D currentShowModuleGP, int boolIndex)
     {
         WorldData.WorldBornPointGroupData_Runtime.Dynamic_UnloadModuleData(currentShowModuleGP);
-        WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null;
+        WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null; // 时序，先置空指针再清空
         yield return worldModule.Clear(false, 256);
         worldModule.PoolRecycle();
         if (boolIndex >= 0)
@@ -600,7 +595,7 @@ public class OpenWorld : World
     {
         transportingPlayerToMicroWorld = true;
         CurrentMicroWorldTypeIndex = worldTypeIndex;
-        BattleManager.Instance.Player1.ForbidAction = true;
+        BattleManager.Instance.IsStart = false;
         UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetMinimumLoadingDuration(2);
@@ -702,7 +697,7 @@ public class OpenWorld : World
         LoadingMapPanel.SetProgress(100f, "Loading Level");
         yield return new WaitForSeconds(LoadingMapPanel.GetRemainingLoadingDuration());
         LoadingMapPanel.CloseUIForm();
-        BattleManager.Instance.Player1.ForbidAction = false;
+        BattleManager.Instance.IsStart = true;
         transportingPlayerToMicroWorld = false;
     }
 
@@ -721,7 +716,7 @@ public class OpenWorld : World
         returningToOpenWorldFormMicroWorld = true;
         CurrentMicroWorldTypeIndex = 0;
         AudioManager.Instance.BGMFadeIn("bgm/CoolSwing", 1f, 1f, true);
-        BattleManager.Instance.Player1.ForbidAction = true;
+        BattleManager.Instance.IsStart = false;
         UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetMinimumLoadingDuration(2);
@@ -764,7 +759,7 @@ public class OpenWorld : World
 
         yield return new WaitForSeconds(LoadingMapPanel.GetRemainingLoadingDuration());
         LoadingMapPanel.CloseUIForm();
-        BattleManager.Instance.Player1.ForbidAction = false;
+        BattleManager.Instance.IsStart = true;
         returningToOpenWorldFormMicroWorld = false;
     }
 
@@ -782,7 +777,7 @@ public class OpenWorld : World
     public IEnumerator Co_RestartMicroWorld(bool rebornPlayer)
     {
         restartingMicroWorld = true;
-        BattleManager.Instance.Player1.ForbidAction = true;
+        BattleManager.Instance.IsStart = false;
         UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetMinimumLoadingDuration(2);
@@ -872,7 +867,7 @@ public class OpenWorld : World
         LoadingMapPanel.SetProgress(100f, "Loading Level");
         yield return new WaitForSeconds(LoadingMapPanel.GetRemainingLoadingDuration());
         LoadingMapPanel.CloseUIForm();
-        BattleManager.Instance.Player1.ForbidAction = false;
+        BattleManager.Instance.IsStart = true;
         restartingMicroWorld = false;
     }
 

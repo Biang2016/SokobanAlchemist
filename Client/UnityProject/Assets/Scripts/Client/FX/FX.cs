@@ -57,7 +57,7 @@ public class FXConfig : IClone<FXConfig>
     }
 
     [SerializeField]
-    [LabelText("@\"特效类型\t\"+FXType")]
+    [HideLabel]
     private TypeSelectHelper FXType = new TypeSelectHelper {TypeDefineType = TypeDefineType.FX};
 
     [SerializeField]
@@ -71,6 +71,10 @@ public class FXConfig : IClone<FXConfig>
     [SerializeField]
     [LabelText("尺寸(曲线)")]
     private AnimationCurve AnimationCurve = new AnimationCurve();
+
+    private FXConfig()
+    {
+    }
 
     public FXConfig(string defaultFXTypeName = "None", float fxScale = 1f, bool useCurve = false, AnimationCurve animationCurve = null)
     {

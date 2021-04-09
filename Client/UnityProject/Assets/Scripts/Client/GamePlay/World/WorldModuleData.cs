@@ -53,7 +53,10 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
         set
         {
             if (entityType == TypeDefineType.Box) EntityDataMatrix_Box[localGP.x, localGP.y, localGP.z] = value;
-            if (entityType == TypeDefineType.Actor) EntityDataMatrix_Actor[localGP.x, localGP.y, localGP.z] = value;
+            if (entityType == TypeDefineType.Actor)
+            {
+                EntityDataMatrix_Actor[localGP.x, localGP.y, localGP.z] = value;
+            }
         }
     }
 

@@ -72,7 +72,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     public bool WarmUpPool_Editor = true;
 
-    [LabelText("@\"开局世界类型\t\"+StartWorldName")]
+    [HideLabel]
     public TypeSelectHelper StartWorldName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
 
     public static string DebugChangeWorldName = null;

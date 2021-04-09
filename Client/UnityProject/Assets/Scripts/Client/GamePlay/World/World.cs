@@ -265,12 +265,12 @@ public class World : PoolObject
         if (newEntity != null && (newEntity is Box {Passable: true})) thisOccupy = false;
         for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++)
         {
-            cached_occupyBeneath[i - 1] = BoxOccupy(worldGP + GridPos3D.Down * i);
+            cached_occupyBeneath[i - 1] = ImpassableBoxOccupy(worldGP + GridPos3D.Down * i);
         }
 
         for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++)
         {
-            cached_occupyAbove[i - 1] = BoxOccupy(worldGP + GridPos3D.Up * i);
+            cached_occupyAbove[i - 1] = ImpassableBoxOccupy(worldGP + GridPos3D.Up * i);
         }
 
         if (thisOccupy)
@@ -376,20 +376,39 @@ public class World : PoolObject
         }
     }
 
-    private bool BoxOccupy(GridPos3D worldGP)
+    private bool ImpassableBoxOccupy(GridPos3D worldGP)
     {
-        Box box = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(worldGP, out WorldModule _, out GridPos3D _, false);
-        if (box != null && !box.Passable) return true;
+        Entity entity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(worldGP, 0, out WorldModule _, out GridPos3D _);
+        if (entity != null && entity is Box) return true;
         return false;
     }
 
-    public Box GetBoxByGridPosition(GridPos3D gp, out WorldModule module, out GridPos3D localGP, bool ignoreUnaccessibleModule = true)
+    public Box GetBoxByGridPosition(GridPos3D gp, out WorldModule module, out GridPos3D localGP, bool ignoreUnaccessibleModule = true, bool ignorePassableBox = false)
+    {
+        Entity entity = GetEntityByGridPositionCore(gp, 0, out module, out localGP, ignoreUnaccessibleModule, ignorePassableBox);
+        if (entity is Box box)
+        {
+            if (ignorePassableBox && box.Passable) return null;
+            return box;
+        }
+
+        return null;
+    }
+
+    public Entity GetImpassableEntityByGridPosition(GridPos3D gp, uint ignoreActorGUID, out WorldModule module, out GridPos3D localGP)
+    {
+        return GetEntityByGridPositionCore(gp, ignoreActorGUID, out module, out localGP, true, true);
+    }
+
+    private Entity GetEntityByGridPositionCore(GridPos3D gp, uint ignoreActorGUID, out WorldModule module, out GridPos3D localGP, bool ignoreUnaccessibleModule = true, bool ignorePassableBox = false)
     {
         module = GetModuleByWorldGP(gp, ignoreUnaccessibleModule);
         if (module != null && (!ignoreUnaccessibleModule || module.IsAccessible))
         {
             localGP = module.WorldGPToLocalGP(gp);
-            return (Box) module[TypeDefineType.Box, localGP];
+            Entity entity = module[ignorePassableBox ? TypeDefineType.Actor : TypeDefineType.Box, localGP];
+            if (entity != null && entity.GUID == ignoreActorGUID) return null;
+            return entity;
         }
         else
         {
@@ -522,7 +541,7 @@ public class World : PoolObject
         do
         {
             currentCastGP += dir;
-            firstBox = GetBoxByGridPosition(currentCastGP, out WorldModule _, out GridPos3D _, false);
+            firstBox = GetBoxByGridPosition(currentCastGP, out WorldModule _, out GridPos3D _, false, false);
             distance++;
         } while (firstBox == null && distance <= maxDistance);
 
@@ -540,26 +559,6 @@ public class World : PoolObject
     #endregion
 
     #region MoveBox Calculators
-
-    protected Collider[] actorOccupiedGridSphereOverlapTempResultCache = new Collider[100];
-
-    public bool CheckActorOccupiedGrid(GridPos3D targetGP, uint excludeActorGUID = 0)
-    {
-        int overlapCount = Physics.OverlapBoxNonAlloc(targetGP, 0.3f * Vector3.one, actorOccupiedGridSphereOverlapTempResultCache, Quaternion.identity, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy, QueryTriggerInteraction.Collide);
-        if (overlapCount > 0)
-        {
-            for (int index = 0; index < overlapCount; index++)
-            {
-                Collider result = actorOccupiedGridSphereOverlapTempResultCache[index];
-                Actor actor = result.GetComponentInParent<Actor>();
-                if (actor.IsNotNullAndAlive() && actor.GUID != excludeActorGUID) return true;
-            }
-
-            return false;
-        }
-
-        return false;
-    }
 
     public bool CheckCanMoveBoxColumn(
         GridPos3D srcGP, GridPos3D direction,
@@ -590,7 +589,8 @@ public class World : PoolObject
                 if (is_box_after_aboveBox) beBlockedByOtherBox = false;
             }
 
-            bool beBlockedByActor = CheckActorOccupiedGrid(gridGP_after, excludeActorGUID);
+            Actor actor = GetActorByGridPosition(gridGP_after, out WorldModule _, out GridPos3D _);
+            bool beBlockedByActor = actor != null && actor.GUID != excludeActorGUID;
             bool cannotMove = module_after == null || beBlockedByOtherBox || beBlockedByActor;
 
             if (cannotMove)
@@ -1116,13 +1116,6 @@ public class World : PoolObject
                 }
             }
 
-            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
-            {
-                GridPos3D gridWorldGP = offset + worldGP;
-                GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP);
-                module[TypeDefineType.Box, localGP] = box;
-            }
-
             Box.LerpType lerpType = Box.LerpType.Throw;
             switch (box.State)
             {
@@ -1155,6 +1148,15 @@ public class World : PoolObject
 
             WorldModule module_box_core = GetModuleByWorldGP(worldGP);
             box.Initialize(worldGP, module_box_core, 0.3f, box.ArtOnly, lerpType);
+
+            // 时序 Initialize在登记占位之前，因为Box的WorldGP是每次Initialize时变化的
+            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
+            {
+                GridPos3D gridWorldGP = offset + worldGP;
+                GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP);
+                module[TypeDefineType.Box, localGP] = box;
+            }
+
             TryMerge(kickDir, new HashSet<Box> {box});
             return true;
         }
@@ -1290,7 +1292,7 @@ public class World : PoolObject
 
     #endregion
 
-    public bool CheckIsGroundByPos(Vector3 startPos, float checkDistance, out GridPos3D nearestGroundGP)
+    public bool CheckIsGroundByPos(Vector3 startPos, float checkDistance, bool ignorePassableBox, out GridPos3D nearestGroundGP)
     {
         nearestGroundGP = GridPos3D.Zero;
         GridPos3D curGrid = (startPos).ToGridPos3D();
@@ -1301,8 +1303,8 @@ public class World : PoolObject
         for (int y = startGridY - 1; y >= endGridY; y--)
         {
             GridPos3D grid = new GridPos3D(curGrid.x, y, curGrid.z);
-            Box lowerBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(grid, out WorldModule _, out GridPos3D _, false);
-            if (lowerBox != null && !lowerBox.Passable)
+            Box lowerBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(grid, out WorldModule _, out GridPos3D _, false, ignorePassableBox);
+            if (lowerBox != null)
             {
                 nearestGroundGP = grid;
                 return true;

@@ -557,7 +557,7 @@ public class EntityStatPropSet
             }
         }
 
-        if (Entity is Actor actor) actor.ActorBattleHelper.DestroyActor();
+        if (Entity is Actor actor) actor.DestroyActor();
     }
 
     private void OnMaxHealthDurabilityChanged(int before, int after)

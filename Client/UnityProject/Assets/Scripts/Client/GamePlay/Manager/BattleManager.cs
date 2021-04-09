@@ -100,7 +100,21 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         NavTrackMarkerRoot = new GameObject("NavTrackMarkerRoot").transform;
     }
 
-    public bool IsStart = false;
+    private bool isStart = false;
+
+    public bool IsStart
+    {
+        get { return isStart; }
+        set
+        {
+            if (isStart != value)
+            {
+                //Debug.Log($"BattleManager.IsStart = {value}");
+                isStart = value;
+                SetAllActorForbidAction(!isStart);
+            }
+        }
+    }
 
     public override void Start()
     {
@@ -112,40 +126,41 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     public void StartBattle()
     {
-        LoadActors();
-        GameStateManager.Instance.SetState(GameState.Fighting);
-        IsStart = true;
+        if (WorldManager.Instance.CurrentWorld.WorldData.UseSpecialCameraConfig)
+        {
+            CameraManager.Instance.FieldCamera.SetTargetConfigData(WorldManager.Instance.CurrentWorld.WorldData.CameraConfigData);
+        }
+
+        CameraManager.Instance.FieldCamera.InitFocus();
+
         if (WorldManager.Instance.CurrentWorld.WorldData.UseSpecialPlayerEnterESPS)
         {
             Player1.ReloadESPS(WorldManager.Instance.CurrentWorld.WorldData.Raw_PlayerEnterESPS);
         }
 
-        if (WorldManager.Instance.CurrentWorld.WorldData.UseSpecialCameraConfig)
-        {
-            CameraManager.Instance.FieldCamera.SetTargetConfigData(WorldManager.Instance.CurrentWorld.WorldData.CameraConfigData);
-        }
-    }
-
-    private void LoadActors()
-    {
-        CameraManager.Instance.FieldCamera.InitFocus();
+        GameStateManager.Instance.SetState(GameState.Fighting);
+        IsStart = true;
     }
 
     public void CreatePlayerByBornPointData(BornPointData bpd)
     {
-        Actor player = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.Player].AllocateGameObject<Actor>(ActorContainerRoot);
+        if (MainPlayers[0] != null) return;
+        Actor player = GameObjectPoolManager.Instance.ActorDict[ConfigManager.Actor_PlayerIndex].AllocateGameObject<Actor>(ActorContainerRoot);
         GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
-        player.Setup(new EntityData(ConfigManager.Actor_PlayerIndex, GridPosR.Orientation.Up), bpd.WorldGP, ActorCategory.Player, 0);
-        BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) player);
-        MainPlayers[0] = player;
+        player.Setup(new EntityData(ConfigManager.Actor_PlayerIndex, GridPosR.Orientation.Up), bpd.WorldGP, 0);
         AddActor(null, player);
-        UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>().Initialize();
-        UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
     }
 
     public void AddActor(WorldModule worldModule, Actor actor)
     {
-        if (actor.ActorCategory == ActorCategory.Creature)
+        if (actor.ActorCategory == ActorCategory.Player)
+        {
+            BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) actor);
+            MainPlayers[0] = actor;
+            UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>().Initialize();
+            UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
+        }
+        else if (actor.ActorCategory == ActorCategory.Creature)
         {
             Enemies.Add(actor);
             RegisterEnemyToWorldModule(worldModule.GUID, actor.GUID);
@@ -167,6 +182,14 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
 
         ActorDict.Remove(actor.GUID);
+    }
+
+    private void SetAllActorForbidAction(bool forbidAction)
+    {
+        foreach (KeyValuePair<uint, Actor> kv in ActorDict)
+        {
+            kv.Value.ForbidAction = forbidAction;
+        }
     }
 
     public void SetAllActorShown(bool shown)
@@ -280,7 +303,8 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     IEnumerator Co_LoseGame()
     {
-        Player1.ForbidAction = true;
+        IsStart = false;
+        SetAllActorForbidAction(true);
         WinLosePanel panel = UIManager.Instance.ShowUIForms<WinLosePanel>();
         yield return panel.Co_LoseGame();
         if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
@@ -296,7 +320,6 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
         else
         {
-            Player1.ForbidAction = true;
             ClientGameManager.Instance.ReloadGame();
         }
     }

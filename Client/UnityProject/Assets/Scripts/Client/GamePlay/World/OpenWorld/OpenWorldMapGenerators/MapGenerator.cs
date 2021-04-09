@@ -134,7 +134,7 @@ public abstract class MapGenerator
                                 EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(staticLayoutEntityData.EntityTypeIndex);
                                 GridPosR.Orientation rot = GridPosR.RotateOrientationClockwise90(staticLayoutEntityData.EntityOrientation, (int) staticLayoutOrientation);
                                 bool spaceAvailableForEntity = true;
-                                foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[staticLayoutEntityData.EntityOrientation])
+                                foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                                 {
                                     GridPos3D entity_grid_world = entity_world + gridPos;
                                     if (CheckGridInsideWorldRange(entity_grid_world, 1))
@@ -198,6 +198,7 @@ public abstract class MapGenerator
                                         }
                                     }
 
+                                    staticLayoutEntityData.EntityOrientation = rot;
                                     WorldMap_EntityDataMatrix[staticLayoutEntityData.EntityType.TypeDefineType][entity_world.x, entity_world.y - Height, entity_world.z] = staticLayoutEntityData;
                                 }
                             }
