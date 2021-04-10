@@ -658,6 +658,9 @@ public class World : PoolObject
         bool valid = CheckCanMoveBoxColumn(srcGP, direction, boxes_moveable, excludeActorGUID);
         if (!valid) return false;
 
+        Box bottomBox = null;
+        GridPos3D bottomBoxGridWorldGP = new GridPos3D(int.MaxValue, int.MaxValue, int.MaxValue);
+
         // 先将矩阵对应格子清空
         foreach (Box box_moveable in boxes_moveable)
         {
@@ -666,8 +669,15 @@ public class World : PoolObject
                 GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP;
                 GetBoxByGridPosition(gridWorldGP_before, out WorldModule module_before, out GridPos3D boxGridLocalGP_before);
                 module_before[TypeDefineType.Box, boxGridLocalGP_before] = null;
+                if (bottomBoxGridWorldGP.y > gridWorldGP_before.y)
+                {
+                    bottomBox = box_moveable;
+                    bottomBoxGridWorldGP = gridWorldGP_before;
+                }
             }
         }
+
+        bottomBox?.EntityWwiseHelper.OnBeingPushed.Post(gameObject);
 
         // 再往矩阵填入引用，不可在一个循环内完成，否则后面的Box会将前面的引用置空
         foreach (Box box_moveable in boxes_moveable)

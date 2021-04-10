@@ -663,7 +663,6 @@ public partial class Box : Entity
                 if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Push {WorldGP} -> {gp}");
                 CurrentMoveGlobalPlanerDir = (gp - WorldGP).Normalized();
                 WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.BeingPushed, true, false, actor.GUID);
-                EntityWwiseHelper.OnBeingPushed.Post(gameObject);
             }
         }
     }

@@ -61,6 +61,21 @@
 						</Event>
 					</ChildrenList>
 				</Folder>
+				<Folder Name="LifeBox" ID="{6E0B2A76-A27D-4F33-843B-12A9DDA2FCCE}" ShortID="91394036">
+					<ChildrenList>
+						<Event Name="LifeBox_OnBeingKicked" ID="{E5A61DC0-8E47-4BC6-9029-F6E5773805A4}">
+							<ChildrenList>
+								<Action Name="" ID="{E0B9EBA4-83CC-49B1-9B6B-EB23610731F0}" ShortID="444745460">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingKicked" ID="{D0EE061A-FBA5-4C9F-9377-B9677E0EF51F}" WorkUnitID="{CD9AA83C-5F6C-408E-A8C1-68A0E0DADAED}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

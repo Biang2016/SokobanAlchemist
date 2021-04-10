@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{DB787D91-370D-401C-ACB6-B7A919E34893}" SchemaVersion="97">
 	<InteractiveMusic>
-		<WorkUnit Name="BGM" ID="{DB787D91-370D-401C-ACB6-B7A919E34893}" PersistMode="Standalone"/>
+		<WorkUnit Name="BGM" ID="{DB787D91-370D-401C-ACB6-B7A919E34893}" PersistMode="Standalone">
+			<ChildrenList>
+				<WorkUnit Name="TutorialScene" ID="{AA0809C9-A85B-4F3D-BA3D-0D377B146A42}" PersistMode="Reference"/>
+				<WorkUnit Name="OpenWorldScene" ID="{A87ADE70-C2BA-4169-A6DE-04700F2813A4}" PersistMode="Reference"/>
+			</ChildrenList>
+		</WorkUnit>
 	</InteractiveMusic>
 </WwiseDocument>

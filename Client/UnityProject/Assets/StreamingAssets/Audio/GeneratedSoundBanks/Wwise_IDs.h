@@ -15,6 +15,7 @@ namespace AK
     {
         static const AkUniqueID FIREBOX_ONBEINGKICKED = 2928738080U;
         static const AkUniqueID FIREBOX_ONBEINGPUSHED = 583630362U;
+        static const AkUniqueID LIFEBOX_ONBEINGKICKED = 137324230U;
         static const AkUniqueID WOODENBOX_ONBEINGKICKED = 3669812430U;
         static const AkUniqueID WOODENBOX_ONBEINGPUSHED = 15596056U;
     } // namespace EVENTS

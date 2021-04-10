@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{CD9AA83C-5F6C-408E-A8C1-68A0E0DADAED}" SchemaVersion="97" RootDocumentID="{9C6FF8E4-29EA-437D-8F32-D6CD73D5AEF5}">
+	<AudioObjects>
+		<WorkUnit Name="LifeBox" ID="{CD9AA83C-5F6C-408E-A8C1-68A0E0DADAED}" OwnerID="{52D12601-DBAD-476B-8152-BE8998A91580}" PersistMode="Nested">
+			<ChildrenList>
+				<RandomSequenceContainer Name="OnBeingKicked" ID="{D0EE061A-FBA5-4C9F-9377-B9677E0EF51F}" ShortID="571182023">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="SFX_1" ID="{9DF0F8AE-BB96-4752-B287-51AE087723AD}" ShortID="596075956">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="ConsumeLifeBox" ID="{B53270E0-3EEB-4282-A679-02E3E0466CD4}">
+									<Language>SFX</Language>
+									<AudioFile>ConsumeLifeBox.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="454977670"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="ConsumeLifeBox" ID="{B53270E0-3EEB-4282-A679-02E3E0466CD4}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>
