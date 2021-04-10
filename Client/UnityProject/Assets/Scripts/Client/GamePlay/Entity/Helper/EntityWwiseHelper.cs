@@ -73,6 +73,12 @@ public class EntityWwiseHelper : EntityMonoHelper
     public Event OnDash;
 
     [BoxGroup("ForActor")]
+    public Event OnBeingDamaged;
+
+    [BoxGroup("ForActor")]
+    public Event OnBeingHealed;
+
+    [BoxGroup("ForActor")]
     public Event[] OnSkillPreparing = new Event[8];
 
     [BoxGroup("ForActor")]
