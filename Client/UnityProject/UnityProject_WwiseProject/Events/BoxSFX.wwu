@@ -76,6 +76,32 @@
 						</Event>
 					</ChildrenList>
 				</Folder>
+				<Folder Name="BoxBase" ID="{9EDB198E-19A4-4591-B5C9-DCCC48EA171A}" ShortID="510691627">
+					<ChildrenList>
+						<Event Name="BoxBase_OnBeingKicked" ID="{90381F18-046A-4CEE-B8F0-2F814AF17944}">
+							<ChildrenList>
+								<Action Name="" ID="{709AB370-2789-44D5-B915-68E0932F8A25}" ShortID="799050226">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingKicked" ID="{4E2B055E-277C-4520-BA7F-3E8ACF364A6E}" WorkUnitID="{CBC0859A-3370-4C51-A4A1-3063503C115B}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="BoxBase_OnBeingPushed" ID="{DCF332F6-FCED-470E-BCB8-08C091D9EDB6}">
+							<ChildrenList>
+								<Action Name="" ID="{EC3D8511-8E86-4925-8293-4EC0E3209130}" ShortID="799890476">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingPushed" ID="{EFB273D9-6EA3-41B5-AC0B-DA5ED8C99617}" WorkUnitID="{CBC0859A-3370-4C51-A4A1-3063503C115B}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

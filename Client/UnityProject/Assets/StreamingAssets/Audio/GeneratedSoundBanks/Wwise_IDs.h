@@ -13,6 +13,8 @@ namespace AK
 {
     namespace EVENTS
     {
+        static const AkUniqueID BOXBASE_ONBEINGKICKED = 848561503U;
+        static const AkUniqueID BOXBASE_ONBEINGPUSHED = 941375425U;
         static const AkUniqueID FIREBOX_ONBEINGKICKED = 2928738080U;
         static const AkUniqueID FIREBOX_ONBEINGPUSHED = 583630362U;
         static const AkUniqueID LIFEBOX_ONBEINGKICKED = 137324230U;
