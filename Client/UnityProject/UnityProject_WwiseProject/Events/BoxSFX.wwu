@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{20565C80-A26D-4D5E-A9DF-DEAC6D709F4E}" SchemaVersion="97" RootDocumentID="{643FECE9-E4F9-4C57-AB02-F7B19532DAD6}">
+	<Events>
+		<WorkUnit Name="BoxSFX" ID="{20565C80-A26D-4D5E-A9DF-DEAC6D709F4E}" OwnerID="{643FECE9-E4F9-4C57-AB02-F7B19532DAD6}" PersistMode="Nested">
+			<ChildrenList>
+				<Folder Name="WoodenBox" ID="{D346B7D7-993F-48B0-B17A-CEF596EA3288}" ShortID="885522208">
+					<ChildrenList>
+						<Event Name="WoodenBox_OnBeingKicked" ID="{E0CE010A-05A9-413E-B1B7-5B26E9B26937}">
+							<ChildrenList>
+								<Action Name="" ID="{FBF6D9DC-570F-4141-9CBF-91C7928E2418}" ShortID="704639501">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingKicked" ID="{ACF77C8F-197B-44C6-AA58-313FA4C83F5D}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenBox_OnBeingPushed" ID="{58E307D2-D092-4844-B6D1-3625565C68B8}">
+							<ChildrenList>
+								<Action Name="" ID="{813A0AC6-BDD9-416F-B8B4-DF6ED1D3BECF}" ShortID="48949835">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingPushed" ID="{35CC133C-D051-4175-B0AC-2FF171F0BD04}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenBox_OnBeingLit" ID="{7FD5E6FB-C351-4C5E-B262-68F8EDDA8B22}"/>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="FireBox" ID="{AE58C2FE-A360-4AC1-9598-396AF73BFAA1}" ShortID="890354682">
+					<ChildrenList>
+						<Event Name="FireBox_OnBeingKicked" ID="{33D8C79F-F925-4EA5-B39B-A3682767FE58}">
+							<ChildrenList>
+								<Action Name="" ID="{F3B6F513-12C1-4DF0-B0F5-C5BF20FA9E65}" ShortID="680318377">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingKicked" ID="{1BF089E9-24AC-4B1E-BEF8-9EA19A209307}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FireBox_OnBeingLit" ID="{7F2DD6B9-9E2B-4AE9-A192-86960B9BFC5B}">
+							<ChildrenList>
+								<Action Name="" ID="{109F5A24-6719-4786-9EAA-B5CF79E424A6}" ShortID="795954590"/>
+							</ChildrenList>
+						</Event>
+						<Event Name="FireBox_OnBeingPushed" ID="{40032B1D-CC6B-400B-89E4-8C3FF0ADFC3A}">
+							<ChildrenList>
+								<Action Name="" ID="{EB17DF5E-79C1-4CBD-A725-AFEDD6BD8790}" ShortID="567008939">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingPushed" ID="{77B3AFAF-A4EB-41FF-A2B5-D64D696D6762}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

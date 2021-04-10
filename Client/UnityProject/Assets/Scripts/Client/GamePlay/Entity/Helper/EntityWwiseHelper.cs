@@ -1,54 +1,82 @@
-﻿using Sirenix.OdinInspector;
+﻿using AK.Wwise;
+using Sirenix.OdinInspector;
 
 public class EntityWwiseHelper : EntityMonoHelper
 {
     [BoxGroup("ForBox")]
-    public AK.Wwise.Event OnBeingKicked;
+    public Event OnBeingKicked;
 
     [BoxGroup("ForBox")]
-    public AK.Wwise.Event OnBeingPushed;
+    public Event OnCollideActively;
+
+    [BoxGroup("Common")]
+    public Event OnCollidePassively;
 
     [BoxGroup("ForBox")]
-    public AK.Wwise.Event OnSliding;
+    public Event OnBeingPushed;
 
     [BoxGroup("ForBox")]
-    public AK.Wwise.Event OnSlideStop;
+    public Event OnSliding;
 
     [BoxGroup("ForBox")]
-    public AK.Wwise.Event OnBeingLift;
+    public Event OnSlideStop;
 
     [BoxGroup("ForBox")]
-    public AK.Wwise.Event OnBeingDropped;
+    public Event OnBeingLift;
 
     [BoxGroup("ForBox")]
-    public AK.Wwise.Event OnBeingLit;
+    public Event OnBeingMerged;
 
     [BoxGroup("ForBox")]
-    public AK.Wwise.Event OnBurning;
+    public Event OnBeingDropped;
 
     [BoxGroup("ForBox")]
-    public AK.Wwise.Event OnDestroyed_Common;
+    public Event OnThrownUp;
 
-    [BoxGroup("ForBox")]
-    public AK.Wwise.Event OnDestroyed_ByFire;
+    [BoxGroup("Common")]
+    public Event OnBeingLit;
 
-    [BoxGroup("ForBox")]
-    public AK.Wwise.Event OnDestroyed_ByExplode;
+    [BoxGroup("Common")]
+    public Event OnBurning;
 
-    [BoxGroup("ForBox")]
-    public AK.Wwise.Event OnDestroyed_ByCollide;
+    [BoxGroup("Common")]
+    public Event OnBurningEnd;
+
+    [BoxGroup("Common")]
+    public Event OnBeingFrozen;
+
+    [BoxGroup("Common")]
+    public Event OnFrozenEnd;
+
+    [BoxGroup("Common")]
+    public Event OnDestroyed_Common;
+
+    [BoxGroup("Common")]
+    public Event OnDestroyed_ByFiringDamage;
+
+    [BoxGroup("Common")]
+    public Event OnDestroyed_ByFrozenDamage;
+
+    [BoxGroup("Common")]
+    public Event OnDestroyed_ByExplodeDamage;
+
+    [BoxGroup("Common")]
+    public Event OnDestroyed_ByCollideDamage;
 
     [BoxGroup("ForActor")]
-    public AK.Wwise.Event OnKick;
+    public Event OnKick;
 
     [BoxGroup("ForActor")]
-    public AK.Wwise.Event OnVault;
+    public Event OnVault;
 
     [BoxGroup("ForActor")]
-    public AK.Wwise.Event OnDash;
+    public Event OnDash;
 
     [BoxGroup("ForActor")]
-    public AK.Wwise.Event OnDie;
+    public Event[] OnSkillPreparing = new Event[8];
+
+    [BoxGroup("ForActor")]
+    public Event[] OnSkillCast = new Event[8];
 
     public override void OnHelperRecycled()
     {

@@ -554,6 +554,30 @@ public class EntityStatPropSet
                 {
                     eps.OnDestroyEntityByElementDamage(attribute);
                 }
+
+                switch (attribute)
+                {
+                    case EntityBuffAttribute.FiringDamage:
+                    {
+                        Entity.EntityWwiseHelper.OnDestroyed_ByFiringDamage.Post(Entity.gameObject);
+                        break;
+                    }
+                    case EntityBuffAttribute.CollideDamage:
+                    {
+                        Entity.EntityWwiseHelper.OnDestroyed_ByCollideDamage.Post(Entity.gameObject);
+                        break;
+                    }
+                    case EntityBuffAttribute.ExplodeDamage:
+                    {
+                        Entity.EntityWwiseHelper.OnDestroyed_ByExplodeDamage.Post(Entity.gameObject);
+                        break;
+                    }
+                    case EntityBuffAttribute.FrozenDamage:
+                    {
+                        Entity.EntityWwiseHelper.OnDestroyed_ByFrozenDamage.Post(Entity.gameObject);
+                        break;
+                    }
+                }
             }
         }
 
@@ -611,7 +635,11 @@ public class EntityStatPropSet
                     if (fx) fx.transform.parent = box.transform;
                 }
             }
+
+            Entity.EntityWwiseHelper.OnBeingLit.Post(Entity.gameObject);
         }
+
+        if (before > 0 && after == 0) Entity.EntityWwiseHelper.OnBurningEnd.Post(Entity.gameObject);
     }
 
     private void OnActionPointRecoveryChanged(int before, int after)

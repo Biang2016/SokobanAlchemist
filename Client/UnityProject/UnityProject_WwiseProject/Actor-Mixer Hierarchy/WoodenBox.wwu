@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{7299A786-FB7D-4188-AC96-82AEC44E099F}" SchemaVersion="97" RootDocumentID="{9C6FF8E4-29EA-437D-8F32-D6CD73D5AEF5}">
+	<AudioObjects>
+		<WorkUnit Name="WoodenBox" ID="{7299A786-FB7D-4188-AC96-82AEC44E099F}" OwnerID="{52D12601-DBAD-476B-8152-BE8998A91580}" PersistMode="Nested">
+			<ChildrenList>
+				<RandomSequenceContainer Name="OnBeingKicked" ID="{ACF77C8F-197B-44C6-AA58-313FA4C83F5D}" ShortID="396258232">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="SFX_1" ID="{5C60450C-1DC8-42FE-AB1A-837C661949CA}" ShortID="1039568950">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="TempSFX_Collide" ID="{9D741097-5885-4C1E-AFE4-0D7B80A9C9DE}">
+									<Language>SFX</Language>
+									<AudioFile>TempSFX_Collide.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="367121688"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="TempSFX_Collide" ID="{9D741097-5885-4C1E-AFE4-0D7B80A9C9DE}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="SFX_2" ID="{FACA5DA3-0D7F-40C0-8B64-A6DDE9D812DA}" ShortID="487889269">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="TempSFX_Collide2" ID="{82537B2E-8F2F-40F5-A255-7A5DEBB76FFB}">
+									<Language>SFX</Language>
+									<AudioFile>TempSFX_Collide2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="278238588"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="TempSFX_Collide2" ID="{82537B2E-8F2F-40F5-A255-7A5DEBB76FFB}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+				<RandomSequenceContainer Name="OnBeingPushed" ID="{35CC133C-D051-4175-B0AC-2FF171F0BD04}" ShortID="917179041">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="SFX_1" ID="{E6A44534-A2AB-4F12-9574-FD65F6B848AA}" ShortID="945309889">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="TempSFX_Push" ID="{A9CA27BF-86BB-4693-9F49-74F046BD6C10}">
+									<Language>SFX</Language>
+									<AudioFile>TempSFX_Push.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="765091200"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="TempSFX_Push" ID="{A9CA27BF-86BB-4693-9F49-74F046BD6C10}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="SFX_2" ID="{BD3130CA-B9C5-4838-B82C-082C6B1CE842}" ShortID="661914377">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="TempSFX_Push1" ID="{9345856C-440B-4162-AD04-1F20A08F858C}">
+									<Language>SFX</Language>
+									<AudioFile>TempSFX_Push1.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="878195806"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="TempSFX_Push1" ID="{9345856C-440B-4162-AD04-1F20A08F858C}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

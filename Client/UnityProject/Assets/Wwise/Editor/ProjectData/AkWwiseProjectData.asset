@@ -30,18 +30,88 @@ MonoBehaviour:
     ParentPath: Default Work Unit
     guid: 6304d89afe194a4293d1284d09af8267
     GuidInternal: 
-    m_lastTime: -8585835855962132869
+    m_lastTime: -8585835669108395571
     List:
-    - name: Master Audio Bus
-      guid: d8a41415a61d2a41a17e75ca0c2149f3
-      id: 3803692087
+    - name: BGM_Audio_Bus
+      guid: 23758ae306bf8b40b0e1bbdb32dcdbfd
+      id: 341217133
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Master Audio Bus
+      - ElementName: Master_Audio_Bus
         ObjectType: 2
-      Path: Default Work Unit\Master Audio Bus
+      - ElementName: BGM_Audio_Bus
+        ObjectType: 2
+      Path: Default Work Unit\Master_Audio_Bus\BGM_Audio_Bus
+    - name: Master_Audio_Bus
+      guid: d8a41415a61d2a41a17e75ca0c2149f3
+      id: 2392784291
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      Path: Default Work Unit\Master_Audio_Bus
+    - name: SFX_Audio_Bus
+      guid: 79db824889ac894fa032a0d616e0d2c1
+      id: 3365874942
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: SFX_Audio_Bus
+        ObjectType: 2
+      Path: Default Work Unit\Master_Audio_Bus\SFX_Audio_Bus
+    - name: SFX_Entity_Audio_Bus
+      guid: b9816060e374794aa6bc5c48847ed51c
+      id: 3663755868
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: SFX_Audio_Bus
+        ObjectType: 2
+      - ElementName: SFX_Entity_Audio_Bus
+        ObjectType: 2
+      Path: Default Work Unit\Master_Audio_Bus\SFX_Audio_Bus\SFX_Entity_Audio_Bus
+    - name: SFX_UI_Audio_Bus
+      guid: f4ad307562693546b92535655e803136
+      id: 3991820723
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: SFX_Audio_Bus
+        ObjectType: 2
+      - ElementName: SFX_UI_Audio_Bus
+        ObjectType: 2
+      Path: Default Work Unit\Master_Audio_Bus\SFX_Audio_Bus\SFX_UI_Audio_Bus
   BankWwu:
+  - PhysicalPath: SoundBanks\BGM Work Unit.wwu
+    PathAndIcons:
+    - ElementName: Default Work Unit
+      ObjectType: 12
+    - ElementName: BGM Work Unit
+      ObjectType: 12
+    ParentPath: Default Work Unit\BGM Work Unit
+    guid: 6dc82ab43faa1343a51bda5be57c36fa
+    GuidInternal: 
+    m_lastTime: -8585835653952850620
+    List:
+    - name: BGM_Bank
+      guid: fd2cab5b31b823468bf8526077bb44ff
+      id: 3734788450
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: BGM Work Unit
+        ObjectType: 12
+      - ElementName: BGM_Bank
+        ObjectType: 7
+      Path: Default Work Unit\BGM Work Unit\BGM_Bank
   - PhysicalPath: SoundBanks\Default Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
@@ -49,9 +119,255 @@ MonoBehaviour:
     ParentPath: Default Work Unit
     guid: e5e209aa3012104698a607393c935465
     GuidInternal: 
-    m_lastTime: -8585835855962342855
+    m_lastTime: -8585835654543015214
     List: []
+  - PhysicalPath: SoundBanks\SFX Work Unit.wwu
+    PathAndIcons:
+    - ElementName: Default Work Unit
+      ObjectType: 12
+    - ElementName: SFX Work Unit
+      ObjectType: 12
+    ParentPath: Default Work Unit\SFX Work Unit
+    guid: 9afb272a990f42408ec1eff8c2bfdc8e
+    GuidInternal: 
+    m_lastTime: -8585835653953100545
+    List:
+    - name: SFX_Bank
+      guid: 69dd4107d35a0644a342dcfc67477ec6
+      id: 1605876511
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX Work Unit
+        ObjectType: 12
+      - ElementName: SFX_Bank
+        ObjectType: 7
+      Path: Default Work Unit\SFX Work Unit\SFX_Bank
   EventWwu:
+  - PhysicalPath: Events\ActorSFX.wwu
+    PathAndIcons:
+    - ElementName: EntitySFX
+      ObjectType: 12
+    - ElementName: ActorSFX
+      ObjectType: 12
+    ParentPath: EntitySFX\ActorSFX
+    guid: 991a3b24403a5c418c7318d11e7863e8
+    GuidInternal: 
+    m_lastTime: -8585835678273915180
+    List:
+    - name: Player
+      guid: f172592f2c50a04cbaccfb99efa9e25d
+      id: 1069431850
+      PathAndIcons:
+      - ElementName: EntitySFX
+        ObjectType: 12
+      - ElementName: ActorSFX
+        ObjectType: 12
+      - ElementName: Player
+        ObjectType: 4
+      Path: EntitySFX\ActorSFX\Player
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_OnDash
+      guid: 8994a554e7036a4fb46a449b2256f731
+      id: 460705202
+      PathAndIcons:
+      - ElementName: EntitySFX
+        ObjectType: 12
+      - ElementName: ActorSFX
+        ObjectType: 12
+      - ElementName: Player
+        ObjectType: 4
+      - ElementName: Player_OnDash
+        ObjectType: 3
+      Path: EntitySFX\ActorSFX\Player\Player_OnDash
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_OnDie
+      guid: e1664c58b2d979478a7768aafa302e03
+      id: 1977187728
+      PathAndIcons:
+      - ElementName: EntitySFX
+        ObjectType: 12
+      - ElementName: ActorSFX
+        ObjectType: 12
+      - ElementName: Player
+        ObjectType: 4
+      - ElementName: Player_OnDie
+        ObjectType: 3
+      Path: EntitySFX\ActorSFX\Player\Player_OnDie
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_OnKick
+      guid: d4fbaa539179c94196ef7a32f11d703d
+      id: 3527200472
+      PathAndIcons:
+      - ElementName: EntitySFX
+        ObjectType: 12
+      - ElementName: ActorSFX
+        ObjectType: 12
+      - ElementName: Player
+        ObjectType: 4
+      - ElementName: Player_OnKick
+        ObjectType: 3
+      Path: EntitySFX\ActorSFX\Player\Player_OnKick
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_OnVault
+      guid: b27fa687a0a08d47a53109d0a1f1bbbc
+      id: 3845548790
+      PathAndIcons:
+      - ElementName: EntitySFX
+        ObjectType: 12
+      - ElementName: ActorSFX
+        ObjectType: 12
+      - ElementName: Player
+        ObjectType: 4
+      - ElementName: Player_OnVault
+        ObjectType: 3
+      Path: EntitySFX\ActorSFX\Player\Player_OnVault
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+  - PhysicalPath: Events\BoxSFX.wwu
+    PathAndIcons:
+    - ElementName: EntitySFX
+      ObjectType: 12
+    - ElementName: BoxSFX
+      ObjectType: 12
+    ParentPath: EntitySFX\BoxSFX
+    guid: 805c56206da25e4da9dfdeac6d709f4e
+    GuidInternal: 
+    m_lastTime: -8585835663536205641
+    List:
+    - name: FireBox
+      guid: fec258ae60a3c14a9598396af73bfaa1
+      id: 89293940
+      PathAndIcons:
+      - ElementName: EntitySFX
+        ObjectType: 12
+      - ElementName: BoxSFX
+        ObjectType: 12
+      - ElementName: FireBox
+        ObjectType: 4
+      Path: EntitySFX\BoxSFX\FireBox
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FireBox_OnBeingKicked
+      guid: 9fc7d83325f9a54eb39ba3682767fe58
+      id: 2928738080
+      PathAndIcons:
+      - ElementName: EntitySFX
+        ObjectType: 12
+      - ElementName: BoxSFX
+        ObjectType: 12
+      - ElementName: FireBox
+        ObjectType: 4
+      - ElementName: FireBox_OnBeingKicked
+        ObjectType: 3
+      Path: EntitySFX\BoxSFX\FireBox\FireBox_OnBeingKicked
+      maxAttenuation: 0
+      maxDuration: 2.5
+      minDuration: 1.583333
+    - name: FireBox_OnBeingLit
+      guid: b9d62d7f2b9ee94aa19286960b9bfc5b
+      id: 3958966416
+      PathAndIcons:
+      - ElementName: EntitySFX
+        ObjectType: 12
+      - ElementName: BoxSFX
+        ObjectType: 12
+      - ElementName: FireBox
+        ObjectType: 4
+      - ElementName: FireBox_OnBeingLit
+        ObjectType: 3
+      Path: EntitySFX\BoxSFX\FireBox\FireBox_OnBeingLit
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FireBox_OnBeingPushed
+      guid: 1d2b03406bcc0b4089e48c3ff0adfc3a
+      id: 583630362
+      PathAndIcons:
+      - ElementName: EntitySFX
+        ObjectType: 12
+      - ElementName: BoxSFX
+        ObjectType: 12
+      - ElementName: FireBox
+        ObjectType: 4
+      - ElementName: FireBox_OnBeingPushed
+        ObjectType: 3
+      Path: EntitySFX\BoxSFX\FireBox\FireBox_OnBeingPushed
+      maxAttenuation: 0
+      maxDuration: 1.583333
+      minDuration: 0.6875
+    - name: WoodenBox
+      guid: d7b746d33f99b048b17acef596ea3288
+      id: 4244245246
+      PathAndIcons:
+      - ElementName: EntitySFX
+        ObjectType: 12
+      - ElementName: BoxSFX
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      Path: EntitySFX\BoxSFX\WoodenBox
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: WoodenBox_OnBeingKicked
+      guid: 0a01cee0a9053e41b1b75b26e9b26937
+      id: 3669812430
+      PathAndIcons:
+      - ElementName: EntitySFX
+        ObjectType: 12
+      - ElementName: BoxSFX
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: WoodenBox_OnBeingKicked
+        ObjectType: 3
+      Path: EntitySFX\BoxSFX\WoodenBox\WoodenBox_OnBeingKicked
+      maxAttenuation: 0
+      maxDuration: 2.5
+      minDuration: 1.583333
+    - name: WoodenBox_OnBeingLit
+      guid: fbe6d57f51c35e4cb26268f8edda8b22
+      id: 2986035246
+      PathAndIcons:
+      - ElementName: EntitySFX
+        ObjectType: 12
+      - ElementName: BoxSFX
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: WoodenBox_OnBeingLit
+        ObjectType: 3
+      Path: EntitySFX\BoxSFX\WoodenBox\WoodenBox_OnBeingLit
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: WoodenBox_OnBeingPushed
+      guid: d207e35892d04448b6d13625565c68b8
+      id: 15596056
+      PathAndIcons:
+      - ElementName: EntitySFX
+        ObjectType: 12
+      - ElementName: BoxSFX
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: WoodenBox_OnBeingPushed
+        ObjectType: 3
+      Path: EntitySFX\BoxSFX\WoodenBox\WoodenBox_OnBeingPushed
+      maxAttenuation: 0
+      maxDuration: 1.583333
+      minDuration: 0.6875
   - PhysicalPath: Events\Default Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
@@ -59,7 +375,16 @@ MonoBehaviour:
     ParentPath: Default Work Unit
     guid: 9f9e9033310c774d81c7f43e6e71b41b
     GuidInternal: 
-    m_lastTime: -8585835855961713051
+    m_lastTime: -8585835678274035100
+    List: []
+  - PhysicalPath: Events\EntitySFX.wwu
+    PathAndIcons:
+    - ElementName: EntitySFX
+      ObjectType: 12
+    ParentPath: EntitySFX
+    guid: e9ec3f64f9e4574cab02f7b19532dad6
+    GuidInternal: 
+    m_lastTime: -8585835795844781688
     List: []
   RtpcWwu:
   - PhysicalPath: Game Parameters\Default Work Unit.wwu
@@ -104,6 +429,8 @@ MonoBehaviour:
   ExpandedItems:
   - /UnityProject_WwiseProject
   - /UnityProject_WwiseProject/Events
-  - /UnityProject_WwiseProject/SoundBanks
+  - /UnityProject_WwiseProject/Events/EntitySFX
+  - /UnityProject_WwiseProject/Events/EntitySFX/ActorSFX
+  - /UnityProject_WwiseProject/Events/EntitySFX/ActorSFX/Player
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

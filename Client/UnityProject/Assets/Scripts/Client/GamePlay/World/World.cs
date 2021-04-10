@@ -745,6 +745,7 @@ public class World : PoolObject
                     {
                         FXManager.Instance.PlayFX(box.MergedFX, box.transform.position);
                         TryMerge(direction, new HashSet<Box> {box});
+                        box.EntityWwiseHelper.OnBeingMerged.Post(box.gameObject);
                     }
                 }
             });

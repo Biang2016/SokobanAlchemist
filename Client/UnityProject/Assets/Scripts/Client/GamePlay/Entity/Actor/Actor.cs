@@ -1015,6 +1015,7 @@ public class Actor : Entity
             else
             {
                 ActorArtHelper.Vault();
+                EntityWwiseHelper.OnVault.Post(gameObject);
             }
         }
         else
@@ -1055,6 +1056,7 @@ public class Actor : Entity
                 EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue, "Kick");
                 box.Kick(CurForward, KickForce, this);
                 FX kickFX = FXManager.Instance.PlayFX(KickFX, KickFXPivot.position);
+                EntityWwiseHelper.OnKick.Post(gameObject);
             }
         }
     }
@@ -1469,6 +1471,7 @@ public class Actor : Entity
             ps.OnBeforeDestroyEntity();
         }
 
+        EntityWwiseHelper.OnDestroyed_Common.Post(gameObject);
         ActiveSkillAgent.Instance.StartCoroutine(Co_DelayDestroyActor(callBack));
     }
 

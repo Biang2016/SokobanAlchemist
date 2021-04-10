@@ -57,6 +57,7 @@ public partial class Box
 
     private bool CollideCalculate(Collider collider, out bool validCollision, BoxCollideType collideType)
     {
+        EntityWwiseHelper.OnCollideActively.Post(gameObject);
         validCollision = false;
 
         // 和一般箱子相撞
@@ -106,6 +107,7 @@ public partial class Box
             Actor actor = collider.gameObject.GetComponentInParent<Actor>();
             if (actor != null) //此处不管Actor是否已经死亡都进行Box损伤计算
             {
+                if (actor.IsNotNullAndAlive()) actor.EntityWwiseHelper.OnCollidePassively.Post(actor.gameObject);
                 if (LastInteractActor != null && LastInteractActor.IsOpponentOrNeutralCampOf(actor))
                 {
                     validCollision = true;

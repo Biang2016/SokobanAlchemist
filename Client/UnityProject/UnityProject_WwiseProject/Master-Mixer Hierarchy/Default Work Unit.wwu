@@ -3,12 +3,21 @@
 	<Busses>
 		<WorkUnit Name="Default Work Unit" ID="{9AD80463-19FE-424A-93D1-284D09AF8267}" PersistMode="Standalone">
 			<ChildrenList>
-				<Bus Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}">
+				<Bus Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}">
 					<ReferenceList>
 						<Reference Name="AudioDevice">
 							<ObjectRef Name="System" ID="{38E71023-BCE9-4EC7-9B5D-413E1406FB66}" WorkUnitID="{07ABC889-4E8B-4C31-BE5A-93D033EFAD28}"/>
 						</Reference>
 					</ReferenceList>
+					<ChildrenList>
+						<Bus Name="SFX_Audio_Bus" ID="{4882DB79-AC89-4F89-A032-A0D616E0D2C1}">
+							<ChildrenList>
+								<Bus Name="SFX_Entity_Audio_Bus" ID="{606081B9-74E3-4A79-A6BC-5C48847ED51C}"/>
+								<Bus Name="SFX_UI_Audio_Bus" ID="{7530ADF4-6962-4635-B925-35655E803136}"/>
+							</ChildrenList>
+						</Bus>
+						<Bus Name="BGM_Audio_Bus" ID="{E38A7523-BF06-408B-B0E1-BBDB32DCDBFD}"/>
+					</ChildrenList>
 				</Bus>
 			</ChildrenList>
 		</WorkUnit>
