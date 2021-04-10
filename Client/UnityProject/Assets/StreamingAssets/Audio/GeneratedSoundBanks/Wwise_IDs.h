@@ -13,6 +13,8 @@ namespace AK
 {
     namespace EVENTS
     {
+        static const AkUniqueID BGM_START = 2985635692U;
+        static const AkUniqueID BGM_STOP = 2090192256U;
         static const AkUniqueID BOXBASE_ONBEINGKICKED = 848561503U;
         static const AkUniqueID BOXBASE_ONBEINGPUSHED = 941375425U;
         static const AkUniqueID FIREBOX_ONBEINGKICKED = 2928738080U;
@@ -21,6 +23,43 @@ namespace AK
         static const AkUniqueID WOODENBOX_ONBEINGKICKED = 3669812430U;
         static const AkUniqueID WOODENBOX_ONBEINGPUSHED = 15596056U;
     } // namespace EVENTS
+
+    namespace STATES
+    {
+        namespace BGM_COMBATSTATE
+        {
+            static const AkUniqueID GROUP = 3129336127U;
+
+            namespace STATE
+            {
+                static const AkUniqueID EXPLORING = 1823678183U;
+                static const AkUniqueID INBOSSCOMBAT = 687614019U;
+                static const AkUniqueID INCOMBAT = 3373579172U;
+                static const AkUniqueID INELITECOMBAT = 789371013U;
+                static const AkUniqueID INSPIDERLEGCOMBAT_PHASE_1 = 1022704585U;
+                static const AkUniqueID INSPIDERLEGCOMBAT_PHASE_2 = 1022704586U;
+                static const AkUniqueID INSPIDERLEGCOMBAT_PHASE_3 = 1022704587U;
+                static const AkUniqueID NONE = 748895195U;
+                static const AkUniqueID NORMAL = 1160234136U;
+            } // namespace STATE
+        } // namespace BGM_COMBATSTATE
+
+        namespace BGM_THEME
+        {
+            static const AkUniqueID GROUP = 3258568639U;
+
+            namespace STATE
+            {
+                static const AkUniqueID EXCAVATION = 2525109375U;
+                static const AkUniqueID LAB = 578926554U;
+                static const AkUniqueID NONE = 748895195U;
+                static const AkUniqueID OPENWORLD = 2009274547U;
+                static const AkUniqueID TEMPLE = 2323193050U;
+                static const AkUniqueID TUTORIAL = 3762955427U;
+            } // namespace STATE
+        } // namespace BGM_THEME
+
+    } // namespace STATES
 
     namespace BANKS
     {

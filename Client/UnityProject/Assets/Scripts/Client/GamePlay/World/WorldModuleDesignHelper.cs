@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AK.Wwise;
 using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using FlowCanvas;
@@ -20,6 +21,8 @@ using UnityEngine.Assertions;
 public class WorldModuleDesignHelper : MonoBehaviour
 {
     public WorldModuleFeature WorldModuleFeature;
+
+    public BGM_Theme BGM_ThemeState;
 
     [LabelText("模组AI")]
     [PropertyOrder(-1)]
@@ -51,6 +54,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
         WorldModuleData worldModuleData = new WorldModuleData();
         worldModuleData.InitNormalModuleData();
         worldModuleData.WorldModuleFeature = WorldModuleFeature;
+        worldModuleData.BGM_ThemeState = BGM_ThemeState;
 
         Grid3DBounds boxBounds = new Grid3DBounds();
         int xMin = int.MaxValue;

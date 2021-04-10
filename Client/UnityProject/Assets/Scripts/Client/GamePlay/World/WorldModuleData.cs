@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AK.Wwise;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.ObjectPool;
@@ -18,6 +19,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     public string WorldModuleFlowAssetPath;
 
     public WorldModuleFeature WorldModuleFeature;
+    public BGM_Theme BGM_ThemeState;
 
     internal static Dictionary<TypeDefineType, int> EntityDataMatrixKeys = new Dictionary<TypeDefineType, int> {{TypeDefineType.Box, 0}, {TypeDefineType.Actor, 1}};
 
@@ -79,6 +81,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
         data.WorldModuleTypeName = WorldModuleTypeName;
         data.WorldModuleFlowAssetPath = WorldModuleFlowAssetPath;
         data.WorldModuleFeature = WorldModuleFeature;
+        data.BGM_ThemeState = BGM_ThemeState;
         data.WorldModuleBornPointGroupData = WorldModuleBornPointGroupData.Clone();
         data.WorldModuleLevelTriggerGroupData = WorldModuleLevelTriggerGroupData.Clone();
 

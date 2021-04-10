@@ -143,8 +143,6 @@ public class OpenWorld : World
         ActorPathFinding.InitializeSpaceAvailableForActorHeight(WorldModuleMatrix.GetLength(0) * WorldModule.MODULE_SIZE, WorldModuleMatrix.GetLength(1) * WorldModule.MODULE_SIZE, WorldModuleMatrix.GetLength(2) * WorldModule.MODULE_SIZE);
 
         LoadingMapPanel = UIManager.Instance.GetBaseUIForm<LoadingMapPanel>();
-        AudioManager.Instance.BGMFadeIn("bgm/CoolSwing", 1f, 1f, true);
-
         uint Seed = 0;
         if (UseCertainSeed)
         {
@@ -455,6 +453,7 @@ public class OpenWorld : World
                     {
                         // 从未加载过的模组，通过generator来计算
                         moduleData = WorldModuleData.WorldModuleDataFactory.Alloc();
+                        moduleData.BGM_ThemeState = BGM_Theme.OpenWorld;
                         m_LevelCacheData.WorldModuleDataDict.Add(targetModuleGP, moduleData);
                         foreach (KeyValuePair<TypeDefineType, EntityData[,,]> kv in WorldMap_EntityDataMatrix)
                         {
@@ -725,7 +724,6 @@ public class OpenWorld : World
     {
         returningToOpenWorldFormMicroWorld = true;
         CurrentMicroWorldTypeIndex = 0;
-        AudioManager.Instance.BGMFadeIn("bgm/CoolSwing", 1f, 1f, true);
         BattleManager.Instance.IsStart = false;
         UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();

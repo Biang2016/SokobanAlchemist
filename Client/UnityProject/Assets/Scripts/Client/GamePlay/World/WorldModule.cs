@@ -40,6 +40,7 @@ public class WorldModule : PoolObject
 
     public WorldModuleData WorldModuleData;
 
+    public WorldZoneTrigger WorldZoneTrigger;
     public WorldDeadZoneTrigger WorldDeadZoneTrigger;
     public WorldWallCollider WorldWallCollider;
     public WorldGroundCollider WorldGroundCollider;
@@ -301,12 +302,16 @@ public class WorldModule : PoolObject
         World = null;
         if (releaseWorldModuleData) WorldModuleData.Release();
         WorldModuleData = null;
+
+        WorldZoneTrigger.PoolRecycle();
+        WorldZoneTrigger = null;
         WorldDeadZoneTrigger?.PoolRecycle();
         WorldDeadZoneTrigger = null;
         WorldWallCollider?.PoolRecycle();
         WorldWallCollider = null;
         WorldGroundCollider?.PoolRecycle();
         WorldGroundCollider = null;
+
         FlowScriptController.StopBehaviour();
         FlowScriptController.graph = null;
         IsGeneratingOrRecycling = false;
@@ -319,6 +324,12 @@ public class WorldModule : PoolObject
         ModuleGP = moduleGP;
         World = world;
         WorldModuleData = worldModuleData;
+
+        WorldZoneTrigger = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldZoneTrigger].AllocateGameObject<WorldZoneTrigger>(WorldModuleTriggerRoot);
+        WorldZoneTrigger.name = $"{nameof(WorldZoneTrigger)}_{ModuleGP}";
+        WorldZoneTrigger.Initialize(moduleGP);
+        WorldZoneTrigger.WorldModule = this;
+
         if (WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.DeadZone))
         {
             WorldDeadZoneTrigger = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldDeadZoneTrigger].AllocateGameObject<WorldDeadZoneTrigger>(WorldModuleTriggerRoot);

@@ -192,7 +192,7 @@ public class ModuleAIAtoms
 
         public override void Invoke()
         {
-            AudioManager.Instance.BGMFadeIn(BGM_Name.value, FadeInDuration.value, Volume.value, true);
+            //AudioManager.Instance.BGMFadeIn(BGM_Name.value, FadeInDuration.value, Volume.value, true);
         }
     }
 }

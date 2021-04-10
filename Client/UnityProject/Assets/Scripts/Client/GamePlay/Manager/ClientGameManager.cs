@@ -18,7 +18,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     #region Mono
 
-    private AudioManager AudioManager => AudioManager.Instance;
+    private WwiseAudioManager WwiseAudioManager => WwiseAudioManager.Instance;
     private CameraManager CameraManager => CameraManager.Instance;
     private UIManager UIManager => UIManager.Instance;
     private ActiveSkillAgent ActiveSkillAgent => ActiveSkillAgent.Instance;
@@ -197,6 +197,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
         LoadingMapPanel.SetBackgroundAlpha(1f);
         LoadingMapPanel.SetProgress(0.5f, "StartGame");
+        WwiseAudioManager.BGM_Start();
         yield return WorldManager.StartGame();
 
         LoadingMapPanel.SetProgress(1f, "Completed");
@@ -354,14 +355,16 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         OnReloadScene();
         UIMaskMgr.OnReloadScene();
         UIManager.OnReloadScene();
+        WwiseAudioManager.OnReloadScene();
         CameraManager.OnReloadScene();
-        AudioManager.OnReloadScene();
         ActiveSkillAgent.OnReloadScene();
         SceneManager.LoadScene("MainScene");
     }
 
     private void ShutDownGame()
     {
+        WwiseAudioManager.ShutDown();
+
         GameStateManager.ShutDown(); // 设置游戏状态为ShutDown
 
         ControlManager.ShutDown();

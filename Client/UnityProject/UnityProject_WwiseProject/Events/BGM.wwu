@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{6A9A517F-DD5A-4187-BD53-E1A556877AE4}" SchemaVersion="97">
+	<Events>
+		<WorkUnit Name="BGM" ID="{6A9A517F-DD5A-4187-BD53-E1A556877AE4}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="BGM_Start" ID="{7387C9D1-9AEA-404B-9DB4-04CF43E02B6A}">
+					<ChildrenList>
+						<Action Name="" ID="{56C13CB9-C6EB-49E7-A8DE-775318AD0912}" ShortID="56188084">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="BGM_SwitchingContainer" ID="{30CB71BC-EE60-4580-ADA5-A1F306814BB4}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="BGM_Stop" ID="{4DB70AB2-8A55-4808-BA45-2C0B0324556C}">
+					<ChildrenList>
+						<Action Name="" ID="{089C6691-F6D7-4EAE-B2BD-D21DDE4B7352}" ShortID="552298612">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="BGM_SwitchingContainer" ID="{30CB71BC-EE60-4580-ADA5-A1F306814BB4}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>
