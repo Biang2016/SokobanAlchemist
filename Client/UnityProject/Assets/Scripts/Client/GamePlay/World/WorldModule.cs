@@ -189,8 +189,22 @@ public class WorldModule : PoolObject
     public IEnumerator Clear(bool releaseWorldModuleData, int clearEntityNumPerFrame = 256)
     {
         IsGeneratingOrRecycling = true;
-        int count = 0;
 
+        // 时序，先清理注册事件，以免回收时触发
+        foreach (EntityPassiveSkill_LevelEventTriggerAppear appear in EventTriggerAppearEntityPassiveSkillList)
+        {
+            appear.ClearAndUnRegister();
+        }
+
+        EventTriggerAppearEntityPassiveSkillList.Clear();
+        foreach (LevelTriggerBase trigger in WorldModuleLevelTriggers)
+        {
+            trigger.PoolRecycle();
+        }
+
+        WorldModuleLevelTriggers.Clear();
+
+        int count = 0;
         // Clear Actor First
         for (int x = 0; x < MODULE_SIZE; x++)
         {
@@ -283,19 +297,6 @@ public class WorldModule : PoolObject
             }
         }
 
-        foreach (LevelTriggerBase trigger in WorldModuleLevelTriggers)
-        {
-            trigger.PoolRecycle();
-        }
-
-        WorldModuleLevelTriggers.Clear();
-
-        foreach (EntityPassiveSkill_LevelEventTriggerAppear appear in EventTriggerAppearEntityPassiveSkillList)
-        {
-            appear.ClearAndUnRegister();
-        }
-
-        EventTriggerAppearEntityPassiveSkillList.Clear();
         BattleManager.Instance.OnRecycleWorldModule(GUID);
 
         if (!(this is OpenWorldModule)) World.WorldData.WorldBornPointGroupData_Runtime.UnInit_UnloadModuleData(ModuleGP);
