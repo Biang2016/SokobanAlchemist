@@ -312,7 +312,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         IsLoaded = false;
         IsExporting = false;
         LoadAllConfigs();
-        if (dialogShow) EditorUtility.DisplayDialog("提示", "序列化成功", "确定");
+        if (dialogShow) EditorUtility.DisplayDialog("Notice", "Serialize Config Success", "Confirm");
     }
 
     [MenuItem("开发工具/配置/快速序列化类型")]
@@ -328,10 +328,10 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         AssetDatabase.Refresh();
         IsLoaded = false;
         LoadAllConfigs();
-        EditorUtility.DisplayDialog("提示", "快速序列化类型成功", "确定");
+        EditorUtility.DisplayDialog("Notice", "Quick Serialize Types Success", "Confirm");
     }
 
-    [MenuItem("Assets/序列化选中模组或世界", priority = -50)]
+    [MenuItem("Assets/SerializeConfigForThisModuleOrWorld", priority = -50)]
     public static void ExportConfigsForSelectedAssets()
     {
         LoadAllConfigs();
@@ -362,7 +362,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             }
         }
 
-        EditorUtility.DisplayDialog("提示", "序列化选中模组或世界成功", "确定");
+        EditorUtility.DisplayDialog("Notice", "SerializeConfigForThisModuleOrWorld Success", "Confirm");
     }
 
     private static void ExportTypeGUIDMapping()
