@@ -140,7 +140,6 @@ MonoBehaviour:
   BoxCollider: {fileID: 2489816499953302024}
   HealthBarPivot: {fileID: 805721671840703478}
   InGameHealthBar: {fileID: 0}
-  IsDestroying: 0
 --- !u!65 &2489816499953302024
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -165,6 +164,7 @@ GameObject:
   - component: {fileID: 1193514219997052081}
   - component: {fileID: 7176362684188563293}
   - component: {fileID: 2445936643813022826}
+  - component: {fileID: 3744265640672872604}
   - component: {fileID: 2702892028185389631}
   - component: {fileID: 9185888305442127324}
   m_Layer: 14
@@ -466,6 +466,7 @@ MonoBehaviour:
   ActorBoxInteractHelper: {fileID: 3175763095622581172}
   LiftBoxPivot: {fileID: 6770438509873070911}
   ActorArtHelper: {fileID: 8171001807248883519}
+  ActorWwiseHelper: {fileID: 3744265640672872604}
   ActorModelHelper: {fileID: 7482838027039899299}
   ActorIndicatorHelper: {fileID: 7089615971486072453}
   ActorBuffHelper: {fileID: 9163556110511499603}
@@ -567,6 +568,7 @@ MonoBehaviour:
   RawFrozenBoxPassiveSkills: []
   ActorBehaviourState: 0
   ThrowState: 0
+  IsRecycling: 0
   JumpHeight: 0
   JumpStartWorldGP:
     x: 0
@@ -580,10 +582,87 @@ MonoBehaviour:
   SmashReachTarget: 0
   InAirMoveTargetPos: {x: 0, y: 0, z: 0}
   InAirMoveSpeed: 0
+  IsDestroying: 0
   references:
     version: 1
     00000000:
       type: {class: , ns: , asm: }
+--- !u!114 &3744265640672872604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193514219997052093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffc94a69e2e26904f94bcdf26838c1eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnBeingKicked:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnBeingPushed:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnSliding:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnSlideStop:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnBeingLift:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnBeingDropped:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnBeingLit:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnBurning:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnDestroyed_Common:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnDestroyed_ByFire:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnDestroyed_ByExplode:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnDestroyed_ByCollide:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnKick:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnVault:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnDash:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnDie:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
 --- !u!114 &2702892028185389631
 MonoBehaviour:
   m_ObjectHideFlags: 0

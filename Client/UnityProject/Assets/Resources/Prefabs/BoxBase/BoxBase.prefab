@@ -417,6 +417,7 @@ MonoBehaviour:
     IsShapePlanSquare: 0
     ActorWidth: 1
     ActorHeight: 1
+    Passable: 0
     BoundsInt:
       m_Position: {x: 0, y: 0, z: 0}
       m_Size: {x: 0, y: 0, z: 0}
@@ -511,6 +512,7 @@ GameObject:
   - component: {fileID: -4207928645834103369}
   - component: {fileID: 4108857161204591899}
   - component: {fileID: 2878046515562270118}
+  - component: {fileID: 534155500011443078}
   m_Layer: 9
   m_Name: BoxBase
   m_TagString: Untagged
@@ -551,8 +553,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PoolIndex: 0
   IsRecycled: 0
-  GUID: 0
-  GUID_Mod_FixedFrameRate: 0
+  SlowlyTick: 0
   InitWorldModuleGUID: 0
   EntityTypeIndex: 0
   RawEntityStatPropSet:
@@ -791,6 +792,8 @@ MonoBehaviour:
   RawEntityPassiveSkills: []
   RawEntityActiveSkills: []
   Camp: 4
+  BoxArtHelper: {fileID: 0}
+  BoxWwiseHelper: {fileID: 534155500011443078}
   BoxModelHelper: {fileID: 943596953443006337}
   BoxIndicatorHelper: {fileID: 5356314078954435621}
   BoxBuffHelper: {fileID: 2962941836236094511}
@@ -804,6 +807,7 @@ MonoBehaviour:
   BoxSkinHelper: {fileID: 4108857161204591899}
   BoxIconSpriteHelper: {fileID: 2878046515562270118}
   BoxFrozenBoxHelper: {fileID: 0}
+  BoxMarchingTextureHelper: {fileID: 0}
   BoxIconSpriteSmoothMove: {fileID: 5487221777558947811}
   BoxModelSmoothMove: {fileID: 4907329536122643906}
   BoxFeature: 0
@@ -936,6 +940,82 @@ MonoBehaviour:
   Right: {fileID: 6971468532280066570}
   Front: {fileID: 1455207757457048434}
   Back: {fileID: 6404415261854757320}
+--- !u!114 &534155500011443078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916418203503847193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffc94a69e2e26904f94bcdf26838c1eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnBeingKicked:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnBeingPushed:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnSliding:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnSlideStop:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnBeingLift:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnBeingDropped:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnBeingLit:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnBurning:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnDestroyed_Common:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnDestroyed_ByFire:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnDestroyed_ByExplode:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnDestroyed_ByCollide:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnKick:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnVault:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnDash:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnDie:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
 --- !u!1 &2025531339328140409
 GameObject:
   m_ObjectHideFlags: 0

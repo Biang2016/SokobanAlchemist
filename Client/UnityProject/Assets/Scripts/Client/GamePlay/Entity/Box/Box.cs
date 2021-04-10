@@ -38,6 +38,7 @@ public partial class Box : Entity
     }
 
     internal override EntityArtHelper EntityArtHelper => BoxArtHelper;
+    internal override EntityWwiseHelper EntityWwiseHelper => BoxWwiseHelper;
     internal override EntityModelHelper EntityModelHelper => BoxModelHelper;
     internal override EntityIndicatorHelper EntityIndicatorHelper => BoxIndicatorHelper;
     internal override EntityBuffHelper EntityBuffHelper => BoxBuffHelper;
@@ -49,6 +50,9 @@ public partial class Box : Entity
 
     [FoldoutGroup("组件")]
     public BoxArtHelper BoxArtHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityWwiseHelper BoxWwiseHelper;
 
     [FoldoutGroup("组件")]
     public EntityModelHelper BoxModelHelper;
@@ -132,6 +136,7 @@ public partial class Box : Entity
         ArtOnly = true;
 
         EntityArtHelper?.OnHelperUsed();
+        EntityWwiseHelper.OnHelperUsed();
         EntityModelHelper.OnHelperUsed();
         EntityIndicatorHelper.OnHelperUsed();
         EntityBuffHelper.OnHelperUsed();
@@ -169,6 +174,7 @@ public partial class Box : Entity
         isDestroying = false;
 
         EntityArtHelper?.OnHelperRecycled();
+        EntityWwiseHelper.OnHelperRecycled();
         EntityModelHelper.OnHelperRecycled();
         EntityIndicatorHelper.OnHelperRecycled();
         EntityBuffHelper.OnHelperRecycled();

@@ -40,6 +40,7 @@ public abstract class Entity : PoolObject
     #region Helpers
 
     internal abstract EntityArtHelper EntityArtHelper { get; }
+    internal abstract EntityWwiseHelper EntityWwiseHelper { get; }
     internal abstract EntityModelHelper EntityModelHelper { get; }
     internal abstract EntityIndicatorHelper EntityIndicatorHelper { get; }
     internal abstract EntityBuffHelper EntityBuffHelper { get; }

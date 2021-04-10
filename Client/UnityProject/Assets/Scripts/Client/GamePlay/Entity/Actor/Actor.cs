@@ -87,6 +87,11 @@ public class Actor : Entity
     [FoldoutGroup("组件")]
     public ActorArtHelper ActorArtHelper;
 
+    internal override EntityWwiseHelper EntityWwiseHelper => ActorWwiseHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityWwiseHelper ActorWwiseHelper;
+
     internal override EntityModelHelper EntityModelHelper => ActorModelHelper;
 
     [FoldoutGroup("组件")]
@@ -504,6 +509,40 @@ public class Actor : Entity
     [LabelText("扔技能状态")]
     public ThrowStates ThrowState = ThrowStates.None;
 
+    public override void OnUsed()
+    {
+        gameObject.SetActive(true);
+        base.OnUsed();
+        EntityArtHelper?.OnHelperUsed();
+        EntityWwiseHelper.OnHelperUsed();
+        EntityModelHelper.OnHelperUsed();
+        EntityIndicatorHelper.OnHelperUsed();
+        EntityBuffHelper.OnHelperUsed();
+        EntityFrozenHelper.OnHelperUsed();
+        EntityTriggerZoneHelper?.OnHelperUsed();
+        EntityGrindTriggerZoneHelper?.OnHelperUsed();
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.OnHelperUsed();
+        }
+
+        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
+        {
+            h.OnHelperUsed();
+        }
+
+        PlayerControllerHelper?.OnHelperUsed();
+        EnemyControllerHelper?.OnHelperUsed();
+        ActorPushHelper.OnHelperUsed();
+        ActorFaceHelper.OnHelperUsed();
+        ActorSkinHelper.OnHelperUsed();
+        ActorLaunchArcRendererHelper.OnHelperUsed();
+        ActorBattleHelper.OnHelperUsed();
+        ActorBoxInteractHelper.OnHelperUsed();
+
+        ActorMoveColliderRoot.SetActive(true);
+    }
+
     public bool IsRecycling = false;
 
     public override void OnRecycled()
@@ -530,6 +569,7 @@ public class Actor : Entity
         ThrowWhenDie();
 
         EntityArtHelper?.OnHelperRecycled();
+        EntityWwiseHelper.OnHelperRecycled();
         EntityModelHelper.OnHelperRecycled();
         EntityIndicatorHelper.OnHelperRecycled();
         EntityBuffHelper.OnHelperRecycled();
@@ -567,39 +607,6 @@ public class Actor : Entity
         BattleManager.Instance.RemoveActor(this);
         base.OnRecycled();
         IsRecycling = false;
-    }
-
-    public override void OnUsed()
-    {
-        gameObject.SetActive(true);
-        base.OnUsed();
-        EntityArtHelper?.OnHelperUsed();
-        EntityModelHelper.OnHelperUsed();
-        EntityIndicatorHelper.OnHelperUsed();
-        EntityBuffHelper.OnHelperUsed();
-        EntityFrozenHelper.OnHelperUsed();
-        EntityTriggerZoneHelper?.OnHelperUsed();
-        EntityGrindTriggerZoneHelper?.OnHelperUsed();
-        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
-        {
-            h.OnHelperUsed();
-        }
-
-        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
-        {
-            h.OnHelperUsed();
-        }
-
-        PlayerControllerHelper?.OnHelperUsed();
-        EnemyControllerHelper?.OnHelperUsed();
-        ActorPushHelper.OnHelperUsed();
-        ActorFaceHelper.OnHelperUsed();
-        ActorSkinHelper.OnHelperUsed();
-        ActorLaunchArcRendererHelper.OnHelperUsed();
-        ActorBattleHelper.OnHelperUsed();
-        ActorBoxInteractHelper.OnHelperUsed();
-
-        ActorMoveColliderRoot.SetActive(true);
     }
 
     void Awake()
