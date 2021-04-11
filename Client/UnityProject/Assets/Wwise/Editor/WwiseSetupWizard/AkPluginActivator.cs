@@ -923,11 +923,11 @@ public class AkPluginActivator
 
 			CppText += @"
 namespace AK { class PluginRegistration; };
-#define AK_STATIC_LINK_PLUGIN(_pluginName_) \
+@hackdefine AK_STATIC_LINK_PLUGIN(_pluginName_) \
 extern AK::PluginRegistration _pluginName_##Registration; \
 void *_pluginName_##_fp = (void*)&_pluginName_##Registration;
 
-";
+".Replace("@hackdefine","#define");
 
 			foreach (var filename in FactoriesHeaderFilenames)
 			{
