@@ -35,7 +35,7 @@ namespace NodeCanvas.Framework
 
         ///----------------------------------------------------------------------------------------------
         [SerializeField] private SerializationPair[] _serializedExposedParameters;
-        internal List<ExposedParameter> exposedParameters { get; set; }
+        public List<ExposedParameter> exposedParameters { get; set; }
 
         //serialize exposed parameters
         void ISerializationCallbackReceiver.OnBeforeSerialize() {
@@ -449,7 +449,7 @@ namespace NodeCanvas.Framework
         ///Editor. Validate.
         protected void OnValidate() { Validate(); }
         ///Editor. Validate.
-        internal void Validate() {
+        public void Validate() {
 
             if ( !UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode ) {
                 //everything here is relevant to bound graphs only.
@@ -476,7 +476,7 @@ namespace NodeCanvas.Framework
         }
 
         ///Editor. Binds the target graph (null to delete current bound).
-        internal void SetBoundGraphReference(Graph target) {
+        public void SetBoundGraphReference(Graph target) {
 
             if ( UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode ) {
                 Debug.LogError("SetBoundGraphReference method is an Editor only method!");

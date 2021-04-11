@@ -29,7 +29,7 @@ namespace NodeCanvas.Editor
         ///----------------------------------------------------------------------------------------------
 
         //Invoke PostGUI
-        internal static void InvokePostGUI() {
+        public static void InvokePostGUI() {
             if ( PostGUI != null ) {
                 PostGUI();
                 PostGUI = null;

@@ -170,8 +170,8 @@ namespace NodeCanvas.Framework
         }
 
         ///----------------------------------------------------------------------------------------------
-        internal GraphSource GetGraphSource() { return _graphSource; }
-        internal string GetSerializedJsonData() { return _serializedGraph; }
+        public GraphSource GetGraphSource() { return _graphSource; }
+        public string GetSerializedJsonData() { return _serializedGraph; }
         internal List<UnityEngine.Object> GetSerializedReferencesData() { return _objectReferences?.ToList(); }
         internal GraphSource GetGraphSourceMetaDataCopy() { return new GraphSource().SetMetaData(graphSource); }
         internal void SetGraphSourceMetaData(GraphSource source) { graphSource.SetMetaData(source); }

@@ -41,9 +41,9 @@ namespace NodeCanvas.Framework
 
         ///----------------------------------------------------------------------------------------------
 
-        internal GenericMenu CallbackOnCanvasContextMenu(GenericMenu menu, Vector2 canvasMousePos) { return OnCanvasContextMenu(menu, canvasMousePos); }
+        public GenericMenu CallbackOnCanvasContextMenu(GenericMenu menu, Vector2 canvasMousePos) { return OnCanvasContextMenu(menu, canvasMousePos); }
         internal GenericMenu CallbackOnNodesContextMenu(GenericMenu menu, Node[] nodes) { return OnNodesContextMenu(menu, nodes); }
-        internal void CallbackOnDropAccepted(Object o, Vector2 canvasMousePos) {
+        public void CallbackOnDropAccepted(Object o, Vector2 canvasMousePos) {
             ///for all graphs, make possible to drag and drop IGraphAssignables
             foreach ( var type in Editor.GraphEditorUtility.GetDropedReferenceNodeTypes<IGraphAssignable>(o) ) {
                 if ( baseNodeType.IsAssignableFrom(type) ) {
@@ -54,8 +54,8 @@ namespace NodeCanvas.Framework
             }
             OnDropAccepted(o, canvasMousePos);
         }
-        internal void CallbackOnVariableDropInGraph(IBlackboard bb, Variable variable, Vector2 canvasMousePos) { OnVariableDropInGraph(bb, variable, canvasMousePos); }
-        internal void CallbackOnGraphEditorToolbar() { OnGraphEditorToolbar(); }
+        public void CallbackOnVariableDropInGraph(IBlackboard bb, Variable variable, Vector2 canvasMousePos) { OnVariableDropInGraph(bb, variable, canvasMousePos); }
+        public void CallbackOnGraphEditorToolbar() { OnGraphEditorToolbar(); }
 
         ///----------------------------------------------------------------------------------------------
 
