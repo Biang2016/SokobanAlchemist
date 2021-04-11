@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{074F3F52-5B32-4505-8825-7A4505AB5DD7}" SchemaVersion="97" RootDocumentID="{9C6FF8E4-29EA-437D-8F32-D6CD73D5AEF5}">
+	<AudioObjects>
+		<WorkUnit Name="IceEnemy_Cyan" ID="{074F3F52-5B32-4505-8825-7A4505AB5DD7}" OwnerID="{E3CE6AB1-4019-454D-87B6-A9F867D5CFE0}" PersistMode="Nested">
+			<ChildrenList>
+				<RandomSequenceContainer Name="OnSkillCast_0" ID="{560D97BC-303B-4477-AED3-B29A0B7E806D}" ShortID="277270223">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="SFX_1" ID="{A4AC9CFD-8018-4759-98E6-C8BEDEEAE5ED}" ShortID="146818847">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="effect 4" ID="{C3FFDC49-F853-4715-830A-FE87E4E04C14}">
+									<Language>SFX</Language>
+									<AudioFile>effect 4.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="598399752"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="effect 4" ID="{C3FFDC49-F853-4715-830A-FE87E4E04C14}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+				<RandomSequenceContainer Name="OnSkillCast_1" ID="{6B21F04B-399F-4069-8275-F5EAC09F6A8E}" ShortID="1070987837">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="SFX_1" ID="{DCDF734D-EFE5-49FA-983F-1E8D10618467}" ShortID="782346331">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="JackHammer_far_03" ID="{EB3B7A1A-8568-4F21-BCE0-3480EBDE8F42}">
+									<Language>SFX</Language>
+									<AudioFile>JackHammer_far_03.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="567636655"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="JackHammer_far_03" ID="{EB3B7A1A-8568-4F21-BCE0-3480EBDE8F42}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

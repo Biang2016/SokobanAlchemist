@@ -9,6 +9,43 @@
 						<Event Name="Player_OnVault" ID="{87A67FB2-A0A0-478D-A531-09D0A1F1BBBC}"/>
 						<Event Name="Player_OnDie" ID="{584C66E1-D9B2-4779-8A77-68AAFA302E03}"/>
 						<Event Name="Player_OnDash" ID="{54A59489-03E7-4F6A-B46A-449B2256F731}"/>
+						<Event Name="Player_OnSkillCast_0" ID="{B633447B-6E36-4C0F-80D5-6C3432DB258C}">
+							<ChildrenList>
+								<Action Name="" ID="{F09DACC6-909A-428B-BD09-591C960425DD}" ShortID="57434717">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnSkillCast_0" ID="{7506DA52-CA85-4B84-B127-858ACB883D0E}" WorkUnitID="{5D6F1939-A32A-482E-AE0C-F6ED1E4E46B6}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="IceEnemy_Cyan" ID="{C6DC32F0-2013-4296-8299-2FA6BDDF66C8}" ShortID="731405076">
+					<ChildrenList>
+						<Event Name="IceEnemy_Cyan_OnSkillCast_0" ID="{4CC8E9DA-B6DC-41B2-AC24-A3C4E11E4288}">
+							<ChildrenList>
+								<Action Name="" ID="{34BE3703-B14A-4F63-829E-9DAD56BA7C28}" ShortID="709168198">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnSkillCast_0" ID="{560D97BC-303B-4477-AED3-B29A0B7E806D}" WorkUnitID="{074F3F52-5B32-4505-8825-7A4505AB5DD7}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="IceEnemy_Cyan_OnSkillCast_1" ID="{C2717160-3306-46CA-878D-F16C1D660693}">
+							<ChildrenList>
+								<Action Name="" ID="{A78EC062-B91B-4EA5-BD40-9B4D198728AD}" ShortID="570467038">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnSkillCast_1" ID="{6B21F04B-399F-4069-8275-F5EAC09F6A8E}" WorkUnitID="{074F3F52-5B32-4505-8825-7A4505AB5DD7}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 			</ChildrenList>

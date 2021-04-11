@@ -371,6 +371,7 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
 
     protected virtual IEnumerator WingUp(float wingUpTime)
     {
+        Entity.EntityWwiseHelper.OnSkillPreparing[(int) EntitySkillIndex].Post(Entity.gameObject);
         SkillPhase = ActiveSkillPhase.WingingUp;
         // todo Entity 前摇animation， 且按时间缩放
         WingUpRatio = 0;
@@ -391,6 +392,7 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
 
     protected virtual IEnumerator Cast(float castDuration)
     {
+        Entity.EntityWwiseHelper.OnSkillCast[(int) EntitySkillIndex].Post(Entity.gameObject);
         SkillPhase = ActiveSkillPhase.Casting;
         CastRatio = 0;
         // todo Entity 施法animation， 且按时间缩放

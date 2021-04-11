@@ -532,6 +532,7 @@ public class EntityStatPropSet
         if (Entity is Actor actor)
         {
             actor.ActorBattleHelper.ShowDamageNumFX(decrease);
+            actor.EntityWwiseHelper.OnBeingDamaged.Post(actor.gameObject);
         }
     }
 
@@ -540,6 +541,7 @@ public class EntityStatPropSet
         if (Entity is Actor actor)
         {
             actor.ActorBattleHelper.ShowHealNumFX(increase);
+            actor.EntityWwiseHelper.OnBeingHealed.Post(actor.gameObject);
         }
     }
 
