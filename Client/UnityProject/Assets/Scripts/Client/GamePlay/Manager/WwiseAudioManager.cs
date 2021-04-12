@@ -8,6 +8,12 @@ public class WwiseAudioManager : MonoSingleton<WwiseAudioManager>
 {
     public WwiseBGMConfiguration WwiseBGMConfiguration;
 
+    public AK.Wwise.RTPC Master_Volume;
+    public AK.Wwise.RTPC BGM_Volume;
+    public AK.Wwise.RTPC SFX_Volume;
+    public AK.Wwise.RTPC SFX_Entity_Volume;
+    public AK.Wwise.RTPC SFX_UI_Volume;
+
     void Awake()
     {
         GetBGMThemeConfigDict();

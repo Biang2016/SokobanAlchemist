@@ -11,12 +11,19 @@
 	<StreamedFiles/>
 	<MediaFilesNotInAnyBank/>
 	<SoundBanks>
-		<SoundBank Id="1355168291" Language="SFX" Hash="488550382">
+		<SoundBank Id="1355168291" Language="SFX" Hash="3079770386">
 			<ObjectPath>Init</ObjectPath>
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
+			<GameParameters>
+				<GameParameter Id="341651998" Name="BGM_Volume" ObjectPath="\Game Parameters\Default Work Unit\BGM_Volume"/>
+				<GameParameter Id="1564184899" Name="SFX_Volume" ObjectPath="\Game Parameters\Default Work Unit\SFX_Volume"/>
+				<GameParameter Id="2698376064" Name="SFX_UI_Volume" ObjectPath="\Game Parameters\Default Work Unit\SFX_UI_Volume"/>
+				<GameParameter Id="3942311461" Name="SFX_Entity_Volume" ObjectPath="\Game Parameters\Default Work Unit\SFX_Entity_Volume"/>
+				<GameParameter Id="4179668880" Name="Master_Volume" ObjectPath="\Game Parameters\Default Work Unit\Master_Volume"/>
+			</GameParameters>
 		</SoundBank>
-		<SoundBank Id="1605876511" Language="SFX" Hash="2455963680">
+		<SoundBank Id="1605876511" Language="SFX" Hash="949076280">
 			<ObjectPath>\SoundBanks\Default Work Unit\SFX Work Unit\SFX_Bank</ObjectPath>
 			<ShortName>SFX_Bank</ShortName>
 			<Path>SFX_Bank.bnk</Path>
@@ -28,6 +35,7 @@
 				<Event Id="2419922771" Name="IceEnemy_Cyan_OnSkillCast_0" ObjectPath="\Events\SFX\Entity_SFX\Actor_SFX\IceEnemy_Cyan\IceEnemy_Cyan_OnSkillCast_0" DurationType="OneShot" DurationMin="3.071610" DurationMax="3.071610"/>
 				<Event Id="2419922770" Name="IceEnemy_Cyan_OnSkillCast_1" ObjectPath="\Events\SFX\Entity_SFX\Actor_SFX\IceEnemy_Cyan\IceEnemy_Cyan_OnSkillCast_1" DurationType="OneShot" DurationMin="2.533900" DurationMax="2.533900"/>
 				<Event Id="137324230" Name="LifeBox_OnBeingKicked" ObjectPath="\Events\SFX\Entity_SFX\Box_SFX\LifeBox\LifeBox_OnBeingKicked" DurationType="OneShot" DurationMin="2.125000" DurationMax="2.125000"/>
+				<Event Id="3527200472" Name="Player_OnKick" ObjectPath="\Events\SFX\Entity_SFX\Actor_SFX\Player\Player_OnKick" DurationType="OneShot" DurationMin="2.500000" DurationMax="2.500000"/>
 				<Event Id="1052167317" Name="Player_OnSkillCast_0" ObjectPath="\Events\SFX\Entity_SFX\Actor_SFX\Player\Player_OnSkillCast_0" DurationType="OneShot" DurationMin="0.452426" DurationMax="0.452426"/>
 				<Event Id="3669812430" Name="WoodenBox_OnBeingKicked" ObjectPath="\Events\SFX\Entity_SFX\Box_SFX\WoodenBox\WoodenBox_OnBeingKicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
 				<Event Id="15596056" Name="WoodenBox_OnBeingPushed" ObjectPath="\Events\SFX\Entity_SFX\Box_SFX\WoodenBox\WoodenBox_OnBeingPushed" DurationType="OneShot" DurationMin="0.687500" DurationMax="1.583333"/>
@@ -67,7 +75,7 @@
 				</File>
 			</IncludedMemoryFiles>
 		</SoundBank>
-		<SoundBank Id="3734788450" Language="SFX" Hash="2911384207">
+		<SoundBank Id="3734788450" Language="SFX" Hash="1374787794">
 			<ObjectPath>\SoundBanks\Default Work Unit\BGM Work Unit\BGM_Bank</ObjectPath>
 			<ShortName>BGM_Bank</ShortName>
 			<Path>BGM_Bank.bnk</Path>
