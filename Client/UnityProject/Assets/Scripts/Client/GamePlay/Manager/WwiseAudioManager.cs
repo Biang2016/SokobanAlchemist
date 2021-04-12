@@ -17,6 +17,23 @@ public class WwiseAudioManager : MonoSingleton<WwiseAudioManager>
     void Awake()
     {
         GetBGMThemeConfigDict();
+        if (PlayerPrefs.HasKey("BGM_Volume"))
+        {
+            BGM_Volume.SetGlobalValue(PlayerPrefs.GetFloat("BGM_Volume"));
+        }
+        else
+        {
+            BGM_Volume.SetGlobalValue(100f);
+        }
+
+        if (PlayerPrefs.HasKey("SFX_Volume"))
+        {
+            SFX_Volume.SetGlobalValue(PlayerPrefs.GetFloat("SFX_Volume"));
+        }
+        else
+        {
+            SFX_Volume.SetGlobalValue(100f);
+        }
     }
 
     public void BGM_Start()
