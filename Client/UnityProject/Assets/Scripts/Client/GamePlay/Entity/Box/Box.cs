@@ -241,9 +241,9 @@ public partial class Box : Entity
 
     #region 旋转朝向
 
-    internal override void SwitchEntityOrientation(GridPosR.Orientation boxOrientation, bool forSetup = false)
+    internal override void SwitchEntityOrientation(GridPosR.Orientation boxOrientation)
     {
-        base.SwitchEntityOrientation(boxOrientation, forSetup);
+        base.SwitchEntityOrientation(boxOrientation);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxColliderHelper.transform, 1);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), EntityModelHelper.transform, 1);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxFrozenHelper.FrozeModelRoot.transform, 1);

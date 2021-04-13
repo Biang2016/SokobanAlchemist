@@ -276,25 +276,18 @@ public class Actor : Entity
 
     #region 旋转朝向
 
-    internal override void SwitchEntityOrientation(GridPosR.Orientation newOrientation, bool forSetup = false)
+    internal override void SwitchEntityOrientation(GridPosR.Orientation newOrientation)
     {
         if (EntityOrientation == newOrientation) return;
 
         // Actor由于限制死平面必须是正方形，因此可以用左下角坐标相减得到核心坐标偏移量；在旋转时应用此偏移量，可以保证平面正方形仍在老位置
         GridPos offset = ActorRotateWorldGPOffset(ActorWidth, newOrientation) - ActorRotateWorldGPOffset(ActorWidth, EntityOrientation);
-        if (!forSetup) UnRegisterFromModule(curWorldGP, EntityOrientation);
-        base.SwitchEntityOrientation(newOrientation, forSetup);
-        if (!forSetup) RegisterInModule(curWorldGP, newOrientation);
+         UnRegisterFromModule(curWorldGP, EntityOrientation);
+        base.SwitchEntityOrientation(newOrientation);
+         RegisterInModule(curWorldGP, newOrientation);
 
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(offset.x + curWorldGP.x, offset.z + curWorldGP.z, newOrientation), transform, 1);
-        if (forSetup)
-        {
-            curWorldGP = GridPos3D.GetGridPosByTrans(transform, 1); // Setup避免触发占位查询和登记，相关操作WorldModule已经代劳
-        }
-        else
-        {
-            WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
-        }
+        WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
     }
 
     public static GridPos ActorRotateWorldGPOffset(int actorWidth, GridPosR.Orientation orientation) // todo 这里的先决条件是所有的Actor都以左下角作为原点
@@ -648,7 +641,8 @@ public class Actor : Entity
         curWorldGP = worldGP; // 避免刚Setup就进行占位查询和登记，相关操作WorldModule已经代劳
         WorldGP = worldGP; // 避免刚Setup就进行占位查询和登记，相关操作WorldModule已经代劳
         LastWorldGP = WorldGP;
-        SwitchEntityOrientation(entityData.EntityOrientation, true);
+        EntityOrientation = entityData.EntityOrientation;
+        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(curWorldGP.x, curWorldGP.z, entityData.EntityOrientation), transform, 1);
 
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
