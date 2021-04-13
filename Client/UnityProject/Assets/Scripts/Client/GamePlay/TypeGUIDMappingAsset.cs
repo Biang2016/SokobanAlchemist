@@ -62,6 +62,7 @@ public class TypeGUIDMappingAsset : SerializedScriptableObject
         {TypeDefineType.World, new Mapping()},
         {TypeDefineType.FX, new Mapping()},
         {TypeDefineType.BattleIndicator, new Mapping()},
+        {TypeDefineType.SkyBox, new Mapping()},
     };
 
     public int version = 0;
@@ -161,4 +162,6 @@ public enum TypeDefineType
     World,
     FX,
     BattleIndicator,
+    SkyBox,
+    PostProcessingProfile,
 }

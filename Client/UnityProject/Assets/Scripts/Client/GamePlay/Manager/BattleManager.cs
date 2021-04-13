@@ -126,13 +126,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     public void StartBattle()
     {
-        if (WorldManager.Instance.CurrentWorld.WorldData.UseSpecialCameraConfig)
-        {
-            CameraManager.Instance.FieldCamera.SetTargetConfigData(WorldManager.Instance.CurrentWorld.WorldData.CameraConfigData);
-        }
-
-        CameraManager.Instance.FieldCamera.InitFocus();
-
+        WorldManager.Instance.CurrentWorld.ApplyWorldVisualEffectSettings(WorldManager.Instance.CurrentWorld.WorldData);
         if (WorldManager.Instance.CurrentWorld.WorldData.UseSpecialPlayerEnterESPS)
         {
             Player1.ReloadESPS(WorldManager.Instance.CurrentWorld.WorldData.Raw_PlayerEnterESPS);

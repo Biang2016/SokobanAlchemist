@@ -24,8 +24,10 @@ public class WorldData : IClone<WorldData>
     public bool UseSpecialPlayerEnterESPS = false;
     public EntityStatPropSet Raw_PlayerEnterESPS = new EntityStatPropSet(); // 干数据
 
-    public bool UseSpecialCameraConfig = false;
     public FieldCamera.CameraConfigData CameraConfigData = new FieldCamera.CameraConfigData();
+
+    public TypeSelectHelper SkyBoxType = new TypeSelectHelper {TypeDefineType = TypeDefineType.SkyBox};
+    public TypeSelectHelper PostProcessingProfileType = new TypeSelectHelper {TypeDefineType = TypeDefineType.PostProcessingProfile };
 
     public WorldData Clone()
     {
@@ -48,8 +50,9 @@ public class WorldData : IClone<WorldData>
         data.WorldModuleGPOrder = WorldModuleGPOrder.Clone();
         data.UseSpecialPlayerEnterESPS = UseSpecialPlayerEnterESPS;
         Raw_PlayerEnterESPS.ApplyDataTo(data.Raw_PlayerEnterESPS);
-        data.UseSpecialCameraConfig = UseSpecialCameraConfig;
-        CameraConfigData.ApplyTo(data.CameraConfigData,true);
+        CameraConfigData.ApplyTo(data.CameraConfigData, true);
+        data.SkyBoxType = SkyBoxType.Clone();
+        data.PostProcessingProfileType = PostProcessingProfileType.Clone();
         return data;
     }
 }

@@ -1325,6 +1325,16 @@ public class World : PoolObject
         return false;
     }
 
+    public void ApplyWorldVisualEffectSettings(WorldData worldData)
+    {
+        CameraManager.Instance.FieldCamera.SetTargetConfigData(worldData.CameraConfigData);
+        RenderSettings.skybox = ConfigManager.GetSkyBoxByName(worldData.SkyBoxType.TypeName);
+        CameraManager.Instance.FieldCamera.PostProcessVolume.profile = ConfigManager.GetPostProcessingProfileByName(worldData.PostProcessingProfileType.TypeName);
+        CameraManager.Instance.FieldCamera.Awake_PostProcessing();
+        CameraManager.Instance.FieldCamera.Distance_Level = 3;
+        CameraManager.Instance.FieldCamera.InitFocus();
+    }
+
     public virtual void ShutDown()
     {
         StopAllCoroutines();
