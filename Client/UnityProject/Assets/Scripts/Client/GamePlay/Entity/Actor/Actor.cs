@@ -282,9 +282,9 @@ public class Actor : Entity
 
         // Actor由于限制死平面必须是正方形，因此可以用左下角坐标相减得到核心坐标偏移量；在旋转时应用此偏移量，可以保证平面正方形仍在老位置
         GridPos offset = ActorRotateWorldGPOffset(ActorWidth, newOrientation) - ActorRotateWorldGPOffset(ActorWidth, EntityOrientation);
-         UnRegisterFromModule(curWorldGP, EntityOrientation);
+        UnRegisterFromModule(curWorldGP, EntityOrientation);
         base.SwitchEntityOrientation(newOrientation);
-         RegisterInModule(curWorldGP, newOrientation);
+        RegisterInModule(curWorldGP, newOrientation);
 
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(offset.x + curWorldGP.x, offset.z + curWorldGP.z, newOrientation), transform, 1);
         WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
@@ -702,9 +702,9 @@ public class Actor : Entity
         WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
     }
 
-    public void TransportPlayerGridPos(GridPos3D worldGP)
+    public void TransportPlayerGridPos(GridPos3D worldGP, float lerpTime = 0)
     {
-        SetModelSmoothMoveLerpTime(0);
+        SetModelSmoothMoveLerpTime(lerpTime);
         transform.position = worldGP;
         LastWorldGP = WorldGP;
         curWorldGP = worldGP; // 强行移动
@@ -952,7 +952,7 @@ public class Actor : Entity
 
     #region Skills
 
-    public void VaultOrDash(bool directionKeyDown)
+    public void VaultOrDash(int dashMaxDistance)
     {
         if (ThrowState != ThrowStates.None) return;
         Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
@@ -960,22 +960,24 @@ public class Actor : Entity
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && !box.Passable)
+            if (box && !box.Passable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.EntityTypeIndex))
             {
                 Vault();
             }
             else
             {
-                Dash();
+                Dash(dashMaxDistance);
             }
         }
         else
         {
-            Dash();
+            Dash(dashMaxDistance);
         }
     }
 
-    private void Dash()
+    private int temp_DashMaxDistance;
+
+    public void Dash(int dashMaxDistance)
     {
         if (CannotAct && !IsFrozen) return;
         if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue)
@@ -987,28 +989,31 @@ public class Actor : Entity
             }
             else
             {
+                temp_DashMaxDistance = dashMaxDistance;
                 ActorArtHelper.Dash();
-
-                int dashMaxDistance = 3;
-                int finalDashDistance = 0;
-                bool lastGridGrounded = true;
-                for (int dashDistance = 1; dashDistance <= dashMaxDistance; dashDistance++)
-                {
-                    GridPos3D targetPos = WorldGP + CurForward.ToGridPos3D() * dashDistance;
-                    if (lastGridGrounded) finalDashDistance = dashDistance - 1;
-                    lastGridGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(targetPos, 3, true, out GridPos3D _);
-                    Entity targetOccupyEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(targetPos, GUID, out WorldModule _, out GridPos3D _);
-                    if (targetOccupyEntity != null) break;
-                }
-
-                TransportPlayerGridPos(WorldGP + CurForward.ToGridPos3D() * finalDashDistance);
-                //RigidBody.AddForce(CurForward * DashForce, ForceMode.VelocityChange);
             }
         }
         else
         {
             UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].OnActionLowWarning();
         }
+    }
+
+    public void DoDash()
+    {
+        int finalDashDistance = 0;
+        bool lastGridGrounded = true;
+        for (int dashDistance = 1; dashDistance <= temp_DashMaxDistance; dashDistance++)
+        {
+            GridPos3D targetPos = WorldGP + CurForward.ToGridPos3D() * dashDistance;
+            if (lastGridGrounded) finalDashDistance = dashDistance - 1;
+            lastGridGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(targetPos, 3, true, out GridPos3D _);
+            Entity targetOccupyEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(targetPos, GUID, out WorldModule _, out GridPos3D _);
+            if (targetOccupyEntity != null && !(targetOccupyEntity is Actor)) break;
+        }
+
+        TransportPlayerGridPos(WorldGP + CurForward.ToGridPos3D() * finalDashDistance, 0.3f);
+        temp_DashMaxDistance = 0;
     }
 
     private void Vault()

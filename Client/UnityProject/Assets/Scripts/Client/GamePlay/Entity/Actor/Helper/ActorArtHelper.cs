@@ -83,6 +83,14 @@ public class ActorArtHelper : EntityArtHelper
         }
     }
 
+    /// <summary>
+    /// Executed by animation
+    /// </summary>
+    public void DoDash()
+    {
+        ((Actor) Entity).DoDash();
+    }
+
     void FixedUpdate()
     {
         if (Entity.IsNotNullAndAlive())

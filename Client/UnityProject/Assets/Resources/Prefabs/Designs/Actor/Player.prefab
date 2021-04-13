@@ -1488,7 +1488,7 @@ PrefabInstance:
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityActiveSkills.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -1499,6 +1499,16 @@ PrefabInstance:
         type: 3}
       propertyPath: RawEntityActiveSkills.Array.data[0]
       value: Client EntityActiveSkill_AddEntityBuff
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[1]
+      value: Client ActorActiveSkill_DashOrVault
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[2]
+      value: Client ActorActiveSkill_Jump
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -1857,7 +1867,42 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[1].SkillAlias
+      value: DashOrVault
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[1].TargetCamp
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[2].JumpHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[2].SkillAlias
+      value: Jump
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[2].TargetCamp
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
       propertyPath: RawEntityActiveSkills.Array.data[0].CastCanMove
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[1].CastCanMove
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[2].CastCanMove
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
@@ -1868,6 +1913,16 @@ PrefabInstance:
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityActiveSkills.Array.data[0].WingUpCanMove
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[1].WingUpCanMove
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[2].WingUpCanMove
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
@@ -1887,6 +1942,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[1].RecoverCanMove
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[2].RecoverCanMove
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
       propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityBuff
       value: Client EntityBuff_EntityPropertyMultiplyModifier
       objectReference: {fileID: 0}
@@ -1902,6 +1967,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[1].DashMaxDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
       propertyPath: RawEntityStatPropSet.ExplodeDamageDefense.BaseValue
       value: 45
       objectReference: {fileID: 0}
@@ -1914,6 +1984,16 @@ PrefabInstance:
         type: 3}
       propertyPath: RawEntityActiveSkills.Array.data[0].TargetEntityType
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[1].EntitySkillIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[2].EntitySkillIndex
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -1958,7 +2038,7 @@ PrefabInstance:
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityStatPropSet.SkillsPropertyCollections.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -2078,6 +2158,16 @@ PrefabInstance:
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityActiveSkills.Array.data[0].RawSubActiveSkillList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[1].RawSubActiveSkillList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[2].RawSubActiveSkillList.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
@@ -2287,6 +2377,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
+      propertyPath: RawEntityStatPropSet.SkillsPropertyCollections.Array.data[1].skillAlias
+      value: DashOrVault
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityStatPropSet.SkillsPropertyCollections.Array.data[2].skillAlias
+      value: Jump
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
       propertyPath: RawEntityActiveSkills.Array.data[0].CastAreaGridPosList.Array.data[10].x
       value: 15
       objectReference: {fileID: 0}
@@ -2467,6 +2567,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[1].InterruptSubActiveSkillsWhenInterrupted
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[2].InterruptSubActiveSkillsWhenInterrupted
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
       propertyPath: RawEntityActiveSkills.Array.data[0].CastFX.AnimationCurve.m_Curve.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -2482,6 +2592,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[1].SubActiveSkillTriggerLogicList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkills.Array.data[2].SubActiveSkillTriggerLogicList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityStatPropSet.SkillsPropertyCollections.Array.data[1].Cooldown.MaxValue
+      value: 1000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
       propertyPath: RawEntityActiveSkills.Array.data[0].RawEntityBuffs.Array.data[0].BuffFX.FXScale
       value: 0
       objectReference: {fileID: 0}
@@ -2494,6 +2619,11 @@ PrefabInstance:
         type: 3}
       propertyPath: RawEntityPassiveSkills.Array.data[0].RawEntityBuff.BuffFX.FXType.TypeDefineType
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityStatPropSet.SkillsPropertyCollections.Array.data[1].Cooldown.BaseValue
+      value: 380
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}

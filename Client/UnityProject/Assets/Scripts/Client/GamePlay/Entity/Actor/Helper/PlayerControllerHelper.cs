@@ -345,7 +345,7 @@ public class PlayerControllerHelper : ActorMonoHelper
 
             if (BS_Skill_1.Down)
             {
-                Actor.VaultOrDash(BS_Up.Pressed || BS_Down.Pressed || BS_Left.Pressed || BS_Right.Pressed);
+                TriggerSkill(EntitySkillIndex.Skill_1);
             }
 
             if (BS_Skill_0.Down)
@@ -360,7 +360,7 @@ public class PlayerControllerHelper : ActorMonoHelper
 
             if (BS_Skill_3.Down)
             {
-                Actor.SetJumpUpTargetHeight(Actor.ActiveJumpForce, 1, false);
+                TriggerSkill(EntitySkillIndex.Skill_2);
             }
 
             #endregion
