@@ -367,7 +367,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             }
         }
 
-
         EditorUtility.DisplayDialog("Notice", "SerializeConfigForThisModuleOrWorld Success", "Confirm");
     }
 
@@ -1222,6 +1221,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return TypeDefineConfigs[TypeDefineType.World].GetTypeAssetDataBasePath(worldName);
     }
 
+#endif
+
     public static Material GetSkyBoxByName(string skyBoxTypeName)
     {
         return Resources.Load<Material>($"SkyBox/{skyBoxTypeName}");
@@ -1231,7 +1232,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     {
         return Resources.Load<PostProcessProfile>($"PostProcessingProfile/{postProcessingProfileTypeName}");
     }
-#endif
 
     #endregion
 }
