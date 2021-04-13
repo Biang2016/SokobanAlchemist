@@ -972,12 +972,12 @@ public class Actor : Entity
             }
             else
             {
-                if (directionKeyDown) Dash();
+                Dash();
             }
         }
         else
         {
-            if (directionKeyDown) Dash();
+            Dash();
         }
     }
 
@@ -994,7 +994,21 @@ public class Actor : Entity
             else
             {
                 ActorArtHelper.Dash();
-                RigidBody.AddForce(CurForward * DashForce, ForceMode.VelocityChange);
+
+                int dashMaxDistance = 5;
+                int finalDashDistance = 0;
+                bool lastGridGrounded = true;
+                for (int dashDistance = 1; dashDistance <= dashMaxDistance; dashDistance++)
+                {
+                    GridPos3D targetPos = WorldGP + CurForward.ToGridPos3D() * dashDistance;
+                    if (lastGridGrounded) finalDashDistance = dashDistance - 1;
+                    lastGridGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(targetPos, 3, true, out GridPos3D _);
+                    Entity targetOccupyEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(targetPos, GUID, out WorldModule _, out GridPos3D _);
+                    if (targetOccupyEntity != null) break;
+                }
+
+                TransportPlayerGridPos(WorldGP + CurForward.ToGridPos3D() * finalDashDistance);
+                //RigidBody.AddForce(CurForward * DashForce, ForceMode.VelocityChange);
             }
         }
         else

@@ -81,10 +81,10 @@ public class EntityWwiseHelper : EntityMonoHelper
     public Event OnBeingHealed;
 
     [BoxGroup("ForActor")]
-    public Event[] OnSkillPreparing = new Event[8];
+    public Event[] OnSkillPreparing = new Event[9];
 
     [BoxGroup("ForActor")]
-    public Event[] OnSkillCast = new Event[8];
+    public Event[] OnSkillCast = new Event[9];
 
     public override void OnHelperRecycled()
     {

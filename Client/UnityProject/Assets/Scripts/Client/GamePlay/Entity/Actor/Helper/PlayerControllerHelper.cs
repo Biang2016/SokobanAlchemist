@@ -265,6 +265,17 @@ public class PlayerControllerHelper : ActorMonoHelper
             // 相机视角旋转后移动也相应旋转
             Actor.CurMoveAttempt = RotateMoveDirectionByCameraRotation(Actor.CurMoveAttempt);
 
+            GridPos3D targetWorldGP = Actor.WorldGP + Actor.CurMoveAttempt.ToGridPos3D();
+            bool isGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(targetWorldGP, 3f, true, out GridPos3D groundGP);
+            if (!isGrounded)
+            {
+                Actor.CurForward = Actor.CurMoveAttempt.normalized;
+                Actor.CurMoveAttempt = Vector3.zero;
+                isQuickMoving = false;
+                quickMoveStartWorldGP = GridPos3D.Zero;
+                quickMoveAttempt = Vector3.zero;
+            }
+
             Actor.MoveInternal();
 
             #endregion
