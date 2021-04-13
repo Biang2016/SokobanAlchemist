@@ -995,7 +995,7 @@ public class Actor : Entity
             {
                 ActorArtHelper.Dash();
 
-                int dashMaxDistance = 5;
+                int dashMaxDistance = 3;
                 int finalDashDistance = 0;
                 bool lastGridGrounded = true;
                 for (int dashDistance = 1; dashDistance <= dashMaxDistance; dashDistance++)
