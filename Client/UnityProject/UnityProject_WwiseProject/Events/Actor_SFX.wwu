@@ -6,7 +6,17 @@
 				<Folder Name="Player" ID="{2F5972F1-502C-4CA0-BACC-FB99EFA9E25D}" ShortID="1047651769">
 					<ChildrenList>
 						<Event Name="Player_OnKick" ID="{53AAFBD4-7991-41C9-96EF-7A32F11D703D}"/>
-						<Event Name="Player_OnVault" ID="{87A67FB2-A0A0-478D-A531-09D0A1F1BBBC}"/>
+						<Event Name="Player_OnVault" ID="{87A67FB2-A0A0-478D-A531-09D0A1F1BBBC}">
+							<ChildrenList>
+								<Action Name="" ID="{E9C8B9D4-7027-43E2-9A0E-1530DE04E751}" ShortID="307037252">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnVault" ID="{AEA05F60-16BA-446B-86FB-5D13DA347276}" WorkUnitID="{5D6F1939-A32A-482E-AE0C-F6ED1E4E46B6}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 						<Event Name="Player_OnDie" ID="{584C66E1-D9B2-4779-8A77-68AAFA302E03}"/>
 						<Event Name="Player_OnDash" ID="{54A59489-03E7-4F6A-B46A-449B2256F731}"/>
 						<Event Name="Player_OnSkillCast_0" ID="{B633447B-6E36-4C0F-80D5-6C3432DB258C}">

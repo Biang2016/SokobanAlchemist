@@ -23,6 +23,7 @@ namespace AK
         static const AkUniqueID ICEENEMY_CYAN_ONSKILLCAST_1 = 2419922770U;
         static const AkUniqueID LIFEBOX_ONBEINGKICKED = 137324230U;
         static const AkUniqueID PLAYER_ONSKILLCAST_0 = 1052167317U;
+        static const AkUniqueID PLAYER_ONVAULT = 3845548790U;
         static const AkUniqueID WOODENBOX_ONBEINGKICKED = 3669812430U;
         static const AkUniqueID WOODENBOX_ONBEINGPUSHED = 15596056U;
     } // namespace EVENTS
