@@ -62,7 +62,7 @@ public partial class Box
 
         // 和一般箱子相撞
         if (EntityStatPropSet.HealthDurability.Value > 0 &&
-            (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box ||
+            (collider.gameObject.layer == LayerManager.Instance.Layer_Box ||
              collider.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
         )
         {
@@ -99,9 +99,9 @@ public partial class Box
 
         // 和角色碰撞体相撞
         if (EntityStatPropSet.HealthDurability.Value > 0 &&
-            (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player ||
+            (collider.gameObject.layer == LayerManager.Instance.Layer_ActorIndicator_Player ||
              collider.gameObject.layer == LayerManager.Instance.Layer_Player ||
-             collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy ||
+             collider.gameObject.layer == LayerManager.Instance.Layer_ActorIndicator_Enemy ||
              collider.gameObject.layer == LayerManager.Instance.Layer_Enemy))
         {
             Actor actor = collider.gameObject.GetComponentInParent<Actor>();

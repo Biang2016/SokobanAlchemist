@@ -108,7 +108,7 @@ public class PlayerControllerHelper : ActorMonoHelper
                     {
                         // Check is there any actor occupies the grid
                         bool isActorOccupying = false;
-                        Collider[] colliders = Physics.OverlapSphere(targetPos, 0.4f, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
+                        Collider[] colliders = Physics.OverlapSphere(targetPos, 0.4f, LayerManager.Instance.LayerMask_ActorIndicator_Player | LayerManager.Instance.LayerMask_ActorIndicator_Enemy);
                         foreach (Collider collider in colliders)
                         {
                             Actor actor = collider.GetComponentInParent<Actor>();

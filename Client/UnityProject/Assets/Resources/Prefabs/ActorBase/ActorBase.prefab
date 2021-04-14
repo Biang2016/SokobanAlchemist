@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1273454549130340810}
   - component: {fileID: 5845903246066138183}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FrozenRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,8 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7765064667789401190}
   - component: {fileID: 7447925958209019029}
-  - component: {fileID: 2489816499953302024}
-  m_Layer: 19
+  m_Layer: 14
   m_Name: ActorBattleHelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,22 +136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1d42840d246bdb4ead92a0f63abb39a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BoxCollider: {fileID: 2489816499953302024}
   HealthBarPivot: {fileID: 805721671840703478}
   InGameHealthBar: {fileID: 0}
---- !u!65 &2489816499953302024
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1120196836116778736}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.8, z: 0.8}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1193514219997052093
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,7 +881,7 @@ GameObject:
   - component: {fileID: 2969417491157341026}
   - component: {fileID: 8171001807248883519}
   - component: {fileID: 8512734493965260897}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: ActorArtHelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -958,7 +943,7 @@ GameObject:
   - component: {fileID: 6227546326838659467}
   - component: {fileID: 62995962691880077}
   - component: {fileID: 1307309690635342499}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Frozen_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1082,7 +1067,7 @@ GameObject:
   - component: {fileID: 8254706746900815082}
   - component: {fileID: 288813110163693452}
   - component: {fileID: 8669538027537317514}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Frozen_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1163,7 +1148,7 @@ GameObject:
   - component: {fileID: 8511362115423378917}
   - component: {fileID: 8861735161064447358}
   - component: {fileID: 6830697735539078830}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Frozen_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1245,7 +1230,7 @@ GameObject:
   - component: {fileID: 1156038876160216290}
   - component: {fileID: 7482838027039899299}
   - component: {fileID: 3792965728662575922}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Models
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1379,7 +1364,7 @@ GameObject:
   - component: {fileID: 4266292117682224583}
   - component: {fileID: 6351656595907517047}
   - component: {fileID: 5286433180155449503}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Frozen_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1459,7 +1444,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6600523851857031601}
   - component: {fileID: 4549577115905723303}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: ActorFrozenHelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1512,7 +1497,7 @@ GameObject:
   - component: {fileID: 2194971821789864963}
   - component: {fileID: 3301782575571214223}
   - component: {fileID: 4832079543978041313}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Frozen_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1774,7 +1759,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 805721671840703478}
-  m_Layer: 19
+  m_Layer: 14
   m_Name: HealthBarPivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1805,7 +1790,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5778284771564482668}
   - component: {fileID: 7089615971486072453}
-  m_Layer: 0
+  m_Layer: 23
   m_Name: ActorIndicatorHelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1863,7 +1848,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6263155178105249289}
-  - component: {fileID: 4439892137878642217}
+  - component: {fileID: 3456650540923688115}
   m_Layer: 14
   m_Name: ActorMoveColliders
   m_TagString: Untagged
@@ -1885,8 +1870,8 @@ Transform:
   m_Father: {fileID: 1193514219997052081}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &4439892137878642217
-CapsuleCollider:
+--- !u!65 &3456650540923688115
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1895,10 +1880,9 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.4
-  m_Height: 0.8293727
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.018501312, z: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 0.8, z: 0.8}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8718526351911058139
 GameObject:
   m_ObjectHideFlags: 0

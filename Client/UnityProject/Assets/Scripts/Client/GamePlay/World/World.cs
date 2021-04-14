@@ -1249,7 +1249,7 @@ public class World : PoolObject
             foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 Vector3 gridWorldPos = offset + box.WorldGP;
-                Collider[] colliders = Physics.OverlapBox(gridWorldPos + Vector3.down * 0.5f, Vector3.one * 0.4f, Quaternion.identity, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
+                Collider[] colliders = Physics.OverlapBox(gridWorldPos + Vector3.down * 0.5f, Vector3.one * 0.4f, Quaternion.identity, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_ActorIndicator_Player | LayerManager.Instance.LayerMask_ActorIndicator_Enemy);
                 foreach (Collider collider in colliders)
                 {
                     Entity entityBeneath = collider.GetComponentInParent<Entity>();

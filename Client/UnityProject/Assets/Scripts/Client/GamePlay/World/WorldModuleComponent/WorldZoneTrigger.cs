@@ -36,7 +36,7 @@ public class WorldZoneTrigger : PoolObject
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player)
+        if (collider.gameObject.layer == LayerManager.Instance.Layer_ActorIndicator_Player)
         {
             Actor player = collider.gameObject.GetComponentInParent<Actor>();
             if (player == BattleManager.Instance.Player1)

@@ -491,14 +491,13 @@ public class ActorAIAgent
 
     public bool CheckIsStuckWithBoxes()
     {
-        if (Actor.IsFrozen) return false;
         foreach (GridPos3D offset in Actor.GetEntityOccupationGPs_Rotated())
         {
             GridPos3D gridPos = Actor.WorldGP + offset;
             Entity entity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridPos, Actor.GUID, out WorldModule targetModule, out GridPos3D _);
-            if (targetModule.IsNotNullAndAvailable() && entity is Box && entity.IsNotNullAndAlive())
+            if (targetModule.IsNotNullAndAvailable() && entity is Box box && entity.IsNotNullAndAlive())
             {
-                return true;
+                if (box.EntityTypeIndex != ConfigManager.Box_EnemyFrozenBoxIndex) return true;
             }
         }
 
@@ -511,9 +510,12 @@ public class ActorAIAgent
         {
             GridPos3D gridPos = Actor.WorldGP + offset;
             Entity entity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridPos, Actor.GUID, out WorldModule targetModule, out GridPos3D _);
-            if (targetModule.IsNotNullAndAvailable() && entity is Box && entity.IsNotNullAndAlive())
+            if (targetModule.IsNotNullAndAvailable() && entity is Box box && entity.IsNotNullAndAlive())
             {
-                entity.EntityBuffHelper.Damage(10000, EntityBuffAttribute.ExplodeDamage, 0);
+                if (box.EntityTypeIndex != ConfigManager.Box_EnemyFrozenBoxIndex)
+                {
+                    entity.EntityBuffHelper.Damage(10000, EntityBuffAttribute.ExplodeDamage, 0);
+                }
             }
         }
     }

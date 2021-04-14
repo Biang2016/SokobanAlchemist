@@ -81,7 +81,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
                 }
 
                 // 寻找新的连接
-                int length = Physics.OverlapSphereNonAlloc(LightningStartPivot.position, 5f, cached_Colliders, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_HitBox_Enemy | LayerManager.Instance.LayerMask_HitBox_Player);
+                int length = Physics.OverlapSphereNonAlloc(LightningStartPivot.position, 5f, cached_Colliders, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_ActorIndicator_Enemy | LayerManager.Instance.LayerMask_ActorIndicator_Player);
                 for (int i = 0; i < length; i++)
                 {
                     Collider c = cached_Colliders[i];

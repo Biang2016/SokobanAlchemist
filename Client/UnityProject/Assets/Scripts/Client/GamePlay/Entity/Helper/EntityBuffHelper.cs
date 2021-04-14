@@ -302,7 +302,7 @@ public class EntityBuffHelper : EntityMonoHelper
 
     public bool AddBuff(EntityBuff newBuff, string extraInfo = null)
     {
-        if (!Entity.IsNotNullAndAlive()) return false;
+         if (!Entity.IsNotNullAndAlive()) return false;
         if (newBuff is EntityBuff_ChangeEntityStatInstantly statBuff)
         {
             if (statBuff.EntityBuffAttribute.IsDamageBuff())
