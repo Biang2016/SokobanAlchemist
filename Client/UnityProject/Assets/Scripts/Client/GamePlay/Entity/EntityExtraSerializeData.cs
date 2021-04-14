@@ -10,7 +10,7 @@ public class EntityExtraSerializeData : IClone<EntityExtraSerializeData>
     [BoxGroup("额外被动技能")]
     [LabelText("额外被动技能")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
-    [SerializeReference] 
+    [SerializeReference]
     public List<EntityPassiveSkill> EntityPassiveSkills = new List<EntityPassiveSkill>();
 
     public EntityExtraSerializeData Clone()

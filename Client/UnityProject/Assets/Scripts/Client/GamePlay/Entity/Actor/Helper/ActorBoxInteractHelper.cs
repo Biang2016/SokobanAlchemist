@@ -49,6 +49,7 @@ public class ActorBoxInteractHelper : ActorMonoHelper
         {
             int a = 0;
         }
+
         return InteractSkillDict[boxTypeIndex];
     }
 

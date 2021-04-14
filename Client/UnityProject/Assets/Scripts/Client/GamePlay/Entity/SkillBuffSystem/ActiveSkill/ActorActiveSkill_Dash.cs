@@ -20,14 +20,14 @@ public class ActorActiveSkill_Dash : EntityActiveSkill
         yield return base.Cast(castDuration);
     }
 
-    protected override void ChildClone(EntityActiveSkill cloneData)
+    protected override void ChildClone(EntitySkill cloneData)
     {
         base.ChildClone(cloneData);
         ActorActiveSkill_Dash newEAS = (ActorActiveSkill_Dash) cloneData;
         newEAS.DashMaxDistance = DashMaxDistance;
     }
 
-    public override void CopyDataFrom(EntityActiveSkill srcData)
+    public override void CopyDataFrom(EntitySkill srcData)
     {
         base.CopyDataFrom(srcData);
         ActorActiveSkill_Dash srcEAS = (ActorActiveSkill_Dash) srcData;

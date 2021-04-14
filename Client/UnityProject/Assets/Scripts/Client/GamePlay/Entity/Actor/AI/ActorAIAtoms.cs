@@ -6,7 +6,6 @@ using FlowCanvas.Nodes;
 using NodeCanvas.BehaviourTrees;
 using NodeCanvas.Framework;
 using ParadoxNotion.Design;
-using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Profiling;
 using Random = UnityEngine.Random;

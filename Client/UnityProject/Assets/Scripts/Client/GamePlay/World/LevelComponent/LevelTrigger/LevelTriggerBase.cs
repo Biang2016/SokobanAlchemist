@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public abstract class LevelTriggerBase : PoolObject
 {
@@ -127,7 +123,7 @@ public abstract class LevelTriggerBase : PoolObject
 
     private void OnDisappearEvent(string eventAlias)
     {
-        if (TriggerData.DisappearLevelEventAlias.CheckEventAliasOrStateBool(eventAlias,WorldModuleGUID))
+        if (TriggerData.DisappearLevelEventAlias.CheckEventAliasOrStateBool(eventAlias, WorldModuleGUID))
         {
             PoolRecycle();
         }

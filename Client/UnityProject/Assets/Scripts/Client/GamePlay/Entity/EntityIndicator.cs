@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using BiangLibrary;
-using BiangLibrary.ObjectPool;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+﻿using BiangLibrary.ObjectPool;
 using UnityEngine;
+#if UNITY_EDITOR
+#endif
 
 public class EntityIndicator : PoolObject
 {

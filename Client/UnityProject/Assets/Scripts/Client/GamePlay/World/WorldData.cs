@@ -27,7 +27,7 @@ public class WorldData : IClone<WorldData>
     public FieldCamera.CameraConfigData CameraConfigData = new FieldCamera.CameraConfigData();
 
     public TypeSelectHelper SkyBoxType = new TypeSelectHelper {TypeDefineType = TypeDefineType.SkyBox};
-    public TypeSelectHelper PostProcessingProfileType = new TypeSelectHelper {TypeDefineType = TypeDefineType.PostProcessingProfile };
+    public TypeSelectHelper PostProcessingProfileType = new TypeSelectHelper {TypeDefineType = TypeDefineType.PostProcessingProfile};
 
     public WorldData Clone()
     {

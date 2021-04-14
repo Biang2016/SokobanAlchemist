@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using BiangLibrary;
 using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 [Serializable]
 public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, EntityPassiveSkillAction.IPureAction

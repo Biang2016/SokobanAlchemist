@@ -1,10 +1,7 @@
 ﻿using System;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
 #if UNITY_EDITOR
-using UnityEditor;
 
 #endif
 

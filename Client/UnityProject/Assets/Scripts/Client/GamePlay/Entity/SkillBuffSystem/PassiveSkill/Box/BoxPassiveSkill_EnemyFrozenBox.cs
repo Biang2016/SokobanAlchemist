@@ -53,9 +53,4 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
         base.OnDestroyEntity();
         Box.FrozenActor = null;
     }
-
-    public override void CopyDataFrom(EntityPassiveSkill srcData)
-    {
-        base.CopyDataFrom(srcData);
-    }
 }

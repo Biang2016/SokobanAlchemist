@@ -248,7 +248,7 @@ public abstract class Entity : PoolObject
         {
             foreach (EntityPassiveSkill rawExtraPS in rawEntityExtraSerializeDataFromModule.EntityPassiveSkills)
             {
-                EntityPassiveSkill newPS = rawExtraPS.Clone();
+                EntityPassiveSkill newPS = (EntityPassiveSkill) rawExtraPS.Clone();
                 AddNewPassiveSkill(newPS, true);
             }
         }
@@ -293,7 +293,7 @@ public abstract class Entity : PoolObject
         {
             foreach (EntityPassiveSkill rawAPS in RawEntityPassiveSkills)
             {
-                EntityPassiveSkill ps = rawAPS.Clone();
+                EntityPassiveSkill ps = (EntityPassiveSkill) rawAPS.Clone();
                 EntityPassiveSkills.Add(ps);
                 ps.IsAddedDuringGamePlay = false;
                 ps.Entity = this;
@@ -359,7 +359,7 @@ public abstract class Entity : PoolObject
         {
             foreach (EntityPassiveSkill rawAPS in RawEntityPassiveSkills)
             {
-                EntityPassiveSkill ps = rawAPS.Clone();
+                EntityPassiveSkill ps = (EntityPassiveSkill) rawAPS.Clone();
                 EntityPassiveSkills.Add(ps);
                 ps.IsAddedDuringGamePlay = false;
                 ps.Entity = this;
@@ -442,7 +442,7 @@ public abstract class Entity : PoolObject
         {
             foreach (EntityActiveSkill rawEAS in RawEntityActiveSkills)
             {
-                EntityActiveSkill eas = rawEAS.Clone();
+                EntityActiveSkill eas = (EntityActiveSkill) rawEAS.Clone();
                 AddNewActiveSkill(eas, false);
             }
         }

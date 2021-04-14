@@ -1,5 +1,4 @@
 ﻿using System;
-using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.Serialization;
 using UnityEngine.Events;
 
@@ -36,10 +35,5 @@ public class EntityPassiveSkill_LevelEventTriggerAppear : EntityPassiveSkill_Con
             data.EntityData = EntityData.Clone();
             data.EntityPassiveSkill_LevelEventTriggerAppear = (EntityPassiveSkill_LevelEventTriggerAppear) EntityPassiveSkill_LevelEventTriggerAppear.Clone(); // 此处慎重Clone，因为GenerateEntityAction没有深拷贝
         }
-    }
-
-    public override void CopyDataFrom(EntityPassiveSkill srcData)
-    {
-        throw new NotImplementedException();
     }
 }

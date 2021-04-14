@@ -1,10 +1,9 @@
 ﻿using System;
-using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
+public abstract class EntityPassiveSkill : EntitySkill
 {
     internal Entity Entity;
 
@@ -119,19 +118,11 @@ public abstract class EntityPassiveSkill : IClone<EntityPassiveSkill>
 
     #endregion
 
-    public EntityPassiveSkill Clone()
-    {
-        Type type = GetType();
-        EntityPassiveSkill newPS = (EntityPassiveSkill) Activator.CreateInstance(type);
-        ChildClone(newPS);
-        return newPS;
-    }
-
-    protected virtual void ChildClone(EntityPassiveSkill newPS)
+    protected override void ChildClone(EntitySkill cloneData)
     {
     }
 
-    public virtual void CopyDataFrom(EntityPassiveSkill srcData)
+    public override void CopyDataFrom(EntitySkill srcData)
     {
     }
 }

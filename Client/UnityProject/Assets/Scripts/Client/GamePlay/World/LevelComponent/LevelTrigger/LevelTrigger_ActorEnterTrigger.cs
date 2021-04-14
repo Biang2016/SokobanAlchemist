@@ -21,7 +21,7 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
     {
         [LabelText("@\"角色类型\t\"+RequiredActorType")]
         [PropertyOrder(-1)]
-        public TypeSelectHelper RequiredActorType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Actor };
+        public TypeSelectHelper RequiredActorType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Actor};
 
         [LabelText("角色至少停留时间/s")]
         [PropertyOrder(-1)]

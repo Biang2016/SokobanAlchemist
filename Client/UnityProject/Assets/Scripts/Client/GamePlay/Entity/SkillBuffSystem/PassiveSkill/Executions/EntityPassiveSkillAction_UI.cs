@@ -1,8 +1,5 @@
 ﻿using System;
-using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay.UI;
-using Sirenix.OdinInspector;
-using UnityEngine;
 
 [Serializable]
 public class EntityPassiveSkillAction_UI : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction

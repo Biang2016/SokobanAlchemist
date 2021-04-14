@@ -2,7 +2,6 @@
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [Serializable]
 public class EntityPassiveSkillAction_PlayFX : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction

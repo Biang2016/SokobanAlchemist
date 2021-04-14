@@ -743,10 +743,10 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     #endregion
 
-    protected override void ChildClone(EntityPassiveSkill newPS)
+    protected override void ChildClone(EntitySkill cloneData)
     {
-        base.ChildClone(newPS);
-        EntityPassiveSkill_Conditional newPSC = (EntityPassiveSkill_Conditional) newPS;
+        base.ChildClone(cloneData);
+        EntityPassiveSkill_Conditional newPSC = (EntityPassiveSkill_Conditional) cloneData;
         newPSC.TriggerProbabilityPercent = TriggerProbabilityPercent;
         newPSC.MultiEventTrigger = MultiEventTrigger;
         newPSC.ListenLevelEventAliasList = ListenLevelEventAliasList.Clone();
@@ -763,7 +763,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
     }
 
-    public override void CopyDataFrom(EntityPassiveSkill srcData)
+    public override void CopyDataFrom(EntitySkill srcData)
     {
         base.CopyDataFrom(srcData);
         EntityPassiveSkill_Conditional srcPSC = (EntityPassiveSkill_Conditional) srcData;

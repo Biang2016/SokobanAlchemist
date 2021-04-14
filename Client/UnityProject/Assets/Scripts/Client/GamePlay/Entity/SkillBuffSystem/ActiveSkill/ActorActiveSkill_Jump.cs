@@ -20,14 +20,14 @@ public class ActorActiveSkill_Jump : EntityActiveSkill
         yield return base.Cast(castDuration);
     }
 
-    protected override void ChildClone(EntityActiveSkill cloneData)
+    protected override void ChildClone(EntitySkill cloneData)
     {
         base.ChildClone(cloneData);
         ActorActiveSkill_Jump newEAS = (ActorActiveSkill_Jump) cloneData;
         newEAS.JumpHeight = JumpHeight;
     }
 
-    public override void CopyDataFrom(EntityActiveSkill srcData)
+    public override void CopyDataFrom(EntitySkill srcData)
     {
         base.CopyDataFrom(srcData);
         ActorActiveSkill_Jump srcEAS = (ActorActiveSkill_Jump) srcData;

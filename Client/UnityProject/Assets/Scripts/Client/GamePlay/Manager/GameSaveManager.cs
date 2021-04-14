@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using BiangLibrary.Singleton;
 using Sirenix.Serialization;
 using UnityEngine;
+
 #if UNITY_EDITOR
 
 #endif
@@ -44,7 +44,6 @@ public class GameSaveManager : TSingletonBaseManager<GameSaveManager>
 
     public void SaveData(string dataGroup, string dataKey, SaveDataType saveDataType, DataFormat dataFormat = DataFormat.Binary)
     {
-     
         //string filePath = GetFilePath(dataGroup, dataKey, saveDataType);
         //if (File.Exists(filePath))
         //{
