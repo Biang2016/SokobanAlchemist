@@ -650,10 +650,6 @@ public class OpenWorld : World
                     MicroWorldModules.Add(module);
                     WorldData.WorldBornPointGroupData_Runtime.Init_LoadModuleData(realModuleGP, module.WorldModuleData);
                     SortedDictionary<string, BornPointData> playerBornPoints = module.WorldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints;
-                    if (playerBornPoints.Count > 0)
-                    {
-                        if (transportPlayerBornPoint == GridPos3D.Zero) transportPlayerBornPoint = module.LocalGPToWorldGP(playerBornPoints[playerBornPoints.Keys.ToList()[0]].LocalGP);
-                    }
 
                     List<BornPointData> moduleBPData = WorldData.WorldBornPointGroupData_Runtime.TryLoadModuleBPData(realModuleGP);
                     if (moduleBPData != null)
@@ -674,6 +670,7 @@ public class OpenWorld : World
             LoadingMapPanel.SetProgress(20f + 60f * loadingModuleCount / totalModuleNum, "Loading Level");
         }
 
+        transportPlayerBornPoint = WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[microWorldData.DefaultWorldActorBornPointAlias].WorldGP;
         if (transportPlayerBornPoint == GridPos3D.Zero)
         {
             Debug.LogWarning("传送的模组没有默认玩家出生点");
