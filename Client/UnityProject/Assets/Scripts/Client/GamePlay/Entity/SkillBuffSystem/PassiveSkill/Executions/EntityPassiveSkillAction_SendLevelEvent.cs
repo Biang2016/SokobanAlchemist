@@ -23,16 +23,12 @@ public class EntityPassiveSkillAction_SendLevelEvent : EntityPassiveSkillAction,
     {
         if (!string.IsNullOrWhiteSpace(EmitEventAlias))
         {
-            ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, EmitEventAlias);
+            ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, EmitEventAlias.FormatEventAliasOrStateBool(InitWorldModuleGUID));
         }
 
         if (!string.IsNullOrWhiteSpace(SetStateAlias))
         {
-            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(Entity.WorldGP);
-            if (module)
-            {
-                BattleManager.Instance.SetStateBool(module.GUID, SetStateAlias, SetStateAliasValue);
-            }
+            BattleManager.Instance.SetStateBool(InitWorldModuleGUID, SetStateAlias.FormatEventAliasOrStateBool(InitWorldModuleGUID), SetStateAliasValue);
         }
     }
 

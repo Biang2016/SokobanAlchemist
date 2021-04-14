@@ -127,7 +127,7 @@ public abstract class LevelTriggerBase : PoolObject
 
     private void OnDisappearEvent(string eventAlias)
     {
-        if (eventAlias == TriggerData.DisappearLevelEventAlias)
+        if (TriggerData.DisappearLevelEventAlias.CheckEventAliasOrStateBool(eventAlias,WorldModuleGUID))
         {
             PoolRecycle();
         }
@@ -148,12 +148,12 @@ public abstract class LevelTriggerBase : PoolObject
         if (HasTriggeredTimes <= TriggerData.MaxTriggerTime)
         {
             FXManager.Instance.PlayFX(TriggerData.TriggerFX, transform.position);
-            ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, TriggerData.TriggerEmitEventAlias);
+            ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, TriggerData.TriggerEmitEventAlias.FormatEventAliasOrStateBool(WorldModuleGUID));
         }
 
         if (!IsRecycled && !TriggerData.isTriggerSetStateAliasEmpty)
         {
-            BattleManager.Instance.SetStateBool(WorldModuleGUID, TriggerData.TriggerSetStateAlias, true);
+            BattleManager.Instance.SetStateBool(WorldModuleGUID, TriggerData.TriggerSetStateAlias.FormatEventAliasOrStateBool(WorldModuleGUID), true);
         }
 
         //Debug.Log("LevelTriggerEventAlias:" + TriggerData.TriggerEmitEventAlias);
@@ -163,7 +163,7 @@ public abstract class LevelTriggerBase : PoolObject
     {
         if (!IsRecycled && !TriggerData.isTriggerSetStateAliasEmpty)
         {
-            BattleManager.Instance.SetStateBool(WorldModuleGUID, TriggerData.TriggerSetStateAlias, false);
+            BattleManager.Instance.SetStateBool(WorldModuleGUID, TriggerData.TriggerSetStateAlias.FormatEventAliasOrStateBool(WorldModuleGUID), false);
         }
     }
 

@@ -105,4 +105,42 @@ public static class ClientUtils
         if (index >= (ushort) ConfigManager.TypeStartIndex.Box) return ConfigManager.TypeStartIndex.Box;
         return ConfigManager.TypeStartIndex.None;
     }
+
+    public static bool CheckEventAliasOrStateBool(this string waiting, string incoming, uint waitingWorldModuleGUID)
+    {
+        if (string.IsNullOrWhiteSpace(waiting) || string.IsNullOrWhiteSpace(incoming)) return false;
+        string formatWaiting = waiting.Replace("{WorldModule}", waitingWorldModuleGUID.ToString());
+        return formatWaiting == incoming;
+    }
+
+    public static bool CheckEventAliasOrStateBool(this string waiting, string incoming, WorldModule waitingWorldModule)
+    {
+        if (string.IsNullOrWhiteSpace(waiting) || string.IsNullOrWhiteSpace(incoming)) return false;
+        if (waitingWorldModule == null)
+        {
+            return waiting == incoming;
+        }
+        else
+        {
+            return waiting.CheckEventAliasOrStateBool(incoming, waitingWorldModule.GUID);
+        }
+    }
+
+    public static string FormatEventAliasOrStateBool(this string sending, uint waitingWorldModuleGUID)
+    {
+        string formatSending = sending.Replace("{WorldModule}", waitingWorldModuleGUID.ToString());
+        return formatSending;
+    }
+
+    public static string FormatEventAliasOrStateBool(this string sending, WorldModule waitingWorldModule)
+    {
+        if (waitingWorldModule == null)
+        {
+            return sending;
+        }
+        else
+        {
+            return sending.FormatEventAliasOrStateBool(waitingWorldModule.GUID);
+        }
+    }
 }

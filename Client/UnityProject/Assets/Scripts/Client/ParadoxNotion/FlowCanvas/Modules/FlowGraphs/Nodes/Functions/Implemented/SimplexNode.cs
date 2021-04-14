@@ -13,33 +13,8 @@ namespace FlowCanvas.Nodes
     [ParadoxNotion.Design.SpoofAOT]
     abstract public class SimplexNode
     {
-        private Actor actor;
-
-        internal Actor Actor {
-            get {
-                if (actor == null)
-                {
-                    actor = parentNode.graph.agent.GetComponent<Actor>();
-                }
-
-                return actor;
-            }
-        }
-
-        private WorldModule worldModule;
-
-        internal WorldModule WorldModule
-        {
-            get
-            {
-                if (worldModule == null)
-                {
-                    worldModule = parentNode.graph.agent.GetComponent<WorldModule>();
-                }
-
-                return worldModule;
-            }
-        }
+        internal Actor Actor => parentNode.Actor;
+        internal WorldModule WorldModule => parentNode.WorldModule;
 
         [System.NonSerialized]
         private string _name;

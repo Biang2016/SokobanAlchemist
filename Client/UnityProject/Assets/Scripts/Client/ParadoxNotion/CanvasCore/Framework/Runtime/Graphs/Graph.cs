@@ -16,6 +16,35 @@ namespace NodeCanvas.Framework
     [System.Serializable]
     abstract public partial class Graph : ScriptableObject, ITaskSystem, ISerializationCallbackReceiver
     {
+        private Actor actor;
+        internal Actor Actor
+        {
+            get
+            {
+                if (actor == null)
+                {
+                    actor = agent?.GetComponentInParent<Actor>();
+                }
+
+                return actor;
+            }
+        }
+
+        private WorldModule worldModule;
+
+        internal WorldModule WorldModule
+        {
+            get
+            {
+                if (worldModule == null)
+                {
+                    worldModule = agent?.GetComponentInParent<WorldModule>();
+                }
+
+                return worldModule;
+            }
+        }
+
         ///Update mode of the graph (see 'StartGraph')
         public enum UpdateMode
         {

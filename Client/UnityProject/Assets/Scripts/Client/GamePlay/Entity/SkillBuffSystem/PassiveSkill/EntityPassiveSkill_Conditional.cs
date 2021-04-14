@@ -187,25 +187,12 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     private void OnEvent(string incomingEventAlias)
     {
-        bool CheckEventAlias(string waitingEventAlias)
-        {
-            if (waitingEventAlias.Contains("{WorldModule}"))
-            {
-                string formatWaitingEventAlias = waitingEventAlias.Replace("{WorldModule}", InitWorldModuleGUID.ToString());
-                return formatWaitingEventAlias.Equals(incomingEventAlias);
-            }
-            else
-            {
-                return !string.IsNullOrEmpty(waitingEventAlias) && waitingEventAlias.Equals(incomingEventAlias);
-            }
-        }
-
         if (MultiEventTrigger)
         {
             for (int index = 0; index < ListenLevelEventAliasList.Count; index++)
             {
                 string alias = ListenLevelEventAliasList[index];
-                if (CheckEventAlias(alias) && !multiTriggerFlags[index])
+                if (alias.CheckEventAliasOrStateBool(incomingEventAlias, InitWorldModuleGUID) && !multiTriggerFlags[index])
                 {
                     multiTriggerFlags[index] = true;
                 }
@@ -227,7 +214,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
         else
         {
-            if (CheckEventAlias(ListenLevelEventAlias))
+            if (ListenLevelEventAlias.CheckEventAliasOrStateBool(incomingEventAlias, InitWorldModuleGUID))
             {
                 if (TriggerProbabilityPercent.ProbabilityBool())
                 {
@@ -649,6 +636,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             }
         }
     }
+
     public override void OnEntityPropertyValueChange(EntityPropertyType entityPropertyType)
     {
         base.OnEntityPropertyValueChange(entityPropertyType);
@@ -721,7 +709,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                     EntityPassiveSkillAction epsa = EntityPassiveSkillActions[i];
                     epsa.Entity = Entity;
                     epsa.CopyDataFrom(RawEntityPassiveSkillActions[i]);
-                    epsa.Init();
+                    epsa.Init(InitWorldModuleGUID);
                 }
             }
             else
@@ -736,7 +724,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 EntityPassiveSkillAction epsa = rawAction.Clone();
                 epsa.Entity = Entity;
                 EntityPassiveSkillActions.Add(epsa);
-                epsa.Init();
+                epsa.Init(InitWorldModuleGUID);
             }
         }
 
