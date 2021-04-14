@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;

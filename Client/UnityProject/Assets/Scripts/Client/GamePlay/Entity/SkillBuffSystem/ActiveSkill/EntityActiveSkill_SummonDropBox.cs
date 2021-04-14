@@ -45,7 +45,7 @@ public class EntityActiveSkill_SummonDropBox : EntityActiveSkill_AreaCast
         yield return base.Cast(castDuration);
     }
 
-    protected override void ChildClone(EntityActiveSkill cloneData)
+    protected override void ChildClone(EntitySkill cloneData)
     {
         base.ChildClone(cloneData);
         EntityActiveSkill_SummonDropBox newEAS = (EntityActiveSkill_SummonDropBox) cloneData;
@@ -53,7 +53,7 @@ public class EntityActiveSkill_SummonDropBox : EntityActiveSkill_AreaCast
         newEAS.DropFromHeightFromFloor = DropFromHeightFromFloor;
     }
 
-    public override void CopyDataFrom(EntityActiveSkill srcData)
+    public override void CopyDataFrom(EntitySkill srcData)
     {
         base.CopyDataFrom(srcData);
         EntityActiveSkill_SummonDropBox srcEAS = (EntityActiveSkill_SummonDropBox) srcData;

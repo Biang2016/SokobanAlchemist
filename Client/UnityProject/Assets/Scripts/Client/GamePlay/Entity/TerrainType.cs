@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public enum TerrainType
+﻿public enum TerrainType
 {
     Earth,
     GrassYellow,

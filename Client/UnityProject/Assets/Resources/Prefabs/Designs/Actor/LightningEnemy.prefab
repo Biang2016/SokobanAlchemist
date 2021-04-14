@@ -62,6 +62,192 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorArtHelper: {fileID: 1558203137015934819}
+--- !u!1 &7391671071692657705
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3172174325591622246}
+  m_Layer: 20
+  m_Name: LightningStartPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3172174325591622246
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7391671071692657705}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.002, y: 0.477, z: -0.858}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7364897974692466264}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8416516430508387416
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7364897974692466264}
+  - component: {fileID: 8868544658734618487}
+  m_Layer: 20
+  m_Name: EntityLightningGeneratorHelper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7364897974692466264
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8416516430508387416}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_Children:
+  - {fileID: 3172174325591622246}
+  m_Father: {fileID: 4639500220616278996}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8868544658734618487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8416516430508387416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e193f67511a4618bf060d8cf3cbff69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LightningPassiveSkill:
+    IsAddedDuringGamePlay: 0
+    InitWorldModuleGUID: 0
+    PassiveSkillCondition: 128
+    TriggerProbabilityPercent: 100
+    DestroyEntityByElementDamageTypeList: 
+    EntityStatChangeType: 0
+    EntityStatChangeThreshold: 0
+    EntityStatChangeThresholdOperator: 0
+    EntityPropertyChangeType: 0
+    EntityPropertyChangeThreshold: 0
+    EntityPropertyChangeThresholdOperator: 0
+    MultiEventTrigger: 0
+    ListenLevelEventAliasList: []
+    ListenLevelEventAlias: 
+    MaxTriggeredTimes: 1
+    RawEntityPassiveSkillActions:
+    - id: 0
+  LightningStartPivot: {fileID: 3172174325591622246}
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkillAction_TriggerZoneEffect, ns: , asm: Client}
+      data:
+        EffectiveOnRelativeCamp: 15
+        RawEntityBuffs_Enter:
+        - id: 1
+        RemoveEnterBuffWhenExit: 0
+        RawEntityBuffs_Stay:
+        - id: 2
+        - id: 3
+        RemoveStayBuffWhenExit: 0
+        EffectInterval: 0.3
+        RawEntityBuffs_Exit: []
+    00000001:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 13925
+        BuffAlias: 
+        EntityBuffAttribute: 40
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 0
+        Delta: -1
+        Percent: 0
+    00000002:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10106
+        BuffAlias: 
+        EntityBuffAttribute: 40
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 0
+        Delta: -1
+        Percent: 0
+    00000003:
+      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
+      data:
+        GUID: 14544
+        BuffAlias: 
+        EntityBuffAttribute: 39
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0.15
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        Percent: -100
+        LinearDecayInDuration: 0
+        EntityPropertyType: 30
 --- !u!1001 &5181507523975537727
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1107,6 +1293,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5181507523975537727}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &4639500220616278996 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d5214637f6a293647b4af7d2c8dc0766,
+    type: 3}
+  m_PrefabInstance: {fileID: 5181507523975537727}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3511315290308396152 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8598175453035470919, guid: d5214637f6a293647b4af7d2c8dc0766,
@@ -1225,6 +1417,16 @@ PrefabInstance:
       propertyPath: RawEntityStatPropSet.MoveSpeed.BaseValue
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: ActorLightningGeneratorHelpers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: ActorLightningGeneratorHelpers.Array.data[0]
+      value: 
+      objectReference: {fileID: 8868544658734618487}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityStatPropSet.HealthDurability._value

@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using BiangLibrary.GameDataFormat.Grid;
-using BiangLibrary.GamePlay;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Profiling;
-using UnityEngine.Serialization;
 #if UNITY_EDITOR
-using UnityEditor;
 
 #endif
 
@@ -241,9 +237,9 @@ public partial class Box : Entity
 
     #region 旋转朝向
 
-    internal override void SwitchEntityOrientation(GridPosR.Orientation boxOrientation, bool forSetup = false)
+    internal override void SwitchEntityOrientation(GridPosR.Orientation boxOrientation)
     {
-        base.SwitchEntityOrientation(boxOrientation, forSetup);
+        base.SwitchEntityOrientation(boxOrientation);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxColliderHelper.transform, 1);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), EntityModelHelper.transform, 1);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxFrozenHelper.FrozeModelRoot.transform, 1);
@@ -1013,7 +1009,7 @@ public partial class Box : Entity
                 bool isGrounded = false;
                 foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
                 {
-                    bool hitGround = Physics.Raycast(transform.position + offset, Vector3.down, 1, LayerManager.Instance.LayerMask_HitBox_Box | LayerManager.Instance.LayerMask_Ground);
+                    bool hitGround = Physics.Raycast(transform.position + offset, Vector3.down, 1, LayerManager.Instance.LayerMask_Box | LayerManager.Instance.LayerMask_Ground);
                     if (hitGround)
                     {
                         isGrounded = true;

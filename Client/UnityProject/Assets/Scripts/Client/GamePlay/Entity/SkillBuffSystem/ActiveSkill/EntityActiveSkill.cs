@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [Serializable]
-public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
+public abstract class EntityActiveSkill : EntitySkill
 {
     internal EntityActiveSkill ParentActiveSkill;
     internal Entity Entity;
@@ -428,7 +428,7 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
     {
         void CloneSubSkillAndTrigger(EntityActiveSkill subSkill)
         {
-            EntityActiveSkill subSkillClone = subSkill.Clone();
+            EntityActiveSkill subSkillClone = (EntityActiveSkill) subSkill.Clone();
             RunningSubActiveSkillList.Add(subSkillClone);
             subSkillClone.OnValidateFailed += () =>
             {
@@ -632,10 +632,10 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
         }
     }
 
-    public EntityActiveSkill Clone()
+    protected override void ChildClone(EntitySkill cloneData)
     {
-        Type type = GetType();
-        EntityActiveSkill newEAS = (EntityActiveSkill) Activator.CreateInstance(type);
+        base.ChildClone(cloneData);
+        EntityActiveSkill newEAS = (EntityActiveSkill) cloneData;
         newEAS.TargetCamp = TargetCamp;
         newEAS.WingUpCanMove = WingUpCanMove;
         newEAS.CastCanMove = CastCanMove;
@@ -645,23 +645,18 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
         newEAS.RawSubActiveSkillList = RawSubActiveSkillList.Clone();
         newEAS.SubActiveSkillTriggerLogicList = SubActiveSkillTriggerLogicList.Clone();
         newEAS.InterruptSubActiveSkillsWhenInterrupted = InterruptSubActiveSkillsWhenInterrupted;
-        ChildClone(newEAS);
-        return newEAS;
     }
 
-    protected virtual void ChildClone(EntityActiveSkill cloneData)
+    public override void CopyDataFrom(EntitySkill srcData)
     {
-    }
-
-    public virtual void CopyDataFrom(EntityActiveSkill srcData)
-    {
-        TargetCamp = srcData.TargetCamp;
-        WingUpCanMove = srcData.WingUpCanMove;
-        CastCanMove = srcData.CastCanMove;
-        RecoverCanMove = srcData.RecoverCanMove;
-        EntitySkillIndex = srcData.EntitySkillIndex;
-        SkillAlias = srcData.SkillAlias;
-        if (RawSubActiveSkillList.Count != srcData.RawSubActiveSkillList.Count)
+        EntityActiveSkill srcEAS = (EntityActiveSkill) srcData;
+        TargetCamp = srcEAS.TargetCamp;
+        WingUpCanMove = srcEAS.WingUpCanMove;
+        CastCanMove = srcEAS.CastCanMove;
+        RecoverCanMove = srcEAS.RecoverCanMove;
+        EntitySkillIndex = srcEAS.EntitySkillIndex;
+        SkillAlias = srcEAS.SkillAlias;
+        if (RawSubActiveSkillList.Count != srcEAS.RawSubActiveSkillList.Count)
         {
             Debug.LogError("EAS CopyDataFrom RawSubActiveSkillList数量不一致");
         }
@@ -669,11 +664,11 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
         {
             for (int i = 0; i < RawSubActiveSkillList.Count; i++)
             {
-                RawSubActiveSkillList[i].CopyDataFrom(srcData.RawSubActiveSkillList[i]);
+                RawSubActiveSkillList[i].CopyDataFrom(srcEAS.RawSubActiveSkillList[i]);
             }
         }
 
-        if (SubActiveSkillTriggerLogicList.Count != srcData.SubActiveSkillTriggerLogicList.Count)
+        if (SubActiveSkillTriggerLogicList.Count != srcEAS.SubActiveSkillTriggerLogicList.Count)
         {
             Debug.LogError("EAS CopyDataFrom SubActiveSkillTriggerLogicList数量不一致");
         }
@@ -681,11 +676,11 @@ public abstract class EntityActiveSkill : IClone<EntityActiveSkill>
         {
             for (int i = 0; i < SubActiveSkillTriggerLogicList.Count; i++)
             {
-                SubActiveSkillTriggerLogicList[i].CopyDataFrom(srcData.SubActiveSkillTriggerLogicList[i]);
+                SubActiveSkillTriggerLogicList[i].CopyDataFrom(srcEAS.SubActiveSkillTriggerLogicList[i]);
             }
         }
 
-        InterruptSubActiveSkillsWhenInterrupted = srcData.InterruptSubActiveSkillsWhenInterrupted;
+        InterruptSubActiveSkillsWhenInterrupted = srcEAS.InterruptSubActiveSkillsWhenInterrupted;
     }
 }
 

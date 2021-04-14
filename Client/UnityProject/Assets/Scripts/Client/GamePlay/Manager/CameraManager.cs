@@ -9,5 +9,4 @@ public class CameraManager : MonoSingleton<CameraManager>
     public FieldCamera FieldCamera;
 
     public PostProcessVolume PostProcessVolume;
-
 }

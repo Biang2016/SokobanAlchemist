@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
-using UnityEngine;
-using UnityEngine.Serialization;
 
 [Serializable]
 public abstract class EntityBuff : IClone<EntityBuff>

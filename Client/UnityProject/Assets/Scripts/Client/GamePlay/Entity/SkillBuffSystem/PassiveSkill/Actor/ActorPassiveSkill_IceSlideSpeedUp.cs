@@ -51,14 +51,14 @@ public class ActorPassiveSkill_IceSlideSpeedUp : ActorPassiveSkill
         }
     }
 
-    protected override void ChildClone(EntityPassiveSkill newPS)
+    protected override void ChildClone(EntitySkill cloneData)
     {
-        base.ChildClone(newPS);
-        ActorPassiveSkill_IceSlideSpeedUp ps = ((ActorPassiveSkill_IceSlideSpeedUp) newPS);
+        base.ChildClone(cloneData);
+        ActorPassiveSkill_IceSlideSpeedUp ps = ((ActorPassiveSkill_IceSlideSpeedUp) cloneData);
         ps.RawEntityBuff = RawEntityBuff.Clone();
     }
 
-    public override void CopyDataFrom(EntityPassiveSkill srcData)
+    public override void CopyDataFrom(EntitySkill srcData)
     {
         base.CopyDataFrom(srcData);
         ActorPassiveSkill_IceSlideSpeedUp ps = ((ActorPassiveSkill_IceSlideSpeedUp) srcData);

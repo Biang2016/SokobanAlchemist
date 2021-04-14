@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
-using UnityEngine.Serialization;
 
 [Serializable]
 public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, EntityPassiveSkillAction.IPureAction
@@ -49,7 +48,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
             Box.DestroyBox(delegate
             {
                 WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(worldGP);
-                    if (module != null) module.GenerateEntity(EntityData.Clone(), worldGP);
+                if (module != null) module.GenerateEntity(EntityData.Clone(), worldGP);
             });
         }
     }

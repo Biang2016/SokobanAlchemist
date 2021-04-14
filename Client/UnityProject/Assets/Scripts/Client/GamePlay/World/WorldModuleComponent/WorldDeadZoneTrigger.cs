@@ -44,7 +44,7 @@ public class WorldDeadZoneTrigger : PoolObject
 
     private void CheckObject(Collider collider)
     {
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box || collider.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
+        if (collider.gameObject.layer == LayerManager.Instance.Layer_Box || collider.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
         {
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box)
@@ -53,7 +53,7 @@ public class WorldDeadZoneTrigger : PoolObject
             }
         }
 
-        if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
+        if (collider.gameObject.layer == LayerManager.Instance.Layer_ActorIndicator_Player || collider.gameObject.layer == LayerManager.Instance.Layer_ActorIndicator_Enemy)
         {
             ActorFaceHelper actorFaceHelper = collider.gameObject.GetComponent<ActorFaceHelper>();
             Actor actor = collider.gameObject.GetComponentInParent<Actor>();

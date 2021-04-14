@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
-using UnityEngine;
 
 [Serializable]
 public class EntityData : IClone<EntityData>
@@ -87,7 +84,7 @@ public class EntityData : IClone<EntityData>
     public void RemoveAllLevelEventTriggerAppearPassiveSkill()
     {
         List<EntityPassiveSkill> removeEPSList = new List<EntityPassiveSkill>();
-        foreach (EntityPassiveSkill eps in RawEntityExtraSerializeData.EntityPassiveSkills)   
+        foreach (EntityPassiveSkill eps in RawEntityExtraSerializeData.EntityPassiveSkills)
         {
             if (eps is EntityPassiveSkill_LevelEventTriggerAppear)
             {

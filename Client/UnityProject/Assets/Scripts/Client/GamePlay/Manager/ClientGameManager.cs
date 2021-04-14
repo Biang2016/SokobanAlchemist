@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using BiangLibrary.GamePlay;
 using BiangLibrary.GamePlay.UI;
 using BiangLibrary.Log;
@@ -67,6 +66,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     public DebugConsole DebugConsole;
     public DebugPanel DebugPanel;
+    public KeyBindingPanel KeyBindingPanel;
     public LoadingMapPanel LoadingMapPanel;
     public NoticePanel NoticePanel;
 
@@ -206,7 +206,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         LoadingMapPanel.CloseUIForm();
         UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>();
         DebugPanel = UIManager.Instance.ShowUIForms<DebugPanel>();
-
+        KeyBindingPanel = UIManager.Instance.ShowUIForms<KeyBindingPanel>();
+        KeyBindingPanel.CloseUIForm();
 #if !DEBUG
         UIManager.Instance.CloseUIForm<DebugPanel>();
 #endif
@@ -305,6 +306,16 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                     openWorld.ReturnToOpenWorldFormMicroWorld(false);
                 }
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            KeyBindingPanel.Display();
+        }
+
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            KeyBindingPanel.Hide();
         }
 
         if (ControlManager.Battle_LeftRotateCamera.Up)

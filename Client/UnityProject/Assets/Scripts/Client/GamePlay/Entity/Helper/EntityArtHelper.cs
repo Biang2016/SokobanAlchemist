@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using BiangLibrary.GameDataFormat.Grid;
-using Sirenix.OdinInspector;
-using UnityEngine;
-
-public class EntityArtHelper : EntityMonoHelper
+﻿public class EntityArtHelper : EntityMonoHelper
 {
     public override void OnHelperRecycled()
     {

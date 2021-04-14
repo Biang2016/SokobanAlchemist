@@ -494,13 +494,11 @@ public class FieldCamera : MonoBehaviour
 
     public PostProcessVolume PostProcessVolume => CameraManager.Instance.PostProcessVolume;
 
-    private Bloom PPV_Bloom;
     private DepthOfField PPV_DepthOfField;
 
-    private void Awake_PostProcessing()
+    public void Awake_PostProcessing()
     {
-        PPV_Bloom = PostProcessVolume.sharedProfile.GetSetting<Bloom>();
-        PPV_DepthOfField = PostProcessVolume.sharedProfile.GetSetting<DepthOfField>();
+        PPV_DepthOfField = PostProcessVolume.profile.GetSetting<DepthOfField>();
     }
 
     #endregion

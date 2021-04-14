@@ -9,14 +9,14 @@ public class EntityPassiveSkill_ProbablyShow : EntityPassiveSkill
     [LabelText("出现概率%")]
     public uint ShowProbabilityPercent = 100;
 
-    protected override void ChildClone(EntityPassiveSkill newPS)
+    protected override void ChildClone(EntitySkill cloneData)
     {
-        base.ChildClone(newPS);
-        EntityPassiveSkill_ProbablyShow newPSC = (EntityPassiveSkill_ProbablyShow) newPS;
+        base.ChildClone(cloneData);
+        EntityPassiveSkill_ProbablyShow newPSC = (EntityPassiveSkill_ProbablyShow) cloneData;
         newPSC.ShowProbabilityPercent = ShowProbabilityPercent;
     }
 
-    public override void CopyDataFrom(EntityPassiveSkill srcData)
+    public override void CopyDataFrom(EntitySkill srcData)
     {
         base.CopyDataFrom(srcData);
         EntityPassiveSkill_ProbablyShow srcPSC = (EntityPassiveSkill_ProbablyShow) srcData;

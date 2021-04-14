@@ -1,23 +1,16 @@
-﻿using System.Collections;
-using BiangLibrary.GameDataFormat.Grid;
-using BiangLibrary.GamePlay.UI;
+﻿using BiangLibrary.GamePlay.UI;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.Events;
 
 public class ActorBattleHelper : ActorMonoHelper
 {
     internal Box LastAttackBox;
 
-    [SerializeField]
-    private BoxCollider BoxCollider;
-
     public Transform HealthBarPivot;
     public InGameHealthBar InGameHealthBar;
 
     public override void OnHelperRecycled()
     {
-        BoxCollider.enabled = false;
         InGameHealthBar?.PoolRecycle();
         InGameHealthBar = null;
         base.OnHelperRecycled();
@@ -30,7 +23,6 @@ public class ActorBattleHelper : ActorMonoHelper
 
     public void Initialize()
     {
-        BoxCollider.enabled = true;
         Transform trans = UIManager.Instance.ShowUIForms<InGameUIPanel>().transform;
         InGameHealthBar = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.InGameHealthBar].AllocateGameObject<InGameHealthBar>(trans);
         InGameHealthBar.Initialize(this, 100, 30);

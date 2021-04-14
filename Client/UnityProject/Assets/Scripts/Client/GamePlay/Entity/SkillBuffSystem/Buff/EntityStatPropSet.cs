@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Profiling;
-using UnityEngine.Serialization;
 
 [Serializable]
 public class EntityStatPropSet
@@ -808,7 +807,7 @@ public class EntityStatPropSet
             }
         }
 
-        target.RawEntityDefaultBuffs = RawEntityDefaultBuffs; // 由于是干数据，此处不克隆！
+        target.RawEntityDefaultBuffs = RawEntityDefaultBuffs.Clone();
     }
 }
 

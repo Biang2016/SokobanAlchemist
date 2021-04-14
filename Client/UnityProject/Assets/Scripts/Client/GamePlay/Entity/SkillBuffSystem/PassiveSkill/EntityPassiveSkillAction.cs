@@ -1,15 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
 public abstract class EntityPassiveSkillAction : IClone<EntityPassiveSkillAction>
 {
+    [ReadOnly]
+    [HideInEditorMode]
+    public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
+
     public abstract void OnRecycled();
 
-    public virtual void Init()
+    public virtual void Init(uint initWorldModuleGUID)
     {
+        InitWorldModuleGUID = initWorldModuleGUID;
     }
 
     public virtual void UnInit()

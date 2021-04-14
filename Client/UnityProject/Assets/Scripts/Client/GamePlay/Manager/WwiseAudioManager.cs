@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AK.Wwise;
 using BiangLibrary.Singleton;
 using UnityEngine;
@@ -8,9 +7,32 @@ public class WwiseAudioManager : MonoSingleton<WwiseAudioManager>
 {
     public WwiseBGMConfiguration WwiseBGMConfiguration;
 
+    public AK.Wwise.RTPC Master_Volume;
+    public AK.Wwise.RTPC BGM_Volume;
+    public AK.Wwise.RTPC SFX_Volume;
+    public AK.Wwise.RTPC SFX_Entity_Volume;
+    public AK.Wwise.RTPC SFX_UI_Volume;
+
     void Awake()
     {
         GetBGMThemeConfigDict();
+        if (PlayerPrefs.HasKey("BGM_Volume"))
+        {
+            BGM_Volume.SetGlobalValue(PlayerPrefs.GetFloat("BGM_Volume"));
+        }
+        else
+        {
+            BGM_Volume.SetGlobalValue(100f);
+        }
+
+        if (PlayerPrefs.HasKey("SFX_Volume"))
+        {
+            SFX_Volume.SetGlobalValue(PlayerPrefs.GetFloat("SFX_Volume"));
+        }
+        else
+        {
+            SFX_Volume.SetGlobalValue(100f);
+        }
     }
 
     public void BGM_Start()

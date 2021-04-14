@@ -2,7 +2,6 @@
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
-using Debug = UnityEngine.Debug;
 
 public abstract class MapGenerator
 {

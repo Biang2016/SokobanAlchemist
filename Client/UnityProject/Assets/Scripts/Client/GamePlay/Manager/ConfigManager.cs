@@ -4,14 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BiangLibrary;
-using BiangLibrary.GameDataFormat.Grid;
-using BiangLibrary.GamePlay;
 using BiangLibrary.Singleton;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
-using UnityEngine.U2D;
+using UnityEngine.Rendering.PostProcessing;
 using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -58,6 +56,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         StaticLayout = 20000,
         World = 30000,
         FX = 31000,
+        SkyBox = 31900,
+        PostProcessingProfile = 31950,
         BattleIndicator = 32000,
     }
 
@@ -210,15 +210,17 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static Dictionary<TypeDefineType, TypeDefineConfig> TypeDefineConfigs = new Dictionary<TypeDefineType, TypeDefineConfig>
     {
-        {TypeDefineType.Box, new TypeDefineConfig<Box>("Box", "/Resources/Prefabs/Designs/Box", true, ConfigManager.TypeStartIndex.Box)},
-        {TypeDefineType.BoxIcon, new TypeDefineConfig<Texture2D>("BoxIcon", "/Resources/BoxIcons", true, ConfigManager.TypeStartIndex.BoxIcon)},
-        {TypeDefineType.Actor, new TypeDefineConfig<Actor>("Actor", "/Resources/Prefabs/Designs/Actor", true, ConfigManager.TypeStartIndex.Actor)},
-        {TypeDefineType.LevelTrigger, new TypeDefineConfig<LevelTriggerBase>("LevelTrigger", "/Resources/Prefabs/Designs/LevelTrigger", true, ConfigManager.TypeStartIndex.LevelTrigger)},
-        {TypeDefineType.WorldModule, new TypeDefineConfig<WorldModuleDesignHelper>("WorldModule", "/Designs/WorldModule", true, ConfigManager.TypeStartIndex.WorldModule)},
-        {TypeDefineType.StaticLayout, new TypeDefineConfig<WorldModuleDesignHelper>("StaticLayout", "/Designs/StaticLayout", true, ConfigManager.TypeStartIndex.StaticLayout)},
-        {TypeDefineType.World, new TypeDefineConfig<WorldDesignHelper>("World", "/Designs/Worlds", true, ConfigManager.TypeStartIndex.World)},
-        {TypeDefineType.FX, new TypeDefineConfig<FX>("FX", "/Resources/Prefabs/FX", true, ConfigManager.TypeStartIndex.FX)},
-        {TypeDefineType.BattleIndicator, new TypeDefineConfig<BattleIndicator>("BattleIndicator", "/Resources/Prefabs/BattleIndicator", true, ConfigManager.TypeStartIndex.BattleIndicator)},
+        {TypeDefineType.Box, new TypeDefineConfig<Box>("Box", "/Resources/Prefabs/Designs/Box", true, TypeStartIndex.Box)},
+        {TypeDefineType.BoxIcon, new TypeDefineConfig<Texture2D>("BoxIcon", "/Resources/BoxIcons", true, TypeStartIndex.BoxIcon)},
+        {TypeDefineType.Actor, new TypeDefineConfig<Actor>("Actor", "/Resources/Prefabs/Designs/Actor", true, TypeStartIndex.Actor)},
+        {TypeDefineType.LevelTrigger, new TypeDefineConfig<LevelTriggerBase>("LevelTrigger", "/Resources/Prefabs/Designs/LevelTrigger", true, TypeStartIndex.LevelTrigger)},
+        {TypeDefineType.WorldModule, new TypeDefineConfig<WorldModuleDesignHelper>("WorldModule", "/Designs/WorldModule", true, TypeStartIndex.WorldModule)},
+        {TypeDefineType.StaticLayout, new TypeDefineConfig<WorldModuleDesignHelper>("StaticLayout", "/Designs/StaticLayout", true, TypeStartIndex.StaticLayout)},
+        {TypeDefineType.World, new TypeDefineConfig<WorldDesignHelper>("World", "/Designs/Worlds", true, TypeStartIndex.World)},
+        {TypeDefineType.FX, new TypeDefineConfig<FX>("FX", "/Resources/Prefabs/FX", true, TypeStartIndex.FX)},
+        {TypeDefineType.BattleIndicator, new TypeDefineConfig<BattleIndicator>("BattleIndicator", "/Resources/Prefabs/BattleIndicator", true, TypeStartIndex.BattleIndicator)},
+        {TypeDefineType.SkyBox, new TypeDefineConfig<Material>("SkyBox", "/Resources/SkyBox", true, TypeStartIndex.SkyBox)},
+        {TypeDefineType.PostProcessingProfile, new TypeDefineConfig<PostProcessProfile>("PostProcessingProfile", "/Resources/PostProcessingProfile", true, TypeStartIndex.PostProcessingProfile)},
     };
 
     [ShowInInspector]
@@ -363,6 +365,18 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
 
         EditorUtility.DisplayDialog("Notice", "SerializeConfigForThisModuleOrWorld Success", "Confirm");
+    }
+
+    [MenuItem("Assets/CleanRedundantDataInPrefab", priority = -50)]
+    public static void CleanRedundantDataInPrefab()
+    {
+        GameObject[] selectedGOs = Selection.gameObjects;
+        foreach (GameObject go in selectedGOs)
+        {
+            EditorUtility.SetDirty(go);
+        }
+
+        AssetDatabase.SaveAssets();
     }
 
     private static void ExportTypeGUIDMapping()
@@ -1203,7 +1217,18 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         TypeDefineConfigs[TypeDefineType.World].ExportTypeNames(); // todo 判断是否要删掉此行
         return TypeDefineConfigs[TypeDefineType.World].GetTypeAssetDataBasePath(worldName);
     }
+
 #endif
+
+    public static Material GetSkyBoxByName(string skyBoxTypeName)
+    {
+        return Resources.Load<Material>($"SkyBox/{skyBoxTypeName}");
+    }
+
+    public static PostProcessProfile GetPostProcessingProfileByName(string postProcessingProfileTypeName)
+    {
+        return Resources.Load<PostProcessProfile>($"PostProcessingProfile/{postProcessingProfileTypeName}");
+    }
 
     #endregion
 }

@@ -23,6 +23,8 @@ namespace NodeCanvas.Framework
     [System.Serializable, fsSerializeAsReference, fsDeserializeOverwrite]
     abstract public partial class Node : IGraphElement, ISerializationCollectable
     {
+        internal Actor Actor => graph.Actor;
+        internal WorldModule WorldModule => graph.WorldModule;
 
         //----------------------------------------------------------------------------------------------
         ///Add on an IList (list/array) field to autosort it automatically when the children nodes are autosorted.

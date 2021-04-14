@@ -21,7 +21,7 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
     {
         [LabelText("@\"角色类型\t\"+RequiredActorType")]
         [PropertyOrder(-1)]
-        public TypeSelectHelper RequiredActorType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Actor };
+        public TypeSelectHelper RequiredActorType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Actor};
 
         [LabelText("角色至少停留时间/s")]
         [PropertyOrder(-1)]
@@ -50,7 +50,7 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
     {
         if (!IsRecycled)
         {
-            if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
+            if (collider.gameObject.layer == LayerManager.Instance.Layer_ActorIndicator_Player || collider.gameObject.layer == LayerManager.Instance.Layer_ActorIndicator_Enemy)
             {
                 Actor actor = collider.gameObject.GetComponentInParent<Actor>();
                 if (actor.IsNotNullAndAlive())
@@ -114,7 +114,7 @@ public class LevelTrigger_ActorEnterTrigger : LevelTriggerBase
     {
         if (!IsRecycled)
         {
-            if (collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Player || collider.gameObject.layer == LayerManager.Instance.Layer_HitBox_Enemy)
+            if (collider.gameObject.layer == LayerManager.Instance.Layer_ActorIndicator_Player || collider.gameObject.layer == LayerManager.Instance.Layer_ActorIndicator_Enemy)
             {
                 Actor actor = collider.gameObject.GetComponentInParent<Actor>();
                 if (actor != null) // 此处不判断角色是否死亡

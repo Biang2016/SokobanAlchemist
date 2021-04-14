@@ -411,9 +411,17 @@ public class DebugPanel : BaseUIPanel
         Time.timeScale = value;
     }
 
-    //[DebugSlider("Audio/BGM", 1, 0, 1)]
-    //public void BGM_Volume(float value)
-    //{
-    //    AudioManager.Instance.BGMSetVolume(value);
-    //}
+    [DebugSlider("Audio/BGM", 100, 0, 100)]
+    public void BGM_Volume(float value)
+    {
+        PlayerPrefs.SetFloat("BGM_Volume", value);
+        WwiseAudioManager.Instance.BGM_Volume.SetGlobalValue(value);
+    }
+
+    [DebugSlider("Audio/SFX", 100, 0, 100)]
+    public void SFX_Volume(float value)
+    {
+        PlayerPrefs.SetFloat("SFX_Volume", value);
+        WwiseAudioManager.Instance.SFX_Volume.SetGlobalValue(value);
+    }
 }

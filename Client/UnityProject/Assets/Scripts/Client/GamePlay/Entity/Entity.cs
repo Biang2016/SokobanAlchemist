@@ -135,7 +135,7 @@ public abstract class Entity : PoolObject
 
     public GridPosR.Orientation EntityOrientation { get; protected set; }
 
-    internal virtual void SwitchEntityOrientation(GridPosR.Orientation entityOrientation, bool forSetup = false)
+    internal virtual void SwitchEntityOrientation(GridPosR.Orientation entityOrientation)
     {
         EntityOrientation = entityOrientation;
     }
@@ -242,13 +242,13 @@ public abstract class Entity : PoolObject
 
     #region EntityExtraData
 
-    public void ApplyEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeDataFromModule = null)
+    public void ApplyEntityExtraSerializeData(EntityExtraSerializeData rawEntityExtraSerializeDataFromModule = null)
     {
-        if (entityExtraSerializeDataFromModule != null)
+        if (rawEntityExtraSerializeDataFromModule != null)
         {
-            foreach (EntityPassiveSkill extraPS in entityExtraSerializeDataFromModule.EntityPassiveSkills)
+            foreach (EntityPassiveSkill rawExtraPS in rawEntityExtraSerializeDataFromModule.EntityPassiveSkills)
             {
-                EntityPassiveSkill newPS = extraPS.Clone();
+                EntityPassiveSkill newPS = (EntityPassiveSkill) rawExtraPS.Clone();
                 AddNewPassiveSkill(newPS, true);
             }
         }
@@ -293,7 +293,7 @@ public abstract class Entity : PoolObject
         {
             foreach (EntityPassiveSkill rawAPS in RawEntityPassiveSkills)
             {
-                EntityPassiveSkill ps = rawAPS.Clone();
+                EntityPassiveSkill ps = (EntityPassiveSkill) rawAPS.Clone();
                 EntityPassiveSkills.Add(ps);
                 ps.IsAddedDuringGamePlay = false;
                 ps.Entity = this;
@@ -359,7 +359,7 @@ public abstract class Entity : PoolObject
         {
             foreach (EntityPassiveSkill rawAPS in RawEntityPassiveSkills)
             {
-                EntityPassiveSkill ps = rawAPS.Clone();
+                EntityPassiveSkill ps = (EntityPassiveSkill) rawAPS.Clone();
                 EntityPassiveSkills.Add(ps);
                 ps.IsAddedDuringGamePlay = false;
                 ps.Entity = this;
@@ -442,7 +442,7 @@ public abstract class Entity : PoolObject
         {
             foreach (EntityActiveSkill rawEAS in RawEntityActiveSkills)
             {
-                EntityActiveSkill eas = rawEAS.Clone();
+                EntityActiveSkill eas = (EntityActiveSkill) rawEAS.Clone();
                 AddNewActiveSkill(eas, false);
             }
         }

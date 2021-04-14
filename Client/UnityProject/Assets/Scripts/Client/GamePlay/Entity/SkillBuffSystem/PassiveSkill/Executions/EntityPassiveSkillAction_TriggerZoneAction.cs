@@ -14,15 +14,15 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
         ActorStayTimeDict.Clear();
     }
 
-    public override void Init()
+    public override void Init(uint initWorldModuleGUID)
     {
-        base.Init();
+        base.Init(initWorldModuleGUID);
         foreach (IPureAction pureAction in EntityActions_Enter)
         {
             if (pureAction is EntityPassiveSkillAction action)
             {
                 action.Entity = Entity;
-                action.Init();
+                action.Init(InitWorldModuleGUID);
             }
         }
 
@@ -31,7 +31,7 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
             if (pureAction is EntityPassiveSkillAction action)
             {
                 action.Entity = Entity;
-                action.Init();
+                action.Init(InitWorldModuleGUID);
             }
         }
 
@@ -40,7 +40,7 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
             if (pureAction is EntityPassiveSkillAction action)
             {
                 action.Entity = Entity;
-                action.Init();
+                action.Init(InitWorldModuleGUID);
             }
         }
     }

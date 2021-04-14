@@ -1,5 +1,4 @@
-﻿using BiangLibrary.GameDataFormat;
-using BiangLibrary.GameDataFormat.Grid;
+﻿using BiangLibrary.GameDataFormat.Grid;
 
 public sealed class AroundMapGenerator : MapGenerator
 {

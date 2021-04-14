@@ -39,14 +39,14 @@ public class EntityActiveSkill_AddEntityBuff : EntityActiveSkill_AreaCast
         yield return base.Cast(castDuration);
     }
 
-    protected override void ChildClone(EntityActiveSkill cloneData)
+    protected override void ChildClone(EntitySkill cloneData)
     {
         base.ChildClone(cloneData);
         EntityActiveSkill_AddEntityBuff newAAS = (EntityActiveSkill_AddEntityBuff) cloneData;
         newAAS.RawEntityBuffs = RawEntityBuffs.Clone();
     }
 
-    public override void CopyDataFrom(EntityActiveSkill srcData)
+    public override void CopyDataFrom(EntitySkill srcData)
     {
         base.CopyDataFrom(srcData);
         EntityActiveSkill_AddEntityBuff srcAAS = (EntityActiveSkill_AddEntityBuff) srcData;

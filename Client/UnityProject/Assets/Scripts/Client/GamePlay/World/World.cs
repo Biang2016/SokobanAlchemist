@@ -98,36 +98,36 @@ public class World : PoolObject
 
         #region DeadZoneWorldModules
 
-        for (int x = 0; x < WORLD_SIZE; x++)
-        {
-            for (int y = 0; y < WORLD_HEIGHT; y++)
-            {
-                for (int z = 1; z < WORLD_SIZE; z++)
-                {
-                    ushort index = WorldData.ModuleMatrix[x, y, z];
-                    ushort index_before = WorldData.ModuleMatrix[x, y, z - 1];
-                    if (index == 0 && index_before != 0)
-                    {
-                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
-                    }
+        //for (int x = 0; x < WORLD_SIZE; x++)
+        //{
+        //    for (int y = 0; y < WORLD_HEIGHT; y++)
+        //    {
+        //        for (int z = 1; z < WORLD_SIZE; z++)
+        //        {
+        //            ushort index = WorldData.ModuleMatrix[x, y, z];
+        //            ushort index_before = WorldData.ModuleMatrix[x, y, z - 1];
+        //            if (index == 0 && index_before != 0)
+        //            {
+        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
+        //            }
 
-                    if (index != 0 && index_before == 0)
-                    {
-                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z - 1);
-                    }
+        //            if (index != 0 && index_before == 0)
+        //            {
+        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z - 1);
+        //            }
 
-                    if (z == 1 && index_before != 0)
-                    {
-                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, -1);
-                    }
+        //            if (z == 1 && index_before != 0)
+        //            {
+        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, -1);
+        //            }
 
-                    if (z == WORLD_SIZE - 1 && index != 0)
-                    {
-                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, WORLD_SIZE);
-                    }
-                }
-            }
-        }
+        //            if (z == WORLD_SIZE - 1 && index != 0)
+        //            {
+        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, WORLD_SIZE);
+        //            }
+        //        }
+        //    }
+        //}
 
         for (int x = 0; x < WORLD_SIZE; x++)
         {
@@ -160,36 +160,36 @@ public class World : PoolObject
             }
         }
 
-        for (int y = 0; y < WORLD_HEIGHT; y++)
-        {
-            for (int z = 0; z < WORLD_SIZE; z++)
-            {
-                for (int x = 1; x < WORLD_SIZE; x++)
-                {
-                    ushort index = WorldData.ModuleMatrix[x, y, z];
-                    ushort index_before = WorldData.ModuleMatrix[x - 1, y, z];
-                    if (index == 0 && index_before != 0)
-                    {
-                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
-                    }
+        //for (int y = 0; y < WORLD_HEIGHT; y++)
+        //{
+        //    for (int z = 0; z < WORLD_SIZE; z++)
+        //    {
+        //        for (int x = 1; x < WORLD_SIZE; x++)
+        //        {
+        //            ushort index = WorldData.ModuleMatrix[x, y, z];
+        //            ushort index_before = WorldData.ModuleMatrix[x - 1, y, z];
+        //            if (index == 0 && index_before != 0)
+        //            {
+        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
+        //            }
 
-                    if (index != 0 && index_before == 0)
-                    {
-                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x - 1, y, z);
-                    }
+        //            if (index != 0 && index_before == 0)
+        //            {
+        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x - 1, y, z);
+        //            }
 
-                    if (x == 1 && index_before != 0)
-                    {
-                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, -1, y, z);
-                    }
+        //            if (x == 1 && index_before != 0)
+        //            {
+        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, -1, y, z);
+        //            }
 
-                    if (x == WORLD_SIZE - 1 && index != 0)
-                    {
-                        yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, WORLD_SIZE, y, z);
-                    }
-                }
-            }
-        }
+        //            if (x == WORLD_SIZE - 1 && index != 0)
+        //            {
+        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, WORLD_SIZE, y, z);
+        //            }
+        //        }
+        //    }
+        //}
 
         #endregion
 
@@ -572,6 +572,8 @@ public class World : PoolObject
             GridPos3D gridGP = offset + box_src.WorldGP;
             GridPos3D gridGP_after = gridGP + direction;
             Box box_after = GetBoxByGridPosition(gridGP_after, out WorldModule module_after, out GridPos3D localGP_after);
+            bool isGroundedAfter = CheckIsGroundByPos(gridGP_after, 5f, false, out GridPos3D _);
+            if (!isGroundedAfter) return false;
 
             if (!module_after.IsNotNullAndAvailable()) return false;
             bool beBlockedByOtherBox = box_after != null && box_after != box_src && !boxes_moveable.Contains(box_after);
@@ -1247,7 +1249,7 @@ public class World : PoolObject
             foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 Vector3 gridWorldPos = offset + box.WorldGP;
-                Collider[] colliders = Physics.OverlapBox(gridWorldPos + Vector3.down * 0.5f, Vector3.one * 0.4f, Quaternion.identity, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
+                Collider[] colliders = Physics.OverlapBox(gridWorldPos + Vector3.down * 0.5f, Vector3.one * 0.4f, Quaternion.identity, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_ActorIndicator_Player | LayerManager.Instance.LayerMask_ActorIndicator_Enemy);
                 foreach (Collider collider in colliders)
                 {
                     Entity entityBeneath = collider.GetComponentInParent<Entity>();
@@ -1323,6 +1325,16 @@ public class World : PoolObject
         }
 
         return false;
+    }
+
+    public void ApplyWorldVisualEffectSettings(WorldData worldData)
+    {
+        CameraManager.Instance.FieldCamera.SetTargetConfigData(worldData.CameraConfigData);
+        RenderSettings.skybox = ConfigManager.GetSkyBoxByName(worldData.SkyBoxType.TypeName);
+        CameraManager.Instance.FieldCamera.PostProcessVolume.profile = ConfigManager.GetPostProcessingProfileByName(worldData.PostProcessingProfileType.TypeName);
+        CameraManager.Instance.FieldCamera.Awake_PostProcessing();
+        CameraManager.Instance.FieldCamera.Distance_Level = 3;
+        CameraManager.Instance.FieldCamera.InitFocus();
     }
 
     public virtual void ShutDown()

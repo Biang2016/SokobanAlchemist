@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using BiangLibrary;
-using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay.UI;
 using BiangLibrary.Messenger;
@@ -126,13 +122,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     public void StartBattle()
     {
-        if (WorldManager.Instance.CurrentWorld.WorldData.UseSpecialCameraConfig)
-        {
-            CameraManager.Instance.FieldCamera.SetTargetConfigData(WorldManager.Instance.CurrentWorld.WorldData.CameraConfigData);
-        }
-
-        CameraManager.Instance.FieldCamera.InitFocus();
-
+        WorldManager.Instance.CurrentWorld.ApplyWorldVisualEffectSettings(WorldManager.Instance.CurrentWorld.WorldData);
         if (WorldManager.Instance.CurrentWorld.WorldData.UseSpecialPlayerEnterESPS)
         {
             Player1.ReloadESPS(WorldManager.Instance.CurrentWorld.WorldData.Raw_PlayerEnterESPS);

@@ -108,7 +108,7 @@ public class PlayerControllerHelper : ActorMonoHelper
                     {
                         // Check is there any actor occupies the grid
                         bool isActorOccupying = false;
-                        Collider[] colliders = Physics.OverlapSphere(targetPos, 0.4f, LayerManager.Instance.LayerMask_HitBox_Player | LayerManager.Instance.LayerMask_HitBox_Enemy);
+                        Collider[] colliders = Physics.OverlapSphere(targetPos, 0.4f, LayerManager.Instance.LayerMask_ActorIndicator_Player | LayerManager.Instance.LayerMask_ActorIndicator_Enemy);
                         foreach (Collider collider in colliders)
                         {
                             Actor actor = collider.GetComponentInParent<Actor>();
@@ -265,6 +265,17 @@ public class PlayerControllerHelper : ActorMonoHelper
             // 相机视角旋转后移动也相应旋转
             Actor.CurMoveAttempt = RotateMoveDirectionByCameraRotation(Actor.CurMoveAttempt);
 
+            GridPos3D targetWorldGP = Actor.WorldGP + Actor.CurMoveAttempt.ToGridPos3D();
+            bool isGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(targetWorldGP, 3f, true, out GridPos3D groundGP);
+            if (!isGrounded)
+            {
+                Actor.CurForward = Actor.CurMoveAttempt.normalized;
+                Actor.CurMoveAttempt = Vector3.zero;
+                isQuickMoving = false;
+                quickMoveStartWorldGP = GridPos3D.Zero;
+                quickMoveAttempt = Vector3.zero;
+            }
+
             Actor.MoveInternal();
 
             #endregion
@@ -334,7 +345,7 @@ public class PlayerControllerHelper : ActorMonoHelper
 
             if (BS_Skill_1.Down)
             {
-                Actor.VaultOrDash(BS_Up.Pressed || BS_Down.Pressed || BS_Left.Pressed || BS_Right.Pressed);
+                TriggerSkill(EntitySkillIndex.Skill_1);
             }
 
             if (BS_Skill_0.Down)
@@ -349,7 +360,7 @@ public class PlayerControllerHelper : ActorMonoHelper
 
             if (BS_Skill_3.Down)
             {
-                Actor.SetJumpUpTargetHeight(Actor.ActiveJumpForce, 1, false);
+                TriggerSkill(EntitySkillIndex.Skill_2);
             }
 
             #endregion

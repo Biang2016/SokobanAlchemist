@@ -36,6 +36,14 @@ public class WorldDesignHelper : MonoBehaviour
     [ShowIf("UseSpecialCameraConfig")]
     public FieldCamera.CameraConfigData CameraConfigData = new FieldCamera.CameraConfigData();
 
+    [BoxGroup("相机配置")]
+    [LabelText("天空盒材质类型")]
+    public TypeSelectHelper SkyBoxType = new TypeSelectHelper {TypeDefineType = TypeDefineType.SkyBox};
+
+    [BoxGroup("相机配置")]
+    [LabelText("后处理配置类型")]
+    public TypeSelectHelper PostProcessingProfileType = new TypeSelectHelper {TypeDefineType = TypeDefineType.PostProcessingProfile};
+
 #if UNITY_EDITOR
     public WorldData ExportWorldData()
     {
@@ -54,8 +62,9 @@ public class WorldDesignHelper : MonoBehaviour
         worldData.DefaultWorldActorBornPointAlias = DefaultWorldActorBornPointAlias;
         worldData.UseSpecialPlayerEnterESPS = UseSpecialPlayerEnterESPS;
         Raw_PlayerEnterESPS.ApplyDataTo(worldData.Raw_PlayerEnterESPS);
-        worldData.UseSpecialCameraConfig = UseSpecialCameraConfig;
         CameraConfigData.ApplyTo(worldData.CameraConfigData, true);
+        worldData.SkyBoxType = SkyBoxType.Clone();
+        worldData.PostProcessingProfileType = PostProcessingProfileType.Clone();
         foreach (WorldModuleDesignHelper module in modules)
         {
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(module.transform, WorldModule.MODULE_SIZE);

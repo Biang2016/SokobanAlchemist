@@ -160,6 +160,12 @@ namespace BiangLibrary.GamePlay.UI
             return (T) baseUIForm;
         }
 
+        public BaseUIPanel GetBaseUIForm(string uiFormName)
+        {
+            AllUIFormDict.TryGetValue(uiFormName, out BaseUIPanel baseUIForm);
+            return baseUIForm;
+        }
+
         #region 显示“UI管理器”内部核心数据，测试使用
 
         /// <summary>

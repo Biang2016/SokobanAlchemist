@@ -7,9 +7,7 @@ using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using Sirenix.Utilities;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 [Serializable]
@@ -418,7 +416,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         return entitySet;
     }
 
-    protected override void ChildClone(EntityActiveSkill cloneData)
+    protected override void ChildClone(EntitySkill cloneData)
     {
         base.ChildClone(cloneData);
         EntityActiveSkill_AreaCast newEAS = (EntityActiveSkill_AreaCast) cloneData;
@@ -439,7 +437,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         newEAS.CastFX = CastFX.Clone();
     }
 
-    public override void CopyDataFrom(EntityActiveSkill srcData)
+    public override void CopyDataFrom(EntitySkill srcData)
     {
         base.CopyDataFrom(srcData);
         EntityActiveSkill_AreaCast srcEAS = (EntityActiveSkill_AreaCast) srcData;

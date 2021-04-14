@@ -22,7 +22,7 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
                 actor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
                 Box.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.FrozenBeCollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
             }
-            else if (collision.gameObject.layer == LayerManager.Instance.Layer_HitBox_Box || collision.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
+            else if (collision.gameObject.layer == LayerManager.Instance.Layer_Box || collision.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
             {
                 Box targetBox = collision.gameObject.GetComponentInParent<Box>();
                 if (targetBox.FrozenActor.IsNotNullAndAlive())
@@ -52,10 +52,5 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
     {
         base.OnDestroyEntity();
         Box.FrozenActor = null;
-    }
-
-    public override void CopyDataFrom(EntityPassiveSkill srcData)
-    {
-        base.CopyDataFrom(srcData);
     }
 }

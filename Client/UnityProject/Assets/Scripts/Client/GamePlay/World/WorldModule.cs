@@ -412,7 +412,7 @@ public class WorldModule : PoolObject
                 Callback<string> cb = null;
                 cb = (eventAlias) =>
                 {
-                    if (eventAlias.Equals(dataClone.AppearLevelEventAlias))
+                    if (dataClone.AppearLevelEventAlias.CheckEventAliasOrStateBool(eventAlias, GUID))
                     {
                         GenerateLevelTrigger(dataClone);
                         ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, cb);

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using BiangLibrary.GameDataFormat;
-using UnityEngine;
 
 public sealed class CellularAutomataTerrainGenerator
 {
