@@ -22,8 +22,8 @@ namespace AK
         static const AkUniqueID ICEENEMY_CYAN_ONSKILLCAST_0 = 2419922771U;
         static const AkUniqueID ICEENEMY_CYAN_ONSKILLCAST_1 = 2419922770U;
         static const AkUniqueID LIFEBOX_ONBEINGKICKED = 137324230U;
-        static const AkUniqueID PLAYER_ONKICK = 3527200472U;
         static const AkUniqueID PLAYER_ONSKILLCAST_0 = 1052167317U;
+        static const AkUniqueID PLAYER_ONVAULT = 3845548790U;
         static const AkUniqueID WOODENBOX_ONBEINGKICKED = 3669812430U;
         static const AkUniqueID WOODENBOX_ONBEINGPUSHED = 15596056U;
     } // namespace EVENTS
@@ -64,15 +64,6 @@ namespace AK
         } // namespace BGM_THEME
 
     } // namespace STATES
-
-    namespace GAME_PARAMETERS
-    {
-        static const AkUniqueID BGM_VOLUME = 341651998U;
-        static const AkUniqueID MASTER_VOLUME = 4179668880U;
-        static const AkUniqueID SFX_ENTITY_VOLUME = 3942311461U;
-        static const AkUniqueID SFX_UI_VOLUME = 2698376064U;
-        static const AkUniqueID SFX_VOLUME = 1564184899U;
-    } // namespace GAME_PARAMETERS
 
     namespace BANKS
     {
