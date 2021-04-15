@@ -61,7 +61,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
                 // 删除无法连接的闪电
                 foreach (EntityLightning lightning in EntityLightnings)
                 {
-                    if (!lightning.EndGeneratorHelper.Entity.IsNotNullAndAlive())
+                    if (!lightning.EndGeneratorHelper.Entity.IsNotNullAndAlive() || !lightning.EndGeneratorHelper.gameObject.activeInHierarchy)
                     {
                         cached_removeLightnings.Add(lightning);
                     }
@@ -91,6 +91,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
                         if (entity.GUID < Entity.GUID) continue; // 每个电塔只连接GUID更大的
                         foreach (EntityLightningGeneratorHelper helper in entity.EntityLightningGeneratorHelpers)
                         {
+                            if (!helper.gameObject.activeInHierarchy) continue;
                             bool alreadyConnect = false;
                             foreach (EntityLightning lightning in EntityLightnings)
                             {
