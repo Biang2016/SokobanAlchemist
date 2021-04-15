@@ -12,21 +12,28 @@ public abstract class EntitySkill : IClone<EntitySkill>
     [Required]
     public string SkillAlias;
 
+    [LabelText("技能描述")]
+    [ShowInInspector]
+    [PropertyOrder(-1)]
+    protected virtual string Description => SkillAlias;
+
     public EntitySkill Clone()
     {
         Type type = GetType();
         EntitySkill newES = (EntitySkill) Activator.CreateInstance(type);
+        newES.SkillGUID = SkillGUID;
+        newES.SkillAlias = SkillAlias;
         ChildClone(newES);
         return newES;
     }
 
     protected virtual void ChildClone(EntitySkill cloneData)
     {
-        cloneData.SkillGUID = SkillGUID;
     }
 
     public virtual void CopyDataFrom(EntitySkill srcData)
     {
         SkillGUID = srcData.SkillGUID;
+        SkillAlias = srcData.SkillAlias;
     }
 }

@@ -1282,7 +1282,7 @@ public class World : PoolObject
                     CheckDropAbove(box); // 递归，检查上方箱子是否坠落
                     GridPos3D boxNewWorldGP = box.WorldGP + GridPos3D.Down;
                     GetBoxByGridPosition(boxNewWorldGP, out WorldModule newModule, out GridPos3D localGP);
-                    box.Initialize(boxNewWorldGP, newModule, 1f, box.ArtOnly, Box.LerpType.Drop);
+                    box.Initialize(boxNewWorldGP, newModule, 0.1f, box.ArtOnly, Box.LerpType.Drop);
                 }
             }
         }

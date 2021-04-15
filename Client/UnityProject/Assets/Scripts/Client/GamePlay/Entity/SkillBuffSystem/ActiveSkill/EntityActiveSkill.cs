@@ -58,11 +58,6 @@ public abstract class EntityActiveSkill : EntitySkill
     internal float cooldownTimeTick = 0f;
     internal float currentExecutingCooldownTime = 0f; // 本次技能释放时取用的冷却时间
 
-    [LabelText("技能描述")]
-    [ShowInInspector]
-    [PropertyOrder(-1)]
-    protected abstract string Description { get; }
-
     [LabelText("前摇可移动")]
     public bool WingUpCanMove;
 
@@ -602,7 +597,6 @@ public abstract class EntityActiveSkill : EntitySkill
         newEAS.CastCanMove = CastCanMove;
         newEAS.RecoverCanMove = RecoverCanMove;
         newEAS.EntitySkillIndex = EntitySkillIndex;
-        newEAS.SkillAlias = SkillAlias;
         newEAS.RawSubActiveSkillList = RawSubActiveSkillList.Clone();
         newEAS.SubActiveSkillTriggerLogicList = SubActiveSkillTriggerLogicList.Clone();
         newEAS.InterruptSubActiveSkillsWhenInterrupted = InterruptSubActiveSkillsWhenInterrupted;
@@ -617,7 +611,6 @@ public abstract class EntityActiveSkill : EntitySkill
         CastCanMove = srcEAS.CastCanMove;
         RecoverCanMove = srcEAS.RecoverCanMove;
         EntitySkillIndex = srcEAS.EntitySkillIndex;
-        SkillAlias = srcEAS.SkillAlias;
         if (RawSubActiveSkillList.Count != srcEAS.RawSubActiveSkillList.Count)
         {
             Debug.LogError("EAS CopyDataFrom RawSubActiveSkillList数量不一致");

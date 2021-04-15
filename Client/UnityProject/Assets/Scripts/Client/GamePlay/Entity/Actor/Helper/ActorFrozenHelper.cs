@@ -43,7 +43,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
                         List<EntityPassiveSkill> actorFrozenBoxPassiveSkills = actor.RawFrozenBoxPassiveSkills.Clone();
                         foreach (EntityPassiveSkill abf in actorFrozenBoxPassiveSkills)
                         {
-                            FrozenBox.AddNewPassiveSkill(abf, true);
+                            FrozenBox.AddNewPassiveSkill(abf);
                         }
 
                         FrozenBox.FrozenActor = actor;

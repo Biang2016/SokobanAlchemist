@@ -25,40 +25,48 @@ public class EntitySkillEditorWindow : EditorWindow
     private void OnGUI()
     {
         EditorGUILayout.LabelField("");
-        if (GUILayout.Button("所有Actor主动技能迁移"))
+        if (GUILayout.Button("所有Entity被动技能迁移"))
         {
-            //    ConfigManager.LoadAllConfigs();
-            //    foreach (string actorName in ConfigManager.GetAllTypeNames(TypeDefineType.Actor, false))
+            //ConfigManager.LoadAllConfigs();
+            //foreach (string actorName in ConfigManager.GetAllTypeNames(TypeDefineType.Actor, false))
+            //{
+            //    GameObject actorPrefab = ConfigManager.FindActorPrefabByName(actorName);
+            //    Actor actor = actorPrefab.GetComponent<Actor>();
+            //    foreach (EntityPassiveSkill eps in actor.RawEntityPassiveSkills)
             //    {
-            //        GameObject actorPrefab = ConfigManager.FindActorPrefabByName(actorName);
-            //        Actor actor = actorPrefab.GetComponent<Actor>();
-            //        foreach (EntityActiveSkill eas in actor.RawEntityActiveSkills)
-            //        {
-            //            EntityActiveSkill eas_clone = (EntityActiveSkill) eas.Clone();
-            //            EntitySkillSSO esSSO = SerializedScriptableObject.CreateInstance<EntitySkillSSO>();
-            //            esSSO.EntitySkill = eas_clone;
-
-            //            Queue<EntityActiveSkill> subActiveSkillQueue = new Queue<EntityActiveSkill>();
-            //            subActiveSkillQueue.Enqueue(eas_clone);
-            //            while (subActiveSkillQueue.Count>0)
-            //            {
-            //                EntityActiveSkill curEAS = subActiveSkillQueue.Dequeue();
-            //                EntityStatPropSet.SkillPropertyCollection skillProperty_clone = new EntityStatPropSet.SkillPropertyCollection();
-            //                actor.RawEntityStatPropSet.SkillsPropertyCollections[(int)curEAS.EntitySkillIndex].ApplyDataTo(skillProperty_clone);
-            //                esSSO.EntityActiveSkillPropertyCollections.Add(skillProperty_clone);
-            //                skillProperty_clone.skillAlias = curEAS.SkillAlias;
-            //                foreach (EntityActiveSkill subEAS in curEAS.RawSubActiveSkillList)
-            //                {
-            //                    subActiveSkillQueue.Enqueue(subEAS);
-            //                }
-            //            }
-
-            //            esSSO.GenerateEntitySkillGUID();
-            //            esSSO.name = eas_clone.SkillAlias;
-            //            AssetDatabase.CreateAsset(esSSO, $"Assets/Designs/EntitySkill/EntityActiveSkill/{esSSO.name}_{esSSO.EntitySkill.SkillGUID}.asset");
-            //            AssetDatabase.SaveAssets();
-            //        }
+            //        EntityPassiveSkill eps_clone = (EntityPassiveSkill) eps.Clone();
+            //        EntitySkillSSO esSSO = SerializedScriptableObject.CreateInstance<EntitySkillSSO>();
+            //        esSSO.EntitySkill = eps_clone;
+            //        esSSO.GenerateEntitySkillGUID();
+            //        esSSO.name = eps_clone.SkillAlias;
+            //        AssetDatabase.CreateAsset(esSSO, $"Assets/Designs/EntitySkill/EntityPassiveSkill/Actor/{esSSO.name}_{esSSO.EntitySkill.SkillGUID}.asset");
+            //        AssetDatabase.SaveAssets();
+            //        actor.RawEntityPassiveSkillSSOs.Add(esSSO);
             //    }
+
+            //    EditorUtility.SetDirty(actor.gameObject);
+            //}
+
+            //foreach (string boxName in ConfigManager.GetAllTypeNames(TypeDefineType.Box, false))
+            //{
+            //    GameObject boxPrefab = ConfigManager.FindBoxPrefabByName(boxName);
+            //    Box box = boxPrefab.GetComponent<Box>();
+            //    foreach (EntityPassiveSkill eps in box.RawEntityPassiveSkills)
+            //    {
+            //        EntityPassiveSkill eps_clone = (EntityPassiveSkill) eps.Clone();
+            //        EntitySkillSSO esSSO = SerializedScriptableObject.CreateInstance<EntitySkillSSO>();
+            //        esSSO.EntitySkill = eps_clone;
+            //        esSSO.GenerateEntitySkillGUID();
+            //        esSSO.name = eps_clone.SkillAlias;
+            //        AssetDatabase.CreateAsset(esSSO, $"Assets/Designs/EntitySkill/EntityPassiveSkill/Box/{esSSO.name}_{esSSO.EntitySkill.SkillGUID}.asset");
+            //        AssetDatabase.SaveAssets();
+            //        box.RawEntityPassiveSkillSSOs.Add(esSSO);
+            //    }
+
+            //    EditorUtility.SetDirty(box.gameObject);
+            //}
+
+            //AssetDatabase.SaveAssets();
         }
     }
 }

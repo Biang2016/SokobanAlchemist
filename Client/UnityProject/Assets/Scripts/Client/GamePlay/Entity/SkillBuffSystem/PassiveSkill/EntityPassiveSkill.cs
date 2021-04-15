@@ -13,11 +13,6 @@ public abstract class EntityPassiveSkill : EntitySkill
     [HideInEditorMode]
     public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
 
-    [LabelText("技能描述")]
-    [ShowInInspector]
-    [PropertyOrder(-1)]
-    protected abstract string Description { get; }
-
     #region Conditions
 
     public virtual void OnInit()

@@ -10,6 +10,18 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "EntitySkillSSO")]
 public class EntitySkillSSO : SerializedScriptableObject
 {
+#if UNITY_EDITOR
+    [Button("刷新Asset名称", ButtonSizes.Large)]
+    public void RefreshAssetName()
+    {
+        if (EntitySkill != null)
+        {
+            string path = AssetDatabase.GetAssetPath(this);
+            AssetDatabase.RenameAsset(path, $"{EntitySkill.SkillAlias}_{EntitySkill.SkillGUID}");
+        }
+    }
+#endif
+
     [BoxGroup("技能")]
     [HideLabel]
     [InlineProperty]
@@ -28,16 +40,4 @@ public class EntitySkillSSO : SerializedScriptableObject
             EntitySkill.SkillGUID = Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
         }
     }
-
-#if UNITY_EDITOR
-    [Button("刷新Asset名称")]
-    public void RefreshAssetName()
-    {
-        if (EntitySkill != null)
-        {
-            string path = AssetDatabase.GetAssetPath(this);
-            AssetDatabase.RenameAsset(path, $"{EntitySkill.SkillAlias}_{EntitySkill.SkillGUID}");
-        }
-    }
-#endif
 }
