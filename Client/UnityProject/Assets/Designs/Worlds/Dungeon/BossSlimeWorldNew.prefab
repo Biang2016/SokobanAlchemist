@@ -80,27 +80,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WorldFeature: 0
   DefaultWorldActorBornPointAlias: Boss_Slime_New
-  UseSpecialPlayerEnterESPS: 0
+  UseSpecialPlayerEnterESPS: 1
   Raw_PlayerEnterESPS:
     Gold:
       _value: 0
       _minValue: 0
-      _maxValue: 0
+      _maxValue: 99999
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     HealthDurability:
-      _value: 0
+      _value: 40
       _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
+      _maxValue: 40
+      AutoChange: 1
       AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
+      AutoChangeTimeInterval: 5000
     MaxHealthDurability:
-      BaseValue: 0
+      BaseValue: 40
       ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
+      MinValue: 1
+      MaxValue: 10000
     DropFromAirSurviveProbabilityPercent:
       _value: 0
       _minValue: 0
@@ -112,58 +112,58 @@ MonoBehaviour:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     BoxCollideDamageSelf:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     CollideDamage:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     FrozenBeCollideDamage:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 10
     CollideDamageX:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     CollideDamageZ:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     BeCollidedHitStopDuration:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     ExplodeDamageDefense:
-      BaseValue: 0
+      BaseValue: 45
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     FrozenResistance:
-      BaseValue: 0
+      BaseValue: 100
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 200
     FrozenValue:
       _value: 0
       _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
+      _maxValue: 1000
+      AutoChange: -10
       AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
+      AutoChangeTimeInterval: 300
     FrozenLevel:
       _value: 0
       _minValue: 0
-      _maxValue: 0
+      _maxValue: 5
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
@@ -171,7 +171,7 @@ MonoBehaviour:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     FrozenFX:
       FXType:
         TypeDefineType: 7
@@ -185,38 +185,38 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
     FiringResistance:
-      BaseValue: 0
+      BaseValue: 100
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 200
     FiringValue:
       _value: 0
       _minValue: 0
-      _maxValue: 0
-      AutoChange: 0
+      _maxValue: 1000
+      AutoChange: -30
       AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
+      AutoChangeTimeInterval: 300
     FiringLevel:
       _value: 0
       _minValue: 0
-      _maxValue: 0
+      _maxValue: 4
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     FiringSpreadPercent:
-      BaseValue: 0
+      BaseValue: 30
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 100
     FiringDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     StartFiringFX:
       FXType:
         TypeDefineType: 7
-        TypeGUID: 
+        TypeGUID: (496e4d78-62a6-4066-bbc6-b75bf11aa688)
       UseCurve: 0
       FXScale: 1
       AnimationCurve:
@@ -228,54 +228,70 @@ MonoBehaviour:
     FiringFX:
       FXType:
         TypeDefineType: 7
-        TypeGUID: 
-      UseCurve: 0
-      FXScale: 1
+        TypeGUID: (ea39ef27-ca6b-4f0b-8407-618bd99d1b3a)
+      UseCurve: 1
+      FXScale: 0
       AnimationCurve:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0.7
+          inSlope: 0.325
+          outSlope: 0.325
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 4
+          value: 2
+          inSlope: 0.325
+          outSlope: 0.325
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
     MoveSpeed:
-      BaseValue: 0
+      BaseValue: 50
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     MaxActionPoint:
-      BaseValue: 0
+      BaseValue: 6
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 100
     ActionPoint:
-      _value: 0
+      _value: 6
       _minValue: 0
-      _maxValue: 0
+      _maxValue: 6
       AutoChange: 0
       AutoChangePercent: 0
-      AutoChangeTimeInterval: 3.4028235e+38
+      AutoChangeTimeInterval: 1000
     ActionPointRecovery:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 10000
     KickConsumeActionPoint:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 100
     DashConsumeActionPoint:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 100
     VaultConsumeActionPoint:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
-    SkillsPropertyCollections: []
-    RawEntityDefaultBuffs: []
+      MaxValue: 100
   UseSpecialCameraConfig: 1
   CameraConfigData:
     HorAngle: 0
@@ -294,8 +310,6 @@ MonoBehaviour:
   PostProcessingProfileType:
     TypeDefineType: 10
     TypeGUID: (4074a9c0-52a4-4df8-9317-e06970dbd34f)
-  references:
-    version: 1
 --- !u!1 &3117608157354636031
 GameObject:
   m_ObjectHideFlags: 0

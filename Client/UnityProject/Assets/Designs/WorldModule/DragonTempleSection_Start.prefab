@@ -113,6 +113,7 @@ Transform:
   - {fileID: 1946282824512585434}
   - {fileID: 6224856658863593846}
   - {fileID: 3479263129714762597}
+  - {fileID: 2585209976717472702}
   m_Father: {fileID: 7729307243981049466}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -189,7 +190,7 @@ GameObject:
   - component: {fileID: 7729307243981049467}
   - component: {fileID: -2219425402513466831}
   m_Layer: 0
-  m_Name: DragonDungenSection_Start
+  m_Name: DragonTempleSection_Start
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5685,6 +5686,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillGUID
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillAlias
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
+        type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MaxTriggeredTimes
       value: 1
       objectReference: {fileID: 0}
@@ -5780,6 +5791,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
+        type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].InteractiveKeyNotice
       value: Press F to interact with the door
       objectReference: {fileID: 0}
@@ -5826,6 +5842,11 @@ PrefabInstance:
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.data[0].ChangeDoorStateTo
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.data[0].InitWorldModuleGUID
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -6180,6 +6201,321 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5673210899967399903, guid: 97d879e20cff407419c7e7187f0bc6f1,
     type: 3}
   m_PrefabInstance: {fileID: 7075748423173617782}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7081811569658464089
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6003654633542279879}
+    m_Modifications:
+    - target: {fileID: 3821726437103475007, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.00000004371139
+      objectReference: {fileID: 0}
+    - target: {fileID: 3821726437103475007, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3821726437103475007, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3821726437103475007, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3960004222510233619, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_Name
+      value: ScrollBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309679939584068231, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.00000004371139
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309679939584068231, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309679939584068231, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309679939584068231, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730790474371364071, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 86
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730790474371364071, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730790474371364071, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730790474371364071, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730790474371364071, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730790474371364071, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730790474371364071, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730790474371364071, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730790474371364071, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730790474371364071, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730790474371364071, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.EntityOrientation
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0]
+      value: Client EntityPassiveSkill_Conditional
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillGUID
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillAlias
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MaxTriggeredTimes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MultiEventTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].EntityStatChangeType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].IsAddedDuringGamePlay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAlias
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].PassiveSkillCondition
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].EntityPropertyChangeType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].EntityStatChangeThreshold
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].TriggerProbabilityPercent
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].EntityPropertyChangeThreshold
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].EntityStatChangeThresholdOperator
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAliasList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].EntityPropertyChangeThresholdOperator
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0]
+      value: Client EntityPassiveSkillAction_TriggerZoneAction
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].DestroyEntityByElementDamageTypeList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].ActionInterval
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].TipPositionType
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].InteractiveKeyNotice
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EffectiveOnRelativeCamp
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].InteractiveKeyNoticeDuration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Exit.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Enter.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EffectiveWhenInteractiveKeyDown
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Exit.Array.data[0]
+      value: Client EntityPassiveSkillAction_UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Enter.Array.data[0]
+      value: Client EntityPassiveSkillAction_UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Exit.Array.data[0].Open
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Enter.Array.data[0].Open
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Exit.Array.data[0].UIName
+      value: KeyBindingPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Enter.Array.data[0].UIName
+      value: KeyBindingPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Exit.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384030003529110668, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Enter.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8fa2aa2d5a2e4b546afd8aab77607fee, type: 3}
+--- !u!4 &2585209976717472702 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4730790474371364071, guid: 8fa2aa2d5a2e4b546afd8aab77607fee,
+    type: 3}
+  m_PrefabInstance: {fileID: 7081811569658464089}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7362920489836145553
 PrefabInstance:

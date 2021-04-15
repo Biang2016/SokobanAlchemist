@@ -188,13 +188,13 @@ public abstract class Stat
             accumulatedAutoChange += AutoChange;
             accumulatedAutoChange += Value * AutoChangePercent / 100f;
 
-            if (accumulatedAutoChange > 1)
+            if (accumulatedAutoChange >= 1)
             {
                 int round = Mathf.FloorToInt(accumulatedAutoChange);
                 SetValue(Value + round, "AccumulatedAutoChange");
                 accumulatedAutoChange -= round;
             }
-            else if (accumulatedAutoChange < -1)
+            else if (accumulatedAutoChange <= -1)
             {
                 int round = Mathf.CeilToInt(accumulatedAutoChange);
                 SetValue(Value + round, "AccumulatedAutoChange");
