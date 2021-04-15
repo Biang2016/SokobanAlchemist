@@ -73,6 +73,9 @@ public class Actor : Entity
     public ActorBoxInteractHelper ActorBoxInteractHelper;
 
     [FoldoutGroup("组件")]
+    public ActorSkillLearningHelper ActorSkillLearningHelper;
+
+    [FoldoutGroup("组件")]
     public Transform LiftBoxPivot;
 
     public Vector3 ArtPos => ActorSkinHelper.MainArtTransform.position;
@@ -529,6 +532,7 @@ public class Actor : Entity
         ActorLaunchArcRendererHelper.OnHelperUsed();
         ActorBattleHelper.OnHelperUsed();
         ActorBoxInteractHelper.OnHelperUsed();
+        ActorSkillLearningHelper?.OnHelperUsed();
 
         ActorMoveColliderRoot.SetActive(true);
     }
@@ -584,6 +588,7 @@ public class Actor : Entity
         ActorLaunchArcRendererHelper.OnHelperRecycled();
         ActorBattleHelper.OnHelperRecycled();
         ActorBoxInteractHelper.OnHelperRecycled();
+        ActorSkillLearningHelper?.OnHelperRecycled();
 
         UnInitActiveSkills();
         UnInitPassiveSkills();
@@ -697,6 +702,18 @@ public class Actor : Entity
         if (ENABLE_ACTOR_MOVE_LOG && WorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {WorldGP}");
         LastWorldGP = WorldGP;
         WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+    }
+
+    protected override void InitPassiveSkills()
+    {
+        base.InitPassiveSkills();
+        // TODO load learned skills.
+    }
+
+    protected override void InitActiveSkills()
+    {
+        base.InitActiveSkills();
+        // TODO load learned skills.
     }
 
     public void TransportPlayerGridPos(GridPos3D worldGP, float lerpTime = 0)

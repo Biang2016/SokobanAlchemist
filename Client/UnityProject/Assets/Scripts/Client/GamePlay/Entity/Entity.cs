@@ -282,7 +282,7 @@ public abstract class Entity : PoolObject
 
     private List<EntityPassiveSkill> cachedRemoveList_EntityPassiveSkill = new List<EntityPassiveSkill>(8);
 
-    protected void InitPassiveSkills()
+    protected virtual void InitPassiveSkills()
     {
         if (EntityPassiveSkills == null) EntityPassiveSkills = new List<EntityPassiveSkill>();
         if (EntityPassiveSkillGUIDDict == null) EntityPassiveSkillGUIDDict = new Dictionary<string, EntityPassiveSkill>();
@@ -334,7 +334,7 @@ public abstract class Entity : PoolObject
 
     public void AddNewPassiveSkill(EntityPassiveSkill eps)
     {
-        if(string.IsNullOrWhiteSpace(eps.SkillGUID) ) eps.SkillGUID = Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
+        if (string.IsNullOrWhiteSpace(eps.SkillGUID)) eps.SkillGUID = Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
         if (!EntityPassiveSkillGUIDDict.ContainsKey(eps.SkillGUID))
         {
             EntityPassiveSkills.Add(eps);
@@ -350,7 +350,7 @@ public abstract class Entity : PoolObject
         }
     }
 
-    protected void UnInitPassiveSkills()
+    protected virtual void UnInitPassiveSkills()
     {
         foreach (EntityPassiveSkill eps in EntityPassiveSkills)
         {
@@ -404,7 +404,7 @@ public abstract class Entity : PoolObject
         }
     }
 
-    protected void InitActiveSkills()
+    protected virtual void InitActiveSkills()
     {
         cachedRemoveList_EntityActiveSkill.Clear();
         foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
@@ -441,11 +441,11 @@ public abstract class Entity : PoolObject
         ActiveSkillMarkAsDestroyed = false;
     }
 
-    protected void AddNewActiveSkill(string skillGUID)
+    protected void AddNewActiveSkill(EntityActiveSkill eas)
     {
     }
 
-    protected void UnInitActiveSkills()
+    protected virtual void UnInitActiveSkills()
     {
         foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
         {

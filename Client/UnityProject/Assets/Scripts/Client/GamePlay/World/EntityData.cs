@@ -16,7 +16,7 @@ public class EntityData : IClone<EntityData>
 
     [LabelText("实体类型")]
     [HideIf("hideOrientationInEntityLevelEditorInspector")]
-    public TypeSelectHelper EntityType = new TypeSelectHelper(); // 在关卡编辑器中不赋值，在Export到Config时数据中自行判断是那种Entity并赋值
+    public TypeSelectHelper EntityType = new TypeSelectHelper(); // 在关卡编辑器中不赋值，在Export到Config时数据中自行判断是哪种Entity并赋值
 
     internal ushort EntityTypeIndex
     {

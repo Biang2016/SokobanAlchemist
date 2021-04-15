@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="12" SoundbankVersion="135">
 	<RootPaths>
-		<ProjectRoot>C:\Projects\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\</ProjectRoot>
-		<SourceFilesRoot>C:\Projects\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Windows\</SourceFilesRoot>
-		<SoundBanksRoot>C:\Projects\SokobanAlchemist\Client\UnityProject\Assets\Wwise\Audio\GeneratedSoundBanks\Windows\</SoundBanksRoot>
+		<ProjectRoot>/Users/jae/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Documents/GitHub/SokobanAlchemist/Client/UnityProject/UnityProject_WwiseProject/</ProjectRoot>
+		<SourceFilesRoot>/Users/jae/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Documents/GitHub/SokobanAlchemist/Client/UnityProject/UnityProject_WwiseProject/.cache/Windows/</SourceFilesRoot>
+		<SoundBanksRoot>/Users/jae/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Documents/GitHub/SokobanAlchemist/Client/UnityProject/Assets/Wwise/Audio/GeneratedSoundBanks/Windows/</SoundBanksRoot>
 		<ExternalSourcesInputFile></ExternalSourcesInputFile>
-		<ExternalSourcesOutputRoot>C:\Projects\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\GeneratedSoundBanks\Windows</ExternalSourcesOutputRoot>
+		<ExternalSourcesOutputRoot>/Users/jae/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Documents/GitHub/SokobanAlchemist/Client/UnityProject/UnityProject_WwiseProject/GeneratedSoundBanks/Windows</ExternalSourcesOutputRoot>
 	</RootPaths>
 	<DialogueEvents/>
 	<StreamedFiles/>
 	<MediaFilesNotInAnyBank/>
 	<SoundBanks>
-		<SoundBank Id="1355168291" Language="SFX" Hash="3592717704">
+		<SoundBank Id="1355168291" Language="SFX" Hash="3308738716">
 			<ObjectPath>Init</ObjectPath>
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
-			<GameParameters>
-				<GameParameter Id="341651998" Name="BGM_Volume" ObjectPath="\Game Parameters\Default Work Unit\BGM_Volume"/>
-				<GameParameter Id="1564184899" Name="SFX_Volume" ObjectPath="\Game Parameters\Default Work Unit\SFX_Volume"/>
-				<GameParameter Id="2698376064" Name="SFX_UI_Volume" ObjectPath="\Game Parameters\Default Work Unit\SFX_UI_Volume"/>
-				<GameParameter Id="3942311461" Name="SFX_Entity_Volume" ObjectPath="\Game Parameters\Default Work Unit\SFX_Entity_Volume"/>
-				<GameParameter Id="4179668880" Name="Master_Volume" ObjectPath="\Game Parameters\Default Work Unit\Master_Volume"/>
-			</GameParameters>
 		</SoundBank>
-		<SoundBank Id="1605876511" Language="SFX" Hash="949076280">
+		<SoundBank Id="1605876511" Language="SFX" Hash="780831358">
 			<ObjectPath>\SoundBanks\Default Work Unit\SFX Work Unit\SFX_Bank</ObjectPath>
 			<ShortName>SFX_Bank</ShortName>
 			<Path>SFX_Bank.bnk</Path>
@@ -35,47 +28,71 @@
 				<Event Id="2419922771" Name="IceEnemy_Cyan_OnSkillCast_0" ObjectPath="\Events\SFX\Entity_SFX\Actor_SFX\IceEnemy_Cyan\IceEnemy_Cyan_OnSkillCast_0" DurationType="OneShot" DurationMin="3.071610" DurationMax="3.071610"/>
 				<Event Id="2419922770" Name="IceEnemy_Cyan_OnSkillCast_1" ObjectPath="\Events\SFX\Entity_SFX\Actor_SFX\IceEnemy_Cyan\IceEnemy_Cyan_OnSkillCast_1" DurationType="OneShot" DurationMin="2.533900" DurationMax="2.533900"/>
 				<Event Id="137324230" Name="LifeBox_OnBeingKicked" ObjectPath="\Events\SFX\Entity_SFX\Box_SFX\LifeBox\LifeBox_OnBeingKicked" DurationType="OneShot" DurationMin="2.125000" DurationMax="2.125000"/>
-				<Event Id="3527200472" Name="Player_OnKick" ObjectPath="\Events\SFX\Entity_SFX\Actor_SFX\Player\Player_OnKick" DurationType="OneShot" DurationMin="2.500000" DurationMax="2.500000"/>
 				<Event Id="1052167317" Name="Player_OnSkillCast_0" ObjectPath="\Events\SFX\Entity_SFX\Actor_SFX\Player\Player_OnSkillCast_0" DurationType="OneShot" DurationMin="0.452426" DurationMax="0.452426"/>
+				<Event Id="3845548790" Name="Player_OnVault" ObjectPath="\Events\SFX\Entity_SFX\Actor_SFX\Player\Player_OnVault" DurationType="OneShot" DurationMin="0.374467" DurationMax="0.812494"/>
 				<Event Id="3669812430" Name="WoodenBox_OnBeingKicked" ObjectPath="\Events\SFX\Entity_SFX\Box_SFX\WoodenBox\WoodenBox_OnBeingKicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
 				<Event Id="15596056" Name="WoodenBox_OnBeingPushed" ObjectPath="\Events\SFX\Entity_SFX\Box_SFX\WoodenBox\WoodenBox_OnBeingPushed" DurationType="OneShot" DurationMin="0.687500" DurationMax="1.583333"/>
 			</IncludedEvents>
 			<IncludedMemoryFiles>
+				<File Id="64029351" Language="SFX">
+					<ShortName>Protagonist_Jump_4.wav</ShortName>
+					<Path>SFX/Protagonist_Jump_4_B09F49DF.wem</Path>
+				</File>
+				<File Id="127835118" Language="SFX">
+					<ShortName>Protagonist_Jump_5.wav</ShortName>
+					<Path>SFX/Protagonist_Jump_5_B09F49DF.wem</Path>
+				</File>
 				<File Id="278238588" Language="SFX">
 					<ShortName>TempSFX_Collide2.wav</ShortName>
-					<Path>SFX\TempSFX_Collide2_B09F49DF.wem</Path>
+					<Path>SFX/TempSFX_Collide2_B09F49DF.wem</Path>
 				</File>
 				<File Id="321057588" Language="SFX">
 					<ShortName>UI Hits Game 1.wav</ShortName>
-					<Path>SFX\UI Hits Game 1_B09F49DF.wem</Path>
+					<Path>SFX/UI Hits Game 1_B09F49DF.wem</Path>
+				</File>
+				<File Id="332046191" Language="SFX">
+					<ShortName>Protagonist_Jump_3.wav</ShortName>
+					<Path>SFX/Protagonist_Jump_3_B09F49DF.wem</Path>
 				</File>
 				<File Id="367121688" Language="SFX">
 					<ShortName>TempSFX_Collide.wav</ShortName>
-					<Path>SFX\TempSFX_Collide_B09F49DF.wem</Path>
+					<Path>SFX/TempSFX_Collide_B09F49DF.wem</Path>
+				</File>
+				<File Id="398061356" Language="SFX">
+					<ShortName>Protagonist_Jump_1.wav</ShortName>
+					<Path>SFX/Protagonist_Jump_1_B09F49DF.wem</Path>
 				</File>
 				<File Id="454977670" Language="SFX">
 					<ShortName>ConsumeLifeBox.wav</ShortName>
-					<Path>SFX\ConsumeLifeBox_B09F49DF.wem</Path>
+					<Path>SFX/ConsumeLifeBox_B09F49DF.wem</Path>
 				</File>
 				<File Id="567636655" Language="SFX">
 					<ShortName>JackHammer_far_03.wav</ShortName>
-					<Path>SFX\JackHammer_far_03_B09F49DF.wem</Path>
+					<Path>SFX/JackHammer_far_03_B09F49DF.wem</Path>
 				</File>
 				<File Id="598399752" Language="SFX">
 					<ShortName>effect 4.wav</ShortName>
-					<Path>SFX\effect 4_B09F49DF.wem</Path>
+					<Path>SFX/effect 4_B09F49DF.wem</Path>
 				</File>
 				<File Id="765091200" Language="SFX">
 					<ShortName>TempSFX_Push.wav</ShortName>
-					<Path>SFX\TempSFX_Push_B09F49DF.wem</Path>
+					<Path>SFX/TempSFX_Push_B09F49DF.wem</Path>
+				</File>
+				<File Id="842732134" Language="SFX">
+					<ShortName>Protagonist_Jump_6.wav</ShortName>
+					<Path>SFX/Protagonist_Jump_6_B09F49DF.wem</Path>
 				</File>
 				<File Id="878195806" Language="SFX">
 					<ShortName>TempSFX_Push1.wav</ShortName>
-					<Path>SFX\TempSFX_Push1_B09F49DF.wem</Path>
+					<Path>SFX/TempSFX_Push1_B09F49DF.wem</Path>
+				</File>
+				<File Id="986382276" Language="SFX">
+					<ShortName>Protagonist_Jump_2.wav</ShortName>
+					<Path>SFX/Protagonist_Jump_2_B09F49DF.wem</Path>
 				</File>
 			</IncludedMemoryFiles>
 		</SoundBank>
-		<SoundBank Id="3734788450" Language="SFX" Hash="1374787794">
+		<SoundBank Id="3734788450" Language="SFX" Hash="1437710146">
 			<ObjectPath>\SoundBanks\Default Work Unit\BGM Work Unit\BGM_Bank</ObjectPath>
 			<ShortName>BGM_Bank</ShortName>
 			<Path>BGM_Bank.bnk</Path>
@@ -86,27 +103,27 @@
 			<IncludedMemoryFiles>
 				<File Id="37445038" Language="SFX">
 					<ShortName>TempleBGM.wav</ShortName>
-					<Path>SFX\TempleBGM_4811579D.wem</Path>
+					<Path>SFX/TempleBGM_4811579D.wem</Path>
 				</File>
 				<File Id="75272111" Language="SFX">
 					<ShortName>OpenWorldBGM2.wav</ShortName>
-					<Path>SFX\OpenWorldBGM2_4811579D.wem</Path>
+					<Path>SFX/OpenWorldBGM2_4811579D.wem</Path>
 				</File>
 				<File Id="102912303" Language="SFX">
 					<ShortName>CoolSwing.wav</ShortName>
-					<Path>SFX\CoolSwing_4811579D.wem</Path>
+					<Path>SFX/CoolSwing_4811579D.wem</Path>
 				</File>
 				<File Id="165791469" Language="SFX">
 					<ShortName>LabBGM.wav</ShortName>
-					<Path>SFX\LabBGM_4811579D.wem</Path>
+					<Path>SFX/LabBGM_4811579D.wem</Path>
 				</File>
 				<File Id="377813988" Language="SFX">
 					<ShortName>ExcavationBGM.wav</ShortName>
-					<Path>SFX\ExcavationBGM_4811579D.wem</Path>
+					<Path>SFX/ExcavationBGM_4811579D.wem</Path>
 				</File>
 				<File Id="727134213" Language="SFX">
 					<ShortName>OpenWorldBGM.wav</ShortName>
-					<Path>SFX\OpenWorldBGM_4811579D.wem</Path>
+					<Path>SFX/OpenWorldBGM_4811579D.wem</Path>
 				</File>
 			</IncludedMemoryFiles>
 			<StateGroups>

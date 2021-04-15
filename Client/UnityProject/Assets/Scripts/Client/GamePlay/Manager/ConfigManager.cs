@@ -239,6 +239,10 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     [LabelText("世界配置表")]
     public static readonly Dictionary<ushort, WorldData> WorldDataConfigDict = new Dictionary<ushort, WorldData>();
 
+    [ShowInInspector]
+    [LabelText("技能库")]
+    public static readonly Dictionary<string, EntitySkill> EntitySkillLibrary = new Dictionary<string, EntitySkill>();
+
     public static string DesignRoot = "/Designs/";
     public static string ResourcesPrefabDesignRoot = "/Resources/Prefabs/Designs/";
 
@@ -250,6 +254,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static string WorldModuleDataConfigFolder_Relative = "WorldModule";
     public static string StaticLayoutDataConfigFolder_Relative = "StaticLayout";
     public static string WorldDataConfigFolder_Relative = "Worlds";
+    public static string EntitySkillLibraryFolder_Relative = "EntitySkill";
 
     public static string ConfigFolder_Build = Application.streamingAssetsPath + "/Configs/";
     public static string TypeNamesConfigFolder_Build = ConfigFolder_Build + "/TypeNames";
@@ -259,6 +264,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static string WorldModuleDataConfigFolder_Build = ConfigFolder_Build + WorldModuleDataConfigFolder_Relative + "s/";
     public static string StaticLayoutDataConfigFolder_Build = ConfigFolder_Build + StaticLayoutDataConfigFolder_Relative + "s/";
     public static string WorldDataConfigFolder_Build = ConfigFolder_Build + WorldDataConfigFolder_Relative + "/";
+    public static string EntitySkillLibraryFolder_Build = ConfigFolder_Build + EntitySkillLibraryFolder_Relative + "/";
 
     public override void Awake()
     {
@@ -300,6 +306,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         // 时序，先导出类型表
         ExportTypeGUIDMapping();
+        ExportPassiveSkillLibrary(dataFormat);
 
         SortAllWorldModules();
         SortAllStaticLayouts();
@@ -325,6 +332,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         // 时序，先导出类型表
         ExportTypeGUIDMapping();
+        ExportPassiveSkillLibrary(DataFormat.Binary);
         ExportAllEntityOccupationDataConfigs(DataFormat.Binary);
 
         AssetDatabase.Refresh();
@@ -439,6 +447,26 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         byte[] bytes = SerializationUtility.SerializeValue(exportDict, DataFormat.JSON);
         File.WriteAllBytes(file, bytes);
         AssetDatabase.Refresh();
+    }
+
+    private static void ExportPassiveSkillLibrary(DataFormat dataFormat)
+    {
+        string folder = EntitySkillLibraryFolder_Build;
+        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+        Dictionary<string, EntitySkill> entitySkillDict = new Dictionary<string, EntitySkill>();
+
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + DesignRoot + EntitySkillLibraryFolder_Relative);
+        foreach (FileInfo fi in di.GetFiles("*.asset", SearchOption.AllDirectories))
+        {
+            string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
+            EntitySkillSSO obj = AssetDatabase.LoadAssetAtPath<EntitySkillSSO>(relativePath);
+            entitySkillDict.Add(obj.EntitySkill.SkillGUID, obj.EntitySkill);
+        }
+
+        string path = folder + "EntitySkillLibrary.config";
+        byte[] bytes = SerializationUtility.SerializeValue(entitySkillDict, dataFormat);
+        File.WriteAllBytes(path, bytes);
     }
 
     private static void SortAllWorldModules()
@@ -815,6 +843,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
 
         LoadTypeGUIDMappingFromConfig(dataFormat);
+        LoadPassiveSkillLibrary(dataFormat);
         LoadEntityStatPropertyEnumList();
         LoadEntityBuffStatPropertyEnumReflection();
         LoadEntityBuffAttributeMatrixFromConfig(dataFormat);
@@ -846,6 +875,29 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                     }
                 }
             }
+        }
+    }
+
+    private static void LoadPassiveSkillLibrary(DataFormat dataFormat)
+    {
+        EntitySkillLibrary.Clear();
+
+        string folder = EntitySkillLibraryFolder_Build;
+        DirectoryInfo di = new DirectoryInfo(WorldDataConfigFolder_Build);
+        if (di.Exists)
+        {
+            string path = folder + "EntitySkillLibrary.config";
+            FileInfo fi = new FileInfo(path);
+            byte[] bytes = File.ReadAllBytes(fi.FullName);
+            Dictionary<string, EntitySkill> data = SerializationUtility.DeserializeValue<Dictionary<string, EntitySkill>>(bytes, dataFormat);
+            foreach (KeyValuePair<string, EntitySkill> kv in data)
+            {
+                EntitySkillLibrary.Add(kv.Key, kv.Value);
+            }
+        }
+        else
+        {
+            Debug.LogError("技能库不存在");
         }
     }
 
@@ -1057,7 +1109,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     #region Special types const
 
     public static IEnumerable AllBuffAttributeTypes;
-
     public static ushort WorldModule_DeadZoneIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_DeadZone");
     public static ushort WorldModule_HiddenWallIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_Wall_Hidden");
     public static ushort WorldModule_GroundIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_Ground");
@@ -1107,6 +1158,18 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
+    public static EntitySkill GetEntitySkill(string skillGUID)
+    {
+        if (EntitySkillLibrary.TryGetValue(skillGUID, out EntitySkill entitySkill))
+        {
+            return entitySkill.Clone();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public static EntityOccupationData GetEntityOccupationData(ushort entityTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
@@ -1142,6 +1205,16 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return worldData?.Clone();
     }
 
+    public static Material GetSkyBoxByName(string skyBoxTypeName)
+    {
+        return Resources.Load<Material>($"SkyBox/{skyBoxTypeName}");
+    }
+
+    public static PostProcessProfile GetPostProcessingProfileByName(string postProcessingProfileTypeName)
+    {
+        return Resources.Load<PostProcessProfile>($"PostProcessingProfile/{postProcessingProfileTypeName}");
+    }
+
     #endregion
 
     #region Prefabs
@@ -1153,6 +1226,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(TypeDefineConfigs[TypeDefineType.Actor].GetTypeAssetDataBasePath(actorName));
         return prefab;
     }
+
     public static GameObject FindBoxPrefabByName(string boxName)
     {
         TypeDefineConfigs[TypeDefineType.Box].ExportTypeNames(); // todo 判断是否要删掉此行
@@ -1213,16 +1287,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     }
 
 #endif
-
-    public static Material GetSkyBoxByName(string skyBoxTypeName)
-    {
-        return Resources.Load<Material>($"SkyBox/{skyBoxTypeName}");
-    }
-
-    public static PostProcessProfile GetPostProcessingProfileByName(string postProcessingProfileTypeName)
-    {
-        return Resources.Load<PostProcessProfile>($"PostProcessingProfile/{postProcessingProfileTypeName}");
-    }
 
     #endregion
 }
