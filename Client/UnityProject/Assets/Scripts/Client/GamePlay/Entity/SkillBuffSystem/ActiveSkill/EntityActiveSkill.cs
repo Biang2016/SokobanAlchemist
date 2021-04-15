@@ -212,6 +212,7 @@ public abstract class EntityActiveSkill : EntitySkill
         cooldownTimeTick = 0;
 
         SkillsPropertyCollection.Init();
+        if (SubActiveSkillDict == null) SubActiveSkillDict = new Dictionary<string, EntityActiveSkill>();
         SubActiveSkillDict.Clear();
         foreach (EntityActiveSkill subEAS in RawSubActiveSkillList)
         {
@@ -228,8 +229,10 @@ public abstract class EntityActiveSkill : EntitySkill
             subEAS.OnInit();
         }
 
+        if (RunningSubActiveSkillList == null) RunningSubActiveSkillList = new List<EntityActiveSkill>();
         RunningSubActiveSkillList.Clear();
 
+        if (SubSkillManageCoroutines_CanNotInterrupt == null) SubSkillManageCoroutines_CanNotInterrupt = new List<Coroutine>();
         SubSkillManageCoroutines_CanNotInterrupt.Clear();
     }
 

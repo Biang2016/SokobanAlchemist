@@ -423,6 +423,7 @@ public abstract class Entity : PoolObject
             else
             {
                 eas = (EntityActiveSkill) sso.EntitySkill.Clone();
+                EntityActiveSkillDict.Add(skillIndex, eas);
             }
 
             eas.Entity = this;

@@ -138,6 +138,14 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     private List<GridPos3D> SkillAreaGPs = new List<GridPos3D>(16);
     protected List<GridPos3D> RealSkillEffectGPs = new List<GridPos3D>(16);
 
+    public override void OnInit()
+    {
+        base.OnInit();
+        if (GridWarningDict == null) GridWarningDict = new Dictionary<GridPos3D, GridWarning>();
+        if (SkillAreaGPs == null) SkillAreaGPs = new List<GridPos3D>(16);
+        if (RealSkillEffectGPs == null) RealSkillEffectGPs = new List<GridPos3D>(16);
+    }
+
     private GridPos3D GetTargetGP()
     {
         GridPos3D targetGP = GridPos3D.Zero;
