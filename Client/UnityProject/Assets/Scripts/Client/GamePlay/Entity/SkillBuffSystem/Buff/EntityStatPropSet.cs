@@ -189,12 +189,6 @@ public class EntityStatPropSet
 
     #endregion
 
-    [SerializeReference]
-    [BoxGroup("Buff")]
-    [LabelText("自带Buff")]
-    [ListDrawerSettings(ListElementLabelName = "Description")]
-    public List<EntityBuff> RawEntityDefaultBuffs = new List<EntityBuff>(); // 干数据，禁修改
-
     public void Initialize(Entity entity)
     {
         Profiler.BeginSample("ESPS #1");
@@ -363,15 +357,6 @@ public class EntityStatPropSet
         #endregion
 
         Profiler.EndSample();
-        Profiler.EndSample();
-
-        Profiler.BeginSample("ESPS #4");
-
-        foreach (EntityBuff rawEntityDefaultBuff in RawEntityDefaultBuffs)
-        {
-            Entity.EntityBuffHelper.AddBuff(rawEntityDefaultBuff.Clone());
-        }
-
         Profiler.EndSample();
 
         foreach (KeyValuePair<EntityStatType, EntityStat> kv in StatDict)
@@ -686,7 +671,5 @@ public class EntityStatPropSet
         VaultConsumeActionPoint.ApplyDataTo(target.VaultConsumeActionPoint);
 
         #endregion
-
-        target.RawEntityDefaultBuffs = RawEntityDefaultBuffs.Clone();
     }
 }
