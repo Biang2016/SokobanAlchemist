@@ -1004,7 +1004,7 @@ public class Actor : Entity
         {
             GridPos3D targetPos = WorldGP + CurForward.ToGridPos3D() * dashDistance;
             if (lastGridGrounded) finalDashDistance = dashDistance - 1;
-            lastGridGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(targetPos, 3, true, out GridPos3D _);
+            lastGridGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(targetPos, 5, true, out GridPos3D _);
             Entity targetOccupyEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(targetPos, GUID, out WorldModule _, out GridPos3D _);
             if (targetOccupyEntity != null && !(targetOccupyEntity is Actor)) break;
         }

@@ -696,7 +696,7 @@ public class World : PoolObject
             WorldModule newModule = GetModuleByWorldGP(box_moveable.WorldGP + direction);
             Assert.IsNotNull(newModule);
             GridPos3D worldGP = box_moveable.WorldGP + direction;
-            box_moveable.Initialize(worldGP, newModule, needLerp ? 0.2f : 0f, box_moveable.ArtOnly, Box.LerpType.Push, needLerpModel, false);
+            box_moveable.Initialize(worldGP, newModule, needLerp ? 0.2f : 0f, box_moveable.ArtOnly, Box.LerpType.Push, needLerpModel, true);
         }
 
         TryMerge(direction, boxes_moveable);
@@ -1282,7 +1282,7 @@ public class World : PoolObject
                     CheckDropAbove(box); // 递归，检查上方箱子是否坠落
                     GridPos3D boxNewWorldGP = box.WorldGP + GridPos3D.Down;
                     GetBoxByGridPosition(boxNewWorldGP, out WorldModule newModule, out GridPos3D localGP);
-                    box.Initialize(boxNewWorldGP, newModule, 0.1f, box.ArtOnly, Box.LerpType.Drop);
+                    box.Initialize(boxNewWorldGP, newModule, 1f, box.ArtOnly, Box.LerpType.Drop);
                 }
             }
         }
