@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
-  m_Name: "\u7838\u5730\u677F_(5cae3730-027b-44d6-94e2-4b758537c304)"
+  m_Name: "\u5C0F\u53F2\u83B1\u59C6\u4E24\u683C\u666E\u901A\u653B\u51FB_(5defe000-480d-467f-a8b7-a9ed6d50d38c)"
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -26,10 +26,13 @@ MonoBehaviour:
       Data: 0|EntityActiveSkill_AddEntityBuff, Client
     - Name: SkillGUID
       Entry: 1
-      Data: (5cae3730-027b-44d6-94e2-4b758537c304)
+      Data: (5defe000-480d-467f-a8b7-a9ed6d50d38c)
+    - Name: SkillAlias
+      Entry: 1
+      Data: "\u5C0F\u53F2\u83B1\u59C6\u4E24\u683C\u666E\u901A\u653B\u51FB"
     - Name: TargetCamp
       Entry: 3
-      Data: 15
+      Data: 6
     - Name: EntitySkillIndex
       Entry: 3
       Data: 0
@@ -173,7 +176,7 @@ MonoBehaviour:
       Data: 
     - Name: BaseValue
       Entry: 3
-      Data: 8000
+      Data: 1000
     - Name: ModifiedValue
       Entry: 3
       Data: 0
@@ -182,7 +185,7 @@ MonoBehaviour:
       Data: 0
     - Name: MaxValue
       Entry: 3
-      Data: 99999
+      Data: 1000000
     - Name: 
       Entry: 8
       Data: 
@@ -235,7 +238,7 @@ MonoBehaviour:
       Data: 
     - Name: BaseValue
       Entry: 3
-      Data: 900
+      Data: 200
     - Name: ModifiedValue
       Entry: 3
       Data: 0
@@ -244,7 +247,7 @@ MonoBehaviour:
       Data: 0
     - Name: MaxValue
       Entry: 3
-      Data: 99999
+      Data: 1000000
     - Name: 
       Entry: 8
       Data: 
@@ -297,7 +300,7 @@ MonoBehaviour:
       Data: 
     - Name: BaseValue
       Entry: 3
-      Data: 200
+      Data: 100
     - Name: ModifiedValue
       Entry: 3
       Data: 0
@@ -306,7 +309,7 @@ MonoBehaviour:
       Data: 0
     - Name: MaxValue
       Entry: 3
-      Data: 99999
+      Data: 1000000
     - Name: 
       Entry: 8
       Data: 
@@ -368,7 +371,7 @@ MonoBehaviour:
       Data: 0
     - Name: MaxValue
       Entry: 3
-      Data: 99999
+      Data: 1000000
     - Name: 
       Entry: 8
       Data: 
@@ -440,9 +443,6 @@ MonoBehaviour:
     - Name: OnSkillPhaseChanged
       Entry: 6
       Data: 
-    - Name: SkillAlias
-      Entry: 1
-      Data: "\u7838\u5730\u677F"
     - Name: WingUpCanMove
       Entry: 5
       Data: false
@@ -1742,75 +1742,6 @@ MonoBehaviour:
       Data: false
     - Name: 
       Entry: 5
-      Data: true
-    - Name: 
-      Entry: 5
-      Data: true
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
       Data: false
     - Name: 
       Entry: 5
@@ -1832,21 +1763,6 @@ MonoBehaviour:
       Data: false
     - Name: 
       Entry: 5
-      Data: true
-    - Name: 
-      Entry: 5
-      Data: true
-    - Name: 
-      Entry: 5
-      Data: true
-    - Name: 
-      Entry: 5
-      Data: true
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
       Data: false
     - Name: 
       Entry: 5
@@ -1922,24 +1838,12 @@ MonoBehaviour:
       Data: false
     - Name: 
       Entry: 5
-      Data: true
-    - Name: 
-      Entry: 5
-      Data: true
-    - Name: 
-      Entry: 5
       Data: false
     - Name: 
       Entry: 5
       Data: false
-    - Name: 
-      Entry: 5
-      Data: true
     - Name: 
       Entry: 5
-      Data: true
-    - Name: 
-      Entry: 5
       Data: false
     - Name: 
       Entry: 5
@@ -2013,12 +1917,6 @@ MonoBehaviour:
     - Name: 
       Entry: 5
       Data: false
-    - Name: 
-      Entry: 5
-      Data: true
-    - Name: 
-      Entry: 5
-      Data: true
     - Name: 
       Entry: 5
       Data: false
@@ -2111,16 +2009,88 @@ MonoBehaviour:
       Data: false
     - Name: 
       Entry: 5
-      Data: true
+      Data: false
     - Name: 
       Entry: 5
-      Data: true
+      Data: false
     - Name: 
       Entry: 5
-      Data: true
+      Data: false
     - Name: 
       Entry: 5
-      Data: true
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
     - Name: 
       Entry: 5
       Data: false
@@ -2207,10 +2177,40 @@ MonoBehaviour:
       Data: false
     - Name: 
       Entry: 5
-      Data: true
+      Data: false
     - Name: 
       Entry: 5
-      Data: true
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: false
     - Name: 
       Entry: 5
       Data: false
@@ -3384,112 +3384,7 @@ MonoBehaviour:
         BiangLibrary.Library]], mscorlib
     - Name: 
       Entry: 12
-      Data: 20
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 13
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 16
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 13
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 15
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 14
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 17
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 14
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 16
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 14
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 15
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 14
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 14
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 15
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 18
-    - Name: 
-      Entry: 8
-      Data: 
+      Data: 2
     - Name: 
       Entry: 7
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
@@ -3516,172 +3411,7 @@ MonoBehaviour:
       Data: 0
     - Name: z
       Entry: 3
-      Data: 14
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 15
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 13
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
       Data: 16
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 18
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 16
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 17
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 16
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 14
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 16
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 13
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 17
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 17
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 17
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 16
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 17
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 15
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 17
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 14
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 18
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 16
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
-    - Name: x
-      Entry: 3
-      Data: 18
-    - Name: y
-      Entry: 3
-      Data: 0
-    - Name: z
-      Entry: 3
-      Data: 15
     - Name: 
       Entry: 8
       Data: 
@@ -3732,16 +3462,16 @@ MonoBehaviour:
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0
+      Data: 0.6978636
     - Name: 
       Entry: 4
-      Data: 0.9256196
+      Data: 0.367791057
     - Name: 
       Entry: 4
-      Data: 1
+      Data: 0.8962264
     - Name: 
       Entry: 4
-      Data: 0.807843149
+      Data: 0.6745098
     - Name: 
       Entry: 8
       Data: 
@@ -3750,16 +3480,16 @@ MonoBehaviour:
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0.112362035
+      Data: 0.8409599
     - Name: 
       Entry: 4
-      Data: 0.6459774
+      Data: 0.5913581
     - Name: 
       Entry: 4
-      Data: 0.9528302
+      Data: 0.9150943
     - Name: 
       Entry: 4
-      Data: 0.6745098
+      Data: 0.921568632
     - Name: 
       Entry: 8
       Data: 
@@ -3768,16 +3498,16 @@ MonoBehaviour:
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0.464311153
+      Data: 0.8301887
     - Name: 
       Entry: 4
-      Data: 0.68667376
+      Data: 0.8301887
     - Name: 
       Entry: 4
-      Data: 0.6981132
+      Data: 0.8301887
     - Name: 
       Entry: 4
-      Data: 0.7176471
+      Data: 0.4627451
     - Name: 
       Entry: 8
       Data: 
@@ -3792,7 +3522,7 @@ MonoBehaviour:
       Data: 7
     - Name: TypeGUID
       Entry: 1
-      Data: (63ecfd21-314e-4006-9f49-8de1802f9650)
+      Data: (a3f1c9b2-11c9-4ae7-b3c8-c0cc492a5e6c)
     - Name: 
       Entry: 8
       Data: 
@@ -3834,19 +3564,19 @@ MonoBehaviour:
       Data: 37|System.Collections.Generic.List`1[[EntityBuff, Client]], mscorlib
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 1
     - Name: 
       Entry: 7
       Data: 38|EntityBuff_ChangeEntityStatInstantly, Client
     - Name: GUID
       Entry: 3
-      Data: 10068
+      Data: 10075
     - Name: BuffAlias
       Entry: 1
       Data: 
     - Name: EntityBuffAttribute
       Entry: 3
-      Data: 21
+      Data: 37
     - Name: EnableWhiteBlackList
       Entry: 5
       Data: false
@@ -3933,112 +3663,7 @@ MonoBehaviour:
       Data: 0
     - Name: Delta
       Entry: 3
-      Data: -2
-    - Name: Percent
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 45|EntityBuff_ChangeEntityStatInstantly, Client
-    - Name: GUID
-      Entry: 3
-      Data: 10069
-    - Name: BuffAlias
-      Entry: 1
-      Data: 
-    - Name: EntityBuffAttribute
-      Entry: 3
-      Data: 0
-    - Name: EnableWhiteBlackList
-      Entry: 5
-      Data: false
-    - Name: AllowAddBuffAliasList
-      Entry: 7
-      Data: 46|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: ForbidAddBuffAliasList
-      Entry: 7
-      Data: 47|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: IsPermanent
-      Entry: 5
-      Data: false
-    - Name: Duration
-      Entry: 4
-      Data: 0
-    - Name: BuffFX
-      Entry: 7
-      Data: 48|FXConfig, Client
-    - Name: FXType
-      Entry: 7
-      Data: 49|TypeSelectHelper, Client
-    - Name: TypeDefineType
-      Entry: 3
-      Data: 7
-    - Name: TypeGUID
-      Entry: 1
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: UseCurve
-      Entry: 5
-      Data: false
-    - Name: FXScale
-      Entry: 4
-      Data: 0
-    - Name: AnimationCurve
-      Entry: 7
-      Data: 50|UnityEngine.AnimationCurve, UnityEngine.CoreModule
-    - Name: 
-      Entry: 7
-      Data: 51|UnityEngine.Keyframe[], UnityEngine.CoreModule
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 3
-      Data: 8
-    - Name: 
-      Entry: 3
-      Data: 8
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: EntityStatType
-      Entry: 3
-      Data: 100
-    - Name: Delta
-      Entry: 3
-      Data: 400
+      Data: -1
     - Name: Percent
       Entry: 3
       Data: 0

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
-  m_Name: "\u666E\u901A\u653B\u51FB_(5defe000-480d-467f-a8b7-a9ed6d50d38c)"
+  m_Name: "\u7535\u654C\u4EBA\u539F\u5730\u6A2A\u626B\u4E00\u6BB5\u5F0F_(951de0a1-81d6-44d3-ae96-ca5e29a231e4)"
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -26,10 +26,13 @@ MonoBehaviour:
       Data: 0|EntityActiveSkill_AddEntityBuff, Client
     - Name: SkillGUID
       Entry: 1
-      Data: (5defe000-480d-467f-a8b7-a9ed6d50d38c)
+      Data: (951de0a1-81d6-44d3-ae96-ca5e29a231e4)
+    - Name: SkillAlias
+      Entry: 1
+      Data: "\u7535\u654C\u4EBA\u539F\u5730\u6A2A\u626B\u4E00\u6BB5\u5F0F"
     - Name: TargetCamp
       Entry: 3
-      Data: 6
+      Data: 7
     - Name: EntitySkillIndex
       Entry: 3
       Data: 0
@@ -235,7 +238,7 @@ MonoBehaviour:
       Data: 
     - Name: BaseValue
       Entry: 3
-      Data: 200
+      Data: 416
     - Name: ModifiedValue
       Entry: 3
       Data: 0
@@ -297,7 +300,7 @@ MonoBehaviour:
       Data: 
     - Name: BaseValue
       Entry: 3
-      Data: 100
+      Data: 0
     - Name: ModifiedValue
       Entry: 3
       Data: 0
@@ -359,7 +362,7 @@ MonoBehaviour:
       Data: 
     - Name: BaseValue
       Entry: 3
-      Data: 200
+      Data: 1250
     - Name: ModifiedValue
       Entry: 3
       Data: 0
@@ -421,7 +424,7 @@ MonoBehaviour:
       Data: 
     - Name: BaseValue
       Entry: 3
-      Data: 0
+      Data: 1
     - Name: ModifiedValue
       Entry: 3
       Data: 0
@@ -430,7 +433,7 @@ MonoBehaviour:
       Data: 0
     - Name: MaxValue
       Entry: 3
-      Data: 0
+      Data: 10
     - Name: 
       Entry: 8
       Data: 
@@ -440,9 +443,6 @@ MonoBehaviour:
     - Name: OnSkillPhaseChanged
       Entry: 6
       Data: 
-    - Name: SkillAlias
-      Entry: 1
-      Data: "\u666E\u901A\u653B\u51FB"
     - Name: WingUpCanMove
       Entry: 5
       Data: false
@@ -3384,7 +3384,22 @@ MonoBehaviour:
         BiangLibrary.Library]], mscorlib
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
+    - Name: x
+      Entry: 3
+      Data: 14
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: z
+      Entry: 3
+      Data: 16
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 7
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
@@ -3396,7 +3411,7 @@ MonoBehaviour:
       Data: 0
     - Name: z
       Entry: 3
-      Data: 17
+      Data: 16
     - Name: 
       Entry: 8
       Data: 
@@ -3405,7 +3420,7 @@ MonoBehaviour:
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
     - Name: x
       Entry: 3
-      Data: 15
+      Data: 16
     - Name: y
       Entry: 3
       Data: 0
@@ -3426,7 +3441,7 @@ MonoBehaviour:
       Data: 2
     - Name: TargetEntityType
       Entry: 3
-      Data: 0
+      Data: 1
     - Name: CastOnTopLayer
       Entry: 5
       Data: false
@@ -3462,16 +3477,16 @@ MonoBehaviour:
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0.6978636
+      Data: 0.5849056
     - Name: 
       Entry: 4
-      Data: 0.367791057
+      Data: 0.5849056
     - Name: 
       Entry: 4
-      Data: 0.8962264
+      Data: 0.5849056
     - Name: 
       Entry: 4
-      Data: 0.6745098
+      Data: 0.905882359
     - Name: 
       Entry: 8
       Data: 
@@ -3480,16 +3495,16 @@ MonoBehaviour:
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0.8409599
+      Data: 0.8207547
     - Name: 
       Entry: 4
-      Data: 0.5913581
+      Data: 0.8207547
     - Name: 
       Entry: 4
-      Data: 0.9150943
+      Data: 0.8207547
     - Name: 
       Entry: 4
-      Data: 0.921568632
+      Data: 0.7372549
     - Name: 
       Entry: 8
       Data: 
@@ -3498,16 +3513,16 @@ MonoBehaviour:
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0.8301887
+      Data: 0.8207547
     - Name: 
       Entry: 4
-      Data: 0.8301887
+      Data: 0.8207547
     - Name: 
       Entry: 4
-      Data: 0.8301887
+      Data: 0.8207547
     - Name: 
       Entry: 4
-      Data: 0.4627451
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
@@ -3522,7 +3537,7 @@ MonoBehaviour:
       Data: 7
     - Name: TypeGUID
       Entry: 1
-      Data: (a3f1c9b2-11c9-4ae7-b3c8-c0cc492a5e6c)
+      Data: (c92d5cef-5f0e-4373-b907-91a8812d72c5)
     - Name: 
       Entry: 8
       Data: 
@@ -3564,19 +3579,19 @@ MonoBehaviour:
       Data: 37|System.Collections.Generic.List`1[[EntityBuff, Client]], mscorlib
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 2
     - Name: 
       Entry: 7
-      Data: 38|EntityBuff_ChangeEntityStatInstantly, Client
+      Data: 38|EntityBuff_EntityPropertyMultiplyModifier, Client
     - Name: GUID
       Entry: 3
-      Data: 10075
+      Data: 10070
     - Name: BuffAlias
       Entry: 1
       Data: 
     - Name: EntityBuffAttribute
       Entry: 3
-      Data: 37
+      Data: 39
     - Name: EnableWhiteBlackList
       Entry: 5
       Data: false
@@ -3609,13 +3624,118 @@ MonoBehaviour:
       Data: false
     - Name: Duration
       Entry: 4
-      Data: 0
+      Data: 1
     - Name: BuffFX
       Entry: 7
       Data: 41|FXConfig, Client
     - Name: FXType
       Entry: 7
       Data: 42|TypeSelectHelper, Client
+    - Name: TypeDefineType
+      Entry: 3
+      Data: 7
+    - Name: TypeGUID
+      Entry: 1
+      Data: (c92d5cef-5f0e-4373-b907-91a8812d72c5)
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: UseCurve
+      Entry: 5
+      Data: false
+    - Name: FXScale
+      Entry: 4
+      Data: 1
+    - Name: AnimationCurve
+      Entry: 7
+      Data: 43|UnityEngine.AnimationCurve, UnityEngine.CoreModule
+    - Name: 
+      Entry: 7
+      Data: 44|UnityEngine.Keyframe[], UnityEngine.CoreModule
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 3
+      Data: 8
+    - Name: 
+      Entry: 3
+      Data: 8
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Percent
+      Entry: 3
+      Data: -100
+    - Name: LinearDecayInDuration
+      Entry: 5
+      Data: false
+    - Name: EntityPropertyType
+      Entry: 3
+      Data: 30
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 45|EntityBuff_ChangeEntityStatInstantly, Client
+    - Name: GUID
+      Entry: 3
+      Data: 10071
+    - Name: BuffAlias
+      Entry: 1
+      Data: 
+    - Name: EntityBuffAttribute
+      Entry: 3
+      Data: 40
+    - Name: EnableWhiteBlackList
+      Entry: 5
+      Data: false
+    - Name: AllowAddBuffAliasList
+      Entry: 7
+      Data: 46|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: ForbidAddBuffAliasList
+      Entry: 7
+      Data: 47|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: IsPermanent
+      Entry: 5
+      Data: false
+    - Name: Duration
+      Entry: 4
+      Data: 0
+    - Name: BuffFX
+      Entry: 7
+      Data: 48|FXConfig, Client
+    - Name: FXType
+      Entry: 7
+      Data: 49|TypeSelectHelper, Client
     - Name: TypeDefineType
       Entry: 3
       Data: 7
@@ -3633,10 +3753,10 @@ MonoBehaviour:
       Data: 0
     - Name: AnimationCurve
       Entry: 7
-      Data: 43|UnityEngine.AnimationCurve, UnityEngine.CoreModule
+      Data: 50|UnityEngine.AnimationCurve, UnityEngine.CoreModule
     - Name: 
       Entry: 7
-      Data: 44|UnityEngine.Keyframe[], UnityEngine.CoreModule
+      Data: 51|UnityEngine.Keyframe[], UnityEngine.CoreModule
     - Name: 
       Entry: 12
       Data: 0

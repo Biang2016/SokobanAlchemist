@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
-  m_Name: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB_(544edafd-3321-4034-bbce-087b4052ce3f)"
+  m_Name: "\u5927\u578B\u706B\u7130\u653B\u51FB\u6CE2_(3d09bbda-1ad1-4b3e-99b9-63a5435002a5)"
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -26,7 +26,10 @@ MonoBehaviour:
       Data: 0|EntityActiveSkill_ParentNode, Client
     - Name: SkillGUID
       Entry: 1
-      Data: (544edafd-3321-4034-bbce-087b4052ce3f)
+      Data: (3d09bbda-1ad1-4b3e-99b9-63a5435002a5)
+    - Name: SkillAlias
+      Entry: 1
+      Data: "\u5927\u578B\u706B\u7130\u653B\u51FB\u6CE2"
     - Name: TargetCamp
       Entry: 3
       Data: 15
@@ -440,9 +443,6 @@ MonoBehaviour:
     - Name: OnSkillPhaseChanged
       Entry: 6
       Data: 
-    - Name: SkillAlias
-      Entry: 1
-      Data: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB"
     - Name: WingUpCanMove
       Entry: 5
       Data: false
@@ -464,6 +464,9 @@ MonoBehaviour:
     - Name: SkillGUID
       Entry: 1
       Data: 
+    - Name: SkillAlias
+      Entry: 1
+      Data: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E00\u6BB5"
     - Name: TargetCamp
       Entry: 3
       Data: 15
@@ -877,9 +880,6 @@ MonoBehaviour:
     - Name: OnSkillPhaseChanged
       Entry: 6
       Data: 
-    - Name: SkillAlias
-      Entry: 1
-      Data: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E00\u6BB5"
     - Name: WingUpCanMove
       Entry: 5
       Data: false
@@ -2269,9 +2269,6 @@ MonoBehaviour:
       Data: false
     - Name: 
       Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
       Data: true
     - Name: 
       Entry: 5
@@ -2548,9 +2545,6 @@ MonoBehaviour:
       Data: false
     - Name: 
       Entry: 5
-      Data: false
-    - Name: 
-      Entry: 5
       Data: true
     - Name: 
       Entry: 5
@@ -2645,6 +2639,12 @@ MonoBehaviour:
     - Name: 
       Entry: 5
       Data: false
+    - Name: 
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 5
+      Data: true
     - Name: 
       Entry: 5
       Data: false
@@ -3821,7 +3821,22 @@ MonoBehaviour:
         BiangLibrary.Library]], mscorlib
     - Name: 
       Entry: 12
-      Data: 8
+      Data: 10
+    - Name: 
+      Entry: 7
+      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
+    - Name: x
+      Entry: 3
+      Data: 14
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: z
+      Entry: 3
+      Data: 17
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 7
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
@@ -3842,13 +3857,13 @@ MonoBehaviour:
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
     - Name: x
       Entry: 3
-      Data: 14
+      Data: 15
     - Name: y
       Entry: 3
       Data: 0
     - Name: z
       Entry: 3
-      Data: 15
+      Data: 18
     - Name: 
       Entry: 8
       Data: 
@@ -3872,13 +3887,13 @@ MonoBehaviour:
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
     - Name: x
       Entry: 3
-      Data: 15
+      Data: 16
     - Name: y
       Entry: 3
       Data: 0
     - Name: z
       Entry: 3
-      Data: 16
+      Data: 18
     - Name: 
       Entry: 8
       Data: 
@@ -3902,13 +3917,13 @@ MonoBehaviour:
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
     - Name: x
       Entry: 3
-      Data: 16
+      Data: 17
     - Name: y
       Entry: 3
       Data: 0
     - Name: z
       Entry: 3
-      Data: 16
+      Data: 18
     - Name: 
       Entry: 8
       Data: 
@@ -3923,7 +3938,7 @@ MonoBehaviour:
       Data: 0
     - Name: z
       Entry: 3
-      Data: 16
+      Data: 17
     - Name: 
       Entry: 8
       Data: 
@@ -3932,13 +3947,28 @@ MonoBehaviour:
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
     - Name: x
       Entry: 3
-      Data: 17
+      Data: 18
     - Name: y
       Entry: 3
       Data: 0
     - Name: z
       Entry: 3
-      Data: 15
+      Data: 17
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
+    - Name: x
+      Entry: 3
+      Data: 18
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: z
+      Entry: 3
+      Data: 16
     - Name: 
       Entry: 8
       Data: 
@@ -4212,6 +4242,9 @@ MonoBehaviour:
     - Name: SkillGUID
       Entry: 1
       Data: 
+    - Name: SkillAlias
+      Entry: 1
+      Data: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E8C\u6BB5"
     - Name: TargetCamp
       Entry: 3
       Data: 15
@@ -4625,9 +4658,6 @@ MonoBehaviour:
     - Name: OnSkillPhaseChanged
       Entry: 6
       Data: 
-    - Name: SkillAlias
-      Entry: 1
-      Data: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E8C\u6BB5"
     - Name: WingUpCanMove
       Entry: 5
       Data: false
@@ -7569,7 +7599,7 @@ MonoBehaviour:
         BiangLibrary.Library]], mscorlib
     - Name: 
       Entry: 12
-      Data: 12
+      Data: 14
     - Name: 
       Entry: 7
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
@@ -7701,7 +7731,7 @@ MonoBehaviour:
       Data: 0
     - Name: z
       Entry: 3
-      Data: 19
+      Data: 20
     - Name: 
       Entry: 8
       Data: 
@@ -7716,7 +7746,22 @@ MonoBehaviour:
       Data: 0
     - Name: z
       Entry: 3
+      Data: 19
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
+    - Name: x
+      Entry: 3
       Data: 18
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: z
+      Entry: 3
+      Data: 19
     - Name: 
       Entry: 8
       Data: 
@@ -7740,7 +7785,22 @@ MonoBehaviour:
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
     - Name: x
       Entry: 3
+      Data: 19
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: z
+      Entry: 3
       Data: 18
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
+    - Name: x
+      Entry: 3
+      Data: 19
     - Name: y
       Entry: 3
       Data: 0
@@ -8020,6 +8080,9 @@ MonoBehaviour:
     - Name: SkillGUID
       Entry: 1
       Data: 
+    - Name: SkillAlias
+      Entry: 1
+      Data: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E09\u6BB5"
     - Name: TargetCamp
       Entry: 3
       Data: 15
@@ -8433,9 +8496,6 @@ MonoBehaviour:
     - Name: OnSkillPhaseChanged
       Entry: 6
       Data: 
-    - Name: SkillAlias
-      Entry: 1
-      Data: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E09\u6BB5"
     - Name: WingUpCanMove
       Entry: 5
       Data: false
@@ -11377,7 +11437,7 @@ MonoBehaviour:
         BiangLibrary.Library]], mscorlib
     - Name: 
       Entry: 12
-      Data: 12
+      Data: 14
     - Name: 
       Entry: 7
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
@@ -11509,7 +11569,7 @@ MonoBehaviour:
       Data: 0
     - Name: z
       Entry: 3
-      Data: 21
+      Data: 22
     - Name: 
       Entry: 8
       Data: 
@@ -11524,7 +11584,22 @@ MonoBehaviour:
       Data: 0
     - Name: z
       Entry: 3
-      Data: 20
+      Data: 21
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
+    - Name: x
+      Entry: 3
+      Data: 18
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: z
+      Entry: 3
+      Data: 21
     - Name: 
       Entry: 8
       Data: 
@@ -11548,7 +11623,22 @@ MonoBehaviour:
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
     - Name: x
       Entry: 3
-      Data: 18
+      Data: 19
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: z
+      Entry: 3
+      Data: 20
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
+    - Name: x
+      Entry: 3
+      Data: 19
     - Name: y
       Entry: 3
       Data: 0
@@ -11828,6 +11918,9 @@ MonoBehaviour:
     - Name: SkillGUID
       Entry: 1
       Data: 
+    - Name: SkillAlias
+      Entry: 1
+      Data: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u56DB\u6BB5"
     - Name: TargetCamp
       Entry: 3
       Data: 15
@@ -12241,9 +12334,6 @@ MonoBehaviour:
     - Name: OnSkillPhaseChanged
       Entry: 6
       Data: 
-    - Name: SkillAlias
-      Entry: 1
-      Data: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u56DB\u6BB5"
     - Name: WingUpCanMove
       Entry: 5
       Data: false
@@ -15185,7 +15275,7 @@ MonoBehaviour:
         BiangLibrary.Library]], mscorlib
     - Name: 
       Entry: 12
-      Data: 12
+      Data: 14
     - Name: 
       Entry: 7
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
@@ -15317,7 +15407,7 @@ MonoBehaviour:
       Data: 0
     - Name: z
       Entry: 3
-      Data: 23
+      Data: 24
     - Name: 
       Entry: 8
       Data: 
@@ -15332,7 +15422,22 @@ MonoBehaviour:
       Data: 0
     - Name: z
       Entry: 3
-      Data: 22
+      Data: 23
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
+    - Name: x
+      Entry: 3
+      Data: 18
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: z
+      Entry: 3
+      Data: 23
     - Name: 
       Entry: 8
       Data: 
@@ -15356,7 +15461,22 @@ MonoBehaviour:
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
     - Name: x
       Entry: 3
-      Data: 18
+      Data: 19
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: z
+      Entry: 3
+      Data: 22
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
+    - Name: x
+      Entry: 3
+      Data: 19
     - Name: y
       Entry: 3
       Data: 0
@@ -15636,6 +15756,9 @@ MonoBehaviour:
     - Name: SkillGUID
       Entry: 1
       Data: 
+    - Name: SkillAlias
+      Entry: 1
+      Data: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E94\u6BB5"
     - Name: TargetCamp
       Entry: 3
       Data: 15
@@ -16049,9 +16172,6 @@ MonoBehaviour:
     - Name: OnSkillPhaseChanged
       Entry: 6
       Data: 
-    - Name: SkillAlias
-      Entry: 1
-      Data: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E94\u6BB5"
     - Name: WingUpCanMove
       Entry: 5
       Data: false
@@ -18993,7 +19113,7 @@ MonoBehaviour:
         BiangLibrary.Library]], mscorlib
     - Name: 
       Entry: 12
-      Data: 12
+      Data: 14
     - Name: 
       Entry: 7
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
@@ -19125,7 +19245,7 @@ MonoBehaviour:
       Data: 0
     - Name: z
       Entry: 3
-      Data: 25
+      Data: 26
     - Name: 
       Entry: 8
       Data: 
@@ -19140,7 +19260,22 @@ MonoBehaviour:
       Data: 0
     - Name: z
       Entry: 3
-      Data: 24
+      Data: 25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
+    - Name: x
+      Entry: 3
+      Data: 18
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: z
+      Entry: 3
+      Data: 25
     - Name: 
       Entry: 8
       Data: 
@@ -19164,7 +19299,22 @@ MonoBehaviour:
       Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
     - Name: x
       Entry: 3
-      Data: 18
+      Data: 19
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: z
+      Entry: 3
+      Data: 24
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: BiangLibrary.GameDataFormat.Grid.GridPos3D, BiangLibrary.Library
+    - Name: x
+      Entry: 3
+      Data: 19
     - Name: y
       Entry: 3
       Data: 0

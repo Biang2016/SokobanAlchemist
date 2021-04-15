@@ -8,6 +8,10 @@ public abstract class EntitySkill : IClone<EntitySkill>
     [ReadOnly]
     public string SkillGUID; // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
 
+    [LabelText("技能花名")]
+    [Required]
+    public string SkillAlias;
+
     public EntitySkill Clone()
     {
         Type type = GetType();

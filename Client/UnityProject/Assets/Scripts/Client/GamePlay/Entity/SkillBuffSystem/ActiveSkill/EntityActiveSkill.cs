@@ -63,10 +63,6 @@ public abstract class EntityActiveSkill : EntitySkill
     [PropertyOrder(-1)]
     protected abstract string Description { get; }
 
-    [LabelText("技能花名")]
-    [Required]
-    public string SkillAlias;
-
     [LabelText("前摇可移动")]
     public bool WingUpCanMove;
 

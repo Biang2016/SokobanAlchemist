@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
-  m_Name: Jump_(583ed52d-d465-4fc5-9505-b00a830bcdb6)
+  m_Name: "\u51B2\u523A\u6216\u7FFB\u8D8A_(5b45a721-79c0-4c0f-95b7-0151ce0e35b8)"
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -23,10 +23,13 @@ MonoBehaviour:
     SerializationNodes:
     - Name: EntitySkill
       Entry: 7
-      Data: 0|ActorActiveSkill_Jump, Client
+      Data: 0|ActorActiveSkill_DashOrVault, Client
     - Name: SkillGUID
       Entry: 1
-      Data: (583ed52d-d465-4fc5-9505-b00a830bcdb6)
+      Data: (5b45a721-79c0-4c0f-95b7-0151ce0e35b8)
+    - Name: SkillAlias
+      Entry: 1
+      Data: "\u51B2\u523A\u6216\u7FFB\u8D8A"
     - Name: TargetCamp
       Entry: 3
       Data: 1
@@ -173,7 +176,7 @@ MonoBehaviour:
       Data: 
     - Name: BaseValue
       Entry: 3
-      Data: 0
+      Data: 380
     - Name: ModifiedValue
       Entry: 3
       Data: 0
@@ -182,7 +185,7 @@ MonoBehaviour:
       Data: 0
     - Name: MaxValue
       Entry: 3
-      Data: 0
+      Data: 1000000
     - Name: 
       Entry: 8
       Data: 
@@ -440,9 +443,6 @@ MonoBehaviour:
     - Name: OnSkillPhaseChanged
       Entry: 6
       Data: 
-    - Name: SkillAlias
-      Entry: 1
-      Data: Jump
     - Name: WingUpCanMove
       Entry: 5
       Data: true
@@ -480,9 +480,9 @@ MonoBehaviour:
     - Name: InterruptSubActiveSkillsWhenInterrupted
       Entry: 5
       Data: false
-    - Name: JumpHeight
+    - Name: DashMaxDistance
       Entry: 3
-      Data: 1
+      Data: 4
     - Name: 
       Entry: 8
       Data: 
