@@ -98,8 +98,6 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     [ShowIf("M_TargetInclination", TargetInclination.TargetCenteredNormalDistribution)]
     public ActorAIAgent.TargetEntityType TargetEntityType;
 
-    internal EntityPropertyValue MaxTargetCount = new EntityPropertyValue();
-
     [LabelText("施法于地表")]
     public bool CastOnTopLayer;
 
@@ -422,7 +420,6 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         EntityActiveSkill_AreaCast newEAS = (EntityActiveSkill_AreaCast) cloneData;
         newEAS.M_TargetInclination = M_TargetInclination;
         newEAS.TargetEntityType = TargetEntityType;
-        newEAS.MaxTargetCount = MaxTargetCount;
         newEAS.CastOnTopLayer = CastOnTopLayer;
         newEAS.CastOnNLayersBeneath = CastOnNLayersBeneath;
         newEAS.CastAreaGridPosList = CastAreaGridPosList.Clone();
@@ -443,7 +440,6 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         EntityActiveSkill_AreaCast srcEAS = (EntityActiveSkill_AreaCast) srcData;
         M_TargetInclination = srcEAS.M_TargetInclination;
         TargetEntityType = srcEAS.TargetEntityType;
-        MaxTargetCount = srcEAS.MaxTargetCount;
         CastOnTopLayer = srcEAS.CastOnTopLayer;
         CastOnNLayersBeneath = srcEAS.CastOnNLayersBeneath;
         CastAreaGridPosList = srcEAS.CastAreaGridPosList.Clone();

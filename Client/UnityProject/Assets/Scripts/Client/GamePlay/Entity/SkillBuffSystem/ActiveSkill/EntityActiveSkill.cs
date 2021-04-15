@@ -25,44 +25,14 @@ public abstract class EntityActiveSkill : EntitySkill
     [LabelText("绑定技能号")]
     public EntitySkillIndex EntitySkillIndex;
 
-    internal Dictionary<EntitySkillPropertyType, EntityPropertyValue> EntityPropertyValueDict = new Dictionary<EntitySkillPropertyType, EntityPropertyValue>();
+    [BoxGroup("技能参数")]
+    [HideLabel]
+    [InlineProperty]
+    public SkillPropertyCollection SkillsPropertyCollection = new SkillPropertyCollection();
 
     protected int GetValue(EntitySkillPropertyType type)
     {
-        return EntityPropertyValueDict[type].Value;
-    }
-
-    public class EntityPropertyValue
-    {
-        public int Value;
-
-        public void OnValueChangedHandle(int before, int after)
-        {
-            Value = after;
-        }
-    }
-
-    protected void BindEntityProperty(EntitySkillPropertyType entitySkillPropertyType)
-    {
-        if (Entity.EntityStatPropSet.SkillsPropertyCollections.Count > (int) EntitySkillIndex)
-        {
-            EntityPropertyValue epv = new EntityPropertyValue();
-
-            EntityProperty ep = Entity.EntityStatPropSet.SkillsPropertyCollections[(int) EntitySkillIndex].PropertyDict[entitySkillPropertyType];
-            epv.Value = ep.GetModifiedValue;
-            ep.m_NotifyActionSet.OnValueChanged += epv.OnValueChangedHandle;
-
-            EntityPropertyValueDict.Add(entitySkillPropertyType, epv);
-        }
-    }
-
-    protected void UnBindActorProperty(EntityPropertyValue epv, EntitySkillPropertyType actorSkillPropertyType)
-    {
-        if (Entity.EntityStatPropSet.SkillsPropertyCollections.Count > (int) EntitySkillIndex)
-        {
-            EntityProperty ep = Entity.EntityStatPropSet.SkillsPropertyCollections[(int) EntitySkillIndex].PropertyDict[actorSkillPropertyType];
-            ep.m_NotifyActionSet.OnValueChanged -= epv.OnValueChangedHandle;
-        }
+        return SkillsPropertyCollection.PropertyDict[type].GetModifiedValue;
     }
 
     #endregion
@@ -94,7 +64,6 @@ public abstract class EntityActiveSkill : EntitySkill
     protected abstract string Description { get; }
 
     [LabelText("技能花名")]
-    [InfoBox("必填且不得与并列技能重复")]
     [Required]
     public string SkillAlias;
 
@@ -242,12 +211,7 @@ public abstract class EntityActiveSkill : EntitySkill
 
         cooldownTimeTick = 0;
 
-        EntityPropertyValueDict.Clear();
-        foreach (EntitySkillPropertyType espt in Enum.GetValues(typeof(EntitySkillPropertyType)))
-        {
-            BindEntityProperty(espt);
-        }
-
+        SkillsPropertyCollection.Init();
         SubActiveSkillDict.Clear();
         foreach (EntityActiveSkill subEAS in RawSubActiveSkillList)
         {
@@ -259,6 +223,7 @@ public abstract class EntityActiveSkill : EntitySkill
 
             SubActiveSkillDict.Add(subEAS.SkillAlias, subEAS);
             subEAS.Entity = Entity;
+            subEAS.IsAddedDuringGamePlay = IsAddedDuringGamePlay;
             subEAS.ParentActiveSkill = this;
             subEAS.OnInit();
         }
@@ -277,11 +242,7 @@ public abstract class EntityActiveSkill : EntitySkill
             subEAS.OnUnInit();
         }
 
-        foreach (KeyValuePair<EntitySkillPropertyType, EntityPropertyValue> kv in EntityPropertyValueDict)
-        {
-            UnBindActorProperty(kv.Value, kv.Key);
-        }
-
+        SkillsPropertyCollection.OnRecycled();
         SubActiveSkillDict.Clear();
 
         foreach (EntityActiveSkill subEAS in RunningSubActiveSkillList)
@@ -636,6 +597,7 @@ public abstract class EntityActiveSkill : EntitySkill
     {
         base.ChildClone(cloneData);
         EntityActiveSkill newEAS = (EntityActiveSkill) cloneData;
+        SkillsPropertyCollection.ApplyDataTo(newEAS.SkillsPropertyCollection);
         newEAS.TargetCamp = TargetCamp;
         newEAS.WingUpCanMove = WingUpCanMove;
         newEAS.CastCanMove = CastCanMove;
@@ -650,6 +612,7 @@ public abstract class EntityActiveSkill : EntitySkill
     public override void CopyDataFrom(EntitySkill srcData)
     {
         EntityActiveSkill srcEAS = (EntityActiveSkill) srcData;
+        srcEAS.SkillsPropertyCollection.ApplyDataTo(SkillsPropertyCollection);
         TargetCamp = srcEAS.TargetCamp;
         WingUpCanMove = srcEAS.WingUpCanMove;
         CastCanMove = srcEAS.CastCanMove;

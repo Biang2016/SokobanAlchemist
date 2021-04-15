@@ -1,9 +1,13 @@
 ﻿using System;
 using BiangLibrary.CloneVariant;
+using Sirenix.OdinInspector;
 
 [Serializable]
-public class EntitySkill : IClone<EntitySkill>
+public abstract class EntitySkill : IClone<EntitySkill>
 {
+    [ReadOnly]
+    public string SkillGUID; // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
+
     public EntitySkill Clone()
     {
         Type type = GetType();
@@ -14,9 +18,11 @@ public class EntitySkill : IClone<EntitySkill>
 
     protected virtual void ChildClone(EntitySkill cloneData)
     {
+        cloneData.SkillGUID = SkillGUID;
     }
 
     public virtual void CopyDataFrom(EntitySkill srcData)
     {
+        SkillGUID = srcData.SkillGUID;
     }
 }

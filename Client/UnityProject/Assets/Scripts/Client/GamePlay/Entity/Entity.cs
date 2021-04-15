@@ -374,18 +374,15 @@ public abstract class Entity : PoolObject
 
     #region 主动技能
 
-    [SerializeReference]
     [FoldoutGroup("主动技能")]
-    [LabelText("主动技能列表")]
-    [ListDrawerSettings(ListElementLabelName = "SkillAlias")]
-    public List<EntityActiveSkill> RawEntityActiveSkills = new List<EntityActiveSkill>(); // 干数据，禁修改
+    [LabelText("主动技能槽位")]
+    [InlineEditor(InlineEditorObjectFieldModes.Foldout)]
+    public List<EntitySkillSSO> RawEntityActiveSkillSSOs = new List<EntitySkillSSO>(); // 自带主动技能
 
-    [NonSerialized]
-    public List<EntityActiveSkill> EntityActiveSkills = new List<EntityActiveSkill>(); // 湿数据，每个Entity生命周期开始前从干数据拷出，结束后清除
+    [HideInInspector]
+    public SortedDictionary<EntitySkillIndex, EntityActiveSkill> EntityActiveSkillDict = new SortedDictionary<EntitySkillIndex, EntityActiveSkill>(); // 技能编号，只包含所有母技能
 
-    public Dictionary<EntitySkillIndex, EntityActiveSkill> EntityActiveSkillDict = new Dictionary<EntitySkillIndex, EntityActiveSkill>(); // 便于寻找
-
-    private List<EntityActiveSkill> cachedRemoveList_EntityActiveSkill = new List<EntityActiveSkill>(5);
+    private List<EntitySkillIndex> cachedRemoveList_EntityActiveSkill = new List<EntitySkillIndex>(16);
 
     internal bool ActiveSkillMarkAsDestroyed = false;
 
@@ -393,9 +390,9 @@ public abstract class Entity : PoolObject
     {
         get
         {
-            foreach (EntityActiveSkill eas in EntityActiveSkills)
+            foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
             {
-                if (!eas.CurrentAllowMove) return false;
+                if (!kv.Value.CurrentAllowMove) return false;
             }
 
             return true;
@@ -405,73 +402,48 @@ public abstract class Entity : PoolObject
     protected void InitActiveSkills()
     {
         cachedRemoveList_EntityActiveSkill.Clear();
-        if (EntityActiveSkills.Count > 0)
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
         {
-            foreach (EntityActiveSkill eas in EntityActiveSkills)
-            {
-                if (eas.IsAddedDuringGamePlay)
-                {
-                    cachedRemoveList_EntityActiveSkill.Add(eas);
-                }
-            }
+            if (kv.Value.IsAddedDuringGamePlay) cachedRemoveList_EntityActiveSkill.Add(kv.Key);
+        }
 
-            foreach (EntityActiveSkill eas in cachedRemoveList_EntityActiveSkill)
-            {
-                EntityActiveSkills.Remove(eas);
-                EntityActiveSkillDict.Remove(eas.EntitySkillIndex);
-            }
+        foreach (EntitySkillIndex skillIndex in cachedRemoveList_EntityActiveSkill)
+        {
+            EntityActiveSkillDict.Remove(skillIndex);
+        }
 
-            if (EntityActiveSkills.Count == RawEntityActiveSkills.Count)
+        for (int i = 0; i < RawEntityActiveSkillSSOs.Count; i++)
+        {
+            EntitySkillSSO sso = RawEntityActiveSkillSSOs[i];
+            EntitySkillIndex skillIndex = (EntitySkillIndex) i;
+            if (EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
             {
-                for (int i = 0; i < RawEntityActiveSkills.Count; i++)
-                {
-                    EntityActiveSkill eas = EntityActiveSkills[i];
-                    eas.CopyDataFrom(RawEntityActiveSkills[i]);
-                    eas.Entity = this;
-                    eas.IsAddedDuringGamePlay = false; // 从Raw里面拷出来的都即为非动态添加的技能
-                    eas.ParentActiveSkill = null;
-                    eas.OnInit();
-                }
+                eas.CopyDataFrom(sso.EntitySkill);
             }
             else
             {
-                Debug.Log("EntityActiveSkills的数量和RawEntityActiveSkills不一致，请检查临时EAS添加情况");
+                eas = (EntityActiveSkill) sso.EntitySkill.Clone();
             }
-        }
-        else
-        {
-            foreach (EntityActiveSkill rawEAS in RawEntityActiveSkills)
-            {
-                EntityActiveSkill eas = (EntityActiveSkill) rawEAS.Clone();
-                AddNewActiveSkill(eas, false);
-            }
+
+            eas.Entity = this;
+            eas.IsAddedDuringGamePlay = false;
+            eas.ParentActiveSkill = null;
+            eas.EntitySkillIndex = skillIndex;
+            eas.OnInit();
         }
 
         ActiveSkillMarkAsDestroyed = false;
     }
 
-    protected void AddNewActiveSkill(EntityActiveSkill eas, bool isAddedDuringGamePlay)
+    protected void AddNewActiveSkill(string skillGUID)
     {
-        EntityActiveSkills.Add(eas);
-        eas.Entity = this;
-        eas.IsAddedDuringGamePlay = isAddedDuringGamePlay;
-        eas.ParentActiveSkill = null;
-        eas.OnInit();
-        if (!EntityActiveSkillDict.ContainsKey(eas.EntitySkillIndex))
-        {
-            EntityActiveSkillDict.Add(eas.EntitySkillIndex, eas);
-        }
-        else
-        {
-            Debug.LogError($"[主动技能] {name} 主动技能编号重复: {eas.EntitySkillIndex}");
-        }
     }
 
     protected void UnInitActiveSkills()
     {
-        foreach (EntityActiveSkill eas in EntityActiveSkills)
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
         {
-            eas.OnUnInit();
+            kv.Value.OnUnInit();
         }
 
         ActiveSkillMarkAsDestroyed = false;
@@ -584,9 +556,9 @@ public abstract class Entity : PoolObject
             //}
         }
 
-        foreach (EntityActiveSkill eas in EntityActiveSkills)
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
         {
-            eas.OnFixedUpdate(Time.fixedDeltaTime);
+            kv.Value.OnFixedUpdate(Time.fixedDeltaTime);
         }
     }
 
@@ -599,9 +571,9 @@ public abstract class Entity : PoolObject
             eps.OnTick(interval);
         }
 
-        foreach (EntityActiveSkill eas in EntityActiveSkills)
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
         {
-            eas.OnTick(interval);
+            kv.Value.OnTick(interval);
         }
     }
 

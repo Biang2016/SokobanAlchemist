@@ -533,7 +533,7 @@ public class Actor : Entity
         ActorMoveColliderRoot.SetActive(true);
     }
 
-    public bool IsRecycling = false;
+    internal bool IsRecycling = false;
 
     public override void OnRecycled()
     {
@@ -1455,7 +1455,7 @@ public class Actor : Entity
 
     #region Die
 
-    public bool IsDestroying = false;
+    internal bool IsDestroying = false;
 
     public void DestroyActorForModuleRecycle()
     {

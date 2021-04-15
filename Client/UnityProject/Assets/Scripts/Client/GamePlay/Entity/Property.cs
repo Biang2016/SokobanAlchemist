@@ -49,6 +49,7 @@ public abstract class Property
         m_NotifyActionSet.ClearCallBacks();
     }
 
+    [HideInInspector]
     public NotifyActionSet m_NotifyActionSet = new NotifyActionSet();
 
     public class NotifyActionSet

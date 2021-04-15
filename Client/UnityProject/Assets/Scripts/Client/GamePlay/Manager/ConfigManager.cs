@@ -367,18 +367,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         EditorUtility.DisplayDialog("Notice", "SerializeConfigForThisModuleOrWorld Success", "Confirm");
     }
 
-    [MenuItem("Assets/CleanRedundantDataInPrefab", priority = -50)]
-    public static void CleanRedundantDataInPrefab()
-    {
-        GameObject[] selectedGOs = Selection.gameObjects;
-        foreach (GameObject go in selectedGOs)
-        {
-            EditorUtility.SetDirty(go);
-        }
-
-        AssetDatabase.SaveAssets();
-    }
-
     private static void ExportTypeGUIDMapping()
     {
         TypeGUIDMappingAsset typeMapping = GetTypeGUIDMappingAsset();
@@ -1159,6 +1147,12 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     #region Prefabs
 
 #if UNITY_EDITOR
+    public static GameObject FindActorPrefabByName(string actorName)
+    {
+        TypeDefineConfigs[TypeDefineType.Actor].ExportTypeNames(); // todo 判断是否要删掉此行
+        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(TypeDefineConfigs[TypeDefineType.Actor].GetTypeAssetDataBasePath(actorName));
+        return prefab;
+    }
     public static GameObject FindBoxPrefabByName(string boxName)
     {
         TypeDefineConfigs[TypeDefineType.Box].ExportTypeNames(); // todo 判断是否要删掉此行
