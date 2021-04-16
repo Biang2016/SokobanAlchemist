@@ -17,7 +17,9 @@ public class World : PoolObject
     [HideInInspector]
     public WorldModule[,,] WorldModuleMatrix = new WorldModule[WORLD_SIZE, WORLD_HEIGHT, WORLD_SIZE];
 
-    public WorldModule[,,] BorderWorldModuleMatrix = new WorldModule[WORLD_SIZE + 2, WORLD_HEIGHT + 2, WORLD_SIZE + 2];
+    public WorldModule[,,] BorderWorldModuleMatrix = new WorldModule[WORLD_SIZE + BORDER_WORLD_MODULE_EXTENSION * 2, WORLD_HEIGHT + BORDER_WORLD_MODULE_EXTENSION * 2, WORLD_SIZE + BORDER_WORLD_MODULE_EXTENSION * 2];
+
+    private const int BORDER_WORLD_MODULE_EXTENSION = 1;
 
     public string WorldGUID;
 
@@ -55,23 +57,7 @@ public class World : PoolObject
             }
         }
 
-        for (int x = 0; x < BorderWorldModuleMatrix.GetLength(0); x++)
-        {
-            for (int y = 0; y < BorderWorldModuleMatrix.GetLength(1); y++)
-            {
-                for (int z = 0; z < BorderWorldModuleMatrix.GetLength(2); z++)
-                {
-                    WorldModule module = BorderWorldModuleMatrix[x, y, z];
-                    if (module != null)
-                    {
-                        yield return module.Clear(true);
-                        module.PoolRecycle();
-                        BorderWorldModuleMatrix[x, y, z] = null;
-                    }
-                }
-            }
-        }
-
+        yield return RecycleEmptyModules();
         WorldData = null;
     }
 
@@ -96,102 +82,8 @@ public class World : PoolObject
             }
         }
 
-        #region DeadZoneWorldModules
-
-        //for (int x = 0; x < WORLD_SIZE; x++)
-        //{
-        //    for (int y = 0; y < WORLD_HEIGHT; y++)
-        //    {
-        //        for (int z = 1; z < WORLD_SIZE; z++)
-        //        {
-        //            ushort index = WorldData.ModuleMatrix[x, y, z];
-        //            ushort index_before = WorldData.ModuleMatrix[x, y, z - 1];
-        //            if (index == 0 && index_before != 0)
-        //            {
-        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
-        //            }
-
-        //            if (index != 0 && index_before == 0)
-        //            {
-        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z - 1);
-        //            }
-
-        //            if (z == 1 && index_before != 0)
-        //            {
-        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, -1);
-        //            }
-
-        //            if (z == WORLD_SIZE - 1 && index != 0)
-        //            {
-        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, WORLD_SIZE);
-        //            }
-        //        }
-        //    }
-        //}
-
-        for (int x = 0; x < WORLD_SIZE; x++)
-        {
-            for (int z = 0; z < WORLD_SIZE; z++)
-            {
-                for (int y = 1; y < WORLD_HEIGHT; y++)
-                {
-                    ushort index = WorldData.ModuleMatrix[x, y, z];
-                    ushort index_before = WorldData.ModuleMatrix[x, y - 1, z];
-                    if (index == 0 && index_before != 0)
-                    {
-                        yield return GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y, z);
-                    }
-
-                    if (index != 0 && index_before == 0)
-                    {
-                        yield return GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, y - 1, z);
-                    }
-
-                    if (y == 1 && index_before != 0)
-                    {
-                        yield return GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, -1, z);
-                    }
-
-                    if (y == WORLD_HEIGHT - 1 && index != 0)
-                    {
-                        yield return GenerateWorldModule(ConfigManager.WorldModule_DeadZoneIndex, x, WORLD_HEIGHT, z);
-                    }
-                }
-            }
-        }
-
-        //for (int y = 0; y < WORLD_HEIGHT; y++)
-        //{
-        //    for (int z = 0; z < WORLD_SIZE; z++)
-        //    {
-        //        for (int x = 1; x < WORLD_SIZE; x++)
-        //        {
-        //            ushort index = WorldData.ModuleMatrix[x, y, z];
-        //            ushort index_before = WorldData.ModuleMatrix[x - 1, y, z];
-        //            if (index == 0 && index_before != 0)
-        //            {
-        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x, y, z);
-        //            }
-
-        //            if (index != 0 && index_before == 0)
-        //            {
-        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, x - 1, y, z);
-        //            }
-
-        //            if (x == 1 && index_before != 0)
-        //            {
-        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, -1, y, z);
-        //            }
-
-        //            if (x == WORLD_SIZE - 1 && index != 0)
-        //            {
-        //                yield return GenerateWorldModule(ConfigManager.WorldModule_HiddenWallIndex, WORLD_SIZE, y, z);
-        //            }
-        //        }
-        //    }
-        //}
-
-        #endregion
+        // 生成空模组填充周围一圈和内部空隙
+        yield return GenerateEmptyModules(WorldData, GridPos3D.Zero);
 
         WorldData.WorldBornPointGroupData_Runtime.Init();
         foreach (GridPos3D worldModuleGP in WorldData.WorldModuleGPOrder)
@@ -222,17 +114,134 @@ public class World : PoolObject
         BattleManager.Instance.CreatePlayerByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias]); // 生成主角
     }
 
+    protected IEnumerator GenerateEmptyModules(WorldData worldData, GridPos3D moduleGPOffset)
+    {
+        // 向外延伸一格为空模组
+        for (int x = 1; x < WORLD_SIZE; x++)
+        {
+            for (int y = 0; y < WORLD_HEIGHT; y++)
+            {
+                for (int z = 0; z < WORLD_SIZE; z++)
+                {
+                    ushort index = worldData.ModuleMatrix[x, y, z];
+                    ushort index_before = worldData.ModuleMatrix[x - 1, y, z];
+                    if (index == 0 && index_before != 0)
+                    {
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_EmptyModuleIndex, x + moduleGPOffset.x, y + moduleGPOffset.y, z + moduleGPOffset.z);
+                    }
+
+                    if (index != 0 && index_before == 0)
+                    {
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_EmptyModuleIndex, x - 1 + moduleGPOffset.x, y + moduleGPOffset.y, z + moduleGPOffset.z);
+                    }
+
+                    if (x == 1 && index_before != 0)
+                    {
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_EmptyModuleIndex, -1 + moduleGPOffset.x, y + moduleGPOffset.y, z + moduleGPOffset.z);
+                    }
+
+                    if (x == WORLD_SIZE - 1 && index != 0)
+                    {
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_EmptyModuleIndex, WORLD_SIZE + moduleGPOffset.x, y + moduleGPOffset.y, z + moduleGPOffset.z);
+                    }
+                }
+            }
+        }
+
+        for (int x = 0; x < WORLD_SIZE; x++)
+        {
+            for (int y = 0; y < WORLD_HEIGHT; y++)
+            {
+                for (int z = 1; z < WORLD_SIZE; z++)
+                {
+                    ushort index = worldData.ModuleMatrix[x, y, z];
+                    ushort index_before = worldData.ModuleMatrix[x, y, z - 1];
+                    if (index == 0 && index_before != 0)
+                    {
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_EmptyModuleIndex, x + moduleGPOffset.x, y + moduleGPOffset.y, z + moduleGPOffset.z);
+                    }
+
+                    if (index != 0 && index_before == 0)
+                    {
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_EmptyModuleIndex, x + moduleGPOffset.x, y + moduleGPOffset.y, z - 1 + moduleGPOffset.z);
+                    }
+
+                    if (z == 1 && index_before != 0)
+                    {
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_EmptyModuleIndex, x + moduleGPOffset.x, y + moduleGPOffset.y, -1 + moduleGPOffset.z);
+                    }
+
+                    if (z == WORLD_SIZE - 1 && index != 0)
+                    {
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_EmptyModuleIndex, x + moduleGPOffset.x, y + moduleGPOffset.y, WORLD_SIZE + moduleGPOffset.z);
+                    }
+                }
+            }
+        }
+
+        for (int x = 0; x < WORLD_SIZE; x++)
+        {
+            for (int y = 1; y < WORLD_HEIGHT; y++)
+            {
+                for (int z = 0; z < WORLD_SIZE; z++)
+                {
+                    ushort index = worldData.ModuleMatrix[x, y, z];
+                    ushort index_before = worldData.ModuleMatrix[x, y - 1, z];
+                    if (index == 0 && index_before != 0)
+                    {
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_EmptyModuleIndex, x + moduleGPOffset.x, y + moduleGPOffset.y, z + moduleGPOffset.z);
+                    }
+
+                    if (index != 0 && index_before == 0)
+                    {
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_EmptyModuleIndex, x + moduleGPOffset.x, y - 1 + moduleGPOffset.y, z + moduleGPOffset.z);
+                    }
+
+                    if (y == 1 && index_before != 0)
+                    {
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_EmptyModuleIndex, x + moduleGPOffset.x, -1 + moduleGPOffset.y, z + moduleGPOffset.z);
+                    }
+
+                    if (y == WORLD_SIZE - 1 && index != 0)
+                    {
+                        yield return GenerateWorldModule(ConfigManager.WorldModule_EmptyModuleIndex, x + moduleGPOffset.x, WORLD_SIZE + moduleGPOffset.y, z + moduleGPOffset.z);
+                    }
+                }
+            }
+        }
+    }
+
+    protected IEnumerator RecycleEmptyModules()
+    {
+        for (int x = 0; x < BorderWorldModuleMatrix.GetLength(0); x++)
+        {
+            for (int y = 0; y < BorderWorldModuleMatrix.GetLength(1); y++)
+            {
+                for (int z = 0; z < BorderWorldModuleMatrix.GetLength(2); z++)
+                {
+                    WorldModule module = BorderWorldModuleMatrix[x, y, z];
+                    if (module != null)
+                    {
+                        yield return module.Clear(true);
+                        module.PoolRecycle();
+                        BorderWorldModuleMatrix[x, y, z] = null;
+                    }
+                }
+            }
+        }
+    }
+
     public virtual IEnumerator GenerateWorldModule(ushort worldModuleTypeIndex, int x, int y, int z, int loadBoxNumPerFrame = 99999)
     {
-        bool isBorderModule = worldModuleTypeIndex == ConfigManager.WorldModule_DeadZoneIndex || worldModuleTypeIndex == ConfigManager.WorldModule_HiddenWallIndex;
-        if (isBorderModule && BorderWorldModuleMatrix[x + 1, y + 1, z + 1] != null) yield break;
+        bool isBorderModule = worldModuleTypeIndex == ConfigManager.WorldModule_EmptyModuleIndex;
+        if (isBorderModule && BorderWorldModuleMatrix[x + BORDER_WORLD_MODULE_EXTENSION, y + BORDER_WORLD_MODULE_EXTENSION, z + BORDER_WORLD_MODULE_EXTENSION] != null) yield break;
         WorldModule wm = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.WorldModule].AllocateGameObject<WorldModule>(isBorderModule ? BorderWorldModuleRoot : WorldModuleRoot);
         WorldModuleData data = ConfigManager.GetWorldModuleDataConfig(worldModuleTypeIndex);
 
         wm.name = $"WM_{data.WorldModuleTypeName}({x}, {y}, {z})";
         if (isBorderModule)
         {
-            BorderWorldModuleMatrix[x + 1, y + 1, z + 1] = wm;
+            BorderWorldModuleMatrix[x + BORDER_WORLD_MODULE_EXTENSION, y + BORDER_WORLD_MODULE_EXTENSION, z + BORDER_WORLD_MODULE_EXTENSION] = wm;
         }
         else
         {
@@ -460,6 +469,14 @@ public class World : PoolObject
         }
         else
         {
+            if (ignoreUnaccessibleModule) return null;
+            gp_module += GridPos3D.One;
+            if (gp_module.x >= 0 && gp_module.x < WORLD_SIZE + BORDER_WORLD_MODULE_EXTENSION * 2 && gp_module.y >= 0 && gp_module.y < WORLD_HEIGHT + +BORDER_WORLD_MODULE_EXTENSION * 2 && gp_module.z >= 0 && gp_module.z < WORLD_SIZE + +BORDER_WORLD_MODULE_EXTENSION * 2)
+            {
+                WorldModule borderModule = BorderWorldModuleMatrix[gp_module.x, gp_module.y, gp_module.z];
+                return borderModule;
+            }
+
             return null;
         }
     }

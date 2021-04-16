@@ -6,6 +6,7 @@ using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class Entity : PoolObject
 {
@@ -523,6 +524,8 @@ public abstract class Entity : PoolObject
         base.OnRecycled();
         StopAllCoroutines();
         InitWorldModuleGUID = 0;
+        destroyBecauseNotInAnyModuleTick = 0;
+        IsDestroying = false;
     }
 
     public void Setup(uint initWorldModuleGUID)
@@ -596,7 +599,40 @@ public abstract class Entity : PoolObject
         {
             kv.Value.OnTick(interval);
         }
+
+        if (BattleManager.Instance.IsStart)
+        {
+            if (WorldManager.Instance != null)
+            {
+                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(transform.position.ToGridPos3D(), false);
+                if (module == null)
+                {
+                    destroyBecauseNotInAnyModuleTick += interval;
+                    if (destroyBecauseNotInAnyModuleTick > DestroyBecauseNotInAnyModuleThreshold)
+                    {
+                        destroyBecauseNotInAnyModuleTick = 0;
+                        DestroySelf(null);
+                    }
+                }
+            }
+        }
     }
+
+    #region Destroy
+
+    private float destroyBecauseNotInAnyModuleTick = 0f;
+    private float DestroyBecauseNotInAnyModuleThreshold = 1.5f;
+    protected bool IsDestroying = false;
+
+    public virtual void DestroySelfByModuleRecycle()
+    {
+    }
+
+    public virtual void DestroySelf(UnityAction callBack = null)
+    {
+    }
+
+    #endregion
 
     protected virtual void OnCollisionEnter(Collision collision)
     {

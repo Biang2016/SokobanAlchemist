@@ -18,7 +18,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
             {
                 actor.transform.parent = BattleManager.Instance.ActorContainerRoot;
                 FrozenBox.FrozenActor = null;
-                FrozenBox.DestroyBox();
+                FrozenBox.DestroySelf();
                 FrozenBox = null;
             }
 

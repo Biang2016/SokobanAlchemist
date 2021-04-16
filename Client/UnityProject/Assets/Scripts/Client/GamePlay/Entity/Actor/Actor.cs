@@ -1479,24 +1479,30 @@ public class Actor : Entity
 
     #region Die
 
-    internal bool IsDestroying = false;
-
-    public void DestroyActorForModuleRecycle()
+    public override void DestroySelfByModuleRecycle()
     {
+        base.DestroySelfByModuleRecycle();
         if (IsDestroying) return;
         IsDestroying = true;
         if (ActorFrozenHelper.FrozenBox)
         {
-            ActorFrozenHelper.FrozenBox.DestroyBox(null, true);
+            ActorFrozenHelper.FrozenBox.DestroySelfByModuleRecycle();
             ActorFrozenHelper.FrozenBox = null;
         }
 
-        if (this != BattleManager.Instance.Player1) PoolRecycle();
-        IsDestroying = false;
+        if (this != BattleManager.Instance.Player1)
+        {
+            PoolRecycle();
+        }
+        else
+        {
+            IsDestroying = false;
+        }
     }
 
-    public void DestroyActor(UnityAction callBack = null)
+    public override void DestroySelf(UnityAction callBack = null)
     {
+        base.DestroySelf();
         if (IsDestroying) return;
         IsDestroying = true;
         if (!IsFrozen) UnRegisterFromModule(WorldGP, EntityOrientation);
@@ -1525,7 +1531,7 @@ public class Actor : Entity
         {
             if (ActorFrozenHelper.FrozenBox)
             {
-                ActorFrozenHelper.FrozenBox.DestroyBox(null, false);
+                ActorFrozenHelper.FrozenBox.DestroySelf();
                 ActorFrozenHelper.FrozenBox = null;
             }
 

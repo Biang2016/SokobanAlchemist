@@ -33,7 +33,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
         if (ChangeForEveryGrid)
         {
             List<GridPos3D> occupations = Box.GetEntityOccupationGPs_Rotated();
-            Box.DestroyBox(delegate
+            Box.DestroySelf(delegate
             {
                 foreach (GridPos3D gridPos in occupations)
                 {
@@ -45,7 +45,7 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
         }
         else
         {
-            Box.DestroyBox(delegate
+            Box.DestroySelf(delegate
             {
                 WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(worldGP);
                 if (module != null) module.GenerateEntity(EntityData.Clone(), worldGP);

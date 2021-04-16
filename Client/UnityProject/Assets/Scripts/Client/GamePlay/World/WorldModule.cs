@@ -230,7 +230,7 @@ public class WorldModule : PoolObject
                                 }
                             }
 
-                            actor.DestroyActorForModuleRecycle();
+                            actor.DestroySelfByModuleRecycle();
                             count++;
                             if (count > clearEntityNumPerFrame)
                             {
@@ -359,7 +359,7 @@ public class WorldModule : PoolObject
             GridPos3D localGP = data.LocalGP;
             appear.GenerateEntityAction = () =>
             {
-                BoxMatrix[localGP.x, localGP.y, localGP.z]?.DestroyBox(null, true); // 强行删除该格占用Box
+                BoxMatrix[localGP.x, localGP.y, localGP.z]?.DestroySelfByModuleRecycle(); // 强行删除该格占用Box
                 EntityData entityData = dataClone.EntityData.Clone();
                 entityData.RemoveAllLevelEventTriggerAppearPassiveSkill();
                 Entity entity = GenerateEntity(entityData, LocalGPToWorldGP(localGP), true, false);
@@ -489,7 +489,7 @@ public class WorldModule : PoolObject
                     if (isTriggerAppear)
                     {
                         valid = true;
-                        if (!canOverlap) box.DestroyBox(null, true);
+                        if (!canOverlap) box.DestroySelfByModuleRecycle();
                     }
                     else
                     {
@@ -609,7 +609,7 @@ public class WorldModule : PoolObject
     {
         if (Selection.Contains(gameObject))
         {
-            if (WorldModuleData != null && WorldModuleData.WorldModuleTypeIndex == ConfigManager.WorldModule_DeadZoneIndex)
+            if (WorldModuleData != null && WorldModuleData.WorldModuleTypeIndex == ConfigManager.WorldModule_EmptyModuleIndex)
             {
                 Gizmos.color = new Color(1f, 0, 0, 0.7f);
                 Gizmos.DrawSphere(transform.position + Vector3.one * (MODULE_SIZE - 1) * 0.5f, 3f);

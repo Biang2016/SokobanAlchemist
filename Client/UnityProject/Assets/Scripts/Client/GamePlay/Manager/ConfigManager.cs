@@ -1109,9 +1109,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     #region Special types const
 
     public static IEnumerable AllBuffAttributeTypes;
-    public static ushort WorldModule_DeadZoneIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_DeadZone");
-    public static ushort WorldModule_HiddenWallIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_Wall_Hidden");
-    public static ushort WorldModule_GroundIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_Ground");
+    public static ushort WorldModule_EmptyModuleIndex => GetTypeIndex(TypeDefineType.WorldModule, "Common_Empty");
     public static ushort World_OpenWorldIndex => GetTypeIndex(TypeDefineType.World, "OpenWorld");
     public static ushort Box_EnemyFrozenBoxIndex => GetTypeIndex(TypeDefineType.Box, "EnemyFrozenBox");
     public static ushort Box_GroundBoxIndex => GetTypeIndex(TypeDefineType.Box, "GroundBox");

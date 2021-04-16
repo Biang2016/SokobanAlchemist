@@ -167,7 +167,6 @@ public partial class Box : Entity
         worldGP_WhenKicked = GridPos3D.Zero;
         LastState = States.Static;
         State = States.Static;
-        isDestroying = false;
 
         EntityArtHelper?.OnHelperRecycled();
         EntityWwiseHelper.OnHelperRecycled();
@@ -1038,7 +1037,7 @@ public partial class Box : Entity
                         h.OnRigidbodyStop();
                     }
 
-                    if (!isDestroying) WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this, checkMerge, CurrentMoveGlobalPlanerDir); // 这里面已经做了“Box本来就在Grid系统里”的判定
+                    if (!IsDestroying) WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this, checkMerge, CurrentMoveGlobalPlanerDir); // 这里面已经做了“Box本来就在Grid系统里”的判定
                     CurrentMoveGlobalPlanerDir = GridPos3D.Zero;
                     EntityWwiseHelper.OnSlideStop.Post(gameObject);
                 }
@@ -1070,7 +1069,7 @@ public partial class Box : Entity
 
         if (PassiveSkillMarkAsDestroyed)
         {
-            DestroyBox();
+            DestroySelf();
         }
     }
 
@@ -1106,7 +1105,7 @@ public partial class Box : Entity
 
                 if (PassiveSkillMarkAsDestroyed && !IsRecycled)
                 {
-                    DestroyBox();
+                    DestroySelf();
                     return;
                 }
 
@@ -1115,7 +1114,7 @@ public partial class Box : Entity
                     OnFlyingCollisionEnter(collision);
                     if (PassiveSkillMarkAsDestroyed)
                     {
-                        DestroyBox();
+                        DestroySelf();
                         return;
                     }
                 }
@@ -1137,7 +1136,7 @@ public partial class Box : Entity
 
                     if (PassiveSkillMarkAsDestroyed && !IsRecycled)
                     {
-                        DestroyBox();
+                        DestroySelf();
                         return;
                     }
 
@@ -1146,7 +1145,7 @@ public partial class Box : Entity
                         OnBeingKickedCollisionEnter(collision);
                         if (PassiveSkillMarkAsDestroyed)
                         {
-                            DestroyBox();
+                            DestroySelf();
                             return;
                         }
                     }
@@ -1171,7 +1170,7 @@ public partial class Box : Entity
 
                 if (PassiveSkillMarkAsDestroyed && !IsRecycled)
                 {
-                    DestroyBox();
+                    DestroySelf();
                     return;
                 }
 
@@ -1180,7 +1179,7 @@ public partial class Box : Entity
                     OnDroppingFromAirCollisionEnter(collision);
                     if (PassiveSkillMarkAsDestroyed)
                     {
-                        DestroyBox();
+                        DestroySelf();
                         return;
                     }
                 }
@@ -1243,12 +1242,23 @@ public partial class Box : Entity
 
     #region Destroy
 
-    private bool isDestroying = false;
 
-    public void DestroyBox(UnityAction callBack = null, bool forModuleRecycle = false)
+    public override void DestroySelfByModuleRecycle()
     {
-        if (isDestroying || IsRecycled) return;
-        isDestroying = true;
+        base.DestroySelfByModuleRecycle();
+        DestroyBoxCore(null, true);
+    }
+
+    public override void DestroySelf(UnityAction callBack = null)
+    {
+        base.DestroySelf(callBack);
+        DestroyBoxCore(null, false);
+    }
+
+    private void DestroyBoxCore(UnityAction callBack = null, bool forModuleRecycle = false)
+    {
+        if (IsDestroying || IsRecycled) return;
+        IsDestroying = true;
         if (!forModuleRecycle)
         {
             foreach (EntityPassiveSkill ps in EntityPassiveSkills)
@@ -1319,7 +1329,7 @@ public partial class Box : Entity
             ps.OnBeingFueled();
         }
 
-        DestroyBox();
+        DestroySelf();
     }
 
     #region Drop

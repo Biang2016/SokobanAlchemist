@@ -49,7 +49,7 @@ public class WorldDeadZoneTrigger : PoolObject
             Box box = collider.gameObject.GetComponentInParent<Box>();
             if (box)
             {
-                box.DestroyBox();
+                box.DestroySelf();
             }
         }
 
@@ -60,7 +60,7 @@ public class WorldDeadZoneTrigger : PoolObject
             if (actor.IsNotNullAndAlive() && !actorFaceHelper)
             {
                 Debug.Log("Actor die in WorldDeadZone:" + name);
-                actor.DestroyActor();
+                actor.DestroySelf();
             }
         }
     }

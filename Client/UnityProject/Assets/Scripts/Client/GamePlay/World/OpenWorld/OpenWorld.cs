@@ -611,7 +611,6 @@ public class OpenWorld : World
         LoadingMapPanel.SetProgress(0, "Loading Level");
 
         WorldData microWorldData = ConfigManager.GetWorldDataConfig(worldTypeIndex);
-        GridPos3D transportPlayerBornPoint = GridPos3D.Zero;
 
         // Recycling Micro World Modules
         if (IsInsideMicroWorld)
@@ -626,6 +625,7 @@ public class OpenWorld : World
             }
 
             MicroWorldModules.Clear();
+            yield return RecycleEmptyModules();
         }
 
         // Loading Micro World Modules
@@ -635,12 +635,12 @@ public class OpenWorld : World
         foreach (GridPos3D worldModuleGP in microWorldData.WorldModuleGPOrder)
         {
             ushort worldModuleTypeIndex = microWorldData.ModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
-            GridPos3D realModuleGP = new GridPos3D(worldModuleGP.x, World.WORLD_HEIGHT / 2 + worldModuleGP.y, worldModuleGP.z);
+            GridPos3D realModuleGP = new GridPos3D(worldModuleGP.x, WORLD_HEIGHT / 2 + worldModuleGP.y, worldModuleGP.z);
             if (worldModuleTypeIndex != 0)
             {
-                if (worldModuleGP.y >= World.WORLD_HEIGHT / 2)
+                if (worldModuleGP.y >= WORLD_HEIGHT / 2)
                 {
-                    Debug.LogError($"静态世界不允许超过{World.WORLD_HEIGHT / 2}个模组高度");
+                    Debug.LogError($"静态世界不允许超过{WORLD_HEIGHT / 2}个模组高度");
                     continue;
                 }
                 else
@@ -649,8 +649,6 @@ public class OpenWorld : World
                     WorldModule module = WorldModuleMatrix[realModuleGP.x, realModuleGP.y, realModuleGP.z];
                     MicroWorldModules.Add(module);
                     WorldData.WorldBornPointGroupData_Runtime.Init_LoadModuleData(realModuleGP, module.WorldModuleData);
-                    SortedDictionary<string, BornPointData> playerBornPoints = module.WorldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints;
-
                     List<BornPointData> moduleBPData = WorldData.WorldBornPointGroupData_Runtime.TryLoadModuleBPData(realModuleGP);
                     if (moduleBPData != null)
                     {
@@ -670,7 +668,9 @@ public class OpenWorld : World
             LoadingMapPanel.SetProgress(20f + 60f * loadingModuleCount / totalModuleNum, "Loading Level");
         }
 
-        transportPlayerBornPoint = WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[microWorldData.DefaultWorldActorBornPointAlias].WorldGP;
+        yield return GenerateEmptyModules(microWorldData, new GridPos3D(0, WORLD_HEIGHT / 2, 0));
+
+        GridPos3D transportPlayerBornPoint = WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[microWorldData.DefaultWorldActorBornPointAlias].WorldGP;
         if (transportPlayerBornPoint == GridPos3D.Zero)
         {
             Debug.LogWarning("传送的模组没有默认玩家出生点");
@@ -757,6 +757,7 @@ public class OpenWorld : World
         }
 
         MicroWorldModules.Clear();
+        yield return RecycleEmptyModules();
         LoadingMapPanel.SetProgress(100f, "Returning to Open World");
 
         yield return new WaitForSeconds(LoadingMapPanel.GetRemainingLoadingDuration());
@@ -801,6 +802,7 @@ public class OpenWorld : World
         }
 
         MicroWorldModules.Clear();
+        yield return RecycleEmptyModules();
 
         // Loading Micro World Modules
         int totalModuleNum = microWorldData.WorldModuleGPOrder.Count;
@@ -846,6 +848,8 @@ public class OpenWorld : World
             loadingModuleCount++;
             LoadingMapPanel.SetProgress(50f + 50f * loadingModuleCount / totalModuleNum, "Rebuilding the dungeon");
         }
+
+        yield return GenerateEmptyModules(microWorldData, new GridPos3D(0, WORLD_HEIGHT / 2, 0));
 
         if (transportPlayerBornPoint == GridPos3D.Zero)
         {
