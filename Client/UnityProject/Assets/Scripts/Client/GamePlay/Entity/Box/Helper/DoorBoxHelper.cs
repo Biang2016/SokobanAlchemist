@@ -4,8 +4,6 @@ public class DoorBoxHelper : BoxMonoHelper
 {
     public Animator DoorAnim;
 
-    public Collider DoorCollider;
-
     private bool open;
 
     public bool Open
@@ -17,7 +15,6 @@ public class DoorBoxHelper : BoxMonoHelper
             {
                 open = value;
                 DoorAnim.SetTrigger(open ? "Open" : "Close");
-                DoorCollider.gameObject.SetActive(!value);
             }
         }
     }

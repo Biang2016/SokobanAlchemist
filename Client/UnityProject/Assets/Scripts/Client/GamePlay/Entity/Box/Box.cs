@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Profiling;
+
 #if UNITY_EDITOR
 
 #endif
@@ -167,6 +168,7 @@ public partial class Box : Entity
         worldGP_WhenKicked = GridPos3D.Zero;
         LastState = States.Static;
         State = States.Static;
+        IsDestroying = false;
 
         EntityArtHelper?.OnHelperRecycled();
         EntityWwiseHelper.OnHelperRecycled();
@@ -1242,36 +1244,25 @@ public partial class Box : Entity
 
     #region Destroy
 
-
     public override void DestroySelfByModuleRecycle()
     {
         base.DestroySelfByModuleRecycle();
-        DestroyBoxCore(null, true);
+        if (IsDestroying || IsRecycled) return;
+        IsDestroying = true;
+        WorldManager.Instance.CurrentWorld.DeleteBox(this);
     }
 
     public override void DestroySelf(UnityAction callBack = null)
     {
         base.DestroySelf(callBack);
-        DestroyBoxCore(null, false);
-    }
-
-    private void DestroyBoxCore(UnityAction callBack = null, bool forModuleRecycle = false)
-    {
         if (IsDestroying || IsRecycled) return;
         IsDestroying = true;
-        if (!forModuleRecycle)
+        foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
-            foreach (EntityPassiveSkill ps in EntityPassiveSkills)
-            {
-                ps.OnBeforeDestroyEntity();
-            }
+            ps.OnBeforeDestroyEntity();
+        }
 
-            StartCoroutine(Co_DelayDestroyBox(callBack));
-        }
-        else
-        {
-            WorldManager.Instance.CurrentWorld.DeleteBox(this);
-        }
+        StartCoroutine(Co_DelayDestroyBox(callBack));
     }
 
     IEnumerator Co_DelayDestroyBox(UnityAction callBack)
