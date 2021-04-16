@@ -199,17 +199,20 @@ public class Actor : Entity
         {
             if (curWorldGP != value)
             {
-                foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+                if (!IsFrozen)
                 {
-                    GridPos3D gridPos = value + offset;
-                    Entity targetGridEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridPos, GUID, out WorldModule targetGridModule, out GridPos3D _);
-                    if (targetGridModule == null) return; // 防止角色走入空模组
-                    if (targetGridEntity != null) return; // 防止角色和其他Entity卡住
+                    foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+                    {
+                        GridPos3D gridPos = value + offset;
+                        Entity targetGridEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridPos, GUID, out WorldModule targetGridModule, out GridPos3D _);
+                        if (targetGridModule == null) return; // 防止角色走入空模组
+                        if (targetGridEntity != null) return; // 防止角色和其他Entity卡住
+                    }
                 }
 
-                UnRegisterFromModule(curWorldGP, EntityOrientation);
+                if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
                 curWorldGP = value;
-                RegisterInModule(curWorldGP, EntityOrientation);
+                if (!IsFrozen) RegisterInModule(curWorldGP, EntityOrientation);
             }
         }
     }
@@ -241,7 +244,7 @@ public class Actor : Entity
         }
     }
 
-    private void UnRegisterFromModule(GridPos3D oldWorldGP, GridPosR.Orientation oldOrientation)
+    public void UnRegisterFromModule(GridPos3D oldWorldGP, GridPosR.Orientation oldOrientation)
     {
         if (IsRecycling) return;
         List<GridPos3D> occupationData_Rotated = ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[oldOrientation];
@@ -257,7 +260,7 @@ public class Actor : Entity
         }
     }
 
-    private void RegisterInModule(GridPos3D newWorldGP, GridPosR.Orientation newOrientation)
+    public void RegisterInModule(GridPos3D newWorldGP, GridPosR.Orientation newOrientation)
     {
         if (IsRecycling) return;
         foreach (GridPos3D offset in ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[newOrientation])
@@ -282,11 +285,12 @@ public class Actor : Entity
 
         // Actor由于限制死平面必须是正方形，因此可以用左下角坐标相减得到核心坐标偏移量；在旋转时应用此偏移量，可以保证平面正方形仍在老位置
         GridPos offset = ActorRotateWorldGPOffset(ActorWidth, newOrientation) - ActorRotateWorldGPOffset(ActorWidth, EntityOrientation);
-        UnRegisterFromModule(curWorldGP, EntityOrientation);
+        if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
         base.SwitchEntityOrientation(newOrientation);
-        RegisterInModule(curWorldGP, newOrientation);
+        if (!IsFrozen) RegisterInModule(curWorldGP, newOrientation);
 
-        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(offset.x + curWorldGP.x, offset.z + curWorldGP.z, newOrientation), transform, 1);
+        transform.position = new Vector3(offset.x + curWorldGP.x, transform.position.y, offset.z + curWorldGP.z);
+        transform.rotation = Quaternion.Euler(0, (int) newOrientation * 90f, 0);
         WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
     }
 
@@ -694,8 +698,11 @@ public class Actor : Entity
     {
     }
 
+    private Vector3 lastPosition = Vector3.zero;
+
     protected override void FixedUpdate()
     {
+        lastPosition = transform.position;
         PlayerControllerHelper?.OnFixedUpdate();
         base.FixedUpdate();
         if (IsRecycled) return;
@@ -1492,7 +1499,7 @@ public class Actor : Entity
     {
         if (IsDestroying) return;
         IsDestroying = true;
-        UnRegisterFromModule(WorldGP, EntityOrientation);
+        if (!IsFrozen) UnRegisterFromModule(WorldGP, EntityOrientation);
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
             ps.OnBeforeDestroyEntity();

@@ -78,6 +78,15 @@ namespace BiangLibrary.GameDataFormat.Grid
             transform.localRotation = Quaternion.Euler(0, rotY, 0);
         }
 
+        public static void ApplyGridPosToTrans(GridPosR gridPos, Transform transform, int gridSize)
+        {
+            float x = gridPos.x * gridSize;
+            float z = gridPos.z * gridSize;
+            float rotY = (int) gridPos.orientation * 90f;
+            transform.position = new Vector3(x, transform.position.y, z);
+            transform.rotation = Quaternion.Euler(0, rotY, 0);
+        }
+
         public static Orientation RotateOrientationClockwise90(Orientation orientation, int times = 1)
         {
             return (Orientation) (((int) orientation + times) % 4);

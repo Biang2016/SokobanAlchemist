@@ -67,11 +67,21 @@ public abstract class Entity : PoolObject
     [ShowInInspector]
     public EntityStatPropSet EntityStatPropSet; // 湿数据，随生命周期消亡
 
+    [DisplayAsString]
+    [HideInEditorMode]
+    [ShowInInspector]
+    [FoldoutGroup("状态")]
+    [LabelText("被冻结")]
     public bool IsFrozen => EntityStatPropSet.IsFrozen;
 
     /// <summary>
     /// （受各种控制技能影响）无法动弹
     /// </summary>
+    [DisplayAsString]
+    [HideInEditorMode]
+    [ShowInInspector]
+    [FoldoutGroup("状态")]
+    [LabelText("无法移动")]
     public bool CannotAct => IsFrozen || EntityBuffHelper.IsShocking || EntityBuffHelper.IsStun || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed;
 
     [DisplayAsString]
@@ -133,6 +143,11 @@ public abstract class Entity : PoolObject
 
     #region 旋转朝向
 
+    [DisplayAsString]
+    [HideInEditorMode]
+    [ShowInInspector]
+    [FoldoutGroup("状态")]
+    [LabelText("旋转朝向")]
     public GridPosR.Orientation EntityOrientation { get; protected set; }
 
     internal virtual void SwitchEntityOrientation(GridPosR.Orientation entityOrientation)

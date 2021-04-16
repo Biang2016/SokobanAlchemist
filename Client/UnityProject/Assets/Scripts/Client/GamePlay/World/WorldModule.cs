@@ -164,9 +164,9 @@ public class WorldModule : PoolObject
 
     #region Roots
 
-    protected Transform WorldModuleBoxRoot;
-    protected Transform WorldModuleTriggerRoot;
-    protected Transform WorldModuleLevelTriggerRoot;
+    internal Transform WorldModuleBoxRoot;
+    internal Transform WorldModuleTriggerRoot;
+    internal Transform WorldModuleLevelTriggerRoot;
 
     #endregion
 

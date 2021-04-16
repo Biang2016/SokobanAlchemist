@@ -240,6 +240,7 @@ public static class ActorAIAtoms
         protected override bool OnCheck()
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
+            if (Actor.CannotAct) return false;
             ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
             if (!target.HasTarget) return false;
             GridPos3D targetGP = target.TargetGP;
@@ -277,6 +278,7 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.CannotAct) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
             ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
             if (!target.HasTarget) return Status.Failure;
@@ -322,6 +324,7 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.CannotAct) return Status.Failure;
             if (Actor.ThrowState == Actor.ThrowStates.Lifting && Actor.CurrentLiftBox != null)
             {
                 Actor.ThrowCharge();
@@ -614,7 +617,7 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            if (Actor.IsFrozen) return Status.Failure;
+            if (Actor.CannotAct) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
             ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
             if (!target.HasTarget) return Status.Failure;
@@ -718,6 +721,7 @@ public static class ActorAIAtoms
 
         protected override bool OnCheck()
         {
+            if (Actor.CannotAct) return false;
             Status status = BT_Enemy_TriggerSkill.TriggerSkill(Actor, EntitySkillIndex.value, TargetEntityType.value);
             return status == Status.Success;
         }
@@ -738,6 +742,7 @@ public static class ActorAIAtoms
 
         public override void Invoke()
         {
+            if (Actor.CannotAct) return;
             BT_Enemy_TriggerSkill.TriggerSkill(Actor, EntitySkillIndex.value, TargetEntityType.value);
         }
     }

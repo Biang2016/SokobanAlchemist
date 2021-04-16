@@ -40,4 +40,13 @@ public class EntitySkillSSO : SerializedScriptableObject
             EntitySkill.SkillGUID = Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
         }
     }
+    [Button("强制刷新技能GUID")]
+    [ShowIf("hasGUID")]
+    public void ForceRefreshEntitySkillGUID()
+    {
+        if (EntitySkill != null && !string.IsNullOrWhiteSpace(EntitySkill.SkillGUID))
+        {
+            EntitySkill.SkillGUID = Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
+        }
+    }
 }

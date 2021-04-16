@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using UnityEngine;
 
 public class ActorFrozenHelper : EntityFrozenHelper
@@ -21,6 +22,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
                 FrozenBox = null;
             }
 
+            actor.RegisterInModule(actor.WorldGP, actor.EntityOrientation);
             Thaw();
             FXManager.Instance.PlayFX(actor.ThawFX, transform.position);
         }
@@ -32,10 +34,11 @@ public class ActorFrozenHelper : EntityFrozenHelper
             else
             {
                 actor.SnapToGrid();
+                actor.UnRegisterFromModule(actor.WorldGP, actor.EntityOrientation);
                 WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(actor.WorldGP);
                 if (module)
                 {
-                    EntityData entityData = new EntityData(ConfigManager.Box_EnemyFrozenBoxIndex, actor.EntityOrientation);
+                     EntityData entityData = new EntityData(ConfigManager.Box_EnemyFrozenBoxIndex, actor.EntityOrientation);
                     // triggerAppear参数填true以确保冰冻箱子能正常生成
                     FrozenBox = (Box) module.GenerateEntity(entityData, actor.WorldGP, true, false, false, actor.GetEntityOccupationGPs_Rotated());
                     if (FrozenBox)

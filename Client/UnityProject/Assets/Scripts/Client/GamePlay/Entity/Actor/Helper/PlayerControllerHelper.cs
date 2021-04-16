@@ -58,8 +58,6 @@ public class PlayerControllerHelper : ActorMonoHelper
 
             Actor.CurMoveAttempt = Vector3.zero;
 
-            // todo 转视角后按键映射问题
-
             if (BS_Up.Down) lastMoveUpButtonDownWorldGP = Actor.WorldGP;
             if (BS_Right.Down) lastMoveRightButtonDownWorldGP = Actor.WorldGP;
             if (BS_Down.Down) lastMoveDownButtonDownWorldGP = Actor.WorldGP;
@@ -106,24 +104,9 @@ public class PlayerControllerHelper : ActorMonoHelper
                         || (entity is Box box && box.Pushable && Actor.ActorPushHelper.Actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.EntityTypeIndex) &&
                             WorldManager.Instance.CurrentWorld.CheckCanMoveBoxColumn(box.WorldGP, rotatedQuickMoveAttemptGP, new HashSet<Box>()))) // 能走到才开启短按
                     {
-                        // Check is there any actor occupies the grid
-                        bool isActorOccupying = false;
-                        Collider[] colliders = Physics.OverlapSphere(targetPos, 0.4f, LayerManager.Instance.LayerMask_ActorIndicator_Player | LayerManager.Instance.LayerMask_ActorIndicator_Enemy);
-                        foreach (Collider collider in colliders)
-                        {
-                            Actor actor = collider.GetComponentInParent<Actor>();
-                            if (actor.IsNotNullAndAlive() && actor.GUID != Actor.GUID)
-                            {
-                                isActorOccupying = true;
-                            }
-                        }
-
-                        if (!isActorOccupying)
-                        {
-                            Actor.CurMoveAttempt = quickMoveAttempt;
-                            //Debug.Log("速按" + quickMoveAttempt);
-                            isQuickMoving = true;
-                        }
+                        Actor.CurMoveAttempt = quickMoveAttempt;
+                        //Debug.Log("速按" + quickMoveAttempt);
+                        isQuickMoving = true;
                     }
                 }
             }

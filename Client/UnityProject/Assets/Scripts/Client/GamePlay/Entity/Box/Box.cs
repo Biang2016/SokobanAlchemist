@@ -545,7 +545,7 @@ public partial class Box : Entity
         WorldModule = module;
         WorldGP = worldGridPos3D;
         LocalGP = module.WorldGPToLocalGP(worldGridPos3D);
-        transform.parent = module.transform;
+        transform.parent = module.WorldModuleBoxRoot;
         BoxColliderHelper.Initialize(Passable, artOnly, BoxFeature.HasFlag(BoxFeature.IsGround), lerpType == LerpType.Drop, lerpTime > 0);
         if (lerpTime > 0)
         {
