@@ -30,6 +30,16 @@ public class BoxArtHelper : EntityArtHelper
                     mv.GameObject.SetActive(mv == randomMV);
                 }
             }
+
+            bool showDecoration = ShowDecorationProbabilityPercent.ProbabilityBool();
+            ModelVariantProbability randomDec = CommonUtils.GetRandomWithProbabilityFromList(ProbablyShowModelDecorations);
+            if (randomDec != null)
+            {
+                foreach (ModelVariantProbability dec in ProbablyShowModelDecorations)
+                {
+                    dec.GameObject.SetActive(showDecoration && dec == randomDec);
+                }
+            }
         }
 
         if (UseRandomScale) Pivot.localScale = new Vector3(GaussianRandom.Range(RandomScaleMean.x, RandomScaleRadius.x), GaussianRandom.Range(RandomScaleMean.y, RandomScaleRadius.y), GaussianRandom.Range(RandomScaleMean.z, RandomScaleRadius.z));
@@ -45,6 +55,18 @@ public class BoxArtHelper : EntityArtHelper
     [ShowIf("UseModelVariants")]
     [ListDrawerSettings(ShowIndexLabels = false)]
     public List<ModelVariantProbability> ModelVariants = new List<ModelVariantProbability>();
+
+    [BoxGroup("模型变种")]
+    [LabelText("出现装饰概率%")]
+    [ShowIf("UseModelVariants")]
+    [ListDrawerSettings(ShowIndexLabels = false)]
+    public int ShowDecorationProbabilityPercent = 0;
+
+    [BoxGroup("模型变种")]
+    [LabelText("可能出现装饰")]
+    [ShowIf("UseModelVariants")]
+    [ListDrawerSettings(ShowIndexLabels = false)]
+    public List<ModelVariantProbability> ProbablyShowModelDecorations = new List<ModelVariantProbability>();
 
     [BoxGroup("随机尺寸")]
     [LabelText("随机尺寸")]
