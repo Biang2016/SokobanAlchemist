@@ -24,9 +24,33 @@ public class EntityStatPropSet
 
     #region 财产
 
-    [BoxGroup("耐久")]
+    [BoxGroup("财产")]
     [LabelText("@\"当前金子\t\"+Gold")]
     public EntityStat Gold = new EntityStat(EntityStatType.Gold);
+
+    [BoxGroup("财产")]
+    [LabelText("@\"火元素碎片\t\"+FireElementFragment")]
+    public EntityStat FireElementFragment = new EntityStat(EntityStatType.FireElementFragment);
+
+    [BoxGroup("财产")]
+    [LabelText("@\"火元素碎片上限\t\"+MaxFireElementFragment")]
+    public EntityProperty MaxFireElementFragment = new EntityProperty(EntityPropertyType.MaxFireElementFragment);
+
+    [BoxGroup("财产")]
+    [LabelText("@\"冰元素碎片\t\"+IceElementFragment")]
+    public EntityStat IceElementFragment = new EntityStat(EntityStatType.IceElementFragment);
+
+    [BoxGroup("财产")]
+    [LabelText("@\"冰元素碎片上限\t\"+MaxIceElementFragment")]
+    public EntityProperty MaxIceElementFragment = new EntityProperty(EntityPropertyType.MaxIceElementFragment);
+
+    [BoxGroup("财产")]
+    [LabelText("@\"电元素碎片\t\"+LightningElementFragment")]
+    public EntityStat LightningElementFragment = new EntityStat(EntityStatType.LightningElementFragment);
+
+    [BoxGroup("财产")]
+    [LabelText("@\"电元素碎片上限\t\"+MaxLightningElementFragment")]
+    public EntityProperty MaxLightningElementFragment = new EntityProperty(EntityPropertyType.MaxLightningElementFragment);
 
     #endregion
 
@@ -196,6 +220,14 @@ public class EntityStatPropSet
 
         #region Property初始化
 
+        #region 财产
+
+        MaxFireElementFragment.Initialize();
+        MaxIceElementFragment.Initialize();
+        MaxLightningElementFragment.Initialize();
+
+        #endregion
+
         #region 耐久
 
         MaxHealthDurability.Initialize();
@@ -256,6 +288,18 @@ public class EntityStatPropSet
         #region 财产
 
         StatDict.Add(EntityStatType.Gold, Gold);
+
+        FireElementFragment.MaxValue = MaxFireElementFragment.GetModifiedValue;
+        StatDict.Add(EntityStatType.FireElementFragment, FireElementFragment);
+        PropertyDict.Add(EntityPropertyType.MaxFireElementFragment, MaxFireElementFragment);
+
+        IceElementFragment.MaxValue = MaxIceElementFragment.GetModifiedValue;
+        StatDict.Add(EntityStatType.IceElementFragment, IceElementFragment);
+        PropertyDict.Add(EntityPropertyType.MaxIceElementFragment, MaxIceElementFragment);
+
+        LightningElementFragment.MaxValue = MaxLightningElementFragment.GetModifiedValue;
+        StatDict.Add(EntityStatType.LightningElementFragment, LightningElementFragment);
+        PropertyDict.Add(EntityPropertyType.MaxLightningElementFragment, MaxLightningElementFragment);
 
         #endregion
 
@@ -392,8 +436,11 @@ public class EntityStatPropSet
         }
 
         StatNotifyActionSetDict[EntityStatType.Gold].OnValueIncrease += OnGoldIncrease;
-        StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueDecrease += OnHealthDurabilityDecrease;
+        StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueIncrease += OnFireElementFragmentIncrease;
+        StatNotifyActionSetDict[EntityStatType.IceElementFragment].OnValueIncrease += OnIceElementFragmentIncrease;
+        StatNotifyActionSetDict[EntityStatType.LightningElementFragment].OnValueIncrease += OnLightningElementFragmentIncrease;
         StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueIncrease += OnHealthDurabilityIncrease;
+        StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueDecrease += OnHealthDurabilityDecrease;
         StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueReachZero += OnHealthDurabilityReachZero;
         StatNotifyActionSetDict[EntityStatType.FrozenValue].OnValueIncrease += OnFrozenValueIncrease;
         StatNotifyActionSetDict[EntityStatType.FrozenValue].OnValueChanged += OnFrozenValueChanged;
@@ -428,12 +475,27 @@ public class EntityStatPropSet
         }
     }
 
-    private void OnHealthDurabilityDecrease(int decrease)
+    private void OnFireElementFragmentIncrease(int increase)
     {
         if (Entity is Actor actor)
         {
-            actor.ActorBattleHelper.ShowDamageNumFX(decrease);
-            actor.EntityWwiseHelper.OnBeingDamaged.Post(actor.gameObject);
+            actor.ActorBattleHelper.ShowGainFireElementFragmentNumFX(increase);
+        }
+    }
+
+    private void OnIceElementFragmentIncrease(int increase)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowGainIceElementFragmentNumFX(increase);
+        }
+    }
+
+    private void OnLightningElementFragmentIncrease(int increase)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowGainLightningElementFragmentNumFX(increase);
         }
     }
 
@@ -443,6 +505,15 @@ public class EntityStatPropSet
         {
             actor.ActorBattleHelper.ShowHealNumFX(increase);
             actor.EntityWwiseHelper.OnBeingHealed.Post(actor.gameObject);
+        }
+    }
+
+    private void OnHealthDurabilityDecrease(int decrease)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowDamageNumFX(decrease);
+            actor.EntityWwiseHelper.OnBeingDamaged.Post(actor.gameObject);
         }
     }
 
@@ -609,6 +680,12 @@ public class EntityStatPropSet
         #region 财产
 
         Gold.ApplyDataTo(target.Gold);
+        FireElementFragment.ApplyDataTo(target.FireElementFragment);
+        MaxFireElementFragment.ApplyDataTo(target.MaxFireElementFragment);
+        IceElementFragment.ApplyDataTo(target.IceElementFragment);
+        MaxIceElementFragment.ApplyDataTo(target.MaxIceElementFragment);
+        LightningElementFragment.ApplyDataTo(target.LightningElementFragment);
+        MaxLightningElementFragment.ApplyDataTo(target.MaxLightningElementFragment);
 
         #endregion
 

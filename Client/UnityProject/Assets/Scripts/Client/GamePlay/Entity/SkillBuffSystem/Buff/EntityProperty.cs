@@ -133,6 +133,18 @@ public enum EntityPropertyType
     [EntityProperty]
     [LabelText("燃烧蔓延率")]
     FiringSpreadPercent = 401,
+
+    [EntityProperty]
+    [LabelText("火元素碎片上限")]
+    MaxFireElementFragment = 500,
+
+    [EntityProperty]
+    [LabelText("冰元素碎片上限")]
+    MaxIceElementFragment = 501,
+
+    [EntityProperty]
+    [LabelText("电元素碎片上限")]
+    MaxLightningElementFragment = 502,
 }
 
 public enum EntitySkillPropertyType

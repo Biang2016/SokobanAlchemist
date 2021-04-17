@@ -5,26 +5,37 @@ using UnityEngine.UI;
 
 public class PlayerStatHUD : MonoBehaviour
 {
+    public void Initialize(ActorBattleHelper helper)
+    {
+        EntityStatPropSet asps = helper.Actor.EntityStatPropSet;
+
+        SetHealth(asps.HealthDurability.Value, asps.HealthDurability.MinValue, asps.HealthDurability.MaxValue);
+        asps.HealthDurability.m_NotifyActionSet.OnChanged += SetHealth;
+
+        SetActionPoint(asps.ActionPoint.Value, asps.ActionPoint.MinValue, asps.ActionPoint.MaxValue);
+        asps.ActionPoint.m_NotifyActionSet.OnChanged += SetActionPoint;
+
+        SetGold(asps.Gold.Value);
+        asps.Gold.m_NotifyActionSet.OnChanged += (value, min, max) => SetGold(value);
+
+        SetFireElementFragment(asps.FireElementFragment.Value, asps.FireElementFragment.MinValue, asps.FireElementFragment.MaxValue);
+        asps.FireElementFragment.m_NotifyActionSet.OnChanged += SetFireElementFragment;
+
+        SetIceElementFragment(asps.IceElementFragment.Value, asps.IceElementFragment.MinValue, asps.IceElementFragment.MaxValue);
+        asps.IceElementFragment.m_NotifyActionSet.OnChanged += SetIceElementFragment;
+
+        SetLightningElementFragment(asps.LightningElementFragment.Value, asps.LightningElementFragment.MinValue, asps.LightningElementFragment.MaxValue);
+        asps.LightningElementFragment.m_NotifyActionSet.OnChanged += SetLightningElementFragment;
+    }
+
+    #region Health
+
     public Gradient HealthSliderFillImageGradient;
     public Image HealthSliderFillImage;
     public Slider HealthSlider;
     public Animator HealthSliderHandleAnim;
     public TextMeshProUGUI HealthText;
     public Animator HealthTextAnim;
-
-    public void Initialize(ActorBattleHelper helper)
-    {
-        EntityStatPropSet asps = helper.Actor.EntityStatPropSet;
-        SetHealth(asps.HealthDurability.Value, asps.HealthDurability.MinValue, asps.HealthDurability.MaxValue);
-        SetActionPoint(asps.ActionPoint.Value, asps.ActionPoint.MinValue, asps.ActionPoint.MaxValue);
-        SetGold(asps.Gold.Value);
-
-        asps.HealthDurability.m_NotifyActionSet.OnChanged += SetHealth;
-        asps.ActionPoint.m_NotifyActionSet.OnChanged += SetActionPoint;
-        asps.Gold.m_NotifyActionSet.OnChanged += (value, min, max) => SetGold(value);
-    }
-
-    #region Health
 
     public void SetHealth(int current, int min, int max)
     {
@@ -86,13 +97,61 @@ public class PlayerStatHUD : MonoBehaviour
 
     #endregion
 
-    #region Gold
+    #region 财产
 
     public TextMeshProUGUI GoldText;
 
     public void SetGold(int current)
     {
         GoldText.text = current.ToString();
+    }
+
+    public TextMeshProUGUI FireElementFragmentText;
+    public Slider FireElementFragmentSlider;
+
+    public void SetFireElementFragment(int current, int min, int max)
+    {
+        FireElementFragmentText.text = current.ToString();
+        if (max == 0)
+        {
+            FireElementFragmentSlider.value = 0f;
+        }
+        else
+        {
+            FireElementFragmentSlider.value = (float) current / max;
+        }
+    }
+
+    public TextMeshProUGUI IceElementFragmentTextText;
+    public Slider IceElementFragmentSlider;
+
+    public void SetIceElementFragment(int current, int min, int max)
+    {
+        IceElementFragmentTextText.text = current.ToString();
+        if (max == 0)
+        {
+            IceElementFragmentSlider.value = 0f;
+        }
+        else
+        {
+            IceElementFragmentSlider.value = (float) current / max;
+        }
+    }
+
+    public TextMeshProUGUI LightningElementFragmentText;
+    public Slider LightningElementFragmentSlider;
+
+    public void SetLightningElementFragment(int current, int min, int max)
+    {
+        LightningElementFragmentText.text = current.ToString();
+        if (max == 0)
+        {
+            LightningElementFragmentSlider.value = 0f;
+        }
+        else
+        {
+            LightningElementFragmentSlider.value = (float) current / max;
+        }
     }
 
     #endregion
