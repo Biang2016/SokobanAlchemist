@@ -1024,7 +1024,7 @@ public class Actor : Entity
         }
         else
         {
-            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].OnActionLowWarning();
+            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].ActionPointBar.OnStatLowWarning();
         }
     }
 
@@ -1062,7 +1062,7 @@ public class Actor : Entity
         }
         else
         {
-            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].OnActionLowWarning();
+            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].ActionPointBar.OnStatLowWarning();
         }
     }
 
@@ -1083,7 +1083,7 @@ public class Actor : Entity
         }
         else
         {
-            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].OnActionLowWarning();
+            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].ActionPointBar.OnStatLowWarning();
         }
     }
 

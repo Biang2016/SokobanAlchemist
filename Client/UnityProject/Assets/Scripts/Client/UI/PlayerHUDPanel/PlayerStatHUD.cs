@@ -12,20 +12,24 @@ public class PlayerStatHUD : MonoBehaviour
         SetHealth(asps.HealthDurability.Value, asps.HealthDurability.MinValue, asps.HealthDurability.MaxValue);
         asps.HealthDurability.m_NotifyActionSet.OnChanged += SetHealth;
 
-        SetActionPoint(asps.ActionPoint.Value, asps.ActionPoint.MinValue, asps.ActionPoint.MaxValue);
-        asps.ActionPoint.m_NotifyActionSet.OnChanged += SetActionPoint;
+        ActionPointBar.Initialize(EntityStatType.ActionPoint);
+        ActionPointBar.SetStat(asps.ActionPoint.Value, asps.ActionPoint.MinValue, asps.ActionPoint.MaxValue);
+        asps.ActionPoint.m_NotifyActionSet.OnChanged += ActionPointBar.SetStat;
 
         SetGold(asps.Gold.Value);
         asps.Gold.m_NotifyActionSet.OnChanged += (value, min, max) => SetGold(value);
 
-        SetFireElementFragment(asps.FireElementFragment.Value, asps.FireElementFragment.MinValue, asps.FireElementFragment.MaxValue);
-        asps.FireElementFragment.m_NotifyActionSet.OnChanged += SetFireElementFragment;
+        FireElementFragmentBar.Initialize(EntityStatType.FireElementFragment);
+        FireElementFragmentBar.SetStat(asps.FireElementFragment.Value, asps.FireElementFragment.MinValue, asps.FireElementFragment.MaxValue);
+        asps.FireElementFragment.m_NotifyActionSet.OnChanged += FireElementFragmentBar.SetStat;
 
-        SetIceElementFragment(asps.IceElementFragment.Value, asps.IceElementFragment.MinValue, asps.IceElementFragment.MaxValue);
-        asps.IceElementFragment.m_NotifyActionSet.OnChanged += SetIceElementFragment;
+        IceElementFragmentBar.Initialize(EntityStatType.IceElementFragment);
+        IceElementFragmentBar.SetStat(asps.IceElementFragment.Value, asps.IceElementFragment.MinValue, asps.IceElementFragment.MaxValue);
+        asps.IceElementFragment.m_NotifyActionSet.OnChanged += IceElementFragmentBar.SetStat;
 
-        SetLightningElementFragment(asps.LightningElementFragment.Value, asps.LightningElementFragment.MinValue, asps.LightningElementFragment.MaxValue);
-        asps.LightningElementFragment.m_NotifyActionSet.OnChanged += SetLightningElementFragment;
+        LightningElementFragmentBar.Initialize(EntityStatType.LightningElementFragment);
+        LightningElementFragmentBar.SetStat(asps.LightningElementFragment.Value, asps.LightningElementFragment.MinValue, asps.LightningElementFragment.MaxValue);
+        asps.LightningElementFragment.m_NotifyActionSet.OnChanged += LightningElementFragmentBar.SetStat;
     }
 
     #region Health
@@ -58,42 +62,7 @@ public class PlayerStatHUD : MonoBehaviour
 
     #region ActionPoint
 
-    public Transform ActionPointsContainer;
-    private List<ActionPointIndicator> ActionPointIndicators = new List<ActionPointIndicator>();
-
-    public void SetActionPoint(int current, int min, int max)
-    {
-        if (ActionPointIndicators.Count > max)
-        {
-            while (ActionPointIndicators.Count != max)
-            {
-                ActionPointIndicators[ActionPointIndicators.Count - 1].PoolRecycle();
-                ActionPointIndicators.RemoveAt(ActionPointIndicators.Count - 1);
-            }
-        }
-        else if (ActionPointIndicators.Count < max)
-        {
-            while (ActionPointIndicators.Count != max)
-            {
-                ActionPointIndicator indicator = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.ActionPointIndicator].AllocateGameObject<ActionPointIndicator>(ActionPointsContainer);
-                indicator.Available = false;
-                ActionPointIndicators.Add(indicator);
-            }
-        }
-
-        for (int i = 0; i < ActionPointIndicators.Count; i++)
-        {
-            ActionPointIndicators[i].Available = i < current;
-        }
-    }
-
-    public void OnActionLowWarning()
-    {
-        foreach (ActionPointIndicator indicator in ActionPointIndicators)
-        {
-            indicator.JumpRed();
-        }
-    }
+    public DiscreteStatPointBar ActionPointBar;
 
     #endregion
 
@@ -106,53 +75,9 @@ public class PlayerStatHUD : MonoBehaviour
         GoldText.text = current.ToString();
     }
 
-    public TextMeshProUGUI FireElementFragmentText;
-    public Slider FireElementFragmentSlider;
-
-    public void SetFireElementFragment(int current, int min, int max)
-    {
-        FireElementFragmentText.text = current.ToString();
-        if (max == 0)
-        {
-            FireElementFragmentSlider.value = 0f;
-        }
-        else
-        {
-            FireElementFragmentSlider.value = (float) current / max;
-        }
-    }
-
-    public TextMeshProUGUI IceElementFragmentTextText;
-    public Slider IceElementFragmentSlider;
-
-    public void SetIceElementFragment(int current, int min, int max)
-    {
-        IceElementFragmentTextText.text = current.ToString();
-        if (max == 0)
-        {
-            IceElementFragmentSlider.value = 0f;
-        }
-        else
-        {
-            IceElementFragmentSlider.value = (float) current / max;
-        }
-    }
-
-    public TextMeshProUGUI LightningElementFragmentText;
-    public Slider LightningElementFragmentSlider;
-
-    public void SetLightningElementFragment(int current, int min, int max)
-    {
-        LightningElementFragmentText.text = current.ToString();
-        if (max == 0)
-        {
-            LightningElementFragmentSlider.value = 0f;
-        }
-        else
-        {
-            LightningElementFragmentSlider.value = (float) current / max;
-        }
-    }
+    public DiscreteStatPointBar FireElementFragmentBar;
+    public DiscreteStatPointBar IceElementFragmentBar;
+    public DiscreteStatPointBar LightningElementFragmentBar;
 
     #endregion
 }
