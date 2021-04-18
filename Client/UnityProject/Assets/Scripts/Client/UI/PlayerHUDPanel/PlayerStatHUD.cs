@@ -12,22 +12,22 @@ public class PlayerStatHUD : MonoBehaviour
         SetHealth(asps.HealthDurability.Value, asps.HealthDurability.MinValue, asps.HealthDurability.MaxValue);
         asps.HealthDurability.m_NotifyActionSet.OnChanged += SetHealth;
 
-        ActionPointBar.Initialize(EntityStatType.ActionPoint);
+        ActionPointBar.Initialize(EntityStatType.ActionPoint, 1);
         ActionPointBar.SetStat(asps.ActionPoint.Value, asps.ActionPoint.MinValue, asps.ActionPoint.MaxValue);
         asps.ActionPoint.m_NotifyActionSet.OnChanged += ActionPointBar.SetStat;
 
         SetGold(asps.Gold.Value);
         asps.Gold.m_NotifyActionSet.OnChanged += (value, min, max) => SetGold(value);
 
-        FireElementFragmentBar.Initialize(EntityStatType.FireElementFragment);
+        FireElementFragmentBar.Initialize(EntityStatType.FireElementFragment, 10);
         FireElementFragmentBar.SetStat(asps.FireElementFragment.Value, asps.FireElementFragment.MinValue, asps.FireElementFragment.MaxValue);
         asps.FireElementFragment.m_NotifyActionSet.OnChanged += FireElementFragmentBar.SetStat;
 
-        IceElementFragmentBar.Initialize(EntityStatType.IceElementFragment);
+        IceElementFragmentBar.Initialize(EntityStatType.IceElementFragment, 20);
         IceElementFragmentBar.SetStat(asps.IceElementFragment.Value, asps.IceElementFragment.MinValue, asps.IceElementFragment.MaxValue);
         asps.IceElementFragment.m_NotifyActionSet.OnChanged += IceElementFragmentBar.SetStat;
 
-        LightningElementFragmentBar.Initialize(EntityStatType.LightningElementFragment);
+        LightningElementFragmentBar.Initialize(EntityStatType.LightningElementFragment, 1);
         LightningElementFragmentBar.SetStat(asps.LightningElementFragment.Value, asps.LightningElementFragment.MinValue, asps.LightningElementFragment.MaxValue);
         asps.LightningElementFragment.m_NotifyActionSet.OnChanged += LightningElementFragmentBar.SetStat;
     }

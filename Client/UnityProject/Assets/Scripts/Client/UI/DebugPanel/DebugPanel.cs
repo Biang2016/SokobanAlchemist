@@ -329,6 +329,24 @@ public class DebugPanel : BaseUIPanel
         BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value + 100, "DebugPanelAddHealth100");
     }
 
+    [DebugButton("Player/AddFire*1")]
+    public void AddFire()
+    {
+        BattleManager.Instance.Player1.EntityStatPropSet.FireElementFragment.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.FireElementFragment.Value + 1);
+    }
+
+    [DebugButton("Player/AddIce*1")]
+    public void AddIce()
+    {
+        BattleManager.Instance.Player1.EntityStatPropSet.IceElementFragment.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.IceElementFragment.Value + 1);
+    }
+
+    [DebugButton("Player/AddLightning*1")]
+    public void AddLightning()
+    {
+        BattleManager.Instance.Player1.EntityStatPropSet.LightningElementFragment.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.LightningElementFragment.Value + 1);
+    }
+
     [DebugButton("Player/TakeDamage*10", KeyCode.Alpha6)]
     public void TakeDamage10()
     {
