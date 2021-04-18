@@ -19,6 +19,7 @@ public class PlayerControllerHelper : ActorMonoHelper
     private ButtonState BS_Skill_1; // Shift/East
     private ButtonState BS_Skill_2; // Z/LeftTrigger
     private ButtonState BS_Skill_3; // X/RightTrigger
+    private ButtonState BS_Skill_4; // C/
 
     // 短按逻辑：短按最优先，短按过程中不接受其他短按，短按那个按键down时记录该轴位置，当位置变化时结束短按，短按结束后短按数据清空
     private bool isQuickMoving = false;
@@ -43,6 +44,7 @@ public class PlayerControllerHelper : ActorMonoHelper
         BS_Skill_1 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1];
         BS_Skill_2 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 2];
         BS_Skill_3 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 3];
+        BS_Skill_4 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 4];
     }
 
     private float Skill_1_PressDuration;
@@ -345,6 +347,11 @@ public class PlayerControllerHelper : ActorMonoHelper
             if (BS_Skill_3.Down)
             {
                 TriggerSkill(EntitySkillIndex.Skill_3);
+            }
+
+            if (BS_Skill_4.Down)
+            {
+                TriggerSkill(EntitySkillIndex.Skill_4);
             }
 
             #endregion

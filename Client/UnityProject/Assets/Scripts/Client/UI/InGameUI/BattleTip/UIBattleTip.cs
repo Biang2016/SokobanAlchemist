@@ -24,6 +24,9 @@ public enum BattleTipPrefabType
 
     UIBattleTip_AttributeTip,
     UIBattleTip_GainGoldTip,
+    UIBattleTip_GainFireElementFragmentTip,
+    UIBattleTip_GainIceElementFragmentTip,
+    UIBattleTip_GainLightningElementFragmentTip,
 }
 
 public enum BattleTipType

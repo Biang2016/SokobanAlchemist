@@ -37,6 +37,7 @@ public class EntityCollectHelper : EntityMonoHelper
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
+        EnableDetector = true;
     }
 
     public void Initialize()

@@ -30,6 +30,10 @@ MonoBehaviour:
       data:
         SkillGUID: (eda298dc-bc0f-458f-a681-a469c669d7cb)
         SkillAlias: "\u6025\u901F\u51B7\u51BB"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: (8e70492d-b44e-4f46-b791-7f4c7bacb2a0)
+        SkillDescription: Spend 1 ice element, freeze everything inside 1 unit radius.
         TargetCamp: 14
         EntitySkillIndex: 0
         SkillsPropertyCollection:
@@ -63,6 +67,11 @@ MonoBehaviour:
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 0
+          ConsumeActionPoint:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
           ConsumeFireElementFragment:
             BaseValue: 0
             ModifiedValue: 0
@@ -85,6 +94,24 @@ MonoBehaviour:
         SubActiveSkillTriggerLogicList: []
         InterruptSubActiveSkillsWhenInterrupted: 0
         CastAreaGridPosList:
+        - x: 13
+          y: 0
+          z: 17
+        - x: 13
+          y: 0
+          z: 16
+        - x: 13
+          y: 0
+          z: 15
+        - x: 13
+          y: 0
+          z: 14
+        - x: 13
+          y: 0
+          z: 13
+        - x: 14
+          y: 0
+          z: 17
         - x: 14
           y: 0
           z: 16
@@ -94,12 +121,24 @@ MonoBehaviour:
         - x: 14
           y: 0
           z: 14
+        - x: 14
+          y: 0
+          z: 13
+        - x: 15
+          y: 0
+          z: 17
         - x: 15
           y: 0
           z: 16
         - x: 15
           y: 0
           z: 14
+        - x: 15
+          y: 0
+          z: 13
+        - x: 16
+          y: 0
+          z: 17
         - x: 16
           y: 0
           z: 16
@@ -109,6 +148,24 @@ MonoBehaviour:
         - x: 16
           y: 0
           z: 14
+        - x: 16
+          y: 0
+          z: 13
+        - x: 17
+          y: 0
+          z: 17
+        - x: 17
+          y: 0
+          z: 16
+        - x: 17
+          y: 0
+          z: 15
+        - x: 17
+          y: 0
+          z: 14
+        - x: 17
+          y: 0
+          z: 13
         M_TargetInclination: 2
         TargetEntityType: 0
         CastOnTopLayer: 0

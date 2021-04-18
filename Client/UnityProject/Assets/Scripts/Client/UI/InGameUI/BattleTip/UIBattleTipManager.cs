@@ -163,11 +163,23 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
                 break;
             }
             case BattleTipType.Gold:
-            case BattleTipType.FireElementFragment:
-            case BattleTipType.IceElementFragment:
-            case BattleTipType.LightningElementFragment:
             {
                 btType = BattleTipPrefabType.UIBattleTip_GainGoldTip;
+                break;
+            }
+            case BattleTipType.FireElementFragment:
+            {
+                btType = BattleTipPrefabType.UIBattleTip_GainFireElementFragmentTip;
+                break;
+            }
+            case BattleTipType.IceElementFragment:
+            {
+                btType = BattleTipPrefabType.UIBattleTip_GainIceElementFragmentTip;
+                break;
+            }
+            case BattleTipType.LightningElementFragment:
+            {
+                btType = BattleTipPrefabType.UIBattleTip_GainLightningElementFragmentTip;
                 break;
             }
         }

@@ -167,4 +167,5 @@ public enum TypeDefineType
     SkyBox = 9,
     PostProcessingProfile = 10,
     CollectableItem = 11,
+    EntitySkillIcon = 12,
 }

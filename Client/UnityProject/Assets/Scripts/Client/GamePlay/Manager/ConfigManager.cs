@@ -60,6 +60,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         SkyBox = 31900,
         PostProcessingProfile = 31950,
         BattleIndicator = 32000,
+        EntitySkillIcon = 33000,
     }
 
     public abstract class TypeDefineConfig
@@ -223,6 +224,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         {TypeDefineType.BattleIndicator, new TypeDefineConfig<BattleIndicator>("BattleIndicator", "/Resources/Prefabs/BattleIndicator", true, TypeStartIndex.BattleIndicator)},
         {TypeDefineType.SkyBox, new TypeDefineConfig<Material>("SkyBox", "/Resources/SkyBox", true, TypeStartIndex.SkyBox)},
         {TypeDefineType.PostProcessingProfile, new TypeDefineConfig<PostProcessProfile>("PostProcessingProfile", "/Resources/PostProcessingProfile", true, TypeStartIndex.PostProcessingProfile)},
+        {TypeDefineType.EntitySkillIcon, new TypeDefineConfig<Texture2D>("EntitySkillIcon", "/Resources/EntitySkillIcon", true, TypeStartIndex.EntitySkillIcon)},
     };
 
     [ShowInInspector]
@@ -1213,6 +1215,11 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static PostProcessProfile GetPostProcessingProfileByName(string postProcessingProfileTypeName)
     {
         return Resources.Load<PostProcessProfile>($"PostProcessingProfile/{postProcessingProfileTypeName}");
+    }
+
+    public static Sprite GetEntitySkillIconByName(string entitySkillIconTypeName)
+    {
+        return Resources.Load<Sprite>($"EntitySkillIcon/{entitySkillIconTypeName}");
     }
 
     #endregion

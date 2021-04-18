@@ -640,7 +640,16 @@ public abstract class Entity : PoolObject
     private void ThrowElementFragment(EntityStatType elementFragmentType)
     {
         int elementFragmentCount = EntityStatPropSet.StatDict[elementFragmentType].Value;
-        int dropElementFragmentCount = Random.Range(Mathf.RoundToInt(elementFragmentCount * 0.7f), Mathf.RoundToInt(elementFragmentCount * 1.3f));
+        int dropElementFragmentCount = 0;
+        if (this == BattleManager.Instance.Player1)
+        {
+            dropElementFragmentCount = Mathf.RoundToInt(elementFragmentCount * 0.5f);
+            EntityStatPropSet.StatDict[elementFragmentType].SetValue(EntityStatPropSet.StatDict[elementFragmentType].Value - dropElementFragmentCount);
+        }
+        else
+        {
+            dropElementFragmentCount = Random.Range(Mathf.RoundToInt(elementFragmentCount * 0.7f), Mathf.RoundToInt(elementFragmentCount * 1.3f));
+        }
 
         switch (elementFragmentType)
         {

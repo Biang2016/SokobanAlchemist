@@ -67,6 +67,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public DebugConsole DebugConsole;
     public DebugPanel DebugPanel;
     public KeyBindingPanel KeyBindingPanel;
+    public EntitySkillPreviewPanel EntitySkillPreviewPanel;
     public LoadingMapPanel LoadingMapPanel;
     public PlayerStatHUDPanel PlayerStatHUDPanel;
     public NoticePanel NoticePanel;
@@ -209,6 +210,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         DebugPanel = UIManager.Instance.ShowUIForms<DebugPanel>();
         KeyBindingPanel = UIManager.Instance.ShowUIForms<KeyBindingPanel>();
         KeyBindingPanel.CloseUIForm();
+        EntitySkillPreviewPanel = UIManager.Instance.ShowUIForms<EntitySkillPreviewPanel>();
+        EntitySkillPreviewPanel.CloseUIForm();
 #if !DEBUG
         UIManager.Instance.CloseUIForm<DebugPanel>();
 #endif
@@ -288,6 +291,11 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, "OnBossSpiderLegAppear");
         }
 
+        if (Input.GetKeyUp(KeyCode.O))
+        {
+            DebugPanel.Toggle();
+        }
+
         if (Input.GetKey(KeyCode.Equals))
         {
             Time.timeScale = 0.1f;
@@ -317,6 +325,20 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         if (Input.GetKeyUp(KeyCode.Tab))
         {
             KeyBindingPanel.Hide();
+        }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            EntitySkillPreviewPanel.Display();
+            if (BattleManager.Instance.Player1 != null)
+            {
+                EntitySkillPreviewPanel.Initialize(BattleManager.Instance.Player1);
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.N))
+        {
+            EntitySkillPreviewPanel.Hide();
         }
 
         if (ControlManager.Battle_LeftRotateCamera.Up)

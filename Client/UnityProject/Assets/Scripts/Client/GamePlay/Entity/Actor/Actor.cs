@@ -437,14 +437,27 @@ public class Actor : Entity
     public void Reborn()
     {
         ReloadESPS(RawEntityStatPropSet);
+        EntityCollectHelper?.OnHelperUsed();
     }
 
     public void ReloadESPS(EntityStatPropSet srcESPS)
     {
+        // 财产保留 todo 待重构
+        int gold = EntityStatPropSet.Gold.Value;
+        int fire = EntityStatPropSet.FireElementFragment.Value;
+        int ice = EntityStatPropSet.IceElementFragment.Value;
+        int lightning = EntityStatPropSet.LightningElementFragment.Value;
+
         EntityStatPropSet.OnRecycled();
         srcESPS.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
         ActorBattleHelper.InGameHealthBar.Initialize(ActorBattleHelper, 100, 30);
+
+        EntityStatPropSet.Gold.SetValue(gold);
+        EntityStatPropSet.FireElementFragment.SetValue(fire);
+        EntityStatPropSet.IceElementFragment.SetValue(ice);
+        EntityStatPropSet.LightningElementFragment.SetValue(lightning);
+
         ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
         ActiveSkillMarkAsDestroyed = false;
         PassiveSkillMarkAsDestroyed = false;
@@ -1419,6 +1432,8 @@ public class Actor : Entity
 
     public override void DestroySelf(UnityAction callBack = null)
     {
+        EntityStatPropSet.FrozenValue.SetValue(0);
+        EntityCollectHelper?.OnHelperRecycled(); // 以免自身掉落物又被自身捡走
         base.DestroySelf();
         if (IsDestroying) return;
         IsDestroying = true;

@@ -309,7 +309,7 @@ public abstract class EntityActiveSkill : EntitySkill
 
         if (Entity.EntityStatPropSet.StatDict[EntityStatType.LightningElementFragment].Value < SkillsPropertyCollection.ConsumeLightningElementFragment.GetModifiedValue)
         {
-            Entity.EntityStatPropSet.StatDict[EntityStatType.IceElementFragment].m_NotifyActionSet.OnValueNotEnoughWarning?.Invoke();
+            Entity.EntityStatPropSet.StatDict[EntityStatType.LightningElementFragment].m_NotifyActionSet.OnValueNotEnoughWarning?.Invoke();
             enoughResources = false;
         }
 

@@ -74,6 +74,18 @@ namespace BiangLibrary.GamePlay.UI
             UIMaskMgr.Instance.CancelAllMaskWindow(UIType.UIForm_LucencyType);
         }
 
+        public virtual void Toggle()
+        {
+            if (gameObject.activeInHierarchy)
+            {
+                Hide();
+            }
+            else
+            {
+                Display();
+            }
+        }
+
         public virtual void Freeze()
         {
             gameObject.SetActive(true);

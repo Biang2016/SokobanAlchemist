@@ -20,127 +20,47 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: EntitySkill
-      Entry: 7
-      Data: 0|ActorPassiveSkill_IceSlideSpeedUp, Client
-    - Name: SkillGUID
-      Entry: 1
-      Data: (9b670077-0c73-4c44-aa62-7e4e072ce724)
-    - Name: SkillAlias
-      Entry: 1
-      Data: "\u51B0\u9762\u52A0\u901F"
-    - Name: IsAddedDuringGamePlay
-      Entry: 5
-      Data: false
-    - Name: InitWorldModuleGUID
-      Entry: 3
-      Data: 0
-    - Name: RawEntityBuff
-      Entry: 7
-      Data: 1|EntityBuff_EntityPropertyMultiplyModifier, Client
-    - Name: GUID
-      Entry: 3
-      Data: 10118
-    - Name: BuffAlias
-      Entry: 1
-      Data: 
-    - Name: EntityBuffAttribute
-      Entry: 3
-      Data: 1
-    - Name: EnableWhiteBlackList
-      Entry: 5
-      Data: false
-    - Name: AllowAddBuffAliasList
-      Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: ForbidAddBuffAliasList
-      Entry: 7
-      Data: 3|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: IsPermanent
-      Entry: 5
-      Data: true
-    - Name: Duration
-      Entry: 4
-      Data: 0
-    - Name: BuffFX
-      Entry: 7
-      Data: 4|FXConfig, Client
-    - Name: FXType
-      Entry: 7
-      Data: 5|TypeSelectHelper, Client
-    - Name: TypeDefineType
-      Entry: 3
-      Data: 0
-    - Name: TypeGUID
-      Entry: 1
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: UseCurve
-      Entry: 5
-      Data: false
-    - Name: FXScale
-      Entry: 4
-      Data: 0
-    - Name: AnimationCurve
-      Entry: 7
-      Data: 6|UnityEngine.AnimationCurve, UnityEngine.CoreModule
-    - Name: 
-      Entry: 7
-      Data: 7|UnityEngine.Keyframe[], UnityEngine.CoreModule
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 3
-      Data: 8
-    - Name: 
-      Entry: 3
-      Data: 8
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: Percent
-      Entry: 3
-      Data: 50
-    - Name: LinearDecayInDuration
-      Entry: 5
-      Data: false
-    - Name: EntityPropertyType
-      Entry: 3
-      Data: 30
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: ActorPassiveSkill_IceSlideSpeedUp, ns: , asm: Client}
+      data:
+        SkillGUID: (9b670077-0c73-4c44-aa62-7e4e072ce724)
+        SkillAlias: "\u51B0\u9762\u52A0\u901F"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: (24ffd430-dd6a-4d11-8590-60976f30d1e4)
+        SkillDescription: Move faster on the top of ice.
+        IsAddedDuringGamePlay: 0
+        InitWorldModuleGUID: 0
+        RawEntityBuff:
+          id: 1
+    00000001:
+      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
+      data:
+        GUID: 10118
+        BuffAlias: 
+        EntityBuffAttribute: 1
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 1
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 0
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        Percent: 50
+        LinearDecayInDuration: 0
+        EntityPropertyType: 30

@@ -20,211 +20,61 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: EntitySkill
-      Entry: 7
-      Data: 0|EntityPassiveSkill_Conditional, Client
-    - Name: SkillGUID
-      Entry: 1
-      Data: (4613c9b8-1cf4-4d3e-bec3-2d144ccc5562)
-    - Name: SkillAlias
-      Entry: 1
-      Data: "\u5C0F\u6811\u7CBE-\u6B7B\u4EA1\u6389\u843D"
-    - Name: IsAddedDuringGamePlay
-      Entry: 5
-      Data: false
-    - Name: InitWorldModuleGUID
-      Entry: 3
-      Data: 0
-    - Name: PassiveSkillCondition
-      Entry: 3
-      Data: 32768
-    - Name: TriggerProbabilityPercent
-      Entry: 3
-      Data: 100
-    - Name: DestroyEntityByElementDamageTypeList
-      Entry: 7
-      Data: 1|System.Collections.Generic.List`1[[EntityBuffAttribute, Client]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 6
-    - Name: 
-      Entry: 3
-      Data: 34
-    - Name: 
-      Entry: 3
-      Data: 40
-    - Name: 
-      Entry: 3
-      Data: 31
-    - Name: 
-      Entry: 3
-      Data: 27
-    - Name: 
-      Entry: 3
-      Data: 37
-    - Name: 
-      Entry: 3
-      Data: 43
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: EntityStatChangeType
-      Entry: 3
-      Data: 0
-    - Name: EntityStatChangeThreshold
-      Entry: 3
-      Data: 0
-    - Name: EntityStatChangeThresholdOperator
-      Entry: 3
-      Data: 0
-    - Name: EntityPropertyChangeType
-      Entry: 3
-      Data: 0
-    - Name: EntityPropertyChangeThreshold
-      Entry: 3
-      Data: 0
-    - Name: EntityPropertyChangeThresholdOperator
-      Entry: 3
-      Data: 0
-    - Name: MultiEventTrigger
-      Entry: 5
-      Data: false
-    - Name: ListenLevelEventAliasList
-      Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: ListenLevelEventAlias
-      Entry: 1
-      Data: 
-    - Name: MaxTriggeredTimes
-      Entry: 3
-      Data: 1
-    - Name: RawEntityPassiveSkillActions
-      Entry: 7
-      Data: 3|System.Collections.Generic.List`1[[EntityPassiveSkillAction, Client]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 4|EntityPassiveSkillAction_DropBox, Client
-    - Name: InitWorldModuleGUID
-      Entry: 3
-      Data: 0
-    - Name: DropBoxList
-      Entry: 7
-      Data: 5|System.Collections.Generic.List`1[[BoxNameWithProbability, Client]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 6|BoxNameWithProbability, Client
-    - Name: BoxTypeName
-      Entry: 7
-      Data: 7|TypeSelectHelper, Client
-    - Name: TypeDefineType
-      Entry: 3
-      Data: 0
-    - Name: TypeGUID
-      Entry: 1
-      Data: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: BoxOrientation
-      Entry: 3
-      Data: 0
-    - Name: probability
-      Entry: 3
-      Data: 8
-    - Name: isSingleton
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 8|BoxNameWithProbability, Client
-    - Name: BoxTypeName
-      Entry: 7
-      Data: 9|TypeSelectHelper, Client
-    - Name: TypeDefineType
-      Entry: 3
-      Data: 0
-    - Name: TypeGUID
-      Entry: 1
-      Data: (b21d38f9-143e-43a6-9094-f1a790641d96)
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: BoxOrientation
-      Entry: 3
-      Data: 0
-    - Name: probability
-      Entry: 3
-      Data: 1
-    - Name: isSingleton
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: DropBoxCountMin
-      Entry: 3
-      Data: 1
-    - Name: DropBoxCountMax
-      Entry: 3
-      Data: 1
-    - Name: DropConeAngle
-      Entry: 4
-      Data: 0
-    - Name: DropVelocity
-      Entry: 4
-      Data: 13
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: EntityPassiveSkillActions
-      Entry: 7
-      Data: 10|System.Collections.Generic.List`1[[EntityPassiveSkillAction, Client]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        SkillGUID: (4613c9b8-1cf4-4d3e-bec3-2d144ccc5562)
+        SkillAlias: "\u5C0F\u6811\u7CBE-\u6B7B\u4EA1\u6389\u843D"
+        SkillIcon:
+          TypeDefineType: 0
+          TypeGUID: 
+        SkillDescription: 
+        IsAddedDuringGamePlay: 0
+        InitWorldModuleGUID: 0
+        PassiveSkillCondition: 32768
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 22000000280000001f0000001b000000250000002b000000
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdOperator: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdOperator: 0
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        RawEntityPassiveSkillActions:
+        - id: 1
+    00000001:
+      type: {class: EntityPassiveSkillAction_DropBox, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        DropBoxList:
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
+          BoxOrientation: 0
+          probability: 8
+          isSingleton: 0
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (b21d38f9-143e-43a6-9094-f1a790641d96)
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (096dcca9-e0d2-439e-9304-94a00bb4f36b)
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        DropBoxCountMin: 1
+        DropBoxCountMax: 1
+        DropConeAngle: 0
+        DropVelocity: 13
