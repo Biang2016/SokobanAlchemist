@@ -212,6 +212,7 @@ public class FieldCamera : MonoBehaviour
     public void InitFocus()
     {
         CameraLerp(false);
+        RefreshCameraOrientation();
     }
 
     private void AddTargetActor(Actor actor)
@@ -309,13 +310,18 @@ public class FieldCamera : MonoBehaviour
     public void CameraLeftRotate()
     {
         TargetConfigData.HorAngle += 90f;
-        RotateDirection = (GridPosR.Orientation) (Mathf.RoundToInt((TargetConfigData.HorAngle + 360f) / 90f) % 4);
+        RefreshCameraOrientation();
     }
 
     public void CameraRightRotate()
     {
         TargetConfigData.HorAngle -= 90f;
-        RotateDirection = (GridPosR.Orientation) (Mathf.RoundToInt((TargetConfigData.HorAngle + 360f) / 90f) % 4);
+        RefreshCameraOrientation();
+    }
+
+    private void RefreshCameraOrientation()
+    {
+        RotateDirection = (GridPosR.Orientation)(Mathf.RoundToInt((TargetConfigData.HorAngle + 360f) / 90f) % 4);
     }
 
     #region Distance Levels
