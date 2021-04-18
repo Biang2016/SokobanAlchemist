@@ -117,6 +117,11 @@ public class Actor : Entity
     [FoldoutGroup("组件")]
     public EntityTriggerZoneHelper ActorTriggerZoneHelper;
 
+    internal override EntityCollectHelper EntityCollectHelper => ActorCollectHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityCollectHelper ActorCollectHelper;
+
     internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => ActorGrindTriggerZoneHelper;
 
     [FoldoutGroup("组件")]
@@ -517,6 +522,7 @@ public class Actor : Entity
         EntityBuffHelper.OnHelperUsed();
         EntityFrozenHelper.OnHelperUsed();
         EntityTriggerZoneHelper?.OnHelperUsed();
+        EntityCollectHelper?.OnHelperUsed();
         EntityGrindTriggerZoneHelper?.OnHelperUsed();
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
@@ -573,6 +579,7 @@ public class Actor : Entity
         EntityBuffHelper.OnHelperRecycled();
         EntityFrozenHelper.OnHelperRecycled();
         EntityTriggerZoneHelper?.OnHelperRecycled();
+        EntityCollectHelper?.OnHelperRecycled();
         EntityGrindTriggerZoneHelper?.OnHelperRecycled();
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
@@ -653,6 +660,7 @@ public class Actor : Entity
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
         ActorBattleHelper.Initialize();
+        ActorCollectHelper?.Initialize();
         ActorBoxInteractHelper.Initialize();
         ActorArtHelper.SetPFMoveGridSpeed(0);
         ActorArtHelper.SetIsPushing(false);

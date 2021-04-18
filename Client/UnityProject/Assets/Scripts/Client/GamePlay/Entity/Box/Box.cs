@@ -41,6 +41,7 @@ public partial class Box : Entity
     internal override EntityBuffHelper EntityBuffHelper => BoxBuffHelper;
     internal override EntityFrozenHelper EntityFrozenHelper => BoxFrozenHelper;
     internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => BoxTriggerZoneHelper;
+    internal override EntityCollectHelper EntityCollectHelper => BoxCollectHelper;
     internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => BoxGrindTriggerZoneHelper;
     internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => BoxFlamethrowerHelpers;
     internal override List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers => BoxLightningGeneratorHelpers;
@@ -68,6 +69,10 @@ public partial class Box : Entity
     [FoldoutGroup("组件")]
     [SerializeField]
     private EntityTriggerZoneHelper BoxTriggerZoneHelper;
+
+    [FoldoutGroup("组件")]
+    [SerializeField]
+    private EntityCollectHelper BoxCollectHelper;
 
     [FoldoutGroup("组件")]
     [SerializeField]
@@ -139,6 +144,7 @@ public partial class Box : Entity
         EntityBuffHelper.OnHelperUsed();
         EntityFrozenHelper.OnHelperUsed();
         EntityTriggerZoneHelper?.OnHelperUsed();
+        EntityCollectHelper?.OnHelperUsed();
         EntityGrindTriggerZoneHelper?.OnHelperUsed();
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
@@ -177,6 +183,7 @@ public partial class Box : Entity
         EntityBuffHelper.OnHelperRecycled();
         EntityFrozenHelper.OnHelperRecycled();
         EntityTriggerZoneHelper?.OnHelperRecycled();
+        EntityCollectHelper?.OnHelperRecycled();
         EntityGrindTriggerZoneHelper?.OnHelperRecycled();
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {

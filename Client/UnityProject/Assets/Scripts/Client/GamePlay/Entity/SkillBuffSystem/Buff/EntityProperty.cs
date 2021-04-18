@@ -135,6 +135,10 @@ public enum EntityPropertyType
     FiringSpreadPercent = 401,
 
     [EntityProperty]
+    [LabelText("拾取吸附半径")]
+    CollectDetectRadius = 499,
+
+    [EntityProperty]
     [LabelText("火元素碎片上限")]
     MaxFireElementFragment = 500,
 

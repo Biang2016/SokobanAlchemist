@@ -25,6 +25,10 @@ public class EntityStatPropSet
     #region 财产
 
     [BoxGroup("财产")]
+    [LabelText("@\"拾取吸附半径\t\"+CollectDetectRadius")]
+    public EntityProperty CollectDetectRadius = new EntityProperty(EntityPropertyType.CollectDetectRadius);
+
+    [BoxGroup("财产")]
     [LabelText("@\"当前金子\t\"+Gold")]
     public EntityStat Gold = new EntityStat(EntityStatType.Gold);
 
@@ -222,6 +226,7 @@ public class EntityStatPropSet
 
         #region 财产
 
+        CollectDetectRadius.Initialize();
         MaxFireElementFragment.Initialize();
         MaxIceElementFragment.Initialize();
         MaxLightningElementFragment.Initialize();
@@ -287,6 +292,7 @@ public class EntityStatPropSet
 
         #region 财产
 
+        PropertyDict.Add(EntityPropertyType.CollectDetectRadius, CollectDetectRadius);
         StatDict.Add(EntityStatType.Gold, Gold);
 
         FireElementFragment.MaxValue = MaxFireElementFragment.GetModifiedValue;
@@ -460,6 +466,7 @@ public class EntityStatPropSet
             };
         }
 
+        PropertyNotifyActionSetDict[EntityPropertyType.CollectDetectRadius].OnValueChanged += OnCollectDetectRadiusChanged;
         PropertyNotifyActionSetDict[EntityPropertyType.MaxHealthDurability].OnValueChanged += OnMaxHealthDurabilityChanged;
         PropertyNotifyActionSetDict[EntityPropertyType.FrozenResistance].OnValueChanged += OnFrozenResistanceChanged;
         PropertyNotifyActionSetDict[EntityPropertyType.FiringResistance].OnValueChanged += OnFiringResistanceChanged;
@@ -556,6 +563,15 @@ public class EntityStatPropSet
         }
 
         if (Entity is Actor actor) actor.DestroySelf();
+    }
+
+    private void OnCollectDetectRadiusChanged(int before, int after)
+    {
+        if (Entity.EntityCollectHelper != null)
+        {
+            Entity.EntityCollectHelper.EnableDetector = after > 0;
+            Entity.EntityCollectHelper.DetectRadius = after;
+        }
     }
 
     private void OnMaxHealthDurabilityChanged(int before, int after)
@@ -679,6 +695,7 @@ public class EntityStatPropSet
     {
         #region 财产
 
+        CollectDetectRadius.ApplyDataTo(target.CollectDetectRadius);
         Gold.ApplyDataTo(target.Gold);
         FireElementFragment.ApplyDataTo(target.FireElementFragment);
         MaxFireElementFragment.ApplyDataTo(target.MaxFireElementFragment);

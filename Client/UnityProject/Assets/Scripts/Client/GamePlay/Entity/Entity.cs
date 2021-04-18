@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 public abstract class Entity : PoolObject
 {
@@ -47,6 +48,7 @@ public abstract class Entity : PoolObject
     internal abstract EntityBuffHelper EntityBuffHelper { get; }
     internal abstract EntityFrozenHelper EntityFrozenHelper { get; }
     internal abstract EntityTriggerZoneHelper EntityTriggerZoneHelper { get; }
+    internal abstract EntityCollectHelper EntityCollectHelper { get; }
     internal abstract EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper { get; }
     internal abstract List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers { get; }
     internal abstract List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers { get; }
@@ -614,12 +616,41 @@ public abstract class Entity : PoolObject
     private float DestroyBecauseNotInAnyModuleThreshold = 1.5f;
     protected bool IsDestroying = false;
 
+    [SerializeField]
+    [FoldoutGroup("掉落物")]
+    [LabelText("抛射角范围")]
+    private float DropConeAngle = 30f;
+
+    [SerializeField]
+    [FoldoutGroup("掉落物")]
+    [LabelText("抛射速度")]
+    private float DropVelocity = 50f;
+
     public virtual void DestroySelfByModuleRecycle()
     {
     }
 
     public virtual void DestroySelf(UnityAction callBack = null)
     {
+        ThrowElementFragment(EntityStatType.FireElementFragment);
+        ThrowElementFragment(EntityStatType.IceElementFragment);
+        ThrowElementFragment(EntityStatType.LightningElementFragment);
+    }
+
+    private void ThrowElementFragment(EntityStatType elementFragmentType)
+    {
+        int elementFragmentCount = EntityStatPropSet.StatDict[elementFragmentType].Value;
+        int dropElementFragmentCount = Random.Range(Mathf.RoundToInt(elementFragmentCount * 0.7f), Mathf.RoundToInt(elementFragmentCount * 1.3f));
+        for (int i = 0; i < dropElementFragmentCount; i++)
+        {
+            Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(DropConeAngle * Mathf.Deg2Rad);
+            Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);
+
+            ushort index = ConfigManager.GetTypeIndex(TypeDefineType.CollectableItem, elementFragmentType.ToString());
+            CollectableItem ci = GameObjectPoolManager.Instance.CollectableItemDict[index].AllocateGameObject<CollectableItem>(WorldManager.Instance.CurrentWorld.transform);
+            ci.Initialize();
+            ci.ThrowFrom(transform.position, dropVel.normalized * DropVelocity);
+        }
     }
 
     #endregion
