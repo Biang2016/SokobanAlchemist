@@ -641,15 +641,37 @@ public abstract class Entity : PoolObject
     {
         int elementFragmentCount = EntityStatPropSet.StatDict[elementFragmentType].Value;
         int dropElementFragmentCount = Random.Range(Mathf.RoundToInt(elementFragmentCount * 0.7f), Mathf.RoundToInt(elementFragmentCount * 1.3f));
-        for (int i = 0; i < dropElementFragmentCount; i++)
-        {
-            Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(DropConeAngle * Mathf.Deg2Rad);
-            Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);
 
-            ushort index = ConfigManager.GetTypeIndex(TypeDefineType.CollectableItem, elementFragmentType.ToString());
-            CollectableItem ci = GameObjectPoolManager.Instance.CollectableItemDict[index].AllocateGameObject<CollectableItem>(WorldManager.Instance.CurrentWorld.transform);
-            ci.Initialize();
-            ci.ThrowFrom(transform.position, dropVel.normalized * DropVelocity);
+        switch (elementFragmentType)
+        {
+            case EntityStatType.FireElementFragment:
+            case EntityStatType.IceElementFragment:
+            {
+                int dropSmallCount = dropElementFragmentCount % 5;
+                int dropMiddleCount = dropElementFragmentCount / 5;
+                DropElementFragment("Small", dropSmallCount);
+                DropElementFragment("Middle", dropMiddleCount);
+                break;
+            }
+            case EntityStatType.LightningElementFragment:
+            {
+                DropElementFragment("Small", dropElementFragmentCount);
+                break;
+            }
+        }
+
+        void DropElementFragment(string size, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(DropConeAngle * Mathf.Deg2Rad);
+                Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);
+
+                ushort index = ConfigManager.GetTypeIndex(TypeDefineType.CollectableItem, size + elementFragmentType);
+                CollectableItem ci = GameObjectPoolManager.Instance.CollectableItemDict[index].AllocateGameObject<CollectableItem>(WorldManager.Instance.CurrentWorld.transform);
+                ci.Initialize();
+                ci.ThrowFrom(transform.position, dropVel.normalized * DropVelocity);
+            }
         }
     }
 
