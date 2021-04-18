@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
-  m_Name: "\u51B2\u523A\u6216\u7FFB\u8D8A_(5b45a721-79c0-4c0f-95b7-0151ce0e35b8)"
+  m_Name: "\u8E22_(cc74c49b-b8db-4f02-a33b-d1353cae7d3d)"
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -26,11 +26,11 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: ActorActiveSkill_DashOrVault, ns: , asm: Client}
+      type: {class: ActorActiveSkill_Kick, ns: , asm: Client}
       data:
-        SkillGUID: (5b45a721-79c0-4c0f-95b7-0151ce0e35b8)
-        SkillAlias: "\u51B2\u523A\u6216\u7FFB\u8D8A"
-        TargetCamp: 1
+        SkillGUID: (cc74c49b-b8db-4f02-a33b-d1353cae7d3d)
+        SkillAlias: "\u8E22"
+        TargetCamp: 0
         EntitySkillIndex: 0
         SkillsPropertyCollection:
           CastingRadius:
@@ -39,7 +39,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           Cooldown:
-            BaseValue: 380
+            BaseValue: 500
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 1000000
@@ -64,10 +64,10 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           ConsumeActionPoint:
-            BaseValue: 1
+            BaseValue: 0
             ModifiedValue: 0
             MinValue: 0
-            MaxValue: 1000
+            MaxValue: 0
           ConsumeFireElementFragment:
             BaseValue: 0
             ModifiedValue: 0
@@ -89,4 +89,3 @@ MonoBehaviour:
         RawSubActiveSkillList: []
         SubActiveSkillTriggerLogicList: []
         InterruptSubActiveSkillsWhenInterrupted: 0
-        DashMaxDistance: 4

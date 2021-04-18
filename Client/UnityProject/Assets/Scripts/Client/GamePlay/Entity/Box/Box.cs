@@ -1087,6 +1087,7 @@ public partial class Box : Entity
     protected override void OnCollisionEnter(Collision collision)
     {
         if (IsRecycled) return;
+        if (collision.gameObject.layer == LayerManager.Instance.Layer_CollectableItem) return;
         if (LastInteractActor.IsNotNullAndAlive() && collision.gameObject == LastInteractActor.gameObject) return; // todo 这里判定上一个碰的Actor有啥用?
         switch (State)
         {

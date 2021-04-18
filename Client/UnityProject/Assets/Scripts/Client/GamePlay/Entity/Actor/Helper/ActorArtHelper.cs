@@ -72,7 +72,7 @@ public class ActorArtHelper : EntityArtHelper
     /// </summary>
     public void KickBox()
     {
-        ((Actor) Entity).KickBox();
+        ((Actor) Entity).DoKickBox();
     }
 
     public void Dash()

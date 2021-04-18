@@ -66,15 +66,6 @@ public class EntityWwiseHelper : EntityMonoHelper
     public Event OnDestroyed_ByCollideDamage;
 
     [BoxGroup("ForActor")]
-    public Event OnKick;
-
-    [BoxGroup("ForActor")]
-    public Event OnVault;
-
-    [BoxGroup("ForActor")]
-    public Event OnDash;
-
-    [BoxGroup("ForActor")]
     public Event OnBeingDamaged;
 
     [BoxGroup("ForActor")]

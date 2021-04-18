@@ -68,6 +68,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public DebugPanel DebugPanel;
     public KeyBindingPanel KeyBindingPanel;
     public LoadingMapPanel LoadingMapPanel;
+    public PlayerStatHUDPanel PlayerStatHUDPanel;
     public NoticePanel NoticePanel;
 
     public bool WarmUpPool_Editor = true;
@@ -198,13 +199,13 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         LoadingMapPanel.SetBackgroundAlpha(1f);
         LoadingMapPanel.SetProgress(0.5f, "StartGame");
         WwiseAudioManager.BGM_Start();
+        PlayerStatHUDPanel = UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>();
         yield return WorldManager.StartGame();
 
         LoadingMapPanel.SetProgress(1f, "Completed");
         yield return new WaitForSeconds(0.1f);
         BattleManager.Instance.StartBattle();
         LoadingMapPanel.CloseUIForm();
-        UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>();
         DebugPanel = UIManager.Instance.ShowUIForms<DebugPanel>();
         KeyBindingPanel = UIManager.Instance.ShowUIForms<KeyBindingPanel>();
         KeyBindingPanel.CloseUIForm();

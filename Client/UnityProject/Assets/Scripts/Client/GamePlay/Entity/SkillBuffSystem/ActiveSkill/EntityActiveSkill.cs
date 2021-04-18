@@ -26,8 +26,8 @@ public abstract class EntityActiveSkill : EntitySkill
     public EntitySkillIndex EntitySkillIndex;
 
     [BoxGroup("技能参数")]
-    [HideLabel]
     [InlineProperty]
+    [HideLabel]
     public SkillPropertyCollection SkillsPropertyCollection = new SkillPropertyCollection();
 
     protected int GetValue(EntitySkillPropertyType type)
@@ -288,7 +288,32 @@ public abstract class EntityActiveSkill : EntitySkill
     protected virtual bool ValidateSkillTrigger()
     {
         if (skillPhase != ActiveSkillPhase.Ready || SkillCoroutine != null) return false;
-        return true;
+        bool enoughResources = true;
+        if (Entity.EntityStatPropSet.StatDict[EntityStatType.ActionPoint].Value < SkillsPropertyCollection.ConsumeActionPoint.GetModifiedValue)
+        {
+            Entity.EntityStatPropSet.StatDict[EntityStatType.ActionPoint].m_NotifyActionSet.OnValueNotEnoughWarning?.Invoke();
+            enoughResources = false;
+        }
+
+        if (Entity.EntityStatPropSet.StatDict[EntityStatType.FireElementFragment].Value < SkillsPropertyCollection.ConsumeFireElementFragment.GetModifiedValue)
+        {
+            Entity.EntityStatPropSet.StatDict[EntityStatType.FireElementFragment].m_NotifyActionSet.OnValueNotEnoughWarning?.Invoke();
+            enoughResources = false;
+        }
+
+        if (Entity.EntityStatPropSet.StatDict[EntityStatType.IceElementFragment].Value < SkillsPropertyCollection.ConsumeIceElementFragment.GetModifiedValue)
+        {
+            Entity.EntityStatPropSet.StatDict[EntityStatType.IceElementFragment].m_NotifyActionSet.OnValueNotEnoughWarning?.Invoke();
+            enoughResources = false;
+        }
+
+        if (Entity.EntityStatPropSet.StatDict[EntityStatType.LightningElementFragment].Value < SkillsPropertyCollection.ConsumeLightningElementFragment.GetModifiedValue)
+        {
+            Entity.EntityStatPropSet.StatDict[EntityStatType.IceElementFragment].m_NotifyActionSet.OnValueNotEnoughWarning?.Invoke();
+            enoughResources = false;
+        }
+
+        return enoughResources;
     }
 
     private Coroutine SkillCoroutine;
@@ -326,6 +351,11 @@ public abstract class EntityActiveSkill : EntitySkill
 
     protected virtual IEnumerator WingUp(float wingUpTime)
     {
+        Entity.EntityStatPropSet.StatDict[EntityStatType.ActionPoint].SetValue(Entity.EntityStatPropSet.StatDict[EntityStatType.ActionPoint].Value - SkillsPropertyCollection.ConsumeActionPoint.GetModifiedValue);
+        Entity.EntityStatPropSet.StatDict[EntityStatType.FireElementFragment].SetValue(Entity.EntityStatPropSet.StatDict[EntityStatType.FireElementFragment].Value - SkillsPropertyCollection.ConsumeFireElementFragment.GetModifiedValue);
+        Entity.EntityStatPropSet.StatDict[EntityStatType.IceElementFragment].SetValue(Entity.EntityStatPropSet.StatDict[EntityStatType.IceElementFragment].Value - SkillsPropertyCollection.ConsumeIceElementFragment.GetModifiedValue);
+        Entity.EntityStatPropSet.StatDict[EntityStatType.LightningElementFragment].SetValue(Entity.EntityStatPropSet.StatDict[EntityStatType.LightningElementFragment].Value - SkillsPropertyCollection.ConsumeLightningElementFragment.GetModifiedValue);
+
         Entity.EntityWwiseHelper.OnSkillPreparing[(int) EntitySkillIndex].Post(Entity.gameObject);
         SkillPhase = ActiveSkillPhase.WingingUp;
         // todo Entity 前摇animation， 且按时间缩放

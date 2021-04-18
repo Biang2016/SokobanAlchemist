@@ -27,6 +27,18 @@ public class SkillPropertyCollection
     [LabelText("@\"震屏伤害当量\t\"+CameraShakeEquivalentDamage")]
     public EntityProperty CameraShakeEquivalentDamage = new EntityProperty(EntitySkillPropertyType.CameraShakeEquivalentDamage);
 
+    [LabelText("@\"消耗行动力点数\t\"+ConsumeActionPoint")]
+    public EntityProperty ConsumeActionPoint = new EntityProperty(EntitySkillPropertyType.ConsumeActionPoint);
+
+    [LabelText("@\"消耗火元素碎片量\t\"+ConsumeFireElementFragment")]
+    public EntityProperty ConsumeFireElementFragment = new EntityProperty(EntitySkillPropertyType.ConsumeFireElementFragment);
+
+    [LabelText("@\"消耗冰元素碎片量\t\"+ConsumeIceElementFragment")]
+    public EntityProperty ConsumeIceElementFragment = new EntityProperty(EntitySkillPropertyType.ConsumeIceElementFragment);
+
+    [LabelText("@\"消耗电元素碎片量\t\"+ConsumeLightningElementFragment")]
+    public EntityProperty ConsumeLightningElementFragment = new EntityProperty(EntitySkillPropertyType.ConsumeLightningElementFragment);
+
     public void Init()
     {
         if (PropertyDict.Count == 0)
@@ -37,6 +49,10 @@ public class SkillPropertyCollection
             PropertyDict.Add(EntitySkillPropertyType.CastDuration, CastDuration);
             PropertyDict.Add(EntitySkillPropertyType.Recovery, Recovery);
             PropertyDict.Add(EntitySkillPropertyType.CameraShakeEquivalentDamage, CameraShakeEquivalentDamage);
+            PropertyDict.Add(EntitySkillPropertyType.ConsumeActionPoint, ConsumeActionPoint);
+            PropertyDict.Add(EntitySkillPropertyType.ConsumeFireElementFragment, ConsumeFireElementFragment);
+            PropertyDict.Add(EntitySkillPropertyType.ConsumeIceElementFragment, ConsumeIceElementFragment);
+            PropertyDict.Add(EntitySkillPropertyType.ConsumeLightningElementFragment, ConsumeLightningElementFragment);
         }
 
         foreach (KeyValuePair<EntitySkillPropertyType, EntityProperty> kv in PropertyDict)
@@ -61,5 +77,9 @@ public class SkillPropertyCollection
         CastDuration.ApplyDataTo(target.CastDuration);
         Recovery.ApplyDataTo(target.Recovery);
         CameraShakeEquivalentDamage.ApplyDataTo(target.CameraShakeEquivalentDamage);
+        ConsumeActionPoint.ApplyDataTo(target.ConsumeActionPoint);
+        ConsumeFireElementFragment.ApplyDataTo(target.ConsumeFireElementFragment);
+        ConsumeIceElementFragment.ApplyDataTo(target.ConsumeIceElementFragment);
+        ConsumeLightningElementFragment.ApplyDataTo(target.ConsumeLightningElementFragment);
     }
 }

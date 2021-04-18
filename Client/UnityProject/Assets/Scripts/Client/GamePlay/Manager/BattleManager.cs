@@ -147,7 +147,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         {
             BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) actor);
             MainPlayers[0] = actor;
-            UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>().Initialize();
+            ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
         }
         else if (actor.ActorCategory == ActorCategory.Creature)
         {

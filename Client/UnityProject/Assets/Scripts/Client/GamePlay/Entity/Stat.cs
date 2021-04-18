@@ -41,6 +41,7 @@ public abstract class Stat
         public UnityAction<string> OnValueReachZero;
         public UnityAction<int, int> OnMinValueChanged;
         public UnityAction<int, int> OnMaxValueChanged;
+        public UnityAction OnValueNotEnoughWarning;
 
         public void RegisterCallBacks(NotifyActionSet target)
         {
@@ -53,6 +54,7 @@ public abstract class Stat
             OnValueReachZero = target.OnValueReachZero;
             OnMinValueChanged = target.OnMinValueChanged;
             OnMaxValueChanged = target.OnMaxValueChanged;
+            OnValueNotEnoughWarning = target.OnValueNotEnoughWarning;
         }
 
         public void ClearCallBacks()
@@ -66,6 +68,7 @@ public abstract class Stat
             OnValueReachZero = null;
             OnMinValueChanged = null;
             OnMaxValueChanged = null;
+            OnValueNotEnoughWarning = null;
         }
     }
 

@@ -445,7 +445,7 @@ public class Actor : Entity
         srcESPS.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
         ActorBattleHelper.InGameHealthBar.Initialize(ActorBattleHelper, 100, 30);
-        UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().Initialize();
+        ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
         ActiveSkillMarkAsDestroyed = false;
         PassiveSkillMarkAsDestroyed = false;
     }
@@ -981,52 +981,7 @@ public class Actor : Entity
 
     #region Skills
 
-    public void VaultOrDash(int dashMaxDistance)
-    {
-        if (ThrowState != ThrowStates.None) return;
-        Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
-        //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
-        {
-            Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && !box.Passable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.EntityTypeIndex))
-            {
-                Vault();
-            }
-            else
-            {
-                Dash(dashMaxDistance);
-            }
-        }
-        else
-        {
-            Dash(dashMaxDistance);
-        }
-    }
-
-    private int temp_DashMaxDistance;
-
-    public void Dash(int dashMaxDistance)
-    {
-        if (CannotAct && !IsFrozen) return;
-        if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue)
-        {
-            EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue, "Dash");
-            if (IsFrozen)
-            {
-                EntityStatPropSet.FrozenValue.SetValue(EntityStatPropSet.FrozenValue.Value - 200, "Dash");
-            }
-            else
-            {
-                temp_DashMaxDistance = dashMaxDistance;
-                ActorArtHelper.Dash();
-            }
-        }
-        else
-        {
-            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].ActionPointBar.OnStatLowWarning();
-        }
-    }
+    internal int temp_DashMaxDistance;
 
     public void DoDash()
     {
@@ -1045,49 +1000,7 @@ public class Actor : Entity
         temp_DashMaxDistance = 0;
     }
 
-    private void Vault()
-    {
-        if (CannotAct) return;
-        if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue)
-        {
-            if (IsFrozen)
-            {
-                EntityStatPropSet.FrozenValue.SetValue(EntityStatPropSet.FrozenValue.Value - 200, "Vault");
-            }
-            else
-            {
-                ActorArtHelper.Vault();
-                EntityWwiseHelper.OnVault.Post(gameObject);
-            }
-        }
-        else
-        {
-            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].ActionPointBar.OnStatLowWarning();
-        }
-    }
-
-    public void Kick()
-    {
-        if (CannotAct) return;
-        if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue)
-        {
-            Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
-            {
-                Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-                if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.EntityTypeIndex))
-                {
-                    ActorArtHelper.Kick();
-                }
-            }
-        }
-        else
-        {
-            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].ActionPointBar.OnStatLowWarning();
-        }
-    }
-
-    public void KickBox()
+    public void DoKickBox()
     {
         Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
@@ -1095,10 +1008,8 @@ public class Actor : Entity
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.EntityTypeIndex))
             {
-                EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue, "Kick");
                 box.Kick(CurForward, KickForce, this);
                 FX kickFX = FXManager.Instance.PlayFX(KickFX, KickFXPivot.position);
-                EntityWwiseHelper.OnKick.Post(gameObject);
             }
         }
     }
@@ -1125,8 +1036,6 @@ public class Actor : Entity
                 {
                     if (offset == boxIndicatorGP_behind - box.WorldGP) return;
                 }
-
-                EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue, "SwapBox"); // 消耗行动力
 
                 GridPos3D boxWorldGP_before = box.WorldGP;
                 GridPos3D boxWorldGP_after = LastWorldGP - boxIndicatorGP + box.WorldGP;

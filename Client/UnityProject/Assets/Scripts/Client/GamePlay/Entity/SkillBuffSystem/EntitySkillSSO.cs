@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
 #if UNITY_EDITOR
-using BiangLibrary;
 using UnityEditor;
 #endif
 using UnityEngine;
@@ -25,6 +23,7 @@ public class EntitySkillSSO : SerializedScriptableObject
     [BoxGroup("技能")]
     [HideLabel]
     [InlineProperty]
+    [SerializeReference]
     public EntitySkill EntitySkill;
 
     private bool isActiveSkill => EntitySkill is EntityActiveSkill;
@@ -40,6 +39,7 @@ public class EntitySkillSSO : SerializedScriptableObject
             EntitySkill.SkillGUID = Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
         }
     }
+
     [Button("强制刷新技能GUID")]
     [ShowIf("hasGUID")]
     public void ForceRefreshEntitySkillGUID()

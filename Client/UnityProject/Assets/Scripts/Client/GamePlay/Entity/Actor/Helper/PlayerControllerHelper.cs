@@ -334,17 +334,17 @@ public class PlayerControllerHelper : ActorMonoHelper
 
             if (BS_Skill_0.Down)
             {
-                Actor.Kick();
+                TriggerSkill(EntitySkillIndex.Skill_0);
             }
 
             if (BS_Skill_2.Down)
             {
-                TriggerSkill(EntitySkillIndex.Skill_0);
+                TriggerSkill(EntitySkillIndex.Skill_2);
             }
 
             if (BS_Skill_3.Down)
             {
-                TriggerSkill(EntitySkillIndex.Skill_2);
+                TriggerSkill(EntitySkillIndex.Skill_3);
             }
 
             #endregion

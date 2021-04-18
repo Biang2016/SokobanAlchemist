@@ -203,18 +203,6 @@ public class EntityStatPropSet
     [LabelText("@\"行动力恢复速度/100\t\"+ActionPointRecovery")]
     public EntityProperty ActionPointRecovery = new EntityProperty(EntityPropertyType.ActionPointRecovery);
 
-    [BoxGroup("操作")]
-    [LabelText("@\"Kick消耗行动力\t\"+KickConsumeActionPoint")]
-    public EntityProperty KickConsumeActionPoint = new EntityProperty(EntityPropertyType.KickConsumeActionPoint);
-
-    [BoxGroup("操作")]
-    [LabelText("@\"Dash消耗行动力\t\"+DashConsumeActionPoint")]
-    public EntityProperty DashConsumeActionPoint = new EntityProperty(EntityPropertyType.DashConsumeActionPoint);
-
-    [BoxGroup("操作")]
-    [LabelText("@\"Vault消耗行动力\t\"+VaultConsumeActionPoint")]
-    public EntityProperty VaultConsumeActionPoint = new EntityProperty(EntityPropertyType.VaultConsumeActionPoint);
-
     #endregion
 
     public void Initialize(Entity entity)
@@ -277,9 +265,6 @@ public class EntityStatPropSet
         MoveSpeed.Initialize();
         MaxActionPoint.Initialize();
         ActionPointRecovery.Initialize();
-        KickConsumeActionPoint.Initialize();
-        DashConsumeActionPoint.Initialize();
-        VaultConsumeActionPoint.Initialize();
 
         #endregion
 
@@ -398,12 +383,6 @@ public class EntityStatPropSet
 
         PropertyDict.Add(EntityPropertyType.ActionPointRecovery, ActionPointRecovery);
 
-        PropertyDict.Add(EntityPropertyType.KickConsumeActionPoint, KickConsumeActionPoint);
-
-        PropertyDict.Add(EntityPropertyType.DashConsumeActionPoint, DashConsumeActionPoint);
-
-        PropertyDict.Add(EntityPropertyType.VaultConsumeActionPoint, VaultConsumeActionPoint);
-
         #endregion
 
         Profiler.EndSample();
@@ -441,10 +420,14 @@ public class EntityStatPropSet
             };
         }
 
+        StatNotifyActionSetDict[EntityStatType.ActionPoint].OnValueNotEnoughWarning += OnActionPointNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.Gold].OnValueIncrease += OnGoldIncrease;
         StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueIncrease += OnFireElementFragmentIncrease;
+        StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueNotEnoughWarning += OnFireElementFragmentNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.IceElementFragment].OnValueIncrease += OnIceElementFragmentIncrease;
+        StatNotifyActionSetDict[EntityStatType.IceElementFragment].OnValueNotEnoughWarning += OnIceElementFragmentNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.LightningElementFragment].OnValueIncrease += OnLightningElementFragmentIncrease;
+        StatNotifyActionSetDict[EntityStatType.LightningElementFragment].OnValueNotEnoughWarning += OnLightningElementFragmentNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueIncrease += OnHealthDurabilityIncrease;
         StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueDecrease += OnHealthDurabilityDecrease;
         StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueReachZero += OnHealthDurabilityReachZero;
@@ -474,6 +457,14 @@ public class EntityStatPropSet
         PropertyNotifyActionSetDict[EntityPropertyType.MaxActionPoint].OnValueChanged += OnMaxActionPointChanged;
     }
 
+    private void OnActionPointNotEnoughWarning()
+    {
+        if (Entity == BattleManager.Instance.Player1)
+        {
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].ActionPointBar.OnStatLowWarning();
+        }
+    }
+
     private void OnGoldIncrease(int increase)
     {
         if (Entity is Actor actor)
@@ -490,6 +481,14 @@ public class EntityStatPropSet
         }
     }
 
+    private void OnFireElementFragmentNotEnoughWarning()
+    {
+        if (Entity == BattleManager.Instance.Player1)
+        {
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].FireElementFragmentBar.OnStatLowWarning();
+        }
+    }
+
     private void OnIceElementFragmentIncrease(int increase)
     {
         if (Entity is Actor actor)
@@ -498,11 +497,27 @@ public class EntityStatPropSet
         }
     }
 
+    private void OnIceElementFragmentNotEnoughWarning()
+    {
+        if (Entity == BattleManager.Instance.Player1)
+        {
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].IceElementFragmentBar.OnStatLowWarning();
+        }
+    }
+
     private void OnLightningElementFragmentIncrease(int increase)
     {
         if (Entity is Actor actor)
         {
             actor.ActorBattleHelper.ShowGainLightningElementFragmentNumFX(increase);
+        }
+    }
+
+    private void OnLightningElementFragmentNotEnoughWarning()
+    {
+        if (Entity == BattleManager.Instance.Player1)
+        {
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].LightningElementFragmentBar.OnStatLowWarning();
         }
     }
 
@@ -760,9 +775,6 @@ public class EntityStatPropSet
         MaxActionPoint.ApplyDataTo(target.MaxActionPoint);
         ActionPoint.ApplyDataTo(target.ActionPoint);
         ActionPointRecovery.ApplyDataTo(target.ActionPointRecovery);
-        KickConsumeActionPoint.ApplyDataTo(target.KickConsumeActionPoint);
-        DashConsumeActionPoint.ApplyDataTo(target.DashConsumeActionPoint);
-        VaultConsumeActionPoint.ApplyDataTo(target.VaultConsumeActionPoint);
 
         #endregion
     }

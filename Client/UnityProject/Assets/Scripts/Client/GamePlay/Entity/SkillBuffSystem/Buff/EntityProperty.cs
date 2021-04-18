@@ -170,4 +170,16 @@ public enum EntitySkillPropertyType
 
     [LabelText("后摇震屏伤害当量")]
     CameraShakeEquivalentDamage = 10124,
+
+    [LabelText("消耗行动力点数")]
+    ConsumeActionPoint = 10199,
+
+    [LabelText("消耗火元素碎片量")]
+    ConsumeFireElementFragment = 10200,
+
+    [LabelText("消耗冰元素碎片量")]
+    ConsumeIceElementFragment = 10201,
+
+    [LabelText("消耗电元素碎片量")]
+    ConsumeLightningElementFragment = 10202,
 }

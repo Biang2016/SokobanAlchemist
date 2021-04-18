@@ -15,6 +15,7 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
     public int LayerMask_BoxOnlyDynamicCollider;
     public int LayerMask_Ground;
     public int LayerMask_Wall;
+    public int LayerMask_CollectableItem;
     public int LayerMask_BattleTips;
     public int LayerMask_BoxTriggerZone;
 
@@ -30,6 +31,7 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
     public int Layer_BoxOnlyDynamicCollider;
     public int Layer_Ground;
     public int Layer_Wall;
+    public int Layer_CollectableItem;
     public int Layer_BattleTips;
     public int Layer_BoxTriggerZone;
 
@@ -47,6 +49,7 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
         LayerMask_BoxOnlyDynamicCollider = LayerMask.GetMask("BoxOnlyDynamicCollider");
         LayerMask_Ground = LayerMask.GetMask("Ground");
         LayerMask_Wall = LayerMask.GetMask("Wall");
+        LayerMask_CollectableItem = LayerMask.GetMask("CollectableItem");
         LayerMask_BattleTips = LayerMask.GetMask("BattleTips");
         LayerMask_BoxTriggerZone = LayerMask.GetMask("BoxTriggerZone");
 
@@ -62,6 +65,7 @@ public class LayerManager : TSingletonBaseManager<LayerManager>
         Layer_BoxOnlyDynamicCollider = LayerMask.NameToLayer("BoxOnlyDynamicCollider");
         Layer_Ground = LayerMask.NameToLayer("Ground");
         Layer_Wall = LayerMask.NameToLayer("Wall");
+        Layer_CollectableItem = LayerMask.NameToLayer("CollectableItem");
         Layer_BattleTips = LayerMask.NameToLayer("BattleTips");
         Layer_BoxTriggerZone = LayerMask.NameToLayer("BoxTriggerZone");
     }
