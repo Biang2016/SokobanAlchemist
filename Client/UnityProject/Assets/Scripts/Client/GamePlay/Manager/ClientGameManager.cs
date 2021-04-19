@@ -277,6 +277,11 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                     return;
                 }
             }
+            else
+            {
+                ReloadGame();
+                return;
+            }
         }
 
 #if DEBUG
@@ -314,6 +319,10 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                 {
                     openWorld.ReturnToOpenWorldFormMicroWorld(false);
                 }
+            }
+            else
+            {
+                SwitchWorld(ConfigManager.GetTypeName(TypeDefineType.World, ConfigManager.World_OpenWorldIndex));
             }
         }
 

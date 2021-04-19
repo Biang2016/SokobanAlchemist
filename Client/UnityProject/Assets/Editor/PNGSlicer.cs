@@ -11,9 +11,14 @@ public static class ImageSlicer
         {
             Texture2D image = obj as Texture2D;
             string rootPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(image)); //获取路径名称  
-            string path = rootPath + "/" + image.name + ".PNG"; //图片路径名称  
 
-            TextureImporter texImp = AssetImporter.GetAtPath(path) as TextureImporter; //获取图片入口  
+            //图片路径名称  
+            string pathPNG = rootPath + "/" + image.name + ".PNG";
+            string pathJPG = rootPath + "/" + image.name + ".JPG"; //图片路径名称  
+
+            //获取图片入口  
+            TextureImporter texImp = AssetImporter.GetAtPath(pathPNG) as TextureImporter;
+            if (texImp == null) texImp = AssetImporter.GetAtPath(pathJPG) as TextureImporter;
 
             AssetDatabase.CreateFolder(rootPath, image.name); //创建文件夹  
 

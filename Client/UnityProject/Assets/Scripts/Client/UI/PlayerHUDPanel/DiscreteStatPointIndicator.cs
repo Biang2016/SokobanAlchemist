@@ -25,6 +25,19 @@ public class DiscreteStatPointIndicator : PoolObject
     private Dictionary<EntityStatType, Sprite> SpriteDict = new Dictionary<EntityStatType, Sprite>();
     private Dictionary<EntityStatType, Color> FullImageColorDict = new Dictionary<EntityStatType, Color>();
 
+    void Awake()
+    {
+        SpriteDict.Add(EntityStatType.ActionPoint, ActionPointSprite);
+        SpriteDict.Add(EntityStatType.FireElementFragment, FireElementFragmentSprite);
+        SpriteDict.Add(EntityStatType.IceElementFragment, IceElementFragmentSprite);
+        SpriteDict.Add(EntityStatType.LightningElementFragment, LightningElementFragmentSprite);
+
+        FullImageColorDict.Add(EntityStatType.ActionPoint, ActionFullImageColor);
+        FullImageColorDict.Add(EntityStatType.FireElementFragment, FireElementFragmentFullImageColor);
+        FullImageColorDict.Add(EntityStatType.IceElementFragment, IceElementFragmentFullImageColor);
+        FullImageColorDict.Add(EntityStatType.LightningElementFragment, LightningElementFragmentFullImageColor);
+    }
+
     private bool available = false;
 
     public bool Available
@@ -98,16 +111,6 @@ public class DiscreteStatPointIndicator : PoolObject
         FullImage.enabled = false;
 
         EntityStatType = statType;
-
-        SpriteDict.Add(EntityStatType.ActionPoint, ActionPointSprite);
-        SpriteDict.Add(EntityStatType.FireElementFragment, FireElementFragmentSprite);
-        SpriteDict.Add(EntityStatType.IceElementFragment, IceElementFragmentSprite);
-        SpriteDict.Add(EntityStatType.LightningElementFragment, LightningElementFragmentSprite);
-
-        FullImageColorDict.Add(EntityStatType.ActionPoint, ActionFullImageColor);
-        FullImageColorDict.Add(EntityStatType.FireElementFragment, FireElementFragmentFullImageColor);
-        FullImageColorDict.Add(EntityStatType.IceElementFragment, IceElementFragmentFullImageColor);
-        FullImageColorDict.Add(EntityStatType.LightningElementFragment, LightningElementFragmentFullImageColor);
 
         SliderImage.sprite = SpriteDict[EntityStatType];
         FullImage.color = FullImageColorDict[EntityStatType];
