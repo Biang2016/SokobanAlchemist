@@ -1411,8 +1411,8 @@ public class Actor : Entity
 
     public override void DestroySelfByModuleRecycle()
     {
-        base.DestroySelfByModuleRecycle();
         if (IsDestroying) return;
+        base.DestroySelfByModuleRecycle();
         IsDestroying = true;
         if (ActorFrozenHelper.FrozenBox)
         {
@@ -1434,8 +1434,8 @@ public class Actor : Entity
     {
         EntityStatPropSet.FrozenValue.SetValue(0);
         EntityCollectHelper?.OnHelperRecycled(); // 以免自身掉落物又被自身捡走
-        base.DestroySelf();
         if (IsDestroying) return;
+        base.DestroySelf();
         IsDestroying = true;
         if (!IsFrozen) UnRegisterFromModule(WorldGP, EntityOrientation);
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)

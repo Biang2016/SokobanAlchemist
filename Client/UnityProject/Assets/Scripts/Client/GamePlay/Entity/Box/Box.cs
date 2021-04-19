@@ -1254,16 +1254,16 @@ public partial class Box : Entity
 
     public override void DestroySelfByModuleRecycle()
     {
-        base.DestroySelfByModuleRecycle();
         if (IsDestroying || IsRecycled) return;
+        base.DestroySelfByModuleRecycle();
         IsDestroying = true;
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
     }
 
     public override void DestroySelf(UnityAction callBack = null)
     {
-        base.DestroySelf(callBack);
         if (IsDestroying || IsRecycled) return;
+        base.DestroySelf(callBack);
         IsDestroying = true;
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
