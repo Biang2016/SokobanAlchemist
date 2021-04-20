@@ -14,6 +14,7 @@ public class ActorArtHelper : EntityArtHelper
     {
         base.OnHelperRecycled();
         CanTurn = true;
+        CanPlayOtherAnimSkill = true;
         if (ActorModelAnim != null)
         {
             foreach (AnimatorControllerParameter parameter in ActorModelAnim.parameters)
@@ -34,6 +35,7 @@ public class ActorArtHelper : EntityArtHelper
     {
         base.OnHelperUsed();
         CanTurn = true;
+        CanPlayOtherAnimSkill = true;
     }
 
     public void Vault()
@@ -170,6 +172,7 @@ public class ActorArtHelper : EntityArtHelper
     #region 第三优先级
 
     internal bool CanTurn = true;
+    internal bool CanPlayOtherAnimSkill = true;
 
     public void SetIsChasing(bool isChasing)
     {

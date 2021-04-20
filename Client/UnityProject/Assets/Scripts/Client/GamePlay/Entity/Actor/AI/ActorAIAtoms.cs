@@ -640,21 +640,21 @@ public static class ActorAIAtoms
         [Name("按动画释放")]
         public BBParameter<bool> TriggerByAnimation;
 
+        [Name("Out_已经找到可行的技能编号")]
+        public BBParameter<bool> Out_HasValidSkill;
+
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            return TriggerSkill(Actor, EntitySkillIndex.value, TargetEntityType.value, TriggerWhenMissProbabilityPercent.value);
-        }
-
-        public static Status TriggerSkill(Actor actor, EntitySkillIndex skillIndex, TargetEntityType targetEntityType, int triggerWhenMissProbabilityPercent)
-        {
-            if (!actor.IsNotNullAndAlive() || actor.ActorAIAgent == null) return Status.Failure;
-            if (actor.CannotAct) return Status.Failure;
-            if (actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.CannotAct) return Status.Failure;
+            if (!Actor.ActorArtHelper.CanPlayOtherAnimSkill) return Status.Failure;
+            if (Actor.EntityActiveSkillDict.TryGetValue(EntitySkillIndex.value, out EntityActiveSkill eas))
             {
-                bool triggerSuc = eas.CheckCanTriggerSkill(targetEntityType, triggerWhenMissProbabilityPercent);
+                bool triggerSuc = eas.CheckCanTriggerSkill(TargetEntityType.value, TriggerWhenMissProbabilityPercent.value);
                 if (triggerSuc)
                 {
-                    actor.ActorArtHelper.PlaySkill(skillIndex, targetEntityType);
+                    Actor.ActorArtHelper.PlaySkill(EntitySkillIndex.value, TargetEntityType.value);
+                    Out_HasValidSkill.SetValue(false);
                     return Status.Success;
                 }
                 else
@@ -678,15 +678,28 @@ public static class ActorAIAtoms
         [Name("技能清单")]
         public BBParameter<List<EntitySkillIndex>> SpecificSkillIndices;
 
+        [Name("Out_已经找到可行的技能编号")]
+        public BBParameter<bool> Out_HasValidSkill;
+
+        [Name("Out_技能编号")]
+        public BBParameter<EntitySkillIndex> Out_ValidSkillIndex;
+
         protected override bool OnCheck()
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
+            if (!Actor.ActorArtHelper.CanPlayOtherAnimSkill) return false;
+            if (Out_HasValidSkill.value) return false;
             foreach (EntitySkillIndex skillIndex in SpecificSkillIndices.value)
             {
                 if (Actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
                 {
                     bool triggerSuc = eas.CheckCanTriggerSkill(TargetEntityType.value, -1);
-                    if (triggerSuc) return true;
+                    if (triggerSuc)
+                    {
+                        Out_ValidSkillIndex.SetValue(skillIndex);
+                        Out_HasValidSkill.SetValue(true);
+                        return true;
+                    }
                 }
             }
 

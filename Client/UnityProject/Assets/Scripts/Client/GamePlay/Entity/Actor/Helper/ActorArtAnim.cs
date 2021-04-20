@@ -56,4 +56,20 @@ public class ActorArtAnim : MonoBehaviour
     {
         ActorArtHelper.CanTurn = false;
     }
+
+    /// <summary>
+    /// Executed by animation
+    /// </summary>
+    public void SetCanPlayOtherAnimSkill()
+    {
+        ActorArtHelper.CanPlayOtherAnimSkill = true;
+    }
+
+    /// <summary>
+    /// Executed by animation
+    /// </summary>
+    public void SetCannotPlayOtherAnimSkill()
+    {
+        ActorArtHelper.CanPlayOtherAnimSkill = false;
+    }
 }

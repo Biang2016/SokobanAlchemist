@@ -32,17 +32,6 @@ public abstract class EntityActiveSkill : EntitySkill
     [SerializeField]
     public SkillPropertyCollection SkillsPropertyCollection;
 
-    [LabelText("目标距离范围判定")]
-    public bool NeedValidTargetDistance = false;
-
-    [LabelText("施法目标距离最小值")]
-    [ShowIf("NeedValidTargetDistance")]
-    public float TargetDistanceMin = 0f;
-
-    [LabelText("施法目标距离最大值")]
-    [ShowIf("NeedValidTargetDistance")]
-    public float TargetDistanceMax = 5f;
-
     [LabelText("Miss时仍触发的概率%")]
     public int TriggerWhenMissProbabilityPercent = 100;
 
@@ -284,7 +273,7 @@ public abstract class EntityActiveSkill : EntitySkill
     {
         if (!ValidateSkill_CD()) return false;
         if (!ValidateSkillTrigger_Subject(targetEntityType)) return false;
-        if (!ValidateSkillTrigger_Resources()) // 其他条件都满足后，判定资源条件，这样可以使资源警告发生在所有条件都满足之后
+        if (!ValidateSkillTrigger_Resources())
         {
             OnValidateFailed?.Invoke();
             return false;
@@ -294,13 +283,12 @@ public abstract class EntityActiveSkill : EntitySkill
             if (!ValidateSkillTrigger_HitProbability(targetEntityType))
             {
                 if (triggerWhenMissProbabilityPercent < 0) triggerWhenMissProbabilityPercent = TriggerWhenMissProbabilityPercent; // 如果不指定值则取技能默认值
-                return triggerWhenMissProbabilityPercent.ProbabilityBool(); // 当确定会miss时，有多少概率仍然发动
-            }
-            else
-            {
-                return true;
+                bool triggerAnyway = triggerWhenMissProbabilityPercent.ProbabilityBool(); // 当确定会miss时，有多少概率仍然发动
+                if (!triggerAnyway) return false;
             }
         }
+
+        return true;
     }
 
     /// <summary>
@@ -319,23 +307,7 @@ public abstract class EntityActiveSkill : EntitySkill
     /// <returns></returns>
     protected virtual bool ValidateSkillTrigger_Subject(TargetEntityType targetEntityType)
     {
-        if (Entity is Actor actor)
-        {
-            GridPos3D targetGP = actor.ActorControllerHelper.AgentTargetDict[targetEntityType].TargetGP;
-            if (NeedValidTargetDistance)
-            {
-                if ((Entity.EntityBaseCenter - targetGP).magnitude < TargetDistanceMin || (Entity.EntityBaseCenter - targetGP).magnitude > TargetDistanceMax) return false;
-                return true;
-            }
-
-            return true;
-        }
-        else if (Entity is Box box)
-        {
-            // todo Box AI
-        }
-
-        return false;
+        return true;
     }
 
     /// <summary>
@@ -653,6 +625,7 @@ public abstract class EntityActiveSkill : EntitySkill
             Entity.StopCoroutine(SkillCoroutine);
             SkillCoroutine = null;
         }
+
         if (SubSkillManageCoroutine_CanInterrupt != null) Entity.StopCoroutine(SubSkillManageCoroutine_CanInterrupt);
         switch (SkillPhase)
         {
@@ -723,9 +696,6 @@ public abstract class EntityActiveSkill : EntitySkill
         EntityActiveSkill newEAS = (EntityActiveSkill) cloneData;
         newEAS.SkillsPropertyCollection = SkillsPropertyCollection.Clone();
         newEAS.TargetCamp = TargetCamp;
-        newEAS.NeedValidTargetDistance = NeedValidTargetDistance;
-        newEAS.TargetDistanceMin = TargetDistanceMin;
-        newEAS.TargetDistanceMax = TargetDistanceMax;
         newEAS.TriggerWhenMissProbabilityPercent = TriggerWhenMissProbabilityPercent;
         newEAS.WingUpCanMove = WingUpCanMove;
         newEAS.CastCanMove = CastCanMove;
@@ -741,9 +711,6 @@ public abstract class EntityActiveSkill : EntitySkill
         EntityActiveSkill srcEAS = (EntityActiveSkill) srcData;
         srcEAS.SkillsPropertyCollection.ApplyDataTo(SkillsPropertyCollection);
         TargetCamp = srcEAS.TargetCamp;
-        NeedValidTargetDistance = srcEAS.NeedValidTargetDistance;
-        TargetDistanceMin = srcEAS.TargetDistanceMin;
-        TargetDistanceMax = srcEAS.TargetDistanceMax;
         TriggerWhenMissProbabilityPercent = srcEAS.TriggerWhenMissProbabilityPercent;
         WingUpCanMove = srcEAS.WingUpCanMove;
         CastCanMove = srcEAS.CastCanMove;
