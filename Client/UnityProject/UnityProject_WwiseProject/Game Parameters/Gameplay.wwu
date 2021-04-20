@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{32EBB2C2-DFCC-485D-8698-021106E33BAD}" SchemaVersion="97">
+	<GameParameters>
+		<WorkUnit Name="Gameplay" ID="{32EBB2C2-DFCC-485D-8698-021106E33BAD}" PersistMode="Standalone">
+			<ChildrenList>
+				<GameParameter Name="InMenu_LowPass" ID="{B4F5D5DC-16E0-45B6-9154-E424CB40136B}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="0"/>
+						<Property Name="RTPCRamping" Type="int16" Value="1"/>
+						<Property Name="SlewRateDown" Type="Real64" Value="100"/>
+						<Property Name="SlewRateUp" Type="Real64" Value="100"/>
+					</PropertyList>
+				</GameParameter>
+				<GameParameter Name="Music_EnemyTheme_Volume" ID="{1332F4BF-9286-407A-945A-29E7D2B9ECA8}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="-60"/>
+						<Property Name="Max" Type="Real64" Value="0"/>
+						<Property Name="Min" Type="Real64" Value="-60"/>
+						<Property Name="RTPCRamping" Type="int16" Value="1"/>
+						<Property Name="SlewRateUp" Type="Real64" Value="20"/>
+					</PropertyList>
+				</GameParameter>
+				<GameParameter Name="MenuSlider_Music_Volume" ID="{50BF03D8-A517-4F63-9CA0-F7D73329F8AE}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="60"/>
+						<Property Name="RTPCRamping" Type="int16" Value="1"/>
+					</PropertyList>
+				</GameParameter>
+				<GameParameter Name="MenuSlider_Master_Volume" ID="{DBE63736-A1A8-4EF3-8DDC-1259BE7F2723}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="100"/>
+						<Property Name="RTPCRamping" Type="int16" Value="1"/>
+					</PropertyList>
+				</GameParameter>
+				<GameParameter Name="SFX_Entity_Volume" ID="{34E52FC2-118E-4026-AC89-0AECC349BAEC}"/>
+				<GameParameter Name="SFX_UI_Volume" ID="{424535AC-C584-4E1A-A7FB-8EA44EEA581B}"/>
+				<GameParameter Name="SFX_Volume" ID="{01846BEA-1AA6-4F2E-A1C2-6F10FBC45B9C}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="100"/>
+					</PropertyList>
+				</GameParameter>
+			</ChildrenList>
+		</WorkUnit>
+	</GameParameters>
+</WwiseDocument>

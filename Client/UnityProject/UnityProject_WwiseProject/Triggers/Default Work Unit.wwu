@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{BA794604-D4C8-4263-A9F9-381ADB4E51CC}" SchemaVersion="97">
 	<Triggers>
-		<WorkUnit Name="Default Work Unit" ID="{BA794604-D4C8-4263-A9F9-381ADB4E51CC}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{BA794604-D4C8-4263-A9F9-381ADB4E51CC}" PersistMode="Standalone">
+			<ChildrenList>
+				<Trigger Name="Trigger_PlayerDeath" ID="{078236E5-6C64-458E-BF1B-2E003CBD0A52}"/>
+				<Trigger Name="Trigger_EnemyTheme" ID="{7E3D3CE2-9A1B-4BB8-97B9-98BA7FD753CB}"/>
+				<Trigger Name="Trigger_Teleport" ID="{AE4D44FA-C4E2-4CD2-8625-DE827EB58E40}"/>
+				<Trigger Name="Trigger_QuestComplete" ID="{1271EAC5-A4A8-4F08-BFA1-4B1D3DD59F68}"/>
+				<Trigger Name="Trigger_Victory" ID="{68BED58F-49C8-43F1-B1FE-14AD8E3512E6}"/>
+			</ChildrenList>
+		</WorkUnit>
 	</Triggers>
 </WwiseDocument>

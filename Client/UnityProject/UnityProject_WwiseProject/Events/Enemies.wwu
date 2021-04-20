@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{AB31CB3F-E95F-48C8-9072-77668498151B}" SchemaVersion="97">
+	<Events>
+		<WorkUnit Name="Enemies" ID="{AB31CB3F-E95F-48C8-9072-77668498151B}" PersistMode="Standalone">
+			<PropertyList>
+				<Property Name="Color" Type="int16" Value="23"/>
+				<Property Name="OverrideColor" Type="bool" Value="True"/>
+			</PropertyList>
+			<ChildrenList>
+				<Folder Name="IceEnemy_Cyan" ID="{C6DC32F0-2013-4296-8299-2FA6BDDF66C8}" ShortID="731405076">
+					<PropertyList>
+						<Property Name="Color" Type="int16" Value="23"/>
+						<Property Name="OverrideColor" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Event Name="IceEnemy_Cyan_SkillCast_v1" ID="{4CC8E9DA-B6DC-41B2-AC24-A3C4E11E4288}">
+							<ChildrenList>
+								<Action Name="" ID="{E0AB0B56-615E-44A5-B5AF-2F62AF321358}" ShortID="10808393">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SkillCast_v1" ID="{E305B247-457B-4E53-B4C7-6FB9D70464C8}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="IceEnemy_Cyan_SkillCast_v2" ID="{C2717160-3306-46CA-878D-F16C1D660693}">
+							<ChildrenList>
+								<Action Name="" ID="{9EC1338C-38DD-47A4-817A-13FDCAB6647B}" ShortID="129644707">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SkillCast_v2" ID="{7AA87C68-3CCC-4058-8818-883B0D3DBD79}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="IceEnemy_Cyan_Hurt" ID="{01DA9D20-EA01-4500-B525-5B1FB72BC7F2}"/>
+						<Event Name="IceEnemy_Cyan_Movement" ID="{52062BBA-BCD8-499B-9F0B-45E54BBE3DD4}"/>
+						<Event Name="IceEnemy_Cyan_Death" ID="{C95A80FD-D94A-41C5-9A10-96679E2A8280}"/>
+						<Event Name="IceEnemy_Cyan_Attack" ID="{9D1CD3E6-E971-4F37-AADC-74AA13641A0E}"/>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="IceEnemy_Blue" ID="{B71F09DD-1E63-4FE8-A423-E7A7BFFBE15F}" ShortID="779460596">
+					<PropertyList>
+						<Property Name="Color" Type="int16" Value="23"/>
+						<Property Name="OverrideColor" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Event Name="IceEnemy_Blue_SkillCast_v1" ID="{E35E2EDD-C212-47C5-89FA-85FB3F70C467}">
+							<ChildrenList>
+								<Action Name="" ID="{63ABF1F7-7AB0-4D44-9E73-B6AC703D46B7}" ShortID="1051761707">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SkillCast_v1" ID="{E305B247-457B-4E53-B4C7-6FB9D70464C8}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="IceEnemy_Blue_SkillCast_v2" ID="{975E859F-C17F-44B0-BC7A-9D4F543410DD}">
+							<ChildrenList>
+								<Action Name="" ID="{E42651D3-ADB9-4331-8594-303644CBA671}" ShortID="759736101">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SkillCast_v2" ID="{7AA87C68-3CCC-4058-8818-883B0D3DBD79}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="IceEnemy_Blue_Hurt" ID="{28BB8DB8-1C53-443C-87C4-AF772A841458}"/>
+						<Event Name="IceEnemy_Blue_Movement" ID="{CF8FFFE3-6D47-4AA7-A897-2C0706B1E67D}"/>
+						<Event Name="IceEnemy_Blue_Death" ID="{55555FE6-7A4B-492F-ABD4-9BC8D6F081D5}"/>
+						<Event Name="IceEnemy_Blue_Attack" ID="{7789B2F8-42C5-41C9-B2C2-82415C6FB59E}"/>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="FireEnemy_Yellow" ID="{66FF9ADC-C8BD-40CD-95C1-49ACAD81AB3F}" ShortID="790130938">
+					<PropertyList>
+						<Property Name="Color" Type="int16" Value="23"/>
+						<Property Name="OverrideColor" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Event Name="FireEnemy_Yellow_SkillCast_v1" ID="{DF56FF07-3A33-4E8C-A8FD-BA7ADDF58A0B}">
+							<ChildrenList>
+								<Action Name="" ID="{6D98E5A7-5D0F-4492-AA2B-28D2001977E7}" ShortID="846848863">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SkillCast_v1" ID="{E305B247-457B-4E53-B4C7-6FB9D70464C8}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FireEnemy_Yellow_SkillCast_v2" ID="{F5D02D4B-6610-4710-852D-DF2ACE78434E}">
+							<ChildrenList>
+								<Action Name="" ID="{67C65C10-FDAB-449F-944D-218C74725037}" ShortID="873420833">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SkillCast_v2" ID="{7AA87C68-3CCC-4058-8818-883B0D3DBD79}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FireEnemy_Yellow_Hurt" ID="{C257BA22-BDF7-46C2-AE72-F35534A94915}"/>
+						<Event Name="FireEnemy_Yellow_Movement" ID="{ABD1D43E-B6D1-4D6F-A070-D50561AE54B2}"/>
+						<Event Name="FireEnemy_Yellow_Death" ID="{3DAFBF8D-6062-4453-AC87-FFB5CCE1D8C6}"/>
+						<Event Name="FireEnemy_Yellow_Attack" ID="{A3A8D58A-A1DD-4221-8382-08BE6D76FA86}"/>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="FireEnemy_Red" ID="{2265681A-B75C-4032-A3B6-E78C6784A8BD}" ShortID="339700">
+					<PropertyList>
+						<Property Name="Color" Type="int16" Value="23"/>
+						<Property Name="OverrideColor" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Event Name="FireEnemy_Red_SkillCast_v1" ID="{5A48918D-F7A4-4349-99F5-6E83875C9F6C}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="23"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{9A2D4EC4-332E-4A1D-9EC4-7972874BCD1B}" ShortID="490793354">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SkillCast_v1" ID="{E305B247-457B-4E53-B4C7-6FB9D70464C8}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FireEnemy_Red_SkillCast_v2" ID="{A37069EB-A94E-40ED-B44B-4E4580A4E5C8}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="23"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{AB5224C8-BBE5-429D-B521-C2176323BB6A}" ShortID="701078034">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SkillCast_v2" ID="{7AA87C68-3CCC-4058-8818-883B0D3DBD79}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FireEnemy_Red_Hurt" ID="{DE8536EE-BCA0-48B1-9F6B-8A6FA4F28E74}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="23"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+						</Event>
+						<Event Name="FireEnemy_Red_Movement" ID="{8BAD35BD-B839-4F4F-A61A-F61F08E1C53A}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="23"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+						</Event>
+						<Event Name="FireEnemy_Red_Death" ID="{7DE4FB76-7784-4B2E-B6F0-B1EBAD684D63}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="23"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+						</Event>
+						<Event Name="FireEnemy_Red_Attack" ID="{6EF8520A-A82E-4710-A21A-90868666E08F}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="23"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{38B1868E-ECF1-490D-A788-27C551743E81}" ShortID="466540451">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FireEnemy_Red_Attack" ID="{39A7C915-B1F5-4196-AEA5-3DF11442EF22}" WorkUnitID="{29945255-34A1-449A-B297-2777D8BBA031}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="LightningEnemy" ID="{3A540480-A734-4230-A053-259F872EAAF6}" ShortID="154410288">
+					<PropertyList>
+						<Property Name="Color" Type="int16" Value="23"/>
+						<Property Name="OverrideColor" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Event Name="LightningEnemy_SkillCast_v1" ID="{D965F543-D718-4A48-9DDD-C3402DE657CA}">
+							<ChildrenList>
+								<Action Name="" ID="{3A617EEC-00F2-4D7A-A2D8-1D5BE9AEE346}" ShortID="484465318">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SkillCast_v1" ID="{E305B247-457B-4E53-B4C7-6FB9D70464C8}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LightningEnemy_SkillCast_v2" ID="{812A7E46-8862-48D6-8FDA-97F524BC1E93}">
+							<ChildrenList>
+								<Action Name="" ID="{2DFD1358-64D7-47E6-8A17-C0689E77AB1F}" ShortID="134051772">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SkillCast_v2" ID="{7AA87C68-3CCC-4058-8818-883B0D3DBD79}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LightningEnemy_Hurt" ID="{3F452618-F942-44CF-9EF5-E8DC51C0B408}"/>
+						<Event Name="LightningEnemy_Movement" ID="{CCB4D8E1-55C3-4522-AFC2-6B39DEAA3383}"/>
+						<Event Name="LightningEnemy_Death" ID="{7EBFC84D-2C4A-4FFA-8F88-5C6297DA4CA1}"/>
+						<Event Name="LightningEnemy_Attack" ID="{A5ADFFD3-1238-4112-9DE1-1F2868869EF1}"/>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="WoodenEnemy" ID="{46BA828A-EE27-4BD9-84DF-D2C71BFC2132}" ShortID="908852169">
+					<ChildrenList>
+						<Event Name="WoodenEnemy_SkillCast_v1" ID="{485021B6-E368-44A8-990B-EBBF345B1D9E}">
+							<ChildrenList>
+								<Action Name="" ID="{D3CFFBCD-CD09-4F04-8A38-53835B9D6ADF}" ShortID="824567522">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SkillCast_v1" ID="{E305B247-457B-4E53-B4C7-6FB9D70464C8}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenEnemy_SkillCast_v2" ID="{BDA27006-B1BD-447E-98D4-58B552433FBD}">
+							<ChildrenList>
+								<Action Name="" ID="{5F66E8E2-AB25-461B-82C4-1C77A9D83A01}" ShortID="676414634">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SkillCast_v2" ID="{7AA87C68-3CCC-4058-8818-883B0D3DBD79}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenEnemy_Hurt" ID="{1A889B91-919F-42D7-98CB-E0E85318767D}"/>
+						<Event Name="WoodenEnemy_Movement" ID="{4DD97D40-AB55-4D93-A47D-FBE6C59368C7}"/>
+						<Event Name="WoodenEnemy_Death" ID="{31979DD4-62B2-483E-820F-F4A1D523A64F}"/>
+						<Event Name="WoodenEnemy_Attack" ID="{ABD0891D-AFFB-469B-AF02-9F3AECBA8982}"/>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="SpiderLegEnemy" ID="{077E0A6D-F671-4E0F-AC60-DCDA5931F30A}" ShortID="290039825">
+					<PropertyList>
+						<Property Name="Color" Type="int16" Value="23"/>
+						<Property Name="OverrideColor" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Event Name="SpiderLegEnemy_Hurt" ID="{FAD07397-FAAF-4A0F-899A-79858C4ACD0F}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="23"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+						</Event>
+						<Event Name="SpiderLegEnemy_Death" ID="{B93A9CBF-3018-40F4-B62F-9F1EA8628586}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="23"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+						</Event>
+						<Event Name="SpiderLegEnemy_Attack" ID="{3D5B2270-3B01-48D7-9C81-8126044A6F38}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="23"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+						</Event>
+						<Event Name="SpiderLegEnemy_Spawn" ID="{0769E7AB-0400-41B3-AFFA-C69B90B32276}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="23"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{BEA2B9B0-B924-434B-814E-92DBAEDD27F7}" ShortID="935461608">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="22"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="InSpiderLegCombat_Phase1" ID="{F90DC440-0769-41C3-B358-1E65CFF25162}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

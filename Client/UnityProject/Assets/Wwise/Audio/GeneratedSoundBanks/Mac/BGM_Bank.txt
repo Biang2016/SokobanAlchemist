@@ -3,31 +3,31 @@ Event	ID	Name			Wwise Object Path	Notes
 	2985635692	BGM_Start			\BGM\BGM_Start	
 
 State Group	ID	Name			Wwise Object Path	Notes
-	3129336127	BGM_CombatState			\Default Work Unit\BGM_CombatState	
-	3258568639	BGM_Theme			\Default Work Unit\BGM_Theme	
+	1071758680	CombatState			\MusicStates\CombatState	
+	2106907484	Music_Regions			\MusicStates\Music_Regions	
 
 State	ID	Name	State Group			Notes
-	687614019	InBossCombat	BGM_CombatState			
-	748895195	None	BGM_CombatState			
-	789371013	InEliteCombat	BGM_CombatState			
-	1022704585	InSpiderLegCombat_Phase_1	BGM_CombatState			
-	1022704586	InSpiderLegCombat_Phase_2	BGM_CombatState			
-	1022704587	InSpiderLegCombat_Phase_3	BGM_CombatState			
-	1160234136	Normal	BGM_CombatState			
-	1823678183	Exploring	BGM_CombatState			
-	3373579172	InCombat	BGM_CombatState			
-	578926554	Lab	BGM_Theme			
-	748895195	None	BGM_Theme			
-	2009274547	OpenWorld	BGM_Theme			
-	2323193050	Temple	BGM_Theme			
-	2525109375	Excavation	BGM_Theme			
-	3762955427	Tutorial	BGM_Theme			
+	687614019	InBossCombat	CombatState			
+	748895195	None	CombatState			
+	789371013	InEliteCombat	CombatState			
+	1841965078	NonCombat	CombatState			
+	2831878517	InNormalCombat	CombatState			
+	4018745156	InSpiderLegCombat_Phase3	CombatState			
+	4018745157	InSpiderLegCombat_Phase2	CombatState			
+	4018745158	InSpiderLegCombat_Phase1	CombatState			
+	578926554	Lab	Music_Regions			
+	748895195	None	Music_Regions			
+	790159209	Iceland	Music_Regions			
+	2009274547	OpenWorld	Music_Regions			
+	2323193050	Temple	Music_Regions			
+	2525109375	Excavation	Music_Regions			
+	3762955427	Tutorial	Music_Regions			
+
+Trigger	ID	Name			Wwise Object Path	Notes
+	940788252	Music_PlayerDeath			\Default Work Unit\Music_PlayerDeath	
+	1686438944	Music_Teleport			\Default Work Unit\Music_Teleport	
+	2637400697	Music_Victory			\Default Work Unit\Music_Victory	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	37445038	TempleBGM	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Mac\SFX\TempleBGM_4811579D.wem		\Interactive Music Hierarchy\BGM\BGM_SwitchingContainer\TempleThemePlaylist\TempleBGM\TempleBGM		930592
-	75272111	OpenWorldBGM2	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Mac\SFX\OpenWorldBGM2_4811579D.wem		\Interactive Music Hierarchy\BGM\BGM_SwitchingContainer\OpenWorldThemePlayList\OpenWorldBGM2\OpenWorldBGM2		7570000
-	102912303	CoolSwing	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Mac\SFX\CoolSwing_4811579D.wem		\Interactive Music Hierarchy\BGM\BGM_SwitchingContainer\TutorialThemePlaylist\TutorialBGM\CoolSwing		3772072
-	165791469	LabBGM	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Mac\SFX\LabBGM_4811579D.wem		\Interactive Music Hierarchy\BGM\BGM_SwitchingContainer\LabThemePlaylist\LabBGM\LabBGM		816544
-	377813988	ExcavationBGM	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Mac\SFX\ExcavationBGM_4811579D.wem		\Interactive Music Hierarchy\BGM\BGM_SwitchingContainer\ExcavationThemePlaylist\ExcavationBGM\ExcavationBGM		7335424
-	727134213	OpenWorldBGM	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Mac\SFX\OpenWorldBGM_4811579D.wem		\Interactive Music Hierarchy\BGM\BGM_SwitchingContainer\OpenWorldThemePlayList\OpenWorldBGM1\OpenWorldBGM		7570000
+	102912303	Tutorial	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Mac\SFX\CoolSwing_4811579D.wem		\Interactive Music Hierarchy\Music\Music_Regions\Tutorial\Tutorial_Layers\Tutorial		3772072
 

@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{BF4FC306-E3A9-4180-902B-945ED5E7EFDB}" SchemaVersion="97">
 	<AudioObjects>
-		<WorkUnit Name="Default Work Unit" ID="{BF4FC306-E3A9-4180-902B-945ED5E7EFDB}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{BF4FC306-E3A9-4180-902B-945ED5E7EFDB}" PersistMode="Standalone">
+			<ChildrenList>
+				<ActorMixer Name="Non_World" ID="{5F3CD7EA-C911-42B0-A868-1A511B49BF44}" ShortID="144043785">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<WorkUnit Name="UI" ID="{DE6AC26A-6F98-400E-8C1A-F110F7537DEB}" PersistMode="Reference"/>
+					</ChildrenList>
+				</ActorMixer>
+				<ActorMixer Name="World" ID="{1BD5D1A4-58D3-4F04-A2EF-D61CB667CA4D}" ShortID="927088180">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<WorkUnit Name="Box" ID="{52D12601-DBAD-476B-8152-BE8998A91580}" PersistMode="Reference"/>
+						<WorkUnit Name="Enemy" ID="{68F88813-B836-4C2D-9185-75DB66E832B7}" PersistMode="Reference"/>
+						<WorkUnit Name="Player_02" ID="{4EB6C7B0-99A6-458F-9A40-E260F23AF82C}" PersistMode="Reference"/>
+						<WorkUnit Name="Ambience" ID="{4526B6CC-851F-4049-A041-2E4CD8150F2D}" PersistMode="Reference"/>
+					</ChildrenList>
+				</ActorMixer>
+			</ChildrenList>
+		</WorkUnit>
 	</AudioObjects>
 </WwiseDocument>
