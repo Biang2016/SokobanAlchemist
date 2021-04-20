@@ -242,7 +242,7 @@ public class Actor : Entity
                 if (offset.z < zmin) zmin = offset.z;
             }
 
-            return WorldGP + new GridPos3D((ActorWidth - 1) / 2 + xmin, ymin, (ActorWidth - 1) / 2 + zmin);
+            return WorldGP + new GridPos3D(xmin, ymin, zmin);
         }
     }
 
