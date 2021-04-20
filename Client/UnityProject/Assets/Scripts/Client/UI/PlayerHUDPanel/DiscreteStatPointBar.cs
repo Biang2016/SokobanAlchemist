@@ -46,7 +46,15 @@ public class DiscreteStatPointBar : MonoBehaviour
         for (int i = 0; i < PointIndicators.Count; i++)
         {
             PointIndicators[i].Available = i < currentGrid;
-            if (i < currentGrid - 1) PointIndicators[i].Ratio = 1f;
+            if (i < currentGrid - 1)
+            {
+                PointIndicators[i].Ratio = 1f;
+            }
+            else if(i >= currentGrid)
+            {
+                PointIndicators[i].Ratio = 0f;
+            }
+
             if (i == currentGrid - 1)
             {
                 if (lastRatio > 0)
