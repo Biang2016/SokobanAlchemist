@@ -4,17 +4,13 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public class ActorActiveSkill_DashOrVault : EntityActiveSkill
+public class ActorActiveSkill_Vault : EntityActiveSkill
 {
-    protected override string Description => "冲刺或翻越";
+    protected override string Description => "翻越";
 
-    [LabelText("冲刺最大距离")]
-    public int DashMaxDistance = 4;
-
-    private string actionType = "Vault";
-
-    protected override bool ValidateSkillTrigger()
+    protected override bool ValidateSkillTrigger_Subject(TargetEntityType targetEntityType)
     {
+        if (!base.ValidateSkillTrigger_Subject(targetEntityType)) return false;
         if (Entity is Actor actor)
         {
             if (actor.ThrowState != Actor.ThrowStates.None) return false;
@@ -27,29 +23,23 @@ public class ActorActiveSkill_DashOrVault : EntityActiveSkill
                 Box box = hit.collider.gameObject.GetComponentInParent<Box>();
                 if (box && !box.Passable && actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.EntityTypeIndex))
                 {
-                    actionType = "Vault";
-                    if (!base.ValidateSkillTrigger()) return false;
                     return true;
                 }
                 else
                 {
-                    actionType = "Dash";
-                    if (!base.ValidateSkillTrigger()) return false;
-                    return true;
+                    return false;
                 }
             }
             else
             {
-                actionType = "Dash";
-                if (!base.ValidateSkillTrigger()) return false;
-                return true;
+                return false;
             }
         }
 
-        return base.ValidateSkillTrigger();
+        return false;
     }
 
-    protected override IEnumerator Cast(float castDuration)
+    protected override IEnumerator Cast(TargetEntityType targetEntityType, float castDuration)
     {
         if (Entity is Actor actor)
         {
@@ -59,32 +49,20 @@ public class ActorActiveSkill_DashOrVault : EntityActiveSkill
             }
             else
             {
-                if (actionType == "Vault")
-                {
-                    actor.ActorArtHelper.Vault();
-                }
-                else if (actionType == "Dash")
-                {
-                    actor.temp_DashMaxDistance = DashMaxDistance;
-                    actor.ActorArtHelper.Dash();
-                }
+                actor.ActorArtHelper.Vault();
             }
         }
 
-        yield return base.Cast(castDuration);
+        yield return base.Cast(targetEntityType, castDuration);
     }
 
     protected override void ChildClone(EntitySkill cloneData)
     {
         base.ChildClone(cloneData);
-        ActorActiveSkill_DashOrVault newEAS = (ActorActiveSkill_DashOrVault) cloneData;
-        newEAS.DashMaxDistance = DashMaxDistance;
     }
 
     public override void CopyDataFrom(EntitySkill srcData)
     {
         base.CopyDataFrom(srcData);
-        ActorActiveSkill_DashOrVault srcEAS = (ActorActiveSkill_DashOrVault) srcData;
-        DashMaxDistance = srcEAS.DashMaxDistance;
     }
 }

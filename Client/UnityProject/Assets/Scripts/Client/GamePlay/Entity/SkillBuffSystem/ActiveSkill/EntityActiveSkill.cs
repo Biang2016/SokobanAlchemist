@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BiangLibrary;
 using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -29,6 +30,20 @@ public abstract class EntityActiveSkill : EntitySkill
     [InlineProperty]
     [HideLabel]
     public SkillPropertyCollection SkillsPropertyCollection = new SkillPropertyCollection();
+
+    [LabelText("目标距离范围判定")]
+    public bool NeedValidTargetDistance = false;
+
+    [LabelText("施法目标距离最小值")]
+    [ShowIf("NeedValidTargetDistance")]
+    public float TargetDistanceMin = 0f;
+
+    [LabelText("施法目标距离最大值")]
+    [ShowIf("NeedValidTargetDistance")]
+    public float TargetDistanceMax = 5f;
+
+    [LabelText("Miss时仍触发的概率%")]
+    public int TriggerWhenMissProbabilityPercent = 100;
 
     protected int GetValue(EntitySkillPropertyType type)
     {
@@ -195,8 +210,13 @@ public abstract class EntityActiveSkill : EntitySkill
     internal UnityAction OnRecoveryPhaseCompleteCallback;
     internal UnityAction OnSkillFinishedCallback;
 
+    private List<int> initStartTimes = new List<int>();
+    private List<int> initFinishTimes = new List<int>();
+    private bool Inited = false;
+
     public virtual void OnInit()
     {
+        initStartTimes.Add(Time.frameCount);
         OnSkillPhaseChanged = null;
         skillPhase = ActiveSkillPhase.Ready;
 
@@ -225,10 +245,17 @@ public abstract class EntityActiveSkill : EntitySkill
 
         if (SubSkillManageCoroutines_CanNotInterrupt == null) SubSkillManageCoroutines_CanNotInterrupt = new List<Coroutine>();
         SubSkillManageCoroutines_CanNotInterrupt.Clear();
+        initFinishTimes.Add(Time.frameCount);
+        Inited = true;
     }
+
+    private List<int> uninitStartTimes = new List<int>();
+    private List<int> uninitFinishTimes = new List<int>();
 
     public virtual void OnUnInit()
     {
+        Inited = false;
+        uninitStartTimes.Add(Time.frameCount);
         Interrupt();
 
         foreach (EntityActiveSkill subEAS in RawSubActiveSkillList)
@@ -237,14 +264,12 @@ public abstract class EntityActiveSkill : EntitySkill
         }
 
         SkillsPropertyCollection.OnRecycled();
-        SubActiveSkillDict.Clear();
 
-        foreach (EntityActiveSkill subEAS in RunningSubActiveSkillList)
+        if (SubActiveSkillDict.Count > 0)
         {
-            subEAS.OnUnInit();
+            int a = 0;
         }
-
-        RunningSubActiveSkillList.Clear();
+        SubActiveSkillDict.Clear();
 
         foreach (Coroutine coroutine in SubSkillManageCoroutines_CanNotInterrupt)
         {
@@ -252,6 +277,13 @@ public abstract class EntityActiveSkill : EntitySkill
         }
 
         SubSkillManageCoroutines_CanNotInterrupt.Clear();
+
+        foreach (EntityActiveSkill subEAS in RunningSubActiveSkillList)
+        {
+            subEAS.OnUnInit();
+        }
+
+        RunningSubActiveSkillList.Clear();
 
         Entity = null;
         ParentActiveSkill = null;
@@ -261,33 +293,91 @@ public abstract class EntityActiveSkill : EntitySkill
         OnCastPhaseCompleteCallback = null;
         OnRecoveryPhaseCompleteCallback = null;
         OnSkillFinishedCallback = null;
+        uninitFinishTimes.Add(Time.frameCount);
     }
 
-    public bool CheckCanTriggerSkill()
+    public bool CheckCanTriggerSkill(TargetEntityType targetEntityType, int triggerWhenMissProbabilityPercent)
     {
-        if (!ValidateSkillTrigger())
+        if (!Inited) return false;
+        if (!ValidateSkill_CD()) return false;
+        if (!ValidateSkillTrigger_Subject(targetEntityType)) return false;
+        if (!ValidateSkillTrigger_Resources()) // 其他条件都满足后，判定资源条件，这样可以使资源警告发生在所有条件都满足之后
         {
             OnValidateFailed?.Invoke();
             return false;
         }
         else
         {
-            return true;
+            if (!ValidateSkillTrigger_HitProbability(targetEntityType))
+            {
+                if (triggerWhenMissProbabilityPercent < 0) triggerWhenMissProbabilityPercent = TriggerWhenMissProbabilityPercent; // 如果不指定值则取技能默认值
+                return triggerWhenMissProbabilityPercent.ProbabilityBool(); // 当确定会miss时，有多少概率仍然发动
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 
-    public virtual void TriggerActiveSkill()
-    {
-        SkillCoroutine = Entity.StartCoroutine(Co_CastSkill(
-            GetValue(EntitySkillPropertyType.WingUp),
-            GetValue(EntitySkillPropertyType.CastDuration),
-            GetValue(EntitySkillPropertyType.Recovery),
-            GetValue(EntitySkillPropertyType.Cooldown)));
-    }
-
-    protected virtual bool ValidateSkillTrigger()
+    /// <summary>
+    /// 触发技能的CD条件
+    /// </summary>
+    /// <returns></returns>
+    protected virtual bool ValidateSkill_CD()
     {
         if (skillPhase != ActiveSkillPhase.Ready || SkillCoroutine != null) return false;
+        return true;
+    }
+
+    /// <summary>
+    /// 触发技能的主观条件
+    /// </summary>
+    /// <returns></returns>
+    protected virtual bool ValidateSkillTrigger_Subject(TargetEntityType targetEntityType)
+    {
+        if (Entity is Actor actor)
+        {
+            GridPos3D targetGP = actor.ActorControllerHelper.AgentTargetDict[targetEntityType].TargetGP;
+            if (NeedValidTargetDistance)
+            {
+                if ((Entity.EntityBaseCenter - targetGP).magnitude < TargetDistanceMin || (Entity.EntityBaseCenter - targetGP).magnitude > TargetDistanceMax) return false;
+                return true;
+            }
+
+            return true;
+        }
+        else if (Entity is Box box)
+        {
+            // todo Box AI
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 触发技能的命中条件
+    /// </summary>
+    /// <returns></returns>
+    protected virtual bool ValidateSkillTrigger_HitProbability(TargetEntityType targetEntityType)
+    {
+        PrepareSkillInfo(targetEntityType);
+        bool hit = false;
+        foreach (KeyValuePair<string, EntityActiveSkill> kv in SubActiveSkillDict)
+        {
+            hit |= kv.Value.ValidateSkillTrigger_HitProbability(targetEntityType);
+            if (hit) return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 触发技能的资源条件
+    /// </summary>
+    /// <returns></returns>
+    protected virtual bool ValidateSkillTrigger_Resources()
+    {
         bool enoughResources = true;
         if (Entity.EntityStatPropSet.StatDict[EntityStatType.ActionPoint].Value < SkillsPropertyCollection.ConsumeActionPoint.GetModifiedValue)
         {
@@ -316,6 +406,16 @@ public abstract class EntityActiveSkill : EntitySkill
         return enoughResources;
     }
 
+    public virtual void TriggerActiveSkill(TargetEntityType targetEntityType)
+    {
+        SkillCoroutine = Entity.StartCoroutine(Co_CastSkill(
+            targetEntityType,
+            GetValue(EntitySkillPropertyType.WingUp),
+            GetValue(EntitySkillPropertyType.CastDuration),
+            GetValue(EntitySkillPropertyType.Recovery),
+            GetValue(EntitySkillPropertyType.Cooldown)));
+    }
+
     private Coroutine SkillCoroutine;
     private Coroutine SubSkillManageCoroutine_CanInterrupt; // 技能被打断时或角色被销毁时停止该协程
     private List<Coroutine> SubSkillManageCoroutines_CanNotInterrupt = new List<Coroutine>(); // 角色被销毁时停止该协程
@@ -326,15 +426,18 @@ public abstract class EntityActiveSkill : EntitySkill
     protected float RecoveryRatio;
     protected float CooldownRatio;
 
+    protected GridPos3D CastEntityWorldGP; // 打出技能瞬间的世界坐标
+    protected GridPosR.Orientation CastEntityOrientation; // 打出技能瞬间的朝向
+
     // 技能主协程
-    IEnumerator Co_CastSkill(float wingUpTime, float castDuration, float recoveryTime, float cooldownTime)
+    IEnumerator Co_CastSkill(TargetEntityType targetEntityType, float wingUpTime, float castDuration, float recoveryTime, float cooldownTime)
     {
         currentExecutingCooldownTime = cooldownTime;
-        PrepareSkillInfo();
+        PrepareSkillInfo(targetEntityType);
         yield return WingUp(wingUpTime);
         OnWingUpPhaseComplete();
         OnWingUpPhaseCompleteCallback?.Invoke();
-        yield return Cast(castDuration);
+        yield return Cast(targetEntityType, castDuration);
         OnCastPhaseComplete();
         OnCastPhaseCompleteCallback?.Invoke();
         yield return Recover(recoveryTime);
@@ -345,8 +448,22 @@ public abstract class EntityActiveSkill : EntitySkill
         OnSkillFinishedCallback?.Invoke();
     }
 
-    protected virtual void PrepareSkillInfo()
+    protected virtual void PrepareSkillInfo(TargetEntityType targetEntityType)
     {
+        if (ParentActiveSkill != null)
+        {
+            CastEntityWorldGP = ParentActiveSkill.CastEntityWorldGP;
+            CastEntityOrientation = ParentActiveSkill.CastEntityOrientation;
+        }
+        else
+        {
+            if (Entity == null)
+            {
+                int a = 0;
+            }
+            CastEntityWorldGP = Entity.WorldGP;
+            CastEntityOrientation = Entity.EntityOrientation;
+        }
     }
 
     protected virtual IEnumerator WingUp(float wingUpTime)
@@ -375,7 +492,7 @@ public abstract class EntityActiveSkill : EntitySkill
     {
     }
 
-    protected virtual IEnumerator Cast(float castDuration)
+    protected virtual IEnumerator Cast(TargetEntityType targetEntityType, float castDuration)
     {
         Entity.EntityWwiseHelper.OnSkillCast[(int) EntitySkillIndex].Post(Entity.gameObject);
         SkillPhase = ActiveSkillPhase.Casting;
@@ -386,13 +503,13 @@ public abstract class EntityActiveSkill : EntitySkill
         {
             if (InterruptSubActiveSkillsWhenInterrupted)
             {
-                SubSkillManageCoroutine_CanInterrupt = Entity.StartCoroutine(CastSubActiveSkills());
+                SubSkillManageCoroutine_CanInterrupt = Entity.StartCoroutine(CastSubActiveSkills(targetEntityType));
             }
             else
             {
                 if (ActiveSkillAgent.Instance != null)
                 {
-                    SubSkillManageCoroutines_CanNotInterrupt.Add(ActiveSkillAgent.Instance.StartCoroutine(CastSubActiveSkills()));
+                    SubSkillManageCoroutines_CanNotInterrupt.Add(ActiveSkillAgent.Instance.StartCoroutine(CastSubActiveSkills(targetEntityType)));
                 }
             }
         }
@@ -409,7 +526,7 @@ public abstract class EntityActiveSkill : EntitySkill
         CastRatio = 0;
     }
 
-    protected virtual IEnumerator CastSubActiveSkills()
+    protected virtual IEnumerator CastSubActiveSkills(TargetEntityType targetEntityType)
     {
         void CloneSubSkillAndTrigger(EntityActiveSkill subSkill)
         {
@@ -425,12 +542,13 @@ public abstract class EntityActiveSkill : EntitySkill
                 RunningSubActiveSkillList.Remove(subSkillClone);
                 subSkillClone.OnUnInit();
             };
-            subSkillClone.Entity = Entity;
-            subSkillClone.ParentActiveSkill = ParentActiveSkill;
+
+            subSkillClone.Entity = subSkill.Entity;
+            subSkillClone.ParentActiveSkill = subSkill.ParentActiveSkill;
             subSkillClone.OnInit();
-            if (subSkillClone.CheckCanTriggerSkill())
+            if (subSkillClone.CheckCanTriggerSkill(targetEntityType, -1))
             {
-                subSkillClone.TriggerActiveSkill();
+                subSkillClone.TriggerActiveSkill(targetEntityType);
             }
         }
 
@@ -551,9 +669,12 @@ public abstract class EntityActiveSkill : EntitySkill
     // 被打断时，进打断当前母技能的主协程及子技能管理携程，已释放的子技能不打断，未释放的子技能由于子技能管理携程被打断无法发出
     public virtual void Interrupt()
     {
-        if (SkillCoroutine != null) Entity.StopCoroutine(SkillCoroutine);
+        if (SkillCoroutine != null)
+        {
+            Entity.StopCoroutine(SkillCoroutine);
+            SkillCoroutine = null;
+        }
         if (SubSkillManageCoroutine_CanInterrupt != null) Entity.StopCoroutine(SubSkillManageCoroutine_CanInterrupt);
-
         switch (SkillPhase)
         {
             case ActiveSkillPhase.Ready:
@@ -623,6 +744,10 @@ public abstract class EntityActiveSkill : EntitySkill
         EntityActiveSkill newEAS = (EntityActiveSkill) cloneData;
         SkillsPropertyCollection.ApplyDataTo(newEAS.SkillsPropertyCollection);
         newEAS.TargetCamp = TargetCamp;
+        newEAS.NeedValidTargetDistance = NeedValidTargetDistance;
+        newEAS.TargetDistanceMin = TargetDistanceMin;
+        newEAS.TargetDistanceMax = TargetDistanceMax;
+        newEAS.TriggerWhenMissProbabilityPercent = TriggerWhenMissProbabilityPercent;
         newEAS.WingUpCanMove = WingUpCanMove;
         newEAS.CastCanMove = CastCanMove;
         newEAS.RecoverCanMove = RecoverCanMove;
@@ -637,6 +762,10 @@ public abstract class EntityActiveSkill : EntitySkill
         EntityActiveSkill srcEAS = (EntityActiveSkill) srcData;
         srcEAS.SkillsPropertyCollection.ApplyDataTo(SkillsPropertyCollection);
         TargetCamp = srcEAS.TargetCamp;
+        NeedValidTargetDistance = srcEAS.NeedValidTargetDistance;
+        TargetDistanceMin = srcEAS.TargetDistanceMin;
+        TargetDistanceMax = srcEAS.TargetDistanceMax;
+        TriggerWhenMissProbabilityPercent = srcEAS.TriggerWhenMissProbabilityPercent;
         WingUpCanMove = srcEAS.WingUpCanMove;
         CastCanMove = srcEAS.CastCanMove;
         RecoverCanMove = srcEAS.RecoverCanMove;

@@ -18,7 +18,7 @@ public class EntityActiveSkill_SummonDropBox : EntityActiveSkill_AreaCast
     [LabelText("箱子起落高度")]
     public int DropFromHeightFromFloor = 1;
 
-    protected override IEnumerator Cast(float castDuration)
+    protected override IEnumerator Cast(TargetEntityType targetEntityType, float castDuration)
     {
         foreach (GridPos3D gp in RealSkillEffectGPs)
         {
@@ -42,7 +42,7 @@ public class EntityActiveSkill_SummonDropBox : EntityActiveSkill_AreaCast
             }
         }
 
-        yield return base.Cast(castDuration);
+        yield return base.Cast(targetEntityType, castDuration);
     }
 
     protected override void ChildClone(EntitySkill cloneData)

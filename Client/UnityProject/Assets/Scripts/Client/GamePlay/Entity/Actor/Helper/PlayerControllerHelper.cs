@@ -4,7 +4,7 @@ using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class PlayerControllerHelper : ActorMonoHelper
+public class PlayerControllerHelper : ActorControllerHelper
 {
     [LabelText("玩家编号")]
     [FoldoutGroup("状态")]
@@ -17,12 +17,42 @@ public class PlayerControllerHelper : ActorMonoHelper
 
     private ButtonState BS_Skill_0; // Space/South
     private ButtonState BS_Skill_1; // Shift/East
-    private ButtonState BS_Skill_2; // Z/LeftTrigger
-    private ButtonState BS_Skill_3; // X/RightTrigger
-    private ButtonState BS_Skill_4; // C/
-    private ButtonState BS_Skill_5; // V/
+    private ButtonState BS_Skill_2; // Z/J/LeftTrigger
+    private ButtonState BS_Skill_3; // X/K/RightTrigger
+    private ButtonState BS_Skill_4; // C/L
+    private ButtonState BS_Skill_5; // V/;/
     private ButtonState BS_Skill_6; // /
     private ButtonState BS_Skill_7; // /
+
+    [FoldoutGroup("SkillKeyMapping")]
+    [LabelText("Space/South")]
+    public List<EntitySkillIndex> SkillKeyMapping_0 = new List<EntitySkillIndex>();
+
+    [FoldoutGroup("SkillKeyMapping")]
+    [LabelText("Shift/East")]
+    public List<EntitySkillIndex> SkillKeyMapping_1 = new List<EntitySkillIndex>();
+
+    [FoldoutGroup("SkillKeyMapping")]
+    [LabelText("Z/J/LeftTrigger")]
+    public List<EntitySkillIndex> SkillKeyMapping_2 = new List<EntitySkillIndex>();
+
+    [FoldoutGroup("SkillKeyMapping")]
+    [LabelText("X/K/RightTrigger")]
+    public List<EntitySkillIndex> SkillKeyMapping_3 = new List<EntitySkillIndex>();
+
+    [FoldoutGroup("SkillKeyMapping")]
+    [LabelText("C/L/")]
+    public List<EntitySkillIndex> SkillKeyMapping_4 = new List<EntitySkillIndex>();
+
+    [FoldoutGroup("SkillKeyMapping")]
+    [LabelText("V/;/")]
+    public List<EntitySkillIndex> SkillKeyMapping_5 = new List<EntitySkillIndex>();
+
+    [FoldoutGroup("SkillKeyMapping")]
+    public List<EntitySkillIndex> SkillKeyMapping_6 = new List<EntitySkillIndex>();
+
+    [FoldoutGroup("SkillKeyMapping")]
+    public List<EntitySkillIndex> SkillKeyMapping_7 = new List<EntitySkillIndex>();
 
     // 短按逻辑：短按最优先，短按过程中不接受其他短按，短按那个按键down时记录该轴位置，当位置变化时结束短按，短按结束后短按数据清空
     private bool isQuickMoving = false;
@@ -58,8 +88,9 @@ public class PlayerControllerHelper : ActorMonoHelper
     private float QuickMoveDuration; // 快速移动开始后经过的时间
     private Vector3 QuickMoveStartActorPosition = Vector3.zero;
 
-    public void OnFixedUpdate()
+    public override void OnFixedUpdate()
     {
+        base.OnFixedUpdate();
         if (Actor.IsNotNullAndAlive())
         {
             #region Move
@@ -337,42 +368,66 @@ public class PlayerControllerHelper : ActorMonoHelper
 
             if (BS_Skill_1.Down)
             {
-                TriggerSkill(EntitySkillIndex.Skill_1);
+                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_1)
+                {
+                    TriggerSkill(skillIndex, TargetEntityType.Self);
+                }
             }
 
             if (BS_Skill_0.Down)
             {
-                TriggerSkill(EntitySkillIndex.Skill_0);
+                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_0)
+                {
+                    TriggerSkill(skillIndex, TargetEntityType.Self);
+                }
             }
 
             if (BS_Skill_2.Down)
             {
-                TriggerSkill(EntitySkillIndex.Skill_2);
+                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_2)
+                {
+                    TriggerSkill(skillIndex, TargetEntityType.Self);
+                }
             }
 
             if (BS_Skill_3.Down)
             {
-                TriggerSkill(EntitySkillIndex.Skill_3);
+                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_3)
+                {
+                    TriggerSkill(skillIndex, TargetEntityType.Self);
+                }
             }
 
             if (BS_Skill_4.Down)
             {
-                TriggerSkill(EntitySkillIndex.Skill_4);
+                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_4)
+                {
+                    TriggerSkill(skillIndex, TargetEntityType.Self);
+                }
             }
 
             if (BS_Skill_5.Down)
             {
-                TriggerSkill(EntitySkillIndex.Skill_5);
+                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_5)
+                {
+                    TriggerSkill(skillIndex, TargetEntityType.Self);
+                }
             }
 
             if (BS_Skill_6.Down)
             {
-                TriggerSkill(EntitySkillIndex.Skill_6);
+                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_6)
+                {
+                    TriggerSkill(skillIndex, TargetEntityType.Self);
+                }
             }
 
             if (BS_Skill_7.Down)
             {
-                TriggerSkill(EntitySkillIndex.Skill_7);
+                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_7)
+                {
+                    TriggerSkill(skillIndex, TargetEntityType.Self);
+                }
             }
 
             #endregion
@@ -430,15 +485,15 @@ public class PlayerControllerHelper : ActorMonoHelper
         Actor.ActorSkinHelper.Initialize(SwitchAvatarPlayerNumber);
     }
 
-    private bool TriggerSkill(EntitySkillIndex skillIndex)
+    private bool TriggerSkill(EntitySkillIndex skillIndex, TargetEntityType targetEntityType)
     {
         if (Actor.CannotAct) return false;
         if (Actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
         {
-            bool triggerSuc = eas.CheckCanTriggerSkill();
+            bool triggerSuc = eas.CheckCanTriggerSkill(targetEntityType, 100);
             if (triggerSuc)
             {
-                eas.TriggerActiveSkill();
+                eas.TriggerActiveSkill(targetEntityType);
                 return true;
             }
             else

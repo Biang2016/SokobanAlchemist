@@ -26,7 +26,7 @@ public class EntityActiveSkill_AddEntityBuff : EntityActiveSkill_AreaCast
         base.OnUnInit();
     }
 
-    protected override IEnumerator Cast(float castDuration)
+    protected override IEnumerator Cast(TargetEntityType targetEntityType, float castDuration)
     {
         foreach (Entity entity in GetTargetEntities())
         {
@@ -36,7 +36,7 @@ public class EntityActiveSkill_AddEntityBuff : EntityActiveSkill_AreaCast
             }
         }
 
-        yield return base.Cast(castDuration);
+        yield return base.Cast(targetEntityType, castDuration);
     }
 
     protected override void ChildClone(EntitySkill cloneData)

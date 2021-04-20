@@ -10,14 +10,14 @@ public class ActorActiveSkill_Jump : EntityActiveSkill
     [LabelText("起跳高度")]
     public int JumpHeight = 1;
 
-    protected override IEnumerator Cast(float castDuration)
+    protected override IEnumerator Cast(TargetEntityType targetEntityType, float castDuration)
     {
         if (Entity is Actor actor)
         {
             actor.SetJumpUpTargetHeight(actor.ActiveJumpForce, JumpHeight, false);
         }
 
-        yield return base.Cast(castDuration);
+        yield return base.Cast(targetEntityType, castDuration);
     }
 
     protected override void ChildClone(EntitySkill cloneData)

@@ -1377,6 +1377,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerNumber: 0
+  SkillKeyMapping_0: 00000000
+  SkillKeyMapping_1: 0100000002000000
+  SkillKeyMapping_2: 03000000
+  SkillKeyMapping_3: 04000000
+  SkillKeyMapping_4: 05000000
+  SkillKeyMapping_5: 06000000
+  SkillKeyMapping_6: 
+  SkillKeyMapping_7: 
 --- !u!1 &8780818314967279681
 GameObject:
   m_ObjectHideFlags: 0
@@ -1583,6 +1591,11 @@ PrefabInstance:
       objectReference: {fileID: 1586490694136040033}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
+      propertyPath: ActorControllerHelper
+      value: 
+      objectReference: {fileID: 5943259440262889538}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
       propertyPath: EnemyControllerHelper
       value: 
       objectReference: {fileID: 0}
@@ -1614,7 +1627,7 @@ PrefabInstance:
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityActiveSkillSSOs.Array.size
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -1751,29 +1764,35 @@ PrefabInstance:
         type: 3}
       propertyPath: RawEntityActiveSkillSSOs.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: fb4ddb237492fa341a39a76ceb390743,
+      objectReference: {fileID: 11400000, guid: 8ce8622cba16d7149bba4c9e97731e8d,
         type: 2}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityActiveSkillSSOs.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 7013610f92026704b9ac9e1e818f64e0,
+      objectReference: {fileID: 11400000, guid: ed84bea5950396240a9b0f24e07eabd9,
         type: 2}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityActiveSkillSSOs.Array.data[3]
       value: 
-      objectReference: {fileID: 11400000, guid: 5c3d0e97b363ed74f980301e2f311d51,
+      objectReference: {fileID: 11400000, guid: 7013610f92026704b9ac9e1e818f64e0,
         type: 2}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityActiveSkillSSOs.Array.data[4]
       value: 
-      objectReference: {fileID: 11400000, guid: 11569fa7f49d85847aeaf70841ecf24a,
+      objectReference: {fileID: 11400000, guid: 5c3d0e97b363ed74f980301e2f311d51,
         type: 2}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityActiveSkillSSOs.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 11569fa7f49d85847aeaf70841ecf24a,
+        type: 2}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkillSSOs.Array.data[6]
       value: 
       objectReference: {fileID: 11400000, guid: 340025cdb4ab6744cb1633c2f062a6a6,
         type: 2}

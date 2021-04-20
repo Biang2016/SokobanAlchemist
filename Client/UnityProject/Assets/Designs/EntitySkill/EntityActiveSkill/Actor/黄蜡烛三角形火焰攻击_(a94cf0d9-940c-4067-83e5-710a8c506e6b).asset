@@ -87,6 +87,10 @@ MonoBehaviour:
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 0
+        NeedValidTargetDistance: 1
+        TargetDistanceMin: 0
+        TargetDistanceMax: 2
+        TriggerWhenMissProbabilityPercent: 30
         WingUpCanMove: 0
         CastCanMove: 0
         RecoverCanMove: 0
@@ -94,9 +98,6 @@ MonoBehaviour:
         SubActiveSkillTriggerLogicList: []
         InterruptSubActiveSkillsWhenInterrupted: 0
         CastAreaGridPosList:
-        - x: 13
-          y: 0
-          z: 16
         - x: 14
           y: 0
           z: 17
@@ -118,11 +119,7 @@ MonoBehaviour:
         - x: 16
           y: 0
           z: 16
-        - x: 17
-          y: 0
-          z: 16
         M_TargetInclination: 2
-        TargetEntityType: 0
         CastOnTopLayer: 0
         CastOnNLayersBeneath: 0
         AccurateStandardDeviation: 0

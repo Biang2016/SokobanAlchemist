@@ -49,10 +49,7 @@ public class Actor : Entity
     public GameObject ActorMoveColliderRoot;
 
     [FoldoutGroup("组件")]
-    public PlayerControllerHelper PlayerControllerHelper;
-
-    [FoldoutGroup("组件")]
-    public EnemyControllerHelper EnemyControllerHelper;
+    public ActorControllerHelper ActorControllerHelper;
 
     [FoldoutGroup("组件")]
     public ActorPushHelper ActorPushHelper;
@@ -139,8 +136,8 @@ public class Actor : Entity
 
     #endregion
 
-    internal GraphOwner GraphOwner => EnemyControllerHelper != null ? EnemyControllerHelper.GraphOwner : null;
-    internal ActorAIAgent ActorAIAgent => EnemyControllerHelper != null ? EnemyControllerHelper.ActorAIAgent : null;
+    internal GraphOwner GraphOwner => ActorControllerHelper != null ? ((ActorControllerHelper is EnemyControllerHelper ech) ? ech.GraphOwner : null) : null;
+    internal ActorAIAgent ActorAIAgent => ActorControllerHelper != null ? ((ActorControllerHelper is EnemyControllerHelper ech) ? ech.ActorAIAgent : null) : null;
 
     #region 状态
 
@@ -547,8 +544,7 @@ public class Actor : Entity
             h.OnHelperUsed();
         }
 
-        PlayerControllerHelper?.OnHelperUsed();
-        EnemyControllerHelper?.OnHelperUsed();
+        ActorControllerHelper?.OnHelperUsed();
         ActorPushHelper.OnHelperUsed();
         ActorFaceHelper.OnHelperUsed();
         ActorSkinHelper.OnHelperUsed();
@@ -604,8 +600,7 @@ public class Actor : Entity
             h.OnHelperRecycled();
         }
 
-        PlayerControllerHelper?.OnHelperRecycled();
-        EnemyControllerHelper?.OnHelperRecycled();
+        ActorControllerHelper?.OnHelperRecycled();
         ActorPushHelper.OnHelperRecycled();
         ActorFaceHelper.OnHelperRecycled();
         ActorSkinHelper.OnHelperRecycled();
@@ -686,8 +681,17 @@ public class Actor : Entity
         InitPassiveSkills();
         InitActiveSkills();
 
-        PlayerControllerHelper?.OnSetup(PlayerNumber.Player1);
-        EnemyControllerHelper?.OnSetup();
+        if (ActorControllerHelper != null)
+        {
+            if (ActorControllerHelper is PlayerControllerHelper pch)
+            {
+                pch.OnSetup(PlayerNumber.Player1);
+            }
+            else if (ActorControllerHelper is EnemyControllerHelper ech)
+            {
+                ech.OnSetup();
+            }
+        }
 
         ForbidAction = false;
         ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
@@ -703,7 +707,7 @@ public class Actor : Entity
 
     protected override void Tick(float interval)
     {
-        EnemyControllerHelper?.OnTick(interval);
+        ActorControllerHelper?.OnTick(interval);
         base.Tick(interval);
     }
 
@@ -719,14 +723,11 @@ public class Actor : Entity
     {
     }
 
-    private Vector3 lastPosition = Vector3.zero;
-
     protected override void FixedUpdate()
     {
-        lastPosition = transform.position;
-        PlayerControllerHelper?.OnFixedUpdate();
         base.FixedUpdate();
         if (IsRecycled) return;
+        ActorControllerHelper?.OnFixedUpdate();
         if (ENABLE_ACTOR_MOVE_LOG && WorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {WorldGP}");
         LastWorldGP = WorldGP;
         WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);

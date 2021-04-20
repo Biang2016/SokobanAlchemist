@@ -439,6 +439,10 @@ public abstract class Entity : PoolObject
                 EntityActiveSkillDict.Add(skillIndex, eas);
             }
 
+            if (this == null)
+            {
+                int a = 0;
+            }
             eas.Entity = this;
             eas.IsAddedDuringGamePlay = false;
             eas.ParentActiveSkill = null;

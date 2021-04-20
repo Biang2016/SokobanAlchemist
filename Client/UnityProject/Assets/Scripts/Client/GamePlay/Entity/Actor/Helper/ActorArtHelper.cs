@@ -8,6 +8,8 @@ public class ActorArtHelper : EntityArtHelper
     [SerializeField]
     private Animator ActorModelAnim;
 
+    internal TargetEntityType TempTargetEntityType;
+
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
@@ -134,12 +136,14 @@ public class ActorArtHelper : EntityArtHelper
 
     #region 第二优先级
 
-    public void PlaySkill(EntitySkillIndex skillIndex)
+    public void PlaySkill(EntitySkillIndex skillIndex, TargetEntityType targetEntityType)
     {
         if (ActorModelAnim != null)
         {
             ActorModelAnim.SetTrigger(skillIndex.ToString());
         }
+
+        TempTargetEntityType = targetEntityType;
     }
 
     /// <summary>
@@ -149,7 +153,7 @@ public class ActorArtHelper : EntityArtHelper
     {
         if (((Actor) Entity).EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
         {
-            eas.TriggerActiveSkill();
+            eas.TriggerActiveSkill(TempTargetEntityType);
         }
     }
 

@@ -18,9 +18,6 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         [LabelText("以目标为中心正态分布")]
         TargetCenteredNormalDistribution,
 
-        [LabelText("尽可能远离施法者")]
-        CasterExpelled,
-
         [LabelText("以施法者为中心正态分布")]
         CasterCenteredNormalDistribution,
 
@@ -30,14 +27,14 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
 
     #region 施法范围
 
-    public const int CastAreaMatrixExtend = 15;
+    private const int CAST_AREA_MATRIX_EXTEND = 15;
 
     [ShowInInspector]
     [LabelText("施法范围")]
     [PropertyOrder(1)]
     [TableMatrix(DrawElementMethod = "DrawColoredEnumElement", ResizableColumns = false, SquareCells = true, RowHeight = 20)]
     [OdinSerialize]
-    private bool[,] CastAreaMatrix_Editor = new bool[CastAreaMatrixExtend * 2 + 1, CastAreaMatrixExtend * 2 + 1];
+    private bool[,] CastAreaMatrix_Editor = new bool[CAST_AREA_MATRIX_EXTEND * 2 + 1, CAST_AREA_MATRIX_EXTEND * 2 + 1];
 
     [PropertyOrder(1)]
     [Button("显示施法范围", ButtonSizes.Medium), GUIColor(0, 1f, 0)]
@@ -51,7 +48,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
 
         foreach (GridPos3D gridPos3D in CastAreaGridPosList)
         {
-            CastAreaMatrix_Editor[gridPos3D.x, CastAreaMatrixExtend * 2 - gridPos3D.z] = true;
+            CastAreaMatrix_Editor[gridPos3D.x, CAST_AREA_MATRIX_EXTEND * 2 - gridPos3D.z] = true;
         }
     }
 
@@ -65,7 +62,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         {
             if (CastAreaMatrix_Editor[x, z])
             {
-                CastAreaGridPosList.Add(new GridPos3D(x, 0, CastAreaMatrixExtend * 2 - z));
+                CastAreaGridPosList.Add(new GridPos3D(x, 0, CAST_AREA_MATRIX_EXTEND * 2 - z));
             }
         }
     }
@@ -93,10 +90,6 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
 
     [LabelText("施法偏好")]
     public TargetInclination M_TargetInclination;
-
-    [LabelText("施法目标")]
-    [ShowIf("M_TargetInclination", TargetInclination.TargetCenteredNormalDistribution)]
-    public ActorAIAgent.TargetEntityType TargetEntityType;
 
     [LabelText("施法于地表")]
     public bool CastOnTopLayer;
@@ -146,7 +139,39 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         if (RealSkillEffectGPs == null) RealSkillEffectGPs = new List<GridPos3D>(16);
     }
 
-    private GridPos3D GetTargetGP()
+    protected override bool ValidateSkillTrigger_HitProbability(TargetEntityType targetEntityType)
+    {
+        PrepareSkillInfo(targetEntityType);
+        switch (M_TargetInclination)
+        {
+            case TargetInclination.TargetCenteredNormalDistribution:
+            case TargetInclination.CasterCenteredNormalDistribution:
+            {
+                if (Entity is Actor actor)
+                {
+                    GridPos3D targetGP = actor.ActorControllerHelper.AgentTargetDict[targetEntityType].TargetGP;
+                    foreach (GridPos3D realSkillEffectGP in RealSkillEffectGPs)
+                    {
+                        if (targetGP == realSkillEffectGP) return true;
+                    }
+                }
+                else if (Entity is Box box)
+                {
+                    // todo Box AI
+                }
+
+                break;
+            }
+            case TargetInclination.PurelyRandom:
+            {
+                return true;
+            }
+        }
+
+        return base.ValidateSkillTrigger_HitProbability(targetEntityType);
+    }
+
+    private GridPos3D GetTargetGP(TargetEntityType targetEntityType)
     {
         GridPos3D targetGP = GridPos3D.Zero;
 
@@ -156,7 +181,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
             {
                 if (Entity is Actor actor)
                 {
-                    targetGP = actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType].TargetGP;
+                    targetGP = actor.ActorControllerHelper.AgentTargetDict[targetEntityType].TargetGP;
                 }
                 else if (Entity is Box box)
                 {
@@ -165,11 +190,10 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
 
                 break;
             }
-            case TargetInclination.CasterExpelled:
             case TargetInclination.CasterCenteredNormalDistribution:
             case TargetInclination.PurelyRandom:
             {
-                targetGP = Entity.WorldGP;
+                targetGP = CastEntityWorldGP;
                 break;
             }
         }
@@ -177,32 +201,36 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         return targetGP;
     }
 
-    private GridRect GetCastingRect()
+    /// <summary>
+    /// 获取技能施法取值范围区域矩形
+    /// </summary>
+    /// <returns></returns>
+    private GridRect GetCastingBoundaryRect()
     {
         int castingRadius = GetValue(EntitySkillPropertyType.CastingRadius);
-        int xMin = Entity.WorldGP.x - castingRadius;
-        int zMin = Entity.WorldGP.z - castingRadius;
+        int xMin = CastEntityWorldGP.x - castingRadius;
+        int zMin = CastEntityWorldGP.z - castingRadius;
         return new GridRect(xMin, zMin, castingRadius * 2 + 1, castingRadius * 2 + 1);
     }
 
-    protected override void PrepareSkillInfo()
+    protected override void PrepareSkillInfo(TargetEntityType targetEntityType)
     {
-        base.PrepareSkillInfo();
-
+        base.PrepareSkillInfo(targetEntityType);
+        SkillAreaGPs.Clear();
         GridPos3D skillCastPosition = GridPos3D.Zero;
-        GridPos3D targetGP = GetTargetGP();
-        GridRect castingRect = GetCastingRect();
+        GridPos3D targetGP = GetTargetGP(targetEntityType);
+        GridRect castingBoundaryRect = GetCastingBoundaryRect();
 
-        int xMin_SkillCastPos = castingRect.x_min;
-        int xMax_SkillCastPos = castingRect.x_max;
-        int zMin_SkillCastPos = castingRect.z_min;
-        int zMax_SkillCastPos = castingRect.z_max;
+        int xMin_SkillCastPos = castingBoundaryRect.x_min;
+        int xMax_SkillCastPos = castingBoundaryRect.x_max;
+        int zMin_SkillCastPos = castingBoundaryRect.z_min;
+        int zMax_SkillCastPos = castingBoundaryRect.z_max;
 
         switch (M_TargetInclination)
         {
             case TargetInclination.TargetCenteredNormalDistribution:
             {
-                GaussianRandom gRandom = new GaussianRandom();
+                //GaussianRandom gRandom = new GaussianRandom();
                 int xRadius = Mathf.Min(Mathf.Abs(xMin_SkillCastPos - targetGP.x), Mathf.Abs(xMax_SkillCastPos - targetGP.x));
                 int zRadius = Mathf.Min(Mathf.Abs(zMin_SkillCastPos - targetGP.z), Mathf.Abs(zMax_SkillCastPos - targetGP.z));
                 skillCastPosition = new GridPos3D(CommonUtils.RandomGaussianInt(targetGP.x - xRadius, targetGP.x + xRadius), targetGP.y, CommonUtils.RandomGaussianInt(targetGP.z - zRadius, targetGP.z + zRadius));
@@ -218,27 +246,12 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
                 skillCastPosition = new GridPos3D(Random.Range(xMin_SkillCastPos, xMax_SkillCastPos), targetGP.y, Random.Range(zMin_SkillCastPos, zMax_SkillCastPos));
                 break;
             }
-            case TargetInclination.CasterExpelled:
-            {
-                int xSign = Mathf.RoundToInt(Random.value * 2f - 1f);
-                int zSign = Mathf.RoundToInt(Random.value * 2f - 1f);
-                int x = xMin_SkillCastPos;
-                int z = zMin_SkillCastPos;
-                if (xSign == 0) x = Random.Range(xMin_SkillCastPos, xMax_SkillCastPos);
-                if (zSign == 0) z = Random.Range(zMin_SkillCastPos, zMax_SkillCastPos);
-                if (xSign == -1) x = xMin_SkillCastPos;
-                if (xSign == 1) x = xMax_SkillCastPos;
-                if (zSign == -1) z = zMin_SkillCastPos;
-                if (zSign == 1) z = zMax_SkillCastPos;
-                skillCastPosition = new GridPos3D(x, targetGP.y, z);
-                break;
-            }
         }
 
         foreach (GridPos3D matrixOffset in CastAreaGridPosList)
         {
-            GridPos3D localOffset = new GridPos3D(matrixOffset.x - CastAreaMatrixExtend, matrixOffset.y, matrixOffset.z - CastAreaMatrixExtend);
-            GridPos rotatedGrid = GridPosR.TransformOccupiedPosition(new GridPosR(skillCastPosition.x, skillCastPosition.z, Entity.EntityOrientation), new GridPos(localOffset.x, localOffset.z));
+            GridPos3D localOffset = new GridPos3D(matrixOffset.x - CAST_AREA_MATRIX_EXTEND, matrixOffset.y, matrixOffset.z - CAST_AREA_MATRIX_EXTEND);
+            GridPos rotatedGrid = GridPosR.TransformOccupiedPosition(new GridPosR(skillCastPosition.x, skillCastPosition.z, CastEntityOrientation), new GridPos(localOffset.x, localOffset.z));
             GridPos3D rotatedGrid3D = new GridPos3D(rotatedGrid.x, skillCastPosition.y, rotatedGrid.z);
             SkillAreaGPs.Add(rotatedGrid3D);
         }
@@ -302,7 +315,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         yield return base.WingUp(wingUpTime);
     }
 
-    protected override IEnumerator Cast(float castDuration)
+    protected override IEnumerator Cast(TargetEntityType targetEntityType, float castDuration)
     {
         UpdateSkillEffectRealPositions();
         if (!CastFX.Empty)
@@ -316,7 +329,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
             }
         }
 
-        yield return base.Cast(castDuration);
+        yield return base.Cast(targetEntityType, castDuration);
     }
 
     private void ClearWhenSkillFinishedOrInterrupted()
@@ -427,7 +440,6 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         base.ChildClone(cloneData);
         EntityActiveSkill_AreaCast newEAS = (EntityActiveSkill_AreaCast) cloneData;
         newEAS.M_TargetInclination = M_TargetInclination;
-        newEAS.TargetEntityType = TargetEntityType;
         newEAS.CastOnTopLayer = CastOnTopLayer;
         newEAS.CastOnNLayersBeneath = CastOnNLayersBeneath;
         newEAS.CastAreaGridPosList = CastAreaGridPosList.Clone();
@@ -447,7 +459,6 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         base.CopyDataFrom(srcData);
         EntityActiveSkill_AreaCast srcEAS = (EntityActiveSkill_AreaCast) srcData;
         M_TargetInclination = srcEAS.M_TargetInclination;
-        TargetEntityType = srcEAS.TargetEntityType;
         CastOnTopLayer = srcEAS.CastOnTopLayer;
         CastOnNLayersBeneath = srcEAS.CastOnNLayersBeneath;
         CastAreaGridPosList = srcEAS.CastAreaGridPosList.Clone();

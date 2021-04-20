@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
-  m_Name: "\u51B2\u523A\u6216\u7FFB\u8D8A_(5b45a721-79c0-4c0f-95b7-0151ce0e35b8)"
+  m_Name: "\u7FFB\u8D8A_(ca203c3f-03ba-4908-9139-88ae9659af12)"
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -26,15 +26,15 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: ActorActiveSkill_DashOrVault, ns: , asm: Client}
+      type: {class: ActorActiveSkill_Vault, ns: , asm: Client}
       data:
-        SkillGUID: (5b45a721-79c0-4c0f-95b7-0151ce0e35b8)
-        SkillAlias: "\u51B2\u523A\u6216\u7FFB\u8D8A"
+        SkillGUID: (ca203c3f-03ba-4908-9139-88ae9659af12)
+        SkillAlias: "\u7FFB\u8D8A"
         SkillIcon:
           TypeDefineType: 12
-          TypeGUID: (7abe6196-8e0d-4228-a7ce-fc967b2fad1f)
-        SkillDescription: Dash and Vault.
-        TargetCamp: 1
+          TypeGUID: (4a895c5e-6ed1-45a9-9b25-97ff2b38007b)
+        SkillDescription: Vault over the box in front of you. Consumes 1 action point.
+        TargetCamp: 0
         EntitySkillIndex: 0
         SkillsPropertyCollection:
           CastingRadius:
@@ -43,10 +43,10 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           Cooldown:
-            BaseValue: 380
+            BaseValue: 0
             ModifiedValue: 0
             MinValue: 0
-            MaxValue: 1000000
+            MaxValue: 0
           WingUp:
             BaseValue: 0
             ModifiedValue: 0
@@ -68,10 +68,10 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           ConsumeActionPoint:
-            BaseValue: 1
+            BaseValue: 0
             ModifiedValue: 0
             MinValue: 0
-            MaxValue: 1000
+            MaxValue: 0
           ConsumeFireElementFragment:
             BaseValue: 0
             ModifiedValue: 0
@@ -87,10 +87,12 @@ MonoBehaviour:
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 0
-        WingUpCanMove: 1
-        CastCanMove: 1
-        RecoverCanMove: 1
+        NeedValidTargetDistance: 0
+        TargetDistanceMin: 0
+        TargetDistanceMax: 5
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
         RawSubActiveSkillList: []
         SubActiveSkillTriggerLogicList: []
         InterruptSubActiveSkillsWhenInterrupted: 0
-        DashMaxDistance: 4

@@ -129,7 +129,18 @@ public static class ActorPathFinding
 
     private static bool FindPath(Node ori, Node dest, Vector3 actorPos, List<Node> resPath, float keepDistanceMin, float keepDistanceMax, float pathFindingRadius, DestinationType destinationType, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
-        if (ori.GridPos3D_PF.y != dest.GridPos3D_PF.y) return false;
+        if (resPath != null)
+        {
+            foreach (Node n in resPath)
+            {
+                n.Release();
+            }
+
+            resPath.Clear();
+        }
+
+        bool pathFound = false;
+        if (ori.GridPos3D_PF.y != dest.GridPos3D_PF.y) return pathFound;
         OpenList.Clear();
         CloseList.Clear();
         OpenList.Add(ori);
@@ -197,6 +208,7 @@ public static class ActorPathFinding
                     float diffToDest = (node.GridPos3D_PF - dest.GridPos3D_PF).magnitude;
                     if (diffToDest <= keepDistanceMax && diffToDest >= keepDistanceMin)
                     {
+                        pathFound = true;
                         if (resPath != null)
                         {
                             foreach (Node n in resPath)
@@ -205,32 +217,33 @@ public static class ActorPathFinding
                             }
 
                             resPath.Clear();
-                        }
 
-                        Node nodePtr = node;
-                        while (nodePtr != null)
-                        {
-                            if (resPath != null)
+                            Node nodePtr = node;
+                            while (nodePtr != null)
                             {
                                 Node pathNode = NodeFactory.Alloc(); // return的List中的Node均为新分配的，与本类中的cache无关
                                 pathNode.GridPos3D_PF = nodePtr.GridPos3D_PF;
                                 resPath.Add(pathNode);
+                                nodePtr = nodePtr.ParentNode;
                             }
 
-                            nodePtr = nodePtr.ParentNode;
+                            resPath.Reverse();
                         }
 
-                        resPath?.Reverse();
-
-                        foreach (Node n in uselessAdjacentNodes)
+                        // 为了避免一到达Max距离就停止，设置一定概率继续前进
+                        float continueProbability = 1f - 1f / (keepDistanceMax - keepDistanceMin);
+                        if (Random.Range(0, 1) > continueProbability) // 不继续则结束
                         {
-                            n.Release();
+                            foreach (Node n in uselessAdjacentNodes)
+                            {
+                                n.Release();
+                            }
+
+                            uselessAdjacentNodes.Clear();
+
+                            releaseNodes();
+                            return true;
                         }
-
-                        uselessAdjacentNodes.Clear();
-
-                        releaseNodes();
-                        return true;
                     }
                 }
             }
@@ -263,7 +276,7 @@ public static class ActorPathFinding
             dest.Release();
         }
 
-        return false;
+        return pathFound;
     }
 
     private static List<Node> cached_adjacentNodesList = new List<Node>(4);

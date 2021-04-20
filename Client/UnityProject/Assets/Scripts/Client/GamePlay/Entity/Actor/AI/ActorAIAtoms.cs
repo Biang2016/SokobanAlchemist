@@ -65,7 +65,7 @@ public static class ActorAIAtoms
                 string targetEntityTypeDesc = "";
                 if (TargetEntityTypes.value != null)
                 {
-                    foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
+                    foreach (TargetEntityType targetEntityType in TargetEntityTypes.value)
                     {
                         targetEntityTypeDesc += "[" + targetEntityType + "]";
                     }
@@ -81,7 +81,7 @@ public static class ActorAIAtoms
         }
 
         [Name("哪种目标")]
-        public BBParameter<List<ActorAIAgent.TargetEntityType>> TargetEntityTypes;
+        public BBParameter<List<TargetEntityType>> TargetEntityTypes;
 
         [Name("是否实体")]
         public BBParameter<bool> NeedEntity;
@@ -92,15 +92,15 @@ public static class ActorAIAtoms
             bool res = true;
             if (TargetEntityTypes.value != null)
             {
-                foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
+                foreach (TargetEntityType targetEntityType in TargetEntityTypes.value)
                 {
                     if (NeedEntity.value)
                     {
-                        res &= Actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].TargetEntity.IsNotNullAndAlive();
+                        res &= Actor.ActorControllerHelper.AgentTargetDict[targetEntityType].TargetEntity.IsNotNullAndAlive();
                     }
                     else
                     {
-                        res &= Actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].HasTarget;
+                        res &= Actor.ActorControllerHelper.AgentTargetDict[targetEntityType].HasTarget;
                     }
                 }
             }
@@ -122,7 +122,7 @@ public static class ActorAIAtoms
                 string targetEntityTypeDesc = "";
                 if (TargetEntityTypes.value != null)
                 {
-                    foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
+                    foreach (TargetEntityType targetEntityType in TargetEntityTypes.value)
                     {
                         targetEntityTypeDesc += "[" + targetEntityType + "]";
                     }
@@ -142,7 +142,7 @@ public static class ActorAIAtoms
         public BBParameter<string> ActorTypeName;
 
         [Name("设为哪种目标")]
-        public BBParameter<List<ActorAIAgent.TargetEntityType>> TargetEntityTypes;
+        public BBParameter<List<TargetEntityType>> TargetEntityTypes;
 
         [Name("忽略Y轴")]
         public BBParameter<bool> Y_Ignore;
@@ -167,9 +167,9 @@ public static class ActorAIAtoms
             if (!target.IsNotNullAndAlive()) return Status.Failure;
             if (TargetEntityTypes.value != null)
             {
-                foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
+                foreach (TargetEntityType targetEntityType in TargetEntityTypes.value)
                 {
-                    Actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].TargetEntity = target;
+                    Actor.ActorControllerHelper.AgentTargetDict[targetEntityType].TargetEntity = target;
                 }
             }
 
@@ -189,7 +189,7 @@ public static class ActorAIAtoms
                 string targetEntityTypeDesc = "";
                 if (TargetEntityTypes.value != null)
                 {
-                    foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
+                    foreach (TargetEntityType targetEntityType in TargetEntityTypes.value)
                     {
                         targetEntityTypeDesc += "[" + targetEntityType + "]";
                     }
@@ -200,14 +200,14 @@ public static class ActorAIAtoms
         }
 
         [Name("哪种目标")]
-        public BBParameter<List<ActorAIAgent.TargetEntityType>> TargetEntityTypes;
+        public BBParameter<List<TargetEntityType>> TargetEntityTypes;
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            foreach (ActorAIAgent.TargetEntityType targetEntityType in TargetEntityTypes.value)
+            foreach (TargetEntityType targetEntityType in TargetEntityTypes.value)
             {
-                Actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].ClearTarget();
+                Actor.ActorControllerHelper.AgentTargetDict[targetEntityType].ClearTarget();
             }
 
             return Status.Success;
@@ -219,11 +219,11 @@ public static class ActorAIAtoms
     #region 寻路
 
     [Category("敌兵/寻路")]
-    [Name("是否能够移动到目标")]
-    [Description("是否能够移动到目标")]
+    [Name("能够移动到目标")]
+    [Description("能够移动到目标")]
     public class BT_Enemy_CheckCanMoveToMainPlayer : ConditionTask
     {
-        protected override string info => $"是否能够移动到{TargetEntityType.value}目标";
+        protected override string info => $"能够移动到{TargetEntityType.value}目标";
 
         [Name("保持最小距离")]
         public BBParameter<float> KeepDistanceMin;
@@ -231,20 +231,16 @@ public static class ActorAIAtoms
         [Name("保持最大距离")]
         public BBParameter<float> KeepDistanceMax;
 
-        [Name("警戒距离")]
-        public BBParameter<float> GuardingRange;
-
         [Name("哪种目标")]
-        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+        public BBParameter<TargetEntityType> TargetEntityType;
 
         protected override bool OnCheck()
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
             if (Actor.CannotAct) return false;
-            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            AgentTarget target = Actor.ActorControllerHelper.AgentTargetDict[TargetEntityType.value];
             if (!target.HasTarget) return false;
             GridPos3D targetGP = target.TargetGP;
-            if (Actor.GetGridDistanceTo(targetGP, false) > GuardingRange.value) return false;
             Profiler.BeginSample("FindPath");
             //ActorPathFinding.InvokeTimes = 0;
             //string pathFindingDesc = $"nav to {targetGP}";
@@ -273,14 +269,14 @@ public static class ActorAIAtoms
         public BBParameter<float> KeepDistanceMax;
 
         [Name("哪种目标")]
-        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+        public BBParameter<TargetEntityType> TargetEntityType;
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.CannotAct) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            AgentTarget target = Actor.ActorControllerHelper.AgentTargetDict[TargetEntityType.value];
             if (!target.HasTarget) return Status.Failure;
             GridPos3D targetGP = target.TargetGP;
             return Actor.ActorAIAgent.SetDestinationToWorldGP(targetGP, KeepDistanceMin.value, KeepDistanceMax.value);
@@ -288,22 +284,22 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵/寻路")]
-    [Name("寻路终点是否是目标坐标")]
-    [Description("寻路终点是否是目标坐标")]
+    [Name("寻路终点是目标坐标")]
+    [Description("寻路终点是目标坐标")]
     public class BT_Enemy_CheckDestIsMainPlayer : ConditionTask
     {
-        protected override string info => $"寻路终点是否是{TargetEntityType.value}目标坐标";
+        protected override string info => $"寻路终点是{TargetEntityType.value}目标坐标";
 
         [Name("容许偏差半径")]
         public BBParameter<float> ToleranceRadius;
 
         [Name("哪种目标")]
-        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+        public BBParameter<TargetEntityType> TargetEntityType;
 
         protected override bool OnCheck()
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null || !Actor.ActorAIAgent.IsPathFinding) return false;
-            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            AgentTarget target = Actor.ActorControllerHelper.AgentTargetDict[TargetEntityType.value];
             if (!target.HasTarget) return false;
             GridPos3D targetGP = target.TargetGP;
             return ((targetGP - Actor.ActorAIAgent.GetCurrentPathFindingDestination().ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth)).magnitude <= ToleranceRadius.value);
@@ -339,7 +335,7 @@ public static class ActorAIAtoms
                 if (suc)
                 {
                     destination_PF.ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth);
-                    Actor.ActorAIAgent.AIAgentTargetDict[ActorAIAgent.TargetEntityType.Navigate].TargetGP = destination_PF.ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth).ToGridPos3D();
+                    Actor.ActorControllerHelper.AgentTargetDict[TargetEntityType.Navigate].TargetGP = destination_PF.ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth).ToGridPos3D();
                     ActorAIAgent.SetDestinationRetCode retCode = Actor.ActorAIAgent.SetDestination(destination_PF, 0f, 0.5f, false, ActorPathFinding.DestinationType.EmptyGrid);
                     switch (retCode)
                     {
@@ -370,7 +366,7 @@ public static class ActorAIAtoms
                 Vector3 dest = Actor.EntityBaseCenter + new Vector3(randomRange.x, 10f, randomRange.y);
                 if (WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(dest, 20f, true, out GridPos3D nearestGroundGP))
                 {
-                    Actor.ActorAIAgent.AIAgentTargetDict[ActorAIAgent.TargetEntityType.Navigate].TargetGP = nearestGroundGP;
+                    Actor.ActorControllerHelper.AgentTargetDict[TargetEntityType.Navigate].TargetGP = nearestGroundGP;
                     return Status.Success;
                 }
 
@@ -510,7 +506,7 @@ public static class ActorAIAtoms
         public BBParameter<float> RangeRadius;
 
         [Name("哪种目标")]
-        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+        public BBParameter<TargetEntityType> TargetEntityType;
 
         [Name("忽略Y轴")]
         public BBParameter<bool> Y_Ignore;
@@ -518,7 +514,7 @@ public static class ActorAIAtoms
         protected override bool OnCheck()
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
-            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            AgentTarget target = Actor.ActorControllerHelper.AgentTargetDict[TargetEntityType.value];
             if (!target.HasTarget) return false;
             GridPos3D targetGP = target.TargetGP;
             return Actor.GetGridDistanceTo(targetGP, Y_Ignore.value) <= RangeRadius.value;
@@ -536,7 +532,7 @@ public static class ActorAIAtoms
         public BBParameter<float> RangeRadius;
 
         [Name("哪种目标")]
-        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+        public BBParameter<TargetEntityType> TargetEntityType;
 
         [Name("忽略Y轴")]
         public BBParameter<bool> Y_Ignore;
@@ -544,7 +540,7 @@ public static class ActorAIAtoms
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
-            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            AgentTarget target = Actor.ActorControllerHelper.AgentTargetDict[TargetEntityType.value];
             if (!target.HasTarget) return Status.Failure;
             GridPos3D targetGP = target.TargetGP;
             bool inside = Actor.GetGridDistanceTo(targetGP, Y_Ignore.value) <= RangeRadius.value;
@@ -565,7 +561,6 @@ public static class ActorAIAtoms
         protected override bool OnCheck()
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
-            if (Actor.ActorBattleHelper == null) return false;
             return Actor.EntityStatPropSet.HealthDurability.Value >= LifeThreshold.value;
         }
     }
@@ -581,7 +576,6 @@ public static class ActorAIAtoms
         protected override bool OnCheck()
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
-            if (Actor.ActorBattleHelper == null) return false;
             return Actor.EntityStatPropSet.HealthDurability.Value > LifeThreshold.value;
         }
     }
@@ -597,7 +591,6 @@ public static class ActorAIAtoms
         protected override bool OnCheck()
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
-            if (Actor.ActorBattleHelper == null) return false;
             return Actor.EntityStatPropSet.HealthDurability.Value > LifePercentThreshold.value / 100f * Actor.EntityStatPropSet.MaxHealthDurability.GetModifiedValue;
         }
     }
@@ -612,17 +605,18 @@ public static class ActorAIAtoms
         public override string name => $"面向{TargetEntityType.value}目标";
 
         [Name("哪种目标")]
-        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+        public BBParameter<TargetEntityType> TargetEntityType;
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.CannotAct) return Status.Failure;
+            if (!Actor.ActorArtHelper.CanTurn) return Status.Failure;
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
-            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            AgentTarget target = Actor.ActorControllerHelper.AgentTargetDict[TargetEntityType.value];
             if (!target.HasTarget) return Status.Failure;
             Vector3 diff = target.TargetGP - Actor.EntityBaseCenter;
-            Actor.CurForward = diff.GetSingleDirectionVectorXZ();
+            Actor.CurForward = diff.GetSingleDirectionVectorXZ().normalized;
             return Status.Success;
         }
     }
@@ -630,70 +624,37 @@ public static class ActorAIAtoms
     [Category("敌兵/战斗")]
     [Name("释放技能")]
     [Description("释放技能")]
-    public class BT_Enemy_TriggerSkill : BTNode
-    {
-        public override string name => $"向{TargetEntityType.value}目标释放技能 [{EntitySkillIndex.value}]";
-
-        [Name("技能编号")]
-        public BBParameter<EntitySkillIndex> EntitySkillIndex;
-
-        [Name("哪种目标")]
-        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
-
-        protected override Status OnExecute(Component agent, IBlackboard blackboard)
-        {
-            return TriggerSkill(Actor, EntitySkillIndex.value, TargetEntityType.value);
-        }
-
-        public static Status TriggerSkill(Actor actor, EntitySkillIndex skillIndex, ActorAIAgent.TargetEntityType targetEntityType)
-        {
-            if (!actor.IsNotNullAndAlive() || actor.ActorAIAgent == null) return Status.Failure;
-            if (actor.CannotAct) return Status.Failure;
-            Entity targetEntity = actor.ActorAIAgent.AIAgentTargetDict[targetEntityType].TargetEntity;
-            if (!targetEntity.IsNotNullAndAlive()) return Status.Failure;
-            if (actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
-            {
-                bool triggerSuc = eas.CheckCanTriggerSkill();
-                if (triggerSuc)
-                {
-                    eas.TriggerActiveSkill();
-                    return Status.Success;
-                }
-                else
-                {
-                    return Status.Failure;
-                }
-            }
-
-            return Status.Failure;
-        }
-    }
-
-    [Category("敌兵/战斗")]
-    [Name("按动画释放技能")]
-    [Description("按动画释放技能")]
     public class BT_Enemy_TriggerSkillByAnimation : BTNode
     {
+        public override string name => (TriggerByAnimation.value ? "按动画" : "") + $"对[{TargetEntityType}目标]释放技能 [{EntitySkillIndex.value}]";
+
         [Name("技能编号")]
         public BBParameter<EntitySkillIndex> EntitySkillIndex;
 
-        public override string name => $"按动画释放技能 [{EntitySkillIndex.value}]";
+        [Name("释放目标")]
+        public BBParameter<TargetEntityType> TargetEntityType;
+
+        [Name("Miss时仍触发的概率%, 填-1则取技能默认值")]
+        public BBParameter<int> TriggerWhenMissProbabilityPercent;
+
+        [Name("按动画释放")]
+        public BBParameter<bool> TriggerByAnimation;
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            return TriggerSkill(Actor, EntitySkillIndex.value);
+            return TriggerSkill(Actor, EntitySkillIndex.value, TargetEntityType.value, TriggerWhenMissProbabilityPercent.value);
         }
 
-        public static Status TriggerSkill(Actor actor, EntitySkillIndex skillIndex)
+        public static Status TriggerSkill(Actor actor, EntitySkillIndex skillIndex, TargetEntityType targetEntityType, int triggerWhenMissProbabilityPercent)
         {
             if (!actor.IsNotNullAndAlive() || actor.ActorAIAgent == null) return Status.Failure;
             if (actor.CannotAct) return Status.Failure;
             if (actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
             {
-                bool triggerSuc = eas.CheckCanTriggerSkill();
+                bool triggerSuc = eas.CheckCanTriggerSkill(targetEntityType, triggerWhenMissProbabilityPercent);
                 if (triggerSuc)
                 {
-                    actor.ActorArtHelper.PlaySkill(skillIndex);
+                    actor.ActorArtHelper.PlaySkill(skillIndex, targetEntityType);
                     return Status.Success;
                 }
                 else
@@ -707,43 +668,29 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵/战斗")]
-    [Name("释放技能+确认")]
-    [Description("释放技能+确认")]
-    public class BT_Enemy_TriggerSkill_ConditionTask : ConditionTask
+    [Name("目标进入技能范围")]
+    [Description("目标进入技能范围")]
+    public class BT_Enemy_TargetEnterSkillCastArea : ConditionTask
     {
-        protected override string info => $"向{TargetEntityType.value}目标释放技能 [{EntitySkillIndex.value}]且成功";
+        [Name("释放目标")]
+        public BBParameter<TargetEntityType> TargetEntityType;
 
-        [Name("技能编号")]
-        public BBParameter<EntitySkillIndex> EntitySkillIndex;
-
-        [Name("哪种目标")]
-        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+        [Name("技能清单")]
+        public BBParameter<List<EntitySkillIndex>> SpecificSkillIndices;
 
         protected override bool OnCheck()
         {
-            if (Actor.CannotAct) return false;
-            Status status = BT_Enemy_TriggerSkill.TriggerSkill(Actor, EntitySkillIndex.value, TargetEntityType.value);
-            return status == Status.Success;
-        }
-    }
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
+            foreach (EntitySkillIndex skillIndex in SpecificSkillIndices.value)
+            {
+                if (Actor.EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
+                {
+                    bool triggerSuc = eas.CheckCanTriggerSkill(TargetEntityType.value, -1);
+                    if (triggerSuc) return true;
+                }
+            }
 
-    [Category("敌兵/战斗")]
-    [Name("释放技能")]
-    [Description("释放技能")]
-    public class FL_Enemy_TriggerSkillAction : CallableActionNode
-    {
-        public override string name => $"向{TargetEntityType.value}目标释放技能 [{EntitySkillIndex.value}]";
-
-        [Name("技能编号")]
-        public BBParameter<EntitySkillIndex> EntitySkillIndex;
-
-        [Name("哪种目标")]
-        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
-
-        public override void Invoke()
-        {
-            if (Actor.CannotAct) return;
-            BT_Enemy_TriggerSkill.TriggerSkill(Actor, EntitySkillIndex.value, TargetEntityType.value);
+            return false;
         }
     }
 
@@ -932,7 +879,7 @@ public static class ActorAIAtoms
     public class BT_Enemy_InAirSetMoveTargetTop : BTNode
     {
         [Name("目标类型")]
-        public BBParameter<ActorAIAgent.TargetEntityType> TargetEntityType;
+        public BBParameter<TargetEntityType> TargetEntityType;
 
         [Name("距离偏差容错")]
         public BBParameter<float> Tolerance;
@@ -946,7 +893,7 @@ public static class ActorAIAtoms
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorBehaviourState != Actor.ActorBehaviourStates.Jump && Actor.ActorBehaviourState != Actor.ActorBehaviourStates.InAirMoving) return Status.Failure;
-            ActorAIAgent.AIAgentTarget target = Actor.ActorAIAgent.AIAgentTargetDict[TargetEntityType.value];
+            AgentTarget target = Actor.ActorControllerHelper.AgentTargetDict[TargetEntityType.value];
             if (!target.HasTarget) return Status.Failure;
             Vector3 randomTolerance = Random.insideUnitSphere * Tolerance.value;
             randomTolerance.y = 0;

@@ -8,8 +8,9 @@ public class ActorActiveSkill_Kick : EntityActiveSkill
 {
     protected override string Description => "踢";
 
-    protected override bool ValidateSkillTrigger()
+    protected override bool ValidateSkillTrigger_Subject(TargetEntityType targetEntityType)
     {
+        if (!base.ValidateSkillTrigger_Subject(targetEntityType)) return false;
         if (Entity is Actor actor)
         {
             if (!actor.CannotAct)
@@ -20,7 +21,6 @@ public class ActorActiveSkill_Kick : EntityActiveSkill
                     Box box = hit.collider.gameObject.GetComponentInParent<Box>();
                     if (box && box.Kickable && actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.EntityTypeIndex))
                     {
-                        if (!base.ValidateSkillTrigger()) return false; // 环境满足技能释放条件后，才判定法力是否足够释放技能
                         return true;
                     }
                 }
@@ -30,14 +30,14 @@ public class ActorActiveSkill_Kick : EntityActiveSkill
         return false;
     }
 
-    protected override IEnumerator Cast(float castDuration)
+    protected override IEnumerator Cast(TargetEntityType targetEntityType, float castDuration)
     {
         if (Entity is Actor actor)
         {
             actor.ActorArtHelper.Kick();
         }
 
-        yield return base.Cast(castDuration);
+        yield return base.Cast(targetEntityType, castDuration);
     }
 
     protected override void ChildClone(EntitySkill cloneData)

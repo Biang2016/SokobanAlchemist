@@ -11,8 +11,9 @@ public class ActorActiveSkill_Dash : EntityActiveSkill
     [LabelText("冲刺最大距离")]
     public int DashMaxDistance = 4;
 
-    protected override bool ValidateSkillTrigger()
+    protected override bool ValidateSkillTrigger_Subject(TargetEntityType targetEntityType)
     {
+        if (!base.ValidateSkillTrigger_Subject(targetEntityType)) return false;
         if (Entity is Actor actor)
         {
             if (actor.ThrowState != Actor.ThrowStates.None) return false;
@@ -29,21 +30,19 @@ public class ActorActiveSkill_Dash : EntityActiveSkill
                 }
                 else
                 {
-                    if (!base.ValidateSkillTrigger()) return false;
                     return true;
                 }
             }
             else
             {
-                if (!base.ValidateSkillTrigger()) return false;
                 return true;
             }
         }
 
-        return base.ValidateSkillTrigger();
+        return false;
     }
 
-    protected override IEnumerator Cast(float castDuration)
+    protected override IEnumerator Cast(TargetEntityType targetEntityType, float castDuration)
     {
         if (Entity is Actor actor)
         {
@@ -58,7 +57,7 @@ public class ActorActiveSkill_Dash : EntityActiveSkill
             }
         }
 
-        yield return base.Cast(castDuration);
+        yield return base.Cast(targetEntityType, castDuration);
     }
 
     protected override void ChildClone(EntitySkill cloneData)
