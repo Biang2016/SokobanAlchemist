@@ -90,13 +90,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WorldFeature: 0
   DefaultWorldActorBornPointAlias: DragonTempleSection_Start
-  UseSpecialPlayerEnterESPS: 0
+  UseSpecialPlayerEnterESPS: 1
   Raw_PlayerEnterESPS:
     CollectDetectRadius:
-      BaseValue: 0
+      BaseValue: 3
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 10
     Gold:
       _value: 0
       _minValue: 0
@@ -107,46 +107,46 @@ MonoBehaviour:
     FireElementFragment:
       _value: 0
       _minValue: 0
-      _maxValue: 0
+      _maxValue: 50
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     MaxFireElementFragment:
-      BaseValue: 0
+      BaseValue: 50
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 50
     IceElementFragment:
       _value: 0
       _minValue: 0
-      _maxValue: 0
+      _maxValue: 40
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     MaxIceElementFragment:
-      BaseValue: 0
+      BaseValue: 40
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 40
     LightningElementFragment:
       _value: 0
       _minValue: 0
-      _maxValue: 0
+      _maxValue: 30
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     MaxLightningElementFragment:
-      BaseValue: 0
+      BaseValue: 30
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 30
     HealthDurability:
       _value: 40
       _minValue: 0
       _maxValue: 40
-      AutoChange: 1
+      AutoChange: 0
       AutoChangePercent: 0
-      AutoChangeTimeInterval: 5000
+      AutoChangeTimeInterval: 3.4028235e+38
     MaxHealthDurability:
       BaseValue: 40
       ModifiedValue: 0
@@ -324,7 +324,7 @@ MonoBehaviour:
       AutoChangePercent: 0
       AutoChangeTimeInterval: 1000
     ActionPointRecovery:
-      BaseValue: 0
+      BaseValue: 10000
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
