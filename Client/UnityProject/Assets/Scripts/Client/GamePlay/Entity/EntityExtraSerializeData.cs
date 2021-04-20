@@ -17,7 +17,7 @@ public class EntityExtraSerializeData : IClone<EntityExtraSerializeData>
     {
         return new EntityExtraSerializeData
         {
-            EntityPassiveSkills = EntityPassiveSkills.Clone()
+            EntityPassiveSkills = EntityPassiveSkills.Clone<EntityPassiveSkill, EntitySkill>()
         };
     }
 }

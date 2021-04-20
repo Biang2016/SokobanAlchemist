@@ -5,10 +5,11 @@ using UnityEditor;
 #endif
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "EntitySkillSSO")]
-public class EntitySkillSSO : SerializedScriptableObject
+[CreateAssetMenu(menuName = "EntitySkillSO")]
+public class EntitySkillSO : ScriptableObject
 {
 #if UNITY_EDITOR
+    [ButtonGroup("Buttons")]
     [Button("刷新Asset名称", ButtonSizes.Large)]
     public void RefreshAssetName()
     {
@@ -17,6 +18,14 @@ public class EntitySkillSSO : SerializedScriptableObject
             string path = AssetDatabase.GetAssetPath(this);
             AssetDatabase.RenameAsset(path, $"{EntitySkill.SkillAlias}_{EntitySkill.SkillGUID}");
         }
+    }
+
+    [ButtonGroup("Buttons")]
+    [Button("强制保存")]
+    public void ForceSave()
+    {
+        EditorUtility.SetDirty(this);
+        AssetDatabase.SaveAssets();
     }
 #endif
 
@@ -30,6 +39,7 @@ public class EntitySkillSSO : SerializedScriptableObject
 
     private bool hasGUID => EntitySkill != null && !string.IsNullOrWhiteSpace(EntitySkill.SkillGUID);
 
+    [ButtonGroup("Buttons")]
     [Button("生成技能GUID")]
     [HideIf("hasGUID")]
     public void GenerateEntitySkillGUID()
@@ -40,6 +50,7 @@ public class EntitySkillSSO : SerializedScriptableObject
         }
     }
 
+    [ButtonGroup("Buttons")]
     [Button("强制刷新技能GUID")]
     [ShowIf("hasGUID")]
     public void ForceRefreshEntitySkillGUID()

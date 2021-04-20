@@ -9,18 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
   m_Name: "\u706B2\u71C3\u70E7_(47eea61d-dd75-4d02-9544-edd462ce3745)"
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   EntitySkill:
     id: 0
   references:
@@ -45,12 +36,12 @@ MonoBehaviour:
             MaxValue: 0
           Cooldown:
             BaseValue: 5000
-            ModifiedValue: 0
+            ModifiedValue: 5000
             MinValue: 0
             MaxValue: 1000000
           WingUp:
             BaseValue: 500
-            ModifiedValue: 0
+            ModifiedValue: 500
             MinValue: 0
             MaxValue: 1000000
           CastDuration:
@@ -75,7 +66,7 @@ MonoBehaviour:
             MaxValue: 0
           ConsumeFireElementFragment:
             BaseValue: 20
-            ModifiedValue: 0
+            ModifiedValue: 20
             MinValue: 0
             MaxValue: 1000
           ConsumeIceElementFragment:
@@ -88,6 +79,10 @@ MonoBehaviour:
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 0
+        NeedValidTargetDistance: 0
+        TargetDistanceMin: 0
+        TargetDistanceMax: 5
+        TriggerWhenMissProbabilityPercent: 100
         WingUpCanMove: 0
         CastCanMove: 0
         RecoverCanMove: 1
@@ -141,7 +136,6 @@ MonoBehaviour:
           y: 0
           z: 17
         M_TargetInclination: 2
-        TargetEntityType: 0
         CastOnTopLayer: 0
         CastOnNLayersBeneath: 0
         AccurateStandardDeviation: 0
@@ -171,7 +165,7 @@ MonoBehaviour:
     00000001:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
-        GUID: 10074
+        GUID: 10274
         BuffAlias: 
         EntityBuffAttribute: 17
         EnableWhiteBlackList: 0

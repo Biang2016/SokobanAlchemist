@@ -9,32 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
-  m_Name: "\u8E22_(cc74c49b-b8db-4f02-a33b-d1353cae7d3d)"
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u8DF3\u8DC3_(583ed52d-d465-4fc5-9505-b00a830bcdb6)"
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   EntitySkill:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: ActorActiveSkill_Kick, ns: , asm: Client}
+      type: {class: ActorActiveSkill_Jump, ns: , asm: Client}
       data:
-        SkillGUID: (cc74c49b-b8db-4f02-a33b-d1353cae7d3d)
-        SkillAlias: "\u8E22"
+        SkillGUID: (583ed52d-d465-4fc5-9505-b00a830bcdb6)
+        SkillAlias: "\u8DF3\u8DC3"
         SkillIcon:
           TypeDefineType: 12
-          TypeGUID: (049e2acf-2241-436c-8e23-424d9b52e748)
-        SkillDescription: Kick the box in front of you.
-        TargetCamp: 0
+          TypeGUID: (67fbe277-cc91-4111-97c1-82712ec6974a)
+        SkillDescription: Spend 5 lightning elements, jump 1 unit height.
+        TargetCamp: 1
         EntitySkillIndex: 0
         SkillsPropertyCollection:
           CastingRadius:
@@ -43,8 +34,8 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           Cooldown:
-            BaseValue: 500
-            ModifiedValue: 0
+            BaseValue: 1000
+            ModifiedValue: 1000
             MinValue: 0
             MaxValue: 1000000
           WingUp:
@@ -83,13 +74,18 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           ConsumeLightningElementFragment:
-            BaseValue: 0
-            ModifiedValue: 0
+            BaseValue: 5
+            ModifiedValue: 5
             MinValue: 0
-            MaxValue: 0
+            MaxValue: 1000
+        NeedValidTargetDistance: 0
+        TargetDistanceMin: 0
+        TargetDistanceMax: 5
+        TriggerWhenMissProbabilityPercent: 100
         WingUpCanMove: 1
         CastCanMove: 1
         RecoverCanMove: 1
         RawSubActiveSkillList: []
         SubActiveSkillTriggerLogicList: []
         InterruptSubActiveSkillsWhenInterrupted: 0
+        JumpHeight: 1

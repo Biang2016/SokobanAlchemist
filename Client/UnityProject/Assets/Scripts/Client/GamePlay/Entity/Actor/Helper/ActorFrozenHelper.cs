@@ -38,12 +38,12 @@ public class ActorFrozenHelper : EntityFrozenHelper
                 WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(actor.WorldGP);
                 if (module)
                 {
-                     EntityData entityData = new EntityData(ConfigManager.Box_EnemyFrozenBoxIndex, actor.EntityOrientation);
+                    EntityData entityData = new EntityData(ConfigManager.Box_EnemyFrozenBoxIndex, actor.EntityOrientation);
                     // triggerAppear参数填true以确保冰冻箱子能正常生成
                     FrozenBox = (Box) module.GenerateEntity(entityData, actor.WorldGP, true, false, false, actor.GetEntityOccupationGPs_Rotated());
                     if (FrozenBox)
                     {
-                        List<EntityPassiveSkill> actorFrozenBoxPassiveSkills = actor.RawFrozenBoxPassiveSkills.Clone();
+                        List<EntityPassiveSkill> actorFrozenBoxPassiveSkills = actor.RawFrozenBoxPassiveSkills.Clone<EntityPassiveSkill, EntitySkill>();
                         foreach (EntityPassiveSkill abf in actorFrozenBoxPassiveSkills)
                         {
                             FrozenBox.AddNewPassiveSkill(abf);

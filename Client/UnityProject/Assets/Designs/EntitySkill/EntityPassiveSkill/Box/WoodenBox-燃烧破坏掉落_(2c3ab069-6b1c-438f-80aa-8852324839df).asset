@@ -9,170 +9,48 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
   m_Name: "WoodenBox-\u71C3\u70E7\u7834\u574F\u6389\u843D_(2c3ab069-6b1c-438f-80aa-8852324839df)"
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: EntitySkill
-      Entry: 7
-      Data: 0|EntityPassiveSkill_Conditional, Client
-    - Name: SkillGUID
-      Entry: 1
-      Data: (2c3ab069-6b1c-438f-80aa-8852324839df)
-    - Name: SkillAlias
-      Entry: 1
-      Data: "WoodenBox-\u71C3\u70E7\u7834\u574F\u6389\u843D"
-    - Name: IsAddedDuringGamePlay
-      Entry: 5
-      Data: false
-    - Name: InitWorldModuleGUID
-      Entry: 3
-      Data: 0
-    - Name: PassiveSkillCondition
-      Entry: 3
-      Data: 32768
-    - Name: TriggerProbabilityPercent
-      Entry: 3
-      Data: 100
-    - Name: DestroyEntityByElementDamageTypeList
-      Entry: 7
-      Data: 1|System.Collections.Generic.List`1[[EntityBuffAttribute, Client]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 3
-      Data: 18
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: EntityStatChangeType
-      Entry: 3
-      Data: 0
-    - Name: EntityStatChangeThreshold
-      Entry: 3
-      Data: 0
-    - Name: EntityStatChangeThresholdOperator
-      Entry: 3
-      Data: 0
-    - Name: EntityPropertyChangeType
-      Entry: 3
-      Data: 0
-    - Name: EntityPropertyChangeThreshold
-      Entry: 3
-      Data: 0
-    - Name: EntityPropertyChangeThresholdOperator
-      Entry: 3
-      Data: 0
-    - Name: MultiEventTrigger
-      Entry: 5
-      Data: false
-    - Name: ListenLevelEventAliasList
-      Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: ListenLevelEventAlias
-      Entry: 1
-      Data: 
-    - Name: MaxTriggeredTimes
-      Entry: 3
-      Data: 1
-    - Name: RawEntityPassiveSkillActions
-      Entry: 7
-      Data: 3|System.Collections.Generic.List`1[[EntityPassiveSkillAction, Client]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 4|BoxPassiveSkillAction_ChangeBoxType, Client
-    - Name: InitWorldModuleGUID
-      Entry: 3
-      Data: 0
-    - Name: EntityData
-      Entry: 7
-      Data: 5|EntityData, Client
-    - Name: EntityType
-      Entry: 7
-      Data: 6|TypeSelectHelper, Client
-    - Name: TypeDefineType
-      Entry: 3
-      Data: 0
-    - Name: TypeGUID
-      Entry: 1
-      Data: (62bccc84-6a59-4519-be2c-b64b161153b4)
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: EntityOrientation
-      Entry: 3
-      Data: 0
-    - Name: RawEntityExtraSerializeData
-      Entry: 7
-      Data: 7|EntityExtraSerializeData, Client
-    - Name: EntityPassiveSkills
-      Entry: 7
-      Data: 8|System.Collections.Generic.List`1[[EntityPassiveSkill, Client]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: ChangeForEveryGrid
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: EntityPassiveSkillActions
-      Entry: 7
-      Data: 9|System.Collections.Generic.List`1[[EntityPassiveSkillAction, Client]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        SkillGUID: (2c3ab069-6b1c-438f-80aa-8852324839df)
+        SkillAlias: "WoodenBox-\u71C3\u70E7\u7834\u574F\u6389\u843D"
+        SkillIcon:
+          TypeDefineType: 0
+          TypeGUID: 
+        SkillDescription: 
+        IsAddedDuringGamePlay: 0
+        InitWorldModuleGUID: 0
+        PassiveSkillCondition: 32768
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 12000000
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdOperator: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdOperator: 0
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        RawEntityPassiveSkillActions:
+        - id: 1
+    00000001:
+      type: {class: BoxPassiveSkillAction_ChangeBoxType, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        EntityData:
+          EntityType:
+            TypeDefineType: 0
+            TypeGUID: (62bccc84-6a59-4519-be2c-b64b161153b4)
+          EntityOrientation: 0
+          RawEntityExtraSerializeData:
+            EntityPassiveSkills: []
+        ChangeForEveryGrid: 0

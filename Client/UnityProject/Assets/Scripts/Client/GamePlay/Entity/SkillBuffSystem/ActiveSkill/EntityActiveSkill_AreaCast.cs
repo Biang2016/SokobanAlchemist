@@ -442,7 +442,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         newEAS.M_TargetInclination = M_TargetInclination;
         newEAS.CastOnTopLayer = CastOnTopLayer;
         newEAS.CastOnNLayersBeneath = CastOnNLayersBeneath;
-        newEAS.CastAreaGridPosList = CastAreaGridPosList.Clone();
+        newEAS.CastAreaGridPosList = CastAreaGridPosList.Clone<GridPos3D, GridPos3D>();
         newEAS.AccurateStandardDeviation = AccurateStandardDeviation;
         newEAS.BattleIndicatorTypeName = BattleIndicatorTypeName;
         newEAS.ProjectOffsetZMax = ProjectOffsetZMax;
@@ -461,7 +461,7 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         M_TargetInclination = srcEAS.M_TargetInclination;
         CastOnTopLayer = srcEAS.CastOnTopLayer;
         CastOnNLayersBeneath = srcEAS.CastOnNLayersBeneath;
-        CastAreaGridPosList = srcEAS.CastAreaGridPosList.Clone();
+        CastAreaGridPosList = srcEAS.CastAreaGridPosList.Clone<GridPos3D, GridPos3D>();
         AccurateStandardDeviation = srcEAS.AccurateStandardDeviation;
         BattleIndicatorTypeName = srcEAS.BattleIndicatorTypeName;
         ProjectOffsetZMax = srcEAS.ProjectOffsetZMax;

@@ -9,33 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
   m_Name: "EnemyFrozenBox-\u7279\u6027\u6807\u7B7E_(5baba3f1-dbc1-4d1e-b764-6e10c398e619)"
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: EntitySkill
-      Entry: 7
-      Data: 0|BoxPassiveSkill_EnemyFrozenBox, Client
-    - Name: SkillGUID
-      Entry: 1
-      Data: (5baba3f1-dbc1-4d1e-b764-6e10c398e619)
-    - Name: SkillAlias
-      Entry: 1
-      Data: "EnemyFrozenBox-\u7279\u6027\u6807\u7B7E"
-    - Name: IsAddedDuringGamePlay
-      Entry: 5
-      Data: false
-    - Name: InitWorldModuleGUID
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: BoxPassiveSkill_EnemyFrozenBox, ns: , asm: Client}
+      data:
+        SkillGUID: (5baba3f1-dbc1-4d1e-b764-6e10c398e619)
+        SkillAlias: "EnemyFrozenBox-\u7279\u6027\u6807\u7B7E"
+        SkillIcon:
+          TypeDefineType: 0
+          TypeGUID: 
+        SkillDescription: 
+        IsAddedDuringGamePlay: 0
+        InitWorldModuleGUID: 0

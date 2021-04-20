@@ -29,7 +29,8 @@ public abstract class EntityActiveSkill : EntitySkill
     [BoxGroup("技能参数")]
     [InlineProperty]
     [HideLabel]
-    public SkillPropertyCollection SkillsPropertyCollection = new SkillPropertyCollection();
+    [SerializeField]
+    public SkillPropertyCollection SkillsPropertyCollection;
 
     [LabelText("目标距离范围判定")]
     public bool NeedValidTargetDistance = false;
@@ -175,17 +176,17 @@ public abstract class EntityActiveSkill : EntitySkill
         {
             SubActiveSkillTriggerLogic newLogic = new SubActiveSkillTriggerLogic();
             newLogic.M_TriggerType = M_TriggerType;
-            newLogic.SubSkillTriggerSequence = SubSkillTriggerSequence.Clone();
+            newLogic.SubSkillTriggerSequence = SubSkillTriggerSequence.Clone<SkillTimePoint, SkillTimePoint>();
             newLogic.Duration = Duration;
             newLogic.Times = Times;
-            newLogic.SubSkillAliasWithProbabilityList = SubSkillAliasWithProbabilityList.Clone();
+            newLogic.SubSkillAliasWithProbabilityList = SubSkillAliasWithProbabilityList.Clone<SubSkillAliasWithProbability, SubSkillAliasWithProbability>();
             return newLogic;
         }
 
         public void CopyDataFrom(SubActiveSkillTriggerLogic src)
         {
             M_TriggerType = src.M_TriggerType;
-            SubSkillTriggerSequence = src.SubSkillTriggerSequence.Clone();
+            SubSkillTriggerSequence = src.SubSkillTriggerSequence.Clone<SkillTimePoint, SkillTimePoint>();
             Duration = src.Duration;
             Times = src.Times;
             if (SubSkillAliasWithProbabilityList.Count != src.SubSkillAliasWithProbabilityList.Count)
@@ -210,13 +211,8 @@ public abstract class EntityActiveSkill : EntitySkill
     internal UnityAction OnRecoveryPhaseCompleteCallback;
     internal UnityAction OnSkillFinishedCallback;
 
-    private List<int> initStartTimes = new List<int>();
-    private List<int> initFinishTimes = new List<int>();
-    private bool Inited = false;
-
     public virtual void OnInit()
     {
-        initStartTimes.Add(Time.frameCount);
         OnSkillPhaseChanged = null;
         skillPhase = ActiveSkillPhase.Ready;
 
@@ -245,17 +241,10 @@ public abstract class EntityActiveSkill : EntitySkill
 
         if (SubSkillManageCoroutines_CanNotInterrupt == null) SubSkillManageCoroutines_CanNotInterrupt = new List<Coroutine>();
         SubSkillManageCoroutines_CanNotInterrupt.Clear();
-        initFinishTimes.Add(Time.frameCount);
-        Inited = true;
     }
-
-    private List<int> uninitStartTimes = new List<int>();
-    private List<int> uninitFinishTimes = new List<int>();
 
     public virtual void OnUnInit()
     {
-        Inited = false;
-        uninitStartTimes.Add(Time.frameCount);
         Interrupt();
 
         foreach (EntityActiveSkill subEAS in RawSubActiveSkillList)
@@ -265,10 +254,6 @@ public abstract class EntityActiveSkill : EntitySkill
 
         SkillsPropertyCollection.OnRecycled();
 
-        if (SubActiveSkillDict.Count > 0)
-        {
-            int a = 0;
-        }
         SubActiveSkillDict.Clear();
 
         foreach (Coroutine coroutine in SubSkillManageCoroutines_CanNotInterrupt)
@@ -293,12 +278,10 @@ public abstract class EntityActiveSkill : EntitySkill
         OnCastPhaseCompleteCallback = null;
         OnRecoveryPhaseCompleteCallback = null;
         OnSkillFinishedCallback = null;
-        uninitFinishTimes.Add(Time.frameCount);
     }
 
     public bool CheckCanTriggerSkill(TargetEntityType targetEntityType, int triggerWhenMissProbabilityPercent)
     {
-        if (!Inited) return false;
         if (!ValidateSkill_CD()) return false;
         if (!ValidateSkillTrigger_Subject(targetEntityType)) return false;
         if (!ValidateSkillTrigger_Resources()) // 其他条件都满足后，判定资源条件，这样可以使资源警告发生在所有条件都满足之后
@@ -457,10 +440,6 @@ public abstract class EntityActiveSkill : EntitySkill
         }
         else
         {
-            if (Entity == null)
-            {
-                int a = 0;
-            }
             CastEntityWorldGP = Entity.WorldGP;
             CastEntityOrientation = Entity.EntityOrientation;
         }
@@ -742,7 +721,7 @@ public abstract class EntityActiveSkill : EntitySkill
     {
         base.ChildClone(cloneData);
         EntityActiveSkill newEAS = (EntityActiveSkill) cloneData;
-        SkillsPropertyCollection.ApplyDataTo(newEAS.SkillsPropertyCollection);
+        newEAS.SkillsPropertyCollection = SkillsPropertyCollection.Clone();
         newEAS.TargetCamp = TargetCamp;
         newEAS.NeedValidTargetDistance = NeedValidTargetDistance;
         newEAS.TargetDistanceMin = TargetDistanceMin;
@@ -752,8 +731,8 @@ public abstract class EntityActiveSkill : EntitySkill
         newEAS.CastCanMove = CastCanMove;
         newEAS.RecoverCanMove = RecoverCanMove;
         newEAS.EntitySkillIndex = EntitySkillIndex;
-        newEAS.RawSubActiveSkillList = RawSubActiveSkillList.Clone();
-        newEAS.SubActiveSkillTriggerLogicList = SubActiveSkillTriggerLogicList.Clone();
+        newEAS.RawSubActiveSkillList = RawSubActiveSkillList.Clone<EntityActiveSkill, EntitySkill>();
+        newEAS.SubActiveSkillTriggerLogicList = SubActiveSkillTriggerLogicList.Clone<SubActiveSkillTriggerLogic, SubActiveSkillTriggerLogic>();
         newEAS.InterruptSubActiveSkillsWhenInterrupted = InterruptSubActiveSkillsWhenInterrupted;
     }
 

@@ -53,7 +53,7 @@ public class EntityPassiveSkillAction_DropBox : EntityPassiveSkillAction, Entity
     {
         base.ChildClone(newAction);
         EntityPassiveSkillAction_DropBox action = ((EntityPassiveSkillAction_DropBox) newAction);
-        action.DropBoxList = DropBoxList.Clone();
+        action.DropBoxList = DropBoxList.Clone<BoxNameWithProbability, BoxNameWithProbability>();
         action.DropBoxCountMin = DropBoxCountMin;
         action.DropBoxCountMax = DropBoxCountMax;
         action.DropConeAngle = DropConeAngle;
@@ -64,7 +64,7 @@ public class EntityPassiveSkillAction_DropBox : EntityPassiveSkillAction, Entity
     {
         base.CopyDataFrom(srcData);
         EntityPassiveSkillAction_DropBox action = ((EntityPassiveSkillAction_DropBox) srcData);
-        DropBoxList = action.DropBoxList.Clone();
+        DropBoxList = action.DropBoxList.Clone<BoxNameWithProbability, BoxNameWithProbability>();
         DropBoxCountMin = action.DropBoxCountMin;
         DropBoxCountMax = action.DropBoxCountMax;
         DropConeAngle = action.DropConeAngle;

@@ -1424,6 +1424,7 @@ public class Actor : Entity
         if (this != BattleManager.Instance.Player1)
         {
             PoolRecycle();
+            IsDestroying = false;
         }
         else
         {

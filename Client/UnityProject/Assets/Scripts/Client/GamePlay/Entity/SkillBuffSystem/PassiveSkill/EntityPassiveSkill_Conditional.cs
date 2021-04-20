@@ -749,12 +749,12 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         EntityPassiveSkill_Conditional newPSC = (EntityPassiveSkill_Conditional) cloneData;
         newPSC.TriggerProbabilityPercent = TriggerProbabilityPercent;
         newPSC.MultiEventTrigger = MultiEventTrigger;
-        newPSC.ListenLevelEventAliasList = ListenLevelEventAliasList.Clone();
+        newPSC.ListenLevelEventAliasList = ListenLevelEventAliasList.Clone<string, string>();
         newPSC.ListenLevelEventAlias = ListenLevelEventAlias;
         newPSC.MaxTriggeredTimes = MaxTriggeredTimes;
 
         newPSC.PassiveSkillCondition = PassiveSkillCondition;
-        newPSC.DestroyEntityByElementDamageTypeList = DestroyEntityByElementDamageTypeList.Clone();
+        newPSC.DestroyEntityByElementDamageTypeList = DestroyEntityByElementDamageTypeList.Clone<EntityBuffAttribute, EntityBuffAttribute>();
         newPSC.EntityStatChangeType = EntityStatChangeType;
         foreach (EntityPassiveSkillAction rawBoxPassiveSkillAction in RawEntityPassiveSkillActions)
         {
@@ -779,7 +779,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         MaxTriggeredTimes = srcPSC.MaxTriggeredTimes;
 
         PassiveSkillCondition = srcPSC.PassiveSkillCondition;
-        DestroyEntityByElementDamageTypeList = srcPSC.DestroyEntityByElementDamageTypeList.Clone();
+        DestroyEntityByElementDamageTypeList = srcPSC.DestroyEntityByElementDamageTypeList.Clone<EntityBuffAttribute, EntityBuffAttribute>();
         EntityStatChangeType = srcPSC.EntityStatChangeType;
         if (srcPSC.RawEntityPassiveSkillActions.Count != RawEntityPassiveSkillActions.Count)
         {

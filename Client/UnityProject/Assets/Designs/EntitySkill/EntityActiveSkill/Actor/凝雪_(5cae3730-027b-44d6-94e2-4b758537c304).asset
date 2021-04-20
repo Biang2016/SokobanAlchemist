@@ -9,18 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
   m_Name: "\u51DD\u96EA_(5cae3730-027b-44d6-94e2-4b758537c304)"
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   EntitySkill:
     id: 0
   references:
@@ -44,22 +35,22 @@ MonoBehaviour:
             MaxValue: 0
           Cooldown:
             BaseValue: 8000
-            ModifiedValue: 0
+            ModifiedValue: 8000
             MinValue: 0
             MaxValue: 99999
           WingUp:
             BaseValue: 900
-            ModifiedValue: 0
+            ModifiedValue: 900
             MinValue: 0
             MaxValue: 99999
           CastDuration:
             BaseValue: 200
-            ModifiedValue: 0
+            ModifiedValue: 200
             MinValue: 0
             MaxValue: 99999
           Recovery:
             BaseValue: 200
-            ModifiedValue: 0
+            ModifiedValue: 200
             MinValue: 0
             MaxValue: 99999
           CameraShakeEquivalentDamage:
@@ -90,6 +81,7 @@ MonoBehaviour:
         NeedValidTargetDistance: 1
         TargetDistanceMin: 0
         TargetDistanceMax: 2
+        TriggerWhenMissProbabilityPercent: 100
         WingUpCanMove: 0
         CastCanMove: 0
         RecoverCanMove: 0
@@ -189,7 +181,7 @@ MonoBehaviour:
     00000001:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
-        GUID: 10068
+        GUID: 10259
         BuffAlias: 
         EntityBuffAttribute: 21
         EnableWhiteBlackList: 0
@@ -215,7 +207,7 @@ MonoBehaviour:
     00000002:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
-        GUID: 10069
+        GUID: 10260
         BuffAlias: 
         EntityBuffAttribute: 0
         EnableWhiteBlackList: 0

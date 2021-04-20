@@ -157,12 +157,12 @@ public class EntityPassiveSkillAction_TriggerZoneEffect : EntityPassiveSkillActi
         base.ChildClone(newAction);
         EntityPassiveSkillAction_TriggerZoneEffect action = ((EntityPassiveSkillAction_TriggerZoneEffect) newAction);
         action.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
-        action.RawEntityBuffs_Enter = RawEntityBuffs_Enter.Clone();
+        action.RawEntityBuffs_Enter = RawEntityBuffs_Enter.Clone<EntityBuff, EntityBuff>();
         action.RemoveEnterBuffWhenExit = RemoveEnterBuffWhenExit;
-        action.RawEntityBuffs_Stay = RawEntityBuffs_Stay.Clone();
+        action.RawEntityBuffs_Stay = RawEntityBuffs_Stay.Clone<EntityBuff, EntityBuff>();
         action.RemoveStayBuffWhenExit = RemoveStayBuffWhenExit;
         action.EffectInterval = EffectInterval;
-        action.RawEntityBuffs_Exit = RawEntityBuffs_Exit.Clone();
+        action.RawEntityBuffs_Exit = RawEntityBuffs_Exit.Clone<EntityBuff, EntityBuff>();
     }
 
     public override void CopyDataFrom(EntityPassiveSkillAction srcData)

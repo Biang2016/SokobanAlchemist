@@ -49,7 +49,7 @@ public class EntityActiveSkill_SummonDropBox : EntityActiveSkill_AreaCast
     {
         base.ChildClone(cloneData);
         EntityActiveSkill_SummonDropBox newEAS = (EntityActiveSkill_SummonDropBox) cloneData;
-        newEAS.DropBoxList = DropBoxList.Clone();
+        newEAS.DropBoxList = DropBoxList.Clone<BoxNameWithProbability, BoxNameWithProbability>();
         newEAS.DropFromHeightFromFloor = DropFromHeightFromFloor;
     }
 

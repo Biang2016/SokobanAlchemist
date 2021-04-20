@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public class SkillPropertyCollection
+public class SkillPropertyCollection : IClone<SkillPropertyCollection>
 {
     [HideInInspector]
     public Dictionary<EntitySkillPropertyType, EntityProperty> PropertyDict = new Dictionary<EntitySkillPropertyType, EntityProperty>();
@@ -81,5 +82,21 @@ public class SkillPropertyCollection
         ConsumeFireElementFragment.ApplyDataTo(target.ConsumeFireElementFragment);
         ConsumeIceElementFragment.ApplyDataTo(target.ConsumeIceElementFragment);
         ConsumeLightningElementFragment.ApplyDataTo(target.ConsumeLightningElementFragment);
+    }
+
+    public SkillPropertyCollection Clone()
+    {
+        SkillPropertyCollection cloneData = new SkillPropertyCollection();
+        CastingRadius.ApplyDataTo(cloneData.CastingRadius);
+        Cooldown.ApplyDataTo(cloneData.Cooldown);
+        WingUp.ApplyDataTo(cloneData.WingUp);
+        CastDuration.ApplyDataTo(cloneData.CastDuration);
+        Recovery.ApplyDataTo(cloneData.Recovery);
+        CameraShakeEquivalentDamage.ApplyDataTo(cloneData.CameraShakeEquivalentDamage);
+        ConsumeActionPoint.ApplyDataTo(cloneData.ConsumeActionPoint);
+        ConsumeFireElementFragment.ApplyDataTo(cloneData.ConsumeFireElementFragment);
+        ConsumeIceElementFragment.ApplyDataTo(cloneData.ConsumeIceElementFragment);
+        ConsumeLightningElementFragment.ApplyDataTo(cloneData.ConsumeLightningElementFragment);
+        return cloneData;
     }
 }

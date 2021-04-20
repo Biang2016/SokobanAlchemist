@@ -188,7 +188,7 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
             newData.FlameLength = FlameLength;
             newData.FlameDuration = FlameDuration;
             newData.FlameColor = FlameColor;
-            newData.RawEntityPassiveSkillActions_ForFlamethrower = RawEntityPassiveSkillActions_ForFlamethrower.Clone();
+            newData.RawEntityPassiveSkillActions_ForFlamethrower = RawEntityPassiveSkillActions_ForFlamethrower.Clone<EntityPassiveSkillAction, EntityPassiveSkillAction>();
             return newData;
         }
     }

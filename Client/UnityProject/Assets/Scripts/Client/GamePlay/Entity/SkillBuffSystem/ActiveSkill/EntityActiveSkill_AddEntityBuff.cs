@@ -43,7 +43,7 @@ public class EntityActiveSkill_AddEntityBuff : EntityActiveSkill_AreaCast
     {
         base.ChildClone(cloneData);
         EntityActiveSkill_AddEntityBuff newAAS = (EntityActiveSkill_AddEntityBuff) cloneData;
-        newAAS.RawEntityBuffs = RawEntityBuffs.Clone();
+        newAAS.RawEntityBuffs = RawEntityBuffs.Clone<EntityBuff, EntityBuff>();
     }
 
     public override void CopyDataFrom(EntitySkill srcData)

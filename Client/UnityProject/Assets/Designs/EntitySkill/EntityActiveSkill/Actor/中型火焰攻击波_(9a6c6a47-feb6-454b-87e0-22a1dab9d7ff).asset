@@ -9,18 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
-  m_Name: "\u5927\u578B\u706B\u7130\u653B\u51FB\u6CE2_(3d09bbda-1ad1-4b3e-99b9-63a5435002a5)"
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u4E2D\u578B\u706B\u7130\u653B\u51FB\u6CE2_(9a6c6a47-feb6-454b-87e0-22a1dab9d7ff)"
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   EntitySkill:
     id: 0
   references:
@@ -28,8 +19,8 @@ MonoBehaviour:
     00000000:
       type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
       data:
-        SkillGUID: (3d09bbda-1ad1-4b3e-99b9-63a5435002a5)
-        SkillAlias: "\u5927\u578B\u706B\u7130\u653B\u51FB\u6CE2"
+        SkillGUID: (9a6c6a47-feb6-454b-87e0-22a1dab9d7ff)
+        SkillAlias: "\u4E2D\u578B\u706B\u7130\u653B\u51FB\u6CE2"
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: (74d61ae1-4f6d-4f41-9027-16473e7ba8c5)
@@ -44,7 +35,7 @@ MonoBehaviour:
             MaxValue: 0
           Cooldown:
             BaseValue: 3500
-            ModifiedValue: 0
+            ModifiedValue: 3500
             MinValue: 0
             MaxValue: 1000000
           WingUp:
@@ -59,7 +50,7 @@ MonoBehaviour:
             MaxValue: 1000000
           Recovery:
             BaseValue: 1000
-            ModifiedValue: 0
+            ModifiedValue: 1000
             MinValue: 0
             MaxValue: 1000000
           CameraShakeEquivalentDamage:
@@ -87,9 +78,9 @@ MonoBehaviour:
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 0
-        NeedValidTargetDistance: 1
+        NeedValidTargetDistance: 0
         TargetDistanceMin: 0
-        TargetDistanceMax: 7
+        TargetDistanceMax: 5
         TriggerWhenMissProbabilityPercent: 10
         WingUpCanMove: 0
         CastCanMove: 0
@@ -192,34 +183,28 @@ MonoBehaviour:
         CastAreaGridPosList:
         - x: 14
           y: 0
-          z: 17
+          z: 16
         - x: 14
           y: 0
-          z: 16
+          z: 15
         - x: 15
           y: 0
-          z: 18
+          z: 17
         - x: 15
+          y: 0
+          z: 16
+        - x: 16
           y: 0
           z: 17
         - x: 16
           y: 0
-          z: 18
-        - x: 16
-          y: 0
-          z: 17
+          z: 16
         - x: 17
-          y: 0
-          z: 18
-        - x: 17
-          y: 0
-          z: 17
-        - x: 18
-          y: 0
-          z: 17
-        - x: 18
           y: 0
           z: 16
+        - x: 17
+          y: 0
+          z: 15
         M_TargetInclination: 1
         CastOnTopLayer: 0
         CastOnNLayersBeneath: 0
@@ -323,46 +308,40 @@ MonoBehaviour:
         CastAreaGridPosList:
         - x: 13
           y: 0
-          z: 18
+          z: 17
         - x: 13
           y: 0
-          z: 17
-        - x: 14
-          y: 0
-          z: 19
+          z: 16
         - x: 14
           y: 0
           z: 18
+        - x: 14
+          y: 0
+          z: 17
         - x: 15
           y: 0
-          z: 20
+          z: 19
         - x: 15
+          y: 0
+          z: 18
+        - x: 16
           y: 0
           z: 19
         - x: 16
           y: 0
-          z: 20
-        - x: 16
-          y: 0
-          z: 19
+          z: 18
         - x: 17
           y: 0
-          z: 20
+          z: 18
         - x: 17
-          y: 0
-          z: 19
-        - x: 18
-          y: 0
-          z: 19
-        - x: 18
-          y: 0
-          z: 18
-        - x: 19
-          y: 0
-          z: 18
-        - x: 19
           y: 0
           z: 17
+        - x: 18
+          y: 0
+          z: 17
+        - x: 18
+          y: 0
+          z: 16
         M_TargetInclination: 1
         CastOnTopLayer: 0
         CastOnNLayersBeneath: 0
@@ -466,46 +445,40 @@ MonoBehaviour:
         CastAreaGridPosList:
         - x: 13
           y: 0
-          z: 20
+          z: 19
         - x: 13
           y: 0
-          z: 19
-        - x: 14
-          y: 0
-          z: 21
+          z: 18
         - x: 14
           y: 0
           z: 20
+        - x: 14
+          y: 0
+          z: 19
         - x: 15
           y: 0
-          z: 22
+          z: 21
         - x: 15
+          y: 0
+          z: 20
+        - x: 16
           y: 0
           z: 21
         - x: 16
           y: 0
-          z: 22
-        - x: 16
-          y: 0
-          z: 21
+          z: 20
         - x: 17
           y: 0
-          z: 22
+          z: 20
         - x: 17
-          y: 0
-          z: 21
-        - x: 18
-          y: 0
-          z: 21
-        - x: 18
-          y: 0
-          z: 20
-        - x: 19
-          y: 0
-          z: 20
-        - x: 19
           y: 0
           z: 19
+        - x: 18
+          y: 0
+          z: 19
+        - x: 18
+          y: 0
+          z: 18
         M_TargetInclination: 1
         CastOnTopLayer: 0
         CastOnNLayersBeneath: 0
@@ -609,46 +582,40 @@ MonoBehaviour:
         CastAreaGridPosList:
         - x: 13
           y: 0
-          z: 22
+          z: 21
         - x: 13
           y: 0
-          z: 21
-        - x: 14
-          y: 0
-          z: 23
+          z: 20
         - x: 14
           y: 0
           z: 22
+        - x: 14
+          y: 0
+          z: 21
         - x: 15
           y: 0
-          z: 24
+          z: 23
         - x: 15
+          y: 0
+          z: 22
+        - x: 16
           y: 0
           z: 23
         - x: 16
           y: 0
-          z: 24
-        - x: 16
-          y: 0
-          z: 23
+          z: 22
         - x: 17
           y: 0
-          z: 24
+          z: 22
         - x: 17
-          y: 0
-          z: 23
-        - x: 18
-          y: 0
-          z: 23
-        - x: 18
-          y: 0
-          z: 22
-        - x: 19
-          y: 0
-          z: 22
-        - x: 19
           y: 0
           z: 21
+        - x: 18
+          y: 0
+          z: 21
+        - x: 18
+          y: 0
+          z: 20
         M_TargetInclination: 1
         CastOnTopLayer: 0
         CastOnNLayersBeneath: 0
@@ -752,46 +719,40 @@ MonoBehaviour:
         CastAreaGridPosList:
         - x: 13
           y: 0
-          z: 24
+          z: 23
         - x: 13
           y: 0
-          z: 23
-        - x: 14
-          y: 0
-          z: 25
+          z: 22
         - x: 14
           y: 0
           z: 24
+        - x: 14
+          y: 0
+          z: 23
         - x: 15
           y: 0
-          z: 26
+          z: 25
         - x: 15
+          y: 0
+          z: 24
+        - x: 16
           y: 0
           z: 25
         - x: 16
           y: 0
-          z: 26
-        - x: 16
-          y: 0
-          z: 25
+          z: 24
         - x: 17
           y: 0
-          z: 26
+          z: 24
         - x: 17
-          y: 0
-          z: 25
-        - x: 18
-          y: 0
-          z: 25
-        - x: 18
-          y: 0
-          z: 24
-        - x: 19
-          y: 0
-          z: 24
-        - x: 19
           y: 0
           z: 23
+        - x: 18
+          y: 0
+          z: 23
+        - x: 18
+          y: 0
+          z: 22
         M_TargetInclination: 1
         CastOnTopLayer: 0
         CastOnNLayersBeneath: 0

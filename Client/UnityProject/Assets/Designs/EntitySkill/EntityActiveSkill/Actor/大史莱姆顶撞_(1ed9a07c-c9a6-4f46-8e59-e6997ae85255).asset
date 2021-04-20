@@ -9,18 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
   m_Name: "\u5927\u53F2\u83B1\u59C6\u9876\u649E_(1ed9a07c-c9a6-4f46-8e59-e6997ae85255)"
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   EntitySkill:
     id: 0
   references:
@@ -44,12 +35,12 @@ MonoBehaviour:
             MaxValue: 0
           Cooldown:
             BaseValue: 3000
-            ModifiedValue: 0
+            ModifiedValue: 3000
             MinValue: 0
             MaxValue: 1000000
           WingUp:
             BaseValue: 516
-            ModifiedValue: 0
+            ModifiedValue: 516
             MinValue: 0
             MaxValue: 1000000
           CastDuration:
@@ -59,7 +50,7 @@ MonoBehaviour:
             MaxValue: 1000000
           Recovery:
             BaseValue: 300
-            ModifiedValue: 0
+            ModifiedValue: 300
             MinValue: 0
             MaxValue: 1000000
           CameraShakeEquivalentDamage:
@@ -90,6 +81,7 @@ MonoBehaviour:
         NeedValidTargetDistance: 1
         TargetDistanceMin: 0
         TargetDistanceMax: 2
+        TriggerWhenMissProbabilityPercent: 100
         WingUpCanMove: 0
         CastCanMove: 0
         RecoverCanMove: 0
@@ -140,7 +132,7 @@ MonoBehaviour:
     00000001:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
-        GUID: 10078
+        GUID: 10249
         BuffAlias: 
         EntityBuffAttribute: 34
         EnableWhiteBlackList: 0

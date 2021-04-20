@@ -202,14 +202,14 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
         base.ChildClone(newAction);
         EntityPassiveSkillAction_TriggerZoneAction action = ((EntityPassiveSkillAction_TriggerZoneAction) newAction);
         action.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
-        action.EntityActions_Enter = EntityActions_Enter.Clone();
-        action.EntityActions_Stay = EntityActions_Stay.Clone();
+        action.EntityActions_Enter = EntityActions_Enter.Clone<IPureAction, IPureAction>();
+        action.EntityActions_Stay = EntityActions_Stay.Clone<IPureAction, IPureAction>();
         action.EffectiveWhenInteractiveKeyDown = EffectiveWhenInteractiveKeyDown;
         action.InteractiveKeyNotice = InteractiveKeyNotice;
         action.TipPositionType = TipPositionType;
         action.InteractiveKeyNoticeDuration = InteractiveKeyNoticeDuration;
         action.ActionInterval = ActionInterval;
-        action.EntityActions_Exit = EntityActions_Exit.Clone();
+        action.EntityActions_Exit = EntityActions_Exit.Clone<IPureAction, IPureAction>();
     }
 
     public override void CopyDataFrom(EntityPassiveSkillAction srcData)
@@ -217,13 +217,13 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
         base.CopyDataFrom(srcData);
         EntityPassiveSkillAction_TriggerZoneAction action = ((EntityPassiveSkillAction_TriggerZoneAction) srcData);
         EffectiveOnRelativeCamp = action.EffectiveOnRelativeCamp;
-        EntityActions_Enter = action.EntityActions_Enter.Clone();
-        EntityActions_Stay = action.EntityActions_Stay.Clone();
+        EntityActions_Enter = action.EntityActions_Enter.Clone<IPureAction, IPureAction>();
+        EntityActions_Stay = action.EntityActions_Stay.Clone<IPureAction, IPureAction>();
         EffectiveWhenInteractiveKeyDown = action.EffectiveWhenInteractiveKeyDown;
         InteractiveKeyNotice = action.InteractiveKeyNotice;
         TipPositionType = action.TipPositionType;
         InteractiveKeyNoticeDuration = action.InteractiveKeyNoticeDuration;
         ActionInterval = action.ActionInterval;
-        EntityActions_Exit = action.EntityActions_Exit.Clone();
+        EntityActions_Exit = action.EntityActions_Exit.Clone<IPureAction, IPureAction>();
     }
 }

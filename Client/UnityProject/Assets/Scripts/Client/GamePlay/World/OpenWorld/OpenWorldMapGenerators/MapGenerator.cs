@@ -205,7 +205,7 @@ public abstract class MapGenerator
                         }
                     }
 
-                    List<EntityPassiveSkill_LevelEventTriggerAppear.Data> etaList = staticLayoutData.EventTriggerAppearEntityDataList.Clone();
+                    List<EntityPassiveSkill_LevelEventTriggerAppear.Data> etaList = staticLayoutData.EventTriggerAppearEntityDataList.Clone<EntityPassiveSkill_LevelEventTriggerAppear.Data, LevelComponentData>();
                     foreach (EntityPassiveSkill_LevelEventTriggerAppear.Data data in etaList)
                     {
                         GridPos3D sl_local = data.LocalGP;

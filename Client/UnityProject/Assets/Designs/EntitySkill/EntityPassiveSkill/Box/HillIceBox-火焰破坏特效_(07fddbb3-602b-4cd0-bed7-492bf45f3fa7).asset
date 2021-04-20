@@ -9,176 +9,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
   m_Name: "HillIceBox-\u706B\u7130\u7834\u574F\u7279\u6548_(07fddbb3-602b-4cd0-bed7-492bf45f3fa7)"
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: EntitySkill
-      Entry: 7
-      Data: 0|EntityPassiveSkill_Conditional, Client
-    - Name: SkillGUID
-      Entry: 1
-      Data: (07fddbb3-602b-4cd0-bed7-492bf45f3fa7)
-    - Name: SkillAlias
-      Entry: 1
-      Data: "HillIceBox-\u706B\u7130\u7834\u574F\u7279\u6548"
-    - Name: IsAddedDuringGamePlay
-      Entry: 5
-      Data: false
-    - Name: InitWorldModuleGUID
-      Entry: 3
-      Data: 0
-    - Name: PassiveSkillCondition
-      Entry: 3
-      Data: 32768
-    - Name: TriggerProbabilityPercent
-      Entry: 3
-      Data: 0
-    - Name: DestroyEntityByElementDamageTypeList
-      Entry: 7
-      Data: 1|System.Collections.Generic.List`1[[EntityBuffAttribute, Client]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 3
-      Data: 18
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: EntityStatChangeType
-      Entry: 3
-      Data: 0
-    - Name: EntityStatChangeThreshold
-      Entry: 3
-      Data: 0
-    - Name: EntityStatChangeThresholdOperator
-      Entry: 3
-      Data: 0
-    - Name: EntityPropertyChangeType
-      Entry: 3
-      Data: 0
-    - Name: EntityPropertyChangeThreshold
-      Entry: 3
-      Data: 0
-    - Name: EntityPropertyChangeThresholdOperator
-      Entry: 3
-      Data: 0
-    - Name: MultiEventTrigger
-      Entry: 5
-      Data: false
-    - Name: ListenLevelEventAliasList
-      Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: ListenLevelEventAlias
-      Entry: 1
-      Data: 
-    - Name: MaxTriggeredTimes
-      Entry: 3
-      Data: 1
-    - Name: RawEntityPassiveSkillActions
-      Entry: 7
-      Data: 3|System.Collections.Generic.List`1[[EntityPassiveSkillAction, Client]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 4|EntityPassiveSkillAction_PlayFX, Client
-    - Name: InitWorldModuleGUID
-      Entry: 3
-      Data: 0
-    - Name: FX
-      Entry: 7
-      Data: 5|FXConfig, Client
-    - Name: FXType
-      Entry: 7
-      Data: 6|TypeSelectHelper, Client
-    - Name: TypeDefineType
-      Entry: 3
-      Data: 7
-    - Name: TypeGUID
-      Entry: 1
-      Data: (ce01f26e-4b00-4b76-bef3-72a60663efa0)
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: UseCurve
-      Entry: 5
-      Data: false
-    - Name: FXScale
-      Entry: 4
-      Data: 1
-    - Name: AnimationCurve
-      Entry: 7
-      Data: 7|UnityEngine.AnimationCurve, UnityEngine.CoreModule
-    - Name: 
-      Entry: 7
-      Data: 8|UnityEngine.Keyframe[], UnityEngine.CoreModule
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 3
-      Data: 8
-    - Name: 
-      Entry: 3
-      Data: 8
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: EntityPassiveSkillActions
-      Entry: 7
-      Data: 9|System.Collections.Generic.List`1[[EntityPassiveSkillAction, Client]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        SkillGUID: (07fddbb3-602b-4cd0-bed7-492bf45f3fa7)
+        SkillAlias: "HillIceBox-\u706B\u7130\u7834\u574F\u7279\u6548"
+        SkillIcon:
+          TypeDefineType: 0
+          TypeGUID: 
+        SkillDescription: 
+        IsAddedDuringGamePlay: 0
+        InitWorldModuleGUID: 0
+        PassiveSkillCondition: 32768
+        TriggerProbabilityPercent: 0
+        DestroyEntityByElementDamageTypeList: 12000000
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdOperator: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdOperator: 0
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        RawEntityPassiveSkillActions:
+        - id: 1
+    00000001:
+      type: {class: EntityPassiveSkillAction_PlayFX, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (ce01f26e-4b00-4b76-bef3-72a60663efa0)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4

@@ -310,7 +310,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         // 时序，先导出类型表
         ExportTypeGUIDMapping();
-        ExportPassiveSkillLibrary(dataFormat);
+        ExportEntitySkillLibrary(dataFormat);
 
         SortAllWorldModules();
         SortAllStaticLayouts();
@@ -336,7 +336,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         // 时序，先导出类型表
         ExportTypeGUIDMapping();
-        ExportPassiveSkillLibrary(DataFormat.Binary);
+        ExportEntitySkillLibrary(DataFormat.Binary);
         ExportAllEntityOccupationDataConfigs(DataFormat.Binary);
 
         AssetDatabase.Refresh();
@@ -453,7 +453,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         AssetDatabase.Refresh();
     }
 
-    private static void ExportPassiveSkillLibrary(DataFormat dataFormat)
+    private static void ExportEntitySkillLibrary(DataFormat dataFormat)
     {
         string folder = EntitySkillLibraryFolder_Build;
         if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
@@ -464,7 +464,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         foreach (FileInfo fi in di.GetFiles("*.asset", SearchOption.AllDirectories))
         {
             string relativePath = CommonUtils.ConvertAbsolutePathToProjectPath(fi.FullName);
-            EntitySkillSSO obj = AssetDatabase.LoadAssetAtPath<EntitySkillSSO>(relativePath);
+            EntitySkillSO obj = AssetDatabase.LoadAssetAtPath<EntitySkillSO>(relativePath);
             entitySkillDict.Add(obj.EntitySkill.SkillGUID, obj.EntitySkill);
         }
 
@@ -847,7 +847,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
 
         LoadTypeGUIDMappingFromConfig(dataFormat);
-        LoadPassiveSkillLibrary(dataFormat);
+        LoadEntitySkillLibrary(dataFormat);
         LoadEntityStatPropertyEnumList();
         LoadEntityBuffStatPropertyEnumReflection();
         LoadEntityBuffAttributeMatrixFromConfig(dataFormat);
@@ -882,7 +882,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
-    private static void LoadPassiveSkillLibrary(DataFormat dataFormat)
+    private static void LoadEntitySkillLibrary(DataFormat dataFormat)
     {
         EntitySkillLibrary.Clear();
 

@@ -52,7 +52,7 @@ public class EntityPassiveSkillAction_RadiusAddEntitiesBuff : EntityPassiveSkill
         action.AddBuffRadius = AddBuffRadius;
         action.ExactGPDistance = ExactGPDistance;
         action.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
-        action.RawEntityBuffs = RawEntityBuffs.Clone();
+        action.RawEntityBuffs = RawEntityBuffs.Clone<EntityBuff, EntityBuff>();
     }
 
     public override void CopyDataFrom(EntityPassiveSkillAction srcData)

@@ -9,18 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
   m_Name: "\u7535\u654C\u4EBA\u540E\u7A7A\u7FFB\u626B\u5C3E_(f7276fb9-8292-4a91-8a9c-00ac37e2c1cc)"
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   EntitySkill:
     id: 0
   references:
@@ -44,12 +35,12 @@ MonoBehaviour:
             MaxValue: 0
           Cooldown:
             BaseValue: 15000
-            ModifiedValue: 0
+            ModifiedValue: 15000
             MinValue: 0
             MaxValue: 1000000
           WingUp:
             BaseValue: 250
-            ModifiedValue: 0
+            ModifiedValue: 250
             MinValue: 0
             MaxValue: 1000000
           CastDuration:
@@ -59,12 +50,12 @@ MonoBehaviour:
             MaxValue: 0
           Recovery:
             BaseValue: 708
-            ModifiedValue: 0
+            ModifiedValue: 708
             MinValue: 0
             MaxValue: 1000000
           CameraShakeEquivalentDamage:
             BaseValue: 5
-            ModifiedValue: 0
+            ModifiedValue: 5
             MinValue: 0
             MaxValue: 10
           ConsumeActionPoint:
@@ -192,7 +183,7 @@ MonoBehaviour:
     00000001:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
-        GUID: 10072
+        GUID: 10263
         BuffAlias: 
         EntityBuffAttribute: 39
         EnableWhiteBlackList: 0
@@ -218,7 +209,7 @@ MonoBehaviour:
     00000002:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
-        GUID: 10073
+        GUID: 10264
         BuffAlias: 
         EntityBuffAttribute: 40
         EnableWhiteBlackList: 0

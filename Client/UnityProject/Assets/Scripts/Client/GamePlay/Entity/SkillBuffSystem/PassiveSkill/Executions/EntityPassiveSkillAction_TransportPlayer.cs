@@ -44,13 +44,13 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
     {
         base.ChildClone(newAction);
         EntityPassiveSkillAction_TransportPlayer action = ((EntityPassiveSkillAction_TransportPlayer) newAction);
-        action.WorldProbList = WorldProbList.Clone();
+        action.WorldProbList = WorldProbList.Clone<WorldNameWithProbability, WorldNameWithProbability>();
     }
 
     public override void CopyDataFrom(EntityPassiveSkillAction srcData)
     {
         base.CopyDataFrom(srcData);
         EntityPassiveSkillAction_TransportPlayer action = ((EntityPassiveSkillAction_TransportPlayer) srcData);
-        WorldProbList = action.WorldProbList.Clone();
+        WorldProbList = action.WorldProbList.Clone<WorldNameWithProbability, WorldNameWithProbability>();
     }
 }

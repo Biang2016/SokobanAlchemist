@@ -45,7 +45,7 @@ public class EntityPassiveSkillAction_AddEntityBuffToSelf : EntityPassiveSkillAc
     {
         base.ChildClone(newAction);
         EntityPassiveSkillAction_AddEntityBuffToSelf action = ((EntityPassiveSkillAction_AddEntityBuffToSelf) newAction);
-        action.RawEntityBuffs = RawEntityBuffs.Clone();
+        action.RawEntityBuffs = RawEntityBuffs.Clone<EntityBuff, EntityBuff>();
     }
 
     public override void CopyDataFrom(EntityPassiveSkillAction srcData)

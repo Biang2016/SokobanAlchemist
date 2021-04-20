@@ -9,18 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c51d427f98346dc48a2d631c91375d79, type: 3}
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
   m_Name: "\u7535\u654C\u4EBA\u539F\u5730\u6A2A\u626B\u4E00\u6BB5\u5F0F_(951de0a1-81d6-44d3-ae96-ca5e29a231e4)"
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   EntitySkill:
     id: 0
   references:
@@ -44,12 +35,12 @@ MonoBehaviour:
             MaxValue: 0
           Cooldown:
             BaseValue: 1000
-            ModifiedValue: 0
+            ModifiedValue: 1000
             MinValue: 0
             MaxValue: 1000000
           WingUp:
             BaseValue: 416
-            ModifiedValue: 0
+            ModifiedValue: 416
             MinValue: 0
             MaxValue: 1000000
           CastDuration:
@@ -59,12 +50,12 @@ MonoBehaviour:
             MaxValue: 1000000
           Recovery:
             BaseValue: 1250
-            ModifiedValue: 0
+            ModifiedValue: 1250
             MinValue: 0
             MaxValue: 1000000
           CameraShakeEquivalentDamage:
             BaseValue: 1
-            ModifiedValue: 0
+            ModifiedValue: 1
             MinValue: 0
             MaxValue: 10
           ConsumeActionPoint:
@@ -139,7 +130,7 @@ MonoBehaviour:
     00000001:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
-        GUID: 10070
+        GUID: 10261
         BuffAlias: 
         EntityBuffAttribute: 39
         EnableWhiteBlackList: 0
@@ -165,7 +156,7 @@ MonoBehaviour:
     00000002:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
-        GUID: 10071
+        GUID: 10262
         BuffAlias: 
         EntityBuffAttribute: 40
         EnableWhiteBlackList: 0

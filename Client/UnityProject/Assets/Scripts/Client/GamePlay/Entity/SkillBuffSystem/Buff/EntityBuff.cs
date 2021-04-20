@@ -94,8 +94,8 @@ public abstract class EntityBuff : IClone<EntityBuff>
         newBuff.BuffAlias = BuffAlias;
         newBuff.EntityBuffAttribute = EntityBuffAttribute;
         newBuff.EnableWhiteBlackList = EnableWhiteBlackList;
-        newBuff.AllowAddBuffAliasList = AllowAddBuffAliasList.Clone();
-        newBuff.ForbidAddBuffAliasList = ForbidAddBuffAliasList.Clone();
+        newBuff.AllowAddBuffAliasList = AllowAddBuffAliasList.Clone<string, string>();
+        newBuff.ForbidAddBuffAliasList = ForbidAddBuffAliasList.Clone<string, string>();
         newBuff.IsPermanent = IsPermanent;
         newBuff.Duration = Duration;
         newBuff.BuffFX = BuffFX;

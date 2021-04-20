@@ -274,9 +274,9 @@ public abstract class Entity : PoolObject
     #region 被动技能
 
     [FoldoutGroup("被动技能")]
-    [LabelText("被动技能槽位")]
+    [LabelText("被动技能槽位SO")]
     [InlineEditor(InlineEditorObjectFieldModes.Foldout)]
-    public List<EntitySkillSSO> RawEntityPassiveSkillSSOs = new List<EntitySkillSSO>(); // 自带被动技能
+    public List<EntitySkillSO> RawEntityPassiveSkillSOs = new List<EntitySkillSO>(); // 自带被动技能
 
     [NonSerialized]
     [ShowInInspector]
@@ -298,9 +298,10 @@ public abstract class Entity : PoolObject
 
         PassiveSkillMarkAsDestroyed = false;
 
-        for (int i = 0; i < RawEntityPassiveSkillSSOs.Count; i++)
+        for (int i = 0; i < RawEntityPassiveSkillSOs.Count; i++)
         {
-            EntityPassiveSkill rawEPS = (EntityPassiveSkill) RawEntityPassiveSkillSSOs[i].EntitySkill;
+            string skillGUID = RawEntityPassiveSkillSOs[i].EntitySkill.SkillGUID;
+            EntityPassiveSkill rawEPS = (EntityPassiveSkill) ConfigManager.GetEntitySkill(skillGUID);
             EntityPassiveSkill eps = null;
             if (EntityPassiveSkills.Count > i)
             {
@@ -308,11 +309,11 @@ public abstract class Entity : PoolObject
             }
             else
             {
-                if (!EntityPassiveSkillGUIDDict.ContainsKey(rawEPS.SkillGUID))
+                if (!EntityPassiveSkillGUIDDict.ContainsKey(skillGUID))
                 {
                     eps = (EntityPassiveSkill) rawEPS.Clone();
                     EntityPassiveSkills.Add(eps);
-                    EntityPassiveSkillGUIDDict.Add(rawEPS.SkillGUID, rawEPS);
+                    EntityPassiveSkillGUIDDict.Add(skillGUID, eps);
                 }
                 else
                 {
@@ -328,7 +329,7 @@ public abstract class Entity : PoolObject
             }
         }
 
-        if (EntityPassiveSkills.Count != RawEntityPassiveSkillSSOs.Count)
+        if (EntityPassiveSkills.Count != RawEntityPassiveSkillSOs.Count)
         {
             Debug.Log($"{name}被动技能数量不一致");
         }
@@ -390,7 +391,7 @@ public abstract class Entity : PoolObject
     [FoldoutGroup("主动技能")]
     [LabelText("主动技能槽位")]
     [InlineEditor(InlineEditorObjectFieldModes.Foldout)]
-    public List<EntitySkillSSO> RawEntityActiveSkillSSOs = new List<EntitySkillSSO>(); // 自带主动技能
+    public List<EntitySkillSO> RawEntityActiveSkillSOs = new List<EntitySkillSO>();
 
     [HideInInspector]
     public SortedDictionary<EntitySkillIndex, EntityActiveSkill> EntityActiveSkillDict = new SortedDictionary<EntitySkillIndex, EntityActiveSkill>(); // 技能编号，只包含所有母技能
@@ -425,24 +426,21 @@ public abstract class Entity : PoolObject
             EntityActiveSkillDict.Remove(skillIndex);
         }
 
-        for (int i = 0; i < RawEntityActiveSkillSSOs.Count; i++)
+        for (int i = 0; i < RawEntityActiveSkillSOs.Count; i++)
         {
-            EntitySkillSSO sso = RawEntityActiveSkillSSOs[i];
+            string skillGUID = RawEntityActiveSkillSOs[i].EntitySkill.SkillGUID;
+            EntityActiveSkill rawEAS = (EntityActiveSkill) ConfigManager.GetEntitySkill(skillGUID);
             EntitySkillIndex skillIndex = (EntitySkillIndex) i;
             if (EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
             {
-                eas.CopyDataFrom(sso.EntitySkill);
+                eas.CopyDataFrom(rawEAS);
             }
             else
             {
-                eas = (EntityActiveSkill) sso.EntitySkill.Clone();
+                eas = (EntityActiveSkill) rawEAS.Clone();
                 EntityActiveSkillDict.Add(skillIndex, eas);
             }
 
-            if (this == null)
-            {
-                int a = 0;
-            }
             eas.Entity = this;
             eas.IsAddedDuringGamePlay = false;
             eas.ParentActiveSkill = null;
