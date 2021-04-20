@@ -300,8 +300,7 @@ public abstract class Entity : PoolObject
 
         for (int i = 0; i < RawEntityPassiveSkillSOs.Count; i++)
         {
-            string skillGUID = RawEntityPassiveSkillSOs[i].EntitySkill.SkillGUID;
-            EntityPassiveSkill rawEPS = (EntityPassiveSkill) ConfigManager.GetEntitySkill(skillGUID);
+            EntityPassiveSkill rawEPS = (EntityPassiveSkill) RawEntityPassiveSkillSOs[i].EntitySkill;
             EntityPassiveSkill eps = null;
             if (EntityPassiveSkills.Count > i)
             {
@@ -309,11 +308,11 @@ public abstract class Entity : PoolObject
             }
             else
             {
-                if (!EntityPassiveSkillGUIDDict.ContainsKey(skillGUID))
+                if (!EntityPassiveSkillGUIDDict.ContainsKey(rawEPS.SkillGUID))
                 {
                     eps = (EntityPassiveSkill) rawEPS.Clone();
                     EntityPassiveSkills.Add(eps);
-                    EntityPassiveSkillGUIDDict.Add(skillGUID, eps);
+                    EntityPassiveSkillGUIDDict.Add(rawEPS.SkillGUID, eps);
                 }
                 else
                 {
@@ -428,8 +427,7 @@ public abstract class Entity : PoolObject
 
         for (int i = 0; i < RawEntityActiveSkillSOs.Count; i++)
         {
-            string skillGUID = RawEntityActiveSkillSOs[i].EntitySkill.SkillGUID;
-            EntityActiveSkill rawEAS = (EntityActiveSkill) ConfigManager.GetEntitySkill(skillGUID);
+            EntityActiveSkill rawEAS = (EntityActiveSkill) RawEntityActiveSkillSOs[i].EntitySkill;
             EntitySkillIndex skillIndex = (EntitySkillIndex) i;
             if (EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
             {
