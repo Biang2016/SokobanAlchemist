@@ -561,7 +561,7 @@ public partial class Box : Entity
 
             Profiler.BeginSample("Box.Initialize DOTween GC Check");
             transform.DOPause();
-            transform.DOLocalMove(LocalGP, lerpTime).SetEase(Ease.Linear).OnComplete(() =>
+            transform.DOLocalMove(LocalGP, lerpTime).SetEase(Ease.OutSine).OnComplete(() =>
             {
                 State = States.Static;
                 IsInGridSystem = true;
@@ -663,7 +663,7 @@ public partial class Box : Entity
             {
                 if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Push {WorldGP} -> {gp}");
                 CurrentMoveGlobalPlanerDir = (gp - WorldGP).Normalized();
-                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.BeingPushed, true, false, actor.GUID);
+                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.BeingPushed, 11f / actor.EntityStatPropSet.PropertyDict[EntityPropertyType.MoveSpeed].GetModifiedValue, false, actor.GUID);
             }
         }
     }
@@ -677,7 +677,7 @@ public partial class Box : Entity
         {
             if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] Box] {name} ForceCancelPush {WorldGP} -> {targetGP}");
             CurrentMoveGlobalPlanerDir = moveDirection;
-            WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.Static, false, true, actor.GUID);
+            WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.Static, 0f, true, actor.GUID);
         }
     }
 

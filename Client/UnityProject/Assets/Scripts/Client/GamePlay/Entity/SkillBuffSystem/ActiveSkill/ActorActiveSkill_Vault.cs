@@ -18,7 +18,7 @@ public class ActorActiveSkill_Vault : EntityActiveSkill
 
             Ray ray = new Ray(actor.transform.position - actor.transform.forward * 0.49f, actor.transform.forward);
             //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
-            if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
+            if (Physics.Raycast(ray, out RaycastHit hit, 1.74f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
             {
                 Box box = hit.collider.gameObject.GetComponentInParent<Box>();
                 if (box && !box.Passable && actor.ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.EntityTypeIndex))
@@ -45,7 +45,7 @@ public class ActorActiveSkill_Vault : EntityActiveSkill
         {
             if (actor.IsFrozen)
             {
-                actor.EntityStatPropSet.FrozenValue.SetValue(actor.EntityStatPropSet.FrozenValue.Value - 200, "DashOrVault");
+                actor.EntityStatPropSet.FrozenValue.SetValue(actor.EntityStatPropSet.FrozenValue.Value - 200, "Vault");
             }
             else
             {

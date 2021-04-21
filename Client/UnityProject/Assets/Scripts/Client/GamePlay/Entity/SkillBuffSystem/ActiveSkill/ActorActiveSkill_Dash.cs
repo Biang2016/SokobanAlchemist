@@ -48,7 +48,7 @@ public class ActorActiveSkill_Dash : EntityActiveSkill
         {
             if (actor.IsFrozen)
             {
-                actor.EntityStatPropSet.FrozenValue.SetValue(actor.EntityStatPropSet.FrozenValue.Value - 200, "DashOrVault");
+                actor.EntityStatPropSet.FrozenValue.SetValue(actor.EntityStatPropSet.FrozenValue.Value - 200, "Dash");
             }
             else
             {

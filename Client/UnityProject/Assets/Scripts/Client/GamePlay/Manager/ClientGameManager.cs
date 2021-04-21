@@ -4,6 +4,7 @@ using BiangLibrary.GamePlay.UI;
 using BiangLibrary.Log;
 using BiangLibrary.Messenger;
 using BiangLibrary.Singleton;
+using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
