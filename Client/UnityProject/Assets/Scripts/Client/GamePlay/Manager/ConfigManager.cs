@@ -315,7 +315,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         SortAllWorldModules();
         SortAllStaticLayouts();
         SortAllWorlds();
-        ExportEntityBuffAttributeMatrix(dataFormat);
+        ExportEntityBuffAttributeMatrix(DataFormat.JSON);
         ExportAllEntityOccupationDataConfigs(dataFormat);
         ExportAllWorldModuleDataConfigs(dataFormat);
         ExportAllStaticLayoutDataConfigs(dataFormat);
@@ -601,7 +601,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
             }
         }
 
-        byte[] bytes = SerializationUtility.SerializeValue(exportDict, DataFormat.JSON);
+        byte[] bytes = SerializationUtility.SerializeValue(exportDict, dataFormat);
         File.WriteAllBytes(file, bytes);
         AssetDatabase.Refresh();
     }
@@ -850,7 +850,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         LoadEntitySkillLibrary(dataFormat);
         LoadEntityStatPropertyEnumList();
         LoadEntityBuffStatPropertyEnumReflection();
-        LoadEntityBuffAttributeMatrixFromConfig(dataFormat);
+        LoadEntityBuffAttributeMatrixFromConfig(dataFormat, false);
         LoadAllEntityOccupationDataConfigs(dataFormat);
         LoadWorldModuleDataConfig(dataFormat);
         LoadStaticLayoutDataConfig(dataFormat);
@@ -957,7 +957,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
-    public static void LoadEntityBuffAttributeMatrixFromConfig(DataFormat dataFormat)
+    public static void LoadEntityBuffAttributeMatrixFromConfig(DataFormat dataFormat, bool saveToAsset)
     {
         string file = $"{EntityBuffAttributeMatrixConfigFolder_Build}/EntityBuffAttributeMatrix.config";
         FileInfo fi = new FileInfo(file);
@@ -983,6 +983,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                     }
                 }
             }
+
+            if (saveToAsset) GetBuffAttributeMatrixAsset().EntityBuffAttributeMatrix = EntityBuffAttributeMatrix;
         }
     }
 

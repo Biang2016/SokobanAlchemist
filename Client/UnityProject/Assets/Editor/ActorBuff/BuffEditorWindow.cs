@@ -122,15 +122,21 @@ public class BuffEditorWindow : EditorWindow
     private void OnGUI()
     {
         EditorGUILayout.LabelField("Buff克制矩阵, 左侧标签为既有buff，顶部标签为新增buff");
-        if (GUILayout.Button("加载"))
+        if (GUILayout.Button("从Asset加载"))
         {
             ConfigManager.LoadEntityBuffAttributeMatrixFromAsset();
             Init();
         }
 
+        if (GUILayout.Button("（仅插入项时使用）从Config加载并保存到Asset"))
+        {
+            ConfigManager.LoadEntityBuffAttributeMatrixFromConfig(DataFormat.JSON, true);
+            Init();
+        }
+
         if (GUILayout.Button("导出Config"))
         {
-            ConfigManager.ExportEntityBuffAttributeMatrix(DataFormat.Binary);
+            ConfigManager.ExportEntityBuffAttributeMatrix(DataFormat.JSON);
             ConfigManager.LoadEntityBuffAttributeMatrixFromAsset();
             ConfigManager.UpgradeEntityBuffAttributeMatrixAssetVersion();
             Init();
