@@ -72,4 +72,20 @@ public class ActorArtAnim : MonoBehaviour
     {
         ActorArtHelper.CanPlayOtherAnimSkill = false;
     }
+
+    /// <summary>
+    /// Executed by animation
+    /// </summary>
+    public void SetCanPan()
+    {
+        ActorArtHelper.CanPan = true;
+    }
+
+    /// <summary>
+    /// Executed by animation
+    /// </summary>
+    public void SetCannotPan()
+    {
+        ActorArtHelper.CanPan = false;
+    }
 }

@@ -801,16 +801,24 @@ public class Actor : Entity
 
                 if (EntityStatPropSet.MoveSpeed.GetModifiedValue != 0)
                 {
-                    Vector3 velDiff = CurMoveAttempt.normalized * Time.fixedDeltaTime * Accelerate;
-                    Vector3 finalVel = new Vector3(RigidBody.velocity.x + velDiff.x, 0, RigidBody.velocity.z + velDiff.z);
-                    float finalSpeed = EntityStatPropSet.MoveSpeed.GetModifiedValue / 10f;
-                    if (finalVel.magnitude > finalSpeed)
+                    if (ActorArtHelper.CanPan)
                     {
-                        finalVel = finalVel.normalized * finalSpeed;
-                    }
+                        Vector3 velDiff = CurMoveAttempt.normalized * Time.fixedDeltaTime * Accelerate;
+                        Vector3 finalVel = new Vector3(RigidBody.velocity.x + velDiff.x, 0, RigidBody.velocity.z + velDiff.z);
+                        float finalSpeed = EntityStatPropSet.MoveSpeed.GetModifiedValue / 10f;
+                        if (finalVel.magnitude > finalSpeed)
+                        {
+                            finalVel = finalVel.normalized * finalSpeed;
+                        }
 
-                    finalVel.y = RigidBody.velocity.y;
-                    RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);
+                        finalVel.y = RigidBody.velocity.y;
+                        RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);
+                    }
+                    else
+                    {
+                        RigidBody.drag = 100f;
+                        RigidBody.mass = 1f;
+                    }
                 }
 
                 CurForward = CurMoveAttempt.normalized;
