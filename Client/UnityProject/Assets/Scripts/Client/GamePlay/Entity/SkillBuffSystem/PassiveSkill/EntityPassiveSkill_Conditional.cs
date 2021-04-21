@@ -49,89 +49,6 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     private HashSet<EntityBuffAttribute> DestroyEntityByElementDamageTypeSet = new HashSet<EntityBuffAttribute>();
 
-    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
-    [LabelText("状态值种类")]
-    public EntityStatType EntityStatChangeType;
-
-    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
-    [LabelText("状态值阈值")]
-    public int EntityStatChangeThreshold;
-
-    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
-    [HideLabel]
-    [EnumToggleButtons]
-    public Operator EntityStatChangeThresholdOperator;
-
-    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityPropertyValueChange)]
-    [LabelText("属性值种类")]
-    public EntityPropertyType EntityPropertyChangeType;
-
-    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityPropertyValueChange)]
-    [LabelText("属性值阈值")]
-    public int EntityPropertyChangeThreshold;
-
-    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityPropertyValueChange)]
-    [HideLabel]
-    [EnumToggleButtons]
-    public Operator EntityPropertyChangeThresholdOperator;
-
-    public enum Operator
-    {
-        LessEquals,
-        Equals,
-        GreaterEquals,
-    }
-
-    private IEnumerable GetAllBuffAttributeTypes => ConfigManager.GetAllBuffAttributeTypes();
-
-    #region Conditions
-
-    public override void OnInit()
-    {
-        base.OnInit();
-        InitWorldModuleGUID = Entity.InitWorldModuleGUID;
-        InitPassiveSkillActions();
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnInit))
-        {
-            if (TriggerProbabilityPercent.ProbabilityBool())
-            {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
-                {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
-                    {
-                        pureAction.Execute();
-                    }
-                }
-            }
-        }
-
-        if (DestroyEntityByElementDamageTypeSet.Count == 0)
-        {
-            foreach (EntityBuffAttribute attribute in DestroyEntityByElementDamageTypeList)
-            {
-                DestroyEntityByElementDamageTypeSet.Add(attribute);
-            }
-        }
-    }
-
-    public override void OnTick(float deltaTime)
-    {
-        base.OnTick(deltaTime);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnTick))
-        {
-            if (TriggerProbabilityPercent.ProbabilityBool())
-            {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
-                {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
-                    {
-                        pureAction.Execute();
-                    }
-                }
-            }
-        }
-    }
-
     #region Level Event Trigger
 
     private bool IsEventTrigger => PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnLevelEvent);
@@ -187,6 +104,33 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     private void OnEvent(string incomingEventAlias)
     {
+        void LevelEventExecuteFunction()
+        {
+            if (triggeredTimes < MaxTriggeredTimes)
+            {
+                OnEventExecute();
+                if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnLevelEvent))
+                {
+                    if (TriggerProbabilityPercent.ProbabilityBool())
+                    {
+                        foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                        {
+                            if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                            {
+                                pureAction.Execute();
+                            }
+                        }
+                    }
+                }
+
+                triggeredTimes++;
+                for (int i = 0; i < multiTriggerFlags.Count; i++)
+                {
+                    multiTriggerFlags[i] = false;
+                }
+            }
+        }
+
         if (MultiEventTrigger)
         {
             for (int index = 0; index < ListenLevelEventAliasList.Count; index++)
@@ -208,7 +152,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             {
                 if (TriggerProbabilityPercent.ProbabilityBool())
                 {
-                    ExecuteFunction();
+                    LevelEventExecuteFunction();
                 }
             }
         }
@@ -218,35 +162,8 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             {
                 if (TriggerProbabilityPercent.ProbabilityBool())
                 {
-                    ExecuteFunction();
+                    LevelEventExecuteFunction();
                 }
-            }
-        }
-    }
-
-    private void ExecuteFunction()
-    {
-        if (triggeredTimes < MaxTriggeredTimes)
-        {
-            OnEventExecute();
-            if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnLevelEvent))
-            {
-                if (TriggerProbabilityPercent.ProbabilityBool())
-                {
-                    foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
-                    {
-                        if (action is EntityPassiveSkillAction.IPureAction pureAction)
-                        {
-                            pureAction.Execute();
-                        }
-                    }
-                }
-            }
-
-            triggeredTimes++;
-            for (int i = 0; i < multiTriggerFlags.Count; i++)
-            {
-                multiTriggerFlags[i] = false;
             }
         }
     }
@@ -257,10 +174,117 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     #endregion
 
+    #region Stat/Property OnChange
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
+    [LabelText("状态值种类")]
+    public EntityStatType EntityStatChangeType;
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
+    [LabelText("状态值阈值")]
+    public int EntityStatChangeThreshold;
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
+    [HideLabel]
+    [EnumToggleButtons]
+    public ValueChangeOverThresholdType EntityStatChangeThresholdType;
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityPropertyValueChange)]
+    [LabelText("属性值种类")]
+    public EntityPropertyType EntityPropertyChangeType;
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityPropertyValueChange)]
+    [LabelText("属性值阈值")]
+    public int EntityPropertyChangeThreshold;
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityPropertyValueChange)]
+    [HideLabel]
+    [EnumToggleButtons]
+    public ValueChangeOverThresholdType EntityPropertyChangeThresholdType;
+
+    #endregion
+
+    #region OnEntityStatPropertyValue
+
+    [LabelText("持续状态条件")]
+    public List<EPSConditional> EPSConditionals = new List<EPSConditional>();
+
+    #endregion
+
+    private IEnumerable GetAllBuffAttributeTypes => ConfigManager.GetAllBuffAttributeTypes();
+
+    #region Conditions
+
+    public override void OnInit()
+    {
+        base.OnInit();
+        InitWorldModuleGUID = Entity.InitWorldModuleGUID;
+        foreach (EPSConditional epsConditional in EPSConditionals)
+        {
+            epsConditional.OnInit(Entity);
+        }
+
+        InitPassiveSkillActions();
+        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnInit))
+        {
+            if (TriggerProbabilityPercent.ProbabilityBool())
+            {
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                {
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
+                }
+            }
+        }
+
+        if (DestroyEntityByElementDamageTypeSet.Count == 0)
+        {
+            foreach (EntityBuffAttribute attribute in DestroyEntityByElementDamageTypeList)
+            {
+                DestroyEntityByElementDamageTypeSet.Add(attribute);
+            }
+        }
+    }
+
+    public override void OnTick(float deltaTime)
+    {
+        base.OnTick(deltaTime);
+        foreach (EPSConditional epsConditional in EPSConditionals)
+        {
+            epsConditional.OnTick(deltaTime);
+        }
+
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnTick))
+        {
+            if (TriggerProbabilityPercent.ProbabilityBool())
+            {
+                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                {
+                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
+                }
+            }
+        }
+    }
+
+    private bool CheckEPSCondition()
+    {
+        foreach (EPSConditional epsConditional in EPSConditionals)
+        {
+            if (!epsConditional.Condition) return false;
+        }
+
+        return true;
+    }
+
     public override void OnBeingLift(Actor actor)
     {
         base.OnBeingLift(actor);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingLift))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingLift))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -283,7 +307,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnBeingKicked(Actor actor)
     {
         base.OnBeingKicked(actor);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingKicked))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingKicked))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -306,7 +330,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnFlyingCollisionEnter(Collision collision)
     {
         base.OnFlyingCollisionEnter(collision);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnFlyingCollisionEnter))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnFlyingCollisionEnter))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -329,7 +353,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnBeingKickedCollisionEnter(Collision collision, Box.KickAxis kickLocalAxis)
     {
         base.OnBeingKickedCollisionEnter(collision, kickLocalAxis);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingKickedCollisionEnter))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingKickedCollisionEnter))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -352,7 +376,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnDroppingFromAirCollisionEnter(Collision collision)
     {
         base.OnDroppingFromAirCollisionEnter(collision);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnDroppingFromAirCollisionEnter))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnDroppingFromAirCollisionEnter))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -375,7 +399,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnTriggerZoneEnter(Collider collider)
     {
         base.OnTriggerZoneEnter(collider);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZone))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZone))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -393,7 +417,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnTriggerZoneStay(Collider collider)
     {
         base.OnTriggerZoneStay(collider);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZone))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZone))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -411,7 +435,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnTriggerZoneExit(Collider collider)
     {
         base.OnTriggerZoneExit(collider);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZone))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityTriggerZone))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -429,7 +453,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnGrindTriggerZoneEnter(Collider collider)
     {
         base.OnGrindTriggerZoneEnter(collider);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityGrindTriggerZone))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityGrindTriggerZone))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -447,7 +471,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnGrindTriggerZoneStay(Collider collider)
     {
         base.OnGrindTriggerZoneStay(collider);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityGrindTriggerZone))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityGrindTriggerZone))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -465,7 +489,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnGrindTriggerZoneExit(Collider collider)
     {
         base.OnGrindTriggerZoneExit(collider);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityGrindTriggerZone))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityGrindTriggerZone))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -483,7 +507,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnBeforeDestroyEntity()
     {
         base.OnBeforeDestroyEntity();
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeforeDestroyEntity))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeforeDestroyEntity))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -501,7 +525,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnDestroyEntity()
     {
         base.OnDestroyEntity();
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnDestroyEntity))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnDestroyEntity))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -521,7 +545,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnBeforeMergeBox()
     {
         base.OnBeforeMergeBox();
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeforeMergeBox))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeforeMergeBox))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -539,7 +563,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnMergeBox()
     {
         base.OnMergeBox();
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnMergeBox))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnMergeBox))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -559,7 +583,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnDestroyEntityByElementDamage(EntityBuffAttribute entityBuffAttribute)
     {
         base.OnDestroyEntityByElementDamage(entityBuffAttribute);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnDestroyEntityByElementDamage))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnDestroyEntityByElementDamage))
         {
             if (DestroyEntityByElementDamageTypeSet.Contains(entityBuffAttribute))
             {
@@ -580,7 +604,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnBeingFueled()
     {
         base.OnBeingFueled();
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingFueled))
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingFueled))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
@@ -595,30 +619,34 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
     }
 
-    public override void OnEntityStatValueChange(EntityStatType entityStatType)
+    public override void OnEntityStatValueChange(EntityStatType entityStatType, int before, int after)
     {
-        base.OnEntityStatValueChange(entityStatType);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityStatValueChange))
+        base.OnEntityStatValueChange(entityStatType, before, after);
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityStatValueChange))
         {
             if (EntityStatChangeType == entityStatType)
             {
-                EntityStat stat = Entity.EntityStatPropSet.StatDict[EntityStatChangeType];
                 bool trigger = false;
-                switch (EntityStatChangeThresholdOperator)
+                switch (EntityStatChangeThresholdType)
                 {
-                    case Operator.LessEquals:
+                    case ValueChangeOverThresholdType.LE_to_G:
                     {
-                        trigger = stat.Value <= EntityStatChangeThreshold;
+                        trigger = before <= EntityStatChangeThreshold && after > EntityStatChangeThreshold;
                         break;
                     }
-                    case Operator.Equals:
+                    case ValueChangeOverThresholdType.L_to_GE:
                     {
-                        trigger = stat.Value == EntityStatChangeThreshold;
+                        trigger = before < EntityStatChangeThreshold && after >= EntityStatChangeThreshold;
                         break;
                     }
-                    case Operator.GreaterEquals:
+                    case ValueChangeOverThresholdType.GE_to_L:
                     {
-                        trigger = stat.Value >= EntityStatChangeThreshold;
+                        trigger = before >= EntityStatChangeThreshold && after < EntityStatChangeThreshold;
+                        break;
+                    }
+                    case ValueChangeOverThresholdType.G_to_LE:
+                    {
+                        trigger = before > EntityStatChangeThreshold && after <= EntityStatChangeThreshold;
                         break;
                     }
                 }
@@ -637,30 +665,34 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
     }
 
-    public override void OnEntityPropertyValueChange(EntityPropertyType entityPropertyType)
+    public override void OnEntityPropertyValueChange(EntityPropertyType entityPropertyType, int before, int after)
     {
-        base.OnEntityPropertyValueChange(entityPropertyType);
-        if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityPropertyValueChange))
+        base.OnEntityPropertyValueChange(entityPropertyType, before, after);
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityPropertyValueChange))
         {
             if (EntityPropertyChangeType == entityPropertyType)
             {
-                EntityProperty property = Entity.EntityStatPropSet.PropertyDict[EntityPropertyChangeType];
                 bool trigger = false;
-                switch (EntityPropertyChangeThresholdOperator)
+                switch (EntityPropertyChangeThresholdType)
                 {
-                    case Operator.LessEquals:
+                    case ValueChangeOverThresholdType.LE_to_G:
                     {
-                        trigger = property.GetModifiedValue <= EntityPropertyChangeThreshold;
+                        trigger = before <= EntityPropertyChangeThreshold && after > EntityPropertyChangeThreshold;
                         break;
                     }
-                    case Operator.Equals:
+                    case ValueChangeOverThresholdType.L_to_GE:
                     {
-                        trigger = property.GetModifiedValue == EntityPropertyChangeThreshold;
+                        trigger = before < EntityPropertyChangeThreshold && after >= EntityPropertyChangeThreshold;
                         break;
                     }
-                    case Operator.GreaterEquals:
+                    case ValueChangeOverThresholdType.GE_to_L:
                     {
-                        trigger = property.GetModifiedValue >= EntityPropertyChangeThreshold;
+                        trigger = before >= EntityPropertyChangeThreshold && after < EntityPropertyChangeThreshold;
+                        break;
+                    }
+                    case ValueChangeOverThresholdType.G_to_LE:
+                    {
+                        trigger = before > EntityPropertyChangeThreshold && after <= EntityPropertyChangeThreshold;
                         break;
                     }
                 }
@@ -748,14 +780,28 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         base.ChildClone(cloneData);
         EntityPassiveSkill_Conditional newPSC = (EntityPassiveSkill_Conditional) cloneData;
         newPSC.TriggerProbabilityPercent = TriggerProbabilityPercent;
+
+        newPSC.PassiveSkillCondition = PassiveSkillCondition;
+        newPSC.DestroyEntityByElementDamageTypeList = DestroyEntityByElementDamageTypeList.Clone<EntityBuffAttribute, EntityBuffAttribute>();
+
+        // Level Event Trigger
         newPSC.MultiEventTrigger = MultiEventTrigger;
         newPSC.ListenLevelEventAliasList = ListenLevelEventAliasList.Clone<string, string>();
         newPSC.ListenLevelEventAlias = ListenLevelEventAlias;
         newPSC.MaxTriggeredTimes = MaxTriggeredTimes;
 
-        newPSC.PassiveSkillCondition = PassiveSkillCondition;
-        newPSC.DestroyEntityByElementDamageTypeList = DestroyEntityByElementDamageTypeList.Clone<EntityBuffAttribute, EntityBuffAttribute>();
+        // OnEntityStatPropertyChange
         newPSC.EntityStatChangeType = EntityStatChangeType;
+        newPSC.EntityStatChangeThreshold = EntityStatChangeThreshold;
+        newPSC.EntityStatChangeThresholdType = EntityStatChangeThresholdType;
+        newPSC.EntityPropertyChangeType = EntityPropertyChangeType;
+        newPSC.EntityPropertyChangeThreshold = EntityPropertyChangeThreshold;
+        newPSC.EntityPropertyChangeThresholdType = EntityPropertyChangeThresholdType;
+
+        // EPSConditionals
+        newPSC.EPSConditionals = EPSConditionals.Clone<EPSConditional, EPSConditional>();
+
+        // Actions
         foreach (EntityPassiveSkillAction rawBoxPassiveSkillAction in RawEntityPassiveSkillActions)
         {
             EntityPassiveSkillAction newEPSA = rawBoxPassiveSkillAction.Clone();
@@ -767,6 +813,10 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     {
         base.CopyDataFrom(srcData);
         EntityPassiveSkill_Conditional srcPSC = (EntityPassiveSkill_Conditional) srcData;
+        PassiveSkillCondition = srcPSC.PassiveSkillCondition;
+        DestroyEntityByElementDamageTypeList = srcPSC.DestroyEntityByElementDamageTypeList.Clone<EntityBuffAttribute, EntityBuffAttribute>();
+
+        // Level Event Trigger
         TriggerProbabilityPercent = srcPSC.TriggerProbabilityPercent;
         MultiEventTrigger = srcPSC.MultiEventTrigger;
         ListenLevelEventAliasList.Clear();
@@ -778,9 +828,21 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         ListenLevelEventAlias = srcPSC.ListenLevelEventAlias;
         MaxTriggeredTimes = srcPSC.MaxTriggeredTimes;
 
-        PassiveSkillCondition = srcPSC.PassiveSkillCondition;
-        DestroyEntityByElementDamageTypeList = srcPSC.DestroyEntityByElementDamageTypeList.Clone<EntityBuffAttribute, EntityBuffAttribute>();
+        // OnEntityStatPropertyChange
         EntityStatChangeType = srcPSC.EntityStatChangeType;
+        EntityStatChangeThreshold = srcPSC.EntityStatChangeThreshold;
+        EntityStatChangeThresholdType = srcPSC.EntityStatChangeThresholdType;
+        EntityPropertyChangeType = srcPSC.EntityPropertyChangeType;
+        EntityPropertyChangeThreshold = srcPSC.EntityPropertyChangeThreshold;
+        EntityPropertyChangeThresholdType = srcPSC.EntityPropertyChangeThresholdType;
+
+        // EPSConditionals
+        for (int i = 0; i < srcPSC.EPSConditionals.Count; i++)
+        {
+            EPSConditionals[i].CopyDataFrom(srcPSC.EPSConditionals[i]);
+        }
+
+        // Actions
         if (srcPSC.RawEntityPassiveSkillActions.Count != RawEntityPassiveSkillActions.Count)
         {
             Debug.LogError("EPS_Conditional CopyDataFrom() Action数量不一致");
@@ -793,4 +855,177 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             }
         }
     }
+}
+
+[Serializable]
+public class EPSConditional : IClone<EPSConditional>
+{
+    [EnumToggleButtons]
+    [LabelText("状态或属性")]
+    public ConditionType m_ConditionType = ConditionType.Stat;
+
+    [LabelText("状态值种类")]
+    [ShowIf("m_ConditionType", ConditionType.Stat)]
+    public EntityStatType EntityStatType;
+
+    [LabelText("状态值阈值")]
+    [ShowIf("m_ConditionType", ConditionType.Stat)]
+    public int EntityStatThreshold;
+
+    private bool StatOrProperty => m_ConditionType == ConditionType.Stat || m_ConditionType == ConditionType.Property;
+
+    [LabelText("属性值种类")]
+    [ShowIf("m_ConditionType", ConditionType.Property)]
+    public EntityPropertyType EntityPropertyType;
+
+    [LabelText("属性值阈值")]
+    [ShowIf("m_ConditionType", ConditionType.Property)]
+    public int EntityPropertyThreshold;
+
+    [HideLabel]
+    [EnumToggleButtons]
+    [ShowIf("StatOrProperty")]
+    public Operator ThresholdOperator;
+
+    [LabelText("战场状态")]
+    [ShowIf("m_ConditionType", ConditionType.BattleStateBool)]
+    public string BattleStateBool = "";
+
+    [LabelText("满足条件持续时间/s")]
+    public float SatisfiedDuration = 0f;
+
+    private float satisfiedDurationTick = 0f;
+
+    private Entity Entity;
+
+    public void OnInit(Entity entity)
+    {
+        Entity = entity;
+        satisfiedDurationTick = 0f;
+    }
+
+    public void OnTick(float tickInterval)
+    {
+        if (Check())
+        {
+            satisfiedDurationTick += tickInterval;
+        }
+        else
+        {
+            satisfiedDurationTick = 0;
+        }
+    }
+
+    private bool Check()
+    {
+        switch (m_ConditionType)
+        {
+            case ConditionType.Stat:
+            {
+                EntityStat stat = Entity.EntityStatPropSet.StatDict[EntityStatType];
+                bool trigger = false;
+                switch (ThresholdOperator)
+                {
+                    case Operator.LessEquals:
+                    {
+                        trigger = stat.Value <= EntityStatThreshold;
+                        break;
+                    }
+                    case Operator.Equals:
+                    {
+                        trigger = stat.Value == EntityStatThreshold;
+                        break;
+                    }
+                    case Operator.GreaterEquals:
+                    {
+                        trigger = stat.Value >= EntityStatThreshold;
+                        break;
+                    }
+                }
+
+                return trigger;
+            }
+            case ConditionType.Property:
+            {
+                EntityProperty property = Entity.EntityStatPropSet.PropertyDict[EntityPropertyType];
+                bool trigger = false;
+                switch (ThresholdOperator)
+                {
+                    case Operator.LessEquals:
+                    {
+                        trigger = property.GetModifiedValue <= EntityStatThreshold;
+                        break;
+                    }
+                    case Operator.Equals:
+                    {
+                        trigger = property.GetModifiedValue == EntityStatThreshold;
+                        break;
+                    }
+                    case Operator.GreaterEquals:
+                    {
+                        trigger = property.GetModifiedValue >= EntityStatThreshold;
+                        break;
+                    }
+                }
+
+                return trigger;
+            }
+            case ConditionType.BattleStateBool:
+            {
+                return BattleManager.Instance.GetStateBool(BattleStateBool);
+            }
+        }
+
+        return false;
+    }
+
+    public bool Condition => satisfiedDurationTick >= SatisfiedDuration;
+
+    public EPSConditional Clone()
+    {
+        EPSConditional cloneData = new EPSConditional();
+        cloneData.m_ConditionType = m_ConditionType;
+        cloneData.EntityStatType = EntityStatType;
+        cloneData.EntityStatThreshold = EntityStatThreshold;
+        cloneData.EntityPropertyType = EntityPropertyType;
+        cloneData.EntityPropertyThreshold = EntityPropertyThreshold;
+        cloneData.ThresholdOperator = ThresholdOperator;
+        cloneData.BattleStateBool = BattleStateBool;
+        cloneData.SatisfiedDuration = SatisfiedDuration;
+        return cloneData;
+    }
+
+    public void CopyDataFrom(EPSConditional srcData)
+    {
+        m_ConditionType = srcData.m_ConditionType;
+        EntityStatType = srcData.EntityStatType;
+        EntityStatThreshold = srcData.EntityStatThreshold;
+        EntityPropertyType = srcData.EntityPropertyType;
+        EntityPropertyThreshold = srcData.EntityPropertyThreshold;
+        ThresholdOperator = srcData.ThresholdOperator;
+        BattleStateBool = srcData.BattleStateBool;
+        SatisfiedDuration = srcData.SatisfiedDuration;
+    }
+}
+
+public enum Operator
+{
+    LessEquals,
+    Equals,
+    GreaterEquals,
+}
+
+public enum ValueChangeOverThresholdType
+{
+    LE_to_G,
+    L_to_GE,
+    GE_to_L,
+    G_to_LE,
+}
+
+public enum ConditionType
+{
+    Stat = 0,
+    Property = 1,
+    BattleStateBool = 2,
 }

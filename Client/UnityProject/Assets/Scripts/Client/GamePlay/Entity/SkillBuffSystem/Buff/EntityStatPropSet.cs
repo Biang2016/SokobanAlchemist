@@ -411,11 +411,11 @@ public class EntityStatPropSet
         foreach (EntityStatType est in Enum.GetValues(typeof(EntityStatType)))
         {
             StatNotifyActionSetDict.Add(est, new Stat.NotifyActionSet());
-            StatNotifyActionSetDict[est].OnValueChanged += delegate
+            StatNotifyActionSetDict[est].OnValueChanged += delegate(int before, int after)
             {
                 foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
                 {
-                    eps.OnEntityStatValueChange(est);
+                    eps.OnEntityStatValueChange(est, before, after);
                 }
             };
         }
@@ -440,11 +440,11 @@ public class EntityStatPropSet
         foreach (EntityPropertyType ept in Enum.GetValues(typeof(EntityPropertyType)))
         {
             PropertyNotifyActionSetDict.Add(ept, new Property.NotifyActionSet());
-            PropertyNotifyActionSetDict[ept].OnValueChanged += delegate
+            PropertyNotifyActionSetDict[ept].OnValueChanged += delegate (int before, int after)
             {
                 foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
                 {
-                    eps.OnEntityPropertyValueChange(ept);
+                    eps.OnEntityPropertyValueChange(ept, before, after);
                 }
             };
         }

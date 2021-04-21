@@ -104,11 +104,11 @@ public abstract class EntityPassiveSkill : EntitySkill
     {
     }
 
-    public virtual void OnEntityStatValueChange(EntityStatType entityStatType)
+    public virtual void OnEntityStatValueChange(EntityStatType entityStatType, int before, int after)
     {
     }
 
-    public virtual void OnEntityPropertyValueChange(EntityPropertyType entityPropertyType)
+    public virtual void OnEntityPropertyValueChange(EntityPropertyType entityPropertyType, int before, int after)
     {
     }
 

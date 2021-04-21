@@ -755,7 +755,7 @@ PrefabInstance:
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityStatPropSet.MoveSpeed.BaseValue
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -1171,7 +1171,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _graph
       value: 
-      objectReference: {fileID: 11400000, guid: 239195d25a5bbe646996538baa19e505,
+      objectReference: {fileID: 11400000, guid: dc445a2f4b2672a43a9f42a161846692,
         type: 2}
     - target: {fileID: 2702892028185389631, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -1545,7 +1545,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _serializedBlackboard
       value: '{"_variables":{"KeepDistanceMin":{"_value":1.0,"_name":"KeepDistanceMin","_id":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax":{"_value":3.0,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax":{"_value":6.0,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"GuardRange":{"_value":10.0,"_name":"GuardRange","_id":"1e4fc14c-3815-4279-a6ee-25a727bd3bb0","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"ChasingRange":{"_value":12.0,"_name":"ChasingRange","_id":"dcaf01a2-8a92-4b8d-b523-e1a0efdcfefd","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IdleRadius":{"_value":8,"_name":"IdleRadius","_id":"26c88988-5b11-46e7-b0ba-b46818aa2ab6","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
@@ -1558,12 +1558,14 @@ PrefabInstance:
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"MeteorSkillStartCastPlayerDistance":{"_value":5.0,"_name":"MeteorSkillStartCastPlayerDistance","_id":"d33710d3-ec78-40f2-ac65-d2093818d348","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"BlizzardSkillStartCastPlayerDistance":{"_value":4.0,"_name":"BlizzardSkillStartCastPlayerDistance","_id":"79329c6a-a971-4075-8d60-8ff8398b470e","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"PoisonousSwampSkillStartCastPlayerDistance":{"_value":6,"_name":"PoisonousSwampSkillStartCastPlayerDistance","_id":"10e16ac4-8b84-427f-96a3-812c4271f9ff","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"MySkillIndices":{"_value":[0,1],"_name":"MySkillIndices","_id":"917fb615-1c22-4edf-857c-32f8c70967c7","$type":"NodeCanvas.Framework.Variable`1[[System.Collections.Generic.List`1[[EntitySkillIndex,
+        Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.size
-      value: 14
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -1574,7 +1576,7 @@ PrefabInstance:
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.data[1]._json
-      value: '{"_value":3.0,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+      value: '{"_value":6.0,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
@@ -1648,6 +1650,13 @@ PrefabInstance:
       propertyPath: _serializedVariables.Array.data[13]._json
       value: '{"_value":6,"_name":"PoisonousSwampSkillStartCastPlayerDistance","_id":"10e16ac4-8b84-427f-96a3-812c4271f9ff","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: _serializedVariables.Array.data[14]._json
+      value: '{"_value":[0,1],"_name":"MySkillIndices","_id":"917fb615-1c22-4edf-857c-32f8c70967c7","$type":"NodeCanvas.Framework.Variable`1[[System.Collections.Generic.List`1[[EntitySkillIndex,
+        Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ca8def23062cf242bafa7e081952811, type: 3}
