@@ -12,6 +12,22 @@ public class EntityBuff_EntityPropertyMultiplyModifier : EntityBuff
         MultiplyModifier = new Property.MultiplyModifier {Percent = Percent};
     }
 
+    [LabelText("属性分类")]
+    [EnumToggleButtons]
+    public PropertyCategory PropertyCategory;
+
+    [LabelText("属性类型")]
+    [ShowIf("PropertyCategory", PropertyCategory.EntityPropertyType)]
+    public EntityPropertyType EntityPropertyType;
+
+    [LabelText("技能GUID")]
+    [ShowIf("PropertyCategory", PropertyCategory.EntitySkillPropertyType)]
+    public string SkillGUID = "";
+
+    [LabelText("属性类型")]
+    [ShowIf("PropertyCategory", PropertyCategory.EntitySkillPropertyType)]
+    public EntitySkillPropertyType EntitySkillPropertyType;
+
     [LabelText("增加比率%")]
     public int Percent;
 
@@ -19,18 +35,32 @@ public class EntityBuff_EntityPropertyMultiplyModifier : EntityBuff
     [HideIf("IsPermanent")]
     public bool LinearDecayInDuration;
 
-    [LabelText("属性类型")]
-    public EntityPropertyType EntityPropertyType;
-
     internal Property.MultiplyModifier MultiplyModifier;
 
     public override void OnAdded(Entity entity, string extraInfo)
     {
         base.OnAdded(entity);
         if (!entity.IsNotNullAndAlive()) return;
-        if (entity.EntityStatPropSet.PropertyDict.TryGetValue(EntityPropertyType, out EntityProperty property))
+        switch (PropertyCategory)
         {
-            property.AddModifier(MultiplyModifier);
+            case PropertyCategory.EntityPropertyType:
+            {
+                if (entity.EntityStatPropSet.PropertyDict.TryGetValue(EntityPropertyType, out EntityProperty property))
+                {
+                    property.AddModifier(MultiplyModifier);
+                }
+
+                break;
+            }
+            case PropertyCategory.EntitySkillPropertyType:
+            {
+                if (entity.EntityActiveSkillGUIDDict.TryGetValue(SkillGUID, out EntityActiveSkill eas))
+                {
+                    eas.SkillsPropertyCollection.PropertyDict[EntitySkillPropertyType].AddModifier(MultiplyModifier);
+                }
+
+                break;
+            }
         }
     }
 
@@ -48,11 +78,31 @@ public class EntityBuff_EntityPropertyMultiplyModifier : EntityBuff
     {
         base.OnRemoved(entity);
         if (!entity.IsNotNullAndAlive()) return;
-        if (entity.EntityStatPropSet.PropertyDict.TryGetValue(EntityPropertyType, out EntityProperty property))
+        switch (PropertyCategory)
         {
-            if (!property.RemoveModifier(MultiplyModifier))
+            case PropertyCategory.EntityPropertyType:
             {
-                Debug.Log($"RemoveMultiplyModifier: {EntityPropertyType} failed from {entity.name}");
+                if (entity.EntityStatPropSet.PropertyDict.TryGetValue(EntityPropertyType, out EntityProperty property))
+                {
+                    if (!property.RemoveModifier(MultiplyModifier))
+                    {
+                        Debug.Log($"RemoveMultiplyModifier: {EntityPropertyType} failed from {entity.name}");
+                    }
+                }
+
+                break;
+            }
+            case PropertyCategory.EntitySkillPropertyType:
+            {
+                if (entity.EntityActiveSkillGUIDDict.TryGetValue(SkillGUID, out EntityActiveSkill eas))
+                {
+                    if (!eas.SkillsPropertyCollection.PropertyDict[EntitySkillPropertyType].RemoveModifier(MultiplyModifier))
+                    {
+                        Debug.Log($"RemoveSkillMultiplyModifier: {EntityPropertyType} failed from {entity.name} {eas.SkillAlias}");
+                    }
+                }
+
+                break;
             }
         }
 
@@ -63,9 +113,12 @@ public class EntityBuff_EntityPropertyMultiplyModifier : EntityBuff
     {
         base.ChildClone(newBuff);
         EntityBuff_EntityPropertyMultiplyModifier buff = ((EntityBuff_EntityPropertyMultiplyModifier) newBuff);
+        buff.PropertyCategory = PropertyCategory;
+        buff.EntityPropertyType = EntityPropertyType;
+        buff.SkillGUID = SkillGUID;
+        buff.EntitySkillPropertyType = EntitySkillPropertyType;
         buff.Percent = Percent;
         buff.LinearDecayInDuration = LinearDecayInDuration;
-        buff.EntityPropertyType = EntityPropertyType;
         buff.MultiplyModifier = new Property.MultiplyModifier {Percent = Percent};
     }
 
@@ -73,9 +126,12 @@ public class EntityBuff_EntityPropertyMultiplyModifier : EntityBuff
     {
         base.CopyDataFrom(srcData);
         EntityBuff_EntityPropertyMultiplyModifier srcBuff = ((EntityBuff_EntityPropertyMultiplyModifier) srcData);
+        PropertyCategory = srcBuff.PropertyCategory;
+        EntityPropertyType = srcBuff.EntityPropertyType;
+        SkillGUID = srcBuff.SkillGUID;
+        EntitySkillPropertyType = srcBuff.EntitySkillPropertyType;
         Percent = srcBuff.Percent;
         LinearDecayInDuration = srcBuff.LinearDecayInDuration;
-        EntityPropertyType = srcBuff.EntityPropertyType;
         MultiplyModifier = new Property.MultiplyModifier {Percent = srcBuff.Percent};
     }
 }

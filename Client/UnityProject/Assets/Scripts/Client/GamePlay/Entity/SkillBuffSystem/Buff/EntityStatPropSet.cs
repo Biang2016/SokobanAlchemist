@@ -440,7 +440,7 @@ public class EntityStatPropSet
         foreach (EntityPropertyType ept in Enum.GetValues(typeof(EntityPropertyType)))
         {
             PropertyNotifyActionSetDict.Add(ept, new Property.NotifyActionSet());
-            PropertyNotifyActionSetDict[ept].OnValueChanged += delegate (int before, int after)
+            PropertyNotifyActionSetDict[ept].OnValueChanged += delegate(int before, int after)
             {
                 foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
                 {
@@ -607,7 +607,7 @@ public class EntityStatPropSet
     private void OnFrozenValueChanged(int before, int after)
     {
         FrozenLevel.SetValue(after / FrozenValuePerLevel, "FrozenValueChange");
-        if (FrozenLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FrozenValue, FrozenFX, FrozenLevel.Value); // 冰冻值变化时，播放一次特效
+        if (FrozenLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX(EntityStatType.FrozenValue, FrozenFX, FrozenLevel.Value); // 冰冻值变化时，播放一次特效
     }
 
     private void OnFiringResistanceChanged(int before, int after)
@@ -619,8 +619,8 @@ public class EntityStatPropSet
     {
         FiringLevel.SetValue(Mathf.RoundToInt(after / FiringValuePerLevel), "FiringValueChange");
         if (FiringLevel.Value > 0)
-            Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FiringValue, FiringFX, FiringLevel.Value); // 燃烧值变化时，播放一次特效
-        else if (after == 0) Entity.EntityBuffHelper.RemoveAbnormalStatFX((int) EntityStatType.FiringValue);
+            Entity.EntityBuffHelper.PlayAbnormalStatFX(EntityStatType.FiringValue, FiringFX, FiringLevel.Value); // 燃烧值变化时，播放一次特效
+        else if (after == 0) Entity.EntityBuffHelper.RemoveAbnormalStatFX(EntityStatType.FiringValue);
     }
 
     private void OnFiringValueIncrease(int increase)

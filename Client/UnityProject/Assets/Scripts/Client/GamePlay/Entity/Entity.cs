@@ -292,10 +292,6 @@ public abstract class Entity : PoolObject
 
     protected virtual void InitPassiveSkills()
     {
-        if (EntityPassiveSkills == null) EntityPassiveSkills = new List<EntityPassiveSkill>();
-        if (EntityPassiveSkillGUIDDict == null) EntityPassiveSkillGUIDDict = new Dictionary<string, EntityPassiveSkill>();
-        if (cachedRemoveList_EntityPassiveSkill == null) cachedRemoveList_EntityPassiveSkill = new List<EntityPassiveSkill>();
-
         PassiveSkillMarkAsDestroyed = false;
 
         for (int i = 0; i < RawEntityPassiveSkillSOs.Count; i++)
@@ -316,7 +312,7 @@ public abstract class Entity : PoolObject
                 }
                 else
                 {
-                    Debug.Log($"{name}已存在相同GUID的被动技能{rawEPS}");
+                    Debug.LogError($"{name}已存在相同GUID的被动技能{rawEPS.SkillAlias}");
                 }
             }
 
@@ -330,7 +326,7 @@ public abstract class Entity : PoolObject
 
         if (EntityPassiveSkills.Count != RawEntityPassiveSkillSOs.Count)
         {
-            Debug.Log($"{name}被动技能数量不一致");
+            Debug.LogError($"{name}被动技能数量不一致");
         }
 
         foreach (EntityPassiveSkill eps in EntityPassiveSkills)
@@ -395,7 +391,9 @@ public abstract class Entity : PoolObject
     [HideInInspector]
     public SortedDictionary<EntitySkillIndex, EntityActiveSkill> EntityActiveSkillDict = new SortedDictionary<EntitySkillIndex, EntityActiveSkill>(); // 技能编号，只包含所有母技能
 
-    private List<EntitySkillIndex> cachedRemoveList_EntityActiveSkill = new List<EntitySkillIndex>(16);
+    public Dictionary<string, EntityActiveSkill> EntityActiveSkillGUIDDict = new Dictionary<string, EntityActiveSkill>(); // 便于使用GUID来索引到技能
+
+    private List<EntityActiveSkill> cachedRemoveList_EntityActiveSkill = new List<EntityActiveSkill>(16);
 
     internal bool ActiveSkillMarkAsDestroyed = false;
 
@@ -417,12 +415,13 @@ public abstract class Entity : PoolObject
         cachedRemoveList_EntityActiveSkill.Clear();
         foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
         {
-            if (kv.Value.IsAddedDuringGamePlay) cachedRemoveList_EntityActiveSkill.Add(kv.Key);
+            if (kv.Value.IsAddedDuringGamePlay) cachedRemoveList_EntityActiveSkill.Add(kv.Value);
         }
 
-        foreach (EntitySkillIndex skillIndex in cachedRemoveList_EntityActiveSkill)
+        foreach (EntityActiveSkill eas in cachedRemoveList_EntityActiveSkill)
         {
-            EntityActiveSkillDict.Remove(skillIndex);
+            EntityActiveSkillDict.Remove(eas.EntitySkillIndex);
+            EntityActiveSkillGUIDDict.Remove(eas.SkillGUID);
         }
 
         for (int i = 0; i < RawEntityActiveSkillSOs.Count; i++)
@@ -435,15 +434,26 @@ public abstract class Entity : PoolObject
             }
             else
             {
-                eas = (EntityActiveSkill) rawEAS.Clone();
-                EntityActiveSkillDict.Add(skillIndex, eas);
+                if (!EntityActiveSkillGUIDDict.ContainsKey(rawEAS.SkillGUID))
+                {
+                    eas = (EntityActiveSkill) rawEAS.Clone();
+                    EntityActiveSkillDict.Add(skillIndex, eas);
+                    EntityActiveSkillGUIDDict.Add(eas.SkillGUID, eas);
+                }
+                else
+                {
+                    Debug.LogError($"{name}已存在相同GUID的主动技能{rawEAS.SkillAlias}");
+                }
             }
 
-            eas.Entity = this;
-            eas.IsAddedDuringGamePlay = false;
-            eas.ParentActiveSkill = null;
-            eas.EntitySkillIndex = skillIndex;
-            eas.OnInit();
+            if (eas != null)
+            {
+                eas.Entity = this;
+                eas.IsAddedDuringGamePlay = false;
+                eas.ParentActiveSkill = null;
+                eas.EntitySkillIndex = skillIndex;
+                eas.OnInit();
+            }
         }
 
         ActiveSkillMarkAsDestroyed = false;

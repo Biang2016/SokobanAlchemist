@@ -183,3 +183,9 @@ public enum EntitySkillPropertyType
     [LabelText("消耗电元素碎片量")]
     ConsumeLightningElementFragment = 10202,
 }
+
+public enum PropertyCategory
+{
+    EntityPropertyType = 0,
+    EntitySkillPropertyType = 1,
+}

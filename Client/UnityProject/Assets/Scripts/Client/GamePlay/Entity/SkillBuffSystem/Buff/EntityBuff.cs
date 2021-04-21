@@ -48,24 +48,12 @@ public abstract class EntityBuff : IClone<EntityBuff>
 
     #endregion
 
-    protected string validateBuffAttributeInfo = "";
-
     [LabelText("永久Buff")]
     public bool IsPermanent;
 
-    [LabelText("Buff持续时间")]
+    [LabelText("Buff持续时间/s")]
     [HideIf("IsPermanent")]
     public float Duration;
-
-    private bool ValidateDuration(float duration)
-    {
-        if (!IsPermanent && duration.Equals(0))
-        {
-            return false;
-        }
-
-        return true;
-    }
 
     [LabelText("@\"Buff特效\t\t\"+BuffFX")]
     public FXConfig BuffFX = new FXConfig();
