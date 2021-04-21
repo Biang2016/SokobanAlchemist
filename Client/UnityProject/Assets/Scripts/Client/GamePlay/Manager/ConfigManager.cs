@@ -984,7 +984,9 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 }
             }
 
+#if UNITY_EDITOR
             if (saveToAsset) GetBuffAttributeMatrixAsset().EntityBuffAttributeMatrix = EntityBuffAttributeMatrix;
+#endif
         }
     }
 

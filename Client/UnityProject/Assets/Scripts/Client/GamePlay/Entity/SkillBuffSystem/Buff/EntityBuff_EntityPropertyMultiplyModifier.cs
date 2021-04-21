@@ -1,5 +1,5 @@
-﻿using System;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 [Serializable]
@@ -20,6 +20,24 @@ public class EntityBuff_EntityPropertyMultiplyModifier : EntityBuff
     [ShowIf("PropertyCategory", PropertyCategory.EntityPropertyType)]
     public EntityPropertyType EntityPropertyType;
 
+    [LabelText("技能")]
+    [ShowIf("PropertyCategory", PropertyCategory.EntitySkillPropertyType)]
+    [OnValueChanged("RefreshSkillGUID")]
+    public EntitySkillSO EntitySkillSO;
+
+    public void RefreshSkillGUID()
+    {
+        if (EntitySkillSO != null)
+        {
+            SkillGUID = EntitySkillSO.EntitySkill.SkillGUID;
+        }
+        else
+        {
+            SkillGUID = "";
+        }
+    }
+
+    [ReadOnly]
     [LabelText("技能GUID")]
     [ShowIf("PropertyCategory", PropertyCategory.EntitySkillPropertyType)]
     public string SkillGUID = "";
@@ -54,6 +72,13 @@ public class EntityBuff_EntityPropertyMultiplyModifier : EntityBuff
             }
             case PropertyCategory.EntitySkillPropertyType:
             {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+                if (ConfigManager.GetEntitySkill(SkillGUID) == null)
+                {
+                    Debug.LogError($"EntitySkillSO Link invalid: {SkillGUID}");
+                }
+#endif
+
                 if (entity.EntityActiveSkillGUIDDict.TryGetValue(SkillGUID, out EntityActiveSkill eas))
                 {
                     eas.SkillsPropertyCollection.PropertyDict[EntitySkillPropertyType].AddModifier(MultiplyModifier);
@@ -94,6 +119,12 @@ public class EntityBuff_EntityPropertyMultiplyModifier : EntityBuff
             }
             case PropertyCategory.EntitySkillPropertyType:
             {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+                if (ConfigManager.GetEntitySkill(SkillGUID) == null)
+                {
+                    Debug.LogError($"EntitySkillSO Link invalid: {SkillGUID}");
+                }
+#endif
                 if (entity.EntityActiveSkillGUIDDict.TryGetValue(SkillGUID, out EntityActiveSkill eas))
                 {
                     if (!eas.SkillsPropertyCollection.PropertyDict[EntitySkillPropertyType].RemoveModifier(MultiplyModifier))

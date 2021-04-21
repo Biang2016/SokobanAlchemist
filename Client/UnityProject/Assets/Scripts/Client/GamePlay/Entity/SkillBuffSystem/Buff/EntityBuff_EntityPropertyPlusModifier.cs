@@ -19,6 +19,24 @@ public class EntityBuff_EntityPropertyPlusModifier : EntityBuff
     [LabelText("属性类型")]
     public EntityPropertyType EntityPropertyType;
 
+    [LabelText("技能")]
+    [ShowIf("PropertyCategory", PropertyCategory.EntitySkillPropertyType)]
+    [OnValueChanged("RefreshSkillGUID")]
+    public EntitySkillSO EntitySkillSO;
+
+    public void RefreshSkillGUID()
+    {
+        if (EntitySkillSO != null)
+        {
+            SkillGUID = EntitySkillSO.EntitySkill.SkillGUID;
+        }
+        else
+        {
+            SkillGUID = "";
+        }
+    }
+
+    [ReadOnly]
     [LabelText("技能GUID")]
     [ShowIf("PropertyCategory", PropertyCategory.EntitySkillPropertyType)]
     public string SkillGUID = "";

@@ -502,10 +502,7 @@ public partial class Box : Entity
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
 
-        if (BoxArtHelper == null || !BoxArtHelper.UseRandomOrientation)
-        {
-            SwitchEntityOrientation(entityData.EntityOrientation);
-        }
+        SwitchEntityOrientation(entityData.EntityOrientation);
 
         if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorBoxInteractHelper.GetInteractSkillType(EntityTypeIndex), EntityTypeIndex);
         ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
