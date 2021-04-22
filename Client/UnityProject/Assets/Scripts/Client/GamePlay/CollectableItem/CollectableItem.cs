@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class CollectableItem : PoolObject
 {
     [SerializeReference]
-    public EntityPassiveSkillAction EntityPassiveSkillAction_OnCollect;
+    public EntitySkillAction EntitySkillAction_OnCollect;
 
     [SerializeField]
     private Rigidbody Rigidbody;

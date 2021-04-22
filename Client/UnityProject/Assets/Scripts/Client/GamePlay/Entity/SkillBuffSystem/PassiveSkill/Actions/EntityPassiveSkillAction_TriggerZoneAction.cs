@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillAction, EntityPassiveSkillAction.ITriggerAction
+public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkillAction.ITriggerAction
 {
     public Dictionary<uint, float> ActorStayTimeDict = new Dictionary<uint, float>();
 
@@ -19,7 +19,7 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
         base.Init(initWorldModuleGUID);
         foreach (IPureAction pureAction in EntityActions_Enter)
         {
-            if (pureAction is EntityPassiveSkillAction action)
+            if (pureAction is EntitySkillAction action)
             {
                 action.Entity = Entity;
                 action.Init(InitWorldModuleGUID);
@@ -28,7 +28,7 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
 
         foreach (IPureAction pureAction in EntityActions_Stay)
         {
-            if (pureAction is EntityPassiveSkillAction action)
+            if (pureAction is EntitySkillAction action)
             {
                 action.Entity = Entity;
                 action.Init(InitWorldModuleGUID);
@@ -37,7 +37,7 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
 
         foreach (IPureAction pureAction in EntityActions_Exit)
         {
-            if (pureAction is EntityPassiveSkillAction action)
+            if (pureAction is EntitySkillAction action)
             {
                 action.Entity = Entity;
                 action.Init(InitWorldModuleGUID);
@@ -50,7 +50,7 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
         base.UnInit();
         foreach (IPureAction pureAction in EntityActions_Enter)
         {
-            if (pureAction is EntityPassiveSkillAction action)
+            if (pureAction is EntitySkillAction action)
             {
                 action.Entity = null;
                 action.UnInit();
@@ -59,7 +59,7 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
 
         foreach (IPureAction pureAction in EntityActions_Stay)
         {
-            if (pureAction is EntityPassiveSkillAction action)
+            if (pureAction is EntitySkillAction action)
             {
                 action.Entity = null;
                 action.UnInit();
@@ -68,7 +68,7 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
 
         foreach (IPureAction pureAction in EntityActions_Exit)
         {
-            if (pureAction is EntityPassiveSkillAction action)
+            if (pureAction is EntitySkillAction action)
             {
                 action.Entity = null;
                 action.UnInit();
@@ -197,10 +197,10 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
         }
     }
 
-    protected override void ChildClone(EntityPassiveSkillAction newAction)
+    protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        EntityPassiveSkillAction_TriggerZoneAction action = ((EntityPassiveSkillAction_TriggerZoneAction) newAction);
+        EntitySkillAction_TriggerZoneAction action = ((EntitySkillAction_TriggerZoneAction) newAction);
         action.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
         action.EntityActions_Enter = EntityActions_Enter.Clone<IPureAction, IPureAction>();
         action.EntityActions_Stay = EntityActions_Stay.Clone<IPureAction, IPureAction>();
@@ -212,10 +212,10 @@ public class EntityPassiveSkillAction_TriggerZoneAction : EntityPassiveSkillActi
         action.EntityActions_Exit = EntityActions_Exit.Clone<IPureAction, IPureAction>();
     }
 
-    public override void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        EntityPassiveSkillAction_TriggerZoneAction action = ((EntityPassiveSkillAction_TriggerZoneAction) srcData);
+        EntitySkillAction_TriggerZoneAction action = ((EntitySkillAction_TriggerZoneAction) srcData);
         EffectiveOnRelativeCamp = action.EffectiveOnRelativeCamp;
         EntityActions_Enter = action.EntityActions_Enter.Clone<IPureAction, IPureAction>();
         EntityActions_Stay = action.EntityActions_Stay.Clone<IPureAction, IPureAction>();

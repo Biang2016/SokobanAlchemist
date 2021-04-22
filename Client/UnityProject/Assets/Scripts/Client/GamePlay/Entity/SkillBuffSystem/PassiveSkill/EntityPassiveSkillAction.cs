@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public abstract class EntityPassiveSkillAction : IClone<EntityPassiveSkillAction>
+public abstract class EntitySkillAction : IClone<EntitySkillAction>
 {
     [ReadOnly]
     [HideInEditorMode]
@@ -47,19 +47,19 @@ public abstract class EntityPassiveSkillAction : IClone<EntityPassiveSkillAction
 
     internal Entity Entity;
 
-    public EntityPassiveSkillAction Clone()
+    public EntitySkillAction Clone()
     {
         Type type = GetType();
-        EntityPassiveSkillAction newAction = (EntityPassiveSkillAction) Activator.CreateInstance(type);
+        EntitySkillAction newAction = (EntitySkillAction) Activator.CreateInstance(type);
         ChildClone(newAction);
         return newAction;
     }
 
-    protected virtual void ChildClone(EntityPassiveSkillAction newAction)
+    protected virtual void ChildClone(EntitySkillAction newAction)
     {
     }
 
-    public virtual void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public virtual void CopyDataFrom(EntitySkillAction srcData)
     {
     }
 }

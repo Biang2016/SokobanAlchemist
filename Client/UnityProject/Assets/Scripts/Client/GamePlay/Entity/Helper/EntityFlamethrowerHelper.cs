@@ -92,7 +92,7 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
         FlamethrowerPassiveSkill?.OnUnRegisterLevelEventID();
         FlamethrowerPassiveSkill?.OnUnInit();
         FlamethrowerPassiveSkill = (EntityPassiveSkill_Conditional) FlamethrowerPassiveSkill_Raw.Clone(); // 再次创建空技能容器
-        FlamethrowerPassiveSkill.RawEntityPassiveSkillActions = CurrentFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower;
+        FlamethrowerPassiveSkill.RawEntitySkillActions = CurrentFlamethrowerFuelData.RawEntitySkillActions_ForFlamethrower;
         FlamethrowerPassiveSkill.Entity = Entity;
         FlamethrowerPassiveSkill.OnInit();
         FlamethrowerPassiveSkill.OnRegisterLevelEventID();
@@ -180,7 +180,7 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
         [SerializeReference]
         [LabelText("火焰效果")]
         [ListDrawerSettings(ListElementLabelName = "Description")]
-        public List<EntityPassiveSkillAction> RawEntityPassiveSkillActions_ForFlamethrower = new List<EntityPassiveSkillAction>(); // 干数据，禁修改
+        public List<EntitySkillAction> RawEntitySkillActions_ForFlamethrower = new List<EntitySkillAction>(); // 干数据，禁修改
 
         public FlamethrowerFuelData Clone()
         {
@@ -188,7 +188,7 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
             newData.FlameLength = FlameLength;
             newData.FlameDuration = FlameDuration;
             newData.FlameColor = FlameColor;
-            newData.RawEntityPassiveSkillActions_ForFlamethrower = RawEntityPassiveSkillActions_ForFlamethrower.Clone<EntityPassiveSkillAction, EntityPassiveSkillAction>();
+            newData.RawEntitySkillActions_ForFlamethrower = RawEntitySkillActions_ForFlamethrower.Clone<EntitySkillAction, EntitySkillAction>();
             return newData;
         }
     }

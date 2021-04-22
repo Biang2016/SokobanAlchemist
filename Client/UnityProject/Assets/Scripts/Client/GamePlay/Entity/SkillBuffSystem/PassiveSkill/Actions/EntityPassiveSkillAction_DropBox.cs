@@ -8,7 +8,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 [Serializable]
-public class EntityPassiveSkillAction_DropBox : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction
+public class EntitySkillAction_DropBox : EntitySkillAction, EntitySkillAction.IPureAction
 {
     [LabelText("箱子类型概率")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
@@ -49,10 +49,10 @@ public class EntityPassiveSkillAction_DropBox : EntityPassiveSkillAction, Entity
         }
     }
 
-    protected override void ChildClone(EntityPassiveSkillAction newAction)
+    protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        EntityPassiveSkillAction_DropBox action = ((EntityPassiveSkillAction_DropBox) newAction);
+        EntitySkillAction_DropBox action = ((EntitySkillAction_DropBox) newAction);
         action.DropBoxList = DropBoxList.Clone<BoxNameWithProbability, BoxNameWithProbability>();
         action.DropBoxCountMin = DropBoxCountMin;
         action.DropBoxCountMax = DropBoxCountMax;
@@ -60,10 +60,10 @@ public class EntityPassiveSkillAction_DropBox : EntityPassiveSkillAction, Entity
         action.DropVelocity = DropVelocity;
     }
 
-    public override void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        EntityPassiveSkillAction_DropBox action = ((EntityPassiveSkillAction_DropBox) srcData);
+        EntitySkillAction_DropBox action = ((EntitySkillAction_DropBox) srcData);
         DropBoxList = action.DropBoxList.Clone<BoxNameWithProbability, BoxNameWithProbability>();
         DropBoxCountMin = action.DropBoxCountMin;
         DropBoxCountMax = action.DropBoxCountMax;

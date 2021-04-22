@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [Serializable]
-public abstract class ActorPassiveSkillAction : EntityPassiveSkillAction
+public abstract class ActorSkillAction : EntitySkillAction
 {
     protected override string Description => "Actor被动技能行为基类";
 

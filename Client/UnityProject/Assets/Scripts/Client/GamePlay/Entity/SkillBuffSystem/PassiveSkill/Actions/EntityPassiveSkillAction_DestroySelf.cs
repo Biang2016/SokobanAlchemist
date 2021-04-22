@@ -1,7 +1,7 @@
 ﻿using System;
 
 [Serializable]
-public class EntityPassiveSkillAction_DestroySelf : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction
+public class EntitySkillAction_DestroySelf : EntitySkillAction, EntitySkillAction.IPureAction
 {
     public override void OnRecycled()
     {
@@ -14,15 +14,15 @@ public class EntityPassiveSkillAction_DestroySelf : EntityPassiveSkillAction, En
         Entity.PassiveSkillMarkAsDestroyed = true;
     }
 
-    protected override void ChildClone(EntityPassiveSkillAction newAction)
+    protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        EntityPassiveSkillAction_DestroySelf action = ((EntityPassiveSkillAction_DestroySelf) newAction);
+        EntitySkillAction_DestroySelf action = ((EntitySkillAction_DestroySelf) newAction);
     }
 
-    public override void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        EntityPassiveSkillAction_DestroySelf action = ((EntityPassiveSkillAction_DestroySelf) srcData);
+        EntitySkillAction_DestroySelf action = ((EntitySkillAction_DestroySelf) srcData);
     }
 }

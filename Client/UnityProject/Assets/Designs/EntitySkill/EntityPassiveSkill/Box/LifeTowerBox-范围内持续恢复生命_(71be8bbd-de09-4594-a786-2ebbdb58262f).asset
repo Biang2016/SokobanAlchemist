@@ -40,12 +40,12 @@ MonoBehaviour:
         ListenLevelEventAliasList: []
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
-        RawEntityPassiveSkillActions:
+        RawEntitySkillActions:
         - id: 1
         - id: 2
         - id: 3
     00000001:
-      type: {class: EntityPassiveSkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
+      type: {class: EntitySkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         AddBuffRadius: 5
@@ -54,7 +54,7 @@ MonoBehaviour:
         RawEntityBuffs:
         - id: 4
     00000002:
-      type: {class: EntityPassiveSkillAction_PlayFX, ns: , asm: Client}
+      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         FX:
@@ -70,7 +70,7 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
     00000003:
-      type: {class: EntityPassiveSkillAction_AddEntityBuffToSelf, ns: , asm: Client}
+      type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         RawEntityBuffs:

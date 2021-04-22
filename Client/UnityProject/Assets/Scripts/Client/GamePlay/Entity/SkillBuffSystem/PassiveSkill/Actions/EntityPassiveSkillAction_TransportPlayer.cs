@@ -5,7 +5,7 @@ using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 
 [Serializable]
-public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, EntityPassiveSkillAction.IPureAction
+public class EntitySkillAction_TransportPlayer : BoxSkillAction, EntitySkillAction.IPureAction
 {
     public override void OnRecycled()
     {
@@ -40,17 +40,17 @@ public class EntityPassiveSkillAction_TransportPlayer : BoxPassiveSkillAction, E
         }
     }
 
-    protected override void ChildClone(EntityPassiveSkillAction newAction)
+    protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        EntityPassiveSkillAction_TransportPlayer action = ((EntityPassiveSkillAction_TransportPlayer) newAction);
+        EntitySkillAction_TransportPlayer action = ((EntitySkillAction_TransportPlayer) newAction);
         action.WorldProbList = WorldProbList.Clone<WorldNameWithProbability, WorldNameWithProbability>();
     }
 
-    public override void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        EntityPassiveSkillAction_TransportPlayer action = ((EntityPassiveSkillAction_TransportPlayer) srcData);
+        EntitySkillAction_TransportPlayer action = ((EntitySkillAction_TransportPlayer) srcData);
         WorldProbList = action.WorldProbList.Clone<WorldNameWithProbability, WorldNameWithProbability>();
     }
 }

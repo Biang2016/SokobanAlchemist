@@ -4,7 +4,7 @@ using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 
 [Serializable]
-public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, EntityPassiveSkillAction.IPureAction
+public class BoxSkillAction_ChangeBoxType : BoxSkillAction, EntitySkillAction.IPureAction
 {
     public override void OnRecycled()
     {
@@ -53,18 +53,18 @@ public class BoxPassiveSkillAction_ChangeBoxType : BoxPassiveSkillAction, Entity
         }
     }
 
-    protected override void ChildClone(EntityPassiveSkillAction newAction)
+    protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType) newAction);
+        BoxSkillAction_ChangeBoxType action = ((BoxSkillAction_ChangeBoxType) newAction);
         action.EntityData = EntityData.Clone();
         action.ChangeForEveryGrid = ChangeForEveryGrid;
     }
 
-    public override void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        BoxPassiveSkillAction_ChangeBoxType action = ((BoxPassiveSkillAction_ChangeBoxType) srcData);
+        BoxSkillAction_ChangeBoxType action = ((BoxSkillAction_ChangeBoxType) srcData);
         EntityData = action.EntityData.Clone();
         ChangeForEveryGrid = action.ChangeForEveryGrid;
     }

@@ -113,9 +113,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 {
                     if (TriggerProbabilityPercent.ProbabilityBool())
                     {
-                        foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                        foreach (EntitySkillAction action in EntitySkillActions)
                         {
-                            if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                            if (action is EntitySkillAction.IPureAction pureAction)
                             {
                                 pureAction.Execute();
                             }
@@ -224,14 +224,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             epsConditional.OnInit(Entity);
         }
 
-        InitPassiveSkillActions();
+        InitSkillActions();
         if (PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnInit))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
                     }
@@ -260,9 +260,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
                     }
@@ -288,14 +288,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
                     }
 
-                    if (action is EntityPassiveSkillAction.IActorOperationAction actorOperationAction)
+                    if (action is EntitySkillAction.IActorOperationAction actorOperationAction)
                     {
                         actorOperationAction.OnOperation(actor);
                     }
@@ -311,14 +311,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
                     }
 
-                    if (action is EntityPassiveSkillAction.IActorOperationAction actorOperationAction)
+                    if (action is EntitySkillAction.IActorOperationAction actorOperationAction)
                     {
                         actorOperationAction.OnOperation(actor);
                     }
@@ -334,14 +334,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
                     }
 
-                    if (action is EntityPassiveSkillAction.ICollideAction collideAction)
+                    if (action is EntitySkillAction.ICollideAction collideAction)
                     {
                         collideAction.OnCollide(collision);
                     }
@@ -357,14 +357,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
                     }
 
-                    if (action is EntityPassiveSkillAction.ICollideAction collideAction)
+                    if (action is EntitySkillAction.ICollideAction collideAction)
                     {
                         collideAction.OnCollide(collision);
                     }
@@ -380,14 +380,14 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
                     }
 
-                    if (action is EntityPassiveSkillAction.ICollideAction collideAction)
+                    if (action is EntitySkillAction.ICollideAction collideAction)
                     {
                         collideAction.OnCollide(collision);
                     }
@@ -403,9 +403,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                    if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
                         collideAction.OnTriggerEnter(collider);
                     }
@@ -421,9 +421,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                    if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
                         collideAction.OnTriggerStay(collider);
                     }
@@ -439,9 +439,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                    if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
                         collideAction.OnTriggerExit(collider);
                     }
@@ -457,9 +457,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                    if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
                         collideAction.OnTriggerEnter(collider);
                     }
@@ -475,9 +475,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                    if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
                         collideAction.OnTriggerStay(collider);
                     }
@@ -493,9 +493,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.ITriggerAction collideAction)
+                    if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
                         collideAction.OnTriggerExit(collider);
                     }
@@ -511,9 +511,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
                     }
@@ -529,9 +529,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
                     }
@@ -539,7 +539,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             }
         }
 
-        UnInitPassiveSkillActions();
+        UnInitSkillActions();
     }
 
     public override void OnBeforeMergeBox()
@@ -549,9 +549,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
                     }
@@ -567,9 +567,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
                     }
@@ -577,7 +577,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             }
         }
 
-        UnInitPassiveSkillActions();
+        UnInitSkillActions();
     }
 
     public override void OnDestroyEntityByElementDamage(EntityBuffAttribute entityBuffAttribute)
@@ -589,9 +589,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             {
                 if (TriggerProbabilityPercent.ProbabilityBool())
                 {
-                    foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                    foreach (EntitySkillAction action in EntitySkillActions)
                     {
-                        if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                        if (action is EntitySkillAction.IPureAction pureAction)
                         {
                             pureAction.Execute();
                         }
@@ -608,9 +608,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
             {
-                foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                    if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
                     }
@@ -653,9 +653,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                 if (trigger && TriggerProbabilityPercent.ProbabilityBool())
                 {
-                    foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                    foreach (EntitySkillAction action in EntitySkillActions)
                     {
-                        if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                        if (action is EntitySkillAction.IPureAction pureAction)
                         {
                             pureAction.Execute();
                         }
@@ -699,9 +699,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                 if (trigger && TriggerProbabilityPercent.ProbabilityBool())
                 {
-                    foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+                    foreach (EntitySkillAction action in EntitySkillActions)
                     {
-                        if (action is EntityPassiveSkillAction.IPureAction pureAction)
+                        if (action is EntitySkillAction.IPureAction pureAction)
                         {
                             pureAction.Execute();
                         }
@@ -718,55 +718,55 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     [SerializeReference]
     [LabelText("具体内容")]
     [ListDrawerSettings(ListElementLabelName = "Description")]
-    public List<EntityPassiveSkillAction> RawEntityPassiveSkillActions = new List<EntityPassiveSkillAction>(); // 干数据，禁修改
+    public List<EntitySkillAction> RawEntitySkillActions = new List<EntitySkillAction>(); // 干数据，禁修改
 
     [HideInInspector]
-    public List<EntityPassiveSkillAction> EntityPassiveSkillActions = new List<EntityPassiveSkillAction>(); // 湿数据，每个Entity生命周期开始前从干数据数据拷贝，数量永远和干数据相等
+    public List<EntitySkillAction> EntitySkillActions = new List<EntitySkillAction>(); // 湿数据，每个Entity生命周期开始前从干数据数据拷贝，数量永远和干数据相等
 
-    internal bool EntityPassiveSkillActionsMarkAsDeleted = false;
+    internal bool EntitySkillActionsMarkAsDeleted = false;
 
-    private void InitPassiveSkillActions()
+    private void InitSkillActions()
     {
-        if (EntityPassiveSkillActions.Count > 0)
+        if (EntitySkillActions.Count > 0)
         {
-            foreach (EntityPassiveSkillAction epsa in EntityPassiveSkillActions) // 放在Init里清空，避免在UnInit里出现Entity死亡而modify collection的情况
+            foreach (EntitySkillAction esa in EntitySkillActions) // 放在Init里清空，避免在UnInit里出现Entity死亡而modify collection的情况
             {
-                epsa.OnRecycled();
+                esa.OnRecycled();
             }
 
-            if (EntityPassiveSkillActions.Count == RawEntityPassiveSkillActions.Count)
+            if (EntitySkillActions.Count == RawEntitySkillActions.Count)
             {
-                for (int i = 0; i < RawEntityPassiveSkillActions.Count; i++)
+                for (int i = 0; i < RawEntitySkillActions.Count; i++)
                 {
-                    EntityPassiveSkillAction epsa = EntityPassiveSkillActions[i];
-                    epsa.Entity = Entity;
-                    epsa.CopyDataFrom(RawEntityPassiveSkillActions[i]);
-                    epsa.Init(InitWorldModuleGUID);
+                    EntitySkillAction esa = EntitySkillActions[i];
+                    esa.Entity = Entity;
+                    esa.CopyDataFrom(RawEntitySkillActions[i]);
+                    esa.Init(InitWorldModuleGUID);
                 }
             }
             else
             {
-                Debug.Log("EntityPassiveSkillActions的数量和RawEntityPassiveSkillActions不一致，请检查临时EPSA添加情况");
+                Debug.Log("EntitySkillActions的数量和RawEntitySkillActions不一致，请检查临时EPSA添加情况");
             }
         }
         else
         {
-            foreach (EntityPassiveSkillAction rawAction in RawEntityPassiveSkillActions)
+            foreach (EntitySkillAction rawAction in RawEntitySkillActions)
             {
-                EntityPassiveSkillAction epsa = rawAction.Clone();
-                epsa.Entity = Entity;
-                EntityPassiveSkillActions.Add(epsa);
-                epsa.Init(InitWorldModuleGUID);
+                EntitySkillAction esa = rawAction.Clone();
+                esa.Entity = Entity;
+                EntitySkillActions.Add(esa);
+                esa.Init(InitWorldModuleGUID);
             }
         }
 
-        EntityPassiveSkillActionsMarkAsDeleted = false;
+        EntitySkillActionsMarkAsDeleted = false;
     }
 
-    private void UnInitPassiveSkillActions()
+    private void UnInitSkillActions()
     {
-        EntityPassiveSkillActionsMarkAsDeleted = false;
-        foreach (EntityPassiveSkillAction action in EntityPassiveSkillActions)
+        EntitySkillActionsMarkAsDeleted = false;
+        foreach (EntitySkillAction action in EntitySkillActions)
         {
             action.Entity = null;
             action.UnInit();
@@ -802,10 +802,10 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         newPSC.EPSConditionals = EPSConditionals.Clone<EPSConditional, EPSConditional>();
 
         // Actions
-        foreach (EntityPassiveSkillAction rawBoxPassiveSkillAction in RawEntityPassiveSkillActions)
+        foreach (EntitySkillAction rawBoxSkillAction in RawEntitySkillActions)
         {
-            EntityPassiveSkillAction newEPSA = rawBoxPassiveSkillAction.Clone();
-            newPSC.RawEntityPassiveSkillActions.Add(newEPSA);
+            EntitySkillAction newEPSA = rawBoxSkillAction.Clone();
+            newPSC.RawEntitySkillActions.Add(newEPSA);
         }
     }
 
@@ -843,15 +843,15 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
 
         // Actions
-        if (srcPSC.RawEntityPassiveSkillActions.Count != RawEntityPassiveSkillActions.Count)
+        if (srcPSC.RawEntitySkillActions.Count != RawEntitySkillActions.Count)
         {
             Debug.LogError("EPS_Conditional CopyDataFrom() Action数量不一致");
         }
         else
         {
-            for (int i = 0; i < srcPSC.RawEntityPassiveSkillActions.Count; i++)
+            for (int i = 0; i < srcPSC.RawEntitySkillActions.Count; i++)
             {
-                RawEntityPassiveSkillActions[i].CopyDataFrom(srcPSC.RawEntityPassiveSkillActions[i]);
+                RawEntitySkillActions[i].CopyDataFrom(srcPSC.RawEntitySkillActions[i]);
             }
         }
     }

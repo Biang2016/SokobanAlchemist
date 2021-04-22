@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public class EntityPassiveSkillAction_ChangeActiveSkillProperty : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction
+public class EntitySkillAction_ChangeActiveSkillProperty : EntitySkillAction, EntitySkillAction.IPureAction
 {
     public override void OnRecycled()
     {
@@ -34,17 +34,17 @@ public class EntityPassiveSkillAction_ChangeActiveSkillProperty : EntityPassiveS
         }
     }
 
-    protected override void ChildClone(EntityPassiveSkillAction newAction)
+    protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        EntityPassiveSkillAction_ChangeActiveSkillProperty action = ((EntityPassiveSkillAction_ChangeActiveSkillProperty) newAction);
+        EntitySkillAction_ChangeActiveSkillProperty action = ((EntitySkillAction_ChangeActiveSkillProperty) newAction);
         action.ActiveSkillGUID = ActiveSkillGUID;
     }
 
-    public override void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        EntityPassiveSkillAction_ChangeActiveSkillProperty action = ((EntityPassiveSkillAction_ChangeActiveSkillProperty) srcData);
+        EntitySkillAction_ChangeActiveSkillProperty action = ((EntitySkillAction_ChangeActiveSkillProperty) srcData);
         ActiveSkillGUID = action.ActiveSkillGUID;
     }
 }

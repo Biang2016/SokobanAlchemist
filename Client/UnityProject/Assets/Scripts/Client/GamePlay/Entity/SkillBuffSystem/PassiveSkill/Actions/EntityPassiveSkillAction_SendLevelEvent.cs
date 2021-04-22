@@ -2,7 +2,7 @@
 using Sirenix.OdinInspector;
 
 [Serializable]
-public class EntityPassiveSkillAction_SendLevelEvent : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction
+public class EntitySkillAction_SendLevelEvent : EntitySkillAction, EntitySkillAction.IPureAction
 {
     public override void OnRecycled()
     {
@@ -32,19 +32,19 @@ public class EntityPassiveSkillAction_SendLevelEvent : EntityPassiveSkillAction,
         }
     }
 
-    protected override void ChildClone(EntityPassiveSkillAction newAction)
+    protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        EntityPassiveSkillAction_SendLevelEvent bf = ((EntityPassiveSkillAction_SendLevelEvent) newAction);
+        EntitySkillAction_SendLevelEvent bf = ((EntitySkillAction_SendLevelEvent) newAction);
         bf.EmitEventAlias = EmitEventAlias;
         bf.SetStateAlias = SetStateAlias;
         bf.SetStateAliasValue = SetStateAliasValue;
     }
 
-    public override void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        EntityPassiveSkillAction_SendLevelEvent bf = ((EntityPassiveSkillAction_SendLevelEvent) srcData);
+        EntitySkillAction_SendLevelEvent bf = ((EntitySkillAction_SendLevelEvent) srcData);
         EmitEventAlias = bf.EmitEventAlias;
         SetStateAlias = bf.SetStateAlias;
         SetStateAliasValue = bf.SetStateAliasValue;

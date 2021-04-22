@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public class EntityPassiveSkillAction_RadiusAddEntitiesBuff : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction
+public class EntitySkillAction_RadiusAddEntitiesBuff : EntitySkillAction, EntitySkillAction.IPureAction
 {
     public override void OnRecycled()
     {
@@ -45,27 +45,27 @@ public class EntityPassiveSkillAction_RadiusAddEntitiesBuff : EntityPassiveSkill
         }
     }
 
-    protected override void ChildClone(EntityPassiveSkillAction newAction)
+    protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        EntityPassiveSkillAction_RadiusAddEntitiesBuff action = ((EntityPassiveSkillAction_RadiusAddEntitiesBuff) newAction);
+        EntitySkillAction_RadiusAddEntitiesBuff action = ((EntitySkillAction_RadiusAddEntitiesBuff) newAction);
         action.AddBuffRadius = AddBuffRadius;
         action.ExactGPDistance = ExactGPDistance;
         action.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
         action.RawEntityBuffs = RawEntityBuffs.Clone<EntityBuff, EntityBuff>();
     }
 
-    public override void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        EntityPassiveSkillAction_RadiusAddEntitiesBuff action = ((EntityPassiveSkillAction_RadiusAddEntitiesBuff) srcData);
+        EntitySkillAction_RadiusAddEntitiesBuff action = ((EntitySkillAction_RadiusAddEntitiesBuff) srcData);
         AddBuffRadius = action.AddBuffRadius;
         ExactGPDistance = action.ExactGPDistance;
         EffectiveOnRelativeCamp = action.EffectiveOnRelativeCamp;
 
         if (RawEntityBuffs.Count != action.RawEntityBuffs.Count)
         {
-            Debug.LogError("EntityPassiveSkillAction_RadiusAddEntitiesBuff CopyDataFrom RawEntityBuffs数量不一致");
+            Debug.LogError("EntitySkillAction_RadiusAddEntitiesBuff CopyDataFrom RawEntityBuffs数量不一致");
         }
         else
         {

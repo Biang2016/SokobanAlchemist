@@ -40,11 +40,11 @@ MonoBehaviour:
         ListenLevelEventAliasList: []
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
-        RawEntityPassiveSkillActions:
+        RawEntitySkillActions:
         - id: 1
         - id: 2
     00000001:
-      type: {class: EntityPassiveSkillAction_TriggerZoneEffect, ns: , asm: Client}
+      type: {class: EntitySkillAction_TriggerZoneEffect, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         EffectiveOnRelativeCamp: 6
@@ -58,7 +58,7 @@ MonoBehaviour:
         EffectInterval: 1
         RawEntityBuffs_Exit: []
     00000002:
-      type: {class: EntityPassiveSkillAction_TriggerZoneAction, ns: , asm: Client}
+      type: {class: EntitySkillAction_TriggerZoneAction, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         EffectiveOnRelativeCamp: 6
@@ -147,7 +147,7 @@ MonoBehaviour:
             m_PostInfinity: 0
             m_RotationOrder: 4
     00000006:
-      type: {class: EntityPassiveSkillAction_AddEntityBuffToSelf, ns: , asm: Client}
+      type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         RawEntityBuffs:

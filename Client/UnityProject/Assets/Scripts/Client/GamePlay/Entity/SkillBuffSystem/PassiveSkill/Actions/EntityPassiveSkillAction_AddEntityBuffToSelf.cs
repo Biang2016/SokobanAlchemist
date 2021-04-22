@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public class EntityPassiveSkillAction_AddEntityBuffToSelf : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction
+public class EntitySkillAction_AddEntityBuffToSelf : EntitySkillAction, EntitySkillAction.IPureAction
 {
     public override void OnRecycled()
     {
@@ -41,20 +41,20 @@ public class EntityPassiveSkillAction_AddEntityBuffToSelf : EntityPassiveSkillAc
         }
     }
 
-    protected override void ChildClone(EntityPassiveSkillAction newAction)
+    protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        EntityPassiveSkillAction_AddEntityBuffToSelf action = ((EntityPassiveSkillAction_AddEntityBuffToSelf) newAction);
+        EntitySkillAction_AddEntityBuffToSelf action = ((EntitySkillAction_AddEntityBuffToSelf) newAction);
         action.RawEntityBuffs = RawEntityBuffs.Clone<EntityBuff, EntityBuff>();
     }
 
-    public override void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        EntityPassiveSkillAction_AddEntityBuffToSelf action = ((EntityPassiveSkillAction_AddEntityBuffToSelf) srcData);
+        EntitySkillAction_AddEntityBuffToSelf action = ((EntitySkillAction_AddEntityBuffToSelf) srcData);
         if (RawEntityBuffs.Count != action.RawEntityBuffs.Count)
         {
-            Debug.LogError("EntityPassiveSkillAction_AddEntityBuffToSelf CopyDataFrom RawEntityBuffs数量不一致");
+            Debug.LogError("EntitySkillAction_AddEntityBuffToSelf CopyDataFrom RawEntityBuffs数量不一致");
         }
         else
         {

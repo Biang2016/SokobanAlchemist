@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public class EntityPassiveSkillAction_PlayFX : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction
+public class EntitySkillAction_PlayFX : EntitySkillAction, EntitySkillAction.IPureAction
 {
     public override void OnRecycled()
     {
@@ -31,17 +31,17 @@ public class EntityPassiveSkillAction_PlayFX : EntityPassiveSkillAction, EntityP
         }
     }
 
-    protected override void ChildClone(EntityPassiveSkillAction newAction)
+    protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        EntityPassiveSkillAction_PlayFX action = ((EntityPassiveSkillAction_PlayFX) newAction);
+        EntitySkillAction_PlayFX action = ((EntitySkillAction_PlayFX) newAction);
         action.FX = FX.Clone();
     }
 
-    public override void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        EntityPassiveSkillAction_PlayFX action = ((EntityPassiveSkillAction_PlayFX) srcData);
+        EntitySkillAction_PlayFX action = ((EntitySkillAction_PlayFX) srcData);
         FX.CopyDataFrom(action.FX);
     }
 }

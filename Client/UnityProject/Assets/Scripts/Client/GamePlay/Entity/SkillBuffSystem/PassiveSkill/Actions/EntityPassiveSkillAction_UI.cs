@@ -2,7 +2,7 @@
 using BiangLibrary.GamePlay.UI;
 
 [Serializable]
-public class EntityPassiveSkillAction_UI : EntityPassiveSkillAction, EntityPassiveSkillAction.IPureAction
+public class EntitySkillAction_UI : EntitySkillAction, EntitySkillAction.IPureAction
 {
     public override void OnRecycled()
     {
@@ -49,18 +49,18 @@ public class EntityPassiveSkillAction_UI : EntityPassiveSkillAction, EntityPassi
         }
     }
 
-    protected override void ChildClone(EntityPassiveSkillAction newAction)
+    protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        EntityPassiveSkillAction_UI action = ((EntityPassiveSkillAction_UI) newAction);
+        EntitySkillAction_UI action = ((EntitySkillAction_UI) newAction);
         action.UIName = UIName;
         action.Open = Open;
     }
 
-    public override void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        EntityPassiveSkillAction_UI action = ((EntityPassiveSkillAction_UI) srcData);
+        EntitySkillAction_UI action = ((EntitySkillAction_UI) srcData);
         UIName = action.UIName;
         Open = action.Open;
     }

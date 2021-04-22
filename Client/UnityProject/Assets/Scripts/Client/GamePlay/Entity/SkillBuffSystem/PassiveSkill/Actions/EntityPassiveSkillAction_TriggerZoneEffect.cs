@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public class EntityPassiveSkillAction_TriggerZoneEffect : EntityPassiveSkillAction, EntityPassiveSkillAction.ITriggerAction
+public class EntitySkillAction_TriggerZoneEffect : EntitySkillAction, EntitySkillAction.ITriggerAction
 {
     public Dictionary<uint, float> ActorStayTimeDict = new Dictionary<uint, float>();
 
@@ -152,10 +152,10 @@ public class EntityPassiveSkillAction_TriggerZoneEffect : EntityPassiveSkillActi
         }
     }
 
-    protected override void ChildClone(EntityPassiveSkillAction newAction)
+    protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        EntityPassiveSkillAction_TriggerZoneEffect action = ((EntityPassiveSkillAction_TriggerZoneEffect) newAction);
+        EntitySkillAction_TriggerZoneEffect action = ((EntitySkillAction_TriggerZoneEffect) newAction);
         action.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
         action.RawEntityBuffs_Enter = RawEntityBuffs_Enter.Clone<EntityBuff, EntityBuff>();
         action.RemoveEnterBuffWhenExit = RemoveEnterBuffWhenExit;
@@ -165,15 +165,15 @@ public class EntityPassiveSkillAction_TriggerZoneEffect : EntityPassiveSkillActi
         action.RawEntityBuffs_Exit = RawEntityBuffs_Exit.Clone<EntityBuff, EntityBuff>();
     }
 
-    public override void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        EntityPassiveSkillAction_TriggerZoneEffect action = ((EntityPassiveSkillAction_TriggerZoneEffect) srcData);
+        EntitySkillAction_TriggerZoneEffect action = ((EntitySkillAction_TriggerZoneEffect) srcData);
         EffectiveOnRelativeCamp = action.EffectiveOnRelativeCamp;
 
         if (RawEntityBuffs_Enter.Count != action.RawEntityBuffs_Enter.Count)
         {
-            Debug.LogError("EntityPassiveSkillAction_TriggerZoneEffect CopyDataFrom RawEntityBuffs_Enter数量不一致");
+            Debug.LogError("EntitySkillAction_TriggerZoneEffect CopyDataFrom RawEntityBuffs_Enter数量不一致");
         }
         else
         {
@@ -187,7 +187,7 @@ public class EntityPassiveSkillAction_TriggerZoneEffect : EntityPassiveSkillActi
 
         if (RawEntityBuffs_Stay.Count != action.RawEntityBuffs_Stay.Count)
         {
-            Debug.LogError("EntityPassiveSkillAction_TriggerZoneEffect CopyDataFrom RawEntityBuffs_Stay数量不一致");
+            Debug.LogError("EntitySkillAction_TriggerZoneEffect CopyDataFrom RawEntityBuffs_Stay数量不一致");
         }
         else
         {
@@ -201,7 +201,7 @@ public class EntityPassiveSkillAction_TriggerZoneEffect : EntityPassiveSkillActi
         EffectInterval = action.EffectInterval;
         if (RawEntityBuffs_Exit.Count != action.RawEntityBuffs_Exit.Count)
         {
-            Debug.LogError("EntityPassiveSkillAction_TriggerZoneEffect CopyDataFrom RawEntityBuffs_Exit数量不一致");
+            Debug.LogError("EntitySkillAction_TriggerZoneEffect CopyDataFrom RawEntityBuffs_Exit数量不一致");
         }
         else
         {

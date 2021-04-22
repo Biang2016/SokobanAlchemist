@@ -32,7 +32,7 @@ public class EntityFlamethrowerFuelTrigger : MonoBehaviour
             else
             {
                 // 从对象配置里面读取关联的被动技能行为，并拷贝作为本技能的行为
-                if (box.RawFlamethrowerFuelData?.RawEntityPassiveSkillActions_ForFlamethrower != null && box.RawFlamethrowerFuelData.RawEntityPassiveSkillActions_ForFlamethrower.Count > 0)
+                if (box.RawFlamethrowerFuelData?.RawEntitySkillActions_ForFlamethrower != null && box.RawFlamethrowerFuelData.RawEntitySkillActions_ForFlamethrower.Count > 0)
                 {
                     EntityFlamethrowerHelper.TurnOnFire(box.RawFlamethrowerFuelData.Clone());
                     box.FuelBox();

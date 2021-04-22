@@ -2,7 +2,7 @@
 using Sirenix.OdinInspector;
 
 [Serializable]
-public class BoxPassiveSkillAction_DoorStateChange : BoxPassiveSkillAction, EntityPassiveSkillAction.IPureAction
+public class BoxSkillAction_DoorStateChange : BoxSkillAction, EntitySkillAction.IPureAction
 {
     public override void OnRecycled()
     {
@@ -32,18 +32,18 @@ public class BoxPassiveSkillAction_DoorStateChange : BoxPassiveSkillAction, Enti
         }
     }
 
-    protected override void ChildClone(EntityPassiveSkillAction newAction)
+    protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        BoxPassiveSkillAction_DoorStateChange action = ((BoxPassiveSkillAction_DoorStateChange) newAction);
+        BoxSkillAction_DoorStateChange action = ((BoxSkillAction_DoorStateChange) newAction);
         action.ToggleDoor = ToggleDoor;
         action.ChangeDoorStateTo = ChangeDoorStateTo;
     }
 
-    public override void CopyDataFrom(EntityPassiveSkillAction srcData)
+    public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        BoxPassiveSkillAction_DoorStateChange action = ((BoxPassiveSkillAction_DoorStateChange) srcData);
+        BoxSkillAction_DoorStateChange action = ((BoxSkillAction_DoorStateChange) srcData);
         ToggleDoor = action.ToggleDoor;
         ChangeDoorStateTo = action.ChangeDoorStateTo;
     }

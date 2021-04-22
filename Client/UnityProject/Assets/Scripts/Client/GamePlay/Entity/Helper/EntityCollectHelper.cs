@@ -52,8 +52,8 @@ public class EntityCollectHelper : EntityMonoHelper
         {
             ci.SetChasingTarget(Entity.transform, () =>
             {
-                EntityPassiveSkillAction action = ci.EntityPassiveSkillAction_OnCollect?.Clone();
-                if (action != null && action is EntityPassiveSkillAction.IActorOperationAction actorOperationAction)
+                EntitySkillAction action = ci.EntitySkillAction_OnCollect?.Clone();
+                if (action != null && action is EntitySkillAction.IActorOperationAction actorOperationAction)
                 {
                     actorOperationAction.OnOperation((Actor) Entity);
                 }

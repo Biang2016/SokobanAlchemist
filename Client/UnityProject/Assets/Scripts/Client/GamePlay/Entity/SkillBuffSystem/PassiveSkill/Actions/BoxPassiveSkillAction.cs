@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [Serializable]
-public abstract class BoxPassiveSkillAction : EntityPassiveSkillAction
+public abstract class BoxSkillAction : EntitySkillAction
 {
     protected override string Description => "Box被动技能行为基类";
 
