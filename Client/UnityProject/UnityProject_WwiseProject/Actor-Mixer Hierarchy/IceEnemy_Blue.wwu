@@ -1,6 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{8B67A45B-094D-43BA-9024-D081F11F6891}" SchemaVersion="97" RootDocumentID="{9C6FF8E4-29EA-437D-8F32-D6CD73D5AEF5}">
+<WwiseDocument Type="WorkUnit" ID="{8B67A45B-094D-43BA-9024-D081F11F6891}" SchemaVersion="97" RootDocumentID="{BF4FC306-E3A9-4180-902B-945ED5E7EFDB}">
 	<AudioObjects>
-		<WorkUnit Name="IceEnemy_Blue" ID="{8B67A45B-094D-43BA-9024-D081F11F6891}" OwnerID="{AB95962D-B8A9-40D0-868C-E15702865962}" PersistMode="Nested"/>
+		<WorkUnit Name="IceEnemy_Blue" ID="{8B67A45B-094D-43BA-9024-D081F11F6891}" OwnerID="{AB95962D-B8A9-40D0-868C-E15702865962}" PersistMode="Nested">
+			<ChildrenList>
+				<RandomSequenceContainer Name="SkillCast_v1" ID="{678E3579-56C4-42A6-908D-30E0BA39FBF9}" ShortID="143022021">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="SkillCast_v1" ID="{0D6EA96A-8FCB-4C44-8F94-97FB59975548}" ShortID="986832026">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="effect 4" ID="{F4CB37D0-2282-41EC-B2F4-48B4B332F151}">
+									<Language>SFX</Language>
+									<AudioFile>effect 4.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="598399752"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="effect 4" ID="{F4CB37D0-2282-41EC-B2F4-48B4B332F151}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+				<RandomSequenceContainer Name="SkillCast_v2" ID="{DEBAE647-1403-482D-BF41-7E2AECE250BE}" ShortID="866733654">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="SkillCast_v2" ID="{779D6BB7-18DC-432F-B442-6F5A0034490B}" ShortID="394703903">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="JackHammer_far_03" ID="{DA02A375-FAF5-4070-9FD8-4DAB812AE5EE}">
+									<Language>SFX</Language>
+									<AudioFile>JackHammer_far_03.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="567636655"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="JackHammer_far_03" ID="{DA02A375-FAF5-4070-9FD8-4DAB812AE5EE}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+			</ChildrenList>
+		</WorkUnit>
 	</AudioObjects>
 </WwiseDocument>

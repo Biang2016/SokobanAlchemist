@@ -39,6 +39,20 @@
 						<Event Name="IceEnemy_Cyan_Movement" ID="{52062BBA-BCD8-499B-9F0B-45E54BBE3DD4}"/>
 						<Event Name="IceEnemy_Cyan_Death" ID="{C95A80FD-D94A-41C5-9A10-96679E2A8280}"/>
 						<Event Name="IceEnemy_Cyan_Attack" ID="{9D1CD3E6-E971-4F37-AADC-74AA13641A0E}"/>
+						<Event Name="IceEnemy_Cyan_Spawn" ID="{BFEB8F38-9BE5-4E5A-BDAD-FE43A22F0EEB}">
+							<ChildrenList>
+								<Action Name="" ID="{400F7163-01E4-44D7-A81D-28933842CAAC}" ShortID="421825113">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="22"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="InCombat" ID="{02A97734-8890-4280-8438-41F2CA3E16DD}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="IceEnemy_Blue" ID="{B71F09DD-1E63-4FE8-A423-E7A7BFFBE15F}" ShortID="779460596">
@@ -73,6 +87,20 @@
 						<Event Name="IceEnemy_Blue_Movement" ID="{CF8FFFE3-6D47-4AA7-A897-2C0706B1E67D}"/>
 						<Event Name="IceEnemy_Blue_Death" ID="{55555FE6-7A4B-492F-ABD4-9BC8D6F081D5}"/>
 						<Event Name="IceEnemy_Blue_Attack" ID="{7789B2F8-42C5-41C9-B2C2-82415C6FB59E}"/>
+						<Event Name="IceEnemy_Blue_Spawn" ID="{26C449A6-29DB-4C8B-A9B5-5B9109EC8964}">
+							<ChildrenList>
+								<Action Name="" ID="{438E8A97-0DA2-41D6-8BE6-36E40DA89FF6}" ShortID="155163635">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="22"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="InEliteCombat" ID="{315FAD00-45C1-4FA4-85FE-995392895DC0}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="FireEnemy_Yellow" ID="{66FF9ADC-C8BD-40CD-95C1-49ACAD81AB3F}" ShortID="790130938">
@@ -107,6 +135,20 @@
 						<Event Name="FireEnemy_Yellow_Movement" ID="{ABD1D43E-B6D1-4D6F-A070-D50561AE54B2}"/>
 						<Event Name="FireEnemy_Yellow_Death" ID="{3DAFBF8D-6062-4453-AC87-FFB5CCE1D8C6}"/>
 						<Event Name="FireEnemy_Yellow_Attack" ID="{A3A8D58A-A1DD-4221-8382-08BE6D76FA86}"/>
+						<Event Name="FireEnemy_Yellow_Spawn" ID="{C65D1D77-E694-43D0-980F-5EB4894ACAC2}">
+							<ChildrenList>
+								<Action Name="" ID="{DAE251BC-49D3-468E-9E1F-684E63A7A968}" ShortID="1025894261">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="22"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="InEliteCombat" ID="{315FAD00-45C1-4FA4-85FE-995392895DC0}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="FireEnemy_Red" ID="{2265681A-B75C-4032-A3B6-E78C6784A8BD}" ShortID="339700">
@@ -178,6 +220,49 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Event Name="FireEnemy_Red_Fire_Loop_Play" ID="{F2577E0E-1246-46F6-851C-5E2D29B641FD}">
+							<ChildrenList>
+								<Action Name="" ID="{F263B7E1-37A8-454E-A39F-73587E3FE7E2}" ShortID="803073231">
+									<PropertyList>
+										<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FireEnemy_Red_Fire_Loop" ID="{23922D4E-1D3A-4B92-BC95-C6220130F011}" WorkUnitID="{29945255-34A1-449A-B297-2777D8BBA031}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FireEnemy_Red_Fire_Loop_Stop" ID="{F4C970D5-04F6-4D20-BCF6-49ECEE78D95F}">
+							<ChildrenList>
+								<Action Name="" ID="{0A13B406-15F3-4DDE-BD88-387DEFAF3876}" ShortID="462266462">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+										<Property Name="FadeTime" Type="Real64" Value="0.35"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FireEnemy_Red_Fire_Loop" ID="{23922D4E-1D3A-4B92-BC95-C6220130F011}" WorkUnitID="{29945255-34A1-449A-B297-2777D8BBA031}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FireEnemy_Red_Spawn" ID="{75D326B3-A4C8-4E14-900D-BA4E51561068}">
+							<ChildrenList>
+								<Action Name="" ID="{E3FA02ED-A8B2-4E1A-AEE6-38A5F12A1DB0}" ShortID="419506923">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="22"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="InCombat" ID="{02A97734-8890-4280-8438-41F2CA3E16DD}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="LightningEnemy" ID="{3A540480-A734-4230-A053-259F872EAAF6}" ShortID="154410288">
@@ -212,6 +297,20 @@
 						<Event Name="LightningEnemy_Movement" ID="{CCB4D8E1-55C3-4522-AFC2-6B39DEAA3383}"/>
 						<Event Name="LightningEnemy_Death" ID="{7EBFC84D-2C4A-4FFA-8F88-5C6297DA4CA1}"/>
 						<Event Name="LightningEnemy_Attack" ID="{A5ADFFD3-1238-4112-9DE1-1F2868869EF1}"/>
+						<Event Name="LightningEnemy_Spawn" ID="{DA53ECC1-1DB3-4324-9702-DF93EC29D77A}">
+							<ChildrenList>
+								<Action Name="" ID="{FEE41909-54A8-4448-BD84-03266B3F9FA0}" ShortID="520123817">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="22"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="InEliteCombat" ID="{315FAD00-45C1-4FA4-85FE-995392895DC0}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="WoodenEnemy" ID="{46BA828A-EE27-4BD9-84DF-D2C71BFC2132}" ShortID="908852169">
@@ -242,6 +341,20 @@
 						<Event Name="WoodenEnemy_Movement" ID="{4DD97D40-AB55-4D93-A47D-FBE6C59368C7}"/>
 						<Event Name="WoodenEnemy_Death" ID="{31979DD4-62B2-483E-820F-F4A1D523A64F}"/>
 						<Event Name="WoodenEnemy_Attack" ID="{ABD0891D-AFFB-469B-AF02-9F3AECBA8982}"/>
+						<Event Name="WoodenEnemy_Spawn" ID="{5FDF8517-FC10-42DB-9965-312508923F7C}">
+							<ChildrenList>
+								<Action Name="" ID="{5EA46C23-C0D8-470B-8D0B-9BE4C449C759}" ShortID="303311642">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="22"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="InCombat" ID="{02A97734-8890-4280-8438-41F2CA3E16DD}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="SpiderLegEnemy" ID="{077E0A6D-F671-4E0F-AC60-DCDA5931F30A}" ShortID="290039825">
@@ -268,7 +381,7 @@
 								<Property Name="OverrideColor" Type="bool" Value="True"/>
 							</PropertyList>
 						</Event>
-						<Event Name="SpiderLegEnemy_Spawn" ID="{0769E7AB-0400-41B3-AFFA-C69B90B32276}">
+						<Event Name="SpiderLegEnemy_Phase1_Spawn" ID="{0769E7AB-0400-41B3-AFFA-C69B90B32276}">
 							<PropertyList>
 								<Property Name="Color" Type="int16" Value="23"/>
 								<Property Name="OverrideColor" Type="bool" Value="True"/>
@@ -280,7 +393,43 @@
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="InSpiderLegCombat_Phase1" ID="{F90DC440-0769-41C3-B358-1E65CFF25162}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+											<ObjectRef Name="EnemySpiderLeg_Phase1" ID="{5F61EF3B-7D14-47DF-B8EC-4A390C353A55}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="SpiderLegEnemy_Phase2_Spawn" ID="{573A230C-BF45-4F1E-8FAC-30CAA9830F54}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="23"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{4256C8FC-D015-4E55-A6E3-F8D53803E13A}" ShortID="528323936">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="22"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="EnemySpiderLeg_Phase2" ID="{EE726B16-6A1B-4D4D-B591-FEA4D29ACF64}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="SpiderLegEnemy_Phase3_Spawn" ID="{7C576487-D26B-473D-8B68-1C50AFD2034B}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="23"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{EAF3B2F9-B2C8-44AA-B962-C3D08BBFAEE4}" ShortID="74179264">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="22"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="EnemySpiderLeg_Phase3" ID="{BE5D1ACA-B309-4694-AD75-F38D1D0A917A}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>

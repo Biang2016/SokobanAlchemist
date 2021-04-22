@@ -7,7 +7,7 @@
 				<Property Name="OverrideColor" Type="bool" Value="True"/>
 			</PropertyList>
 			<ChildrenList>
-				<RandomSequenceContainer Name="OnBeingKicked" ID="{1BF089E9-24AC-4B1E-BEF8-9EA19A209307}" ShortID="235287468">
+				<RandomSequenceContainer Name="Kicked" ID="{1BF089E9-24AC-4B1E-BEF8-9EA19A209307}" ShortID="235287468">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -61,31 +61,9 @@
 								<ActiveSource Name="TempSFX_Collide2" ID="{BDD0FBBE-B4C3-485C-A283-7194590D4817}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
-						<Sound Name="FireBox_Destructed" ID="{10C7CB57-F7E1-4132-8E0E-D720269C0DA6}" ShortID="703813826">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="fire-torch-whoosh-movement-01" ID="{20D2E49E-2ADA-47D7-940E-B5B8D5869BFF}">
-									<Language>SFX</Language>
-									<AudioFile>fire-torch-whoosh-movement-01.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="695924251"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{20D2E49E-2ADA-47D7-940E-B5B8D5869BFF}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
 					</ChildrenList>
 				</RandomSequenceContainer>
-				<RandomSequenceContainer Name="OnBeingPushed" ID="{77B3AFAF-A4EB-41FF-A2B5-D64D696D6762}" ShortID="544024914">
+				<RandomSequenceContainer Name="Pushed" ID="{77B3AFAF-A4EB-41FF-A2B5-D64D696D6762}" ShortID="544024914">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -137,6 +115,53 @@
 							</ChildrenList>
 							<ActiveSourceList>
 								<ActiveSource Name="TempSFX_Push1" ID="{07D17251-FC80-4701-8835-E178881008A8}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+				<RandomSequenceContainer Name="Destructed" ID="{A6EF4A07-E725-4248-B2EA-0A93BCEF9F65}" ShortID="966307857">
+					<PropertyList>
+						<Property Name="OverridePositioning" Type="bool" Value="True"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="FireBox_Destructed" ID="{10C7CB57-F7E1-4132-8E0E-D720269C0DA6}" ShortID="703813826">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="fire-torch-whoosh-movement-01" ID="{20D2E49E-2ADA-47D7-940E-B5B8D5869BFF}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.0888888888888889"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.418518518518519"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="VolumeOffset" Type="Real64">
+											<ValueList>
+												<Value>-8.3</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>fire-torch-whoosh-movement-01.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="695924251"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{20D2E49E-2ADA-47D7-940E-B5B8D5869BFF}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>

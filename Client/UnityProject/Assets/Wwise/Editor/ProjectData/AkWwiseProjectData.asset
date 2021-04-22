@@ -30,7 +30,7 @@ MonoBehaviour:
     ParentPath: Default Work Unit
     guid: 6304d89afe194a4293d1284d09af8267
     GuidInternal: 
-    m_lastTime: -8585827075964775808
+    m_lastTime: -8585826974194775808
     List:
     - name: Ambient
       guid: 990213b893031041bb750a674c2c915d
@@ -132,6 +132,21 @@ MonoBehaviour:
       - ElementName: Music
         ObjectType: 2
       Path: Default Work Unit/Master_Audio_Bus/NonWorld/Music
+    - name: Music_Aux
+      guid: 499db802cc807e47832e13996fadc667
+      id: 2412664669
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      - ElementName: AUX
+        ObjectType: 2
+      - ElementName: Music_Aux
+        ObjectType: 1
+      Path: Default Work Unit/Master_Audio_Bus/World/AUX/Music_Aux
     - name: MusicStinger
       guid: a5b2987a5a76c44ca0d2712603a747b4
       id: 1636576504
@@ -363,7 +378,7 @@ MonoBehaviour:
     ParentPath: Default Work Unit/SFX Work Unit
     guid: 9afb272a990f42408ec1eff8c2bfdc8e
     GuidInternal: 
-    m_lastTime: -8585827956754775808
+    m_lastTime: -8585826974184775808
     List:
     - name: SFX_Bank
       guid: 69dd4107d35a0644a342dcfc67477ec6
@@ -489,7 +504,7 @@ MonoBehaviour:
     ParentPath: BGM
     guid: 7f519a6a5add8741bd53e1a556877ae4
     GuidInternal: 
-    m_lastTime: -8585827075964775808
+    m_lastTime: -8585825265204775808
     List:
     - name: BGM_Start
       guid: d1c98773ea9a4b409db404cf43e02b6a
@@ -522,7 +537,7 @@ MonoBehaviour:
     ParentPath: Boxes
     guid: 805c56206da25e4da9dfdeac6d709f4e
     GuidInternal: 
-    m_lastTime: -8585827008604775808
+    m_lastTime: -8585826226254775808
     List:
     - name: BlizardBox
       guid: 19e328047e4ed049a0ef112840a31a09
@@ -1470,7 +1485,7 @@ MonoBehaviour:
     ParentPath: Enemies
     guid: 3fcb31ab5fe9c848907277668498151b
     GuidInternal: 
-    m_lastTime: -8585827096794775808
+    m_lastTime: -8585825265204775808
     List:
     - name: FireEnemy_Red
       guid: 1a6865225cb73240a3b6e78c6784a8bd
@@ -1509,6 +1524,34 @@ MonoBehaviour:
       - ElementName: FireEnemy_Red_Death
         ObjectType: 3
       Path: Enemies/FireEnemy_Red/FireEnemy_Red_Death
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FireEnemy_Red_Fire_Loop_Play
+      guid: 0e7e57f24612f646851c5e2d29b641fd
+      id: 1886063940
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Red
+        ObjectType: 4
+      - ElementName: FireEnemy_Red_Fire_Loop_Play
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Red/FireEnemy_Red_Fire_Loop_Play
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FireEnemy_Red_Fire_Loop_Stop
+      guid: d570c9f4f604204dbcf649ecee78d95f
+      id: 363543870
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Red
+        ObjectType: 4
+      - ElementName: FireEnemy_Red_Fire_Loop_Stop
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Red/FireEnemy_Red_Fire_Loop_Stop
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -1565,6 +1608,20 @@ MonoBehaviour:
       - ElementName: FireEnemy_Red_SkillCast_v2
         ObjectType: 3
       Path: Enemies/FireEnemy_Red/FireEnemy_Red_SkillCast_v2
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FireEnemy_Red_Spawn
+      guid: b326d375c8a4144e900dba4e51561068
+      id: 1264739987
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Red
+        ObjectType: 4
+      - ElementName: FireEnemy_Red_Spawn
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Red/FireEnemy_Red_Spawn
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -1664,6 +1721,20 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: FireEnemy_Yellow_Spawn
+      guid: 771d5dc694e6d043980f5eb4894acac2
+      id: 3537376158
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Yellow
+        ObjectType: 4
+      - ElementName: FireEnemy_Yellow_Spawn
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Yellow/FireEnemy_Yellow_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: IceEnemy_Blue
       guid: dd091fb7631ee84fa423e7a7bffbe15f
       id: 3867005197
@@ -1757,6 +1828,20 @@ MonoBehaviour:
       - ElementName: IceEnemy_Blue_SkillCast_v2
         ObjectType: 3
       Path: Enemies/IceEnemy_Blue/IceEnemy_Blue_SkillCast_v2
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Blue_Spawn
+      guid: a649c426db298b4ca9b55b9109ec8964
+      id: 1924959645
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Blue
+        ObjectType: 4
+      - ElementName: IceEnemy_Blue_Spawn
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Blue/IceEnemy_Blue_Spawn
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -1856,6 +1941,20 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: IceEnemy_Cyan_Spawn
+      guid: 388febbfe59b5a4ebdadfe43a22f0eeb
+      id: 3021078688
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Cyan
+        ObjectType: 4
+      - ElementName: IceEnemy_Cyan_Spawn
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Cyan/IceEnemy_Cyan_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: LightningEnemy
       guid: 8004543a34a73042a053259f872eaaf6
       id: 1651625483
@@ -1949,6 +2048,116 @@ MonoBehaviour:
       - ElementName: LightningEnemy_SkillCast_v2
         ObjectType: 3
       Path: Enemies/LightningEnemy/LightningEnemy_SkillCast_v2
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LightningEnemy_Spawn
+      guid: c1ec53dab31d24439702df93ec29d77a
+      id: 4249675467
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: LightningEnemy
+        ObjectType: 4
+      - ElementName: LightningEnemy_Spawn
+        ObjectType: 3
+      Path: Enemies/LightningEnemy/LightningEnemy_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy
+      guid: 6d0a7e0771f60f4eac60dcda5931f30a
+      id: 4210375790
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      Path: Enemies/SpiderLegEnemy
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy_Attack
+      guid: 70225b3d013bd7489c818126044a6f38
+      id: 1024679453
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      - ElementName: SpiderLegEnemy_Attack
+        ObjectType: 3
+      Path: Enemies/SpiderLegEnemy/SpiderLegEnemy_Attack
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy_Death
+      guid: bf9c3ab91830f440b62f9f1ea8628586
+      id: 744254753
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      - ElementName: SpiderLegEnemy_Death
+        ObjectType: 3
+      Path: Enemies/SpiderLegEnemy/SpiderLegEnemy_Death
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy_Hurt
+      guid: 9773d0faaffa0f4a899a79858c4acd0f
+      id: 1119177010
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      - ElementName: SpiderLegEnemy_Hurt
+        ObjectType: 3
+      Path: Enemies/SpiderLegEnemy/SpiderLegEnemy_Hurt
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy_Phase1_Spawn
+      guid: abe769070004b341affac69b90b32276
+      id: 372070459
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      - ElementName: SpiderLegEnemy_Phase1_Spawn
+        ObjectType: 3
+      Path: Enemies/SpiderLegEnemy/SpiderLegEnemy_Phase1_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy_Phase2_Spawn
+      guid: 0c233a5745bf1e4f8fac30caa9830f54
+      id: 3370926328
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      - ElementName: SpiderLegEnemy_Phase2_Spawn
+        ObjectType: 3
+      Path: Enemies/SpiderLegEnemy/SpiderLegEnemy_Phase2_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy_Phase3_Spawn
+      guid: 8764577c6bd23d478b681c50afd2034b
+      id: 2584731025
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      - ElementName: SpiderLegEnemy_Phase3_Spawn
+        ObjectType: 3
+      Path: Enemies/SpiderLegEnemy/SpiderLegEnemy_Phase3_Spawn
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -2048,6 +2257,20 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: WoodenEnemy_Spawn
+      guid: 1785df5f10fcdb429965312508923f7c
+      id: 1175728201
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: WoodenEnemy
+        ObjectType: 4
+      - ElementName: WoodenEnemy_Spawn
+        ObjectType: 3
+      Path: Enemies/WoodenEnemy/WoodenEnemy_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
   - PhysicalPath: Events/Entity_SFX.wwu
     PathAndIcons:
     - ElementName: SFX
@@ -2087,7 +2310,7 @@ MonoBehaviour:
     ParentPath: Music
     guid: a34f078a80671a4da7da502619b28955
     GuidInternal: 
-    m_lastTime: -8585827096794775808
+    m_lastTime: -8585825265204775808
     List:
     - name: General
       guid: b1f9b9c3a6cb524d9c29db2b36d1a5c9
@@ -2102,7 +2325,7 @@ MonoBehaviour:
       maxDuration: -1
       minDuration: -1
     - name: Music_Enemies
-      guid: 0be623dc5fcf1a4aacfdae08e023763b
+      guid: dfb2f27c75643c479b09131e42512b9a
       id: 433441283
       PathAndIcons:
       - ElementName: Music
@@ -2110,13 +2333,13 @@ MonoBehaviour:
       - ElementName: General
         ObjectType: 4
       - ElementName: Music_Enemies
-        ObjectType: 4
+        ObjectType: 3
       Path: Music/General/Music_Enemies
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
     - name: Music_Region
-      guid: ccd23a8a2d3bcd43acc15d455b711040
+      guid: 49313a06dae7b2449d315e6dc4a89cc6
       id: 3741135221
       PathAndIcons:
       - ElementName: Music
@@ -2124,22 +2347,8 @@ MonoBehaviour:
       - ElementName: General
         ObjectType: 4
       - ElementName: Music_Region
-        ObjectType: 4
+        ObjectType: 3
       Path: Music/General/Music_Region
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
-    - name: Stinger_Victory
-      guid: cd47b79d790f64439dde1e2f826459e2
-      id: 826616306
-      PathAndIcons:
-      - ElementName: Music
-        ObjectType: 12
-      - ElementName: General
-        ObjectType: 4
-      - ElementName: Stinger_Victory
-        ObjectType: 4
-      Path: Music/General/Stinger_Victory
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -2150,7 +2359,7 @@ MonoBehaviour:
     ParentPath: Player
     guid: 991a3b24403a5c418c7318d11e7863e8
     GuidInternal: 
-    m_lastTime: -8585827008604775808
+    m_lastTime: -8585825388444775808
     List:
     - name: General
       guid: f56de660626dc348a1eeb1a5750a255c
@@ -2161,6 +2370,20 @@ MonoBehaviour:
       - ElementName: General
         ObjectType: 4
       Path: Player/General
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_Damaged
+      guid: dcdf6c980ffcc84aa85076002bfc6e25
+      id: 1386564838
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_Damaged
+        ObjectType: 3
+      Path: Player/General/Player_Damaged
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -2198,11 +2421,25 @@ MonoBehaviour:
       PathAndIcons:
       - ElementName: Player
         ObjectType: 12
-      - ElementName: General
+      - ElementName: SoundBankSpecific
         ObjectType: 4
       - ElementName: Player_Footstep
         ObjectType: 3
-      Path: Player/General/Player_Footstep
+      Path: Player/SoundBankSpecific/Player_Footstep
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_Healed
+      guid: 5412711c9225764cb2b6075c26401dc6
+      id: 4225739944
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_Healed
+        ObjectType: 3
+      Path: Player/General/Player_Healed
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -2248,6 +2485,18 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: SoundBankSpecific
+      guid: ef96b9a2fe03b14390624e0363f349d0
+      id: 1175010472
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: SoundBankSpecific
+        ObjectType: 4
+      Path: Player/SoundBankSpecific
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
   - PhysicalPath: Events/SFX.wwu
     PathAndIcons:
     - ElementName: SFX
@@ -2264,7 +2513,7 @@ MonoBehaviour:
     ParentPath: UI
     guid: 7db0fe11b8f1c045b29c9a8403f43e18
     GuidInternal: 
-    m_lastTime: -8585827096794775808
+    m_lastTime: -8585825388444775808
     List:
     - name: General
       guid: eb7fa98fbfcb5f4fbf5e0a5ed3266334
@@ -2342,7 +2591,7 @@ MonoBehaviour:
     ParentPath: Default Work Unit
     guid: 730cbf2236587e468f5d2d56b87c5ae8
     GuidInternal: 
-    m_lastTime: -8585827096794775808
+    m_lastTime: -8585825789104775808
     List: []
   - PhysicalPath: Game Parameters/Enemies.wwu
     PathAndIcons:
@@ -2351,7 +2600,7 @@ MonoBehaviour:
     ParentPath: Enemies
     guid: efa28aae345ec24bbdeee9e6f04dbc53
     GuidInternal: 
-    m_lastTime: -8585827020084775808
+    m_lastTime: -8585825265204775808
     List:
     - name: CombatLevel
       guid: 25d0f441fcee4845807775fda1e60d81
@@ -2362,60 +2611,6 @@ MonoBehaviour:
       - ElementName: CombatLevel
         ObjectType: 13
       Path: Enemies/CombatLevel
-    - name: Enemy_Music_FireEnemy_Red
-      guid: b9ab85309bc38f48b34a41421212bbfe
-      id: 2509434830
-      PathAndIcons:
-      - ElementName: Enemies
-        ObjectType: 12
-      - ElementName: Enemy_Music_FireEnemy_Red
-        ObjectType: 13
-      Path: Enemies/Enemy_Music_FireEnemy_Red
-    - name: Enemy_Music_FireEnemy_Yellow
-      guid: 9a151a659a845648b15a25630dd20e0a
-      id: 2051208853
-      PathAndIcons:
-      - ElementName: Enemies
-        ObjectType: 12
-      - ElementName: Enemy_Music_FireEnemy_Yellow
-        ObjectType: 13
-      Path: Enemies/Enemy_Music_FireEnemy_Yellow
-    - name: Enemy_Music_IceEnemy_Blue
-      guid: 179e4fda241d574c9990be3e7e8a5c18
-      id: 3359594840
-      PathAndIcons:
-      - ElementName: Enemies
-        ObjectType: 12
-      - ElementName: Enemy_Music_IceEnemy_Blue
-        ObjectType: 13
-      Path: Enemies/Enemy_Music_IceEnemy_Blue
-    - name: Enemy_Music_IceEnemy_Cyan
-      guid: b9593afe20210047845bac74850fa6dd
-      id: 883083201
-      PathAndIcons:
-      - ElementName: Enemies
-        ObjectType: 12
-      - ElementName: Enemy_Music_IceEnemy_Cyan
-        ObjectType: 13
-      Path: Enemies/Enemy_Music_IceEnemy_Cyan
-    - name: Enemy_Music_LightningEnemy
-      guid: cfe89c7eeac7d944a2ef31ef537f7f52
-      id: 1188105696
-      PathAndIcons:
-      - ElementName: Enemies
-        ObjectType: 12
-      - ElementName: Enemy_Music_LightningEnemy
-        ObjectType: 13
-      Path: Enemies/Enemy_Music_LightningEnemy
-    - name: Enemy_Music_WoodenEnemy
-      guid: 436da74b680dcc439ea55dd7d25c804d
-      id: 4281557124
-      PathAndIcons:
-      - ElementName: Enemies
-        ObjectType: 12
-      - ElementName: Enemy_Music_WoodenEnemy
-        ObjectType: 13
-      Path: Enemies/Enemy_Music_WoodenEnemy
   - PhysicalPath: Game Parameters/Gameplay.wwu
     PathAndIcons:
     - ElementName: Gameplay
@@ -2495,7 +2690,7 @@ MonoBehaviour:
     ParentPath: General
     guid: 8bffba1a5493dc498421bee60b25b87a
     GuidInternal: 
-    m_lastTime: -8585827020084775808
+    m_lastTime: -8585825265204775808
     List:
     - name: Distance_to_Player
       guid: 8463c5d920d9e14785808a6201311e30
@@ -2506,15 +2701,15 @@ MonoBehaviour:
       - ElementName: Distance_to_Player
         ObjectType: 13
       Path: General/Distance_to_Player
-    - name: DopplerEffect
-      guid: 8facb232e993fc4da3937c203a621c09
-      id: 1124499852
+    - name: SpiderLegEnemy_Combat_Intensity
+      guid: be85a6dbf748f84bbbe7b41c4416f63b
+      id: 1190047843
       PathAndIcons:
       - ElementName: General
         ObjectType: 12
-      - ElementName: DopplerEffect
+      - ElementName: SpiderLegEnemy_Combat_Intensity
         ObjectType: 13
-      Path: General/DopplerEffect
+      Path: General/SpiderLegEnemy_Combat_Intensity
   - PhysicalPath: Game Parameters/Player.wwu
     PathAndIcons:
     - ElementName: Player
@@ -2542,6 +2737,24 @@ MonoBehaviour:
       - ElementName: Player_MovementSpeed
         ObjectType: 13
       Path: Player/Player_MovementSpeed
+  - PhysicalPath: Game Parameters/States.wwu
+    PathAndIcons:
+    - ElementName: States
+      ObjectType: 12
+    ParentPath: States
+    guid: 09411fbf25a9654d9c18f964417d2427
+    GuidInternal: 
+    m_lastTime: -8585825789104775808
+    List:
+    - name: InCombat
+      guid: d663cf18019f9a4d89fc3e3b3f684315
+      id: 3373579172
+      PathAndIcons:
+      - ElementName: States
+        ObjectType: 12
+      - ElementName: InCombat
+        ObjectType: 13
+      Path: States/InCombat
   StateWwu:
   - PhysicalPath: States/Default Work Unit.wwu
     PathAndIcons:
@@ -2559,17 +2772,17 @@ MonoBehaviour:
     ParentPath: MusicStates
     guid: 3f4868067839e945a8d8f15a6b5db6dc
     GuidInternal: 
-    m_lastTime: -8585827020084775808
+    m_lastTime: -8585825265204775808
     List:
-    - name: CombatState
+    - name: Combat
       guid: 10bf40b90f8f7446972ba287d951d4eb
-      id: 1071758680
+      id: 2764240573
       PathAndIcons:
       - ElementName: MusicStates
         ObjectType: 12
-      - ElementName: CombatState
+      - ElementName: Combat
         ObjectType: 9
-      Path: MusicStates/CombatState
+      Path: MusicStates/Combat
       values:
       - name: InBossCombat
         guid: fa65c8fb5fecf24181501e1f4b28f064
@@ -2577,44 +2790,57 @@ MonoBehaviour:
         PathAndIcons:
         - ElementName: InBossCombat
           ObjectType: 8
+      - name: InCombat
+        guid: 3477a90290888042843841f2ca3e16dd
+        id: 3373579172
+        PathAndIcons:
+        - ElementName: InCombat
+          ObjectType: 8
       - name: InEliteCombat
         guid: 00ad5f31c145a44f85fe995392895dc0
         id: 789371013
         PathAndIcons:
         - ElementName: InEliteCombat
           ObjectType: 8
-      - name: InNormalCombat
-        guid: 3477a90290888042843841f2ca3e16dd
-        id: 2831878517
-        PathAndIcons:
-        - ElementName: InNormalCombat
-          ObjectType: 8
-      - name: InSpiderLegCombat_Phase1
-        guid: 40c40df96907c341b3581e65cff25162
-        id: 4018745158
-        PathAndIcons:
-        - ElementName: InSpiderLegCombat_Phase1
-          ObjectType: 8
-      - name: InSpiderLegCombat_Phase2
-        guid: be3a9d32d7074b4bbd0c5d0dcca1ed91
-        id: 4018745157
-        PathAndIcons:
-        - ElementName: InSpiderLegCombat_Phase2
-          ObjectType: 8
-      - name: InSpiderLegCombat_Phase3
-        guid: 35d54d2d88a19d46981704442ee355ef
-        id: 4018745156
-        PathAndIcons:
-        - ElementName: InSpiderLegCombat_Phase3
-          ObjectType: 8
-      - name: NonCombat
-        guid: 539ac42e89b7004d8e5d06cb23d98083
-        id: 1841965078
-        PathAndIcons:
-        - ElementName: NonCombat
-          ObjectType: 8
       - name: None
         guid: a86a0733aa57324ab615f58c8930ef62
+        id: 748895195
+        PathAndIcons:
+        - ElementName: None
+          ObjectType: 8
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
+    - name: Combat_EnemySpiderLeg_PhaseLevel
+      guid: e7396cd4cfa15b4894e6f7a8c5faf83c
+      id: 2589279669
+      PathAndIcons:
+      - ElementName: MusicStates
+        ObjectType: 12
+      - ElementName: Combat_EnemySpiderLeg_PhaseLevel
+        ObjectType: 9
+      Path: MusicStates/Combat_EnemySpiderLeg_PhaseLevel
+      values:
+      - name: EnemySpiderLeg_Phase1
+        guid: 3bef615f147ddf47b8ec4a390c353a55
+        id: 1652927213
+        PathAndIcons:
+        - ElementName: EnemySpiderLeg_Phase1
+          ObjectType: 8
+      - name: EnemySpiderLeg_Phase2
+        guid: 166b72ee1b6a4d4db591fea4d29acf64
+        id: 1652927214
+        PathAndIcons:
+        - ElementName: EnemySpiderLeg_Phase2
+          ObjectType: 8
+      - name: EnemySpiderLeg_Phase3
+        guid: ca1a5dbe09b39446ad75f38d1d0a917a
+        id: 1652927215
+        PathAndIcons:
+        - ElementName: EnemySpiderLeg_Phase3
+          ObjectType: 8
+      - name: None
+        guid: 61c24d629afce54489bbb16994e67663
         id: 748895195
         PathAndIcons:
         - ElementName: None
@@ -2632,17 +2858,17 @@ MonoBehaviour:
         ObjectType: 9
       Path: MusicStates/Music_Regions
       values:
+      - name: Dungeon
+        guid: 57ddd3f92df9df4f988476d98a5282fe
+        id: 608898761
+        PathAndIcons:
+        - ElementName: Dungeon
+          ObjectType: 8
       - name: Excavation
         guid: 3669a0ad173cd9448e3b7e1227401d76
         id: 2525109375
         PathAndIcons:
         - ElementName: Excavation
-          ObjectType: 8
-      - name: Iceland
-        guid: 6a7c9d704fa20845be6b8a204a5bc9fa
-        id: 790159209
-        PathAndIcons:
-        - ElementName: Iceland
           ObjectType: 8
       - name: Lab
         guid: 4f9fafbdbe2a3f4ba5aa09220c0c4798
@@ -2678,6 +2904,120 @@ MonoBehaviour:
       ValueIcons: []
       valuesInternal: []
   SwitchWwu:
+  - PhysicalPath: Switches/Combat.wwu
+    PathAndIcons:
+    - ElementName: Combat
+      ObjectType: 12
+    ParentPath: Combat
+    guid: 12434b2d5395b3499804c554ed6a40a6
+    GuidInternal: 
+    m_lastTime: -8585825347654775808
+    List:
+    - name: Combat
+      guid: ee633805af62e54ea95491f4772f24ef
+      id: 2764240573
+      PathAndIcons:
+      - ElementName: Combat
+        ObjectType: 12
+      - ElementName: Combat
+        ObjectType: 11
+      Path: Combat/Combat
+      values:
+      - name: InBossCombat
+        guid: 6c1b6d79773af54da36e0e09912ea7aa
+        id: 687614019
+        PathAndIcons:
+        - ElementName: InBossCombat
+          ObjectType: 10
+      - name: InCombat
+        guid: 8c177a86e1bd324b9fc4b5a4040425a0
+        id: 3373579172
+        PathAndIcons:
+        - ElementName: InCombat
+          ObjectType: 10
+      - name: InEliteCombat
+        guid: 4591fc27d009b8468b797c0c8dce7e8a
+        id: 789371013
+        PathAndIcons:
+        - ElementName: InEliteCombat
+          ObjectType: 10
+      - name: NonCombat
+        guid: ff3f4f64817dcc478bd5d49a8ab646cf
+        id: 1841965078
+        PathAndIcons:
+        - ElementName: NonCombat
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
+    - name: Combat_EnemySpiderLeg_PhaseLevel
+      guid: aef2756d3a7f3a48b125cf43676bef42
+      id: 2589279669
+      PathAndIcons:
+      - ElementName: Combat
+        ObjectType: 12
+      - ElementName: Combat_EnemySpiderLeg_PhaseLevel
+        ObjectType: 11
+      Path: Combat/Combat_EnemySpiderLeg_PhaseLevel
+      values:
+      - name: EnemySpiderLeg_Phase1
+        guid: 16c9e8f3075caa458de9f0eed3d903a5
+        id: 1652927213
+        PathAndIcons:
+        - ElementName: EnemySpiderLeg_Phase1
+          ObjectType: 10
+      - name: EnemySpiderLeg_Phase2
+        guid: c625478be64a0a42a7c5f29003ab289d
+        id: 1652927214
+        PathAndIcons:
+        - ElementName: EnemySpiderLeg_Phase2
+          ObjectType: 10
+      - name: EnemySpiderLeg_Phase3
+        guid: b1f3a5e260e99843919f76ef3909b0c4
+        id: 1652927215
+        PathAndIcons:
+        - ElementName: EnemySpiderLeg_Phase3
+          ObjectType: 10
+      - name: NonSpiderCombat
+        guid: dfeb9e91b41655438683b4ee8b14fd4d
+        id: 1624858949
+        PathAndIcons:
+        - ElementName: NonSpiderCombat
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
+    - name: EnemySpiderLeg_Volume_by_Distnace
+      guid: 02a4cac15087da489fb109bcb32d84e9
+      id: 3762693077
+      PathAndIcons:
+      - ElementName: Combat
+        ObjectType: 12
+      - ElementName: EnemySpiderLeg_Volume_by_Distnace
+        ObjectType: 11
+      Path: Combat/EnemySpiderLeg_Volume_by_Distnace
+      values:
+      - name: Close
+        guid: ad6e21afa079d540a7b6840d7af0439f
+        id: 1451272583
+        PathAndIcons:
+        - ElementName: Close
+          ObjectType: 10
+      - name: Far
+        guid: 3897d292dc0329459b6fdc42e7e2472a
+        id: 1183803292
+        PathAndIcons:
+        - ElementName: Far
+          ObjectType: 10
+      - name: Middle
+        guid: 41d04606fe6a1e429aee2d5afb3331ad
+        id: 1026627430
+        PathAndIcons:
+        - ElementName: Middle
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
   - PhysicalPath: Switches/Default Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
@@ -2694,7 +3034,7 @@ MonoBehaviour:
     ParentPath: General
     guid: 7b2aa25cef361c43a821498489431e58
     GuidInternal: 
-    m_lastTime: -8585827020084775808
+    m_lastTime: -8585825388444775808
     List:
     - name: Distance_to_Player
       guid: 04a1fd30ad2b764bb0bdda1f3902ab1e
@@ -2713,7 +3053,7 @@ MonoBehaviour:
         - ElementName: Close
           ObjectType: 10
       - name: Far
-        guid: cc37cc745f40b247bedbb5a8f1135bf9
+        guid: 72da3f814769ff4ba362a6d129483313
         id: 1183803292
         PathAndIcons:
         - ElementName: Far
@@ -2806,59 +3146,48 @@ MonoBehaviour:
     ParentPath: Default Work Unit
     guid: 044679bac8d46342a9f9381adb4e51cc
     GuidInternal: 
-    m_lastTime: -8585827020084775808
+    m_lastTime: -8585826226254775808
     List:
-    - name: Music_EnemyTheme
-      guid: e23c3d7e1b9ab84b97b998ba7fd753cb
-      id: 3921957830
-      PathAndIcons:
-      - ElementName: Default Work Unit
-        ObjectType: 12
-      - ElementName: Music_EnemyTheme
-        ObjectType: 14
-      Path: Default Work Unit/Music_EnemyTheme
-    - name: Music_PlayerDeath
+    - name: Trigger_PlayerDeath
       guid: e5368207646c8e45bf1b2e003cbd0a52
-      id: 940788252
+      id: 821629565
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Music_PlayerDeath
+      - ElementName: Trigger_PlayerDeath
         ObjectType: 14
-      Path: Default Work Unit/Music_PlayerDeath
-    - name: Music_QuestComplete
+      Path: Default Work Unit/Trigger_PlayerDeath
+    - name: Trigger_QuestComplete
       guid: c5ea7112a8a4084fbfa14b1d3dd59f68
-      id: 780938204
+      id: 48326457
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Music_QuestComplete
+      - ElementName: Trigger_QuestComplete
         ObjectType: 14
-      Path: Default Work Unit/Music_QuestComplete
-    - name: Music_Teleport
+      Path: Default Work Unit/Trigger_QuestComplete
+    - name: Trigger_Teleport
       guid: fa444daee2c4d24c8625de827eb58e40
-      id: 1686438944
+      id: 1218580015
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Music_Teleport
+      - ElementName: Trigger_Teleport
         ObjectType: 14
-      Path: Default Work Unit/Music_Teleport
-    - name: Music_Victory
+      Path: Default Work Unit/Trigger_Teleport
+    - name: Trigger_Victory
       guid: 8fd5be68c849f143b1fe14ad8e3512e6
-      id: 2637400697
+      id: 1605137596
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Music_Victory
+      - ElementName: Trigger_Victory
         ObjectType: 14
-      Path: Default Work Unit/Music_Victory
+      Path: Default Work Unit/Trigger_Victory
   ExpandedItems:
   - /UnityProject_WwiseProject
   - /UnityProject_WwiseProject/Events
   - /UnityProject_WwiseProject/Events/Ambience
   - /UnityProject_WwiseProject/Events/Ambience/General
-  - /UnityProject_WwiseProject/Events/Boxes
-  - /UnityProject_WwiseProject/Events/Boxes/FireBox
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

@@ -1,34 +1,49 @@
 Switch Group	ID	Name			Wwise Object Path	Notes
 	2471758783	Player_MovementSpeed			\Player\Player_MovementSpeed	
+	2589279669	Combat_EnemySpiderLeg_PhaseLevel			\Combat\Combat_EnemySpiderLeg_PhaseLevel	
+	2764240573	Combat			\Combat\Combat	
+	3762693077	EnemySpiderLeg_Volume_by_Distnace			\Combat\EnemySpiderLeg_Volume_by_Distnace	
 	3917897988	Distance_to_Player			\General\Distance_to_Player	
 
 Switch	ID	Name	Switch Group			Notes
 	1942692385	Dash	Player_MovementSpeed			
 	2108779966	Walk	Player_MovementSpeed			
+	1624858949	NonSpiderCombat	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927213	EnemySpiderLeg_Phase1	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927214	EnemySpiderLeg_Phase2	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927215	EnemySpiderLeg_Phase3	Combat_EnemySpiderLeg_PhaseLevel			
+	687614019	InBossCombat	Combat			
+	789371013	InEliteCombat	Combat			
+	1841965078	NonCombat	Combat			
+	3373579172	InCombat	Combat			
+	1026627430	Middle	EnemySpiderLeg_Volume_by_Distnace			
+	1183803292	Far	EnemySpiderLeg_Volume_by_Distnace			
+	1451272583	Close	EnemySpiderLeg_Volume_by_Distnace			
 	1183803292	Far	Distance_to_Player			
 	1451272583	Close	Distance_to_Player			
 	2849147824	Medium	Distance_to_Player			
 
 State Group	ID	Name			Wwise Object Path	Notes
-	1071758680	CombatState			\MusicStates\CombatState	
 	2106907484	Music_Regions			\MusicStates\Music_Regions	
+	2589279669	Combat_EnemySpiderLeg_PhaseLevel			\MusicStates\Combat_EnemySpiderLeg_PhaseLevel	
+	2764240573	Combat			\MusicStates\Combat	
 
 State	ID	Name	State Group			Notes
-	687614019	InBossCombat	CombatState			
-	748895195	None	CombatState			
-	789371013	InEliteCombat	CombatState			
-	1841965078	NonCombat	CombatState			
-	2831878517	InNormalCombat	CombatState			
-	4018745156	InSpiderLegCombat_Phase3	CombatState			
-	4018745157	InSpiderLegCombat_Phase2	CombatState			
-	4018745158	InSpiderLegCombat_Phase1	CombatState			
 	578926554	Lab	Music_Regions			
+	608898761	Dungeon	Music_Regions			
 	748895195	None	Music_Regions			
-	790159209	Iceland	Music_Regions			
 	2009274547	OpenWorld	Music_Regions			
 	2323193050	Temple	Music_Regions			
 	2525109375	Excavation	Music_Regions			
 	3762955427	Tutorial	Music_Regions			
+	748895195	None	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927213	EnemySpiderLeg_Phase1	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927214	EnemySpiderLeg_Phase2	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927215	EnemySpiderLeg_Phase3	Combat_EnemySpiderLeg_PhaseLevel			
+	687614019	InBossCombat	Combat			
+	748895195	None	Combat			
+	789371013	InEliteCombat	Combat			
+	3373579172	InCombat	Combat			
 
 Game Parameter	ID	Name			Wwise Object Path	Notes
 	1333239961	MenuSlider_Master_Volume			\Gameplay\MenuSlider_Master_Volume	
@@ -60,6 +75,12 @@ Audio Bus	ID	Name			Wwise Object Path	Notes
 	3365874942	SFX_Audio_Bus			\Default Work Unit\Master_Audio_Bus\SFX_Audio_Bus	
 	3663755868	SFX_Entity_Audio_Bus			\Default Work Unit\Master_Audio_Bus\SFX_Audio_Bus\SFX_Entity_Audio_Bus	
 	3991942870	Music			\Default Work Unit\Master_Audio_Bus\NonWorld\Music	
+
+Auxiliary Bus	ID	Name			Wwise Object Path	Notes
+	2412664669	Music_Aux			\Default Work Unit\Master_Audio_Bus\World\AUX\Music_Aux	
+
+Effect plug-ins	ID	Name	Type				Notes
+	958590783	Wwise RoomVerb (Custom)	Wwise RoomVerb			
 
 Audio Devices	ID	Name	Type				Notes
 	2317455096	No_Output	No Output			

@@ -15,26 +15,36 @@ namespace AK
     {
         static const AkUniqueID BGM_START = 2985635692U;
         static const AkUniqueID BGM_STOP = 2090192256U;
+        static const AkUniqueID MUSIC_REGION = 3741135221U;
     } // namespace EVENTS
 
     namespace STATES
     {
-        namespace COMBATSTATE
+        namespace COMBAT
         {
-            static const AkUniqueID GROUP = 1071758680U;
+            static const AkUniqueID GROUP = 2764240573U;
 
             namespace STATE
             {
                 static const AkUniqueID INBOSSCOMBAT = 687614019U;
+                static const AkUniqueID INCOMBAT = 3373579172U;
                 static const AkUniqueID INELITECOMBAT = 789371013U;
-                static const AkUniqueID INNORMALCOMBAT = 2831878517U;
-                static const AkUniqueID INSPIDERLEGCOMBAT_PHASE1 = 4018745158U;
-                static const AkUniqueID INSPIDERLEGCOMBAT_PHASE2 = 4018745157U;
-                static const AkUniqueID INSPIDERLEGCOMBAT_PHASE3 = 4018745156U;
-                static const AkUniqueID NONCOMBAT = 1841965078U;
                 static const AkUniqueID NONE = 748895195U;
             } // namespace STATE
-        } // namespace COMBATSTATE
+        } // namespace COMBAT
+
+        namespace COMBAT_ENEMYSPIDERLEG_PHASELEVEL
+        {
+            static const AkUniqueID GROUP = 2589279669U;
+
+            namespace STATE
+            {
+                static const AkUniqueID ENEMYSPIDERLEG_PHASE1 = 1652927213U;
+                static const AkUniqueID ENEMYSPIDERLEG_PHASE2 = 1652927214U;
+                static const AkUniqueID ENEMYSPIDERLEG_PHASE3 = 1652927215U;
+                static const AkUniqueID NONE = 748895195U;
+            } // namespace STATE
+        } // namespace COMBAT_ENEMYSPIDERLEG_PHASELEVEL
 
         namespace MUSIC_REGIONS
         {
@@ -42,8 +52,8 @@ namespace AK
 
             namespace STATE
             {
+                static const AkUniqueID DUNGEON = 608898761U;
                 static const AkUniqueID EXCAVATION = 2525109375U;
-                static const AkUniqueID ICELAND = 790159209U;
                 static const AkUniqueID LAB = 578926554U;
                 static const AkUniqueID NONE = 748895195U;
                 static const AkUniqueID OPENWORLD = 2009274547U;
@@ -56,6 +66,32 @@ namespace AK
 
     namespace SWITCHES
     {
+        namespace COMBAT
+        {
+            static const AkUniqueID GROUP = 2764240573U;
+
+            namespace SWITCH
+            {
+                static const AkUniqueID INBOSSCOMBAT = 687614019U;
+                static const AkUniqueID INCOMBAT = 3373579172U;
+                static const AkUniqueID INELITECOMBAT = 789371013U;
+                static const AkUniqueID NONCOMBAT = 1841965078U;
+            } // namespace SWITCH
+        } // namespace COMBAT
+
+        namespace COMBAT_ENEMYSPIDERLEG_PHASELEVEL
+        {
+            static const AkUniqueID GROUP = 2589279669U;
+
+            namespace SWITCH
+            {
+                static const AkUniqueID ENEMYSPIDERLEG_PHASE1 = 1652927213U;
+                static const AkUniqueID ENEMYSPIDERLEG_PHASE2 = 1652927214U;
+                static const AkUniqueID ENEMYSPIDERLEG_PHASE3 = 1652927215U;
+                static const AkUniqueID NONSPIDERCOMBAT = 1624858949U;
+            } // namespace SWITCH
+        } // namespace COMBAT_ENEMYSPIDERLEG_PHASELEVEL
+
         namespace DISTANCE_TO_PLAYER
         {
             static const AkUniqueID GROUP = 3917897988U;
@@ -67,6 +103,18 @@ namespace AK
                 static const AkUniqueID MEDIUM = 2849147824U;
             } // namespace SWITCH
         } // namespace DISTANCE_TO_PLAYER
+
+        namespace ENEMYSPIDERLEG_VOLUME_BY_DISTNACE
+        {
+            static const AkUniqueID GROUP = 3762693077U;
+
+            namespace SWITCH
+            {
+                static const AkUniqueID CLOSE = 1451272583U;
+                static const AkUniqueID FAR = 1183803292U;
+                static const AkUniqueID MIDDLE = 1026627430U;
+            } // namespace SWITCH
+        } // namespace ENEMYSPIDERLEG_VOLUME_BY_DISTNACE
 
         namespace PLAYER_MOVEMENTSPEED
         {
@@ -107,13 +155,7 @@ namespace AK
     {
         static const AkUniqueID COMBATLEVEL = 3717892141U;
         static const AkUniqueID DISTANCE_TO_PLAYER = 3917897988U;
-        static const AkUniqueID DOPPLEREFFECT = 1124499852U;
-        static const AkUniqueID ENEMY_MUSIC_FIREENEMY_RED = 2509434830U;
-        static const AkUniqueID ENEMY_MUSIC_FIREENEMY_YELLOW = 2051208853U;
-        static const AkUniqueID ENEMY_MUSIC_ICEENEMY_BLUE = 3359594840U;
-        static const AkUniqueID ENEMY_MUSIC_ICEENEMY_CYAN = 883083201U;
-        static const AkUniqueID ENEMY_MUSIC_LIGHTNINGENEMY = 1188105696U;
-        static const AkUniqueID ENEMY_MUSIC_WOODENENEMY = 4281557124U;
+        static const AkUniqueID INCOMBAT = 3373579172U;
         static const AkUniqueID INMENU_LOWPASS = 1756231317U;
         static const AkUniqueID MENUSLIDER_MASTER_VOLUME = 1333239961U;
         static const AkUniqueID MENUSLIDER_MUSIC_VOLUME = 2642438544U;
@@ -123,15 +165,15 @@ namespace AK
         static const AkUniqueID SFX_ENTITY_VOLUME = 3942311461U;
         static const AkUniqueID SFX_UI_VOLUME = 2698376064U;
         static const AkUniqueID SFX_VOLUME = 1564184899U;
+        static const AkUniqueID SPIDERLEGENEMY_COMBAT_INTENSITY = 1190047843U;
     } // namespace GAME_PARAMETERS
 
     namespace TRIGGERS
     {
-        static const AkUniqueID MUSIC_ENEMYTHEME = 3921957830U;
-        static const AkUniqueID MUSIC_PLAYERDEATH = 940788252U;
-        static const AkUniqueID MUSIC_QUESTCOMPLETE = 780938204U;
-        static const AkUniqueID MUSIC_TELEPORT = 1686438944U;
-        static const AkUniqueID MUSIC_VICTORY = 2637400697U;
+        static const AkUniqueID TRIGGER_PLAYERDEATH = 821629565U;
+        static const AkUniqueID TRIGGER_QUESTCOMPLETE = 48326457U;
+        static const AkUniqueID TRIGGER_TELEPORT = 1218580015U;
+        static const AkUniqueID TRIGGER_VICTORY = 1605137596U;
     } // namespace TRIGGERS
 
     namespace BANKS
@@ -166,6 +208,11 @@ namespace AK
         static const AkUniqueID UI = 1551306167U;
         static const AkUniqueID WORLD = 2609808943U;
     } // namespace BUSSES
+
+    namespace AUX_BUSSES
+    {
+        static const AkUniqueID MUSIC_AUX = 2412664669U;
+    } // namespace AUX_BUSSES
 
     namespace AUDIO_DEVICES
     {

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{2D4B4312-9553-49B3-9804-C554ED6A40A6}" SchemaVersion="97">
+	<Switches>
+		<WorkUnit Name="Combat" ID="{2D4B4312-9553-49B3-9804-C554ED6A40A6}" PersistMode="Standalone">
+			<ChildrenList>
+				<SwitchGroup Name="Combat" ID="{053863EE-62AF-4EE5-A954-91F4772F24EF}">
+					<PropertyList>
+						<Property Name="UseGameParameter" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Switch Name="InCombat" ID="{867A178C-BDE1-4B32-9FC4-B5A4040425A0}"/>
+						<Switch Name="InEliteCombat" ID="{27FC9145-09D0-46B8-8B79-7C0C8DCE7E8A}"/>
+						<Switch Name="InBossCombat" ID="{796D1B6C-3A77-4DF5-A36E-0E09912EA7AA}"/>
+						<Switch Name="NonCombat" ID="{644F3FFF-7D81-47CC-8BD5-D49A8AB646CF}"/>
+					</ChildrenList>
+					<SwitchOnRTPC>
+						<GameParameterRef Name="InCombat" ID="{18CF63D6-9F01-4D9A-89FC-3E3B3F684315}"/>
+						<Curve Name="" ID="{48BDD762-F668-4313-9EB6-22430DB44836}">
+							<PropertyList>
+								<Property Name="Flags" Type="int32" Value="65537"/>
+							</PropertyList>
+							<PointList>
+								<Point>
+									<XPos>0</XPos>
+									<YPos>4</YPos>
+									<Flags>5</Flags>
+								</Point>
+								<Point>
+									<XPos>25</XPos>
+									<YPos>1</YPos>
+									<Flags>0</Flags>
+								</Point>
+								<Point>
+									<XPos>50</XPos>
+									<YPos>2</YPos>
+									<Flags>0</Flags>
+								</Point>
+								<Point>
+									<XPos>75</XPos>
+									<YPos>3</YPos>
+									<Flags>0</Flags>
+								</Point>
+								<Point>
+									<XPos>100</XPos>
+									<YPos>3</YPos>
+									<Flags>37</Flags>
+								</Point>
+							</PointList>
+						</Curve>
+					</SwitchOnRTPC>
+				</SwitchGroup>
+				<SwitchGroup Name="EnemySpiderLeg_Volume_by_Distnace" ID="{C1CAA402-8750-48DA-9FB1-09BCB32D84E9}">
+					<PropertyList>
+						<Property Name="UseGameParameter" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Switch Name="Far" ID="{92D29738-03DC-4529-9B6F-DC42E7E2472A}"/>
+						<Switch Name="Middle" ID="{0646D041-6AFE-421E-9AEE-2D5AFB3331AD}"/>
+						<Switch Name="Close" ID="{AF216EAD-79A0-40D5-A7B6-840D7AF0439F}"/>
+					</ChildrenList>
+					<SwitchOnRTPC>
+						<GameParameterRef Name="Distance_to_Player" ID="{D9C56384-D920-47E1-8580-8A6201311E30}"/>
+						<Curve Name="" ID="{35BD1A1E-EA8F-4418-91F7-E25A9219B87E}">
+							<PropertyList>
+								<Property Name="Flags" Type="int32" Value="65537"/>
+							</PropertyList>
+							<PointList>
+								<Point>
+									<XPos>0</XPos>
+									<YPos>3</YPos>
+									<Flags>5</Flags>
+								</Point>
+								<Point>
+									<XPos>25</XPos>
+									<YPos>2</YPos>
+									<Flags>0</Flags>
+								</Point>
+								<Point>
+									<XPos>50.36765</XPos>
+									<YPos>1</YPos>
+									<Flags>0</Flags>
+								</Point>
+								<Point>
+									<XPos>75</XPos>
+									<YPos>0</YPos>
+									<Flags>0</Flags>
+								</Point>
+								<Point>
+									<XPos>100</XPos>
+									<YPos>0</YPos>
+									<Flags>37</Flags>
+								</Point>
+							</PointList>
+						</Curve>
+					</SwitchOnRTPC>
+				</SwitchGroup>
+				<SwitchGroup Name="Combat_EnemySpiderLeg_PhaseLevel" ID="{6D75F2AE-7F3A-483A-B125-CF43676BEF42}">
+					<PropertyList>
+						<Property Name="UseGameParameter" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Switch Name="EnemySpiderLeg_Phase1" ID="{F3E8C916-5C07-45AA-8DE9-F0EED3D903A5}"/>
+						<Switch Name="EnemySpiderLeg_Phase2" ID="{8B4725C6-4AE6-420A-A7C5-F29003AB289D}"/>
+						<Switch Name="EnemySpiderLeg_Phase3" ID="{E2A5F3B1-E960-4398-919F-76EF3909B0C4}"/>
+						<Switch Name="NonSpiderCombat" ID="{919EEBDF-16B4-4355-8683-B4EE8B14FD4D}"/>
+					</ChildrenList>
+					<SwitchOnRTPC>
+						<GameParameterRef Name="SpiderLegEnemy_Combat_Intensity" ID="{DBA685BE-48F7-4BF8-BBE7-B41C4416F63B}"/>
+						<Curve Name="" ID="{3FBB1DE7-AD36-49FD-833F-5C8483E3AD22}">
+							<PropertyList>
+								<Property Name="Flags" Type="int32" Value="65537"/>
+							</PropertyList>
+							<PointList>
+								<Point>
+									<XPos>0</XPos>
+									<YPos>4</YPos>
+									<Flags>5</Flags>
+								</Point>
+								<Point>
+									<XPos>24.99999</XPos>
+									<YPos>1</YPos>
+									<Flags>0</Flags>
+								</Point>
+								<Point>
+									<XPos>50</XPos>
+									<YPos>2</YPos>
+									<Flags>0</Flags>
+								</Point>
+								<Point>
+									<XPos>75</XPos>
+									<YPos>3</YPos>
+									<Flags>0</Flags>
+								</Point>
+								<Point>
+									<XPos>100</XPos>
+									<YPos>3</YPos>
+									<Flags>37</Flags>
+								</Point>
+							</PointList>
+						</Curve>
+					</SwitchOnRTPC>
+				</SwitchGroup>
+			</ChildrenList>
+		</WorkUnit>
+	</Switches>
+</WwiseDocument>

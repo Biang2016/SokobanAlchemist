@@ -7,7 +7,7 @@
 				<Property Name="OverrideColor" Type="bool" Value="True"/>
 			</PropertyList>
 			<ChildrenList>
-				<RandomSequenceContainer Name="OnBeingKicked" ID="{ACF77C8F-197B-44C6-AA58-313FA4C83F5D}" ShortID="396258232">
+				<RandomSequenceContainer Name="Kicked" ID="{ACF77C8F-197B-44C6-AA58-313FA4C83F5D}" ShortID="396258232">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -63,7 +63,7 @@
 						</Sound>
 					</ChildrenList>
 				</RandomSequenceContainer>
-				<RandomSequenceContainer Name="OnBeingPushed" ID="{35CC133C-D051-4175-B0AC-2FF171F0BD04}" ShortID="917179041">
+				<RandomSequenceContainer Name="Pushed" ID="{35CC133C-D051-4175-B0AC-2FF171F0BD04}" ShortID="917179041">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -119,7 +119,17 @@
 						</Sound>
 					</ChildrenList>
 				</RandomSequenceContainer>
-				<RandomSequenceContainer Name="OnBurning" ID="{92701E02-A302-405D-B5F4-0E22B0742210}" ShortID="569783165">
+				<RandomSequenceContainer Name="Lit" ID="{92701E02-A302-405D-B5F4-0E22B0742210}" ShortID="569783165">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+				</RandomSequenceContainer>
+				<RandomSequenceContainer Name="Destructed" ID="{5ADE77C7-2E58-46AA-ACB6-5A4D019D0E6C}" ShortID="532318358">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>

@@ -1,33 +1,48 @@
 Event	ID	Name			Wwise Object Path	Notes
 	2090192256	BGM_Stop			\BGM\BGM_Stop	
 	2985635692	BGM_Start			\BGM\BGM_Start	
+	3741135221	Music_Region			\Music\General\Music_Region	
 
 State Group	ID	Name			Wwise Object Path	Notes
-	1071758680	CombatState			\MusicStates\CombatState	
 	2106907484	Music_Regions			\MusicStates\Music_Regions	
+	2589279669	Combat_EnemySpiderLeg_PhaseLevel			\MusicStates\Combat_EnemySpiderLeg_PhaseLevel	
+	2764240573	Combat			\MusicStates\Combat	
 
 State	ID	Name	State Group			Notes
-	687614019	InBossCombat	CombatState			
-	748895195	None	CombatState			
-	789371013	InEliteCombat	CombatState			
-	1841965078	NonCombat	CombatState			
-	2831878517	InNormalCombat	CombatState			
-	4018745156	InSpiderLegCombat_Phase3	CombatState			
-	4018745157	InSpiderLegCombat_Phase2	CombatState			
-	4018745158	InSpiderLegCombat_Phase1	CombatState			
 	578926554	Lab	Music_Regions			
+	608898761	Dungeon	Music_Regions			
 	748895195	None	Music_Regions			
-	790159209	Iceland	Music_Regions			
 	2009274547	OpenWorld	Music_Regions			
 	2323193050	Temple	Music_Regions			
 	2525109375	Excavation	Music_Regions			
 	3762955427	Tutorial	Music_Regions			
+	748895195	None	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927213	EnemySpiderLeg_Phase1	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927214	EnemySpiderLeg_Phase2	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927215	EnemySpiderLeg_Phase3	Combat_EnemySpiderLeg_PhaseLevel			
+	687614019	InBossCombat	Combat			
+	748895195	None	Combat			
+	789371013	InEliteCombat	Combat			
+	3373579172	InCombat	Combat			
+
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	1190047843	SpiderLegEnemy_Combat_Intensity			\General\SpiderLegEnemy_Combat_Intensity	
+	3373579172	InCombat			\States\InCombat	
+	3917897988	Distance_to_Player			\General\Distance_to_Player	
 
 Trigger	ID	Name			Wwise Object Path	Notes
-	940788252	Music_PlayerDeath			\Default Work Unit\Music_PlayerDeath	
-	1686438944	Music_Teleport			\Default Work Unit\Music_Teleport	
-	2637400697	Music_Victory			\Default Work Unit\Music_Victory	
+	821629565	Trigger_PlayerDeath			\Default Work Unit\Trigger_PlayerDeath	
+	1218580015	Trigger_Teleport			\Default Work Unit\Trigger_Teleport	
+	1605137596	Trigger_Victory			\Default Work Unit\Trigger_Victory	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	102912303	Tutorial	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Windows\SFX\CoolSwing_4811579D.wem		\Interactive Music Hierarchy\Music\Music_Regions\Tutorial\Tutorial_Layers\Tutorial		3772072
+	37445038	TempleBGM	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Windows\SFX\TempleBGM_4811579D.wem		\Interactive Music Hierarchy\Music\Music\Region_Temple\TempleBGM\TempleBGM		930592
+	102912303	Tutorial	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Windows\SFX\CoolSwing_4811579D.wem		\Interactive Music Hierarchy\Music\Music\Region_Tutorial\Tutorial_Layers\Tutorial		3772072
+	165791469	LabBGM	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Windows\SFX\LabBGM_4811579D.wem		\Interactive Music Hierarchy\Music\Music\Region_Lab\LabBGM\LabBGM		816544
+	377813988	ExcavationBGM	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Windows\SFX\ExcavationBGM_4811579D.wem		\Interactive Music Hierarchy\Music\Music\Region_Excavation\ExcavationBGM\ExcavationBGM		7335424
+	466124290	SpiderPhase2_Tutorial	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Windows\SFX\yt1s.com - Epic Battle Music  Epic Legend Auracle Music_4811579D.wem		\Interactive Music Hierarchy\Music\Music\Region_OpenWorld\OpenWorld_Layers\SpiderPhase2_Tutorial		6422464
+	478411344	Stinger_Death	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Windows\SFX\Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03_4811579D.wem		\Interactive Music Hierarchy\Music\Stinger_Death\Stinger_Death		135532
+	601941146	SpiderPhase1_ExcavationBGM	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Windows\SFX\yt1s.com - Epic Orchestral Battle Music  Well End This War_4811579D.wem		\Interactive Music Hierarchy\Music\Music\Region_OpenWorld\OpenWorld_Layers\SpiderPhase1_ExcavationBGM		7292224
+	727134213	OpenWorld	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Windows\SFX\OpenWorldBGM_4811579D.wem		\Interactive Music Hierarchy\Music\Music\Region_Excavation\ExcavationBGM\OpenWorld		7570000
+	971736339	SpiderPhase3_LabBGM	Y:\Documents\GitHub\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Windows\SFX\yt1s.com - Dark Fantasy Battle Music  The Lord Of Chaos _4811579D.wem		\Interactive Music Hierarchy\Music\Music\Region_OpenWorld\OpenWorld_Layers\SpiderPhase3_LabBGM		11725120
 

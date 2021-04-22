@@ -11,10 +11,13 @@
 	<StreamedFiles/>
 	<MediaFilesNotInAnyBank/>
 	<SoundBanks>
-		<SoundBank Id="1355168291" Language="SFX" Hash="3857197815">
+		<SoundBank Id="1355168291" Language="SFX" Hash="843080494">
 			<ObjectPath>Init</ObjectPath>
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
+			<IncludedAuxBusses>
+				<AuxBus Id="2412664669" Name="Music_Aux" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master_Audio_Bus\World\AUX\Music_Aux"/>
+			</IncludedAuxBusses>
 			<GameParameters>
 				<GameParameter Id="1333239961" Name="MenuSlider_Master_Volume" ObjectPath="\Game Parameters\Gameplay\MenuSlider_Master_Volume"/>
 				<GameParameter Id="1564184899" Name="SFX_Volume" ObjectPath="\Game Parameters\Gameplay\SFX_Volume"/>
@@ -23,38 +26,70 @@
 				<GameParameter Id="3942311461" Name="SFX_Entity_Volume" ObjectPath="\Game Parameters\Gameplay\SFX_Entity_Volume"/>
 			</GameParameters>
 		</SoundBank>
-		<SoundBank Id="1605876511" Language="SFX" Hash="2491212443">
+		<SoundBank Id="1605876511" Language="SFX" Hash="2447243524">
 			<ObjectPath>\SoundBanks\Default Work Unit\SFX Work Unit\SFX_Bank</ObjectPath>
 			<ShortName>SFX_Bank</ShortName>
 			<Path>SFX_Bank.bnk</Path>
+			<IncludedMemoryFiles>
+				<File Id="367121688" Language="SFX">
+					<ShortName>TempSFX_Collide.wav</ShortName>
+					<Path>SFX/TempSFX_Collide_B09F49DF.wem</Path>
+				</File>
+			</IncludedMemoryFiles>
 		</SoundBank>
-		<SoundBank Id="3734788450" Language="SFX" Hash="2516409827">
+		<SoundBank Id="3734788450" Language="SFX" Hash="4027989529">
 			<ObjectPath>\SoundBanks\Default Work Unit\BGM Work Unit\BGM_Bank</ObjectPath>
 			<ShortName>BGM_Bank</ShortName>
 			<Path>BGM_Bank.bnk</Path>
 			<IncludedEvents>
 				<Event Id="2985635692" Name="BGM_Start" ObjectPath="\Events\BGM\BGM_Start" DurationType="Infinite"/>
 				<Event Id="2090192256" Name="BGM_Stop" ObjectPath="\Events\BGM\BGM_Stop" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="3741135221" Name="Music_Region" ObjectPath="\Events\Music\General\Music_Region" DurationType="Infinite"/>
 			</IncludedEvents>
 			<IncludedMemoryFiles>
+				<File Id="37445038" Language="SFX">
+					<ShortName>TempleBGM.wav</ShortName>
+					<Path>SFX/TempleBGM_4811579D.wem</Path>
+				</File>
 				<File Id="102912303" Language="SFX">
 					<ShortName>CoolSwing.wav</ShortName>
 					<Path>SFX/CoolSwing_4811579D.wem</Path>
 				</File>
+				<File Id="165791469" Language="SFX">
+					<ShortName>LabBGM.wav</ShortName>
+					<Path>SFX/LabBGM_4811579D.wem</Path>
+				</File>
+				<File Id="377813988" Language="SFX">
+					<ShortName>ExcavationBGM.wav</ShortName>
+					<Path>SFX/ExcavationBGM_4811579D.wem</Path>
+				</File>
+				<File Id="466124290" Language="SFX">
+					<ShortName>yt1s.com - Epic Battle Music  Epic Legend Auracle Music.wav</ShortName>
+					<Path>SFX/yt1s.com - Epic Battle Music  Epic Legend Auracle Music_4811579D.wem</Path>
+				</File>
+				<File Id="478411344" Language="SFX">
+					<ShortName>Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03.wav</ShortName>
+					<Path>SFX/Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03_4811579D.wem</Path>
+				</File>
+				<File Id="601941146" Language="SFX">
+					<ShortName>yt1s.com - Epic Orchestral Battle Music  Well End This War.wav</ShortName>
+					<Path>SFX/yt1s.com - Epic Orchestral Battle Music  Well End This War_4811579D.wem</Path>
+				</File>
+				<File Id="727134213" Language="SFX">
+					<ShortName>OpenWorldBGM.wav</ShortName>
+					<Path>SFX/OpenWorldBGM_4811579D.wem</Path>
+				</File>
+				<File Id="971736339" Language="SFX">
+					<ShortName>yt1s.com - Dark Fantasy Battle Music  The Lord Of Chaos .wav</ShortName>
+					<Path>SFX/yt1s.com - Dark Fantasy Battle Music  The Lord Of Chaos _4811579D.wem</Path>
+				</File>
 			</IncludedMemoryFiles>
+			<GameParameters>
+				<GameParameter Id="1190047843" Name="SpiderLegEnemy_Combat_Intensity" ObjectPath="\Game Parameters\General\SpiderLegEnemy_Combat_Intensity"/>
+				<GameParameter Id="3373579172" Name="InCombat" ObjectPath="\Game Parameters\States\InCombat"/>
+				<GameParameter Id="3917897988" Name="Distance_to_Player" ObjectPath="\Game Parameters\General\Distance_to_Player"/>
+			</GameParameters>
 			<StateGroups>
-				<StateGroup Id="1071758680" Name="CombatState" ObjectPath="\States\MusicStates\CombatState">
-					<States>
-						<State Id="748895195" Name="None" ObjectPath="\States\MusicStates\CombatState\None"/>
-						<State Id="1841965078" Name="NonCombat" ObjectPath="\States\MusicStates\CombatState\NonCombat"/>
-						<State Id="2831878517" Name="InNormalCombat" ObjectPath="\States\MusicStates\CombatState\InNormalCombat"/>
-						<State Id="789371013" Name="InEliteCombat" ObjectPath="\States\MusicStates\CombatState\InEliteCombat"/>
-						<State Id="687614019" Name="InBossCombat" ObjectPath="\States\MusicStates\CombatState\InBossCombat"/>
-						<State Id="4018745158" Name="InSpiderLegCombat_Phase1" ObjectPath="\States\MusicStates\CombatState\InSpiderLegCombat_Phase1"/>
-						<State Id="4018745157" Name="InSpiderLegCombat_Phase2" ObjectPath="\States\MusicStates\CombatState\InSpiderLegCombat_Phase2"/>
-						<State Id="4018745156" Name="InSpiderLegCombat_Phase3" ObjectPath="\States\MusicStates\CombatState\InSpiderLegCombat_Phase3"/>
-					</States>
-				</StateGroup>
 				<StateGroup Id="2106907484" Name="Music_Regions" ObjectPath="\States\MusicStates\Music_Regions">
 					<States>
 						<State Id="748895195" Name="None" ObjectPath="\States\MusicStates\Music_Regions\None"/>
@@ -63,14 +98,30 @@
 						<State Id="578926554" Name="Lab" ObjectPath="\States\MusicStates\Music_Regions\Lab"/>
 						<State Id="2525109375" Name="Excavation" ObjectPath="\States\MusicStates\Music_Regions\Excavation"/>
 						<State Id="3762955427" Name="Tutorial" ObjectPath="\States\MusicStates\Music_Regions\Tutorial"/>
-						<State Id="790159209" Name="Iceland" ObjectPath="\States\MusicStates\Music_Regions\Iceland"/>
+						<State Id="608898761" Name="Dungeon" ObjectPath="\States\MusicStates\Music_Regions\Dungeon"/>
+					</States>
+				</StateGroup>
+				<StateGroup Id="2589279669" Name="Combat_EnemySpiderLeg_PhaseLevel" ObjectPath="\States\MusicStates\Combat_EnemySpiderLeg_PhaseLevel">
+					<States>
+						<State Id="748895195" Name="None" ObjectPath="\States\MusicStates\Combat_EnemySpiderLeg_PhaseLevel\None"/>
+						<State Id="1652927213" Name="EnemySpiderLeg_Phase1" ObjectPath="\States\MusicStates\Combat_EnemySpiderLeg_PhaseLevel\EnemySpiderLeg_Phase1"/>
+						<State Id="1652927214" Name="EnemySpiderLeg_Phase2" ObjectPath="\States\MusicStates\Combat_EnemySpiderLeg_PhaseLevel\EnemySpiderLeg_Phase2"/>
+						<State Id="1652927215" Name="EnemySpiderLeg_Phase3" ObjectPath="\States\MusicStates\Combat_EnemySpiderLeg_PhaseLevel\EnemySpiderLeg_Phase3"/>
+					</States>
+				</StateGroup>
+				<StateGroup Id="2764240573" Name="Combat" ObjectPath="\States\MusicStates\Combat">
+					<States>
+						<State Id="748895195" Name="None" ObjectPath="\States\MusicStates\Combat\None"/>
+						<State Id="3373579172" Name="InCombat" ObjectPath="\States\MusicStates\Combat\InCombat"/>
+						<State Id="789371013" Name="InEliteCombat" ObjectPath="\States\MusicStates\Combat\InEliteCombat"/>
+						<State Id="687614019" Name="InBossCombat" ObjectPath="\States\MusicStates\Combat\InBossCombat"/>
 					</States>
 				</StateGroup>
 			</StateGroups>
 			<Triggers>
-				<Trigger Id="940788252" Name="Music_PlayerDeath" ObjectPath="\Triggers\Default Work Unit\Music_PlayerDeath"/>
-				<Trigger Id="1686438944" Name="Music_Teleport" ObjectPath="\Triggers\Default Work Unit\Music_Teleport"/>
-				<Trigger Id="2637400697" Name="Music_Victory" ObjectPath="\Triggers\Default Work Unit\Music_Victory"/>
+				<Trigger Id="821629565" Name="Trigger_PlayerDeath" ObjectPath="\Triggers\Default Work Unit\Trigger_PlayerDeath"/>
+				<Trigger Id="1218580015" Name="Trigger_Teleport" ObjectPath="\Triggers\Default Work Unit\Trigger_Teleport"/>
+				<Trigger Id="1605137596" Name="Trigger_Victory" ObjectPath="\Triggers\Default Work Unit\Trigger_Victory"/>
 			</Triggers>
 		</SoundBank>
 	</SoundBanks>

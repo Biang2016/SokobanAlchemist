@@ -3,7 +3,7 @@
 	<AudioObjects>
 		<WorkUnit Name="Player" ID="{33851429-B42A-4B53-A82A-080058A6785D}" OwnerID="{3880237C-749B-43AB-B7EE-4E3D8899E49E}" PersistMode="Nested">
 			<ChildrenList>
-				<RandomSequenceContainer Name="OnSkillCast_0" ID="{627EFCD6-9C96-48D5-A274-25592FAEDADA}" ShortID="838571994">
+				<RandomSequenceContainer Name="Player_OnSkillCast_0" ID="{627EFCD6-9C96-48D5-A274-25592FAEDADA}" ShortID="838571994">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -37,7 +37,7 @@
 						</Sound>
 					</ChildrenList>
 				</RandomSequenceContainer>
-				<RandomSequenceContainer Name="Jump" ID="{79135A40-AB6A-45CB-AAA0-08F78F1FAC42}" ShortID="81718513">
+				<RandomSequenceContainer Name="Player_Jump" ID="{79135A40-AB6A-45CB-AAA0-08F78F1FAC42}" ShortID="81718513">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -181,7 +181,48 @@
 						</Sound>
 					</ChildrenList>
 				</RandomSequenceContainer>
-				<RandomSequenceContainer Name="Damaged" ID="{E04A482A-D3B0-4E6A-A592-43BE932D8958}" ShortID="705084075">
+				<RandomSequenceContainer Name="Player_Damaged" ID="{E04A482A-D3B0-4E6A-A592-43BE932D8958}" ShortID="705084075">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="Player_Damaged" ID="{AC8E4BB2-E22C-4F79-9EFD-EFCCE4577A6D}" ShortID="266264319">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Cartoon Hit" ID="{5151E3AC-D672-4C09-BE17-D549AABDC9BC}">
+									<PropertyList>
+										<Property Name="VolumeOffset" Type="Real64">
+											<ValueList>
+												<Value>-5.6</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>Cartoon Hit.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="712398590"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Cartoon Hit" ID="{5151E3AC-D672-4C09-BE17-D549AABDC9BC}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+				<RandomSequenceContainer Name="Player_Kick" ID="{D39F32AD-F077-4349-865D-9B5CB06EB29B}" ShortID="940721563">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -191,7 +232,7 @@
 						</Reference>
 					</ReferenceList>
 				</RandomSequenceContainer>
-				<RandomSequenceContainer Name="Kick" ID="{D39F32AD-F077-4349-865D-9B5CB06EB29B}" ShortID="940721563">
+				<RandomSequenceContainer Name="Player_Dash" ID="{046336DC-BE5E-4300-ABD3-CD445403AD57}" ShortID="1016750197">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -201,7 +242,7 @@
 						</Reference>
 					</ReferenceList>
 				</RandomSequenceContainer>
-				<RandomSequenceContainer Name="Dash" ID="{046336DC-BE5E-4300-ABD3-CD445403AD57}" ShortID="1016750197">
+				<RandomSequenceContainer Name="Player_Healed" ID="{6DF8F41F-A03E-45FE-BD92-97756C68CAD1}" ShortID="330624740">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -210,8 +251,32 @@
 							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 						</Reference>
 					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="Player_Healed" ID="{D5036AC9-5672-4177-BCC2-FE1BAD2C5255}" ShortID="1000292111">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Item_Energy" ID="{D734024F-5664-4CB9-9775-8378195097AE}">
+									<Language>SFX</Language>
+									<AudioFile>Item_Energy.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="874496196"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Item_Energy" ID="{D734024F-5664-4CB9-9775-8378195097AE}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
 				</RandomSequenceContainer>
-				<RandomSequenceContainer Name="Healed" ID="{6DF8F41F-A03E-45FE-BD92-97756C68CAD1}" ShortID="330624740">
+				<RandomSequenceContainer Name="Player_Death" ID="{64ABD81E-0CDE-4E36-86E2-5D48F891A3A6}" ShortID="246032613">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -220,16 +285,65 @@
 							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 						</Reference>
 					</ReferenceList>
-				</RandomSequenceContainer>
-				<RandomSequenceContainer Name="Death" ID="{64ABD81E-0CDE-4E36-86E2-5D48F891A3A6}" ShortID="246032613">
-					<ReferenceList>
-						<Reference Name="Conversion">
-							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-						</Reference>
-						<Reference Name="OutputBus">
-							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-						</Reference>
-					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="Player_Death_01" ID="{A26F02D0-BBE2-45D3-B89B-FF88DB3A92D1}" ShortID="541306020">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03" ID="{3A85F569-06EE-4D27-B98F-9CD65129FA23}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.0568889361300076"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.227555744520032"/>
+										<Property Name="LoopEnd" Type="Real64" Value="1.79200148809524"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.91526084971026"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="926179735"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03" ID="{3A85F569-06EE-4D27-B98F-9CD65129FA23}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Player_Death_02" ID="{4816F967-2A9E-4AA9-9A95-45295BBD019E}" ShortID="98835543">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04" ID="{966921DB-F13A-464F-80D4-830137541C91}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.0989073522927689"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.183685082829428"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimEnd" Type="Real64" Value="2.45855418556311"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="336431912"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04" ID="{966921DB-F13A-464F-80D4-830137541C91}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
 				</RandomSequenceContainer>
 			</ChildrenList>
 		</WorkUnit>
