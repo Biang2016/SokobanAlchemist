@@ -15,14 +15,19 @@ public class PlayerControllerHelper : ActorControllerHelper
     private ButtonState BS_Down;
     private ButtonState BS_Left;
 
-    private ButtonState BS_Skill_0; // Space/South
-    private ButtonState BS_Skill_1; // Shift/East
-    private ButtonState BS_Skill_2; // Z/J/LeftTrigger
-    private ButtonState BS_Skill_3; // X/K/RightTrigger
-    private ButtonState BS_Skill_4; // C/L
-    private ButtonState BS_Skill_5; // V/;/
-    private ButtonState BS_Skill_6; // /
-    private ButtonState BS_Skill_7; // /
+    public static Dictionary<int, string> KeyMappingStrDict = new Dictionary<int, string>
+    {
+        {0, "Space"}, // Space/South
+        {1, "LShift"}, // Shift/East
+        {2, "H"}, // H/LeftTrigger
+        {3, "J"}, // J/RightTrigger
+        {4, "K"}, // K
+        {5, "L"}, // L
+    };
+
+    private ButtonState[] BS_SkillArray = new ButtonState[8];
+
+    internal List<List<EntitySkillIndex>> SkillKeyMappings = new List<List<EntitySkillIndex>>();
 
     [FoldoutGroup("SkillKeyMapping")]
     [LabelText("Space/South")]
@@ -73,14 +78,19 @@ public class PlayerControllerHelper : ActorControllerHelper
         BS_Down = ControlManager.Instance.Battle_MoveButtons[(int) PlayerNumber, (int) GridPosR.Orientation.Down];
         BS_Left = ControlManager.Instance.Battle_MoveButtons[(int) PlayerNumber, (int) GridPosR.Orientation.Left];
 
-        BS_Skill_0 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 0];
-        BS_Skill_1 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 1];
-        BS_Skill_2 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 2];
-        BS_Skill_3 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 3];
-        BS_Skill_4 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 4];
-        BS_Skill_5 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 5];
-        BS_Skill_6 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 6];
-        BS_Skill_7 = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, 7];
+        SkillKeyMappings.Add(SkillKeyMapping_0);
+        SkillKeyMappings.Add(SkillKeyMapping_1);
+        SkillKeyMappings.Add(SkillKeyMapping_2);
+        SkillKeyMappings.Add(SkillKeyMapping_3);
+        SkillKeyMappings.Add(SkillKeyMapping_4);
+        SkillKeyMappings.Add(SkillKeyMapping_5);
+        SkillKeyMappings.Add(SkillKeyMapping_6);
+        SkillKeyMappings.Add(SkillKeyMapping_7);
+
+        for (int i = 0; i < 8; i++)
+        {
+            BS_SkillArray[i] = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, i];
+        }
     }
 
     private float Skill_1_PressDuration;
@@ -348,86 +358,35 @@ public class PlayerControllerHelper : ActorControllerHelper
 
             #region Skill
 
-            if (BS_Skill_1.Down)
+            if (BS_SkillArray[1].Down)
             {
                 Actor.Lift();
                 Skill_1_PressDuration = 0;
             }
 
-            if (BS_Skill_1.Pressed)
+            if (BS_SkillArray[1].Pressed)
             {
                 Actor.ThrowCharge();
                 Skill_1_PressDuration += Time.fixedDeltaTime;
             }
 
-            if (BS_Skill_1.Up)
+            if (BS_SkillArray[1].Up)
             {
                 Skill_1_PressDuration = 0;
                 Actor.ThrowOrPut();
             }
 
-            if (BS_Skill_1.Down)
+            for (int i = 0; i < 8; i++)
             {
-                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_1)
+                if (BS_SkillArray[i].Down)
                 {
-                    TriggerSkill(skillIndex, TargetEntityType.Self);
+                    foreach (EntitySkillIndex skillIndex in SkillKeyMappings[i])
+                    {
+                        TriggerSkill(skillIndex, TargetEntityType.Self);
+                    }
                 }
-            }
 
-            if (BS_Skill_0.Down)
-            {
-                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_0)
-                {
-                    TriggerSkill(skillIndex, TargetEntityType.Self);
-                }
-            }
-
-            if (BS_Skill_2.Down)
-            {
-                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_2)
-                {
-                    TriggerSkill(skillIndex, TargetEntityType.Self);
-                }
-            }
-
-            if (BS_Skill_3.Down)
-            {
-                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_3)
-                {
-                    TriggerSkill(skillIndex, TargetEntityType.Self);
-                }
-            }
-
-            if (BS_Skill_4.Down)
-            {
-                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_4)
-                {
-                    TriggerSkill(skillIndex, TargetEntityType.Self);
-                }
-            }
-
-            if (BS_Skill_5.Down)
-            {
-                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_5)
-                {
-                    TriggerSkill(skillIndex, TargetEntityType.Self);
-                }
-            }
-
-            if (BS_Skill_6.Down)
-            {
-                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_6)
-                {
-                    TriggerSkill(skillIndex, TargetEntityType.Self);
-                }
-            }
-
-            if (BS_Skill_7.Down)
-            {
-                foreach (EntitySkillIndex skillIndex in SkillKeyMapping_7)
-                {
-                    TriggerSkill(skillIndex, TargetEntityType.Self);
-                }
+                BS_SkillArray[i] = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, i];
             }
 
             #endregion

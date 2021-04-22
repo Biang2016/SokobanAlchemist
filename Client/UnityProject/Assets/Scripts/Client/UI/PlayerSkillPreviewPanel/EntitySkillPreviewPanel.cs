@@ -33,17 +33,39 @@ public class EntitySkillPreviewPanel : BaseUIPanel
             if (string.IsNullOrWhiteSpace(eps.SkillDescription)) continue;
             if (eps.SkillIcon == null || string.IsNullOrWhiteSpace(eps.SkillIcon.TypeName)) continue;
             EntitySkillRow esr = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(PassiveSkillContainer);
-            esr.Initialize(eps);
             PassiveSkillRows.Add(esr);
+            esr.Initialize(eps, "");
         }
 
         foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in entity.EntityActiveSkillDict)
         {
             if (string.IsNullOrWhiteSpace(kv.Value.SkillDescription)) continue;
             if (kv.Value.SkillIcon == null || string.IsNullOrWhiteSpace(kv.Value.SkillIcon.TypeName)) continue;
+
             EntitySkillRow esr = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(ActiveSkillContainer);
-            esr.Initialize(kv.Value);
             ActiveSkillRows.Add(esr);
+
+            string keyBind = "";
+            if (entity is Actor actor)
+            {
+                if (actor.ActorControllerHelper is PlayerControllerHelper pch)
+                {
+                    for (int i = 0; i < pch.SkillKeyMappings.Count; i++)
+                    {
+                        List<EntitySkillIndex> entitySkillIndices = pch.SkillKeyMappings[i];
+                        foreach (EntitySkillIndex entitySkillIndex in entitySkillIndices)
+                        {
+                            if (kv.Key == entitySkillIndex)
+                            {
+                                PlayerControllerHelper.KeyMappingStrDict.TryGetValue(i, out keyBind);
+                                esr.transform.SetAsFirstSibling();
+                            }
+                        }
+                    }
+                }
+            }
+
+            esr.Initialize(kv.Value, keyBind);
         }
     }
 
