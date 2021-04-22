@@ -11,7 +11,7 @@ public class EntitySkillAction_AddEntityBuff : EntitySkillAction, EntitySkillAct
     {
     }
 
-    protected override string Description => "碰撞时给撞击者Entity施加Buff，或被角色交互时给该角色Entity施加buff";
+    protected override string Description => "碰撞时给撞击者施加，或被角色交互时给该角色施加，或AreaCast施加";
 
     [LabelText("Buff列表")]
     [SerializeReference]
