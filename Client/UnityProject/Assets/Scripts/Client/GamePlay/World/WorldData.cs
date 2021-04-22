@@ -24,6 +24,10 @@ public class WorldData : IClone<WorldData>
     public bool UseSpecialPlayerEnterESPS = false;
     public EntityStatPropSet Raw_PlayerEnterESPS = new EntityStatPropSet(); // 干数据
 
+    public bool UseSpecialPlayerEnterSkillSet = false;
+    public List<string> PlayerDefaultPassiveSkillSet = new List<string>();
+    public List<string> PlayerDefaultActiveSkillSet = new List<string>();
+
     public FieldCamera.CameraConfigData CameraConfigData = new FieldCamera.CameraConfigData();
 
     public TypeSelectHelper SkyBoxType = new TypeSelectHelper {TypeDefineType = TypeDefineType.SkyBox};
@@ -50,6 +54,9 @@ public class WorldData : IClone<WorldData>
         data.WorldModuleGPOrder = WorldModuleGPOrder.Clone<GridPos3D, GridPos3D>();
         data.UseSpecialPlayerEnterESPS = UseSpecialPlayerEnterESPS;
         Raw_PlayerEnterESPS.ApplyDataTo(data.Raw_PlayerEnterESPS);
+        data.UseSpecialPlayerEnterSkillSet = UseSpecialPlayerEnterSkillSet;
+        data.PlayerDefaultPassiveSkillSet = PlayerDefaultPassiveSkillSet.Clone<string, string>();
+        data.PlayerDefaultActiveSkillSet = PlayerDefaultActiveSkillSet.Clone<string, string>();
         CameraConfigData.ApplyTo(data.CameraConfigData, true);
         data.SkyBoxType = SkyBoxType.Clone();
         data.PostProcessingProfileType = PostProcessingProfileType.Clone();

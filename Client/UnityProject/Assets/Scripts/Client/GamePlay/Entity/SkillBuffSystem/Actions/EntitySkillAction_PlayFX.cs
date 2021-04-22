@@ -23,6 +23,7 @@ public class EntitySkillAction_PlayFX : EntitySkillAction, EntitySkillAction.IPu
     {
         if (PlayFXForEveryGrid)
         {
+            if (Entity == null) return;
             GridPos3D worldGP = Entity.WorldGP;
             if (Entity is Box box)
             {

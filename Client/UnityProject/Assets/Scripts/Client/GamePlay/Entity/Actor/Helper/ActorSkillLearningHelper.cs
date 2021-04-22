@@ -24,7 +24,8 @@ public class ActorSkillLearningHelper : ActorMonoHelper
             if (entitySkill is EntityActiveSkill activeSkill)
             {
                 ActorSkillLearningData.LearnedActiveSkillGUIDs.Add(skillGUID);
-                Entity.AddNewActiveSkill(activeSkill, keyBind);
+                Entity.ForgetActiveSkill(keyBind);
+                Entity.AddNewActiveSkill(activeSkill, keyBind, true);
             }
             else if (entitySkill is EntityPassiveSkill passiveSkill)
             {

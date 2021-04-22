@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -27,13 +28,22 @@ public class WorldDesignHelper : MonoBehaviour
     [ShowIf("UseSpecialPlayerEnterESPS")]
     public EntityStatPropSet Raw_PlayerEnterESPS = new EntityStatPropSet(); // 干数据
 
-    [BoxGroup("相机配置")]
-    [LabelText("是否使用特殊相机配置")]
-    public bool UseSpecialCameraConfig = false;
+    [BoxGroup("开局数据")]
+    [LabelText("是否使用特殊开局技能集")]
+    public bool UseSpecialPlayerEnterSkillSet = false;
+
+    [BoxGroup("开局数据")]
+    [LabelText("玩家特殊开局技能")]
+    [ShowIf("UseSpecialPlayerEnterSkillSet")]
+    public List<EntitySkillSO> Raw_PlayerEnterActiveSkillSOs = new List<EntitySkillSO>();
+
+    [BoxGroup("开局数据")]
+    [LabelText("玩家特殊开局技能")]
+    [ShowIf("UseSpecialPlayerEnterSkillSet")]
+    public List<EntitySkillSO> Raw_PlayerEnterPassiveSkillSOs = new List<EntitySkillSO>();
 
     [BoxGroup("相机配置")]
     [LabelText("特殊相机配置")]
-    [ShowIf("UseSpecialCameraConfig")]
     public FieldCamera.CameraConfigData CameraConfigData = new FieldCamera.CameraConfigData();
 
     [BoxGroup("相机配置")]
@@ -62,6 +72,19 @@ public class WorldDesignHelper : MonoBehaviour
         worldData.DefaultWorldActorBornPointAlias = DefaultWorldActorBornPointAlias;
         worldData.UseSpecialPlayerEnterESPS = UseSpecialPlayerEnterESPS;
         Raw_PlayerEnterESPS.ApplyDataTo(worldData.Raw_PlayerEnterESPS);
+        worldData.UseSpecialPlayerEnterSkillSet = UseSpecialPlayerEnterSkillSet;
+
+        foreach (EntitySkillSO so in Raw_PlayerEnterActiveSkillSOs)
+        {
+            worldData.PlayerDefaultActiveSkillSet.Add(so.EntitySkill.SkillGUID);
+        }
+
+        foreach (EntitySkillSO so in Raw_PlayerEnterPassiveSkillSOs)
+        {
+            worldData.PlayerDefaultPassiveSkillSet.Add(so.EntitySkill.SkillGUID);
+        }
+
+        worldData.UseSpecialPlayerEnterSkillSet = UseSpecialPlayerEnterSkillSet;
         CameraConfigData.ApplyTo(worldData.CameraConfigData, true);
         worldData.SkyBoxType = SkyBoxType.Clone();
         worldData.PostProcessingProfileType = PostProcessingProfileType.Clone();

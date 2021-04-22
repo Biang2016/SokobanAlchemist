@@ -354,6 +354,17 @@ public abstract class Entity : PoolObject
         }
     }
 
+    public void ForgetPassiveSkill(string skillGUID)
+    {
+        if (EntityPassiveSkillGUIDDict.TryGetValue(skillGUID, out EntityPassiveSkill eps))
+        {
+            EntityPassiveSkills.Remove(eps);
+            EntityPassiveSkillGUIDDict.Remove(eps.SkillGUID);
+            eps.OnUnRegisterLevelEventID();
+            eps.OnUnInit();
+        }
+    }
+
     protected virtual void UnInitPassiveSkills()
     {
         foreach (EntityPassiveSkill eps in EntityPassiveSkills)
@@ -459,7 +470,7 @@ public abstract class Entity : PoolObject
         ActiveSkillMarkAsDestroyed = false;
     }
 
-    public void AddNewActiveSkill(EntityActiveSkill eas, int keyBind)
+    public void AddNewActiveSkill(EntityActiveSkill eas, int keyBind, bool clearAllExistedSkillInKeyBind)
     {
         if (string.IsNullOrWhiteSpace(eas.SkillGUID))
         {
@@ -492,7 +503,7 @@ public abstract class Entity : PoolObject
             {
                 if (actor.ActorControllerHelper is PlayerControllerHelper pch)
                 {
-                    pch.SkillKeyMappings[keyBind].Clear(); 
+                    if (clearAllExistedSkillInKeyBind) pch.SkillKeyMappings[keyBind].Clear();
                     pch.SkillKeyMappings[keyBind].Add(skillIndex);
                 }
             }
@@ -500,6 +511,52 @@ public abstract class Entity : PoolObject
         else
         {
             Debug.Log($"{name}添加主动技能失败{eas}");
+        }
+    }
+
+    public void ForgetActiveSkill(string skillGUID)
+    {
+        if (EntityActiveSkillGUIDDict.TryGetValue(skillGUID, out EntityActiveSkill eas))
+        {
+            if (this is Actor actor)
+            {
+                if (actor.ActorControllerHelper is PlayerControllerHelper pch)
+                {
+                    foreach (List<EntitySkillIndex> entitySkillIndices in pch.SkillKeyMappings)
+                    {
+                        entitySkillIndices.Remove(eas.EntitySkillIndex);
+                    }
+                }
+            }
+
+            EntityActiveSkillDict.Remove(eas.EntitySkillIndex);
+            EntityActiveSkillGUIDDict.Remove(eas.SkillGUID);
+            eas.OnUnInit();
+        }
+    }
+
+    public void ForgetActiveSkill(int keyBind)
+    {
+        if (this is Actor actor)
+        {
+            if (actor.ActorControllerHelper is PlayerControllerHelper pch)
+            {
+                List<EntityActiveSkill> forgetList = new List<EntityActiveSkill>();
+                foreach (EntitySkillIndex entitySkillIndex in pch.SkillKeyMappings[keyBind])
+                {
+                    EntityActiveSkill eas = EntityActiveSkillDict[entitySkillIndex];
+                    forgetList.Add(eas);
+                }
+
+                foreach (EntityActiveSkill eas in forgetList)
+                {
+                    ForgetActiveSkill(eas.SkillGUID);
+                }
+            }
+        }
+        else
+        {
+            return;
         }
     }
 

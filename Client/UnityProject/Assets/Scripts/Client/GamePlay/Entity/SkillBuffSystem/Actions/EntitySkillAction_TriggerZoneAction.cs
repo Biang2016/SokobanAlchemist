@@ -80,6 +80,10 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
     public List<IPureAction> EntityActions_Enter = new List<IPureAction>();
 
     [SerializeReference]
+    [LabelText("进入触发事件")]
+    public List<IEntityAction> EntityActions_Enter_Entity = new List<IEntityAction>();
+
+    [SerializeReference]
     [LabelText("停留触发事件")]
     public List<IPureAction> EntityActions_Stay = new List<IPureAction>();
 
@@ -103,6 +107,10 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
     [LabelText("离开触发事件")]
     public List<IPureAction> EntityActions_Exit = new List<IPureAction>();
 
+    [SerializeReference]
+    [LabelText("进入触发事件")]
+    public List<IEntityAction> EntityActions_Exit_Entity = new List<IEntityAction>();
+
     public void ExecuteOnTriggerEnter(Collider collider)
     {
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
@@ -121,6 +129,11 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                     foreach (IPureAction action in EntityActions_Enter)
                     {
                         action.Execute();
+                    }
+
+                    foreach (IEntityAction action in EntityActions_Enter_Entity)
+                    {
+                        action.ExecuteOnEntity(target);
                     }
                 }
             }
@@ -186,6 +199,11 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                     {
                         action.Execute();
                     }
+
+                    foreach (IEntityAction action in EntityActions_Exit_Entity)
+                    {
+                        action.ExecuteOnEntity(target);
+                    }
                 }
             }
         }
@@ -197,6 +215,7 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         EntitySkillAction_TriggerZoneAction action = ((EntitySkillAction_TriggerZoneAction) newAction);
         action.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
         action.EntityActions_Enter = EntityActions_Enter.Clone<IPureAction, IPureAction>();
+        action.EntityActions_Enter_Entity = EntityActions_Enter_Entity.Clone<IEntityAction, IEntityAction>();
         action.EntityActions_Stay = EntityActions_Stay.Clone<IPureAction, IPureAction>();
         action.EffectiveWhenInteractiveKeyDown = EffectiveWhenInteractiveKeyDown;
         action.InteractiveKeyNotice = InteractiveKeyNotice;
@@ -204,6 +223,7 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         action.InteractiveKeyNoticeDuration = InteractiveKeyNoticeDuration;
         action.ActionInterval = ActionInterval;
         action.EntityActions_Exit = EntityActions_Exit.Clone<IPureAction, IPureAction>();
+        action.EntityActions_Exit_Entity = EntityActions_Exit_Entity.Clone<IEntityAction, IEntityAction>();
     }
 
     public override void CopyDataFrom(EntitySkillAction srcData)
@@ -219,5 +239,6 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         InteractiveKeyNoticeDuration = action.InteractiveKeyNoticeDuration;
         ActionInterval = action.ActionInterval;
         EntityActions_Exit = action.EntityActions_Exit.Clone<IPureAction, IPureAction>();
+        EntityActions_Exit_Entity = action.EntityActions_Exit_Entity.Clone<IEntityAction, IEntityAction>();
     }
 }

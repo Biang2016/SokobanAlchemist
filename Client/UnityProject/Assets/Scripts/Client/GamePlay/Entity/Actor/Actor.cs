@@ -479,6 +479,32 @@ public class Actor : Entity
         PassiveSkillMarkAsDestroyed = false;
     }
 
+    public void ReloadActiveSkillSet(List<string> activeSkillSet)
+    {
+        //UnInitActiveSkills();
+        //foreach (string skillGUID in activeSkillSet)
+        //{
+        //    EntityActiveSkill eas = (EntityActiveSkill) ConfigManager.GetEntitySkill(skillGUID);
+        //    if (eas != null)
+        //    {
+                //AddNewActiveSkill(eas);
+            //}
+        //}
+    }
+
+    public void ReloadPassiveSkillSet(List<string> passiveSkillSet)
+    {
+        UnInitPassiveSkills();
+        foreach (string skillGUID in passiveSkillSet)
+        {
+            EntityPassiveSkill eps = (EntityPassiveSkill) ConfigManager.GetEntitySkill(skillGUID);
+            if (eps != null)
+            {
+                AddNewPassiveSkill(eps);
+            }
+        }
+    }
+
     #endregion
 
     #region 冻结

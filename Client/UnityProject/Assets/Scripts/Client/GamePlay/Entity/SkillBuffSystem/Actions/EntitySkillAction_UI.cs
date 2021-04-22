@@ -31,10 +31,7 @@ public class EntitySkillAction_UI : EntitySkillAction, EntitySkillAction.IPureAc
         BaseUIPanel uiPanel = UIManager.Instance.GetBaseUIForm(UIName);
         if (Open)
         {
-            if (uiPanel == null)
-            {
-                UIManager.Instance.ShowUIForm(UIName);
-            }
+            UIManager.Instance.ShowUIForm(UIName);
         }
         else
         {
