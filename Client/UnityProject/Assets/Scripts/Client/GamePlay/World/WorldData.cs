@@ -47,7 +47,7 @@ public class WorldData : IClone<WorldData>
             }
         }
 
-        data.WorldModuleGPOrder = WorldModuleGPOrder.Clone();
+        data.WorldModuleGPOrder = WorldModuleGPOrder.Clone<GridPos3D, GridPos3D>();
         data.UseSpecialPlayerEnterESPS = UseSpecialPlayerEnterESPS;
         Raw_PlayerEnterESPS.ApplyDataTo(data.Raw_PlayerEnterESPS);
         CameraConfigData.ApplyTo(data.CameraConfigData, true);

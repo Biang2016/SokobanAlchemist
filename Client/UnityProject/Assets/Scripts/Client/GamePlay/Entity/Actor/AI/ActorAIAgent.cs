@@ -26,7 +26,6 @@ public class ActorAIAgent
     {
         if (isStop) return;
         if (!Actor.GraphOwner.isRunning) Actor.GraphOwner?.StartBehaviour();
-        RefreshTargetGP();
         RefreshThreatEntityRank();
         RefreshExceptionJudgment(interval);
 
@@ -56,12 +55,6 @@ public class ActorAIAgent
     public void Stop()
     {
         isStop = true;
-
-        foreach (KeyValuePair<TargetEntityType, AIAgentTarget> kv in AIAgentTargetDict)
-        {
-            kv.Value.ClearTarget();
-        }
-
         ClearPathFinding();
         ClearNavTrackMarkers();
         ClearExceptionJudgment();
@@ -69,82 +62,8 @@ public class ActorAIAgent
 
     #region 目标搜索
 
-    public enum TargetEntityType
-    {
-        Navigate,
-        Attack,
-        Guard,
-        Follow,
-    }
-
-    public class AIAgentTarget
-    {
-        public Entity TargetEntity
-        {
-            get { return targetEntity; }
-            set
-            {
-                targetEntity = value;
-                if (value != null)
-                {
-                    targetGP = targetEntity.EntityBaseCenter.ToGridPos3D();
-                }
-            }
-        }
-
-        private Entity targetEntity;
-
-        public GridPos3D TargetGP
-        {
-            get { return targetGP; }
-            set
-            {
-                targetGP = value;
-                targetEntity = null;
-            }
-        }
-
-        private GridPos3D targetGP;
-
-        public bool HasTarget => targetEntity.IsNotNullAndAlive() || targetGP != GridPos3D.One * -1;
-
-        public void RefreshTargetGP()
-        {
-            if (targetEntity.IsNotNullAndAlive())
-            {
-                targetGP = targetEntity.EntityBaseCenter.ToGridPos3D();
-            }
-            else
-            {
-                targetEntity = null;
-            }
-        }
-
-        public void ClearTarget()
-        {
-            targetEntity = null;
-            targetGP = GridPos3D.One * -1;
-        }
-    }
-
-    public Dictionary<TargetEntityType, AIAgentTarget> AIAgentTargetDict = new Dictionary<TargetEntityType, AIAgentTarget>
-    {
-        {TargetEntityType.Navigate, new AIAgentTarget()},
-        {TargetEntityType.Attack, new AIAgentTarget()},
-        {TargetEntityType.Guard, new AIAgentTarget()},
-        {TargetEntityType.Follow, new AIAgentTarget()},
-    };
-
     public Dictionary<Actor, int> ThreatActorRank = new Dictionary<Actor, int>();
     private List<Actor> removeActorsFromThreatEntityRank = new List<Actor>(4);
-
-    public void RefreshTargetGP()
-    {
-        foreach (KeyValuePair<TargetEntityType, AIAgentTarget> kv in AIAgentTargetDict)
-        {
-            kv.Value.RefreshTargetGP();
-        }
-    }
 
     public void RefreshThreatEntityRank()
     {

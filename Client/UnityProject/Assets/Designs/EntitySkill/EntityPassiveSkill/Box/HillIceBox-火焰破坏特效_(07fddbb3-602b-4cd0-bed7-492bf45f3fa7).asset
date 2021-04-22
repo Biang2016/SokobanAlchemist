@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "HillIceBox-\u706B\u7130\u7834\u574F\u7279\u6548_(07fddbb3-602b-4cd0-bed7-492bf45f3fa7)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        SkillGUID: (07fddbb3-602b-4cd0-bed7-492bf45f3fa7)
+        SkillAlias: "HillIceBox-\u706B\u7130\u7834\u574F\u7279\u6548"
+        SkillIcon:
+          TypeDefineType: 0
+          TypeGUID: 
+        SkillDescription: 
+        IsAddedDuringGamePlay: 0
+        InitWorldModuleGUID: 0
+        PassiveSkillCondition: 32768
+        TriggerProbabilityPercent: 0
+        DestroyEntityByElementDamageTypeList: 12000000
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdOperator: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdOperator: 0
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        RawEntitySkillActions:
+        - id: 1
+    00000001:
+      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (ce01f26e-4b00-4b76-bef3-72a60663efa0)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4

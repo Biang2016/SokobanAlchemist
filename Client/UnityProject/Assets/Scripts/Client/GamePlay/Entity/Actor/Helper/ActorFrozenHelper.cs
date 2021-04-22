@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using UnityEngine;
 
 public class ActorFrozenHelper : EntityFrozenHelper
@@ -17,10 +18,11 @@ public class ActorFrozenHelper : EntityFrozenHelper
             {
                 actor.transform.parent = BattleManager.Instance.ActorContainerRoot;
                 FrozenBox.FrozenActor = null;
-                FrozenBox.DestroyBox();
+                FrozenBox.DestroySelf();
                 FrozenBox = null;
             }
 
+            actor.RegisterInModule(actor.WorldGP, actor.EntityOrientation);
             Thaw();
             FXManager.Instance.PlayFX(actor.ThawFX, transform.position);
         }
@@ -32,6 +34,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
             else
             {
                 actor.SnapToGrid();
+                actor.UnRegisterFromModule(actor.WorldGP, actor.EntityOrientation);
                 WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(actor.WorldGP);
                 if (module)
                 {
@@ -40,10 +43,10 @@ public class ActorFrozenHelper : EntityFrozenHelper
                     FrozenBox = (Box) module.GenerateEntity(entityData, actor.WorldGP, true, false, false, actor.GetEntityOccupationGPs_Rotated());
                     if (FrozenBox)
                     {
-                        List<EntityPassiveSkill> actorFrozenBoxPassiveSkills = actor.RawFrozenBoxPassiveSkills.Clone();
+                        List<EntityPassiveSkill> actorFrozenBoxPassiveSkills = actor.RawFrozenBoxPassiveSkills.Clone<EntityPassiveSkill, EntitySkill>();
                         foreach (EntityPassiveSkill abf in actorFrozenBoxPassiveSkills)
                         {
-                            FrozenBox.AddNewPassiveSkill(abf, true);
+                            FrozenBox.AddNewPassiveSkill(abf);
                         }
 
                         FrozenBox.FrozenActor = actor;

@@ -92,6 +92,11 @@ MonoBehaviour:
   DefaultWorldActorBornPointAlias: Tutorial_0_1
   UseSpecialPlayerEnterESPS: 1
   Raw_PlayerEnterESPS:
+    CollectDetectRadius:
+      BaseValue: 3
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 10
     Gold:
       _value: 0
       _minValue: 0
@@ -99,6 +104,42 @@ MonoBehaviour:
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
+    FireElementFragment:
+      _value: 0
+      _minValue: 0
+      _maxValue: 50
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
+    MaxFireElementFragment:
+      BaseValue: 50
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 50
+    IceElementFragment:
+      _value: 0
+      _minValue: 0
+      _maxValue: 40
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
+    MaxIceElementFragment:
+      BaseValue: 40
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 40
+    LightningElementFragment:
+      _value: 0
+      _minValue: 0
+      _maxValue: 30
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
+    MaxLightningElementFragment:
+      BaseValue: 30
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 30
     HealthDurability:
       _value: 100
       _minValue: 0
@@ -122,37 +163,37 @@ MonoBehaviour:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     BoxCollideDamageSelf:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     CollideDamage:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     FrozenBeCollideDamage:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 10
     CollideDamageX:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     CollideDamageZ:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     BeCollidedHitStopDuration:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     ExplodeDamageDefense:
       BaseValue: 45
       ModifiedValue: 0
@@ -162,12 +203,12 @@ MonoBehaviour:
       BaseValue: 100
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 1000
+      MaxValue: 200
     FrozenValue:
       _value: 0
       _minValue: 0
       _maxValue: 1000
-      AutoChange: -30
+      AutoChange: -10
       AutoChangePercent: 0
       AutoChangeTimeInterval: 300
     FrozenLevel:
@@ -181,13 +222,13 @@ MonoBehaviour:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     FrozenFX:
       FXType:
         TypeDefineType: 7
         TypeGUID: 
       UseCurve: 0
-      FXScale: 0
+      FXScale: 1
       AnimationCurve:
         serializedVersion: 2
         m_Curve: []
@@ -214,15 +255,15 @@ MonoBehaviour:
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     FiringSpreadPercent:
-      BaseValue: 0
+      BaseValue: 30
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 100
     FiringDamageDefense:
       BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 0
+      MaxValue: 1000
     StartFiringFX:
       FXType:
         TypeDefineType: 7
@@ -278,7 +319,7 @@ MonoBehaviour:
     ActionPoint:
       _value: 6
       _minValue: 0
-      _maxValue: 4
+      _maxValue: 6
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 1000
@@ -287,54 +328,6 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
-    KickConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 100
-    DashConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 100
-    VaultConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 100
-    SkillsPropertyCollections:
-    - skillAlias: "\u539F\u5730\u7206\u70B8"
-      CastingRadius:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-      Cooldown:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-      WingUp:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-      CastDuration:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-      Recovery:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-      CameraShakeEquivalentDamage:
-        BaseValue: 0
-        ModifiedValue: 0
-        MinValue: 0
-        MaxValue: 0
-    RawEntityDefaultBuffs: []
   UseSpecialCameraConfig: 0
   CameraConfigData:
     HorAngle: 0
@@ -352,9 +345,7 @@ MonoBehaviour:
     TypeGUID: (709a3ea8-3acb-4ad9-b14a-8a1345ab8a47)
   PostProcessingProfileType:
     TypeDefineType: 10
-    TypeGUID: (4074a9c0-52a4-4df8-9317-e06970dbd34f)
-  references:
-    version: 1
+    TypeGUID: (af3494a7-793d-4989-af6c-3a57b3e6bcf8)
 --- !u!1 &3117608157354636031
 GameObject:
   m_ObjectHideFlags: 0

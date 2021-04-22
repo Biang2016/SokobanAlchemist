@@ -8,6 +8,7 @@ public partial class BattleManager
 
     public bool GetStateBool(string stateAlias)
     {
+        if (string.IsNullOrWhiteSpace(stateAlias)) return false;
         if (BattleStateBoolDict.TryGetValue(stateAlias, out BattleStateBool bsb))
         {
             return bsb.Value;

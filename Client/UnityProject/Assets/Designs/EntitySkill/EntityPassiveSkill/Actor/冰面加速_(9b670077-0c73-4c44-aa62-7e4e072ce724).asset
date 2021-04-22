@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u51B0\u9762\u52A0\u901F_(9b670077-0c73-4c44-aa62-7e4e072ce724)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: ActorPassiveSkill_IceSlideSpeedUp, ns: , asm: Client}
+      data:
+        SkillGUID: (9b670077-0c73-4c44-aa62-7e4e072ce724)
+        SkillAlias: "\u51B0\u9762\u52A0\u901F"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: (24ffd430-dd6a-4d11-8590-60976f30d1e4)
+        SkillDescription: Move faster on the top of ice.
+        IsAddedDuringGamePlay: 0
+        InitWorldModuleGUID: 0
+        RawEntityBuff:
+          id: 1
+    00000001:
+      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
+      data:
+        GUID: 10239
+        BuffAlias: 
+        EntityBuffAttribute: 1
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 1
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 0
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        Percent: 50
+        LinearDecayInDuration: 0
+        EntityPropertyType: 30

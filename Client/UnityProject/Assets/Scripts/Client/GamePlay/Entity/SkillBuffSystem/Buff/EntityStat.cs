@@ -69,4 +69,16 @@ public enum EntityStatType
     [EntityStat]
     [LabelText("当前金子")]
     Gold = 1000,
+
+    [EntityStat]
+    [LabelText("火元素碎片")]
+    FireElementFragment = 1001,
+
+    [EntityStat]
+    [LabelText("冰元素碎片")]
+    IceElementFragment = 1002,
+
+    [EntityStat]
+    [LabelText("电元素碎片")]
+    LightningElementFragment = 1003,
 }

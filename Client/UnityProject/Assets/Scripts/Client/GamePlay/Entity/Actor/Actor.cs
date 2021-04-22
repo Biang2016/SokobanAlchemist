@@ -49,10 +49,7 @@ public class Actor : Entity
     public GameObject ActorMoveColliderRoot;
 
     [FoldoutGroup("组件")]
-    public PlayerControllerHelper PlayerControllerHelper;
-
-    [FoldoutGroup("组件")]
-    public EnemyControllerHelper EnemyControllerHelper;
+    public ActorControllerHelper ActorControllerHelper;
 
     [FoldoutGroup("组件")]
     public ActorPushHelper ActorPushHelper;
@@ -71,6 +68,9 @@ public class Actor : Entity
 
     [FoldoutGroup("组件")]
     public ActorBoxInteractHelper ActorBoxInteractHelper;
+
+    [FoldoutGroup("组件")]
+    public ActorSkillLearningHelper ActorSkillLearningHelper;
 
     [FoldoutGroup("组件")]
     public Transform LiftBoxPivot;
@@ -114,6 +114,11 @@ public class Actor : Entity
     [FoldoutGroup("组件")]
     public EntityTriggerZoneHelper ActorTriggerZoneHelper;
 
+    internal override EntityCollectHelper EntityCollectHelper => ActorCollectHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityCollectHelper ActorCollectHelper;
+
     internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => ActorGrindTriggerZoneHelper;
 
     [FoldoutGroup("组件")]
@@ -131,8 +136,8 @@ public class Actor : Entity
 
     #endregion
 
-    internal GraphOwner GraphOwner => EnemyControllerHelper != null ? EnemyControllerHelper.GraphOwner : null;
-    internal ActorAIAgent ActorAIAgent => EnemyControllerHelper != null ? EnemyControllerHelper.ActorAIAgent : null;
+    internal GraphOwner GraphOwner => ActorControllerHelper != null ? ((ActorControllerHelper is EnemyControllerHelper ech) ? ech.GraphOwner : null) : null;
+    internal ActorAIAgent ActorAIAgent => ActorControllerHelper != null ? ((ActorControllerHelper is EnemyControllerHelper ech) ? ech.ActorAIAgent : null) : null;
 
     #region 状态
 
@@ -196,17 +201,39 @@ public class Actor : Entity
         {
             if (curWorldGP != value)
             {
-                foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+                if (!IsFrozen)
                 {
-                    GridPos3D gridPos = value + offset;
-                    Entity targetGridEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridPos, GUID, out WorldModule targetGridModule, out GridPos3D _);
-                    if (targetGridModule == null) return; // 防止角色走入空模组
-                    if (targetGridEntity != null) return; // 防止角色和其他Entity卡住
+                    foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+                    {
+                        GridPos3D gridPos = value + offset;
+                        Entity targetGridEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridPos, GUID, out WorldModule targetGridModule, out GridPos3D localGP);
+                        if (targetGridModule == null) return; // 防止角色走入空模组
+                        if (targetGridEntity != null)
+                        {
+                            // 检查改对象是否真的占据这几格，否则是bug
+                            bool correctOccupation = false;
+                            foreach (GridPos3D _offset in targetGridEntity.GetEntityOccupationGPs_Rotated())
+                            {
+                                GridPos3D _gridPos = targetGridEntity.WorldGP + _offset;
+                                if (_gridPos == gridPos)
+                                {
+                                    correctOccupation = true;
+                                    break;
+                                }
+                            }
+
+                            if (correctOccupation) return; // 防止角色和其他Entity卡住
+                            else
+                            {
+                                targetGridModule[TypeDefineType.Actor, localGP] = null; // 执行到这里说明是bug，先这样处理，以后再研究
+                            }
+                        }
+                    }
                 }
 
-                UnRegisterFromModule(curWorldGP, EntityOrientation);
+                if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
                 curWorldGP = value;
-                RegisterInModule(curWorldGP, EntityOrientation);
+                if (!IsFrozen) RegisterInModule(curWorldGP, EntityOrientation);
             }
         }
     }
@@ -234,11 +261,11 @@ public class Actor : Entity
                 if (offset.z < zmin) zmin = offset.z;
             }
 
-            return WorldGP + new GridPos3D((ActorWidth - 1) / 2 + xmin, ymin, (ActorWidth - 1) / 2 + zmin);
+            return WorldGP + new GridPos3D(xmin, ymin, zmin);
         }
     }
 
-    private void UnRegisterFromModule(GridPos3D oldWorldGP, GridPosR.Orientation oldOrientation)
+    public void UnRegisterFromModule(GridPos3D oldWorldGP, GridPosR.Orientation oldOrientation)
     {
         if (IsRecycling) return;
         List<GridPos3D> occupationData_Rotated = ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[oldOrientation];
@@ -254,7 +281,7 @@ public class Actor : Entity
         }
     }
 
-    private void RegisterInModule(GridPos3D newWorldGP, GridPosR.Orientation newOrientation)
+    public void RegisterInModule(GridPos3D newWorldGP, GridPosR.Orientation newOrientation)
     {
         if (IsRecycling) return;
         foreach (GridPos3D offset in ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[newOrientation])
@@ -279,11 +306,12 @@ public class Actor : Entity
 
         // Actor由于限制死平面必须是正方形，因此可以用左下角坐标相减得到核心坐标偏移量；在旋转时应用此偏移量，可以保证平面正方形仍在老位置
         GridPos offset = ActorRotateWorldGPOffset(ActorWidth, newOrientation) - ActorRotateWorldGPOffset(ActorWidth, EntityOrientation);
-        UnRegisterFromModule(curWorldGP, EntityOrientation);
+        if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
         base.SwitchEntityOrientation(newOrientation);
-        RegisterInModule(curWorldGP, newOrientation);
+        if (!IsFrozen) RegisterInModule(curWorldGP, newOrientation);
 
-        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(offset.x + curWorldGP.x, offset.z + curWorldGP.z, newOrientation), transform, 1);
+        transform.position = new Vector3(offset.x + curWorldGP.x, transform.position.y, offset.z + curWorldGP.z);
+        transform.rotation = Quaternion.Euler(0, (int) newOrientation * 90f, 0);
         WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
     }
 
@@ -425,15 +453,28 @@ public class Actor : Entity
     public void Reborn()
     {
         ReloadESPS(RawEntityStatPropSet);
+        EntityCollectHelper?.OnHelperUsed();
     }
 
     public void ReloadESPS(EntityStatPropSet srcESPS)
     {
+        // 财产保留 todo 待重构
+        int gold = EntityStatPropSet.Gold.Value;
+        int fire = EntityStatPropSet.FireElementFragment.Value;
+        int ice = EntityStatPropSet.IceElementFragment.Value;
+        int lightning = EntityStatPropSet.LightningElementFragment.Value;
+
         EntityStatPropSet.OnRecycled();
         srcESPS.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
         ActorBattleHelper.InGameHealthBar.Initialize(ActorBattleHelper, 100, 30);
-        UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().Initialize();
+
+        EntityStatPropSet.Gold.SetValue(gold);
+        EntityStatPropSet.FireElementFragment.SetValue(fire);
+        EntityStatPropSet.IceElementFragment.SetValue(ice);
+        EntityStatPropSet.LightningElementFragment.SetValue(lightning);
+
+        ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
         ActiveSkillMarkAsDestroyed = false;
         PassiveSkillMarkAsDestroyed = false;
     }
@@ -510,6 +551,7 @@ public class Actor : Entity
         EntityBuffHelper.OnHelperUsed();
         EntityFrozenHelper.OnHelperUsed();
         EntityTriggerZoneHelper?.OnHelperUsed();
+        EntityCollectHelper?.OnHelperUsed();
         EntityGrindTriggerZoneHelper?.OnHelperUsed();
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
@@ -521,19 +563,19 @@ public class Actor : Entity
             h.OnHelperUsed();
         }
 
-        PlayerControllerHelper?.OnHelperUsed();
-        EnemyControllerHelper?.OnHelperUsed();
+        ActorControllerHelper?.OnHelperUsed();
         ActorPushHelper.OnHelperUsed();
         ActorFaceHelper.OnHelperUsed();
         ActorSkinHelper.OnHelperUsed();
         ActorLaunchArcRendererHelper.OnHelperUsed();
         ActorBattleHelper.OnHelperUsed();
         ActorBoxInteractHelper.OnHelperUsed();
+        ActorSkillLearningHelper?.OnHelperUsed();
 
         ActorMoveColliderRoot.SetActive(true);
     }
 
-    public bool IsRecycling = false;
+    internal bool IsRecycling = false;
 
     public override void OnRecycled()
     {
@@ -565,6 +607,7 @@ public class Actor : Entity
         EntityBuffHelper.OnHelperRecycled();
         EntityFrozenHelper.OnHelperRecycled();
         EntityTriggerZoneHelper?.OnHelperRecycled();
+        EntityCollectHelper?.OnHelperRecycled();
         EntityGrindTriggerZoneHelper?.OnHelperRecycled();
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
@@ -576,14 +619,14 @@ public class Actor : Entity
             h.OnHelperRecycled();
         }
 
-        PlayerControllerHelper?.OnHelperRecycled();
-        EnemyControllerHelper?.OnHelperRecycled();
+        ActorControllerHelper?.OnHelperRecycled();
         ActorPushHelper.OnHelperRecycled();
         ActorFaceHelper.OnHelperRecycled();
         ActorSkinHelper.OnHelperRecycled();
         ActorLaunchArcRendererHelper.OnHelperRecycled();
         ActorBattleHelper.OnHelperRecycled();
         ActorBoxInteractHelper.OnHelperRecycled();
+        ActorSkillLearningHelper?.OnHelperRecycled();
 
         UnInitActiveSkills();
         UnInitPassiveSkills();
@@ -644,6 +687,7 @@ public class Actor : Entity
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
         ActorBattleHelper.Initialize();
+        ActorCollectHelper?.Initialize();
         ActorBoxInteractHelper.Initialize();
         ActorArtHelper.SetPFMoveGridSpeed(0);
         ActorArtHelper.SetIsPushing(false);
@@ -656,8 +700,17 @@ public class Actor : Entity
         InitPassiveSkills();
         InitActiveSkills();
 
-        PlayerControllerHelper?.OnSetup(PlayerNumber.Player1);
-        EnemyControllerHelper?.OnSetup();
+        if (ActorControllerHelper != null)
+        {
+            if (ActorControllerHelper is PlayerControllerHelper pch)
+            {
+                pch.OnSetup(PlayerNumber.Player1);
+            }
+            else if (ActorControllerHelper is EnemyControllerHelper ech)
+            {
+                ech.OnSetup();
+            }
+        }
 
         ForbidAction = false;
         ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
@@ -673,7 +726,7 @@ public class Actor : Entity
 
     protected override void Tick(float interval)
     {
-        EnemyControllerHelper?.OnTick(interval);
+        ActorControllerHelper?.OnTick(interval);
         base.Tick(interval);
     }
 
@@ -691,12 +744,24 @@ public class Actor : Entity
 
     protected override void FixedUpdate()
     {
-        PlayerControllerHelper?.OnFixedUpdate();
         base.FixedUpdate();
         if (IsRecycled) return;
+        ActorControllerHelper?.OnFixedUpdate();
         if (ENABLE_ACTOR_MOVE_LOG && WorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {WorldGP}");
         LastWorldGP = WorldGP;
         WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+    }
+
+    protected override void InitPassiveSkills()
+    {
+        base.InitPassiveSkills();
+        // TODO load learned skills.
+    }
+
+    protected override void InitActiveSkills()
+    {
+        base.InitActiveSkills();
+        // TODO load learned skills.
     }
 
     public void TransportPlayerGridPos(GridPos3D worldGP, float lerpTime = 0)
@@ -755,16 +820,24 @@ public class Actor : Entity
 
                 if (EntityStatPropSet.MoveSpeed.GetModifiedValue != 0)
                 {
-                    Vector3 velDiff = CurMoveAttempt.normalized * Time.fixedDeltaTime * Accelerate;
-                    Vector3 finalVel = new Vector3(RigidBody.velocity.x + velDiff.x, 0, RigidBody.velocity.z + velDiff.z);
-                    float finalSpeed = EntityStatPropSet.MoveSpeed.GetModifiedValue / 10f;
-                    if (finalVel.magnitude > finalSpeed)
+                    if (ActorArtHelper.CanPan)
                     {
-                        finalVel = finalVel.normalized * finalSpeed;
-                    }
+                        Vector3 velDiff = CurMoveAttempt.normalized * Time.fixedDeltaTime * Accelerate;
+                        Vector3 finalVel = new Vector3(RigidBody.velocity.x + velDiff.x, 0, RigidBody.velocity.z + velDiff.z);
+                        float finalSpeed = EntityStatPropSet.MoveSpeed.GetModifiedValue / 10f;
+                        if (finalVel.magnitude > finalSpeed)
+                        {
+                            finalVel = finalVel.normalized * finalSpeed;
+                        }
 
-                    finalVel.y = RigidBody.velocity.y;
-                    RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);
+                        finalVel.y = RigidBody.velocity.y;
+                        RigidBody.AddForce(finalVel - RigidBody.velocity, ForceMode.VelocityChange);
+                    }
+                    else
+                    {
+                        RigidBody.drag = 100f;
+                        RigidBody.mass = 1f;
+                    }
                 }
 
                 CurForward = CurMoveAttempt.normalized;
@@ -949,52 +1022,7 @@ public class Actor : Entity
 
     #region Skills
 
-    public void VaultOrDash(int dashMaxDistance)
-    {
-        if (ThrowState != ThrowStates.None) return;
-        Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
-        //Debug.DrawRay(ray.origin, ray.direction, Color.red, 0.3f);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
-        {
-            Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && !box.Passable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Push, box.EntityTypeIndex))
-            {
-                Vault();
-            }
-            else
-            {
-                Dash(dashMaxDistance);
-            }
-        }
-        else
-        {
-            Dash(dashMaxDistance);
-        }
-    }
-
-    private int temp_DashMaxDistance;
-
-    public void Dash(int dashMaxDistance)
-    {
-        if (CannotAct && !IsFrozen) return;
-        if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue)
-        {
-            EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.DashConsumeActionPoint.GetModifiedValue, "Dash");
-            if (IsFrozen)
-            {
-                EntityStatPropSet.FrozenValue.SetValue(EntityStatPropSet.FrozenValue.Value - 200, "Dash");
-            }
-            else
-            {
-                temp_DashMaxDistance = dashMaxDistance;
-                ActorArtHelper.Dash();
-            }
-        }
-        else
-        {
-            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].OnActionLowWarning();
-        }
-    }
+    internal int temp_DashMaxDistance;
 
     public void DoDash()
     {
@@ -1004,7 +1032,7 @@ public class Actor : Entity
         {
             GridPos3D targetPos = WorldGP + CurForward.ToGridPos3D() * dashDistance;
             if (lastGridGrounded) finalDashDistance = dashDistance - 1;
-            lastGridGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(targetPos, 3, true, out GridPos3D _);
+            lastGridGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(targetPos, 5, true, out GridPos3D _);
             Entity targetOccupyEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(targetPos, GUID, out WorldModule _, out GridPos3D _);
             if (targetOccupyEntity != null && !(targetOccupyEntity is Actor)) break;
         }
@@ -1013,49 +1041,7 @@ public class Actor : Entity
         temp_DashMaxDistance = 0;
     }
 
-    private void Vault()
-    {
-        if (CannotAct) return;
-        if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue)
-        {
-            if (IsFrozen)
-            {
-                EntityStatPropSet.FrozenValue.SetValue(EntityStatPropSet.FrozenValue.Value - 200, "Vault");
-            }
-            else
-            {
-                ActorArtHelper.Vault();
-                EntityWwiseHelper.OnVault.Post(gameObject);
-            }
-        }
-        else
-        {
-            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].OnActionLowWarning();
-        }
-    }
-
-    public void Kick()
-    {
-        if (CannotAct) return;
-        if (EntityStatPropSet.ActionPoint.Value >= EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue)
-        {
-            Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
-            {
-                Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-                if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.EntityTypeIndex))
-                {
-                    ActorArtHelper.Kick();
-                }
-            }
-        }
-        else
-        {
-            UIManager.Instance.GetBaseUIForm<PlayerStatHUDPanel>().PlayerStatHUDs_Player[0].OnActionLowWarning();
-        }
-    }
-
-    public void KickBox()
+    public void DoKickBox()
     {
         Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
@@ -1063,10 +1049,8 @@ public class Actor : Entity
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.EntityTypeIndex))
             {
-                EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.KickConsumeActionPoint.GetModifiedValue, "Kick");
                 box.Kick(CurForward, KickForce, this);
                 FX kickFX = FXManager.Instance.PlayFX(KickFX, KickFXPivot.position);
-                EntityWwiseHelper.OnKick.Post(gameObject);
             }
         }
     }
@@ -1075,7 +1059,7 @@ public class Actor : Entity
     {
         if (CannotAct) return;
         Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(ray, out RaycastHit hit, 1.74f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
         {
             Box box = hit.collider.gameObject.GetComponentInParent<Box>();
             GridPos3D actorSwapBoxMoveAttempt = (hit.collider.transform.position - transform.position).ToGridPos3D().Normalized();
@@ -1094,11 +1078,9 @@ public class Actor : Entity
                     if (offset == boxIndicatorGP_behind - box.WorldGP) return;
                 }
 
-                EntityStatPropSet.ActionPoint.SetValue(EntityStatPropSet.ActionPoint.Value - EntityStatPropSet.VaultConsumeActionPoint.GetModifiedValue, "SwapBox"); // 消耗行动力
-
                 GridPos3D boxWorldGP_before = box.WorldGP;
                 GridPos3D boxWorldGP_after = LastWorldGP - boxIndicatorGP + box.WorldGP;
-                if (WorldManager.Instance.CurrentWorld.MoveBoxColumn(box.WorldGP, -actorSwapBoxMoveAttempt, Box.States.BeingPushed, false, true, GUID))
+                if (WorldManager.Instance.CurrentWorld.MoveBoxColumn(box.WorldGP, -actorSwapBoxMoveAttempt, Box.States.BeingPushed, 0f, true, GUID))
                 {
                     if (Box.ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {box.name} SwapBox {boxWorldGP_before} -> {box.WorldGP}");
                     transform.position = boxIndicatorGP;
@@ -1327,6 +1309,7 @@ public class Actor : Entity
         if (CannotAct) return;
         if (HasRigidbody)
         {
+            ActorMoveColliderRoot.SetActive(false);
             JumpHeight = jumpHeight;
             JumpStartWorldGP = WorldGP;
             CurrentJumpForce = jumpForce;
@@ -1383,6 +1366,7 @@ public class Actor : Entity
             if (CannotAct) return;
             if (HasRigidbody)
             {
+                ActorMoveColliderRoot.SetActive(true);
                 SmashDownTargetPos = targetPos;
                 SmashForce = smashForce;
                 ActorBehaviourState = ActorBehaviourStates.SmashDown;
@@ -1410,7 +1394,7 @@ public class Actor : Entity
             {
                 ActorBehaviourState = ActorBehaviourStates.Idle;
             }
-            else if (RigidBody.velocity.y <= 0.1f)
+            else if (RigidBody.velocity.y >= -0.1f)
             {
                 ActorBehaviourState = ActorBehaviourStates.Idle;
             }
@@ -1455,27 +1439,36 @@ public class Actor : Entity
 
     #region Die
 
-    public bool IsDestroying = false;
-
-    public void DestroyActorForModuleRecycle()
+    public override void DestroySelfByModuleRecycle()
     {
         if (IsDestroying) return;
+        base.DestroySelfByModuleRecycle();
         IsDestroying = true;
         if (ActorFrozenHelper.FrozenBox)
         {
-            ActorFrozenHelper.FrozenBox.DestroyBox(null, true);
+            ActorFrozenHelper.FrozenBox.DestroySelfByModuleRecycle();
             ActorFrozenHelper.FrozenBox = null;
         }
 
-        if (this != BattleManager.Instance.Player1) PoolRecycle();
-        IsDestroying = false;
+        if (this != BattleManager.Instance.Player1)
+        {
+            PoolRecycle();
+            IsDestroying = false;
+        }
+        else
+        {
+            IsDestroying = false;
+        }
     }
 
-    public void DestroyActor(UnityAction callBack = null)
+    public override void DestroySelf(UnityAction callBack = null)
     {
+        EntityStatPropSet.FrozenValue.SetValue(0);
+        EntityCollectHelper?.OnHelperRecycled(); // 以免自身掉落物又被自身捡走
         if (IsDestroying) return;
+        base.DestroySelf();
         IsDestroying = true;
-        UnRegisterFromModule(WorldGP, EntityOrientation);
+        if (!IsFrozen) UnRegisterFromModule(WorldGP, EntityOrientation);
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
             ps.OnBeforeDestroyEntity();
@@ -1501,7 +1494,7 @@ public class Actor : Entity
         {
             if (ActorFrozenHelper.FrozenBox)
             {
-                ActorFrozenHelper.FrozenBox.DestroyBox(null, false);
+                ActorFrozenHelper.FrozenBox.DestroySelf();
                 ActorFrozenHelper.FrozenBox = null;
             }
 

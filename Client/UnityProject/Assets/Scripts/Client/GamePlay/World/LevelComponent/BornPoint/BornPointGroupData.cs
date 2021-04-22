@@ -8,7 +8,7 @@ public class BornPointGroupData : IClone<BornPointGroupData>
     public BornPointGroupData Clone()
     {
         BornPointGroupData newData = new BornPointGroupData();
-        newData.PlayerBornPoints = PlayerBornPoints.Clone();
+        newData.PlayerBornPoints = PlayerBornPoints.Clone<string, BornPointData, string, LevelComponentData>();
         return newData;
     }
 }

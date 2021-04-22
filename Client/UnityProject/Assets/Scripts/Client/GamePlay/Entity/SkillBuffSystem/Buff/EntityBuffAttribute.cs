@@ -136,6 +136,9 @@ public enum EntityBuffAttribute
 
     [LabelText("碾压免疫")]
     GrindImmune,
+
+    [LabelText("技能Buff")]
+    SkillBuff,
 }
 
 public static class EntityBuffAttributeExtension

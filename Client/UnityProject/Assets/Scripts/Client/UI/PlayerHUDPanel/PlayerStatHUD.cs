@@ -5,26 +5,41 @@ using UnityEngine.UI;
 
 public class PlayerStatHUD : MonoBehaviour
 {
+    public void Initialize(ActorBattleHelper helper)
+    {
+        EntityStatPropSet asps = helper.Actor.EntityStatPropSet;
+
+        SetHealth(asps.HealthDurability.Value, asps.HealthDurability.MinValue, asps.HealthDurability.MaxValue);
+        asps.HealthDurability.m_NotifyActionSet.OnChanged += SetHealth;
+
+        ActionPointBar.Initialize(EntityStatType.ActionPoint, 1);
+        ActionPointBar.SetStat(asps.ActionPoint.Value, asps.ActionPoint.MinValue, asps.ActionPoint.MaxValue);
+        asps.ActionPoint.m_NotifyActionSet.OnChanged += ActionPointBar.SetStat;
+
+        SetGold(asps.Gold.Value);
+        asps.Gold.m_NotifyActionSet.OnChanged += (value, min, max) => SetGold(value);
+
+        FireElementFragmentBar.Initialize(EntityStatType.FireElementFragment, 10);
+        FireElementFragmentBar.SetStat(asps.FireElementFragment.Value, asps.FireElementFragment.MinValue, asps.FireElementFragment.MaxValue);
+        asps.FireElementFragment.m_NotifyActionSet.OnChanged += FireElementFragmentBar.SetStat;
+
+        IceElementFragmentBar.Initialize(EntityStatType.IceElementFragment, 20);
+        IceElementFragmentBar.SetStat(asps.IceElementFragment.Value, asps.IceElementFragment.MinValue, asps.IceElementFragment.MaxValue);
+        asps.IceElementFragment.m_NotifyActionSet.OnChanged += IceElementFragmentBar.SetStat;
+
+        LightningElementFragmentBar.Initialize(EntityStatType.LightningElementFragment, 1);
+        LightningElementFragmentBar.SetStat(asps.LightningElementFragment.Value, asps.LightningElementFragment.MinValue, asps.LightningElementFragment.MaxValue);
+        asps.LightningElementFragment.m_NotifyActionSet.OnChanged += LightningElementFragmentBar.SetStat;
+    }
+
+    #region Health
+
     public Gradient HealthSliderFillImageGradient;
     public Image HealthSliderFillImage;
     public Slider HealthSlider;
     public Animator HealthSliderHandleAnim;
     public TextMeshProUGUI HealthText;
     public Animator HealthTextAnim;
-
-    public void Initialize(ActorBattleHelper helper)
-    {
-        EntityStatPropSet asps = helper.Actor.EntityStatPropSet;
-        SetHealth(asps.HealthDurability.Value, asps.HealthDurability.MinValue, asps.HealthDurability.MaxValue);
-        SetActionPoint(asps.ActionPoint.Value, asps.ActionPoint.MinValue, asps.ActionPoint.MaxValue);
-        SetGold(asps.Gold.Value);
-
-        asps.HealthDurability.m_NotifyActionSet.OnChanged += SetHealth;
-        asps.ActionPoint.m_NotifyActionSet.OnChanged += SetActionPoint;
-        asps.Gold.m_NotifyActionSet.OnChanged += (value, min, max) => SetGold(value);
-    }
-
-    #region Health
 
     public void SetHealth(int current, int min, int max)
     {
@@ -47,46 +62,11 @@ public class PlayerStatHUD : MonoBehaviour
 
     #region ActionPoint
 
-    public Transform ActionPointsContainer;
-    private List<ActionPointIndicator> ActionPointIndicators = new List<ActionPointIndicator>();
-
-    public void SetActionPoint(int current, int min, int max)
-    {
-        if (ActionPointIndicators.Count > max)
-        {
-            while (ActionPointIndicators.Count != max)
-            {
-                ActionPointIndicators[ActionPointIndicators.Count - 1].PoolRecycle();
-                ActionPointIndicators.RemoveAt(ActionPointIndicators.Count - 1);
-            }
-        }
-        else if (ActionPointIndicators.Count < max)
-        {
-            while (ActionPointIndicators.Count != max)
-            {
-                ActionPointIndicator indicator = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.ActionPointIndicator].AllocateGameObject<ActionPointIndicator>(ActionPointsContainer);
-                indicator.Available = false;
-                ActionPointIndicators.Add(indicator);
-            }
-        }
-
-        for (int i = 0; i < ActionPointIndicators.Count; i++)
-        {
-            ActionPointIndicators[i].Available = i < current;
-        }
-    }
-
-    public void OnActionLowWarning()
-    {
-        foreach (ActionPointIndicator indicator in ActionPointIndicators)
-        {
-            indicator.JumpRed();
-        }
-    }
+    public DiscreteStatPointBar ActionPointBar;
 
     #endregion
 
-    #region Gold
+    #region 财产
 
     public TextMeshProUGUI GoldText;
 
@@ -94,6 +74,10 @@ public class PlayerStatHUD : MonoBehaviour
     {
         GoldText.text = current.ToString();
     }
+
+    public DiscreteStatPointBar FireElementFragmentBar;
+    public DiscreteStatPointBar IceElementFragmentBar;
+    public DiscreteStatPointBar LightningElementFragmentBar;
 
     #endregion
 }

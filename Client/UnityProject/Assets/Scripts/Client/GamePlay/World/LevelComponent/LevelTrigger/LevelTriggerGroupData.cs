@@ -8,7 +8,7 @@ public class LevelTriggerGroupData : IClone<LevelTriggerGroupData>
     public LevelTriggerGroupData Clone()
     {
         LevelTriggerGroupData newData = new LevelTriggerGroupData();
-        newData.TriggerDataList = TriggerDataList.Clone();
+        newData.TriggerDataList = TriggerDataList.Clone<LevelTriggerBase.Data, LevelComponentData>();
         return newData;
     }
 }

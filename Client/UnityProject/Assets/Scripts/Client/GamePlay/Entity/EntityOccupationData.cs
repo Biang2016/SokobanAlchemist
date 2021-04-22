@@ -75,7 +75,7 @@ public class EntityOccupationData : IClone<EntityOccupationData>
         newData.Passable = Passable;
         newData.BoundsInt = BoundsInt;
         newData.LocalGeometryCenter = LocalGeometryCenter;
-        newData.EntityIndicatorGPs = EntityIndicatorGPs.Clone();
+        newData.EntityIndicatorGPs = EntityIndicatorGPs.Clone<GridPos3D, GridPos3D>();
         return newData;
     }
 }

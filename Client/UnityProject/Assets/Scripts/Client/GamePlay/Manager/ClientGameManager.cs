@@ -4,6 +4,7 @@ using BiangLibrary.GamePlay.UI;
 using BiangLibrary.Log;
 using BiangLibrary.Messenger;
 using BiangLibrary.Singleton;
+using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -67,7 +68,9 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public DebugConsole DebugConsole;
     public DebugPanel DebugPanel;
     public KeyBindingPanel KeyBindingPanel;
+    public EntitySkillPreviewPanel EntitySkillPreviewPanel;
     public LoadingMapPanel LoadingMapPanel;
+    public PlayerStatHUDPanel PlayerStatHUDPanel;
     public NoticePanel NoticePanel;
 
     public bool WarmUpPool_Editor = true;
@@ -198,16 +201,18 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         LoadingMapPanel.SetBackgroundAlpha(1f);
         LoadingMapPanel.SetProgress(0.5f, "StartGame");
         WwiseAudioManager.BGM_Start();
+        PlayerStatHUDPanel = UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>();
         yield return WorldManager.StartGame();
 
         LoadingMapPanel.SetProgress(1f, "Completed");
         yield return new WaitForSeconds(0.1f);
         BattleManager.Instance.StartBattle();
         LoadingMapPanel.CloseUIForm();
-        UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>();
         DebugPanel = UIManager.Instance.ShowUIForms<DebugPanel>();
         KeyBindingPanel = UIManager.Instance.ShowUIForms<KeyBindingPanel>();
         KeyBindingPanel.CloseUIForm();
+        EntitySkillPreviewPanel = UIManager.Instance.ShowUIForms<EntitySkillPreviewPanel>();
+        EntitySkillPreviewPanel.CloseUIForm();
 #if !DEBUG
         UIManager.Instance.CloseUIForm<DebugPanel>();
 #endif
@@ -273,6 +278,11 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                     return;
                 }
             }
+            else
+            {
+                ReloadGame();
+                return;
+            }
         }
 
 #if DEBUG
@@ -285,6 +295,11 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         if (Input.GetKeyUp(KeyCode.P))
         {
             BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, "OnBossSpiderLegAppear");
+        }
+
+        if (Input.GetKeyUp(KeyCode.O))
+        {
+            DebugPanel.Toggle();
         }
 
         if (Input.GetKey(KeyCode.Equals))
@@ -306,6 +321,10 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                     openWorld.ReturnToOpenWorldFormMicroWorld(false);
                 }
             }
+            else
+            {
+                SwitchWorld(ConfigManager.GetTypeName(TypeDefineType.World, ConfigManager.World_OpenWorldIndex));
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -316,6 +335,20 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         if (Input.GetKeyUp(KeyCode.Tab))
         {
             KeyBindingPanel.Hide();
+        }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            EntitySkillPreviewPanel.Display();
+            if (BattleManager.Instance.Player1 != null)
+            {
+                EntitySkillPreviewPanel.Initialize(BattleManager.Instance.Player1);
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.N))
+        {
+            EntitySkillPreviewPanel.Hide();
         }
 
         if (ControlManager.Battle_LeftRotateCamera.Up)

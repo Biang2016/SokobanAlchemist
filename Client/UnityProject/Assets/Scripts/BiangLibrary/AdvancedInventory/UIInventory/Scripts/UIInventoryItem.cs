@@ -117,7 +117,7 @@ namespace BiangLibrary.AdvancedInventory.UIInventory
         public void Draggable_OnMouseDown(DragAreaIndicator dragAreaIndicator, Collider collider)
         {
             dragStartLocalPos = RectTransform.anchoredPosition;
-            dragStartOccupiedPositions_Matrix = InventoryItem.OccupiedGridPositions_Matrix.Clone();
+            dragStartOccupiedPositions_Matrix = InventoryItem.OccupiedGridPositions_Matrix.Clone<GridPos, GridPos>();
             dragStartGridPos_Matrix = InventoryItem.GridPos_Matrix;
             InventoryItem.Inventory.PickUpItem(InventoryItem);
         }

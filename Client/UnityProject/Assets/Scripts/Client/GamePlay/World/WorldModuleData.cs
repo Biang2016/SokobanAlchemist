@@ -96,7 +96,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
         data.BoxBounds = BoxBounds;
 
-        if (EventTriggerAppearEntityDataList != null) data.EventTriggerAppearEntityDataList = EventTriggerAppearEntityDataList.Clone();
+        if (EventTriggerAppearEntityDataList != null) data.EventTriggerAppearEntityDataList = EventTriggerAppearEntityDataList.Clone<EntityPassiveSkill_LevelEventTriggerAppear.Data, LevelComponentData>();
         return data;
     }
 

@@ -24,11 +24,12 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         BoxEffectHelper,
         BattleIndicator,
         EntityLightning,
-        ActionPointIndicator,
+        DiscreteStatPointIndicator,
         MarchingSquareTerrainTile,
         DebugPanelColumn,
         DebugPanelButton,
         DebugPanelSlider,
+        EntitySkillRow,
     }
 
     public Dictionary<PrefabNames, int> PoolConfigs = new Dictionary<PrefabNames, int>
@@ -46,11 +47,12 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         {PrefabNames.BoxEffectHelper, 10},
         {PrefabNames.BattleIndicator, 10},
         {PrefabNames.EntityLightning, 10},
-        {PrefabNames.ActionPointIndicator, 10},
+        {PrefabNames.DiscreteStatPointIndicator, 50},
         {PrefabNames.MarchingSquareTerrainTile, 2048},
         {PrefabNames.DebugPanelColumn, 4},
         {PrefabNames.DebugPanelButton, 4},
         {PrefabNames.DebugPanelSlider, 4},
+        {PrefabNames.EntitySkillRow, 16},
     };
 
     public Dictionary<string, int> WarmUpBoxConfig = new Dictionary<string, int>
@@ -67,6 +69,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     public Dictionary<PrefabNames, GameObjectPool> PoolDict = new Dictionary<PrefabNames, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> BoxDict = new Dictionary<ushort, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> ActorDict = new Dictionary<ushort, GameObjectPool>();
+    public Dictionary<ushort, GameObjectPool> CollectableItemDict = new Dictionary<ushort, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> LevelTriggerDict = new Dictionary<ushort, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> FXDict = new Dictionary<ushort, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> BattleIndicatorDict = new Dictionary<ushort, GameObjectPool>();
@@ -136,6 +139,21 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 GameObjectPool pool = go.AddComponent<GameObjectPool>();
                 pool.transform.SetParent(Root);
                 ActorDict.Add(kv.Key, pool);
+                PoolObject po = go_Prefab.GetComponent<PoolObject>();
+                pool.Initiate(po, 20);
+            }
+        }
+
+        foreach (KeyValuePair<ushort, string> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.CollectableItem].TypeNameDict)
+        {
+            string prefabName = kv.Value;
+            GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
+            if (go_Prefab)
+            {
+                GameObject go = new GameObject("Pool_" + prefabName);
+                GameObjectPool pool = go.AddComponent<GameObjectPool>();
+                pool.transform.SetParent(Root);
+                CollectableItemDict.Add(kv.Key, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
                 pool.Initiate(po, 20);
             }

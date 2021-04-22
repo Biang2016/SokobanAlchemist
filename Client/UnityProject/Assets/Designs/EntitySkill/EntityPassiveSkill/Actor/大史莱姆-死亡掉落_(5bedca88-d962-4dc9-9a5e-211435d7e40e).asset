@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u5927\u53F2\u83B1\u59C6-\u6B7B\u4EA1\u6389\u843D_(5bedca88-d962-4dc9-9a5e-211435d7e40e)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        SkillGUID: (5bedca88-d962-4dc9-9a5e-211435d7e40e)
+        SkillAlias: "\u5927\u53F2\u83B1\u59C6-\u6B7B\u4EA1\u6389\u843D"
+        SkillIcon:
+          TypeDefineType: 0
+          TypeGUID: 
+        SkillDescription: 
+        IsAddedDuringGamePlay: 0
+        InitWorldModuleGUID: 0
+        PassiveSkillCondition: 1024
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdOperator: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdOperator: 0
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        RawEntitySkillActions:
+        - id: 1
+        - id: 2
+    00000001:
+      type: {class: EntitySkillAction_DropBox, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        DropBoxList:
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (72613c50-a87a-49bf-a141-627b227d5989)
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        DropBoxCountMin: 1
+        DropBoxCountMax: 1
+        DropConeAngle: 0
+        DropVelocity: 12
+    00000002:
+      type: {class: EntitySkillAction_DropBox, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        DropBoxList:
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (374e935f-27dc-4ac2-aeed-c78fd70ae29e)
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (b21d38f9-143e-43a6-9094-f1a790641d96)
+          BoxOrientation: 0
+          probability: 3
+          isSingleton: 0
+        DropBoxCountMin: 1
+        DropBoxCountMax: 4
+        DropConeAngle: 15
+        DropVelocity: 13

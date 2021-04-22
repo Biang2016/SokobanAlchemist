@@ -17,9 +17,9 @@ public class Box_LevelEditor : Entity_LevelEditor
         //{
         //    if (bf is EntityPassiveSkill_Conditional condition)
         //    {
-        //        foreach (EntityPassiveSkillAction action in condition.RawEntityPassiveSkillActions)
+        //        foreach (EntitySkillAction action in condition.RawEntitySkillActions)
         //        {
-        //            if (action is BoxPassiveSkillAction_ChangeBoxToEnemy cbt)
+        //            if (action is BoxSkillAction_ChangeBoxToEnemy cbt)
         //            {
         //                //cbt.RefreshABC();
         //                isDirty = true;

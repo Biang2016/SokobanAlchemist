@@ -222,6 +222,11 @@ MonoBehaviour:
   InitWorldModuleGUID: 0
   EntityTypeIndex: 0
   RawEntityStatPropSet:
+    CollectDetectRadius:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     Gold:
       _value: 0
       _minValue: 0
@@ -229,6 +234,42 @@ MonoBehaviour:
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
+    FireElementFragment:
+      _value: 0
+      _minValue: 0
+      _maxValue: 1000
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
+    MaxFireElementFragment:
+      BaseValue: 1000
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
+    IceElementFragment:
+      _value: 0
+      _minValue: 0
+      _maxValue: 1000
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
+    MaxIceElementFragment:
+      BaseValue: 1000
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
+    LightningElementFragment:
+      _value: 0
+      _minValue: 0
+      _maxValue: 1000
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
+    MaxLightningElementFragment:
+      BaseValue: 1000
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
     HealthDurability:
       _value: 1
       _minValue: 0
@@ -417,38 +458,23 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
-    KickConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 100
-    DashConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 100
-    VaultConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 100
-    SkillsPropertyCollections: []
-    RawEntityDefaultBuffs: []
   RawFlamethrowerFuelData:
     id: 0
-  RawEntityPassiveSkills: []
-  RawEntityActiveSkills: []
+  RawEntityPassiveSkillSSOs: []
+  RawEntityActiveSkillSSOs: []
   Camp: 0
+  DropConeAngle: 30
+  DropVelocity: 30
   RigidBody: {fileID: 7176362684188563293}
   ActorMoveColliderRoot: {fileID: 8674013607515377696}
-  PlayerControllerHelper: {fileID: 0}
-  EnemyControllerHelper: {fileID: 8004586592175520014}
+  ActorControllerHelper: {fileID: 8004586592175520014}
   ActorPushHelper: {fileID: 963576408595443080}
   ActorFaceHelper: {fileID: 1156805331396305853}
   ActorSkinHelper: {fileID: 8512734493965260897}
   ActorLaunchArcRendererHelper: {fileID: 1938071905637696770}
   ActorBattleHelper: {fileID: 7447925958209019029}
   ActorBoxInteractHelper: {fileID: 3175763095622581172}
+  ActorSkillLearningHelper: {fileID: 0}
   LiftBoxPivot: {fileID: 6770438509873070911}
   ActorArtHelper: {fileID: 8171001807248883519}
   ActorWwiseHelper: {fileID: 3744265640672872604}
@@ -457,6 +483,7 @@ MonoBehaviour:
   ActorBuffHelper: {fileID: 9163556110511499603}
   ActorFrozenHelper: {fileID: 4549577115905723303}
   ActorTriggerZoneHelper: {fileID: 4516746531455456877}
+  ActorCollectHelper: {fileID: 0}
   ActorGrindTriggerZoneHelper: {fileID: 102898860229551115}
   ActorFlamethrowerHelpers: []
   ActorLightningGeneratorHelpers: []
@@ -553,7 +580,6 @@ MonoBehaviour:
   RawFrozenBoxPassiveSkills: []
   ActorBehaviourState: 0
   ThrowState: 0
-  IsRecycling: 0
   JumpHeight: 0
   JumpStartWorldGP:
     x: 0
@@ -567,7 +593,6 @@ MonoBehaviour:
   SmashReachTarget: 0
   InAirMoveTargetPos: {x: 0, y: 0, z: 0}
   InAirMoveSpeed: 0
-  IsDestroying: 0
   references:
     version: 1
     00000000:
@@ -661,18 +686,6 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 0}
   OnDestroyed_ByCollideDamage:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
-  OnKick:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
-  OnVault:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
-  OnDash:
     idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 0}

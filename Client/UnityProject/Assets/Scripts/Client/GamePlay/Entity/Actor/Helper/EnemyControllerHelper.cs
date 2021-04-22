@@ -1,6 +1,6 @@
 ﻿using NodeCanvas.Framework;
 
-public class EnemyControllerHelper : ActorMonoHelper
+public class EnemyControllerHelper : ActorControllerHelper
 {
     internal GraphOwner GraphOwner;
     internal ActorAIAgent ActorAIAgent;
@@ -21,8 +21,9 @@ public class EnemyControllerHelper : ActorMonoHelper
         AIUpdateIntervalTick = 0;
     }
 
-    public void OnTick(float interval)
+    public override void OnTick(float interval)
     {
+        base.OnTick(interval);
         if (!Actor.IsRecycled)
         {
             if (BattleManager.Instance.Player1 != null)

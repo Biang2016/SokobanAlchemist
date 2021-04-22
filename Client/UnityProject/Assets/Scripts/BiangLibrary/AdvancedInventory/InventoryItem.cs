@@ -37,7 +37,7 @@ namespace BiangLibrary.AdvancedInventory
         {
             get
             {
-                List<GridPos> res = ItemContentInfo.IInventoryItemContentInfo_OriginalOccupiedGridPositions.Clone();
+                List<GridPos> res = ItemContentInfo.IInventoryItemContentInfo_OriginalOccupiedGridPositions.Clone<GridPos, GridPos>();
                 for (int i = 0; i < res.Count; i++)
                 {
                     res[i] = new GridPos(Inventory.X_Mirror ? -res[i].x : res[i].x, Inventory.Z_Mirror ? -res[i].z : res[i].z);

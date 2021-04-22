@@ -1,0 +1,895 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u4E2D\u578B\u706B\u7130\u653B\u51FB\u6CE2_(9a6c6a47-feb6-454b-87e0-22a1dab9d7ff)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
+      data:
+        SkillGUID: (9a6c6a47-feb6-454b-87e0-22a1dab9d7ff)
+        SkillAlias: "\u4E2D\u578B\u706B\u7130\u653B\u51FB\u6CE2"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: (74d61ae1-4f6d-4f41-9027-16473e7ba8c5)
+        SkillDescription: 
+        TargetCamp: 15
+        EntitySkillIndex: 0
+        SkillsPropertyCollection:
+          CastingRadius:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Cooldown:
+            BaseValue: 3500
+            ModifiedValue: 3500
+            MinValue: 0
+            MaxValue: 1000000
+          WingUp:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          CastDuration:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          Recovery:
+            BaseValue: 1000
+            ModifiedValue: 1000
+            MinValue: 0
+            MaxValue: 1000000
+          CameraShakeEquivalentDamage:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeActionPoint:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeFireElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeIceElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeLightningElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+        TriggerWhenMissProbabilityPercent: 0
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList:
+        - id: 1
+        - id: 2
+        - id: 3
+        - id: 4
+        - id: 5
+        SubActiveSkillTriggerLogicList:
+        - M_TriggerType: 0
+          SubSkillTriggerSequence:
+          - SubSkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E00\u6BB5"
+            SubActiveSkillTimePoint: 0
+          - SubSkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E8C\u6BB5"
+            SubActiveSkillTimePoint: 450
+          - SubSkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E09\u6BB5"
+            SubActiveSkillTimePoint: 800
+          - SubSkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u56DB\u6BB5"
+            SubActiveSkillTimePoint: 1150
+          - SubSkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E94\u6BB5"
+            SubActiveSkillTimePoint: 1500
+          Duration: 0
+          Times: 0
+          SubSkillAliasWithProbabilityList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+    00000001:
+      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      data:
+        SkillGUID: 
+        SkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E00\u6BB5"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: 
+        SkillDescription: 
+        TargetCamp: 15
+        EntitySkillIndex: 1
+        SkillsPropertyCollection:
+          CastingRadius:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Cooldown:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          WingUp:
+            BaseValue: 650
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          CastDuration:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          Recovery:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          CameraShakeEquivalentDamage:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 10
+          ConsumeActionPoint:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeFireElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeIceElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeLightningElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+        TriggerWhenMissProbabilityPercent: 100
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 14
+          y: 0
+          z: 16
+        - x: 14
+          y: 0
+          z: 15
+        - x: 15
+          y: 0
+          z: 17
+        - x: 15
+          y: 0
+          z: 16
+        - x: 16
+          y: 0
+          z: 17
+        - x: 16
+          y: 0
+          z: 16
+        - x: 17
+          y: 0
+          z: 16
+        - x: 17
+          y: 0
+          z: 15
+        M_TargetInclination: 1
+        CastOnTopLayer: 0
+        CastOnNLayersBeneath: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        ProjectHeightDeltaRange: 999
+        GridWarningColorFill: {r: 1, g: 0.11792451, b: 0.11792451, a: 0.6392157}
+        GridWarningColorBorderHighlight: {r: 0.9433962, g: 0.4988594, b: 0.12904951,
+          a: 0.68235296}
+        GridWarningColorBorderDim: {r: 0.9716981, g: 0.5271004, b: 0.5271004, a: 0.65882355}
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (496e4d78-62a6-4066-bbc6-b75bf11aa688)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        RawEntityBuffs:
+        - id: 6
+    00000002:
+      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      data:
+        SkillGUID: 
+        SkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E8C\u6BB5"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: 
+        SkillDescription: 
+        TargetCamp: 15
+        EntitySkillIndex: 2
+        SkillsPropertyCollection:
+          CastingRadius:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Cooldown:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          WingUp:
+            BaseValue: 450
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          CastDuration:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          Recovery:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          CameraShakeEquivalentDamage:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 10
+          ConsumeActionPoint:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeFireElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeIceElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeLightningElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+        TriggerWhenMissProbabilityPercent: 100
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 13
+          y: 0
+          z: 17
+        - x: 13
+          y: 0
+          z: 16
+        - x: 14
+          y: 0
+          z: 18
+        - x: 14
+          y: 0
+          z: 17
+        - x: 15
+          y: 0
+          z: 19
+        - x: 15
+          y: 0
+          z: 18
+        - x: 16
+          y: 0
+          z: 19
+        - x: 16
+          y: 0
+          z: 18
+        - x: 17
+          y: 0
+          z: 18
+        - x: 17
+          y: 0
+          z: 17
+        - x: 18
+          y: 0
+          z: 17
+        - x: 18
+          y: 0
+          z: 16
+        M_TargetInclination: 1
+        CastOnTopLayer: 0
+        CastOnNLayersBeneath: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        ProjectHeightDeltaRange: 999
+        GridWarningColorFill: {r: 1, g: 0.11792451, b: 0.11792451, a: 0.6392157}
+        GridWarningColorBorderHighlight: {r: 0.9433962, g: 0.4988594, b: 0.12904951,
+          a: 0.68235296}
+        GridWarningColorBorderDim: {r: 0.9716981, g: 0.5271004, b: 0.5271004, a: 0.65882355}
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (496e4d78-62a6-4066-bbc6-b75bf11aa688)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        RawEntityBuffs:
+        - id: 7
+    00000003:
+      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      data:
+        SkillGUID: 
+        SkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E09\u6BB5"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: 
+        SkillDescription: 
+        TargetCamp: 15
+        EntitySkillIndex: 3
+        SkillsPropertyCollection:
+          CastingRadius:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Cooldown:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          WingUp:
+            BaseValue: 450
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          CastDuration:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          Recovery:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          CameraShakeEquivalentDamage:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 10
+          ConsumeActionPoint:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeFireElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeIceElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeLightningElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+        TriggerWhenMissProbabilityPercent: 100
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 13
+          y: 0
+          z: 19
+        - x: 13
+          y: 0
+          z: 18
+        - x: 14
+          y: 0
+          z: 20
+        - x: 14
+          y: 0
+          z: 19
+        - x: 15
+          y: 0
+          z: 21
+        - x: 15
+          y: 0
+          z: 20
+        - x: 16
+          y: 0
+          z: 21
+        - x: 16
+          y: 0
+          z: 20
+        - x: 17
+          y: 0
+          z: 20
+        - x: 17
+          y: 0
+          z: 19
+        - x: 18
+          y: 0
+          z: 19
+        - x: 18
+          y: 0
+          z: 18
+        M_TargetInclination: 1
+        CastOnTopLayer: 0
+        CastOnNLayersBeneath: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        ProjectHeightDeltaRange: 999
+        GridWarningColorFill: {r: 1, g: 0.11792451, b: 0.11792451, a: 0.6392157}
+        GridWarningColorBorderHighlight: {r: 0.9433962, g: 0.4988594, b: 0.12904951,
+          a: 0.68235296}
+        GridWarningColorBorderDim: {r: 0.9716981, g: 0.5271004, b: 0.5271004, a: 0.65882355}
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (496e4d78-62a6-4066-bbc6-b75bf11aa688)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        RawEntityBuffs:
+        - id: 8
+    00000004:
+      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      data:
+        SkillGUID: 
+        SkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u56DB\u6BB5"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: 
+        SkillDescription: 
+        TargetCamp: 15
+        EntitySkillIndex: 4
+        SkillsPropertyCollection:
+          CastingRadius:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Cooldown:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          WingUp:
+            BaseValue: 450
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          CastDuration:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          Recovery:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          CameraShakeEquivalentDamage:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 10
+          ConsumeActionPoint:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeFireElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeIceElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeLightningElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+        TriggerWhenMissProbabilityPercent: 100
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 13
+          y: 0
+          z: 21
+        - x: 13
+          y: 0
+          z: 20
+        - x: 14
+          y: 0
+          z: 22
+        - x: 14
+          y: 0
+          z: 21
+        - x: 15
+          y: 0
+          z: 23
+        - x: 15
+          y: 0
+          z: 22
+        - x: 16
+          y: 0
+          z: 23
+        - x: 16
+          y: 0
+          z: 22
+        - x: 17
+          y: 0
+          z: 22
+        - x: 17
+          y: 0
+          z: 21
+        - x: 18
+          y: 0
+          z: 21
+        - x: 18
+          y: 0
+          z: 20
+        M_TargetInclination: 1
+        CastOnTopLayer: 0
+        CastOnNLayersBeneath: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        ProjectHeightDeltaRange: 999
+        GridWarningColorFill: {r: 1, g: 0.11792451, b: 0.11792451, a: 0.6392157}
+        GridWarningColorBorderHighlight: {r: 0.9433962, g: 0.4988594, b: 0.12904951,
+          a: 0.68235296}
+        GridWarningColorBorderDim: {r: 0.9716981, g: 0.5271004, b: 0.5271004, a: 0.65882355}
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (496e4d78-62a6-4066-bbc6-b75bf11aa688)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        RawEntityBuffs:
+        - id: 9
+    00000005:
+      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      data:
+        SkillGUID: 
+        SkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E94\u6BB5"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: 
+        SkillDescription: 
+        TargetCamp: 15
+        EntitySkillIndex: 5
+        SkillsPropertyCollection:
+          CastingRadius:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Cooldown:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          WingUp:
+            BaseValue: 450
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          CastDuration:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          Recovery:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          CameraShakeEquivalentDamage:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 10
+          ConsumeActionPoint:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeFireElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeIceElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeLightningElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+        TriggerWhenMissProbabilityPercent: 100
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 13
+          y: 0
+          z: 23
+        - x: 13
+          y: 0
+          z: 22
+        - x: 14
+          y: 0
+          z: 24
+        - x: 14
+          y: 0
+          z: 23
+        - x: 15
+          y: 0
+          z: 25
+        - x: 15
+          y: 0
+          z: 24
+        - x: 16
+          y: 0
+          z: 25
+        - x: 16
+          y: 0
+          z: 24
+        - x: 17
+          y: 0
+          z: 24
+        - x: 17
+          y: 0
+          z: 23
+        - x: 18
+          y: 0
+          z: 23
+        - x: 18
+          y: 0
+          z: 22
+        M_TargetInclination: 1
+        CastOnTopLayer: 0
+        CastOnNLayersBeneath: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        ProjectHeightDeltaRange: 999
+        GridWarningColorFill: {r: 1, g: 0.11792451, b: 0.11792451, a: 0.6392157}
+        GridWarningColorBorderHighlight: {r: 0.9433962, g: 0.4988594, b: 0.12904951,
+          a: 0.68235296}
+        GridWarningColorBorderDim: {r: 0.9716981, g: 0.5271004, b: 0.5271004, a: 0.65882355}
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (496e4d78-62a6-4066-bbc6-b75bf11aa688)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        RawEntityBuffs:
+        - id: 10
+    00000006:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10237
+        BuffAlias: 
+        EntityBuffAttribute: 17
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 101
+        Delta: 350
+        Percent: 0
+    00000007:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10237
+        BuffAlias: 
+        EntityBuffAttribute: 17
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 101
+        Delta: 350
+        Percent: 0
+    00000008:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10237
+        BuffAlias: 
+        EntityBuffAttribute: 17
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 101
+        Delta: 350
+        Percent: 0
+    00000009:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10237
+        BuffAlias: 
+        EntityBuffAttribute: 17
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 101
+        Delta: 350
+        Percent: 0
+    0000000A:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10237
+        BuffAlias: 
+        EntityBuffAttribute: 17
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 101
+        Delta: 350
+        Percent: 0

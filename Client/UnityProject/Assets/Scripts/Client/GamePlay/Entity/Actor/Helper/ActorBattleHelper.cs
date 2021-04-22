@@ -57,15 +57,42 @@ public class ActorBattleHelper : ActorMonoHelper
 
     #endregion
 
-    #region Money
+    #region 财产
 
     public UnityAction<int> OnGainGold;
 
-    public void ShowGainGoldNumFX(int gold)
+    public void ShowGainGoldNumFX(int gain)
     {
-        if (gold == 0) return;
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gold, BattleTipType.Gold, 0, 0));
-        OnGainGold?.Invoke(gold);
+        if (gain == 0) return;
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.Gold, 0, 0));
+        OnGainGold?.Invoke(gain);
+    }
+
+    public UnityAction<int> OnGainFireElementFragment;
+
+    public void ShowGainFireElementFragmentNumFX(int gain)
+    {
+        if (gain == 0) return;
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.FireElementFragment, 0, 0));
+        OnGainFireElementFragment?.Invoke(gain);
+    }
+
+    public UnityAction<int> OnGainIceElementFragment;
+
+    public void ShowGainIceElementFragmentNumFX(int gain)
+    {
+        if (gain == 0) return;
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.IceElementFragment, 0, 0));
+        OnGainIceElementFragment?.Invoke(gain);
+    }
+
+    public UnityAction<int> OnGainLightningElementFragmentGold;
+
+    public void ShowGainLightningElementFragmentNumFX(int gain)
+    {
+        if (gain == 0) return;
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.LightningElementFragment, 0, 0));
+        OnGainLightningElementFragmentGold?.Invoke(gain);
     }
 
     #endregion

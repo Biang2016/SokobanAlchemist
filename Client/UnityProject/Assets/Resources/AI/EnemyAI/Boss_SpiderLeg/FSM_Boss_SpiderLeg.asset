@@ -1,0 +1,251 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f945e777233a59f4aba40aeca29093a6, type: 3}
+  m_Name: FSM_Boss_SpiderLeg
+  m_EditorClassIdentifier: 
+  _serializedGraph: '{"type":"NodeCanvas.StateMachines.FSM","nodes":[{"_nestedBT":{"_value":1},"_name":"Idling","_position":{"x":1335.0,"y":105.0},"$type":"NodeCanvas.StateMachines.NestedBTState","$id":"0"},{"_nestedBT":{"_value":2},"_name":"Chasing","_position":{"x":765.0,"y":-120.0},"$type":"NodeCanvas.StateMachines.NestedBTState","$id":"1"},{"_nestedBT":{"_value":3},"_name":"Attack","_position":{"x":1110.0,"y":-345.0},"$type":"NodeCanvas.StateMachines.NestedBTState","$id":"2"},{"_position":{"x":1650.0,"y":-165.0},"$type":"NodeCanvas.StateMachines.AnyState"}],"connections":[{"_condition":{"conditions":[{"RangeRadius":{"_name":"GuardRange","_targetVariableID":"1e4fc14c-3815-4279-a6ee-25a727bd3bb0"},"TargetEntityType":{},"Y_Ignore":{"_value":true},"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},{"TargetEntityTypes":{"_value":[0]},"NeedEntity":{"_value":true},"$type":"ActorAIAtoms+BT_Enemy_CheckHasTarget"}],"$type":"NodeCanvas.Framework.ConditionList"},"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"checkMode":1,"conditions":[{"RangeRadius":{"_name":"ChasingRange","_targetVariableID":"dcaf01a2-8a92-4b8d-b523-e1a0efdcfefd"},"TargetEntityType":{},"Y_Ignore":{"_value":true},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},{"TargetEntityTypes":{"_value":[0,1]},"NeedEntity":{"_value":true},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_CheckHasTarget"},{"StuckTime":{"_value":1000},"$type":"ActorAIAtoms+BT_Enemy_StuckWithBoxes"}],"$type":"NodeCanvas.Framework.ConditionList"},"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"0"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"RangeRadius":{"_name":"KeepDistanceMax","_targetVariableID":"f4670f67-b504-4764-ac45-263d9b4a165b"},"TargetEntityType":{"_value":1},"Y_Ignore":{"_value":true},"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"RangeRadius":{"_name":"KeepDistanceMax","_targetVariableID":"f4670f67-b504-4764-ac45-263d9b4a165b"},"TargetEntityType":{"_value":1},"Y_Ignore":{"_value":true},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"checkMode":1,"conditions":[{"StuckTime":{"_value":1000},"$type":"ActorAIAtoms+BT_Enemy_StuckWithBoxes"},{"TargetEntityTypes":{"_value":[0,1]},"NeedEntity":{"_value":true},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_CheckHasTarget"}],"$type":"NodeCanvas.Framework.ConditionList"},"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"0"},"$type":"NodeCanvas.StateMachines.FSMConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
+  _objectReferences:
+  - {fileID: 0}
+  - {fileID: 11400000, guid: db70e97b5247b444186cbba4d8ce46e0, type: 2}
+  - {fileID: 11400000, guid: b004a0303d1b21c41af82ad6190b0387, type: 2}
+  - {fileID: 11400000, guid: 7725dc198c170554ca4556326eaa6c08, type: 2}
+  _graphSource:
+    _version: 3.08
+    _category: 
+    _comments: 
+    _translation: {x: -359, y: 835}
+    _zoomFactor: 1
+  _haltSerialization: 0
+#---GRAPH_START---
+#The pretty formatted json serialization bellow is only a reference to help in version control diff. Other than that it is not used at all.
+#{
+#    "type": "NodeCanvas.StateMachines.FSM",
+#    "nodes": [
+#        {
+#            "_nestedBT": {
+#                "_value": 1
+#            },
+#            "_name": "Idling",
+#            "_position": {
+#                "x": 1335.0,
+#                "y": 105.0
+#            },
+#            "$type": "NodeCanvas.StateMachines.NestedBTState",
+#            "$id": "0"
+#        },
+#        {
+#            "_nestedBT": {
+#                "_value": 2
+#            },
+#            "_name": "Chasing",
+#            "_position": {
+#                "x": 765.0,
+#                "y": -120.0
+#            },
+#            "$type": "NodeCanvas.StateMachines.NestedBTState",
+#            "$id": "1"
+#        },
+#        {
+#            "_nestedBT": {
+#                "_value": 3
+#            },
+#            "_name": "Attack",
+#            "_position": {
+#                "x": 1110.0,
+#                "y": -345.0
+#            },
+#            "$type": "NodeCanvas.StateMachines.NestedBTState",
+#            "$id": "2"
+#        },
+#        {
+#            "_position": {
+#                "x": 1650.0,
+#                "y": -165.0
+#            },
+#            "$type": "NodeCanvas.StateMachines.AnyState"
+#        }
+#    ],
+#    "connections": [
+#        {
+#            "_condition": {
+#                "conditions": [
+#                    {
+#                        "RangeRadius": {
+#                            "_name": "GuardRange",
+#                            "_targetVariableID": "1e4fc14c-3815-4279-a6ee-25a727bd3bb0"
+#                        },
+#                        "TargetEntityType": {
+#
+#                        },
+#                        "Y_Ignore": {
+#                            "_value": true
+#                        },
+#                        "$type": "ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"
+#                    },
+#                    {
+#                        "TargetEntityTypes": {
+#                            "_value": [
+#                                0
+#                            ]
+#                        },
+#                        "NeedEntity": {
+#                            "_value": true
+#                        },
+#                        "$type": "ActorAIAtoms+BT_Enemy_CheckHasTarget"
+#                    }
+#                ],
+#                "$type": "NodeCanvas.Framework.ConditionList"
+#            },
+#            "_sourceNode": {
+#                "$ref": "0"
+#            },
+#            "_targetNode": {
+#                "$ref": "1"
+#            },
+#            "$type": "NodeCanvas.StateMachines.FSMConnection"
+#        },
+#        {
+#            "_condition": {
+#                "checkMode": 1,
+#                "conditions": [
+#                    {
+#                        "RangeRadius": {
+#                            "_name": "ChasingRange",
+#                            "_targetVariableID": "dcaf01a2-8a92-4b8d-b523-e1a0efdcfefd"
+#                        },
+#                        "TargetEntityType": {
+#
+#                        },
+#                        "Y_Ignore": {
+#                            "_value": true
+#                        },
+#                        "_invert": true,
+#                        "$type": "ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"
+#                    },
+#                    {
+#                        "TargetEntityTypes": {
+#                            "_value": [
+#                                0,
+#                                1
+#                            ]
+#                        },
+#                        "NeedEntity": {
+#                            "_value": true
+#                        },
+#                        "_invert": true,
+#                        "$type": "ActorAIAtoms+BT_Enemy_CheckHasTarget"
+#                    },
+#                    {
+#                        "StuckTime": {
+#                            "_value": 1000
+#                        },
+#                        "$type": "ActorAIAtoms+BT_Enemy_StuckWithBoxes"
+#                    }
+#                ],
+#                "$type": "NodeCanvas.Framework.ConditionList"
+#            },
+#            "_sourceNode": {
+#                "$ref": "1"
+#            },
+#            "_targetNode": {
+#                "$ref": "0"
+#            },
+#            "$type": "NodeCanvas.StateMachines.FSMConnection"
+#        },
+#        {
+#            "_condition": {
+#                "RangeRadius": {
+#                    "_name": "KeepDistanceMax",
+#                    "_targetVariableID": "f4670f67-b504-4764-ac45-263d9b4a165b"
+#                },
+#                "TargetEntityType": {
+#                    "_value": 1
+#                },
+#                "Y_Ignore": {
+#                    "_value": true
+#                },
+#                "$type": "ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"
+#            },
+#            "_sourceNode": {
+#                "$ref": "1"
+#            },
+#            "_targetNode": {
+#                "$ref": "2"
+#            },
+#            "$type": "NodeCanvas.StateMachines.FSMConnection"
+#        },
+#        {
+#            "_condition": {
+#                "RangeRadius": {
+#                    "_name": "KeepDistanceMax",
+#                    "_targetVariableID": "f4670f67-b504-4764-ac45-263d9b4a165b"
+#                },
+#                "TargetEntityType": {
+#                    "_value": 1
+#                },
+#                "Y_Ignore": {
+#                    "_value": true
+#                },
+#                "_invert": true,
+#                "$type": "ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"
+#            },
+#            "_sourceNode": {
+#                "$ref": "2"
+#            },
+#            "_targetNode": {
+#                "$ref": "1"
+#            },
+#            "$type": "NodeCanvas.StateMachines.FSMConnection"
+#        },
+#        {
+#            "_condition": {
+#                "checkMode": 1,
+#                "conditions": [
+#                    {
+#                        "StuckTime": {
+#                            "_value": 1000
+#                        },
+#                        "$type": "ActorAIAtoms+BT_Enemy_StuckWithBoxes"
+#                    },
+#                    {
+#                        "TargetEntityTypes": {
+#                            "_value": [
+#                                0,
+#                                1
+#                            ]
+#                        },
+#                        "NeedEntity": {
+#                            "_value": true
+#                        },
+#                        "_invert": true,
+#                        "$type": "ActorAIAtoms+BT_Enemy_CheckHasTarget"
+#                    }
+#                ],
+#                "$type": "NodeCanvas.Framework.ConditionList"
+#            },
+#            "_sourceNode": {
+#                "$ref": "2"
+#            },
+#            "_targetNode": {
+#                "$ref": "0"
+#            },
+#            "$type": "NodeCanvas.StateMachines.FSMConnection"
+#        }
+#    ],
+#    "canvasGroups": [],
+#    "localBlackboard": {
+#        "_variables": {
+#
+#        }
+#    }
+#}
+#---GRAPH_END---

@@ -6,6 +6,8 @@ using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 public abstract class Entity : PoolObject
 {
@@ -46,6 +48,7 @@ public abstract class Entity : PoolObject
     internal abstract EntityBuffHelper EntityBuffHelper { get; }
     internal abstract EntityFrozenHelper EntityFrozenHelper { get; }
     internal abstract EntityTriggerZoneHelper EntityTriggerZoneHelper { get; }
+    internal abstract EntityCollectHelper EntityCollectHelper { get; }
     internal abstract EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper { get; }
     internal abstract List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers { get; }
     internal abstract List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers { get; }
@@ -133,6 +136,11 @@ public abstract class Entity : PoolObject
 
     #region 旋转朝向
 
+    [DisplayAsString]
+    [HideInEditorMode]
+    [ShowInInspector]
+    [FoldoutGroup("状态")]
+    [LabelText("旋转朝向")]
     public GridPosR.Orientation EntityOrientation { get; protected set; }
 
     internal virtual void SwitchEntityOrientation(GridPosR.Orientation entityOrientation)
@@ -249,7 +257,7 @@ public abstract class Entity : PoolObject
             foreach (EntityPassiveSkill rawExtraPS in rawEntityExtraSerializeDataFromModule.EntityPassiveSkills)
             {
                 EntityPassiveSkill newPS = (EntityPassiveSkill) rawExtraPS.Clone();
-                AddNewPassiveSkill(newPS, true);
+                AddNewPassiveSkill(newPS);
             }
         }
     }
@@ -265,11 +273,10 @@ public abstract class Entity : PoolObject
 
     #region 被动技能
 
-    [SerializeReference]
-    [FoldoutGroup("初始被动技能")]
-    [LabelText("初始被动技能列表")]
-    [ListDrawerSettings(ListElementLabelName = "Description")]
-    public List<EntityPassiveSkill> RawEntityPassiveSkills = new List<EntityPassiveSkill>(); // 干数据，禁修改
+    [FoldoutGroup("被动技能")]
+    [LabelText("被动技能槽位SO")]
+    [InlineEditor(InlineEditorObjectFieldModes.Foldout)]
+    public List<EntitySkillSO> RawEntityPassiveSkillSOs = new List<EntitySkillSO>(); // 自带被动技能
 
     [NonSerialized]
     [ShowInInspector]
@@ -277,27 +284,49 @@ public abstract class Entity : PoolObject
     [LabelText("实时被动技能列表")]
     public List<EntityPassiveSkill> EntityPassiveSkills = new List<EntityPassiveSkill>(); // 湿数据，每个Entity生命周期开始前从干数据进行数据拷贝
 
+    public Dictionary<string, EntityPassiveSkill> EntityPassiveSkillGUIDDict = new Dictionary<string, EntityPassiveSkill>(); // 便于使用GUID来索引到技能
+
     internal bool PassiveSkillMarkAsDestroyed = false;
 
-    private List<EntityPassiveSkill> cachedRemoveList_EntityPassiveSkill = new List<EntityPassiveSkill>(5);
+    private List<EntityPassiveSkill> cachedRemoveList_EntityPassiveSkill = new List<EntityPassiveSkill>(8);
 
-    protected void InitPassiveSkills()
+    protected virtual void InitPassiveSkills()
     {
-        if (GUID == 2218)
+        PassiveSkillMarkAsDestroyed = false;
+
+        for (int i = 0; i < RawEntityPassiveSkillSOs.Count; i++)
         {
-            int a = 0;
+            EntityPassiveSkill rawEPS = (EntityPassiveSkill) RawEntityPassiveSkillSOs[i].EntitySkill;
+            EntityPassiveSkill eps = null;
+            if (EntityPassiveSkills.Count > i)
+            {
+                eps = EntityPassiveSkills[i];
+            }
+            else
+            {
+                if (!EntityPassiveSkillGUIDDict.ContainsKey(rawEPS.SkillGUID))
+                {
+                    eps = (EntityPassiveSkill) rawEPS.Clone();
+                    EntityPassiveSkills.Add(eps);
+                    EntityPassiveSkillGUIDDict.Add(rawEPS.SkillGUID, eps);
+                }
+                else
+                {
+                    Debug.LogError($"{name}已存在相同GUID的被动技能{rawEPS.SkillAlias}");
+                }
+            }
+
+            if (eps != null)
+            {
+                eps.Entity = this;
+                eps.IsAddedDuringGamePlay = false;
+                eps.CopyDataFrom(rawEPS);
+            }
         }
 
-        PassiveSkillMarkAsDestroyed = false;
-        if (EntityPassiveSkills.Count == 0)
+        if (EntityPassiveSkills.Count != RawEntityPassiveSkillSOs.Count)
         {
-            foreach (EntityPassiveSkill rawAPS in RawEntityPassiveSkills)
-            {
-                EntityPassiveSkill ps = (EntityPassiveSkill) rawAPS.Clone();
-                EntityPassiveSkills.Add(ps);
-                ps.IsAddedDuringGamePlay = false;
-                ps.Entity = this;
-            }
+            Debug.LogError($"{name}被动技能数量不一致");
         }
 
         foreach (EntityPassiveSkill eps in EntityPassiveSkills)
@@ -307,16 +336,25 @@ public abstract class Entity : PoolObject
         }
     }
 
-    public void AddNewPassiveSkill(EntityPassiveSkill eps, bool isAddedDuringGamePlay)
+    public void AddNewPassiveSkill(EntityPassiveSkill eps)
     {
-        EntityPassiveSkills.Add(eps);
-        eps.IsAddedDuringGamePlay = isAddedDuringGamePlay;
-        eps.Entity = this;
-        eps.OnInit();
-        eps.OnRegisterLevelEventID();
+        if (string.IsNullOrWhiteSpace(eps.SkillGUID)) eps.SkillGUID = Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
+        if (!EntityPassiveSkillGUIDDict.ContainsKey(eps.SkillGUID))
+        {
+            EntityPassiveSkills.Add(eps);
+            EntityPassiveSkillGUIDDict.Add(eps.SkillGUID, eps);
+            eps.IsAddedDuringGamePlay = true;
+            eps.Entity = this;
+            eps.OnInit();
+            eps.OnRegisterLevelEventID();
+        }
+        else
+        {
+            Debug.Log($"{name}添加被动技能失败{eps}");
+        }
     }
 
-    protected void UnInitPassiveSkills()
+    protected virtual void UnInitPassiveSkills()
     {
         foreach (EntityPassiveSkill eps in EntityPassiveSkills)
         {
@@ -325,48 +363,19 @@ public abstract class Entity : PoolObject
         }
 
         cachedRemoveList_EntityPassiveSkill.Clear();
-        if (EntityPassiveSkills.Count > 0)
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
         {
-            foreach (EntityPassiveSkill eps in EntityPassiveSkills)
-            {
-                if (eps.IsAddedDuringGamePlay)
-                {
-                    cachedRemoveList_EntityPassiveSkill.Add(eps);
-                }
-            }
-
-            foreach (EntityPassiveSkill eps in cachedRemoveList_EntityPassiveSkill)
-            {
-                EntityPassiveSkills.Remove(eps);
-            }
-
-            if (EntityPassiveSkills.Count == RawEntityPassiveSkills.Count)
-            {
-                for (int i = 0; i < RawEntityPassiveSkills.Count; i++)
-                {
-                    EntityPassiveSkill eps = EntityPassiveSkills[i];
-                    eps.Entity = this;
-                    eps.IsAddedDuringGamePlay = false; // 从Raw里面拷出来的都即为非动态添加的技能
-                    eps.CopyDataFrom(RawEntityPassiveSkills[i]);
-                }
-            }
-            else
-            {
-                Debug.Log("EntityPassiveSkills的数量和RawEntityPassiveSkills不一致，请检查临时EPS添加情况");
-            }
+            if (eps.IsAddedDuringGamePlay) cachedRemoveList_EntityPassiveSkill.Add(eps);
         }
-        else
+
+        foreach (EntityPassiveSkill eps in cachedRemoveList_EntityPassiveSkill)
         {
-            foreach (EntityPassiveSkill rawAPS in RawEntityPassiveSkills)
-            {
-                EntityPassiveSkill ps = (EntityPassiveSkill) rawAPS.Clone();
-                EntityPassiveSkills.Add(ps);
-                ps.IsAddedDuringGamePlay = false;
-                ps.Entity = this;
-            }
+            EntityPassiveSkills.Remove(eps);
+            EntityPassiveSkillGUIDDict.Remove(eps.SkillGUID);
         }
 
         cachedRemoveList_EntityPassiveSkill.Clear();
+
         PassiveSkillMarkAsDestroyed = false;
     }
 
@@ -374,18 +383,17 @@ public abstract class Entity : PoolObject
 
     #region 主动技能
 
-    [SerializeReference]
     [FoldoutGroup("主动技能")]
-    [LabelText("主动技能列表")]
-    [ListDrawerSettings(ListElementLabelName = "SkillAlias")]
-    public List<EntityActiveSkill> RawEntityActiveSkills = new List<EntityActiveSkill>(); // 干数据，禁修改
+    [LabelText("主动技能槽位")]
+    [InlineEditor(InlineEditorObjectFieldModes.Foldout)]
+    public List<EntitySkillSO> RawEntityActiveSkillSOs = new List<EntitySkillSO>();
 
-    [NonSerialized]
-    public List<EntityActiveSkill> EntityActiveSkills = new List<EntityActiveSkill>(); // 湿数据，每个Entity生命周期开始前从干数据拷出，结束后清除
+    [HideInInspector]
+    public SortedDictionary<EntitySkillIndex, EntityActiveSkill> EntityActiveSkillDict = new SortedDictionary<EntitySkillIndex, EntityActiveSkill>(); // 技能编号，只包含所有母技能
 
-    public Dictionary<EntitySkillIndex, EntityActiveSkill> EntityActiveSkillDict = new Dictionary<EntitySkillIndex, EntityActiveSkill>(); // 便于寻找
+    public Dictionary<string, EntityActiveSkill> EntityActiveSkillGUIDDict = new Dictionary<string, EntityActiveSkill>(); // 便于使用GUID来索引到技能
 
-    private List<EntityActiveSkill> cachedRemoveList_EntityActiveSkill = new List<EntityActiveSkill>(5);
+    private List<EntityActiveSkill> cachedRemoveList_EntityActiveSkill = new List<EntityActiveSkill>(16);
 
     internal bool ActiveSkillMarkAsDestroyed = false;
 
@@ -393,85 +401,73 @@ public abstract class Entity : PoolObject
     {
         get
         {
-            foreach (EntityActiveSkill eas in EntityActiveSkills)
+            foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
             {
-                if (!eas.CurrentAllowMove) return false;
+                if (!kv.Value.CurrentAllowMove) return false;
             }
 
             return true;
         }
     }
 
-    protected void InitActiveSkills()
+    protected virtual void InitActiveSkills()
     {
         cachedRemoveList_EntityActiveSkill.Clear();
-        if (EntityActiveSkills.Count > 0)
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
         {
-            foreach (EntityActiveSkill eas in EntityActiveSkills)
-            {
-                if (eas.IsAddedDuringGamePlay)
-                {
-                    cachedRemoveList_EntityActiveSkill.Add(eas);
-                }
-            }
+            if (kv.Value.IsAddedDuringGamePlay) cachedRemoveList_EntityActiveSkill.Add(kv.Value);
+        }
 
-            foreach (EntityActiveSkill eas in cachedRemoveList_EntityActiveSkill)
-            {
-                EntityActiveSkills.Remove(eas);
-                EntityActiveSkillDict.Remove(eas.EntitySkillIndex);
-            }
+        foreach (EntityActiveSkill eas in cachedRemoveList_EntityActiveSkill)
+        {
+            EntityActiveSkillDict.Remove(eas.EntitySkillIndex);
+            EntityActiveSkillGUIDDict.Remove(eas.SkillGUID);
+        }
 
-            if (EntityActiveSkills.Count == RawEntityActiveSkills.Count)
+        for (int i = 0; i < RawEntityActiveSkillSOs.Count; i++)
+        {
+            EntityActiveSkill rawEAS = (EntityActiveSkill) RawEntityActiveSkillSOs[i].EntitySkill;
+            EntitySkillIndex skillIndex = (EntitySkillIndex) i;
+            if (EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
             {
-                for (int i = 0; i < RawEntityActiveSkills.Count; i++)
-                {
-                    EntityActiveSkill eas = EntityActiveSkills[i];
-                    eas.CopyDataFrom(RawEntityActiveSkills[i]);
-                    eas.Entity = this;
-                    eas.IsAddedDuringGamePlay = false; // 从Raw里面拷出来的都即为非动态添加的技能
-                    eas.ParentActiveSkill = null;
-                    eas.OnInit();
-                }
+                eas.CopyDataFrom(rawEAS);
             }
             else
             {
-                Debug.Log("EntityActiveSkills的数量和RawEntityActiveSkills不一致，请检查临时EAS添加情况");
+                if (!EntityActiveSkillGUIDDict.ContainsKey(rawEAS.SkillGUID))
+                {
+                    eas = (EntityActiveSkill) rawEAS.Clone();
+                    EntityActiveSkillDict.Add(skillIndex, eas);
+                    EntityActiveSkillGUIDDict.Add(eas.SkillGUID, eas);
+                }
+                else
+                {
+                    Debug.LogError($"{name}已存在相同GUID的主动技能{rawEAS.SkillAlias}");
+                }
             }
-        }
-        else
-        {
-            foreach (EntityActiveSkill rawEAS in RawEntityActiveSkills)
+
+            if (eas != null)
             {
-                EntityActiveSkill eas = (EntityActiveSkill) rawEAS.Clone();
-                AddNewActiveSkill(eas, false);
+                eas.Entity = this;
+                eas.IsAddedDuringGamePlay = false;
+                eas.ParentActiveSkill = null;
+                eas.EntitySkillIndex = skillIndex;
+                eas.OnInit();
             }
         }
 
         ActiveSkillMarkAsDestroyed = false;
     }
 
-    protected void AddNewActiveSkill(EntityActiveSkill eas, bool isAddedDuringGamePlay)
+    protected void AddNewActiveSkill(EntityActiveSkill eas)
     {
-        EntityActiveSkills.Add(eas);
-        eas.Entity = this;
-        eas.IsAddedDuringGamePlay = isAddedDuringGamePlay;
-        eas.ParentActiveSkill = null;
-        eas.OnInit();
-        if (!EntityActiveSkillDict.ContainsKey(eas.EntitySkillIndex))
-        {
-            EntityActiveSkillDict.Add(eas.EntitySkillIndex, eas);
-        }
-        else
-        {
-            Debug.LogError($"[主动技能] {name} 主动技能编号重复: {eas.EntitySkillIndex}");
-        }
     }
 
-    protected void UnInitActiveSkills()
+    protected virtual void UnInitActiveSkills()
     {
-        foreach (EntityActiveSkill eas in EntityActiveSkills)
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
         {
-            eas.OnUnInit();
+            kv.Value.OnUnInit();
         }
 
         ActiveSkillMarkAsDestroyed = false;
@@ -530,6 +526,8 @@ public abstract class Entity : PoolObject
         base.OnRecycled();
         StopAllCoroutines();
         InitWorldModuleGUID = 0;
+        destroyBecauseNotInAnyModuleTick = 0;
+        IsDestroying = false;
     }
 
     public void Setup(uint initWorldModuleGUID)
@@ -584,9 +582,9 @@ public abstract class Entity : PoolObject
             //}
         }
 
-        foreach (EntityActiveSkill eas in EntityActiveSkills)
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
         {
-            eas.OnFixedUpdate(Time.fixedDeltaTime);
+            kv.Value.OnFixedUpdate(Time.fixedDeltaTime);
         }
     }
 
@@ -599,11 +597,104 @@ public abstract class Entity : PoolObject
             eps.OnTick(interval);
         }
 
-        foreach (EntityActiveSkill eas in EntityActiveSkills)
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
         {
-            eas.OnTick(interval);
+            kv.Value.OnTick(interval);
+        }
+
+        if (BattleManager.Instance.IsStart)
+        {
+            if (WorldManager.Instance != null)
+            {
+                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(transform.position.ToGridPos3D(), false);
+                if (module == null)
+                {
+                    destroyBecauseNotInAnyModuleTick += interval;
+                    if (destroyBecauseNotInAnyModuleTick > DestroyBecauseNotInAnyModuleThreshold)
+                    {
+                        destroyBecauseNotInAnyModuleTick = 0;
+                        DestroySelf(null);
+                    }
+                }
+            }
         }
     }
+
+    #region Destroy
+
+    private float destroyBecauseNotInAnyModuleTick = 0f;
+    private float DestroyBecauseNotInAnyModuleThreshold = 1.5f;
+    protected bool IsDestroying = false;
+
+    [SerializeField]
+    [FoldoutGroup("掉落物")]
+    [LabelText("抛射角范围")]
+    private float DropConeAngle = 30f;
+
+    [SerializeField]
+    [FoldoutGroup("掉落物")]
+    [LabelText("抛射速度")]
+    private float DropVelocity = 50f;
+
+    public virtual void DestroySelfByModuleRecycle()
+    {
+    }
+
+    public virtual void DestroySelf(UnityAction callBack = null)
+    {
+        ThrowElementFragment(EntityStatType.FireElementFragment);
+        ThrowElementFragment(EntityStatType.IceElementFragment);
+        ThrowElementFragment(EntityStatType.LightningElementFragment);
+    }
+
+    private void ThrowElementFragment(EntityStatType elementFragmentType)
+    {
+        int elementFragmentCount = EntityStatPropSet.StatDict[elementFragmentType].Value;
+        int dropElementFragmentCount = 0;
+        if (this == BattleManager.Instance.Player1)
+        {
+            dropElementFragmentCount = Mathf.RoundToInt(elementFragmentCount * 0.5f);
+            EntityStatPropSet.StatDict[elementFragmentType].SetValue(EntityStatPropSet.StatDict[elementFragmentType].Value - dropElementFragmentCount);
+        }
+        else
+        {
+            dropElementFragmentCount = Random.Range(Mathf.RoundToInt(elementFragmentCount * 0.7f), Mathf.RoundToInt(elementFragmentCount * 1.3f));
+        }
+
+        switch (elementFragmentType)
+        {
+            case EntityStatType.FireElementFragment:
+            case EntityStatType.IceElementFragment:
+            {
+                int dropSmallCount = dropElementFragmentCount % 5;
+                int dropMiddleCount = dropElementFragmentCount / 5;
+                DropElementFragment("Small", dropSmallCount);
+                DropElementFragment("Middle", dropMiddleCount);
+                break;
+            }
+            case EntityStatType.LightningElementFragment:
+            {
+                DropElementFragment("Small", dropElementFragmentCount);
+                break;
+            }
+        }
+
+        void DropElementFragment(string size, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(DropConeAngle * Mathf.Deg2Rad);
+                Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);
+
+                ushort index = ConfigManager.GetTypeIndex(TypeDefineType.CollectableItem, size + elementFragmentType);
+                CollectableItem ci = GameObjectPoolManager.Instance.CollectableItemDict[index].AllocateGameObject<CollectableItem>(WorldManager.Instance.CurrentWorld.transform);
+                ci.Initialize();
+                ci.ThrowFrom(transform.position, dropVel.normalized * DropVelocity);
+            }
+        }
+    }
+
+    #endregion
 
     protected virtual void OnCollisionEnter(Collision collision)
     {

@@ -24,9 +24,37 @@ public class EntityStatPropSet
 
     #region 财产
 
-    [BoxGroup("耐久")]
+    [BoxGroup("财产")]
+    [LabelText("@\"拾取吸附半径\t\"+CollectDetectRadius")]
+    public EntityProperty CollectDetectRadius = new EntityProperty(EntityPropertyType.CollectDetectRadius);
+
+    [BoxGroup("财产")]
     [LabelText("@\"当前金子\t\"+Gold")]
     public EntityStat Gold = new EntityStat(EntityStatType.Gold);
+
+    [BoxGroup("财产")]
+    [LabelText("@\"火元素碎片\t\"+FireElementFragment")]
+    public EntityStat FireElementFragment = new EntityStat(EntityStatType.FireElementFragment);
+
+    [BoxGroup("财产")]
+    [LabelText("@\"火元素碎片上限\t\"+MaxFireElementFragment")]
+    public EntityProperty MaxFireElementFragment = new EntityProperty(EntityPropertyType.MaxFireElementFragment);
+
+    [BoxGroup("财产")]
+    [LabelText("@\"冰元素碎片\t\"+IceElementFragment")]
+    public EntityStat IceElementFragment = new EntityStat(EntityStatType.IceElementFragment);
+
+    [BoxGroup("财产")]
+    [LabelText("@\"冰元素碎片上限\t\"+MaxIceElementFragment")]
+    public EntityProperty MaxIceElementFragment = new EntityProperty(EntityPropertyType.MaxIceElementFragment);
+
+    [BoxGroup("财产")]
+    [LabelText("@\"电元素碎片\t\"+LightningElementFragment")]
+    public EntityStat LightningElementFragment = new EntityStat(EntityStatType.LightningElementFragment);
+
+    [BoxGroup("财产")]
+    [LabelText("@\"电元素碎片上限\t\"+MaxLightningElementFragment")]
+    public EntityProperty MaxLightningElementFragment = new EntityProperty(EntityPropertyType.MaxLightningElementFragment);
 
     #endregion
 
@@ -175,100 +203,7 @@ public class EntityStatPropSet
     [LabelText("@\"行动力恢复速度/100\t\"+ActionPointRecovery")]
     public EntityProperty ActionPointRecovery = new EntityProperty(EntityPropertyType.ActionPointRecovery);
 
-    [BoxGroup("操作")]
-    [LabelText("@\"Kick消耗行动力\t\"+KickConsumeActionPoint")]
-    public EntityProperty KickConsumeActionPoint = new EntityProperty(EntityPropertyType.KickConsumeActionPoint);
-
-    [BoxGroup("操作")]
-    [LabelText("@\"Dash消耗行动力\t\"+DashConsumeActionPoint")]
-    public EntityProperty DashConsumeActionPoint = new EntityProperty(EntityPropertyType.DashConsumeActionPoint);
-
-    [BoxGroup("操作")]
-    [LabelText("@\"Vault消耗行动力\t\"+VaultConsumeActionPoint")]
-    public EntityProperty VaultConsumeActionPoint = new EntityProperty(EntityPropertyType.VaultConsumeActionPoint);
-
     #endregion
-
-    #region 技能
-
-    [LabelText("技能参数列表")]
-    [ListDrawerSettings(ListElementLabelName = "skillAlias")]
-    public List<SkillPropertyCollection> SkillsPropertyCollections = new List<SkillPropertyCollection>();
-
-    [Serializable]
-    public class SkillPropertyCollection
-    {
-        public Dictionary<EntitySkillPropertyType, EntityProperty> PropertyDict = new Dictionary<EntitySkillPropertyType, EntityProperty>();
-
-        [SerializeField]
-        [LabelText("技能名备注")]
-        private string skillAlias = "";
-
-        [LabelText("@\"施法正方形范围边长\t\"+CastingRadius")]
-        public EntityProperty CastingRadius = new EntityProperty(EntitySkillPropertyType.CastingRadius);
-
-        [LabelText("@\"冷却时间/ms\t\"+Cooldown")]
-        public EntityProperty Cooldown = new EntityProperty(EntitySkillPropertyType.Cooldown);
-
-        [LabelText("@\"前摇/ms\t\"+WingUp")]
-        public EntityProperty WingUp = new EntityProperty(EntitySkillPropertyType.WingUp);
-
-        [LabelText("@\"施法时间/ms\t\"+CastDuration")]
-        public EntityProperty CastDuration = new EntityProperty(EntitySkillPropertyType.CastDuration);
-
-        [LabelText("@\"后摇/ms\t\"+Recovery")]
-        public EntityProperty Recovery = new EntityProperty(EntitySkillPropertyType.Recovery);
-
-        [LabelText("@\"震屏伤害当量\t\"+CameraShakeEquivalentDamage")]
-        public EntityProperty CameraShakeEquivalentDamage = new EntityProperty(EntitySkillPropertyType.CameraShakeEquivalentDamage);
-
-        public void Setup()
-        {
-            if (PropertyDict.Count == 0)
-            {
-                PropertyDict.Add(EntitySkillPropertyType.CastingRadius, CastingRadius);
-                PropertyDict.Add(EntitySkillPropertyType.Cooldown, Cooldown);
-                PropertyDict.Add(EntitySkillPropertyType.WingUp, WingUp);
-                PropertyDict.Add(EntitySkillPropertyType.CastDuration, CastDuration);
-                PropertyDict.Add(EntitySkillPropertyType.Recovery, Recovery);
-                PropertyDict.Add(EntitySkillPropertyType.CameraShakeEquivalentDamage, CameraShakeEquivalentDamage);
-            }
-        }
-
-        public void Initialize()
-        {
-            foreach (KeyValuePair<EntitySkillPropertyType, EntityProperty> kv in PropertyDict)
-            {
-                kv.Value.Initialize();
-            }
-        }
-
-        public void OnRecycled()
-        {
-            foreach (KeyValuePair<EntitySkillPropertyType, EntityProperty> kv in PropertyDict)
-            {
-                kv.Value.OnRecycled();
-            }
-        }
-
-        public void ApplyDataTo(SkillPropertyCollection target)
-        {
-            CastingRadius.ApplyDataTo(target.CastingRadius);
-            Cooldown.ApplyDataTo(target.Cooldown);
-            WingUp.ApplyDataTo(target.WingUp);
-            CastDuration.ApplyDataTo(target.CastDuration);
-            Recovery.ApplyDataTo(target.Recovery);
-            CameraShakeEquivalentDamage.ApplyDataTo(target.CameraShakeEquivalentDamage);
-        }
-    }
-
-    #endregion
-
-    [SerializeReference]
-    [BoxGroup("Buff")]
-    [LabelText("自带Buff")]
-    [ListDrawerSettings(ListElementLabelName = "Description")]
-    public List<EntityBuff> RawEntityDefaultBuffs = new List<EntityBuff>(); // 干数据，禁修改
 
     public void Initialize(Entity entity)
     {
@@ -276,6 +211,15 @@ public class EntityStatPropSet
         Entity = entity;
 
         #region Property初始化
+
+        #region 财产
+
+        CollectDetectRadius.Initialize();
+        MaxFireElementFragment.Initialize();
+        MaxIceElementFragment.Initialize();
+        MaxLightningElementFragment.Initialize();
+
+        #endregion
 
         #region 耐久
 
@@ -321,9 +265,6 @@ public class EntityStatPropSet
         MoveSpeed.Initialize();
         MaxActionPoint.Initialize();
         ActionPointRecovery.Initialize();
-        KickConsumeActionPoint.Initialize();
-        DashConsumeActionPoint.Initialize();
-        VaultConsumeActionPoint.Initialize();
 
         #endregion
 
@@ -336,7 +277,20 @@ public class EntityStatPropSet
 
         #region 财产
 
+        PropertyDict.Add(EntityPropertyType.CollectDetectRadius, CollectDetectRadius);
         StatDict.Add(EntityStatType.Gold, Gold);
+
+        FireElementFragment.MaxValue = MaxFireElementFragment.GetModifiedValue;
+        StatDict.Add(EntityStatType.FireElementFragment, FireElementFragment);
+        PropertyDict.Add(EntityPropertyType.MaxFireElementFragment, MaxFireElementFragment);
+
+        IceElementFragment.MaxValue = MaxIceElementFragment.GetModifiedValue;
+        StatDict.Add(EntityStatType.IceElementFragment, IceElementFragment);
+        PropertyDict.Add(EntityPropertyType.MaxIceElementFragment, MaxIceElementFragment);
+
+        LightningElementFragment.MaxValue = MaxLightningElementFragment.GetModifiedValue;
+        StatDict.Add(EntityStatType.LightningElementFragment, LightningElementFragment);
+        PropertyDict.Add(EntityPropertyType.MaxLightningElementFragment, MaxLightningElementFragment);
 
         #endregion
 
@@ -429,32 +383,9 @@ public class EntityStatPropSet
 
         PropertyDict.Add(EntityPropertyType.ActionPointRecovery, ActionPointRecovery);
 
-        PropertyDict.Add(EntityPropertyType.KickConsumeActionPoint, KickConsumeActionPoint);
-
-        PropertyDict.Add(EntityPropertyType.DashConsumeActionPoint, DashConsumeActionPoint);
-
-        PropertyDict.Add(EntityPropertyType.VaultConsumeActionPoint, VaultConsumeActionPoint);
-
         #endregion
 
         Profiler.EndSample();
-        Profiler.EndSample();
-
-        Profiler.BeginSample("ESPS #3");
-        foreach (SkillPropertyCollection spc in SkillsPropertyCollections)
-        {
-            spc.Initialize();
-        }
-
-        Profiler.EndSample();
-
-        Profiler.BeginSample("ESPS #4");
-
-        foreach (EntityBuff rawEntityDefaultBuff in RawEntityDefaultBuffs)
-        {
-            Entity.EntityBuffHelper.AddBuff(rawEntityDefaultBuff.Clone());
-        }
-
         Profiler.EndSample();
 
         foreach (KeyValuePair<EntityStatType, EntityStat> kv in StatDict)
@@ -480,18 +411,25 @@ public class EntityStatPropSet
         foreach (EntityStatType est in Enum.GetValues(typeof(EntityStatType)))
         {
             StatNotifyActionSetDict.Add(est, new Stat.NotifyActionSet());
-            StatNotifyActionSetDict[est].OnValueChanged += delegate
+            StatNotifyActionSetDict[est].OnValueChanged += delegate(int before, int after)
             {
                 foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
                 {
-                    eps.OnEntityStatValueChange(est);
+                    eps.OnEntityStatValueChange(est, before, after);
                 }
             };
         }
 
+        StatNotifyActionSetDict[EntityStatType.ActionPoint].OnValueNotEnoughWarning += OnActionPointNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.Gold].OnValueIncrease += OnGoldIncrease;
-        StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueDecrease += OnHealthDurabilityDecrease;
+        StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueIncrease += OnFireElementFragmentIncrease;
+        StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueNotEnoughWarning += OnFireElementFragmentNotEnoughWarning;
+        StatNotifyActionSetDict[EntityStatType.IceElementFragment].OnValueIncrease += OnIceElementFragmentIncrease;
+        StatNotifyActionSetDict[EntityStatType.IceElementFragment].OnValueNotEnoughWarning += OnIceElementFragmentNotEnoughWarning;
+        StatNotifyActionSetDict[EntityStatType.LightningElementFragment].OnValueIncrease += OnLightningElementFragmentIncrease;
+        StatNotifyActionSetDict[EntityStatType.LightningElementFragment].OnValueNotEnoughWarning += OnLightningElementFragmentNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueIncrease += OnHealthDurabilityIncrease;
+        StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueDecrease += OnHealthDurabilityDecrease;
         StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueReachZero += OnHealthDurabilityReachZero;
         StatNotifyActionSetDict[EntityStatType.FrozenValue].OnValueIncrease += OnFrozenValueIncrease;
         StatNotifyActionSetDict[EntityStatType.FrozenValue].OnValueChanged += OnFrozenValueChanged;
@@ -502,20 +440,29 @@ public class EntityStatPropSet
         foreach (EntityPropertyType ept in Enum.GetValues(typeof(EntityPropertyType)))
         {
             PropertyNotifyActionSetDict.Add(ept, new Property.NotifyActionSet());
-            PropertyNotifyActionSetDict[ept].OnValueChanged += delegate
+            PropertyNotifyActionSetDict[ept].OnValueChanged += delegate(int before, int after)
             {
                 foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
                 {
-                    eps.OnEntityPropertyValueChange(ept);
+                    eps.OnEntityPropertyValueChange(ept, before, after);
                 }
             };
         }
 
+        PropertyNotifyActionSetDict[EntityPropertyType.CollectDetectRadius].OnValueChanged += OnCollectDetectRadiusChanged;
         PropertyNotifyActionSetDict[EntityPropertyType.MaxHealthDurability].OnValueChanged += OnMaxHealthDurabilityChanged;
         PropertyNotifyActionSetDict[EntityPropertyType.FrozenResistance].OnValueChanged += OnFrozenResistanceChanged;
         PropertyNotifyActionSetDict[EntityPropertyType.FiringResistance].OnValueChanged += OnFiringResistanceChanged;
         PropertyNotifyActionSetDict[EntityPropertyType.ActionPointRecovery].OnValueChanged += OnActionPointRecoveryChanged;
         PropertyNotifyActionSetDict[EntityPropertyType.MaxActionPoint].OnValueChanged += OnMaxActionPointChanged;
+    }
+
+    private void OnActionPointNotEnoughWarning()
+    {
+        if (Entity == BattleManager.Instance.Player1)
+        {
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].ActionPointBar.OnStatLowWarning();
+        }
     }
 
     private void OnGoldIncrease(int increase)
@@ -526,12 +473,51 @@ public class EntityStatPropSet
         }
     }
 
-    private void OnHealthDurabilityDecrease(int decrease)
+    private void OnFireElementFragmentIncrease(int increase)
     {
         if (Entity is Actor actor)
         {
-            actor.ActorBattleHelper.ShowDamageNumFX(decrease);
-            actor.EntityWwiseHelper.OnBeingDamaged.Post(actor.gameObject);
+            actor.ActorBattleHelper.ShowGainFireElementFragmentNumFX(increase);
+        }
+    }
+
+    private void OnFireElementFragmentNotEnoughWarning()
+    {
+        if (Entity == BattleManager.Instance.Player1)
+        {
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].FireElementFragmentBar.OnStatLowWarning();
+        }
+    }
+
+    private void OnIceElementFragmentIncrease(int increase)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowGainIceElementFragmentNumFX(increase);
+        }
+    }
+
+    private void OnIceElementFragmentNotEnoughWarning()
+    {
+        if (Entity == BattleManager.Instance.Player1)
+        {
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].IceElementFragmentBar.OnStatLowWarning();
+        }
+    }
+
+    private void OnLightningElementFragmentIncrease(int increase)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowGainLightningElementFragmentNumFX(increase);
+        }
+    }
+
+    private void OnLightningElementFragmentNotEnoughWarning()
+    {
+        if (Entity == BattleManager.Instance.Player1)
+        {
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].LightningElementFragmentBar.OnStatLowWarning();
         }
     }
 
@@ -541,6 +527,15 @@ public class EntityStatPropSet
         {
             actor.ActorBattleHelper.ShowHealNumFX(increase);
             actor.EntityWwiseHelper.OnBeingHealed.Post(actor.gameObject);
+        }
+    }
+
+    private void OnHealthDurabilityDecrease(int decrease)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowDamageNumFX(decrease);
+            actor.EntityWwiseHelper.OnBeingDamaged.Post(actor.gameObject);
         }
     }
 
@@ -582,7 +577,16 @@ public class EntityStatPropSet
             }
         }
 
-        if (Entity is Actor actor) actor.DestroyActor();
+        if (Entity is Actor actor) actor.DestroySelf();
+    }
+
+    private void OnCollectDetectRadiusChanged(int before, int after)
+    {
+        if (Entity.EntityCollectHelper != null)
+        {
+            Entity.EntityCollectHelper.EnableDetector = after > 0;
+            Entity.EntityCollectHelper.DetectRadius = after;
+        }
     }
 
     private void OnMaxHealthDurabilityChanged(int before, int after)
@@ -603,7 +607,7 @@ public class EntityStatPropSet
     private void OnFrozenValueChanged(int before, int after)
     {
         FrozenLevel.SetValue(after / FrozenValuePerLevel, "FrozenValueChange");
-        if (FrozenLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FrozenValue, FrozenFX, FrozenLevel.Value); // 冰冻值变化时，播放一次特效
+        if (FrozenLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX(EntityStatType.FrozenValue, FrozenFX, FrozenLevel.Value); // 冰冻值变化时，播放一次特效
     }
 
     private void OnFiringResistanceChanged(int before, int after)
@@ -615,8 +619,8 @@ public class EntityStatPropSet
     {
         FiringLevel.SetValue(Mathf.RoundToInt(after / FiringValuePerLevel), "FiringValueChange");
         if (FiringLevel.Value > 0)
-            Entity.EntityBuffHelper.PlayAbnormalStatFX((int) EntityStatType.FiringValue, FiringFX, FiringLevel.Value); // 燃烧值变化时，播放一次特效
-        else if (after == 0) Entity.EntityBuffHelper.RemoveAbnormalStatFX((int) EntityStatType.FiringValue);
+            Entity.EntityBuffHelper.PlayAbnormalStatFX(EntityStatType.FiringValue, FiringFX, FiringLevel.Value); // 燃烧值变化时，播放一次特效
+        else if (after == 0) Entity.EntityBuffHelper.RemoveAbnormalStatFX(EntityStatType.FiringValue);
     }
 
     private void OnFiringValueIncrease(int increase)
@@ -669,11 +673,6 @@ public class EntityStatPropSet
         }
 
         PropertyDict.Clear();
-
-        foreach (SkillPropertyCollection spc in SkillsPropertyCollections)
-        {
-            spc.OnRecycled();
-        }
     }
 
     private float abnormalStateAutoTick = 0f;
@@ -711,7 +710,14 @@ public class EntityStatPropSet
     {
         #region 财产
 
+        CollectDetectRadius.ApplyDataTo(target.CollectDetectRadius);
         Gold.ApplyDataTo(target.Gold);
+        FireElementFragment.ApplyDataTo(target.FireElementFragment);
+        MaxFireElementFragment.ApplyDataTo(target.MaxFireElementFragment);
+        IceElementFragment.ApplyDataTo(target.IceElementFragment);
+        MaxIceElementFragment.ApplyDataTo(target.MaxIceElementFragment);
+        LightningElementFragment.ApplyDataTo(target.LightningElementFragment);
+        MaxLightningElementFragment.ApplyDataTo(target.MaxLightningElementFragment);
 
         #endregion
 
@@ -769,74 +775,7 @@ public class EntityStatPropSet
         MaxActionPoint.ApplyDataTo(target.MaxActionPoint);
         ActionPoint.ApplyDataTo(target.ActionPoint);
         ActionPointRecovery.ApplyDataTo(target.ActionPointRecovery);
-        KickConsumeActionPoint.ApplyDataTo(target.KickConsumeActionPoint);
-        DashConsumeActionPoint.ApplyDataTo(target.DashConsumeActionPoint);
-        VaultConsumeActionPoint.ApplyDataTo(target.VaultConsumeActionPoint);
 
         #endregion
-
-        // 性能考虑，进行数据拷贝
-
-        if (target.SkillsPropertyCollections.Count == 0)
-        {
-            for (int i = 0; i < SkillsPropertyCollections.Count; i++)
-            {
-                SkillPropertyCollection targetSRC = new SkillPropertyCollection();
-                target.SkillsPropertyCollections.Add(targetSRC);
-                SkillsPropertyCollections[i].Setup();
-                targetSRC.Setup();
-                SkillsPropertyCollections[i].ApplyDataTo(targetSRC);
-            }
-        }
-        else
-        {
-            if (target.SkillsPropertyCollections.Count == SkillsPropertyCollections.Count)
-            {
-                // 性能考虑，进行数据拷贝
-                for (int i = 0; i < SkillsPropertyCollections.Count; i++)
-                {
-                    SkillPropertyCollection targetSRC = target.SkillsPropertyCollections[i];
-                    SkillsPropertyCollections[i].Setup();
-                    targetSRC.Setup();
-                    SkillsPropertyCollections[i].ApplyDataTo(targetSRC);
-                }
-            }
-            else
-            {
-                Debug.Log("技能属性数据，源数据和目标数据数量不符");
-            }
-        }
-
-        target.RawEntityDefaultBuffs = RawEntityDefaultBuffs.Clone();
     }
-}
-
-public enum EntitySkillIndex
-{
-    [LabelText("技能0")]
-    Skill_0 = 0,
-
-    [LabelText("技能1")]
-    Skill_1 = 1,
-
-    [LabelText("技能2")]
-    Skill_2 = 2,
-
-    [LabelText("技能3")]
-    Skill_3 = 3,
-
-    [LabelText("技能4")]
-    Skill_4 = 4,
-
-    [LabelText("技能5")]
-    Skill_5 = 5,
-
-    [LabelText("技能6")]
-    Skill_6 = 6,
-
-    [LabelText("技能7")]
-    Skill_7 = 7,
-
-    [LabelText("技能8")]
-    Skill_8 = 8,
 }

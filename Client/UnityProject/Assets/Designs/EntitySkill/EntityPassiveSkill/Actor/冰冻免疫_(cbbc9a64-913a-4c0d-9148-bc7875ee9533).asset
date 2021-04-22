@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u51B0\u51BB\u514D\u75AB_(cbbc9a64-913a-4c0d-9148-bc7875ee9533)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        SkillGUID: (cbbc9a64-913a-4c0d-9148-bc7875ee9533)
+        SkillAlias: "\u51B0\u51BB\u514D\u75AB"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: (5c8eb360-251b-40bc-96b0-d3d17aea7c5b)
+        SkillDescription: Immune to ice damage and effects.
+        IsAddedDuringGamePlay: 0
+        InitWorldModuleGUID: 0
+        PassiveSkillCondition: 1
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdOperator: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdOperator: 0
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        RawEntitySkillActions:
+        - id: 1
+    00000001:
+      type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        RawEntityBuffs:
+        - id: 2
+    00000002:
+      type: {class: EntityBuff_AttributeLabel, ns: , asm: Client}
+      data:
+        GUID: 10236
+        BuffAlias: 
+        EntityBuffAttribute: 22
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 1
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4

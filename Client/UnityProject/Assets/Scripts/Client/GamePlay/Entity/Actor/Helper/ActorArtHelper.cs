@@ -8,10 +8,14 @@ public class ActorArtHelper : EntityArtHelper
     [SerializeField]
     private Animator ActorModelAnim;
 
+    internal TargetEntityType TempTargetEntityType;
+
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
         CanTurn = true;
+        CanPlayOtherAnimSkill = true;
+        CanPan = true;
         if (ActorModelAnim != null)
         {
             foreach (AnimatorControllerParameter parameter in ActorModelAnim.parameters)
@@ -32,6 +36,18 @@ public class ActorArtHelper : EntityArtHelper
     {
         base.OnHelperUsed();
         CanTurn = true;
+        CanPlayOtherAnimSkill = true;
+        CanPan = true;
+    }
+
+    public void SetModelAnimTrigger(string trigger)
+    {
+        if (ActorModelAnim != null) ActorModelAnim.SetTrigger(trigger);
+    }
+
+    public void SetModelAnimBool(string boolean, bool value)
+    {
+        if (ActorModelAnim != null) ActorModelAnim.SetBool(boolean, value);
     }
 
     public void Vault()
@@ -72,7 +88,7 @@ public class ActorArtHelper : EntityArtHelper
     /// </summary>
     public void KickBox()
     {
-        ((Actor) Entity).KickBox();
+        ((Actor) Entity).DoKickBox();
     }
 
     public void Dash()
@@ -134,12 +150,14 @@ public class ActorArtHelper : EntityArtHelper
 
     #region 第二优先级
 
-    public void PlaySkill(EntitySkillIndex skillIndex)
+    public void PlaySkill(EntitySkillIndex skillIndex, TargetEntityType targetEntityType)
     {
         if (ActorModelAnim != null)
         {
             ActorModelAnim.SetTrigger(skillIndex.ToString());
         }
+
+        TempTargetEntityType = targetEntityType;
     }
 
     /// <summary>
@@ -149,7 +167,7 @@ public class ActorArtHelper : EntityArtHelper
     {
         if (((Actor) Entity).EntityActiveSkillDict.TryGetValue(skillIndex, out EntityActiveSkill eas))
         {
-            eas.TriggerActiveSkill();
+            eas.TriggerActiveSkill(TempTargetEntityType);
         }
     }
 
@@ -166,6 +184,8 @@ public class ActorArtHelper : EntityArtHelper
     #region 第三优先级
 
     internal bool CanTurn = true;
+    internal bool CanPlayOtherAnimSkill = true;
+    internal bool CanPan = true;
 
     public void SetIsChasing(bool isChasing)
     {

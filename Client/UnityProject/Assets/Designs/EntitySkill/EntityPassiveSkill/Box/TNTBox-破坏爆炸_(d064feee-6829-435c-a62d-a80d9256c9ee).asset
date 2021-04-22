@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "TNTBox-\u7834\u574F\u7206\u70B8_(d064feee-6829-435c-a62d-a80d9256c9ee)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        SkillGUID: (d064feee-6829-435c-a62d-a80d9256c9ee)
+        SkillAlias: "TNTBox-\u7834\u574F\u7206\u70B8"
+        SkillIcon:
+          TypeDefineType: 0
+          TypeGUID: 
+        SkillDescription: 
+        IsAddedDuringGamePlay: 0
+        InitWorldModuleGUID: 0
+        PassiveSkillCondition: 2048
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdOperator: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdOperator: 0
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        RawEntitySkillActions:
+        - id: 1
+        - id: 2
+    00000001:
+      type: {class: EntitySkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        AddBuffRadius: 2
+        ExactGPDistance: 1
+        EffectiveOnRelativeCamp: 15
+        RawEntityBuffs:
+        - id: 3
+    00000002:
+      type: {class: EntitySkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        AddBuffRadius: 2.3
+        ExactGPDistance: 1
+        EffectiveOnRelativeCamp: 15
+        RawEntityBuffs:
+        - id: 4
+    00000003:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10405
+        BuffAlias: 
+        EntityBuffAttribute: 24
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (fdc1ee6b-89b1-434d-b1a1-57b9d21d1053)
+          UseCurve: 0
+          FXScale: 3
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 0
+            m_PostInfinity: 0
+            m_RotationOrder: 4
+        EntityStatType: 0
+        Delta: -50
+        Percent: 0
+    00000004:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10406
+        BuffAlias: 
+        EntityBuffAttribute: 17
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 0
+            m_PostInfinity: 0
+            m_RotationOrder: 4
+        EntityStatType: 101
+        Delta: 500
+        Percent: 0

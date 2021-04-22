@@ -10,7 +10,7 @@ public class PlayerStatHUDPanel : BaseUIPanel
             false,
             false,
             false,
-            UIFormTypes.Fixed,
+            UIFormTypes.Normal,
             UIFormShowModes.Normal,
             UIFormLucencyTypes.Penetrable);
     }

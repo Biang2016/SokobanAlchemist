@@ -72,7 +72,7 @@ public class InGameHealthBar : PoolObject
 
     void Update()
     {
-        if (!IsRecycled)
+        if (!IsRecycled && BattleManager.Instance != null && BattleManager.Instance.IsStart)
         {
             Vector2 screenPos = CameraManager.Instance.MainCamera.WorldToScreenPoint(ActorBattleHelper.HealthBarPivot.position + ActorBattleHelper.Actor.ArtPos - ActorBattleHelper.Actor.transform.position);
             //Debug.Log($"ScreenPos: {screenPos}");

@@ -1,0 +1,148 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u5C0F\u53F2\u83B1\u59C6\u4E24\u683C\u666E\u901A\u653B\u51FB_(5defe000-480d-467f-a8b7-a9ed6d50d38c)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      data:
+        SkillGUID: (5defe000-480d-467f-a8b7-a9ed6d50d38c)
+        SkillAlias: "\u5C0F\u53F2\u83B1\u59C6\u4E24\u683C\u666E\u901A\u653B\u51FB"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: (d5230ea3-e8f9-43e0-aaa5-0d75916998a9)
+        SkillDescription: 
+        TargetCamp: 6
+        EntitySkillIndex: 0
+        SkillsPropertyCollection:
+          CastingRadius:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Cooldown:
+            BaseValue: 1000
+            ModifiedValue: 1000
+            MinValue: 0
+            MaxValue: 1000000
+          WingUp:
+            BaseValue: 416
+            ModifiedValue: 200
+            MinValue: 0
+            MaxValue: 1000000
+          CastDuration:
+            BaseValue: 0
+            ModifiedValue: 100
+            MinValue: 0
+            MaxValue: 1000000
+          Recovery:
+            BaseValue: 566
+            ModifiedValue: 200
+            MinValue: 0
+            MaxValue: 1000000
+          CameraShakeEquivalentDamage:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeActionPoint:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeFireElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeIceElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeLightningElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+        TriggerWhenMissProbabilityPercent: 0
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 15
+          y: 0
+          z: 17
+        - x: 15
+          y: 0
+          z: 16
+        M_TargetInclination: 1
+        CastOnTopLayer: 0
+        CastOnNLayersBeneath: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        ProjectHeightDeltaRange: 999
+        GridWarningColorFill: {r: 0.6978636, g: 0.36779106, b: 0.8962264, a: 0.6745098}
+        GridWarningColorBorderHighlight: {r: 0.8409599, g: 0.5913581, b: 0.9150943,
+          a: 0.92156863}
+        GridWarningColorBorderDim: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 0.4627451}
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (a3f1c9b2-11c9-4ae7-b3c8-c0cc492a5e6c)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        RawEntityBuffs:
+        - id: 1
+    00000001:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10277
+        BuffAlias: 
+        EntityBuffAttribute: 37
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 0
+        Delta: -1
+        Percent: 0

@@ -1,0 +1,113 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "ActionBox-\u6062\u590D\u884C\u52A8\u529B_(b221cb45-e010-49d7-8808-c974224090c7)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        SkillGUID: (b221cb45-e010-49d7-8808-c974224090c7)
+        SkillAlias: "ActionBox-\u6062\u590D\u884C\u52A8\u529B"
+        SkillIcon:
+          TypeDefineType: 0
+          TypeGUID: 
+        SkillDescription: 
+        IsAddedDuringGamePlay: 0
+        InitWorldModuleGUID: 0
+        PassiveSkillCondition: 8
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EPSConditionals: []
+        RawEntitySkillActions:
+        - id: 1
+        - id: 2
+    00000001:
+      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        RawEntityBuffs:
+        - id: 3
+        - id: 4
+    00000002:
+      type: {class: EntitySkillAction_DestroySelf, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+    00000003:
+      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
+      data:
+        GUID: 10309
+        BuffAlias: 
+        EntityBuffAttribute: 1
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 3
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (e9aaa995-68e2-4e7e-af31-6238c26a29bf)
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 0
+            m_PostInfinity: 0
+            m_RotationOrder: 4
+        PropertyCategory: 0
+        EntityPropertyType: 30
+        EntitySkillSO: {fileID: 0}
+        SkillGUID: 
+        EntitySkillPropertyType: 0
+        Percent: 50
+        LinearDecayInDuration: 0
+    00000004:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10310
+        BuffAlias: 
+        EntityBuffAttribute: 4
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 0
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 0
+            m_PostInfinity: 0
+            m_RotationOrder: 4
+        EntityStatType: 30
+        Delta: 3
+        Percent: 0

@@ -147,6 +147,9 @@ public abstract class Entity_LevelEditor : MonoBehaviour
             GameObject go = (GameObject) PrefabUtility.InstantiatePrefab(prefab, transform.parent);
             go.transform.position = transform.position;
             go.transform.rotation = Quaternion.identity;
+            Entity_LevelEditor entityLevelEditor = go.GetComponentInParent<Entity_LevelEditor>();
+            entityLevelEditor.EntityOrientation = EntityOrientation;
+            entityLevelEditor.RefreshOrientation();
             DestroyImmediate(gameObject);
         }
         else if (ReplaceEntityTypeName.TypeDefineType == TypeDefineType.Actor)
@@ -155,6 +158,9 @@ public abstract class Entity_LevelEditor : MonoBehaviour
             GameObject go = (GameObject) PrefabUtility.InstantiatePrefab(prefab, transform.parent);
             go.transform.position = transform.position;
             go.transform.rotation = Quaternion.identity;
+            Entity_LevelEditor entityLevelEditor = go.GetComponentInParent<Entity_LevelEditor>();
+            entityLevelEditor.EntityOrientation = EntityOrientation;
+            entityLevelEditor.RefreshOrientation();
             DestroyImmediate(gameObject);
         }
     }

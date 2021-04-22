@@ -133,6 +133,22 @@ public enum EntityPropertyType
     [EntityProperty]
     [LabelText("燃烧蔓延率")]
     FiringSpreadPercent = 401,
+
+    [EntityProperty]
+    [LabelText("拾取吸附半径")]
+    CollectDetectRadius = 499,
+
+    [EntityProperty]
+    [LabelText("火元素碎片上限")]
+    MaxFireElementFragment = 500,
+
+    [EntityProperty]
+    [LabelText("冰元素碎片上限")]
+    MaxIceElementFragment = 501,
+
+    [EntityProperty]
+    [LabelText("电元素碎片上限")]
+    MaxLightningElementFragment = 502,
 }
 
 public enum EntitySkillPropertyType
@@ -154,4 +170,22 @@ public enum EntitySkillPropertyType
 
     [LabelText("后摇震屏伤害当量")]
     CameraShakeEquivalentDamage = 10124,
+
+    [LabelText("消耗行动力点数")]
+    ConsumeActionPoint = 10199,
+
+    [LabelText("消耗火元素碎片量")]
+    ConsumeFireElementFragment = 10200,
+
+    [LabelText("消耗冰元素碎片量")]
+    ConsumeIceElementFragment = 10201,
+
+    [LabelText("消耗电元素碎片量")]
+    ConsumeLightningElementFragment = 10202,
+}
+
+public enum PropertyCategory
+{
+    EntityPropertyType = 0,
+    EntitySkillPropertyType = 1,
 }

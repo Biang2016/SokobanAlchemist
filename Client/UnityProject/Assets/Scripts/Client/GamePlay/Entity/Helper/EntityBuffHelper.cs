@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class EntityBuffHelper : EntityMonoHelper
 {
+    public static HashSet<EntitySkillPropertyType> EntitySkillBuffEnums_Property = new HashSet<EntitySkillPropertyType>();
     public static HashSet<EntityPropertyType> BoxBuffEnums_Property = new HashSet<EntityPropertyType>();
     public static HashSet<EntityStatType> BoxBuffEnums_Stat = new HashSet<EntityStatType>();
     public static HashSet<EntityPropertyType> ActorBuffEnums_Property = new HashSet<EntityPropertyType>();
@@ -28,7 +29,7 @@ public class EntityBuffHelper : EntityMonoHelper
         }
 
         BuffFXDict.Clear();
-        foreach (KeyValuePair<int, List<FX>> kv in AbnormalBuffFXDict)
+        foreach (KeyValuePair<EntityStatType, List<FX>> kv in AbnormalBuffFXDict)
         {
             foreach (FX fx in kv.Value)
             {
@@ -56,7 +57,7 @@ public class EntityBuffHelper : EntityMonoHelper
     }
 
     protected Dictionary<EntityBuffAttribute, List<EntityBuff>> EntityBuffAttributeDict = new Dictionary<EntityBuffAttribute, List<EntityBuff>>(30);
-    protected Dictionary<int, List<FX>> AbnormalBuffFXDict = new Dictionary<int, List<FX>>(10);
+    protected Dictionary<EntityStatType, List<FX>> AbnormalBuffFXDict = new Dictionary<EntityStatType, List<FX>>(10);
     protected Dictionary<uint, List<FX>> BuffFXDict = new Dictionary<uint, List<FX>>(10);
 
     [ShowInInspector]
@@ -372,7 +373,7 @@ public class EntityBuffHelper : EntityMonoHelper
         return false;
     }
 
-    public void PlayAbnormalStatFX(int statType, FXConfig fxConfig, float evaluator = 0f)
+    public void PlayAbnormalStatFX(EntityStatType statType, FXConfig fxConfig, float evaluator = 0f)
     {
         if (fxConfig == null || fxConfig.Empty) return;
         if (AbnormalBuffFXDict.TryGetValue(statType, out List<FX> fxs))
@@ -420,7 +421,7 @@ public class EntityBuffHelper : EntityMonoHelper
         }
     }
 
-    public void RemoveAbnormalStatFX(int statType)
+    public void RemoveAbnormalStatFX(EntityStatType statType)
     {
         if (AbnormalBuffFXDict.TryGetValue(statType, out List<FX> fxs))
         {

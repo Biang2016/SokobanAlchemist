@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Profiling;
+
 #if UNITY_EDITOR
 
 #endif
@@ -40,6 +41,7 @@ public partial class Box : Entity
     internal override EntityBuffHelper EntityBuffHelper => BoxBuffHelper;
     internal override EntityFrozenHelper EntityFrozenHelper => BoxFrozenHelper;
     internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => BoxTriggerZoneHelper;
+    internal override EntityCollectHelper EntityCollectHelper => BoxCollectHelper;
     internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => BoxGrindTriggerZoneHelper;
     internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => BoxFlamethrowerHelpers;
     internal override List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers => BoxLightningGeneratorHelpers;
@@ -67,6 +69,10 @@ public partial class Box : Entity
     [FoldoutGroup("组件")]
     [SerializeField]
     private EntityTriggerZoneHelper BoxTriggerZoneHelper;
+
+    [FoldoutGroup("组件")]
+    [SerializeField]
+    private EntityCollectHelper BoxCollectHelper;
 
     [FoldoutGroup("组件")]
     [SerializeField]
@@ -138,6 +144,7 @@ public partial class Box : Entity
         EntityBuffHelper.OnHelperUsed();
         EntityFrozenHelper.OnHelperUsed();
         EntityTriggerZoneHelper?.OnHelperUsed();
+        EntityCollectHelper?.OnHelperUsed();
         EntityGrindTriggerZoneHelper?.OnHelperUsed();
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
@@ -167,7 +174,7 @@ public partial class Box : Entity
         worldGP_WhenKicked = GridPos3D.Zero;
         LastState = States.Static;
         State = States.Static;
-        isDestroying = false;
+        IsDestroying = false;
 
         EntityArtHelper?.OnHelperRecycled();
         EntityWwiseHelper.OnHelperRecycled();
@@ -176,6 +183,7 @@ public partial class Box : Entity
         EntityBuffHelper.OnHelperRecycled();
         EntityFrozenHelper.OnHelperRecycled();
         EntityTriggerZoneHelper?.OnHelperRecycled();
+        EntityCollectHelper?.OnHelperRecycled();
         EntityGrindTriggerZoneHelper?.OnHelperRecycled();
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
@@ -494,10 +502,7 @@ public partial class Box : Entity
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
 
-        if (BoxArtHelper == null || !BoxArtHelper.UseRandomOrientation)
-        {
-            SwitchEntityOrientation(entityData.EntityOrientation);
-        }
+        SwitchEntityOrientation(entityData.EntityOrientation);
 
         if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorBoxInteractHelper.GetInteractSkillType(EntityTypeIndex), EntityTypeIndex);
         ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
@@ -545,7 +550,7 @@ public partial class Box : Entity
         WorldModule = module;
         WorldGP = worldGridPos3D;
         LocalGP = module.WorldGPToLocalGP(worldGridPos3D);
-        transform.parent = module.transform;
+        transform.parent = module.WorldModuleBoxRoot;
         BoxColliderHelper.Initialize(Passable, artOnly, BoxFeature.HasFlag(BoxFeature.IsGround), lerpType == LerpType.Drop, lerpTime > 0);
         if (lerpTime > 0)
         {
@@ -556,7 +561,7 @@ public partial class Box : Entity
 
             Profiler.BeginSample("Box.Initialize DOTween GC Check");
             transform.DOPause();
-            transform.DOLocalMove(LocalGP, lerpTime).SetEase(Ease.Linear).OnComplete(() =>
+            transform.DOLocalMove(LocalGP, lerpTime).SetEase(Ease.OutSine).OnComplete(() =>
             {
                 State = States.Static;
                 IsInGridSystem = true;
@@ -658,7 +663,7 @@ public partial class Box : Entity
             {
                 if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Push {WorldGP} -> {gp}");
                 CurrentMoveGlobalPlanerDir = (gp - WorldGP).Normalized();
-                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.BeingPushed, true, false, actor.GUID);
+                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.BeingPushed, 11f / actor.EntityStatPropSet.PropertyDict[EntityPropertyType.MoveSpeed].GetModifiedValue, false, actor.GUID);
             }
         }
     }
@@ -672,7 +677,7 @@ public partial class Box : Entity
         {
             if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] Box] {name} ForceCancelPush {WorldGP} -> {targetGP}");
             CurrentMoveGlobalPlanerDir = moveDirection;
-            WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.Static, false, true, actor.GUID);
+            WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.Static, 0f, true, actor.GUID);
         }
     }
 
@@ -1038,7 +1043,7 @@ public partial class Box : Entity
                         h.OnRigidbodyStop();
                     }
 
-                    if (!isDestroying) WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this, checkMerge, CurrentMoveGlobalPlanerDir); // 这里面已经做了“Box本来就在Grid系统里”的判定
+                    if (!IsDestroying) WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this, checkMerge, CurrentMoveGlobalPlanerDir); // 这里面已经做了“Box本来就在Grid系统里”的判定
                     CurrentMoveGlobalPlanerDir = GridPos3D.Zero;
                     EntityWwiseHelper.OnSlideStop.Post(gameObject);
                 }
@@ -1070,7 +1075,7 @@ public partial class Box : Entity
 
         if (PassiveSkillMarkAsDestroyed)
         {
-            DestroyBox();
+            DestroySelf();
         }
     }
 
@@ -1079,6 +1084,7 @@ public partial class Box : Entity
     protected override void OnCollisionEnter(Collision collision)
     {
         if (IsRecycled) return;
+        if (collision.gameObject.layer == LayerManager.Instance.Layer_CollectableItem) return;
         if (LastInteractActor.IsNotNullAndAlive() && collision.gameObject == LastInteractActor.gameObject) return; // todo 这里判定上一个碰的Actor有啥用?
         switch (State)
         {
@@ -1106,7 +1112,7 @@ public partial class Box : Entity
 
                 if (PassiveSkillMarkAsDestroyed && !IsRecycled)
                 {
-                    DestroyBox();
+                    DestroySelf();
                     return;
                 }
 
@@ -1115,7 +1121,7 @@ public partial class Box : Entity
                     OnFlyingCollisionEnter(collision);
                     if (PassiveSkillMarkAsDestroyed)
                     {
-                        DestroyBox();
+                        DestroySelf();
                         return;
                     }
                 }
@@ -1137,7 +1143,7 @@ public partial class Box : Entity
 
                     if (PassiveSkillMarkAsDestroyed && !IsRecycled)
                     {
-                        DestroyBox();
+                        DestroySelf();
                         return;
                     }
 
@@ -1146,7 +1152,7 @@ public partial class Box : Entity
                         OnBeingKickedCollisionEnter(collision);
                         if (PassiveSkillMarkAsDestroyed)
                         {
-                            DestroyBox();
+                            DestroySelf();
                             return;
                         }
                     }
@@ -1171,7 +1177,7 @@ public partial class Box : Entity
 
                 if (PassiveSkillMarkAsDestroyed && !IsRecycled)
                 {
-                    DestroyBox();
+                    DestroySelf();
                     return;
                 }
 
@@ -1180,7 +1186,7 @@ public partial class Box : Entity
                     OnDroppingFromAirCollisionEnter(collision);
                     if (PassiveSkillMarkAsDestroyed)
                     {
-                        DestroyBox();
+                        DestroySelf();
                         return;
                     }
                 }
@@ -1243,25 +1249,25 @@ public partial class Box : Entity
 
     #region Destroy
 
-    private bool isDestroying = false;
-
-    public void DestroyBox(UnityAction callBack = null, bool forModuleRecycle = false)
+    public override void DestroySelfByModuleRecycle()
     {
-        if (isDestroying || IsRecycled) return;
-        isDestroying = true;
-        if (!forModuleRecycle)
-        {
-            foreach (EntityPassiveSkill ps in EntityPassiveSkills)
-            {
-                ps.OnBeforeDestroyEntity();
-            }
+        if (IsDestroying || IsRecycled) return;
+        base.DestroySelfByModuleRecycle();
+        IsDestroying = true;
+        WorldManager.Instance.CurrentWorld.DeleteBox(this);
+    }
 
-            StartCoroutine(Co_DelayDestroyBox(callBack));
-        }
-        else
+    public override void DestroySelf(UnityAction callBack = null)
+    {
+        if (IsDestroying || IsRecycled) return;
+        base.DestroySelf(callBack);
+        IsDestroying = true;
+        foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
-            WorldManager.Instance.CurrentWorld.DeleteBox(this);
+            ps.OnBeforeDestroyEntity();
         }
+
+        StartCoroutine(Co_DelayDestroyBox(callBack));
     }
 
     IEnumerator Co_DelayDestroyBox(UnityAction callBack)
@@ -1319,7 +1325,7 @@ public partial class Box : Entity
             ps.OnBeingFueled();
         }
 
-        DestroyBox();
+        DestroySelf();
     }
 
     #region Drop

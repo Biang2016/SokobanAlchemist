@@ -153,15 +153,19 @@ public class TypeSelectHelper : IClone<TypeSelectHelper>
 
 public enum TypeDefineType
 {
-    Box,
-    BoxIcon,
-    Actor,
-    LevelTrigger,
-    WorldModule,
-    StaticLayout,
-    World,
-    FX,
-    BattleIndicator,
-    SkyBox,
-    PostProcessingProfile,
+    // 顺序不可变
+
+    Box = 0,
+    BoxIcon = 1,
+    Actor = 2,
+    LevelTrigger = 3,
+    WorldModule = 4,
+    StaticLayout = 5,
+    World = 6,
+    FX = 7,
+    BattleIndicator = 8,
+    SkyBox = 9,
+    PostProcessingProfile = 10,
+    CollectableItem = 11,
+    EntitySkillIcon = 12,
 }

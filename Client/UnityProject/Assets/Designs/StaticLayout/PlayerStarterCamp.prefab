@@ -111,6 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WorldModuleFeature: 0
+  BGM_ThemeState: 0
   WorldModuleAI: {fileID: 0}
 --- !u!114 &-2219425402513466831
 MonoBehaviour:
@@ -2670,6 +2671,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillGUID
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillAlias
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillDescription
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MaxTriggeredTimes
       value: 1
       objectReference: {fileID: 0}
@@ -2677,6 +2693,11 @@ PrefabInstance:
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MultiEventTrigger
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillIcon.TypeGUID
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
@@ -2706,6 +2727,11 @@ PrefabInstance:
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].EntityPropertyChangeType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillIcon.TypeDefineType
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
@@ -2740,13 +2766,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.size
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0]
-      value: Client EntityPassiveSkillAction_TriggerZoneAction
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0]
+      value: Client EntitySkillAction_TriggerZoneAction
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
@@ -2755,77 +2781,87 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].ActionInterval
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].ActionInterval
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].TipPositionType
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].TipPositionType
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].InteractiveKeyNotice
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].InteractiveKeyNotice
       value: Press F to enter Tutorial
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EffectiveOnRelativeCamp
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EffectiveOnRelativeCamp
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].InteractiveKeyNoticeDuration
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].InteractiveKeyNoticeDuration
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Exit.Array.size
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Exit.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.size
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Enter.Array.size
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Enter.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EffectiveWhenInteractiveKeyDown
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EffectiveWhenInteractiveKeyDown
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.data[0]
-      value: Client EntityPassiveSkillAction_TransportPlayer
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.data[0]
+      value: Client EntitySkillAction_TransportPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.data[0].WorldProbList.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
-        type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.data[0].WorldProbList.Array.data[0].isSingleton
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.data[0].InitWorldModuleGUID
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.data[0].WorldProbList.Array.data[0].probability
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.data[0].WorldProbList.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.data[0].WorldProbList.Array.data[0].WorldTypeName.TypeGUID
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.data[0].WorldProbList.Array.data[0].isSingleton
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.data[0].WorldProbList.Array.data[0].probability
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.data[0].WorldProbList.Array.data[0].WorldTypeName.TypeGUID
       value: (9df819f3-6aa6-48cf-937d-c1129a079def)
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.data[0].WorldProbList.Array.data[0].WorldTypeName.TypeDefineType
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.data[0].WorldProbList.Array.data[0].WorldTypeName.TypeDefineType
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3516584908323160470, guid: aec626e4b4700a0478e8f16745b70235,
@@ -2906,7 +2942,7 @@ PrefabInstance:
     - target: {fileID: 1404924200201823912, guid: c78f3d0e9e12f5040aff25adc557455c,
         type: 3}
       propertyPath: m_Name
-      value: BossSpiderLeg
+      value: Boss_SpiderLeg
       objectReference: {fileID: 0}
     - target: {fileID: 6141617761014380063, guid: c78f3d0e9e12f5040aff25adc557455c,
         type: 3}
@@ -2920,6 +2956,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6141617761014380063, guid: c78f3d0e9e12f5040aff25adc557455c,
         type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillGUID
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6141617761014380063, guid: c78f3d0e9e12f5040aff25adc557455c,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillAlias
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6141617761014380063, guid: c78f3d0e9e12f5040aff25adc557455c,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillDescription
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6141617761014380063, guid: c78f3d0e9e12f5040aff25adc557455c,
+        type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MaxTriggeredTimes
       value: 1
       objectReference: {fileID: 0}
@@ -2927,6 +2978,11 @@ PrefabInstance:
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MultiEventTrigger
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6141617761014380063, guid: c78f3d0e9e12f5040aff25adc557455c,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillIcon.TypeGUID
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6141617761014380063, guid: c78f3d0e9e12f5040aff25adc557455c,
         type: 3}
@@ -2956,6 +3012,11 @@ PrefabInstance:
     - target: {fileID: 6141617761014380063, guid: c78f3d0e9e12f5040aff25adc557455c,
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].EntityPropertyChangeType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6141617761014380063, guid: c78f3d0e9e12f5040aff25adc557455c,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillIcon.TypeDefineType
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6141617761014380063, guid: c78f3d0e9e12f5040aff25adc557455c,
@@ -2990,7 +3051,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6141617761014380063, guid: c78f3d0e9e12f5040aff25adc557455c,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.size
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6141617761014380063, guid: c78f3d0e9e12f5040aff25adc557455c,
@@ -4580,6 +4641,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillGUID
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillAlias
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillDescription
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
+        type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MaxTriggeredTimes
       value: 1
       objectReference: {fileID: 0}
@@ -4587,6 +4663,11 @@ PrefabInstance:
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].MultiEventTrigger
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillIcon.TypeGUID
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
@@ -4616,6 +4697,11 @@ PrefabInstance:
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].EntityPropertyChangeType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].SkillIcon.TypeDefineType
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
@@ -4650,13 +4736,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.size
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0]
-      value: Client EntityPassiveSkillAction_TriggerZoneAction
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0]
+      value: Client EntitySkillAction_TriggerZoneAction
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
@@ -4665,62 +4751,72 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].ActionInterval
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].ActionInterval
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].TipPositionType
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].TipPositionType
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].InteractiveKeyNotice
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].InitWorldModuleGUID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].InteractiveKeyNotice
       value: Press F to interact with the door
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EffectiveOnRelativeCamp
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EffectiveOnRelativeCamp
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].InteractiveKeyNoticeDuration
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].InteractiveKeyNoticeDuration
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Exit.Array.size
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Exit.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.size
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Enter.Array.size
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Enter.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EffectiveWhenInteractiveKeyDown
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EffectiveWhenInteractiveKeyDown
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.data[0]
-      value: Client BoxPassiveSkillAction_DoorStateChange
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.data[0]
+      value: Client BoxSkillAction_DoorStateChange
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.data[0].ToggleDoor
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.data[0].ToggleDoor
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
         type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntityPassiveSkillActions.Array.data[0].EntityActions_Stay.Array.data[0].ChangeDoorStateTo
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.data[0].ChangeDoorStateTo
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655875468429131362, guid: 469010978d5305b439b215061c096fae,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.data[0].InitWorldModuleGUID
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

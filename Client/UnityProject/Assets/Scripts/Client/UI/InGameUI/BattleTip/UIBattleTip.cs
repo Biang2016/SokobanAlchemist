@@ -24,6 +24,9 @@ public enum BattleTipPrefabType
 
     UIBattleTip_AttributeTip,
     UIBattleTip_GainGoldTip,
+    UIBattleTip_GainFireElementFragmentTip,
+    UIBattleTip_GainIceElementFragmentTip,
+    UIBattleTip_GainLightningElementFragmentTip,
 }
 
 public enum BattleTipType
@@ -34,6 +37,9 @@ public enum BattleTipType
     Defense, // 伤害抵消
     Heal, //加血 
     Gold, //获得金子 
+    FireElementFragment, // 获得火元素碎片
+    IceElementFragment, // 获得冰元素碎片
+    LightningElementFragment, //获得电元素碎片
     Dodge, //躲闪
     Stun, //晕眩
     Shield, //护盾

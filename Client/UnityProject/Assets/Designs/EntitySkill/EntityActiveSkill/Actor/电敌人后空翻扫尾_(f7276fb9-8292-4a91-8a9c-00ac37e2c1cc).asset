@@ -1,0 +1,231 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u7535\u654C\u4EBA\u540E\u7A7A\u7FFB\u626B\u5C3E_(f7276fb9-8292-4a91-8a9c-00ac37e2c1cc)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      data:
+        SkillGUID: (f7276fb9-8292-4a91-8a9c-00ac37e2c1cc)
+        SkillAlias: "\u7535\u654C\u4EBA\u540E\u7A7A\u7FFB\u626B\u5C3E"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: (37f54f4a-8aba-4780-b6c4-a259d2e16f0d)
+        SkillDescription: 
+        TargetCamp: 7
+        EntitySkillIndex: 0
+        SkillsPropertyCollection:
+          CastingRadius:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Cooldown:
+            BaseValue: 15000
+            ModifiedValue: 15000
+            MinValue: 0
+            MaxValue: 1000000
+          WingUp:
+            BaseValue: 250
+            ModifiedValue: 250
+            MinValue: 0
+            MaxValue: 1000000
+          CastDuration:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Recovery:
+            BaseValue: 708
+            ModifiedValue: 708
+            MinValue: 0
+            MaxValue: 1000000
+          CameraShakeEquivalentDamage:
+            BaseValue: 5
+            ModifiedValue: 5
+            MinValue: 0
+            MaxValue: 10
+          ConsumeActionPoint:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeFireElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeIceElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeLightningElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+        TriggerWhenMissProbabilityPercent: 0
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 10
+          y: 0
+          z: 20
+        - x: 11
+          y: 0
+          z: 19
+        - x: 12
+          y: 0
+          z: 18
+        - x: 13
+          y: 0
+          z: 17
+        - x: 13
+          y: 0
+          z: 15
+        - x: 14
+          y: 0
+          z: 16
+        - x: 14
+          y: 0
+          z: 15
+        - x: 15
+          y: 0
+          z: 22
+        - x: 15
+          y: 0
+          z: 21
+        - x: 15
+          y: 0
+          z: 20
+        - x: 15
+          y: 0
+          z: 19
+        - x: 15
+          y: 0
+          z: 18
+        - x: 15
+          y: 0
+          z: 17
+        - x: 15
+          y: 0
+          z: 16
+        - x: 16
+          y: 0
+          z: 16
+        - x: 16
+          y: 0
+          z: 15
+        - x: 17
+          y: 0
+          z: 17
+        - x: 17
+          y: 0
+          z: 15
+        - x: 18
+          y: 0
+          z: 18
+        - x: 19
+          y: 0
+          z: 19
+        - x: 20
+          y: 0
+          z: 20
+        M_TargetInclination: 1
+        CastOnTopLayer: 0
+        CastOnNLayersBeneath: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        ProjectHeightDeltaRange: 999
+        GridWarningColorFill: {r: 0.9245283, g: 0.9245283, b: 0.9245283, a: 1}
+        GridWarningColorBorderHighlight: {r: 0, g: 0.9596045, b: 1, a: 1}
+        GridWarningColorBorderDim: {r: 0, g: 1, b: 0.6165807, a: 0.9843137}
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (c92d5cef-5f0e-4373-b907-91a8812d72c5)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        RawEntityBuffs:
+        - id: 1
+        - id: 2
+    00000001:
+      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
+      data:
+        GUID: 10263
+        BuffAlias: 
+        EntityBuffAttribute: 39
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 3
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (c92d5cef-5f0e-4373-b907-91a8812d72c5)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        Percent: -100
+        LinearDecayInDuration: 0
+        EntityPropertyType: 30
+    00000002:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10264
+        BuffAlias: 
+        EntityBuffAttribute: 40
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 0
+        Delta: -4
+        Percent: 0

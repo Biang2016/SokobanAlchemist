@@ -557,6 +557,11 @@ MonoBehaviour:
   InitWorldModuleGUID: 0
   EntityTypeIndex: 0
   RawEntityStatPropSet:
+    CollectDetectRadius:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     Gold:
       _value: 0
       _minValue: 0
@@ -564,6 +569,42 @@ MonoBehaviour:
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
+    FireElementFragment:
+      _value: 0
+      _minValue: 0
+      _maxValue: 1000
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
+    MaxFireElementFragment:
+      BaseValue: 1000
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
+    IceElementFragment:
+      _value: 0
+      _minValue: 0
+      _maxValue: 1000
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
+    MaxIceElementFragment:
+      BaseValue: 1000
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
+    LightningElementFragment:
+      _value: 0
+      _minValue: 0
+      _maxValue: 1000
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
+    MaxLightningElementFragment:
+      BaseValue: 1000
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 1000
     HealthDurability:
       _value: 1
       _minValue: 0
@@ -770,28 +811,13 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
-    KickConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    DashConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    VaultConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    SkillsPropertyCollections: []
-    RawEntityDefaultBuffs: []
   RawFlamethrowerFuelData:
     id: 0
-  RawEntityPassiveSkills: []
-  RawEntityActiveSkills: []
+  RawEntityPassiveSkillSSOs: []
+  RawEntityActiveSkillSSOs: []
   Camp: 4
+  DropConeAngle: 30
+  DropVelocity: 30
   BoxArtHelper: {fileID: 0}
   BoxWwiseHelper: {fileID: 534155500011443078}
   BoxModelHelper: {fileID: 943596953443006337}
@@ -799,6 +825,7 @@ MonoBehaviour:
   BoxBuffHelper: {fileID: 2962941836236094511}
   BoxFrozenHelper: {fileID: 7499738859985598480}
   BoxTriggerZoneHelper: {fileID: 0}
+  BoxCollectHelper: {fileID: 0}
   BoxGrindTriggerZoneHelper: {fileID: 0}
   BoxFlamethrowerHelpers: []
   BoxLightningGeneratorHelpers: []
@@ -1031,18 +1058,6 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 0}
   OnDestroyed_ByCollideDamage:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
-  OnKick:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
-  OnVault:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
-  OnDash:
     idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 0}

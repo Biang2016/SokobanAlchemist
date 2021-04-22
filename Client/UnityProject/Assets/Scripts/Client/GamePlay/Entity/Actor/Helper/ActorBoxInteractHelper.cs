@@ -45,11 +45,6 @@ public class ActorBoxInteractHelper : ActorMonoHelper
 
     public InteractSkillType GetInteractSkillType(ushort boxTypeIndex)
     {
-        if (!InteractSkillDict.ContainsKey(boxTypeIndex))
-        {
-            int a = 0;
-        }
-
         return InteractSkillDict[boxTypeIndex];
     }
 
