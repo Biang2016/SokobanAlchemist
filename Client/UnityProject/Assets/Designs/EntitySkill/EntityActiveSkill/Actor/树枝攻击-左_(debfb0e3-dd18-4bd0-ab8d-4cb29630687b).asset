@@ -17,8 +17,9 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (debfb0e3-dd18-4bd0-ab8d-4cb29630687b)
         SkillAlias: "\u6811\u679D\u653B\u51FB-\u5DE6"
         SkillIcon:
@@ -106,7 +107,20 @@ MonoBehaviour:
         GridWarningColorBorderHighlight: {r: 0.9274322, g: 0.9433962, b: 0.13794944,
           a: 0.64705884}
         GridWarningColorBorderDim: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 0.69411767}
-        CastFX:
+        RawEntitySkillActions:
+        - id: 1
+        - id: 2
+    00000001:
+      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        RawEntityBuffs:
+        - id: 3
+    00000002:
+      type: {class: EntitySkillAction_PlayFXOnWorldGP, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
           FXType:
             TypeDefineType: 7
             TypeGUID: (05a6fc15-c9b3-45f1-b482-3a5e6b03843d)
@@ -118,9 +132,7 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-        RawEntityBuffs:
-        - id: 1
-    00000001:
+    00000003:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10278

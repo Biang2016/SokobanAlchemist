@@ -17,8 +17,9 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (b4c66a8f-eec0-4c03-94f3-19424f53be4c)
         SkillAlias: "\u95EA\u7535\u73AF"
         SkillIcon:
@@ -78,9 +79,6 @@ MonoBehaviour:
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 1000
-        NeedValidTargetDistance: 0
-        TargetDistanceMin: 0
-        TargetDistanceMax: 5
         TriggerWhenMissProbabilityPercent: 100
         WingUpCanMove: 0
         CastCanMove: 0
@@ -175,7 +173,20 @@ MonoBehaviour:
         GridWarningColorBorderHighlight: {r: 0.4811321, g: 0.4811321, b: 0.4811321,
           a: 1}
         GridWarningColorBorderDim: {r: 0.8113208, g: 0.8113208, b: 0.8113208, a: 1}
-        CastFX:
+        RawEntitySkillActions:
+        - id: 1
+        - id: 2
+    00000001:
+      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        RawEntityBuffs:
+        - id: 3
+    00000002:
+      type: {class: EntitySkillAction_PlayFXOnWorldGP, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
           FXType:
             TypeDefineType: 7
             TypeGUID: (b11a2bfd-6135-424e-be00-44511f05fcf9)
@@ -187,9 +198,7 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-        RawEntityBuffs:
-        - id: 1
-    00000001:
+    00000003:
       type: {class: EntityBuff_AttributeLabel, ns: , asm: Client}
       data:
         GUID: 10683

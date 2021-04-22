@@ -11,7 +11,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 [Serializable]
-public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
+public class EntityActiveSkill_AreaCast : EntityActiveSkill
 {
     public enum TargetInclination
     {
@@ -123,8 +123,67 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     [LabelText("技能范围标识描边色模糊")]
     public Color GridWarningColorBorderDim;
 
-    [LabelText("@\"释放特效\t\"+CastFX")]
-    public FXConfig CastFX = new FXConfig();
+    #region 主动技能行为部分
+
+    [SerializeReference]
+    [LabelText("具体内容")]
+    [ListDrawerSettings(ListElementLabelName = "Description")]
+    public List<EntitySkillAction> RawEntitySkillActions = new List<EntitySkillAction>(); // 干数据，禁修改
+
+    [HideInInspector]
+    internal List<EntitySkillAction> EntitySkillActions = new List<EntitySkillAction>(); // 湿数据，每个Entity生命周期开始前从干数据数据拷贝，数量永远和干数据相等
+
+    internal bool EntitySkillActionsMarkAsDeleted = false;
+
+    private void InitSkillActions()
+    {
+        if (EntitySkillActions.Count > 0)
+        {
+            foreach (EntitySkillAction esa in EntitySkillActions) // 放在Init里清空，避免在UnInit里出现Entity死亡而modify collection的情况
+            {
+                esa.OnRecycled();
+            }
+
+            if (EntitySkillActions.Count == RawEntitySkillActions.Count)
+            {
+                for (int i = 0; i < RawEntitySkillActions.Count; i++)
+                {
+                    EntitySkillAction esa = EntitySkillActions[i];
+                    esa.Entity = Entity;
+                    esa.CopyDataFrom(RawEntitySkillActions[i]);
+                    esa.Init(InitWorldModuleGUID);
+                }
+            }
+            else
+            {
+                Debug.Log("EntitySkillActions的数量和RawEntitySkillActions不一致，请检查临时ESA添加情况");
+            }
+        }
+        else
+        {
+            foreach (EntitySkillAction rawAction in RawEntitySkillActions)
+            {
+                EntitySkillAction esa = rawAction.Clone();
+                esa.Entity = Entity;
+                EntitySkillActions.Add(esa);
+                esa.Init(InitWorldModuleGUID);
+            }
+        }
+
+        EntitySkillActionsMarkAsDeleted = false;
+    }
+
+    private void UnInitSkillActions()
+    {
+        EntitySkillActionsMarkAsDeleted = false;
+        foreach (EntitySkillAction action in EntitySkillActions)
+        {
+            action.Entity = null;
+            action.UnInit();
+        }
+    }
+
+    #endregion
 
     internal Dictionary<GridPos3D, GridWarning> GridWarningDict = new Dictionary<GridPos3D, GridWarning>();
 
@@ -134,9 +193,16 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     public override void OnInit()
     {
         base.OnInit();
+        InitSkillActions();
         if (GridWarningDict == null) GridWarningDict = new Dictionary<GridPos3D, GridWarning>();
         if (SkillAreaGPs == null) SkillAreaGPs = new List<GridPos3D>(16);
         if (RealSkillEffectGPs == null) RealSkillEffectGPs = new List<GridPos3D>(16);
+    }
+
+    public override void OnUnInit()
+    {
+        base.OnUnInit();
+        UnInitSkillActions();
     }
 
     protected override bool ValidateSkillTrigger_HitProbability(TargetEntityType targetEntityType)
@@ -318,13 +384,35 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
     protected override IEnumerator Cast(TargetEntityType targetEntityType, float castDuration)
     {
         UpdateSkillEffectRealPositions();
-        if (!CastFX.Empty)
+        foreach (EntitySkillAction action in EntitySkillActions)
         {
-            foreach (GridPos3D gp in RealSkillEffectGPs)
+            if (action is EntitySkillAction.IPureAction pureAction)
             {
-                if (gp != -GridPos3D.One)
+                pureAction.Execute();
+            }
+        }
+
+        foreach (Entity targetEntity in GetTargetEntities())
+        {
+            foreach (EntitySkillAction action in EntitySkillActions)
+            {
+                if (action is EntitySkillAction.IEntityAction entityAction)
                 {
-                    FX fx = FXManager.Instance.PlayFX(CastFX, gp);
+                    entityAction.ExecuteOnEntity(targetEntity);
+                }
+            }
+        }
+
+        foreach (GridPos3D gp in RealSkillEffectGPs)
+        {
+            if (gp != -GridPos3D.One)
+            {
+                foreach (EntitySkillAction action in EntitySkillActions)
+                {
+                    if (action is EntitySkillAction.IWorldGPAction worldGPAction)
+                    {
+                        worldGPAction.ExecuteOnWorldGP(gp);
+                    }
                 }
             }
         }
@@ -451,7 +539,13 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         newEAS.GridWarningColorFill = GridWarningColorFill;
         newEAS.GridWarningColorBorderHighlight = GridWarningColorBorderHighlight;
         newEAS.GridWarningColorBorderDim = GridWarningColorBorderDim;
-        newEAS.CastFX = CastFX.Clone();
+
+        // Actions
+        foreach (EntitySkillAction rawBoxSkillAction in RawEntitySkillActions)
+        {
+            EntitySkillAction newESA = rawBoxSkillAction.Clone();
+            newEAS.RawEntitySkillActions.Add(newESA);
+        }
     }
 
     public override void CopyDataFrom(EntitySkill srcData)
@@ -470,6 +564,18 @@ public abstract class EntityActiveSkill_AreaCast : EntityActiveSkill
         GridWarningColorFill = srcEAS.GridWarningColorFill;
         GridWarningColorBorderHighlight = srcEAS.GridWarningColorBorderHighlight;
         GridWarningColorBorderDim = srcEAS.GridWarningColorBorderDim;
-        CastFX.CopyDataFrom(srcEAS.CastFX);
+
+        // Actions
+        if (srcEAS.RawEntitySkillActions.Count != RawEntitySkillActions.Count)
+        {
+            Debug.LogError("EPS_Conditional CopyDataFrom() Action数量不一致");
+        }
+        else
+        {
+            for (int i = 0; i < srcEAS.RawEntitySkillActions.Count; i++)
+            {
+                RawEntitySkillActions[i].CopyDataFrom(srcEAS.RawEntitySkillActions[i]);
+            }
+        }
     }
 }

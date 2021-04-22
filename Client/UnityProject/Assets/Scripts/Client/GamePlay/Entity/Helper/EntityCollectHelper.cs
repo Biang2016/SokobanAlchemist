@@ -53,9 +53,9 @@ public class EntityCollectHelper : EntityMonoHelper
             ci.SetChasingTarget(Entity.transform, () =>
             {
                 EntitySkillAction action = ci.EntitySkillAction_OnCollect?.Clone();
-                if (action != null && action is EntitySkillAction.IActorOperationAction actorOperationAction)
+                if (action != null && action is EntitySkillAction.IEntityAction entityAction)
                 {
-                    actorOperationAction.OnOperation((Actor) Entity);
+                    entityAction.ExecuteOnEntity(Entity);
                 }
 
                 ci.PoolRecycle();

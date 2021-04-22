@@ -218,7 +218,6 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnInit()
     {
         base.OnInit();
-        InitWorldModuleGUID = Entity.InitWorldModuleGUID;
         foreach (EPSConditional epsConditional in EPSConditionals)
         {
             epsConditional.OnInit(Entity);
@@ -295,9 +294,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                         pureAction.Execute();
                     }
 
-                    if (action is EntitySkillAction.IActorOperationAction actorOperationAction)
+                    if (action is EntitySkillAction.IEntityAction entityAction)
                     {
-                        actorOperationAction.OnOperation(actor);
+                        entityAction.ExecuteOnEntity(actor);
                     }
                 }
             }
@@ -318,9 +317,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                         pureAction.Execute();
                     }
 
-                    if (action is EntitySkillAction.IActorOperationAction actorOperationAction)
+                    if (action is EntitySkillAction.IEntityAction entityAction)
                     {
-                        actorOperationAction.OnOperation(actor);
+                        entityAction.ExecuteOnEntity(actor);
                     }
                 }
             }
@@ -343,7 +342,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                     if (action is EntitySkillAction.ICollideAction collideAction)
                     {
-                        collideAction.OnCollide(collision);
+                        collideAction.ExecuteOnCollide(collision);
                     }
                 }
             }
@@ -366,7 +365,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                     if (action is EntitySkillAction.ICollideAction collideAction)
                     {
-                        collideAction.OnCollide(collision);
+                        collideAction.ExecuteOnCollide(collision);
                     }
                 }
             }
@@ -389,7 +388,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                     if (action is EntitySkillAction.ICollideAction collideAction)
                     {
-                        collideAction.OnCollide(collision);
+                        collideAction.ExecuteOnCollide(collision);
                     }
                 }
             }
@@ -407,7 +406,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 {
                     if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
-                        collideAction.OnTriggerEnter(collider);
+                        collideAction.ExecuteOnTriggerEnter(collider);
                     }
                 }
             }
@@ -425,7 +424,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 {
                     if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
-                        collideAction.OnTriggerStay(collider);
+                        collideAction.ExecuteOnTriggerStay(collider);
                     }
                 }
             }
@@ -443,7 +442,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 {
                     if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
-                        collideAction.OnTriggerExit(collider);
+                        collideAction.ExecuteOnTriggerExit(collider);
                     }
                 }
             }
@@ -461,7 +460,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 {
                     if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
-                        collideAction.OnTriggerEnter(collider);
+                        collideAction.ExecuteOnTriggerEnter(collider);
                     }
                 }
             }
@@ -479,7 +478,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 {
                     if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
-                        collideAction.OnTriggerStay(collider);
+                        collideAction.ExecuteOnTriggerStay(collider);
                     }
                 }
             }
@@ -497,7 +496,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 {
                     if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
-                        collideAction.OnTriggerExit(collider);
+                        collideAction.ExecuteOnTriggerExit(collider);
                     }
                 }
             }
@@ -721,7 +720,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public List<EntitySkillAction> RawEntitySkillActions = new List<EntitySkillAction>(); // 干数据，禁修改
 
     [HideInInspector]
-    public List<EntitySkillAction> EntitySkillActions = new List<EntitySkillAction>(); // 湿数据，每个Entity生命周期开始前从干数据数据拷贝，数量永远和干数据相等
+    internal List<EntitySkillAction> EntitySkillActions = new List<EntitySkillAction>(); // 湿数据，每个Entity生命周期开始前从干数据数据拷贝，数量永远和干数据相等
 
     internal bool EntitySkillActionsMarkAsDeleted = false;
 
@@ -746,7 +745,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             }
             else
             {
-                Debug.Log("EntitySkillActions的数量和RawEntitySkillActions不一致，请检查临时EPSA添加情况");
+                Debug.Log("EntitySkillActions的数量和RawEntitySkillActions不一致，请检查临时ESA添加情况");
             }
         }
         else
@@ -804,8 +803,8 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         // Actions
         foreach (EntitySkillAction rawBoxSkillAction in RawEntitySkillActions)
         {
-            EntitySkillAction newEPSA = rawBoxSkillAction.Clone();
-            newPSC.RawEntitySkillActions.Add(newEPSA);
+            EntitySkillAction newESA = rawBoxSkillAction.Clone();
+            newPSC.RawEntitySkillActions.Add(newESA);
         }
     }
 

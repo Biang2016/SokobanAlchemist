@@ -17,8 +17,9 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (f7276fb9-8292-4a91-8a9c-00ac37e2c1cc)
         SkillAlias: "\u7535\u654C\u4EBA\u540E\u7A7A\u7FFB\u626B\u5C3E"
         SkillIcon:
@@ -162,7 +163,21 @@ MonoBehaviour:
         GridWarningColorFill: {r: 0.9245283, g: 0.9245283, b: 0.9245283, a: 1}
         GridWarningColorBorderHighlight: {r: 0, g: 0.9596045, b: 1, a: 1}
         GridWarningColorBorderDim: {r: 0, g: 1, b: 0.6165807, a: 0.9843137}
-        CastFX:
+        RawEntitySkillActions:
+        - id: 1
+        - id: 2
+    00000001:
+      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        RawEntityBuffs:
+        - id: 3
+        - id: 4
+    00000002:
+      type: {class: EntitySkillAction_PlayFXOnWorldGP, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
           FXType:
             TypeDefineType: 7
             TypeGUID: (c92d5cef-5f0e-4373-b907-91a8812d72c5)
@@ -174,10 +189,7 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-        RawEntityBuffs:
-        - id: 1
-        - id: 2
-    00000001:
+    00000003:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 10263
@@ -200,10 +212,14 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
+        PropertyCategory: 0
+        EntityPropertyType: 30
+        EntitySkillSO: {fileID: 0}
+        SkillGUID: 
+        EntitySkillPropertyType: 0
         Percent: -100
         LinearDecayInDuration: 0
-        EntityPropertyType: 30
-    00000002:
+    00000004:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10264

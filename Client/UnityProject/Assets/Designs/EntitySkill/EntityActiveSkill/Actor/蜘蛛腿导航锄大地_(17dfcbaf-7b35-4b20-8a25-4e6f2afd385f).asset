@@ -19,6 +19,7 @@ MonoBehaviour:
     00000000:
       type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (17dfcbaf-7b35-4b20-8a25-4e6f2afd385f)
         SkillAlias: "\u8718\u86DB\u817F\u5BFC\u822A\u9504\u5927\u5730"
         SkillIcon:
@@ -97,8 +98,9 @@ MonoBehaviour:
           SubSkillAliasWithProbabilityList: []
         InterruptSubActiveSkillsWhenInterrupted: 0
     00000001:
-      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: 
         SkillAlias: "\u5BFC\u822A\u9504\u5927\u5730-\u4E00\u73AF"
         SkillIcon:
@@ -215,23 +217,13 @@ MonoBehaviour:
         GridWarningColorFill: {r: 0.41509432, g: 0.14776357, b: 0, a: 1}
         GridWarningColorBorderHighlight: {r: 1, g: 1, b: 1, a: 1}
         GridWarningColorBorderDim: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
-        CastFX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: (ce3a827b-7df7-4a62-ad01-ced312be7a9d)
-          UseCurve: 0
-          FXScale: 1.3
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        RawEntityBuffs:
+        RawEntitySkillActions:
         - id: 3
+        - id: 4
     00000002:
-      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: 
         SkillAlias: "\u5BFC\u822A\u9504\u5927\u5730-\u4E8C\u73AF"
         SkillIcon:
@@ -348,7 +340,20 @@ MonoBehaviour:
         GridWarningColorFill: {r: 0.41509432, g: 0.14776357, b: 0, a: 1}
         GridWarningColorBorderHighlight: {r: 1, g: 1, b: 1, a: 1}
         GridWarningColorBorderDim: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
-        CastFX:
+        RawEntitySkillActions:
+        - id: 5
+        - id: 6
+    00000003:
+      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        RawEntityBuffs:
+        - id: 7
+    00000004:
+      type: {class: EntitySkillAction_PlayFXOnWorldGP, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
           FXType:
             TypeDefineType: 7
             TypeGUID: (ce3a827b-7df7-4a62-ad01-ced312be7a9d)
@@ -360,9 +365,29 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
+    00000005:
+      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
         RawEntityBuffs:
-        - id: 4
-    00000003:
+        - id: 8
+    00000006:
+      type: {class: EntitySkillAction_PlayFXOnWorldGP, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (ce3a827b-7df7-4a62-ad01-ced312be7a9d)
+          UseCurve: 0
+          FXScale: 1.3
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+    00000007:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 11606
@@ -388,7 +413,7 @@ MonoBehaviour:
         EntityStatType: 0
         Delta: -3
         Percent: 0
-    00000004:
+    00000008:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 11606

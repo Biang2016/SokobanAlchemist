@@ -19,6 +19,7 @@ MonoBehaviour:
     00000000:
       type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (b3eb6613-6002-4787-9d3d-9de78cf8100e)
         SkillAlias: "\u9668\u77F3\u672F"
         SkillIcon:
@@ -34,7 +35,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 8
           Cooldown:
-            BaseValue: 20000
+            BaseValue: 5000
             ModifiedValue: 3500
             MinValue: 0
             MaxValue: 1000000
@@ -97,8 +98,9 @@ MonoBehaviour:
             isSingleton: 0
         InterruptSubActiveSkillsWhenInterrupted: 0
     00000001:
-      type: {class: EntityActiveSkill_SummonDropBox, ns: , asm: Client}
+      type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: 
         SkillAlias: "\u9668\u77F3\u672F\u5355\u53D1"
         SkillIcon:
@@ -182,18 +184,12 @@ MonoBehaviour:
         GridWarningColorFill: {r: 1, g: 0.24595508, b: 0, a: 0.6392157}
         GridWarningColorBorderHighlight: {r: 1, g: 0, b: 0, a: 0.5254902}
         GridWarningColorBorderDim: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 0.5529412}
-        CastFX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: 
-          UseCurve: 0
-          FXScale: 1
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
+        RawEntitySkillActions:
+        - id: 2
+    00000002:
+      type: {class: EntitySkillAction_SummonSmashDownBox, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
         DropBoxList:
         - BoxTypeName:
             TypeDefineType: 0

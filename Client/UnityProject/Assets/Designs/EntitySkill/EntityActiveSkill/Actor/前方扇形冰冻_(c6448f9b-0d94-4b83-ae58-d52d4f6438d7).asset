@@ -17,8 +17,9 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
+      type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (c6448f9b-0d94-4b83-ae58-d52d4f6438d7)
         SkillAlias: "\u524D\u65B9\u6247\u5F62\u51B0\u51BB"
         SkillIcon:
@@ -172,7 +173,21 @@ MonoBehaviour:
         GridWarningColorBorderHighlight: {r: 0.112362035, g: 0.6459774, b: 0.9528302,
           a: 0.6745098}
         GridWarningColorBorderDim: {r: 0.46431115, g: 0.68667376, b: 0.6981132, a: 0.7176471}
-        CastFX:
+        RawEntitySkillActions:
+        - id: 1
+        - id: 2
+    00000001:
+      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        RawEntityBuffs:
+        - id: 3
+        - id: 4
+    00000002:
+      type: {class: EntitySkillAction_PlayFXOnWorldGP, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
           FXType:
             TypeDefineType: 7
             TypeGUID: (ce01f26e-4b00-4b76-bef3-72a60663efa0)
@@ -184,10 +199,7 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-        RawEntityBuffs:
-        - id: 1
-        - id: 2
-    00000001:
+    00000003:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 10253
@@ -210,10 +222,14 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
+        PropertyCategory: 0
+        EntityPropertyType: 30
+        EntitySkillSO: {fileID: 0}
+        SkillGUID: 
+        EntitySkillPropertyType: 0
         Percent: -50
         LinearDecayInDuration: 1
-        EntityPropertyType: 30
-    00000002:
+    00000004:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10254

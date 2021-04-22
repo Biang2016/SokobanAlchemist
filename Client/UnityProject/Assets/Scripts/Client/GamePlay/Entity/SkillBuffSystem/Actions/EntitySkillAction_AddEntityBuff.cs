@@ -5,27 +5,27 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public class EntitySkillAction_AddEntityBuff : EntitySkillAction, EntitySkillAction.ICollideAction, EntitySkillAction.IActorOperationAction
+public class EntitySkillAction_AddEntityBuff : EntitySkillAction, EntitySkillAction.ICollideAction, EntitySkillAction.IEntityAction
 {
     public override void OnRecycled()
     {
     }
 
-    protected override string Description => "碰撞时给撞击者Entity施加Buff，或被角色交互时给该角色Entity施加buff";
+    protected override string Description => "碰撞时给撞击者施加，或被角色交互时给该角色施加，或AreaCast施加";
 
     [LabelText("Buff列表")]
     [SerializeReference]
     public List<EntityBuff> RawEntityBuffs = new List<EntityBuff>();
 
-    public void OnCollide(Collision collision)
+    public void ExecuteOnCollide(Collision collision)
     {
         Entity entity = collision.gameObject.GetComponentInParent<Entity>();
         if (entity.IsNotNullAndAlive()) CoreAddBuff(entity);
     }
 
-    public void OnOperation(Actor actor)
+    public void ExecuteOnEntity(Entity entity)
     {
-        CoreAddBuff(actor);
+        CoreAddBuff(entity);
     }
 
     private void CoreAddBuff(Entity entity)
