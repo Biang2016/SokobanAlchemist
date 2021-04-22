@@ -109,7 +109,7 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
     [LabelText("离开触发事件")]
     public List<IPureAction> EntityActions_Exit = new List<IPureAction>();
 
-    public void OnTriggerEnter(Collider collider)
+    public void ExecuteOnTriggerEnter(Collider collider)
     {
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {
@@ -133,7 +133,7 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         }
     }
 
-    public void OnTriggerStay(Collider collider)
+    public void ExecuteOnTriggerStay(Collider collider)
     {
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {
@@ -173,7 +173,7 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         }
     }
 
-    public void OnTriggerExit(Collider collider)
+    public void ExecuteOnTriggerExit(Collider collider)
     {
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {

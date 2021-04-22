@@ -17,13 +17,13 @@ public class EntitySkillAction_AddEntityBuff : EntitySkillAction, EntitySkillAct
     [SerializeReference]
     public List<EntityBuff> RawEntityBuffs = new List<EntityBuff>();
 
-    public void OnCollide(Collision collision)
+    public void ExecuteOnCollide(Collision collision)
     {
         Entity entity = collision.gameObject.GetComponentInParent<Entity>();
         if (entity.IsNotNullAndAlive()) CoreAddBuff(entity);
     }
 
-    public void OnExert(Entity entity)
+    public void ExecuteOnEntity(Entity entity)
     {
         CoreAddBuff(entity);
     }

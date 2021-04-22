@@ -36,7 +36,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           Cooldown:
-            BaseValue: 5000
+            BaseValue: 0
             ModifiedValue: 5000
             MinValue: 0
             MaxValue: 1000000
@@ -66,7 +66,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           ConsumeFireElementFragment:
-            BaseValue: 20
+            BaseValue: 0
             ModifiedValue: 20
             MinValue: 0
             MaxValue: 1000
@@ -146,18 +146,6 @@ MonoBehaviour:
         GridWarningColorFill: {r: 1, g: 0.9183839, b: 0, a: 1}
         GridWarningColorBorderHighlight: {r: 1, g: 1, b: 1, a: 1}
         GridWarningColorBorderDim: {r: 1, g: 0.6745283, b: 0.6745283, a: 1}
-        CastFX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: (fdc1ee6b-89b1-434d-b1a1-57b9d21d1053)
-          UseCurve: 0
-          FXScale: 1
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
         RawEntitySkillActions:
         - id: 1
         - id: 2
@@ -168,7 +156,7 @@ MonoBehaviour:
         RawEntityBuffs:
         - id: 3
     00000002:
-      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
+      type: {class: EntitySkillAction_PlayFXOnWorldGP, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         FX:

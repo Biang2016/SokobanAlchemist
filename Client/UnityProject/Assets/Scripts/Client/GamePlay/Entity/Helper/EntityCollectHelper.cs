@@ -55,7 +55,7 @@ public class EntityCollectHelper : EntityMonoHelper
                 EntitySkillAction action = ci.EntitySkillAction_OnCollect?.Clone();
                 if (action != null && action is EntitySkillAction.IEntityAction entityAction)
                 {
-                    entityAction.OnExert(Entity);
+                    entityAction.ExecuteOnEntity(Entity);
                 }
 
                 ci.PoolRecycle();

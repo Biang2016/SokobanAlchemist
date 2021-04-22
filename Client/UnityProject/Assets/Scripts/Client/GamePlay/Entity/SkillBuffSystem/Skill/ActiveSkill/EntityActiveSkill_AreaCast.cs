@@ -123,9 +123,6 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
     [LabelText("技能范围标识描边色模糊")]
     public Color GridWarningColorBorderDim;
 
-    [LabelText("@\"释放特效\t\"+CastFX")]
-    public FXConfig CastFX = new FXConfig();
-
     #region 主动技能行为部分
 
     [SerializeReference]
@@ -387,15 +384,34 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
     protected override IEnumerator Cast(TargetEntityType targetEntityType, float castDuration)
     {
         UpdateSkillEffectRealPositions();
-        if (!CastFX.Empty)
+        foreach (EntitySkillAction action in EntitySkillActions)
         {
-            foreach (Entity targetEntity in GetTargetEntities())
+            if (action is EntitySkillAction.IPureAction pureAction)
+            {
+                pureAction.Execute();
+            }
+        }
+
+        foreach (Entity targetEntity in GetTargetEntities())
+        {
+            foreach (EntitySkillAction action in EntitySkillActions)
+            {
+                if (action is EntitySkillAction.IEntityAction entityAction)
+                {
+                    entityAction.ExecuteOnEntity(targetEntity);
+                }
+            }
+        }
+
+        foreach (GridPos3D gp in RealSkillEffectGPs)
+        {
+            if (gp != -GridPos3D.One)
             {
                 foreach (EntitySkillAction action in EntitySkillActions)
                 {
-                    if (action is EntitySkillAction.IEntityAction entityAction)
+                    if (action is EntitySkillAction.IWorldGPAction worldGPAction)
                     {
-                        entityAction.OnExert(targetEntity);
+                        worldGPAction.ExecuteOnWorldGP(gp);
                     }
                 }
             }
@@ -523,7 +539,6 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
         newEAS.GridWarningColorFill = GridWarningColorFill;
         newEAS.GridWarningColorBorderHighlight = GridWarningColorBorderHighlight;
         newEAS.GridWarningColorBorderDim = GridWarningColorBorderDim;
-        newEAS.CastFX = CastFX.Clone();
 
         // Actions
         foreach (EntitySkillAction rawBoxSkillAction in RawEntitySkillActions)
@@ -549,7 +564,6 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
         GridWarningColorFill = srcEAS.GridWarningColorFill;
         GridWarningColorBorderHighlight = srcEAS.GridWarningColorBorderHighlight;
         GridWarningColorBorderDim = srcEAS.GridWarningColorBorderDim;
-        CastFX.CopyDataFrom(srcEAS.CastFX);
 
         // Actions
         if (srcEAS.RawEntitySkillActions.Count != RawEntitySkillActions.Count)

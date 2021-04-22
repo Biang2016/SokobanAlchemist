@@ -680,17 +680,41 @@ public static class ActorAIAtoms
     [Description("动画Trigger")]
     public class BT_Enemy_TriggerAnimation : BTNode
     {
-        public override string name => $"设置动画Trigger:{AnimationTrigger.value}";
+        public override string name
+        {
+            get
+            {
+                if (Reset.value)
+                {
+                    return $"重置动画Trigger:{AnimationTrigger.value}";
+                }
+                else
+                {
+                    return $"设置动画Trigger:{AnimationTrigger.value}";
+                }
+            }
+        }
 
         [Name("动画Trigger")]
         public BBParameter<string> AnimationTrigger;
+
+        [Name("重置")]
+        public BBParameter<bool> Reset;
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.CannotAct) return Status.Failure;
             if (!Actor.ActorArtHelper.CanPlayOtherAnimSkill) return Status.Failure;
-            Actor.ActorArtHelper.SetModelAnimTrigger(AnimationTrigger.value);
+            if (Reset.value)
+            {
+                Actor.ActorArtHelper.ResetModelAnimTrigger(AnimationTrigger.value);
+            }
+            else
+            {
+                Actor.ActorArtHelper.SetModelAnimTrigger(AnimationTrigger.value);
+            }
+
             return Status.Success;
         }
     }

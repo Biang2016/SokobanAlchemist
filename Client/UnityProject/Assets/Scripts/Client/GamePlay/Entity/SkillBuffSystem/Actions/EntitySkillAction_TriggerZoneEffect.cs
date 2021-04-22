@@ -49,7 +49,7 @@ public class EntitySkillAction_TriggerZoneEffect : EntitySkillAction, EntitySkil
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<EntityBuff> RawEntityBuffs_Exit = new List<EntityBuff>();
 
-    public void OnTriggerEnter(Collider collider)
+    public void ExecuteOnTriggerEnter(Collider collider)
     {
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {
@@ -77,7 +77,7 @@ public class EntitySkillAction_TriggerZoneEffect : EntitySkillAction, EntitySkil
         }
     }
 
-    public void OnTriggerStay(Collider collider)
+    public void ExecuteOnTriggerStay(Collider collider)
     {
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {
@@ -113,7 +113,7 @@ public class EntitySkillAction_TriggerZoneEffect : EntitySkillAction, EntitySkil
         }
     }
 
-    public void OnTriggerExit(Collider collider)
+    public void ExecuteOnTriggerExit(Collider collider)
     {
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {

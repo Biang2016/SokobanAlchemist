@@ -173,18 +173,6 @@ MonoBehaviour:
         GridWarningColorBorderHighlight: {r: 0.4811321, g: 0.4811321, b: 0.4811321,
           a: 1}
         GridWarningColorBorderDim: {r: 0.8113208, g: 0.8113208, b: 0.8113208, a: 1}
-        CastFX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: (b11a2bfd-6135-424e-be00-44511f05fcf9)
-          UseCurve: 0
-          FXScale: 1
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
         RawEntitySkillActions:
         - id: 1
         - id: 2
@@ -195,7 +183,7 @@ MonoBehaviour:
         RawEntityBuffs:
         - id: 3
     00000002:
-      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
+      type: {class: EntitySkillAction_PlayFXOnWorldGP, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         FX:

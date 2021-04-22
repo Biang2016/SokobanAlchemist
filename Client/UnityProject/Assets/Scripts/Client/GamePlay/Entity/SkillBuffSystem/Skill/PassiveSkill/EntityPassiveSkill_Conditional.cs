@@ -296,7 +296,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                     if (action is EntitySkillAction.IEntityAction entityAction)
                     {
-                        entityAction.OnExert(actor);
+                        entityAction.ExecuteOnEntity(actor);
                     }
                 }
             }
@@ -319,7 +319,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                     if (action is EntitySkillAction.IEntityAction entityAction)
                     {
-                        entityAction.OnExert(actor);
+                        entityAction.ExecuteOnEntity(actor);
                     }
                 }
             }
@@ -342,7 +342,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                     if (action is EntitySkillAction.ICollideAction collideAction)
                     {
-                        collideAction.OnCollide(collision);
+                        collideAction.ExecuteOnCollide(collision);
                     }
                 }
             }
@@ -365,7 +365,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                     if (action is EntitySkillAction.ICollideAction collideAction)
                     {
-                        collideAction.OnCollide(collision);
+                        collideAction.ExecuteOnCollide(collision);
                     }
                 }
             }
@@ -388,7 +388,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                     if (action is EntitySkillAction.ICollideAction collideAction)
                     {
-                        collideAction.OnCollide(collision);
+                        collideAction.ExecuteOnCollide(collision);
                     }
                 }
             }
@@ -406,7 +406,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 {
                     if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
-                        collideAction.OnTriggerEnter(collider);
+                        collideAction.ExecuteOnTriggerEnter(collider);
                     }
                 }
             }
@@ -424,7 +424,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 {
                     if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
-                        collideAction.OnTriggerStay(collider);
+                        collideAction.ExecuteOnTriggerStay(collider);
                     }
                 }
             }
@@ -442,7 +442,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 {
                     if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
-                        collideAction.OnTriggerExit(collider);
+                        collideAction.ExecuteOnTriggerExit(collider);
                     }
                 }
             }
@@ -460,7 +460,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 {
                     if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
-                        collideAction.OnTriggerEnter(collider);
+                        collideAction.ExecuteOnTriggerEnter(collider);
                     }
                 }
             }
@@ -478,7 +478,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 {
                     if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
-                        collideAction.OnTriggerStay(collider);
+                        collideAction.ExecuteOnTriggerStay(collider);
                     }
                 }
             }
@@ -496,7 +496,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 {
                     if (action is EntitySkillAction.ITriggerAction collideAction)
                     {
-                        collideAction.OnTriggerExit(collider);
+                        collideAction.ExecuteOnTriggerExit(collider);
                     }
                 }
             }

@@ -40,6 +40,11 @@ public class ActorArtHelper : EntityArtHelper
         CanPan = true;
     }
 
+    public void ResetModelAnimTrigger(string trigger)
+    {
+        if (ActorModelAnim != null) ActorModelAnim.ResetTrigger(trigger);
+    }
+
     public void SetModelAnimTrigger(string trigger)
     {
         if (ActorModelAnim != null) ActorModelAnim.SetTrigger(trigger);

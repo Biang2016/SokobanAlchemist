@@ -1,5 +1,6 @@
 ﻿using System;
 using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -28,21 +29,26 @@ public abstract class EntitySkillAction : IClone<EntitySkillAction>
         void Execute();
     }
 
+    public interface IWorldGPAction
+    {
+        void ExecuteOnWorldGP(GridPos3D worldGP);
+    }
+
     public interface IEntityAction
     {
-        void OnExert(Entity entity);
+        void ExecuteOnEntity(Entity entity);
     }
 
     public interface ICollideAction
     {
-        void OnCollide(Collision collision);
+        void ExecuteOnCollide(Collision collision);
     }
 
     public interface ITriggerAction
     {
-        void OnTriggerEnter(Collider collider);
-        void OnTriggerStay(Collider collider);
-        void OnTriggerExit(Collider collider);
+        void ExecuteOnTriggerEnter(Collider collider);
+        void ExecuteOnTriggerStay(Collider collider);
+        void ExecuteOnTriggerExit(Collider collider);
     }
 
     internal Entity Entity;
