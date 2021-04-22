@@ -19,6 +19,7 @@ MonoBehaviour:
     00000000:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (1ed9a07c-c9a6-4f46-8e59-e6997ae85255)
         SkillAlias: "\u5927\u53F2\u83B1\u59C6\u9876\u649E"
         SkillIcon:
@@ -124,9 +125,33 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-        RawEntityBuffs:
+        RawEntitySkillActions:
         - id: 1
+        - id: 2
+        RawEntityBuffs: []
     00000001:
+      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        RawEntityBuffs:
+        - id: 3
+    00000002:
+      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (6b85310e-f4c9-4818-b682-4d1846b2638c)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+    00000003:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10249

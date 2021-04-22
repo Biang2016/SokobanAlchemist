@@ -12,7 +12,6 @@ using UnityEngine.Events;
 public abstract class EntityActiveSkill : EntitySkill
 {
     internal EntityActiveSkill ParentActiveSkill;
-    internal Entity Entity;
 
     internal bool IsAddedDuringGamePlay = false; // 是否是在游戏过程中添加的，以便在回收之后判断要不要清掉
 
@@ -200,8 +199,9 @@ public abstract class EntityActiveSkill : EntitySkill
     internal UnityAction OnRecoveryPhaseCompleteCallback;
     internal UnityAction OnSkillFinishedCallback;
 
-    public virtual void OnInit()
+    public override void OnInit()
     {
+        base.OnInit();
         OnSkillPhaseChanged = null;
         skillPhase = ActiveSkillPhase.Ready;
 
@@ -232,8 +232,9 @@ public abstract class EntityActiveSkill : EntitySkill
         SubSkillManageCoroutines_CanNotInterrupt.Clear();
     }
 
-    public virtual void OnUnInit()
+    public override void OnUnInit()
     {
+        base.OnUnInit();
         Interrupt();
 
         foreach (EntityActiveSkill subEAS in RawSubActiveSkillList)

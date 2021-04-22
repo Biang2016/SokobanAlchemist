@@ -28,9 +28,9 @@ public abstract class EntitySkillAction : IClone<EntitySkillAction>
         void Execute();
     }
 
-    public interface IActorOperationAction
+    public interface IEntityAction
     {
-        void OnOperation(Actor actor);
+        void OnExert(Entity entity);
     }
 
     public interface ICollideAction

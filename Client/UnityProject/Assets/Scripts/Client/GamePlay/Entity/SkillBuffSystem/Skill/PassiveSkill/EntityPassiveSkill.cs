@@ -6,22 +6,18 @@ using UnityEngine;
 [Serializable]
 public abstract class EntityPassiveSkill : EntitySkill
 {
-    internal Entity Entity;
-
     public bool IsAddedDuringGamePlay = false; // 是否是在游戏过程中添加的，以便在回收之后判断要不要清掉
-
-    [ReadOnly]
-    [HideInEditorMode]
-    public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
 
     #region Conditions
 
-    public virtual void OnInit()
+    public override void OnInit()
     {
+        base.OnInit();
     }
 
-    public virtual void OnUnInit()
+    public override void OnUnInit()
     {
+        base.OnUnInit();
     }
 
     public virtual void OnTick(float deltaTime)

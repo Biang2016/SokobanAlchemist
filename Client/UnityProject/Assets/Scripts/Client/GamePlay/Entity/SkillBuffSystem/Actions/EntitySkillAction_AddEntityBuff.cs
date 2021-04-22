@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public class EntitySkillAction_AddEntityBuff : EntitySkillAction, EntitySkillAction.ICollideAction, EntitySkillAction.IActorOperationAction
+public class EntitySkillAction_AddEntityBuff : EntitySkillAction, EntitySkillAction.ICollideAction, EntitySkillAction.IEntityAction
 {
     public override void OnRecycled()
     {
@@ -23,9 +23,9 @@ public class EntitySkillAction_AddEntityBuff : EntitySkillAction, EntitySkillAct
         if (entity.IsNotNullAndAlive()) CoreAddBuff(entity);
     }
 
-    public void OnOperation(Actor actor)
+    public void OnExert(Entity entity)
     {
-        CoreAddBuff(actor);
+        CoreAddBuff(entity);
     }
 
     private void CoreAddBuff(Entity entity)

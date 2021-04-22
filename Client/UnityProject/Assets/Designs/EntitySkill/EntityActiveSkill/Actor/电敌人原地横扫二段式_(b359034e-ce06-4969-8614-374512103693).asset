@@ -19,6 +19,7 @@ MonoBehaviour:
     00000000:
       type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (b359034e-ce06-4969-8614-374512103693)
         SkillAlias: "\u7535\u654C\u4EBA\u539F\u5730\u6A2A\u626B\u4E8C\u6BB5\u5F0F"
         SkillIcon:
@@ -99,6 +100,7 @@ MonoBehaviour:
     00000001:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: 
         SkillAlias: "\u539F\u5730\u6A2A\u626B\u4E8C\u6BB5\u5F0F-\u7B2C\u4E00\u6BB5"
         SkillIcon:
@@ -201,12 +203,14 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-        RawEntityBuffs:
+        RawEntitySkillActions:
         - id: 3
         - id: 4
+        RawEntityBuffs: []
     00000002:
       type: {class: EntityActiveSkill_AddEntityBuff, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: 
         SkillAlias: "\u539F\u5730\u6A2A\u626B\u4E8C\u6BB5\u5F0F-\u7B2C\u4E8C\u6BB5"
         SkillIcon:
@@ -324,10 +328,57 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-        RawEntityBuffs:
+        RawEntitySkillActions:
         - id: 5
         - id: 6
+        RawEntityBuffs: []
     00000003:
+      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        RawEntityBuffs:
+        - id: 7
+        - id: 8
+    00000004:
+      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (c92d5cef-5f0e-4373-b907-91a8812d72c5)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+    00000005:
+      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        RawEntityBuffs:
+        - id: 9
+        - id: 10
+    00000006:
+      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (daaf29d1-eee6-4e6c-aa1a-0b0b345b949d)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+    00000007:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 11297
@@ -350,10 +401,14 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
+        PropertyCategory: 0
+        EntityPropertyType: 30
+        EntitySkillSO: {fileID: 0}
+        SkillGUID: 
+        EntitySkillPropertyType: 0
         Percent: -100
         LinearDecayInDuration: 0
-        EntityPropertyType: 30
-    00000004:
+    00000008:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 15103
@@ -379,7 +434,7 @@ MonoBehaviour:
         EntityStatType: 0
         Delta: -1
         Percent: 0
-    00000005:
+    00000009:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 11297
@@ -402,10 +457,14 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
+        PropertyCategory: 0
+        EntityPropertyType: 30
+        EntitySkillSO: {fileID: 0}
+        SkillGUID: 
+        EntitySkillPropertyType: 0
         Percent: -100
         LinearDecayInDuration: 0
-        EntityPropertyType: 30
-    00000006:
+    0000000A:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 15103

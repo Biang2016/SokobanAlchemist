@@ -6,6 +6,12 @@ using UnityEngine;
 [Serializable]
 public abstract class EntitySkill : IClone<EntitySkill>
 {
+    internal Entity Entity;
+
+    [ReadOnly]
+    [HideInEditorMode]
+    public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
+
     [ReadOnly]
     [PropertyOrder(-10)]
     public string SkillGUID; // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
@@ -32,6 +38,15 @@ public abstract class EntitySkill : IClone<EntitySkill>
 
     [LabelText("技能具体描述")]
     public string SkillDescription = "";
+
+    public virtual void OnInit()
+    {
+        InitWorldModuleGUID = Entity.InitWorldModuleGUID;
+    }
+
+    public virtual void OnUnInit()
+    {
+    }
 
     public EntitySkill Clone()
     {
