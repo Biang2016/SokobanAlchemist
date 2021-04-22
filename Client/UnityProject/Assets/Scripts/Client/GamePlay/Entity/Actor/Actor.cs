@@ -206,9 +206,28 @@ public class Actor : Entity
                     foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
                     {
                         GridPos3D gridPos = value + offset;
-                        Entity targetGridEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridPos, GUID, out WorldModule targetGridModule, out GridPos3D _);
+                        Entity targetGridEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridPos, GUID, out WorldModule targetGridModule, out GridPos3D localGP);
                         if (targetGridModule == null) return; // 防止角色走入空模组
-                        if (targetGridEntity != null) return; // 防止角色和其他Entity卡住
+                        if (targetGridEntity != null)
+                        {
+                            // 检查改对象是否真的占据这几格，否则是bug
+                            bool correctOccupation = false;
+                            foreach (GridPos3D _offset in targetGridEntity.GetEntityOccupationGPs_Rotated())
+                            {
+                                GridPos3D _gridPos = targetGridEntity.WorldGP + _offset;
+                                if (_gridPos == gridPos)
+                                {
+                                    correctOccupation = true;
+                                    break;
+                                }
+                            }
+
+                            if (correctOccupation) return; // 防止角色和其他Entity卡住
+                            else
+                            {
+                                targetGridModule[TypeDefineType.Actor, localGP] = null; // 执行到这里说明是bug，先这样处理，以后再研究
+                            }
+                        }
                     }
                 }
 
@@ -1290,6 +1309,7 @@ public class Actor : Entity
         if (CannotAct) return;
         if (HasRigidbody)
         {
+            ActorMoveColliderRoot.SetActive(false);
             JumpHeight = jumpHeight;
             JumpStartWorldGP = WorldGP;
             CurrentJumpForce = jumpForce;
@@ -1346,6 +1366,7 @@ public class Actor : Entity
             if (CannotAct) return;
             if (HasRigidbody)
             {
+                ActorMoveColliderRoot.SetActive(true);
                 SmashDownTargetPos = targetPos;
                 SmashForce = smashForce;
                 ActorBehaviourState = ActorBehaviourStates.SmashDown;
@@ -1373,7 +1394,7 @@ public class Actor : Entity
             {
                 ActorBehaviourState = ActorBehaviourStates.Idle;
             }
-            else if (RigidBody.velocity.y <= 0.1f)
+            else if (RigidBody.velocity.y >= -0.1f)
             {
                 ActorBehaviourState = ActorBehaviourStates.Idle;
             }

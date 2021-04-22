@@ -653,7 +653,15 @@ public static class ActorAIAtoms
                 bool triggerSuc = eas.CheckCanTriggerSkill(TargetEntityType.value, TriggerWhenMissProbabilityPercent.value);
                 if (triggerSuc)
                 {
-                    Actor.ActorArtHelper.PlaySkill(EntitySkillIndex.value, TargetEntityType.value);
+                    if (TriggerByAnimation.value)
+                    {
+                        Actor.ActorArtHelper.PlaySkill(EntitySkillIndex.value, TargetEntityType.value);
+                    }
+                    else
+                    {
+                        Actor.ActorArtHelper.TriggerSkill(EntitySkillIndex.value);
+                    }
+
                     Out_HasValidSkill.SetValue(false);
                     return Status.Success;
                 }
@@ -663,6 +671,49 @@ public static class ActorAIAtoms
                 }
             }
 
+            return Status.Success;
+        }
+    }
+
+    [Category("敌兵/动画")]
+    [Name("动画Trigger")]
+    [Description("动画Trigger")]
+    public class BT_Enemy_TriggerAnimation : BTNode
+    {
+        public override string name => $"设置动画Trigger:{AnimationTrigger.value}";
+
+        [Name("动画Trigger")]
+        public BBParameter<string> AnimationTrigger;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.CannotAct) return Status.Failure;
+            if (!Actor.ActorArtHelper.CanPlayOtherAnimSkill) return Status.Failure;
+            Actor.ActorArtHelper.SetModelAnimTrigger(AnimationTrigger.value);
+            return Status.Success;
+        }
+    }
+
+    [Category("敌兵/动画")]
+    [Name("动画Bool")]
+    [Description("动画Bool")]
+    public class BT_Enemy_SetAnimationBool : BTNode
+    {
+        public override string name => $"设置动画Bool:{AnimationBool.value}为{AnimationBoolValue.value}";
+
+        [Name("动画Bool")]
+        public BBParameter<string> AnimationBool;
+
+        [Name("动画Bool")]
+        public BBParameter<bool> AnimationBoolValue;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.CannotAct) return Status.Failure;
+            if (!Actor.ActorArtHelper.CanPlayOtherAnimSkill) return Status.Failure;
+            Actor.ActorArtHelper.SetModelAnimBool(AnimationBool.value, AnimationBoolValue.value);
             return Status.Success;
         }
     }
@@ -708,6 +759,98 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵/战斗")]
+    [Name("技能可以释放")]
+    [Description("技能可以释放")]
+    public class BT_Enemy_SkillCanTrigger : ConditionTask
+    {
+        protected override string info
+        {
+            get
+            {
+                string skillStr = "";
+                if (SpecificSkillIndices.value != null)
+                {
+                    foreach (EntitySkillIndex entitySkillIndex in SpecificSkillIndices.value)
+                    {
+                        skillStr += entitySkillIndex + " & ";
+                    }
+                }
+
+                return $"{skillStr}技能可以释放";
+            }
+        }
+
+        [Name("技能清单")]
+        public BBParameter<List<EntitySkillIndex>> SpecificSkillIndices;
+
+        protected override bool OnCheck()
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
+            if (!Actor.ActorArtHelper.CanPlayOtherAnimSkill) return false;
+            bool canTrigger = true;
+            foreach (EntitySkillIndex entitySkillIndex in SpecificSkillIndices.value)
+            {
+                if (Actor.EntityActiveSkillDict.TryGetValue(entitySkillIndex, out EntityActiveSkill eas))
+                {
+                    if (!eas.CheckCanTriggerSkill(TargetEntityType.Attack, 100))
+                    {
+                        canTrigger = false;
+                        break;
+                    }
+                }
+            }
+
+            return canTrigger;
+        }
+    }
+
+    [Category("敌兵/战斗")]
+    [Name("技能可以释放")]
+    [Description("技能可以释放")]
+    public class BT_Enemy_SkillCanTriggerNode : BTNode
+    {
+        public override string name
+        {
+            get
+            {
+                string skillStr = "";
+                if (SpecificSkillIndices.value != null)
+                {
+                    foreach (EntitySkillIndex entitySkillIndex in SpecificSkillIndices.value)
+                    {
+                        skillStr += entitySkillIndex + " & ";
+                    }
+                }
+
+                return $"{skillStr}技能可以释放";
+            }
+        }
+
+        [Name("技能清单")]
+        public BBParameter<List<EntitySkillIndex>> SpecificSkillIndices;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            if (!Actor.ActorArtHelper.CanPlayOtherAnimSkill) return Status.Failure;
+            bool canTrigger = true;
+            foreach (EntitySkillIndex entitySkillIndex in SpecificSkillIndices.value)
+            {
+                if (Actor.EntityActiveSkillDict.TryGetValue(entitySkillIndex, out EntityActiveSkill eas))
+                {
+                    if (!eas.CheckCanTriggerSkill(TargetEntityType.Attack, 100))
+                    {
+                        canTrigger = false;
+                        break;
+                    }
+                }
+            }
+
+            return canTrigger ? Status.Success : Status.Failure;
+        }
+    }
+
+    [Category("敌兵/战斗")]
     [Name("等待技能结束")]
     [Description("等待技能结束")]
     public class BT_Enemy_WaitSkillEnd : BTNode
@@ -733,6 +876,35 @@ public static class ActorAIAtoms
             }
 
             return Status.Failure;
+        }
+    }
+
+    [Category("敌兵/战斗")]
+    [Name("等待技能结束")]
+    [Description("等待技能结束")]
+    public class BT_Enemy_SkillEndConditionTask : ConditionTask
+    {
+        [Name("技能编号")]
+        public BBParameter<EntitySkillIndex> EntitySkillIndex;
+
+        protected override string info => $"等待技能结束 [{EntitySkillIndex.value}]";
+
+        protected override bool OnCheck()
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
+            if (Actor.EntityActiveSkillDict.TryGetValue(EntitySkillIndex.value, out EntityActiveSkill eas))
+            {
+                if (eas.SkillPhase == ActiveSkillPhase.CoolingDown || eas.SkillPhase == ActiveSkillPhase.Ready)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return false;
         }
     }
 
@@ -924,13 +1096,16 @@ public static class ActorAIAtoms
     {
         public override string name => $"悬空移动Update";
 
+        [Name("无限等待")]
+        public BBParameter<bool> InfiniteInAir;
+
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorBehaviourState != Actor.ActorBehaviourStates.InAirMoving) return Status.Failure;
             Vector3 distanceXZ = Actor.transform.position - Actor.InAirMoveTargetPos;
             distanceXZ.y = 0;
-            if (distanceXZ.magnitude <= 0.5f) return Status.Success;
+            if (distanceXZ.magnitude <= 0.5f) return InfiniteInAir.value ? Status.Running : Status.Success;
             return Status.Running;
         }
     }

@@ -1,0 +1,210 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u9668\u77F3\u672F_(b3eb6613-6002-4787-9d3d-9de78cf8100e)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityActiveSkill_ParentNode, ns: , asm: Client}
+      data:
+        SkillGUID: (b3eb6613-6002-4787-9d3d-9de78cf8100e)
+        SkillAlias: "\u9668\u77F3\u672F"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: (7f5292e8-182c-480f-9670-a4c4de8eb68c)
+        SkillDescription: 
+        TargetCamp: 15
+        EntitySkillIndex: 0
+        SkillsPropertyCollection:
+          CastingRadius:
+            BaseValue: 8
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 8
+          Cooldown:
+            BaseValue: 20000
+            ModifiedValue: 3500
+            MinValue: 0
+            MaxValue: 1000000
+          WingUp:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          CastDuration:
+            BaseValue: 4000
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          Recovery:
+            BaseValue: 0
+            ModifiedValue: 1000
+            MinValue: 0
+            MaxValue: 1000000
+          CameraShakeEquivalentDamage:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeActionPoint:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeFireElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeIceElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeLightningElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+        TriggerWhenMissProbabilityPercent: 0
+        WingUpCanMove: 1
+        CastCanMove: 1
+        RecoverCanMove: 1
+        RawSubActiveSkillList:
+        - id: 1
+        SubActiveSkillTriggerLogicList:
+        - M_TriggerType: 2
+          SubSkillTriggerSequence:
+          - SubSkillAlias: "\u73AF\u5F62\u591A\u6BB5\u706B\u7130\u653B\u51FB\u4E00\u6BB5"
+            SubActiveSkillTimePoint: 0
+          Duration: 4000
+          Times: 10
+          SubSkillAliasWithProbabilityList:
+          - SubSkillAlias: "\u9668\u77F3\u672F\u5355\u53D1"
+            probability: 1
+            isSingleton: 0
+        InterruptSubActiveSkillsWhenInterrupted: 0
+    00000001:
+      type: {class: EntityActiveSkill_SummonDropBox, ns: , asm: Client}
+      data:
+        SkillGUID: 
+        SkillAlias: "\u9668\u77F3\u672F\u5355\u53D1"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: 
+        SkillDescription: 
+        TargetCamp: 14
+        EntitySkillIndex: 0
+        SkillsPropertyCollection:
+          CastingRadius:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Cooldown:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          WingUp:
+            BaseValue: 300
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          CastDuration:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Recovery:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          CameraShakeEquivalentDamage:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeActionPoint:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeFireElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeIceElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeLightningElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+        TriggerWhenMissProbabilityPercent: 100
+        WingUpCanMove: 1
+        CastCanMove: 1
+        RecoverCanMove: 1
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 15
+          y: 0
+          z: 15
+        M_TargetInclination: 0
+        CastOnTopLayer: 1
+        CastOnNLayersBeneath: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
+        ProjectOffsetZMax: 3
+        ProjectOffsetZMin: -8
+        ProjectHeightDeltaRange: 999
+        GridWarningColorFill: {r: 1, g: 0.24595508, b: 0, a: 0.6392157}
+        GridWarningColorBorderHighlight: {r: 1, g: 0, b: 0, a: 0.5254902}
+        GridWarningColorBorderDim: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 0.5529412}
+        CastFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        DropBoxList:
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (65e613ca-1b8c-4002-84d1-0c49ea3b0903)
+          BoxOrientation: 0
+          probability: 9
+          isSingleton: 0
+        - BoxTypeName:
+            TypeDefineType: 0
+            TypeGUID: (096dcca9-e0d2-439e-9304-94a00bb4f36b)
+          BoxOrientation: 0
+          probability: 1
+          isSingleton: 0
+        DropFromHeightFromFloor: 8

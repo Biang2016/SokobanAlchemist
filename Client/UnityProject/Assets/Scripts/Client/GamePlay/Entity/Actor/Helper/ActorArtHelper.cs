@@ -40,6 +40,16 @@ public class ActorArtHelper : EntityArtHelper
         CanPan = true;
     }
 
+    public void SetModelAnimTrigger(string trigger)
+    {
+        if (ActorModelAnim != null) ActorModelAnim.SetTrigger(trigger);
+    }
+
+    public void SetModelAnimBool(string boolean, bool value)
+    {
+        if (ActorModelAnim != null) ActorModelAnim.SetBool(boolean, value);
+    }
+
     public void Vault()
     {
         if (ActorArtRootAnim != null)

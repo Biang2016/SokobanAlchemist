@@ -12,28 +12,13 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: b77d83aebe36d864ba0eb2bdf9803182, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 1
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4068298203195820750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3401897685561425608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2970f586ab4ca948b65604b8455b30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Actor: {fileID: 7134617453480111786}
-  Anim: {fileID: 2783864003464862932}
-  DeltaPositionFactor: 1
 --- !u!114 &4757858465448460674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,17 +111,17 @@ PrefabInstance:
     - target: {fileID: -8965811294570246362, guid: 8759d7882de420c48a54c480117799f7,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.2199551
+      value: 1.7109501e-14
       objectReference: {fileID: 0}
     - target: {fileID: -8965811294570246362, guid: 8759d7882de420c48a54c480117799f7,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 44.99934
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: -8965811294570246362, guid: 8759d7882de420c48a54c480117799f7,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 90.22222
+      value: 89.68727
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8759d7882de420c48a54c480117799f7,
         type: 3}
@@ -211,7 +196,7 @@ PrefabInstance:
     - target: {fileID: -6596629675466879577, guid: 8759d7882de420c48a54c480117799f7,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 5.248919e-15
+      value: 8.379745e-15
       objectReference: {fileID: 0}
     - target: {fileID: -6596629675466879577, guid: 8759d7882de420c48a54c480117799f7,
         type: 3}
@@ -644,7 +629,7 @@ PrefabInstance:
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityActiveSkillSOs.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -672,6 +657,12 @@ PrefabInstance:
       propertyPath: RawEntityActiveSkillSOs.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: f97d31c90eb6fa8459cf7ef56a75c31f,
+        type: 2}
+    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: RawEntityActiveSkillSOs.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 5451d2a37e7680b43b5ff41f01314a76,
         type: 2}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -800,7 +791,7 @@ PrefabInstance:
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityStatPropSet.HealthDurability.AutoChange
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -1545,8 +1536,8 @@ PrefabInstance:
         type: 3}
       propertyPath: _serializedBlackboard
       value: '{"_variables":{"KeepDistanceMin":{"_value":1.0,"_name":"KeepDistanceMin","_id":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax":{"_value":6.0,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"GuardRange":{"_value":10.0,"_name":"GuardRange","_id":"1e4fc14c-3815-4279-a6ee-25a727bd3bb0","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax":{"_value":3.0,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"GuardRange":{"_value":6.0,"_name":"GuardRange","_id":"1e4fc14c-3815-4279-a6ee-25a727bd3bb0","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"ChasingRange":{"_value":12.0,"_name":"ChasingRange","_id":"dcaf01a2-8a92-4b8d-b523-e1a0efdcfefd","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IdleRadius":{"_value":8,"_name":"IdleRadius","_id":"26c88988-5b11-46e7-b0ba-b46818aa2ab6","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IdleInterval":{"_value":3.0,"_name":"IdleInterval","_id":"d77d9828-19d3-4615-972e-e8a7fbefc740","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
@@ -1555,17 +1546,16 @@ PrefabInstance:
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"Phase3LifePercent":{"_value":30,"_name":"Phase3LifePercent","_id":"0bc40e7d-7e9e-4867-a643-847427f9a8cf","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"Phase3HealLifePercentThreshold":{"_value":25,"_name":"Phase3HealLifePercentThreshold","_id":"b4f56a12-7e5e-4f9a-830f-8e168eaa6dbe","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"AttackRange":{"_value":6,"_name":"AttackRange","_id":"8775ec58-f3f7-4d70-ac7f-66fac7793809","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"MeteorSkillStartCastPlayerDistance":{"_value":5.0,"_name":"MeteorSkillStartCastPlayerDistance","_id":"d33710d3-ec78-40f2-ac65-d2093818d348","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"BlizzardSkillStartCastPlayerDistance":{"_value":4.0,"_name":"BlizzardSkillStartCastPlayerDistance","_id":"79329c6a-a971-4075-8d60-8ff8398b470e","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"PoisonousSwampSkillStartCastPlayerDistance":{"_value":6,"_name":"PoisonousSwampSkillStartCastPlayerDistance","_id":"10e16ac4-8b84-427f-96a3-812c4271f9ff","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"MySkillIndices":{"_value":[0,1],"_name":"MySkillIndices","_id":"917fb615-1c22-4edf-857c-32f8c70967c7","$type":"NodeCanvas.Framework.Variable`1[[System.Collections.Generic.List`1[[EntitySkillIndex,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"MySkillIndices":{"_value":[0],"_name":"MySkillIndices","_id":"917fb615-1c22-4edf-857c-32f8c70967c7","$type":"NodeCanvas.Framework.Variable`1[[System.Collections.Generic.List`1[[EntitySkillIndex,
         Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib,
-        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IsJumping":{"_name":"IsJumping","_id":"15250993-3b2d-4d06-b47d-841c7948e1fd","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"SmashDownRadius":{"_value":7.0,"_name":"SmashDownRadius","_id":"f0d20e68-525c-42e1-a6f9-8970d1b47556","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.size
-      value: 15
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -1576,13 +1566,13 @@ PrefabInstance:
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.data[1]._json
-      value: '{"_value":6.0,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+      value: '{"_value":3.0,"_name":"KeepDistanceMax","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.data[2]._json
-      value: '{"_value":10.0,"_name":"GuardRange","_id":"1e4fc14c-3815-4279-a6ee-25a727bd3bb0","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+      value: '{"_value":6.0,"_name":"GuardRange","_id":"1e4fc14c-3815-4279-a6ee-25a727bd3bb0","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
@@ -1636,42 +1626,42 @@ PrefabInstance:
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.data[11]._json
-      value: '{"_value":5.0,"_name":"MeteorSkillStartCastPlayerDistance","_id":"d33710d3-ec78-40f2-ac65-d2093818d348","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+      value: '{"_value":[0],"_name":"MySkillIndices","_id":"917fb615-1c22-4edf-857c-32f8c70967c7","$type":"NodeCanvas.Framework.Variable`1[[System.Collections.Generic.List`1[[EntitySkillIndex,
+        Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.data[12]._json
-      value: '{"_value":4.0,"_name":"BlizzardSkillStartCastPlayerDistance","_id":"79329c6a-a971-4075-8d60-8ff8398b470e","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+      value: '{"_name":"IsJumping","_id":"15250993-3b2d-4d06-b47d-841c7948e1fd","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.data[13]._json
-      value: '{"_value":6,"_name":"PoisonousSwampSkillStartCastPlayerDistance","_id":"10e16ac4-8b84-427f-96a3-812c4271f9ff","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
+      value: '{"_value":7.0,"_name":"SmashDownRadius","_id":"f0d20e68-525c-42e1-a6f9-8970d1b47556","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.data[14]._json
-      value: '{"_value":[0,1],"_name":"MySkillIndices","_id":"917fb615-1c22-4edf-857c-32f8c70967c7","$type":"NodeCanvas.Framework.Variable`1[[System.Collections.Generic.List`1[[EntitySkillIndex,
-        Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib,
-        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+      value: '{"_value":7.0,"_name":"SmashDownRadius","_id":"f0d20e68-525c-42e1-a6f9-8970d1b47556","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: _serializedVariables.Array.data[15]._json
+      value: '{"_value":7.0,"_name":"SmashDownRadius","_id":"f0d20e68-525c-42e1-a6f9-8970d1b47556","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: _serializedVariables.Array.data[16]._json
+      value: '{"_value":7.0,"_name":"SmashDownRadius","_id":"f0d20e68-525c-42e1-a6f9-8970d1b47556","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ca8def23062cf242bafa7e081952811, type: 3}
---- !u!114 &7134617453480111786 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
-    type: 3}
-  m_PrefabInstance: {fileID: 4824189382203142848}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae87b0f1479312e47a8f54e2ea31cca5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3717664819819122175 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8171001807248883519, guid: 8ca8def23062cf242bafa7e081952811,
