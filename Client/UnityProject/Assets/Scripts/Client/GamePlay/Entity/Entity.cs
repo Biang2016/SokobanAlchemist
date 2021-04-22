@@ -343,8 +343,8 @@ public abstract class Entity : PoolObject
         {
             EntityPassiveSkills.Add(eps);
             EntityPassiveSkillGUIDDict.Add(eps.SkillGUID, eps);
-            eps.IsAddedDuringGamePlay = true;
             eps.Entity = this;
+            eps.IsAddedDuringGamePlay = true;
             eps.OnInit();
             eps.OnRegisterLevelEventID();
         }
@@ -459,8 +459,48 @@ public abstract class Entity : PoolObject
         ActiveSkillMarkAsDestroyed = false;
     }
 
-    protected void AddNewActiveSkill(EntityActiveSkill eas)
+    public void AddNewActiveSkill(EntityActiveSkill eas, int keyBind)
     {
+        if (string.IsNullOrWhiteSpace(eas.SkillGUID))
+        {
+            Debug.LogError($"主动技能GUID为空: {eas.SkillAlias}");
+            return; // 不添加GUID为空的主动技能
+        }
+
+        if (!EntityActiveSkillGUIDDict.ContainsKey(eas.SkillGUID))
+        {
+            // 找一个没用过的SkillIndex
+            EntitySkillIndex skillIndex = EntitySkillIndex.Skill_0;
+            foreach (EntitySkillIndex si in Enum.GetValues(typeof(EntitySkillIndex)))
+            {
+                if (!EntityActiveSkillDict.ContainsKey(si))
+                {
+                    skillIndex = si;
+                    break;
+                }
+            }
+
+            EntityActiveSkillDict.Add(skillIndex, eas);
+            EntityActiveSkillGUIDDict.Add(eas.SkillGUID, eas);
+            eas.Entity = this;
+            eas.IsAddedDuringGamePlay = true;
+            eas.ParentActiveSkill = null;
+            eas.EntitySkillIndex = skillIndex;
+            eas.OnInit();
+
+            if (this is Actor actor)
+            {
+                if (actor.ActorControllerHelper is PlayerControllerHelper pch)
+                {
+                    pch.SkillKeyMappings[keyBind].Clear(); 
+                    pch.SkillKeyMappings[keyBind].Add(skillIndex);
+                }
+            }
+        }
+        else
+        {
+            Debug.Log($"{name}添加主动技能失败{eas}");
+        }
     }
 
     protected virtual void UnInitActiveSkills()

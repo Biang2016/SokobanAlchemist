@@ -25,7 +25,7 @@ MonoBehaviour:
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: (306afce7-157e-4e74-9180-259545780dd1)
-        SkillDescription: Get 50% Speed up
+        SkillDescription: Spend 10 lightning elements, get 50% Speed up in 10 seconds
         TargetCamp: 1
         EntitySkillIndex: 0
         SkillsPropertyCollection:
@@ -35,7 +35,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           Cooldown:
-            BaseValue: 0
+            BaseValue: 3000
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 1000000
@@ -75,11 +75,12 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 1000
           ConsumeLightningElementFragment:
-            BaseValue: 0
+            BaseValue: 10
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 1000
         TriggerWhenMissProbabilityPercent: 100
+        EntitySkillConditions: []
         WingUpCanMove: 0
         CastCanMove: 0
         RecoverCanMove: 1
@@ -129,6 +130,7 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
+        PlayFXForEveryGrid: 1
     00000003:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
@@ -139,7 +141,7 @@ MonoBehaviour:
         AllowAddBuffAliasList: []
         ForbidAddBuffAliasList: []
         IsPermanent: 0
-        Duration: 3
+        Duration: 10
         BuffFX:
           FXType:
             TypeDefineType: 7

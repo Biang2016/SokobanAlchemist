@@ -1176,6 +1176,18 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
+    public static EntitySkill GetRawEntitySkill(string skillGUID)
+    {
+        if (EntitySkillLibrary.TryGetValue(skillGUID, out EntitySkill entitySkill))
+        {
+            return entitySkill;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public static EntityOccupationData GetEntityOccupationData(ushort entityTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();

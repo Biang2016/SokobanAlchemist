@@ -7,6 +7,8 @@ namespace BiangLibrary.GamePlay.UI
     {
         public UIType UIType = new UIType();
 
+        public bool IsShown = false;
+
         #region 窗体的四种(生命周期)状态
 
         private bool closeFlag = false;
@@ -64,12 +66,14 @@ namespace BiangLibrary.GamePlay.UI
 
         public virtual void Display()
         {
+            IsShown = true;
             gameObject.SetActive(true);
             UIMaskMgr.Instance.SetMaskWindow(gameObject, UIType.UIForms_Type, UIType.UIForm_LucencyType);
         }
 
         public virtual void Hide()
         {
+            IsShown = false;
             gameObject.SetActive(false);
             UIMaskMgr.Instance.CancelAllMaskWindow(UIType.UIForm_LucencyType);
         }

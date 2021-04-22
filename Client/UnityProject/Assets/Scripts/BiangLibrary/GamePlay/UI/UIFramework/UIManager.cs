@@ -75,6 +75,13 @@ namespace BiangLibrary.GamePlay.UI
             return peek != null && peek is T;
         }
 
+        public bool IsUIShown<T>() where T : BaseUIPanel
+        {
+            T panel = GetBaseUIForm<T>();
+            if (panel == null) return false;
+            return panel.IsShown;
+        }
+
         /// <summary>
         /// 显示（打开）UI窗体
         /// 功能：

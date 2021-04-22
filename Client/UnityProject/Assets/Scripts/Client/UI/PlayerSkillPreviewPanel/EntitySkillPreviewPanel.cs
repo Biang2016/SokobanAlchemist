@@ -11,7 +11,7 @@ public class EntitySkillPreviewPanel : BaseUIPanel
             false,
             false,
             false,
-            UIFormTypes.Normal,
+            UIFormTypes.Fixed,
             UIFormShowModes.Normal,
             UIFormLucencyTypes.Penetrable);
     }

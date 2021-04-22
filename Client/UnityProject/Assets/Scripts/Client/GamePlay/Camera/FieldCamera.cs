@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.GamePlay.UI;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -321,7 +322,7 @@ public class FieldCamera : MonoBehaviour
 
     private void RefreshCameraOrientation()
     {
-        RotateDirection = (GridPosR.Orientation)(Mathf.RoundToInt((TargetConfigData.HorAngle + 360f) / 90f) % 4);
+        RotateDirection = (GridPosR.Orientation) (Mathf.RoundToInt((TargetConfigData.HorAngle + 360f) / 90f) % 4);
     }
 
     #region Distance Levels
@@ -359,8 +360,11 @@ public class FieldCamera : MonoBehaviour
 #if DEVELOPMENT_BUILD || DEBUG
         if (Application.isPlaying)
         {
+            bool isUIOpen = false;
+            isUIOpen |= UIManager.Instance.IsUIShown<KeyBindingPanel>();
+            isUIOpen |= UIManager.Instance.IsUIShown<EntitySkillPreviewPanel>();
             bool IsMouseOverGameWindow = !(0 > Input.mousePosition.x || 0 > Input.mousePosition.y || Screen.width < Input.mousePosition.x || Screen.height < Input.mousePosition.y);
-            if (IsMouseOverGameWindow)
+            if (IsMouseOverGameWindow && !isUIOpen)
             {
                 if (ControlManager.Instance.Battle_MouseWheel.y < 0)
                 {

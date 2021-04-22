@@ -35,16 +35,12 @@ public class EntitySkillAction_UI : EntitySkillAction, EntitySkillAction.IPureAc
             {
                 UIManager.Instance.ShowUIForm(UIName);
             }
-            else
-            {
-                uiPanel.Display();
-            }
         }
         else
         {
             if (uiPanel != null)
             {
-                uiPanel.Hide();
+                uiPanel.CloseUIForm();
             }
         }
     }
