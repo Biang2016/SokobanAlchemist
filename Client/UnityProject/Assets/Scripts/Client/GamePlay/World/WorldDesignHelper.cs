@@ -72,19 +72,6 @@ public class WorldDesignHelper : MonoBehaviour
         worldData.DefaultWorldActorBornPointAlias = DefaultWorldActorBornPointAlias;
         worldData.UseSpecialPlayerEnterESPS = UseSpecialPlayerEnterESPS;
         Raw_PlayerEnterESPS.ApplyDataTo(worldData.Raw_PlayerEnterESPS);
-        worldData.UseSpecialPlayerEnterSkillSet = UseSpecialPlayerEnterSkillSet;
-
-        foreach (EntitySkillSO so in Raw_PlayerEnterActiveSkillSOs)
-        {
-            worldData.PlayerDefaultActiveSkillSet.Add(so.EntitySkill.SkillGUID);
-        }
-
-        foreach (EntitySkillSO so in Raw_PlayerEnterPassiveSkillSOs)
-        {
-            worldData.PlayerDefaultPassiveSkillSet.Add(so.EntitySkill.SkillGUID);
-        }
-
-        worldData.UseSpecialPlayerEnterSkillSet = UseSpecialPlayerEnterSkillSet;
         CameraConfigData.ApplyTo(worldData.CameraConfigData, true);
         worldData.SkyBoxType = SkyBoxType.Clone();
         worldData.PostProcessingProfileType = PostProcessingProfileType.Clone();

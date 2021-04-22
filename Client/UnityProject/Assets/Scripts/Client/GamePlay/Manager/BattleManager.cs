@@ -128,12 +128,6 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             Player1.ReloadESPS(WorldManager.Instance.CurrentWorld.WorldData.Raw_PlayerEnterESPS);
         }
 
-        if (WorldManager.Instance.CurrentWorld.WorldData.UseSpecialPlayerEnterSkillSet)
-        {
-            Player1.ReloadPassiveSkillSet(WorldManager.Instance.CurrentWorld.WorldData.PlayerDefaultPassiveSkillSet);
-            Player1.ReloadActiveSkillSet(WorldManager.Instance.CurrentWorld.WorldData.PlayerDefaultActiveSkillSet);
-        }
-
         GameStateManager.Instance.SetState(GameState.Fighting);
         IsStart = true;
     }

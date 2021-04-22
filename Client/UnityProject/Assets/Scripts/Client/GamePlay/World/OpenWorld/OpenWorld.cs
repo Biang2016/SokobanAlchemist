@@ -686,11 +686,6 @@ public class OpenWorld : World
         IsUsingSpecialESPSInsideMicroWorld = microWorldData.UseSpecialPlayerEnterESPS;
         BattleManager.Instance.Player1.EntityStatPropSet.ApplyDataTo(m_LevelCacheData.PlayerCurrentESPS);
         if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(microWorldData.Raw_PlayerEnterESPS);
-        if (microWorldData.UseSpecialPlayerEnterSkillSet)
-        {
-            BattleManager.Instance.Player1.ReloadPassiveSkillSet(microWorldData.PlayerDefaultPassiveSkillSet);
-            BattleManager.Instance.Player1.ReloadActiveSkillSet(microWorldData.PlayerDefaultActiveSkillSet);
-        }
 
         ApplyWorldVisualEffectSettings(microWorldData);
 
@@ -867,11 +862,6 @@ public class OpenWorld : World
         {
             BattleManager.Instance.Player1.Reborn();
             if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(microWorldData.Raw_PlayerEnterESPS);
-            if (microWorldData.UseSpecialPlayerEnterSkillSet)
-            {
-                BattleManager.Instance.Player1.ReloadPassiveSkillSet(microWorldData.PlayerDefaultPassiveSkillSet);
-                BattleManager.Instance.Player1.ReloadActiveSkillSet(microWorldData.PlayerDefaultActiveSkillSet);
-            }
         }
 
         CameraManager.Instance.FieldCamera.InitFocus();
