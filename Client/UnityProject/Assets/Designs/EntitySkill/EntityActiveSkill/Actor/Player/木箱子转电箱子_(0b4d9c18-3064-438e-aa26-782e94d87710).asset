@@ -1,0 +1,173 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u6728\u7BB1\u5B50\u8F6C\u7535\u7BB1\u5B50_(0b4d9c18-3064-438e-aa26-782e94d87710)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        SkillGUID: (0b4d9c18-3064-438e-aa26-782e94d87710)
+        SkillAlias: "\u6728\u7BB1\u5B50\u8F6C\u7535\u7BB1\u5B50"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: (9cb4ea3d-1f9e-4003-8406-a47fef7216f4)
+        SkillDescription: Spend 10 lightning element, change the wooden box in front
+          of you into an lightning box.
+        TargetCamp: 8
+        EntitySkillIndex: 0
+        SkillsPropertyCollection:
+          CastingRadius:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Cooldown:
+            BaseValue: 1000
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000000
+          WingUp:
+            BaseValue: 300
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          CastDuration:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Recovery:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          CameraShakeEquivalentDamage:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeActionPoint:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeFireElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000
+          ConsumeIceElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeLightningElementFragment:
+            BaseValue: 10
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 1000
+        TriggerWhenMissProbabilityPercent: 100
+        EntitySkillConditions:
+        - id: 1
+        WingUpCanMove: 0
+        CastCanMove: 0
+        RecoverCanMove: 0
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 15
+          y: 0
+          z: 16
+        M_TargetInclination: 1
+        CastOnTopLayer: 0
+        CastOnNLayersBeneath: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        ProjectHeightDeltaRange: 999
+        GridWarningColorFill: {r: 0.8018868, g: 0.8018868, b: 0.8018868, a: 0.92941177}
+        GridWarningColorBorderHighlight: {r: 1, g: 1, b: 1, a: 0.80784315}
+        GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
+        RawEntitySkillActions:
+        - id: 2
+    00000001:
+      type: {class: EntitySkillCondition_HasEntityInCastArea, ns: , asm: Client}
+      data:
+        EntityType:
+          TypeDefineType: 0
+          TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
+    00000002:
+      type: {class: EntitySkillAction_ChangeBoxType, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        EntityData:
+          EntityType:
+            TypeDefineType: 0
+            TypeGUID: (392aec17-1844-43c8-92d3-826cc62fa4bb)
+          EntityOrientation: 0
+          RawEntityExtraSerializeData:
+            EntityPassiveSkills:
+            - id: 3
+        ChangeForEveryGrid: 0
+    00000003:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        SkillGUID: 
+        SkillAlias: 
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: 
+        SkillDescription: 
+        IsAddedDuringGamePlay: 0
+        PassiveSkillCondition: 1
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
+        RawEntitySkillActions:
+        - id: 4
+    00000004:
+      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (2ffe2270-3562-4ca9-aee0-583315db835a)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        PlayFXForEveryGrid: 1

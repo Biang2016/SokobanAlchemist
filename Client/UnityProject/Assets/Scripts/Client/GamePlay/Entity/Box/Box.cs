@@ -491,9 +491,11 @@ public partial class Box : Entity
         }
     }
 
-    public void Setup(EntityData entityData, uint initWorldModuleGUID)
+    public void Setup(EntityData entityData, uint initWorldModuleGUID, GridPos3D worldGP)
     {
         base.Setup(initWorldModuleGUID);
+        transform.position = worldGP;
+        WorldGP = worldGP;
         if (IsHidden) BoxModelHelper.gameObject.SetActive(false);
         EntityTypeIndex = entityData.EntityTypeIndex;
 
@@ -538,18 +540,18 @@ public partial class Box : Entity
         }
     }
 
-    public void Initialize(GridPos3D worldGridPos3D, WorldModule module, float lerpTime, bool artOnly, LerpType lerpType, bool needLerpModel = false, bool needCheckDrop = true)
+    public void Initialize(GridPos3D worldGP, WorldModule module, float lerpTime, bool artOnly, LerpType lerpType, bool needLerpModel = false, bool needCheckDrop = true)
     {
         //name = $"{BoxTypeName}_{worldGridPos3D}";
 
-        if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Init LerpType:{lerpType} TargetGP:{worldGridPos3D}");
+        if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Init LerpType:{lerpType} TargetGP:{worldGP}");
         SetModelSmoothMoveLerpTime(0);
         ArtOnly = artOnly;
         LastInteractActorGUID = 0;
         LastWorldGP = WorldGP;
         WorldModule = module;
-        WorldGP = worldGridPos3D;
-        LocalGP = module.WorldGPToLocalGP(worldGridPos3D);
+        WorldGP = worldGP;
+        LocalGP = module.WorldGPToLocalGP(worldGP);
         transform.parent = module.WorldModuleBoxRoot;
         BoxColliderHelper.Initialize(Passable, artOnly, BoxFeature.HasFlag(BoxFeature.IsGround), lerpType == LerpType.Drop, lerpTime > 0);
         if (lerpTime > 0)

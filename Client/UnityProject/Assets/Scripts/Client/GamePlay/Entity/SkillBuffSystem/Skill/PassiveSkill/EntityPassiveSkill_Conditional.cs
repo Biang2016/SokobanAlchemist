@@ -248,6 +248,13 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
     }
 
+    public override void OnUnInit()
+    {
+        base.OnUnInit();
+        UnInitSkillActions();
+        UnInitSkillConditions();
+    }
+
     public override void OnTick(float deltaTime)
     {
         base.OnTick(deltaTime);
@@ -541,9 +548,6 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 }
             }
         }
-
-        UnInitSkillActions();
-        UnInitSkillConditions();
     }
 
     public override void OnBeforeMergeBox()
@@ -580,9 +584,6 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 }
             }
         }
-
-        UnInitSkillActions();
-        UnInitSkillConditions();
     }
 
     public override void OnDestroyEntityByElementDamage(EntityBuffAttribute entityBuffAttribute)

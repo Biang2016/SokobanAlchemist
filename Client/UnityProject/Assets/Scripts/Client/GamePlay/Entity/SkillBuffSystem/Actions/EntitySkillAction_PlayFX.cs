@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -15,19 +16,32 @@ public class EntitySkillAction_PlayFX : EntitySkillAction, EntitySkillAction.IPu
     [LabelText("@\"特效\t\"+FX")]
     public FXConfig FX = new FXConfig();
 
+    [LabelText("每格都播放特效")]
+    public bool PlayFXForEveryGrid = true;
+
     public void Execute()
     {
-        if (Entity is Box box)
+        if (PlayFXForEveryGrid)
         {
-            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
+            GridPos3D worldGP = Entity.WorldGP;
+            if (Entity is Box box)
             {
-                Vector3 boxIndicatorPos = box.transform.position + offset;
-                FXManager.Instance.PlayFX(FX, boxIndicatorPos);
+                if (box.State != Box.States.Static)
+                {
+                    worldGP = box.transform.position.ToGridPos3D();
+                }
+            }
+
+            List<GridPos3D> occupations = Entity.GetEntityOccupationGPs_Rotated();
+            foreach (GridPos3D gridPos in occupations)
+            {
+                GridPos3D gridWorldGP = worldGP + gridPos;
+                FXManager.Instance.PlayFX(FX, gridWorldGP);
             }
         }
-        else if (Entity is Actor actor)
+        else
         {
-            FXManager.Instance.PlayFX(FX, actor.transform.position);
+            FXManager.Instance.PlayFX(FX, Entity.EntityGeometryCenter);
         }
     }
 

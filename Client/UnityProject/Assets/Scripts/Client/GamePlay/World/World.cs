@@ -1234,7 +1234,7 @@ public class World : PoolObject
             {
                 dropBox = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);
                 EntityData entityData = new EntityData(boxTypeIndex, boxOrientation);
-                dropBox.Setup(entityData, module.GUID);
+                dropBox.Setup(entityData, module.GUID, origin);
                 dropBox.Initialize(origin, module, 0, false, Box.LerpType.DropFromAir);
                 dropBox.DropFromAir();
                 return true;

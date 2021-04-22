@@ -45,7 +45,8 @@ public abstract class EntityActiveSkill : EntitySkill
 
     [LabelText("释放合法性判断条件")]
     [SerializeReference]
-    public List<EntitySkillCondition> EntitySkillConditions = new List<EntitySkillCondition>();
+    public List<EntitySkillCondition> EntitySkillConditions = new List<EntitySkillCondition>(); // 干数据，禁修改
+
 
     #endregion
 
@@ -259,6 +260,8 @@ public abstract class EntityActiveSkill : EntitySkill
         {
             condition.OnUnInit();
         }
+
+        EntitySkillConditions.Clear();
 
         SkillsPropertyCollection.OnRecycled();
 

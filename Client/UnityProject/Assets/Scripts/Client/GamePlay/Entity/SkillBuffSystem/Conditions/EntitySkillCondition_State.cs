@@ -70,6 +70,11 @@ public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondi
         {
             case ConditionType.Stat:
             {
+                if (Entity == null || Entity.EntityStatPropSet == null || Entity.EntityStatPropSet.StatDict == null)
+                {
+                    int a = 0;
+                }
+
                 EntityStat stat = Entity.EntityStatPropSet.StatDict[EntityStatType];
                 bool trigger = false;
                 switch (ThresholdOperator)

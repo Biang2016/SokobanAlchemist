@@ -20,11 +20,13 @@ public class EntitySkillCondition_HasEntityInCastArea : EntitySkillCondition, En
     protected override void ChildClone(EntitySkillCondition cloneData)
     {
         EntitySkillCondition_HasEntityInCastArea newCondition = (EntitySkillCondition_HasEntityInCastArea) cloneData;
+        newCondition.EntityType = EntityType.Clone();
     }
 
     public override void CopyDataFrom(EntitySkillCondition srcData)
     {
         base.CopyDataFrom(srcData);
         EntitySkillCondition_HasEntityInCastArea srcCondition = (EntitySkillCondition_HasEntityInCastArea) srcData;
+        EntityType.CopyDataFrom(srcCondition.EntityType);
     }
 }
