@@ -7,19 +7,23 @@ using UnityEngine;
 [Serializable]
 public abstract class EntitySkillAction : IClone<EntitySkillAction>
 {
+    internal Entity Entity;
+
     [ReadOnly]
     [HideInEditorMode]
     public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
 
     public abstract void OnRecycled();
 
-    public virtual void Init(uint initWorldModuleGUID)
+    public virtual void Init(Entity entity)
     {
-        InitWorldModuleGUID = initWorldModuleGUID;
+        Entity = entity;
+        InitWorldModuleGUID = entity.InitWorldModuleGUID;
     }
 
     public virtual void UnInit()
     {
+        Entity = null;
     }
 
     protected virtual string Description => "Entity被动技能行为基类";
@@ -50,8 +54,6 @@ public abstract class EntitySkillAction : IClone<EntitySkillAction>
         void ExecuteOnTriggerStay(Collider collider);
         void ExecuteOnTriggerExit(Collider collider);
     }
-
-    internal Entity Entity;
 
     public EntitySkillAction Clone()
     {

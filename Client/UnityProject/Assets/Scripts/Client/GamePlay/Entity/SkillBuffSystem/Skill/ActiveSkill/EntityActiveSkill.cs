@@ -41,26 +41,13 @@ public abstract class EntityActiveSkill : EntitySkill
 
     #endregion
 
-    [HideInInspector]
-    public UnityAction<ActiveSkillPhase, ActiveSkillPhase> OnSkillPhaseChanged;
+    #region 释放合法性判断条件
 
-    private ActiveSkillPhase skillPhase;
+    [LabelText("释放合法性判断条件")]
+    [SerializeReference]
+    public List<EntitySkillCondition> EntitySkillConditions = new List<EntitySkillCondition>();
 
-    public ActiveSkillPhase SkillPhase
-    {
-        get { return skillPhase; }
-        set
-        {
-            if (skillPhase != value)
-            {
-                skillPhase = value;
-                OnSkillPhaseChanged?.Invoke(skillPhase, value);
-            }
-        }
-    }
-
-    internal float cooldownTimeTick = 0f;
-    internal float currentExecutingCooldownTime = 0f; // 本次技能释放时取用的冷却时间
+    #endregion
 
     [LabelText("前摇可移动")]
     public bool WingUpCanMove;
@@ -193,6 +180,27 @@ public abstract class EntityActiveSkill : EntitySkill
 
     #endregion
 
+    [HideInInspector]
+    public UnityAction<ActiveSkillPhase, ActiveSkillPhase> OnSkillPhaseChanged;
+
+    private ActiveSkillPhase skillPhase;
+
+    public ActiveSkillPhase SkillPhase
+    {
+        get { return skillPhase; }
+        set
+        {
+            if (skillPhase != value)
+            {
+                skillPhase = value;
+                OnSkillPhaseChanged?.Invoke(skillPhase, value);
+            }
+        }
+    }
+
+    internal float cooldownTimeTick = 0f;
+    internal float currentExecutingCooldownTime = 0f; // 本次技能释放时取用的冷却时间
+
     internal UnityAction OnValidateFailed;
     internal UnityAction OnWingUpPhaseCompleteCallback;
     internal UnityAction OnCastPhaseCompleteCallback;
@@ -225,6 +233,11 @@ public abstract class EntityActiveSkill : EntitySkill
             subEAS.OnInit();
         }
 
+        foreach (EntitySkillCondition condition in EntitySkillConditions)
+        {
+            condition.OnInit(Entity);
+        }
+
         if (RunningSubActiveSkillList == null) RunningSubActiveSkillList = new List<EntityActiveSkill>();
         RunningSubActiveSkillList.Clear();
 
@@ -240,6 +253,11 @@ public abstract class EntityActiveSkill : EntitySkill
         foreach (EntityActiveSkill subEAS in RawSubActiveSkillList)
         {
             subEAS.OnUnInit();
+        }
+
+        foreach (EntitySkillCondition condition in EntitySkillConditions)
+        {
+            condition.OnUnInit();
         }
 
         SkillsPropertyCollection.OnRecycled();
@@ -308,6 +326,14 @@ public abstract class EntityActiveSkill : EntitySkill
     /// <returns></returns>
     protected virtual bool ValidateSkillTrigger_Subject(TargetEntityType targetEntityType)
     {
+        foreach (EntitySkillCondition condition in EntitySkillConditions)
+        {
+            if (condition is EntitySkillCondition.IPureCondition pureCondition)
+            {
+                if (!pureCondition.OnCheckCondition()) return false;
+            }
+        }
+
         return true;
     }
 
@@ -683,11 +709,16 @@ public abstract class EntityActiveSkill : EntitySkill
         }
     }
 
-    public virtual void OnTick(float tickDeltaTime)
+    public override void OnTick(float tickInterval)
     {
         foreach (EntityActiveSkill subEAS in RunningSubActiveSkillList)
         {
-            subEAS.OnTick(tickDeltaTime);
+            subEAS.OnTick(tickInterval);
+        }
+
+        foreach (EntitySkillCondition condition in EntitySkillConditions)
+        {
+            condition.OnTick(tickInterval);
         }
     }
 
@@ -698,6 +729,7 @@ public abstract class EntityActiveSkill : EntitySkill
         newEAS.SkillsPropertyCollection = SkillsPropertyCollection.Clone();
         newEAS.TargetCamp = TargetCamp;
         newEAS.TriggerWhenMissProbabilityPercent = TriggerWhenMissProbabilityPercent;
+        newEAS.EntitySkillConditions = EntitySkillConditions.Clone<EntitySkillCondition, EntitySkillCondition>();
         newEAS.WingUpCanMove = WingUpCanMove;
         newEAS.CastCanMove = CastCanMove;
         newEAS.RecoverCanMove = RecoverCanMove;
@@ -713,6 +745,18 @@ public abstract class EntityActiveSkill : EntitySkill
         srcEAS.SkillsPropertyCollection.ApplyDataTo(SkillsPropertyCollection);
         TargetCamp = srcEAS.TargetCamp;
         TriggerWhenMissProbabilityPercent = srcEAS.TriggerWhenMissProbabilityPercent;
+        if (EntitySkillConditions.Count != srcEAS.EntitySkillConditions.Count)
+        {
+            Debug.LogError("EAS CopyDataFrom EntitySkillConditions数量不一致");
+        }
+        else
+        {
+            for (int i = 0; i < EntitySkillConditions.Count; i++)
+            {
+                EntitySkillConditions[i].CopyDataFrom(srcEAS.EntitySkillConditions[i]);
+            }
+        }
+
         WingUpCanMove = srcEAS.WingUpCanMove;
         CastCanMove = srcEAS.CastCanMove;
         RecoverCanMove = srcEAS.RecoverCanMove;

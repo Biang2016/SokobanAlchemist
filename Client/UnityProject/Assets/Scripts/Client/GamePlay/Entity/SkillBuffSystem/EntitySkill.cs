@@ -48,6 +48,10 @@ public abstract class EntitySkill : IClone<EntitySkill>
     {
     }
 
+    public virtual void OnTick(float tickInterval)
+    {
+    }
+
     public EntitySkill Clone()
     {
         Type type = GetType();

@@ -4,7 +4,7 @@ using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 
 [Serializable]
-public class BoxSkillAction_ChangeBoxType : BoxSkillAction, EntitySkillAction.IPureAction
+public class BoxSkillAction_ChangeBoxTypeSelf : BoxSkillAction, EntitySkillAction.IPureAction
 {
     public override void OnRecycled()
     {
@@ -33,30 +33,26 @@ public class BoxSkillAction_ChangeBoxType : BoxSkillAction, EntitySkillAction.IP
         if (ChangeForEveryGrid)
         {
             List<GridPos3D> occupations = Box.GetEntityOccupationGPs_Rotated();
-            Box.DestroySelf(delegate
+            Box.DestroySelfByModuleRecycle();
+            foreach (GridPos3D gridPos in occupations)
             {
-                foreach (GridPos3D gridPos in occupations)
-                {
-                    GridPos3D gridWorldGP = worldGP + gridPos;
-                    WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridWorldGP);
-                    if (module != null) module.GenerateEntity(EntityData.Clone(), gridWorldGP);
-                }
-            });
+                GridPos3D gridWorldGP = worldGP + gridPos;
+                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridWorldGP);
+                if (module != null) module.GenerateEntity(EntityData.Clone(), gridWorldGP);
+            }
         }
         else
         {
-            Box.DestroySelf(delegate
-            {
-                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(worldGP);
-                if (module != null) module.GenerateEntity(EntityData.Clone(), worldGP);
-            });
+            Box.DestroySelfByModuleRecycle();
+            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(worldGP);
+            if (module != null) module.GenerateEntity(EntityData.Clone(), worldGP);
         }
     }
 
     protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        BoxSkillAction_ChangeBoxType action = ((BoxSkillAction_ChangeBoxType) newAction);
+        BoxSkillAction_ChangeBoxTypeSelf action = ((BoxSkillAction_ChangeBoxTypeSelf) newAction);
         action.EntityData = EntityData.Clone();
         action.ChangeForEveryGrid = ChangeForEveryGrid;
     }
@@ -64,7 +60,7 @@ public class BoxSkillAction_ChangeBoxType : BoxSkillAction, EntitySkillAction.IP
     public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        BoxSkillAction_ChangeBoxType action = ((BoxSkillAction_ChangeBoxType) srcData);
+        BoxSkillAction_ChangeBoxTypeSelf action = ((BoxSkillAction_ChangeBoxTypeSelf) srcData);
         EntityData = action.EntityData.Clone();
         ChangeForEveryGrid = action.ChangeForEveryGrid;
     }

@@ -14,15 +14,14 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         ActorStayTimeDict.Clear();
     }
 
-    public override void Init(uint initWorldModuleGUID)
+    public override void Init(Entity entity)
     {
-        base.Init(initWorldModuleGUID);
+        base.Init(entity);
         foreach (IPureAction pureAction in EntityActions_Enter)
         {
             if (pureAction is EntitySkillAction action)
             {
-                action.Entity = Entity;
-                action.Init(InitWorldModuleGUID);
+                action.Init(Entity);
             }
         }
 
@@ -30,8 +29,7 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         {
             if (pureAction is EntitySkillAction action)
             {
-                action.Entity = Entity;
-                action.Init(InitWorldModuleGUID);
+                action.Init(Entity);
             }
         }
 
@@ -39,8 +37,7 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         {
             if (pureAction is EntitySkillAction action)
             {
-                action.Entity = Entity;
-                action.Init(InitWorldModuleGUID);
+                action.Init(Entity);
             }
         }
     }
@@ -52,7 +49,6 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         {
             if (pureAction is EntitySkillAction action)
             {
-                action.Entity = null;
                 action.UnInit();
             }
         }
@@ -61,7 +57,6 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         {
             if (pureAction is EntitySkillAction action)
             {
-                action.Entity = null;
                 action.UnInit();
             }
         }
@@ -70,7 +65,6 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         {
             if (pureAction is EntitySkillAction action)
             {
-                action.Entity = null;
                 action.UnInit();
             }
         }

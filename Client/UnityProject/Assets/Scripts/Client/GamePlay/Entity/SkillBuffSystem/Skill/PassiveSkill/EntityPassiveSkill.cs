@@ -20,8 +20,9 @@ public abstract class EntityPassiveSkill : EntitySkill
         base.OnUnInit();
     }
 
-    public virtual void OnTick(float deltaTime)
+    public override void OnTick(float tickInterval)
     {
+        base.OnTick(tickInterval);
     }
 
     public virtual void OnRegisterLevelEventID()
