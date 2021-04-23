@@ -51,6 +51,12 @@ public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondi
         satisfiedDurationTick = 0f;
     }
 
+    public override void OnUnInit()
+    {
+        base.OnUnInit();
+        satisfiedDurationTick = 0f;
+    }
+
     public override void OnTick(float tickInterval)
     {
         base.OnTick(tickInterval);

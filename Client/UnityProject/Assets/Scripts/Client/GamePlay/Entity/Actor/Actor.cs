@@ -348,6 +348,11 @@ public class Actor : Entity
         foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
         {
             Vector3 startPos = transform.position + offset;
+            if (WorldManager.Instance == null || WorldManager.Instance.CurrentWorld == null)
+            {
+                Debug.Log(name);
+            }
+
             bool gridGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(startPos, checkDistance, true, out GridPos3D groundGP);
             isGrounded |= gridGrounded;
             if (gridGrounded)
@@ -477,32 +482,6 @@ public class Actor : Entity
         ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
         ActiveSkillMarkAsDestroyed = false;
         PassiveSkillMarkAsDestroyed = false;
-    }
-
-    public void ReloadActiveSkillSet(List<string> activeSkillSet)
-    {
-        //UnInitActiveSkills();
-        //foreach (string skillGUID in activeSkillSet)
-        //{
-        //    EntityActiveSkill eas = (EntityActiveSkill) ConfigManager.GetEntitySkill(skillGUID);
-        //    if (eas != null)
-        //    {
-                //AddNewActiveSkill(eas);
-            //}
-        //}
-    }
-
-    public void ReloadPassiveSkillSet(List<string> passiveSkillSet)
-    {
-        UnInitPassiveSkills();
-        foreach (string skillGUID in passiveSkillSet)
-        {
-            EntityPassiveSkill eps = (EntityPassiveSkill) ConfigManager.GetEntitySkill(skillGUID);
-            if (eps != null)
-            {
-                AddNewPassiveSkill(eps);
-            }
-        }
     }
 
     #endregion
@@ -725,6 +704,7 @@ public class Actor : Entity
 
         InitPassiveSkills();
         InitActiveSkills();
+        ActorSkillLearningHelper?.LoadInitSkills();
 
         if (ActorControllerHelper != null)
         {

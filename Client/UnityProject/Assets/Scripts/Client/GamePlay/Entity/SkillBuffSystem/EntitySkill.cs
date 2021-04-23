@@ -75,4 +75,9 @@ public abstract class EntitySkill : IClone<EntitySkill>
         SkillIcon?.CopyDataFrom(srcData.SkillIcon);
         SkillDescription = srcData.SkillDescription;
     }
+
+    public override string ToString()
+    {
+        return SkillAlias + ": " + Description;
+    }
 }

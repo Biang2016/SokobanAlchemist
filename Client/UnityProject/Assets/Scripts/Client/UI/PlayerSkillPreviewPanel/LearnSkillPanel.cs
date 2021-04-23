@@ -32,13 +32,13 @@ public class LearnSkillPanel : BaseUIPanel
     {
         m_EntitySkillRow?.PoolRecycle();
         m_EntitySkillRow = null;
-        EntitySkill entitySkill = ConfigManager.GetRawEntitySkill(skillGUID);
-        if (entitySkill != null)
+        EntitySkill rawEntitySkill = ConfigManager.GetRawEntitySkill(skillGUID);
+        if (rawEntitySkill != null)
         {
             m_EntitySkillRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(EntitySkillRowContainer);
-            m_EntitySkillRow.Initialize(entitySkill, "");
+            m_EntitySkillRow.Initialize(rawEntitySkill, "");
 
-            if (entitySkill is EntityPassiveSkill)
+            if (rawEntitySkill is EntityPassiveSkill rawEPS)
             {
                 LearnButton_Passive.gameObject.SetActive(true);
                 LearnButtons_Active.SetActive(false);
@@ -46,12 +46,12 @@ public class LearnSkillPanel : BaseUIPanel
                 LearnButton_Passive.onClick.RemoveAllListeners();
                 LearnButton_Passive.onClick.AddListener(() =>
                 {
-                    BattleManager.Instance.Player1.ActorSkillLearningHelper.LearnSkill(skillGUID, -1);
+                    BattleManager.Instance.Player1.AddNewPassiveSkill((EntityPassiveSkill) rawEPS.Clone());
                     ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
                     CloseUIForm();
                 });
             }
-            else if (entitySkill is EntityActiveSkill)
+            else if (rawEntitySkill is EntityActiveSkill rawEAS)
             {
                 LearnButton_Passive.gameObject.SetActive(false);
                 LearnButtons_Active.SetActive(true);
@@ -61,31 +61,18 @@ public class LearnSkillPanel : BaseUIPanel
                 LearnButton_K.onClick.RemoveAllListeners();
                 LearnButton_L.onClick.RemoveAllListeners();
 
-                LearnButton_H.onClick.AddListener(() =>
-                {
-                    BattleManager.Instance.Player1.ActorSkillLearningHelper.LearnSkill(skillGUID, 2);
-                    ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
-                    CloseUIForm();
-                });
-                LearnButton_J.onClick.AddListener(() =>
-                {
-                    BattleManager.Instance.Player1.ActorSkillLearningHelper.LearnSkill(skillGUID, 3);
-                    ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
-                    CloseUIForm();
-                });
-                LearnButton_K.onClick.AddListener(() =>
-                {
-                    BattleManager.Instance.Player1.ActorSkillLearningHelper.LearnSkill(skillGUID, 4);
-                    ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
-                    CloseUIForm();
-                });
-                LearnButton_L.onClick.AddListener(() =>
-                {
-                    BattleManager.Instance.Player1.ActorSkillLearningHelper.LearnSkill(skillGUID, 5);
-                    ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
-                    CloseUIForm();
-                });
+                LearnButton_H.onClick.AddListener(() => { OnButtonClick(rawEAS, 2); });
+                LearnButton_J.onClick.AddListener(() => { OnButtonClick(rawEAS, 3); });
+                LearnButton_K.onClick.AddListener(() => { OnButtonClick(rawEAS, 4); });
+                LearnButton_L.onClick.AddListener(() => { OnButtonClick(rawEAS, 5); });
             }
+        }
+
+        void OnButtonClick(EntityActiveSkill rawEAS, int keyBind)
+        {
+            BattleManager.Instance.Player1.AddNewActiveSkill((EntityActiveSkill) rawEAS.Clone(), keyBind, false);
+            ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
+            CloseUIForm();
         }
     }
 

@@ -139,6 +139,8 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
         player.Setup(new EntityData(ConfigManager.Actor_PlayerIndex, GridPosR.Orientation.Up), bpd.WorldGP, 0);
         AddActor(null, player);
+        PlayerDefaultActorSkillLearningData = player.ActorSkillLearningHelper.ActorSkillLearningData.Clone();
+        PlayerCurrentActorSkillLearningData = player.ActorSkillLearningHelper.ActorSkillLearningData;
     }
 
     public void AddActor(WorldModule worldModule, Actor actor)
@@ -277,6 +279,13 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             }
         }
     }
+
+    #endregion
+
+    #region Skills
+
+    public ActorSkillLearningData PlayerDefaultActorSkillLearningData; // 玩家初始化后克隆出来的备份数据
+    public ActorSkillLearningData PlayerCurrentActorSkillLearningData; // 实时引用
 
     #endregion
 

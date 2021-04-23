@@ -58,11 +58,11 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
         else
         {
             EntitySkill entitySkill = ConfigManager.GetRawEntitySkill(SkillGUID);
-            if (entitySkill is EntityActiveSkill eas)
+            if (entitySkill is EntityActiveSkill)
             {
                 entity.ForgetActiveSkill(SkillGUID);
             }
-            else if (entitySkill is EntityPassiveSkill eps)
+            else if (entitySkill is EntityPassiveSkill)
             {
                 entity.ForgetPassiveSkill(SkillGUID);
             }
@@ -72,7 +72,7 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
     protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        EntitySkillAction_ChangeActorSkill action = ((EntitySkillAction_ChangeActorSkill)newAction);
+        EntitySkillAction_ChangeActorSkill action = ((EntitySkillAction_ChangeActorSkill) newAction);
         action.AddOrRemove = AddOrRemove;
         action.SkillGUID = SkillGUID;
         action.KeyBind = KeyBind;
@@ -82,7 +82,7 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
     public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        EntitySkillAction_ChangeActorSkill action = ((EntitySkillAction_ChangeActorSkill)srcData);
+        EntitySkillAction_ChangeActorSkill action = ((EntitySkillAction_ChangeActorSkill) srcData);
         AddOrRemove = action.AddOrRemove;
         SkillGUID = action.SkillGUID;
         KeyBind = action.KeyBind;
