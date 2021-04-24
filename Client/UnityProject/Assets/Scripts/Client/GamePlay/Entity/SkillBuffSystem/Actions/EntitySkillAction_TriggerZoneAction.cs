@@ -17,56 +17,38 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
     public override void Init(Entity entity)
     {
         base.Init(entity);
-        foreach (IPureAction pureAction in EntityActions_Enter)
+        foreach (EntitySkillAction esa in EntityActions_Enter)
         {
-            if (pureAction is EntitySkillAction action)
-            {
-                action.Init(Entity);
-            }
+            esa.Init(Entity);
         }
 
-        foreach (IPureAction pureAction in EntityActions_Stay)
+        foreach (EntitySkillAction esa in EntityActions_Stay)
         {
-            if (pureAction is EntitySkillAction action)
-            {
-                action.Init(Entity);
-            }
+            esa.Init(Entity);
         }
 
-        foreach (IPureAction pureAction in EntityActions_Exit)
+        foreach (EntitySkillAction esa in EntityActions_Exit)
         {
-            if (pureAction is EntitySkillAction action)
-            {
-                action.Init(Entity);
-            }
+            esa.Init(Entity);
         }
     }
 
     public override void UnInit()
     {
         base.UnInit();
-        foreach (IPureAction pureAction in EntityActions_Enter)
+        foreach (EntitySkillAction esa in EntityActions_Enter)
         {
-            if (pureAction is EntitySkillAction action)
-            {
-                action.UnInit();
-            }
+            esa.UnInit();
         }
 
-        foreach (IPureAction pureAction in EntityActions_Stay)
+        foreach (EntitySkillAction esa in EntityActions_Stay)
         {
-            if (pureAction is EntitySkillAction action)
-            {
-                action.UnInit();
-            }
+            esa.UnInit();
         }
 
-        foreach (IPureAction pureAction in EntityActions_Exit)
+        foreach (EntitySkillAction esa in EntityActions_Exit)
         {
-            if (pureAction is EntitySkillAction action)
-            {
-                action.UnInit();
-            }
+            esa.UnInit();
         }
     }
 
@@ -75,17 +57,20 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
     [LabelText("生效于相对阵营")]
     public RelativeCamp EffectiveOnRelativeCamp;
 
-    [SerializeReference]
-    [LabelText("进入触发事件")]
-    public List<IPureAction> EntityActions_Enter = new List<IPureAction>();
+    [LabelText("生效于特定种类Entity")]
+    public bool EffectiveOnSpecificEntity;
+
+    [LabelText("Entity种类")]
+    [ShowIf("EffectiveOnSpecificEntity")]
+    public TypeSelectHelper EffectiveOnSpecificEntityType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
 
     [SerializeReference]
     [LabelText("进入触发事件")]
-    public List<IEntityAction> EntityActions_Enter_Entity = new List<IEntityAction>();
+    public List<EntitySkillAction> EntityActions_Enter = new List<EntitySkillAction>();
 
     [SerializeReference]
     [LabelText("停留触发事件")]
-    public List<IPureAction> EntityActions_Stay = new List<IPureAction>();
+    public List<EntitySkillAction> EntityActions_Stay = new List<EntitySkillAction>();
 
     [LabelText("停留时按交互键触发")]
     public bool EffectiveWhenInteractiveKeyDown = false;
@@ -105,11 +90,7 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
 
     [SerializeReference]
     [LabelText("离开触发事件")]
-    public List<IPureAction> EntityActions_Exit = new List<IPureAction>();
-
-    [SerializeReference]
-    [LabelText("进入触发事件")]
-    public List<IEntityAction> EntityActions_Exit_Entity = new List<IEntityAction>();
+    public List<EntitySkillAction> EntityActions_Exit = new List<EntitySkillAction>();
 
     public void ExecuteOnTriggerEnter(Collider collider)
     {
@@ -118,6 +99,14 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
             Entity target = collider.GetComponentInParent<Entity>();
             if (target.IsNotNullAndAlive())
             {
+                if (EffectiveOnSpecificEntity)
+                {
+                    if (target.EntityTypeIndex != ConfigManager.GetTypeIndex(EffectiveOnSpecificEntityType.TypeDefineType, EffectiveOnSpecificEntityType.TypeName))
+                    {
+                        return;
+                    }
+                }
+
                 if (EffectiveWhenInteractiveKeyDown)
                 {
                     ClientGameManager.Instance.NoticePanel.ShowTip(InteractiveKeyNotice, TipPositionType, InteractiveKeyNoticeDuration);
@@ -126,14 +115,17 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                 if (!ActorStayTimeDict.ContainsKey(target.GUID))
                 {
                     ActorStayTimeDict.Add(target.GUID, 0);
-                    foreach (IPureAction action in EntityActions_Enter)
+                    foreach (EntitySkillAction action in EntityActions_Enter)
                     {
-                        action.Execute();
-                    }
+                        if (action is IPureAction pureAction)
+                        {
+                            pureAction.Execute();
+                        }
 
-                    foreach (IEntityAction action in EntityActions_Enter_Entity)
-                    {
-                        action.ExecuteOnEntity(target);
+                        if (action is IEntityAction entityAction)
+                        {
+                            entityAction.ExecuteOnEntity(target);
+                        }
                     }
                 }
             }
@@ -147,13 +139,29 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
             Entity target = collider.GetComponentInParent<Entity>();
             if (target.IsNotNullAndAlive())
             {
+                if (EffectiveOnSpecificEntity)
+                {
+                    if (target.EntityTypeIndex != ConfigManager.GetTypeIndex(EffectiveOnSpecificEntityType.TypeDefineType, EffectiveOnSpecificEntityType.TypeName))
+                    {
+                        return;
+                    }
+                }
+
                 if (EffectiveWhenInteractiveKeyDown)
                 {
                     if (ControlManager.Instance.Common_InteractiveKey.Down)
                     {
-                        foreach (IPureAction action in EntityActions_Stay)
+                        foreach (EntitySkillAction action in EntityActions_Stay)
                         {
-                            action.Execute();
+                            if (action is IPureAction pureAction)
+                            {
+                                pureAction.Execute();
+                            }
+
+                            if (action is IEntityAction entityAction)
+                            {
+                                entityAction.ExecuteOnEntity(target);
+                            }
                         }
                     }
                 }
@@ -163,9 +171,17 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                     {
                         if (duration > ActionInterval)
                         {
-                            foreach (IPureAction action in EntityActions_Stay)
+                            foreach (EntitySkillAction action in EntityActions_Stay)
                             {
-                                action.Execute();
+                                if (action is IPureAction pureAction)
+                                {
+                                    pureAction.Execute();
+                                }
+
+                                if (action is IEntityAction entityAction)
+                                {
+                                    entityAction.ExecuteOnEntity(target);
+                                }
                             }
 
                             ActorStayTimeDict[target.GUID] = 0;
@@ -187,6 +203,14 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
             Entity target = collider.GetComponentInParent<Entity>();
             if (target.IsNotNullAndAlive())
             {
+                if (EffectiveOnSpecificEntity)
+                {
+                    if (target.EntityTypeIndex != ConfigManager.GetTypeIndex(EffectiveOnSpecificEntityType.TypeDefineType, EffectiveOnSpecificEntityType.TypeName))
+                    {
+                        return;
+                    }
+                }
+
                 if (EffectiveWhenInteractiveKeyDown)
                 {
                     ClientGameManager.Instance.NoticePanel.HideTip();
@@ -195,14 +219,17 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                 if (ActorStayTimeDict.ContainsKey(target.GUID))
                 {
                     ActorStayTimeDict.Remove(target.GUID);
-                    foreach (IPureAction action in EntityActions_Exit)
+                    foreach (EntitySkillAction action in EntityActions_Exit)
                     {
-                        action.Execute();
-                    }
+                        if (action is IPureAction pureAction)
+                        {
+                            pureAction.Execute();
+                        }
 
-                    foreach (IEntityAction action in EntityActions_Exit_Entity)
-                    {
-                        action.ExecuteOnEntity(target);
+                        if (action is IEntityAction entityAction)
+                        {
+                            entityAction.ExecuteOnEntity(target);
+                        }
                     }
                 }
             }
@@ -214,16 +241,16 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         base.ChildClone(newAction);
         EntitySkillAction_TriggerZoneAction action = ((EntitySkillAction_TriggerZoneAction) newAction);
         action.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
-        action.EntityActions_Enter = EntityActions_Enter.Clone<IPureAction, IPureAction>();
-        action.EntityActions_Enter_Entity = EntityActions_Enter_Entity.Clone<IEntityAction, IEntityAction>();
-        action.EntityActions_Stay = EntityActions_Stay.Clone<IPureAction, IPureAction>();
+        action.EffectiveOnSpecificEntity = EffectiveOnSpecificEntity;
+        action.EffectiveOnSpecificEntityType = EffectiveOnSpecificEntityType.Clone();
+        action.EntityActions_Enter = EntityActions_Enter.Clone<EntitySkillAction, EntitySkillAction>();
+        action.EntityActions_Stay = EntityActions_Stay.Clone<EntitySkillAction, EntitySkillAction>();
         action.EffectiveWhenInteractiveKeyDown = EffectiveWhenInteractiveKeyDown;
         action.InteractiveKeyNotice = InteractiveKeyNotice;
         action.TipPositionType = TipPositionType;
         action.InteractiveKeyNoticeDuration = InteractiveKeyNoticeDuration;
         action.ActionInterval = ActionInterval;
-        action.EntityActions_Exit = EntityActions_Exit.Clone<IPureAction, IPureAction>();
-        action.EntityActions_Exit_Entity = EntityActions_Exit_Entity.Clone<IEntityAction, IEntityAction>();
+        action.EntityActions_Exit = EntityActions_Exit.Clone<EntitySkillAction, EntitySkillAction>();
     }
 
     public override void CopyDataFrom(EntitySkillAction srcData)
@@ -231,14 +258,15 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         base.CopyDataFrom(srcData);
         EntitySkillAction_TriggerZoneAction action = ((EntitySkillAction_TriggerZoneAction) srcData);
         EffectiveOnRelativeCamp = action.EffectiveOnRelativeCamp;
-        EntityActions_Enter = action.EntityActions_Enter.Clone<IPureAction, IPureAction>();
-        EntityActions_Stay = action.EntityActions_Stay.Clone<IPureAction, IPureAction>();
+        EffectiveOnSpecificEntity = action.EffectiveOnSpecificEntity;
+        EffectiveOnSpecificEntityType = action.EffectiveOnSpecificEntityType.Clone();
+        EntityActions_Enter = action.EntityActions_Enter.Clone<EntitySkillAction, EntitySkillAction>();
+        EntityActions_Stay = action.EntityActions_Stay.Clone<EntitySkillAction, EntitySkillAction>();
         EffectiveWhenInteractiveKeyDown = action.EffectiveWhenInteractiveKeyDown;
         InteractiveKeyNotice = action.InteractiveKeyNotice;
         TipPositionType = action.TipPositionType;
         InteractiveKeyNoticeDuration = action.InteractiveKeyNoticeDuration;
         ActionInterval = action.ActionInterval;
-        EntityActions_Exit = action.EntityActions_Exit.Clone<IPureAction, IPureAction>();
-        EntityActions_Exit_Entity = action.EntityActions_Exit_Entity.Clone<IEntityAction, IEntityAction>();
+        EntityActions_Exit = action.EntityActions_Exit.Clone<EntitySkillAction, EntitySkillAction>();
     }
 }

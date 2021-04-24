@@ -452,6 +452,12 @@ public class World : PoolObject
         return gp_module;
     }
 
+    public GridPos3D GetLocalGPByWorldGP(GridPos3D worldGP)
+    {
+        GridPos3D gp_local = new GridPos3D(worldGP.x % WorldModule.MODULE_SIZE, worldGP.y % WorldModule.MODULE_SIZE, worldGP.z % WorldModule.MODULE_SIZE);
+        return gp_local;
+    }
+
     public WorldModule GetModuleByWorldGP(GridPos3D worldGP, bool ignoreUnaccessibleModule = true)
     {
         GridPos3D gp_module = GetModuleGPByWorldGP(worldGP);

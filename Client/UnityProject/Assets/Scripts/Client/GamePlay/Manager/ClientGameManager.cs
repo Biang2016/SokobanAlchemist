@@ -280,7 +280,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             }
             else
             {
-                ReloadGame();
+                StartCoroutine(ReloadGame());
                 return;
             }
         }
@@ -288,7 +288,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 #if DEBUG
         if (Input.GetKeyUp(KeyCode.F10) && !IsGameLoading)
         {
-            ReloadGame();
+            StartCoroutine(ReloadGame());
             return;
         }
 

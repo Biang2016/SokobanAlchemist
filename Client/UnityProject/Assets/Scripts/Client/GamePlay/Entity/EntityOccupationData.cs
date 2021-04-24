@@ -8,6 +8,9 @@ using UnityEngine;
 [Serializable]
 public class EntityOccupationData : IClone<EntityOccupationData>
 {
+    [LabelText("是否是Trigger实体")]
+    public bool IsTriggerEntity;
+
     [LabelText("长方体外形")]
     public bool IsShapeCuboid = false;
 
@@ -68,6 +71,7 @@ public class EntityOccupationData : IClone<EntityOccupationData>
     public EntityOccupationData Clone()
     {
         EntityOccupationData newData = new EntityOccupationData();
+        newData.IsTriggerEntity = IsTriggerEntity;
         newData.IsShapeCuboid = IsShapeCuboid;
         newData.IsShapePlanSquare = IsShapePlanSquare;
         newData.ActorWidth = ActorWidth;

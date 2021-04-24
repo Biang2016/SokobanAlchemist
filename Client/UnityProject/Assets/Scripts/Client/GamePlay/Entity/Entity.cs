@@ -23,7 +23,13 @@ public abstract class Entity : PoolObject
     [ShowInInspector]
     internal int GUID_Mod_FixedFrameRate;
 
+    [ShowInInspector]
     [FoldoutGroup("属性")]
+    [LabelText("是Trigger实体")]
+    public bool IsTriggerEntity => EntityIndicatorHelper.EntityOccupationData.IsTriggerEntity;
+
+    [FoldoutGroup("属性")]
+    [LabelText("慢刷新")]
     public bool SlowlyTick = false;
 
     private static uint guidGenerator = (uint) ConfigManager.GUID_Separator.Entity;
@@ -851,7 +857,7 @@ public abstract class Entity : PoolObject
     [AssetsOnly]
     [Button("刷新关卡编辑器中该实体的形态", ButtonSizes.Large)]
     [GUIColor(0, 1, 0)]
-    public void CreateEntityLevelEditor()
+    public void RefreshEntityLevelEditor()
     {
         GameObject entity_Instance = Instantiate(gameObject); // 这是实例化一个无链接的prefab实例（unpacked completely）
         Entity entity = entity_Instance.GetComponent<Entity>();

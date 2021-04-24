@@ -21,7 +21,14 @@ public class EntityIndicatorHelper : EntityMonoHelper
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
-        IsOn = true;
+        if (EntityOccupationData.IsTriggerEntity)
+        {
+            IsOn = false;
+        }
+        else
+        {
+            IsOn = true;
+        }
     }
 
     public override void OnHelperRecycled()
@@ -41,8 +48,9 @@ public class EntityIndicatorHelper : EntityMonoHelper
             foreach (Collider ic in IndicatorColliders)
             {
                 ic.enabled = value;
-                gameObject.SetActive(value);
             }
+
+            gameObject.SetActive(value);
         }
     }
 

@@ -202,7 +202,7 @@ public class Actor : Entity
         {
             if (curWorldGP != value)
             {
-                if (!IsFrozen)
+                if (!IsFrozen && !IsTriggerEntity)
                 {
                     foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
                     {
@@ -232,9 +232,9 @@ public class Actor : Entity
                     }
                 }
 
-                if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
+                if (!IsFrozen && !IsTriggerEntity) UnRegisterFromModule(curWorldGP, EntityOrientation);
                 curWorldGP = value;
-                if (!IsFrozen) RegisterInModule(curWorldGP, EntityOrientation);
+                if (!IsFrozen && !IsTriggerEntity) RegisterInModule(curWorldGP, EntityOrientation);
             }
         }
     }
@@ -269,6 +269,7 @@ public class Actor : Entity
     public void UnRegisterFromModule(GridPos3D oldWorldGP, GridPosR.Orientation oldOrientation)
     {
         if (IsRecycling) return;
+        if (IsTriggerEntity) return;
         List<GridPos3D> occupationData_Rotated = ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[oldOrientation];
         foreach (GridPos3D offset in occupationData_Rotated)
         {
@@ -285,6 +286,7 @@ public class Actor : Entity
     public void RegisterInModule(GridPos3D newWorldGP, GridPosR.Orientation newOrientation)
     {
         if (IsRecycling) return;
+        if (IsTriggerEntity) return;
         foreach (GridPos3D offset in ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[newOrientation])
         {
             GridPos3D gridPos = newWorldGP + offset;
@@ -307,9 +309,9 @@ public class Actor : Entity
 
         // Actor由于限制死平面必须是正方形，因此可以用左下角坐标相减得到核心坐标偏移量；在旋转时应用此偏移量，可以保证平面正方形仍在老位置
         GridPos offset = ActorRotateWorldGPOffset(ActorWidth, newOrientation) - ActorRotateWorldGPOffset(ActorWidth, EntityOrientation);
-        if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
+        if (!IsFrozen && !IsTriggerEntity) UnRegisterFromModule(curWorldGP, EntityOrientation);
         base.SwitchEntityOrientation(newOrientation);
-        if (!IsFrozen) RegisterInModule(curWorldGP, newOrientation);
+        if (!IsFrozen && !IsTriggerEntity) RegisterInModule(curWorldGP, newOrientation);
 
         transform.position = new Vector3(offset.x + curWorldGP.x, transform.position.y, offset.z + curWorldGP.z);
         transform.rotation = Quaternion.Euler(0, (int) newOrientation * 90f, 0);
@@ -1537,7 +1539,7 @@ public class Actor : Entity
         if (IsDestroying) return;
         base.DestroySelf();
         IsDestroying = true;
-        if (!IsFrozen) UnRegisterFromModule(WorldGP, EntityOrientation);
+        if (!IsFrozen && !IsTriggerEntity) UnRegisterFromModule(WorldGP, EntityOrientation);
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
             ps.OnBeforeDestroyEntity();
