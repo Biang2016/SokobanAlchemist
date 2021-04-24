@@ -50,18 +50,18 @@ public class EntitySkillPreviewPanel : BaseUIPanel
             {
                 if (actor.ActorControllerHelper is PlayerControllerHelper pch)
                 {
-                    for (int i = 0; i < pch.SkillKeyMappings.Count; i++)
+                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> _kv in pch.SkillKeyMappings)
                     {
-                        List<EntitySkillIndex> entitySkillIndices = pch.SkillKeyMappings[i];
-                        foreach (EntitySkillIndex entitySkillIndex in entitySkillIndices)
+                        foreach (EntitySkillIndex entitySkillIndex in _kv.Value)
                         {
                             if (kv.Key == entitySkillIndex)
                             {
-                                PlayerControllerHelper.KeyMappingStrDict.TryGetValue(i, out keyBind);
+                                PlayerControllerHelper.KeyMappingStrDict.TryGetValue(_kv.Key, out keyBind);
                                 esr.transform.SetAsFirstSibling();
                             }
                         }
                     }
+                   
                 }
             }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay.UI;
 using DG.Tweening;
@@ -457,7 +458,6 @@ public class Actor : Entity
 
     public void Reborn()
     {
-        ReloadESPS(RawEntityStatPropSet);
         EntityCollectHelper?.OnHelperUsed();
     }
 
@@ -482,6 +482,44 @@ public class Actor : Entity
         ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
         ActiveSkillMarkAsDestroyed = false;
         PassiveSkillMarkAsDestroyed = false;
+    }
+
+    public void ReloadActorSkillLearningData(ActorSkillLearningData srcASLD)
+    {
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills.ToArray())
+        {
+            ForgetPassiveSkill(eps.SkillGUID);
+        }
+
+        foreach (string skillGUID in EntityActiveSkillGUIDDict.Keys.ToArray())
+        {
+            ForgetActiveSkill(skillGUID);
+        }
+
+        if (ActorControllerHelper is PlayerControllerHelper pch)
+        {
+            pch.SkillKeyMappings = srcASLD.SkillKeyMappings.Clone<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>, PlayerControllerHelper.KeyBind, List<EntitySkillIndex>>();
+        }
+
+        ActorSkillLearningHelper.ActorSkillLearningData.Clear(); // 清空放在遗忘后面，放在添加前面，确保最终结果和srcASLD相同
+
+        foreach (string skillGUID in srcASLD.LearnedPassiveSkillGUIDs)
+        {
+            EntitySkill rawEntitySkill = ConfigManager.GetEntitySkill(skillGUID);
+            if (rawEntitySkill is EntityPassiveSkill eps)
+            {
+                AddNewPassiveSkill(eps);
+            }
+        }
+
+        foreach (string skillGUID in srcASLD.LearnedActiveSkillGUIDs)
+        {
+            EntitySkill rawEntitySkill = ConfigManager.GetEntitySkill(skillGUID);
+            if (rawEntitySkill is EntityActiveSkill eas)
+            {
+                AddNewActiveSkill(eas, srcASLD.LearnedActiveSkillDict[skillGUID]);
+            }
+        }
     }
 
     #endregion
@@ -582,6 +620,9 @@ public class Actor : Entity
 
     internal bool IsRecycling = false;
 
+    /// <summary>
+    /// 在一场游戏中，Player不进行回收，回收会导致玩家的进度丢失
+    /// </summary>
     public override void OnRecycled()
     {
         IsRecycling = true;
@@ -675,6 +716,13 @@ public class Actor : Entity
         }
     }
 
+    /// <summary>
+    /// 在一场游戏中，Player不进行反复Setup，除非重载场景进入其他world
+    /// 反复Setup将造成玩家的进度丢失
+    /// </summary>
+    /// <param name="entityData"></param>
+    /// <param name="worldGP"></param>
+    /// <param name="initWorldModuleGUID"></param>
     public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
     {
         base.Setup(initWorldModuleGUID);
@@ -704,8 +752,6 @@ public class Actor : Entity
 
         InitPassiveSkills();
         InitActiveSkills();
-        ActorSkillLearningHelper?.LoadInitSkills();
-
         if (ActorControllerHelper != null)
         {
             if (ActorControllerHelper is PlayerControllerHelper pch)
@@ -718,12 +764,15 @@ public class Actor : Entity
             }
         }
 
+        ActorSkillLearningHelper?.LoadInitSkills();
+
         ForbidAction = false;
         ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
     }
 
     private void Update()
     {
+        if (!BattleManager.Instance.IsStart) return;
         if (!IsRecycled)
         {
             UpdateThrowParabolaLine();
@@ -732,6 +781,7 @@ public class Actor : Entity
 
     protected override void Tick(float interval)
     {
+        if (!BattleManager.Instance.IsStart) return;
         ActorControllerHelper?.OnTick(interval);
         base.Tick(interval);
     }
@@ -751,6 +801,7 @@ public class Actor : Entity
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
+        if (!BattleManager.Instance.IsStart) return;
         if (IsRecycled) return;
         ActorControllerHelper?.OnFixedUpdate();
         if (ENABLE_ACTOR_MOVE_LOG && WorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {WorldGP}");

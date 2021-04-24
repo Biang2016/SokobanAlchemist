@@ -342,8 +342,6 @@ public class OpenWorld : World
         public Dictionary<GridPos3D, WorldModuleData> WorldModuleDataDict = new Dictionary<GridPos3D, WorldModuleData>();
 
         public List<GridPos3D> CurrentShowModuleGPs = new List<GridPos3D>();
-
-        public EntityStatPropSet PlayerCurrentESPS = new EntityStatPropSet();
     }
 
     private LevelCacheData m_LevelCacheData;
@@ -585,9 +583,12 @@ public class OpenWorld : World
 
     internal bool IsInsideMicroWorld = false;
     internal bool IsUsingSpecialESPSInsideMicroWorld = false;
+    internal bool DungeonMissionComplete = false;
     internal ushort CurrentMicroWorldTypeIndex = 0;
     internal GridPos3D LastLeaveOpenWorldPlayerGP = GridPos3D.Zero;
     private List<WorldModule> MicroWorldModules = new List<WorldModule>();
+
+    private PlayerData PlayerData_BeforeEnterDungeon;
 
     public void TransportPlayerToMicroWorld(ushort worldTypeIndex)
     {
@@ -626,6 +627,22 @@ public class OpenWorld : World
 
             MicroWorldModules.Clear();
             yield return RecycleEmptyModules();
+        }
+
+        if (IsUsingSpecialESPSInsideMicroWorld) // 此类特殊关卡默认不计入成长，如教程关、体验关等等
+        {
+            PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
+        }
+        else
+        {
+            if (DungeonMissionComplete) // dungeon通关，获得所有奖励，保存玩家成长数值和技能
+            {
+                PlayerData_BeforeEnterDungeon = null;
+            }
+            else
+            {
+                PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
+            }
         }
 
         // Loading Micro World Modules
@@ -684,7 +701,7 @@ public class OpenWorld : World
         // MicroWorld Special Settings
         IsInsideMicroWorld = true;
         IsUsingSpecialESPSInsideMicroWorld = microWorldData.UseSpecialPlayerEnterESPS;
-        BattleManager.Instance.Player1.EntityStatPropSet.ApplyDataTo(m_LevelCacheData.PlayerCurrentESPS);
+        PlayerData_BeforeEnterDungeon = PlayerData.GetPlayerData();
         if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(microWorldData.Raw_PlayerEnterESPS);
 
         ApplyWorldVisualEffectSettings(microWorldData);
@@ -728,15 +745,30 @@ public class OpenWorld : World
 
         // Recycling the Open World
         while (RefreshScopeModulesCoroutine != null) yield return null;
+        if (IsUsingSpecialESPSInsideMicroWorld) // 此类特殊关卡默认不计入成长，如教程关、体验关等等
+        {
+            PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
+        }
+        else
+        {
+            if (DungeonMissionComplete) // dungeon通关，获得所有奖励，保存玩家成长数值和技能
+            {
+                PlayerData_BeforeEnterDungeon = null;
+            }
+            else
+            {
+                PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
+            }
+        }
+
         if (rebornPlayer)
         {
-            BattleManager.Instance.Player1.TransportPlayerGridPos(InitialPlayerBP);
+            BattleManager.Instance.Player1.TransportPlayerGridPos(InitialPlayerBP); // 如果在dungeon里面死亡，复活回老家
             BattleManager.Instance.Player1.Reborn();
         }
         else
         {
-            BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP);
-            if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(m_LevelCacheData.PlayerCurrentESPS);
+            BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP); // 如果未在dungeon里面死亡，复活回进入dungeon的地方
         }
 
         ApplyWorldVisualEffectSettings(WorldData);

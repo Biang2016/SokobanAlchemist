@@ -312,18 +312,20 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         }
 
 #endif
-        if (Input.GetKey(KeyCode.B))
+        if (Input.GetKeyUp(KeyCode.B))
         {
             if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
             {
                 if (openWorld.IsInsideMicroWorld)
                 {
                     openWorld.ReturnToOpenWorldFormMicroWorld(false);
+                    return;
                 }
             }
             else
             {
                 SwitchWorld(ConfigManager.GetTypeName(TypeDefineType.World, ConfigManager.World_OpenWorldIndex));
+                return;
             }
         }
 
@@ -389,13 +391,13 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     public void SwitchWorld(string worldName)
     {
-        ClientGameManager.DebugChangeWorldName = worldName;
-        ClientGameManager.Instance.ReloadGame();
+        DebugChangeWorldName = worldName;
+        StartCoroutine(ReloadGame());
     }
 
-    public void ReloadGame()
+    public IEnumerator ReloadGame()
     {
-        ShutDownGame();
+        yield return ShutDownGame();
         OnReloadScene();
         UIMaskMgr.OnReloadScene();
         UIManager.OnReloadScene();
@@ -405,8 +407,9 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         SceneManager.LoadScene("MainScene");
     }
 
-    private void ShutDownGame()
+    private IEnumerator ShutDownGame()
     {
+        BattleManager.Instance.IsStart = false;
         WwiseAudioManager.ShutDown();
 
         GameStateManager.ShutDown(); // 设置游戏状态为ShutDown
@@ -419,8 +422,9 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         GameSaveManager.ShutDown();
         UIBattleTipManager.ShutDown();
         ProjectileManager.ShutDown();
-        BattleManager.ShutDown();
         WorldManager.ShutDown();
+        yield return WorldManager.Co_ShutDown();
+        BattleManager.ShutDown();
 
         DebugConsole.OnDebugConsoleToggleHandler = null;
         DebugConsole.OnDebugConsoleKeyDownHandler = null;

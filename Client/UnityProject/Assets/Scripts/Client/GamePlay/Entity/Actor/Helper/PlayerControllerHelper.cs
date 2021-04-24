@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -15,49 +16,72 @@ public class PlayerControllerHelper : ActorControllerHelper
     private ButtonState BS_Down;
     private ButtonState BS_Left;
 
-    public static Dictionary<int, string> KeyMappingStrDict = new Dictionary<int, string>
+    public enum KeyBind
     {
-        {0, "Space"}, // Space/South
-        {1, "LShift"}, // Shift/East
-        {2, "H"}, // H/LeftTrigger
-        {3, "J"}, // J/RightTrigger
-        {4, "K"}, // K
-        {5, "L"}, // L
+        Space_South = 0,
+        Shift_East = 1,
+        H_LeftTrigger = 2,
+        J_RightTrigger = 3,
+        K = 4,
+        L = 5,
+        Empty_6 = 6,
+        Empty_7 = 7,
+    }
+
+    public static Dictionary<KeyBind, string> KeyMappingStrDict = new Dictionary<KeyBind, string>
+    {
+        {KeyBind.Space_South, "Space"},
+        {KeyBind.Shift_East, "LShift"},
+        {KeyBind.H_LeftTrigger, "H"},
+        {KeyBind.J_RightTrigger, "J"},
+        {KeyBind.K, "K"},
+        {KeyBind.L, "L"},
     };
 
     private ButtonState[] BS_SkillArray = new ButtonState[8];
 
-    internal List<List<EntitySkillIndex>> SkillKeyMappings = new List<List<EntitySkillIndex>>();
+    [FoldoutGroup("SkillKeyMapping")]
+    [HideInEditorMode]
+    [ShowInInspector]
+    internal SortedDictionary<KeyBind, List<EntitySkillIndex>> SkillKeyMappings = new SortedDictionary<KeyBind, List<EntitySkillIndex>>();
 
+    [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
     [LabelText("Space/South")]
-    public List<EntitySkillIndex> SkillKeyMapping_0 = new List<EntitySkillIndex>();
+    public List<EntitySkillIndex> SkillKeyMapping_0 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
+    [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
     [LabelText("Shift/East")]
-    public List<EntitySkillIndex> SkillKeyMapping_1 = new List<EntitySkillIndex>();
+    public List<EntitySkillIndex> SkillKeyMapping_1 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
+    [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
     [LabelText("Z/J/LeftTrigger")]
-    public List<EntitySkillIndex> SkillKeyMapping_2 = new List<EntitySkillIndex>();
+    public List<EntitySkillIndex> SkillKeyMapping_2 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
+    [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
     [LabelText("X/K/RightTrigger")]
-    public List<EntitySkillIndex> SkillKeyMapping_3 = new List<EntitySkillIndex>();
+    public List<EntitySkillIndex> SkillKeyMapping_3 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
+    [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
     [LabelText("C/L/")]
-    public List<EntitySkillIndex> SkillKeyMapping_4 = new List<EntitySkillIndex>();
+    public List<EntitySkillIndex> SkillKeyMapping_4 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
+    [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
     [LabelText("V/;/")]
-    public List<EntitySkillIndex> SkillKeyMapping_5 = new List<EntitySkillIndex>();
+    public List<EntitySkillIndex> SkillKeyMapping_5 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
+    [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
-    public List<EntitySkillIndex> SkillKeyMapping_6 = new List<EntitySkillIndex>();
+    public List<EntitySkillIndex> SkillKeyMapping_6 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
+    [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
-    public List<EntitySkillIndex> SkillKeyMapping_7 = new List<EntitySkillIndex>();
+    public List<EntitySkillIndex> SkillKeyMapping_7 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
     // 短按逻辑：短按最优先，短按过程中不接受其他短按，短按那个按键down时记录该轴位置，当位置变化时结束短按，短按结束后短按数据清空
     private bool isQuickMoving = false;
@@ -78,14 +102,15 @@ public class PlayerControllerHelper : ActorControllerHelper
         BS_Down = ControlManager.Instance.Battle_MoveButtons[(int) PlayerNumber, (int) GridPosR.Orientation.Down];
         BS_Left = ControlManager.Instance.Battle_MoveButtons[(int) PlayerNumber, (int) GridPosR.Orientation.Left];
 
-        SkillKeyMappings.Add(SkillKeyMapping_0);
-        SkillKeyMappings.Add(SkillKeyMapping_1);
-        SkillKeyMappings.Add(SkillKeyMapping_2);
-        SkillKeyMappings.Add(SkillKeyMapping_3);
-        SkillKeyMappings.Add(SkillKeyMapping_4);
-        SkillKeyMappings.Add(SkillKeyMapping_5);
-        SkillKeyMappings.Add(SkillKeyMapping_6);
-        SkillKeyMappings.Add(SkillKeyMapping_7);
+        SkillKeyMappings.Clear();
+        SkillKeyMappings.Add(KeyBind.Space_South, SkillKeyMapping_0.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.Shift_East, SkillKeyMapping_1.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.H_LeftTrigger, SkillKeyMapping_2.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.J_RightTrigger, SkillKeyMapping_3.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.K, SkillKeyMapping_4.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.L, SkillKeyMapping_5.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.Empty_6, SkillKeyMapping_6.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.Empty_7, SkillKeyMapping_7.Clone<EntitySkillIndex, EntitySkillIndex>());
 
         for (int i = 0; i < 8; i++)
         {
@@ -380,7 +405,7 @@ public class PlayerControllerHelper : ActorControllerHelper
             {
                 if (BS_SkillArray[i].Down)
                 {
-                    foreach (EntitySkillIndex skillIndex in SkillKeyMappings[i])
+                    foreach (EntitySkillIndex skillIndex in SkillKeyMappings[(KeyBind) i])
                     {
                         TriggerSkill(skillIndex, TargetEntityType.Self);
                     }

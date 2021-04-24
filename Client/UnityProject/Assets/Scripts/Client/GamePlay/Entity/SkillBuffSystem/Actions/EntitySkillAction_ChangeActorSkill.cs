@@ -22,12 +22,22 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
     public string SkillGUID = "";
 
     [ShowIf("AddOrRemove")]
+    [ShowIf("IsActiveSkill")]
     [LabelText("主动技能按键绑定")]
-    public int KeyBind;
+    public PlayerControllerHelper.KeyBind KeyBind;
 
-    [ShowIf("AddOrRemove")]
-    [LabelText("清除技能绑定所有技能")]
-    public bool ClearAllExistedSkillInKeyBind;
+    private bool IsActiveSkill
+    {
+        get
+        {
+            if (EntitySkillSO != null && EntitySkillSO.EntitySkill != null)
+            {
+                return EntitySkillSO.EntitySkill is EntityActiveSkill;
+            }
+
+            return false;
+        }
+    }
 
     public void RefreshSkillGUID()
     {
@@ -43,12 +53,13 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
 
     public void ExecuteOnEntity(Entity entity)
     {
-        if (AddOrRemove)
+          if (AddOrRemove)
         {
             EntitySkill entitySkill = ConfigManager.GetEntitySkill(SkillGUID);
             if (entitySkill is EntityActiveSkill eas)
             {
-                entity.AddNewActiveSkill(eas, KeyBind, ClearAllExistedSkillInKeyBind);
+                entity.AddNewActiveSkill(eas);
+                entity.BindActiveSkillToKey(eas, KeyBind, false);
             }
             else if (entitySkill is EntityPassiveSkill eps)
             {
@@ -76,7 +87,6 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
         action.AddOrRemove = AddOrRemove;
         action.SkillGUID = SkillGUID;
         action.KeyBind = KeyBind;
-        action.ClearAllExistedSkillInKeyBind = ClearAllExistedSkillInKeyBind;
     }
 
     public override void CopyDataFrom(EntitySkillAction srcData)
@@ -86,6 +96,5 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
         AddOrRemove = action.AddOrRemove;
         SkillGUID = action.SkillGUID;
         KeyBind = action.KeyBind;
-        ClearAllExistedSkillInKeyBind = action.ClearAllExistedSkillInKeyBind;
     }
 }

@@ -69,16 +69,10 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     public void Clear()
     {
-        foreach (Actor enemy in Enemies.ToArray().ToList())
-        {
-            enemy.PoolRecycle();
-        }
-
         Enemies.Clear();
 
         for (int index = 0; index < MainPlayers.Length; index++)
         {
-            MainPlayers[index]?.PoolRecycle();
             MainPlayers[index] = null;
         }
 

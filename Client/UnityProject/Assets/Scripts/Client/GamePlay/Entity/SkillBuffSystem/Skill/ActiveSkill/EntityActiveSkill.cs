@@ -18,10 +18,7 @@ public abstract class EntityActiveSkill : EntitySkill
 
     #region 绑定角色技能参数
 
-    // 本技能为母技能时，该编号必须和其他母技能互斥
-    // 子技能不受此限制，可绑定任意技能参数
-    [LabelText("绑定技能号")]
-    public EntitySkillIndex EntitySkillIndex;
+    internal EntitySkillIndex EntitySkillIndex;
 
     [BoxGroup("技能参数")]
     [InlineProperty]
@@ -731,7 +728,7 @@ public abstract class EntityActiveSkill : EntitySkill
         newEAS.WingUpCanMove = WingUpCanMove;
         newEAS.CastCanMove = CastCanMove;
         newEAS.RecoverCanMove = RecoverCanMove;
-        newEAS.EntitySkillIndex = EntitySkillIndex;
+        //newEAS.EntitySkillIndex = EntitySkillIndex; // 这条不抄，没有意义
         newEAS.RawSubActiveSkillList = RawSubActiveSkillList.Clone<EntityActiveSkill, EntitySkill>();
         newEAS.SubActiveSkillTriggerLogicList = SubActiveSkillTriggerLogicList.Clone<SubActiveSkillTriggerLogic, SubActiveSkillTriggerLogic>();
         newEAS.InterruptSubActiveSkillsWhenInterrupted = InterruptSubActiveSkillsWhenInterrupted;
@@ -758,7 +755,7 @@ public abstract class EntityActiveSkill : EntitySkill
         WingUpCanMove = srcEAS.WingUpCanMove;
         CastCanMove = srcEAS.CastCanMove;
         RecoverCanMove = srcEAS.RecoverCanMove;
-        EntitySkillIndex = srcEAS.EntitySkillIndex;
+        //EntitySkillIndex = srcEAS.EntitySkillIndex; // 这条不抄！！！
         if (RawSubActiveSkillList.Count != srcEAS.RawSubActiveSkillList.Count)
         {
             Debug.LogError("EAS CopyDataFrom RawSubActiveSkillList数量不一致");

@@ -474,16 +474,16 @@ public abstract class Entity : PoolObject
             EntityActiveSkill rawEAS = (EntityActiveSkill) so.EntitySkill;
             if (EntityActiveSkillGUIDDict.TryGetValue(so.EntitySkill.SkillGUID, out EntityActiveSkill eas))
             {
-                eas.EntitySkillIndex = skillIndex;
                 eas.CopyDataFrom(rawEAS);
+                eas.EntitySkillIndex = skillIndex;
             }
             else
             {
                 eas = (EntityActiveSkill) rawEAS.Clone();
-                eas.EntitySkillIndex = skillIndex;
                 EntityActiveSkillDict.Add(skillIndex, eas);
                 EntityActiveSkillGUIDDict.Add(eas.SkillGUID, eas);
                 eas.CopyDataFrom(rawEAS);
+                eas.EntitySkillIndex = skillIndex;
             }
         }
 
@@ -497,7 +497,21 @@ public abstract class Entity : PoolObject
         ActiveSkillMarkAsDestroyed = false;
     }
 
-    public void AddNewActiveSkill(EntityActiveSkill eas, int keyBind, bool clearAllExistedSkillInKeyBind)
+    public void AddNewActiveSkill(EntityActiveSkill eas)
+    {
+        EntitySkillIndex skillIndex = EntitySkillIndex.Skill_0;
+        foreach (EntitySkillIndex si in Enum.GetValues(typeof(EntitySkillIndex)))
+        {
+            if (!EntityActiveSkillDict.ContainsKey(si))
+            {
+                skillIndex = si;
+                AddNewActiveSkill(eas, skillIndex);
+                return;
+            }
+        }
+    }
+
+    public void AddNewActiveSkill(EntityActiveSkill eas, EntitySkillIndex skillIndex)
     {
         if (string.IsNullOrWhiteSpace(eas.SkillGUID))
         {
@@ -507,38 +521,33 @@ public abstract class Entity : PoolObject
 
         if (!EntityActiveSkillGUIDDict.ContainsKey(eas.SkillGUID))
         {
-            // 找一个没用过的SkillIndex
-            EntitySkillIndex skillIndex = EntitySkillIndex.Skill_0;
-            foreach (EntitySkillIndex si in Enum.GetValues(typeof(EntitySkillIndex)))
-            {
-                if (!EntityActiveSkillDict.ContainsKey(si))
-                {
-                    skillIndex = si;
-                    break;
-                }
-            }
-
             EntityActiveSkillDict.Add(skillIndex, eas);
             EntityActiveSkillGUIDDict.Add(eas.SkillGUID, eas);
             eas.Entity = this;
             eas.ParentActiveSkill = null;
             eas.EntitySkillIndex = skillIndex;
             eas.OnInit();
+        }
+        else
+        {
+            Debug.Log($"{name}添加主动技能失败{eas}，主动技能已存在");
+        }
+    }
 
+    public void BindActiveSkillToKey(EntityActiveSkill eas, PlayerControllerHelper.KeyBind keyBind, bool clearAllExistedSkillInKeyBind)
+    {
+        if (EntityActiveSkillGUIDDict.ContainsKey(eas.SkillGUID))
+        {
             if (this is Actor actor)
             {
                 if (actor.ActorControllerHelper is PlayerControllerHelper pch)
                 {
                     if (clearAllExistedSkillInKeyBind) pch.SkillKeyMappings[keyBind].Clear();
-                    pch.SkillKeyMappings[keyBind].Add(skillIndex);
+                    pch.SkillKeyMappings[keyBind].Add(eas.EntitySkillIndex);
                 }
 
-                actor.ActorSkillLearningHelper?.LearnActiveSkill(eas.SkillGUID, skillIndex, keyBind, clearAllExistedSkillInKeyBind);
+                actor.ActorSkillLearningHelper?.BindActiveSkillToKey(eas.EntitySkillIndex, keyBind, clearAllExistedSkillInKeyBind);
             }
-        }
-        else
-        {
-            Debug.Log($"{name}添加主动技能失败{eas}，主动技能已存在");
         }
     }
 
@@ -550,9 +559,9 @@ public abstract class Entity : PoolObject
             {
                 if (actor.ActorControllerHelper is PlayerControllerHelper pch)
                 {
-                    foreach (List<EntitySkillIndex> entitySkillIndices in pch.SkillKeyMappings)
+                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> kv in pch.SkillKeyMappings)
                     {
-                        entitySkillIndices.Remove(eas.EntitySkillIndex);
+                        kv.Value.Remove(eas.EntitySkillIndex);
                     }
                 }
 
@@ -565,7 +574,7 @@ public abstract class Entity : PoolObject
         }
     }
 
-    public void ForgetActiveSkill(int keyBind)
+    public void ForgetActiveSkill(PlayerControllerHelper.KeyBind keyBind)
     {
         if (this is Actor actor)
         {
@@ -683,6 +692,7 @@ public abstract class Entity : PoolObject
 
     protected virtual void FixedUpdate()
     {
+        if (!BattleManager.Instance.IsStart) return;
         if (IsRecycled) return;
         if (IsBoxCamp)
         {

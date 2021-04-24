@@ -974,12 +974,14 @@ public partial class Box : Entity
 
     protected override void Tick(float interval)
     {
+        if (!BattleManager.Instance.IsStart) return;
         base.Tick(interval);
     }
 
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
+        if (!BattleManager.Instance.IsStart) return;
         if (IsRecycled) return;
         if (FaceToCameraForever)
         {
@@ -1085,6 +1087,7 @@ public partial class Box : Entity
 
     protected override void OnCollisionEnter(Collision collision)
     {
+        if (!BattleManager.Instance.IsStart) return;
         if (IsRecycled) return;
         if (collision.gameObject.layer == LayerManager.Instance.Layer_CollectableItem) return;
         if (LastInteractActor.IsNotNullAndAlive() && collision.gameObject == LastInteractActor.gameObject) return; // todo 这里判定上一个碰的Actor有啥用?

@@ -388,17 +388,20 @@ public class EntityStatPropSet
         Profiler.EndSample();
         Profiler.EndSample();
 
-        foreach (KeyValuePair<EntityStatType, EntityStat> kv in StatDict)
+        if (Entity != null)
         {
-            kv.Value.m_NotifyActionSet.RegisterCallBacks(StatNotifyActionSetDict[kv.Key]);
-        }
+            foreach (KeyValuePair<EntityStatType, EntityStat> kv in StatDict)
+            {
+                kv.Value.m_NotifyActionSet.RegisterCallBacks(StatNotifyActionSetDict[kv.Key]);
+            }
 
-        foreach (KeyValuePair<EntityPropertyType, EntityProperty> kv in PropertyDict)
-        {
-            kv.Value.m_NotifyActionSet.RegisterCallBacks(PropertyNotifyActionSetDict[kv.Key]);
-        }
+            foreach (KeyValuePair<EntityPropertyType, EntityProperty> kv in PropertyDict)
+            {
+                kv.Value.m_NotifyActionSet.RegisterCallBacks(PropertyNotifyActionSetDict[kv.Key]);
+            }
 
-        FrozenLevel.m_NotifyActionSet.OnValueChanged += Entity.EntityFrozenHelper.OnFrozeIntoIceBlockAction;
+            FrozenLevel.m_NotifyActionSet.OnValueChanged += Entity.EntityFrozenHelper.OnFrozeIntoIceBlockAction;
+        }
     }
 
     #region Delegates
@@ -411,13 +414,16 @@ public class EntityStatPropSet
         foreach (EntityStatType est in Enum.GetValues(typeof(EntityStatType)))
         {
             StatNotifyActionSetDict.Add(est, new Stat.NotifyActionSet());
-            StatNotifyActionSetDict[est].OnValueChanged += delegate(int before, int after)
+            if (Entity != null)
             {
-                foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+                StatNotifyActionSetDict[est].OnValueChanged += delegate(int before, int after)
                 {
-                    eps.OnEntityStatValueChange(est, before, after);
-                }
-            };
+                    foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+                    {
+                        eps.OnEntityStatValueChange(est, before, after);
+                    }
+                };
+            }
         }
 
         StatNotifyActionSetDict[EntityStatType.ActionPoint].OnValueNotEnoughWarning += OnActionPointNotEnoughWarning;
@@ -440,13 +446,16 @@ public class EntityStatPropSet
         foreach (EntityPropertyType ept in Enum.GetValues(typeof(EntityPropertyType)))
         {
             PropertyNotifyActionSetDict.Add(ept, new Property.NotifyActionSet());
-            PropertyNotifyActionSetDict[ept].OnValueChanged += delegate(int before, int after)
+            if (Entity != null)
             {
-                foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+                PropertyNotifyActionSetDict[ept].OnValueChanged += delegate(int before, int after)
                 {
-                    eps.OnEntityPropertyValueChange(ept, before, after);
-                }
-            };
+                    foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+                    {
+                        eps.OnEntityPropertyValueChange(ept, before, after);
+                    }
+                };
+            }
         }
 
         PropertyNotifyActionSetDict[EntityPropertyType.CollectDetectRadius].OnValueChanged += OnCollectDetectRadiusChanged;

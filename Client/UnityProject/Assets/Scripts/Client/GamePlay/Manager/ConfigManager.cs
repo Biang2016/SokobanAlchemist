@@ -299,7 +299,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static bool IsExporting = false;
 
-    public static void ExportConfigs(bool dialogShow = true)
+    public static void ExportConfigs(bool dialogShow = true, bool sortWorldModule = true)
     {
         IsExporting = true;
         // http://www.sirenix.net/odininspector/faq?Search=&t-11=on#faq
@@ -312,9 +312,13 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         ExportTypeGUIDMapping();
         ExportEntitySkillLibrary(dataFormat);
 
-        SortAllWorldModules();
-        SortAllStaticLayouts();
-        SortAllWorlds();
+        if (sortWorldModule)
+        {
+            SortAllWorldModules();
+            SortAllStaticLayouts();
+            SortAllWorlds();
+        }
+
         ExportEntityBuffAttributeMatrix(DataFormat.JSON);
         ExportAllEntityOccupationDataConfigs(dataFormat);
         ExportAllWorldModuleDataConfigs(dataFormat);
@@ -328,21 +332,27 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         if (dialogShow) EditorUtility.DisplayDialog("Notice", "Serialize Config Success", "Confirm");
     }
 
+    //[MenuItem("开发工具/配置/快速序列化类型")]
+    //public static void QuickExportConfigs_TypeDefines()
+    //{
+    //    if (Directory.Exists(TypeNamesConfigFolder_Build)) Directory.Delete(TypeNamesConfigFolder_Build, true);
+    //    Directory.CreateDirectory(TypeNamesConfigFolder_Build);
+
+    //    // 时序，先导出类型表
+    //    ExportTypeGUIDMapping();
+    //    ExportEntitySkillLibrary(DataFormat.Binary);
+    //    ExportAllEntityOccupationDataConfigs(DataFormat.Binary);
+
+    //    AssetDatabase.Refresh();
+    //    IsLoaded = false;
+    //    LoadAllConfigs();
+    //    EditorUtility.DisplayDialog("Notice", "Quick Serialize Types Success", "Confirm");
+    //}
+
     [MenuItem("开发工具/配置/快速序列化类型")]
     public static void QuickExportConfigs_TypeDefines()
     {
-        if (Directory.Exists(TypeNamesConfigFolder_Build)) Directory.Delete(TypeNamesConfigFolder_Build, true);
-        Directory.CreateDirectory(TypeNamesConfigFolder_Build);
-
-        // 时序，先导出类型表
-        ExportTypeGUIDMapping();
-        ExportEntitySkillLibrary(DataFormat.Binary);
-        ExportAllEntityOccupationDataConfigs(DataFormat.Binary);
-
-        AssetDatabase.Refresh();
-        IsLoaded = false;
-        LoadAllConfigs();
-        EditorUtility.DisplayDialog("Notice", "Quick Serialize Types Success", "Confirm");
+        ExportConfigs(true, false);
     }
 
     [MenuItem("Assets/SerializeConfigForThisModuleOrWorld", priority = -50)]

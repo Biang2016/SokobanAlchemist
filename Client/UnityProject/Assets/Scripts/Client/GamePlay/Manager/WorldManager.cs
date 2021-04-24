@@ -14,7 +14,7 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
     /// </summary>
     public SortedDictionary<uint, Box> OtherBoxDict = new SortedDictionary<uint, Box>();
 
-    public void Clear()
+    public IEnumerator Clear()
     {
         foreach (KeyValuePair<uint, Box> kv in OtherBoxDict)
         {
@@ -22,7 +22,7 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
         }
 
         OtherBoxDict.Clear();
-        CurrentWorld?.Clear();
+        yield return CurrentWorld?.Clear();
         CurrentWorld = null;
     }
 
@@ -78,8 +78,12 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
 
     public override void ShutDown()
     {
-        CurrentWorld?.ShutDown();
         base.ShutDown();
-        Clear();
+    }
+
+    public IEnumerator Co_ShutDown()
+    {
+        CurrentWorld?.ShutDown();
+        yield return Clear();
     }
 }
