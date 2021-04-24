@@ -36,7 +36,7 @@ public class EntitySkillAction_AddEntityBuff : EntitySkillAction, EntitySkillAct
             {
                 if (!entity.EntityBuffHelper.AddBuff(entityBuff.Clone()))
                 {
-                    Debug.Log($"Failed to AddBuff: {entityBuff.GetType().Name} to {entity.name}");
+                    //Debug.Log($"Failed to AddBuff: {entityBuff.GetType().Name} to {entity.name}");
                 }
             }
         }

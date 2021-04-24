@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f945e777233a59f4aba40aeca29093a6, type: 3}
   m_Name: FSM_Boss_Slime
   m_EditorClassIdentifier: 
-  _serializedGraph: '{"type":"NodeCanvas.StateMachines.FSM","nodes":[{"_nestedBT":{"_value":1},"_name":"Idling","_position":{"x":1065.0,"y":60.0},"$type":"NodeCanvas.StateMachines.NestedBTState","$id":"0"},{"_nestedBT":{"_value":2},"_name":"Combat","_position":{"x":735.0,"y":-210.0},"$type":"NodeCanvas.StateMachines.NestedBTState","$id":"1"},{"_position":{"x":1275.0,"y":-120.0},"$type":"NodeCanvas.StateMachines.AnyState","$id":"2"}],"connections":[{"_condition":{"RangeRadius":{"_name":"GuardRange","_targetVariableID":"1e4fc14c-3815-4279-a6ee-25a727bd3bb0"},"TargetEntityType":{},"Y_Ignore":{},"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"conditions":[{"RangeRadius":{"_name":"ChasingRange","_targetVariableID":"dcaf01a2-8a92-4b8d-b523-e1a0efdcfefd"},"TargetEntityType":{},"Y_Ignore":{},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},{"valueA":{"_name":"IsJumping","_targetVariableID":"15250993-3b2d-4d06-b47d-841c7948e1fd"},"valueB":{},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"}],"$type":"NodeCanvas.Framework.ConditionList"},"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"0"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"checkMode":1,"conditions":[{"StuckTime":{"_value":3000},"$type":"ActorAIAtoms+BT_Enemy_StuckWithNavTask"},{"StuckTime":{"_value":1000},"$type":"ActorAIAtoms+BT_Enemy_StuckWithBoxes"}],"$type":"NodeCanvas.Framework.ConditionList"},"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"0"},"$type":"NodeCanvas.StateMachines.FSMConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
+  _serializedGraph: '{"type":"NodeCanvas.StateMachines.FSM","nodes":[{"_position":{"x":1320.0,"y":-180.0},"$type":"NodeCanvas.StateMachines.AnyState","$id":"0"},{"_nestedBT":{"_value":1},"_name":"Idling","_position":{"x":1110.0},"$type":"NodeCanvas.StateMachines.NestedBTState","$id":"1"},{"_nestedBT":{"_value":2},"_name":"Combat","_position":{"x":750.0,"y":-330.0},"$type":"NodeCanvas.StateMachines.NestedBTState","$id":"2"},{"_position":{"x":1020.0,"y":-450.0},"$type":"NodeCanvas.StateMachines.EmptyState","$id":"3"},{"_position":{"x":675.0},"$type":"NodeCanvas.StateMachines.EmptyState","$id":"4"}],"connections":[{"_condition":{"checkMode":1,"conditions":[{"StuckTime":{"_value":3000},"$type":"ActorAIAtoms+BT_Enemy_StuckWithNavTask"},{"StuckTime":{"_value":1000},"$type":"ActorAIAtoms+BT_Enemy_StuckWithBoxes"}],"$type":"NodeCanvas.Framework.ConditionList"},"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"conditions":[{"RangeRadius":{"_name":"GuardRange","_targetVariableID":"31e68abb-9456-4d93-9c19-e1255b4debfa"},"TargetEntityType":{},"Y_Ignore":{},"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},{"KeepDistanceMin":{"_name":"KeepDistanceMin","_targetVariableID":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"},"KeepDistanceMax":{"_name":"KeepDistanceMax","_targetVariableID":"f4670f67-b504-4764-ac45-263d9b4a165b"},"TargetEntityType":{},"$type":"ActorAIAtoms+BT_Enemy_CheckCanMoveToMainPlayer"}],"$type":"NodeCanvas.Framework.ConditionList"},"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"RangeRadius":{"_name":"KeepDistanceMax","_targetVariableID":"f4670f67-b504-4764-ac45-263d9b4a165b"},"TargetEntityType":{"_value":1},"Y_Ignore":{},"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"4"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"RangeRadius":{"_name":"KeepDistanceMax","_targetVariableID":"f4670f67-b504-4764-ac45-263d9b4a165b"},"TargetEntityType":{"_value":1},"Y_Ignore":{},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_condition":{"checkMode":1,"conditions":[{"RangeRadius":{"_name":"ChasingRange","_targetVariableID":"93fd230d-bfe4-4b6f-87dc-63c1c7248307"},"TargetEntityType":{},"Y_Ignore":{},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"},{"KeepDistanceMin":{"_name":"KeepDistanceMin","_targetVariableID":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"},"KeepDistanceMax":{"_name":"KeepDistanceMax","_targetVariableID":"f4670f67-b504-4764-ac45-263d9b4a165b"},"TargetEntityType":{},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_CheckCanMoveToMainPlayer"}],"$type":"NodeCanvas.Framework.ConditionList"},"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.StateMachines.FSMConnection"},{"_sourceNode":{"$ref":"4"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.StateMachines.FSMConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
   _objectReferences:
   - {fileID: 0}
   - {fileID: 11400000, guid: 14acd9f4fd65d274e8065d6b28752e38, type: 2}
@@ -21,7 +21,7 @@ MonoBehaviour:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: -146, y: 867}
+    _translation: {x: -145, y: 1020}
     _zoomFactor: 1
   _haltSerialization: 0
 #---GRAPH_START---
@@ -30,16 +30,23 @@ MonoBehaviour:
 #    "type": "NodeCanvas.StateMachines.FSM",
 #    "nodes": [
 #        {
+#            "_position": {
+#                "x": 1320.0,
+#                "y": -180.0
+#            },
+#            "$type": "NodeCanvas.StateMachines.AnyState",
+#            "$id": "0"
+#        },
+#        {
 #            "_nestedBT": {
 #                "_value": 1
 #            },
 #            "_name": "Idling",
 #            "_position": {
-#                "x": 1065.0,
-#                "y": 60.0
+#                "x": 1110.0
 #            },
 #            "$type": "NodeCanvas.StateMachines.NestedBTState",
-#            "$id": "0"
+#            "$id": "1"
 #        },
 #        {
 #            "_nestedBT": {
@@ -47,82 +54,29 @@ MonoBehaviour:
 #            },
 #            "_name": "Combat",
 #            "_position": {
-#                "x": 735.0,
-#                "y": -210.0
+#                "x": 750.0,
+#                "y": -330.0
 #            },
 #            "$type": "NodeCanvas.StateMachines.NestedBTState",
-#            "$id": "1"
+#            "$id": "2"
 #        },
 #        {
 #            "_position": {
-#                "x": 1275.0,
-#                "y": -120.0
+#                "x": 1020.0,
+#                "y": -450.0
 #            },
-#            "$type": "NodeCanvas.StateMachines.AnyState",
-#            "$id": "2"
+#            "$type": "NodeCanvas.StateMachines.EmptyState",
+#            "$id": "3"
+#        },
+#        {
+#            "_position": {
+#                "x": 675.0
+#            },
+#            "$type": "NodeCanvas.StateMachines.EmptyState",
+#            "$id": "4"
 #        }
 #    ],
 #    "connections": [
-#        {
-#            "_condition": {
-#                "RangeRadius": {
-#                    "_name": "GuardRange",
-#                    "_targetVariableID": "1e4fc14c-3815-4279-a6ee-25a727bd3bb0"
-#                },
-#                "TargetEntityType": {
-#
-#                },
-#                "Y_Ignore": {
-#
-#                },
-#                "$type": "ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"
-#            },
-#            "_sourceNode": {
-#                "$ref": "0"
-#            },
-#            "_targetNode": {
-#                "$ref": "1"
-#            },
-#            "$type": "NodeCanvas.StateMachines.FSMConnection"
-#        },
-#        {
-#            "_condition": {
-#                "conditions": [
-#                    {
-#                        "RangeRadius": {
-#                            "_name": "ChasingRange",
-#                            "_targetVariableID": "dcaf01a2-8a92-4b8d-b523-e1a0efdcfefd"
-#                        },
-#                        "TargetEntityType": {
-#
-#                        },
-#                        "Y_Ignore": {
-#
-#                        },
-#                        "_invert": true,
-#                        "$type": "ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"
-#                    },
-#                    {
-#                        "valueA": {
-#                            "_name": "IsJumping",
-#                            "_targetVariableID": "15250993-3b2d-4d06-b47d-841c7948e1fd"
-#                        },
-#                        "valueB": {
-#
-#                        },
-#                        "$type": "NodeCanvas.Tasks.Conditions.CheckBoolean"
-#                    }
-#                ],
-#                "$type": "NodeCanvas.Framework.ConditionList"
-#            },
-#            "_sourceNode": {
-#                "$ref": "1"
-#            },
-#            "_targetNode": {
-#                "$ref": "0"
-#            },
-#            "$type": "NodeCanvas.StateMachines.FSMConnection"
-#        },
 #        {
 #            "_condition": {
 #                "checkMode": 1,
@@ -143,10 +97,158 @@ MonoBehaviour:
 #                "$type": "NodeCanvas.Framework.ConditionList"
 #            },
 #            "_sourceNode": {
+#                "$ref": "0"
+#            },
+#            "_targetNode": {
+#                "$ref": "1"
+#            },
+#            "$type": "NodeCanvas.StateMachines.FSMConnection"
+#        },
+#        {
+#            "_condition": {
+#                "conditions": [
+#                    {
+#                        "RangeRadius": {
+#                            "_name": "GuardRange",
+#                            "_targetVariableID": "31e68abb-9456-4d93-9c19-e1255b4debfa"
+#                        },
+#                        "TargetEntityType": {
+#
+#                        },
+#                        "Y_Ignore": {
+#
+#                        },
+#                        "$type": "ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"
+#                    },
+#                    {
+#                        "KeepDistanceMin": {
+#                            "_name": "KeepDistanceMin",
+#                            "_targetVariableID": "c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"
+#                        },
+#                        "KeepDistanceMax": {
+#                            "_name": "KeepDistanceMax",
+#                            "_targetVariableID": "f4670f67-b504-4764-ac45-263d9b4a165b"
+#                        },
+#                        "TargetEntityType": {
+#
+#                        },
+#                        "$type": "ActorAIAtoms+BT_Enemy_CheckCanMoveToMainPlayer"
+#                    }
+#                ],
+#                "$type": "NodeCanvas.Framework.ConditionList"
+#            },
+#            "_sourceNode": {
+#                "$ref": "1"
+#            },
+#            "_targetNode": {
+#                "$ref": "2"
+#            },
+#            "$type": "NodeCanvas.StateMachines.FSMConnection"
+#        },
+#        {
+#            "_condition": {
+#                "RangeRadius": {
+#                    "_name": "KeepDistanceMax",
+#                    "_targetVariableID": "f4670f67-b504-4764-ac45-263d9b4a165b"
+#                },
+#                "TargetEntityType": {
+#                    "_value": 1
+#                },
+#                "Y_Ignore": {
+#
+#                },
+#                "$type": "ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"
+#            },
+#            "_sourceNode": {
+#                "$ref": "1"
+#            },
+#            "_targetNode": {
+#                "$ref": "4"
+#            },
+#            "$type": "NodeCanvas.StateMachines.FSMConnection"
+#        },
+#        {
+#            "_condition": {
+#                "RangeRadius": {
+#                    "_name": "KeepDistanceMax",
+#                    "_targetVariableID": "f4670f67-b504-4764-ac45-263d9b4a165b"
+#                },
+#                "TargetEntityType": {
+#                    "_value": 1
+#                },
+#                "Y_Ignore": {
+#
+#                },
+#                "_invert": true,
+#                "$type": "ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"
+#            },
+#            "_sourceNode": {
 #                "$ref": "2"
 #            },
 #            "_targetNode": {
-#                "$ref": "0"
+#                "$ref": "3"
+#            },
+#            "$type": "NodeCanvas.StateMachines.FSMConnection"
+#        },
+#        {
+#            "_sourceNode": {
+#                "$ref": "3"
+#            },
+#            "_targetNode": {
+#                "$ref": "2"
+#            },
+#            "$type": "NodeCanvas.StateMachines.FSMConnection"
+#        },
+#        {
+#            "_condition": {
+#                "checkMode": 1,
+#                "conditions": [
+#                    {
+#                        "RangeRadius": {
+#                            "_name": "ChasingRange",
+#                            "_targetVariableID": "93fd230d-bfe4-4b6f-87dc-63c1c7248307"
+#                        },
+#                        "TargetEntityType": {
+#
+#                        },
+#                        "Y_Ignore": {
+#
+#                        },
+#                        "_invert": true,
+#                        "$type": "ActorAIAtoms+BT_Enemy_PlayerInGuardRangeCondition"
+#                    },
+#                    {
+#                        "KeepDistanceMin": {
+#                            "_name": "KeepDistanceMin",
+#                            "_targetVariableID": "c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78"
+#                        },
+#                        "KeepDistanceMax": {
+#                            "_name": "KeepDistanceMax",
+#                            "_targetVariableID": "f4670f67-b504-4764-ac45-263d9b4a165b"
+#                        },
+#                        "TargetEntityType": {
+#
+#                        },
+#                        "_invert": true,
+#                        "$type": "ActorAIAtoms+BT_Enemy_CheckCanMoveToMainPlayer"
+#                    }
+#                ],
+#                "$type": "NodeCanvas.Framework.ConditionList"
+#            },
+#            "_sourceNode": {
+#                "$ref": "3"
+#            },
+#            "_targetNode": {
+#                "$ref": "1"
+#            },
+#            "$type": "NodeCanvas.StateMachines.FSMConnection"
+#        },
+#        {
+#            "_sourceNode": {
+#                "$ref": "4"
+#            },
+#            "_targetNode": {
+#                "$ref": "2"
 #            },
 #            "$type": "NodeCanvas.StateMachines.FSMConnection"
 #        }
