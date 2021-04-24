@@ -485,6 +485,93 @@
 						</Event>
 					</ChildrenList>
 				</Folder>
+				<Folder Name="Boxes_Common" ID="{5CBEC263-C258-487E-BCC6-76290AEAC0E0}" ShortID="382209377">
+					<ChildrenList>
+						<Event Name="OnBeingKicked_Light" ID="{22CF9AA8-C76F-4D8D-A86A-47C02667D0F0}">
+							<ChildrenList>
+								<Action Name="" ID="{443C0EE8-28EE-433E-B4DA-91878FF3D374}" ShortID="762837768">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingKicked_Light" ID="{0E6ED2BA-FD03-478E-B6CF-1C8B46B52326}" WorkUnitID="{36B96266-F37E-43B8-8F8F-FB21678F9273}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="OnBeingKicked_Heavy" ID="{C0EB16DD-E51D-453A-8B14-39EA579207A4}">
+							<ChildrenList>
+								<Action Name="" ID="{5964D943-60A3-4478-8231-5C9BE70B6429}" ShortID="786006064">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingKicked_Heavy" ID="{52400584-A129-4CEA-9D17-E192FA5CC836}" WorkUnitID="{36B96266-F37E-43B8-8F8F-FB21678F9273}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="OnBeingPushed_Light" ID="{85ADD1C6-47C4-4FB1-A5A1-A1B714975A8D}">
+							<ChildrenList>
+								<Action Name="" ID="{28ADD8A9-4652-4823-B848-224331186980}" ShortID="997659323">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingPushed_Light" ID="{F28CC2E5-B848-4EEE-87A8-CD4CFB439DD2}" WorkUnitID="{36B96266-F37E-43B8-8F8F-FB21678F9273}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="OnBeingPushed_Heavy" ID="{3B06310C-4F9E-48AD-B8B9-29EB11ACA16C}">
+							<ChildrenList>
+								<Action Name="" ID="{87B0A65B-B784-425F-989E-7DDCDAF41A4A}" ShortID="1003297142">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingPushed_Heavy" ID="{4F158FE6-23DF-4C1C-8514-3303A301C377}" WorkUnitID="{36B96266-F37E-43B8-8F8F-FB21678F9273}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="OnBeingPushedEnd_Light" ID="{5C92D88E-EB6D-445C-B9E8-BDC6D94C72C9}">
+							<ChildrenList>
+								<Action Name="" ID="{A950F666-1737-457C-BB27-BA620A494C4B}" ShortID="622815809">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingPushed_Light" ID="{F28CC2E5-B848-4EEE-87A8-CD4CFB439DD2}" WorkUnitID="{36B96266-F37E-43B8-8F8F-FB21678F9273}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="OnBeingPushedEnd_Heavy" ID="{B56EC5F9-6395-4299-83E0-8F390DFFFF06}">
+							<ChildrenList>
+								<Action Name="" ID="{BB8B4884-BDBA-4EFA-ACB8-99834EA62CD9}" ShortID="798348096">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingPushed_Heavy" ID="{4F158FE6-23DF-4C1C-8514-3303A301C377}" WorkUnitID="{36B96266-F37E-43B8-8F8F-FB21678F9273}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="OnBeingMerged" ID="{D37DA2AB-3EB9-4A47-A1F0-AFFCC4D72742}">
+							<ChildrenList>
+								<Action Name="" ID="{88309CDE-37F8-422B-BBA0-0B8C814642A4}" ShortID="449958603">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingMerged" ID="{023746A5-2A5C-4320-AC59-08EE2E36BF41}" WorkUnitID="{36B96266-F37E-43B8-8F8F-FB21678F9273}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

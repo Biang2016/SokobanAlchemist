@@ -19,7 +19,7 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<RandomSequenceContainer Name="FireEnemy_Red_Footstep" ID="{065C133B-4923-4FDC-958B-C3E9248768B1}" ShortID="99128202">
+						<RandomSequenceContainer Name="_FireEnemy_Red_Footstep" ID="{065C133B-4923-4FDC-958B-C3E9248768B1}" ShortID="99128202">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -29,7 +29,7 @@
 								</Reference>
 							</ReferenceList>
 						</RandomSequenceContainer>
-						<RandomSequenceContainer Name="FireEnemy_Red_Die" ID="{E1ED1A15-8C4E-45B5-9425-7F514E44988F}" ShortID="276940203">
+						<RandomSequenceContainer Name="FireEnemy_Red_OnDestroyed_Common" ID="{E1ED1A15-8C4E-45B5-9425-7F514E44988F}" ShortID="276940203">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -39,7 +39,7 @@
 								</Reference>
 							</ReferenceList>
 						</RandomSequenceContainer>
-						<RandomSequenceContainer Name="FireEnemy_Red_Hurt" ID="{063F2F43-0318-4BDB-88E6-6BA5B0DCE05D}" ShortID="358614124">
+						<RandomSequenceContainer Name="FireEnemy_Red_OnBeingDamaged" ID="{063F2F43-0318-4BDB-88E6-6BA5B0DCE05D}" ShortID="358614124">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -49,17 +49,7 @@
 								</Reference>
 							</ReferenceList>
 						</RandomSequenceContainer>
-						<RandomSequenceContainer Name="FireEnemy_Red_Attack" ID="{39A7C915-B1F5-4196-AEA5-3DF11442EF22}" ShortID="102053945">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-						</RandomSequenceContainer>
-						<RandomSequenceContainer Name="SkillCast_v1" ID="{7F5C837C-2008-4B02-94EA-D0C123416F3B}" ShortID="487935529">
+						<RandomSequenceContainer Name="FireEnemy_Red_Attack" ID="{7F5C837C-2008-4B02-94EA-D0C123416F3B}" ShortID="487935529">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -69,7 +59,7 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="SkillCast_v1" ID="{694E5344-92C8-4CC5-82D4-3E48713907FA}" ShortID="188331497">
+								<Sound Name="FireEnemy_Red_Attack_1" ID="{694E5344-92C8-4CC5-82D4-3E48713907FA}" ShortID="188331497">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -91,25 +81,16 @@
 										<ActiveSource Name="effect 4" ID="{D030C75A-A57F-4326-B592-57AD48766B0D}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-							</ChildrenList>
-						</RandomSequenceContainer>
-						<RandomSequenceContainer Name="SkillCast_v2" ID="{7F5F0E3F-B232-4D14-89C8-3CFD62F9F188}" ShortID="450505753">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<Sound Name="SkillCast_v2" ID="{4ADB05F6-EE8B-4222-B087-5C64030A8DC3}" ShortID="153689749">
+								<Sound Name="FireEnemy_Red_Attack_2" ID="{4ADB05F6-EE8B-4222-B087-5C64030A8DC3}" ShortID="153689749">
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="Enemy" ID="{3E5000B2-2D9A-4A27-B6A0-3DE8D825202C}" WorkUnitID="{84F5CCD1-CDB4-4A82-8FB9-A89731141588}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
@@ -127,7 +108,7 @@
 								</Sound>
 							</ChildrenList>
 						</RandomSequenceContainer>
-						<RandomSequenceContainer Name="FireEnemy_Red_Fire_Loop" ID="{A4178666-3906-49E3-8027-F0494443DEE8}" ShortID="797301691">
+						<RandomSequenceContainer Name="_FireEnemy_Red_Fire_Loop" ID="{A4178666-3906-49E3-8027-F0494443DEE8}" ShortID="797301691">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>

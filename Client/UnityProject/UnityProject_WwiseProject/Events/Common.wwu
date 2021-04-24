@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{D9DE7D80-DB10-49B6-9943-1DBCFED8DEC8}" SchemaVersion="97">
+	<Events>
+		<WorkUnit Name="Common" ID="{D9DE7D80-DB10-49B6-9943-1DBCFED8DEC8}" PersistMode="Standalone">
+			<PropertyList>
+				<Property Name="Color" Type="int16" Value="8"/>
+				<Property Name="OverrideColor" Type="bool" Value="True"/>
+			</PropertyList>
+			<ChildrenList>
+				<Folder Name="Common" ID="{3AD79D0C-4969-4113-B42C-EDC6406CC1F8}" ShortID="518815984">
+					<ChildrenList>
+						<Event Name="OnBeingLit" ID="{9ED18AF0-576F-4DA0-BDA2-5187E68CF7BA}">
+							<ChildrenList>
+								<Action Name="" ID="{E2272A45-5F30-4D44-8302-0D7D17ECDAFC}" ShortID="272121918">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingLit" ID="{87FA2092-F1C7-493A-B0E1-D3A5F1388A45}" WorkUnitID="{14DF5FF2-2294-4377-88F1-41B925CE0573}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="OnFrozenEnd" ID="{B3BEFA17-07A4-4E09-90CF-91A18CEA9569}">
+							<ChildrenList>
+								<Action Name="" ID="{E634C530-EA93-45DE-BFE6-B9CFFEC32E6A}" ShortID="460515452">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingFrozen" ID="{95303CFA-1BB8-4929-92BB-ACCCD41E2514}" WorkUnitID="{14DF5FF2-2294-4377-88F1-41B925CE0573}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="OnBurningEnd" ID="{58B387F6-9DBE-4884-8A4E-7A20E30A4558}">
+							<ChildrenList>
+								<Action Name="" ID="{89BDD99B-75C1-408C-A21D-70F3575F46CA}" ShortID="772528165">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingLit" ID="{87FA2092-F1C7-493A-B0E1-D3A5F1388A45}" WorkUnitID="{14DF5FF2-2294-4377-88F1-41B925CE0573}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="OnBeingFrozen" ID="{1E80035F-0680-4AEA-AE59-80688DBA57F4}">
+							<ChildrenList>
+								<Action Name="" ID="{10B711B8-D954-449B-B92A-57428C3AA3DD}" ShortID="375136016">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="OnBeingFrozen" ID="{95303CFA-1BB8-4929-92BB-ACCCD41E2514}" WorkUnitID="{14DF5FF2-2294-4377-88F1-41B925CE0573}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

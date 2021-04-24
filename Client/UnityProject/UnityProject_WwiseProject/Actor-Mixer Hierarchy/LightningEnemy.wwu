@@ -3,7 +3,7 @@
 	<AudioObjects>
 		<WorkUnit Name="LightningEnemy" ID="{46938B20-D5D9-4BBC-9328-20C080B198B5}" OwnerID="{AB95962D-B8A9-40D0-868C-E15702865962}" PersistMode="Nested">
 			<ChildrenList>
-				<RandomSequenceContainer Name="SkillCast_v1" ID="{392DD137-1D7A-4DE4-9E7A-74BE8806204A}" ShortID="849957647">
+				<ActorMixer Name="LightningEnemy" ID="{4FDE3AAB-987D-4DA7-9BEE-F0BBA12DD773}" ShortID="464820431">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -13,7 +13,7 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="SkillCast_v1" ID="{02CEE96E-73CB-4603-A46C-D78484A2529D}" ShortID="623927938">
+						<RandomSequenceContainer Name="LightningEnemy_SingleStrike" ID="{48C6E8FF-0ECC-48C2-9FD7-AF3D3451F30D}" ShortID="218875018">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -22,32 +22,38 @@
 									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 								</Reference>
 							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="effect 4" ID="{D8E1AFEF-FC93-42C9-9515-537BF135613D}">
-									<Language>SFX</Language>
-									<AudioFile>effect 4.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="598399752"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="effect 4" ID="{D8E1AFEF-FC93-42C9-9515-537BF135613D}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-					</ChildrenList>
-				</RandomSequenceContainer>
-				<RandomSequenceContainer Name="SkillCast_v2" ID="{D524401F-8C32-4C3E-9002-043B71A3FCDB}" ShortID="801276630">
-					<ReferenceList>
-						<Reference Name="Conversion">
-							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-						</Reference>
-						<Reference Name="OutputBus">
-							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-						</Reference>
-					</ReferenceList>
-					<ChildrenList>
-						<Sound Name="SkillCast_v2" ID="{8FCDCB18-1D4B-49BF-8FA2-8E4D2C7F6746}" ShortID="146369258">
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="LightningEnemy_DoubleStrike" ID="{FF89E1CD-BBE5-401E-BBF7-29CFD0A5733D}" ShortID="123500055">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="LightningEnemy_TripleStrike" ID="{BDEF986D-3D6A-48C7-BB21-AF8302EA274C}" ShortID="146410242">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="LightningEnemy_Somersault" ID="{6890047D-D29F-4476-B2E5-E24BE60ED84B}" ShortID="354492193">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="LightningEnemy_OnBeingDamaged" ID="{345B56C7-BE9C-497F-918B-EB326E93D745}" ShortID="839170025">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -56,21 +62,19 @@
 									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 								</Reference>
 							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="JackHammer_far_03" ID="{7519B03A-E6A8-4846-AA6B-2DDDB7607F5A}">
-									<Language>SFX</Language>
-									<AudioFile>JackHammer_far_03.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="567636655"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="JackHammer_far_03" ID="{7519B03A-E6A8-4846-AA6B-2DDDB7607F5A}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="LightningEnemy_OnDestroyed_Common" ID="{96A4491C-1152-4596-A77B-B692535BD079}" ShortID="130799005">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
 					</ChildrenList>
-				</RandomSequenceContainer>
+				</ActorMixer>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>
