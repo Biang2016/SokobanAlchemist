@@ -404,6 +404,14 @@ public class EntityStatPropSet
         }
     }
 
+    public void OnReborn()
+    {
+        HealthDurability.SetValue(99999);
+        FrozenValue.SetValue(0);
+        FiringValue.SetValue(0);
+        ActionPoint.SetValue(99999);
+    }
+
     #region Delegates
 
     private Dictionary<EntityStatType, Stat.NotifyActionSet> StatNotifyActionSetDict = new Dictionary<EntityStatType, Stat.NotifyActionSet>();

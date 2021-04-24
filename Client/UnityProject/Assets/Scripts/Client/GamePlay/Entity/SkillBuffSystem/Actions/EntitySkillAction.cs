@@ -28,27 +28,31 @@ public abstract class EntitySkillAction : IClone<EntitySkillAction>
 
     protected virtual string Description => "Entity被动技能行为基类";
 
-    public interface IPureAction
+    public interface IAction : IClone<EntitySkillAction>
+    {
+    }
+
+    public interface IPureAction : IAction
     {
         void Execute();
     }
 
-    public interface IWorldGPAction
+    public interface IWorldGPAction : IAction
     {
         void ExecuteOnWorldGP(GridPos3D worldGP);
     }
 
-    public interface IEntityAction
+    public interface IEntityAction : IAction
     {
         void ExecuteOnEntity(Entity entity);
     }
 
-    public interface ICollideAction
+    public interface ICollideAction : IAction
     {
         void ExecuteOnCollide(Collision collision);
     }
 
-    public interface ITriggerAction
+    public interface ITriggerAction : IAction
     {
         void ExecuteOnTriggerEnter(Collider collider);
         void ExecuteOnTriggerStay(Collider collider);

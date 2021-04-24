@@ -190,6 +190,8 @@ public abstract class Property
 
     public void ApplyDataTo(Property target)
     {
+        // 只修改了基准值、最大值和最小值，没有修改Modifier，因此仍然保持原属性值与buff系统的关联性，不影响未来移除buff
+
         target.BaseValue = BaseValue;
         target.MinValue = MinValue;
         target.MaxValue = MaxValue;

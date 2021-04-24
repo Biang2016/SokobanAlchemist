@@ -45,6 +45,7 @@ public class WorldModule : PoolObject
     public WorldWallCollider WorldWallCollider;
     public WorldGroundCollider WorldGroundCollider;
     protected List<LevelTriggerBase> WorldModuleLevelTriggers = new List<LevelTriggerBase>();
+    protected List<Entity> WorldModuleTriggerEntities = new List<Entity>();
 
     public List<EntityPassiveSkill_LevelEventTriggerAppear> EventTriggerAppearEntityPassiveSkillList = new List<EntityPassiveSkill_LevelEventTriggerAppear>();
 
@@ -203,6 +204,12 @@ public class WorldModule : PoolObject
         }
 
         WorldModuleLevelTriggers.Clear();
+        foreach (Entity triggerEntity in WorldModuleTriggerEntities)
+        {
+            triggerEntity.PoolRecycle();
+        }
+
+        WorldModuleTriggerEntities.Clear();
 
         int count = 0;
         // Clear Actor First
@@ -422,6 +429,12 @@ public class WorldModule : PoolObject
             }
         }
 
+        foreach (TriggerEntityData triggerEntityData in worldModuleData.TriggerEntityDataList)
+        {
+            Entity triggerEntity = GenerateEntity(triggerEntityData.EntityData, LocalGPToWorldGP(triggerEntityData.LocalGP), false, true, false, null);
+            if (triggerEntity != null) WorldModuleTriggerEntities.Add(triggerEntity);
+        }
+
         if (!string.IsNullOrWhiteSpace(worldModuleData.WorldModuleFlowAssetPath))
         {
             FlowScript flowScriptAsset = (FlowScript) Resources.Load(worldModuleData.WorldModuleFlowAssetPath);
@@ -447,10 +460,12 @@ public class WorldModule : PoolObject
     {
         if (entityData == null) return null;
         if (entityData.EntityTypeIndex == 0) return null;
+        EntityOccupationData occupationData = ConfigManager.GetEntityOccupationData(entityData.EntityTypeIndex);
+        bool isTriggerEntity = occupationData.IsTriggerEntity;
 
         GridPos3D localGP = WorldGPToLocalGP(worldGP);
         bool valid = true;
-        if (BoxMatrix[localGP.x, localGP.y, localGP.z] == null)
+        if (BoxMatrix[localGP.x, localGP.y, localGP.z] == null || isTriggerEntity)
         {
             // Probability Check
             if (entityData.RawEntityExtraSerializeData != null)
@@ -479,22 +494,25 @@ public class WorldModule : PoolObject
             }
 
             // 空位检查，if isTriggerAppear则摧毁原先箱子
-            foreach (GridPos3D offset in entityOccupation_rotated)
+            if (!isTriggerEntity)
             {
-                GridPos3D gridWorldGP = offset + worldGP;
-                Box box = World.GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D _, true, true);
-                if (box != null)
+                foreach (GridPos3D offset in entityOccupation_rotated)
                 {
-                    bool canOverlap = entityData.EntityType.TypeDefineType == TypeDefineType.Actor && box.Passable;
-                    if (isTriggerAppear)
+                    GridPos3D gridWorldGP = offset + worldGP;
+                    Box box = World.GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D _, true, true);
+                    if (box != null)
                     {
-                        valid = true;
-                        if (!canOverlap) box.DestroySelfByModuleRecycle();
-                    }
-                    else
-                    {
-                        if (canOverlap) valid = true;
-                        else valid = false;
+                        bool canOverlap = entityData.EntityType.TypeDefineType == TypeDefineType.Actor && box.Passable;
+                        if (isTriggerAppear)
+                        {
+                            valid = true;
+                            if (!canOverlap) box.DestroySelfByModuleRecycle();
+                        }
+                        else
+                        {
+                            if (canOverlap) valid = true;
+                            else valid = false;
+                        }
                     }
                 }
             }
@@ -515,21 +533,24 @@ public class WorldModule : PoolObject
                         box.Initialize(worldGP, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedEntities); // 如果是TriggerAppear的箱子则不需要检查坠落
 
                         // 到模组处登记
-                        foreach (GridPos3D offset in entityOccupation_rotated)
+                        if (!isTriggerEntity)
                         {
-                            GridPos3D gridPos = offset + worldGP;
-                            Box existedBox = World.GetBoxByGridPosition(gridPos, out WorldModule module, out GridPos3D gridLocalGP, IsAccessible, false); // 如果此模组是Accessible的就忽略不可到达的模组(可到达的模组的箱子不能伸到不可到达的模组里)
-                            if (module != null && existedBox == null)
+                            foreach (GridPos3D offset in entityOccupation_rotated)
                             {
-                                if (isStartedEntities)
+                                GridPos3D gridPos = offset + worldGP;
+                                Box existedBox = World.GetBoxByGridPosition(gridPos, out WorldModule module, out GridPos3D gridLocalGP, IsAccessible, false); // 如果此模组是Accessible的就忽略不可到达的模组(可到达的模组的箱子不能伸到不可到达的模组里)
+                                if (module != null && existedBox == null)
                                 {
-                                    module.BoxMatrix[gridLocalGP.x, gridLocalGP.y, gridLocalGP.z] = box;
-                                    if (!box.Passable) module.EntityMatrix_CheckOverlap_BoxAndActor[gridLocalGP.x, gridLocalGP.y, gridLocalGP.z] = box;
-                                    World.RefreshActorPathFindingSpaceAvailableCache(gridPos, box);
-                                }
-                                else
-                                {
-                                    module[TypeDefineType.Box, gridLocalGP] = box;
+                                    if (isStartedEntities)
+                                    {
+                                        module.BoxMatrix[gridLocalGP.x, gridLocalGP.y, gridLocalGP.z] = box;
+                                        if (!box.Passable) module.EntityMatrix_CheckOverlap_BoxAndActor[gridLocalGP.x, gridLocalGP.y, gridLocalGP.z] = box;
+                                        World.RefreshActorPathFindingSpaceAvailableCache(gridPos, box);
+                                    }
+                                    else
+                                    {
+                                        module[TypeDefineType.Box, gridLocalGP] = box;
+                                    }
                                 }
                             }
                         }
@@ -547,20 +568,23 @@ public class WorldModule : PoolObject
                         BattleManager.Instance.AddActor(this, actor);
 
                         // 到模组处登记
-                        foreach (GridPos3D offset in entityOccupation_rotated)
+                        if (!isTriggerEntity)
                         {
-                            GridPos3D gridPos = offset + actor.WorldGP; // 此处actor.WorldGP已经根据Actor的朝向更新过，不等于上文的worldGP
-                            Box existedBox = World.GetBoxByGridPosition(gridPos, out WorldModule module, out GridPos3D gridLocalGP, IsAccessible, true);
-                            if (module != null && existedBox == null)
+                            foreach (GridPos3D offset in entityOccupation_rotated)
                             {
-                                if (isStartedEntities)
+                                GridPos3D gridPos = offset + actor.WorldGP; // 此处actor.WorldGP已经根据Actor的朝向更新过，不等于上文的worldGP
+                                Box existedBox = World.GetBoxByGridPosition(gridPos, out WorldModule module, out GridPos3D gridLocalGP, IsAccessible, true);
+                                if (module != null && existedBox == null)
                                 {
-                                    module.EntityMatrix_CheckOverlap_BoxAndActor[gridLocalGP.x, gridLocalGP.y, gridLocalGP.z] = actor;
-                                    //World.RefreshActorPathFindingSpaceAvailableCache(gridWorldGP, actor);
-                                }
-                                else
-                                {
-                                    module[TypeDefineType.Actor, gridLocalGP] = actor;
+                                    if (isStartedEntities)
+                                    {
+                                        module.EntityMatrix_CheckOverlap_BoxAndActor[gridLocalGP.x, gridLocalGP.y, gridLocalGP.z] = actor;
+                                        //World.RefreshActorPathFindingSpaceAvailableCache(gridWorldGP, actor);
+                                    }
+                                    else
+                                    {
+                                        module[TypeDefineType.Actor, gridLocalGP] = actor;
+                                    }
                                 }
                             }
                         }

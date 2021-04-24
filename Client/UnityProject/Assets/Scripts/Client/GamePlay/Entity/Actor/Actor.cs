@@ -202,7 +202,7 @@ public class Actor : Entity
         {
             if (curWorldGP != value)
             {
-                if (!IsFrozen)
+                if (!IsFrozen && !IsTriggerEntity)
                 {
                     foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
                     {
@@ -232,9 +232,9 @@ public class Actor : Entity
                     }
                 }
 
-                if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
+                if (!IsFrozen && !IsTriggerEntity) UnRegisterFromModule(curWorldGP, EntityOrientation);
                 curWorldGP = value;
-                if (!IsFrozen) RegisterInModule(curWorldGP, EntityOrientation);
+                if (!IsFrozen && !IsTriggerEntity) RegisterInModule(curWorldGP, EntityOrientation);
             }
         }
     }
@@ -269,6 +269,7 @@ public class Actor : Entity
     public void UnRegisterFromModule(GridPos3D oldWorldGP, GridPosR.Orientation oldOrientation)
     {
         if (IsRecycling) return;
+        if (IsTriggerEntity) return;
         List<GridPos3D> occupationData_Rotated = ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[oldOrientation];
         foreach (GridPos3D offset in occupationData_Rotated)
         {
@@ -285,6 +286,7 @@ public class Actor : Entity
     public void RegisterInModule(GridPos3D newWorldGP, GridPosR.Orientation newOrientation)
     {
         if (IsRecycling) return;
+        if (IsTriggerEntity) return;
         foreach (GridPos3D offset in ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[newOrientation])
         {
             GridPos3D gridPos = newWorldGP + offset;
@@ -307,9 +309,9 @@ public class Actor : Entity
 
         // Actor由于限制死平面必须是正方形，因此可以用左下角坐标相减得到核心坐标偏移量；在旋转时应用此偏移量，可以保证平面正方形仍在老位置
         GridPos offset = ActorRotateWorldGPOffset(ActorWidth, newOrientation) - ActorRotateWorldGPOffset(ActorWidth, EntityOrientation);
-        if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
+        if (!IsFrozen && !IsTriggerEntity) UnRegisterFromModule(curWorldGP, EntityOrientation);
         base.SwitchEntityOrientation(newOrientation);
-        if (!IsFrozen) RegisterInModule(curWorldGP, newOrientation);
+        if (!IsFrozen && !IsTriggerEntity) RegisterInModule(curWorldGP, newOrientation);
 
         transform.position = new Vector3(offset.x + curWorldGP.x, transform.position.y, offset.z + curWorldGP.z);
         transform.rotation = Quaternion.Euler(0, (int) newOrientation * 90f, 0);
@@ -458,7 +460,13 @@ public class Actor : Entity
 
     public void Reborn()
     {
-        EntityCollectHelper?.OnHelperUsed();
+        EntityCollectHelper?.OnReborn();
+        EntityStatPropSet.OnReborn();
+        EntityBuffHelper.OnReborn();
+        ActorBattleHelper.InGameHealthBar.Initialize(ActorBattleHelper, 100, 30);
+        ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
+        ActiveSkillMarkAsDestroyed = false;
+        PassiveSkillMarkAsDestroyed = false;
     }
 
     public void ReloadESPS(EntityStatPropSet srcESPS)
@@ -496,11 +504,6 @@ public class Actor : Entity
             ForgetActiveSkill(skillGUID);
         }
 
-        if (ActorControllerHelper is PlayerControllerHelper pch)
-        {
-            pch.SkillKeyMappings = srcASLD.SkillKeyMappings.Clone<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>, PlayerControllerHelper.KeyBind, List<EntitySkillIndex>>();
-        }
-
         ActorSkillLearningHelper.ActorSkillLearningData.Clear(); // 清空放在遗忘后面，放在添加前面，确保最终结果和srcASLD相同
 
         foreach (string skillGUID in srcASLD.LearnedPassiveSkillGUIDs)
@@ -517,7 +520,18 @@ public class Actor : Entity
             EntitySkill rawEntitySkill = ConfigManager.GetEntitySkill(skillGUID);
             if (rawEntitySkill is EntityActiveSkill eas)
             {
-                AddNewActiveSkill(eas, srcASLD.LearnedActiveSkillDict[skillGUID]);
+                EntitySkillIndex skillIndex = srcASLD.LearnedActiveSkillDict[skillGUID];
+                AddNewActiveSkill(eas, skillIndex);
+                foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> kv in srcASLD.SkillKeyMappings)
+                {
+                    foreach (EntitySkillIndex esi in kv.Value)
+                    {
+                        if (esi == skillIndex)
+                        {
+                            BindActiveSkillToKey(eas, kv.Key, false);
+                        }
+                    }
+                }
             }
         }
     }
@@ -1521,11 +1535,11 @@ public class Actor : Entity
     public override void DestroySelf(UnityAction callBack = null)
     {
         EntityStatPropSet.FrozenValue.SetValue(0);
-        EntityCollectHelper?.OnHelperRecycled(); // 以免自身掉落物又被自身捡走
+        EntityCollectHelper?.OnDie(); // 以免自身掉落物又被自身捡走
         if (IsDestroying) return;
         base.DestroySelf();
         IsDestroying = true;
-        if (!IsFrozen) UnRegisterFromModule(WorldGP, EntityOrientation);
+        if (!IsFrozen && !IsTriggerEntity) UnRegisterFromModule(WorldGP, EntityOrientation);
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
             ps.OnBeforeDestroyEntity();

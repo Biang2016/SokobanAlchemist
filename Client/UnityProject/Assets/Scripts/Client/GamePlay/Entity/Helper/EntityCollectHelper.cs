@@ -40,6 +40,16 @@ public class EntityCollectHelper : EntityMonoHelper
         EnableDetector = true;
     }
 
+    public void OnDie()
+    {
+        EnableDetector = false;
+    }
+
+    public void OnReborn()
+    {
+        EnableDetector = true;
+    }
+
     public void Initialize()
     {
         DetectRadius = Entity.EntityStatPropSet.CollectDetectRadius.GetModifiedValue;

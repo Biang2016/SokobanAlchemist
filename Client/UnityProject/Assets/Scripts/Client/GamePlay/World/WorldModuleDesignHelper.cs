@@ -65,6 +65,7 @@ public class WorldModuleDesignHelper : MonoBehaviour
             GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(entity.transform, 1);
             EntityData entityData = entity.EntityData.Clone();
             ushort entityTypeIndex = entityData.EntityTypeIndex;
+            EntityOccupationData entityOccupationData = ConfigManager.EntityOccupationConfigDict[entityTypeIndex];
 
             bool isLevelEventTriggerAppearEntity = false;
             foreach (EntityPassiveSkill eps in entity.EntityData.RawEntityExtraSerializeData.EntityPassiveSkills)
@@ -81,11 +82,20 @@ public class WorldModuleDesignHelper : MonoBehaviour
                 }
             }
 
-            if (!isLevelEventTriggerAppearEntity)
+            bool isTriggerEntity = entityOccupationData.IsTriggerEntity;
+            if (isTriggerEntity)
             {
-                bool spaceAvailable = true;
-                EntityOccupationData entityOccupationData = ConfigManager.EntityOccupationConfigDict[entityTypeIndex];
-                List<GridPos3D> entityOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(entity.EntityOrientation, entityOccupationData.EntityIndicatorGPs);
+                TriggerEntityData data = new TriggerEntityData();
+                data.LocalGP = gp;
+                data.EntityData = entity.EntityData.Clone();
+                worldModuleData.TriggerEntityDataList.Add(data);
+            }
+
+            bool spaceAvailable = true;
+            List<GridPos3D> entityOccupation_rotated = GridPos3D.TransformOccupiedPositions_XZ(entity.EntityOrientation, entityOccupationData.EntityIndicatorGPs);
+
+            if (!isLevelEventTriggerAppearEntity && !isTriggerEntity)
+            {
                 foreach (GridPos3D gridPos3D in entityOccupation_rotated)
                 {
                     GridPos3D gridPos = gridPos3D + gp;
@@ -124,20 +134,23 @@ public class WorldModuleDesignHelper : MonoBehaviour
                         }
                     }
                 }
+            }
 
-                if (spaceAvailable)
+            if (spaceAvailable)
+            {
+                foreach (GridPos3D gridPos3D in entityOccupation_rotated)
                 {
-                    foreach (GridPos3D gridPos3D in entityOccupation_rotated)
-                    {
-                        GridPos3D gridPos = gridPos3D + gp;
-                        xMin = Mathf.Min(xMin, gridPos.x);
-                        xMax = Mathf.Max(xMax, gridPos.x);
-                        yMin = Mathf.Min(yMin, gridPos.y);
-                        yMax = Mathf.Max(yMax, gridPos.y);
-                        zMin = Mathf.Min(zMin, gridPos.z);
-                        zMax = Mathf.Max(zMax, gridPos.z);
-                    }
+                    GridPos3D gridPos = gridPos3D + gp;
+                    xMin = Mathf.Min(xMin, gridPos.x);
+                    xMax = Mathf.Max(xMax, gridPos.x);
+                    yMin = Mathf.Min(yMin, gridPos.y);
+                    yMax = Mathf.Max(yMax, gridPos.y);
+                    zMin = Mathf.Min(zMin, gridPos.z);
+                    zMax = Mathf.Max(zMax, gridPos.z);
+                }
 
+                if (!isLevelEventTriggerAppearEntity && !isTriggerEntity)
+                {
                     worldModuleData[entityData.EntityType.TypeDefineType, gp] = entityData;
                     foreach (GridPos3D gridPos3D in entityOccupation_rotated)
                     {
@@ -239,7 +252,8 @@ public class WorldModuleDesignHelper : MonoBehaviour
     [ValidateInput("ValidateReplaceWorldModuleTypeName", "只能选择WorldModule")]
     [PropertyOrder(3)]
     [GUIColor(0.7f, 0.7f, 0.7f)]
-    private TypeSelectHelper ReplaceWorldModuleTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.WorldModule};
+    private TypeSelectHelper ReplaceWorldModuleTypeName =
+        new TypeSelectHelper {TypeDefineType = TypeDefineType.WorldModule};
 
     private bool ValidateReplaceWorldModuleTypeName(TypeSelectHelper value)
     {

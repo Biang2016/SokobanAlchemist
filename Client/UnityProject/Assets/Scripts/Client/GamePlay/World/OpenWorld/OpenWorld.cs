@@ -25,6 +25,7 @@ public class OpenWorld : World
     public uint GivenSeed = 0;
 
     internal Dictionary<TypeDefineType, EntityData[,,]> WorldMap_EntityDataMatrix = new Dictionary<TypeDefineType, EntityData[,,]>(); // 地图元素放置, Y轴缩小16
+    internal TriggerEntityData[,,] WorldMap_TriggerEntityDataMatrix; // 地图Trigger实体放置, Y轴缩小16
     internal List<EntityPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearEntityDataList = new List<EntityPassiveSkill_LevelEventTriggerAppear.Data>();
 
     #region Occupy
@@ -125,6 +126,7 @@ public class OpenWorld : World
     {
         base.OnRecycled();
         WorldMap_EntityDataMatrix = null;
+        WorldMap_TriggerEntityDataMatrix = null;
         EventTriggerAppearEntityDataList.Clear();
         WorldMap_Occupied_BetweenBoxes = null;
         WorldMap_Occupied_BoxAndActor = null;
@@ -157,6 +159,7 @@ public class OpenWorld : World
 
         WorldMap_EntityDataMatrix.Add(TypeDefineType.Box, new EntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE]);
         WorldMap_EntityDataMatrix.Add(TypeDefineType.Actor, new EntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE]);
+        WorldMap_TriggerEntityDataMatrix = new TriggerEntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_Occupied_BetweenBoxes = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_Occupied_BoxAndActor = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_StaticLayoutOccupied_IntactForStaticLayout = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
@@ -462,6 +465,20 @@ public class OpenWorld : World
                                 GridPos3D worldGP = new GridPos3D(world_x, world_y, world_z);
                                 GridPos3D localGP = worldGP - targetModuleGP * WorldModule.MODULE_SIZE;
                                 moduleData[kv.Key, localGP] = WorldMap_EntityDataMatrix[kv.Key][world_x, world_y - WorldModule.MODULE_SIZE, world_z]?.Clone();
+                            }
+                        }
+
+                        // TriggerEntity
+                        for (int world_x = targetModuleGP.x * WorldModule.MODULE_SIZE; world_x < (targetModuleGP.x + 1) * WorldModule.MODULE_SIZE; world_x++)
+                        for (int world_y = targetModuleGP.y * WorldModule.MODULE_SIZE; world_y < (targetModuleGP.y + 1) * WorldModule.MODULE_SIZE; world_y++)
+                        for (int world_z = targetModuleGP.z * WorldModule.MODULE_SIZE; world_z < (targetModuleGP.z + 1) * WorldModule.MODULE_SIZE; world_z++)
+                        {
+                            GridPos3D worldGP = new GridPos3D(world_x, world_y, world_z);
+                            GridPos3D localGP = worldGP - targetModuleGP * WorldModule.MODULE_SIZE;
+                            TriggerEntityData data = WorldMap_TriggerEntityDataMatrix[world_x, world_y - WorldModule.MODULE_SIZE, world_z]?.Clone();
+                            if (data != null)
+                            {
+                                moduleData.TriggerEntityDataList.Add(data);
                             }
                         }
 
@@ -837,6 +854,22 @@ public class OpenWorld : World
         MicroWorldModules.Clear();
         yield return RecycleEmptyModules();
 
+        if (IsUsingSpecialESPSInsideMicroWorld) // 此类特殊关卡默认不计入成长，如教程关、体验关等等
+        {
+            PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
+        }
+        else
+        {
+            if (DungeonMissionComplete) // dungeon通关，获得所有奖励，保存玩家成长数值和技能
+            {
+                PlayerData_BeforeEnterDungeon = null;
+            }
+            else
+            {
+                PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
+            }
+        }
+
         // Loading Micro World Modules
         int totalModuleNum = microWorldData.WorldModuleGPOrder.Count;
         int loadingModuleCount = 0;
@@ -893,8 +926,9 @@ public class OpenWorld : World
         if (rebornPlayer)
         {
             BattleManager.Instance.Player1.Reborn();
-            if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(microWorldData.Raw_PlayerEnterESPS);
         }
+
+        if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(microWorldData.Raw_PlayerEnterESPS);
 
         CameraManager.Instance.FieldCamera.InitFocus();
 

@@ -39,6 +39,9 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
     public LevelTriggerGroupData WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();
+
+    public List<TriggerEntityData> TriggerEntityDataList = new List<TriggerEntityData>();
+
     public List<EntityPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearEntityDataList = new List<EntityPassiveSkill_LevelEventTriggerAppear.Data>();
 
     public EntityData this[TypeDefineType entityType, GridPos3D localGP]
@@ -81,6 +84,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
         data.BGM_ThemeState = BGM_ThemeState;
         data.WorldModuleBornPointGroupData = WorldModuleBornPointGroupData.Clone();
         data.WorldModuleLevelTriggerGroupData = WorldModuleLevelTriggerGroupData.Clone();
+        data.TriggerEntityDataList = TriggerEntityDataList.Clone<TriggerEntityData, TriggerEntityData>();
 
         for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
         {

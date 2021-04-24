@@ -43,7 +43,10 @@ public class ActorSkillLearningHelper : ActorMonoHelper
         {
             if (actor.ActorControllerHelper is PlayerControllerHelper pch)
             {
-                ActorSkillLearningData.SkillKeyMappings = pch.SkillKeyMappings.Clone<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>, PlayerControllerHelper.KeyBind, List<EntitySkillIndex>>();
+                foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> kv in pch.SkillKeyMappings)
+                {
+                    ActorSkillLearningData.SkillKeyMappings[kv.Key] = kv.Value.Clone<EntitySkillIndex, EntitySkillIndex>();
+                }
             }
         }
     }
@@ -95,7 +98,10 @@ public class ActorSkillLearningData : IClone<ActorSkillLearningData>
         Clear();
         foreach (PlayerControllerHelper.KeyBind keyBind in Enum.GetValues(typeof(PlayerControllerHelper.KeyBind)))
         {
-            SkillKeyMappings.Add(keyBind, new List<EntitySkillIndex>());
+            if (!SkillKeyMappings.ContainsKey(keyBind))
+            {
+                SkillKeyMappings.Add(keyBind, new List<EntitySkillIndex>());
+            }
         }
     }
 
@@ -104,7 +110,11 @@ public class ActorSkillLearningData : IClone<ActorSkillLearningData>
         LearnedPassiveSkillGUIDs.Clear();
         LearnedActiveSkillGUIDs.Clear();
         LearnedActiveSkillDict.Clear();
-        SkillKeyMappings.Clear();
+
+        foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> kv in SkillKeyMappings)
+        {
+            kv.Value.Clear();
+        }
     }
 
     public ActorSkillLearningData Clone()
@@ -113,7 +123,12 @@ public class ActorSkillLearningData : IClone<ActorSkillLearningData>
         cloneData.LearnedPassiveSkillGUIDs = LearnedPassiveSkillGUIDs.Clone<string, string>();
         cloneData.LearnedActiveSkillGUIDs = LearnedActiveSkillGUIDs.Clone<string, string>();
         cloneData.LearnedActiveSkillDict = LearnedActiveSkillDict.Clone<string, EntitySkillIndex, string, EntitySkillIndex>();
-        cloneData.SkillKeyMappings = SkillKeyMappings.Clone<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>, PlayerControllerHelper.KeyBind, List<EntitySkillIndex>>();
+
+        foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> kv in SkillKeyMappings)
+        {
+            cloneData.SkillKeyMappings[kv.Key] = kv.Value.Clone<EntitySkillIndex, EntitySkillIndex>();
+        }
+
         return cloneData;
     }
 }

@@ -2,8 +2,6 @@
 using Sirenix.Serialization;
 using UnityEngine.Events;
 
-[assembly: BindTypeNameToType("BoxPassiveSkill_LevelEventTriggerAppear", typeof(EntityPassiveSkill_LevelEventTriggerAppear))]
-
 [Serializable]
 public class EntityPassiveSkill_LevelEventTriggerAppear : EntityPassiveSkill_Conditional
 {
