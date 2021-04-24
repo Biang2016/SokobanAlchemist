@@ -110,7 +110,7 @@ public static class ActorPathFinding
         return false;
     }
 
-    public static bool FindRandomAccessibleDestination(GridPos3D ori_PF, Vector3 actorPos, float rangeRadius, out GridPos3D destination_PF, int actorWidth, int actorHeight, uint exceptActorGUID)
+    public static bool FindRandomAccessibleDestination(GridPos3D ori_PF, Vector3 actorPos, float rangeRadius, out GridPos3D destination_PF, int actorWidth, int actorHeight, uint exceptActorGUID, List<TerrainType> preferTerrainTypes)
     {
         destination_PF = GridPos3D.Zero;
         WorldModule oriModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(ori_PF.ConvertPathFindingNodeGPToWorldPosition(actorWidth).ToGridPos3D());
@@ -120,7 +120,26 @@ public static class ActorPathFinding
             List<GridPos3D> validNodes = UnionFindNodes(ori_PF, actorPos, rangeRadius, actorWidth, actorHeight, exceptActorGUID);
             Profiler.EndSample();
             if (validNodes.Count == 0) return false;
-            destination_PF = CommonUtils.GetRandomFromList(validNodes);
+            int maxTryTimes = 30;
+            int tryTimes = 0;
+            while (tryTimes < maxTryTimes)
+            {
+                tryTimes++;
+                destination_PF = CommonUtils.GetRandomFromList(validNodes);
+                if (preferTerrainTypes.Count == 0) break;
+                bool found = false;
+                foreach (TerrainType validTerrainType in preferTerrainTypes)
+                {
+                    if (WorldManager.Instance.CurrentWorld.GetTerrainType(destination_PF) == validTerrainType)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found) break;
+            }
+
             return true;
         }
 

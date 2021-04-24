@@ -134,6 +134,10 @@ public abstract class Entity : PoolObject
     [LabelText("模组内坐标")]
     internal GridPos3D LocalGP;
 
+    [FoldoutGroup("习性")]
+    [LabelText("偏好地形")]
+    public List<TerrainType> PreferTerrainTypes = new List<TerrainType>();
+
     #region 旋转朝向
 
     [DisplayAsString]

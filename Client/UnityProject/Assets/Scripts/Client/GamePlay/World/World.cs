@@ -1322,6 +1322,41 @@ public class World : PoolObject
 
     #endregion
 
+    public TerrainType GetTerrainType(GridPos3D worldGP)
+    {
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            return openWorld.WorldMap_TerrainType[worldGP.x, worldGP.z];
+        }
+        else
+        {
+            return TerrainType.Earth;
+        }
+    }
+
+    public bool TerrainValid(GridPos3D worldGP, List<TerrainType> validTerrainTypes)
+    {
+        if (validTerrainTypes.Count == 0) return true;
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            if (openWorld.IsInsideMicroWorld) return true;
+            TerrainType terrainType = openWorld.WorldMap_TerrainType[worldGP.x, worldGP.z];
+            foreach (TerrainType validTerrainType in validTerrainTypes)
+            {
+                if (terrainType == validTerrainType)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public bool CheckIsGroundByPos(Vector3 startPos, float checkDistance, bool ignorePassableBox, out GridPos3D nearestGroundGP)
     {
         nearestGroundGP = GridPos3D.Zero;

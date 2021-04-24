@@ -156,12 +156,12 @@ public static class ActorAIAtoms
                 bool groundBeneath = Actor.CheckIsGrounded(20f, out GridPos3D nearestGround);
                 if (groundBeneath)
                 {
-                    target = BattleManager.Instance.SearchNearestActor(nearestGround, Actor.Camp, SearchRadius.value, RelativeCamp.value, ActorTypeName.value);
+                    target = BattleManager.Instance.SearchNearestActor(nearestGround, Actor.Camp, SearchRadius.value, RelativeCamp.value, Actor.PreferTerrainTypes, ActorTypeName.value);
                 }
             }
             else
             {
-                target = BattleManager.Instance.SearchNearestActor(Actor.EntityBaseCenter, Actor.Camp, SearchRadius.value, RelativeCamp.value, ActorTypeName.value);
+                target = BattleManager.Instance.SearchNearestActor(Actor.EntityBaseCenter, Actor.Camp, SearchRadius.value, RelativeCamp.value, Actor.PreferTerrainTypes, ActorTypeName.value);
             }
 
             if (!target.IsNotNullAndAlive()) return Status.Failure;
@@ -241,6 +241,9 @@ public static class ActorAIAtoms
             AgentTarget target = Actor.ActorControllerHelper.AgentTargetDict[TargetEntityType.value];
             if (!target.HasTarget) return false;
             GridPos3D targetGP = target.TargetGP;
+            bool terrainValid = WorldManager.Instance.CurrentWorld.TerrainValid(targetGP, Actor.PreferTerrainTypes);
+            if (!terrainValid) return false;
+
             Profiler.BeginSample("FindPath");
             //ActorPathFinding.InvokeTimes = 0;
             //string pathFindingDesc = $"nav to {targetGP}";
@@ -279,6 +282,8 @@ public static class ActorAIAtoms
             AgentTarget target = Actor.ActorControllerHelper.AgentTargetDict[TargetEntityType.value];
             if (!target.HasTarget) return Status.Failure;
             GridPos3D targetGP = target.TargetGP;
+            bool terrainValid = WorldManager.Instance.CurrentWorld.TerrainValid(targetGP, Actor.PreferTerrainTypes);
+            if (!terrainValid) return Status.Failure;
             return Actor.ActorAIAgent.SetDestinationToWorldGP(targetGP, KeepDistanceMin.value, KeepDistanceMax.value);
         }
     }
@@ -307,6 +312,24 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵/寻路")]
+    [Name("当前所处地形类型")]
+    [Description("当前所处地形类型")]
+    public class BT_Enemy_CurrentStandTerrainType : ConditionTask
+    {
+        protected override string info => $"当前所处地形类型是{TerrainType.value}";
+
+        [Name("当前所处地形类型")]
+        public BBParameter<TerrainType> TerrainType;
+
+        protected override bool OnCheck()
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
+            TerrainType terrainType = WorldManager.Instance.CurrentWorld.GetTerrainType(Actor.WorldGP);
+            return terrainType == TerrainType.value;
+        }
+    }
+
+    [Category("敌兵/寻路")]
     [Name("设置闲逛目标点")]
     [Description("设置闲逛目标点")]
     public class BT_Enemy_Idle : BTNode
@@ -331,7 +354,7 @@ public static class ActorAIAtoms
             if (Actor.ActorAIAgent.IsPathFinding) return Status.Failure;
             if (!IgnoreBarrier.value)
             {
-                bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.WorldGP_PF, Actor.transform.position, IdleRadius.value, out GridPos3D destination_PF, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID);
+                bool suc = ActorPathFinding.FindRandomAccessibleDestination(Actor.WorldGP_PF, Actor.transform.position, IdleRadius.value, out GridPos3D destination_PF, Actor.ActorWidth, Actor.ActorHeight, Actor.GUID, Actor.PreferTerrainTypes);
                 if (suc)
                 {
                     destination_PF.ConvertPathFindingNodeGPToWorldPosition(Actor.ActorWidth);

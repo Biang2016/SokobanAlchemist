@@ -193,7 +193,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     private List<Actor> cachedSearchActorList = new List<Actor>(32);
     private Collider[] cachedColliders = new Collider[128];
 
-    public Actor SearchNearestActor(Vector3 center, Camp executeCamp, float radius, RelativeCamp effectiveOnRelativeCamp, string actorTypeName = "")
+    public Actor SearchNearestActor(Vector3 center, Camp executeCamp, float radius, RelativeCamp effectiveOnRelativeCamp, List<TerrainType> validTerrainTypes, string actorTypeName = "")
     {
         float minDist = float.MaxValue;
         Actor nearestActor = null;
@@ -215,11 +215,15 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
                         }
                     }
 
-                    float dist = (actor.EntityBaseCenter - center).magnitude;
-                    if (minDist > dist)
+                    bool terrainValid = WorldManager.Instance.CurrentWorld.TerrainValid(actor.WorldGP, validTerrainTypes);
+                    if (terrainValid)
                     {
-                        minDist = dist;
-                        nearestActor = actor;
+                        float dist = (actor.EntityBaseCenter - center).magnitude;
+                        if (minDist > dist)
+                        {
+                            minDist = dist;
+                            nearestActor = actor;
+                        }
                     }
                 }
             }

@@ -53,7 +53,7 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
 
     public void ExecuteOnEntity(Entity entity)
     {
-          if (AddOrRemove)
+        if (AddOrRemove)
         {
             EntitySkill entitySkill = ConfigManager.GetEntitySkill(SkillGUID);
             if (entitySkill is EntityActiveSkill eas)
