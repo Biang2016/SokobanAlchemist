@@ -458,7 +458,13 @@ public class Actor : Entity
 
     public void Reborn()
     {
-        EntityCollectHelper?.OnHelperUsed();
+        EntityCollectHelper?.OnReborn();
+        EntityStatPropSet.OnReborn();
+        EntityBuffHelper.OnReborn();
+        ActorBattleHelper.InGameHealthBar.Initialize(ActorBattleHelper, 100, 30);
+        ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
+        ActiveSkillMarkAsDestroyed = false;
+        PassiveSkillMarkAsDestroyed = false;
     }
 
     public void ReloadESPS(EntityStatPropSet srcESPS)
@@ -496,11 +502,6 @@ public class Actor : Entity
             ForgetActiveSkill(skillGUID);
         }
 
-        if (ActorControllerHelper is PlayerControllerHelper pch)
-        {
-            pch.SkillKeyMappings = srcASLD.SkillKeyMappings.Clone<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>, PlayerControllerHelper.KeyBind, List<EntitySkillIndex>>();
-        }
-
         ActorSkillLearningHelper.ActorSkillLearningData.Clear(); // 清空放在遗忘后面，放在添加前面，确保最终结果和srcASLD相同
 
         foreach (string skillGUID in srcASLD.LearnedPassiveSkillGUIDs)
@@ -517,7 +518,18 @@ public class Actor : Entity
             EntitySkill rawEntitySkill = ConfigManager.GetEntitySkill(skillGUID);
             if (rawEntitySkill is EntityActiveSkill eas)
             {
-                AddNewActiveSkill(eas, srcASLD.LearnedActiveSkillDict[skillGUID]);
+                EntitySkillIndex skillIndex = srcASLD.LearnedActiveSkillDict[skillGUID];
+                AddNewActiveSkill(eas, skillIndex);
+                foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> kv in srcASLD.SkillKeyMappings)
+                {
+                    foreach (EntitySkillIndex esi in kv.Value)
+                    {
+                        if (esi == skillIndex)
+                        {
+                            BindActiveSkillToKey(eas, kv.Key, false);
+                        }
+                    }
+                }
             }
         }
     }
@@ -1521,7 +1533,7 @@ public class Actor : Entity
     public override void DestroySelf(UnityAction callBack = null)
     {
         EntityStatPropSet.FrozenValue.SetValue(0);
-        EntityCollectHelper?.OnHelperRecycled(); // 以免自身掉落物又被自身捡走
+        EntityCollectHelper?.OnDie(); // 以免自身掉落物又被自身捡走
         if (IsDestroying) return;
         base.DestroySelf();
         IsDestroying = true;

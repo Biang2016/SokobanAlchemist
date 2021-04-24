@@ -14,6 +14,26 @@ public class EntityBuffHelper : EntityMonoHelper
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
+        ClearAllBuff();
+    }
+
+    private List<EntityBuff> cachedRemoveBuffList = new List<EntityBuff>(16);
+
+    private void ClearAllBuff()
+    {
+        cachedRemoveBuffList.Clear();
+        foreach (KeyValuePair<uint, EntityBuff> kv in BuffDict)
+        {
+            cachedRemoveBuffList.Add(kv.Value);
+        }
+
+        foreach (EntityBuff entityBuff in cachedRemoveBuffList)
+        {
+            entityBuff.OnRemoved(Entity);
+        }
+
+        cachedRemoveBuffList.Clear();
+
         foreach (KeyValuePair<EntityBuffAttribute, List<EntityBuff>> kv in EntityBuffAttributeDict)
         {
             kv.Value.Clear();
@@ -500,31 +520,8 @@ public class EntityBuffHelper : EntityMonoHelper
         });
     }
 
-    public void Heal(int health, EntityBuffAttribute healAttribute)
+    public void OnReborn()
     {
-        AddBuff(new EntityBuff_ChangeEntityStatInstantly
-        {
-            BuffFX = null,
-            Delta = health,
-            Duration = 0,
-            EntityBuffAttribute = healAttribute,
-            EntityStatType = EntityStatType.HealthDurability,
-            IsPermanent = false,
-            Percent = 0
-        });
-    }
-
-    public void RefillActionPoints(int actionPoints, EntityBuffAttribute attribute)
-    {
-        AddBuff(new EntityBuff_ChangeEntityStatInstantly
-        {
-            BuffFX = null,
-            Delta = actionPoints,
-            Duration = 0,
-            EntityBuffAttribute = attribute,
-            EntityStatType = EntityStatType.ActionPoint,
-            IsPermanent = false,
-            Percent = 0
-        });
+        ClearAllBuff();
     }
 }

@@ -837,6 +837,22 @@ public class OpenWorld : World
         MicroWorldModules.Clear();
         yield return RecycleEmptyModules();
 
+        if (IsUsingSpecialESPSInsideMicroWorld) // 此类特殊关卡默认不计入成长，如教程关、体验关等等
+        {
+            PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
+        }
+        else
+        {
+            if (DungeonMissionComplete) // dungeon通关，获得所有奖励，保存玩家成长数值和技能
+            {
+                PlayerData_BeforeEnterDungeon = null;
+            }
+            else
+            {
+                PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
+            }
+        }
+
         // Loading Micro World Modules
         int totalModuleNum = microWorldData.WorldModuleGPOrder.Count;
         int loadingModuleCount = 0;
@@ -893,8 +909,9 @@ public class OpenWorld : World
         if (rebornPlayer)
         {
             BattleManager.Instance.Player1.Reborn();
-            if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(microWorldData.Raw_PlayerEnterESPS);
         }
+
+        if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(microWorldData.Raw_PlayerEnterESPS);
 
         CameraManager.Instance.FieldCamera.InitFocus();
 

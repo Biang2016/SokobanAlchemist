@@ -54,14 +54,14 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
         else
         {
             FixedUpdateIntervalTick = 0;
-            if (Entity.IsNotNullAndAlive())
+            if (Entity.IsNotNullAndAlive() && !Entity.IsFrozen)
             {
                 cached_removeLightnings.Clear();
 
                 // 删除无法连接的闪电
                 foreach (EntityLightning lightning in EntityLightnings)
                 {
-                    if (!lightning.EndGeneratorHelper.Entity.IsNotNullAndAlive() || !lightning.EndGeneratorHelper.gameObject.activeInHierarchy)
+                    if (!lightning.EndGeneratorHelper.Entity.IsNotNullAndAlive() || !lightning.EndGeneratorHelper.gameObject.activeInHierarchy || lightning.EndGeneratorHelper.Entity.IsFrozen)
                     {
                         cached_removeLightnings.Add(lightning);
                     }
@@ -116,6 +116,20 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
                             }
                         }
                     }
+                }
+            }
+            else
+            {
+                cached_removeLightnings.Clear();
+                foreach (EntityLightning generator in EntityLightnings)
+                {
+                    cached_removeLightnings.Add(generator);
+                }
+
+                foreach (EntityLightning generator in cached_removeLightnings)
+                {
+                    EntityLightnings.Remove(generator);
+                    generator.PoolRecycle();
                 }
             }
         }
