@@ -25,7 +25,7 @@ public class DebugPanel : BaseUIPanel
             false,
             false,
             false,
-            UIFormTypes.Fixed,
+            UIFormTypes.Normal,
             UIFormShowModes.Normal,
             UIFormLucencyTypes.Penetrable);
     }
@@ -327,6 +327,14 @@ public class DebugPanel : BaseUIPanel
     {
         BattleManager.Instance.Player1.EntityStatPropSet.MaxHealthDurability.AddModifier(new Property.PlusModifier {Delta = 100});
         BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.HealthDurability.Value + 100, "DebugPanelAddHealth100");
+    }
+
+    [DebugButton("Player/AddAllElement*100", KeyCode.Alpha5)]
+    public void AddAllElement100()
+    {
+        BattleManager.Instance.Player1.EntityStatPropSet.FireElementFragment.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.FireElementFragment.Value + 100);
+        BattleManager.Instance.Player1.EntityStatPropSet.IceElementFragment.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.IceElementFragment.Value + 100);
+        BattleManager.Instance.Player1.EntityStatPropSet.LightningElementFragment.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.LightningElementFragment.Value + 100);
     }
 
     [DebugButton("Player/AddFire*1")]

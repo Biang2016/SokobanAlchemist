@@ -149,9 +149,8 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
                 for (int i = 0; i < RawEntitySkillActions.Count; i++)
                 {
                     EntitySkillAction esa = EntitySkillActions[i];
-                    esa.Entity = Entity;
+                    esa.Init(Entity);
                     esa.CopyDataFrom(RawEntitySkillActions[i]);
-                    esa.Init(InitWorldModuleGUID);
                 }
             }
             else
@@ -164,9 +163,8 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
             foreach (EntitySkillAction rawAction in RawEntitySkillActions)
             {
                 EntitySkillAction esa = rawAction.Clone();
-                esa.Entity = Entity;
+                esa.Init(Entity);
                 EntitySkillActions.Add(esa);
-                esa.Init(InitWorldModuleGUID);
             }
         }
 
@@ -203,6 +201,31 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
     {
         base.OnUnInit();
         UnInitSkillActions();
+    }
+
+    protected override bool ValidateSkillTrigger_Subject(TargetEntityType targetEntityType)
+    {
+        if (!base.ValidateSkillTrigger_Subject(targetEntityType)) return false;
+        PrepareSkillInfo(targetEntityType);
+        foreach (EntitySkillCondition condition in EntitySkillConditions)
+        {
+            if (condition is EntitySkillCondition.IEntityCondition entityCondition)
+            {
+                bool entityFound = false;
+                foreach (Entity entity in GetTargetEntities())
+                {
+                    if (entityCondition.OnCheckConditionOnEntity(entity))
+                    {
+                        entityFound = true;
+                        break;
+                    }
+                }
+
+                if (!entityFound) return false;
+            }
+        }
+
+        return true;
     }
 
     protected override bool ValidateSkillTrigger_HitProbability(TargetEntityType targetEntityType)

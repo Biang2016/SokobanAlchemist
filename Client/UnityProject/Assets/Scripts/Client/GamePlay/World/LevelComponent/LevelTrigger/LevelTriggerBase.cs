@@ -12,7 +12,6 @@ public abstract class LevelTriggerBase : PoolObject
     public abstract Data TriggerData { get; set; }
 
     public BoxCollider Trigger;
-    public Renderer Renderer;
 
     [ShowInInspector]
     [ReadOnly]
@@ -92,7 +91,6 @@ public abstract class LevelTriggerBase : PoolObject
     protected virtual void SetShown(bool shown)
     {
         Trigger.enabled = shown;
-        Renderer.enabled = shown;
     }
 
     public void InitializeInWorldModule(Data data, uint worldModuleGUID)
@@ -129,13 +127,8 @@ public abstract class LevelTriggerBase : PoolObject
         }
     }
 
-    [Button("预览颜色")]
-    private void InitializeColor()
+    protected virtual void InitializeColor()
     {
-        MaterialPropertyBlock mpb = new MaterialPropertyBlock();
-        Renderer.GetPropertyBlock(mpb);
-        mpb.SetColor("_Color", TriggerData.TriggerColor);
-        Renderer.SetPropertyBlock(mpb);
     }
 
     protected virtual void TriggerEvent()

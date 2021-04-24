@@ -206,8 +206,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     #region OnEntityStatPropertyValue
 
-    [LabelText("持续状态条件")]
-    public List<EPSConditional> EPSConditionals = new List<EPSConditional>();
+    [LabelText("释放合法性判断条件")]
+    [SerializeReference]
+    public List<EntitySkillCondition> EntitySkillConditions = new List<EntitySkillCondition>();
 
     #endregion
 
@@ -218,9 +219,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public override void OnInit()
     {
         base.OnInit();
-        foreach (EPSConditional epsConditional in EPSConditionals)
+        foreach (EntitySkillCondition condition in EntitySkillConditions)
         {
-            epsConditional.OnInit(Entity);
+            condition.OnInit(Entity);
         }
 
         InitSkillActions();
@@ -247,12 +248,19 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
     }
 
+    public override void OnUnInit()
+    {
+        base.OnUnInit();
+        UnInitSkillActions();
+        UnInitSkillConditions();
+    }
+
     public override void OnTick(float deltaTime)
     {
         base.OnTick(deltaTime);
-        foreach (EPSConditional epsConditional in EPSConditionals)
+        foreach (EntitySkillCondition condition in EntitySkillConditions)
         {
-            epsConditional.OnTick(deltaTime);
+            condition.OnTick(deltaTime);
         }
 
         if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnTick))
@@ -272,9 +280,12 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
     private bool CheckEPSCondition()
     {
-        foreach (EPSConditional epsConditional in EPSConditionals)
+        foreach (EntitySkillCondition condition in EntitySkillConditions)
         {
-            if (!epsConditional.Condition) return false;
+            if (condition is EntitySkillCondition.IPureCondition pureCondition)
+            {
+                if (!pureCondition.OnCheckCondition()) return false;
+            }
         }
 
         return true;
@@ -537,8 +548,6 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 }
             }
         }
-
-        UnInitSkillActions();
     }
 
     public override void OnBeforeMergeBox()
@@ -575,8 +584,6 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 }
             }
         }
-
-        UnInitSkillActions();
     }
 
     public override void OnDestroyEntityByElementDamage(EntityBuffAttribute entityBuffAttribute)
@@ -738,9 +745,8 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 for (int i = 0; i < RawEntitySkillActions.Count; i++)
                 {
                     EntitySkillAction esa = EntitySkillActions[i];
-                    esa.Entity = Entity;
+                    esa.Init(Entity);
                     esa.CopyDataFrom(RawEntitySkillActions[i]);
-                    esa.Init(InitWorldModuleGUID);
                 }
             }
             else
@@ -753,9 +759,8 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             foreach (EntitySkillAction rawAction in RawEntitySkillActions)
             {
                 EntitySkillAction esa = rawAction.Clone();
-                esa.Entity = Entity;
+                esa.Init(Entity);
                 EntitySkillActions.Add(esa);
-                esa.Init(InitWorldModuleGUID);
             }
         }
 
@@ -767,8 +772,15 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         EntitySkillActionsMarkAsDeleted = false;
         foreach (EntitySkillAction action in EntitySkillActions)
         {
-            action.Entity = null;
             action.UnInit();
+        }
+    }
+
+    private void UnInitSkillConditions()
+    {
+        foreach (EntitySkillCondition condition in EntitySkillConditions)
+        {
+            condition.OnUnInit();
         }
     }
 
@@ -797,8 +809,8 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         newPSC.EntityPropertyChangeThreshold = EntityPropertyChangeThreshold;
         newPSC.EntityPropertyChangeThresholdType = EntityPropertyChangeThresholdType;
 
-        // EPSConditionals
-        newPSC.EPSConditionals = EPSConditionals.Clone<EPSConditional, EPSConditional>();
+        // EPSConditions
+        newPSC.EntitySkillConditions = EntitySkillConditions.Clone<EntitySkillCondition, EntitySkillCondition>();
 
         // Actions
         foreach (EntitySkillAction rawBoxSkillAction in RawEntitySkillActions)
@@ -835,10 +847,10 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         EntityPropertyChangeThreshold = srcPSC.EntityPropertyChangeThreshold;
         EntityPropertyChangeThresholdType = srcPSC.EntityPropertyChangeThresholdType;
 
-        // EPSConditionals
-        for (int i = 0; i < srcPSC.EPSConditionals.Count; i++)
+        // EPSConditions
+        for (int i = 0; i < srcPSC.EntitySkillConditions.Count; i++)
         {
-            EPSConditionals[i].CopyDataFrom(srcPSC.EPSConditionals[i]);
+            EntitySkillConditions[i].CopyDataFrom(srcPSC.EntitySkillConditions[i]);
         }
 
         // Actions
@@ -854,177 +866,4 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             }
         }
     }
-}
-
-[Serializable]
-public class EPSConditional : IClone<EPSConditional>
-{
-    [EnumToggleButtons]
-    [LabelText("状态或属性")]
-    public ConditionType m_ConditionType = ConditionType.Stat;
-
-    [LabelText("状态值种类")]
-    [ShowIf("m_ConditionType", ConditionType.Stat)]
-    public EntityStatType EntityStatType;
-
-    [LabelText("状态值阈值")]
-    [ShowIf("m_ConditionType", ConditionType.Stat)]
-    public int EntityStatThreshold;
-
-    private bool StatOrProperty => m_ConditionType == ConditionType.Stat || m_ConditionType == ConditionType.Property;
-
-    [LabelText("属性值种类")]
-    [ShowIf("m_ConditionType", ConditionType.Property)]
-    public EntityPropertyType EntityPropertyType;
-
-    [LabelText("属性值阈值")]
-    [ShowIf("m_ConditionType", ConditionType.Property)]
-    public int EntityPropertyThreshold;
-
-    [HideLabel]
-    [EnumToggleButtons]
-    [ShowIf("StatOrProperty")]
-    public Operator ThresholdOperator;
-
-    [LabelText("战场状态")]
-    [ShowIf("m_ConditionType", ConditionType.BattleStateBool)]
-    public string BattleStateBool = "";
-
-    [LabelText("满足条件持续时间/s")]
-    public float SatisfiedDuration = 0f;
-
-    private float satisfiedDurationTick = 0f;
-
-    private Entity Entity;
-
-    public void OnInit(Entity entity)
-    {
-        Entity = entity;
-        satisfiedDurationTick = 0f;
-    }
-
-    public void OnTick(float tickInterval)
-    {
-        if (Check())
-        {
-            satisfiedDurationTick += tickInterval;
-        }
-        else
-        {
-            satisfiedDurationTick = 0;
-        }
-    }
-
-    private bool Check()
-    {
-        switch (m_ConditionType)
-        {
-            case ConditionType.Stat:
-            {
-                EntityStat stat = Entity.EntityStatPropSet.StatDict[EntityStatType];
-                bool trigger = false;
-                switch (ThresholdOperator)
-                {
-                    case Operator.LessEquals:
-                    {
-                        trigger = stat.Value <= EntityStatThreshold;
-                        break;
-                    }
-                    case Operator.Equals:
-                    {
-                        trigger = stat.Value == EntityStatThreshold;
-                        break;
-                    }
-                    case Operator.GreaterEquals:
-                    {
-                        trigger = stat.Value >= EntityStatThreshold;
-                        break;
-                    }
-                }
-
-                return trigger;
-            }
-            case ConditionType.Property:
-            {
-                EntityProperty property = Entity.EntityStatPropSet.PropertyDict[EntityPropertyType];
-                bool trigger = false;
-                switch (ThresholdOperator)
-                {
-                    case Operator.LessEquals:
-                    {
-                        trigger = property.GetModifiedValue <= EntityStatThreshold;
-                        break;
-                    }
-                    case Operator.Equals:
-                    {
-                        trigger = property.GetModifiedValue == EntityStatThreshold;
-                        break;
-                    }
-                    case Operator.GreaterEquals:
-                    {
-                        trigger = property.GetModifiedValue >= EntityStatThreshold;
-                        break;
-                    }
-                }
-
-                return trigger;
-            }
-            case ConditionType.BattleStateBool:
-            {
-                return BattleManager.Instance.GetStateBool(BattleStateBool);
-            }
-        }
-
-        return false;
-    }
-
-    public bool Condition => satisfiedDurationTick >= SatisfiedDuration;
-
-    public EPSConditional Clone()
-    {
-        EPSConditional cloneData = new EPSConditional();
-        cloneData.m_ConditionType = m_ConditionType;
-        cloneData.EntityStatType = EntityStatType;
-        cloneData.EntityStatThreshold = EntityStatThreshold;
-        cloneData.EntityPropertyType = EntityPropertyType;
-        cloneData.EntityPropertyThreshold = EntityPropertyThreshold;
-        cloneData.ThresholdOperator = ThresholdOperator;
-        cloneData.BattleStateBool = BattleStateBool;
-        cloneData.SatisfiedDuration = SatisfiedDuration;
-        return cloneData;
-    }
-
-    public void CopyDataFrom(EPSConditional srcData)
-    {
-        m_ConditionType = srcData.m_ConditionType;
-        EntityStatType = srcData.EntityStatType;
-        EntityStatThreshold = srcData.EntityStatThreshold;
-        EntityPropertyType = srcData.EntityPropertyType;
-        EntityPropertyThreshold = srcData.EntityPropertyThreshold;
-        ThresholdOperator = srcData.ThresholdOperator;
-        BattleStateBool = srcData.BattleStateBool;
-        SatisfiedDuration = srcData.SatisfiedDuration;
-    }
-}
-
-public enum Operator
-{
-    LessEquals,
-    Equals,
-    GreaterEquals,
-}
-
-public enum ValueChangeOverThresholdType
-{
-    LE_to_G,
-    L_to_GE,
-    GE_to_L,
-    G_to_LE,
-}
-
-public enum ConditionType
-{
-    Stat = 0,
-    Property = 1,
-    BattleStateBool = 2,
 }

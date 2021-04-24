@@ -1,13 +1,25 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using BiangLibrary;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
 {
+    public GameObject[] ColoredModels;
+
     [BoxGroup("Trigger配置")]
     [HideLabel]
     public Data childData = new Data();
+
+    public enum BoxLockTriggerColor
+    {
+        Blue = 0,
+        Purple = 1,
+        Green = 2,
+        Yellow = 3,
+        Red = 4
+    }
 
     public override LevelTriggerBase.Data TriggerData
     {
@@ -18,6 +30,9 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
     [Serializable]
     public new class Data : LevelTriggerBase.Data
     {
+        [LabelText("锁颜色")]
+        public BoxLockTriggerColor BoxLockTriggerColor;
+
         [LabelText("@\"指定推入的箱子类型\t\"+RequireBoxTypeName")]
         [PropertyOrder(-1)]
         public TypeSelectHelper RequireBoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
@@ -30,6 +45,7 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
         {
             base.ChildClone(newData);
             Data data = ((Data) newData);
+            data.BoxLockTriggerColor = BoxLockTriggerColor;
             data.RequireBoxTypeName = RequireBoxTypeName.Clone();
             data.RequiredStayDuration = RequiredStayDuration;
         }
@@ -43,6 +59,17 @@ public class LevelTrigger_BoxLockTrigger : LevelTriggerBase
         base.OnRecycled();
         StayBox = null;
         StayBoxTick = 0;
+    }
+
+    [Button("刷新颜色", ButtonSizes.Large)]
+    [GUIColor(0, 1, 0)]
+    protected override void InitializeColor()
+    {
+        base.InitializeColor();
+        for (int i = 0; i < ColoredModels.Length; i++)
+        {
+            ColoredModels[i].SetActive(i == (int) childData.BoxLockTriggerColor);
+        }
     }
 
     void OnTriggerEnter(Collider collider)

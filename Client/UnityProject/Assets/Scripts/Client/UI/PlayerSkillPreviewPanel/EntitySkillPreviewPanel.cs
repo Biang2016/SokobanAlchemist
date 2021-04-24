@@ -11,7 +11,7 @@ public class EntitySkillPreviewPanel : BaseUIPanel
             false,
             false,
             false,
-            UIFormTypes.Normal,
+            UIFormTypes.Fixed,
             UIFormShowModes.Normal,
             UIFormLucencyTypes.Penetrable);
     }
@@ -33,17 +33,39 @@ public class EntitySkillPreviewPanel : BaseUIPanel
             if (string.IsNullOrWhiteSpace(eps.SkillDescription)) continue;
             if (eps.SkillIcon == null || string.IsNullOrWhiteSpace(eps.SkillIcon.TypeName)) continue;
             EntitySkillRow esr = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(PassiveSkillContainer);
-            esr.Initialize(eps);
             PassiveSkillRows.Add(esr);
+            esr.Initialize(eps, "");
         }
 
         foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in entity.EntityActiveSkillDict)
         {
             if (string.IsNullOrWhiteSpace(kv.Value.SkillDescription)) continue;
             if (kv.Value.SkillIcon == null || string.IsNullOrWhiteSpace(kv.Value.SkillIcon.TypeName)) continue;
+
             EntitySkillRow esr = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(ActiveSkillContainer);
-            esr.Initialize(kv.Value);
             ActiveSkillRows.Add(esr);
+
+            string keyBind = "";
+            if (entity is Actor actor)
+            {
+                if (actor.ActorControllerHelper is PlayerControllerHelper pch)
+                {
+                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> _kv in pch.SkillKeyMappings)
+                    {
+                        foreach (EntitySkillIndex entitySkillIndex in _kv.Value)
+                        {
+                            if (kv.Key == entitySkillIndex)
+                            {
+                                PlayerControllerHelper.KeyMappingStrDict.TryGetValue(_kv.Key, out keyBind);
+                                esr.transform.SetAsFirstSibling();
+                            }
+                        }
+                    }
+                   
+                }
+            }
+
+            esr.Initialize(kv.Value, keyBind);
         }
     }
 

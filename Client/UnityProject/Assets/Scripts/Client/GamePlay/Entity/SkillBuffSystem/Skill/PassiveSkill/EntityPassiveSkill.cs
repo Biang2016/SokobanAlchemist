@@ -6,8 +6,6 @@ using UnityEngine;
 [Serializable]
 public abstract class EntityPassiveSkill : EntitySkill
 {
-    public bool IsAddedDuringGamePlay = false; // 是否是在游戏过程中添加的，以便在回收之后判断要不要清掉
-
     #region Conditions
 
     public override void OnInit()
@@ -20,8 +18,9 @@ public abstract class EntityPassiveSkill : EntitySkill
         base.OnUnInit();
     }
 
-    public virtual void OnTick(float deltaTime)
+    public override void OnTick(float tickInterval)
     {
+        base.OnTick(tickInterval);
     }
 
     public virtual void OnRegisterLevelEventID()

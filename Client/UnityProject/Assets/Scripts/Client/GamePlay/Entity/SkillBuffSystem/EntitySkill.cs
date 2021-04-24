@@ -48,6 +48,10 @@ public abstract class EntitySkill : IClone<EntitySkill>
     {
     }
 
+    public virtual void OnTick(float tickInterval)
+    {
+    }
+
     public EntitySkill Clone()
     {
         Type type = GetType();
@@ -70,5 +74,10 @@ public abstract class EntitySkill : IClone<EntitySkill>
         SkillAlias = srcData.SkillAlias;
         SkillIcon?.CopyDataFrom(srcData.SkillIcon);
         SkillDescription = srcData.SkillDescription;
+    }
+
+    public override string ToString()
+    {
+        return SkillAlias + ": " + Description;
     }
 }

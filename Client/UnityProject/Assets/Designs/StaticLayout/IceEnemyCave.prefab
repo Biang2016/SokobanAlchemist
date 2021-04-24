@@ -1735,7 +1735,7 @@ PrefabInstance:
     - target: {fileID: 3007119630750015051, guid: bd0371d94acb87a499d45d912e9a3db0,
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3007119630750015051, guid: bd0371d94acb87a499d45d912e9a3db0,
         type: 3}
@@ -4745,7 +4745,7 @@ PrefabInstance:
     - target: {fileID: 3007119630750015051, guid: bd0371d94acb87a499d45d912e9a3db0,
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3007119630750015051, guid: bd0371d94acb87a499d45d912e9a3db0,
         type: 3}
@@ -5305,7 +5305,7 @@ PrefabInstance:
     - target: {fileID: 3007119630750015051, guid: bd0371d94acb87a499d45d912e9a3db0,
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3007119630750015051, guid: bd0371d94acb87a499d45d912e9a3db0,
         type: 3}
@@ -6415,7 +6415,7 @@ PrefabInstance:
     - target: {fileID: 7287735299755939967, guid: 7a1817f53d3c0ad4fafc29cb2fe740fe,
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
-      value: 35
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7287735299755939967, guid: 7a1817f53d3c0ad4fafc29cb2fe740fe,
         type: 3}
@@ -6709,6 +6709,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].EntitySkillConditions.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].EntityPropertyChangeThresholdType
       value: 0
       objectReference: {fileID: 0}
@@ -6719,6 +6729,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0]
+      value: Client EntitySkillAction_TriggerZoneAction
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ListenLevelEventAliasList.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -6726,16 +6741,6 @@ PrefabInstance:
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].EntityPropertyChangeThresholdOperator
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
-        type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
-        type: 3}
-      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0]
-      value: Client EntitySkillAction_TriggerZoneAction
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
@@ -6796,6 +6801,16 @@ PrefabInstance:
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Stay.Array.data[0]
       value: Client EntitySkillAction_TransportPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Exit_Entity.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
+        type: 3}
+      propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].RawEntitySkillActions.Array.data[0].EntityActions_Enter_Entity.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1662698676067443197, guid: aec626e4b4700a0478e8f16745b70235,
         type: 3}
@@ -7720,7 +7735,7 @@ PrefabInstance:
     - target: {fileID: 7287735299755939967, guid: 7a1817f53d3c0ad4fafc29cb2fe740fe,
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
-      value: 35
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7287735299755939967, guid: 7a1817f53d3c0ad4fafc29cb2fe740fe,
         type: 3}
@@ -8785,7 +8800,7 @@ PrefabInstance:
     - target: {fileID: 3007119630750015051, guid: bd0371d94acb87a499d45d912e9a3db0,
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3007119630750015051, guid: bd0371d94acb87a499d45d912e9a3db0,
         type: 3}
@@ -9455,7 +9470,7 @@ PrefabInstance:
     - target: {fileID: 3007119630750015051, guid: bd0371d94acb87a499d45d912e9a3db0,
         type: 3}
       propertyPath: EntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Array.data[0].ShowProbabilityPercent
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3007119630750015051, guid: bd0371d94acb87a499d45d912e9a3db0,
         type: 3}

@@ -73,7 +73,7 @@ public class EntityBuff_EntityPropertyMultiplyModifier : EntityBuff
             case PropertyCategory.EntitySkillPropertyType:
             {
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
-                if (ConfigManager.GetEntitySkill(SkillGUID) == null)
+                if (ConfigManager.GetRawEntitySkill(SkillGUID) == null)
                 {
                     Debug.LogError($"EntitySkillSO Link invalid: {SkillGUID}");
                 }
@@ -120,7 +120,7 @@ public class EntityBuff_EntityPropertyMultiplyModifier : EntityBuff
             case PropertyCategory.EntitySkillPropertyType:
             {
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
-                if (ConfigManager.GetEntitySkill(SkillGUID) == null)
+                if (ConfigManager.GetRawEntitySkill(SkillGUID) == null)
                 {
                     Debug.LogError($"EntitySkillSO Link invalid: {SkillGUID}");
                 }

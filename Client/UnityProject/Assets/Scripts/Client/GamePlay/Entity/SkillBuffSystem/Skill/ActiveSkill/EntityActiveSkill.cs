@@ -13,17 +13,12 @@ public abstract class EntityActiveSkill : EntitySkill
 {
     internal EntityActiveSkill ParentActiveSkill;
 
-    internal bool IsAddedDuringGamePlay = false; // 是否是在游戏过程中添加的，以便在回收之后判断要不要清掉
-
     [LabelText("作用阵营")]
     public RelativeCamp TargetCamp;
 
     #region 绑定角色技能参数
 
-    // 本技能为母技能时，该编号必须和其他母技能互斥
-    // 子技能不受此限制，可绑定任意技能参数
-    [LabelText("绑定技能号")]
-    public EntitySkillIndex EntitySkillIndex;
+    internal EntitySkillIndex EntitySkillIndex;
 
     [BoxGroup("技能参数")]
     [InlineProperty]
@@ -41,26 +36,14 @@ public abstract class EntityActiveSkill : EntitySkill
 
     #endregion
 
-    [HideInInspector]
-    public UnityAction<ActiveSkillPhase, ActiveSkillPhase> OnSkillPhaseChanged;
+    #region 释放合法性判断条件
 
-    private ActiveSkillPhase skillPhase;
+    [LabelText("释放合法性判断条件")]
+    [SerializeReference]
+    public List<EntitySkillCondition> EntitySkillConditions = new List<EntitySkillCondition>(); // 干数据，禁修改
 
-    public ActiveSkillPhase SkillPhase
-    {
-        get { return skillPhase; }
-        set
-        {
-            if (skillPhase != value)
-            {
-                skillPhase = value;
-                OnSkillPhaseChanged?.Invoke(skillPhase, value);
-            }
-        }
-    }
 
-    internal float cooldownTimeTick = 0f;
-    internal float currentExecutingCooldownTime = 0f; // 本次技能释放时取用的冷却时间
+    #endregion
 
     [LabelText("前摇可移动")]
     public bool WingUpCanMove;
@@ -193,6 +176,27 @@ public abstract class EntityActiveSkill : EntitySkill
 
     #endregion
 
+    [HideInInspector]
+    public UnityAction<ActiveSkillPhase, ActiveSkillPhase> OnSkillPhaseChanged;
+
+    private ActiveSkillPhase skillPhase;
+
+    public ActiveSkillPhase SkillPhase
+    {
+        get { return skillPhase; }
+        set
+        {
+            if (skillPhase != value)
+            {
+                skillPhase = value;
+                OnSkillPhaseChanged?.Invoke(skillPhase, value);
+            }
+        }
+    }
+
+    internal float cooldownTimeTick = 0f;
+    internal float currentExecutingCooldownTime = 0f; // 本次技能释放时取用的冷却时间
+
     internal UnityAction OnValidateFailed;
     internal UnityAction OnWingUpPhaseCompleteCallback;
     internal UnityAction OnCastPhaseCompleteCallback;
@@ -220,9 +224,13 @@ public abstract class EntityActiveSkill : EntitySkill
 
             SubActiveSkillDict.Add(subEAS.SkillAlias, subEAS);
             subEAS.Entity = Entity;
-            subEAS.IsAddedDuringGamePlay = IsAddedDuringGamePlay;
             subEAS.ParentActiveSkill = this;
             subEAS.OnInit();
+        }
+
+        foreach (EntitySkillCondition condition in EntitySkillConditions)
+        {
+            condition.OnInit(Entity);
         }
 
         if (RunningSubActiveSkillList == null) RunningSubActiveSkillList = new List<EntityActiveSkill>();
@@ -240,6 +248,11 @@ public abstract class EntityActiveSkill : EntitySkill
         foreach (EntityActiveSkill subEAS in RawSubActiveSkillList)
         {
             subEAS.OnUnInit();
+        }
+
+        foreach (EntitySkillCondition condition in EntitySkillConditions)
+        {
+            condition.OnUnInit();
         }
 
         SkillsPropertyCollection.OnRecycled();
@@ -308,6 +321,14 @@ public abstract class EntityActiveSkill : EntitySkill
     /// <returns></returns>
     protected virtual bool ValidateSkillTrigger_Subject(TargetEntityType targetEntityType)
     {
+        foreach (EntitySkillCondition condition in EntitySkillConditions)
+        {
+            if (condition is EntitySkillCondition.IPureCondition pureCondition)
+            {
+                if (!pureCondition.OnCheckCondition()) return false;
+            }
+        }
+
         return true;
     }
 
@@ -683,11 +704,16 @@ public abstract class EntityActiveSkill : EntitySkill
         }
     }
 
-    public virtual void OnTick(float tickDeltaTime)
+    public override void OnTick(float tickInterval)
     {
         foreach (EntityActiveSkill subEAS in RunningSubActiveSkillList)
         {
-            subEAS.OnTick(tickDeltaTime);
+            subEAS.OnTick(tickInterval);
+        }
+
+        foreach (EntitySkillCondition condition in EntitySkillConditions)
+        {
+            condition.OnTick(tickInterval);
         }
     }
 
@@ -698,10 +724,11 @@ public abstract class EntityActiveSkill : EntitySkill
         newEAS.SkillsPropertyCollection = SkillsPropertyCollection.Clone();
         newEAS.TargetCamp = TargetCamp;
         newEAS.TriggerWhenMissProbabilityPercent = TriggerWhenMissProbabilityPercent;
+        newEAS.EntitySkillConditions = EntitySkillConditions.Clone<EntitySkillCondition, EntitySkillCondition>();
         newEAS.WingUpCanMove = WingUpCanMove;
         newEAS.CastCanMove = CastCanMove;
         newEAS.RecoverCanMove = RecoverCanMove;
-        newEAS.EntitySkillIndex = EntitySkillIndex;
+        //newEAS.EntitySkillIndex = EntitySkillIndex; // 这条不抄，没有意义
         newEAS.RawSubActiveSkillList = RawSubActiveSkillList.Clone<EntityActiveSkill, EntitySkill>();
         newEAS.SubActiveSkillTriggerLogicList = SubActiveSkillTriggerLogicList.Clone<SubActiveSkillTriggerLogic, SubActiveSkillTriggerLogic>();
         newEAS.InterruptSubActiveSkillsWhenInterrupted = InterruptSubActiveSkillsWhenInterrupted;
@@ -713,10 +740,22 @@ public abstract class EntityActiveSkill : EntitySkill
         srcEAS.SkillsPropertyCollection.ApplyDataTo(SkillsPropertyCollection);
         TargetCamp = srcEAS.TargetCamp;
         TriggerWhenMissProbabilityPercent = srcEAS.TriggerWhenMissProbabilityPercent;
+        if (EntitySkillConditions.Count != srcEAS.EntitySkillConditions.Count)
+        {
+            Debug.LogError("EAS CopyDataFrom EntitySkillConditions数量不一致");
+        }
+        else
+        {
+            for (int i = 0; i < EntitySkillConditions.Count; i++)
+            {
+                EntitySkillConditions[i].CopyDataFrom(srcEAS.EntitySkillConditions[i]);
+            }
+        }
+
         WingUpCanMove = srcEAS.WingUpCanMove;
         CastCanMove = srcEAS.CastCanMove;
         RecoverCanMove = srcEAS.RecoverCanMove;
-        EntitySkillIndex = srcEAS.EntitySkillIndex;
+        //EntitySkillIndex = srcEAS.EntitySkillIndex; // 这条不抄！！！
         if (RawSubActiveSkillList.Count != srcEAS.RawSubActiveSkillList.Count)
         {
             Debug.LogError("EAS CopyDataFrom RawSubActiveSkillList数量不一致");

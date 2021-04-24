@@ -19,6 +19,7 @@ MonoBehaviour:
     00000000:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (1b02d43d-5801-4315-872a-9eb658b610ba)
         SkillAlias: "\u51B0\u51BB3s\u6323\u81311s\u51B0\u514D"
         SkillIcon:
@@ -27,7 +28,6 @@ MonoBehaviour:
         SkillDescription: If stuck in ice block over 3 seconds, break out from the
           ice and get immune to freezing for 1 second.
         IsAddedDuringGamePlay: 0
-        InitWorldModuleGUID: 0
         PassiveSkillCondition: 2
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
@@ -41,24 +41,28 @@ MonoBehaviour:
         EntityPropertyChangeType: 0
         EntityPropertyChangeThreshold: 0
         EntityPropertyChangeThresholdType: 0
-        EPSConditionals:
-        - m_ConditionType: 0
-          EntityStatType: 120
-          EntityStatThreshold: 2
-          EntityPropertyType: 0
-          EntityPropertyThreshold: 0
-          ThresholdOperator: 2
-          BattleStateBool: 
-          SatisfiedDuration: 3
-        RawEntitySkillActions:
+        EntitySkillConditions:
         - id: 1
+        RawEntitySkillActions:
+        - id: 2
     00000001:
+      type: {class: EntitySkillCondition_State, ns: , asm: Client}
+      data:
+        m_ConditionType: 0
+        EntityStatType: 120
+        EntityStatThreshold: 2
+        EntityPropertyType: 0
+        EntityPropertyThreshold: 0
+        ThresholdOperator: 2
+        BattleStateBool: 
+        SatisfiedDuration: 3
+    00000002:
       type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         RawEntityBuffs:
-        - id: 2
-    00000002:
+        - id: 3
+    00000003:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10936

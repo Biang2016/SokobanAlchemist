@@ -511,7 +511,7 @@ public class WorldModule : PoolObject
                             box.BoxFrozenBoxHelper.FrozenBoxOccupation = entityOccupation_rotated;
                         }
 
-                        box.Setup(entityData, GUID);
+                        box.Setup(entityData, GUID, worldGP);
                         box.Initialize(worldGP, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedEntities); // 如果是TriggerAppear的箱子则不需要检查坠落
 
                         // 到模组处登记

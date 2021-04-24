@@ -69,16 +69,10 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     public void Clear()
     {
-        foreach (Actor enemy in Enemies.ToArray().ToList())
-        {
-            enemy.PoolRecycle();
-        }
-
         Enemies.Clear();
 
         for (int index = 0; index < MainPlayers.Length; index++)
         {
-            MainPlayers[index]?.PoolRecycle();
             MainPlayers[index] = null;
         }
 
@@ -139,6 +133,8 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
         player.Setup(new EntityData(ConfigManager.Actor_PlayerIndex, GridPosR.Orientation.Up), bpd.WorldGP, 0);
         AddActor(null, player);
+        PlayerDefaultActorSkillLearningData = player.ActorSkillLearningHelper.ActorSkillLearningData.Clone();
+        PlayerCurrentActorSkillLearningData = player.ActorSkillLearningHelper.ActorSkillLearningData;
     }
 
     public void AddActor(WorldModule worldModule, Actor actor)
@@ -197,7 +193,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     private List<Actor> cachedSearchActorList = new List<Actor>(32);
     private Collider[] cachedColliders = new Collider[128];
 
-    public Actor SearchNearestActor(Vector3 center, Camp executeCamp, float radius, RelativeCamp effectiveOnRelativeCamp, string actorTypeName = "")
+    public Actor SearchNearestActor(Vector3 center, Camp executeCamp, float radius, RelativeCamp effectiveOnRelativeCamp, List<TerrainType> validTerrainTypes, string actorTypeName = "")
     {
         float minDist = float.MaxValue;
         Actor nearestActor = null;
@@ -219,11 +215,15 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
                         }
                     }
 
-                    float dist = (actor.EntityBaseCenter - center).magnitude;
-                    if (minDist > dist)
+                    bool terrainValid = WorldManager.Instance.CurrentWorld.TerrainValid(actor.WorldGP, validTerrainTypes);
+                    if (terrainValid)
                     {
-                        minDist = dist;
-                        nearestActor = actor;
+                        float dist = (actor.EntityBaseCenter - center).magnitude;
+                        if (minDist > dist)
+                        {
+                            minDist = dist;
+                            nearestActor = actor;
+                        }
                     }
                 }
             }
@@ -277,6 +277,13 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             }
         }
     }
+
+    #endregion
+
+    #region Skills
+
+    public ActorSkillLearningData PlayerDefaultActorSkillLearningData; // 玩家初始化后克隆出来的备份数据
+    public ActorSkillLearningData PlayerCurrentActorSkillLearningData; // 实时引用
 
     #endregion
 

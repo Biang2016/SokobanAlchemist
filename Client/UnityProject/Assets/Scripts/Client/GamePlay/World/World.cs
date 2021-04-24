@@ -1234,7 +1234,7 @@ public class World : PoolObject
             {
                 dropBox = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);
                 EntityData entityData = new EntityData(boxTypeIndex, boxOrientation);
-                dropBox.Setup(entityData, module.GUID);
+                dropBox.Setup(entityData, module.GUID, origin);
                 dropBox.Initialize(origin, module, 0, false, Box.LerpType.DropFromAir);
                 dropBox.DropFromAir();
                 return true;
@@ -1321,6 +1321,41 @@ public class World : PoolObject
     }
 
     #endregion
+
+    public TerrainType GetTerrainType(GridPos3D worldGP)
+    {
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            return openWorld.WorldMap_TerrainType[worldGP.x, worldGP.z];
+        }
+        else
+        {
+            return TerrainType.Earth;
+        }
+    }
+
+    public bool TerrainValid(GridPos3D worldGP, List<TerrainType> validTerrainTypes)
+    {
+        if (validTerrainTypes.Count == 0) return true;
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            if (openWorld.IsInsideMicroWorld) return true;
+            TerrainType terrainType = openWorld.WorldMap_TerrainType[worldGP.x, worldGP.z];
+            foreach (TerrainType validTerrainType in validTerrainTypes)
+            {
+                if (terrainType == validTerrainType)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 
     public bool CheckIsGroundByPos(Vector3 startPos, float checkDistance, bool ignorePassableBox, out GridPos3D nearestGroundGP)
     {
