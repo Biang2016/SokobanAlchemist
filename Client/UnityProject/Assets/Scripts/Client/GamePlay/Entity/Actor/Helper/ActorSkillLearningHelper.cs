@@ -51,12 +51,10 @@ public class ActorSkillLearningHelper : ActorMonoHelper
         }
     }
 
-    public void LearnActiveSkill(string skillGUID, EntitySkillIndex skillIndex, PlayerControllerHelper.KeyBind keyBind, bool clearAllSkillOnKeyBind)
+    public void LearnActiveSkill(string skillGUID, EntitySkillIndex skillIndex)
     {
         ActorSkillLearningData.LearnedActiveSkillGUIDs.Add(skillGUID);
         ActorSkillLearningData.LearnedActiveSkillDict.Add(skillGUID, skillIndex);
-        if (clearAllSkillOnKeyBind) ActorSkillLearningData.SkillKeyMappings[keyBind].Clear();
-        ActorSkillLearningData.SkillKeyMappings[keyBind].Add(skillIndex);
     }
 
     public void BindActiveSkillToKey(EntitySkillIndex skillIndex, PlayerControllerHelper.KeyBind keyBind, bool clearAllExistedSkillInKeyBind)

@@ -509,13 +509,11 @@ public abstract class Entity : PoolObject
 
     public void AddNewActiveSkill(EntityActiveSkill eas)
     {
-        EntitySkillIndex skillIndex = EntitySkillIndex.Skill_0;
         foreach (EntitySkillIndex si in Enum.GetValues(typeof(EntitySkillIndex)))
         {
             if (!EntityActiveSkillDict.ContainsKey(si))
             {
-                skillIndex = si;
-                AddNewActiveSkill(eas, skillIndex);
+                AddNewActiveSkill(eas, si);
                 return;
             }
         }
@@ -531,6 +529,11 @@ public abstract class Entity : PoolObject
 
         if (!EntityActiveSkillGUIDDict.ContainsKey(eas.SkillGUID))
         {
+            if (this is Actor actor && actor.ActorSkillLearningHelper != null)
+            {
+                actor.ActorSkillLearningHelper.LearnActiveSkill(eas.SkillGUID, skillIndex);
+            }
+
             EntityActiveSkillDict.Add(skillIndex, eas);
             EntityActiveSkillGUIDDict.Add(eas.SkillGUID, eas);
             eas.Entity = this;
