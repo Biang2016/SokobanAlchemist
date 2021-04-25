@@ -190,15 +190,12 @@ namespace AK
         static const AkUniqueID BGM_AUDIO_BUS = 341217133U;
         static const AkUniqueID BOXES = 2016903052U;
         static const AkUniqueID ENEMIES = 2242381963U;
-        static const AkUniqueID ENEMYTHEME = 3259822206U;
         static const AkUniqueID MASTER_AUDIO_BUS = 2392784291U;
-        static const AkUniqueID MUSIC = 3991942870U;
         static const AkUniqueID MUSICSTINGER = 1636576504U;
         static const AkUniqueID NONWORLD = 841296678U;
         static const AkUniqueID PLAYER = 1069431850U;
         static const AkUniqueID REGION_DUNGEON = 3334061918U;
         static const AkUniqueID REGION_EXCAVATOR = 1355693303U;
-        static const AkUniqueID REGION_ICELAND = 96158278U;
         static const AkUniqueID REGION_LAB = 2754982597U;
         static const AkUniqueID REGION_OPENWORLD = 1863167500U;
         static const AkUniqueID REGION_TEMPLE = 2746966547U;

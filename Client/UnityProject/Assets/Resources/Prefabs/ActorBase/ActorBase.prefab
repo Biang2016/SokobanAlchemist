@@ -458,10 +458,11 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
+  PreferTerrainTypes: 
   RawFlamethrowerFuelData:
     id: 0
-  RawEntityPassiveSkillSSOs: []
-  RawEntityActiveSkillSSOs: []
+  RawEntityPassiveSkillSOs: []
+  RawEntityActiveSkillSOs: []
   Camp: 0
   DropConeAngle: 30
   DropVelocity: 30
@@ -652,7 +653,8 @@ MonoBehaviour:
   OnBeingLit:
     idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: 9d8e41fa4f1614ff78dd80c7a24693c6,
+      type: 2}
   OnBurning:
     idInternal: 0
     valueGuidInternal: 
@@ -660,15 +662,18 @@ MonoBehaviour:
   OnBurningEnd:
     idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: 4653d999919a34c1fb0dbfcfe32729ab,
+      type: 2}
   OnBeingFrozen:
     idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: a7acfc1135a154266985ae90bf3643ab,
+      type: 2}
   OnFrozenEnd:
     idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: b62476b82bd8a441daaa680f1e605fba,
+      type: 2}
   OnDestroyed_Common:
     idInternal: 0
     valueGuidInternal: 
@@ -728,13 +733,16 @@ MonoBehaviour:
   OnSkillCast:
   - idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: 0b93439bd0a711a41b515821e7330d21,
+      type: 2}
   - idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: c03d93abec815824a956adddb6ef868b,
+      type: 2}
   - idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: 3303afa7b097f40f7b4ed8885fdf5ead,
+      type: 2}
   - idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 0}
@@ -1838,6 +1846,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EntityOccupationData:
+    IsTriggerEntity: 0
     IsShapeCuboid: 1
     IsShapePlanSquare: 1
     ActorWidth: 1

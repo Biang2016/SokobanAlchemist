@@ -395,7 +395,7 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="WoodenEnemy_LeftSalsh" ID="{ABD0891D-AFFB-469B-AF02-9F3AECBA8982}">
+						<Event Name="WoodenEnemy_LeftSlash" ID="{ABD0891D-AFFB-469B-AF02-9F3AECBA8982}">
 							<ChildrenList>
 								<Action Name="" ID="{E2B5F60B-DB5E-4620-B9F6-A067C746580B}" ShortID="464129303">
 									<ReferenceList>
@@ -420,7 +420,7 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="WoodenEnemy_RightSalsh" ID="{A9DB9409-FE86-48E8-9CE1-3BCEF6A8D2B0}">
+						<Event Name="WoodenEnemy_RightSlash" ID="{A9DB9409-FE86-48E8-9CE1-3BCEF6A8D2B0}">
 							<ChildrenList>
 								<Action Name="" ID="{7C099A2F-4404-47A5-9CFE-97A68DEF1670}" ShortID="400270448">
 									<ReferenceList>
@@ -529,6 +529,54 @@
 						<Event Name="Slime_Attack" ID="{3787F99C-29FE-4B9B-A87D-D7F9086077ED}"/>
 						<Event Name="Slime_OnBeingDamaged" ID="{8A2782B4-309C-4450-A26D-1F0C30D6BE05}"/>
 						<Event Name="Slime_OnDestroyed_Common" ID="{3CEB5BE5-4DA8-4EFA-9AC1-945D1FE885A6}"/>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="BossSlime" ID="{10B58978-1200-46B3-B8E3-A4A8959E2396}" ShortID="275791019">
+					<ChildrenList>
+						<Event Name="BossSlime_OnSkillPreparing" ID="{35E93B1F-EEA5-4396-8A73-0FA050B3903F}">
+							<ChildrenList>
+								<Action Name="" ID="{830A66CF-C7B3-4764-840B-96F01A3827B6}" ShortID="691562856">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="BossSlime_OnSkillPreparing" ID="{462E851F-C2B9-461D-886F-9CEE05992DA1}" WorkUnitID="{44F49863-25D5-4520-AE6C-CF0DF7C6A3D6}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="BossSlime_OnSkillCast" ID="{EE25627F-0E25-4F8A-8B18-F9B37AC5A0DC}">
+							<ChildrenList>
+								<Action Name="" ID="{9CF723A2-0869-46EF-AD62-F2783EF712E8}" ShortID="141979964">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="BossSlime_OnSkillCast" ID="{C29EA7CE-D110-43ED-A7A9-58A5008BDA2B}" WorkUnitID="{44F49863-25D5-4520-AE6C-CF0DF7C6A3D6}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="BossSlime_OnBeingDamaged" ID="{565BF205-0CB6-4F85-BDC5-AB3C203A30DB}">
+							<ChildrenList>
+								<Action Name="" ID="{C5ECB3D5-8B4B-4FCC-A537-DBB594199D22}" ShortID="180527157">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="BossSlime_OnBeingDamaged" ID="{4E9F0663-83DA-4AA3-B339-B68348BE344F}" WorkUnitID="{44F49863-25D5-4520-AE6C-CF0DF7C6A3D6}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="BossSlime_OnDestroyed_Common" ID="{D840C2B9-21D1-404C-9EB1-527D5030FD30}">
+							<ChildrenList>
+								<Action Name="" ID="{26638D85-BE4F-46AA-A5AC-93593993A1AE}" ShortID="872652008">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="BossSlime_OnDestroyed_Common" ID="{F0DB1F4F-2BF4-4C50-8F36-E3C50C47A6FB}" WorkUnitID="{44F49863-25D5-4520-AE6C-CF0DF7C6A3D6}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 			</ChildrenList>

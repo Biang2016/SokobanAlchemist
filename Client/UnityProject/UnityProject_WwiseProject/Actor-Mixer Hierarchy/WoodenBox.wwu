@@ -129,7 +129,7 @@
 						</Reference>
 					</ReferenceList>
 				</RandomSequenceContainer>
-				<RandomSequenceContainer Name="Destructed" ID="{5ADE77C7-2E58-46AA-ACB6-5A4D019D0E6C}" ShortID="532318358">
+				<RandomSequenceContainer Name="OnDestroyed" ID="{5ADE77C7-2E58-46AA-ACB6-5A4D019D0E6C}" ShortID="532318358">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -138,6 +138,52 @@
 							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 						</Reference>
 					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="CrashWoodLogs_BW_17676" ID="{9ADAED85-C650-4F94-985D-F5698E8B6D61}" ShortID="965952020">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="CrashWoodLogs_BW_17676" ID="{2A50F4D6-E275-424D-87A8-196BBAEC9C9E}">
+									<Language>SFX</Language>
+									<AudioFile>CrashWoodLogs_BW.17676.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="58903391"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="CrashWoodLogs_BW_17676" ID="{2A50F4D6-E275-424D-87A8-196BBAEC9C9E}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="OBJECT_WOOD_Logs_Small_Fall_08" ID="{23FB1236-5133-45B6-B906-8BEAEA403E4E}" ShortID="392969507">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="OBJECT_WOOD_Logs_Small_Fall_08" ID="{E19900FA-8946-41EE-BC95-E6B6B52721E5}">
+									<Language>SFX</Language>
+									<AudioFile>OBJECT_WOOD_Logs_Small_Fall_08.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="740197906"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="OBJECT_WOOD_Logs_Small_Fall_08" ID="{E19900FA-8946-41EE-BC95-E6B6B52721E5}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
 				</RandomSequenceContainer>
 			</ChildrenList>
 		</WorkUnit>

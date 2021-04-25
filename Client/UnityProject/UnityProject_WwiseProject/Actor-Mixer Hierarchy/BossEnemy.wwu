@@ -71,6 +71,164 @@
 						</Sound>
 					</ChildrenList>
 				</RandomSequenceContainer>
+				<RandomSequenceContainer Name="BossSlime_OnSkillPreparing" ID="{462E851F-C2B9-461D-886F-9CEE05992DA1}" ShortID="33447162">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="Acid Attack" ID="{267AC017-9DE0-42EE-86E9-AEA7498E72D2}" ShortID="559184115">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Acid Attack" ID="{704E5047-3171-4E3A-AF93-BCF5AC22F30D}">
+									<Language>SFX</Language>
+									<AudioFile>Acid Attack.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="664351962"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Acid Attack" ID="{704E5047-3171-4E3A-AF93-BCF5AC22F30D}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+				<RandomSequenceContainer Name="BossSlime_OnSkillCast" ID="{C29EA7CE-D110-43ED-A7A9-58A5008BDA2B}" ShortID="33041020">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="ACID_Acid_Bomb_Explosion" ID="{EA17ADCF-2ADA-420A-B169-FF83A275B104}" ShortID="751850913">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="ACID_Acid_Bomb_Explosion" ID="{24112296-2914-4D7A-8E17-FACCE7E872C3}">
+									<Language>SFX</Language>
+									<AudioFile>ACID_Acid_Bomb_Explosion.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="981677076"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="ACID_Acid_Bomb_Explosion" ID="{24112296-2914-4D7A-8E17-FACCE7E872C3}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+				<RandomSequenceContainer Name="BossSlime_OnBeingDamaged" ID="{4E9F0663-83DA-4AA3-B339-B68348BE344F}" ShortID="657590313">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03" ID="{7EBF87D6-4C57-4768-9AF3-105B296CA498}" ShortID="611907142">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03" ID="{64751405-ADDA-4AF1-AB26-2A73063C1E93}">
+									<Language>SFX</Language>
+									<AudioFile>Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="845770983"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03" ID="{64751405-ADDA-4AF1-AB26-2A73063C1E93}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04" ID="{61D90BFF-0492-4D30-9DF5-855A77E80775}" ShortID="611558927">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04" ID="{0AE1EADD-138A-4E72-AEBD-E1A87B0A7712}">
+									<Language>SFX</Language>
+									<AudioFile>Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="727884239"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04" ID="{0AE1EADD-138A-4E72-AEBD-E1A87B0A7712}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+				<RandomSequenceContainer Name="BossSlime_OnDestroyed_Common" ID="{F0DB1F4F-2BF4-4C50-8F36-E3C50C47A6FB}" ShortID="665967132">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="Ta Da Orchestra Fanfare 2" ID="{64EBE796-9A75-4592-A0F6-65BFC8E880E7}" ShortID="90712444">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Ta Da Orchestra Fanfare 2" ID="{E8A29BEA-F83F-46F3-819D-9770C28BC1AC}">
+									<Language>SFX</Language>
+									<AudioFile>Ta Da Orchestra Fanfare 2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="967888007"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Ta Da Orchestra Fanfare 2" ID="{E8A29BEA-F83F-46F3-819D-9770C28BC1AC}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>
