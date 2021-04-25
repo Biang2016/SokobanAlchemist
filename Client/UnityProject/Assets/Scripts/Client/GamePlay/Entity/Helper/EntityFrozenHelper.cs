@@ -31,9 +31,9 @@ public class EntityFrozenHelper : EntityMonoHelper
         Thaw();
     }
 
-    public UnityAction<int, int> OnFrozeIntoIceBlockAction;
+    public UnityAction<int, int, int, int> OnFrozeIntoIceBlockAction;
 
-    public virtual void FrozeIntoIceBlock(int beforeFrozenLevel, int afterFrozenLevel)
+    public virtual void FrozeIntoIceBlock(int beforeFrozenLevel, int afterFrozenLevel, int min, int max)
     {
         if (afterFrozenLevel > beforeFrozenLevel) Entity.EntityWwiseHelper.OnBeingFrozen.Post(Entity.gameObject);
         if (beforeFrozenLevel > 0 && afterFrozenLevel == 0) Entity.EntityWwiseHelper.OnFrozenEnd.Post(Entity.gameObject);

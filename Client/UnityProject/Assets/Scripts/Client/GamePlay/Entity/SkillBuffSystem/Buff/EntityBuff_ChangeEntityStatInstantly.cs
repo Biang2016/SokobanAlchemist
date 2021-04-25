@@ -20,9 +20,10 @@ public class EntityBuff_ChangeEntityStatInstantly : EntityBuff
     {
         base.OnAdded(entity);
         if (!entity.IsNotNullAndAlive()) return;
-        float valueBefore = entity.EntityStatPropSet.StatDict[EntityStatType].Value;
+        Stat stat = entity.EntityStatPropSet.StatDict[EntityStatType];
+        float valueBefore = stat.Value;
         valueBefore += Delta;
-        valueBefore *= (100 + Percent) / 100f;
+        valueBefore += Percent / 100f * stat.MaxValue;
 
         entity.EntityStatPropSet.StatDict[EntityStatType].SetValue(Mathf.RoundToInt(valueBefore), $"ChangeEntityStatInstantly-{extraInfo}");
     }

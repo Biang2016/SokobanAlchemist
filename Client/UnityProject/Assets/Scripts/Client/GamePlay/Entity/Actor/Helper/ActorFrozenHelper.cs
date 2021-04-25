@@ -7,7 +7,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
 {
     internal Box FrozenBox;
 
-    public override void FrozeIntoIceBlock(int beforeFrozenLevel, int afterFrozenLevel)
+    public override void FrozeIntoIceBlock(int beforeFrozenLevel, int afterFrozenLevel, int min, int max)
     {
         Actor actor = (Actor) Entity;
         if (afterFrozenLevel <= 1)
@@ -26,6 +26,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
             Thaw();
             FXManager.Instance.PlayFX(actor.ThawFX, transform.position);
         }
+
         else
         {
             if (FrozenBox)

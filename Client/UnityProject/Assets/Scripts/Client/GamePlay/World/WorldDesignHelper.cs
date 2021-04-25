@@ -28,20 +28,6 @@ public class WorldDesignHelper : MonoBehaviour
     [ShowIf("UseSpecialPlayerEnterESPS")]
     public EntityStatPropSet Raw_PlayerEnterESPS = new EntityStatPropSet(); // 干数据
 
-    [BoxGroup("开局数据")]
-    [LabelText("是否使用特殊开局技能集")]
-    public bool UseSpecialPlayerEnterSkillSet = false;
-
-    [BoxGroup("开局数据")]
-    [LabelText("玩家特殊开局技能")]
-    [ShowIf("UseSpecialPlayerEnterSkillSet")]
-    public List<EntitySkillSO> Raw_PlayerEnterActiveSkillSOs = new List<EntitySkillSO>();
-
-    [BoxGroup("开局数据")]
-    [LabelText("玩家特殊开局技能")]
-    [ShowIf("UseSpecialPlayerEnterSkillSet")]
-    public List<EntitySkillSO> Raw_PlayerEnterPassiveSkillSOs = new List<EntitySkillSO>();
-
     [BoxGroup("相机配置")]
     [LabelText("特殊相机配置")]
     public FieldCamera.CameraConfigData CameraConfigData = new FieldCamera.CameraConfigData();

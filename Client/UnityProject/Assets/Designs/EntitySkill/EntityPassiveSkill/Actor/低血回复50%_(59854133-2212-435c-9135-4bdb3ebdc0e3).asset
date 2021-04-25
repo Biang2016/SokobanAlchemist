@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u4F4E\u8840\u56DE\u590D50%_(59854133-2212-435c-9135-4bdb3ebdc0e3)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        SkillGUID: (59854133-2212-435c-9135-4bdb3ebdc0e3)
+        SkillAlias: "\u4F4E\u8840\u56DE\u590D50%"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: 
+        SkillDescription: 
+        PassiveSkillCondition: 2
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions:
+        - id: 1
+        RawEntitySkillActions:
+        - id: 2
+        - id: 3
+    00000001:
+      type: {class: EntitySkillCondition_State, ns: , asm: Client}
+      data:
+        m_ConditionType: 0
+        EntityStatType: 0
+        EntityStatThreshold_UsePercent: 1
+        EntityStatThreshold: 50
+        EntityStatThresholdPercent: 20
+        EntityPropertyType: 0
+        EntityPropertyThreshold: 0
+        ThresholdOperator: 0
+        BattleStateBool: 
+        BattleStateBoolValue: 0
+        SatisfiedDuration: 0
+    00000002:
+      type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        RawEntityBuffs:
+        - id: 4
+    00000003:
+      type: {class: EntitySkillAction_NoticeTip, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        Show: 1
+        NoticeTip: Oops! Be careful!!! Pay attention to your health!
+        TipPositionType: 4
+        Duration: 2
+    00000004:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10056
+        BuffAlias: 
+        EntityBuffAttribute: 13
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (e597fb9a-7751-46ac-8eb0-0eb1811827c2)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 0
+        Delta: 0
+        Percent: 100

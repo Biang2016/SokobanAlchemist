@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d31b62ec9d586a4e94389d9071559ca, type: 3}
-  m_Name: Tutorial_0_2_2
+  m_Name: IceFire_1
   m_EditorClassIdentifier: 
-  _serializedGraph: '{"type":"FlowCanvas.FlowScript","nodes":[{"LevelEventAlias":{"_value":"Tutorial_0_2_2_Dash"},"_position":{"x":495.0,"y":480.0},"$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"0"},{"_simplexNode":{"NoticeTip":{"_value":"Press
-    Space To Dash!"},"TipPositionType":{"_value":4},"Duration":{"_value":4.0}},"_position":{"x":870.0,"y":480.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
+  _serializedGraph: '{"type":"FlowCanvas.FlowScript","nodes":[{"LevelEventAlias":{"_value":"IceFire_1_CheckPoint_1"},"_tag":"Tutorial_0_6_KillTheEnemyTip","_position":{"x":585.0,"y":540.0},"_comment":"Tutorial_0_7_KillTheEnemyTip","$type":"ModuleAIAtoms+Flow_OnLevelEventTrigger","$id":"0"},{"_simplexNode":{"NoticeTip":{"_value":"Push
+    the key into the lock!"},"TipPositionType":{},"Duration":{"_value":3.0}},"_position":{"x":930.0,"y":540.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip,
     Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"1"}],"connections":[{"_sourcePortName":"OnTriggered","_targetPortName":"
     ","_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
   _objectReferences: []
@@ -21,7 +21,7 @@ MonoBehaviour:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: 42, y: 61}
+    _translation: {x: 0, y: 0}
     _zoomFactor: 1
   _haltSerialization: 0
 #---GRAPH_START---
@@ -31,30 +31,32 @@ MonoBehaviour:
 #    "nodes": [
 #        {
 #            "LevelEventAlias": {
-#                "_value": "Tutorial_0_2_2_Dash"
+#                "_value": "IceFire_1_CheckPoint_1"
 #            },
+#            "_tag": "Tutorial_0_6_KillTheEnemyTip",
 #            "_position": {
-#                "x": 495.0,
-#                "y": 480.0
+#                "x": 585.0,
+#                "y": 540.0
 #            },
+#            "_comment": "Tutorial_0_7_KillTheEnemyTip",
 #            "$type": "ModuleAIAtoms+Flow_OnLevelEventTrigger",
 #            "$id": "0"
 #        },
 #        {
 #            "_simplexNode": {
 #                "NoticeTip": {
-#                    "_value": "Press Space To Dash!"
+#                    "_value": "Push the key into the lock!"
 #                },
 #                "TipPositionType": {
-#                    "_value": 4
+#
 #                },
 #                "Duration": {
-#                    "_value": 4.0
+#                    "_value": 3.0
 #                }
 #            },
 #            "_position": {
-#                "x": 870.0,
-#                "y": 480.0
+#                "x": 930.0,
+#                "y": 540.0
 #            },
 #            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_ShowNoticeTip, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
 #            "$id": "1"

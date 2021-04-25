@@ -173,18 +173,6 @@ public class WorldModuleDesignHelper : MonoBehaviour
         boxBounds.size = new GridPos3D(xMax - xMin + 1, yMax - yMin + 1, zMax - zMin + 1);
         worldModuleData.BoxBounds = boxBounds;
 
-        List<LevelTriggerBase> levelTriggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
-        foreach (LevelTriggerBase trigger in levelTriggers)
-        {
-            LevelTriggerBase.Data data = (LevelTriggerBase.Data) trigger.TriggerData.Clone();
-            GameObject levelTriggerPrefab = PrefabUtility.GetCorrespondingObjectFromSource(trigger.gameObject);
-            ushort levelTriggerTypeIndex = ConfigManager.TypeDefineConfigs[TypeDefineType.LevelTrigger].TypeIndexDict[levelTriggerPrefab.name];
-            data.LevelTriggerTypeIndex = levelTriggerTypeIndex;
-            GridPos3D gp = GridPos3D.GetGridPosByLocalTrans(trigger.transform, 1);
-            data.LocalGP = gp;
-            worldModuleData.WorldModuleLevelTriggerGroupData.TriggerDataList.Add(data);
-        }
-
         List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
         foreach (BornPointDesignHelper bp in bornPoints)
         {
@@ -296,7 +284,6 @@ public class WorldModuleDesignHelper : MonoBehaviour
         dirty |= ArrangeAllRoots();
         dirty |= FormatAllEntityName_Editor();
         dirty |= FormatAllBornPointName_Editor();
-        dirty |= FormatAllLevelTriggerName_Editor();
         return dirty;
     }
 
@@ -312,23 +299,6 @@ public class WorldModuleDesignHelper : MonoBehaviour
             if (entity.name != prefabName)
             {
                 entity.name = prefabName;
-                dirty = true;
-            }
-        }
-
-        return dirty;
-    }
-
-    private bool FormatAllLevelTriggerName_Editor()
-    {
-        bool dirty = false;
-        List<LevelTriggerBase> levelTriggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
-        foreach (LevelTriggerBase trigger in levelTriggers)
-        {
-            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(trigger.gameObject);
-            if (trigger.name != prefab.name)
-            {
-                trigger.name = prefab.name;
                 dirty = true;
             }
         }
@@ -368,19 +338,6 @@ public class WorldModuleDesignHelper : MonoBehaviour
                 root.parent = transform;
                 dirty = true;
             }
-        }
-
-        List<LevelTriggerBase> triggers = GetComponentsInChildren<LevelTriggerBase>().ToList();
-        root = GetRoot(WorldModuleHierarchyRootType.WorldModuleLevelTriggersRoot);
-        foreach (LevelTriggerBase trigger in triggers)
-        {
-            if (!trigger.transform.IsChildOf(root))
-            {
-                trigger.transform.parent = root;
-                dirty = true;
-            }
-
-            trigger.RefreshIsUnderWorldOrModuleBoxesRoot();
         }
 
         List<BornPointDesignHelper> bornPoints = GetComponentsInChildren<BornPointDesignHelper>().ToList();
@@ -451,6 +408,5 @@ public enum WorldModuleHierarchyRootType
 {
     BoxesRoot = 0,
     ActorsRoot = 1,
-    WorldModuleLevelTriggersRoot = 2,
-    WorldModuleBornPointsRoot = 3,
+    WorldModuleBornPointsRoot = 2,
 }

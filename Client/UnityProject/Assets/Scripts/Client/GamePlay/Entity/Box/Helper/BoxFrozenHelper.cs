@@ -2,7 +2,7 @@
 
 public class BoxFrozenHelper : EntityFrozenHelper
 {
-    public override void FrozeIntoIceBlock(int beforeFrozenLevel, int afterFrozenLevel)
+    public override void FrozeIntoIceBlock(int beforeFrozenLevel, int afterFrozenLevel, int min, int max)
     {
         Box box = (Box) Entity;
         if (afterFrozenLevel == 0)

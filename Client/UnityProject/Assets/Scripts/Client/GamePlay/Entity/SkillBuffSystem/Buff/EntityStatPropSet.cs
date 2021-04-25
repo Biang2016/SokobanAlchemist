@@ -424,11 +424,11 @@ public class EntityStatPropSet
             StatNotifyActionSetDict.Add(est, new Stat.NotifyActionSet());
             if (Entity != null)
             {
-                StatNotifyActionSetDict[est].OnValueChanged += delegate(int before, int after)
+                StatNotifyActionSetDict[est].OnValueChanged += delegate(int before, int after, int min, int max)
                 {
                     foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
                     {
-                        eps.OnEntityStatValueChange(est, before, after);
+                        eps.OnEntityStatValueChange(est, before, after, min, max);
                     }
                 };
             }
@@ -621,7 +621,7 @@ public class EntityStatPropSet
         FiringValue.SetValue(0);
     }
 
-    private void OnFrozenValueChanged(int before, int after)
+    private void OnFrozenValueChanged(int before, int after, int min, int max)
     {
         FrozenLevel.SetValue(after / FrozenValuePerLevel, "FrozenValueChange");
         if (FrozenLevel.Value > 0) Entity.EntityBuffHelper.PlayAbnormalStatFX(EntityStatType.FrozenValue, FrozenFX, FrozenLevel.Value); // 冰冻值变化时，播放一次特效
@@ -632,7 +632,7 @@ public class EntityStatPropSet
         FiringValue.AbnormalStatResistance = after;
     }
 
-    private void OnFiringValueChanged(int before, int after)
+    private void OnFiringValueChanged(int before, int after, int min, int max)
     {
         FiringLevel.SetValue(Mathf.RoundToInt(after / FiringValuePerLevel), "FiringValueChange");
         if (FiringLevel.Value > 0)
@@ -645,7 +645,7 @@ public class EntityStatPropSet
         FrozenValue.SetValue(FrozenValue.Value - increase);
     }
 
-    private void OnFiringLevelChanged(int before, int after)
+    private void OnFiringLevelChanged(int before, int after, int min, int max)
     {
         if (before == 0 && after > 0)
         {

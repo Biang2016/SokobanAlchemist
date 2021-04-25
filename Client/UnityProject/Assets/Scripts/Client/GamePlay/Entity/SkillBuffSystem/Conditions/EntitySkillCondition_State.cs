@@ -1,5 +1,6 @@
 ﻿using System;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 [Serializable]
 public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondition.IPureCondition
@@ -12,9 +13,19 @@ public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondi
     [ShowIf("m_ConditionType", ConditionType.Stat)]
     public EntityStatType EntityStatType;
 
+    [LabelText("使用百分比")]
+    [ShowIf("m_ConditionType", ConditionType.Stat)]
+    public bool EntityStatThreshold_UsePercent = false;
+
     [LabelText("状态值阈值")]
     [ShowIf("m_ConditionType", ConditionType.Stat)]
+    [HideIf("EntityStatThreshold_UsePercent")]
     public int EntityStatThreshold;
+
+    [LabelText("状态值阈值%")]
+    [ShowIf("m_ConditionType", ConditionType.Stat)]
+    [ShowIf("EntityStatThreshold_UsePercent")]
+    public int EntityStatThresholdPercent;
 
     private bool StatOrProperty => m_ConditionType == ConditionType.Stat || m_ConditionType == ConditionType.Property;
 
@@ -35,6 +46,10 @@ public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondi
     [ShowIf("m_ConditionType", ConditionType.BattleStateBool)]
     public string BattleStateBool = "";
 
+    [LabelText("战场状态")]
+    [ShowIf("m_ConditionType", ConditionType.BattleStateBool)]
+    public bool BattleStateBoolValue = false;
+
     [LabelText("满足条件持续时间/s")]
     public float SatisfiedDuration = 0f;
 
@@ -42,7 +57,7 @@ public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondi
 
     public bool OnCheckCondition()
     {
-        return satisfiedDurationTick >= SatisfiedDuration;
+        return satisfiedDurationTick > SatisfiedDuration;
     }
 
     public override void OnInit(Entity entity)
@@ -76,28 +91,29 @@ public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondi
         {
             case ConditionType.Stat:
             {
-                if (Entity == null || Entity.EntityStatPropSet == null || Entity.EntityStatPropSet.StatDict == null)
-                {
-                    int a = 0;
-                }
-
                 EntityStat stat = Entity.EntityStatPropSet.StatDict[EntityStatType];
                 bool trigger = false;
+                int threshold = EntityStatThreshold;
+                if (EntityStatThreshold_UsePercent)
+                {
+                    threshold = Mathf.RoundToInt(EntityStatThresholdPercent / 100f * stat.MaxValue);
+                }
+
                 switch (ThresholdOperator)
                 {
                     case Operator.LessEquals:
                     {
-                        trigger = stat.Value <= EntityStatThreshold;
+                        trigger = stat.Value <= threshold;
                         break;
                     }
                     case Operator.Equals:
                     {
-                        trigger = stat.Value == EntityStatThreshold;
+                        trigger = stat.Value == threshold;
                         break;
                     }
                     case Operator.GreaterEquals:
                     {
-                        trigger = stat.Value >= EntityStatThreshold;
+                        trigger = stat.Value >= threshold;
                         break;
                     }
                 }
@@ -131,7 +147,7 @@ public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondi
             }
             case ConditionType.BattleStateBool:
             {
-                return BattleManager.Instance.GetStateBool(BattleStateBool);
+                return BattleManager.Instance.GetStateBool(BattleStateBool) == BattleStateBoolValue;
             }
         }
 
@@ -143,11 +159,14 @@ public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondi
         EntitySkillCondition_State cloneCondition = (EntitySkillCondition_State) cloneData;
         cloneCondition.m_ConditionType = m_ConditionType;
         cloneCondition.EntityStatType = EntityStatType;
+        cloneCondition.EntityStatThreshold_UsePercent = EntityStatThreshold_UsePercent;
         cloneCondition.EntityStatThreshold = EntityStatThreshold;
+        cloneCondition.EntityStatThresholdPercent = EntityStatThresholdPercent;
         cloneCondition.EntityPropertyType = EntityPropertyType;
         cloneCondition.EntityPropertyThreshold = EntityPropertyThreshold;
         cloneCondition.ThresholdOperator = ThresholdOperator;
         cloneCondition.BattleStateBool = BattleStateBool;
+        cloneCondition.BattleStateBoolValue = BattleStateBoolValue;
         cloneCondition.SatisfiedDuration = SatisfiedDuration;
     }
 
@@ -157,11 +176,14 @@ public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondi
         EntitySkillCondition_State srcCondition = (EntitySkillCondition_State) srcData;
         m_ConditionType = srcCondition.m_ConditionType;
         EntityStatType = srcCondition.EntityStatType;
+        EntityStatThreshold_UsePercent = srcCondition.EntityStatThreshold_UsePercent;
         EntityStatThreshold = srcCondition.EntityStatThreshold;
+        EntityStatThresholdPercent = srcCondition.EntityStatThresholdPercent;
         EntityPropertyType = srcCondition.EntityPropertyType;
         EntityPropertyThreshold = srcCondition.EntityPropertyThreshold;
         ThresholdOperator = srcCondition.ThresholdOperator;
         BattleStateBool = srcCondition.BattleStateBool;
+        BattleStateBoolValue = srcCondition.BattleStateBoolValue;
         SatisfiedDuration = srcCondition.SatisfiedDuration;
     }
 }

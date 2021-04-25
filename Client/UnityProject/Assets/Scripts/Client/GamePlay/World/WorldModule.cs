@@ -44,7 +44,6 @@ public class WorldModule : PoolObject
     public WorldDeadZoneTrigger WorldDeadZoneTrigger;
     public WorldWallCollider WorldWallCollider;
     public WorldGroundCollider WorldGroundCollider;
-    protected List<LevelTriggerBase> WorldModuleLevelTriggers = new List<LevelTriggerBase>();
     protected List<Entity> WorldModuleTriggerEntities = new List<Entity>();
 
     public List<EntityPassiveSkill_LevelEventTriggerAppear> EventTriggerAppearEntityPassiveSkillList = new List<EntityPassiveSkill_LevelEventTriggerAppear>();
@@ -167,7 +166,6 @@ public class WorldModule : PoolObject
 
     internal Transform WorldModuleBoxRoot;
     internal Transform WorldModuleTriggerRoot;
-    internal Transform WorldModuleLevelTriggerRoot;
 
     #endregion
 
@@ -180,8 +178,6 @@ public class WorldModule : PoolObject
         WorldModuleBoxRoot.parent = transform;
         WorldModuleTriggerRoot = new GameObject("WorldModuleTriggerRoot").transform;
         WorldModuleTriggerRoot.parent = transform;
-        WorldModuleLevelTriggerRoot = new GameObject("WorldModuleLevelTriggerRoot").transform;
-        WorldModuleLevelTriggerRoot.parent = transform;
     }
 
     [HideInEditorMode]
@@ -198,12 +194,6 @@ public class WorldModule : PoolObject
         }
 
         EventTriggerAppearEntityPassiveSkillList.Clear();
-        foreach (LevelTriggerBase trigger in WorldModuleLevelTriggers)
-        {
-            trigger.PoolRecycle();
-        }
-
-        WorldModuleLevelTriggers.Clear();
         foreach (Entity triggerEntity in WorldModuleTriggerEntities)
         {
             triggerEntity.PoolRecycle();
@@ -407,28 +397,6 @@ public class WorldModule : PoolObject
             }
         }
 
-        foreach (LevelTriggerBase.Data triggerData in worldModuleData.WorldModuleLevelTriggerGroupData.TriggerDataList)
-        {
-            LevelTriggerBase.Data dataClone = (LevelTriggerBase.Data) triggerData.Clone();
-            if (string.IsNullOrEmpty(dataClone.AppearLevelEventAlias))
-            {
-                GenerateLevelTrigger(dataClone);
-            }
-            else
-            {
-                Callback<string> cb = null;
-                cb = (eventAlias) =>
-                {
-                    if (dataClone.AppearLevelEventAlias.CheckEventAliasOrStateBool(eventAlias, GUID))
-                    {
-                        GenerateLevelTrigger(dataClone);
-                        ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, cb);
-                    }
-                };
-                ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, cb);
-            }
-        }
-
         foreach (TriggerEntityData triggerEntityData in worldModuleData.TriggerEntityDataList)
         {
             Entity triggerEntity = GenerateEntity(triggerEntityData.EntityData, LocalGPToWorldGP(triggerEntityData.LocalGP), false, true, false, null);
@@ -447,13 +415,6 @@ public class WorldModule : PoolObject
         }
 
         IsGeneratingOrRecycling = false;
-    }
-
-    public void GenerateLevelTrigger(LevelTriggerBase.Data dataClone)
-    {
-        LevelTriggerBase trigger = GameObjectPoolManager.Instance.LevelTriggerDict[dataClone.LevelTriggerTypeIndex].AllocateGameObject<LevelTriggerBase>(WorldModuleLevelTriggerRoot);
-        trigger.InitializeInWorldModule(dataClone, GUID);
-        WorldModuleLevelTriggers.Add(trigger);
     }
 
     public Entity GenerateEntity(EntityData entityData, GridPos3D worldGP, bool isTriggerAppear = false, bool isStartedEntities = false, bool findSpaceUpward = false, List<GridPos3D> overrideOccupation = null)
