@@ -254,7 +254,7 @@ public abstract class MapGenerator
                         data.WorldGP = appear_world;
                         data.LocalGP = appear_local;
                         data.EntityData.EntityOrientation = GridPosR.RotateOrientationClockwise90(data.EntityData.EntityOrientation, (int) staticLayoutOrientation);
-                        m_OpenWorld.WorldMap_TriggerEntityDataMatrix[worldGP.x, worldGP.y - Height, worldGP.z] = data;
+                        m_OpenWorld.WorldMap_TriggerEntityDataMatrix[data.WorldGP.x, data.WorldGP.y - Height, data.WorldGP.z] = data;
                     }
 
                     if (staticLayoutLayerData.DeterminePlayerBP && m_OpenWorld.InitialPlayerBP == GridPos3D.Zero)
