@@ -52,7 +52,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         BoxIcon = 10000,
         Actor = 11000,
         CollectableItem = 12000,
-        LevelTrigger = 13000,
         WorldModule = 14000,
         StaticLayout = 20000,
         World = 30000,
@@ -216,7 +215,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         {TypeDefineType.BoxIcon, new TypeDefineConfig<Texture2D>("BoxIcon", "/Resources/BoxIcons", true, TypeStartIndex.BoxIcon)},
         {TypeDefineType.Actor, new TypeDefineConfig<Actor>("Actor", "/Resources/Prefabs/Designs/Actor", true, TypeStartIndex.Actor)},
         {TypeDefineType.CollectableItem, new TypeDefineConfig<CollectableItem>("CollectableItem", "/Resources/Prefabs/Designs/CollectableItem", true, TypeStartIndex.CollectableItem)},
-        {TypeDefineType.LevelTrigger, new TypeDefineConfig<LevelTriggerBase>("LevelTrigger", "/Resources/Prefabs/Designs/LevelTrigger", true, TypeStartIndex.LevelTrigger)},
         {TypeDefineType.WorldModule, new TypeDefineConfig<WorldModuleDesignHelper>("WorldModule", "/Designs/WorldModule", true, TypeStartIndex.WorldModule)},
         {TypeDefineType.StaticLayout, new TypeDefineConfig<WorldModuleDesignHelper>("StaticLayout", "/Designs/StaticLayout", true, TypeStartIndex.StaticLayout)},
         {TypeDefineType.World, new TypeDefineConfig<WorldDesignHelper>("World", "/Designs/Worlds", true, TypeStartIndex.World)},
@@ -332,28 +330,28 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         if (dialogShow) EditorUtility.DisplayDialog("Notice", "Serialize Config Success", "Confirm");
     }
 
-    //[MenuItem("开发工具/配置/快速序列化类型")]
-    //public static void QuickExportConfigs_TypeDefines()
-    //{
-    //    if (Directory.Exists(TypeNamesConfigFolder_Build)) Directory.Delete(TypeNamesConfigFolder_Build, true);
-    //    Directory.CreateDirectory(TypeNamesConfigFolder_Build);
-
-    //    // 时序，先导出类型表
-    //    ExportTypeGUIDMapping();
-    //    ExportEntitySkillLibrary(DataFormat.Binary);
-    //    ExportAllEntityOccupationDataConfigs(DataFormat.Binary);
-
-    //    AssetDatabase.Refresh();
-    //    IsLoaded = false;
-    //    LoadAllConfigs();
-    //    EditorUtility.DisplayDialog("Notice", "Quick Serialize Types Success", "Confirm");
-    //}
-
     [MenuItem("开发工具/配置/快速序列化类型")]
     public static void QuickExportConfigs_TypeDefines()
     {
-        ExportConfigs(true, false);
+        if (Directory.Exists(TypeNamesConfigFolder_Build)) Directory.Delete(TypeNamesConfigFolder_Build, true);
+        Directory.CreateDirectory(TypeNamesConfigFolder_Build);
+
+        // 时序，先导出类型表
+        ExportTypeGUIDMapping();
+        ExportEntitySkillLibrary(DataFormat.Binary);
+        ExportAllEntityOccupationDataConfigs(DataFormat.Binary);
+
+        AssetDatabase.Refresh();
+        IsLoaded = false;
+        LoadAllConfigs();
+        EditorUtility.DisplayDialog("Notice", "Quick Serialize Types Success", "Confirm");
     }
+
+    //[MenuItem("开发工具/配置/快速序列化类型")]
+    //public static void QuickExportConfigs_TypeDefines()
+    //{
+    //    ExportConfigs(true, false);
+    //}
 
     [MenuItem("Assets/SerializeConfigForThisModuleOrWorld", priority = -50)]
     public static void ExportConfigsForSelectedAssets()
@@ -1287,12 +1285,6 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
 
         return null;
-    }
-
-    public static GameObject FindLevelTriggerPrefabByName(string levelTriggerName)
-    {
-        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(TypeDefineConfigs[TypeDefineType.LevelTrigger].GetTypeAssetDataBasePath(levelTriggerName));
-        return prefab;
     }
 
     public static GameObject FindWorldModulePrefabByName(TypeDefineType worldModuleType, string worldModuleName)

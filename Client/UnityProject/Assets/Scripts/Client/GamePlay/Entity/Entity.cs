@@ -419,7 +419,7 @@ public abstract class Entity : PoolObject
     [ShowInInspector]
     [FoldoutGroup("实时主动技能")]
     [LabelText("实时主动技能列表")]
-    public SortedDictionary<EntitySkillIndex, EntityActiveSkill> EntityActiveSkillDict = new SortedDictionary<EntitySkillIndex, EntityActiveSkill>(); // 技能编号
+    public Dictionary<EntitySkillIndex, EntityActiveSkill> EntityActiveSkillDict = new Dictionary<EntitySkillIndex, EntityActiveSkill>(); // 技能编号
 
     public Dictionary<string, EntityActiveSkill> EntityActiveSkillGUIDDict = new Dictionary<string, EntityActiveSkill>(); // 便于使用GUID来索引到技能
 
@@ -509,13 +509,11 @@ public abstract class Entity : PoolObject
 
     public void AddNewActiveSkill(EntityActiveSkill eas)
     {
-        EntitySkillIndex skillIndex = EntitySkillIndex.Skill_0;
         foreach (EntitySkillIndex si in Enum.GetValues(typeof(EntitySkillIndex)))
         {
             if (!EntityActiveSkillDict.ContainsKey(si))
             {
-                skillIndex = si;
-                AddNewActiveSkill(eas, skillIndex);
+                AddNewActiveSkill(eas, si);
                 return;
             }
         }
@@ -531,6 +529,11 @@ public abstract class Entity : PoolObject
 
         if (!EntityActiveSkillGUIDDict.ContainsKey(eas.SkillGUID))
         {
+            if (this is Actor actor && actor.ActorSkillLearningHelper != null)
+            {
+                actor.ActorSkillLearningHelper.LearnActiveSkill(eas.SkillGUID, skillIndex);
+            }
+
             EntityActiveSkillDict.Add(skillIndex, eas);
             EntityActiveSkillGUIDDict.Add(eas.SkillGUID, eas);
             eas.Entity = this;

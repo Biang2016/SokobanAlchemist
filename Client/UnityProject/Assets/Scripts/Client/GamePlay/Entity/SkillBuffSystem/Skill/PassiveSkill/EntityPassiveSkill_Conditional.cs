@@ -181,8 +181,18 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     public EntityStatType EntityStatChangeType;
 
     [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
+    [LabelText("使用百分比")]
+    public bool EntityStatChangeThreshold_UsePercent = false;
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
+    [HideIf("EntityStatChangeThreshold_UsePercent")]
     [LabelText("状态值阈值")]
     public int EntityStatChangeThreshold;
+
+    [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
+    [ShowIf("EntityStatChangeThreshold_UsePercent")]
+    [LabelText("状态值阈值%")]
+    public int EntityStatChangeThresholdPercent;
 
     [ShowIf("PassiveSkillCondition", PassiveSkillConditionType.OnEntityStatValueChange)]
     [HideLabel]
@@ -625,34 +635,40 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
     }
 
-    public override void OnEntityStatValueChange(EntityStatType entityStatType, int before, int after)
+    public override void OnEntityStatValueChange(EntityStatType entityStatType, int before, int after, int min, int max)
     {
-        base.OnEntityStatValueChange(entityStatType, before, after);
+        base.OnEntityStatValueChange(entityStatType, before, after, min, max);
         if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnEntityStatValueChange))
         {
             if (EntityStatChangeType == entityStatType)
             {
                 bool trigger = false;
+                int threshold = EntityStatChangeThreshold;
+                if (EntityStatChangeThreshold_UsePercent)
+                {
+                    threshold = Mathf.RoundToInt(EntityStatChangeThresholdPercent / 100f * max);
+                }
+
                 switch (EntityStatChangeThresholdType)
                 {
                     case ValueChangeOverThresholdType.LE_to_G:
                     {
-                        trigger = before <= EntityStatChangeThreshold && after > EntityStatChangeThreshold;
+                        trigger = before <= threshold && after > threshold;
                         break;
                     }
                     case ValueChangeOverThresholdType.L_to_GE:
                     {
-                        trigger = before < EntityStatChangeThreshold && after >= EntityStatChangeThreshold;
+                        trigger = before < threshold && after >= threshold;
                         break;
                     }
                     case ValueChangeOverThresholdType.GE_to_L:
                     {
-                        trigger = before >= EntityStatChangeThreshold && after < EntityStatChangeThreshold;
+                        trigger = before >= threshold && after < threshold;
                         break;
                     }
                     case ValueChangeOverThresholdType.G_to_LE:
                     {
-                        trigger = before > EntityStatChangeThreshold && after <= EntityStatChangeThreshold;
+                        trigger = before > threshold && after <= threshold;
                         break;
                     }
                 }
@@ -803,7 +819,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
         // OnEntityStatPropertyChange
         newPSC.EntityStatChangeType = EntityStatChangeType;
+        newPSC.EntityStatChangeThreshold_UsePercent = EntityStatChangeThreshold_UsePercent;
         newPSC.EntityStatChangeThreshold = EntityStatChangeThreshold;
+        newPSC.EntityStatChangeThresholdPercent = EntityStatChangeThresholdPercent;
         newPSC.EntityStatChangeThresholdType = EntityStatChangeThresholdType;
         newPSC.EntityPropertyChangeType = EntityPropertyChangeType;
         newPSC.EntityPropertyChangeThreshold = EntityPropertyChangeThreshold;
@@ -841,7 +859,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
         // OnEntityStatPropertyChange
         EntityStatChangeType = srcPSC.EntityStatChangeType;
+        EntityStatChangeThreshold_UsePercent = srcPSC.EntityStatChangeThreshold_UsePercent;
         EntityStatChangeThreshold = srcPSC.EntityStatChangeThreshold;
+        EntityStatChangeThresholdPercent = srcPSC.EntityStatChangeThresholdPercent;
         EntityStatChangeThresholdType = srcPSC.EntityStatChangeThresholdType;
         EntityPropertyChangeType = srcPSC.EntityPropertyChangeType;
         EntityPropertyChangeThreshold = srcPSC.EntityPropertyChangeThreshold;

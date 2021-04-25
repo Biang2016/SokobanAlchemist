@@ -33,7 +33,7 @@ public abstract class Stat
     public class NotifyActionSet
     {
         public UnityAction<int, int, int> OnChanged;
-        public UnityAction<int, int> OnValueChanged;
+        public UnityAction<int, int, int, int> OnValueChanged;
         public UnityAction<int> OnValueIncrease;
         public UnityAction<int> OnValueDecrease;
         public UnityAction<int> OnValueReachMin;
@@ -109,7 +109,7 @@ public abstract class Stat
             _value = value;
             if (_value == _minValue) m_NotifyActionSet.OnValueReachMin?.Invoke(_value);
             if (_value == _maxValue) m_NotifyActionSet.OnValueReachMax?.Invoke(_value);
-            m_NotifyActionSet.OnValueChanged?.Invoke(before, _value);
+            m_NotifyActionSet.OnValueChanged?.Invoke(before, _value, MinValue, MaxValue);
             m_NotifyActionSet.OnChanged?.Invoke(_value, _minValue, _maxValue);
             if (before < _value) m_NotifyActionSet.OnValueIncrease?.Invoke(_value - before);
             if (before > _value) m_NotifyActionSet.OnValueDecrease?.Invoke(before - _value);

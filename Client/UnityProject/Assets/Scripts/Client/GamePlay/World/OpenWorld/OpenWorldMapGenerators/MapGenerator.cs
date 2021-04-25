@@ -233,11 +233,28 @@ public abstract class MapGenerator
                         }
 
                         GridPos3D appear_world = worldGP + rot_local;
+
+                        // 破损布局情况下，为了避免不占位的TriggerEntity无限放置，只有附近的有占位的Entity被允许放置了，此TriggerEntity才允许被放置（是一种假想的占位）
+                        if (staticLayoutLayerData.AllowFragment)
+                        {
+                            bool insideValidRange = false;
+                            foreach (GridPos3D validWorldGP in cached_IntactGPs_World)
+                            {
+                                if (appear_world == validWorldGP)
+                                {
+                                    insideValidRange = true;
+                                    break;
+                                }
+                            }
+
+                            if (!insideValidRange) continue;
+                        }
+
                         GridPos3D appear_local = new GridPos3D(appear_world.x % WorldModule.MODULE_SIZE, 0, appear_world.z % WorldModule.MODULE_SIZE);
                         data.WorldGP = appear_world;
                         data.LocalGP = appear_local;
-                        data.EntityData.EntityOrientation = GridPosR.RotateOrientationClockwise90(data.EntityData.EntityOrientation, (int)staticLayoutOrientation);
-                        m_OpenWorld.WorldMap_TriggerEntityDataMatrix[worldGP.x, worldGP.y - Height, worldGP.z] = data;
+                        data.EntityData.EntityOrientation = GridPosR.RotateOrientationClockwise90(data.EntityData.EntityOrientation, (int) staticLayoutOrientation);
+                        m_OpenWorld.WorldMap_TriggerEntityDataMatrix[data.WorldGP.x, data.WorldGP.y - Height, data.WorldGP.z] = data;
                     }
 
                     if (staticLayoutLayerData.DeterminePlayerBP && m_OpenWorld.InitialPlayerBP == GridPos3D.Zero)

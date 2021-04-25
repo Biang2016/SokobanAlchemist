@@ -7,16 +7,17 @@ using UnityEngine;
 [Serializable]
 public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkillAction.ITriggerAction
 {
-    public Dictionary<uint, float> ActorStayTimeDict = new Dictionary<uint, float>();
+    public Dictionary<uint, float> EntityStayTimeDict = new Dictionary<uint, float>();
 
     public override void OnRecycled()
     {
-        ActorStayTimeDict.Clear();
+        EntityStayTimeDict.Clear();
     }
 
     public override void Init(Entity entity)
     {
         base.Init(entity);
+        triggerTimeWhenStayCount = 0;
         foreach (EntitySkillAction esa in EntityActions_Enter)
         {
             esa.Init(Entity);
@@ -72,21 +73,29 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
     [LabelText("停留触发事件")]
     public List<EntitySkillAction> EntityActions_Stay = new List<EntitySkillAction>();
 
+    [LabelText("停留时最大触发次数")]
+    public int MaxTriggerTimeWhenStay = 999999;
+
+    private int triggerTimeWhenStayCount = 0;
+
     [LabelText("停留时按交互键触发")]
     public bool EffectiveWhenInteractiveKeyDown = false;
 
     [LabelText("交互提示语")]
+    [ShowIf("EffectiveWhenInteractiveKeyDown")]
     public string InteractiveKeyNotice = "";
 
     [LabelText("交互提示语位置")]
+    [ShowIf("EffectiveWhenInteractiveKeyDown")]
     public NoticePanel.TipPositionType TipPositionType = NoticePanel.TipPositionType.RightCenter;
 
     [LabelText("交互提示语持续时间")]
+    [ShowIf("EffectiveWhenInteractiveKeyDown")]
     public float InteractiveKeyNoticeDuration = 0.5f;
 
     [LabelText("停留时重复触发间隔时间/s")]
     [HideIf("EffectiveWhenInteractiveKeyDown")]
-    public float ActionInterval = 1f;
+    public float ActionInterval = 0.1f;
 
     [SerializeReference]
     [LabelText("离开触发事件")]
@@ -112,9 +121,9 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                     ClientGameManager.Instance.NoticePanel.ShowTip(InteractiveKeyNotice, TipPositionType, InteractiveKeyNoticeDuration);
                 }
 
-                if (!ActorStayTimeDict.ContainsKey(target.GUID))
+                if (!EntityStayTimeDict.ContainsKey(target.GUID))
                 {
-                    ActorStayTimeDict.Add(target.GUID, 0);
+                    EntityStayTimeDict.Add(target.GUID, 0);
                     foreach (EntitySkillAction action in EntityActions_Enter)
                     {
                         if (action is IPureAction pureAction)
@@ -134,6 +143,7 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
 
     public void ExecuteOnTriggerStay(Collider collider)
     {
+        if (triggerTimeWhenStayCount >= MaxTriggerTimeWhenStay) return;
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {
             Entity target = collider.GetComponentInParent<Entity>();
@@ -151,6 +161,7 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                 {
                     if (ControlManager.Instance.Common_InteractiveKey.Down)
                     {
+                        triggerTimeWhenStayCount++;
                         foreach (EntitySkillAction action in EntityActions_Stay)
                         {
                             if (action is IPureAction pureAction)
@@ -167,10 +178,11 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                 }
                 else
                 {
-                    if (ActorStayTimeDict.TryGetValue(target.GUID, out float duration))
+                    if (EntityStayTimeDict.TryGetValue(target.GUID, out float duration))
                     {
                         if (duration > ActionInterval)
                         {
+                            triggerTimeWhenStayCount++;
                             foreach (EntitySkillAction action in EntityActions_Stay)
                             {
                                 if (action is IPureAction pureAction)
@@ -184,11 +196,11 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                                 }
                             }
 
-                            ActorStayTimeDict[target.GUID] = 0;
+                            EntityStayTimeDict[target.GUID] = 0;
                         }
                         else
                         {
-                            ActorStayTimeDict[target.GUID] += Time.fixedDeltaTime;
+                            EntityStayTimeDict[target.GUID] += Time.fixedDeltaTime;
                         }
                     }
                 }
@@ -216,9 +228,9 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                     ClientGameManager.Instance.NoticePanel.HideTip();
                 }
 
-                if (ActorStayTimeDict.ContainsKey(target.GUID))
+                if (EntityStayTimeDict.ContainsKey(target.GUID))
                 {
-                    ActorStayTimeDict.Remove(target.GUID);
+                    EntityStayTimeDict.Remove(target.GUID);
                     foreach (EntitySkillAction action in EntityActions_Exit)
                     {
                         if (action is IPureAction pureAction)
@@ -244,6 +256,7 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         action.EffectiveOnSpecificEntity = EffectiveOnSpecificEntity;
         action.EffectiveOnSpecificEntityType = EffectiveOnSpecificEntityType.Clone();
         action.EntityActions_Enter = EntityActions_Enter.Clone<EntitySkillAction, EntitySkillAction>();
+        action.MaxTriggerTimeWhenStay = MaxTriggerTimeWhenStay;
         action.EntityActions_Stay = EntityActions_Stay.Clone<EntitySkillAction, EntitySkillAction>();
         action.EffectiveWhenInteractiveKeyDown = EffectiveWhenInteractiveKeyDown;
         action.InteractiveKeyNotice = InteractiveKeyNotice;
@@ -262,6 +275,7 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         EffectiveOnSpecificEntityType = action.EffectiveOnSpecificEntityType.Clone();
         EntityActions_Enter = action.EntityActions_Enter.Clone<EntitySkillAction, EntitySkillAction>();
         EntityActions_Stay = action.EntityActions_Stay.Clone<EntitySkillAction, EntitySkillAction>();
+        MaxTriggerTimeWhenStay = action.MaxTriggerTimeWhenStay;
         EffectiveWhenInteractiveKeyDown = action.EffectiveWhenInteractiveKeyDown;
         InteractiveKeyNotice = action.InteractiveKeyNotice;
         TipPositionType = action.TipPositionType;

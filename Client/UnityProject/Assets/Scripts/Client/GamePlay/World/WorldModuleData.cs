@@ -38,7 +38,6 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     public Grid3DBounds BoxBounds;
 
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
-    public LevelTriggerGroupData WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();
 
     public List<TriggerEntityData> TriggerEntityDataList = new List<TriggerEntityData>();
 
@@ -83,7 +82,6 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
         data.WorldModuleFeature = WorldModuleFeature;
         data.BGM_ThemeState = BGM_ThemeState;
         data.WorldModuleBornPointGroupData = WorldModuleBornPointGroupData.Clone();
-        data.WorldModuleLevelTriggerGroupData = WorldModuleLevelTriggerGroupData.Clone();
         data.TriggerEntityDataList = TriggerEntityDataList.Clone<TriggerEntityData, TriggerEntityData>();
 
         for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
@@ -124,13 +122,11 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
         WorldModuleFeature = WorldModuleFeature.None;
         WorldModuleBornPointGroupData = new BornPointGroupData();
-        WorldModuleLevelTriggerGroupData = new LevelTriggerGroupData();
     }
 
     public void OnRelease()
     {
         WorldModuleBornPointGroupData = null;
-        WorldModuleLevelTriggerGroupData = null;
         WorldModuleFeature = WorldModuleFeature.None;
         EventTriggerAppearEntityDataList.Clear();
     }

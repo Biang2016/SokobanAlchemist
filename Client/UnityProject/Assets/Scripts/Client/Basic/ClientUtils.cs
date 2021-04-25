@@ -99,7 +99,6 @@ public static class ClientUtils
         if (index >= (ushort) ConfigManager.TypeStartIndex.World) return ConfigManager.TypeStartIndex.World;
         if (index >= (ushort) ConfigManager.TypeStartIndex.StaticLayout) return ConfigManager.TypeStartIndex.StaticLayout;
         if (index >= (ushort) ConfigManager.TypeStartIndex.WorldModule) return ConfigManager.TypeStartIndex.WorldModule;
-        if (index >= (ushort) ConfigManager.TypeStartIndex.LevelTrigger) return ConfigManager.TypeStartIndex.LevelTrigger;
         if (index >= (ushort) ConfigManager.TypeStartIndex.Actor) return ConfigManager.TypeStartIndex.Actor;
         if (index >= (ushort) ConfigManager.TypeStartIndex.BoxIcon) return ConfigManager.TypeStartIndex.BoxIcon;
         if (index >= (ushort) ConfigManager.TypeStartIndex.Box) return ConfigManager.TypeStartIndex.Box;

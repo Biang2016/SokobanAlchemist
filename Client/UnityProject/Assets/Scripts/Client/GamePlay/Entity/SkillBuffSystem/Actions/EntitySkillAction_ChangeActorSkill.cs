@@ -1,14 +1,15 @@
 ﻿using System;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 
 [Serializable]
-public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkillAction.IEntityAction
+public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkillAction.IEntityAction, EntitySkillAction.IPureAction
 {
     public override void OnRecycled()
     {
     }
 
-    protected override string Description => "询问是否学习技能界面";
+    protected override string Description => "技能变化";
 
     [LabelText("True添加False移除")]
     public bool AddOrRemove;
@@ -25,6 +26,9 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
     [ShowIf("IsActiveSkill")]
     [LabelText("主动技能按键绑定")]
     public PlayerControllerHelper.KeyBind KeyBind;
+
+    [LabelText("True:对目标Entity生效; False:对本Entity生效")]
+    public bool ExertOnTarget;
 
     private bool IsActiveSkill
     {
@@ -53,17 +57,29 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
 
     public void ExecuteOnEntity(Entity entity)
     {
+        if (!ExertOnTarget) return;
+        ExecuteCore(entity);
+    }
+
+    public void Execute()
+    {
+        if (ExertOnTarget) return;
+        ExecuteCore(Entity);
+    }
+
+    private void ExecuteCore(Entity target)
+    {
         if (AddOrRemove)
         {
             EntitySkill entitySkill = ConfigManager.GetEntitySkill(SkillGUID);
             if (entitySkill is EntityActiveSkill eas)
             {
-                entity.AddNewActiveSkill(eas);
-                entity.BindActiveSkillToKey(eas, KeyBind, false);
+                target.AddNewActiveSkill(eas);
+                target.BindActiveSkillToKey(eas, KeyBind, false);
             }
             else if (entitySkill is EntityPassiveSkill eps)
             {
-                entity.AddNewPassiveSkill(eps);
+                target.AddNewPassiveSkill(eps);
             }
         }
         else
@@ -71,11 +87,11 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
             EntitySkill entitySkill = ConfigManager.GetRawEntitySkill(SkillGUID);
             if (entitySkill is EntityActiveSkill)
             {
-                entity.ForgetActiveSkill(SkillGUID);
+                target.ForgetActiveSkill(SkillGUID);
             }
             else if (entitySkill is EntityPassiveSkill)
             {
-                entity.ForgetPassiveSkill(SkillGUID);
+                target.ForgetPassiveSkill(SkillGUID);
             }
         }
     }
@@ -87,6 +103,7 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
         action.AddOrRemove = AddOrRemove;
         action.SkillGUID = SkillGUID;
         action.KeyBind = KeyBind;
+        action.ExertOnTarget = ExertOnTarget;
     }
 
     public override void CopyDataFrom(EntitySkillAction srcData)
@@ -96,5 +113,6 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
         AddOrRemove = action.AddOrRemove;
         SkillGUID = action.SkillGUID;
         KeyBind = action.KeyBind;
+        ExertOnTarget = action.ExertOnTarget;
     }
 }

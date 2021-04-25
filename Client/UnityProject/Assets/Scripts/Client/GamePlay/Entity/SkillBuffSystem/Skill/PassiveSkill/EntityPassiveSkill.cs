@@ -99,7 +99,7 @@ public abstract class EntityPassiveSkill : EntitySkill
     {
     }
 
-    public virtual void OnEntityStatValueChange(EntityStatType entityStatType, int before, int after)
+    public virtual void OnEntityStatValueChange(EntityStatType entityStatType, int before, int after, int min, int max)
     {
     }
 

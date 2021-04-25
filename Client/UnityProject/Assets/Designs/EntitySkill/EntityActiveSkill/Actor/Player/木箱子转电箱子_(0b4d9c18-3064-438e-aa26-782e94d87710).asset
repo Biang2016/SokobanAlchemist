@@ -28,7 +28,6 @@ MonoBehaviour:
         SkillDescription: Spend 10 lightning element, change the wooden box in front
           of you into an lightning box.
         TargetCamp: 8
-        EntitySkillIndex: 0
         SkillsPropertyCollection:
           CastingRadius:
             BaseValue: 0
@@ -115,7 +114,7 @@ MonoBehaviour:
           TypeDefineType: 0
           TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
     00000002:
-      type: {class: EntitySkillAction_ChangeBoxType, ns: , asm: Client}
+      type: {class: BoxSkillAction_ChangeBoxType, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         EntityData:
@@ -127,6 +126,7 @@ MonoBehaviour:
             EntityPassiveSkills:
             - id: 3
         ChangeForEveryGrid: 0
+        ExertOnTarget: 1
     00000003:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
@@ -137,7 +137,6 @@ MonoBehaviour:
           TypeDefineType: 12
           TypeGUID: 
         SkillDescription: 
-        IsAddedDuringGamePlay: 0
         PassiveSkillCondition: 1
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 

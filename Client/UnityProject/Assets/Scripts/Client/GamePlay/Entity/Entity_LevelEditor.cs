@@ -26,7 +26,7 @@ public abstract class Entity_LevelEditor : MonoBehaviour
         set { EntityData.EntityOrientation = value; }
     }
 
-    [HideInPrefabAssets]
+    //[HideInPrefabAssets]
     [HideLabel]
     [PropertyOrder(2)]
     public EntityData EntityData = new EntityData();
