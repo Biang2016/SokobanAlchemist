@@ -419,7 +419,7 @@ public abstract class Entity : PoolObject
     [ShowInInspector]
     [FoldoutGroup("实时主动技能")]
     [LabelText("实时主动技能列表")]
-    public SortedDictionary<EntitySkillIndex, EntityActiveSkill> EntityActiveSkillDict = new SortedDictionary<EntitySkillIndex, EntityActiveSkill>(); // 技能编号
+    public Dictionary<EntitySkillIndex, EntityActiveSkill> EntityActiveSkillDict = new Dictionary<EntitySkillIndex, EntityActiveSkill>(); // 技能编号
 
     public Dictionary<string, EntityActiveSkill> EntityActiveSkillGUIDDict = new Dictionary<string, EntityActiveSkill>(); // 便于使用GUID来索引到技能
 
