@@ -9,7 +9,7 @@ public class EntityWwiseHelper : EntityMonoHelper
     [BoxGroup("ForBox")]
     public Event OnCollideActively;
 
-    [BoxGroup("Common")]
+    [BoxGroup("Actor")]
     public Event OnCollidePassively;
 
     [BoxGroup("ForBox")]
