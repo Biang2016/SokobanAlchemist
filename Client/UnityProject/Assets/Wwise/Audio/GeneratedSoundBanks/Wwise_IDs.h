@@ -155,10 +155,10 @@ namespace AK
 
             namespace SWITCH
             {
-                static const AkUniqueID CONCRETE = 841620460U;
-                static const AkUniqueID DIRT = 2195636714U;
+                static const AkUniqueID EARTH = 3747705955U;
                 static const AkUniqueID GRASS = 4248645337U;
-                static const AkUniqueID ICE = 344481046U;
+                static const AkUniqueID ICESNOW = 1981860639U;
+                static const AkUniqueID TORCHEDEARTH = 1222644186U;
             } // namespace SWITCH
         } // namespace SURFACE_TYPE
 
@@ -196,7 +196,6 @@ namespace AK
     {
         static const AkUniqueID AMBIENT = 77978275U;
         static const AkUniqueID AUX = 983310469U;
-        static const AkUniqueID BGM_AUDIO_BUS = 341217133U;
         static const AkUniqueID BOXES = 2016903052U;
         static const AkUniqueID ENEMIES = 2242381963U;
         static const AkUniqueID MASTER_AUDIO_BUS = 2392784291U;
