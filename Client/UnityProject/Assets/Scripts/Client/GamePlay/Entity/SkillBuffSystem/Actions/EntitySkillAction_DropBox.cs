@@ -38,10 +38,11 @@ public class EntitySkillAction_DropBox : EntitySkillAction, EntitySkillAction.IP
                 ushort boxIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, bp.BoxTypeName.TypeName);
                 if (boxIndex == 0) return;
                 Box box = GameObjectPoolManager.Instance.BoxDict[boxIndex].AllocateGameObject<Box>(null);
-                GridPos3D worldGP = Entity.WorldGP;
+                GridPos3D worldGP = Entity.transform.position.ToGridPos3D();
+                worldGP += (Entity.EntityIndicatorHelper.EntityOccupationData.BoundsInt.zMax + 1) * GridPos3D.Up;
                 EntityData entityData = new EntityData(boxIndex, (GridPosR.Orientation) Random.Range(0, 4));
                 box.Setup(entityData, Entity.InitWorldModuleGUID, worldGP);
-                box.Initialize(worldGP, module, 0, false, Box.LerpType.DropFromEntity);
+                box.Initialize(worldGP, module, 0, false, Box.LerpType.DropFromEntity, false, false);
                 Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(DropConeAngle * Mathf.Deg2Rad);
                 Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);
                 box.DropFromEntity(dropVel.normalized * DropVelocity);

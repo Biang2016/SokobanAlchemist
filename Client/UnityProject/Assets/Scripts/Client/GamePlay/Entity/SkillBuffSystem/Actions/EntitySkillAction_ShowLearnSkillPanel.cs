@@ -37,7 +37,12 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
     public void Execute()
     {
         LearnSkillPanel learnSkillPanel = UIManager.Instance.ShowUIForms<LearnSkillPanel>();
-        learnSkillPanel.Initialize(SkillGUID);
+        learnSkillPanel.Initialize(SkillGUID, OnLearned);
+    }
+
+    private void OnLearned()
+    {
+        Entity.DestroySelf();
     }
 
     protected override void ChildClone(EntitySkillAction newAction)

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using BiangLibrary.GamePlay.UI;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class LearnSkillPanel : BaseUIPanel
@@ -28,7 +29,7 @@ public class LearnSkillPanel : BaseUIPanel
 
     private EntitySkillRow m_EntitySkillRow;
 
-    public void Initialize(string skillGUID)
+    public void Initialize(string skillGUID, UnityAction learnCallback)
     {
         m_EntitySkillRow?.PoolRecycle();
         m_EntitySkillRow = null;
@@ -48,6 +49,7 @@ public class LearnSkillPanel : BaseUIPanel
                 {
                     BattleManager.Instance.Player1.AddNewPassiveSkill((EntityPassiveSkill) rawEPS.Clone());
                     ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
+                    learnCallback?.Invoke();
                     CloseUIForm();
                 });
             }
@@ -74,6 +76,7 @@ public class LearnSkillPanel : BaseUIPanel
             BattleManager.Instance.Player1.AddNewActiveSkill(eas);
             BattleManager.Instance.Player1.BindActiveSkillToKey(eas, keyBind, true);
             ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
+            learnCallback?.Invoke();
             CloseUIForm();
         }
     }
@@ -87,6 +90,12 @@ public class LearnSkillPanel : BaseUIPanel
     public override void Hide()
     {
         base.Hide();
+        m_EntitySkillRow?.PoolRecycle();
+        LearnButton_Passive.onClick.RemoveAllListeners();
+        LearnButton_H.onClick.RemoveAllListeners();
+        LearnButton_J.onClick.RemoveAllListeners();
+        LearnButton_K.onClick.RemoveAllListeners();
+        LearnButton_L.onClick.RemoveAllListeners();
         UIManager.Instance.UI3DRoot.gameObject.SetActive(true);
     }
 }
