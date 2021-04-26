@@ -178,30 +178,32 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                 }
                 else
                 {
-                    if (EntityStayTimeDict.TryGetValue(target.GUID, out float duration))
+                    if (!EntityStayTimeDict.TryGetValue(target.GUID, out float duration))
                     {
-                        if (duration > ActionInterval)
-                        {
-                            triggerTimeWhenStayCount++;
-                            foreach (EntitySkillAction action in EntityActions_Stay)
-                            {
-                                if (action is IPureAction pureAction)
-                                {
-                                    pureAction.Execute();
-                                }
+                        EntityStayTimeDict.Add(target.GUID, 0);
+                    }
 
-                                if (action is IEntityAction entityAction)
-                                {
-                                    entityAction.ExecuteOnEntity(target);
-                                }
+                    if (duration > ActionInterval)
+                    {
+                        triggerTimeWhenStayCount++;
+                        foreach (EntitySkillAction action in EntityActions_Stay)
+                        {
+                            if (action is IPureAction pureAction)
+                            {
+                                pureAction.Execute();
                             }
 
-                            EntityStayTimeDict[target.GUID] = 0;
+                            if (action is IEntityAction entityAction)
+                            {
+                                entityAction.ExecuteOnEntity(target);
+                            }
                         }
-                        else
-                        {
-                            EntityStayTimeDict[target.GUID] += Time.fixedDeltaTime;
-                        }
+
+                        EntityStayTimeDict[target.GUID] = 0;
+                    }
+                    else
+                    {
+                        EntityStayTimeDict[target.GUID] += Time.fixedDeltaTime;
                     }
                 }
             }
