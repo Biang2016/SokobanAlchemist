@@ -67,4 +67,10 @@ public class WwiseAudioManager : MonoSingleton<WwiseAudioManager>
             World_Volume.SetGlobalValue(100f);
         }
     }
+
+    public Trigger Trigger_PlayerDeath;
+    public Trigger Trigger_QuestComplete;
+    public Trigger Trigger_Teleport;
+    public Trigger Trigger_Victory;
+
 }

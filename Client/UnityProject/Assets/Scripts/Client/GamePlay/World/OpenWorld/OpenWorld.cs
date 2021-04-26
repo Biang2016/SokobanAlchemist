@@ -622,6 +622,7 @@ public class OpenWorld : World
         transportingPlayerToMicroWorld = true;
         CurrentMicroWorldTypeIndex = worldTypeIndex;
         BattleManager.Instance.IsStart = false;
+        WwiseAudioManager.Instance.Trigger_Teleport.Post(WwiseAudioManager.Instance.WwiseBGMConfiguration.gameObject);
         UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetMinimumLoadingDuration(2);
@@ -754,6 +755,7 @@ public class OpenWorld : World
         returningToOpenWorldFormMicroWorld = true;
         CurrentMicroWorldTypeIndex = 0;
         BattleManager.Instance.IsStart = false;
+        WwiseAudioManager.Instance.Trigger_Teleport.Post(WwiseAudioManager.Instance.WwiseBGMConfiguration.gameObject);
         UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetMinimumLoadingDuration(2);
@@ -831,6 +833,7 @@ public class OpenWorld : World
     {
         restartingMicroWorld = true;
         BattleManager.Instance.IsStart = false;
+        WwiseAudioManager.Instance.Trigger_Teleport.Post(WwiseAudioManager.Instance.WwiseBGMConfiguration.gameObject);
         UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetMinimumLoadingDuration(2);

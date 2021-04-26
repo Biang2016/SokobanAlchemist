@@ -353,6 +353,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     IEnumerator Co_LoseGame()
     {
         IsStart = false;
+        WwiseAudioManager.Instance.Trigger_PlayerDeath.Post(WwiseAudioManager.Instance.WwiseBGMConfiguration.gameObject);
         SetAllActorForbidAction(true);
         WinLosePanel panel = UIManager.Instance.ShowUIForms<WinLosePanel>();
         yield return panel.Co_LoseGame();
