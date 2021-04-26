@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{243B1A99-3A40-415C-8C73-18D11E7863E8}" SchemaVersion="97">
+	<Events>
+		<WorkUnit Name="Player" ID="{243B1A99-3A40-415C-8C73-18D11E7863E8}" PersistMode="Standalone">
+			<PropertyList>
+				<Property Name="Color" Type="int16" Value="16"/>
+				<Property Name="OverrideColor" Type="bool" Value="True"/>
+			</PropertyList>
+			<ChildrenList>
+				<Folder Name="General" ID="{60E66DF5-6D62-48C3-A1EE-B1A5750A255C}" ShortID="368170146">
+					<PropertyList>
+						<Property Name="Color" Type="int16" Value="16"/>
+						<Property Name="OverrideColor" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Event Name="Player_Kick" ID="{53AAFBD4-7991-41C9-96EF-7A32F11D703D}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="16"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{D1B713C5-AD6E-4803-AE55-AF26BFA631DF}" ShortID="885952149">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_Kick" ID="{D39F32AD-F077-4349-865D-9B5CB06EB29B}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Player_Vault" ID="{87A67FB2-A0A0-478D-A531-09D0A1F1BBBC}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="16"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{A45A5572-D4F2-4AF2-B3D7-008AB85D010B}" ShortID="97221945">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_Vault" ID="{79135A40-AB6A-45CB-AAA0-08F78F1FAC42}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Player_Death" ID="{584C66E1-D9B2-4779-8A77-68AAFA302E03}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="16"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{B07EB281-2655-4A8A-91DF-D5859D4A19E0}" ShortID="498531730">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_Death" ID="{64ABD81E-0CDE-4E36-86E2-5D48F891A3A6}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Player_Dash" ID="{54A59489-03E7-4F6A-B46A-449B2256F731}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="16"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{B0BD229A-7802-493C-BFAB-8ACFBBD644C8}" ShortID="490130083">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_Dash" ID="{046336DC-BE5E-4300-ABD3-CD445403AD57}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Player_SkillCast" ID="{B633447B-6E36-4C0F-80D5-6C3432DB258C}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="16"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{F09DACC6-909A-428B-BD09-591C960425DD}" ShortID="57434717">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SFX_1" ID="{857EFB32-95D1-48F0-BD98-397AC62D568B}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Player_OnBeingDamaged" ID="{986CDFDC-FC0F-4AC8-A850-76002BFC6E25}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="16"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{630C0C81-BFC4-437E-90CA-ABA38149517C}" ShortID="932268872">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_OnBeingDamaged" ID="{E04A482A-D3B0-4E6A-A592-43BE932D8958}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Player_OnBeingHealed" ID="{1C711254-2592-4C76-B2B6-075C26401DC6}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="16"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{676B4753-BBEC-47AA-B26E-4C3ECEA4560C}" ShortID="415419187">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_OnBeingHealed" ID="{6DF8F41F-A03E-45FE-BD92-97756C68CAD1}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Player_OnBeingLit" ID="{6A8DC2DC-5481-4543-8F99-43AA4D52E48F}">
+							<ChildrenList>
+								<Action Name="" ID="{45D03BA4-FE3A-4742-B98B-2DE773F9EDBE}" ShortID="772743815">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_OnBeingLit" ID="{5543C1ED-A2D3-4BB0-9D4D-88A073A149D7}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Player_OnBeingFrozen" ID="{627DD1F4-3CB5-4535-A4B9-DDBA0E5ED552}">
+							<ChildrenList>
+								<Action Name="" ID="{53546166-7065-4BAF-A2AA-72DF1828C215}" ShortID="464596079">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_OnBeingFrozen" ID="{BC967AAE-46E2-4983-9273-C708AE26EB37}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Player_OnFrozenEnd" ID="{88176781-D2A8-4A77-9A49-8292F186A5D3}">
+							<ChildrenList>
+								<Action Name="" ID="{9D1EFEDC-D10F-4303-BEA1-1B16C7014A72}" ShortID="677069131">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_OnBeingFrozen" ID="{BC967AAE-46E2-4983-9273-C708AE26EB37}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Player_OnBurningEnd" ID="{C3FD06A2-0D89-41F7-9B1C-074AAF2F7047}">
+							<ChildrenList>
+								<Action Name="" ID="{10008142-8DE8-46C8-8A8A-01A2988D4348}" ShortID="868514375">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_OnBeingLit" ID="{5543C1ED-A2D3-4BB0-9D4D-88A073A149D7}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="SoundBankSpecific" ID="{A2B996EF-03FE-43B1-9062-4E0363F349D0}" ShortID="393608610">
+					<PropertyList>
+						<Property Name="Color" Type="int16" Value="16"/>
+						<Property Name="OverrideColor" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Event Name="Player_Footstep" ID="{2935B358-74BD-46BE-9FA6-D9D0BA824577}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="16"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{0FDAB20F-1652-468C-8171-349ED518EC94}" ShortID="579990352">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Footstep_Surface" ID="{EA739B7B-4D09-43EA-BAE6-D9E4D71A89BF}" WorkUnitID="{4EB6C7B0-99A6-458F-9A40-E260F23AF82C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

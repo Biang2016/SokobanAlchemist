@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{36B96266-F37E-43B8-8F8F-FB21678F9273}" SchemaVersion="97" RootDocumentID="{BF4FC306-E3A9-4180-902B-945ED5E7EFDB}">
+	<AudioObjects>
+		<WorkUnit Name="Boxes_Common" ID="{36B96266-F37E-43B8-8F8F-FB21678F9273}" OwnerID="{ABC65056-1A6C-4C9D-8CE0-4E3CFED4B185}" PersistMode="Nested">
+			<ChildrenList>
+				<ActorMixer Name="Boxes_Common" ID="{429A0557-21A8-429C-A1CC-BF47FDFEA756}" ShortID="922907437">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<RandomSequenceContainer Name="OnBeingPushed_Light" ID="{F28CC2E5-B848-4EEE-87A8-CD4CFB439DD2}" ShortID="446607047">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="OnBeingKicked_Light" ID="{0E6ED2BA-FD03-478E-B6CF-1C8B46B52326}" ShortID="165229107">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnBeingKicked_1" ID="{F754CCE5-B34D-48C0-9505-2BA747DAFFCB}" ShortID="479161409">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Protagonist_Push_1" ID="{D3B6E08C-FD52-471D-B489-A833707ECFB3}">
+											<Language>SFX</Language>
+											<AudioFile>Protagonist_Push_1.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="1062430198"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Protagonist_Push_1" ID="{D3B6E08C-FD52-471D-B489-A833707ECFB3}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnBeingKicked_2" ID="{23ABCB46-CAF2-4301-AC20-606A83DA28DA}" ShortID="643535541">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Protagonist_Push_2" ID="{6EC93BB0-81B1-47D7-832E-C02CA15C10DF}">
+											<Language>SFX</Language>
+											<AudioFile>Protagonist_Push_2.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="941213969"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Protagonist_Push_2" ID="{6EC93BB0-81B1-47D7-832E-C02CA15C10DF}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnBeingKicked_3" ID="{99E020DD-DE35-46C0-82F0-919542DAB04B}" ShortID="854224945">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Protagonist_Push_3" ID="{4F9E7685-805C-4F60-B11A-EEEFB6581239}">
+											<Language>SFX</Language>
+											<AudioFile>Protagonist_Push_3.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="979841132"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Protagonist_Push_3" ID="{4F9E7685-805C-4F60-B11A-EEEFB6581239}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="OnBeingMerged" ID="{023746A5-2A5C-4320-AC59-08EE2E36BF41}" ShortID="245962559">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="OnBeingPushed_Heavy" ID="{4F158FE6-23DF-4C1C-8514-3303A301C377}" ShortID="224623290">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="OnBeingKicked_Heavy" ID="{52400584-A129-4CEA-9D17-E192FA5CC836}" ShortID="512284632">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="OnCollideActively" ID="{3C00FBAD-2DD7-428E-B9C9-88F0C81A9540}" ShortID="722046299">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="Cardboard Box Crashing v2" ID="{C5E21FB3-65DE-4D2F-9ABB-6F6BE5698D40}" ShortID="848645961">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Cardboard Box Crashing v2" ID="{76DA4253-6221-4797-80DA-3A8611692B64}">
+											<Language>SFX</Language>
+											<AudioFile>Cardboard Box Crashing v2.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="21993998"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Cardboard Box Crashing v2" ID="{76DA4253-6221-4797-80DA-3A8611692B64}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Cardboard Box Crashing v4" ID="{501DEFF5-F660-4ECF-B0AA-D43400124B5E}" ShortID="1037871092">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Cardboard Box Crashing v4" ID="{D45286E3-A370-43E3-B7A8-50373877DFE8}">
+											<Language>SFX</Language>
+											<AudioFile>Cardboard Box Crashing v4.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="81508214"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Cardboard Box Crashing v4" ID="{D45286E3-A370-43E3-B7A8-50373877DFE8}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Cardboard Box Crashing v5" ID="{14CAED1D-AC34-48A4-91A8-6CBD21D6C6EA}" ShortID="813581289">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Cardboard Box Crashing v5" ID="{ABA76C32-8921-4B8C-842C-A5361A4D5E15}">
+											<Language>SFX</Language>
+											<AudioFile>Cardboard Box Crashing v5.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="653454346"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Cardboard Box Crashing v5" ID="{ABA76C32-8921-4B8C-842C-A5361A4D5E15}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Cardboard Box Crashing v3" ID="{C9A179B7-3E9F-4C49-BD5F-E3AE7FBBA047}" ShortID="247574214">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Cardboard Box Crashing v3" ID="{946FA509-B5A4-4DB0-858B-A9E4F51E6BE1}">
+											<Language>SFX</Language>
+											<AudioFile>Cardboard Box Crashing v3.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="805774241"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Cardboard Box Crashing v3" ID="{946FA509-B5A4-4DB0-858B-A9E4F51E6BE1}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Cardboard Box Crashing v1" ID="{5FDF4B9C-E797-4840-9A94-E1F6A93026A5}" ShortID="161942160">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Cardboard Box Crashing v1" ID="{CE2D646A-0E64-443B-BFC5-1CCB84AC29F7}">
+											<Language>SFX</Language>
+											<AudioFile>Cardboard Box Crashing v1.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="78304770"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Cardboard Box Crashing v1" ID="{CE2D646A-0E64-443B-BFC5-1CCB84AC29F7}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+					</ChildrenList>
+				</ActorMixer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

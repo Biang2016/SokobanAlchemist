@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{5CA22A7B-36EF-431C-A821-498489431E58}" SchemaVersion="97">
+	<Switches>
+		<WorkUnit Name="General" ID="{5CA22A7B-36EF-431C-A821-498489431E58}" PersistMode="Standalone">
+			<ChildrenList>
+				<SwitchGroup Name="Distance_to_Player" ID="{30FDA104-2BAD-4B76-B0BD-DA1F3902AB1E}">
+					<PropertyList>
+						<Property Name="UseGameParameter" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Switch Name="Close" ID="{651D8A07-AB41-4BE5-BEDB-CAE39AD0D12A}"/>
+						<Switch Name="Medium" ID="{E406CB73-A34B-4BA4-801D-9A2F16F86D1F}"/>
+						<Switch Name="Far" ID="{813FDA72-6947-4BFF-A362-A6D129483313}"/>
+					</ChildrenList>
+					<SwitchOnRTPC>
+						<GameParameterRef Name="Distance_to_Player" ID="{D9C56384-D920-47E1-8580-8A6201311E30}"/>
+						<Curve Name="" ID="{411E32BC-EB02-4D92-A433-5980FBCF077B}">
+							<PropertyList>
+								<Property Name="Flags" Type="int32" Value="65537"/>
+							</PropertyList>
+							<PointList>
+								<Point>
+									<XPos>0</XPos>
+									<YPos>1</YPos>
+									<Flags>5</Flags>
+								</Point>
+								<Point>
+									<XPos>25.50676</XPos>
+									<YPos>2</YPos>
+									<Flags>0</Flags>
+								</Point>
+								<Point>
+									<XPos>50.23649</XPos>
+									<YPos>3</YPos>
+									<Flags>0</Flags>
+								</Point>
+								<Point>
+									<XPos>80.20269</XPos>
+									<YPos>0</YPos>
+									<Flags>0</Flags>
+								</Point>
+								<Point>
+									<XPos>100</XPos>
+									<YPos>0</YPos>
+									<Flags>37</Flags>
+								</Point>
+							</PointList>
+						</Curve>
+					</SwitchOnRTPC>
+				</SwitchGroup>
+				<SwitchGroup Name="Surface_Type" ID="{4079D71D-09BA-47BB-BB36-44D224892B48}">
+					<ChildrenList>
+						<Switch Name="Concrete" ID="{780183F2-AF58-4237-96F8-B204D6EBC684}"/>
+						<Switch Name="Ice" ID="{EE46BFAC-81AB-4F90-A466-58A5A71E8D9E}"/>
+						<Switch Name="Grass" ID="{B23D011A-A6B7-41EB-AD0C-00EEEBEFF68B}"/>
+						<Switch Name="Dirt" ID="{41D91460-AF5E-45A1-B643-EDCDE619EF7F}"/>
+					</ChildrenList>
+				</SwitchGroup>
+			</ChildrenList>
+		</WorkUnit>
+	</Switches>
+</WwiseDocument>

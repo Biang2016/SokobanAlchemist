@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}" SchemaVersion="97" RootDocumentID="{9C6FF8E4-29EA-437D-8F32-D6CD73D5AEF5}">
+<WwiseDocument Type="WorkUnit" ID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}" SchemaVersion="97" RootDocumentID="{BF4FC306-E3A9-4180-902B-945ED5E7EFDB}">
 	<AudioObjects>
 		<WorkUnit Name="IceEnemy_Cyan" ID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}" OwnerID="{AB95962D-B8A9-40D0-868C-E15702865962}" PersistMode="Nested">
 			<ChildrenList>
-				<RandomSequenceContainer Name="OnSkillCast_0" ID="{E305B247-457B-4E53-B4C7-6FB9D70464C8}" ShortID="884024761">
+				<RandomSequenceContainer Name="SkillCast_v1" ID="{E305B247-457B-4E53-B4C7-6FB9D70464C8}" ShortID="884024761">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -13,7 +13,7 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="SFX_1" ID="{D5B01807-12DC-4E97-84BF-61D9CBD2B4A3}" ShortID="355854659">
+						<Sound Name="SkillCast_v1" ID="{D5B01807-12DC-4E97-84BF-61D9CBD2B4A3}" ShortID="355854659">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -37,7 +37,7 @@
 						</Sound>
 					</ChildrenList>
 				</RandomSequenceContainer>
-				<RandomSequenceContainer Name="OnSkillCast_1" ID="{7AA87C68-3CCC-4058-8818-883B0D3DBD79}" ShortID="756700947">
+				<RandomSequenceContainer Name="SkillCast_v2" ID="{7AA87C68-3CCC-4058-8818-883B0D3DBD79}" ShortID="756700947">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -47,7 +47,7 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="SFX_1" ID="{06D785EC-D76F-4CF2-850C-9DCF8BD2889B}" ShortID="571694375">
+						<Sound Name="SkillCast_v2" ID="{06D785EC-D76F-4CF2-850C-9DCF8BD2889B}" ShortID="571694375">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -71,6 +71,130 @@
 						</Sound>
 					</ChildrenList>
 				</RandomSequenceContainer>
+				<ActorMixer Name="IceEnemy_Cyan" ID="{B8FE5761-92D2-4928-9A2A-FED17CE24808}" ShortID="1062189507">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<RandomSequenceContainer Name="IceEnemy_Cyan_FrostBreath" ID="{8ADA565E-CDA3-4F0A-8CDC-663B5E513F81}" ShortID="956951403">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="SkillCast_v1" ID="{A6993B6C-B968-458A-9725-CB4C00E0C42F}" ShortID="45136669">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="effect 4" ID="{F1FD2A1E-B749-4FE5-861A-B02E6D373728}">
+											<Language>SFX</Language>
+											<AudioFile>effect 4.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="598399752"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="effect 4" ID="{F1FD2A1E-B749-4FE5-861A-B02E6D373728}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="IceEnemy_Cyan_GlacialSlam" ID="{10682822-8C94-4EA5-9D66-E7E9AF7CD366}" ShortID="92848669">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="SkillCast_v2" ID="{F0D66CA2-4F2A-4A08-8222-5A5C62C32272}" ShortID="138523522">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="JackHammer_far_03" ID="{5DBDFF96-D5F5-463C-88FE-21062170F782}">
+											<Language>SFX</Language>
+											<AudioFile>JackHammer_far_03.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="567636655"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="JackHammer_far_03" ID="{5DBDFF96-D5F5-463C-88FE-21062170F782}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="IceEnemy_Cyan_OnBeingDamaged" ID="{8E5CE747-B39B-4BCF-A7C6-B3388488BD3E}" ShortID="580579917">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="IceEnemy_Cyan_OnDestroyed_Common" ID="{683187E9-6227-47B3-A6D6-FA49676784B1}" ShortID="517867416">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="InCombatMarimba Prize" ID="{203DBC5A-DFDC-4FD3-9C3C-5FFEBAD5E977}" ShortID="353399644">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="InCombatMarimba Prize" ID="{9AD8F372-FB2D-468B-B0E4-BB0D5E747603}">
+											<Language>SFX</Language>
+											<AudioFile>InCombatMarimba Prize.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="47235782"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="InCombatMarimba Prize" ID="{9AD8F372-FB2D-468B-B0E4-BB0D5E747603}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+					</ChildrenList>
+				</ActorMixer>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>

@@ -13,25 +13,51 @@ MonoBehaviour:
   m_Name: AkWwiseProjectData
   m_EditorClassIdentifier: 
   AcousticTextureWwu:
-  - PhysicalPath: Virtual Acoustics\Default Work Unit.wwu
+  - PhysicalPath: Virtual Acoustics/Default Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
       ObjectType: 12
     ParentPath: Default Work Unit
     guid: f3d9f46073051244a88eb44bebd9a7b4
     GuidInternal: 
-    m_lastTime: -8585834061468515156
+    m_lastTime: -8585834173474775808
     List: []
   AuxBusWwu:
-  - PhysicalPath: Master-Mixer Hierarchy\Default Work Unit.wwu
+  - PhysicalPath: Master-Mixer Hierarchy/Default Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
       ObjectType: 12
     ParentPath: Default Work Unit
     guid: 6304d89afe194a4293d1284d09af8267
     GuidInternal: 
-    m_lastTime: -8585833709491077675
+    m_lastTime: -8585823177424775808
     List:
+    - name: Ambient
+      guid: 990213b893031041bb750a674c2c915d
+      id: 77978275
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      - ElementName: Ambient
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/World/Ambient
+    - name: AUX
+      guid: dc71d83b0d944e4eb78fe0b8360e2d7e
+      id: 983310469
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      - ElementName: AUX
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/World/AUX
     - name: BGM_Audio_Bus
       guid: 23758ae306bf8b40b0e1bbdb32dcdbfd
       id: 341217133
@@ -42,7 +68,33 @@ MonoBehaviour:
         ObjectType: 2
       - ElementName: BGM_Audio_Bus
         ObjectType: 2
-      Path: Default Work Unit\Master_Audio_Bus\BGM_Audio_Bus
+      Path: Default Work Unit/Master_Audio_Bus/BGM_Audio_Bus
+    - name: Boxes
+      guid: 47d8528e5e65534c87551b6771a8b618
+      id: 2016903052
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      - ElementName: Boxes
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/World/Boxes
+    - name: Enemies
+      guid: 1682a0346d14b64488bb740b61be1e9a
+      id: 2242381963
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      - ElementName: Enemies
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/World/Enemies
     - name: Master_Audio_Bus
       guid: d8a41415a61d2a41a17e75ca0c2149f3
       id: 2392784291
@@ -51,7 +103,149 @@ MonoBehaviour:
         ObjectType: 12
       - ElementName: Master_Audio_Bus
         ObjectType: 2
-      Path: Default Work Unit\Master_Audio_Bus
+      Path: Default Work Unit/Master_Audio_Bus
+    - name: Music_Aux
+      guid: 499db802cc807e47832e13996fadc667
+      id: 2412664669
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      - ElementName: AUX
+        ObjectType: 2
+      - ElementName: Music_Aux
+        ObjectType: 1
+      Path: Default Work Unit/Master_Audio_Bus/World/AUX/Music_Aux
+    - name: MusicStinger
+      guid: a5b2987a5a76c44ca0d2712603a747b4
+      id: 1636576504
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: NonWorld
+        ObjectType: 2
+      - ElementName: MusicStinger
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/NonWorld/MusicStinger
+    - name: NonWorld
+      guid: 53b3b103402a034e9c353169b7bbca7d
+      id: 841296678
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: NonWorld
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/NonWorld
+    - name: Player
+      guid: 04ffdb54a826554dae80facbd2bdc2af
+      id: 1069431850
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      - ElementName: Player
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/World/Player
+    - name: Region_Dungeon
+      guid: cccc0012520f6e4889795a765d107d83
+      id: 3334061918
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      - ElementName: AUX
+        ObjectType: 2
+      - ElementName: Region_Dungeon
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/World/AUX/Region_Dungeon
+    - name: Region_Excavator
+      guid: 1e2d4c05947d9f4fb902ee422d61db2e
+      id: 1355693303
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      - ElementName: AUX
+        ObjectType: 2
+      - ElementName: Region_Excavator
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/World/AUX/Region_Excavator
+    - name: Region_Lab
+      guid: 599cfeeee2e2d94ca87802201071e17c
+      id: 2754982597
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      - ElementName: AUX
+        ObjectType: 2
+      - ElementName: Region_Lab
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/World/AUX/Region_Lab
+    - name: Region_OpenWorld
+      guid: 17c36af8c3b81b4192370d7f4a631815
+      id: 1863167500
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      - ElementName: AUX
+        ObjectType: 2
+      - ElementName: Region_OpenWorld
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/World/AUX/Region_OpenWorld
+    - name: Region_Temple
+      guid: 23a1cce10513034aa7ddb9958d3c2a5c
+      id: 2746966547
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      - ElementName: AUX
+        ObjectType: 2
+      - ElementName: Region_Temple
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/World/AUX/Region_Temple
+    - name: Region_Tutorial
+      guid: 8aa2eeed8a0d0949a49029ee1ea2660a
+      id: 1843703454
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      - ElementName: AUX
+        ObjectType: 2
+      - ElementName: Region_Tutorial
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/World/AUX/Region_Tutorial
     - name: SFX_Audio_Bus
       guid: 79db824889ac894fa032a0d616e0d2c1
       id: 3365874942
@@ -62,7 +256,7 @@ MonoBehaviour:
         ObjectType: 2
       - ElementName: SFX_Audio_Bus
         ObjectType: 2
-      Path: Default Work Unit\Master_Audio_Bus\SFX_Audio_Bus
+      Path: Default Work Unit/Master_Audio_Bus/SFX_Audio_Bus
     - name: SFX_Entity_Audio_Bus
       guid: b9816060e374794aa6bc5c48847ed51c
       id: 3663755868
@@ -75,31 +269,42 @@ MonoBehaviour:
         ObjectType: 2
       - ElementName: SFX_Entity_Audio_Bus
         ObjectType: 2
-      Path: Default Work Unit\Master_Audio_Bus\SFX_Audio_Bus\SFX_Entity_Audio_Bus
-    - name: SFX_UI_Audio_Bus
+      Path: Default Work Unit/Master_Audio_Bus/SFX_Audio_Bus/SFX_Entity_Audio_Bus
+    - name: UI
       guid: f4ad307562693546b92535655e803136
-      id: 3991820723
+      id: 1551306167
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
       - ElementName: Master_Audio_Bus
         ObjectType: 2
-      - ElementName: SFX_Audio_Bus
+      - ElementName: NonWorld
         ObjectType: 2
-      - ElementName: SFX_UI_Audio_Bus
+      - ElementName: UI
         ObjectType: 2
-      Path: Default Work Unit\Master_Audio_Bus\SFX_Audio_Bus\SFX_UI_Audio_Bus
+      Path: Default Work Unit/Master_Audio_Bus/NonWorld/UI
+    - name: World
+      guid: a823e455d420164ab54a42bb644d0582
+      id: 2609808943
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Master_Audio_Bus
+        ObjectType: 2
+      - ElementName: World
+        ObjectType: 2
+      Path: Default Work Unit/Master_Audio_Bus/World
   BankWwu:
-  - PhysicalPath: SoundBanks\BGM Work Unit.wwu
+  - PhysicalPath: SoundBanks/BGM Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
       ObjectType: 12
     - ElementName: BGM Work Unit
       ObjectType: 12
-    ParentPath: Default Work Unit\BGM Work Unit
+    ParentPath: Default Work Unit/BGM Work Unit
     guid: 6dc82ab43faa1343a51bda5be57c36fa
     GuidInternal: 
-    m_lastTime: -8585834020409764901
+    m_lastTime: -8585827126264775808
     List:
     - name: BGM_Bank
       guid: fd2cab5b31b823468bf8526077bb44ff
@@ -111,26 +316,26 @@ MonoBehaviour:
         ObjectType: 12
       - ElementName: BGM_Bank
         ObjectType: 7
-      Path: Default Work Unit\BGM Work Unit\BGM_Bank
-  - PhysicalPath: SoundBanks\Default Work Unit.wwu
+      Path: Default Work Unit/BGM Work Unit/BGM_Bank
+  - PhysicalPath: SoundBanks/Default Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
       ObjectType: 12
     ParentPath: Default Work Unit
     guid: e5e209aa3012104698a607393c935465
     GuidInternal: 
-    m_lastTime: -8585834020409744901
+    m_lastTime: -8585834173474775808
     List: []
-  - PhysicalPath: SoundBanks\SFX Work Unit.wwu
+  - PhysicalPath: SoundBanks/SFX Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
       ObjectType: 12
     - ElementName: SFX Work Unit
       ObjectType: 12
-    ParentPath: Default Work Unit\SFX Work Unit
+    ParentPath: Default Work Unit/SFX Work Unit
     guid: 9afb272a990f42408ec1eff8c2bfdc8e
     GuidInternal: 
-    m_lastTime: -8585834020409735086
+    m_lastTime: -8585826974184775808
     List:
     - name: SFX_Bank
       guid: 69dd4107d35a0644a342dcfc67477ec6
@@ -142,187 +347,121 @@ MonoBehaviour:
         ObjectType: 12
       - ElementName: SFX_Bank
         ObjectType: 7
-      Path: Default Work Unit\SFX Work Unit\SFX_Bank
+      Path: Default Work Unit/SFX Work Unit/SFX_Bank
   EventWwu:
-  - PhysicalPath: Events\Actor_SFX.wwu
+  - PhysicalPath: Events/Ambience.wwu
     PathAndIcons:
-    - ElementName: SFX
+    - ElementName: Ambience
       ObjectType: 12
-    - ElementName: Entity_SFX
-      ObjectType: 12
-    - ElementName: Actor_SFX
-      ObjectType: 12
-    ParentPath: SFX\Entity_SFX\Actor_SFX
-    guid: 991a3b24403a5c418c7318d11e7863e8
+    ParentPath: Ambience
+    guid: 98b850c7f96f8f4384459be196162d96
     GuidInternal: 
-    m_lastTime: -8585831489871328825
+    m_lastTime: -8585827096794775808
     List:
-    - name: IceEnemy_Cyan
-      guid: f032dcc61320964282992fa6bddf66c8
-      id: 2310488800
+    - name: Ambient_Region_Dungeon
+      guid: 84128c7ecc8fd94ca05a567416fff30f
+      id: 4077685701
       PathAndIcons:
-      - ElementName: SFX
+      - ElementName: Ambience
         ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Actor_SFX
-        ObjectType: 12
-      - ElementName: IceEnemy_Cyan
+      - ElementName: General
         ObjectType: 4
-      Path: SFX\Entity_SFX\Actor_SFX\IceEnemy_Cyan
+      - ElementName: Ambient_Region_Dungeon
+        ObjectType: 3
+      Path: Ambience/General/Ambient_Region_Dungeon
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: IceEnemy_Cyan_OnSkillCast_0
-      guid: dae9c84cdcb6b241ac24a3c4e11e4288
-      id: 2419922771
+    - name: Ambient_Region_Iceland
+      guid: 78669d93f1fa7a46a58a1ec040b6f962
+      id: 3652360861
       PathAndIcons:
-      - ElementName: SFX
+      - ElementName: Ambience
         ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Actor_SFX
-        ObjectType: 12
-      - ElementName: IceEnemy_Cyan
+      - ElementName: General
         ObjectType: 4
-      - ElementName: IceEnemy_Cyan_OnSkillCast_0
+      - ElementName: Ambient_Region_Iceland
         ObjectType: 3
-      Path: SFX\Entity_SFX\Actor_SFX\IceEnemy_Cyan\IceEnemy_Cyan_OnSkillCast_0
-      maxAttenuation: 0
-      maxDuration: 3.07161
-      minDuration: 3.07161
-    - name: IceEnemy_Cyan_OnSkillCast_1
-      guid: 607171c20633ca46878df16c1d660693
-      id: 2419922770
-      PathAndIcons:
-      - ElementName: SFX
-        ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Actor_SFX
-        ObjectType: 12
-      - ElementName: IceEnemy_Cyan
-        ObjectType: 4
-      - ElementName: IceEnemy_Cyan_OnSkillCast_1
-        ObjectType: 3
-      Path: SFX\Entity_SFX\Actor_SFX\IceEnemy_Cyan\IceEnemy_Cyan_OnSkillCast_1
-      maxAttenuation: 0
-      maxDuration: 2.5339
-      minDuration: 2.5339
-    - name: Player
-      guid: f172592f2c50a04cbaccfb99efa9e25d
-      id: 1069431850
-      PathAndIcons:
-      - ElementName: SFX
-        ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Actor_SFX
-        ObjectType: 12
-      - ElementName: Player
-        ObjectType: 4
-      Path: SFX\Entity_SFX\Actor_SFX\Player
+      Path: Ambience/General/Ambient_Region_Iceland
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: Player_OnDash
-      guid: 8994a554e7036a4fb46a449b2256f731
-      id: 460705202
+    - name: Ambient_Region_OpenWorld
+      guid: 4407970ac1c8234daeed999cf267731f
+      id: 830147231
       PathAndIcons:
-      - ElementName: SFX
+      - ElementName: Ambience
         ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Actor_SFX
-        ObjectType: 12
-      - ElementName: Player
+      - ElementName: General
         ObjectType: 4
-      - ElementName: Player_OnDash
+      - ElementName: Ambient_Region_OpenWorld
         ObjectType: 3
-      Path: SFX\Entity_SFX\Actor_SFX\Player\Player_OnDash
+      Path: Ambience/General/Ambient_Region_OpenWorld
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: Player_OnDie
-      guid: e1664c58b2d979478a7768aafa302e03
-      id: 1977187728
+    - name: Ambient_Region_Woodland
+      guid: 3cc80b0514243340b5e6a28f345995a4
+      id: 1499605897
       PathAndIcons:
-      - ElementName: SFX
+      - ElementName: Ambience
         ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Actor_SFX
-        ObjectType: 12
-      - ElementName: Player
+      - ElementName: General
         ObjectType: 4
-      - ElementName: Player_OnDie
+      - ElementName: Ambient_Region_Woodland
         ObjectType: 3
-      Path: SFX\Entity_SFX\Actor_SFX\Player\Player_OnDie
+      Path: Ambience/General/Ambient_Region_Woodland
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: Player_OnKick
-      guid: d4fbaa539179c94196ef7a32f11d703d
-      id: 3527200472
+    - name: Ambient_Torch_Play
+      guid: a826dd9f3c53f240b1ee6de3d579816f
+      id: 745966989
       PathAndIcons:
-      - ElementName: SFX
+      - ElementName: Ambience
         ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Actor_SFX
-        ObjectType: 12
-      - ElementName: Player
+      - ElementName: General
         ObjectType: 4
-      - ElementName: Player_OnKick
+      - ElementName: Ambient_Torch_Play
         ObjectType: 3
-      Path: SFX\Entity_SFX\Actor_SFX\Player\Player_OnKick
+      Path: Ambience/General/Ambient_Torch_Play
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: Player_OnSkillCast_0
-      guid: 7b4433b6366e0f4c80d56c3432db258c
-      id: 1052167317
+    - name: Ambient_Torch_Stop
+      guid: 40b0c152a33fc243b0a2312926686f38
+      id: 1863161307
       PathAndIcons:
-      - ElementName: SFX
+      - ElementName: Ambience
         ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Actor_SFX
-        ObjectType: 12
-      - ElementName: Player
+      - ElementName: General
         ObjectType: 4
-      - ElementName: Player_OnSkillCast_0
+      - ElementName: Ambient_Torch_Stop
         ObjectType: 3
-      Path: SFX\Entity_SFX\Actor_SFX\Player\Player_OnSkillCast_0
+      Path: Ambience/General/Ambient_Torch_Stop
       maxAttenuation: 0
-      maxDuration: 0.452426
-      minDuration: 0.452426
-    - name: Player_OnVault
-      guid: b27fa687a0a08d47a53109d0a1f1bbbc
-      id: 3845548790
+      maxDuration: -1
+      minDuration: -1
+    - name: General
+      guid: 9ff0c34833b9fb4abb77d39af101c87c
+      id: 133642231
       PathAndIcons:
-      - ElementName: SFX
+      - ElementName: Ambience
         ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Actor_SFX
-        ObjectType: 12
-      - ElementName: Player
+      - ElementName: General
         ObjectType: 4
-      - ElementName: Player_OnVault
-        ObjectType: 3
-      Path: SFX\Entity_SFX\Actor_SFX\Player\Player_OnVault
+      Path: Ambience/General
       maxAttenuation: 0
-      maxDuration: 0.812494
-      minDuration: 0.374467
-  - PhysicalPath: Events\BGM.wwu
+      maxDuration: -1
+      minDuration: -1
+  - PhysicalPath: Events/BGM.wwu
     PathAndIcons:
     - ElementName: BGM
       ObjectType: 12
     ParentPath: BGM
     guid: 7f519a6a5add8741bd53e1a556877ae4
     GuidInternal: 
-    m_lastTime: -8585834020429338628
+    m_lastTime: -8585825265204775808
     List:
     - name: BGM_Start
       guid: d1c98773ea9a4b409db404cf43e02b6a
@@ -332,7 +471,7 @@ MonoBehaviour:
         ObjectType: 12
       - ElementName: BGM_Start
         ObjectType: 3
-      Path: BGM\BGM_Start
+      Path: BGM/BGM_Start
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -344,88 +483,222 @@ MonoBehaviour:
         ObjectType: 12
       - ElementName: BGM_Stop
         ObjectType: 3
-      Path: BGM\BGM_Stop
+      Path: BGM/BGM_Stop
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-  - PhysicalPath: Events\Box_SFX.wwu
+  - PhysicalPath: Events/Boxes.wwu
     PathAndIcons:
-    - ElementName: SFX
+    - ElementName: Boxes
       ObjectType: 12
-    - ElementName: Entity_SFX
-      ObjectType: 12
-    - ElementName: Box_SFX
-      ObjectType: 12
-    ParentPath: SFX\Entity_SFX\Box_SFX
+    ParentPath: Boxes
     guid: 805c56206da25e4da9dfdeac6d709f4e
     GuidInternal: 
-    m_lastTime: -8585834020429328630
+    m_lastTime: -8585822145214775808
     List:
-    - name: BoxBase
-      guid: 8e19db9ea4199145b5c9dccc48ea171a
-      id: 4122975431
+    - name: ActionBox
+      guid: 2d8860660f0f9344b7ee2eaa442a7cb0
+      id: 1431402150
       PathAndIcons:
-      - ElementName: SFX
+      - ElementName: Boxes
         ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Box_SFX
-        ObjectType: 12
-      - ElementName: BoxBase
+      - ElementName: ActionBox
         ObjectType: 4
-      Path: SFX\Entity_SFX\Box_SFX\BoxBase
+      Path: Boxes/ActionBox
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: BoxBase_OnBeingKicked
-      guid: 181f38906a04ee4cb8f02f814af17944
-      id: 848561503
+    - name: ActionBox_OnDestroyed
+      guid: 4ededf08fd003d4b9c11c04dbdded3fd
+      id: 2736176351
       PathAndIcons:
-      - ElementName: SFX
+      - ElementName: Boxes
         ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Box_SFX
-        ObjectType: 12
-      - ElementName: BoxBase
+      - ElementName: ActionBox
         ObjectType: 4
-      - ElementName: BoxBase_OnBeingKicked
+      - ElementName: ActionBox_OnDestroyed
         ObjectType: 3
-      Path: SFX\Entity_SFX\Box_SFX\BoxBase\BoxBase_OnBeingKicked
+      Path: Boxes/ActionBox/ActionBox_OnDestroyed
       maxAttenuation: 0
-      maxDuration: 2.5
-      minDuration: 1.583333
-    - name: BoxBase_OnBeingPushed
-      guid: f632f3dcedfc0e47bcb808c091d9edb6
-      id: 941375425
+      maxDuration: -1
+      minDuration: -1
+    - name: BlizardBox
+      guid: 19e328047e4ed049a0ef112840a31a09
+      id: 2778367036
       PathAndIcons:
-      - ElementName: SFX
+      - ElementName: Boxes
         ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Box_SFX
-        ObjectType: 12
-      - ElementName: BoxBase
+      - ElementName: IceBox
         ObjectType: 4
-      - ElementName: BoxBase_OnBeingPushed
-        ObjectType: 3
-      Path: SFX\Entity_SFX\Box_SFX\BoxBase\BoxBase_OnBeingPushed
+      - ElementName: BlizardBox
+        ObjectType: 4
+      Path: Boxes/IceBox/BlizardBox
       maxAttenuation: 0
-      maxDuration: 1.583333
-      minDuration: 0.6875
+      maxDuration: -1
+      minDuration: -1
+    - name: BlizardBox_Destructed
+      guid: c18096a56922b44583628646146810c9
+      id: 3855709934
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: IceBox
+        ObjectType: 4
+      - ElementName: BlizardBox
+        ObjectType: 4
+      - ElementName: BlizardBox_Destructed
+        ObjectType: 3
+      Path: Boxes/IceBox/BlizardBox/BlizardBox_Destructed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: BlizardBox_Kicked
+      guid: d1cca5554d6096459072affb23fcbe8c
+      id: 4250711070
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: IceBox
+        ObjectType: 4
+      - ElementName: BlizardBox
+        ObjectType: 4
+      - ElementName: BlizardBox_Kicked
+        ObjectType: 3
+      Path: Boxes/IceBox/BlizardBox/BlizardBox_Kicked
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: BlizardBox_Lit
+      guid: f58cc3071f0f3345a210296a99847b26
+      id: 3217091070
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: IceBox
+        ObjectType: 4
+      - ElementName: BlizardBox
+        ObjectType: 4
+      - ElementName: BlizardBox_Lit
+        ObjectType: 3
+      Path: Boxes/IceBox/BlizardBox/BlizardBox_Lit
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: BlizardBox_Pushed
+      guid: f54c23b6f3c8ff4d8ef5ea996d3eac3b
+      id: 2753109256
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: IceBox
+        ObjectType: 4
+      - ElementName: BlizardBox
+        ObjectType: 4
+      - ElementName: BlizardBox_Pushed
+        ObjectType: 3
+      Path: Boxes/IceBox/BlizardBox/BlizardBox_Pushed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Boxes_Common
+      guid: 63c2be5c58c27e48bcc676290aeac0e0
+      id: 2669540712
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: Boxes_Common
+        ObjectType: 4
+      Path: Boxes/Boxes_Common
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Charcoal_Destructed
+      guid: 806a62f4ca30fb4ca2addf24f11e20a4
+      id: 1896382454
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: CharcoalBox
+        ObjectType: 4
+      - ElementName: Charcoal_Destructed
+        ObjectType: 3
+      Path: Boxes/WoodenBox/CharcoalBox/Charcoal_Destructed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: CharcoalBox
+      guid: 1e7da2b2ddc9394db80053f83f83ec14
+      id: 3132154983
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: CharcoalBox
+        ObjectType: 4
+      Path: Boxes/WoodenBox/CharcoalBox
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: CharcoalBox_Kicked
+      guid: 88fdc2d6a224974ea22d47f0e96220cb
+      id: 161732435
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: CharcoalBox
+        ObjectType: 4
+      - ElementName: CharcoalBox_Kicked
+        ObjectType: 3
+      Path: Boxes/WoodenBox/CharcoalBox/CharcoalBox_Kicked
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: CharcoalBox_Lit
+      guid: 8532e340609d844da1255caa59fc2a66
+      id: 2752647561
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: CharcoalBox
+        ObjectType: 4
+      - ElementName: CharcoalBox_Lit
+        ObjectType: 3
+      Path: Boxes/WoodenBox/CharcoalBox/CharcoalBox_Lit
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: CharcoalBox_Pushed
+      guid: 29ba2e3463eca74da807076177e72382
+      id: 1104558077
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: CharcoalBox
+        ObjectType: 4
+      - ElementName: CharcoalBox_Pushed
+        ObjectType: 3
+      Path: Boxes/WoodenBox/CharcoalBox/CharcoalBox_Pushed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: FireBox
       guid: fec258ae60a3c14a9598396af73bfaa1
       id: 89293940
       PathAndIcons:
-      - ElementName: SFX
-        ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Box_SFX
+      - ElementName: Boxes
         ObjectType: 12
       - ElementName: FireBox
         ObjectType: 4
-      Path: SFX\Entity_SFX\Box_SFX\FireBox
+      Path: Boxes/FireBox
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -433,188 +706,1644 @@ MonoBehaviour:
       guid: 9fc7d83325f9a54eb39ba3682767fe58
       id: 2928738080
       PathAndIcons:
-      - ElementName: SFX
-        ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Box_SFX
+      - ElementName: Boxes
         ObjectType: 12
       - ElementName: FireBox
         ObjectType: 4
       - ElementName: FireBox_OnBeingKicked
         ObjectType: 3
-      Path: SFX\Entity_SFX\Box_SFX\FireBox\FireBox_OnBeingKicked
-      maxAttenuation: 0
-      maxDuration: 2.5
-      minDuration: 1.583333
-    - name: FireBox_OnBeingLit
-      guid: b9d62d7f2b9ee94aa19286960b9bfc5b
-      id: 3958966416
-      PathAndIcons:
-      - ElementName: SFX
-        ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Box_SFX
-        ObjectType: 12
-      - ElementName: FireBox
-        ObjectType: 4
-      - ElementName: FireBox_OnBeingLit
-        ObjectType: 3
-      Path: SFX\Entity_SFX\Box_SFX\FireBox\FireBox_OnBeingLit
+      Path: Boxes/FireBox/FireBox_OnBeingKicked
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: FireBox_OnBeingPushed
-      guid: 1d2b03406bcc0b4089e48c3ff0adfc3a
-      id: 583630362
+    - name: FireBox_OnDestroyed
+      guid: 09cfce570d8ae648a04a5daae763ed4d
+      id: 4227993261
       PathAndIcons:
-      - ElementName: SFX
-        ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Box_SFX
+      - ElementName: Boxes
         ObjectType: 12
       - ElementName: FireBox
         ObjectType: 4
-      - ElementName: FireBox_OnBeingPushed
+      - ElementName: FireBox_OnDestroyed
         ObjectType: 3
-      Path: SFX\Entity_SFX\Box_SFX\FireBox\FireBox_OnBeingPushed
+      Path: Boxes/FireBox/FireBox_OnDestroyed
       maxAttenuation: 0
-      maxDuration: 1.583333
-      minDuration: 0.6875
+      maxDuration: -1
+      minDuration: -1
+    - name: FlamethrowerBox
+      guid: e602b5a13b376545b3c46baee5e9d474
+      id: 997789142
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: FireBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox
+        ObjectType: 4
+      Path: Boxes/FireBox/FlamethrowerBox
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FlamethrowerBox_Destructed
+      guid: 6bc7d5dfd992f44b88321564065df1e3
+      id: 2959568644
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: FireBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox_Destructed
+        ObjectType: 3
+      Path: Boxes/FireBox/FlamethrowerBox/FlamethrowerBox_Destructed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FlamethrowerBox_Kicked
+      guid: e1c9a508dc5d12419ab0b3efcb408493
+      id: 1646279540
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: FireBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox_Kicked
+        ObjectType: 3
+      Path: Boxes/FireBox/FlamethrowerBox/FlamethrowerBox_Kicked
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FlamethrowerBox_Lit
+      guid: e6cf532dcc665f40b8d44ac6c164660a
+      id: 1725493308
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: FireBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox_Lit
+        ObjectType: 3
+      Path: Boxes/FireBox/FlamethrowerBox/FlamethrowerBox_Lit
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FlamethrowerBox_Pushed
+      guid: bd013f506e5ed3479a77cd97107ca803
+      id: 3203132454
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: FireBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox_Pushed
+        ObjectType: 3
+      Path: Boxes/FireBox/FlamethrowerBox/FlamethrowerBox_Pushed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: GoldenBox
+      guid: dd80c4dabcaab44e948c975c51e3c541
+      id: 2839812117
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: GoldenBox
+        ObjectType: 4
+      Path: Boxes/GoldenBox
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: GoldenBox_OnDestroyed
+      guid: f36b583c3714134b822d04c1ce41afda
+      id: 2575000920
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: GoldenBox
+        ObjectType: 4
+      - ElementName: GoldenBox_OnDestroyed
+        ObjectType: 3
+      Path: Boxes/GoldenBox/GoldenBox_OnDestroyed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceBox
+      guid: f4bc18bf93473446905665d08da14c1f
+      id: 3055019141
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: IceBox
+        ObjectType: 4
+      Path: Boxes/IceBox
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceBox_OnBeingKicked
+      guid: 55d3cf2edff8df42bc5a1d6dffd8a0bc
+      id: 2707351273
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: IceBox
+        ObjectType: 4
+      - ElementName: IceBox_OnBeingKicked
+        ObjectType: 3
+      Path: Boxes/IceBox/IceBox_OnBeingKicked
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceBox_OnDestroyed
+      guid: af9fa80452e96c46a3592753a4b4aed1
+      id: 368214952
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: IceBox
+        ObjectType: 4
+      - ElementName: IceBox_OnDestroyed
+        ObjectType: 3
+      Path: Boxes/IceBox/IceBox_OnDestroyed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: KeyBox
+      guid: fd80852e66603543a62a8f6706c1e5c2
+      id: 626353953
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: KeyBox
+        ObjectType: 4
+      Path: Boxes/KeyBox
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: KeyBox_Kicked
+      guid: 9f5833b9e9bde14a8203dc3c022b3616
+      id: 3571089393
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: KeyBox
+        ObjectType: 4
+      - ElementName: KeyBox_Kicked
+        ObjectType: 3
+      Path: Boxes/KeyBox/KeyBox_Kicked
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: KeyBox_Pushed
+      guid: fda03ac07f832e4ca2adab91677d98bb
+      id: 2598199707
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: KeyBox
+        ObjectType: 4
+      - ElementName: KeyBox_Pushed
+        ObjectType: 3
+      Path: Boxes/KeyBox/KeyBox_Pushed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: LifeBox
       guid: 762a0b6e7da2334f843b12a9dda2fcce
       id: 1127861078
       PathAndIcons:
-      - ElementName: SFX
-        ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Box_SFX
+      - ElementName: Boxes
         ObjectType: 12
       - ElementName: LifeBox
         ObjectType: 4
-      Path: SFX\Entity_SFX\Box_SFX\LifeBox
+      Path: Boxes/LifeBox
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: LifeBox_OnBeingKicked
-      guid: c01da6e5478ec64b9029f6e5773805a4
-      id: 137324230
+    - name: LightningBox
+      guid: 1878dbaf78c05946b8206721301e8a6f
+      id: 670883636
       PathAndIcons:
-      - ElementName: SFX
+      - ElementName: Boxes
         ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Box_SFX
-        ObjectType: 12
-      - ElementName: LifeBox
+      - ElementName: LightningBox
         ObjectType: 4
-      - ElementName: LifeBox_OnBeingKicked
-        ObjectType: 3
-      Path: SFX\Entity_SFX\Box_SFX\LifeBox\LifeBox_OnBeingKicked
+      Path: Boxes/LightningBox
       maxAttenuation: 0
-      maxDuration: 2.125
-      minDuration: 2.125
+      maxDuration: -1
+      minDuration: -1
+    - name: LightningBox_Kicked
+      guid: 136fcf0106e0b7459ecf30de2a816716
+      id: 2252175878
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: LightningBox
+        ObjectType: 4
+      - ElementName: LightningBox_Kicked
+        ObjectType: 3
+      Path: Boxes/LightningBox/LightningBox_Kicked
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LightningBox_OnBeingMerged
+      guid: bfe529fc3b6dbd49937127554da01646
+      id: 752514333
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: LightningBox
+        ObjectType: 4
+      - ElementName: LightningBox_OnBeingMerged
+        ObjectType: 3
+      Path: Boxes/LightningBox/LightningBox_OnBeingMerged
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LightningBox_OnBeingMergedEnd
+      guid: b8c765ebcebafb41b98b7590cf307b73
+      id: 3325291516
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: LightningBox
+        ObjectType: 4
+      - ElementName: LightningBox_OnBeingMergedEnd
+        ObjectType: 3
+      Path: Boxes/LightningBox/LightningBox_OnBeingMergedEnd
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LightningBox_OnDestroyed
+      guid: fc5f775d5646f2488ae947e3ae6d8728
+      id: 1840927597
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: LightningBox
+        ObjectType: 4
+      - ElementName: LightningBox_OnDestroyed
+        ObjectType: 3
+      Path: Boxes/LightningBox/LightningBox_OnDestroyed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LongLogBox
+      guid: ed7155a68a22df4cbb917547f99d4bec
+      id: 3087206198
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: LongLogBox
+        ObjectType: 4
+      Path: Boxes/WoodenBox/LongLogBox
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LongLogBox_OnBeingKicked
+      guid: 3ff7d02639510949935a7ed0bf30da36
+      id: 2757939046
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: LongLogBox
+        ObjectType: 4
+      - ElementName: LongLogBox_OnBeingKicked
+        ObjectType: 3
+      Path: Boxes/WoodenBox/LongLogBox/LongLogBox_OnBeingKicked
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LongLogBox_OnBeingPushed
+      guid: f156f7417d53a64096f726d2f1358502
+      id: 475682704
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: LongLogBox
+        ObjectType: 4
+      - ElementName: LongLogBox_OnBeingPushed
+        ObjectType: 3
+      Path: Boxes/WoodenBox/LongLogBox/LongLogBox_OnBeingPushed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LongLogBox_OnDestroyed
+      guid: f9e7ac8e8635c4499be7f1bfa108e21b
+      id: 1228531471
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: LongLogBox
+        ObjectType: 4
+      - ElementName: LongLogBox_OnDestroyed
+        ObjectType: 3
+      Path: Boxes/WoodenBox/LongLogBox/LongLogBox_OnDestroyed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: MediumLogBox
+      guid: 7e51f9cb1a4098448bcc747efcd06013
+      id: 3114800021
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: MediumLogBox
+        ObjectType: 4
+      Path: Boxes/WoodenBox/MediumLogBox
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: MediumLogBox_Destructed
+      guid: 7b6449b68c3ce441822d132a0a704841
+      id: 815623393
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: MediumLogBox
+        ObjectType: 4
+      - ElementName: MediumLogBox_Destructed
+        ObjectType: 3
+      Path: Boxes/WoodenBox/MediumLogBox/MediumLogBox_Destructed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: MediumLogBox_Kicked
+      guid: f852769b54469840830f00687ce657ee
+      id: 2645972933
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: MediumLogBox
+        ObjectType: 4
+      - ElementName: MediumLogBox_Kicked
+        ObjectType: 3
+      Path: Boxes/WoodenBox/MediumLogBox/MediumLogBox_Kicked
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: MediumLogBox_Lit
+      guid: 8d472a3c2bbd5649a14b54f4758f6d0d
+      id: 2270886067
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: MediumLogBox
+        ObjectType: 4
+      - ElementName: MediumLogBox_Lit
+        ObjectType: 3
+      Path: Boxes/WoodenBox/MediumLogBox/MediumLogBox_Lit
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: MediumLogBox_Pushed
+      guid: a12175e434668049a8c671e9636e4987
+      id: 461148455
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: MediumLogBox
+        ObjectType: 4
+      - ElementName: MediumLogBox_Pushed
+        ObjectType: 3
+      Path: Boxes/WoodenBox/MediumLogBox/MediumLogBox_Pushed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: MetalTrapBox
+      guid: dcfa886d23b0b5439e77e46f3fbd10cf
+      id: 3089231802
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: MetalTrapBox
+        ObjectType: 4
+      Path: Boxes/MetalTrapBox
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: MetalTrapBox_Kicked
+      guid: 7c639387b7ab5441b24ced17986f9a3a
+      id: 4041442744
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: MetalTrapBox
+        ObjectType: 4
+      - ElementName: MetalTrapBox_Kicked
+        ObjectType: 3
+      Path: Boxes/MetalTrapBox/MetalTrapBox_Kicked
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: MetalTrapBox_Lit
+      guid: 7a6aebf9e4f64142b66ef80a93a05e58
+      id: 2316092040
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: MetalTrapBox
+        ObjectType: 4
+      - ElementName: MetalTrapBox_Lit
+        ObjectType: 3
+      Path: Boxes/MetalTrapBox/MetalTrapBox_Lit
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: MetalTrapBox_Pushed
+      guid: c7f6c81ceacba64fb9e644d60e9199cf
+      id: 2194083730
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: MetalTrapBox
+        ObjectType: 4
+      - ElementName: MetalTrapBox_Pushed
+        ObjectType: 3
+      Path: Boxes/MetalTrapBox/MetalTrapBox_Pushed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: OnBeingKicked_Heavy
+      guid: dd16ebc01de53a458b1439ea579207a4
+      id: 1643181542
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: Boxes_Common
+        ObjectType: 4
+      - ElementName: OnBeingKicked_Heavy
+        ObjectType: 3
+      Path: Boxes/Boxes_Common/OnBeingKicked_Heavy
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: OnBeingKicked_Light
+      guid: a89acf226fc78d4da86a47c02667d0f0
+      id: 2340279731
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: Boxes_Common
+        ObjectType: 4
+      - ElementName: OnBeingKicked_Light
+        ObjectType: 3
+      Path: Boxes/Boxes_Common/OnBeingKicked_Light
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: OnBeingMerged
+      guid: aba27dd3b93e474aa1f0affcc4d72742
+      id: 2779989151
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: Boxes_Common
+        ObjectType: 4
+      - ElementName: OnBeingMerged
+        ObjectType: 3
+      Path: Boxes/Boxes_Common/OnBeingMerged
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: OnBeingPushed_Heavy
+      guid: 0c31063b9e4fad48b8b929eb11aca16c
+      id: 1989187440
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: Boxes_Common
+        ObjectType: 4
+      - ElementName: OnBeingPushed_Heavy
+        ObjectType: 3
+      Path: Boxes/Boxes_Common/OnBeingPushed_Heavy
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: OnBeingPushed_Light
+      guid: c6d1ad85c447b14fa5a1a1b714975a8d
+      id: 2546353925
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: Boxes_Common
+        ObjectType: 4
+      - ElementName: OnBeingPushed_Light
+        ObjectType: 3
+      Path: Boxes/Boxes_Common/OnBeingPushed_Light
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: OnBeingPushedEnd_Heavy
+      guid: f9c56eb59563994283e08f390dffff06
+      id: 2263609135
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: Boxes_Common
+        ObjectType: 4
+      - ElementName: OnBeingPushedEnd_Heavy
+        ObjectType: 3
+      Path: Boxes/Boxes_Common/OnBeingPushedEnd_Heavy
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: OnBeingPushedEnd_Light
+      guid: 8ed8925c6deb5c44b9e8bdc6d94c72c9
+      id: 235712830
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: Boxes_Common
+        ObjectType: 4
+      - ElementName: OnBeingPushedEnd_Light
+        ObjectType: 3
+      Path: Boxes/Boxes_Common/OnBeingPushedEnd_Light
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: OnCollideActively
+      guid: a77342752ae48846aebcadba784b399d
+      id: 446098551
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: Boxes_Common
+        ObjectType: 4
+      - ElementName: OnCollideActively
+        ObjectType: 3
+      Path: Boxes/Boxes_Common/OnCollideActively
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: WoodenBox
       guid: d7b746d33f99b048b17acef596ea3288
       id: 4244245246
       PathAndIcons:
-      - ElementName: SFX
-        ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Box_SFX
+      - ElementName: Boxes
         ObjectType: 12
       - ElementName: WoodenBox
         ObjectType: 4
-      Path: SFX\Entity_SFX\Box_SFX\WoodenBox
+      Path: Boxes/WoodenBox
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: WoodenBox_OnBeingKicked
-      guid: 0a01cee0a9053e41b1b75b26e9b26937
-      id: 3669812430
+    - name: WoodenBox_OnDestroyed
+      guid: 6e244ca59b901846b75e9b421c07388a
+      id: 4168590375
       PathAndIcons:
-      - ElementName: SFX
-        ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Box_SFX
+      - ElementName: Boxes
         ObjectType: 12
       - ElementName: WoodenBox
         ObjectType: 4
-      - ElementName: WoodenBox_OnBeingKicked
+      - ElementName: WoodenBox_OnDestroyed
         ObjectType: 3
-      Path: SFX\Entity_SFX\Box_SFX\WoodenBox\WoodenBox_OnBeingKicked
-      maxAttenuation: 0
-      maxDuration: 2.5
-      minDuration: 1.583333
-    - name: WoodenBox_OnBeingLit
-      guid: fbe6d57f51c35e4cb26268f8edda8b22
-      id: 2986035246
-      PathAndIcons:
-      - ElementName: SFX
-        ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Box_SFX
-        ObjectType: 12
-      - ElementName: WoodenBox
-        ObjectType: 4
-      - ElementName: WoodenBox_OnBeingLit
-        ObjectType: 3
-      Path: SFX\Entity_SFX\Box_SFX\WoodenBox\WoodenBox_OnBeingLit
+      Path: Boxes/WoodenBox/WoodenBox_OnDestroyed
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: WoodenBox_OnBeingPushed
-      guid: d207e35892d04448b6d13625565c68b8
-      id: 15596056
+    - name: WoodenTrapBox
+      guid: 0cd3373f28161b4d94fb61c1b5bba83e
+      id: 1023678269
       PathAndIcons:
-      - ElementName: SFX
+      - ElementName: Boxes
         ObjectType: 12
-      - ElementName: Entity_SFX
-        ObjectType: 12
-      - ElementName: Box_SFX
-        ObjectType: 12
-      - ElementName: WoodenBox
+      - ElementName: WoodenTrapBox
         ObjectType: 4
-      - ElementName: WoodenBox_OnBeingPushed
-        ObjectType: 3
-      Path: SFX\Entity_SFX\Box_SFX\WoodenBox\WoodenBox_OnBeingPushed
+      Path: Boxes/WoodenTrapBox
       maxAttenuation: 0
-      maxDuration: 1.583333
-      minDuration: 0.6875
-  - PhysicalPath: Events\Default Work Unit.wwu
+      maxDuration: -1
+      minDuration: -1
+    - name: WoodenTrapBox_Kicked
+      guid: 2f4d5fbdb6d0ce47a0ffda042d1a9092
+      id: 3947184381
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenTrapBox
+        ObjectType: 4
+      - ElementName: WoodenTrapBox_Kicked
+        ObjectType: 3
+      Path: Boxes/WoodenTrapBox/WoodenTrapBox_Kicked
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: WoodenTrapBox_Lit
+      guid: c1ecc4ebd1810d48a2b6cf39324db64a
+      id: 1180410923
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenTrapBox
+        ObjectType: 4
+      - ElementName: WoodenTrapBox_Lit
+        ObjectType: 3
+      Path: Boxes/WoodenTrapBox/WoodenTrapBox_Lit
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: WoodenTrapBox_Pushed
+      guid: 2e15d1da6b908c41a5ddf1db38392830
+      id: 1708343807
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenTrapBox
+        ObjectType: 4
+      - ElementName: WoodenTrapBox_Pushed
+        ObjectType: 3
+      Path: Boxes/WoodenTrapBox/WoodenTrapBox_Pushed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+  - PhysicalPath: Events/Common.wwu
+    PathAndIcons:
+    - ElementName: Common
+      ObjectType: 12
+    ParentPath: Common
+    guid: 807dded910dbb64999431dbcfed8dec8
+    GuidInternal: 
+    m_lastTime: -8585823558734775808
+    List:
+    - name: Common
+      guid: 0c9dd73a69491341b42cedc6406cc1f8
+      id: 2395677314
+      PathAndIcons:
+      - ElementName: Common
+        ObjectType: 12
+      - ElementName: Common
+        ObjectType: 4
+      Path: Common/Common
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: OnBeingFrozen
+      guid: 5f03801e8006ea4aae5980688dba57f4
+      id: 3833687285
+      PathAndIcons:
+      - ElementName: Common
+        ObjectType: 12
+      - ElementName: Common
+        ObjectType: 4
+      - ElementName: OnBeingFrozen
+        ObjectType: 3
+      Path: Common/Common/OnBeingFrozen
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: OnBeingLit
+      guid: f08ad19e6f57a04dbda25187e68cf7ba
+      id: 3713364846
+      PathAndIcons:
+      - ElementName: Common
+        ObjectType: 12
+      - ElementName: Common
+        ObjectType: 4
+      - ElementName: OnBeingLit
+        ObjectType: 3
+      Path: Common/Common/OnBeingLit
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: OnBurningEnd
+      guid: f687b358be9d84488a4e7a20e30a4558
+      id: 3484121230
+      PathAndIcons:
+      - ElementName: Common
+        ObjectType: 12
+      - ElementName: Common
+        ObjectType: 4
+      - ElementName: OnBurningEnd
+        ObjectType: 3
+      Path: Common/Common/OnBurningEnd
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: OnFrozenEnd
+      guid: 17fabeb3a407094e90cf91a18cea9569
+      id: 4030028399
+      PathAndIcons:
+      - ElementName: Common
+        ObjectType: 12
+      - ElementName: Common
+        ObjectType: 4
+      - ElementName: OnFrozenEnd
+        ObjectType: 3
+      Path: Common/Common/OnFrozenEnd
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+  - PhysicalPath: Events/Default Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
       ObjectType: 12
     ParentPath: Default Work Unit
     guid: 9f9e9033310c774d81c7f43e6e71b41b
     GuidInternal: 
-    m_lastTime: -8585834061515323250
+    m_lastTime: -8585834173494775808
     List: []
-  - PhysicalPath: Events\Entity_SFX.wwu
+  - PhysicalPath: Events/Enemies.wwu
+    PathAndIcons:
+    - ElementName: Enemies
+      ObjectType: 12
+    ParentPath: Enemies
+    guid: 3fcb31ab5fe9c848907277668498151b
+    GuidInternal: 
+    m_lastTime: -8585822154034775808
+    List:
+    - name: _FireEnemy_Red_Fire_Loop_Play
+      guid: 0e7e57f24612f646851c5e2d29b641fd
+      id: 2091411013
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Red
+        ObjectType: 4
+      - ElementName: _FireEnemy_Red_Fire_Loop_Play
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Red/_FireEnemy_Red_Fire_Loop_Play
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: _FireEnemy_Red_Fire_Loop_Stop
+      guid: d570c9f4f604204dbcf649ecee78d95f
+      id: 3516063939
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Red
+        ObjectType: 4
+      - ElementName: _FireEnemy_Red_Fire_Loop_Stop
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Red/_FireEnemy_Red_Fire_Loop_Stop
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: _FireEnemy_Red_Movement
+      guid: bd35ad8b39b84f4fa61af61f08e1c53a
+      id: 4067913892
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Red
+        ObjectType: 4
+      - ElementName: _FireEnemy_Red_Movement
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Red/_FireEnemy_Red_Movement
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: _FireEnemy_Red_Spawn
+      guid: b326d375c8a4144e900dba4e51561068
+      id: 917045148
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Red
+        ObjectType: 4
+      - ElementName: _FireEnemy_Red_Spawn
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Red/_FireEnemy_Red_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: _FireEnemy_Yellow_Death
+      guid: 8dbfaf3d62605344ac87ffb5cce1d8c6
+      id: 1235191408
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Yellow
+        ObjectType: 4
+      - ElementName: _FireEnemy_Yellow_Death
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Yellow/_FireEnemy_Yellow_Death
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: _FireEnemy_Yellow_Movement
+      guid: 3ed4d1abd1b66f4da070d50561ae54b2
+      id: 2709855825
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Yellow
+        ObjectType: 4
+      - ElementName: _FireEnemy_Yellow_Movement
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Yellow/_FireEnemy_Yellow_Movement
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: _FireEnemy_Yellow_Spawn
+      guid: 771d5dc694e6d043980f5eb4894acac2
+      id: 905538611
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Yellow
+        ObjectType: 4
+      - ElementName: _FireEnemy_Yellow_Spawn
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Yellow/_FireEnemy_Yellow_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: _IceEnemy_Blue_Movement
+      guid: e3ff8fcf476da74aa8972c0706b1e67d
+      id: 4220081654
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Blue
+        ObjectType: 4
+      - ElementName: _IceEnemy_Blue_Movement
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Blue/_IceEnemy_Blue_Movement
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: _IceEnemy_Cyan_Movement
+      guid: 62bfd1fc2462e9499aeff4a49c98f31b
+      id: 3499367965
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Cyan
+        ObjectType: 4
+      - ElementName: _IceEnemy_Cyan_Movement
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Cyan/_IceEnemy_Cyan_Movement
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: _LightningEnemy_Movement
+      guid: e1d8b4ccc3552245afc26b39deaa3383
+      id: 2490450014
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: LightningEnemy
+        ObjectType: 4
+      - ElementName: _LightningEnemy_Movement
+        ObjectType: 3
+      Path: Enemies/LightningEnemy/_LightningEnemy_Movement
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: _WoodenEnemy_Movement
+      guid: 407dd94d55ab934da47dfbe6c59368c7
+      id: 1481291014
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: WoodenEnemy
+        ObjectType: 4
+      - ElementName: _WoodenEnemy_Movement
+        ObjectType: 3
+      Path: Enemies/WoodenEnemy/_WoodenEnemy_Movement
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: BossSlime
+      guid: 7889b5100012b346b8e3a4a8959e2396
+      id: 2519783298
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: BossSlime
+        ObjectType: 4
+      Path: Enemies/BossSlime
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: BossSlime_OnBeingDamaged
+      guid: 05f25b56b60c854fbdc5ab3c203a30db
+      id: 702229356
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: BossSlime
+        ObjectType: 4
+      - ElementName: BossSlime_OnBeingDamaged
+        ObjectType: 3
+      Path: Enemies/BossSlime/BossSlime_OnBeingDamaged
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: BossSlime_OnDestroyed_Common
+      guid: b9c240d8d1214c409eb1527d5030fd30
+      id: 2086125305
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: BossSlime
+        ObjectType: 4
+      - ElementName: BossSlime_OnDestroyed_Common
+        ObjectType: 3
+      Path: Enemies/BossSlime/BossSlime_OnDestroyed_Common
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: BossSlime_OnSkillCast
+      guid: 7f6225ee250e8a4f8b18f9b37ac5a0dc
+      id: 2444784752
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: BossSlime
+        ObjectType: 4
+      - ElementName: BossSlime_OnSkillCast
+        ObjectType: 3
+      Path: Enemies/BossSlime/BossSlime_OnSkillCast
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: BossSlime_OnSkillPreparing
+      guid: 1f3be935a5ee96438a730fa050b3903f
+      id: 3617569119
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: BossSlime
+        ObjectType: 4
+      - ElementName: BossSlime_OnSkillPreparing
+        ObjectType: 3
+      Path: Enemies/BossSlime/BossSlime_OnSkillPreparing
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FireEnemy_Red
+      guid: 1a6865225cb73240a3b6e78c6784a8bd
+      id: 3082659795
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Red
+        ObjectType: 4
+      Path: Enemies/FireEnemy_Red
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FireEnemy_Red_Attack
+      guid: 8d91485aa4f7494399f56e83875c9f6c
+      id: 1939644666
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Red
+        ObjectType: 4
+      - ElementName: FireEnemy_Red_Attack
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Red/FireEnemy_Red_Attack
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FireEnemy_Red_OnBeingDamaged
+      guid: ee3685dea0bcb1489f6b8a6fa4f28e74
+      id: 1850913127
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Red
+        ObjectType: 4
+      - ElementName: FireEnemy_Red_OnBeingDamaged
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Red/FireEnemy_Red_OnBeingDamaged
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FireEnemy_Red_OnDestroyed_Common
+      guid: 76fbe47d84772e4bb6f0b1ebad684d63
+      id: 3133826026
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Red
+        ObjectType: 4
+      - ElementName: FireEnemy_Red_OnDestroyed_Common
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Red/FireEnemy_Red_OnDestroyed_Common
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FireEnemy_Yellow
+      guid: dc9aff66bdc8cd4095c149acad81ab3f
+      id: 1096702878
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Yellow
+        ObjectType: 4
+      Path: Enemies/FireEnemy_Yellow
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FireEnemy_Yellow_Attack
+      guid: 8ad5a8a3dda12142838208be6d76fa86
+      id: 4186582285
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Yellow
+        ObjectType: 4
+      - ElementName: FireEnemy_Yellow_Attack
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Yellow/FireEnemy_Yellow_Attack
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FireEnemy_Yellow_OnBeingDamaged
+      guid: 22ba57c2f7bdc246ae72f35534a94915
+      id: 3562230120
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Yellow
+        ObjectType: 4
+      - ElementName: FireEnemy_Yellow_OnBeingDamaged
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Yellow/FireEnemy_Yellow_OnBeingDamaged
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: FireEnemy_Yellow_OnDestroyed_Common
+      guid: 693a8002bb82e74d81f8a7974c4fd84e
+      id: 2446285653
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: FireEnemy_Yellow
+        ObjectType: 4
+      - ElementName: FireEnemy_Yellow_OnDestroyed_Common
+        ObjectType: 3
+      Path: Enemies/FireEnemy_Yellow/FireEnemy_Yellow_OnDestroyed_Common
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Blue
+      guid: dd091fb7631ee84fa423e7a7bffbe15f
+      id: 3867005197
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Blue
+        ObjectType: 4
+      Path: Enemies/IceEnemy_Blue
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Blue_FrostBreath
+      guid: f8b28977c542c941b2c282415c6fb59e
+      id: 3085887420
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Blue
+        ObjectType: 4
+      - ElementName: IceEnemy_Blue_FrostBreath
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Blue/IceEnemy_Blue_FrostBreath
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Blue_GlacialSlam
+      guid: b9d7262280ce534fae9a5fb1cecc8358
+      id: 1251542582
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Blue
+        ObjectType: 4
+      - ElementName: IceEnemy_Blue_GlacialSlam
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Blue/IceEnemy_Blue_GlacialSlam
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Blue_OnBeingDamaged
+      guid: b88dbb28531c3c4487c4af772a841458
+      id: 1588324721
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Blue
+        ObjectType: 4
+      - ElementName: IceEnemy_Blue_OnBeingDamaged
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Blue/IceEnemy_Blue_OnBeingDamaged
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Blue_OnDestroyed_Common
+      guid: e65f55554b7a2f49abd49bc8d6f081d5
+      id: 1636125444
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Blue
+        ObjectType: 4
+      - ElementName: IceEnemy_Blue_OnDestroyed_Common
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Blue/IceEnemy_Blue_OnDestroyed_Common
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Blue_Spawn
+      guid: a649c426db298b4ca9b55b9109ec8964
+      id: 1924959645
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Blue
+        ObjectType: 4
+      - ElementName: IceEnemy_Blue_Spawn
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Blue/IceEnemy_Blue_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Cyan
+      guid: f032dcc61320964282992fa6bddf66c8
+      id: 2310488800
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Cyan
+        ObjectType: 4
+      Path: Enemies/IceEnemy_Cyan
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Cyan_FrostBreath
+      guid: 3cc797b76f100342bf3f8dfd7b7c668d
+      id: 910157
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Cyan
+        ObjectType: 4
+      - ElementName: IceEnemy_Cyan_FrostBreath
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Cyan/IceEnemy_Cyan_FrostBreath
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Cyan_GlacialSlam
+      guid: f0051ad0d38fed4599b2c560fe3d6f6f
+      id: 2840113683
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Cyan
+        ObjectType: 4
+      - ElementName: IceEnemy_Cyan_GlacialSlam
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Cyan/IceEnemy_Cyan_GlacialSlam
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Cyan_OnBeingDamaged
+      guid: 3e362ce67b65b54ea8bdb342f1761e6d
+      id: 3058618138
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Cyan
+        ObjectType: 4
+      - ElementName: IceEnemy_Cyan_OnBeingDamaged
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Cyan/IceEnemy_Cyan_OnBeingDamaged
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Cyan_OnDestroyed_Common
+      guid: bc4668eac242f943b6eac5bdc15b2175
+      id: 4133186583
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Cyan
+        ObjectType: 4
+      - ElementName: IceEnemy_Cyan_OnDestroyed_Common
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Cyan/IceEnemy_Cyan_OnDestroyed_Common
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Cyan_Spawn
+      guid: 11d6cf444eca3940b12439416bda5fdb
+      id: 3021078688
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Cyan
+        ObjectType: 4
+      - ElementName: IceEnemy_Cyan_Spawn
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Cyan/IceEnemy_Cyan_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LightningEnemy
+      guid: 8004543a34a73042a053259f872eaaf6
+      id: 1651625483
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: LightningEnemy
+        ObjectType: 4
+      Path: Enemies/LightningEnemy
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LightningEnemy_DoubleStrike
+      guid: 9d7948f89b957a4f92b471d9c4b38166
+      id: 3506016687
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: LightningEnemy
+        ObjectType: 4
+      - ElementName: LightningEnemy_DoubleStrike
+        ObjectType: 3
+      Path: Enemies/LightningEnemy/LightningEnemy_DoubleStrike
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LightningEnemy_OnBeingDamaged
+      guid: 1826453f42f9cf449ef5e8dc51c0b408
+      id: 3756377455
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: LightningEnemy
+        ObjectType: 4
+      - ElementName: LightningEnemy_OnBeingDamaged
+        ObjectType: 3
+      Path: Enemies/LightningEnemy/LightningEnemy_OnBeingDamaged
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LightningEnemy_OnDestroyed_Common
+      guid: 4dc8bf7e4a2cfa4f8f885c6297da4ca1
+      id: 2752093154
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: LightningEnemy
+        ObjectType: 4
+      - ElementName: LightningEnemy_OnDestroyed_Common
+        ObjectType: 3
+      Path: Enemies/LightningEnemy/LightningEnemy_OnDestroyed_Common
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LightningEnemy_SingleStrike
+      guid: d3ffada5381212419de11f2868869ef1
+      id: 3418243016
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: LightningEnemy
+        ObjectType: 4
+      - ElementName: LightningEnemy_SingleStrike
+        ObjectType: 3
+      Path: Enemies/LightningEnemy/LightningEnemy_SingleStrike
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LightningEnemy_Somersault
+      guid: 332fb1d4cdcb864884a497b7ef347c7e
+      id: 3983008853
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: LightningEnemy
+        ObjectType: 4
+      - ElementName: LightningEnemy_Somersault
+        ObjectType: 3
+      Path: Enemies/LightningEnemy/LightningEnemy_Somersault
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LightningEnemy_Spawn
+      guid: c1ec53dab31d24439702df93ec29d77a
+      id: 4249675467
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: LightningEnemy
+        ObjectType: 4
+      - ElementName: LightningEnemy_Spawn
+        ObjectType: 3
+      Path: Enemies/LightningEnemy/LightningEnemy_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: LightningEnemy_TripleStrike
+      guid: 4966fc77c672c04b81282d9a6e24037f
+      id: 2202770892
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: LightningEnemy
+        ObjectType: 4
+      - ElementName: LightningEnemy_TripleStrike
+        ObjectType: 3
+      Path: Enemies/LightningEnemy/LightningEnemy_TripleStrike
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Slime
+      guid: 2e643e28e634a440bb1356fe239a6cde
+      id: 3803999823
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: Slime
+        ObjectType: 4
+      Path: Enemies/Slime
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Slime_Attack
+      guid: 9cf98737fe299b4ba87dd7f9086077ed
+      id: 3675729830
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: Slime
+        ObjectType: 4
+      - ElementName: Slime_Attack
+        ObjectType: 3
+      Path: Enemies/Slime/Slime_Attack
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Slime_OnBeingDamaged
+      guid: b482278a9c305044a26d1f0c30d6be05
+      id: 2567829187
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: Slime
+        ObjectType: 4
+      - ElementName: Slime_OnBeingDamaged
+        ObjectType: 3
+      Path: Enemies/Slime/Slime_OnBeingDamaged
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Slime_OnDestroyed_Common
+      guid: e55beb3ca84dfa4e9ac1945d1fe885a6
+      id: 3540171926
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: Slime
+        ObjectType: 4
+      - ElementName: Slime_OnDestroyed_Common
+        ObjectType: 3
+      Path: Enemies/Slime/Slime_OnDestroyed_Common
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy
+      guid: 6d0a7e0771f60f4eac60dcda5931f30a
+      id: 4210375790
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      Path: Enemies/SpiderLegEnemy
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy_Attack
+      guid: 70225b3d013bd7489c818126044a6f38
+      id: 1024679453
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      - ElementName: SpiderLegEnemy_Attack
+        ObjectType: 3
+      Path: Enemies/SpiderLegEnemy/SpiderLegEnemy_Attack
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy_Death
+      guid: bf9c3ab91830f440b62f9f1ea8628586
+      id: 744254753
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      - ElementName: SpiderLegEnemy_Death
+        ObjectType: 3
+      Path: Enemies/SpiderLegEnemy/SpiderLegEnemy_Death
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy_Hurt
+      guid: 9773d0faaffa0f4a899a79858c4acd0f
+      id: 1119177010
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      - ElementName: SpiderLegEnemy_Hurt
+        ObjectType: 3
+      Path: Enemies/SpiderLegEnemy/SpiderLegEnemy_Hurt
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy_Phase1_Spawn
+      guid: abe769070004b341affac69b90b32276
+      id: 372070459
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      - ElementName: SpiderLegEnemy_Phase1_Spawn
+        ObjectType: 3
+      Path: Enemies/SpiderLegEnemy/SpiderLegEnemy_Phase1_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy_Phase2_Spawn
+      guid: 0c233a5745bf1e4f8fac30caa9830f54
+      id: 3370926328
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      - ElementName: SpiderLegEnemy_Phase2_Spawn
+        ObjectType: 3
+      Path: Enemies/SpiderLegEnemy/SpiderLegEnemy_Phase2_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SpiderLegEnemy_Phase3_Spawn
+      guid: 8764577c6bd23d478b681c50afd2034b
+      id: 2584731025
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy
+        ObjectType: 4
+      - ElementName: SpiderLegEnemy_Phase3_Spawn
+        ObjectType: 3
+      Path: Enemies/SpiderLegEnemy/SpiderLegEnemy_Phase3_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: WoodenEnemy
+      guid: 8a82ba4627eed94b84dfd2c71bfc2132
+      id: 1245868945
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: WoodenEnemy
+        ObjectType: 4
+      Path: Enemies/WoodenEnemy
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: WoodenEnemy_DoubleSlash
+      guid: 9d3bdee0085c4b44901a6dec372aa0de
+      id: 1750783146
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: WoodenEnemy
+        ObjectType: 4
+      - ElementName: WoodenEnemy_DoubleSlash
+        ObjectType: 3
+      Path: Enemies/WoodenEnemy/WoodenEnemy_DoubleSlash
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: WoodenEnemy_LeftSlash
+      guid: 1d89d0abfbaf9b46af029f3aecba8982
+      id: 3394653118
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: WoodenEnemy
+        ObjectType: 4
+      - ElementName: WoodenEnemy_LeftSlash
+        ObjectType: 3
+      Path: Enemies/WoodenEnemy/WoodenEnemy_LeftSlash
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: WoodenEnemy_OnBeingDamaged
+      guid: 919b881a9f91d74298cbe0e85318767d
+      id: 3411415237
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: WoodenEnemy
+        ObjectType: 4
+      - ElementName: WoodenEnemy_OnBeingDamaged
+        ObjectType: 3
+      Path: Enemies/WoodenEnemy/WoodenEnemy_OnBeingDamaged
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: WoodenEnemy_OnDestroyed_Common
+      guid: d49d9731b2623e48820ff4a1d523a64f
+      id: 1354805688
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: WoodenEnemy
+        ObjectType: 4
+      - ElementName: WoodenEnemy_OnDestroyed_Common
+        ObjectType: 3
+      Path: Enemies/WoodenEnemy/WoodenEnemy_OnDestroyed_Common
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: WoodenEnemy_RightSlash
+      guid: 0994dba986fee8489ce13bcef6a8d2b0
+      id: 148497201
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: WoodenEnemy
+        ObjectType: 4
+      - ElementName: WoodenEnemy_RightSlash
+        ObjectType: 3
+      Path: Enemies/WoodenEnemy/WoodenEnemy_RightSlash
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: WoodenEnemy_Spawn
+      guid: 1785df5f10fcdb429965312508923f7c
+      id: 1175728201
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: WoodenEnemy
+        ObjectType: 4
+      - ElementName: WoodenEnemy_Spawn
+        ObjectType: 3
+      Path: Enemies/WoodenEnemy/WoodenEnemy_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+  - PhysicalPath: Events/Entity_SFX.wwu
     PathAndIcons:
     - ElementName: SFX
       ObjectType: 12
     - ElementName: Entity_SFX
       ObjectType: 12
-    ParentPath: SFX\Entity_SFX
+    ParentPath: SFX/Entity_SFX
     guid: e9ec3f64f9e4574cab02f7b19532dad6
     GuidInternal: 
-    m_lastTime: -8585834020429318635
+    m_lastTime: -8585827133554775808
     List: []
-  - PhysicalPath: Events\Global.wwu
+  - PhysicalPath: Events/Global.wwu
     PathAndIcons:
     - ElementName: Global
       ObjectType: 12
     ParentPath: Global
     guid: 00c6d3d4ebb7bd4387ca46eee0c7206d
     GuidInternal: 
-    m_lastTime: -8585834020429308668
+    m_lastTime: -8585834173494775808
     List:
     - name: StopAll
       guid: a729102da7d7ea42835826629e88d0ac
@@ -624,111 +2353,547 @@ MonoBehaviour:
         ObjectType: 12
       - ElementName: StopAll
         ObjectType: 3
-      Path: Global\StopAll
+      Path: Global/StopAll
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-  - PhysicalPath: Events\SFX.wwu
+  - PhysicalPath: Events/Music.wwu
+    PathAndIcons:
+    - ElementName: Music
+      ObjectType: 12
+    ParentPath: Music
+    guid: a34f078a80671a4da7da502619b28955
+    GuidInternal: 
+    m_lastTime: -8585825265204775808
+    List:
+    - name: General
+      guid: b1f9b9c3a6cb524d9c29db2b36d1a5c9
+      id: 133642231
+      PathAndIcons:
+      - ElementName: Music
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      Path: Music/General
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Music_Enemies
+      guid: dfb2f27c75643c479b09131e42512b9a
+      id: 433441283
+      PathAndIcons:
+      - ElementName: Music
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Music_Enemies
+        ObjectType: 3
+      Path: Music/General/Music_Enemies
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Music_Region
+      guid: 49313a06dae7b2449d315e6dc4a89cc6
+      id: 3741135221
+      PathAndIcons:
+      - ElementName: Music
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Music_Region
+        ObjectType: 3
+      Path: Music/General/Music_Region
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+  - PhysicalPath: Events/Player.wwu
+    PathAndIcons:
+    - ElementName: Player
+      ObjectType: 12
+    ParentPath: Player
+    guid: 991a3b24403a5c418c7318d11e7863e8
+    GuidInternal: 
+    m_lastTime: -8585823560744775808
+    List:
+    - name: General
+      guid: f56de660626dc348a1eeb1a5750a255c
+      id: 133642231
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      Path: Player/General
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_Dash
+      guid: 8994a554e7036a4fb46a449b2256f731
+      id: 2394582229
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_Dash
+        ObjectType: 3
+      Path: Player/General/Player_Dash
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_Death
+      guid: e1664c58b2d979478a7768aafa302e03
+      id: 3083087645
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_Death
+        ObjectType: 3
+      Path: Player/General/Player_Death
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_Footstep
+      guid: 58b33529bd74be469fa6d9d0ba824577
+      id: 2453392179
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: SoundBankSpecific
+        ObjectType: 4
+      - ElementName: Player_Footstep
+        ObjectType: 3
+      Path: Player/SoundBankSpecific/Player_Footstep
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_Kick
+      guid: d4fbaa539179c94196ef7a32f11d703d
+      id: 4076006907
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_Kick
+        ObjectType: 3
+      Path: Player/General/Player_Kick
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_OnBeingDamaged
+      guid: dcdf6c980ffcc84aa85076002bfc6e25
+      id: 173863332
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_OnBeingDamaged
+        ObjectType: 3
+      Path: Player/General/Player_OnBeingDamaged
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_OnBeingFrozen
+      guid: f4d17d62b53c3545a4b9ddba0e5ed552
+      id: 2856534737
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_OnBeingFrozen
+        ObjectType: 3
+      Path: Player/General/Player_OnBeingFrozen
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_OnBeingHealed
+      guid: 5412711c9225764cb2b6075c26401dc6
+      id: 433135230
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_OnBeingHealed
+        ObjectType: 3
+      Path: Player/General/Player_OnBeingHealed
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_OnBeingLit
+      guid: dcc28d6a815443458f9943aa4d52e48f
+      id: 1305348786
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_OnBeingLit
+        ObjectType: 3
+      Path: Player/General/Player_OnBeingLit
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_OnBurningEnd
+      guid: a206fdc3890df7419b1c074aaf2f7047
+      id: 651730626
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_OnBurningEnd
+        ObjectType: 3
+      Path: Player/General/Player_OnBurningEnd
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_OnFrozenEnd
+      guid: 81671788a8d2774a9a498292f186a5d3
+      id: 2187238187
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_OnFrozenEnd
+        ObjectType: 3
+      Path: Player/General/Player_OnFrozenEnd
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_SkillCast
+      guid: 7b4433b6366e0f4c80d56c3432db258c
+      id: 2480229653
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_SkillCast
+        ObjectType: 3
+      Path: Player/General/Player_SkillCast
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_Vault
+      guid: b27fa687a0a08d47a53109d0a1f1bbbc
+      id: 769234327
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_Vault
+        ObjectType: 3
+      Path: Player/General/Player_Vault
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SoundBankSpecific
+      guid: ef96b9a2fe03b14390624e0363f349d0
+      id: 1175010472
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: SoundBankSpecific
+        ObjectType: 4
+      Path: Player/SoundBankSpecific
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+  - PhysicalPath: Events/SFX.wwu
     PathAndIcons:
     - ElementName: SFX
       ObjectType: 12
     ParentPath: SFX
     guid: 561c89e77ee2b043af420addb051576e
     GuidInternal: 
-    m_lastTime: -8585834020429298824
+    m_lastTime: -8585827126974775808
     List: []
-  - PhysicalPath: Events\UI_SFX.wwu
+  - PhysicalPath: Events/UI.wwu
     PathAndIcons:
-    - ElementName: SFX
+    - ElementName: UI
       ObjectType: 12
-    - ElementName: UI_SFX
-      ObjectType: 12
-    ParentPath: SFX\UI_SFX
+    ParentPath: UI
     guid: 7db0fe11b8f1c045b29c9a8403f43e18
     GuidInternal: 
-    m_lastTime: -8585834020429288827
-    List: []
+    m_lastTime: -8585825388444775808
+    List:
+    - name: General
+      guid: eb7fa98fbfcb5f4fbf5e0a5ed3266334
+      id: 133642231
+      PathAndIcons:
+      - ElementName: UI
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      Path: UI/General
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: UI_Button_Down
+      guid: c54b94edfb0a0441be1d4aee4861dfc6
+      id: 156563189
+      PathAndIcons:
+      - ElementName: UI
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: UI_Button_Down
+        ObjectType: 3
+      Path: UI/General/UI_Button_Down
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: UI_Button_Enter
+      guid: a9f219b8da2b0643aeb8f66478caca9e
+      id: 18309885
+      PathAndIcons:
+      - ElementName: UI
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: UI_Button_Enter
+        ObjectType: 3
+      Path: UI/General/UI_Button_Enter
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: UI_Button_Exit
+      guid: 6166e46222a0d1438c1a40d8da0b0503
+      id: 2325560497
+      PathAndIcons:
+      - ElementName: UI
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: UI_Button_Exit
+        ObjectType: 3
+      Path: UI/General/UI_Button_Exit
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: UI_Button_Up
+      guid: 04702a7004fd41439123921946909b08
+      id: 15662850
+      PathAndIcons:
+      - ElementName: UI
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: UI_Button_Up
+        ObjectType: 3
+      Path: UI/General/UI_Button_Up
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
   RtpcWwu:
-  - PhysicalPath: Game Parameters\Default Work Unit.wwu
+  - PhysicalPath: Game Parameters/Default Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
       ObjectType: 12
     ParentPath: Default Work Unit
     guid: 730cbf2236587e468f5d2d56b87c5ae8
     GuidInternal: 
-    m_lastTime: -8585833709490827773
+    m_lastTime: -8585825789104775808
+    List: []
+  - PhysicalPath: Game Parameters/Enemies.wwu
+    PathAndIcons:
+    - ElementName: Enemies
+      ObjectType: 12
+    ParentPath: Enemies
+    guid: efa28aae345ec24bbdeee9e6f04dbc53
+    GuidInternal: 
+    m_lastTime: -8585825265204775808
     List:
-    - name: BGM_Volume
-      guid: d803bf5017a5634f9ca0f7d73329f8ae
-      id: 341651998
+    - name: CombatLevel
+      guid: 25d0f441fcee4845807775fda1e60d81
+      id: 3717892141
       PathAndIcons:
-      - ElementName: Default Work Unit
+      - ElementName: Enemies
         ObjectType: 12
-      - ElementName: BGM_Volume
+      - ElementName: CombatLevel
         ObjectType: 13
-      Path: Default Work Unit\BGM_Volume
-    - name: Master_Volume
+      Path: Enemies/CombatLevel
+  - PhysicalPath: Game Parameters/Gameplay.wwu
+    PathAndIcons:
+    - ElementName: Gameplay
+      ObjectType: 12
+    ParentPath: Gameplay
+    guid: c2b2eb32ccdf5d488698021106e33bad
+    GuidInternal: 
+    m_lastTime: -8585827020084775808
+    List:
+    - name: InMenu_LowPass
+      guid: dcd5f5b4e016b6459154e424cb40136b
+      id: 1756231317
+      PathAndIcons:
+      - ElementName: Gameplay
+        ObjectType: 12
+      - ElementName: InMenu_LowPass
+        ObjectType: 13
+      Path: Gameplay/InMenu_LowPass
+    - name: MenuSlider_Master_Volume
       guid: 3637e6dba8a1f34e8ddc1259be7f2723
-      id: 4179668880
+      id: 1333239961
       PathAndIcons:
-      - ElementName: Default Work Unit
+      - ElementName: Gameplay
         ObjectType: 12
-      - ElementName: Master_Volume
+      - ElementName: MenuSlider_Master_Volume
         ObjectType: 13
-      Path: Default Work Unit\Master_Volume
+      Path: Gameplay/MenuSlider_Master_Volume
+    - name: MenuSlider_Music_Volume
+      guid: d803bf5017a5634f9ca0f7d73329f8ae
+      id: 2642438544
+      PathAndIcons:
+      - ElementName: Gameplay
+        ObjectType: 12
+      - ElementName: MenuSlider_Music_Volume
+        ObjectType: 13
+      Path: Gameplay/MenuSlider_Music_Volume
+    - name: Music_EnemyTheme_Volume
+      guid: bff4321386927a40945a29e7d2b9eca8
+      id: 3588190939
+      PathAndIcons:
+      - ElementName: Gameplay
+        ObjectType: 12
+      - ElementName: Music_EnemyTheme_Volume
+        ObjectType: 13
+      Path: Gameplay/Music_EnemyTheme_Volume
     - name: SFX_Entity_Volume
       guid: c22fe5348e112640ac890aecc349baec
       id: 3942311461
       PathAndIcons:
-      - ElementName: Default Work Unit
+      - ElementName: Gameplay
         ObjectType: 12
       - ElementName: SFX_Entity_Volume
         ObjectType: 13
-      Path: Default Work Unit\SFX_Entity_Volume
+      Path: Gameplay/SFX_Entity_Volume
     - name: SFX_UI_Volume
       guid: ac35454284c51a4ea7fb8ea44eea581b
       id: 2698376064
       PathAndIcons:
-      - ElementName: Default Work Unit
+      - ElementName: Gameplay
         ObjectType: 12
       - ElementName: SFX_UI_Volume
         ObjectType: 13
-      Path: Default Work Unit\SFX_UI_Volume
+      Path: Gameplay/SFX_UI_Volume
     - name: SFX_Volume
       guid: ea6b8401a61a2e4fa1c26f10fbc45b9c
       id: 1564184899
       PathAndIcons:
-      - ElementName: Default Work Unit
+      - ElementName: Gameplay
         ObjectType: 12
       - ElementName: SFX_Volume
         ObjectType: 13
-      Path: Default Work Unit\SFX_Volume
+      Path: Gameplay/SFX_Volume
+  - PhysicalPath: Game Parameters/General.wwu
+    PathAndIcons:
+    - ElementName: General
+      ObjectType: 12
+    ParentPath: General
+    guid: 8bffba1a5493dc498421bee60b25b87a
+    GuidInternal: 
+    m_lastTime: -8585825265204775808
+    List:
+    - name: Distance_to_Player
+      guid: 8463c5d920d9e14785808a6201311e30
+      id: 3917897988
+      PathAndIcons:
+      - ElementName: General
+        ObjectType: 12
+      - ElementName: Distance_to_Player
+        ObjectType: 13
+      Path: General/Distance_to_Player
+    - name: SpiderLegEnemy_Combat_Intensity
+      guid: be85a6dbf748f84bbbe7b41c4416f63b
+      id: 1190047843
+      PathAndIcons:
+      - ElementName: General
+        ObjectType: 12
+      - ElementName: SpiderLegEnemy_Combat_Intensity
+        ObjectType: 13
+      Path: General/SpiderLegEnemy_Combat_Intensity
+  - PhysicalPath: Game Parameters/Player.wwu
+    PathAndIcons:
+    - ElementName: Player
+      ObjectType: 12
+    ParentPath: Player
+    guid: f620889793190647a395a27aa8135d6e
+    GuidInternal: 
+    m_lastTime: -8585827020084775808
+    List:
+    - name: Player_Health
+      guid: fac793996e96da4bbf02b14dc6ddacbd
+      id: 215992295
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: Player_Health
+        ObjectType: 13
+      Path: Player/Player_Health
+    - name: Player_MovementSpeed
+      guid: cb23f1494620d4488c631298a86811eb
+      id: 2471758783
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: Player_MovementSpeed
+        ObjectType: 13
+      Path: Player/Player_MovementSpeed
+  - PhysicalPath: Game Parameters/States.wwu
+    PathAndIcons:
+    - ElementName: States
+      ObjectType: 12
+    ParentPath: States
+    guid: 09411fbf25a9654d9c18f964417d2427
+    GuidInternal: 
+    m_lastTime: -8585825789104775808
+    List:
+    - name: InCombat
+      guid: d663cf18019f9a4d89fc3e3b3f684315
+      id: 3373579172
+      PathAndIcons:
+      - ElementName: States
+        ObjectType: 12
+      - ElementName: InCombat
+        ObjectType: 13
+      Path: States/InCombat
   StateWwu:
-  - PhysicalPath: States\Default Work Unit.wwu
+  - PhysicalPath: States/Default Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
       ObjectType: 12
     ParentPath: Default Work Unit
     guid: 82fac5636ca6d245b37ade7d40d548da
     GuidInternal: 
-    m_lastTime: -8585834020409704912
+    m_lastTime: -8585827075964775808
+    List: []
+  - PhysicalPath: States/MusicStates.wwu
+    PathAndIcons:
+    - ElementName: MusicStates
+      ObjectType: 12
+    ParentPath: MusicStates
+    guid: 3f4868067839e945a8d8f15a6b5db6dc
+    GuidInternal: 
+    m_lastTime: -8585825265204775808
     List:
-    - name: BGM_CombatState
+    - name: Combat
       guid: 10bf40b90f8f7446972ba287d951d4eb
-      id: 3129336127
+      id: 2764240573
       PathAndIcons:
-      - ElementName: Default Work Unit
+      - ElementName: MusicStates
         ObjectType: 12
-      - ElementName: BGM_CombatState
+      - ElementName: Combat
         ObjectType: 9
-      Path: Default Work Unit\BGM_CombatState
+      Path: MusicStates/Combat
       values:
-      - name: Exploring
-        guid: 539ac42e89b7004d8e5d06cb23d98083
-        id: 1823678183
-        PathAndIcons:
-        - ElementName: Exploring
-          ObjectType: 8
       - name: InBossCombat
         guid: fa65c8fb5fecf24181501e1f4b28f064
         id: 687614019
@@ -747,49 +2912,68 @@ MonoBehaviour:
         PathAndIcons:
         - ElementName: InEliteCombat
           ObjectType: 8
-      - name: InSpiderLegCombat_Phase_1
-        guid: 40c40df96907c341b3581e65cff25162
-        id: 1022704585
-        PathAndIcons:
-        - ElementName: InSpiderLegCombat_Phase_1
-          ObjectType: 8
-      - name: InSpiderLegCombat_Phase_2
-        guid: be3a9d32d7074b4bbd0c5d0dcca1ed91
-        id: 1022704586
-        PathAndIcons:
-        - ElementName: InSpiderLegCombat_Phase_2
-          ObjectType: 8
-      - name: InSpiderLegCombat_Phase_3
-        guid: 35d54d2d88a19d46981704442ee355ef
-        id: 1022704587
-        PathAndIcons:
-        - ElementName: InSpiderLegCombat_Phase_3
-          ObjectType: 8
       - name: None
         guid: a86a0733aa57324ab615f58c8930ef62
         id: 748895195
         PathAndIcons:
         - ElementName: None
           ObjectType: 8
-      - name: Normal
-        guid: 0a3982dfa09d23479ae000ef8c012400
-        id: 1160234136
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
+    - name: Combat_EnemySpiderLeg_PhaseLevel
+      guid: e7396cd4cfa15b4894e6f7a8c5faf83c
+      id: 2589279669
+      PathAndIcons:
+      - ElementName: MusicStates
+        ObjectType: 12
+      - ElementName: Combat_EnemySpiderLeg_PhaseLevel
+        ObjectType: 9
+      Path: MusicStates/Combat_EnemySpiderLeg_PhaseLevel
+      values:
+      - name: EnemySpiderLeg_Phase1
+        guid: 3bef615f147ddf47b8ec4a390c353a55
+        id: 1652927213
         PathAndIcons:
-        - ElementName: Normal
+        - ElementName: EnemySpiderLeg_Phase1
+          ObjectType: 8
+      - name: EnemySpiderLeg_Phase2
+        guid: 166b72ee1b6a4d4db591fea4d29acf64
+        id: 1652927214
+        PathAndIcons:
+        - ElementName: EnemySpiderLeg_Phase2
+          ObjectType: 8
+      - name: EnemySpiderLeg_Phase3
+        guid: ca1a5dbe09b39446ad75f38d1d0a917a
+        id: 1652927215
+        PathAndIcons:
+        - ElementName: EnemySpiderLeg_Phase3
+          ObjectType: 8
+      - name: None
+        guid: 61c24d629afce54489bbb16994e67663
+        id: 748895195
+        PathAndIcons:
+        - ElementName: None
           ObjectType: 8
       ValueGuids: []
       ValueIcons: []
       valuesInternal: []
-    - name: BGM_Theme
+    - name: Music_Regions
       guid: c06ded40db788b4ab3bc430269c74f68
-      id: 3258568639
+      id: 2106907484
       PathAndIcons:
-      - ElementName: Default Work Unit
+      - ElementName: MusicStates
         ObjectType: 12
-      - ElementName: BGM_Theme
+      - ElementName: Music_Regions
         ObjectType: 9
-      Path: Default Work Unit\BGM_Theme
+      Path: MusicStates/Music_Regions
       values:
+      - name: Dungeon
+        guid: 57ddd3f92df9df4f988476d98a5282fe
+        id: 608898761
+        PathAndIcons:
+        - ElementName: Dungeon
+          ObjectType: 8
       - name: Excavation
         guid: 3669a0ad173cd9448e3b7e1227401d76
         id: 2525109375
@@ -830,31 +3014,290 @@ MonoBehaviour:
       ValueIcons: []
       valuesInternal: []
   SwitchWwu:
-  - PhysicalPath: Switches\Default Work Unit.wwu
+  - PhysicalPath: Switches/Combat.wwu
+    PathAndIcons:
+    - ElementName: Combat
+      ObjectType: 12
+    ParentPath: Combat
+    guid: 12434b2d5395b3499804c554ed6a40a6
+    GuidInternal: 
+    m_lastTime: -8585825347654775808
+    List:
+    - name: Combat
+      guid: ee633805af62e54ea95491f4772f24ef
+      id: 2764240573
+      PathAndIcons:
+      - ElementName: Combat
+        ObjectType: 12
+      - ElementName: Combat
+        ObjectType: 11
+      Path: Combat/Combat
+      values:
+      - name: InBossCombat
+        guid: 6c1b6d79773af54da36e0e09912ea7aa
+        id: 687614019
+        PathAndIcons:
+        - ElementName: InBossCombat
+          ObjectType: 10
+      - name: InCombat
+        guid: 8c177a86e1bd324b9fc4b5a4040425a0
+        id: 3373579172
+        PathAndIcons:
+        - ElementName: InCombat
+          ObjectType: 10
+      - name: InEliteCombat
+        guid: 4591fc27d009b8468b797c0c8dce7e8a
+        id: 789371013
+        PathAndIcons:
+        - ElementName: InEliteCombat
+          ObjectType: 10
+      - name: NonCombat
+        guid: ff3f4f64817dcc478bd5d49a8ab646cf
+        id: 1841965078
+        PathAndIcons:
+        - ElementName: NonCombat
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
+    - name: Combat_EnemySpiderLeg_PhaseLevel
+      guid: aef2756d3a7f3a48b125cf43676bef42
+      id: 2589279669
+      PathAndIcons:
+      - ElementName: Combat
+        ObjectType: 12
+      - ElementName: Combat_EnemySpiderLeg_PhaseLevel
+        ObjectType: 11
+      Path: Combat/Combat_EnemySpiderLeg_PhaseLevel
+      values:
+      - name: EnemySpiderLeg_Phase1
+        guid: 16c9e8f3075caa458de9f0eed3d903a5
+        id: 1652927213
+        PathAndIcons:
+        - ElementName: EnemySpiderLeg_Phase1
+          ObjectType: 10
+      - name: EnemySpiderLeg_Phase2
+        guid: c625478be64a0a42a7c5f29003ab289d
+        id: 1652927214
+        PathAndIcons:
+        - ElementName: EnemySpiderLeg_Phase2
+          ObjectType: 10
+      - name: EnemySpiderLeg_Phase3
+        guid: b1f3a5e260e99843919f76ef3909b0c4
+        id: 1652927215
+        PathAndIcons:
+        - ElementName: EnemySpiderLeg_Phase3
+          ObjectType: 10
+      - name: NonSpiderCombat
+        guid: dfeb9e91b41655438683b4ee8b14fd4d
+        id: 1624858949
+        PathAndIcons:
+        - ElementName: NonSpiderCombat
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
+    - name: EnemySpiderLeg_Volume_by_Distnace
+      guid: 02a4cac15087da489fb109bcb32d84e9
+      id: 3762693077
+      PathAndIcons:
+      - ElementName: Combat
+        ObjectType: 12
+      - ElementName: EnemySpiderLeg_Volume_by_Distnace
+        ObjectType: 11
+      Path: Combat/EnemySpiderLeg_Volume_by_Distnace
+      values:
+      - name: Close
+        guid: ad6e21afa079d540a7b6840d7af0439f
+        id: 1451272583
+        PathAndIcons:
+        - ElementName: Close
+          ObjectType: 10
+      - name: Far
+        guid: 3897d292dc0329459b6fdc42e7e2472a
+        id: 1183803292
+        PathAndIcons:
+        - ElementName: Far
+          ObjectType: 10
+      - name: Middle
+        guid: 41d04606fe6a1e429aee2d5afb3331ad
+        id: 1026627430
+        PathAndIcons:
+        - ElementName: Middle
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
+  - PhysicalPath: Switches/Default Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
       ObjectType: 12
     ParentPath: Default Work Unit
     guid: 7718d65df1a3d64bb3d873f97b71a704
     GuidInternal: 
-    m_lastTime: -8585834061468785212
+    m_lastTime: -8585834173474775808
     List: []
+  - PhysicalPath: Switches/General.wwu
+    PathAndIcons:
+    - ElementName: General
+      ObjectType: 12
+    ParentPath: General
+    guid: 7b2aa25cef361c43a821498489431e58
+    GuidInternal: 
+    m_lastTime: -8585825388444775808
+    List:
+    - name: Distance_to_Player
+      guid: 04a1fd30ad2b764bb0bdda1f3902ab1e
+      id: 3917897988
+      PathAndIcons:
+      - ElementName: General
+        ObjectType: 12
+      - ElementName: Distance_to_Player
+        ObjectType: 11
+      Path: General/Distance_to_Player
+      values:
+      - name: Close
+        guid: 078a1d6541abe54bbedbcae39ad0d12a
+        id: 1451272583
+        PathAndIcons:
+        - ElementName: Close
+          ObjectType: 10
+      - name: Far
+        guid: 72da3f814769ff4ba362a6d129483313
+        id: 1183803292
+        PathAndIcons:
+        - ElementName: Far
+          ObjectType: 10
+      - name: Medium
+        guid: 73cb06e44ba3a44b801d9a2f16f86d1f
+        id: 2849147824
+        PathAndIcons:
+        - ElementName: Medium
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
+    - name: Surface_Type
+      guid: 1dd77940ba09bb47bb3644d224892b48
+      id: 4064446173
+      PathAndIcons:
+      - ElementName: General
+        ObjectType: 12
+      - ElementName: Surface_Type
+        ObjectType: 11
+      Path: General/Surface_Type
+      values:
+      - name: Concrete
+        guid: f283017858af374296f8b204d6ebc684
+        id: 841620460
+        PathAndIcons:
+        - ElementName: Concrete
+          ObjectType: 10
+      - name: Dirt
+        guid: 6014d9415eafa145b643edcde619ef7f
+        id: 2195636714
+        PathAndIcons:
+        - ElementName: Dirt
+          ObjectType: 10
+      - name: Grass
+        guid: 1a013db2b7a6eb41ad0c00eeebeff68b
+        id: 4248645337
+        PathAndIcons:
+        - ElementName: Grass
+          ObjectType: 10
+      - name: Ice
+        guid: acbf46eeab81904fa46658a5a71e8d9e
+        id: 344481046
+        PathAndIcons:
+        - ElementName: Ice
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
+  - PhysicalPath: Switches/Player.wwu
+    PathAndIcons:
+    - ElementName: Player
+      ObjectType: 12
+    ParentPath: Player
+    guid: 02c9e5d4dc0c4f4c95de99fc55d63d79
+    GuidInternal: 
+    m_lastTime: -8585827020084775808
+    List:
+    - name: Player_MovementSpeed
+      guid: 2f4e09f700bb8a44828757cd13d26f96
+      id: 2471758783
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: Player_MovementSpeed
+        ObjectType: 11
+      Path: Player/Player_MovementSpeed
+      values:
+      - name: Dash
+        guid: c0f3adc766015648997ef2eba4b56a35
+        id: 1942692385
+        PathAndIcons:
+        - ElementName: Dash
+          ObjectType: 10
+      - name: Walk
+        guid: 70f365c60698a44c8dd4c0c35595c03a
+        id: 2108779966
+        PathAndIcons:
+        - ElementName: Walk
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
   TriggerWwu:
-  - PhysicalPath: Triggers\Default Work Unit.wwu
+  - PhysicalPath: Triggers/Default Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
       ObjectType: 12
     ParentPath: Default Work Unit
     guid: 044679bac8d46342a9f9381adb4e51cc
     GuidInternal: 
-    m_lastTime: -8585834061468715235
-    List: []
+    m_lastTime: -8585826226254775808
+    List:
+    - name: Trigger_PlayerDeath
+      guid: e5368207646c8e45bf1b2e003cbd0a52
+      id: 821629565
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Trigger_PlayerDeath
+        ObjectType: 14
+      Path: Default Work Unit/Trigger_PlayerDeath
+    - name: Trigger_QuestComplete
+      guid: c5ea7112a8a4084fbfa14b1d3dd59f68
+      id: 48326457
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Trigger_QuestComplete
+        ObjectType: 14
+      Path: Default Work Unit/Trigger_QuestComplete
+    - name: Trigger_Teleport
+      guid: fa444daee2c4d24c8625de827eb58e40
+      id: 1218580015
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Trigger_Teleport
+        ObjectType: 14
+      Path: Default Work Unit/Trigger_Teleport
+    - name: Trigger_Victory
+      guid: 8fd5be68c849f143b1fe14ad8e3512e6
+      id: 1605137596
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Trigger_Victory
+        ObjectType: 14
+      Path: Default Work Unit/Trigger_Victory
   ExpandedItems:
   - /UnityProject_WwiseProject
   - /UnityProject_WwiseProject/Events
-  - /UnityProject_WwiseProject/Events/SFX
-  - /UnityProject_WwiseProject/Events/SFX/Entity_SFX
-  - /UnityProject_WwiseProject/Events/SFX/Entity_SFX/Actor_SFX
-  - /UnityProject_WwiseProject/Events/SFX/Entity_SFX/Actor_SFX/IceEnemy_Cyan
+  - /UnityProject_WwiseProject/Events/Ambience
+  - /UnityProject_WwiseProject/Events/Ambience/General
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

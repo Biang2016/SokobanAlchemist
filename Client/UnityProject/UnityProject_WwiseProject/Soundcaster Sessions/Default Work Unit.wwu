@@ -1,6 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{77C9FDB8-57B0-47C9-B5FF-B0477BFEF239}" SchemaVersion="97">
 	<SoundcasterSessions>
-		<WorkUnit Name="Default Work Unit" ID="{77C9FDB8-57B0-47C9-B5FF-B0477BFEF239}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{77C9FDB8-57B0-47C9-B5FF-B0477BFEF239}" PersistMode="Standalone">
+			<ChildrenList>
+				<SoundcasterSession Name="New Soundcaster Session" ID="{040558D8-A443-4FE5-8A51-D2A860861BC0}">
+					<RTPCValueList ShowAll="true">
+						<RTPCValue>
+							<GameParameterRef Name="SFX_Entity_Volume" ID="{34E52FC2-118E-4026-AC89-0AECC349BAEC}"/>
+							<Value>50</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="Music_EnemyTheme_Volume" ID="{1332F4BF-9286-407A-945A-29E7D2B9ECA8}"/>
+							<Value>-60</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="CombatLevel" ID="{41F4D025-EEFC-4548-8077-75FDA1E60D81}"/>
+							<Value>10</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="InMenu_LowPass" ID="{B4F5D5DC-16E0-45B6-9154-E424CB40136B}"/>
+							<Value>50</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="Distance_to_Player" ID="{D9C56384-D920-47E1-8580-8A6201311E30}"/>
+							<Value>82.3515706375747</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="Player_MovementSpeed" ID="{49F123CB-2046-48D4-8C63-1298A86811EB}"/>
+							<Value>92.2297297297297</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="Player_Health" ID="{9993C7FA-966E-4BDA-BF02-B14DC6DDACBD}"/>
+							<Value>50</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="SpiderLegEnemy_Combat_Intensity" ID="{DBA685BE-48F7-4BF8-BBE7-B41C4416F63B}"/>
+							<Value>50</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="InCombat" ID="{18CF63D6-9F01-4D9A-89FC-3E3B3F684315}"/>
+							<Value>50</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="SFX_UI_Volume" ID="{424535AC-C584-4E1A-A7FB-8EA44EEA581B}"/>
+							<Value>50</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="MenuSlider_Master_Volume" ID="{DBE63736-A1A8-4EF3-8DDC-1259BE7F2723}"/>
+							<Value>50</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="SFX_Volume" ID="{01846BEA-1AA6-4F2E-A1C2-6F10FBC45B9C}"/>
+							<Value>100</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="MenuSlider_Music_Volume" ID="{50BF03D8-A517-4F63-9CA0-F7D73329F8AE}"/>
+							<Value>100</Value>
+						</RTPCValue>
+					</RTPCValueList>
+					<CurrentStateList ShowAll="true">
+						<CurrentStateRef Name="None" ID="{33076AA8-57AA-4A32-B615-F58C8930EF62}"/>
+						<CurrentStateRef Name="None" ID="{624DC261-FC9A-44E5-89BB-B16994E67663}"/>
+						<CurrentStateRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
+					</CurrentStateList>
+					<CurrentSwitchList ShowAll="true">
+						<CurrentSwitchRef Name="Dash" ID="{C7ADF3C0-0166-4856-997E-F2EBA4B56A35}"/>
+						<CurrentSwitchRef Name="Concrete" ID="{780183F2-AF58-4237-96F8-B204D6EBC684}"/>
+						<CurrentSwitchRef Name="EnemySpiderLeg_Phase1" ID="{F3E8C916-5C07-45AA-8DE9-F0EED3D903A5}"/>
+						<CurrentSwitchRef Name="Close" ID="{AF216EAD-79A0-40D5-A7B6-840D7AF0439F}"/>
+						<CurrentSwitchRef Name="Close" ID="{651D8A07-AB41-4BE5-BEDB-CAE39AD0D12A}"/>
+						<CurrentSwitchRef Name="InBossCombat" ID="{796D1B6C-3A77-4DF5-A36E-0E09912EA7AA}"/>
+					</CurrentSwitchList>
+				</SoundcasterSession>
+			</ChildrenList>
+		</WorkUnit>
 	</SoundcasterSessions>
 </WwiseDocument>

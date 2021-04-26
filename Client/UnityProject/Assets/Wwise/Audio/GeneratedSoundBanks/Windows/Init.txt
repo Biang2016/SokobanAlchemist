@@ -1,30 +1,83 @@
+Switch Group	ID	Name			Wwise Object Path	Notes
+	2471758783	Player_MovementSpeed			\Player\Player_MovementSpeed	
+	2589279669	Combat_EnemySpiderLeg_PhaseLevel			\Combat\Combat_EnemySpiderLeg_PhaseLevel	
+	2764240573	Combat			\Combat\Combat	
+	3762693077	EnemySpiderLeg_Volume_by_Distnace			\Combat\EnemySpiderLeg_Volume_by_Distnace	
+	3917897988	Distance_to_Player			\General\Distance_to_Player	
+
+Switch	ID	Name	Switch Group			Notes
+	1942692385	Dash	Player_MovementSpeed			
+	2108779966	Walk	Player_MovementSpeed			
+	1624858949	NonSpiderCombat	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927213	EnemySpiderLeg_Phase1	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927214	EnemySpiderLeg_Phase2	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927215	EnemySpiderLeg_Phase3	Combat_EnemySpiderLeg_PhaseLevel			
+	687614019	InBossCombat	Combat			
+	789371013	InEliteCombat	Combat			
+	1841965078	NonCombat	Combat			
+	3373579172	InCombat	Combat			
+	1026627430	Middle	EnemySpiderLeg_Volume_by_Distnace			
+	1183803292	Far	EnemySpiderLeg_Volume_by_Distnace			
+	1451272583	Close	EnemySpiderLeg_Volume_by_Distnace			
+	1183803292	Far	Distance_to_Player			
+	1451272583	Close	Distance_to_Player			
+	2849147824	Medium	Distance_to_Player			
+
 State Group	ID	Name			Wwise Object Path	Notes
-	3129336127	BGM_CombatState			\Default Work Unit\BGM_CombatState	
-	3258568639	BGM_Theme			\Default Work Unit\BGM_Theme	
+	2106907484	Music_Regions			\MusicStates\Music_Regions	
+	2589279669	Combat_EnemySpiderLeg_PhaseLevel			\MusicStates\Combat_EnemySpiderLeg_PhaseLevel	
+	2764240573	Combat			\MusicStates\Combat	
 
 State	ID	Name	State Group			Notes
-	687614019	InBossCombat	BGM_CombatState			
-	748895195	None	BGM_CombatState			
-	789371013	InEliteCombat	BGM_CombatState			
-	1022704585	InSpiderLegCombat_Phase_1	BGM_CombatState			
-	1022704586	InSpiderLegCombat_Phase_2	BGM_CombatState			
-	1022704587	InSpiderLegCombat_Phase_3	BGM_CombatState			
-	1160234136	Normal	BGM_CombatState			
-	1823678183	Exploring	BGM_CombatState			
-	3373579172	InCombat	BGM_CombatState			
-	578926554	Lab	BGM_Theme			
-	748895195	None	BGM_Theme			
-	2009274547	OpenWorld	BGM_Theme			
-	2323193050	Temple	BGM_Theme			
-	2525109375	Excavation	BGM_Theme			
-	3762955427	Tutorial	BGM_Theme			
+	578926554	Lab	Music_Regions			
+	608898761	Dungeon	Music_Regions			
+	748895195	None	Music_Regions			
+	2009274547	OpenWorld	Music_Regions			
+	2323193050	Temple	Music_Regions			
+	2525109375	Excavation	Music_Regions			
+	3762955427	Tutorial	Music_Regions			
+	748895195	None	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927213	EnemySpiderLeg_Phase1	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927214	EnemySpiderLeg_Phase2	Combat_EnemySpiderLeg_PhaseLevel			
+	1652927215	EnemySpiderLeg_Phase3	Combat_EnemySpiderLeg_PhaseLevel			
+	687614019	InBossCombat	Combat			
+	748895195	None	Combat			
+	789371013	InEliteCombat	Combat			
+	3373579172	InCombat	Combat			
+
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	1333239961	MenuSlider_Master_Volume			\Gameplay\MenuSlider_Master_Volume	
+	1564184899	SFX_Volume			\Gameplay\SFX_Volume	
+	2642438544	MenuSlider_Music_Volume			\Gameplay\MenuSlider_Music_Volume	
+	2698376064	SFX_UI_Volume			\Gameplay\SFX_UI_Volume	
+	3942311461	SFX_Entity_Volume			\Gameplay\SFX_Entity_Volume	
 
 Audio Bus	ID	Name			Wwise Object Path	Notes
+	77978275	Ambient			\Default Work Unit\Master_Audio_Bus\World\Ambient	
 	341217133	BGM_Audio_Bus			\Default Work Unit\Master_Audio_Bus\BGM_Audio_Bus	
+	841296678	NonWorld			\Default Work Unit\Master_Audio_Bus\NonWorld	
+	983310469	AUX			\Default Work Unit\Master_Audio_Bus\World\AUX	
+	1069431850	Player			\Default Work Unit\Master_Audio_Bus\World\Player	
+	1355693303	Region_Excavator			\Default Work Unit\Master_Audio_Bus\World\AUX\Region_Excavator	
+	1551306167	UI			\Default Work Unit\Master_Audio_Bus\NonWorld\UI	
+	1636576504	MusicStinger			\Default Work Unit\Master_Audio_Bus\NonWorld\MusicStinger	
+	1843703454	Region_Tutorial			\Default Work Unit\Master_Audio_Bus\World\AUX\Region_Tutorial	
+	1863167500	Region_OpenWorld			\Default Work Unit\Master_Audio_Bus\World\AUX\Region_OpenWorld	
+	2016903052	Boxes			\Default Work Unit\Master_Audio_Bus\World\Boxes	
+	2242381963	Enemies			\Default Work Unit\Master_Audio_Bus\World\Enemies	
 	2392784291	Master_Audio_Bus			\Default Work Unit\Master_Audio_Bus	
+	2609808943	World			\Default Work Unit\Master_Audio_Bus\World	
+	2746966547	Region_Temple			\Default Work Unit\Master_Audio_Bus\World\AUX\Region_Temple	
+	2754982597	Region_Lab			\Default Work Unit\Master_Audio_Bus\World\AUX\Region_Lab	
+	3334061918	Region_Dungeon			\Default Work Unit\Master_Audio_Bus\World\AUX\Region_Dungeon	
 	3365874942	SFX_Audio_Bus			\Default Work Unit\Master_Audio_Bus\SFX_Audio_Bus	
 	3663755868	SFX_Entity_Audio_Bus			\Default Work Unit\Master_Audio_Bus\SFX_Audio_Bus\SFX_Entity_Audio_Bus	
-	3991820723	SFX_UI_Audio_Bus			\Default Work Unit\Master_Audio_Bus\SFX_Audio_Bus\SFX_UI_Audio_Bus	
+
+Auxiliary Bus	ID	Name			Wwise Object Path	Notes
+	2412664669	Music_Aux			\Default Work Unit\Master_Audio_Bus\World\AUX\Music_Aux	
+
+Effect plug-ins	ID	Name	Type				Notes
+	958590783	Wwise RoomVerb (Custom)	Wwise RoomVerb			
 
 Audio Devices	ID	Name	Type				Notes
 	2317455096	No_Output	No Output			
