@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BiangLibrary.GameDataFormat.Grid;
 using FlowCanvas;
 using FlowCanvas.Nodes;
 using NodeCanvas.Framework;
@@ -193,6 +194,27 @@ public class ModuleAIAtoms
         public override void Invoke()
         {
             //AudioManager.Instance.BGMFadeIn(BGM_Name.value, FadeInDuration.value, Volume.value, true);
+        }
+    }
+
+    [Name("所有箱子的火焰是否都扑灭了")]
+    [Category("States")]
+    public class Flow_CheckFirePutOutForEveryBox : CallableFunctionNode<bool>
+    {
+        public override bool Invoke()
+        {
+            for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
+            for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
+            for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
+            {
+                Entity entity = WorldModule[TypeDefineType.Box, new GridPos3D(x, y, z)];
+                if (entity is Box box)
+                {
+                    if (box.EntityStatPropSet.IsFiring) return false;
+                }
+            }
+
+            return true;
         }
     }
 }

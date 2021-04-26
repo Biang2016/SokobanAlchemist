@@ -162,6 +162,7 @@ public partial class Box : Entity
         BoxIconSpriteHelper.OnHelperUsed();
         BoxFrozenBoxHelper?.OnHelperUsed();
         BoxMarchingTextureHelper?.OnHelperUsed();
+        BoxMergeConfig.MergeEnable = true;
         base.OnUsed();
     }
 

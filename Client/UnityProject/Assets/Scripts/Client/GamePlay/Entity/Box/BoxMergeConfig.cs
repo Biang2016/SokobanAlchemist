@@ -5,11 +5,14 @@ using Sirenix.OdinInspector;
 [Serializable]
 public class BoxMergeConfig
 {
+    internal bool MergeEnable = true;
+
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<BoxMergeConfigData> BoxMergeConfigDataList = new List<BoxMergeConfigData>();
 
     public ushort GetMergeBoxTypeIndex(int mergeCount, MergeOrientation mergeOrientation)
     {
+        if (!MergeEnable) return 0;
         foreach (BoxMergeConfigData data in BoxMergeConfigDataList)
         {
             if (data.MergeCount == mergeCount && (data.MergeOrientation & mergeOrientation) != 0)
@@ -24,6 +27,7 @@ public class BoxMergeConfig
     public List<int> GetAllValidMergeCounts(MergeOrientation mergeOrientation)
     {
         List<int> validMergeCounts = new List<int>();
+        if (!MergeEnable) return validMergeCounts;
         foreach (BoxMergeConfigData data in BoxMergeConfigDataList)
         {
             if ((data.MergeOrientation & mergeOrientation) != 0)
