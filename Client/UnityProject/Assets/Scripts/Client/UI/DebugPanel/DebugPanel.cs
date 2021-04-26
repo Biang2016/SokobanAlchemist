@@ -437,17 +437,38 @@ public class DebugPanel : BaseUIPanel
         Time.timeScale = value;
     }
 
-    [DebugSlider("Audio/BGM", 100, 0, 100)]
-    public void BGM_Volume(float value)
+    [DebugSlider("Audio/InMenu_LowPass", 100, 0, 100)]
+    public void Set_InMenu_LowPass(float value)
     {
-        PlayerPrefs.SetFloat("BGM_Volume", value);
-        WwiseAudioManager.Instance.BGM_Volume.SetGlobalValue(value);
+        PlayerPrefs.SetFloat("InMenu_LowPass", value);
+        WwiseAudioManager.Instance.InMenu_LowPass.SetGlobalValue(value);
     }
 
-    [DebugSlider("Audio/SFX", 100, 0, 100)]
-    public void SFX_Volume(float value)
+    [DebugSlider("Audio/Master_Volume", 100, 0, 100)]
+    public void Set_Master_Volume(float value)
     {
-        PlayerPrefs.SetFloat("SFX_Volume", value);
-        WwiseAudioManager.Instance.SFX_Volume.SetGlobalValue(value);
+        PlayerPrefs.SetFloat("Master_Volume", value);
+        WwiseAudioManager.Instance.Master_Volume.SetGlobalValue(value);
+    }
+
+    [DebugSlider("Audio/Music_Volume", 100, 0, 100)]
+    public void Set_Music_Volume(float value)
+    {
+        PlayerPrefs.SetFloat("Music_Volume", value);
+        WwiseAudioManager.Instance.Music_Volume.SetGlobalValue(value);
+    }
+
+    [DebugSlider("Audio/UI_Volume", 100, 0, 100)]
+    public void Set_UI_Volume(float value)
+    {
+        PlayerPrefs.SetFloat("UI_Volume", value);
+        WwiseAudioManager.Instance.UI_Volume.SetGlobalValue(value);
+    }
+
+    [DebugSlider("Audio/World_Volume", 100, 0, 100)]
+    public void Set_World_Volume(float value)
+    {
+        PlayerPrefs.SetFloat("World_Volume", value);
+        WwiseAudioManager.Instance.World_Volume.SetGlobalValue(value);
     }
 }

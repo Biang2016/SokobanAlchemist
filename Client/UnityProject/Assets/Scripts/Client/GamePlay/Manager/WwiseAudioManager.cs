@@ -7,31 +7,58 @@ public class WwiseAudioManager : MonoSingleton<WwiseAudioManager>
 {
     public WwiseBGMConfiguration WwiseBGMConfiguration;
 
+    public AK.Wwise.RTPC InMenu_LowPass;
     public AK.Wwise.RTPC Master_Volume;
-    public AK.Wwise.RTPC BGM_Volume;
-    public AK.Wwise.RTPC SFX_Volume;
-    public AK.Wwise.RTPC SFX_Entity_Volume;
-    public AK.Wwise.RTPC SFX_UI_Volume;
+    public AK.Wwise.RTPC Music_Volume;
+    public AK.Wwise.RTPC UI_Volume;
+    public AK.Wwise.RTPC World_Volume;
 
     void Awake()
     {
         GetBGMThemeConfigDict();
-        if (PlayerPrefs.HasKey("BGM_Volume"))
+        if (PlayerPrefs.HasKey("InMenu_LowPass"))
         {
-            BGM_Volume.SetGlobalValue(PlayerPrefs.GetFloat("BGM_Volume"));
+            InMenu_LowPass.SetGlobalValue(PlayerPrefs.GetFloat("InMenu_LowPass"));
         }
         else
         {
-            BGM_Volume.SetGlobalValue(100f);
+            InMenu_LowPass.SetGlobalValue(100f);
         }
 
-        if (PlayerPrefs.HasKey("SFX_Volume"))
+        if (PlayerPrefs.HasKey("Master_Volume"))
         {
-            SFX_Volume.SetGlobalValue(PlayerPrefs.GetFloat("SFX_Volume"));
+            Master_Volume.SetGlobalValue(PlayerPrefs.GetFloat("Master_Volume"));
         }
         else
         {
-            SFX_Volume.SetGlobalValue(100f);
+            Master_Volume.SetGlobalValue(100f);
+        }
+
+        if (PlayerPrefs.HasKey("Music_Volume"))
+        {
+            Music_Volume.SetGlobalValue(PlayerPrefs.GetFloat("Music_Volume"));
+        }
+        else
+        {
+            Music_Volume.SetGlobalValue(100f);
+        }
+
+        if (PlayerPrefs.HasKey("UI_Volume"))
+        {
+            UI_Volume.SetGlobalValue(PlayerPrefs.GetFloat("UI_Volume"));
+        }
+        else
+        {
+            UI_Volume.SetGlobalValue(100f);
+        }
+
+        if (PlayerPrefs.HasKey("World_Volume"))
+        {
+            World_Volume.SetGlobalValue(PlayerPrefs.GetFloat("World_Volume"));
+        }
+        else
+        {
+            World_Volume.SetGlobalValue(100f);
         }
     }
 

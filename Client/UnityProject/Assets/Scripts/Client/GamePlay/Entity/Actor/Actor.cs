@@ -402,6 +402,10 @@ public class Actor : Entity
     [LabelText("频繁更新")]
     public bool FrequentUpdate = false;
 
+    [FoldoutGroup("属性")]
+    [LabelText("角色阶级")]
+    public ActorClass ActorClass = ActorClass.Normal;
+
     #region 手感
 
     [FoldoutGroup("手感")]

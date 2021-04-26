@@ -237,15 +237,13 @@ namespace AK
         static const AkUniqueID DISTANCE_TO_PLAYER = 3917897988U;
         static const AkUniqueID INCOMBAT = 3373579172U;
         static const AkUniqueID INMENU_LOWPASS = 1756231317U;
-        static const AkUniqueID MENUSLIDER_MASTER_VOLUME = 1333239961U;
-        static const AkUniqueID MENUSLIDER_MUSIC_VOLUME = 2642438544U;
-        static const AkUniqueID MUSIC_ENEMYTHEME_VOLUME = 3588190939U;
+        static const AkUniqueID MASTER_VOLUME = 4179668880U;
+        static const AkUniqueID MUSIC_VOLUME = 1006694123U;
         static const AkUniqueID PLAYER_HEALTH = 215992295U;
         static const AkUniqueID PLAYER_MOVEMENTSPEED = 2471758783U;
-        static const AkUniqueID SFX_ENTITY_VOLUME = 3942311461U;
-        static const AkUniqueID SFX_UI_VOLUME = 2698376064U;
-        static const AkUniqueID SFX_VOLUME = 1564184899U;
         static const AkUniqueID SPIDERLEGENEMY_COMBAT_INTENSITY = 1190047843U;
+        static const AkUniqueID UI_VOLUME = 1719345792U;
+        static const AkUniqueID WORLD_VOLUME = 988558536U;
     } // namespace GAME_PARAMETERS
 
     namespace TRIGGERS
@@ -280,8 +278,6 @@ namespace AK
         static const AkUniqueID REGION_OPENWORLD = 1863167500U;
         static const AkUniqueID REGION_TEMPLE = 2746966547U;
         static const AkUniqueID REGION_TUTORIAL = 1843703454U;
-        static const AkUniqueID SFX_AUDIO_BUS = 3365874942U;
-        static const AkUniqueID SFX_ENTITY_AUDIO_BUS = 3663755868U;
         static const AkUniqueID UI = 1551306167U;
         static const AkUniqueID WORLD = 2609808943U;
     } // namespace BUSSES
