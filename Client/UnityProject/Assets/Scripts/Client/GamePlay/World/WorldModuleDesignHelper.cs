@@ -82,13 +82,17 @@ public class WorldModuleDesignHelper : MonoBehaviour
                 }
             }
 
-            bool isTriggerEntity = entityOccupationData.IsTriggerEntity;
-            if (isTriggerEntity)
+            bool isTriggerEntity = false;
+            if (!isLevelEventTriggerAppearEntity)
             {
-                TriggerEntityData data = new TriggerEntityData();
-                data.LocalGP = gp;
-                data.EntityData = entity.EntityData.Clone();
-                worldModuleData.TriggerEntityDataList.Add(data);
+                isTriggerEntity = entityOccupationData.IsTriggerEntity;
+                if (isTriggerEntity)
+                {
+                    TriggerEntityData data = new TriggerEntityData();
+                    data.LocalGP = gp;
+                    data.EntityData = entity.EntityData.Clone();
+                    worldModuleData.TriggerEntityDataList.Add(data);
+                }
             }
 
             bool spaceAvailable = true;
