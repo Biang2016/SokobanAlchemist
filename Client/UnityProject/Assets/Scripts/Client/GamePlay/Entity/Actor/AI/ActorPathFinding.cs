@@ -10,17 +10,23 @@ public static class ActorPathFinding
     #region 占位缓存，加速寻路搜索
 
     private static byte[,,] SpaceAvailableForActorHeight;
+    private static int SAFAH__SIZE_X;
+    private static int SAFAH__SIZE_Y;
+    private static int SAFAH__SIZE_Z;
 
     public static void InitializeSpaceAvailableForActorHeight(int worldGridSize_x, int worldGridSize_y, int worldGridSize_z)
     {
+        SAFAH__SIZE_X = worldGridSize_x;
+        SAFAH__SIZE_Y = worldGridSize_y;
+        SAFAH__SIZE_Z = worldGridSize_z;
         SpaceAvailableForActorHeight = new byte[worldGridSize_x, worldGridSize_y, worldGridSize_z];
     }
 
     public static bool GetSpaceAvailableForActorHeight(GridPos3D worldGP, int actorHeight)
     {
-        if (worldGP.x < 0 || worldGP.x >= SpaceAvailableForActorHeight.GetLength(0) ||
-            worldGP.y < 0 || worldGP.y >= SpaceAvailableForActorHeight.GetLength(1) ||
-            worldGP.z < 0 || worldGP.z >= SpaceAvailableForActorHeight.GetLength(2)) return false;
+        if (worldGP.x < 0 || worldGP.x >= SAFAH__SIZE_X ||
+            worldGP.y < 0 || worldGP.y >= SAFAH__SIZE_Y ||
+            worldGP.z < 0 || worldGP.z >= SAFAH__SIZE_Z) return false;
         byte curValue = SpaceAvailableForActorHeight[worldGP.x, worldGP.y, worldGP.z];
         byte compare = (byte) (1 << (actorHeight - 1));
         return (curValue & compare) == compare;
@@ -28,9 +34,9 @@ public static class ActorPathFinding
 
     public static void SetSpaceAvailableForActorHeight(GridPos3D worldGP, int actorHeight, bool available)
     {
-        if (worldGP.x < 0 || worldGP.x >= SpaceAvailableForActorHeight.GetLength(0) ||
-            worldGP.y < 0 || worldGP.y >= SpaceAvailableForActorHeight.GetLength(1) ||
-            worldGP.z < 0 || worldGP.z >= SpaceAvailableForActorHeight.GetLength(2)) return;
+        if (worldGP.x < 0 || worldGP.x >= SAFAH__SIZE_X ||
+            worldGP.y < 0 || worldGP.y >= SAFAH__SIZE_Y ||
+            worldGP.z < 0 || worldGP.z >= SAFAH__SIZE_Z) return;
         byte curValue = SpaceAvailableForActorHeight[worldGP.x, worldGP.y, worldGP.z];
         byte resValue = 0;
         if (available)
@@ -401,15 +407,16 @@ public static class ActorPathFinding
     private static List<GridPos3D> cached_UnionFindNodeList = new List<GridPos3D>(256);
 
     private static Queue<GridPos3D> cached_QueueUnionFind = new Queue<GridPos3D>(256);
-    private static bool[,] cached_OccupationUnionFind = new bool[256, 256];
+    private static bool[,] cached_OccupationUnionFind = new bool[OUF_SIZE, OUF_SIZE];
+    private const int OUF_SIZE = 256;
 
     public static List<GridPos3D> UnionFindNodes(GridPos3D center_PF, Vector3 actorPos, float rangeRadius, int actorWidth, int actorHeight, uint exceptActorGUID)
     {
         cached_UnionFindNodeList.Clear();
         int radius = Mathf.RoundToInt(rangeRadius);
-        for (int i = 0; i < cached_OccupationUnionFind.GetLength(0); i++)
+        for (int i = 0; i < OUF_SIZE; i++)
         {
-            for (int j = 0; j < cached_OccupationUnionFind.GetLength(1); j++)
+            for (int j = 0; j < OUF_SIZE; j++)
             {
                 cached_OccupationUnionFind[i, j] = false;
             }

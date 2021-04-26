@@ -142,7 +142,7 @@ public class OpenWorld : World
 
     public override IEnumerator Initialize(WorldData worldData)
     {
-        ActorPathFinding.InitializeSpaceAvailableForActorHeight(WorldModuleMatrix.GetLength(0) * WorldModule.MODULE_SIZE, WorldModuleMatrix.GetLength(1) * WorldModule.MODULE_SIZE, WorldModuleMatrix.GetLength(2) * WorldModule.MODULE_SIZE);
+        ActorPathFinding.InitializeSpaceAvailableForActorHeight(WORLD_SIZE * WorldModule.MODULE_SIZE, WORLD_HEIGHT * WorldModule.MODULE_SIZE, WORLD_SIZE * WorldModule.MODULE_SIZE);
 
         LoadingMapPanel = UIManager.Instance.GetBaseUIForm<LoadingMapPanel>();
         uint Seed = 0;

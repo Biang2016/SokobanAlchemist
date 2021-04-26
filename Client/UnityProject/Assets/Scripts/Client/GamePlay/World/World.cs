@@ -40,11 +40,11 @@ public class World : PoolObject
 
     public IEnumerator Clear()
     {
-        for (int x = 0; x < WorldModuleMatrix.GetLength(0); x++)
+        for (int x = 0; x < WORLD_SIZE; x++)
         {
-            for (int y = 0; y < WorldModuleMatrix.GetLength(1); y++)
+            for (int y = 0; y < WORLD_HEIGHT; y++)
             {
-                for (int z = 0; z < WorldModuleMatrix.GetLength(2); z++)
+                for (int z = 0; z < WORLD_SIZE; z++)
                 {
                     WorldModule module = WorldModuleMatrix[x, y, z];
                     if (module != null)
@@ -63,15 +63,15 @@ public class World : PoolObject
 
     public virtual IEnumerator Initialize(WorldData worldData)
     {
-        ActorPathFinding.InitializeSpaceAvailableForActorHeight(WorldModuleMatrix.GetLength(0) * WorldModule.MODULE_SIZE, WorldModuleMatrix.GetLength(1) * WorldModule.MODULE_SIZE, WorldModuleMatrix.GetLength(2) * WorldModule.MODULE_SIZE);
+        ActorPathFinding.InitializeSpaceAvailableForActorHeight(WORLD_SIZE * WorldModule.MODULE_SIZE, WORLD_HEIGHT * WorldModule.MODULE_SIZE, WORLD_SIZE * WorldModule.MODULE_SIZE);
 
         WorldGUID = Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
         WorldData = worldData;
-        for (int x = 0; x < WorldData.ModuleMatrix.GetLength(0); x++)
+        for (int x = 0; x < WORLD_SIZE; x++)
         {
-            for (int y = 0; y < WorldData.ModuleMatrix.GetLength(1); y++)
+            for (int y = 0; y < WORLD_HEIGHT; y++)
             {
-                for (int z = 0; z < WorldData.ModuleMatrix.GetLength(2); z++)
+                for (int z = 0; z < WORLD_SIZE; z++)
                 {
                     ushort worldModuleTypeIndex = WorldData.ModuleMatrix[x, y, z];
                     if (worldModuleTypeIndex != 0)
@@ -213,11 +213,11 @@ public class World : PoolObject
 
     protected IEnumerator RecycleEmptyModules()
     {
-        for (int x = 0; x < BorderWorldModuleMatrix.GetLength(0); x++)
+        for (int x = 0; x < WORLD_SIZE + BORDER_WORLD_MODULE_EXTENSION * 2; x++)
         {
-            for (int y = 0; y < BorderWorldModuleMatrix.GetLength(1); y++)
+            for (int y = 0; y < WORLD_HEIGHT + BORDER_WORLD_MODULE_EXTENSION * 2; y++)
             {
-                for (int z = 0; z < BorderWorldModuleMatrix.GetLength(2); z++)
+                for (int z = 0; z < WORLD_SIZE + BORDER_WORLD_MODULE_EXTENSION * 2; z++)
                 {
                     WorldModule module = BorderWorldModuleMatrix[x, y, z];
                     if (module != null)

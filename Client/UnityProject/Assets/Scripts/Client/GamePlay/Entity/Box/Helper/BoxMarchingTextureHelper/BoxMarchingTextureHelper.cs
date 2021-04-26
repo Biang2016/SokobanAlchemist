@@ -31,7 +31,7 @@ public class BoxMarchingTextureHelper : BoxMonoHelper
             TerrainType GetTerrainType(int x, int z)
             {
                 TerrainType terrainType = TerrainType.Earth;
-                if (x < 0 || x >= openWorld.WorldMap_TerrainType.GetLength(0) || z < 0 || z >= openWorld.WorldMap_TerrainType.GetLength(1)) return TerrainType.Earth;
+                if (x < 0 || x >=  openWorld.WorldSize_X * WorldModule.MODULE_SIZE || z < 0 || z >= openWorld.WorldSize_Z * WorldModule.MODULE_SIZE) return TerrainType.Earth;
                 terrainType = openWorld.WorldMap_TerrainType[x, z];
                 return terrainType;
             }

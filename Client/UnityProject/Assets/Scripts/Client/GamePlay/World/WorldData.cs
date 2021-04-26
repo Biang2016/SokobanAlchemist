@@ -36,11 +36,11 @@ public class WorldData : IClone<WorldData>
         data.WorldTypeName = WorldTypeName;
         data.WorldFeature = WorldFeature;
         data.DefaultWorldActorBornPointAlias = DefaultWorldActorBornPointAlias;
-        for (int x = 0; x < ModuleMatrix.GetLength(0); x++)
+        for (int x = 0; x < World.WORLD_SIZE; x++)
         {
-            for (int y = 0; y < ModuleMatrix.GetLength(1); y++)
+            for (int y = 0; y < World.WORLD_HEIGHT; y++)
             {
-                for (int z = 0; z < ModuleMatrix.GetLength(2); z++)
+                for (int z = 0; z < World.WORLD_SIZE; z++)
                 {
                     data.ModuleMatrix[x, y, z] = ModuleMatrix[x, y, z];
                 }
