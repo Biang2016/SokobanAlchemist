@@ -437,7 +437,7 @@ MonoBehaviour:
     ParentPath: BGM
     guid: 7f519a6a5add8741bd53e1a556877ae4
     GuidInternal: 
-    m_lastTime: -8585822065682618293
+    m_lastTime: -8585821886829993134
     List:
     - name: BGM_Start
       guid: d1c98773ea9a4b409db404cf43e02b6a
@@ -1449,7 +1449,7 @@ MonoBehaviour:
     ParentPath: Enemies
     guid: 3fcb31ab5fe9c848907277668498151b
     GuidInternal: 
-    m_lastTime: -8585822065682558314
+    m_lastTime: -8585821896976839330
     List:
     - name: _FireEnemy_Red_Fire_Loop_Play
       guid: 0e7e57f24612f646851c5e2d29b641fd
@@ -2301,17 +2301,6 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-  - PhysicalPath: Events\Entity_SFX.wwu
-    PathAndIcons:
-    - ElementName: SFX
-      ObjectType: 12
-    - ElementName: Entity_SFX
-      ObjectType: 12
-    ParentPath: SFX\Entity_SFX
-    guid: e9ec3f64f9e4574cab02f7b19532dad6
-    GuidInternal: 
-    m_lastTime: -8585822065682538328
-    List: []
   - PhysicalPath: Events\Global.wwu
     PathAndIcons:
     - ElementName: Global
@@ -2583,15 +2572,6 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-  - PhysicalPath: Events\SFX.wwu
-    PathAndIcons:
-    - ElementName: SFX
-      ObjectType: 12
-    ParentPath: SFX
-    guid: 561c89e77ee2b043af420addb051576e
-    GuidInternal: 
-    m_lastTime: -8585822065682468348
-    List: []
   - PhysicalPath: Events\UI.wwu
     PathAndIcons:
     - ElementName: UI
@@ -2686,71 +2666,80 @@ MonoBehaviour:
     ParentPath: Enemies
     guid: efa28aae345ec24bbdeee9e6f04dbc53
     GuidInternal: 
-    m_lastTime: -8585822065682398371
+    m_lastTime: -8585821906292524511
     List:
-    - name: CombatLevel
-      guid: 25d0f441fcee4845807775fda1e60d81
-      id: 3717892141
+    - name: CombatEnemyNumber
+      guid: 56273852283cba48a83b0ec7e5308bc3
+      id: 224530976
       PathAndIcons:
       - ElementName: Enemies
         ObjectType: 12
-      - ElementName: CombatLevel
+      - ElementName: CombatEnemyNumber
         ObjectType: 13
-      Path: Enemies\CombatLevel
-  - PhysicalPath: Game Parameters\Gameplay.wwu
+      Path: Enemies\CombatEnemyNumber
+    - name: SpiderLegDistanceToPlayer
+      guid: 8463c5d920d9e14785808a6201311e30
+      id: 2648624475
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: SpiderLegDistanceToPlayer
+        ObjectType: 13
+      Path: Enemies\SpiderLegDistanceToPlayer
+  - PhysicalPath: Game Parameters\GameplayVolumes.wwu
     PathAndIcons:
-    - ElementName: Gameplay
+    - ElementName: GameplayVolumes
       ObjectType: 12
-    ParentPath: Gameplay
+    ParentPath: GameplayVolumes
     guid: c2b2eb32ccdf5d488698021106e33bad
     GuidInternal: 
-    m_lastTime: -8585822013907779921
+    m_lastTime: -8585821922406679572
     List:
     - name: InMenu_LowPass
       guid: dcd5f5b4e016b6459154e424cb40136b
       id: 1756231317
       PathAndIcons:
-      - ElementName: Gameplay
+      - ElementName: GameplayVolumes
         ObjectType: 12
       - ElementName: InMenu_LowPass
         ObjectType: 13
-      Path: Gameplay\InMenu_LowPass
+      Path: GameplayVolumes\InMenu_LowPass
     - name: Master_Volume
       guid: 3637e6dba8a1f34e8ddc1259be7f2723
       id: 4179668880
       PathAndIcons:
-      - ElementName: Gameplay
+      - ElementName: GameplayVolumes
         ObjectType: 12
       - ElementName: Master_Volume
         ObjectType: 13
-      Path: Gameplay\Master_Volume
+      Path: GameplayVolumes\Master_Volume
     - name: Music_Volume
       guid: d803bf5017a5634f9ca0f7d73329f8ae
       id: 1006694123
       PathAndIcons:
-      - ElementName: Gameplay
+      - ElementName: GameplayVolumes
         ObjectType: 12
       - ElementName: Music_Volume
         ObjectType: 13
-      Path: Gameplay\Music_Volume
+      Path: GameplayVolumes\Music_Volume
     - name: UI_Volume
       guid: ac35454284c51a4ea7fb8ea44eea581b
       id: 1719345792
       PathAndIcons:
-      - ElementName: Gameplay
+      - ElementName: GameplayVolumes
         ObjectType: 12
       - ElementName: UI_Volume
         ObjectType: 13
-      Path: Gameplay\UI_Volume
+      Path: GameplayVolumes\UI_Volume
     - name: World_Volume
       guid: bff4321386927a40945a29e7d2b9eca8
       id: 988558536
       PathAndIcons:
-      - ElementName: Gameplay
+      - ElementName: GameplayVolumes
         ObjectType: 12
       - ElementName: World_Volume
         ObjectType: 13
-      Path: Gameplay\World_Volume
+      Path: GameplayVolumes\World_Volume
   - PhysicalPath: Game Parameters\General.wwu
     PathAndIcons:
     - ElementName: General
@@ -2758,26 +2747,8 @@ MonoBehaviour:
     ParentPath: General
     guid: 8bffba1a5493dc498421bee60b25b87a
     GuidInternal: 
-    m_lastTime: -8585822065682378378
-    List:
-    - name: Distance_to_Player
-      guid: 8463c5d920d9e14785808a6201311e30
-      id: 3917897988
-      PathAndIcons:
-      - ElementName: General
-        ObjectType: 12
-      - ElementName: Distance_to_Player
-        ObjectType: 13
-      Path: General\Distance_to_Player
-    - name: SpiderLegEnemy_Combat_Intensity
-      guid: be85a6dbf748f84bbbe7b41c4416f63b
-      id: 1190047843
-      PathAndIcons:
-      - ElementName: General
-        ObjectType: 12
-      - ElementName: SpiderLegEnemy_Combat_Intensity
-        ObjectType: 13
-      Path: General\SpiderLegEnemy_Combat_Intensity
+    m_lastTime: -8585821910277252978
+    List: []
   - PhysicalPath: Game Parameters\Player.wwu
     PathAndIcons:
     - ElementName: Player
@@ -2785,17 +2756,17 @@ MonoBehaviour:
     ParentPath: Player
     guid: f620889793190647a395a27aa8135d6e
     GuidInternal: 
-    m_lastTime: -8585822065682368382
+    m_lastTime: -8585821905859384155
     List:
-    - name: Player_Health
+    - name: Player_HealthPercent
       guid: fac793996e96da4bbf02b14dc6ddacbd
-      id: 215992295
+      id: 567901342
       PathAndIcons:
       - ElementName: Player
         ObjectType: 12
-      - ElementName: Player_Health
+      - ElementName: Player_HealthPercent
         ObjectType: 13
-      Path: Player\Player_Health
+      Path: Player\Player_HealthPercent
     - name: Player_MovementSpeed
       guid: cb23f1494620d4488c631298a86811eb
       id: 2471758783
@@ -2805,24 +2776,6 @@ MonoBehaviour:
       - ElementName: Player_MovementSpeed
         ObjectType: 13
       Path: Player\Player_MovementSpeed
-  - PhysicalPath: Game Parameters\States.wwu
-    PathAndIcons:
-    - ElementName: States
-      ObjectType: 12
-    ParentPath: States
-    guid: 09411fbf25a9654d9c18f964417d2427
-    GuidInternal: 
-    m_lastTime: -8585822065682358387
-    List:
-    - name: InCombat
-      guid: d663cf18019f9a4d89fc3e3b3f684315
-      id: 3373579172
-      PathAndIcons:
-      - ElementName: States
-        ObjectType: 12
-      - ElementName: InCombat
-        ObjectType: 13
-      Path: States\InCombat
   StateWwu:
   - PhysicalPath: States\Default Work Unit.wwu
     PathAndIcons:
@@ -2840,7 +2793,7 @@ MonoBehaviour:
     ParentPath: MusicStates
     guid: 3f4868067839e945a8d8f15a6b5db6dc
     GuidInternal: 
-    m_lastTime: -8585822065671541850
+    m_lastTime: -8585821893493123074
     List:
     - name: Combat
       guid: 10bf40b90f8f7446972ba287d951d4eb
@@ -2852,11 +2805,23 @@ MonoBehaviour:
         ObjectType: 9
       Path: MusicStates\Combat
       values:
+      - name: Exploring
+        guid: d3d6433dee1634479a44e93cfc6b1a41
+        id: 1823678183
+        PathAndIcons:
+        - ElementName: Exploring
+          ObjectType: 8
       - name: InBossCombat
         guid: fa65c8fb5fecf24181501e1f4b28f064
         id: 687614019
         PathAndIcons:
         - ElementName: InBossCombat
+          ObjectType: 8
+      - name: InCamp
+        guid: c524c4ebd7b0c4479983b3f24bae5557
+        id: 3966798339
+        PathAndIcons:
+        - ElementName: InCamp
           ObjectType: 8
       - name: InCombat
         guid: 3477a90290888042843841f2ca3e16dd
@@ -2870,45 +2835,26 @@ MonoBehaviour:
         PathAndIcons:
         - ElementName: InEliteCombat
           ObjectType: 8
+      - name: InSpiderLegCombat_Phase_1
+        guid: 371d318ff506f846a05d534226a7f0f1
+        id: 1022704585
+        PathAndIcons:
+        - ElementName: InSpiderLegCombat_Phase_1
+          ObjectType: 8
+      - name: InSpiderLegCombat_Phase_2
+        guid: ff968c42f2eaef458339a38193b1614e
+        id: 1022704586
+        PathAndIcons:
+        - ElementName: InSpiderLegCombat_Phase_2
+          ObjectType: 8
+      - name: InSpiderLegCombat_Phase_3
+        guid: 19e67231e40bb64e9a3b26e37842d395
+        id: 1022704587
+        PathAndIcons:
+        - ElementName: InSpiderLegCombat_Phase_3
+          ObjectType: 8
       - name: None
         guid: a86a0733aa57324ab615f58c8930ef62
-        id: 748895195
-        PathAndIcons:
-        - ElementName: None
-          ObjectType: 8
-      ValueGuids: []
-      ValueIcons: []
-      valuesInternal: []
-    - name: Combat_EnemySpiderLeg_PhaseLevel
-      guid: e7396cd4cfa15b4894e6f7a8c5faf83c
-      id: 2589279669
-      PathAndIcons:
-      - ElementName: MusicStates
-        ObjectType: 12
-      - ElementName: Combat_EnemySpiderLeg_PhaseLevel
-        ObjectType: 9
-      Path: MusicStates\Combat_EnemySpiderLeg_PhaseLevel
-      values:
-      - name: EnemySpiderLeg_Phase1
-        guid: 3bef615f147ddf47b8ec4a390c353a55
-        id: 1652927213
-        PathAndIcons:
-        - ElementName: EnemySpiderLeg_Phase1
-          ObjectType: 8
-      - name: EnemySpiderLeg_Phase2
-        guid: 166b72ee1b6a4d4db591fea4d29acf64
-        id: 1652927214
-        PathAndIcons:
-        - ElementName: EnemySpiderLeg_Phase2
-          ObjectType: 8
-      - name: EnemySpiderLeg_Phase3
-        guid: ca1a5dbe09b39446ad75f38d1d0a917a
-        id: 1652927215
-        PathAndIcons:
-        - ElementName: EnemySpiderLeg_Phase3
-          ObjectType: 8
-      - name: None
-        guid: 61c24d629afce54489bbb16994e67663
         id: 748895195
         PathAndIcons:
         - ElementName: None
@@ -2926,12 +2872,6 @@ MonoBehaviour:
         ObjectType: 9
       Path: MusicStates\Music_Regions
       values:
-      - name: Dungeon
-        guid: 57ddd3f92df9df4f988476d98a5282fe
-        id: 608898761
-        PathAndIcons:
-        - ElementName: Dungeon
-          ObjectType: 8
       - name: Excavation
         guid: 3669a0ad173cd9448e3b7e1227401d76
         id: 2525109375
@@ -2979,113 +2919,8 @@ MonoBehaviour:
     ParentPath: Combat
     guid: 12434b2d5395b3499804c554ed6a40a6
     GuidInternal: 
-    m_lastTime: -8585822065671531855
-    List:
-    - name: Combat
-      guid: ee633805af62e54ea95491f4772f24ef
-      id: 2764240573
-      PathAndIcons:
-      - ElementName: Combat
-        ObjectType: 12
-      - ElementName: Combat
-        ObjectType: 11
-      Path: Combat\Combat
-      values:
-      - name: InBossCombat
-        guid: 6c1b6d79773af54da36e0e09912ea7aa
-        id: 687614019
-        PathAndIcons:
-        - ElementName: InBossCombat
-          ObjectType: 10
-      - name: InCombat
-        guid: 8c177a86e1bd324b9fc4b5a4040425a0
-        id: 3373579172
-        PathAndIcons:
-        - ElementName: InCombat
-          ObjectType: 10
-      - name: InEliteCombat
-        guid: 4591fc27d009b8468b797c0c8dce7e8a
-        id: 789371013
-        PathAndIcons:
-        - ElementName: InEliteCombat
-          ObjectType: 10
-      - name: NonCombat
-        guid: ff3f4f64817dcc478bd5d49a8ab646cf
-        id: 1841965078
-        PathAndIcons:
-        - ElementName: NonCombat
-          ObjectType: 10
-      ValueGuids: []
-      ValueIcons: []
-      valuesInternal: []
-    - name: Combat_EnemySpiderLeg_PhaseLevel
-      guid: aef2756d3a7f3a48b125cf43676bef42
-      id: 2589279669
-      PathAndIcons:
-      - ElementName: Combat
-        ObjectType: 12
-      - ElementName: Combat_EnemySpiderLeg_PhaseLevel
-        ObjectType: 11
-      Path: Combat\Combat_EnemySpiderLeg_PhaseLevel
-      values:
-      - name: EnemySpiderLeg_Phase1
-        guid: 16c9e8f3075caa458de9f0eed3d903a5
-        id: 1652927213
-        PathAndIcons:
-        - ElementName: EnemySpiderLeg_Phase1
-          ObjectType: 10
-      - name: EnemySpiderLeg_Phase2
-        guid: c625478be64a0a42a7c5f29003ab289d
-        id: 1652927214
-        PathAndIcons:
-        - ElementName: EnemySpiderLeg_Phase2
-          ObjectType: 10
-      - name: EnemySpiderLeg_Phase3
-        guid: b1f3a5e260e99843919f76ef3909b0c4
-        id: 1652927215
-        PathAndIcons:
-        - ElementName: EnemySpiderLeg_Phase3
-          ObjectType: 10
-      - name: NonSpiderCombat
-        guid: dfeb9e91b41655438683b4ee8b14fd4d
-        id: 1624858949
-        PathAndIcons:
-        - ElementName: NonSpiderCombat
-          ObjectType: 10
-      ValueGuids: []
-      ValueIcons: []
-      valuesInternal: []
-    - name: EnemySpiderLeg_Volume_by_Distnace
-      guid: 02a4cac15087da489fb109bcb32d84e9
-      id: 3762693077
-      PathAndIcons:
-      - ElementName: Combat
-        ObjectType: 12
-      - ElementName: EnemySpiderLeg_Volume_by_Distnace
-        ObjectType: 11
-      Path: Combat\EnemySpiderLeg_Volume_by_Distnace
-      values:
-      - name: Close
-        guid: ad6e21afa079d540a7b6840d7af0439f
-        id: 1451272583
-        PathAndIcons:
-        - ElementName: Close
-          ObjectType: 10
-      - name: Far
-        guid: 3897d292dc0329459b6fdc42e7e2472a
-        id: 1183803292
-        PathAndIcons:
-        - ElementName: Far
-          ObjectType: 10
-      - name: Middle
-        guid: 41d04606fe6a1e429aee2d5afb3331ad
-        id: 1026627430
-        PathAndIcons:
-        - ElementName: Middle
-          ObjectType: 10
-      ValueGuids: []
-      ValueIcons: []
-      valuesInternal: []
+    m_lastTime: -8585821909193159636
+    List: []
   - PhysicalPath: Switches\Default Work Unit.wwu
     PathAndIcons:
     - ElementName: Default Work Unit
@@ -3102,7 +2937,7 @@ MonoBehaviour:
     ParentPath: General
     guid: 7b2aa25cef361c43a821498489431e58
     GuidInternal: 
-    m_lastTime: -8585822065671511860
+    m_lastTime: -8585821906292704458
     List:
     - name: Distance_to_Player
       guid: 04a1fd30ad2b764bb0bdda1f3902ab1e
@@ -3168,40 +3003,6 @@ MonoBehaviour:
         id: 344481046
         PathAndIcons:
         - ElementName: Ice
-          ObjectType: 10
-      ValueGuids: []
-      ValueIcons: []
-      valuesInternal: []
-  - PhysicalPath: Switches\Player.wwu
-    PathAndIcons:
-    - ElementName: Player
-      ObjectType: 12
-    ParentPath: Player
-    guid: 02c9e5d4dc0c4f4c95de99fc55d63d79
-    GuidInternal: 
-    m_lastTime: -8585822065671491860
-    List:
-    - name: Player_MovementSpeed
-      guid: 2f4e09f700bb8a44828757cd13d26f96
-      id: 2471758783
-      PathAndIcons:
-      - ElementName: Player
-        ObjectType: 12
-      - ElementName: Player_MovementSpeed
-        ObjectType: 11
-      Path: Player\Player_MovementSpeed
-      values:
-      - name: Dash
-        guid: c0f3adc766015648997ef2eba4b56a35
-        id: 1942692385
-        PathAndIcons:
-        - ElementName: Dash
-          ObjectType: 10
-      - name: Walk
-        guid: 70f365c60698a44c8dd4c0c35595c03a
-        id: 2108779966
-        PathAndIcons:
-        - ElementName: Walk
           ObjectType: 10
       ValueGuids: []
       ValueIcons: []

@@ -11,7 +11,7 @@
 	<StreamedFiles/>
 	<MediaFilesNotInAnyBank/>
 	<SoundBanks>
-		<SoundBank Id="1355168291" Language="SFX" Hash="749941880">
+		<SoundBank Id="1355168291" Language="SFX" Hash="2564328332">
 			<ObjectPath>Init</ObjectPath>
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
@@ -19,10 +19,10 @@
 				<AuxBus Id="2412664669" Name="Music_Aux" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master_Audio_Bus\World\AUX\Music_Aux"/>
 			</IncludedAuxBusses>
 			<GameParameters>
-				<GameParameter Id="988558536" Name="World_Volume" ObjectPath="\Game Parameters\Gameplay\World_Volume"/>
-				<GameParameter Id="1006694123" Name="Music_Volume" ObjectPath="\Game Parameters\Gameplay\Music_Volume"/>
-				<GameParameter Id="1719345792" Name="UI_Volume" ObjectPath="\Game Parameters\Gameplay\UI_Volume"/>
-				<GameParameter Id="4179668880" Name="Master_Volume" ObjectPath="\Game Parameters\Gameplay\Master_Volume"/>
+				<GameParameter Id="988558536" Name="World_Volume" ObjectPath="\Game Parameters\GameplayVolumes\World_Volume"/>
+				<GameParameter Id="1006694123" Name="Music_Volume" ObjectPath="\Game Parameters\GameplayVolumes\Music_Volume"/>
+				<GameParameter Id="1719345792" Name="UI_Volume" ObjectPath="\Game Parameters\GameplayVolumes\UI_Volume"/>
+				<GameParameter Id="4179668880" Name="Master_Volume" ObjectPath="\Game Parameters\GameplayVolumes\Master_Volume"/>
 			</GameParameters>
 		</SoundBank>
 		<SoundBank Id="1605876511" Language="SFX" Hash="3567091385">
@@ -278,7 +278,7 @@
 				</File>
 			</IncludedMemoryFiles>
 		</SoundBank>
-		<SoundBank Id="3734788450" Language="SFX" Hash="3750880808">
+		<SoundBank Id="3734788450" Language="SFX" Hash="3574184268">
 			<ObjectPath>\SoundBanks\Default Work Unit\BGM Work Unit\BGM_Bank</ObjectPath>
 			<ShortName>BGM_Bank</ShortName>
 			<Path>BGM_Bank.bnk</Path>
@@ -326,9 +326,7 @@
 				</File>
 			</IncludedMemoryFiles>
 			<GameParameters>
-				<GameParameter Id="1190047843" Name="SpiderLegEnemy_Combat_Intensity" ObjectPath="\Game Parameters\General\SpiderLegEnemy_Combat_Intensity"/>
-				<GameParameter Id="3373579172" Name="InCombat" ObjectPath="\Game Parameters\States\InCombat"/>
-				<GameParameter Id="3917897988" Name="Distance_to_Player" ObjectPath="\Game Parameters\General\Distance_to_Player"/>
+				<GameParameter Id="2648624475" Name="SpiderLegDistanceToPlayer" ObjectPath="\Game Parameters\Enemies\SpiderLegDistanceToPlayer"/>
 			</GameParameters>
 			<StateGroups>
 				<StateGroup Id="2106907484" Name="Music_Regions" ObjectPath="\States\MusicStates\Music_Regions">
@@ -339,15 +337,6 @@
 						<State Id="578926554" Name="Lab" ObjectPath="\States\MusicStates\Music_Regions\Lab"/>
 						<State Id="2525109375" Name="Excavation" ObjectPath="\States\MusicStates\Music_Regions\Excavation"/>
 						<State Id="3762955427" Name="Tutorial" ObjectPath="\States\MusicStates\Music_Regions\Tutorial"/>
-						<State Id="608898761" Name="Dungeon" ObjectPath="\States\MusicStates\Music_Regions\Dungeon"/>
-					</States>
-				</StateGroup>
-				<StateGroup Id="2589279669" Name="Combat_EnemySpiderLeg_PhaseLevel" ObjectPath="\States\MusicStates\Combat_EnemySpiderLeg_PhaseLevel">
-					<States>
-						<State Id="748895195" Name="None" ObjectPath="\States\MusicStates\Combat_EnemySpiderLeg_PhaseLevel\None"/>
-						<State Id="1652927213" Name="EnemySpiderLeg_Phase1" ObjectPath="\States\MusicStates\Combat_EnemySpiderLeg_PhaseLevel\EnemySpiderLeg_Phase1"/>
-						<State Id="1652927214" Name="EnemySpiderLeg_Phase2" ObjectPath="\States\MusicStates\Combat_EnemySpiderLeg_PhaseLevel\EnemySpiderLeg_Phase2"/>
-						<State Id="1652927215" Name="EnemySpiderLeg_Phase3" ObjectPath="\States\MusicStates\Combat_EnemySpiderLeg_PhaseLevel\EnemySpiderLeg_Phase3"/>
 					</States>
 				</StateGroup>
 				<StateGroup Id="2764240573" Name="Combat" ObjectPath="\States\MusicStates\Combat">
@@ -356,6 +345,11 @@
 						<State Id="3373579172" Name="InCombat" ObjectPath="\States\MusicStates\Combat\InCombat"/>
 						<State Id="789371013" Name="InEliteCombat" ObjectPath="\States\MusicStates\Combat\InEliteCombat"/>
 						<State Id="687614019" Name="InBossCombat" ObjectPath="\States\MusicStates\Combat\InBossCombat"/>
+						<State Id="1823678183" Name="Exploring" ObjectPath="\States\MusicStates\Combat\Exploring"/>
+						<State Id="1022704585" Name="InSpiderLegCombat_Phase_1" ObjectPath="\States\MusicStates\Combat\InSpiderLegCombat_Phase_1"/>
+						<State Id="1022704586" Name="InSpiderLegCombat_Phase_2" ObjectPath="\States\MusicStates\Combat\InSpiderLegCombat_Phase_2"/>
+						<State Id="1022704587" Name="InSpiderLegCombat_Phase_3" ObjectPath="\States\MusicStates\Combat\InSpiderLegCombat_Phase_3"/>
+						<State Id="3966798339" Name="InCamp" ObjectPath="\States\MusicStates\Combat\InCamp"/>
 					</States>
 				</StateGroup>
 			</StateGroups>

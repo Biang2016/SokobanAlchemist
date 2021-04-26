@@ -41,7 +41,7 @@ public class WorldZoneTrigger : PoolObject
             Actor player = collider.gameObject.GetComponentInParent<Actor>();
             if (player == BattleManager.Instance.Player1)
             {
-                WwiseAudioManager.Instance.SwitchBGMTheme(WorldModule.WorldModuleData.BGM_ThemeState);
+                WwiseAudioManager.Instance.WwiseBGMConfiguration.SwitchBGMTheme(WorldModule.WorldModuleData.BGM_ThemeState);
             }
         }
     }

@@ -106,25 +106,17 @@ namespace AK
 
             namespace STATE
             {
+                static const AkUniqueID EXPLORING = 1823678183U;
                 static const AkUniqueID INBOSSCOMBAT = 687614019U;
+                static const AkUniqueID INCAMP = 3966798339U;
                 static const AkUniqueID INCOMBAT = 3373579172U;
                 static const AkUniqueID INELITECOMBAT = 789371013U;
+                static const AkUniqueID INSPIDERLEGCOMBAT_PHASE_1 = 1022704585U;
+                static const AkUniqueID INSPIDERLEGCOMBAT_PHASE_2 = 1022704586U;
+                static const AkUniqueID INSPIDERLEGCOMBAT_PHASE_3 = 1022704587U;
                 static const AkUniqueID NONE = 748895195U;
             } // namespace STATE
         } // namespace COMBAT
-
-        namespace COMBAT_ENEMYSPIDERLEG_PHASELEVEL
-        {
-            static const AkUniqueID GROUP = 2589279669U;
-
-            namespace STATE
-            {
-                static const AkUniqueID ENEMYSPIDERLEG_PHASE1 = 1652927213U;
-                static const AkUniqueID ENEMYSPIDERLEG_PHASE2 = 1652927214U;
-                static const AkUniqueID ENEMYSPIDERLEG_PHASE3 = 1652927215U;
-                static const AkUniqueID NONE = 748895195U;
-            } // namespace STATE
-        } // namespace COMBAT_ENEMYSPIDERLEG_PHASELEVEL
 
         namespace MUSIC_REGIONS
         {
@@ -132,7 +124,6 @@ namespace AK
 
             namespace STATE
             {
-                static const AkUniqueID DUNGEON = 608898761U;
                 static const AkUniqueID EXCAVATION = 2525109375U;
                 static const AkUniqueID LAB = 578926554U;
                 static const AkUniqueID NONE = 748895195U;
@@ -146,32 +137,6 @@ namespace AK
 
     namespace SWITCHES
     {
-        namespace COMBAT
-        {
-            static const AkUniqueID GROUP = 2764240573U;
-
-            namespace SWITCH
-            {
-                static const AkUniqueID INBOSSCOMBAT = 687614019U;
-                static const AkUniqueID INCOMBAT = 3373579172U;
-                static const AkUniqueID INELITECOMBAT = 789371013U;
-                static const AkUniqueID NONCOMBAT = 1841965078U;
-            } // namespace SWITCH
-        } // namespace COMBAT
-
-        namespace COMBAT_ENEMYSPIDERLEG_PHASELEVEL
-        {
-            static const AkUniqueID GROUP = 2589279669U;
-
-            namespace SWITCH
-            {
-                static const AkUniqueID ENEMYSPIDERLEG_PHASE1 = 1652927213U;
-                static const AkUniqueID ENEMYSPIDERLEG_PHASE2 = 1652927214U;
-                static const AkUniqueID ENEMYSPIDERLEG_PHASE3 = 1652927215U;
-                static const AkUniqueID NONSPIDERCOMBAT = 1624858949U;
-            } // namespace SWITCH
-        } // namespace COMBAT_ENEMYSPIDERLEG_PHASELEVEL
-
         namespace DISTANCE_TO_PLAYER
         {
             static const AkUniqueID GROUP = 3917897988U;
@@ -183,38 +148,6 @@ namespace AK
                 static const AkUniqueID MEDIUM = 2849147824U;
             } // namespace SWITCH
         } // namespace DISTANCE_TO_PLAYER
-
-        namespace ENEMYSPIDERLEG_VOLUME_BY_DISTNACE
-        {
-            static const AkUniqueID GROUP = 3762693077U;
-
-            namespace SWITCH
-            {
-                static const AkUniqueID CLOSE = 1451272583U;
-                static const AkUniqueID FAR = 1183803292U;
-                static const AkUniqueID MIDDLE = 1026627430U;
-            } // namespace SWITCH
-        } // namespace ENEMYSPIDERLEG_VOLUME_BY_DISTNACE
-
-        namespace PLAYER_MOVEMENTSPEED
-        {
-            static const AkUniqueID GROUP = 2471758783U;
-
-            namespace SWITCH
-            {
-                static const AkUniqueID DASH = 1942692385U;
-                static const AkUniqueID WALK = 2108779966U;
-            } // namespace SWITCH
-        } // namespace PLAYER_MOVEMENTSPEED
-
-        namespace PLAYER_PICKUP_ITEMTYPE
-        {
-            static const AkUniqueID GROUP = 3639591801U;
-
-            namespace SWITCH
-            {
-            } // namespace SWITCH
-        } // namespace PLAYER_PICKUP_ITEMTYPE
 
         namespace SURFACE_TYPE
         {
@@ -233,15 +166,13 @@ namespace AK
 
     namespace GAME_PARAMETERS
     {
-        static const AkUniqueID COMBATLEVEL = 3717892141U;
-        static const AkUniqueID DISTANCE_TO_PLAYER = 3917897988U;
-        static const AkUniqueID INCOMBAT = 3373579172U;
+        static const AkUniqueID COMBATENEMYNUMBER = 224530976U;
         static const AkUniqueID INMENU_LOWPASS = 1756231317U;
         static const AkUniqueID MASTER_VOLUME = 4179668880U;
         static const AkUniqueID MUSIC_VOLUME = 1006694123U;
-        static const AkUniqueID PLAYER_HEALTH = 215992295U;
+        static const AkUniqueID PLAYER_HEALTHPERCENT = 567901342U;
         static const AkUniqueID PLAYER_MOVEMENTSPEED = 2471758783U;
-        static const AkUniqueID SPIDERLEGENEMY_COMBAT_INTENSITY = 1190047843U;
+        static const AkUniqueID SPIDERLEGDISTANCETOPLAYER = 2648624475U;
         static const AkUniqueID UI_VOLUME = 1719345792U;
         static const AkUniqueID WORLD_VOLUME = 988558536U;
     } // namespace GAME_PARAMETERS

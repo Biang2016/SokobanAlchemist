@@ -3,13 +3,16 @@
 	<GameParameters>
 		<WorkUnit Name="Enemies" ID="{AE8AA2EF-5E34-4BC2-BDEE-E9E6F04DBC53}" PersistMode="Standalone">
 			<ChildrenList>
-				<GameParameter Name="CombatLevel" ID="{41F4D025-EEFC-4548-8077-75FDA1E60D81}">
+				<GameParameter Name="CombatEnemyNumber" ID="{52382756-3C28-48BA-A83B-0EC7E5308BC3}">
 					<PropertyList>
 						<Property Name="InitialValue" Type="Real64" Value="0"/>
-						<Property Name="Max" Type="Real64" Value="10"/>
-						<Property Name="RTPCRamping" Type="int16" Value="1"/>
-						<Property Name="SlewRateDown" Type="Real64" Value="0.8"/>
-						<Property Name="SlewRateUp" Type="Real64" Value="3"/>
+						<Property Name="Max" Type="Real64" Value="20"/>
+					</PropertyList>
+				</GameParameter>
+				<GameParameter Name="SpiderLegDistanceToPlayer" ID="{D9C56384-D920-47E1-8580-8A6201311E30}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="9999"/>
+						<Property Name="Max" Type="Real64" Value="9999"/>
 					</PropertyList>
 				</GameParameter>
 			</ChildrenList>

@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay.UI;
 using BiangLibrary.Messenger;
@@ -17,6 +16,58 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     internal List<Actor> Enemies = new List<Actor>();
     internal SortedDictionary<uint, Actor> ActorDict = new SortedDictionary<uint, Actor>(); // Key: ActorGUID
+
+    #region 战斗状态
+
+    internal Dictionary<uint, CombatState> ActorCombatStateDict = new Dictionary<uint, CombatState>(); // Key: ActorGUID
+
+    public void SetActorInCombat(uint actorGUID, CombatState newCombatState)
+    {
+        void RefreshCombatState()
+        {
+            CombatState = CombatState.Exploring;
+            foreach (KeyValuePair<uint, CombatState> kv in ActorCombatStateDict)
+            {
+                if (kv.Value > CombatState)
+                {
+                    CombatState = kv.Value;
+                }
+            }
+
+            WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState);
+        }
+
+        if (ActorCombatStateDict.TryGetValue(actorGUID, out CombatState oldCombatState))
+        {
+            if (newCombatState == CombatState.Exploring)
+            {
+                ActorCombatStateDict.Remove(actorGUID);
+                WwiseAudioManager.Instance.WwiseBGMConfiguration.CombatEnemyNumber.SetGlobalValue(ActorCombatStateDict.Count);
+            }
+            if (newCombatState != oldCombatState)
+            {
+                ActorCombatStateDict[actorGUID] = newCombatState;
+                if (newCombatState >= CombatState || oldCombatState >= CombatState)
+                {
+                    RefreshCombatState();
+                }
+            }
+        }
+        else
+        {
+            if (newCombatState == CombatState.Exploring) return;
+            ActorCombatStateDict.Add(actorGUID, newCombatState);
+            WwiseAudioManager.Instance.WwiseBGMConfiguration.CombatEnemyNumber.SetGlobalValue(ActorCombatStateDict.Count);
+            if (newCombatState > CombatState)
+            {
+                RefreshCombatState();
+            }
+        }
+    }
+
+    public CombatState CombatState;
+
+    #endregion
 
     #region 分模组记录模组所属的Actor信息
 
@@ -77,6 +128,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
 
         ActorDict.Clear();
+        ActorCombatStateDict.Clear();
         WorldModuleActorDict.Clear();
 
         BattleMessenger.Cleanup();
@@ -167,6 +219,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
 
         ActorDict.Remove(actor.GUID);
+        ActorCombatStateDict.Remove(actor.GUID);
     }
 
     private void SetAllActorForbidAction(bool forbidAction)

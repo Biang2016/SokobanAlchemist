@@ -621,6 +621,93 @@ public static class ActorAIAtoms
     #region 战斗
 
     [Category("敌兵/战斗")]
+    [Name("是否与玩家交战")]
+    [Description("是否与玩家交战")]
+    public class BT_Enemy_SetPlayerCombatState : BTNode
+    {
+        public override string name => $"与玩家" + (InCombat.value ? "交战" : "脱战");
+
+        [Name("是否交战")]
+        public BBParameter<bool> InCombat;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            if (InCombat.value)
+            {
+                switch (Actor.ActorClass)
+                {
+                    case ActorClass.Normal:
+                    {
+                        BattleManager.Instance.SetActorInCombat(Actor.GUID, CombatState.InCombat);
+                        break;
+                    }
+                    case ActorClass.Elite:
+                    {
+                        BattleManager.Instance.SetActorInCombat(Actor.GUID, CombatState.InEliteCombat);
+                        break;
+                    }
+                    case ActorClass.Boss:
+                    {
+                        BattleManager.Instance.SetActorInCombat(Actor.GUID, CombatState.InBossCombat);
+                        break;
+                    }
+                    case ActorClass.FinalBoss:
+                    {
+                        BattleManager.Instance.SetActorInCombat(Actor.GUID, CombatState.InSpiderLegCombat_Phase_1);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                BattleManager.Instance.SetActorInCombat(Actor.GUID, CombatState.Exploring);
+            }
+
+            return Status.Success;
+        }
+    }
+
+    [Category("敌兵/战斗")]
+    [Name("设置Actor交战阶段")]
+    [Description("设置Actor交战阶段")]
+    public class BT_Enemy_SetActorCombatPhase : BTNode
+    {
+        public override string name => $"设置Actor交战阶段为{ActorCombatPhase.value}";
+
+        [Name("交战阶段")]
+        public BBParameter<int> ActorCombatPhase;
+
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
+            if (Actor.ActorClass == ActorClass.FinalBoss)
+            {
+                switch (ActorCombatPhase.value)
+                {
+                    case 1:
+                    {
+                        BattleManager.Instance.SetActorInCombat(Actor.GUID, CombatState.InSpiderLegCombat_Phase_1);
+                        break;
+                    }
+                    case 2:
+                    {
+                        BattleManager.Instance.SetActorInCombat(Actor.GUID, CombatState.InSpiderLegCombat_Phase_2);
+                        break;
+                    }
+                    case 3:
+                    {
+                        BattleManager.Instance.SetActorInCombat(Actor.GUID, CombatState.InSpiderLegCombat_Phase_3);
+                        break;
+                    }
+                }
+            }
+
+            return Status.Success;
+        }
+    }
+
+    [Category("敌兵/战斗")]
     [Name("面向目标")]
     [Description("面向目标")]
     public class BT_Enemy_FaceToPlayer : BTNode

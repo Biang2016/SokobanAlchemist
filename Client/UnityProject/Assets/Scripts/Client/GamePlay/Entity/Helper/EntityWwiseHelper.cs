@@ -9,9 +9,6 @@ public class EntityWwiseHelper : EntityMonoHelper
     [BoxGroup("ForBox")]
     public Event OnCollideActively;
 
-    [BoxGroup("Actor")]
-    public Event OnCollidePassively;
-
     [BoxGroup("ForBox")]
     public Event OnBeingPushed;
 
@@ -64,6 +61,21 @@ public class EntityWwiseHelper : EntityMonoHelper
 
     [BoxGroup("Common")]
     public Event OnDestroyed_ByCollideDamage;
+
+    [BoxGroup("ForActor")]
+    public Event OnCollidePassively;
+
+    [BoxGroup("ForActor")]
+    public Event OnGainGold;
+
+    [BoxGroup("ForActor")]
+    public Event OnGainFireElement;
+
+    [BoxGroup("ForActor")]
+    public Event OnGainIceElement;
+
+    [BoxGroup("ForActor")]
+    public Event OnGainLightningElement;
 
     [BoxGroup("ForActor")]
     public Event OnBeingDamaged;

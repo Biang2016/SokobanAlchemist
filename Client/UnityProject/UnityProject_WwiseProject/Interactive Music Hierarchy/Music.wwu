@@ -13,7 +13,6 @@
 								<Value>1</Value>
 							</ValueList>
 						</Property>
-						<Property Name="Mode" Type="int16" Value="1"/>
 						<Property Name="OverrideColor" Type="bool" Value="True"/>
 					</PropertyList>
 					<ReferenceList>
@@ -403,49 +402,6 @@
 														<Value>1</Value>
 													</ValueList>
 												</Property>
-												<Property Name="Volume" Type="Real64">
-													<RTPCList>
-														<RTPC Name="" ID="{2AA0DA79-9830-4C3A-B808-057EF3EC8436}" ShortID="1043362470">
-															<ReferenceList>
-																<Reference Name="ControlInput">
-																	<ObjectRef Name="InCombat" ID="{18CF63D6-9F01-4D9A-89FC-3E3B3F684315}" WorkUnitID="{BF1F4109-A925-4D65-9C18-F964417D2427}"/>
-																</Reference>
-															</ReferenceList>
-															<Curve Name="" ID="{63105976-2B00-41BD-A219-06AED00732AC}">
-																<PropertyList>
-																	<Property Name="Flags" Type="int32" Value="3"/>
-																</PropertyList>
-																<PointList>
-																	<Point>
-																		<XPos>0</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>5</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>24.74012</XPos>
-																		<YPos>-0.16829</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>49.8960498960499</XPos>
-																		<YPos>-0.0991695237330286</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>60.08316</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>100</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>37</Flags>
-																	</Point>
-																</PointList>
-															</Curve>
-														</RTPC>
-													</RTPCList>
-												</Property>
 											</PropertyList>
 											<ReferenceList>
 												<Reference Name="Conversion">
@@ -498,44 +454,6 @@
 													<ValueList>
 														<Value>1</Value>
 													</ValueList>
-												</Property>
-												<Property Name="Volume" Type="Real64">
-													<RTPCList>
-														<RTPC Name="" ID="{9DB67B7A-707C-42A1-99DB-74E19E5C3F1A}" ShortID="144147881">
-															<ReferenceList>
-																<Reference Name="ControlInput">
-																	<ObjectRef Name="InCombat" ID="{18CF63D6-9F01-4D9A-89FC-3E3B3F684315}" WorkUnitID="{BF1F4109-A925-4D65-9C18-F964417D2427}"/>
-																</Reference>
-															</ReferenceList>
-															<Curve Name="" ID="{DAF3FE45-50F7-484C-B0C7-1F464F9C1672}">
-																<PropertyList>
-																	<Property Name="Flags" Type="int32" Value="3"/>
-																</PropertyList>
-																<PointList>
-																	<Point>
-																		<XPos>0</XPos>
-																		<YPos>-0.03768</YPos>
-																		<Flags>5</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>25.15593</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>49.89605</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>100</XPos>
-																		<YPos>0</YPos>
-																		<Flags>37</Flags>
-																	</Point>
-																</PointList>
-															</Curve>
-														</RTPC>
-													</RTPCList>
 												</Property>
 											</PropertyList>
 											<ReferenceList>
@@ -780,7 +698,7 @@
 														<RTPC Name="" ID="{65AD1FB4-AFEC-4E81-BBBC-D6CD34CF3B00}" ShortID="167809009">
 															<ReferenceList>
 																<Reference Name="ControlInput">
-																	<ObjectRef Name="Distance_to_Player" ID="{D9C56384-D920-47E1-8580-8A6201311E30}" WorkUnitID="{1ABAFF8B-9354-49DC-8421-BEE60B25B87A}"/>
+																	<ObjectRef Name="SpiderLegDistanceToPlayer" ID="{D9C56384-D920-47E1-8580-8A6201311E30}" WorkUnitID="{AE8AA2EF-5E34-4BC2-BDEE-E9E6F04DBC53}"/>
 																</Reference>
 															</ReferenceList>
 															<Curve Name="" ID="{A16C912F-64E4-420F-82DE-B46F4A3BE425}">
@@ -794,62 +712,18 @@
 																		<Flags>5</Flags>
 																	</Point>
 																	<Point>
-																		<XPos>0.001</XPos>
+																		<XPos>0.09999</XPos>
 																		<YPos>-200</YPos>
 																		<Flags>0</Flags>
 																	</Point>
 																	<Point>
-																		<XPos>99.999</XPos>
+																		<XPos>9998.90001</XPos>
 																		<YPos>0.12289</YPos>
 																		<Flags>0</Flags>
 																	</Point>
 																	<Point>
-																		<XPos>100</XPos>
+																		<XPos>9999</XPos>
 																		<YPos>0</YPos>
-																		<Flags>37</Flags>
-																	</Point>
-																</PointList>
-															</Curve>
-														</RTPC>
-														<RTPC Name="" ID="{ACD163BC-B429-4CAD-8527-4D2E5B9AFE70}" ShortID="273049762">
-															<ReferenceList>
-																<Reference Name="ControlInput">
-																	<ObjectRef Name="SpiderLegEnemy_Combat_Intensity" ID="{DBA685BE-48F7-4BF8-BBE7-B41C4416F63B}" WorkUnitID="{1ABAFF8B-9354-49DC-8421-BEE60B25B87A}"/>
-																</Reference>
-															</ReferenceList>
-															<Curve Name="" ID="{DA93D60A-3F6A-4428-A169-A617458B2E0A}">
-																<PropertyList>
-																	<Property Name="Flags" Type="int32" Value="3"/>
-																</PropertyList>
-																<PointList>
-																	<Point>
-																		<XPos>0</XPos>
-																		<YPos>-0.27872</YPos>
-																		<Flags>5</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>0.001</XPos>
-																		<YPos>-0.09192</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>0.002</XPos>
-																		<YPos>-0.23949</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>14.40162</XPos>
-																		<YPos>-0.01699</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>19.98071</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>100</XPos>
-																		<YPos>-200</YPos>
 																		<Flags>37</Flags>
 																	</Point>
 																</PointList>
@@ -909,7 +783,7 @@
 														<RTPC Name="" ID="{B4892C24-B2D4-47EC-82EF-3CD930B4B814}" ShortID="1040997627">
 															<ReferenceList>
 																<Reference Name="ControlInput">
-																	<ObjectRef Name="Distance_to_Player" ID="{D9C56384-D920-47E1-8580-8A6201311E30}" WorkUnitID="{1ABAFF8B-9354-49DC-8421-BEE60B25B87A}"/>
+																	<ObjectRef Name="SpiderLegDistanceToPlayer" ID="{D9C56384-D920-47E1-8580-8A6201311E30}" WorkUnitID="{AE8AA2EF-5E34-4BC2-BDEE-E9E6F04DBC53}"/>
 																</Reference>
 															</ReferenceList>
 															<Curve Name="" ID="{B4779569-8288-4432-9C8D-49841457F08A}">
@@ -923,66 +797,22 @@
 																		<Flags>5</Flags>
 																	</Point>
 																	<Point>
-																		<XPos>30.1217</XPos>
+																		<XPos>3011.868783</XPos>
 																		<YPos>-4.15147</YPos>
 																		<Flags>0</Flags>
 																	</Point>
 																	<Point>
-																		<XPos>99.998</XPos>
+																		<XPos>9998.80002</XPos>
 																		<YPos>-200</YPos>
 																		<Flags>0</Flags>
 																	</Point>
 																	<Point>
-																		<XPos>99.999</XPos>
+																		<XPos>9998.90001</XPos>
 																		<YPos>-200</YPos>
 																		<Flags>0</Flags>
 																	</Point>
 																	<Point>
-																		<XPos>100</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>37</Flags>
-																	</Point>
-																</PointList>
-															</Curve>
-														</RTPC>
-														<RTPC Name="" ID="{2C3573FA-7946-4228-890C-F963FAE27E2F}" ShortID="184077231">
-															<ReferenceList>
-																<Reference Name="ControlInput">
-																	<ObjectRef Name="SpiderLegEnemy_Combat_Intensity" ID="{DBA685BE-48F7-4BF8-BBE7-B41C4416F63B}" WorkUnitID="{1ABAFF8B-9354-49DC-8421-BEE60B25B87A}"/>
-																</Reference>
-															</ReferenceList>
-															<Curve Name="" ID="{96C21179-B061-471A-BCF9-F930E4979942}">
-																<PropertyList>
-																	<Property Name="Flags" Type="int32" Value="3"/>
-																</PropertyList>
-																<PointList>
-																	<Point>
-																		<XPos>0</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>5</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>15.51824</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>20.28397</XPos>
-																		<YPos>0.13048</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>34.48276</XPos>
-																		<YPos>-0.01699</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>39.75759</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>100</XPos>
+																		<XPos>9999</XPos>
 																		<YPos>-200</YPos>
 																		<Flags>37</Flags>
 																	</Point>
@@ -1046,54 +876,10 @@
 												</Property>
 												<Property Name="Volume" Type="Real64">
 													<RTPCList>
-														<RTPC Name="" ID="{3909856C-6F52-42B3-97B5-4B290DFA3BA5}" ShortID="810923019">
-															<ReferenceList>
-																<Reference Name="ControlInput">
-																	<ObjectRef Name="SpiderLegEnemy_Combat_Intensity" ID="{DBA685BE-48F7-4BF8-BBE7-B41C4416F63B}" WorkUnitID="{1ABAFF8B-9354-49DC-8421-BEE60B25B87A}"/>
-																</Reference>
-															</ReferenceList>
-															<Curve Name="" ID="{9689E93A-438C-42F6-9084-2D4F5AC551A0}">
-																<PropertyList>
-																	<Property Name="Flags" Type="int32" Value="3"/>
-																</PropertyList>
-																<PointList>
-																	<Point>
-																		<XPos>0</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>5</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>34.88844</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>40.16227</XPos>
-																		<YPos>-0.35087</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>64.90872</XPos>
-																		<YPos>0.16749</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>69.97971</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>100</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>37</Flags>
-																	</Point>
-																</PointList>
-															</Curve>
-														</RTPC>
 														<RTPC Name="" ID="{6F37DAF0-6E4F-42FC-A42E-E1EC7D955716}" ShortID="632140388">
 															<ReferenceList>
 																<Reference Name="ControlInput">
-																	<ObjectRef Name="Distance_to_Player" ID="{D9C56384-D920-47E1-8580-8A6201311E30}" WorkUnitID="{1ABAFF8B-9354-49DC-8421-BEE60B25B87A}"/>
+																	<ObjectRef Name="SpiderLegDistanceToPlayer" ID="{D9C56384-D920-47E1-8580-8A6201311E30}" WorkUnitID="{AE8AA2EF-5E34-4BC2-BDEE-E9E6F04DBC53}"/>
 																</Reference>
 															</ReferenceList>
 															<Curve Name="" ID="{6962093F-4F94-4561-9D01-C2C7C735A5EB}">
@@ -1107,17 +893,17 @@
 																		<Flags>5</Flags>
 																	</Point>
 																	<Point>
-																		<XPos>30.02028</XPos>
+																		<XPos>3001.7277972</XPos>
 																		<YPos>-4.9806</YPos>
 																		<Flags>0</Flags>
 																	</Point>
 																	<Point>
-																		<XPos>39.95944</XPos>
+																		<XPos>3995.5444056</XPos>
 																		<YPos>-200</YPos>
 																		<Flags>0</Flags>
 																	</Point>
 																	<Point>
-																		<XPos>100</XPos>
+																		<XPos>9999</XPos>
 																		<YPos>-200</YPos>
 																		<Flags>37</Flags>
 																	</Point>
@@ -1184,7 +970,7 @@
 														<RTPC Name="" ID="{500AE50B-35B3-4CDB-98CF-948F1883F01E}" ShortID="710108881">
 															<ReferenceList>
 																<Reference Name="ControlInput">
-																	<ObjectRef Name="Distance_to_Player" ID="{D9C56384-D920-47E1-8580-8A6201311E30}" WorkUnitID="{1ABAFF8B-9354-49DC-8421-BEE60B25B87A}"/>
+																	<ObjectRef Name="SpiderLegDistanceToPlayer" ID="{D9C56384-D920-47E1-8580-8A6201311E30}" WorkUnitID="{AE8AA2EF-5E34-4BC2-BDEE-E9E6F04DBC53}"/>
 																</Reference>
 															</ReferenceList>
 															<Curve Name="" ID="{216AA139-2CEE-4FFA-B542-B52ED3DEEE8B}">
@@ -1198,61 +984,17 @@
 																		<Flags>5</Flags>
 																	</Point>
 																	<Point>
-																		<XPos>30.1217</XPos>
+																		<XPos>3011.868783</XPos>
 																		<YPos>-5.38024</YPos>
 																		<Flags>0</Flags>
 																	</Point>
 																	<Point>
-																		<XPos>39.95944</XPos>
+																		<XPos>3995.5444056</XPos>
 																		<YPos>-200</YPos>
 																		<Flags>0</Flags>
 																	</Point>
 																	<Point>
-																		<XPos>100</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>37</Flags>
-																	</Point>
-																</PointList>
-															</Curve>
-														</RTPC>
-														<RTPC Name="" ID="{82B12955-2B13-4544-8E94-C43AEE343D83}" ShortID="585253720">
-															<ReferenceList>
-																<Reference Name="ControlInput">
-																	<ObjectRef Name="SpiderLegEnemy_Combat_Intensity" ID="{DBA685BE-48F7-4BF8-BBE7-B41C4416F63B}" WorkUnitID="{1ABAFF8B-9354-49DC-8421-BEE60B25B87A}"/>
-																</Reference>
-															</ReferenceList>
-															<Curve Name="" ID="{44EC1894-2DAD-410B-9D47-FEEA220724E3}">
-																<PropertyList>
-																	<Property Name="Flags" Type="int32" Value="3"/>
-																</PropertyList>
-																<PointList>
-																	<Point>
-																		<XPos>0</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>5</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>65.11156</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>70.28397</XPos>
-																		<YPos>-0.16253</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>99.998</XPos>
-																		<YPos>0.13447</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>99.999</XPos>
-																		<YPos>-200</YPos>
-																		<Flags>0</Flags>
-																	</Point>
-																	<Point>
-																		<XPos>100</XPos>
+																		<XPos>9999</XPos>
 																		<YPos>-200</YPos>
 																		<Flags>37</Flags>
 																	</Point>
@@ -2152,14 +1894,12 @@
 					<ArgumentList>
 						<ArgumentRef Name="Music_Regions" ID="{40ED6DC0-78DB-4A8B-B3BC-430269C74F68}"/>
 						<ArgumentRef Name="Combat" ID="{B940BF10-8F0F-4674-972B-A287D951D4EB}"/>
-						<ArgumentRef Name="Combat_EnemySpiderLeg_PhaseLevel" ID="{D46C39E7-A1CF-485B-94E6-F7A8C5FAF83C}"/>
 					</ArgumentList>
 					<EntryList>
 						<Entry>
 							<Path>
 								<PathElementRef Name="Lab" ID="{BDAF9F4F-2ABE-4B3F-A5AA-09220C0C4798}"/>
 								<PathElementRef Name="Combat" ID="{B940BF10-8F0F-4674-972B-A287D951D4EB}"/>
-								<PathElementRef Name="Combat_EnemySpiderLeg_PhaseLevel" ID="{D46C39E7-A1CF-485B-94E6-F7A8C5FAF83C}"/>
 							</Path>
 							<AudioNodeInfo>
 								<AudioNodeRef Name="Region_Lab" ID="{91DCDE13-BB29-4B90-A253-9EEA7C61E838}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
@@ -2169,7 +1909,6 @@
 							<Path>
 								<PathElementRef Name="Temple" ID="{08F478D6-8A4C-499B-9AA0-DCFE184341FE}"/>
 								<PathElementRef Name="Combat" ID="{B940BF10-8F0F-4674-972B-A287D951D4EB}"/>
-								<PathElementRef Name="Combat_EnemySpiderLeg_PhaseLevel" ID="{D46C39E7-A1CF-485B-94E6-F7A8C5FAF83C}"/>
 							</Path>
 							<AudioNodeInfo>
 								<AudioNodeRef Name="Region_Temple" ID="{13A5C2B2-447A-4A67-B08B-8443C09EEA1B}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
@@ -2179,7 +1918,6 @@
 							<Path>
 								<PathElementRef Name="Excavation" ID="{ADA06936-3C17-44D9-8E3B-7E1227401D76}"/>
 								<PathElementRef Name="Combat" ID="{B940BF10-8F0F-4674-972B-A287D951D4EB}"/>
-								<PathElementRef Name="Combat_EnemySpiderLeg_PhaseLevel" ID="{D46C39E7-A1CF-485B-94E6-F7A8C5FAF83C}"/>
 							</Path>
 							<AudioNodeInfo>
 								<AudioNodeRef Name="Region_Excavation" ID="{8E20FA86-5553-4BC4-9C94-D484E3C6120B}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
@@ -2187,9 +1925,35 @@
 						</Entry>
 						<Entry>
 							<Path>
-								<PathElementRef Name="Dungeon" ID="{F9D3DD57-F92D-4FDF-9884-76D98A5282FE}"/>
+								<PathElementRef Name="Tutorial" ID="{54FD0182-3652-4FEC-BA5B-9734C9C53A4F}"/>
+								<PathElementRef Name="Combat" ID="{B940BF10-8F0F-4674-972B-A287D951D4EB}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Region_Tutorial" ID="{8FEEA1BB-52FA-4708-870F-08E1C0FE6479}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="Temple" ID="{08F478D6-8A4C-499B-9AA0-DCFE184341FE}"/>
+								<PathElementRef Name="InCombat" ID="{02A97734-8890-4280-8438-41F2CA3E16DD}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Combat_InCombat" ID="{A3BFD731-4CDD-4918-98D9-D23620985BC3}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="Temple" ID="{08F478D6-8A4C-499B-9AA0-DCFE184341FE}"/>
+								<PathElementRef Name="InEliteCombat" ID="{315FAD00-45C1-4FA4-85FE-995392895DC0}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Combat_InEliteCombat" ID="{DD969D55-BE57-40C9-A825-C21DB61620E6}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="Temple" ID="{08F478D6-8A4C-499B-9AA0-DCFE184341FE}"/>
 								<PathElementRef Name="InBossCombat" ID="{FBC865FA-EC5F-41F2-8150-1E1F4B28F064}"/>
-								<PathElementRef Name="Combat_EnemySpiderLeg_PhaseLevel" ID="{D46C39E7-A1CF-485B-94E6-F7A8C5FAF83C}"/>
 							</Path>
 							<AudioNodeInfo>
 								<AudioNodeRef Name="Combat_InBossCombat" ID="{A0F14D8C-9667-48A7-BDF0-7CB04E49A793}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
@@ -2197,59 +1961,8 @@
 						</Entry>
 						<Entry>
 							<Path>
-								<PathElementRef Name="Dungeon" ID="{F9D3DD57-F92D-4FDF-9884-76D98A5282FE}"/>
-								<PathElementRef Name="InCombat" ID="{02A97734-8890-4280-8438-41F2CA3E16DD}"/>
-								<PathElementRef Name="Combat_EnemySpiderLeg_PhaseLevel" ID="{D46C39E7-A1CF-485B-94E6-F7A8C5FAF83C}"/>
-							</Path>
-							<AudioNodeInfo>
-								<AudioNodeRef Name="Combat_InCombat" ID="{A3BFD731-4CDD-4918-98D9-D23620985BC3}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
-							</AudioNodeInfo>
-						</Entry>
-						<Entry>
-							<Path>
-								<PathElementRef Name="Dungeon" ID="{F9D3DD57-F92D-4FDF-9884-76D98A5282FE}"/>
-								<PathElementRef Name="InEliteCombat" ID="{315FAD00-45C1-4FA4-85FE-995392895DC0}"/>
-								<PathElementRef Name="Combat_EnemySpiderLeg_PhaseLevel" ID="{D46C39E7-A1CF-485B-94E6-F7A8C5FAF83C}"/>
-							</Path>
-							<AudioNodeInfo>
-								<AudioNodeRef Name="Combat_InEliteCombat" ID="{DD969D55-BE57-40C9-A825-C21DB61620E6}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
-							</AudioNodeInfo>
-						</Entry>
-						<Entry>
-							<Path>
-								<PathElementRef Name="Dungeon" ID="{F9D3DD57-F92D-4FDF-9884-76D98A5282FE}"/>
-								<PathElementRef Name="None" ID="{33076AA8-57AA-4A32-B615-F58C8930EF62}"/>
-								<PathElementRef Name="Combat_EnemySpiderLeg_PhaseLevel" ID="{D46C39E7-A1CF-485B-94E6-F7A8C5FAF83C}"/>
-							</Path>
-							<AudioNodeInfo>
-								<AudioNodeRef Name="Region_Dungeon" ID="{7BA79F3B-6D32-4225-A7D4-F0ACA8CCE63C}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
-							</AudioNodeInfo>
-						</Entry>
-						<Entry>
-							<Path>
 								<PathElementRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
-								<PathElementRef Name="InCombat" ID="{02A97734-8890-4280-8438-41F2CA3E16DD}"/>
-								<PathElementRef Name="None" ID="{624DC261-FC9A-44E5-89BB-B16994E67663}"/>
-							</Path>
-							<AudioNodeInfo>
-								<AudioNodeRef Name="Combat_InCombat" ID="{A3BFD731-4CDD-4918-98D9-D23620985BC3}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
-							</AudioNodeInfo>
-						</Entry>
-						<Entry>
-							<Path>
-								<PathElementRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
-								<PathElementRef Name="InEliteCombat" ID="{315FAD00-45C1-4FA4-85FE-995392895DC0}"/>
-								<PathElementRef Name="None" ID="{624DC261-FC9A-44E5-89BB-B16994E67663}"/>
-							</Path>
-							<AudioNodeInfo>
-								<AudioNodeRef Name="Combat_InEliteCombat" ID="{DD969D55-BE57-40C9-A825-C21DB61620E6}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
-							</AudioNodeInfo>
-						</Entry>
-						<Entry>
-							<Path>
-								<PathElementRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
-								<PathElementRef Name="None" ID="{33076AA8-57AA-4A32-B615-F58C8930EF62}"/>
-								<PathElementRef Name="None" ID="{624DC261-FC9A-44E5-89BB-B16994E67663}"/>
+								<PathElementRef Name="InCamp" ID="{EBC424C5-B0D7-47C4-9983-B3F24BAE5557}"/>
 							</Path>
 							<AudioNodeInfo>
 								<AudioNodeRef Name="Region_OpenWorld" ID="{BEDDD119-0684-4625-A620-2D21C26C4A75}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
@@ -2258,8 +1971,43 @@
 						<Entry>
 							<Path>
 								<PathElementRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
-								<PathElementRef Name="Combat" ID="{B940BF10-8F0F-4674-972B-A287D951D4EB}"/>
-								<PathElementRef Name="EnemySpiderLeg_Phase1" ID="{5F61EF3B-7D14-47DF-B8EC-4A390C353A55}"/>
+								<PathElementRef Name="Exploring" ID="{3D43D6D3-16EE-4734-9A44-E93CFC6B1A41}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Region_OpenWorld" ID="{BEDDD119-0684-4625-A620-2D21C26C4A75}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
+								<PathElementRef Name="InCombat" ID="{02A97734-8890-4280-8438-41F2CA3E16DD}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Combat_InCombat" ID="{A3BFD731-4CDD-4918-98D9-D23620985BC3}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
+								<PathElementRef Name="InEliteCombat" ID="{315FAD00-45C1-4FA4-85FE-995392895DC0}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Combat_InEliteCombat" ID="{DD969D55-BE57-40C9-A825-C21DB61620E6}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
+								<PathElementRef Name="InBossCombat" ID="{FBC865FA-EC5F-41F2-8150-1E1F4B28F064}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Combat_InBossCombat" ID="{A0F14D8C-9667-48A7-BDF0-7CB04E49A793}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
+								<PathElementRef Name="InSpiderLegCombat_Phase_1" ID="{8F311D37-06F5-46F8-A05D-534226A7F0F1}"/>
 							</Path>
 							<AudioNodeInfo>
 								<AudioNodeRef Name="Combat_SpiderBossLeg_Phase1" ID="{316F9E05-789B-47D7-B575-1FE9CDBE96F2}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
@@ -2268,8 +2016,7 @@
 						<Entry>
 							<Path>
 								<PathElementRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
-								<PathElementRef Name="Combat" ID="{B940BF10-8F0F-4674-972B-A287D951D4EB}"/>
-								<PathElementRef Name="EnemySpiderLeg_Phase2" ID="{EE726B16-6A1B-4D4D-B591-FEA4D29ACF64}"/>
+								<PathElementRef Name="InSpiderLegCombat_Phase_2" ID="{428C96FF-EAF2-45EF-8339-A38193B1614E}"/>
 							</Path>
 							<AudioNodeInfo>
 								<AudioNodeRef Name="Combat_SpiderBossLeg_Phase2" ID="{311C97C7-CB56-43F8-A134-7E36E4067A5C}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
@@ -2278,31 +2025,10 @@
 						<Entry>
 							<Path>
 								<PathElementRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
-								<PathElementRef Name="Combat" ID="{B940BF10-8F0F-4674-972B-A287D951D4EB}"/>
-								<PathElementRef Name="EnemySpiderLeg_Phase3" ID="{BE5D1ACA-B309-4694-AD75-F38D1D0A917A}"/>
+								<PathElementRef Name="InSpiderLegCombat_Phase_3" ID="{3172E619-0BE4-4EB6-9A3B-26E37842D395}"/>
 							</Path>
 							<AudioNodeInfo>
 								<AudioNodeRef Name="Combat_SpiderBossLeg_Phase3" ID="{0E78545B-3AEF-436C-873B-FC3EAE290E62}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
-							</AudioNodeInfo>
-						</Entry>
-						<Entry>
-							<Path>
-								<PathElementRef Name="Tutorial" ID="{54FD0182-3652-4FEC-BA5B-9734C9C53A4F}"/>
-								<PathElementRef Name="None" ID="{33076AA8-57AA-4A32-B615-F58C8930EF62}"/>
-								<PathElementRef Name="Combat_EnemySpiderLeg_PhaseLevel" ID="{D46C39E7-A1CF-485B-94E6-F7A8C5FAF83C}"/>
-							</Path>
-							<AudioNodeInfo>
-								<AudioNodeRef Name="Region_Tutorial" ID="{8FEEA1BB-52FA-4708-870F-08E1C0FE6479}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
-							</AudioNodeInfo>
-						</Entry>
-						<Entry>
-							<Path>
-								<PathElementRef Name="Tutorial" ID="{54FD0182-3652-4FEC-BA5B-9734C9C53A4F}"/>
-								<PathElementRef Name="InCombat" ID="{02A97734-8890-4280-8438-41F2CA3E16DD}"/>
-								<PathElementRef Name="Combat_EnemySpiderLeg_PhaseLevel" ID="{D46C39E7-A1CF-485B-94E6-F7A8C5FAF83C}"/>
-							</Path>
-							<AudioNodeInfo>
-								<AudioNodeRef Name="Combat_InCombat" ID="{A3BFD731-4CDD-4918-98D9-D23620985BC3}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
 							</AudioNodeInfo>
 						</Entry>
 					</EntryList>
@@ -2322,7 +2048,7 @@
 								<RTPC Name="" ID="{967C7451-ED46-4A2C-B5B8-7435BD77C3FE}" ShortID="261394949">
 									<ReferenceList>
 										<Reference Name="ControlInput">
-											<ObjectRef Name="Distance_to_Player" ID="{D9C56384-D920-47E1-8580-8A6201311E30}" WorkUnitID="{1ABAFF8B-9354-49DC-8421-BEE60B25B87A}"/>
+											<ObjectRef Name="SpiderLegDistanceToPlayer" ID="{D9C56384-D920-47E1-8580-8A6201311E30}" WorkUnitID="{AE8AA2EF-5E34-4BC2-BDEE-E9E6F04DBC53}"/>
 										</Reference>
 									</ReferenceList>
 									<Curve Name="" ID="{0859059F-1DC9-4418-9FD0-3A2C4BC8DBE1}">
@@ -2337,7 +2063,7 @@
 												<SegmentShape>Log2</SegmentShape>
 											</Point>
 											<Point>
-												<XPos>100</XPos>
+												<XPos>9999</XPos>
 												<YPos>-200</YPos>
 												<Flags>37</Flags>
 											</Point>

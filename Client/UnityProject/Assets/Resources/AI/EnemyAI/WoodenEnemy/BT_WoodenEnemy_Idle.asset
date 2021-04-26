@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a686a47eee2fa44cb0a34b5d86e4d5e, type: 3}
   m_Name: BT_WoodenEnemy_Idle
   m_EditorClassIdentifier: 
-  _serializedGraph: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[{"_position":{"x":570.0,"y":60.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"0"},{"repeaterMode":2,"repeatTimes":{"_value":1},"_position":{"x":570.0,"y":135.0},"$type":"NodeCanvas.BehaviourTrees.Repeater","$id":"1"},{"_position":{"x":570.0,"y":240.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"2"},{"_subTree":{"_value":1},"_variablesMap":[],"_position":{"x":75.0,"y":360.0},"$type":"NodeCanvas.BehaviourTrees.SubTree","$id":"3"},{"ActorBehaviourState":{},"_position":{"x":345.0,"y":360.0},"$type":"ActorAIAtoms+BT_Enemy_SetEnemyBehaviourState","$id":"4"},{"_position":{"x":570.0,"y":360.0},"$type":"NodeCanvas.BehaviourTrees.Optional","$id":"5"},{"_condition":{"TargetEntityTypes":{"_value":[0,1]},"NeedEntity":{"_value":true},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_CheckHasTarget"},"_position":{"x":525.0,"y":450.0},"$type":"NodeCanvas.BehaviourTrees.ConditionalEvaluator","$id":"6"},{"SearchRadius":{"_name":"GuardRange","_targetVariableID":"31e68abb-9456-4d93-9c19-e1255b4debfa"},"RelativeCamp":{"_value":2},"ActorTypeName":{"_value":"Player"},"TargetEntityTypes":{"_value":[0,1]},"Y_Ignore":{},"_position":{"x":450.0,"y":570.0},"$type":"ActorAIAtoms+BT_Enemy_SetTargetEntity","$id":"7"},{"maxCount":{"_value":1},"coolDownTime":{"_name":"IdleInterval","_targetVariableID":"cd5f3044-b79e-48a7-821a-ff99d76f747d"},"_position":{"x":930.0,"y":360.0},"$type":"NodeCanvas.BehaviourTrees.Filter","$id":"8"},{"_position":{"x":930.0,"y":480.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"9"},{"ActorBehaviourState":{"_value":2},"_position":{"x":840.0,"y":600.0},"$type":"ActorAIAtoms+BT_Enemy_SetEnemyBehaviourState","$id":"10"},{"_condition":{"StuckTime":{"_value":2000},"$type":"ActorAIAtoms+BT_Enemy_StuckWithNavTask"},"_position":{"x":1005.0,"y":615.0},"$type":"NodeCanvas.BehaviourTrees.BinarySelector","$id":"11"},{"_position":{"x":930.0,"y":765.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"12"},{"_position":{"x":855.0,"y":855.0},"$type":"ActorAIAtoms+BT_Enemy_ForceTerminatePathFinding","$id":"13"},{"_position":{"x":975.0,"y":855.0},"$type":"NodeCanvas.BehaviourTrees.Optional","$id":"14"},{"IdleRadius":{"_name":"IdleRadius","_targetVariableID":"c845233e-8dc9-4145-92fc-38fe141abbaa"},"IgnoreBarrier":{},"_position":{"x":975.0,"y":915.0},"$type":"ActorAIAtoms+BT_Enemy_Idle","$id":"15"},{"_position":{"x":1125.0,"y":750.0},"$type":"NodeCanvas.BehaviourTrees.Optional","$id":"16"},{"IdleRadius":{"_name":"IdleRadius","_targetVariableID":"c845233e-8dc9-4145-92fc-38fe141abbaa"},"IgnoreBarrier":{},"_position":{"x":1125.0,"y":825.0},"$type":"ActorAIAtoms+BT_Enemy_Idle","$id":"17"}],"connections":[{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"4"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"5"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"8"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"5"},"_targetNode":{"$ref":"6"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"6"},"_targetNode":{"$ref":"7"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"8"},"_targetNode":{"$ref":"9"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"9"},"_targetNode":{"$ref":"10"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"9"},"_targetNode":{"$ref":"11"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"11"},"_targetNode":{"$ref":"12"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"11"},"_targetNode":{"$ref":"16"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"12"},"_targetNode":{"$ref":"13"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"12"},"_targetNode":{"$ref":"14"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"14"},"_targetNode":{"$ref":"15"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"16"},"_targetNode":{"$ref":"17"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
+  _serializedGraph: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[{"_position":{"x":570.0,"y":60.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"0"},{"repeaterMode":2,"repeatTimes":{"_value":1},"_position":{"x":570.0,"y":135.0},"$type":"NodeCanvas.BehaviourTrees.Repeater","$id":"1"},{"_position":{"x":570.0,"y":240.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"2"},{"InCombat":{},"_position":{"x":-195.0,"y":345.0},"$type":"ActorAIAtoms+BT_Enemy_SetPlayerCombatState","$id":"3"},{"_subTree":{"_value":1},"_variablesMap":[],"_position":{"x":75.0,"y":360.0},"$type":"NodeCanvas.BehaviourTrees.SubTree","$id":"4"},{"ActorBehaviourState":{},"_position":{"x":345.0,"y":360.0},"$type":"ActorAIAtoms+BT_Enemy_SetEnemyBehaviourState","$id":"5"},{"_position":{"x":570.0,"y":360.0},"$type":"NodeCanvas.BehaviourTrees.Optional","$id":"6"},{"_condition":{"TargetEntityTypes":{"_value":[0,1]},"NeedEntity":{"_value":true},"_invert":true,"$type":"ActorAIAtoms+BT_Enemy_CheckHasTarget"},"_position":{"x":525.0,"y":450.0},"$type":"NodeCanvas.BehaviourTrees.ConditionalEvaluator","$id":"7"},{"SearchRadius":{"_name":"GuardRange","_targetVariableID":"31e68abb-9456-4d93-9c19-e1255b4debfa"},"RelativeCamp":{"_value":2},"ActorTypeName":{"_value":"Player"},"TargetEntityTypes":{"_value":[0,1]},"Y_Ignore":{},"_position":{"x":450.0,"y":570.0},"$type":"ActorAIAtoms+BT_Enemy_SetTargetEntity","$id":"8"},{"maxCount":{"_value":1},"coolDownTime":{"_name":"IdleInterval","_targetVariableID":"749305d2-8488-46da-952a-7531214ba3d3"},"_position":{"x":930.0,"y":360.0},"$type":"NodeCanvas.BehaviourTrees.Filter","$id":"9"},{"_position":{"x":930.0,"y":480.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"10"},{"ActorBehaviourState":{"_value":2},"_position":{"x":840.0,"y":600.0},"$type":"ActorAIAtoms+BT_Enemy_SetEnemyBehaviourState","$id":"11"},{"_condition":{"StuckTime":{"_value":2000},"$type":"ActorAIAtoms+BT_Enemy_StuckWithNavTask"},"_position":{"x":1005.0,"y":615.0},"$type":"NodeCanvas.BehaviourTrees.BinarySelector","$id":"12"},{"_position":{"x":930.0,"y":765.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"13"},{"_position":{"x":855.0,"y":855.0},"$type":"ActorAIAtoms+BT_Enemy_ForceTerminatePathFinding","$id":"14"},{"_position":{"x":975.0,"y":855.0},"$type":"NodeCanvas.BehaviourTrees.Optional","$id":"15"},{"IdleRadius":{"_name":"IdleRadius","_targetVariableID":"c845233e-8dc9-4145-92fc-38fe141abbaa"},"IgnoreBarrier":{},"_position":{"x":975.0,"y":915.0},"$type":"ActorAIAtoms+BT_Enemy_Idle","$id":"16"},{"_position":{"x":1125.0,"y":750.0},"$type":"NodeCanvas.BehaviourTrees.Optional","$id":"17"},{"IdleRadius":{"_name":"IdleRadius","_targetVariableID":"c845233e-8dc9-4145-92fc-38fe141abbaa"},"IgnoreBarrier":{},"_position":{"x":1125.0,"y":825.0},"$type":"ActorAIAtoms+BT_Enemy_Idle","$id":"18"}],"connections":[{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"4"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"5"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"6"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"9"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"6"},"_targetNode":{"$ref":"7"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"7"},"_targetNode":{"$ref":"8"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"9"},"_targetNode":{"$ref":"10"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"10"},"_targetNode":{"$ref":"11"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"10"},"_targetNode":{"$ref":"12"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"12"},"_targetNode":{"$ref":"13"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"12"},"_targetNode":{"$ref":"17"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"13"},"_targetNode":{"$ref":"14"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"13"},"_targetNode":{"$ref":"15"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"15"},"_targetNode":{"$ref":"16"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"17"},"_targetNode":{"$ref":"18"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
   _objectReferences:
   - {fileID: 0}
   - {fileID: 11400000, guid: c382205d2e7ee81428c4a8ab4ff75ca4, type: 2}
@@ -20,7 +20,7 @@ MonoBehaviour:
     _version: 3.08
     _category: 
     _comments: 
-    _translation: {x: 259, y: 286}
+    _translation: {x: 622, y: 362}
     _zoomFactor: 1
   _haltSerialization: 0
 #---GRAPH_START---
@@ -57,6 +57,17 @@ MonoBehaviour:
 #            "$id": "2"
 #        },
 #        {
+#            "InCombat": {
+#
+#            },
+#            "_position": {
+#                "x": -195.0,
+#                "y": 345.0
+#            },
+#            "$type": "ActorAIAtoms+BT_Enemy_SetPlayerCombatState",
+#            "$id": "3"
+#        },
+#        {
 #            "_subTree": {
 #                "_value": 1
 #            },
@@ -66,7 +77,7 @@ MonoBehaviour:
 #                "y": 360.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.SubTree",
-#            "$id": "3"
+#            "$id": "4"
 #        },
 #        {
 #            "ActorBehaviourState": {
@@ -77,7 +88,7 @@ MonoBehaviour:
 #                "y": 360.0
 #            },
 #            "$type": "ActorAIAtoms+BT_Enemy_SetEnemyBehaviourState",
-#            "$id": "4"
+#            "$id": "5"
 #        },
 #        {
 #            "_position": {
@@ -85,7 +96,7 @@ MonoBehaviour:
 #                "y": 360.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.Optional",
-#            "$id": "5"
+#            "$id": "6"
 #        },
 #        {
 #            "_condition": {
@@ -106,7 +117,7 @@ MonoBehaviour:
 #                "y": 450.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.ConditionalEvaluator",
-#            "$id": "6"
+#            "$id": "7"
 #        },
 #        {
 #            "SearchRadius": {
@@ -133,7 +144,7 @@ MonoBehaviour:
 #                "y": 570.0
 #            },
 #            "$type": "ActorAIAtoms+BT_Enemy_SetTargetEntity",
-#            "$id": "7"
+#            "$id": "8"
 #        },
 #        {
 #            "maxCount": {
@@ -141,14 +152,14 @@ MonoBehaviour:
 #            },
 #            "coolDownTime": {
 #                "_name": "IdleInterval",
-#                "_targetVariableID": "cd5f3044-b79e-48a7-821a-ff99d76f747d"
+#                "_targetVariableID": "749305d2-8488-46da-952a-7531214ba3d3"
 #            },
 #            "_position": {
 #                "x": 930.0,
 #                "y": 360.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.Filter",
-#            "$id": "8"
+#            "$id": "9"
 #        },
 #        {
 #            "_position": {
@@ -156,7 +167,7 @@ MonoBehaviour:
 #                "y": 480.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.Sequencer",
-#            "$id": "9"
+#            "$id": "10"
 #        },
 #        {
 #            "ActorBehaviourState": {
@@ -167,7 +178,7 @@ MonoBehaviour:
 #                "y": 600.0
 #            },
 #            "$type": "ActorAIAtoms+BT_Enemy_SetEnemyBehaviourState",
-#            "$id": "10"
+#            "$id": "11"
 #        },
 #        {
 #            "_condition": {
@@ -181,7 +192,7 @@ MonoBehaviour:
 #                "y": 615.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.BinarySelector",
-#            "$id": "11"
+#            "$id": "12"
 #        },
 #        {
 #            "_position": {
@@ -189,7 +200,7 @@ MonoBehaviour:
 #                "y": 765.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.Sequencer",
-#            "$id": "12"
+#            "$id": "13"
 #        },
 #        {
 #            "_position": {
@@ -197,7 +208,7 @@ MonoBehaviour:
 #                "y": 855.0
 #            },
 #            "$type": "ActorAIAtoms+BT_Enemy_ForceTerminatePathFinding",
-#            "$id": "13"
+#            "$id": "14"
 #        },
 #        {
 #            "_position": {
@@ -205,7 +216,7 @@ MonoBehaviour:
 #                "y": 855.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.Optional",
-#            "$id": "14"
+#            "$id": "15"
 #        },
 #        {
 #            "IdleRadius": {
@@ -220,7 +231,7 @@ MonoBehaviour:
 #                "y": 915.0
 #            },
 #            "$type": "ActorAIAtoms+BT_Enemy_Idle",
-#            "$id": "15"
+#            "$id": "16"
 #        },
 #        {
 #            "_position": {
@@ -228,7 +239,7 @@ MonoBehaviour:
 #                "y": 750.0
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.Optional",
-#            "$id": "16"
+#            "$id": "17"
 #        },
 #        {
 #            "IdleRadius": {
@@ -243,7 +254,7 @@ MonoBehaviour:
 #                "y": 825.0
 #            },
 #            "$type": "ActorAIAtoms+BT_Enemy_Idle",
-#            "$id": "17"
+#            "$id": "18"
 #        }
 #    ],
 #    "connections": [
@@ -297,16 +308,16 @@ MonoBehaviour:
 #                "$ref": "2"
 #            },
 #            "_targetNode": {
-#                "$ref": "8"
+#                "$ref": "6"
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.BTConnection"
 #        },
 #        {
 #            "_sourceNode": {
-#                "$ref": "5"
+#                "$ref": "2"
 #            },
 #            "_targetNode": {
-#                "$ref": "6"
+#                "$ref": "9"
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.BTConnection"
 #        },
@@ -321,10 +332,10 @@ MonoBehaviour:
 #        },
 #        {
 #            "_sourceNode": {
-#                "$ref": "8"
+#                "$ref": "7"
 #            },
 #            "_targetNode": {
-#                "$ref": "9"
+#                "$ref": "8"
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.BTConnection"
 #        },
@@ -339,7 +350,7 @@ MonoBehaviour:
 #        },
 #        {
 #            "_sourceNode": {
-#                "$ref": "9"
+#                "$ref": "10"
 #            },
 #            "_targetNode": {
 #                "$ref": "11"
@@ -348,19 +359,10 @@ MonoBehaviour:
 #        },
 #        {
 #            "_sourceNode": {
-#                "$ref": "11"
+#                "$ref": "10"
 #            },
 #            "_targetNode": {
 #                "$ref": "12"
-#            },
-#            "$type": "NodeCanvas.BehaviourTrees.BTConnection"
-#        },
-#        {
-#            "_sourceNode": {
-#                "$ref": "11"
-#            },
-#            "_targetNode": {
-#                "$ref": "16"
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.BTConnection"
 #        },
@@ -378,13 +380,22 @@ MonoBehaviour:
 #                "$ref": "12"
 #            },
 #            "_targetNode": {
+#                "$ref": "17"
+#            },
+#            "$type": "NodeCanvas.BehaviourTrees.BTConnection"
+#        },
+#        {
+#            "_sourceNode": {
+#                "$ref": "13"
+#            },
+#            "_targetNode": {
 #                "$ref": "14"
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.BTConnection"
 #        },
 #        {
 #            "_sourceNode": {
-#                "$ref": "14"
+#                "$ref": "13"
 #            },
 #            "_targetNode": {
 #                "$ref": "15"
@@ -393,10 +404,19 @@ MonoBehaviour:
 #        },
 #        {
 #            "_sourceNode": {
-#                "$ref": "16"
+#                "$ref": "15"
 #            },
 #            "_targetNode": {
+#                "$ref": "16"
+#            },
+#            "$type": "NodeCanvas.BehaviourTrees.BTConnection"
+#        },
+#        {
+#            "_sourceNode": {
 #                "$ref": "17"
+#            },
+#            "_targetNode": {
+#                "$ref": "18"
 #            },
 #            "$type": "NodeCanvas.BehaviourTrees.BTConnection"
 #        }

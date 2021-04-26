@@ -643,6 +643,11 @@ public class Actor : Entity
     /// </summary>
     public override void OnRecycled()
     {
+        if (ActorClass == ActorClass.FinalBoss)
+        {
+            WwiseAudioManager.Instance.WwiseBGMConfiguration.SpiderLegEnemyDistanceToPlayer.SetGlobalValue(99999f);
+        }
+
         IsRecycling = true;
         IsInMicroWorld = false;
         ForbidAction = true;
@@ -1012,6 +1017,22 @@ public class Actor : Entity
         }
 
         LastMoveAttempt = CurMoveAttempt;
+        if (this == BattleManager.Instance.Player1)
+        {
+            if (HasRigidbody)
+            {
+                WwiseAudioManager.Instance.WwiseBGMConfiguration.PlayerMovementSpeed.SetGlobalValue(RigidBody.velocity.magnitude);
+            }
+            else
+            {
+                WwiseAudioManager.Instance.WwiseBGMConfiguration.PlayerMovementSpeed.SetGlobalValue(0);
+            }
+        }
+
+        if (ActorClass == ActorClass.FinalBoss)
+        {
+            WwiseAudioManager.Instance.WwiseBGMConfiguration.SpiderLegEnemyDistanceToPlayer.SetGlobalValue((WorldGP - BattleManager.Instance.Player1.WorldGP).magnitude);
+        }
     }
 
     private void AddRigidbody()

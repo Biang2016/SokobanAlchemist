@@ -200,7 +200,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
         LoadingMapPanel.SetBackgroundAlpha(1f);
         LoadingMapPanel.SetProgress(0.5f, "StartGame");
-        WwiseAudioManager.BGM_Start();
+        WwiseAudioManager.WwiseBGMConfiguration.BGM_Start();
         PlayerStatHUDPanel = UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>();
         yield return WorldManager.StartGame();
 

@@ -442,6 +442,7 @@ public class EntityStatPropSet
         StatNotifyActionSetDict[EntityStatType.IceElementFragment].OnValueNotEnoughWarning += OnIceElementFragmentNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.LightningElementFragment].OnValueIncrease += OnLightningElementFragmentIncrease;
         StatNotifyActionSetDict[EntityStatType.LightningElementFragment].OnValueNotEnoughWarning += OnLightningElementFragmentNotEnoughWarning;
+        StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueChanged += OnHealthDurabilityChanged;
         StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueIncrease += OnHealthDurabilityIncrease;
         StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueDecrease += OnHealthDurabilityDecrease;
         StatNotifyActionSetDict[EntityStatType.HealthDurability].OnValueReachZero += OnHealthDurabilityReachZero;
@@ -487,6 +488,7 @@ public class EntityStatPropSet
         if (Entity is Actor actor)
         {
             actor.ActorBattleHelper.ShowGainGoldNumFX(increase);
+            actor.EntityWwiseHelper.OnGainGold.Post(actor.gameObject);
         }
     }
 
@@ -495,6 +497,7 @@ public class EntityStatPropSet
         if (Entity is Actor actor)
         {
             actor.ActorBattleHelper.ShowGainFireElementFragmentNumFX(increase);
+            actor.EntityWwiseHelper.OnGainFireElement.Post(actor.gameObject);
         }
     }
 
@@ -511,6 +514,7 @@ public class EntityStatPropSet
         if (Entity is Actor actor)
         {
             actor.ActorBattleHelper.ShowGainIceElementFragmentNumFX(increase);
+            actor.EntityWwiseHelper.OnGainIceElement.Post(actor.gameObject);
         }
     }
 
@@ -527,6 +531,7 @@ public class EntityStatPropSet
         if (Entity is Actor actor)
         {
             actor.ActorBattleHelper.ShowGainLightningElementFragmentNumFX(increase);
+            actor.EntityWwiseHelper.OnGainLightningElement.Post(actor.gameObject);
         }
     }
 
@@ -535,6 +540,14 @@ public class EntityStatPropSet
         if (Entity == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].LightningElementFragmentBar.OnStatLowWarning();
+        }
+    }
+
+    private void OnHealthDurabilityChanged(int before, int after, int min, int max)
+    {
+        if (Entity == BattleManager.Instance.Player1)
+        {
+            WwiseAudioManager.Instance.WwiseBGMConfiguration.PlayerHealthPercent.SetGlobalValue((float) after / max * 100f);
         }
     }
 
