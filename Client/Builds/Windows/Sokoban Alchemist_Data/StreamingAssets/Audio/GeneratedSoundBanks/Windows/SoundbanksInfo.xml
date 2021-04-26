@@ -1,156 +1,363 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="12" SoundbankVersion="135">
 	<RootPaths>
-		<ProjectRoot>/Users/jae/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Documents/GitHub/SokobanAlchemist/Client/UnityProject/UnityProject_WwiseProject/</ProjectRoot>
-		<SourceFilesRoot>/Users/jae/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Documents/GitHub/SokobanAlchemist/Client/UnityProject/UnityProject_WwiseProject/.cache/Windows/</SourceFilesRoot>
-		<SoundBanksRoot>/Users/jae/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Documents/GitHub/SokobanAlchemist/Client/UnityProject/Assets/Wwise/Audio/GeneratedSoundBanks/Windows/</SoundBanksRoot>
+		<ProjectRoot>C:\Projects\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\</ProjectRoot>
+		<SourceFilesRoot>C:\Projects\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\.cache\Windows\</SourceFilesRoot>
+		<SoundBanksRoot>C:\Projects\SokobanAlchemist\Client\UnityProject\Assets\Wwise\Audio\GeneratedSoundBanks\Windows\</SoundBanksRoot>
 		<ExternalSourcesInputFile></ExternalSourcesInputFile>
-		<ExternalSourcesOutputRoot>/Users/jae/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Documents/GitHub/SokobanAlchemist/Client/UnityProject/UnityProject_WwiseProject/GeneratedSoundBanks/Windows</ExternalSourcesOutputRoot>
+		<ExternalSourcesOutputRoot>C:\Projects\SokobanAlchemist\Client\UnityProject\UnityProject_WwiseProject\GeneratedSoundBanks\Windows</ExternalSourcesOutputRoot>
 	</RootPaths>
 	<DialogueEvents/>
 	<StreamedFiles/>
 	<MediaFilesNotInAnyBank/>
 	<SoundBanks>
-		<SoundBank Id="1355168291" Language="SFX" Hash="3308738716">
+		<SoundBank Id="1355168291" Language="SFX" Hash="214988973">
 			<ObjectPath>Init</ObjectPath>
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
+			<IncludedAuxBusses>
+				<AuxBus Id="2412664669" Name="Music_Aux" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master_Audio_Bus\World\AUX\Music_Aux"/>
+			</IncludedAuxBusses>
+			<GameParameters>
+				<GameParameter Id="988558536" Name="World_Volume" ObjectPath="\Game Parameters\GameplayVolumes\World_Volume"/>
+				<GameParameter Id="1006694123" Name="Music_Volume" ObjectPath="\Game Parameters\GameplayVolumes\Music_Volume"/>
+				<GameParameter Id="1719345792" Name="UI_Volume" ObjectPath="\Game Parameters\GameplayVolumes\UI_Volume"/>
+				<GameParameter Id="4179668880" Name="Master_Volume" ObjectPath="\Game Parameters\GameplayVolumes\Master_Volume"/>
+			</GameParameters>
 		</SoundBank>
-		<SoundBank Id="1605876511" Language="SFX" Hash="780831358">
+		<SoundBank Id="1605876511" Language="SFX" Hash="3567091385">
 			<ObjectPath>\SoundBanks\Default Work Unit\SFX Work Unit\SFX_Bank</ObjectPath>
 			<ShortName>SFX_Bank</ShortName>
 			<Path>SFX_Bank.bnk</Path>
 			<IncludedEvents>
-				<Event Id="848561503" Name="BoxBase_OnBeingKicked" ObjectPath="\Events\SFX\Entity_SFX\Box_SFX\BoxBase\BoxBase_OnBeingKicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
-				<Event Id="941375425" Name="BoxBase_OnBeingPushed" ObjectPath="\Events\SFX\Entity_SFX\Box_SFX\BoxBase\BoxBase_OnBeingPushed" DurationType="OneShot" DurationMin="0.687500" DurationMax="1.583333"/>
-				<Event Id="2928738080" Name="FireBox_OnBeingKicked" ObjectPath="\Events\SFX\Entity_SFX\Box_SFX\FireBox\FireBox_OnBeingKicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
-				<Event Id="583630362" Name="FireBox_OnBeingPushed" ObjectPath="\Events\SFX\Entity_SFX\Box_SFX\FireBox\FireBox_OnBeingPushed" DurationType="OneShot" DurationMin="0.687500" DurationMax="1.583333"/>
-				<Event Id="2419922771" Name="IceEnemy_Cyan_OnSkillCast_0" ObjectPath="\Events\SFX\Entity_SFX\Actor_SFX\IceEnemy_Cyan\IceEnemy_Cyan_OnSkillCast_0" DurationType="OneShot" DurationMin="3.071610" DurationMax="3.071610"/>
-				<Event Id="2419922770" Name="IceEnemy_Cyan_OnSkillCast_1" ObjectPath="\Events\SFX\Entity_SFX\Actor_SFX\IceEnemy_Cyan\IceEnemy_Cyan_OnSkillCast_1" DurationType="OneShot" DurationMin="2.533900" DurationMax="2.533900"/>
-				<Event Id="137324230" Name="LifeBox_OnBeingKicked" ObjectPath="\Events\SFX\Entity_SFX\Box_SFX\LifeBox\LifeBox_OnBeingKicked" DurationType="OneShot" DurationMin="2.125000" DurationMax="2.125000"/>
-				<Event Id="1052167317" Name="Player_OnSkillCast_0" ObjectPath="\Events\SFX\Entity_SFX\Actor_SFX\Player\Player_OnSkillCast_0" DurationType="OneShot" DurationMin="0.452426" DurationMax="0.452426"/>
-				<Event Id="3845548790" Name="Player_OnVault" ObjectPath="\Events\SFX\Entity_SFX\Actor_SFX\Player\Player_OnVault" DurationType="OneShot" DurationMin="0.374467" DurationMax="0.812494"/>
-				<Event Id="3669812430" Name="WoodenBox_OnBeingKicked" ObjectPath="\Events\SFX\Entity_SFX\Box_SFX\WoodenBox\WoodenBox_OnBeingKicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
-				<Event Id="15596056" Name="WoodenBox_OnBeingPushed" ObjectPath="\Events\SFX\Entity_SFX\Box_SFX\WoodenBox\WoodenBox_OnBeingPushed" DurationType="OneShot" DurationMin="0.687500" DurationMax="1.583333"/>
+				<Event Id="2091411013" Name="_FireEnemy_Red_Fire_Loop_Play" ObjectPath="\Events\Enemies\FireEnemy_Red\_FireEnemy_Red_Fire_Loop_Play" MaxAttenuation="30.000000" DurationType="Infinite"/>
+				<Event Id="3516063939" Name="_FireEnemy_Red_Fire_Loop_Stop" ObjectPath="\Events\Enemies\FireEnemy_Red\_FireEnemy_Red_Fire_Loop_Stop" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="2736176351" Name="ActionBox_OnDestroyed" ObjectPath="\Events\Boxes\ActionBox\ActionBox_OnDestroyed" DurationType="OneShot" DurationMin="4.990998" DurationMax="4.990998"/>
+				<Event Id="4250711070" Name="BlizardBox_Kicked" ObjectPath="\Events\Boxes\IceBox\BlizardBox\BlizardBox_Kicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
+				<Event Id="2753109256" Name="BlizardBox_Pushed" ObjectPath="\Events\Boxes\IceBox\BlizardBox\BlizardBox_Pushed" DurationType="OneShot" DurationMin="0.687500" DurationMax="1.583333"/>
+				<Event Id="702229356" Name="BossSlime_OnBeingDamaged" ObjectPath="\Events\Enemies\BossSlime\BossSlime_OnBeingDamaged" DurationType="OneShot" DurationMin="5.461338" DurationMax="8.138662"/>
+				<Event Id="2086125305" Name="BossSlime_OnDestroyed_Common" ObjectPath="\Events\Enemies\BossSlime\BossSlime_OnDestroyed_Common" DurationType="OneShot" DurationMin="5.845125" DurationMax="5.845125"/>
+				<Event Id="2444784752" Name="BossSlime_OnSkillCast" ObjectPath="\Events\Enemies\BossSlime\BossSlime_OnSkillCast" DurationType="OneShot" DurationMin="4.094671" DurationMax="4.094671"/>
+				<Event Id="3617569119" Name="BossSlime_OnSkillPreparing" ObjectPath="\Events\Enemies\BossSlime\BossSlime_OnSkillPreparing" DurationType="OneShot" DurationMin="1.475215" DurationMax="1.475215"/>
+				<Event Id="161732435" Name="CharcoalBox_Kicked" ObjectPath="\Events\Boxes\WoodenBox\CharcoalBox\CharcoalBox_Kicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
+				<Event Id="1104558077" Name="CharcoalBox_Pushed" ObjectPath="\Events\Boxes\WoodenBox\CharcoalBox\CharcoalBox_Pushed" DurationType="OneShot" DurationMin="0.687500" DurationMax="1.583333"/>
+				<Event Id="2928738080" Name="FireBox_OnBeingKicked" ObjectPath="\Events\Boxes\FireBox\FireBox_OnBeingKicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
+				<Event Id="4227993261" Name="FireBox_OnDestroyed" ObjectPath="\Events\Boxes\FireBox\FireBox_OnDestroyed" DurationType="OneShot" DurationMin="2.133333" DurationMax="2.133333"/>
+				<Event Id="1939644666" Name="FireEnemy_Red_Attack" ObjectPath="\Events\Enemies\FireEnemy_Red\FireEnemy_Red_Attack" MaxAttenuation="30.000000" DurationType="OneShot" DurationMin="2.533900" DurationMax="3.071610"/>
+				<Event Id="3133826026" Name="FireEnemy_Red_OnDestroyed_Common" ObjectPath="\Events\Enemies\FireEnemy_Red\FireEnemy_Red_OnDestroyed_Common" MaxAttenuation="30.000000" DurationType="OneShot" DurationMin="2.683288" DurationMax="2.683288"/>
+				<Event Id="4186582285" Name="FireEnemy_Yellow_Attack" ObjectPath="\Events\Enemies\FireEnemy_Yellow\FireEnemy_Yellow_Attack" DurationType="OneShot" DurationMin="3.066004" DurationMax="4.294018"/>
+				<Event Id="2446285653" Name="FireEnemy_Yellow_OnDestroyed_Common" ObjectPath="\Events\Enemies\FireEnemy_Yellow\FireEnemy_Yellow_OnDestroyed_Common" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="1646279540" Name="FlamethrowerBox_Kicked" ObjectPath="\Events\Boxes\FireBox\FlamethrowerBox\FlamethrowerBox_Kicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
+				<Event Id="3203132454" Name="FlamethrowerBox_Pushed" ObjectPath="\Events\Boxes\FireBox\FlamethrowerBox\FlamethrowerBox_Pushed" DurationType="OneShot" DurationMin="0.687500" DurationMax="1.583333"/>
+				<Event Id="2575000920" Name="GoldenBox_OnDestroyed" ObjectPath="\Events\Boxes\GoldenBox\GoldenBox_OnDestroyed" DurationType="OneShot" DurationMin="1.536825" DurationMax="1.536825"/>
+				<Event Id="2707351273" Name="IceBox_OnBeingKicked" ObjectPath="\Events\Boxes\IceBox\IceBox_OnBeingKicked" DurationType="OneShot" DurationMin="2.456576" DurationMax="2.456576"/>
+				<Event Id="368214952" Name="IceBox_OnDestroyed" ObjectPath="\Events\Boxes\IceBox\IceBox_OnDestroyed" DurationType="OneShot" DurationMin="3.000000" DurationMax="3.000000"/>
+				<Event Id="3085887420" Name="IceEnemy_Blue_FrostBreath" ObjectPath="\Events\Enemies\IceEnemy_Blue\IceEnemy_Blue_FrostBreath" DurationType="OneShot" DurationMin="3.071610" DurationMax="3.071610"/>
+				<Event Id="1251542582" Name="IceEnemy_Blue_GlacialSlam" ObjectPath="\Events\Enemies\IceEnemy_Blue\IceEnemy_Blue_GlacialSlam" DurationType="OneShot" DurationMin="2.533900" DurationMax="2.533900"/>
+				<Event Id="1588324721" Name="IceEnemy_Blue_OnBeingDamaged" ObjectPath="\Events\Enemies\IceEnemy_Blue\IceEnemy_Blue_OnBeingDamaged" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="1636125444" Name="IceEnemy_Blue_OnDestroyed_Common" ObjectPath="\Events\Enemies\IceEnemy_Blue\IceEnemy_Blue_OnDestroyed_Common" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="910157" Name="IceEnemy_Cyan_FrostBreath" ObjectPath="\Events\Enemies\IceEnemy_Cyan\IceEnemy_Cyan_FrostBreath" DurationType="OneShot" DurationMin="3.071610" DurationMax="3.071610"/>
+				<Event Id="2840113683" Name="IceEnemy_Cyan_GlacialSlam" ObjectPath="\Events\Enemies\IceEnemy_Cyan\IceEnemy_Cyan_GlacialSlam" DurationType="OneShot" DurationMin="2.533900" DurationMax="2.533900"/>
+				<Event Id="3058618138" Name="IceEnemy_Cyan_OnBeingDamaged" ObjectPath="\Events\Enemies\IceEnemy_Cyan\IceEnemy_Cyan_OnBeingDamaged" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="4133186583" Name="IceEnemy_Cyan_OnDestroyed_Common" ObjectPath="\Events\Enemies\IceEnemy_Cyan\IceEnemy_Cyan_OnDestroyed_Common" DurationType="OneShot" DurationMin="2.683288" DurationMax="2.683288"/>
+				<Event Id="3571089393" Name="KeyBox_Kicked" ObjectPath="\Events\Boxes\KeyBox\KeyBox_Kicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
+				<Event Id="2598199707" Name="KeyBox_Pushed" ObjectPath="\Events\Boxes\KeyBox\KeyBox_Pushed" DurationType="OneShot" DurationMin="0.687500" DurationMax="1.583333"/>
+				<Event Id="2252175878" Name="LightningBox_Kicked" ObjectPath="\Events\Boxes\LightningBox\LightningBox_Kicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
+				<Event Id="752514333" Name="LightningBox_OnBeingMerged" ObjectPath="\Events\Boxes\LightningBox\LightningBox_OnBeingMerged" DurationType="Infinite"/>
+				<Event Id="3325291516" Name="LightningBox_OnBeingMergedEnd" ObjectPath="\Events\Boxes\LightningBox\LightningBox_OnBeingMergedEnd" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="3506016687" Name="LightningEnemy_DoubleStrike" ObjectPath="\Events\Enemies\LightningEnemy\LightningEnemy_DoubleStrike" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="3756377455" Name="LightningEnemy_OnBeingDamaged" ObjectPath="\Events\Enemies\LightningEnemy\LightningEnemy_OnBeingDamaged" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="2752093154" Name="LightningEnemy_OnDestroyed_Common" ObjectPath="\Events\Enemies\LightningEnemy\LightningEnemy_OnDestroyed_Common" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="3418243016" Name="LightningEnemy_SingleStrike" ObjectPath="\Events\Enemies\LightningEnemy\LightningEnemy_SingleStrike" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="3983008853" Name="LightningEnemy_Somersault" ObjectPath="\Events\Enemies\LightningEnemy\LightningEnemy_Somersault" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="2202770892" Name="LightningEnemy_TripleStrike" ObjectPath="\Events\Enemies\LightningEnemy\LightningEnemy_TripleStrike" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="2757939046" Name="LongLogBox_OnBeingKicked" ObjectPath="\Events\Boxes\WoodenBox\LongLogBox\LongLogBox_OnBeingKicked" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="475682704" Name="LongLogBox_OnBeingPushed" ObjectPath="\Events\Boxes\WoodenBox\LongLogBox\LongLogBox_OnBeingPushed" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="1228531471" Name="LongLogBox_OnDestroyed" ObjectPath="\Events\Boxes\WoodenBox\LongLogBox\LongLogBox_OnDestroyed" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="2645972933" Name="MediumLogBox_Kicked" ObjectPath="\Events\Boxes\WoodenBox\MediumLogBox\MediumLogBox_Kicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
+				<Event Id="461148455" Name="MediumLogBox_Pushed" ObjectPath="\Events\Boxes\WoodenBox\MediumLogBox\MediumLogBox_Pushed" DurationType="OneShot" DurationMin="0.687500" DurationMax="1.583333"/>
+				<Event Id="4041442744" Name="MetalTrapBox_Kicked" ObjectPath="\Events\Boxes\MetalTrapBox\MetalTrapBox_Kicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
+				<Event Id="2194083730" Name="MetalTrapBox_Pushed" ObjectPath="\Events\Boxes\MetalTrapBox\MetalTrapBox_Pushed" DurationType="OneShot" DurationMin="0.687500" DurationMax="1.583333"/>
+				<Event Id="3833687285" Name="OnBeingFrozen" ObjectPath="\Events\Common\Common\OnBeingFrozen" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="1643181542" Name="OnBeingKicked_Heavy" ObjectPath="\Events\Boxes\Boxes_Common\OnBeingKicked_Heavy" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="2340279731" Name="OnBeingKicked_Light" ObjectPath="\Events\Boxes\Boxes_Common\OnBeingKicked_Light" DurationType="OneShot" DurationMin="0.966531" DurationMax="1.175510"/>
+				<Event Id="3713364846" Name="OnBeingLit" ObjectPath="\Events\Common\Common\OnBeingLit" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="2779989151" Name="OnBeingMerged" ObjectPath="\Events\Boxes\Boxes_Common\OnBeingMerged" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="1989187440" Name="OnBeingPushed_Heavy" ObjectPath="\Events\Boxes\Boxes_Common\OnBeingPushed_Heavy" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="2546353925" Name="OnBeingPushed_Light" ObjectPath="\Events\Boxes\Boxes_Common\OnBeingPushed_Light" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="2263609135" Name="OnBeingPushedEnd_Heavy" ObjectPath="\Events\Boxes\Boxes_Common\OnBeingPushedEnd_Heavy" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="235712830" Name="OnBeingPushedEnd_Light" ObjectPath="\Events\Boxes\Boxes_Common\OnBeingPushedEnd_Light" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="3484121230" Name="OnBurningEnd" ObjectPath="\Events\Common\Common\OnBurningEnd" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="446098551" Name="OnCollideActively" ObjectPath="\Events\Boxes\Boxes_Common\OnCollideActively" DurationType="OneShot" DurationMin="0.510295" DurationMax="0.730816"/>
+				<Event Id="4030028399" Name="OnFrozenEnd" ObjectPath="\Events\Common\Common\OnFrozenEnd" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="2394582229" Name="Player_Dash" ObjectPath="\Events\Player\General\Player_Dash" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="3083087645" Name="Player_Death" ObjectPath="\Events\Player\General\Player_Death" DurationType="OneShot" DurationMin="1.915261" DurationMax="2.458554"/>
+				<Event Id="2453392179" Name="Player_Footstep" ObjectPath="\Events\Player\SoundBankSpecific\Player_Footstep" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="4076006907" Name="Player_Kick" ObjectPath="\Events\Player\General\Player_Kick" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="173863332" Name="Player_OnBeingDamaged" ObjectPath="\Events\Player\General\Player_OnBeingDamaged" DurationType="OneShot" DurationMin="1.093832" DurationMax="1.093832"/>
+				<Event Id="2856534737" Name="Player_OnBeingFrozen" ObjectPath="\Events\Player\General\Player_OnBeingFrozen" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="433135230" Name="Player_OnBeingHealed" ObjectPath="\Events\Player\General\Player_OnBeingHealed" DurationType="OneShot" DurationMin="2.167347" DurationMax="2.167347"/>
+				<Event Id="1305348786" Name="Player_OnBeingLit" ObjectPath="\Events\Player\General\Player_OnBeingLit" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="651730626" Name="Player_OnBurningEnd" ObjectPath="\Events\Player\General\Player_OnBurningEnd" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="2187238187" Name="Player_OnFrozenEnd" ObjectPath="\Events\Player\General\Player_OnFrozenEnd" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="2480229653" Name="Player_SkillCast" ObjectPath="\Events\Player\General\Player_SkillCast" DurationType="OneShot" DurationMin="0.452426" DurationMax="0.452426"/>
+				<Event Id="769234327" Name="Player_Vault" ObjectPath="\Events\Player\General\Player_Vault" DurationType="OneShot" DurationMin="0.374467" DurationMax="0.812494"/>
+				<Event Id="4168590375" Name="WoodenBox_OnDestroyed" ObjectPath="\Events\Boxes\WoodenBox\WoodenBox_OnDestroyed" DurationType="OneShot" DurationMin="1.463991" DurationMax="1.610658"/>
+				<Event Id="1750783146" Name="WoodenEnemy_DoubleSlash" ObjectPath="\Events\Enemies\WoodenEnemy\WoodenEnemy_DoubleSlash" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="3394653118" Name="WoodenEnemy_LeftSlash" ObjectPath="\Events\Enemies\WoodenEnemy\WoodenEnemy_LeftSlash" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="3411415237" Name="WoodenEnemy_OnBeingDamaged" ObjectPath="\Events\Enemies\WoodenEnemy\WoodenEnemy_OnBeingDamaged" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="1354805688" Name="WoodenEnemy_OnDestroyed_Common" ObjectPath="\Events\Enemies\WoodenEnemy\WoodenEnemy_OnDestroyed_Common" DurationType="OneShot" DurationMin="2.683288" DurationMax="2.683288"/>
+				<Event Id="148497201" Name="WoodenEnemy_RightSlash" ObjectPath="\Events\Enemies\WoodenEnemy\WoodenEnemy_RightSlash" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="3947184381" Name="WoodenTrapBox_Kicked" ObjectPath="\Events\Boxes\WoodenTrapBox\WoodenTrapBox_Kicked" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
+				<Event Id="1708343807" Name="WoodenTrapBox_Pushed" ObjectPath="\Events\Boxes\WoodenTrapBox\WoodenTrapBox_Pushed" DurationType="OneShot" DurationMin="0.687500" DurationMax="1.583333"/>
 			</IncludedEvents>
 			<IncludedMemoryFiles>
+				<File Id="21993998" Language="SFX">
+					<ShortName>Cardboard Box Crashing v2.wav</ShortName>
+					<Path>SFX\Cardboard Box Crashing v2_B09F49DF.wem</Path>
+				</File>
+				<File Id="47235782" Language="SFX">
+					<ShortName>InCombatMarimba Prize.wav</ShortName>
+					<Path>SFX\InCombatMarimba Prize_B09F49DF.wem</Path>
+				</File>
+				<File Id="54026860" Language="SFX">
+					<ShortName>Magic Ice Fire Gun.wav</ShortName>
+					<Path>SFX\Magic Ice Fire Gun_B09F49DF.wem</Path>
+				</File>
+				<File Id="58903391" Language="SFX">
+					<ShortName>CrashWoodLogs_BW.17676.wav</ShortName>
+					<Path>SFX\CrashWoodLogs_BW.17676_B09F49DF.wem</Path>
+				</File>
 				<File Id="64029351" Language="SFX">
 					<ShortName>Protagonist_Jump_4.wav</ShortName>
-					<Path>SFX/Protagonist_Jump_4_B09F49DF.wem</Path>
+					<Path>SFX\Protagonist_Jump_4_B09F49DF.wem</Path>
+				</File>
+				<File Id="78304770" Language="SFX">
+					<ShortName>Cardboard Box Crashing v1.wav</ShortName>
+					<Path>SFX\Cardboard Box Crashing v1_B09F49DF.wem</Path>
+				</File>
+				<File Id="81508214" Language="SFX">
+					<ShortName>Cardboard Box Crashing v4.wav</ShortName>
+					<Path>SFX\Cardboard Box Crashing v4_B09F49DF.wem</Path>
+				</File>
+				<File Id="86165249" Language="SFX">
+					<ShortName>Frost Magic Ice Bolt Spell Flying By 2.wav</ShortName>
+					<Path>SFX\Frost Magic Ice Bolt Spell Flying By 2_B09F49DF.wem</Path>
 				</File>
 				<File Id="127835118" Language="SFX">
 					<ShortName>Protagonist_Jump_5.wav</ShortName>
-					<Path>SFX/Protagonist_Jump_5_B09F49DF.wem</Path>
+					<Path>SFX\Protagonist_Jump_5_B09F49DF.wem</Path>
+				</File>
+				<File Id="231963893" Language="SFX">
+					<ShortName>Money Prize.wav</ShortName>
+					<Path>SFX\Money Prize_B09F49DF.wem</Path>
 				</File>
 				<File Id="278238588" Language="SFX">
 					<ShortName>TempSFX_Collide2.wav</ShortName>
-					<Path>SFX/TempSFX_Collide2_B09F49DF.wem</Path>
+					<Path>SFX\TempSFX_Collide2_B09F49DF.wem</Path>
 				</File>
 				<File Id="321057588" Language="SFX">
 					<ShortName>UI Hits Game 1.wav</ShortName>
-					<Path>SFX/UI Hits Game 1_B09F49DF.wem</Path>
+					<Path>SFX\UI Hits Game 1_B09F49DF.wem</Path>
 				</File>
 				<File Id="332046191" Language="SFX">
 					<ShortName>Protagonist_Jump_3.wav</ShortName>
-					<Path>SFX/Protagonist_Jump_3_B09F49DF.wem</Path>
+					<Path>SFX\Protagonist_Jump_3_B09F49DF.wem</Path>
+				</File>
+				<File Id="336431912" Language="SFX">
+					<ShortName>Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04.wav</ShortName>
+					<Path>SFX\Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04_E8217EED.wem</Path>
 				</File>
 				<File Id="367121688" Language="SFX">
 					<ShortName>TempSFX_Collide.wav</ShortName>
-					<Path>SFX/TempSFX_Collide_B09F49DF.wem</Path>
+					<Path>SFX\TempSFX_Collide_B09F49DF.wem</Path>
 				</File>
 				<File Id="398061356" Language="SFX">
 					<ShortName>Protagonist_Jump_1.wav</ShortName>
-					<Path>SFX/Protagonist_Jump_1_B09F49DF.wem</Path>
+					<Path>SFX\Protagonist_Jump_1_B09F49DF.wem</Path>
 				</File>
 				<File Id="454977670" Language="SFX">
 					<ShortName>ConsumeLifeBox.wav</ShortName>
-					<Path>SFX/ConsumeLifeBox_B09F49DF.wem</Path>
+					<Path>SFX\ConsumeLifeBox_B09F49DF.wem</Path>
 				</File>
 				<File Id="567636655" Language="SFX">
 					<ShortName>JackHammer_far_03.wav</ShortName>
-					<Path>SFX/JackHammer_far_03_B09F49DF.wem</Path>
+					<Path>SFX\JackHammer_far_03_B09F49DF.wem</Path>
 				</File>
 				<File Id="598399752" Language="SFX">
 					<ShortName>effect 4.wav</ShortName>
-					<Path>SFX/effect 4_B09F49DF.wem</Path>
+					<Path>SFX\effect 4_B09F49DF.wem</Path>
+				</File>
+				<File Id="653454346" Language="SFX">
+					<ShortName>Cardboard Box Crashing v5.wav</ShortName>
+					<Path>SFX\Cardboard Box Crashing v5_B09F49DF.wem</Path>
+				</File>
+				<File Id="664351962" Language="SFX">
+					<ShortName>Acid Attack.wav</ShortName>
+					<Path>SFX\Acid Attack_B09F49DF.wem</Path>
+				</File>
+				<File Id="695924251" Language="SFX">
+					<ShortName>fire-torch-whoosh-movement-01.wav</ShortName>
+					<Path>SFX\fire-torch-whoosh-movement-01_BD185D5E.wem</Path>
+				</File>
+				<File Id="696361244" Language="SFX">
+					<ShortName>torch burn loop.wav</ShortName>
+					<Path>SFX\torch burn loop_C456DEB3.wem</Path>
+				</File>
+				<File Id="712398590" Language="SFX">
+					<ShortName>Cartoon Hit.wav</ShortName>
+					<Path>SFX\Cartoon Hit_B09F49DF.wem</Path>
+				</File>
+				<File Id="727884239" Language="SFX">
+					<ShortName>Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04.wav</ShortName>
+					<Path>SFX\Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04_B09F49DF.wem</Path>
+				</File>
+				<File Id="740197906" Language="SFX">
+					<ShortName>OBJECT_WOOD_Logs_Small_Fall_08.wav</ShortName>
+					<Path>SFX\OBJECT_WOOD_Logs_Small_Fall_08_B09F49DF.wem</Path>
 				</File>
 				<File Id="765091200" Language="SFX">
 					<ShortName>TempSFX_Push.wav</ShortName>
-					<Path>SFX/TempSFX_Push_B09F49DF.wem</Path>
+					<Path>SFX\TempSFX_Push_B09F49DF.wem</Path>
+				</File>
+				<File Id="805774241" Language="SFX">
+					<ShortName>Cardboard Box Crashing v3.wav</ShortName>
+					<Path>SFX\Cardboard Box Crashing v3_B09F49DF.wem</Path>
 				</File>
 				<File Id="842732134" Language="SFX">
 					<ShortName>Protagonist_Jump_6.wav</ShortName>
-					<Path>SFX/Protagonist_Jump_6_B09F49DF.wem</Path>
+					<Path>SFX\Protagonist_Jump_6_B09F49DF.wem</Path>
+				</File>
+				<File Id="845770983" Language="SFX">
+					<ShortName>Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03.wav</ShortName>
+					<Path>SFX\Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03_B09F49DF.wem</Path>
+				</File>
+				<File Id="858114505" Language="SFX">
+					<ShortName>electricity spark mystic.wav</ShortName>
+					<Path>SFX\electricity spark mystic_4811579D.wem</Path>
+				</File>
+				<File Id="865244144" Language="SFX">
+					<ShortName>SFX Videogame Health Potion Restore Life 3.wav</ShortName>
+					<Path>SFX\SFX Videogame Health Potion Restore Life 3_B09F49DF.wem</Path>
 				</File>
 				<File Id="878195806" Language="SFX">
 					<ShortName>TempSFX_Push1.wav</ShortName>
-					<Path>SFX/TempSFX_Push1_B09F49DF.wem</Path>
+					<Path>SFX\TempSFX_Push1_B09F49DF.wem</Path>
+				</File>
+				<File Id="889678760" Language="SFX">
+					<ShortName>RadarPingPitchshifted.wav</ShortName>
+					<Path>SFX\RadarPingPitchshifted_B09F49DF.wem</Path>
+				</File>
+				<File Id="926179735" Language="SFX">
+					<ShortName>Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03.wav</ShortName>
+					<Path>SFX\Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03_011139C8.wem</Path>
+				</File>
+				<File Id="941213969" Language="SFX">
+					<ShortName>Protagonist_Push_2.wav</ShortName>
+					<Path>SFX\Protagonist_Push_2_B09F49DF.wem</Path>
+				</File>
+				<File Id="967888007" Language="SFX">
+					<ShortName>Ta Da Orchestra Fanfare 2.wav</ShortName>
+					<Path>SFX\Ta Da Orchestra Fanfare 2_B09F49DF.wem</Path>
+				</File>
+				<File Id="979841132" Language="SFX">
+					<ShortName>Protagonist_Push_3.wav</ShortName>
+					<Path>SFX\Protagonist_Push_3_B09F49DF.wem</Path>
+				</File>
+				<File Id="981677076" Language="SFX">
+					<ShortName>ACID_Acid_Bomb_Explosion.wav</ShortName>
+					<Path>SFX\ACID_Acid_Bomb_Explosion_B09F49DF.wem</Path>
 				</File>
 				<File Id="986382276" Language="SFX">
 					<ShortName>Protagonist_Jump_2.wav</ShortName>
-					<Path>SFX/Protagonist_Jump_2_B09F49DF.wem</Path>
+					<Path>SFX\Protagonist_Jump_2_B09F49DF.wem</Path>
+				</File>
+				<File Id="1062430198" Language="SFX">
+					<ShortName>Protagonist_Push_1.wav</ShortName>
+					<Path>SFX\Protagonist_Push_1_B09F49DF.wem</Path>
 				</File>
 			</IncludedMemoryFiles>
 		</SoundBank>
-		<SoundBank Id="3734788450" Language="SFX" Hash="1437710146">
+		<SoundBank Id="3734788450" Language="SFX" Hash="3574184268">
 			<ObjectPath>\SoundBanks\Default Work Unit\BGM Work Unit\BGM_Bank</ObjectPath>
 			<ShortName>BGM_Bank</ShortName>
 			<Path>BGM_Bank.bnk</Path>
 			<IncludedEvents>
 				<Event Id="2985635692" Name="BGM_Start" ObjectPath="\Events\BGM\BGM_Start" DurationType="Infinite"/>
 				<Event Id="2090192256" Name="BGM_Stop" ObjectPath="\Events\BGM\BGM_Stop" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="3741135221" Name="Music_Region" ObjectPath="\Events\Music\General\Music_Region" DurationType="Infinite"/>
 			</IncludedEvents>
 			<IncludedMemoryFiles>
 				<File Id="37445038" Language="SFX">
 					<ShortName>TempleBGM.wav</ShortName>
-					<Path>SFX/TempleBGM_4811579D.wem</Path>
-				</File>
-				<File Id="75272111" Language="SFX">
-					<ShortName>OpenWorldBGM2.wav</ShortName>
-					<Path>SFX/OpenWorldBGM2_4811579D.wem</Path>
+					<Path>SFX\TempleBGM_4811579D.wem</Path>
 				</File>
 				<File Id="102912303" Language="SFX">
 					<ShortName>CoolSwing.wav</ShortName>
-					<Path>SFX/CoolSwing_4811579D.wem</Path>
+					<Path>SFX\CoolSwing_4811579D.wem</Path>
 				</File>
 				<File Id="165791469" Language="SFX">
 					<ShortName>LabBGM.wav</ShortName>
-					<Path>SFX/LabBGM_4811579D.wem</Path>
+					<Path>SFX\LabBGM_4811579D.wem</Path>
 				</File>
 				<File Id="377813988" Language="SFX">
 					<ShortName>ExcavationBGM.wav</ShortName>
-					<Path>SFX/ExcavationBGM_4811579D.wem</Path>
+					<Path>SFX\ExcavationBGM_4811579D.wem</Path>
+				</File>
+				<File Id="466124290" Language="SFX">
+					<ShortName>yt1s.com - Epic Battle Music  Epic Legend Auracle Music.wav</ShortName>
+					<Path>SFX\yt1s.com - Epic Battle Music  Epic Legend Auracle Music_4811579D.wem</Path>
+				</File>
+				<File Id="478411344" Language="SFX">
+					<ShortName>Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03.wav</ShortName>
+					<Path>SFX\Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03_4811579D.wem</Path>
+				</File>
+				<File Id="601941146" Language="SFX">
+					<ShortName>yt1s.com - Epic Orchestral Battle Music  Well End This War.wav</ShortName>
+					<Path>SFX\yt1s.com - Epic Orchestral Battle Music  Well End This War_4811579D.wem</Path>
 				</File>
 				<File Id="727134213" Language="SFX">
 					<ShortName>OpenWorldBGM.wav</ShortName>
-					<Path>SFX/OpenWorldBGM_4811579D.wem</Path>
+					<Path>SFX\OpenWorldBGM_4811579D.wem</Path>
+				</File>
+				<File Id="971736339" Language="SFX">
+					<ShortName>yt1s.com - Dark Fantasy Battle Music  The Lord Of Chaos .wav</ShortName>
+					<Path>SFX\yt1s.com - Dark Fantasy Battle Music  The Lord Of Chaos _4811579D.wem</Path>
 				</File>
 			</IncludedMemoryFiles>
+			<GameParameters>
+				<GameParameter Id="2648624475" Name="SpiderLegDistanceToPlayer" ObjectPath="\Game Parameters\Enemies\SpiderLegDistanceToPlayer"/>
+			</GameParameters>
 			<StateGroups>
-				<StateGroup Id="3129336127" Name="BGM_CombatState" ObjectPath="\States\Default Work Unit\BGM_CombatState">
+				<StateGroup Id="2106907484" Name="Music_Regions" ObjectPath="\States\MusicStates\Music_Regions">
 					<States>
-						<State Id="748895195" Name="None" ObjectPath="\States\Default Work Unit\BGM_CombatState\None"/>
-						<State Id="1160234136" Name="Normal" ObjectPath="\States\Default Work Unit\BGM_CombatState\Normal"/>
-						<State Id="1823678183" Name="Exploring" ObjectPath="\States\Default Work Unit\BGM_CombatState\Exploring"/>
-						<State Id="3373579172" Name="InCombat" ObjectPath="\States\Default Work Unit\BGM_CombatState\InCombat"/>
-						<State Id="789371013" Name="InEliteCombat" ObjectPath="\States\Default Work Unit\BGM_CombatState\InEliteCombat"/>
-						<State Id="687614019" Name="InBossCombat" ObjectPath="\States\Default Work Unit\BGM_CombatState\InBossCombat"/>
-						<State Id="1022704585" Name="InSpiderLegCombat_Phase_1" ObjectPath="\States\Default Work Unit\BGM_CombatState\InSpiderLegCombat_Phase_1"/>
-						<State Id="1022704586" Name="InSpiderLegCombat_Phase_2" ObjectPath="\States\Default Work Unit\BGM_CombatState\InSpiderLegCombat_Phase_2"/>
-						<State Id="1022704587" Name="InSpiderLegCombat_Phase_3" ObjectPath="\States\Default Work Unit\BGM_CombatState\InSpiderLegCombat_Phase_3"/>
+						<State Id="748895195" Name="None" ObjectPath="\States\MusicStates\Music_Regions\None"/>
+						<State Id="2009274547" Name="OpenWorld" ObjectPath="\States\MusicStates\Music_Regions\OpenWorld"/>
+						<State Id="2323193050" Name="Temple" ObjectPath="\States\MusicStates\Music_Regions\Temple"/>
+						<State Id="578926554" Name="Lab" ObjectPath="\States\MusicStates\Music_Regions\Lab"/>
+						<State Id="2525109375" Name="Excavation" ObjectPath="\States\MusicStates\Music_Regions\Excavation"/>
+						<State Id="3762955427" Name="Tutorial" ObjectPath="\States\MusicStates\Music_Regions\Tutorial"/>
 					</States>
 				</StateGroup>
-				<StateGroup Id="3258568639" Name="BGM_Theme" ObjectPath="\States\Default Work Unit\BGM_Theme">
+				<StateGroup Id="2764240573" Name="Combat" ObjectPath="\States\MusicStates\Combat">
 					<States>
-						<State Id="748895195" Name="None" ObjectPath="\States\Default Work Unit\BGM_Theme\None"/>
-						<State Id="2009274547" Name="OpenWorld" ObjectPath="\States\Default Work Unit\BGM_Theme\OpenWorld"/>
-						<State Id="2323193050" Name="Temple" ObjectPath="\States\Default Work Unit\BGM_Theme\Temple"/>
-						<State Id="578926554" Name="Lab" ObjectPath="\States\Default Work Unit\BGM_Theme\Lab"/>
-						<State Id="2525109375" Name="Excavation" ObjectPath="\States\Default Work Unit\BGM_Theme\Excavation"/>
-						<State Id="3762955427" Name="Tutorial" ObjectPath="\States\Default Work Unit\BGM_Theme\Tutorial"/>
+						<State Id="748895195" Name="None" ObjectPath="\States\MusicStates\Combat\None"/>
+						<State Id="3373579172" Name="InCombat" ObjectPath="\States\MusicStates\Combat\InCombat"/>
+						<State Id="789371013" Name="InEliteCombat" ObjectPath="\States\MusicStates\Combat\InEliteCombat"/>
+						<State Id="687614019" Name="InBossCombat" ObjectPath="\States\MusicStates\Combat\InBossCombat"/>
+						<State Id="1823678183" Name="Exploring" ObjectPath="\States\MusicStates\Combat\Exploring"/>
+						<State Id="1022704585" Name="InSpiderLegCombat_Phase_1" ObjectPath="\States\MusicStates\Combat\InSpiderLegCombat_Phase_1"/>
+						<State Id="1022704586" Name="InSpiderLegCombat_Phase_2" ObjectPath="\States\MusicStates\Combat\InSpiderLegCombat_Phase_2"/>
+						<State Id="1022704587" Name="InSpiderLegCombat_Phase_3" ObjectPath="\States\MusicStates\Combat\InSpiderLegCombat_Phase_3"/>
+						<State Id="3966798339" Name="InCamp" ObjectPath="\States\MusicStates\Combat\InCamp"/>
 					</States>
 				</StateGroup>
 			</StateGroups>
+			<Triggers>
+				<Trigger Id="821629565" Name="Trigger_PlayerDeath" ObjectPath="\Triggers\Default Work Unit\Trigger_PlayerDeath"/>
+				<Trigger Id="1218580015" Name="Trigger_Teleport" ObjectPath="\Triggers\Default Work Unit\Trigger_Teleport"/>
+				<Trigger Id="1605137596" Name="Trigger_Victory" ObjectPath="\Triggers\Default Work Unit\Trigger_Victory"/>
+			</Triggers>
 		</SoundBank>
 	</SoundBanks>
 </SoundBanksInfo>
