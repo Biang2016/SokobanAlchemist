@@ -25,9 +25,8 @@ MonoBehaviour:
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: (8e70492d-b44e-4f46-b791-7f4c7bacb2a0)
-        SkillDescription: Spend 1 ice element, freeze everything inside 1 unit radius.
+        SkillDescription: Spend 5 ice element, freeze everything inside 1 unit radius.
         TargetCamp: 14
-        EntitySkillIndex: 0
         SkillsPropertyCollection:
           CastingRadius:
             BaseValue: 0
@@ -70,7 +69,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           ConsumeIceElementFragment:
-            BaseValue: 20
+            BaseValue: 5
             ModifiedValue: 1
             MinValue: 0
             MaxValue: 1000
@@ -80,6 +79,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
         TriggerWhenMissProbabilityPercent: 100
+        EntitySkillConditions: []
         WingUpCanMove: 0
         CastCanMove: 0
         RecoverCanMove: 1

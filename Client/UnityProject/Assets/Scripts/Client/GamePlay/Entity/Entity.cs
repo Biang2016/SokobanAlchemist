@@ -571,6 +571,10 @@ public abstract class Entity : PoolObject
                 }
 
                 actor.ActorSkillLearningHelper?.BindActiveSkillToKey(eas.EntitySkillIndex, keyBind, clearAllExistedSkillInKeyBind);
+                if (ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].SkillSlotDict.TryGetValue(keyBind, out SkillSlot skillSlot))
+                {
+                    skillSlot.Initialize(eas);
+                }
             }
         }
     }
@@ -586,6 +590,10 @@ public abstract class Entity : PoolObject
                     foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> kv in pch.SkillKeyMappings)
                     {
                         kv.Value.Remove(eas.EntitySkillIndex);
+                        if (ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].SkillSlotDict.TryGetValue(kv.Key, out SkillSlot skillSlot))
+                        {
+                            skillSlot.Initialize(null);
+                        }
                     }
                 }
 

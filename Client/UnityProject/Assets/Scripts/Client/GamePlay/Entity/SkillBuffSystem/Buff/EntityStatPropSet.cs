@@ -479,7 +479,7 @@ public class EntityStatPropSet
     {
         if (Entity == BattleManager.Instance.Player1)
         {
-            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].ActionPointBar.OnStatLowWarning();
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].ActionPointBottle.OnStatLowWarning();
         }
     }
 
@@ -505,7 +505,7 @@ public class EntityStatPropSet
     {
         if (Entity == BattleManager.Instance.Player1)
         {
-            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].FireElementFragmentBar.OnStatLowWarning();
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].FireElementBottle.OnStatLowWarning();
         }
     }
 
@@ -522,7 +522,7 @@ public class EntityStatPropSet
     {
         if (Entity == BattleManager.Instance.Player1)
         {
-            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].IceElementFragmentBar.OnStatLowWarning();
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].IceElementBottle.OnStatLowWarning();
         }
     }
 
@@ -539,7 +539,7 @@ public class EntityStatPropSet
     {
         if (Entity == BattleManager.Instance.Player1)
         {
-            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].LightningElementFragmentBar.OnStatLowWarning();
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].LightningElementBottle.OnStatLowWarning();
         }
     }
 

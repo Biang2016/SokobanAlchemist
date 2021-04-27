@@ -5,79 +5,70 @@ using UnityEngine.UI;
 
 public class PlayerStatHUD : MonoBehaviour
 {
+    void Awake()
+    {
+        SkillSlotDict.Add(PlayerControllerHelper.KeyBind.Num1, SkillSlot_Num1);
+        SkillSlotDict.Add(PlayerControllerHelper.KeyBind.Num2, SkillSlot_Num2);
+        SkillSlotDict.Add(PlayerControllerHelper.KeyBind.Num3, SkillSlot_Num3);
+        SkillSlotDict.Add(PlayerControllerHelper.KeyBind.Num4, SkillSlot_Num4);
+    }
+
     public void Initialize(ActorBattleHelper helper)
     {
         EntityStatPropSet asps = helper.Actor.EntityStatPropSet;
 
-        SetHealth(asps.HealthDurability.Value, asps.HealthDurability.MinValue, asps.HealthDurability.MaxValue);
-        asps.HealthDurability.m_NotifyActionSet.OnChanged += SetHealth;
+        HealthBottle.RefreshValue(asps.HealthDurability.Value, asps.HealthDurability.MinValue, asps.HealthDurability.MaxValue);
+        asps.HealthDurability.m_NotifyActionSet.OnChanged += HealthBottle.RefreshValue;
 
-        ActionPointBar.Initialize(EntityStatType.ActionPoint, 1);
-        ActionPointBar.SetStat(asps.ActionPoint.Value, asps.ActionPoint.MinValue, asps.ActionPoint.MaxValue);
-        asps.ActionPoint.m_NotifyActionSet.OnChanged += ActionPointBar.SetStat;
+        ActionPointBottle.RefreshValue(asps.ActionPoint.Value, asps.ActionPoint.MinValue, asps.ActionPoint.MaxValue);
+        asps.ActionPoint.m_NotifyActionSet.OnChanged += ActionPointBottle.RefreshValue;
 
-        SetGold(asps.Gold.Value);
-        asps.Gold.m_NotifyActionSet.OnChanged += (value, min, max) => SetGold(value);
+        GoldBottle.Initialize();
+        GoldBottle.RefreshValue(asps.Gold.Value, asps.Gold.MinValue, asps.Gold.MaxValue);
+        asps.Gold.m_NotifyActionSet.OnChanged += GoldBottle.RefreshValue;
 
-        FireElementFragmentBar.Initialize(EntityStatType.FireElementFragment, 10);
-        FireElementFragmentBar.SetStat(asps.FireElementFragment.Value, asps.FireElementFragment.MinValue, asps.FireElementFragment.MaxValue);
-        asps.FireElementFragment.m_NotifyActionSet.OnChanged += FireElementFragmentBar.SetStat;
+        FireElementBottle.Initialize(PlayerControllerHelper.KeyBind.J_RightTrigger);
+        FireElementBottle.RefreshValue(asps.FireElementFragment.Value, asps.FireElementFragment.MinValue, asps.FireElementFragment.MaxValue);
+        asps.FireElementFragment.m_NotifyActionSet.OnChanged += FireElementBottle.RefreshValue;
 
-        IceElementFragmentBar.Initialize(EntityStatType.IceElementFragment, 20);
-        IceElementFragmentBar.SetStat(asps.IceElementFragment.Value, asps.IceElementFragment.MinValue, asps.IceElementFragment.MaxValue);
-        asps.IceElementFragment.m_NotifyActionSet.OnChanged += IceElementFragmentBar.SetStat;
+        IceElementBottle.Initialize(PlayerControllerHelper.KeyBind.K);
+        IceElementBottle.RefreshValue(asps.IceElementFragment.Value, asps.IceElementFragment.MinValue, asps.IceElementFragment.MaxValue);
+        asps.IceElementFragment.m_NotifyActionSet.OnChanged += IceElementBottle.RefreshValue;
 
-        LightningElementFragmentBar.Initialize(EntityStatType.LightningElementFragment, 1);
-        LightningElementFragmentBar.SetStat(asps.LightningElementFragment.Value, asps.LightningElementFragment.MinValue, asps.LightningElementFragment.MaxValue);
-        asps.LightningElementFragment.m_NotifyActionSet.OnChanged += LightningElementFragmentBar.SetStat;
+        LightningElementBottle.Initialize(PlayerControllerHelper.KeyBind.L);
+        LightningElementBottle.RefreshValue(asps.LightningElementFragment.Value, asps.LightningElementFragment.MinValue, asps.LightningElementFragment.MaxValue);
+        asps.LightningElementFragment.m_NotifyActionSet.OnChanged += LightningElementBottle.RefreshValue;
+
+        SkillSlot_Num1.Initialize(null);
+        SkillSlot_Num2.Initialize(null);
+        SkillSlot_Num3.Initialize(null);
+        SkillSlot_Num4.Initialize(null);
     }
 
-    #region Health
+    #region Health & ActionPoint
 
-    public Gradient HealthSliderFillImageGradient;
-    public Image HealthSliderFillImage;
-    public Slider HealthSlider;
-    public Animator HealthSliderHandleAnim;
-    public TextMeshProUGUI HealthText;
-    public Animator HealthTextAnim;
-
-    public void SetHealth(int current, int min, int max)
-    {
-        if (max == 0)
-        {
-            HealthSlider.value = 0f;
-        }
-        else
-        {
-            HealthSlider.value = (float) current / max;
-            HealthSliderHandleAnim.SetTrigger("Jump");
-        }
-
-        HealthSliderFillImage.color = HealthSliderFillImageGradient.Evaluate((float) current / max);
-        HealthTextAnim.SetTrigger("Jump");
-        HealthText.text = current.ToString();
-    }
-
-    #endregion
-
-    #region ActionPoint
-
-    public DiscreteStatPointBar ActionPointBar;
+    public SphereBottle HealthBottle;
+    public SphereBottle ActionPointBottle;
 
     #endregion
 
     #region 财产
 
-    public TextMeshProUGUI GoldText;
+    public ElementBottle GoldBottle;
+    public ElementBottle FireElementBottle;
+    public ElementBottle IceElementBottle;
+    public ElementBottle LightningElementBottle;
 
-    public void SetGold(int current)
-    {
-        GoldText.text = current.ToString();
-    }
+    #endregion
 
-    public DiscreteStatPointBar FireElementFragmentBar;
-    public DiscreteStatPointBar IceElementFragmentBar;
-    public DiscreteStatPointBar LightningElementFragmentBar;
+    #region SkillSlots
+
+    public Dictionary<PlayerControllerHelper.KeyBind, SkillSlot> SkillSlotDict = new Dictionary<PlayerControllerHelper.KeyBind, SkillSlot>();
+
+    public SkillSlot SkillSlot_Num1;
+    public SkillSlot SkillSlot_Num2;
+    public SkillSlot SkillSlot_Num3;
+    public SkillSlot SkillSlot_Num4;
 
     #endregion
 }
