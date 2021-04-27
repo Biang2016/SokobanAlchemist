@@ -100,7 +100,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2936910451847443326}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.154, y: 0.552, z: 0.157}
+  m_LocalPosition: {x: -0.416, y: 3.009, z: 0.448}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6600720139833440480}
@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 6600720139833440480}
   - component: {fileID: 9142494354364933658}
   m_Layer: 20
-  m_Name: EntityLightningGeneratorHelper (2)
+  m_Name: EntityLightningGeneratorHelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -130,9 +130,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3557420060694059705}
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0, y: 0, z: 0.014285712}
-  m_LocalScale: {x: 0.028571434, y: 0.028571438, z: 0.028571438}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2357031868214765188}
   m_Father: {fileID: 5909615261843532136}
@@ -176,7 +176,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3732408833491594067}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.154, y: 0.562, z: 0.182}
+  m_LocalPosition: {x: -0.42, y: 2.98, z: 0.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4667705033964045142}
@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 4667705033964045142}
   - component: {fileID: 6627292486422510454}
   m_Layer: 20
-  m_Name: EntityLightningGeneratorHelper (1)
+  m_Name: EntityLightningGeneratorHelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -206,9 +206,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5926485307395746605}
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0, y: 0, z: 0.0142857125}
-  m_LocalScale: {x: 0.02857143, y: 0.028571438, z: 0.028571438}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 708487131671070861}
   m_Father: {fileID: 3828305842174104863}
@@ -243,9 +243,6 @@ MonoBehaviour:
   Pivot: {fileID: 4895478766167816576}
   UseModelVariants: 1
   ModelVariants:
-  - GameObject: {fileID: 6388586902824718267}
-    probability: 1
-    isSingleton: 0
   - GameObject: {fileID: 6433668499106264018}
     probability: 1
     isSingleton: 0
@@ -273,17 +270,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 95b8f0a645c9456488dd680e58d8712d,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 35
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 95b8f0a645c9456488dd680e58d8712d,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 35
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 95b8f0a645c9456488dd680e58d8712d,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 35
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 95b8f0a645c9456488dd680e58d8712d,
         type: 3}
@@ -303,12 +300,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 95b8f0a645c9456488dd680e58d8712d,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071067
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 95b8f0a645c9456488dd680e58d8712d,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 95b8f0a645c9456488dd680e58d8712d,
         type: 3}
@@ -318,7 +315,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 95b8f0a645c9456488dd680e58d8712d,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 95b8f0a645c9456488dd680e58d8712d,
         type: 3}
@@ -344,20 +341,45 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: ef573351d136e8449b2789fda6f5c61f, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 95b8f0a645c9456488dd680e58d8712d,
         type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
       objectReference: {fileID: 2100000, guid: 58f7a0461f2dbb04ea60de3b0095ceb4, type: 2}
+    - target: {fileID: -6992485226205158233, guid: 95b8f0a645c9456488dd680e58d8712d,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -5908163146266368092, guid: 95b8f0a645c9456488dd680e58d8712d,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 58f7a0461f2dbb04ea60de3b0095ceb4, type: 2}
+    - target: {fileID: -5908163146266368092, guid: 95b8f0a645c9456488dd680e58d8712d,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: d498c555652186346b43e86322209109, type: 2}
+    - target: {fileID: -4813063946722226727, guid: 95b8f0a645c9456488dd680e58d8712d,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 95b8f0a645c9456488dd680e58d8712d,
         type: 3}
       propertyPath: m_Name
-      value: electricitybox2
+      value: LightningBox_1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 95b8f0a645c9456488dd680e58d8712d,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6859582725635117845, guid: 95b8f0a645c9456488dd680e58d8712d,
+        type: 3}
+      propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -470,7 +492,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[3]
       value: 
-      objectReference: {fileID: 2100000, guid: ef573351d136e8449b2789fda6f5c61f, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d5282be111e565e428d505c7c2ecd921,
         type: 3}
       propertyPath: m_Name
@@ -484,16 +506,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d5282be111e565e428d505c7c2ecd921,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5282be111e565e428d505c7c2ecd921, type: 3}
---- !u!1 &6388586902824718267 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d5282be111e565e428d505c7c2ecd921,
-    type: 3}
-  m_PrefabInstance: {fileID: 6082595225687667434}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6044676619596256513 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d5282be111e565e428d505c7c2ecd921,
@@ -586,7 +602,7 @@ PrefabInstance:
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: BoxLightningGeneratorHelpers.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -852,12 +868,12 @@ PrefabInstance:
         type: 3}
       propertyPath: BoxLightningGeneratorHelpers.Array.data[0]
       value: 
-      objectReference: {fileID: 5493950490796493808}
+      objectReference: {fileID: 6627292486422510454}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: BoxLightningGeneratorHelpers.Array.data[1]
       value: 
-      objectReference: {fileID: 6627292486422510454}
+      objectReference: {fileID: 9142494354364933658}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: BoxLightningGeneratorHelpers.Array.data[2]
@@ -1409,17 +1425,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 4e8ce642ef3179049aa609791d6b127f,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 35
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4e8ce642ef3179049aa609791d6b127f,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 35
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4e8ce642ef3179049aa609791d6b127f,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 35
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4e8ce642ef3179049aa609791d6b127f,
         type: 3}
@@ -1439,12 +1455,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 4e8ce642ef3179049aa609791d6b127f,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071067
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4e8ce642ef3179049aa609791d6b127f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4e8ce642ef3179049aa609791d6b127f,
         type: 3}
@@ -1454,7 +1470,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 4e8ce642ef3179049aa609791d6b127f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4e8ce642ef3179049aa609791d6b127f,
         type: 3}
@@ -1475,21 +1491,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: d498c555652186346b43e86322209109, type: 2}
+      objectReference: {fileID: 2100000, guid: 58f7a0461f2dbb04ea60de3b0095ceb4, type: 2}
     - target: {fileID: -7511558181221131132, guid: 4e8ce642ef3179049aa609791d6b127f,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 58f7a0461f2dbb04ea60de3b0095ceb4, type: 2}
+      objectReference: {fileID: 2100000, guid: 9cf0886fe3c46f0478d47f6888ec6796, type: 2}
     - target: {fileID: -7511558181221131132, guid: 4e8ce642ef3179049aa609791d6b127f,
         type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: ef573351d136e8449b2789fda6f5c61f, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4e8ce642ef3179049aa609791d6b127f,
         type: 3}
       propertyPath: m_Name
-      value: electricitybox3
+      value: LightningBox_2
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4e8ce642ef3179049aa609791d6b127f,
         type: 3}
