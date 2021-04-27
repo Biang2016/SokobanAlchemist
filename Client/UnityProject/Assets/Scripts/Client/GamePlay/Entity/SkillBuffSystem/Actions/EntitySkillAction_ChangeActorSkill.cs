@@ -74,8 +74,10 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
             EntitySkill entitySkill = ConfigManager.GetEntitySkill(SkillGUID);
             if (entitySkill is EntityActiveSkill eas)
             {
-                target.AddNewActiveSkill(eas);
-                target.BindActiveSkillToKey(eas, KeyBind, false);
+                if (target.AddNewActiveSkill(eas))
+                {
+                    target.BindActiveSkillToKey(eas, KeyBind, false);
+                }
             }
             else if (entitySkill is EntityPassiveSkill eps)
             {

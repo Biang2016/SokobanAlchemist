@@ -177,7 +177,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         BoxMarchingSquareTerrainMat.SetTexture("_Albedo", array);
     }
 
-    public bool IsGameLoading = false;
+    internal bool IsGameLoading = false;
 
     private IEnumerator Co_StartGame()
     {
@@ -239,51 +239,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         UIBattleTipManager.Update(Time.deltaTime);
         GameSaveManager.Update(Time.deltaTime);
         FXManager.Update(Time.deltaTime);
-    }
-
-    void LateUpdate()
-    {
-        ControlManager.LateUpdate(Time.deltaTime);
-
-        ConfigManager.LateUpdate(Time.deltaTime);
-        LayerManager.LateUpdate(Time.deltaTime);
-        PrefabManager.LateUpdate(Time.deltaTime);
-        GameObjectPoolManager.LateUpdate(Time.deltaTime);
-
-        RoutineManager.LateUpdate(Time.deltaTime);
-        GameStateManager.LateUpdate(Time.deltaTime);
-
-        BattleManager.LateUpdate(Time.deltaTime);
-        WorldManager.LateUpdate(Time.deltaTime);
-        ProjectileManager.LateUpdate(Time.deltaTime);
-        UIBattleTipManager.LateUpdate(Time.deltaTime);
-        GameSaveManager.LateUpdate(Time.deltaTime);
-        FXManager.LateUpdate(Time.deltaTime);
-    }
-
-    void FixedUpdate()
-    {
-        CurrentFixedFrameCount++;
-        CurrentFixedFrameCount_Mod_FixedFrameRate = CurrentFixedFrameCount % FixedFrameRate;
-        CurrentFixedFrameCount_Mod_FixedFrameRate_01X = CurrentFixedFrameCount % FixedFrameRate_01X;
-        CurrentFixedFrameCount_Mod_FixedFrameRate_5X = CurrentFixedFrameCount % FixedFrameRate_5X;
-        ControlManager.FixedUpdate(Time.fixedDeltaTime);
-        if (ControlManager.Common_RestartGame.Up && !IsGameLoading)
-        {
-            if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
-            {
-                if (openWorld.IsInsideMicroWorld)
-                {
-                    openWorld.RestartMicroWorld(false);
-                    return;
-                }
-            }
-            else
-            {
-                StartCoroutine(ReloadGame());
-                return;
-            }
-        }
 
 #if DEBUG
         if (Input.GetKeyUp(KeyCode.F10) && !IsGameLoading)
@@ -351,6 +306,51 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         if (Input.GetKeyUp(KeyCode.N))
         {
             EntitySkillPreviewPanel.Hide();
+        }
+    }
+
+    void LateUpdate()
+    {
+        ControlManager.LateUpdate(Time.deltaTime);
+
+        ConfigManager.LateUpdate(Time.deltaTime);
+        LayerManager.LateUpdate(Time.deltaTime);
+        PrefabManager.LateUpdate(Time.deltaTime);
+        GameObjectPoolManager.LateUpdate(Time.deltaTime);
+
+        RoutineManager.LateUpdate(Time.deltaTime);
+        GameStateManager.LateUpdate(Time.deltaTime);
+
+        BattleManager.LateUpdate(Time.deltaTime);
+        WorldManager.LateUpdate(Time.deltaTime);
+        ProjectileManager.LateUpdate(Time.deltaTime);
+        UIBattleTipManager.LateUpdate(Time.deltaTime);
+        GameSaveManager.LateUpdate(Time.deltaTime);
+        FXManager.LateUpdate(Time.deltaTime);
+    }
+
+    void FixedUpdate()
+    {
+        CurrentFixedFrameCount++;
+        CurrentFixedFrameCount_Mod_FixedFrameRate = CurrentFixedFrameCount % FixedFrameRate;
+        CurrentFixedFrameCount_Mod_FixedFrameRate_01X = CurrentFixedFrameCount % FixedFrameRate_01X;
+        CurrentFixedFrameCount_Mod_FixedFrameRate_5X = CurrentFixedFrameCount % FixedFrameRate_5X;
+        ControlManager.FixedUpdate(Time.fixedDeltaTime);
+        if (ControlManager.Common_RestartGame.Up && !IsGameLoading)
+        {
+            if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+            {
+                if (openWorld.IsInsideMicroWorld)
+                {
+                    openWorld.RestartMicroWorld(false);
+                    return;
+                }
+            }
+            else
+            {
+                StartCoroutine(ReloadGame());
+                return;
+            }
         }
 
         if (ControlManager.Battle_LeftRotateCamera.Up)

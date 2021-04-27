@@ -525,14 +525,16 @@ public class Actor : Entity
             if (rawEntitySkill is EntityActiveSkill eas)
             {
                 EntitySkillIndex skillIndex = srcASLD.LearnedActiveSkillDict[skillGUID];
-                AddNewActiveSkill(eas, skillIndex);
-                foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> kv in srcASLD.SkillKeyMappings)
+                if (AddNewActiveSkill(eas, skillIndex))
                 {
-                    foreach (EntitySkillIndex esi in kv.Value)
+                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> kv in srcASLD.SkillKeyMappings)
                     {
-                        if (esi == skillIndex)
+                        foreach (EntitySkillIndex esi in kv.Value)
                         {
-                            BindActiveSkillToKey(eas, kv.Key, false);
+                            if (esi == skillIndex)
+                            {
+                                BindActiveSkillToKey(eas, kv.Key, false);
+                            }
                         }
                     }
                 }

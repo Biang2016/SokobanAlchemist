@@ -1,0 +1,134 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u7535\u6D41\u7535\u51FB_(986be3f2-aacb-42e5-ab2a-584b54044be2)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        SkillGUID: (986be3f2-aacb-42e5-ab2a-584b54044be2)
+        SkillAlias: "\u7535\u6D41\u7535\u51FB"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: 
+        SkillDescription: 
+        PassiveSkillCondition: 128
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
+        RawEntitySkillActions:
+        - id: 1
+    00000001:
+      type: {class: EntitySkillAction_TriggerZoneAction, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        EffectiveOnRelativeCamp: 15
+        EffectiveOnSpecificEntity: 0
+        EffectiveOnSpecificEntityType:
+          TypeDefineType: 0
+          TypeGUID: 
+        EntityActions_Enter:
+        - id: 2
+        EntityActions_Stay:
+        - id: 3
+        MaxTriggerTimeWhenStay: 999999
+        EffectiveWhenInteractiveKeyDown: 0
+        InteractiveKeyNotice: 
+        TipPositionType: 5
+        InteractiveKeyNoticeDuration: 0.5
+        ActionInterval: 0.33
+        EntityActions_Exit: []
+    00000002:
+      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        RawEntityBuffs:
+        - id: 4
+    00000003:
+      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        RawEntityBuffs:
+        - id: 5
+    00000004:
+      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
+      data:
+        GUID: 10816
+        BuffAlias: 
+        EntityBuffAttribute: 39
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0.3
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (c92d5cef-5f0e-4373-b907-91a8812d72c5)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        PropertyCategory: 0
+        EntityPropertyType: 30
+        EntitySkillSO: {fileID: 0}
+        SkillGUID: 
+        EntitySkillPropertyType: 0
+        Percent: -100
+        LinearDecayInDuration: 1
+    00000005:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10817
+        BuffAlias: 
+        EntityBuffAttribute: 40
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 0
+        Delta: -1
+        Percent: 0

@@ -10,13 +10,13 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
 
     public List<EntityFlamethrower> EntityFlamethrowers = new List<EntityFlamethrower>();
 
-    [LabelText("技能容器")]
-    public EntityPassiveSkill_Conditional FlamethrowerPassiveSkill_Raw;
+    [LabelText("喷火器技能")]
+    public EntitySkillSO FlamethrowerSkillSO;
 
     [LabelText("技能容器实时")]
     [ShowInInspector]
     [HideInEditorMode]
-    public EntityPassiveSkill_Conditional FlamethrowerPassiveSkill;
+    public EntityPassiveSkill_Conditional FlamethrowerSkill;
 
     [LabelText("燃料数据实时")]
     [ShowInInspector]
@@ -89,13 +89,13 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
         CurrentFlamethrowerFuelData = fuelData;
 
         // 将上一次设好的技能全部清空
-        FlamethrowerPassiveSkill?.OnUnRegisterLevelEventID();
-        FlamethrowerPassiveSkill?.OnUnInit();
-        FlamethrowerPassiveSkill = (EntityPassiveSkill_Conditional) FlamethrowerPassiveSkill_Raw.Clone(); // 再次创建空技能容器
-        FlamethrowerPassiveSkill.RawEntitySkillActions = CurrentFlamethrowerFuelData.RawEntitySkillActions_ForFlamethrower;
-        FlamethrowerPassiveSkill.Entity = Entity;
-        FlamethrowerPassiveSkill.OnInit();
-        FlamethrowerPassiveSkill.OnRegisterLevelEventID();
+        FlamethrowerSkill?.OnUnRegisterLevelEventID();
+        FlamethrowerSkill?.OnUnInit();
+        FlamethrowerSkill = (EntityPassiveSkill_Conditional) FlamethrowerSkillSO.EntitySkill.Clone(); // 再次创建空技能容器
+        FlamethrowerSkill.RawEntitySkillActions = CurrentFlamethrowerFuelData.RawEntitySkillActions_ForFlamethrower;
+        FlamethrowerSkill.Entity = Entity;
+        FlamethrowerSkill.OnInit();
+        FlamethrowerSkill.OnRegisterLevelEventID();
 
         foreach (EntityFlamethrower ef in EntityFlamethrowers)
         {
@@ -133,11 +133,11 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
         if (!forced && !FireOn) return;
         FireOn = false;
 
-        if (FlamethrowerPassiveSkill != null)
+        if (FlamethrowerSkill != null)
         {
-            FlamethrowerPassiveSkill.OnUnRegisterLevelEventID();
-            FlamethrowerPassiveSkill.OnUnInit();
-            FlamethrowerPassiveSkill = null;
+            FlamethrowerSkill.OnUnRegisterLevelEventID();
+            FlamethrowerSkill.OnUnInit();
+            FlamethrowerSkill = null;
         }
 
         CurrentFlamethrowerFuelData = null;
@@ -152,17 +152,17 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
     // todo 此处有风险，两个Trigger进出次序如果很极限的话，有可能exit不触发就换技能了
     public void OnTriggerZoneEnter(Collider c)
     {
-        FlamethrowerPassiveSkill?.OnTriggerZoneEnter(c);
+        FlamethrowerSkill?.OnTriggerZoneEnter(c);
     }
 
     public void OnTriggerZoneStay(Collider c)
     {
-        FlamethrowerPassiveSkill?.OnTriggerZoneStay(c);
+        FlamethrowerSkill?.OnTriggerZoneStay(c);
     }
 
     public void OnTriggerZoneExit(Collider c)
     {
-        FlamethrowerPassiveSkill?.OnTriggerZoneExit(c);
+        FlamethrowerSkill?.OnTriggerZoneExit(c);
     }
 
     [Serializable]

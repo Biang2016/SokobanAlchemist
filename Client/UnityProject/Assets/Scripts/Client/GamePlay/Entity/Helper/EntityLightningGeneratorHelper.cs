@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZoneHelper
 {
-    [LabelText("技能容器")]
-    public EntityPassiveSkill_Conditional LightningPassiveSkill;
+    [LabelText("闪电技能")]
+    public EntitySkillSO LightningSkillSO;
+
+    private EntityPassiveSkill LightningSkill;
 
     private List<EntityLightning> EntityLightnings = new List<EntityLightning>();
 
@@ -14,6 +16,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
 
     void Awake()
     {
+        LightningSkill = (EntityPassiveSkill) LightningSkillSO.EntitySkill.Clone();
     }
 
     public override void OnHelperRecycled()
@@ -25,17 +28,17 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
         }
 
         EntityLightnings.Clear();
-        LightningPassiveSkill.Entity = null;
-        LightningPassiveSkill.OnUnRegisterLevelEventID();
-        LightningPassiveSkill.OnUnInit();
+        LightningSkill.Entity = null;
+        LightningSkill.OnUnRegisterLevelEventID();
+        LightningSkill.OnUnInit();
     }
 
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
-        LightningPassiveSkill.Entity = Entity;
-        LightningPassiveSkill.OnInit();
-        LightningPassiveSkill.OnRegisterLevelEventID();
+        LightningSkill.Entity = Entity;
+        LightningSkill.OnInit();
+        LightningSkill.OnRegisterLevelEventID();
     }
 
     private List<EntityLightning> cached_removeLightnings = new List<EntityLightning>(4);
@@ -140,7 +143,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
     {
         if (Entity.IsNotNullAndAlive())
         {
-            LightningPassiveSkill?.OnTriggerZoneEnter(c);
+            LightningSkill?.OnTriggerZoneEnter(c);
         }
     }
 
@@ -148,7 +151,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
     {
         if (Entity.IsNotNullAndAlive())
         {
-            LightningPassiveSkill?.OnTriggerZoneStay(c);
+            LightningSkill?.OnTriggerZoneStay(c);
         }
     }
 
@@ -156,7 +159,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
     {
         if (Entity.IsNotNullAndAlive())
         {
-            LightningPassiveSkill?.OnTriggerZoneExit(c);
+            LightningSkill?.OnTriggerZoneExit(c);
         }
     }
 }

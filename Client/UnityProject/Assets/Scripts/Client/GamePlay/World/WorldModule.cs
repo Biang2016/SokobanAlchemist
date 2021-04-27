@@ -45,6 +45,7 @@ public class WorldModule : PoolObject
     public WorldWallCollider WorldWallCollider;
     public WorldGroundCollider WorldGroundCollider;
     protected List<Entity> WorldModuleTriggerEntities = new List<Entity>();
+    public List<CollectableItem> WorldModuleCollectableItems = new List<CollectableItem>();
 
     public List<EntityPassiveSkill_LevelEventTriggerAppear> EventTriggerAppearEntityPassiveSkillList = new List<EntityPassiveSkill_LevelEventTriggerAppear>();
 
@@ -166,6 +167,7 @@ public class WorldModule : PoolObject
 
     internal Transform WorldModuleBoxRoot;
     internal Transform WorldModuleTriggerRoot;
+    internal Transform WorldModuleCollectableItemRoot;
 
     #endregion
 
@@ -178,6 +180,8 @@ public class WorldModule : PoolObject
         WorldModuleBoxRoot.parent = transform;
         WorldModuleTriggerRoot = new GameObject("WorldModuleTriggerRoot").transform;
         WorldModuleTriggerRoot.parent = transform;
+        WorldModuleCollectableItemRoot = new GameObject("WorldModuleCollectableItemRoot").transform;
+        WorldModuleCollectableItemRoot.parent = transform;
     }
 
     [HideInEditorMode]
@@ -200,6 +204,12 @@ public class WorldModule : PoolObject
         }
 
         WorldModuleTriggerEntities.Clear();
+        foreach (CollectableItem ci in WorldModuleCollectableItems)
+        {
+            ci.PoolRecycle();
+        }
+
+        WorldModuleCollectableItems.Clear();
 
         int count = 0;
         // Clear Actor First
@@ -515,6 +525,10 @@ public class WorldModule : PoolObject
                                 }
                             }
                         }
+                        else
+                        {
+                            WorldModuleTriggerEntities.Add(box);
+                        }
 
                         return box;
                     }
@@ -548,6 +562,10 @@ public class WorldModule : PoolObject
                                     }
                                 }
                             }
+                        }
+                        else
+                        {
+                            WorldModuleTriggerEntities.Add(actor);
                         }
 
                         return actor;

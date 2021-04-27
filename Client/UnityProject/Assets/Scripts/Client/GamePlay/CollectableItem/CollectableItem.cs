@@ -39,6 +39,8 @@ public class CollectableItem : PoolObject
     [SerializeField]
     private FXConfig ConsumeFX;
 
+    internal WorldModule WorldModule;
+
     public enum Status
     {
         None,
@@ -62,6 +64,7 @@ public class CollectableItem : PoolObject
         CurrentStatus = Status.None;
         TrailParticleSystem.gameObject.SetActive(false);
         ChasedCallback = null;
+        WorldModule = null;
     }
 
     public override void OnUsed()
@@ -71,8 +74,9 @@ public class CollectableItem : PoolObject
         CurrentStatus = Status.None;
     }
 
-    public void Initialize()
+    public void Initialize(WorldModule worldModule)
     {
+        WorldModule = worldModule;
         ModelAnimator.SetBool("Floating", false);
     }
 
@@ -114,6 +118,8 @@ public class CollectableItem : PoolObject
     {
         if (CurrentStatus == Status.Flying || CurrentStatus == Status.Floating)
         {
+            WorldModule.WorldModuleCollectableItems.Remove(this);
+            WorldModule = null;
             CurrentStatus = Status.Chasing;
             StopAllCoroutines();
             Rigidbody.velocity = Vector3.zero;

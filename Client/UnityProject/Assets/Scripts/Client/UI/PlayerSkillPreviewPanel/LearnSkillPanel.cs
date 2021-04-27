@@ -73,9 +73,12 @@ public class LearnSkillPanel : BaseUIPanel
         void OnButtonClick(EntityActiveSkill rawEAS, PlayerControllerHelper.KeyBind keyBind)
         {
             EntityActiveSkill eas = (EntityActiveSkill) rawEAS.Clone();
-            BattleManager.Instance.Player1.AddNewActiveSkill(eas);
-            BattleManager.Instance.Player1.BindActiveSkillToKey(eas, keyBind, true);
-            ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
+            if (BattleManager.Instance.Player1.AddNewActiveSkill(eas))
+            {
+                BattleManager.Instance.Player1.BindActiveSkillToKey(eas, keyBind, true);
+                ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
+            }
+
             learnCallback?.Invoke();
             CloseUIForm();
         }
@@ -90,7 +93,6 @@ public class LearnSkillPanel : BaseUIPanel
     public override void Hide()
     {
         base.Hide();
-        m_EntitySkillRow?.PoolRecycle();
         LearnButton_Passive.onClick.RemoveAllListeners();
         LearnButton_H.onClick.RemoveAllListeners();
         LearnButton_J.onClick.RemoveAllListeners();

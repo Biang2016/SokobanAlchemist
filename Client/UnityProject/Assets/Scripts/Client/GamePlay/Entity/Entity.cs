@@ -507,24 +507,25 @@ public abstract class Entity : PoolObject
         ActiveSkillMarkAsDestroyed = false;
     }
 
-    public void AddNewActiveSkill(EntityActiveSkill eas)
+    public bool AddNewActiveSkill(EntityActiveSkill eas)
     {
         foreach (EntitySkillIndex si in Enum.GetValues(typeof(EntitySkillIndex)))
         {
             if (!EntityActiveSkillDict.ContainsKey(si))
             {
-                AddNewActiveSkill(eas, si);
-                return;
+                return AddNewActiveSkill(eas, si);
             }
         }
+
+        return false;
     }
 
-    public void AddNewActiveSkill(EntityActiveSkill eas, EntitySkillIndex skillIndex)
+    public bool AddNewActiveSkill(EntityActiveSkill eas, EntitySkillIndex skillIndex)
     {
         if (string.IsNullOrWhiteSpace(eas.SkillGUID))
         {
             Debug.LogError($"主动技能GUID为空: {eas.SkillAlias}");
-            return; // 不添加GUID为空的主动技能
+            return false; // 不添加GUID为空的主动技能
         }
 
         if (!EntityActiveSkillGUIDDict.ContainsKey(eas.SkillGUID))
@@ -540,10 +541,12 @@ public abstract class Entity : PoolObject
             eas.ParentActiveSkill = null;
             eas.EntitySkillIndex = skillIndex;
             eas.OnInit();
+            return true;
         }
         else
         {
             Debug.Log($"{name}添加主动技能失败{eas}，主动技能已存在");
+            return false;
         }
     }
 
@@ -831,15 +834,24 @@ public abstract class Entity : PoolObject
 
         void DropElementFragment(string size, int count)
         {
-            for (int i = 0; i < count; i++)
+            WorldModule worldModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(transform.position.ToGridPos3D());
+            if (worldModule == null) worldModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(WorldGP);
+            if (worldModule)
             {
-                Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(DropConeAngle * Mathf.Deg2Rad);
-                Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);
-
-                ushort index = ConfigManager.GetTypeIndex(TypeDefineType.CollectableItem, size + elementFragmentType);
-                CollectableItem ci = GameObjectPoolManager.Instance.CollectableItemDict[index].AllocateGameObject<CollectableItem>(WorldManager.Instance.CurrentWorld.transform);
-                ci.Initialize();
-                ci.ThrowFrom(transform.position, dropVel.normalized * DropVelocity);
+                for (int i = 0; i < count; i++)
+                {
+                    Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(DropConeAngle * Mathf.Deg2Rad);
+                    Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);
+                    ushort index = ConfigManager.GetTypeIndex(TypeDefineType.CollectableItem, size + elementFragmentType);
+                    CollectableItem ci = GameObjectPoolManager.Instance.CollectableItemDict[index].AllocateGameObject<CollectableItem>(worldModule.WorldModuleCollectableItemRoot);
+                    ci.Initialize(worldModule);
+                    ci.ThrowFrom(transform.position, dropVel.normalized * DropVelocity);
+                    worldModule.WorldModuleCollectableItems.Add(ci);
+                }
+            }
+            else
+            {
+                Debug.LogError("Entity不属于任何一个WorldModule，无法确定掉落物归属");
             }
         }
     }
