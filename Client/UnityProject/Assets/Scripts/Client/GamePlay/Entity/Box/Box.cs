@@ -657,6 +657,7 @@ public partial class Box : Entity
 
     public void Push(Vector3 direction, Actor actor)
     {
+        if (!Pushable) return;
         if (state == States.Static)
         {
             SetModelSmoothMoveLerpTime(0);
@@ -673,6 +674,7 @@ public partial class Box : Entity
 
     public void ForceStopWhenSwapBox(Actor actor)
     {
+        if (!Pushable) return;
         GridPos3D targetGP = transform.position.ToGridPos3D();
         GridPos3D moveDirection = (targetGP - WorldGP).Normalized();
         WorldManager.Instance.CurrentWorld.BoxColumnTransformDOPause(WorldGP, moveDirection, actor.GUID);

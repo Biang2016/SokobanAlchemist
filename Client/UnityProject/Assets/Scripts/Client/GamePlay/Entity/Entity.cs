@@ -274,6 +274,14 @@ public abstract class Entity : PoolObject
 
     #endregion
 
+    #region 仇恨 // 临时，未来用量化的仇恨值代替
+
+    [ShowInInspector]
+    [FoldoutGroup("状态")]
+    internal bool CanBeThreatened = true;
+
+    #endregion
+
     #region 技能
 
     [SerializeReference]
@@ -680,6 +688,12 @@ public abstract class Entity : PoolObject
         InitWorldModuleGUID = 0;
         destroyBecauseNotInAnyModuleTick = 0;
         IsDestroying = false;
+    }
+
+    public override void OnUsed()
+    {
+        base.OnUsed();
+        CanBeThreatened = true;
     }
 
     public void Setup(uint initWorldModuleGUID)

@@ -1,4 +1,5 @@
-﻿using BiangLibrary.ObjectPool;
+﻿using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.ObjectPool;
 using UnityEngine;
 #if UNITY_EDITOR
 #endif
@@ -6,6 +7,7 @@ using UnityEngine;
 public class EntityIndicator : PoolObject
 {
     public BoxCollider BoxCollider;
+    internal GridPos3D Offset;
 
     public override void OnRecycled()
     {

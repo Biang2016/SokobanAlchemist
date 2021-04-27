@@ -9,13 +9,17 @@ public class EntityIndicatorHelper : EntityMonoHelper
     [LabelText("占位信息")]
     public EntityOccupationData EntityOccupationData = new EntityOccupationData();
 
-    private List<Collider> IndicatorColliders = new List<Collider>();
+    private List<EntityIndicator> IndicatorColliders = new List<EntityIndicator>();
 
     public bool IsSpecialBoxIndicator = false; // MegaGroundBox 专用，为了减少Indicator数量而采取的合并措施
 
     void Awake()
     {
-        IndicatorColliders = GetComponentsInChildren<Collider>().ToList();
+        IndicatorColliders = GetComponentsInChildren<EntityIndicator>().ToList();
+        foreach (EntityIndicator indicator in IndicatorColliders)
+        {
+            indicator.Offset = indicator.transform.localPosition.ToGridPos3D();
+        }
     }
 
     public override void OnHelperUsed()
@@ -45,9 +49,9 @@ public class EntityIndicatorHelper : EntityMonoHelper
         set
         {
             isOn = value;
-            foreach (Collider ic in IndicatorColliders)
+            foreach (EntityIndicator ei in IndicatorColliders)
             {
-                ic.enabled = value;
+                ei.BoxCollider.enabled = value;
             }
 
             gameObject.SetActive(value);

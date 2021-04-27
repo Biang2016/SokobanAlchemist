@@ -53,10 +53,23 @@ public class AgentTarget
         get { return targetEntity; }
         set
         {
-            targetEntity = value;
             if (value != null)
             {
-                targetGP = targetEntity.EntityBaseCenter.ToGridPos3D();
+                if (value.CanBeThreatened)
+                {
+                    targetEntity = value;
+                    targetGP = targetEntity.EntityBaseCenter.ToGridPos3D();
+                }
+                else
+                {
+                    targetEntity = null;
+                    targetGP = GridPos3D.One * -1;
+                }
+            }
+            else
+            {
+                targetEntity = null;
+                targetGP = GridPos3D.One * -1;
             }
         }
     }
@@ -80,13 +93,23 @@ public class AgentTarget
         targetEntity = _targetEntity;
     }
 
-    public bool HasTarget => targetEntity.IsNotNullAndAlive() || targetGP != GridPos3D.One * -1;
+    public bool HasTarget
+    {
+        get { return (targetEntity.IsNotNullAndAlive() && targetEntity.CanBeThreatened) || targetGP != GridPos3D.One * -1; }
+    }
 
     public void RefreshTargetGP()
     {
         if (targetEntity.IsNotNullAndAlive())
         {
-            targetGP = targetEntity.EntityBaseCenter.ToGridPos3D();
+            if (targetEntity.CanBeThreatened)
+            {
+                targetGP = targetEntity.EntityBaseCenter.ToGridPos3D();
+            }
+            else
+            {
+                TargetEntity = null;
+            }
         }
         else
         {

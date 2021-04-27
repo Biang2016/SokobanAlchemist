@@ -213,13 +213,17 @@ public class Actor : Entity
                         {
                             // 检查改对象是否真的占据这几格，否则是bug
                             bool correctOccupation = false;
-                            foreach (GridPos3D _offset in targetGridEntity.GetEntityOccupationGPs_Rotated())
+                            List<GridPos3D> occupationGPs = targetGridEntity.GetEntityOccupationGPs_Rotated();
+                            if (occupationGPs != null)
                             {
-                                GridPos3D _gridPos = targetGridEntity.WorldGP + _offset;
-                                if (_gridPos == gridPos)
+                                foreach (GridPos3D _offset in occupationGPs)
                                 {
-                                    correctOccupation = true;
-                                    break;
+                                    GridPos3D _gridPos = targetGridEntity.WorldGP + _offset;
+                                    if (_gridPos == gridPos)
+                                    {
+                                        correctOccupation = true;
+                                        break;
+                                    }
                                 }
                             }
 

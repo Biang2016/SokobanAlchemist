@@ -130,10 +130,10 @@ public class NoticePanel : BaseUIPanel
 
     public void HideTip()
     {
+        TipText.text = "";
         if (!NoticeShown) return;
         if (hideTipCoroutine != null) StopCoroutine(hideTipCoroutine);
         TipAnim.SetTrigger("Hide");
-        TipText.text = "";
     }
 
     public enum TipPositionType

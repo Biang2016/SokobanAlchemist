@@ -258,7 +258,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             if (collider != null)
             {
                 Actor actor = collider.gameObject.GetComponentInParent<Actor>();
-                if (actor.IsNotNullAndAlive())
+                if (actor.IsNotNullAndAlive() && actor.CanBeThreatened)
                 {
                     if (!string.IsNullOrWhiteSpace(actorTypeName))
                     {
@@ -283,20 +283,6 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
 
         return nearestActor;
-    }
-
-    public List<Actor> SearchActors(Vector3 center, Camp executeCamp, float radius, RelativeCamp effectiveOnRelativeCamp)
-    {
-        cachedSearchActorList.Clear();
-        int layerMask = LayerManager.Instance.GetTargetEntityLayerMask(executeCamp, effectiveOnRelativeCamp);
-        Collider[] colliders = Physics.OverlapSphere(center, radius, layerMask);
-        foreach (Collider collider in colliders)
-        {
-            Actor actor = collider.gameObject.GetComponentInParent<Actor>();
-            if (actor.IsNotNullAndAlive()) cachedSearchActorList.Add(actor);
-        }
-
-        return cachedSearchActorList;
     }
 
     #region Buff

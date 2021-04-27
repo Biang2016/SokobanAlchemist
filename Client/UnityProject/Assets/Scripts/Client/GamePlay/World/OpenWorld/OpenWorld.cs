@@ -721,6 +721,7 @@ public class OpenWorld : World
         IsUsingSpecialESPSInsideMicroWorld = microWorldData.UseSpecialPlayerEnterESPS;
         PlayerData_BeforeEnterDungeon = PlayerData.GetPlayerData();
         if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(microWorldData.Raw_PlayerEnterESPS);
+        BattleManager.Instance.Player1.CanBeThreatened = true;
 
         ApplyWorldVisualEffectSettings(microWorldData);
 
@@ -780,6 +781,7 @@ public class OpenWorld : World
             }
         }
 
+        BattleManager.Instance.Player1.CanBeThreatened = true;
         if (rebornPlayer)
         {
             BattleManager.Instance.Player1.TransportPlayerGridPos(InitialPlayerBP); // 如果在dungeon里面死亡，复活回老家
@@ -925,6 +927,7 @@ public class OpenWorld : World
             Debug.LogWarning("传送的模组没有默认玩家出生点");
         }
 
+        BattleManager.Instance.Player1.CanBeThreatened = true;
         BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint);
         if (rebornPlayer)
         {

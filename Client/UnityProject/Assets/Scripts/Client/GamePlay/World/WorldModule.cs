@@ -56,7 +56,7 @@ public class WorldModule : PoolObject
     private Entity[,,] EntityMatrix_CheckOverlap_BoxAndActor = new Entity[MODULE_SIZE, MODULE_SIZE, MODULE_SIZE]; // 实体占位矩阵，包括!Passable的箱子和所有Actor
 
     // 此索引仅仅用于战斗时的Set，不可用于Recycle时候置空 
-    public Entity this[TypeDefineType entityType, GridPos3D localGP]
+    public Entity this[TypeDefineType entityType, GridPos3D localGP, bool partial = false] // Partial 针对门箱子这种，虽然Indicator占位变化，但主体未变化
     {
         get
         {
@@ -82,7 +82,7 @@ public class WorldModule : PoolObject
                 BoxMatrix[localGP.x, localGP.y, localGP.z] = boxValue;
                 if (value == null)
                 {
-                    WorldModuleData[TypeDefineType.Box, localGP] = null;
+                    if (!partial) WorldModuleData[TypeDefineType.Box, localGP] = null;
                     Entity entityInOverlapMatrix = EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z];
                     if (entityInOverlapMatrix != null && entityInOverlapMatrix is Box boxInOverlapMatrix)
                     {
@@ -91,18 +91,21 @@ public class WorldModule : PoolObject
                 }
                 else
                 {
-                    EntityData entityData = WorldModuleData[TypeDefineType.Box, localGP];
-                    if (entityData != null)
+                    if (!partial)
                     {
-                        entityData.EntityTypeIndex = value.EntityTypeIndex;
-                        entityData.EntityOrientation = value.EntityOrientation;
-                        entityData.EntityType.RefreshGUID();
-                    }
-                    else
-                    {
-                        if (WorldGPToLocalGP(value.WorldGP) == localGP) // 只针对核心格纪录data信息
+                        EntityData entityData = WorldModuleData[TypeDefineType.Box, localGP];
+                        if (entityData != null)
                         {
-                            WorldModuleData[TypeDefineType.Box, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                            entityData.EntityTypeIndex = value.EntityTypeIndex;
+                            entityData.EntityOrientation = value.EntityOrientation;
+                            entityData.EntityType.RefreshGUID();
+                        }
+                        else
+                        {
+                            if (WorldGPToLocalGP(value.WorldGP) == localGP) // 只针对核心格纪录data信息
+                            {
+                                WorldModuleData[TypeDefineType.Box, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                            }
                         }
                     }
 
@@ -115,7 +118,7 @@ public class WorldModule : PoolObject
             {
                 if (value == null)
                 {
-                    WorldModuleData[TypeDefineType.Actor, localGP] = null;
+                    if (!partial) WorldModuleData[TypeDefineType.Actor, localGP] = null;
                     Entity entityInOverlapMatrix = EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z];
                     if (entityInOverlapMatrix != null && entityInOverlapMatrix is Actor)
                     {
@@ -124,18 +127,21 @@ public class WorldModule : PoolObject
                 }
                 else
                 {
-                    EntityData entityData = WorldModuleData[TypeDefineType.Actor, localGP];
-                    if (entityData != null)
+                    if (!partial)
                     {
-                        entityData.EntityTypeIndex = value.EntityTypeIndex;
-                        entityData.EntityOrientation = value.EntityOrientation;
-                        entityData.EntityType.RefreshGUID();
-                    }
-                    else
-                    {
-                        if (WorldGPToLocalGP(value.WorldGP) == localGP) // 只针对核心格纪录data信息
+                        EntityData entityData = WorldModuleData[TypeDefineType.Actor, localGP];
+                        if (entityData != null)
                         {
-                            WorldModuleData[TypeDefineType.Actor, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                            entityData.EntityTypeIndex = value.EntityTypeIndex;
+                            entityData.EntityOrientation = value.EntityOrientation;
+                            entityData.EntityType.RefreshGUID();
+                        }
+                        else
+                        {
+                            if (WorldGPToLocalGP(value.WorldGP) == localGP) // 只针对核心格纪录data信息
+                            {
+                                WorldModuleData[TypeDefineType.Actor, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                            }
                         }
                     }
 
