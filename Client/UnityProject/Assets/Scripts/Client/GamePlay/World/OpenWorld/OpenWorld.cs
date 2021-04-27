@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay.UI;
@@ -25,7 +26,7 @@ public class OpenWorld : World
     public uint GivenSeed = 0;
 
     internal Dictionary<TypeDefineType, EntityData[,,]> WorldMap_EntityDataMatrix = new Dictionary<TypeDefineType, EntityData[,,]>(); // 地图元素放置, Y轴缩小16
-    internal TriggerEntityData[,,] WorldMap_TriggerEntityDataMatrix; // 地图Trigger实体放置, Y轴缩小16
+    internal List<TriggerEntityData>[,,] WorldMap_TriggerEntityDataMatrix; // 地图Trigger实体放置, Y轴缩小16
     internal List<EntityPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearEntityDataList = new List<EntityPassiveSkill_LevelEventTriggerAppear.Data>();
 
     #region Occupy
@@ -159,7 +160,14 @@ public class OpenWorld : World
 
         WorldMap_EntityDataMatrix.Add(TypeDefineType.Box, new EntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE]);
         WorldMap_EntityDataMatrix.Add(TypeDefineType.Actor, new EntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE]);
-        WorldMap_TriggerEntityDataMatrix = new TriggerEntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        WorldMap_TriggerEntityDataMatrix = new List<TriggerEntityData>[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+        for (int x = 0; x < WorldSize_X * WorldModule.MODULE_SIZE; x++)
+        for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
+        for (int z = 0; z < WorldSize_Z * WorldModule.MODULE_SIZE; z++)
+        {
+            WorldMap_TriggerEntityDataMatrix[x, y, z] = new List<TriggerEntityData>(4);
+        }
+
         WorldMap_Occupied_BetweenBoxes = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_Occupied_BoxAndActor = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
         WorldMap_StaticLayoutOccupied_IntactForStaticLayout = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
@@ -475,8 +483,8 @@ public class OpenWorld : World
                         {
                             GridPos3D worldGP = new GridPos3D(world_x, world_y, world_z);
                             GridPos3D localGP = worldGP - targetModuleGP * WorldModule.MODULE_SIZE;
-                            TriggerEntityData data = WorldMap_TriggerEntityDataMatrix[world_x, world_y - WorldModule.MODULE_SIZE, world_z]?.Clone();
-                            if (data != null)
+                            List<TriggerEntityData> dataList = WorldMap_TriggerEntityDataMatrix[world_x, world_y - WorldModule.MODULE_SIZE, world_z].Clone<TriggerEntityData, TriggerEntityData>();
+                            foreach (TriggerEntityData data in dataList)
                             {
                                 moduleData.TriggerEntityDataList.Add(data);
                             }
@@ -896,9 +904,9 @@ public class OpenWorld : World
                     MicroWorldModules.Add(module);
                     WorldData.WorldBornPointGroupData_Runtime.Init_LoadModuleData(realModuleGP, module.WorldModuleData);
                     SortedDictionary<string, BornPointData> playerBornPoints = module.WorldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints;
-                    if (playerBornPoints.Count > 0)
+                    if (playerBornPoints.TryGetValue(microWorldData.DefaultWorldActorBornPointAlias, out BornPointData defaultBP))
                     {
-                        if (transportPlayerBornPoint == GridPos3D.Zero) transportPlayerBornPoint = module.LocalGPToWorldGP(playerBornPoints[playerBornPoints.Keys.ToList()[0]].LocalGP);
+                        transportPlayerBornPoint = module.LocalGPToWorldGP(defaultBP.LocalGP);
                     }
 
                     List<BornPointData> moduleBPData = WorldData.WorldBornPointGroupData_Runtime.TryLoadModuleBPData(realModuleGP);

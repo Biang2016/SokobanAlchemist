@@ -19,27 +19,29 @@ MonoBehaviour:
     00000000:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (bca4560e-2166-4719-a956-4aae6723d9be)
         SkillAlias: "\u8840\u654C\u4EBA-\u6B7B\u4EA1\u6389\u843D"
         SkillIcon:
           TypeDefineType: 0
           TypeGUID: 
         SkillDescription: 
-        IsAddedDuringGamePlay: 0
-        InitWorldModuleGUID: 0
         PassiveSkillCondition: 1024
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
-        EntityStatChangeType: 0
-        EntityStatChangeThreshold: 0
-        EntityStatChangeThresholdOperator: 0
-        EntityPropertyChangeType: 0
-        EntityPropertyChangeThreshold: 0
-        EntityPropertyChangeThresholdOperator: 0
         MultiEventTrigger: 0
         ListenLevelEventAliasList: []
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
         RawEntitySkillActions:
         - id: 1
     00000001:
@@ -56,4 +58,4 @@ MonoBehaviour:
         DropBoxCountMin: 1
         DropBoxCountMax: 3
         DropConeAngle: 14
-        DropVelocity: 12
+        DropVelocity: 3

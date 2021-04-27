@@ -59,7 +59,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         }
     }
 
-    public ButtonState[,] Battle_Skill = new ButtonState[2, 8];
+    public ButtonState[,] Battle_Skill = new ButtonState[2, 10];
 
     public ButtonState Battle_Skill_0_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_0_Player1};
     public ButtonState Battle_Skill_1_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_1_Player1};
@@ -69,6 +69,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     public ButtonState Battle_Skill_5_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_5_Player1};
     public ButtonState Battle_Skill_6_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_6_Player1};
     public ButtonState Battle_Skill_7_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_7_Player1};
+    public ButtonState Battle_Skill_8_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_8_Player1};
+    public ButtonState Battle_Skill_9_Player1 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_9_Player1};
     public ButtonState Battle_Skill_0_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_0_Player2};
     public ButtonState Battle_Skill_1_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_1_Player2};
     public ButtonState Battle_Skill_2_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_2_Player2};
@@ -77,6 +79,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     public ButtonState Battle_Skill_5_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_5_Player2};
     public ButtonState Battle_Skill_6_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_6_Player2};
     public ButtonState Battle_Skill_7_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_7_Player2};
+    public ButtonState Battle_Skill_8_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_8_Player2};
+    public ButtonState Battle_Skill_9_Player2 = new ButtonState() {ButtonName = ButtonNames.Battle_Skill_9_Player2};
 
     public ButtonState Battle_ToggleBattleTip = new ButtonState() {ButtonName = ButtonNames.Battle_ToggleBattleTip};
 
@@ -209,6 +213,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         Battle_Skill_5_Player1.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_5_Player1);
         Battle_Skill_6_Player1.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_6_Player1);
         Battle_Skill_7_Player1.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_7_Player1);
+        Battle_Skill_8_Player1.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_8_Player1);
+        Battle_Skill_9_Player1.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_9_Player1);
         Battle_Skill_0_Player2.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_0_Player2);
         Battle_Skill_1_Player2.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_1_Player2);
         Battle_Skill_2_Player2.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_2_Player2);
@@ -217,6 +223,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         Battle_Skill_5_Player2.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_5_Player2);
         Battle_Skill_6_Player2.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_6_Player2);
         Battle_Skill_7_Player2.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_7_Player2);
+        Battle_Skill_8_Player2.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_8_Player2);
+        Battle_Skill_9_Player2.GetStateCallbackFromContext_UpDownPress(BattleInputActions.Skill_9_Player2);
 
         Battle_Skill[(int) PlayerNumber.Player1, 0] = Battle_Skill_0_Player1;
         Battle_Skill[(int) PlayerNumber.Player1, 1] = Battle_Skill_1_Player1;
@@ -226,6 +234,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         Battle_Skill[(int) PlayerNumber.Player1, 5] = Battle_Skill_5_Player1;
         Battle_Skill[(int) PlayerNumber.Player1, 6] = Battle_Skill_6_Player1;
         Battle_Skill[(int) PlayerNumber.Player1, 7] = Battle_Skill_7_Player1;
+        Battle_Skill[(int) PlayerNumber.Player1, 8] = Battle_Skill_8_Player1;
+        Battle_Skill[(int) PlayerNumber.Player1, 9] = Battle_Skill_9_Player1;
 
         Battle_Skill[(int) PlayerNumber.Player2, 0] = Battle_Skill_0_Player2;
         Battle_Skill[(int) PlayerNumber.Player2, 1] = Battle_Skill_1_Player2;
@@ -235,6 +245,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         Battle_Skill[(int) PlayerNumber.Player2, 5] = Battle_Skill_5_Player2;
         Battle_Skill[(int) PlayerNumber.Player2, 6] = Battle_Skill_6_Player2;
         Battle_Skill[(int) PlayerNumber.Player2, 7] = Battle_Skill_7_Player2;
+        Battle_Skill[(int) PlayerNumber.Player2, 8] = Battle_Skill_8_Player2;
+        Battle_Skill[(int) PlayerNumber.Player2, 9] = Battle_Skill_9_Player2;
 
         Battle_ToggleBattleTip.GetStateCallbackFromContext_UpDownPress(BattleInputActions.ToggleBattleTip);
         Battle_LeftRotateCamera.GetStateCallbackFromContext_UpDownPress(BattleInputActions.LeftRotateCamera);

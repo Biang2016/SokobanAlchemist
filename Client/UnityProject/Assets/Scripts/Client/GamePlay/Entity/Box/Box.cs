@@ -1275,6 +1275,7 @@ public partial class Box : Entity
             ps.OnBeforeDestroyEntity();
         }
 
+        if (DoorBoxHelper) DoorBoxHelper.Open = false;
         StartCoroutine(Co_DelayDestroyBox(callBack));
     }
 

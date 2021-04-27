@@ -29,7 +29,7 @@ public class LearnSkillPanel : BaseUIPanel
 
     private EntitySkillRow m_EntitySkillRow;
 
-    public void Initialize(string skillGUID, UnityAction learnCallback)
+    public void Initialize(string skillGUID, UnityAction learnCallback, bool specifyKeyBind, PlayerControllerHelper.KeyBind keyBind)
     {
         m_EntitySkillRow?.PoolRecycle();
         m_EntitySkillRow = null;
@@ -37,7 +37,7 @@ public class LearnSkillPanel : BaseUIPanel
         if (rawEntitySkill != null)
         {
             m_EntitySkillRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(EntitySkillRowContainer);
-            m_EntitySkillRow.Initialize(rawEntitySkill, "");
+            m_EntitySkillRow.Initialize(rawEntitySkill, specifyKeyBind ? PlayerControllerHelper.KeyMappingStrDict[keyBind] : "");
 
             if (rawEntitySkill is EntityPassiveSkill rawEPS)
             {
@@ -55,18 +55,29 @@ public class LearnSkillPanel : BaseUIPanel
             }
             else if (rawEntitySkill is EntityActiveSkill rawEAS)
             {
-                LearnButton_Passive.gameObject.SetActive(false);
-                LearnButtons_Active.SetActive(true);
+                if (specifyKeyBind)
+                {
+                    LearnButton_Passive.gameObject.SetActive(true);
+                    LearnButtons_Active.SetActive(false);
 
-                LearnButton_H.onClick.RemoveAllListeners();
-                LearnButton_J.onClick.RemoveAllListeners();
-                LearnButton_K.onClick.RemoveAllListeners();
-                LearnButton_L.onClick.RemoveAllListeners();
+                    LearnButton_Passive.onClick.RemoveAllListeners();
+                    LearnButton_Passive.onClick.AddListener(() => { OnButtonClick(rawEAS, keyBind); });
+                }
+                else
+                {
+                    LearnButton_Passive.gameObject.SetActive(false);
+                    LearnButtons_Active.SetActive(true);
 
-                LearnButton_H.onClick.AddListener(() => { OnButtonClick(rawEAS, PlayerControllerHelper.KeyBind.H_LeftTrigger); });
-                LearnButton_J.onClick.AddListener(() => { OnButtonClick(rawEAS, PlayerControllerHelper.KeyBind.J_RightTrigger); });
-                LearnButton_K.onClick.AddListener(() => { OnButtonClick(rawEAS, PlayerControllerHelper.KeyBind.K); });
-                LearnButton_L.onClick.AddListener(() => { OnButtonClick(rawEAS, PlayerControllerHelper.KeyBind.L); });
+                    LearnButton_H.onClick.RemoveAllListeners();
+                    LearnButton_J.onClick.RemoveAllListeners();
+                    LearnButton_K.onClick.RemoveAllListeners();
+                    LearnButton_L.onClick.RemoveAllListeners();
+
+                    LearnButton_H.onClick.AddListener(() => { OnButtonClick(rawEAS, PlayerControllerHelper.KeyBind.H_LeftTrigger); });
+                    LearnButton_J.onClick.AddListener(() => { OnButtonClick(rawEAS, PlayerControllerHelper.KeyBind.J_RightTrigger); });
+                    LearnButton_K.onClick.AddListener(() => { OnButtonClick(rawEAS, PlayerControllerHelper.KeyBind.K); });
+                    LearnButton_L.onClick.AddListener(() => { OnButtonClick(rawEAS, PlayerControllerHelper.KeyBind.L); });
+                }
             }
         }
 

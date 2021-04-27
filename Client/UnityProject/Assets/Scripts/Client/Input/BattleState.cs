@@ -107,6 +107,8 @@ public enum ButtonNames
     Battle_Skill_5_Player1,
     Battle_Skill_6_Player1,
     Battle_Skill_7_Player1,
+    Battle_Skill_8_Player1,
+    Battle_Skill_9_Player1,
     Battle_Skill_0_Player2,
     Battle_Skill_1_Player2,
     Battle_Skill_2_Player2,
@@ -115,6 +117,8 @@ public enum ButtonNames
     Battle_Skill_5_Player2,
     Battle_Skill_6_Player2,
     Battle_Skill_7_Player2,
+    Battle_Skill_8_Player2,
+    Battle_Skill_9_Player2,
     Battle_ToggleBattleTip,
 
     Battle_LeftRotateCamera,

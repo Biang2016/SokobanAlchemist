@@ -24,8 +24,12 @@ public class PlayerControllerHelper : ActorControllerHelper
         J_RightTrigger = 3,
         K = 4,
         L = 5,
-        Empty_6 = 6,
-        Empty_7 = 7,
+        Num1 = 6,
+        Num2 = 7,
+        Num3 = 8,
+        Num4 = 9,
+
+        MAX
     }
 
     public static Dictionary<KeyBind, string> KeyMappingStrDict = new Dictionary<KeyBind, string>
@@ -36,9 +40,13 @@ public class PlayerControllerHelper : ActorControllerHelper
         {KeyBind.J_RightTrigger, "J"},
         {KeyBind.K, "K"},
         {KeyBind.L, "L"},
+        {KeyBind.Num1, "Num1"},
+        {KeyBind.Num2, "Num2"},
+        {KeyBind.Num3, "Num3"},
+        {KeyBind.Num4, "Num4"},
     };
 
-    private ButtonState[] BS_SkillArray = new ButtonState[8];
+    private ButtonState[] BS_SkillArray = new ButtonState[(int) KeyBind.MAX];
 
     [FoldoutGroup("SkillKeyMapping")]
     [HideInEditorMode]
@@ -57,31 +65,43 @@ public class PlayerControllerHelper : ActorControllerHelper
 
     [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
-    [LabelText("Z/J/LeftTrigger")]
+    [LabelText("H/LeftTrigger")]
     public List<EntitySkillIndex> SkillKeyMapping_2 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
     [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
-    [LabelText("X/K/RightTrigger")]
+    [LabelText("J/RightTrigger")]
     public List<EntitySkillIndex> SkillKeyMapping_3 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
     [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
-    [LabelText("C/L/")]
+    [LabelText("K/")]
     public List<EntitySkillIndex> SkillKeyMapping_4 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
     [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
-    [LabelText("V/;/")]
+    [LabelText("L/")]
     public List<EntitySkillIndex> SkillKeyMapping_5 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
     [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
+    [LabelText("Num1")]
     public List<EntitySkillIndex> SkillKeyMapping_6 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
     [HideInPlayMode]
     [FoldoutGroup("SkillKeyMapping")]
+    [LabelText("Num2")]
     public List<EntitySkillIndex> SkillKeyMapping_7 = new List<EntitySkillIndex>(); // 干数据，不编辑
+
+    [HideInPlayMode]
+    [FoldoutGroup("SkillKeyMapping")]
+    [LabelText("Num3")]
+    public List<EntitySkillIndex> SkillKeyMapping_8 = new List<EntitySkillIndex>(); // 干数据，不编辑
+
+    [HideInPlayMode]
+    [FoldoutGroup("SkillKeyMapping")]
+    [LabelText("Num4")]
+    public List<EntitySkillIndex> SkillKeyMapping_9 = new List<EntitySkillIndex>(); // 干数据，不编辑
 
     // 短按逻辑：短按最优先，短按过程中不接受其他短按，短按那个按键down时记录该轴位置，当位置变化时结束短按，短按结束后短按数据清空
     private bool isQuickMoving = false;
@@ -109,10 +129,11 @@ public class PlayerControllerHelper : ActorControllerHelper
         SkillKeyMappings.Add(KeyBind.J_RightTrigger, SkillKeyMapping_3.Clone<EntitySkillIndex, EntitySkillIndex>());
         SkillKeyMappings.Add(KeyBind.K, SkillKeyMapping_4.Clone<EntitySkillIndex, EntitySkillIndex>());
         SkillKeyMappings.Add(KeyBind.L, SkillKeyMapping_5.Clone<EntitySkillIndex, EntitySkillIndex>());
-        SkillKeyMappings.Add(KeyBind.Empty_6, SkillKeyMapping_6.Clone<EntitySkillIndex, EntitySkillIndex>());
-        SkillKeyMappings.Add(KeyBind.Empty_7, SkillKeyMapping_7.Clone<EntitySkillIndex, EntitySkillIndex>());
-
-        for (int i = 0; i < 8; i++)
+        SkillKeyMappings.Add(KeyBind.Num1, SkillKeyMapping_6.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.Num2, SkillKeyMapping_7.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.Num3, SkillKeyMapping_8.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.Num4, SkillKeyMapping_9.Clone<EntitySkillIndex, EntitySkillIndex>());
+        for (int i = 0; i < (int) KeyBind.MAX; i++)
         {
             BS_SkillArray[i] = ControlManager.Instance.Battle_Skill[(int) PlayerNumber, i];
         }
@@ -401,7 +422,7 @@ public class PlayerControllerHelper : ActorControllerHelper
                 Actor.ThrowOrPut();
             }
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < (int) KeyBind.MAX; i++)
             {
                 if (BS_SkillArray[i].Down)
                 {

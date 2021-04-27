@@ -18,6 +18,30 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
     [OnValueChanged("RefreshSkillGUID")]
     public EntitySkillSO EntitySkillSO;
 
+    [LabelText("是否指定键位")]
+    [ShowIf("isActiveSkill")]
+    public bool SpecifyKeyBind = false;
+
+    private bool isActiveSkill // 仅Editor下用
+    {
+        get
+        {
+            if (EntitySkillSO != null && EntitySkillSO.EntitySkill != null && EntitySkillSO.EntitySkill is EntityActiveSkill)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    [LabelText("指定键位")]
+    [ShowIf("isActiveSkill")]
+    [ShowIf("SpecifyKeyBind")]
+    public PlayerControllerHelper.KeyBind KeyBind;
+
     public void RefreshSkillGUID()
     {
         if (EntitySkillSO != null)
@@ -37,7 +61,7 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
     public void Execute()
     {
         LearnSkillPanel learnSkillPanel = UIManager.Instance.ShowUIForms<LearnSkillPanel>();
-        learnSkillPanel.Initialize(SkillGUID, OnLearned);
+        learnSkillPanel.Initialize(SkillGUID, OnLearned, SpecifyKeyBind, KeyBind);
     }
 
     private void OnLearned()
@@ -50,6 +74,8 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
         base.ChildClone(newAction);
         EntitySkillAction_ShowLearnSkillPanel action = ((EntitySkillAction_ShowLearnSkillPanel) newAction);
         action.SkillGUID = SkillGUID;
+        action.SpecifyKeyBind = SpecifyKeyBind;
+        action.KeyBind = KeyBind;
     }
 
     public override void CopyDataFrom(EntitySkillAction srcData)
@@ -57,5 +83,7 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
         base.CopyDataFrom(srcData);
         EntitySkillAction_ShowLearnSkillPanel action = ((EntitySkillAction_ShowLearnSkillPanel) srcData);
         SkillGUID = action.SkillGUID;
+        SpecifyKeyBind = action.SpecifyKeyBind;
+        KeyBind = action.KeyBind;
     }
 }
