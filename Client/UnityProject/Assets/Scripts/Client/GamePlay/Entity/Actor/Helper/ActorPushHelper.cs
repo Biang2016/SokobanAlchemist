@@ -2,20 +2,25 @@
 
 public class ActorPushHelper : ActorMonoHelper
 {
-    public Collider Collider;
     public Animator AnimCollider;
-    public ActorPushHelperTrigger ActorPushHelperTrigger;
+    public ActorPushHelperTrigger_Enter ActorPushHelperTrigger_Enter;
+    public ActorPushHelperTrigger_Exit ActorPushHelperTrigger_Exit;
+
+    public Box curPushingBox = null; // 一次只推一个箱子
 
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
-        ActorPushHelperTrigger.OnUsed();
+        ActorPushHelperTrigger_Enter.OnUsed();
+        ActorPushHelperTrigger_Exit.OnUsed();
     }
 
     public override void OnHelperRecycled()
     {
         TriggerOut = false;
-        ActorPushHelperTrigger.OnRecycled();
+        ActorPushHelperTrigger_Enter.OnRecycled();
+        ActorPushHelperTrigger_Exit.OnRecycled();
+        curPushingBox = null;
         base.OnHelperRecycled();
     }
 

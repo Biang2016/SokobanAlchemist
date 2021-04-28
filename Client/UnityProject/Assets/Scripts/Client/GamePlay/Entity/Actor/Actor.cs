@@ -213,16 +213,19 @@ public class Actor : Entity
                         {
                             // 检查改对象是否真的占据这几格，否则是bug
                             bool correctOccupation = false;
-                            List<GridPos3D> occupationGPs = targetGridEntity.GetEntityOccupationGPs_Rotated();
-                            if (occupationGPs != null)
+                            if (targetGridEntity.IsNotNullAndAlive())
                             {
-                                foreach (GridPos3D _offset in occupationGPs)
+                                List<GridPos3D> occupationGPs = targetGridEntity.GetEntityOccupationGPs_Rotated();
+                                if (occupationGPs != null)
                                 {
-                                    GridPos3D _gridPos = targetGridEntity.WorldGP + _offset;
-                                    if (_gridPos == gridPos)
+                                    foreach (GridPos3D _offset in occupationGPs)
                                     {
-                                        correctOccupation = true;
-                                        break;
+                                        GridPos3D _gridPos = targetGridEntity.WorldGP + _offset;
+                                        if (_gridPos == gridPos)
+                                        {
+                                            correctOccupation = true;
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -230,7 +233,7 @@ public class Actor : Entity
                             if (correctOccupation) return; // 防止角色和其他Entity卡住
                             else
                             {
-                                targetGridModule[TypeDefineType.Actor, localGP] = null; // 执行到这里说明是bug，先这样处理，以后再研究
+                                targetGridModule[TypeDefineType.Actor, localGP] = null; // todo 执行到这里说明是bug，先这样处理，以后再研究
                             }
                         }
                     }
@@ -1182,7 +1185,7 @@ public class Actor : Entity
 
                 GridPos3D boxWorldGP_before = box.WorldGP;
                 GridPos3D boxWorldGP_after = LastWorldGP - boxIndicatorGP + box.WorldGP;
-                if (WorldManager.Instance.CurrentWorld.MoveBoxColumn(box.WorldGP, -actorSwapBoxMoveAttempt, Box.States.BeingPushed, 0f, true, GUID))
+                if (WorldManager.Instance.CurrentWorld.MoveBoxColumn(box.WorldGP, -actorSwapBoxMoveAttempt, Box.States.BeingPushed, true, 0f, true, GUID))
                 {
                     if (Box.ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {box.name} SwapBox {boxWorldGP_before} -> {box.WorldGP}");
                     transform.position = boxIndicatorGP;

@@ -676,7 +676,7 @@ public class World : PoolObject
         }
     }
 
-    public bool MoveBoxColumn(GridPos3D srcGP, GridPos3D direction, Box.States sucState, float physicLerpTime, bool needLerpModel = false, uint excludeActorGUID = 0)
+    public bool MoveBoxColumn(GridPos3D srcGP, GridPos3D direction, Box.States sucState, bool checkMerge, float physicLerpTime, bool needLerpModel = false, uint excludeActorGUID = 0)
     {
         if (direction == GridPos3D.Zero) return false;
         HashSet<Box> boxes_moveable = new HashSet<Box>();
@@ -722,7 +722,7 @@ public class World : PoolObject
             box_moveable.Initialize(worldGP, newModule, physicLerpTime, box_moveable.ArtOnly, Box.LerpType.Push, needLerpModel, true);
         }
 
-        TryMerge(direction, boxes_moveable);
+        if (checkMerge) TryMerge(direction, boxes_moveable);
         return true;
     }
 

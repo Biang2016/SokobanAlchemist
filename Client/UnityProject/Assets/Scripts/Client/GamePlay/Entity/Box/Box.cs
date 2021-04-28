@@ -667,8 +667,21 @@ public partial class Box : Entity
             {
                 if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] [Box] {name} Push {WorldGP} -> {gp}");
                 CurrentMoveGlobalPlanerDir = (gp - WorldGP).Normalized();
-                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.BeingPushed, 11f / actor.EntityStatPropSet.PropertyDict[EntityPropertyType.MoveSpeed].GetModifiedValue, false, actor.GUID);
+                WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.BeingPushed, true, 11f / actor.EntityStatPropSet.PropertyDict[EntityPropertyType.MoveSpeed].GetModifiedValue, false, actor.GUID);
             }
+        }
+    }
+
+    public void PushCancel(Actor actor)
+    {
+        GridPos3D targetGP = transform.position.ToGridPos3D();
+        GridPos3D moveDirection = (targetGP - WorldGP).Normalized();
+        if (moveDirection != GridPos3D.Zero)
+        {
+            WorldManager.Instance.CurrentWorld.BoxColumnTransformDOPause(WorldGP, moveDirection);
+            if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] Box] {name} PushCancel {WorldGP} -> {targetGP}");
+            CurrentMoveGlobalPlanerDir = moveDirection;
+            WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.Static, false, 11f / actor.EntityStatPropSet.PropertyDict[EntityPropertyType.MoveSpeed].GetModifiedValue, true, actor.GUID);
         }
     }
 
@@ -682,7 +695,7 @@ public partial class Box : Entity
         {
             if (ENABLE_BOX_MOVE_LOG) Debug.Log($"[{Time.frameCount}] Box] {name} ForceCancelPush {WorldGP} -> {targetGP}");
             CurrentMoveGlobalPlanerDir = moveDirection;
-            WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.Static, 0f, true, actor.GUID);
+            WorldManager.Instance.CurrentWorld.MoveBoxColumn(WorldGP, CurrentMoveGlobalPlanerDir, States.Static, false, 0f, true, actor.GUID);
         }
     }
 
