@@ -1562,6 +1562,7 @@ public class Actor : Entity
         }
         else
         {
+            BattleManager.Instance.SetActorInCombat(GUID, CombatState.Exploring);
             IsDestroying = false;
         }
     }
@@ -1580,6 +1581,7 @@ public class Actor : Entity
         }
 
         EntityWwiseHelper.OnDestroyed_Common.Post(gameObject);
+        BattleManager.Instance.SetActorInCombat(GUID, CombatState.Exploring);
         ActiveSkillAgent.Instance.StartCoroutine(Co_DelayDestroyActor(callBack));
     }
 

@@ -48,6 +48,10 @@ public class WwiseBGMConfiguration : MonoBehaviour
 
     public BGM_Theme CurrentBGMTheme;
 
+    [ShowInInspector]
+    [HideInEditorMode]
+    public CombatState currentCombatState => BattleManager.Instance.CombatState;
+
     public void SwitchBGMTheme(BGM_Theme bgmTheme)
     {
         if (BGMThemeConfigDict.TryGetValue(bgmTheme, out State state))
@@ -92,10 +96,6 @@ public class WwiseBGMConfiguration : MonoBehaviour
         public BGM_Theme BGM_Theme;
         public State State;
     }
-
-    [ShowInInspector]
-    [HideInEditorMode]
-    public CombatState currentCombatState => BattleManager.Instance.CombatState;
 
     [ShowInInspector]
     [HideInEditorMode]

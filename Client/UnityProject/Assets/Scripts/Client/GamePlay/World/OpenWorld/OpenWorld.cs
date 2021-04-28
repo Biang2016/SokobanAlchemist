@@ -322,7 +322,13 @@ public class OpenWorld : World
             while (RefreshScopeModulesCoroutine != null) yield return null;
             BattleManager.Instance.IsStart = true;
         }
+        else
+        {
+            WaitingForLoadStartMicroWorld = true;
+        }
     }
+
+    private bool WaitingForLoadStartMicroWorld = false;
 
     public IEnumerator OnAfterInitialize()
     {
@@ -332,6 +338,7 @@ public class OpenWorld : World
             yield return Co_TransportPlayerToMicroWorld(startMicroWorldTypeIndex);
         }
 
+        WaitingForLoadStartMicroWorld = false;
         yield return null;
     }
 
@@ -365,7 +372,7 @@ public class OpenWorld : World
         {
             if (GameStateManager.Instance.GetState() == GameState.Fighting && !IsInsideMicroWorld)
             {
-                if (RefreshScopeModulesCoroutine == null)
+                if (RefreshScopeModulesCoroutine == null && !WaitingForLoadStartMicroWorld)
                 {
                     RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
                 }
