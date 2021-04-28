@@ -14,6 +14,13 @@
 					</ReferenceList>
 					<ChildrenList>
 						<RandomSequenceContainer Name="OnBeingPushed_Light" ID="{F28CC2E5-B848-4EEE-87A8-CD4CFB439DD2}" ShortID="446607047">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-5</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -22,6 +29,95 @@
 									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnBeingPushed_Light_1" ID="{53DE3458-55E9-4C4D-9F63-0F7B925244C8}" ShortID="11712951">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Slide" ID="{CF61FB4A-28B3-430D-85DA-A39DB96D6202}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.109953703703704"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.118634259259259"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.338541666666666"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.659722222222222"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Slide.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="924462267"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Slide" ID="{CF61FB4A-28B3-430D-85DA-A39DB96D6202}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnBeingPushed_Light_2" ID="{8C886FE1-274E-4594-93ED-C59F5615D257}" ShortID="543928904">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Slide" ID="{D6847CF5-568C-41C8-923A-1E56339773E2}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.159143518518519"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.112847222222222"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.706018518518518"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.05613425925926"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Slide.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="297716614"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Slide" ID="{D6847CF5-568C-41C8-923A-1E56339773E2}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnBeingPushed_Light_3" ID="{5E0BCCC3-66C7-40B2-B041-4C427257FF0C}" ShortID="134006623">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Slide" ID="{6D983024-9E8C-46D6-A088-656B6FBB15DA}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.121527777777778"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.153356481481482"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="1.1400462962963"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.49594907407407"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Slide.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="650244277"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Slide" ID="{6D983024-9E8C-46D6-A088-656B6FBB15DA}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="OnBeingKicked_Light" ID="{0E6ED2BA-FD03-478E-B6CF-1C8B46B52326}" ShortID="165229107">
 							<ReferenceList>
@@ -33,70 +129,48 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="OnBeingKicked_1" ID="{F754CCE5-B34D-48C0-9505-2BA747DAFFCB}" ShortID="479161409">
+								<Sound Name="OnBeingKicked_Light_1" ID="{6E3845B3-E66F-4D8A-B2D8-D434ADBA9DB1}" ShortID="452003981">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="Protagonist_Push_1" ID="{D3B6E08C-FD52-471D-B489-A833707ECFB3}">
+										<AudioFileSource Name="TempSFX_Collide" ID="{953107AF-BD0A-4C15-B2B3-12EB01E1DBDE}">
 											<Language>SFX</Language>
-											<AudioFile>Protagonist_Push_1.wav</AudioFile>
+											<AudioFile>TempSFX_Collide.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="1062430198"/>
+												<MediaID ID="367121688"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="Protagonist_Push_1" ID="{D3B6E08C-FD52-471D-B489-A833707ECFB3}" Platform="Linked"/>
+										<ActiveSource Name="TempSFX_Collide" ID="{953107AF-BD0A-4C15-B2B3-12EB01E1DBDE}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="OnBeingKicked_2" ID="{23ABCB46-CAF2-4301-AC20-606A83DA28DA}" ShortID="643535541">
+								<Sound Name="OnBeingKicked_Light_2" ID="{80495337-A280-4418-ABA8-B745D448A035}" ShortID="82148812">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="Protagonist_Push_2" ID="{6EC93BB0-81B1-47D7-832E-C02CA15C10DF}">
+										<AudioFileSource Name="TempSFX_Collide2" ID="{BDD0FBBE-B4C3-485C-A283-7194590D4817}">
 											<Language>SFX</Language>
-											<AudioFile>Protagonist_Push_2.wav</AudioFile>
+											<AudioFile>TempSFX_Collide2.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="941213969"/>
+												<MediaID ID="278238588"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="Protagonist_Push_2" ID="{6EC93BB0-81B1-47D7-832E-C02CA15C10DF}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-								<Sound Name="OnBeingKicked_3" ID="{99E020DD-DE35-46C0-82F0-919542DAB04B}" ShortID="854224945">
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="Protagonist_Push_3" ID="{4F9E7685-805C-4F60-B11A-EEEFB6581239}">
-											<Language>SFX</Language>
-											<AudioFile>Protagonist_Push_3.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="979841132"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="Protagonist_Push_3" ID="{4F9E7685-805C-4F60-B11A-EEEFB6581239}" Platform="Linked"/>
+										<ActiveSource Name="TempSFX_Collide2" ID="{BDD0FBBE-B4C3-485C-A283-7194590D4817}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
@@ -110,8 +184,39 @@
 									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnBeingMerged" ID="{57E748E3-FC9E-48C7-BD8B-C8C1F7FE6B60}" ShortID="1008863906">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Logic Sound Lab" ID="{A1C60B73-9CA7-46C0-8239-F40876D4AC6D}">
+											<Language>SFX</Language>
+											<AudioFile>Logic Sound Lab.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="117032943"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Logic Sound Lab" ID="{A1C60B73-9CA7-46C0-8239-F40876D4AC6D}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="OnBeingPushed_Heavy" ID="{4F158FE6-23DF-4C1C-8514-3303A301C377}" ShortID="224623290">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-5</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -120,6 +225,95 @@
 									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnBeingPushed_Heavy_1" ID="{2157B32B-BF5D-4B50-8B33-60F508F5D580}" ShortID="651683037">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Slide" ID="{4CE92775-F60B-4B5F-8422-B6F3A8B7AE87}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.109953703703704"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.118634259259259"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.338541666666666"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.659722222222222"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Slide.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="924462267"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Slide" ID="{4CE92775-F60B-4B5F-8422-B6F3A8B7AE87}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnBeingPushed_Heavy_2" ID="{5DE73F6F-7D25-42AC-BB01-66929C42829B}" ShortID="207732193">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Slide" ID="{0961FB42-2200-4AAB-9C91-3E267BB43D38}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.159143518518519"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.112847222222222"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.706018518518518"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.05613425925926"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Slide.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="297716614"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Slide" ID="{0961FB42-2200-4AAB-9C91-3E267BB43D38}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnBeingPushed_Heavy_3" ID="{A3DDE816-C189-4710-A65A-943E6C70D255}" ShortID="801620508">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Slide" ID="{EFC42BEF-A3C8-4946-8EBF-3CA22E5F05EB}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.121527777777778"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.153356481481482"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="1.1400462962963"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.49594907407407"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Slide.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="650244277"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Slide" ID="{EFC42BEF-A3C8-4946-8EBF-3CA22E5F05EB}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="OnBeingKicked_Heavy" ID="{52400584-A129-4CEA-9D17-E192FA5CC836}" ShortID="512284632">
 							<ReferenceList>
@@ -130,6 +324,66 @@
 									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnBeingKicked_Heavy_1" ID="{739C1F4B-BD84-4087-A20D-84AEA261B7BC}" ShortID="435164574">
+									<PropertyList>
+										<Property Name="Pitch" Type="int32">
+											<ValueList>
+												<Value>-180</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="TempSFX_Collide" ID="{2A56A978-A37A-4A2F-9D34-147C51F4CCE6}">
+											<Language>SFX</Language>
+											<AudioFile>TempSFX_Collide.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="367121688"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="TempSFX_Collide" ID="{2A56A978-A37A-4A2F-9D34-147C51F4CCE6}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnBeingKicked_Heavy_2" ID="{F69E4564-9E50-4B68-838D-2167AF55FDE7}" ShortID="1069123630">
+									<PropertyList>
+										<Property Name="Pitch" Type="int32">
+											<ValueList>
+												<Value>-230</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="TempSFX_Collide2" ID="{B339D2F2-FA10-4A82-9F2F-30B0C4C6ADA8}">
+											<Language>SFX</Language>
+											<AudioFile>TempSFX_Collide2.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="278238588"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="TempSFX_Collide2" ID="{B339D2F2-FA10-4A82-9F2F-30B0C4C6ADA8}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="OnCollideActively" ID="{3C00FBAD-2DD7-428E-B9C9-88F0C81A9540}" ShortID="722046299">
 							<ReferenceList>
@@ -141,7 +395,7 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="Cardboard Box Crashing v2" ID="{C5E21FB3-65DE-4D2F-9ABB-6F6BE5698D40}" ShortID="848645961">
+								<Sound Name="OnCollideActively_2" ID="{C5E21FB3-65DE-4D2F-9ABB-6F6BE5698D40}" ShortID="848645961">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -163,7 +417,7 @@
 										<ActiveSource Name="Cardboard Box Crashing v2" ID="{76DA4253-6221-4797-80DA-3A8611692B64}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="Cardboard Box Crashing v4" ID="{501DEFF5-F660-4ECF-B0AA-D43400124B5E}" ShortID="1037871092">
+								<Sound Name="OnCollideActively_4" ID="{501DEFF5-F660-4ECF-B0AA-D43400124B5E}" ShortID="1037871092">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -185,7 +439,7 @@
 										<ActiveSource Name="Cardboard Box Crashing v4" ID="{D45286E3-A370-43E3-B7A8-50373877DFE8}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="Cardboard Box Crashing v5" ID="{14CAED1D-AC34-48A4-91A8-6CBD21D6C6EA}" ShortID="813581289">
+								<Sound Name="OnCollideActively_5" ID="{14CAED1D-AC34-48A4-91A8-6CBD21D6C6EA}" ShortID="813581289">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -207,7 +461,7 @@
 										<ActiveSource Name="Cardboard Box Crashing v5" ID="{ABA76C32-8921-4B8C-842C-A5361A4D5E15}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="Cardboard Box Crashing v3" ID="{C9A179B7-3E9F-4C49-BD5F-E3AE7FBBA047}" ShortID="247574214">
+								<Sound Name="OnCollideActively_3" ID="{C9A179B7-3E9F-4C49-BD5F-E3AE7FBBA047}" ShortID="247574214">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -229,7 +483,7 @@
 										<ActiveSource Name="Cardboard Box Crashing v3" ID="{946FA509-B5A4-4DB0-858B-A9E4F51E6BE1}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="Cardboard Box Crashing v1" ID="{5FDF4B9C-E797-4840-9A94-E1F6A93026A5}" ShortID="161942160">
+								<Sound Name="OnCollideActively_1" ID="{5FDF4B9C-E797-4840-9A94-E1F6A93026A5}" ShortID="161942160">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -253,6 +507,534 @@
 								</Sound>
 							</ChildrenList>
 						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="BoxWhoosh" ID="{1C30BA7D-C021-4560-A289-19994190A8D4}" ShortID="506643394">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnBeingKicked_1" ID="{F754CCE5-B34D-48C0-9505-2BA747DAFFCB}" ShortID="479161409">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Protagonist_Push_1" ID="{D3B6E08C-FD52-471D-B489-A833707ECFB3}">
+											<Language>SFX</Language>
+											<AudioFile>Protagonist_Push_1.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="1062430198"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Protagonist_Push_1" ID="{D3B6E08C-FD52-471D-B489-A833707ECFB3}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnBeingKicked_2" ID="{23ABCB46-CAF2-4301-AC20-606A83DA28DA}" ShortID="643535541">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Protagonist_Push_2" ID="{6EC93BB0-81B1-47D7-832E-C02CA15C10DF}">
+											<Language>SFX</Language>
+											<AudioFile>Protagonist_Push_2.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="941213969"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Protagonist_Push_2" ID="{6EC93BB0-81B1-47D7-832E-C02CA15C10DF}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnBeingKicked_3" ID="{99E020DD-DE35-46C0-82F0-919542DAB04B}" ShortID="854224945">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Protagonist_Push_3" ID="{4F9E7685-805C-4F60-B11A-EEEFB6581239}">
+											<Language>SFX</Language>
+											<AudioFile>Protagonist_Push_3.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="979841132"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Protagonist_Push_3" ID="{4F9E7685-805C-4F60-B11A-EEEFB6581239}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="OnThrownUp" ID="{617BB2FC-72FE-4834-B6D5-F029388327D4}" ShortID="307152632">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ValueList>
+										<Value>180</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnBeingDropped_1" ID="{AF7F62BD-EFA4-4B8B-B3FD-C019C3A9462F}" ShortID="25000708">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Logic Sound Lab2" ID="{12A2DCE0-D232-4FF2-8704-BCD4AEE73B3A}">
+											<Language>SFX</Language>
+											<AudioFile>Logic Sound Lab2.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="288551405"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Logic Sound Lab2" ID="{12A2DCE0-D232-4FF2-8704-BCD4AEE73B3A}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnBeingDropped_4" ID="{FC6CE388-FDC4-4D1A-8902-B80F4D8DF980}" ShortID="183611843">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Logic Sound Lab5" ID="{E0E3D386-4CF7-4822-8001-34CFE1C433A2}">
+											<Language>SFX</Language>
+											<AudioFile>Logic Sound Lab5.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="660266055"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Logic Sound Lab5" ID="{E0E3D386-4CF7-4822-8001-34CFE1C433A2}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnBeingDropped_2" ID="{BBFD6236-CDD7-4E1E-BE87-E0EB203CA72B}" ShortID="665666309">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Logic Sound Lab3" ID="{A2837E08-6D49-45EB-89C9-DE6AD8C02557}">
+											<Language>SFX</Language>
+											<AudioFile>Logic Sound Lab3.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="305257575"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Logic Sound Lab3" ID="{A2837E08-6D49-45EB-89C9-DE6AD8C02557}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnBeingDropped_5" ID="{6E24FA85-0761-49AB-9C98-9B343D3C4960}" ShortID="123552188">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Logic Sound Lab6" ID="{1CF9027C-BEF8-42D6-9653-D4406074EB1E}">
+											<Language>SFX</Language>
+											<AudioFile>Logic Sound Lab6.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="507950500"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Logic Sound Lab6" ID="{1CF9027C-BEF8-42D6-9653-D4406074EB1E}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnBeingDropped_3" ID="{DDEF4C66-940F-4D33-A216-8C79A1919828}" ShortID="828855915">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Logic Sound Lab4" ID="{34083E93-2462-43AF-BFB4-08F457192AF8}">
+											<Language>SFX</Language>
+											<AudioFile>Logic Sound Lab4.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="49836195"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Logic Sound Lab4" ID="{34083E93-2462-43AF-BFB4-08F457192AF8}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="OnDestroyed_Common" ID="{52D36985-4677-4781-AC58-F427DFC93C9F}" ShortID="61447031">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnDestroyed" ID="{678221D5-F331-407E-9797-197004DF28D0}" ShortID="660491225">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="OnDestroyed" ID="{68A78571-6F3A-43D0-AD83-15187740C2A2}">
+											<Language>SFX</Language>
+											<AudioFile>OnDestroyed.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="487051256"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="OnDestroyed" ID="{68A78571-6F3A-43D0-AD83-15187740C2A2}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<BlendContainer Name="OnDestroyed_Firing" ID="{A12CF672-CCB6-4A15-B813-E897552FD0F6}" ShortID="47076387">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnDestroyed" ID="{C8AA36D1-6B44-4E50-93BB-05F8100041D0}" ShortID="560068865">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="OnDestroyed" ID="{14BBA5BD-5E4A-4284-BBC2-D444F111F672}">
+											<Language>SFX</Language>
+											<AudioFile>OnDestroyed.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="487051256"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="OnDestroyed" ID="{14BBA5BD-5E4A-4284-BBC2-D444F111F672}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="FireBox_OnDestroyed" ID="{696B262F-E74A-43CA-A3F4-0C4599E4422C}" ShortID="247579645">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-3</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="fire-torch-whoosh-movement-01" ID="{3F624E1E-AC5C-4F9E-BFA9-49DD977572CD}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.0888888888888889"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.418518518518519"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.1"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.49259259259259"/>
+												<Property Name="VolumeOffset" Type="Real64">
+													<ValueList>
+														<Value>-4.5</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>fire-torch-whoosh-movement-01.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="695924251"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{3F624E1E-AC5C-4F9E-BFA9-49DD977572CD}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</BlendContainer>
+						<BlendContainer Name="OnDestroyed_Frozen" ID="{FE7DD7D6-7A04-427F-97C7-5D79E85735A5}" ShortID="130375663">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnDestroyed" ID="{F0B1F084-7FEE-42E8-8BC8-E2A4232DFBB6}" ShortID="959651867">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="OnDestroyed" ID="{2FD3DCE8-C717-4C93-AAFC-CEBBC4108692}">
+											<Language>SFX</Language>
+											<AudioFile>OnDestroyed.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="487051256"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="OnDestroyed" ID="{2FD3DCE8-C717-4C93-AAFC-CEBBC4108692}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{07DC9CC1-6CD4-452F-80FE-E20828FFF107}" ShortID="351407981">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-3</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{21AF3A6A-F897-4AAC-A346-5569D0A9AF7C}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.0298542217813051"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.511786659108087"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.67183641975309"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Frost Magic Ice Bolt Spell Flying By 2.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="490027950"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{21AF3A6A-F897-4AAC-A346-5569D0A9AF7C}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</BlendContainer>
+						<BlendContainer Name="OnDestroyed_Collide" ID="{A0864DEC-DD43-4824-AB2F-17BEBB1E54E8}" ShortID="713044724">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnDestroyed" ID="{4E459F98-6210-4B20-8009-8242038BAFFB}" ShortID="835851949">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-3</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="OnDestroyed" ID="{0BC5076B-D13E-49A7-8ADA-1A1D6B0DFE37}">
+											<Language>SFX</Language>
+											<AudioFile>OnDestroyed.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="487051256"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="OnDestroyed" ID="{0BC5076B-D13E-49A7-8ADA-1A1D6B0DFE37}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="OnCollideActively_1" ID="{1D7344AC-E249-45E0-BC23-8BF38FA6051C}" ShortID="1064662491">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Cardboard Box Crashing v1" ID="{1B261F92-37B5-41CA-8635-6BD96C194C82}">
+											<Language>SFX</Language>
+											<AudioFile>Cardboard Box Crashing v1.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="78304770"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Cardboard Box Crashing v1" ID="{1B261F92-37B5-41CA-8635-6BD96C194C82}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</BlendContainer>
+						<BlendContainer Name="OnDestroyed_Explosion" ID="{7C17DE31-F901-4EA8-B2E6-E1B3A5020176}" ShortID="288353146">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnDestroyed" ID="{E0B15D08-B5B3-4E75-B60B-AC8D252DB86B}" ShortID="949765637">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-3</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="OnDestroyed" ID="{3DE837C5-52E2-405F-9998-9FD386C534CF}">
+											<Language>SFX</Language>
+											<AudioFile>OnDestroyed.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="487051256"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="OnDestroyed" ID="{3DE837C5-52E2-405F-9998-9FD386C534CF}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="PotionExplodes10Ve HS064603 2" ID="{C2536041-44CF-4EF9-8BE4-415E26A727FB}" ShortID="628667973">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>6</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="PotionExplodes10Ve HS064603 2" ID="{1B4DBBE8-70F1-4778-AC28-9B16E6321F3D}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.147059712773998"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.278639455782313"/>
+												<Property Name="VolumeOffset" Type="Real64">
+													<ValueList>
+														<Value>3.2</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>PotionExplodes10Ve HS064603 2.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="532644551"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="PotionExplodes10Ve HS064603 2" ID="{1B4DBBE8-70F1-4778-AC28-9B16E6321F3D}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</BlendContainer>
 					</ChildrenList>
 				</ActorMixer>
 			</ChildrenList>
