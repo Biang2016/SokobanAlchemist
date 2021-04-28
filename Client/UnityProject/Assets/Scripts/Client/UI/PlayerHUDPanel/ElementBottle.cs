@@ -4,12 +4,23 @@ using UnityEngine.UI;
 
 public class ElementBottle : MonoBehaviour
 {
-    public TextMeshProUGUI KeyBind_Text;
-    public TextMeshProUGUI CurrentValue_Text;
-    public TextMeshProUGUI MaxValue_Text;
-    public Image Image;
-    public Sprite[] Sprites;
-    public Animator FillAnim;
+    [SerializeField]
+    private TextMeshProUGUI KeyBind_Text;
+
+    [SerializeField]
+    private TextMeshProUGUI CurrentValue_Text;
+
+    [SerializeField]
+    private TextMeshProUGUI MaxValue_Text;
+
+    [SerializeField]
+    private Image Image;
+
+    [SerializeField]
+    private Sprite[] Sprites;
+
+    [SerializeField]
+    private Animator FillAnim;
 
     void Start()
     {
@@ -40,10 +51,12 @@ public class ElementBottle : MonoBehaviour
         {
             CurrentValue_Text.text = currentValue.ToString();
         }
+
+        if (FillAnim) FillAnim.SetTrigger("ValueChange");
     }
 
     public void OnStatLowWarning()
     {
-        if (FillAnim) FillAnim.SetTrigger("Warning");
+        if (FillAnim) FillAnim.SetTrigger("LowWarning");
     }
 }

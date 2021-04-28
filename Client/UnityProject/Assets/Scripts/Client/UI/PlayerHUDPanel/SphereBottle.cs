@@ -5,11 +5,20 @@ using UnityEngine.UI;
 
 public class SphereBottle : MonoBehaviour
 {
-    public TextMeshProUGUI Value_Text;
-    public Image FillImage;
-    public Image SurfaceImage;
-    public Animator TextAnim;
-    public Animator FillAnim;
+    [SerializeField]
+    private TextMeshProUGUI Value_Text;
+
+    [SerializeField]
+    private Image FillImage;
+
+    [SerializeField]
+    private Image SurfaceImage;
+
+    [SerializeField]
+    private Animator FillAnim;
+
+    [SerializeField]
+    private bool HealthLowWarning;
 
     void Start()
     {
@@ -30,7 +39,18 @@ public class SphereBottle : MonoBehaviour
 
         FillImage.fillAmount = ratio;
 
-        if (TextAnim != null) TextAnim.SetTrigger("Jump");
+        if (HealthLowWarning)
+        {
+            if (ratio >= 0.2f)
+            {
+                if (FillAnim) FillAnim.SetTrigger("ValueChange");
+            }
+        }
+        else
+        {
+            if (FillAnim) FillAnim.SetTrigger("ValueChange");
+        }
+
         Value_Text.text = currentValue + "/" + maxValue;
 
         float width = SurfaceImage.rectTransform.sizeDelta.x;
@@ -43,6 +63,6 @@ public class SphereBottle : MonoBehaviour
 
     public void OnStatLowWarning()
     {
-        if (FillAnim) FillAnim.SetTrigger("Warning");
+        if (FillAnim) FillAnim.SetTrigger("LowWarning");
     }
 }

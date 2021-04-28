@@ -19,6 +19,7 @@ MonoBehaviour:
     00000000:
       type: {class: ActorActiveSkill_Jump, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (583ed52d-d465-4fc5-9505-b00a830bcdb6)
         SkillAlias: "\u8DF3\u8DC3"
         SkillIcon:
@@ -26,7 +27,6 @@ MonoBehaviour:
           TypeGUID: (67fbe277-cc91-4111-97c1-82712ec6974a)
         SkillDescription: Spend 5 lightning elements, jump 1 unit height.
         TargetCamp: 1
-        EntitySkillIndex: 0
         SkillsPropertyCollection:
           CastingRadius:
             BaseValue: 0
@@ -34,7 +34,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           Cooldown:
-            BaseValue: 1000
+            BaseValue: 2000
             ModifiedValue: 1000
             MinValue: 0
             MaxValue: 1000000
@@ -78,10 +78,8 @@ MonoBehaviour:
             ModifiedValue: 5
             MinValue: 0
             MaxValue: 1000
-        NeedValidTargetDistance: 0
-        TargetDistanceMin: 0
-        TargetDistanceMax: 5
         TriggerWhenMissProbabilityPercent: 100
+        EntitySkillConditions: []
         WingUpCanMove: 1
         CastCanMove: 1
         RecoverCanMove: 1

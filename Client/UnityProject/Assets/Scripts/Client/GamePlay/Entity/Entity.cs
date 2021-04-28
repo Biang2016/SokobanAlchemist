@@ -571,7 +571,8 @@ public abstract class Entity : PoolObject
                 }
 
                 actor.ActorSkillLearningHelper?.BindActiveSkillToKey(eas.EntitySkillIndex, keyBind, clearAllExistedSkillInKeyBind);
-                if (ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].SkillSlotDict.TryGetValue(keyBind, out SkillSlot skillSlot))
+                PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
+                if (HUD.SkillSlotDict.TryGetValue(keyBind, out SkillSlot skillSlot))
                 {
                     skillSlot.Initialize(eas);
                 }

@@ -42,7 +42,6 @@ public abstract class EntityActiveSkill : EntitySkill
     [SerializeReference]
     public List<EntitySkillCondition> EntitySkillConditions = new List<EntitySkillCondition>(); // 干数据，禁修改
 
-
     #endregion
 
     [LabelText("前摇可移动")]
@@ -273,6 +272,11 @@ public abstract class EntityActiveSkill : EntitySkill
 
         RunningSubActiveSkillList.Clear();
 
+        // 娄底置空
+        OnSkillWingingUp = null;
+        OnSkillCasting = null;
+        OnSkillCoolingDown = null;
+
         Entity = null;
         ParentActiveSkill = null;
 
@@ -439,6 +443,8 @@ public abstract class EntityActiveSkill : EntitySkill
         }
     }
 
+    internal UnityAction<ActiveSkillPhase, float, float> OnSkillWingingUp;
+
     protected virtual IEnumerator WingUp(float wingUpTime)
     {
         Entity.EntityStatPropSet.StatDict[EntityStatType.ActionPoint].SetValue(Entity.EntityStatPropSet.StatDict[EntityStatType.ActionPoint].Value - SkillsPropertyCollection.ConsumeActionPoint.GetModifiedValue);
@@ -453,6 +459,7 @@ public abstract class EntityActiveSkill : EntitySkill
         float wingUpTick = 0f;
         while (wingUpTick < wingUpTime / 1000f)
         {
+            OnSkillWingingUp?.Invoke(ActiveSkillPhase.WingingUp, wingUpTick, wingUpTime / 1000f);
             wingUpTick += Time.deltaTime;
             WingUpRatio = wingUpTick / (wingUpTime / 1000f);
             yield return null;
@@ -464,6 +471,8 @@ public abstract class EntityActiveSkill : EntitySkill
     public virtual void OnWingUpPhaseComplete()
     {
     }
+
+    internal UnityAction<ActiveSkillPhase, float, float> OnSkillCasting;
 
     protected virtual IEnumerator Cast(TargetEntityType targetEntityType, float castDuration)
     {
@@ -490,6 +499,7 @@ public abstract class EntityActiveSkill : EntitySkill
         float castTick = 0f;
         while (castTick < castDuration / 1000f)
         {
+            OnSkillCasting?.Invoke(ActiveSkillPhase.Casting, castTick, castDuration / 1000f);
             castTick += Time.deltaTime;
             CastRatio = castTick / (castDuration / 1000f);
             yield return null;
@@ -684,6 +694,8 @@ public abstract class EntityActiveSkill : EntitySkill
         OnRecoveryPhaseComplete();
     }
 
+    internal UnityAction<ActiveSkillPhase, float, float> OnSkillCoolingDown;
+
     public virtual void OnFixedUpdate(float fixedDeltaTime)
     {
         foreach (EntityActiveSkill subEAS in RunningSubActiveSkillList)
@@ -695,6 +707,8 @@ public abstract class EntityActiveSkill : EntitySkill
         {
             cooldownTimeTick -= fixedDeltaTime * 1000f;
             CooldownRatio = cooldownTimeTick / currentExecutingCooldownTime;
+            OnSkillCoolingDown?.Invoke(ActiveSkillPhase.CoolingDown, (currentExecutingCooldownTime - cooldownTimeTick) / 1000f, currentExecutingCooldownTime / 1000f);
+
             // 冷却时间结束，且目前后摇已完成并进入冷却阶段，才能将状态置为Ready
             if (cooldownTimeTick <= 0 && skillPhase == ActiveSkillPhase.CoolingDown)
             {
