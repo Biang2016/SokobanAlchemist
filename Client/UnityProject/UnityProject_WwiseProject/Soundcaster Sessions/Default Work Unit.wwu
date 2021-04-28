@@ -6,8 +6,40 @@
 				<SoundcasterSession Name="New Soundcaster Session" ID="{040558D8-A443-4FE5-8A51-D2A860861BC0}">
 					<ModuleList>
 						<Module>
-							<ObjectRef Name="Music" ID="{30CB71BC-EE60-4580-ADA5-A1F306814BB4}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+							<ObjectRef Name="OnBeingPushed_Light" ID="{85ADD1C6-47C4-4FB1-A5A1-A1B714975A8D}" WorkUnitID="{20565C80-A26D-4D5E-A9DF-DEAC6D709F4E}"/>
 							<Position X="0" Y="0"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="OnDestroyed" ID="{5ADE77C7-2E58-46AA-ACB6-5A4D019D0E6C}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
+							<Position X="0" Y="1"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="Music" ID="{30CB71BC-EE60-4580-ADA5-A1F306814BB4}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+							<Position X="1" Y="0"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="IceEnemy_Cyan_FrostBreath_Cast" ID="{8ADA565E-CDA3-4F0A-8CDC-663B5E513F81}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+							<Position X="1" Y="1"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="Player_GainFireElement" ID="{8206348C-8CF6-4C92-B1B7-53E2AC7A129A}" WorkUnitID="{243B1A99-3A40-415C-8C73-18D11E7863E8}"/>
+							<Position X="2" Y="0"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="IceEnemy_Cyan_FrostBreath_Preparing" ID="{AD1B196B-887D-4F8F-B010-BC282203546D}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+							<Position X="2" Y="1"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="Player_GainGold" ID="{51A5AB64-F672-4456-87E8-33BA8582CCDF}" WorkUnitID="{243B1A99-3A40-415C-8C73-18D11E7863E8}"/>
+							<Position X="3" Y="0"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="FireEnemy_Red_HeatEmit_Cast" ID="{5A48918D-F7A4-4349-99F5-6E83875C9F6C}" WorkUnitID="{AB31CB3F-E95F-48C8-9072-77668498151B}"/>
+							<Position X="4" Y="0"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="FireEnemy_Red_HeatEmit_Preparing" ID="{0A3EEE52-AC14-4331-8705-982DE4A7F1BA}" WorkUnitID="{AB31CB3F-E95F-48C8-9072-77668498151B}"/>
+							<Position X="5" Y="0"/>
 						</Module>
 					</ModuleList>
 					<RTPCValueList ShowAll="true">
@@ -45,7 +77,7 @@
 						</RTPCValue>
 					</RTPCValueList>
 					<CurrentStateList ShowAll="true">
-						<CurrentStateRef Name="InBossCombat" ID="{FBC865FA-EC5F-41F2-8150-1E1F4B28F064}"/>
+						<CurrentStateRef Name="Exploring" ID="{3D43D6D3-16EE-4734-9A44-E93CFC6B1A41}"/>
 						<CurrentStateRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
 					</CurrentStateList>
 					<CurrentSwitchList ShowAll="true">
