@@ -13,7 +13,7 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<RandomSequenceContainer Name="WoodenEnemy_LeftSlash" ID="{80CB4721-299F-45F3-B2F3-B828DBD14081}" ShortID="47625512">
+						<RandomSequenceContainer Name="WoodenEnemy_LeftSlash_Cast" ID="{80CB4721-299F-45F3-B2F3-B828DBD14081}" ShortID="47625512">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -22,8 +22,32 @@
 									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnCollideActively_1" ID="{1D127934-A291-4AC3-B92E-E493CEACD9C1}" ShortID="861666989">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Cardboard Box Crashing v1" ID="{57B5CE1B-1B8E-4D86-8C4D-B2F7309F36CE}">
+											<Language>SFX</Language>
+											<AudioFile>Cardboard Box Crashing v1.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="78304770"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Cardboard Box Crashing v1" ID="{57B5CE1B-1B8E-4D86-8C4D-B2F7309F36CE}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
 						</RandomSequenceContainer>
-						<RandomSequenceContainer Name="WoodenEnemy_RightSlash" ID="{6F205624-409C-433D-A94E-6ABE4EE27502}" ShortID="853776541">
+						<RandomSequenceContainer Name="WoodenEnemy_RightSlash_Cast" ID="{6F205624-409C-433D-A94E-6ABE4EE27502}" ShortID="853776541">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -32,8 +56,32 @@
 									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnCollideActively_2" ID="{C8E4D756-7D39-415F-88C1-52906E898676}" ShortID="183163437">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Cardboard Box Crashing v2" ID="{8BE620E9-5130-46BD-B3A5-25ECE3CAFE54}">
+											<Language>SFX</Language>
+											<AudioFile>Cardboard Box Crashing v2.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="21993998"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Cardboard Box Crashing v2" ID="{8BE620E9-5130-46BD-B3A5-25ECE3CAFE54}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
 						</RandomSequenceContainer>
-						<RandomSequenceContainer Name="WoodenEnemy_DoubleSlash" ID="{7C022AB6-3E04-445A-B61F-F060C892A8CD}" ShortID="239887445">
+						<RandomSequenceContainer Name="WoodenEnemy_DoubleSlash_Cast" ID="{7C022AB6-3E04-445A-B61F-F060C892A8CD}" ShortID="239887445">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -42,6 +90,30 @@
 									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnCollideActively_3" ID="{66A5C0DE-14A5-40D9-8940-7573E82DB601}" ShortID="103533811">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Cardboard Box Crashing v3" ID="{BB4CE403-65AE-4714-9650-F25C84A6D1C0}">
+											<Language>SFX</Language>
+											<AudioFile>Cardboard Box Crashing v3.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="805774241"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Cardboard Box Crashing v3" ID="{BB4CE403-65AE-4714-9650-F25C84A6D1C0}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="WoodenEnemy_OnBeingDamaged" ID="{50204202-3BAD-4BE4-B216-0356BA1737A4}" ShortID="686262180">
 							<ReferenceList>
@@ -83,6 +155,108 @@
 									</ChildrenList>
 									<ActiveSourceList>
 										<ActiveSource Name="InCombatMarimba Prize" ID="{05FF50B9-7D50-41E6-8ED1-D3F07268563E}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="WoodenEnemy_DoubleSlash_Preparing" ID="{BD555769-011E-4DBB-92D8-8FD098717692}" ShortID="549578975">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnCollideActively_3" ID="{76DC6F87-10DE-4CC4-82DC-DA10B819DF69}" ShortID="448889077">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Cardboard Box Crashing v3" ID="{D1290FEC-D0A7-4B35-98CF-F4CD8F584326}">
+											<Language>SFX</Language>
+											<AudioFile>Cardboard Box Crashing v3.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="805774241"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Cardboard Box Crashing v3" ID="{D1290FEC-D0A7-4B35-98CF-F4CD8F584326}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="WoodenEnemy_RightSlash_Preparing" ID="{E5D387C6-4090-41C7-9308-D3369B1E47EF}" ShortID="577168315">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnCollideActively_2" ID="{DAD3A892-5580-4003-A8C0-87BB57653D37}" ShortID="974957481">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Cardboard Box Crashing v2" ID="{A20B12D8-C547-4E04-83E6-8680642C8828}">
+											<Language>SFX</Language>
+											<AudioFile>Cardboard Box Crashing v2.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="21993998"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Cardboard Box Crashing v2" ID="{A20B12D8-C547-4E04-83E6-8680642C8828}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="WoodenEnemy_LeftSlash_Preparing" ID="{219CE8F5-6FAC-4A0C-9931-21979C0CD0F1}" ShortID="371781662">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="OnCollideActively_1" ID="{68188BE3-CF79-4FF1-A49B-0EF5B78C5250}" ShortID="822194909">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Cardboard Box Crashing v1" ID="{D6FFE8E3-3B09-4E17-BE42-81EFA39B6DBE}">
+											<Language>SFX</Language>
+											<AudioFile>Cardboard Box Crashing v1.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="78304770"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Cardboard Box Crashing v1" ID="{D6FFE8E3-3B09-4E17-BE42-81EFA39B6DBE}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>

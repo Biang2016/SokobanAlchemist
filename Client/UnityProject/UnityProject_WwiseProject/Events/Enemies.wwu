@@ -509,12 +509,12 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="WoodenEnemy_LeftSlash" ID="{ABD0891D-AFFB-469B-AF02-9F3AECBA8982}">
+						<Event Name="WoodenEnemy_LeftSlash_Cast" ID="{ABD0891D-AFFB-469B-AF02-9F3AECBA8982}">
 							<ChildrenList>
 								<Action Name="" ID="{E2B5F60B-DB5E-4620-B9F6-A067C746580B}" ShortID="464129303">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="WoodenEnemy_LeftSlash" ID="{80CB4721-299F-45F3-B2F3-B828DBD14081}" WorkUnitID="{06284773-0079-4ECC-A88D-3AEAB930CC03}"/>
+											<ObjectRef Name="WoodenEnemy_LeftSlash_Cast" ID="{80CB4721-299F-45F3-B2F3-B828DBD14081}" WorkUnitID="{06284773-0079-4ECC-A88D-3AEAB930CC03}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -534,23 +534,56 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="WoodenEnemy_RightSlash" ID="{A9DB9409-FE86-48E8-9CE1-3BCEF6A8D2B0}">
+						<Event Name="WoodenEnemy_RightSlash_Cast" ID="{A9DB9409-FE86-48E8-9CE1-3BCEF6A8D2B0}">
 							<ChildrenList>
 								<Action Name="" ID="{7C099A2F-4404-47A5-9CFE-97A68DEF1670}" ShortID="400270448">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="WoodenEnemy_RightSlash" ID="{6F205624-409C-433D-A94E-6ABE4EE27502}" WorkUnitID="{06284773-0079-4ECC-A88D-3AEAB930CC03}"/>
+											<ObjectRef Name="WoodenEnemy_RightSlash_Cast" ID="{6F205624-409C-433D-A94E-6ABE4EE27502}" WorkUnitID="{06284773-0079-4ECC-A88D-3AEAB930CC03}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="WoodenEnemy_DoubleSlash" ID="{E0DE3B9D-5C08-444B-901A-6DEC372AA0DE}">
+						<Event Name="WoodenEnemy_DoubleSlash_Cast" ID="{E0DE3B9D-5C08-444B-901A-6DEC372AA0DE}">
 							<ChildrenList>
 								<Action Name="" ID="{EA449D52-0FBD-461E-A27E-09FE821F641A}" ShortID="342042429">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="WoodenEnemy_DoubleSlash" ID="{7C022AB6-3E04-445A-B61F-F060C892A8CD}" WorkUnitID="{06284773-0079-4ECC-A88D-3AEAB930CC03}"/>
+											<ObjectRef Name="WoodenEnemy_DoubleSlash_Cast" ID="{7C022AB6-3E04-445A-B61F-F060C892A8CD}" WorkUnitID="{06284773-0079-4ECC-A88D-3AEAB930CC03}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenEnemy_DoubleSlash_Preparing" ID="{1561CEF7-D339-4BED-B3A3-7DCE6CE82ECA}">
+							<ChildrenList>
+								<Action Name="" ID="{575FB2E5-C96A-43E0-BDC4-98D6FF87E736}" ShortID="1057872404">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenEnemy_DoubleSlash_Preparing" ID="{BD555769-011E-4DBB-92D8-8FD098717692}" WorkUnitID="{06284773-0079-4ECC-A88D-3AEAB930CC03}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenEnemy_LeftSlash_Preparing" ID="{DE140840-4348-4C4B-9502-5122C39970AF}">
+							<ChildrenList>
+								<Action Name="" ID="{2632B143-060B-406E-B062-9BE382CD9D64}" ShortID="607807264">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenEnemy_LeftSlash_Preparing" ID="{219CE8F5-6FAC-4A0C-9931-21979C0CD0F1}" WorkUnitID="{06284773-0079-4ECC-A88D-3AEAB930CC03}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenEnemy_RightSlash_Preparing" ID="{7C026AB1-E88C-46A5-A7E6-5433BE2037BE}">
+							<ChildrenList>
+								<Action Name="" ID="{7D55C691-6BF1-46EB-8381-9D1F021770EB}" ShortID="634024979">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenEnemy_RightSlash_Preparing" ID="{E5D387C6-4090-41C7-9308-D3369B1E47EF}" WorkUnitID="{06284773-0079-4ECC-A88D-3AEAB930CC03}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
