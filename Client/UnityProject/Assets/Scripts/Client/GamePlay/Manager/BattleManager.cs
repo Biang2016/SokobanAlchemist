@@ -19,7 +19,23 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     #region 战斗状态
 
+    public CombatState CombatState;
     internal Dictionary<uint, CombatState> ActorCombatStateDict = new Dictionary<uint, CombatState>(); // Key: ActorGUID
+
+    public void SetActorInCamp(bool inCamp)
+    {
+        if (inCamp)
+        {
+            ActorCombatStateDict.Clear();
+            CombatState = CombatState.InCamp;
+            WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState);
+        }
+        else
+        {
+            CombatState = CombatState.Exploring;
+            WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState);
+        }
+    }
 
     public void SetActorInCombat(uint actorGUID, CombatState newCombatState)
     {
@@ -37,6 +53,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState);
         }
 
+        if (CombatState == CombatState.InCamp) return;
         if (ActorCombatStateDict.TryGetValue(actorGUID, out CombatState oldCombatState))
         {
             if (newCombatState == CombatState.Exploring)
@@ -44,6 +61,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
                 ActorCombatStateDict.Remove(actorGUID);
                 WwiseAudioManager.Instance.WwiseBGMConfiguration.CombatEnemyNumber.SetGlobalValue(ActorCombatStateDict.Count);
             }
+
             if (newCombatState != oldCombatState)
             {
                 ActorCombatStateDict[actorGUID] = newCombatState;
@@ -55,7 +73,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
         else
         {
-            if (newCombatState == CombatState.Exploring) return;
+            if (newCombatState < CombatState) return;
             ActorCombatStateDict.Add(actorGUID, newCombatState);
             WwiseAudioManager.Instance.WwiseBGMConfiguration.CombatEnemyNumber.SetGlobalValue(ActorCombatStateDict.Count);
             if (newCombatState > CombatState)
@@ -64,8 +82,6 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             }
         }
     }
-
-    public CombatState CombatState;
 
     #endregion
 
@@ -345,13 +361,13 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         yield return panel.Co_LoseGame();
         if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
-            if (openWorld.IsInsideMicroWorld)
+            if (openWorld.IsInsideDungeon)
             {
-                openWorld.RestartMicroWorld(true);
+                openWorld.RestartDungeon();
             }
             else
             {
-                openWorld.ReturnToOpenWorldFormMicroWorld(true);
+                openWorld.RespawnInOpenWorld();
             }
         }
         else

@@ -92,9 +92,9 @@ public class OpenWorld : World
 
     public BornPointData[,,] WorldBornPointData; // 地图出生点数据, Y轴缩小16
 
-    [BoxGroup("@\"起始MicroWorld\t\"+StartMicroWorldTypeName")]
+    [BoxGroup("@\"起始Dungeon\t\"+StartDungeonTypeName")]
     [HideLabel]
-    public TypeSelectHelper StartMicroWorldTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
+    public TypeSelectHelper StartDungeonTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
 
     internal GridPos3D InitialPlayerBP = GridPos3D.Zero;
 
@@ -134,11 +134,11 @@ public class OpenWorld : World
         WorldMap_StaticLayoutOccupied_IntactForStaticLayout = null;
         WorldMap_StaticLayoutOccupied_IntactForBox = null;
         WorldMap_TerrainType = null;
-        IsInsideMicroWorld = false;
+        IsInsideDungeon = false;
         InitialPlayerBP = GridPos3D.Zero;
-        transportingPlayerToMicroWorld = false;
-        returningToOpenWorldFormMicroWorld = false;
-        restartingMicroWorld = false;
+        transportingPlayerToDungeon = false;
+        returningToOpenWorldFormDungeon = false;
+        restartingDungeon = false;
     }
 
     public override IEnumerator Initialize(WorldData worldData)
@@ -314,24 +314,31 @@ public class OpenWorld : World
         CameraManager.Instance.FieldCamera.InitFocus();
 
         // 没有起始关卡就直接进入大世界，有起始关卡则避免加载了又卸载
-        ushort startMicroWorldTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, StartMicroWorldTypeName.TypeName);
-        if (startMicroWorldTypeIndex == 0)
+        ushort startDungeonTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, StartDungeonTypeName.TypeName);
+        if (startDungeonTypeIndex == 0)
         {
             GridPos3D playerBPWorld = new GridPos3D(-1, -1, -1);
             RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(playerBPWorld, PlayerScopeRadiusX, PlayerScopeRadiusZ)); // 按关卡生成器和角色位置初始化需要的模组
             while (RefreshScopeModulesCoroutine != null) yield return null;
             BattleManager.Instance.IsStart = true;
         }
+        else
+        {
+            WaitingForLoadStartDungeon = true;
+        }
     }
+
+    private bool WaitingForLoadStartDungeon = false;
 
     public IEnumerator OnAfterInitialize()
     {
-        ushort startMicroWorldTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, StartMicroWorldTypeName.TypeName);
-        if (startMicroWorldTypeIndex != 0)
+        ushort startDungeonTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, StartDungeonTypeName.TypeName);
+        if (startDungeonTypeIndex != 0)
         {
-            yield return Co_TransportPlayerToMicroWorld(startMicroWorldTypeIndex);
+            yield return Co_TransportPlayerToDungeon(startDungeonTypeIndex);
         }
 
+        WaitingForLoadStartDungeon = false;
         yield return null;
     }
 
@@ -363,9 +370,9 @@ public class OpenWorld : World
     {
         if (!IsRecycled)
         {
-            if (GameStateManager.Instance.GetState() == GameState.Fighting && !IsInsideMicroWorld)
+            if (GameStateManager.Instance.GetState() == GameState.Fighting && !IsInsideDungeon)
             {
-                if (RefreshScopeModulesCoroutine == null)
+                if (RefreshScopeModulesCoroutine == null && !WaitingForLoadStartDungeon)
                 {
                     RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
                 }
@@ -393,7 +400,7 @@ public class OpenWorld : World
 
         bool CheckModuleCanBeSeenByCamera(GridPos3D moduleGP, bool checkBottom, bool checkTop, float extendScope)
         {
-            if (IsInsideMicroWorld) return moduleGP.y >= WORLD_HEIGHT / 2; // 当角色在解谜关卡时，隐藏其它模组，且恒定显示解谜模组 todo 此处粗暴地使用了模组坐标来判断是否在解谜关卡，未来需要处理
+            if (IsInsideDungeon) return moduleGP.y >= WORLD_HEIGHT / 2; // 当角色在解谜关卡时，隐藏其它模组，且恒定显示解谜模组 todo 此处粗暴地使用了模组坐标来判断是否在解谜关卡，未来需要处理
             GeometryUtility.CalculateFrustumPlanes(CameraManager.Instance.MainCamera, cachedPlanes);
             if (checkBottom && checkTop)
             {
@@ -604,31 +611,32 @@ public class OpenWorld : World
 
     #endregion
 
-    #region MicroWorld
+    #region Dungeon
 
-    internal bool IsInsideMicroWorld = false;
-    internal bool IsUsingSpecialESPSInsideMicroWorld = false;
+    internal bool IsInsideDungeon = false;
+    internal bool IsUsingSpecialESPSInsideDungeon = false;
     internal bool DungeonMissionComplete = false;
-    internal ushort CurrentMicroWorldTypeIndex = 0;
+    internal ushort CurrentDungeonWorldTypeIndex = 0;
     internal GridPos3D LastLeaveOpenWorldPlayerGP = GridPos3D.Zero;
-    private List<WorldModule> MicroWorldModules = new List<WorldModule>();
+    private List<WorldModule> DungeonModules = new List<WorldModule>();
 
-    private PlayerData PlayerData_BeforeEnterDungeon;
+    private PlayerData PlayerDataSave;
 
-    public void TransportPlayerToMicroWorld(ushort worldTypeIndex)
+    public void TransportPlayerToDungeon(ushort worldTypeIndex)
     {
-        if (transportingPlayerToMicroWorld) return;
-        if (returningToOpenWorldFormMicroWorld) return;
-        if (restartingMicroWorld) return;
-        StartCoroutine(Co_TransportPlayerToMicroWorld(worldTypeIndex));
+        if (transportingPlayerToDungeon) return;
+        if (returningToOpenWorldFormDungeon) return;
+        if (restartingDungeon) return;
+        if (respawningInOpenWorld) return;
+        StartCoroutine(Co_TransportPlayerToDungeon(worldTypeIndex));
     }
 
-    private bool transportingPlayerToMicroWorld = false;
+    private bool transportingPlayerToDungeon = false;
 
-    IEnumerator Co_TransportPlayerToMicroWorld(ushort worldTypeIndex)
+    IEnumerator Co_TransportPlayerToDungeon(ushort worldTypeIndex)
     {
-        transportingPlayerToMicroWorld = true;
-        CurrentMicroWorldTypeIndex = worldTypeIndex;
+        transportingPlayerToDungeon = true;
+        CurrentDungeonWorldTypeIndex = worldTypeIndex;
         BattleManager.Instance.IsStart = false;
         WwiseAudioManager.Instance.Trigger_Teleport.Post(WwiseAudioManager.Instance.WwiseBGMConfiguration.gameObject);
         UIManager.Instance.ShowUIForms<LoadingMapPanel>();
@@ -637,47 +645,37 @@ public class OpenWorld : World
         LoadingMapPanel.SetBackgroundAlpha(1);
         LoadingMapPanel.SetProgress(0, "Loading Level");
 
-        WorldData microWorldData = ConfigManager.GetWorldDataConfig(worldTypeIndex);
+        WorldData dungeonData = ConfigManager.GetWorldDataConfig(worldTypeIndex);
 
-        // Recycling Micro World Modules
-        if (IsInsideMicroWorld)
+        if (IsInsideDungeon)
         {
-            int totalRecycleModuleNumber = MicroWorldModules.Count;
+            // Recycle Current Dungeon Modules
+            int totalRecycleModuleNumber = DungeonModules.Count;
             int recycledModuleCount = 0;
-            foreach (WorldModule microWorldModule in MicroWorldModules)
+            foreach (WorldModule dungeonModule in DungeonModules)
             {
-                yield return Co_RecycleModule(microWorldModule, microWorldModule.ModuleGP, -1);
+                yield return Co_RecycleModule(dungeonModule, dungeonModule.ModuleGP, -1);
                 recycledModuleCount++;
                 LoadingMapPanel.SetProgress(20f * recycledModuleCount / totalRecycleModuleNumber, "Destroying the dungeon");
             }
 
-            MicroWorldModules.Clear();
+            DungeonModules.Clear();
             yield return RecycleEmptyModules();
-        }
-
-        if (IsUsingSpecialESPSInsideMicroWorld) // 此类特殊关卡默认不计入成长，如教程关、体验关等等
-        {
-            PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
+            CalculatePlayerGrowth(); // Dungeon→Dungeon，检查是否通关、是否特殊关卡，来判断是否保存玩家进度
+            DungeonMissionComplete = false; // 重置DungeonComplete
         }
         else
         {
-            if (DungeonMissionComplete) // dungeon通关，获得所有奖励，保存玩家成长数值和技能
-            {
-                PlayerData_BeforeEnterDungeon = null;
-            }
-            else
-            {
-                PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
-            }
+            CalculatePlayerGrowth(); // 大世界→Dungeon，保存玩家进度
         }
 
-        // Loading Micro World Modules
-        int totalModuleNum = microWorldData.WorldModuleGPOrder.Count;
+        // Loading New Dungeon Modules
+        int totalModuleNum = dungeonData.WorldModuleGPOrder.Count;
         int loadingModuleCount = 0;
         while (RefreshScopeModulesCoroutine != null) yield return null;
-        foreach (GridPos3D worldModuleGP in microWorldData.WorldModuleGPOrder)
+        foreach (GridPos3D worldModuleGP in dungeonData.WorldModuleGPOrder)
         {
-            ushort worldModuleTypeIndex = microWorldData.ModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
+            ushort worldModuleTypeIndex = dungeonData.ModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
             GridPos3D realModuleGP = new GridPos3D(worldModuleGP.x, WORLD_HEIGHT / 2 + worldModuleGP.y, worldModuleGP.z);
             if (worldModuleTypeIndex != 0)
             {
@@ -690,7 +688,7 @@ public class OpenWorld : World
                 {
                     yield return GenerateWorldModule(worldModuleTypeIndex, realModuleGP.x, realModuleGP.y, realModuleGP.z);
                     WorldModule module = WorldModuleMatrix[realModuleGP.x, realModuleGP.y, realModuleGP.z];
-                    MicroWorldModules.Add(module);
+                    DungeonModules.Add(module);
                     WorldData.WorldBornPointGroupData_Runtime.Init_LoadModuleData(realModuleGP, module.WorldModuleData);
                     List<BornPointData> moduleBPData = WorldData.WorldBornPointGroupData_Runtime.TryLoadModuleBPData(realModuleGP);
                     if (moduleBPData != null)
@@ -711,27 +709,28 @@ public class OpenWorld : World
             LoadingMapPanel.SetProgress(20f + 60f * loadingModuleCount / totalModuleNum, "Loading Level");
         }
 
-        yield return GenerateEmptyModules(microWorldData, new GridPos3D(0, WORLD_HEIGHT / 2, 0));
+        yield return GenerateEmptyModules(dungeonData, new GridPos3D(0, WORLD_HEIGHT / 2, 0));
 
-        GridPos3D transportPlayerBornPoint = WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[microWorldData.DefaultWorldActorBornPointAlias].WorldGP;
+        GridPos3D transportPlayerBornPoint = WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[dungeonData.DefaultWorldActorBornPointAlias].WorldGP;
         if (transportPlayerBornPoint == GridPos3D.Zero)
         {
             Debug.LogWarning("传送的模组没有默认玩家出生点");
         }
 
-        if (!IsInsideMicroWorld)
+        if (!IsInsideDungeon)
         {
             LastLeaveOpenWorldPlayerGP = BattleManager.Instance.Player1.transform.position.ToGridPos3D();
         }
 
-        // MicroWorld Special Settings
-        IsInsideMicroWorld = true;
-        IsUsingSpecialESPSInsideMicroWorld = microWorldData.UseSpecialPlayerEnterESPS;
-        PlayerData_BeforeEnterDungeon = PlayerData.GetPlayerData();
-        if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(microWorldData.Raw_PlayerEnterESPS);
+        // Dungeon Special Settings
+        IsInsideDungeon = true;
+        DungeonMissionComplete = false;
+        IsUsingSpecialESPSInsideDungeon = dungeonData.UseSpecialPlayerEnterESPS;
+        PlayerDataSave = PlayerData.GetPlayerData();
+        if (IsUsingSpecialESPSInsideDungeon) BattleManager.Instance.Player1.ReloadESPS(dungeonData.Raw_PlayerEnterESPS);
         BattleManager.Instance.Player1.CanBeThreatened = true;
 
-        ApplyWorldVisualEffectSettings(microWorldData);
+        ApplyWorldVisualEffectSettings(dungeonData);
 
         BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint);
 
@@ -746,23 +745,24 @@ public class OpenWorld : World
         yield return new WaitForSeconds(LoadingMapPanel.GetRemainingLoadingDuration());
         LoadingMapPanel.CloseUIForm();
         BattleManager.Instance.IsStart = true;
-        transportingPlayerToMicroWorld = false;
+        transportingPlayerToDungeon = false;
     }
 
-    public void ReturnToOpenWorldFormMicroWorld(bool rebornPlayer)
+    public void ReturnToOpenWorld()
     {
-        if (transportingPlayerToMicroWorld) return;
-        if (returningToOpenWorldFormMicroWorld) return;
-        if (restartingMicroWorld) return;
-        StartCoroutine(Co_ReturnToOpenWorldFormMicroWorld(rebornPlayer));
+        if (transportingPlayerToDungeon) return;
+        if (returningToOpenWorldFormDungeon) return;
+        if (restartingDungeon) return;
+        if (respawningInOpenWorld) return;
+        StartCoroutine(Co_ReturnToOpenWorld());
     }
 
-    private bool returningToOpenWorldFormMicroWorld = false;
+    private bool returningToOpenWorldFormDungeon = false;
 
-    public IEnumerator Co_ReturnToOpenWorldFormMicroWorld(bool rebornPlayer)
+    public IEnumerator Co_ReturnToOpenWorld()
     {
-        returningToOpenWorldFormMicroWorld = true;
-        CurrentMicroWorldTypeIndex = 0;
+        returningToOpenWorldFormDungeon = true;
+        CurrentDungeonWorldTypeIndex = 0;
         BattleManager.Instance.IsStart = false;
         WwiseAudioManager.Instance.Trigger_Teleport.Post(WwiseAudioManager.Instance.WwiseBGMConfiguration.gameObject);
         UIManager.Instance.ShowUIForms<LoadingMapPanel>();
@@ -771,77 +771,54 @@ public class OpenWorld : World
         LoadingMapPanel.SetBackgroundAlpha(1);
         LoadingMapPanel.SetProgress(0, "Returning to Open World");
 
-        // Recycling the Open World
         while (RefreshScopeModulesCoroutine != null) yield return null;
-        if (IsUsingSpecialESPSInsideMicroWorld) // 此类特殊关卡默认不计入成长，如教程关、体验关等等
-        {
-            PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
-        }
-        else
-        {
-            if (DungeonMissionComplete) // dungeon通关，获得所有奖励，保存玩家成长数值和技能
-            {
-                PlayerData_BeforeEnterDungeon = null;
-            }
-            else
-            {
-                PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
-            }
-        }
-
+        CalculatePlayerGrowth();
         BattleManager.Instance.Player1.CanBeThreatened = true;
-        if (rebornPlayer)
-        {
-            BattleManager.Instance.Player1.TransportPlayerGridPos(InitialPlayerBP); // 如果在dungeon里面死亡，复活回老家
-            BattleManager.Instance.Player1.Reborn();
-        }
-        else
-        {
-            BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP); // 如果未在dungeon里面死亡，复活回进入dungeon的地方
-        }
+        BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP); // 如果未在dungeon里面死亡，复活回进入dungeon的地方
 
         ApplyWorldVisualEffectSettings(WorldData);
 
         CameraManager.Instance.FieldCamera.InitFocus();
-        IsInsideMicroWorld = false;
+        IsInsideDungeon = false;
         RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(LastLeaveOpenWorldPlayerGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
         while (RefreshScopeModulesCoroutine != null) yield return null;
 
-        // Loading Micro World Modules
+        // Recycle Dungeon Modules
         LoadingMapPanel.SetProgress(80f, "Returning to Open World");
-        int totalRecycleModuleNumber = MicroWorldModules.Count;
+        int totalRecycleModuleNumber = DungeonModules.Count;
         int recycledModuleCount = 0;
-        foreach (WorldModule microWorldModule in MicroWorldModules)
+        foreach (WorldModule dungeonModule in DungeonModules)
         {
-            yield return Co_RecycleModule(microWorldModule, microWorldModule.ModuleGP, -1);
+            yield return Co_RecycleModule(dungeonModule, dungeonModule.ModuleGP, -1);
             recycledModuleCount++;
             LoadingMapPanel.SetProgress(80f + 20f * recycledModuleCount / totalRecycleModuleNumber, "Returning to Open World");
         }
 
-        MicroWorldModules.Clear();
+        DungeonModules.Clear();
         yield return RecycleEmptyModules();
         LoadingMapPanel.SetProgress(100f, "Returning to Open World");
 
         yield return new WaitForSeconds(LoadingMapPanel.GetRemainingLoadingDuration());
         LoadingMapPanel.CloseUIForm();
         BattleManager.Instance.IsStart = true;
-        returningToOpenWorldFormMicroWorld = false;
+        returningToOpenWorldFormDungeon = false;
     }
 
-    public void RestartMicroWorld(bool rebornPlayer)
+    public void RestartDungeon()
     {
-        if (transportingPlayerToMicroWorld) return;
-        if (returningToOpenWorldFormMicroWorld) return;
-        if (restartingMicroWorld) return;
-        if (!IsInsideMicroWorld) return;
-        StartCoroutine(Co_RestartMicroWorld(rebornPlayer));
+        if (transportingPlayerToDungeon) return;
+        if (returningToOpenWorldFormDungeon) return;
+        if (restartingDungeon) return;
+        if (respawningInOpenWorld) return;
+        if (!IsInsideDungeon) return;
+        StartCoroutine(Co_RestartDungeon());
     }
 
-    private bool restartingMicroWorld = false;
+    private bool restartingDungeon = false;
 
-    public IEnumerator Co_RestartMicroWorld(bool rebornPlayer)
+    public IEnumerator Co_RestartDungeon()
     {
-        restartingMicroWorld = true;
+        restartingDungeon = true;
         BattleManager.Instance.IsStart = false;
         WwiseAudioManager.Instance.Trigger_Teleport.Post(WwiseAudioManager.Instance.WwiseBGMConfiguration.gameObject);
         UIManager.Instance.ShowUIForms<LoadingMapPanel>();
@@ -849,46 +826,33 @@ public class OpenWorld : World
         LoadingMapPanel.SetMinimumLoadingDuration(2);
         LoadingMapPanel.SetBackgroundAlpha(1);
         LoadingMapPanel.SetProgress(0, "Loading Level");
-        WorldData microWorldData = ConfigManager.GetWorldDataConfig(CurrentMicroWorldTypeIndex);
+        WorldData dungeonData = ConfigManager.GetWorldDataConfig(CurrentDungeonWorldTypeIndex);
         GridPos3D transportPlayerBornPoint = GridPos3D.Zero;
 
         while (RefreshScopeModulesCoroutine != null) yield return null;
 
-        // Recycling Micro World Modules
-        int totalRecycleModuleNumber = MicroWorldModules.Count;
+        // Recycling Dungeon Modules
+        int totalRecycleModuleNumber = DungeonModules.Count;
         int recycledModuleCount = 0;
-        foreach (WorldModule microWorldModule in MicroWorldModules)
+        foreach (WorldModule dungeonModule in DungeonModules)
         {
-            yield return Co_RecycleModule(microWorldModule, microWorldModule.ModuleGP, -1);
+            yield return Co_RecycleModule(dungeonModule, dungeonModule.ModuleGP, -1);
             recycledModuleCount++;
             LoadingMapPanel.SetProgress(50f * recycledModuleCount / totalRecycleModuleNumber, "Destroying the dungeon");
         }
 
-        MicroWorldModules.Clear();
+        DungeonModules.Clear();
         yield return RecycleEmptyModules();
 
-        if (IsUsingSpecialESPSInsideMicroWorld) // 此类特殊关卡默认不计入成长，如教程关、体验关等等
-        {
-            PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
-        }
-        else
-        {
-            if (DungeonMissionComplete) // dungeon通关，获得所有奖励，保存玩家成长数值和技能
-            {
-                PlayerData_BeforeEnterDungeon = null;
-            }
-            else
-            {
-                PlayerData_BeforeEnterDungeon?.ApplyDataOnPlayer();
-            }
-        }
+        DungeonMissionComplete = false;
+        CalculatePlayerGrowth();
 
-        // Loading Micro World Modules
-        int totalModuleNum = microWorldData.WorldModuleGPOrder.Count;
+        // Loading Dungeon Modules
+        int totalModuleNum = dungeonData.WorldModuleGPOrder.Count;
         int loadingModuleCount = 0;
-        foreach (GridPos3D worldModuleGP in microWorldData.WorldModuleGPOrder)
+        foreach (GridPos3D worldModuleGP in dungeonData.WorldModuleGPOrder)
         {
-            ushort worldModuleTypeIndex = microWorldData.ModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
+            ushort worldModuleTypeIndex = dungeonData.ModuleMatrix[worldModuleGP.x, worldModuleGP.y, worldModuleGP.z];
             GridPos3D realModuleGP = new GridPos3D(worldModuleGP.x, WORLD_HEIGHT / 2 + worldModuleGP.y, worldModuleGP.z);
             if (worldModuleTypeIndex != 0)
             {
@@ -901,10 +865,10 @@ public class OpenWorld : World
                 {
                     yield return GenerateWorldModule(worldModuleTypeIndex, realModuleGP.x, realModuleGP.y, realModuleGP.z);
                     WorldModule module = WorldModuleMatrix[realModuleGP.x, realModuleGP.y, realModuleGP.z];
-                    MicroWorldModules.Add(module);
+                    DungeonModules.Add(module);
                     WorldData.WorldBornPointGroupData_Runtime.Init_LoadModuleData(realModuleGP, module.WorldModuleData);
                     SortedDictionary<string, BornPointData> playerBornPoints = module.WorldModuleData.WorldModuleBornPointGroupData.PlayerBornPoints;
-                    if (playerBornPoints.TryGetValue(microWorldData.DefaultWorldActorBornPointAlias, out BornPointData defaultBP))
+                    if (playerBornPoints.TryGetValue(dungeonData.DefaultWorldActorBornPointAlias, out BornPointData defaultBP))
                     {
                         transportPlayerBornPoint = module.LocalGPToWorldGP(defaultBP.LocalGP);
                     }
@@ -928,7 +892,7 @@ public class OpenWorld : World
             LoadingMapPanel.SetProgress(50f + 50f * loadingModuleCount / totalModuleNum, "Rebuilding the dungeon");
         }
 
-        yield return GenerateEmptyModules(microWorldData, new GridPos3D(0, WORLD_HEIGHT / 2, 0));
+        yield return GenerateEmptyModules(dungeonData, new GridPos3D(0, WORLD_HEIGHT / 2, 0));
 
         if (transportPlayerBornPoint == GridPos3D.Zero)
         {
@@ -937,12 +901,9 @@ public class OpenWorld : World
 
         BattleManager.Instance.Player1.CanBeThreatened = true;
         BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint);
-        if (rebornPlayer)
-        {
-            BattleManager.Instance.Player1.Reborn();
-        }
+        BattleManager.Instance.Player1.Reborn();
 
-        if (IsUsingSpecialESPSInsideMicroWorld) BattleManager.Instance.Player1.ReloadESPS(microWorldData.Raw_PlayerEnterESPS);
+        if (IsUsingSpecialESPSInsideDungeon) BattleManager.Instance.Player1.ReloadESPS(dungeonData.Raw_PlayerEnterESPS);
 
         CameraManager.Instance.FieldCamera.InitFocus();
 
@@ -955,7 +916,87 @@ public class OpenWorld : World
         yield return new WaitForSeconds(LoadingMapPanel.GetRemainingLoadingDuration());
         LoadingMapPanel.CloseUIForm();
         BattleManager.Instance.IsStart = true;
-        restartingMicroWorld = false;
+        restartingDungeon = false;
+    }
+
+    public void RespawnInOpenWorld()
+    {
+        if (transportingPlayerToDungeon) return;
+        if (returningToOpenWorldFormDungeon) return;
+        if (restartingDungeon) return;
+        if (respawningInOpenWorld) return;
+        StartCoroutine(Co_RespawnInOpenWorld());
+    }
+
+    private bool respawningInOpenWorld = false;
+
+    public IEnumerator Co_RespawnInOpenWorld()
+    {
+        respawningInOpenWorld = true;
+        BattleManager.Instance.IsStart = false;
+        WwiseAudioManager.Instance.Trigger_Teleport.Post(WwiseAudioManager.Instance.WwiseBGMConfiguration.gameObject);
+        UIManager.Instance.ShowUIForms<LoadingMapPanel>();
+        LoadingMapPanel.Clear();
+        LoadingMapPanel.SetMinimumLoadingDuration(2);
+        LoadingMapPanel.SetBackgroundAlpha(1);
+        LoadingMapPanel.SetProgress(0, "Respawning");
+
+        // Recycling the Open World
+        while (RefreshScopeModulesCoroutine != null) yield return null;
+        CalculatePlayerGrowth();
+        BattleManager.Instance.Player1.CanBeThreatened = true;
+        BattleManager.Instance.Player1.TransportPlayerGridPos(InitialPlayerBP); // 如果在dungeon里面死亡，复活回老家
+        BattleManager.Instance.Player1.Reborn();
+
+        CameraManager.Instance.FieldCamera.InitFocus();
+        RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(LastLeaveOpenWorldPlayerGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
+        while (RefreshScopeModulesCoroutine != null) yield return null;
+
+        // Loading Dungeon Modules
+        LoadingMapPanel.SetProgress(80f, "Returning to Open World");
+        int totalRecycleModuleNumber = DungeonModules.Count;
+        int recycledModuleCount = 0;
+        foreach (WorldModule dungeonModule in DungeonModules)
+        {
+            yield return Co_RecycleModule(dungeonModule, dungeonModule.ModuleGP, -1);
+            recycledModuleCount++;
+            LoadingMapPanel.SetProgress(80f + 20f * recycledModuleCount / totalRecycleModuleNumber, "Returning to Open World");
+        }
+
+        DungeonModules.Clear();
+        yield return RecycleEmptyModules();
+        LoadingMapPanel.SetProgress(100f, "Returning to Open World");
+
+        yield return new WaitForSeconds(LoadingMapPanel.GetRemainingLoadingDuration());
+        LoadingMapPanel.CloseUIForm();
+        BattleManager.Instance.IsStart = true;
+        respawningInOpenWorld = false;
+    }
+
+    #endregion
+
+    #region PlayerGrowth
+
+    private void CalculatePlayerGrowth()
+    {
+        if (IsInsideDungeon)
+        {
+            if (IsUsingSpecialESPSInsideDungeon) // 此类特殊关卡默认不计入成长，如教程关、体验关等等
+            {
+                PlayerDataSave?.ApplyDataOnPlayer();
+            }
+            else
+            {
+                if (DungeonMissionComplete) // dungeon通关，获得所有奖励，保存玩家成长数值和技能
+                {
+                    PlayerDataSave = PlayerData.GetPlayerData();
+                }
+                else
+                {
+                    PlayerDataSave?.ApplyDataOnPlayer();
+                }
+            }
+        }
     }
 
     #endregion

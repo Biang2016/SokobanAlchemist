@@ -24,13 +24,14 @@ public class EntitySkillAction_TransportPlayer : BoxSkillAction, EntitySkillActi
             ushort worldTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, randomResult.WorldTypeName.TypeName);
             if (worldTypeIndex != 0)
             {
+                openWorld.DungeonMissionComplete = true;
                 if (worldTypeIndex == ConfigManager.World_OpenWorldIndex)
                 {
-                    openWorld.ReturnToOpenWorldFormMicroWorld(false);
+                    openWorld.ReturnToOpenWorld();
                 }
                 else
                 {
-                    openWorld.TransportPlayerToMicroWorld(worldTypeIndex);
+                    openWorld.TransportPlayerToDungeon(worldTypeIndex);
                 }
             }
         }

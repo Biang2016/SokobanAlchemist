@@ -7,13 +7,10 @@ using UnityEngine.UI;
 public class SkillSlot : MonoBehaviour
 {
     [SerializeField]
-    private Button SkillButton;
+    private PlayerControllerHelper.KeyBind MyKeyBind;
 
     [SerializeField]
     private Image SkillIcon;
-
-    [SerializeField]
-    private Text SkillDescription;
 
     [SerializeField]
     private TextMeshProUGUI SkillKeyBind_Text;
@@ -40,6 +37,11 @@ public class SkillSlot : MonoBehaviour
 
     private Dictionary<ActiveSkillPhase, Image> SkillPhaseClockDict = new Dictionary<ActiveSkillPhase, Image>();
 
+    [SerializeField]
+    private Transform SkillRowContainer;
+
+    private EntitySkillRow curEntitySkillRow;
+
     void Awake()
     {
         SkillPhaseClockDict.Add(ActiveSkillPhase.WingingUp, SkillClock_WingingUp);
@@ -62,8 +64,10 @@ public class SkillSlot : MonoBehaviour
             boundEntityActiveSkill = null;
             SkillIcon.color = Color.clear;
             SkillIcon.sprite = null;
-            SkillDescription.text = "";
             Anim.SetTrigger("SetEmpty");
+
+            curEntitySkillRow?.PoolRecycle();
+            curEntitySkillRow = null;
         }
         else
         {
@@ -75,8 +79,11 @@ public class SkillSlot : MonoBehaviour
             SkillIcon.color = Color.white;
             Sprite sprite = ConfigManager.GetEntitySkillIconByName(entityActiveSkill.SkillIcon.TypeName);
             SkillIcon.sprite = sprite;
-            SkillDescription.text = entityActiveSkill.SkillDescription;
             Anim.SetTrigger("SetSkill");
+
+            curEntitySkillRow?.PoolRecycle();
+            curEntitySkillRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(SkillRowContainer);
+            curEntitySkillRow.Initialize(entityActiveSkill, MyKeyBind.ToString());
         }
     }
 

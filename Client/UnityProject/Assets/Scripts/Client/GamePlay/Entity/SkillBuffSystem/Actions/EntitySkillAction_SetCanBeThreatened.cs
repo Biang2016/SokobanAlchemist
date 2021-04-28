@@ -2,13 +2,13 @@
 using Sirenix.OdinInspector;
 
 [Serializable]
-public class EntitySkillAction_ClearEnemyThreat : EntitySkillAction, EntitySkillAction.IPureAction, EntitySkillAction.IEntityAction
+public class EntitySkillAction_SetCanBeThreatened : EntitySkillAction, EntitySkillAction.IPureAction, EntitySkillAction.IEntityAction
 {
     public override void OnRecycled()
     {
     }
 
-    protected override string Description => "清除敌人仇恨";
+    protected override string Description => "设置能否被威胁";
 
     [LabelText("True会被攻击False不会")]
     public bool CanBeThreatened;
@@ -31,12 +31,20 @@ public class EntitySkillAction_ClearEnemyThreat : EntitySkillAction, EntitySkill
     private void ExecuteCore(Entity target)
     {
         target.CanBeThreatened = CanBeThreatened;
+        if (!CanBeThreatened)
+        {
+            BattleManager.Instance.SetActorInCamp(true);
+        }
+        else
+        {
+            BattleManager.Instance.SetActorInCamp(false);
+        }
     }
 
     protected override void ChildClone(EntitySkillAction newAction)
     {
         base.ChildClone(newAction);
-        EntitySkillAction_ClearEnemyThreat action = ((EntitySkillAction_ClearEnemyThreat) newAction);
+        EntitySkillAction_SetCanBeThreatened action = ((EntitySkillAction_SetCanBeThreatened) newAction);
         action.CanBeThreatened = CanBeThreatened;
         action.ExertOnTarget = ExertOnTarget;
     }
@@ -44,7 +52,7 @@ public class EntitySkillAction_ClearEnemyThreat : EntitySkillAction, EntitySkill
     public override void CopyDataFrom(EntitySkillAction srcData)
     {
         base.CopyDataFrom(srcData);
-        EntitySkillAction_ClearEnemyThreat action = ((EntitySkillAction_ClearEnemyThreat) srcData);
+        EntitySkillAction_SetCanBeThreatened action = ((EntitySkillAction_SetCanBeThreatened) srcData);
         CanBeThreatened = action.CanBeThreatened;
         ExertOnTarget = action.ExertOnTarget;
     }

@@ -1345,7 +1345,7 @@ public class World : PoolObject
         if (validTerrainTypes.Count == 0) return true;
         if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
-            if (openWorld.IsInsideMicroWorld) return true;
+            if (openWorld.IsInsideDungeon) return true;
             TerrainType terrainType = openWorld.WorldMap_TerrainType[worldGP.x, worldGP.z];
             foreach (TerrainType validTerrainType in validTerrainTypes)
             {
