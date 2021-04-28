@@ -81,7 +81,7 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<RandomSequenceContainer Name="IceEnemy_Cyan_FrostBreath" ID="{8ADA565E-CDA3-4F0A-8CDC-663B5E513F81}" ShortID="956951403">
+						<RandomSequenceContainer Name="IceEnemy_Cyan_FrostBreath_Cast" ID="{8ADA565E-CDA3-4F0A-8CDC-663B5E513F81}" ShortID="956951403">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -91,60 +91,26 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="SkillCast_v1" ID="{A6993B6C-B968-458A-9725-CB4C00E0C42F}" ShortID="45136669">
+								<Sound Name="FrostBreathCast" ID="{9D4E34FA-6EDE-406D-BC93-D5525D7E6615}" ShortID="371322682">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="effect 4" ID="{F1FD2A1E-B749-4FE5-861A-B02E6D373728}">
+										<AudioFileSource Name="FrostBreathCast" ID="{1F27DD0C-1B54-4781-B856-2D5C71B051A9}">
 											<Language>SFX</Language>
-											<AudioFile>effect 4.wav</AudioFile>
+											<AudioFile>FrostBreathCast.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="598399752"/>
+												<MediaID ID="638158596"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="effect 4" ID="{F1FD2A1E-B749-4FE5-861A-B02E6D373728}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-							</ChildrenList>
-						</RandomSequenceContainer>
-						<RandomSequenceContainer Name="IceEnemy_Cyan_GlacialSlam" ID="{10682822-8C94-4EA5-9D66-E7E9AF7CD366}" ShortID="92848669">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<Sound Name="SkillCast_v2" ID="{F0D66CA2-4F2A-4A08-8222-5A5C62C32272}" ShortID="138523522">
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="JackHammer_far_03" ID="{5DBDFF96-D5F5-463C-88FE-21062170F782}">
-											<Language>SFX</Language>
-											<AudioFile>JackHammer_far_03.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="567636655"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="JackHammer_far_03" ID="{5DBDFF96-D5F5-463C-88FE-21062170F782}" Platform="Linked"/>
+										<ActiveSource Name="FrostBreathCast" ID="{1F27DD0C-1B54-4781-B856-2D5C71B051A9}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
@@ -193,6 +159,210 @@
 								</Sound>
 							</ChildrenList>
 						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="IceEnemy_Cyan_FrostBreath_Preparing" ID="{AD1B196B-887D-4F8F-B010-BC282203546D}" ShortID="109690724">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="IceInhale1" ID="{8B7E81A4-E679-400A-A27C-99F18166E18F}" ShortID="474805242">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="IceInhale1" ID="{F806853E-93DB-4033-9B95-5999BE59D90E}">
+											<Language>SFX</Language>
+											<AudioFile>IceInhale1.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="779840687"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="IceInhale1" ID="{F806853E-93DB-4033-9B95-5999BE59D90E}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="IceInhale2" ID="{41B6D596-0A84-4607-8D31-F9EC04770FEF}" ShortID="361159493">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="IceInhale2" ID="{DCE54D0F-4525-4736-A622-DDC7AE04868E}">
+											<Language>SFX</Language>
+											<AudioFile>IceInhale2.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="388369344"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="IceInhale2" ID="{DCE54D0F-4525-4736-A622-DDC7AE04868E}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="IceInhale3" ID="{B76D8249-82E8-45CF-9B2C-21981069FDD6}" ShortID="525805817">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="IceInhale3" ID="{6FAD5E36-E76D-4E11-9B11-B32818AE330B}">
+											<Language>SFX</Language>
+											<AudioFile>IceInhale3.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="496669309"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="IceInhale3" ID="{6FAD5E36-E76D-4E11-9B11-B32818AE330B}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="IceEnemy_Cyan_GlacialSlam_Preparing" ID="{AC583B86-5DD6-4825-A3C2-DD3499C267E9}" ShortID="389849234">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="SlamCharge" ID="{D3B34B01-0388-420D-BFCB-C013800BC3E0}" ShortID="716446997">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SlamCharge" ID="{F7C8FCCC-B0FC-412C-B92D-380EA009084B}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.00976556594860156"/>
+												<Property Name="LoopBegin" Type="Real64" Value="0"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="VolumeOffset" Type="Real64">
+													<ValueList>
+														<Value>1.4</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>SlamCharge.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="958001520"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SlamCharge" ID="{F7C8FCCC-B0FC-412C-B92D-380EA009084B}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<BlendContainer Name="IceEnemy_Cyan_GlacialSlam_Cast" ID="{43BA65C3-974A-408F-AD27-9BA301850823}" ShortID="325984548">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="Golem Slam A" ID="{44026C63-0EBD-4E64-9E36-573CB8FA16AC}" ShortID="1013322859">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Golem Slam A" ID="{378E3A08-2033-466A-A6C3-58B2B1C1E5AF}">
+											<PropertyList>
+												<Property Name="LoopBegin" Type="Real64" Value="0.460408163265306"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.460408163265306"/>
+												<Property Name="VolumeOffset" Type="Real64">
+													<ValueList>
+														<Value>2</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Golem Slam A.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="889405926"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Golem Slam A" ID="{378E3A08-2033-466A-A6C3-58B2B1C1E5AF}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Iron Bolt Slam" ID="{21B30F46-9B90-4963-9ADC-B69B3241B741}" ShortID="618951693">
+									<PropertyList>
+										<Property Name="Pitch" Type="int32">
+											<ValueList>
+												<Value>510</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Iron Bolt Slam" ID="{07491063-CD20-4268-A417-D19FC1226223}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.121567263479466"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="VolumeOffset" Type="Real64">
+													<ValueList>
+														<Value>3.4</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Iron Bolt Slam.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="868619944"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Iron Bolt Slam" ID="{07491063-CD20-4268-A417-D19FC1226223}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</BlendContainer>
 					</ChildrenList>
 				</ActorMixer>
 			</ChildrenList>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{272A9442-A827-4ACE-B7FF-CB1D875FF0FD}" SchemaVersion="97" RootDocumentID="{BF4FC306-E3A9-4180-902B-945ED5E7EFDB}">
+	<AudioObjects>
+		<WorkUnit Name="WoodenTrapBox" ID="{272A9442-A827-4ACE-B7FF-CB1D875FF0FD}" OwnerID="{ABC65056-1A6C-4C9D-8CE0-4E3CFED4B185}" PersistMode="Nested">
+			<ChildrenList>
+				<RandomSequenceContainer Name="OnBeingLift" ID="{17D95929-E380-44FB-A29A-6655BF929D50}" ShortID="975149505">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="OnBeingLift_1" ID="{ABC38B9F-9270-4C93-80AC-A2B5A21E3D5B}" ShortID="889075343">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Logic Sound Lab" ID="{299E2E7A-279D-417E-A1EC-BD7712B8D3FF}">
+									<PropertyList>
+										<Property Name="LoopEnd" Type="Real64" Value="1.13627535273369"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.0620654604434366"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.14343675201562"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>Logic Sound Lab.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="107284141"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Logic Sound Lab" ID="{299E2E7A-279D-417E-A1EC-BD7712B8D3FF}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="OnBeingLift_2" ID="{A4EEF5A7-7F92-42D6-8D76-322B03CE1FB1}" ShortID="124654642">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Logic Sound Lab2" ID="{4B1AEA42-DFAD-4127-B23C-5932C56D3FA0}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.0177950207860922"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.00593167359536406"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimEnd" Type="Real64" Value="0.836365976946335"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>Logic Sound Lab2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="176623352"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Logic Sound Lab2" ID="{4B1AEA42-DFAD-4127-B23C-5932C56D3FA0}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+				<RandomSequenceContainer Name="OnBeingDropped" ID="{D7C7C5CD-E433-4F22-929F-7F1167A790A7}" ShortID="159025381">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="OnBeingDropped_1" ID="{65384580-DDE0-417A-A405-8F6BBB54233C}" ShortID="970677758">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Logic Sound Lab2" ID="{847CC1DF-CAC2-44FB-9B7C-D20EB0E64F0E}">
+									<Language>SFX</Language>
+									<AudioFile>Logic Sound Lab2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="288551405"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Logic Sound Lab2" ID="{847CC1DF-CAC2-44FB-9B7C-D20EB0E64F0E}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="OnBeingDropped_2" ID="{6AD7B8E3-319C-4F16-BDF8-D11623FCE7E2}" ShortID="834367841">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Logic Sound Lab3" ID="{B59CA702-D54C-4517-AEFA-A59CA4E7F807}">
+									<Language>SFX</Language>
+									<AudioFile>Logic Sound Lab3.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="305257575"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Logic Sound Lab3" ID="{B59CA702-D54C-4517-AEFA-A59CA4E7F807}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="OnBeingDropped_3" ID="{82502A33-8C64-4900-9A1B-7952EED0D5D2}" ShortID="903496335">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Logic Sound Lab4" ID="{A5612D23-5D2A-4EBC-AC5F-C69713AA30D7}">
+									<Language>SFX</Language>
+									<AudioFile>Logic Sound Lab4.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="49836195"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Logic Sound Lab4" ID="{A5612D23-5D2A-4EBC-AC5F-C69713AA30D7}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="OnBeingDropped_4" ID="{48FA06C9-E7CD-40CB-85EF-2419C20AB6E0}" ShortID="232254938">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Logic Sound Lab5" ID="{E2AF0265-50AD-499B-92F3-F1AB919363BE}">
+									<Language>SFX</Language>
+									<AudioFile>Logic Sound Lab5.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="660266055"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Logic Sound Lab5" ID="{E2AF0265-50AD-499B-92F3-F1AB919363BE}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="OnBeingDropped_5" ID="{BAB2E0A2-4108-4281-AE63-398DA302F88F}" ShortID="603872218">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Logic Sound Lab6" ID="{155B8BAF-9A46-4A68-B2CE-F5B428A48939}">
+									<Language>SFX</Language>
+									<AudioFile>Logic Sound Lab6.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="507950500"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Logic Sound Lab6" ID="{155B8BAF-9A46-4A68-B2CE-F5B428A48939}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>
