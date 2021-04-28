@@ -573,7 +573,7 @@ public class Actor : Entity
 
     [ShowInInspector]
     [HideInEditorMode]
-    internal bool IsInMicroWorld = false;
+    internal bool IsInDungeon = false;
 
     public enum ActorBehaviourStates
     {
@@ -658,7 +658,7 @@ public class Actor : Entity
         }
 
         IsRecycling = true;
-        IsInMicroWorld = false;
+        IsInDungeon = false;
         ForbidAction = true;
         if (!HasRigidbody) AddRigidbody();
         RigidBody.drag = 100f;
@@ -1414,7 +1414,7 @@ public class Actor : Entity
         if (CannotAct) return;
         if (HasRigidbody)
         {
-            ActorMoveColliderRoot.SetActive(false);
+            //ActorMoveColliderRoot.SetActive(false);
             JumpHeight = jumpHeight;
             JumpStartWorldGP = WorldGP;
             CurrentJumpForce = jumpForce;
@@ -1471,7 +1471,7 @@ public class Actor : Entity
             if (CannotAct) return;
             if (HasRigidbody)
             {
-                ActorMoveColliderRoot.SetActive(true);
+                //ActorMoveColliderRoot.SetActive(true);
                 SmashDownTargetPos = targetPos;
                 SmashForce = smashForce;
                 ActorBehaviourState = ActorBehaviourStates.SmashDown;

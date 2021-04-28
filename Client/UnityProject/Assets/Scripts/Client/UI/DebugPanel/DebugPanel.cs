@@ -274,11 +274,11 @@ public class DebugPanel : BaseUIPanel
             ushort worldNameIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, worldName);
             if (worldNameIndex == ConfigManager.World_OpenWorldIndex)
             {
-                openWorld.ReturnToOpenWorldFormMicroWorld(false);
+                openWorld.ReturnToOpenWorld();
             }
             else
             {
-                openWorld.TransportPlayerToMicroWorld(worldNameIndex);
+                openWorld.TransportPlayerToDungeon(worldNameIndex);
             }
         }
         else

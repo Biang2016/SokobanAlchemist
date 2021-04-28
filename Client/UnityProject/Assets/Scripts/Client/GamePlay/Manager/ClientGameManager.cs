@@ -271,9 +271,9 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         {
             if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
             {
-                if (openWorld.IsInsideMicroWorld)
+                if (openWorld.IsInsideDungeon)
                 {
-                    openWorld.ReturnToOpenWorldFormMicroWorld(false);
+                    openWorld.ReturnToOpenWorld();
                     return;
                 }
             }
@@ -340,9 +340,9 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         {
             if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
             {
-                if (openWorld.IsInsideMicroWorld)
+                if (openWorld.IsInsideDungeon)
                 {
-                    openWorld.RestartMicroWorld(false);
+                    openWorld.RestartDungeon();
                     return;
                 }
             }

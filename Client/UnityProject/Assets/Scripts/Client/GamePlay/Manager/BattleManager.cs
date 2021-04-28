@@ -361,13 +361,13 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         yield return panel.Co_LoseGame();
         if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
-            if (openWorld.IsInsideMicroWorld)
+            if (openWorld.IsInsideDungeon)
             {
-                openWorld.RestartMicroWorld(true);
+                openWorld.RestartDungeon();
             }
             else
             {
-                openWorld.ReturnToOpenWorldFormMicroWorld(true);
+                openWorld.RespawnInOpenWorld();
             }
         }
         else
