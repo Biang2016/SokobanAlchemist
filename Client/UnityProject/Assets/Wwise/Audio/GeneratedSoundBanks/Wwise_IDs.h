@@ -63,7 +63,6 @@ namespace AK
         static const AkUniqueID MEDIUMLOGBOX_PUSHED = 461148455U;
         static const AkUniqueID METALTRAPBOX_KICKED = 4041442744U;
         static const AkUniqueID METALTRAPBOX_PUSHED = 2194083730U;
-        static const AkUniqueID MUSIC_REGION = 3741135221U;
         static const AkUniqueID ONBEINGFROZEN = 3833687285U;
         static const AkUniqueID ONBEINGKICKED_HEAVY = 1643181542U;
         static const AkUniqueID ONBEINGKICKED_LIGHT = 2340279731U;
@@ -202,7 +201,6 @@ namespace AK
         static const AkUniqueID MUSICSTINGER = 1636576504U;
         static const AkUniqueID NONWORLD = 841296678U;
         static const AkUniqueID PLAYER = 1069431850U;
-        static const AkUniqueID REGION_DUNGEON = 3334061918U;
         static const AkUniqueID REGION_EXCAVATOR = 1355693303U;
         static const AkUniqueID REGION_LAB = 2754982597U;
         static const AkUniqueID REGION_OPENWORLD = 1863167500U;

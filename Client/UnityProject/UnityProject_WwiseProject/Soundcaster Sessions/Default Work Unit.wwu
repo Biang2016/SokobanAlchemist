@@ -4,6 +4,12 @@
 		<WorkUnit Name="Default Work Unit" ID="{77C9FDB8-57B0-47C9-B5FF-B0477BFEF239}" PersistMode="Standalone">
 			<ChildrenList>
 				<SoundcasterSession Name="New Soundcaster Session" ID="{040558D8-A443-4FE5-8A51-D2A860861BC0}">
+					<ModuleList>
+						<Module>
+							<ObjectRef Name="Music" ID="{30CB71BC-EE60-4580-ADA5-A1F306814BB4}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+							<Position X="0" Y="0"/>
+						</Module>
+					</ModuleList>
 					<RTPCValueList ShowAll="true">
 						<RTPCValue>
 							<GameParameterRef Name="World_Volume" ID="{1332F4BF-9286-407A-945A-29E7D2B9ECA8}"/>
@@ -15,7 +21,7 @@
 						</RTPCValue>
 						<RTPCValue>
 							<GameParameterRef Name="SpiderLegDistanceToPlayer" ID="{D9C56384-D920-47E1-8580-8A6201311E30}"/>
-							<Value>82.3515706375747</Value>
+							<Value>0</Value>
 						</RTPCValue>
 						<RTPCValue>
 							<GameParameterRef Name="Player_MovementSpeed" ID="{49F123CB-2046-48D4-8C63-1298A86811EB}"/>
@@ -39,7 +45,7 @@
 						</RTPCValue>
 					</RTPCValueList>
 					<CurrentStateList ShowAll="true">
-						<CurrentStateRef Name="Exploring" ID="{3D43D6D3-16EE-4734-9A44-E93CFC6B1A41}"/>
+						<CurrentStateRef Name="InBossCombat" ID="{FBC865FA-EC5F-41F2-8150-1E1F4B28F064}"/>
 						<CurrentStateRef Name="Temple" ID="{08F478D6-8A4C-499B-9AA0-DCFE184341FE}"/>
 					</CurrentStateList>
 					<CurrentSwitchList ShowAll="true">
