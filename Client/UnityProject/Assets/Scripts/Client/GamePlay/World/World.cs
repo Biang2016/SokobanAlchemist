@@ -59,6 +59,8 @@ public class World : PoolObject
 
         yield return RecycleEmptyModules();
         WorldData = null;
+        cachedAdjacentBoxList.Clear();
+        cachedAdjacentAddedBoxes.Clear();
     }
 
     public virtual IEnumerator Initialize(WorldData worldData)
@@ -487,71 +489,74 @@ public class World : PoolObject
         }
     }
 
+    private HashSet<Box> cachedAdjacentAddedBoxes = new HashSet<Box>();
+    private List<Box> cachedAdjacentBoxList = new List<Box>(128);
+
     public List<Box> GetAdjacentBox(GridPos3D worldGP)
     {
-        HashSet<Box> addedBoxes = new HashSet<Box>();
-        List<Box> boxes = new List<Box>();
+        cachedAdjacentAddedBoxes.Clear();
+        cachedAdjacentBoxList.Clear();
         Box leftBox = GetBoxByGridPosition(worldGP + new GridPos3D(-1, 0, 0), out WorldModule _, out GridPos3D _);
         if (leftBox)
         {
-            if (!addedBoxes.Contains(leftBox))
+            if (!cachedAdjacentAddedBoxes.Contains(leftBox))
             {
-                boxes.Add(leftBox);
-                addedBoxes.Add(leftBox);
+                cachedAdjacentBoxList.Add(leftBox);
+                cachedAdjacentAddedBoxes.Add(leftBox);
             }
         }
 
         Box rightBox = GetBoxByGridPosition(worldGP + new GridPos3D(1, 0, 0), out WorldModule _, out GridPos3D _);
         if (rightBox)
         {
-            if (!addedBoxes.Contains(rightBox))
+            if (!cachedAdjacentAddedBoxes.Contains(rightBox))
             {
-                boxes.Add(rightBox);
-                addedBoxes.Add(rightBox);
+                cachedAdjacentBoxList.Add(rightBox);
+                cachedAdjacentAddedBoxes.Add(rightBox);
             }
         }
 
         Box upBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 1, 0), out WorldModule _, out GridPos3D _);
         if (upBox)
         {
-            if (!addedBoxes.Contains(upBox))
+            if (!cachedAdjacentAddedBoxes.Contains(upBox))
             {
-                boxes.Add(upBox);
-                addedBoxes.Add(upBox);
+                cachedAdjacentBoxList.Add(upBox);
+                cachedAdjacentAddedBoxes.Add(upBox);
             }
         }
 
         Box downBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, -1, 0), out WorldModule _, out GridPos3D _);
         if (downBox)
         {
-            if (!addedBoxes.Contains(downBox))
+            if (!cachedAdjacentAddedBoxes.Contains(downBox))
             {
-                boxes.Add(downBox);
-                addedBoxes.Add(downBox);
+                cachedAdjacentBoxList.Add(downBox);
+                cachedAdjacentAddedBoxes.Add(downBox);
             }
         }
 
         Box frontBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 0, 1), out WorldModule _, out GridPos3D _);
         if (frontBox)
         {
-            if (!addedBoxes.Contains(frontBox))
+            if (!cachedAdjacentAddedBoxes.Contains(frontBox))
             {
-                boxes.Add(frontBox);
-                addedBoxes.Add(frontBox);
+                cachedAdjacentBoxList.Add(frontBox);
+                cachedAdjacentAddedBoxes.Add(frontBox);
             }
         }
 
         Box backBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 0, -1), out WorldModule _, out GridPos3D _);
         if (backBox)
         {
-            if (!addedBoxes.Contains(backBox))
+            if (!cachedAdjacentAddedBoxes.Contains(backBox))
             {
-                boxes.Add(backBox);
-                addedBoxes.Add(backBox);
+                cachedAdjacentBoxList.Add(backBox);
+                cachedAdjacentAddedBoxes.Add(backBox);
             }
         }
 
-        return boxes;
+        return cachedAdjacentBoxList;
     }
 
     public bool BoxProject(GridPos3D dir, GridPos3D origin, int maxDistance, bool touchBox, out GridPos3D worldGP, out Box firstBox)

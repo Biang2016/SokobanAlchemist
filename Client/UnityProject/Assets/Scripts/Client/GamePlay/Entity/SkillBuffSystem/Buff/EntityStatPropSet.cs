@@ -708,10 +708,13 @@ public class EntityStatPropSet
         }
 
         PropertyDict.Clear();
+        cachedFireSpreadEntitySet.Clear();
     }
 
     private float abnormalStateAutoTick = 0f;
     private int abnormalStateAutoTickInterval = 1; // 异常状态值每秒降低
+
+    private HashSet<Entity> cachedFireSpreadEntitySet = new HashSet<Entity>();
 
     public void Tick(float deltaTime)
     {
@@ -727,12 +730,20 @@ public class EntityStatPropSet
             if (FiringLevel.Value >= 1)
             {
                 // 燃烧蔓延
-                foreach (Box adjacentBox in WorldManager.Instance.CurrentWorld.GetAdjacentBox(Entity.WorldGP))
+                cachedFireSpreadEntitySet.Clear();
+                cachedFireSpreadEntitySet.Add(Entity); // 不蔓延自己
+                foreach (GridPos3D offset in Entity.GetEntityOccupationGPs_Rotated())
                 {
-                    int diff = FiringValue.Value - adjacentBox.EntityStatPropSet.FiringValue.Value;
-                    if (diff > 0)
+                    GridPos3D gridPos = offset + Entity.WorldGP;
+                    foreach (Box adjacentBox in WorldManager.Instance.CurrentWorld.GetAdjacentBox(gridPos))
                     {
-                        adjacentBox.EntityStatPropSet.FiringValue.SetValue(adjacentBox.EntityStatPropSet.FiringValue.Value + Mathf.RoundToInt(diff * FiringSpreadPercent.GetModifiedValue / 100f), "FiringSpread");
+                        if (cachedFireSpreadEntitySet.Contains(adjacentBox)) continue;
+                        cachedFireSpreadEntitySet.Add(adjacentBox);
+                        int diff = FiringValue.Value - adjacentBox.EntityStatPropSet.FiringValue.Value;
+                        if (diff > 0)
+                        {
+                            adjacentBox.EntityStatPropSet.FiringValue.SetValue(adjacentBox.EntityStatPropSet.FiringValue.Value + Mathf.RoundToInt(diff * FiringSpreadPercent.GetModifiedValue / 100f), "FiringSpread");
+                        }
                     }
                 }
 
