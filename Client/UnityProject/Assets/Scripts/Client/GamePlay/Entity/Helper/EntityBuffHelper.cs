@@ -505,11 +505,11 @@ public class EntityBuffHelper : EntityMonoHelper
         }
     }
 
-    public void Damage(int damage, EntityBuffAttribute damageAttribute, uint lastInteractActorGUID)
+    public void Damage(int damage, EntityBuffAttribute damageAttribute, Entity lastInteractEntity)
     {
         AddBuff(new EntityBuff_ChangeEntityStatInstantly
         {
-            CasterActorGUID = lastInteractActorGUID,
+            CasterEntity = lastInteractEntity,
             BuffFX = null,
             Delta = -damage,
             Duration = 0,

@@ -347,6 +347,22 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         EditorUtility.DisplayDialog("Notice", "Quick Serialize Types Success", "Confirm");
     }
 
+    [MenuItem("开发工具/配置/快速导出技能")]
+    public static void QuickExportConfigs_Skills()
+    {
+        if (Directory.Exists(TypeNamesConfigFolder_Build)) Directory.Delete(TypeNamesConfigFolder_Build, true);
+        Directory.CreateDirectory(TypeNamesConfigFolder_Build);
+
+        // 时序，先导出类型表
+        ExportTypeGUIDMapping();
+        ExportEntitySkillLibrary(DataFormat.Binary);
+
+        AssetDatabase.Refresh();
+        IsLoaded = false;
+        LoadAllConfigs();
+        EditorUtility.DisplayDialog("Notice", "Quick Serialize Skill Success", "Confirm");
+    }
+
     //[MenuItem("开发工具/配置/快速序列化类型")]
     //public static void QuickExportConfigs_TypeDefines()
     //{

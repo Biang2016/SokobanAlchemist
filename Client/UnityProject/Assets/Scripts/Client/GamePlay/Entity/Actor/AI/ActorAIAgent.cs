@@ -433,7 +433,7 @@ public class ActorAIAgent
             {
                 if (box.EntityTypeIndex != ConfigManager.Box_EnemyFrozenBoxIndex)
                 {
-                    entity.EntityBuffHelper.Damage(10000, EntityBuffAttribute.ExplodeDamage, 0);
+                    entity.EntityBuffHelper.Damage(10000, EntityBuffAttribute.ExplodeDamage, null);
                 }
             }
         }

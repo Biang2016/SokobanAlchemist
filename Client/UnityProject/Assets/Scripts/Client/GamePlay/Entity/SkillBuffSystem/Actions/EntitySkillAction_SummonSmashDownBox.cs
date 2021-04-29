@@ -31,10 +31,7 @@ public class EntitySkillAction_SummonSmashDownBox : EntitySkillAction, EntitySki
             {
                 if (WorldManager.Instance.CurrentWorld.DropBoxOnTopLayer(boxTypeIndex, randomResult.BoxOrientation, GridPos3D.Down, worldGP + GridPos3D.Up * DropFromHeightFromFloor, DropFromHeightFromFloor + 3, out Box dropBox))
                 {
-                    if (Entity is Actor actor)
-                    {
-                        dropBox.LastInteractActorGUID = actor.GUID;
-                    }
+                    dropBox.LastInteractEntity = Entity;
                 }
             }
         }

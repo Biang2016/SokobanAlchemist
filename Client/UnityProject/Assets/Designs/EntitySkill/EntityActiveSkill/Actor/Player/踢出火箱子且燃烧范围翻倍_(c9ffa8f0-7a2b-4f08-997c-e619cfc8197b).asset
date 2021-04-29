@@ -10,24 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "\u6728\u7BB1\u5B50\u8F6C\u51B0\u7BB1\u5B50_(9a9d0e5c-aeae-4e67-b9b0-a48bddc1300b)"
+  m_Name: "\u8E22\u51FA\u706B\u7BB1\u5B50\u4E14\u71C3\u70E7\u8303\u56F4\u7FFB\u500D_(c9ffa8f0-7a2b-4f08-997c-e619cfc8197b)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
+      type: {class: ActorActiveSkill_KickAreaCast, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        SkillGUID: (9a9d0e5c-aeae-4e67-b9b0-a48bddc1300b)
-        SkillAlias: "\u6728\u7BB1\u5B50\u8F6C\u51B0\u7BB1\u5B50"
+        SkillGUID: (c9ffa8f0-7a2b-4f08-997c-e619cfc8197b)
+        SkillAlias: "\u8E22\u51FA\u706B\u7BB1\u5B50\u4E14\u71C3\u70E7\u8303\u56F4\u7FFB\u500D"
         SkillIcon:
           TypeDefineType: 12
-          TypeGUID: (64d911b2-c1f0-48de-a315-66cdc2273f7f)
-        SkillDescription: Spend 10 ice element, change the wooden box in front of
-          you into an ice box.
-        TargetCamp: 8
+          TypeGUID: (7f4263a7-f15f-445a-85f1-f28979436c39)
+        SkillDescription: 
+        TargetCamp: 14
         SkillsPropertyCollection:
           CastingRadius:
             BaseValue: 0
@@ -35,7 +34,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           Cooldown:
-            BaseValue: 1000
+            BaseValue: 5000
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 1000000
@@ -65,15 +64,15 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           ConsumeFireElementFragment:
-            BaseValue: 0
-            ModifiedValue: 0
-            MinValue: 0
-            MaxValue: 1000
-          ConsumeIceElementFragment:
             BaseValue: 10
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 1000
+          ConsumeIceElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
           ConsumeLightningElementFragment:
             BaseValue: 0
             ModifiedValue: 0
@@ -82,9 +81,10 @@ MonoBehaviour:
         TriggerWhenMissProbabilityPercent: 100
         EntitySkillConditions:
         - id: 1
-        WingUpCanMove: 0
-        CastCanMove: 0
-        RecoverCanMove: 0
+        - id: 2
+        WingUpCanMove: 1
+        CastCanMove: 1
+        RecoverCanMove: 1
         RawSubActiveSkillList: []
         SubActiveSkillTriggerLogicList: []
         InterruptSubActiveSkillsWhenInterrupted: 0
@@ -102,73 +102,40 @@ MonoBehaviour:
         ProjectOffsetZMax: 0
         ProjectOffsetZMin: 0
         ProjectHeightDeltaRange: 999
-        GridWarningColorFill: {r: 0, g: 0.9999995, b: 1, a: 0.92941177}
-        GridWarningColorBorderHighlight: {r: 1, g: 1, b: 1, a: 0.80784315}
+        GridWarningColorFill: {r: 0, g: 0, b: 0, a: 0}
+        GridWarningColorBorderHighlight: {r: 0, g: 0, b: 0, a: 0}
         GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
         RawEntitySkillActions:
-        - id: 2
+        - id: 3
+        - id: 4
     00000001:
+      type: {class: EntitySkillCondition_HasInteractableEntityInCastArea, ns: , asm: Client}
+      data:
+        DependOnActorInteractSkill: 1
+        InteractSkillTypes: 02000000
+    00000002:
       type: {class: EntitySkillCondition_HasEntityInCastArea, ns: , asm: Client}
       data:
         EntityType:
           TypeDefineType: 0
-          TypeGUID: (8f038b03-db45-4d6f-9be3-23dc5cf50dfc)
-    00000002:
-      type: {class: BoxSkillAction_ChangeBoxType, ns: , asm: Client}
-      data:
-        InitWorldModuleGUID: 0
-        EntityData:
-          EntityType:
-            TypeDefineType: 0
-            TypeGUID: (c9630278-8f6d-416f-b6de-620573dfb81a)
-          EntityOrientation: 0
-          RawEntityExtraSerializeData:
-            EntityPassiveSkills:
-            - id: 3
-        ChangeForEveryGrid: 0
-        ExertOnTarget: 1
+          TypeGUID: (65e613ca-1b8c-4002-84d1-0c49ea3b0903)
     00000003:
-      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        SkillGUID: 
-        SkillAlias: 
-        SkillIcon:
-          TypeDefineType: 12
-          TypeGUID: 
-        SkillDescription: 
-        PassiveSkillCondition: 1
-        TriggerProbabilityPercent: 100
-        DestroyEntityByElementDamageTypeList: 
-        MultiEventTrigger: 0
-        ListenLevelEventAliasList: []
-        ListenLevelEventAlias: 
-        MaxTriggeredTimes: 1
-        EntityStatChangeType: 0
-        EntityStatChangeThreshold_UsePercent: 0
-        EntityStatChangeThreshold: 0
-        EntityStatChangeThresholdPercent: 0
-        EntityStatChangeThresholdType: 0
-        EntityPropertyChangeType: 0
-        EntityPropertyChangeThreshold: 0
-        EntityPropertyChangeThresholdType: 0
-        EntitySkillConditions: []
-        RawEntitySkillActions:
-        - id: 4
+        AddOrRemove: 1
+        EntitySkillSO: {fileID: 11400000, guid: db54046bf3e9fa24c98ab860a2cfe4a8,
+          type: 2}
+        SkillGUID: (1f9d40f5-573f-42bb-b4e7-f430e549b57b)
+        KeyBind: 0
+        ExertOnTarget: 1
     00000004:
-      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
+      type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        FX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: (2ffe2270-3562-4ca9-aee0-583315db835a)
-          UseCurve: 0
-          FXScale: 1
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        PlayFXForEveryGrid: 1
+        AddOrRemove: 0
+        EntitySkillSO: {fileID: 11400000, guid: e8d8386ffbccf204a974a327dd306a6a,
+          type: 2}
+        SkillGUID: (3106ddee-0888-4483-9270-4aa47a704521)
+        KeyBind: 0
+        ExertOnTarget: 1

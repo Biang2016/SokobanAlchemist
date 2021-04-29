@@ -736,7 +736,7 @@ public class EntityStatPropSet
                     }
                 }
 
-                Entity.EntityBuffHelper.Damage(FiringLevel.Value, EntityBuffAttribute.FiringDamage, 0);
+                Entity.EntityBuffHelper.Damage(FiringLevel.Value, EntityBuffAttribute.FiringDamage, null);
             }
         }
     }

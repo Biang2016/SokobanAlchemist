@@ -4,9 +4,9 @@ using BiangLibrary.GamePlay.UI;
 using UnityEngine;
 
 [Serializable]
-public class ActorActiveSkill_Kick : EntityActiveSkill
+public class ActorActiveSkill_KickAreaCast : EntityActiveSkill_AreaCast
 {
-    protected override string Description => "踢";
+    protected override string Description => "踢AreaCast";
 
     protected override bool ValidateSkillTrigger_Subject(TargetEntityType targetEntityType)
     {
@@ -35,6 +35,7 @@ public class ActorActiveSkill_Kick : EntityActiveSkill
         if (Entity is Actor actor)
         {
             actor.ActorArtHelper.Kick();
+            //yield return new WaitForSeconds(0.066f);
         }
 
         yield return base.Cast(targetEntityType, castDuration);

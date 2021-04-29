@@ -31,11 +31,11 @@ public abstract class EntityPassiveSkill : EntitySkill
     {
     }
 
-    public virtual void OnBeingLift(Actor actor)
+    public virtual void OnBeingLift(Entity entity)
     {
     }
 
-    public virtual void OnBeingKicked(Actor actor)
+    public virtual void OnBeingKicked(Entity entity)
     {
     }
 

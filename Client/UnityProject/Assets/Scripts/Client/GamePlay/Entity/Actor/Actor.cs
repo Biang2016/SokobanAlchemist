@@ -1146,20 +1146,6 @@ public class Actor : Entity
         temp_DashMaxDistance = 0;
     }
 
-    public void DoKickBox()
-    {
-        Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
-        {
-            Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.EntityTypeIndex))
-            {
-                box.Kick(CurForward, KickForce, this);
-                FX kickFX = FXManager.Instance.PlayFX(KickFX, KickFXPivot.position);
-            }
-        }
-    }
-
     public void SwapBox()
     {
         if (CannotAct) return;

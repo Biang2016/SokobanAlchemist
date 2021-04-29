@@ -45,16 +45,34 @@ MonoBehaviour:
         RawEntitySkillActions:
         - id: 1
         - id: 2
+        - id: 3
     00000001:
+      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (fdc1ee6b-89b1-434d-b1a1-57b9d21d1053)
+          UseCurve: 0
+          FXScale: 3
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        PlayFXForEveryGrid: 1
+    00000002:
       type: {class: EntitySkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        AddBuffRadius: 3
+        AddBuffRadius: 4
         ExactGPDistance: 1
         EffectiveOnRelativeCamp: 14
         RawEntityBuffs:
-        - id: 3
-    00000002:
+        - id: 4
+    00000003:
       type: {class: BoxSkillAction_ChangeBoxType, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
@@ -67,7 +85,7 @@ MonoBehaviour:
             EntityPassiveSkills: []
         ChangeForEveryGrid: 0
         ExertOnTarget: 0
-    00000003:
+    00000004:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10326

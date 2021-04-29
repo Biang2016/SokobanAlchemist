@@ -306,9 +306,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         return true;
     }
 
-    public override void OnBeingLift(Actor actor)
+    public override void OnBeingLift(Entity entity)
     {
-        base.OnBeingLift(actor);
+        base.OnBeingLift(entity);
         if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingLift))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
@@ -322,16 +322,16 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                     if (action is EntitySkillAction.IEntityAction entityAction)
                     {
-                        entityAction.ExecuteOnEntity(actor);
+                        entityAction.ExecuteOnEntity(entity);
                     }
                 }
             }
         }
     }
 
-    public override void OnBeingKicked(Actor actor)
+    public override void OnBeingKicked(Entity entity)
     {
-        base.OnBeingKicked(actor);
+        base.OnBeingKicked(entity);
         if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingKicked))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
@@ -345,7 +345,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                     if (action is EntitySkillAction.IEntityAction entityAction)
                     {
-                        entityAction.ExecuteOnEntity(actor);
+                        entityAction.ExecuteOnEntity(entity);
                     }
                 }
             }

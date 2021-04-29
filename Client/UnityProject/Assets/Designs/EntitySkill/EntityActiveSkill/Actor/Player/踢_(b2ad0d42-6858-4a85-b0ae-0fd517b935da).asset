@@ -10,24 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "\u8E22\u51FA\u706B\u7BB1\u5B50\u4E14\u71C3\u70E7\u8303\u56F4\u7FFB\u500D_(44139fa5-48ad-4199-8ada-a34ab7954ad6)"
+  m_Name: "\u8E22_(b2ad0d42-6858-4a85-b0ae-0fd517b935da)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
+      type: {class: ActorActiveSkill_KickAreaCast, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        SkillGUID: (44139fa5-48ad-4199-8ada-a34ab7954ad6)
-        SkillAlias: "\u8E22\u51FA\u706B\u7BB1\u5B50\u4E14\u71C3\u70E7\u8303\u56F4\u7FFB\u500D"
+        SkillGUID: (b2ad0d42-6858-4a85-b0ae-0fd517b935da)
+        SkillAlias: "\u8E22"
         SkillIcon:
           TypeDefineType: 12
-          TypeGUID: (7f4263a7-f15f-445a-85f1-f28979436c39)
-        SkillDescription: Spend 10 fire elements, kick the fire box and expand its
-          burning range.
-        TargetCamp: 8
+          TypeGUID: (fbeee9d8-b838-4ada-b92b-6a0a1dd4be93)
+        SkillDescription: 
+        TargetCamp: 14
         SkillsPropertyCollection:
           CastingRadius:
             BaseValue: 0
@@ -35,20 +34,20 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           Cooldown:
-            BaseValue: 5000
-            ModifiedValue: 5000
+            BaseValue: 200
+            ModifiedValue: 0
             MinValue: 0
             MaxValue: 1000000
           WingUp:
             BaseValue: 0
-            ModifiedValue: 500
+            ModifiedValue: 0
             MinValue: 0
-            MaxValue: 1000000
+            MaxValue: 0
           CastDuration:
             BaseValue: 0
             ModifiedValue: 0
             MinValue: 0
-            MaxValue: 1000000
+            MaxValue: 0
           Recovery:
             BaseValue: 0
             ModifiedValue: 0
@@ -65,8 +64,8 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           ConsumeFireElementFragment:
-            BaseValue: 10
-            ModifiedValue: 20
+            BaseValue: 0
+            ModifiedValue: 0
             MinValue: 0
             MaxValue: 1000
           ConsumeIceElementFragment:
@@ -102,52 +101,33 @@ MonoBehaviour:
         ProjectOffsetZMax: 0
         ProjectOffsetZMin: 0
         ProjectHeightDeltaRange: 999
-        GridWarningColorFill: {r: 1, g: 0.9183839, b: 0, a: 1}
-        GridWarningColorBorderHighlight: {r: 1, g: 1, b: 1, a: 1}
-        GridWarningColorBorderDim: {r: 1, g: 0.6745283, b: 0.6745283, a: 1}
+        GridWarningColorFill: {r: 0, g: 0, b: 0, a: 0}
+        GridWarningColorBorderHighlight: {r: 0, g: 0, b: 0, a: 0}
+        GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
         RawEntitySkillActions:
         - id: 2
-        - id: 3
-        - id: 4
     00000001:
-      type: {class: EntitySkillCondition_HasEntityInCastArea, ns: , asm: Client}
+      type: {class: EntitySkillCondition_HasInteractableEntityInCastArea, ns: , asm: Client}
       data:
-        EntityType:
-          TypeDefineType: 0
-          TypeGUID: (65e613ca-1b8c-4002-84d1-0c49ea3b0903)
+        DependOnActorInteractSkill: 1
+        InteractSkillTypes: 02000000
     00000002:
-      type: {class: EntitySkillAction_PlayFXOnWorldGP, ns: , asm: Client}
+      type: {class: EntitySkillAction_KickOut, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         FX:
           FXType:
             TypeDefineType: 7
-            TypeGUID: (299071b6-f620-41f2-80f9-0ea5a3deeeef)
+            TypeGUID: (ce01f26e-4b00-4b76-bef3-72a60663efa0)
           UseCurve: 0
-          FXScale: 2
+          FXScale: 1
           AnimationCurve:
             serializedVersion: 2
             m_Curve: []
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-    00000003:
-      type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
-      data:
-        InitWorldModuleGUID: 0
-        AddOrRemove: 1
-        EntitySkillSO: {fileID: 11400000, guid: db54046bf3e9fa24c98ab860a2cfe4a8,
-          type: 2}
-        SkillGUID: (1f9d40f5-573f-42bb-b4e7-f430e549b57b)
-        KeyBind: 0
-        ExertOnTarget: 1
-    00000004:
-      type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
-      data:
-        InitWorldModuleGUID: 0
-        AddOrRemove: 0
-        EntitySkillSO: {fileID: 11400000, guid: e8d8386ffbccf204a974a327dd306a6a,
-          type: 2}
-        SkillGUID: (3106ddee-0888-4483-9270-4aa47a704521)
-        KeyBind: 0
-        ExertOnTarget: 1
+        AutoDirection_Side: 0
+        AutoDirection_BackForth: 0
+        Direction: 0
+        KickForce: 30
