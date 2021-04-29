@@ -1,14 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 [Serializable]
 public class BoxMergeConfig
 {
     internal bool MergeEnable = true;
 
+    [LabelText("合并延迟")]
+    public float MergeDelay = 0;
+
     [ListDrawerSettings(ListElementLabelName = "Description")]
+    [LabelText("合成配方")]
     public List<BoxMergeConfigData> BoxMergeConfigDataList = new List<BoxMergeConfigData>();
+
+    [ShowInInspector]
+    internal string Temp_NextMergeEntityDataOverrideKey = "";
+
+    [ShowInInspector]
+    internal EntityData Temp_NextMergeEntityData;
 
     public ushort GetMergeBoxTypeIndex(int mergeCount, MergeOrientation mergeOrientation)
     {
@@ -38,6 +49,20 @@ public class BoxMergeConfig
 
         validMergeCounts.Sort((a, b) => -a.CompareTo(b));
         return validMergeCounts;
+    }
+
+    public void OnRecycled()
+    {
+        Temp_NextMergeEntityDataOverrideKey = "";
+        Temp_NextMergeEntityData = null;
+        MergeEnable = true;
+    }
+
+    public void OnUsed()
+    {
+        Temp_NextMergeEntityDataOverrideKey = "";
+        Temp_NextMergeEntityData = null;
+        MergeEnable = true;
     }
 }
 

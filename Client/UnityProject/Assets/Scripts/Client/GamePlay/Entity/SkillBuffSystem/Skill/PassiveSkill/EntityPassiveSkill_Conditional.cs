@@ -32,8 +32,11 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         OnMergeBox = 1 << 14,
         OnDestroyEntityByElementDamage = 1 << 15,
         OnBeingFueled = 1 << 16,
+
         OnEntityStatValueChange = 1 << 17,
         OnEntityPropertyValueChange = 1 << 18,
+
+        OnFuelEntered = 1 << 19,
     }
 
     [LabelText("触发时机")]
@@ -729,6 +732,24 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                         {
                             pureAction.Execute();
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    public override void OnFuelEntered(EntityFlamethrowerHelper.FlamethrowerFuelData fuelData)
+    {
+        base.OnFuelEntered(fuelData);
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnFuelEntered))
+        {
+            if (TriggerProbabilityPercent.ProbabilityBool())
+            {
+                foreach (EntitySkillAction action in EntitySkillActions)
+                {
+                    if (action is EntitySkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
                     }
                 }
             }

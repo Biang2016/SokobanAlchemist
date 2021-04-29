@@ -162,7 +162,7 @@ public partial class Box : Entity
         BoxIconSpriteHelper.OnHelperUsed();
         BoxFrozenBoxHelper?.OnHelperUsed();
         BoxMarchingTextureHelper?.OnHelperUsed();
-        BoxMergeConfig.MergeEnable = true;
+        BoxMergeConfig.OnUsed();
         base.OnUsed();
     }
 
@@ -204,6 +204,7 @@ public partial class Box : Entity
         BoxIconSpriteHelper?.OnHelperRecycled();
         BoxFrozenBoxHelper?.OnHelperRecycled();
         BoxMarchingTextureHelper?.OnHelperRecycled();
+        BoxMergeConfig.OnRecycled();
 
         UnInitPassiveSkills();
         UnInitActiveSkills();
@@ -337,11 +338,6 @@ public partial class Box : Entity
     [FoldoutGroup("属性")]
     [LabelText("死亡延迟")]
     private float DeleteDelay = 0;
-
-    [SerializeField]
-    [FoldoutGroup("属性")]
-    [LabelText("合并延迟")]
-    private float MergeDelay = 0;
 
     [SerializeField]
     [FoldoutGroup("属性")]
@@ -1327,14 +1323,14 @@ public partial class Box : Entity
         PlayFXOnEachGrid(MergeFX);
 
         EntityModelHelper.transform.DOShakeScale(0.2f);
-        EntityModelHelper.transform.DOMove(mergeToWorldGP, MergeDelay * 1.2f);
-        yield return new WaitForSeconds(MergeDelay);
+        EntityModelHelper.transform.DOMove(mergeToWorldGP, BoxMergeConfig.MergeDelay * 1.2f);
+        yield return new WaitForSeconds(BoxMergeConfig.MergeDelay);
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
             ps.OnMergeBox();
         }
 
-        WorldManager.Instance.CurrentWorld.DeleteBox(this, callBack == null); // 有callback的是oldBoxCore，要避免上面box落下导致新箱子合成不出来
+        WorldManager.Instance.CurrentWorld.DeleteBox(this, callBack == null); // 只有oldBoxCore具有callback，要避免上面box落下导致新箱子合成不出来
         callBack?.Invoke();
     }
 

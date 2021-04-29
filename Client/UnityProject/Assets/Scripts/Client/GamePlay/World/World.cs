@@ -760,30 +760,71 @@ public class World : PoolObject
                 allPossibleMergeTargetWorldGP.Add(offset + mergeTargetWorldGP);
             }
 
+            // 提前拿到所有素材箱子的合成配置的引用
+            List<BoxMergeConfig> boxMergeConfigs = new List<BoxMergeConfig>();
+            boxMergeConfigs.Add(oldCoreBox.BoxMergeConfig);
+
             foreach (Box oldBox in oldBoxes)
             {
                 if (oldBox == oldCoreBox) continue;
                 GridPos3D nearestGP = GridPos3D.GetNearestGPFromList(oldBox.WorldGP, allPossibleMergeTargetWorldGP);
                 oldBox.MergeBox(nearestGP);
+                boxMergeConfigs.Add(oldBox.BoxMergeConfig);
             }
 
             // 保证目标点的箱子最后合成消失，从而生成新箱子的时候不会与任何一个老箱子冲突
             GridPos3D nearestGP_Core = GridPos3D.GetNearestGPFromList(oldCoreBox.WorldGP, allPossibleMergeTargetWorldGP);
+            EntityData overrideEntityData = null;
             oldCoreBox.MergeBox(nearestGP_Core, delegate
             {
                 WorldModule module = GetModuleByWorldGP(mergeTargetWorldGP);
                 if (module != null)
                 {
-                    EntityData entityData = new EntityData(newBoxTypeIndex, newBoxOrientation);
-                    Box box = (Box) module.GenerateEntity(entityData, mergeTargetWorldGP, false, false, true); // 合成生成的箱子允许往上方堆
-                    if (box != null)
+                    EntityData entityData = overrideEntityData ?? new EntityData(newBoxTypeIndex, newBoxOrientation);
+                    Box mergeResultBox = (Box) module.GenerateEntity(entityData, mergeTargetWorldGP, false, false, true); // 合成生成的箱子允许往上方堆
+                    if (mergeResultBox != null)
                     {
-                        FXManager.Instance.PlayFX(box.MergedFX, box.transform.position);
-                        TryMerge(direction, new HashSet<Box> {box});
-                        box.EntityWwiseHelper.OnBeingMerged.Post(box.gameObject);
+                        FXManager.Instance.PlayFX(mergeResultBox.MergedFX, mergeResultBox.transform.position);
+                        TryMerge(direction, new HashSet<Box> {mergeResultBox});
+                        mergeResultBox.EntityWwiseHelper.OnBeingMerged.Post(mergeResultBox.gameObject);
                     }
                 }
             });
+
+            // 遍历素材箱子的合成配置，看看是否有覆写配方MergeEntityData
+            ushort currentMergeBoxIndex = 0;
+            string currentMergeBoxOverrideKey = "";
+            foreach (BoxMergeConfig boxMergeConfig in boxMergeConfigs)
+            {
+                if (boxMergeConfig.Temp_NextMergeEntityData != null)
+                {
+                    if (currentMergeBoxIndex == 0)
+                    {
+                        currentMergeBoxIndex = boxMergeConfig.Temp_NextMergeEntityData.EntityTypeIndex;
+                        currentMergeBoxOverrideKey = boxMergeConfig.Temp_NextMergeEntityDataOverrideKey;
+                        overrideEntityData = boxMergeConfig.Temp_NextMergeEntityData;
+                    }
+                    else
+                    {
+                        if (currentMergeBoxIndex != boxMergeConfig.Temp_NextMergeEntityData.EntityTypeIndex)
+                        {
+                            string boxTypeName_1 = ConfigManager.GetTypeName(TypeDefineType.Box, currentMergeBoxIndex);
+                            string boxTypeName_2 = ConfigManager.GetTypeName(TypeDefineType.Box, boxMergeConfig.Temp_NextMergeEntityData.EntityTypeIndex);
+                            Debug.LogError($"MergeEntityData point to different box type: {boxTypeName_1} vs {boxTypeName_2}, please check!");
+                        }
+                        else
+                        {
+                            // 相同OverrideKey的MergeEntityData在关卡设计上应配为完全相同的，使其不会反复覆写。Merge逻辑执行时只随机取用一个
+                            if (currentMergeBoxOverrideKey == boxMergeConfig.Temp_NextMergeEntityDataOverrideKey) continue;
+                            foreach (EntityPassiveSkill eps in boxMergeConfig.Temp_NextMergeEntityData.RawEntityExtraSerializeData.EntityPassiveSkills)
+                            {
+                                Assert.IsNotNull(overrideEntityData);
+                                overrideEntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Add((EntityPassiveSkill)eps.Clone());
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

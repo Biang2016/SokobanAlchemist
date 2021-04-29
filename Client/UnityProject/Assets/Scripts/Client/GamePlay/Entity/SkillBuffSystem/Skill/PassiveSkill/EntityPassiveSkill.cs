@@ -107,6 +107,10 @@ public abstract class EntityPassiveSkill : EntitySkill
     {
     }
 
+    public virtual void OnFuelEntered(EntityFlamethrowerHelper.FlamethrowerFuelData fuelData)
+    {
+    }
+
     #endregion
 
     protected override void ChildClone(EntitySkill cloneData)
