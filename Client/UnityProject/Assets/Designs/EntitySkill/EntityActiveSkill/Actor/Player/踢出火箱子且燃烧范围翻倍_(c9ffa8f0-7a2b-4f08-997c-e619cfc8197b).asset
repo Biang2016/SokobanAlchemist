@@ -108,6 +108,7 @@ MonoBehaviour:
         RawEntitySkillActions:
         - id: 3
         - id: 4
+        - id: 5
     00000001:
       type: {class: EntitySkillCondition_HasInteractableEntityInCastArea, ns: , asm: Client}
       data:
@@ -139,3 +140,23 @@ MonoBehaviour:
         SkillGUID: (3106ddee-0888-4483-9270-4aa47a704521)
         KeyBind: 0
         ExertOnTarget: 1
+    00000005:
+      type: {class: EntitySkillAction_KickOut, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        FX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (ce01f26e-4b00-4b76-bef3-72a60663efa0)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        AutoDirection_Side: 0
+        AutoDirection_BackForth: 0
+        Direction: 0
+        KickForce: 30

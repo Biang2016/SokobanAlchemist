@@ -865,6 +865,7 @@ public abstract class Entity : PoolObject
         {
             WorldModule worldModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(transform.position.ToGridPos3D());
             if (worldModule == null) worldModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(WorldGP);
+            if (worldModule == null) worldModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(LastWorldGP);
             if (worldModule)
             {
                 for (int i = 0; i < count; i++)
@@ -877,10 +878,6 @@ public abstract class Entity : PoolObject
                     ci.ThrowFrom(transform.position, dropVel.normalized * DropVelocity);
                     worldModule.WorldModuleCollectableItems.Add(ci);
                 }
-            }
-            else
-            {
-                Debug.LogError("Entity不属于任何一个WorldModule，无法确定掉落物归属");
             }
         }
     }
