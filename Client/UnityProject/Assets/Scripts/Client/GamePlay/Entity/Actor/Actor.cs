@@ -31,10 +31,12 @@ public class Actor : Entity
                 forbidAction = value;
                 if (forbidAction)
                 {
+                    ActorIndicatorHelper.gameObject.SetActive(false);
                     RemoveRigidbody();
                 }
                 else
                 {
+                    ActorIndicatorHelper.gameObject.SetActive(true);
                     AddRigidbody();
                 }
             }

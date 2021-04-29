@@ -44,7 +44,7 @@ public class WorldModule : PoolObject
     public WorldDeadZoneTrigger WorldDeadZoneTrigger;
     public WorldWallCollider WorldWallCollider;
     public WorldGroundCollider WorldGroundCollider;
-    protected List<Entity> WorldModuleTriggerEntities = new List<Entity>();
+    public List<Entity> WorldModuleTriggerEntities = new List<Entity>();
     public List<CollectableItem> WorldModuleCollectableItems = new List<CollectableItem>();
 
     public List<EntityPassiveSkill_LevelEventTriggerAppear> EventTriggerAppearEntityPassiveSkillList = new List<EntityPassiveSkill_LevelEventTriggerAppear>();
@@ -416,7 +416,6 @@ public class WorldModule : PoolObject
         foreach (TriggerEntityData triggerEntityData in worldModuleData.TriggerEntityDataList)
         {
             Entity triggerEntity = GenerateEntity(triggerEntityData.EntityData, LocalGPToWorldGP(triggerEntityData.LocalGP), false, true, false, null);
-            if (triggerEntity != null) WorldModuleTriggerEntities.Add(triggerEntity);
         }
 
         if (!string.IsNullOrWhiteSpace(worldModuleData.WorldModuleFlowAssetPath))

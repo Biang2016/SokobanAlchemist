@@ -1153,8 +1153,16 @@ public class World : PoolObject
 
     public void DeleteBox(Box box, bool checkDrop = true)
     {
-        RemoveBoxFromGrid(box, checkDrop);
-        WorldManager.Instance.OtherBoxDict.Remove(box.GUID);
+        if (!box.IsTriggerEntity)
+        {
+            RemoveBoxFromGrid(box, checkDrop);
+            WorldManager.Instance.OtherBoxDict.Remove(box.GUID);
+        }
+        else
+        {
+            box.WorldModule.WorldModuleTriggerEntities.Remove(box);
+        }
+        
         box.PoolRecycle();
     }
 
