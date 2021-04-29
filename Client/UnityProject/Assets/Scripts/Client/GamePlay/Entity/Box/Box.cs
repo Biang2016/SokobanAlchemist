@@ -481,7 +481,7 @@ public partial class Box : Entity
 
     public void Setup(EntityData entityData, uint initWorldModuleGUID, GridPos3D worldGP)
     {
-        base.Setup(initWorldModuleGUID);
+        base.Setup(entityData, initWorldModuleGUID);
         transform.position = worldGP;
         WorldGP = worldGP;
         if (IsHidden) BoxModelHelper.gameObject.SetActive(false);

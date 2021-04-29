@@ -819,7 +819,7 @@ public class World : PoolObject
                             foreach (EntityPassiveSkill eps in boxMergeConfig.Temp_NextMergeEntityData.RawEntityExtraSerializeData.EntityPassiveSkills)
                             {
                                 Assert.IsNotNull(overrideEntityData);
-                                overrideEntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Add((EntityPassiveSkill)eps.Clone());
+                                overrideEntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Add((EntityPassiveSkill) eps.Clone());
                             }
                         }
                     }
@@ -1160,9 +1160,14 @@ public class World : PoolObject
         }
         else
         {
+            if (box.WorldModule is OpenWorldModule) // Open World记录所有Entity变化情况
+            {
+                box.WorldModule.WorldModuleData.TriggerEntityDataList.Remove(box.EntityData);
+            }
+
             box.WorldModule.WorldModuleTriggerEntities.Remove(box);
         }
-        
+
         box.PoolRecycle();
     }
 

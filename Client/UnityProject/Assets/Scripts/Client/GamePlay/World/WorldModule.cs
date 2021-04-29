@@ -413,9 +413,9 @@ public class WorldModule : PoolObject
             }
         }
 
-        foreach (TriggerEntityData triggerEntityData in worldModuleData.TriggerEntityDataList)
+        foreach (EntityData triggerEntityData in worldModuleData.TriggerEntityDataList)
         {
-            Entity triggerEntity = GenerateEntity(triggerEntityData.EntityData, LocalGPToWorldGP(triggerEntityData.LocalGP), false, true, false, null);
+            GenerateEntity(triggerEntityData, LocalGPToWorldGP(triggerEntityData.LocalGP), false, true, false, null);
         }
 
         if (!string.IsNullOrWhiteSpace(worldModuleData.WorldModuleFlowAssetPath))
@@ -532,6 +532,12 @@ public class WorldModule : PoolObject
                         }
                         else
                         {
+                            // Trigger Entity如果不是起始的，需要记录到WorldModuleData里面去
+                            if (!isStartedEntities && this is OpenWorldModule)
+                            {
+                                WorldModuleData.TriggerEntityDataList.Add(box.EntityData);
+                            }
+
                             WorldModuleTriggerEntities.Add(box);
                         }
 
@@ -570,6 +576,12 @@ public class WorldModule : PoolObject
                         }
                         else
                         {
+                            // Trigger Entity如果不是起始的，需要记录到WorldModuleData里面去
+                            if (!isStartedEntities && this is OpenWorldModule)
+                            {
+                                WorldModuleData.TriggerEntityDataList.Add(actor.EntityData);
+                            }
+
                             WorldModuleTriggerEntities.Add(actor);
                         }
 

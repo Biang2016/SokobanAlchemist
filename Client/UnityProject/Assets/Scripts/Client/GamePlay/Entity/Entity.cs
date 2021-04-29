@@ -23,15 +23,6 @@ public abstract class Entity : PoolObject
     [ShowInInspector]
     internal int GUID_Mod_FixedFrameRate;
 
-    [ShowInInspector]
-    [FoldoutGroup("属性")]
-    [LabelText("是Trigger实体")]
-    public bool IsTriggerEntity => EntityIndicatorHelper.EntityOccupationData.IsTriggerEntity;
-
-    [FoldoutGroup("属性")]
-    [LabelText("慢刷新")]
-    public bool SlowlyTick = false;
-
     private static uint guidGenerator = (uint) ConfigManager.GUID_Separator.Entity;
 
     protected uint GetGUID()
@@ -44,6 +35,19 @@ public abstract class Entity : PoolObject
     public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
 
     #endregion
+
+
+
+    [ShowInInspector]
+    [FoldoutGroup("属性")]
+    [LabelText("是Trigger实体")]
+    public bool IsTriggerEntity => EntityIndicatorHelper.EntityOccupationData.IsTriggerEntity;
+
+    [FoldoutGroup("属性")]
+    [LabelText("慢刷新")]
+    public bool SlowlyTick = false;
+
+    public EntityData EntityData;
 
     #region Helpers
 
@@ -693,6 +697,7 @@ public abstract class Entity : PoolObject
     public override void OnRecycled()
     {
         base.OnRecycled();
+        EntityData = null;
         StopAllCoroutines();
         InitWorldModuleGUID = 0;
         destroyBecauseNotInAnyModuleTick = 0;
@@ -705,8 +710,9 @@ public abstract class Entity : PoolObject
         CanBeThreatened = true;
     }
 
-    public void Setup(uint initWorldModuleGUID)
+    public void Setup(EntityData entityData, uint initWorldModuleGUID)
     {
+        EntityData = entityData;
         InitWorldModuleGUID = initWorldModuleGUID;
         if (GUID == 0)
         {

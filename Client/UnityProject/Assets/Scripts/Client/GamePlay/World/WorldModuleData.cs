@@ -39,7 +39,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
 
-    public List<TriggerEntityData> TriggerEntityDataList = new List<TriggerEntityData>();
+    public List<EntityData> TriggerEntityDataList = new List<EntityData>();
 
     public List<EntityPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearEntityDataList = new List<EntityPassiveSkill_LevelEventTriggerAppear.Data>();
 
@@ -82,7 +82,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
         data.WorldModuleFeature = WorldModuleFeature;
         data.BGM_ThemeState = BGM_ThemeState;
         data.WorldModuleBornPointGroupData = WorldModuleBornPointGroupData.Clone();
-        data.TriggerEntityDataList = TriggerEntityDataList.Clone<TriggerEntityData, TriggerEntityData>();
+        data.TriggerEntityDataList = TriggerEntityDataList.Clone<EntityData, EntityData>();
 
         for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
         {
