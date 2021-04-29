@@ -241,7 +241,7 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
             FlamethrowerSkill = null;
         }
 
-        StopFlameSound(CurrentFlamethrowerFuelData.FlameType);
+        if (CurrentFlamethrowerFuelData != null) StopFlameSound(CurrentFlamethrowerFuelData.FlameType);
 
         CurrentFlamethrowerFuelData = null;
         foreach (EntityFlamethrower ef in EntityFlamethrowers)
