@@ -15,6 +15,9 @@ public class SphereBottle : MonoBehaviour
     private Image SurfaceImage;
 
     [SerializeField]
+    private Image HighlightImage;
+
+    [SerializeField]
     private Animator FillAnim;
 
     [SerializeField]

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "\u8E22\u51FA\u706B\u7BB1\u5B50\u4E14\u71C3\u70E7\u8303\u56F4\u7FFB\u500D_(c9ffa8f0-7a2b-4f08-997c-e619cfc8197b)"
+  m_Name: "\u8E22\u51FA\u51B0\u7BB1\u5B50\u751F\u6210\u51B0\u5899_(275bac7b-f12c-45f5-8014-9318c101b487)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
@@ -20,13 +20,13 @@ MonoBehaviour:
       type: {class: ActorActiveSkill_KickAreaCast, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        SkillGUID: (c9ffa8f0-7a2b-4f08-997c-e619cfc8197b)
-        SkillAlias: "\u8E22\u51FA\u706B\u7BB1\u5B50\u4E14\u71C3\u70E7\u8303\u56F4\u7FFB\u500D"
+        SkillGUID: (275bac7b-f12c-45f5-8014-9318c101b487)
+        SkillAlias: "\u8E22\u51FA\u51B0\u7BB1\u5B50\u751F\u6210\u51B0\u5899"
         SkillIcon:
           TypeDefineType: 12
-          TypeGUID: (7f4263a7-f15f-445a-85f1-f28979436c39)
+          TypeGUID: (154524e9-714f-40b1-8307-fcbe38618922)
         SkillDescription: 
-        TargetCamp: 14
+        TargetCamp: 8
         SkillsPropertyCollection:
           CastingRadius:
             BaseValue: 0
@@ -64,12 +64,12 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           ConsumeFireElementFragment:
-            BaseValue: 10
+            BaseValue: 0
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 1000
           ConsumeIceElementFragment:
-            BaseValue: 0
+            BaseValue: 10
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 0
@@ -119,25 +119,25 @@ MonoBehaviour:
       data:
         EntityType:
           TypeDefineType: 0
-          TypeGUID: (65e613ca-1b8c-4002-84d1-0c49ea3b0903)
+          TypeGUID: (c9630278-8f6d-416f-b6de-620573dfb81a)
     00000003:
       type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         AddOrRemove: 1
-        EntitySkillSO: {fileID: 11400000, guid: db54046bf3e9fa24c98ab860a2cfe4a8,
+        EntitySkillSO: {fileID: 11400000, guid: f081684a5e1e9a1488522b6dc0a935c3,
           type: 2}
-        SkillGUID: (1f9d40f5-573f-42bb-b4e7-f430e549b57b)
+        SkillGUID: (43bab592-f797-4cc3-bbdc-055b9c8af65b)
         KeyBind: 0
         ExertOnTarget: 1
     00000004:
       type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        AddOrRemove: 0
-        EntitySkillSO: {fileID: 11400000, guid: e8d8386ffbccf204a974a327dd306a6a,
+        AddOrRemove: 1
+        EntitySkillSO: {fileID: 11400000, guid: 7ca9317d0e539314aae988c48467d2c6,
           type: 2}
-        SkillGUID: (3106ddee-0888-4483-9270-4aa47a704521)
+        SkillGUID: (87f9ac5b-19aa-4f38-a183-011c79648048)
         KeyBind: 0
         ExertOnTarget: 1
     00000005:

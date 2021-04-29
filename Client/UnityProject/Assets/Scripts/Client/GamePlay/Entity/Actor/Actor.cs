@@ -243,6 +243,7 @@ public class Actor : Entity
 
                 if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
                 curWorldGP = value;
+                RealtimeWorldGP = value;
                 if (!IsFrozen) RegisterInModule(curWorldGP, EntityOrientation);
             }
         }
@@ -697,6 +698,7 @@ public class Actor : Entity
         CurForward = Vector3.forward;
         WorldGP = GridPos3D.Zero;
         LastWorldGP = GridPos3D.Zero;
+        RealtimeWorldGP = GridPos3D.Zero;
         ThrowState = ThrowStates.None;
         ClearJumpParams();
         ThrowWhenDie();

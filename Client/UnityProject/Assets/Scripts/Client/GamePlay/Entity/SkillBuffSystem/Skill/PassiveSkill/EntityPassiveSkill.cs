@@ -1,5 +1,6 @@
 ﻿using System;
 using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -108,6 +109,10 @@ public abstract class EntityPassiveSkill : EntitySkill
     }
 
     public virtual void OnFuelEntered(EntityFlamethrowerHelper.FlamethrowerFuelData fuelData)
+    {
+    }
+
+    public virtual void OnPassGrid(GridPos3D gridGP)
     {
     }
 

@@ -45,7 +45,6 @@ MonoBehaviour:
         RawEntitySkillActions:
         - id: 1
         - id: 2
-        - id: 3
     00000001:
       type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
       data:
@@ -71,21 +70,8 @@ MonoBehaviour:
         ExactGPDistance: 1
         EffectiveOnRelativeCamp: 14
         RawEntityBuffs:
-        - id: 4
+        - id: 3
     00000003:
-      type: {class: BoxSkillAction_ChangeBoxType, ns: , asm: Client}
-      data:
-        InitWorldModuleGUID: 0
-        EntityData:
-          EntityType:
-            TypeDefineType: 0
-            TypeGUID: 
-          EntityOrientation: 0
-          RawEntityExtraSerializeData:
-            EntityPassiveSkills: []
-        ChangeForEveryGrid: 0
-        ExertOnTarget: 0
-    00000004:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10326

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BiangLibrary;
 using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -37,6 +38,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         OnEntityPropertyValueChange = 1 << 18,
 
         OnFuelEntered = 1 << 19,
+        OnPassGrid = 1 << 20,
     }
 
     [LabelText("触发时机")]
@@ -750,6 +752,29 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                     if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
+                    }
+                }
+            }
+        }
+    }
+
+    public override void OnPassGrid(GridPos3D gridGP)
+    {
+        base.OnPassGrid(gridGP);
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnPassGrid))
+        {
+            if (TriggerProbabilityPercent.ProbabilityBool())
+            {
+                foreach (EntitySkillAction action in EntitySkillActions)
+                {
+                    if (action is EntitySkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
+
+                    if (action is EntitySkillAction.IWorldGPAction worldGPAction)
+                    {
+                        worldGPAction.ExecuteOnWorldGP(gridGP);
                     }
                 }
             }

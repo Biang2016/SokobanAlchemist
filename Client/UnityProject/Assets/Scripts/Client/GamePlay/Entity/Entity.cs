@@ -36,8 +36,6 @@ public abstract class Entity : PoolObject
 
     #endregion
 
-
-
     [ShowInInspector]
     [FoldoutGroup("属性")]
     [LabelText("是Trigger实体")]
@@ -47,7 +45,7 @@ public abstract class Entity : PoolObject
     [LabelText("慢刷新")]
     public bool SlowlyTick = false;
 
-    public EntityData EntityData;
+    internal EntityData EntityData;
 
     #region Helpers
 
@@ -91,7 +89,7 @@ public abstract class Entity : PoolObject
     [HideInEditorMode]
     [ShowInInspector]
     [FoldoutGroup("状态")]
-    [LabelText("上帧世界坐标")]
+    [LabelText("上次世界坐标")]
     internal GridPos3D LastWorldGP;
 
     [DisplayAsString]
@@ -100,6 +98,35 @@ public abstract class Entity : PoolObject
     [FoldoutGroup("状态")]
     [LabelText("世界坐标")]
     public abstract GridPos3D WorldGP { get; set; }
+
+    [DisplayAsString]
+    [HideInEditorMode]
+    [ShowInInspector]
+    [FoldoutGroup("状态")]
+    [LabelText("实时世界坐标")]
+    private GridPos3D realtimeWorldGP;
+
+    internal GridPos3D RealtimeWorldGP
+    {
+        get { return realtimeWorldGP; }
+        set
+        {
+            if (realtimeWorldGP != value)
+            {
+                realtimeWorldGP = value;
+                if (realtimeWorldGP != GridPos3D.Zero && value != GridPos3D.Zero && !IsRecycled)
+                {
+                    foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+                    {
+                        foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+                        {
+                            eps.OnPassGrid(realtimeWorldGP + offset);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     public Vector3 CurForward
     {
