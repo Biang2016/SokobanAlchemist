@@ -285,8 +285,8 @@ public abstract class Entity : PoolObject
     #region 技能
 
     [SerializeReference]
-    [FoldoutGroup("作为喷火器燃料")]
-    [LabelText("燃料数据")]
+    [FoldoutGroup("Fuel")]
+    [LabelText("As Fuel Data")]
     public EntityFlamethrowerHelper.FlamethrowerFuelData RawFlamethrowerFuelData; // 干数据，禁修改
 
     #region 被动技能
