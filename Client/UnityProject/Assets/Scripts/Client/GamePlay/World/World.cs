@@ -331,9 +331,9 @@ public class World : PoolObject
                 for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++)
                 {
                     bool thisAvailable = true;
-                    for (int j = 1; j <= i; j++)
+                    for (int j = 2; j <= i; j++)
                     {
-                        if (cached_occupyAbove[i - 1])
+                        if (cached_occupyAbove[i - 2])
                         {
                             thisAvailable = false;
                             break;
