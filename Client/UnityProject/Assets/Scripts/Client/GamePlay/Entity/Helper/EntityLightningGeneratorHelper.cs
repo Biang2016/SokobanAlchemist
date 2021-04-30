@@ -142,7 +142,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
     }
 
     // todo 此处有风险，两个Trigger进出次序如果很极限的话，有可能exit不触发就换技能了
-    public void OnTriggerZoneEnter(Collider c)
+    public void OnTriggerZoneEnter(Collider c, EntityTriggerZone entityTriggerZone)
     {
         if (Entity.IsNotNullAndAlive())
         {
@@ -150,7 +150,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
         }
     }
 
-    public void OnTriggerZoneStay(Collider c)
+    public void OnTriggerZoneStay(Collider c, EntityTriggerZone entityTriggerZone)
     {
         if (Entity.IsNotNullAndAlive())
         {
@@ -158,7 +158,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
         }
     }
 
-    public void OnTriggerZoneExit(Collider c)
+    public void OnTriggerZoneExit(Collider c, EntityTriggerZone entityTriggerZone)
     {
         if (Entity.IsNotNullAndAlive())
         {

@@ -253,19 +253,49 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
     }
 
     // todo 此处有风险，两个Trigger进出次序如果很极限的话，有可能exit不触发就换技能了
-    public void OnTriggerZoneEnter(Collider c)
+    public void OnTriggerZoneEnter(Collider c, EntityTriggerZone entityTriggerZone)
     {
-        FlamethrowerSkill?.OnTriggerZoneEnter(c);
+        Actor actor = c.GetComponentInParent<Actor>();
+        if (actor == BattleManager.Instance.Player1)
+        {
+            foreach (EntityFlamethrower ef in EntityFlamethrowers)
+            {
+                if (ef.EntityTriggerZone_Flame == entityTriggerZone)
+                {
+                    ef.FirePS.Stop(true);
+                    ef.FireLight.gameObject.SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            FlamethrowerSkill?.OnTriggerZoneEnter(c);
+        }
     }
 
-    public void OnTriggerZoneStay(Collider c)
+    public void OnTriggerZoneStay(Collider c, EntityTriggerZone entityTriggerZone)
     {
         FlamethrowerSkill?.OnTriggerZoneStay(c);
     }
 
-    public void OnTriggerZoneExit(Collider c)
+    public void OnTriggerZoneExit(Collider c, EntityTriggerZone entityTriggerZone)
     {
-        FlamethrowerSkill?.OnTriggerZoneExit(c);
+        Actor actor = c.GetComponentInParent<Actor>();
+        if (actor == BattleManager.Instance.Player1)
+        {
+            foreach (EntityFlamethrower ef in EntityFlamethrowers)
+            {
+                if (ef.EntityTriggerZone_Flame == entityTriggerZone)
+                {
+                    ef.FirePS.Play(true);
+                    ef.FireLight.gameObject.SetActive(true);
+                }
+            }
+        }
+        else
+        {
+            FlamethrowerSkill?.OnTriggerZoneExit(c);
+        }
     }
 
     [Serializable]

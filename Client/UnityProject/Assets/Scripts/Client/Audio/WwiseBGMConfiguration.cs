@@ -56,7 +56,11 @@ public class WwiseBGMConfiguration : MonoBehaviour
     {
         if (BGMThemeConfigDict.TryGetValue(bgmTheme, out State state))
         {
-            Debug.Log($"BGM switch to {bgmTheme}");
+            if (CurrentBGMTheme != bgmTheme)
+            {
+                Debug.Log($"BGM switch to {bgmTheme}");
+            }
+
             CurrentBGMTheme = bgmTheme;
             state.SetValue();
         }
@@ -116,7 +120,6 @@ public class WwiseBGMConfiguration : MonoBehaviour
 
     public void SetCombatState(CombatState combatState)
     {
-        Debug.Log($"Change BGM combat state to {combatState}");
         switch (combatState)
         {
             case CombatState.InCamp:
