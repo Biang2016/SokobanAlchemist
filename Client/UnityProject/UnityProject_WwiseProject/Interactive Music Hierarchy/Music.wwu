@@ -140,8 +140,6 @@
 												</ModifierInfo>
 											</ModifierList>
 										</Property>
-										<Property Name="NormalOrShuffle" Type="int16" Value="0"/>
-										<Property Name="PlayMode" Type="int16" Value="3"/>
 									</PropertyList>
 									<ChildrenList>
 										<MusicPlaylistItem Name="" ID="{91587A83-5405-4166-8368-51C188B01F32}" ShortID="901886402">
@@ -2134,7 +2132,20 @@
 								</MusicTransition>
 							</TransitionList>
 							<Playlist>
-								<MusicPlaylistItem Name="" ID="{C377A134-EBD6-4B2B-8E7F-C94322135302}" ShortID="521343365"/>
+								<MusicPlaylistItem Name="" ID="{C377A134-EBD6-4B2B-8E7F-C94322135302}" ShortID="521343365">
+									<PropertyList>
+										<Property Name="LoopCount" Type="int16" Value="0"/>
+									</PropertyList>
+									<ChildrenList>
+										<MusicPlaylistItem Name="" ID="{ACE0FF6F-3334-45A8-A343-B87C030668B8}" ShortID="1072852895">
+											<PropertyList>
+												<Property Name="LoopCount" Type="int16" Value="0"/>
+												<Property Name="PlaylistItemType" Type="int16" Value="1"/>
+											</PropertyList>
+											<SegmentRef Name="OpenWorld_InCamp" ID="{8E811255-79D5-44B8-A2CB-95A565C58C19}"/>
+										</MusicPlaylistItem>
+									</ChildrenList>
+								</MusicPlaylistItem>
 							</Playlist>
 						</MusicPlaylistContainer>
 					</ChildrenList>
@@ -2313,6 +2324,15 @@
 							</Path>
 							<AudioNodeInfo>
 								<AudioNodeRef Name="Temple_Explore" ID="{5F410ABF-DB72-4549-B98A-F54B0E80CB9E}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
+								<PathElementRef Name="Combat" ID="{B940BF10-8F0F-4674-972B-A287D951D4EB}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="OpenWorld_InCamp" ID="{02E7C85E-2EDF-4942-A25D-534C4364811D}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
 							</AudioNodeInfo>
 						</Entry>
 					</EntryList>

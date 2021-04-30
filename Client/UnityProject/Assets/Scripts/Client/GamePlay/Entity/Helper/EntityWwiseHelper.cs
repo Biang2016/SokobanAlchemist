@@ -13,13 +13,6 @@ public class EntityWwiseHelper : EntityMonoHelper
     public Event OnBeingPushed;
 
     [BoxGroup("ForBox")]
-    [ReadOnly]
-    public Event OnSliding;
-
-    [BoxGroup("ForBox")]
-    public Event OnSlideStop;
-
-    [BoxGroup("ForBox")]
     public Event OnBeingLift;
 
     [BoxGroup("ForBox")]
@@ -33,10 +26,6 @@ public class EntityWwiseHelper : EntityMonoHelper
 
     [BoxGroup("Common")]
     public Event OnBeingLit;
-
-    [BoxGroup("Common")]
-    [ReadOnly]
-    public Event OnBurning;
 
     [BoxGroup("Common")]
     public Event OnBurningEnd;
