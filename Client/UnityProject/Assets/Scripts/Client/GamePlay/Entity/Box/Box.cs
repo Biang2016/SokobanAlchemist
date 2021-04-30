@@ -73,7 +73,9 @@ public partial class Box : Entity
     [SerializeField]
     private List<EntityLightningGeneratorHelper> BoxLightningGeneratorHelpers;
 
-    internal BoxEffectHelper BoxEffectHelper;
+    [FoldoutGroup("组件")]
+    [SerializeField]
+    private BoxEffectHelper BoxEffectHelper;
 
     [FoldoutGroup("组件")]
     public BoxColliderHelper BoxColliderHelper;
@@ -184,8 +186,7 @@ public partial class Box : Entity
             h.OnHelperRecycled();
         }
 
-        BoxEffectHelper?.OnBoxPoolRecycled();
-        BoxEffectHelper = null;
+        BoxEffectHelper.OnHelperRecycled();
         BoxColliderHelper.OnBoxPoolRecycled();
         DoorBoxHelper?.OnHelperRecycled();
         BoxSkinHelper?.OnHelperRecycled();
@@ -694,11 +695,7 @@ public partial class Box : Entity
         {
             transform.DOPause();
             SetModelSmoothMoveLerpTime(0);
-            if (BoxEffectHelper == null)
-            {
-                BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
-            }
-
+            BoxEffectHelper.ShowTrails();
             foreach (EntityPassiveSkill ps in EntityPassiveSkills)
             {
                 ps.OnBeingKicked(entity);
@@ -798,8 +795,7 @@ public partial class Box : Entity
                 hasRigidbody = false;
             }
 
-            BoxEffectHelper?.PoolRecycle();
-            BoxEffectHelper = null;
+            BoxEffectHelper.HideTrails();
             EntityWwiseHelper.OnBeingLift.Post(gameObject);
             return true;
         }
@@ -819,11 +815,7 @@ public partial class Box : Entity
         {
             SetModelSmoothMoveLerpTime(0);
             alreadyCollidedActorSet.Clear();
-            if (BoxEffectHelper == null)
-            {
-                BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
-            }
-
+            BoxEffectHelper.ShowTrails();
             LastInteractEntity = entity;
             State = States.Flying;
             transform.DOPause();
@@ -860,11 +852,7 @@ public partial class Box : Entity
         {
             SetModelSmoothMoveLerpTime(0);
             alreadyCollidedActorSet.Clear();
-            if (BoxEffectHelper == null)
-            {
-                BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
-            }
-
+            BoxEffectHelper.ShowTrails();
             LastInteractEntity = entity;
             State = States.Putting;
             transform.DOPause();
@@ -901,11 +889,7 @@ public partial class Box : Entity
     public void DropFromEntity(Vector3 startVelocity)
     {
         SetModelSmoothMoveLerpTime(0);
-        if (BoxEffectHelper == null)
-        {
-            BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
-        }
-
+        BoxEffectHelper.ShowTrails();
         alreadyCollidedActorSet.Clear();
         LastInteractEntity = null;
         State = States.DroppingFromEntity;
@@ -940,11 +924,7 @@ public partial class Box : Entity
     public void DropFromAir()
     {
         SetModelSmoothMoveLerpTime(0);
-        if (BoxEffectHelper == null)
-        {
-            BoxEffectHelper = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxEffectHelper].AllocateGameObject<BoxEffectHelper>(transform);
-        }
-
+        BoxEffectHelper.ShowTrails();
         alreadyCollidedActorSet.Clear();
         LastInteractEntity = null;
         State = States.DroppingFromAir;
@@ -1045,8 +1025,7 @@ public partial class Box : Entity
                     }
 
                     BoxColliderHelper.OnRigidbodyStop();
-                    BoxEffectHelper?.PoolRecycle();
-                    BoxEffectHelper = null;
+                    BoxEffectHelper.HideTrails();
                     BoxGrindTriggerZoneHelper?.SetActive(false);
 
                     foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
@@ -1056,7 +1035,6 @@ public partial class Box : Entity
 
                     if (!IsDestroying) WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this, checkMerge, CurrentMoveGlobalPlanerDir); // 这里面已经做了“Box本来就在Grid系统里”的判定
                     CurrentMoveGlobalPlanerDir = GridPos3D.Zero;
-                    EntityWwiseHelper.OnSlideStop.Post(gameObject);
                 }
             }
         }
@@ -1068,11 +1046,11 @@ public partial class Box : Entity
 
         if (hasRigidbody && Rigidbody.velocity.magnitude > 1f)
         {
-            BoxEffectHelper?.Play();
+            BoxEffectHelper.ShowTrails();
         }
         else
         {
-            BoxEffectHelper?.Stop();
+            BoxEffectHelper.HideTrails();
         }
 
         if (hasRigidbody && Rigidbody.velocity.magnitude > 20f)
