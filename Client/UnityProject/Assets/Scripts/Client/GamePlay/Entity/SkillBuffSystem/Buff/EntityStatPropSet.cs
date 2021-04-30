@@ -137,7 +137,7 @@ public class EntityStatPropSet
 
     internal int FrozenValuePerLevel => Mathf.RoundToInt(((float) FrozenValue.MaxValue / FrozenLevel.MaxValue));
 
-    public bool IsFrozen => FrozenLevel.Value > 1; // 1级不算冰冻， 2级~4级冰冻对应三个模型
+    public bool IsFrozen => FrozenLevel.Value >= 1; // 1级~3级对应三个模型，4级以后都是满冰
 
     [BoxGroup("冰冻")]
     [LabelText("@\"冰冻伤害抵消\t\"+FrozenDamageDefense")]

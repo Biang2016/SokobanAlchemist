@@ -10,7 +10,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
     public override void FrozeIntoIceBlock(int beforeFrozenLevel, int afterFrozenLevel, int min, int max)
     {
         Actor actor = (Actor) Entity;
-        if (afterFrozenLevel <= 1)
+        if (afterFrozenLevel < 1)
         {
             actor.ForbidAction = false;
             actor.SetModelSmoothMoveLerpTime(actor.DefaultSmoothMoveLerpTime);
@@ -74,7 +74,12 @@ public class ActorFrozenHelper : EntityFrozenHelper
             for (int index = 0; index < FrozeModels.Length; index++)
             {
                 GameObject frozeModel = FrozeModels[index];
-                frozeModel.SetActive(index == afterFrozenLevel - 1);
+                frozeModel.SetActive(index == afterFrozenLevel);
+            }
+
+            if (afterFrozenLevel >= FrozeModels.Length)
+            {
+                FrozeModels[FrozeModels.Length - 1].SetActive(true);
             }
 
             FXManager.Instance.PlayFX(beforeFrozenLevel < afterFrozenLevel ? actor.FrozeFX : actor.ThawFX, transform.position);

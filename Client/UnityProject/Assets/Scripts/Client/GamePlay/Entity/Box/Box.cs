@@ -1005,7 +1005,7 @@ public partial class Box : Entity
                 bool isGrounded = false;
                 foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
                 {
-                    bool hitGround = Physics.Raycast(transform.position + offset, Vector3.down, 1, LayerManager.Instance.LayerMask_Box | LayerManager.Instance.LayerMask_Ground);
+                    bool hitGround = Physics.Raycast(transform.position + offset, Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground);
                     if (hitGround)
                     {
                         isGrounded = true;

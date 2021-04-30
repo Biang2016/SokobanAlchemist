@@ -678,7 +678,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 {
                     actor.EntityIndicatorHelper.RefreshEntityIndicatorOccupationData();
                     EditorUtility.SetDirty(actorPrefab);
-                    EntityOccupationData occupationData = actor.ActorIndicatorHelper.EntityOccupationData.Clone();
+                    EntityOccupationData occupationData = actor.EntityIndicatorHelper.EntityOccupationData.Clone();
                     ushort entityTypeIndex = TypeDefineConfigs[TypeDefineType.Actor].TypeIndexDict[actor.name];
                     if (entityTypeIndex != 0)
                     {
