@@ -17,6 +17,8 @@ public class LearnSkillPanel : BaseUIPanel
             UIFormLucencyTypes.Penetrable);
     }
 
+    public Animator Anim;
+  
     public Transform EntitySkillRowContainer;
     public Button LearnButton_Passive;
 
@@ -29,11 +31,16 @@ public class LearnSkillPanel : BaseUIPanel
 
     private EntitySkillRow m_EntitySkillRow;
 
+    internal int openStackTimes = 0;
     private UnityAction current_LearnCallBack;
     private EntitySkill current_EntitySkill;
 
     public void Initialize(string skillGUID, UnityAction learnCallback, bool specifyKeyBind, PlayerControllerHelper.KeyBind keyBind)
     {
+        Anim.SetTrigger("Jump");
+
+        openStackTimes++;
+
         current_LearnCallBack = learnCallback;
         current_EntitySkill = ConfigManager.GetEntitySkill(skillGUID);
 
@@ -107,6 +114,7 @@ public class LearnSkillPanel : BaseUIPanel
 
     public override void Hide()
     {
+        openStackTimes--;
         base.Hide();
         LearnButton_Passive.onClick.RemoveAllListeners();
         LearnButton_H.onClick.RemoveAllListeners();
@@ -116,5 +124,10 @@ public class LearnSkillPanel : BaseUIPanel
         UIManager.Instance.UI3DRoot.gameObject.SetActive(true);
         current_LearnCallBack = null;
         current_EntitySkill = null;
+
+        if (openStackTimes > 0)
+        {
+            UIManager.Instance.ShowUIForms<LearnSkillPanel>();
+        }
     }
 }

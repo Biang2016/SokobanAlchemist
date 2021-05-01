@@ -212,6 +212,7 @@ GameObject:
   - component: {fileID: 1081569820716009646}
   - component: {fileID: 1081569820716009649}
   - component: {fileID: 1917042805701927328}
+  - component: {fileID: -3513307185993498475}
   m_Layer: 5
   m_Name: LearnSkillPanel
   m_TagString: Untagged
@@ -291,6 +292,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8568db93a603582458b288883ae0fb25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsShown: 0
+  Anim: {fileID: -3513307185993498475}
   EntitySkillRowContainer: {fileID: 1081569821308404075}
   LearnButton_Passive: {fileID: 7256524164656866975}
   LearnButtons_Active: {fileID: 6133334239089029352}
@@ -299,6 +302,25 @@ MonoBehaviour:
   LearnButton_J: {fileID: 7301111872280259658}
   LearnButton_K: {fileID: 247949409555224620}
   LearnButton_L: {fileID: 6781698162941478771}
+--- !u!95 &-3513307185993498475
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081569820716009651}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: db7671ab9c4365945b6a2a4fd45edc12, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1081569821308404074
 GameObject:
   m_ObjectHideFlags: 0

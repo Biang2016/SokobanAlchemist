@@ -15,7 +15,6 @@ public class EntitySkillAction_ShowLearnUpgradePanel : EntitySkillAction, Entity
 
     public void Execute()
     {
-        if (Entity == null) return;
         LearnUpgradePanel learnUpgradePanel = UIManager.Instance.ShowUIForms<LearnUpgradePanel>();
         learnUpgradePanel.Initialize(EntityUpgrade, OnLearned);
     }

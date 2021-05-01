@@ -331,8 +331,8 @@ namespace BiangLibrary.GamePlay.UI
         {
             CurrentShowUIFormDict.TryGetValue(strUIFormName, out BaseUIPanel baseUIForm);
             if (baseUIForm == null) return;
-            baseUIForm.Hide();
             CurrentShowUIFormDict.Remove(strUIFormName);
+            baseUIForm.Hide();
         }
 
         //（“反向切换”属性）窗体的出栈逻辑

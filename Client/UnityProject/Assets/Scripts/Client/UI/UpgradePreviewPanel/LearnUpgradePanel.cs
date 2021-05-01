@@ -17,16 +17,22 @@ public class LearnUpgradePanel : BaseUIPanel
             UIFormLucencyTypes.Penetrable);
     }
 
+    public Animator Anim;
     public Transform EntityUpgradeRowContainer;
     public Button LearnButton;
 
     private EntityUpgradeRow m_EntityUpgradeRow;
 
+    internal int openStackTimes = 0;
     private UnityAction current_LearnCallBack;
     private EntityUpgrade current_EntityUpgrade;
 
     public void Initialize(EntityUpgrade entityUpgrade, UnityAction learnCallback)
     {
+        Anim.SetTrigger("Jump");
+
+        openStackTimes++;
+
         current_EntityUpgrade = entityUpgrade.Clone();
         current_LearnCallBack = learnCallback;
 
@@ -54,10 +60,16 @@ public class LearnUpgradePanel : BaseUIPanel
 
     public override void Hide()
     {
+        openStackTimes--;
         base.Hide();
         LearnButton.onClick.RemoveAllListeners();
         UIManager.Instance.UI3DRoot.gameObject.SetActive(true);
         current_LearnCallBack = null;
         current_EntityUpgrade = null;
+
+        if (openStackTimes > 0)
+        {
+            UIManager.Instance.ShowUIForms<LearnUpgradePanel>();
+        }
     }
 }
