@@ -137,6 +137,9 @@ public class CollectableItem : PoolObject
 
     private float chasingTime = 0f;
 
+    private float destroyBecauseNotInAnyModuleTick = 0f;
+    private float DestroyBecauseNotInAnyModuleThreshold = 1.5f;
+
     void FixedUpdate()
     {
         if (CurrentStatus == Status.Chasing && ChasingTarget != null)
@@ -148,6 +151,23 @@ public class CollectableItem : PoolObject
                 FXManager.Instance.PlayFX(ConsumeFX, transform.position);
                 ChasedCallback?.Invoke();
                 PoolRecycle();
+            }
+        }
+
+        if (BattleManager.Instance.IsStart)
+        {
+            if (WorldManager.Instance != null)
+            {
+                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(transform.position.ToGridPos3D(), false);
+                if (module == null)
+                {
+                    destroyBecauseNotInAnyModuleTick += Time.fixedDeltaTime;
+                    if (destroyBecauseNotInAnyModuleTick > DestroyBecauseNotInAnyModuleThreshold)
+                    {
+                        destroyBecauseNotInAnyModuleTick = 0;
+                        PoolRecycle();
+                    }
+                }
             }
         }
     }

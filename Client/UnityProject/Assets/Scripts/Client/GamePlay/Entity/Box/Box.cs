@@ -403,8 +403,9 @@ public partial class Box : Entity
         Lifted,
         Flying,
         Putting,
-        DroppingFromEntity,
         Dropping,
+        DroppingOutFromEntity_Up,
+        DroppingOutFromEntity_Down,
         DroppingFromAir,
     }
 
@@ -423,7 +424,7 @@ public partial class Box : Entity
         Throw,
         Put,
         Drop,
-        DropFromEntity,
+        DropOutFromEntity,
         DropFromAir,
         Create,
     }
@@ -481,9 +482,9 @@ public partial class Box : Entity
         }
     }
 
-    public void Setup(EntityData entityData, uint initWorldModuleGUID, GridPos3D worldGP)
+    public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
     {
-        base.Setup(entityData, initWorldModuleGUID);
+        base.Setup(initWorldModuleGUID);
         transform.position = worldGP;
         WorldGP = worldGP;
         if (IsHidden) BoxModelHelper.gameObject.SetActive(false);
@@ -616,9 +617,9 @@ public partial class Box : Entity
             IsInGridSystem = true;
             switch (lerpType)
             {
-                case LerpType.DropFromEntity:
+                case LerpType.DropOutFromEntity:
                 {
-                    State = States.DroppingFromEntity;
+                    State = States.DroppingOutFromEntity_Up;
                     break;
                 }
                 case LerpType.DropFromAir:
@@ -886,16 +887,16 @@ public partial class Box : Entity
         }
     }
 
-    public void DropFromEntity(Vector3 startVelocity)
+    public void DropOutFromEntity(Vector3 startVelocity)
     {
         SetModelSmoothMoveLerpTime(0);
         BoxEffectHelper.ShowTrails();
         alreadyCollidedActorSet.Clear();
         LastInteractEntity = null;
-        State = States.DroppingFromEntity;
+        State = States.DroppingOutFromEntity_Up;
         transform.DOPause();
         transform.parent = WorldManager.Instance.CurrentWorld.transform;
-        BoxColliderHelper.OnDropFromEntity();
+        BoxColliderHelper.OnDropOutFromEntity_Up();
         Rigidbody = gameObject.GetComponent<Rigidbody>();
         if (!hasRigidbody)
         {
@@ -984,7 +985,7 @@ public partial class Box : Entity
             }
         }
 
-        if ((state == States.Static || state == States.BeingKicked || state == States.BeingKickedToGrind || state == States.Flying || state == States.DroppingFromEntity || state == States.DroppingFromAir || state == States.Putting) && hasRigidbody)
+        if ((state == States.Static || state == States.BeingKicked || state == States.BeingKickedToGrind || state == States.Flying || state == States.DroppingOutFromEntity_Up || state == States.DroppingOutFromEntity_Down || state == States.DroppingFromAir || state == States.Putting) && hasRigidbody)
         {
             if (state == States.BeingKicked || state == States.BeingKickedToGrind)
             {
@@ -1000,12 +1001,25 @@ public partial class Box : Entity
                 }
             }
 
+            if (state == States.DroppingOutFromEntity_Up)
+            {
+                if (hasRigidbody && Rigidbody.velocity.y < 0f)
+                {
+                    BoxColliderHelper.OnDropOutFromEntity_Down();
+                }
+            }
+
             if (hasRigidbody && Rigidbody.velocity.magnitude < 1f)
             {
                 bool isGrounded = false;
                 foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
                 {
-                    bool hitGround = Physics.Raycast(transform.position + offset, Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground);
+                    // 检查格子中部和四角是否落地，避免卡在半空中
+                    bool hitGround = Physics.Raycast(transform.position + offset, Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
+                                     || Physics.Raycast(transform.position + offset + new Vector3(0.45f,0f,0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
+                                     || Physics.Raycast(transform.position + offset + new Vector3(-0.45f, 0f, 0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
+                                     || Physics.Raycast(transform.position + offset + new Vector3(0.45f, 0f, -0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
+                                     || Physics.Raycast(transform.position + offset + new Vector3(-0.45f, 0f, -0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground);
                     if (hitGround)
                     {
                         isGrounded = true;
@@ -1033,7 +1047,7 @@ public partial class Box : Entity
                         h.OnRigidbodyStop();
                     }
 
-                    if (!IsDestroying) WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this, checkMerge, CurrentMoveGlobalPlanerDir); // 这里面已经做了“Box本来就在Grid系统里”的判定
+                    if (!IsDestroying) WorldManager.Instance.CurrentWorld.BoxReturnToWorldFromPhysics(this, CurrentMoveGlobalPlanerDir); // 这里面已经做了“Box本来就在Grid系统里”的判定
                     CurrentMoveGlobalPlanerDir = GridPos3D.Zero;
                 }
             }

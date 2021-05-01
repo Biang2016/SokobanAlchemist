@@ -11,6 +11,9 @@ using UnityEngine.Events;
 [Serializable]
 public abstract class EntityActiveSkill : EntitySkill
 {
+    public override string GetSkillDescription_EN => base.GetSkillDescription_EN + $" CD: {SkillsPropertyCollection.Cooldown.GetModifiedValue}s";
+    public override string GetSkillDescription_ZH => base.GetSkillDescription_ZH + $" CD: {SkillsPropertyCollection.Cooldown.GetModifiedValue}s";
+
     internal EntityActiveSkill ParentActiveSkill;
 
     [LabelText("作用阵营")]

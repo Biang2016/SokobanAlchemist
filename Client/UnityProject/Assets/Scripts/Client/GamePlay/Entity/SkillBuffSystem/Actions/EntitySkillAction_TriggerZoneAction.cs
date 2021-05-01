@@ -126,6 +126,11 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                     EntityStayTimeDict.Add(target.GUID, 0);
                     foreach (EntitySkillAction action in EntityActions_Enter)
                     {
+                        if (action.Entity == null)
+                        {
+                            action.Entity = Entity;
+                        }
+
                         if (action is IPureAction pureAction)
                         {
                             pureAction.Execute();
@@ -164,6 +169,11 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                         triggerTimeWhenStayCount++;
                         foreach (EntitySkillAction action in EntityActions_Stay)
                         {
+                            if (action.Entity == null)
+                            {
+                                action.Entity = Entity;
+                            }
+
                             if (action is IPureAction pureAction)
                             {
                                 pureAction.Execute();
@@ -188,6 +198,11 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                         triggerTimeWhenStayCount++;
                         foreach (EntitySkillAction action in EntityActions_Stay)
                         {
+                            if (action.Entity == null)
+                            {
+                                action.Entity = Entity;
+                            }
+
                             if (action is IPureAction pureAction)
                             {
                                 pureAction.Execute();
@@ -235,6 +250,11 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                     EntityStayTimeDict.Remove(target.GUID);
                     foreach (EntitySkillAction action in EntityActions_Exit)
                     {
+                        if (action.Entity == null)
+                        {
+                            action.Entity = Entity;
+                        }
+
                         if (action is IPureAction pureAction)
                         {
                             pureAction.Execute();

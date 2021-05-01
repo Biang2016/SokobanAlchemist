@@ -19,14 +19,17 @@ MonoBehaviour:
     00000000:
       type: {class: ActorActiveSkill_Dash, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (81536e4e-8a71-4461-ad58-85e5093e8023)
         SkillAlias: "\u51B2\u523A"
+        SkillName_EN: Dash
+        SkillName_ZH: "\u51B2\u523A"
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: (306afce7-157e-4e74-9180-259545780dd1)
-        SkillDescription: Dash forwards by 4 grids.
+        SkillDescription_EN: Dash forward by 3 grids
+        SkillDescription_ZH: "\u5411\u524D\u51B2\u523A\u4E09\u683C"
         TargetCamp: 0
-        EntitySkillIndex: 0
         SkillsPropertyCollection:
           CastingRadius:
             BaseValue: 0
@@ -79,6 +82,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
         TriggerWhenMissProbabilityPercent: 100
+        EntitySkillConditions: []
         WingUpCanMove: 0
         CastCanMove: 0
         RecoverCanMove: 0

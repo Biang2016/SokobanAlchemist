@@ -44,7 +44,10 @@ public class WorldModule : PoolObject
     public WorldDeadZoneTrigger WorldDeadZoneTrigger;
     public WorldWallCollider WorldWallCollider;
     public WorldGroundCollider WorldGroundCollider;
-    public List<Entity> WorldModuleTriggerEntities = new List<Entity>();
+
+    [ShowInInspector]
+    public Dictionary<uint, Entity> WorldModuleTriggerEntities = new Dictionary<uint, Entity>(); // 仅记录核心格在此模组内的TriggerEntity
+
     public List<CollectableItem> WorldModuleCollectableItems = new List<CollectableItem>();
 
     public List<EntityPassiveSkill_LevelEventTriggerAppear> EventTriggerAppearEntityPassiveSkillList = new List<EntityPassiveSkill_LevelEventTriggerAppear>();
@@ -55,100 +58,166 @@ public class WorldModule : PoolObject
     [HideInInspector]
     private Entity[,,] EntityMatrix_CheckOverlap_BoxAndActor = new Entity[MODULE_SIZE, MODULE_SIZE, MODULE_SIZE]; // 实体占位矩阵，包括!Passable的箱子和所有Actor
 
-    // 此索引仅仅用于战斗时的Set，不可用于Recycle时候置空 
-    public Entity this[TypeDefineType entityType, GridPos3D localGP, bool partial = false] // Partial 针对门箱子这种，虽然Indicator占位变化，但主体未变化
+    /// <summary>
+    /// 此索引仅仅用于战斗时的Set，不可用于Recycle时候置空 
+    /// </summary>
+    /// <param name="entityType"></param>
+    /// <param name="localGP"></param>
+    /// <param name="isStart">是否是初始化（初始化对WorldModuleData不做修改）</param>
+    /// <param name="isPartial">针对门箱子这种，虽然Indicator占位变化，但主体未变化</param>
+    /// <param name="isTriggerEntity"></param>
+    /// <param name="triggerEntityGUID">针对TriggerEntity，由于其占位非一一对应，故需要一个GUID来映射到Dict</param>
+    /// <returns></returns>
+    public Entity this[TypeDefineType entityType, GridPos3D localGP, bool isStart = false, bool isPartial = false, bool isTriggerEntity = false, uint triggerEntityGUID = 0]
     {
         get
         {
-            if (entityType == TypeDefineType.Box)
+            if (isTriggerEntity)
             {
-                return BoxMatrix[localGP.x, localGP.y, localGP.z];
+                if (WorldModuleTriggerEntities.TryGetValue(triggerEntityGUID, out Entity triggerEntity))
+                {
+                    return triggerEntity;
+                }
             }
-            else if (entityType == TypeDefineType.Actor)
+            else
             {
-                return EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z];
+                if (entityType == TypeDefineType.Box)
+                {
+                    return BoxMatrix[localGP.x, localGP.y, localGP.z];
+                }
+                else if (entityType == TypeDefineType.Actor)
+                {
+                    return EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z];
+                }
             }
 
             return null;
         }
         set
         {
-            if (entityType == TypeDefineType.Box)
+            if (isTriggerEntity)
             {
-#if UNITY_EDITOR
-                Assert.IsTrue(value == null || value is Box);
-#endif
-                Box boxValue = (Box) value;
-                BoxMatrix[localGP.x, localGP.y, localGP.z] = boxValue;
-                if (value == null)
+                if (value != null)
                 {
-                    if (!partial) WorldModuleData[TypeDefineType.Box, localGP] = null;
-                    Entity entityInOverlapMatrix = EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z];
-                    if (entityInOverlapMatrix != null && entityInOverlapMatrix is Box boxInOverlapMatrix)
+                    if (!WorldModuleTriggerEntities.ContainsKey(value.GUID))
                     {
-                        EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = null;
+                        WorldModuleTriggerEntities.Add(value.GUID, value);
+                        if (!isStart)
+                        {
+                            if (WorldModuleData.TriggerEntityDataDict.TryGetValue(value.GUID, out EntityData triggerEntityData))
+                            {
+                                triggerEntityData.LocalGP = localGP;
+                                triggerEntityData.WorldGP = LocalGPToWorldGP(localGP);
+                            }
+                            else
+                            {
+                                triggerEntityData = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                                WorldModuleData.TriggerEntityDataDict.Add(value.GUID, triggerEntityData);
+                                WorldModuleData.TriggerEntityDataList.Add(triggerEntityData);
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    if (!partial)
+                    WorldModuleTriggerEntities.Remove(triggerEntityGUID);
+                    if (!isStart)
                     {
-                        EntityData entityData = WorldModuleData[TypeDefineType.Box, localGP];
-                        if (entityData != null)
+                        if (WorldModuleData.TriggerEntityDataDict.TryGetValue(triggerEntityGUID, out EntityData triggerEntityData))
                         {
-                            entityData.EntityTypeIndex = value.EntityTypeIndex;
-                            entityData.EntityOrientation = value.EntityOrientation;
-                            entityData.EntityType.RefreshGUID();
-                        }
-                        else
-                        {
-                            if (WorldGPToLocalGP(value.WorldGP) == localGP) // 只针对核心格纪录data信息
-                            {
-                                WorldModuleData[TypeDefineType.Box, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
-                            }
+                            WorldModuleData.TriggerEntityDataDict.Remove(triggerEntityGUID);
+                            WorldModuleData.TriggerEntityDataList.Remove(triggerEntityData);
                         }
                     }
-
-                    if (!((Box) value).Passable) EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = value;
                 }
-
-                World.RefreshActorPathFindingSpaceAvailableCache(LocalGPToWorldGP(localGP), value);
             }
-            else if (entityType == TypeDefineType.Actor)
+            else
             {
-                if (value == null)
+                if (entityType == TypeDefineType.Box)
                 {
-                    if (!partial) WorldModuleData[TypeDefineType.Actor, localGP] = null;
-                    Entity entityInOverlapMatrix = EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z];
-                    if (entityInOverlapMatrix != null && entityInOverlapMatrix is Actor)
+#if UNITY_EDITOR
+                    Assert.IsTrue(value == null || value is Box);
+#endif
+                    Box boxValue = (Box) value;
+                    BoxMatrix[localGP.x, localGP.y, localGP.z] = boxValue;
+                    if (value == null)
                     {
-                        EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = null;
-                    }
-                }
-                else
-                {
-                    if (!partial)
-                    {
-                        EntityData entityData = WorldModuleData[TypeDefineType.Actor, localGP];
-                        if (entityData != null)
+                        if (!isPartial && !isStart) WorldModuleData[TypeDefineType.Box, localGP] = null;
+                        Entity entityInOverlapMatrix = EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z];
+                        if (entityInOverlapMatrix != null && entityInOverlapMatrix is Box)
                         {
-                            entityData.EntityTypeIndex = value.EntityTypeIndex;
-                            entityData.EntityOrientation = value.EntityOrientation;
-                            entityData.EntityType.RefreshGUID();
+                            EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = null;
                         }
-                        else
+                    }
+                    else
+                    {
+                        if (!isPartial && !isStart)
                         {
                             if (WorldGPToLocalGP(value.WorldGP) == localGP) // 只针对核心格纪录data信息
                             {
-                                WorldModuleData[TypeDefineType.Actor, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                                EntityData entityData = WorldModuleData[TypeDefineType.Box, localGP];
+                                if (entityData != null)
+                                {
+                                    entityData.EntityTypeIndex = value.EntityTypeIndex;
+                                    entityData.EntityOrientation = value.EntityOrientation;
+                                    entityData.EntityType.RefreshGUID();
+                                }
+                                else
+                                {
+                                    WorldModuleData[TypeDefineType.Box, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                                }
+                            }
+                            else
+                            {
+                                WorldModuleData[TypeDefineType.Box, localGP] = null;
                             }
                         }
+
+                        if (!boxValue.Passable) EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = value;
                     }
 
-                    EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = value;
+                    World.RefreshActorPathFindingSpaceAvailableCache(LocalGPToWorldGP(localGP), value);
                 }
+                else if (entityType == TypeDefineType.Actor)
+                {
+                    if (value == null)
+                    {
+                        if (!isPartial && !isStart) WorldModuleData[TypeDefineType.Actor, localGP] = null;
+                        Entity entityInOverlapMatrix = EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z];
+                        if (entityInOverlapMatrix != null && entityInOverlapMatrix is Actor)
+                        {
+                            EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = null;
+                        }
+                    }
+                    else
+                    {
+                        if (!isPartial && !isStart)
+                        {
+                            if (WorldGPToLocalGP(value.WorldGP) == localGP) // 只针对核心格纪录data信息
+                            {
+                                EntityData entityData = WorldModuleData[TypeDefineType.Actor, localGP];
+                                if (entityData != null)
+                                {
+                                    entityData.EntityTypeIndex = value.EntityTypeIndex;
+                                    entityData.EntityOrientation = value.EntityOrientation;
+                                    entityData.EntityType.RefreshGUID();
+                                }
+                                else
+                                {
+                                    WorldModuleData[TypeDefineType.Actor, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                                }
+                            }
+                            else
+                            {
+                                WorldModuleData[TypeDefineType.Box, localGP] = null;
+                            }
+                        }
 
-                //World.RefreshActorPathFindingSpaceAvailableCache(LocalGPToWorldGP(localGP), value); // Actor暂时不参与寻路缓存刷新
+                        EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = value;
+                    }
+
+                    //World.RefreshActorPathFindingSpaceAvailableCache(LocalGPToWorldGP(localGP), value); // Actor暂时不参与寻路缓存刷新
+                }
             }
         }
     }
@@ -204,9 +273,9 @@ public class WorldModule : PoolObject
         }
 
         EventTriggerAppearEntityPassiveSkillList.Clear();
-        foreach (Entity triggerEntity in WorldModuleTriggerEntities)
+        foreach (KeyValuePair<uint, Entity> kv in WorldModuleTriggerEntities)
         {
-            triggerEntity.PoolRecycle();
+            kv.Value.PoolRecycle();
         }
 
         WorldModuleTriggerEntities.Clear();
@@ -277,7 +346,7 @@ public class WorldModule : PoolObject
                             foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
                             {
                                 GridPos3D gridWorldGP = offset + box.WorldGP;
-                                if (World.GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP) == box)
+                                if (World.GetBoxByGridPosition(gridWorldGP, 0, out WorldModule module, out GridPos3D localGP) == box)
                                 {
                                     if (module.BoxMatrix[localGP.x, localGP.y, localGP.z] == box)
                                     {
@@ -441,7 +510,7 @@ public class WorldModule : PoolObject
 
         GridPos3D localGP = WorldGPToLocalGP(worldGP);
         bool valid = true;
-        if (BoxMatrix[localGP.x, localGP.y, localGP.z] == null || isTriggerEntity)
+
         {
             // Probability Check
             if (entityData.RawEntityExtraSerializeData != null)
@@ -475,7 +544,7 @@ public class WorldModule : PoolObject
                 foreach (GridPos3D offset in entityOccupation_rotated)
                 {
                     GridPos3D gridWorldGP = offset + worldGP;
-                    Box box = World.GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D _, true, true);
+                    Box box = World.GetBoxByGridPosition(gridWorldGP, 0, out WorldModule module, out GridPos3D _, true, true);
                     if (box != null)
                     {
                         bool canOverlap = entityData.EntityType.TypeDefineType == TypeDefineType.Actor && box.Passable;
@@ -505,40 +574,18 @@ public class WorldModule : PoolObject
                             box.BoxFrozenBoxHelper.FrozenBoxOccupation = entityOccupation_rotated;
                         }
 
-                        box.Setup(entityData, GUID, worldGP);
+                        box.Setup(entityData, worldGP, GUID);
                         box.Initialize(worldGP, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedEntities); // 如果是TriggerAppear的箱子则不需要检查坠落
 
                         // 到模组处登记
-                        if (!isTriggerEntity)
+                        foreach (GridPos3D offset in entityOccupation_rotated)
                         {
-                            foreach (GridPos3D offset in entityOccupation_rotated)
+                            GridPos3D gridPos = offset + worldGP;
+                            Entity existedEntity = World.GetImpassableEntityByGridPosition(gridPos, 0, out WorldModule module, out GridPos3D gridLocalGP);
+                            if (module != null && existedEntity == null)
                             {
-                                GridPos3D gridPos = offset + worldGP;
-                                Box existedBox = World.GetBoxByGridPosition(gridPos, out WorldModule module, out GridPos3D gridLocalGP, IsAccessible, false); // 如果此模组是Accessible的就忽略不可到达的模组(可到达的模组的箱子不能伸到不可到达的模组里)
-                                if (module != null && existedBox == null)
-                                {
-                                    if (isStartedEntities)
-                                    {
-                                        module.BoxMatrix[gridLocalGP.x, gridLocalGP.y, gridLocalGP.z] = box;
-                                        if (!box.Passable) module.EntityMatrix_CheckOverlap_BoxAndActor[gridLocalGP.x, gridLocalGP.y, gridLocalGP.z] = box;
-                                        World.RefreshActorPathFindingSpaceAvailableCache(gridPos, box);
-                                    }
-                                    else
-                                    {
-                                        module[TypeDefineType.Box, gridLocalGP] = box;
-                                    }
-                                }
+                                module[TypeDefineType.Box, gridLocalGP, isStartedEntities, false, isTriggerEntity, box.GUID] = box;
                             }
-                        }
-                        else
-                        {
-                            // Trigger Entity如果不是起始的，需要记录到WorldModuleData里面去
-                            if (!isStartedEntities && this is OpenWorldModule)
-                            {
-                                WorldModuleData.TriggerEntityDataList.Add(box.EntityData);
-                            }
-
-                            WorldModuleTriggerEntities.Add(box);
                         }
 
                         return box;
@@ -554,35 +601,14 @@ public class WorldModule : PoolObject
                         BattleManager.Instance.AddActor(this, actor);
 
                         // 到模组处登记
-                        if (!isTriggerEntity)
+                        foreach (GridPos3D offset in entityOccupation_rotated)
                         {
-                            foreach (GridPos3D offset in entityOccupation_rotated)
+                            GridPos3D gridPos = offset + actor.WorldGP; // 此处actor.WorldGP已经根据Actor的朝向更新过，不等于上文的worldGP
+                            Entity existedEntity = World.GetImpassableEntityByGridPosition(gridPos, actor.GUID, out WorldModule module, out GridPos3D gridLocalGP);
+                            if (module != null && existedEntity == null)
                             {
-                                GridPos3D gridPos = offset + actor.WorldGP; // 此处actor.WorldGP已经根据Actor的朝向更新过，不等于上文的worldGP
-                                Box existedBox = World.GetBoxByGridPosition(gridPos, out WorldModule module, out GridPos3D gridLocalGP, IsAccessible, true);
-                                if (module != null && existedBox == null)
-                                {
-                                    if (isStartedEntities)
-                                    {
-                                        module.EntityMatrix_CheckOverlap_BoxAndActor[gridLocalGP.x, gridLocalGP.y, gridLocalGP.z] = actor;
-                                        //World.RefreshActorPathFindingSpaceAvailableCache(gridWorldGP, actor);
-                                    }
-                                    else
-                                    {
-                                        module[TypeDefineType.Actor, gridLocalGP] = actor;
-                                    }
-                                }
+                                module[TypeDefineType.Actor, gridLocalGP, isStartedEntities, false, isTriggerEntity, actor.GUID] = actor;
                             }
-                        }
-                        else
-                        {
-                            // Trigger Entity如果不是起始的，需要记录到WorldModuleData里面去
-                            if (!isStartedEntities && this is OpenWorldModule)
-                            {
-                                WorldModuleData.TriggerEntityDataList.Add(actor.EntityData);
-                            }
-
-                            WorldModuleTriggerEntities.Add(actor);
                         }
 
                         return actor;
@@ -590,7 +616,6 @@ public class WorldModule : PoolObject
                 }
             }
         }
-
         if (findSpaceUpward)
         {
             worldGP += GridPos3D.Up;
@@ -604,6 +629,7 @@ public class WorldModule : PoolObject
                 return null;
             }
         }
+
         else
         {
             return null;
@@ -623,7 +649,6 @@ public class WorldModule : PoolObject
     public bool IsAccessible => !WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.DeadZone)
                                 && !WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Wall)
                                 && !WorldModuleData.WorldModuleFeature.HasFlag(WorldModuleFeature.Ground);
-
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {

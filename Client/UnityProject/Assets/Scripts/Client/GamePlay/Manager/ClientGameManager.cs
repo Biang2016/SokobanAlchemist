@@ -11,6 +11,9 @@ using UnityEngine.SceneManagement;
 
 public class ClientGameManager : MonoSingleton<ClientGameManager>
 {
+
+    public float dropSpeed = 8f;
+
     public Material BoxMarchingSquareTerrainMat;
     public BoxMarchingTextureConfigMatrix BoxMarchingTextureConfigMatrix;
 

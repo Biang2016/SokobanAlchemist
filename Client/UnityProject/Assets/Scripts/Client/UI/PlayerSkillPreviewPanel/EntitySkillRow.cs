@@ -9,6 +9,9 @@ public class EntitySkillRow : PoolObject
     private Image SkillIcon;
 
     [SerializeField]
+    private Text SkillName;
+
+    [SerializeField]
     private Text SkillKeyBind;
 
     [SerializeField]
@@ -18,7 +21,8 @@ public class EntitySkillRow : PoolObject
     {
         Sprite sprite = ConfigManager.GetEntitySkillIconByName(entitySkill.SkillIcon.TypeName);
         SkillIcon.sprite = sprite;
-        SkillDescription.text = entitySkill.SkillDescription;
+        SkillDescription.text = entitySkill.GetSkillDescription_EN;
+        SkillName.text = entitySkill.SkillName_EN;
         SkillKeyBind.gameObject.SetActive(!string.IsNullOrWhiteSpace(keyBind));
         SkillKeyBind.text = keyBind;
     }

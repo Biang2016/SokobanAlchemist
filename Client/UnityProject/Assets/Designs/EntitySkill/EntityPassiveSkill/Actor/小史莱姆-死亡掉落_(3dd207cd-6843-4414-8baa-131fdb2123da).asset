@@ -22,10 +22,13 @@ MonoBehaviour:
         InitWorldModuleGUID: 0
         SkillGUID: (3dd207cd-6843-4414-8baa-131fdb2123da)
         SkillAlias: "\u5C0F\u53F2\u83B1\u59C6-\u6B7B\u4EA1\u6389\u843D"
+        SkillName_EN: 
+        SkillName_ZH: 
         SkillIcon:
           TypeDefineType: 0
           TypeGUID: 
-        SkillDescription: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
         PassiveSkillCondition: 1024
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
@@ -49,13 +52,8 @@ MonoBehaviour:
       data:
         InitWorldModuleGUID: 0
         DropBoxList:
-        - BoxTypeName:
+        - ProbabilityMin: 1
+          ProbabilityMax: 1
+          ItemType:
             TypeDefineType: 0
             TypeGUID: (1fd4d701-1e6c-4bdf-a28d-2f7bf02e7bb9)
-          BoxOrientation: 0
-          probability: 1
-          isSingleton: 0
-        DropBoxCountMin: 1
-        DropBoxCountMax: 1
-        DropConeAngle: 0
-        DropVelocity: 3

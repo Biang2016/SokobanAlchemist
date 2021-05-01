@@ -6,6 +6,8 @@ using UnityEngine;
 [Serializable]
 public abstract class EntitySkill : IClone<EntitySkill>
 {
+    [ShowInInspector]
+    [HideInEditorMode]
     internal Entity Entity;
 
     [ReadOnly]
@@ -20,6 +22,16 @@ public abstract class EntitySkill : IClone<EntitySkill>
     [Required]
     [PropertyOrder(-9)]
     public string SkillAlias;
+
+    [LabelText("技能名EN")]
+    [Required]
+    [PropertyOrder(-9)]
+    public string SkillName_EN;
+
+    [LabelText("技能名ZH")]
+    [Required]
+    [PropertyOrder(-9)]
+    public string SkillName_ZH;
 
     [LabelText("技能类型描述")]
     [ShowInInspector]
@@ -36,8 +48,14 @@ public abstract class EntitySkill : IClone<EntitySkill>
     [HideLabel]
     private Sprite SkillIconPreview => ConfigManager.GetEntitySkillIconByName(SkillIcon.TypeName);
 
-    [LabelText("技能具体描述")]
-    public string SkillDescription = "";
+    [LabelText("技能具体描述EN")]
+    public string SkillDescription_EN = "";
+
+    [LabelText("技能具体描述ZH")]
+    public string SkillDescription_ZH = "";
+
+    public virtual string GetSkillDescription_EN => SkillDescription_EN;
+    public virtual string GetSkillDescription_ZH => SkillDescription_ZH;
 
     public virtual void OnInit()
     {
@@ -58,8 +76,11 @@ public abstract class EntitySkill : IClone<EntitySkill>
         EntitySkill newES = (EntitySkill) Activator.CreateInstance(type);
         newES.SkillGUID = SkillGUID;
         newES.SkillAlias = SkillAlias;
+        newES.SkillName_EN = SkillName_EN;
+        newES.SkillName_ZH = SkillName_ZH;
         newES.SkillIcon = SkillIcon?.Clone();
-        newES.SkillDescription = SkillDescription;
+        newES.SkillDescription_EN = SkillDescription_EN;
+        newES.SkillDescription_ZH = SkillDescription_ZH;
         ChildClone(newES);
         return newES;
     }
@@ -72,8 +93,11 @@ public abstract class EntitySkill : IClone<EntitySkill>
     {
         SkillGUID = srcData.SkillGUID;
         SkillAlias = srcData.SkillAlias;
+        SkillName_EN = srcData.SkillName_EN;
+        SkillName_ZH = srcData.SkillName_ZH;
         SkillIcon?.CopyDataFrom(srcData.SkillIcon);
-        SkillDescription = srcData.SkillDescription;
+        SkillDescription_EN = srcData.SkillDescription_EN;
+        SkillDescription_ZH = srcData.SkillDescription_ZH;
     }
 
     public override string ToString()

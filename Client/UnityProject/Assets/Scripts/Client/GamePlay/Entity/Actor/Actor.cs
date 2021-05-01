@@ -233,7 +233,7 @@ public class Actor : Entity
                             if (correctOccupation) return; // 防止角色和其他Entity卡住
                             else
                             {
-                                targetGridModule[TypeDefineType.Actor, localGP] = null; // todo 执行到这里说明是bug，先这样处理，以后再研究
+                                targetGridModule[TypeDefineType.Actor, localGP, false, false, IsTriggerEntity, GUID] = null; // todo 执行到这里说明是bug，先这样处理，以后再研究
                             }
                         }
                     }
@@ -274,56 +274,35 @@ public class Actor : Entity
         }
     }
 
+    // 这个函数在WorldModule初始化时不执行，已经通过curWorldGP赋值来规避
     public void UnRegisterFromModule(GridPos3D oldWorldGP, GridPosR.Orientation oldOrientation)
     {
         if (IsRecycling) return;
-        if (!IsTriggerEntity)
+        List<GridPos3D> occupationData_Rotated = ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[oldOrientation];
+        foreach (GridPos3D offset in occupationData_Rotated)
         {
-            List<GridPos3D> occupationData_Rotated = ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[oldOrientation];
-            foreach (GridPos3D offset in occupationData_Rotated)
+            GridPos3D gridPos = oldWorldGP + offset;
+            WorldModule currentGridModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridPos, true);
+            if (currentGridModule != null)
             {
-                GridPos3D gridPos = oldWorldGP + offset;
-                WorldModule currentGridModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridPos, true);
-                if (currentGridModule != null)
-                {
-                    GridPos3D currentGridLocalGP = currentGridModule.WorldGPToLocalGP(gridPos);
-                    currentGridModule[TypeDefineType.Actor, currentGridLocalGP] = null;
-                }
-            }
-        }
-        else
-        {
-            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(WorldGP, true);
-            if (module is OpenWorldModule) // 大世界才进行存储记录
-            {
-                bool removeSuc = module.WorldModuleData.TriggerEntityDataList.Remove(EntityData);
-                if (!removeSuc) Debug.LogError($"Trigger Actor {name} cannot be removed from world module {module}");
+                GridPos3D currentGridLocalGP = currentGridModule.WorldGPToLocalGP(gridPos);
+                currentGridModule[TypeDefineType.Actor, currentGridLocalGP, false, false, IsTriggerEntity, GUID] = null;
             }
         }
     }
 
+    // 这个函数在WorldModule初始化时不执行，已经通过curWorldGP赋值来规避
     public void RegisterInModule(GridPos3D newWorldGP, GridPosR.Orientation newOrientation)
     {
         if (IsRecycling) return;
-        if (!IsTriggerEntity)
+        foreach (GridPos3D offset in ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[newOrientation])
         {
-            foreach (GridPos3D offset in ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[newOrientation])
+            GridPos3D gridPos = newWorldGP + offset;
+            WorldModule currentGridModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridPos, true);
+            if (currentGridModule != null)
             {
-                GridPos3D gridPos = newWorldGP + offset;
-                WorldModule currentGridModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridPos, true);
-                if (currentGridModule != null)
-                {
-                    GridPos3D currentGridLocalGP = currentGridModule.WorldGPToLocalGP(gridPos);
-                    currentGridModule[TypeDefineType.Actor, currentGridLocalGP] = this;
-                }
-            }
-        }
-        else
-        {
-            WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(WorldGP, true);
-            if (module is OpenWorldModule) // 大世界才进行存储记录
-            {
-                module.WorldModuleData.TriggerEntityDataList.Add(EntityData);
+                GridPos3D currentGridLocalGP = currentGridModule.WorldGPToLocalGP(gridPos);
+                currentGridModule[TypeDefineType.Actor, currentGridLocalGP, false, false, IsTriggerEntity, GUID] = this;
             }
         }
     }
@@ -338,7 +317,7 @@ public class Actor : Entity
 
         // Actor由于限制死平面必须是正方形，因此可以用左下角坐标相减得到核心坐标偏移量；在旋转时应用此偏移量，可以保证平面正方形仍在老位置
         GridPos offset = ActorRotateWorldGPOffset(ActorWidth, newOrientation) - ActorRotateWorldGPOffset(ActorWidth, EntityOrientation);
-        if (!IsFrozen && !IsTriggerEntity) UnRegisterFromModule(curWorldGP, EntityOrientation);
+        if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
         base.SwitchEntityOrientation(newOrientation);
         if (!IsFrozen) RegisterInModule(curWorldGP, newOrientation);
 
@@ -780,7 +759,7 @@ public class Actor : Entity
     /// <param name="initWorldModuleGUID"></param>
     public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
     {
-        base.Setup(entityData, initWorldModuleGUID);
+        base.Setup(initWorldModuleGUID);
         EntityTypeIndex = entityData.EntityTypeIndex;
         ActorType = entityData.EntityType.TypeName;
         ActorCategory = entityData.EntityTypeIndex == ConfigManager.Actor_PlayerIndex ? ActorCategory.Player : ActorCategory.Creature;

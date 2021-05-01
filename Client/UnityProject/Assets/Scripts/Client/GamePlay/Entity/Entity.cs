@@ -45,8 +45,6 @@ public abstract class Entity : PoolObject
     [LabelText("慢刷新")]
     public bool SlowlyTick = false;
 
-    internal EntityData EntityData;
-
     #region Helpers
 
     internal abstract EntityArtHelper EntityArtHelper { get; }
@@ -675,6 +673,38 @@ public abstract class Entity : PoolObject
 
     #endregion
 
+    #region Upgrades
+
+    public void GetUpgraded(EntityUpgrade entityUpgrade)
+    {
+        switch (entityUpgrade.EntityUpgradeType)
+        {
+            case EntityUpgradeType.Property:
+            {
+                EntityProperty property = EntityStatPropSet.PropertyDict[entityUpgrade.EntityPropertyType];
+                int mod_BaseValue = Mathf.RoundToInt((property.GetBaseValue + entityUpgrade.Delta_BaseValue) * (1f + entityUpgrade.Percent_BaseValue / 100f));
+                int mod_MinValue = Mathf.RoundToInt((property.GetMinValue + entityUpgrade.Delta_MinValue) * (1f + entityUpgrade.Percent_MinValue / 100f));
+                int mod_MaxValue = Mathf.RoundToInt((property.GetMaxValue + entityUpgrade.Delta_MaxValue) * (1f + entityUpgrade.Percent_MaxValue / 100f));
+                property.ChangeProperty(mod_BaseValue, mod_MinValue, mod_MaxValue);
+                break;
+            }
+
+            case EntityUpgradeType.Stat:
+            {
+                EntityStat stat = EntityStatPropSet.StatDict[entityUpgrade.EntityStatType];
+                int mod_MinValue = Mathf.RoundToInt((stat.MinValue + entityUpgrade.Delta_MinValue) * (1f + entityUpgrade.Percent_MinValue / 100f));
+                int mod_MaxValue = Mathf.RoundToInt((stat.MaxValue + entityUpgrade.Delta_MaxValue) * (1f + entityUpgrade.Percent_MaxValue / 100f));
+                int mod_AbnormalStatResistance = Mathf.RoundToInt((stat.AbnormalStatResistance + entityUpgrade.Delta_AbnormalStatResistance) * (1f + entityUpgrade.Percent_AbnormalStatResistance / 100f));
+                int mod_AutoChange = Mathf.RoundToInt((stat.MaxValue + entityUpgrade.Delta_AutoChange) * (1f + entityUpgrade.Percent_AutoChange / 100f));
+                int mod_AutoChangePercent = Mathf.RoundToInt((stat.MaxValue + entityUpgrade.Delta_AutoChangePercent) * (1f + entityUpgrade.Percent_AutoChangePercent / 100f));
+                stat.ChangeStat(mod_MinValue, mod_MaxValue, mod_AbnormalStatResistance, mod_AutoChange, mod_AutoChangePercent);
+                break;
+            }
+        }
+    }
+
+    #endregion
+
     #endregion
 
     #region Camp
@@ -724,7 +754,6 @@ public abstract class Entity : PoolObject
     public override void OnRecycled()
     {
         base.OnRecycled();
-        EntityData = null;
         StopAllCoroutines();
         InitWorldModuleGUID = 0;
         destroyBecauseNotInAnyModuleTick = 0;
@@ -737,9 +766,8 @@ public abstract class Entity : PoolObject
         CanBeThreatened = true;
     }
 
-    public void Setup(EntityData entityData, uint initWorldModuleGUID)
+    public void Setup(uint initWorldModuleGUID)
     {
-        EntityData = entityData;
         InitWorldModuleGUID = initWorldModuleGUID;
         if (GUID == 0)
         {

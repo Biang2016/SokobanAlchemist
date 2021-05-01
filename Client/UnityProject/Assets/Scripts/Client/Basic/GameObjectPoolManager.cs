@@ -30,6 +30,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         DebugPanelButton,
         DebugPanelSlider,
         EntitySkillRow,
+        EntityUpgradeRow,
     }
 
     public Dictionary<PrefabNames, int> PoolConfigs = new Dictionary<PrefabNames, int>
@@ -53,6 +54,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         {PrefabNames.DebugPanelButton, 4},
         {PrefabNames.DebugPanelSlider, 4},
         {PrefabNames.EntitySkillRow, 16},
+        {PrefabNames.EntityUpgradeRow, 4},
     };
 
     public Dictionary<string, int> WarmUpBoxConfig = new Dictionary<string, int>

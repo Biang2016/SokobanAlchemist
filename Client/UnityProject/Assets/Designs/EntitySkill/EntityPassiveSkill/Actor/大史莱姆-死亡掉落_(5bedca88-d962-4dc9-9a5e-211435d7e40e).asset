@@ -22,10 +22,13 @@ MonoBehaviour:
         InitWorldModuleGUID: 0
         SkillGUID: (5bedca88-d962-4dc9-9a5e-211435d7e40e)
         SkillAlias: "\u5927\u53F2\u83B1\u59C6-\u6B7B\u4EA1\u6389\u843D"
+        SkillName_EN: 
+        SkillName_ZH: 
         SkillIcon:
           TypeDefineType: 0
           TypeGUID: 
-        SkillDescription: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
         PassiveSkillCondition: 1024
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
@@ -44,40 +47,18 @@ MonoBehaviour:
         EntitySkillConditions: []
         RawEntitySkillActions:
         - id: 1
-        - id: 2
     00000001:
       type: {class: EntitySkillAction_DropBox, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         DropBoxList:
-        - BoxTypeName:
+        - ProbabilityMin: 1.5
+          ProbabilityMax: 1.5
+          ItemType:
             TypeDefineType: 0
-            TypeGUID: (72613c50-a87a-49bf-a141-627b227d5989)
-          BoxOrientation: 0
-          probability: 1
-          isSingleton: 0
-        DropBoxCountMin: 1
-        DropBoxCountMax: 1
-        DropConeAngle: 0
-        DropVelocity: 3
-    00000002:
-      type: {class: EntitySkillAction_DropBox, ns: , asm: Client}
-      data:
-        InitWorldModuleGUID: 0
-        DropBoxList:
-        - BoxTypeName:
-            TypeDefineType: 0
-            TypeGUID: (374e935f-27dc-4ac2-aeed-c78fd70ae29e)
-          BoxOrientation: 0
-          probability: 1
-          isSingleton: 0
-        - BoxTypeName:
+            TypeGUID: (1fd4d701-1e6c-4bdf-a28d-2f7bf02e7bb9)
+        - ProbabilityMin: 3
+          ProbabilityMax: 3
+          ItemType:
             TypeDefineType: 0
             TypeGUID: (b21d38f9-143e-43a6-9094-f1a790641d96)
-          BoxOrientation: 0
-          probability: 3
-          isSingleton: 0
-        DropBoxCountMin: 1
-        DropBoxCountMax: 4
-        DropConeAngle: 15
-        DropVelocity: 3

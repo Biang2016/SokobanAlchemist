@@ -51,7 +51,7 @@ public class EntitySkillAction_GenerateBox : EntitySkillAction, EntitySkillActio
             Entity existedEntity = null;
             if (entityOccupationData.IsTriggerEntity)
             {
-                WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridGP, out module, out localGP);
+                WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridGP, 0, out module, out localGP);
             }
             else
             {

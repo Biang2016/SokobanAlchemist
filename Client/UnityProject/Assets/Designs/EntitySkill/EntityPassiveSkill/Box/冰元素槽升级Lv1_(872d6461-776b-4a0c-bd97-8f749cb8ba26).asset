@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u51B0\u5143\u7D20\u69FD\u5347\u7EA7Lv1_(872d6461-776b-4a0c-bd97-8f749cb8ba26)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        SkillGUID: (872d6461-776b-4a0c-bd97-8f749cb8ba26)
+        SkillAlias: "\u51B0\u5143\u7D20\u69FD\u5347\u7EA7Lv1"
+        SkillName_EN: Ice Rise Lv1
+        SkillName_ZH: "\u51B0\u5143\u7D20\u69FD\u5347\u7EA7Lv1"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: 
+        SkillDescription_EN: Increase the fire element capacity by 10 points.
+        SkillDescription_ZH: "\u51B0\u5143\u7D20\u69FD\u5BB9\u91CF\u589E\u52A010\u70B9"
+        PassiveSkillCondition: 128
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
+        RawEntitySkillActions:
+        - id: 1
+    00000001:
+      type: {class: EntitySkillAction_TriggerZoneAction, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        EffectiveOnRelativeCamp: 1
+        EffectiveOnSpecificEntity: 1
+        EffectiveOnSpecificEntityType:
+          TypeDefineType: 2
+          TypeGUID: (9f9579ea-527a-4374-adfe-d4afb0271acd)
+        EntityActions_Enter:
+        - id: 2
+        EntityActions_Stay: []
+        MaxTriggerTimeWhenStay: 999999
+        EffectiveWhenInteractiveKeyDown: 0
+        InteractiveKeyNotice: 
+        TipPositionType: 5
+        InteractiveKeyNoticeDuration: 0.5
+        ActionInterval: 0.1
+        EntityActions_Exit:
+        - id: 3
+    00000002:
+      type: {class: EntitySkillAction_ShowLearnUpgradePanel, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        EntityUpgrade:
+          UpgradeIcon:
+            TypeDefineType: 12
+            TypeGUID: (8cfd1542-9e61-4107-9dd6-56989153cf2a)
+          UpgradeName_EN: Ice Rise Lv1
+          UpgradeName_ZH: "\u51B0\u5143\u7D20\u69FD\u5347\u7EA7Lv1"
+          UpgradeDescription_EN: Increase the ice element capacity by 10 points.
+          UpgradeDescription_ZH: "\u51B0\u5143\u7D20\u69FD\u5BB9\u91CF\u589E\u52A010\u70B9"
+          EntityUpgradeType: 0
+          EntityPropertyType: 0
+          EntityStatType: 1002
+          Delta_BaseValue: 10
+          Percent_BaseValue: 0
+          Delta_MinValue: 0
+          Percent_MinValue: 0
+          Delta_MaxValue: 10
+          Percent_MaxValue: 0
+          Delta_AbnormalStatResistance: 0
+          Percent_AbnormalStatResistance: 0
+          Delta_AutoChange: 0
+          Percent_AutoChange: 0
+          Delta_AutoChangePercent: 0
+          Percent_AutoChangePercent: 0
+    00000003:
+      type: {class: EntitySkillAction_UI, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        UIName: LearnUpgradePanel
+        Open: 0

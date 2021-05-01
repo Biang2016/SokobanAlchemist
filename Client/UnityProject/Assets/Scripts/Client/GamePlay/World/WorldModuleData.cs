@@ -39,6 +39,9 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
 
+    [NonSerialized]
+    public Dictionary<uint, EntityData> TriggerEntityDataDict = new Dictionary<uint, EntityData>();
+
     public List<EntityData> TriggerEntityDataList = new List<EntityData>();
 
     public List<EntityPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearEntityDataList = new List<EntityPassiveSkill_LevelEventTriggerAppear.Data>();

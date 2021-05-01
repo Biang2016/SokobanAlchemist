@@ -7,6 +7,8 @@ using UnityEngine;
 [Serializable]
 public abstract class EntitySkillAction : IClone<EntitySkillAction>
 {
+    [ShowInInspector]
+    [HideInEditorMode]
     internal Entity Entity;
 
     [ReadOnly]

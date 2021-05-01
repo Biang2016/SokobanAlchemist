@@ -26,12 +26,12 @@ public class DoorBoxHelper : BoxMonoHelper
                     GridPos3D offset = doorEntityIndicator.Offset;
                     GridPos offset_rotated = GridPos.RotateGridPos(new GridPos(offset.x, offset.z), Entity.EntityOrientation);
                     GridPos3D offset3D_rotated = new GridPos3D(offset_rotated.x, offset.y, offset_rotated.z);
-                    WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(offset3D_rotated + Entity.WorldGP, out WorldModule module, out GridPos3D boxGridLocalGP);
+                    WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(offset3D_rotated + Entity.WorldGP, 0, out WorldModule module, out GridPos3D boxGridLocalGP);
                     if (module)
                     {
                         Box existedBox = (Box) module[TypeDefineType.Box, boxGridLocalGP];
                         if (!value && existedBox != null && existedBox != Entity) existedBox.DestroySelf(); // 被门夹的箱子自行摧毁 todo 先这样处理
-                        module[TypeDefineType.Box, boxGridLocalGP, true] = value ? null : Entity;
+                        module[TypeDefineType.Box, boxGridLocalGP, false, true, Entity.IsTriggerEntity, Entity.GUID] = value ? null : Entity;
                     }
 
                     doorEntityIndicator.gameObject.SetActive(!value);
