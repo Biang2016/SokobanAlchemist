@@ -75,7 +75,7 @@ public class EntitySkillAction_DropSkillScroll : EntitySkillAction, EntitySkillA
                             {
                                 if (action is EntitySkillAction_TriggerZoneAction triggerZoneAction)
                                 {
-                                    foreach (EntitySkillAction stayAction in triggerZoneAction.EntityActions_Stay)
+                                    foreach (EntitySkillAction stayAction in triggerZoneAction.EntityActions_Enter)
                                     {
                                         if (stayAction is EntitySkillAction_ShowLearnSkillPanel learnSkillAction)
                                         {
