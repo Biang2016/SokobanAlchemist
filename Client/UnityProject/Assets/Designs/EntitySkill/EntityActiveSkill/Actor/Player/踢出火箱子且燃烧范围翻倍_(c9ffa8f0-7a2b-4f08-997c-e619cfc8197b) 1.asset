@@ -30,6 +30,12 @@ MonoBehaviour:
           TypeGUID: (091061ef-7c48-4664-b762-8b794d17ceaa)
         SkillDescription_EN: Kick a fire box out and expand its burning range.
         SkillDescription_ZH: "\u5C06\u4E00\u4E2A\u706B\u7BB1\u5B50\u8E22\u51FA\uFF0C\u5E76\u4F7F\u5176\u71C3\u70E7\u8303\u56F4\u6269\u5927"
+        PlayerCanLearn: 1
+        SkillCategoryType: 1
+        SkillRankType: 2
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: (32c00ccc-4a08-4074-8b06-f2bd01f3ab8c)
         TargetCamp: 14
         SkillsPropertyCollection:
           CastingRadius:
@@ -129,6 +135,9 @@ MonoBehaviour:
       type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        ForbidAllActiveSkill: 0
+        RecoverAllActiveSkill: 0
+        ForbidAllDropSkill: 0
         AddOrRemove: 1
         EntitySkillSO: {fileID: 11400000, guid: db54046bf3e9fa24c98ab860a2cfe4a8,
           type: 2}
@@ -139,6 +148,9 @@ MonoBehaviour:
       type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        ForbidAllActiveSkill: 0
+        RecoverAllActiveSkill: 0
+        ForbidAllDropSkill: 0
         AddOrRemove: 0
         EntitySkillSO: {fileID: 11400000, guid: e8d8386ffbccf204a974a327dd306a6a,
           type: 2}
@@ -149,6 +161,9 @@ MonoBehaviour:
       type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        ForbidAllActiveSkill: 0
+        RecoverAllActiveSkill: 0
+        ForbidAllDropSkill: 0
         AddOrRemove: 1
         EntitySkillSO: {fileID: 11400000, guid: 7ca9317d0e539314aae988c48467d2c6,
           type: 2}

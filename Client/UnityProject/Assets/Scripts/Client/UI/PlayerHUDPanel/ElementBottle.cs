@@ -24,7 +24,7 @@ public class ElementBottle : MonoBehaviour
 
     void Start()
     {
-        RefreshValue(0, 0, 1);
+        RefreshValue(0, 0, 0);
     }
 
     public void Initialize()
@@ -39,7 +39,14 @@ public class ElementBottle : MonoBehaviour
 
     public void RefreshValue(int currentValue, int minValue, int maxValue)
     {
-        int ratio = Mathf.CeilToInt((float) currentValue / maxValue * 10f);
+        gameObject.SetActive(maxValue > 0);
+
+        int ratio = 0;
+        if (currentValue != 0 && maxValue != 0)
+        {
+            ratio = Mathf.CeilToInt((float) currentValue / maxValue * 10f);
+        }
+
         Image.sprite = Sprites[ratio];
         CurrentValue_Text.text = currentValue + "/";
         if (MaxValue_Text)

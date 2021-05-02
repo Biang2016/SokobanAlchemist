@@ -653,7 +653,8 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 int threshold = EntityStatChangeThreshold;
                 if (EntityStatChangeThreshold_UsePercent)
                 {
-                    threshold = Mathf.RoundToInt(EntityStatChangeThresholdPercent / 100f * max);
+                    if (max == 0) threshold = 0;
+                    else threshold = Mathf.RoundToInt(EntityStatChangeThresholdPercent / 100f * max);
                 }
 
                 switch (EntityStatChangeThresholdType)

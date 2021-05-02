@@ -843,18 +843,6 @@ public class Actor : Entity
         WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
     }
 
-    protected override void InitPassiveSkills()
-    {
-        base.InitPassiveSkills();
-        // TODO load learned skills.
-    }
-
-    protected override void InitActiveSkills()
-    {
-        base.InitActiveSkills();
-        // TODO load learned skills.
-    }
-
     public void TransportPlayerGridPos(GridPos3D worldGP, float lerpTime = 0)
     {
         SetModelSmoothMoveLerpTime(lerpTime);

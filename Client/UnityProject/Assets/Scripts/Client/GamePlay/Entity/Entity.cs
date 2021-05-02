@@ -296,6 +296,7 @@ public abstract class Entity : PoolObject
             foreach (EntityPassiveSkill rawExtraPS in rawEntityExtraSerializeDataFromModule.EntityPassiveSkills)
             {
                 EntityPassiveSkill newPS = (EntityPassiveSkill) rawExtraPS.Clone();
+                newPS.IsLevelExtraEntitySkill = true;
                 AddNewPassiveSkill(newPS);
             }
         }
@@ -317,6 +318,13 @@ public abstract class Entity : PoolObject
     [FoldoutGroup("Fuel")]
     [LabelText("As Fuel Data")]
     public EntityFlamethrowerHelper.FlamethrowerFuelData RawFlamethrowerFuelData; // 干数据，禁修改
+
+    public bool HasLearnedSkill(string skillGUID)
+    {
+        if (EntityPassiveSkillGUIDDict.ContainsKey(skillGUID)) return true;
+        if (EntityActiveSkillGUIDDict.ContainsKey(skillGUID)) return true;
+        return false;
+    }
 
     #region 被动技能
 
@@ -340,7 +348,7 @@ public abstract class Entity : PoolObject
     /// <summary>
     /// 将携带的被动技能初始化至Prefab配置状态
     /// </summary>
-    protected virtual void InitPassiveSkills()
+    public virtual void InitPassiveSkills()
     {
         PassiveSkillMarkAsDestroyed = false;
         cachedRemoveList_EntityPassiveSkill.Clear();
@@ -480,7 +488,7 @@ public abstract class Entity : PoolObject
     /// <summary>
     /// 将携带的主动技能初始化至Prefab配置状态
     /// </summary>
-    protected virtual void InitActiveSkills()
+    public virtual void InitActiveSkills()
     {
         ActiveSkillMarkAsDestroyed = false;
         EntityActiveSkillDict.Clear();

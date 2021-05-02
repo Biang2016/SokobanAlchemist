@@ -435,6 +435,7 @@ public class EntityStatPropSet
         }
 
         StatNotifyActionSetDict[EntityStatType.ActionPoint].OnValueNotEnoughWarning += OnActionPointNotEnoughWarning;
+        StatNotifyActionSetDict[EntityStatType.ActionPoint].OnValueIncrease += OnActionPointIncrease;
         StatNotifyActionSetDict[EntityStatType.Gold].OnValueIncrease += OnGoldIncrease;
         StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueIncrease += OnFireElementFragmentIncrease;
         StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueNotEnoughWarning += OnFireElementFragmentNotEnoughWarning;
@@ -473,6 +474,9 @@ public class EntityStatPropSet
         PropertyNotifyActionSetDict[EntityPropertyType.FiringResistance].OnValueChanged += OnFiringResistanceChanged;
         PropertyNotifyActionSetDict[EntityPropertyType.ActionPointRecovery].OnValueChanged += OnActionPointRecoveryChanged;
         PropertyNotifyActionSetDict[EntityPropertyType.MaxActionPoint].OnValueChanged += OnMaxActionPointChanged;
+        PropertyNotifyActionSetDict[EntityPropertyType.MaxFireElementFragment].OnValueChanged += OnMaxFireElementFragmentChanged;
+        PropertyNotifyActionSetDict[EntityPropertyType.MaxIceElementFragment].OnValueChanged += OnMaxIceElementFragmentChanged;
+        PropertyNotifyActionSetDict[EntityPropertyType.MaxLightningElementFragment].OnValueChanged += OnMaxLightningElementFragmentChanged;
     }
 
     private void OnActionPointNotEnoughWarning()
@@ -480,6 +484,15 @@ public class EntityStatPropSet
         if (Entity == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].ActionPointBottle.OnStatLowWarning();
+        }
+    }
+
+    private void OnActionPointIncrease(int increase)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowGainActionPointNumFX(increase);
+            actor.EntityWwiseHelper.OnGainActionPoint.Post(actor.gameObject);
         }
     }
 
@@ -627,6 +640,11 @@ public class EntityStatPropSet
     private void OnMaxHealthDurabilityChanged(int before, int after)
     {
         HealthDurability.MaxValue = after;
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowGainMaxHealthNumFX(after - before);
+            actor.EntityWwiseHelper.OnGainMaxHealth.Post(actor.gameObject);
+        }
     }
 
     private void OnFrozenResistanceChanged(int before, int after)
@@ -689,7 +707,28 @@ public class EntityStatPropSet
 
     private void OnMaxActionPointChanged(int before, int after)
     {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowGainMaxActionPointNumFX(after - before);
+            actor.EntityWwiseHelper.OnGainMaxActionPoint.Post(actor.gameObject);
+        }
+
         ActionPoint.MaxValue = after;
+    }
+
+    private void OnMaxFireElementFragmentChanged(int before, int after)
+    {
+        FireElementFragment.MaxValue = after;
+    }
+
+    private void OnMaxIceElementFragmentChanged(int before, int after)
+    {
+        IceElementFragment.MaxValue = after;
+    }
+
+    private void OnMaxLightningElementFragmentChanged(int before, int after)
+    {
+        LightningElementFragment.MaxValue = after;
     }
 
     #endregion

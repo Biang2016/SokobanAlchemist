@@ -29,6 +29,12 @@ MonoBehaviour:
           TypeGUID: (154524e9-714f-40b1-8307-fcbe38618922)
         SkillDescription_EN: Generate an ice wall when you kick out the ice box.
         SkillDescription_ZH: "\u8E22\u51FA\u51B0\u7BB1\u5B50\u65F6\uFF0C\u5728\u5176\u8DEF\u5F84\u4E0A\u751F\u6210\u4E00\u5835\u51B0\u5899"
+        PlayerCanLearn: 1
+        SkillCategoryType: 2
+        SkillRankType: 2
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: (32c00ccc-4a08-4074-8b06-f2bd01f3ab8c)
         TargetCamp: 8
         SkillsPropertyCollection:
           CastingRadius:
@@ -127,6 +133,9 @@ MonoBehaviour:
       type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        ForbidAllActiveSkill: 0
+        RecoverAllActiveSkill: 0
+        ForbidAllDropSkill: 0
         AddOrRemove: 1
         EntitySkillSO: {fileID: 11400000, guid: f081684a5e1e9a1488522b6dc0a935c3,
           type: 2}
@@ -137,6 +146,9 @@ MonoBehaviour:
       type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        ForbidAllActiveSkill: 0
+        RecoverAllActiveSkill: 0
+        ForbidAllDropSkill: 0
         AddOrRemove: 1
         EntitySkillSO: {fileID: 11400000, guid: 7ca9317d0e539314aae988c48467d2c6,
           type: 2}

@@ -55,6 +55,15 @@ public class EntityWwiseHelper : EntityMonoHelper
     public Event OnCollidePassively;
 
     [BoxGroup("ForActor")]
+    public Event OnGainActionPoint;
+
+    [BoxGroup("ForActor")]
+    public Event OnGainMaxActionPoint;
+
+    [BoxGroup("ForActor")]
+    public Event OnGainMaxHealth;
+
+    [BoxGroup("ForActor")]
     public Event OnGainGold;
 
     [BoxGroup("ForActor")]

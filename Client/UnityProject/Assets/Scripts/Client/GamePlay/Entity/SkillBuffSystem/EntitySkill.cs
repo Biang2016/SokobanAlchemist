@@ -14,6 +14,8 @@ public abstract class EntitySkill : IClone<EntitySkill>
     [HideInEditorMode]
     public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
 
+    internal bool IsLevelExtraEntitySkill;
+
     [ReadOnly]
     [PropertyOrder(-10)]
     public string SkillGUID; // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
@@ -57,6 +59,22 @@ public abstract class EntitySkill : IClone<EntitySkill>
     public virtual string GetSkillDescription_EN => SkillDescription_EN;
     public virtual string GetSkillDescription_ZH => SkillDescription_ZH;
 
+    [LabelText("玩家可学习")]
+    [PropertyOrder(-8)]
+    public bool PlayerCanLearn;
+
+    [LabelText("技能分类")]
+    [PropertyOrder(-8)]
+    public SkillCategoryType SkillCategoryType;
+
+    [LabelText("技能阶级")]
+    [PropertyOrder(-8)]
+    public SkillRankType SkillRankType;
+
+    [LabelText("技能卷轴箱子类型")]
+    [PropertyOrder(-8)]
+    public TypeSelectHelper SkillScrollType = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};
+
     public virtual void OnInit()
     {
         InitWorldModuleGUID = Entity.InitWorldModuleGUID;
@@ -81,6 +99,10 @@ public abstract class EntitySkill : IClone<EntitySkill>
         newES.SkillIcon = SkillIcon?.Clone();
         newES.SkillDescription_EN = SkillDescription_EN;
         newES.SkillDescription_ZH = SkillDescription_ZH;
+        newES.PlayerCanLearn = PlayerCanLearn;
+        newES.SkillCategoryType = SkillCategoryType;
+        newES.SkillRankType = SkillRankType;
+        newES.SkillScrollType = SkillScrollType.Clone();
         ChildClone(newES);
         return newES;
     }
@@ -98,6 +120,10 @@ public abstract class EntitySkill : IClone<EntitySkill>
         SkillIcon?.CopyDataFrom(srcData.SkillIcon);
         SkillDescription_EN = srcData.SkillDescription_EN;
         SkillDescription_ZH = srcData.SkillDescription_ZH;
+        PlayerCanLearn = srcData.PlayerCanLearn;
+        SkillCategoryType = srcData.SkillCategoryType;
+        SkillRankType = srcData.SkillRankType;
+        SkillScrollType = srcData.SkillScrollType.Clone();
     }
 
     public override string ToString()

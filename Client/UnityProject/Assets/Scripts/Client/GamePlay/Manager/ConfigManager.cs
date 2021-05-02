@@ -8,6 +8,7 @@ using BiangLibrary.Singleton;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using Object = UnityEngine.Object;
@@ -1212,6 +1213,23 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
+    private static List<EntitySkill> cached_GetRawEntitySkillByFilterList = new List<EntitySkill>(16);
+
+    public static EntitySkill GetRawEntitySkillByFilter(SkillCategoryType category, SkillRankType rank, bool playerCanLearn)
+    {
+        cached_GetRawEntitySkillByFilterList.Clear();
+        foreach (KeyValuePair<string, EntitySkill> kv in EntitySkillLibrary)
+        {
+            if (kv.Value.PlayerCanLearn == playerCanLearn && kv.Value.SkillCategoryType.HasFlag(category) && kv.Value.SkillRankType.HasFlag(rank))
+            {
+                cached_GetRawEntitySkillByFilterList.Add(kv.Value);
+            }
+        }
+
+        EntitySkill entitySkill = CommonUtils.GetRandomFromList(cached_GetRawEntitySkillByFilterList);
+        return entitySkill;
+    }
+
     public static EntityOccupationData GetEntityOccupationData(ushort entityTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
@@ -1269,6 +1287,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 #if UNITY_EDITOR
     public static GameObject FindActorPrefabByName(string actorName)
     {
+        if (actorName.IsNullOrWhitespace()) return null;
         TypeDefineConfigs[TypeDefineType.Actor].ExportTypeNames(); // todo 判断是否要删掉此行
         GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(TypeDefineConfigs[TypeDefineType.Actor].GetTypeAssetDataBasePath(actorName));
         return prefab;
@@ -1276,6 +1295,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static GameObject FindBoxPrefabByName(string boxName)
     {
+        if (boxName.IsNullOrWhitespace()) return null;
         TypeDefineConfigs[TypeDefineType.Box].ExportTypeNames(); // todo 判断是否要删掉此行
         GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(TypeDefineConfigs[TypeDefineType.Box].GetTypeAssetDataBasePath(boxName));
         return prefab;

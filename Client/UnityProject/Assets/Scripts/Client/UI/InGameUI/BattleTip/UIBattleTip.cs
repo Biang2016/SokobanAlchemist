@@ -23,6 +23,9 @@ public enum BattleTipPrefabType
     UIBattleTip_EnemyGetHealed,
 
     UIBattleTip_AttributeTip,
+    UIBattleTip_GainActionPointTip,
+    UIBattleTip_GainMaxActionPointTip,
+    UIBattleTip_GainMaxHealthTip,
     UIBattleTip_GainGoldTip,
     UIBattleTip_GainFireElementFragmentTip,
     UIBattleTip_GainIceElementFragmentTip,
@@ -35,7 +38,10 @@ public enum BattleTipType
     Damage, //普通伤害-
     CriticalDamage, //暴击-
     Defense, // 伤害抵消
+    MaxHealth, //加血上限 
     Heal, //加血 
+    ActionPoint, //获得行动力
+    MaxActionPoint, //获得行动力上限 
     Gold, //获得金子 
     FireElementFragment, // 获得火元素碎片
     IceElementFragment, // 获得冰元素碎片
@@ -122,23 +128,15 @@ public class UIBattleTip : PoolObject
         set
         {
             sortingOrder = value;
-            TextType.sortingOrder = sortingOrder;
             TextContent.sortingOrder = sortingOrder;
-            TextElementContent.sortingOrder = sortingOrder;
         }
     }
 
     [LabelText("图标")]
     public Image Icon;
 
-    [LabelText("类型")]
-    public TextMeshPro TextType;
-
     [LabelText("数值")]
     public TextMeshPro TextContent;
-
-    [LabelText("元素数值")]
-    public TextMeshPro TextElementContent;
 
     public Animator Animator;
 
@@ -148,9 +146,7 @@ public class UIBattleTip : PoolObject
     public Gradient ColorDuringLife;
 
     protected Vector3 default_IconLocalPos = Vector3.zero;
-    protected Vector3 default_TextTypeLocalPos = Vector3.zero;
     protected Vector3 default_TextContextLocalPos = Vector3.zero;
-    protected Vector3 default_TextElementContextLocalPos = Vector3.zero;
 
     protected Vector3 offsetPos = new Vector3();
 
@@ -162,9 +158,7 @@ public class UIBattleTip : PoolObject
 
     void Awake()
     {
-        if (TextType) default_TextTypeLocalPos = TextType.transform.localPosition;
         if (TextContent) default_TextContextLocalPos = TextContent.transform.localPosition;
-        if (TextElementContent) default_TextElementContextLocalPos = TextElementContent.transform.localPosition;
         if (Icon) default_IconLocalPos = Icon.transform.localPosition;
     }
 
@@ -190,22 +184,10 @@ public class UIBattleTip : PoolObject
         Animator.speed = 1;
         UIBattleTipInfo = null;
         disappearTick = 0;
-        if (TextType)
-        {
-            TextType.transform.localPosition = default_TextTypeLocalPos;
-            TextType.color = new Color(0, 0, 0, 0);
-        }
-
         if (TextContent)
         {
             TextContent.transform.localPosition = default_TextContextLocalPos;
             TextContent.color = new Color(0, 0, 0, 0);
-        }
-
-        if (TextElementContent)
-        {
-            TextElementContent.transform.localPosition = default_TextElementContextLocalPos;
-            TextElementContent.color = new Color(0, 0, 0, 0);
         }
 
         if (Icon)
@@ -232,62 +214,32 @@ public class UIBattleTip : PoolObject
         transform.localPosition = UIBattleTipInfo.StartPos;
         ClientUtils.InGameUIFaceToCamera(transform);
 
-        bool needAddPlusSign = info.BattleTipType == BattleTipType.Heal || info.BattleTipType == BattleTipType.Gold;
+        bool needAddPlusSign =
+            info.BattleTipType == BattleTipType.Heal
+            || info.BattleTipType == BattleTipType.MaxHealth
+            || info.BattleTipType == BattleTipType.Gold
+            || info.BattleTipType == BattleTipType.ActionPoint
+            || info.BattleTipType == BattleTipType.MaxActionPoint;
 
-        SetTextType(TextType);
-        SetTextContext(TextContent, needAddPlusSign ? $"+{info.DiffHP}" : info.DiffHP.ToString());
-        SetElementTextContext(TextElementContent, info.ElementHP == 0 ? "" : (needAddPlusSign ? $"+{info.ElementHP}" : info.ElementHP.ToString()));
+        SetTextContext(TextContent, info.ExtraStr_Before + (needAddPlusSign ? $"+{info.DiffValue}" : info.DiffValue.ToString()) + info.ExtraStr_After);
 
         Animator.SetTrigger("Play");
         float duration_ori = CommonUtils.GetClipLength(Animator, "Float");
         Animator.speed = Animator.speed * duration_ori / info.DisappearTime;
     }
 
-    private void SetTextType(TextMeshPro text)
+    private void SetTextContext(TextMeshPro text, string str)
     {
-        text.text = "";
+        text.text = str;
         text.color = ColorDuringLife.Evaluate(0);
         text.transform.localPosition = default_TextContextLocalPos + offsetPos;
-    }
-
-    private void SetTextContext(TextMeshPro text, string diffHP)
-    {
-        text.text = diffHP;
-        text.color = ColorDuringLife.Evaluate(0);
-        text.transform.localPosition = default_TextContextLocalPos + offsetPos;
-    }
-
-    private void SetElementTextContext(TextMeshPro text, string diffHP)
-    {
-        if (diffHP.IsNullOrWhitespace())
-        {
-            text.gameObject.SetActive(false);
-        }
-        else
-        {
-            text.gameObject.SetActive(true);
-            text.text = diffHP;
-        }
-
-        text.color = ColorDuringLife.Evaluate(0);
-        text.transform.localPosition = default_TextElementContextLocalPos + offsetPos;
     }
 
     private void RefreshColor(float timePortion)
     {
-        if (TextType)
-        {
-            TextType.color = ColorDuringLife.Evaluate(timePortion);
-        }
-
         if (TextContent)
         {
             TextContent.color = ColorDuringLife.Evaluate(timePortion);
-        }
-
-        if (TextElementContent)
-        {
-            TextElementContent.color = ColorDuringLife.Evaluate(timePortion);
         }
     }
 }

@@ -39,7 +39,7 @@ public class ActorBattleHelper : ActorMonoHelper
     public void ShowDamageNumFX(int damage)
     {
         if (damage == 0) return;
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, damage, BattleTipType.Damage, 0, 0));
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, damage, BattleTipType.Damage, "", ""));
         OnDamaged?.Invoke(damage);
         FX injureFX = FXManager.Instance.PlayFX(Actor.InjureFX, Actor.transform.position);
     }
@@ -49,7 +49,7 @@ public class ActorBattleHelper : ActorMonoHelper
     public void ShowHealNumFX(int addHealth)
     {
         if (addHealth == 0) return;
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, addHealth, BattleTipType.Heal, 0, 0));
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, addHealth, BattleTipType.Heal, "", ""));
         OnHealed?.Invoke(addHealth);
 
         FX healFX = FXManager.Instance.PlayFX(Actor.HealFX, Actor.transform.position);
@@ -59,12 +59,39 @@ public class ActorBattleHelper : ActorMonoHelper
 
     #region 财产
 
+    public UnityAction<int> OnGainActionPoint;
+
+    public void ShowGainActionPointNumFX(int gain)
+    {
+        if (gain == 0) return;
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.ActionPoint, "AP", ""));
+        OnGainActionPoint?.Invoke(gain);
+    }
+
+    public UnityAction<int> OnGainMaxActionPoint;
+
+    public void ShowGainMaxActionPointNumFX(int gain)
+    {
+        if (gain == 0) return;
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.MaxActionPoint, "AP", " Max"));
+        OnGainMaxActionPoint?.Invoke(gain);
+    }
+
+    public UnityAction<int> OnGainMaxHealth;
+
+    public void ShowGainMaxHealthNumFX(int gain)
+    {
+        if (gain == 0) return;
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.MaxHealth, "", " Max"));
+        OnGainMaxHealth?.Invoke(gain);
+    }
+
     public UnityAction<int> OnGainGold;
 
     public void ShowGainGoldNumFX(int gain)
     {
         if (gain == 0) return;
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.Gold, 0, 0));
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.Gold, "", ""));
         OnGainGold?.Invoke(gain);
     }
 
@@ -73,7 +100,7 @@ public class ActorBattleHelper : ActorMonoHelper
     public void ShowGainFireElementFragmentNumFX(int gain)
     {
         if (gain == 0) return;
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.FireElementFragment, 0, 0));
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.FireElementFragment, "", ""));
         OnGainFireElementFragment?.Invoke(gain);
     }
 
@@ -82,7 +109,7 @@ public class ActorBattleHelper : ActorMonoHelper
     public void ShowGainIceElementFragmentNumFX(int gain)
     {
         if (gain == 0) return;
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.IceElementFragment, 0, 0));
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.IceElementFragment, "", ""));
         OnGainIceElementFragment?.Invoke(gain);
     }
 
@@ -91,7 +118,7 @@ public class ActorBattleHelper : ActorMonoHelper
     public void ShowGainLightningElementFragmentNumFX(int gain)
     {
         if (gain == 0) return;
-        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.LightningElementFragment, 0, 0));
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.LightningElementFragment, "", ""));
         OnGainLightningElementFragmentGold?.Invoke(gain);
     }
 

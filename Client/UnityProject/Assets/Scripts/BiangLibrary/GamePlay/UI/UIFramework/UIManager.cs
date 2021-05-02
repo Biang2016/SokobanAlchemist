@@ -162,7 +162,7 @@ namespace BiangLibrary.GamePlay.UI
 
         public T GetBaseUIForm<T>() where T : BaseUIPanel
         {
-            string uiFormNameStr = typeof(T).ToString();
+            string uiFormNameStr = typeof(T).Name;
             AllUIFormDict.TryGetValue(uiFormNameStr, out BaseUIPanel baseUIForm);
             return (T) baseUIForm;
         }
