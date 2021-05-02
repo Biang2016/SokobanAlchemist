@@ -407,6 +407,8 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
     protected override IEnumerator Cast(TargetEntityType targetEntityType, float castDuration)
     {
         UpdateSkillEffectRealPositions();
+        yield return base.Cast(targetEntityType, castDuration);
+        UpdateSkillEffectRealPositions();
         foreach (EntitySkillAction action in EntitySkillActions)
         {
             if (action is EntitySkillAction.IPureAction pureAction)
@@ -439,8 +441,6 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
                 }
             }
         }
-
-        yield return base.Cast(targetEntityType, castDuration);
     }
 
     private void ClearWhenSkillFinishedOrInterrupted()

@@ -10,31 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "\u8E22\u51FA\u51B0\u7BB1\u5B50\u751F\u6210\u51B0\u5899_(275bac7b-f12c-45f5-8014-9318c101b487)"
+  m_Name: "\u8D4B\u4E88\u8E22\u51FA\u7684\u51B0\u7BB1\u5B50\u4EE5\u51B0\u5899\u88AB\u52A8\u6280\u80FD_(3a9170f9-21a1-4203-bc23-17ab2ad6ce78)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: ActorActiveSkill_KickAreaCast, ns: , asm: Client}
+      type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        SkillGUID: (275bac7b-f12c-45f5-8014-9318c101b487)
-        SkillAlias: "\u8E22\u51FA\u51B0\u7BB1\u5B50\u751F\u6210\u51B0\u5899"
-        SkillName_EN: Ice Wall
-        SkillName_ZH: "\u51B0\u5899"
+        SkillGUID: (3a9170f9-21a1-4203-bc23-17ab2ad6ce78)
+        SkillAlias: "\u8D4B\u4E88\u8E22\u51FA\u7684\u51B0\u7BB1\u5B50\u4EE5\u51B0\u5899\u88AB\u52A8\u6280\u80FD"
+        SkillName_EN: 
+        SkillName_ZH: 
         SkillIcon:
           TypeDefineType: 12
-          TypeGUID: (154524e9-714f-40b1-8307-fcbe38618922)
-        SkillDescription_EN: Generate an ice wall when you kick out the ice box.
-        SkillDescription_ZH: "\u8E22\u51FA\u51B0\u7BB1\u5B50\u65F6\uFF0C\u5728\u5176\u8DEF\u5F84\u4E0A\u751F\u6210\u4E00\u5835\u51B0\u5899"
-        PlayerCanLearn: 1
-        SkillCategoryType: 2
-        SkillRankType: 2
+          TypeGUID: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
         SkillScrollType:
           TypeDefineType: 0
-          TypeGUID: (32c00ccc-4a08-4074-8b06-f2bd01f3ab8c)
+          TypeGUID: 
         TargetCamp: 8
         SkillsPropertyCollection:
           CastingRadius:
@@ -43,10 +43,10 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           Cooldown:
-            BaseValue: 5000
+            BaseValue: 0
             ModifiedValue: 0
             MinValue: 0
-            MaxValue: 1000000
+            MaxValue: 0
           WingUp:
             BaseValue: 0
             ModifiedValue: 0
@@ -76,12 +76,12 @@ MonoBehaviour:
             BaseValue: 0
             ModifiedValue: 0
             MinValue: 0
-            MaxValue: 1000
+            MaxValue: 0
           ConsumeIceElementFragment:
             BaseValue: 10
             ModifiedValue: 0
             MinValue: 0
-            MaxValue: 0
+            MaxValue: 100
           ConsumeLightningElementFragment:
             BaseValue: 0
             ModifiedValue: 0
@@ -90,7 +90,6 @@ MonoBehaviour:
         TriggerWhenMissProbabilityPercent: 100
         EntitySkillConditions:
         - id: 1
-        - id: 2
         WingUpCanMove: 1
         CastCanMove: 1
         RecoverCanMove: 1
@@ -107,7 +106,7 @@ MonoBehaviour:
         AccurateStandardDeviation: 0
         BattleIndicatorTypeName:
           TypeDefineType: 8
-          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
+          TypeGUID: 
         ProjectOffsetZMax: 0
         ProjectOffsetZMin: 0
         ProjectHeightDeltaRange: 999
@@ -115,21 +114,15 @@ MonoBehaviour:
         GridWarningColorBorderHighlight: {r: 0, g: 0, b: 0, a: 0}
         GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
         RawEntitySkillActions:
+        - id: 2
         - id: 3
-        - id: 4
-        - id: 5
     00000001:
-      type: {class: EntitySkillCondition_HasInteractableEntityInCastArea, ns: , asm: Client}
-      data:
-        DependOnActorInteractSkill: 1
-        InteractSkillTypes: 02000000
-    00000002:
       type: {class: EntitySkillCondition_HasEntityInCastArea, ns: , asm: Client}
       data:
         EntityType:
           TypeDefineType: 0
           TypeGUID: (c9630278-8f6d-416f-b6de-620573dfb81a)
-    00000003:
+    00000002:
       type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
@@ -142,7 +135,7 @@ MonoBehaviour:
         SkillGUID: (43bab592-f797-4cc3-bbdc-055b9c8af65b)
         KeyBind: 0
         ExertOnTarget: 1
-    00000004:
+    00000003:
       type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
@@ -150,28 +143,8 @@ MonoBehaviour:
         RecoverAllActiveSkill: 0
         ForbidAllDropSkill: 0
         AddOrRemove: 1
-        EntitySkillSO: {fileID: 11400000, guid: 7ca9317d0e539314aae988c48467d2c6,
+        EntitySkillSO: {fileID: 11400000, guid: 0d89bb4613a19ed409e9bf151f143eb7,
           type: 2}
-        SkillGUID: (87f9ac5b-19aa-4f38-a183-011c79648048)
+        SkillGUID: (181629ac-9118-465d-bf0b-e928b8bbaa3a)
         KeyBind: 0
         ExertOnTarget: 1
-    00000005:
-      type: {class: EntitySkillAction_KickOut, ns: , asm: Client}
-      data:
-        InitWorldModuleGUID: 0
-        FX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: (ce01f26e-4b00-4b76-bef3-72a60663efa0)
-          UseCurve: 0
-          FXScale: 1
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        AutoDirection_Side: 0
-        AutoDirection_BackForth: 0
-        Direction: 0
-        KickForce: 30

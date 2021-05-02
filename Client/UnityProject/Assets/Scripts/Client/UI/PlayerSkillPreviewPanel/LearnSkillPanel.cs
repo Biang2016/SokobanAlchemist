@@ -18,7 +18,7 @@ public class LearnSkillPanel : BaseUIPanel
     }
 
     public Animator Anim;
-  
+
     public Transform EntitySkillRowContainer;
     public Button LearnButton_Passive;
 
@@ -49,6 +49,7 @@ public class LearnSkillPanel : BaseUIPanel
         if (current_EntitySkill != null)
         {
             m_EntitySkillRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(EntitySkillRowContainer);
+            if (current_EntitySkill is EntityPassiveSkill) specifyKeyBind = false;
             m_EntitySkillRow.Initialize(current_EntitySkill, specifyKeyBind ? PlayerControllerHelper.KeyMappingStrDict[keyBind] : "");
 
             if (current_EntitySkill is EntityPassiveSkill EPS)
@@ -116,14 +117,17 @@ public class LearnSkillPanel : BaseUIPanel
     {
         openStackTimes--;
         base.Hide();
-        LearnButton_Passive.onClick.RemoveAllListeners();
-        LearnButton_H.onClick.RemoveAllListeners();
-        LearnButton_J.onClick.RemoveAllListeners();
-        LearnButton_K.onClick.RemoveAllListeners();
-        LearnButton_L.onClick.RemoveAllListeners();
-        UIManager.Instance.UI3DRoot.gameObject.SetActive(true);
-        current_LearnCallBack = null;
-        current_EntitySkill = null;
+        if (openStackTimes == 0)
+        {
+            LearnButton_Passive.onClick.RemoveAllListeners();
+            LearnButton_H.onClick.RemoveAllListeners();
+            LearnButton_J.onClick.RemoveAllListeners();
+            LearnButton_K.onClick.RemoveAllListeners();
+            LearnButton_L.onClick.RemoveAllListeners();
+            UIManager.Instance.UI3DRoot.gameObject.SetActive(true);
+            current_LearnCallBack = null;
+            current_EntitySkill = null;
+        }
 
         if (openStackTimes > 0)
         {

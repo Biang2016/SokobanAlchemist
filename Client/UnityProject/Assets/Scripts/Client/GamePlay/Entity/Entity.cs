@@ -4,6 +4,7 @@ using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay;
 using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -312,6 +313,48 @@ public abstract class Entity : PoolObject
 
     #endregion
 
+    public override void OnRecycled()
+    {
+        base.OnRecycled();
+        StopAllCoroutines();
+        InitWorldModuleGUID = 0;
+        destroyBecauseNotInAnyModuleTick = 0;
+        cachedRemoveList_EntityPassiveSkill.Clear();
+        cachedRemoveList_EntityActiveSkill.Clear();
+        cachedAddList_EntityPassiveSkill.Clear();
+        IsDestroying = false;
+    }
+
+    public override void OnUsed()
+    {
+        base.OnUsed();
+        CanBeThreatened = true;
+    }
+
+    public void Setup(uint initWorldModuleGUID)
+    {
+        InitWorldModuleGUID = initWorldModuleGUID;
+        if (GUID == 0)
+        {
+            GUID = GetGUID();
+            if (IsBoxCamp)
+            {
+                if (SlowlyTick)
+                {
+                    GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_5X;
+                }
+                else
+                {
+                    GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
+                }
+            }
+            else
+            {
+                GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_01X;
+            }
+        }
+    }
+
     #region 技能
 
     [SerializeReference]
@@ -344,6 +387,7 @@ public abstract class Entity : PoolObject
     internal bool PassiveSkillMarkAsDestroyed = false;
 
     private List<EntityPassiveSkill> cachedRemoveList_EntityPassiveSkill = new List<EntityPassiveSkill>(8);
+    private List<EntityPassiveSkill> cachedAddList_EntityPassiveSkill = new List<EntityPassiveSkill>(8);
 
     /// <summary>
     /// 将携带的被动技能初始化至Prefab配置状态
@@ -417,11 +461,32 @@ public abstract class Entity : PoolObject
             eps.Entity = this;
             eps.OnInit();
             eps.OnRegisterLevelEventID();
+
+            if (this == BattleManager.Instance.Player1)
+            {
+                if (!eps.SkillIcon.TypeName.IsNullOrWhitespace() && !eps.SkillName_EN.IsNullOrWhitespace() && eps.OccupySkillGrid)
+                {
+                    PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
+                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, SkillSlot> kv in HUD.SkillSlotDict)
+                    {
+                        if (kv.Value.Empty)
+                        {
+                            kv.Value.Initialize(eps);
+                            break;
+                        }
+                    }
+                }
+            }
         }
         else
         {
-            Debug.Log($"{name}添加被动技能失败{eps}，被动技能已存在");
+            //Debug.Log($"{name}添加被动技能失败{eps}，被动技能已存在");
         }
+    }
+
+    public void Async_AddNewPassiveSkill(EntityPassiveSkill eps)
+    {
+        cachedAddList_EntityPassiveSkill.Add(eps);
     }
 
     public void ForgetPassiveSkill(string skillGUID)
@@ -437,6 +502,29 @@ public abstract class Entity : PoolObject
             EntityPassiveSkillGUIDDict.Remove(eps.SkillGUID);
             eps.OnUnRegisterLevelEventID();
             eps.OnUnInit();
+
+            if (this == BattleManager.Instance.Player1)
+            {
+                if (!eps.SkillIcon.TypeName.IsNullOrWhitespace() && !eps.SkillName_EN.IsNullOrWhitespace() && eps.OccupySkillGrid)
+                {
+                    PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
+                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, SkillSlot> kv in HUD.SkillSlotDict)
+                    {
+                        if (kv.Value.BoundEntitySkill == eps)
+                        {
+                            kv.Value.Initialize(null);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void Async_ForgetPassiveSkill(string skillGUID)
+    {
+        if (EntityPassiveSkillGUIDDict.TryGetValue(skillGUID, out EntityPassiveSkill eps))
+        {
+            eps.MarkAsForget = true;
         }
     }
 
@@ -590,7 +678,7 @@ public abstract class Entity : PoolObject
         }
         else
         {
-            Debug.Log($"{name}添加主动技能失败{eas}，主动技能已存在");
+            //Debug.Log($"{name}添加主动技能失败{eas}，主动技能已存在");
             return false;
         }
     }
@@ -605,14 +693,15 @@ public abstract class Entity : PoolObject
                 {
                     if (clearAllExistedSkillInKeyBind) pch.SkillKeyMappings[keyBind].Clear();
                     pch.SkillKeyMappings[keyBind].Add(eas.EntitySkillIndex);
+
+                    PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
+                    if (HUD.SkillSlotDict.TryGetValue(keyBind, out SkillSlot skillSlot))
+                    {
+                        skillSlot.Initialize(eas);
+                    }
                 }
 
                 actor.ActorSkillLearningHelper?.BindActiveSkillToKey(eas.EntitySkillIndex, keyBind, clearAllExistedSkillInKeyBind);
-                PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
-                if (HUD.SkillSlotDict.TryGetValue(keyBind, out SkillSlot skillSlot))
-                {
-                    skillSlot.Initialize(eas);
-                }
             }
         }
     }
@@ -628,7 +717,8 @@ public abstract class Entity : PoolObject
                     foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> kv in pch.SkillKeyMappings)
                     {
                         kv.Value.Remove(eas.EntitySkillIndex);
-                        if (ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].SkillSlotDict.TryGetValue(kv.Key, out SkillSlot skillSlot))
+                        PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
+                        if (HUD.SkillSlotDict.TryGetValue(kv.Key, out SkillSlot skillSlot))
                         {
                             skillSlot.Initialize(null);
                         }
@@ -644,28 +734,11 @@ public abstract class Entity : PoolObject
         }
     }
 
-    public void ForgetActiveSkill(PlayerControllerHelper.KeyBind keyBind)
+    public void Async_ForgetActiveSkill(string skillGUID)
     {
-        if (this is Actor actor)
+        if (EntityActiveSkillGUIDDict.TryGetValue(skillGUID, out EntityActiveSkill eas))
         {
-            if (actor.ActorControllerHelper is PlayerControllerHelper pch)
-            {
-                List<EntityActiveSkill> forgetList = new List<EntityActiveSkill>();
-                foreach (EntitySkillIndex entitySkillIndex in pch.SkillKeyMappings[keyBind])
-                {
-                    EntityActiveSkill eas = EntityActiveSkillDict[entitySkillIndex];
-                    forgetList.Add(eas);
-                }
-
-                foreach (EntityActiveSkill eas in forgetList)
-                {
-                    ForgetActiveSkill(eas.SkillGUID);
-                }
-            }
-        }
-        else
-        {
-            return;
+            eas.MarkAsForget = true;
         }
     }
 
@@ -759,45 +832,6 @@ public abstract class Entity : PoolObject
 
     #endregion
 
-    public override void OnRecycled()
-    {
-        base.OnRecycled();
-        StopAllCoroutines();
-        InitWorldModuleGUID = 0;
-        destroyBecauseNotInAnyModuleTick = 0;
-        IsDestroying = false;
-    }
-
-    public override void OnUsed()
-    {
-        base.OnUsed();
-        CanBeThreatened = true;
-    }
-
-    public void Setup(uint initWorldModuleGUID)
-    {
-        InitWorldModuleGUID = initWorldModuleGUID;
-        if (GUID == 0)
-        {
-            GUID = GetGUID();
-            if (IsBoxCamp)
-            {
-                if (SlowlyTick)
-                {
-                    GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_5X;
-                }
-                else
-                {
-                    GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
-                }
-            }
-            else
-            {
-                GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_01X;
-            }
-        }
-    }
-
     protected virtual void FixedUpdate()
     {
         if (!BattleManager.Instance.IsStart) return;
@@ -831,6 +865,39 @@ public abstract class Entity : PoolObject
         {
             kv.Value.OnFixedUpdate(Time.fixedDeltaTime);
         }
+
+        cachedRemoveList_EntityPassiveSkill.Clear();
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+        {
+            if (eps.MarkAsForget) cachedRemoveList_EntityPassiveSkill.Add(eps);
+        }
+
+        cachedRemoveList_EntityActiveSkill.Clear();
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
+        {
+            if (kv.Value.MarkAsForget) cachedRemoveList_EntityActiveSkill.Add(kv.Value);
+        }
+
+        foreach (EntityPassiveSkill skill in cachedRemoveList_EntityPassiveSkill)
+        {
+            ForgetPassiveSkill(skill.SkillGUID);
+        }
+
+        cachedRemoveList_EntityPassiveSkill.Clear();
+
+        foreach (EntityActiveSkill skill in cachedRemoveList_EntityActiveSkill)
+        {
+            ForgetActiveSkill(skill.SkillGUID);
+        }
+
+        cachedRemoveList_EntityActiveSkill.Clear();
+
+        foreach (EntityPassiveSkill skill in cachedAddList_EntityPassiveSkill)
+        {
+            AddNewPassiveSkill(skill);
+        }
+
+        cachedAddList_EntityPassiveSkill.Clear();
     }
 
     protected virtual void Tick(float interval)

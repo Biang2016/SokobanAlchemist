@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "\u706B\u7130\u514D\u75AB_(39588380-ce85-4d51-8c7b-77b20116ca48)"
+  m_Name: "\u8E22\u706B\u7BB1\u5B50\u65F6\u6269\u5927\u71C3\u70E7\u8303\u56F4_(07d95537-0d46-40aa-95b7-7511e4a003f3)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
@@ -20,24 +20,25 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        SkillGUID: (39588380-ce85-4d51-8c7b-77b20116ca48)
-        SkillAlias: "\u706B\u7130\u514D\u75AB"
-        SkillName_EN: Fire Immune
-        SkillName_ZH: "\u706B\u7130\u514D\u75AB"
+        SkillGUID: (07d95537-0d46-40aa-95b7-7511e4a003f3)
+        SkillAlias: "\u8E22\u706B\u7BB1\u5B50\u65F6\u6269\u5927\u71C3\u70E7\u8303\u56F4"
+        SkillName_EN: Fire Explode
+        SkillName_ZH: "\u9A71\u706B"
         SkillIcon:
           TypeDefineType: 12
-          TypeGUID: (324fd9c4-6736-40be-a21e-b426b6fd79f1)
-        SkillDescription_EN: Immune to any fire effect and damage
-        SkillDescription_ZH: "\u514D\u75AB\u6240\u6709\u71C3\u70E7\u6548\u679C\u548C\u4F24\u5BB3"
-        PlayerCanLearn: 0
-        OccupySkillGrid: 0
+          TypeGUID: (091061ef-7c48-4664-b762-8b794d17ceaa)
+        SkillDescription_EN: Enhance the fire box's power and range when it's kicked.
+          Spend 10 fire element
+        SkillDescription_ZH: "\u589E\u5F3A\u8E22\u51FA\u7684\u706B\u7BB1\u5B50\u7684\u5A01\u529B\u548C\u8303\u56F4\uFF0C\u6D88\u801710\u70B9\u706B\u5143\u7D20"
+        PlayerCanLearn: 1
+        OccupySkillGrid: 1
         ShowInSkillPreviewPanel: 1
         SkillCategoryType: 1
-        SkillRankType: 64
+        SkillRankType: 2
         SkillScrollType:
           TypeDefineType: 0
-          TypeGUID: 
-        PassiveSkillCondition: 1
+          TypeGUID: (32c00ccc-4a08-4074-8b06-f2bd01f3ab8c)
+        PassiveSkillCondition: 2097152
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
         MultiEventTrigger: 0
@@ -56,31 +57,10 @@ MonoBehaviour:
         RawEntitySkillActions:
         - id: 1
     00000001:
-      type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
+      type: {class: EntitySkillAction_ExecuteActiveSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        RawEntityBuffs:
-        - id: 2
-    00000002:
-      type: {class: EntityBuff_AttributeLabel, ns: , asm: Client}
-      data:
-        GUID: 10233
-        BuffAlias: 
-        EntityBuffAttribute: 19
-        EnableWhiteBlackList: 0
-        AllowAddBuffAliasList: []
-        ForbidAddBuffAliasList: []
-        IsPermanent: 1
-        Duration: 0
-        BuffFX:
-          FXType:
-            TypeDefineType: 0
-            TypeGUID: 
-          UseCurve: 0
-          FXScale: 0
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
+        TargetEntityType: 4
+        EntitySkillSO: {fileID: 11400000, guid: d7cafbe2f27f143429f72fa9c4640c8d,
+          type: 2}
+        SkillGUID: (821b4f41-99bb-4da7-8107-f4f7f7ba8ca3)

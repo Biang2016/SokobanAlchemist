@@ -1177,17 +1177,32 @@ public class World : PoolObject
 
     public void RemoveBoxFromGrid(Box box, bool checkDrop = true)
     {
-        foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
+        if (!box.IsTriggerEntity)
         {
-            GridPos3D gridWorldGP = offset + box.WorldGP;
-            if (GetBoxByGridPosition(gridWorldGP, 0, out WorldModule module, out GridPos3D localGP) == box)
+            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
-                if (module[TypeDefineType.Box, localGP] == box)
+                GridPos3D gridWorldGP = offset + box.WorldGP;
+                if (GetBoxByGridPosition(gridWorldGP, 0, out WorldModule module, out GridPos3D localGP) == box)
                 {
-                    module[TypeDefineType.Box, localGP, false, false, box.IsTriggerEntity, box.GUID] = null;
+                    if (module[TypeDefineType.Box, localGP] == box)
+                    {
+                        module[TypeDefineType.Box, localGP, false, false, false, box.GUID] = null;
+                    }
                 }
             }
         }
+        else
+        {
+            List<Entity> triggerEntities = GetTriggerEntitiesByGridPosition(box.WorldGP, 0, out WorldModule module, out GridPos3D localGP);
+            foreach (Entity triggerEntity in triggerEntities)
+            {
+                if(triggerEntity == box)
+                {
+                    module[TypeDefineType.Box, localGP, false, false, true, box.GUID] = null;
+                }
+            }
+        }
+        
 
         if (checkDrop) CheckDropAbove(box);
         box.WorldModule = null;
@@ -1500,7 +1515,14 @@ public class World : PoolObject
     {
         if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
-            return openWorld.WorldMap_TerrainType[worldGP.x, worldGP.z];
+            if (openWorld.IsInsideDungeon)
+            {
+                return TerrainType.Earth;
+            }
+            else
+            {
+                return openWorld.WorldMap_TerrainType[worldGP.x, worldGP.z];
+            }
         }
         else
         {

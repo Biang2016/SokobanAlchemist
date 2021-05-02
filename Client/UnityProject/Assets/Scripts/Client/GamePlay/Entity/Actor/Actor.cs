@@ -385,14 +385,6 @@ public class Actor : Entity
     #region 特效
 
     [FoldoutGroup("特效")]
-    [LabelText("@\"踢特效\t\"+KickFX")]
-    public FXConfig KickFX = new FXConfig();
-
-    [FoldoutGroup("特效")]
-    [LabelText("踢特效锚点")]
-    public Transform KickFXPivot;
-
-    [FoldoutGroup("特效")]
     [LabelText("@\"受伤特效\t\"+InjureFX")]
     public FXConfig InjureFX = new FXConfig();
 

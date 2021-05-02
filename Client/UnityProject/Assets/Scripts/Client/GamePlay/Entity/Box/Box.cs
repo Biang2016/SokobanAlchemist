@@ -1233,7 +1233,7 @@ public partial class Box : Entity
             collidedActor.RigidBody.velocity = Vector3.zero;
             Vector3 repelForce = force * (CurrentKickLocalAxis == KickAxis.X ? KickRepelForce_X : KickRepelForce_Z); // 不同Local方向撞击击退力度不同
             collidedActor.RigidBody.AddForce(repelForce, ForceMode.VelocityChange);
-            collidedActor.EntityBuffHelper.AddBuff(new EntityBuff_AttributeLabel {CasterEntity = LastInteractEntity, Duration = repelForce.magnitude / 30f, EntityBuffAttribute = EntityBuffAttribute.Repulse, IsPermanent = false});
+            collidedActor.EntityBuffHelper.AddBuff(new EntityBuff_AttributeLabel {CasterEntity = LastInteractEntity, Duration = repelForce.magnitude / 30f, EntityBuffAttribute = EntityBuffAttribute.Repulse, IsPermanent = false}, out EntityBuff _);
             collidedActor.EntityBuffHelper.Damage(EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, LastInteractEntity);
             return true;
         }

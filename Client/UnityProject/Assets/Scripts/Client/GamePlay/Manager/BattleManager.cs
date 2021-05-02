@@ -323,7 +323,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
                 {
                     if (entity.IsNotNullAndAlive())
                     {
-                        if (!entity.EntityBuffHelper.AddBuff(entityBuff.Clone()))
+                        if (!entity.EntityBuffHelper.AddBuff(entityBuff, out EntityBuff _))
                         {
                             //Debug.Log($"Failed to AddBuff: {entityBuff.GetType().Name} to {entity.name}");
                         }

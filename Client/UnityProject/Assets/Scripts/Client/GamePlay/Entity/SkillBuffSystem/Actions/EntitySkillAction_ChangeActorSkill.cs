@@ -85,7 +85,7 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
         {
             foreach (EntitySkillSO so in target.RawEntityActiveSkillSOs)
             {
-                target.ForgetActiveSkill(so.EntitySkill.SkillGUID);
+                target.Async_ForgetActiveSkill(so.EntitySkill.SkillGUID);
             }
         }
 
@@ -115,7 +115,7 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
 
             foreach (string guid in forgetPassiveSkillGUIDs)
             {
-                target.ForgetPassiveSkill(guid);
+                target.Async_ForgetPassiveSkill(guid);
             }
         }
 
@@ -131,7 +131,7 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
             }
             else if (entitySkill is EntityPassiveSkill eps)
             {
-                target.AddNewPassiveSkill(eps);
+                target.Async_AddNewPassiveSkill(eps);
             }
         }
         else
@@ -139,11 +139,11 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
             EntitySkill entitySkill = ConfigManager.GetRawEntitySkill(SkillGUID);
             if (entitySkill is EntityActiveSkill)
             {
-                target.ForgetActiveSkill(SkillGUID);
+                target.Async_ForgetActiveSkill(SkillGUID);
             }
             else if (entitySkill is EntityPassiveSkill)
             {
-                target.ForgetPassiveSkill(SkillGUID);
+                target.Async_ForgetPassiveSkill(SkillGUID);
             }
         }
     }

@@ -34,6 +34,11 @@ public class ActorActiveSkill_KickAreaCast : EntityActiveSkill_AreaCast
     {
         if (Entity is Actor actor)
         {
+            foreach (EntityPassiveSkill eps in actor.EntityPassiveSkills)
+            {
+                eps.OnKick();
+            }
+
             actor.ActorArtHelper.Kick();
             //yield return new WaitForSeconds(0.066f);
         }

@@ -62,10 +62,14 @@ public class LearnUpgradePanel : BaseUIPanel
     {
         openStackTimes--;
         base.Hide();
-        LearnButton.onClick.RemoveAllListeners();
-        UIManager.Instance.UI3DRoot.gameObject.SetActive(true);
-        current_LearnCallBack = null;
-        current_EntityUpgrade = null;
+
+        if (openStackTimes == 0)
+        {
+            LearnButton.onClick.RemoveAllListeners();
+            UIManager.Instance.UI3DRoot.gameObject.SetActive(true);
+            current_LearnCallBack = null;
+            current_EntityUpgrade = null;
+        }
 
         if (openStackTimes > 0)
         {

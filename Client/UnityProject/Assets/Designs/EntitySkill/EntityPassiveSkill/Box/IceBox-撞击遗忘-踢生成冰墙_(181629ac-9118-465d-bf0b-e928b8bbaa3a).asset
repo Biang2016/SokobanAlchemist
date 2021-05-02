@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "\u51B0\u51BB\u514D\u75AB_(cbbc9a64-913a-4c0d-9148-bc7875ee9533)"
+  m_Name: "IceBox-\u649E\u51FB\u9057\u5FD8-\u8E22\u751F\u6210\u51B0\u5899_(181629ac-9118-465d-bf0b-e928b8bbaa3a)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
@@ -20,24 +20,22 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        SkillGUID: (cbbc9a64-913a-4c0d-9148-bc7875ee9533)
-        SkillAlias: "\u51B0\u51BB\u514D\u75AB"
-        SkillName_EN: Ice Immune
-        SkillName_ZH: "\u51B0\u51BB\u514D\u75AB"
+        SkillGUID: (181629ac-9118-465d-bf0b-e928b8bbaa3a)
+        SkillAlias: "IceBox-\u649E\u51FB\u9057\u5FD8-\u8E22\u751F\u6210\u51B0\u5899"
+        SkillName_EN: 
+        SkillName_ZH: 
         SkillIcon:
-          TypeDefineType: 12
-          TypeGUID: (5c8eb360-251b-40bc-96b0-d3d17aea7c5b)
-        SkillDescription_EN: Immune to any frost effect and damage
-        SkillDescription_ZH: "\u514D\u75AB\u6240\u6709\u51B0\u51BB\u6548\u679C\u548C\u4F24\u5BB3"
+          TypeDefineType: 0
+          TypeGUID: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
         PlayerCanLearn: 0
-        OccupySkillGrid: 0
-        ShowInSkillPreviewPanel: 1
-        SkillCategoryType: 2
-        SkillRankType: 64
+        SkillCategoryType: 0
+        SkillRankType: 0
         SkillScrollType:
           TypeDefineType: 0
           TypeGUID: 
-        PassiveSkillCondition: 1
+        PassiveSkillCondition: 32
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
         MultiEventTrigger: 0
@@ -55,32 +53,29 @@ MonoBehaviour:
         EntitySkillConditions: []
         RawEntitySkillActions:
         - id: 1
+        - id: 2
     00000001:
-      type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
+      type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        RawEntityBuffs:
-        - id: 2
+        ForbidAllActiveSkill: 0
+        RecoverAllActiveSkill: 0
+        ForbidAllDropSkill: 0
+        AddOrRemove: 0
+        EntitySkillSO: {fileID: 11400000, guid: f081684a5e1e9a1488522b6dc0a935c3,
+          type: 2}
+        SkillGUID: (43bab592-f797-4cc3-bbdc-055b9c8af65b)
+        KeyBind: 0
+        ExertOnTarget: 0
     00000002:
-      type: {class: EntityBuff_AttributeLabel, ns: , asm: Client}
+      type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
-        GUID: 10236
-        BuffAlias: 
-        EntityBuffAttribute: 22
-        EnableWhiteBlackList: 0
-        AllowAddBuffAliasList: []
-        ForbidAddBuffAliasList: []
-        IsPermanent: 1
-        Duration: 0
-        BuffFX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: 
-          UseCurve: 0
-          FXScale: 0
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
+        InitWorldModuleGUID: 0
+        ForbidAllActiveSkill: 0
+        RecoverAllActiveSkill: 0
+        ForbidAllDropSkill: 0
+        AddOrRemove: 0
+        EntitySkillSO: {fileID: 11400000}
+        SkillGUID: (181629ac-9118-465d-bf0b-e928b8bbaa3a)
+        KeyBind: 0
+        ExertOnTarget: 0

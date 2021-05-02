@@ -321,31 +321,33 @@ public class EntityBuffHelper : EntityMonoHelper
         return true;
     }
 
-    public bool AddBuff(EntityBuff newBuff, string extraInfo = null)
+    public bool AddBuff(EntityBuff newRawBuff, out EntityBuff cloneNewBuff, string extraInfo = null)
     {
+        cloneNewBuff = null;
         if (!Entity.IsNotNullAndAlive()) return false;
-        if (newBuff is EntityBuff_ChangeEntityStatInstantly statBuff)
-        {
-            if (statBuff.EntityBuffAttribute.IsDamageBuff())
-            {
-                extraInfo = $"Damage-{statBuff.EntityBuffAttribute}";
-                CalculateDefense(statBuff);
-            }
-        }
-
-        bool suc = BuffRelationshipProcess(newBuff) && CheckBuffPropertyTypeValid((newBuff));
+        bool suc = BuffRelationshipProcess(newRawBuff) && CheckBuffPropertyTypeValid((newRawBuff));
         if (suc)
         {
-            newBuff.OnAdded(Entity, extraInfo);
-            PlayBuffFX(newBuff);
-            if (newBuff.Duration > 0 || newBuff.IsPermanent)
+            cloneNewBuff = newRawBuff.Clone();
+            if (cloneNewBuff is EntityBuff_ChangeEntityStatInstantly statBuff)
             {
-                BuffDict.Add(newBuff.GUID, newBuff);
-                EntityBuffAttributeDict[newBuff.EntityBuffAttribute].Add(newBuff);
-                if (!newBuff.IsPermanent)
+                if (statBuff.EntityBuffAttribute.IsDamageBuff())
                 {
-                    BuffRemainTimeDict.Add(newBuff.GUID, newBuff.Duration);
-                    BuffPassedTimeDict.Add(newBuff.GUID, 0);
+                    extraInfo = $"Damage-{statBuff.EntityBuffAttribute}";
+                    CalculateDefense(statBuff);
+                }
+            }
+
+            cloneNewBuff.OnAdded(Entity, extraInfo);
+            PlayBuffFX(cloneNewBuff);
+            if (cloneNewBuff.Duration > 0 || cloneNewBuff.IsPermanent)
+            {
+                BuffDict.Add(cloneNewBuff.GUID, cloneNewBuff);
+                EntityBuffAttributeDict[cloneNewBuff.EntityBuffAttribute].Add(cloneNewBuff);
+                if (!cloneNewBuff.IsPermanent)
+                {
+                    BuffRemainTimeDict.Add(cloneNewBuff.GUID, cloneNewBuff.Duration);
+                    BuffPassedTimeDict.Add(cloneNewBuff.GUID, 0);
                 }
             }
 
@@ -517,7 +519,7 @@ public class EntityBuffHelper : EntityMonoHelper
             EntityStatType = EntityStatType.HealthDurability,
             IsPermanent = false,
             Percent = 0
-        });
+        }, out EntityBuff _);
     }
 
     public void OnReborn()

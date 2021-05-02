@@ -28,7 +28,7 @@ public class EntitySkillCondition_BoxState : EntitySkillCondition, EntitySkillCo
     protected override void ChildClone(EntitySkillCondition cloneData)
     {
         EntitySkillCondition_BoxState newCondition = (EntitySkillCondition_BoxState) cloneData;
-        newCondition.ValidBoxStates = ValidBoxStates.Clone<Box.States,Box.States>();
+        newCondition.ValidBoxStates = ValidBoxStates.Clone<Box.States, Box.States>();
     }
 
     public override void CopyDataFrom(EntitySkillCondition srcData)

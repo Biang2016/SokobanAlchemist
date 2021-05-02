@@ -22,10 +22,19 @@ MonoBehaviour:
         InitWorldModuleGUID: 0
         SkillGUID: (1f9d40f5-573f-42bb-b4e7-f430e549b57b)
         SkillAlias: "FireBox-\u649E\u51FB\u71C3\u70E7-\u6269\u5927\u7248"
+        SkillName_EN: 
+        SkillName_ZH: 
         SkillIcon:
           TypeDefineType: 0
           TypeGUID: 
-        SkillDescription: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
         PassiveSkillCondition: 112
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
@@ -71,6 +80,7 @@ MonoBehaviour:
         EffectiveOnRelativeCamp: 14
         RawEntityBuffs:
         - id: 3
+        - id: 4
     00000003:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
@@ -95,5 +105,31 @@ MonoBehaviour:
             m_PostInfinity: 0
             m_RotationOrder: 4
         EntityStatType: 101
-        Delta: 700
+        Delta: 400
+        Percent: 0
+    00000004:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 13679
+        BuffAlias: 
+        EntityBuffAttribute: 24
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 0
+        Delta: -1
         Percent: 0

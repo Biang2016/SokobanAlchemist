@@ -116,6 +116,10 @@ public abstract class EntityPassiveSkill : EntitySkill
     {
     }
 
+    public virtual void OnKick()
+    {
+    }
+
     #endregion
 
     protected override void ChildClone(EntitySkill cloneData)

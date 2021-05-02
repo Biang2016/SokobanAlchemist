@@ -39,6 +39,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
         OnFuelEntered = 1 << 19,
         OnPassGrid = 1 << 20,
+        OnKick = 1 << 21,
     }
 
     [LabelText("触发时机")]
@@ -776,6 +777,24 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                     if (action is EntitySkillAction.IWorldGPAction worldGPAction)
                     {
                         worldGPAction.ExecuteOnWorldGP(gridGP);
+                    }
+                }
+            }
+        }
+    }
+
+    public override void OnKick()
+    {
+        base.OnKick();
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnKick))
+        {
+            if (TriggerProbabilityPercent.ProbabilityBool())
+            {
+                foreach (EntitySkillAction action in EntitySkillActions)
+                {
+                    if (action is EntitySkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
                     }
                 }
             }

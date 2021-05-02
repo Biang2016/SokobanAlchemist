@@ -10,33 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "\u8E22\u51FA\u706B\u7BB1\u5B50\u4E14\u71C3\u70E7\u8303\u56F4\u7FFB\u500D_(c9ffa8f0-7a2b-4f08-997c-e619cfc8197b)
-    1"
+  m_Name: "\u8D4B\u4E88\u8E22\u51FA\u7684\u706B\u7BB1\u5B50\u4EE5\u6269\u5927\u71C3\u70E7\u8303\u56F4\u88AB\u52A8\u6280\u80FD_(821b4f41-99bb-4da7-8107-f4f7f7ba8ca3)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: ActorActiveSkill_KickAreaCast, ns: , asm: Client}
+      type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        SkillGUID: (c9ffa8f0-7a2b-4f08-997c-e619cfc8197b)
-        SkillAlias: "\u8E22\u51B0\u7BB1\u5B50\u751F\u6210\u51B0\u5899"
-        SkillName_EN: Fire Player
-        SkillName_ZH: "\u9A71\u706B\u672F"
+        SkillGUID: (821b4f41-99bb-4da7-8107-f4f7f7ba8ca3)
+        SkillAlias: "\u8D4B\u4E88\u8E22\u51FA\u7684\u706B\u7BB1\u5B50\u4EE5\u6269\u5927\u71C3\u70E7\u8303\u56F4\u88AB\u52A8\u6280\u80FD"
+        SkillName_EN: 
+        SkillName_ZH: 
         SkillIcon:
           TypeDefineType: 12
-          TypeGUID: (091061ef-7c48-4664-b762-8b794d17ceaa)
-        SkillDescription_EN: Kick a fire box out and expand its burning range.
-        SkillDescription_ZH: "\u5C06\u4E00\u4E2A\u706B\u7BB1\u5B50\u8E22\u51FA\uFF0C\u5E76\u4F7F\u5176\u71C3\u70E7\u8303\u56F4\u6269\u5927"
-        PlayerCanLearn: 1
-        SkillCategoryType: 1
-        SkillRankType: 2
+          TypeGUID: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
         SkillScrollType:
           TypeDefineType: 0
-          TypeGUID: (32c00ccc-4a08-4074-8b06-f2bd01f3ab8c)
-        TargetCamp: 14
+          TypeGUID: 
+        TargetCamp: 8
         SkillsPropertyCollection:
           CastingRadius:
             BaseValue: 0
@@ -44,10 +43,10 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           Cooldown:
-            BaseValue: 5000
+            BaseValue: 0
             ModifiedValue: 0
             MinValue: 0
-            MaxValue: 1000000
+            MaxValue: 0
           WingUp:
             BaseValue: 0
             ModifiedValue: 0
@@ -77,12 +76,12 @@ MonoBehaviour:
             BaseValue: 10
             ModifiedValue: 0
             MinValue: 0
-            MaxValue: 1000
+            MaxValue: 10
           ConsumeIceElementFragment:
             BaseValue: 0
             ModifiedValue: 0
             MinValue: 0
-            MaxValue: 0
+            MaxValue: 100
           ConsumeLightningElementFragment:
             BaseValue: 0
             ModifiedValue: 0
@@ -91,7 +90,6 @@ MonoBehaviour:
         TriggerWhenMissProbabilityPercent: 100
         EntitySkillConditions:
         - id: 1
-        - id: 2
         WingUpCanMove: 1
         CastCanMove: 1
         RecoverCanMove: 1
@@ -108,7 +106,7 @@ MonoBehaviour:
         AccurateStandardDeviation: 0
         BattleIndicatorTypeName:
           TypeDefineType: 8
-          TypeGUID: (483bd093-b077-41b2-9d2f-25a768f85d99)
+          TypeGUID: 
         ProjectOffsetZMax: 0
         ProjectOffsetZMin: 0
         ProjectHeightDeltaRange: 999
@@ -116,21 +114,28 @@ MonoBehaviour:
         GridWarningColorBorderHighlight: {r: 0, g: 0, b: 0, a: 0}
         GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
         RawEntitySkillActions:
+        - id: 2
         - id: 3
         - id: 4
-        - id: 5
-        - id: 6
     00000001:
-      type: {class: EntitySkillCondition_HasInteractableEntityInCastArea, ns: , asm: Client}
-      data:
-        DependOnActorInteractSkill: 1
-        InteractSkillTypes: 02000000
-    00000002:
       type: {class: EntitySkillCondition_HasEntityInCastArea, ns: , asm: Client}
       data:
         EntityType:
           TypeDefineType: 0
           TypeGUID: (65e613ca-1b8c-4002-84d1-0c49ea3b0903)
+    00000002:
+      type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        ForbidAllActiveSkill: 0
+        RecoverAllActiveSkill: 0
+        ForbidAllDropSkill: 0
+        AddOrRemove: 0
+        EntitySkillSO: {fileID: 11400000, guid: e8d8386ffbccf204a974a327dd306a6a,
+          type: 2}
+        SkillGUID: (3106ddee-0888-4483-9270-4aa47a704521)
+        KeyBind: 0
+        ExertOnTarget: 1
     00000003:
       type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
@@ -151,42 +156,9 @@ MonoBehaviour:
         ForbidAllActiveSkill: 0
         RecoverAllActiveSkill: 0
         ForbidAllDropSkill: 0
-        AddOrRemove: 0
-        EntitySkillSO: {fileID: 11400000, guid: e8d8386ffbccf204a974a327dd306a6a,
-          type: 2}
-        SkillGUID: (3106ddee-0888-4483-9270-4aa47a704521)
-        KeyBind: 0
-        ExertOnTarget: 1
-    00000005:
-      type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
-      data:
-        InitWorldModuleGUID: 0
-        ForbidAllActiveSkill: 0
-        RecoverAllActiveSkill: 0
-        ForbidAllDropSkill: 0
         AddOrRemove: 1
         EntitySkillSO: {fileID: 11400000, guid: 7ca9317d0e539314aae988c48467d2c6,
           type: 2}
         SkillGUID: (87f9ac5b-19aa-4f38-a183-011c79648048)
         KeyBind: 0
         ExertOnTarget: 1
-    00000006:
-      type: {class: EntitySkillAction_KickOut, ns: , asm: Client}
-      data:
-        InitWorldModuleGUID: 0
-        FX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: (ce01f26e-4b00-4b76-bef3-72a60663efa0)
-          UseCurve: 0
-          FXScale: 1
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        AutoDirection_Side: 0
-        AutoDirection_BackForth: 0
-        Direction: 0
-        KickForce: 30

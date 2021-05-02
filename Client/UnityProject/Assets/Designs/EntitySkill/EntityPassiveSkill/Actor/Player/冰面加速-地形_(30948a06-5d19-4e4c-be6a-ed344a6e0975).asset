@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "\u51B0\u51BB3s\u6323\u81311s\u51B0\u514D_(1b02d43d-5801-4315-872a-9eb658b610ba)"
+  m_Name: "\u51B0\u9762\u52A0\u901F-\u5730\u5F62_(30948a06-5d19-4e4c-be6a-ed344a6e0975)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
@@ -20,14 +20,23 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        SkillGUID: (1b02d43d-5801-4315-872a-9eb658b610ba)
-        SkillAlias: "\u51B0\u51BB3s\u6323\u81311s\u51B0\u514D"
+        SkillGUID: (30948a06-5d19-4e4c-be6a-ed344a6e0975)
+        SkillAlias: "\u51B0\u9762\u52A0\u901F-\u5730\u5F62"
+        SkillName_EN: IceSpeedUp-Terrain
+        SkillName_ZH: "\u51B0\u9762\u52A0\u901F-\u5730\u5F62"
         SkillIcon:
           TypeDefineType: 12
-          TypeGUID: (f3b7ae37-4a6a-4f1b-a976-02fe3dc4d12d)
-        SkillDescription: If stuck in ice block over 3 seconds, break out from the
-          ice and get immune to freezing for 1 second.
-        IsAddedDuringGamePlay: 0
+          TypeGUID: (24ffd430-dd6a-4d11-8590-60976f30d1e4)
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
+        SkillCategoryType: 10
+        SkillRankType: 1
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
         PassiveSkillCondition: 2
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
@@ -36,7 +45,9 @@ MonoBehaviour:
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
         EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
         EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
         EntityStatChangeThresholdType: 0
         EntityPropertyChangeType: 0
         EntityPropertyChangeThreshold: 0
@@ -46,16 +57,9 @@ MonoBehaviour:
         RawEntitySkillActions:
         - id: 2
     00000001:
-      type: {class: EntitySkillCondition_State, ns: , asm: Client}
+      type: {class: EntitySkillCondition_TerrainState, ns: , asm: Client}
       data:
-        m_ConditionType: 0
-        EntityStatType: 120
-        EntityStatThreshold: 2
-        EntityPropertyType: 0
-        EntityPropertyThreshold: 0
-        ThresholdOperator: 2
-        BattleStateBool: 
-        SatisfiedDuration: 3
+        ValidTerrainTypes: 0300000004000000
     00000002:
       type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
       data:
@@ -63,20 +67,21 @@ MonoBehaviour:
         RawEntityBuffs:
         - id: 3
     00000003:
-      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
-        GUID: 10936
-        BuffAlias: 
-        EntityBuffAttribute: 22
-        EnableWhiteBlackList: 0
+        GUID: 11386
+        BuffAlias: IceSpeedUp-Terrain
+        EntityBuffAttribute: 1
+        EnableWhiteBlackList: 1
         AllowAddBuffAliasList: []
-        ForbidAddBuffAliasList: []
+        ForbidAddBuffAliasList:
+        - IceSpeedUp-Terrain
         IsPermanent: 0
-        Duration: 1
+        Duration: 0.3
         BuffFX:
           FXType:
             TypeDefineType: 7
-            TypeGUID: (1000c3ce-04d0-4c81-85c2-e372bb0cabc2)
+            TypeGUID: 
           UseCurve: 0
           FXScale: 1
           AnimationCurve:
@@ -85,6 +90,10 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-        EntityStatType: 100
-        Delta: 0
-        Percent: -100
+        PropertyCategory: 0
+        EntityPropertyType: 30
+        EntitySkillSO: {fileID: 0}
+        SkillGUID: 
+        EntitySkillPropertyType: 0
+        Percent: 50
+        LinearDecayInDuration: 0

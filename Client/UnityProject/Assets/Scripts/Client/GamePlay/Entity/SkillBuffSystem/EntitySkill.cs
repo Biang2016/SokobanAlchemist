@@ -15,6 +15,7 @@ public abstract class EntitySkill : IClone<EntitySkill>
     public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
 
     internal bool IsLevelExtraEntitySkill;
+    internal bool MarkAsForget;
 
     [ReadOnly]
     [PropertyOrder(-10)]
@@ -63,6 +64,14 @@ public abstract class EntitySkill : IClone<EntitySkill>
     [PropertyOrder(-8)]
     public bool PlayerCanLearn;
 
+    [LabelText("占据技能格子")]
+    [PropertyOrder(-8)]
+    public bool OccupySkillGrid;
+
+    [LabelText("显示到技能清单")]
+    [PropertyOrder(-8)]
+    public bool ShowInSkillPreviewPanel;
+
     [LabelText("技能分类")]
     [PropertyOrder(-8)]
     public SkillCategoryType SkillCategoryType;
@@ -82,6 +91,7 @@ public abstract class EntitySkill : IClone<EntitySkill>
 
     public virtual void OnUnInit()
     {
+        MarkAsForget = false;
     }
 
     public virtual void OnTick(float tickInterval)
@@ -100,6 +110,8 @@ public abstract class EntitySkill : IClone<EntitySkill>
         newES.SkillDescription_EN = SkillDescription_EN;
         newES.SkillDescription_ZH = SkillDescription_ZH;
         newES.PlayerCanLearn = PlayerCanLearn;
+        newES.OccupySkillGrid = OccupySkillGrid;
+        newES.ShowInSkillPreviewPanel = ShowInSkillPreviewPanel;
         newES.SkillCategoryType = SkillCategoryType;
         newES.SkillRankType = SkillRankType;
         newES.SkillScrollType = SkillScrollType.Clone();
@@ -121,6 +133,8 @@ public abstract class EntitySkill : IClone<EntitySkill>
         SkillDescription_EN = srcData.SkillDescription_EN;
         SkillDescription_ZH = srcData.SkillDescription_ZH;
         PlayerCanLearn = srcData.PlayerCanLearn;
+        OccupySkillGrid = srcData.OccupySkillGrid;
+        ShowInSkillPreviewPanel = srcData.ShowInSkillPreviewPanel;
         SkillCategoryType = srcData.SkillCategoryType;
         SkillRankType = srcData.SkillRankType;
         SkillScrollType = srcData.SkillScrollType.Clone();

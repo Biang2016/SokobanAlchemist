@@ -28,8 +28,7 @@ public class ActorPassiveSkill_IceSlideSpeedUp : ActorPassiveSkill
             {
                 if (EntityBuff == null)
                 {
-                    EntityBuff = RawEntityBuff.Clone();
-                    Actor.EntityBuffHelper.AddBuff(EntityBuff);
+                    Actor.EntityBuffHelper.AddBuff(RawEntityBuff, out EntityBuff);
                 }
             }
             else

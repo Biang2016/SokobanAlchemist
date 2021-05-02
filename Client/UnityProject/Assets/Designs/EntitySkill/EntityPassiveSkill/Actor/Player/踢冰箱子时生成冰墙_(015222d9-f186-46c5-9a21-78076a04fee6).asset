@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "\u51B0\u51BB\u514D\u75AB_(cbbc9a64-913a-4c0d-9148-bc7875ee9533)"
+  m_Name: "\u8E22\u51B0\u7BB1\u5B50\u65F6\u751F\u6210\u51B0\u5899_(015222d9-f186-46c5-9a21-78076a04fee6)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
@@ -20,24 +20,24 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        SkillGUID: (cbbc9a64-913a-4c0d-9148-bc7875ee9533)
-        SkillAlias: "\u51B0\u51BB\u514D\u75AB"
-        SkillName_EN: Ice Immune
-        SkillName_ZH: "\u51B0\u51BB\u514D\u75AB"
+        SkillGUID: (015222d9-f186-46c5-9a21-78076a04fee6)
+        SkillAlias: "\u8E22\u51B0\u7BB1\u5B50\u65F6\u751F\u6210\u51B0\u5899"
+        SkillName_EN: Ice Wall
+        SkillName_ZH: "\u51B0\u5899"
         SkillIcon:
           TypeDefineType: 12
-          TypeGUID: (5c8eb360-251b-40bc-96b0-d3d17aea7c5b)
-        SkillDescription_EN: Immune to any frost effect and damage
-        SkillDescription_ZH: "\u514D\u75AB\u6240\u6709\u51B0\u51BB\u6548\u679C\u548C\u4F24\u5BB3"
-        PlayerCanLearn: 0
-        OccupySkillGrid: 0
+          TypeGUID: (154524e9-714f-40b1-8307-fcbe38618922)
+        SkillDescription_EN: Generate an ice wall when you kick out the ice box.
+        SkillDescription_ZH: "\u8E22\u51FA\u51B0\u7BB1\u5B50\u65F6\uFF0C\u5728\u5176\u8DEF\u5F84\u4E0A\u751F\u6210\u4E00\u5835\u51B0\u5899"
+        PlayerCanLearn: 1
+        OccupySkillGrid: 1
         ShowInSkillPreviewPanel: 1
         SkillCategoryType: 2
-        SkillRankType: 64
+        SkillRankType: 2
         SkillScrollType:
           TypeDefineType: 0
-          TypeGUID: 
-        PassiveSkillCondition: 1
+          TypeGUID: (32c00ccc-4a08-4074-8b06-f2bd01f3ab8c)
+        PassiveSkillCondition: 2097152
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
         MultiEventTrigger: 0
@@ -56,31 +56,10 @@ MonoBehaviour:
         RawEntitySkillActions:
         - id: 1
     00000001:
-      type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
+      type: {class: EntitySkillAction_ExecuteActiveSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        RawEntityBuffs:
-        - id: 2
-    00000002:
-      type: {class: EntityBuff_AttributeLabel, ns: , asm: Client}
-      data:
-        GUID: 10236
-        BuffAlias: 
-        EntityBuffAttribute: 22
-        EnableWhiteBlackList: 0
-        AllowAddBuffAliasList: []
-        ForbidAddBuffAliasList: []
-        IsPermanent: 1
-        Duration: 0
-        BuffFX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: 
-          UseCurve: 0
-          FXScale: 0
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
+        TargetEntityType: 4
+        EntitySkillSO: {fileID: 11400000, guid: 66ab8aca1d3cc574cbd6a54383ec81c7,
+          type: 2}
+        SkillGUID: (3a9170f9-21a1-4203-bc23-17ab2ad6ce78)
