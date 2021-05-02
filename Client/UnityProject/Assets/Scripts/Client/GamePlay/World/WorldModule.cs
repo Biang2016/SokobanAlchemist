@@ -68,7 +68,7 @@ public class WorldModule : PoolObject
     /// <param name="isTriggerEntity"></param>
     /// <param name="triggerEntityGUID">针对TriggerEntity，由于其占位非一一对应，故需要一个GUID来映射到Dict</param>
     /// <returns></returns>
-    public Entity this[TypeDefineType entityType, GridPos3D localGP, bool isStart = false, bool isPartial = false, bool isTriggerEntity = false, uint triggerEntityGUID = 0]
+    public Entity this[TypeDefineType entityType, GridPos3D localGP, bool isStart = false, bool isPartial = false, bool isTriggerEntity = false, uint triggerEntityGUID = 0, EntityData entityData = null]
     {
         get
         {
@@ -95,7 +95,7 @@ public class WorldModule : PoolObject
         }
         set
         {
-            if (isTriggerEntity)
+            if (isTriggerEntity) // TriggerEntity一定要记录坐标
             {
                 if (value != null)
                 {
@@ -112,8 +112,17 @@ public class WorldModule : PoolObject
                             else
                             {
                                 triggerEntityData = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                                triggerEntityData.LocalGP = localGP;
+                                triggerEntityData.WorldGP = LocalGPToWorldGP(localGP);
                                 WorldModuleData.TriggerEntityDataDict.Add(value.GUID, triggerEntityData);
                                 WorldModuleData.TriggerEntityDataList.Add(triggerEntityData);
+                            }
+                        }
+                        else
+                        {
+                            if (!WorldModuleData.TriggerEntityDataDict.ContainsKey(value.GUID))
+                            {
+                                WorldModuleData.TriggerEntityDataDict.Add(value.GUID, entityData);
                             }
                         }
                     }
@@ -155,12 +164,12 @@ public class WorldModule : PoolObject
                         {
                             if (WorldGPToLocalGP(value.WorldGP) == localGP) // 只针对核心格纪录data信息
                             {
-                                EntityData entityData = WorldModuleData[TypeDefineType.Box, localGP];
-                                if (entityData != null)
+                                EntityData _entityData = WorldModuleData[TypeDefineType.Box, localGP];
+                                if (_entityData != null)
                                 {
-                                    entityData.EntityTypeIndex = value.EntityTypeIndex;
-                                    entityData.EntityOrientation = value.EntityOrientation;
-                                    entityData.EntityType.RefreshGUID();
+                                    _entityData.EntityTypeIndex = value.EntityTypeIndex;
+                                    _entityData.EntityOrientation = value.EntityOrientation;
+                                    _entityData.EntityType.RefreshGUID();
                                 }
                                 else
                                 {
@@ -195,12 +204,12 @@ public class WorldModule : PoolObject
                         {
                             if (WorldGPToLocalGP(value.WorldGP) == localGP) // 只针对核心格纪录data信息
                             {
-                                EntityData entityData = WorldModuleData[TypeDefineType.Actor, localGP];
-                                if (entityData != null)
+                                EntityData _entityData = WorldModuleData[TypeDefineType.Actor, localGP];
+                                if (_entityData != null)
                                 {
-                                    entityData.EntityTypeIndex = value.EntityTypeIndex;
-                                    entityData.EntityOrientation = value.EntityOrientation;
-                                    entityData.EntityType.RefreshGUID();
+                                    _entityData.EntityTypeIndex = value.EntityTypeIndex;
+                                    _entityData.EntityOrientation = value.EntityOrientation;
+                                    _entityData.EntityType.RefreshGUID();
                                 }
                                 else
                                 {
@@ -584,7 +593,7 @@ public class WorldModule : PoolObject
                             Entity existedEntity = World.GetImpassableEntityByGridPosition(gridPos, 0, out WorldModule module, out GridPos3D gridLocalGP);
                             if (module != null && existedEntity == null)
                             {
-                                module[TypeDefineType.Box, gridLocalGP, isStartedEntities, false, isTriggerEntity, box.GUID] = box;
+                                module[TypeDefineType.Box, gridLocalGP, isStartedEntities, false, isTriggerEntity, box.GUID, entityData] = box;
                             }
                         }
 
@@ -607,7 +616,7 @@ public class WorldModule : PoolObject
                             Entity existedEntity = World.GetImpassableEntityByGridPosition(gridPos, actor.GUID, out WorldModule module, out GridPos3D gridLocalGP);
                             if (module != null && existedEntity == null)
                             {
-                                module[TypeDefineType.Actor, gridLocalGP, isStartedEntities, false, isTriggerEntity, actor.GUID] = actor;
+                                module[TypeDefineType.Actor, gridLocalGP, isStartedEntities, false, isTriggerEntity, actor.GUID, entityData] = actor;
                             }
                         }
 
