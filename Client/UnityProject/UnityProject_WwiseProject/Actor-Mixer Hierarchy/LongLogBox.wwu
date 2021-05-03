@@ -33,7 +33,7 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="LongLogBox_OnBeingPushed" ID="{DF1B7C93-8D79-43B3-A214-B353B677D466}" ShortID="918490418">
+						<Sound Name="LongLogBox_OnBeingPushed_1" ID="{DF1B7C93-8D79-43B3-A214-B353B677D466}" ShortID="918490418">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -44,6 +44,17 @@
 							</ReferenceList>
 							<ChildrenList>
 								<AudioFileSource Name="Log Push" ID="{2FF82B01-57B3-4B42-B621-B02829F1BF70}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.333874362244898"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.353514030612245"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.45988201530612"/>
+										<Property Name="VolumeOffset" Type="Real64">
+											<ValueList>
+												<Value>-1</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<Language>SFX</Language>
 									<AudioFile>Log Push.wav</AudioFile>
 									<MediaIDList>
@@ -53,6 +64,45 @@
 							</ChildrenList>
 							<ActiveSourceList>
 								<ActiveSource Name="Log Push" ID="{2FF82B01-57B3-4B42-B621-B02829F1BF70}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="LongLogBox_OnBeingPushed_2" ID="{459CD26B-E490-4FA4-8259-4238D74C501C}" ShortID="40737338">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Log Push" ID="{436D917E-2B7C-4EDC-9EF3-2BCCB616E8F8}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.333874362244898"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.353514030612245"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="2.26510841836735"/>
+										<Property Name="VolumeOffset" Type="Real64">
+											<ValueList>
+												<Value>-1.1</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>Log Push.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="533522633"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Log Push" ID="{436D917E-2B7C-4EDC-9EF3-2BCCB616E8F8}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>

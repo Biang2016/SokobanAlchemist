@@ -6,46 +6,82 @@
 				<SoundcasterSession Name="New Soundcaster Session" ID="{040558D8-A443-4FE5-8A51-D2A860861BC0}">
 					<ModuleList>
 						<Module>
-							<ObjectRef Name="OnBeingPushed_Light" ID="{85ADD1C6-47C4-4FB1-A5A1-A1B714975A8D}" WorkUnitID="{20565C80-A26D-4D5E-A9DF-DEAC6D709F4E}"/>
+							<ObjectRef Name="Music" ID="{30CB71BC-EE60-4580-ADA5-A1F306814BB4}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
 							<Position X="0" Y="0"/>
 						</Module>
 						<Module>
-							<ObjectRef Name="OnDestroyed" ID="{5ADE77C7-2E58-46AA-ACB6-5A4D019D0E6C}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
+							<ObjectRef Name="OnBeingPushed_Light" ID="{85ADD1C6-47C4-4FB1-A5A1-A1B714975A8D}" WorkUnitID="{20565C80-A26D-4D5E-A9DF-DEAC6D709F4E}"/>
 							<Position X="0" Y="1"/>
 						</Module>
 						<Module>
-							<ObjectRef Name="Music" ID="{30CB71BC-EE60-4580-ADA5-A1F306814BB4}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
-							<Position X="1" Y="0"/>
+							<ObjectRef Name="OnDestroyed" ID="{5ADE77C7-2E58-46AA-ACB6-5A4D019D0E6C}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
+							<Position X="0" Y="2"/>
 						</Module>
 						<Module>
-							<ObjectRef Name="IceEnemy_Cyan_FrostBreath_Cast" ID="{8ADA565E-CDA3-4F0A-8CDC-663B5E513F81}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
-							<Position X="1" Y="1"/>
+							<ObjectRef Name="GoldenBox_OnDestroyed" ID="{6C9FAD93-B5B4-47F5-B6C6-490281B8488D}" WorkUnitID="{B32F6991-3B3D-4A33-A367-C32AE3F737CF}"/>
+							<Position X="0" Y="3"/>
 						</Module>
 						<Module>
-							<ObjectRef Name="Player_GainFireElement" ID="{8206348C-8CF6-4C92-B1B7-53E2AC7A129A}" WorkUnitID="{243B1A99-3A40-415C-8C73-18D11E7863E8}"/>
-							<Position X="2" Y="0"/>
-						</Module>
-						<Module>
-							<ObjectRef Name="IceEnemy_Cyan_FrostBreath_Preparing" ID="{AD1B196B-887D-4F8F-B010-BC282203546D}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
-							<Position X="2" Y="1"/>
-						</Module>
-						<Module>
-							<ObjectRef Name="Player_GainGold" ID="{51A5AB64-F672-4456-87E8-33BA8582CCDF}" WorkUnitID="{243B1A99-3A40-415C-8C73-18D11E7863E8}"/>
-							<Position X="3" Y="0"/>
-						</Module>
-						<Module>
-							<ObjectRef Name="FireEnemy_Red_HeatEmit_Cast" ID="{5A48918D-F7A4-4349-99F5-6E83875C9F6C}" WorkUnitID="{AB31CB3F-E95F-48C8-9072-77668498151B}"/>
-							<Position X="4" Y="0"/>
+							<ObjectRef Name="OnDestroyed_Common" ID="{52D36985-4677-4781-AC58-F427DFC93C9F}" WorkUnitID="{36B96266-F37E-43B8-8F8F-FB21678F9273}"/>
+							<Position X="0" Y="4"/>
 						</Module>
 						<Module>
 							<ObjectRef Name="FireEnemy_Red_HeatEmit_Preparing" ID="{0A3EEE52-AC14-4331-8705-982DE4A7F1BA}" WorkUnitID="{AB31CB3F-E95F-48C8-9072-77668498151B}"/>
-							<Position X="5" Y="0"/>
+							<Position X="3" Y="1"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="IceEnemy_Cyan_FrostBreath_Preparing" ID="{AD1B196B-887D-4F8F-B010-BC282203546D}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+							<Position X="3" Y="2"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="LightningEnemy_TripleStrike_Preparing" ID="{4CF5D632-2134-4D4E-8C79-2975FF0664FA}" WorkUnitID="{46938B20-D5D9-4BBC-9328-20C080B198B5}"/>
+							<Position X="3" Y="3"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="FireEnemy_Red_HeatEmit_Cast" ID="{5A48918D-F7A4-4349-99F5-6E83875C9F6C}" WorkUnitID="{AB31CB3F-E95F-48C8-9072-77668498151B}"/>
+							<Position X="4" Y="1"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="IceEnemy_Cyan_FrostBreath_Cast" ID="{8ADA565E-CDA3-4F0A-8CDC-663B5E513F81}" WorkUnitID="{54105AE9-4BD1-4C1C-A0AE-775FF95D7073}"/>
+							<Position X="4" Y="2"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="LightningEnemy_TripleStrike_Cast" ID="{030ED2D1-239F-4271-AA9C-5BD26196EBB5}" WorkUnitID="{46938B20-D5D9-4BBC-9328-20C080B198B5}"/>
+							<Position X="4" Y="3"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="Player_GainFireElement" ID="{8206348C-8CF6-4C92-B1B7-53E2AC7A129A}" WorkUnitID="{243B1A99-3A40-415C-8C73-18D11E7863E8}"/>
+							<Position X="5" Y="1"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="Player_GainIceElement" ID="{F61D4E81-83F0-4EB4-972F-7E3C96B7D315}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+							<Position X="5" Y="2"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="Player_Dash" ID="{046336DC-BE5E-4300-ABD3-CD445403AD57}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+							<Position X="5" Y="3"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="Player_Kick" ID="{D39F32AD-F077-4349-865D-9B5CB06EB29B}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+							<Position X="5" Y="4"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="Player_GainGold" ID="{51A5AB64-F672-4456-87E8-33BA8582CCDF}" WorkUnitID="{243B1A99-3A40-415C-8C73-18D11E7863E8}"/>
+							<Position X="6" Y="1"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="Player_GainLightningElement" ID="{794DB359-FD45-405D-9475-F626C83DA359}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+							<Position X="6" Y="2"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="Player_Vault" ID="{79135A40-AB6A-45CB-AAA0-08F78F1FAC42}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+							<Position X="6" Y="3"/>
 						</Module>
 					</ModuleList>
 					<RTPCValueList ShowAll="true">
 						<RTPCValue>
 							<GameParameterRef Name="World_Volume" ID="{1332F4BF-9286-407A-945A-29E7D2B9ECA8}"/>
-							<Value>-60</Value>
+							<Value>100</Value>
 						</RTPCValue>
 						<RTPCValue>
 							<GameParameterRef Name="InMenu_LowPass" ID="{B4F5D5DC-16E0-45B6-9154-E424CB40136B}"/>
@@ -53,6 +89,58 @@
 						</RTPCValue>
 						<RTPCValue>
 							<GameParameterRef Name="SpiderLegDistanceToPlayer" ID="{D9C56384-D920-47E1-8580-8A6201311E30}"/>
+							<Value>9999</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="CombatEnemyNumber" ID="{52382756-3C28-48BA-A83B-0EC7E5308BC3}"/>
+							<Value>0</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="Player_MovementSpeed" ID="{49F123CB-2046-48D4-8C63-1298A86811EB}"/>
+							<Value>92.2297297297297</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="Player_HealthPercent" ID="{9993C7FA-966E-4BDA-BF02-B14DC6DDACBD}"/>
+							<Value>50</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="UI_Volume" ID="{424535AC-C584-4E1A-A7FB-8EA44EEA581B}"/>
+							<Value>50</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="Master_Volume" ID="{DBE63736-A1A8-4EF3-8DDC-1259BE7F2723}"/>
+							<Value>50</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="Music_Volume" ID="{50BF03D8-A517-4F63-9CA0-F7D73329F8AE}"/>
+							<Value>100</Value>
+						</RTPCValue>
+					</RTPCValueList>
+					<CurrentStateList ShowAll="true">
+						<CurrentStateRef Name="InCamp" ID="{EBC424C5-B0D7-47C4-9983-B3F24BAE5557}"/>
+						<CurrentStateRef Name="Lab" ID="{BDAF9F4F-2ABE-4B3F-A5AA-09220C0C4798}"/>
+					</CurrentStateList>
+					<CurrentSwitchList ShowAll="true">
+						<CurrentSwitchRef Name="Earth" ID="{780183F2-AF58-4237-96F8-B204D6EBC684}"/>
+						<CurrentSwitchRef Name="Close" ID="{651D8A07-AB41-4BE5-BEDB-CAE39AD0D12A}"/>
+					</CurrentSwitchList>
+				</SoundcasterSession>
+				<SoundcasterSession Name="Player" ID="{C8F30AF5-6E35-4C81-8E76-0CFEA007C3A8}">
+					<RTPCValueList ShowAll="true">
+						<RTPCValue>
+							<GameParameterRef Name="World_Volume" ID="{1332F4BF-9286-407A-945A-29E7D2B9ECA8}"/>
+							<Value>50</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="InMenu_LowPass" ID="{B4F5D5DC-16E0-45B6-9154-E424CB40136B}"/>
+							<Value>50</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="SpiderLegDistanceToPlayer" ID="{D9C56384-D920-47E1-8580-8A6201311E30}"/>
+							<Value>0</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="CombatEnemyNumber" ID="{52382756-3C28-48BA-A83B-0EC7E5308BC3}"/>
 							<Value>0</Value>
 						</RTPCValue>
 						<RTPCValue>
