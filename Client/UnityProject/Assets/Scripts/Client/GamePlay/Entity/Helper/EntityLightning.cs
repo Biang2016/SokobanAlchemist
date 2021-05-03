@@ -14,6 +14,9 @@ public class EntityLightning : PoolObject
 
     public EntityTriggerZone EntityTriggerZone_Lightning;
 
+    public AK.Wwise.Event OnLightningStart;
+    public AK.Wwise.Event OnLightningStop;
+
     public override void OnRecycled()
     {
         base.OnRecycled();
@@ -40,6 +43,12 @@ public class EntityLightning : PoolObject
         EndPivot = endPivot;
         LightningPS.Play(true);
         LightningLight.gameObject.SetActive(true);
+        OnLightningStart?.Post(gameObject);
+    }
+
+    public void Stop()
+    {
+        OnLightningStop?.Post(gameObject);
     }
 
     private void FixedUpdate()

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BiangLibrary;
 using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -32,8 +33,13 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         OnMergeBox = 1 << 14,
         OnDestroyEntityByElementDamage = 1 << 15,
         OnBeingFueled = 1 << 16,
+
         OnEntityStatValueChange = 1 << 17,
         OnEntityPropertyValueChange = 1 << 18,
+
+        OnFuelEntered = 1 << 19,
+        OnPassGrid = 1 << 20,
+        OnKick = 1 << 21,
     }
 
     [LabelText("触发时机")]
@@ -303,9 +309,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         return true;
     }
 
-    public override void OnBeingLift(Actor actor)
+    public override void OnBeingLift(Entity entity)
     {
-        base.OnBeingLift(actor);
+        base.OnBeingLift(entity);
         if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingLift))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
@@ -319,16 +325,16 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                     if (action is EntitySkillAction.IEntityAction entityAction)
                     {
-                        entityAction.ExecuteOnEntity(actor);
+                        entityAction.ExecuteOnEntity(entity);
                     }
                 }
             }
         }
     }
 
-    public override void OnBeingKicked(Actor actor)
+    public override void OnBeingKicked(Entity entity)
     {
-        base.OnBeingKicked(actor);
+        base.OnBeingKicked(entity);
         if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnBeingKicked))
         {
             if (TriggerProbabilityPercent.ProbabilityBool())
@@ -342,7 +348,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
 
                     if (action is EntitySkillAction.IEntityAction entityAction)
                     {
-                        entityAction.ExecuteOnEntity(actor);
+                        entityAction.ExecuteOnEntity(entity);
                     }
                 }
             }
@@ -648,7 +654,8 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                 int threshold = EntityStatChangeThreshold;
                 if (EntityStatChangeThreshold_UsePercent)
                 {
-                    threshold = Mathf.RoundToInt(EntityStatChangeThresholdPercent / 100f * max);
+                    if (max == 0) threshold = 0;
+                    else threshold = Mathf.RoundToInt(EntityStatChangeThresholdPercent / 100f * max);
                 }
 
                 switch (EntityStatChangeThresholdType)
@@ -729,6 +736,65 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                         {
                             pureAction.Execute();
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    public override void OnFuelEntered(EntityFlamethrowerHelper.FlamethrowerFuelData fuelData)
+    {
+        base.OnFuelEntered(fuelData);
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnFuelEntered))
+        {
+            if (TriggerProbabilityPercent.ProbabilityBool())
+            {
+                foreach (EntitySkillAction action in EntitySkillActions)
+                {
+                    if (action is EntitySkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
+                }
+            }
+        }
+    }
+
+    public override void OnPassGrid(GridPos3D gridGP)
+    {
+        base.OnPassGrid(gridGP);
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnPassGrid))
+        {
+            if (TriggerProbabilityPercent.ProbabilityBool())
+            {
+                foreach (EntitySkillAction action in EntitySkillActions)
+                {
+                    if (action is EntitySkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
+
+                    if (action is EntitySkillAction.IWorldGPAction worldGPAction)
+                    {
+                        worldGPAction.ExecuteOnWorldGP(gridGP);
+                    }
+                }
+            }
+        }
+    }
+
+    public override void OnKick()
+    {
+        base.OnKick();
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnKick))
+        {
+            if (TriggerProbabilityPercent.ProbabilityBool())
+            {
+                foreach (EntitySkillAction action in EntitySkillActions)
+                {
+                    if (action is EntitySkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
                     }
                 }
             }

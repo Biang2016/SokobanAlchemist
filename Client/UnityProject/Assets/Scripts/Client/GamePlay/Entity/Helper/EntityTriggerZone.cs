@@ -23,18 +23,18 @@ public class EntityTriggerZone : MonoBehaviour
     public void OnTriggerEnter(Collider c)
     {
         if (!BattleManager.Instance.IsStart) return;
-        IEntityTriggerZone.OnTriggerZoneEnter(c);
+        IEntityTriggerZone.OnTriggerZoneEnter(c, this);
     }
 
     public void OnTriggerStay(Collider c)
     {
         if (!BattleManager.Instance.IsStart) return;
-        IEntityTriggerZone.OnTriggerZoneStay(c);
+        IEntityTriggerZone.OnTriggerZoneStay(c, this);
     }
 
     public void OnTriggerExit(Collider c)
     {
         if (!BattleManager.Instance.IsStart) return;
-        IEntityTriggerZone.OnTriggerZoneExit(c);
+        IEntityTriggerZone.OnTriggerZoneExit(c, this);
     }
 }

@@ -17,6 +17,8 @@ public class LearnSkillPanel : BaseUIPanel
             UIFormLucencyTypes.Penetrable);
     }
 
+    public Animator Anim;
+
     public Transform EntitySkillRowContainer;
     public Button LearnButton_Passive;
 
@@ -29,68 +31,96 @@ public class LearnSkillPanel : BaseUIPanel
 
     private EntitySkillRow m_EntitySkillRow;
 
-    public void Initialize(string skillGUID, UnityAction learnCallback, bool specifyKeyBind, PlayerControllerHelper.KeyBind keyBind)
+    internal int openStackTimes = 0;
+    private UnityAction current_LearnCallBack;
+    private EntitySkill current_EntitySkill;
+
+    public void Initialize(string skillGUID, UnityAction learnCallback, bool specifyKeyBind, PlayerControllerHelper.KeyBind keyBind, int goldCost)
     {
+        Anim.SetTrigger("Jump");
+
+        openStackTimes++;
+
+        current_LearnCallBack = learnCallback;
+        current_EntitySkill = ConfigManager.GetEntitySkill(skillGUID);
+
         m_EntitySkillRow?.PoolRecycle();
         m_EntitySkillRow = null;
-        EntitySkill rawEntitySkill = ConfigManager.GetRawEntitySkill(skillGUID);
-        if (rawEntitySkill != null)
+
+        if (current_EntitySkill != null)
         {
             m_EntitySkillRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(EntitySkillRowContainer);
-            m_EntitySkillRow.Initialize(rawEntitySkill, specifyKeyBind ? PlayerControllerHelper.KeyMappingStrDict[keyBind] : "");
+            if (current_EntitySkill is EntityPassiveSkill) specifyKeyBind = false;
+            m_EntitySkillRow.Initialize(current_EntitySkill, specifyKeyBind ? PlayerControllerHelper.KeyMappingStrDict[keyBind] : "", goldCost);
+            bool canAfford = BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value >= goldCost;
 
-            if (rawEntitySkill is EntityPassiveSkill rawEPS)
+            if (current_EntitySkill is EntityPassiveSkill EPS)
             {
                 LearnButton_Passive.gameObject.SetActive(true);
                 LearnButtons_Active.SetActive(false);
 
-                LearnButton_Passive.onClick.RemoveAllListeners();
-                LearnButton_Passive.onClick.AddListener(() =>
+                LearnButton_Passive.interactable = canAfford;
+                if (canAfford)
                 {
-                    BattleManager.Instance.Player1.AddNewPassiveSkill((EntityPassiveSkill) rawEPS.Clone());
-                    ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
-                    learnCallback?.Invoke();
-                    CloseUIForm();
-                });
+                    LearnButton_Passive.onClick.RemoveAllListeners();
+                    LearnButton_Passive.onClick.AddListener(() =>
+                    {
+                        BattleManager.Instance.Player1.AddNewPassiveSkill(EPS);
+                        ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
+                        current_LearnCallBack?.Invoke();
+                        CloseUIForm();
+                    });
+                }
             }
-            else if (rawEntitySkill is EntityActiveSkill rawEAS)
+            else if (current_EntitySkill is EntityActiveSkill EAS)
             {
                 if (specifyKeyBind)
                 {
                     LearnButton_Passive.gameObject.SetActive(true);
                     LearnButtons_Active.SetActive(false);
 
-                    LearnButton_Passive.onClick.RemoveAllListeners();
-                    LearnButton_Passive.onClick.AddListener(() => { OnButtonClick(rawEAS, keyBind); });
+                    LearnButton_Passive.interactable = canAfford;
+                    if (canAfford)
+                    {
+                        LearnButton_Passive.onClick.RemoveAllListeners();
+                        LearnButton_Passive.onClick.AddListener(() => { OnButtonClick(EAS, keyBind); });
+                    }
                 }
                 else
                 {
                     LearnButton_Passive.gameObject.SetActive(false);
                     LearnButtons_Active.SetActive(true);
 
-                    LearnButton_H.onClick.RemoveAllListeners();
-                    LearnButton_J.onClick.RemoveAllListeners();
-                    LearnButton_K.onClick.RemoveAllListeners();
-                    LearnButton_L.onClick.RemoveAllListeners();
+                    LearnButton_H.interactable = canAfford;
+                    LearnButton_J.interactable = canAfford;
+                    LearnButton_K.interactable = canAfford;
+                    LearnButton_L.interactable = canAfford;
 
-                    LearnButton_H.onClick.AddListener(() => { OnButtonClick(rawEAS, PlayerControllerHelper.KeyBind.H_LeftTrigger); });
-                    LearnButton_J.onClick.AddListener(() => { OnButtonClick(rawEAS, PlayerControllerHelper.KeyBind.J_RightTrigger); });
-                    LearnButton_K.onClick.AddListener(() => { OnButtonClick(rawEAS, PlayerControllerHelper.KeyBind.K); });
-                    LearnButton_L.onClick.AddListener(() => { OnButtonClick(rawEAS, PlayerControllerHelper.KeyBind.L); });
+                    if (canAfford)
+                    {
+                        LearnButton_H.onClick.RemoveAllListeners();
+                        LearnButton_J.onClick.RemoveAllListeners();
+                        LearnButton_K.onClick.RemoveAllListeners();
+                        LearnButton_L.onClick.RemoveAllListeners();
+
+                        LearnButton_H.onClick.AddListener(() => { OnButtonClick(EAS, PlayerControllerHelper.KeyBind.H_LeftTrigger); });
+                        LearnButton_J.onClick.AddListener(() => { OnButtonClick(EAS, PlayerControllerHelper.KeyBind.J_RightTrigger); });
+                        LearnButton_K.onClick.AddListener(() => { OnButtonClick(EAS, PlayerControllerHelper.KeyBind.K); });
+                        LearnButton_L.onClick.AddListener(() => { OnButtonClick(EAS, PlayerControllerHelper.KeyBind.L); });
+                    }
                 }
             }
         }
 
-        void OnButtonClick(EntityActiveSkill rawEAS, PlayerControllerHelper.KeyBind keyBind)
+        void OnButtonClick(EntityActiveSkill EAS, PlayerControllerHelper.KeyBind keyBind)
         {
-            EntityActiveSkill eas = (EntityActiveSkill) rawEAS.Clone();
-            if (BattleManager.Instance.Player1.AddNewActiveSkill(eas))
+            if (BattleManager.Instance.Player1.AddNewActiveSkill(EAS))
             {
-                BattleManager.Instance.Player1.BindActiveSkillToKey(eas, keyBind, true);
+                BattleManager.Instance.Player1.BindActiveSkillToKey(EAS, keyBind, true);
                 ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
             }
 
-            learnCallback?.Invoke();
+            current_LearnCallBack?.Invoke();
             CloseUIForm();
         }
     }
@@ -103,12 +133,23 @@ public class LearnSkillPanel : BaseUIPanel
 
     public override void Hide()
     {
+        openStackTimes--;
         base.Hide();
-        LearnButton_Passive.onClick.RemoveAllListeners();
-        LearnButton_H.onClick.RemoveAllListeners();
-        LearnButton_J.onClick.RemoveAllListeners();
-        LearnButton_K.onClick.RemoveAllListeners();
-        LearnButton_L.onClick.RemoveAllListeners();
-        UIManager.Instance.UI3DRoot.gameObject.SetActive(true);
+        if (openStackTimes == 0)
+        {
+            LearnButton_Passive.onClick.RemoveAllListeners();
+            LearnButton_H.onClick.RemoveAllListeners();
+            LearnButton_J.onClick.RemoveAllListeners();
+            LearnButton_K.onClick.RemoveAllListeners();
+            LearnButton_L.onClick.RemoveAllListeners();
+            UIManager.Instance.UI3DRoot.gameObject.SetActive(true);
+            current_LearnCallBack = null;
+            current_EntitySkill = null;
+        }
+
+        if (openStackTimes > 0)
+        {
+            UIManager.Instance.ShowUIForms<LearnSkillPanel>();
+        }
     }
 }

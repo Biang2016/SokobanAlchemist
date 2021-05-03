@@ -96,7 +96,8 @@ public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondi
                 int threshold = EntityStatThreshold;
                 if (EntityStatThreshold_UsePercent)
                 {
-                    threshold = Mathf.RoundToInt(EntityStatThresholdPercent / 100f * stat.MaxValue);
+                    if (stat.MaxValue == 0) threshold = 0;
+                    else threshold = Mathf.RoundToInt(EntityStatThresholdPercent / 100f * stat.MaxValue);
                 }
 
                 switch (ThresholdOperator)
@@ -128,17 +129,17 @@ public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondi
                 {
                     case Operator.LessEquals:
                     {
-                        trigger = property.GetModifiedValue <= EntityStatThreshold;
+                        trigger = property.GetModifiedValue <= EntityPropertyThreshold;
                         break;
                     }
                     case Operator.Equals:
                     {
-                        trigger = property.GetModifiedValue == EntityStatThreshold;
+                        trigger = property.GetModifiedValue == EntityPropertyThreshold;
                         break;
                     }
                     case Operator.GreaterEquals:
                     {
-                        trigger = property.GetModifiedValue >= EntityStatThreshold;
+                        trigger = property.GetModifiedValue >= EntityPropertyThreshold;
                         break;
                     }
                 }

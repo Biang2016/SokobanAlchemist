@@ -22,11 +22,21 @@ MonoBehaviour:
         InitWorldModuleGUID: 0
         SkillGUID: (3cec238b-0773-46ae-be2e-37f682a8847f)
         SkillAlias: "\u6728\u7BB1\u5B50\u8F6C\u706B\u7BB1\u5B50"
+        SkillName_EN: Fire Maker
+        SkillName_ZH: "\u706B\u672F"
         SkillIcon:
           TypeDefineType: 12
-          TypeGUID: (f420d9e9-f324-49fc-a7c2-4185f6ada25e)
-        SkillDescription: Spend 10 fire element, change the wooden box in front of
-          you into a fire box.
+          TypeGUID: (f77a57f2-b089-4e08-bfe7-70221aadfed9)
+        SkillDescription_EN: Turn a wooden box into fire box.
+        SkillDescription_ZH: "\u5C06\u9762\u524D\u7684\u6728\u7BB1\u5B50\u53D8\u6210\u706B\u7BB1\u5B50"
+        PlayerCanLearn: 1
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 1
+        SkillCategoryType: 1
+        SkillRankType: 1
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: (32c00ccc-4a08-4074-8b06-f2bd01f3ab8c)
         TargetCamp: 8
         SkillsPropertyCollection:
           CastingRadius:
@@ -40,7 +50,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 1000000
           WingUp:
-            BaseValue: 300
+            BaseValue: 0
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 0
@@ -118,6 +128,14 @@ MonoBehaviour:
       data:
         InitWorldModuleGUID: 0
         EntityData:
+          WorldGP:
+            x: 0
+            y: 0
+            z: 0
+          LocalGP:
+            x: 0
+            y: 0
+            z: 0
           EntityType:
             TypeDefineType: 0
             TypeGUID: (65e613ca-1b8c-4002-84d1-0c49ea3b0903)
@@ -133,10 +151,21 @@ MonoBehaviour:
         InitWorldModuleGUID: 0
         SkillGUID: 
         SkillAlias: 
+        SkillName_EN: 
+        SkillName_ZH: 
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: 
-        SkillDescription: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
         PassiveSkillCondition: 1
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 

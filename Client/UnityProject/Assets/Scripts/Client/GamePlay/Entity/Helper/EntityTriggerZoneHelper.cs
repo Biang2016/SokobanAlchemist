@@ -37,7 +37,7 @@ public class EntityTriggerZoneHelper : EntityMonoHelper, IEntityTriggerZoneHelpe
         SetActive(false);
     }
 
-    public void OnTriggerZoneEnter(Collider c)
+    public void OnTriggerZoneEnter(Collider c, EntityTriggerZone entityTriggerZone)
     {
         foreach (EntityPassiveSkill ps in Entity.EntityPassiveSkills)
         {
@@ -45,7 +45,7 @@ public class EntityTriggerZoneHelper : EntityMonoHelper, IEntityTriggerZoneHelpe
         }
     }
 
-    public void OnTriggerZoneStay(Collider c)
+    public void OnTriggerZoneStay(Collider c, EntityTriggerZone entityTriggerZone)
     {
         foreach (EntityPassiveSkill ps in Entity.EntityPassiveSkills)
         {
@@ -53,7 +53,7 @@ public class EntityTriggerZoneHelper : EntityMonoHelper, IEntityTriggerZoneHelpe
         }
     }
 
-    public void OnTriggerZoneExit(Collider c)
+    public void OnTriggerZoneExit(Collider c, EntityTriggerZone entityTriggerZone)
     {
         foreach (EntityPassiveSkill ps in Entity.EntityPassiveSkills)
         {

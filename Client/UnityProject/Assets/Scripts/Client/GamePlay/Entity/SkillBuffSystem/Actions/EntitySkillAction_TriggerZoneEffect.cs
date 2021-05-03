@@ -61,15 +61,14 @@ public class EntitySkillAction_TriggerZoneEffect : EntitySkillAction, EntitySkil
                     ActorStayTimeDict.Add(target.GUID, 0);
                     foreach (EntityBuff buff in RawEntityBuffs_Enter)
                     {
-                        EntityBuff newBuff = buff.Clone();
-                        if (target.EntityBuffHelper.AddBuff(newBuff) && RemoveEnterBuffWhenExit)
+                        if (target.EntityBuffHelper.AddBuff(buff, out EntityBuff cloneNewBuff) && RemoveEnterBuffWhenExit)
                         {
                             if (!EntityBuffs_Enter.ContainsKey(target.GUID))
                             {
                                 EntityBuffs_Enter.Add(target.GUID, new List<EntityBuff>());
                             }
 
-                            EntityBuffs_Enter[target.GUID].Add(newBuff);
+                            EntityBuffs_Enter[target.GUID].Add(cloneNewBuff);
                         }
                     }
                 }
@@ -90,15 +89,14 @@ public class EntitySkillAction_TriggerZoneEffect : EntitySkillAction, EntitySkil
                     {
                         foreach (EntityBuff buff in RawEntityBuffs_Stay)
                         {
-                            EntityBuff newBuff = buff.Clone();
-                            if (target.EntityBuffHelper.AddBuff(newBuff) && RemoveStayBuffWhenExit)
+                            if (target.EntityBuffHelper.AddBuff(buff, out EntityBuff cloneNewBuff) && RemoveStayBuffWhenExit)
                             {
                                 if (!EntityBuffs_Stay.ContainsKey(target.GUID))
                                 {
                                     EntityBuffs_Stay.Add(target.GUID, new List<EntityBuff>());
                                 }
 
-                                EntityBuffs_Stay[target.GUID].Add(newBuff);
+                                EntityBuffs_Stay[target.GUID].Add(cloneNewBuff);
                             }
                         }
 
@@ -125,7 +123,7 @@ public class EntitySkillAction_TriggerZoneEffect : EntitySkillAction, EntitySkil
                     ActorStayTimeDict.Remove(target.GUID);
                     foreach (EntityBuff buff in RawEntityBuffs_Exit)
                     {
-                        target.EntityBuffHelper.AddBuff(buff.Clone());
+                        target.EntityBuffHelper.AddBuff(buff, out EntityBuff _);
                     }
 
                     if (RemoveEnterBuffWhenExit && EntityBuffs_Enter.TryGetValue(target.GUID, out List<EntityBuff> enterBuffs))

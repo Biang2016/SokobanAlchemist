@@ -19,26 +19,26 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
             if (collision.gameObject.layer == LayerManager.Instance.Layer_Enemy)
             {
                 Actor actor = collision.gameObject.GetComponentInParent<Actor>();
-                actor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
-                Box.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.FrozenBeCollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
+                actor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractEntity);
+                Box.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.FrozenBeCollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractEntity);
             }
             else if (collision.gameObject.layer == LayerManager.Instance.Layer_Box || collision.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
             {
                 Box targetBox = collision.gameObject.GetComponentInParent<Box>();
                 if (targetBox.FrozenActor.IsNotNullAndAlive())
                 {
-                    targetBox.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
-                    Box.FrozenActor.EntityBuffHelper.Damage(targetBox.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
+                    targetBox.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractEntity);
+                    Box.FrozenActor.EntityBuffHelper.Damage(targetBox.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractEntity);
                 }
                 else
                 {
-                    Box.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.FrozenBeCollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
+                    Box.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.FrozenBeCollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractEntity);
                 }
             }
             else if (collision.gameObject.layer == LayerManager.Instance.Layer_Wall ||
                      collision.gameObject.layer == LayerManager.Instance.Layer_Ground)
             {
-                Box.FrozenActor.EntityBuffHelper.Damage(1, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
+                Box.FrozenActor.EntityBuffHelper.Damage(1, EntityBuffAttribute.CollideDamage, Box.LastInteractEntity);
             }
 
             if (Box.FrozenActor.IsNotNullAndAlive())

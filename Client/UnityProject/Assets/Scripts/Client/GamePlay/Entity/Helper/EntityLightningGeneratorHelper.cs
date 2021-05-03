@@ -24,6 +24,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
         base.OnHelperRecycled();
         foreach (EntityLightning lightning in EntityLightnings)
         {
+            lightning.Stop();
             lightning.PoolRecycle();
         }
 
@@ -77,10 +78,11 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
                     }
                 }
 
-                foreach (EntityLightning generator in cached_removeLightnings)
+                foreach (EntityLightning lightning in cached_removeLightnings)
                 {
-                    EntityLightnings.Remove(generator);
-                    generator.PoolRecycle();
+                    EntityLightnings.Remove(lightning);
+                    lightning.Stop();
+                    lightning.PoolRecycle();
                 }
 
                 // 寻找新的连接
@@ -124,22 +126,23 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
             else
             {
                 cached_removeLightnings.Clear();
-                foreach (EntityLightning generator in EntityLightnings)
+                foreach (EntityLightning lightning in EntityLightnings)
                 {
-                    cached_removeLightnings.Add(generator);
+                    cached_removeLightnings.Add(lightning);
                 }
 
-                foreach (EntityLightning generator in cached_removeLightnings)
+                foreach (EntityLightning lightning in cached_removeLightnings)
                 {
-                    EntityLightnings.Remove(generator);
-                    generator.PoolRecycle();
+                    EntityLightnings.Remove(lightning);
+                    lightning.Stop();
+                    lightning.PoolRecycle();
                 }
             }
         }
     }
 
     // todo 此处有风险，两个Trigger进出次序如果很极限的话，有可能exit不触发就换技能了
-    public void OnTriggerZoneEnter(Collider c)
+    public void OnTriggerZoneEnter(Collider c, EntityTriggerZone entityTriggerZone)
     {
         if (Entity.IsNotNullAndAlive())
         {
@@ -147,7 +150,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
         }
     }
 
-    public void OnTriggerZoneStay(Collider c)
+    public void OnTriggerZoneStay(Collider c, EntityTriggerZone entityTriggerZone)
     {
         if (Entity.IsNotNullAndAlive())
         {
@@ -155,7 +158,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
         }
     }
 
-    public void OnTriggerZoneExit(Collider c)
+    public void OnTriggerZoneExit(Collider c, EntityTriggerZone entityTriggerZone)
     {
         if (Entity.IsNotNullAndAlive())
         {

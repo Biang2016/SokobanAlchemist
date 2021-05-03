@@ -8,6 +8,7 @@ using BiangLibrary.Singleton;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using Object = UnityEngine.Object;
@@ -347,6 +348,22 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         EditorUtility.DisplayDialog("Notice", "Quick Serialize Types Success", "Confirm");
     }
 
+    [MenuItem("开发工具/配置/快速导出技能")]
+    public static void QuickExportConfigs_Skills()
+    {
+        if (Directory.Exists(TypeNamesConfigFolder_Build)) Directory.Delete(TypeNamesConfigFolder_Build, true);
+        Directory.CreateDirectory(TypeNamesConfigFolder_Build);
+
+        // 时序，先导出类型表
+        ExportTypeGUIDMapping();
+        ExportEntitySkillLibrary(DataFormat.Binary);
+
+        AssetDatabase.Refresh();
+        IsLoaded = false;
+        LoadAllConfigs();
+        EditorUtility.DisplayDialog("Notice", "Quick Serialize Skill Success", "Confirm");
+    }
+
     //[MenuItem("开发工具/配置/快速序列化类型")]
     //public static void QuickExportConfigs_TypeDefines()
     //{
@@ -662,7 +679,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 {
                     actor.EntityIndicatorHelper.RefreshEntityIndicatorOccupationData();
                     EditorUtility.SetDirty(actorPrefab);
-                    EntityOccupationData occupationData = actor.ActorIndicatorHelper.EntityOccupationData.Clone();
+                    EntityOccupationData occupationData = actor.EntityIndicatorHelper.EntityOccupationData.Clone();
                     ushort entityTypeIndex = TypeDefineConfigs[TypeDefineType.Actor].TypeIndexDict[actor.name];
                     if (entityTypeIndex != 0)
                     {
@@ -1196,6 +1213,23 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         }
     }
 
+    private static List<EntitySkill> cached_GetRawEntitySkillByFilterList = new List<EntitySkill>(16);
+
+    public static EntitySkill GetRawEntitySkillByFilter(SkillCategoryType category, SkillRankType rank, bool playerCanLearn)
+    {
+        cached_GetRawEntitySkillByFilterList.Clear();
+        foreach (KeyValuePair<string, EntitySkill> kv in EntitySkillLibrary)
+        {
+            if (kv.Value.PlayerCanLearn == playerCanLearn && kv.Value.SkillCategoryType.HasFlag(category) && kv.Value.SkillRankType.HasFlag(rank))
+            {
+                cached_GetRawEntitySkillByFilterList.Add(kv.Value);
+            }
+        }
+
+        EntitySkill entitySkill = CommonUtils.GetRandomFromList(cached_GetRawEntitySkillByFilterList);
+        return entitySkill;
+    }
+
     public static EntityOccupationData GetEntityOccupationData(ushort entityTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
@@ -1253,6 +1287,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 #if UNITY_EDITOR
     public static GameObject FindActorPrefabByName(string actorName)
     {
+        if (actorName.IsNullOrWhitespace()) return null;
         TypeDefineConfigs[TypeDefineType.Actor].ExportTypeNames(); // todo 判断是否要删掉此行
         GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(TypeDefineConfigs[TypeDefineType.Actor].GetTypeAssetDataBasePath(actorName));
         return prefab;
@@ -1260,6 +1295,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
     public static GameObject FindBoxPrefabByName(string boxName)
     {
+        if (boxName.IsNullOrWhitespace()) return null;
         TypeDefineConfigs[TypeDefineType.Box].ExportTypeNames(); // todo 判断是否要删掉此行
         GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(TypeDefineConfigs[TypeDefineType.Box].GetTypeAssetDataBasePath(boxName));
         return prefab;

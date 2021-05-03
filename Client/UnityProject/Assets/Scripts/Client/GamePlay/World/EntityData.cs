@@ -10,6 +10,9 @@ using Sirenix.OdinInspector;
 [Serializable]
 public class EntityData : IClone<EntityData>
 {
+    public GridPos3D WorldGP;
+    public GridPos3D LocalGP;
+
     public override string ToString()
     {
         return EntityType.ToString();
@@ -102,6 +105,8 @@ public class EntityData : IClone<EntityData>
     public EntityData Clone()
     {
         EntityData newEntityData = new EntityData(EntityTypeIndex, EntityOrientation, RawEntityExtraSerializeData?.Clone());
+        newEntityData.WorldGP = WorldGP;
+        newEntityData.LocalGP = LocalGP;
         return newEntityData;
     }
 }

@@ -12,6 +12,8 @@ public class WorldNameWithProbability : Probability, IClone<WorldNameWithProbabi
     [HideLabel]
     public TypeSelectHelper WorldTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
 
+    public int GoldCost = 0;
+
     [SerializeField]
     private int probability;
 
@@ -34,6 +36,7 @@ public class WorldNameWithProbability : Probability, IClone<WorldNameWithProbabi
     {
         WorldNameWithProbability newData = new WorldNameWithProbability();
         newData.WorldTypeName = WorldTypeName.Clone();
+        newData.GoldCost = GoldCost;
         newData.probability = probability;
         newData.isSingleton = isSingleton;
         return newData;
@@ -47,6 +50,7 @@ public class WorldNameWithProbability : Probability, IClone<WorldNameWithProbabi
     public void CopyDataFrom(WorldNameWithProbability src)
     {
         WorldTypeName.CopyDataFrom(src.WorldTypeName);
+        GoldCost = src.GoldCost;
         probability = src.probability;
         isSingleton = src.isSingleton;
     }

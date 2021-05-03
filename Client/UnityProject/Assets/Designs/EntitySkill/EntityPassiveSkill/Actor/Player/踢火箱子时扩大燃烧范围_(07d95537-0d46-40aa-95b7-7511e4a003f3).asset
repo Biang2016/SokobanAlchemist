@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u8E22\u706B\u7BB1\u5B50\u65F6\u6269\u5927\u71C3\u70E7\u8303\u56F4_(07d95537-0d46-40aa-95b7-7511e4a003f3)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        SkillGUID: (07d95537-0d46-40aa-95b7-7511e4a003f3)
+        SkillAlias: "\u8E22\u706B\u7BB1\u5B50\u65F6\u6269\u5927\u71C3\u70E7\u8303\u56F4"
+        SkillName_EN: Fire Explode
+        SkillName_ZH: "\u9A71\u706B"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: (091061ef-7c48-4664-b762-8b794d17ceaa)
+        SkillDescription_EN: Enhance the fire box's power and range when it's kicked.
+          Spend 10 fire element
+        SkillDescription_ZH: "\u589E\u5F3A\u8E22\u51FA\u7684\u706B\u7BB1\u5B50\u7684\u5A01\u529B\u548C\u8303\u56F4\uFF0C\u6D88\u801710\u70B9\u706B\u5143\u7D20"
+        PlayerCanLearn: 1
+        OccupySkillGrid: 1
+        ShowInSkillPreviewPanel: 1
+        SkillCategoryType: 1
+        SkillRankType: 2
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: (32c00ccc-4a08-4074-8b06-f2bd01f3ab8c)
+        PassiveSkillCondition: 2097152
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
+        RawEntitySkillActions:
+        - id: 1
+    00000001:
+      type: {class: EntitySkillAction_ExecuteActiveSkill, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        TargetEntityType: 4
+        EntitySkillSO: {fileID: 11400000, guid: d7cafbe2f27f143429f72fa9c4640c8d,
+          type: 2}
+        SkillGUID: (821b4f41-99bb-4da7-8107-f4f7f7ba8ca3)

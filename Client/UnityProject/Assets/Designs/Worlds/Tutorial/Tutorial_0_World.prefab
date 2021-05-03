@@ -89,8 +89,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WorldFeature: 0
+  WorldName_EN: Tutorial
+  WorldName_ZH: "\u65B0\u624B\u6559\u7A0B"
+  WorldDescription_EN: The tutorial would teach you the basic controls and mechanics.
+  WorldDescription_ZH: "\u9010\u6B65\u6559\u4F1A\u73A9\u5BB6\u57FA\u672C\u7684\u64CD\u4F5C\u548C\u6E38\u620F\u673A\u5236\uFF0C\u4EE5\u53CA\u6218\u6597\u7684\u4E00\u4E9B\u5C0F\u6280\u5DE7"
+  WorldIcon:
+    TypeDefineType: 12
+    TypeGUID: (7a45a8ca-8424-4199-bfd8-cb6f7fbb132b)
   DefaultWorldActorBornPointAlias: Tutorial_0_1
-  UseSpecialPlayerEnterESPS: 0
+  UseSpecialPlayerEnterESPS: 1
   Raw_PlayerEnterESPS:
     CollectDetectRadius:
       BaseValue: 3
@@ -100,55 +107,55 @@ MonoBehaviour:
     Gold:
       _value: 0
       _minValue: 0
-      _maxValue: 99999
+      _maxValue: 0
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     FireElementFragment:
       _value: 0
       _minValue: 0
-      _maxValue: 50
+      _maxValue: 0
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     MaxFireElementFragment:
-      BaseValue: 50
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 50
+      MaxValue: 1000
     IceElementFragment:
       _value: 0
       _minValue: 0
-      _maxValue: 40
+      _maxValue: 0
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     MaxIceElementFragment:
-      BaseValue: 40
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 40
+      MaxValue: 1000
     LightningElementFragment:
       _value: 0
       _minValue: 0
-      _maxValue: 30
+      _maxValue: 0
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     MaxLightningElementFragment:
-      BaseValue: 30
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
-      MaxValue: 30
+      MaxValue: 1000
     HealthDurability:
-      _value: 100
+      _value: 10
       _minValue: 0
-      _maxValue: 100
+      _maxValue: 10
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
     MaxHealthDurability:
-      BaseValue: 100
+      BaseValue: 10
       ModifiedValue: 0
       MinValue: 1
       MaxValue: 10000
@@ -324,13 +331,10 @@ MonoBehaviour:
       AutoChangePercent: 0
       AutoChangeTimeInterval: 1000
     ActionPointRecovery:
-      BaseValue: 100
+      BaseValue: 0
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
-  UseSpecialPlayerEnterSkillSet: 0
-  Raw_PlayerEnterActiveSkillSOs: []
-  Raw_PlayerEnterPassiveSkillSOs: []
   CameraConfigData:
     HorAngle: 0
     VerAngle: 60

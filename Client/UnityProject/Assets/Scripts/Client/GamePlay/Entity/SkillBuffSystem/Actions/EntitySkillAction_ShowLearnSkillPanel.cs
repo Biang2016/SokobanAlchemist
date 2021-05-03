@@ -58,14 +58,18 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
     [LabelText("技能GUID")]
     public string SkillGUID = "";
 
+    [LabelText("价格")]
+    public int GoldCost = 0;
+
     public void Execute()
     {
         LearnSkillPanel learnSkillPanel = UIManager.Instance.ShowUIForms<LearnSkillPanel>();
-        learnSkillPanel.Initialize(SkillGUID, OnLearned, SpecifyKeyBind, KeyBind);
+        learnSkillPanel.Initialize(SkillGUID, OnLearned, SpecifyKeyBind, KeyBind, GoldCost);
     }
 
     private void OnLearned()
     {
+        BattleManager.Instance.Player1.EntityStatPropSet.Gold.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value - GoldCost);
         Entity.DestroySelf();
     }
 
@@ -76,6 +80,7 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
         action.SkillGUID = SkillGUID;
         action.SpecifyKeyBind = SpecifyKeyBind;
         action.KeyBind = KeyBind;
+        action.GoldCost = GoldCost;
     }
 
     public override void CopyDataFrom(EntitySkillAction srcData)
@@ -85,5 +90,6 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
         SkillGUID = action.SkillGUID;
         SpecifyKeyBind = action.SpecifyKeyBind;
         KeyBind = action.KeyBind;
+        GoldCost = action.GoldCost;
     }
 }

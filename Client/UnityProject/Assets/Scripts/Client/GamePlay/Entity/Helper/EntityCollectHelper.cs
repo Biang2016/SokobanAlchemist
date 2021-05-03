@@ -60,6 +60,19 @@ public class EntityCollectHelper : EntityMonoHelper
         CollectableItem ci = trigger.gameObject.GetComponentInParent<CollectableItem>();
         if (ci != null)
         {
+            foreach (EntitySkillCondition_State condition in ci.EntitySkillConditions_ToCollect)
+            {
+                condition.OnInit(Entity);
+                condition.OnTick(0.1f);
+                if (!condition.OnCheckCondition())
+                {
+                    condition.OnUnInit();
+                    return;
+                }
+
+                condition.OnUnInit();
+            }
+
             ci.SetChasingTarget(Entity.transform, () =>
             {
                 EntitySkillAction action = ci.EntitySkillAction_OnCollect?.Clone();

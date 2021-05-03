@@ -19,27 +19,40 @@ MonoBehaviour:
     00000000:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (39588380-ce85-4d51-8c7b-77b20116ca48)
         SkillAlias: "\u706B\u7130\u514D\u75AB"
+        SkillName_EN: Fire Immune
+        SkillName_ZH: "\u706B\u7130\u514D\u75AB"
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: (324fd9c4-6736-40be-a21e-b426b6fd79f1)
-        SkillDescription: Immune to fire damage and effects.
-        IsAddedDuringGamePlay: 0
-        InitWorldModuleGUID: 0
+        SkillDescription_EN: Immune to any fire effect and damage
+        SkillDescription_ZH: "\u514D\u75AB\u6240\u6709\u71C3\u70E7\u6548\u679C\u548C\u4F24\u5BB3"
+        PlayerCanLearn: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 1
+        SkillCategoryType: 1
+        SkillRankType: 64
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
         PassiveSkillCondition: 1
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
-        EntityStatChangeType: 0
-        EntityStatChangeThreshold: 0
-        EntityStatChangeThresholdOperator: 0
-        EntityPropertyChangeType: 0
-        EntityPropertyChangeThreshold: 0
-        EntityPropertyChangeThresholdOperator: 0
         MultiEventTrigger: 0
         ListenLevelEventAliasList: []
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
         RawEntitySkillActions:
         - id: 1
     00000001:

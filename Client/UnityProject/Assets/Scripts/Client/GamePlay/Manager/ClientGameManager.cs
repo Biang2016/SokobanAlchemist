@@ -11,6 +11,9 @@ using UnityEngine.SceneManagement;
 
 public class ClientGameManager : MonoSingleton<ClientGameManager>
 {
+    public float dropSpeed = 8f;
+    public float dropSkillScrollSpeed = 8f;
+
     public Material BoxMarchingSquareTerrainMat;
     public BoxMarchingTextureConfigMatrix BoxMarchingTextureConfigMatrix;
 
@@ -184,6 +187,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         IsGameLoading = true;
         NoticePanel = UIManager.Instance.ShowUIForms<NoticePanel>();
         LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
+
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetBackgroundAlpha(0f);
         LoadingMapPanel.SetProgress(0, "Start Loading");
@@ -269,18 +273,29 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 #endif
         if (Input.GetKeyUp(KeyCode.B))
         {
-            if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+            if (!UIManager.IsUIShown<ConfirmPanel>())
             {
-                if (openWorld.IsInsideDungeon)
+                if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
                 {
-                    openWorld.ReturnToOpenWorld();
+                    if (openWorld.IsInsideDungeon)
+                    {
+                        ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
+                        confirmPanel.Initialize("Wanna give up the dungeon? You'll lose the rewards that you've got", "Let me go", "Cancel",
+                            () =>
+                            {
+                                openWorld.ReturnToOpenWorld();
+                                confirmPanel.CloseUIForm();
+                            },
+                            () => { confirmPanel.CloseUIForm(); }
+                        );
+                        return;
+                    }
+                }
+                else
+                {
+                    SwitchWorld_ReloadGame(ConfigManager.GetTypeName(TypeDefineType.World, ConfigManager.World_OpenWorldIndex));
                     return;
                 }
-            }
-            else
-            {
-                SwitchWorld(ConfigManager.GetTypeName(TypeDefineType.World, ConfigManager.World_OpenWorldIndex));
-                return;
             }
         }
 
@@ -338,18 +353,29 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         ControlManager.FixedUpdate(Time.fixedDeltaTime);
         if (ControlManager.Common_RestartGame.Up && !IsGameLoading)
         {
-            if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+            if (!UIManager.IsUIShown<ConfirmPanel>())
             {
-                if (openWorld.IsInsideDungeon)
+                if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
                 {
-                    openWorld.RestartDungeon();
+                    if (openWorld.IsInsideDungeon)
+                    {
+                        ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
+                        confirmPanel.Initialize("Wanna restart the dungeon? You'll lose the rewards that you've got", "Restart", "Cancel",
+                            () =>
+                            {
+                                openWorld.RestartDungeon();
+                                confirmPanel.CloseUIForm();
+                            },
+                            () => { confirmPanel.CloseUIForm(); }
+                        );
+                        return;
+                    }
+                }
+                else
+                {
+                    StartCoroutine(ReloadGame());
                     return;
                 }
-            }
-            else
-            {
-                StartCoroutine(ReloadGame());
-                return;
             }
         }
 
@@ -389,10 +415,31 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         FXManager.FixedUpdate(Time.fixedDeltaTime);
     }
 
-    public void SwitchWorld(string worldName)
+    public void SwitchWorld_ReloadGame(string worldName)
     {
         DebugChangeWorldName = worldName;
         StartCoroutine(ReloadGame());
+    }
+
+    public void ChangeWorld(string worldName, bool dungeonComplete)
+    {
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            ushort worldNameIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, worldName);
+            if (worldNameIndex == ConfigManager.World_OpenWorldIndex)
+            {
+                openWorld.DungeonMissionComplete = dungeonComplete;
+                openWorld.ReturnToOpenWorld();
+            }
+            else
+            {
+                openWorld.TransportPlayerToDungeon(worldNameIndex);
+            }
+        }
+        else
+        {
+            SwitchWorld_ReloadGame(worldName);
+        }
     }
 
     public IEnumerator ReloadGame()

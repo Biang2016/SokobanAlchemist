@@ -56,6 +56,11 @@ public class WwiseBGMConfiguration : MonoBehaviour
     {
         if (BGMThemeConfigDict.TryGetValue(bgmTheme, out State state))
         {
+            if (CurrentBGMTheme != bgmTheme)
+            {
+                Debug.Log($"BGM switch to {bgmTheme}");
+            }
+
             CurrentBGMTheme = bgmTheme;
             state.SetValue();
         }

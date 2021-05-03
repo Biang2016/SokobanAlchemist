@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "SkillScrollBoxCommon-\u6280\u80FD\u5377\u8F74\u6280\u80FD\u5BB9\u5668_(823e7f9f-0ef3-452b-abab-c91fd5d9d5b9)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        SkillGUID: (823e7f9f-0ef3-452b-abab-c91fd5d9d5b9)
+        SkillAlias: "SkillScrollBoxCommon-\u6280\u80FD\u5377\u8F74\u6280\u80FD\u5BB9\u5668"
+        SkillName_EN: 
+        SkillName_ZH: 
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
+        PassiveSkillCondition: 128
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
+        RawEntitySkillActions:
+        - id: 1
+    00000001:
+      type: {class: EntitySkillAction_TriggerZoneAction, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        EffectiveOnRelativeCamp: 1
+        EffectiveOnSpecificEntity: 1
+        EffectiveOnSpecificEntityType:
+          TypeDefineType: 2
+          TypeGUID: (9f9579ea-527a-4374-adfe-d4afb0271acd)
+        EntityActions_Enter:
+        - id: 2
+        EntityActions_Stay: []
+        MaxTriggerTimeWhenStay: 999999
+        EffectiveWhenInteractiveKeyDown: 0
+        InteractiveKeyNotice: 
+        TipPositionType: 5
+        InteractiveKeyNoticeDuration: 0.5
+        ActionInterval: 0.1
+        EntityActions_Exit:
+        - id: 3
+    00000002:
+      type: {class: EntitySkillAction_ShowLearnSkillPanel, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        EntitySkillSO: {fileID: 0}
+        SpecifyKeyBind: 0
+        KeyBind: 0
+        SkillGUID: 
+    00000003:
+      type: {class: EntitySkillAction_UI, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        UIName: LearnSkillPanel
+        Open: 0

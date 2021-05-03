@@ -8,7 +8,7 @@ using UnityEngine;
 [Serializable]
 public class BoxNameWithProbability : Probability, IClone<BoxNameWithProbability>
 {
-    public string Description => $"{BoxTypeName}";
+    public string Description => $"{BoxTypeName} * {Probability}";
 
     [HideLabel]
     public TypeSelectHelper BoxTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.Box};

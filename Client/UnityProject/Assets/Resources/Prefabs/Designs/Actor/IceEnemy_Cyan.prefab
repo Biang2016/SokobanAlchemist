@@ -464,7 +464,7 @@ PrefabInstance:
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityPassiveSkillSOs.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -509,13 +509,13 @@ PrefabInstance:
         type: 3}
       propertyPath: RawEntityPassiveSkillSOs.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 5622cd1f475b4204ab4a66d7e1f41c5b,
+      objectReference: {fileID: 11400000, guid: c6ded4f9681147d429b8b34493e5106f,
         type: 2}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityPassiveSkillSOs.Array.data[3]
       value: 
-      objectReference: {fileID: 11400000, guid: fdb94959758af9540bf03c2fc3a5aa1e,
+      objectReference: {fileID: 11400000, guid: 5622cd1f475b4204ab4a66d7e1f41c5b,
         type: 2}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -1108,12 +1108,14 @@ PrefabInstance:
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IdleInterval":{"_value":3.0,"_name":"IdleInterval","_id":"53bcc14c-263a-4c8c-baf9-6f41f5e9874a","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"MySkillIndices":{"_value":[0],"_name":"MySkillIndices","_id":"cbcd6613-0626-46d3-9c0e-871fa53800b3","$type":"NodeCanvas.Framework.Variable`1[[System.Collections.Generic.List`1[[EntitySkillIndex,
         Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib,
-        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"_Out_HasValidSkill":{"_name":"_Out_HasValidSkill","_id":"2ea7e543-b595-4c1d-9d53-705159308d98","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"_Out_ValidSkillIndex":{"_name":"_Out_ValidSkillIndex","_id":"794daee7-a79b-4697-a54d-7c9ce4ff03c9","$type":"NodeCanvas.Framework.Variable`1[[EntitySkillIndex,
+        Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}}}'
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.size
-      value: 9
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -1169,6 +1171,18 @@ PrefabInstance:
       value: '{"_value":[0],"_name":"MySkillIndices","_id":"cbcd6613-0626-46d3-9c0e-871fa53800b3","$type":"NodeCanvas.Framework.Variable`1[[System.Collections.Generic.List`1[[EntitySkillIndex,
         Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib,
         Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: _serializedVariables.Array.data[9]._json
+      value: '{"_name":"_Out_HasValidSkill","_id":"2ea7e543-b595-4c1d-9d53-705159308d98","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: _serializedVariables.Array.data[10]._json
+      value: '{"_name":"_Out_ValidSkillIndex","_id":"794daee7-a79b-4697-a54d-7c9ce4ff03c9","$type":"NodeCanvas.Framework.Variable`1[[EntitySkillIndex,
+        Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ca8def23062cf242bafa7e081952811, type: 3}

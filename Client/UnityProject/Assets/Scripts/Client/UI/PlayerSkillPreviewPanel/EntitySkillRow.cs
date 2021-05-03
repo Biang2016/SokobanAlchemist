@@ -9,17 +9,26 @@ public class EntitySkillRow : PoolObject
     private Image SkillIcon;
 
     [SerializeField]
+    private Text SkillName;
+
+    [SerializeField]
     private Text SkillKeyBind;
 
     [SerializeField]
     private Text SkillDescription;
 
-    public void Initialize(EntitySkill entitySkill, string keyBind)
+    [SerializeField]
+    private Text SkillCost;
+
+    public void Initialize(EntitySkill entitySkill, string keyBind, int goldCost)
     {
         Sprite sprite = ConfigManager.GetEntitySkillIconByName(entitySkill.SkillIcon.TypeName);
         SkillIcon.sprite = sprite;
-        SkillDescription.text = entitySkill.SkillDescription;
+        SkillDescription.text = entitySkill.GetSkillDescription_EN;
+        SkillName.text = entitySkill.SkillName_EN;
         SkillKeyBind.gameObject.SetActive(!string.IsNullOrWhiteSpace(keyBind));
         SkillKeyBind.text = keyBind;
+        SkillCost.gameObject.SetActive(goldCost > 0);
+        if (goldCost > 0) SkillCost.text = $"Cost: {goldCost} Gold";
     }
 }

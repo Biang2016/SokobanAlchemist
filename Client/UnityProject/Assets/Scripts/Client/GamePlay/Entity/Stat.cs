@@ -164,6 +164,15 @@ public abstract class Stat
         }
     }
 
+    public void ChangeStat(int minValue, int maxValue, int abnormalStatResistance, int autoChange, int autoChangePercent)
+    {
+        MinValue = minValue;
+        MaxValue = maxValue;
+        AbnormalStatResistance = abnormalStatResistance;
+        AutoChange = autoChange;
+        AutoChangePercent = autoChangePercent;
+    }
+
     #region 自动恢复及增长
 
     [SerializeField]

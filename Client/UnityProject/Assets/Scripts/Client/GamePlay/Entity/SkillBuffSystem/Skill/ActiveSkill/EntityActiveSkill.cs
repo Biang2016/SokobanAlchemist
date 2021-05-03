@@ -11,6 +11,9 @@ using UnityEngine.Events;
 [Serializable]
 public abstract class EntityActiveSkill : EntitySkill
 {
+    public override string GetSkillDescription_EN => base.GetSkillDescription_EN + $" CD: {(SkillsPropertyCollection.Cooldown.GetModifiedValue / 1000f):F1}s";
+    public override string GetSkillDescription_ZH => base.GetSkillDescription_ZH + $" CD: {(SkillsPropertyCollection.Cooldown.GetModifiedValue / 1000f):F1}s";
+
     internal EntityActiveSkill ParentActiveSkill;
 
     [LabelText("作用阵营")]
@@ -415,13 +418,14 @@ public abstract class EntityActiveSkill : EntitySkill
     {
         currentExecutingCooldownTime = cooldownTime;
         PrepareSkillInfo(targetEntityType);
-        yield return WingUp(wingUpTime);
+        ConsumeResources();
+        if (wingUpTime > 0) yield return WingUp(wingUpTime);
         OnWingUpPhaseComplete();
         OnWingUpPhaseCompleteCallback?.Invoke();
         yield return Cast(targetEntityType, castDuration);
         OnCastPhaseComplete();
         OnCastPhaseCompleteCallback?.Invoke();
-        yield return Recover(recoveryTime);
+        if (recoveryTime > 0) yield return Recover(recoveryTime);
         OnRecoveryPhaseComplete();
         OnRecoveryPhaseCompleteCallback?.Invoke();
         SkillPhase = ActiveSkillPhase.CoolingDown;
@@ -443,15 +447,18 @@ public abstract class EntityActiveSkill : EntitySkill
         }
     }
 
-    internal UnityAction<ActiveSkillPhase, float, float> OnSkillWingingUp;
-
-    protected virtual IEnumerator WingUp(float wingUpTime)
+    protected virtual void ConsumeResources()
     {
         Entity.EntityStatPropSet.StatDict[EntityStatType.ActionPoint].SetValue(Entity.EntityStatPropSet.StatDict[EntityStatType.ActionPoint].Value - SkillsPropertyCollection.ConsumeActionPoint.GetModifiedValue);
         Entity.EntityStatPropSet.StatDict[EntityStatType.FireElementFragment].SetValue(Entity.EntityStatPropSet.StatDict[EntityStatType.FireElementFragment].Value - SkillsPropertyCollection.ConsumeFireElementFragment.GetModifiedValue);
         Entity.EntityStatPropSet.StatDict[EntityStatType.IceElementFragment].SetValue(Entity.EntityStatPropSet.StatDict[EntityStatType.IceElementFragment].Value - SkillsPropertyCollection.ConsumeIceElementFragment.GetModifiedValue);
         Entity.EntityStatPropSet.StatDict[EntityStatType.LightningElementFragment].SetValue(Entity.EntityStatPropSet.StatDict[EntityStatType.LightningElementFragment].Value - SkillsPropertyCollection.ConsumeLightningElementFragment.GetModifiedValue);
+    }
 
+    internal UnityAction<ActiveSkillPhase, float, float> OnSkillWingingUp;
+
+    protected virtual IEnumerator WingUp(float wingUpTime)
+    {
         Entity.EntityWwiseHelper.OnSkillPreparing[(int) EntitySkillIndex].Post(Entity.gameObject);
         SkillPhase = ActiveSkillPhase.WingingUp;
         // todo Entity 前摇animation， 且按时间缩放

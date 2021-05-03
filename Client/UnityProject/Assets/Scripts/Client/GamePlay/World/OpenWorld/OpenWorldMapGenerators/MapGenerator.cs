@@ -222,10 +222,11 @@ public abstract class MapGenerator
                         m_OpenWorld.EventTriggerAppearEntityDataList.Add(data);
                     }
 
-                    List<TriggerEntityData> ted = staticLayoutData.TriggerEntityDataList.Clone<TriggerEntityData, TriggerEntityData>();
-                    foreach (TriggerEntityData data in ted)
+                    // Trigger Entity Data
+                    List<EntityData> ted = staticLayoutData.TriggerEntityDataList.Clone<EntityData, EntityData>();
+                    foreach (EntityData triggerEntityData in ted)
                     {
-                        GridPos3D sl_local = data.LocalGP;
+                        GridPos3D sl_local = triggerEntityData.LocalGP;
                         GridPos3D rot_local = sl_local;
                         for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++) // 旋转
                         {
@@ -251,10 +252,10 @@ public abstract class MapGenerator
                         }
 
                         GridPos3D appear_local = new GridPos3D(appear_world.x % WorldModule.MODULE_SIZE, 0, appear_world.z % WorldModule.MODULE_SIZE);
-                        data.WorldGP = appear_world;
-                        data.LocalGP = appear_local;
-                        data.EntityData.EntityOrientation = GridPosR.RotateOrientationClockwise90(data.EntityData.EntityOrientation, (int) staticLayoutOrientation);
-                        m_OpenWorld.WorldMap_TriggerEntityDataMatrix[data.WorldGP.x, data.WorldGP.y - Height, data.WorldGP.z].Add(data);
+                        triggerEntityData.WorldGP = appear_world;
+                        triggerEntityData.LocalGP = appear_local;
+                        triggerEntityData.EntityOrientation = GridPosR.RotateOrientationClockwise90(triggerEntityData.EntityOrientation, (int) staticLayoutOrientation);
+                        m_OpenWorld.WorldMap_TriggerEntityDataMatrix[triggerEntityData.WorldGP.x, triggerEntityData.WorldGP.y - Height, triggerEntityData.WorldGP.z].Add(triggerEntityData);
                     }
 
                     if (staticLayoutLayerData.DeterminePlayerBP && m_OpenWorld.InitialPlayerBP == GridPos3D.Zero)
@@ -412,10 +413,10 @@ public abstract class MapGenerator
                     }
                     else
                     {
-                        TriggerEntityData triggerEntityData = new TriggerEntityData();
+                        EntityData triggerEntityData = new EntityData();
                         triggerEntityData.WorldGP = worldGP;
-                        triggerEntityData.EntityData.EntityOrientation = writeOrientation;
                         triggerEntityData.LocalGP = m_OpenWorld.GetLocalGPByWorldGP(worldGP);
+                        triggerEntityData.EntityOrientation = writeOrientation;
                         m_OpenWorld.WorldMap_TriggerEntityDataMatrix[worldGP.x, worldGP.y - Height, worldGP.z].Add(triggerEntityData);
                     }
                 }

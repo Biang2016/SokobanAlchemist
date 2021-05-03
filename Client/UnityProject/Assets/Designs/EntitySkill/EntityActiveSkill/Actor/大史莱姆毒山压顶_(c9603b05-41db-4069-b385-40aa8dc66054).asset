@@ -27,7 +27,6 @@ MonoBehaviour:
           TypeGUID: (bbd7ebda-393d-4e63-baa0-3a971185d159)
         SkillDescription: 
         TargetCamp: 14
-        EntitySkillIndex: 0
         SkillsPropertyCollection:
           CastingRadius:
             BaseValue: 0
@@ -35,7 +34,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 20
           Cooldown:
-            BaseValue: 40000
+            BaseValue: 10000
             ModifiedValue: 4000
             MinValue: 0
             MaxValue: 1000000
@@ -80,6 +79,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
         TriggerWhenMissProbabilityPercent: 0
+        EntitySkillConditions: []
         WingUpCanMove: 1
         CastCanMove: 0
         RecoverCanMove: 1
@@ -143,30 +143,13 @@ MonoBehaviour:
         RawEntitySkillActions:
         - id: 1
         - id: 2
-        - id: 3
     00000001:
       type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         RawEntityBuffs:
-        - id: 4
+        - id: 3
     00000002:
-      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
-      data:
-        InitWorldModuleGUID: 0
-        FX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: (6b85310e-f4c9-4818-b682-4d1846b2638c)
-          UseCurve: 0
-          FXScale: 1.2
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-    00000003:
       type: {class: EntitySkillAction_PlayFXOnWorldGP, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
@@ -182,7 +165,7 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-    00000004:
+    00000003:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
         GUID: 10250

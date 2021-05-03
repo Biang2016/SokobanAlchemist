@@ -88,14 +88,6 @@ public class ActorArtHelper : EntityArtHelper
         }
     }
 
-    /// <summary>
-    /// Executed by animation
-    /// </summary>
-    public void KickBox()
-    {
-        ((Actor) Entity).DoKickBox();
-    }
-
     public void Dash()
     {
         if (ActorArtRootAnim != null)

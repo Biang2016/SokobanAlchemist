@@ -19,26 +19,7 @@ public class EntitySkillAction_TransportPlayer : BoxSkillAction, EntitySkillActi
     public void Execute()
     {
         WorldNameWithProbability randomResult = CommonUtils.GetRandomFromList(WorldProbList);
-        if ((WorldManager.Instance.CurrentWorld is OpenWorld openWorld))
-        {
-            ushort worldTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, randomResult.WorldTypeName.TypeName);
-            if (worldTypeIndex != 0)
-            {
-                openWorld.DungeonMissionComplete = true;
-                if (worldTypeIndex == ConfigManager.World_OpenWorldIndex)
-                {
-                    openWorld.ReturnToOpenWorld();
-                }
-                else
-                {
-                    openWorld.TransportPlayerToDungeon(worldTypeIndex);
-                }
-            }
-        }
-        else
-        {
-            ClientGameManager.Instance.SwitchWorld(randomResult.WorldTypeName.TypeName);
-        }
+        ClientGameManager.Instance.ChangeWorld(randomResult.WorldTypeName.TypeName, true);
     }
 
     protected override void ChildClone(EntitySkillAction newAction)

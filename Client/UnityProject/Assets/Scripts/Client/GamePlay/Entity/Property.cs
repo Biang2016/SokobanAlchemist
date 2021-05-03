@@ -184,9 +184,13 @@ public abstract class Property
     [LabelText("下限")]
     private int MinValue;
 
+    public int GetMinValue => MinValue;
+
     [SerializeField]
     [LabelText("上限")]
     private int MaxValue;
+
+    public int GetMaxValue => MaxValue;
 
     public void ApplyDataTo(Property target)
     {
@@ -206,6 +210,14 @@ public abstract class Property
         }
 
         ChildApplyDataTo(target);
+    }
+
+    public void ChangeProperty(int baseValue, int minValue, int maxValue)
+    {
+        BaseValue = baseValue;
+        MinValue = minValue;
+        MaxValue = maxValue;
+        RefreshModifiedValue();
     }
 
     protected virtual void ChildApplyDataTo(Property target)

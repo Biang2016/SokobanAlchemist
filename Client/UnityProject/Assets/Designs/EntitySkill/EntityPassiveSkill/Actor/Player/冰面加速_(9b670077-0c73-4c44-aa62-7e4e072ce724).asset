@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u51B0\u9762\u52A0\u901F_(9b670077-0c73-4c44-aa62-7e4e072ce724)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: ActorPassiveSkill_IceSlideSpeedUp, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        SkillGUID: (9b670077-0c73-4c44-aa62-7e4e072ce724)
+        SkillAlias: "\u51B0\u9762\u52A0\u901F"
+        SkillName_EN: Skate
+        SkillName_ZH: "\u6ED1\u51B0"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: (24ffd430-dd6a-4d11-8590-60976f30d1e4)
+        SkillDescription_EN: Gain 50% speed up on ice.
+        SkillDescription_ZH: "\u5728\u51B0\u9762\u4E0A\u79FB\u52A8\u65F6\u83B7\u5F9750%\u7684\u79FB\u52A8\u901F\u5EA6\u63D0\u5347"
+        PlayerCanLearn: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 1
+        SkillCategoryType: 10
+        SkillRankType: 1
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
+        RawEntityBuff:
+          id: 1
+    00000001:
+      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
+      data:
+        GUID: 10239
+        BuffAlias: 
+        EntityBuffAttribute: 1
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 1
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 0
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        PropertyCategory: 0
+        EntityPropertyType: 30
+        EntitySkillSO: {fileID: 0}
+        SkillGUID: 
+        EntitySkillPropertyType: 0
+        Percent: 50
+        LinearDecayInDuration: 0

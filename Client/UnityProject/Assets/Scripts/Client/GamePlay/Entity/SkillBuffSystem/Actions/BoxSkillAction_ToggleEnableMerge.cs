@@ -18,11 +18,13 @@ public class BoxSkillAction_ToggleEnableMerge : BoxSkillAction, EntitySkillActio
 
     public void Execute()
     {
+        if (ExertOnTarget) return;
         Box.BoxMergeConfig.MergeEnable = EnableMerge;
     }
 
     public void ExecuteOnEntity(Entity entity)
     {
+        if (!ExertOnTarget) return;
         if (entity is Box box)
         {
             box.BoxMergeConfig.MergeEnable = EnableMerge;

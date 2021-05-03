@@ -221,7 +221,7 @@ PrefabInstance:
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityPassiveSkillSOs.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -283,7 +283,7 @@ PrefabInstance:
         type: 3}
       propertyPath: RawEntityPassiveSkillSOs.Array.data[3]
       value: 
-      objectReference: {fileID: 11400000, guid: 5cc18b64f2832c64a8e28fb4bf72efa9,
+      objectReference: {fileID: 11400000, guid: f63c538745645b544bd9992b7b295c16,
         type: 2}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -664,12 +664,14 @@ PrefabInstance:
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IdleInterval":{"_value":5.0,"_name":"IdleInterval","_id":"749305d2-8488-46da-952a-7531214ba3d3","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"MySkillIndices":{"_value":[0,1,2],"_name":"MySkillIndices","_id":"1f00cc12-20c6-461f-b445-505d7a9c752e","$type":"NodeCanvas.Framework.Variable`1[[System.Collections.Generic.List`1[[EntitySkillIndex,
         Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib,
-        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"_Out_HasValidSkill":{"_name":"_Out_HasValidSkill","_id":"94cde0ea-7126-4fff-ab75-c24c3aa133af","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"_Out_ValidSkillIndex":{"_name":"_Out_ValidSkillIndex","_id":"a58b4195-9480-4de9-94dd-982343ce0fc2","$type":"NodeCanvas.Framework.Variable`1[[EntitySkillIndex,
+        Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}}}'
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.size
-      value: 9
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -725,6 +727,18 @@ PrefabInstance:
       value: '{"_value":[0,1,2],"_name":"MySkillIndices","_id":"1f00cc12-20c6-461f-b445-505d7a9c752e","$type":"NodeCanvas.Framework.Variable`1[[System.Collections.Generic.List`1[[EntitySkillIndex,
         Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib,
         Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: _serializedVariables.Array.data[9]._json
+      value: '{"_name":"_Out_HasValidSkill","_id":"94cde0ea-7126-4fff-ab75-c24c3aa133af","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: _serializedVariables.Array.data[10]._json
+      value: '{"_name":"_Out_ValidSkillIndex","_id":"a58b4195-9480-4de9-94dd-982343ce0fc2","$type":"NodeCanvas.Framework.Variable`1[[EntitySkillIndex,
+        Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ca8def23062cf242bafa7e081952811, type: 3}

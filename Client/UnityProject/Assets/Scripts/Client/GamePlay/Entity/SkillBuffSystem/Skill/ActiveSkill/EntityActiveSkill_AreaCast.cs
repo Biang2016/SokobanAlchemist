@@ -407,6 +407,8 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
     protected override IEnumerator Cast(TargetEntityType targetEntityType, float castDuration)
     {
         UpdateSkillEffectRealPositions();
+        yield return base.Cast(targetEntityType, castDuration);
+        UpdateSkillEffectRealPositions();
         foreach (EntitySkillAction action in EntitySkillActions)
         {
             if (action is EntitySkillAction.IPureAction pureAction)
@@ -439,8 +441,6 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
                 }
             }
         }
-
-        yield return base.Cast(targetEntityType, castDuration);
     }
 
     private void ClearWhenSkillFinishedOrInterrupted()
@@ -524,7 +524,7 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
                 for (int i = 0; i <= CastOnNLayersBeneath; i++)
                 {
                     GridPos3D buffCenterGP = gp + GridPos3D.Down * i;
-                    Collider[] colliders_PlayerLayer = Physics.OverlapSphere(buffCenterGP, 0.3f, LayerManager.Instance.GetTargetEntityLayerMask(Entity.Camp, TargetCamp));
+                    Collider[] colliders_PlayerLayer = Physics.OverlapSphere(buffCenterGP, 0.48f, LayerManager.Instance.GetTargetEntityLayerMask(Entity.Camp, TargetCamp));
                     foreach (Collider c in colliders_PlayerLayer)
                     {
                         Actor targetActor = c.GetComponentInParent<Actor>();

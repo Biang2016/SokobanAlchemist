@@ -19,27 +19,40 @@ MonoBehaviour:
     00000000:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (cbbc9a64-913a-4c0d-9148-bc7875ee9533)
         SkillAlias: "\u51B0\u51BB\u514D\u75AB"
+        SkillName_EN: Ice Immune
+        SkillName_ZH: "\u51B0\u51BB\u514D\u75AB"
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: (5c8eb360-251b-40bc-96b0-d3d17aea7c5b)
-        SkillDescription: Immune to ice damage and effects.
-        IsAddedDuringGamePlay: 0
-        InitWorldModuleGUID: 0
+        SkillDescription_EN: Immune to any frost effect and damage
+        SkillDescription_ZH: "\u514D\u75AB\u6240\u6709\u51B0\u51BB\u6548\u679C\u548C\u4F24\u5BB3"
+        PlayerCanLearn: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 1
+        SkillCategoryType: 2
+        SkillRankType: 64
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
         PassiveSkillCondition: 1
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
-        EntityStatChangeType: 0
-        EntityStatChangeThreshold: 0
-        EntityStatChangeThresholdOperator: 0
-        EntityPropertyChangeType: 0
-        EntityPropertyChangeThreshold: 0
-        EntityPropertyChangeThresholdOperator: 0
         MultiEventTrigger: 0
         ListenLevelEventAliasList: []
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
         RawEntitySkillActions:
         - id: 1
     00000001:
