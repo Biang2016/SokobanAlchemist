@@ -13,14 +13,17 @@ public class EntitySkillAction_ShowLearnUpgradePanel : EntitySkillAction, Entity
 
     public EntityUpgrade EntityUpgrade;
 
+    public int GoldCost;
+
     public void Execute()
     {
         LearnUpgradePanel learnUpgradePanel = UIManager.Instance.ShowUIForms<LearnUpgradePanel>();
-        learnUpgradePanel.Initialize(EntityUpgrade, OnLearned);
+        learnUpgradePanel.Initialize(EntityUpgrade, OnLearned, GoldCost);
     }
 
     private void OnLearned()
     {
+        BattleManager.Instance.Player1.EntityStatPropSet.Gold.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value - GoldCost);
         Entity.DestroySelf();
     }
 
@@ -29,6 +32,7 @@ public class EntitySkillAction_ShowLearnUpgradePanel : EntitySkillAction, Entity
         base.ChildClone(newAction);
         EntitySkillAction_ShowLearnUpgradePanel action = ((EntitySkillAction_ShowLearnUpgradePanel) newAction);
         action.EntityUpgrade = EntityUpgrade.Clone();
+        action.GoldCost = GoldCost;
     }
 
     public override void CopyDataFrom(EntitySkillAction srcData)
@@ -36,5 +40,6 @@ public class EntitySkillAction_ShowLearnUpgradePanel : EntitySkillAction, Entity
         base.CopyDataFrom(srcData);
         EntitySkillAction_ShowLearnUpgradePanel action = ((EntitySkillAction_ShowLearnUpgradePanel) srcData);
         EntityUpgrade = action.EntityUpgrade.Clone();
+        GoldCost = action.GoldCost;
     }
 }

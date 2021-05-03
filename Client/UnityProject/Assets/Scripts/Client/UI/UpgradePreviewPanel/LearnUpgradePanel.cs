@@ -27,7 +27,7 @@ public class LearnUpgradePanel : BaseUIPanel
     private UnityAction current_LearnCallBack;
     private EntityUpgrade current_EntityUpgrade;
 
-    public void Initialize(EntityUpgrade entityUpgrade, UnityAction learnCallback)
+    public void Initialize(EntityUpgrade entityUpgrade, UnityAction learnCallback, int goldCost)
     {
         Anim.SetTrigger("Jump");
 
@@ -40,16 +40,21 @@ public class LearnUpgradePanel : BaseUIPanel
         m_EntityUpgradeRow = null;
 
         m_EntityUpgradeRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntityUpgradeRow].AllocateGameObject<EntityUpgradeRow>(EntityUpgradeRowContainer);
-        m_EntityUpgradeRow.Initialize(current_EntityUpgrade);
+        m_EntityUpgradeRow.Initialize(current_EntityUpgrade, goldCost);
+        bool canAfford = BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value >= goldCost;
 
-        LearnButton.onClick.RemoveAllListeners();
-        LearnButton.onClick.AddListener(() =>
+        LearnButton.interactable = canAfford;
+        if (canAfford)
         {
-            BattleManager.Instance.Player1.GetUpgraded(current_EntityUpgrade);
-            ClientGameManager.Instance.NoticePanel.ShowTip("Successfully upgrade!", NoticePanel.TipPositionType.RightCenter, 1f);
-            current_LearnCallBack?.Invoke();
-            CloseUIForm();
-        });
+            LearnButton.onClick.RemoveAllListeners();
+            LearnButton.onClick.AddListener(() =>
+            {
+                BattleManager.Instance.Player1.GetUpgraded(current_EntityUpgrade);
+                ClientGameManager.Instance.NoticePanel.ShowTip("Successfully upgrade!", NoticePanel.TipPositionType.RightCenter, 1f);
+                current_LearnCallBack?.Invoke();
+                CloseUIForm();
+            });
+        }
     }
 
     public override void Display()

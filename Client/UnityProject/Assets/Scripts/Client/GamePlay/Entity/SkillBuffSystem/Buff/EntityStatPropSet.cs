@@ -406,10 +406,10 @@ public class EntityStatPropSet
 
     public void OnReborn()
     {
-        HealthDurability.SetValue(99999);
+        HealthDurability.SetValue(HealthDurability.MaxValue / 2);
         FrozenValue.SetValue(0);
         FiringValue.SetValue(0);
-        ActionPoint.SetValue(99999);
+        ActionPoint.SetValue(ActionPoint.MaxValue / 2);
     }
 
     #region Delegates

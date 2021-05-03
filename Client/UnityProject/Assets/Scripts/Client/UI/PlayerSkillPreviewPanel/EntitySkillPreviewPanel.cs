@@ -33,7 +33,7 @@ public class EntitySkillPreviewPanel : BaseUIPanel
             if (!eps.ShowInSkillPreviewPanel) continue;
             EntitySkillRow esr = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(PassiveSkillContainer);
             PassiveSkillRows.Add(esr);
-            esr.Initialize(eps, "");
+            esr.Initialize(eps, "", 0);
         }
 
         foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in entity.EntityActiveSkillDict)
@@ -61,7 +61,7 @@ public class EntitySkillPreviewPanel : BaseUIPanel
                 }
             }
 
-            esr.Initialize(kv.Value, keyBind);
+            esr.Initialize(kv.Value, keyBind, 0);
         }
     }
 

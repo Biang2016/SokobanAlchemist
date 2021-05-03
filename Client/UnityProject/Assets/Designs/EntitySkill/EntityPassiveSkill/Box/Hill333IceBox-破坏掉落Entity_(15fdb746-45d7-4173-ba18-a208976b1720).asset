@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "Hill333FireBox-\u7834\u574F\u6389\u843DEntity_(15fdb746-45d7-4173-ba18-a208976b1720)"
+  m_Name: "Hill333IceBox-\u7834\u574F\u6389\u843DEntity_(15fdb746-45d7-4173-ba18-a208976b1720)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
@@ -21,7 +21,7 @@ MonoBehaviour:
       data:
         InitWorldModuleGUID: 0
         SkillGUID: (15fdb746-45d7-4173-ba18-a208976b1720)
-        SkillAlias: "Hill333FireBox-\u7834\u574F\u6389\u843DEntity"
+        SkillAlias: "Hill333IceBox-\u7834\u574F\u6389\u843DEntity"
         SkillName_EN: 
         SkillName_ZH: 
         SkillIcon:
@@ -30,6 +30,8 @@ MonoBehaviour:
         SkillDescription_EN: 
         SkillDescription_ZH: 
         PlayerCanLearn: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
         SkillCategoryType: 0
         SkillRankType: 0
         SkillScrollType:
@@ -58,18 +60,28 @@ MonoBehaviour:
       data:
         InitWorldModuleGUID: 0
         DropBoxList:
-        - ProbabilityMin: 0
-          ProbabilityMax: 0
+        - ProbabilityMin: 0.2
+          ProbabilityMax: 0.5
           ItemType:
             TypeDefineType: 0
-            TypeGUID: 
-        - ProbabilityMin: 0
-          ProbabilityMax: 0
+            TypeGUID: (a70294a1-e40c-492f-a596-da864174039d)
+        - ProbabilityMin: 0.8
+          ProbabilityMax: 2
           ItemType:
             TypeDefineType: 0
-            TypeGUID: 
-        - ProbabilityMin: 0
-          ProbabilityMax: 0
+            TypeGUID: (87e2a74d-1653-453b-93cf-a7abae57614b)
+        - ProbabilityMin: 0.25
+          ProbabilityMax: 0.25
           ItemType:
             TypeDefineType: 0
-            TypeGUID: 
+            TypeGUID: (b21d38f9-143e-43a6-9094-f1a790641d96)
+        - ProbabilityMin: 0.3
+          ProbabilityMax: 0.3
+          ItemType:
+            TypeDefineType: 0
+            TypeGUID: (c9630278-8f6d-416f-b6de-620573dfb81a)
+        - ProbabilityMin: 0.1
+          ProbabilityMax: 0.1
+          ItemType:
+            TypeDefineType: 0
+            TypeGUID: (ea62bcfe-806f-49bb-af18-c47cf821c618)

@@ -293,7 +293,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                 }
                 else
                 {
-                    SwitchWorld(ConfigManager.GetTypeName(TypeDefineType.World, ConfigManager.World_OpenWorldIndex));
+                    SwitchWorld_ReloadGame(ConfigManager.GetTypeName(TypeDefineType.World, ConfigManager.World_OpenWorldIndex));
                     return;
                 }
             }
@@ -415,10 +415,31 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         FXManager.FixedUpdate(Time.fixedDeltaTime);
     }
 
-    public void SwitchWorld(string worldName)
+    public void SwitchWorld_ReloadGame(string worldName)
     {
         DebugChangeWorldName = worldName;
         StartCoroutine(ReloadGame());
+    }
+
+    public void ChangeWorld(string worldName, bool dungeonComplete)
+    {
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            ushort worldNameIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, worldName);
+            if (worldNameIndex == ConfigManager.World_OpenWorldIndex)
+            {
+                openWorld.DungeonMissionComplete = dungeonComplete;
+                openWorld.ReturnToOpenWorld();
+            }
+            else
+            {
+                openWorld.TransportPlayerToDungeon(worldNameIndex);
+            }
+        }
+        else
+        {
+            SwitchWorld_ReloadGame(worldName);
+        }
     }
 
     public IEnumerator ReloadGame()

@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 1081569820716009646}
   - component: {fileID: 1081569820716009649}
   - component: {fileID: 9088499247133009929}
+  - component: {fileID: -579483925666273177}
   - component: {fileID: 2489985796099970193}
   - component: {fileID: 4253877445322117138}
-  - component: {fileID: 7542001402207385687}
   m_Layer: 5
-  m_Name: LearnUpgradePanel
+  m_Name: TransportWorldPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -100,6 +100,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-579483925666273177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081569820716009651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2694c505a3ab754db546172fb5447ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsShown: 0
+  Anim: {fileID: 9088499247133009929}
+  TransportWorldRowContainer: {fileID: 1081569821308404075}
+  TransportButton: {fileID: 7256524164656866975}
 --- !u!114 &2489985796099970193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,22 +156,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &7542001402207385687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1081569820716009651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99ddf054e553e0d45a5d09101841325c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsShown: 0
-  Anim: {fileID: 9088499247133009929}
-  EntityUpgradeRowContainer: {fileID: 1081569821308404075}
-  LearnButton: {fileID: 7256524164656866975}
 --- !u!1 &1081569821308404074
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 1081569821308404072}
   - component: {fileID: 5549145103295342911}
   m_Layer: 5
-  m_Name: UpgradeRowContainer
+  m_Name: TransportWorldRowContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -247,7 +247,7 @@ GameObject:
   - component: {fileID: 7256524164656866975}
   - component: {fileID: 6667056802160756564}
   m_Layer: 5
-  m_Name: LearnButton
+  m_Name: TransportButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -332,11 +332,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 0.6313726, b: 0, a: 1}
-    m_HighlightedColor: {r: 1, g: 0.8862745, b: 0, a: 1}
+    m_NormalColor: {r: 1, g: 0.6308285, b: 0, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.88550174, b: 0, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 0.5019608}
+    m_DisabledColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -453,4 +453,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Learn
+  m_Text: Transport

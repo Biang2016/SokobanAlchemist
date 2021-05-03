@@ -63,7 +63,7 @@ public class SkillSlot : MonoBehaviour
             }
 
             SkillKeyBind_Text.gameObject.SetActive(false);
-          
+
             RefreshSkillCD(ActiveSkillPhase.Ready, 0, 0);
             BoundEntitySkill = null;
             SkillIcon.color = Color.clear;
@@ -93,7 +93,7 @@ public class SkillSlot : MonoBehaviour
 
             curEntitySkillRow?.PoolRecycle();
             curEntitySkillRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(SkillRowContainer);
-            curEntitySkillRow.Initialize(entitySkill, (BoundEntitySkill is EntityActiveSkill) ? MyKeyBind.ToString() : "");
+            curEntitySkillRow.Initialize(entitySkill, (BoundEntitySkill is EntityActiveSkill) ? MyKeyBind.ToString() : "", 0);
         }
     }
 
