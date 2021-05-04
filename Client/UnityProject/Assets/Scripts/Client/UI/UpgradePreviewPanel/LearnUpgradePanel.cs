@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using BiangLibrary.GamePlay.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,42 +19,91 @@ public class LearnUpgradePanel : BaseUIPanel
     }
 
     public Animator Anim;
-    public Transform EntityUpgradeRowContainer;
-    public Button LearnButton;
 
-    private EntityUpgradeRow m_EntityUpgradeRow;
+    [SerializeField]
+    private Image UpgradeIcon;
+
+    [SerializeField]
+    private Text UpgradeName;
+
+    [SerializeField]
+    private Text UpgradeDescription;
+
+    [SerializeField]
+    private Text UpgradeCost;
+
+    [SerializeField]
+    private Image ButtonIcon;
+
+    [SerializeField]
+    private Sprite ButtonIconNormalSprite;
+
+    [SerializeField]
+    private Sprite ButtonIconGrayOutSprite;
 
     internal int openStackTimes = 0;
     private UnityAction current_LearnCallBack;
+    private UnityAction current_LearnAction;
     private EntityUpgrade current_EntityUpgrade;
+    private Stack<UpgradeInfo> UpgradeInfoStack = new Stack<UpgradeInfo>();
+
+    private class UpgradeInfo
+    {
+        public EntityUpgrade EntityUpgrade;
+        public UnityAction LearnCallback;
+        public int GoldCost;
+    }
+
+    public void Initialize(EntityUpgrade entityUpgrade, int goldCost)
+    {
+    }
 
     public void Initialize(EntityUpgrade entityUpgrade, UnityAction learnCallback, int goldCost)
     {
+        UpgradeInfoStack.Push(new UpgradeInfo
+        {
+            EntityUpgrade = entityUpgrade,
+            LearnCallback = learnCallback,
+            GoldCost = goldCost
+        });
+
         Anim.SetTrigger("Jump");
 
         openStackTimes++;
 
-        current_EntityUpgrade = entityUpgrade.Clone();
         current_LearnCallBack = learnCallback;
+        current_EntityUpgrade = entityUpgrade.Clone();
 
-        m_EntityUpgradeRow?.PoolRecycle();
-        m_EntityUpgradeRow = null;
+        Sprite sprite = ConfigManager.GetEntitySkillIconByName(entityUpgrade.UpgradeIcon.TypeName);
+        UpgradeIcon.sprite = sprite;
+        UpgradeName.text = entityUpgrade.UpgradeName_EN;
+        UpgradeDescription.text = entityUpgrade.UpgradeDescription_EN;
+        UpgradeCost.gameObject.SetActive(goldCost > 0);
+        if (goldCost > 0) UpgradeCost.text = goldCost.ToString();
+        else UpgradeCost.text = "Free";
 
-        m_EntityUpgradeRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntityUpgradeRow].AllocateGameObject<EntityUpgradeRow>(EntityUpgradeRowContainer);
-        m_EntityUpgradeRow.Initialize(current_EntityUpgrade, goldCost);
         bool canAfford = BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value >= goldCost;
+        ButtonIcon.sprite = canAfford ? ButtonIconNormalSprite : ButtonIconGrayOutSprite;
 
-        LearnButton.interactable = canAfford;
         if (canAfford)
         {
-            LearnButton.onClick.RemoveAllListeners();
-            LearnButton.onClick.AddListener(() =>
+            current_LearnAction = () =>
             {
+                UpgradeInfoStack.Pop();
                 BattleManager.Instance.Player1.GetUpgraded(current_EntityUpgrade);
-                ClientGameManager.Instance.NoticePanel.ShowTip("Successfully upgrade!", NoticePanel.TipPositionType.RightCenter, 1f);
+                ClientGameManager.Instance.NoticePanel.ShowTip("Successfully upgrade!", NoticePanel.TipPositionType.Center, 1f);
+                current_LearnAction = null;
                 current_LearnCallBack?.Invoke();
                 CloseUIForm();
-            });
+            };
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.F))
+        {
+            current_LearnAction?.Invoke();
         }
     }
 
@@ -70,8 +120,8 @@ public class LearnUpgradePanel : BaseUIPanel
 
         if (openStackTimes == 0)
         {
-            LearnButton.onClick.RemoveAllListeners();
             UIManager.Instance.UI3DRoot.gameObject.SetActive(true);
+            current_LearnAction = null;
             current_LearnCallBack = null;
             current_EntityUpgrade = null;
         }
@@ -79,6 +129,9 @@ public class LearnUpgradePanel : BaseUIPanel
         if (openStackTimes > 0)
         {
             UIManager.Instance.ShowUIForms<LearnUpgradePanel>();
+            UpgradeInfo upgradeInfo = UpgradeInfoStack.Pop();
+            Initialize(upgradeInfo.EntityUpgrade, upgradeInfo.LearnCallback, upgradeInfo.GoldCost);
+            openStackTimes--;
         }
     }
 }

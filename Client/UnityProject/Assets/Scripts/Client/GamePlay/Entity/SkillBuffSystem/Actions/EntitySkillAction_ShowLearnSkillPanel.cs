@@ -18,10 +18,6 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
     [OnValueChanged("RefreshSkillGUID")]
     public EntitySkillSO EntitySkillSO;
 
-    [LabelText("是否指定键位")]
-    [ShowIf("isActiveSkill")]
-    public bool SpecifyKeyBind = false;
-
     private bool isActiveSkill // 仅Editor下用
     {
         get
@@ -64,7 +60,7 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
     public void Execute()
     {
         LearnSkillPanel learnSkillPanel = UIManager.Instance.ShowUIForms<LearnSkillPanel>();
-        learnSkillPanel.Initialize(SkillGUID, OnLearned, SpecifyKeyBind, KeyBind, GoldCost);
+        learnSkillPanel.Initialize(SkillGUID, OnLearned, KeyBind, GoldCost);
     }
 
     private void OnLearned()
@@ -78,7 +74,6 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
         base.ChildClone(newAction);
         EntitySkillAction_ShowLearnSkillPanel action = ((EntitySkillAction_ShowLearnSkillPanel) newAction);
         action.SkillGUID = SkillGUID;
-        action.SpecifyKeyBind = SpecifyKeyBind;
         action.KeyBind = KeyBind;
         action.GoldCost = GoldCost;
     }
@@ -88,7 +83,6 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
         base.CopyDataFrom(srcData);
         EntitySkillAction_ShowLearnSkillPanel action = ((EntitySkillAction_ShowLearnSkillPanel) srcData);
         SkillGUID = action.SkillGUID;
-        SpecifyKeyBind = action.SpecifyKeyBind;
         KeyBind = action.KeyBind;
         GoldCost = action.GoldCost;
     }

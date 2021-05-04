@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using BiangLibrary.GamePlay.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,24 +20,55 @@ public class LearnSkillPanel : BaseUIPanel
 
     public Animator Anim;
 
-    public Transform EntitySkillRowContainer;
-    public Button LearnButton_Passive;
+    [SerializeField]
+    private Image SkillIcon;
 
-    public GameObject LearnButtons_Active;
-    public Text SelectKeyBindText;
-    public Button LearnButton_H;
-    public Button LearnButton_J;
-    public Button LearnButton_K;
-    public Button LearnButton_L;
+    [SerializeField]
+    private Text SkillName;
 
-    private EntitySkillRow m_EntitySkillRow;
+    [SerializeField]
+    private Text SkillKeyBind;
+
+    [SerializeField]
+    private Text SkillDescription;
+
+    [SerializeField]
+    private Text SkillCost;
+
+    [SerializeField]
+    private Image ButtonIcon;
+
+    [SerializeField]
+    private Sprite ButtonIconNormalSprite;
+
+    [SerializeField]
+    private Sprite ButtonIconGrayOutSprite;
 
     internal int openStackTimes = 0;
     private UnityAction current_LearnCallBack;
+    private UnityAction current_LearnAction;
     private EntitySkill current_EntitySkill;
 
-    public void Initialize(string skillGUID, UnityAction learnCallback, bool specifyKeyBind, PlayerControllerHelper.KeyBind keyBind, int goldCost)
+    private Stack<SkillInfo> SkillInfoStack = new Stack<SkillInfo>();
+
+    private class SkillInfo
     {
+        public string SkillGUID;
+        public UnityAction LearnCallback;
+        public PlayerControllerHelper.KeyBind KeyBind;
+        public int GoldCost;
+    }
+
+    public void Initialize(string skillGUID, UnityAction learnCallback, PlayerControllerHelper.KeyBind keyBind, int goldCost)
+    {
+        SkillInfoStack.Push(new SkillInfo
+        {
+            SkillGUID = skillGUID,
+            LearnCallback = learnCallback,
+            KeyBind = keyBind,
+            GoldCost = goldCost
+        });
+
         Anim.SetTrigger("Jump");
 
         openStackTimes++;
@@ -44,84 +76,66 @@ public class LearnSkillPanel : BaseUIPanel
         current_LearnCallBack = learnCallback;
         current_EntitySkill = ConfigManager.GetEntitySkill(skillGUID);
 
-        m_EntitySkillRow?.PoolRecycle();
-        m_EntitySkillRow = null;
-
         if (current_EntitySkill != null)
         {
-            m_EntitySkillRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(EntitySkillRowContainer);
-            if (current_EntitySkill is EntityPassiveSkill) specifyKeyBind = false;
-            m_EntitySkillRow.Initialize(current_EntitySkill, specifyKeyBind ? PlayerControllerHelper.KeyMappingStrDict[keyBind] : "", goldCost);
+            bool specifyKeyBind = current_EntitySkill is EntityActiveSkill;
+
+            string keyBindStr = specifyKeyBind ? PlayerControllerHelper.KeyMappingStrDict[keyBind] : "";
+            Sprite sprite = ConfigManager.GetEntitySkillIconByName(current_EntitySkill.SkillIcon.TypeName);
+            SkillIcon.sprite = sprite;
+            SkillDescription.text = current_EntitySkill.GetSkillDescription_EN;
+            SkillName.text = current_EntitySkill.SkillName_EN;
+            SkillKeyBind.gameObject.SetActive(!string.IsNullOrWhiteSpace(keyBindStr));
+            SkillKeyBind.text = keyBindStr;
+            SkillCost.gameObject.SetActive(goldCost > 0);
+            if (goldCost > 0) SkillCost.text = goldCost.ToString();
+            else SkillCost.text = "Free";
+
             bool canAfford = BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value >= goldCost;
+            ButtonIcon.sprite = canAfford ? ButtonIconNormalSprite : ButtonIconGrayOutSprite;
 
             if (current_EntitySkill is EntityPassiveSkill EPS)
             {
-                LearnButton_Passive.gameObject.SetActive(true);
-                LearnButtons_Active.SetActive(false);
-
-                LearnButton_Passive.interactable = canAfford;
                 if (canAfford)
                 {
-                    LearnButton_Passive.onClick.RemoveAllListeners();
-                    LearnButton_Passive.onClick.AddListener(() =>
+                    current_LearnAction = () =>
                     {
+                        SkillInfoStack.Pop();
                         BattleManager.Instance.Player1.AddNewPassiveSkill(EPS);
-                        ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
+                        ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.Center, 1f);
+                        current_LearnAction = null;
                         current_LearnCallBack?.Invoke();
                         CloseUIForm();
-                    });
+                    };
                 }
             }
             else if (current_EntitySkill is EntityActiveSkill EAS)
             {
-                if (specifyKeyBind)
+                if (canAfford)
                 {
-                    LearnButton_Passive.gameObject.SetActive(true);
-                    LearnButtons_Active.SetActive(false);
-
-                    LearnButton_Passive.interactable = canAfford;
-                    if (canAfford)
+                    current_LearnAction = () =>
                     {
-                        LearnButton_Passive.onClick.RemoveAllListeners();
-                        LearnButton_Passive.onClick.AddListener(() => { OnButtonClick(EAS, keyBind); });
-                    }
-                }
-                else
-                {
-                    LearnButton_Passive.gameObject.SetActive(false);
-                    LearnButtons_Active.SetActive(true);
+                        SkillInfoStack.Pop();
+                        if (BattleManager.Instance.Player1.AddNewActiveSkill(EAS))
+                        {
+                            BattleManager.Instance.Player1.BindActiveSkillToKey(EAS, keyBind, true);
+                            ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.Center, 1f);
+                        }
 
-                    LearnButton_H.interactable = canAfford;
-                    LearnButton_J.interactable = canAfford;
-                    LearnButton_K.interactable = canAfford;
-                    LearnButton_L.interactable = canAfford;
-
-                    if (canAfford)
-                    {
-                        LearnButton_H.onClick.RemoveAllListeners();
-                        LearnButton_J.onClick.RemoveAllListeners();
-                        LearnButton_K.onClick.RemoveAllListeners();
-                        LearnButton_L.onClick.RemoveAllListeners();
-
-                        LearnButton_H.onClick.AddListener(() => { OnButtonClick(EAS, PlayerControllerHelper.KeyBind.H_LeftTrigger); });
-                        LearnButton_J.onClick.AddListener(() => { OnButtonClick(EAS, PlayerControllerHelper.KeyBind.J_RightTrigger); });
-                        LearnButton_K.onClick.AddListener(() => { OnButtonClick(EAS, PlayerControllerHelper.KeyBind.K); });
-                        LearnButton_L.onClick.AddListener(() => { OnButtonClick(EAS, PlayerControllerHelper.KeyBind.L); });
-                    }
+                        current_LearnAction = null;
+                        current_LearnCallBack?.Invoke();
+                        CloseUIForm();
+                    };
                 }
             }
         }
+    }
 
-        void OnButtonClick(EntityActiveSkill EAS, PlayerControllerHelper.KeyBind keyBind)
+    void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.F))
         {
-            if (BattleManager.Instance.Player1.AddNewActiveSkill(EAS))
-            {
-                BattleManager.Instance.Player1.BindActiveSkillToKey(EAS, keyBind, true);
-                ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.RightCenter, 1f);
-            }
-
-            current_LearnCallBack?.Invoke();
-            CloseUIForm();
+            current_LearnAction?.Invoke();
         }
     }
 
@@ -137,12 +151,8 @@ public class LearnSkillPanel : BaseUIPanel
         base.Hide();
         if (openStackTimes == 0)
         {
-            LearnButton_Passive.onClick.RemoveAllListeners();
-            LearnButton_H.onClick.RemoveAllListeners();
-            LearnButton_J.onClick.RemoveAllListeners();
-            LearnButton_K.onClick.RemoveAllListeners();
-            LearnButton_L.onClick.RemoveAllListeners();
             UIManager.Instance.UI3DRoot.gameObject.SetActive(true);
+            current_LearnAction = null;
             current_LearnCallBack = null;
             current_EntitySkill = null;
         }
@@ -150,6 +160,9 @@ public class LearnSkillPanel : BaseUIPanel
         if (openStackTimes > 0)
         {
             UIManager.Instance.ShowUIForms<LearnSkillPanel>();
+            SkillInfo skillInfo = SkillInfoStack.Pop();
+            Initialize(skillInfo.SkillGUID, skillInfo.LearnCallback, skillInfo.KeyBind, skillInfo.GoldCost);
+            openStackTimes--;
         }
     }
 }

@@ -28,7 +28,7 @@ public class EntitySkillAction_ShowTransportWorldPanel : EntitySkillAction, Enti
         if (worldData != null)
         {
             TransportWorldPanel transportWorldPanel = UIManager.Instance.ShowUIForms<TransportWorldPanel>();
-            transportWorldPanel.Initialize(worldData, selectedWorld.GoldCost, OnTransport);
+            transportWorldPanel.Initialize(worldData, OnTransport, selectedWorld.GoldCost);
         }
     }
 

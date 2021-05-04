@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using BiangLibrary.GamePlay.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,17 +19,48 @@ public class TransportWorldPanel : BaseUIPanel
     }
 
     public Animator Anim;
-    public Transform TransportWorldRowContainer;
-    public Button TransportButton;
 
-    private TransportWorldRow m_TransportWorldRow;
+    //[SerializeField]
+    //private Image WorldIcon;
+
+    [SerializeField]
+    private Text WorldDescription;
+
+    [SerializeField]
+    private Text WorldCost;
+
+    [SerializeField]
+    private Image ButtonIcon;
+
+    [SerializeField]
+    private Sprite ButtonIconNormalSprite;
+
+    [SerializeField]
+    private Sprite ButtonIconGrayOutSprite;
 
     internal int openStackTimes = 0;
     private UnityAction current_LearnCallBack;
+    private UnityAction current_LearnAction;
     private WorldData current_RawWorldData;
 
-    public void Initialize(WorldData rawWorldData, int goldCost, UnityAction learnCallback)
+    private Stack<TransportInfo> TransportInfoStack = new Stack<TransportInfo>();
+
+    private class TransportInfo
     {
+        public WorldData RawWorldData;
+        public UnityAction LearnCallback;
+        public int GoldCost;
+    }
+
+    public void Initialize(WorldData rawWorldData, UnityAction learnCallback, int goldCost)
+    {
+        TransportInfoStack.Push(new TransportInfo
+        {
+            RawWorldData = rawWorldData,
+            LearnCallback = learnCallback,
+            GoldCost = goldCost
+        });
+
         Anim.SetTrigger("Jump");
 
         openStackTimes++;
@@ -36,22 +68,33 @@ public class TransportWorldPanel : BaseUIPanel
         current_RawWorldData = rawWorldData;
         current_LearnCallBack = learnCallback;
 
-        m_TransportWorldRow?.PoolRecycle();
-        m_TransportWorldRow = null;
-
-        m_TransportWorldRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.TransportWorldRow].AllocateGameObject<TransportWorldRow>(TransportWorldRowContainer);
-        m_TransportWorldRow.Initialize(current_RawWorldData, goldCost);
+        //Sprite sprite = ConfigManager.GetEntitySkillIconByName(rawWorldData.WorldIcon.TypeName);
+        //WorldIcon.sprite = sprite;
+        WorldDescription.text = $"*{rawWorldData.WorldName_EN}*\n{rawWorldData.WorldDescription_EN}";
+        WorldCost.gameObject.SetActive(goldCost > 0);
+        if (goldCost > 0) WorldCost.text = goldCost.ToString();
+        else WorldCost.text = "Free";
 
         bool canAfford = BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value >= goldCost;
-        TransportButton.interactable = canAfford;
+        ButtonIcon.sprite = canAfford ? ButtonIconNormalSprite : ButtonIconGrayOutSprite;
+
         if (canAfford)
         {
-            TransportButton.onClick.RemoveAllListeners();
-            TransportButton.onClick.AddListener(() =>
+            current_LearnAction = () =>
             {
+                TransportInfoStack.Pop();
+                current_LearnAction = null;
                 current_LearnCallBack?.Invoke();
                 CloseUIForm();
-            });
+            };
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.F))
+        {
+            current_LearnAction?.Invoke();
         }
     }
 
@@ -68,8 +111,8 @@ public class TransportWorldPanel : BaseUIPanel
 
         if (openStackTimes == 0)
         {
-            TransportButton.onClick.RemoveAllListeners();
             UIManager.Instance.UI3DRoot.gameObject.SetActive(true);
+            current_LearnAction = null;
             current_LearnCallBack = null;
             current_RawWorldData = null;
         }
@@ -77,6 +120,9 @@ public class TransportWorldPanel : BaseUIPanel
         if (openStackTimes > 0)
         {
             UIManager.Instance.ShowUIForms<TransportWorldPanel>();
+            TransportInfo transportInfo = TransportInfoStack.Pop();
+            Initialize(transportInfo.RawWorldData, transportInfo.LearnCallback, transportInfo.GoldCost);
+            openStackTimes--;
         }
     }
 }
