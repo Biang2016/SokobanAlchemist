@@ -63,17 +63,29 @@ public class EntityWwiseHelper : EntityMonoHelper
     [BoxGroup("ForActor")]
     public Event OnGainMaxHealth;
 
-    [BoxGroup("ForActor")]
+    [BoxGroup("ForActor_Player")]
     public Event OnGainGold;
 
-    [BoxGroup("ForActor")]
+    [BoxGroup("ForActor_Player")]
     public Event OnGainFireElement;
 
-    [BoxGroup("ForActor")]
+    [BoxGroup("ForActor_Player")]
     public Event OnGainIceElement;
 
-    [BoxGroup("ForActor")]
+    [BoxGroup("ForActor_Player")]
     public Event OnGainLightningElement;
+
+    [BoxGroup("ForActor_Player")]
+    public Event OnLowHealthWarning;
+
+    [BoxGroup("ForActor_Player")]
+    public Event OnActionPointNotEnough;
+
+    [BoxGroup("ForActor_Player")]
+    public Event OnGoldNotEnough;
+
+    [BoxGroup("ForActor_Player")]
+    public Event OnElementsNotEnough;
 
     [BoxGroup("ForActor")]
     public Event OnBeingDamaged;
