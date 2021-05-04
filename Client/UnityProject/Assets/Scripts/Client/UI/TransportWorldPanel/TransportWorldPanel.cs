@@ -101,7 +101,7 @@ public class TransportWorldPanel : BaseUIPanel
     public override void Display()
     {
         base.Display();
-        UIManager.Instance.UI3DRoot.gameObject.SetActive(false);
+        UIManager.Instance.CloseUIForm<InGameUIPanel>();
     }
 
     public override void Hide()
@@ -111,10 +111,11 @@ public class TransportWorldPanel : BaseUIPanel
 
         if (openStackTimes == 0)
         {
-            UIManager.Instance.UI3DRoot.gameObject.SetActive(true);
+            UIManager.Instance.ShowUIForms<InGameUIPanel>();
             current_LearnAction = null;
             current_LearnCallBack = null;
             current_RawWorldData = null;
+            Anim.SetTrigger("Hide");
         }
 
         if (openStackTimes > 0)
