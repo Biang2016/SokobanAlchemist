@@ -890,6 +890,41 @@
 										<ActiveSource Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{21AF3A6A-F897-4AAC-A346-5569D0A9AF7C}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
+								<Sound Name="OnDestroyed_Frozen" ID="{11196E4A-9AC5-45D3-9A41-20A726A0A547}" ShortID="1007724347">
+									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+										</Reference>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="LDj_Audio - High Pitched Whoosh 2 (Wav)" ID="{2D0191C4-B34F-4A02-BB73-C1F5EC45094F}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.19019778281683"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="1.05797516691862"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.160479379251701"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.93763991244646"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>LDj_Audio - High Pitched Whoosh 2 (Wav).wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="313750501"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="LDj_Audio - High Pitched Whoosh 2 (Wav)" ID="{2D0191C4-B34F-4A02-BB73-C1F5EC45094F}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
 							</ChildrenList>
 						</BlendContainer>
 						<BlendContainer Name="OnDestroyed_Collide" ID="{A0864DEC-DD43-4824-AB2F-17BEBB1E54E8}" ShortID="713044724">
@@ -994,11 +1029,11 @@
 										<ActiveSource Name="OnDestroyed" ID="{3DE837C5-52E2-405F-9998-9FD386C534CF}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="PotionExplodes10Ve HS064603 2" ID="{C2536041-44CF-4EF9-8BE4-415E26A727FB}" ShortID="628667973">
+								<Sound Name="fence explosion" ID="{AF58E983-3C30-4AB0-A399-9C963553A952}" ShortID="849466192">
 									<PropertyList>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>6</Value>
+												<Value>4</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -1011,26 +1046,16 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="PotionExplodes10Ve HS064603 2" ID="{1B4DBBE8-70F1-4778-AC28-9B16E6321F3D}">
-											<PropertyList>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.147059712773998"/>
-												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimBegin" Type="Real64" Value="0.278639455782313"/>
-												<Property Name="VolumeOffset" Type="Real64">
-													<ValueList>
-														<Value>3.2</Value>
-													</ValueList>
-												</Property>
-											</PropertyList>
+										<AudioFileSource Name="fence explosion" ID="{2D3097C6-8EBC-424D-822D-35B097ABE0F8}">
 											<Language>SFX</Language>
-											<AudioFile>PotionExplodes10Ve HS064603 2.wav</AudioFile>
+											<AudioFile>fence explosion.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="532644551"/>
+												<MediaID ID="35739125"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="PotionExplodes10Ve HS064603 2" ID="{1B4DBBE8-70F1-4778-AC28-9B16E6321F3D}" Platform="Linked"/>
+										<ActiveSource Name="fence explosion" ID="{2D3097C6-8EBC-424D-822D-35B097ABE0F8}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>

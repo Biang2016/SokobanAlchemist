@@ -339,7 +339,7 @@ MonoBehaviour:
     ParentPath: Boxes
     guid: 805c56206da25e4da9dfdeac6d709f4e
     GuidInternal: 
-    m_lastTime: -8585819906414775808
+    m_lastTime: -8585815208614775808
     List:
     - name: ActionBox
       guid: 2d8860660f0f9344b7ee2eaa442a7cb0
@@ -367,81 +367,97 @@ MonoBehaviour:
       maxAttenuation: 100
       maxDuration: 4.990998
       minDuration: 4.990998
-    - name: BlizardBox
-      guid: 19e328047e4ed049a0ef112840a31a09
-      id: 2778367036
-      PathAndIcons:
-      - ElementName: Boxes
-        ObjectType: 12
-      - ElementName: IceBox
-        ObjectType: 4
-      - ElementName: BlizardBox
-        ObjectType: 4
-      Path: Boxes/IceBox/BlizardBox
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
-    - name: BlizardBox_Destructed
+    - name: BlizardBox_OnDestroyed_Common
       guid: c18096a56922b44583628646146810c9
-      id: 3855709934
+      id: 3214215107
       PathAndIcons:
       - ElementName: Boxes
         ObjectType: 12
       - ElementName: IceBox
         ObjectType: 4
-      - ElementName: BlizardBox
+      - ElementName: BlizzardBox
         ObjectType: 4
-      - ElementName: BlizardBox_Destructed
+      - ElementName: BlizardBox_OnDestroyed_Common
         ObjectType: 3
-      Path: Boxes/IceBox/BlizardBox/BlizardBox_Destructed
+      Path: Boxes/IceBox/BlizzardBox/BlizardBox_OnDestroyed_Common
+      maxAttenuation: 100
+      maxDuration: 1.283732
+      minDuration: 1.283732
+    - name: BlizzardBox
+      guid: 19e328047e4ed049a0ef112840a31a09
+      id: 3944270082
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: IceBox
+        ObjectType: 4
+      - ElementName: BlizzardBox
+        ObjectType: 4
+      Path: Boxes/IceBox/BlizzardBox
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: BlizardBox_Kicked
-      guid: d1cca5554d6096459072affb23fcbe8c
-      id: 4250711070
+    - name: BlizzardBox_OnDestroyed_Coll
+      guid: 9ed5ab3b09321f44a52edeee0d0bde13
+      id: 2499538724
       PathAndIcons:
       - ElementName: Boxes
         ObjectType: 12
       - ElementName: IceBox
         ObjectType: 4
-      - ElementName: BlizardBox
+      - ElementName: BlizzardBox
         ObjectType: 4
-      - ElementName: BlizardBox_Kicked
+      - ElementName: BlizzardBox_OnDestroyed_Coll
         ObjectType: 3
-      Path: Boxes/IceBox/BlizardBox/BlizardBox_Kicked
+      Path: Boxes/IceBox/BlizzardBox/BlizzardBox_OnDestroyed_Coll
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: BlizardBox_Lit
-      guid: f58cc3071f0f3345a210296a99847b26
-      id: 3217091070
+    - name: BlizzardBox_OnDestroyed_Explos
+      guid: f476a070d52aec41b8040bd2dceafacb
+      id: 620918991
       PathAndIcons:
       - ElementName: Boxes
         ObjectType: 12
       - ElementName: IceBox
         ObjectType: 4
-      - ElementName: BlizardBox
+      - ElementName: BlizzardBox
         ObjectType: 4
-      - ElementName: BlizardBox_Lit
+      - ElementName: BlizzardBox_OnDestroyed_Explos
         ObjectType: 3
-      Path: Boxes/IceBox/BlizardBox/BlizardBox_Lit
+      Path: Boxes/IceBox/BlizzardBox/BlizzardBox_OnDestroyed_Explos
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: BlizardBox_Pushed
-      guid: f54c23b6f3c8ff4d8ef5ea996d3eac3b
-      id: 2753109256
+    - name: BlizzardBox_OnDestroyed_Fir
+      guid: 2c6d566f89744e45b31be61ba0afbc68
+      id: 3120635917
       PathAndIcons:
       - ElementName: Boxes
         ObjectType: 12
       - ElementName: IceBox
         ObjectType: 4
-      - ElementName: BlizardBox
+      - ElementName: BlizzardBox
         ObjectType: 4
-      - ElementName: BlizardBox_Pushed
+      - ElementName: BlizzardBox_OnDestroyed_Fir
         ObjectType: 3
-      Path: Boxes/IceBox/BlizardBox/BlizardBox_Pushed
+      Path: Boxes/IceBox/BlizzardBox/BlizzardBox_OnDestroyed_Fir
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: BlizzardBox_OnDestroyed_Fro
+      guid: 34131e8f51b75843a968bba6639afd43
+      id: 3540076469
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: IceBox
+        ObjectType: 4
+      - ElementName: BlizzardBox
+        ObjectType: 4
+      - ElementName: BlizzardBox_OnDestroyed_Fro
+        ObjectType: 3
+      Path: Boxes/IceBox/BlizzardBox/BlizzardBox_OnDestroyed_Fro
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -454,22 +470,6 @@ MonoBehaviour:
       - ElementName: Boxes_Common
         ObjectType: 4
       Path: Boxes/Boxes_Common
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
-    - name: Charcoal_Destructed
-      guid: 806a62f4ca30fb4ca2addf24f11e20a4
-      id: 1896382454
-      PathAndIcons:
-      - ElementName: Boxes
-        ObjectType: 12
-      - ElementName: WoodenBox
-        ObjectType: 4
-      - ElementName: CharcoalBox
-        ObjectType: 4
-      - ElementName: Charcoal_Destructed
-        ObjectType: 3
-      Path: Boxes/WoodenBox/CharcoalBox/Charcoal_Destructed
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -519,6 +519,22 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: CharcoalBox_OnDestroyed_Common
+      guid: 806a62f4ca30fb4ca2addf24f11e20a4
+      id: 329619566
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: WoodenBox
+        ObjectType: 4
+      - ElementName: CharcoalBox
+        ObjectType: 4
+      - ElementName: CharcoalBox_OnDestroyed_Common
+        ObjectType: 3
+      Path: Boxes/WoodenBox/CharcoalBox/CharcoalBox_OnDestroyed_Common
+      maxAttenuation: 100
+      maxDuration: 0.435238
+      minDuration: 0.355828
     - name: CharcoalBox_Pushed
       guid: 29ba2e3463eca74da807076177e72382
       id: 1104558077
@@ -547,20 +563,6 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: FireBox_OnBeingKicked
-      guid: 9fc7d83325f9a54eb39ba3682767fe58
-      id: 2928738080
-      PathAndIcons:
-      - ElementName: Boxes
-        ObjectType: 12
-      - ElementName: FireBox
-        ObjectType: 4
-      - ElementName: FireBox_OnBeingKicked
-        ObjectType: 3
-      Path: Boxes/FireBox/FireBox_OnBeingKicked
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
     - name: FireBox_OnDestroyed_Collide
       guid: 4fd348c8fa4a024a8447d2ff9b6f9c1c
       id: 3979359346
@@ -573,8 +575,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/FireBox/FireBox_OnDestroyed_Collide
       maxAttenuation: 100
-      maxDuration: 1.440741
-      minDuration: 1.440741
+      maxDuration: 1.288889
+      minDuration: 1.288889
     - name: FireBox_OnDestroyed_Common
       guid: 09cfce570d8ae648a04a5daae763ed4d
       id: 1497070139
@@ -586,9 +588,9 @@ MonoBehaviour:
       - ElementName: FireBox_OnDestroyed_Common
         ObjectType: 3
       Path: Boxes/FireBox/FireBox_OnDestroyed_Common
-      maxAttenuation: 0
-      maxDuration: 1.392593
-      minDuration: 1.392593
+      maxAttenuation: 100
+      maxDuration: 1.288889
+      minDuration: 1.288889
     - name: FireBox_OnDestroyed_Explosion
       guid: 6f24fc7413fe3f4f83788b4a503b3052
       id: 923382053
@@ -601,8 +603,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/FireBox/FireBox_OnDestroyed_Explosion
       maxAttenuation: 100
-      maxDuration: 1.440741
-      minDuration: 1.440741
+      maxDuration: 1.288889
+      minDuration: 1.288889
     - name: FireBox_OnDestroyed_Firing
       guid: ec621169b357da448b326a2168d572b9
       id: 2661498149
@@ -615,8 +617,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/FireBox/FireBox_OnDestroyed_Firing
       maxAttenuation: 100
-      maxDuration: 1.440741
-      minDuration: 1.440741
+      maxDuration: 1.288889
+      minDuration: 1.288889
     - name: FireBox_OnDestroyed_Frozen
       guid: 6e2c8594c37a2646aea38e670b82b058
       id: 1477219654
@@ -629,8 +631,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/FireBox/FireBox_OnDestroyed_Frozen
       maxAttenuation: 100
-      maxDuration: 1.440741
-      minDuration: 1.440741
+      maxDuration: 1.777161
+      minDuration: 1.777161
     - name: FlamethrowerBox
       guid: e602b5a13b376545b3c46baee5e9d474
       id: 997789142
@@ -645,6 +647,22 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: FlamethrowerBox_OnDestroyed_Collide
+      guid: dad31d2cdc043c43b398419f58c1ee23
+      id: 2151462320
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: FireBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox_OnDestroyed_Collide
+        ObjectType: 3
+      Path: Boxes/FireBox/FlamethrowerBox/FlamethrowerBox_OnDestroyed_Collide
+      maxAttenuation: 100
+      maxDuration: 1.910545
+      minDuration: 1.910545
     - name: FlamethrowerBox_OnDestroyed_Common
       guid: 6bc7d5dfd992f44b88321564065df1e3
       id: 1042301101
@@ -658,9 +676,57 @@ MonoBehaviour:
       - ElementName: FlamethrowerBox_OnDestroyed_Common
         ObjectType: 3
       Path: Boxes/FireBox/FlamethrowerBox/FlamethrowerBox_OnDestroyed_Common
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 100
+      maxDuration: 1.910545
+      minDuration: 1.910545
+    - name: FlamethrowerBox_OnDestroyed_Explosion
+      guid: 83a4386bedd5924491c3251fa916a390
+      id: 1653540371
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: FireBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox_OnDestroyed_Explosion
+        ObjectType: 3
+      Path: Boxes/FireBox/FlamethrowerBox/FlamethrowerBox_OnDestroyed_Explosion
+      maxAttenuation: 100
+      maxDuration: 1.910545
+      minDuration: 1.910545
+    - name: FlamethrowerBox_OnDestroyed_Firing
+      guid: 8a3680784682144f84f6334f73e877d6
+      id: 3299051695
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: FireBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox_OnDestroyed_Firing
+        ObjectType: 3
+      Path: Boxes/FireBox/FlamethrowerBox/FlamethrowerBox_OnDestroyed_Firing
+      maxAttenuation: 100
+      maxDuration: 1.910545
+      minDuration: 1.910545
+    - name: FlamethrowerBox_OnDestroyed_Frozen
+      guid: 207a087b96015f4795f031b479bd3c3d
+      id: 1657988332
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: FireBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox
+        ObjectType: 4
+      - ElementName: FlamethrowerBox_OnDestroyed_Frozen
+        ObjectType: 3
+      Path: Boxes/FireBox/FlamethrowerBox/FlamethrowerBox_OnDestroyed_Frozen
+      maxAttenuation: 100
+      maxDuration: 1.910545
+      minDuration: 1.910545
     - name: GoldenBox
       guid: dd80c4dabcaab44e948c975c51e3c541
       id: 2839812117
@@ -699,31 +765,73 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: IceBox_OnBeingKicked
-      guid: 55d3cf2edff8df42bc5a1d6dffd8a0bc
-      id: 2707351273
+    - name: IceBox_OnDestroyed_Collide
+      guid: c1cfcc180d947a4dbe7049fd397779b3
+      id: 3533703535
       PathAndIcons:
       - ElementName: Boxes
         ObjectType: 12
       - ElementName: IceBox
         ObjectType: 4
-      - ElementName: IceBox_OnBeingKicked
+      - ElementName: IceBox_OnDestroyed_Collide
         ObjectType: 3
-      Path: Boxes/IceBox/IceBox_OnBeingKicked
+      Path: Boxes/IceBox/IceBox_OnDestroyed_Collide
       maxAttenuation: 100
-      maxDuration: 1.249612
-      minDuration: 1.249612
-    - name: IceBox_OnDestroyed
+      maxDuration: 1.03125
+      minDuration: 1.03125
+    - name: IceBox_OnDestroyed_Common
       guid: af9fa80452e96c46a3592753a4b4aed1
-      id: 368214952
+      id: 677915420
       PathAndIcons:
       - ElementName: Boxes
         ObjectType: 12
       - ElementName: IceBox
         ObjectType: 4
-      - ElementName: IceBox_OnDestroyed
+      - ElementName: IceBox_OnDestroyed_Common
         ObjectType: 3
-      Path: Boxes/IceBox/IceBox_OnDestroyed
+      Path: Boxes/IceBox/IceBox_OnDestroyed_Common
+      maxAttenuation: 100
+      maxDuration: 3
+      minDuration: 3
+    - name: IceBox_OnDestroyed_Explosion
+      guid: beaa3192e8b3414b83b9f69a45b4bff0
+      id: 2440487424
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: IceBox
+        ObjectType: 4
+      - ElementName: IceBox_OnDestroyed_Explosion
+        ObjectType: 3
+      Path: Boxes/IceBox/IceBox_OnDestroyed_Explosion
+      maxAttenuation: 100
+      maxDuration: 3
+      minDuration: 3
+    - name: IceBox_OnDestroyed_Firing
+      guid: c236089758b77546a71a592a71dc8586
+      id: 3101720622
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: IceBox
+        ObjectType: 4
+      - ElementName: IceBox_OnDestroyed_Firing
+        ObjectType: 3
+      Path: Boxes/IceBox/IceBox_OnDestroyed_Firing
+      maxAttenuation: 100
+      maxDuration: 2.932292
+      minDuration: 2.932292
+    - name: IceBox_OnDestroyed_Frozen
+      guid: e96b43bc50ba53428f991761d4b9d47f
+      id: 325648945
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: IceBox
+        ObjectType: 4
+      - ElementName: IceBox_OnDestroyed_Frozen
+        ObjectType: 3
+      Path: Boxes/IceBox/IceBox_OnDestroyed_Frozen
       maxAttenuation: 100
       maxDuration: 3
       minDuration: 3
@@ -791,8 +899,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/LifeBox/LifeBox_OnDestoryed
       maxAttenuation: 100
-      maxDuration: 1.516276
-      minDuration: 1.516276
+      maxDuration: 2.167347
+      minDuration: 2.167347
     - name: LightningBox
       guid: 1878dbaf78c05946b8206721301e8a6f
       id: 670883636
@@ -805,62 +913,48 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: LightningBox_Kicked
-      guid: 136fcf0106e0b7459ecf30de2a816716
-      id: 2252175878
+    - name: LightningBox_OnDestroyed_Common
+      guid: fc5f775d5646f2488ae947e3ae6d8728
+      id: 2603255291
       PathAndIcons:
       - ElementName: Boxes
         ObjectType: 12
       - ElementName: LightningBox
         ObjectType: 4
-      - ElementName: LightningBox_Kicked
+      - ElementName: LightningBox_OnDestroyed_Common
         ObjectType: 3
-      Path: Boxes/LightningBox/LightningBox_Kicked
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
-    - name: LightningBox_OnBeingMerged
+      Path: Boxes/LightningBox/LightningBox_OnDestroyed_Common
+      maxAttenuation: 100
+      maxDuration: 0.756599
+      minDuration: 0.756599
+    - name: LightningBox_OnLightningStart
       guid: bfe529fc3b6dbd49937127554da01646
-      id: 752514333
+      id: 1782102794
       PathAndIcons:
       - ElementName: Boxes
         ObjectType: 12
       - ElementName: LightningBox
         ObjectType: 4
-      - ElementName: LightningBox_OnBeingMerged
+      - ElementName: LightningBox_OnLightningStart
         ObjectType: 3
-      Path: Boxes/LightningBox/LightningBox_OnBeingMerged
+      Path: Boxes/LightningBox/LightningBox_OnLightningStart
       maxAttenuation: 100
       maxDuration: -1
       minDuration: -1
-    - name: LightningBox_OnBeingMergedEnd
+    - name: LightningBox_OnLightningStop
       guid: b8c765ebcebafb41b98b7590cf307b73
-      id: 3325291516
+      id: 3069114978
       PathAndIcons:
       - ElementName: Boxes
         ObjectType: 12
       - ElementName: LightningBox
         ObjectType: 4
-      - ElementName: LightningBox_OnBeingMergedEnd
+      - ElementName: LightningBox_OnLightningStop
         ObjectType: 3
-      Path: Boxes/LightningBox/LightningBox_OnBeingMergedEnd
+      Path: Boxes/LightningBox/LightningBox_OnLightningStop
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: LightningBox_OnDestroyed
-      guid: fc5f775d5646f2488ae947e3ae6d8728
-      id: 1840927597
-      PathAndIcons:
-      - ElementName: Boxes
-        ObjectType: 12
-      - ElementName: LightningBox
-        ObjectType: 4
-      - ElementName: LightningBox_OnDestroyed
-        ObjectType: 3
-      Path: Boxes/LightningBox/LightningBox_OnDestroyed
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
     - name: LongLogBox
       guid: ed7155a68a22df4cbb917547f99d4bec
       id: 3087206198
@@ -875,22 +969,6 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: LongLogBox_OnBeingKicked
-      guid: 3ff7d02639510949935a7ed0bf30da36
-      id: 2757939046
-      PathAndIcons:
-      - ElementName: Boxes
-        ObjectType: 12
-      - ElementName: WoodenBox
-        ObjectType: 4
-      - ElementName: LongLogBox
-        ObjectType: 4
-      - ElementName: LongLogBox_OnBeingKicked
-        ObjectType: 3
-      Path: Boxes/WoodenBox/LongLogBox/LongLogBox_OnBeingKicked
-      maxAttenuation: 100
-      maxDuration: 0
-      minDuration: 0
     - name: LongLogBox_OnBeingPushed
       guid: f156f7417d53a64096f726d2f1358502
       id: 475682704
@@ -905,8 +983,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/WoodenBox/LongLogBox/LongLogBox_OnBeingPushed
       maxAttenuation: 100
-      maxDuration: 1.505708
-      minDuration: 1.459882
+      maxDuration: 2.045011
+      minDuration: 1.982772
     - name: LongLogBox_OnBeingPushedEnd
       guid: 4a3dacf8238604409fb1eccb59d146e0
       id: 1433190295
@@ -923,9 +1001,9 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
-    - name: LongLogBox_OnDestroyed
+    - name: LongLogBox_OnDestroyed_Common
       guid: f9e7ac8e8635c4499be7f1bfa108e21b
-      id: 1228531471
+      id: 648543501
       PathAndIcons:
       - ElementName: Boxes
         ObjectType: 12
@@ -933,12 +1011,12 @@ MonoBehaviour:
         ObjectType: 4
       - ElementName: LongLogBox
         ObjectType: 4
-      - ElementName: LongLogBox_OnDestroyed
+      - ElementName: LongLogBox_OnDestroyed_Common
         ObjectType: 3
-      Path: Boxes/WoodenBox/LongLogBox/LongLogBox_OnDestroyed
+      Path: Boxes/WoodenBox/LongLogBox/LongLogBox_OnDestroyed_Common
       maxAttenuation: 100
-      maxDuration: 0
-      minDuration: 0
+      maxDuration: 1.421626
+      minDuration: 0.909089
     - name: MediumLogBox
       guid: 7e51f9cb1a4098448bcc747efcd06013
       id: 3114800021
@@ -1111,8 +1189,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/Boxes_Common/OnBeingKicked_Heavy
       maxAttenuation: 100
-      maxDuration: 2.855206
-      minDuration: 1.756818
+      maxDuration: 3.991492
+      minDuration: 2.455979
     - name: OnBeingKicked_Light
       guid: a89acf226fc78d4da86a47c02667d0f0
       id: 2340279731
@@ -1139,7 +1217,7 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/Boxes_Common/OnBeingLift
       maxAttenuation: 100
-      maxDuration: 1.081371
+      maxDuration: 0.223424
       minDuration: 0.223424
     - name: OnBeingMerged
       guid: aba27dd3b93e474aa1f0affcc4d72742
@@ -1167,8 +1245,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/Boxes_Common/OnBeingPushed_Heavy
       maxAttenuation: 100
-      maxDuration: 0.355903
-      minDuration: 0.321181
+      maxDuration: 0.51212
+      minDuration: 0.462157
     - name: OnBeingPushed_Light
       guid: c6d1ad85c447b14fa5a1a1b714975a8d
       id: 2546353925
@@ -1265,8 +1343,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/Boxes_Common/OnDestroyed_Explosion
       maxAttenuation: 100
-      maxDuration: 1.950476
-      minDuration: 1.950476
+      maxDuration: 0.93381
+      minDuration: 0.93381
     - name: OnDestroyed_Firing
       guid: c76a3ed707172b409df9bddaaab354d9
       id: 179895447
@@ -1293,8 +1371,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/Boxes_Common/OnDestroyed_Frozen
       maxAttenuation: 100
-      maxDuration: 1.16005
-      minDuration: 1.16005
+      maxDuration: 1.777161
+      minDuration: 1.777161
     - name: OnThrownUp
       guid: dd72d8eb7e18dc49af34bc07efb23d3d
       id: 58254363
@@ -1309,6 +1387,36 @@ MonoBehaviour:
       maxAttenuation: 100
       maxDuration: 0.337979
       minDuration: 0.201361
+    - name: StackingGoldenBox
+      guid: a8deaf253297154291527f480b4622fc
+      id: 3080133125
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: GoldenBox
+        ObjectType: 4
+      - ElementName: StackingGoldenBox
+        ObjectType: 4
+      Path: Boxes/GoldenBox/StackingGoldenBox
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: StackingGoldenBox_OnDestroyed
+      guid: 6e40e10fc9f4a64c9f3d8df52721a5e4
+      id: 3367223592
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: GoldenBox
+        ObjectType: 4
+      - ElementName: StackingGoldenBox
+        ObjectType: 4
+      - ElementName: StackingGoldenBox_OnDestroyed
+        ObjectType: 3
+      Path: Boxes/GoldenBox/StackingGoldenBox/StackingGoldenBox_OnDestroyed
+      maxAttenuation: 100
+      maxDuration: 2.018876
+      minDuration: 2.018876
     - name: WoodenBox
       guid: d7b746d33f99b048b17acef596ea3288
       id: 4244245246
@@ -1421,9 +1529,9 @@ MonoBehaviour:
       - ElementName: OnBeingFrozen
         ObjectType: 3
       Path: Common/Common/OnBeingFrozen
-      maxAttenuation: 0
-      maxDuration: 2.75
-      minDuration: 2.75
+      maxAttenuation: 100
+      maxDuration: 0
+      minDuration: 0
     - name: OnBeingLit
       guid: f08ad19e6f57a04dbda25187e68cf7ba
       id: 3713364846
@@ -1435,7 +1543,7 @@ MonoBehaviour:
       - ElementName: OnBeingLit
         ObjectType: 3
       Path: Common/Common/OnBeingLit
-      maxAttenuation: 0
+      maxAttenuation: 100
       maxDuration: 5
       minDuration: 5
     - name: OnBurningEnd
@@ -1482,7 +1590,7 @@ MonoBehaviour:
     ParentPath: Enemies
     guid: 3fcb31ab5fe9c848907277668498151b
     GuidInternal: 
-    m_lastTime: -8585819903534775808
+    m_lastTime: -8585815310454775808
     List:
     - name: _FireEnemy_Red_Fire_Loop_Play
       guid: 0e7e57f24612f646851c5e2d29b641fd
@@ -1730,8 +1838,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Enemies/FireEnemy_Red/FireEnemy_Red_HeatEmit_Cast
       maxAttenuation: 30
-      maxDuration: 3.07161
-      minDuration: 2.5339
+      maxDuration: 4.4971
+      minDuration: 3.709847
     - name: FireEnemy_Red_HeatEmit_Preparing
       guid: 52ee3e0a14ac31438705982de4a7f1ba
       id: 2633498556
@@ -1744,8 +1852,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Enemies/FireEnemy_Red/FireEnemy_Red_HeatEmit_Preparing
       maxAttenuation: 30
-      maxDuration: 2.133609
-      minDuration: 1.676504
+      maxDuration: 2.688179
+      minDuration: 2.112262
     - name: FireEnemy_Red_OnBeingDamaged
       guid: ee3685dea0bcb1489f6b8a6fa4f28e74
       id: 1850913127
@@ -1798,8 +1906,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Enemies/FireEnemy_Yellow/FireEnemy_Yellow_HeatEmit_Cast
       maxAttenuation: 0
-      maxDuration: 4.4971
-      minDuration: 3.709847
+      maxDuration: 3.07161
+      minDuration: 2.5339
     - name: FireEnemy_Yellow_HeatEmit_Preparing
       guid: 5ec3fec6f0a033469d5f98e91a807a7b
       id: 1254688751
@@ -1812,8 +1920,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Enemies/FireEnemy_Yellow/FireEnemy_Yellow_HeatEmit_Preparing
       maxAttenuation: 0
-      maxDuration: 2.688179
-      minDuration: 2.112262
+      maxDuration: 2.133609
+      minDuration: 1.676504
     - name: FireEnemy_Yellow_OnBeingDamaged
       guid: 22ba57c2f7bdc246ae72f35534a94915
       id: 3562230120
@@ -2059,6 +2167,116 @@ MonoBehaviour:
       - ElementName: IceEnemy_Cyan_Spawn
         ObjectType: 3
       Path: Enemies/IceEnemy_Cyan/IceEnemy_Cyan_Spawn
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Purple
+      guid: 7287cebded282d43b65fa3a9dbea0e2b
+      id: 3962682843
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Purple
+        ObjectType: 4
+      Path: Enemies/IceEnemy_Purple
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: IceEnemy_Purple_FrostBreath_Cast
+      guid: 2444e7d305474d49aa9bc5941f7ba42f
+      id: 3490688640
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Purple
+        ObjectType: 4
+      - ElementName: IceEnemy_Purple_FrostBreath_Cast
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Purple/IceEnemy_Purple_FrostBreath_Cast
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: IceEnemy_Purple_FrostBreath_Preparing
+      guid: a699e60e1bb54742954124354b13d9cb
+      id: 566792463
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Purple
+        ObjectType: 4
+      - ElementName: IceEnemy_Purple_FrostBreath_Preparing
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Purple/IceEnemy_Purple_FrostBreath_Preparing
+      maxAttenuation: 0
+      maxDuration: 1.5
+      minDuration: 1.374989
+    - name: IceEnemy_Purple_GlacialSlam_Cast
+      guid: 964667c5765c8f4882355ff3933d5f73
+      id: 511085118
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Purple
+        ObjectType: 4
+      - ElementName: IceEnemy_Purple_GlacialSlam_Cast
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Purple/IceEnemy_Purple_GlacialSlam_Cast
+      maxAttenuation: 0
+      maxDuration: 3.222857
+      minDuration: 3.222857
+    - name: IceEnemy_Purple_GlacialSlam_Preparing
+      guid: 336d649f2952804e98a987b755740d72
+      id: 1029919329
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Purple
+        ObjectType: 4
+      - ElementName: IceEnemy_Purple_GlacialSlam_Preparing
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Purple/IceEnemy_Purple_GlacialSlam_Preparing
+      maxAttenuation: 0
+      maxDuration: 1.874989
+      minDuration: 1.874989
+    - name: IceEnemy_Purple_OnBeingDamaged
+      guid: 2eeb931b34f37c4fafad2d37401a7e12
+      id: 3520954431
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Purple
+        ObjectType: 4
+      - ElementName: IceEnemy_Purple_OnBeingDamaged
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Purple/IceEnemy_Purple_OnBeingDamaged
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
+    - name: IceEnemy_Purple_OnDestroyed_Common
+      guid: 1c5090ab1f65524fa824b82eeac0f6a3
+      id: 1320188178
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Purple
+        ObjectType: 4
+      - ElementName: IceEnemy_Purple_OnDestroyed_Common
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Purple/IceEnemy_Purple_OnDestroyed_Common
+      maxAttenuation: 0
+      maxDuration: 2.683288
+      minDuration: 2.683288
+    - name: IceEnemy_Purple_Spawn
+      guid: 11e4f0f64392d44c9a2dd797e98004a8
+      id: 198415643
+      PathAndIcons:
+      - ElementName: Enemies
+        ObjectType: 12
+      - ElementName: IceEnemy_Purple
+        ObjectType: 4
+      - ElementName: IceEnemy_Purple_Spawn
+        ObjectType: 3
+      Path: Enemies/IceEnemy_Purple/IceEnemy_Purple_Spawn
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -2544,7 +2762,7 @@ MonoBehaviour:
     ParentPath: Player
     guid: 991a3b24403a5c418c7318d11e7863e8
     GuidInternal: 
-    m_lastTime: -8585819939104775808
+    m_lastTime: -8585815310454775808
     List:
     - name: General
       guid: f56de660626dc348a1eeb1a5750a255c
@@ -2570,22 +2788,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Player/General/Player_Dash
       maxAttenuation: 0
-      maxDuration: 1.791283
-      minDuration: 1.24102
-    - name: Player_Death
-      guid: e1664c58b2d979478a7768aafa302e03
-      id: 3083087645
-      PathAndIcons:
-      - ElementName: Player
-        ObjectType: 12
-      - ElementName: General
-        ObjectType: 4
-      - ElementName: Player_Death
-        ObjectType: 3
-      Path: Player/General/Player_Death
-      maxAttenuation: 0
-      maxDuration: 2.458554
-      minDuration: 1.915261
+      maxDuration: 1.156191
+      minDuration: 1.079546
     - name: Player_Footstep
       guid: 58b33529bd74be469fa6d9d0ba824577
       id: 2453392179
@@ -2600,6 +2804,20 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
+    - name: Player_GainActionPoint
+      guid: c1f3ddedc468404cb750441537ef6c75
+      id: 1318441712
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_GainActionPoint
+        ObjectType: 3
+      Path: Player/General/Player_GainActionPoint
+      maxAttenuation: 0
+      maxDuration: 1.529683
+      minDuration: 1.529683
     - name: Player_GainFireElement
       guid: 8c340682f68c924cb1b753e2ac7a129a
       id: 347690904
@@ -2656,6 +2874,34 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: 2.13833
       minDuration: 2.13833
+    - name: Player_GainMaxActionPoint
+      guid: c7300d4275cf93488661f3a016deddbb
+      id: 3822428458
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_GainMaxActionPoint
+        ObjectType: 3
+      Path: Player/General/Player_GainMaxActionPoint
+      maxAttenuation: 0
+      maxDuration: 1.113651
+      minDuration: 1.113651
+    - name: Player_GainMaxHealth
+      guid: 6883cf19dee9de41b1c2dfac139f86d3
+      id: 730516512
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_GainMaxHealth
+        ObjectType: 3
+      Path: Player/General/Player_GainMaxHealth
+      maxAttenuation: 0
+      maxDuration: 2.311202
+      minDuration: 1.662857
     - name: Player_Kick
       guid: d4fbaa539179c94196ef7a32f11d703d
       id: 4076006907
@@ -2710,8 +2956,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Player/General/Player_OnBeingHealed
       maxAttenuation: 0
-      maxDuration: 2.167347
-      minDuration: 2.167347
+      maxDuration: 3
+      minDuration: 2.312494
     - name: Player_OnBeingLit
       guid: dcc28d6a815443458f9943aa4d52e48f
       id: 1305348786
@@ -2724,8 +2970,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Player/General/Player_OnBeingLit
       maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxDuration: 5
+      minDuration: 5
     - name: Player_OnBurningEnd
       guid: a206fdc3890df7419b1c074aaf2f7047
       id: 651730626
@@ -2740,6 +2986,20 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: 0
       minDuration: 0
+    - name: Player_OnDestroyed
+      guid: e1664c58b2d979478a7768aafa302e03
+      id: 1122442795
+      PathAndIcons:
+      - ElementName: Player
+        ObjectType: 12
+      - ElementName: General
+        ObjectType: 4
+      - ElementName: Player_OnDestroyed
+        ObjectType: 3
+      Path: Player/General/Player_OnDestroyed
+      maxAttenuation: 0
+      maxDuration: 2.093741
+      minDuration: 1.111995
     - name: Player_OnFrozenEnd
       guid: 81671788a8d2774a9a498292f186a5d3
       id: 2187238187

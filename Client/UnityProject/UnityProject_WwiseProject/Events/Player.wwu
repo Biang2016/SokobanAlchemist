@@ -43,7 +43,7 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="Player_Death" ID="{584C66E1-D9B2-4779-8A77-68AAFA302E03}">
+						<Event Name="Player_OnDestroyed" ID="{584C66E1-D9B2-4779-8A77-68AAFA302E03}">
 							<PropertyList>
 								<Property Name="Color" Type="int16" Value="16"/>
 								<Property Name="OverrideColor" Type="bool" Value="True"/>
@@ -52,7 +52,7 @@
 								<Action Name="" ID="{B07EB281-2655-4A8A-91DF-D5859D4A19E0}" ShortID="498531730">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="Player_Death" ID="{64ABD81E-0CDE-4E36-86E2-5D48F891A3A6}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+											<ObjectRef Name="Player_OnDestroyed" ID="{64ABD81E-0CDE-4E36-86E2-5D48F891A3A6}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -207,6 +207,39 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="Player_GainGold" ID="{EF67105E-A2DC-4357-83E3-7CA2A14D073B}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Player_GainMaxActionPoint" ID="{420D30C7-CF75-4893-8661-F3A016DEDDBB}">
+							<ChildrenList>
+								<Action Name="" ID="{FF23D3E8-31BA-4259-96C5-4EF2624AB1BD}" ShortID="917646346">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_GainMaxActionPoint" ID="{6186D8B2-15A9-4502-B675-56C42AE1E633}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Player_GainActionPoint" ID="{EDDDF3C1-68C4-4C40-B750-441537EF6C75}">
+							<ChildrenList>
+								<Action Name="" ID="{FBAE9535-5FD7-4976-A08C-B5B28FC96D5D}" ShortID="417919973">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_GainActionPoint" ID="{6D703755-2DA2-4F0D-95B7-5B9BA1187736}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Player_GainMaxHealth" ID="{19CF8368-E9DE-41DE-B1C2-DFAC139F86D3}">
+							<ChildrenList>
+								<Action Name="" ID="{82F6163B-FA80-4777-BB06-F3FE7D2056CA}" ShortID="469511889">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_GainMaxHealth" ID="{03924624-EE45-4139-A261-599A544AF315}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>

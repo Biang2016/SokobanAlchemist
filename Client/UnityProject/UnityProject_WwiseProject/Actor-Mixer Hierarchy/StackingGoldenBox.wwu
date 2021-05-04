@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{F6FA8875-3158-4E99-8C40-3C82D64E7370}" SchemaVersion="97" RootDocumentID="{BF4FC306-E3A9-4180-902B-945ED5E7EFDB}">
+	<AudioObjects>
+		<WorkUnit Name="StackingGoldenBox" ID="{F6FA8875-3158-4E99-8C40-3C82D64E7370}" OwnerID="{ABC65056-1A6C-4C9D-8CE0-4E3CFED4B185}" PersistMode="Nested">
+			<ChildrenList>
+				<RandomSequenceContainer Name="StackingGoldenBox_OnDestroyed" ID="{3EFC0A3A-3C0F-4FF5-8A4E-FF8BBCAB13DE}" ShortID="721224322">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="gold chest" ID="{9A06E6D4-DA0D-44EC-9FA0-ABA73BF991C4}" ShortID="361674623">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="gold chest" ID="{B5BB7EC2-CEEA-4C97-A727-AB73C44B1319}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.167632275132275"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.743412698412698"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.225939153439153"/>
+										<Property Name="TrimEnd" Type="Real64" Value="2.24481481481481"/>
+										<Property Name="VolumeOffset" Type="Real64">
+											<ValueList>
+												<Value>-0.3</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>gold chest.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1036048774"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="gold chest" ID="{B5BB7EC2-CEEA-4C97-A727-AB73C44B1319}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>
