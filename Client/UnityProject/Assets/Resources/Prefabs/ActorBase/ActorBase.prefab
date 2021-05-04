@@ -277,8 +277,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PoolIndex: 0
   IsRecycled: 0
-  SlowlyTick: 0
   InitWorldModuleGUID: 0
+  SlowlyTick: 0
   EntityTypeIndex: 0
   RawEntityStatPropSet:
     CollectDetectRadius:
@@ -553,19 +553,6 @@ MonoBehaviour:
   LastMoveAttempt: {x: 0, y: 0, z: 0}
   CurThrowMoveAttempt: {x: 0, y: 0, z: 0}
   CurThrowPointOffset: {x: 0, y: 0, z: 0}
-  KickFX:
-    FXType:
-      TypeDefineType: 7
-      TypeGUID: (ce01f26e-4b00-4b76-bef3-72a60663efa0)
-    UseCurve: 0
-    FXScale: 1
-    AnimationCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  KickFXPivot: {fileID: 5032162331279849440}
   InjureFX:
     FXType:
       TypeDefineType: 7
@@ -682,14 +669,6 @@ MonoBehaviour:
     idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 0}
-  OnSliding:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
-  OnSlideStop:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
   OnBeingLift:
     idInternal: 0
     valueGuidInternal: 
@@ -711,10 +690,6 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 9d8e41fa4f1614ff78dd80c7a24693c6,
       type: 2}
-  OnBurning:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
   OnBurningEnd:
     idInternal: 0
     valueGuidInternal: 
@@ -758,7 +733,23 @@ MonoBehaviour:
   OnCollidePassively:
     idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: 96724c5f708ba4d6b8bc29b0864fa50c,
+      type: 2}
+  OnGainActionPoint:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: d3f2feb19e70a4da6ba2e1e4421c8515,
+      type: 2}
+  OnGainMaxActionPoint:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 79a6668d6bbab4d4e957443b43da80f4,
+      type: 2}
+  OnGainMaxHealth:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: efcb22022537441d78dbcb1c8cf67d00,
+      type: 2}
   OnGainGold:
     idInternal: 0
     valueGuidInternal: 
@@ -823,7 +814,8 @@ MonoBehaviour:
   OnSkillCast:
   - idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: 221aed6659af54dad9efa1cb28446480,
+      type: 2}
   - idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: c03d93abec815824a956adddb6ef868b,

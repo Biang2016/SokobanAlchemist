@@ -3,7 +3,7 @@
 	<AudioObjects>
 		<WorkUnit Name="Blizzard" ID="{FC8FD99A-8ABB-4A73-A864-F33E4DFDD0DA}" OwnerID="{ABC65056-1A6C-4C9D-8CE0-4E3CFED4B185}" PersistMode="Nested">
 			<ChildrenList>
-				<BlendContainer Name="BlizzardBox_OnDestroyed_Com" ID="{8B693ECA-54E7-469F-AE4C-0719D7AF86C1}" ShortID="775830870">
+				<BlendContainer Name="BlizzardBox_OnDestroyed_Common" ID="{8B693ECA-54E7-469F-AE4C-0719D7AF86C1}" ShortID="775830870">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -84,6 +84,334 @@
 							</ChildrenList>
 							<ActiveSourceList>
 								<ActiveSource Name="Cardboard Box Crashing v1" ID="{467C154C-E996-4887-AD05-E1D5A8A20E2C}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</BlendContainer>
+				<BlendContainer Name="BlizzardBox_OnDestroyed_Firing" ID="{7A791677-BBD7-4C69-B44B-8BBF5CCB075B}" ShortID="81482145">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="FireBox_OnDestroyed" ID="{6B0454EC-A463-4EC5-8378-4B0343AA50F0}" ShortID="644728627">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="fire-torch-whoosh-movement-01" ID="{0C90F753-9E25-45F1-8EDA-59956108FB1D}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.0888888888888889"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.418518518518519"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.285185185185185"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.57407407407407"/>
+										<Property Name="VolumeOffset" Type="Real64">
+											<ValueList>
+												<Value>-4.4</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>fire-torch-whoosh-movement-01.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1039121056"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{0C90F753-9E25-45F1-8EDA-59956108FB1D}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{434A82DF-F133-4EF9-8382-F8B64708ADE2}" ShortID="652834380">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-3</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{DBC75602-DCC6-4EC6-BE10-D830CBB89D69}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.136476442428823"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.541640880889393"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.622673768581506"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.90640530517763"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>Frost Magic Ice Bolt Spell Flying By 2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1050330503"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{DBC75602-DCC6-4EC6-BE10-D830CBB89D69}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</BlendContainer>
+				<BlendContainer Name="BlizzardBox_OnDestroyed_Frozen" ID="{7C17DE3A-9D93-4B1D-80E3-49471FC5AE30}" ShortID="230829828">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="OnDestroyed_Frozen" ID="{3B8F29BD-9C8F-42BA-B036-C26060459723}" ShortID="574027771">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="LDj_Audio - High Pitched Whoosh 2 (Wav)" ID="{22E2DB4F-C94A-4529-A2FB-D9E97ED058FA}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.19019778281683"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="1.05797516691862"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.160479379251701"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.93763991244646"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>LDj_Audio - High Pitched Whoosh 2 (Wav).wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="313750501"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="LDj_Audio - High Pitched Whoosh 2 (Wav)" ID="{22E2DB4F-C94A-4529-A2FB-D9E97ED058FA}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{DF1A7B04-C78E-4F31-B729-4843DEEF95BC}" ShortID="1038051538">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-3</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{3C551FE6-DA25-43CB-AAA1-74FB40F06848}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.136476442428823"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.541640880889393"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.622673768581506"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.90640530517763"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>Frost Magic Ice Bolt Spell Flying By 2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1050330503"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{3C551FE6-DA25-43CB-AAA1-74FB40F06848}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</BlendContainer>
+				<BlendContainer Name="BlizzardBox_OnDestroyed_Collide" ID="{13FAB7EE-05E0-4970-AF98-291D5BA6A702}" ShortID="1047498824">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="OnCollideActively_2" ID="{CB8D86BB-2B6A-4CD4-95E4-29F5EE513793}" ShortID="644322926">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Cardboard Box Crashing v2" ID="{95076ACD-6BD5-4CA9-8105-D507AC2567DF}">
+									<Language>SFX</Language>
+									<AudioFile>Cardboard Box Crashing v2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="21993998"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Cardboard Box Crashing v2" ID="{95076ACD-6BD5-4CA9-8105-D507AC2567DF}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</BlendContainer>
+				<BlendContainer Name="BlizzardBox_OnDestroyed_Explosion" ID="{41139455-C248-43E0-97C8-438B36FDF12F}" ShortID="871521922">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="fence explosion" ID="{53CD0E2F-884F-414D-ADDA-D419F6E09D95}" ShortID="85110690">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>4</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="fence explosion" ID="{4F1D2531-027E-456C-8A4A-2C788CB7473C}">
+									<Language>SFX</Language>
+									<AudioFile>fence explosion.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="35739125"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="fence explosion" ID="{4F1D2531-027E-456C-8A4A-2C788CB7473C}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{231B8C96-5DED-43D4-94BD-0A1AB693A5BD}" ShortID="810144869">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-3</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{911E362C-41C9-41BE-8E15-CD8922E5C37E}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.136476442428823"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.541640880889393"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.622673768581506"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.90640530517763"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>Frost Magic Ice Bolt Spell Flying By 2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1050330503"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{911E362C-41C9-41BE-8E15-CD8922E5C37E}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>

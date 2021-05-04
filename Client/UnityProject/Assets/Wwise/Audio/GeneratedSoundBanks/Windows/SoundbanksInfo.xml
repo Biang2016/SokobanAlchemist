@@ -25,7 +25,7 @@
 				<GameParameter Id="4179668880" Name="Master_Volume" ObjectPath="\Game Parameters\GameplayVolumes\Master_Volume"/>
 			</GameParameters>
 		</SoundBank>
-		<SoundBank Id="1605876511" Language="SFX" Hash="3321575811">
+		<SoundBank Id="1605876511" Language="SFX" Hash="1382236094">
 			<ObjectPath>\SoundBanks\Default Work Unit\SFX Work Unit\SFX_Bank</ObjectPath>
 			<ShortName>SFX_Bank</ShortName>
 			<Path>SFX_Bank.bnk</Path>
@@ -120,7 +120,7 @@
 				<Event Id="2932381025" Name="MediumLogBox_OnDestroyed_Frozen" ObjectPath="\Events\Boxes\MediumLogBox\MediumLogBox_OnDestroyed_Frozen" MaxAttenuation="100.000000" DurationType="OneShot" DurationMin="1.777161" DurationMax="1.777161"/>
 				<Event Id="1507480323" Name="OnBeingDropped_Metal" ObjectPath="\Events\Boxes\Boxes_Common\OnBeingDropped_Metal" MaxAttenuation="100.000000" DurationType="OneShot" DurationMin="0.688657" DurationMax="0.848446"/>
 				<Event Id="2957810425" Name="OnBeingDropped_Wood" ObjectPath="\Events\Boxes\Boxes_Common\OnBeingDropped_Wood" MaxAttenuation="100.000000" DurationType="OneShot" DurationMin="0.223424" DurationMax="0.375011"/>
-				<Event Id="3833687285" Name="OnBeingFrozen" ObjectPath="\Events\Common\Common\OnBeingFrozen" MaxAttenuation="100.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+				<Event Id="3833687285" Name="OnBeingFrozen" ObjectPath="\Events\Common\Common\OnBeingFrozen" MaxAttenuation="100.000000" DurationType="OneShot" DurationMin="2.643333" DurationMax="2.643333"/>
 				<Event Id="1643181542" Name="OnBeingKicked_Heavy" ObjectPath="\Events\Boxes\Boxes_Common\OnBeingKicked_Heavy" MaxAttenuation="100.000000" DurationType="OneShot" DurationMin="2.455979" DurationMax="3.991492"/>
 				<Event Id="2340279731" Name="OnBeingKicked_Light" ObjectPath="\Events\Boxes\Boxes_Common\OnBeingKicked_Light" MaxAttenuation="100.000000" DurationType="OneShot" DurationMin="1.583333" DurationMax="2.500000"/>
 				<Event Id="3917794368" Name="OnBeingLift" ObjectPath="\Events\Boxes\Boxes_Common\OnBeingLift" MaxAttenuation="100.000000" DurationType="OneShot" DurationMin="0.223424" DurationMax="0.223424"/>
@@ -132,6 +132,7 @@
 				<Event Id="235712830" Name="OnBeingPushedEnd_Light" ObjectPath="\Events\Boxes\Boxes_Common\OnBeingPushedEnd_Light" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
 				<Event Id="3484121230" Name="OnBurningEnd" ObjectPath="\Events\Common\Common\OnBurningEnd" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
 				<Event Id="446098551" Name="OnCollideActively" ObjectPath="\Events\Boxes\Boxes_Common\OnCollideActively" MaxAttenuation="100.000000" DurationType="OneShot" DurationMin="0.510295" DurationMax="0.730816"/>
+				<Event Id="1132485630" Name="OnCollidePassively" ObjectPath="\Events\Common\Common\OnCollidePassively" DurationType="OneShot" DurationMin="0.246456" DurationMax="0.352961"/>
 				<Event Id="1965948984" Name="OnDestroyed_Collide" ObjectPath="\Events\Boxes\Boxes_Common\OnDestroyed_Collide" MaxAttenuation="100.000000" DurationType="OneShot" DurationMin="0.780068" DurationMax="0.780068"/>
 				<Event Id="931390837" Name="OnDestroyed_Common" ObjectPath="\Events\Boxes\Boxes_Common\OnDestroyed_Common" MaxAttenuation="100.000000" DurationType="OneShot" DurationMin="0.780068" DurationMax="0.780068"/>
 				<Event Id="2622590811" Name="OnDestroyed_Explosion" ObjectPath="\Events\Boxes\Boxes_Common\OnDestroyed_Explosion" MaxAttenuation="100.000000" DurationType="OneShot" DurationMin="0.933810" DurationMax="0.933810"/>
@@ -474,6 +475,10 @@
 				<File Id="740197906" Language="SFX">
 					<ShortName>OBJECT_WOOD_Logs_Small_Fall_08.wav</ShortName>
 					<Path>SFX/OBJECT_WOOD_Logs_Small_Fall_08_B09F49DF.wem</Path>
+				</File>
+				<File Id="742139677" Language="SFX">
+					<ShortName>Frozen_Ice_Hit_Spell_Whoosh_2.wav</ShortName>
+					<Path>SFX/Frozen_Ice_Hit_Spell_Whoosh_2_B09F49DF.wem</Path>
 				</File>
 				<File Id="761767088" Language="SFX">
 					<ShortName>Inhale3.wav</ShortName>

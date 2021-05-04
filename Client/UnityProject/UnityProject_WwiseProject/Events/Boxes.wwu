@@ -13,118 +13,56 @@
 						<Property Name="OverrideColor" Type="bool" Value="True"/>
 					</PropertyList>
 					<ChildrenList>
-						<Folder Name="MediumLogBox" ID="{CBF9517E-401A-4498-8BCC-747EFCD06013}" ShortID="895342839">
-							<ChildrenList>
-								<Event Name="MediumLogBox_Kicked" ID="{9B7652F8-4654-4098-830F-00687CE657EE}">
-									<ChildrenList>
-										<Action Name="" ID="{AEF5323C-6E4C-4D80-87CA-3229FCF14C2C}" ShortID="358287305">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="Kicked" ID="{ACF77C8F-197B-44C6-AA58-313FA4C83F5D}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="MediumLogBox_Pushed" ID="{E47521A1-6634-4980-A8C6-71E9636E4987}">
-									<ChildrenList>
-										<Action Name="" ID="{033A4345-1C14-4E9B-BC72-5E0FD16313D7}" ShortID="1048109603">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="Pushed" ID="{35CC133C-D051-4175-B0AC-2FF171F0BD04}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="MediumLogBox_Lit" ID="{3C2A478D-BD2B-4956-A14B-54F4758F6D0D}"/>
-								<Event Name="MediumLogBox_Destructed" ID="{B649647B-3C8C-41E4-822D-132A0A704841}"/>
-							</ChildrenList>
-						</Folder>
-						<Folder Name="LongLogBox" ID="{A65571ED-228A-4CDF-BB91-7547F99D4BEC}" ShortID="813131049">
-							<ChildrenList>
-								<Event Name="LongLogBox_OnBeingPushed" ID="{41F756F1-537D-40A6-96F7-26D2F1358502}">
-									<ChildrenList>
-										<Action Name="" ID="{431BF827-96CF-43E3-850A-F5BFA0C8F7A4}" ShortID="545678642">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="LongLogBox_OnBeingPushed" ID="{3DE046D8-7C8F-4010-A09A-0DF2AE323663}" WorkUnitID="{736D18D2-B848-4748-AA9C-619A57052F80}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="LongLogBox_OnDestroyed_Common" ID="{8EACE7F9-3586-49C4-9BE7-F1BFA108E21B}">
-									<ChildrenList>
-										<Action Name="" ID="{C0816D83-6D43-4DC6-8742-095458CB8B94}" ShortID="445257628">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="LongLogBox_OnDestroyed_Common" ID="{D3FF591C-26AF-4F67-9E07-3DFC53D7C0C2}" WorkUnitID="{736D18D2-B848-4748-AA9C-619A57052F80}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="LongLogBox_OnBeingPushedEnd" ID="{F8AC3D4A-8623-4004-9FB1-ECCB59D146E0}">
-									<ChildrenList>
-										<Action Name="" ID="{89F0A217-0B21-460F-A34A-30B2DE94CA12}" ShortID="414854084">
-											<PropertyList>
-												<Property Name="ActionType" Type="int16" Value="2"/>
-											</PropertyList>
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="LongLogBox_OnBeingPushed" ID="{3DE046D8-7C8F-4010-A09A-0DF2AE323663}" WorkUnitID="{736D18D2-B848-4748-AA9C-619A57052F80}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-							</ChildrenList>
-						</Folder>
-						<Folder Name="CharcoalBox" ID="{B2A27D1E-C9DD-4D39-B800-53F83F83EC14}" ShortID="1052075035">
-							<ChildrenList>
-								<Event Name="CharcoalBox_Kicked" ID="{D6C2FD88-24A2-4E97-A22D-47F0E96220CB}">
-									<ChildrenList>
-										<Action Name="" ID="{508C0408-2107-4BBB-A1AF-326F4AEAE285}" ShortID="792406036">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="Kicked" ID="{ACF77C8F-197B-44C6-AA58-313FA4C83F5D}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="CharcoalBox_Pushed" ID="{342EBA29-EC63-4DA7-A807-076177E72382}">
-									<ChildrenList>
-										<Action Name="" ID="{7115BB61-B032-475E-A083-5CD1B1B5B23C}" ShortID="189932580">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="Pushed" ID="{35CC133C-D051-4175-B0AC-2FF171F0BD04}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="CharcoalBox_Lit" ID="{40E33285-9D60-4D84-A125-5CAA59FC2A66}"/>
-								<Event Name="CharcoalBox_OnDestroyed_Common" ID="{F4626A80-30CA-4CFB-A2AD-DF24F11E20A4}">
-									<ChildrenList>
-										<Action Name="" ID="{65F2A545-6C57-48E0-92EE-14916ECBF01B}" ShortID="834937285">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="CharcoalBox_OnDestroyed_Common" ID="{C544481F-9E03-48BB-A2BC-94FCEAFD6117}" WorkUnitID="{BF63AAA4-E74E-47E3-B82E-04306A579548}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-							</ChildrenList>
-						</Folder>
-						<Event Name="WoodenBox_OnDestroyed" ID="{A54C246E-909B-4618-B75E-9B421C07388A}">
+						<Event Name="WoodenBox_OnDestroyed_Common" ID="{A54C246E-909B-4618-B75E-9B421C07388A}">
 							<ChildrenList>
 								<Action Name="" ID="{D0875999-8957-4ACD-9B99-E77A883B7046}" ShortID="394097803">
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="WoodebBox_OnDestroyed_Common" ID="{5ADE77C7-2E58-46AA-ACB6-5A4D019D0E6C}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenBox_OnDestroyed_Firing" ID="{99C10BDB-45E4-416E-AF22-C63C49DC8A94}">
+							<ChildrenList>
+								<Action Name="" ID="{6CFD6DB0-4DDE-40B6-AFCD-5E8797CAC7D3}" ShortID="356315159">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenBox_OnDestroyed_Firing" ID="{026DF670-AC87-4C61-9DB6-DBF6CE12874F}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenBox_OnDestroyed_Frozen" ID="{9CD981DB-8C8E-473F-987A-7D7A1659DDE9}">
+							<ChildrenList>
+								<Action Name="" ID="{0E1BFB10-4E1B-488D-98CC-918A66EBCDDB}" ShortID="728264139">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenBox_OnDestroyed_Frozen" ID="{EA16142A-A772-4A03-885F-F3718C199390}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenBox_OnDestroyed_Collide" ID="{C604C691-843B-4611-A13C-015EEA599C23}">
+							<ChildrenList>
+								<Action Name="" ID="{CEDC1320-44E0-4186-90C7-72C311B75CBD}" ShortID="546605113">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenBox_OnDestroyed_Collide" ID="{9F4CD4EC-B78C-49C4-9A12-06377C56CC5B}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenBox_OnDestroyed_Explosion" ID="{0458E39D-A341-4118-8A4B-010C02B18247}">
+							<ChildrenList>
+								<Action Name="" ID="{27D398F9-74C3-47BE-8E64-5CFEB4599CE3}" ShortID="1048601872">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenBox_OnDestroyed_Explosion" ID="{22EBA309-F9E7-4D41-8761-BB39543B1046}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -138,65 +76,6 @@
 						<Property Name="OverrideColor" Type="bool" Value="True"/>
 					</PropertyList>
 					<ChildrenList>
-						<Folder Name="FlamethrowerBox" ID="{A1B502E6-373B-4565-B3C4-6BAEE5E9D474}" ShortID="1024717628">
-							<ChildrenList>
-								<Event Name="FlamethrowerBox_OnDestroyed_Common" ID="{DFD5C76B-92D9-4BF4-8832-1564065DF1E3}">
-									<ChildrenList>
-										<Action Name="" ID="{1A5176B6-82FC-44A4-B5C4-C4DC601E9F55}" ShortID="790285113">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="FlamethrowerBox_OnDestroyed_Common" ID="{7F7ACFC4-0D9B-44A8-B8C0-FA45D431B4C7}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="FlamethrowerBox_OnDestroyed_Firing" ID="{7880368A-8246-4F14-84F6-334F73E877D6}">
-									<ChildrenList>
-										<Action Name="" ID="{3C3FD35B-33BC-496F-868B-ACFE4C7ED8F3}" ShortID="26727038">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="FireBox_OnDestroyed_Firing" ID="{C74082BE-98EF-44A0-A4A4-C26510C39D6C}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="FlamethrowerBox_OnDestroyed_Frozen" ID="{7B087A20-0196-475F-95F0-31B479BD3C3D}">
-									<ChildrenList>
-										<Action Name="" ID="{1C12435F-391C-4CB4-90CA-C6D96B4FD17E}" ShortID="690577755">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="FireBox_OnDestroyed_Frozen" ID="{6532E5C5-2E0C-4906-9D3A-AAD101A85A6B}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="FlamethrowerBox_OnDestroyed_Collide" ID="{2C1DD3DA-04DC-433C-B398-419F58C1EE23}">
-									<ChildrenList>
-										<Action Name="" ID="{68EADD8C-9106-49E1-82C8-6FC5608C9980}" ShortID="361881798">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="FireBox_OnDestroyed_Collide" ID="{62C3DD49-0F2B-43E2-88A1-3D7E0D86DFE9}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="FlamethrowerBox_OnDestroyed_Explosion" ID="{6B38A483-D5ED-4492-91C3-251FA916A390}">
-									<ChildrenList>
-										<Action Name="" ID="{44FCD408-0D75-46BE-8DEC-09CE45D7B817}" ShortID="232146400">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="FireBox_OnDestroyed_Explosion" ID="{9A2CF6FF-B629-4772-8824-AAF88DC85DAD}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-							</ChildrenList>
-						</Folder>
 						<Event Name="FireBox_OnDestroyed_Common" ID="{57CECF09-8A0D-48E6-A04A-5DAAE763ED4D}">
 							<ChildrenList>
 								<Action Name="" ID="{4685D584-833A-4BAB-8398-94D9A2C20C50}" ShortID="871515942">
@@ -265,7 +144,7 @@
 								<Action Name="" ID="{3A3E5BD4-736F-48A6-B492-88986A260B8A}" ShortID="977805238">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="LifeBox_OnDestroyed" ID="{D0EE061A-FBA5-4C9F-9377-B9677E0EF51F}" WorkUnitID="{CD9AA83C-5F6C-408E-A8C1-68A0E0DADAED}"/>
+											<ObjectRef Name="LifeBox_OnDestroyed" ID="{57866460-9B73-4BF8-BCFA-EAA11825E34D}" WorkUnitID="{CD9AA83C-5F6C-408E-A8C1-68A0E0DADAED}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -279,65 +158,6 @@
 						<Property Name="OverrideColor" Type="bool" Value="True"/>
 					</PropertyList>
 					<ChildrenList>
-						<Folder Name="BlizzardBox" ID="{0428E319-4E7E-49D0-A0EF-112840A31A09}" ShortID="415261282">
-							<ChildrenList>
-								<Event Name="BlizardBox_OnDestroyed_Common" ID="{A59680C1-2269-45B4-8362-8646146810C9}">
-									<ChildrenList>
-										<Action Name="" ID="{7D704EE4-0814-459E-9736-FFAF3911B086}" ShortID="1060248609">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="BlizzardBox_OnDestroyed_Com" ID="{8B693ECA-54E7-469F-AE4C-0719D7AF86C1}" WorkUnitID="{FC8FD99A-8ABB-4A73-A864-F33E4DFDD0DA}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="BlizzardBox_OnDestroyed_Fir" ID="{6F566D2C-7489-454E-B31B-E61BA0AFBC68}">
-									<ChildrenList>
-										<Action Name="" ID="{5EC5009B-E206-49AF-B698-4C3521158946}" ShortID="186951230">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="FireBox_OnDestroyed_Firing" ID="{C74082BE-98EF-44A0-A4A4-C26510C39D6C}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="BlizzardBox_OnDestroyed_Fro" ID="{8F1E1334-B751-4358-A968-BBA6639AFD43}">
-									<ChildrenList>
-										<Action Name="" ID="{FE8E914B-73FE-4F8B-B7B7-E5AE9DAC8050}" ShortID="819204023">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="FireBox_OnDestroyed_Frozen" ID="{6532E5C5-2E0C-4906-9D3A-AAD101A85A6B}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="BlizzardBox_OnDestroyed_Coll" ID="{3BABD59E-3209-441F-A52E-DEEE0D0BDE13}">
-									<ChildrenList>
-										<Action Name="" ID="{BC59C350-6816-4620-87F5-A8B66586B4A2}" ShortID="724273140">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="FireBox_OnDestroyed_Collide" ID="{62C3DD49-0F2B-43E2-88A1-3D7E0D86DFE9}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="BlizzardBox_OnDestroyed_Explos" ID="{70A076F4-2AD5-41EC-B804-0BD2DCEAFACB}">
-									<ChildrenList>
-										<Action Name="" ID="{65605F0B-48B0-4401-86F5-561463E9A4BD}" ShortID="229314555">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="FireBox_OnDestroyed_Explosion" ID="{9A2CF6FF-B629-4772-8824-AAF88DC85DAD}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-							</ChildrenList>
-						</Folder>
 						<Event Name="IceBox_OnDestroyed_Common" ID="{04A89FAF-E952-466C-A359-2753A4B4AED1}">
 							<ChildrenList>
 								<Action Name="" ID="{67ABBFF7-8DA5-4E93-A787-A648B9CEBDBE}" ShortID="1031948539">
@@ -354,7 +174,7 @@
 								<Action Name="" ID="{C26B8561-AC13-4E57-A066-618A5A0E28B8}" ShortID="392362644">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="FireBox_OnDestroyed_Firing" ID="{C74082BE-98EF-44A0-A4A4-C26510C39D6C}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+											<ObjectRef Name="IceBox_OnDestroyed_Firing" ID="{B365B27F-FA10-4423-8548-66B44F1E83F6}" WorkUnitID="{15FB3040-4F45-4956-BB37-AB5ADF20AD4B}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -365,7 +185,7 @@
 								<Action Name="" ID="{7B0AAC5E-25FC-4A00-B18F-C05091AC98B1}" ShortID="110998278">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="FireBox_OnDestroyed_Frozen" ID="{6532E5C5-2E0C-4906-9D3A-AAD101A85A6B}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+											<ObjectRef Name="IceBox_OnDestroyed_Frozen" ID="{AFA12132-219F-43C7-82E2-F8A2D90B387B}" WorkUnitID="{15FB3040-4F45-4956-BB37-AB5ADF20AD4B}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -376,7 +196,7 @@
 								<Action Name="" ID="{CD460979-214E-4060-BCB6-885B6F2E59E3}" ShortID="797754633">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="FireBox_OnDestroyed_Collide" ID="{62C3DD49-0F2B-43E2-88A1-3D7E0D86DFE9}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+											<ObjectRef Name="IceBox_OnDestroyed_Collide" ID="{1A6E3D45-1D91-4784-BB95-885019E45A93}" WorkUnitID="{15FB3040-4F45-4956-BB37-AB5ADF20AD4B}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -387,7 +207,18 @@
 								<Action Name="" ID="{9793C071-DBA5-4397-ACD7-51A871486A5E}" ShortID="932732407">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="FireBox_OnDestroyed_Explosion" ID="{9A2CF6FF-B629-4772-8824-AAF88DC85DAD}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+											<ObjectRef Name="IceBox_OnDestroyed_Explosion" ID="{07D0D731-BA3B-404B-BA1D-C0B856AF557A}" WorkUnitID="{15FB3040-4F45-4956-BB37-AB5ADF20AD4B}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="IceBox_OnBeingKicked" ID="{CA2A2E94-D6C0-4A8B-8BB2-792DCC3C8262}">
+							<ChildrenList>
+								<Action Name="" ID="{2598B4CE-34C2-4009-A5FC-22BEF088FC18}" ShortID="1016595957">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="IceBox_OnBeingKicked" ID="{11273AEC-0928-4C97-9489-00D390DCEE76}" WorkUnitID="{15FB3040-4F45-4956-BB37-AB5ADF20AD4B}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -437,15 +268,59 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Event Name="LightningBox_OnDestroyed_Firing" ID="{30AAC77D-876E-4CD4-ACCF-DBC7830A0522}">
+							<ChildrenList>
+								<Action Name="" ID="{120F04D6-A3FC-4A28-BAA6-EF5233BBDA4F}" ShortID="561023181">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LightningBox_OnDestroyed_Firing" ID="{DFD604D2-967B-43B7-B6EE-D877B60AC2F9}" WorkUnitID="{10D67FDA-C83C-4E77-94DE-6C24113B692D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LightningBox_OnDestroyed_Frozen" ID="{732983F4-8BA6-4687-AC6E-507ECCE9A801}">
+							<ChildrenList>
+								<Action Name="" ID="{84A656A5-06F8-43F2-AF0B-E3CCB4BC51D1}" ShortID="405972903">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LightningBox_OnDestroyed_Frozen" ID="{C4CC7AFB-E747-4842-B143-6A556852A4DC}" WorkUnitID="{10D67FDA-C83C-4E77-94DE-6C24113B692D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LightningBox_OnDestroyed_Collide" ID="{5CB5889F-BCF6-4694-993F-8D8857B36173}">
+							<ChildrenList>
+								<Action Name="" ID="{99084747-16D5-4594-B375-2BA99FA1D504}" ShortID="542158035">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LightningBox_OnDestroyed_Collide" ID="{1B03752C-4911-41E2-A3A0-8301F7B7E081}" WorkUnitID="{10D67FDA-C83C-4E77-94DE-6C24113B692D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LightningBox_OnDestroyed_Explosion" ID="{C4AD6671-356A-410D-B269-8FB809750219}">
+							<ChildrenList>
+								<Action Name="" ID="{FB766A08-EABD-4FED-A419-CFC1F112681B}" ShortID="250261528">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LightningBox_OnDestroyed_Common" ID="{3C0DFAA3-1054-4BB7-A9BF-1452923990AA}" WorkUnitID="{10D67FDA-C83C-4E77-94DE-6C24113B692D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
-				<Folder Name="KeyBox" ID="{2E8580FD-6066-4335-A62A-8F6706C1E5C2}" ShortID="1041185163">
+				<Folder Name="BlueKeyBox" ID="{2E8580FD-6066-4335-A62A-8F6706C1E5C2}" ShortID="1041185163">
 					<PropertyList>
 						<Property Name="Color" Type="int16" Value="20"/>
 						<Property Name="OverrideColor" Type="bool" Value="True"/>
 					</PropertyList>
 					<ChildrenList>
-						<Event Name="KeyBox_Kicked" ID="{B933589F-BDE9-4AE1-8203-DC3C022B3616}">
+						<Event Name="BlueKeyBox_OnBeingKicked" ID="{B933589F-BDE9-4AE1-8203-DC3C022B3616}">
 							<ChildrenList>
 								<Action Name="" ID="{D6CD590F-3172-495F-8C52-B997A215C68C}" ShortID="199682358">
 									<ReferenceList>
@@ -456,7 +331,7 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="KeyBox_Pushed" ID="{C03AA0FD-837F-4C2E-A2AD-AB91677D98BB}">
+						<Event Name="BlueKeyBox_OnBeingPushed" ID="{C03AA0FD-837F-4C2E-A2AD-AB91677D98BB}">
 							<ChildrenList>
 								<Action Name="" ID="{B37CAAEE-2334-47B8-A5F6-5C383F43127C}" ShortID="459483361">
 									<ReferenceList>
@@ -481,91 +356,6 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="GoldenBox_OnDestroyed" ID="{6C9FAD93-B5B4-47F5-B6C6-490281B8488D}" WorkUnitID="{B32F6991-3B3D-4A33-A367-C32AE3F737CF}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Folder Name="StackingGoldenBox" ID="{25AFDEA8-9732-4215-9152-7F480B4622FC}" ShortID="221096514">
-							<ChildrenList>
-								<Event Name="StackingGoldenBox_OnDestroyed" ID="{0FE1406E-F4C9-4CA6-9F3D-8DF52721A5E4}">
-									<ChildrenList>
-										<Action Name="" ID="{B5C82179-0E29-48D6-9245-37377A0D2A0E}" ShortID="11230772">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="StackingGoldenBox_OnDestroyed" ID="{3EFC0A3A-3C0F-4FF5-8A4E-FF8BBCAB13DE}" WorkUnitID="{F6FA8875-3158-4E99-8C40-3C82D64E7370}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-							</ChildrenList>
-						</Folder>
-					</ChildrenList>
-				</Folder>
-				<Folder Name="WoodenTrapBox" ID="{3F37D30C-1628-4D1B-94FB-61C1B5BBA83E}" ShortID="631171746">
-					<PropertyList>
-						<Property Name="Color" Type="int16" Value="20"/>
-						<Property Name="OverrideColor" Type="bool" Value="True"/>
-					</PropertyList>
-					<ChildrenList>
-						<Event Name="WoodenTrapBox_Kicked" ID="{BD5F4D2F-D0B6-47CE-A0FF-DA042D1A9092}">
-							<ChildrenList>
-								<Action Name="" ID="{FA5EF3C7-8287-4BBB-84F4-E40A302808CB}" ShortID="999546616">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="Kicked" ID="{1BF089E9-24AC-4B1E-BEF8-9EA19A209307}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="WoodenTrapBox_Lit" ID="{EBC4ECC1-81D1-480D-A2B6-CF39324DB64A}">
-							<ChildrenList>
-								<Action Name="" ID="{A853357C-2C5D-4C70-A80E-60B1E942C3C6}" ShortID="269103947"/>
-							</ChildrenList>
-						</Event>
-						<Event Name="WoodenTrapBox_Pushed" ID="{DAD1152E-906B-418C-A5DD-F1DB38392830}">
-							<ChildrenList>
-								<Action Name="" ID="{DDEAB3C3-178B-41CC-ACD2-512693C9435D}" ShortID="388513352">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="Pushed" ID="{77B3AFAF-A4EB-41FF-A2B5-D64D696D6762}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-					</ChildrenList>
-				</Folder>
-				<Folder Name="MetalTrapBox" ID="{6D88FADC-B023-43B5-9E77-E46F3FBD10CF}" ShortID="555723049">
-					<PropertyList>
-						<Property Name="Color" Type="int16" Value="20"/>
-						<Property Name="OverrideColor" Type="bool" Value="True"/>
-					</PropertyList>
-					<ChildrenList>
-						<Event Name="MetalTrapBox_Kicked" ID="{8793637C-ABB7-4154-B24C-ED17986F9A3A}">
-							<ChildrenList>
-								<Action Name="" ID="{9EDD285B-810A-473B-9FFD-6EA835375D48}" ShortID="69035688">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="Kicked" ID="{1BF089E9-24AC-4B1E-BEF8-9EA19A209307}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="MetalTrapBox_Lit" ID="{F9EB6A7A-F6E4-4241-B66E-F80A93A05E58}">
-							<ChildrenList>
-								<Action Name="" ID="{413039BF-61E8-4F4D-8681-BC1D4FEB4A45}" ShortID="895990966"/>
-							</ChildrenList>
-						</Event>
-						<Event Name="MetalTrapBox_Pushed" ID="{1CC8F6C7-CBEA-4FA6-B9E6-44D60E9199CF}">
-							<ChildrenList>
-								<Action Name="" ID="{60A192D0-1CA5-4073-953C-F3706FD86A70}" ShortID="820129514">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="Pushed" ID="{77B3AFAF-A4EB-41FF-A2B5-D64D696D6762}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -674,7 +464,7 @@
 								<Action Name="" ID="{CD7253F1-58C2-4179-A00C-4038AD9BD276}" ShortID="370630630">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="OnBeingLift" ID="{17D95929-E380-44FB-A29A-6655BF929D50}" WorkUnitID="{272A9442-A827-4ACE-B7FF-CB1D875FF0FD}"/>
+											<ObjectRef Name="WoodenTrapBox_OnBeingLift" ID="{17D95929-E380-44FB-A29A-6655BF929D50}" WorkUnitID="{272A9442-A827-4ACE-B7FF-CB1D875FF0FD}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -685,7 +475,7 @@
 								<Action Name="" ID="{68D67877-5315-47DD-AC91-025EF9AFA79E}" ShortID="679088029">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="OnBeingDropped" ID="{D7C7C5CD-E433-4F22-929F-7F1167A790A7}" WorkUnitID="{272A9442-A827-4ACE-B7FF-CB1D875FF0FD}"/>
+											<ObjectRef Name="WoodenTrapBox_OnBeingDropped" ID="{D7C7C5CD-E433-4F22-929F-7F1167A790A7}" WorkUnitID="{272A9442-A827-4ACE-B7FF-CB1D875FF0FD}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -696,7 +486,7 @@
 								<Action Name="" ID="{AE94086D-824B-43F8-BD44-C9BA04C3EF3B}" ShortID="137409957">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="OnBeingDropped" ID="{1AB98581-1A1D-4B63-AC8A-53EA01437DE3}" WorkUnitID="{6E284F1F-0F0F-4E75-872F-A541086FA0B8}"/>
+											<ObjectRef Name="MetalTrapBox_OnBeingDropped" ID="{1AB98581-1A1D-4B63-AC8A-53EA01437DE3}" WorkUnitID="{6E284F1F-0F0F-4E75-872F-A541086FA0B8}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -778,6 +568,427 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="ActionBox_OnDestroyed" ID="{35FB06A0-B32E-41AF-95FC-3D95048BD7D4}" WorkUnitID="{176F3640-575B-4852-B804-9FCD5ADDB13B}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="FlamethrowerBox" ID="{A1B502E6-373B-4565-B3C4-6BAEE5E9D474}" ShortID="1024717628">
+					<ChildrenList>
+						<Event Name="FlamethrowerBox_OnDestroyed_Common" ID="{DFD5C76B-92D9-4BF4-8832-1564065DF1E3}">
+							<ChildrenList>
+								<Action Name="" ID="{1A5176B6-82FC-44A4-B5C4-C4DC601E9F55}" ShortID="790285113">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnDestroyed_Common" ID="{7F7ACFC4-0D9B-44A8-B8C0-FA45D431B4C7}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FlamethrowerBox_OnDestroyed_Firing" ID="{7880368A-8246-4F14-84F6-334F73E877D6}">
+							<ChildrenList>
+								<Action Name="" ID="{3C3FD35B-33BC-496F-868B-ACFE4C7ED8F3}" ShortID="26727038">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnDestroyed_Firing" ID="{4442EE6E-A944-4454-B694-F06F5009088E}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FlamethrowerBox_OnDestroyed_Frozen" ID="{7B087A20-0196-475F-95F0-31B479BD3C3D}">
+							<ChildrenList>
+								<Action Name="" ID="{1C12435F-391C-4CB4-90CA-C6D96B4FD17E}" ShortID="690577755">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnDestroyed_Frozen" ID="{CAF3AC6F-D64D-4D7C-A11D-E0669B2DD448}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FlamethrowerBox_OnDestroyed_Collide" ID="{2C1DD3DA-04DC-433C-B398-419F58C1EE23}">
+							<ChildrenList>
+								<Action Name="" ID="{68EADD8C-9106-49E1-82C8-6FC5608C9980}" ShortID="361881798">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnDestroyed_Collide" ID="{0B2D7BA8-8A84-411D-BEFB-61C893B8E4F0}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FlamethrowerBox_OnDestroyed_Explosion" ID="{6B38A483-D5ED-4492-91C3-251FA916A390}">
+							<ChildrenList>
+								<Action Name="" ID="{44FCD408-0D75-46BE-8DEC-09CE45D7B817}" ShortID="232146400">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnDestroyed_Explosion" ID="{4E11CCFF-0656-4D2A-8130-7EC5EFA35143}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="BlizzardBox" ID="{0428E319-4E7E-49D0-A0EF-112840A31A09}" ShortID="415261282">
+					<ChildrenList>
+						<Event Name="BlizardBox_OnDestroyed_Common" ID="{A59680C1-2269-45B4-8362-8646146810C9}">
+							<ChildrenList>
+								<Action Name="" ID="{7D704EE4-0814-459E-9736-FFAF3911B086}" ShortID="1060248609">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="BlizzardBox_OnDestroyed_Common" ID="{8B693ECA-54E7-469F-AE4C-0719D7AF86C1}" WorkUnitID="{FC8FD99A-8ABB-4A73-A864-F33E4DFDD0DA}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="BlizzardBox_OnDestroyed_Firing" ID="{6F566D2C-7489-454E-B31B-E61BA0AFBC68}">
+							<ChildrenList>
+								<Action Name="" ID="{5EC5009B-E206-49AF-B698-4C3521158946}" ShortID="186951230">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="BlizzardBox_OnDestroyed_Firing" ID="{7A791677-BBD7-4C69-B44B-8BBF5CCB075B}" WorkUnitID="{FC8FD99A-8ABB-4A73-A864-F33E4DFDD0DA}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="BlizzardBox_OnDestroyed_Frozen" ID="{8F1E1334-B751-4358-A968-BBA6639AFD43}">
+							<ChildrenList>
+								<Action Name="" ID="{FE8E914B-73FE-4F8B-B7B7-E5AE9DAC8050}" ShortID="819204023">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="BlizzardBox_OnDestroyed_Frozen" ID="{7C17DE3A-9D93-4B1D-80E3-49471FC5AE30}" WorkUnitID="{FC8FD99A-8ABB-4A73-A864-F33E4DFDD0DA}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="BlizzardBox_OnDestroyed_Collide" ID="{3BABD59E-3209-441F-A52E-DEEE0D0BDE13}">
+							<ChildrenList>
+								<Action Name="" ID="{BC59C350-6816-4620-87F5-A8B66586B4A2}" ShortID="724273140">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="BlizzardBox_OnDestroyed_Collide" ID="{13FAB7EE-05E0-4970-AF98-291D5BA6A702}" WorkUnitID="{FC8FD99A-8ABB-4A73-A864-F33E4DFDD0DA}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="BlizzardBox_OnDestroyed_Explosion" ID="{70A076F4-2AD5-41EC-B804-0BD2DCEAFACB}">
+							<ChildrenList>
+								<Action Name="" ID="{65605F0B-48B0-4401-86F5-561463E9A4BD}" ShortID="229314555">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="BlizzardBox_OnDestroyed_Explosion" ID="{41139455-C248-43E0-97C8-438B36FDF12F}" WorkUnitID="{FC8FD99A-8ABB-4A73-A864-F33E4DFDD0DA}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="CharcoalBox" ID="{B2A27D1E-C9DD-4D39-B800-53F83F83EC14}" ShortID="1052075035">
+					<ChildrenList>
+						<Event Name="CharcoalBox_OnDestroyed_Common" ID="{F4626A80-30CA-4CFB-A2AD-DF24F11E20A4}">
+							<ChildrenList>
+								<Action Name="" ID="{65F2A545-6C57-48E0-92EE-14916ECBF01B}" ShortID="834937285">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="CharcoalBox_OnDestroyed_Common" ID="{C544481F-9E03-48BB-A2BC-94FCEAFD6117}" WorkUnitID="{BF63AAA4-E74E-47E3-B82E-04306A579548}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="CharcoalBox_OnDestroyed_Firing" ID="{AB7499B6-D24E-44E7-BC12-31B3B2A01196}">
+							<ChildrenList>
+								<Action Name="" ID="{A8ECEA60-650E-406D-9B41-1D2741BBAD0F}" ShortID="715636560">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="CharcoalBox_OnDestroyed_Firing" ID="{F91CE704-AEBA-4D65-892D-0084A81A498E}" WorkUnitID="{BF63AAA4-E74E-47E3-B82E-04306A579548}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="CharcoalBox_OnDestroyed_Frozen" ID="{3A617A92-8397-4C11-9695-A6919D632309}">
+							<ChildrenList>
+								<Action Name="" ID="{F8C1958B-7666-444F-BEB9-F6FA56FA289B}" ShortID="411748409">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="CharcoalBox_OnDestroyed_Frozen" ID="{5778C570-8ACF-4B15-88EA-622B6EE65A7D}" WorkUnitID="{BF63AAA4-E74E-47E3-B82E-04306A579548}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="CharcoalBox_OnDestroyed_Collide" ID="{83217765-7C6F-49F9-A6BB-7844B2D2D9F8}">
+							<ChildrenList>
+								<Action Name="" ID="{704D9EEA-58D1-42D1-A29D-3103EB4ED4E7}" ShortID="812590987">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="CharcoalBox_OnDestroyed_Collide" ID="{34E8440C-2DE1-4330-BDC2-AAEEA21B6C74}" WorkUnitID="{BF63AAA4-E74E-47E3-B82E-04306A579548}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="CharcoalBox_OnDestroyed_Explosion" ID="{3D8FFC8E-46A7-4A9C-8F05-3CE212D6E3FD}">
+							<ChildrenList>
+								<Action Name="" ID="{C6B475EF-0486-4716-B537-37B88A247052}" ShortID="575027702">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="CharcoalBox_OnDestroyed_Explosion" ID="{EA3704F4-8192-4D2D-B33A-554E931FC07C}" WorkUnitID="{BF63AAA4-E74E-47E3-B82E-04306A579548}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="LongLogBox" ID="{A65571ED-228A-4CDF-BB91-7547F99D4BEC}" ShortID="813131049">
+					<ChildrenList>
+						<Event Name="LongLogBox_OnBeingPushed" ID="{41F756F1-537D-40A6-96F7-26D2F1358502}">
+							<ChildrenList>
+								<Action Name="" ID="{431BF827-96CF-43E3-850A-F5BFA0C8F7A4}" ShortID="545678642">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LongLogBox_OnBeingPushed" ID="{3DE046D8-7C8F-4010-A09A-0DF2AE323663}" WorkUnitID="{736D18D2-B848-4748-AA9C-619A57052F80}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LongLogBox_OnDestroyed_Common" ID="{8EACE7F9-3586-49C4-9BE7-F1BFA108E21B}">
+							<ChildrenList>
+								<Action Name="" ID="{C0816D83-6D43-4DC6-8742-095458CB8B94}" ShortID="445257628">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LongLogBox_OnDestroyed_Common" ID="{D3FF591C-26AF-4F67-9E07-3DFC53D7C0C2}" WorkUnitID="{736D18D2-B848-4748-AA9C-619A57052F80}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LongLogBox_OnDestroyed_Firing" ID="{DBE1EFA1-55AA-4D17-A8DE-EE36A50DB051}">
+							<ChildrenList>
+								<Action Name="" ID="{172E1837-A803-4FFD-B809-D002C88300A8}" ShortID="880894253">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LongLogBox_OnDestroyed_Firing" ID="{FC1B0389-2846-478B-BC8C-1EA60E52BC8C}" WorkUnitID="{736D18D2-B848-4748-AA9C-619A57052F80}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LongLogBox_OnDestroyed_Frozen" ID="{F1697D88-76DA-41F2-AABF-82CB7F2E5544}">
+							<ChildrenList>
+								<Action Name="" ID="{BE39EC1E-C947-4415-B65A-FDD8AB611062}" ShortID="610681430">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LongLogBox_OnDestroyed_Frozen" ID="{9EA289C5-CDAE-4244-B576-EBC5131E7570}" WorkUnitID="{736D18D2-B848-4748-AA9C-619A57052F80}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LongLogBox_OnDestroyed_Collide" ID="{74550DE0-1AE8-4852-8458-49BF1D04D706}">
+							<ChildrenList>
+								<Action Name="" ID="{83F492DE-00CD-4CFC-AD25-8A1C1DA29A7F}" ShortID="63088852">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FireBox_OnDestroyed_Collide" ID="{62C3DD49-0F2B-43E2-88A1-3D7E0D86DFE9}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LongLogBox_OnDestroyed_Explosion" ID="{105DC93A-9C1E-4710-A7F9-F3712A36B634}">
+							<ChildrenList>
+								<Action Name="" ID="{BA5A3FAE-D12D-4D3E-B841-035144B86E12}" ShortID="662850726">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LongLogBox_OnDestroyed_Explosion" ID="{5C9F0743-0556-4971-91C2-9D9CF623E952}" WorkUnitID="{736D18D2-B848-4748-AA9C-619A57052F80}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="MediumLogBox" ID="{CBF9517E-401A-4498-8BCC-747EFCD06013}" ShortID="895342839">
+					<ChildrenList>
+						<Event Name="MediumLogBox_OnBeingPushed" ID="{E47521A1-6634-4980-A8C6-71E9636E4987}">
+							<ChildrenList>
+								<Action Name="" ID="{033A4345-1C14-4E9B-BC72-5E0FD16313D7}" ShortID="1048109603">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="MediumLogBox_OnBeingPushed" ID="{E0FC6EFF-4F8A-44E7-B730-A8A960ACA076}" WorkUnitID="{E9CB3951-7C26-4D6F-ABFA-C507D0680ABA}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="MediumLogBox_OnDestroyed_Common" ID="{B649647B-3C8C-41E4-822D-132A0A704841}">
+							<ChildrenList>
+								<Action Name="" ID="{00D66B87-B6FE-454E-8C9D-F370A49172EB}" ShortID="672519302">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="MediumLogBox_OnDestroyed_Common" ID="{98CA7FFD-5DAE-4129-9B10-24145A9A1F06}" WorkUnitID="{E9CB3951-7C26-4D6F-ABFA-C507D0680ABA}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="MediumLogBox_OnDestroyed_Firing" ID="{25B5A837-141C-4CBD-87F0-54DAB230DEE9}">
+							<ChildrenList>
+								<Action Name="" ID="{0A8B5628-FF6E-4CCD-ACDA-07D86D9D9948}" ShortID="813905321">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="MediumLogBox_OnDestroyed_Firing" ID="{580682D1-5436-44A2-8CAF-BADDB5F173FE}" WorkUnitID="{E9CB3951-7C26-4D6F-ABFA-C507D0680ABA}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="MediumLogBox_OnDestroyed_Frozen" ID="{D83ACBF1-D03D-4368-83CD-A435A8969305}">
+							<ChildrenList>
+								<Action Name="" ID="{C9BD9FB5-4A5A-4B74-B8B6-3F5F726C08B2}" ShortID="721092207">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="MediumLogBox_OnDestroyed_Frozen" ID="{FB6002BA-518E-4733-8125-9FAE0E6CC211}" WorkUnitID="{E9CB3951-7C26-4D6F-ABFA-C507D0680ABA}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="MediumLogBox_OnDestroyed_Collide" ID="{E867798C-B2DD-437B-B993-7281EACF286B}">
+							<ChildrenList>
+								<Action Name="" ID="{71601D8B-68A6-4328-91C7-803C5001E482}" ShortID="731353">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="MediumLogBox_OnDestroyed_Collide" ID="{18BED0A1-D45A-491A-92BD-F4CAD3FA3F6E}" WorkUnitID="{E9CB3951-7C26-4D6F-ABFA-C507D0680ABA}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="MediumLogBox_OnDestroyed_Explosion" ID="{2D4BD53C-301D-4E74-B2DF-7DED72E23A1A}">
+							<ChildrenList>
+								<Action Name="" ID="{F477C360-AEB5-4C27-9914-0280EF866BFE}" ShortID="942599060">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="MediumLogBox_OnDestroyed_Explosion" ID="{E7696FAA-4FAB-4EB0-8049-0B6594BCB21B}" WorkUnitID="{E9CB3951-7C26-4D6F-ABFA-C507D0680ABA}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="TNTBox" ID="{EFCE3D9C-C526-4B45-9470-A119AE5601A7}" ShortID="965758808">
+					<ChildrenList>
+						<Event Name="TNTBox_OnDestroyed_Common" ID="{9E86D503-2222-4FE3-B246-DEA168323D5C}">
+							<ChildrenList>
+								<Action Name="" ID="{1B1F800F-4F60-49D7-A5C9-9926FFB3F553}" ShortID="50234381">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="TNTBox_OnDestroyed_Common" ID="{EA16539A-FF22-41FE-8148-4E18E0E6C559}" WorkUnitID="{7C114DD3-51DB-487D-9ED5-FC3CA2AA6B08}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="TNTBox_OnDestroyed_Frozen" ID="{B7EC27BE-5F6E-43F5-BA71-ACA1B4302900}">
+							<ChildrenList>
+								<Action Name="" ID="{A3CFACF6-42A9-420B-ABA1-BD7FED268A5C}" ShortID="916720149">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="TNTBox_OnDestroyed_Frozen" ID="{BA59199E-75DF-4578-ADE5-1C6CFB660600}" WorkUnitID="{7C114DD3-51DB-487D-9ED5-FC3CA2AA6B08}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="TNTBox_OnDestroyed_Firing" ID="{9DA640E1-249D-47BC-89C6-FF2D81D4916B}">
+							<ChildrenList>
+								<Action Name="" ID="{6904FC4D-DF6A-44DA-A91C-0A5B5ACE7151}" ShortID="148645339">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="TNTBox_OnDestroyed_Firing" ID="{A0DEEA9A-F4D7-43D9-BF91-06F9461A06AB}" WorkUnitID="{7C114DD3-51DB-487D-9ED5-FC3CA2AA6B08}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="TNTBox_OnDestroyed_Collide" ID="{92E83542-51B8-4BB6-8BD5-441FA19980DC}">
+							<ChildrenList>
+								<Action Name="" ID="{E1E72E42-9301-46CE-A381-1FC232160FB7}" ShortID="976374602">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="TNTBox_OnDestroyed_Collide" ID="{8C5CCE37-0CE5-4FE7-8F2B-EEE6A2535B02}" WorkUnitID="{7C114DD3-51DB-487D-9ED5-FC3CA2AA6B08}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="TNTBox_OnDestroyed_Explosion" ID="{C3072A5A-7DBB-4F7E-9F62-A5113311DAC8}">
+							<ChildrenList>
+								<Action Name="" ID="{E610A00C-AF9E-4D98-B4B1-D754353363AF}" ShortID="790707439">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="TNTBox_OnDestroyed_Explosion" ID="{EA3692CA-3497-4099-B298-6F767C4EE879}" WorkUnitID="{7C114DD3-51DB-487D-9ED5-FC3CA2AA6B08}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="StackingGoldenBox" ID="{25AFDEA8-9732-4215-9152-7F480B4622FC}" ShortID="221096514">
+					<ChildrenList>
+						<Event Name="StackingGoldenBox_OnDestroyed" ID="{0FE1406E-F4C9-4CA6-9F3D-8DF52721A5E4}">
+							<ChildrenList>
+								<Action Name="" ID="{B5C82179-0E29-48D6-9245-37377A0D2A0E}" ShortID="11230772">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="StackingGoldenBox_OnDestroyed" ID="{3EFC0A3A-3C0F-4FF5-8A4E-FF8BBCAB13DE}" WorkUnitID="{F6FA8875-3158-4E99-8C40-3C82D64E7370}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="GreenKeyBox" ID="{0603AD3F-BD31-4FAB-9EB4-D8415A134A02}" ShortID="137939940">
+					<PropertyList>
+						<Property Name="Color" Type="int16" Value="20"/>
+						<Property Name="OverrideColor" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Event Name="GreenKeyBox_OnBeingKicked" ID="{9E38364C-EE98-4A13-8ABF-582E4C4EBF8E}">
+							<ChildrenList>
+								<Action Name="" ID="{F1EEF896-DE88-4E4D-9808-87889118F99C}" ShortID="232155451">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Kicked" ID="{1BF089E9-24AC-4B1E-BEF8-9EA19A209307}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="GreenKeyBox_OnBeingPushed" ID="{BBF38805-7548-4F71-A332-BDDBFB2FDB26}">
+							<ChildrenList>
+								<Action Name="" ID="{A3DB042E-E711-4A08-B20B-C1685176563C}" ShortID="455703049">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Pushed" ID="{77B3AFAF-A4EB-41FF-A2B5-D64D696D6762}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>

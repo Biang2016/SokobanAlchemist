@@ -117,6 +117,7 @@ namespace AK
         static const AkUniqueID ONBEINGPUSHEDEND_LIGHT = 235712830U;
         static const AkUniqueID ONBURNINGEND = 3484121230U;
         static const AkUniqueID ONCOLLIDEACTIVELY = 446098551U;
+        static const AkUniqueID ONCOLLIDEPASSIVELY = 1132485630U;
         static const AkUniqueID ONDESTROYED_COLLIDE = 1965948984U;
         static const AkUniqueID ONDESTROYED_COMMON = 931390837U;
         static const AkUniqueID ONDESTROYED_EXPLOSION = 2622590811U;
