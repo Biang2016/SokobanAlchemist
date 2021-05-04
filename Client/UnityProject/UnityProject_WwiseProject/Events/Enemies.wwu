@@ -199,7 +199,7 @@
 								<Action Name="" ID="{D8AAF579-238F-43FB-9B53-A1F91F157B57}" ShortID="510060401">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="FireEnemy_Yellow_HeatEmit_Cast" ID="{979B215E-9CBE-4766-BBCF-19C216E1CE7C}" WorkUnitID="{8959D4E4-6293-465A-9F95-B2C3C20A3C0F}"/>
+											<ObjectRef Name="FireEnemy_Yellow_HeatEmit_Cast" ID="{D8480278-6F68-4E63-A9C3-4E9FCC5E4FDB}" WorkUnitID="{8959D4E4-6293-465A-9F95-B2C3C20A3C0F}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -213,7 +213,7 @@
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="InEliteCombat" ID="{315FAD00-45C1-4FA4-85FE-995392895DC0}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+											<ObjectRef Name="InCombat" ID="{02A97734-8890-4280-8438-41F2CA3E16DD}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -235,7 +235,7 @@
 								<Action Name="" ID="{0C88DF59-7825-49CF-BC1C-565B4BCED96E}" ShortID="794602092">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="FireEnemy_Yellow_HeatEmit_Preparing" ID="{CD3CAAAB-3577-44E4-BAF5-2035425A8D29}" WorkUnitID="{8959D4E4-6293-465A-9F95-B2C3C20A3C0F}"/>
+											<ObjectRef Name="FireEnemy_Yellow_HeatEmit_Preparing" ID="{1B03E8D6-FA54-46E4-91FF-D31FA3700516}" WorkUnitID="{8959D4E4-6293-465A-9F95-B2C3C20A3C0F}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -258,7 +258,7 @@
 								<Action Name="" ID="{9A2D4EC4-332E-4A1D-9EC4-7972874BCD1B}" ShortID="490793354">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="FireEnemy_Red_HeatEmit_Cast" ID="{7F5C837C-2008-4B02-94EA-D0C123416F3B}" WorkUnitID="{29945255-34A1-449A-B297-2777D8BBA031}"/>
+											<ObjectRef Name="FireEnemy_Red_HeatEmit_Cast" ID="{6E489DC9-890D-407F-B8CE-E15F84B6CA07}" WorkUnitID="{29945255-34A1-449A-B297-2777D8BBA031}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -328,7 +328,7 @@
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="InCombat" ID="{02A97734-8890-4280-8438-41F2CA3E16DD}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+											<ObjectRef Name="InEliteCombat" ID="{315FAD00-45C1-4FA4-85FE-995392895DC0}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -343,7 +343,7 @@
 								<Action Name="" ID="{691F517E-202D-48B1-901C-3C9B035E282D}" ShortID="754111885">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="FireEnemy_Red_HeatEmit_Preparing" ID="{341E800E-BF3E-4FF9-89FB-CB09A8CB671B}" WorkUnitID="{29945255-34A1-449A-B297-2777D8BBA031}"/>
+											<ObjectRef Name="FireEnemy_Red_HeatEmit_Preparing" ID="{751BAFFE-E2F2-4D2F-A90B-1AC4287525A9}" WorkUnitID="{29945255-34A1-449A-B297-2777D8BBA031}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -719,6 +719,90 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="BossSlime_OnDestroyed_Common" ID="{F0DB1F4F-2BF4-4C50-8F36-E3C50C47A6FB}" WorkUnitID="{44F49863-25D5-4520-AE6C-CF0DF7C6A3D6}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="IceEnemy_Purple" ID="{BDCE8772-28ED-432D-B65F-A3A9DBEA0E2B}" ShortID="770426664">
+					<ChildrenList>
+						<Event Name="IceEnemy_Purple_OnBeingDamaged" ID="{1B93EB2E-F334-4F7C-AFAD-2D37401A7E12}">
+							<ChildrenList>
+								<Action Name="" ID="{68564AC4-A13E-495F-B225-412C767DC675}" ShortID="980629612">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="IceEnemy_Purple_OnBeingDamaged" ID="{7A171112-2049-4B85-880C-8C5DB71A0DA8}" WorkUnitID="{9902E442-68DF-4F56-9ED3-95C235507D81}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="IceEnemy_Purple_OnDestroyed_Common" ID="{AB90501C-651F-4F52-A824-B82EEAC0F6A3}">
+							<ChildrenList>
+								<Action Name="" ID="{E4E36C26-7731-474B-A157-7FA997C941AC}" ShortID="893902116">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="IceEnemy_Purple_OnDestroyed_Common" ID="{B3CDD370-4442-4B2F-B50C-CCD1BE55DF8F}" WorkUnitID="{9902E442-68DF-4F56-9ED3-95C235507D81}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="IceEnemy_Purple_FrostBreath_Cast" ID="{D3E74424-4705-494D-AA9B-C5941F7BA42F}">
+							<ChildrenList>
+								<Action Name="" ID="{0E4C24C7-93BC-470F-A83E-67D2E9116164}" ShortID="886972448">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="IceEnemy_Purple_FrostBreath_Cast" ID="{5975F62F-A87C-4E78-8371-6B3B8639B5EE}" WorkUnitID="{9902E442-68DF-4F56-9ED3-95C235507D81}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="IceEnemy_Purple_Spawn" ID="{F6F0E411-9243-4CD4-9A2D-D797E98004A8}">
+							<ChildrenList>
+								<Action Name="" ID="{6147D676-9016-40B0-8B5C-620825EF3E73}" ShortID="52066288">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="22"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="InBossCombat" ID="{FBC865FA-EC5F-41F2-8150-1E1F4B28F064}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="IceEnemy_Purple_GlacialSlam_Cast" ID="{C5674696-5C76-488F-8235-5FF3933D5F73}">
+							<ChildrenList>
+								<Action Name="" ID="{E25E7103-7C0F-4193-8C1A-1C40C880369F}" ShortID="623893589">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="IceEnemy_Purple_GlacialSlam_Cast" ID="{9A5DCBA8-6BB5-474C-A414-BA754691FD3F}" WorkUnitID="{9902E442-68DF-4F56-9ED3-95C235507D81}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="IceEnemy_Purple_FrostBreath_Preparing" ID="{0EE699A6-B51B-4247-9541-24354B13D9CB}">
+							<ChildrenList>
+								<Action Name="" ID="{553A32A9-B966-4C9E-BA21-5431F53730F6}" ShortID="234550348">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="IceEnemy_Purple_FrostBreath_Preparing" ID="{042DBE71-FA8D-4B77-BC85-884CFFB44BFE}" WorkUnitID="{9902E442-68DF-4F56-9ED3-95C235507D81}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="IceEnemy_Purple_GlacialSlam_Preparing" ID="{9F646D33-5229-4E80-98A9-87B755740D72}">
+							<ChildrenList>
+								<Action Name="" ID="{CD5A8F70-91CD-4A0D-A542-7B89FEAA0CE4}" ShortID="845295351">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="IceEnemy_Purple_GlacialSlam_Preparing" ID="{C12030CA-B063-4A0A-B071-37FD7F1C86E1}" WorkUnitID="{9902E442-68DF-4F56-9ED3-95C235507D81}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>

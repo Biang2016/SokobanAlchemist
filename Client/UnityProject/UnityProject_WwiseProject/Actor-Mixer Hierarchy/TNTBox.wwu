@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{7C114DD3-51DB-487D-9ED5-FC3CA2AA6B08}" SchemaVersion="97" RootDocumentID="{BF4FC306-E3A9-4180-902B-945ED5E7EFDB}">
+	<AudioObjects>
+		<WorkUnit Name="TNTBox" ID="{7C114DD3-51DB-487D-9ED5-FC3CA2AA6B08}" OwnerID="{ABC65056-1A6C-4C9D-8CE0-4E3CFED4B185}" PersistMode="Nested">
+			<ChildrenList>
+				<BlendContainer Name="TNTBox_OnDestroyed_Common" ID="{EA16539A-FF22-41FE-8148-4E18E0E6C559}" ShortID="2903540">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="OnDestroyed" ID="{A47ED19B-B017-4A42-A254-FFC20DF2AFD0}" ShortID="615253891">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-5</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="OnDestroyed" ID="{F7DB697F-3BBF-4A20-BB71-0DCB0B5FFC23}">
+									<Language>SFX</Language>
+									<AudioFile>OnDestroyed.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="487051256"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="OnDestroyed" ID="{F7DB697F-3BBF-4A20-BB71-0DCB0B5FFC23}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="raptor explosion" ID="{3240C338-DE63-46A8-92DB-5FECFE4A2272}" ShortID="769968721">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>5</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="raptor explosion" ID="{38F51FE7-E7E1-4AD4-836C-5735452BE411}">
+									<Language>SFX</Language>
+									<AudioFile>raptor explosion.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="921623884"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="raptor explosion" ID="{38F51FE7-E7E1-4AD4-836C-5735452BE411}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</BlendContainer>
+				<BlendContainer Name="TNTBox_OnDestroyed_Firing" ID="{A0DEEA9A-F4D7-43D9-BF91-06F9461A06AB}" ShortID="886187018">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="FireBox_OnDestroyed" ID="{4E8D569C-E5B8-499E-8A57-19A7AA0CC1DB}" ShortID="275417688">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="fire-torch-whoosh-movement-01" ID="{80CAEBFF-3CFF-4E24-814E-EFBAC5F664BA}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.0888888888888889"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.418518518518519"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.285185185185185"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.57407407407407"/>
+										<Property Name="VolumeOffset" Type="Real64">
+											<ValueList>
+												<Value>-4.4</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>fire-torch-whoosh-movement-01.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1039121056"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{80CAEBFF-3CFF-4E24-814E-EFBAC5F664BA}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="raptor explosion" ID="{161B30D6-2428-4FD0-BE25-CAF30537D6BC}" ShortID="1020425928">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>5</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="raptor explosion" ID="{DBC0EA9B-2E07-4348-AFE4-097DB2624A8F}">
+									<Language>SFX</Language>
+									<AudioFile>raptor explosion.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="921623884"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="raptor explosion" ID="{DBC0EA9B-2E07-4348-AFE4-097DB2624A8F}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</BlendContainer>
+				<BlendContainer Name="TNTBox_OnDestroyed_Frozen" ID="{BA59199E-75DF-4578-ADE5-1C6CFB660600}" ShortID="243775787">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="OnDestroyed_Frozen" ID="{A8D04B44-BAE5-4728-A2DC-BD88952045DD}" ShortID="767649872">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="LDj_Audio - High Pitched Whoosh 2 (Wav)" ID="{72A14A22-F437-4424-AEBF-CD902E551A1B}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.19019778281683"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="1.05797516691862"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.160479379251701"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.93763991244646"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>LDj_Audio - High Pitched Whoosh 2 (Wav).wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="313750501"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="LDj_Audio - High Pitched Whoosh 2 (Wav)" ID="{72A14A22-F437-4424-AEBF-CD902E551A1B}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="raptor explosion" ID="{5C385463-F14B-4C42-8EF3-0F42CC60C7A9}" ShortID="436935237">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>5</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="raptor explosion" ID="{B33DEC4A-6E2F-46D4-A997-B8272A134BCE}">
+									<Language>SFX</Language>
+									<AudioFile>raptor explosion.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="921623884"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="raptor explosion" ID="{B33DEC4A-6E2F-46D4-A997-B8272A134BCE}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</BlendContainer>
+				<BlendContainer Name="TNTBox_OnDestroyed_Collide" ID="{8C5CCE37-0CE5-4FE7-8F2B-EEE6A2535B02}" ShortID="985706691">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="OnCollideActively_2" ID="{AD07C184-324E-497A-85FA-EA309C59B02B}" ShortID="316191202">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Cardboard Box Crashing v2" ID="{DB77C03C-48AD-465F-8248-8087B236969A}">
+									<Language>SFX</Language>
+									<AudioFile>Cardboard Box Crashing v2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="21993998"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Cardboard Box Crashing v2" ID="{DB77C03C-48AD-465F-8248-8087B236969A}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="raptor explosion" ID="{983B9650-458B-49A3-AC8D-1B910D94E04D}" ShortID="934553360">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>5</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="raptor explosion" ID="{0534D679-C0AC-4DA6-9EDD-CA83022A4AB6}">
+									<Language>SFX</Language>
+									<AudioFile>raptor explosion.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="921623884"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="raptor explosion" ID="{0534D679-C0AC-4DA6-9EDD-CA83022A4AB6}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</BlendContainer>
+				<BlendContainer Name="TNTBox_OnDestroyed_Explosion" ID="{EA3692CA-3497-4099-B298-6F767C4EE879}" ShortID="616135730">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="fence explosion" ID="{79103CAF-1EBF-44D5-9752-40259A59DEE2}" ShortID="1027257625">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>4</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="fence explosion" ID="{DFBB7BA9-4BFF-4954-B407-EFD6655B790A}">
+									<Language>SFX</Language>
+									<AudioFile>fence explosion.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="35739125"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="fence explosion" ID="{DFBB7BA9-4BFF-4954-B407-EFD6655B790A}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="raptor explosion" ID="{830630E9-538C-4949-A790-EBA1ACD492F7}" ShortID="63635653">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>5</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="raptor explosion" ID="{B48778B8-C34C-4A8D-8C93-279BF4153F90}">
+									<Language>SFX</Language>
+									<AudioFile>raptor explosion.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="921623884"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="raptor explosion" ID="{B48778B8-C34C-4A8D-8C93-279BF4153F90}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</BlendContainer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

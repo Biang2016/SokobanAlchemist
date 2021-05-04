@@ -140,6 +140,8 @@
 												</ModifierInfo>
 											</ModifierList>
 										</Property>
+										<Property Name="NormalOrShuffle" Type="int16" Value="0"/>
+										<Property Name="PlayMode" Type="int16" Value="3"/>
 									</PropertyList>
 									<ChildrenList>
 										<MusicPlaylistItem Name="" ID="{91587A83-5405-4166-8368-51C188B01F32}" ShortID="901886402">
@@ -1809,6 +1811,39 @@
 									<PropertyList>
 										<Property Name="EndPosition" Type="Real64" Value="55868.3125"/>
 										<Property Name="IsGlobalLimit" Type="int16" Value="1"/>
+										<Property Name="Lowpass" Type="int16">
+											<RTPCList>
+												<RTPC Name="" ID="{4CD76802-C90C-4539-9D22-D76E166DB03A}" ShortID="709232635">
+													<ReferenceList>
+														<Reference Name="ControlInput">
+															<ObjectRef Name="SpiderLegDistanceToPlayer" ID="{D9C56384-D920-47E1-8580-8A6201311E30}" WorkUnitID="{AE8AA2EF-5E34-4BC2-BDEE-E9E6F04DBC53}"/>
+														</Reference>
+													</ReferenceList>
+													<Curve Name="" ID="{6109817A-97B7-4373-98C6-B31FEA522A1A}">
+														<PropertyList>
+															<Property Name="Flags" Type="int32" Value="65537"/>
+														</PropertyList>
+														<PointList>
+															<Point>
+																<XPos>0</XPos>
+																<YPos>0</YPos>
+																<Flags>5</Flags>
+															</Point>
+															<Point>
+																<XPos>7034.86956</XPos>
+																<YPos>27</YPos>
+																<Flags>0</Flags>
+															</Point>
+															<Point>
+																<XPos>9999</XPos>
+																<YPos>48</YPos>
+																<Flags>37</Flags>
+															</Point>
+														</PointList>
+													</Curve>
+												</RTPC>
+											</RTPCList>
+										</Property>
 										<Property Name="MaxReachedBehavior" Type="int16" Value="1"/>
 										<Property Name="MaxSoundPerInstance" Type="int16">
 											<ValueList>
@@ -1980,6 +2015,11 @@
 								<MusicSegment Name="OpenWorld_InCamp" ID="{8E811255-79D5-44B8-A2CB-95A565C58C19}" ShortID="426257039">
 									<PropertyList>
 										<Property Name="EndPosition" Type="Real64" Value="48000"/>
+										<Property Name="Lowpass" Type="int16">
+											<ValueList>
+												<Value>27</Value>
+											</ValueList>
+										</Property>
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
@@ -2137,7 +2177,7 @@
 										<Property Name="LoopCount" Type="int16" Value="0"/>
 									</PropertyList>
 									<ChildrenList>
-										<MusicPlaylistItem Name="" ID="{ACE0FF6F-3334-45A8-A343-B87C030668B8}" ShortID="1072852895">
+										<MusicPlaylistItem Name="" ID="{A0A5F461-79FC-4BF0-BBFC-857665703172}" ShortID="630316161">
 											<PropertyList>
 												<Property Name="LoopCount" Type="int16" Value="0"/>
 												<Property Name="PlaylistItemType" Type="int16" Value="1"/>
@@ -2160,17 +2200,16 @@
 										<Property Name="DestinationJumpPositionPreset" Type="int16" Value="1"/>
 										<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
 										<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
-										<Property Name="ExitSourceAt" Type="int16" Value="3"/>
+										<Property Name="ExitSourceAt" Type="int16" Value="0"/>
 										<Property Name="PlayDestinationPreEntry" Type="bool" Value="False"/>
-										<Property Name="PlaySourcePostExit" Type="bool" Value="False"/>
 									</PropertyList>
 									<TransitionInfo>
 										<SourceFadeOut>
 											<MusicFade Name="Source Fade-out" ID="{F0BFBBF0-1BCD-4CB4-8E4F-3E5FDD13736D}">
 												<PropertyList>
 													<Property Name="FadeCurve" Type="int16" Value="3"/>
-													<Property Name="FadeOffset" Type="Real64" Value="1.5"/>
-													<Property Name="FadeTime" Type="Real64" Value="3"/>
+													<Property Name="FadeOffset" Type="Real64" Value="2.5"/>
+													<Property Name="FadeTime" Type="Real64" Value="5"/>
 													<Property Name="FadeType" Type="int16" Value="1"/>
 												</PropertyList>
 											</MusicFade>
@@ -2179,8 +2218,8 @@
 											<MusicFade Name="Destination Fade-in" ID="{0C33C975-4B50-4A64-93B7-95AB5504F2E1}">
 												<PropertyList>
 													<Property Name="FadeCurve" Type="int16" Value="5"/>
-													<Property Name="FadeOffset" Type="Real64" Value="-1.5"/>
-													<Property Name="FadeTime" Type="Real64" Value="3"/>
+													<Property Name="FadeOffset" Type="Real64" Value="-2.5"/>
+													<Property Name="FadeTime" Type="Real64" Value="5"/>
 												</PropertyList>
 											</MusicFade>
 										</DestinationFadeIn>
@@ -2328,11 +2367,92 @@
 						</Entry>
 						<Entry>
 							<Path>
-								<PathElementRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
-								<PathElementRef Name="Combat" ID="{B940BF10-8F0F-4674-972B-A287D951D4EB}"/>
+								<PathElementRef Name="Lab" ID="{BDAF9F4F-2ABE-4B3F-A5AA-09220C0C4798}"/>
+								<PathElementRef Name="Exploring" ID="{3D43D6D3-16EE-4734-9A44-E93CFC6B1A41}"/>
 							</Path>
 							<AudioNodeInfo>
-								<AudioNodeRef Name="OpenWorld_InCamp" ID="{02E7C85E-2EDF-4942-A25D-534C4364811D}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+								<AudioNodeRef Name="Temple_Explore" ID="{5F410ABF-DB72-4549-B98A-F54B0E80CB9E}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="Lab" ID="{BDAF9F4F-2ABE-4B3F-A5AA-09220C0C4798}"/>
+								<PathElementRef Name="InCombat" ID="{02A97734-8890-4280-8438-41F2CA3E16DD}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Temple_InCombat" ID="{CC9FC1B8-22B9-450B-A30A-AA18795441D8}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="Lab" ID="{BDAF9F4F-2ABE-4B3F-A5AA-09220C0C4798}"/>
+								<PathElementRef Name="InEliteCombat" ID="{315FAD00-45C1-4FA4-85FE-995392895DC0}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Temple_InEliteCombat" ID="{CC7AAA6F-D384-4C44-B92F-D9CC44C21FD2}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="Lab" ID="{BDAF9F4F-2ABE-4B3F-A5AA-09220C0C4798}"/>
+								<PathElementRef Name="InBossCombat" ID="{FBC865FA-EC5F-41F2-8150-1E1F4B28F064}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Temple_InBossCombat" ID="{7FB3C367-F2D1-4DCD-B693-07274A5841D1}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="Excavation" ID="{ADA06936-3C17-44D9-8E3B-7E1227401D76}"/>
+								<PathElementRef Name="Exploring" ID="{3D43D6D3-16EE-4734-9A44-E93CFC6B1A41}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Temple_Explore" ID="{5F410ABF-DB72-4549-B98A-F54B0E80CB9E}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="Excavation" ID="{ADA06936-3C17-44D9-8E3B-7E1227401D76}"/>
+								<PathElementRef Name="InBossCombat" ID="{FBC865FA-EC5F-41F2-8150-1E1F4B28F064}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Temple_InBossCombat" ID="{7FB3C367-F2D1-4DCD-B693-07274A5841D1}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="Excavation" ID="{ADA06936-3C17-44D9-8E3B-7E1227401D76}"/>
+								<PathElementRef Name="InCamp" ID="{EBC424C5-B0D7-47C4-9983-B3F24BAE5557}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Temple_Explore" ID="{5F410ABF-DB72-4549-B98A-F54B0E80CB9E}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="Excavation" ID="{ADA06936-3C17-44D9-8E3B-7E1227401D76}"/>
+								<PathElementRef Name="InCombat" ID="{02A97734-8890-4280-8438-41F2CA3E16DD}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Temple_InCombat" ID="{CC9FC1B8-22B9-450B-A30A-AA18795441D8}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="Excavation" ID="{ADA06936-3C17-44D9-8E3B-7E1227401D76}"/>
+								<PathElementRef Name="InEliteCombat" ID="{315FAD00-45C1-4FA4-85FE-995392895DC0}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Temple_InEliteCombat" ID="{CC7AAA6F-D384-4C44-B92F-D9CC44C21FD2}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
+							</AudioNodeInfo>
+						</Entry>
+						<Entry>
+							<Path>
+								<PathElementRef Name="Lab" ID="{BDAF9F4F-2ABE-4B3F-A5AA-09220C0C4798}"/>
+								<PathElementRef Name="InCamp" ID="{EBC424C5-B0D7-47C4-9983-B3F24BAE5557}"/>
+							</Path>
+							<AudioNodeInfo>
+								<AudioNodeRef Name="Temple_Explore" ID="{5F410ABF-DB72-4549-B98A-F54B0E80CB9E}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}" Platform="Linked"/>
 							</AudioNodeInfo>
 						</Entry>
 					</EntryList>

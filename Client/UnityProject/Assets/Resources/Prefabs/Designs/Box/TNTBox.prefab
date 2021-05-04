@@ -1,5 +1,61 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7980573856782748319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066729804727452614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00a3f379912932e4ebb18b5369bafc10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerList: f7e1664c
+  useOtherObject: 0
+  actionOnEventType: 0
+  curveInterpolation: 4
+  enableActionOnEvent: 0
+  data:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 2235c8be83b104faf99cc524069c5108,
+      type: 2}
+  useCallbacks: 0
+  Callbacks: []
+  playingId: 0
+  soundEmitterObject: {fileID: 0}
+  transitionDuration: 0
+  eventIdInternal: 0
+  valueGuidInternal: 
+  m_callbackDataInternal: {fileID: 0}
+  MultiPositionType: 1
+  multiPositionTypeLabel: 0
+  LargeModePositions: []
+  multiPositionArray: []
+--- !u!114 &-786159390830796172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066729804727452614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c6b3093d98c17e4499aa35e4c1b82a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_listeners:
+    initialListenerList: []
+    useDefaultListeners: 1
+  isEnvironmentAware: 1
+  isStaticObject: 0
+  m_positionOffsetData:
+    KeepMe: 0
+    positionOffset: {x: 0, y: 0, z: 0}
+  m_posOffsetData: {fileID: 0}
+  listenerMask: 1
 --- !u!1001 &5668104137405785311
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -208,6 +264,36 @@ PrefabInstance:
       propertyPath: RawEntityStatPropSet.RawEntityDefaultBuffs.Array.data[0].EntityBuffAttribute
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 534155500011443078, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: OnDestroyed_Common.WwiseObjectReference
+      value: 
+      objectReference: {fileID: 11400000, guid: 26ca1b080ac00434ba54607d4a90d707,
+        type: 2}
+    - target: {fileID: 534155500011443078, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: OnDestroyed_ByFiringDamage.WwiseObjectReference
+      value: 
+      objectReference: {fileID: 11400000, guid: 2f50d0cee48c949e185de0815ecd7355,
+        type: 2}
+    - target: {fileID: 534155500011443078, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: OnDestroyed_ByFrozenDamage.WwiseObjectReference
+      value: 
+      objectReference: {fileID: 11400000, guid: 8d722b10fffc44c3bb1cbe19a7813a4c,
+        type: 2}
+    - target: {fileID: 534155500011443078, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: OnDestroyed_ByCollideDamage.WwiseObjectReference
+      value: 
+      objectReference: {fileID: 11400000, guid: c993890f96a944921bae3c396fca4a1f,
+        type: 2}
+    - target: {fileID: 534155500011443078, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: OnDestroyed_ByExplodeDamage.WwiseObjectReference
+      value: 
+      objectReference: {fileID: 11400000, guid: d80d38dfb918848c0a66808e326f012c,
+        type: 2}
     - target: {fileID: 570053385983063175, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: m_RootOrder
@@ -321,6 +407,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6cecbe5753a1cb5479294bf6cec13ba1, type: 3}
+--- !u!1 &6066729804727452614 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1916418203503847193, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+    type: 3}
+  m_PrefabInstance: {fileID: 5668104137405785311}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6455574961529999485 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1675314425065157794, guid: 6cecbe5753a1cb5479294bf6cec13ba1,

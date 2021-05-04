@@ -9,11 +9,16 @@
 			<ChildrenList>
 				<ActorMixer Name="Boxes" ID="{ABC65056-1A6C-4C9D-8CE0-4E3CFED4B185}" ShortID="290852218">
 					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="2"/>
 						<Property Name="Color" Type="int16" Value="20"/>
 						<Property Name="OverrideColor" Type="bool" Value="True"/>
 						<Property Name="OverrideOutput" Type="bool" Value="True"/>
+						<Property Name="OverridePositioning" Type="bool" Value="True"/>
 					</PropertyList>
 					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+						</Reference>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 						</Reference>
@@ -34,6 +39,11 @@
 						<WorkUnit Name="ActionBox" ID="{176F3640-575B-4852-B804-9FCD5ADDB13B}" PersistMode="Reference"/>
 						<WorkUnit Name="WoodenTrapBox" ID="{272A9442-A827-4ACE-B7FF-CB1D875FF0FD}" PersistMode="Reference"/>
 						<WorkUnit Name="MetalTrapBox" ID="{6E284F1F-0F0F-4E75-872F-A541086FA0B8}" PersistMode="Reference"/>
+						<WorkUnit Name="CharcoalBox" ID="{BF63AAA4-E74E-47E3-B82E-04306A579548}" PersistMode="Reference"/>
+						<WorkUnit Name="Blizzard" ID="{FC8FD99A-8ABB-4A73-A864-F33E4DFDD0DA}" PersistMode="Reference"/>
+						<WorkUnit Name="TNTBox" ID="{7C114DD3-51DB-487D-9ED5-FC3CA2AA6B08}" PersistMode="Reference"/>
+						<WorkUnit Name="StackingGoldenBox" ID="{F6FA8875-3158-4E99-8C40-3C82D64E7370}" PersistMode="Reference"/>
+						<WorkUnit Name="MediumLogBox" ID="{E9CB3951-7C26-4D6F-ABFA-C507D0680ABA}" PersistMode="Reference"/>
 					</ChildrenList>
 				</ActorMixer>
 			</ChildrenList>
