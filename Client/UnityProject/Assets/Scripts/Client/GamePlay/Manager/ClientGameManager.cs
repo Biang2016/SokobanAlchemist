@@ -159,6 +159,11 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         GameSaveManager.Start();
         FXManager.Start();
 
+        UIManager.Instance.ShowUIForms<StartMenuPanel>();
+    }
+
+    public void StartGame()
+    {
         StartCoroutine(Co_StartGame());
     }
 
@@ -183,7 +188,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     internal bool IsGameLoading = false;
 
-    private IEnumerator Co_StartGame()
+    internal IEnumerator Co_StartGame()
     {
         IsGameLoading = true;
         NoticePanel = UIManager.Instance.ShowUIForms<NoticePanel>();
@@ -352,56 +357,61 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         CurrentFixedFrameCount_Mod_FixedFrameRate = CurrentFixedFrameCount % FixedFrameRate;
         CurrentFixedFrameCount_Mod_FixedFrameRate_01X = CurrentFixedFrameCount % FixedFrameRate_01X;
         CurrentFixedFrameCount_Mod_FixedFrameRate_5X = CurrentFixedFrameCount % FixedFrameRate_5X;
+
         ControlManager.FixedUpdate(Time.fixedDeltaTime);
-        if (ControlManager.Common_RestartGame.Up && !IsGameLoading)
+
+        if (BattleManager.Instance.IsStart)
         {
-            if (!UIManager.IsUIShown<ConfirmPanel>())
+            if (ControlManager.Common_RestartGame.Up && !IsGameLoading)
             {
-                if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+                if (!UIManager.IsUIShown<ConfirmPanel>())
                 {
-                    if (openWorld.IsInsideDungeon)
+                    if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
                     {
-                        ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
-                        confirmPanel.Initialize("Wanna restart the dungeon? You'll lose the rewards that you've got", "Restart", "Cancel",
-                            () =>
-                            {
-                                openWorld.RestartDungeon();
-                                confirmPanel.CloseUIForm();
-                            },
-                            () => { confirmPanel.CloseUIForm(); }
-                        );
+                        if (openWorld.IsInsideDungeon)
+                        {
+                            ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
+                            confirmPanel.Initialize("Wanna restart the dungeon? You'll lose the rewards that you've got", "Restart", "Cancel",
+                                () =>
+                                {
+                                    openWorld.RestartDungeon();
+                                    confirmPanel.CloseUIForm();
+                                },
+                                () => { confirmPanel.CloseUIForm(); }
+                            );
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        StartCoroutine(ReloadGame());
                         return;
                     }
                 }
-                else
+            }
+
+            if (!LearnSkillUpgradePanel.HasPage)
+            {
+                if (ControlManager.Battle_LeftSwitch.Up)
                 {
-                    StartCoroutine(ReloadGame());
-                    return;
+                    CameraManager.Instance.FieldCamera.CameraLeftRotate();
+                }
+
+                if (ControlManager.Battle_RightSwitch.Up)
+                {
+                    CameraManager.Instance.FieldCamera.CameraRightRotate();
                 }
             }
-        }
 
-        if (!LearnSkillUpgradePanel.HasPage)
-        {
-            if (ControlManager.Battle_LeftSwitch.Up)
+            if (ControlManager.Common_ToggleUI.Up)
             {
-                CameraManager.Instance.FieldCamera.CameraLeftRotate();
+                UIManager.Instance.UICamera.enabled = !UIManager.Instance.UICamera.enabled;
             }
 
-            if (ControlManager.Battle_RightSwitch.Up)
+            if (ControlManager.Common_ToggleDebugButton.Up)
             {
-                CameraManager.Instance.FieldCamera.CameraRightRotate();
+                DebugPanel.DebugToggleButton.gameObject.SetActive(!DebugPanel.DebugToggleButton.gameObject.activeInHierarchy);
             }
-        }
-
-        if (ControlManager.Common_ToggleUI.Up)
-        {
-            UIManager.Instance.UICamera.enabled = !UIManager.Instance.UICamera.enabled;
-        }
-
-        if (ControlManager.Common_ToggleDebugButton.Up)
-        {
-            DebugPanel.DebugToggleButton.gameObject.SetActive(!DebugPanel.DebugToggleButton.gameObject.activeInHierarchy);
         }
 
         ConfigManager.FixedUpdate(Time.fixedDeltaTime);
