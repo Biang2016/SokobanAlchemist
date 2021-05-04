@@ -1,9 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using BiangLibrary.GamePlay.UI;
 using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
-using Sirenix.OdinInspector.Editor.Validation;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
@@ -37,6 +34,9 @@ public class LearnSkillUpgradePage : PoolObject
 
     [SerializeField]
     private Image Icon;
+
+    [SerializeField]
+    private Text TitleText;
 
     [SerializeField]
     private Text NameText;
@@ -85,6 +85,7 @@ public class LearnSkillUpgradePage : PoolObject
         {
             case LearnType.Skill:
             {
+                TitleText.text = "New Skill";
                 EntitySkill rawEntitySkill = ConfigManager.GetRawEntitySkill(learnInfo.SkillGUID);
                 Assert.IsNotNull(rawEntitySkill);
                 bool specifyKeyBind = rawEntitySkill is EntityActiveSkill;
@@ -139,6 +140,7 @@ public class LearnSkillUpgradePage : PoolObject
             }
             case LearnType.Upgrade:
             {
+                TitleText.text = "New Upgrade";
                 KeyBindText.text = "";
                 Assert.IsNotNull(learnInfo.EntityUpgrade);
                 Sprite sprite = ConfigManager.GetEntitySkillIconByName(learnInfo.EntityUpgrade.UpgradeIcon.TypeName);

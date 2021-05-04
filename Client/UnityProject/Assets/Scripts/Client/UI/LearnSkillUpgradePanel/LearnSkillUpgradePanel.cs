@@ -194,6 +194,18 @@ public class LearnSkillUpgradePanel : BaseUIPanel
     {
         if (IsShown)
         {
+            if (ControlManager.Instance.Common_InteractiveKey.Up)
+            {
+                if (PageList.Count > 0)
+                {
+                    PageDict[PageList[CurrentFocusPageIndex]].current_LearnAction?.Invoke();
+                    if (PageDict[PageList[CurrentFocusPageIndex]].current_LearnAction == null)
+                    {
+                        RemovePage(PageList[CurrentFocusPageIndex]);
+                    }
+                }
+            }
+
             if (ControlManager.Instance.Common_Exit.Up)
             {
                 if (PageList.Count > 0)

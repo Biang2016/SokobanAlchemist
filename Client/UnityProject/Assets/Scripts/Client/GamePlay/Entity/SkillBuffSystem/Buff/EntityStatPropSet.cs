@@ -437,6 +437,7 @@ public class EntityStatPropSet
         StatNotifyActionSetDict[EntityStatType.ActionPoint].OnValueNotEnoughWarning += OnActionPointNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.ActionPoint].OnValueIncrease += OnActionPointIncrease;
         StatNotifyActionSetDict[EntityStatType.Gold].OnValueIncrease += OnGoldIncrease;
+        StatNotifyActionSetDict[EntityStatType.Gold].OnValueNotEnoughWarning += OnGoldNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueIncrease += OnFireElementFragmentIncrease;
         StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueNotEnoughWarning += OnFireElementFragmentNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.IceElementFragment].OnValueIncrease += OnIceElementFragmentIncrease;
@@ -502,6 +503,15 @@ public class EntityStatPropSet
         {
             actor.ActorBattleHelper.ShowGainGoldNumFX(increase);
             actor.EntityWwiseHelper.OnGainGold.Post(actor.gameObject);
+        }
+    }
+
+    private void OnGoldNotEnoughWarning()
+    {
+        if (Entity == BattleManager.Instance.Player1)
+        {
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].GoldBottle.OnStatLowWarning();
+            ClientGameManager.Instance.NoticePanel.ShowTip("Not enough gold", NoticePanel.TipPositionType.Center, 0.8f);
         }
     }
 
