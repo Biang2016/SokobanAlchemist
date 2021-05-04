@@ -23,12 +23,19 @@ public class EntitySkillAction_ShowTransportWorldPanel : EntitySkillAction, Enti
 
     public void Execute()
     {
-        selectedWorld = CommonUtils.GetRandomFromList(WorldProbList);
-        WorldData worldData = ConfigManager.GetWorldDataConfig(ConfigManager.GetTypeIndex(TypeDefineType.World, selectedWorld.WorldTypeName.TypeName));
-        if (worldData != null)
+        if (UIManager.Instance.IsUIShown<TransportWorldPanel>()) return;
+        if (selectedWorld == null)
+        {
+            selectedWorld = CommonUtils.GetRandomFromList(WorldProbList);
+            WorldProbList.Clear();
+            WorldProbList.Add(selectedWorld);
+           
+        }
+        WorldData rawWorldData = ConfigManager.GetRawWorldDataConfig(ConfigManager.GetTypeIndex(TypeDefineType.World, selectedWorld.WorldTypeName.TypeName));
+        if (rawWorldData != null)
         {
             TransportWorldPanel transportWorldPanel = UIManager.Instance.ShowUIForms<TransportWorldPanel>();
-            transportWorldPanel.Initialize(worldData, OnTransport, selectedWorld.GoldCost);
+            transportWorldPanel.Initialize(rawWorldData, OnTransport, selectedWorld.GoldCost);
         }
     }
 

@@ -56,26 +56,6 @@ MonoBehaviour:
         RawEntitySkillActions:
         - id: 1
     00000001:
-      type: {class: EntitySkillAction_TriggerZoneAction, ns: , asm: Client}
-      data:
-        InitWorldModuleGUID: 0
-        EffectiveOnRelativeCamp: 1
-        EffectiveOnSpecificEntity: 1
-        EffectiveOnSpecificEntityType:
-          TypeDefineType: 2
-          TypeGUID: (9f9579ea-527a-4374-adfe-d4afb0271acd)
-        EntityActions_Enter:
-        - id: 2
-        EntityActions_Stay: []
-        MaxTriggerTimeWhenStay: 999999
-        EffectiveWhenInteractiveKeyDown: 0
-        InteractiveKeyNotice: 
-        TipPositionType: 5
-        InteractiveKeyNoticeDuration: 0.5
-        ActionInterval: 0.1
-        EntityActions_Exit:
-        - id: 3
-    00000002:
       type: {class: EntitySkillAction_ShowLearnUpgradePanel, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
@@ -102,10 +82,9 @@ MonoBehaviour:
           Percent_AutoChange: 0
           Delta_AutoChangePercent: 0
           Percent_AutoChangePercent: 0
-        GoldCost: 3
-    00000003:
-      type: {class: EntitySkillAction_UI, ns: , asm: Client}
-      data:
-        InitWorldModuleGUID: 0
-        UIName: LearnUpgradePanel
-        Open: 0
+        GoldCost: 0
+        EffectiveOnRelativeCamp: 1
+        EffectiveOnSpecificEntity: 1
+        EffectiveOnSpecificEntityType:
+          TypeDefineType: 2
+          TypeGUID: (9f9579ea-527a-4374-adfe-d4afb0271acd)

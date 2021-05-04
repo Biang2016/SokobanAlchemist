@@ -16,10 +16,18 @@ public class EntitySkillAction_TransportPlayer : BoxSkillAction, EntitySkillActi
     [LabelText("世界类型概率")]
     public List<WorldNameWithProbability> WorldProbList = new List<WorldNameWithProbability>();
 
+    private WorldNameWithProbability selectedWorld;
+
     public void Execute()
     {
-        WorldNameWithProbability randomResult = CommonUtils.GetRandomFromList(WorldProbList);
-        ClientGameManager.Instance.ChangeWorld(randomResult.WorldTypeName.TypeName, true);
+        if (selectedWorld == null)
+        {
+            selectedWorld = CommonUtils.GetRandomFromList(WorldProbList);
+            WorldProbList.Clear();
+            WorldProbList.Add(selectedWorld);
+        }
+
+        ClientGameManager.Instance.ChangeWorld(selectedWorld.WorldTypeName.TypeName, true);
     }
 
     protected override void ChildClone(EntitySkillAction newAction)

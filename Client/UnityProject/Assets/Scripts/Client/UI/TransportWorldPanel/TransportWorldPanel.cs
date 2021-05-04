@@ -11,7 +11,7 @@ public class TransportWorldPanel : BaseUIPanel
     {
         UIType.InitUIType(
             false,
-            false,
+            true,
             false,
             UIFormTypes.Normal,
             UIFormShowModes.Normal,
@@ -38,7 +38,6 @@ public class TransportWorldPanel : BaseUIPanel
     [SerializeField]
     private Sprite ButtonIconGrayOutSprite;
 
-    internal int openStackTimes = 0;
     private UnityAction current_LearnCallBack;
     private UnityAction current_LearnAction;
     private WorldData current_RawWorldData;
@@ -63,15 +62,12 @@ public class TransportWorldPanel : BaseUIPanel
 
         Anim.SetTrigger("Jump");
 
-        openStackTimes++;
-
         current_RawWorldData = rawWorldData;
         current_LearnCallBack = learnCallback;
 
         //Sprite sprite = ConfigManager.GetEntitySkillIconByName(rawWorldData.WorldIcon.TypeName);
         //WorldIcon.sprite = sprite;
         WorldDescription.text = $"*{rawWorldData.WorldName_EN}*\n{rawWorldData.WorldDescription_EN}";
-        WorldCost.gameObject.SetActive(goldCost > 0);
         if (goldCost > 0) WorldCost.text = goldCost.ToString();
         else WorldCost.text = "Free";
 
@@ -88,11 +84,15 @@ public class TransportWorldPanel : BaseUIPanel
                 CloseUIForm();
             };
         }
+        else
+        {
+            current_LearnAction = () => { BattleManager.Instance.Player1.EntityStatPropSet.Gold.m_NotifyActionSet.OnValueNotEnoughWarning?.Invoke(); };
+        }
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (Input.GetKeyUp(KeyCode.F))
+        if (ControlManager.Instance.Common_InteractiveKey.Down)
         {
             current_LearnAction?.Invoke();
         }
@@ -106,10 +106,8 @@ public class TransportWorldPanel : BaseUIPanel
 
     public override void Hide()
     {
-        openStackTimes--;
         base.Hide();
-
-        if (openStackTimes == 0)
+        if (TransportInfoStack.Count == 0)
         {
             UIManager.Instance.ShowUIForms<InGameUIPanel>();
             current_LearnAction = null;
@@ -117,13 +115,15 @@ public class TransportWorldPanel : BaseUIPanel
             current_RawWorldData = null;
             Anim.SetTrigger("Hide");
         }
-
-        if (openStackTimes > 0)
+        else
         {
-            UIManager.Instance.ShowUIForms<TransportWorldPanel>();
-            TransportInfo transportInfo = TransportInfoStack.Pop();
-            Initialize(transportInfo.RawWorldData, transportInfo.LearnCallback, transportInfo.GoldCost);
-            openStackTimes--;
+            TransportInfoStack.Pop();
+            if (TransportInfoStack.Count > 0)
+            {
+                TransportInfo transportInfo = TransportInfoStack.Pop();
+                UIManager.Instance.ShowUIForms<TransportWorldPanel>();
+                Initialize(transportInfo.RawWorldData, transportInfo.LearnCallback, transportInfo.GoldCost);
+            }
         }
     }
 }

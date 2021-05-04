@@ -64,6 +64,10 @@ public abstract class EntitySkill : IClone<EntitySkill>
     [PropertyOrder(-8)]
     public bool PlayerCanLearn;
 
+    [LabelText("购买价格")]
+    [PropertyOrder(-8)]
+    public int GoldCost;
+
     [LabelText("占据技能格子")]
     [PropertyOrder(-8)]
     public bool OccupySkillGrid;
@@ -110,6 +114,7 @@ public abstract class EntitySkill : IClone<EntitySkill>
         newES.SkillDescription_EN = SkillDescription_EN;
         newES.SkillDescription_ZH = SkillDescription_ZH;
         newES.PlayerCanLearn = PlayerCanLearn;
+        newES.GoldCost = GoldCost;
         newES.OccupySkillGrid = OccupySkillGrid;
         newES.ShowInSkillPreviewPanel = ShowInSkillPreviewPanel;
         newES.SkillCategoryType = SkillCategoryType;
@@ -133,6 +138,7 @@ public abstract class EntitySkill : IClone<EntitySkill>
         SkillDescription_EN = srcData.SkillDescription_EN;
         SkillDescription_ZH = srcData.SkillDescription_ZH;
         PlayerCanLearn = srcData.PlayerCanLearn;
+        GoldCost = srcData.GoldCost;
         OccupySkillGrid = srcData.OccupySkillGrid;
         ShowInSkillPreviewPanel = srcData.ShowInSkillPreviewPanel;
         SkillCategoryType = srcData.SkillCategoryType;

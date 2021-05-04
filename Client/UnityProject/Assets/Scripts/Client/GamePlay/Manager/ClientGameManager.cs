@@ -75,6 +75,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public LoadingMapPanel LoadingMapPanel;
     public PlayerStatHUDPanel PlayerStatHUDPanel;
     public NoticePanel NoticePanel;
+    public LearnSkillUpgradePanel LearnSkillUpgradePanel;
 
     public bool WarmUpPool_Editor = true;
 
@@ -187,6 +188,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         IsGameLoading = true;
         NoticePanel = UIManager.Instance.ShowUIForms<NoticePanel>();
         LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
+        LearnSkillUpgradePanel = UIManager.Instance.ShowUIForms<LearnSkillUpgradePanel>();
 
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetBackgroundAlpha(0f);
@@ -379,14 +381,17 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             }
         }
 
-        if (ControlManager.Battle_LeftRotateCamera.Up)
+        if (!LearnSkillUpgradePanel.HasPage)
         {
-            CameraManager.Instance.FieldCamera.CameraLeftRotate();
-        }
+            if (ControlManager.Battle_LeftSwitch.Up)
+            {
+                CameraManager.Instance.FieldCamera.CameraLeftRotate();
+            }
 
-        if (ControlManager.Battle_RightRotateCamera.Up)
-        {
-            CameraManager.Instance.FieldCamera.CameraRightRotate();
+            if (ControlManager.Battle_RightSwitch.Up)
+            {
+                CameraManager.Instance.FieldCamera.CameraRightRotate();
+            }
         }
 
         if (ControlManager.Common_ToggleUI.Up)

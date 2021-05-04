@@ -73,16 +73,11 @@ public class EntitySkillAction_DropSkillScroll : EntitySkillAction, EntitySkillA
                         {
                             foreach (EntitySkillAction action in conditional.EntitySkillActions)
                             {
-                                if (action is EntitySkillAction_TriggerZoneAction triggerZoneAction)
+                                if (action is EntitySkillAction_ShowLearnSkillPanel showLearnSkillPanelAction)
                                 {
-                                    foreach (EntitySkillAction stayAction in triggerZoneAction.EntityActions_Enter)
-                                    {
-                                        if (stayAction is EntitySkillAction_ShowLearnSkillPanel learnSkillAction)
-                                        {
-                                            learnSkillAction.SkillGUID = rawEntitySkill.SkillGUID;
-                                            sucChanged = true;
-                                        }
-                                    }
+                                    showLearnSkillPanelAction.SkillGUID = rawEntitySkill.SkillGUID;
+                                    showLearnSkillPanelAction.GoldCost = rawEntitySkill.GoldCost;
+                                    sucChanged = true;
                                 }
                             }
                         }

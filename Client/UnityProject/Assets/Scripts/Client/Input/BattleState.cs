@@ -121,8 +121,8 @@ public enum ButtonNames
     Battle_Skill_9_Player2,
     Battle_ToggleBattleTip,
 
-    Battle_LeftRotateCamera,
-    Battle_RightRotateCamera,
+    Battle_LeftSwitch,
+    Battle_RightSwitch,
 
     BATTLE_MAX_FLAG = 400,
 

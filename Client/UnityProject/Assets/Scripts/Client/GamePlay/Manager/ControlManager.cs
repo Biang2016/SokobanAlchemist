@@ -84,8 +84,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
 
     public ButtonState Battle_ToggleBattleTip = new ButtonState() {ButtonName = ButtonNames.Battle_ToggleBattleTip};
 
-    public ButtonState Battle_LeftRotateCamera = new ButtonState() {ButtonName = ButtonNames.Battle_LeftRotateCamera};
-    public ButtonState Battle_RightRotateCamera = new ButtonState() {ButtonName = ButtonNames.Battle_RightRotateCamera};
+    public ButtonState Battle_LeftSwitch = new ButtonState() {ButtonName = ButtonNames.Battle_LeftSwitch};
+    public ButtonState Battle_RightSwitch = new ButtonState() {ButtonName = ButtonNames.Battle_RightSwitch};
 
     #endregion
 
@@ -249,8 +249,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         Battle_Skill[(int) PlayerNumber.Player2, 9] = Battle_Skill_9_Player2;
 
         Battle_ToggleBattleTip.GetStateCallbackFromContext_UpDownPress(BattleInputActions.ToggleBattleTip);
-        Battle_LeftRotateCamera.GetStateCallbackFromContext_UpDownPress(BattleInputActions.LeftRotateCamera);
-        Battle_RightRotateCamera.GetStateCallbackFromContext_UpDownPress(BattleInputActions.RightRotateCamera);
+        Battle_LeftSwitch.GetStateCallbackFromContext_UpDownPress(BattleInputActions.LeftSwitch);
+        Battle_RightSwitch.GetStateCallbackFromContext_UpDownPress(BattleInputActions.RightSwitch);
 
         Common_MouseLeft.GetStateCallbackFromContext_UpDownPress(CommonInputActions.MouseLeftClick);
         Common_MouseRight.GetStateCallbackFromContext_UpDownPress(CommonInputActions.MouseRightClick);

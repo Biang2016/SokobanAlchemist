@@ -435,12 +435,6 @@ namespace BiangLibrary
         {
             LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
             yield return new WaitForEndOfFrame();
-            LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
-            yield return new WaitForEndOfFrame();
-            LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
-            yield return new WaitForEndOfFrame();
-            LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
-            yield return null;
             callBack?.Invoke();
         }
 

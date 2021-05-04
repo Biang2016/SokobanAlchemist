@@ -29,6 +29,7 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         Buff = 10000,
         BornPointData = 90000,
         PropertyModifier = 100000,
+        LearnSkillUpgradePage = 110000,
     }
 
     public static bool ShowEnemyPathFinding = false;
@@ -1256,6 +1257,13 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         {
             return worldModuleData;
         }
+    }
+
+    public static WorldData GetRawWorldDataConfig(ushort worldTypeIndex)
+    {
+        if (!IsLoaded) LoadAllConfigs();
+        WorldDataConfigDict.TryGetValue(worldTypeIndex, out WorldData worldData);
+        return worldData;
     }
 
     public static WorldData GetWorldDataConfig(ushort worldTypeIndex)

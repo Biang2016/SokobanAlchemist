@@ -116,11 +116,6 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                     }
                 }
 
-                if (EffectiveWhenInteractiveKeyDown)
-                {
-                    ClientGameManager.Instance.NoticePanel.ShowTip(InteractiveKeyNotice, TipPositionType, InteractiveKeyNoticeDuration);
-                }
-
                 if (!EntityStayTimeDict.ContainsKey(target.GUID))
                 {
                     EntityStayTimeDict.Add(target.GUID, 0);
@@ -164,24 +159,28 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
 
                 if (EffectiveWhenInteractiveKeyDown)
                 {
-                    if (ControlManager.Instance.Common_InteractiveKey.Down)
+                    if (!ClientGameManager.Instance.LearnSkillUpgradePanel.HasPage)
                     {
-                        triggerTimeWhenStayCount++;
-                        foreach (EntitySkillAction action in EntityActions_Stay)
+                        ClientGameManager.Instance.NoticePanel.ShowTip(InteractiveKeyNotice, TipPositionType, InteractiveKeyNoticeDuration);
+                        if (ControlManager.Instance.Common_InteractiveKey.Up)
                         {
-                            if (action.Entity == null)
+                            triggerTimeWhenStayCount++;
+                            foreach (EntitySkillAction action in EntityActions_Stay)
                             {
-                                action.Entity = Entity;
-                            }
+                                if (action.Entity == null)
+                                {
+                                    action.Entity = Entity;
+                                }
 
-                            if (action is IPureAction pureAction)
-                            {
-                                pureAction.Execute();
-                            }
+                                if (action is IPureAction pureAction)
+                                {
+                                    pureAction.Execute();
+                                }
 
-                            if (action is IEntityAction entityAction)
-                            {
-                                entityAction.ExecuteOnEntity(target);
+                                if (action is IEntityAction entityAction)
+                                {
+                                    entityAction.ExecuteOnEntity(target);
+                                }
                             }
                         }
                     }

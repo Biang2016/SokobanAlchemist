@@ -347,7 +347,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""LeftRotateCamera"",
+                    ""name"": ""LeftSwitch"",
                     ""type"": ""Button"",
                     ""id"": ""4c0ad541-70b9-4323-b90a-f89bd96489f9"",
                     ""expectedControlType"": ""Button"",
@@ -355,7 +355,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)""
                 },
                 {
-                    ""name"": ""RightRotateCamera"",
+                    ""name"": ""RightSwitch"",
                     ""type"": ""Button"",
                     ""id"": ""7ecf879f-d5c0-432e-b67c-46f4c52d0d68"",
                     ""expectedControlType"": ""Button"",
@@ -965,7 +965,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""LeftRotateCamera"",
+                    ""action"": ""LeftSwitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -976,7 +976,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""LeftRotateCamera"",
+                    ""action"": ""LeftSwitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -987,7 +987,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""RightRotateCamera"",
+                    ""action"": ""RightSwitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -998,7 +998,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""RightRotateCamera"",
+                    ""action"": ""RightSwitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1691,8 +1691,8 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_BattleInput_Player2_Move_Right = m_BattleInput.FindAction("Player2_Move_Right", throwIfNotFound: true);
         m_BattleInput_Player2_Move_Right_M = m_BattleInput.FindAction("Player2_Move_Right_M", throwIfNotFound: true);
         m_BattleInput_Player1_Move = m_BattleInput.FindAction("Player1_Move", throwIfNotFound: true);
-        m_BattleInput_LeftRotateCamera = m_BattleInput.FindAction("LeftRotateCamera", throwIfNotFound: true);
-        m_BattleInput_RightRotateCamera = m_BattleInput.FindAction("RightRotateCamera", throwIfNotFound: true);
+        m_BattleInput_LeftSwitch = m_BattleInput.FindAction("LeftSwitch", throwIfNotFound: true);
+        m_BattleInput_RightSwitch = m_BattleInput.FindAction("RightSwitch", throwIfNotFound: true);
         // Common
         m_Common = asset.FindActionMap("Common", throwIfNotFound: true);
         m_Common_MouseLeftClick = m_Common.FindAction("MouseLeftClick", throwIfNotFound: true);
@@ -1806,8 +1806,8 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_BattleInput_Player2_Move_Right;
     private readonly InputAction m_BattleInput_Player2_Move_Right_M;
     private readonly InputAction m_BattleInput_Player1_Move;
-    private readonly InputAction m_BattleInput_LeftRotateCamera;
-    private readonly InputAction m_BattleInput_RightRotateCamera;
+    private readonly InputAction m_BattleInput_LeftSwitch;
+    private readonly InputAction m_BattleInput_RightSwitch;
     public struct BattleInputActions
     {
         private @PlayerInput m_Wrapper;
@@ -1853,8 +1853,8 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @Player2_Move_Right => m_Wrapper.m_BattleInput_Player2_Move_Right;
         public InputAction @Player2_Move_Right_M => m_Wrapper.m_BattleInput_Player2_Move_Right_M;
         public InputAction @Player1_Move => m_Wrapper.m_BattleInput_Player1_Move;
-        public InputAction @LeftRotateCamera => m_Wrapper.m_BattleInput_LeftRotateCamera;
-        public InputAction @RightRotateCamera => m_Wrapper.m_BattleInput_RightRotateCamera;
+        public InputAction @LeftSwitch => m_Wrapper.m_BattleInput_LeftSwitch;
+        public InputAction @RightSwitch => m_Wrapper.m_BattleInput_RightSwitch;
         public InputActionMap Get() { return m_Wrapper.m_BattleInput; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1987,12 +1987,12 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Player1_Move.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move;
                 @Player1_Move.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move;
                 @Player1_Move.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnPlayer1_Move;
-                @LeftRotateCamera.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnLeftRotateCamera;
-                @LeftRotateCamera.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnLeftRotateCamera;
-                @LeftRotateCamera.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnLeftRotateCamera;
-                @RightRotateCamera.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnRightRotateCamera;
-                @RightRotateCamera.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnRightRotateCamera;
-                @RightRotateCamera.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnRightRotateCamera;
+                @LeftSwitch.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnLeftSwitch;
+                @LeftSwitch.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnLeftSwitch;
+                @LeftSwitch.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnLeftSwitch;
+                @RightSwitch.started -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnRightSwitch;
+                @RightSwitch.performed -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnRightSwitch;
+                @RightSwitch.canceled -= m_Wrapper.m_BattleInputActionsCallbackInterface.OnRightSwitch;
             }
             m_Wrapper.m_BattleInputActionsCallbackInterface = instance;
             if (instance != null)
@@ -2120,12 +2120,12 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Player1_Move.started += instance.OnPlayer1_Move;
                 @Player1_Move.performed += instance.OnPlayer1_Move;
                 @Player1_Move.canceled += instance.OnPlayer1_Move;
-                @LeftRotateCamera.started += instance.OnLeftRotateCamera;
-                @LeftRotateCamera.performed += instance.OnLeftRotateCamera;
-                @LeftRotateCamera.canceled += instance.OnLeftRotateCamera;
-                @RightRotateCamera.started += instance.OnRightRotateCamera;
-                @RightRotateCamera.performed += instance.OnRightRotateCamera;
-                @RightRotateCamera.canceled += instance.OnRightRotateCamera;
+                @LeftSwitch.started += instance.OnLeftSwitch;
+                @LeftSwitch.performed += instance.OnLeftSwitch;
+                @LeftSwitch.canceled += instance.OnLeftSwitch;
+                @RightSwitch.started += instance.OnRightSwitch;
+                @RightSwitch.performed += instance.OnRightSwitch;
+                @RightSwitch.canceled += instance.OnRightSwitch;
             }
         }
     }
@@ -2393,8 +2393,8 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnPlayer2_Move_Right(InputAction.CallbackContext context);
         void OnPlayer2_Move_Right_M(InputAction.CallbackContext context);
         void OnPlayer1_Move(InputAction.CallbackContext context);
-        void OnLeftRotateCamera(InputAction.CallbackContext context);
-        void OnRightRotateCamera(InputAction.CallbackContext context);
+        void OnLeftSwitch(InputAction.CallbackContext context);
+        void OnRightSwitch(InputAction.CallbackContext context);
     }
     public interface ICommonActions
     {
