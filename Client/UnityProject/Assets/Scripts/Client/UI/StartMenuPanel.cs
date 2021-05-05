@@ -9,7 +9,7 @@ public class StartMenuPanel : BaseUIPanel
     {
         UIType.InitUIType(
             false,
-            true,
+            false,
             false,
             UIFormTypes.Normal,
             UIFormShowModes.Normal,

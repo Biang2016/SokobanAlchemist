@@ -357,7 +357,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         IsStart = false;
         WwiseAudioManager.Instance.Trigger_PlayerDeath.Post(WwiseAudioManager.Instance.WwiseBGMConfiguration.gameObject);
         SetAllActorForbidAction(true);
-        ClientGameManager.Instance.LearnSkillUpgradePanel.Hide();
+        ClientGameManager.Instance.LearnSkillUpgradePanel.HidePanel();
         UIManager.Instance.CloseUIForm<KeyBindingPanel>();
         UIManager.Instance.CloseUIForm<TransportWorldPanel>();
         WinLosePanel panel = UIManager.Instance.ShowUIForms<WinLosePanel>();

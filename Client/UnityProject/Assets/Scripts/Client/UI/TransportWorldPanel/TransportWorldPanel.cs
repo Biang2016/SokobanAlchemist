@@ -90,8 +90,9 @@ public class TransportWorldPanel : BaseUIPanel
         }
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
+        base.FixedUpdate();
         if (ControlManager.Instance.Common_InteractiveKey.Down)
         {
             current_LearnAction?.Invoke();

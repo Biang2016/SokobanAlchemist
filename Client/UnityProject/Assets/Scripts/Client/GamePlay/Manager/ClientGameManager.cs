@@ -76,6 +76,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public PlayerStatHUDPanel PlayerStatHUDPanel;
     public NoticePanel NoticePanel;
     public LearnSkillUpgradePanel LearnSkillUpgradePanel;
+    public ExitMenuPanel ExitMenuPanel;
 
     public bool WarmUpPool_Editor = true;
 
@@ -103,11 +104,11 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         UIManager.Init(
             (prefabName) => Instantiate(PrefabManager.GetPrefab(prefabName)),
             Debug.LogError,
-            () => ControlManager.Instance.Common_MouseLeft.Down,
-            () => ControlManager.Instance.Common_MouseRight.Down,
-            () => ControlManager.Instance.Common_Exit.Down,
-            () => ControlManager.Instance.Common_Confirm.Down,
-            () => ControlManager.Instance.Common_Tab.Down
+            () => ControlManager.Instance.Common_MouseLeft.Up,
+            () => ControlManager.Instance.Common_MouseRight.Up,
+            () => ControlManager.Instance.Common_Exit.Up,
+            () => ControlManager.Instance.Common_Confirm.Up,
+            () => ControlManager.Instance.Common_Tab.Up
         );
 
         ControlManager.Awake();
@@ -159,6 +160,9 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         GameSaveManager.Start();
         FXManager.Start();
 
+        NoticePanel = UIManager.Instance.ShowUIForms<NoticePanel>();
+        LoadingMapPanel = UIManager.Instance.WarmUpUIForms<LoadingMapPanel>();
+        LearnSkillUpgradePanel = UIManager.Instance.ShowUIForms<LearnSkillUpgradePanel>();
         UIManager.Instance.ShowUIForms<StartMenuPanel>();
     }
 
@@ -191,9 +195,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     internal IEnumerator Co_StartGame()
     {
         IsGameLoading = true;
-        NoticePanel = UIManager.Instance.ShowUIForms<NoticePanel>();
         LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
-        LearnSkillUpgradePanel = UIManager.Instance.ShowUIForms<LearnSkillUpgradePanel>();
 
         LoadingMapPanel.Clear();
         LoadingMapPanel.SetBackgroundAlpha(0f);
@@ -220,10 +222,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         BattleManager.Instance.StartBattle();
         LoadingMapPanel.CloseUIForm();
         DebugPanel = UIManager.Instance.ShowUIForms<DebugPanel>();
-        KeyBindingPanel = UIManager.Instance.ShowUIForms<KeyBindingPanel>();
-        KeyBindingPanel.CloseUIForm();
-        EntitySkillPreviewPanel = UIManager.Instance.ShowUIForms<EntitySkillPreviewPanel>();
-        EntitySkillPreviewPanel.CloseUIForm();
+        KeyBindingPanel = UIManager.Instance.WarmUpUIForms<KeyBindingPanel>();
+        EntitySkillPreviewPanel = UIManager.Instance.WarmUpUIForms<EntitySkillPreviewPanel>();
 #if !DEBUG
         UIManager.Instance.CloseUIForm<DebugPanel>();
 #endif
@@ -288,6 +288,20 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         CurrentFixedFrameCount_Mod_FixedFrameRate_5X = CurrentFixedFrameCount % FixedFrameRate_5X;
 
         ControlManager.FixedUpdate(Time.fixedDeltaTime);
+
+        if (ControlManager.Common_Exit.Up)
+        {
+            if (!UIManager.IsUIShown<StartMenuPanel>()
+                && !UIManager.IsUIShown<ConfirmPanel>()
+                && !UIManager.IsUIShown<TransportWorldPanel>()
+                && !UIManager.IsUIShown<EntitySkillPreviewPanel>()
+                && !UIManager.IsUIShown<KeyBindingPanel>()
+                && !UIManager.IsUIShown<LoadingMapPanel>()
+                && !LearnSkillUpgradePanel.HasPage)
+            {
+                UIManager.Instance.ToggleUIForm<ExitMenuPanel>();
+            }
+        }
 
         if (BattleManager.Instance.IsStart)
         {
@@ -379,27 +393,33 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
             if (ControlManager.Common_Tab.Down)
             {
-                KeyBindingPanel.Display();
+                if (!UIManager.Instance.IsUIShown<ExitMenuPanel>())
+                {
+                    UIManager.Instance.ShowUIForms<KeyBindingPanel>();
+                }
             }
 
             if (ControlManager.Common_Tab.Up)
             {
-                KeyBindingPanel.Hide();
+                KeyBindingPanel.CloseUIForm();
             }
 
             if (ControlManager.Common_ToggleDebugPanel.Up)
             {
-                DebugPanel.Toggle();
+                UIManager.Instance.ToggleUIForm<DebugPanel>();
             }
 
             if (ControlManager.Common_SkillPreviewPanel.Up)
             {
-                EntitySkillPreviewPanel.Toggle();
-                if (EntitySkillPreviewPanel.IsShown)
+                if (!UIManager.Instance.IsUIShown<ExitMenuPanel>())
                 {
-                    if (BattleManager.Instance.Player1 != null)
+                    UIManager.Instance.ToggleUIForm<EntitySkillPreviewPanel>();
+                    if (EntitySkillPreviewPanel.IsShown)
                     {
-                        EntitySkillPreviewPanel.Initialize(BattleManager.Instance.Player1);
+                        if (BattleManager.Instance.Player1 != null)
+                        {
+                            EntitySkillPreviewPanel.Initialize(BattleManager.Instance.Player1);
+                        }
                     }
                 }
             }

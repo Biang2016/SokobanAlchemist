@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangLibrary.GamePlay.UI;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -71,6 +72,8 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
 
     public void ExecuteOnTriggerEnter(Collider collider)
     {
+        if (UIManager.Instance.IsUIShown<ExitMenuPanel>()) return;
+        if (UIManager.Instance.IsUIShown<TransportWorldPanel>()) return;
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {
             Entity target = collider.GetComponentInParent<Entity>();

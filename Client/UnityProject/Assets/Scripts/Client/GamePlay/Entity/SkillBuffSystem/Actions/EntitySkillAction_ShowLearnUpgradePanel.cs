@@ -35,6 +35,8 @@ public class EntitySkillAction_ShowLearnUpgradePanel : EntitySkillAction, Entity
 
     public void ExecuteOnTriggerEnter(Collider collider)
     {
+        if (UIManager.Instance.IsUIShown<ExitMenuPanel>()) return;
+        if (UIManager.Instance.IsUIShown<TransportWorldPanel>()) return;
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {
             Entity target = collider.GetComponentInParent<Entity>();

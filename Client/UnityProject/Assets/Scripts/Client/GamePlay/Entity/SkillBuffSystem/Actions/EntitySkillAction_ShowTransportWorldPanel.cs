@@ -23,6 +23,7 @@ public class EntitySkillAction_ShowTransportWorldPanel : EntitySkillAction, Enti
 
     public void Execute()
     {
+        if (UIManager.Instance.IsUIShown<ExitMenuPanel>()) return;
         if (UIManager.Instance.IsUIShown<TransportWorldPanel>()) return;
         if (selectedWorld == null)
         {
