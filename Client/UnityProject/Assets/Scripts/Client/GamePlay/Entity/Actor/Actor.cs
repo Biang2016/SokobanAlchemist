@@ -968,7 +968,7 @@ public class Actor : Entity
             ActorArtHelper.SetIsPushing(false);
             if (HasRigidbody)
             {
-                if (CannotAct)
+                if (CannotAct && !EntityBuffHelper.IsBeingRepulsed)
                 {
                     RigidBody.drag = 100f;
                     RigidBody.mass = 1f;

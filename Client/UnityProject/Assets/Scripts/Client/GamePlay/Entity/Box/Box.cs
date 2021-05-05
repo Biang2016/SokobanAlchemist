@@ -1381,6 +1381,8 @@ public partial class Box : Entity
     public bool Consumable => BoxFeature.HasFlag(BoxFeature.LiftThenDisappear);
 
     public bool IsHidden => BoxFeature.HasFlag(BoxFeature.Hidden);
+
+    public bool Destroyable => !BoxFeature.HasFlag(BoxFeature.IsBorder) && !BoxFeature.HasFlag(BoxFeature.IsGround) && !BoxFeature.HasFlag(BoxFeature.IsImportantBox);
 }
 
 [Flags]
@@ -1432,4 +1434,7 @@ public enum BoxFeature
 
     [LabelText("隐藏的")]
     Hidden = 1 << 14,
+
+    [LabelText("重要箱子")]
+    IsImportantBox = 1 << 15,
 }
