@@ -467,11 +467,11 @@ public abstract class Entity : PoolObject
                 if (!eps.SkillIcon.TypeName.IsNullOrWhitespace() && !eps.SkillName_EN.IsNullOrWhitespace() && eps.OccupySkillGrid)
                 {
                     PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
-                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, SkillSlot> kv in HUD.SkillSlotDict)
+                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, ISkillBind> kv in HUD.SkillSlotDict)
                     {
-                        if (kv.Value.Empty)
+                        if (kv.Value.EmptySkill)
                         {
-                            kv.Value.Initialize(eps);
+                            kv.Value.BindSkill(eps);
                             break;
                         }
                     }
@@ -508,11 +508,11 @@ public abstract class Entity : PoolObject
                 if (!eps.SkillIcon.TypeName.IsNullOrWhitespace() && !eps.SkillName_EN.IsNullOrWhitespace() && eps.OccupySkillGrid)
                 {
                     PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
-                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, SkillSlot> kv in HUD.SkillSlotDict)
+                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, ISkillBind> kv in HUD.SkillSlotDict)
                     {
                         if (kv.Value.BoundEntitySkill == eps)
                         {
-                            kv.Value.Initialize(null);
+                            kv.Value.BindSkill(null);
                         }
                     }
                 }
@@ -695,9 +695,9 @@ public abstract class Entity : PoolObject
                     pch.SkillKeyMappings[keyBind].Add(eas.EntitySkillIndex);
 
                     PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
-                    if (HUD.SkillSlotDict.TryGetValue(keyBind, out SkillSlot skillSlot))
+                    if (HUD.SkillSlotDict.TryGetValue(keyBind, out ISkillBind iSkillBind))
                     {
-                        skillSlot.Initialize(eas);
+                        iSkillBind.BindSkill(eas);
                     }
                 }
 
@@ -718,9 +718,9 @@ public abstract class Entity : PoolObject
                     {
                         kv.Value.Remove(eas.EntitySkillIndex);
                         PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
-                        if (HUD.SkillSlotDict.TryGetValue(kv.Key, out SkillSlot skillSlot))
+                        if (HUD.SkillSlotDict.TryGetValue(kv.Key, out ISkillBind iSkillBind))
                         {
-                            skillSlot.Initialize(null);
+                            iSkillBind.BindSkill(null);
                         }
                     }
                 }
