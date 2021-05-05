@@ -437,6 +437,7 @@ public class EntityStatPropSet
         StatNotifyActionSetDict[EntityStatType.ActionPoint].OnValueNotEnoughWarning += OnActionPointNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.ActionPoint].OnValueIncrease += OnActionPointIncrease;
         StatNotifyActionSetDict[EntityStatType.Gold].OnValueIncrease += OnGoldIncrease;
+        StatNotifyActionSetDict[EntityStatType.Gold].OnValueDecrease += OnGoldDecrease;
         StatNotifyActionSetDict[EntityStatType.Gold].OnValueNotEnoughWarning += OnGoldNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueIncrease += OnFireElementFragmentIncrease;
         StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueNotEnoughWarning += OnFireElementFragmentNotEnoughWarning;
@@ -504,6 +505,15 @@ public class EntityStatPropSet
         {
             actor.ActorBattleHelper.ShowGainGoldNumFX(increase);
             actor.EntityWwiseHelper.OnGainGold.Post(actor.gameObject);
+        }
+    }
+
+    private void OnGoldDecrease(int decrease)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowSpendGoldNumFX(decrease);
+            actor.EntityWwiseHelper.OnSpendGold.Post(actor.gameObject);
         }
     }
 

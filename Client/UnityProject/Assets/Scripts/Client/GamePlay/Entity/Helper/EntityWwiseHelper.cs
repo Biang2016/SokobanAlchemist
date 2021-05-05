@@ -67,6 +67,9 @@ public class EntityWwiseHelper : EntityMonoHelper
     public Event OnGainGold;
 
     [BoxGroup("ForActor_Player")]
+    public Event OnSpendGold;
+
+    [BoxGroup("ForActor_Player")]
     public Event OnGainFireElement;
 
     [BoxGroup("ForActor_Player")]
