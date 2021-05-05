@@ -79,9 +79,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WorldFeature: 4
+  WorldName_EN: 
+  WorldName_ZH: 
+  WorldDescription_EN: 
+  WorldDescription_ZH: 
+  WorldIcon:
+    TypeDefineType: 12
+    TypeGUID: 
   DefaultWorldActorBornPointAlias: OpenWorldModule
   UseSpecialPlayerEnterESPS: 0
   Raw_PlayerEnterESPS:
+    CollectDetectRadius:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     Gold:
       _value: 0
       _minValue: 0
@@ -89,6 +101,42 @@ MonoBehaviour:
       AutoChange: 0
       AutoChangePercent: 0
       AutoChangeTimeInterval: 3.4028235e+38
+    FireElementFragment:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
+    MaxFireElementFragment:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    IceElementFragment:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
+    MaxIceElementFragment:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
+    LightningElementFragment:
+      _value: 0
+      _minValue: 0
+      _maxValue: 0
+      AutoChange: 0
+      AutoChangePercent: 0
+      AutoChangeTimeInterval: 3.4028235e+38
+    MaxLightningElementFragment:
+      BaseValue: 0
+      ModifiedValue: 0
+      MinValue: 0
+      MaxValue: 0
     HealthDurability:
       _value: 0
       _minValue: 0
@@ -259,24 +307,6 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 0
-    KickConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    DashConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    VaultConsumeActionPoint:
-      BaseValue: 0
-      ModifiedValue: 0
-      MinValue: 0
-      MaxValue: 0
-    SkillsPropertyCollections: []
-    RawEntityDefaultBuffs: []
-  UseSpecialCameraConfig: 1
   CameraConfigData:
     HorAngle: 0
     VerAngle: 50
@@ -294,8 +324,6 @@ MonoBehaviour:
   PostProcessingProfileType:
     TypeDefineType: 10
     TypeGUID: (4074a9c0-52a4-4df8-9317-e06970dbd34f)
-  references:
-    version: 1
 --- !u!1 &3117608157354636031
 GameObject:
   m_ObjectHideFlags: 0
