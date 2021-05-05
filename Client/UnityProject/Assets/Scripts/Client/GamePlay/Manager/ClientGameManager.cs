@@ -126,7 +126,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         RoutineManager.LogErrorHandler = Debug.LogError;
         RoutineManager.Awake();
         GameStateManager.Awake();
-        DebugConsole.OnDebugConsoleKeyDownHandler = () => ControlManager.Instance.Common_Debug.Down;
+        DebugConsole.OnDebugConsoleKeyDownHandler = () => ControlManager.Instance.Common_DebugConsole.Down;
         DebugConsole.OnDebugConsoleToggleHandler = (enable) => { ControlManager.Instance.EnableBattleInputActions(!enable); };
 
         BattleManager.Awake();
@@ -257,72 +257,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, "OnBossSpiderLegAppear");
         }
 
-        if (Input.GetKeyUp(KeyCode.O))
-        {
-            DebugPanel.Toggle();
-        }
-
-        if (Input.GetKey(KeyCode.Equals))
-        {
-            Time.timeScale = 0.1f;
-        }
-        else
-        {
-            Time.timeScale = 1f;
-        }
-
 #endif
-        if (Input.GetKeyUp(KeyCode.B))
-        {
-            if (!UIManager.IsUIShown<ConfirmPanel>())
-            {
-                if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
-                {
-                    if (openWorld.IsInsideDungeon)
-                    {
-                        ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
-                        confirmPanel.Initialize("Wanna give up the dungeon? You'll lose the rewards that you've got", "Let me go", "Cancel",
-                            () =>
-                            {
-                                openWorld.ReturnToOpenWorld();
-                                confirmPanel.CloseUIForm();
-                            },
-                            () => { confirmPanel.CloseUIForm(); }
-                        );
-                        return;
-                    }
-                }
-                else
-                {
-                    SwitchWorld_ReloadGame(ConfigManager.GetTypeName(TypeDefineType.World, ConfigManager.World_OpenWorldIndex));
-                    return;
-                }
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            KeyBindingPanel.Display();
-        }
-
-        if (Input.GetKeyUp(KeyCode.Tab))
-        {
-            KeyBindingPanel.Hide();
-        }
-
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            EntitySkillPreviewPanel.Display();
-            if (BattleManager.Instance.Player1 != null)
-            {
-                EntitySkillPreviewPanel.Initialize(BattleManager.Instance.Player1);
-            }
-        }
-
-        if (Input.GetKeyUp(KeyCode.N))
-        {
-            EntitySkillPreviewPanel.Hide();
-        }
     }
 
     void LateUpdate()
@@ -384,6 +319,51 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                 }
             }
 
+            if (ControlManager.Common_ReloadGame.Up && !IsGameLoading)
+            {
+                if (!UIManager.IsUIShown<ConfirmPanel>())
+                {
+                    ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
+                    confirmPanel.Initialize("Wanna reload the game? You'll lose all the progress", "Reload", "Cancel",
+                        () =>
+                        {
+                            StartCoroutine(ReloadGame());
+                            confirmPanel.CloseUIForm();
+                        },
+                        () => { confirmPanel.CloseUIForm(); }
+                    );
+                    return;
+                }
+            }
+
+            if (ControlManager.Common_ReturnToOpenWorld.Up && !IsGameLoading)
+            {
+                if (!UIManager.IsUIShown<ConfirmPanel>())
+                {
+                    if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+                    {
+                        if (openWorld.IsInsideDungeon)
+                        {
+                            ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
+                            confirmPanel.Initialize("Wanna give up the dungeon? You'll lose the rewards that you've got", "Let me go", "Cancel",
+                                () =>
+                                {
+                                    openWorld.ReturnToOpenWorld();
+                                    confirmPanel.CloseUIForm();
+                                },
+                                () => { confirmPanel.CloseUIForm(); }
+                            );
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        SwitchWorld_ReloadGame(ConfigManager.GetTypeName(TypeDefineType.World, ConfigManager.World_OpenWorldIndex));
+                        return;
+                    }
+                }
+            }
+
             if (!LearnSkillUpgradePanel.HasPage)
             {
                 if (ControlManager.Battle_LeftSwitch.Up)
@@ -397,15 +377,49 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                 }
             }
 
+            if (ControlManager.Common_Tab.Down)
+            {
+                KeyBindingPanel.Display();
+            }
+
+            if (ControlManager.Common_Tab.Up)
+            {
+                KeyBindingPanel.Hide();
+            }
+
+            if (ControlManager.Common_ToggleDebugPanel.Up)
+            {
+                DebugPanel.Toggle();
+            }
+
+            if (ControlManager.Common_SkillPreviewPanel.Up)
+            {
+                EntitySkillPreviewPanel.Toggle();
+                if (EntitySkillPreviewPanel.IsShown)
+                {
+                    if (BattleManager.Instance.Player1 != null)
+                    {
+                        EntitySkillPreviewPanel.Initialize(BattleManager.Instance.Player1);
+                    }
+                }
+            }
+
             if (ControlManager.Common_ToggleUI.Up)
             {
                 UIManager.Instance.UICamera.enabled = !UIManager.Instance.UICamera.enabled;
             }
 
-            if (ControlManager.Common_ToggleDebugButton.Up)
+#if DEBUG
+
+            if (ControlManager.Common_SlowDownGame.Pressed)
             {
-                DebugPanel.DebugToggleButton.gameObject.SetActive(!DebugPanel.DebugToggleButton.gameObject.activeInHierarchy);
+                Time.timeScale = 0.1f;
             }
+            else
+            {
+                Time.timeScale = 1f;
+            }
+#endif
         }
 
         ConfigManager.FixedUpdate(Time.fixedDeltaTime);
