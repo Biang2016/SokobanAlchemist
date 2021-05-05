@@ -51,6 +51,16 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
     public override void OnDestroyEntity()
     {
         base.OnDestroyEntity();
+        if (Box.FrozenActor != null)
+        {
+            Box.FrozenActor.EntityFrozenHelper.FrozeIntoIceBlock(
+                Box.FrozenActor.EntityStatPropSet.FrozenLevel.Value,
+                0,
+                Box.FrozenActor.EntityStatPropSet.FrozenLevel.MinValue,
+                Box.FrozenActor.EntityStatPropSet.FrozenLevel.MaxValue
+            ); // 此举为了避免Box因非战斗原因先于Actor销毁时，要先将Actor释放出来，否则Actor无法进入正常销毁逻辑
+        }
+
         Box.FrozenActor = null;
     }
 }

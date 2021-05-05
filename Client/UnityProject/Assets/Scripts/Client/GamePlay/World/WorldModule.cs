@@ -591,7 +591,7 @@ public class WorldModule : PoolObject
                         {
                             GridPos3D gridPos = offset + worldGP;
                             Entity existedEntity = World.GetImpassableEntityByGridPosition(gridPos, 0, out WorldModule module, out GridPos3D gridLocalGP);
-                            if (module != null && existedEntity == null)
+                            if (module != null && (existedEntity == null || isTriggerEntity))
                             {
                                 module[TypeDefineType.Box, gridLocalGP, isStartedEntities, false, isTriggerEntity, box.GUID, entityData] = box;
                             }
@@ -614,7 +614,7 @@ public class WorldModule : PoolObject
                         {
                             GridPos3D gridPos = offset + actor.WorldGP; // 此处actor.WorldGP已经根据Actor的朝向更新过，不等于上文的worldGP
                             Entity existedEntity = World.GetImpassableEntityByGridPosition(gridPos, actor.GUID, out WorldModule module, out GridPos3D gridLocalGP);
-                            if (module != null && existedEntity == null)
+                            if (module != null && (existedEntity == null || isTriggerEntity))
                             {
                                 module[TypeDefineType.Actor, gridLocalGP, isStartedEntities, false, isTriggerEntity, actor.GUID, entityData] = actor;
                             }

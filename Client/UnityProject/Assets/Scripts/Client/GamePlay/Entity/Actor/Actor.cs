@@ -968,8 +968,16 @@ public class Actor : Entity
             ActorArtHelper.SetIsPushing(false);
             if (HasRigidbody)
             {
-                RigidBody.drag = 0f;
-                RigidBody.mass = 1f;
+                if (CannotAct)
+                {
+                    RigidBody.drag = 100f;
+                    RigidBody.mass = 1f;
+                }
+                else
+                {
+                    RigidBody.drag = 0f;
+                    RigidBody.mass = 1f;
+                }
             }
 
             CurMoveAttempt = Vector3.zero;

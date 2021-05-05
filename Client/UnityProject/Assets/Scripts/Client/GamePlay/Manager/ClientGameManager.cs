@@ -252,12 +252,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         FXManager.Update(Time.deltaTime);
 
 #if DEBUG
-        if (Input.GetKeyUp(KeyCode.F10) && !IsGameLoading)
-        {
-            StartCoroutine(ReloadGame());
-            return;
-        }
-
         if (Input.GetKeyUp(KeyCode.P))
         {
             BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, "OnBossSpiderLegAppear");
