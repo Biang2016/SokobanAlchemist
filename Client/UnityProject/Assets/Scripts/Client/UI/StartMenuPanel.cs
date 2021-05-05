@@ -17,6 +17,7 @@ public class StartMenuPanel : BaseUIPanel
     }
 
     public Animator StartMenuAnim;
+    public Animator CreditAnim;
 
     public Button SettingButton;
     public Button StartButton;
@@ -40,5 +41,11 @@ public class StartMenuPanel : BaseUIPanel
 
     public void OnCreditButtonClick()
     {
+        CreditAnim.SetTrigger("Show");
+    }
+
+    public void OnCreditSelfButtonClick()
+    {
+        CreditAnim.SetTrigger("Hide");
     }
 }
