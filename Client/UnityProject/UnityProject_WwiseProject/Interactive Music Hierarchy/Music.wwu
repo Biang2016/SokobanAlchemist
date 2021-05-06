@@ -2506,10 +2506,10 @@
 											</PropertyList>
 											<ReferenceList>
 												<Reference Name="DestinationContextObject">
-													<ObjectRef Name="OpenWorld_Explore" ID="{8F97D2F8-14A4-4714-8106-FCCB6591FF22}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+													<ObjectRef Name="OpenWorld_InCamp" ID="{02E7C85E-2EDF-4942-A25D-534C4364811D}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
 												</Reference>
 												<Reference Name="SourceContextObject">
-													<ObjectRef Name="Temple_Explore" ID="{5F410ABF-DB72-4549-B98A-F54B0E80CB9E}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+													<ObjectRef Name="Temple_InCamp" ID="{1C18E907-5E86-47B4-B815-4C70F7DB9988}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
 												</Reference>
 											</ReferenceList>
 											<TransitionInfo>
@@ -2545,7 +2545,7 @@
 													<ObjectRef Name="OpenWorld_Explore" ID="{8F97D2F8-14A4-4714-8106-FCCB6591FF22}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
 												</Reference>
 												<Reference Name="SourceContextObject">
-													<ObjectRef Name="Temple_Explore" ID="{5F410ABF-DB72-4549-B98A-F54B0E80CB9E}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+													<ObjectRef Name="Temple_InCamp" ID="{1C18E907-5E86-47B4-B815-4C70F7DB9988}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
 												</Reference>
 											</ReferenceList>
 											<TransitionInfo>
@@ -2578,10 +2578,10 @@
 											</PropertyList>
 											<ReferenceList>
 												<Reference Name="DestinationContextObject">
-													<ObjectRef Name="OpenWorld_Explore" ID="{8F97D2F8-14A4-4714-8106-FCCB6591FF22}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+													<ObjectRef Name="OpenWorld_InCombat" ID="{1E15022C-7AA5-4AE0-BA9F-4DB6631188B1}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
 												</Reference>
 												<Reference Name="SourceContextObject">
-													<ObjectRef Name="Temple_Explore" ID="{5F410ABF-DB72-4549-B98A-F54B0E80CB9E}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+													<ObjectRef Name="Temple_InCamp" ID="{1C18E907-5E86-47B4-B815-4C70F7DB9988}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
 												</Reference>
 											</ReferenceList>
 											<TransitionInfo>
@@ -2614,10 +2614,10 @@
 											</PropertyList>
 											<ReferenceList>
 												<Reference Name="DestinationContextObject">
-													<ObjectRef Name="OpenWorld_Explore" ID="{8F97D2F8-14A4-4714-8106-FCCB6591FF22}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+													<ObjectRef Name="OpenWorld_InEliteCombat" ID="{6638FAB6-8726-4C38-9333-2FB4F639BABB}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
 												</Reference>
 												<Reference Name="SourceContextObject">
-													<ObjectRef Name="Temple_Explore" ID="{5F410ABF-DB72-4549-B98A-F54B0E80CB9E}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+													<ObjectRef Name="Temple_InCamp" ID="{1C18E907-5E86-47B4-B815-4C70F7DB9988}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
 												</Reference>
 											</ReferenceList>
 											<TransitionInfo>
@@ -2650,7 +2650,7 @@
 											</PropertyList>
 											<ReferenceList>
 												<Reference Name="DestinationContextObject">
-													<ObjectRef Name="OpenWorld_Explore" ID="{8F97D2F8-14A4-4714-8106-FCCB6591FF22}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+													<ObjectRef Name="OpenWorld_InCamp" ID="{02E7C85E-2EDF-4942-A25D-534C4364811D}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
 												</Reference>
 												<Reference Name="SourceContextObject">
 													<ObjectRef Name="Temple_Explore" ID="{5F410ABF-DB72-4549-B98A-F54B0E80CB9E}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
@@ -2668,6 +2668,546 @@
 												</SourceFadeOut>
 												<DestinationFadeIn>
 													<MusicFade Name="Destination Fade-in" ID="{F492CF32-465E-4343-9536-28A5C34EE346}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{DBD8BFD0-0D79-4160-B5D0-CD559C41388B}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_Explore" ID="{8F97D2F8-14A4-4714-8106-FCCB6591FF22}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_Explore" ID="{5F410ABF-DB72-4549-B98A-F54B0E80CB9E}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{A81E79B2-7AAC-4C7F-8A2E-22DCCBC5317D}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{9EC44688-A550-4D6D-912E-A66C88758F17}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{6FFD912E-0C0F-450F-AE41-0057B83890AC}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_InCombat" ID="{1E15022C-7AA5-4AE0-BA9F-4DB6631188B1}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_Explore" ID="{5F410ABF-DB72-4549-B98A-F54B0E80CB9E}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{797AFE15-8AE6-4A36-B7E0-5C7FB10DA3FD}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{2FE7B823-D011-42B2-A776-74625581FBA8}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{D7D65FAA-F44E-410E-B0C7-C263A65F5D97}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_InEliteCombat" ID="{6638FAB6-8726-4C38-9333-2FB4F639BABB}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_Explore" ID="{5F410ABF-DB72-4549-B98A-F54B0E80CB9E}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{3F82E53F-F646-4C04-86C1-B22FB0BAF6E9}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{225FDD8F-594A-4511-9B63-4439E1AAEAC6}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{E3F37FCC-21A9-46C3-BA21-E9FB6F97DC06}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_InCamp" ID="{02E7C85E-2EDF-4942-A25D-534C4364811D}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_InCombat" ID="{CC9FC1B8-22B9-450B-A30A-AA18795441D8}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{AA33DAB0-34EF-49E8-B108-37050AD30994}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{380398A9-D238-49A3-A185-31600B483F18}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{5BD2C3FB-B820-4938-9926-2BA037F06319}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_Explore" ID="{8F97D2F8-14A4-4714-8106-FCCB6591FF22}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_InCombat" ID="{CC9FC1B8-22B9-450B-A30A-AA18795441D8}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{EC6669FB-C4E5-45BF-9413-909A47B2ACCE}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{BA919A3F-F5ED-4AAD-8915-7EA470A39A2F}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{6C0F0547-09BB-46DD-9934-2ABC2E8F2F33}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_InCombat" ID="{1E15022C-7AA5-4AE0-BA9F-4DB6631188B1}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_InCombat" ID="{CC9FC1B8-22B9-450B-A30A-AA18795441D8}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{83C4EE99-8E9E-40FF-96D0-AAB46A7116F3}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{DE24CF47-6388-4477-817C-DE62325A16BD}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{C6E15F4A-0611-4254-B2CF-0936BC27D73C}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_InEliteCombat" ID="{6638FAB6-8726-4C38-9333-2FB4F639BABB}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_InCombat" ID="{CC9FC1B8-22B9-450B-A30A-AA18795441D8}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{CB802C96-CFC5-45A0-BAE6-D0F0D8F8166B}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{9A769DB4-2688-42E3-B483-387B8C13AEF3}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{2D2FFA1A-A652-480D-A91B-048AA07266B6}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_InCamp" ID="{02E7C85E-2EDF-4942-A25D-534C4364811D}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_InEliteCombat" ID="{CC7AAA6F-D384-4C44-B92F-D9CC44C21FD2}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{3592440A-46F1-45C5-BC4B-4AAD5CC6155E}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{92C49DFD-3BE9-4969-87A1-A6BD092D8A12}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{D82CA557-CE4D-4696-B7CB-83B991E5A8FA}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_Explore" ID="{8F97D2F8-14A4-4714-8106-FCCB6591FF22}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_InEliteCombat" ID="{CC7AAA6F-D384-4C44-B92F-D9CC44C21FD2}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{CBE7BC95-5A19-44D1-9403-22110D3572D3}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{6BA8574B-BF14-472A-924D-B0E59F8A334B}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{8CD3C349-82BE-42B7-939C-B98F6F1D04E9}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_InCombat" ID="{1E15022C-7AA5-4AE0-BA9F-4DB6631188B1}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_InEliteCombat" ID="{CC7AAA6F-D384-4C44-B92F-D9CC44C21FD2}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{EA784E80-9CEA-4EEA-B5C3-24551619FAF3}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{4EEC58C0-0FC5-4D07-8920-731D3C8632E8}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{BDFDD0D4-7D1A-4274-B47E-1C827FC23B65}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_InEliteCombat" ID="{6638FAB6-8726-4C38-9333-2FB4F639BABB}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_InEliteCombat" ID="{CC7AAA6F-D384-4C44-B92F-D9CC44C21FD2}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{C2F19EC8-59F6-4D86-9D11-43D3D487D4F2}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{B1F7EA7D-680B-47D3-B28D-8C0C4AA28715}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{DE60CA45-C204-4B13-A795-83CAAEE0D53E}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_InCamp" ID="{02E7C85E-2EDF-4942-A25D-534C4364811D}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_InBossCombat" ID="{7FB3C367-F2D1-4DCD-B693-07274A5841D1}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{8B62FA2D-178B-4006-8641-A5B1CE423CA2}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{A1C02410-E0F4-433A-A1AC-0AD70DD1E040}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{68A72BA5-CA72-412A-B0CD-B00E841A16F6}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_Explore" ID="{8F97D2F8-14A4-4714-8106-FCCB6591FF22}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_InBossCombat" ID="{7FB3C367-F2D1-4DCD-B693-07274A5841D1}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{F5414D84-07BC-403F-91BE-70CB2EF180DB}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{88AD2B0D-7A4E-4AE5-BCB1-5FBB2639B6C4}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{50AA0C3A-0C47-4C48-99B2-CE6938A04747}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_InCombat" ID="{1E15022C-7AA5-4AE0-BA9F-4DB6631188B1}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_InBossCombat" ID="{7FB3C367-F2D1-4DCD-B693-07274A5841D1}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{D5DEFA70-5A7C-4F59-ADC3-B6F8974015C0}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{242C75E6-E69B-4D2B-83CF-050912857CCE}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+														</PropertyList>
+													</MusicFade>
+												</DestinationFadeIn>
+											</TransitionInfo>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{4328E01F-40F5-4C15-BA6D-D59752C7292F}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="OpenWorld_InEliteCombat" ID="{6638FAB6-8726-4C38-9333-2FB4F639BABB}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="Temple_InBossCombat" ID="{7FB3C367-F2D1-4DCD-B693-07274A5841D1}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<SourceFadeOut>
+													<MusicFade Name="Source Fade-out" ID="{5CDE24B8-9A9D-4772-B30E-5371A5E57153}">
+														<PropertyList>
+															<Property Name="FadeCurve" Type="int16" Value="5"/>
+															<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+															<Property Name="FadeType" Type="int16" Value="1"/>
+														</PropertyList>
+													</MusicFade>
+												</SourceFadeOut>
+												<DestinationFadeIn>
+													<MusicFade Name="Destination Fade-in" ID="{8F4E4CD9-785A-4237-A558-D5DC8EC9B86A}">
 														<PropertyList>
 															<Property Name="FadeCurve" Type="int16" Value="5"/>
 															<Property Name="FadeOffset" Type="Real64" Value="-0.5"/>

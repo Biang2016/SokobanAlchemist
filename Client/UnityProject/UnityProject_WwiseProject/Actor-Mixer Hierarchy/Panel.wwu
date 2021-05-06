@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{2341878E-01DA-444D-9535-FD1C53A10D47}" SchemaVersion="97" RootDocumentID="{BF4FC306-E3A9-4180-902B-945ED5E7EFDB}">
+	<AudioObjects>
+		<WorkUnit Name="Panel" ID="{2341878E-01DA-444D-9535-FD1C53A10D47}" OwnerID="{5F3CD7EA-C911-42B0-A868-1A511B49BF44}" PersistMode="Nested">
+			<PropertyList>
+				<Property Name="Color" Type="int16" Value="24"/>
+				<Property Name="OverrideColor" Type="bool" Value="True"/>
+			</PropertyList>
+			<ChildrenList>
+				<ActorMixer Name="LearnSkillUpgradePanel" ID="{9C696DA6-3C69-4CD2-9FDD-CF33CFEED713}" ShortID="8624153">
+					<PropertyList>
+						<Property Name="Color" Type="int16" Value="24"/>
+						<Property Name="OverrideColor" Type="bool" Value="True"/>
+						<Property Name="OverrideOutput" Type="bool" Value="True"/>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{57D63A2F-9232-45AA-BBE1-2B69E2B360B7}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="126"/>
+											<Property Name="Min" Type="Real64" Value="-126"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Skill_Panel" ID="{46B8E72E-71D4-42C1-94D8-5147FCCCB7CF}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<RandomSequenceContainer Name="LearnSkillUpgradePanel_OnAddPage" ID="{62315C66-6928-49A0-846C-4B93FEE44089}" ShortID="363684828">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{0654B675-EE16-49A0-B211-AF32C2C3FD94}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="227"/>
+													<Property Name="Min" Type="Real64" Value="-202"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="open_book" ID="{46F21252-8564-4F85-96A4-6CD743CAF0BF}" ShortID="575484507">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="open_book" ID="{62187C6E-7649-47C1-A03B-168B652EE517}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.0274647266313933"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.30015022675737"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.971074263038547"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>open_book.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="834718315"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="open_book" ID="{62187C6E-7649-47C1-A03B-168B652EE517}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="LearnSkillUpgradePanel_OnRemovePage" ID="{B68AA051-DCFA-4CFA-BE40-F584DC2C5B34}" ShortID="244284611">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Skill_Panel" ID="{46B8E72E-71D4-42C1-94D8-5147FCCCB7CF}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="Book Closewav" ID="{A11658E3-E999-46AE-84C5-20EEFCB78991}" ShortID="982320662">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Book Closewav" ID="{C1070FBA-C8CC-407D-BCDE-03602B3837DC}">
+											<Language>SFX</Language>
+											<AudioFile>Book Closewav.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="461884215"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Book Closewav" ID="{C1070FBA-C8CC-407D-BCDE-03602B3837DC}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Book close 12" ID="{2B22D363-0472-4F7A-9925-AED5BA0B2548}" ShortID="970483200">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Book close 12" ID="{74EFDAAF-BEC4-42B6-9602-EAE805F1DAD3}">
+											<Language>SFX</Language>
+											<AudioFile>Book close 12.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="839853808"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Book close 12" ID="{74EFDAAF-BEC4-42B6-9602-EAE805F1DAD3}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="LearnSkillUpgradePanel_OnSwitchPage" ID="{76A09D1B-186A-4A65-A282-30B42BD655FA}" ShortID="558719279">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{16A353D9-F377-46FA-8862-2EB485EC8452}"/>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Skill_Panel" ID="{46B8E72E-71D4-42C1-94D8-5147FCCCB7CF}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="HardcoverBookFlipPages_BW_5657" ID="{A0BA309C-CC79-4FA8-ADD1-CB1918D75120}" ShortID="418789541">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="HardcoverBookFlipPages_BW_5657" ID="{81EF8DFB-5EF2-46D7-AFEF-14599A140321}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.0815554925673974"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.0815554925673974"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="3.25202526612497"/>
+												<Property Name="TrimEnd" Type="Real64" Value="3.77194153124213"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>HardcoverBookFlipPages_BW.5657.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="20996024"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="HardcoverBookFlipPages_BW_5657" ID="{81EF8DFB-5EF2-46D7-AFEF-14599A140321}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="HardcoverBookFlipPages_BW_01" ID="{25AA4096-4383-4A09-B49E-0F8F98695433}" ShortID="53137693">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Skill_Panel" ID="{46B8E72E-71D4-42C1-94D8-5147FCCCB7CF}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="HardcoverBookFlipPages_BW_5657" ID="{43458C2F-4472-484E-8FE0-6EEE49D5F941}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.0815554925673973"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.030583309712774"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.224277604560343"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.723804996535651"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>HardcoverBookFlipPages_BW.5657.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="151919182"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="HardcoverBookFlipPages_BW_5657" ID="{43458C2F-4472-484E-8FE0-6EEE49D5F941}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="HardcoverBookFlipPages_BW_02" ID="{30AA8D3E-5662-4DBB-85EB-8A2F07381A99}" ShortID="405807107">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Skill_Panel" ID="{46B8E72E-71D4-42C1-94D8-5147FCCCB7CF}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="HardcoverBookFlipPages_BW_5657" ID="{8C237089-5139-4529-B8A0-7CB73E870D40}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.234472041131267"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.101944365709247"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.795166052532124"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.50877661249685"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>HardcoverBookFlipPages_BW.5657.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="73343620"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="HardcoverBookFlipPages_BW_5657" ID="{8C237089-5139-4529-B8A0-7CB73E870D40}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="HardcoverBookFlipPages_BW_03" ID="{B5797341-1C7D-45CC-90BD-A5351ACD4A41}" ShortID="815427220">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Skill_Panel" ID="{46B8E72E-71D4-42C1-94D8-5147FCCCB7CF}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="HardcoverBookFlipPages_BW_5657" ID="{BF03A914-49B0-4A77-8AF5-7F97E2AECE84}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.101944365709247"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.061166619425548"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="1.49858217592593"/>
+												<Property Name="TrimEnd" Type="Real64" Value="2.01849844104309"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>HardcoverBookFlipPages_BW.5657.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="1039124846"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="HardcoverBookFlipPages_BW_5657" ID="{BF03A914-49B0-4A77-8AF5-7F97E2AECE84}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="HardcoverBookFlipPages_BW_04" ID="{41BDAB91-DF5B-4FAA-A684-F59015401CF0}" ShortID="588865423">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Skill_Panel" ID="{46B8E72E-71D4-42C1-94D8-5147FCCCB7CF}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="HardcoverBookFlipPages_BW_5657" ID="{C787C338-E3C0-4EB4-9ACE-CA8F9F0A46CB}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.0917499291383221"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.0713610559964726"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="2.10005393361048"/>
+												<Property Name="TrimEnd" Type="Real64" Value="2.63016463529857"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>HardcoverBookFlipPages_BW.5657.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="139492770"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="HardcoverBookFlipPages_BW_5657" ID="{C787C338-E3C0-4EB4-9ACE-CA8F9F0A46CB}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+					</ChildrenList>
+				</ActorMixer>
+				<ActorMixer Name="TransportWorldPanel" ID="{8E2D061A-A0D9-4B38-A58E-899C5EC76943}" ShortID="233068386">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<RandomSequenceContainer Name="TransportWorldPanel_OnDesplay" ID="{99AAE8DA-FA9B-4881-9CDF-27A6C91F7874}" ShortID="1062938825">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="book_open" ID="{FF6F35FF-833B-4946-9137-C6A689559AEF}" ShortID="527477001">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="book_open" ID="{399394E4-8BB5-42D8-A109-280C8F763F43}">
+											<Language>SFX</Language>
+											<AudioFile>book_open.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="527135800"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="book_open" ID="{399394E4-8BB5-42D8-A109-280C8F763F43}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="TransportWorldPanel_OnHide" ID="{C05E43DB-E599-4DD5-9F9E-AC3B198433C5}" ShortID="798247878">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+					</ChildrenList>
+				</ActorMixer>
+				<ActorMixer Name="ExitMenuPanel" ID="{C3C71244-72FA-4002-9E7C-5A374600C333}" ShortID="431865146">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<RandomSequenceContainer Name="ExitMenuPanel_OnHide" ID="{8ECD96D9-7A36-4349-A552-577952D141B3}" ShortID="380747663">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="ExitMenuPanel_OnDesplay" ID="{93896BBB-EA2C-456A-8286-ADDC534AE761}" ShortID="484188081">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="book_open" ID="{0A56A0F0-C5DA-4E6C-A240-55A05076049F}" ShortID="638219204">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="book_open" ID="{0E17B16D-3E20-4FBF-B4FB-2DA3FC6C0E59}">
+											<Language>SFX</Language>
+											<AudioFile>book_open.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="527135800"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="book_open" ID="{0E17B16D-3E20-4FBF-B4FB-2DA3FC6C0E59}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+					</ChildrenList>
+				</ActorMixer>
+				<ActorMixer Name="StartMenuPanel" ID="{9404E4AB-5AAB-4DBC-9D57-A1BE56AD4A22}" ShortID="538288185">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<RandomSequenceContainer Name="StartMenuPanel_OnPlayAnim" ID="{0F0A2A2E-2AD0-4E53-9ACF-66460685CFCB}" ShortID="902790073">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+					</ChildrenList>
+				</ActorMixer>
+				<ActorMixer Name="NoticePanel" ID="{3CAB8699-C15F-4DF2-9A68-5E78D3047BC9}" ShortID="615715969">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<RandomSequenceContainer Name="NoticePanel_OnHide" ID="{DC2CC4AD-3894-4160-AED8-EB98D7F1D1AF}" ShortID="513345002">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="NoticePanel_OnDesplay" ID="{86CD2AB2-27D1-4460-832F-BB1BC3C23E34}" ShortID="646951059">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="book_open" ID="{8E88A968-4047-4DC3-853B-C3C396F44CE4}" ShortID="671600353">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="book_open" ID="{EF25B1F5-C952-4C70-912C-009DB2ED1382}">
+											<Language>SFX</Language>
+											<AudioFile>book_open.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="527135800"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="book_open" ID="{EF25B1F5-C952-4C70-912C-009DB2ED1382}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+					</ChildrenList>
+				</ActorMixer>
+				<ActorMixer Name="KeyBindMenuPanel" ID="{14697BB6-BB29-4500-9A37-F4C0CF2A2FB2}" ShortID="175996000">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<RandomSequenceContainer Name="KeyBindMenuPanel_OnHide" ID="{5C69B96B-E39F-40D2-B217-7E65FB4266CD}" ShortID="181125579">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="KeyBindMenuPanel_OnDesplay" ID="{F870514A-C601-422F-A4AC-A91875D6968A}" ShortID="1071779397">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="book_open" ID="{08AAD96C-BCAB-47AC-A3EF-72DF02B38BDC}" ShortID="731797235">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="book_open" ID="{6912E007-E74D-4FBD-A703-B3EE6C9D0DD1}">
+											<Language>SFX</Language>
+											<AudioFile>book_open.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="527135800"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="book_open" ID="{6912E007-E74D-4FBD-A703-B3EE6C9D0DD1}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+					</ChildrenList>
+				</ActorMixer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

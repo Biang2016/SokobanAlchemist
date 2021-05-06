@@ -22,8 +22,52 @@
 									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="Game Prize 3" ID="{1308B28F-142B-4A63-97D6-090D18D4F691}" ShortID="864239675">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Game Prize 3" ID="{8766A7B6-624F-4577-AACF-3384529C5124}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.814285714285714"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.56919642857143"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Game Prize 3.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="138578601"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Game Prize 3" ID="{8766A7B6-624F-4577-AACF-3384529C5124}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="FireEnemy_Yellow_OnBeingDamaged" ID="{99377481-9C76-41AE-8CC7-C3AB98BD04FC}" ShortID="691591061">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{B8EAB5C9-716E-4A8E-BF55-3EF90D8B5B63}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="126"/>
+													<Property Name="Min" Type="Real64" Value="-126"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Attenuation">
 									<ObjectRef Name="Enemy" ID="{3E5000B2-2D9A-4A27-B6A0-3DE8D825202C}" WorkUnitID="{84F5CCD1-CDB4-4A82-8FB9-A89731141588}"/>
@@ -35,9 +79,89 @@
 									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="zombie medium fire death 1" ID="{A87DAA96-0DFE-46C3-9684-AA30D4281932}" ShortID="843159048">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="zombie medium fire death 1" ID="{139D458A-CB22-4D63-BC08-111AF9DD5DF6}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.255282423154447"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.442990087238599"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.112624598450491"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.83202680146132"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>zombie medium fire death 1.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="858029523"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="zombie medium fire death 1" ID="{139D458A-CB22-4D63-BC08-111AF9DD5DF6}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="zombie medium fire death 2" ID="{A1336B31-0476-4AA8-81D2-E2F6C8C2971F}" ShortID="566568594">
+									<PropertyList>
+										<Property Name="Pitch" Type="int32">
+											<ValueList>
+												<Value>530</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="zombie medium fire death 2" ID="{0955D735-4F1F-426F-94B5-E90CDC943C81}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.210559334845049"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.500078420256992"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.219332640463593"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.94767384731671"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>zombie medium fire death 2.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="191564339"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="zombie medium fire death 2" ID="{0955D735-4F1F-426F-94B5-E90CDC943C81}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="FireEnemy_Yellow_HeatEmit_Cast" ID="{D8480278-6F68-4E63-A9C3-4E9FCC5E4FDB}" ShortID="368282171">
 							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{952F975A-CB46-4096-8874-A82A48E71CFF}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="429"/>
+													<Property Name="Min" Type="Real64" Value="-76"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
 										<Value>-3</Value>
@@ -75,6 +199,10 @@
 									<ChildrenList>
 										<AudioFileSource Name="effect 4" ID="{190C7429-7618-4DEB-B931-F2035EF9FA41}">
 											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.39994921579743"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.943880149281935"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="2.05840529730411"/>
 												<Property Name="VolumeOffset" Type="Real64">
 													<ValueList>
 														<Value>1.8</Value>
@@ -84,7 +212,7 @@
 											<Language>SFX</Language>
 											<AudioFile>effect 4.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="598399752"/>
+												<MediaID ID="745741690"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
@@ -94,6 +222,11 @@
 								</Sound>
 								<Sound Name="FireEnemy_Red_Attack_2" ID="{5B1AA381-3807-4B95-BCAE-74C34F77C729}" ShortID="289218240">
 									<PropertyList>
+										<Property Name="Highpass" Type="int16">
+											<ValueList>
+												<Value>24</Value>
+											</ValueList>
+										</Property>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>3</Value>
@@ -113,10 +246,16 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="JackHammer_far_03" ID="{E388FCA5-DBF5-4500-94FB-9737FE9E468C}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.29914099899219"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.690663777084908"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.47370933327034"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>JackHammer_far_03.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="567636655"/>
+												<MediaID ID="948583581"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
@@ -126,9 +265,9 @@
 								</Sound>
 								<Sound Name="Fire Burn" ID="{473C0856-27C2-4547-886F-3E112D8CBF05}" ShortID="90884527">
 									<PropertyList>
-										<Property Name="Volume" Type="Real64">
+										<Property Name="Highpass" Type="int16">
 											<ValueList>
-												<Value>4</Value>
+												<Value>6</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -143,6 +282,10 @@
 									<ChildrenList>
 										<AudioFileSource Name="Fire Burn" ID="{75268EA8-33A6-4372-AEA7-D5085E0B5FF5}">
 											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.288954042265054"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.509342718568909"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.49374547272613"/>
 												<Property Name="VolumeOffset" Type="Real64">
 													<ValueList>
 														<Value>1.7</Value>
@@ -152,7 +295,7 @@
 											<Language>SFX</Language>
 											<AudioFile>Fire Burn.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="996530563"/>
+												<MediaID ID="686501480"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
@@ -166,8 +309,19 @@
 							<PropertyList>
 								<Property Name="Pitch" Type="int32">
 									<ValueList>
-										<Value>-610</Value>
+										<Value>-100</Value>
 									</ValueList>
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{7D101BDE-DEBD-447F-9CED-0C08F84CD932}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="202"/>
+													<Property Name="Min" Type="Real64" Value="-253"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
 								</Property>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
@@ -187,70 +341,98 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="Inhale1" ID="{DCADD19A-0CE3-442F-AF6D-5E2824986A3F}" ShortID="490771730">
+								<Sound Name="Inhale1" ID="{F33573E8-F8A9-403B-B3A1-653A29421491}" ShortID="521594118">
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="Enemy" ID="{3E5000B2-2D9A-4A27-B6A0-3DE8D825202C}" WorkUnitID="{84F5CCD1-CDB4-4A82-8FB9-A89731141588}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="Inhale1" ID="{5A05A4E1-0D48-49C7-A995-FC64C6F7B37E}">
+										<AudioFileSource Name="Inhale1" ID="{A8D1DC34-1298-4990-809B-E3C599BE04F5}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.255208333333333"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.1875"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.151041666666667"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.770833333333333"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>Inhale1.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="174806785"/>
+												<MediaID ID="892637694"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="Inhale1" ID="{5A05A4E1-0D48-49C7-A995-FC64C6F7B37E}" Platform="Linked"/>
+										<ActiveSource Name="Inhale1" ID="{A8D1DC34-1298-4990-809B-E3C599BE04F5}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="Inhale2" ID="{2F38ED5E-030F-4BBF-8899-BC27AB2D7C87}" ShortID="159064573">
+								<Sound Name="Inhale2" ID="{BAC2E960-7FB3-4E56-BD05-D1F1B754BB09}" ShortID="877687303">
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="Enemy" ID="{3E5000B2-2D9A-4A27-B6A0-3DE8D825202C}" WorkUnitID="{84F5CCD1-CDB4-4A82-8FB9-A89731141588}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="Inhale2" ID="{EB8A07F8-34EC-4FD5-85CD-E7D6D228D3EA}">
+										<AudioFileSource Name="Inhale2" ID="{6CC23E81-5DEF-4367-8474-238ACFF2A869}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.174260715860418"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.183809248236332"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.63020313681028"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>Inhale2.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="291022797"/>
+												<MediaID ID="11856717"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="Inhale2" ID="{EB8A07F8-34EC-4FD5-85CD-E7D6D228D3EA}" Platform="Linked"/>
+										<ActiveSource Name="Inhale2" ID="{6CC23E81-5DEF-4367-8474-238ACFF2A869}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="Inhale3" ID="{05CA6EEB-ADAC-44D3-8567-1FDDE4424D4D}" ShortID="7344893">
+								<Sound Name="Inhale3" ID="{8FECEF2A-914B-4F78-8ED8-F99B8F96B852}" ShortID="580823506">
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="Enemy" ID="{3E5000B2-2D9A-4A27-B6A0-3DE8D825202C}" WorkUnitID="{84F5CCD1-CDB4-4A82-8FB9-A89731141588}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="Inhale3" ID="{DDF7CBF2-B85F-4DC3-8874-4E34966DFC61}">
+										<AudioFileSource Name="Inhale3" ID="{226EBB3F-6111-41D8-8377-17197B04D2A0}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.327399848828421"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.323307350718065"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.736649659863945"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>Inhale3.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="761767088"/>
+												<MediaID ID="374463479"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="Inhale3" ID="{DDF7CBF2-B85F-4DC3-8874-4E34966DFC61}" Platform="Linked"/>
+										<ActiveSource Name="Inhale3" ID="{226EBB3F-6111-41D8-8377-17197B04D2A0}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
