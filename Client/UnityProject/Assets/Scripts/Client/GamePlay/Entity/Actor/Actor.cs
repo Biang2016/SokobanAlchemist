@@ -676,7 +676,6 @@ public class Actor : Entity
         RealtimeWorldGP = GridPos3D.Zero;
         ThrowState = ThrowStates.None;
         ClearJumpParams();
-        ThrowWhenDie();
 
         foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
         {
@@ -1552,6 +1551,7 @@ public class Actor : Entity
         if (IsDestroying) return;
         base.DestroySelf();
         IsDestroying = true;
+        ThrowWhenDie();
         if (!IsFrozen) UnRegisterFromModule(WorldGP, EntityOrientation);
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
