@@ -503,7 +503,6 @@ public partial class Box : Entity
         SwitchEntityOrientation(entityData.EntityOrientation);
 
         if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorBoxInteractHelper.GetInteractSkillType(EntityTypeIndex), EntityTypeIndex);
-        ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
     }
 
     protected override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)

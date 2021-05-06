@@ -597,6 +597,7 @@ public class WorldModule : PoolObject
                             }
                         }
 
+                        box.ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
                         return box;
                     }
                     case TypeDefineType.Actor:
@@ -620,6 +621,7 @@ public class WorldModule : PoolObject
                             }
                         }
 
+                        actor.ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
                         return actor;
                     }
                 }
