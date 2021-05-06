@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1081569820716009646}
   - component: {fileID: 8096402264906696958}
   - component: {fileID: 4841726031077101272}
+  - component: {fileID: 9100910924832584919}
   m_Layer: 5
   m_Name: ExitMenuPanel
   m_TagString: Untagged
@@ -85,6 +86,44 @@ MonoBehaviour:
   RestartDungeonButton: {fileID: 7434154466903474029}
   ExitToMenuButton: {fileID: 506591793802171382}
   ExitToDesktopButton: {fileID: 6645804414013018732}
+  OnDisplay:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnHide:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+--- !u!114 &9100910924832584919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081569820716009651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.5019608}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1177492885084151557
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,7 +691,7 @@ GameObject:
   - component: {fileID: 1213620439954277363}
   - component: {fileID: 2242421689755765086}
   m_Layer: 5
-  m_Name: BG
+  m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
