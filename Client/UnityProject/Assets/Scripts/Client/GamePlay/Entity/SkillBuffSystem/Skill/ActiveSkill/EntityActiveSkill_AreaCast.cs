@@ -392,6 +392,12 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
     {
         if (BattleIndicatorTypeIndex != 0)
         {
+            foreach (KeyValuePair<GridPos3D, GridWarning> kv in GridWarningDict)
+            {
+                kv.Value.PoolRecycle();
+            }
+
+            GridWarningDict.Clear();
             foreach (GridPos3D gp in SkillAreaGPs)
             {
                 GridWarning gw = GameObjectPoolManager.Instance.BattleIndicatorDict[BattleIndicatorTypeIndex].AllocateGameObject<GridWarning>(WorldManager.Instance.BattleIndicatorRoot);
