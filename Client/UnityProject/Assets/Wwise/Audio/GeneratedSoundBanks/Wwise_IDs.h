@@ -269,19 +269,9 @@ namespace AK
         static const AkUniqueID MUSICSTINGER = 1636576504U;
         static const AkUniqueID NONWORLD = 841296678U;
         static const AkUniqueID PLAYER = 1069431850U;
-        static const AkUniqueID REGION_EXCAVATOR = 1355693303U;
-        static const AkUniqueID REGION_LAB = 2754982597U;
-        static const AkUniqueID REGION_OPENWORLD = 1863167500U;
-        static const AkUniqueID REGION_TEMPLE = 2746966547U;
-        static const AkUniqueID REGION_TUTORIAL = 1843703454U;
         static const AkUniqueID UI = 1551306167U;
         static const AkUniqueID WORLD = 2609808943U;
     } // namespace BUSSES
-
-    namespace AUX_BUSSES
-    {
-        static const AkUniqueID MUSIC_AUX = 2412664669U;
-    } // namespace AUX_BUSSES
 
     namespace AUDIO_DEVICES
     {
