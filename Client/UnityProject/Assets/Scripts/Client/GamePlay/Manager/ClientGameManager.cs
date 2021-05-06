@@ -70,6 +70,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     public DebugConsole DebugConsole;
     public DebugPanel DebugPanel;
+    public InGameUIPanel InGameUIPanel;
     public KeyBindingPanel KeyBindingPanel;
     public EntitySkillPreviewPanel EntitySkillPreviewPanel;
     public LoadingMapPanel LoadingMapPanel;
@@ -163,6 +164,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         NoticePanel = UIManager.Instance.ShowUIForms<NoticePanel>();
         LoadingMapPanel = UIManager.Instance.WarmUpUIForms<LoadingMapPanel>();
         LearnSkillUpgradePanel = UIManager.Instance.ShowUIForms<LearnSkillUpgradePanel>();
+        InGameUIPanel = UIManager.Instance.ShowUIForms<InGameUIPanel>();
         UIManager.Instance.ShowUIForms<StartMenuPanel>();
     }
 
@@ -227,7 +229,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 #if !DEBUG
         UIManager.Instance.CloseUIForm<DebugPanel>();
 #endif
-        UIManager.Instance.ShowUIForms<InGameUIPanel>();
         yield return WorldManager.OnAfterStartGame();
         IsGameLoading = false;
     }

@@ -753,7 +753,7 @@ public class World : PoolObject
             }
         }
 
-        bottomBox?.EntityWwiseHelper.OnBeingPushed.Post(gameObject);
+        bottomBox?.EntityWwiseHelper.OnBeingPushed.Post(bottomBox.gameObject);
 
         // 再往矩阵填入引用，不可在一个循环内完成，否则后面的Box会将前面的引用置空
         foreach (Box box_moveable in boxes_moveable)

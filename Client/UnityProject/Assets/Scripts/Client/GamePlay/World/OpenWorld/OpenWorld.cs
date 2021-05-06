@@ -599,8 +599,9 @@ public class OpenWorld : World
     {
         WorldData.WorldBornPointGroupData_Runtime.Dynamic_UnloadModuleData(currentShowModuleGP);
         WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null; // 时序，先置空指针再清空
-        yield return worldModule.RecordWorldModuleData(256);
-        yield return worldModule.Clear(false, 256);
+        bool isDungeonModule = currentShowModuleGP.y >= WORLD_HEIGHT / 2;
+        if (!isDungeonModule) yield return worldModule.RecordWorldModuleData(256); // 只有底部的大世界模组需要存档
+        yield return worldModule.Clear(isDungeonModule, 256); // Dungeon模组则回收WorldModuleData，大世界不回收，因为记录在m_LevelCacheData中
         worldModule.PoolRecycle();
         if (boolIndex >= 0)
         {

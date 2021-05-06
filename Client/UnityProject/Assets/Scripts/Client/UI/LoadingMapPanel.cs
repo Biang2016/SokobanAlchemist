@@ -45,13 +45,13 @@ public class LoadingMapPanel : BaseUIPanel
 
     public override void Display()
     {
-        base.Display();
         UIManager.Instance.CloseUIForm<ExitMenuPanel>();
         UIManager.Instance.CloseUIForm<EntitySkillPreviewPanel>();
         UIManager.Instance.CloseUIForm<TransportWorldPanel>();
         ClientGameManager.Instance.LearnSkillUpgradePanel?.HidePanel();
         UIManager.Instance.CloseUIForm<KeyBindingPanel>();
         UIManager.Instance.CloseUIForm<WinLosePanel>();
+        base.Display();
     }
 
     public void SetBackgroundAlpha(float alpha)

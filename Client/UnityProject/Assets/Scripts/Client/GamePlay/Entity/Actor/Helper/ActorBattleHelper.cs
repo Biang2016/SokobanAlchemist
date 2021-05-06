@@ -34,7 +34,7 @@ public class ActorBattleHelper : ActorMonoHelper
 
     public void Initialize()
     {
-        Transform trans = UIManager.Instance.ShowUIForms<InGameUIPanel>().transform;
+        Transform trans = ClientGameManager.Instance.InGameUIPanel.transform;
         InGameHealthBar = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.InGameHealthBar].AllocateGameObject<InGameHealthBar>(trans);
         InGameHealthBar.Initialize(this, 100, 30);
     }
