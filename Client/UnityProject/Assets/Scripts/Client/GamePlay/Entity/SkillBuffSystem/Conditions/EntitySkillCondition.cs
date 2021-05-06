@@ -2,11 +2,14 @@
 using System.Collections;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
 public abstract class EntitySkillCondition : IClone<EntitySkillCondition>
 {
+    [ShowInInspector]
+    [HideInEditorMode]
     protected Entity Entity;
 
     public virtual void OnInit(Entity entity)

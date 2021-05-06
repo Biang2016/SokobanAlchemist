@@ -29,7 +29,7 @@ public class ModuleAIAtoms
 
         private void OnEvent(string levelEventAlias)
         {
-            if (LevelEventAlias.value.CheckEventAliasOrStateBool(levelEventAlias, WorldModule))
+            if (LevelEventAlias.value.CheckEventAliasOrStateBool(levelEventAlias, WorldModule, null))
             {
                 OnTriggered.Call(new Flow());
             }
@@ -47,23 +47,7 @@ public class ModuleAIAtoms
 
         public override void Invoke()
         {
-            ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, LevelEventAlias.value.FormatEventAliasOrStateBool(WorldModule));
-        }
-    }
-
-    [Name("开放世界/返回开放世界")]
-    [Category("OpenWorld/ReturnToOpenWorld")]
-    public class Flow_ReturnToOpenWorld : CallableActionNode
-    {
-        public override void Invoke()
-        {
-            if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
-            {
-                if (openWorld.IsInsideDungeon)
-                {
-                    openWorld.ReturnToOpenWorld();
-                }
-            }
+            ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, LevelEventAlias.value.FormatEventAliasOrStateBool(WorldModule, null));
         }
     }
 
@@ -78,7 +62,7 @@ public class ModuleAIAtoms
 
         public override bool Invoke()
         {
-            return BattleManager.Instance.GetStateBool(BattleStateAlias.value.FormatEventAliasOrStateBool(WorldModule));
+            return BattleManager.Instance.GetStateBool(BattleStateAlias.value.FormatEventAliasOrStateBool(WorldModule, null));
         }
     }
 
@@ -100,7 +84,7 @@ public class ModuleAIAtoms
             {
                 foreach (string stateAlias in BattleStateAliasList.value)
                 {
-                    bool state = BattleManager.Instance.GetStateBool(stateAlias.FormatEventAliasOrStateBool(WorldModule));
+                    bool state = BattleManager.Instance.GetStateBool(stateAlias.FormatEventAliasOrStateBool(WorldModule, null));
                     if (!state) return false;
                 }
 
@@ -110,7 +94,7 @@ public class ModuleAIAtoms
             {
                 foreach (string stateAlias in BattleStateAliasList.value)
                 {
-                    bool state = BattleManager.Instance.GetStateBool(stateAlias.FormatEventAliasOrStateBool(WorldModule));
+                    bool state = BattleManager.Instance.GetStateBool(stateAlias.FormatEventAliasOrStateBool(WorldModule, null));
                     if (state) return true;
                 }
 
@@ -135,7 +119,7 @@ public class ModuleAIAtoms
 
         public override void Invoke()
         {
-            BattleManager.Instance.SetStateBool(WorldModule.GUID, BattleStateAlias.value.FormatEventAliasOrStateBool(WorldModule), BattleStateValue.value);
+            BattleManager.Instance.SetStateBool(WorldModule.GUID, BattleStateAlias.value.FormatEventAliasOrStateBool(WorldModule, null), BattleStateValue.value);
         }
     }
 

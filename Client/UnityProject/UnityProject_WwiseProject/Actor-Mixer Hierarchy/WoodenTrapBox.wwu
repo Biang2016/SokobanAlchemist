@@ -3,7 +3,22 @@
 	<AudioObjects>
 		<WorkUnit Name="WoodenTrapBox" ID="{272A9442-A827-4ACE-B7FF-CB1D875FF0FD}" OwnerID="{ABC65056-1A6C-4C9D-8CE0-4E3CFED4B185}" PersistMode="Nested">
 			<ChildrenList>
-				<RandomSequenceContainer Name="OnBeingLift" ID="{17D95929-E380-44FB-A29A-6655BF929D50}" ShortID="975149505">
+				<RandomSequenceContainer Name="WoodenTrapBox_OnBeingLift" ID="{17D95929-E380-44FB-A29A-6655BF929D50}" ShortID="975149505">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{8952434B-9F8C-4E00-AF85-8E220F585862}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="354"/>
+											<Property Name="Min" Type="Real64" Value="-354"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -13,34 +28,6 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="OnBeingLift_1" ID="{ABC38B9F-9270-4C93-80AC-A2B5A21E3D5B}" ShortID="889075343">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="Logic Sound Lab" ID="{299E2E7A-279D-417E-A1EC-BD7712B8D3FF}">
-									<PropertyList>
-										<Property Name="LoopEnd" Type="Real64" Value="1.13627535273369"/>
-										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-										<Property Name="TrimBegin" Type="Real64" Value="0.0620654604434366"/>
-										<Property Name="TrimEnd" Type="Real64" Value="1.14343675201562"/>
-									</PropertyList>
-									<Language>SFX</Language>
-									<AudioFile>Logic Sound Lab.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="107284141"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="Logic Sound Lab" ID="{299E2E7A-279D-417E-A1EC-BD7712B8D3FF}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
 						<Sound Name="OnBeingLift_2" ID="{A4EEF5A7-7F92-42D6-8D76-322B03CE1FB1}" ShortID="124654642">
 							<ReferenceList>
 								<Reference Name="Conversion">
@@ -71,7 +58,22 @@
 						</Sound>
 					</ChildrenList>
 				</RandomSequenceContainer>
-				<RandomSequenceContainer Name="OnBeingDropped" ID="{D7C7C5CD-E433-4F22-929F-7F1167A790A7}" ShortID="159025381">
+				<RandomSequenceContainer Name="WoodenTrapBox_OnBeingDropped" ID="{D7C7C5CD-E433-4F22-929F-7F1167A790A7}" ShortID="159025381">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{6646033A-316A-4F37-9C50-A23A1090BCC2}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="354"/>
+											<Property Name="Min" Type="Real64" Value="-354"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>

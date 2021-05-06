@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SkillSlot : MonoBehaviour
+public class SkillSlot : MonoBehaviour, ISkillBind
 {
     [SerializeField]
     private PlayerControllerHelper.KeyBind MyKeyBind;
@@ -17,8 +17,6 @@ public class SkillSlot : MonoBehaviour
 
     [SerializeField]
     private Animator Anim;
-
-    private EntityActiveSkill boundEntityActiveSkill;
 
     [SerializeField]
     private Image SkillClock_WingingUp;
@@ -41,6 +39,10 @@ public class SkillSlot : MonoBehaviour
     private Transform SkillRowContainer;
 
     private EntitySkillRow curEntitySkillRow;
+    public EntitySkill BoundEntitySkill => boundEntitySkill;
+    private EntitySkill boundEntitySkill;
+
+    public bool EmptySkill => curEntitySkillRow == null;
 
     void Awake()
     {
@@ -49,19 +51,21 @@ public class SkillSlot : MonoBehaviour
         SkillPhaseClockDict.Add(ActiveSkillPhase.CoolingDown, SkillClock_CoolingDown);
     }
 
-    public void Initialize(EntityActiveSkill entityActiveSkill)
+    public void BindSkill(EntitySkill entitySkill)
     {
-        if (entityActiveSkill == null)
+        if (entitySkill == null)
         {
-            if (boundEntityActiveSkill != null)
+            if (BoundEntitySkill != null && BoundEntitySkill is EntityActiveSkill eas)
             {
-                boundEntityActiveSkill.OnSkillWingingUp -= RefreshSkillCD;
-                boundEntityActiveSkill.OnSkillCasting -= RefreshSkillCD;
-                boundEntityActiveSkill.OnSkillCoolingDown -= RefreshSkillCD;
+                eas.OnSkillWingingUp -= RefreshSkillCD;
+                eas.OnSkillCasting -= RefreshSkillCD;
+                eas.OnSkillCoolingDown -= RefreshSkillCD;
             }
 
+            SkillKeyBind_Text.gameObject.SetActive(false);
+
             RefreshSkillCD(ActiveSkillPhase.Ready, 0, 0);
-            boundEntityActiveSkill = null;
+            boundEntitySkill = null;
             SkillIcon.color = Color.clear;
             SkillIcon.sprite = null;
             Anim.SetTrigger("SetEmpty");
@@ -71,19 +75,25 @@ public class SkillSlot : MonoBehaviour
         }
         else
         {
-            boundEntityActiveSkill = entityActiveSkill;
-            boundEntityActiveSkill.OnSkillWingingUp += RefreshSkillCD;
-            boundEntityActiveSkill.OnSkillCasting += RefreshSkillCD;
-            boundEntityActiveSkill.OnSkillCoolingDown += RefreshSkillCD;
+            boundEntitySkill = entitySkill;
+            if (BoundEntitySkill is EntityActiveSkill eas)
+            {
+                eas.OnSkillWingingUp += RefreshSkillCD;
+                eas.OnSkillCasting += RefreshSkillCD;
+                eas.OnSkillCoolingDown += RefreshSkillCD;
+            }
+
+            SkillKeyBind_Text.gameObject.SetActive(BoundEntitySkill is EntityActiveSkill);
+
             RefreshSkillCD(ActiveSkillPhase.Ready, 0, 0);
             SkillIcon.color = Color.white;
-            Sprite sprite = ConfigManager.GetEntitySkillIconByName(entityActiveSkill.SkillIcon.TypeName);
+            Sprite sprite = ConfigManager.GetEntitySkillIconByName(entitySkill.SkillIcon.TypeName);
             SkillIcon.sprite = sprite;
             Anim.SetTrigger("SetSkill");
 
             curEntitySkillRow?.PoolRecycle();
             curEntitySkillRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(SkillRowContainer);
-            curEntitySkillRow.Initialize(entityActiveSkill, MyKeyBind.ToString());
+            curEntitySkillRow.Initialize(entitySkill, (BoundEntitySkill is EntityActiveSkill) ? MyKeyBind.ToString() : "", 0);
         }
     }
 
@@ -127,4 +137,11 @@ public class SkillSlot : MonoBehaviour
 
         SkillCD_Text.text = showCDSecond > 0 ? showCDSecond.ToString() : "";
     }
+}
+
+public interface ISkillBind
+{
+    void BindSkill(EntitySkill entitySkill);
+    bool EmptySkill { get; }
+    EntitySkill BoundEntitySkill { get; }
 }

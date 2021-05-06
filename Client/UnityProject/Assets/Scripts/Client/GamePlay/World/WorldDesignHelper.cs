@@ -16,6 +16,21 @@ public class WorldDesignHelper : MonoBehaviour
     [LabelText("世界特性")]
     public WorldFeature WorldFeature;
 
+    public string WorldName_EN;
+    public string WorldName_ZH;
+    public string WorldDescription_EN;
+    public string WorldDescription_ZH;
+
+    [LabelText("世界图标")]
+    [PropertyOrder(-9)]
+    public TypeSelectHelper WorldIcon = new TypeSelectHelper { TypeDefineType = TypeDefineType.EntitySkillIcon };
+
+    [PreviewField]
+    [ShowInInspector]
+    [PropertyOrder(-9)]
+    [HideLabel]
+    private Sprite WorldIconPreview => ConfigManager.GetEntitySkillIconByName(WorldIcon.TypeName);
+
     [LabelText("默认出生点花名")]
     public string DefaultWorldActorBornPointAlias;
 
@@ -56,6 +71,11 @@ public class WorldDesignHelper : MonoBehaviour
         WorldData worldData = new WorldData();
         worldData.WorldFeature = WorldFeature;
         worldData.DefaultWorldActorBornPointAlias = DefaultWorldActorBornPointAlias;
+        worldData.WorldName_EN = WorldName_EN;
+        worldData.WorldName_ZH = WorldName_ZH;
+        worldData.WorldDescription_EN = WorldDescription_EN;
+        worldData.WorldDescription_ZH = WorldDescription_ZH;
+        worldData.WorldIcon = WorldIcon.Clone();
         worldData.UseSpecialPlayerEnterESPS = UseSpecialPlayerEnterESPS;
         Raw_PlayerEnterESPS.ApplyDataTo(worldData.Raw_PlayerEnterESPS);
         CameraConfigData.ApplyTo(worldData.CameraConfigData, true);

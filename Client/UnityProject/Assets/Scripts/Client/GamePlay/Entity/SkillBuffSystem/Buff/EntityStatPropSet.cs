@@ -137,7 +137,7 @@ public class EntityStatPropSet
 
     internal int FrozenValuePerLevel => Mathf.RoundToInt(((float) FrozenValue.MaxValue / FrozenLevel.MaxValue));
 
-    public bool IsFrozen => FrozenLevel.Value > 1; // 1级不算冰冻， 2级~4级冰冻对应三个模型
+    public bool IsFrozen => FrozenLevel.Value >= 1; // 1级~3级对应三个模型，4级以后都是满冰
 
     [BoxGroup("冰冻")]
     [LabelText("@\"冰冻伤害抵消\t\"+FrozenDamageDefense")]
@@ -406,10 +406,10 @@ public class EntityStatPropSet
 
     public void OnReborn()
     {
-        HealthDurability.SetValue(99999);
+        HealthDurability.SetValue(HealthDurability.MaxValue / 2);
         FrozenValue.SetValue(0);
         FiringValue.SetValue(0);
-        ActionPoint.SetValue(99999);
+        ActionPoint.SetValue(ActionPoint.MaxValue / 2);
     }
 
     #region Delegates
@@ -435,7 +435,10 @@ public class EntityStatPropSet
         }
 
         StatNotifyActionSetDict[EntityStatType.ActionPoint].OnValueNotEnoughWarning += OnActionPointNotEnoughWarning;
+        StatNotifyActionSetDict[EntityStatType.ActionPoint].OnValueIncrease += OnActionPointIncrease;
         StatNotifyActionSetDict[EntityStatType.Gold].OnValueIncrease += OnGoldIncrease;
+        StatNotifyActionSetDict[EntityStatType.Gold].OnValueDecrease += OnGoldDecrease;
+        StatNotifyActionSetDict[EntityStatType.Gold].OnValueNotEnoughWarning += OnGoldNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueIncrease += OnFireElementFragmentIncrease;
         StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueNotEnoughWarning += OnFireElementFragmentNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.IceElementFragment].OnValueIncrease += OnIceElementFragmentIncrease;
@@ -473,6 +476,9 @@ public class EntityStatPropSet
         PropertyNotifyActionSetDict[EntityPropertyType.FiringResistance].OnValueChanged += OnFiringResistanceChanged;
         PropertyNotifyActionSetDict[EntityPropertyType.ActionPointRecovery].OnValueChanged += OnActionPointRecoveryChanged;
         PropertyNotifyActionSetDict[EntityPropertyType.MaxActionPoint].OnValueChanged += OnMaxActionPointChanged;
+        PropertyNotifyActionSetDict[EntityPropertyType.MaxFireElementFragment].OnValueChanged += OnMaxFireElementFragmentChanged;
+        PropertyNotifyActionSetDict[EntityPropertyType.MaxIceElementFragment].OnValueChanged += OnMaxIceElementFragmentChanged;
+        PropertyNotifyActionSetDict[EntityPropertyType.MaxLightningElementFragment].OnValueChanged += OnMaxLightningElementFragmentChanged;
     }
 
     private void OnActionPointNotEnoughWarning()
@@ -480,6 +486,16 @@ public class EntityStatPropSet
         if (Entity == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].ActionPointBottle.OnStatLowWarning();
+            Entity.EntityWwiseHelper.OnActionPointNotEnough?.Post(Entity.gameObject);
+        }
+    }
+
+    private void OnActionPointIncrease(int increase)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowGainActionPointNumFX(increase);
+            actor.EntityWwiseHelper.OnGainActionPoint.Post(actor.gameObject);
         }
     }
 
@@ -489,6 +505,25 @@ public class EntityStatPropSet
         {
             actor.ActorBattleHelper.ShowGainGoldNumFX(increase);
             actor.EntityWwiseHelper.OnGainGold.Post(actor.gameObject);
+        }
+    }
+
+    private void OnGoldDecrease(int decrease)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowSpendGoldNumFX(decrease);
+            actor.EntityWwiseHelper.OnSpendGold.Post(actor.gameObject);
+        }
+    }
+
+    private void OnGoldNotEnoughWarning()
+    {
+        if (Entity == BattleManager.Instance.Player1)
+        {
+            ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].GoldBottle.OnStatLowWarning();
+            ClientGameManager.Instance.NoticePanel.ShowTip("Not enough gold", NoticePanel.TipPositionType.Center, 0.8f);
+            Entity.EntityWwiseHelper.OnGoldNotEnough?.Post(Entity.gameObject);
         }
     }
 
@@ -506,6 +541,7 @@ public class EntityStatPropSet
         if (Entity == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].FireElementBottle.OnStatLowWarning();
+            Entity.EntityWwiseHelper.OnElementsNotEnough?.Post(Entity.gameObject);
         }
     }
 
@@ -523,6 +559,7 @@ public class EntityStatPropSet
         if (Entity == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].IceElementBottle.OnStatLowWarning();
+            Entity.EntityWwiseHelper.OnElementsNotEnough?.Post(Entity.gameObject);
         }
     }
 
@@ -540,6 +577,7 @@ public class EntityStatPropSet
         if (Entity == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].LightningElementBottle.OnStatLowWarning();
+            Entity.EntityWwiseHelper.OnElementsNotEnough?.Post(Entity.gameObject);
         }
     }
 
@@ -570,6 +608,7 @@ public class EntityStatPropSet
             if (HealthDurability.Value < 0.2f * HealthDurability.MaxValue)
             {
                 ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].HealthBottle.OnStatLowWarning();
+                Entity.EntityWwiseHelper.OnLowHealthWarning?.Post(Entity.gameObject);
             }
         }
     }
@@ -627,6 +666,11 @@ public class EntityStatPropSet
     private void OnMaxHealthDurabilityChanged(int before, int after)
     {
         HealthDurability.MaxValue = after;
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowGainMaxHealthNumFX(after - before);
+            actor.EntityWwiseHelper.OnGainMaxHealth.Post(actor.gameObject);
+        }
     }
 
     private void OnFrozenResistanceChanged(int before, int after)
@@ -689,7 +733,28 @@ public class EntityStatPropSet
 
     private void OnMaxActionPointChanged(int before, int after)
     {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowGainMaxActionPointNumFX(after - before);
+            actor.EntityWwiseHelper.OnGainMaxActionPoint.Post(actor.gameObject);
+        }
+
         ActionPoint.MaxValue = after;
+    }
+
+    private void OnMaxFireElementFragmentChanged(int before, int after)
+    {
+        FireElementFragment.MaxValue = after;
+    }
+
+    private void OnMaxIceElementFragmentChanged(int before, int after)
+    {
+        IceElementFragment.MaxValue = after;
+    }
+
+    private void OnMaxLightningElementFragmentChanged(int before, int after)
+    {
+        LightningElementFragment.MaxValue = after;
     }
 
     #endregion
@@ -708,10 +773,13 @@ public class EntityStatPropSet
         }
 
         PropertyDict.Clear();
+        cachedFireSpreadEntitySet.Clear();
     }
 
     private float abnormalStateAutoTick = 0f;
     private int abnormalStateAutoTickInterval = 1; // 异常状态值每秒降低
+
+    private HashSet<Entity> cachedFireSpreadEntitySet = new HashSet<Entity>();
 
     public void Tick(float deltaTime)
     {
@@ -727,16 +795,24 @@ public class EntityStatPropSet
             if (FiringLevel.Value >= 1)
             {
                 // 燃烧蔓延
-                foreach (Box adjacentBox in WorldManager.Instance.CurrentWorld.GetAdjacentBox(Entity.WorldGP))
+                cachedFireSpreadEntitySet.Clear();
+                cachedFireSpreadEntitySet.Add(Entity); // 不蔓延自己
+                foreach (GridPos3D offset in Entity.GetEntityOccupationGPs_Rotated())
                 {
-                    int diff = FiringValue.Value - adjacentBox.EntityStatPropSet.FiringValue.Value;
-                    if (diff > 0)
+                    GridPos3D gridPos = offset + Entity.WorldGP;
+                    foreach (Box adjacentBox in WorldManager.Instance.CurrentWorld.GetAdjacentBox(gridPos))
                     {
-                        adjacentBox.EntityStatPropSet.FiringValue.SetValue(adjacentBox.EntityStatPropSet.FiringValue.Value + Mathf.RoundToInt(diff * FiringSpreadPercent.GetModifiedValue / 100f), "FiringSpread");
+                        if (cachedFireSpreadEntitySet.Contains(adjacentBox)) continue;
+                        cachedFireSpreadEntitySet.Add(adjacentBox);
+                        int diff = FiringValue.Value - adjacentBox.EntityStatPropSet.FiringValue.Value;
+                        if (diff > 0)
+                        {
+                            adjacentBox.EntityStatPropSet.FiringValue.SetValue(adjacentBox.EntityStatPropSet.FiringValue.Value + Mathf.RoundToInt(diff * FiringSpreadPercent.GetModifiedValue / 100f), "FiringSpread");
+                        }
                     }
                 }
 
-                Entity.EntityBuffHelper.Damage(FiringLevel.Value, EntityBuffAttribute.FiringDamage, 0);
+                Entity.EntityBuffHelper.Damage(FiringLevel.Value, EntityBuffAttribute.FiringDamage, null);
             }
         }
     }

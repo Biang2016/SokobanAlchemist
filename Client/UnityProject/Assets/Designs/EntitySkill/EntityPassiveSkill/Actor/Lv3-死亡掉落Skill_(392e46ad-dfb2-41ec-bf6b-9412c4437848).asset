@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "Lv3-\u6B7B\u4EA1\u6389\u843DSkill_(392e46ad-dfb2-41ec-bf6b-9412c4437848)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        SkillGUID: (392e46ad-dfb2-41ec-bf6b-9412c4437848)
+        SkillAlias: "Lv3-\u6B7B\u4EA1\u6389\u843DSkill"
+        SkillName_EN: Lv3-DieDropSkill
+        SkillName_ZH: "Lv3-\u6B7B\u4EA1\u6389\u843DSkill"
+        SkillIcon:
+          TypeDefineType: 0
+          TypeGUID: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
+        PassiveSkillCondition: 1024
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
+        RawEntitySkillActions:
+        - id: 1
+    00000001:
+      type: {class: EntitySkillAction_DropSkillScroll, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        SkillScrollProbabilityList:
+        - ProbabilityMin: 0
+          ProbabilityMax: 0
+          SkillCategoryWithProbabilityList:
+          - SkillCategoryType: 0
+            probability: 1
+            isSingleton: 0
+          SkillRankWithProbabilityList:
+          - SkillRankType: 4
+            probability: 3
+            isSingleton: 0
+          - SkillRankType: 2
+            probability: 1
+            isSingleton: 0

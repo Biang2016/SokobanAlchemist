@@ -150,6 +150,7 @@ public abstract class Entity_LevelEditor : MonoBehaviour
             Entity_LevelEditor entityLevelEditor = go.GetComponentInParent<Entity_LevelEditor>();
             entityLevelEditor.EntityOrientation = EntityOrientation;
             entityLevelEditor.RefreshOrientation();
+            entityLevelEditor.EntityData.RawEntityExtraSerializeData = EntityData.RawEntityExtraSerializeData.Clone();
             DestroyImmediate(gameObject);
         }
         else if (ReplaceEntityTypeName.TypeDefineType == TypeDefineType.Actor)
@@ -161,6 +162,7 @@ public abstract class Entity_LevelEditor : MonoBehaviour
             Entity_LevelEditor entityLevelEditor = go.GetComponentInParent<Entity_LevelEditor>();
             entityLevelEditor.EntityOrientation = EntityOrientation;
             entityLevelEditor.RefreshOrientation();
+            entityLevelEditor.EntityData.RawEntityExtraSerializeData = EntityData.RawEntityExtraSerializeData.Clone();
             DestroyImmediate(gameObject);
         }
     }

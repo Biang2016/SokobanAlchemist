@@ -88,9 +88,8 @@ public class WorldModuleDesignHelper : MonoBehaviour
                 isTriggerEntity = entityOccupationData.IsTriggerEntity;
                 if (isTriggerEntity)
                 {
-                    TriggerEntityData data = new TriggerEntityData();
+                    EntityData data = entity.EntityData.Clone();
                     data.LocalGP = gp;
-                    data.EntityData = entity.EntityData.Clone();
                     worldModuleData.TriggerEntityDataList.Add(data);
                 }
             }

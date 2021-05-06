@@ -1,5 +1,6 @@
 ﻿using System;
 using BiangLibrary.CloneVariant;
+using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -31,11 +32,11 @@ public abstract class EntityPassiveSkill : EntitySkill
     {
     }
 
-    public virtual void OnBeingLift(Actor actor)
+    public virtual void OnBeingLift(Entity entity)
     {
     }
 
-    public virtual void OnBeingKicked(Actor actor)
+    public virtual void OnBeingKicked(Entity entity)
     {
     }
 
@@ -104,6 +105,18 @@ public abstract class EntityPassiveSkill : EntitySkill
     }
 
     public virtual void OnEntityPropertyValueChange(EntityPropertyType entityPropertyType, int before, int after)
+    {
+    }
+
+    public virtual void OnFuelEntered(EntityFlamethrowerHelper.FlamethrowerFuelData fuelData)
+    {
+    }
+
+    public virtual void OnPassGrid(GridPos3D gridGP)
+    {
+    }
+
+    public virtual void OnKick()
     {
     }
 

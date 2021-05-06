@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BiangLibrary.GamePlay.UI;
 using BiangLibrary.Messenger;
 using BiangLibrary.Singleton;
+using Sirenix.Utilities;
 using UnityEngine;
 
 public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
@@ -42,46 +43,25 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
     private void RegisterEvent()
     {
         Messenger.AddListener<NumeralUIBattleTipData>((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, HandleNumeralTip);
-        Messenger.AddListener<CommonUIBattleTipData>((uint) ENUM_BattleEvent.Battle_ActorCommonTip, HandleCommonTip);
     }
 
     private void UnRegisterEvent()
     {
         Messenger.RemoveListener<NumeralUIBattleTipData>((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, HandleNumeralTip);
-        Messenger.RemoveListener<CommonUIBattleTipData>((uint) ENUM_BattleEvent.Battle_ActorCommonTip, HandleCommonTip);
     }
 
     private void HandleNumeralTip(NumeralUIBattleTipData data)
     {
         if (!EnableUIBattleTip) return;
-        if (data.MainNum == 0 && data.SubNum == 0) return;
+        if (data.MainNum == 0 && data.ExtraInfo_After.IsNullOrWhitespace()  && data.ExtraInfo_Before.IsNullOrWhitespace()) return;
         UIBattleTipInfo info = new UIBattleTipInfo(
             0,
             data.BattleTipType,
             data.Receiver,
             data.MainNum,
-            data.SubNum,
+            data.ExtraInfo_Before,
+            data.ExtraInfo_After,
             0.2f,
-            data.SubNumType,
-            "",
-            data.ReceiverPosition + Vector3.up * 1.5f,
-            Vector2.zero,
-            Vector2.one * 1f,
-            0.5f);
-        CreateTip(info);
-    }
-
-    private void HandleCommonTip(CommonUIBattleTipData data)
-    {
-        if (!EnableUIBattleTip) return;
-        UIBattleTipInfo info = new UIBattleTipInfo(
-            0,
-            data.BattleTipType,
-            data.Receiver,
-            0,
-            0,
-            0.2f,
-            0,
             "",
             data.ReceiverPosition + Vector3.up * 1.5f,
             Vector2.zero,
@@ -110,18 +90,18 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
                 {
                     case Camp.Player:
                     {
-                        btType = info.DiffHP < 5 ? BattleTipPrefabType.UIBattleTip_PlayerGetDamaged : BattleTipPrefabType.UIBattleTip_PlayerGetGreatDamaged;
+                        btType = info.DiffValue < 5 ? BattleTipPrefabType.UIBattleTip_PlayerGetDamaged : BattleTipPrefabType.UIBattleTip_PlayerGetGreatDamaged;
                         break;
                     }
                     case Camp.Friend:
                     {
-                        btType = info.DiffHP < 5 ? BattleTipPrefabType.UIBattleTip_FriendGetDamaged : BattleTipPrefabType.UIBattleTip_FriendGetGreatDamaged;
+                        btType = info.DiffValue < 5 ? BattleTipPrefabType.UIBattleTip_FriendGetDamaged : BattleTipPrefabType.UIBattleTip_FriendGetGreatDamaged;
                         break;
                     }
                     case Camp.Enemy:
                     case Camp.Neutral:
                     {
-                        btType = info.DiffHP < 5 ? BattleTipPrefabType.UIBattleTip_EnemyGetDamaged : BattleTipPrefabType.UIBattleTip_EnemyGetGreatDamaged;
+                        btType = info.DiffValue < 5 ? BattleTipPrefabType.UIBattleTip_EnemyGetDamaged : BattleTipPrefabType.UIBattleTip_EnemyGetGreatDamaged;
                         break;
                     }
                     case Camp.Box:
@@ -160,6 +140,21 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
                     }
                 }
 
+                break;
+            }
+            case BattleTipType.MaxHealth:
+            {
+                btType = BattleTipPrefabType.UIBattleTip_GainMaxHealthTip;
+                break;
+            }
+            case BattleTipType.ActionPoint:
+            {
+                btType = BattleTipPrefabType.UIBattleTip_GainActionPointTip;
+                break;
+            }
+            case BattleTipType.MaxActionPoint:
+            {
+                btType = BattleTipPrefabType.UIBattleTip_GainMaxActionPointTip;
                 break;
             }
             case BattleTipType.Gold:

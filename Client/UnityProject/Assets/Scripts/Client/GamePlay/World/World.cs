@@ -59,6 +59,8 @@ public class World : PoolObject
 
         yield return RecycleEmptyModules();
         WorldData = null;
+        cachedAdjacentBoxList.Clear();
+        cachedAdjacentAddedBoxes.Clear();
     }
 
     public virtual IEnumerator Initialize(WorldData worldData)
@@ -329,9 +331,9 @@ public class World : PoolObject
                 for (int i = 1; i <= Actor.ACTOR_MAX_HEIGHT; i++)
                 {
                     bool thisAvailable = true;
-                    for (int j = 1; j <= i; j++)
+                    for (int j = 2; j <= i; j++)
                     {
-                        if (cached_occupyAbove[i - 1])
+                        if (cached_occupyAbove[i - 2])
                         {
                             thisAvailable = false;
                             break;
@@ -392,11 +394,12 @@ public class World : PoolObject
         return false;
     }
 
-    public Box GetBoxByGridPosition(GridPos3D gp, out WorldModule module, out GridPos3D localGP, bool ignoreUnaccessibleModule = true, bool ignorePassableBox = false)
+    public Box GetBoxByGridPosition(GridPos3D gp, uint ignoreEntityGUID, out WorldModule module, out GridPos3D localGP, bool ignoreUnaccessibleModule = true, bool ignorePassableBox = false)
     {
         Entity entity = GetEntityByGridPositionCore(gp, 0, out module, out localGP, ignoreUnaccessibleModule, ignorePassableBox);
         if (entity is Box box)
         {
+            if (entity.GUID == ignoreEntityGUID) return null;
             if (ignorePassableBox && box.Passable) return null;
             return box;
         }
@@ -404,19 +407,19 @@ public class World : PoolObject
         return null;
     }
 
-    public Entity GetImpassableEntityByGridPosition(GridPos3D gp, uint ignoreActorGUID, out WorldModule module, out GridPos3D localGP)
+    public Entity GetImpassableEntityByGridPosition(GridPos3D gp, uint ignoreEntityGUID, out WorldModule module, out GridPos3D localGP)
     {
-        return GetEntityByGridPositionCore(gp, ignoreActorGUID, out module, out localGP, false, true);
+        return GetEntityByGridPositionCore(gp, ignoreEntityGUID, out module, out localGP, false, true);
     }
 
-    private Entity GetEntityByGridPositionCore(GridPos3D gp, uint ignoreActorGUID, out WorldModule module, out GridPos3D localGP, bool ignoreUnaccessibleModule = true, bool ignorePassableBox = false)
+    private Entity GetEntityByGridPositionCore(GridPos3D gp, uint ignoreEntityGUID, out WorldModule module, out GridPos3D localGP, bool ignoreUnaccessibleModule = true, bool ignorePassableBox = false)
     {
         module = GetModuleByWorldGP(gp, ignoreUnaccessibleModule);
         if (module != null && (!ignoreUnaccessibleModule || module.IsAccessible))
         {
             localGP = module.WorldGPToLocalGP(gp);
             Entity entity = module[ignorePassableBox ? TypeDefineType.Actor : TypeDefineType.Box, localGP];
-            if (entity != null && entity.GUID == ignoreActorGUID) return null;
+            if (entity != null && entity.GUID == ignoreEntityGUID) return null;
             return entity;
         }
         else
@@ -439,6 +442,32 @@ public class World : PoolObject
             localGP = GridPos3D.Zero;
             return null;
         }
+    }
+
+    private List<Entity> cached_GetTriggerEntityList = new List<Entity>(4);
+
+    public List<Entity> GetTriggerEntitiesByGridPosition(GridPos3D gp, uint ignoreEntityGUID, out WorldModule module, out GridPos3D localGP)
+    {
+        cached_GetTriggerEntityList.Clear();
+        module = GetModuleByWorldGP(gp);
+        if (module != null && module.IsAccessible)
+        {
+            localGP = module.WorldGPToLocalGP(gp);
+            foreach (KeyValuePair<uint, Entity> kv in module.WorldModuleTriggerEntities)
+            {
+                if (kv.Value.GUID == ignoreEntityGUID) continue;
+                if (kv.Value.WorldGP == gp)
+                {
+                    cached_GetTriggerEntityList.Add(kv.Value);
+                }
+            }
+        }
+        else
+        {
+            localGP = GridPos3D.Zero;
+        }
+
+        return cached_GetTriggerEntityList;
     }
 
     public GridPos3D GetWorldGPByModuleGP(GridPos3D moduleGP, GridPos3D localGP)
@@ -487,71 +516,74 @@ public class World : PoolObject
         }
     }
 
+    private HashSet<Box> cachedAdjacentAddedBoxes = new HashSet<Box>();
+    private List<Box> cachedAdjacentBoxList = new List<Box>(128);
+
     public List<Box> GetAdjacentBox(GridPos3D worldGP)
     {
-        HashSet<Box> addedBoxes = new HashSet<Box>();
-        List<Box> boxes = new List<Box>();
-        Box leftBox = GetBoxByGridPosition(worldGP + new GridPos3D(-1, 0, 0), out WorldModule _, out GridPos3D _);
+        cachedAdjacentAddedBoxes.Clear();
+        cachedAdjacentBoxList.Clear();
+        Box leftBox = GetBoxByGridPosition(worldGP + new GridPos3D(-1, 0, 0), 0, out WorldModule _, out GridPos3D _);
         if (leftBox)
         {
-            if (!addedBoxes.Contains(leftBox))
+            if (!cachedAdjacentAddedBoxes.Contains(leftBox))
             {
-                boxes.Add(leftBox);
-                addedBoxes.Add(leftBox);
+                cachedAdjacentBoxList.Add(leftBox);
+                cachedAdjacentAddedBoxes.Add(leftBox);
             }
         }
 
-        Box rightBox = GetBoxByGridPosition(worldGP + new GridPos3D(1, 0, 0), out WorldModule _, out GridPos3D _);
+        Box rightBox = GetBoxByGridPosition(worldGP + new GridPos3D(1, 0, 0), 0, out WorldModule _, out GridPos3D _);
         if (rightBox)
         {
-            if (!addedBoxes.Contains(rightBox))
+            if (!cachedAdjacentAddedBoxes.Contains(rightBox))
             {
-                boxes.Add(rightBox);
-                addedBoxes.Add(rightBox);
+                cachedAdjacentBoxList.Add(rightBox);
+                cachedAdjacentAddedBoxes.Add(rightBox);
             }
         }
 
-        Box upBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 1, 0), out WorldModule _, out GridPos3D _);
+        Box upBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 1, 0), 0, out WorldModule _, out GridPos3D _);
         if (upBox)
         {
-            if (!addedBoxes.Contains(upBox))
+            if (!cachedAdjacentAddedBoxes.Contains(upBox))
             {
-                boxes.Add(upBox);
-                addedBoxes.Add(upBox);
+                cachedAdjacentBoxList.Add(upBox);
+                cachedAdjacentAddedBoxes.Add(upBox);
             }
         }
 
-        Box downBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, -1, 0), out WorldModule _, out GridPos3D _);
+        Box downBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, -1, 0), 0, out WorldModule _, out GridPos3D _);
         if (downBox)
         {
-            if (!addedBoxes.Contains(downBox))
+            if (!cachedAdjacentAddedBoxes.Contains(downBox))
             {
-                boxes.Add(downBox);
-                addedBoxes.Add(downBox);
+                cachedAdjacentBoxList.Add(downBox);
+                cachedAdjacentAddedBoxes.Add(downBox);
             }
         }
 
-        Box frontBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 0, 1), out WorldModule _, out GridPos3D _);
+        Box frontBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 0, 1), 0, out WorldModule _, out GridPos3D _);
         if (frontBox)
         {
-            if (!addedBoxes.Contains(frontBox))
+            if (!cachedAdjacentAddedBoxes.Contains(frontBox))
             {
-                boxes.Add(frontBox);
-                addedBoxes.Add(frontBox);
+                cachedAdjacentBoxList.Add(frontBox);
+                cachedAdjacentAddedBoxes.Add(frontBox);
             }
         }
 
-        Box backBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 0, -1), out WorldModule _, out GridPos3D _);
+        Box backBox = GetBoxByGridPosition(worldGP + new GridPos3D(0, 0, -1), 0, out WorldModule _, out GridPos3D _);
         if (backBox)
         {
-            if (!addedBoxes.Contains(backBox))
+            if (!cachedAdjacentAddedBoxes.Contains(backBox))
             {
-                boxes.Add(backBox);
-                addedBoxes.Add(backBox);
+                cachedAdjacentBoxList.Add(backBox);
+                cachedAdjacentAddedBoxes.Add(backBox);
             }
         }
 
-        return boxes;
+        return cachedAdjacentBoxList;
     }
 
     public bool BoxProject(GridPos3D dir, GridPos3D origin, int maxDistance, bool touchBox, out GridPos3D worldGP, out Box firstBox)
@@ -564,7 +596,7 @@ public class World : PoolObject
         do
         {
             currentCastGP += dir;
-            firstBox = GetBoxByGridPosition(currentCastGP, out WorldModule _, out GridPos3D _, false, false);
+            firstBox = GetBoxByGridPosition(currentCastGP, 0, out WorldModule _, out GridPos3D _, false, false);
             distance++;
         } while (firstBox == null && distance <= maxDistance);
 
@@ -588,13 +620,13 @@ public class World : PoolObject
         HashSet<Box> boxes_moveable,
         uint excludeActorGUID = 0)
     {
-        Box box_src = GetBoxByGridPosition(srcGP, out WorldModule module_src, out GridPos3D localGP_src);
+        Box box_src = GetBoxByGridPosition(srcGP, 0, out WorldModule module_src, out GridPos3D localGP_src);
         if (box_src == null || !module_src.IsNotNullAndAvailable()) return true;
         foreach (GridPos3D offset in box_src.GetEntityOccupationGPs_Rotated())
         {
             GridPos3D gridGP = offset + box_src.WorldGP;
             GridPos3D gridGP_after = gridGP + direction;
-            Box box_after = GetBoxByGridPosition(gridGP_after, out WorldModule module_after, out GridPos3D localGP_after);
+            Box box_after = GetBoxByGridPosition(gridGP_after, 0, out WorldModule module_after, out GridPos3D localGP_after);
             bool isGroundedAfter = CheckIsGroundByPos(gridGP_after, 5f, false, out GridPos3D _);
             if (!isGroundedAfter) return false;
 
@@ -627,17 +659,36 @@ public class World : PoolObject
 
         boxes_moveable.Add(box_src);
 
+        // 将可移动箱子的上表面放置的TriggerBox也一起移动
+        if (module_src.IsNotNullAndAvailable())
+        {
+            foreach (GridPos3D offset in box_src.GetEntityOccupationGPs_Rotated())
+            {
+                GridPos3D gridGP = offset + box_src.WorldGP;
+                GridPos3D gridGP_above = gridGP + GridPos3D.Up;
+                Box box_above = GetBoxByGridPosition(gridGP_above, 0, out WorldModule module_after, out GridPos3D localGP_after);
+                if (box_above == box_src) continue;
+                foreach (KeyValuePair<uint, Entity> kv in module_src.WorldModuleTriggerEntities)
+                {
+                    if (kv.Value is Box triggerBox && triggerBox.WorldGP == gridGP_above)
+                    {
+                        boxes_moveable.Add(triggerBox);
+                    }
+                }
+            }
+        }
+
         List<Box> aboveNearestBoxList = new List<Box>();
         foreach (GridPos3D offset in box_src.GetEntityOccupationGPs_Rotated())
         {
             GridPos3D gridGP = offset + box_src.WorldGP;
 
             GridPos3D upVector = GridPos3D.Up;
-            Box box_above = GetBoxByGridPosition(gridGP + upVector, out _, out _);
+            Box box_above = GetBoxByGridPosition(gridGP + upVector, 0, out _, out _);
             while (box_above != null && boxes_moveable.Contains(box_above)) // 如果上下箱子是同一个箱子，说明这个箱子检查过了，跳过，再往上找
             {
                 upVector += GridPos3D.Up;
-                box_above = GetBoxByGridPosition(gridGP + upVector, out _, out _);
+                box_above = GetBoxByGridPosition(gridGP + upVector, 0, out _, out _);
             }
 
             if (box_above != null && box_above.Droppable) // 只有droppable的箱子会跟着一起移动
@@ -692,8 +743,8 @@ public class World : PoolObject
             foreach (GridPos3D offset in box_moveable.GetEntityOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP;
-                GetBoxByGridPosition(gridWorldGP_before, out WorldModule module_before, out GridPos3D boxGridLocalGP_before);
-                module_before[TypeDefineType.Box, boxGridLocalGP_before] = null;
+                GetBoxByGridPosition(gridWorldGP_before, 0, out WorldModule module_before, out GridPos3D boxGridLocalGP_before);
+                module_before[TypeDefineType.Box, boxGridLocalGP_before, false, false, box_moveable.IsTriggerEntity, box_moveable.GUID] = null;
                 if (bottomBoxGridWorldGP.y > gridWorldGP_before.y)
                 {
                     bottomBox = box_moveable;
@@ -702,7 +753,7 @@ public class World : PoolObject
             }
         }
 
-        bottomBox?.EntityWwiseHelper.OnBeingPushed.Post(gameObject);
+        bottomBox?.EntityWwiseHelper.OnBeingPushed.Post(bottomBox.gameObject);
 
         // 再往矩阵填入引用，不可在一个循环内完成，否则后面的Box会将前面的引用置空
         foreach (Box box_moveable in boxes_moveable)
@@ -711,8 +762,8 @@ public class World : PoolObject
             {
                 GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP;
                 GridPos3D gridWorldGP_after = gridWorldGP_before + direction;
-                GetBoxByGridPosition(gridWorldGP_after, out WorldModule module_after, out GridPos3D boxGridLocalGP_after);
-                module_after[TypeDefineType.Box, boxGridLocalGP_after] = box_moveable;
+                GetBoxByGridPosition(gridWorldGP_after, 0, out WorldModule module_after, out GridPos3D boxGridLocalGP_after);
+                module_after[TypeDefineType.Box, boxGridLocalGP_after, false, false, box_moveable.IsTriggerEntity, box_moveable.GUID] = box_moveable;
             }
 
             box_moveable.State = sucState;
@@ -760,30 +811,71 @@ public class World : PoolObject
                 allPossibleMergeTargetWorldGP.Add(offset + mergeTargetWorldGP);
             }
 
+            // 提前拿到所有素材箱子的合成配置的引用
+            List<BoxMergeConfig> boxMergeConfigs = new List<BoxMergeConfig>();
+            boxMergeConfigs.Add(oldCoreBox.BoxMergeConfig);
+
             foreach (Box oldBox in oldBoxes)
             {
                 if (oldBox == oldCoreBox) continue;
                 GridPos3D nearestGP = GridPos3D.GetNearestGPFromList(oldBox.WorldGP, allPossibleMergeTargetWorldGP);
                 oldBox.MergeBox(nearestGP);
+                boxMergeConfigs.Add(oldBox.BoxMergeConfig);
             }
 
             // 保证目标点的箱子最后合成消失，从而生成新箱子的时候不会与任何一个老箱子冲突
             GridPos3D nearestGP_Core = GridPos3D.GetNearestGPFromList(oldCoreBox.WorldGP, allPossibleMergeTargetWorldGP);
+            EntityData overrideEntityData = null;
             oldCoreBox.MergeBox(nearestGP_Core, delegate
             {
                 WorldModule module = GetModuleByWorldGP(mergeTargetWorldGP);
                 if (module != null)
                 {
-                    EntityData entityData = new EntityData(newBoxTypeIndex, newBoxOrientation);
-                    Box box = (Box) module.GenerateEntity(entityData, mergeTargetWorldGP, false, false, true); // 合成生成的箱子允许往上方堆
-                    if (box != null)
+                    EntityData entityData = overrideEntityData ?? new EntityData(newBoxTypeIndex, newBoxOrientation);
+                    Box mergeResultBox = (Box) module.GenerateEntity(entityData, mergeTargetWorldGP, false, false, true); // 合成生成的箱子允许往上方堆
+                    if (mergeResultBox != null)
                     {
-                        FXManager.Instance.PlayFX(box.MergedFX, box.transform.position);
-                        TryMerge(direction, new HashSet<Box> {box});
-                        box.EntityWwiseHelper.OnBeingMerged.Post(box.gameObject);
+                        FXManager.Instance.PlayFX(mergeResultBox.MergedFX, mergeResultBox.transform.position);
+                        TryMerge(direction, new HashSet<Box> {mergeResultBox});
+                        mergeResultBox.EntityWwiseHelper.OnBeingMerged.Post(mergeResultBox.gameObject);
                     }
                 }
             });
+
+            // 遍历素材箱子的合成配置，看看是否有覆写配方MergeEntityData
+            ushort currentMergeBoxIndex = 0;
+            string currentMergeBoxOverrideKey = "";
+            foreach (BoxMergeConfig boxMergeConfig in boxMergeConfigs)
+            {
+                if (boxMergeConfig.Temp_NextMergeEntityData != null)
+                {
+                    if (currentMergeBoxIndex == 0)
+                    {
+                        currentMergeBoxIndex = boxMergeConfig.Temp_NextMergeEntityData.EntityTypeIndex;
+                        currentMergeBoxOverrideKey = boxMergeConfig.Temp_NextMergeEntityDataOverrideKey;
+                        overrideEntityData = boxMergeConfig.Temp_NextMergeEntityData;
+                    }
+                    else
+                    {
+                        if (currentMergeBoxIndex != boxMergeConfig.Temp_NextMergeEntityData.EntityTypeIndex)
+                        {
+                            string boxTypeName_1 = ConfigManager.GetTypeName(TypeDefineType.Box, currentMergeBoxIndex);
+                            string boxTypeName_2 = ConfigManager.GetTypeName(TypeDefineType.Box, boxMergeConfig.Temp_NextMergeEntityData.EntityTypeIndex);
+                            Debug.LogError($"MergeEntityData point to different box type: {boxTypeName_1} vs {boxTypeName_2}, please check!");
+                        }
+                        else
+                        {
+                            // 相同OverrideKey的MergeEntityData在关卡设计上应配为完全相同的，使其不会反复覆写。Merge逻辑执行时只随机取用一个
+                            if (currentMergeBoxOverrideKey == boxMergeConfig.Temp_NextMergeEntityDataOverrideKey) continue;
+                            foreach (EntityPassiveSkill eps in boxMergeConfig.Temp_NextMergeEntityData.RawEntityExtraSerializeData.EntityPassiveSkills)
+                            {
+                                Assert.IsNotNull(overrideEntityData);
+                                overrideEntityData.RawEntityExtraSerializeData.EntityPassiveSkills.Add((EntityPassiveSkill) eps.Clone());
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -842,7 +934,7 @@ public class World : PoolObject
                     if (i == 0) continue;
                     int matrixIndex = i > 0 ? i + N_x - 1 : i + N_x;
                     GridPos3D targetGP = alignRefGP + GridPos3D.Right * i * boundsInt.size.x;
-                    Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
+                    Box targetBox = GetBoxByGridPosition(targetGP, 0, out WorldModule _, out GridPos3D _);
                     if (targetBox == null || targetBox == srcBox || targetBox.EntityTypeIndex != srcBox.EntityTypeIndex)
                     {
                         x_match_matrix[matrixIndex] = false;
@@ -855,7 +947,7 @@ public class World : PoolObject
                     if (i == 0) continue;
                     int matrixIndex = i > 0 ? i + N_z - 1 : i + N_z;
                     GridPos3D targetGP = alignRefGP + GridPos3D.Forward * i * boundsInt.size.z;
-                    Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
+                    Box targetBox = GetBoxByGridPosition(targetGP, 0, out WorldModule _, out GridPos3D _);
                     if (targetBox == null || targetBox == srcBox || targetBox.EntityTypeIndex != srcBox.EntityTypeIndex)
                     {
                         z_match_matrix[matrixIndex] = false;
@@ -964,7 +1056,7 @@ public class World : PoolObject
             for (int offsetUnit = -x_connect_negative; offsetUnit <= x_connect_positive; offsetUnit++)
             {
                 GridPos3D targetGP = srcBox.WorldGP + GridPos3D.Right * offsetUnit * boundsInt.size.x; // 这里用Box.WorldGP是仅为了随便取一个grid
-                Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
+                Box targetBox = GetBoxByGridPosition(targetGP, 0, out WorldModule _, out GridPos3D _);
                 Assert.IsNotNull(targetBox);
                 matchedBoxes.Add(targetBox);
                 mergedBoxes.Add(targetBox); // 这是此次Move合成的所有箱子
@@ -978,7 +1070,7 @@ public class World : PoolObject
             for (int offsetUnit = -z_connect_negative; offsetUnit <= z_connect_positive; offsetUnit++)
             {
                 GridPos3D targetGP = srcBox.WorldGP + GridPos3D.Forward * offsetUnit * boundsInt.size.z; // 这里用Box.WorldGP是仅为了随便取一个grid
-                Box targetBox = GetBoxByGridPosition(targetGP, out WorldModule _, out GridPos3D _);
+                Box targetBox = GetBoxByGridPosition(targetGP, 0, out WorldModule _, out GridPos3D _);
                 Assert.IsNotNull(targetBox);
                 matchedBoxes.Add(targetBox);
                 mergedBoxes.Add(targetBox);
@@ -1085,28 +1177,40 @@ public class World : PoolObject
 
     public void RemoveBoxFromGrid(Box box, bool checkDrop = true)
     {
-        if (box.WorldModule)
+        if (!box.IsTriggerEntity)
         {
             foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP = offset + box.WorldGP;
-                if (GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP) == box)
+                if (GetBoxByGridPosition(gridWorldGP, 0, out WorldModule module, out GridPos3D localGP) == box)
                 {
                     if (module[TypeDefineType.Box, localGP] == box)
                     {
-                        module[TypeDefineType.Box, localGP] = null;
+                        module[TypeDefineType.Box, localGP, false, false, false, box.GUID] = null;
                     }
                 }
             }
-
-            if (checkDrop) CheckDropAbove(box);
-            box.WorldModule = null;
-            box.IsInGridSystem = false;
-
-            if (!WorldManager.Instance.OtherBoxDict.ContainsKey(box.GUID))
+        }
+        else
+        {
+            List<Entity> triggerEntities = GetTriggerEntitiesByGridPosition(box.WorldGP, 0, out WorldModule module, out GridPos3D localGP);
+            foreach (Entity triggerEntity in triggerEntities)
             {
-                WorldManager.Instance.OtherBoxDict.Add(box.GUID, box);
+                if(triggerEntity == box)
+                {
+                    module[TypeDefineType.Box, localGP, false, false, true, box.GUID] = null;
+                }
             }
+        }
+        
+
+        if (checkDrop) CheckDropAbove(box);
+        box.WorldModule = null;
+        box.IsInGridSystem = false;
+
+        if (!WorldManager.Instance.OtherBoxDict.ContainsKey(box.GUID))
+        {
+            WorldManager.Instance.OtherBoxDict.Add(box.GUID, box);
         }
     }
 
@@ -1117,7 +1221,7 @@ public class World : PoolObject
         box.PoolRecycle();
     }
 
-    public void BoxReturnToWorldFromPhysics(Box box, bool checkMerge, GridPos3D kickDir)
+    public void BoxReturnToWorldFromPhysics(Box box, GridPos3D kickDir)
     {
         WorldManager.Instance.OtherBoxDict.Remove(box.GUID);
         GridPos3D gp = GridPos3D.GetGridPosByTrans(box.transform, 1);
@@ -1129,8 +1233,25 @@ public class World : PoolObject
                                || tryPutBox(gp + new GridPos3D(0, 1, 0))
                                || tryPutBox(gp + new GridPos3D(0, -1, 0))
                                || tryPutBox(gp + new GridPos3D(0, 0, 1))
-                               || tryPutBox(gp + new GridPos3D(0, 0, -1));
-            if (!canPutAside) box.PoolRecycle(); // 无处可放即销毁
+                               || tryPutBox(gp + new GridPos3D(0, 0, -1))
+                               || tryPutBox(gp + new GridPos3D(1, 0, 1))
+                               || tryPutBox(gp + new GridPos3D(-1, 0, 1))
+                               || tryPutBox(gp + new GridPos3D(1, 0, -1))
+                               || tryPutBox(gp + new GridPos3D(-1, 0, -1))
+                               || tryPutBox(gp + new GridPos3D(1, 1, 0))
+                               || tryPutBox(gp + new GridPos3D(-1, 1, 0))
+                               || tryPutBox(gp + new GridPos3D(1, -1, 0))
+                               || tryPutBox(gp + new GridPos3D(-1, -1, 0))
+                               || tryPutBox(gp + new GridPos3D(0, 1, 1))
+                               || tryPutBox(gp + new GridPos3D(0, -1, 1))
+                               || tryPutBox(gp + new GridPos3D(0, 1, -1))
+                               || tryPutBox(gp + new GridPos3D(0, -1, -1))
+                ;
+            if (!canPutAside)
+            {
+                Debug.Log("BoxReturnToWorldFromPhysics Destroy because no space to put ");
+                box.DestroySelf(); // 无处可放即销毁
+            }
         }
 
         bool tryPutBox(GridPos3D worldGP)
@@ -1138,17 +1259,20 @@ public class World : PoolObject
             foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP = offset + worldGP;
-                Box existBox = GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP);
+                Box existBox = GetBoxByGridPosition(gridWorldGP, box.GUID, out WorldModule module, out GridPos3D localGP);
                 if (module.IsNotNullAndAvailable())
                 {
-                    if (existBox != null && existBox != box)
-                    {
-                        return false;
-                    }
+                    if (existBox != null) return false;
                 }
                 else
                 {
                     return false;
+                }
+
+                if (box.IsTriggerEntity)
+                {
+                    List<Entity> triggerEntities = GetTriggerEntitiesByGridPosition(gridWorldGP, box.GUID, out module, out localGP);
+                    if (triggerEntities.Count > 0) return false;
                 }
             }
 
@@ -1170,9 +1294,10 @@ public class World : PoolObject
                     lerpType = Box.LerpType.KickToGrind;
                     break;
                 }
-                case Box.States.DroppingFromEntity:
+                case Box.States.DroppingOutFromEntity_Up:
+                case Box.States.DroppingOutFromEntity_Down:
                 {
-                    lerpType = Box.LerpType.DropFromEntity;
+                    lerpType = Box.LerpType.DropOutFromEntity;
                     break;
                 }
                 case Box.States.Putting:
@@ -1189,11 +1314,11 @@ public class World : PoolObject
             foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 GridPos3D gridWorldGP = offset + worldGP;
-                GetBoxByGridPosition(gridWorldGP, out WorldModule module, out GridPos3D localGP);
-                module[TypeDefineType.Box, localGP] = box;
+                GetBoxByGridPosition(gridWorldGP, 0, out WorldModule module, out GridPos3D localGP);
+                module[TypeDefineType.Box, localGP, false, false, box.IsTriggerEntity, box.GUID] = box;
             }
 
-            TryMerge(kickDir, new HashSet<Box> {box});
+            if (!box.IsTriggerEntity) TryMerge(kickDir, new HashSet<Box> {box});
             return true;
         }
     }
@@ -1219,7 +1344,7 @@ public class World : PoolObject
             foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
             {
                 GridPos3D gridGP = box.WorldGP + offset;
-                Box beneathBox = GetBoxByGridPosition(gridGP + GridPos3D.Down, out WorldModule _, out GridPos3D _);
+                Box beneathBox = GetBoxByGridPosition(gridGP + GridPos3D.Down, 0, out WorldModule _, out GridPos3D _);
                 if (beneathBox != null && beneathBox != box)
                 {
                     bool addSuc = beneathBoxes.Add(beneathBox);
@@ -1240,10 +1365,45 @@ public class World : PoolObject
             {
                 dropBox = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);
                 EntityData entityData = new EntityData(boxTypeIndex, boxOrientation);
-                dropBox.Setup(entityData, module.GUID, origin);
+                dropBox.Setup(entityData, origin, module.GUID);
                 dropBox.Initialize(origin, module, 0, false, Box.LerpType.DropFromAir);
                 dropBox.DropFromAir();
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool GenerateEntityOnWorldGPWithoutOccupy(ushort entityTypeIndex, GridPosR.Orientation entityOrientation, GridPos3D origin, out Entity dropEntity)
+    {
+        dropEntity = null;
+        if (entityTypeIndex == 0) return false;
+        WorldModule module = GetModuleByWorldGP(origin, true);
+        if (module != null)
+        {
+            ConfigManager.TypeStartIndex tsi = entityTypeIndex.ConvertToTypeStartIndex();
+            switch (tsi)
+            {
+                case ConfigManager.TypeStartIndex.Box:
+                {
+                    dropEntity = GameObjectPoolManager.Instance.BoxDict[entityTypeIndex].AllocateGameObject<Box>(transform);
+                    Box dropBox = (Box) dropEntity;
+                    EntityData entityData = new EntityData(entityTypeIndex, entityOrientation);
+                    dropBox.Setup(entityData, origin, module.GUID);
+                    dropBox.Initialize(origin, module, 0, false, Box.LerpType.Create);
+                    return true;
+                }
+                case ConfigManager.TypeStartIndex.Actor:
+                {
+                    dropEntity = GameObjectPoolManager.Instance.ActorDict[entityTypeIndex].AllocateGameObject<Actor>(transform);
+                    Actor dropActor = (Actor) dropEntity;
+                    EntityData entityData = new EntityData(entityTypeIndex, entityOrientation);
+                    dropActor.Setup(entityData, origin, module.GUID);
+                    dropActor.ForbidAction = !BattleManager.Instance.IsStart;
+                    BattleManager.Instance.AddActor(module, dropActor);
+                    return true;
+                }
             }
         }
 
@@ -1261,7 +1421,7 @@ public class World : PoolObject
                 GridPos3D gridWorldGP = offset + box.WorldGP;
                 GridPos3D beneathBoxGridWorldGP = gridWorldGP + GridPos3D.Down;
 
-                Box boxBeneath = GetBoxByGridPosition(beneathBoxGridWorldGP, out WorldModule module, out GridPos3D localGP);
+                Box boxBeneath = GetBoxByGridPosition(beneathBoxGridWorldGP, 0, out WorldModule module, out GridPos3D localGP);
                 if (!module.IsNotNullAndAvailable() || (boxBeneath != null && boxBeneath != box))
                 {
                     spaceAvailable = false;
@@ -1269,23 +1429,23 @@ public class World : PoolObject
                 }
             }
 
-            foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
-            {
-                Vector3 gridWorldPos = offset + box.WorldGP;
-                Collider[] colliders = Physics.OverlapBox(gridWorldPos + Vector3.down * 0.5f, Vector3.one * 0.4f, Quaternion.identity, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_ActorIndicator_Player | LayerManager.Instance.LayerMask_ActorIndicator_Enemy);
-                foreach (Collider collider in colliders)
-                {
-                    Entity entityBeneath = collider.GetComponentInParent<Entity>();
-                    if (entityBeneath.IsNotNullAndAlive() && entityBeneath.GUID != box.GUID)
-                    {
-                        spaceTempAvailable = false;
-                        break;
-                    }
-                }
-            }
-
             if (spaceAvailable)
             {
+                foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
+                {
+                    Vector3 gridWorldPos = offset + box.WorldGP;
+                    Collider[] colliders = Physics.OverlapBox(gridWorldPos + Vector3.down * 0.5f, Vector3.one * 0.4f, Quaternion.identity, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_ActorIndicator_Player | LayerManager.Instance.LayerMask_ActorIndicator_Enemy);
+                    foreach (Collider collider in colliders)
+                    {
+                        Entity entityBeneath = collider.GetComponentInParent<Entity>();
+                        if (entityBeneath.IsNotNullAndAlive() && entityBeneath.GUID != box.GUID)
+                        {
+                            spaceTempAvailable = false;
+                            break;
+                        }
+                    }
+                }
+
                 if (!spaceTempAvailable)
                 {
                     box.StartTryingDropSelf();
@@ -1296,15 +1456,15 @@ public class World : PoolObject
                     {
                         GridPos3D gridWorldGP = offset + box.WorldGP;
                         GridPos3D beneathBoxGridWorldGP = gridWorldGP + GridPos3D.Down;
-                        GetBoxByGridPosition(gridWorldGP, out WorldModule module_before, out GridPos3D boxGridLocalGP_before);
-                        GetBoxByGridPosition(beneathBoxGridWorldGP, out WorldModule module_after, out GridPos3D boxGridLocalGP_after);
-                        module_before[TypeDefineType.Box, boxGridLocalGP_before] = null;
-                        module_after[TypeDefineType.Box, boxGridLocalGP_after] = box;
+                        GetBoxByGridPosition(gridWorldGP, 0, out WorldModule module_before, out GridPos3D boxGridLocalGP_before);
+                        GetBoxByGridPosition(beneathBoxGridWorldGP, 0, out WorldModule module_after, out GridPos3D boxGridLocalGP_after);
+                        module_before[TypeDefineType.Box, boxGridLocalGP_before, false, false, box.IsTriggerEntity, box.GUID] = null;
+                        module_after[TypeDefineType.Box, boxGridLocalGP_after, false, false, box.IsTriggerEntity, box.GUID] = box;
                     }
 
                     CheckDropAbove(box); // 递归，检查上方箱子是否坠落
                     GridPos3D boxNewWorldGP = box.WorldGP + GridPos3D.Down;
-                    GetBoxByGridPosition(boxNewWorldGP, out WorldModule newModule, out GridPos3D localGP);
+                    GetBoxByGridPosition(boxNewWorldGP, 0, out WorldModule newModule, out GridPos3D localGP);
                     box.Initialize(boxNewWorldGP, newModule, 0.1f, box.ArtOnly, Box.LerpType.Drop);
                 }
             }
@@ -1317,11 +1477,34 @@ public class World : PoolObject
         foreach (GridPos3D offset in box.GetEntityOccupationGPs_Rotated())
         {
             GridPos3D gridWorldGP = offset + box.WorldGP + GridPos3D.Up;
-            Box boxAbove = GetBoxByGridPosition(gridWorldGP, out WorldModule _, out GridPos3D _);
+            Box boxAbove = GetBoxByGridPosition(gridWorldGP, 0, out WorldModule module, out GridPos3D _);
             if (boxAbove != null && boxAbove != box && !boxSet.Contains(boxAbove))
             {
                 boxSet.Add(boxAbove);
                 CheckDropSelf(boxAbove);
+            }
+
+            if (module != null)
+            {
+                List<Box> cached_CheckDropAboveList = new List<Box>();
+                foreach (KeyValuePair<uint, Entity> kv in module.WorldModuleTriggerEntities)
+                {
+                    if (kv.Value is Box triggerBox && triggerBox.WorldGP == gridWorldGP)
+                    {
+                        if (triggerBox.State == Box.States.Static)
+                        {
+                            boxSet.Add(triggerBox);
+                            cached_CheckDropAboveList.Add(triggerBox);
+                        }
+                    }
+                }
+
+                foreach (Box triggerBox in cached_CheckDropAboveList)
+                {
+                    CheckDropSelf(triggerBox);
+                }
+
+                cached_CheckDropAboveList.Clear();
             }
         }
     }
@@ -1332,7 +1515,14 @@ public class World : PoolObject
     {
         if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
-            return openWorld.WorldMap_TerrainType[worldGP.x, worldGP.z];
+            if (openWorld.InsideDungeon)
+            {
+                return TerrainType.Earth;
+            }
+            else
+            {
+                return openWorld.WorldMap_TerrainType[worldGP.x, worldGP.z];
+            }
         }
         else
         {
@@ -1345,7 +1535,7 @@ public class World : PoolObject
         if (validTerrainTypes.Count == 0) return true;
         if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
-            if (openWorld.IsInsideDungeon) return true;
+            if (openWorld.InsideDungeon) return true;
             TerrainType terrainType = openWorld.WorldMap_TerrainType[worldGP.x, worldGP.z];
             foreach (TerrainType validTerrainType in validTerrainTypes)
             {
@@ -1374,7 +1564,7 @@ public class World : PoolObject
         for (int y = startGridY - 1; y >= endGridY; y--)
         {
             GridPos3D grid = new GridPos3D(curGrid.x, y, curGrid.z);
-            Box lowerBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(grid, out WorldModule _, out GridPos3D _, false, ignorePassableBox);
+            Box lowerBox = WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(grid, 0, out WorldModule _, out GridPos3D _, false, ignorePassableBox);
             if (lowerBox != null)
             {
                 nearestGroundGP = grid;

@@ -15,11 +15,13 @@ public class KeyBindingPanel : BaseUIPanel
     }
 
     public Animator Anim;
+    public AK.Wwise.Event OnDisplay;
 
     public override void Display()
     {
         base.Display();
         Anim.SetTrigger("Show");
+        OnDisplay?.Post(gameObject);
     }
 
     public override void Hide()

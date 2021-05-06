@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 public class WorldData : IClone<WorldData>
 {
@@ -11,6 +12,21 @@ public class WorldData : IClone<WorldData>
 
     public WorldFeature WorldFeature;
     public string DefaultWorldActorBornPointAlias;
+
+    public string WorldName_EN;
+    public string WorldName_ZH;
+    public string WorldDescription_EN;
+    public string WorldDescription_ZH;
+
+    [LabelText("世界图标")]
+    [PropertyOrder(-9)]
+    public TypeSelectHelper WorldIcon = new TypeSelectHelper { TypeDefineType = TypeDefineType.EntitySkillIcon };
+
+    [PreviewField]
+    [ShowInInspector]
+    [PropertyOrder(-9)]
+    [HideLabel]
+    private Sprite WorldIconPreview => ConfigManager.GetEntitySkillIconByName(WorldIcon.TypeName);
 
     /// <summary>
     /// 世界制作规范，世界最大范围为16x16x8个模组
@@ -36,6 +52,11 @@ public class WorldData : IClone<WorldData>
         data.WorldTypeName = WorldTypeName;
         data.WorldFeature = WorldFeature;
         data.DefaultWorldActorBornPointAlias = DefaultWorldActorBornPointAlias;
+        data.WorldName_EN = WorldName_EN;
+        data.WorldName_ZH = WorldName_ZH;
+        data.WorldDescription_EN = WorldDescription_EN;
+        data.WorldDescription_ZH = WorldDescription_ZH;
+        data.WorldIcon = WorldIcon.Clone();
         for (int x = 0; x < World.WORLD_SIZE; x++)
         {
             for (int y = 0; y < World.WORLD_HEIGHT; y++)

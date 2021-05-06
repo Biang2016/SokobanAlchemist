@@ -23,7 +23,7 @@ public abstract class EntityBuff : IClone<EntityBuff>
 
     #endregion
 
-    internal uint CasterActorGUID;
+    internal Entity CasterEntity;
 
     [LabelText("Buff描述")]
     [ShowInInspector]

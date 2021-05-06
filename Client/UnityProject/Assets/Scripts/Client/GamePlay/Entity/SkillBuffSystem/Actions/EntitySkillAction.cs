@@ -7,11 +7,17 @@ using UnityEngine;
 [Serializable]
 public abstract class EntitySkillAction : IClone<EntitySkillAction>
 {
+    [ShowInInspector]
+    [HideInEditorMode]
     internal Entity Entity;
 
     [ReadOnly]
     [HideInEditorMode]
     public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
+
+    [ReadOnly]
+    [HideInEditorMode]
+    public string InitStaticLayoutGUID = ""; // 创建时所属的静态布局GUID
 
     public abstract void OnRecycled();
 
@@ -19,6 +25,7 @@ public abstract class EntitySkillAction : IClone<EntitySkillAction>
     {
         Entity = entity;
         InitWorldModuleGUID = entity.InitWorldModuleGUID;
+        InitStaticLayoutGUID = entity.CurrentEntityData.InitStaticLayoutGUID;
     }
 
     public virtual void UnInit()
@@ -63,6 +70,8 @@ public abstract class EntitySkillAction : IClone<EntitySkillAction>
     {
         Type type = GetType();
         EntitySkillAction newAction = (EntitySkillAction) Activator.CreateInstance(type);
+        newAction.InitWorldModuleGUID = InitWorldModuleGUID;
+        newAction.InitStaticLayoutGUID = InitStaticLayoutGUID;
         ChildClone(newAction);
         return newAction;
     }

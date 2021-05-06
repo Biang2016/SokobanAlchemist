@@ -7,9 +7,21 @@
 				<Property Name="OverrideColor" Type="bool" Value="True"/>
 			</PropertyList>
 			<ChildrenList>
-				<RandomSequenceContainer Name="FireBox_OnDestroyed_Common" ID="{A6EF4A07-E725-4248-B2EA-0A93BCEF9F65}" ShortID="966307857">
+				<BlendContainer Name="FireBox_OnDestroyed_Firing" ID="{C74082BE-98EF-44A0-A4A4-C26510C39D6C}" ShortID="39926685">
 					<PropertyList>
-						<Property Name="OverridePositioning" Type="bool" Value="True"/>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{D95FAA01-D1F6-4225-92A1-2327EF00280C}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="404"/>
+											<Property Name="Min" Type="Real64" Value="-303"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
 					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
@@ -20,54 +32,14 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="FireBox_OnDestroyed" ID="{10C7CB57-F7E1-4132-8E0E-D720269C0DA6}" ShortID="703813826">
+						<Sound Name="FireBox_OnDestroyed" ID="{A0C0871F-F05E-4919-9EB8-3ED2DC883E58}" ShortID="810873599">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+							</PropertyList>
 							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
 								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="fire-torch-whoosh-movement-01" ID="{20D2E49E-2ADA-47D7-940E-B5B8D5869BFF}">
-									<PropertyList>
-										<Property Name="FadeInDuration" Type="Real64" Value="0.0888888888888889"/>
-										<Property Name="FadeOutDuration" Type="Real64" Value="0.418518518518519"/>
-										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-										<Property Name="TrimBegin" Type="Real64" Value="0.1"/>
-										<Property Name="TrimEnd" Type="Real64" Value="1.49259259259259"/>
-										<Property Name="VolumeOffset" Type="Real64">
-											<ValueList>
-												<Value>-4.5</Value>
-											</ValueList>
-										</Property>
-									</PropertyList>
-									<Language>SFX</Language>
-									<AudioFile>fire-torch-whoosh-movement-01.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="695924251"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{20D2E49E-2ADA-47D7-940E-B5B8D5869BFF}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-					</ChildrenList>
-				</RandomSequenceContainer>
-				<BlendContainer Name="FireBox_OnDestroyed_Firing" ID="{C74082BE-98EF-44A0-A4A4-C26510C39D6C}" ShortID="39926685">
-					<ReferenceList>
-						<Reference Name="Conversion">
-							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-						</Reference>
-						<Reference Name="OutputBus">
-							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-						</Reference>
-					</ReferenceList>
-					<ChildrenList>
-						<Sound Name="FireBox_OnDestroyed" ID="{4D220ECB-C478-490D-8011-3047F19ABA3E}" ShortID="316378966">
-							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 								</Reference>
@@ -76,12 +48,12 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="fire-torch-whoosh-movement-01" ID="{4B0DED82-2E59-497F-87E0-06332AEEC037}">
+								<AudioFileSource Name="fire-torch-whoosh-movement-01" ID="{36D2C665-9D34-4C56-8D59-2D325C203E31}">
 									<PropertyList>
 										<Property Name="FadeInDuration" Type="Real64" Value="0.0888888888888889"/>
 										<Property Name="FadeOutDuration" Type="Real64" Value="0.418518518518519"/>
 										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-										<Property Name="TrimBegin" Type="Real64" Value="0.133333333333333"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.285185185185185"/>
 										<Property Name="TrimEnd" Type="Real64" Value="1.57407407407407"/>
 										<Property Name="VolumeOffset" Type="Real64">
 											<ValueList>
@@ -92,17 +64,32 @@
 									<Language>SFX</Language>
 									<AudioFile>fire-torch-whoosh-movement-01.wav</AudioFile>
 									<MediaIDList>
-										<MediaID ID="815984779"/>
+										<MediaID ID="1039121056"/>
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{4B0DED82-2E59-497F-87E0-06332AEEC037}" Platform="Linked"/>
+								<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{36D2C665-9D34-4C56-8D59-2D325C203E31}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>
 				</BlendContainer>
 				<BlendContainer Name="FireBox_OnDestroyed_Frozen" ID="{6532E5C5-2E0C-4906-9D3A-AAD101A85A6B}" ShortID="804968271">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{7EBB07EC-6D3D-4D55-8749-60CA499B03AD}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="404"/>
+											<Property Name="Min" Type="Real64" Value="-303"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -112,8 +99,14 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="FireBox_OnDestroyed" ID="{D7738F71-5520-4FE2-A8B2-D9DDDC551BD0}" ShortID="206912153">
+						<Sound Name="FireBox_OnDestroyed" ID="{E0BA3F2A-456D-4212-9800-36947431D765}" ShortID="170035584">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+							</PropertyList>
 							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 								</Reference>
@@ -122,12 +115,12 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="fire-torch-whoosh-movement-01" ID="{DFD58D24-3891-47F5-BAF4-E1098374BB67}">
+								<AudioFileSource Name="fire-torch-whoosh-movement-01" ID="{88AF9D5F-560B-4691-B2D2-3A100877FEE5}">
 									<PropertyList>
 										<Property Name="FadeInDuration" Type="Real64" Value="0.0888888888888889"/>
 										<Property Name="FadeOutDuration" Type="Real64" Value="0.418518518518519"/>
 										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-										<Property Name="TrimBegin" Type="Real64" Value="0.133333333333333"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.285185185185185"/>
 										<Property Name="TrimEnd" Type="Real64" Value="1.57407407407407"/>
 										<Property Name="VolumeOffset" Type="Real64">
 											<ValueList>
@@ -138,17 +131,67 @@
 									<Language>SFX</Language>
 									<AudioFile>fire-torch-whoosh-movement-01.wav</AudioFile>
 									<MediaIDList>
-										<MediaID ID="815984779"/>
+										<MediaID ID="1039121056"/>
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{DFD58D24-3891-47F5-BAF4-E1098374BB67}" Platform="Linked"/>
+								<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{88AF9D5F-560B-4691-B2D2-3A100877FEE5}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="OnDestroyed_Frozen" ID="{ED0C2F9E-C9D9-471F-B2CC-BB67CAA42374}" ShortID="165427326">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="LDj_Audio - High Pitched Whoosh 2 (Wav)" ID="{9A139D4C-5FB2-42D9-9CF1-879F78F1E772}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.19019778281683"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="1.05797516691862"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.160479379251701"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.93763991244646"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>LDj_Audio - High Pitched Whoosh 2 (Wav).wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="313750501"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="LDj_Audio - High Pitched Whoosh 2 (Wav)" ID="{9A139D4C-5FB2-42D9-9CF1-879F78F1E772}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>
 				</BlendContainer>
 				<BlendContainer Name="FireBox_OnDestroyed_Collide" ID="{62C3DD49-0F2B-43E2-88A1-3D7E0D86DFE9}" ShortID="641326318">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{978996E8-87E3-4160-82F6-C75489ED012D}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="404"/>
+											<Property Name="Min" Type="Real64" Value="-303"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -173,7 +216,7 @@
 										<Property Name="FadeInDuration" Type="Real64" Value="0.0888888888888889"/>
 										<Property Name="FadeOutDuration" Type="Real64" Value="0.418518518518519"/>
 										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-										<Property Name="TrimBegin" Type="Real64" Value="0.133333333333333"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.285185185185185"/>
 										<Property Name="TrimEnd" Type="Real64" Value="1.57407407407407"/>
 										<Property Name="VolumeOffset" Type="Real64">
 											<ValueList>
@@ -184,7 +227,7 @@
 									<Language>SFX</Language>
 									<AudioFile>fire-torch-whoosh-movement-01.wav</AudioFile>
 									<MediaIDList>
-										<MediaID ID="815984779"/>
+										<MediaID ID="1039121056"/>
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
@@ -192,8 +235,14 @@
 								<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{8168032B-0061-4CF2-ADC3-2CAA61A0F254}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
-						<Sound Name="OnCollideActively_1" ID="{C873B6E1-C1C4-45C2-88FF-3B429F3F3238}" ShortID="560809464">
+						<Sound Name="OnCollideActively_2" ID="{A56055E0-A214-40B9-8A71-8647D64BCF33}" ShortID="313774068">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+							</PropertyList>
 							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 								</Reference>
@@ -202,21 +251,36 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="Cardboard Box Crashing v1" ID="{69621E94-FDFF-4A66-AF0B-F221BC523A06}">
+								<AudioFileSource Name="Cardboard Box Crashing v2" ID="{AB59DF1C-39F7-4380-B548-02A19B0DE12F}">
 									<Language>SFX</Language>
-									<AudioFile>Cardboard Box Crashing v1.wav</AudioFile>
+									<AudioFile>Cardboard Box Crashing v2.wav</AudioFile>
 									<MediaIDList>
-										<MediaID ID="78304770"/>
+										<MediaID ID="21993998"/>
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="Cardboard Box Crashing v1" ID="{69621E94-FDFF-4A66-AF0B-F221BC523A06}" Platform="Linked"/>
+								<ActiveSource Name="Cardboard Box Crashing v2" ID="{AB59DF1C-39F7-4380-B548-02A19B0DE12F}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>
 				</BlendContainer>
 				<BlendContainer Name="FireBox_OnDestroyed_Explosion" ID="{9A2CF6FF-B629-4772-8824-AAF88DC85DAD}" ShortID="810668037">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{94C49985-47DB-4B12-9A05-CE0FFB415C6F}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="404"/>
+											<Property Name="Min" Type="Real64" Value="-303"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -226,8 +290,14 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="FireBox_OnDestroyed" ID="{F40846D7-3A33-4232-B0AD-E09D47423B5F}" ShortID="187384841">
+						<Sound Name="FireBox_OnDestroyed" ID="{2248AC5B-BCCD-4606-9AA0-B1C04E0A3D4B}" ShortID="864650248">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+							</PropertyList>
 							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 								</Reference>
@@ -236,12 +306,12 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="fire-torch-whoosh-movement-01" ID="{55EA41FD-E58D-4F6B-8334-F17F14EAC658}">
+								<AudioFileSource Name="fire-torch-whoosh-movement-01" ID="{396257B0-01EF-4762-93A7-5A9F1FBDE1F6}">
 									<PropertyList>
 										<Property Name="FadeInDuration" Type="Real64" Value="0.0888888888888889"/>
 										<Property Name="FadeOutDuration" Type="Real64" Value="0.418518518518519"/>
 										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-										<Property Name="TrimBegin" Type="Real64" Value="0.133333333333333"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.285185185185185"/>
 										<Property Name="TrimEnd" Type="Real64" Value="1.57407407407407"/>
 										<Property Name="VolumeOffset" Type="Real64">
 											<ValueList>
@@ -252,12 +322,112 @@
 									<Language>SFX</Language>
 									<AudioFile>fire-torch-whoosh-movement-01.wav</AudioFile>
 									<MediaIDList>
-										<MediaID ID="815984779"/>
+										<MediaID ID="1039121056"/>
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{55EA41FD-E58D-4F6B-8334-F17F14EAC658}" Platform="Linked"/>
+								<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{396257B0-01EF-4762-93A7-5A9F1FBDE1F6}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="fence explosion" ID="{83AE2945-985C-4356-9B4D-5C659C76AF64}" ShortID="818605671">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>4</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="fence explosion" ID="{49BE1B1B-C8C4-4079-96E5-CA5C2582B5F8}">
+									<Language>SFX</Language>
+									<AudioFile>fence explosion.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="35739125"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="fence explosion" ID="{49BE1B1B-C8C4-4079-96E5-CA5C2582B5F8}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</BlendContainer>
+				<BlendContainer Name="FireBox_OnDestroyed_Common" ID="{16948882-74E7-474D-86FE-3C22FED9137A}" ShortID="803987221">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{AD5FA635-9163-4417-9351-6CEE60A02B53}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="404"/>
+											<Property Name="Min" Type="Real64" Value="-303"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="FireBox_OnDestroyed" ID="{11EAB034-8083-4BCA-8AE1-145C43038460}" ShortID="440854516">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="fire-torch-whoosh-movement-01" ID="{8DDAE5EA-AD83-4263-8AE5-DA88EBF39C9B}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.0888888888888889"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.418518518518519"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.285185185185185"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.57407407407407"/>
+										<Property Name="VolumeOffset" Type="Real64">
+											<ValueList>
+												<Value>-4.4</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>fire-torch-whoosh-movement-01.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1039121056"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="fire-torch-whoosh-movement-01" ID="{8DDAE5EA-AD83-4263-8AE5-DA88EBF39C9B}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>

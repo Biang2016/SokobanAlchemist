@@ -7,6 +7,9 @@ public class PlayerStatHUD : MonoBehaviour
 {
     void Awake()
     {
+        SkillSlotDict.Add(PlayerControllerHelper.KeyBind.J_RightTrigger, FireElementBottle);
+        SkillSlotDict.Add(PlayerControllerHelper.KeyBind.K, IceElementBottle);
+        SkillSlotDict.Add(PlayerControllerHelper.KeyBind.L, LightningElementBottle);
         SkillSlotDict.Add(PlayerControllerHelper.KeyBind.Num1, SkillSlot_Num1);
         SkillSlotDict.Add(PlayerControllerHelper.KeyBind.Num2, SkillSlot_Num2);
         SkillSlotDict.Add(PlayerControllerHelper.KeyBind.Num3, SkillSlot_Num3);
@@ -27,22 +30,22 @@ public class PlayerStatHUD : MonoBehaviour
         GoldBottle.RefreshValue(asps.Gold.Value, asps.Gold.MinValue, asps.Gold.MaxValue);
         asps.Gold.m_NotifyActionSet.OnChanged += GoldBottle.RefreshValue;
 
-        FireElementBottle.Initialize(PlayerControllerHelper.KeyBind.J_RightTrigger);
+        FireElementBottle.Initialize();
         FireElementBottle.RefreshValue(asps.FireElementFragment.Value, asps.FireElementFragment.MinValue, asps.FireElementFragment.MaxValue);
         asps.FireElementFragment.m_NotifyActionSet.OnChanged += FireElementBottle.RefreshValue;
 
-        IceElementBottle.Initialize(PlayerControllerHelper.KeyBind.K);
+        IceElementBottle.Initialize();
         IceElementBottle.RefreshValue(asps.IceElementFragment.Value, asps.IceElementFragment.MinValue, asps.IceElementFragment.MaxValue);
         asps.IceElementFragment.m_NotifyActionSet.OnChanged += IceElementBottle.RefreshValue;
 
-        LightningElementBottle.Initialize(PlayerControllerHelper.KeyBind.L);
+        LightningElementBottle.Initialize();
         LightningElementBottle.RefreshValue(asps.LightningElementFragment.Value, asps.LightningElementFragment.MinValue, asps.LightningElementFragment.MaxValue);
         asps.LightningElementFragment.m_NotifyActionSet.OnChanged += LightningElementBottle.RefreshValue;
 
-        SkillSlot_Num1.Initialize(null);
-        SkillSlot_Num2.Initialize(null);
-        SkillSlot_Num3.Initialize(null);
-        SkillSlot_Num4.Initialize(null);
+        foreach (KeyValuePair<PlayerControllerHelper.KeyBind, ISkillBind> kv in SkillSlotDict)
+        {
+            kv.Value.BindSkill(null);
+        }
     }
 
     #region Health & ActionPoint
@@ -63,7 +66,7 @@ public class PlayerStatHUD : MonoBehaviour
 
     #region SkillSlots
 
-    public Dictionary<PlayerControllerHelper.KeyBind, SkillSlot> SkillSlotDict = new Dictionary<PlayerControllerHelper.KeyBind, SkillSlot>();
+    public Dictionary<PlayerControllerHelper.KeyBind, ISkillBind> SkillSlotDict = new Dictionary<PlayerControllerHelper.KeyBind, ISkillBind>();
 
     public SkillSlot SkillSlot_Num1;
     public SkillSlot SkillSlot_Num2;

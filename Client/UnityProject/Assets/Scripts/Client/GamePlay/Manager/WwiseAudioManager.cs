@@ -7,11 +7,9 @@ public class WwiseAudioManager : MonoSingleton<WwiseAudioManager>
 {
     public WwiseBGMConfiguration WwiseBGMConfiguration;
 
-    public AK.Wwise.Event StopAllEvent;
-
     public void ShutDown()
     {
-        StopAllEvent.Post(gameObject);
+        WwiseBGMConfiguration.BGM_Stop();
     }
 
     public RTPC InMenu_LowPass;

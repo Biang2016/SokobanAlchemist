@@ -6,11 +6,11 @@ public class ActorControllerHelper : ActorMonoHelper
 {
     public Dictionary<TargetEntityType, AgentTarget> AgentTargetDict = new Dictionary<TargetEntityType, AgentTarget>
     {
-        {TargetEntityType.Navigate, new AgentTarget()},
-        {TargetEntityType.Attack, new AgentTarget()},
-        {TargetEntityType.Guard, new AgentTarget()},
-        {TargetEntityType.Follow, new AgentTarget()},
-        {TargetEntityType.Self, new AgentTarget()},
+        {TargetEntityType.Navigate, new AgentTarget {TargetEntityType = TargetEntityType.Navigate}},
+        {TargetEntityType.Attack, new AgentTarget {TargetEntityType = TargetEntityType.Attack}},
+        {TargetEntityType.Guard, new AgentTarget {TargetEntityType = TargetEntityType.Guard}},
+        {TargetEntityType.Follow, new AgentTarget {TargetEntityType = TargetEntityType.Follow}},
+        {TargetEntityType.Self, new AgentTarget {TargetEntityType = TargetEntityType.Self}},
     };
 
     public override void OnHelperUsed()
@@ -48,6 +48,8 @@ public class ActorControllerHelper : ActorMonoHelper
 
 public class AgentTarget
 {
+    public TargetEntityType TargetEntityType;
+
     public Entity TargetEntity
     {
         get { return targetEntity; }
@@ -102,13 +104,13 @@ public class AgentTarget
     {
         if (targetEntity.IsNotNullAndAlive())
         {
-            if (targetEntity.CanBeThreatened)
+            if (TargetEntityType != TargetEntityType.Self && !targetEntity.CanBeThreatened)
             {
-                targetGP = targetEntity.EntityBaseCenter.ToGridPos3D();
+                TargetEntity = null;
             }
             else
             {
-                TargetEntity = null;
+                targetGP = targetEntity.EntityBaseCenter.ToGridPos3D();
             }
         }
         else

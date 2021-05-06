@@ -1,35 +1,40 @@
-﻿using BiangLibrary.ObjectPool;
-using UnityEngine;
+﻿using System.Collections.Generic;
+using BiangLibrary.GameDataFormat.Grid;
 
-public class BoxEffectHelper : PoolObject, IBoxHelper
+public class BoxEffectHelper : BoxMonoHelper
 {
-    public override void OnRecycled()
+    private List<BoxTrail> BoxTrails = new List<BoxTrail>();
+
+    public override void OnHelperRecycled()
     {
-        Stop();
-        base.OnRecycled();
+        base.OnHelperRecycled();
+        HideTrails();
     }
 
-    public void OnBoxUsed()
+    public override void OnHelperUsed()
     {
+        base.OnHelperUsed();
     }
 
-    public void OnBoxPoolRecycled()
+    public void ShowTrails()
     {
-        PoolRecycle();
-    }
-
-    public ParticleSystem ImpulseParticleSystem;
-
-    public void Play()
-    {
-        if (!ImpulseParticleSystem.isPlaying)
+        foreach (GridPos3D offset in Box.GetEntityOccupationGPs_Rotated())
         {
-            ImpulseParticleSystem.Play(true);
+            BoxTrail boxTrail = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxTrail].AllocateGameObject<BoxTrail>(transform);
+            BoxTrails.Add(boxTrail);
+            boxTrail.Play();
+            boxTrail.transform.localPosition = offset;
         }
     }
 
-    public void Stop()
+    public void HideTrails()
     {
-        ImpulseParticleSystem.Stop(true);
+        foreach (BoxTrail boxTrail in BoxTrails)
+        {
+            boxTrail.Stop();
+            boxTrail.PoolRecycle();
+        }
+
+        BoxTrails.Clear();
     }
 }

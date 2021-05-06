@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{A2F6AA7C-7F71-49FC-99B4-5AF4AA6C03B0}" SchemaVersion="97">
+	<Events>
+		<WorkUnit Name="Panel" ID="{A2F6AA7C-7F71-49FC-99B4-5AF4AA6C03B0}" PersistMode="Standalone">
+			<PropertyList>
+				<Property Name="Color" Type="int16" Value="24"/>
+				<Property Name="OverrideColor" Type="bool" Value="True"/>
+			</PropertyList>
+			<ChildrenList>
+				<Folder Name="LearnSkillUpgradePanel" ID="{1F6094FF-0FB9-498A-831D-D71F3B074805}" ShortID="975434631">
+					<ChildrenList>
+						<Event Name="LearnSkillUpgradePanel_OnAddPage" ID="{37EAC33E-3097-40D2-B7BF-2AB705F5C36A}">
+							<ChildrenList>
+								<Action Name="" ID="{88D76DE9-1F51-469D-8527-2195A214C746}" ShortID="427003676">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LearnSkillUpgradePanel_OnAddPage" ID="{62315C66-6928-49A0-846C-4B93FEE44089}" WorkUnitID="{2341878E-01DA-444D-9535-FD1C53A10D47}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LearnSkillUpgradePanel_OnRemovePage" ID="{92F3E2F6-1FBF-451C-BBE2-36039D52F8D6}">
+							<ChildrenList>
+								<Action Name="" ID="{B0E0380F-DD02-4A4C-82D1-F5FCEB883BE2}" ShortID="853838553">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LearnSkillUpgradePanel_OnRemovePage" ID="{B68AA051-DCFA-4CFA-BE40-F584DC2C5B34}" WorkUnitID="{2341878E-01DA-444D-9535-FD1C53A10D47}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LearnSkillUpgradePanel_OnSwitchPage" ID="{1942155E-A4FF-4016-9DED-6D91A3DC0426}">
+							<ChildrenList>
+								<Action Name="" ID="{38ECE66B-BF12-4888-9941-B22D8E249FE3}" ShortID="554349808">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LearnSkillUpgradePanel_OnSwitchPage" ID="{76A09D1B-186A-4A65-A282-30B42BD655FA}" WorkUnitID="{2341878E-01DA-444D-9535-FD1C53A10D47}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="StartMenuPanel" ID="{BD071D90-9B08-4013-8220-3D19B58ECE5C}" ShortID="781680154">
+					<ChildrenList>
+						<Event Name="StartMenuPanel_OnPlayAnim" ID="{3FA33D4B-FC21-41C2-80E2-953C06632873}">
+							<ChildrenList>
+								<Action Name="" ID="{5C48B013-241D-4862-987F-A681A1E0011A}" ShortID="475700572">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="StartMenuPanel_OnPlayAnim" ID="{0F0A2A2E-2AD0-4E53-9ACF-66460685CFCB}" WorkUnitID="{2341878E-01DA-444D-9535-FD1C53A10D47}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="KeyBindMenuPanel" ID="{7EE89730-A1A2-4C4A-9440-31EC2DF6376E}" ShortID="917538035">
+					<ChildrenList>
+						<Event Name="KeyBindMenuPanel_OnDesplay" ID="{85F6A4AF-98EE-4DA7-9A0F-F5128E3FEFF4}">
+							<ChildrenList>
+								<Action Name="" ID="{D1B14208-0259-4629-94B8-0089D3013E96}" ShortID="324183999">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="KeyBindMenuPanel_OnDesplay" ID="{F870514A-C601-422F-A4AC-A91875D6968A}" WorkUnitID="{2341878E-01DA-444D-9535-FD1C53A10D47}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="KeyBindMenuPanel_OnHide" ID="{A0F34F27-2977-4FF5-8D03-2CE1B107023A}"/>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="TransportMenuPanel" ID="{1C7F3F70-6F24-4741-8B83-871045856FCA}" ShortID="561173942">
+					<ChildrenList>
+						<Event Name="TransportMenuPanel_OnHide" ID="{B51E45DD-C0F6-4511-AC83-1693D7D8EE4A}"/>
+						<Event Name="TransportMenuPanel_OnDesplay" ID="{939422A1-75ED-48B9-BFBD-978A59E0CB08}">
+							<ChildrenList>
+								<Action Name="" ID="{7F5104E2-EA7C-4085-8B4B-6ACC234A8ED0}" ShortID="876188911">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="TransportWorldPanel_OnDesplay" ID="{99AAE8DA-FA9B-4881-9CDF-27A6C91F7874}" WorkUnitID="{2341878E-01DA-444D-9535-FD1C53A10D47}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="ExitMenuPanel" ID="{4B012C1B-5C5A-45B7-A4FA-2463F9E0BFA0}" ShortID="775075313">
+					<ChildrenList>
+						<Event Name="ExitMenuPanel_OnHide" ID="{D08B8050-F12D-4047-A9BE-2B3705DABEA9}"/>
+						<Event Name="ExitMenuPanel_OnDesplay" ID="{BA2C2C9C-9A2E-4FD2-9D99-1563FE34E36A}">
+							<ChildrenList>
+								<Action Name="" ID="{C1595F43-33B8-4CD0-9C7B-7C6C4471AF3A}" ShortID="606775267">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="ExitMenuPanel_OnDesplay" ID="{93896BBB-EA2C-456A-8286-ADDC534AE761}" WorkUnitID="{2341878E-01DA-444D-9535-FD1C53A10D47}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="NoticeMenuPanel" ID="{54B704CA-64E3-4AA3-B12E-876EAF11FC48}" ShortID="425021987">
+					<ChildrenList>
+						<Event Name="NoticeMenuPanel_OnHide" ID="{5B75B28D-B988-4CE5-AA84-AC999F78468C}"/>
+						<Event Name="NoticeMenuPanel_OnDesplay" ID="{0731CBC2-48D0-4E29-B69A-0B052F7BDE29}">
+							<ChildrenList>
+								<Action Name="" ID="{C2D703CD-BE62-45E9-8BD0-4F2DF33A0CF4}" ShortID="512311833">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="NoticePanel_OnDesplay" ID="{86CD2AB2-27D1-4460-832F-BB1BC3C23E34}" WorkUnitID="{2341878E-01DA-444D-9535-FD1C53A10D47}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

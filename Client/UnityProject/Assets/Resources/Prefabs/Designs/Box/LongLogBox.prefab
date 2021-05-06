@@ -1043,6 +1043,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: RawFlamethrowerFuelData.FlameType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: RawEntityStatPropSet.FiringBreakFX
       value: Hit_Leaves
       objectReference: {fileID: 0}
@@ -1402,7 +1407,7 @@ PrefabInstance:
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: RawEntityStatPropSet.CollideDamageZ.BaseValue
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -1518,6 +1523,11 @@ PrefabInstance:
         type: 3}
       propertyPath: RawFlamethrowerFuelData.RawEntitySkillActions_ForFlamethrower.Array.data[0].InitWorldModuleGUID
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawFlamethrowerFuelData.RawEntitySkillActions_ForFlamethrower.Array.data[0].InitStaticLayoutGUID
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -1849,17 +1859,57 @@ PrefabInstance:
       propertyPath: RawFlamethrowerFuelData.RawEntitySkillActions_ForFlamethrower.Array.data[0].RawEntityBuffs_Enter.Array.data[0].BuffFX_Config.AnimationCurve.m_Curve.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 103343841482681952, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 534155500011443078, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: OnSlideStop.WwiseObjectReference
       value: 
-      objectReference: {fileID: 11400000, guid: df6aecb62df704215971e48f16cc441d,
+      objectReference: {fileID: 0}
+    - target: {fileID: 534155500011443078, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: OnBeingKicked.WwiseObjectReference
+      value: 
+      objectReference: {fileID: 11400000, guid: 14af7d0dcc54b46c0971eea33a48fecd,
         type: 2}
     - target: {fileID: 534155500011443078, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: OnBeingPushed.WwiseObjectReference
       value: 
       objectReference: {fileID: 11400000, guid: 30341745ab51e4299898a246494068f9,
+        type: 2}
+    - target: {fileID: 534155500011443078, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: OnDestroyed_Common.WwiseObjectReference
+      value: 
+      objectReference: {fileID: 11400000, guid: 35e2e781a29c94e8fac04d9ab3424d12,
+        type: 2}
+    - target: {fileID: 534155500011443078, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: OnDestroyed_ByFiringDamage.WwiseObjectReference
+      value: 
+      objectReference: {fileID: 11400000, guid: 33e09dcb16f6c4218a78921477d00da2,
+        type: 2}
+    - target: {fileID: 534155500011443078, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: OnDestroyed_ByFrozenDamage.WwiseObjectReference
+      value: 
+      objectReference: {fileID: 11400000, guid: be6e5853556dc4768bedb3437867dba0,
+        type: 2}
+    - target: {fileID: 534155500011443078, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: OnDestroyed_ByCollideDamage.WwiseObjectReference
+      value: 
+      objectReference: {fileID: 11400000, guid: d98624429f7bf44618581aa1050b52b1,
+        type: 2}
+    - target: {fileID: 534155500011443078, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: OnDestroyed_ByExplodeDamage.WwiseObjectReference
+      value: 
+      objectReference: {fileID: 11400000, guid: 7ed21f7033b8e497d9d76d7100a4723b,
         type: 2}
     - target: {fileID: 570053385983063175, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}

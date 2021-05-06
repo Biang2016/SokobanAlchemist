@@ -19,26 +19,26 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
             if (collision.gameObject.layer == LayerManager.Instance.Layer_Enemy)
             {
                 Actor actor = collision.gameObject.GetComponentInParent<Actor>();
-                actor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
-                Box.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.FrozenBeCollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
+                actor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractEntity);
+                Box.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.FrozenBeCollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractEntity);
             }
             else if (collision.gameObject.layer == LayerManager.Instance.Layer_Box || collision.gameObject.layer == LayerManager.Instance.Layer_BoxOnlyDynamicCollider)
             {
                 Box targetBox = collision.gameObject.GetComponentInParent<Box>();
                 if (targetBox.FrozenActor.IsNotNullAndAlive())
                 {
-                    targetBox.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
-                    Box.FrozenActor.EntityBuffHelper.Damage(targetBox.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
+                    targetBox.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractEntity);
+                    Box.FrozenActor.EntityBuffHelper.Damage(targetBox.FrozenActor.EntityStatPropSet.GetCollideDamageByAxis(kickLocalAxis).GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractEntity);
                 }
                 else
                 {
-                    Box.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.FrozenBeCollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
+                    Box.FrozenActor.EntityBuffHelper.Damage(Box.FrozenActor.EntityStatPropSet.FrozenBeCollideDamage.GetModifiedValue, EntityBuffAttribute.CollideDamage, Box.LastInteractEntity);
                 }
             }
             else if (collision.gameObject.layer == LayerManager.Instance.Layer_Wall ||
                      collision.gameObject.layer == LayerManager.Instance.Layer_Ground)
             {
-                Box.FrozenActor.EntityBuffHelper.Damage(1, EntityBuffAttribute.CollideDamage, Box.LastInteractActorGUID);
+                Box.FrozenActor.EntityBuffHelper.Damage(1, EntityBuffAttribute.CollideDamage, Box.LastInteractEntity);
             }
 
             if (Box.FrozenActor.IsNotNullAndAlive())
@@ -51,6 +51,16 @@ public class BoxPassiveSkill_EnemyFrozenBox : BoxPassiveSkill
     public override void OnDestroyEntity()
     {
         base.OnDestroyEntity();
+        if (Box.FrozenActor != null)
+        {
+            Box.FrozenActor.EntityFrozenHelper.FrozeIntoIceBlock(
+                Box.FrozenActor.EntityStatPropSet.FrozenLevel.Value,
+                0,
+                Box.FrozenActor.EntityStatPropSet.FrozenLevel.MinValue,
+                Box.FrozenActor.EntityStatPropSet.FrozenLevel.MaxValue
+            ); // 此举为了避免Box因非战斗原因先于Actor销毁时，要先将Actor释放出来，否则Actor无法进入正常销毁逻辑
+        }
+
         Box.FrozenActor = null;
     }
 }

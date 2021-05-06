@@ -89,6 +89,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WorldFeature: 0
+  WorldName_EN: Dragon Temple
+  WorldName_ZH: "\u9F99\u4E4B\u795E\u6BBF"
+  WorldDescription_EN: 'Suggestion:  hp > 20, ap > 10'
+  WorldDescription_ZH: "\u5EFA\u8BAE: hp > 20, ap > 10"
+  WorldIcon:
+    TypeDefineType: 12
+    TypeGUID: (014b772e-8235-4392-a175-e380156c63fa)
   DefaultWorldActorBornPointAlias: DragonTempleSection_Start
   UseSpecialPlayerEnterESPS: 0
   Raw_PlayerEnterESPS:
@@ -328,9 +335,6 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
-  UseSpecialPlayerEnterSkillSet: 0
-  Raw_PlayerEnterActiveSkillSOs: []
-  Raw_PlayerEnterPassiveSkillSOs: []
   CameraConfigData:
     HorAngle: 0
     VerAngle: 50
@@ -445,6 +449,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4473764230237189337}
     m_Modifications:
+    - target: {fileID: 7597924716441724111, guid: 6893069b7faa5ac44807b39ef5656e6d,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7597924716441724111, guid: 6893069b7faa5ac44807b39ef5656e6d,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7729307243981049460, guid: 6893069b7faa5ac44807b39ef5656e6d,
         type: 3}
       propertyPath: m_Name
@@ -729,6 +743,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8595330229776249074, guid: 3822bdf9c4f088247954b44068d0de3e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8595330229776249074, guid: 3822bdf9c4f088247954b44068d0de3e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3822bdf9c4f088247954b44068d0de3e, type: 3}

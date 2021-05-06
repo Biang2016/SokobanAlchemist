@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "Hill555RockBox-\u7834\u574F\u6389\u843DEntity_(1c805b32-90ce-4e24-a6fa-44b2d57c7146)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        SkillGUID: (1c805b32-90ce-4e24-a6fa-44b2d57c7146)
+        SkillAlias: "Hill555RockBox-\u7834\u574F\u6389\u843DEntity"
+        SkillName_EN: 
+        SkillName_ZH: 
+        SkillIcon:
+          TypeDefineType: 0
+          TypeGUID: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
+        PassiveSkillCondition: 2048
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
+        RawEntitySkillActions:
+        - id: 1
+    00000001:
+      type: {class: EntitySkillAction_DropBox, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        DropBoxList:
+        - ProbabilityMin: 0.4
+          ProbabilityMax: 0.8
+          ItemType:
+            TypeDefineType: 0
+            TypeGUID: (c47a38df-48a7-4681-b876-9564f3688516)
+        - ProbabilityMin: 1.2
+          ProbabilityMax: 3
+          ItemType:
+            TypeDefineType: 0
+            TypeGUID: (a2086c05-0f2a-450f-8a64-7ce2b66cea21)
+        - ProbabilityMin: 0.8
+          ProbabilityMax: 0.8
+          ItemType:
+            TypeDefineType: 0
+            TypeGUID: (b21d38f9-143e-43a6-9094-f1a790641d96)
+        - ProbabilityMin: 0.3
+          ProbabilityMax: 0.3
+          ItemType:
+            TypeDefineType: 0
+            TypeGUID: (374e935f-27dc-4ac2-aeed-c78fd70ae29e)
+        - ProbabilityMin: 0.7
+          ProbabilityMax: 1.2
+          ItemType:
+            TypeDefineType: 0
+            TypeGUID: (096dcca9-e0d2-439e-9304-94a00bb4f36b)
+        - ProbabilityMin: 0.7
+          ProbabilityMax: 1.2
+          ItemType:
+            TypeDefineType: 0
+            TypeGUID: (1fd4d701-1e6c-4bdf-a28d-2f7bf02e7bb9)

@@ -13,13 +13,6 @@ public class EntityWwiseHelper : EntityMonoHelper
     public Event OnBeingPushed;
 
     [BoxGroup("ForBox")]
-    [ReadOnly]
-    public Event OnSliding;
-
-    [BoxGroup("ForBox")]
-    public Event OnSlideStop;
-
-    [BoxGroup("ForBox")]
     public Event OnBeingLift;
 
     [BoxGroup("ForBox")]
@@ -33,10 +26,6 @@ public class EntityWwiseHelper : EntityMonoHelper
 
     [BoxGroup("Common")]
     public Event OnBeingLit;
-
-    [BoxGroup("Common")]
-    [ReadOnly]
-    public Event OnBurning;
 
     [BoxGroup("Common")]
     public Event OnBurningEnd;
@@ -66,16 +55,40 @@ public class EntityWwiseHelper : EntityMonoHelper
     public Event OnCollidePassively;
 
     [BoxGroup("ForActor")]
+    public Event OnGainActionPoint;
+
+    [BoxGroup("ForActor")]
+    public Event OnGainMaxActionPoint;
+
+    [BoxGroup("ForActor")]
+    public Event OnGainMaxHealth;
+
+    [BoxGroup("ForActor_Player")]
     public Event OnGainGold;
 
-    [BoxGroup("ForActor")]
+    [BoxGroup("ForActor_Player")]
+    public Event OnSpendGold;
+
+    [BoxGroup("ForActor_Player")]
     public Event OnGainFireElement;
 
-    [BoxGroup("ForActor")]
+    [BoxGroup("ForActor_Player")]
     public Event OnGainIceElement;
 
-    [BoxGroup("ForActor")]
+    [BoxGroup("ForActor_Player")]
     public Event OnGainLightningElement;
+
+    [BoxGroup("ForActor_Player")]
+    public Event OnLowHealthWarning;
+
+    [BoxGroup("ForActor_Player")]
+    public Event OnActionPointNotEnough;
+
+    [BoxGroup("ForActor_Player")]
+    public Event OnGoldNotEnough;
+
+    [BoxGroup("ForActor_Player")]
+    public Event OnElementsNotEnough;
 
     [BoxGroup("ForActor")]
     public Event OnBeingDamaged;

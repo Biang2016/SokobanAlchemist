@@ -19,27 +19,40 @@ MonoBehaviour:
     00000000:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (3113b09d-ea27-4f63-9a7d-19fc96b56cc4)
         SkillAlias: "\u7535\u51FB\u514D\u75AB"
+        SkillName_EN: Lightning Immune
+        SkillName_ZH: "\u7535\u51FB\u514D\u75AB"
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: (cac1be1e-576d-4b00-a17f-e156ac3bc019)
-        SkillDescription: Immune to lightning damage and effects.
-        IsAddedDuringGamePlay: 0
-        InitWorldModuleGUID: 0
+        SkillDescription_EN: Immune to any lightning effect and damage
+        SkillDescription_ZH: "\u514D\u75AB\u6240\u6709\u7535\u51FB\u6548\u679C\u548C\u4F24\u5BB3"
+        PlayerCanLearn: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 1
+        SkillCategoryType: 4
+        SkillRankType: 64
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
         PassiveSkillCondition: 1
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
-        EntityStatChangeType: 0
-        EntityStatChangeThreshold: 0
-        EntityStatChangeThresholdOperator: 0
-        EntityPropertyChangeType: 0
-        EntityPropertyChangeThreshold: 0
-        EntityPropertyChangeThresholdOperator: 0
         MultiEventTrigger: 0
         ListenLevelEventAliasList: []
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
         RawEntitySkillActions:
         - id: 1
     00000001:

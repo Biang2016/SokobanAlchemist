@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
+public class BoxColliderHelper : BoxMonoHelper
 {
     [SerializeField]
     private GameObject NormalColliderRoot;
@@ -68,21 +68,24 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         }
     }
 
-    public void OnBoxUsed()
+    public override void OnHelperUsed()
     {
+        base.OnHelperUsed();
         NormalColliderRoot.SetActive(true);
         StaticColliderRoot.SetActive(true);
         BoxOnlyDynamicColliderRoot.SetActive(true);
     }
 
-    public void OnBoxPoolRecycled()
+    public override void OnHelperRecycled()
     {
+        base.OnHelperRecycled();
         StaticColliderEnable = false;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = false;
         NormalColliderRoot.SetActive(false);
         StaticColliderRoot.SetActive(false);
         BoxOnlyDynamicColliderRoot.SetActive(false);
+        if (Entity.IsTriggerEntity) gameObject.SetActive(false);
     }
 
     private bool defaultBoxOnlyDynamicColliderRootActive;
@@ -175,7 +178,17 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         BoxOnlyDynamicCollidersEnable = true;
     }
 
-    public void OnDropFromEntity()
+    public void OnDropOutFromEntity_Up()
+    {
+        StaticColliderEnable = false;
+        DynamicColliderEnable = false;
+        BoxOnlyDynamicCollidersEnable = false;
+        Box.BoxIndicatorHelper.IsOn = false;
+        BoxOnlyDynamicColliderRoot.SetActive(true);
+        if (Entity.IsTriggerEntity) gameObject.SetActive(true);
+    }
+
+    public void OnDropOutFromEntity_Down()
     {
         StaticColliderEnable = false;
         DynamicColliderEnable = false;
@@ -206,7 +219,8 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = false;
-        Box.BoxIndicatorHelper.IsOn = true;
+        Box.BoxIndicatorHelper.IsOn = !Entity.IsTriggerEntity;
         BoxOnlyDynamicColliderRoot.SetActive(defaultBoxOnlyDynamicColliderRootActive);
+        if (Entity.IsTriggerEntity) gameObject.SetActive(false);
     }
 }

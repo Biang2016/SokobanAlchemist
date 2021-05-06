@@ -233,15 +233,16 @@ public class Actor : Entity
                             if (correctOccupation) return; // 防止角色和其他Entity卡住
                             else
                             {
-                                targetGridModule[TypeDefineType.Actor, localGP] = null; // todo 执行到这里说明是bug，先这样处理，以后再研究
+                                targetGridModule[TypeDefineType.Actor, localGP, false, false, IsTriggerEntity, GUID] = null; // todo 执行到这里说明是bug，先这样处理，以后再研究
                             }
                         }
                     }
                 }
 
-                if (!IsFrozen && !IsTriggerEntity) UnRegisterFromModule(curWorldGP, EntityOrientation);
+                if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
                 curWorldGP = value;
-                if (!IsFrozen && !IsTriggerEntity) RegisterInModule(curWorldGP, EntityOrientation);
+                RealtimeWorldGP = value;
+                if (!IsFrozen) RegisterInModule(curWorldGP, EntityOrientation);
             }
         }
     }
@@ -273,10 +274,10 @@ public class Actor : Entity
         }
     }
 
+    // 这个函数在WorldModule初始化时不执行，已经通过curWorldGP赋值来规避
     public void UnRegisterFromModule(GridPos3D oldWorldGP, GridPosR.Orientation oldOrientation)
     {
         if (IsRecycling) return;
-        if (IsTriggerEntity) return;
         List<GridPos3D> occupationData_Rotated = ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[oldOrientation];
         foreach (GridPos3D offset in occupationData_Rotated)
         {
@@ -285,15 +286,15 @@ public class Actor : Entity
             if (currentGridModule != null)
             {
                 GridPos3D currentGridLocalGP = currentGridModule.WorldGPToLocalGP(gridPos);
-                currentGridModule[TypeDefineType.Actor, currentGridLocalGP] = null;
+                currentGridModule[TypeDefineType.Actor, currentGridLocalGP, false, false, IsTriggerEntity, GUID] = null;
             }
         }
     }
 
+    // 这个函数在WorldModule初始化时不执行，已经通过curWorldGP赋值来规避
     public void RegisterInModule(GridPos3D newWorldGP, GridPosR.Orientation newOrientation)
     {
         if (IsRecycling) return;
-        if (IsTriggerEntity) return;
         foreach (GridPos3D offset in ConfigManager.GetEntityOccupationData(EntityTypeIndex).EntityIndicatorGPs_RotatedDict[newOrientation])
         {
             GridPos3D gridPos = newWorldGP + offset;
@@ -301,7 +302,7 @@ public class Actor : Entity
             if (currentGridModule != null)
             {
                 GridPos3D currentGridLocalGP = currentGridModule.WorldGPToLocalGP(gridPos);
-                currentGridModule[TypeDefineType.Actor, currentGridLocalGP] = this;
+                currentGridModule[TypeDefineType.Actor, currentGridLocalGP, false, false, IsTriggerEntity, GUID] = this;
             }
         }
     }
@@ -316,9 +317,9 @@ public class Actor : Entity
 
         // Actor由于限制死平面必须是正方形，因此可以用左下角坐标相减得到核心坐标偏移量；在旋转时应用此偏移量，可以保证平面正方形仍在老位置
         GridPos offset = ActorRotateWorldGPOffset(ActorWidth, newOrientation) - ActorRotateWorldGPOffset(ActorWidth, EntityOrientation);
-        if (!IsFrozen && !IsTriggerEntity) UnRegisterFromModule(curWorldGP, EntityOrientation);
+        if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
         base.SwitchEntityOrientation(newOrientation);
-        if (!IsFrozen && !IsTriggerEntity) RegisterInModule(curWorldGP, newOrientation);
+        if (!IsFrozen) RegisterInModule(curWorldGP, newOrientation);
 
         transform.position = new Vector3(offset.x + curWorldGP.x, transform.position.y, offset.z + curWorldGP.z);
         transform.rotation = Quaternion.Euler(0, (int) newOrientation * 90f, 0);
@@ -382,14 +383,6 @@ public class Actor : Entity
     #endregion
 
     #region 特效
-
-    [FoldoutGroup("特效")]
-    [LabelText("@\"踢特效\t\"+KickFX")]
-    public FXConfig KickFX = new FXConfig();
-
-    [FoldoutGroup("特效")]
-    [LabelText("踢特效锚点")]
-    public Transform KickFXPivot;
 
     [FoldoutGroup("特效")]
     [LabelText("@\"受伤特效\t\"+InjureFX")]
@@ -614,33 +607,39 @@ public class Actor : Entity
     {
         gameObject.SetActive(true);
         base.OnUsed();
-        EntityArtHelper?.OnHelperUsed();
-        EntityWwiseHelper.OnHelperUsed();
-        EntityModelHelper.OnHelperUsed();
-        EntityIndicatorHelper.OnHelperUsed();
-        EntityBuffHelper.OnHelperUsed();
-        EntityFrozenHelper.OnHelperUsed();
-        EntityTriggerZoneHelper?.OnHelperUsed();
-        EntityCollectHelper?.OnHelperUsed();
-        EntityGrindTriggerZoneHelper?.OnHelperUsed();
+        EntityMonoHelpers.Clear();
+        EntityMonoHelpers.Add(EntityArtHelper);
+        EntityMonoHelpers.Add(EntityWwiseHelper);
+        EntityMonoHelpers.Add(EntityModelHelper);
+        EntityMonoHelpers.Add(EntityIndicatorHelper);
+        EntityMonoHelpers.Add(EntityBuffHelper);
+        EntityMonoHelpers.Add(EntityFrozenHelper);
+        EntityMonoHelpers.Add(EntityTriggerZoneHelper);
+        EntityMonoHelpers.Add(EntityCollectHelper);
+        EntityMonoHelpers.Add(EntityGrindTriggerZoneHelper);
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
-            h.OnHelperUsed();
+            EntityMonoHelpers.Add(h);
         }
 
         foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
         {
-            h.OnHelperUsed();
+            EntityMonoHelpers.Add(h);
         }
 
-        ActorControllerHelper?.OnHelperUsed();
-        ActorPushHelper.OnHelperUsed();
-        ActorFaceHelper.OnHelperUsed();
-        ActorSkinHelper.OnHelperUsed();
-        ActorLaunchArcRendererHelper.OnHelperUsed();
-        ActorBattleHelper.OnHelperUsed();
-        ActorBoxInteractHelper.OnHelperUsed();
-        ActorSkillLearningHelper?.OnHelperUsed();
+        EntityMonoHelpers.Add(ActorControllerHelper);
+        EntityMonoHelpers.Add(ActorPushHelper);
+        EntityMonoHelpers.Add(ActorFaceHelper);
+        EntityMonoHelpers.Add(ActorSkinHelper);
+        EntityMonoHelpers.Add(ActorLaunchArcRendererHelper);
+        EntityMonoHelpers.Add(ActorBattleHelper);
+        EntityMonoHelpers.Add(ActorBoxInteractHelper);
+        EntityMonoHelpers.Add(ActorSkillLearningHelper);
+
+        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
+        {
+            entityMonoHelper?.OnHelperUsed();
+        }
 
         ActorMoveColliderRoot.SetActive(true);
     }
@@ -674,37 +673,15 @@ public class Actor : Entity
         CurForward = Vector3.forward;
         WorldGP = GridPos3D.Zero;
         LastWorldGP = GridPos3D.Zero;
+        RealtimeWorldGP = GridPos3D.Zero;
         ThrowState = ThrowStates.None;
         ClearJumpParams();
         ThrowWhenDie();
 
-        EntityArtHelper?.OnHelperRecycled();
-        EntityWwiseHelper.OnHelperRecycled();
-        EntityModelHelper.OnHelperRecycled();
-        EntityIndicatorHelper.OnHelperRecycled();
-        EntityBuffHelper.OnHelperRecycled();
-        EntityFrozenHelper.OnHelperRecycled();
-        EntityTriggerZoneHelper?.OnHelperRecycled();
-        EntityCollectHelper?.OnHelperRecycled();
-        EntityGrindTriggerZoneHelper?.OnHelperRecycled();
-        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
         {
-            h.OnHelperRecycled();
+            entityMonoHelper?.OnHelperRecycled();
         }
-
-        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
-        {
-            h.OnHelperRecycled();
-        }
-
-        ActorControllerHelper?.OnHelperRecycled();
-        ActorPushHelper.OnHelperRecycled();
-        ActorFaceHelper.OnHelperRecycled();
-        ActorSkinHelper.OnHelperRecycled();
-        ActorLaunchArcRendererHelper.OnHelperRecycled();
-        ActorBattleHelper.OnHelperRecycled();
-        ActorBoxInteractHelper.OnHelperRecycled();
-        ActorSkillLearningHelper?.OnHelperRecycled();
 
         UnInitActiveSkills();
         UnInitPassiveSkills();
@@ -716,6 +693,7 @@ public class Actor : Entity
         StopAllCoroutines();
         gameObject.SetActive(false);
         BattleManager.Instance.RemoveActor(this);
+        EntityMonoHelpers.Clear();
         base.OnRecycled();
         IsRecycling = false;
     }
@@ -757,7 +735,7 @@ public class Actor : Entity
     /// <param name="initWorldModuleGUID"></param>
     public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
     {
-        base.Setup(initWorldModuleGUID);
+        base.Setup(entityData, initWorldModuleGUID);
         EntityTypeIndex = entityData.EntityTypeIndex;
         ActorType = entityData.EntityType.TypeName;
         ActorCategory = entityData.EntityTypeIndex == ConfigManager.Actor_PlayerIndex ? ActorCategory.Player : ActorCategory.Creature;
@@ -802,6 +780,24 @@ public class Actor : Entity
         ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
     }
 
+    protected override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+        base.RecordEntityExtraStates(entityDataExtraStates);
+        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
+        {
+            entityMonoHelper?.RecordEntityExtraStates(entityDataExtraStates);
+        }
+    }
+
+    protected override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+        base.ApplyEntityExtraStates(entityDataExtraStates);
+        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
+        {
+            entityMonoHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        }
+    }
+
     private void Update()
     {
         if (!BattleManager.Instance.IsStart) return;
@@ -839,18 +835,6 @@ public class Actor : Entity
         if (ENABLE_ACTOR_MOVE_LOG && WorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {WorldGP}");
         LastWorldGP = WorldGP;
         WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
-    }
-
-    protected override void InitPassiveSkills()
-    {
-        base.InitPassiveSkills();
-        // TODO load learned skills.
-    }
-
-    protected override void InitActiveSkills()
-    {
-        base.InitActiveSkills();
-        // TODO load learned skills.
     }
 
     public void TransportPlayerGridPos(GridPos3D worldGP, float lerpTime = 0)
@@ -986,8 +970,16 @@ public class Actor : Entity
             ActorArtHelper.SetIsPushing(false);
             if (HasRigidbody)
             {
-                RigidBody.drag = 0f;
-                RigidBody.mass = 1f;
+                if (CannotAct && !EntityBuffHelper.IsBeingRepulsed)
+                {
+                    RigidBody.drag = 100f;
+                    RigidBody.mass = 1f;
+                }
+                else
+                {
+                    RigidBody.drag = 0f;
+                    RigidBody.mass = 1f;
+                }
             }
 
             CurMoveAttempt = Vector3.zero;
@@ -1144,20 +1136,6 @@ public class Actor : Entity
 
         TransportPlayerGridPos(WorldGP + CurForward.ToGridPos3D() * finalDashDistance, 0.3f);
         temp_DashMaxDistance = 0;
-    }
-
-    public void DoKickBox()
-    {
-        Ray ray = new Ray(transform.position - transform.forward * 0.49f, transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1.49f, LayerManager.Instance.LayerMask_BoxIndicator, QueryTriggerInteraction.Collide))
-        {
-            Box box = hit.collider.gameObject.GetComponentInParent<Box>();
-            if (box && box.Kickable && ActorBoxInteractHelper.CanInteract(InteractSkillType.Kick, box.EntityTypeIndex))
-            {
-                box.Kick(CurForward, KickForce, this);
-                FX kickFX = FXManager.Instance.PlayFX(KickFX, KickFXPivot.position);
-            }
-        }
     }
 
     public void SwapBox()
@@ -1574,7 +1552,7 @@ public class Actor : Entity
         if (IsDestroying) return;
         base.DestroySelf();
         IsDestroying = true;
-        if (!IsFrozen && !IsTriggerEntity) UnRegisterFromModule(WorldGP, EntityOrientation);
+        if (!IsFrozen) UnRegisterFromModule(WorldGP, EntityOrientation);
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
             ps.OnBeforeDestroyEntity();

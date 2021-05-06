@@ -11,10 +11,22 @@ using UnityEngine.Events;
 [Serializable]
 public abstract class EntityActiveSkill : EntitySkill
 {
+    public override string GetSkillDescription_EN => base.GetSkillDescription_EN + $" CD: {(SkillsPropertyCollection.Cooldown.GetModifiedValue / 1000f):F1}s";
+    public override string GetSkillDescription_ZH => base.GetSkillDescription_ZH + $" CD: {(SkillsPropertyCollection.Cooldown.GetModifiedValue / 1000f):F1}s";
+
     internal EntityActiveSkill ParentActiveSkill;
 
     [LabelText("作用阵营")]
     public RelativeCamp TargetCamp;
+
+    [LabelText("是否绑定键位")]
+    [PropertyOrder(-8)]
+    public bool NeedBindKey;
+
+    [LabelText("技能绑定键位")]
+    [PropertyOrder(-8)]
+    [ShowIf("NeedBindKey")]
+    public PlayerControllerHelper.KeyBind SkillKeyBind;
 
     #region 绑定角色技能参数
 
@@ -415,13 +427,14 @@ public abstract class EntityActiveSkill : EntitySkill
     {
         currentExecutingCooldownTime = cooldownTime;
         PrepareSkillInfo(targetEntityType);
-        yield return WingUp(wingUpTime);
+        ConsumeResources();
+        if (wingUpTime > 0) yield return WingUp(wingUpTime);
         OnWingUpPhaseComplete();
         OnWingUpPhaseCompleteCallback?.Invoke();
         yield return Cast(targetEntityType, castDuration);
         OnCastPhaseComplete();
         OnCastPhaseCompleteCallback?.Invoke();
-        yield return Recover(recoveryTime);
+        if (recoveryTime > 0) yield return Recover(recoveryTime);
         OnRecoveryPhaseComplete();
         OnRecoveryPhaseCompleteCallback?.Invoke();
         SkillPhase = ActiveSkillPhase.CoolingDown;
@@ -443,15 +456,18 @@ public abstract class EntityActiveSkill : EntitySkill
         }
     }
 
-    internal UnityAction<ActiveSkillPhase, float, float> OnSkillWingingUp;
-
-    protected virtual IEnumerator WingUp(float wingUpTime)
+    protected virtual void ConsumeResources()
     {
         Entity.EntityStatPropSet.StatDict[EntityStatType.ActionPoint].SetValue(Entity.EntityStatPropSet.StatDict[EntityStatType.ActionPoint].Value - SkillsPropertyCollection.ConsumeActionPoint.GetModifiedValue);
         Entity.EntityStatPropSet.StatDict[EntityStatType.FireElementFragment].SetValue(Entity.EntityStatPropSet.StatDict[EntityStatType.FireElementFragment].Value - SkillsPropertyCollection.ConsumeFireElementFragment.GetModifiedValue);
         Entity.EntityStatPropSet.StatDict[EntityStatType.IceElementFragment].SetValue(Entity.EntityStatPropSet.StatDict[EntityStatType.IceElementFragment].Value - SkillsPropertyCollection.ConsumeIceElementFragment.GetModifiedValue);
         Entity.EntityStatPropSet.StatDict[EntityStatType.LightningElementFragment].SetValue(Entity.EntityStatPropSet.StatDict[EntityStatType.LightningElementFragment].Value - SkillsPropertyCollection.ConsumeLightningElementFragment.GetModifiedValue);
+    }
 
+    internal UnityAction<ActiveSkillPhase, float, float> OnSkillWingingUp;
+
+    protected virtual IEnumerator WingUp(float wingUpTime)
+    {
         Entity.EntityWwiseHelper.OnSkillPreparing[(int) EntitySkillIndex].Post(Entity.gameObject);
         SkillPhase = ActiveSkillPhase.WingingUp;
         // todo Entity 前摇animation， 且按时间缩放
@@ -737,6 +753,8 @@ public abstract class EntityActiveSkill : EntitySkill
         EntityActiveSkill newEAS = (EntityActiveSkill) cloneData;
         newEAS.SkillsPropertyCollection = SkillsPropertyCollection.Clone();
         newEAS.TargetCamp = TargetCamp;
+        newEAS.NeedBindKey = NeedBindKey;
+        newEAS.SkillKeyBind = SkillKeyBind;
         newEAS.TriggerWhenMissProbabilityPercent = TriggerWhenMissProbabilityPercent;
         newEAS.EntitySkillConditions = EntitySkillConditions.Clone<EntitySkillCondition, EntitySkillCondition>();
         newEAS.WingUpCanMove = WingUpCanMove;
@@ -753,6 +771,8 @@ public abstract class EntityActiveSkill : EntitySkill
         EntityActiveSkill srcEAS = (EntityActiveSkill) srcData;
         srcEAS.SkillsPropertyCollection.ApplyDataTo(SkillsPropertyCollection);
         TargetCamp = srcEAS.TargetCamp;
+        NeedBindKey = srcEAS.NeedBindKey;
+        SkillKeyBind = srcEAS.SkillKeyBind;
         TriggerWhenMissProbabilityPercent = srcEAS.TriggerWhenMissProbabilityPercent;
         if (EntitySkillConditions.Count != srcEAS.EntitySkillConditions.Count)
         {

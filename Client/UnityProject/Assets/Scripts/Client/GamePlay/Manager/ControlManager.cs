@@ -84,8 +84,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
 
     public ButtonState Battle_ToggleBattleTip = new ButtonState() {ButtonName = ButtonNames.Battle_ToggleBattleTip};
 
-    public ButtonState Battle_LeftRotateCamera = new ButtonState() {ButtonName = ButtonNames.Battle_LeftRotateCamera};
-    public ButtonState Battle_RightRotateCamera = new ButtonState() {ButtonName = ButtonNames.Battle_RightRotateCamera};
+    public ButtonState Battle_LeftSwitch = new ButtonState() {ButtonName = ButtonNames.Battle_LeftSwitch};
+    public ButtonState Battle_RightSwitch = new ButtonState() {ButtonName = ButtonNames.Battle_RightSwitch};
 
     #endregion
 
@@ -131,14 +131,18 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     }
 
     public ButtonState Common_Confirm = new ButtonState() {ButtonName = ButtonNames.Common_Confirm};
-    public ButtonState Common_Debug = new ButtonState() {ButtonName = ButtonNames.Common_Debug};
     public ButtonState Common_Exit = new ButtonState() {ButtonName = ButtonNames.Common_Exit};
     public ButtonState Common_Tab = new ButtonState() {ButtonName = ButtonNames.Common_Tab};
     public ButtonState Common_RestartGame = new ButtonState() {ButtonName = ButtonNames.Common_RestartGame};
-    public ButtonState Common_PauseGame = new ButtonState() {ButtonName = ButtonNames.Common_Pause};
+    public ButtonState Common_ReloadGame = new ButtonState() {ButtonName = ButtonNames.Common_ReloadGame};
+    public ButtonState Common_PauseGame = new ButtonState() {ButtonName = ButtonNames.Common_PauseGame};
     public ButtonState Common_ToggleUI = new ButtonState() {ButtonName = ButtonNames.Common_ToggleUI};
-    public ButtonState Common_ToggleDebugButton = new ButtonState() {ButtonName = ButtonNames.Common_ToggleDebugButton};
     public ButtonState Common_InteractiveKey = new ButtonState() {ButtonName = ButtonNames.Common_InteractiveKey};
+    public ButtonState Common_SlowDownGame = new ButtonState() {ButtonName = ButtonNames.Common_SlowDownGame};
+    public ButtonState Common_ReturnToOpenWorld = new ButtonState() {ButtonName = ButtonNames.Common_ReturnToOpenWorld};
+    public ButtonState Common_SkillPreviewPanel = new ButtonState() {ButtonName = ButtonNames.Common_SkillPreviewPanel};
+    public ButtonState Common_DebugConsole = new ButtonState() {ButtonName = ButtonNames.Common_DebugConsole};
+    public ButtonState Common_ToggleDebugPanel = new ButtonState() {ButtonName = ButtonNames.Common_ToggleDebugPanel};
 
     #endregion
 
@@ -249,22 +253,26 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         Battle_Skill[(int) PlayerNumber.Player2, 9] = Battle_Skill_9_Player2;
 
         Battle_ToggleBattleTip.GetStateCallbackFromContext_UpDownPress(BattleInputActions.ToggleBattleTip);
-        Battle_LeftRotateCamera.GetStateCallbackFromContext_UpDownPress(BattleInputActions.LeftRotateCamera);
-        Battle_RightRotateCamera.GetStateCallbackFromContext_UpDownPress(BattleInputActions.RightRotateCamera);
+        Battle_LeftSwitch.GetStateCallbackFromContext_UpDownPress(BattleInputActions.LeftSwitch);
+        Battle_RightSwitch.GetStateCallbackFromContext_UpDownPress(BattleInputActions.RightSwitch);
 
         Common_MouseLeft.GetStateCallbackFromContext_UpDownPress(CommonInputActions.MouseLeftClick);
         Common_MouseRight.GetStateCallbackFromContext_UpDownPress(CommonInputActions.MouseRightClick);
         Common_MouseMiddle.GetStateCallbackFromContext_UpDownPress(CommonInputActions.MouseMiddleClick);
 
         Common_Confirm.GetStateCallbackFromContext_UpDownPress(CommonInputActions.Confirm);
-        Common_Debug.GetStateCallbackFromContext_UpDownPress(CommonInputActions.Debug);
         Common_Exit.GetStateCallbackFromContext_UpDownPress(CommonInputActions.Exit);
         Common_Tab.GetStateCallbackFromContext_UpDownPress(CommonInputActions.Tab);
         Common_RestartGame.GetStateCallbackFromContext_UpDownPress(CommonInputActions.RestartGame);
+        Common_ReloadGame.GetStateCallbackFromContext_UpDownPress(CommonInputActions.ReloadGame);
         Common_PauseGame.GetStateCallbackFromContext_UpDownPress(CommonInputActions.PauseGame);
         Common_ToggleUI.GetStateCallbackFromContext_UpDownPress(CommonInputActions.ToggleUI);
-        Common_ToggleDebugButton.GetStateCallbackFromContext_UpDownPress(CommonInputActions.ToggleDebugButton);
         Common_InteractiveKey.GetStateCallbackFromContext_UpDownPress(CommonInputActions.InteractiveKey);
+        Common_SlowDownGame.GetStateCallbackFromContext_UpDownPress(CommonInputActions.SlowDownGame);
+        Common_ReturnToOpenWorld.GetStateCallbackFromContext_UpDownPress(CommonInputActions.ReturnToOpenWorld);
+        Common_SkillPreviewPanel.GetStateCallbackFromContext_UpDownPress(CommonInputActions.SkillPreviewPanel);
+        Common_DebugConsole.GetStateCallbackFromContext_UpDownPress(CommonInputActions.DebugConsole);
+        Common_ToggleDebugPanel.GetStateCallbackFromContext_UpDownPress(CommonInputActions.ToggleDebugPanel);
 
         PlayerInput.Enable();
         CommonInputActions.Enable();

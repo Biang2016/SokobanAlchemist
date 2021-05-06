@@ -21,7 +21,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         WorldDeadZoneTrigger,
         WorldWallCollider,
         WorldGroundCollider,
-        BoxEffectHelper,
+        BoxTrail,
         BattleIndicator,
         EntityLightning,
         DiscreteStatPointIndicator,
@@ -30,6 +30,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         DebugPanelButton,
         DebugPanelSlider,
         EntitySkillRow,
+        LearnSkillUpgradePage,
     }
 
     public Dictionary<PrefabNames, int> PoolConfigs = new Dictionary<PrefabNames, int>
@@ -44,7 +45,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         {PrefabNames.WorldDeadZoneTrigger, 16},
         {PrefabNames.WorldWallCollider, 16},
         {PrefabNames.WorldGroundCollider, 16},
-        {PrefabNames.BoxEffectHelper, 10},
+        {PrefabNames.BoxTrail, 128},
         {PrefabNames.BattleIndicator, 10},
         {PrefabNames.EntityLightning, 10},
         {PrefabNames.DiscreteStatPointIndicator, 50},
@@ -53,6 +54,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         {PrefabNames.DebugPanelButton, 4},
         {PrefabNames.DebugPanelSlider, 4},
         {PrefabNames.EntitySkillRow, 16},
+        {PrefabNames.LearnSkillUpgradePage, 4},
     };
 
     public Dictionary<string, int> WarmUpBoxConfig = new Dictionary<string, int>
@@ -276,7 +278,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             {
                 Box warmUpBox = pool.AllocateGameObject<Box>(null);
                 warmUpBoxes[i] = warmUpBox;
-                warmUpBox.BoxColliderHelper.OnBoxPoolRecycled(); // 防止Collider过多重叠
+                warmUpBox.BoxColliderHelper.OnHelperRecycled(); // 防止Collider过多重叠
                 warmUpBox.EntityIndicatorHelper.OnHelperRecycled(); // 防止Collider过多重叠
                 boxWarmUpPerFrame++;
                 totalWarmUpTaskCount++;

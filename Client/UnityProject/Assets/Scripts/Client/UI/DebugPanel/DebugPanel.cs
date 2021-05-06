@@ -269,22 +269,7 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("SwitchWorld/{0}", "GetAllWorldNames", -10)]
     public void ChangeWorld(string worldName)
     {
-        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
-        {
-            ushort worldNameIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, worldName);
-            if (worldNameIndex == ConfigManager.World_OpenWorldIndex)
-            {
-                openWorld.ReturnToOpenWorld();
-            }
-            else
-            {
-                openWorld.TransportPlayerToDungeon(worldNameIndex);
-            }
-        }
-        else
-        {
-            ClientGameManager.Instance.SwitchWorld(worldName);
-        }
+        ClientGameManager.Instance.ChangeWorld(worldName, false);
     }
 
     public List<string> GetAllWorldNames()
@@ -332,6 +317,7 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("Player/AddAllElement*100", KeyCode.Alpha5)]
     public void AddAllElement100()
     {
+        BattleManager.Instance.Player1.EntityStatPropSet.Gold.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value + 10);
         BattleManager.Instance.Player1.EntityStatPropSet.FireElementFragment.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.FireElementFragment.Value + 100);
         BattleManager.Instance.Player1.EntityStatPropSet.IceElementFragment.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.IceElementFragment.Value + 100);
         BattleManager.Instance.Player1.EntityStatPropSet.LightningElementFragment.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.LightningElementFragment.Value + 100);

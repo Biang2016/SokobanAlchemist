@@ -23,6 +23,104 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
     [HideInEditorMode]
     private FlamethrowerFuelData CurrentFlamethrowerFuelData;
 
+    #region SFX
+
+    [BoxGroup("SFX")]
+    public AK.Wwise.Event OnStart_Fire_Small;
+
+    [BoxGroup("SFX")]
+    public AK.Wwise.Event OnStop_Fire_Small;
+
+    [BoxGroup("SFX")]
+    public AK.Wwise.Event OnStart_Fire_Medium;
+
+    [BoxGroup("SFX")]
+    public AK.Wwise.Event OnStop_Fire_Medium;
+
+    [BoxGroup("SFX")]
+    public AK.Wwise.Event OnStart_Fire_Big;
+
+    [BoxGroup("SFX")]
+    public AK.Wwise.Event OnStop_Fire_Big;
+
+    [BoxGroup("SFX")]
+    public AK.Wwise.Event OnStart_Ice;
+
+    [BoxGroup("SFX")]
+    public AK.Wwise.Event OnStop_Ice;
+
+    [BoxGroup("SFX")]
+    public AK.Wwise.Event OnStart_Lightning;
+
+    [BoxGroup("SFX")]
+    public AK.Wwise.Event OnStop_Lightning;
+
+    private void StartFlameSound(FlameType flameType)
+    {
+        switch (flameType)
+        {
+            case FlameType.Fire_Small:
+            {
+                OnStart_Fire_Small?.Post(gameObject);
+                break;
+            }
+            case FlameType.Fire_Medium:
+            {
+                OnStart_Fire_Medium?.Post(gameObject);
+                break;
+            }
+            case FlameType.Fire_Big:
+            {
+                OnStart_Fire_Big?.Post(gameObject);
+                break;
+            }
+            case FlameType.Ice:
+            {
+                OnStart_Ice?.Post(gameObject);
+                break;
+            }
+            case FlameType.Lightning:
+            {
+                OnStart_Lightning?.Post(gameObject);
+                break;
+            }
+        }
+    }
+
+    private void StopFlameSound(FlameType flameType)
+    {
+        switch (CurrentFlamethrowerFuelData.FlameType)
+        {
+            case FlameType.Fire_Small:
+            {
+                OnStop_Fire_Small?.Post(gameObject);
+                break;
+            }
+            case FlameType.Fire_Medium:
+            {
+                OnStop_Fire_Medium?.Post(gameObject);
+                break;
+            }
+            case FlameType.Fire_Big:
+            {
+                OnStop_Fire_Big?.Post(gameObject);
+                break;
+            }
+            case FlameType.Ice:
+            {
+                OnStop_Ice?.Post(gameObject);
+                break;
+            }
+            case FlameType.Lightning:
+            {
+                OnStop_Lightning?.Post(gameObject);
+                break;
+            }
+        }
+    }
+
+    #endregion
+
     void Awake()
     {
         foreach (EntityFlamethrower ef in EntityFlamethrowers)
@@ -77,7 +175,8 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
 
     public void TurnOnFire(FlamethrowerFuelData fuelData)
     {
-        //if (FireOn) return; // todo 燃料叠加或替换？
+        if (FireOn) StopFlameSound(CurrentFlamethrowerFuelData.FlameType);
+
         FXDurationTick = 0;
         FireOn = true;
 
@@ -126,6 +225,8 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
             ef.FirePS.Play(true);
             ef.FireLight.gameObject.SetActive(true);
         }
+
+        StartFlameSound(CurrentFlamethrowerFuelData.FlameType);
     }
 
     public void TurnOffFire(bool forced)
@@ -140,6 +241,8 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
             FlamethrowerSkill = null;
         }
 
+        if (CurrentFlamethrowerFuelData != null) StopFlameSound(CurrentFlamethrowerFuelData.FlameType);
+
         CurrentFlamethrowerFuelData = null;
         foreach (EntityFlamethrower ef in EntityFlamethrowers)
         {
@@ -150,41 +253,71 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
     }
 
     // todo 此处有风险，两个Trigger进出次序如果很极限的话，有可能exit不触发就换技能了
-    public void OnTriggerZoneEnter(Collider c)
+    public void OnTriggerZoneEnter(Collider c, EntityTriggerZone entityTriggerZone)
     {
-        FlamethrowerSkill?.OnTriggerZoneEnter(c);
+        Actor actor = c.GetComponentInParent<Actor>();
+        if (actor == BattleManager.Instance.Player1)
+        {
+            foreach (EntityFlamethrower ef in EntityFlamethrowers)
+            {
+                if (ef.EntityTriggerZone_Flame == entityTriggerZone)
+                {
+                    ef.FirePS.Stop(true);
+                    ef.FireLight.gameObject.SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            FlamethrowerSkill?.OnTriggerZoneEnter(c);
+        }
     }
 
-    public void OnTriggerZoneStay(Collider c)
+    public void OnTriggerZoneStay(Collider c, EntityTriggerZone entityTriggerZone)
     {
         FlamethrowerSkill?.OnTriggerZoneStay(c);
     }
 
-    public void OnTriggerZoneExit(Collider c)
+    public void OnTriggerZoneExit(Collider c, EntityTriggerZone entityTriggerZone)
     {
-        FlamethrowerSkill?.OnTriggerZoneExit(c);
+        Actor actor = c.GetComponentInParent<Actor>();
+        if (actor == BattleManager.Instance.Player1)
+        {
+            foreach (EntityFlamethrower ef in EntityFlamethrowers)
+            {
+                if (ef.EntityTriggerZone_Flame == entityTriggerZone)
+                {
+                    ef.FirePS.Play(true);
+                    ef.FireLight.gameObject.SetActive(true);
+                }
+            }
+        }
+        else
+        {
+            FlamethrowerSkill?.OnTriggerZoneExit(c);
+        }
     }
 
     [Serializable]
     public class FlamethrowerFuelData : IClone<FlamethrowerFuelData>
     {
-        [LabelText("火焰长度")]
+        public FlameType FlameType;
+
         public int FlameLength;
 
-        [LabelText("火焰持续时间")]
         public int FlameDuration;
 
-        [LabelText("火焰色")]
         public Gradient FlameColor;
 
         [SerializeReference]
-        [LabelText("火焰效果")]
+        [LabelText("Flame Effect")]
         [ListDrawerSettings(ListElementLabelName = "Description")]
         public List<EntitySkillAction> RawEntitySkillActions_ForFlamethrower = new List<EntitySkillAction>(); // 干数据，禁修改
 
         public FlamethrowerFuelData Clone()
         {
             FlamethrowerFuelData newData = new FlamethrowerFuelData();
+            newData.FlameType = FlameType;
             newData.FlameLength = FlameLength;
             newData.FlameDuration = FlameDuration;
             newData.FlameColor = FlameColor;
@@ -192,4 +325,13 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
             return newData;
         }
     }
+}
+
+public enum FlameType
+{
+    Fire_Small,
+    Fire_Medium,
+    Fire_Big,
+    Ice,
+    Lightning
 }

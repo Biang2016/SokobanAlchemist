@@ -1,0 +1,150 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u8D4B\u4E88\u8E22\u51FA\u7684\u51B0\u7BB1\u5B50\u4EE5\u51B0\u5899\u88AB\u52A8\u6280\u80FD_(3a9170f9-21a1-4203-bc23-17ab2ad6ce78)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        SkillGUID: (3a9170f9-21a1-4203-bc23-17ab2ad6ce78)
+        SkillAlias: "\u8D4B\u4E88\u8E22\u51FA\u7684\u51B0\u7BB1\u5B50\u4EE5\u51B0\u5899\u88AB\u52A8\u6280\u80FD"
+        SkillName_EN: 
+        SkillName_ZH: 
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
+        TargetCamp: 8
+        SkillsPropertyCollection:
+          CastingRadius:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Cooldown:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          WingUp:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          CastDuration:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          Recovery:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          CameraShakeEquivalentDamage:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeActionPoint:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeFireElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+          ConsumeIceElementFragment:
+            BaseValue: 10
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 100
+          ConsumeLightningElementFragment:
+            BaseValue: 0
+            ModifiedValue: 0
+            MinValue: 0
+            MaxValue: 0
+        TriggerWhenMissProbabilityPercent: 100
+        EntitySkillConditions:
+        - id: 1
+        WingUpCanMove: 1
+        CastCanMove: 1
+        RecoverCanMove: 1
+        RawSubActiveSkillList: []
+        SubActiveSkillTriggerLogicList: []
+        InterruptSubActiveSkillsWhenInterrupted: 0
+        CastAreaGridPosList:
+        - x: 15
+          y: 0
+          z: 16
+        M_TargetInclination: 1
+        CastOnTopLayer: 0
+        CastOnNLayersBeneath: 0
+        AccurateStandardDeviation: 0
+        BattleIndicatorTypeName:
+          TypeDefineType: 8
+          TypeGUID: 
+        ProjectOffsetZMax: 0
+        ProjectOffsetZMin: 0
+        ProjectHeightDeltaRange: 999
+        GridWarningColorFill: {r: 0, g: 0, b: 0, a: 0}
+        GridWarningColorBorderHighlight: {r: 0, g: 0, b: 0, a: 0}
+        GridWarningColorBorderDim: {r: 0, g: 0, b: 0, a: 0}
+        RawEntitySkillActions:
+        - id: 2
+        - id: 3
+    00000001:
+      type: {class: EntitySkillCondition_HasEntityInCastArea, ns: , asm: Client}
+      data:
+        EntityType:
+          TypeDefineType: 0
+          TypeGUID: (c9630278-8f6d-416f-b6de-620573dfb81a)
+    00000002:
+      type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        ForbidAllActiveSkill: 0
+        RecoverAllActiveSkill: 0
+        ForbidAllDropSkill: 0
+        AddOrRemove: 1
+        EntitySkillSO: {fileID: 11400000, guid: f081684a5e1e9a1488522b6dc0a935c3,
+          type: 2}
+        SkillGUID: (43bab592-f797-4cc3-bbdc-055b9c8af65b)
+        KeyBind: 0
+        ExertOnTarget: 1
+    00000003:
+      type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        ForbidAllActiveSkill: 0
+        RecoverAllActiveSkill: 0
+        ForbidAllDropSkill: 0
+        AddOrRemove: 1
+        EntitySkillSO: {fileID: 11400000, guid: 0d89bb4613a19ed409e9bf151f143eb7,
+          type: 2}
+        SkillGUID: (181629ac-9118-465d-bf0b-e928b8bbaa3a)
+        KeyBind: 0
+        ExertOnTarget: 1

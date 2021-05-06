@@ -16,29 +16,18 @@ public class EntitySkillAction_TransportPlayer : BoxSkillAction, EntitySkillActi
     [LabelText("世界类型概率")]
     public List<WorldNameWithProbability> WorldProbList = new List<WorldNameWithProbability>();
 
+    private WorldNameWithProbability selectedWorld;
+
     public void Execute()
     {
-        WorldNameWithProbability randomResult = CommonUtils.GetRandomFromList(WorldProbList);
-        if ((WorldManager.Instance.CurrentWorld is OpenWorld openWorld))
+        if (selectedWorld == null)
         {
-            ushort worldTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, randomResult.WorldTypeName.TypeName);
-            if (worldTypeIndex != 0)
-            {
-                openWorld.DungeonMissionComplete = true;
-                if (worldTypeIndex == ConfigManager.World_OpenWorldIndex)
-                {
-                    openWorld.ReturnToOpenWorld();
-                }
-                else
-                {
-                    openWorld.TransportPlayerToDungeon(worldTypeIndex);
-                }
-            }
+            selectedWorld = CommonUtils.GetRandomFromList(WorldProbList);
+            WorldProbList.Clear();
+            WorldProbList.Add(selectedWorld);
         }
-        else
-        {
-            ClientGameManager.Instance.SwitchWorld(randomResult.WorldTypeName.TypeName);
-        }
+
+        ClientGameManager.Instance.ChangeWorld(selectedWorld.WorldTypeName.TypeName, true, Entity.CurrentEntityData);
     }
 
     protected override void ChildClone(EntitySkillAction newAction)

@@ -19,14 +19,28 @@ MonoBehaviour:
     00000000:
       type: {class: ActorActiveSkill_Vault, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
         SkillGUID: (ca203c3f-03ba-4908-9139-88ae9659af12)
         SkillAlias: "\u7FFB\u8D8A"
+        SkillName_EN: Vault
+        SkillName_ZH: "\u7FFB\u8D8A"
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: (4a895c5e-6ed1-45a9-9b25-97ff2b38007b)
-        SkillDescription: Vault over the box in front of you. Consumes 1 action point.
+        SkillDescription_EN: Vault over a box.
+        SkillDescription_ZH: "\u7FFB\u8FC7\u4E00\u4E2A\u7BB1\u5B50"
+        PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 1
+        SkillCategoryType: 8
+        SkillRankType: 1
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: (32c00ccc-4a08-4074-8b06-f2bd01f3ab8c)
         TargetCamp: 0
-        EntitySkillIndex: 0
+        NeedBindKey: 1
+        SkillKeyBind: 1
         SkillsPropertyCollection:
           CastingRadius:
             BaseValue: 0
@@ -79,6 +93,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
         TriggerWhenMissProbabilityPercent: 100
+        EntitySkillConditions: []
         WingUpCanMove: 0
         CastCanMove: 0
         RecoverCanMove: 0

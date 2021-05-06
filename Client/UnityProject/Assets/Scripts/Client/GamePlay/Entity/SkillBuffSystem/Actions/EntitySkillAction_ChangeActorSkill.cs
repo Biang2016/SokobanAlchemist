@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 
@@ -10,6 +11,17 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
     }
 
     protected override string Description => "技能变化";
+
+    [LabelText("忘记所有主动技能")]
+    [HideIf("RecoverAllActiveSkill")]
+    public bool ForbidAllActiveSkill;
+
+    [LabelText("恢复所有主动技能")]
+    [HideIf("ForbidAllActiveSkill")]
+    public bool RecoverAllActiveSkill;
+
+    [LabelText("忘记所有掉落技能")]
+    public bool ForbidAllDropSkill;
 
     [LabelText("True添加False移除")]
     public bool AddOrRemove;
@@ -69,6 +81,44 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
 
     private void ExecuteCore(Entity target)
     {
+        if (ForbidAllActiveSkill)
+        {
+            foreach (EntitySkillSO so in target.RawEntityActiveSkillSOs)
+            {
+                target.Async_ForgetActiveSkill(so.EntitySkill.SkillGUID);
+            }
+        }
+
+        if (RecoverAllActiveSkill)
+        {
+            target.InitActiveSkills();
+        }
+
+        if (ForbidAllDropSkill)
+        {
+            List<string> forgetPassiveSkillGUIDs = new List<string>();
+            foreach (EntityPassiveSkill eps in target.EntityPassiveSkills)
+            {
+                if (eps.IsLevelExtraEntitySkill) continue;
+                if (eps is EntityPassiveSkill_Conditional eps_conditional)
+                {
+                    foreach (EntitySkillAction action in eps_conditional.EntitySkillActions)
+                    {
+                        if (action is EntitySkillAction_DropBox || action is EntitySkillAction_DropSkillScroll)
+                        {
+                            forgetPassiveSkillGUIDs.Add(eps.SkillGUID);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            foreach (string guid in forgetPassiveSkillGUIDs)
+            {
+                target.Async_ForgetPassiveSkill(guid);
+            }
+        }
+
         if (AddOrRemove)
         {
             EntitySkill entitySkill = ConfigManager.GetEntitySkill(SkillGUID);
@@ -81,7 +131,7 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
             }
             else if (entitySkill is EntityPassiveSkill eps)
             {
-                target.AddNewPassiveSkill(eps);
+                target.Async_AddNewPassiveSkill(eps);
             }
         }
         else
@@ -89,11 +139,11 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
             EntitySkill entitySkill = ConfigManager.GetRawEntitySkill(SkillGUID);
             if (entitySkill is EntityActiveSkill)
             {
-                target.ForgetActiveSkill(SkillGUID);
+                target.Async_ForgetActiveSkill(SkillGUID);
             }
             else if (entitySkill is EntityPassiveSkill)
             {
-                target.ForgetPassiveSkill(SkillGUID);
+                target.Async_ForgetPassiveSkill(SkillGUID);
             }
         }
     }
@@ -102,6 +152,9 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
     {
         base.ChildClone(newAction);
         EntitySkillAction_ChangeActorSkill action = ((EntitySkillAction_ChangeActorSkill) newAction);
+        action.ForbidAllActiveSkill = ForbidAllActiveSkill;
+        action.RecoverAllActiveSkill = RecoverAllActiveSkill;
+        action.ForbidAllDropSkill = ForbidAllDropSkill;
         action.AddOrRemove = AddOrRemove;
         action.SkillGUID = SkillGUID;
         action.KeyBind = KeyBind;
@@ -112,6 +165,9 @@ public class EntitySkillAction_ChangeActorSkill : EntitySkillAction, EntitySkill
     {
         base.CopyDataFrom(srcData);
         EntitySkillAction_ChangeActorSkill action = ((EntitySkillAction_ChangeActorSkill) srcData);
+        ForbidAllActiveSkill = action.ForbidAllActiveSkill;
+        RecoverAllActiveSkill = action.RecoverAllActiveSkill;
+        ForbidAllDropSkill = action.ForbidAllDropSkill;
         AddOrRemove = action.AddOrRemove;
         SkillGUID = action.SkillGUID;
         KeyBind = action.KeyBind;

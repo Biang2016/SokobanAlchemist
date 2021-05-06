@@ -10,7 +10,7 @@ public class InGameUIPanel : BaseUIPanel
             false,
             false,
             false,
-            UIFormTypes.Fixed,
+            UIFormTypes.Normal,
             UIFormShowModes.Normal,
             UIFormLucencyTypes.Penetrable);
     }

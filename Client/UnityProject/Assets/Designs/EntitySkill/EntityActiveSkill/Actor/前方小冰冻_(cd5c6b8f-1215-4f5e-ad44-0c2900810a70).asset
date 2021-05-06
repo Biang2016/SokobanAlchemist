@@ -22,10 +22,13 @@ MonoBehaviour:
         InitWorldModuleGUID: 0
         SkillGUID: (cd5c6b8f-1215-4f5e-ad44-0c2900810a70)
         SkillAlias: "\u524D\u65B9\u5C0F\u51B0\u51BB"
+        SkillName_EN: 
+        SkillName_ZH: 
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: (b2ef5347-4082-4772-bcbe-7a9519436626)
-        SkillDescription: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
         TargetCamp: 15
         SkillsPropertyCollection:
           CastingRadius:
@@ -113,32 +116,14 @@ MonoBehaviour:
         RawEntitySkillActions:
         - id: 1
         - id: 2
-        - id: 3
     00000001:
       type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         RawEntityBuffs:
+        - id: 3
         - id: 4
-        - id: 5
     00000002:
-      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
-      data:
-        InitWorldModuleGUID: 0
-        FX:
-          FXType:
-            TypeDefineType: 7
-            TypeGUID: (ce01f26e-4b00-4b76-bef3-72a60663efa0)
-          UseCurve: 0
-          FXScale: 1
-          AnimationCurve:
-            serializedVersion: 2
-            m_Curve: []
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        PlayFXForEveryGrid: 1
-    00000003:
       type: {class: EntitySkillAction_PlayFXOnWorldGP, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
@@ -154,7 +139,7 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-    00000004:
+    00000003:
       type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
       data:
         GUID: 10257
@@ -182,14 +167,14 @@ MonoBehaviour:
         EntitySkillSO: {fileID: 0}
         SkillGUID: 
         EntitySkillPropertyType: 0
-        Percent: -50
+        Percent: -70
         LinearDecayInDuration: 1
-    00000005:
+    00000004:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
-        GUID: 10258
+        GUID: 12256
         BuffAlias: 
-        EntityBuffAttribute: 20
+        EntityBuffAttribute: 21
         EnableWhiteBlackList: 0
         AllowAddBuffAliasList: []
         ForbidAddBuffAliasList: []
@@ -200,13 +185,13 @@ MonoBehaviour:
             TypeDefineType: 7
             TypeGUID: 
           UseCurve: 0
-          FXScale: 0
+          FXScale: 1
           AnimationCurve:
             serializedVersion: 2
             m_Curve: []
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-        EntityStatType: 100
-        Delta: 400
+        EntityStatType: 0
+        Delta: -1
         Percent: 0

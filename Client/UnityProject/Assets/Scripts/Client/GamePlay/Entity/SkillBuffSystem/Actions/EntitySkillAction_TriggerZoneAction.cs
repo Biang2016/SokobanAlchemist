@@ -116,16 +116,16 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                     }
                 }
 
-                if (EffectiveWhenInteractiveKeyDown)
-                {
-                    ClientGameManager.Instance.NoticePanel.ShowTip(InteractiveKeyNotice, TipPositionType, InteractiveKeyNoticeDuration);
-                }
-
                 if (!EntityStayTimeDict.ContainsKey(target.GUID))
                 {
                     EntityStayTimeDict.Add(target.GUID, 0);
                     foreach (EntitySkillAction action in EntityActions_Enter)
                     {
+                        if (action.Entity == null)
+                        {
+                            action.Entity = Entity;
+                        }
+
                         if (action is IPureAction pureAction)
                         {
                             pureAction.Execute();
@@ -159,19 +159,28 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
 
                 if (EffectiveWhenInteractiveKeyDown)
                 {
-                    if (ControlManager.Instance.Common_InteractiveKey.Down)
+                    if (!ClientGameManager.Instance.LearnSkillUpgradePanel.HasPage)
                     {
-                        triggerTimeWhenStayCount++;
-                        foreach (EntitySkillAction action in EntityActions_Stay)
+                        ClientGameManager.Instance.NoticePanel.ShowTip(InteractiveKeyNotice, TipPositionType, InteractiveKeyNoticeDuration);
+                        if (ControlManager.Instance.Common_InteractiveKey.Up)
                         {
-                            if (action is IPureAction pureAction)
+                            triggerTimeWhenStayCount++;
+                            foreach (EntitySkillAction action in EntityActions_Stay)
                             {
-                                pureAction.Execute();
-                            }
+                                if (action.Entity == null)
+                                {
+                                    action.Entity = Entity;
+                                }
 
-                            if (action is IEntityAction entityAction)
-                            {
-                                entityAction.ExecuteOnEntity(target);
+                                if (action is IPureAction pureAction)
+                                {
+                                    pureAction.Execute();
+                                }
+
+                                if (action is IEntityAction entityAction)
+                                {
+                                    entityAction.ExecuteOnEntity(target);
+                                }
                             }
                         }
                     }
@@ -188,6 +197,11 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                         triggerTimeWhenStayCount++;
                         foreach (EntitySkillAction action in EntityActions_Stay)
                         {
+                            if (action.Entity == null)
+                            {
+                                action.Entity = Entity;
+                            }
+
                             if (action is IPureAction pureAction)
                             {
                                 pureAction.Execute();
@@ -235,6 +249,11 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                     EntityStayTimeDict.Remove(target.GUID);
                     foreach (EntitySkillAction action in EntityActions_Exit)
                     {
+                        if (action.Entity == null)
+                        {
+                            action.Entity = Entity;
+                        }
+
                         if (action is IPureAction pureAction)
                         {
                             pureAction.Execute();
