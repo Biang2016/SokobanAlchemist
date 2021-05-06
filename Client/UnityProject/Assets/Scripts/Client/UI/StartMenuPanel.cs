@@ -23,10 +23,13 @@ public class StartMenuPanel : BaseUIPanel
     public Button StartButton;
     public Button CreditButton;
 
+    public AK.Wwise.Event OnPlayAnim;
+
     public override void Display()
     {
         base.Display();
         StartMenuAnim.SetTrigger("Play");
+        OnPlayAnim?.Post(gameObject);
     }
 
     public void OnSettingButtonClick()

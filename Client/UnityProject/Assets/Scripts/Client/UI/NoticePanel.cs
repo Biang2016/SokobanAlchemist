@@ -29,6 +29,8 @@ public class NoticePanel : BaseUIPanel
 
     private Coroutine hideTipCoroutine;
 
+    public AK.Wwise.Event OnShowTip;
+
     /// <summary>
     /// 显示提示
     /// </summary>
@@ -42,6 +44,7 @@ public class NoticePanel : BaseUIPanel
             return;
         }
 
+        OnShowTip?.Post(gameObject);
         TipText.text = tipContent;
         TipAnim.SetTrigger("Show");
         if (hideTipCoroutine != null) StopCoroutine(hideTipCoroutine);

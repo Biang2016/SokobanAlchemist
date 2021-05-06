@@ -22,15 +22,25 @@ public class ExitMenuPanel : BaseUIPanel
     public Button ExitToMenuButton;
     public Button ExitToDesktopButton;
 
+    public AK.Wwise.Event OnDisplay;
+    public AK.Wwise.Event OnHide;
+
     public override void Display()
     {
         base.Display();
+        OnDisplay?.Post(gameObject);
         ExitMenuAnim.SetTrigger("Play");
         if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
             ExitToOpenWorldButton.gameObject.SetActive(openWorld.IsInsideDungeon);
             RestartDungeonButton.gameObject.SetActive(openWorld.IsInsideDungeon);
         }
+    }
+
+    public override void Hide()
+    {
+        OnHide?.Post(gameObject);
+        base.Hide();
     }
 
     public void OnExitToOpenWorldButtonClick()

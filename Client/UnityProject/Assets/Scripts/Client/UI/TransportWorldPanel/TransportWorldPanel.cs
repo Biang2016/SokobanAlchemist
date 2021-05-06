@@ -44,6 +44,8 @@ public class TransportWorldPanel : BaseUIPanel
 
     private Stack<TransportInfo> TransportInfoStack = new Stack<TransportInfo>();
 
+    public AK.Wwise.Event OnDisplay;
+
     private class TransportInfo
     {
         public WorldData RawWorldData;
@@ -61,6 +63,7 @@ public class TransportWorldPanel : BaseUIPanel
         });
 
         Anim.SetTrigger("Jump");
+        OnDisplay?.Post(gameObject);
 
         current_RawWorldData = rawWorldData;
         current_LearnCallBack = learnCallback;
