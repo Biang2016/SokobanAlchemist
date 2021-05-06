@@ -4,6 +4,21 @@
 		<WorkUnit Name="MetalTrapBox" ID="{6E284F1F-0F0F-4E75-872F-A541086FA0B8}" OwnerID="{ABC65056-1A6C-4C9D-8CE0-4E3CFED4B185}" PersistMode="Nested">
 			<ChildrenList>
 				<RandomSequenceContainer Name="MetalTrapBox_OnBeingDropped" ID="{1AB98581-1A1D-4B63-AC8A-53EA01437DE3}" ShortID="80784068">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{A70B392E-9B41-446D-9495-15A595E3BECD}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="354"/>
+											<Property Name="Min" Type="Real64" Value="-354"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -108,6 +123,17 @@
 							<ValueList>
 								<Value>-580</Value>
 							</ValueList>
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{E566B039-A75F-4F32-BF93-B2A799EA9B31}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="354"/>
+											<Property Name="Min" Type="Real64" Value="-354"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
 						</Property>
 					</PropertyList>
 					<ReferenceList>
