@@ -17,6 +17,8 @@ public class ExitMenuPanel : BaseUIPanel
 
     public Animator ExitMenuAnim;
 
+    public Button ExitToOpenWorldButton;
+    public Button RestartDungeonButton;
     public Button ExitToMenuButton;
     public Button ExitToDesktopButton;
 
@@ -24,6 +26,21 @@ public class ExitMenuPanel : BaseUIPanel
     {
         base.Display();
         ExitMenuAnim.SetTrigger("Play");
+        if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            ExitToOpenWorldButton.gameObject.SetActive(openWorld.IsInsideDungeon);
+            RestartDungeonButton.gameObject.SetActive(openWorld.IsInsideDungeon);
+        }
+    }
+
+    public void OnExitToOpenWorldButtonClick()
+    {
+        ClientGameManager.Instance.ReturnToOpenWorld();
+    }
+
+    public void OnRestartDungeonButtonClick()
+    {
+        ClientGameManager.Instance.RestartDungeon();
     }
 
     public void OnExitToMenuButtonClick()

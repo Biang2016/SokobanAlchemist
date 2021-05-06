@@ -307,30 +307,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         {
             if (ControlManager.Common_RestartGame.Up && !IsGameLoading)
             {
-                if (!UIManager.IsUIShown<ConfirmPanel>())
-                {
-                    if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
-                    {
-                        if (openWorld.IsInsideDungeon)
-                        {
-                            ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
-                            confirmPanel.Initialize("Wanna restart the dungeon? You'll lose the rewards that you've got", "Restart", "Cancel",
-                                () =>
-                                {
-                                    openWorld.RestartDungeon();
-                                    confirmPanel.CloseUIForm();
-                                },
-                                () => { confirmPanel.CloseUIForm(); }
-                            );
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        StartCoroutine(ReloadGame());
-                        return;
-                    }
-                }
+                if (RestartDungeon()) return;
             }
 
             if (ControlManager.Common_ReloadGame.Up && !IsGameLoading)
@@ -352,30 +329,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
             if (ControlManager.Common_ReturnToOpenWorld.Up && !IsGameLoading)
             {
-                if (!UIManager.IsUIShown<ConfirmPanel>())
-                {
-                    if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
-                    {
-                        if (openWorld.IsInsideDungeon)
-                        {
-                            ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
-                            confirmPanel.Initialize("Wanna give up the dungeon? You'll lose the rewards that you've got", "Let me go", "Cancel",
-                                () =>
-                                {
-                                    openWorld.ReturnToOpenWorld();
-                                    confirmPanel.CloseUIForm();
-                                },
-                                () => { confirmPanel.CloseUIForm(); }
-                            );
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        SwitchWorld_ReloadGame(ConfigManager.GetTypeName(TypeDefineType.World, ConfigManager.World_OpenWorldIndex));
-                        return;
-                    }
-                }
+                if (ReturnToOpenWorld()) return;
             }
 
             if (!LearnSkillUpgradePanel.HasPage)
@@ -456,6 +410,66 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         UIBattleTipManager.FixedUpdate(Time.fixedDeltaTime);
         GameSaveManager.FixedUpdate(Time.fixedDeltaTime);
         FXManager.FixedUpdate(Time.fixedDeltaTime);
+    }
+
+    public bool ReturnToOpenWorld()
+    {
+        if (!UIManager.IsUIShown<ConfirmPanel>())
+        {
+            if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+            {
+                if (openWorld.IsInsideDungeon)
+                {
+                    ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
+                    confirmPanel.Initialize("Wanna give up the dungeon? You'll lose the rewards that you've got", "Let me go", "Cancel",
+                        () =>
+                        {
+                            openWorld.ReturnToOpenWorld();
+                            confirmPanel.CloseUIForm();
+                        },
+                        () => { confirmPanel.CloseUIForm(); }
+                    );
+                    return true;
+                }
+            }
+            else
+            {
+                SwitchWorld_ReloadGame(ConfigManager.GetTypeName(TypeDefineType.World, ConfigManager.World_OpenWorldIndex));
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool RestartDungeon()
+    {
+        if (!UIManager.IsUIShown<ConfirmPanel>())
+        {
+            if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+            {
+                if (openWorld.IsInsideDungeon)
+                {
+                    ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
+                    confirmPanel.Initialize("Wanna restart the dungeon? You'll lose the rewards that you've got", "Restart", "Cancel",
+                        () =>
+                        {
+                            openWorld.RestartDungeon();
+                            confirmPanel.CloseUIForm();
+                        },
+                        () => { confirmPanel.CloseUIForm(); }
+                    );
+                    return true;
+                }
+            }
+            else
+            {
+                StartCoroutine(ReloadGame());
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void SwitchWorld_ReloadGame(string worldName)
