@@ -8,6 +8,7 @@ using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Profiling;
 using Random = UnityEngine.Random;
 
 public abstract class Entity : PoolObject
@@ -61,6 +62,8 @@ public abstract class Entity : PoolObject
     internal abstract EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper { get; }
     internal abstract List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers { get; }
     internal abstract List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers { get; }
+
+    protected List<EntityMonoHelper> EntityMonoHelpers = new List<EntityMonoHelper>(32);
 
     #endregion
 
@@ -294,6 +297,7 @@ public abstract class Entity : PoolObject
 
     public void ApplyEntityExtraSerializeData(EntityExtraSerializeData rawEntityExtraSerializeDataFromModule = null)
     {
+        Profiler.BeginSample("ApplyEntityExtraSerializeData");
         if (rawEntityExtraSerializeDataFromModule != null)
         {
             foreach (EntityPassiveSkill rawExtraPS in rawEntityExtraSerializeDataFromModule.EntityPassiveSkills)
@@ -305,14 +309,19 @@ public abstract class Entity : PoolObject
 
             ApplyEntityExtraStates(rawEntityExtraSerializeDataFromModule.EntityDataExtraStates);
         }
+
+        Profiler.EndSample();
     }
 
     public void RecordEntityExtraSerializeData()
     {
+        Profiler.BeginSample("RecordEntityExtraSerializeData");
         if (CurrentEntityData != null && CurrentEntityData.RawEntityExtraSerializeData != null)
         {
             RecordEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
         }
+
+        Profiler.EndSample();
     }
 
     protected virtual void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
@@ -465,6 +474,11 @@ public abstract class Entity : PoolObject
             eps.OnInit();
             eps.OnRegisterLevelEventID();
         }
+
+        foreach (EntityMonoHelper h in EntityMonoHelpers)
+        {
+            h?.OnInitPassiveSkills();
+        }
     }
 
     public void AddNewPassiveSkill(EntityPassiveSkill eps)
@@ -556,6 +570,11 @@ public abstract class Entity : PoolObject
         {
             eps.OnUnRegisterLevelEventID();
             eps.OnUnInit();
+        }
+
+        foreach (EntityMonoHelper h in EntityMonoHelpers)
+        {
+            h?.OnUnInitPassiveSkills();
         }
 
         PassiveSkillMarkAsDestroyed = false;
@@ -659,7 +678,10 @@ public abstract class Entity : PoolObject
             kv.Value.OnInit();
         }
 
-        ActiveSkillMarkAsDestroyed = false;
+        foreach (EntityMonoHelper h in EntityMonoHelpers)
+        {
+            h?.OnInitActiveSkills();
+        }
     }
 
     public bool AddNewActiveSkill(EntityActiveSkill eas)
@@ -769,6 +791,11 @@ public abstract class Entity : PoolObject
         foreach (KeyValuePair<string, EntityActiveSkill> kv in EntityActiveSkillGUIDDict)
         {
             kv.Value.OnUnInit();
+        }
+
+        foreach (EntityMonoHelper h in EntityMonoHelpers)
+        {
+            h?.OnUnInitActiveSkills();
         }
 
         ActiveSkillMarkAsDestroyed = false;

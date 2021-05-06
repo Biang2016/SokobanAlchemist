@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
@@ -113,6 +114,7 @@ public abstract class MapGenerator
 
                 if (allowPut) // 对于允许布局破损的情况，默认是允许放置的，但能够成功放置多少Entity就要依据实际情况了
                 {
+                    string staticLayoutGUID = Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
                     cached_IntactGPs_World.Clear();
                     for (int sl_local_x = 0; sl_local_x < WorldModule.MODULE_SIZE; sl_local_x++)
                     for (int sl_local_y = 0; sl_local_y < WorldModule.MODULE_SIZE; sl_local_y++)
@@ -130,6 +132,7 @@ public abstract class MapGenerator
                             EntityData staticLayoutEntityData = staticLayoutData[kv.Key, sl_local]?.Clone();
                             if (staticLayoutEntityData != null)
                             {
+                                staticLayoutEntityData.InitStaticLayoutGUID = staticLayoutGUID;
                                 GridPos3D entity_world = worldGP + rot_local;
                                 EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(staticLayoutEntityData.EntityTypeIndex);
                                 GridPosR.Orientation rot = GridPosR.RotateOrientationClockwise90(staticLayoutEntityData.EntityOrientation, (int) staticLayoutOrientation);
@@ -219,6 +222,9 @@ public abstract class MapGenerator
                         GridPos3D appear_local = new GridPos3D(appear_world.x % WorldModule.MODULE_SIZE, 0, appear_world.z % WorldModule.MODULE_SIZE);
                         data.WorldGP = appear_world;
                         data.LocalGP = appear_local;
+                        data.EntityData.EntityOrientation = GridPosR.RotateOrientationClockwise90(data.EntityData.EntityOrientation, (int)staticLayoutOrientation);
+                        data.EntityData.InitStaticLayoutGUID = staticLayoutGUID;
+                        data.EntityPassiveSkill_LevelEventTriggerAppear.InitStaticLayoutGUID = staticLayoutGUID;
                         m_OpenWorld.EventTriggerAppearEntityDataList.Add(data);
                     }
 
@@ -226,6 +232,7 @@ public abstract class MapGenerator
                     List<EntityData> ted = staticLayoutData.TriggerEntityDataList.Clone<EntityData, EntityData>();
                     foreach (EntityData triggerEntityData in ted)
                     {
+                        triggerEntityData.InitStaticLayoutGUID = staticLayoutGUID;
                         GridPos3D sl_local = triggerEntityData.LocalGP;
                         GridPos3D rot_local = sl_local;
                         for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++) // 旋转

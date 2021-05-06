@@ -6,6 +6,7 @@ using UnityEngine;
 public class TransportBoxHelper : BoxMonoHelper
 {
     public GameObject CloseModel;
+    public GameObject CloseTrigger;
 
     [ShowInInspector]
     private bool open;
@@ -19,6 +20,7 @@ public class TransportBoxHelper : BoxMonoHelper
             {
                 open = value;
                 CloseModel.SetActive(!open);
+                CloseTrigger.SetActive(!open);
             }
         }
     }

@@ -607,33 +607,39 @@ public class Actor : Entity
     {
         gameObject.SetActive(true);
         base.OnUsed();
-        EntityArtHelper?.OnHelperUsed();
-        EntityWwiseHelper.OnHelperUsed();
-        EntityModelHelper.OnHelperUsed();
-        EntityIndicatorHelper.OnHelperUsed();
-        EntityBuffHelper.OnHelperUsed();
-        EntityFrozenHelper.OnHelperUsed();
-        EntityTriggerZoneHelper?.OnHelperUsed();
-        EntityCollectHelper?.OnHelperUsed();
-        EntityGrindTriggerZoneHelper?.OnHelperUsed();
+        EntityMonoHelpers.Clear();
+        EntityMonoHelpers.Add(EntityArtHelper);
+        EntityMonoHelpers.Add(EntityWwiseHelper);
+        EntityMonoHelpers.Add(EntityModelHelper);
+        EntityMonoHelpers.Add(EntityIndicatorHelper);
+        EntityMonoHelpers.Add(EntityBuffHelper);
+        EntityMonoHelpers.Add(EntityFrozenHelper);
+        EntityMonoHelpers.Add(EntityTriggerZoneHelper);
+        EntityMonoHelpers.Add(EntityCollectHelper);
+        EntityMonoHelpers.Add(EntityGrindTriggerZoneHelper);
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
-            h.OnHelperUsed();
+            EntityMonoHelpers.Add(h);
         }
 
         foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
         {
-            h.OnHelperUsed();
+            EntityMonoHelpers.Add(h);
         }
 
-        ActorControllerHelper?.OnHelperUsed();
-        ActorPushHelper.OnHelperUsed();
-        ActorFaceHelper.OnHelperUsed();
-        ActorSkinHelper.OnHelperUsed();
-        ActorLaunchArcRendererHelper.OnHelperUsed();
-        ActorBattleHelper.OnHelperUsed();
-        ActorBoxInteractHelper.OnHelperUsed();
-        ActorSkillLearningHelper?.OnHelperUsed();
+        EntityMonoHelpers.Add(ActorControllerHelper);
+        EntityMonoHelpers.Add(ActorPushHelper);
+        EntityMonoHelpers.Add(ActorFaceHelper);
+        EntityMonoHelpers.Add(ActorSkinHelper);
+        EntityMonoHelpers.Add(ActorLaunchArcRendererHelper);
+        EntityMonoHelpers.Add(ActorBattleHelper);
+        EntityMonoHelpers.Add(ActorBoxInteractHelper);
+        EntityMonoHelpers.Add(ActorSkillLearningHelper);
+
+        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
+        {
+            entityMonoHelper?.OnHelperUsed();
+        }
 
         ActorMoveColliderRoot.SetActive(true);
     }
@@ -672,33 +678,10 @@ public class Actor : Entity
         ClearJumpParams();
         ThrowWhenDie();
 
-        EntityArtHelper?.OnHelperRecycled();
-        EntityWwiseHelper.OnHelperRecycled();
-        EntityModelHelper.OnHelperRecycled();
-        EntityIndicatorHelper.OnHelperRecycled();
-        EntityBuffHelper.OnHelperRecycled();
-        EntityFrozenHelper.OnHelperRecycled();
-        EntityTriggerZoneHelper?.OnHelperRecycled();
-        EntityCollectHelper?.OnHelperRecycled();
-        EntityGrindTriggerZoneHelper?.OnHelperRecycled();
-        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
         {
-            h.OnHelperRecycled();
+            entityMonoHelper?.OnHelperRecycled();
         }
-
-        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
-        {
-            h.OnHelperRecycled();
-        }
-
-        ActorControllerHelper?.OnHelperRecycled();
-        ActorPushHelper.OnHelperRecycled();
-        ActorFaceHelper.OnHelperRecycled();
-        ActorSkinHelper.OnHelperRecycled();
-        ActorLaunchArcRendererHelper.OnHelperRecycled();
-        ActorBattleHelper.OnHelperRecycled();
-        ActorBoxInteractHelper.OnHelperRecycled();
-        ActorSkillLearningHelper?.OnHelperRecycled();
 
         UnInitActiveSkills();
         UnInitPassiveSkills();
@@ -710,6 +693,7 @@ public class Actor : Entity
         StopAllCoroutines();
         gameObject.SetActive(false);
         BattleManager.Instance.RemoveActor(this);
+        EntityMonoHelpers.Clear();
         base.OnRecycled();
         IsRecycling = false;
     }
@@ -799,65 +783,19 @@ public class Actor : Entity
     protected override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
     {
         base.RecordEntityExtraStates(entityDataExtraStates);
-        EntityArtHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        EntityWwiseHelper.RecordEntityExtraStates(entityDataExtraStates);
-        EntityModelHelper.RecordEntityExtraStates(entityDataExtraStates);
-        EntityIndicatorHelper.RecordEntityExtraStates(entityDataExtraStates);
-        EntityBuffHelper.RecordEntityExtraStates(entityDataExtraStates);
-        EntityFrozenHelper.RecordEntityExtraStates(entityDataExtraStates);
-        EntityTriggerZoneHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        EntityCollectHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        EntityGrindTriggerZoneHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
         {
-            h.RecordEntityExtraStates(entityDataExtraStates);
+            entityMonoHelper?.RecordEntityExtraStates(entityDataExtraStates);
         }
-
-        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
-        {
-            h.RecordEntityExtraStates(entityDataExtraStates);
-        }
-
-        ActorControllerHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        ActorPushHelper.RecordEntityExtraStates(entityDataExtraStates);
-        ActorFaceHelper.RecordEntityExtraStates(entityDataExtraStates);
-        ActorSkinHelper.RecordEntityExtraStates(entityDataExtraStates);
-        ActorLaunchArcRendererHelper.RecordEntityExtraStates(entityDataExtraStates);
-        ActorBattleHelper.RecordEntityExtraStates(entityDataExtraStates);
-        ActorBoxInteractHelper.RecordEntityExtraStates(entityDataExtraStates);
-        ActorSkillLearningHelper?.RecordEntityExtraStates(entityDataExtraStates);
     }
 
     protected override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
     {
         base.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityArtHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityWwiseHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityModelHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityIndicatorHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityBuffHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityFrozenHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityTriggerZoneHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityCollectHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityGrindTriggerZoneHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
         {
-            h.ApplyEntityExtraStates(entityDataExtraStates);
+            entityMonoHelper?.ApplyEntityExtraStates(entityDataExtraStates);
         }
-
-        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
-        {
-            h.ApplyEntityExtraStates(entityDataExtraStates);
-        }
-
-        ActorControllerHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        ActorPushHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        ActorFaceHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        ActorSkinHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        ActorLaunchArcRendererHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        ActorBattleHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        ActorBoxInteractHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        ActorSkillLearningHelper?.ApplyEntityExtraStates(entityDataExtraStates);
     }
 
     private void Update()
