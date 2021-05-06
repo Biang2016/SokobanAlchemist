@@ -69,10 +69,6 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     /// </summary>
     public void InitNormalModuleData()
     {
-#if UNITY_EDITOR
-        EntityDataMatrix_Temp_CheckOverlap_BetweenBoxes = new EntityData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
-        EntityDataMatrix_Temp_CheckOverlap_BoxAndActor = new EntityData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
-#endif
     }
 
     public WorldModuleData Clone() // 理论上只有NormalModule会用到，开放世界模组不能用此Clone，否则会造成不必要的内存占用
@@ -111,6 +107,12 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     public void OnUsed()
     {
+        WorldModuleBornPointGroupData = new BornPointGroupData();
+    }
+
+    public void OnRelease()
+    {
+        WorldModuleFeature = WorldModuleFeature.None;
         for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
         {
             for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
@@ -123,14 +125,11 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
             }
         }
 
-        WorldModuleFeature = WorldModuleFeature.None;
-        WorldModuleBornPointGroupData = new BornPointGroupData();
-    }
-
-    public void OnRelease()
-    {
+        EntityDataMatrix_Temp_CheckOverlap_BetweenBoxes = new EntityData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
+        EntityDataMatrix_Temp_CheckOverlap_BoxAndActor = new EntityData[WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE];
         WorldModuleBornPointGroupData = null;
-        WorldModuleFeature = WorldModuleFeature.None;
+        TriggerEntityDataDict.Clear();
+        TriggerEntityDataList.Clear();
         EventTriggerAppearEntityDataList.Clear();
     }
 
