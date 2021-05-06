@@ -27,6 +27,10 @@ public abstract class EntityMonoHelper : MonoBehaviour
     {
     }
 
+    public virtual void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+    }
+
     public virtual void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
     {
     }

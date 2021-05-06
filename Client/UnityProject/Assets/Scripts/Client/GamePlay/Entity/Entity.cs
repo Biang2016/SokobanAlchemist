@@ -307,6 +307,18 @@ public abstract class Entity : PoolObject
         }
     }
 
+    public void RecordEntityExtraSerializeData()
+    {
+        if (CurrentEntityData != null && CurrentEntityData.RawEntityExtraSerializeData != null)
+        {
+            RecordEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
+        }
+    }
+
+    protected virtual void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+    }
+
     protected virtual void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
     {
     }

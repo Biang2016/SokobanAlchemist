@@ -796,6 +796,38 @@ public class Actor : Entity
         ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
     }
 
+    protected override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+        base.RecordEntityExtraStates(entityDataExtraStates);
+        EntityArtHelper?.RecordEntityExtraStates(entityDataExtraStates);
+        EntityWwiseHelper.RecordEntityExtraStates(entityDataExtraStates);
+        EntityModelHelper.RecordEntityExtraStates(entityDataExtraStates);
+        EntityIndicatorHelper.RecordEntityExtraStates(entityDataExtraStates);
+        EntityBuffHelper.RecordEntityExtraStates(entityDataExtraStates);
+        EntityFrozenHelper.RecordEntityExtraStates(entityDataExtraStates);
+        EntityTriggerZoneHelper?.RecordEntityExtraStates(entityDataExtraStates);
+        EntityCollectHelper?.RecordEntityExtraStates(entityDataExtraStates);
+        EntityGrindTriggerZoneHelper?.RecordEntityExtraStates(entityDataExtraStates);
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.RecordEntityExtraStates(entityDataExtraStates);
+        }
+
+        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
+        {
+            h.RecordEntityExtraStates(entityDataExtraStates);
+        }
+
+        ActorControllerHelper?.RecordEntityExtraStates(entityDataExtraStates);
+        ActorPushHelper.RecordEntityExtraStates(entityDataExtraStates);
+        ActorFaceHelper.RecordEntityExtraStates(entityDataExtraStates);
+        ActorSkinHelper.RecordEntityExtraStates(entityDataExtraStates);
+        ActorLaunchArcRendererHelper.RecordEntityExtraStates(entityDataExtraStates);
+        ActorBattleHelper.RecordEntityExtraStates(entityDataExtraStates);
+        ActorBoxInteractHelper.RecordEntityExtraStates(entityDataExtraStates);
+        ActorSkillLearningHelper?.RecordEntityExtraStates(entityDataExtraStates);
+    }
+
     protected override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
     {
         base.ApplyEntityExtraStates(entityDataExtraStates);

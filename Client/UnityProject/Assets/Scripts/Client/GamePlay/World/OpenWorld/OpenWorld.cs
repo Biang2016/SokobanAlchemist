@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
@@ -600,6 +599,7 @@ public class OpenWorld : World
     {
         WorldData.WorldBornPointGroupData_Runtime.Dynamic_UnloadModuleData(currentShowModuleGP);
         WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null; // 时序，先置空指针再清空
+        yield return worldModule.RecordWorldModuleData(256);
         yield return worldModule.Clear(false, 256);
         worldModule.PoolRecycle();
         if (boolIndex >= 0)
