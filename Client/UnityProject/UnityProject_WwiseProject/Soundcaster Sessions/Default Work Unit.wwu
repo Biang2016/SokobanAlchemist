@@ -26,6 +26,26 @@
 							<Position X="0" Y="4"/>
 						</Module>
 						<Module>
+							<ObjectRef Name="State_OWC_2_TIC" ID="{0D2EBFA7-DBAE-4037-AEE6-70AD4658B35E}" WorkUnitID="{33909E9F-0C31-4D77-81C7-F43E6E71B41B}"/>
+							<Position X="1" Y="0"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="FireBox_OnDestroyed_Common" ID="{16948882-74E7-474D-86FE-3C22FED9137A}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+							<Position X="1" Y="6"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="IceBox_OnDestroyed_Common" ID="{31937532-CBC5-4BE6-A866-01CE339E02E9}" WorkUnitID="{15FB3040-4F45-4956-BB37-AB5ADF20AD4B}"/>
+							<Position X="1" Y="7"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="FireBox_OnDestroyed_Collide" ID="{62C3DD49-0F2B-43E2-88A1-3D7E0D86DFE9}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+							<Position X="2" Y="6"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="IceBox_OnDestroyed_Collide" ID="{1A6E3D45-1D91-4784-BB95-885019E45A93}" WorkUnitID="{15FB3040-4F45-4956-BB37-AB5ADF20AD4B}"/>
+							<Position X="2" Y="7"/>
+						</Module>
+						<Module>
 							<ObjectRef Name="FireEnemy_Red_HeatEmit_Preparing" ID="{0A3EEE52-AC14-4331-8705-982DE4A7F1BA}" WorkUnitID="{AB31CB3F-E95F-48C8-9072-77668498151B}"/>
 							<Position X="3" Y="1"/>
 						</Module>
@@ -38,6 +58,10 @@
 							<Position X="3" Y="3"/>
 						</Module>
 						<Module>
+							<ObjectRef Name="FireBox_OnDestroyed_Explosion" ID="{9A2CF6FF-B629-4772-8824-AAF88DC85DAD}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+							<Position X="3" Y="6"/>
+						</Module>
+						<Module>
 							<ObjectRef Name="FireEnemy_Red_HeatEmit_Cast" ID="{5A48918D-F7A4-4349-99F5-6E83875C9F6C}" WorkUnitID="{AB31CB3F-E95F-48C8-9072-77668498151B}"/>
 							<Position X="4" Y="1"/>
 						</Module>
@@ -48,6 +72,10 @@
 						<Module>
 							<ObjectRef Name="LightningEnemy_TripleStrike_Cast" ID="{030ED2D1-239F-4271-AA9C-5BD26196EBB5}" WorkUnitID="{46938B20-D5D9-4BBC-9328-20C080B198B5}"/>
 							<Position X="4" Y="3"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="FireBox_OnDestroyed_Firing" ID="{C74082BE-98EF-44A0-A4A4-C26510C39D6C}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+							<Position X="4" Y="6"/>
 						</Module>
 						<Module>
 							<ObjectRef Name="Player_GainFireElement" ID="{8206348C-8CF6-4C92-B1B7-53E2AC7A129A}" WorkUnitID="{243B1A99-3A40-415C-8C73-18D11E7863E8}"/>
@@ -64,6 +92,10 @@
 						<Module>
 							<ObjectRef Name="Player_Kick" ID="{D39F32AD-F077-4349-865D-9B5CB06EB29B}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
 							<Position X="5" Y="4"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="FireBox_OnDestroyed_Frozen" ID="{6532E5C5-2E0C-4906-9D3A-AAD101A85A6B}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+							<Position X="5" Y="6"/>
 						</Module>
 						<Module>
 							<ObjectRef Name="Player_GainGold" ID="{51A5AB64-F672-4456-87E8-33BA8582CCDF}" WorkUnitID="{243B1A99-3A40-415C-8C73-18D11E7863E8}"/>
@@ -89,7 +121,7 @@
 						</RTPCValue>
 						<RTPCValue>
 							<GameParameterRef Name="SpiderLegDistanceToPlayer" ID="{D9C56384-D920-47E1-8580-8A6201311E30}"/>
-							<Value>9999</Value>
+							<Value>0</Value>
 						</RTPCValue>
 						<RTPCValue>
 							<GameParameterRef Name="CombatEnemyNumber" ID="{52382756-3C28-48BA-A83B-0EC7E5308BC3}"/>
@@ -117,8 +149,8 @@
 						</RTPCValue>
 					</RTPCValueList>
 					<CurrentStateList ShowAll="true">
-						<CurrentStateRef Name="InCamp" ID="{EBC424C5-B0D7-47C4-9983-B3F24BAE5557}"/>
-						<CurrentStateRef Name="Lab" ID="{BDAF9F4F-2ABE-4B3F-A5AA-09220C0C4798}"/>
+						<CurrentStateRef Name="Exploring" ID="{3D43D6D3-16EE-4734-9A44-E93CFC6B1A41}"/>
+						<CurrentStateRef Name="Temple" ID="{08F478D6-8A4C-499B-9AA0-DCFE184341FE}"/>
 					</CurrentStateList>
 					<CurrentSwitchList ShowAll="true">
 						<CurrentSwitchRef Name="Earth" ID="{780183F2-AF58-4237-96F8-B204D6EBC684}"/>
