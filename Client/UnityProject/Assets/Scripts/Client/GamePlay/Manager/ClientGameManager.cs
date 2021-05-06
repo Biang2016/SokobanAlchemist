@@ -418,13 +418,13 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         {
             if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
             {
-                if (openWorld.IsInsideDungeon)
+                if (openWorld.InsideDungeon)
                 {
                     ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
                     confirmPanel.Initialize("Wanna give up the dungeon? You'll lose the rewards that you've got", "Let me go", "Cancel",
                         () =>
                         {
-                            openWorld.ReturnToOpenWorld();
+                            openWorld.ReturnToOpenWorld(false);
                             confirmPanel.CloseUIForm();
                         },
                         () => { confirmPanel.CloseUIForm(); }
@@ -448,7 +448,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         {
             if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
             {
-                if (openWorld.IsInsideDungeon)
+                if (openWorld.InsideDungeon)
                 {
                     ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
                     confirmPanel.Initialize("Wanna restart the dungeon? You'll lose the rewards that you've got", "Restart", "Cancel",
@@ -485,8 +485,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             ushort worldNameIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, worldName);
             if (worldNameIndex == ConfigManager.World_OpenWorldIndex)
             {
-                openWorld.DungeonMissionComplete = dungeonComplete;
-                openWorld.ReturnToOpenWorld();
+                openWorld.ReturnToOpenWorld(dungeonComplete);
             }
             else
             {

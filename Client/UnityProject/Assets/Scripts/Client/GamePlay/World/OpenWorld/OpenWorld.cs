@@ -134,7 +134,7 @@ public class OpenWorld : World
         WorldMap_StaticLayoutOccupied_IntactForStaticLayout = null;
         WorldMap_StaticLayoutOccupied_IntactForBox = null;
         WorldMap_TerrainType = null;
-        IsInsideDungeon = false;
+        DungeonMissionState = DungeonMissionState.NotInDungeon;
         InitialPlayerBP = GridPos3D.Zero;
         transportingPlayerToDungeon = false;
         returningToOpenWorldFormDungeon = false;
@@ -370,7 +370,7 @@ public class OpenWorld : World
     {
         if (!IsRecycled)
         {
-            if (GameStateManager.Instance.GetState() == GameState.Fighting && !IsInsideDungeon)
+            if (GameStateManager.Instance.GetState() == GameState.Fighting && DungeonMissionState == DungeonMissionState.NotInDungeon)
             {
                 if (RefreshScopeModulesCoroutine == null && !WaitingForLoadStartDungeon)
                 {
@@ -400,7 +400,7 @@ public class OpenWorld : World
 
         bool CheckModuleCanBeSeenByCamera(GridPos3D moduleGP, bool checkBottom, bool checkTop, float extendScope)
         {
-            if (IsInsideDungeon) return moduleGP.y >= WORLD_HEIGHT / 2; // 当角色在解谜关卡时，隐藏其它模组，且恒定显示解谜模组 todo 此处粗暴地使用了模组坐标来判断是否在解谜关卡，未来需要处理
+            if (InsideDungeon) return moduleGP.y >= WORLD_HEIGHT / 2; // 当角色在解谜关卡时，隐藏其它模组，且恒定显示解谜模组 todo 此处粗暴地使用了模组坐标来判断是否在解谜关卡，未来需要处理
             GeometryUtility.CalculateFrustumPlanes(CameraManager.Instance.MainCamera, cachedPlanes);
             if (checkBottom && checkTop)
             {
@@ -613,14 +613,16 @@ public class OpenWorld : World
 
     #region Dungeon
 
-    internal bool IsInsideDungeon = false;
+    internal bool InsideDungeon => DungeonMissionState != DungeonMissionState.NotInDungeon;
+    internal DungeonMissionState DungeonMissionState;
     internal bool IsUsingSpecialESPSInsideDungeon = false;
-    internal bool DungeonMissionComplete = false;
+
     internal ushort CurrentDungeonWorldTypeIndex = 0;
     internal GridPos3D LastLeaveOpenWorldPlayerGP = GridPos3D.Zero;
     private List<WorldModule> DungeonModules = new List<WorldModule>();
 
     private PlayerData PlayerDataSave;
+    private PlayerData PlayerDataSave_DungeonTemp;
 
     public void TransportPlayerToDungeon(ushort worldTypeIndex)
     {
@@ -647,7 +649,7 @@ public class OpenWorld : World
 
         WorldData dungeonData = ConfigManager.GetWorldDataConfig(worldTypeIndex);
 
-        if (IsInsideDungeon)
+        if (InsideDungeon)
         {
             // Recycle Current Dungeon Modules
             int totalRecycleModuleNumber = DungeonModules.Count;
@@ -661,12 +663,14 @@ public class OpenWorld : World
 
             DungeonModules.Clear();
             yield return RecycleEmptyModules();
-            CalculatePlayerGrowth(); // Dungeon→Dungeon，检查是否通关、是否特殊关卡，来判断是否保存玩家进度
-            DungeonMissionComplete = false; // 重置DungeonComplete
+            DungeonMissionState = DungeonMissionState.DungeonPartialComplete;
+            SavePlayerGrowth();
         }
         else
         {
-            CalculatePlayerGrowth(); // 大世界→Dungeon，保存玩家进度
+            LastLeaveOpenWorldPlayerGP = BattleManager.Instance.Player1.transform.position.ToGridPos3D();
+            DungeonMissionState = DungeonMissionState.DungeonInProgress;
+            SavePlayerGrowth();
         }
 
         // Loading New Dungeon Modules
@@ -717,16 +721,8 @@ public class OpenWorld : World
             Debug.LogWarning("传送的模组没有默认玩家出生点");
         }
 
-        if (!IsInsideDungeon)
-        {
-            LastLeaveOpenWorldPlayerGP = BattleManager.Instance.Player1.transform.position.ToGridPos3D();
-        }
-
         // Dungeon Special Settings
-        IsInsideDungeon = true;
-        DungeonMissionComplete = false;
         IsUsingSpecialESPSInsideDungeon = dungeonData.UseSpecialPlayerEnterESPS;
-        PlayerDataSave = PlayerData.GetPlayerData();
         if (IsUsingSpecialESPSInsideDungeon) BattleManager.Instance.Player1.ReloadESPS(dungeonData.Raw_PlayerEnterESPS);
         BattleManager.Instance.Player1.CanBeThreatened = true;
 
@@ -748,18 +744,18 @@ public class OpenWorld : World
         transportingPlayerToDungeon = false;
     }
 
-    public void ReturnToOpenWorld()
+    public void ReturnToOpenWorld(bool dungeonComplete)
     {
         if (transportingPlayerToDungeon) return;
         if (returningToOpenWorldFormDungeon) return;
         if (restartingDungeon) return;
         if (respawningInOpenWorld) return;
-        StartCoroutine(Co_ReturnToOpenWorld());
+        StartCoroutine(Co_ReturnToOpenWorld(dungeonComplete));
     }
 
     private bool returningToOpenWorldFormDungeon = false;
 
-    public IEnumerator Co_ReturnToOpenWorld()
+    public IEnumerator Co_ReturnToOpenWorld(bool dungeonComplete)
     {
         returningToOpenWorldFormDungeon = true;
         CurrentDungeonWorldTypeIndex = 0;
@@ -772,14 +768,20 @@ public class OpenWorld : World
         LoadingMapPanel.SetProgress(0, "Returning to Open World");
 
         while (RefreshScopeModulesCoroutine != null) yield return null;
-        CalculatePlayerGrowth();
+
+        if (dungeonComplete) DungeonMissionState = DungeonMissionState.DungeonComplete;
+        else DungeonMissionState = DungeonMissionState.DungeonFailed;
+        SavePlayerGrowth();
+        LoadPlayerGrowth();
+        DungeonMissionState = DungeonMissionState.NotInDungeon;
+
         BattleManager.Instance.Player1.CanBeThreatened = true;
         BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP); // 如果未在dungeon里面死亡，复活回进入dungeon的地方
 
         ApplyWorldVisualEffectSettings(WorldData);
 
         CameraManager.Instance.FieldCamera.InitFocus();
-        IsInsideDungeon = false;
+        DungeonMissionState = DungeonMissionState.NotInDungeon;
         RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(LastLeaveOpenWorldPlayerGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
         while (RefreshScopeModulesCoroutine != null) yield return null;
 
@@ -810,7 +812,7 @@ public class OpenWorld : World
         if (returningToOpenWorldFormDungeon) return;
         if (restartingDungeon) return;
         if (respawningInOpenWorld) return;
-        if (!IsInsideDungeon) return;
+        if (!InsideDungeon) return;
         StartCoroutine(Co_RestartDungeon());
     }
 
@@ -844,8 +846,8 @@ public class OpenWorld : World
         DungeonModules.Clear();
         yield return RecycleEmptyModules();
 
-        DungeonMissionComplete = false;
-        CalculatePlayerGrowth();
+        DungeonMissionState = DungeonMissionState.DungeonPartialFailed;
+        LoadPlayerGrowth();
 
         // Loading Dungeon Modules
         int totalModuleNum = dungeonData.WorldModuleGPOrder.Count;
@@ -943,7 +945,7 @@ public class OpenWorld : World
 
         // Recycling the Open World
         while (RefreshScopeModulesCoroutine != null) yield return null;
-        CalculatePlayerGrowth();
+        SavePlayerGrowth();
         BattleManager.Instance.Player1.CanBeThreatened = true;
         BattleManager.Instance.Player1.TransportPlayerGridPos(InitialPlayerBP); // 如果在dungeon里面死亡，复活回老家
         BattleManager.Instance.Player1.Reborn();
@@ -977,9 +979,44 @@ public class OpenWorld : World
 
     #region PlayerGrowth
 
-    private void CalculatePlayerGrowth()
+    private void SavePlayerGrowth() // 将玩家成长存档
     {
-        if (IsInsideDungeon)
+        if (DungeonMissionState == DungeonMissionState.NotInDungeon)
+        {
+            PlayerDataSave = PlayerData.GetPlayerData();
+        }
+        else if (DungeonMissionState == DungeonMissionState.DungeonInProgress)
+        {
+            PlayerDataSave = PlayerData.GetPlayerData();
+            PlayerDataSave_DungeonTemp = PlayerData.GetPlayerData();
+        }
+        else
+        {
+            if (IsUsingSpecialESPSInsideDungeon) // 此类特殊关卡默认不计入成长，如教程关、体验关等等
+            {
+                return;
+            }
+            else
+            {
+                if (DungeonMissionState == DungeonMissionState.DungeonPartialComplete) // Dungeon阶段性过关，记录玩家数据到DungeonTemp里
+                {
+                    PlayerDataSave_DungeonTemp = PlayerData.GetPlayerData();
+                }
+                else if (DungeonMissionState == DungeonMissionState.DungeonComplete) // Dungeon通关，获得所有奖励，保存玩家成长数值和技能
+                {
+                    PlayerDataSave = PlayerData.GetPlayerData();
+                }
+            }
+        }
+    }
+
+    private void LoadPlayerGrowth() // 提取存档
+    {
+        if (DungeonMissionState == DungeonMissionState.NotInDungeon)
+        {
+            PlayerDataSave?.ApplyDataOnPlayer();
+        }
+        else
         {
             if (IsUsingSpecialESPSInsideDungeon) // 此类特殊关卡默认不计入成长，如教程关、体验关等等
             {
@@ -987,11 +1024,11 @@ public class OpenWorld : World
             }
             else
             {
-                if (DungeonMissionComplete) // dungeon通关，获得所有奖励，保存玩家成长数值和技能
+                if (DungeonMissionState == DungeonMissionState.DungeonPartialFailed) // Dungeon死亡，回到上一关的存档数据
                 {
-                    PlayerDataSave = PlayerData.GetPlayerData();
+                    PlayerDataSave_DungeonTemp?.ApplyDataOnPlayer();
                 }
-                else
+                else if (DungeonMissionState == DungeonMissionState.DungeonFailed) // Dungeon放弃，回到进入Dungeon之前的大世界的存档数据
                 {
                     PlayerDataSave?.ApplyDataOnPlayer();
                 }

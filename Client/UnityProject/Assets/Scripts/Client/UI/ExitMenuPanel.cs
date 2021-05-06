@@ -32,8 +32,8 @@ public class ExitMenuPanel : BaseUIPanel
         ExitMenuAnim.SetTrigger("Play");
         if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
-            ExitToOpenWorldButton.gameObject.SetActive(openWorld.IsInsideDungeon);
-            RestartDungeonButton.gameObject.SetActive(openWorld.IsInsideDungeon);
+            ExitToOpenWorldButton.gameObject.SetActive(openWorld.InsideDungeon);
+            RestartDungeonButton.gameObject.SetActive(openWorld.InsideDungeon);
         }
     }
 
