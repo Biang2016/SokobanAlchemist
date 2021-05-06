@@ -479,7 +479,16 @@ public class OpenWorld : World
                             {
                                 GridPos3D worldGP = new GridPos3D(world_x, world_y, world_z);
                                 GridPos3D localGP = worldGP - targetModuleGP * WorldModule.MODULE_SIZE;
-                                moduleData[kv.Key, localGP] = WorldMap_EntityDataMatrix[kv.Key][world_x, world_y - WorldModule.MODULE_SIZE, world_z]?.Clone();
+                                EntityData entityData = WorldMap_EntityDataMatrix[kv.Key][world_x, world_y - WorldModule.MODULE_SIZE, world_z];
+                                if (entityData != null)
+                                {
+                                    if (entityData.ProbablyShow()) // 为了防止大世界每次进出后都不同，要在第一次加载时将ProbablyShow固化
+                                    {
+                                        EntityData clone_EntityData = entityData.Clone();
+                                        clone_EntityData.RemoveAllProbablyShowPassiveSkill();
+                                        moduleData[kv.Key, localGP] = clone_EntityData;
+                                    }
+                                }
                             }
                         }
 
@@ -491,17 +500,26 @@ public class OpenWorld : World
                             GridPos3D worldGP = new GridPos3D(world_x, world_y, world_z);
                             GridPos3D localGP = worldGP - targetModuleGP * WorldModule.MODULE_SIZE;
                             List<EntityData> dataList = WorldMap_TriggerEntityDataMatrix[world_x, world_y - WorldModule.MODULE_SIZE, world_z].Clone<EntityData, EntityData>();
-                            foreach (EntityData data in dataList)
+                            foreach (EntityData cloneTriggerEntityData in dataList)
                             {
-                                moduleData.TriggerEntityDataList.Add(data);
+                                if (cloneTriggerEntityData.ProbablyShow()) // 为了防止大世界每次进出后都不同，要在第一次加载时将ProbablyShow固化
+                                {
+                                    cloneTriggerEntityData.RemoveAllProbablyShowPassiveSkill();
+                                    moduleData.TriggerEntityDataList.Add(cloneTriggerEntityData);
+                                }
                             }
                         }
 
-                        foreach (EntityPassiveSkill_LevelEventTriggerAppear.Data data in EventTriggerAppearEntityDataList)
+                        foreach (EntityPassiveSkill_LevelEventTriggerAppear.Data LET_EntityData in EventTriggerAppearEntityDataList)
                         {
-                            if (GetModuleGPByWorldGP(data.WorldGP) == targetModuleGP)
+                            if (GetModuleGPByWorldGP(LET_EntityData.WorldGP) == targetModuleGP)
                             {
-                                moduleData.EventTriggerAppearEntityDataList.Add((EntityPassiveSkill_LevelEventTriggerAppear.Data) data.Clone());
+                                if (LET_EntityData.EntityData.ProbablyShow()) // 为了防止大世界每次进出后都不同，要在第一次加载时将ProbablyShow固化
+                                {
+                                    EntityPassiveSkill_LevelEventTriggerAppear.Data clone_LET_EntityData = (EntityPassiveSkill_LevelEventTriggerAppear.Data) LET_EntityData.Clone();
+                                    clone_LET_EntityData.EntityData.RemoveAllProbablyShowPassiveSkill();
+                                    moduleData.EventTriggerAppearEntityDataList.Add(clone_LET_EntityData);
+                                }
                             }
                         }
 
@@ -724,12 +742,13 @@ public class OpenWorld : World
         // Dungeon Special Settings
         IsUsingSpecialESPSInsideDungeon = dungeonData.UseSpecialPlayerEnterESPS;
         if (IsUsingSpecialESPSInsideDungeon) BattleManager.Instance.Player1.ReloadESPS(dungeonData.Raw_PlayerEnterESPS);
-        BattleManager.Instance.Player1.CanBeThreatened = true;
+
+        WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState.Exploring); // 默认战斗状态 （如果有Camp的世界将由对应的TriggerBox来切换到InCamp）
+        BattleManager.Instance.Player1.CanBeThreatened = true; // 时序，要在Transport之前，因为Transport后可能会由TriggerBox赋值CanBeThreatened状态
+        BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint); // 时序，传送要发生在CombatState切换到默认值之后（如果有InCamp状态将在此行赋值）
 
         ApplyWorldVisualEffectSettings(dungeonData);
-
-        BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint);
-
+      
         CameraManager.Instance.FieldCamera.InitFocus();
 
         ClientGameManager.Instance.DebugPanel.Clear();
@@ -775,8 +794,9 @@ public class OpenWorld : World
         LoadPlayerGrowth();
         DungeonMissionState = DungeonMissionState.NotInDungeon;
 
-        BattleManager.Instance.Player1.CanBeThreatened = true;
-        BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP); // 如果未在dungeon里面死亡，复活回进入dungeon的地方
+        WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState.Exploring); // 默认战斗状态 （如果有Camp的世界将由对应的TriggerBox来切换到InCamp）
+        BattleManager.Instance.Player1.CanBeThreatened = true; // 时序，要在Transport之前，因为Transport后可能会由TriggerBox赋值CanBeThreatened状态
+        BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP); // 时序，传送要发生在CombatState切换到默认值之后（如果有InCamp状态将在此行赋值）
 
         ApplyWorldVisualEffectSettings(WorldData);
 
@@ -901,8 +921,9 @@ public class OpenWorld : World
             Debug.LogWarning("传送的模组没有默认玩家出生点");
         }
 
-        BattleManager.Instance.Player1.CanBeThreatened = true;
-        BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint);
+        WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState.Exploring); // 默认战斗状态 （如果有Camp的世界将由对应的TriggerBox来切换到InCamp）
+        BattleManager.Instance.Player1.CanBeThreatened = true; // 时序，要在Transport之前，因为Transport后可能会由TriggerBox赋值CanBeThreatened状态
+        BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint); // 时序，传送要发生在CombatState切换到默认值之后（如果有InCamp状态将在此行赋值）
         BattleManager.Instance.Player1.Reborn();
 
         if (IsUsingSpecialESPSInsideDungeon) BattleManager.Instance.Player1.ReloadESPS(dungeonData.Raw_PlayerEnterESPS);
@@ -946,8 +967,9 @@ public class OpenWorld : World
         // Recycling the Open World
         while (RefreshScopeModulesCoroutine != null) yield return null;
         SavePlayerGrowth();
-        BattleManager.Instance.Player1.CanBeThreatened = true;
-        BattleManager.Instance.Player1.TransportPlayerGridPos(InitialPlayerBP); // 如果在dungeon里面死亡，复活回老家
+        WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState.Exploring); // 默认战斗状态 （如果有Camp的世界将由对应的TriggerBox来切换到InCamp）
+        BattleManager.Instance.Player1.CanBeThreatened = true; // 时序，要在Transport之前，因为Transport后可能会由TriggerBox赋值CanBeThreatened状态
+        BattleManager.Instance.Player1.TransportPlayerGridPos(InitialPlayerBP); // 时序，传送要发生在CombatState切换到默认值之后（如果有InCamp状态将在此行赋值）
         BattleManager.Instance.Player1.Reborn();
 
         CameraManager.Instance.FieldCamera.InitFocus();

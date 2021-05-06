@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangLibrary;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
@@ -91,6 +92,43 @@ public class EntityData : IClone<EntityData>
         foreach (EntityPassiveSkill eps in RawEntityExtraSerializeData.EntityPassiveSkills)
         {
             if (eps is EntityPassiveSkill_LevelEventTriggerAppear)
+            {
+                removeEPSList.Add(eps);
+            }
+        }
+
+        foreach (EntityPassiveSkill eps in removeEPSList)
+        {
+            RawEntityExtraSerializeData.EntityPassiveSkills.Remove(eps);
+        }
+    }
+
+    public bool ProbablyShow()
+    {
+        foreach (EntityPassiveSkill eps in RawEntityExtraSerializeData.EntityPassiveSkills)
+        {
+            if (eps is EntityPassiveSkill_ProbablyShow probablyShow)
+            {
+                if (probablyShow.ShowProbabilityPercent.ProbabilityBool())
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public void RemoveAllProbablyShowPassiveSkill()
+    {
+        List<EntityPassiveSkill> removeEPSList = new List<EntityPassiveSkill>();
+        foreach (EntityPassiveSkill eps in RawEntityExtraSerializeData.EntityPassiveSkills)
+        {
+            if (eps is EntityPassiveSkill_ProbablyShow)
             {
                 removeEPSList.Add(eps);
             }
