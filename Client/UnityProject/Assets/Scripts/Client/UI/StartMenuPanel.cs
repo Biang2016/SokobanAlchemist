@@ -22,6 +22,7 @@ public class StartMenuPanel : BaseUIPanel
     public Button SettingButton;
     public Button StartButton;
     public Button CreditButton;
+    public Button ExitButton;
 
     public AK.Wwise.Event OnPlayAnim;
 
@@ -50,5 +51,10 @@ public class StartMenuPanel : BaseUIPanel
     public void OnCreditSelfButtonClick()
     {
         CreditAnim.SetTrigger("Hide");
+    }
+
+    public void OnExitButtonClick()
+    {
+        Application.Quit();
     }
 }
