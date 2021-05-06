@@ -607,33 +607,39 @@ public class Actor : Entity
     {
         gameObject.SetActive(true);
         base.OnUsed();
-        EntityArtHelper?.OnHelperUsed();
-        EntityWwiseHelper.OnHelperUsed();
-        EntityModelHelper.OnHelperUsed();
-        EntityIndicatorHelper.OnHelperUsed();
-        EntityBuffHelper.OnHelperUsed();
-        EntityFrozenHelper.OnHelperUsed();
-        EntityTriggerZoneHelper?.OnHelperUsed();
-        EntityCollectHelper?.OnHelperUsed();
-        EntityGrindTriggerZoneHelper?.OnHelperUsed();
+        EntityMonoHelpers.Clear();
+        EntityMonoHelpers.Add(EntityArtHelper);
+        EntityMonoHelpers.Add(EntityWwiseHelper);
+        EntityMonoHelpers.Add(EntityModelHelper);
+        EntityMonoHelpers.Add(EntityIndicatorHelper);
+        EntityMonoHelpers.Add(EntityBuffHelper);
+        EntityMonoHelpers.Add(EntityFrozenHelper);
+        EntityMonoHelpers.Add(EntityTriggerZoneHelper);
+        EntityMonoHelpers.Add(EntityCollectHelper);
+        EntityMonoHelpers.Add(EntityGrindTriggerZoneHelper);
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
-            h.OnHelperUsed();
+            EntityMonoHelpers.Add(h);
         }
 
         foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
         {
-            h.OnHelperUsed();
+            EntityMonoHelpers.Add(h);
         }
 
-        ActorControllerHelper?.OnHelperUsed();
-        ActorPushHelper.OnHelperUsed();
-        ActorFaceHelper.OnHelperUsed();
-        ActorSkinHelper.OnHelperUsed();
-        ActorLaunchArcRendererHelper.OnHelperUsed();
-        ActorBattleHelper.OnHelperUsed();
-        ActorBoxInteractHelper.OnHelperUsed();
-        ActorSkillLearningHelper?.OnHelperUsed();
+        EntityMonoHelpers.Add(ActorControllerHelper);
+        EntityMonoHelpers.Add(ActorPushHelper);
+        EntityMonoHelpers.Add(ActorFaceHelper);
+        EntityMonoHelpers.Add(ActorSkinHelper);
+        EntityMonoHelpers.Add(ActorLaunchArcRendererHelper);
+        EntityMonoHelpers.Add(ActorBattleHelper);
+        EntityMonoHelpers.Add(ActorBoxInteractHelper);
+        EntityMonoHelpers.Add(ActorSkillLearningHelper);
+
+        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
+        {
+            entityMonoHelper?.OnHelperUsed();
+        }
 
         ActorMoveColliderRoot.SetActive(true);
     }
@@ -672,33 +678,10 @@ public class Actor : Entity
         ClearJumpParams();
         ThrowWhenDie();
 
-        EntityArtHelper?.OnHelperRecycled();
-        EntityWwiseHelper.OnHelperRecycled();
-        EntityModelHelper.OnHelperRecycled();
-        EntityIndicatorHelper.OnHelperRecycled();
-        EntityBuffHelper.OnHelperRecycled();
-        EntityFrozenHelper.OnHelperRecycled();
-        EntityTriggerZoneHelper?.OnHelperRecycled();
-        EntityCollectHelper?.OnHelperRecycled();
-        EntityGrindTriggerZoneHelper?.OnHelperRecycled();
-        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
         {
-            h.OnHelperRecycled();
+            entityMonoHelper?.OnHelperRecycled();
         }
-
-        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
-        {
-            h.OnHelperRecycled();
-        }
-
-        ActorControllerHelper?.OnHelperRecycled();
-        ActorPushHelper.OnHelperRecycled();
-        ActorFaceHelper.OnHelperRecycled();
-        ActorSkinHelper.OnHelperRecycled();
-        ActorLaunchArcRendererHelper.OnHelperRecycled();
-        ActorBattleHelper.OnHelperRecycled();
-        ActorBoxInteractHelper.OnHelperRecycled();
-        ActorSkillLearningHelper?.OnHelperRecycled();
 
         UnInitActiveSkills();
         UnInitPassiveSkills();
@@ -710,6 +693,7 @@ public class Actor : Entity
         StopAllCoroutines();
         gameObject.SetActive(false);
         BattleManager.Instance.RemoveActor(this);
+        EntityMonoHelpers.Clear();
         base.OnRecycled();
         IsRecycling = false;
     }
@@ -751,7 +735,7 @@ public class Actor : Entity
     /// <param name="initWorldModuleGUID"></param>
     public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
     {
-        base.Setup(initWorldModuleGUID);
+        base.Setup(entityData, initWorldModuleGUID);
         EntityTypeIndex = entityData.EntityTypeIndex;
         ActorType = entityData.EntityType.TypeName;
         ActorCategory = entityData.EntityTypeIndex == ConfigManager.Actor_PlayerIndex ? ActorCategory.Player : ActorCategory.Creature;
@@ -794,6 +778,24 @@ public class Actor : Entity
 
         ForbidAction = false;
         ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
+    }
+
+    protected override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+        base.RecordEntityExtraStates(entityDataExtraStates);
+        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
+        {
+            entityMonoHelper?.RecordEntityExtraStates(entityDataExtraStates);
+        }
+    }
+
+    protected override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+        base.ApplyEntityExtraStates(entityDataExtraStates);
+        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
+        {
+            entityMonoHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        }
     }
 
     private void Update()

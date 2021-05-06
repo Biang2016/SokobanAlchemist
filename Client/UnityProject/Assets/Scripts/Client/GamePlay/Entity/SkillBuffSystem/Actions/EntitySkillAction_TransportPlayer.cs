@@ -27,7 +27,7 @@ public class EntitySkillAction_TransportPlayer : BoxSkillAction, EntitySkillActi
             WorldProbList.Add(selectedWorld);
         }
 
-        ClientGameManager.Instance.ChangeWorld(selectedWorld.WorldTypeName.TypeName, true);
+        ClientGameManager.Instance.ChangeWorld(selectedWorld.WorldTypeName.TypeName, true, Entity.CurrentEntityData);
     }
 
     protected override void ChildClone(EntitySkillAction newAction)

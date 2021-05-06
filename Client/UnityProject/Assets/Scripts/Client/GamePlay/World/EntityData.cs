@@ -14,6 +14,10 @@ public class EntityData : IClone<EntityData>
     public GridPos3D WorldGP;
     public GridPos3D LocalGP;
 
+    [ReadOnly]
+    [HideInEditorMode]
+    public string InitStaticLayoutGUID = ""; // 创建时所属的静态布局GUID
+
     public override string ToString()
     {
         return EntityType.ToString();
@@ -145,6 +149,7 @@ public class EntityData : IClone<EntityData>
         EntityData newEntityData = new EntityData(EntityTypeIndex, EntityOrientation, RawEntityExtraSerializeData?.Clone());
         newEntityData.WorldGP = WorldGP;
         newEntityData.LocalGP = LocalGP;
+        newEntityData.InitStaticLayoutGUID = InitStaticLayoutGUID;
         return newEntityData;
     }
 }

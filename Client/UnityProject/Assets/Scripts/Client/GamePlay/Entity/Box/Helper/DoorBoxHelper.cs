@@ -20,6 +20,7 @@ public class DoorBoxHelper : BoxMonoHelper
             if (open != value)
             {
                 open = value;
+                DoorAnim.ResetTrigger(open ? "Close" : "Open");
                 DoorAnim.SetTrigger(open ? "Open" : "Close");
                 foreach (EntityIndicator doorEntityIndicator in DoorEntityIndicators)
                 {
@@ -49,5 +50,17 @@ public class DoorBoxHelper : BoxMonoHelper
     {
         base.OnHelperUsed();
         Open = false;
+    }
+
+    public override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+        base.RecordEntityExtraStates(entityDataExtraStates);
+        Entity.CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates.DoorOpen = Open;
+    }
+
+    public override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+        base.ApplyEntityExtraStates(entityDataExtraStates);
+        Open = entityDataExtraStates.DoorOpen;
     }
 }

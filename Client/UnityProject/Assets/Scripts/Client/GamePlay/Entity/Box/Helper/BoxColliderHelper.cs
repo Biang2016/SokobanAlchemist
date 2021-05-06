@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
+public class BoxColliderHelper : BoxMonoHelper
 {
     [SerializeField]
     private GameObject NormalColliderRoot;
@@ -68,15 +68,17 @@ public class BoxColliderHelper : BoxMonoHelper, IBoxHelper
         }
     }
 
-    public void OnBoxUsed()
+    public override void OnHelperUsed()
     {
+        base.OnHelperUsed();
         NormalColliderRoot.SetActive(true);
         StaticColliderRoot.SetActive(true);
         BoxOnlyDynamicColliderRoot.SetActive(true);
     }
 
-    public void OnBoxPoolRecycled()
+    public override void OnHelperRecycled()
     {
+        base.OnHelperRecycled();
         StaticColliderEnable = false;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = false;

@@ -258,7 +258,6 @@ public class LearnInfo
     public string SkillGUID;
     public EntityUpgrade EntityUpgrade;
     public UnityAction LearnCallback;
-    public PlayerControllerHelper.KeyBind KeyBind;
     public int GoldCost;
 }
 
