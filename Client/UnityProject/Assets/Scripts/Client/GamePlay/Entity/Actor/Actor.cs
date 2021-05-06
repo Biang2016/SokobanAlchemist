@@ -1317,6 +1317,20 @@ public class Actor : Entity
         }
     }
 
+    #region Vertically Move
+
+    public void MoveUp()
+    {
+
+    }
+
+    public void MoveDown()
+    {
+
+    }
+
+    #endregion
+
     #region Jump
 
     private void ClearJumpParams()
