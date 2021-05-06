@@ -19,6 +19,15 @@ public abstract class EntityActiveSkill : EntitySkill
     [LabelText("作用阵营")]
     public RelativeCamp TargetCamp;
 
+    [LabelText("是否绑定键位")]
+    [PropertyOrder(-8)]
+    public bool NeedBindKey;
+
+    [LabelText("技能绑定键位")]
+    [PropertyOrder(-8)]
+    [ShowIf("NeedBindKey")]
+    public PlayerControllerHelper.KeyBind SkillKeyBind;
+
     #region 绑定角色技能参数
 
     internal EntitySkillIndex EntitySkillIndex;
@@ -744,6 +753,8 @@ public abstract class EntityActiveSkill : EntitySkill
         EntityActiveSkill newEAS = (EntityActiveSkill) cloneData;
         newEAS.SkillsPropertyCollection = SkillsPropertyCollection.Clone();
         newEAS.TargetCamp = TargetCamp;
+        newEAS.NeedBindKey = NeedBindKey;
+        newEAS.SkillKeyBind = SkillKeyBind;
         newEAS.TriggerWhenMissProbabilityPercent = TriggerWhenMissProbabilityPercent;
         newEAS.EntitySkillConditions = EntitySkillConditions.Clone<EntitySkillCondition, EntitySkillCondition>();
         newEAS.WingUpCanMove = WingUpCanMove;
@@ -760,6 +771,8 @@ public abstract class EntityActiveSkill : EntitySkill
         EntityActiveSkill srcEAS = (EntityActiveSkill) srcData;
         srcEAS.SkillsPropertyCollection.ApplyDataTo(SkillsPropertyCollection);
         TargetCamp = srcEAS.TargetCamp;
+        NeedBindKey = srcEAS.NeedBindKey;
+        SkillKeyBind = srcEAS.SkillKeyBind;
         TriggerWhenMissProbabilityPercent = srcEAS.TriggerWhenMissProbabilityPercent;
         if (EntitySkillConditions.Count != srcEAS.EntitySkillConditions.Count)
         {

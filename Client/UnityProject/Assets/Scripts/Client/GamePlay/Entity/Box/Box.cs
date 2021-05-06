@@ -95,6 +95,9 @@ public partial class Box : Entity
     [FoldoutGroup("组件")]
     public BoxMarchingTextureHelper BoxMarchingTextureHelper;
 
+    [FoldoutGroup("组件")]
+    public TransportBoxHelper TransportBoxHelper;
+
     internal Actor FrozenActor
     {
         get { return BoxFrozenBoxHelper != null ? BoxFrozenBoxHelper.FrozenActor : null; }
@@ -145,12 +148,13 @@ public partial class Box : Entity
             h.OnHelperUsed();
         }
 
-        BoxColliderHelper.OnBoxUsed();
+        BoxColliderHelper.OnHelperUsed();
         DoorBoxHelper?.OnHelperUsed();
         BoxSkinHelper?.OnHelperUsed();
         BoxIconSpriteHelper.OnHelperUsed();
         BoxFrozenBoxHelper?.OnHelperUsed();
         BoxMarchingTextureHelper?.OnHelperUsed();
+        TransportBoxHelper?.OnHelperUsed();
         BoxMergeConfig.OnUsed();
         base.OnUsed();
     }
@@ -187,12 +191,13 @@ public partial class Box : Entity
         }
 
         BoxEffectHelper.OnHelperRecycled();
-        BoxColliderHelper.OnBoxPoolRecycled();
+        BoxColliderHelper.OnHelperRecycled();
         DoorBoxHelper?.OnHelperRecycled();
         BoxSkinHelper?.OnHelperRecycled();
         BoxIconSpriteHelper?.OnHelperRecycled();
         BoxFrozenBoxHelper?.OnHelperRecycled();
         BoxMarchingTextureHelper?.OnHelperRecycled();
+        TransportBoxHelper?.OnHelperRecycled();
         BoxMergeConfig.OnRecycled();
 
         UnInitPassiveSkills();
@@ -484,7 +489,7 @@ public partial class Box : Entity
 
     public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
     {
-        base.Setup(initWorldModuleGUID);
+        base.Setup(entityData, initWorldModuleGUID);
         transform.position = worldGP;
         WorldGP = worldGP;
         if (IsHidden) BoxModelHelper.gameObject.SetActive(false);
@@ -499,6 +504,38 @@ public partial class Box : Entity
 
         if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorBoxInteractHelper.GetInteractSkillType(EntityTypeIndex), EntityTypeIndex);
         ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
+    }
+
+    protected override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+        base.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityArtHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityWwiseHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityModelHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityIndicatorHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityBuffHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityFrozenHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityTriggerZoneHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityCollectHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityGrindTriggerZoneHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.ApplyEntityExtraStates(entityDataExtraStates);
+        }
+
+        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
+        {
+            h.ApplyEntityExtraStates(entityDataExtraStates);
+        }
+
+        BoxColliderHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        DoorBoxHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        ;
+        BoxSkinHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        BoxIconSpriteHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        BoxFrozenBoxHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        BoxMarchingTextureHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        TransportBoxHelper?.ApplyEntityExtraStates(entityDataExtraStates);
     }
 
     private void SetModelSmoothMoveLerpTime(float lerpTime)
@@ -1016,7 +1053,7 @@ public partial class Box : Entity
                 {
                     // 检查格子中部和四角是否落地，避免卡在半空中
                     bool hitGround = Physics.Raycast(transform.position + offset, Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
-                                     || Physics.Raycast(transform.position + offset + new Vector3(0.45f,0f,0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
+                                     || Physics.Raycast(transform.position + offset + new Vector3(0.45f, 0f, 0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
                                      || Physics.Raycast(transform.position + offset + new Vector3(-0.45f, 0f, 0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
                                      || Physics.Raycast(transform.position + offset + new Vector3(0.45f, 0f, -0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
                                      || Physics.Raycast(transform.position + offset + new Vector3(-0.45f, 0f, -0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground);

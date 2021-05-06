@@ -751,7 +751,7 @@ public class Actor : Entity
     /// <param name="initWorldModuleGUID"></param>
     public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
     {
-        base.Setup(initWorldModuleGUID);
+        base.Setup(entityData, initWorldModuleGUID);
         EntityTypeIndex = entityData.EntityTypeIndex;
         ActorType = entityData.EntityType.TypeName;
         ActorCategory = entityData.EntityTypeIndex == ConfigManager.Actor_PlayerIndex ? ActorCategory.Player : ActorCategory.Creature;
@@ -794,6 +794,38 @@ public class Actor : Entity
 
         ForbidAction = false;
         ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
+    }
+
+    protected override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+        base.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityArtHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityWwiseHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityModelHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityIndicatorHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityBuffHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityFrozenHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityTriggerZoneHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityCollectHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        EntityGrindTriggerZoneHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            h.ApplyEntityExtraStates(entityDataExtraStates);
+        }
+
+        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
+        {
+            h.ApplyEntityExtraStates(entityDataExtraStates);
+        }
+
+        ActorControllerHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        ActorPushHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        ActorFaceHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        ActorSkinHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        ActorLaunchArcRendererHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        ActorBattleHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        ActorBoxInteractHelper.ApplyEntityExtraStates(entityDataExtraStates);
+        ActorSkillLearningHelper?.ApplyEntityExtraStates(entityDataExtraStates);
     }
 
     private void Update()

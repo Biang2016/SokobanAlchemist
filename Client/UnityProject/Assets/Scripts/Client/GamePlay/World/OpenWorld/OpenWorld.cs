@@ -335,7 +335,7 @@ public class OpenWorld : World
         ushort startDungeonTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, StartDungeonTypeName.TypeName);
         if (startDungeonTypeIndex != 0)
         {
-            yield return Co_TransportPlayerToDungeon(startDungeonTypeIndex);
+            yield return Co_TransportPlayerToDungeon(startDungeonTypeIndex, null);
         }
 
         WaitingForLoadStartDungeon = false;
@@ -642,19 +642,21 @@ public class OpenWorld : World
     private PlayerData PlayerDataSave;
     private PlayerData PlayerDataSave_DungeonTemp;
 
-    public void TransportPlayerToDungeon(ushort worldTypeIndex)
+    public void TransportPlayerToDungeon(ushort worldTypeIndex, EntityData transportBoxEntityData)
     {
         if (transportingPlayerToDungeon) return;
         if (returningToOpenWorldFormDungeon) return;
         if (restartingDungeon) return;
         if (respawningInOpenWorld) return;
-        StartCoroutine(Co_TransportPlayerToDungeon(worldTypeIndex));
+        StartCoroutine(Co_TransportPlayerToDungeon(worldTypeIndex, transportBoxEntityData));
     }
 
     private bool transportingPlayerToDungeon = false;
+    internal EntityData temp_LastTransportBoxEntityData = null; // 记录传送门的数据，如果Dungeon通关则该传送门应关闭
 
-    IEnumerator Co_TransportPlayerToDungeon(ushort worldTypeIndex)
+    IEnumerator Co_TransportPlayerToDungeon(ushort worldTypeIndex, EntityData transportBoxEntityData)
     {
+        temp_LastTransportBoxEntityData = transportBoxEntityData;
         transportingPlayerToDungeon = true;
         CurrentDungeonWorldTypeIndex = worldTypeIndex;
         BattleManager.Instance.IsStart = false;
@@ -748,7 +750,7 @@ public class OpenWorld : World
         BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint); // 时序，传送要发生在CombatState切换到默认值之后（如果有InCamp状态将在此行赋值）
 
         ApplyWorldVisualEffectSettings(dungeonData);
-      
+
         CameraManager.Instance.FieldCamera.InitFocus();
 
         ClientGameManager.Instance.DebugPanel.Clear();
@@ -788,8 +790,20 @@ public class OpenWorld : World
 
         while (RefreshScopeModulesCoroutine != null) yield return null;
 
-        if (dungeonComplete) DungeonMissionState = DungeonMissionState.DungeonComplete;
-        else DungeonMissionState = DungeonMissionState.DungeonFailed;
+        if (dungeonComplete)
+        {
+            DungeonMissionState = DungeonMissionState.DungeonComplete;
+            if (temp_LastTransportBoxEntityData != null)
+            {
+                temp_LastTransportBoxEntityData.RawEntityExtraSerializeData.EntityDataExtraStates.TransportBoxClosed = true;
+                temp_LastTransportBoxEntityData = null;
+            }
+        }
+        else
+        {
+            DungeonMissionState = DungeonMissionState.DungeonFailed;
+        }
+
         SavePlayerGrowth();
         LoadPlayerGrowth();
         DungeonMissionState = DungeonMissionState.NotInDungeon;

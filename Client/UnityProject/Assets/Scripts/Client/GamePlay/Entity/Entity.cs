@@ -46,6 +46,8 @@ public abstract class Entity : PoolObject
     [LabelText("慢刷新")]
     public bool SlowlyTick = false;
 
+    internal EntityData CurrentEntityData;
+
     #region Helpers
 
     internal abstract EntityArtHelper EntityArtHelper { get; }
@@ -300,7 +302,13 @@ public abstract class Entity : PoolObject
                 newPS.IsLevelExtraEntitySkill = true;
                 AddNewPassiveSkill(newPS);
             }
+
+            ApplyEntityExtraStates(rawEntityExtraSerializeDataFromModule.EntityDataExtraStates);
         }
+    }
+
+    protected virtual void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
     }
 
     #endregion
@@ -317,6 +325,7 @@ public abstract class Entity : PoolObject
     {
         base.OnRecycled();
         StopAllCoroutines();
+        CurrentEntityData = null;
         InitWorldModuleGUID = 0;
         destroyBecauseNotInAnyModuleTick = 0;
         cachedRemoveList_EntityPassiveSkill.Clear();
@@ -331,8 +340,9 @@ public abstract class Entity : PoolObject
         CanBeThreatened = true;
     }
 
-    public void Setup(uint initWorldModuleGUID)
+    public void Setup(EntityData entityData, uint initWorldModuleGUID)
     {
+        CurrentEntityData = entityData;
         InitWorldModuleGUID = initWorldModuleGUID;
         if (GUID == 0)
         {

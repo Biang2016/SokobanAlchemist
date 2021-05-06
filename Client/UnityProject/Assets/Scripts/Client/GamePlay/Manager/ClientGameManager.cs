@@ -478,7 +478,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         StartCoroutine(ReloadGame());
     }
 
-    public void ChangeWorld(string worldName, bool dungeonComplete)
+    public void ChangeWorld(string worldName, bool dungeonComplete, EntityData transportBoxEntityData = null)
     {
         if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
@@ -489,7 +489,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             }
             else
             {
-                openWorld.TransportPlayerToDungeon(worldNameIndex);
+                openWorld.TransportPlayerToDungeon(worldNameIndex, transportBoxEntityData);
             }
         }
         else

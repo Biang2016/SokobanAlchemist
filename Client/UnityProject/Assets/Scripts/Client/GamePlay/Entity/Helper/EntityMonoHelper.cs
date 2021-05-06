@@ -26,4 +26,8 @@ public abstract class EntityMonoHelper : MonoBehaviour
     public virtual void OnHelperRecycled()
     {
     }
+
+    public virtual void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+    }
 }
