@@ -776,7 +776,6 @@ public class Actor : Entity
         ActorSkillLearningHelper?.LoadInitSkills();
 
         ForbidAction = false;
-        ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
     }
 
     protected override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
