@@ -114,6 +114,38 @@
 										<Property Name="OverrideColor" Type="bool" Value="True"/>
 									</PropertyList>
 								</Bus>
+								<Bus Name="Skill_Panel" ID="{46B8E72E-71D4-42C1-94D8-5147FCCCB7CF}">
+									<PropertyList>
+										<Property Name="BusVolume" Type="Real64">
+											<RTPCList>
+												<RTPC Name="" ID="{7F68E8EC-AACE-4494-B9BC-0AA3A04BD9E8}" ShortID="85529638">
+													<ReferenceList>
+														<Reference Name="ControlInput">
+															<ObjectRef Name="Panel_Volume" ID="{4631257F-675A-49D2-86FC-C815F8926BA4}" WorkUnitID="{32EBB2C2-DFCC-485D-8698-021106E33BAD}"/>
+														</Reference>
+													</ReferenceList>
+													<Curve Name="" ID="{B9A52531-7CE6-4E42-BEBF-27A957C9A621}">
+														<PropertyList>
+															<Property Name="Flags" Type="int32" Value="3"/>
+														</PropertyList>
+														<PointList>
+															<Point>
+																<XPos>0</XPos>
+																<YPos>-200</YPos>
+																<Flags>5</Flags>
+															</Point>
+															<Point>
+																<XPos>100</XPos>
+																<YPos>0</YPos>
+																<Flags>37</Flags>
+															</Point>
+														</PointList>
+													</Curve>
+												</RTPC>
+											</RTPCList>
+										</Property>
+									</PropertyList>
+								</Bus>
 							</ChildrenList>
 						</Bus>
 						<Bus Name="World" ID="{55E423A8-20D4-4A16-B54A-42BB644D0582}">

@@ -78,11 +78,11 @@
 							<Position X="4" Y="6"/>
 						</Module>
 						<Module>
-							<ObjectRef Name="Player_GainFireElement" ID="{8206348C-8CF6-4C92-B1B7-53E2AC7A129A}" WorkUnitID="{243B1A99-3A40-415C-8C73-18D11E7863E8}"/>
+							<ObjectRef Name="Player_OnGainFireElement" ID="{8206348C-8CF6-4C92-B1B7-53E2AC7A129A}" WorkUnitID="{243B1A99-3A40-415C-8C73-18D11E7863E8}"/>
 							<Position X="5" Y="1"/>
 						</Module>
 						<Module>
-							<ObjectRef Name="Player_GainIceElement" ID="{F61D4E81-83F0-4EB4-972F-7E3C96B7D315}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+							<ObjectRef Name="Player_OnGainIceElement" ID="{F61D4E81-83F0-4EB4-972F-7E3C96B7D315}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
 							<Position X="5" Y="2"/>
 						</Module>
 						<Module>
@@ -98,11 +98,11 @@
 							<Position X="5" Y="6"/>
 						</Module>
 						<Module>
-							<ObjectRef Name="Player_GainGold" ID="{51A5AB64-F672-4456-87E8-33BA8582CCDF}" WorkUnitID="{243B1A99-3A40-415C-8C73-18D11E7863E8}"/>
+							<ObjectRef Name="Player_OnGainGold" ID="{51A5AB64-F672-4456-87E8-33BA8582CCDF}" WorkUnitID="{243B1A99-3A40-415C-8C73-18D11E7863E8}"/>
 							<Position X="6" Y="1"/>
 						</Module>
 						<Module>
-							<ObjectRef Name="Player_GainLightningElement" ID="{794DB359-FD45-405D-9475-F626C83DA359}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
+							<ObjectRef Name="Player_OnGainLightningElement" ID="{794DB359-FD45-405D-9475-F626C83DA359}" WorkUnitID="{33851429-B42A-4B53-A82A-080058A6785D}"/>
 							<Position X="6" Y="2"/>
 						</Module>
 						<Module>
@@ -130,6 +130,10 @@
 						<RTPCValue>
 							<GameParameterRef Name="Player_MovementSpeed" ID="{49F123CB-2046-48D4-8C63-1298A86811EB}"/>
 							<Value>92.2297297297297</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="Panel_Volume" ID="{4631257F-675A-49D2-86FC-C815F8926BA4}"/>
+							<Value>100</Value>
 						</RTPCValue>
 						<RTPCValue>
 							<GameParameterRef Name="Player_HealthPercent" ID="{9993C7FA-966E-4BDA-BF02-B14DC6DDACBD}"/>
