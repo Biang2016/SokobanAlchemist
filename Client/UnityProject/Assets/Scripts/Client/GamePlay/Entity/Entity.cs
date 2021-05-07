@@ -47,6 +47,10 @@ public abstract class Entity : PoolObject
     [LabelText("慢刷新")]
     public bool SlowlyTick = false;
 
+    [FoldoutGroup("属性")]
+    [LabelText("出模组自动删除")]
+    public bool AutoDeleteWhenNotInModule = true;
+
     internal EntityData CurrentEntityData;
 
     #region Helpers
@@ -88,6 +92,10 @@ public abstract class Entity : PoolObject
     /// （受各种控制技能影响）无法动弹
     /// </summary>
     public bool CannotAct => IsFrozen || EntityBuffHelper.IsShocking || EntityBuffHelper.IsStun || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed;
+
+    [FoldoutGroup("跳跃")]
+    [LabelText("能自动落下")]
+    public bool CanAutoFallDown = true;
 
     [DisplayAsString]
     [HideInEditorMode]
@@ -881,6 +889,16 @@ public abstract class Entity : PoolObject
 
     #endregion
 
+    protected virtual void Update()
+    {
+        if (!BattleManager.Instance.IsStart) return;
+        if (IsRecycled) return;
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
+        {
+            kv.Value.OnUpdate(Time.deltaTime);
+        }
+    }
+
     protected virtual void FixedUpdate()
     {
         if (!BattleManager.Instance.IsStart) return;
@@ -951,6 +969,8 @@ public abstract class Entity : PoolObject
 
     protected virtual void Tick(float interval)
     {
+        if (!BattleManager.Instance.IsStart) return;
+        if (IsRecycled) return;
         EntityStatPropSet.Tick(interval);
         EntityBuffHelper.BuffTick(interval);
         foreach (EntityPassiveSkill eps in EntityPassiveSkills)
@@ -963,7 +983,8 @@ public abstract class Entity : PoolObject
             kv.Value.OnTick(interval);
         }
 
-        if (BattleManager.Instance.IsStart)
+        // Auto Delete when not in a module
+        if (AutoDeleteWhenNotInModule)
         {
             if (WorldManager.Instance != null)
             {

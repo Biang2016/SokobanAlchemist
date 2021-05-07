@@ -398,13 +398,15 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
             }
 
             GridWarningDict.Clear();
-            foreach (GridPos3D gp in SkillAreaGPs)
+            foreach (GridPos3D skillAreaGP in SkillAreaGPs)
             {
                 GridWarning gw = GameObjectPoolManager.Instance.BattleIndicatorDict[BattleIndicatorTypeIndex].AllocateGameObject<GridWarning>(WorldManager.Instance.BattleIndicatorRoot);
                 gw.SetFillColor(GridWarningColorFill).SetBorderHighlightColor(GridWarningColorBorderHighlight).SetBorderDimColor(GridWarningColorBorderDim);
-                gw.transform.position = gp;
-                GridWarningDict.Add(gp, gw);
+                gw.transform.position = skillAreaGP;
+                GridWarningDict.Add(skillAreaGP, gw);
             }
+
+            UpdateSkillEffectRealPositions();
         }
 
         yield return base.WingUp(wingUpTime);
@@ -478,10 +480,15 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
         yield return base.Recover(recoveryTime);
     }
 
+    public override void OnUpdate(float deltaTime)
+    {
+        base.OnUpdate(deltaTime);
+        UpdateSkillEffectGridWarning();
+    }
+
     public override void OnFixedUpdate(float fixedDeltaTime)
     {
         base.OnFixedUpdate(fixedDeltaTime);
-        UpdateSkillEffectGridWarning();
     }
 
     public override void OnTick(float tickDeltaTime)

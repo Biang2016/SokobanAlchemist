@@ -477,7 +477,7 @@ public abstract class EntityActiveSkill : EntitySkill
         {
             OnSkillWingingUp?.Invoke(ActiveSkillPhase.WingingUp, wingUpTick, wingUpTime / 1000f);
             wingUpTick += Time.deltaTime;
-            WingUpRatio = wingUpTick / (wingUpTime / 1000f);
+            WingUpRatio = Mathf.Min(1f, wingUpTick / (wingUpTime / 1000f));
             yield return null;
         }
 
@@ -517,7 +517,7 @@ public abstract class EntityActiveSkill : EntitySkill
         {
             OnSkillCasting?.Invoke(ActiveSkillPhase.Casting, castTick, castDuration / 1000f);
             castTick += Time.deltaTime;
-            CastRatio = castTick / (castDuration / 1000f);
+            CastRatio = Mathf.Min(1f, castTick / (castDuration / 1000f));
             yield return null;
         }
 
@@ -654,7 +654,7 @@ public abstract class EntityActiveSkill : EntitySkill
         while (recoveryTick < recoveryTime / 1000f)
         {
             recoveryTick += Time.deltaTime;
-            RecoveryRatio = recoveryTick / (recoveryTime / 1000f);
+            RecoveryRatio = Mathf.Min(1f, recoveryTick / (recoveryTime / 1000f));
             yield return null;
         }
 
@@ -712,6 +712,14 @@ public abstract class EntityActiveSkill : EntitySkill
 
     internal UnityAction<ActiveSkillPhase, float, float> OnSkillCoolingDown;
 
+    public virtual void OnUpdate(float deltaTime)
+    {
+        foreach (EntityActiveSkill subEAS in RunningSubActiveSkillList)
+        {
+            subEAS.OnUpdate(deltaTime);
+        }
+    }
+
     public virtual void OnFixedUpdate(float fixedDeltaTime)
     {
         foreach (EntityActiveSkill subEAS in RunningSubActiveSkillList)
@@ -722,7 +730,7 @@ public abstract class EntityActiveSkill : EntitySkill
         if (skillPhase == ActiveSkillPhase.Recovering || skillPhase == ActiveSkillPhase.CoolingDown)
         {
             cooldownTimeTick -= fixedDeltaTime * 1000f;
-            CooldownRatio = cooldownTimeTick / currentExecutingCooldownTime;
+            CooldownRatio = Mathf.Min(1f, cooldownTimeTick / currentExecutingCooldownTime);
             OnSkillCoolingDown?.Invoke(ActiveSkillPhase.CoolingDown, (currentExecutingCooldownTime - cooldownTimeTick) / 1000f, currentExecutingCooldownTime / 1000f);
 
             // 冷却时间结束，且目前后摇已完成并进入冷却阶段，才能将状态置为Ready

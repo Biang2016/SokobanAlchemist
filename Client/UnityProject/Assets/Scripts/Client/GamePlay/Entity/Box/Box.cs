@@ -908,7 +908,7 @@ public partial class Box : Entity
 
             Rigidbody.drag = 0;
             Rigidbody.angularDrag = 0;
-            Rigidbody.useGravity = true;
+            Rigidbody.useGravity = CanAutoFallDown;
             Rigidbody.velocity = direction.normalized * velocity;
             Rigidbody.angularVelocity = Vector3.zero;
             Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
@@ -945,7 +945,7 @@ public partial class Box : Entity
 
             Rigidbody.drag = 0;
             Rigidbody.angularDrag = 0;
-            Rigidbody.useGravity = true;
+            Rigidbody.useGravity = CanAutoFallDown;
             Rigidbody.velocity = direction.normalized * velocity;
             CurrentMoveGlobalPlanerDir = direction.normalized.ToGridPos3D();
             CurrentMoveGlobalPlanerDir.y = 0;
@@ -983,7 +983,7 @@ public partial class Box : Entity
 
         Rigidbody.drag = 0;
         Rigidbody.angularDrag = 0;
-        Rigidbody.useGravity = true;
+        Rigidbody.useGravity = CanAutoFallDown;
         Rigidbody.velocity = startVelocity;
         Rigidbody.angularVelocity = Vector3.zero;
         Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
@@ -1018,7 +1018,7 @@ public partial class Box : Entity
 
         Rigidbody.drag = 0;
         Rigidbody.angularDrag = 0;
-        Rigidbody.useGravity = true;
+        Rigidbody.useGravity = CanAutoFallDown;
         Rigidbody.velocity = Vector3.down * 2f;
         Rigidbody.angularVelocity = Vector3.zero;
         Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
@@ -1026,10 +1026,18 @@ public partial class Box : Entity
 
     #endregion
 
+    protected override void Update()
+    {
+        base.Update();
+        if (!BattleManager.Instance.IsStart) return;
+        if (IsRecycled) return;
+    }
+
     protected override void Tick(float interval)
     {
-        if (!BattleManager.Instance.IsStart) return;
         base.Tick(interval);
+        if (!BattleManager.Instance.IsStart) return;
+        if (IsRecycled) return;
     }
 
     protected override void FixedUpdate()
@@ -1058,7 +1066,7 @@ public partial class Box : Entity
             if (state == States.BeingKicked || state == States.BeingKickedToGrind)
             {
                 bool isGrounded = Physics.Raycast(new Ray(transform.position, Vector3.down), 0.55f, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground);
-                Rigidbody.useGravity = !isGrounded;
+                Rigidbody.useGravity = !isGrounded && CanAutoFallDown;
                 if (isGrounded)
                 {
                     Rigidbody.constraints |= RigidbodyConstraints.FreezePositionY;

@@ -409,10 +409,6 @@ public class Actor : Entity
     #region 手感
 
     [FoldoutGroup("手感")]
-    [LabelText("Dash力度")]
-    public float DashForce = 150f;
-
-    [FoldoutGroup("手感")]
     [LabelText("起步速度")]
     public float Accelerate = 200f;
 
@@ -564,10 +560,6 @@ public class Actor : Entity
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 
-    [ShowInInspector]
-    [HideInEditorMode]
-    internal bool IsInDungeon = false;
-
     public enum ActorBehaviourStates
     {
         Idle,
@@ -657,10 +649,9 @@ public class Actor : Entity
         }
 
         IsRecycling = true;
-        IsInDungeon = false;
         ForbidAction = true;
         if (!HasRigidbody) AddRigidbody();
-        RigidBody.drag = 100f;
+        RigidBody.drag = CanAutoFallDown ? 100f : 0f;
         RigidBody.velocity = Vector3.zero;
 
         ActorBehaviourState = ActorBehaviourStates.Idle;
@@ -796,20 +787,20 @@ public class Actor : Entity
         }
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         if (!BattleManager.Instance.IsStart) return;
-        if (!IsRecycled)
-        {
-            UpdateThrowParabolaLine();
-        }
+        if (IsRecycled) return;
+        UpdateThrowParabolaLine();
     }
 
     protected override void Tick(float interval)
     {
-        if (!BattleManager.Instance.IsStart) return;
-        ActorControllerHelper?.OnTick(interval);
         base.Tick(interval);
+        if (!BattleManager.Instance.IsStart) return;
+        if (IsRecycled) return;
+        ActorControllerHelper?.OnTick(interval);
     }
 
     public void OnLoaded(Actor actor)
@@ -906,7 +897,7 @@ public class Actor : Entity
                     }
                     else
                     {
-                        RigidBody.drag = 100f;
+                        RigidBody.drag = CanAutoFallDown ? 100f : 0f;
                         RigidBody.mass = 1f;
                     }
                 }
@@ -940,7 +931,7 @@ public class Actor : Entity
                     ActorArtHelper.SetIsWalking(false);
                     ActorArtHelper.SetIsChasing(false);
                     ActorArtHelper.SetIsPushing(false);
-                    RigidBody.drag = 100f;
+                    RigidBody.drag = CanAutoFallDown ? 100f : 0f;
                     RigidBody.mass = 1f;
                     ActorPushHelper.TriggerOut = false;
                 }
@@ -970,7 +961,7 @@ public class Actor : Entity
             {
                 if (CannotAct && !EntityBuffHelper.IsBeingRepulsed)
                 {
-                    RigidBody.drag = 100f;
+                    RigidBody.drag = CanAutoFallDown ? 100f : 0f;
                     RigidBody.mass = 1f;
                 }
                 else
@@ -991,7 +982,13 @@ public class Actor : Entity
         JumpingUpTick();
         InAirMovingToTargetPosTick();
         SmashingDownTick();
-        if (!IsExecutingAirSkills() || (ActorBehaviourState == ActorBehaviourStates.Jump && JumpReachClimax))
+
+        bool autoFallDown = CanAutoFallDown && (
+            !IsExecutingAirSkills()
+            || (ActorBehaviourState == ActorBehaviourStates.Jump && JumpReachClimax)
+        );
+
+        if (autoFallDown)
         {
             if (!CannotAct && HasRigidbody)
             {
@@ -1044,7 +1041,7 @@ public class Actor : Entity
             RigidBody.mass = 1f;
             RigidBody.drag = 0f;
             RigidBody.angularDrag = 20f;
-            RigidBody.useGravity = true;
+            RigidBody.useGravity = CanAutoFallDown;
             RigidBody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
             RigidBody.interpolation = RigidbodyInterpolation.Interpolate;
             RigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -1321,12 +1318,10 @@ public class Actor : Entity
 
     public void MoveUp()
     {
-
     }
 
     public void MoveDown()
     {
-
     }
 
     #endregion
@@ -1480,18 +1475,20 @@ public class Actor : Entity
         if (CannotAct) return;
         if (HasRigidbody)
         {
-            if (transform.position.y > SmashDownTargetPos.y + 1f)
-            {
-                RigidBody.AddForce(Vector3.up * (-SmashForce - RigidBody.velocity.y), ForceMode.VelocityChange);
-            }
-
             if (IsGrounded)
             {
                 ActorBehaviourState = ActorBehaviourStates.Idle;
             }
-            else if (RigidBody.velocity.y >= -0.1f)
+            else
             {
-                ActorBehaviourState = ActorBehaviourStates.Idle;
+                if (transform.position.y > SmashDownTargetPos.y + 1f)
+                {
+                    RigidBody.AddForce(Vector3.up * (-SmashForce - RigidBody.velocity.y), ForceMode.VelocityChange);
+                }
+                else if (RigidBody.velocity.y >= -0.1f)
+                {
+                    ActorBehaviourState = ActorBehaviourStates.Idle;
+                }
             }
         }
     }

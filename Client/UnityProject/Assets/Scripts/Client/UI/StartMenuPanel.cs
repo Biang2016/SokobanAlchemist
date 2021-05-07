@@ -57,4 +57,9 @@ public class StartMenuPanel : BaseUIPanel
         WwiseAudioManager.Instance.Common_UI_ButtonClick?.Post(WwiseAudioManager.Instance.gameObject);
         Application.Quit();
     }
+
+    public void DebugLog(string log)
+    {
+        Debug.Log(log);
+    }
 }
