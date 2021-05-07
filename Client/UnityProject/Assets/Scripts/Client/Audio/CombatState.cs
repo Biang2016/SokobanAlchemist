@@ -1,7 +1,7 @@
 ﻿public enum CombatState
 {
     InCamp,
-    Exploring, // 默认值
+    Exploring,
     InCombat,
     InEliteCombat,
     InBossCombat,

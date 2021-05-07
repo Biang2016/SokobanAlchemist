@@ -4,21 +4,6 @@
 		<WorkUnit Name="MetalTrapBox" ID="{6E284F1F-0F0F-4E75-872F-A541086FA0B8}" OwnerID="{ABC65056-1A6C-4C9D-8CE0-4E3CFED4B185}" PersistMode="Nested">
 			<ChildrenList>
 				<RandomSequenceContainer Name="MetalTrapBox_OnBeingDropped" ID="{1AB98581-1A1D-4B63-AC8A-53EA01437DE3}" ShortID="80784068">
-					<PropertyList>
-						<Property Name="Pitch" Type="int32">
-							<ModifierList>
-								<ModifierInfo>
-									<Modifier Name="" ID="{A70B392E-9B41-446D-9495-15A595E3BECD}">
-										<PropertyList>
-											<Property Name="Enabled" Type="bool" Value="True"/>
-											<Property Name="Max" Type="Real64" Value="354"/>
-											<Property Name="Min" Type="Real64" Value="-354"/>
-										</PropertyList>
-									</Modifier>
-								</ModifierInfo>
-							</ModifierList>
-						</Property>
-					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -28,6 +13,34 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
+						<Sound Name="Light Metal Drop 2" ID="{004BD9F6-1128-4D6F-BD7B-2BBD168BAA8A}" ShortID="873221330">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Light Metal Drop 2" ID="{E8403537-C05F-41E6-8EA9-E821CE9B8451}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.0133824247291509"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.00802945483749051"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimEnd" Type="Real64" Value="0.848445727828169"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>Light Metal Drop 2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="816733164"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Light Metal Drop 2" ID="{E8403537-C05F-41E6-8EA9-E821CE9B8451}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
 						<Sound Name="Light Metal Drop 3" ID="{C8B070DB-3D5D-4788-8697-A4C43164F960}" ShortID="526909061">
 							<ReferenceList>
 								<Reference Name="Conversion">
@@ -57,6 +70,35 @@
 								<ActiveSource Name="Light Metal Drop 3" ID="{AEEF00F2-D83C-4CD3-BCCE-A889E5B0C96B}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
+						<Sound Name="Light Metal Drop" ID="{3E97C652-E973-4DEE-AEE1-33AAC8C33C35}" ShortID="81552554">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Light Metal Drop" ID="{DFC6C252-8B26-4FB2-B767-8CB513CFA25E}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.0113931799571681"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.00683590797430078"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.0751949877173092"/>
+										<Property Name="TrimEnd" Type="Real64" Value="0.840816680839002"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>Light Metal Drop.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="420768076"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Light Metal Drop" ID="{DFC6C252-8B26-4FB2-B767-8CB513CFA25E}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
 					</ChildrenList>
 				</RandomSequenceContainer>
 				<RandomSequenceContainer Name="MetalTrapBox_OnBeingLift" ID="{C38A8CE7-C4BB-48E7-9724-443817E43A3F}" ShortID="1041230233">
@@ -66,17 +108,6 @@
 							<ValueList>
 								<Value>-580</Value>
 							</ValueList>
-							<ModifierList>
-								<ModifierInfo>
-									<Modifier Name="" ID="{E566B039-A75F-4F32-BF93-B2A799EA9B31}">
-										<PropertyList>
-											<Property Name="Enabled" Type="bool" Value="True"/>
-											<Property Name="Max" Type="Real64" Value="354"/>
-											<Property Name="Min" Type="Real64" Value="-354"/>
-										</PropertyList>
-									</Modifier>
-								</ModifierInfo>
-							</ModifierList>
 						</Property>
 					</PropertyList>
 					<ReferenceList>

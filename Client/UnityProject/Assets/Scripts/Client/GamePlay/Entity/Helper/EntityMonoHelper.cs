@@ -26,28 +26,4 @@ public abstract class EntityMonoHelper : MonoBehaviour
     public virtual void OnHelperRecycled()
     {
     }
-
-    public virtual void OnInitPassiveSkills()
-    {
-    }
-
-    public virtual void OnInitActiveSkills()
-    {
-    }
-
-    public virtual void OnUnInitPassiveSkills()
-    {
-    }
-
-    public virtual void OnUnInitActiveSkills()
-    {
-    }
-
-    public virtual void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
-    {
-    }
-
-    public virtual void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
-    {
-    }
 }

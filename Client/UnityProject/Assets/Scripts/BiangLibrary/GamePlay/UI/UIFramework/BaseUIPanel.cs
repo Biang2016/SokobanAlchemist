@@ -19,11 +19,6 @@ namespace BiangLibrary.GamePlay.UI
 
         void Update()
         {
-            ChildUpdate();
-        }
-
-        protected virtual void FixedUpdate()
-        {
             if (UIType.IsESCClose)
             {
                 if (UIManager.Instance.CloseUIFormKeyDownHandler != null && UIManager.Instance.CloseUIFormKeyDownHandler.Invoke())
@@ -52,6 +47,8 @@ namespace BiangLibrary.GamePlay.UI
                     }
                 }
             }
+
+            ChildUpdate();
         }
 
         private void LateUpdate()
@@ -79,6 +76,18 @@ namespace BiangLibrary.GamePlay.UI
             IsShown = false;
             gameObject.SetActive(false);
             UIMaskMgr.Instance.CancelAllMaskWindow(UIType.UIForm_LucencyType);
+        }
+
+        public virtual void Toggle()
+        {
+            if (gameObject.activeInHierarchy)
+            {
+                Hide();
+            }
+            else
+            {
+                Display();
+            }
         }
 
         public virtual void Freeze()

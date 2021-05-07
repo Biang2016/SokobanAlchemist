@@ -14,10 +14,6 @@ public abstract class EntitySkill : IClone<EntitySkill>
     [HideInEditorMode]
     public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
 
-    [ReadOnly]
-    [HideInEditorMode]
-    public string InitStaticLayoutGUID= ""; // 创建时所属的静态布局GUID
-
     internal bool IsLevelExtraEntitySkill;
     internal bool MarkAsForget;
 
@@ -95,7 +91,6 @@ public abstract class EntitySkill : IClone<EntitySkill>
     public virtual void OnInit()
     {
         InitWorldModuleGUID = Entity.InitWorldModuleGUID;
-        InitStaticLayoutGUID = Entity.CurrentEntityData.InitStaticLayoutGUID;
     }
 
     public virtual void OnUnInit()
@@ -111,8 +106,6 @@ public abstract class EntitySkill : IClone<EntitySkill>
     {
         Type type = GetType();
         EntitySkill newES = (EntitySkill) Activator.CreateInstance(type);
-        newES.InitWorldModuleGUID = InitWorldModuleGUID;
-        newES.InitStaticLayoutGUID = InitStaticLayoutGUID;
         newES.SkillGUID = SkillGUID;
         newES.SkillAlias = SkillAlias;
         newES.SkillName_EN = SkillName_EN;
@@ -137,8 +130,6 @@ public abstract class EntitySkill : IClone<EntitySkill>
 
     public virtual void CopyDataFrom(EntitySkill srcData)
     {
-        InitWorldModuleGUID = srcData.InitWorldModuleGUID;
-        InitStaticLayoutGUID = srcData.InitStaticLayoutGUID;
         SkillGUID = srcData.SkillGUID;
         SkillAlias = srcData.SkillAlias;
         SkillName_EN = srcData.SkillName_EN;

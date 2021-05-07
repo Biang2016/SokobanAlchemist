@@ -88,13 +88,14 @@ public class LearnSkillUpgradePage : PoolObject
                 TitleText.text = "New Skill";
                 EntitySkill rawEntitySkill = ConfigManager.GetRawEntitySkill(learnInfo.SkillGUID);
                 Assert.IsNotNull(rawEntitySkill);
+                bool specifyKeyBind = rawEntitySkill is EntityActiveSkill;
 
+                string keyBindStr = specifyKeyBind ? PlayerControllerHelper.KeyMappingStrDict[learnInfo.KeyBind] : "";
                 Sprite sprite = ConfigManager.GetEntitySkillIconByName(rawEntitySkill.SkillIcon.TypeName);
                 Icon.sprite = sprite;
                 DescriptionText.text = rawEntitySkill.GetSkillDescription_EN;
                 NameText.text = rawEntitySkill.SkillName_EN;
-                KeyBindText.text = "";
-                if (rawEntitySkill is EntityActiveSkill _rawEAS && _rawEAS.NeedBindKey) KeyBindText.text = PlayerControllerHelper.KeyMappingStrDict[_rawEAS.SkillKeyBind];
+                KeyBindText.text = keyBindStr;
                 if (learnInfo.GoldCost > 0) CostText.text = learnInfo.GoldCost.ToString();
                 else CostText.text = "Free";
 
@@ -121,7 +122,7 @@ public class LearnSkillUpgradePage : PoolObject
                             EntityActiveSkill EAS = (EntityActiveSkill) rawEAS.Clone();
                             if (BattleManager.Instance.Player1.AddNewActiveSkill(EAS))
                             {
-                                if (EAS.NeedBindKey) BattleManager.Instance.Player1.BindActiveSkillToKey(EAS, EAS.SkillKeyBind, true);
+                                BattleManager.Instance.Player1.BindActiveSkillToKey(EAS, learnInfo.KeyBind, true);
                                 ClientGameManager.Instance.NoticePanel.ShowTip("Successfully learn skill!", NoticePanel.TipPositionType.Center, 1f);
                             }
 

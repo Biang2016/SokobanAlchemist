@@ -214,21 +214,14 @@ public class UIBattleTip : PoolObject
         transform.localPosition = UIBattleTipInfo.StartPos;
         ClientUtils.InGameUIFaceToCamera(transform);
 
-        bool needAddSign =
+        bool needAddPlusSign =
             info.BattleTipType == BattleTipType.Heal
             || info.BattleTipType == BattleTipType.MaxHealth
             || info.BattleTipType == BattleTipType.Gold
             || info.BattleTipType == BattleTipType.ActionPoint
             || info.BattleTipType == BattleTipType.MaxActionPoint;
 
-        if (info.DiffValue > 0)
-        {
-            SetTextContext(TextContent, info.ExtraStr_Before + (needAddSign ? $"+{info.DiffValue}" : info.DiffValue.ToString()) + info.ExtraStr_After);
-        }
-        else
-        {
-            SetTextContext(TextContent, info.ExtraStr_Before + (needAddSign ? $"-{-info.DiffValue}" : (-info.DiffValue).ToString()) + info.ExtraStr_After);
-        }
+        SetTextContext(TextContent, info.ExtraStr_Before + (needAddPlusSign ? $"+{info.DiffValue}" : info.DiffValue.ToString()) + info.ExtraStr_After);
 
         Animator.SetTrigger("Play");
         float duration_ori = CommonUtils.GetClipLength(Animator, "Float");

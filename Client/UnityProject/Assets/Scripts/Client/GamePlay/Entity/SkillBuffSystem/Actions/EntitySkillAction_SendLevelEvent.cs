@@ -23,12 +23,12 @@ public class EntitySkillAction_SendLevelEvent : EntitySkillAction, EntitySkillAc
     {
         if (!string.IsNullOrWhiteSpace(EmitEventAlias))
         {
-            ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, EmitEventAlias.FormatEventAliasOrStateBool(InitWorldModuleGUID, InitStaticLayoutGUID));
+            ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, EmitEventAlias.FormatEventAliasOrStateBool(InitWorldModuleGUID));
         }
 
         if (!string.IsNullOrWhiteSpace(SetStateAlias))
         {
-            BattleManager.Instance.SetStateBool(InitWorldModuleGUID, SetStateAlias.FormatEventAliasOrStateBool(InitWorldModuleGUID, InitStaticLayoutGUID), SetStateAliasValue);
+            BattleManager.Instance.SetStateBool(InitWorldModuleGUID, SetStateAlias.FormatEventAliasOrStateBool(InitWorldModuleGUID), SetStateAliasValue);
         }
     }
 

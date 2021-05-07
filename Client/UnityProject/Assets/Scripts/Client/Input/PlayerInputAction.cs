@@ -1280,14 +1280,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Confirm"",
-                    ""type"": ""Button"",
-                    ""id"": ""9c95a13c-9036-4cae-9675-0ddef4b52926"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
-                },
-                {
                     ""name"": ""Exit"",
                     ""type"": ""Button"",
                     ""id"": ""c221a3f9-4221-4da1-b188-bf04e006da04"",
@@ -1304,7 +1296,15 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)""
                 },
                 {
-                    ""name"": ""DebugConsole"",
+                    ""name"": ""Confirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""9c95a13c-9036-4cae-9675-0ddef4b52926"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Debug"",
                     ""type"": ""Button"",
                     ""id"": ""a3d49bae-abc7-4e11-8476-9ad2ac9ac463"",
                     ""expectedControlType"": ""Button"",
@@ -1315,14 +1315,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""name"": ""RestartGame"",
                     ""type"": ""Button"",
                     ""id"": ""072a09ac-3b24-472b-aa42-f116b670abde"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
-                },
-                {
-                    ""name"": ""ReloadGame"",
-                    ""type"": ""Button"",
-                    ""id"": ""f08b4971-aebb-4143-b619-4cc77d25c2bb"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
@@ -1344,7 +1336,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)""
                 },
                 {
-                    ""name"": ""ToggleDebugPanel"",
+                    ""name"": ""ToggleDebugButton"",
                     ""type"": ""Button"",
                     ""id"": ""25917861-bf33-45b7-906b-5b8ef997638c"",
                     ""expectedControlType"": ""Button"",
@@ -1355,30 +1347,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""name"": ""InteractiveKey"",
                     ""type"": ""Button"",
                     ""id"": ""2a2737b3-6adb-4d9c-ab7c-96f34dd805db"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
-                },
-                {
-                    ""name"": ""SlowDownGame"",
-                    ""type"": ""Button"",
-                    ""id"": ""6b643af7-1749-4735-8ca9-f26b532e5816"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
-                },
-                {
-                    ""name"": ""ReturnToOpenWorld"",
-                    ""type"": ""Button"",
-                    ""id"": ""ec437b7c-4a56-412f-baae-d2f1fefb8239"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
-                },
-                {
-                    ""name"": ""SkillPreviewPanel"",
-                    ""type"": ""Button"",
-                    ""id"": ""c70aeac8-43cc-456c-b1e7-d3feabe67bc6"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
@@ -1409,12 +1377,23 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""dd493237-8c65-4d8b-961e-f9f1a409bb06"",
+                    ""path"": ""*/{Submit}"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse;Gamepad"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""3eed784b-c75c-4d15-8ec8-e96895d015b0"",
                     ""path"": ""<Keyboard>/BackQuote"",
                     ""interactions"": ""Press(behavior=2)"",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""DebugConsole"",
+                    ""action"": ""Debug"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1475,6 +1454,17 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""c5a85a49-e777-4c4a-b3f5-2ceb978fcb5f"",
+                    ""path"": ""<Keyboard>/F10"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": ""Clamp(max=1)"",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RestartGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""73a94d58-4b5b-4d7d-a9fb-57918fb08e48"",
                     ""path"": ""<Keyboard>/#(P)"",
                     ""interactions"": ""Press(behavior=2)"",
@@ -1524,7 +1514,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)"",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""ToggleDebugPanel"",
+                    ""action"": ""ToggleDebugButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1536,61 +1526,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""InteractiveKey"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ca04e5db-4ab9-41d3-ae12-6cccc327ba41"",
-                    ""path"": ""<Keyboard>/equals"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""SlowDownGame"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""39a93977-ae39-4a82-976d-66c6ae2b3b47"",
-                    ""path"": ""<Keyboard>/F10"",
-                    ""interactions"": ""Press(behavior=2)"",
-                    ""processors"": ""Clamp(max=1)"",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""ReloadGame"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d27e1062-395a-4e29-ab68-d66b2445373d"",
-                    ""path"": ""<Keyboard>/b"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""ReturnToOpenWorld"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""05598b18-1fe4-4a74-86ce-59a8b88f126f"",
-                    ""path"": ""<Keyboard>/n"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""SkillPreviewPanel"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""dd493237-8c65-4d8b-961e-f9f1a409bb06"",
-                    ""path"": ""*/{Submit}"",
-                    ""interactions"": ""Press(behavior=2)"",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse;Gamepad"",
-                    ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1765,19 +1700,15 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_Common_MouseMiddleClick = m_Common.FindAction("MouseMiddleClick", throwIfNotFound: true);
         m_Common_MousePosition = m_Common.FindAction("MousePosition", throwIfNotFound: true);
         m_Common_MouseWheel = m_Common.FindAction("MouseWheel", throwIfNotFound: true);
-        m_Common_Confirm = m_Common.FindAction("Confirm", throwIfNotFound: true);
         m_Common_Exit = m_Common.FindAction("Exit", throwIfNotFound: true);
         m_Common_Tab = m_Common.FindAction("Tab", throwIfNotFound: true);
-        m_Common_DebugConsole = m_Common.FindAction("DebugConsole", throwIfNotFound: true);
+        m_Common_Confirm = m_Common.FindAction("Confirm", throwIfNotFound: true);
+        m_Common_Debug = m_Common.FindAction("Debug", throwIfNotFound: true);
         m_Common_RestartGame = m_Common.FindAction("RestartGame", throwIfNotFound: true);
-        m_Common_ReloadGame = m_Common.FindAction("ReloadGame", throwIfNotFound: true);
         m_Common_PauseGame = m_Common.FindAction("PauseGame", throwIfNotFound: true);
         m_Common_ToggleUI = m_Common.FindAction("ToggleUI", throwIfNotFound: true);
-        m_Common_ToggleDebugPanel = m_Common.FindAction("ToggleDebugPanel", throwIfNotFound: true);
+        m_Common_ToggleDebugButton = m_Common.FindAction("ToggleDebugButton", throwIfNotFound: true);
         m_Common_InteractiveKey = m_Common.FindAction("InteractiveKey", throwIfNotFound: true);
-        m_Common_SlowDownGame = m_Common.FindAction("SlowDownGame", throwIfNotFound: true);
-        m_Common_ReturnToOpenWorld = m_Common.FindAction("ReturnToOpenWorld", throwIfNotFound: true);
-        m_Common_SkillPreviewPanel = m_Common.FindAction("SkillPreviewPanel", throwIfNotFound: true);
         // Editor
         m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
         m_Editor_MousePosition = m_Editor.FindAction("MousePosition", throwIfNotFound: true);
@@ -2208,19 +2139,15 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Common_MouseMiddleClick;
     private readonly InputAction m_Common_MousePosition;
     private readonly InputAction m_Common_MouseWheel;
-    private readonly InputAction m_Common_Confirm;
     private readonly InputAction m_Common_Exit;
     private readonly InputAction m_Common_Tab;
-    private readonly InputAction m_Common_DebugConsole;
+    private readonly InputAction m_Common_Confirm;
+    private readonly InputAction m_Common_Debug;
     private readonly InputAction m_Common_RestartGame;
-    private readonly InputAction m_Common_ReloadGame;
     private readonly InputAction m_Common_PauseGame;
     private readonly InputAction m_Common_ToggleUI;
-    private readonly InputAction m_Common_ToggleDebugPanel;
+    private readonly InputAction m_Common_ToggleDebugButton;
     private readonly InputAction m_Common_InteractiveKey;
-    private readonly InputAction m_Common_SlowDownGame;
-    private readonly InputAction m_Common_ReturnToOpenWorld;
-    private readonly InputAction m_Common_SkillPreviewPanel;
     public struct CommonActions
     {
         private @PlayerInput m_Wrapper;
@@ -2230,19 +2157,15 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @MouseMiddleClick => m_Wrapper.m_Common_MouseMiddleClick;
         public InputAction @MousePosition => m_Wrapper.m_Common_MousePosition;
         public InputAction @MouseWheel => m_Wrapper.m_Common_MouseWheel;
-        public InputAction @Confirm => m_Wrapper.m_Common_Confirm;
         public InputAction @Exit => m_Wrapper.m_Common_Exit;
         public InputAction @Tab => m_Wrapper.m_Common_Tab;
-        public InputAction @DebugConsole => m_Wrapper.m_Common_DebugConsole;
+        public InputAction @Confirm => m_Wrapper.m_Common_Confirm;
+        public InputAction @Debug => m_Wrapper.m_Common_Debug;
         public InputAction @RestartGame => m_Wrapper.m_Common_RestartGame;
-        public InputAction @ReloadGame => m_Wrapper.m_Common_ReloadGame;
         public InputAction @PauseGame => m_Wrapper.m_Common_PauseGame;
         public InputAction @ToggleUI => m_Wrapper.m_Common_ToggleUI;
-        public InputAction @ToggleDebugPanel => m_Wrapper.m_Common_ToggleDebugPanel;
+        public InputAction @ToggleDebugButton => m_Wrapper.m_Common_ToggleDebugButton;
         public InputAction @InteractiveKey => m_Wrapper.m_Common_InteractiveKey;
-        public InputAction @SlowDownGame => m_Wrapper.m_Common_SlowDownGame;
-        public InputAction @ReturnToOpenWorld => m_Wrapper.m_Common_ReturnToOpenWorld;
-        public InputAction @SkillPreviewPanel => m_Wrapper.m_Common_SkillPreviewPanel;
         public InputActionMap Get() { return m_Wrapper.m_Common; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -2267,45 +2190,33 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @MouseWheel.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnMouseWheel;
                 @MouseWheel.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnMouseWheel;
                 @MouseWheel.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnMouseWheel;
-                @Confirm.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnConfirm;
-                @Confirm.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnConfirm;
-                @Confirm.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnConfirm;
                 @Exit.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnExit;
                 @Exit.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnExit;
                 @Exit.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnExit;
                 @Tab.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnTab;
                 @Tab.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnTab;
                 @Tab.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnTab;
-                @DebugConsole.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnDebugConsole;
-                @DebugConsole.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnDebugConsole;
-                @DebugConsole.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnDebugConsole;
+                @Confirm.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnConfirm;
+                @Confirm.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnConfirm;
+                @Confirm.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnConfirm;
+                @Debug.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnDebug;
+                @Debug.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnDebug;
+                @Debug.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnDebug;
                 @RestartGame.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnRestartGame;
                 @RestartGame.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnRestartGame;
                 @RestartGame.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnRestartGame;
-                @ReloadGame.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnReloadGame;
-                @ReloadGame.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnReloadGame;
-                @ReloadGame.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnReloadGame;
                 @PauseGame.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnPauseGame;
                 @PauseGame.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnPauseGame;
                 @PauseGame.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnPauseGame;
                 @ToggleUI.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleUI;
                 @ToggleUI.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleUI;
                 @ToggleUI.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleUI;
-                @ToggleDebugPanel.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleDebugPanel;
-                @ToggleDebugPanel.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleDebugPanel;
-                @ToggleDebugPanel.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleDebugPanel;
+                @ToggleDebugButton.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleDebugButton;
+                @ToggleDebugButton.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleDebugButton;
+                @ToggleDebugButton.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnToggleDebugButton;
                 @InteractiveKey.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnInteractiveKey;
                 @InteractiveKey.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnInteractiveKey;
                 @InteractiveKey.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnInteractiveKey;
-                @SlowDownGame.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnSlowDownGame;
-                @SlowDownGame.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnSlowDownGame;
-                @SlowDownGame.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnSlowDownGame;
-                @ReturnToOpenWorld.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnReturnToOpenWorld;
-                @ReturnToOpenWorld.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnReturnToOpenWorld;
-                @ReturnToOpenWorld.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnReturnToOpenWorld;
-                @SkillPreviewPanel.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnSkillPreviewPanel;
-                @SkillPreviewPanel.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnSkillPreviewPanel;
-                @SkillPreviewPanel.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnSkillPreviewPanel;
             }
             m_Wrapper.m_CommonActionsCallbackInterface = instance;
             if (instance != null)
@@ -2325,45 +2236,33 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @MouseWheel.started += instance.OnMouseWheel;
                 @MouseWheel.performed += instance.OnMouseWheel;
                 @MouseWheel.canceled += instance.OnMouseWheel;
-                @Confirm.started += instance.OnConfirm;
-                @Confirm.performed += instance.OnConfirm;
-                @Confirm.canceled += instance.OnConfirm;
                 @Exit.started += instance.OnExit;
                 @Exit.performed += instance.OnExit;
                 @Exit.canceled += instance.OnExit;
                 @Tab.started += instance.OnTab;
                 @Tab.performed += instance.OnTab;
                 @Tab.canceled += instance.OnTab;
-                @DebugConsole.started += instance.OnDebugConsole;
-                @DebugConsole.performed += instance.OnDebugConsole;
-                @DebugConsole.canceled += instance.OnDebugConsole;
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
+                @Debug.started += instance.OnDebug;
+                @Debug.performed += instance.OnDebug;
+                @Debug.canceled += instance.OnDebug;
                 @RestartGame.started += instance.OnRestartGame;
                 @RestartGame.performed += instance.OnRestartGame;
                 @RestartGame.canceled += instance.OnRestartGame;
-                @ReloadGame.started += instance.OnReloadGame;
-                @ReloadGame.performed += instance.OnReloadGame;
-                @ReloadGame.canceled += instance.OnReloadGame;
                 @PauseGame.started += instance.OnPauseGame;
                 @PauseGame.performed += instance.OnPauseGame;
                 @PauseGame.canceled += instance.OnPauseGame;
                 @ToggleUI.started += instance.OnToggleUI;
                 @ToggleUI.performed += instance.OnToggleUI;
                 @ToggleUI.canceled += instance.OnToggleUI;
-                @ToggleDebugPanel.started += instance.OnToggleDebugPanel;
-                @ToggleDebugPanel.performed += instance.OnToggleDebugPanel;
-                @ToggleDebugPanel.canceled += instance.OnToggleDebugPanel;
+                @ToggleDebugButton.started += instance.OnToggleDebugButton;
+                @ToggleDebugButton.performed += instance.OnToggleDebugButton;
+                @ToggleDebugButton.canceled += instance.OnToggleDebugButton;
                 @InteractiveKey.started += instance.OnInteractiveKey;
                 @InteractiveKey.performed += instance.OnInteractiveKey;
                 @InteractiveKey.canceled += instance.OnInteractiveKey;
-                @SlowDownGame.started += instance.OnSlowDownGame;
-                @SlowDownGame.performed += instance.OnSlowDownGame;
-                @SlowDownGame.canceled += instance.OnSlowDownGame;
-                @ReturnToOpenWorld.started += instance.OnReturnToOpenWorld;
-                @ReturnToOpenWorld.performed += instance.OnReturnToOpenWorld;
-                @ReturnToOpenWorld.canceled += instance.OnReturnToOpenWorld;
-                @SkillPreviewPanel.started += instance.OnSkillPreviewPanel;
-                @SkillPreviewPanel.performed += instance.OnSkillPreviewPanel;
-                @SkillPreviewPanel.canceled += instance.OnSkillPreviewPanel;
             }
         }
     }
@@ -2504,19 +2403,15 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnMouseMiddleClick(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
         void OnMouseWheel(InputAction.CallbackContext context);
-        void OnConfirm(InputAction.CallbackContext context);
         void OnExit(InputAction.CallbackContext context);
         void OnTab(InputAction.CallbackContext context);
-        void OnDebugConsole(InputAction.CallbackContext context);
+        void OnConfirm(InputAction.CallbackContext context);
+        void OnDebug(InputAction.CallbackContext context);
         void OnRestartGame(InputAction.CallbackContext context);
-        void OnReloadGame(InputAction.CallbackContext context);
         void OnPauseGame(InputAction.CallbackContext context);
         void OnToggleUI(InputAction.CallbackContext context);
-        void OnToggleDebugPanel(InputAction.CallbackContext context);
+        void OnToggleDebugButton(InputAction.CallbackContext context);
         void OnInteractiveKey(InputAction.CallbackContext context);
-        void OnSlowDownGame(InputAction.CallbackContext context);
-        void OnReturnToOpenWorld(InputAction.CallbackContext context);
-        void OnSkillPreviewPanel(InputAction.CallbackContext context);
     }
     public interface IEditorActions
     {

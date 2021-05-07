@@ -13,11 +13,13 @@ namespace AK
 {
     namespace EVENTS
     {
+        static const AkUniqueID _FIREENEMY_RED_FIRE_LOOP_PLAY = 2091411013U;
+        static const AkUniqueID _FIREENEMY_RED_FIRE_LOOP_STOP = 3516063939U;
         static const AkUniqueID ACTIONBOX_ONDESTROYED = 2736176351U;
         static const AkUniqueID BGM_START = 2985635692U;
         static const AkUniqueID BGM_STOP = 2090192256U;
+        static const AkUniqueID BLIZARDBOX_ONDESTROYED_COMMON = 3214215107U;
         static const AkUniqueID BLIZZARDBOX_ONDESTROYED_COLLIDE = 1922810052U;
-        static const AkUniqueID BLIZZARDBOX_ONDESTROYED_COMMON = 3849920377U;
         static const AkUniqueID BLIZZARDBOX_ONDESTROYED_EXPLOSION = 4274406951U;
         static const AkUniqueID BLIZZARDBOX_ONDESTROYED_FIRING = 479139163U;
         static const AkUniqueID BLIZZARDBOX_ONDESTROYED_FROZEN = 4148369200U;
@@ -30,10 +32,6 @@ namespace AK
         static const AkUniqueID CHARCOALBOX_ONDESTROYED_EXPLOSION = 1495961766U;
         static const AkUniqueID CHARCOALBOX_ONDESTROYED_FIRING = 51118880U;
         static const AkUniqueID CHARCOALBOX_ONDESTROYED_FROZEN = 2930634879U;
-        static const AkUniqueID DOORBOX_ONDOORCLOSE = 2893571260U;
-        static const AkUniqueID DOORBOX_ONDOOROPEN = 3196853800U;
-        static const AkUniqueID EXITMENUPANEL_ONDESPLAY = 1412053944U;
-        static const AkUniqueID EXITMENUPANEL_ONHIDE = 2190979674U;
         static const AkUniqueID FIREBOX_ONDESTROYED_COLLIDE = 3979359346U;
         static const AkUniqueID FIREBOX_ONDESTROYED_COMMON = 1497070139U;
         static const AkUniqueID FIREBOX_ONDESTROYED_EXPLOSION = 923382053U;
@@ -41,31 +39,15 @@ namespace AK
         static const AkUniqueID FIREBOX_ONDESTROYED_FROZEN = 1477219654U;
         static const AkUniqueID FIREENEMY_RED_HEATEMIT_CAST = 172805781U;
         static const AkUniqueID FIREENEMY_RED_HEATEMIT_PREPARING = 2633498556U;
-        static const AkUniqueID FIREENEMY_RED_ONBEINGDAMAGED = 1850913127U;
         static const AkUniqueID FIREENEMY_RED_ONDESTROYED_COMMON = 3133826026U;
-        static const AkUniqueID FIREENEMY_WHITE_HEATEMIT_CAST = 30534527U;
-        static const AkUniqueID FIREENEMY_WHITE_HEATEMIT_PREPARING = 1370808650U;
-        static const AkUniqueID FIREENEMY_WHITE_ONBEINGDAMAGED = 1604058721U;
-        static const AkUniqueID FIREENEMY_WHITE_ONDESTROYED_COMMON = 2215494996U;
         static const AkUniqueID FIREENEMY_YELLOW_HEATEMIT_CAST = 2115686624U;
         static const AkUniqueID FIREENEMY_YELLOW_HEATEMIT_PREPARING = 1254688751U;
-        static const AkUniqueID FIREENEMY_YELLOW_ONBEINGDAMAGED = 3562230120U;
         static const AkUniqueID FIREENEMY_YELLOW_ONDESTROYED_COMMON = 2446285653U;
         static const AkUniqueID FLAMETHROWERBOX_ONDESTROYED_COLLIDE = 2151462320U;
         static const AkUniqueID FLAMETHROWERBOX_ONDESTROYED_COMMON = 1042301101U;
         static const AkUniqueID FLAMETHROWERBOX_ONDESTROYED_EXPLOSION = 1653540371U;
         static const AkUniqueID FLAMETHROWERBOX_ONDESTROYED_FIRING = 3299051695U;
         static const AkUniqueID FLAMETHROWERBOX_ONDESTROYED_FROZEN = 1657988332U;
-        static const AkUniqueID FLAMETHROWERBOX_ONFIRE_BIG_START = 3604967992U;
-        static const AkUniqueID FLAMETHROWERBOX_ONFIRE_BIG_STOP = 3757470788U;
-        static const AkUniqueID FLAMETHROWERBOX_ONFIRE_MEDIUM_START = 3001284785U;
-        static const AkUniqueID FLAMETHROWERBOX_ONFIRE_MEDIUM_STOP = 1093137963U;
-        static const AkUniqueID FLAMETHROWERBOX_ONFIRE_SMALL_START = 1183096935U;
-        static const AkUniqueID FLAMETHROWERBOX_ONFIRE_SMALL_STOP = 1969622413U;
-        static const AkUniqueID FLAMETHROWERBOX_ONICE_START = 3359598974U;
-        static const AkUniqueID FLAMETHROWERBOX_ONICE_STOP = 811813534U;
-        static const AkUniqueID FLAMETHROWERBOX_ONLIGHTNING_START = 3663234077U;
-        static const AkUniqueID FLAMETHROWERBOX_ONLIGHTNING_STOP = 499123743U;
         static const AkUniqueID GOLDENBOX_ONDESTROYED = 2575000920U;
         static const AkUniqueID ICEBOX_ONBEINGKICKED = 2707351273U;
         static const AkUniqueID ICEBOX_ONDESTROYED_COLLIDE = 3533703535U;
@@ -91,11 +73,6 @@ namespace AK
         static const AkUniqueID ICEENEMY_PURPLE_GLACIALSLAM_PREPARING = 1029919329U;
         static const AkUniqueID ICEENEMY_PURPLE_ONBEINGDAMAGED = 3520954431U;
         static const AkUniqueID ICEENEMY_PURPLE_ONDESTROYED_COMMON = 1320188178U;
-        static const AkUniqueID KEYBINDMENUPANEL_ONDESPLAY = 3944878542U;
-        static const AkUniqueID KEYBINDMENUPANEL_ONHIDE = 524991712U;
-        static const AkUniqueID LEARNSKILLUPGRADEPANEL_ONADDPAGE = 2397036670U;
-        static const AkUniqueID LEARNSKILLUPGRADEPANEL_ONREMOVEPAGE = 3030785919U;
-        static const AkUniqueID LEARNSKILLUPGRADEPANEL_ONSWITCHPAGE = 2446548203U;
         static const AkUniqueID LIFEBOX_ONDESTORYED = 4117332225U;
         static const AkUniqueID LIGHTNINGBOX_ONDESTROYED_COLLIDE = 2021531698U;
         static const AkUniqueID LIGHTNINGBOX_ONDESTROYED_COMMON = 2603255291U;
@@ -126,8 +103,6 @@ namespace AK
         static const AkUniqueID MEDIUMLOGBOX_ONDESTROYED_EXPLOSION = 1003809712U;
         static const AkUniqueID MEDIUMLOGBOX_ONDESTROYED_FIRING = 376043262U;
         static const AkUniqueID MEDIUMLOGBOX_ONDESTROYED_FROZEN = 2932381025U;
-        static const AkUniqueID NOTICEMENUPANEL_ONDESPLAY = 1179181088U;
-        static const AkUniqueID NOTICEMENUPANEL_ONHIDE = 247593618U;
         static const AkUniqueID ONBEINGDROPPED_METAL = 1507480323U;
         static const AkUniqueID ONBEINGDROPPED_WOOD = 2957810425U;
         static const AkUniqueID ONBEINGFROZEN = 3833687285U;
@@ -152,41 +127,29 @@ namespace AK
         static const AkUniqueID ONTHROWNUP = 58254363U;
         static const AkUniqueID PLAYER_DASH = 2394582229U;
         static const AkUniqueID PLAYER_FOOTSTEP = 2453392179U;
+        static const AkUniqueID PLAYER_GAINACTIONPOINT = 1318441712U;
+        static const AkUniqueID PLAYER_GAINFIREELEMENT = 347690904U;
+        static const AkUniqueID PLAYER_GAINGOLD = 380542854U;
+        static const AkUniqueID PLAYER_GAINICEELEMENT = 3078063127U;
+        static const AkUniqueID PLAYER_GAINLIGHTNINGELEMENT = 3731475914U;
+        static const AkUniqueID PLAYER_GAINMAXACTIONPOINT = 3822428458U;
+        static const AkUniqueID PLAYER_GAINMAXHEALTH = 730516512U;
         static const AkUniqueID PLAYER_KICK = 4076006907U;
-        static const AkUniqueID PLAYER_ONACTIONPOINTNOTENOUGH = 3824622445U;
         static const AkUniqueID PLAYER_ONBEINGDAMAGED = 173863332U;
         static const AkUniqueID PLAYER_ONBEINGFROZEN = 2856534737U;
         static const AkUniqueID PLAYER_ONBEINGHEALED = 433135230U;
         static const AkUniqueID PLAYER_ONBEINGLIT = 1305348786U;
         static const AkUniqueID PLAYER_ONBURNINGEND = 651730626U;
         static const AkUniqueID PLAYER_ONDESTROYED = 1122442795U;
-        static const AkUniqueID PLAYER_ONELEMENTSNOTENOUGH = 290944804U;
         static const AkUniqueID PLAYER_ONFROZENEND = 2187238187U;
-        static const AkUniqueID PLAYER_ONGAINACTIONPOINT = 617567001U;
-        static const AkUniqueID PLAYER_ONGAINFIREELEMENT = 1540866317U;
-        static const AkUniqueID PLAYER_ONGAINGOLD = 299269653U;
-        static const AkUniqueID PLAYER_ONGAINICEELEMENT = 1558159708U;
-        static const AkUniqueID PLAYER_ONGAINLIGHTNINGELEMENT = 4038615097U;
-        static const AkUniqueID PLAYER_ONGAINMAXACTIONPOINT = 1388792941U;
-        static const AkUniqueID PLAYER_ONGAINMAXHEALTH = 4227671061U;
-        static const AkUniqueID PLAYER_ONGOLDNOTENOUGH = 3021707611U;
-        static const AkUniqueID PLAYER_ONLOWHEALTHWARNING = 933431834U;
-        static const AkUniqueID PLAYER_ONSPENDGOLD = 1210998136U;
         static const AkUniqueID PLAYER_SKILLCAST = 2480229653U;
         static const AkUniqueID PLAYER_VAULT = 769234327U;
-        static const AkUniqueID SLIMEENEMY_ATTACK_CAST = 655779634U;
-        static const AkUniqueID SLIMEENEMY_ATTACK_PREPARING = 3728825757U;
-        static const AkUniqueID SLIMEENEMY_ONBEINGDAMAGED = 2309355301U;
-        static const AkUniqueID SLIMEENEMY_ONDESTROYED_COMMON = 3214525016U;
         static const AkUniqueID STACKINGGOLDENBOX_ONDESTROYED = 3367223592U;
         static const AkUniqueID TNTBOX_ONDESTROYED_COLLIDE = 4109294050U;
         static const AkUniqueID TNTBOX_ONDESTROYED_COMMON = 2927179275U;
         static const AkUniqueID TNTBOX_ONDESTROYED_EXPLOSION = 889605877U;
         static const AkUniqueID TNTBOX_ONDESTROYED_FIRING = 2239706709U;
         static const AkUniqueID TNTBOX_ONDESTROYED_FROZEN = 128714198U;
-        static const AkUniqueID TRANSPORTMENUPANEL_ONDESPLAY = 3246025091U;
-        static const AkUniqueID TRANSPORTMENUPANEL_ONHIDE = 3536283519U;
-        static const AkUniqueID UI_BUTTONCLICK_COMMON = 3340673110U;
         static const AkUniqueID WOODENBOX_ONDESTROYED_COLLIDE = 241115384U;
         static const AkUniqueID WOODENBOX_ONDESTROYED_COMMON = 3956398389U;
         static const AkUniqueID WOODENBOX_ONDESTROYED_EXPLOSION = 469322011U;
@@ -232,7 +195,6 @@ namespace AK
                 static const AkUniqueID LAB = 578926554U;
                 static const AkUniqueID NONE = 748895195U;
                 static const AkUniqueID OPENWORLD = 2009274547U;
-                static const AkUniqueID STARTMENU = 3944636910U;
                 static const AkUniqueID TEMPLE = 2323193050U;
                 static const AkUniqueID TUTORIAL = 3762955427U;
             } // namespace STATE
@@ -275,7 +237,6 @@ namespace AK
         static const AkUniqueID INMENU_LOWPASS = 1756231317U;
         static const AkUniqueID MASTER_VOLUME = 4179668880U;
         static const AkUniqueID MUSIC_VOLUME = 1006694123U;
-        static const AkUniqueID PANEL_VOLUME = 1463762030U;
         static const AkUniqueID PLAYER_HEALTHPERCENT = 567901342U;
         static const AkUniqueID PLAYER_MOVEMENTSPEED = 2471758783U;
         static const AkUniqueID SPIDERLEGDISTANCETOPLAYER = 2648624475U;
@@ -308,10 +269,19 @@ namespace AK
         static const AkUniqueID MUSICSTINGER = 1636576504U;
         static const AkUniqueID NONWORLD = 841296678U;
         static const AkUniqueID PLAYER = 1069431850U;
-        static const AkUniqueID SKILL_PANEL = 3895222555U;
+        static const AkUniqueID REGION_EXCAVATOR = 1355693303U;
+        static const AkUniqueID REGION_LAB = 2754982597U;
+        static const AkUniqueID REGION_OPENWORLD = 1863167500U;
+        static const AkUniqueID REGION_TEMPLE = 2746966547U;
+        static const AkUniqueID REGION_TUTORIAL = 1843703454U;
         static const AkUniqueID UI = 1551306167U;
         static const AkUniqueID WORLD = 2609808943U;
     } // namespace BUSSES
+
+    namespace AUX_BUSSES
+    {
+        static const AkUniqueID MUSIC_AUX = 2412664669U;
+    } // namespace AUX_BUSSES
 
     namespace AUDIO_DEVICES
     {

@@ -143,7 +143,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             for (int index = 0; index < ListenLevelEventAliasList.Count; index++)
             {
                 string alias = ListenLevelEventAliasList[index];
-                if (alias.CheckEventAliasOrStateBool(incomingEventAlias, InitWorldModuleGUID, InitStaticLayoutGUID) && !multiTriggerFlags[index])
+                if (alias.CheckEventAliasOrStateBool(incomingEventAlias, InitWorldModuleGUID) && !multiTriggerFlags[index])
                 {
                     multiTriggerFlags[index] = true;
                     matchAny = true;
@@ -166,7 +166,7 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         }
         else
         {
-            if (ListenLevelEventAlias.CheckEventAliasOrStateBool(incomingEventAlias, InitWorldModuleGUID, InitStaticLayoutGUID))
+            if (ListenLevelEventAlias.CheckEventAliasOrStateBool(incomingEventAlias, InitWorldModuleGUID))
             {
                 if (TriggerProbabilityPercent.ProbabilityBool())
                 {

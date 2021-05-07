@@ -13,30 +13,11 @@ public class EntityExtraSerializeData : IClone<EntityExtraSerializeData>
     [SerializeReference]
     public List<EntityPassiveSkill> EntityPassiveSkills = new List<EntityPassiveSkill>();
 
-    public EntityDataExtraStates EntityDataExtraStates = new EntityDataExtraStates();
-
     public EntityExtraSerializeData Clone()
     {
         return new EntityExtraSerializeData
         {
-            EntityPassiveSkills = EntityPassiveSkills.Clone<EntityPassiveSkill, EntitySkill>(),
-            EntityDataExtraStates = EntityDataExtraStates.Clone(),
-        };
-    }
-}
-
-[Serializable]
-public class EntityDataExtraStates : IClone<EntityDataExtraStates>
-{
-    public bool DoorOpen = false;
-    public bool TransportBoxClosed = false;
-
-    public EntityDataExtraStates Clone()
-    {
-        return new EntityDataExtraStates
-        {
-            DoorOpen = DoorOpen,
-            TransportBoxClosed = TransportBoxClosed,
+            EntityPassiveSkills = EntityPassiveSkills.Clone<EntityPassiveSkill, EntitySkill>()
         };
     }
 }

@@ -24,10 +24,6 @@ public class LearnSkillUpgradePanel : BaseUIPanel
     [SerializeField]
     private RectTransform AddingPageContainer;
 
-    public AK.Wwise.Event OnAddPage;
-    public AK.Wwise.Event OnRemovePage;
-    public AK.Wwise.Event OnSwitchPage;
-
     public bool HasPage => PageList.Count + AddingPageQueue.Count > 0;
     public int PageCount => PageList.Count;
 
@@ -53,7 +49,6 @@ public class LearnSkillUpgradePanel : BaseUIPanel
                 }
                 else
                 {
-                    OnSwitchPage?.Post(gameObject);
                     currentFocusPageIndex = value % PageList.Count;
                 }
 
@@ -131,7 +126,6 @@ public class LearnSkillUpgradePanel : BaseUIPanel
                         addPage.transform.SetParent(PageContainer);
                         addPage.transform.SetAsFirstSibling();
                         addPage.Anim.SetTrigger("Jump");
-                        OnAddPage?.Post(gameObject);
                     }
                     else
                     {
@@ -152,7 +146,6 @@ public class LearnSkillUpgradePanel : BaseUIPanel
                         if (PageList.Contains(removePage.GUID))
                         {
                             PageList.Remove(removePage.GUID);
-                            OnRemovePage?.Post(gameObject);
                             StartCoroutine(removePage.Co_Remove());
                         }
                     }
@@ -197,9 +190,8 @@ public class LearnSkillUpgradePanel : BaseUIPanel
 
     #endregion
 
-    protected override void FixedUpdate()
+    void FixedUpdate()
     {
-        base.FixedUpdate();
         if (IsShown)
         {
             if (ControlManager.Instance.Common_InteractiveKey.Up)
@@ -258,6 +250,7 @@ public class LearnInfo
     public string SkillGUID;
     public EntityUpgrade EntityUpgrade;
     public UnityAction LearnCallback;
+    public PlayerControllerHelper.KeyBind KeyBind;
     public int GoldCost;
 }
 

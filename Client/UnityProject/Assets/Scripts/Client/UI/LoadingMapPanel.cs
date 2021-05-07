@@ -43,17 +43,6 @@ public class LoadingMapPanel : BaseUIPanel
         currentLoadingTick = 0;
     }
 
-    public override void Display()
-    {
-        UIManager.Instance.CloseUIForm<ExitMenuPanel>();
-        UIManager.Instance.CloseUIForm<EntitySkillPreviewPanel>();
-        UIManager.Instance.CloseUIForm<TransportWorldPanel>();
-        ClientGameManager.Instance.LearnSkillUpgradePanel?.HidePanel();
-        UIManager.Instance.CloseUIForm<KeyBindingPanel>();
-        UIManager.Instance.CloseUIForm<WinLosePanel>();
-        base.Display();
-    }
-
     public void SetBackgroundAlpha(float alpha)
     {
         BackgroundImage.color = new Color(BackgroundImage.color.r, BackgroundImage.color.g, BackgroundImage.color.b, alpha);
@@ -86,9 +75,8 @@ public class LoadingMapPanel : BaseUIPanel
     private float RefreshInterval = 0.2f;
     private float RefreshTick = 0.2f;
 
-    protected override void FixedUpdate()
+    void FixedUpdate()
     {
-        base.FixedUpdate();
         currentLoadingTick += Time.fixedDeltaTime;
         RefreshTick += Time.fixedDeltaTime;
         if (RefreshTick > RefreshInterval)

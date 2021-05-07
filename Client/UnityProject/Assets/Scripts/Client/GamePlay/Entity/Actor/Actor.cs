@@ -409,6 +409,10 @@ public class Actor : Entity
     #region 手感
 
     [FoldoutGroup("手感")]
+    [LabelText("Dash力度")]
+    public float DashForce = 150f;
+
+    [FoldoutGroup("手感")]
     [LabelText("起步速度")]
     public float Accelerate = 200f;
 
@@ -560,6 +564,10 @@ public class Actor : Entity
 
     private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 
+    [ShowInInspector]
+    [HideInEditorMode]
+    internal bool IsInDungeon = false;
+
     public enum ActorBehaviourStates
     {
         Idle,
@@ -599,39 +607,33 @@ public class Actor : Entity
     {
         gameObject.SetActive(true);
         base.OnUsed();
-        EntityMonoHelpers.Clear();
-        EntityMonoHelpers.Add(EntityArtHelper);
-        EntityMonoHelpers.Add(EntityWwiseHelper);
-        EntityMonoHelpers.Add(EntityModelHelper);
-        EntityMonoHelpers.Add(EntityIndicatorHelper);
-        EntityMonoHelpers.Add(EntityBuffHelper);
-        EntityMonoHelpers.Add(EntityFrozenHelper);
-        EntityMonoHelpers.Add(EntityTriggerZoneHelper);
-        EntityMonoHelpers.Add(EntityCollectHelper);
-        EntityMonoHelpers.Add(EntityGrindTriggerZoneHelper);
+        EntityArtHelper?.OnHelperUsed();
+        EntityWwiseHelper.OnHelperUsed();
+        EntityModelHelper.OnHelperUsed();
+        EntityIndicatorHelper.OnHelperUsed();
+        EntityBuffHelper.OnHelperUsed();
+        EntityFrozenHelper.OnHelperUsed();
+        EntityTriggerZoneHelper?.OnHelperUsed();
+        EntityCollectHelper?.OnHelperUsed();
+        EntityGrindTriggerZoneHelper?.OnHelperUsed();
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
-            EntityMonoHelpers.Add(h);
+            h.OnHelperUsed();
         }
 
         foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
         {
-            EntityMonoHelpers.Add(h);
+            h.OnHelperUsed();
         }
 
-        EntityMonoHelpers.Add(ActorControllerHelper);
-        EntityMonoHelpers.Add(ActorPushHelper);
-        EntityMonoHelpers.Add(ActorFaceHelper);
-        EntityMonoHelpers.Add(ActorSkinHelper);
-        EntityMonoHelpers.Add(ActorLaunchArcRendererHelper);
-        EntityMonoHelpers.Add(ActorBattleHelper);
-        EntityMonoHelpers.Add(ActorBoxInteractHelper);
-        EntityMonoHelpers.Add(ActorSkillLearningHelper);
-
-        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
-        {
-            entityMonoHelper?.OnHelperUsed();
-        }
+        ActorControllerHelper?.OnHelperUsed();
+        ActorPushHelper.OnHelperUsed();
+        ActorFaceHelper.OnHelperUsed();
+        ActorSkinHelper.OnHelperUsed();
+        ActorLaunchArcRendererHelper.OnHelperUsed();
+        ActorBattleHelper.OnHelperUsed();
+        ActorBoxInteractHelper.OnHelperUsed();
+        ActorSkillLearningHelper?.OnHelperUsed();
 
         ActorMoveColliderRoot.SetActive(true);
     }
@@ -649,9 +651,10 @@ public class Actor : Entity
         }
 
         IsRecycling = true;
+        IsInDungeon = false;
         ForbidAction = true;
         if (!HasRigidbody) AddRigidbody();
-        RigidBody.drag = CanAutoFallDown ? 100f : 0f;
+        RigidBody.drag = 100f;
         RigidBody.velocity = Vector3.zero;
 
         ActorBehaviourState = ActorBehaviourStates.Idle;
@@ -667,11 +670,35 @@ public class Actor : Entity
         RealtimeWorldGP = GridPos3D.Zero;
         ThrowState = ThrowStates.None;
         ClearJumpParams();
+        ThrowWhenDie();
 
-        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
+        EntityArtHelper?.OnHelperRecycled();
+        EntityWwiseHelper.OnHelperRecycled();
+        EntityModelHelper.OnHelperRecycled();
+        EntityIndicatorHelper.OnHelperRecycled();
+        EntityBuffHelper.OnHelperRecycled();
+        EntityFrozenHelper.OnHelperRecycled();
+        EntityTriggerZoneHelper?.OnHelperRecycled();
+        EntityCollectHelper?.OnHelperRecycled();
+        EntityGrindTriggerZoneHelper?.OnHelperRecycled();
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
-            entityMonoHelper?.OnHelperRecycled();
+            h.OnHelperRecycled();
         }
+
+        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
+        {
+            h.OnHelperRecycled();
+        }
+
+        ActorControllerHelper?.OnHelperRecycled();
+        ActorPushHelper.OnHelperRecycled();
+        ActorFaceHelper.OnHelperRecycled();
+        ActorSkinHelper.OnHelperRecycled();
+        ActorLaunchArcRendererHelper.OnHelperRecycled();
+        ActorBattleHelper.OnHelperRecycled();
+        ActorBoxInteractHelper.OnHelperRecycled();
+        ActorSkillLearningHelper?.OnHelperRecycled();
 
         UnInitActiveSkills();
         UnInitPassiveSkills();
@@ -683,7 +710,6 @@ public class Actor : Entity
         StopAllCoroutines();
         gameObject.SetActive(false);
         BattleManager.Instance.RemoveActor(this);
-        EntityMonoHelpers.Clear();
         base.OnRecycled();
         IsRecycling = false;
     }
@@ -725,7 +751,7 @@ public class Actor : Entity
     /// <param name="initWorldModuleGUID"></param>
     public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
     {
-        base.Setup(entityData, initWorldModuleGUID);
+        base.Setup(initWorldModuleGUID);
         EntityTypeIndex = entityData.EntityTypeIndex;
         ActorType = entityData.EntityType.TypeName;
         ActorCategory = entityData.EntityTypeIndex == ConfigManager.Actor_PlayerIndex ? ActorCategory.Player : ActorCategory.Creature;
@@ -767,40 +793,23 @@ public class Actor : Entity
         ActorSkillLearningHelper?.LoadInitSkills();
 
         ForbidAction = false;
+        ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
     }
 
-    protected override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    private void Update()
     {
-        base.RecordEntityExtraStates(entityDataExtraStates);
-        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
-        {
-            entityMonoHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        }
-    }
-
-    protected override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
-    {
-        base.ApplyEntityExtraStates(entityDataExtraStates);
-        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
-        {
-            entityMonoHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        }
-    }
-
-    protected override void Update()
-    {
-        base.Update();
         if (!BattleManager.Instance.IsStart) return;
-        if (IsRecycled) return;
-        UpdateThrowParabolaLine();
+        if (!IsRecycled)
+        {
+            UpdateThrowParabolaLine();
+        }
     }
 
     protected override void Tick(float interval)
     {
-        base.Tick(interval);
         if (!BattleManager.Instance.IsStart) return;
-        if (IsRecycled) return;
         ActorControllerHelper?.OnTick(interval);
+        base.Tick(interval);
     }
 
     public void OnLoaded(Actor actor)
@@ -897,7 +906,7 @@ public class Actor : Entity
                     }
                     else
                     {
-                        RigidBody.drag = CanAutoFallDown ? 100f : 0f;
+                        RigidBody.drag = 100f;
                         RigidBody.mass = 1f;
                     }
                 }
@@ -931,7 +940,7 @@ public class Actor : Entity
                     ActorArtHelper.SetIsWalking(false);
                     ActorArtHelper.SetIsChasing(false);
                     ActorArtHelper.SetIsPushing(false);
-                    RigidBody.drag = CanAutoFallDown ? 100f : 0f;
+                    RigidBody.drag = 100f;
                     RigidBody.mass = 1f;
                     ActorPushHelper.TriggerOut = false;
                 }
@@ -959,16 +968,8 @@ public class Actor : Entity
             ActorArtHelper.SetIsPushing(false);
             if (HasRigidbody)
             {
-                if (CannotAct && !EntityBuffHelper.IsBeingRepulsed)
-                {
-                    RigidBody.drag = CanAutoFallDown ? 100f : 0f;
-                    RigidBody.mass = 1f;
-                }
-                else
-                {
-                    RigidBody.drag = 0f;
-                    RigidBody.mass = 1f;
-                }
+                RigidBody.drag = 0f;
+                RigidBody.mass = 1f;
             }
 
             CurMoveAttempt = Vector3.zero;
@@ -982,13 +983,7 @@ public class Actor : Entity
         JumpingUpTick();
         InAirMovingToTargetPosTick();
         SmashingDownTick();
-
-        bool autoFallDown = CanAutoFallDown && (
-            !IsExecutingAirSkills()
-            || (ActorBehaviourState == ActorBehaviourStates.Jump && JumpReachClimax)
-        );
-
-        if (autoFallDown)
+        if (!IsExecutingAirSkills() || (ActorBehaviourState == ActorBehaviourStates.Jump && JumpReachClimax))
         {
             if (!CannotAct && HasRigidbody)
             {
@@ -1041,7 +1036,7 @@ public class Actor : Entity
             RigidBody.mass = 1f;
             RigidBody.drag = 0f;
             RigidBody.angularDrag = 20f;
-            RigidBody.useGravity = CanAutoFallDown;
+            RigidBody.useGravity = true;
             RigidBody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
             RigidBody.interpolation = RigidbodyInterpolation.Interpolate;
             RigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -1314,18 +1309,6 @@ public class Actor : Entity
         }
     }
 
-    #region Vertically Move
-
-    public void MoveUp()
-    {
-    }
-
-    public void MoveDown()
-    {
-    }
-
-    #endregion
-
     #region Jump
 
     private void ClearJumpParams()
@@ -1475,20 +1458,18 @@ public class Actor : Entity
         if (CannotAct) return;
         if (HasRigidbody)
         {
+            if (transform.position.y > SmashDownTargetPos.y + 1f)
+            {
+                RigidBody.AddForce(Vector3.up * (-SmashForce - RigidBody.velocity.y), ForceMode.VelocityChange);
+            }
+
             if (IsGrounded)
             {
                 ActorBehaviourState = ActorBehaviourStates.Idle;
             }
-            else
+            else if (RigidBody.velocity.y >= -0.1f)
             {
-                if (transform.position.y > SmashDownTargetPos.y + 1f)
-                {
-                    RigidBody.AddForce(Vector3.up * (-SmashForce - RigidBody.velocity.y), ForceMode.VelocityChange);
-                }
-                else if (RigidBody.velocity.y >= -0.1f)
-                {
-                    ActorBehaviourState = ActorBehaviourStates.Idle;
-                }
+                ActorBehaviourState = ActorBehaviourStates.Idle;
             }
         }
     }
@@ -1561,7 +1542,6 @@ public class Actor : Entity
         if (IsDestroying) return;
         base.DestroySelf();
         IsDestroying = true;
-        ThrowWhenDie();
         if (!IsFrozen) UnRegisterFromModule(WorldGP, EntityOrientation);
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {

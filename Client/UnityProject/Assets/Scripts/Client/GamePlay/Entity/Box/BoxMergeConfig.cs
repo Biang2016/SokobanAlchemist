@@ -16,13 +16,9 @@ public class BoxMergeConfig
     public List<BoxMergeConfigData> BoxMergeConfigDataList = new List<BoxMergeConfigData>();
 
     [ShowInInspector]
-    [ReadOnly]
-    [HideInEditorMode]
     internal string Temp_NextMergeEntityDataOverrideKey = "";
 
     [ShowInInspector]
-    [ReadOnly]
-    [HideInEditorMode]
     internal EntityData Temp_NextMergeEntityData;
 
     public ushort GetMergeBoxTypeIndex(int mergeCount, MergeOrientation mergeOrientation)

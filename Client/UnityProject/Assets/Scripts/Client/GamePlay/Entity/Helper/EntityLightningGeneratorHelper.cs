@@ -29,27 +29,17 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
         }
 
         EntityLightnings.Clear();
+        LightningSkill.Entity = null;
+        LightningSkill.OnUnRegisterLevelEventID();
+        LightningSkill.OnUnInit();
     }
 
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
-    }
-
-    public override void OnInitPassiveSkills()
-    {
-        base.OnInitPassiveSkills();
         LightningSkill.Entity = Entity;
         LightningSkill.OnInit();
         LightningSkill.OnRegisterLevelEventID();
-    }
-
-    public override void OnUnInitPassiveSkills()
-    {
-        base.OnUnInitPassiveSkills();
-        LightningSkill.Entity = null;
-        LightningSkill.OnUnRegisterLevelEventID();
-        LightningSkill.OnUnInit();
     }
 
     private List<EntityLightning> cached_removeLightnings = new List<EntityLightning>(4);

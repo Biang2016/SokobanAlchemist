@@ -28,7 +28,6 @@ public class EntitySkillAction_UI : EntitySkillAction, EntitySkillAction.IPureAc
 
     public void Execute()
     {
-        if (UIManager.Instance.IsUIShown<ExitMenuPanel>()) return;
         BaseUIPanel uiPanel = UIManager.Instance.GetBaseUIForm(UIName);
         if (Open)
         {

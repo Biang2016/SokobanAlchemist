@@ -431,7 +431,7 @@ public class ActorAIAgent
             Entity entity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridPos, Actor.GUID, out WorldModule targetModule, out GridPos3D _);
             if (targetModule.IsNotNullAndAvailable() && entity is Box box && entity.IsNotNullAndAlive())
             {
-                if (box.EntityTypeIndex != ConfigManager.Box_EnemyFrozenBoxIndex && box.Destroyable)
+                if (box.EntityTypeIndex != ConfigManager.Box_EnemyFrozenBoxIndex)
                 {
                     entity.EntityBuffHelper.Damage(10000, EntityBuffAttribute.ExplodeDamage, null);
                 }

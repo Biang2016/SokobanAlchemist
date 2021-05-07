@@ -95,9 +95,6 @@ public partial class Box : Entity
     [FoldoutGroup("组件")]
     public BoxMarchingTextureHelper BoxMarchingTextureHelper;
 
-    [FoldoutGroup("组件")]
-    public TransportBoxHelper TransportBoxHelper;
-
     internal Actor FrozenActor
     {
         get { return BoxFrozenBoxHelper != null ? BoxFrozenBoxHelper.FrozenActor : null; }
@@ -148,13 +145,12 @@ public partial class Box : Entity
             h.OnHelperUsed();
         }
 
-        BoxColliderHelper.OnHelperUsed();
+        BoxColliderHelper.OnBoxUsed();
         DoorBoxHelper?.OnHelperUsed();
         BoxSkinHelper?.OnHelperUsed();
         BoxIconSpriteHelper.OnHelperUsed();
         BoxFrozenBoxHelper?.OnHelperUsed();
         BoxMarchingTextureHelper?.OnHelperUsed();
-        TransportBoxHelper?.OnHelperUsed();
         BoxMergeConfig.OnUsed();
         base.OnUsed();
     }
@@ -191,13 +187,12 @@ public partial class Box : Entity
         }
 
         BoxEffectHelper.OnHelperRecycled();
-        BoxColliderHelper.OnHelperRecycled();
+        BoxColliderHelper.OnBoxPoolRecycled();
         DoorBoxHelper?.OnHelperRecycled();
         BoxSkinHelper?.OnHelperRecycled();
         BoxIconSpriteHelper?.OnHelperRecycled();
         BoxFrozenBoxHelper?.OnHelperRecycled();
         BoxMarchingTextureHelper?.OnHelperRecycled();
-        TransportBoxHelper?.OnHelperRecycled();
         BoxMergeConfig.OnRecycled();
 
         UnInitPassiveSkills();
@@ -489,7 +484,7 @@ public partial class Box : Entity
 
     public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
     {
-        base.Setup(entityData, initWorldModuleGUID);
+        base.Setup(initWorldModuleGUID);
         transform.position = worldGP;
         WorldGP = worldGP;
         if (IsHidden) BoxModelHelper.gameObject.SetActive(false);
@@ -503,70 +498,7 @@ public partial class Box : Entity
         SwitchEntityOrientation(entityData.EntityOrientation);
 
         if (BattleManager.Instance.Player1) OnPlayerInteractSkillChanged(BattleManager.Instance.Player1.ActorBoxInteractHelper.GetInteractSkillType(EntityTypeIndex), EntityTypeIndex);
-    }
-
-    protected override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
-    {
-        base.RecordEntityExtraStates(entityDataExtraStates);
-        EntityArtHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        EntityWwiseHelper.RecordEntityExtraStates(entityDataExtraStates);
-        EntityModelHelper.RecordEntityExtraStates(entityDataExtraStates);
-        EntityIndicatorHelper.RecordEntityExtraStates(entityDataExtraStates);
-        EntityBuffHelper.RecordEntityExtraStates(entityDataExtraStates);
-        EntityFrozenHelper.RecordEntityExtraStates(entityDataExtraStates);
-        EntityTriggerZoneHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        EntityCollectHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        EntityGrindTriggerZoneHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
-        {
-            h.RecordEntityExtraStates(entityDataExtraStates);
-        }
-
-        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
-        {
-            h.RecordEntityExtraStates(entityDataExtraStates);
-        }
-
-        BoxColliderHelper.RecordEntityExtraStates(entityDataExtraStates);
-        DoorBoxHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        ;
-        BoxSkinHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        BoxIconSpriteHelper.RecordEntityExtraStates(entityDataExtraStates);
-        BoxFrozenBoxHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        BoxMarchingTextureHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        TransportBoxHelper?.RecordEntityExtraStates(entityDataExtraStates);
-    }
-
-    protected override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
-    {
-        base.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityArtHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityWwiseHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityModelHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityIndicatorHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityBuffHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityFrozenHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityTriggerZoneHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityCollectHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        EntityGrindTriggerZoneHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
-        {
-            h.ApplyEntityExtraStates(entityDataExtraStates);
-        }
-
-        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
-        {
-            h.ApplyEntityExtraStates(entityDataExtraStates);
-        }
-
-        BoxColliderHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        DoorBoxHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        ;
-        BoxSkinHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        BoxIconSpriteHelper.ApplyEntityExtraStates(entityDataExtraStates);
-        BoxFrozenBoxHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        BoxMarchingTextureHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        TransportBoxHelper?.ApplyEntityExtraStates(entityDataExtraStates);
+        ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
     }
 
     private void SetModelSmoothMoveLerpTime(float lerpTime)
@@ -908,7 +840,7 @@ public partial class Box : Entity
 
             Rigidbody.drag = 0;
             Rigidbody.angularDrag = 0;
-            Rigidbody.useGravity = CanAutoFallDown;
+            Rigidbody.useGravity = true;
             Rigidbody.velocity = direction.normalized * velocity;
             Rigidbody.angularVelocity = Vector3.zero;
             Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
@@ -945,7 +877,7 @@ public partial class Box : Entity
 
             Rigidbody.drag = 0;
             Rigidbody.angularDrag = 0;
-            Rigidbody.useGravity = CanAutoFallDown;
+            Rigidbody.useGravity = true;
             Rigidbody.velocity = direction.normalized * velocity;
             CurrentMoveGlobalPlanerDir = direction.normalized.ToGridPos3D();
             CurrentMoveGlobalPlanerDir.y = 0;
@@ -983,7 +915,7 @@ public partial class Box : Entity
 
         Rigidbody.drag = 0;
         Rigidbody.angularDrag = 0;
-        Rigidbody.useGravity = CanAutoFallDown;
+        Rigidbody.useGravity = true;
         Rigidbody.velocity = startVelocity;
         Rigidbody.angularVelocity = Vector3.zero;
         Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
@@ -1018,7 +950,7 @@ public partial class Box : Entity
 
         Rigidbody.drag = 0;
         Rigidbody.angularDrag = 0;
-        Rigidbody.useGravity = CanAutoFallDown;
+        Rigidbody.useGravity = true;
         Rigidbody.velocity = Vector3.down * 2f;
         Rigidbody.angularVelocity = Vector3.zero;
         Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
@@ -1026,18 +958,10 @@ public partial class Box : Entity
 
     #endregion
 
-    protected override void Update()
-    {
-        base.Update();
-        if (!BattleManager.Instance.IsStart) return;
-        if (IsRecycled) return;
-    }
-
     protected override void Tick(float interval)
     {
-        base.Tick(interval);
         if (!BattleManager.Instance.IsStart) return;
-        if (IsRecycled) return;
+        base.Tick(interval);
     }
 
     protected override void FixedUpdate()
@@ -1066,7 +990,7 @@ public partial class Box : Entity
             if (state == States.BeingKicked || state == States.BeingKickedToGrind)
             {
                 bool isGrounded = Physics.Raycast(new Ray(transform.position, Vector3.down), 0.55f, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground);
-                Rigidbody.useGravity = !isGrounded && CanAutoFallDown;
+                Rigidbody.useGravity = !isGrounded;
                 if (isGrounded)
                 {
                     Rigidbody.constraints |= RigidbodyConstraints.FreezePositionY;
@@ -1092,7 +1016,7 @@ public partial class Box : Entity
                 {
                     // 检查格子中部和四角是否落地，避免卡在半空中
                     bool hitGround = Physics.Raycast(transform.position + offset, Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
-                                     || Physics.Raycast(transform.position + offset + new Vector3(0.45f, 0f, 0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
+                                     || Physics.Raycast(transform.position + offset + new Vector3(0.45f,0f,0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
                                      || Physics.Raycast(transform.position + offset + new Vector3(-0.45f, 0f, 0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
                                      || Physics.Raycast(transform.position + offset + new Vector3(0.45f, 0f, -0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground)
                                      || Physics.Raycast(transform.position + offset + new Vector3(-0.45f, 0f, -0.45f), Vector3.down, 1, LayerManager.Instance.LayerMask_BoxIndicator | LayerManager.Instance.LayerMask_Ground);
@@ -1457,8 +1381,6 @@ public partial class Box : Entity
     public bool Consumable => BoxFeature.HasFlag(BoxFeature.LiftThenDisappear);
 
     public bool IsHidden => BoxFeature.HasFlag(BoxFeature.Hidden);
-
-    public bool Destroyable => !BoxFeature.HasFlag(BoxFeature.IsBorder) && !BoxFeature.HasFlag(BoxFeature.IsGround) && !BoxFeature.HasFlag(BoxFeature.IsImportantBox);
 }
 
 [Flags]
@@ -1510,7 +1432,4 @@ public enum BoxFeature
 
     [LabelText("隐藏的")]
     Hidden = 1 << 14,
-
-    [LabelText("重要箱子")]
-    IsImportantBox = 1 << 15,
 }

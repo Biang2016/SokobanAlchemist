@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{29B2124F-97D6-4CB9-A0FC-C415387C2161}" SchemaVersion="97" RootDocumentID="{BF4FC306-E3A9-4180-902B-945ED5E7EFDB}">
+	<AudioObjects>
+		<WorkUnit Name="Slime" ID="{29B2124F-97D6-4CB9-A0FC-C415387C2161}" OwnerID="{AB95962D-B8A9-40D0-868C-E15702865962}" PersistMode="Nested">
+			<ChildrenList>
+				<ActorMixer Name="Slime" ID="{A91B354D-3CDA-4FC0-BFC4-62C359BEFA51}" ShortID="436410865">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<RandomSequenceContainer Name="Slime_Attack" ID="{6546DF8D-1ECD-40E4-9EB0-66D2E97146CD}" ShortID="903323629">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="Slime_OnBeingDamaged" ID="{8059076D-38D2-477F-9287-B1C2B70D1E47}" ShortID="207608035">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03" ID="{D978ACEF-500A-4F0F-AE38-58E06020F339}" ShortID="950868714">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03" ID="{9FF74290-44BA-42E8-923D-C1BE659ABF36}">
+											<Language>SFX</Language>
+											<AudioFile>Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="845770983"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-03" ID="{9FF74290-44BA-42E8-923D-C1BE659ABF36}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04" ID="{E182962D-A0F0-4D7F-9474-496E5CDECB07}" ShortID="1035500753">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04" ID="{12388C9E-3D70-4A6E-8A5F-29AE9DEDE685}">
+											<Language>SFX</Language>
+											<AudioFile>Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="727884239"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Monster_Screams_Short_Screeches_Rumbly_Growls_OCP-0409-07-04" ID="{12388C9E-3D70-4A6E-8A5F-29AE9DEDE685}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="Slime_OnDestroyed_Common" ID="{E2A8B1F8-78C3-4B07-84B9-CC873667DAA8}" ShortID="249460768">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="InCombatMarimba Prize" ID="{D59EBDDD-975B-44F7-A21D-07BD1DBEEBAF}" ShortID="500270346">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="InCombatMarimba Prize" ID="{B9F2CA88-7C65-4BEF-B048-AF6B3471BC34}">
+											<Language>SFX</Language>
+											<AudioFile>InCombatMarimba Prize.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="47235782"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="InCombatMarimba Prize" ID="{B9F2CA88-7C65-4BEF-B048-AF6B3471BC34}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+					</ChildrenList>
+				</ActorMixer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
@@ -133,7 +134,7 @@ public class OpenWorld : World
         WorldMap_StaticLayoutOccupied_IntactForStaticLayout = null;
         WorldMap_StaticLayoutOccupied_IntactForBox = null;
         WorldMap_TerrainType = null;
-        DungeonMissionState = DungeonMissionState.NotInDungeon;
+        IsInsideDungeon = false;
         InitialPlayerBP = GridPos3D.Zero;
         transportingPlayerToDungeon = false;
         returningToOpenWorldFormDungeon = false;
@@ -334,7 +335,7 @@ public class OpenWorld : World
         ushort startDungeonTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, StartDungeonTypeName.TypeName);
         if (startDungeonTypeIndex != 0)
         {
-            yield return Co_TransportPlayerToDungeon(startDungeonTypeIndex, null);
+            yield return Co_TransportPlayerToDungeon(startDungeonTypeIndex);
         }
 
         WaitingForLoadStartDungeon = false;
@@ -369,7 +370,7 @@ public class OpenWorld : World
     {
         if (!IsRecycled)
         {
-            if (GameStateManager.Instance.GetState() == GameState.Fighting && DungeonMissionState == DungeonMissionState.NotInDungeon)
+            if (GameStateManager.Instance.GetState() == GameState.Fighting && !IsInsideDungeon)
             {
                 if (RefreshScopeModulesCoroutine == null && !WaitingForLoadStartDungeon)
                 {
@@ -399,7 +400,7 @@ public class OpenWorld : World
 
         bool CheckModuleCanBeSeenByCamera(GridPos3D moduleGP, bool checkBottom, bool checkTop, float extendScope)
         {
-            if (InsideDungeon) return moduleGP.y >= WORLD_HEIGHT / 2; // 当角色在解谜关卡时，隐藏其它模组，且恒定显示解谜模组 todo 此处粗暴地使用了模组坐标来判断是否在解谜关卡，未来需要处理
+            if (IsInsideDungeon) return moduleGP.y >= WORLD_HEIGHT / 2; // 当角色在解谜关卡时，隐藏其它模组，且恒定显示解谜模组 todo 此处粗暴地使用了模组坐标来判断是否在解谜关卡，未来需要处理
             GeometryUtility.CalculateFrustumPlanes(CameraManager.Instance.MainCamera, cachedPlanes);
             if (checkBottom && checkTop)
             {
@@ -478,16 +479,7 @@ public class OpenWorld : World
                             {
                                 GridPos3D worldGP = new GridPos3D(world_x, world_y, world_z);
                                 GridPos3D localGP = worldGP - targetModuleGP * WorldModule.MODULE_SIZE;
-                                EntityData entityData = WorldMap_EntityDataMatrix[kv.Key][world_x, world_y - WorldModule.MODULE_SIZE, world_z];
-                                if (entityData != null)
-                                {
-                                    if (entityData.ProbablyShow()) // 为了防止大世界每次进出后都不同，要在第一次加载时将ProbablyShow固化
-                                    {
-                                        EntityData clone_EntityData = entityData.Clone();
-                                        clone_EntityData.RemoveAllProbablyShowPassiveSkill();
-                                        moduleData[kv.Key, localGP] = clone_EntityData;
-                                    }
-                                }
+                                moduleData[kv.Key, localGP] = WorldMap_EntityDataMatrix[kv.Key][world_x, world_y - WorldModule.MODULE_SIZE, world_z]?.Clone();
                             }
                         }
 
@@ -499,26 +491,17 @@ public class OpenWorld : World
                             GridPos3D worldGP = new GridPos3D(world_x, world_y, world_z);
                             GridPos3D localGP = worldGP - targetModuleGP * WorldModule.MODULE_SIZE;
                             List<EntityData> dataList = WorldMap_TriggerEntityDataMatrix[world_x, world_y - WorldModule.MODULE_SIZE, world_z].Clone<EntityData, EntityData>();
-                            foreach (EntityData cloneTriggerEntityData in dataList)
+                            foreach (EntityData data in dataList)
                             {
-                                if (cloneTriggerEntityData.ProbablyShow()) // 为了防止大世界每次进出后都不同，要在第一次加载时将ProbablyShow固化
-                                {
-                                    cloneTriggerEntityData.RemoveAllProbablyShowPassiveSkill();
-                                    moduleData.TriggerEntityDataList.Add(cloneTriggerEntityData);
-                                }
+                                moduleData.TriggerEntityDataList.Add(data);
                             }
                         }
 
-                        foreach (EntityPassiveSkill_LevelEventTriggerAppear.Data LET_EntityData in EventTriggerAppearEntityDataList)
+                        foreach (EntityPassiveSkill_LevelEventTriggerAppear.Data data in EventTriggerAppearEntityDataList)
                         {
-                            if (GetModuleGPByWorldGP(LET_EntityData.WorldGP) == targetModuleGP)
+                            if (GetModuleGPByWorldGP(data.WorldGP) == targetModuleGP)
                             {
-                                if (LET_EntityData.EntityData.ProbablyShow()) // 为了防止大世界每次进出后都不同，要在第一次加载时将ProbablyShow固化
-                                {
-                                    EntityPassiveSkill_LevelEventTriggerAppear.Data clone_LET_EntityData = (EntityPassiveSkill_LevelEventTriggerAppear.Data) LET_EntityData.Clone();
-                                    clone_LET_EntityData.EntityData.RemoveAllProbablyShowPassiveSkill();
-                                    moduleData.EventTriggerAppearEntityDataList.Add(clone_LET_EntityData);
-                                }
+                                moduleData.EventTriggerAppearEntityDataList.Add((EntityPassiveSkill_LevelEventTriggerAppear.Data) data.Clone());
                             }
                         }
 
@@ -599,9 +582,7 @@ public class OpenWorld : World
     {
         WorldData.WorldBornPointGroupData_Runtime.Dynamic_UnloadModuleData(currentShowModuleGP);
         WorldModuleMatrix[currentShowModuleGP.x, currentShowModuleGP.y, currentShowModuleGP.z] = null; // 时序，先置空指针再清空
-        bool isDungeonModule = currentShowModuleGP.y >= WORLD_HEIGHT / 2;
-        if (!isDungeonModule) yield return worldModule.RecordWorldModuleData(256); // 只有底部的大世界模组需要存档
-        yield return worldModule.Clear(isDungeonModule, 256); // Dungeon模组则回收WorldModuleData，大世界不回收，因为记录在m_LevelCacheData中
+        yield return worldModule.Clear(false, 256);
         worldModule.PoolRecycle();
         if (boolIndex >= 0)
         {
@@ -632,32 +613,28 @@ public class OpenWorld : World
 
     #region Dungeon
 
-    internal bool InsideDungeon => DungeonMissionState != DungeonMissionState.NotInDungeon;
-    internal DungeonMissionState DungeonMissionState;
+    internal bool IsInsideDungeon = false;
     internal bool IsUsingSpecialESPSInsideDungeon = false;
-
+    internal bool DungeonMissionComplete = false;
     internal ushort CurrentDungeonWorldTypeIndex = 0;
     internal GridPos3D LastLeaveOpenWorldPlayerGP = GridPos3D.Zero;
     private List<WorldModule> DungeonModules = new List<WorldModule>();
 
     private PlayerData PlayerDataSave;
-    private PlayerData PlayerDataSave_DungeonTemp;
 
-    public void TransportPlayerToDungeon(ushort worldTypeIndex, EntityData transportBoxEntityData)
+    public void TransportPlayerToDungeon(ushort worldTypeIndex)
     {
         if (transportingPlayerToDungeon) return;
         if (returningToOpenWorldFormDungeon) return;
         if (restartingDungeon) return;
         if (respawningInOpenWorld) return;
-        StartCoroutine(Co_TransportPlayerToDungeon(worldTypeIndex, transportBoxEntityData));
+        StartCoroutine(Co_TransportPlayerToDungeon(worldTypeIndex));
     }
 
     private bool transportingPlayerToDungeon = false;
-    internal EntityData temp_LastTransportBoxEntityData = null; // 记录传送门的数据，如果Dungeon通关则该传送门应关闭
 
-    IEnumerator Co_TransportPlayerToDungeon(ushort worldTypeIndex, EntityData transportBoxEntityData)
+    IEnumerator Co_TransportPlayerToDungeon(ushort worldTypeIndex)
     {
-        temp_LastTransportBoxEntityData = transportBoxEntityData;
         transportingPlayerToDungeon = true;
         CurrentDungeonWorldTypeIndex = worldTypeIndex;
         BattleManager.Instance.IsStart = false;
@@ -670,7 +647,7 @@ public class OpenWorld : World
 
         WorldData dungeonData = ConfigManager.GetWorldDataConfig(worldTypeIndex);
 
-        if (InsideDungeon)
+        if (IsInsideDungeon)
         {
             // Recycle Current Dungeon Modules
             int totalRecycleModuleNumber = DungeonModules.Count;
@@ -684,14 +661,12 @@ public class OpenWorld : World
 
             DungeonModules.Clear();
             yield return RecycleEmptyModules();
-            DungeonMissionState = DungeonMissionState.DungeonPartialComplete;
-            SavePlayerGrowth();
+            CalculatePlayerGrowth(); // Dungeon→Dungeon，检查是否通关、是否特殊关卡，来判断是否保存玩家进度
+            DungeonMissionComplete = false; // 重置DungeonComplete
         }
         else
         {
-            LastLeaveOpenWorldPlayerGP = BattleManager.Instance.Player1.transform.position.ToGridPos3D();
-            DungeonMissionState = DungeonMissionState.DungeonInProgress;
-            SavePlayerGrowth();
+            CalculatePlayerGrowth(); // 大世界→Dungeon，保存玩家进度
         }
 
         // Loading New Dungeon Modules
@@ -742,15 +717,22 @@ public class OpenWorld : World
             Debug.LogWarning("传送的模组没有默认玩家出生点");
         }
 
-        // Dungeon Special Settings
-        IsUsingSpecialESPSInsideDungeon = dungeonData.UseSpecialPlayerEnterESPS;
-        if (IsUsingSpecialESPSInsideDungeon) BattleManager.Instance.Player1.ReloadESPS(dungeonData.Raw_PlayerEnterESPS);
+        if (!IsInsideDungeon)
+        {
+            LastLeaveOpenWorldPlayerGP = BattleManager.Instance.Player1.transform.position.ToGridPos3D();
+        }
 
-        WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState.Exploring); // 默认战斗状态 （如果有Camp的世界将由对应的TriggerBox来切换到InCamp）
-        BattleManager.Instance.Player1.CanBeThreatened = true; // 时序，要在Transport之前，因为Transport后可能会由TriggerBox赋值CanBeThreatened状态
-        BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint); // 时序，传送要发生在CombatState切换到默认值之后（如果有InCamp状态将在此行赋值）
+        // Dungeon Special Settings
+        IsInsideDungeon = true;
+        DungeonMissionComplete = false;
+        IsUsingSpecialESPSInsideDungeon = dungeonData.UseSpecialPlayerEnterESPS;
+        PlayerDataSave = PlayerData.GetPlayerData();
+        if (IsUsingSpecialESPSInsideDungeon) BattleManager.Instance.Player1.ReloadESPS(dungeonData.Raw_PlayerEnterESPS);
+        BattleManager.Instance.Player1.CanBeThreatened = true;
 
         ApplyWorldVisualEffectSettings(dungeonData);
+
+        BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint);
 
         CameraManager.Instance.FieldCamera.InitFocus();
 
@@ -766,18 +748,18 @@ public class OpenWorld : World
         transportingPlayerToDungeon = false;
     }
 
-    public void ReturnToOpenWorld(bool dungeonComplete)
+    public void ReturnToOpenWorld()
     {
         if (transportingPlayerToDungeon) return;
         if (returningToOpenWorldFormDungeon) return;
         if (restartingDungeon) return;
         if (respawningInOpenWorld) return;
-        StartCoroutine(Co_ReturnToOpenWorld(dungeonComplete));
+        StartCoroutine(Co_ReturnToOpenWorld());
     }
 
     private bool returningToOpenWorldFormDungeon = false;
 
-    public IEnumerator Co_ReturnToOpenWorld(bool dungeonComplete)
+    public IEnumerator Co_ReturnToOpenWorld()
     {
         returningToOpenWorldFormDungeon = true;
         CurrentDungeonWorldTypeIndex = 0;
@@ -790,33 +772,14 @@ public class OpenWorld : World
         LoadingMapPanel.SetProgress(0, "Returning to Open World");
 
         while (RefreshScopeModulesCoroutine != null) yield return null;
-
-        if (dungeonComplete)
-        {
-            DungeonMissionState = DungeonMissionState.DungeonComplete;
-            if (temp_LastTransportBoxEntityData != null)
-            {
-                temp_LastTransportBoxEntityData.RawEntityExtraSerializeData.EntityDataExtraStates.TransportBoxClosed = true;
-                temp_LastTransportBoxEntityData = null;
-            }
-        }
-        else
-        {
-            DungeonMissionState = DungeonMissionState.DungeonFailed;
-        }
-
-        SavePlayerGrowth();
-        LoadPlayerGrowth();
-        DungeonMissionState = DungeonMissionState.NotInDungeon;
-
-        WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState.Exploring); // 默认战斗状态 （如果有Camp的世界将由对应的TriggerBox来切换到InCamp）
-        BattleManager.Instance.Player1.CanBeThreatened = true; // 时序，要在Transport之前，因为Transport后可能会由TriggerBox赋值CanBeThreatened状态
-        BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP); // 时序，传送要发生在CombatState切换到默认值之后（如果有InCamp状态将在此行赋值）
+        CalculatePlayerGrowth();
+        BattleManager.Instance.Player1.CanBeThreatened = true;
+        BattleManager.Instance.Player1.TransportPlayerGridPos(LastLeaveOpenWorldPlayerGP); // 如果未在dungeon里面死亡，复活回进入dungeon的地方
 
         ApplyWorldVisualEffectSettings(WorldData);
 
         CameraManager.Instance.FieldCamera.InitFocus();
-        DungeonMissionState = DungeonMissionState.NotInDungeon;
+        IsInsideDungeon = false;
         RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(LastLeaveOpenWorldPlayerGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
         while (RefreshScopeModulesCoroutine != null) yield return null;
 
@@ -847,7 +810,7 @@ public class OpenWorld : World
         if (returningToOpenWorldFormDungeon) return;
         if (restartingDungeon) return;
         if (respawningInOpenWorld) return;
-        if (!InsideDungeon) return;
+        if (!IsInsideDungeon) return;
         StartCoroutine(Co_RestartDungeon());
     }
 
@@ -881,8 +844,8 @@ public class OpenWorld : World
         DungeonModules.Clear();
         yield return RecycleEmptyModules();
 
-        DungeonMissionState = DungeonMissionState.DungeonPartialFailed;
-        LoadPlayerGrowth();
+        DungeonMissionComplete = false;
+        CalculatePlayerGrowth();
 
         // Loading Dungeon Modules
         int totalModuleNum = dungeonData.WorldModuleGPOrder.Count;
@@ -936,9 +899,8 @@ public class OpenWorld : World
             Debug.LogWarning("传送的模组没有默认玩家出生点");
         }
 
-        WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState.Exploring); // 默认战斗状态 （如果有Camp的世界将由对应的TriggerBox来切换到InCamp）
-        BattleManager.Instance.Player1.CanBeThreatened = true; // 时序，要在Transport之前，因为Transport后可能会由TriggerBox赋值CanBeThreatened状态
-        BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint); // 时序，传送要发生在CombatState切换到默认值之后（如果有InCamp状态将在此行赋值）
+        BattleManager.Instance.Player1.CanBeThreatened = true;
+        BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint);
         BattleManager.Instance.Player1.Reborn();
 
         if (IsUsingSpecialESPSInsideDungeon) BattleManager.Instance.Player1.ReloadESPS(dungeonData.Raw_PlayerEnterESPS);
@@ -981,10 +943,9 @@ public class OpenWorld : World
 
         // Recycling the Open World
         while (RefreshScopeModulesCoroutine != null) yield return null;
-        SavePlayerGrowth();
-        WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState.Exploring); // 默认战斗状态 （如果有Camp的世界将由对应的TriggerBox来切换到InCamp）
-        BattleManager.Instance.Player1.CanBeThreatened = true; // 时序，要在Transport之前，因为Transport后可能会由TriggerBox赋值CanBeThreatened状态
-        BattleManager.Instance.Player1.TransportPlayerGridPos(InitialPlayerBP); // 时序，传送要发生在CombatState切换到默认值之后（如果有InCamp状态将在此行赋值）
+        CalculatePlayerGrowth();
+        BattleManager.Instance.Player1.CanBeThreatened = true;
+        BattleManager.Instance.Player1.TransportPlayerGridPos(InitialPlayerBP); // 如果在dungeon里面死亡，复活回老家
         BattleManager.Instance.Player1.Reborn();
 
         CameraManager.Instance.FieldCamera.InitFocus();
@@ -1016,44 +977,9 @@ public class OpenWorld : World
 
     #region PlayerGrowth
 
-    private void SavePlayerGrowth() // 将玩家成长存档
+    private void CalculatePlayerGrowth()
     {
-        if (DungeonMissionState == DungeonMissionState.NotInDungeon)
-        {
-            PlayerDataSave = PlayerData.GetPlayerData();
-        }
-        else if (DungeonMissionState == DungeonMissionState.DungeonInProgress)
-        {
-            PlayerDataSave = PlayerData.GetPlayerData();
-            PlayerDataSave_DungeonTemp = PlayerData.GetPlayerData();
-        }
-        else
-        {
-            if (IsUsingSpecialESPSInsideDungeon) // 此类特殊关卡默认不计入成长，如教程关、体验关等等
-            {
-                return;
-            }
-            else
-            {
-                if (DungeonMissionState == DungeonMissionState.DungeonPartialComplete) // Dungeon阶段性过关，记录玩家数据到DungeonTemp里
-                {
-                    PlayerDataSave_DungeonTemp = PlayerData.GetPlayerData();
-                }
-                else if (DungeonMissionState == DungeonMissionState.DungeonComplete) // Dungeon通关，获得所有奖励，保存玩家成长数值和技能
-                {
-                    PlayerDataSave = PlayerData.GetPlayerData();
-                }
-            }
-        }
-    }
-
-    private void LoadPlayerGrowth() // 提取存档
-    {
-        if (DungeonMissionState == DungeonMissionState.NotInDungeon)
-        {
-            PlayerDataSave?.ApplyDataOnPlayer();
-        }
-        else
+        if (IsInsideDungeon)
         {
             if (IsUsingSpecialESPSInsideDungeon) // 此类特殊关卡默认不计入成长，如教程关、体验关等等
             {
@@ -1061,11 +987,11 @@ public class OpenWorld : World
             }
             else
             {
-                if (DungeonMissionState == DungeonMissionState.DungeonPartialFailed) // Dungeon死亡，回到上一关的存档数据
+                if (DungeonMissionComplete) // dungeon通关，获得所有奖励，保存玩家成长数值和技能
                 {
-                    PlayerDataSave_DungeonTemp?.ApplyDataOnPlayer();
+                    PlayerDataSave = PlayerData.GetPlayerData();
                 }
-                else if (DungeonMissionState == DungeonMissionState.DungeonFailed) // Dungeon放弃，回到进入Dungeon之前的大世界的存档数据
+                else
                 {
                     PlayerDataSave?.ApplyDataOnPlayer();
                 }

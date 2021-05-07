@@ -1014,20 +1014,6 @@ public static class ActorAIAtoms
     }
 
     [Category("敌兵/战斗")]
-    [Name("允许切换动作")]
-    [Description("允许切换动作")]
-    public class BT_Enemy_CanPlayOtherAnimSkillConditionTask : ConditionTask
-    {
-        protected override string info => $"允许切换动作";
-
-        protected override bool OnCheck()
-        {
-            if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return false;
-            return Actor.ActorArtHelper.CanPlayOtherAnimSkill;
-        }
-    }
-
-    [Category("敌兵/战斗")]
     [Name("等待技能结束")]
     [Description("等待技能结束")]
     public class BT_Enemy_SkillEndConditionTask : ConditionTask

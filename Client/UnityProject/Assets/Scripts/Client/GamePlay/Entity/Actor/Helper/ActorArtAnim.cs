@@ -88,15 +88,4 @@ public class ActorArtAnim : MonoBehaviour
     {
         ActorArtHelper.CanPan = false;
     }
-
-    /// <summary>
-    /// Executed by animation
-    /// </summary>
-    public void SetActorState(Actor.ActorBehaviourStates actorBehaviourState)
-    {
-        if (ActorArtHelper.Entity is Actor actor)
-        {
-            actor.ActorBehaviourState = actorBehaviourState;
-        }
-    }
 }

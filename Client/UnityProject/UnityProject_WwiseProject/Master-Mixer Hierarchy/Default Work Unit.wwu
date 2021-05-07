@@ -79,17 +79,6 @@
 										<Property Name="Color" Type="int16" Value="14"/>
 										<Property Name="OverrideColor" Type="bool" Value="True"/>
 									</PropertyList>
-									<DuckingList>
-										<DuckItem>
-											<BusRef Name="AUX" ID="{3BD871DC-940D-4E4E-B78F-E0B8360E2D7E}"/>
-											<DuckingParam>
-												<Volume>-16</Volume>
-												<FadeInTime>1</FadeInTime>
-												<FadeOutTime>1</FadeOutTime>
-												<FadeCurve>FadeLinear</FadeCurve>
-											</DuckingParam>
-										</DuckItem>
-									</DuckingList>
 								</Bus>
 								<Bus Name="UI" ID="{7530ADF4-6962-4635-B925-35655E803136}">
 									<PropertyList>
@@ -123,38 +112,6 @@
 										</Property>
 										<Property Name="Color" Type="int16" Value="14"/>
 										<Property Name="OverrideColor" Type="bool" Value="True"/>
-									</PropertyList>
-								</Bus>
-								<Bus Name="Skill_Panel" ID="{46B8E72E-71D4-42C1-94D8-5147FCCCB7CF}">
-									<PropertyList>
-										<Property Name="BusVolume" Type="Real64">
-											<RTPCList>
-												<RTPC Name="" ID="{7F68E8EC-AACE-4494-B9BC-0AA3A04BD9E8}" ShortID="85529638">
-													<ReferenceList>
-														<Reference Name="ControlInput">
-															<ObjectRef Name="Panel_Volume" ID="{4631257F-675A-49D2-86FC-C815F8926BA4}" WorkUnitID="{32EBB2C2-DFCC-485D-8698-021106E33BAD}"/>
-														</Reference>
-													</ReferenceList>
-													<Curve Name="" ID="{B9A52531-7CE6-4E42-BEBF-27A957C9A621}">
-														<PropertyList>
-															<Property Name="Flags" Type="int32" Value="3"/>
-														</PropertyList>
-														<PointList>
-															<Point>
-																<XPos>0</XPos>
-																<YPos>-200</YPos>
-																<Flags>5</Flags>
-															</Point>
-															<Point>
-																<XPos>100</XPos>
-																<YPos>0</YPos>
-																<Flags>37</Flags>
-															</Point>
-														</PointList>
-													</Curve>
-												</RTPC>
-											</RTPCList>
-										</Property>
 									</PropertyList>
 								</Bus>
 							</ChildrenList>
@@ -192,13 +149,6 @@
 								<Property Name="Color" Type="int16" Value="18"/>
 								<Property Name="OverrideColor" Type="bool" Value="True"/>
 							</PropertyList>
-							<ReferenceList>
-								<Reference Name="Effect0">
-									<Custom>
-										<Effect Name="Wwise Meter (Custom)" ID="{FBA39B35-1412-4EF2-A0E7-F04AA69D3582}" ShortID="972289323" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3"/>
-									</Custom>
-								</Reference>
-							</ReferenceList>
 							<ChildrenList>
 								<Bus Name="Ambient" ID="{B8130299-0393-4110-BB75-0A674C2C915D}">
 									<PropertyList>
@@ -234,6 +184,106 @@
 										<Property Name="OverrideColor" Type="bool" Value="True"/>
 									</PropertyList>
 								</Bus>
+								<Bus Name="AUX" ID="{3BD871DC-940D-4E4E-B78F-E0B8360E2D7E}">
+									<PropertyList>
+										<Property Name="BusVolume" Type="Real64">
+											<RTPCList>
+												<RTPC Name="" ID="{EC18D264-7329-49CF-920E-E1FF6098A687}" ShortID="249968140">
+													<ReferenceList>
+														<Reference Name="ControlInput">
+															<ObjectRef Name="Music_Volume" ID="{50BF03D8-A517-4F63-9CA0-F7D73329F8AE}" WorkUnitID="{32EBB2C2-DFCC-485D-8698-021106E33BAD}"/>
+														</Reference>
+													</ReferenceList>
+													<Curve Name="" ID="{D1AF0444-247F-4666-8592-4F202D2FA585}">
+														<PropertyList>
+															<Property Name="Flags" Type="int32" Value="3"/>
+														</PropertyList>
+														<PointList>
+															<Point>
+																<XPos>0</XPos>
+																<YPos>-200</YPos>
+																<Flags>5</Flags>
+															</Point>
+															<Point>
+																<XPos>100</XPos>
+																<YPos>0</YPos>
+																<Flags>37</Flags>
+															</Point>
+														</PointList>
+													</Curve>
+												</RTPC>
+											</RTPCList>
+										</Property>
+										<Property Name="Color" Type="int16" Value="18"/>
+										<Property Name="OverrideColor" Type="bool" Value="True"/>
+									</PropertyList>
+									<ChildrenList>
+										<Bus Name="Region_Lab" ID="{EEFE9C59-E2E2-4CD9-A878-02201071E17C}">
+											<PropertyList>
+												<Property Name="Color" Type="int16" Value="18"/>
+												<Property Name="OverrideColor" Type="bool" Value="True"/>
+											</PropertyList>
+										</Bus>
+										<Bus Name="Region_Temple" ID="{E1CCA123-1305-4A03-A7DD-B9958D3C2A5C}">
+											<PropertyList>
+												<Property Name="Color" Type="int16" Value="18"/>
+												<Property Name="OverrideColor" Type="bool" Value="True"/>
+											</PropertyList>
+										</Bus>
+										<Bus Name="Region_OpenWorld" ID="{F86AC317-B8C3-411B-9237-0D7F4A631815}">
+											<PropertyList>
+												<Property Name="Color" Type="int16" Value="18"/>
+												<Property Name="OverrideColor" Type="bool" Value="True"/>
+											</PropertyList>
+										</Bus>
+										<Bus Name="Region_Excavator" ID="{054C2D1E-7D94-4F9F-B902-EE422D61DB2E}">
+											<PropertyList>
+												<Property Name="Color" Type="int16" Value="18"/>
+												<Property Name="OverrideColor" Type="bool" Value="True"/>
+											</PropertyList>
+										</Bus>
+										<Bus Name="Region_Tutorial" ID="{EDEEA28A-0D8A-4909-A490-29EE1EA2660A}">
+											<PropertyList>
+												<Property Name="Color" Type="int16" Value="18"/>
+												<Property Name="OverrideColor" Type="bool" Value="True"/>
+											</PropertyList>
+										</Bus>
+										<AuxBus Name="Music_Aux" ID="{02B89D49-80CC-477E-832E-13996FADC667}">
+											<PropertyList>
+												<Property Name="BusVolume" Type="Real64">
+													<RTPCList>
+														<RTPC Name="" ID="{11F5D689-F069-4FDC-BA3E-C21987397CCC}" ShortID="918591630">
+															<ReferenceList>
+																<Reference Name="ControlInput">
+																	<ObjectRef Name="Music_Volume" ID="{50BF03D8-A517-4F63-9CA0-F7D73329F8AE}" WorkUnitID="{32EBB2C2-DFCC-485D-8698-021106E33BAD}"/>
+																</Reference>
+															</ReferenceList>
+															<Curve Name="" ID="{02B7889B-8A86-4B9F-962C-6DACED89F04C}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="3"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>-200</YPos>
+																		<Flags>5</Flags>
+																		<SegmentShape>SCurve</SegmentShape>
+																	</Point>
+																	<Point>
+																		<XPos>100</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</RTPC>
+													</RTPCList>
+												</Property>
+											</PropertyList>
+											<ReferenceList/>
+										</AuxBus>
+									</ChildrenList>
+								</Bus>
 								<Bus Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}">
 									<PropertyList>
 										<Property Name="Color" Type="int16" Value="18"/>
@@ -251,52 +301,8 @@
 										<Property Name="Color" Type="int16" Value="18"/>
 										<Property Name="OverrideColor" Type="bool" Value="True"/>
 									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Effect0">
-											<Custom>
-												<Effect Name="Wwise Meter (Custom)" ID="{FCF53046-4332-4484-8311-E0212A5EEE89}" ShortID="81198878" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3"/>
-											</Custom>
-										</Reference>
-									</ReferenceList>
 								</Bus>
 							</ChildrenList>
-						</Bus>
-						<Bus Name="AUX" ID="{3BD871DC-940D-4E4E-B78F-E0B8360E2D7E}">
-							<PropertyList>
-								<Property Name="BusVolume" Type="Real64">
-									<ValueList>
-										<Value>6</Value>
-									</ValueList>
-									<RTPCList>
-										<RTPC Name="" ID="{EC18D264-7329-49CF-920E-E1FF6098A687}" ShortID="249968140">
-											<ReferenceList>
-												<Reference Name="ControlInput">
-													<ObjectRef Name="Music_Volume" ID="{50BF03D8-A517-4F63-9CA0-F7D73329F8AE}" WorkUnitID="{32EBB2C2-DFCC-485D-8698-021106E33BAD}"/>
-												</Reference>
-											</ReferenceList>
-											<Curve Name="" ID="{D1AF0444-247F-4666-8592-4F202D2FA585}">
-												<PropertyList>
-													<Property Name="Flags" Type="int32" Value="3"/>
-												</PropertyList>
-												<PointList>
-													<Point>
-														<XPos>0</XPos>
-														<YPos>-200</YPos>
-														<Flags>5</Flags>
-													</Point>
-													<Point>
-														<XPos>100</XPos>
-														<YPos>0</YPos>
-														<Flags>37</Flags>
-													</Point>
-												</PointList>
-											</Curve>
-										</RTPC>
-									</RTPCList>
-								</Property>
-								<Property Name="Color" Type="int16" Value="18"/>
-								<Property Name="OverrideColor" Type="bool" Value="True"/>
-							</PropertyList>
 						</Bus>
 					</ChildrenList>
 				</Bus>
