@@ -5,6 +5,7 @@
 			<ChildrenList>
 				<RandomSequenceContainer Name="LongLogBox_OnDestroyed_Common" ID="{D3FF591C-26AF-4F67-9E07-3DFC53D7C0C2}" ShortID="58527545">
 					<PropertyList>
+						<Property Name="OverridePositioning" Type="bool" Value="True"/>
 						<Property Name="Pitch" Type="int32">
 							<ValueList>
 								<Value>-930</Value>
@@ -23,6 +24,9 @@
 						</Property>
 					</PropertyList>
 					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="WoodenBox" ID="{E1CF5EB6-861C-4FC1-B045-CDBDC2F0A82B}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+						</Reference>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 						</Reference>
@@ -250,6 +254,7 @@
 				</RandomSequenceContainer>
 				<BlendContainer Name="LongLogBox_OnDestroyed_Frozen" ID="{9EA289C5-CDAE-4244-B576-EBC5131E7570}" ShortID="542864340">
 					<PropertyList>
+						<Property Name="OverridePositioning" Type="bool" Value="True"/>
 						<Property Name="Pitch" Type="int32">
 							<ModifierList>
 								<ModifierInfo>
@@ -265,6 +270,9 @@
 						</Property>
 					</PropertyList>
 					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="WoodenBox" ID="{E1CF5EB6-861C-4FC1-B045-CDBDC2F0A82B}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+						</Reference>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 						</Reference>
@@ -352,6 +360,7 @@
 				<BlendContainer Name="LongLogBox_OnDestroyed_Firing" ID="{FC1B0389-2846-478B-BC8C-1EA60E52BC8C}" ShortID="852203458">
 					<PropertyList>
 						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+						<Property Name="OverridePositioning" Type="bool" Value="True"/>
 						<Property Name="Pitch" Type="int32">
 							<ModifierList>
 								<ModifierInfo>
@@ -368,7 +377,7 @@
 					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Attenuation">
-							<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+							<ObjectRef Name="WoodenBox" ID="{E1CF5EB6-861C-4FC1-B045-CDBDC2F0A82B}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
 						</Reference>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -462,6 +471,7 @@
 				<BlendContainer Name="LongLogBox_OnDestroyed_Collide" ID="{493D04DC-3337-4715-A84D-4A15557D4DEC}" ShortID="411322723">
 					<PropertyList>
 						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+						<Property Name="OverridePositioning" Type="bool" Value="True"/>
 						<Property Name="Pitch" Type="int32">
 							<ModifierList>
 								<ModifierInfo>
@@ -478,7 +488,7 @@
 					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Attenuation">
-							<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+							<ObjectRef Name="WoodenBox" ID="{E1CF5EB6-861C-4FC1-B045-CDBDC2F0A82B}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
 						</Reference>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -560,6 +570,7 @@
 				<BlendContainer Name="LongLogBox_OnDestroyed_Explosion" ID="{5C9F0743-0556-4971-91C2-9D9CF623E952}" ShortID="621392341">
 					<PropertyList>
 						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+						<Property Name="OverridePositioning" Type="bool" Value="True"/>
 						<Property Name="Pitch" Type="int32">
 							<ModifierList>
 								<ModifierInfo>
@@ -576,7 +587,7 @@
 					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Attenuation">
-							<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+							<ObjectRef Name="WoodenBox" ID="{E1CF5EB6-861C-4FC1-B045-CDBDC2F0A82B}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
 						</Reference>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
