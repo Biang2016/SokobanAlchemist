@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Actor: {fileID: 7773775348503840032}
   Anim: {fileID: 5517043626234299901}
-  DeltaPositionFactor: 1
+  DeltaPositionFactor: 2
 --- !u!1001 &529952160883568597
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1179,7 +1179,7 @@ PrefabInstance:
     - target: {fileID: 7176362684188563293, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: m_Drag
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7176362684188563293, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -1207,8 +1207,8 @@ PrefabInstance:
       value: '{"_variables":{"KeepDistanceMin":{"_value":1.0,"_name":"KeepDistanceMin","_id":"c7cd1850-2c3d-46dc-8b07-a9dc73bcfa78","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax":{"_value":5.0,"_name":"KeepDistanceMax","_id":"0126568d-fdbd-47ae-82a8-6e8a46311c00","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax_Phase1":{"_value":5.0,"_name":"KeepDistanceMax_Phase1","_id":"f4670f67-b504-4764-ac45-263d9b4a165b","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax_Phase2":{"_value":3.0,"_name":"KeepDistanceMax_Phase2","_id":"742685b1-c5a9-4aad-9a45-797d8793d4ca","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax_Phase3":{"_value":1.0,"_name":"KeepDistanceMax_Phase3","_id":"29493bdf-1502-4a5c-920e-9539effbc5e5","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax_Phase2":{"_value":4.0,"_name":"KeepDistanceMax_Phase2","_id":"742685b1-c5a9-4aad-9a45-797d8793d4ca","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"KeepDistanceMax_Phase3":{"_value":3.0,"_name":"KeepDistanceMax_Phase3","_id":"29493bdf-1502-4a5c-920e-9539effbc5e5","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"GuardRange":{"_value":10.0,"_name":"GuardRange","_id":"1ba5b749-68b3-4b5f-9d1b-b2231b856284","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"GuardRange_Phase1":{"_value":10.0,"_name":"GuardRange_Phase1","_id":"1e4fc14c-3815-4279-a6ee-25a727bd3bb0","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"GuardRange_Phase2":{"_value":20.0,"_name":"GuardRange_Phase2","_id":"12e9b5d3-fe8f-44fd-bd21-3308e1ae0be0","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
@@ -1220,12 +1220,16 @@ PrefabInstance:
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IdleRadius":{"_value":30,"_name":"IdleRadius","_id":"26c88988-5b11-46e7-b0ba-b46818aa2ab6","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"Phase":{"_value":1,"_name":"Phase","_id":"4604a815-720e-48aa-98a8-d4672fb230d9","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"IdleInterval":{"_value":3.0,"_name":"IdleInterval","_id":"d77d9828-19d3-4615-972e-e8a7fbefc740","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"ChasingSpeed":{"_value":3.0,"_name":"ChasingSpeed","_id":"e95bb9aa-0db9-4a42-85e9-801dfcbe9428","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"ChasingSpeed_Phase1":{"_value":3.0,"_name":"ChasingSpeed_Phase1","_id":"5aa07546-e7e3-4fc5-b451-5ad21820e0cc","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"ChasingSpeed_Phase2":{"_value":5.0,"_name":"ChasingSpeed_Phase2","_id":"9430e3d8-53db-4f29-97c2-ddf65ba1ab9c","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"ChasingSpeed_Phase3":{"_value":7.0,"_name":"ChasingSpeed_Phase3","_id":"ec893562-c460-4bb3-955f-f359b84245bc","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.size
-      value: 16
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -1248,13 +1252,13 @@ PrefabInstance:
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.data[3]._json
-      value: '{"_value":3.0,"_name":"KeepDistanceMax_Phase2","_id":"742685b1-c5a9-4aad-9a45-797d8793d4ca","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+      value: '{"_value":4.0,"_name":"KeepDistanceMax_Phase2","_id":"742685b1-c5a9-4aad-9a45-797d8793d4ca","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: _serializedVariables.Array.data[4]._json
-      value: '{"_value":1.0,"_name":"KeepDistanceMax_Phase3","_id":"29493bdf-1502-4a5c-920e-9539effbc5e5","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+      value: '{"_value":3.0,"_name":"KeepDistanceMax_Phase3","_id":"29493bdf-1502-4a5c-920e-9539effbc5e5","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
       objectReference: {fileID: 0}
     - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
@@ -1321,6 +1325,30 @@ PrefabInstance:
         type: 3}
       propertyPath: _serializedVariables.Array.data[15]._json
       value: '{"_value":3.0,"_name":"IdleInterval","_id":"d77d9828-19d3-4615-972e-e8a7fbefc740","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: _serializedVariables.Array.data[16]._json
+      value: '{"_value":3.0,"_name":"ChasingSpeed","_id":"e95bb9aa-0db9-4a42-85e9-801dfcbe9428","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: _serializedVariables.Array.data[17]._json
+      value: '{"_value":3.0,"_name":"ChasingSpeed_Phase1","_id":"5aa07546-e7e3-4fc5-b451-5ad21820e0cc","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: _serializedVariables.Array.data[18]._json
+      value: '{"_value":5.0,"_name":"ChasingSpeed_Phase2","_id":"9430e3d8-53db-4f29-97c2-ddf65ba1ab9c","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 9185888305442127324, guid: 8ca8def23062cf242bafa7e081952811,
+        type: 3}
+      propertyPath: _serializedVariables.Array.data[19]._json
+      value: '{"_value":7.0,"_name":"ChasingSpeed_Phase3","_id":"ec893562-c460-4bb3-955f-f359b84245bc","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1441,32 +1469,32 @@ PrefabInstance:
     - target: {fileID: -6520179805631412246, guid: 96df9ad25a697b14cb712c0e0702fa17,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -90.149536
+      value: -85.62
       objectReference: {fileID: 0}
     - target: {fileID: -6520179805631412246, guid: 96df9ad25a697b14cb712c0e0702fa17,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 50.625954
+      value: -23.229
       objectReference: {fileID: 0}
     - target: {fileID: -6520179805631412246, guid: 96df9ad25a697b14cb712c0e0702fa17,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -50.62605
+      value: 23.229
       objectReference: {fileID: 0}
     - target: {fileID: -2999849387336594774, guid: 96df9ad25a697b14cb712c0e0702fa17,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -90.21006
+      value: -83.421
       objectReference: {fileID: 0}
     - target: {fileID: -2999849387336594774, guid: 96df9ad25a697b14cb712c0e0702fa17,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -67.501076
+      value: 31.68
       objectReference: {fileID: 0}
     - target: {fileID: -2999849387336594774, guid: 96df9ad25a697b14cb712c0e0702fa17,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 67.501076
+      value: -31.682
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 96df9ad25a697b14cb712c0e0702fa17,
         type: 3}

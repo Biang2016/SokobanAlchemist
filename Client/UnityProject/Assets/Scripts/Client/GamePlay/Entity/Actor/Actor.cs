@@ -651,7 +651,7 @@ public class Actor : Entity
         IsRecycling = true;
         ForbidAction = true;
         if (!HasRigidbody) AddRigidbody();
-        RigidBody.drag = CanAutoFallDown ? 100f : 0f;
+        RigidBody.drag = 100f;
         RigidBody.velocity = Vector3.zero;
 
         ActorBehaviourState = ActorBehaviourStates.Idle;
@@ -897,7 +897,7 @@ public class Actor : Entity
                     }
                     else
                     {
-                        RigidBody.drag = CanAutoFallDown ? 100f : 0f;
+                        RigidBody.drag = 100f;
                         RigidBody.mass = 1f;
                     }
                 }
@@ -931,7 +931,7 @@ public class Actor : Entity
                     ActorArtHelper.SetIsWalking(false);
                     ActorArtHelper.SetIsChasing(false);
                     ActorArtHelper.SetIsPushing(false);
-                    RigidBody.drag = CanAutoFallDown ? 100f : 0f;
+                    RigidBody.drag = 100f;
                     RigidBody.mass = 1f;
                     ActorPushHelper.TriggerOut = false;
                 }
@@ -961,7 +961,7 @@ public class Actor : Entity
             {
                 if (CannotAct && !EntityBuffHelper.IsBeingRepulsed)
                 {
-                    RigidBody.drag = CanAutoFallDown ? 100f : 0f;
+                    RigidBody.drag = 100f;
                     RigidBody.mass = 1f;
                 }
                 else
@@ -1504,6 +1504,7 @@ public class Actor : Entity
                 InAirMoveSpeed = moveSpeed;
                 ActorBehaviourState = ActorBehaviourStates.InAirMoving;
                 RigidBody.velocity = Vector3.zero;
+                RigidBody.drag = 0;
             }
         }
     }
@@ -1515,6 +1516,7 @@ public class Actor : Entity
             if (HasRigidbody)
             {
                 Vector3 diff = InAirMoveTargetPos - transform.position;
+                if (diff.magnitude > 1f) diff = diff.normalized;
                 RigidBody.velocity = Vector3.zero;
                 RigidBody.AddForce(diff.normalized * InAirMoveSpeed, ForceMode.VelocityChange);
                 if (RigidBody.velocity.magnitude > InAirMoveSpeed)

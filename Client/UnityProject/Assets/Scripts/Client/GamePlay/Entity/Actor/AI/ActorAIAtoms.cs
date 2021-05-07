@@ -1247,13 +1247,16 @@ public static class ActorAIAtoms
         [Name("无限等待")]
         public BBParameter<bool> InfiniteInAir;
 
+        [Name("距离偏差容错")]
+        public BBParameter<float> Tolerance;
+
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
             if (!Actor.IsNotNullAndAlive() || Actor.ActorAIAgent == null) return Status.Failure;
             if (Actor.ActorBehaviourState != Actor.ActorBehaviourStates.InAirMoving) return Status.Failure;
             Vector3 distanceXZ = Actor.transform.position - Actor.InAirMoveTargetPos;
             distanceXZ.y = 0;
-            if (distanceXZ.magnitude <= 0.5f) return InfiniteInAir.value ? Status.Running : Status.Success;
+            if (distanceXZ.magnitude <= Tolerance.value) return InfiniteInAir.value ? Status.Running : Status.Success;
             return Status.Running;
         }
     }
