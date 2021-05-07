@@ -2,6 +2,7 @@
 using AK.Wwise;
 using BiangLibrary.Singleton;
 using UnityEngine;
+using Event = AK.Wwise.Event;
 
 public class WwiseAudioManager : MonoSingleton<WwiseAudioManager>
 {
@@ -71,4 +72,5 @@ public class WwiseAudioManager : MonoSingleton<WwiseAudioManager>
     public Trigger Trigger_Teleport;
     public Trigger Trigger_Victory;
 
+    public Event Common_UI_ButtonClick;
 }

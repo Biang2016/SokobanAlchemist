@@ -166,6 +166,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         LearnSkillUpgradePanel = UIManager.Instance.ShowUIForms<LearnSkillUpgradePanel>();
         InGameUIPanel = UIManager.Instance.ShowUIForms<InGameUIPanel>();
         UIManager.Instance.ShowUIForms<StartMenuPanel>();
+        WwiseAudioManager.WwiseBGMConfiguration.BGM_Start();
     }
 
     public void StartGame()
@@ -215,7 +216,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
         LoadingMapPanel.SetBackgroundAlpha(1f);
         LoadingMapPanel.SetProgress(0.5f, "StartGame");
-        WwiseAudioManager.WwiseBGMConfiguration.BGM_Start();
         PlayerStatHUDPanel = UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>();
         yield return WorldManager.StartGame();
 

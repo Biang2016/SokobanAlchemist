@@ -111,6 +111,12 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     public void OnUsed()
     {
+        WorldModuleBornPointGroupData = new BornPointGroupData();
+    }
+
+    public void OnRelease()
+    {
+        WorldModuleFeature = WorldModuleFeature.None;
         for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
         {
             for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
@@ -123,14 +129,9 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
             }
         }
 
-        WorldModuleFeature = WorldModuleFeature.None;
-        WorldModuleBornPointGroupData = new BornPointGroupData();
-    }
-
-    public void OnRelease()
-    {
         WorldModuleBornPointGroupData = null;
-        WorldModuleFeature = WorldModuleFeature.None;
+        TriggerEntityDataDict.Clear();
+        TriggerEntityDataList.Clear();
         EventTriggerAppearEntityDataList.Clear();
     }
 

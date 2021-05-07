@@ -218,6 +218,7 @@ namespace AK
                 static const AkUniqueID LAB = 578926554U;
                 static const AkUniqueID NONE = 748895195U;
                 static const AkUniqueID OPENWORLD = 2009274547U;
+                static const AkUniqueID STARTMENU = 3944636910U;
                 static const AkUniqueID TEMPLE = 2323193050U;
                 static const AkUniqueID TUTORIAL = 3762955427U;
             } // namespace STATE

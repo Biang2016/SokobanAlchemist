@@ -9,6 +9,9 @@ public class DoorBoxHelper : BoxMonoHelper
 
     public List<EntityIndicator> DoorEntityIndicators = new List<EntityIndicator>();
 
+    public AK.Wwise.Event OnDoorOpen;
+    public AK.Wwise.Event OnDoorClose;
+
     [ShowInInspector]
     private bool open;
 
@@ -22,6 +25,8 @@ public class DoorBoxHelper : BoxMonoHelper
                 open = value;
                 DoorAnim.ResetTrigger(open ? "Close" : "Open");
                 DoorAnim.SetTrigger(open ? "Open" : "Close");
+                if (value) OnDoorOpen?.Post(Entity.gameObject);
+                else OnDoorClose?.Post(Entity.gameObject);
                 foreach (EntityIndicator doorEntityIndicator in DoorEntityIndicators)
                 {
                     GridPos3D offset = doorEntityIndicator.Offset;

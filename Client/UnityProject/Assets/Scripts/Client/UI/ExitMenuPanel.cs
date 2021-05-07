@@ -45,16 +45,19 @@ public class ExitMenuPanel : BaseUIPanel
 
     public void OnExitToOpenWorldButtonClick()
     {
+        WwiseAudioManager.Instance.Common_UI_ButtonClick?.Post(WwiseAudioManager.Instance.gameObject);
         ClientGameManager.Instance.ReturnToOpenWorld();
     }
 
     public void OnRestartDungeonButtonClick()
     {
+        WwiseAudioManager.Instance.Common_UI_ButtonClick?.Post(WwiseAudioManager.Instance.gameObject);
         ClientGameManager.Instance.RestartDungeon();
     }
 
     public void OnExitToMenuButtonClick()
     {
+        WwiseAudioManager.Instance.Common_UI_ButtonClick?.Post(WwiseAudioManager.Instance.gameObject);
         if (!UIManager.Instance.IsUIShown<ConfirmPanel>())
         {
             ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
@@ -72,6 +75,7 @@ public class ExitMenuPanel : BaseUIPanel
 
     public void OnExitToDesktopButtonClick()
     {
+        WwiseAudioManager.Instance.Common_UI_ButtonClick?.Post(WwiseAudioManager.Instance.gameObject);
         Application.Quit();
     }
 }

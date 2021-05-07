@@ -676,7 +676,6 @@ public class Actor : Entity
         RealtimeWorldGP = GridPos3D.Zero;
         ThrowState = ThrowStates.None;
         ClearJumpParams();
-        ThrowWhenDie();
 
         foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
         {
@@ -777,7 +776,6 @@ public class Actor : Entity
         ActorSkillLearningHelper?.LoadInitSkills();
 
         ForbidAction = false;
-        ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
     }
 
     protected override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
@@ -1319,6 +1317,20 @@ public class Actor : Entity
         }
     }
 
+    #region Vertically Move
+
+    public void MoveUp()
+    {
+
+    }
+
+    public void MoveDown()
+    {
+
+    }
+
+    #endregion
+
     #region Jump
 
     private void ClearJumpParams()
@@ -1552,6 +1564,7 @@ public class Actor : Entity
         if (IsDestroying) return;
         base.DestroySelf();
         IsDestroying = true;
+        ThrowWhenDie();
         if (!IsFrozen) UnRegisterFromModule(WorldGP, EntityOrientation);
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {

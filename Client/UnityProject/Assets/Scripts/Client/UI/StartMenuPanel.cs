@@ -19,36 +19,42 @@ public class StartMenuPanel : BaseUIPanel
     public Animator StartMenuAnim;
     public Animator CreditAnim;
 
-    public Button SettingButton;
-    public Button StartButton;
-    public Button CreditButton;
-
     public AK.Wwise.Event OnPlayAnim;
 
     public override void Display()
     {
         base.Display();
+        WwiseAudioManager.Instance.WwiseBGMConfiguration.SwitchBGMTheme(BGM_Theme.StartMenu);
         StartMenuAnim.SetTrigger("Play");
         OnPlayAnim?.Post(gameObject);
     }
 
     public void OnSettingButtonClick()
     {
+        WwiseAudioManager.Instance.Common_UI_ButtonClick?.Post(WwiseAudioManager.Instance.gameObject);
     }
 
     public void OnStartButtonClick()
     {
+        WwiseAudioManager.Instance.Common_UI_ButtonClick?.Post(WwiseAudioManager.Instance.gameObject);
         ClientGameManager.Instance.StartGame();
         CloseUIForm();
     }
 
     public void OnCreditButtonClick()
     {
+        WwiseAudioManager.Instance.Common_UI_ButtonClick?.Post(WwiseAudioManager.Instance.gameObject);
         CreditAnim.SetTrigger("Show");
     }
 
     public void OnCreditSelfButtonClick()
     {
         CreditAnim.SetTrigger("Hide");
+    }
+
+    public void OnExitButtonClick()
+    {
+        WwiseAudioManager.Instance.Common_UI_ButtonClick?.Post(WwiseAudioManager.Instance.gameObject);
+        Application.Quit();
     }
 }
