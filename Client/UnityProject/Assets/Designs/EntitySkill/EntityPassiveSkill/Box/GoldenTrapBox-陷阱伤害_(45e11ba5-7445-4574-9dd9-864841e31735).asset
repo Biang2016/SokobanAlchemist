@@ -1,0 +1,203 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "GoldenTrapBox-\u9677\u9631\u4F24\u5BB3_(45e11ba5-7445-4574-9dd9-864841e31735)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        SkillGUID: (45e11ba5-7445-4574-9dd9-864841e31735)
+        SkillAlias: "GoldenTrapBox-\u9677\u9631\u4F24\u5BB3"
+        SkillName_EN: 
+        SkillName_ZH: 
+        SkillIcon:
+          TypeDefineType: 0
+          TypeGUID: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
+        PassiveSkillCondition: 128
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
+        RawEntitySkillActions:
+        - id: 1
+        - id: 2
+    00000001:
+      type: {class: EntitySkillAction_TriggerZoneEffect, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        EffectiveOnRelativeCamp: 6
+        RawEntityBuffs_Enter:
+        - id: 3
+        RemoveEnterBuffWhenExit: 0
+        RawEntityBuffs_Stay:
+        - id: 4
+        - id: 5
+        RemoveStayBuffWhenExit: 0
+        EffectInterval: 0.5
+        RawEntityBuffs_Exit: []
+    00000002:
+      type: {class: EntitySkillAction_TriggerZoneAction, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        EffectiveOnRelativeCamp: 6
+        EffectiveOnSpecificEntity: 0
+        EffectiveOnSpecificEntityType:
+          TypeDefineType: 0
+          TypeGUID: 
+        EntityActions_Enter:
+        - id: 6
+        EntityActions_Stay: []
+        MaxTriggerTimeWhenStay: 999999
+        EffectiveWhenInteractiveKeyDown: 0
+        InteractiveKeyNotice: 
+        TipPositionType: 5
+        InteractiveKeyNoticeDuration: 0.5
+        ActionInterval: 1
+        EntityActions_Exit: []
+    00000003:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10401
+        BuffAlias: 
+        EntityBuffAttribute: 34
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 0
+            m_PostInfinity: 0
+            m_RotationOrder: 4
+        EntityStatType: 0
+        Delta: -3
+        Percent: 0
+    00000004:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 10402
+        BuffAlias: 
+        EntityBuffAttribute: 34
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 0
+            m_PostInfinity: 0
+            m_RotationOrder: 4
+        EntityStatType: 0
+        Delta: -2
+        Percent: 0
+    00000005:
+      type: {class: EntityBuff_AttributeLabel, ns: , asm: Client}
+      data:
+        GUID: 10403
+        BuffAlias: 
+        EntityBuffAttribute: 33
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 1
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 0
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 0
+            m_PostInfinity: 0
+            m_RotationOrder: 4
+    00000006:
+      type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        RawEntityBuffs:
+        - id: 7
+    00000007:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 12102
+        BuffAlias: 
+        EntityBuffAttribute: 0
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 0
+        Delta: -1
+        Percent: 0

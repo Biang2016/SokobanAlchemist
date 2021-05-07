@@ -5,5 +5,6 @@
     OpenWorld,
     Temple,
     Excavation,
-    Lab
+    Lab,
+    StartMenu,
 }
