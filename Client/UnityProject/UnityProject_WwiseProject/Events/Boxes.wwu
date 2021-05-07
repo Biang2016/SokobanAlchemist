@@ -560,6 +560,39 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Event Name="BoxTypeChange" ID="{297C9133-8C0A-4631-8415-430D0932CE10}">
+							<ChildrenList>
+								<Action Name="" ID="{E8B3DA3E-CFBD-49B0-8D6F-884BF6AEB839}" ShortID="181461738">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="BoxTypeChange" ID="{9DBD7E8E-AB79-4006-872C-6828BEBD6C65}" WorkUnitID="{36B96266-F37E-43B8-8F8F-FB21678F9273}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="RewardBox_Show" ID="{BDF019DB-B88E-4E69-BC5C-D25B5A6635EF}">
+							<ChildrenList>
+								<Action Name="" ID="{798030D5-67D0-4BAF-AF10-51CBF30628AC}" ShortID="182926778">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="RewardBox_Show" ID="{F024DF74-F92C-40F2-870C-3723293A6C53}" WorkUnitID="{36B96266-F37E-43B8-8F8F-FB21678F9273}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="TransportBox_Show" ID="{4B98BF08-05E0-40EC-BE76-0BE7309AA0B7}">
+							<ChildrenList>
+								<Action Name="" ID="{D4B7B30E-AD1C-46FD-BAB1-607E34A4E863}" ShortID="270570613">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="TransportBox_Show" ID="{6583862A-ABEA-40BE-9BAD-260F1256C042}" WorkUnitID="{36B96266-F37E-43B8-8F8F-FB21678F9273}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="ActionBox" ID="{6660882D-0F0F-4493-B7EE-2EAA442A7CB0}" ShortID="168824791">
@@ -1152,6 +1185,36 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="DoorBox_OnDoorClose" ID="{5367415F-8FB5-452C-AFBD-F8AC4630263B}" WorkUnitID="{9C773F52-9408-4C53-8867-8FC60428491C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="KeyBox" ID="{68EEF4E0-0EF4-4CCF-92A7-7F03004D4792}" ShortID="91876965">
+					<ChildrenList>
+						<Event Name="KeyBox_InLock" ID="{2DF8DF34-51D7-420A-9EAE-D262A4E00B42}">
+							<ChildrenList>
+								<Action Name="" ID="{0A2B6130-EC2A-4136-B618-BE5539897F04}" ShortID="210357920">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="KeyBox_InLock" ID="{29BFEEFE-6FD2-49CF-B1DB-0C7A105BF6DC}" WorkUnitID="{D863AA7D-577A-4323-921D-0798FAAB04B1}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="LockBox" ID="{EE4A38C3-8A83-4BB7-B3DC-953305DCDCA4}" ShortID="800486869">
+					<ChildrenList>
+						<Event Name="LockBox_Unlocked" ID="{42D6E1EB-EFBE-4487-BD13-55E046C445D2}">
+							<ChildrenList>
+								<Action Name="" ID="{898B9A32-FB32-46B2-B7D6-58AB2C032968}" ShortID="832632826">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LockBox_Unlocked" ID="{0D51BC6B-34C2-44D0-94C3-3ED7FC403511}" WorkUnitID="{667B6077-3EC5-45CD-945B-089A486EEE13}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
