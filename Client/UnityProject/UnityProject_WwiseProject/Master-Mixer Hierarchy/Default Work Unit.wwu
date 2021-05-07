@@ -79,6 +79,17 @@
 										<Property Name="Color" Type="int16" Value="14"/>
 										<Property Name="OverrideColor" Type="bool" Value="True"/>
 									</PropertyList>
+									<DuckingList>
+										<DuckItem>
+											<BusRef Name="AUX" ID="{3BD871DC-940D-4E4E-B78F-E0B8360E2D7E}"/>
+											<DuckingParam>
+												<Volume>-16</Volume>
+												<FadeInTime>1</FadeInTime>
+												<FadeOutTime>1</FadeOutTime>
+												<FadeCurve>FadeLinear</FadeCurve>
+											</DuckingParam>
+										</DuckItem>
+									</DuckingList>
 								</Bus>
 								<Bus Name="UI" ID="{7530ADF4-6962-4635-B925-35655E803136}">
 									<PropertyList>
@@ -253,6 +264,9 @@
 						<Bus Name="AUX" ID="{3BD871DC-940D-4E4E-B78F-E0B8360E2D7E}">
 							<PropertyList>
 								<Property Name="BusVolume" Type="Real64">
+									<ValueList>
+										<Value>6</Value>
+									</ValueList>
 									<RTPCList>
 										<RTPC Name="" ID="{EC18D264-7329-49CF-920E-E1FF6098A687}" ShortID="249968140">
 											<ReferenceList>

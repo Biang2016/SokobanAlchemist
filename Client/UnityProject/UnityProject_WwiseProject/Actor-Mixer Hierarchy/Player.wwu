@@ -157,28 +157,6 @@
 								<ActiveSource Name="Protagonist_Jump_5" ID="{BEFFF214-5177-4F3F-B1BD-98E8ADAD9AFC}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
-						<Sound Name="Player_Vault_6" ID="{177A08C3-D1AC-4C69-945B-61AE9B35AA4F}" ShortID="791488781">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="Protagonist_Jump_6" ID="{B0683CDD-378F-40A0-AA64-FADD23DD2668}">
-									<Language>SFX</Language>
-									<AudioFile>Protagonist_Jump_6.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="842732134"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="Protagonist_Jump_6" ID="{B0683CDD-378F-40A0-AA64-FADD23DD2668}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
 					</ChildrenList>
 				</RandomSequenceContainer>
 				<RandomSequenceContainer Name="Player_OnBeingDamaged" ID="{E04A482A-D3B0-4E6A-A592-43BE932D8958}" ShortID="705084075">
@@ -411,6 +389,21 @@
 					</ChildrenList>
 				</RandomSequenceContainer>
 				<RandomSequenceContainer Name="Player_Dash" ID="{046336DC-BE5E-4300-ABD3-CD445403AD57}" ShortID="1016750197">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{83C3133B-CB9C-47AC-98FE-9011A5AA0DC6}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="253"/>
+											<Property Name="Min" Type="Real64" Value="-126"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -420,132 +413,6 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="Powerful_Dash_1" ID="{C8ED59C2-76EB-4255-B599-169D10CEBADB}" ShortID="108209230">
-							<PropertyList>
-								<Property Name="Inclusion" Type="bool">
-									<ValueList>
-										<Value>False</Value>
-									</ValueList>
-								</Property>
-							</PropertyList>
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="Powerful_Dash_1" ID="{ADA31CDC-3694-4A5D-9581-A22DE8FF3450}">
-									<Language>SFX</Language>
-									<AudioFile>Powerful_Dash_1.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="93634542"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="Powerful_Dash_1" ID="{ADA31CDC-3694-4A5D-9581-A22DE8FF3450}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="Powerful_Dash_2" ID="{7A24438F-27CD-4057-A21B-95C24B5910E7}" ShortID="787622958">
-							<PropertyList>
-								<Property Name="Inclusion" Type="bool">
-									<ValueList>
-										<Value>False</Value>
-									</ValueList>
-								</Property>
-							</PropertyList>
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="Powerful_Dash_2" ID="{5E099195-9ABC-43AF-B5B7-F6AA270C7505}">
-									<PropertyList>
-										<Property Name="FadeInDuration" Type="Real64" Value="0.0387388983371126"/>
-										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-										<Property Name="TrimBegin" Type="Real64" Value="0.118799288233812"/>
-									</PropertyList>
-									<Language>SFX</Language>
-									<AudioFile>Powerful_Dash_2.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="406563041"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="Powerful_Dash_2" ID="{5E099195-9ABC-43AF-B5B7-F6AA270C7505}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="Powerful_Dash_3" ID="{B006990E-A4A2-490F-A513-92C271025D9A}" ShortID="641892820">
-							<PropertyList>
-								<Property Name="Inclusion" Type="bool">
-									<ValueList>
-										<Value>False</Value>
-									</ValueList>
-								</Property>
-							</PropertyList>
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="Powerful_Dash_3" ID="{CF979E97-0D33-4F97-927B-F63D76A09075}">
-									<Language>SFX</Language>
-									<AudioFile>Powerful_Dash_3.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="211486421"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="Powerful_Dash_3" ID="{CF979E97-0D33-4F97-927B-F63D76A09075}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="Powerful_Dash_4" ID="{4FBC4D3C-DA01-4A05-B090-51B3E09278F5}" ShortID="213720635">
-							<PropertyList>
-								<Property Name="Inclusion" Type="bool">
-									<ValueList>
-										<Value>False</Value>
-									</ValueList>
-								</Property>
-							</PropertyList>
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="Powerful_Dash_4" ID="{4B50D891-B57B-4E67-921F-222BA9F03B36}">
-									<PropertyList>
-										<Property Name="FadeInDuration" Type="Real64" Value="0.0492110733182162"/>
-										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-										<Property Name="TrimBegin" Type="Real64" Value="0.0984221466364323"/>
-									</PropertyList>
-									<Language>SFX</Language>
-									<AudioFile>Powerful_Dash_4.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="852710076"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="Powerful_Dash_4" ID="{4B50D891-B57B-4E67-921F-222BA9F03B36}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
 						<Sound Name="Air Swipe 01" ID="{4F595C9C-46BE-4737-BFDF-A8089C34F7E8}" ShortID="465795910">
 							<ReferenceList>
 								<Reference Name="Conversion">
@@ -739,28 +606,6 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="Cartoon Character Death 03" ID="{93E7894D-4126-4012-B9CB-5A154E7D3CD1}" ShortID="878155329">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="Cartoon Character Death 03" ID="{B0BA1F63-BAF7-4B82-95AC-DD386FEAB605}">
-									<Language>SFX</Language>
-									<AudioFile>Cartoon Character Death 03.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="783487954"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="Cartoon Character Death 03" ID="{B0BA1F63-BAF7-4B82-95AC-DD386FEAB605}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
 						<Sound Name="Cartoon Character Death 04" ID="{89339D02-5AF8-4B8E-B992-7E77D5F84E70}" ShortID="773506494">
 							<ReferenceList>
 								<Reference Name="Conversion">
@@ -1121,7 +966,7 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="Game Message Ping " ID="{E35DD690-B72B-46B4-A4F4-B32C051D83AD}" ShortID="173599951">
+						<Sound Name="Game Message Ping" ID="{E35DD690-B72B-46B4-A4F4-B32C051D83AD}" ShortID="173599951">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -1131,7 +976,7 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="Game Message Ping " ID="{13FA083E-36B6-4D30-A63D-0640D0A00BBA}">
+								<AudioFileSource Name="Game Message Ping" ID="{13FA083E-36B6-4D30-A63D-0640D0A00BBA}">
 									<Language>SFX</Language>
 									<AudioFile>Game Message Ping .wav</AudioFile>
 									<MediaIDList>
@@ -1140,7 +985,7 @@
 								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="Game Message Ping " ID="{13FA083E-36B6-4D30-A63D-0640D0A00BBA}" Platform="Linked"/>
+								<ActiveSource Name="Game Message Ping" ID="{13FA083E-36B6-4D30-A63D-0640D0A00BBA}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>
@@ -1189,28 +1034,6 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="Refill Game Health 03" ID="{FB71E8D1-BE9C-449F-84E6-A3A778E3D850}" ShortID="219836685">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="Refill Game Health 03" ID="{56939F2B-2A8C-4DE2-85FE-4B2A91DCFB92}">
-									<Language>SFX</Language>
-									<AudioFile>Refill Game Health 03.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="239441190"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="Refill Game Health 03" ID="{56939F2B-2A8C-4DE2-85FE-4B2A91DCFB92}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
 						<Sound Name="Refill Game Health 01" ID="{E9DBAAD1-272C-45CA-A7B9-F769AF5A432B}" ShortID="655812902">
 							<ReferenceList>
 								<Reference Name="Conversion">
@@ -1415,52 +1238,6 @@
 							</ChildrenList>
 							<ActiveSourceList>
 								<ActiveSource Name="Empty_Bottle_1" ID="{6EB8DC5A-9B2F-498A-A162-D5F2283568BA}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="Mountain Audio - Nut in a bowl" ID="{A351C37B-034C-46EB-9271-4B6E2920B182}" ShortID="145190050">
-							<PropertyList>
-								<Property Name="Pitch" Type="int32">
-									<ModifierList>
-										<ModifierInfo>
-											<Modifier Name="" ID="{C3BA07C3-364D-417C-95AA-D150A31E1D59}">
-												<PropertyList>
-													<Property Name="Enabled" Type="bool" Value="True"/>
-													<Property Name="Max" Type="Real64" Value="101"/>
-													<Property Name="Min" Type="Real64" Value="-101"/>
-												</PropertyList>
-											</Modifier>
-										</ModifierInfo>
-									</ModifierList>
-								</Property>
-								<Property Name="Volume" Type="Real64">
-									<ValueList>
-										<Value>-2</Value>
-									</ValueList>
-								</Property>
-							</PropertyList>
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="Mountain Audio - Nut in a bowl" ID="{3EDDB133-E08D-4EF9-8CF9-6BC466085751}">
-									<PropertyList>
-										<Property Name="FadeOutDuration" Type="Real64" Value="0.0411863819601915"/>
-										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-									</PropertyList>
-									<Language>SFX</Language>
-									<AudioFile>Mountain Audio - Nut in a bowl.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="205359896"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="Mountain Audio - Nut in a bowl" ID="{3EDDB133-E08D-4EF9-8CF9-6BC466085751}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>

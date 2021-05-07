@@ -116,6 +116,22 @@
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="IceEnemy_Purple_FrostBreath_Preparing" ID="{042DBE71-FA8D-4B77-BC85-884CFFB44BFE}" ShortID="344915994">
 							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ValueList>
+										<Value>-1060</Value>
+									</ValueList>
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{013BF7C8-0023-476B-BE3B-C4D055260FA1}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="278"/>
+													<Property Name="Min" Type="Real64" Value="-152"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
 										<Value>-4</Value>
@@ -153,54 +169,15 @@
 										<ActiveSource Name="IceInhale1" ID="{315C25BA-C2F6-4C10-824E-E823A7EDF432}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="IceInhale2" ID="{230D11FC-FF80-4607-8AD9-93A20B1E5336}" ShortID="620456200">
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="IceInhale2" ID="{42B15BC4-5C17-4B8E-882F-D1670268D73A}">
-											<Language>SFX</Language>
-											<AudioFile>IceInhale2.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="388369344"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="IceInhale2" ID="{42B15BC4-5C17-4B8E-882F-D1670268D73A}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-								<Sound Name="IceInhale3" ID="{09D610C4-CA98-49D7-8589-FF68AF6CFB63}" ShortID="928840484">
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="IceInhale3" ID="{ACF17D61-A7A4-4799-BB01-26FE3CB6C3B9}">
-											<Language>SFX</Language>
-											<AudioFile>IceInhale3.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="496669309"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="IceInhale3" ID="{ACF17D61-A7A4-4799-BB01-26FE3CB6C3B9}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
 							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="IceEnemy_Purple_GlacialSlam_Preparing" ID="{C12030CA-B063-4A0A-B071-37FD7F1C86E1}" ShortID="383302165">
 							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ValueList>
+										<Value>-30</Value>
+									</ValueList>
+								</Property>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
 										<Value>-4</Value>
@@ -322,11 +299,11 @@
 									<ChildrenList>
 										<AudioFileSource Name="Golem Slam A" ID="{4B0C70A1-0260-4E8B-8AEB-979709CA9073}">
 											<PropertyList>
-												<Property Name="FadeInDuration" Type="Real64" Value="0.0895238095238095"/>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.185442176870748"/>
 												<Property Name="FadeOutDuration" Type="Real64" Value="0.728979591836735"/>
 												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
 												<Property Name="TrimBegin" Type="Real64" Value="0.524353741496599"/>
-												<Property Name="TrimEnd" Type="Real64" Value="3.40190476190476"/>
+												<Property Name="TrimEnd" Type="Real64" Value="2.51306122448979"/>
 												<Property Name="VolumeOffset" Type="Real64">
 													<ValueList>
 														<Value>2</Value>
@@ -342,57 +319,6 @@
 									</ChildrenList>
 									<ActiveSourceList>
 										<ActiveSource Name="Golem Slam A" ID="{4B0C70A1-0260-4E8B-8AEB-979709CA9073}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-								<Sound Name="Iron Bolt Slam" ID="{2A324EFC-4110-4E16-A555-1C2CE36CAC37}" ShortID="932664793">
-									<PropertyList>
-										<Property Name="Highpass" Type="int16">
-											<ValueList>
-												<Value>7</Value>
-											</ValueList>
-										</Property>
-										<Property Name="Lowpass" Type="int16">
-											<ValueList>
-												<Value>5</Value>
-											</ValueList>
-										</Property>
-										<Property Name="Pitch" Type="int32">
-											<ValueList>
-												<Value>400</Value>
-											</ValueList>
-										</Property>
-									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="Iron Bolt Slam" ID="{47B91DFC-59E0-4F3F-969B-ACC5C90E3FE7}">
-											<PropertyList>
-												<Property Name="FadeInDuration" Type="Real64" Value="0.502125653502142"/>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.909111709498614"/>
-												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimBegin" Type="Real64" Value="0.327703058075082"/>
-												<Property Name="TrimEnd" Type="Real64" Value="2.33620567208365"/>
-												<Property Name="VolumeOffset" Type="Real64">
-													<ValueList>
-														<Value>3.4</Value>
-													</ValueList>
-												</Property>
-											</PropertyList>
-											<Language>SFX</Language>
-											<AudioFile>Iron Bolt Slam.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="868619944"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="Iron Bolt Slam" ID="{47B91DFC-59E0-4F3F-969B-ACC5C90E3FE7}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
@@ -422,64 +348,6 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="zombie large death scream 1" ID="{E7390927-2461-4FC3-BF99-8B93646CFF6C}" ShortID="703307595">
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="zombie large death scream 1" ID="{AB2521E1-FAA7-43B7-9011-F5D6AF478B2D}">
-											<Language>SFX</Language>
-											<AudioFile>zombie large death scream 1.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="355642139"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="zombie large death scream 1" ID="{AB2521E1-FAA7-43B7-9011-F5D6AF478B2D}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-								<Sound Name="ice  golem pain hurt grunt 2" ID="{7ED84161-C681-4D12-A09B-9F925501960B}" ShortID="233698737">
-									<PropertyList>
-										<Property Name="Highpass" Type="int16">
-											<ValueList>
-												<Value>34</Value>
-											</ValueList>
-										</Property>
-									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="ice  golem pain hurt grunt 2" ID="{C6564A5E-CBFD-4CC0-8966-784BFD672B1D}">
-											<PropertyList>
-												<Property Name="FadeInDuration" Type="Real64" Value="0.312440318720081"/>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.496228741496598"/>
-												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimBegin" Type="Real64" Value="0.739748401675485"/>
-												<Property Name="TrimEnd" Type="Real64" Value="1.93896786029226"/>
-											</PropertyList>
-											<Language>SFX</Language>
-											<AudioFile>ice  golem pain hurt grunt 2.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="542014239"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="ice  golem pain hurt grunt 2" ID="{C6564A5E-CBFD-4CC0-8966-784BFD672B1D}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
 								<Sound Name="ice  golem pain hurt grunt" ID="{36BB1AFA-F6C4-442E-B60E-F6F1DF29618A}" ShortID="369503400">
 									<PropertyList>
 										<Property Name="Highpass" Type="int16">

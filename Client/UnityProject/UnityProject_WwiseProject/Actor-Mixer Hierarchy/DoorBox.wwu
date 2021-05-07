@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{9C773F52-9408-4C53-8867-8FC60428491C}" SchemaVersion="97" RootDocumentID="{BF4FC306-E3A9-4180-902B-945ED5E7EFDB}">
+	<AudioObjects>
+		<WorkUnit Name="DoorBox" ID="{9C773F52-9408-4C53-8867-8FC60428491C}" OwnerID="{ABC65056-1A6C-4C9D-8CE0-4E3CFED4B185}" PersistMode="Nested">
+			<ChildrenList>
+				<BlendContainer Name="DoorBox_OnDoorOpen" ID="{818A2B93-2BAC-450B-82F4-585F9C576203}" ShortID="1067305176">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="Fantasy_Game_Open_Gate" ID="{B6590AC6-8BA2-49C9-8C26-69FF01C196A7}" ShortID="1021527036">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Fantasy_Game_Open_Gate" ID="{B38E0878-D5EB-4FB2-890A-D6F2A2AC2BEA}">
+									<Language>SFX</Language>
+									<AudioFile>Fantasy_Game_Open_Gate.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="455539478"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Fantasy_Game_Open_Gate" ID="{B38E0878-D5EB-4FB2-890A-D6F2A2AC2BEA}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</BlendContainer>
+				<BlendContainer Name="DoorBox_OnDoorClose" ID="{5367415F-8FB5-452C-AFBD-F8AC4630263B}" ShortID="943865596">
+					<PropertyList>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-2</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="22092 indoor gate close-full" ID="{04C504C5-ACB8-4E5D-B1D5-FA1414783E95}" ShortID="807459496">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="22092 indoor gate close-full" ID="{AEAF90B8-D181-42E2-8CFA-59A247ECFB07}">
+									<Language>SFX</Language>
+									<AudioFile>22092 indoor gate close-full.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="119611627"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="22092 indoor gate close-full" ID="{AEAF90B8-D181-42E2-8CFA-59A247ECFB07}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</BlendContainer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

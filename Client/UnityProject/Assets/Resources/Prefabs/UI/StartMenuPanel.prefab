@@ -144,11 +144,11 @@ MonoBehaviour:
   SettingButton: {fileID: 506591793802171382}
   StartButton: {fileID: 6645804414013018732}
   CreditButton: {fileID: 4738498244061816898}
-  ExitButton: {fileID: 4738498244061816898}
   OnPlayAnim:
     idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: 7bc4088a006e241a99fd39109f29e11a,
+      type: 2}
 --- !u!95 &8096402264906696958
 Animator:
   serializedVersion: 3
@@ -181,7 +181,7 @@ GameObject:
   - component: {fileID: 2680779378737521633}
   - component: {fileID: 506591793802171382}
   m_Layer: 5
-  m_Name: Button_Left
+  m_Name: SettingButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -234,7 +234,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 89f5559501cc4c44bbe1e2e362d9f054, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5d4c1b65eea9bcc4896c5954a26f440b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -273,10 +273,10 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: e58db787eb2dd9d4c8d10f3a22e83485,
+    m_HighlightedSprite: {fileID: 21300000, guid: 1ec67ab4a1ca97446805d5dbf6be32b3,
       type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: ca6cb2cb7a342ff4593abe8fee11abe4, type: 3}
-    m_SelectedSprite: {fileID: 21300000, guid: 89f5559501cc4c44bbe1e2e362d9f054, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: d20c010683adfb24db809f4e64a0d94b, type: 3}
+    m_SelectedSprite: {fileID: 21300000, guid: 5d4c1b65eea9bcc4896c5954a26f440b, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -291,7 +291,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8523794290779132809}
         m_TargetAssemblyTypeName: StartMenuPanel, Client
-        m_MethodName: OnCreditButtonClick
+        m_MethodName: OnSettingButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -542,7 +542,7 @@ GameObject:
   - component: {fileID: 7942841993884671247}
   - component: {fileID: 4738498244061816898}
   m_Layer: 5
-  m_Name: Button_Right
+  m_Name: CreditButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -595,7 +595,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ec1d2634fd2e4584f85f5dbeed7d9d11, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 89f5559501cc4c44bbe1e2e362d9f054, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -634,10 +634,10 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: 5014e1756c9d4d7448fd546953812bb5,
+    m_HighlightedSprite: {fileID: 21300000, guid: e58db787eb2dd9d4c8d10f3a22e83485,
       type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: 141cd9684bafc2f4780840fd6abff0e8, type: 3}
-    m_SelectedSprite: {fileID: 21300000, guid: ec1d2634fd2e4584f85f5dbeed7d9d11, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: ca6cb2cb7a342ff4593abe8fee11abe4, type: 3}
+    m_SelectedSprite: {fileID: 21300000, guid: 89f5559501cc4c44bbe1e2e362d9f054, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -652,7 +652,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8523794290779132809}
         m_TargetAssemblyTypeName: StartMenuPanel, Client
-        m_MethodName: OnExitButtonClick
+        m_MethodName: OnCreditButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -903,7 +903,7 @@ GameObject:
   - component: {fileID: 8809144374972002147}
   - component: {fileID: 6645804414013018732}
   m_Layer: 5
-  m_Name: Button_Middle
+  m_Name: StartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

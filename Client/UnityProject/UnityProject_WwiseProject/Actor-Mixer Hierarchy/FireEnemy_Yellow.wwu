@@ -109,42 +109,6 @@
 										<ActiveSource Name="zombie medium fire death 1" ID="{139D458A-CB22-4D63-BC08-111AF9DD5DF6}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="zombie medium fire death 2" ID="{A1336B31-0476-4AA8-81D2-E2F6C8C2971F}" ShortID="566568594">
-									<PropertyList>
-										<Property Name="Pitch" Type="int32">
-											<ValueList>
-												<Value>530</Value>
-											</ValueList>
-										</Property>
-									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="zombie medium fire death 2" ID="{0955D735-4F1F-426F-94B5-E90CDC943C81}">
-											<PropertyList>
-												<Property Name="FadeInDuration" Type="Real64" Value="0.210559334845049"/>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.500078420256992"/>
-												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimBegin" Type="Real64" Value="0.219332640463593"/>
-												<Property Name="TrimEnd" Type="Real64" Value="1.94767384731671"/>
-											</PropertyList>
-											<Language>SFX</Language>
-											<AudioFile>zombie medium fire death 2.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="191564339"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="zombie medium fire death 2" ID="{0955D735-4F1F-426F-94B5-E90CDC943C81}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
 							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="FireEnemy_Yellow_HeatEmit_Cast" ID="{D8480278-6F68-4E63-A9C3-4E9FCC5E4FDB}" ShortID="368282171">
@@ -402,37 +366,6 @@
 									</ChildrenList>
 									<ActiveSourceList>
 										<ActiveSource Name="Inhale2" ID="{6CC23E81-5DEF-4367-8474-238ACFF2A869}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-								<Sound Name="Inhale3" ID="{8FECEF2A-914B-4F78-8ED8-F99B8F96B852}" ShortID="580823506">
-									<ReferenceList>
-										<Reference Name="Attenuation">
-											<ObjectRef Name="Enemy" ID="{3E5000B2-2D9A-4A27-B6A0-3DE8D825202C}" WorkUnitID="{84F5CCD1-CDB4-4A82-8FB9-A89731141588}"/>
-										</Reference>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="Inhale3" ID="{226EBB3F-6111-41D8-8377-17197B04D2A0}">
-											<PropertyList>
-												<Property Name="FadeInDuration" Type="Real64" Value="0.327399848828421"/>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.323307350718065"/>
-												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimEnd" Type="Real64" Value="0.736649659863945"/>
-											</PropertyList>
-											<Language>SFX</Language>
-											<AudioFile>Inhale3.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="374463479"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="Inhale3" ID="{226EBB3F-6111-41D8-8377-17197B04D2A0}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>

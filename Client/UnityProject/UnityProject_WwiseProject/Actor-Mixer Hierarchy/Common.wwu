@@ -26,10 +26,15 @@
 						<RandomSequenceContainer Name="OnBeingLit" ID="{87FA2092-F1C7-493A-B0E1-D3A5F1388A45}" ShortID="702635461">
 							<PropertyList>
 								<Property Name="OverridePositioning" Type="bool" Value="True"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-5</Value>
+									</ValueList>
+								</Property>
 							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Attenuation">
-									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+									<ObjectRef Name="LoopBox" ID="{92F03FFA-D097-47D0-BF75-F4ACE1CE5839}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
 								</Reference>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -40,6 +45,9 @@
 							</ReferenceList>
 							<ChildrenList>
 								<Sound Name="FireEnemy_Red_Fire_Loop" ID="{464078EC-EF84-48B3-8233-DE7C58D5EC7E}" ShortID="271281444">
+									<PropertyList>
+										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Attenuation">
 											<ObjectRef Name="Enemy" ID="{3E5000B2-2D9A-4A27-B6A0-3DE8D825202C}" WorkUnitID="{84F5CCD1-CDB4-4A82-8FB9-A89731141588}"/>
@@ -81,13 +89,13 @@
 								<Property Name="OverridePositioning" Type="bool" Value="True"/>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
-										<Value>-4</Value>
+										<Value>-8</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Attenuation">
-									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+									<ObjectRef Name="LoopBox" ID="{92F03FFA-D097-47D0-BF75-F4ACE1CE5839}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
 								</Reference>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -97,7 +105,10 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="Frozen_Ice_Hit_Spell_Whoosh_2" ID="{4617A657-317E-41CA-B052-346AD95E2C6B}" ShortID="858056840">
+								<Sound Name="Frost Magic Ice Bolt Spell Flying Loop 2" ID="{81A80DD7-3AD4-4CC7-89AA-2AE5531CCA1B}" ShortID="496670661">
+									<PropertyList>
+										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -107,16 +118,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="Frozen_Ice_Hit_Spell_Whoosh_2" ID="{76DF98DB-038A-40E6-AB45-E5631A85D7B9}">
+										<AudioFileSource Name="Frost Magic Ice Bolt Spell Flying Loop 2" ID="{A2721A0F-7977-4C41-A94A-F44292CC25F2}">
+											<PropertyList>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+											</PropertyList>
 											<Language>SFX</Language>
-											<AudioFile>Frozen_Ice_Hit_Spell_Whoosh_2.wav</AudioFile>
+											<AudioFile>Frost Magic Ice Bolt Spell Flying Loop 2.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="742139677"/>
+												<MediaID ID="893529380"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="Frozen_Ice_Hit_Spell_Whoosh_2" ID="{76DF98DB-038A-40E6-AB45-E5631A85D7B9}" Platform="Linked"/>
+										<ActiveSource Name="Frost Magic Ice Bolt Spell Flying Loop 2" ID="{A2721A0F-7977-4C41-A94A-F44292CC25F2}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
@@ -128,6 +142,17 @@
 									<ValueList>
 										<Value>1260</Value>
 									</ValueList>
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{6C17617D-B86A-41FA-962B-184D3BF19E41}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="76"/>
+													<Property Name="Min" Type="Real64" Value="-202"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
 								</Property>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
@@ -173,62 +198,6 @@
 									</ChildrenList>
 									<ActiveSourceList>
 										<ActiveSource Name="Cardboard Box Crashing v2" ID="{194AC2E4-F3D0-49A1-BFE6-0D91C974B5F4}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-								<Sound Name="OnCollideActively_4" ID="{A31791A0-F388-45D1-8FFE-036310F57286}" ShortID="637357654">
-									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
-									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Attenuation">
-											<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
-										</Reference>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="Cardboard Box Crashing v4" ID="{4E3F12A6-34FD-46AB-B868-D8864BABB5BB}">
-											<Language>SFX</Language>
-											<AudioFile>Cardboard Box Crashing v4.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="81508214"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="Cardboard Box Crashing v4" ID="{4E3F12A6-34FD-46AB-B868-D8864BABB5BB}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-								<Sound Name="OnCollideActively_5" ID="{2E87BF8D-EDFF-4A42-A767-5640D619A96E}" ShortID="923352006">
-									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
-									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Attenuation">
-											<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
-										</Reference>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="Cardboard Box Crashing v5" ID="{342EB22B-ED4A-482D-8246-0604DEC6B7B4}">
-											<Language>SFX</Language>
-											<AudioFile>Cardboard Box Crashing v5.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="653454346"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="Cardboard Box Crashing v5" ID="{342EB22B-ED4A-482D-8246-0604DEC6B7B4}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="OnCollideActively_3" ID="{8B567FB9-5BDE-4ACD-946D-51F4A0F38033}" ShortID="346290355">
