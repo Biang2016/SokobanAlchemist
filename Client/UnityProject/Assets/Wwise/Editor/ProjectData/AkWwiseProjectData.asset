@@ -260,7 +260,7 @@ MonoBehaviour:
     ParentPath: Boxes
     guid: 805c56206da25e4da9dfdeac6d709f4e
     GuidInternal: 
-    m_lastTime: -8585812298874775808
+    m_lastTime: -8585812177804775808
     List:
     - name: ActionBox
       guid: 2d8860660f0f9344b7ee2eaa442a7cb0
@@ -288,20 +288,6 @@ MonoBehaviour:
       maxAttenuation: 100
       maxDuration: 4.990998
       minDuration: 4.990998
-    - name: BlizardBox_OnDestroyed_Common
-      guid: c18096a56922b44583628646146810c9
-      id: 3214215107
-      PathAndIcons:
-      - ElementName: Boxes
-        ObjectType: 12
-      - ElementName: BlizzardBox
-        ObjectType: 4
-      - ElementName: BlizardBox_OnDestroyed_Common
-        ObjectType: 3
-      Path: Boxes/BlizzardBox/BlizardBox_OnDestroyed_Common
-      maxAttenuation: 100
-      maxDuration: 1.322111
-      minDuration: 1.210981
     - name: BlizzardBox
       guid: 19e328047e4ed049a0ef112840a31a09
       id: 3944270082
@@ -328,6 +314,20 @@ MonoBehaviour:
       maxAttenuation: 100
       maxDuration: 1.360852
       minDuration: 1.19362
+    - name: BlizzardBox_OnDestroyed_Common
+      guid: c18096a56922b44583628646146810c9
+      id: 3849920377
+      PathAndIcons:
+      - ElementName: Boxes
+        ObjectType: 12
+      - ElementName: BlizzardBox
+        ObjectType: 4
+      - ElementName: BlizzardBox_OnDestroyed_Common
+        ObjectType: 3
+      Path: Boxes/BlizzardBox/BlizzardBox_OnDestroyed_Common
+      maxAttenuation: 100
+      maxDuration: 1.322111
+      minDuration: 1.210981
     - name: BlizzardBox_OnDestroyed_Explosion
       guid: f476a070d52aec41b8040bd2dceafacb
       id: 4274406951
@@ -527,9 +527,9 @@ MonoBehaviour:
       - ElementName: DoorBox_OnDoorClose
         ObjectType: 3
       Path: Boxes/DoorBox/DoorBox_OnDoorClose
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 100
+      maxDuration: 2.179048
+      minDuration: 2.179048
     - name: DoorBox_OnDoorOpen
       guid: 3887b59a8cc1a94db3daedadb8ef5be9
       id: 3196853800
@@ -541,9 +541,9 @@ MonoBehaviour:
       - ElementName: DoorBox_OnDoorOpen
         ObjectType: 3
       Path: Boxes/DoorBox/DoorBox_OnDoorOpen
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 100
+      maxDuration: 4
+      minDuration: 4
     - name: FireBox
       guid: fec258ae60a3c14a9598396af73bfaa1
       id: 89293940
@@ -719,9 +719,9 @@ MonoBehaviour:
       - ElementName: FlamethrowerBox_OnFire_Big_Start
         ObjectType: 3
       Path: Boxes/FlamethrowerBox/FlamethrowerBox_OnFire_Big_Start
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 100
+      maxDuration: 16.29892
+      minDuration: 11.821746
     - name: FlamethrowerBox_OnFire_Big_Stop
       guid: 5a85d8f73df4a64490e3054fed0ef4fc
       id: 3757470788
@@ -734,8 +734,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/FlamethrowerBox/FlamethrowerBox_OnFire_Big_Stop
       maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxDuration: 0
+      minDuration: 0
     - name: FlamethrowerBox_OnFire_Medium_Start
       guid: 8fa8468cd6f9be42877c0fa74413f1e1
       id: 3001284785
@@ -747,9 +747,9 @@ MonoBehaviour:
       - ElementName: FlamethrowerBox_OnFire_Medium_Start
         ObjectType: 3
       Path: Boxes/FlamethrowerBox/FlamethrowerBox_OnFire_Medium_Start
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 100
+      maxDuration: 12.000627
+      minDuration: 9.641145
     - name: FlamethrowerBox_OnFire_Medium_Stop
       guid: 98b2ce01002ad34786d825eca7c95c98
       id: 1093137963
@@ -762,8 +762,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/FlamethrowerBox/FlamethrowerBox_OnFire_Medium_Stop
       maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxDuration: 0
+      minDuration: 0
     - name: FlamethrowerBox_OnFire_Small_Start
       guid: ac5e59fb5bc8984eb3b8c3c0e77f0974
       id: 1183096935
@@ -775,9 +775,9 @@ MonoBehaviour:
       - ElementName: FlamethrowerBox_OnFire_Small_Start
         ObjectType: 3
       Path: Boxes/FlamethrowerBox/FlamethrowerBox_OnFire_Small_Start
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 100
+      maxDuration: 9.355865
+      minDuration: 8.325505
     - name: FlamethrowerBox_OnFire_Small_Stop
       guid: 7b6d92ab0ca5a540abffe1af704228a7
       id: 1969622413
@@ -790,8 +790,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/FlamethrowerBox/FlamethrowerBox_OnFire_Small_Stop
       maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxDuration: 0
+      minDuration: 0
     - name: FlamethrowerBox_OnIce_Start
       guid: b9f3108a91dc604b8620b4bfb98f4358
       id: 3359598974
@@ -803,9 +803,9 @@ MonoBehaviour:
       - ElementName: FlamethrowerBox_OnIce_Start
         ObjectType: 3
       Path: Boxes/FlamethrowerBox/FlamethrowerBox_OnIce_Start
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 100
+      maxDuration: 7.132805
+      minDuration: 7.132805
     - name: FlamethrowerBox_OnIce_Stop
       guid: 6367e40c7c045443978719390fb9fe61
       id: 811813534
@@ -818,8 +818,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/FlamethrowerBox/FlamethrowerBox_OnIce_Stop
       maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxDuration: 0
+      minDuration: 0
     - name: FlamethrowerBox_OnLightning_Start
       guid: 71725d3fdf29bd408082861ecf0ae32f
       id: 3663234077
@@ -831,9 +831,9 @@ MonoBehaviour:
       - ElementName: FlamethrowerBox_OnLightning_Start
         ObjectType: 3
       Path: Boxes/FlamethrowerBox/FlamethrowerBox_OnLightning_Start
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 100
+      maxDuration: 3.494354
+      minDuration: 3.494354
     - name: FlamethrowerBox_OnLightning_Stop
       guid: 3f95f7a575065b499d7c1d49ae475d0a
       id: 499123743
@@ -846,8 +846,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/FlamethrowerBox/FlamethrowerBox_OnLightning_Stop
       maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxDuration: 0
+      minDuration: 0
     - name: GoldenBox
       guid: dd80c4dabcaab44e948c975c51e3c541
       id: 2839812117
@@ -1130,8 +1130,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/LightningBox/LightningBox_OnLightningStart
       maxAttenuation: 100
-      maxDuration: 8.778775
-      minDuration: 8.778775
+      maxDuration: -1
+      minDuration: -1
     - name: LightningBox_OnLightningStop
       guid: b8c765ebcebafb41b98b7590cf307b73
       id: 3069114978
@@ -1170,8 +1170,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/LongLogBox/LongLogBox_OnBeingPushed
       maxAttenuation: 100
-      maxDuration: 2.436159
-      minDuration: 1.570095
+      maxDuration: 1.228672
+      minDuration: 0.647752
     - name: LongLogBox_OnDestroyed_Collide
       guid: e00d5574e81a5248845849bf1d04d706
       id: 3991552144
@@ -1266,8 +1266,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/MediumLogBox/MediumLogBox_OnBeingPushed
       maxAttenuation: 100
-      maxDuration: 1.84733
-      minDuration: 1.189909
+      maxDuration: 0.875474
+      minDuration: 0.581615
     - name: MediumLogBox_OnDestroyed_Collide
       guid: 8c7967e8ddb27b43b9937281eacf286b
       id: 2727807807
@@ -1448,8 +1448,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Boxes/Boxes_Common/OnBeingPushed_Light
       maxAttenuation: 100
-      maxDuration: 0.377284
-      minDuration: 0.298635
+      maxDuration: 0.340476
+      minDuration: 0.271731
     - name: OnBeingPushedEnd_Heavy
       guid: f9c56eb59563994283e08f390dffff06
       id: 2263609135
@@ -1773,7 +1773,7 @@ MonoBehaviour:
     ParentPath: Common
     guid: 807dded910dbb64999431dbcfed8dec8
     GuidInternal: 
-    m_lastTime: -8585815169214775808
+    m_lastTime: -8585812214254775808
     List:
     - name: Common
       guid: 0c9dd73a69491341b42cedc6406cc1f8
@@ -1799,8 +1799,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Common/Common/OnBeingFrozen
       maxAttenuation: 100
-      maxDuration: 2.643333
-      minDuration: 2.643333
+      maxDuration: -1
+      minDuration: -1
     - name: OnBeingLit
       guid: f08ad19e6f57a04dbda25187e68cf7ba
       id: 3713364846
@@ -1813,8 +1813,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Common/Common/OnBeingLit
       maxAttenuation: 100
-      maxDuration: 5
-      minDuration: 5
+      maxDuration: -1
+      minDuration: -1
     - name: OnBurningEnd
       guid: f687b358be9d84488a4e7a20e30a4558
       id: 3484121230
@@ -3041,7 +3041,7 @@ MonoBehaviour:
     ParentPath: Panel
     guid: 7caaf6a2717ffc4999b45af4aa6c03b0
     GuidInternal: 
-    m_lastTime: -8585812981734775808
+    m_lastTime: -8585812214254775808
     List:
     - name: ExitMenuPanel
       guid: 1b2c014b5a5cb745a4fa2463f9e0bfa0
@@ -3067,8 +3067,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Panel/ExitMenuPanel/ExitMenuPanel_OnDesplay
       maxAttenuation: 0
-      maxDuration: 0.521633
-      minDuration: 0.521633
+      maxDuration: 0.536599
+      minDuration: 0.536599
     - name: ExitMenuPanel_OnHide
       guid: 50808bd02df14740a9be2b3705dabea9
       id: 2190979674
@@ -3081,8 +3081,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Panel/ExitMenuPanel/ExitMenuPanel_OnHide
       maxAttenuation: 0
-      maxDuration: 0.616145
-      minDuration: 0.616145
+      maxDuration: 0.094796
+      minDuration: 0.094796
     - name: KeyBindMenuPanel
       guid: 3097e87ea2a14a4c944031ec2df6376e
       id: 2884122552
@@ -3147,8 +3147,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Panel/LearnSkillUpgradePanel/LearnSkillUpgradePanel_OnAddPage
       maxAttenuation: 0
-      maxDuration: 1.173638
-      minDuration: 0.791953
+      maxDuration: 1.28134
+      minDuration: 0.735937
     - name: LearnSkillUpgradePanel_OnRemovePage
       guid: f6e2f392bf1f1c45bbe236039d52f8d6
       id: 3030785919
@@ -3161,8 +3161,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Panel/LearnSkillUpgradePanel/LearnSkillUpgradePanel_OnRemovePage
       maxAttenuation: 0
-      maxDuration: 0.662661
-      minDuration: 0.356889
+      maxDuration: 0.813008
+      minDuration: 0.28672
     - name: LearnSkillUpgradePanel_OnSwitchPage
       guid: 5e154219ffa416409ded6d91a3dc0426
       id: 2446548203
@@ -3175,8 +3175,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Panel/LearnSkillUpgradePanel/LearnSkillUpgradePanel_OnSwitchPage
       maxAttenuation: 0
-      maxDuration: 0.767484
-      minDuration: 0.464463
+      maxDuration: 0.862468
+      minDuration: 0.373143
     - name: NoticeMenuPanel
       guid: ca04b754e364a34ab12e876eaf11fc48
       id: 1755767778
@@ -3201,8 +3201,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Panel/NoticeMenuPanel/NoticeMenuPanel_OnDesplay
       maxAttenuation: 0
-      maxDuration: 0.521633
-      minDuration: 0.521633
+      maxDuration: 1.993923
+      minDuration: 1.972449
     - name: NoticeMenuPanel_OnHide
       guid: 8db2755b88b9e54caa84ac999f78468c
       id: 247593618
@@ -3267,8 +3267,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Panel/TransportMenuPanel/TransportMenuPanel_OnDesplay
       maxAttenuation: 0
-      maxDuration: 0.521633
-      minDuration: 0.521633
+      maxDuration: 0.560454
+      minDuration: 0.560454
     - name: TransportMenuPanel_OnHide
       guid: dd451eb5f6c01145ac831693d7d8ee4a
       id: 3536283519
@@ -4148,6 +4148,6 @@ MonoBehaviour:
   - /UnityProject_WwiseProject
   - /UnityProject_WwiseProject/Events
   - /UnityProject_WwiseProject/Events/Boxes
-  - /UnityProject_WwiseProject/Events/Boxes/Boxes_Common
+  - /UnityProject_WwiseProject/Events/Boxes/BlizzardBox
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

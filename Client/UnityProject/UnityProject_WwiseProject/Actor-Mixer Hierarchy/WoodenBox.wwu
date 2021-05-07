@@ -7,8 +7,9 @@
 				<Property Name="OverrideColor" Type="bool" Value="True"/>
 			</PropertyList>
 			<ChildrenList>
-				<RandomSequenceContainer Name="WoodebBox_OnDestroyed_Common" ID="{5ADE77C7-2E58-46AA-ACB6-5A4D019D0E6C}" ShortID="532318358">
+				<RandomSequenceContainer Name="WoodenBox_OnDestroyed_Common" ID="{5ADE77C7-2E58-46AA-ACB6-5A4D019D0E6C}" ShortID="532318358">
 					<PropertyList>
+						<Property Name="OverridePositioning" Type="bool" Value="True"/>
 						<Property Name="Pitch" Type="int32">
 							<ModifierList>
 								<ModifierInfo>
@@ -24,6 +25,9 @@
 						</Property>
 					</PropertyList>
 					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="WoodenBox" ID="{E1CF5EB6-861C-4FC1-B045-CDBDC2F0A82B}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+						</Reference>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 						</Reference>

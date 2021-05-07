@@ -43,8 +43,8 @@
 											<Modifier Name="" ID="{0654B675-EE16-49A0-B211-AF32C2C3FD94}">
 												<PropertyList>
 													<Property Name="Enabled" Type="bool" Value="True"/>
-													<Property Name="Max" Type="Real64" Value="227"/>
-													<Property Name="Min" Type="Real64" Value="-202"/>
+													<Property Name="Max" Type="Real64" Value="354"/>
+													<Property Name="Min" Type="Real64" Value="-354"/>
 												</PropertyList>
 											</Modifier>
 										</ModifierInfo>
@@ -91,6 +91,21 @@
 							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="LearnSkillUpgradePanel_OnRemovePage" ID="{B68AA051-DCFA-4CFA-BE40-F584DC2C5B34}" ShortID="244284611">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{EFBC6041-3CF1-4024-9534-5238FD1842AA}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="379"/>
+													<Property Name="Min" Type="Real64" Value="-354"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -123,6 +138,13 @@
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="Book close 12" ID="{2B22D363-0472-4F7A-9925-AED5BA0B2548}" ShortID="970483200">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-4</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -151,7 +173,24 @@
 								<Property Name="Pitch" Type="int32">
 									<ModifierList>
 										<ModifierInfo>
-											<Modifier Name="" ID="{16A353D9-F377-46FA-8862-2EB485EC8452}"/>
+											<Modifier Name="" ID="{16A353D9-F377-46FA-8862-2EB485EC8452}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="379"/>
+													<Property Name="Min" Type="Real64" Value="-202"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+								<Property Name="Volume" Type="Real64">
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{DDF4D5BE-5C74-4FF7-9442-FD2BBD85FE03}">
+												<PropertyList>
+													<Property Name="Min" Type="Real64" Value="-13"/>
+												</PropertyList>
+											</Modifier>
 										</ModifierInfo>
 									</ModifierList>
 								</Property>
@@ -281,35 +320,6 @@
 										<ActiveSource Name="HardcoverBookFlipPages_BW_5657" ID="{BF03A914-49B0-4A77-8AF5-7F97E2AECE84}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="HardcoverBookFlipPages_BW_04" ID="{41BDAB91-DF5B-4FAA-A684-F59015401CF0}" ShortID="588865423">
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Skill_Panel" ID="{46B8E72E-71D4-42C1-94D8-5147FCCCB7CF}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="HardcoverBookFlipPages_BW_5657" ID="{C787C338-E3C0-4EB4-9ACE-CA8F9F0A46CB}">
-											<PropertyList>
-												<Property Name="FadeInDuration" Type="Real64" Value="0.0917499291383221"/>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.0713610559964726"/>
-												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimBegin" Type="Real64" Value="2.10005393361048"/>
-												<Property Name="TrimEnd" Type="Real64" Value="2.63016463529857"/>
-											</PropertyList>
-											<Language>SFX</Language>
-											<AudioFile>HardcoverBookFlipPages_BW.5657.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="139492770"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="HardcoverBookFlipPages_BW_5657" ID="{C787C338-E3C0-4EB4-9ACE-CA8F9F0A46CB}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
 							</ChildrenList>
 						</RandomSequenceContainer>
 					</ChildrenList>
@@ -325,6 +335,13 @@
 					</ReferenceList>
 					<ChildrenList>
 						<RandomSequenceContainer Name="TransportWorldPanel_OnDesplay" ID="{99AAE8DA-FA9B-4881-9CDF-27A6C91F7874}" ShortID="1062938825">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-6</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -334,7 +351,7 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="book_open" ID="{FF6F35FF-833B-4946-9137-C6A689559AEF}" ShortID="527477001">
+								<Sound Name="Protagonist_Push_1" ID="{1674B949-176E-4C09-8A22-02E79ECF395A}" ShortID="410555980">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -344,16 +361,23 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="book_open" ID="{399394E4-8BB5-42D8-A109-280C8F763F43}">
+										<AudioFileSource Name="Protagonist_Push_1" ID="{5B0D0292-C7EF-478D-81AC-1C74204C669C}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.093968253968254"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.171156462585034"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.107392290249433"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.667845804988662"/>
+											</PropertyList>
 											<Language>SFX</Language>
-											<AudioFile>book_open.wav</AudioFile>
+											<AudioFile>Protagonist_Push_1.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="527135800"/>
+												<MediaID ID="851431513"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="book_open" ID="{399394E4-8BB5-42D8-A109-280C8F763F43}" Platform="Linked"/>
+										<ActiveSource Name="Protagonist_Push_1" ID="{5B0D0292-C7EF-478D-81AC-1C74204C669C}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
@@ -414,26 +438,33 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="Book close 12" ID="{5B9B7AEB-1F23-4E82-870B-229A1209828E}" ShortID="823639720">
+								<Sound Name="Click" ID="{4B780E75-3B72-4B61-8CD1-0F4DA36BEC1E}" ShortID="913699883">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Skill_Panel" ID="{46B8E72E-71D4-42C1-94D8-5147FCCCB7CF}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="Book close 12" ID="{19CFAA7D-B041-429A-A571-565329D5D0A3}">
+										<AudioFileSource Name="Click" ID="{ADB18A49-2697-4283-BD6C-A2E43A7838F8}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.00876263699924414"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.0270845143613001"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.0573554421768707"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.152151242441421"/>
+											</PropertyList>
 											<Language>SFX</Language>
-											<AudioFile>Book close 12.wav</AudioFile>
+											<AudioFile>Click.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="839853808"/>
+												<MediaID ID="533067515"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="Book close 12" ID="{19CFAA7D-B041-429A-A571-565329D5D0A3}" Platform="Linked"/>
+										<ActiveSource Name="Click" ID="{ADB18A49-2697-4283-BD6C-A2E43A7838F8}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
@@ -448,26 +479,26 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="book_open" ID="{0A56A0F0-C5DA-4E6C-A240-55A05076049F}" ShortID="638219204">
+								<Sound Name="Interface Ping Switch" ID="{EF09EB5A-DE5B-4FC0-81AC-79F5786CFA61}" ShortID="522025991">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="book_open" ID="{0E17B16D-3E20-4FBF-B4FB-2DA3FC6C0E59}">
+										<AudioFileSource Name="Interface Ping Switch" ID="{2194AA36-10A7-440A-824E-DE46E5CA79A2}">
 											<Language>SFX</Language>
-											<AudioFile>book_open.wav</AudioFile>
+											<AudioFile>Interface Ping Switch.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="527135800"/>
+												<MediaID ID="260505000"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="book_open" ID="{0E17B16D-3E20-4FBF-B4FB-2DA3FC6C0E59}" Platform="Linked"/>
+										<ActiveSource Name="Interface Ping Switch" ID="{2194AA36-10A7-440A-824E-DE46E5CA79A2}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
@@ -550,26 +581,70 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="book_open" ID="{8E88A968-4047-4DC3-853B-C3C396F44CE4}" ShortID="671600353">
+								<Sound Name="Ping Notification 01" ID="{2CEC9F72-3A08-4CF3-A4DE-9E7922FEAACB}" ShortID="351548155">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="NonWorld" ID="{03B1B353-2A40-4E03-9C35-3169B7BBCA7D}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="book_open" ID="{EF25B1F5-C952-4C70-912C-009DB2ED1382}">
+										<AudioFileSource Name="Ping Notification 01" ID="{D4BAE24E-39DA-4EF7-85F6-BDB9C0C7FB37}">
 											<Language>SFX</Language>
-											<AudioFile>book_open.wav</AudioFile>
+											<AudioFile>Ping Notification 01.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="527135800"/>
+												<MediaID ID="820608064"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="book_open" ID="{EF25B1F5-C952-4C70-912C-009DB2ED1382}" Platform="Linked"/>
+										<ActiveSource Name="Ping Notification 01" ID="{D4BAE24E-39DA-4EF7-85F6-BDB9C0C7FB37}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Ping Notification 02" ID="{0D62C8B6-7B11-4AF8-955C-4D46F7AA07F6}" ShortID="1053256534">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Ping Notification 02" ID="{81DDFB07-048D-4B66-9576-E250D0E3107B}">
+											<Language>SFX</Language>
+											<AudioFile>Ping Notification 02.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="711333519"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Ping Notification 02" ID="{81DDFB07-048D-4B66-9576-E250D0E3107B}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Ping Notification 03" ID="{C742712F-B564-48D7-9C0C-B3CBF8829D64}" ShortID="768580361">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Ping Notification 03" ID="{67C21BD7-F767-4902-94A6-FE6FB6854F37}">
+											<Language>SFX</Language>
+											<AudioFile>Ping Notification 03.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="1014209317"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Ping Notification 03" ID="{67C21BD7-F767-4902-94A6-FE6FB6854F37}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
