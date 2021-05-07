@@ -105,14 +105,15 @@ public static class ClientUtils
         return ConfigManager.TypeStartIndex.None;
     }
 
-    public static bool CheckEventAliasOrStateBool(this string waiting, string incoming, uint waitingWorldModuleGUID)
+    public static bool CheckEventAliasOrStateBool(this string waiting, string incoming, uint waitingWorldModuleGUID, string waitingStaticLayoutGUID)
     {
         if (string.IsNullOrWhiteSpace(waiting) || string.IsNullOrWhiteSpace(incoming)) return false;
         string formatWaiting = waiting.Replace("{WorldModule}", waitingWorldModuleGUID.ToString());
+        if (!string.IsNullOrWhiteSpace(waitingStaticLayoutGUID)) formatWaiting = formatWaiting.Replace("{StaticLayout}", waitingStaticLayoutGUID);
         return formatWaiting == incoming;
     }
 
-    public static bool CheckEventAliasOrStateBool(this string waiting, string incoming, WorldModule waitingWorldModule)
+    public static bool CheckEventAliasOrStateBool(this string waiting, string incoming, WorldModule waitingWorldModule, string waitingStaticLayoutGUID)
     {
         if (string.IsNullOrWhiteSpace(waiting) || string.IsNullOrWhiteSpace(incoming)) return false;
         if (waitingWorldModule == null)
@@ -121,17 +122,18 @@ public static class ClientUtils
         }
         else
         {
-            return waiting.CheckEventAliasOrStateBool(incoming, waitingWorldModule.GUID);
+            return waiting.CheckEventAliasOrStateBool(incoming, waitingWorldModule.GUID, waitingStaticLayoutGUID);
         }
     }
 
-    public static string FormatEventAliasOrStateBool(this string sending, uint waitingWorldModuleGUID)
+    public static string FormatEventAliasOrStateBool(this string sending, uint waitingWorldModuleGUID, string waitingStaticLayoutGUID)
     {
         string formatSending = sending.Replace("{WorldModule}", waitingWorldModuleGUID.ToString());
+        if (!string.IsNullOrWhiteSpace(waitingStaticLayoutGUID)) formatSending = formatSending.Replace("{StaticLayout}", waitingStaticLayoutGUID);
         return formatSending;
     }
 
-    public static string FormatEventAliasOrStateBool(this string sending, WorldModule waitingWorldModule)
+    public static string FormatEventAliasOrStateBool(this string sending, WorldModule waitingWorldModule, string waitingStaticLayoutGUID)
     {
         if (waitingWorldModule == null)
         {
@@ -139,7 +141,7 @@ public static class ClientUtils
         }
         else
         {
-            return sending.FormatEventAliasOrStateBool(waitingWorldModule.GUID);
+            return sending.FormatEventAliasOrStateBool(waitingWorldModule.GUID, waitingStaticLayoutGUID);
         }
     }
 }

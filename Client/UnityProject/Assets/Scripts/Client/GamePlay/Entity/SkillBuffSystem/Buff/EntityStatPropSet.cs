@@ -437,6 +437,7 @@ public class EntityStatPropSet
         StatNotifyActionSetDict[EntityStatType.ActionPoint].OnValueNotEnoughWarning += OnActionPointNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.ActionPoint].OnValueIncrease += OnActionPointIncrease;
         StatNotifyActionSetDict[EntityStatType.Gold].OnValueIncrease += OnGoldIncrease;
+        StatNotifyActionSetDict[EntityStatType.Gold].OnValueDecrease += OnGoldDecrease;
         StatNotifyActionSetDict[EntityStatType.Gold].OnValueNotEnoughWarning += OnGoldNotEnoughWarning;
         StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueIncrease += OnFireElementFragmentIncrease;
         StatNotifyActionSetDict[EntityStatType.FireElementFragment].OnValueNotEnoughWarning += OnFireElementFragmentNotEnoughWarning;
@@ -485,6 +486,7 @@ public class EntityStatPropSet
         if (Entity == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].ActionPointBottle.OnStatLowWarning();
+            Entity.EntityWwiseHelper.OnActionPointNotEnough?.Post(Entity.gameObject);
         }
     }
 
@@ -506,12 +508,22 @@ public class EntityStatPropSet
         }
     }
 
+    private void OnGoldDecrease(int decrease)
+    {
+        if (Entity is Actor actor)
+        {
+            actor.ActorBattleHelper.ShowSpendGoldNumFX(decrease);
+            actor.EntityWwiseHelper.OnSpendGold.Post(actor.gameObject);
+        }
+    }
+
     private void OnGoldNotEnoughWarning()
     {
         if (Entity == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].GoldBottle.OnStatLowWarning();
             ClientGameManager.Instance.NoticePanel.ShowTip("Not enough gold", NoticePanel.TipPositionType.Center, 0.8f);
+            Entity.EntityWwiseHelper.OnGoldNotEnough?.Post(Entity.gameObject);
         }
     }
 
@@ -529,6 +541,7 @@ public class EntityStatPropSet
         if (Entity == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].FireElementBottle.OnStatLowWarning();
+            Entity.EntityWwiseHelper.OnElementsNotEnough?.Post(Entity.gameObject);
         }
     }
 
@@ -546,6 +559,7 @@ public class EntityStatPropSet
         if (Entity == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].IceElementBottle.OnStatLowWarning();
+            Entity.EntityWwiseHelper.OnElementsNotEnough?.Post(Entity.gameObject);
         }
     }
 
@@ -563,6 +577,7 @@ public class EntityStatPropSet
         if (Entity == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].LightningElementBottle.OnStatLowWarning();
+            Entity.EntityWwiseHelper.OnElementsNotEnough?.Post(Entity.gameObject);
         }
     }
 
@@ -593,6 +608,7 @@ public class EntityStatPropSet
             if (HealthDurability.Value < 0.2f * HealthDurability.MaxValue)
             {
                 ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].HealthBottle.OnStatLowWarning();
+                Entity.EntityWwiseHelper.OnLowHealthWarning?.Post(Entity.gameObject);
             }
         }
     }

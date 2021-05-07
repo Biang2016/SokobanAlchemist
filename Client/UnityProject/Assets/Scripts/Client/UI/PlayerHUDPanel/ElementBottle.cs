@@ -2,10 +2,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ElementBottle : MonoBehaviour
+public class ElementBottle : MonoBehaviour, ISkillBind
 {
     [SerializeField]
-    private TextMeshProUGUI KeyBind_Text;
+    private PlayerControllerHelper.KeyBind MyKeyBind;
+
+    [SerializeField]
+    private TextMeshProUGUI SkillKeyBind_Text;
 
     [SerializeField]
     private TextMeshProUGUI CurrentValue_Text;
@@ -17,10 +20,25 @@ public class ElementBottle : MonoBehaviour
     private Image Image;
 
     [SerializeField]
+    private string ElementDescHeader;
+
+    [SerializeField]
+    private Text ElementDesc;
+
+    [SerializeField]
     private Sprite[] Sprites;
 
     [SerializeField]
     private Animator FillAnim;
+
+    [SerializeField]
+    private Transform SkillRowContainer;
+
+    private EntitySkillRow curEntitySkillRow;
+    public EntitySkill BoundEntitySkill => boundEntitySkill;
+    private EntitySkill boundEntitySkill;
+
+    public bool EmptySkill => curEntitySkillRow == null;
 
     void Start()
     {
@@ -29,16 +47,32 @@ public class ElementBottle : MonoBehaviour
 
     public void Initialize()
     {
-        if (KeyBind_Text) KeyBind_Text.text = "";
+        SkillKeyBind_Text.gameObject.SetActive(false);
     }
 
-    public void Initialize(PlayerControllerHelper.KeyBind keyBind)
+    public void BindSkill(EntitySkill entitySkill)
     {
-        if (KeyBind_Text) KeyBind_Text.text = PlayerControllerHelper.KeyMappingStrDict[keyBind];
+        if (entitySkill == null)
+        {
+            SkillKeyBind_Text.gameObject.SetActive(false);
+            boundEntitySkill = null;
+            curEntitySkillRow?.PoolRecycle();
+            curEntitySkillRow = null;
+        }
+        else
+        {
+            boundEntitySkill = entitySkill;
+            SkillKeyBind_Text.gameObject.SetActive(BoundEntitySkill is EntityActiveSkill);
+
+            curEntitySkillRow?.PoolRecycle();
+            curEntitySkillRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(SkillRowContainer);
+            curEntitySkillRow.Initialize(entitySkill, (BoundEntitySkill is EntityActiveSkill) ? MyKeyBind.ToString() : "", 0);
+        }
     }
 
     public void RefreshValue(int currentValue, int minValue, int maxValue)
     {
+        ElementDesc.text = $"{ElementDescHeader}: {currentValue} / {maxValue}";
         gameObject.SetActive(maxValue > 0);
 
         int ratio = 0;

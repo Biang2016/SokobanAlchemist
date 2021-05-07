@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 public class ActorArtHelper : EntityArtHelper
 {
@@ -180,8 +181,13 @@ public class ActorArtHelper : EntityArtHelper
 
     #region 第三优先级
 
+    [ShowInInspector]
     internal bool CanTurn = true;
+
+    [ShowInInspector]
     internal bool CanPlayOtherAnimSkill = true;
+
+    [ShowInInspector]
     internal bool CanPan = true;
 
     public void SetIsChasing(bool isChasing)

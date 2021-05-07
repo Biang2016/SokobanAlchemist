@@ -85,9 +85,10 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     #endregion
 
-    #region 分模组记录模组所属的Actor信息
+    #region 分模组或静态布局记录模组所属的Actor信息
 
     internal Dictionary<uint, HashSet<uint>> WorldModuleActorDict = new Dictionary<uint, HashSet<uint>>(); // Key: WorldModuleGUID, Value: HashSet<ActorGUID>
+    internal Dictionary<string, HashSet<uint>> StaticLayoutActorDict = new Dictionary<string, HashSet<uint>>(); // Key: StaticLayoutGUID, Value: HashSet<ActorGUID>
 
     private void RegisterEnemyToWorldModule(uint worldModuleGUID, uint actorGUID)
     {
@@ -121,6 +122,48 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             else
             {
                 Debug.LogError("未注册过的世界模组GUID");
+            }
+        }
+        else
+        {
+            Debug.LogError("未注册过角色");
+        }
+    }
+
+    private void RegisterEnemyToStaticLayout(string staticLayoutGUID, uint actorGUID)
+    {
+        if (string.IsNullOrWhiteSpace(staticLayoutGUID)) return;
+        if (!StaticLayoutActorDict.ContainsKey(staticLayoutGUID))
+        {
+            StaticLayoutActorDict.Add(staticLayoutGUID, new HashSet<uint>());
+        }
+
+        StaticLayoutActorDict[staticLayoutGUID].Add(actorGUID);
+    }
+
+    private void UnregisterEnemyFromStaticLayout(uint actorGUID)
+    {
+        if (ActorDict.TryGetValue(actorGUID, out Actor actor))
+        {
+            if (string.IsNullOrWhiteSpace(actor.CurrentEntityData.InitStaticLayoutGUID)) return;
+            if (StaticLayoutActorDict.TryGetValue(actor.CurrentEntityData.InitStaticLayoutGUID, out HashSet<uint> dict))
+            {
+                if (dict.Remove(actorGUID))
+                {
+                    if (dict.Count == 0)
+                    {
+                        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, $"StaticLayout_{actor.CurrentEntityData.InitStaticLayoutGUID}_EnemyClear");
+                        StaticLayoutActorDict.Remove(actor.CurrentEntityData.InitStaticLayoutGUID);
+                    }
+                }
+                else
+                {
+                    Debug.LogError("角色未注册进静态布局字典");
+                }
+            }
+            else
+            {
+                Debug.LogError("未注册过的静态布局GUID");
             }
         }
         else
@@ -217,6 +260,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         {
             Enemies.Add(actor);
             RegisterEnemyToWorldModule(worldModule.GUID, actor.GUID);
+            RegisterEnemyToStaticLayout(actor.CurrentEntityData.InitStaticLayoutGUID, actor.GUID);
         }
 
         ActorDict.Add(actor.GUID, actor);
@@ -231,6 +275,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         if (actor.ActorCategory == ActorCategory.Creature)
         {
             UnregisterEnemyFromWorldModule(actor.GUID);
+            UnregisterEnemyFromStaticLayout(actor.GUID);
             Enemies.Remove(actor);
         }
 
@@ -357,14 +402,14 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         IsStart = false;
         WwiseAudioManager.Instance.Trigger_PlayerDeath.Post(WwiseAudioManager.Instance.WwiseBGMConfiguration.gameObject);
         SetAllActorForbidAction(true);
-        ClientGameManager.Instance.LearnSkillUpgradePanel.Hide();
+        ClientGameManager.Instance.LearnSkillUpgradePanel.HidePanel();
         UIManager.Instance.CloseUIForm<KeyBindingPanel>();
         UIManager.Instance.CloseUIForm<TransportWorldPanel>();
         WinLosePanel panel = UIManager.Instance.ShowUIForms<WinLosePanel>();
         yield return panel.Co_LoseGame();
         if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
-            if (openWorld.IsInsideDungeon)
+            if (openWorld.InsideDungeon)
             {
                 openWorld.RestartDungeon();
             }

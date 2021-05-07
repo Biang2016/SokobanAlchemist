@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangLibrary;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
@@ -12,6 +13,10 @@ public class EntityData : IClone<EntityData>
 {
     public GridPos3D WorldGP;
     public GridPos3D LocalGP;
+
+    [ReadOnly]
+    [HideInEditorMode]
+    public string InitStaticLayoutGUID = ""; // 创建时所属的静态布局GUID
 
     public override string ToString()
     {
@@ -102,11 +107,49 @@ public class EntityData : IClone<EntityData>
         }
     }
 
+    public bool ProbablyShow()
+    {
+        foreach (EntityPassiveSkill eps in RawEntityExtraSerializeData.EntityPassiveSkills)
+        {
+            if (eps is EntityPassiveSkill_ProbablyShow probablyShow)
+            {
+                if (probablyShow.ShowProbabilityPercent.ProbabilityBool())
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public void RemoveAllProbablyShowPassiveSkill()
+    {
+        List<EntityPassiveSkill> removeEPSList = new List<EntityPassiveSkill>();
+        foreach (EntityPassiveSkill eps in RawEntityExtraSerializeData.EntityPassiveSkills)
+        {
+            if (eps is EntityPassiveSkill_ProbablyShow)
+            {
+                removeEPSList.Add(eps);
+            }
+        }
+
+        foreach (EntityPassiveSkill eps in removeEPSList)
+        {
+            RawEntityExtraSerializeData.EntityPassiveSkills.Remove(eps);
+        }
+    }
+
     public EntityData Clone()
     {
         EntityData newEntityData = new EntityData(EntityTypeIndex, EntityOrientation, RawEntityExtraSerializeData?.Clone());
         newEntityData.WorldGP = WorldGP;
         newEntityData.LocalGP = LocalGP;
+        newEntityData.InitStaticLayoutGUID = InitStaticLayoutGUID;
         return newEntityData;
     }
 }

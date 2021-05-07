@@ -9,6 +9,9 @@ public class DoorBoxHelper : BoxMonoHelper
 
     public List<EntityIndicator> DoorEntityIndicators = new List<EntityIndicator>();
 
+    public AK.Wwise.Event OnDoorOpen;
+    public AK.Wwise.Event OnDoorClose;
+
     [ShowInInspector]
     private bool open;
 
@@ -20,7 +23,10 @@ public class DoorBoxHelper : BoxMonoHelper
             if (open != value)
             {
                 open = value;
+                DoorAnim.ResetTrigger(open ? "Close" : "Open");
                 DoorAnim.SetTrigger(open ? "Open" : "Close");
+                if (value) OnDoorOpen?.Post(Entity.gameObject);
+                else OnDoorClose?.Post(Entity.gameObject);
                 foreach (EntityIndicator doorEntityIndicator in DoorEntityIndicators)
                 {
                     GridPos3D offset = doorEntityIndicator.Offset;
@@ -49,5 +55,17 @@ public class DoorBoxHelper : BoxMonoHelper
     {
         base.OnHelperUsed();
         Open = false;
+    }
+
+    public override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+        base.RecordEntityExtraStates(entityDataExtraStates);
+        Entity.CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates.DoorOpen = Open;
+    }
+
+    public override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+        base.ApplyEntityExtraStates(entityDataExtraStates);
+        Open = entityDataExtraStates.DoorOpen;
     }
 }

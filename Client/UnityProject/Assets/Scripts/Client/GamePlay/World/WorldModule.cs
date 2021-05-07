@@ -591,12 +591,13 @@ public class WorldModule : PoolObject
                         {
                             GridPos3D gridPos = offset + worldGP;
                             Entity existedEntity = World.GetImpassableEntityByGridPosition(gridPos, 0, out WorldModule module, out GridPos3D gridLocalGP);
-                            if (module != null && existedEntity == null)
+                            if (module != null && (existedEntity == null || isTriggerEntity))
                             {
                                 module[TypeDefineType.Box, gridLocalGP, isStartedEntities, false, isTriggerEntity, box.GUID, entityData] = box;
                             }
                         }
 
+                        box.ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
                         return box;
                     }
                     case TypeDefineType.Actor:
@@ -614,12 +615,13 @@ public class WorldModule : PoolObject
                         {
                             GridPos3D gridPos = offset + actor.WorldGP; // 此处actor.WorldGP已经根据Actor的朝向更新过，不等于上文的worldGP
                             Entity existedEntity = World.GetImpassableEntityByGridPosition(gridPos, actor.GUID, out WorldModule module, out GridPos3D gridLocalGP);
-                            if (module != null && existedEntity == null)
+                            if (module != null && (existedEntity == null || isTriggerEntity))
                             {
                                 module[TypeDefineType.Actor, gridLocalGP, isStartedEntities, false, isTriggerEntity, actor.GUID, entityData] = actor;
                             }
                         }
 
+                        actor.ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
                         return actor;
                     }
                 }
@@ -642,6 +644,79 @@ public class WorldModule : PoolObject
         else
         {
             return null;
+        }
+    }
+
+    public IEnumerator RecordWorldModuleData(int recordEntityNumPerFrame)
+    {
+        IsGeneratingOrRecycling = true;
+
+        // 时序，先清理注册事件，以免回收时触发 // todo 触发事件的记录
+        //foreach (EntityPassiveSkill_LevelEventTriggerAppear appear in EventTriggerAppearEntityPassiveSkillList)
+        //{
+        //    appear.ClearAndUnRegister();
+        //}
+
+        //EventTriggerAppearEntityPassiveSkillList.Clear();
+
+        foreach (KeyValuePair<uint, Entity> kv in WorldModuleTriggerEntities)
+        {
+            kv.Value.RecordEntityExtraSerializeData();
+        }
+
+        WorldModuleTriggerEntities.Clear();
+
+        int count = 0;
+        // Record Actor First
+        for (int x = 0; x < MODULE_SIZE; x++)
+        {
+            for (int y = 0; y < MODULE_SIZE; y++)
+            {
+                for (int z = 0; z < MODULE_SIZE; z++)
+                {
+                    Entity entity = EntityMatrix_CheckOverlap_BoxAndActor[x, y, z];
+                    if (entity != null && entity is Actor actor)
+                    {
+                        GridPos3D worldGP = actor.WorldGP;
+                        if (actor.WorldGP == LocalGPToWorldGP(new GridPos3D(x, y, z))) // 不是核心格所在的模组无权记录该Entity
+                        {
+                            actor.RecordEntityExtraSerializeData();
+                            count++;
+                            if (count > recordEntityNumPerFrame)
+                            {
+                                count = 0;
+                                yield return null;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Record Box
+        for (int x = 0; x < MODULE_SIZE; x++)
+        {
+            for (int y = 0; y < MODULE_SIZE; y++)
+            {
+                for (int z = 0; z < MODULE_SIZE; z++)
+                {
+                    Box box = BoxMatrix[x, y, z];
+                    if (box != null)
+                    {
+                        GridPos3D worldGP = box.WorldGP;
+                        if (box.WorldGP == LocalGPToWorldGP(new GridPos3D(x, y, z))) // 不是核心格所在的模组无权卸载该Box
+                        {
+                            box.RecordEntityExtraSerializeData();
+                            count++;
+                            if (count > recordEntityNumPerFrame)
+                            {
+                                count = 0;
+                                yield return null;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

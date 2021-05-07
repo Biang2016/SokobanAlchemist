@@ -82,6 +82,13 @@ namespace BiangLibrary.GamePlay.UI
             return panel.IsShown;
         }
 
+        public T WarmUpUIForms<T>() where T : BaseUIPanel
+        {
+            T panel = ShowUIForms<T>();
+            panel.CloseUIForm();
+            return panel;
+        }
+
         /// <summary>
         /// 显示（打开）UI窗体
         /// 功能：
@@ -93,6 +100,19 @@ namespace BiangLibrary.GamePlay.UI
             string uiFormNameStr = typeof(T).Name;
             BaseUIPanel uiPanel = ShowUIForm(uiFormNameStr);
             return (T) uiPanel;
+        }
+
+        public void ToggleUIForm<T>() where T : BaseUIPanel
+        {
+            string uiFormNameStr = typeof(T).Name;
+            if (CurrentShowUIFormDict.TryGetValue(uiFormNameStr, out BaseUIPanel uiPanel))
+            {
+                uiPanel.CloseUIForm();
+            }
+            else
+            {
+                ShowUIForm(uiFormNameStr);
+            }
         }
 
         public BaseUIPanel ShowUIForm(string uiFormName)

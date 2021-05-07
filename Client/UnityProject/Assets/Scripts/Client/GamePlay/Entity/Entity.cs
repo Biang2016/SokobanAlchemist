@@ -8,6 +8,7 @@ using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Profiling;
 using Random = UnityEngine.Random;
 
 public abstract class Entity : PoolObject
@@ -46,6 +47,12 @@ public abstract class Entity : PoolObject
     [LabelText("慢刷新")]
     public bool SlowlyTick = false;
 
+    [FoldoutGroup("属性")]
+    [LabelText("出模组自动删除")]
+    public bool AutoDeleteWhenNotInModule = true;
+
+    internal EntityData CurrentEntityData;
+
     #region Helpers
 
     internal abstract EntityArtHelper EntityArtHelper { get; }
@@ -59,6 +66,8 @@ public abstract class Entity : PoolObject
     internal abstract EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper { get; }
     internal abstract List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers { get; }
     internal abstract List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers { get; }
+
+    protected List<EntityMonoHelper> EntityMonoHelpers = new List<EntityMonoHelper>(32);
 
     #endregion
 
@@ -83,6 +92,10 @@ public abstract class Entity : PoolObject
     /// （受各种控制技能影响）无法动弹
     /// </summary>
     public bool CannotAct => IsFrozen || EntityBuffHelper.IsShocking || EntityBuffHelper.IsStun || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed;
+
+    [FoldoutGroup("跳跃")]
+    [LabelText("能自动落下")]
+    public bool CanAutoFallDown = true;
 
     [DisplayAsString]
     [HideInEditorMode]
@@ -292,6 +305,7 @@ public abstract class Entity : PoolObject
 
     public void ApplyEntityExtraSerializeData(EntityExtraSerializeData rawEntityExtraSerializeDataFromModule = null)
     {
+        Profiler.BeginSample("ApplyEntityExtraSerializeData");
         if (rawEntityExtraSerializeDataFromModule != null)
         {
             foreach (EntityPassiveSkill rawExtraPS in rawEntityExtraSerializeDataFromModule.EntityPassiveSkills)
@@ -300,7 +314,30 @@ public abstract class Entity : PoolObject
                 newPS.IsLevelExtraEntitySkill = true;
                 AddNewPassiveSkill(newPS);
             }
+
+            ApplyEntityExtraStates(rawEntityExtraSerializeDataFromModule.EntityDataExtraStates);
         }
+
+        Profiler.EndSample();
+    }
+
+    public void RecordEntityExtraSerializeData()
+    {
+        Profiler.BeginSample("RecordEntityExtraSerializeData");
+        if (CurrentEntityData != null && CurrentEntityData.RawEntityExtraSerializeData != null)
+        {
+            RecordEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
+        }
+
+        Profiler.EndSample();
+    }
+
+    protected virtual void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+    }
+
+    protected virtual void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
     }
 
     #endregion
@@ -317,6 +354,7 @@ public abstract class Entity : PoolObject
     {
         base.OnRecycled();
         StopAllCoroutines();
+        CurrentEntityData = null;
         InitWorldModuleGUID = 0;
         destroyBecauseNotInAnyModuleTick = 0;
         cachedRemoveList_EntityPassiveSkill.Clear();
@@ -331,8 +369,9 @@ public abstract class Entity : PoolObject
         CanBeThreatened = true;
     }
 
-    public void Setup(uint initWorldModuleGUID)
+    public void Setup(EntityData entityData, uint initWorldModuleGUID)
     {
+        CurrentEntityData = entityData;
         InitWorldModuleGUID = initWorldModuleGUID;
         if (GUID == 0)
         {
@@ -443,6 +482,11 @@ public abstract class Entity : PoolObject
             eps.OnInit();
             eps.OnRegisterLevelEventID();
         }
+
+        foreach (EntityMonoHelper h in EntityMonoHelpers)
+        {
+            h?.OnInitPassiveSkills();
+        }
     }
 
     public void AddNewPassiveSkill(EntityPassiveSkill eps)
@@ -467,11 +511,11 @@ public abstract class Entity : PoolObject
                 if (!eps.SkillIcon.TypeName.IsNullOrWhitespace() && !eps.SkillName_EN.IsNullOrWhitespace() && eps.OccupySkillGrid)
                 {
                     PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
-                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, SkillSlot> kv in HUD.SkillSlotDict)
+                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, ISkillBind> kv in HUD.SkillSlotDict)
                     {
-                        if (kv.Value.Empty)
+                        if (kv.Value.EmptySkill)
                         {
-                            kv.Value.Initialize(eps);
+                            kv.Value.BindSkill(eps);
                             break;
                         }
                     }
@@ -508,11 +552,11 @@ public abstract class Entity : PoolObject
                 if (!eps.SkillIcon.TypeName.IsNullOrWhitespace() && !eps.SkillName_EN.IsNullOrWhitespace() && eps.OccupySkillGrid)
                 {
                     PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
-                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, SkillSlot> kv in HUD.SkillSlotDict)
+                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, ISkillBind> kv in HUD.SkillSlotDict)
                     {
                         if (kv.Value.BoundEntitySkill == eps)
                         {
-                            kv.Value.Initialize(null);
+                            kv.Value.BindSkill(null);
                         }
                     }
                 }
@@ -534,6 +578,11 @@ public abstract class Entity : PoolObject
         {
             eps.OnUnRegisterLevelEventID();
             eps.OnUnInit();
+        }
+
+        foreach (EntityMonoHelper h in EntityMonoHelpers)
+        {
+            h?.OnUnInitPassiveSkills();
         }
 
         PassiveSkillMarkAsDestroyed = false;
@@ -637,7 +686,10 @@ public abstract class Entity : PoolObject
             kv.Value.OnInit();
         }
 
-        ActiveSkillMarkAsDestroyed = false;
+        foreach (EntityMonoHelper h in EntityMonoHelpers)
+        {
+            h?.OnInitActiveSkills();
+        }
     }
 
     public bool AddNewActiveSkill(EntityActiveSkill eas)
@@ -695,9 +747,9 @@ public abstract class Entity : PoolObject
                     pch.SkillKeyMappings[keyBind].Add(eas.EntitySkillIndex);
 
                     PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
-                    if (HUD.SkillSlotDict.TryGetValue(keyBind, out SkillSlot skillSlot))
+                    if (HUD.SkillSlotDict.TryGetValue(keyBind, out ISkillBind iSkillBind))
                     {
-                        skillSlot.Initialize(eas);
+                        iSkillBind.BindSkill(eas);
                     }
                 }
 
@@ -718,9 +770,9 @@ public abstract class Entity : PoolObject
                     {
                         kv.Value.Remove(eas.EntitySkillIndex);
                         PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
-                        if (HUD.SkillSlotDict.TryGetValue(kv.Key, out SkillSlot skillSlot))
+                        if (HUD.SkillSlotDict.TryGetValue(kv.Key, out ISkillBind iSkillBind))
                         {
-                            skillSlot.Initialize(null);
+                            iSkillBind.BindSkill(null);
                         }
                     }
                 }
@@ -747,6 +799,11 @@ public abstract class Entity : PoolObject
         foreach (KeyValuePair<string, EntityActiveSkill> kv in EntityActiveSkillGUIDDict)
         {
             kv.Value.OnUnInit();
+        }
+
+        foreach (EntityMonoHelper h in EntityMonoHelpers)
+        {
+            h?.OnUnInitActiveSkills();
         }
 
         ActiveSkillMarkAsDestroyed = false;
@@ -832,6 +889,16 @@ public abstract class Entity : PoolObject
 
     #endregion
 
+    protected virtual void Update()
+    {
+        if (!BattleManager.Instance.IsStart) return;
+        if (IsRecycled) return;
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
+        {
+            kv.Value.OnUpdate(Time.deltaTime);
+        }
+    }
+
     protected virtual void FixedUpdate()
     {
         if (!BattleManager.Instance.IsStart) return;
@@ -902,6 +969,8 @@ public abstract class Entity : PoolObject
 
     protected virtual void Tick(float interval)
     {
+        if (!BattleManager.Instance.IsStart) return;
+        if (IsRecycled) return;
         EntityStatPropSet.Tick(interval);
         EntityBuffHelper.BuffTick(interval);
         foreach (EntityPassiveSkill eps in EntityPassiveSkills)
@@ -914,7 +983,8 @@ public abstract class Entity : PoolObject
             kv.Value.OnTick(interval);
         }
 
-        if (BattleManager.Instance.IsStart)
+        // Auto Delete when not in a module
+        if (AutoDeleteWhenNotInModule)
         {
             if (WorldManager.Instance != null)
             {

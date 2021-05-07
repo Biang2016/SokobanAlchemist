@@ -25,9 +25,11 @@
 							<ChildrenList>
 								<AudioFileSource Name="Frost Magic Ice Bolt Spell Flying By 2" ID="{D38D24A0-20A5-4EBF-A161-153A2F3C0E8F}">
 									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.11941688712522"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.063973332388511"/>
 										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-										<Property Name="TrimBegin" Type="Real64" Value="0.311336884290753"/>
-										<Property Name="TrimEnd" Type="Real64" Value="1.56094931027967"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.609879102103804"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.38608886841774"/>
 									</PropertyList>
 									<Language>SFX</Language>
 									<AudioFile>Frost Magic Ice Bolt Spell Flying By 2.wav</AudioFile>
@@ -43,6 +45,21 @@
 					</ChildrenList>
 				</RandomSequenceContainer>
 				<BlendContainer Name="IceBox_OnDestroyed_Common" ID="{31937532-CBC5-4BE6-A866-01CE339E02E9}" ShortID="495040564">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{2C81B9D6-5D59-4F06-ACD9-B64C3FBF9448}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="404"/>
+											<Property Name="Min" Type="Real64" Value="-303"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -90,6 +107,19 @@
 				<BlendContainer Name="IceBox_OnDestroyed_Firing" ID="{B365B27F-FA10-4423-8548-66B44F1E83F6}" ShortID="146600299">
 					<PropertyList>
 						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{8EF8088A-B956-4655-B0D4-E2091A8CBA94}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="404"/>
+											<Property Name="Min" Type="Real64" Value="-303"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
 					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Attenuation">
@@ -191,6 +221,19 @@
 				<BlendContainer Name="IceBox_OnDestroyed_Frozen" ID="{AFA12132-219F-43C7-82E2-F8A2D90B387B}" ShortID="642926396">
 					<PropertyList>
 						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{E7611415-CB74-4973-A268-729E68038B47}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="404"/>
+											<Property Name="Min" Type="Real64" Value="-303"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
 					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Attenuation">
@@ -277,6 +320,19 @@
 				<BlendContainer Name="IceBox_OnDestroyed_Collide" ID="{1A6E3D45-1D91-4784-BB95-885019E45A93}" ShortID="730344592">
 					<PropertyList>
 						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{B7D91589-3CD6-4022-86CA-CCB8BF420EF0}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="404"/>
+											<Property Name="Min" Type="Real64" Value="-303"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
 					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Attenuation">
@@ -363,6 +419,19 @@
 				<BlendContainer Name="IceBox_OnDestroyed_Explosion" ID="{07D0D731-BA3B-404B-BA1D-C0B856AF557A}" ShortID="419582103">
 					<PropertyList>
 						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{55D97766-0C42-4BA4-B4EC-C202BF6D6E36}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="404"/>
+											<Property Name="Min" Type="Real64" Value="-303"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
 					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Attenuation">

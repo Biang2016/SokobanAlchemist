@@ -44,6 +44,8 @@ public class TransportWorldPanel : BaseUIPanel
 
     private Stack<TransportInfo> TransportInfoStack = new Stack<TransportInfo>();
 
+    public AK.Wwise.Event OnDisplay;
+
     private class TransportInfo
     {
         public WorldData RawWorldData;
@@ -61,6 +63,7 @@ public class TransportWorldPanel : BaseUIPanel
         });
 
         Anim.SetTrigger("Jump");
+        OnDisplay?.Post(gameObject);
 
         current_RawWorldData = rawWorldData;
         current_LearnCallBack = learnCallback;
@@ -78,7 +81,6 @@ public class TransportWorldPanel : BaseUIPanel
         {
             current_LearnAction = () =>
             {
-                TransportInfoStack.Pop();
                 current_LearnAction = null;
                 current_LearnCallBack?.Invoke();
                 CloseUIForm();
@@ -90,8 +92,9 @@ public class TransportWorldPanel : BaseUIPanel
         }
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
+        base.FixedUpdate();
         if (ControlManager.Instance.Common_InteractiveKey.Down)
         {
             current_LearnAction?.Invoke();
@@ -107,6 +110,7 @@ public class TransportWorldPanel : BaseUIPanel
     public override void Hide()
     {
         base.Hide();
+        if (TransportInfoStack.Count > 0) TransportInfoStack.Pop();
         if (TransportInfoStack.Count == 0)
         {
             UIManager.Instance.ShowUIForms<InGameUIPanel>();
@@ -117,13 +121,9 @@ public class TransportWorldPanel : BaseUIPanel
         }
         else
         {
-            TransportInfoStack.Pop();
-            if (TransportInfoStack.Count > 0)
-            {
-                TransportInfo transportInfo = TransportInfoStack.Pop();
-                UIManager.Instance.ShowUIForms<TransportWorldPanel>();
-                Initialize(transportInfo.RawWorldData, transportInfo.LearnCallback, transportInfo.GoldCost);
-            }
+            TransportInfo transportInfo = TransportInfoStack.Pop();
+            UIManager.Instance.ShowUIForms<TransportWorldPanel>();
+            Initialize(transportInfo.RawWorldData, transportInfo.LearnCallback, transportInfo.GoldCost);
         }
     }
 }

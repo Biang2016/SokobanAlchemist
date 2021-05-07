@@ -71,19 +71,6 @@ public enum ButtonNames
 {
     None = 0,
 
-    BUILDING_MIN_FLAG = 100,
-
-    Building_MouseLeft,
-    Building_MouseRight,
-    Building_MouseMiddle,
-
-    Building_RotateItem,
-    Building_ToggleBackpack,
-    Building_ToggleWireLines,
-    Building_ToggleDebug,
-
-    BUILDING_MAX_FLAG = 200,
-
     BATTLE_MIN_FLAG = 300,
 
     Battle_MouseLeft,
@@ -133,14 +120,18 @@ public enum ButtonNames
     Common_MouseMiddle,
 
     Common_Confirm,
-    Common_Debug,
     Common_Exit,
     Common_Tab,
     Common_RestartGame,
-    Common_Pause,
+    Common_ReloadGame,
+    Common_PauseGame,
     Common_ToggleUI,
-    Common_ToggleDebugButton,
     Common_InteractiveKey,
+    Common_SlowDownGame,
+    Common_ReturnToOpenWorld,
+    Common_SkillPreviewPanel,
+    Common_DebugConsole,
+    Common_ToggleDebugPanel,
 
     COMMON_MAX_FLAG = 600,
 }

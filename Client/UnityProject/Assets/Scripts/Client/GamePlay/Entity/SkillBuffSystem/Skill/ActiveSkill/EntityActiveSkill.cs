@@ -19,6 +19,15 @@ public abstract class EntityActiveSkill : EntitySkill
     [LabelText("作用阵营")]
     public RelativeCamp TargetCamp;
 
+    [LabelText("是否绑定键位")]
+    [PropertyOrder(-8)]
+    public bool NeedBindKey;
+
+    [LabelText("技能绑定键位")]
+    [PropertyOrder(-8)]
+    [ShowIf("NeedBindKey")]
+    public PlayerControllerHelper.KeyBind SkillKeyBind;
+
     #region 绑定角色技能参数
 
     internal EntitySkillIndex EntitySkillIndex;
@@ -468,7 +477,7 @@ public abstract class EntityActiveSkill : EntitySkill
         {
             OnSkillWingingUp?.Invoke(ActiveSkillPhase.WingingUp, wingUpTick, wingUpTime / 1000f);
             wingUpTick += Time.deltaTime;
-            WingUpRatio = wingUpTick / (wingUpTime / 1000f);
+            WingUpRatio = Mathf.Min(1f, wingUpTick / (wingUpTime / 1000f));
             yield return null;
         }
 
@@ -508,7 +517,7 @@ public abstract class EntityActiveSkill : EntitySkill
         {
             OnSkillCasting?.Invoke(ActiveSkillPhase.Casting, castTick, castDuration / 1000f);
             castTick += Time.deltaTime;
-            CastRatio = castTick / (castDuration / 1000f);
+            CastRatio = Mathf.Min(1f, castTick / (castDuration / 1000f));
             yield return null;
         }
 
@@ -645,7 +654,7 @@ public abstract class EntityActiveSkill : EntitySkill
         while (recoveryTick < recoveryTime / 1000f)
         {
             recoveryTick += Time.deltaTime;
-            RecoveryRatio = recoveryTick / (recoveryTime / 1000f);
+            RecoveryRatio = Mathf.Min(1f, recoveryTick / (recoveryTime / 1000f));
             yield return null;
         }
 
@@ -703,6 +712,14 @@ public abstract class EntityActiveSkill : EntitySkill
 
     internal UnityAction<ActiveSkillPhase, float, float> OnSkillCoolingDown;
 
+    public virtual void OnUpdate(float deltaTime)
+    {
+        foreach (EntityActiveSkill subEAS in RunningSubActiveSkillList)
+        {
+            subEAS.OnUpdate(deltaTime);
+        }
+    }
+
     public virtual void OnFixedUpdate(float fixedDeltaTime)
     {
         foreach (EntityActiveSkill subEAS in RunningSubActiveSkillList)
@@ -713,7 +730,7 @@ public abstract class EntityActiveSkill : EntitySkill
         if (skillPhase == ActiveSkillPhase.Recovering || skillPhase == ActiveSkillPhase.CoolingDown)
         {
             cooldownTimeTick -= fixedDeltaTime * 1000f;
-            CooldownRatio = cooldownTimeTick / currentExecutingCooldownTime;
+            CooldownRatio = Mathf.Min(1f, cooldownTimeTick / currentExecutingCooldownTime);
             OnSkillCoolingDown?.Invoke(ActiveSkillPhase.CoolingDown, (currentExecutingCooldownTime - cooldownTimeTick) / 1000f, currentExecutingCooldownTime / 1000f);
 
             // 冷却时间结束，且目前后摇已完成并进入冷却阶段，才能将状态置为Ready
@@ -744,6 +761,8 @@ public abstract class EntityActiveSkill : EntitySkill
         EntityActiveSkill newEAS = (EntityActiveSkill) cloneData;
         newEAS.SkillsPropertyCollection = SkillsPropertyCollection.Clone();
         newEAS.TargetCamp = TargetCamp;
+        newEAS.NeedBindKey = NeedBindKey;
+        newEAS.SkillKeyBind = SkillKeyBind;
         newEAS.TriggerWhenMissProbabilityPercent = TriggerWhenMissProbabilityPercent;
         newEAS.EntitySkillConditions = EntitySkillConditions.Clone<EntitySkillCondition, EntitySkillCondition>();
         newEAS.WingUpCanMove = WingUpCanMove;
@@ -760,6 +779,8 @@ public abstract class EntityActiveSkill : EntitySkill
         EntityActiveSkill srcEAS = (EntityActiveSkill) srcData;
         srcEAS.SkillsPropertyCollection.ApplyDataTo(SkillsPropertyCollection);
         TargetCamp = srcEAS.TargetCamp;
+        NeedBindKey = srcEAS.NeedBindKey;
+        SkillKeyBind = srcEAS.SkillKeyBind;
         TriggerWhenMissProbabilityPercent = srcEAS.TriggerWhenMissProbabilityPercent;
         if (EntitySkillConditions.Count != srcEAS.EntitySkillConditions.Count)
         {

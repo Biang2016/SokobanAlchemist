@@ -226,6 +226,7 @@ public class PlayerControllerHelper : ActorControllerHelper
                     else // 停止短按移动
                     {
                         //Debug.Log("速按结束" + quickMoveAttempt);
+                        Actor.CurMoveAttempt = Vector3.zero;
                         quickMoveAttempt = Vector3.zero;
                         isQuickMoving = false;
                     }

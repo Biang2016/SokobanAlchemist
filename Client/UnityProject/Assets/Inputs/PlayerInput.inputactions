@@ -1267,6 +1267,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "Confirm",
+                    "type": "Button",
+                    "id": "9c95a13c-9036-4cae-9675-0ddef4b52926",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
                     "name": "Exit",
                     "type": "Button",
                     "id": "c221a3f9-4221-4da1-b188-bf04e006da04",
@@ -1283,15 +1291,7 @@
                     "interactions": "Press(behavior=2)"
                 },
                 {
-                    "name": "Confirm",
-                    "type": "Button",
-                    "id": "9c95a13c-9036-4cae-9675-0ddef4b52926",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "Debug",
+                    "name": "DebugConsole",
                     "type": "Button",
                     "id": "a3d49bae-abc7-4e11-8476-9ad2ac9ac463",
                     "expectedControlType": "Button",
@@ -1302,6 +1302,14 @@
                     "name": "RestartGame",
                     "type": "Button",
                     "id": "072a09ac-3b24-472b-aa42-f116b670abde",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "ReloadGame",
+                    "type": "Button",
+                    "id": "f08b4971-aebb-4143-b619-4cc77d25c2bb",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)"
@@ -1323,7 +1331,7 @@
                     "interactions": "Press(behavior=2)"
                 },
                 {
-                    "name": "ToggleDebugButton",
+                    "name": "ToggleDebugPanel",
                     "type": "Button",
                     "id": "25917861-bf33-45b7-906b-5b8ef997638c",
                     "expectedControlType": "Button",
@@ -1334,6 +1342,30 @@
                     "name": "InteractiveKey",
                     "type": "Button",
                     "id": "2a2737b3-6adb-4d9c-ab7c-96f34dd805db",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "SlowDownGame",
+                    "type": "Button",
+                    "id": "6b643af7-1749-4735-8ca9-f26b532e5816",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "ReturnToOpenWorld",
+                    "type": "Button",
+                    "id": "ec437b7c-4a56-412f-baae-d2f1fefb8239",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "SkillPreviewPanel",
+                    "type": "Button",
+                    "id": "c70aeac8-43cc-456c-b1e7-d3feabe67bc6",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)"
@@ -1364,23 +1396,12 @@
                 },
                 {
                     "name": "",
-                    "id": "dd493237-8c65-4d8b-961e-f9f1a409bb06",
-                    "path": "*/{Submit}",
-                    "interactions": "Press(behavior=2)",
-                    "processors": "",
-                    "groups": "KeyboardMouse;Gamepad",
-                    "action": "Confirm",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "3eed784b-c75c-4d15-8ec8-e96895d015b0",
                     "path": "<Keyboard>/BackQuote",
                     "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Debug",
+                    "action": "DebugConsole",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1441,17 +1462,6 @@
                 },
                 {
                     "name": "",
-                    "id": "c5a85a49-e777-4c4a-b3f5-2ceb978fcb5f",
-                    "path": "<Keyboard>/F10",
-                    "interactions": "Press(behavior=2)",
-                    "processors": "Clamp(max=1)",
-                    "groups": "KeyboardMouse",
-                    "action": "RestartGame",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "73a94d58-4b5b-4d7d-a9fb-57918fb08e48",
                     "path": "<Keyboard>/#(P)",
                     "interactions": "Press(behavior=2)",
@@ -1501,7 +1511,7 @@
                     "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "ToggleDebugButton",
+                    "action": "ToggleDebugPanel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1513,6 +1523,61 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "InteractiveKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ca04e5db-4ab9-41d3-ae12-6cccc327ba41",
+                    "path": "<Keyboard>/equals",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "SlowDownGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "39a93977-ae39-4a82-976d-66c6ae2b3b47",
+                    "path": "<Keyboard>/F10",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "Clamp(max=1)",
+                    "groups": "KeyboardMouse",
+                    "action": "ReloadGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d27e1062-395a-4e29-ab68-d66b2445373d",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ReturnToOpenWorld",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "05598b18-1fe4-4a74-86ce-59a8b88f126f",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "SkillPreviewPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dd493237-8c65-4d8b-961e-f9f1a409bb06",
+                    "path": "*/{Submit}",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "KeyboardMouse;Gamepad",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

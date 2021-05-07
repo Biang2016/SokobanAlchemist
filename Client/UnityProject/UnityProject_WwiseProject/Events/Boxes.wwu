@@ -18,7 +18,7 @@
 								<Action Name="" ID="{D0875999-8957-4ACD-9B99-E77A883B7046}" ShortID="394097803">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="WoodebBox_OnDestroyed_Common" ID="{5ADE77C7-2E58-46AA-ACB6-5A4D019D0E6C}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
+											<ObjectRef Name="WoodenBox_OnDestroyed_Common" ID="{5ADE77C7-2E58-46AA-ACB6-5A4D019D0E6C}" WorkUnitID="{7299A786-FB7D-4188-AC96-82AEC44E099F}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -259,6 +259,8 @@
 								<Action Name="" ID="{63A2D1A3-C9C7-4607-BC54-3EC256D8BEFB}" ShortID="437000270">
 									<PropertyList>
 										<Property Name="ActionType" Type="int16" Value="2"/>
+										<Property Name="FadeOutCurve" Type="int16" Value="2"/>
+										<Property Name="FadeTime" Type="Real64" Value="1"/>
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Target">
@@ -632,11 +634,146 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Event Name="FlamethrowerBox_OnFire_Small_Start" ID="{FB595EAC-C85B-4E98-B3B8-C3C0E77F0974}">
+							<ChildrenList>
+								<Action Name="" ID="{80C4F826-5400-49F0-9114-1F0E892D26A1}" ShortID="65276865">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnFire_Small" ID="{A307CE33-C9B7-4716-8D78-B03F521EFD62}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FlamethrowerBox_OnFire_Small_Stop" ID="{AB926D7B-A50C-40A5-ABFF-E1AF704228A7}">
+							<ChildrenList>
+								<Action Name="" ID="{BB987CA1-2CA7-44BB-B0D7-B48714ED2F93}" ShortID="153070616">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+										<Property Name="FadeOutCurve" Type="int16" Value="2"/>
+										<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnFire_Small" ID="{A307CE33-C9B7-4716-8D78-B03F521EFD62}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FlamethrowerBox_OnFire_Medium_Start" ID="{8C46A88F-F9D6-42BE-877C-0FA74413F1E1}">
+							<ChildrenList>
+								<Action Name="" ID="{E0549597-78DC-4BCA-84D2-4687D58DC841}" ShortID="612946591">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnFire_Medium" ID="{D838E16B-468F-4AF0-A748-F1FDE75C44A5}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FlamethrowerBox_OnFire_Medium_Stop" ID="{01CEB298-2A00-47D3-86D8-25ECA7C95C98}">
+							<ChildrenList>
+								<Action Name="" ID="{94E4E590-7E3D-4AB2-84DE-CF436E3F3437}" ShortID="243057322">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+										<Property Name="FadeOutCurve" Type="int16" Value="2"/>
+										<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnFire_Medium" ID="{D838E16B-468F-4AF0-A748-F1FDE75C44A5}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FlamethrowerBox_OnFire_Big_Start" ID="{2405139E-09D2-417B-8151-17A277475125}">
+							<ChildrenList>
+								<Action Name="" ID="{8BD941CE-B2F4-4EE0-A5C3-C11360D56B96}" ShortID="942682989">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnFire_Big" ID="{1562799B-D53B-4BC1-B7EB-9D0037BDE6C4}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FlamethrowerBox_OnFire_Big_Stop" ID="{F7D8855A-F43D-44A6-90E3-054FED0EF4FC}">
+							<ChildrenList>
+								<Action Name="" ID="{5EDA35DB-ABD0-45F1-B442-EB7456EF3540}" ShortID="210636736">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+										<Property Name="FadeOutCurve" Type="int16" Value="2"/>
+										<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnFire_Big" ID="{1562799B-D53B-4BC1-B7EB-9D0037BDE6C4}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FlamethrowerBox_OnIce_Start" ID="{8A10F3B9-DC91-4B60-8620-B4BFB98F4358}">
+							<ChildrenList>
+								<Action Name="" ID="{455D89BD-8DE6-4AFF-8C3C-B652192D08CB}" ShortID="926044520">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnIce" ID="{A2F0A94F-DA92-4A53-BB68-F2660BE209FA}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FlamethrowerBox_OnIce_Stop" ID="{0CE46763-047C-4354-9787-19390FB9FE61}">
+							<ChildrenList>
+								<Action Name="" ID="{DC3A5CE7-7AF9-4B68-B519-1450468266C9}" ShortID="586856242">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+										<Property Name="FadeOutCurve" Type="int16" Value="2"/>
+										<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnIce" ID="{A2F0A94F-DA92-4A53-BB68-F2660BE209FA}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FlamethrowerBox_OnLightning_Start" ID="{3F5D7271-29DF-40BD-8082-861ECF0AE32F}">
+							<ChildrenList>
+								<Action Name="" ID="{CAB1FD23-0B70-4F1C-8635-7DA19D6E6134}" ShortID="420810373">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnLightning" ID="{CA25620B-DD86-4BF5-9E91-C851B328E174}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="FlamethrowerBox_OnLightning_Stop" ID="{A5F7953F-0675-495B-9D7C-1D49AE475D0A}">
+							<ChildrenList>
+								<Action Name="" ID="{DC17F951-FD91-4370-B849-B43E2AEAE1B9}" ShortID="897073633">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+										<Property Name="FadeOutCurve" Type="int16" Value="2"/>
+										<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="FlamethrowerBox_OnLightning" ID="{CA25620B-DD86-4BF5-9E91-C851B328E174}" WorkUnitID="{32970C3C-A936-4297-8071-54668A59B1B9}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="BlizzardBox" ID="{0428E319-4E7E-49D0-A0EF-112840A31A09}" ShortID="415261282">
 					<ChildrenList>
-						<Event Name="BlizardBox_OnDestroyed_Common" ID="{A59680C1-2269-45B4-8362-8646146810C9}">
+						<Event Name="BlizzardBox_OnDestroyed_Common" ID="{A59680C1-2269-45B4-8362-8646146810C9}">
 							<ChildrenList>
 								<Action Name="" ID="{7D704EE4-0814-459E-9736-FFAF3911B086}" ShortID="1060248609">
 									<ReferenceList>
@@ -989,6 +1126,32 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="Pushed" ID="{77B3AFAF-A4EB-41FF-A2B5-D64D696D6762}" WorkUnitID="{AC000A11-C53A-473B-BD6B-4EBDA413E49C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="DoorBox" ID="{1E22CA73-4012-46D8-B03A-33DA6B0638F4}" ShortID="655860705">
+					<ChildrenList>
+						<Event Name="DoorBox_OnDoorOpen" ID="{9AB58738-C18C-4DA9-B3DA-EDADB8EF5BE9}">
+							<ChildrenList>
+								<Action Name="" ID="{CD15C257-BAAC-4E82-9D8B-F5779565189C}" ShortID="1029813302">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="DoorBox_OnDoorOpen" ID="{818A2B93-2BAC-450B-82F4-585F9C576203}" WorkUnitID="{9C773F52-9408-4C53-8867-8FC60428491C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="DoorBox_OnDoorClose" ID="{D6CEE69D-D973-4063-A569-62E46F9610C0}">
+							<ChildrenList>
+								<Action Name="" ID="{6FA4E603-C069-49E8-97B1-004E44D74C89}" ShortID="826538135">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="DoorBox_OnDoorClose" ID="{5367415F-8FB5-452C-AFBD-F8AC4630263B}" WorkUnitID="{9C773F52-9408-4C53-8867-8FC60428491C}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>

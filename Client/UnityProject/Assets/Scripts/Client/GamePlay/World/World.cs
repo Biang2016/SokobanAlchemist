@@ -753,24 +753,24 @@ public class World : PoolObject
             }
         }
 
-        bottomBox?.EntityWwiseHelper.OnBeingPushed.Post(gameObject);
+        bottomBox?.EntityWwiseHelper.OnBeingPushed.Post(bottomBox.gameObject);
 
         // 再往矩阵填入引用，不可在一个循环内完成，否则后面的Box会将前面的引用置空
         foreach (Box box_moveable in boxes_moveable)
         {
-            foreach (GridPos3D offset in box_moveable.GetEntityOccupationGPs_Rotated())
-            {
-                GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP;
-                GridPos3D gridWorldGP_after = gridWorldGP_before + direction;
-                GetBoxByGridPosition(gridWorldGP_after, 0, out WorldModule module_after, out GridPos3D boxGridLocalGP_after);
-                module_after[TypeDefineType.Box, boxGridLocalGP_after, false, false, box_moveable.IsTriggerEntity, box_moveable.GUID] = box_moveable;
-            }
-
             box_moveable.State = sucState;
             WorldModule newModule = GetModuleByWorldGP(box_moveable.WorldGP + direction);
             Assert.IsNotNull(newModule);
             GridPos3D worldGP = box_moveable.WorldGP + direction;
             box_moveable.Initialize(worldGP, newModule, physicLerpTime, box_moveable.ArtOnly, Box.LerpType.Push, needLerpModel, true);
+
+            foreach (GridPos3D offset in box_moveable.GetEntityOccupationGPs_Rotated())
+            {
+                GridPos3D gridWorldGP_before = offset + box_moveable.WorldGP - direction;
+                GridPos3D gridWorldGP_after = gridWorldGP_before + direction;
+                GetBoxByGridPosition(gridWorldGP_after, 0, out WorldModule module_after, out GridPos3D boxGridLocalGP_after);
+                module_after[TypeDefineType.Box, boxGridLocalGP_after, false, false, box_moveable.IsTriggerEntity, box_moveable.GUID] = box_moveable; // 时序，要Box移动后Initialize之后才能赋值，否则会由于核心格坐标对不上而无法存档信息
+            }
         }
 
         if (checkMerge) TryMerge(direction, boxes_moveable);
@@ -1196,13 +1196,12 @@ public class World : PoolObject
             List<Entity> triggerEntities = GetTriggerEntitiesByGridPosition(box.WorldGP, 0, out WorldModule module, out GridPos3D localGP);
             foreach (Entity triggerEntity in triggerEntities)
             {
-                if(triggerEntity == box)
+                if (triggerEntity == box)
                 {
                     module[TypeDefineType.Box, localGP, false, false, true, box.GUID] = null;
                 }
             }
         }
-        
 
         if (checkDrop) CheckDropAbove(box);
         box.WorldModule = null;
@@ -1367,6 +1366,7 @@ public class World : PoolObject
                 EntityData entityData = new EntityData(boxTypeIndex, boxOrientation);
                 dropBox.Setup(entityData, origin, module.GUID);
                 dropBox.Initialize(origin, module, 0, false, Box.LerpType.DropFromAir);
+                dropBox.ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
                 dropBox.DropFromAir();
                 return true;
             }
@@ -1392,6 +1392,7 @@ public class World : PoolObject
                     EntityData entityData = new EntityData(entityTypeIndex, entityOrientation);
                     dropBox.Setup(entityData, origin, module.GUID);
                     dropBox.Initialize(origin, module, 0, false, Box.LerpType.Create);
+                    dropBox.ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
                     return true;
                 }
                 case ConfigManager.TypeStartIndex.Actor:
@@ -1515,7 +1516,7 @@ public class World : PoolObject
     {
         if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
-            if (openWorld.IsInsideDungeon)
+            if (openWorld.InsideDungeon)
             {
                 return TerrainType.Earth;
             }
@@ -1535,7 +1536,7 @@ public class World : PoolObject
         if (validTerrainTypes.Count == 0) return true;
         if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
         {
-            if (openWorld.IsInsideDungeon) return true;
+            if (openWorld.InsideDungeon) return true;
             TerrainType terrainType = openWorld.WorldMap_TerrainType[worldGP.x, worldGP.z];
             foreach (TerrainType validTerrainType in validTerrainTypes)
             {

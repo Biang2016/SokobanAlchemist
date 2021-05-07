@@ -24,6 +24,13 @@
 							</ReferenceList>
 							<ChildrenList>
 								<Sound Name="Electric Sword Hit 1" ID="{D6213F11-8481-4956-821F-2717026A6F3B}" ShortID="199018510">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-3</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -34,10 +41,15 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="Electric Sword Hit 1" ID="{ACE4BE23-9F0E-4747-B537-3FB5B42E528D}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.702066326530612"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.62915391156463"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>Electric Sword Hit 1.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="997881523"/>
+												<MediaID ID="483239570"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
@@ -58,6 +70,13 @@
 							</ReferenceList>
 							<ChildrenList>
 								<Sound Name="24250 electric neutron explode-full" ID="{04FE4556-AE5E-4BF9-A979-7955BA9F20CB}" ShortID="354005398">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-7</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -69,9 +88,10 @@
 									<ChildrenList>
 										<AudioFileSource Name="24250 electric neutron explode-full" ID="{43545C0B-AE9D-4B0C-9C84-5951859F3D08}">
 											<PropertyList>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.189688681027967"/>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.5690660430839"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="1.23297642668178"/>
 												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimEnd" Type="Real64" Value="6.33876342435122"/>
+												<Property Name="TrimEnd" Type="Real64" Value="5.70646782092466"/>
 											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>24250 electric neutron explode-full.wav</AudioFile>
@@ -87,6 +107,21 @@
 							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="LightningEnemy_OnBeingDamaged" ID="{345B56C7-BE9C-497F-918B-EB326E93D745}" ShortID="839170025">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{D4ECA8AC-A02B-4278-BE0B-ADC639A3EB11}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="101"/>
+													<Property Name="Min" Type="Real64" Value="-177"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -95,8 +130,53 @@
 									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="Creature_Screams_Electrical_Screeches_OCP-0063-13-04" ID="{8FCF5EB0-10FF-4D84-BA38-11D439727A33}" ShortID="736143108">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Creature_Screams_Electrical_Screeches_OCP-0063-13-04" ID="{87AA88D0-56AC-44BD-B3B8-6F029665F643}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.526018518518519"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.664444444444444"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.110740740740741"/>
+												<Property Name="TrimEnd" Type="Real64" Value="2.18712962962963"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Creature_Screams_Electrical_Screeches_OCP-0063-13-04.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="188906627"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Creature_Screams_Electrical_Screeches_OCP-0063-13-04" ID="{87AA88D0-56AC-44BD-B3B8-6F029665F643}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="LightningEnemy_OnDestroyed_Common" ID="{96A4491C-1152-4596-A77B-B692535BD079}" ShortID="130799005">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{6650F40B-8C0E-4DA7-A397-77884A95F271}">
+												<PropertyList>
+													<Property Name="Max" Type="Real64" Value="152"/>
+													<Property Name="Min" Type="Real64" Value="-126"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -105,6 +185,35 @@
 									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="Game Prize 3" ID="{A04E63B3-E369-4548-9AA3-4265F5382840}" ShortID="528981153">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Game Prize 3" ID="{03DC1BD7-E1EB-454D-A3F6-353BB17C4CBE}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.814285714285714"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.56919642857143"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Game Prize 3.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="138578601"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Game Prize 3" ID="{03DC1BD7-E1EB-454D-A3F6-353BB17C4CBE}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="LightningEnemy_DoubleStrike_Preparing" ID="{A656E320-76C9-404B-8C48-C98EA9A8EE63}" ShortID="468091003">
 							<ReferenceList>
@@ -117,6 +226,13 @@
 							</ReferenceList>
 							<ChildrenList>
 								<Sound Name="Charge2" ID="{3A538AA6-E302-4129-AB6D-968A2A591941}" ShortID="498671345">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-6</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -127,6 +243,13 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="Charge2" ID="{6E2AA4B3-A515-474D-A7DC-45E454823B06}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.0868494110607206"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.0811853190350214"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.0415366748551272"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.06862536218191"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>Charge2.wav</AudioFile>
 											<MediaIDList>
@@ -151,6 +274,13 @@
 							</ReferenceList>
 							<ChildrenList>
 								<Sound Name="Charge3" ID="{D1A2A009-5CEC-40BD-A4BD-73B0F5F32889}" ShortID="122389641">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-6</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -161,6 +291,13 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="Charge3" ID="{CA84C4F0-D802-4F7E-86B7-24752D149E8F}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.19140625"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.215711805555556"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.133680555555556"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.66796875"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>Charge3.wav</AudioFile>
 											<MediaIDList>
@@ -184,26 +321,40 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="Charge1" ID="{8BC4B420-072D-4EB0-B5D1-65B6D4E44782}" ShortID="601283509">
+								<Sound Name="Charge1" ID="{0914F1E0-3BD3-49F7-A2AE-F86786D4B359}" ShortID="978790721">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-6</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="Charge1" ID="{ABF7BA68-6DB7-4FFF-8CDC-8466F3939ED0}">
+										<AudioFileSource Name="Charge1" ID="{93E99F38-101D-4584-B54B-CD1157AD9237}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.103080475245654"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.0361685878054926"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.202544091710758"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.01452888794407"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>Charge1.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="580761560"/>
+												<MediaID ID="6978400"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="Charge1" ID="{ABF7BA68-6DB7-4FFF-8CDC-8466F3939ED0}" Platform="Linked"/>
+										<ActiveSource Name="Charge1" ID="{93E99F38-101D-4584-B54B-CD1157AD9237}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
@@ -219,6 +370,13 @@
 							</ReferenceList>
 							<ChildrenList>
 								<Sound Name="Charge1" ID="{6A347CE4-ECE0-40D3-AAA3-39D1552B14F0}" ShortID="170276259">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-6</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -229,10 +387,17 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="Charge1" ID="{21C13EE4-F1B4-43A5-88DC-92FC4E270A04}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.103080475245654"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.0361685878054926"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.202544091710758"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.01452888794407"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>Charge1.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="580761560"/>
+												<MediaID ID="6978400"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
@@ -243,6 +408,13 @@
 							</ChildrenList>
 						</RandomSequenceContainer>
 						<BlendContainer Name="LightningEnemy_TripleStrike_Cast" ID="{030ED2D1-239F-4271-AA9C-5BD26196EBB5}" ShortID="661915715">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-3</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -263,6 +435,11 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="Electric Sword Hit 1" ID="{AFF7B08D-B70F-4ABA-AFB5-8E864B2C8F79}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.382536139455782"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.38163052721088"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>Electric Sword Hit 1.wav</AudioFile>
 											<MediaIDList>
@@ -285,10 +462,16 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="Hit2" ID="{23E99F77-4F44-4A89-894E-39ADA22610A7}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.212086128432855"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.183033234126984"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.26380090230537"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>Hit2.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="944350651"/>
+												<MediaID ID="227634464"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
@@ -307,6 +490,11 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="Hit3" ID="{866C18E1-8D60-4A37-B50F-13EBA3C18A3E}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.357638888888889"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.61111111111111"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>Hit3.wav</AudioFile>
 											<MediaIDList>
@@ -321,6 +509,13 @@
 							</ChildrenList>
 						</BlendContainer>
 						<BlendContainer Name="LightningEnemy_DoubleStrike_Cast" ID="{081E54CC-6073-4A06-935C-0E8E2A6EF050}" ShortID="109433089">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-3</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -341,10 +536,16 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="Electric Sword Hit 1" ID="{68B07173-DB4B-4872-887D-E2E0DB42EC35}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.193518282312925"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.459043367346939"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.39513180272109"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>Electric Sword Hit 1.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="997881523"/>
+												<MediaID ID="162330286"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
@@ -363,6 +564,11 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="Hit2" ID="{05516AAC-5DD9-4354-A73D-5A29F45C04F0}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.296339521919879"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.26670619173595"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>Hit2.wav</AudioFile>
 											<MediaIDList>

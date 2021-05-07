@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SkillSlot : MonoBehaviour
+public class SkillSlot : MonoBehaviour, ISkillBind
 {
     [SerializeField]
     private PlayerControllerHelper.KeyBind MyKeyBind;
@@ -17,8 +17,6 @@ public class SkillSlot : MonoBehaviour
 
     [SerializeField]
     private Animator Anim;
-
-    internal EntitySkill BoundEntitySkill;
 
     [SerializeField]
     private Image SkillClock_WingingUp;
@@ -41,8 +39,10 @@ public class SkillSlot : MonoBehaviour
     private Transform SkillRowContainer;
 
     private EntitySkillRow curEntitySkillRow;
+    public EntitySkill BoundEntitySkill => boundEntitySkill;
+    private EntitySkill boundEntitySkill;
 
-    public bool Empty => curEntitySkillRow == null;
+    public bool EmptySkill => curEntitySkillRow == null;
 
     void Awake()
     {
@@ -51,7 +51,7 @@ public class SkillSlot : MonoBehaviour
         SkillPhaseClockDict.Add(ActiveSkillPhase.CoolingDown, SkillClock_CoolingDown);
     }
 
-    public void Initialize(EntitySkill entitySkill)
+    public void BindSkill(EntitySkill entitySkill)
     {
         if (entitySkill == null)
         {
@@ -65,7 +65,7 @@ public class SkillSlot : MonoBehaviour
             SkillKeyBind_Text.gameObject.SetActive(false);
 
             RefreshSkillCD(ActiveSkillPhase.Ready, 0, 0);
-            BoundEntitySkill = null;
+            boundEntitySkill = null;
             SkillIcon.color = Color.clear;
             SkillIcon.sprite = null;
             Anim.SetTrigger("SetEmpty");
@@ -75,7 +75,7 @@ public class SkillSlot : MonoBehaviour
         }
         else
         {
-            BoundEntitySkill = entitySkill;
+            boundEntitySkill = entitySkill;
             if (BoundEntitySkill is EntityActiveSkill eas)
             {
                 eas.OnSkillWingingUp += RefreshSkillCD;
@@ -137,4 +137,11 @@ public class SkillSlot : MonoBehaviour
 
         SkillCD_Text.text = showCDSecond > 0 ? showCDSecond.ToString() : "";
     }
+}
+
+public interface ISkillBind
+{
+    void BindSkill(EntitySkill entitySkill);
+    bool EmptySkill { get; }
+    EntitySkill BoundEntitySkill { get; }
 }

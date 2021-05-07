@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BiangLibrary.GamePlay.UI;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -31,10 +32,6 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
             }
         }
     }
-
-    [LabelText("指定键位")]
-    [ShowIf("isActiveSkill")]
-    public PlayerControllerHelper.KeyBind KeyBind;
 
     public void RefreshSkillGUID()
     {
@@ -71,6 +68,8 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
 
     public void ExecuteOnTriggerEnter(Collider collider)
     {
+        if (UIManager.Instance.IsUIShown<ExitMenuPanel>()) return;
+        if (UIManager.Instance.IsUIShown<TransportWorldPanel>()) return;
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {
             Entity target = collider.GetComponentInParent<Entity>();
@@ -94,7 +93,6 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
                     LearnType = LearnType.Skill,
                     SkillGUID = SkillGUID,
                     LearnCallback = OnLearned,
-                    KeyBind = KeyBind,
                     GoldCost = GoldCost
                 });
             }
@@ -141,7 +139,6 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
         base.ChildClone(newAction);
         EntitySkillAction_ShowLearnSkillPanel action = ((EntitySkillAction_ShowLearnSkillPanel) newAction);
         action.SkillGUID = SkillGUID;
-        action.KeyBind = KeyBind;
         action.GoldCost = GoldCost;
         action.EffectiveOnRelativeCamp = EffectiveOnRelativeCamp;
         action.EffectiveOnSpecificEntity = EffectiveOnSpecificEntity;
@@ -153,7 +150,6 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
         base.CopyDataFrom(srcData);
         EntitySkillAction_ShowLearnSkillPanel action = ((EntitySkillAction_ShowLearnSkillPanel) srcData);
         SkillGUID = action.SkillGUID;
-        KeyBind = action.KeyBind;
         GoldCost = action.GoldCost;
         EffectiveOnRelativeCamp = action.EffectiveOnRelativeCamp;
         EffectiveOnSpecificEntity = action.EffectiveOnSpecificEntity;

@@ -23,6 +23,7 @@ public class EntitySkillAction_ShowTransportWorldPanel : EntitySkillAction, Enti
 
     public void Execute()
     {
+        if (UIManager.Instance.IsUIShown<ExitMenuPanel>()) return;
         if (UIManager.Instance.IsUIShown<TransportWorldPanel>()) return;
         if (selectedWorld == null)
         {
@@ -42,7 +43,7 @@ public class EntitySkillAction_ShowTransportWorldPanel : EntitySkillAction, Enti
     private void OnTransport()
     {
         BattleManager.Instance.Player1.EntityStatPropSet.Gold.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value - selectedWorld.GoldCost);
-        ClientGameManager.Instance.ChangeWorld(selectedWorld.WorldTypeName.TypeName, true);
+        ClientGameManager.Instance.ChangeWorld(selectedWorld.WorldTypeName.TypeName, true, Entity.CurrentEntityData);
         selectedWorld = null;
     }
 

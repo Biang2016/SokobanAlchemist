@@ -11,6 +11,17 @@ public class ActorBattleHelper : ActorMonoHelper
 
     public override void OnHelperRecycled()
     {
+        OnDamaged = null;
+        OnHealed = null;
+        OnGainActionPoint = null;
+        OnGainMaxActionPoint = null;
+        OnGainMaxHealth = null;
+        OnGainGold = null;
+        OnSpendGold = null;
+        OnGainFireElementFragment = null;
+        OnGainIceElementFragment = null;
+        OnGainLightningElementFragmentGold = null;
+
         InGameHealthBar?.PoolRecycle();
         InGameHealthBar = null;
         base.OnHelperRecycled();
@@ -23,7 +34,7 @@ public class ActorBattleHelper : ActorMonoHelper
 
     public void Initialize()
     {
-        Transform trans = UIManager.Instance.ShowUIForms<InGameUIPanel>().transform;
+        Transform trans = ClientGameManager.Instance.InGameUIPanel.transform;
         InGameHealthBar = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.InGameHealthBar].AllocateGameObject<InGameHealthBar>(trans);
         InGameHealthBar.Initialize(this, 100, 30);
     }
@@ -93,6 +104,15 @@ public class ActorBattleHelper : ActorMonoHelper
         if (gain == 0) return;
         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, gain, BattleTipType.Gold, "", ""));
         OnGainGold?.Invoke(gain);
+    }
+
+    public UnityAction<int> OnSpendGold;
+
+    public void ShowSpendGoldNumFX(int spend)
+    {
+        if (spend == 0) return;
+        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_ActorNumeralTip, new NumeralUIBattleTipData(Actor.Camp, Actor.transform.position, -spend, BattleTipType.Gold, "", ""));
+        OnSpendGold?.Invoke(spend);
     }
 
     public UnityAction<int> OnGainFireElementFragment;
