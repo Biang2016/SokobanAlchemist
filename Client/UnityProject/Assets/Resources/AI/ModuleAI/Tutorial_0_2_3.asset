@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _serializedGraph: '{"type":"FlowCanvas.FlowScript","nodes":[{"_position":{"x":420.0,"y":630.0},"$type":"FlowCanvas.Nodes.FixedUpdateEvent","$id":"0"},{"_simplexNode":{"BattleStateAliasList":{"_value":["Tutorial_0_2_3_LockTrigger_1","Tutorial_0_2_3_LockTrigger_2"]},"And":{"_value":true}},"_position":{"x":660.0,"y":630.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_GetMultiBattleStateAnd,
     Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"1"},{"_position":{"x":930.0,"y":630.0},"$type":"FlowCanvas.Nodes.SwitchBool","$id":"2"},{"_position":{"x":1125.0,"y":630.0},"$type":"FlowCanvas.Nodes.DoOnce","$id":"3"},{"_simplexNode":{"LevelEventAlias":{"_value":"Tutorial_0_2_3_LockOpen"}},"_position":{"x":1275.0,"y":630.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_BroadcastLevelEvent,
-    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"4"}],"connections":[{"_sourcePortName":"Out","_targetPortName":"
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"4"},{"_simplexNode":{"CommonAudioEvent":{"_value":1002}},"_position":{"x":1605.0,"y":630.0},"$type":"FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_PlaySound,
+    Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","$id":"5"}],"connections":[{"_sourcePortName":"Out","_targetPortName":"
     ","_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Value","_targetPortName":"Condition","_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"FlowCanvas.BinderConnection`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},{"_sourcePortName":"
     ","_targetPortName":"In","_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"True","_targetPortName":"In","_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"Out","_targetPortName":"
-    ","_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"4"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
+    ","_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"4"},"$type":"FlowCanvas.BinderConnection"},{"_sourcePortName":"
+    ","_targetPortName":" ","_sourceNode":{"$ref":"4"},"_targetNode":{"$ref":"5"},"$type":"FlowCanvas.BinderConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}}}'
   _objectReferences: []
   _graphSource:
     _version: 3.08
@@ -87,6 +89,19 @@ MonoBehaviour:
 #            },
 #            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_BroadcastLevelEvent, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
 #            "$id": "4"
+#        },
+#        {
+#            "_simplexNode": {
+#                "CommonAudioEvent": {
+#                    "_value": 1002
+#                }
+#            },
+#            "_position": {
+#                "x": 1605.0,
+#                "y": 630.0
+#            },
+#            "$type": "FlowCanvas.Nodes.SimplexNodeWrapper`1[[ModuleAIAtoms+Flow_PlaySound, Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+#            "$id": "5"
 #        }
 #    ],
 #    "connections": [
@@ -142,6 +157,17 @@ MonoBehaviour:
 #            },
 #            "_targetNode": {
 #                "$ref": "4"
+#            },
+#            "$type": "FlowCanvas.BinderConnection"
+#        },
+#        {
+#            "_sourcePortName": " ",
+#            "_targetPortName": " ",
+#            "_sourceNode": {
+#                "$ref": "4"
+#            },
+#            "_targetNode": {
+#                "$ref": "5"
 #            },
 #            "$type": "FlowCanvas.BinderConnection"
 #        }

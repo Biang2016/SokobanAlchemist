@@ -181,6 +181,22 @@ public class ModuleAIAtoms
         }
     }
 
+    [Name("播放音效")]
+    [Category("音乐")]
+    public class Flow_PlaySound : CallableActionNode
+    {
+        [RequiredField]
+        [Name("音效")]
+        public BBParameter<WwiseAudioManager.CommonAudioEvent> CommonAudioEvent;
+
+        public override string name => $"{base.name} [{CommonAudioEvent.value}]";
+
+        public override void Invoke()
+        {
+            WwiseAudioManager.Instance.PlayCommonAudioSound(CommonAudioEvent.value, WorldModule.gameObject);
+        }
+    }
+
     [Name("所有箱子的火焰是否都扑灭了")]
     [Category("States")]
     public class Flow_CheckFirePutOutForEveryBox : CallableFunctionNode<bool>

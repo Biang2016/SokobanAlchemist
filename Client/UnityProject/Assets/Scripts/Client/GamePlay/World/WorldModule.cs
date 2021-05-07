@@ -560,7 +560,7 @@ public class WorldModule : PoolObject
                         if (isTriggerAppear)
                         {
                             valid = true;
-                            if (!canOverlap) box.DestroySelfByModuleRecycle();
+                            if (!canOverlap && box.Destroyable) box.DestroySelfByModuleRecycle();
                         }
                         else
                         {

@@ -29,21 +29,26 @@ public class StartMenuPanel : BaseUIPanel
         OnPlayAnim?.Post(gameObject);
     }
 
+    public void OnButtonHover()
+    {
+        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonHover, WwiseAudioManager.Instance.gameObject);
+    }
+
     public void OnSettingButtonClick()
     {
-        WwiseAudioManager.Instance.Common_UI_ButtonClick?.Post(WwiseAudioManager.Instance.gameObject);
+        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
     }
 
     public void OnStartButtonClick()
     {
-        WwiseAudioManager.Instance.Common_UI_ButtonClick?.Post(WwiseAudioManager.Instance.gameObject);
+        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
         ClientGameManager.Instance.StartGame();
         CloseUIForm();
     }
 
     public void OnCreditButtonClick()
     {
-        WwiseAudioManager.Instance.Common_UI_ButtonClick?.Post(WwiseAudioManager.Instance.gameObject);
+        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
         CreditAnim.SetTrigger("Show");
     }
 
@@ -54,7 +59,7 @@ public class StartMenuPanel : BaseUIPanel
 
     public void OnExitButtonClick()
     {
-        WwiseAudioManager.Instance.Common_UI_ButtonClick?.Post(WwiseAudioManager.Instance.gameObject);
+        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
         Application.Quit();
     }
 
