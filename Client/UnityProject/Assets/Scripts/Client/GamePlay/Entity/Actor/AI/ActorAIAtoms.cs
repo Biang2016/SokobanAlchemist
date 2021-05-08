@@ -49,6 +49,104 @@ public static class ActorAIAtoms
         }
     }
 
+    [Category("敌兵/状态")]
+    [Name("检查属性状态")]
+    [Description("检查属性状态")]
+    public class BT_Enemy_StatProperty_ConditionTask : ConditionTask
+    {
+        [Name("状态或属性")]
+        public BBParameter<ConditionType> m_ConditionType;
+
+        [Name("状态值种类")]
+        public BBParameter<EntityStatType> EntityStatType;
+
+        [Name("使用百分比")]
+        public BBParameter<bool> EntityStatThreshold_UsePercent;
+
+        [Name("状态值阈值")]
+        public BBParameter<int> EntityStatThreshold;
+
+        [Name("状态值阈值%")]
+        public BBParameter<int> EntityStatThresholdPercent;
+
+        [Name("属性值种类")]
+        public BBParameter<EntityPropertyType> EntityPropertyType;
+
+        [Name("属性值阈值")]
+        public BBParameter<int> EntityPropertyThreshold;
+
+        [Name("操作符")]
+        public BBParameter<Operator> ThresholdOperator;
+
+        protected override string info => $"检查属性状态";
+
+        protected override bool OnCheck()
+        {
+            switch (m_ConditionType.value)
+            {
+                case ConditionType.Stat:
+                {
+                    EntityStat stat = Actor.EntityStatPropSet.StatDict[EntityStatType.value];
+                    bool trigger = false;
+                    int threshold = EntityStatThreshold.value;
+                    if (EntityStatThreshold_UsePercent.value)
+                    {
+                        if (stat.MaxValue == 0) threshold = 0;
+                        else threshold = Mathf.RoundToInt(EntityStatThresholdPercent.value / 100f * stat.MaxValue);
+                    }
+
+                    switch (ThresholdOperator.value)
+                    {
+                        case Operator.LessEquals:
+                        {
+                            trigger = stat.Value <= threshold;
+                            break;
+                        }
+                        case Operator.Equals:
+                        {
+                            trigger = stat.Value == threshold;
+                            break;
+                        }
+                        case Operator.GreaterEquals:
+                        {
+                            trigger = stat.Value >= threshold;
+                            break;
+                        }
+                    }
+
+                    return trigger;
+                }
+                case ConditionType.Property:
+                {
+                    EntityProperty property = Actor.EntityStatPropSet.PropertyDict[EntityPropertyType.value];
+                    bool trigger = false;
+                    switch (ThresholdOperator.value)
+                    {
+                        case Operator.LessEquals:
+                        {
+                            trigger = property.GetModifiedValue <= EntityPropertyThreshold.value;
+                            break;
+                        }
+                        case Operator.Equals:
+                        {
+                            trigger = property.GetModifiedValue == EntityPropertyThreshold.value;
+                            break;
+                        }
+                        case Operator.GreaterEquals:
+                        {
+                            trigger = property.GetModifiedValue >= EntityPropertyThreshold.value;
+                            break;
+                        }
+                    }
+
+                    return trigger;
+                }
+            }
+
+            return false;
+        }
+    }
+
     #endregion
 
     #region 目标搜索

@@ -279,6 +279,7 @@ MonoBehaviour:
   IsRecycled: 0
   InitWorldModuleGUID: 0
   SlowlyTick: 0
+  AutoDeleteWhenNotInModule: 1
   EntityTypeIndex: 0
   RawEntityStatPropSet:
     CollectDetectRadius:
@@ -517,6 +518,7 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
+  CanAutoFallDown: 1
   PreferTerrainTypes: 
   RawFlamethrowerFuelData:
     id: 0
@@ -526,7 +528,8 @@ MonoBehaviour:
   DropConeAngle: 30
   DropVelocity: 30
   RigidBody: {fileID: 7176362684188563293}
-  ActorMoveColliderRoot: {fileID: 8674013607515377696}
+  ActorMoveColliders:
+  - {fileID: 3456650540923688115}
   ActorControllerHelper: {fileID: 8004586592175520014}
   ActorPushHelper: {fileID: 963576408595443080}
   ActorFaceHelper: {fileID: 1156805331396305853}
@@ -591,7 +594,6 @@ MonoBehaviour:
       m_RotationOrder: 4
   FrequentUpdate: 0
   ActorClass: 0
-  DashForce: 100
   Accelerate: 200
   KickForce: 30
   ThrowRadius: 15
@@ -755,6 +757,10 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: bf3b150c131984b0cb7e4d390a3ee934,
       type: 2}
+  OnSpendGold:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
   OnGainFireElement:
     idInternal: 0
     valueGuidInternal: 
@@ -770,6 +776,22 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 673f46bcf04474682808d50fe1b244ca,
       type: 2}
+  OnLowHealthWarning:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnActionPointNotEnough:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnGoldNotEnough:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  OnElementsNotEnough:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
   OnBeingDamaged:
     idInternal: 0
     valueGuidInternal: 

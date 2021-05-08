@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BiangLibrary.GameDataFormat.Grid;
+using UnityEngine;
 
 public class ActorArtAnim : MonoBehaviour
 {
@@ -97,6 +98,22 @@ public class ActorArtAnim : MonoBehaviour
         if (ActorArtHelper.Entity is Actor actor)
         {
             actor.ActorBehaviourState = actorBehaviourState;
+        }
+    }
+
+    /// <summary>
+    /// Executed by animation
+    /// </summary>
+    public void SetActorPosY(float relativePosY)
+    {
+        if (ActorArtHelper.Entity is Actor actor)
+        {
+            if (WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(actor.transform.position, 30f, true, out GridPos3D nearestGroundGp))
+            {
+                Vector3 pos = actor.transform.position;
+                pos.y = nearestGroundGp.y + relativePosY;
+                actor.transform.position = pos;
+            }
         }
     }
 }

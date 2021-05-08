@@ -47,7 +47,7 @@ public class Actor : Entity
     public Rigidbody RigidBody;
 
     [FoldoutGroup("组件")]
-    public GameObject ActorMoveColliderRoot;
+    public List<Collider> ActorMoveColliders = new List<Collider>();
 
     [FoldoutGroup("组件")]
     public ActorControllerHelper ActorControllerHelper;
@@ -633,7 +633,10 @@ public class Actor : Entity
             entityMonoHelper?.OnHelperUsed();
         }
 
-        ActorMoveColliderRoot.SetActive(true);
+        foreach (Collider collider in ActorMoveColliders)
+        {
+            collider.enabled = true;
+        }
     }
 
     internal bool IsRecycling = false;
@@ -677,7 +680,11 @@ public class Actor : Entity
         UnInitPassiveSkills();
         EntityStatPropSet.OnRecycled();
 
-        ActorMoveColliderRoot.SetActive(false);
+        foreach (Collider collider in ActorMoveColliders)
+        {
+            collider.enabled = false;
+        }
+
         SetModelSmoothMoveLerpTime(0);
         SwitchEntityOrientation(GridPosR.Orientation.Up);
         StopAllCoroutines();
@@ -937,7 +944,7 @@ public class Actor : Entity
                 }
             }
 
-            if (!IsExecutingAirSkills())
+            if (!IsExecutingAirSkills() && CanAutoFallDown)
             {
                 if (CurMoveAttempt.x.Equals(0))
                 {
@@ -1504,6 +1511,7 @@ public class Actor : Entity
                 InAirMoveSpeed = moveSpeed;
                 ActorBehaviourState = ActorBehaviourStates.InAirMoving;
                 RigidBody.velocity = Vector3.zero;
+                RigidBody.drag = 0f;
             }
         }
     }
@@ -1515,12 +1523,21 @@ public class Actor : Entity
             if (HasRigidbody)
             {
                 Vector3 diff = InAirMoveTargetPos - transform.position;
+                diff.y = 0;
                 if (diff.magnitude > 1f) diff = diff.normalized;
                 RigidBody.velocity = Vector3.zero;
                 RigidBody.AddForce(diff.normalized * InAirMoveSpeed, ForceMode.VelocityChange);
                 if (RigidBody.velocity.magnitude > InAirMoveSpeed)
                 {
-                    RigidBody.velocity = RigidBody.velocity.normalized * InAirMoveSpeed;
+                    Vector3 vel = RigidBody.velocity.normalized * InAirMoveSpeed;
+                    vel.y = 0;
+                    RigidBody.velocity = vel;
+                }
+                else
+                {
+                    Vector3 vel = RigidBody.velocity;
+                    vel.y = 0;
+                    RigidBody.velocity = vel;
                 }
             }
         }
