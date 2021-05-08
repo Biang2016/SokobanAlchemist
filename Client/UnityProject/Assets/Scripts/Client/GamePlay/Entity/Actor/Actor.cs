@@ -1504,7 +1504,6 @@ public class Actor : Entity
                 InAirMoveSpeed = moveSpeed;
                 ActorBehaviourState = ActorBehaviourStates.InAirMoving;
                 RigidBody.velocity = Vector3.zero;
-                RigidBody.drag = 0;
             }
         }
     }

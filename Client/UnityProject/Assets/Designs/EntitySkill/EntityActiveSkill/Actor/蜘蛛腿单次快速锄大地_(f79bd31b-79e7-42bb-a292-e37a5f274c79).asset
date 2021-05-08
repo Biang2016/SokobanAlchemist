@@ -20,14 +20,28 @@ MonoBehaviour:
       type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: (f79bd31b-79e7-42bb-a292-e37a5f274c79)
         SkillAlias: "\u8718\u86DB\u817F\u5355\u6B21\u5FEB\u901F\u9504\u5927\u5730"
+        SkillName_EN: 
+        SkillName_ZH: 
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: (fab712ad-d906-4335-84b0-09a00b867a88)
-        SkillDescription: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
         TargetCamp: 14
-        EntitySkillIndex: 0
+        NeedBindKey: 0
+        SkillKeyBind: 0
         SkillsPropertyCollection:
           CastingRadius:
             BaseValue: 0
@@ -35,10 +49,10 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           Cooldown:
-            BaseValue: 0
+            BaseValue: 3000
             ModifiedValue: 0
             MinValue: 0
-            MaxValue: 0
+            MaxValue: 1000000
           WingUp:
             BaseValue: 100
             ModifiedValue: 100
@@ -80,6 +94,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
         TriggerWhenMissProbabilityPercent: 0
+        EntitySkillConditions: []
         WingUpCanMove: 1
         CastCanMove: 1
         RecoverCanMove: 1
@@ -119,12 +134,14 @@ MonoBehaviour:
       type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         RawEntityBuffs:
         - id: 3
     00000002:
       type: {class: EntitySkillAction_PlayFXOnWorldGP, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         FX:
           FXType:
             TypeDefineType: 7
