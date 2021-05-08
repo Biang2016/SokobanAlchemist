@@ -44,6 +44,11 @@ public abstract class EntitySkillAction : IClone<EntitySkillAction>
         void Execute();
     }
 
+    public interface IBuffAction : IAction
+    {
+        void ExecuteOnBuff(EntityBuff buff);
+    }
+
     public interface IWorldGPAction : IAction
     {
         void ExecuteOnWorldGP(GridPos3D worldGP);

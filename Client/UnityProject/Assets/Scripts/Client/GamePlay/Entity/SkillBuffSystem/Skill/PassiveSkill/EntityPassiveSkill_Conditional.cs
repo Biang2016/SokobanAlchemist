@@ -40,6 +40,10 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         OnFuelEntered = 1 << 19,
         OnPassGrid = 1 << 20,
         OnKick = 1 << 21,
+        OnKillEnemy = 1 << 22,
+        OnKillBox = 1 << 23,
+
+        OnGetDamaged = 1 << 24,
     }
 
     [LabelText("触发时机")]
@@ -795,6 +799,60 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
                     if (action is EntitySkillAction.IPureAction pureAction)
                     {
                         pureAction.Execute();
+                    }
+                }
+            }
+        }
+    }
+
+    public override void OnKillEnemy()
+    {
+        base.OnKillEnemy();
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnKillEnemy))
+        {
+            if (TriggerProbabilityPercent.ProbabilityBool())
+            {
+                foreach (EntitySkillAction action in EntitySkillActions)
+                {
+                    if (action is EntitySkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
+                }
+            }
+        }
+    }
+
+    public override void OnKillBox()
+    {
+        base.OnKillBox();
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnKillBox))
+        {
+            if (TriggerProbabilityPercent.ProbabilityBool())
+            {
+                foreach (EntitySkillAction action in EntitySkillActions)
+                {
+                    if (action is EntitySkillAction.IPureAction pureAction)
+                    {
+                        pureAction.Execute();
+                    }
+                }
+            }
+        }
+    }
+
+    public override void OnGetDamaged(EntityBuff buff)
+    {
+        base.OnGetDamaged(buff);
+        if (CheckEPSCondition() && PassiveSkillCondition.HasFlag(PassiveSkillConditionType.OnGetDamaged))
+        {
+            if (TriggerProbabilityPercent.ProbabilityBool())
+            {
+                foreach (EntitySkillAction action in EntitySkillActions)
+                {
+                    if (action is EntitySkillAction.IBuffAction buffAction)
+                    {
+                        buffAction.ExecuteOnBuff(buff);
                     }
                 }
             }

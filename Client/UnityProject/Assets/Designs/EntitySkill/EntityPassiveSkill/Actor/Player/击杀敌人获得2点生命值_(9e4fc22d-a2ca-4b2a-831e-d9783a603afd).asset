@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u51FB\u6740\u654C\u4EBA\u83B7\u5F972\u70B9\u751F\u547D\u503C_(9e4fc22d-a2ca-4b2a-831e-d9783a603afd)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        SkillGUID: (9e4fc22d-a2ca-4b2a-831e-d9783a603afd)
+        SkillAlias: "\u51FB\u6740\u654C\u4EBA\u83B7\u5F972\u70B9\u751F\u547D\u503C"
+        SkillName_EN: Health Absorb
+        SkillName_ZH: "\u751F\u547D\u5438\u53D6"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: (27c6bf77-831f-44b5-b3b3-c62712d56801)
+        SkillDescription_EN: Gain 2 health points when killing an enemy
+        SkillDescription_ZH: "\u51FB\u6740\u654C\u4EBA\u83B7\u5F972\u70B9\u751F\u547D\u503C"
+        PlayerCanLearn: 1
+        GoldCost: 5
+        OccupySkillGrid: 1
+        ShowInSkillPreviewPanel: 1
+        SkillCategoryType: 0
+        SkillRankType: 1
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: (32c00ccc-4a08-4074-8b06-f2bd01f3ab8c)
+        PassiveSkillCondition: 4194304
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
+        RawEntitySkillActions:
+        - id: 1
+    00000001:
+      type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        RawEntityBuffs:
+        - id: 2
+    00000002:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 11550
+        BuffAlias: 
+        EntityBuffAttribute: 13
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (e597fb9a-7751-46ac-8eb0-0eb1811827c2)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 0
+        Delta: 2
+        Percent: 0

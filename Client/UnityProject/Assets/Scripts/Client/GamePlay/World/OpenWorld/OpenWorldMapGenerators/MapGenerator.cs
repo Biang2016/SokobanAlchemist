@@ -39,6 +39,44 @@ public abstract class MapGenerator
 
     protected bool TryOverrideToWorldMap(GridPos3D worldGP, ushort writeEntityTypeIndex, GridPosR.Orientation writeOrientation)
     {
+        bool CheckGridAvailable(GridPos3D grid_world, KeyValuePair<TypeDefineType, int> EntityDataMatrixKV, ref bool available)
+        {
+            if (CheckGridInsideWorldRange(grid_world, 1))
+            {
+                if (WorldMap_StaticLayoutOccupied_IntactForStaticLayout[grid_world.x, grid_world.y - Height, grid_world.z] != 0)
+                {
+                    available = false;
+                    return true;
+                }
+
+                if (m_OpenWorld.CheckOccupied(EntityDataMatrixKV.Key, grid_world))
+                {
+                    available = false;
+                    return true;
+                }
+
+                TerrainType terrainType = WorldMap_TerrainType[grid_world.x, grid_world.z];
+                if (GenerateLayerData.OnlyAllowPutOnTerrain && !GenerateLayerData.AllowPlaceOnTerrainTypeSet.Contains(terrainType))
+                {
+                    available = false;
+                    return true;
+                }
+
+                if (!GenerateLayerData.OnlyAllowPutOnTerrain && GenerateLayerData.ForbidPlaceOnTerrainTypeSet.Contains(terrainType))
+                {
+                    available = false;
+                    return true;
+                }
+            }
+            else
+            {
+                available = false;
+                return true;
+            }
+
+            return false;
+        }
+
         bool CheckGridInsideWorldRange(GridPos3D _worldGP, int borderThickness)
         {
             return _worldGP.x >= borderThickness && _worldGP.x < Width - borderThickness && _worldGP.y - Height >= 0 && _worldGP.y - Height < Height && _worldGP.z >= borderThickness && _worldGP.z < Depth - borderThickness;
@@ -61,18 +99,18 @@ public abstract class MapGenerator
                 // box_grid_world: 旋转后的静态布局中的箱子的每一格对应的世界坐标
 
                 // 检查范围内是否允许放置静态布局
-                bool allowPut = true;
+                bool allowPutStaticLayout = true;
                 if (!staticLayoutLayerData.AllowFragment)
                 {
                     for (int sl_local_x = 0; sl_local_x < WorldModule.MODULE_SIZE; sl_local_x++)
                     {
-                        if (!allowPut) break;
+                        if (!allowPutStaticLayout) break;
                         for (int sl_local_y = 0; sl_local_y < WorldModule.MODULE_SIZE; sl_local_y++)
                         {
-                            if (!allowPut) break;
+                            if (!allowPutStaticLayout) break;
                             for (int sl_local_z = 0; sl_local_z < WorldModule.MODULE_SIZE; sl_local_z++)
                             {
-                                if (!allowPut) break;
+                                if (!allowPutStaticLayout) break;
                                 GridPos3D sl_local = new GridPos3D(sl_local_x, sl_local_y, sl_local_z);
                                 GridPos3D rot_local = sl_local;
                                 for (int rotCount = 0; rotCount < (int) staticLayoutOrientation; rotCount++) // 旋转
@@ -91,19 +129,7 @@ public abstract class MapGenerator
                                         foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                                         {
                                             GridPos3D box_grid_world = box_world + gridPos;
-                                            if (CheckGridInsideWorldRange(box_grid_world, 1))
-                                            {
-                                                if (m_OpenWorld.CheckOccupied(kv.Key, box_grid_world))
-                                                {
-                                                    allowPut = false;
-                                                    break;
-                                                }
-                                            }
-                                            else
-                                            {
-                                                allowPut = false;
-                                                break;
-                                            }
+                                            if (CheckGridAvailable(box_grid_world, kv, ref allowPutStaticLayout)) break;
                                         }
                                     }
                                 }
@@ -112,7 +138,7 @@ public abstract class MapGenerator
                     }
                 }
 
-                if (allowPut) // 对于允许布局破损的情况，默认是允许放置的，但能够成功放置多少Entity就要依据实际情况了
+                if (allowPutStaticLayout) // 对于允许布局破损的情况，默认是允许放置的，但能够成功放置多少Entity就要依据实际情况了
                 {
                     string staticLayoutGUID = Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
                     cached_IntactGPs_World.Clear();
@@ -136,45 +162,14 @@ public abstract class MapGenerator
                                 GridPos3D entity_world = worldGP + rot_local;
                                 EntityOccupationData occupation = ConfigManager.GetEntityOccupationData(staticLayoutEntityData.EntityTypeIndex);
                                 GridPosR.Orientation rot = GridPosR.RotateOrientationClockwise90(staticLayoutEntityData.EntityOrientation, (int) staticLayoutOrientation);
-                                bool spaceAvailableForEntity = true;
+                                bool allowPutEntity = true;
                                 foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                                 {
                                     GridPos3D entity_grid_world = entity_world + gridPos;
-                                    if (CheckGridInsideWorldRange(entity_grid_world, 1))
-                                    {
-                                        if (WorldMap_StaticLayoutOccupied_IntactForStaticLayout[entity_grid_world.x, entity_grid_world.y - Height, entity_grid_world.z] != 0)
-                                        {
-                                            spaceAvailableForEntity = false;
-                                            break;
-                                        }
-
-                                        if (m_OpenWorld.CheckOccupied(kv.Key, entity_grid_world))
-                                        {
-                                            spaceAvailableForEntity = false;
-                                            break;
-                                        }
-
-                                        TerrainType terrainType = WorldMap_TerrainType[entity_grid_world.x, entity_grid_world.z];
-                                        if (GenerateLayerData.OnlyAllowPutOnTerrain && !GenerateLayerData.AllowPlaceOnTerrainTypeSet.Contains(terrainType))
-                                        {
-                                            spaceAvailableForEntity = false;
-                                            break;
-                                        }
-
-                                        if (!GenerateLayerData.OnlyAllowPutOnTerrain && GenerateLayerData.ForbidPlaceOnTerrainTypeSet.Contains(terrainType))
-                                        {
-                                            spaceAvailableForEntity = false;
-                                            break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        spaceAvailableForEntity = false;
-                                        break;
-                                    }
+                                    if (CheckGridAvailable(entity_grid_world, kv, ref allowPutEntity)) break;
                                 }
 
-                                if (spaceAvailableForEntity)
+                                if (allowPutEntity)
                                 {
                                     foreach (GridPos3D gridPos in occupation.EntityIndicatorGPs_RotatedDict[rot])
                                     {
@@ -222,7 +217,7 @@ public abstract class MapGenerator
                         GridPos3D appear_local = new GridPos3D(appear_world.x % WorldModule.MODULE_SIZE, 0, appear_world.z % WorldModule.MODULE_SIZE);
                         data.WorldGP = appear_world;
                         data.LocalGP = appear_local;
-                        data.EntityData.EntityOrientation = GridPosR.RotateOrientationClockwise90(data.EntityData.EntityOrientation, (int)staticLayoutOrientation);
+                        data.EntityData.EntityOrientation = GridPosR.RotateOrientationClockwise90(data.EntityData.EntityOrientation, (int) staticLayoutOrientation);
                         data.EntityData.InitStaticLayoutGUID = staticLayoutGUID;
                         data.EntityPassiveSkill_LevelEventTriggerAppear.InitStaticLayoutGUID = staticLayoutGUID;
                         m_OpenWorld.EventTriggerAppearEntityDataList.Add(data);

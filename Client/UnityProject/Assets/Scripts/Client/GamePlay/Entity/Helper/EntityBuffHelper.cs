@@ -335,6 +335,10 @@ public class EntityBuffHelper : EntityMonoHelper
                 {
                     extraInfo = $"Damage-{statBuff.EntityBuffAttribute}";
                     CalculateDefense(statBuff);
+                    foreach (EntityPassiveSkill eps in Entity.EntityPassiveSkills)
+                    {
+                        eps.OnGetDamaged(statBuff);
+                    }
                 }
             }
 

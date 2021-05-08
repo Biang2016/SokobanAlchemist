@@ -284,7 +284,7 @@ public class WorldModule : PoolObject
         EventTriggerAppearEntityPassiveSkillList.Clear();
         foreach (KeyValuePair<uint, Entity> kv in WorldModuleTriggerEntities)
         {
-            kv.Value.PoolRecycle();
+            kv.Value.DestroySelfByModuleRecycle();
         }
 
         WorldModuleTriggerEntities.Clear();
@@ -388,9 +388,12 @@ public class WorldModule : PoolObject
             }
         }
 
-        BattleManager.Instance.OnRecycleWorldModule(GUID);
+        if (!(this is OpenWorldModule))
+        {
+            BattleManager.Instance.OnRecycleWorldModule(GUID); // Open World Module 不回收，长存
+            World.WorldData.WorldBornPointGroupData_Runtime.UnInit_UnloadModuleData(ModuleGP); // Open World Module 不回收，长存
+        }
 
-        if (!(this is OpenWorldModule)) World.WorldData.WorldBornPointGroupData_Runtime.UnInit_UnloadModuleData(ModuleGP);
         World = null;
         if (releaseWorldModuleData) WorldModuleData.Release();
         WorldModuleData = null;

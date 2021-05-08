@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "\u7535\u76FE_(02b4dd2c-5a2e-4ac0-9693-e5fdd3cf9fdd)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        SkillGUID: (02b4dd2c-5a2e-4ac0-9693-e5fdd3cf9fdd)
+        SkillAlias: "\u7535\u76FE"
+        SkillName_EN: Electricity Shield
+        SkillName_ZH: "\u7535\u76FE"
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: (52777772-efce-4cb9-b3e3-8ffa74ab65d1)
+        SkillDescription_EN: Dodge every damage point by 2 lightning element.
+        SkillDescription_ZH: "\u53D7\u5230\u4F24\u5BB3\u65F6\u53EF\u4F7F\u75282\u70B9\u7535\u5143\u7D20\u62B5\u63211\u70B9\u4F24\u5BB3"
+        PlayerCanLearn: 1
+        GoldCost: 10
+        OccupySkillGrid: 1
+        ShowInSkillPreviewPanel: 1
+        SkillCategoryType: 4
+        SkillRankType: 1
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
+        PassiveSkillCondition: 16777216
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
+        RawEntitySkillActions:
+        - id: 1
+    00000001:
+      type: {class: EntitySkillAction_LightningShield, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        LightningElementConsumptionPerDamage: 2

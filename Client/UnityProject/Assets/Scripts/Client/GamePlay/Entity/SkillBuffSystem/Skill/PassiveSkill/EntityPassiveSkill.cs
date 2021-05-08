@@ -120,6 +120,18 @@ public abstract class EntityPassiveSkill : EntitySkill
     {
     }
 
+    public virtual void OnKillEnemy()
+    {
+    }
+
+    public virtual void OnKillBox()
+    {
+    }
+
+    public virtual void OnGetDamaged(EntityBuff buff)
+    {
+    }
+
     #endregion
 
     protected override void ChildClone(EntitySkill cloneData)

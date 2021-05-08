@@ -1578,6 +1578,11 @@ public class Actor : Entity
         EntityCollectHelper?.OnDie(); // 以免自身掉落物又被自身捡走
         if (IsDestroying) return;
         base.DestroySelf();
+        if (Camp == Camp.Enemy)
+        {
+            BattleManager.Instance.Player1.OnKillEnemy();
+        }
+
         IsDestroying = true;
         ThrowWhenDie();
         if (!IsFrozen) UnRegisterFromModule(WorldGP, EntityOrientation);
@@ -1620,4 +1625,20 @@ public class Actor : Entity
     }
 
     #endregion
+
+    public void OnKillEnemy()
+    {
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+        {
+            eps.OnKillEnemy();
+        }
+    }
+
+    public void OnKillBox()
+    {
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+        {
+            eps.OnKillBox();
+        }
+    }
 }

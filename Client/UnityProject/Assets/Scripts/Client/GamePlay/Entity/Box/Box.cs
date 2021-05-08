@@ -1347,6 +1347,11 @@ public partial class Box : Entity
             ps.OnBeforeDestroyEntity();
         }
 
+        if (LastInteractEntity != null && LastInteractEntity is Actor actor)
+        {
+            actor.OnKillBox();
+        }
+
         if (DoorBoxHelper) DoorBoxHelper.Open = false;
         StartCoroutine(Co_DelayDestroyBox(callBack));
     }

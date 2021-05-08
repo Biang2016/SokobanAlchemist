@@ -21,17 +21,22 @@ public sealed class RandomMapGenerator : MapGenerator
                 if (genCount >= GenerateLayerData.Count) break;
                 int module_x = SRandom.Range(0, Width / WorldModule.MODULE_SIZE);
                 int module_z = SRandom.Range(0, Depth / WorldModule.MODULE_SIZE);
+                bool muduleCreateSuc = false;
                 for (int local_x = 0; local_x < WorldModule.MODULE_SIZE; local_x++)
                 {
                     if (genCount >= GenerateLayerData.Count) break;
+                    if (muduleCreateSuc) break;
                     for (int local_z = 0; local_z < WorldModule.MODULE_SIZE; local_z++)
                     {
                         if (genCount >= GenerateLayerData.Count) break;
+                        if (muduleCreateSuc) break;
                         int world_x = module_x * WorldModule.MODULE_SIZE + local_x;
                         int world_z = module_z * WorldModule.MODULE_SIZE + local_z;
                         if (TryOverrideToWorldMap(new GridPos3D(world_x, Height, world_z), TypeIndex, (GridPosR.Orientation) SRandom.Range(0, 4)))
                         {
                             genCount++;
+                            muduleCreateSuc = true; // 换一个模组了
+                            break;
                         }
                     }
                 }
