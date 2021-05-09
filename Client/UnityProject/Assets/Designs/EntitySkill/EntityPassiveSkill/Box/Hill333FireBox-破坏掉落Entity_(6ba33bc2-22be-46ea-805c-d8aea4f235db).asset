@@ -20,6 +20,7 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: (6ba33bc2-22be-46ea-805c-d8aea4f235db)
         SkillAlias: "Hill333FireBox-\u7834\u574F\u6389\u843DEntity"
         SkillName_EN: 
@@ -30,6 +31,7 @@ MonoBehaviour:
         SkillDescription_EN: 
         SkillDescription_ZH: 
         PlayerCanLearn: 0
+        GoldCost: 0
         OccupySkillGrid: 0
         ShowInSkillPreviewPanel: 0
         SkillCategoryType: 0
@@ -59,6 +61,7 @@ MonoBehaviour:
       type: {class: EntitySkillAction_DropBox, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         DropBoxList:
         - ProbabilityMin: 0.2
           ProbabilityMax: 0.5
@@ -70,8 +73,8 @@ MonoBehaviour:
           ItemType:
             TypeDefineType: 0
             TypeGUID: (2cd52b8f-c317-424f-a8fa-bbe2d34dee46)
-        - ProbabilityMin: 0.25
-          ProbabilityMax: 0.25
+        - ProbabilityMin: 1
+          ProbabilityMax: 3
           ItemType:
             TypeDefineType: 0
             TypeGUID: (b21d38f9-143e-43a6-9094-f1a790641d96)

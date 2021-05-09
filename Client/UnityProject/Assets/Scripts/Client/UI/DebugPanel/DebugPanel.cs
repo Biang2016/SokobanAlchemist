@@ -82,7 +82,6 @@ public class DebugPanel : BaseUIPanel
                     {
                         UnityAction action = () => { m.Invoke(this, new object[] { }); };
                         AddButton(dba.ButtonName, dba.Shortcut, 0, DebugComponentDictTree, action, true);
-#if DEBUG || DEVELOPMENT_BUILD
                         if (dba.Shortcut != KeyCode.None)
                         {
                             OnShortcutKeyDown += () =>
@@ -93,7 +92,6 @@ public class DebugPanel : BaseUIPanel
                                 }
                             };
                         }
-#endif
                     }
                     else
                     {
@@ -269,7 +267,7 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("SwitchWorld/{0}", "GetAllWorldNames", -10)]
     public void ChangeWorld(string worldName)
     {
-        ClientGameManager.Instance.ChangeWorld(worldName, false);
+        ClientGameManager.Instance.ChangeWorld(worldName, true);
     }
 
     public List<string> GetAllWorldNames()

@@ -20,9 +20,9 @@ public class PlayerData : IClone<PlayerData>
         return playerData;
     }
 
-    public void ApplyDataOnPlayer()
+    public void ApplyDataOnPlayer(bool keepResources)
     {
-        BattleManager.Instance.Player1.ReloadESPS(EntityStatPropSet);
+        BattleManager.Instance.Player1.ReloadESPS(EntityStatPropSet, keepResources);
         BattleManager.Instance.Player1.ReloadActorSkillLearningData(ActorSkillLearningData);
     }
 
