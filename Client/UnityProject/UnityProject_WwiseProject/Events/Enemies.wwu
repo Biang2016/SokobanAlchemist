@@ -407,7 +407,7 @@
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="InEliteCombat" ID="{315FAD00-45C1-4FA4-85FE-995392895DC0}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+											<ObjectRef Name="InCombat" ID="{02A97734-8890-4280-8438-41F2CA3E16DD}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -419,28 +419,6 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="LightningEnemy_DoubleStrike_Preparing" ID="{A656E320-76C9-404B-8C48-C98EA9A8EE63}" WorkUnitID="{46938B20-D5D9-4BBC-9328-20C080B198B5}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="LightningEnemy_TripleStrike_Preparing" ID="{77FC6649-72C6-4BC0-8128-2D9A6E24037F}">
-							<ChildrenList>
-								<Action Name="" ID="{21F7A870-3D43-4310-9969-5BADF445AD68}" ShortID="1009164765">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="LightningEnemy_TripleStrike_Preparing" ID="{4CF5D632-2134-4D4E-8C79-2975FF0664FA}" WorkUnitID="{46938B20-D5D9-4BBC-9328-20C080B198B5}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="LightningEnemy_Somersault_Preparing" ID="{D4B12F33-CBCD-4886-84A4-97B7EF347C7E}">
-							<ChildrenList>
-								<Action Name="" ID="{3D507C5F-3A5A-40A1-90F6-CFF8FCA1B4AE}" ShortID="410933530">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="LightningEnemy_Somersault_Cast" ID="{6890047D-D29F-4476-B2E5-E24BE60ED84B}" WorkUnitID="{46938B20-D5D9-4BBC-9328-20C080B198B5}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -463,28 +441,6 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="LightningEnemy_SingleStrike_Cast" ID="{48C6E8FF-0ECC-48C2-9FD7-AF3D3451F30D}" WorkUnitID="{46938B20-D5D9-4BBC-9328-20C080B198B5}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="LightningEnemy_Somersault_Cast" ID="{C9416F43-0B00-4F36-9800-8EE348EE24A3}">
-							<ChildrenList>
-								<Action Name="" ID="{88F45545-BED2-42F4-94E3-35562CB5999D}" ShortID="1049695461">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="LightningEnemy_Somersault_Preparing" ID="{C73A2AB2-E314-4CC4-AA91-BEF4FC376EEE}" WorkUnitID="{46938B20-D5D9-4BBC-9328-20C080B198B5}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="LightningEnemy_TripleStrike_Cast" ID="{57CB4DFB-EE4F-4E52-A1A0-A5D38CDC250C}">
-							<ChildrenList>
-								<Action Name="" ID="{9B1FA963-FE39-4F28-A8C8-C5560E7CAC2E}" ShortID="487944426">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="LightningEnemy_TripleStrike_Cast" ID="{030ED2D1-239F-4271-AA9C-5BD26196EBB5}" WorkUnitID="{46938B20-D5D9-4BBC-9328-20C080B198B5}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -903,6 +859,226 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="FireEnemy_White_HeatEmit_Preparing" ID="{E039A2D5-83D2-4018-BA58-1744358D1706}" WorkUnitID="{7A833364-D427-4CB6-8D37-769919678994}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="LargeLightningEnemy" ID="{EE32EA5B-3E4D-472A-98F6-951DAC91C27B}" ShortID="31616333">
+					<ChildrenList>
+						<Event Name="LargeLightningEnemy_OnBeingDamaged" ID="{2A4345D4-DC7F-43E1-8287-C3443348F629}">
+							<ChildrenList>
+								<Action Name="" ID="{7A61C5D6-D64B-4E9A-851C-230D11F19977}" ShortID="1019789003">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LargeLightningEnemy_OnBeingDamaged" ID="{A7FC1A01-47F2-4A47-A1CD-20C68A5CD18A}" WorkUnitID="{8D9EAAEC-5F0F-4234-B7A8-A4A209ECC61C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LargeLightningEnemy_OnDestroyed_Common" ID="{47DED0A1-1499-4EB7-92B9-CC5BC71CA622}">
+							<ChildrenList>
+								<Action Name="" ID="{71C47C72-1760-4513-9A73-8D6FCE69ED7B}" ShortID="420462099">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LargeLightningEnemy_OnDestroyed_Common" ID="{9BF5F525-F40D-4FBD-8A65-26AED59D3824}" WorkUnitID="{8D9EAAEC-5F0F-4234-B7A8-A4A209ECC61C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LargeLightningEnemy_SingleStrike_Preparing" ID="{BF443983-C922-4A46-AA71-FC95E1A5F196}">
+							<ChildrenList>
+								<Action Name="" ID="{4A799412-D01F-42E1-9665-9A6B22F56379}" ShortID="586178697">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LargeLightningEnemy_SingleStrike_Preparing" ID="{05ED968F-7D00-4639-BB85-039A97F9108D}" WorkUnitID="{8D9EAAEC-5F0F-4234-B7A8-A4A209ECC61C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LargeLightningEnemy_Spawn" ID="{7B378E57-4002-4A7E-A028-EEF69729ACAB}">
+							<ChildrenList>
+								<Action Name="" ID="{C172263A-6CD9-427B-A665-F4548BF5126D}" ShortID="146020100">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="22"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="InEliteCombat" ID="{315FAD00-45C1-4FA4-85FE-995392895DC0}" WorkUnitID="{0668483F-3978-45E9-A8D8-F15A6B5DB6DC}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LargeLightningEnemy_DoubleStrike_Preparing" ID="{DDEC7A3E-13DA-4C09-9BD1-E87B0066CBE0}">
+							<ChildrenList>
+								<Action Name="" ID="{6C35A5A9-AE73-4E9E-9299-6C13552B2E44}" ShortID="86482707">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LargeLightningEnemy_DoubleStrike_Preparing" ID="{B3E17F11-DEB6-4715-AC01-79EBDDEF305F}" WorkUnitID="{8D9EAAEC-5F0F-4234-B7A8-A4A209ECC61C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LargeLightningEnemy_TripleStrike_Preparing" ID="{2DACCBB6-30A5-4CFA-AE47-C5A133913257}">
+							<ChildrenList>
+								<Action Name="" ID="{57F382C5-3A09-4B06-BD66-2E556EA33485}" ShortID="330840229">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LargeLightningEnemy_TripleStrike_Preparing" ID="{0CEE65F9-7529-465A-80B0-9EA49A5F88AE}" WorkUnitID="{8D9EAAEC-5F0F-4234-B7A8-A4A209ECC61C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LargeLightningEnemy_Somersault_Preparing" ID="{EDDE01C9-C9F6-4A0F-8D63-42CFD5BD9AF7}">
+							<ChildrenList>
+								<Action Name="" ID="{E376852C-EB7B-4E5D-88D8-FD2DD55A1EA0}" ShortID="1013878097">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LargeLightningEnemy_Somersault_Preparing" ID="{91DD2A1D-970D-4BFF-90F2-356922A77783}" WorkUnitID="{8D9EAAEC-5F0F-4234-B7A8-A4A209ECC61C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LargeLightningEnemy_DoubleStrike_Cast" ID="{521DEEAB-2300-48C6-829C-7F9C753E47D7}">
+							<ChildrenList>
+								<Action Name="" ID="{10D42AC6-A9E9-4561-9DAB-115DA1ECDA87}" ShortID="118756483">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LargeLightningEnemy_DoubleStrike_Cast" ID="{C06D21D4-7366-4427-8C17-D3E0417D8A3D}" WorkUnitID="{8D9EAAEC-5F0F-4234-B7A8-A4A209ECC61C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LargeLightningEnemy_SingleStrike_Cast" ID="{488B649C-157A-4BCE-91D6-7332AE0DA9D3}">
+							<ChildrenList>
+								<Action Name="" ID="{2AF6521D-D1E3-46C8-BC47-5BBE89B639D0}" ShortID="97798445">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LargeLightningEnemy_SingleStrike_Cast" ID="{BBAA3FA1-7682-41DB-B2E4-E81076E8F500}" WorkUnitID="{8D9EAAEC-5F0F-4234-B7A8-A4A209ECC61C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LargeLightningEnemy_Somersault_Cast" ID="{0636B78C-0DFB-43B2-A88C-23EE903F8CDC}">
+							<ChildrenList>
+								<Action Name="" ID="{D9EA11B5-17BE-491B-B9CE-E9B7BD8EB2C0}" ShortID="279548060">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LargeLightningEnemy_Somersault_Cast" ID="{99975057-D6DA-4BF6-B608-0E3F176B6E18}" WorkUnitID="{8D9EAAEC-5F0F-4234-B7A8-A4A209ECC61C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="LargeLightningEnemy_TripleStrike_Cast" ID="{67982894-2011-402F-BCFF-38171CCB3BB4}">
+							<ChildrenList>
+								<Action Name="" ID="{DBDEABFF-618B-44A8-8269-47D43A67ECBD}" ShortID="576473226">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="LargeLightningEnemy_TripleStrike_Cast" ID="{ACA9ACBA-88B5-4197-A03A-D8B8E5E65F24}" WorkUnitID="{8D9EAAEC-5F0F-4234-B7A8-A4A209ECC61C}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="WoodenEnemy_Cyan" ID="{3328AD1C-514C-4CB1-A6DA-DB3CD7D64438}" ShortID="912131013">
+					<ChildrenList>
+						<Event Name="WoodenEnemy_Cyan_OnBeingDamaged" ID="{2A4C15BD-138A-4D3B-A9AC-5AE88DDE19D7}">
+							<ChildrenList>
+								<Action Name="" ID="{F806BDA5-D01A-4B5B-98CC-6E3C9B5DCAD4}" ShortID="659527137">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenEnemy_Cyan_OnBeingDamaged" ID="{B38CB4AE-5AD6-4A07-94B8-7C6808D57022}" WorkUnitID="{2010CCE4-7F96-48FE-89EE-BF33A8B4D4D1}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenEnemy_Cyan_OnDestroyed_Common" ID="{8DC46547-1E47-4ACB-84BA-6DCA369088DB}">
+							<ChildrenList>
+								<Action Name="" ID="{60962EFD-AD23-416C-BD59-9E5169E98757}" ShortID="620041882">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenEnemy_Cyan_OnDestroyed_Common" ID="{155CDD6E-37B9-4069-A830-2CB1D47E2F5B}" WorkUnitID="{2010CCE4-7F96-48FE-89EE-BF33A8B4D4D1}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenEnemy_Cyan_LeftSlash_Cast" ID="{04733132-B60B-43CC-8CF1-52FB417CD8FF}">
+							<ChildrenList>
+								<Action Name="" ID="{8D009D48-E481-47D9-8F60-960E5AA985F2}" ShortID="702592400">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenEnemy_Cyan_LeftSlash_Cast" ID="{4003C32B-EACC-41CF-B004-643B5381ECAD}" WorkUnitID="{2010CCE4-7F96-48FE-89EE-BF33A8B4D4D1}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenEnemy_Cyan_RightSlash_Cast" ID="{3890A9C0-8A72-4790-B2EF-8603A66D38D0}">
+							<ChildrenList>
+								<Action Name="" ID="{60E70C9C-21E1-467C-B6BF-4D93E35E12C2}" ShortID="270358334">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenEnemy_Cyan_RightSlash_Cast" ID="{AA07F0D3-B13A-4C6D-BBD0-DDAB5B217D5F}" WorkUnitID="{2010CCE4-7F96-48FE-89EE-BF33A8B4D4D1}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenEnemy_Cyan_DoubleSlash_Cast" ID="{7F5E4E4F-BF8E-4EB8-833D-80B285B24409}">
+							<ChildrenList>
+								<Action Name="" ID="{6B17AB0A-96FC-43F8-8161-309C6B586DBE}" ShortID="250087822">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenEnemy_Cyan_DoubleSlash_Cast" ID="{B855764F-3584-428D-A64B-D7B833490AC7}" WorkUnitID="{2010CCE4-7F96-48FE-89EE-BF33A8B4D4D1}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenEnemy_Cyan_DoubleSlash_Preparing" ID="{2722AEBB-8D22-4D31-AB49-4966AA7116E2}">
+							<ChildrenList>
+								<Action Name="" ID="{CE9EDFDC-897F-439E-8D94-B790D6A95723}" ShortID="858932683">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenEnemy_Cyan_DoubleSlash_Preparing" ID="{DCF2F941-0E15-48A0-8607-293100C07166}" WorkUnitID="{2010CCE4-7F96-48FE-89EE-BF33A8B4D4D1}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenEnemy_Cyan_LeftSlash_Preparing" ID="{D3403562-75C3-465C-89D4-5139E954FD42}">
+							<ChildrenList>
+								<Action Name="" ID="{1819C773-F26A-4C3D-BFF1-C0752321485D}" ShortID="1025716849">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenEnemy_Cyan_LeftSlash_Preparing" ID="{CF4D417C-AE16-4CF3-A0D8-EF7332AF6A92}" WorkUnitID="{2010CCE4-7F96-48FE-89EE-BF33A8B4D4D1}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="WoodenEnemy_Cyan_RightSlash_Preparing" ID="{D54176E4-DA6F-427A-BFBD-3F9E26D28839}">
+							<ChildrenList>
+								<Action Name="" ID="{B0359ACC-4219-4ACF-96D0-EE7E8CF4E4D6}" ShortID="354731631">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="WoodenEnemy_Cyan_RightSlash_Preparing" ID="{6878AE50-2835-4E9D-8279-AB097185C441}" WorkUnitID="{2010CCE4-7F96-48FE-89EE-BF33A8B4D4D1}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>

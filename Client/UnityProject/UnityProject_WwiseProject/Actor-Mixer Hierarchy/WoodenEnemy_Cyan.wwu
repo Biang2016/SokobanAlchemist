@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{2010CCE4-7F96-48FE-89EE-BF33A8B4D4D1}" SchemaVersion="97" RootDocumentID="{BF4FC306-E3A9-4180-902B-945ED5E7EFDB}">
+	<AudioObjects>
+		<WorkUnit Name="WoodenEnemy_Cyan" ID="{2010CCE4-7F96-48FE-89EE-BF33A8B4D4D1}" OwnerID="{AB95962D-B8A9-40D0-868C-E15702865962}" PersistMode="Nested">
+			<ChildrenList>
+				<ActorMixer Name="WoodenEnemy_Cyan" ID="{643B2046-2BCA-4668-BCF8-10D1785AD035}" ShortID="421718299">
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="Enemy" ID="{3E5000B2-2D9A-4A27-B6A0-3DE8D825202C}" WorkUnitID="{84F5CCD1-CDB4-4A82-8FB9-A89731141588}"/>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<RandomSequenceContainer Name="WoodenEnemy_Cyan_LeftSlash_Cast" ID="{4003C32B-EACC-41CF-B004-643B5381ECAD}" ShortID="2637806">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ValueList>
+										<Value>-530</Value>
+									</ValueList>
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{571E8798-34B9-4C4B-B767-9E1EF6132EE3}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="379"/>
+													<Property Name="Min" Type="Real64" Value="-278"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01" ID="{0AC023D8-AE01-4030-8FE6-5C65F9AB7FE5}" ShortID="141964764">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01" ID="{D4DC7358-DAF8-44A5-9CDE-75CF1CA5FACB}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.172926036155203"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.209981615331318"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.741111583522298"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="409016567"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01" ID="{D4DC7358-DAF8-44A5-9CDE-75CF1CA5FACB}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="WoodenEnemy_Cyan_RightSlash_Cast" ID="{AA07F0D3-B13A-4C6D-BBD0-DDAB5B217D5F}" ShortID="292892734">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ValueList>
+										<Value>-530</Value>
+									</ValueList>
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{8EB83F07-3E26-4EF3-BFD5-EA58345FB712}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="379"/>
+													<Property Name="Min" Type="Real64" Value="-278"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02" ID="{A91DFB92-32C4-486D-B6E1-5E3590C2C1A0}" ShortID="708988526">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02" ID="{5FA7635C-0F5E-47B7-A72C-899E2B99874E}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.206351765243134"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.206351765243134"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="1.59453636778786"/>
+												<Property Name="TrimEnd" Type="Real64" Value="2.87016546201814"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="535038090"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02" ID="{5FA7635C-0F5E-47B7-A72C-899E2B99874E}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="WoodenEnemy_Cyan_OnBeingDamaged" ID="{B38CB4AE-5AD6-4A07-94B8-7C6808D57022}" ShortID="972918258">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ValueList>
+										<Value>-530</Value>
+									</ValueList>
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{2BCEB6EC-7C2E-4A04-A48D-5AE19691F6FA}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="379"/>
+													<Property Name="Min" Type="Real64" Value="-278"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="WildcatGroansSever AT019601_01" ID="{FE152D73-2EEB-4AEE-8779-3DFE6ABC36B0}" ShortID="672245046">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="WildcatGroansSever AT019601" ID="{FE0491FD-E942-4794-A4F9-CABFFD516D64}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.16"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.136296296296296"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="1.45777777777778"/>
+												<Property Name="TrimEnd" Type="Real64" Value="2.34666666666667"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>WildcatGroansSever AT019601.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="906237639"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="WildcatGroansSever AT019601" ID="{FE0491FD-E942-4794-A4F9-CABFFD516D64}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="WoodenEnemy_Cyan_OnDestroyed_Common" ID="{155CDD6E-37B9-4069-A830-2CB1D47E2F5B}" ShortID="996649653">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-6</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="Game Prize 3" ID="{66FA4D83-0469-4829-AB57-1CD916E0BCA5}" ShortID="428000096">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Game Prize 3" ID="{28D4AB0B-773C-46C0-8C70-49D75FC2AEBE}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.814285714285714"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.56919642857143"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Game Prize 3.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="138578601"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Game Prize 3" ID="{28D4AB0B-773C-46C0-8C70-49D75FC2AEBE}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="WoodenEnemy_Cyan_RightSlash_Preparing" ID="{6878AE50-2835-4E9D-8279-AB097185C441}" ShortID="67140063">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ValueList>
+										<Value>-530</Value>
+									</ValueList>
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{2A5FAA80-43D2-49B5-9BF4-A5144154AFAB}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="379"/>
+													<Property Name="Min" Type="Real64" Value="-278"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="CrackWood CRB01_01" ID="{73C42356-B79F-4AF7-9C9B-E38817C97F90}" ShortID="171260322">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="CrackWood CRB01_37" ID="{9DFCA973-3617-4F4E-BD74-0B28110D8061}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.232884857646762"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.26803728898967"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="1.20836482741245"/>
+												<Property Name="TrimEnd" Type="Real64" Value="2.09596371882086"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>CrackWood CRB01_37.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="191554599"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="CrackWood CRB01_37" ID="{9DFCA973-3617-4F4E-BD74-0B28110D8061}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="WoodenEnemy_Cyan_LeftSlash_Preparing" ID="{CF4D417C-AE16-4CF3-A0D8-EF7332AF6A92}" ShortID="56969751">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ValueList>
+										<Value>-530</Value>
+									</ValueList>
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{840E1C26-0072-4229-8FC0-27582E95A1AD}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="379"/>
+													<Property Name="Min" Type="Real64" Value="-278"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="CrackWood CRB01_01" ID="{CF8C2E95-752C-4195-9E98-67161D9DB042}" ShortID="346090057">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="CrackWood CRB01_37" ID="{EC271DC5-8C92-42A1-85FA-A1314C5A5C88}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.232884857646762"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.26803728898967"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="1.20836482741245"/>
+												<Property Name="TrimEnd" Type="Real64" Value="2.09596371882086"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>CrackWood CRB01_37.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="191554599"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="CrackWood CRB01_37" ID="{EC271DC5-8C92-42A1-85FA-A1314C5A5C88}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<BlendContainer Name="WoodenEnemy_Cyan_DoubleSlash_Preparing" ID="{DCF2F941-0E15-48A0-8607-293100C07166}" ShortID="1055064116">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ValueList>
+										<Value>-530</Value>
+									</ValueList>
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{4C6B2419-BC82-447D-B421-99C6D7B562D1}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="379"/>
+													<Property Name="Min" Type="Real64" Value="-278"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>5</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="CrackWood CRB01_02" ID="{EAD12E70-AC9B-42A1-BDB8-92FBCE68CD6C}" ShortID="533518815">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="CrackWood CRB01_37" ID="{042E06EB-A4F7-499A-A954-AAE925753E57}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.232884857646762"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.26803728898967"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.26803728898967"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.3577626606198"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>CrackWood CRB01_37.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="645165664"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="CrackWood CRB01_37" ID="{042E06EB-A4F7-499A-A954-AAE925753E57}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</BlendContainer>
+						<BlendContainer Name="WoodenEnemy_Cyan_DoubleSlash_Cast" ID="{B855764F-3584-428D-A64B-D7B833490AC7}" ShortID="509982679">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ValueList>
+										<Value>-530</Value>
+									</ValueList>
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{3B806FF0-26C0-41A4-8DAD-1DD660D2ACAD}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="379"/>
+													<Property Name="Min" Type="Real64" Value="-278"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<RandomSequenceContainer Name="DoubleSlash_1" ID="{F22234A3-C4B8-4252-B6EE-39B3DBF63E59}" ShortID="176239689">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01_01" ID="{B3CA3DAF-F85F-418F-B570-FF21BD611331}" ShortID="901154942">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01" ID="{88CE6727-81C5-4A2E-9DD2-C5B20D8F9CFB}">
+													<PropertyList>
+														<Property Name="FadeInDuration" Type="Real64" Value="0.135870456979088"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.222333475056689"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="0.988148778029731"/>
+														<Property Name="TrimEnd" Type="Real64" Value="1.92689011715797"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="315644955"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01" ID="{88CE6727-81C5-4A2E-9DD2-C5B20D8F9CFB}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01_03" ID="{4B87F8D6-8EF4-46D3-908D-4E605EE0A293}" ShortID="643722318">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01" ID="{7CDEC07B-399A-434B-9A9A-D260208E57AF}">
+													<PropertyList>
+														<Property Name="FadeInDuration" Type="Real64" Value="0.0988148778029734"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.222333475056689"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="4.01435441074578"/>
+														<Property Name="TrimEnd" Type="Real64" Value="4.76781785399345"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="837929653"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01" ID="{7CDEC07B-399A-434B-9A9A-D260208E57AF}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01" ID="{F002022A-49CD-4B3B-BDE0-0399C1CE9954}" ShortID="807328833">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01" ID="{5C283A65-7CAC-4E48-9AF5-99E0AC153F66}">
+													<PropertyList>
+														<Property Name="FadeInDuration" Type="Real64" Value="0.172926036155203"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.209981615331318"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimEnd" Type="Real64" Value="0.741111583522298"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="409016567"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-01" ID="{5C283A65-7CAC-4E48-9AF5-99E0AC153F66}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
+								</RandomSequenceContainer>
+								<RandomSequenceContainer Name="DoubleSlash_2" ID="{F3681066-A310-4898-B714-7E7228C902C9}" ShortID="47932933">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02_02" ID="{3CA9D591-72D5-4FE8-8064-1CCE521D4A00}" ShortID="963746734">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02" ID="{4EA8F3B3-BCD4-49B4-85AE-A848336CD7FD}">
+													<PropertyList>
+														<Property Name="FadeInDuration" Type="Real64" Value="0.168833262471655"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.337666524943311"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="7.29734878905266"/>
+														<Property Name="TrimEnd" Type="Real64" Value="8.34786686665406"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="649894879"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02" ID="{4EA8F3B3-BCD4-49B4-85AE-A848336CD7FD}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02" ID="{F5D3E30B-CA3B-4706-BB58-8E8AF82F388E}" ShortID="794880045">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02" ID="{F6DFC3AA-BB9A-4338-9153-83AA278095D7}">
+													<PropertyList>
+														<Property Name="FadeInDuration" Type="Real64" Value="0.206351765243134"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.206351765243134"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="1.59453636778786"/>
+														<Property Name="TrimEnd" Type="Real64" Value="2.87016546201814"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="535038090"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02" ID="{F6DFC3AA-BB9A-4338-9153-83AA278095D7}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02_01" ID="{3AD28343-A7F2-4B9F-9A8C-683DE48028ED}" ShortID="573461542">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02" ID="{3F037ADA-8EE8-45B7-8F8D-0AFEF85EAC2F}">
+													<PropertyList>
+														<Property Name="FadeInDuration" Type="Real64" Value="0.318907273557571"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.431462781872008"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="2.9452024675611"/>
+														<Property Name="TrimEnd" Type="Real64" Value="4.35214632149156"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="233879201"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Metal_Scrape_Wood_Short_and_Fast_Slashes_Scrape_OCP-1506-081-02" ID="{3F037ADA-8EE8-45B7-8F8D-0AFEF85EAC2F}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
+								</RandomSequenceContainer>
+								<RandomSequenceContainer Name="DoubleSlash_3" ID="{B3761646-6039-4D79-ACBC-E5A7BA2A7F3A}" ShortID="441168852">
+									<PropertyList>
+										<Property Name="Highpass" Type="int16">
+											<ValueList>
+												<Value>20</Value>
+											</ValueList>
+										</Property>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-5</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="Metal_Scrape_Wood_Exterior_OCP-1506-082-01" ID="{A9E579AB-CFB0-4C7F-B468-27963DC56123}" ShortID="478116938">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-3</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Metal_Scrape_Wood_Exterior_OCP-1506-082-01" ID="{CC690B92-D3F2-4BD2-86BD-D5D4A681E41F}">
+													<PropertyList>
+														<Property Name="FadeInDuration" Type="Real64" Value="0.293166808390023"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.488611347316704"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="3.32255716175359"/>
+														<Property Name="TrimEnd" Type="Real64" Value="4.85353938334593"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>Metal_Scrape_Wood_Exterior_OCP-1506-082-01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="977188378"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Metal_Scrape_Wood_Exterior_OCP-1506-082-01" ID="{CC690B92-D3F2-4BD2-86BD-D5D4A681E41F}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="Metal_Scrape_Wood_Exterior_OCP-1506-082-01_01" ID="{5C073662-3394-4F6E-ADA8-E196F1E43A89}" ShortID="660607434">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-3</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Metal_Scrape_Wood_Exterior_OCP-1506-082-01" ID="{2A940545-E95D-4F64-8C00-4726FB6564F6}">
+													<PropertyList>
+														<Property Name="FadeInDuration" Type="Real64" Value="0.293166808390023"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.488611347316704"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="10.0979678445452"/>
+														<Property Name="TrimEnd" Type="Real64" Value="12.019839143991"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>Metal_Scrape_Wood_Exterior_OCP-1506-082-01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="535854793"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Metal_Scrape_Wood_Exterior_OCP-1506-082-01" ID="{2A940545-E95D-4F64-8C00-4726FB6564F6}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="Metal_Scrape_Wood_Exterior_OCP-1506-082-01_02" ID="{822C73F0-23BE-4B00-A091-9ED38590FA8B}" ShortID="524699789">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-3</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Metal_Scrape_Wood_Exterior_OCP-1506-082-01" ID="{2A61432E-BA2F-4F7D-AF65-6C7BC77B8B02}">
+													<PropertyList>
+														<Property Name="FadeInDuration" Type="Real64" Value="0.293166808390023"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.488611347316704"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="17.2642676051902"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>Metal_Scrape_Wood_Exterior_OCP-1506-082-01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="464319193"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Metal_Scrape_Wood_Exterior_OCP-1506-082-01" ID="{2A61432E-BA2F-4F7D-AF65-6C7BC77B8B02}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
+								</RandomSequenceContainer>
+							</ChildrenList>
+						</BlendContainer>
+					</ChildrenList>
+				</ActorMixer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

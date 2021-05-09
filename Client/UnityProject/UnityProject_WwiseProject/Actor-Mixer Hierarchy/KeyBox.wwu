@@ -3,7 +3,27 @@
 	<AudioObjects>
 		<WorkUnit Name="KeyBox" ID="{D863AA7D-577A-4323-921D-0798FAAB04B1}" OwnerID="{ABC65056-1A6C-4C9D-8CE0-4E3CFED4B185}" PersistMode="Nested">
 			<ChildrenList>
-				<BlendContainer Name="KeyBox_InLock" ID="{29BFEEFE-6FD2-49CF-B1DB-0C7A105BF6DC}" ShortID="164166213">
+				<RandomSequenceContainer Name="KeyBox_InLock" ID="{394E7261-9E1B-4E38-B45F-151D25B8BB21}" ShortID="536287958">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{024262C3-3CAD-4645-BD31-69982046C0A3}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="505"/>
+											<Property Name="Min" Type="Real64" Value="-531"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>4</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -12,7 +32,73 @@
 							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 						</Reference>
 					</ReferenceList>
-				</BlendContainer>
+					<ChildrenList>
+						<Sound Name="GunLockLoad GFX019702_01" ID="{D8242575-A387-4F4E-94C7-E35C7E22C066}" ShortID="234333531">
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="GunLockLoad GFX019702" ID="{DE41F942-FBA8-4065-890B-FC4406B2E271}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.0215268329554044"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.035878054925674"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.448475686570925"/>
+										<Property Name="TrimEnd" Type="Real64" Value="0.577636684303351"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>GunLockLoad GFX019702.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="197574490"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="GunLockLoad GFX019702" ID="{DE41F942-FBA8-4065-890B-FC4406B2E271}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="GunLockLoad GFX019702" ID="{952DFBC4-FA97-4733-A3F5-7C8A6EF44193}" ShortID="34553901">
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Box" ID="{D18D14CB-8A3E-4562-962A-109088C5C4D3}" WorkUnitID="{940F0379-5618-4D6F-AE52-A878038155BD}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Boxes" ID="{8E52D847-655E-4C53-8755-1B6771A8B618}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="GunLockLoad GFX019702" ID="{C18AD39E-8865-463A-9818-3BD764AE9636}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.035878054925674"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.035878054925674"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.147100025195263"/>
+										<Property Name="TrimEnd" Type="Real64" Value="0.297787855883093"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>GunLockLoad GFX019702.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="491235527"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="GunLockLoad GFX019702" ID="{C18AD39E-8865-463A-9818-3BD764AE9636}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>
