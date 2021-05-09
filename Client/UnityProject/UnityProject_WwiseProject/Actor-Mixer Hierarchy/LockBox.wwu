@@ -3,7 +3,26 @@
 	<AudioObjects>
 		<WorkUnit Name="LockBox" ID="{667B6077-3EC5-45CD-945B-089A486EEE13}" OwnerID="{ABC65056-1A6C-4C9D-8CE0-4E3CFED4B185}" PersistMode="Nested">
 			<ChildrenList>
-				<BlendContainer Name="LockBox_Unlocked" ID="{0D51BC6B-34C2-44D0-94C3-3ED7FC403511}" ShortID="135477443">
+				<RandomSequenceContainer Name="LockBox_Unlocked" ID="{A4476F61-F2C9-4F52-933A-52EEC76D53E1}" ShortID="1060095670">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{C6F5D166-5359-4C8E-AC9D-6156A8310382}">
+										<PropertyList>
+											<Property Name="Max" Type="Real64" Value="581"/>
+											<Property Name="Min" Type="Real64" Value="-531"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-3</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -12,7 +31,75 @@
 							<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
 						</Reference>
 					</ReferenceList>
-				</BlendContainer>
+					<ChildrenList>
+						<Sound Name="Points Scored Bonus 3" ID="{0AB35E3C-99F9-41B2-96A5-D6EC686D6D2A}" ShortID="224317286">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Points Scored Bonus 3" ID="{0BAE41F5-090F-48C9-9C58-6C0519A7FD66}">
+									<Language>SFX</Language>
+									<AudioFile>Points Scored Bonus 3.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="313931543"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Points Scored Bonus 3" ID="{0BAE41F5-090F-48C9-9C58-6C0519A7FD66}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Points Scored Bonus 2" ID="{0EBDDB3E-A72C-4008-B044-FF6DAB493351}" ShortID="135087552">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Points Scored Bonus 2" ID="{5C407829-236E-432F-A9DE-B9D8DF5F57F2}">
+									<Language>SFX</Language>
+									<AudioFile>Points Scored Bonus 2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="200927341"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Points Scored Bonus 2" ID="{5C407829-236E-432F-A9DE-B9D8DF5F57F2}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Points Scored Bonus 4" ID="{3A5B67EC-3E95-4E8E-AD9E-F7A36AC35EED}" ShortID="831382842">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Points Scored Bonus 4" ID="{AC84439F-0699-43F2-96AB-202A4E067EAB}">
+									<Language>SFX</Language>
+									<AudioFile>Points Scored Bonus 4.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="253925488"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Points Scored Bonus 4" ID="{AC84439F-0699-43F2-96AB-202A4E067EAB}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>

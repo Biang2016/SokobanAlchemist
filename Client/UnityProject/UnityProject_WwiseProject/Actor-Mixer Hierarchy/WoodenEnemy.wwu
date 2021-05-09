@@ -21,8 +21,8 @@
 											<Modifier Name="" ID="{D06FF949-7FDF-4F84-A862-31A8D5703C2F}">
 												<PropertyList>
 													<Property Name="Enabled" Type="bool" Value="True"/>
-													<Property Name="Max" Type="Real64" Value="429"/>
-													<Property Name="Min" Type="Real64" Value="-152"/>
+													<Property Name="Max" Type="Real64" Value="328"/>
+													<Property Name="Min" Type="Real64" Value="-253"/>
 												</PropertyList>
 											</Modifier>
 										</ModifierInfo>
@@ -79,8 +79,8 @@
 											<Modifier Name="" ID="{C7709A43-B6F6-4CEA-8E34-A6E5C30AF4B8}">
 												<PropertyList>
 													<Property Name="Enabled" Type="bool" Value="True"/>
-													<Property Name="Max" Type="Real64" Value="455"/>
-													<Property Name="Min" Type="Real64" Value="-152"/>
+													<Property Name="Max" Type="Real64" Value="328"/>
+													<Property Name="Min" Type="Real64" Value="-253"/>
 												</PropertyList>
 											</Modifier>
 										</ModifierInfo>
@@ -138,8 +138,8 @@
 											<Modifier Name="" ID="{79978230-5BCD-45ED-8C36-8E433425EC8E}">
 												<PropertyList>
 													<Property Name="Enabled" Type="bool" Value="True"/>
-													<Property Name="Max" Type="Real64" Value="177"/>
-													<Property Name="Min" Type="Real64" Value="-152"/>
+													<Property Name="Max" Type="Real64" Value="328"/>
+													<Property Name="Min" Type="Real64" Value="-253"/>
 												</PropertyList>
 											</Modifier>
 										</ModifierInfo>
@@ -187,6 +187,13 @@
 							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="WoodenEnemy_OnDestroyed_Common" ID="{D2B61C86-3661-4DEB-A28C-BB19081E9556}" ShortID="179430797">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-6</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -233,8 +240,8 @@
 											<Modifier Name="" ID="{896D9F1E-84D5-44BF-820E-686C0F011291}">
 												<PropertyList>
 													<Property Name="Enabled" Type="bool" Value="True"/>
-													<Property Name="Max" Type="Real64" Value="455"/>
-													<Property Name="Min" Type="Real64" Value="-429"/>
+													<Property Name="Max" Type="Real64" Value="328"/>
+													<Property Name="Min" Type="Real64" Value="-253"/>
 												</PropertyList>
 											</Modifier>
 										</ModifierInfo>
@@ -282,6 +289,21 @@
 							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="WoodenEnemy_LeftSlash_Preparing" ID="{219CE8F5-6FAC-4A0C-9931-21979C0CD0F1}" ShortID="371781662">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{6B47AF0D-30E0-4983-83CF-15AB7EA7C718}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="328"/>
+													<Property Name="Min" Type="Real64" Value="-253"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -330,8 +352,8 @@
 											<Modifier Name="" ID="{3779FBA7-DC92-41B7-A609-9561EA34C236}">
 												<PropertyList>
 													<Property Name="Enabled" Type="bool" Value="True"/>
-													<Property Name="Max" Type="Real64" Value="126"/>
-													<Property Name="Min" Type="Real64" Value="-76"/>
+													<Property Name="Max" Type="Real64" Value="328"/>
+													<Property Name="Min" Type="Real64" Value="-253"/>
 												</PropertyList>
 											</Modifier>
 										</ModifierInfo>
@@ -384,6 +406,21 @@
 							</ChildrenList>
 						</BlendContainer>
 						<BlendContainer Name="WoodenEnemy_DoubleSlash_Cast" ID="{7D94CB8D-7385-4503-A533-61A7F29BD57F}" ShortID="436651380">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{4057EA05-4B7E-4A97-B5AC-4EFA5B1EE286}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="328"/>
+													<Property Name="Min" Type="Real64" Value="-253"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>

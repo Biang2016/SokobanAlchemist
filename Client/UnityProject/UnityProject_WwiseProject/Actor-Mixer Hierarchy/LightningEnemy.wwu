@@ -14,6 +14,21 @@
 					</ReferenceList>
 					<ChildrenList>
 						<RandomSequenceContainer Name="LightningEnemy_SingleStrike_Cast" ID="{48C6E8FF-0ECC-48C2-9FD7-AF3D3451F30D}" ShortID="218875018">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{E5977BFC-F6C7-41B8-833B-EEF027E50891}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="253"/>
+													<Property Name="Min" Type="Real64" Value="-278"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -25,9 +40,14 @@
 							<ChildrenList>
 								<Sound Name="Electric Sword Hit 1" ID="{D6213F11-8481-4956-821F-2717026A6F3B}" ShortID="199018510">
 									<PropertyList>
+										<Property Name="Pitch" Type="int32">
+											<ValueList>
+												<Value>760</Value>
+											</ValueList>
+										</Property>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-3</Value>
+												<Value>-7</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -59,53 +79,6 @@
 								</Sound>
 							</ChildrenList>
 						</RandomSequenceContainer>
-						<RandomSequenceContainer Name="LightningEnemy_Somersault_Cast" ID="{6890047D-D29F-4476-B2E5-E24BE60ED84B}" ShortID="354492193">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<Sound Name="24250 electric neutron explode-full" ID="{04FE4556-AE5E-4BF9-A979-7955BA9F20CB}" ShortID="354005398">
-									<PropertyList>
-										<Property Name="Volume" Type="Real64">
-											<ValueList>
-												<Value>-7</Value>
-											</ValueList>
-										</Property>
-									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="24250 electric neutron explode-full" ID="{43545C0B-AE9D-4B0C-9C84-5951859F3D08}">
-											<PropertyList>
-												<Property Name="FadeInDuration" Type="Real64" Value="0.5690660430839"/>
-												<Property Name="FadeOutDuration" Type="Real64" Value="1.23297642668178"/>
-												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimEnd" Type="Real64" Value="5.70646782092466"/>
-											</PropertyList>
-											<Language>SFX</Language>
-											<AudioFile>24250 electric neutron explode-full.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="423528000"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="24250 electric neutron explode-full" ID="{43545C0B-AE9D-4B0C-9C84-5951859F3D08}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-							</ChildrenList>
-						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="LightningEnemy_OnBeingDamaged" ID="{345B56C7-BE9C-497F-918B-EB326E93D745}" ShortID="839170025">
 							<PropertyList>
 								<Property Name="Pitch" Type="int32">
@@ -114,8 +87,8 @@
 											<Modifier Name="" ID="{D4ECA8AC-A02B-4278-BE0B-ADC639A3EB11}">
 												<PropertyList>
 													<Property Name="Enabled" Type="bool" Value="True"/>
-													<Property Name="Max" Type="Real64" Value="101"/>
-													<Property Name="Min" Type="Real64" Value="-177"/>
+													<Property Name="Max" Type="Real64" Value="253"/>
+													<Property Name="Min" Type="Real64" Value="-278"/>
 												</PropertyList>
 											</Modifier>
 										</ModifierInfo>
@@ -169,8 +142,70 @@
 										<ModifierInfo>
 											<Modifier Name="" ID="{6650F40B-8C0E-4DA7-A397-77884A95F271}">
 												<PropertyList>
-													<Property Name="Max" Type="Real64" Value="152"/>
-													<Property Name="Min" Type="Real64" Value="-126"/>
+													<Property Name="Max" Type="Real64" Value="253"/>
+													<Property Name="Min" Type="Real64" Value="-278"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-6</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="Game Prize 1" ID="{A45CCD14-2992-43B7-975E-F29F80A19D53}" ShortID="633863784">
+									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="Enemy" ID="{3E5000B2-2D9A-4A27-B6A0-3DE8D825202C}" WorkUnitID="{84F5CCD1-CDB4-4A82-8FB9-A89731141588}"/>
+										</Reference>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Game Prize 1" ID="{81478214-9980-4EB6-A212-DC04BB9BD2E8}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.87375637755102"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="2.41057610544218"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>Game Prize 1.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="763591062"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Game Prize 1" ID="{81478214-9980-4EB6-A212-DC04BB9BD2E8}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="LightningEnemy_DoubleStrike_Preparing" ID="{A656E320-76C9-404B-8C48-C98EA9A8EE63}" ShortID="468091003">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{6283DEF9-C608-4EED-BC46-9100FD5138C8}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="253"/>
+													<Property Name="Min" Type="Real64" Value="-278"/>
 												</PropertyList>
 											</Modifier>
 										</ModifierInfo>
@@ -186,50 +221,16 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="Game Prize 3" ID="{A04E63B3-E369-4548-9AA3-4265F5382840}" ShortID="528981153">
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="Game Prize 3" ID="{03DC1BD7-E1EB-454D-A3F6-353BB17C4CBE}">
-											<PropertyList>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.814285714285714"/>
-												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimEnd" Type="Real64" Value="1.56919642857143"/>
-											</PropertyList>
-											<Language>SFX</Language>
-											<AudioFile>Game Prize 3.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="138578601"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="Game Prize 3" ID="{03DC1BD7-E1EB-454D-A3F6-353BB17C4CBE}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-							</ChildrenList>
-						</RandomSequenceContainer>
-						<RandomSequenceContainer Name="LightningEnemy_DoubleStrike_Preparing" ID="{A656E320-76C9-404B-8C48-C98EA9A8EE63}" ShortID="468091003">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
 								<Sound Name="Charge2" ID="{3A538AA6-E302-4129-AB6D-968A2A591941}" ShortID="498671345">
 									<PropertyList>
+										<Property Name="Pitch" Type="int32">
+											<ValueList>
+												<Value>510</Value>
+											</ValueList>
+										</Property>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-6</Value>
+												<Value>-12</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -263,55 +264,22 @@
 								</Sound>
 							</ChildrenList>
 						</RandomSequenceContainer>
-						<RandomSequenceContainer Name="LightningEnemy_TripleStrike_Preparing" ID="{4CF5D632-2134-4D4E-8C79-2975FF0664FA}" ShortID="94959719">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<Sound Name="Charge3" ID="{D1A2A009-5CEC-40BD-A4BD-73B0F5F32889}" ShortID="122389641">
-									<PropertyList>
-										<Property Name="Volume" Type="Real64">
-											<ValueList>
-												<Value>-6</Value>
-											</ValueList>
-										</Property>
-									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="Charge3" ID="{CA84C4F0-D802-4F7E-86B7-24752D149E8F}">
-											<PropertyList>
-												<Property Name="FadeInDuration" Type="Real64" Value="0.19140625"/>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.215711805555556"/>
-												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimBegin" Type="Real64" Value="0.133680555555556"/>
-												<Property Name="TrimEnd" Type="Real64" Value="1.66796875"/>
-											</PropertyList>
-											<Language>SFX</Language>
-											<AudioFile>Charge3.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="816299122"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="Charge3" ID="{CA84C4F0-D802-4F7E-86B7-24752D149E8F}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-							</ChildrenList>
-						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="LightningEnemy_SingleStrike_Preparing" ID="{D6DAC0B1-E0A0-468F-B587-41DCCDE15BE3}" ShortID="892663650">
+							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{9DA6F10B-3EC9-414D-BB3C-57C4518B8DEB}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="253"/>
+													<Property Name="Min" Type="Real64" Value="-278"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
@@ -323,9 +291,14 @@
 							<ChildrenList>
 								<Sound Name="Charge1" ID="{0914F1E0-3BD3-49F7-A2AE-F86786D4B359}" ShortID="978790721">
 									<PropertyList>
+										<Property Name="Pitch" Type="int32">
+											<ValueList>
+												<Value>860</Value>
+											</ValueList>
+										</Property>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-6</Value>
+												<Value>-10</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -359,160 +332,27 @@
 								</Sound>
 							</ChildrenList>
 						</RandomSequenceContainer>
-						<RandomSequenceContainer Name="LightningEnemy_Somersault_Preparing" ID="{C73A2AB2-E314-4CC4-AA91-BEF4FC376EEE}" ShortID="694925128">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<Sound Name="Charge1" ID="{6A347CE4-ECE0-40D3-AAA3-39D1552B14F0}" ShortID="170276259">
-									<PropertyList>
-										<Property Name="Volume" Type="Real64">
-											<ValueList>
-												<Value>-6</Value>
-											</ValueList>
-										</Property>
-									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="Charge1" ID="{21C13EE4-F1B4-43A5-88DC-92FC4E270A04}">
-											<PropertyList>
-												<Property Name="FadeInDuration" Type="Real64" Value="0.103080475245654"/>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.0361685878054926"/>
-												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimBegin" Type="Real64" Value="0.202544091710758"/>
-												<Property Name="TrimEnd" Type="Real64" Value="1.01452888794407"/>
-											</PropertyList>
-											<Language>SFX</Language>
-											<AudioFile>Charge1.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="6978400"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="Charge1" ID="{21C13EE4-F1B4-43A5-88DC-92FC4E270A04}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-							</ChildrenList>
-						</RandomSequenceContainer>
-						<BlendContainer Name="LightningEnemy_TripleStrike_Cast" ID="{030ED2D1-239F-4271-AA9C-5BD26196EBB5}" ShortID="661915715">
-							<PropertyList>
-								<Property Name="Volume" Type="Real64">
-									<ValueList>
-										<Value>-3</Value>
-									</ValueList>
-								</Property>
-							</PropertyList>
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master_Audio_Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<Sound Name="Electric Sword Hit 1" ID="{6BC7FE70-C3CE-4474-A58C-99FE23F86D06}" ShortID="146413708">
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="Electric Sword Hit 1" ID="{AFF7B08D-B70F-4ABA-AFB5-8E864B2C8F79}">
-											<PropertyList>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.382536139455782"/>
-												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimEnd" Type="Real64" Value="1.38163052721088"/>
-											</PropertyList>
-											<Language>SFX</Language>
-											<AudioFile>Electric Sword Hit 1.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="997881523"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="Electric Sword Hit 1" ID="{AFF7B08D-B70F-4ABA-AFB5-8E864B2C8F79}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-								<Sound Name="Hit2" ID="{E4E16E03-FBCD-4BF6-913C-B235B19C289E}" ShortID="173464854">
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="Hit2" ID="{23E99F77-4F44-4A89-894E-39ADA22610A7}">
-											<PropertyList>
-												<Property Name="FadeInDuration" Type="Real64" Value="0.212086128432855"/>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.183033234126984"/>
-												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimEnd" Type="Real64" Value="1.26380090230537"/>
-											</PropertyList>
-											<Language>SFX</Language>
-											<AudioFile>Hit2.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="227634464"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="Hit2" ID="{23E99F77-4F44-4A89-894E-39ADA22610A7}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-								<Sound Name="Hit3" ID="{1773A802-D75B-49D8-9860-B0CC86AE38F3}" ShortID="255798177">
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Enemies" ID="{34A08216-146D-44B6-88BB-740B61BE1E9A}" WorkUnitID="{9AD80463-19FE-424A-93D1-284D09AF8267}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="Hit3" ID="{866C18E1-8D60-4A37-B50F-13EBA3C18A3E}">
-											<PropertyList>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.357638888888889"/>
-												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimEnd" Type="Real64" Value="1.61111111111111"/>
-											</PropertyList>
-											<Language>SFX</Language>
-											<AudioFile>Hit3.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="603369938"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="Hit3" ID="{866C18E1-8D60-4A37-B50F-13EBA3C18A3E}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-							</ChildrenList>
-						</BlendContainer>
 						<BlendContainer Name="LightningEnemy_DoubleStrike_Cast" ID="{081E54CC-6073-4A06-935C-0E8E2A6EF050}" ShortID="109433089">
 							<PropertyList>
+								<Property Name="Pitch" Type="int32">
+									<ValueList>
+										<Value>530</Value>
+									</ValueList>
+									<ModifierList>
+										<ModifierInfo>
+											<Modifier Name="" ID="{B78B67C0-C6B2-4AB2-ADFA-477C0AA00780}">
+												<PropertyList>
+													<Property Name="Enabled" Type="bool" Value="True"/>
+													<Property Name="Max" Type="Real64" Value="253"/>
+													<Property Name="Min" Type="Real64" Value="-278"/>
+												</PropertyList>
+											</Modifier>
+										</ModifierInfo>
+									</ModifierList>
+								</Property>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
-										<Value>-3</Value>
+										<Value>-8</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
