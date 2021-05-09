@@ -252,13 +252,10 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         GameSaveManager.Update(Time.deltaTime);
         FXManager.Update(Time.deltaTime);
 
-#if DEBUG
         if (Input.GetKeyUp(KeyCode.P))
         {
             BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, "OnBossSpiderLegAppear");
         }
-
-#endif
     }
 
     void LateUpdate()
@@ -384,17 +381,17 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                 UIManager.Instance.UICamera.enabled = !UIManager.Instance.UICamera.enabled;
             }
 
-#if DEBUG
-
-            if (ControlManager.Common_SlowDownGame.Pressed)
+            if (DebugPanel != null && DebugPanel.IsShown)
             {
-                Time.timeScale = 0.1f;
+                if (ControlManager.Common_SlowDownGame.Pressed)
+                {
+                    Time.timeScale = 0.1f;
+                }
+                else
+                {
+                    Time.timeScale = 1f;
+                }
             }
-            else
-            {
-                Time.timeScale = 1f;
-            }
-#endif
         }
 
         ConfigManager.FixedUpdate(Time.fixedDeltaTime);

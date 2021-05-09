@@ -82,7 +82,6 @@ public class DebugPanel : BaseUIPanel
                     {
                         UnityAction action = () => { m.Invoke(this, new object[] { }); };
                         AddButton(dba.ButtonName, dba.Shortcut, 0, DebugComponentDictTree, action, true);
-#if DEBUG || DEVELOPMENT_BUILD
                         if (dba.Shortcut != KeyCode.None)
                         {
                             OnShortcutKeyDown += () =>
@@ -93,7 +92,6 @@ public class DebugPanel : BaseUIPanel
                                 }
                             };
                         }
-#endif
                     }
                     else
                     {

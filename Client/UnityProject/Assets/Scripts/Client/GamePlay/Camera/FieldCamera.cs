@@ -357,27 +357,37 @@ public class FieldCamera : MonoBehaviour
 
     void UpdateFOVLevel()
     {
-#if DEVELOPMENT_BUILD || DEBUG
-        if (Application.isPlaying)
+        if (ControlManager.Instance.Battle_MouseWheel.y != 0)
         {
-            bool isUIOpen = false;
-            isUIOpen |= UIManager.Instance.IsUIShown<KeyBindingPanel>();
-            isUIOpen |= UIManager.Instance.IsUIShown<EntitySkillPreviewPanel>();
-            bool IsMouseOverGameWindow = !(0 > Input.mousePosition.x || 0 > Input.mousePosition.y || Screen.width < Input.mousePosition.x || Screen.height < Input.mousePosition.y);
-            if (IsMouseOverGameWindow && !isUIOpen)
+#if DEVELOPMENT_BUILD || DEBUG
+            if (Application.isPlaying)
             {
-                if (ControlManager.Instance.Battle_MouseWheel.y < 0)
+#endif
+                bool isInDebugMode = UIManager.Instance.IsUIShown<DebugPanel>();
+                if (isInDebugMode)
                 {
-                    Distance_Level++;
+                    bool isUIOpen = false;
+                    isUIOpen |= UIManager.Instance.IsUIShown<KeyBindingPanel>();
+                    isUIOpen |= UIManager.Instance.IsUIShown<EntitySkillPreviewPanel>();
+                    bool IsMouseOverGameWindow = !(0 > Input.mousePosition.x || 0 > Input.mousePosition.y || Screen.width < Input.mousePosition.x || Screen.height < Input.mousePosition.y);
+                    if (IsMouseOverGameWindow && !isUIOpen)
+                    {
+                        if (ControlManager.Instance.Battle_MouseWheel.y < 0)
+                        {
+                            Distance_Level++;
+                        }
+
+                        if (ControlManager.Instance.Battle_MouseWheel.y > 0)
+                        {
+                            Distance_Level--;
+                        }
+                    }
                 }
 
-                if (ControlManager.Instance.Battle_MouseWheel.y > 0)
-                {
-                    Distance_Level--;
-                }
+#if DEVELOPMENT_BUILD || DEBUG
             }
-        }
 #endif
+        }
     }
 
     #endregion
