@@ -355,8 +355,15 @@ public class FieldCamera : MonoBehaviour
     [LabelText("InGameUI大小等级")]
     public float[] InGameUISizeLevels = new float[] {2f, 1.5f, 1, 0.8f, 0.65f, 0.5f, 0.3f, 0.2f};
 
+    private bool unlockZoomInOut = false;
+
     void UpdateFOVLevel()
     {
+        if (Input.GetKeyUp(KeyCode.F2))
+        {
+            unlockZoomInOut = !unlockZoomInOut;
+        }
+
         if (ControlManager.Instance.Battle_MouseWheel.y != 0)
         {
 #if DEVELOPMENT_BUILD || DEBUG
@@ -364,7 +371,7 @@ public class FieldCamera : MonoBehaviour
             {
 #endif
                 bool isInDebugMode = UIManager.Instance.IsUIShown<DebugPanel>();
-                if (isInDebugMode)
+                if (isInDebugMode || unlockZoomInOut)
                 {
                     bool isUIOpen = false;
                     isUIOpen |= UIManager.Instance.IsUIShown<KeyBindingPanel>();
