@@ -64,7 +64,7 @@ public class EntityLightning : PoolObject
                 float lightningPSDefaultScale = 13f;
                 LightningPS.transform.localScale = new Vector3(scale / LightningPS.transform.parent.lossyScale.x / lightningPSDefaultScale, scale / LightningPS.transform.parent.lossyScale.y / lightningPSDefaultScale, scale / LightningPS.transform.parent.lossyScale.z / lightningPSDefaultScale);
                 BoxCollider boxCollider = (BoxCollider) EntityTriggerZone_Lightning.Collider;
-                boxCollider.size = new Vector3(0.2f / EntityTriggerZone_Lightning.transform.lossyScale.x, 0.2f / EntityTriggerZone_Lightning.transform.lossyScale.y, scale / EntityTriggerZone_Lightning.transform.lossyScale.z);
+                boxCollider.size = new Vector3(0.2f / EntityTriggerZone_Lightning.transform.lossyScale.x, 0.4f / EntityTriggerZone_Lightning.transform.lossyScale.y, scale / EntityTriggerZone_Lightning.transform.lossyScale.z);
                 transform.LookAt(EndPivot);
             }
         }

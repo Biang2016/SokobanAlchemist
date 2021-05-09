@@ -269,7 +269,7 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("SwitchWorld/{0}", "GetAllWorldNames", -10)]
     public void ChangeWorld(string worldName)
     {
-        ClientGameManager.Instance.ChangeWorld(worldName, false);
+        ClientGameManager.Instance.ChangeWorld(worldName, true);
     }
 
     public List<string> GetAllWorldNames()

@@ -469,7 +469,7 @@ public class Actor : Entity
         PassiveSkillMarkAsDestroyed = false;
     }
 
-    public void ReloadESPS(EntityStatPropSet srcESPS)
+    public void ReloadESPS(EntityStatPropSet srcESPS, bool keepResources)
     {
         // 财产保留 todo 待重构
         int gold = EntityStatPropSet.Gold.Value;
@@ -482,10 +482,13 @@ public class Actor : Entity
         EntityStatPropSet.Initialize(this);
         ActorBattleHelper.InGameHealthBar.Initialize(ActorBattleHelper, 100, 30);
 
-        EntityStatPropSet.Gold.SetValue(gold);
-        EntityStatPropSet.FireElementFragment.SetValue(fire);
-        EntityStatPropSet.IceElementFragment.SetValue(ice);
-        EntityStatPropSet.LightningElementFragment.SetValue(lightning);
+        if (keepResources)
+        {
+            EntityStatPropSet.Gold.SetValue(gold);
+            EntityStatPropSet.FireElementFragment.SetValue(fire);
+            EntityStatPropSet.IceElementFragment.SetValue(ice);
+            EntityStatPropSet.LightningElementFragment.SetValue(lightning);
+        }
 
         ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
         ActiveSkillMarkAsDestroyed = false;

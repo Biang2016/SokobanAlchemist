@@ -230,7 +230,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         WorldManager.Instance.CurrentWorld.ApplyWorldVisualEffectSettings(WorldManager.Instance.CurrentWorld.WorldData);
         if (WorldManager.Instance.CurrentWorld.WorldData.UseSpecialPlayerEnterESPS)
         {
-            Player1.ReloadESPS(WorldManager.Instance.CurrentWorld.WorldData.Raw_PlayerEnterESPS);
+            Player1.ReloadESPS(WorldManager.Instance.CurrentWorld.WorldData.Raw_PlayerEnterESPS, false);
         }
 
         GameStateManager.Instance.SetState(GameState.Fighting);

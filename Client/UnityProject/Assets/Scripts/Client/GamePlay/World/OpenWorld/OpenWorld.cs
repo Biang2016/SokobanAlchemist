@@ -312,6 +312,9 @@ public class OpenWorld : World
         BattleManager.Instance.IsStart = false;
         CameraManager.Instance.FieldCamera.InitFocus();
 
+        DungeonMissionState = DungeonMissionState.NotInDungeon;
+        SavePlayerGrowth();
+
         // 没有起始关卡就直接进入大世界，有起始关卡则避免加载了又卸载
         ushort startDungeonTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.World, StartDungeonTypeName.TypeName);
         if (startDungeonTypeIndex == 0)
@@ -686,6 +689,10 @@ public class OpenWorld : World
             yield return RecycleEmptyModules();
             DungeonMissionState = DungeonMissionState.DungeonPartialComplete;
             SavePlayerGrowth();
+            if (IsUsingSpecialESPSInsideDungeon) // 如果上个关卡是特殊关卡，出来后要恢复玩家成长到该关之前
+            {
+                LoadPlayerGrowth();
+            }
         }
         else
         {
@@ -744,7 +751,10 @@ public class OpenWorld : World
 
         // Dungeon Special Settings
         IsUsingSpecialESPSInsideDungeon = dungeonData.UseSpecialPlayerEnterESPS;
-        if (IsUsingSpecialESPSInsideDungeon) BattleManager.Instance.Player1.ReloadESPS(dungeonData.Raw_PlayerEnterESPS);
+        if (IsUsingSpecialESPSInsideDungeon)
+        {
+            BattleManager.Instance.Player1.ReloadESPS(dungeonData.Raw_PlayerEnterESPS, false);
+        }
 
         WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState.Exploring); // 默认战斗状态 （如果有Camp的世界将由对应的TriggerBox来切换到InCamp）
         BattleManager.Instance.Player1.CanBeThreatened = true; // 时序，要在Transport之前，因为Transport后可能会由TriggerBox赋值CanBeThreatened状态
@@ -941,7 +951,7 @@ public class OpenWorld : World
         BattleManager.Instance.Player1.TransportPlayerGridPos(transportPlayerBornPoint); // 时序，传送要发生在CombatState切换到默认值之后（如果有InCamp状态将在此行赋值）
         BattleManager.Instance.Player1.Reborn();
 
-        if (IsUsingSpecialESPSInsideDungeon) BattleManager.Instance.Player1.ReloadESPS(dungeonData.Raw_PlayerEnterESPS);
+        if (IsUsingSpecialESPSInsideDungeon) BattleManager.Instance.Player1.ReloadESPS(dungeonData.Raw_PlayerEnterESPS, false);
 
         CameraManager.Instance.FieldCamera.InitFocus();
 
@@ -1051,23 +1061,23 @@ public class OpenWorld : World
     {
         if (DungeonMissionState == DungeonMissionState.NotInDungeon)
         {
-            PlayerDataSave?.ApplyDataOnPlayer();
+            PlayerDataSave?.ApplyDataOnPlayer(true);
         }
         else
         {
             if (IsUsingSpecialESPSInsideDungeon) // 此类特殊关卡默认不计入成长，如教程关、体验关等等
             {
-                PlayerDataSave?.ApplyDataOnPlayer();
+                PlayerDataSave?.ApplyDataOnPlayer(false);
             }
             else
             {
                 if (DungeonMissionState == DungeonMissionState.DungeonPartialFailed) // Dungeon死亡，回到上一关的存档数据
                 {
-                    PlayerDataSave_DungeonTemp?.ApplyDataOnPlayer();
+                    PlayerDataSave_DungeonTemp?.ApplyDataOnPlayer(true);
                 }
                 else if (DungeonMissionState == DungeonMissionState.DungeonFailed) // Dungeon放弃，回到进入Dungeon之前的大世界的存档数据
                 {
-                    PlayerDataSave?.ApplyDataOnPlayer();
+                    PlayerDataSave?.ApplyDataOnPlayer(true);
                 }
             }
         }

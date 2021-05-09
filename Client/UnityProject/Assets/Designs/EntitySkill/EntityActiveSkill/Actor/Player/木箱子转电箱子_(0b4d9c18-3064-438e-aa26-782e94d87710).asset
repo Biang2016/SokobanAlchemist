@@ -20,6 +20,7 @@ MonoBehaviour:
       type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: (0b4d9c18-3064-438e-aa26-782e94d87710)
         SkillAlias: "\u6728\u7BB1\u5B50\u8F6C\u7535\u7BB1\u5B50"
         SkillName_EN: Electric Maker
@@ -88,7 +89,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           ConsumeLightningElementFragment:
-            BaseValue: 10
+            BaseValue: 3
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 1000
@@ -130,6 +131,7 @@ MonoBehaviour:
       type: {class: BoxSkillAction_ChangeBoxType, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         EntityData:
           WorldGP:
             x: 0
@@ -139,6 +141,7 @@ MonoBehaviour:
             x: 0
             y: 0
             z: 0
+          InitStaticLayoutGUID: 
           EntityType:
             TypeDefineType: 0
             TypeGUID: (392aec17-1844-43c8-92d3-826cc62fa4bb)
@@ -155,6 +158,7 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: 
         SkillAlias: 
         SkillName_EN: 
@@ -195,6 +199,7 @@ MonoBehaviour:
       type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         FX:
           FXType:
             TypeDefineType: 7
