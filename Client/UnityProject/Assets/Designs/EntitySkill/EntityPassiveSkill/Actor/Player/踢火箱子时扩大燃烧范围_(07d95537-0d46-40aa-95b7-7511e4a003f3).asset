@@ -20,6 +20,7 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: (07d95537-0d46-40aa-95b7-7511e4a003f3)
         SkillAlias: "\u8E22\u706B\u7BB1\u5B50\u65F6\u6269\u5927\u71C3\u70E7\u8303\u56F4"
         SkillName_EN: Fire Explode
@@ -27,9 +28,9 @@ MonoBehaviour:
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: (091061ef-7c48-4664-b762-8b794d17ceaa)
-        SkillDescription_EN: Enhance the fire box's power and range when it's kicked.
-          Spend 10 fire element
-        SkillDescription_ZH: "\u589E\u5F3A\u8E22\u51FA\u7684\u706B\u7BB1\u5B50\u7684\u5A01\u529B\u548C\u8303\u56F4\uFF0C\u6D88\u801710\u70B9\u706B\u5143\u7D20"
+        SkillDescription_EN: Enhance the fire box's power and range when it's kicked,
+          then spend 5 fire element
+        SkillDescription_ZH: "\u589E\u5F3A\u8E22\u51FA\u7684\u706B\u7BB1\u5B50\u7684\u5A01\u529B\u548C\u8303\u56F4\uFF0C\u6D88\u80175\u70B9\u706B\u5143\u7D20"
         PlayerCanLearn: 1
         GoldCost: 6
         OccupySkillGrid: 1
@@ -61,6 +62,7 @@ MonoBehaviour:
       type: {class: EntitySkillAction_ExecuteActiveSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         TargetEntityType: 4
         EntitySkillSO: {fileID: 11400000, guid: d7cafbe2f27f143429f72fa9c4640c8d,
           type: 2}

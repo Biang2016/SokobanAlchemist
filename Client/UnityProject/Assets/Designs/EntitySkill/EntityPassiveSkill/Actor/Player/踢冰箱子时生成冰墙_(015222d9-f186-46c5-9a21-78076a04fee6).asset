@@ -20,6 +20,7 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: (015222d9-f186-46c5-9a21-78076a04fee6)
         SkillAlias: "\u8E22\u51B0\u7BB1\u5B50\u65F6\u751F\u6210\u51B0\u5899"
         SkillName_EN: Ice Wall
@@ -27,8 +28,9 @@ MonoBehaviour:
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: (154524e9-714f-40b1-8307-fcbe38618922)
-        SkillDescription_EN: Generate an ice wall when you kick out the ice box.
-        SkillDescription_ZH: "\u8E22\u51FA\u51B0\u7BB1\u5B50\u65F6\uFF0C\u5728\u5176\u8DEF\u5F84\u4E0A\u751F\u6210\u4E00\u5835\u51B0\u5899"
+        SkillDescription_EN: Generate an ice wall when you kick out the ice box,
+          then spend 5 ice element.
+        SkillDescription_ZH: "\u8E22\u51FA\u51B0\u7BB1\u5B50\u65F6\uFF0C\u5728\u5176\u8DEF\u5F84\u4E0A\u751F\u6210\u4E00\u5835\u51B0\u5899\uFF0C\u5E76\u6D88\u80175\u70B9\u51B0\u5143\u7D20"
         PlayerCanLearn: 1
         GoldCost: 9
         OccupySkillGrid: 1
@@ -60,6 +62,7 @@ MonoBehaviour:
       type: {class: EntitySkillAction_ExecuteActiveSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         TargetEntityType: 4
         EntitySkillSO: {fileID: 11400000, guid: 66ab8aca1d3cc574cbd6a54383ec81c7,
           type: 2}
