@@ -655,34 +655,61 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             if (EntityStatChangeType == entityStatType)
             {
                 bool trigger = false;
-                int threshold = EntityStatChangeThreshold;
                 if (EntityStatChangeThreshold_UsePercent)
                 {
-                    if (max == 0) threshold = 0;
-                    else threshold = Mathf.RoundToInt(EntityStatChangeThresholdPercent / 100f * max);
+                    if (max != 0)
+                    {
+                        float threshold = EntityStatChangeThresholdPercent / 100f * max;
+                        switch (EntityStatChangeThresholdType)
+                        {
+                            case ValueChangeOverThresholdType.LE_to_G:
+                            {
+                                trigger = before <= threshold && after > threshold;
+                                break;
+                            }
+                            case ValueChangeOverThresholdType.L_to_GE:
+                            {
+                                trigger = before < threshold && after >= threshold;
+                                break;
+                            }
+                            case ValueChangeOverThresholdType.GE_to_L:
+                            {
+                                trigger = before >= threshold && after < threshold;
+                                break;
+                            }
+                            case ValueChangeOverThresholdType.G_to_LE:
+                            {
+                                trigger = before > threshold && after <= threshold;
+                                break;
+                            }
+                        }
+                    }
                 }
-
-                switch (EntityStatChangeThresholdType)
+                else
                 {
-                    case ValueChangeOverThresholdType.LE_to_G:
+                    int threshold = EntityStatChangeThreshold;
+                    switch (EntityStatChangeThresholdType)
                     {
-                        trigger = before <= threshold && after > threshold;
-                        break;
-                    }
-                    case ValueChangeOverThresholdType.L_to_GE:
-                    {
-                        trigger = before < threshold && after >= threshold;
-                        break;
-                    }
-                    case ValueChangeOverThresholdType.GE_to_L:
-                    {
-                        trigger = before >= threshold && after < threshold;
-                        break;
-                    }
-                    case ValueChangeOverThresholdType.G_to_LE:
-                    {
-                        trigger = before > threshold && after <= threshold;
-                        break;
+                        case ValueChangeOverThresholdType.LE_to_G:
+                        {
+                            trigger = before <= threshold && after > threshold;
+                            break;
+                        }
+                        case ValueChangeOverThresholdType.L_to_GE:
+                        {
+                            trigger = before < threshold && after >= threshold;
+                            break;
+                        }
+                        case ValueChangeOverThresholdType.GE_to_L:
+                        {
+                            trigger = before >= threshold && after < threshold;
+                            break;
+                        }
+                        case ValueChangeOverThresholdType.G_to_LE:
+                        {
+                            trigger = before > threshold && after <= threshold;
+                            break;
+                        }
                     }
                 }
 

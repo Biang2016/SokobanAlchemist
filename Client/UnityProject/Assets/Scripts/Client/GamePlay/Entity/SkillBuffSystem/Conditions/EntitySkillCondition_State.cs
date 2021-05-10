@@ -93,29 +93,51 @@ public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondi
             {
                 EntityStat stat = Entity.EntityStatPropSet.StatDict[EntityStatType];
                 bool trigger = false;
-                int threshold = EntityStatThreshold;
                 if (EntityStatThreshold_UsePercent)
                 {
-                    if (stat.MaxValue == 0) threshold = 0;
-                    else threshold = Mathf.RoundToInt(EntityStatThresholdPercent / 100f * stat.MaxValue);
+                    if (stat.MaxValue != 0)
+                    {
+                        float threshold = EntityStatThresholdPercent / 100f * stat.MaxValue;
+                        switch (ThresholdOperator)
+                        {
+                            case Operator.LessEquals:
+                            {
+                                trigger = stat.Value <= threshold;
+                                break;
+                            }
+                            case Operator.Equals:
+                            {
+                                trigger = stat.Value.Equals(Mathf.RoundToInt(threshold));
+                                break;
+                            }
+                            case Operator.GreaterEquals:
+                            {
+                                trigger = stat.Value >= threshold;
+                                break;
+                            }
+                        }
+                    }
                 }
-
-                switch (ThresholdOperator)
+                else
                 {
-                    case Operator.LessEquals:
+                    int threshold = EntityStatThreshold;
+                    switch (ThresholdOperator)
                     {
-                        trigger = stat.Value <= threshold;
-                        break;
-                    }
-                    case Operator.Equals:
-                    {
-                        trigger = stat.Value == threshold;
-                        break;
-                    }
-                    case Operator.GreaterEquals:
-                    {
-                        trigger = stat.Value >= threshold;
-                        break;
+                        case Operator.LessEquals:
+                        {
+                            trigger = stat.Value <= threshold;
+                            break;
+                        }
+                        case Operator.Equals:
+                        {
+                            trigger = stat.Value == threshold;
+                            break;
+                        }
+                        case Operator.GreaterEquals:
+                        {
+                            trigger = stat.Value >= threshold;
+                            break;
+                        }
                     }
                 }
 

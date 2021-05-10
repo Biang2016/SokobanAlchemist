@@ -605,10 +605,13 @@ public class EntityStatPropSet
             actor.ActorBattleHelper.ShowDamageNumFX(decrease);
             actor.EntityWwiseHelper.OnBeingDamaged.Post(actor.gameObject);
 
-            if (HealthDurability.Value < 0.2f * HealthDurability.MaxValue)
+            if (actor == BattleManager.Instance.Player1)
             {
-                ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].HealthBottle.OnStatLowWarning();
-                Entity.EntityWwiseHelper.OnLowHealthWarning?.Post(Entity.gameObject);
+                if (HealthDurability.Value < 0.2f * HealthDurability.MaxValue)
+                {
+                    ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].HealthBottle.OnStatLowWarning();
+                    Entity.EntityWwiseHelper.OnLowHealthWarning?.Post(Entity.gameObject);
+                }
             }
         }
     }
