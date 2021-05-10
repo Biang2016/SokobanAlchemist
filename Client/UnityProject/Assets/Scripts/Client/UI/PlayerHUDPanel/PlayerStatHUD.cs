@@ -68,6 +68,11 @@ public class PlayerStatHUD : MonoBehaviour
 
     public Dictionary<PlayerControllerHelper.KeyBind, ISkillBind> SkillSlotDict = new Dictionary<PlayerControllerHelper.KeyBind, ISkillBind>();
 
+    public HashSet<PlayerControllerHelper.KeyBind> JKL_KeyBinds = new HashSet<PlayerControllerHelper.KeyBind>
+    {
+        PlayerControllerHelper.KeyBind.J_RightTrigger, PlayerControllerHelper.KeyBind.K, PlayerControllerHelper.KeyBind.L
+    };
+
     public SkillSlot SkillSlot_Num1;
     public SkillSlot SkillSlot_Num2;
     public SkillSlot SkillSlot_Num3;

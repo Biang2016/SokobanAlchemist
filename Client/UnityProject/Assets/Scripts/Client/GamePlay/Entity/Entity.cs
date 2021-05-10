@@ -682,10 +682,13 @@ public abstract class Entity : PoolObject
                     PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
                     foreach (KeyValuePair<PlayerControllerHelper.KeyBind, ISkillBind> kv in HUD.SkillSlotDict)
                     {
-                        if (kv.Value.EmptySkill)
+                        if (!HUD.JKL_KeyBinds.Contains(kv.Key))
                         {
-                            kv.Value.BindSkill(eps);
-                            break;
+                            if (kv.Value.EmptySkill)
+                            {
+                                kv.Value.BindSkill(eps);
+                                break;
+                            }
                         }
                     }
                 }

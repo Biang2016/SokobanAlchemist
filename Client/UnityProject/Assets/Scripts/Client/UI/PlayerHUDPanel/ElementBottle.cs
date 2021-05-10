@@ -66,7 +66,8 @@ public class ElementBottle : MonoBehaviour, ISkillBind
 
             curEntitySkillRow?.PoolRecycle();
             curEntitySkillRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(SkillRowContainer);
-            curEntitySkillRow.Initialize(entitySkill, (BoundEntitySkill is EntityActiveSkill) ? MyKeyBind.ToString() : "", 0);
+            PlayerControllerHelper.KeyMappingStrDict.TryGetValue(MyKeyBind, out string keyBindStr);
+            curEntitySkillRow.Initialize(entitySkill, (BoundEntitySkill is EntityActiveSkill) ? keyBindStr : "", 0);
         }
     }
 
