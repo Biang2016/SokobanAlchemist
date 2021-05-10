@@ -651,9 +651,9 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 Box box = boxPrefab.GetComponent<Box>();
                 if (box)
                 {
-                    box.BoxIndicatorHelper.RefreshEntityIndicatorOccupationData();
+                    box.EntityIndicatorHelper.RefreshEntityIndicatorOccupationData();
                     EditorUtility.SetDirty(boxPrefab);
-                    EntityOccupationData occupationData = box.BoxIndicatorHelper.EntityOccupationData.Clone();
+                    EntityOccupationData occupationData = box.EntityIndicatorHelper.EntityOccupationData.Clone();
                     ushort entityTypeIndex = TypeDefineConfigs[TypeDefineType.Box].TypeIndexDict[box.name];
                     if (entityTypeIndex != 0)
                     {

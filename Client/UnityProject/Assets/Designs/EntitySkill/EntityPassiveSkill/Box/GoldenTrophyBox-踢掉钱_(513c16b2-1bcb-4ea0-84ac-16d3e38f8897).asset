@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "TrophyBoxCommon-\u8E22\u6389\u94B1_(74be56dd-05c4-48bc-8789-039958f7f147)"
+  m_Name: "GoldenTrophyBox-\u8E22\u6389\u94B1_(513c16b2-1bcb-4ea0-84ac-16d3e38f8897)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
@@ -20,8 +20,9 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        SkillGUID: (74be56dd-05c4-48bc-8789-039958f7f147)
-        SkillAlias: "TrophyBoxCommon-\u8E22\u6389\u94B1"
+        InitStaticLayoutGUID: 
+        SkillGUID: (513c16b2-1bcb-4ea0-84ac-16d3e38f8897)
+        SkillAlias: "GoldenTrophyBox-\u8E22\u6389\u94B1"
         SkillName_EN: 
         SkillName_ZH: 
         SkillIcon:
@@ -29,6 +30,15 @@ MonoBehaviour:
           TypeGUID: 
         SkillDescription_EN: 
         SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
         PassiveSkillCondition: 8
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
@@ -53,18 +63,21 @@ MonoBehaviour:
       type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         RawEntityBuffs:
         - id: 4
     00000002:
       type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         RawEntityBuffs:
         - id: 5
     00000003:
       type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         FX:
           FXType:
             TypeDefineType: 7
@@ -102,7 +115,7 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         EntityStatType: 1000
-        Delta: -1
+        Delta: -3
         Percent: 0
     00000005:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
@@ -128,5 +141,5 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
         EntityStatType: 1000
-        Delta: 1
+        Delta: 3
         Percent: 0

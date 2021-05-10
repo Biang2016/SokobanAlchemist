@@ -21,57 +21,7 @@ public partial class Box : Entity
 
     internal Entity LastInteractEntity;
 
-    internal override EntityArtHelper EntityArtHelper => BoxArtHelper;
-    internal override EntityWwiseHelper EntityWwiseHelper => BoxWwiseHelper;
-    internal override EntityModelHelper EntityModelHelper => BoxModelHelper;
-    internal override EntityIndicatorHelper EntityIndicatorHelper => BoxIndicatorHelper;
-    internal override EntityBuffHelper EntityBuffHelper => BoxBuffHelper;
-    internal override EntityFrozenHelper EntityFrozenHelper => BoxFrozenHelper;
-    internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => BoxTriggerZoneHelper;
-    internal override EntityCollectHelper EntityCollectHelper => BoxCollectHelper;
-    internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => BoxGrindTriggerZoneHelper;
-    internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => BoxFlamethrowerHelpers;
-    internal override List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers => BoxLightningGeneratorHelpers;
-
-    [FoldoutGroup("组件")]
-    public BoxArtHelper BoxArtHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityWwiseHelper BoxWwiseHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityModelHelper BoxModelHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityIndicatorHelper BoxIndicatorHelper;
-
-    [FoldoutGroup("组件")]
-    [SerializeField]
-    private EntityBuffHelper BoxBuffHelper;
-
-    [FoldoutGroup("组件")]
-    [SerializeField]
-    private BoxFrozenHelper BoxFrozenHelper;
-
-    [FoldoutGroup("组件")]
-    [SerializeField]
-    private EntityTriggerZoneHelper BoxTriggerZoneHelper;
-
-    [FoldoutGroup("组件")]
-    [SerializeField]
-    private EntityCollectHelper BoxCollectHelper;
-
-    [FoldoutGroup("组件")]
-    [SerializeField]
-    private EntityGrindTriggerZoneHelper BoxGrindTriggerZoneHelper;
-
-    [FoldoutGroup("组件")]
-    [SerializeField]
-    private List<EntityFlamethrowerHelper> BoxFlamethrowerHelpers;
-
-    [FoldoutGroup("组件")]
-    [SerializeField]
-    private List<EntityLightningGeneratorHelper> BoxLightningGeneratorHelpers;
+    #region Helpers
 
     [FoldoutGroup("组件")]
     [SerializeField]
@@ -98,6 +48,27 @@ public partial class Box : Entity
     [FoldoutGroup("组件")]
     public TransportBoxHelper TransportBoxHelper;
 
+    [FoldoutGroup("组件")]
+    public SmoothMove BoxIconSpriteSmoothMove;
+
+    [FoldoutGroup("组件")]
+    public SmoothMove BoxModelSmoothMove;
+
+    protected override void OnInitHelperList()
+    {
+        base.OnInitHelperList();
+        EntityMonoHelpers.Add(BoxEffectHelper);
+        EntityMonoHelpers.Add(BoxColliderHelper);
+        EntityMonoHelpers.Add(DoorBoxHelper);
+        EntityMonoHelpers.Add(BoxSkinHelper);
+        EntityMonoHelpers.Add(BoxIconSpriteHelper);
+        EntityMonoHelpers.Add(BoxFrozenBoxHelper);
+        EntityMonoHelpers.Add(BoxMarchingTextureHelper);
+        EntityMonoHelpers.Add(TransportBoxHelper);
+    }
+
+    #endregion
+
     internal Actor FrozenActor
     {
         get { return BoxFrozenBoxHelper != null ? BoxFrozenBoxHelper.FrozenActor : null; }
@@ -110,15 +81,9 @@ public partial class Box : Entity
         }
     }
 
-    [FoldoutGroup("组件")]
-    public SmoothMove BoxIconSpriteSmoothMove;
-
-    [FoldoutGroup("组件")]
-    public SmoothMove BoxModelSmoothMove;
-
     internal bool ArtOnly;
 
-    void Awake()
+    protected override void Awake()
     {
         EntityStatPropSet = new EntityStatPropSet();
     }
@@ -128,33 +93,8 @@ public partial class Box : Entity
         gameObject.SetActive(true);
         LastInteractEntity = null;
         ArtOnly = true;
-
-        EntityArtHelper?.OnHelperUsed();
-        EntityWwiseHelper.OnHelperUsed();
-        EntityModelHelper.OnHelperUsed();
-        EntityIndicatorHelper.OnHelperUsed();
-        EntityBuffHelper.OnHelperUsed();
-        EntityFrozenHelper.OnHelperUsed();
-        EntityTriggerZoneHelper?.OnHelperUsed();
-        EntityCollectHelper?.OnHelperUsed();
-        EntityGrindTriggerZoneHelper?.OnHelperUsed();
-        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
-        {
-            h.OnHelperUsed();
-        }
-
-        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
-        {
-            h.OnHelperUsed();
-        }
-
-        BoxColliderHelper.OnHelperUsed();
-        DoorBoxHelper?.OnHelperUsed();
-        BoxSkinHelper?.OnHelperUsed();
-        BoxIconSpriteHelper.OnHelperUsed();
-        BoxFrozenBoxHelper?.OnHelperUsed();
-        BoxMarchingTextureHelper?.OnHelperUsed();
-        TransportBoxHelper?.OnHelperUsed();
+        OnInitHelperList();
+        foreach (EntityMonoHelper h in EntityMonoHelpers) h?.OnHelperUsed();
         BoxMergeConfig.OnUsed();
         base.OnUsed();
     }
@@ -171,33 +111,7 @@ public partial class Box : Entity
         State = States.Static;
         IsDestroying = false;
 
-        EntityArtHelper?.OnHelperRecycled();
-        EntityWwiseHelper.OnHelperRecycled();
-        EntityModelHelper.OnHelperRecycled();
-        EntityIndicatorHelper.OnHelperRecycled();
-        EntityBuffHelper.OnHelperRecycled();
-        EntityFrozenHelper.OnHelperRecycled();
-        EntityTriggerZoneHelper?.OnHelperRecycled();
-        EntityCollectHelper?.OnHelperRecycled();
-        EntityGrindTriggerZoneHelper?.OnHelperRecycled();
-        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
-        {
-            h.OnHelperRecycled();
-        }
-
-        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
-        {
-            h.OnHelperRecycled();
-        }
-
-        BoxEffectHelper.OnHelperRecycled();
-        BoxColliderHelper.OnHelperRecycled();
-        DoorBoxHelper?.OnHelperRecycled();
-        BoxSkinHelper?.OnHelperRecycled();
-        BoxIconSpriteHelper?.OnHelperRecycled();
-        BoxFrozenBoxHelper?.OnHelperRecycled();
-        BoxMarchingTextureHelper?.OnHelperRecycled();
-        TransportBoxHelper?.OnHelperRecycled();
+        foreach (EntityMonoHelper h in EntityMonoHelpers) h?.OnHelperRecycled();
         BoxMergeConfig.OnRecycled();
 
         UnInitPassiveSkills();
@@ -250,8 +164,8 @@ public partial class Box : Entity
         base.SwitchEntityOrientation(boxOrientation);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxColliderHelper.transform, 1);
         GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), EntityModelHelper.transform, 1);
-        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxFrozenHelper.FrozeModelRoot.transform, 1);
-        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), BoxIndicatorHelper.transform, 1);
+        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), EntityFrozenHelper.FrozeModelRoot.transform, 1);
+        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), EntityIndicatorHelper.transform, 1);
         if (EntityTriggerZoneHelper) GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), EntityTriggerZoneHelper.transform, 1);
         if (EntityGrindTriggerZoneHelper) GridPosR.ApplyGridPosToLocalTrans(new GridPosR(0, 0, boxOrientation), EntityGrindTriggerZoneHelper.transform, 1);
     }
@@ -492,7 +406,7 @@ public partial class Box : Entity
         base.Setup(entityData, initWorldModuleGUID);
         transform.position = worldGP;
         WorldGP = worldGP;
-        if (IsHidden) BoxModelHelper.gameObject.SetActive(false);
+        if (IsHidden) EntityModelHelper.gameObject.SetActive(false);
         EntityTypeIndex = entityData.EntityTypeIndex;
 
         InitPassiveSkills();
@@ -821,13 +735,13 @@ public partial class Box : Entity
 
             if (CurrentKickLocalAxis == KickAxis.X && Grind_X || CurrentKickLocalAxis == KickAxis.Z && Grind_Z)
             {
-                BoxGrindTriggerZoneHelper?.SetActive(true);
+                EntityGrindTriggerZoneHelper?.SetActive(true);
                 BoxColliderHelper.OnKick_ToGrind();
                 State = States.BeingKickedToGrind;
             }
             else
             {
-                BoxGrindTriggerZoneHelper?.SetActive(false);
+                EntityGrindTriggerZoneHelper?.SetActive(false);
                 BoxColliderHelper.OnKick();
                 State = States.BeingKicked;
             }
@@ -1116,7 +1030,7 @@ public partial class Box : Entity
 
                     BoxColliderHelper.OnRigidbodyStop();
                     BoxEffectHelper.HideTrails();
-                    BoxGrindTriggerZoneHelper?.SetActive(false);
+                    EntityGrindTriggerZoneHelper?.SetActive(false);
 
                     foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
                     {
@@ -1377,7 +1291,7 @@ public partial class Box : Entity
     {
         MarkedAsMergedSourceBox = true;
         BoxColliderHelper.OnMerge();
-        BoxIndicatorHelper.IsOn = false;
+        EntityIndicatorHelper.IsOn = false;
         foreach (EntityPassiveSkill ps in EntityPassiveSkills)
         {
             ps.OnBeforeMergeBox();

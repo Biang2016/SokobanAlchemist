@@ -291,19 +291,6 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
     }
 
-    public void SetAllActorShown(bool shown)
-    {
-        for (int i = 0; i < MainPlayers.Length; i++)
-        {
-            MainPlayers[i]?.SetShown(shown);
-        }
-
-        foreach (Actor enemy in Enemies)
-        {
-            enemy.SetShown(shown);
-        }
-    }
-
     private List<Actor> cachedSearchActorList = new List<Actor>(32);
     private Collider[] cachedColliders = new Collider[128];
 

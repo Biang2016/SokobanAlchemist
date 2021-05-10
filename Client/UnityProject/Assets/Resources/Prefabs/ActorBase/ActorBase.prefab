@@ -280,6 +280,18 @@ MonoBehaviour:
   InitWorldModuleGUID: 0
   SlowlyTick: 0
   AutoDeleteWhenNotInModule: 1
+  CanAutoFallDown: 1
+  EntityArtHelper: {fileID: 8171001807248883519}
+  EntityWwiseHelper: {fileID: 3744265640672872604}
+  EntityModelHelper: {fileID: 7482838027039899299}
+  EntityIndicatorHelper: {fileID: 7089615971486072453}
+  EntityBuffHelper: {fileID: 9163556110511499603}
+  EntityFrozenHelper: {fileID: 4549577115905723303}
+  EntityTriggerZoneHelper: {fileID: 4516746531455456877}
+  EntityCollectHelper: {fileID: 0}
+  EntityGrindTriggerZoneHelper: {fileID: 0}
+  EntityFlamethrowerHelpers: []
+  EntityLightningGeneratorHelpers: []
   EntityTypeIndex: 0
   RawEntityStatPropSet:
     CollectDetectRadius:
@@ -518,7 +530,6 @@ MonoBehaviour:
       ModifiedValue: 0
       MinValue: 0
       MaxValue: 10000
-  CanAutoFallDown: 1
   PreferTerrainTypes: 
   RawFlamethrowerFuelData:
     id: 0
@@ -527,6 +538,8 @@ MonoBehaviour:
   Camp: 0
   DropConeAngle: 30
   DropVelocity: 30
+  FrequentUpdate: 0
+  ActorClass: 0
   RigidBody: {fileID: 7176362684188563293}
   ActorMoveColliders:
   - {fileID: 3456650540923688115}
@@ -539,17 +552,6 @@ MonoBehaviour:
   ActorBoxInteractHelper: {fileID: 3175763095622581172}
   ActorSkillLearningHelper: {fileID: 0}
   LiftBoxPivot: {fileID: 6770438509873070911}
-  ActorArtHelper: {fileID: 8171001807248883519}
-  ActorWwiseHelper: {fileID: 3744265640672872604}
-  ActorModelHelper: {fileID: 7482838027039899299}
-  ActorIndicatorHelper: {fileID: 7089615971486072453}
-  ActorBuffHelper: {fileID: 9163556110511499603}
-  ActorFrozenHelper: {fileID: 4549577115905723303}
-  ActorTriggerZoneHelper: {fileID: 4516746531455456877}
-  ActorCollectHelper: {fileID: 0}
-  ActorGrindTriggerZoneHelper: {fileID: 102898860229551115}
-  ActorFlamethrowerHelpers: []
-  ActorLightningGeneratorHelpers: []
   ActorCategory: 0
   ActorType: 
   CurMoveAttempt: {x: 0, y: 0, z: 0}
@@ -592,8 +594,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  FrequentUpdate: 0
-  ActorClass: 0
   Accelerate: 200
   KickForce: 30
   ThrowRadius: 15

@@ -868,7 +868,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<EntitySkillAction> RawEntitySkillActions = new List<EntitySkillAction>(); // 干数据，禁修改
 
-    [HideInInspector]
+    [HideInEditorMode]
+    [ShowInInspector]
+    [LabelText("实时内容")]
     internal List<EntitySkillAction> EntitySkillActions = new List<EntitySkillAction>(); // 湿数据，每个Entity生命周期开始前从干数据数据拷贝，数量永远和干数据相等
 
     internal bool EntitySkillActionsMarkAsDeleted = false;

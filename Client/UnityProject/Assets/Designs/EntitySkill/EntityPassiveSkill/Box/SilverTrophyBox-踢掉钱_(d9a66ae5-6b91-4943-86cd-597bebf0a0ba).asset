@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "\u7535\u6D41\u7535\u51FB_(986be3f2-aacb-42e5-ab2a-584b54044be2)"
+  m_Name: "SilverTrophyBox-\u8E22\u6389\u94B1_(d9a66ae5-6b91-4943-86cd-597bebf0a0ba)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
@@ -21,8 +21,8 @@ MonoBehaviour:
       data:
         InitWorldModuleGUID: 0
         InitStaticLayoutGUID: 
-        SkillGUID: (986be3f2-aacb-42e5-ab2a-584b54044be2)
-        SkillAlias: "\u7535\u6D41\u7535\u51FB"
+        SkillGUID: (d9a66ae5-6b91-4943-86cd-597bebf0a0ba)
+        SkillAlias: "SilverTrophyBox-\u8E22\u6389\u94B1"
         SkillName_EN: 
         SkillName_ZH: 
         SkillIcon:
@@ -39,7 +39,7 @@ MonoBehaviour:
         SkillScrollType:
           TypeDefineType: 0
           TypeGUID: 
-        PassiveSkillCondition: 128
+        PassiveSkillCondition: 8
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
         MultiEventTrigger: 0
@@ -57,56 +57,31 @@ MonoBehaviour:
         EntitySkillConditions: []
         RawEntitySkillActions:
         - id: 1
+        - id: 2
+        - id: 3
     00000001:
-      type: {class: EntitySkillAction_TriggerZoneAction, ns: , asm: Client}
+      type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         InitStaticLayoutGUID: 
-        EffectiveOnRelativeCamp: 15
-        EffectiveOnSpecificEntity: 0
-        EffectiveOnSpecificEntityType:
-          TypeDefineType: 0
-          TypeGUID: 
-        EntityActions_Enter:
-        - id: 2
-        EntityActions_Stay:
-        - id: 3
-        MaxTriggerTimeWhenStay: 999999
-        EffectiveWhenInteractiveKeyDown: 0
-        InteractiveKeyNotice: 
-        TipPositionType: 5
-        InteractiveKeyNoticeDuration: 0.5
-        ActionInterval: 0.33
-        EntityActions_Exit: []
+        RawEntityBuffs:
+        - id: 4
     00000002:
       type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         InitStaticLayoutGUID: 
         RawEntityBuffs:
-        - id: 4
+        - id: 5
     00000003:
-      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
         InitStaticLayoutGUID: 
-        RawEntityBuffs:
-        - id: 5
-    00000004:
-      type: {class: EntityBuff_EntityPropertyMultiplyModifier, ns: , asm: Client}
-      data:
-        GUID: 10816
-        BuffAlias: 
-        EntityBuffAttribute: 39
-        EnableWhiteBlackList: 0
-        AllowAddBuffAliasList: []
-        ForbidAddBuffAliasList: []
-        IsPermanent: 0
-        Duration: 0.3
-        BuffFX:
+        FX:
           FXType:
             TypeDefineType: 7
-            TypeGUID: (c92d5cef-5f0e-4373-b907-91a8812d72c5)
+            TypeGUID: (299071b6-f620-41f2-80f9-0ea5a3deeeef)
           UseCurve: 0
           FXScale: 1
           AnimationCurve:
@@ -115,19 +90,13 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-        PropertyCategory: 0
-        EntityPropertyType: 30
-        EntitySkillSO: {fileID: 0}
-        SkillGUID: 
-        EntitySkillPropertyType: 0
-        Percent: -80
-        LinearDecayInDuration: 1
-    00000005:
+        PlayFXForEveryGrid: 1
+    00000004:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
       data:
-        GUID: 10817
+        GUID: 15873
         BuffAlias: 
-        EntityBuffAttribute: 40
+        EntityBuffAttribute: 0
         EnableWhiteBlackList: 0
         AllowAddBuffAliasList: []
         ForbidAddBuffAliasList: []
@@ -145,6 +114,32 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-        EntityStatType: 0
-        Delta: -1
+        EntityStatType: 1000
+        Delta: -2
+        Percent: 0
+    00000005:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 15874
+        BuffAlias: 
+        EntityBuffAttribute: 0
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 1000
+        Delta: 2
         Percent: 0
