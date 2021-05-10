@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using UnityEngine;
 
 [Serializable]
 public class EntitySkillAction_LightningShield : EntitySkillAction, EntitySkillAction.IBuffAction
@@ -16,19 +17,24 @@ public class EntitySkillAction_LightningShield : EntitySkillAction, EntitySkillA
     {
         if (buff is EntityBuff_ChangeEntityStatInstantly damageBuff)
         {
-            int damage = damageBuff.Delta;
+            int damage = -damageBuff.Delta; // 伤害Delta默认是负数，这里damage取正
             int lightningElementLeft = Entity.EntityStatPropSet.LightningElementFragment.Value;
-            if (damage * LightningElementConsumptionPerDamage <= lightningElementLeft )
+            bool playSound = false;
+            if (damage * LightningElementConsumptionPerDamage <= lightningElementLeft)
             {
                 Entity.EntityStatPropSet.LightningElementFragment.SetValue(lightningElementLeft - damage * LightningElementConsumptionPerDamage);
-                damageBuff.EntityStatType = EntityStatType.LightningElementFragment;
+                damageBuff.Delta = 0;
+                playSound = true;
             }
             else
             {
                 int decreaseDamage = lightningElementLeft / LightningElementConsumptionPerDamage;
+                playSound = decreaseDamage > 0;
                 Entity.EntityStatPropSet.LightningElementFragment.SetValue(lightningElementLeft - decreaseDamage * LightningElementConsumptionPerDamage);
-                damageBuff.Delta -= decreaseDamage;
+                damageBuff.Delta += decreaseDamage;
             }
+
+            if (playSound) Entity.EntityWwiseHelper.OnLightningShieldBlockDamage?.Post(Entity.gameObject);
         }
     }
 
@@ -48,5 +54,4 @@ public class EntitySkillAction_LightningShield : EntitySkillAction, EntitySkillA
         EntitySkillAction_LightningShield action = ((EntitySkillAction_LightningShield) srcData);
         LightningElementConsumptionPerDamage = action.LightningElementConsumptionPerDamage;
     }
-
 }

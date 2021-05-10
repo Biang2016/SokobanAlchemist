@@ -91,6 +91,9 @@ public class EntityWwiseHelper : EntityMonoHelper
     public Event OnElementsNotEnough;
 
     [BoxGroup("ForActor")]
+    public Event OnLightningShieldBlockDamage;
+
+    [BoxGroup("ForActor")]
     public Event OnBeingDamaged;
 
     [BoxGroup("ForActor")]

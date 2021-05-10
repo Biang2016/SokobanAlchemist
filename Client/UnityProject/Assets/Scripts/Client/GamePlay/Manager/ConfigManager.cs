@@ -1231,6 +1231,22 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
         return entitySkill;
     }
 
+    private static List<EntitySkill> cached_GetAllLearnableSkillNamesList = new List<EntitySkill>(16);
+
+    public static List<EntitySkill> GetAllLearnableSkills()
+    {
+        cached_GetAllLearnableSkillNamesList.Clear();
+        foreach (KeyValuePair<string, EntitySkill> kv in EntitySkillLibrary)
+        {
+            if (kv.Value.PlayerCanLearn)
+            {
+                cached_GetAllLearnableSkillNamesList.Add(kv.Value);
+            }
+        }
+
+        return cached_GetAllLearnableSkillNamesList;
+    }
+
     public static EntityOccupationData GetEntityOccupationData(ushort entityTypeIndex)
     {
         if (!IsLoaded) LoadAllConfigs();
