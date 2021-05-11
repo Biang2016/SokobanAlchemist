@@ -395,6 +395,33 @@ public class DebugPanel : BaseUIPanel
         BattleManager.Instance.Player1.EntityStatPropSet.ActionPointRecovery.AddModifier(new Property.PlusModifier {Delta = 100});
     }
 
+    [DebugButton("Player/ChangeTerrainToFire", KeyCode.Z)]
+    public void ChangeTerrainToFire()
+    {
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            openWorld.ReplaceTerrain(BattleManager.Instance.Player1.WorldGP, TerrainType.Fire);
+        }
+    }
+
+    [DebugButton("Player/ChangeTerrainToIce", KeyCode.C)]
+    public void ChangeTerrainToIce()
+    {
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            openWorld.ReplaceTerrain(BattleManager.Instance.Player1.WorldGP, TerrainType.Ice);
+        }
+    }
+
+    [DebugButton("Player/ChangeTerrainToEarth", KeyCode.V)]
+    public void ChangeTerrainToEarth()
+    {
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            openWorld.ReplaceTerrain(BattleManager.Instance.Player1.WorldGP, TerrainType.Earth);
+        }
+    }
+
     [DebugButton("Player/LearnSkill/{0}", "GetAllLearnableSkillNames", "GetAllLearnableSkillGUIDs")]
     public void LearnSkill(string skillName, string skillGUID)
     {

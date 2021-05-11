@@ -551,7 +551,12 @@ public abstract class Entity : PoolObject
         Profiler.BeginSample("RecordEntityExtraSerializeData");
         foreach (EntityMonoHelper h in EntityMonoHelpers)
         {
-            h?.RecordEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
+            if (CurrentEntityData == null) Debug.LogError("RecordEntityExtraSerializeData CurrentEntityData == null");
+            else if (CurrentEntityData.RawEntityExtraSerializeData == null) Debug.LogError("RecordEntityExtraSerializeData CurrentEntityData.RawEntityExtraSerializeData == null");
+            else
+            {
+                h?.RecordEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
+            }
         }
 
         Profiler.EndSample();

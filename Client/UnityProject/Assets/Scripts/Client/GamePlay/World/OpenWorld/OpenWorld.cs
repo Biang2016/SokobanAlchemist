@@ -1085,4 +1085,20 @@ public class OpenWorld : World
     }
 
     #endregion
+
+    #region Terrain
+
+    public void ReplaceTerrain(GridPos3D worldGP, TerrainType newTerrainType)
+    {
+        GridPos3D tileWorldGP = worldGP;
+        tileWorldGP.y = WorldModule.MODULE_SIZE - 1;
+        WorldMap_TerrainType[tileWorldGP.x, tileWorldGP.z] = newTerrainType;
+        Box tileBox = GetBoxByGridPosition(tileWorldGP, 0, out WorldModule module, out GridPos3D localGP, false, false);
+        if (tileBox != null && tileBox.BoxMarchingTextureHelper != null)
+        {
+            tileBox.BoxMarchingTextureHelper.Initialize();
+        }
+    }
+
+    #endregion
 }

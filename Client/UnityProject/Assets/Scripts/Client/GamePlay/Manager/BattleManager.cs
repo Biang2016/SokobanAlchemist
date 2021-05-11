@@ -351,6 +351,11 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             if (entity.IsNotNullAndAlive() && !entityGUIDSet.Contains(entity.GUID))
             {
                 entityGUIDSet.Add(entity.GUID);
+                if (entity.EntityTypeIndex == ConfigManager.Box_CombinedGroundBoxIndex)
+                {
+
+                }
+
                 foreach (EntityBuff entityBuff in entityBuffs)
                 {
                     if (entity.IsNotNullAndAlive())
