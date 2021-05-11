@@ -17,9 +17,9 @@ public class EntityGoldValueHelper : BoxMonoHelper
         base.OnHelperUsed();
     }
 
-    [Range(0, 1)]
-    [LabelText("浮动比例")]
-    public float RangeRatio = 0.3f;
+    [LabelText("上下限比例系数")]
+    [MinMaxSlider(0, 2f, showFields: true)]
+    public Vector2 RangeRatioFactor = new Vector2(0.7f, 1.3f);
 
     public RandomType RandomType = RandomType.Uniform;
 
@@ -47,20 +47,18 @@ public class EntityGoldValueHelper : BoxMonoHelper
     {
         base.ApplyEntityExtraStates(entityDataExtraStates);
         int baseGoldValue = Entity.EntityStatPropSet.Gold.Value;
-        float MinGoldProbability = baseGoldValue * (1 - RangeRatio);
-        float MaxGoldProbability = baseGoldValue * (1 + RangeRatio);
+        float MinGoldProbability = baseGoldValue * RangeRatioFactor.x;
+        float MaxGoldProbability = baseGoldValue * RangeRatioFactor.y;
         if (entityDataExtraStates.R_GoldValue)
         {
             Entity.EntityStatPropSet.Gold.SetValue(entityDataExtraStates.GoldValue);
             OnChangeGoldValue(Entity.EntityStatPropSet.Gold.Value, MaxGoldProbability);
-            Debug.Log($"LoadRecord Gold {entityDataExtraStates.GoldValue}/ {MaxGoldProbability}");
         }
         else
         {
             int dropNum = CommonUtils.GetRandomFromFloatProbability(RandomType, MinGoldProbability, MaxGoldProbability, BinaryP);
             Entity.EntityStatPropSet.Gold.SetValue(dropNum);
             OnChangeGoldValue(Entity.EntityStatPropSet.Gold.Value, MaxGoldProbability);
-            Debug.Log($"Init Gold {dropNum}/ {MaxGoldProbability}");
         }
     }
 

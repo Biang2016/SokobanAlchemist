@@ -883,11 +883,19 @@ public partial class Box : Entity
         if (IsRecycled) return;
     }
 
+    private int CheckDropTickInterval = 3;
+    private int CheckDropTickIntervalCount = 0;
     protected override void Tick(float interval)
     {
         base.Tick(interval);
         if (!BattleManager.Instance.IsStart) return;
         if (IsRecycled) return;
+        CheckDropTickIntervalCount++;
+        if (CheckDropTickIntervalCount > CheckDropTickInterval)
+        {
+            CheckDropTickIntervalCount = 0;
+            WorldManager.Instance.CurrentWorld.CheckDropSelf(this);
+        }
     }
 
     protected override void FixedUpdate()
