@@ -6,6 +6,7 @@ using BiangLibrary.ObjectPool;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Random = UnityEngine.Random;
 
 public class World : PoolObject
 {
@@ -1366,7 +1367,7 @@ public class World : PoolObject
                 EntityData entityData = new EntityData(boxTypeIndex, boxOrientation);
                 dropBox.Setup(entityData, origin, module.GUID);
                 dropBox.Initialize(origin, module, 0, false, Box.LerpType.DropFromAir);
-                dropBox.ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
+                dropBox.ApplyEntityExtraSerializeData();
                 dropBox.DropFromAir();
                 return true;
             }
@@ -1392,7 +1393,7 @@ public class World : PoolObject
                     EntityData entityData = new EntityData(entityTypeIndex, entityOrientation);
                     dropBox.Setup(entityData, origin, module.GUID);
                     dropBox.Initialize(origin, module, 0, false, Box.LerpType.Create);
-                    dropBox.ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
+                    dropBox.ApplyEntityExtraSerializeData();
                     return true;
                 }
                 case ConfigManager.TypeStartIndex.Actor:
@@ -1511,6 +1512,26 @@ public class World : PoolObject
     }
 
     #endregion
+
+    public void ThrowBoxFormWorldGP(List<ushort> throwBoxIndexList, GridPos3D worldGP)
+    {
+        int dropConeAngle = 0;
+        if (throwBoxIndexList.Count == 1) dropConeAngle = 0;
+        else if (throwBoxIndexList.Count <= 4) dropConeAngle = 15;
+        else if (throwBoxIndexList.Count <= 10) dropConeAngle = 30;
+        else dropConeAngle = 45;
+
+        foreach (ushort boxTypeIndex in throwBoxIndexList)
+        {
+            if (WorldManager.Instance.CurrentWorld.GenerateEntityOnWorldGPWithoutOccupy(boxTypeIndex, (GridPosR.Orientation) Random.Range(0, 4), worldGP, out Entity dropEntity))
+            {
+                Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(dropConeAngle * Mathf.Deg2Rad);
+                Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);
+                Box dropBox = (Box) dropEntity;
+                dropBox.DropOutFromEntity(dropVel.normalized * ClientGameManager.Instance.dropSpeed); // 抛射速度写死
+            }
+        }
+    }
 
     public TerrainType GetTerrainType(GridPos3D worldGP)
     {

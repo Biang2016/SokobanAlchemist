@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "MediumLogBox-\u71C3\u70E7\u7834\u574F\u6389\u843DEntity_(e2e3b726-277a-41bc-9331-5528bc3511f8)"
+  m_Name: "MediumWoodenBoardBox-\u71C3\u70E7\u7834\u574F\u6389\u843DEntity_(e2e3b726-277a-41bc-9331-5528bc3511f8)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
@@ -20,8 +20,9 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: (e2e3b726-277a-41bc-9331-5528bc3511f8)
-        SkillAlias: "MediumLogBox-\u71C3\u70E7\u7834\u574F\u6389\u843DEntity"
+        SkillAlias: "MediumWoodenBoardBox-\u71C3\u70E7\u7834\u574F\u6389\u843DEntity"
         SkillName_EN: 
         SkillName_ZH: 
         SkillIcon:
@@ -30,6 +31,9 @@ MonoBehaviour:
         SkillDescription_EN: 
         SkillDescription_ZH: 
         PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
         SkillCategoryType: 0
         SkillRankType: 0
         SkillScrollType:
@@ -57,6 +61,7 @@ MonoBehaviour:
       type: {class: BoxSkillAction_ChangeBoxType, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         EntityData:
           WorldGP:
             x: 0
@@ -66,11 +71,27 @@ MonoBehaviour:
             x: 0
             y: 0
             z: 0
+          InitStaticLayoutGUID: 
           EntityType:
             TypeDefineType: 0
             TypeGUID: (62bccc84-6a59-4519-be2c-b64b161153b4)
           EntityOrientation: 0
           RawEntityExtraSerializeData:
             EntityPassiveSkills: []
+            EntityDataExtraStates:
+              R_DoorOpen: 0
+              DoorOpen: 0
+              R_TransportBoxClosed: 0
+              TransportBoxClosed: 0
+              R_GoldValue: 0
+              GoldValue: 0
+              R_ModelIndex: 0
+              ModelIndex: 0
+              R_DecoratorIndex: 0
+              DecoratorIndex: 0
+              R_ModelScale: 0
+              ModelScale: {x: 1, y: 1, z: 1}
+              R_ModelRotation: 0
+              ModelRotation: {x: 0, y: 0, z: 0, w: 1}
         ChangeForEveryGrid: 1
         ExertOnTarget: 0

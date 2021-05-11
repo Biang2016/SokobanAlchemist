@@ -1149,6 +1149,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort Box_GroundBoxIndex => GetTypeIndex(TypeDefineType.Box, "GroundBox");
     public static ushort Box_BrickBoxIndex => GetTypeIndex(TypeDefineType.Box, "BrickBox");
     public static ushort Box_CombinedGroundBoxIndex => GetTypeIndex(TypeDefineType.Box, "CombinedGroundBox");
+    public static ushort Box_GoldenBoxIndex => GetTypeIndex(TypeDefineType.Box, "GoldenBox");
+    public static ushort Box_StackingGoldenBoxIndex => GetTypeIndex(TypeDefineType.Box, "StackingGoldenBox");
     public static ushort Actor_PlayerIndex => GetTypeIndex(TypeDefineType.Actor, "Player");
 
     #endregion

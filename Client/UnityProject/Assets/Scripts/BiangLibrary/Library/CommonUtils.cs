@@ -820,5 +820,68 @@ namespace BiangLibrary
                     break;
                 }
         }
+
+        public static int GetRandomFromFloatProbability(RandomType randomType, float minProb, float maxProb, float binaryP = 0.8f)
+        {
+            if (maxProb < minProb) return 0;
+            switch (randomType)
+            {
+                case RandomType.Uniform:
+                {
+                    int count = 0;
+                    float dropProbability = Random.Range(minProb, maxProb);
+                    while (dropProbability > 1)
+                    {
+                        dropProbability -= 1;
+                        count++;
+                    }
+
+                    if (dropProbability.ProbabilityBool())
+                    {
+                        count++;
+                    }
+
+                    return count;
+                }
+                case RandomType.BinaryUp:
+                {
+                    int addTimes = Mathf.RoundToInt(maxProb - minProb);
+                    int num = 0;
+                    for (int i = 0; i < addTimes; i++)
+                    {
+                        if (binaryP.ProbabilityBool())
+                        {
+                            num++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    return num + Mathf.RoundToInt(minProb);
+                }
+                case RandomType.BinaryDown:
+                {
+                    int minorsTimes = Mathf.RoundToInt(maxProb - minProb);
+                    int num = 0;
+                    for (int i = 0; i < minorsTimes; i++)
+                    {
+                        if (binaryP.ProbabilityBool())
+                        {
+                            num--;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    return num + Mathf.RoundToInt(maxProb);
+                }
+            }
+
+            return 0;
+        }
     }
 }

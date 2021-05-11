@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
-  m_Name: "MediumLogBox-\u78BE\u538B_(3bcf3e48-b836-486a-8c82-bc7067e758cf)"
+  m_Name: "MediumWoodenBoardBox-\u78BE\u538B_(be32b1c7-1518-46f1-8c8f-af62470a9070)"
   m_EditorClassIdentifier: 
   EntitySkill:
     id: 0
@@ -19,33 +19,49 @@ MonoBehaviour:
     00000000:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
-        SkillGUID: (3bcf3e48-b836-486a-8c82-bc7067e758cf)
-        SkillAlias: "MediumLogBox-\u78BE\u538B"
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        SkillGUID: (be32b1c7-1518-46f1-8c8f-af62470a9070)
+        SkillAlias: "MediumWoodenBoardBox-\u78BE\u538B"
+        SkillName_EN: 
+        SkillName_ZH: 
         SkillIcon:
           TypeDefineType: 0
           TypeGUID: 
-        SkillDescription: 
-        IsAddedDuringGamePlay: 0
-        InitWorldModuleGUID: 0
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
         PassiveSkillCondition: 256
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 12000000
-        EntityStatChangeType: 0
-        EntityStatChangeThreshold: 0
-        EntityStatChangeThresholdOperator: 0
-        EntityPropertyChangeType: 0
-        EntityPropertyChangeThreshold: 0
-        EntityPropertyChangeThresholdOperator: 0
         MultiEventTrigger: 0
         ListenLevelEventAliasList: []
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
         RawEntitySkillActions:
         - id: 1
     00000001:
       type: {class: EntitySkillAction_TriggerZoneEffect, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         EffectiveOnRelativeCamp: 6
         RawEntityBuffs_Enter:
         - id: 2

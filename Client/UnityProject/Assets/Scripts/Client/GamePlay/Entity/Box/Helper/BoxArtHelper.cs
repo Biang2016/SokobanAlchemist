@@ -11,39 +11,113 @@ public class BoxArtHelper : EntityArtHelper
 {
     public Transform Pivot;
 
+    private int ModelIndex;
+    private bool ShowDecoration;
+    private int DecorationIndex;
+
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
         if (UseRandomScale) transform.localScale = Vector3.one;
+
+        ModelIndex = 0;
+        ShowDecoration = false;
+        DecorationIndex = 0;
     }
 
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
+    }
+
+    public override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+        base.ApplyEntityExtraStates(entityDataExtraStates);
         if (UseModelVariants)
         {
-            ModelVariantProbability randomMV = CommonUtils.GetRandomWithProbabilityFromList(ModelVariants);
-            if (randomMV != null)
+            if (entityDataExtraStates.R_ModelIndex)
             {
-                foreach (ModelVariantProbability mv in ModelVariants)
+                for (int i = 0; i < ModelVariants.Count; i++)
                 {
-                    mv.GameObject.SetActive(mv == randomMV);
+                    ModelVariants[i].GameObject.SetActive(i == entityDataExtraStates.ModelIndex);
                 }
             }
-
-            bool showDecoration = ShowDecorationProbabilityPercent.ProbabilityBool();
-            ModelVariantProbability randomDec = CommonUtils.GetRandomWithProbabilityFromList(ProbablyShowModelDecorations);
-            if (randomDec != null)
+            else
             {
-                foreach (ModelVariantProbability dec in ProbablyShowModelDecorations)
+                ModelVariantProbability randomMV = CommonUtils.GetRandomWithProbabilityFromList(ModelVariants);
+                if (randomMV != null)
                 {
-                    dec.GameObject.SetActive(showDecoration && dec == randomDec);
+                    foreach (ModelVariantProbability mv in ModelVariants)
+                    {
+                        mv.GameObject.SetActive(mv == randomMV);
+                    }
+
+                    ModelIndex = ModelVariants.IndexOf(randomMV);
+                }
+
+                bool showDecoration = ShowDecorationProbabilityPercent.ProbabilityBool();
+                ModelVariantProbability randomDec = CommonUtils.GetRandomWithProbabilityFromList(ProbablyShowModelDecorations);
+                if (randomDec != null)
+                {
+                    foreach (ModelVariantProbability dec in ProbablyShowModelDecorations)
+                    {
+                        dec.GameObject.SetActive(showDecoration && dec == randomDec);
+                    }
+
+                    ShowDecoration = true;
+                    DecorationIndex = ProbablyShowModelDecorations.IndexOf(randomDec);
                 }
             }
         }
 
-        if (UseRandomScale) Pivot.localScale = new Vector3(GaussianRandom.Range(RandomScaleMean.x, RandomScaleRadius.x), GaussianRandom.Range(RandomScaleMean.y, RandomScaleRadius.y), GaussianRandom.Range(RandomScaleMean.z, RandomScaleRadius.z));
-        if (UseRandomOrientation) Pivot.localRotation = Quaternion.Euler(0, 90f * Random.Range(0, 4), 0);
+        if (UseRandomScale)
+        {
+            if (entityDataExtraStates.R_ModelScale)
+            {
+                Pivot.localScale = entityDataExtraStates.ModelScale;
+            }
+            else
+            {
+                Pivot.localScale = new Vector3(GaussianRandom.Range(RandomScaleMean.x, RandomScaleRadius.x), GaussianRandom.Range(RandomScaleMean.y, RandomScaleRadius.y), GaussianRandom.Range(RandomScaleMean.z, RandomScaleRadius.z));
+            }
+        }
+
+        if (UseRandomOrientation)
+        {
+            if (entityDataExtraStates.R_ModelRotation)
+            {
+                Pivot.localRotation = entityDataExtraStates.ModelRotation;
+            }
+            else
+            {
+                Pivot.localRotation = Quaternion.Euler(0, 90f * Random.Range(0, 4), 0);
+            }
+        }
+    }
+
+    public override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    {
+        base.RecordEntityExtraStates(entityDataExtraStates);
+        if (UseModelVariants)
+        {
+            entityDataExtraStates.R_ModelIndex = true;
+            entityDataExtraStates.ModelIndex = ModelIndex;
+          
+            entityDataExtraStates.R_DecoratorIndex = ShowDecoration;
+            if (ShowDecoration) entityDataExtraStates.DecoratorIndex = DecorationIndex;
+        }
+
+        if (UseRandomScale)
+        {
+            entityDataExtraStates.R_ModelScale = true;
+            entityDataExtraStates.ModelScale = Pivot.localScale;
+        }
+
+        if (UseRandomOrientation)
+        {
+            entityDataExtraStates.R_ModelRotation = true;
+            entityDataExtraStates.ModelRotation = Pivot.localRotation;
+        }
     }
 
     [BoxGroup("模型变种")]

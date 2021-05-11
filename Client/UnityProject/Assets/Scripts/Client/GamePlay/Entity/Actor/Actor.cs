@@ -114,6 +114,7 @@ public class Actor : Entity
 
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
+
         ActorBattleHelper.Initialize();
         EntityCollectHelper?.Initialize();
         ActorBoxInteractHelper.Initialize();
@@ -860,8 +861,6 @@ public class Actor : Entity
         EntityCollectHelper?.OnReborn();
         EntityStatPropSet.OnReborn();
         EntityBuffHelper.OnReborn();
-        ActorBattleHelper.InGameHealthBar.Initialize(ActorBattleHelper, 100, 30);
-        ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
         ActiveSkillMarkAsDestroyed = false;
         PassiveSkillMarkAsDestroyed = false;
     }
@@ -1011,24 +1010,6 @@ public class Actor : Entity
                 sm.enabled = true;
                 sm.SmoothTime = lerpTime;
             }
-        }
-    }
-
-    protected override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
-    {
-        base.RecordEntityExtraStates(entityDataExtraStates);
-        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
-        {
-            entityMonoHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        }
-    }
-
-    protected override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
-    {
-        base.ApplyEntityExtraStates(entityDataExtraStates);
-        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
-        {
-            entityMonoHelper?.ApplyEntityExtraStates(entityDataExtraStates);
         }
     }
 

@@ -20,6 +20,7 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: (d3c87f38-eeb3-444b-9f07-0e263bd2ac7d)
         SkillAlias: "Lv2-\u6B7B\u4EA1\u6389\u843DEntity"
         SkillName_EN: Lv2-DieDropEntity
@@ -30,6 +31,9 @@ MonoBehaviour:
         SkillDescription_EN: 
         SkillDescription_ZH: 
         PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
         SkillCategoryType: 0
         SkillRankType: 0
         SkillScrollType:
@@ -57,6 +61,7 @@ MonoBehaviour:
       type: {class: EntitySkillAction_DropBox, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         DropBoxList:
         - ProbabilityMin: 0.8
           ProbabilityMax: 0.8
@@ -68,16 +73,6 @@ MonoBehaviour:
           ItemType:
             TypeDefineType: 0
             TypeGUID: (096dcca9-e0d2-439e-9304-94a00bb4f36b)
-        - ProbabilityMin: 0.2
-          ProbabilityMax: 0.2
-          ItemType:
-            TypeDefineType: 0
-            TypeGUID: (b21d38f9-143e-43a6-9094-f1a790641d96)
-        - ProbabilityMin: 0.03
-          ProbabilityMax: 0.03
-          ItemType:
-            TypeDefineType: 0
-            TypeGUID: (374e935f-27dc-4ac2-aeed-c78fd70ae29e)
         - ProbabilityMin: 0.2
           ProbabilityMax: 0.2
           ItemType:

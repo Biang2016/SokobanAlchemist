@@ -483,7 +483,7 @@ public class EntityStatPropSet
 
     private void OnActionPointNotEnoughWarning()
     {
-        if (Entity == BattleManager.Instance.Player1)
+        if (Entity is Actor actor && actor == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].ActionPointBottle.OnStatLowWarning();
             Entity.EntityWwiseHelper.OnActionPointNotEnough?.Post(Entity.gameObject);
@@ -492,7 +492,7 @@ public class EntityStatPropSet
 
     private void OnActionPointIncrease(int increase)
     {
-        if (Entity is Actor actor)
+        if (Entity is Actor actor && actor == BattleManager.Instance.Player1)
         {
             actor.ActorBattleHelper.ShowGainActionPointNumFX(increase);
             actor.EntityWwiseHelper.OnGainActionPoint.Post(actor.gameObject);
@@ -501,7 +501,7 @@ public class EntityStatPropSet
 
     private void OnGoldIncrease(int increase)
     {
-        if (Entity is Actor actor)
+        if (Entity is Actor actor && actor == BattleManager.Instance.Player1)
         {
             actor.ActorBattleHelper.ShowGainGoldNumFX(increase);
             actor.EntityWwiseHelper.OnGainGold.Post(actor.gameObject);
@@ -510,7 +510,7 @@ public class EntityStatPropSet
 
     private void OnGoldDecrease(int decrease)
     {
-        if (Entity is Actor actor)
+        if (Entity is Actor actor && actor == BattleManager.Instance.Player1)
         {
             actor.ActorBattleHelper.ShowSpendGoldNumFX(decrease);
             actor.EntityWwiseHelper.OnSpendGold.Post(actor.gameObject);
@@ -519,7 +519,7 @@ public class EntityStatPropSet
 
     private void OnGoldNotEnoughWarning()
     {
-        if (Entity == BattleManager.Instance.Player1)
+        if (Entity is Actor actor && actor == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].GoldBottle.OnStatLowWarning();
             ClientGameManager.Instance.NoticePanel.ShowTip("Not enough gold", NoticePanel.TipPositionType.Center, 0.8f);
@@ -529,7 +529,7 @@ public class EntityStatPropSet
 
     private void OnFireElementFragmentIncrease(int increase)
     {
-        if (Entity is Actor actor)
+        if (Entity is Actor actor && actor == BattleManager.Instance.Player1)
         {
             actor.ActorBattleHelper.ShowGainFireElementFragmentNumFX(increase);
             actor.EntityWwiseHelper.OnGainFireElement.Post(actor.gameObject);
@@ -538,7 +538,7 @@ public class EntityStatPropSet
 
     private void OnFireElementFragmentNotEnoughWarning()
     {
-        if (Entity == BattleManager.Instance.Player1)
+        if (Entity is Actor actor && actor == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].FireElementBottle.OnStatLowWarning();
             Entity.EntityWwiseHelper.OnElementsNotEnough?.Post(Entity.gameObject);
@@ -547,7 +547,7 @@ public class EntityStatPropSet
 
     private void OnIceElementFragmentIncrease(int increase)
     {
-        if (Entity is Actor actor)
+        if (Entity is Actor actor && actor == BattleManager.Instance.Player1)
         {
             actor.ActorBattleHelper.ShowGainIceElementFragmentNumFX(increase);
             actor.EntityWwiseHelper.OnGainIceElement.Post(actor.gameObject);
@@ -556,7 +556,7 @@ public class EntityStatPropSet
 
     private void OnIceElementFragmentNotEnoughWarning()
     {
-        if (Entity == BattleManager.Instance.Player1)
+        if (Entity is Actor actor && actor == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].IceElementBottle.OnStatLowWarning();
             Entity.EntityWwiseHelper.OnElementsNotEnough?.Post(Entity.gameObject);
@@ -565,7 +565,7 @@ public class EntityStatPropSet
 
     private void OnLightningElementFragmentIncrease(int increase)
     {
-        if (Entity is Actor actor)
+        if (Entity is Actor actor && actor == BattleManager.Instance.Player1)
         {
             actor.ActorBattleHelper.ShowGainLightningElementFragmentNumFX(increase);
             actor.EntityWwiseHelper.OnGainLightningElement.Post(actor.gameObject);
@@ -574,7 +574,7 @@ public class EntityStatPropSet
 
     private void OnLightningElementFragmentNotEnoughWarning()
     {
-        if (Entity == BattleManager.Instance.Player1)
+        if (Entity is Actor actor && actor == BattleManager.Instance.Player1)
         {
             ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0].LightningElementBottle.OnStatLowWarning();
             Entity.EntityWwiseHelper.OnElementsNotEnough?.Post(Entity.gameObject);
@@ -583,7 +583,7 @@ public class EntityStatPropSet
 
     private void OnHealthDurabilityChanged(int before, int after, int min, int max)
     {
-        if (Entity == BattleManager.Instance.Player1)
+        if (Entity is Actor actor && actor == BattleManager.Instance.Player1)
         {
             WwiseAudioManager.Instance.WwiseBGMConfiguration.PlayerHealthPercent.SetGlobalValue((float) after / max * 100f);
         }
@@ -672,7 +672,7 @@ public class EntityStatPropSet
         if (Entity is Actor actor)
         {
             actor.ActorBattleHelper.ShowGainMaxHealthNumFX(after - before);
-            actor.EntityWwiseHelper.OnGainMaxHealth.Post(actor.gameObject);
+            if (actor == BattleManager.Instance.Player1) actor.EntityWwiseHelper.OnGainMaxHealth.Post(actor.gameObject);
         }
     }
 

@@ -257,6 +257,9 @@ public abstract class Entity : PoolObject
     public EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper;
 
     [FoldoutGroup("组件")]
+    public EntityGoldValueHelper EntityGoldValueHelper;
+
+    [FoldoutGroup("组件")]
     public List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers = new List<EntityFlamethrowerHelper>();
 
     [FoldoutGroup("组件")]
@@ -276,6 +279,7 @@ public abstract class Entity : PoolObject
         EntityMonoHelpers.Add(EntityTriggerZoneHelper);
         EntityMonoHelpers.Add(EntityCollectHelper);
         EntityMonoHelpers.Add(EntityGrindTriggerZoneHelper);
+        EntityMonoHelpers.Add(EntityGoldValueHelper);
         foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
         {
             EntityMonoHelpers.Add(h);
@@ -524,19 +528,19 @@ public abstract class Entity : PoolObject
 
     internal EntityData CurrentEntityData;
 
-    public void ApplyEntityExtraSerializeData(EntityExtraSerializeData rawEntityExtraSerializeDataFromModule = null)
+    public void ApplyEntityExtraSerializeData()
     {
         Profiler.BeginSample("ApplyEntityExtraSerializeData");
-        if (rawEntityExtraSerializeDataFromModule != null)
+        foreach (EntityPassiveSkill rawExtraPS in CurrentEntityData.RawEntityExtraSerializeData.EntityPassiveSkills)
         {
-            foreach (EntityPassiveSkill rawExtraPS in rawEntityExtraSerializeDataFromModule.EntityPassiveSkills)
-            {
-                EntityPassiveSkill newPS = (EntityPassiveSkill) rawExtraPS.Clone();
-                newPS.IsLevelExtraEntitySkill = true;
-                AddNewPassiveSkill(newPS);
-            }
+            EntityPassiveSkill newPS = (EntityPassiveSkill) rawExtraPS.Clone();
+            newPS.IsLevelExtraEntitySkill = true;
+            AddNewPassiveSkill(newPS);
+        }
 
-            ApplyEntityExtraStates(rawEntityExtraSerializeDataFromModule.EntityDataExtraStates);
+        foreach (EntityMonoHelper h in EntityMonoHelpers)
+        {
+            h?.ApplyEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
         }
 
         Profiler.EndSample();
@@ -545,20 +549,12 @@ public abstract class Entity : PoolObject
     public void RecordEntityExtraSerializeData()
     {
         Profiler.BeginSample("RecordEntityExtraSerializeData");
-        if (CurrentEntityData != null && CurrentEntityData.RawEntityExtraSerializeData != null)
+        foreach (EntityMonoHelper h in EntityMonoHelpers)
         {
-            RecordEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
+            h?.RecordEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
         }
 
         Profiler.EndSample();
-    }
-
-    protected virtual void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
-    {
-    }
-
-    protected virtual void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
-    {
     }
 
     #endregion
@@ -1083,44 +1079,56 @@ public abstract class Entity : PoolObject
 
     public virtual void DestroySelf(UnityAction callBack = null)
     {
-        ThrowElementFragment(EntityStatType.FireElementFragment);
-        ThrowElementFragment(EntityStatType.IceElementFragment);
-        ThrowElementFragment(EntityStatType.LightningElementFragment);
+        ThrowResources(EntityStatType.Gold);
+        ThrowResources(EntityStatType.FireElementFragment);
+        ThrowResources(EntityStatType.IceElementFragment);
+        ThrowResources(EntityStatType.LightningElementFragment);
     }
 
-    private void ThrowElementFragment(EntityStatType elementFragmentType)
+    private List<ushort> cached_ThrowGoldBoxList = new List<ushort>(16);
+
+    private void ThrowResources(EntityStatType resourceType)
     {
-        int elementFragmentCount = EntityStatPropSet.StatDict[elementFragmentType].Value;
-        int dropElementFragmentCount = 0;
+        int resourceCount = EntityStatPropSet.StatDict[resourceType].Value;
+        int dropResourceCount = 0;
         if (this == BattleManager.Instance.Player1)
         {
-            dropElementFragmentCount = Mathf.RoundToInt(elementFragmentCount * 0.5f);
-            EntityStatPropSet.StatDict[elementFragmentType].SetValue(EntityStatPropSet.StatDict[elementFragmentType].Value - dropElementFragmentCount);
+            if (resourceType == EntityStatType.Gold) dropResourceCount = 0;
+            else dropResourceCount = Mathf.RoundToInt(resourceCount * 0.5f);
+            EntityStatPropSet.StatDict[resourceType].SetValue(EntityStatPropSet.StatDict[resourceType].Value - dropResourceCount);
         }
         else
         {
-            dropElementFragmentCount = Random.Range(Mathf.RoundToInt(elementFragmentCount * 0.7f), Mathf.RoundToInt(elementFragmentCount * 1.3f));
+            dropResourceCount = Random.Range(Mathf.RoundToInt(resourceCount * 0.7f), Mathf.RoundToInt(resourceCount * 1.3f));
         }
 
-        switch (elementFragmentType)
+        switch (resourceType)
         {
+            case EntityStatType.Gold:
+            {
+                int dropSmallCount = dropResourceCount % 5;
+                int dropMiddleCount = dropResourceCount / 5;
+                ThrowGold("Small", dropSmallCount);
+                ThrowGold("Middle", dropMiddleCount);
+                break;
+            }
             case EntityStatType.FireElementFragment:
             case EntityStatType.IceElementFragment:
             {
-                int dropSmallCount = dropElementFragmentCount % 5;
-                int dropMiddleCount = dropElementFragmentCount / 5;
-                DropElementFragment("Small", dropSmallCount);
-                DropElementFragment("Middle", dropMiddleCount);
+                int dropSmallCount = dropResourceCount % 5;
+                int dropMiddleCount = dropResourceCount / 5;
+                ThrowElementFragment("Small", dropSmallCount);
+                ThrowElementFragment("Middle", dropMiddleCount);
                 break;
             }
             case EntityStatType.LightningElementFragment:
             {
-                DropElementFragment("Small", dropElementFragmentCount);
+                ThrowElementFragment("Small", dropResourceCount);
                 break;
             }
         }
 
-        void DropElementFragment(string size, int count)
+        void ThrowElementFragment(string size, int count)
         {
             WorldModule worldModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(transform.position.ToGridPos3D());
             if (worldModule == null) worldModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(WorldGP);
@@ -1131,13 +1139,43 @@ public abstract class Entity : PoolObject
                 {
                     Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(DropConeAngle * Mathf.Deg2Rad);
                     Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);
-                    ushort index = ConfigManager.GetTypeIndex(TypeDefineType.CollectableItem, size + elementFragmentType);
+                    ushort index = ConfigManager.GetTypeIndex(TypeDefineType.CollectableItem, size + resourceType);
                     CollectableItem ci = GameObjectPoolManager.Instance.CollectableItemDict[index].AllocateGameObject<CollectableItem>(worldModule.WorldModuleCollectableItemRoot);
                     ci.Initialize(worldModule);
                     ci.ThrowFrom(transform.position, dropVel.normalized * DropVelocity);
                     worldModule.WorldModuleCollectableItems.Add(ci);
                 }
             }
+        }
+
+        void ThrowGold(string size, int count)
+        {
+            cached_ThrowGoldBoxList.Clear();
+            switch (size)
+            {
+                case "Small":
+                {
+                    ushort boxTypeIndex = ConfigManager.Box_GoldenBoxIndex;
+                    for (int i = 0; i < count; i++)
+                    {
+                        cached_ThrowGoldBoxList.Add(boxTypeIndex);
+                    }
+
+                    break;
+                }
+                case "Middle":
+                {
+                    ushort boxTypeIndex = ConfigManager.Box_StackingGoldenBoxIndex;
+                    for (int i = 0; i < count; i++)
+                    {
+                        cached_ThrowGoldBoxList.Add(boxTypeIndex);
+                    }
+
+                    break;
+                }
+            }
+
+            WorldManager.Instance.CurrentWorld.ThrowBoxFormWorldGP(cached_ThrowGoldBoxList, EntityGeometryCenter.ToGridPos3D());
         }
     }
 

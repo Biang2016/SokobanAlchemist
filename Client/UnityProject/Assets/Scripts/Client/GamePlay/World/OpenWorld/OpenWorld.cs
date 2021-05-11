@@ -454,7 +454,7 @@ public class OpenWorld : World
                         {
                             EntityType = entityType,
                             EntityOrientation = GridPosR.Orientation.Up,
-                            RawEntityExtraSerializeData = null,
+                            RawEntityExtraSerializeData = new EntityExtraSerializeData(),
                         };
                     moduleData.WorldModuleFeature = WorldModuleFeature.Ground;
 
@@ -806,6 +806,7 @@ public class OpenWorld : World
             DungeonMissionState = DungeonMissionState.DungeonComplete;
             if (temp_LastTransportBoxEntityData != null)
             {
+                temp_LastTransportBoxEntityData.RawEntityExtraSerializeData.EntityDataExtraStates.R_TransportBoxClosed = true;
                 temp_LastTransportBoxEntityData.RawEntityExtraSerializeData.EntityDataExtraStates.TransportBoxClosed = true;
                 temp_LastTransportBoxEntityData = null;
             }

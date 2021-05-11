@@ -600,7 +600,7 @@ public class WorldModule : PoolObject
                             }
                         }
 
-                        box.ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
+                        box.ApplyEntityExtraSerializeData();
                         return box;
                     }
                     case TypeDefineType.Actor:
@@ -624,7 +624,7 @@ public class WorldModule : PoolObject
                             }
                         }
 
-                        actor.ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
+                        actor.ApplyEntityExtraSerializeData();
                         return actor;
                     }
                 }
@@ -666,8 +666,6 @@ public class WorldModule : PoolObject
         {
             kv.Value.RecordEntityExtraSerializeData();
         }
-
-        WorldModuleTriggerEntities.Clear();
 
         int count = 0;
         // Record Actor First
