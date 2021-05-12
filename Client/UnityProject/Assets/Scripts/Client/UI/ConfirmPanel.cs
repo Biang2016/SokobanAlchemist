@@ -50,7 +50,19 @@ public class ConfirmPanel : BaseUIPanel
             uiForm_LucencyType: UIFormLucencyTypes.Blur);
     }
 
-    private UnityAction ConfirmClick = null;
+    void Start()
+    {
+        ControlManager.Instance.OnControlSchemeChanged += (before, after) =>
+        {
+            if (after == ControlManager.ControlScheme.GamePad)
+            {
+                if (IsShown)
+                {
+                    InitButtons();
+                }
+            }
+        };
+    }
 
     public void Initialize(string descText, string leftButtonText, string rightButtonText, UnityAction leftButtonClick, UnityAction rightButtonClick, string inputFieldPlaceHolderText1 = null, string inputFieldPlaceHolderText2 = null, string inputFieldPlaceHolderText3 = null)
     {
@@ -61,7 +73,6 @@ public class ConfirmPanel : BaseUIPanel
             uiForms_Type: UIFormTypes.PopUp,
             uiForms_ShowMode: UIFormShowModes.Return,
             uiForm_LucencyType: UIFormLucencyTypes.Blur);
-        ConfirmClick = leftButtonClick;
         DescText.text = descText;
 
         LeftButton.onClick.RemoveAllListeners();
@@ -106,6 +117,11 @@ public class ConfirmPanel : BaseUIPanel
     {
         base.Display();
         OnDisplay?.Post(gameObject);
+        InitButtons();
+    }
+
+    private void InitButtons()
+    {
         LeftButton.Select();
     }
 

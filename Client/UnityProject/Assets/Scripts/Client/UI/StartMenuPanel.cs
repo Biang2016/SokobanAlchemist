@@ -17,6 +17,20 @@ public class StartMenuPanel : BaseUIPanel
             UIFormLucencyTypes.Penetrable);
     }
 
+    void Start()
+    {
+        ControlManager.Instance.OnControlSchemeChanged += (before, after) =>
+        {
+            if (after == ControlManager.ControlScheme.GamePad)
+            {
+                if (IsShown)
+                {
+                    InitButtons();
+                }
+            }
+        };
+    }
+
     public Button FirstSelectedButton;
     public Button CreditSelfButton;
 
@@ -36,6 +50,11 @@ public class StartMenuPanel : BaseUIPanel
         StartMenuAnim.SetTrigger("Play");
         OnPlayAnim?.Post(gameObject);
 
+        InitButtons();
+    }
+
+    private void InitButtons()
+    {
         FirstSelectedButton.Select();
     }
 
