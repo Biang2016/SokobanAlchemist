@@ -36,6 +36,8 @@ public class ExitMenuPanel : BaseUIPanel
             ExitToOpenWorldButton.gameObject.SetActive(openWorld.InsideDungeon);
             RestartDungeonButton.gameObject.SetActive(openWorld.InsideDungeon);
         }
+
+        SaveGameButton.Select();
     }
 
     public override void Hide()
@@ -75,21 +77,7 @@ public class ExitMenuPanel : BaseUIPanel
 
     public void OnExitToMenuButtonClick()
     {
-        if (!UIManager.Instance.IsUIShown<ConfirmPanel>())
-        {
-            ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
-            confirmPanel.Initialize("If you back to menu, you'll lose all the progress", "Go to menu", "Cancel",
-                () =>
-                {
-                    confirmPanel.CloseUIForm();
-                    UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
-                    UIManager.Instance.CloseUIForm<ExitMenuPanel>();
-                    ClientGameManager.Instance.ReloadGame();
-                },
-                () => { confirmPanel.CloseUIForm(); }
-            );
-            return;
-        }
+        ClientGameManager.Instance.ExitToMainMenu();
     }
 
     public void OnExitToDesktopButtonClick()

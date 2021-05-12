@@ -108,7 +108,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             () => ControlManager.Instance.Common_MouseLeft.Up,
             () => ControlManager.Instance.Common_MouseRight.Up,
             () => ControlManager.Instance.Common_Exit.Up,
-            () => ControlManager.Instance.Common_Confirm.Up,
+            () => ControlManager.Instance.Common_Confirm.Down,
             () => ControlManager.Instance.Common_Tab.Up
         );
 
@@ -417,6 +417,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     {
         if (!UIManager.IsUIShown<ConfirmPanel>())
         {
+            bool isExitMenuPanelShown = UIManager.Instance.IsUIShown<ExitMenuPanel>();
+            if (isExitMenuPanelShown) UIManager.Instance.CloseUIForm<ExitMenuPanel>();
             if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
             {
                 if (openWorld.InsideDungeon)
@@ -428,7 +430,11 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                             openWorld.ReturnToOpenWorld(false);
                             confirmPanel.CloseUIForm();
                         },
-                        () => { confirmPanel.CloseUIForm(); }
+                        () =>
+                        {
+                            confirmPanel.CloseUIForm();
+                            if (isExitMenuPanelShown) UIManager.Instance.ShowUIForms<ExitMenuPanel>();
+                        }
                     );
                     return true;
                 }
@@ -447,6 +453,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     {
         if (!UIManager.IsUIShown<ConfirmPanel>())
         {
+            bool isExitMenuPanelShown = UIManager.Instance.IsUIShown<ExitMenuPanel>();
+            if (isExitMenuPanelShown) UIManager.Instance.CloseUIForm<ExitMenuPanel>();
             if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
             {
                 if (openWorld.InsideDungeon)
@@ -458,7 +466,11 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                             openWorld.RestartDungeon();
                             confirmPanel.CloseUIForm();
                         },
-                        () => { confirmPanel.CloseUIForm(); }
+                        () =>
+                        {
+                            confirmPanel.CloseUIForm();
+                            if (isExitMenuPanelShown) UIManager.Instance.ShowUIForms<ExitMenuPanel>();
+                        }
                     );
                     return true;
                 }
@@ -471,6 +483,29 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         }
 
         return false;
+    }
+
+    public void ExitToMainMenu()
+    {
+        if (!UIManager.Instance.IsUIShown<ConfirmPanel>())
+        {
+            UIManager.Instance.CloseUIForm<ExitMenuPanel>();
+            ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
+            confirmPanel.Initialize("If you back to menu, you'll lose all the progress", "Go to menu", "Cancel",
+                () =>
+                {
+                    confirmPanel.CloseUIForm();
+                    UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
+                    ClientGameManager.Instance.ReloadGame();
+                },
+                () =>
+                {
+                    confirmPanel.CloseUIForm();
+                    UIManager.Instance.ShowUIForms<ExitMenuPanel>();
+                }
+            );
+            return;
+        }
     }
 
     public void ReloadGame()

@@ -378,7 +378,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f9a3469e-bf26-401d-bd90-5b657d01ce7e"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -1115,7 +1115,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e8838878-13ab-429b-b78f-d6b7ebdb196c"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -1170,22 +1170,11 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ec90f968-9f44-44fb-83b5-eb6f1b4edfb2"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Skill_1_Player1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""25f8da1f-8500-41ca-9480-d4b803e16970"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Skill_2_Player1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1296,6 +1285,14 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)""
                 },
                 {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""8d4f3577-d55d-4fac-a439-94225b57b9ad"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=1)""
+                },
+                {
                     ""name"": ""Tab"",
                     ""type"": ""Button"",
                     ""id"": ""21fa8e64-6108-4648-bbba-0381934760dd"",
@@ -1382,16 +1379,24 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""UINavigation"",
+                    ""type"": ""Button"",
+                    ""id"": ""bc02dd05-0578-4b0a-8f60-84da6c6b0a02"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""c2a2ef1b-7b38-4f7c-aabe-258fb695fb5b"",
-                    ""path"": ""*/{Cancel}"",
+                    ""id"": ""2349d29d-84fe-419b-b518-7447fc786c1d"",
+                    ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad;KeyboardMouse"",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Exit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1403,6 +1408,17 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)"",
                     ""processors"": ""Clamp(max=1)"",
                     ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Tab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e143e42c-3e22-47ce-b879-1baa35066785"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Tab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1497,17 +1513,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ca4af09e-ef36-4fff-a83c-0b72b962532f"",
-                    ""path"": ""<Gamepad>/start"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""RestartGame"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""50c4cd9c-6198-4d5d-b7b7-807142622972"",
                     ""path"": ""<Keyboard>/f3"",
                     ""interactions"": ""Press(behavior=2)"",
@@ -1535,6 +1540,17 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
+                    ""action"": ""InteractiveKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d745739c-0960-4a12-9791-8253378e2546"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""InteractiveKey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1593,6 +1609,72 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""90c64eb1-f2c1-40d0-9f13-1330c2807e89"",
+                    ""path"": ""*/{Cancel}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad;KeyboardMouse"",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""DPad"",
+                    ""id"": ""ab5cb213-d49b-40c4-9c69-08bd686fd274"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UINavigation"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""f47bc717-2ecf-4528-a054-7adfdf2b0967"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""UINavigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""a7c57673-acf4-442d-9bd1-6c4f9b52a862"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""UINavigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""3858350b-3118-48d1-b4fc-2718511a1fb5"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""UINavigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""fc251bd0-a65f-466c-afa9-77c9ae21cbc3"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""UINavigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1767,6 +1849,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_Common_MouseWheel = m_Common.FindAction("MouseWheel", throwIfNotFound: true);
         m_Common_Confirm = m_Common.FindAction("Confirm", throwIfNotFound: true);
         m_Common_Exit = m_Common.FindAction("Exit", throwIfNotFound: true);
+        m_Common_Cancel = m_Common.FindAction("Cancel", throwIfNotFound: true);
         m_Common_Tab = m_Common.FindAction("Tab", throwIfNotFound: true);
         m_Common_DebugConsole = m_Common.FindAction("DebugConsole", throwIfNotFound: true);
         m_Common_RestartGame = m_Common.FindAction("RestartGame", throwIfNotFound: true);
@@ -1778,6 +1861,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_Common_SlowDownGame = m_Common.FindAction("SlowDownGame", throwIfNotFound: true);
         m_Common_ReturnToOpenWorld = m_Common.FindAction("ReturnToOpenWorld", throwIfNotFound: true);
         m_Common_SkillPreviewPanel = m_Common.FindAction("SkillPreviewPanel", throwIfNotFound: true);
+        m_Common_UINavigation = m_Common.FindAction("UINavigation", throwIfNotFound: true);
         // Editor
         m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
         m_Editor_MousePosition = m_Editor.FindAction("MousePosition", throwIfNotFound: true);
@@ -2210,6 +2294,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Common_MouseWheel;
     private readonly InputAction m_Common_Confirm;
     private readonly InputAction m_Common_Exit;
+    private readonly InputAction m_Common_Cancel;
     private readonly InputAction m_Common_Tab;
     private readonly InputAction m_Common_DebugConsole;
     private readonly InputAction m_Common_RestartGame;
@@ -2221,6 +2306,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Common_SlowDownGame;
     private readonly InputAction m_Common_ReturnToOpenWorld;
     private readonly InputAction m_Common_SkillPreviewPanel;
+    private readonly InputAction m_Common_UINavigation;
     public struct CommonActions
     {
         private @PlayerInput m_Wrapper;
@@ -2232,6 +2318,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @MouseWheel => m_Wrapper.m_Common_MouseWheel;
         public InputAction @Confirm => m_Wrapper.m_Common_Confirm;
         public InputAction @Exit => m_Wrapper.m_Common_Exit;
+        public InputAction @Cancel => m_Wrapper.m_Common_Cancel;
         public InputAction @Tab => m_Wrapper.m_Common_Tab;
         public InputAction @DebugConsole => m_Wrapper.m_Common_DebugConsole;
         public InputAction @RestartGame => m_Wrapper.m_Common_RestartGame;
@@ -2243,6 +2330,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @SlowDownGame => m_Wrapper.m_Common_SlowDownGame;
         public InputAction @ReturnToOpenWorld => m_Wrapper.m_Common_ReturnToOpenWorld;
         public InputAction @SkillPreviewPanel => m_Wrapper.m_Common_SkillPreviewPanel;
+        public InputAction @UINavigation => m_Wrapper.m_Common_UINavigation;
         public InputActionMap Get() { return m_Wrapper.m_Common; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -2273,6 +2361,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Exit.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnExit;
                 @Exit.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnExit;
                 @Exit.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnExit;
+                @Cancel.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnCancel;
+                @Cancel.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnCancel;
+                @Cancel.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnCancel;
                 @Tab.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnTab;
                 @Tab.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnTab;
                 @Tab.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnTab;
@@ -2306,6 +2397,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @SkillPreviewPanel.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnSkillPreviewPanel;
                 @SkillPreviewPanel.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnSkillPreviewPanel;
                 @SkillPreviewPanel.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnSkillPreviewPanel;
+                @UINavigation.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnUINavigation;
+                @UINavigation.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnUINavigation;
+                @UINavigation.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnUINavigation;
             }
             m_Wrapper.m_CommonActionsCallbackInterface = instance;
             if (instance != null)
@@ -2331,6 +2425,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Exit.started += instance.OnExit;
                 @Exit.performed += instance.OnExit;
                 @Exit.canceled += instance.OnExit;
+                @Cancel.started += instance.OnCancel;
+                @Cancel.performed += instance.OnCancel;
+                @Cancel.canceled += instance.OnCancel;
                 @Tab.started += instance.OnTab;
                 @Tab.performed += instance.OnTab;
                 @Tab.canceled += instance.OnTab;
@@ -2364,6 +2461,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @SkillPreviewPanel.started += instance.OnSkillPreviewPanel;
                 @SkillPreviewPanel.performed += instance.OnSkillPreviewPanel;
                 @SkillPreviewPanel.canceled += instance.OnSkillPreviewPanel;
+                @UINavigation.started += instance.OnUINavigation;
+                @UINavigation.performed += instance.OnUINavigation;
+                @UINavigation.canceled += instance.OnUINavigation;
             }
         }
     }
@@ -2506,6 +2606,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnMouseWheel(InputAction.CallbackContext context);
         void OnConfirm(InputAction.CallbackContext context);
         void OnExit(InputAction.CallbackContext context);
+        void OnCancel(InputAction.CallbackContext context);
         void OnTab(InputAction.CallbackContext context);
         void OnDebugConsole(InputAction.CallbackContext context);
         void OnRestartGame(InputAction.CallbackContext context);
@@ -2517,6 +2618,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnSlowDownGame(InputAction.CallbackContext context);
         void OnReturnToOpenWorld(InputAction.CallbackContext context);
         void OnSkillPreviewPanel(InputAction.CallbackContext context);
+        void OnUINavigation(InputAction.CallbackContext context);
     }
     public interface IEditorActions
     {

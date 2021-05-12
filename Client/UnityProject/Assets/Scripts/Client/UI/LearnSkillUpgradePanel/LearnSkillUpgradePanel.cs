@@ -197,9 +197,9 @@ public class LearnSkillUpgradePanel : BaseUIPanel
 
     #endregion
 
-    protected override void FixedUpdate()
+    protected override void ChildFixedUpdate()
     {
-        base.FixedUpdate();
+        base.ChildFixedUpdate();
         if (IsShown)
         {
             if (ControlManager.Instance.Common_InteractiveKey.Up)

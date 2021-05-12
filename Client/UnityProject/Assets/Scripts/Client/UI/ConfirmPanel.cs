@@ -50,15 +50,6 @@ public class ConfirmPanel : BaseUIPanel
             uiForm_LucencyType: UIFormLucencyTypes.Blur);
     }
 
-    protected override void ChildUpdate()
-    {
-        base.ChildUpdate();
-        if (UIManager.Instance.ConfirmKeyDownHandler != null && UIManager.Instance.ConfirmKeyDownHandler.Invoke())
-        {
-            ConfirmClick?.Invoke();
-        }
-    }
-
     private UnityAction ConfirmClick = null;
 
     public void Initialize(string descText, string leftButtonText, string rightButtonText, UnityAction leftButtonClick, UnityAction rightButtonClick, string inputFieldPlaceHolderText1 = null, string inputFieldPlaceHolderText2 = null, string inputFieldPlaceHolderText3 = null)
@@ -115,6 +106,7 @@ public class ConfirmPanel : BaseUIPanel
     {
         base.Display();
         OnDisplay?.Post(gameObject);
+        LeftButton.Select();
     }
 
     public override void Hide()

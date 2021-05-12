@@ -17,6 +17,13 @@ public class StartMenuPanel : BaseUIPanel
             UIFormLucencyTypes.Penetrable);
     }
 
+    public Button FirstSelectedButton;
+    public Button CreditSelfButton;
+
+    public Button CreditButton;
+    public Button StartButton;
+    public Button ExitButton;
+
     public Animator StartMenuAnim;
     public Animator CreditAnim;
 
@@ -28,6 +35,8 @@ public class StartMenuPanel : BaseUIPanel
         WwiseAudioManager.Instance.WwiseBGMConfiguration.SwitchBGMTheme(BGM_Theme.StartMenu);
         StartMenuAnim.SetTrigger("Play");
         OnPlayAnim?.Post(gameObject);
+
+        FirstSelectedButton.Select();
     }
 
     public void OnButtonClick()
@@ -82,11 +91,13 @@ public class StartMenuPanel : BaseUIPanel
     public void OnCreditButtonClick()
     {
         CreditAnim.SetTrigger("Show");
+        CreditSelfButton.Select();
     }
 
     public void OnCreditSelfButtonClick()
     {
         CreditAnim.SetTrigger("Hide");
+        CreditButton.Select();
     }
 
     public void OnExitButtonClick()
