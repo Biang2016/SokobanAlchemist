@@ -886,6 +886,8 @@ public class Actor : Entity
             EntityStatPropSet.LightningElementFragment.SetValue(lightning);
         }
 
+        EntityBuffHelper.RemoveAllAbnormalStatFX();
+
         ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
         ActiveSkillMarkAsDestroyed = false;
         PassiveSkillMarkAsDestroyed = false;

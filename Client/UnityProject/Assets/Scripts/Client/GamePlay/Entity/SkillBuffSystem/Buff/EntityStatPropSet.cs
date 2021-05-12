@@ -388,6 +388,16 @@ public class EntityStatPropSet
         Profiler.EndSample();
         Profiler.EndSample();
 
+        foreach (KeyValuePair<EntityStatType, EntityStat> kv in StatDict)
+        {
+            kv.Value.m_StatType = kv.Key;
+        }
+
+        foreach (KeyValuePair<EntityPropertyType, EntityProperty> kv in PropertyDict)
+        {
+            kv.Value.m_PropertyType = (int) kv.Key;
+        }
+
         if (Entity != null)
         {
             foreach (KeyValuePair<EntityStatType, EntityStat> kv in StatDict)

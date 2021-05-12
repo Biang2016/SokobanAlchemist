@@ -297,7 +297,10 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                 && !UIManager.IsUIShown<LoadingMapPanel>()
                 && !LearnSkillUpgradePanel.HasPage)
             {
-                UIManager.Instance.ToggleUIForm<ExitMenuPanel>();
+                if (BattleManager.Instance.IsStart)
+                {
+                    UIManager.Instance.ToggleUIForm<ExitMenuPanel>();
+                }
             }
         }
 

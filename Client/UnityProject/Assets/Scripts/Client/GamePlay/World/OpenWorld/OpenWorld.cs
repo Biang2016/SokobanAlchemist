@@ -683,6 +683,7 @@ public class OpenWorld : World
 
     public void TransportPlayerToDungeon(ushort worldTypeIndex, EntityData transportBoxEntityData)
     {
+        if (!BattleManager.Instance.IsStart) return;
         if (transportingPlayerToDungeon) return;
         if (returningToOpenWorldFormDungeon) return;
         if (restartingDungeon) return;
@@ -816,6 +817,7 @@ public class OpenWorld : World
 
     public void ReturnToOpenWorld(bool dungeonComplete)
     {
+        if (!BattleManager.Instance.IsStart) return;
         if (transportingPlayerToDungeon) return;
         if (returningToOpenWorldFormDungeon) return;
         if (restartingDungeon) return;

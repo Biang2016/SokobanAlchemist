@@ -447,6 +447,18 @@ public class EntityBuffHelper : EntityMonoHelper
         }
     }
 
+    public void RemoveAllAbnormalStatFX()
+    {
+        foreach (KeyValuePair<EntityStatType, EntityStat> kv in Entity.EntityStatPropSet.StatDict)
+        {
+            if (kv.Value.IsAbnormalStat)
+            {
+                kv.Value.SetValue(0);
+                RemoveAbnormalStatFX(kv.Key);
+            }
+        }
+    }
+
     public void RemoveAbnormalStatFX(EntityStatType statType)
     {
         if (AbnormalBuffFXDict.TryGetValue(statType, out List<FX> fxs))
