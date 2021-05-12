@@ -412,7 +412,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
         else
         {
-            yield return ClientGameManager.Instance.ReloadGame();
+            yield return ClientGameManager.Instance.Co_ReloadGame();
         }
     }
 
@@ -420,7 +420,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     {
         WinLosePanel panel = UIManager.Instance.ShowUIForms<WinLosePanel>();
         yield return panel.Co_WinGame();
-        yield return ClientGameManager.Instance.ReloadGame();
+        yield return ClientGameManager.Instance.Co_ReloadGame();
     }
 
     public override void ShutDown()

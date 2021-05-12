@@ -1471,15 +1471,28 @@ public class Actor : Entity
             ActorFrozenHelper.FrozenBox = null;
         }
 
+        BattleManager.Instance.SetActorInCombat(GUID, CombatState.Exploring);
         if (this != BattleManager.Instance.Player1)
         {
             PoolRecycle();
-            IsDestroying = false;
         }
-        else
+    }
+
+    public override void DestroySelfWithoutSideEffect()
+    {
+        if (IsDestroying) return;
+        base.DestroySelfWithoutSideEffect();
+        IsDestroying = true;
+        if (ActorFrozenHelper.FrozenBox)
         {
-            BattleManager.Instance.SetActorInCombat(GUID, CombatState.Exploring);
-            IsDestroying = false;
+            ActorFrozenHelper.FrozenBox.DestroySelfWithoutSideEffect();
+            ActorFrozenHelper.FrozenBox = null;
+        }
+
+        BattleManager.Instance.SetActorInCombat(GUID, CombatState.Exploring);
+        if (this != BattleManager.Instance.Player1)
+        {
+            PoolRecycle();
         }
     }
 

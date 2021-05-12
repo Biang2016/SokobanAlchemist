@@ -49,6 +49,6 @@ public class TransportBoxHelper : BoxMonoHelper
     {
         base.RecordEntityExtraStates(entityDataExtraStates);
         entityDataExtraStates.R_TransportBoxClosed = true;
-        entityDataExtraStates.TransportBoxClosed = Open;
+        entityDataExtraStates.TransportBoxClosed = !Open;
     }
 }

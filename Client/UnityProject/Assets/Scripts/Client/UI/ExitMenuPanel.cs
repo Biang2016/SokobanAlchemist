@@ -69,8 +69,10 @@ public class ExitMenuPanel : BaseUIPanel
             confirmPanel.Initialize("If you back to menu, you'll lose all the progress", "Go to menu", "Cancel",
                 () =>
                 {
-                    StartCoroutine(ClientGameManager.Instance.ReloadGame());
                     confirmPanel.CloseUIForm();
+                    UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
+                    UIManager.Instance.CloseUIForm<ExitMenuPanel>();
+                    ClientGameManager.Instance.ReloadGame();
                 },
                 () => { confirmPanel.CloseUIForm(); }
             );

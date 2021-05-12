@@ -50,7 +50,7 @@ public class BoxSkillAction_ChangeBoxType : BoxSkillAction, EntitySkillAction.IP
         if (ChangeForEveryGrid)
         {
             List<GridPos3D> occupations = targetBox.GetEntityOccupationGPs_Rotated();
-            targetBox.DestroySelfByModuleRecycle();
+            targetBox.DestroySelfWithoutSideEffect();
             foreach (GridPos3D gridPos in occupations)
             {
                 GridPos3D gridWorldGP = worldGP + gridPos;
@@ -60,7 +60,7 @@ public class BoxSkillAction_ChangeBoxType : BoxSkillAction, EntitySkillAction.IP
         }
         else
         {
-            targetBox.DestroySelfByModuleRecycle();
+            targetBox.DestroySelfWithoutSideEffect();
             WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(worldGP);
             if (module != null) module.GenerateEntity(EntityData.Clone(), worldGP);
         }

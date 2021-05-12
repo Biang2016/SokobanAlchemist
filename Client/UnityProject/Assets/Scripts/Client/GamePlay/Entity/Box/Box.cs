@@ -1192,6 +1192,14 @@ public partial class Box : Entity
         if (IsDestroying || IsRecycled) return;
         base.DestroySelfByModuleRecycle();
         IsDestroying = true;
+        PoolRecycle();
+    }
+
+    public override void DestroySelfWithoutSideEffect()
+    {
+        if (IsDestroying || IsRecycled) return;
+        base.DestroySelfWithoutSideEffect();
+        IsDestroying = true;
         WorldManager.Instance.CurrentWorld.DeleteBox(this);
     }
 

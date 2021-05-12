@@ -171,7 +171,7 @@ PrefabInstance:
     - target: {fileID: 1193514219997052093, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: m_Name
-      value: CyanWoodenEnemy
+      value: WoodenEnemy_Brown
       objectReference: {fileID: 0}
     - target: {fileID: 1308311186246730168, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -181,7 +181,7 @@ PrefabInstance:
     - target: {fileID: 1308311186246730168, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RangeRatioFactor.y
-      value: 0.5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2194971821789864963, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -242,19 +242,19 @@ PrefabInstance:
         type: 3}
       propertyPath: RawEntityActiveSkillSOs.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 455c370d82a6ef04882e231a09578005,
+      objectReference: {fileID: 11400000, guid: 13a1e34b8d537d04bb2bb8a25c38e92b,
         type: 2}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityActiveSkillSOs.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 417eb54e8f3e9ee4a9150e3ffab5db78,
+      objectReference: {fileID: 11400000, guid: 72b52f7675aab5e4fa02dd71f8c1e4a7,
         type: 2}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityActiveSkillSOs.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: c724d004a4f5c8e428b5351c8e2e0d78,
+      objectReference: {fileID: 11400000, guid: 5cc18b64f2832c64a8e28fb4bf72efa9,
         type: 2}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -275,7 +275,7 @@ PrefabInstance:
         type: 3}
       propertyPath: RawEntityPassiveSkillSOs.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 2dd903458c4739c4396aa8875ad313e8,
+      objectReference: {fileID: 11400000, guid: 0505ffbb18f2ff948b213ced5d9c86ad,
         type: 2}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -293,7 +293,7 @@ PrefabInstance:
         type: 3}
       propertyPath: RawEntityPassiveSkillSOs.Array.data[3]
       value: 
-      objectReference: {fileID: 11400000, guid: c6ded4f9681147d429b8b34493e5106f,
+      objectReference: {fileID: 11400000, guid: f63c538745645b544bd9992b7b295c16,
         type: 2}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -354,43 +354,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
-      propertyPath: RawEntityStatPropSet.MoveSpeed.BaseValue
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
-        type: 3}
-      propertyPath: RawEntityStatPropSet.HealthDurability._value
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
-        type: 3}
       propertyPath: RawEntityStatPropSet.IceElementFragment._value
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityStatPropSet.FireElementFragment._value
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
-        type: 3}
-      propertyPath: RawEntityStatPropSet.HealthDurability._maxValue
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
-        type: 3}
-      propertyPath: RawEntityStatPropSet.MaxHealthDurability.MinValue
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
-        type: 3}
-      propertyPath: RawEntityStatPropSet.MaxHealthDurability.BaseValue
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: RawEntityStatPropSet.LightningElementFragment._value
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2445936643813022826, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -552,25 +527,25 @@ PrefabInstance:
         type: 3}
       propertyPath: OnBeingDamaged.WwiseObjectReference
       value: 
-      objectReference: {fileID: 11400000, guid: 33413a9df1e0f4c9d9b2ca12c503d246,
+      objectReference: {fileID: 11400000, guid: 704d6da75621a4ac0aae55a6eb287212,
         type: 2}
     - target: {fileID: 3744265640672872604, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: OnDestroyed_Common.WwiseObjectReference
       value: 
-      objectReference: {fileID: 11400000, guid: f54bd2d445a8049519290089e7f6aadf,
+      objectReference: {fileID: 11400000, guid: 69a97ed978cd64c65a7e37700ae09a15,
         type: 2}
     - target: {fileID: 3744265640672872604, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: OnSkillCast.Array.data[0].WwiseObjectReference
       value: 
-      objectReference: {fileID: 11400000, guid: f6055cf3c1e1a4575aeb1736f3f4a73b,
+      objectReference: {fileID: 11400000, guid: 418767980b3074a28b6f25ee6694c522,
         type: 2}
     - target: {fileID: 3744265640672872604, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: OnSkillCast.Array.data[1].WwiseObjectReference
       value: 
-      objectReference: {fileID: 11400000, guid: 258d8baed8a3d47debb8fcbaa25618d9,
+      objectReference: {fileID: 11400000, guid: 175ee932f19654971a69bbe837691aa2,
         type: 2}
     - target: {fileID: 3744265640672872604, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
@@ -582,49 +557,44 @@ PrefabInstance:
         type: 3}
       propertyPath: OnDestroyed_ByFiringDamage.WwiseObjectReference
       value: 
-      objectReference: {fileID: 11400000, guid: f54bd2d445a8049519290089e7f6aadf,
+      objectReference: {fileID: 11400000, guid: 69a97ed978cd64c65a7e37700ae09a15,
         type: 2}
     - target: {fileID: 3744265640672872604, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: OnDestroyed_ByFrozenDamage.WwiseObjectReference
       value: 
-      objectReference: {fileID: 11400000, guid: f54bd2d445a8049519290089e7f6aadf,
+      objectReference: {fileID: 11400000, guid: 69a97ed978cd64c65a7e37700ae09a15,
         type: 2}
     - target: {fileID: 3744265640672872604, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: OnDestroyed_ByCollideDamage.WwiseObjectReference
       value: 
-      objectReference: {fileID: 11400000, guid: f54bd2d445a8049519290089e7f6aadf,
+      objectReference: {fileID: 11400000, guid: 69a97ed978cd64c65a7e37700ae09a15,
         type: 2}
     - target: {fileID: 3744265640672872604, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: OnDestroyed_ByExplodeDamage.WwiseObjectReference
       value: 
-      objectReference: {fileID: 11400000, guid: f54bd2d445a8049519290089e7f6aadf,
+      objectReference: {fileID: 11400000, guid: 69a97ed978cd64c65a7e37700ae09a15,
         type: 2}
     - target: {fileID: 3744265640672872604, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: OnSkillPreparing.Array.data[0].WwiseObjectReference
       value: 
-      objectReference: {fileID: 11400000, guid: 8444d5931ab514064b237282f568d5ef,
+      objectReference: {fileID: 11400000, guid: 29674ffda9eca4f939b6189529f11e5a,
         type: 2}
     - target: {fileID: 3744265640672872604, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: OnSkillPreparing.Array.data[1].WwiseObjectReference
       value: 
-      objectReference: {fileID: 11400000, guid: b330793a4f4a447849a7c0d82428001f,
+      objectReference: {fileID: 11400000, guid: 5a7ba97b1621547478fdcd27a9367d10,
         type: 2}
     - target: {fileID: 3744265640672872604, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: OnSkillPreparing.Array.data[2].WwiseObjectReference
       value: 
-      objectReference: {fileID: 11400000, guid: d8b5df7c4b7174d638701e2d27c99303,
+      objectReference: {fileID: 11400000, guid: 38611e3feef554059924effdc92e59de,
         type: 2}
-    - target: {fileID: 3744265640672872604, guid: 8ca8def23062cf242bafa7e081952811,
-        type: 3}
-      propertyPath: OnSkillPreparing.Array.data[9].WwiseObjectReference
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4266292117682224583, guid: 8ca8def23062cf242bafa7e081952811,
         type: 3}
       propertyPath: m_LocalScale.y
@@ -845,17 +815,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 4625385b59eb045cea5a9c6f0f1aa3b2,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.8
+      value: 2.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4625385b59eb045cea5a9c6f0f1aa3b2,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.8
+      value: 2.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4625385b59eb045cea5a9c6f0f1aa3b2,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 2.8
+      value: 2.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4625385b59eb045cea5a9c6f0f1aa3b2,
         type: 3}
@@ -865,7 +835,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 4625385b59eb045cea5a9c6f0f1aa3b2,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.764
+      value: 0.578
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4625385b59eb045cea5a9c6f0f1aa3b2,
         type: 3}
@@ -1006,7 +976,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 40404986f16111348b0fadb536b20110, type: 2}
+      objectReference: {fileID: 2100000, guid: 044916aa64ff65041b6cd32d5290c206, type: 2}
     - target: {fileID: 4918753458281921464, guid: 4625385b59eb045cea5a9c6f0f1aa3b2,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

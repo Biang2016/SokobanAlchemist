@@ -75,6 +75,11 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 #endif
     }
 
+    public void OnLoadFromGameSave()
+    {
+        TriggerEntityDataDict = new Dictionary<uint, EntityData>();
+    }
+
     public WorldModuleData Clone() // 理论上只有NormalModule会用到，开放世界模组不能用此Clone，否则会造成不必要的内存占用
     {
         WorldModuleData data = WorldModuleDataFactory.Alloc();

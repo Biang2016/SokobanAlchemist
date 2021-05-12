@@ -551,8 +551,14 @@ public abstract class Entity : PoolObject
         Profiler.BeginSample("RecordEntityExtraSerializeData");
         foreach (EntityMonoHelper h in EntityMonoHelpers)
         {
-            if (CurrentEntityData == null) Debug.LogError("RecordEntityExtraSerializeData CurrentEntityData == null");
-            else if (CurrentEntityData.RawEntityExtraSerializeData == null) Debug.LogError("RecordEntityExtraSerializeData CurrentEntityData.RawEntityExtraSerializeData == null");
+            if (CurrentEntityData == null)
+            {
+                Debug.LogError("RecordEntityExtraSerializeData CurrentEntityData == null");
+            }
+            else if (CurrentEntityData.RawEntityExtraSerializeData == null)
+            {
+                Debug.LogError("RecordEntityExtraSerializeData CurrentEntityData.RawEntityExtraSerializeData == null");
+            }
             else
             {
                 h?.RecordEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
@@ -1079,6 +1085,9 @@ public abstract class Entity : PoolObject
     private float DropVelocity = 50f;
 
     public virtual void DestroySelfByModuleRecycle()
+    {
+    }
+    public virtual void DestroySelfWithoutSideEffect()
     {
     }
 

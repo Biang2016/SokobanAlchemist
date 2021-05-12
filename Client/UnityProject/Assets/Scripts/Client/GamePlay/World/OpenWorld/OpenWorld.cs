@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay.UI;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 
 public class OpenWorld : World
@@ -133,186 +135,46 @@ public class OpenWorld : World
         WorldMap_StaticLayoutOccupied_IntactForStaticLayout = null;
         WorldMap_StaticLayoutOccupied_IntactForBox = null;
         WorldMap_TerrainType = null;
-        DungeonMissionState = DungeonMissionState.NotInDungeon;
+        WorldBornPointData = null;
         InitialPlayerBP = GridPos3D.Zero;
+
+        m_LevelCacheData = null;
+
+        DungeonMissionState = DungeonMissionState.NotInDungeon;
+        IsUsingSpecialESPSInsideDungeon = false;
+        CurrentDungeonWorldTypeIndex = 0;
+        LastLeaveOpenWorldPlayerGP = GridPos3D.Zero;
+        DungeonModules.Clear();
+        PlayerDataSave = null;
+        PlayerDataSave_DungeonTemp = null;
+
         transportingPlayerToDungeon = false;
+        temp_LastTransportBoxEntityData = null;
+
         returningToOpenWorldFormDungeon = false;
         restartingDungeon = false;
+        respawningInOpenWorld = false;
+    }
+
+    public void Prepare(WorldData worldData)
+    {
+        WorldData = worldData;
+        WorldData.WorldBornPointGroupData_Runtime.Init();
+        WorldData.DefaultWorldActorBornPointAlias = PLAYER_DEFAULT_BP;
     }
 
     public override IEnumerator Initialize(WorldData worldData)
     {
-        ActorPathFinding.InitializeSpaceAvailableForActorHeight(WORLD_SIZE * WorldModule.MODULE_SIZE, WORLD_HEIGHT * WorldModule.MODULE_SIZE, WORLD_SIZE * WorldModule.MODULE_SIZE);
-
         LoadingMapPanel = UIManager.Instance.GetBaseUIForm<LoadingMapPanel>();
-        uint Seed = 0;
-        if (UseCertainSeed)
-        {
-            Seed = GivenSeed;
-        }
-        else
-        {
-            Seed = (uint) Time.time.ToString().GetHashCode();
-        }
-
-        SRandom SRandom = new SRandom(Seed);
-
-        WorldMap_EntityDataMatrix.Add(TypeDefineType.Box, new EntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE]);
-        WorldMap_EntityDataMatrix.Add(TypeDefineType.Actor, new EntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE]);
-        WorldMap_TriggerEntityDataMatrix = new List<EntityData>[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        for (int x = 0; x < WorldSize_X * WorldModule.MODULE_SIZE; x++)
-        for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
-        for (int z = 0; z < WorldSize_Z * WorldModule.MODULE_SIZE; z++)
-        {
-            WorldMap_TriggerEntityDataMatrix[x, y, z] = new List<EntityData>(4);
-        }
-
-        WorldMap_Occupied_BetweenBoxes = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        WorldMap_Occupied_BoxAndActor = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        WorldMap_StaticLayoutOccupied_IntactForStaticLayout = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        WorldMap_StaticLayoutOccupied_IntactForBox = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        WorldMap_TerrainType = new TerrainType[WorldSize_X * WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-        WorldBornPointData = new BornPointData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
-
-        WorldGUID = Seed + "_" + Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
-        m_LevelCacheData = new LevelCacheData();
-        WorldData = worldData;
-
-        WorldData.WorldBornPointGroupData_Runtime.Init();
-        WorldData.DefaultWorldActorBornPointAlias = PLAYER_DEFAULT_BP;
-
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.5f, "Loading Open World");
-        yield return null;
-
-        #region GenerateTerrain
-
-        m_LevelCacheData.TerrainGenerator = new CellularAutomataTerrainGenerator(m_GenerateTerrainData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
-        m_LevelCacheData.TerrainGenerator.ApplyToWorldTerrainMap();
-
-        #endregion
-
-        #region GenerateStaticLayoutLayer
-
-        int generatorCount_staticLayoutLayer = 0;
-
-        foreach (GenerateStaticLayoutLayerData staticLayoutLayerData in GenerateStaticLayoutLayerDataList) // 按层生成关卡静态布局数据
-        {
-            if (!staticLayoutLayerData.Enable) continue;
-            if (!staticLayoutLayerData.DeterminePlayerBP && TestTerrain) continue;
-            staticLayoutLayerData.Init();
-            MapGenerator generator = null;
-            switch (staticLayoutLayerData.m_GenerateAlgorithm)
-            {
-                case GenerateAlgorithm.Random:
-                {
-                    generator = new RandomMapGenerator(staticLayoutLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
-                    break;
-                }
-            }
-
-            if (generator != null)
-            {
-                generator.ApplyToWorldMap();
-                m_LevelCacheData.CurrentGenerator_StaticLayouts.Add(generator);
-                generatorCount_staticLayoutLayer++;
-                ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.5f + 0.1f * generatorCount_staticLayoutLayer / GenerateStaticLayoutLayerDataList.Count, "Generating Map Static Layouts");
-                yield return null;
-            }
-        }
-
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.6f, "Generating Map Static Layouts Completed");
-        yield return null;
-
-        #endregion
-
-        #region GenerateBoxLayer
-
-        int generatorCount_boxLayer = 0;
-
-        foreach (GenerateBoxLayerData boxLayerData in GenerateBoxLayerDataList) // 按层生成关卡Box数据
-        {
-            if (!boxLayerData.Enable) continue;
-            if (TestTerrain) continue;
-            boxLayerData.Init();
-            MapGenerator generator = null;
-            switch (boxLayerData.m_GenerateAlgorithm)
-            {
-                case GenerateAlgorithm.CellularAutomata:
-                {
-                    generator = new CellularAutomataMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
-                    break;
-                }
-                case GenerateAlgorithm.PerlinNoise:
-                {
-                    break;
-                }
-                case GenerateAlgorithm.Random:
-                {
-                    generator = new RandomMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
-                    break;
-                }
-                case GenerateAlgorithm.Around:
-                {
-                    generator = new AroundMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
-                    break;
-                }
-            }
-
-            if (generator != null)
-            {
-                generator.ApplyToWorldMap();
-                m_LevelCacheData.CurrentGenerators_Boxes.Add(generator);
-                generatorCount_boxLayer++;
-                ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.6f + 0.2f * generatorCount_boxLayer / GenerateBoxLayerDataList.Count, "Generating Map Boxes");
-                yield return null;
-            }
-        }
-
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.8f, "Generating Map Boxes Completed");
-        yield return null;
-
-        #endregion
-
-        #region GenerateActorLayer
-
-        int generatorCount_actorLayer = 0;
-        foreach (GenerateActorLayerData actorLayerData in GenerateActorLayerDataList) // 按层生成关卡Actor数据
-        {
-            if (!actorLayerData.Enable) continue;
-            if (TestTerrain) continue;
-            actorLayerData.Init();
-            MapGenerator generator = null;
-            switch (actorLayerData.m_GenerateAlgorithm)
-            {
-                case GenerateAlgorithm.Random:
-                {
-                    generator = new RandomMapGenerator(actorLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
-                    break;
-                }
-            }
-
-            if (generator != null)
-            {
-                generator.ApplyToWorldMap();
-                m_LevelCacheData.CurrentGenerators_Actors.Add(generator);
-                generatorCount_actorLayer++;
-                ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.8f + 0.1f * generatorCount_actorLayer / GenerateActorLayerDataList.Count, "Generating Map Actors");
-                yield return null;
-            }
-        }
-
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.9f, "Generating Map Actors Completed");
-        yield return null;
-
-        #endregion
-
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.91f, "Loading Maps");
         yield return null;
+
         BattleManager.Instance.CreatePlayerByBornPointData(WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[WorldData.DefaultWorldActorBornPointAlias]);
         BattleManager.Instance.IsStart = false;
         CameraManager.Instance.FieldCamera.InitFocus();
+        ActorPathFinding.InitializeSpaceAvailableForActorHeight(WORLD_SIZE * WorldModule.MODULE_SIZE, WORLD_HEIGHT * WorldModule.MODULE_SIZE, WORLD_SIZE * WorldModule.MODULE_SIZE);
 
-        DungeonMissionState = DungeonMissionState.NotInDungeon;
+        LoadPlayerGrowth(true); // 如果是读档，则自动加载出玩家的成长，如果是新游戏，则不加载任何东西
         SavePlayerGrowth();
 
         // 没有起始关卡就直接进入大世界，有起始关卡则避免加载了又卸载
@@ -327,6 +189,175 @@ public class OpenWorld : World
         else
         {
             WaitingForLoadStartDungeon = true;
+        }
+    }
+
+    public IEnumerator GenerateMap(string gameSaveName)
+    {
+        if (TryLoadGame(gameSaveName))
+        {
+            BornPointData bp = new BornPointData {BornPointAlias = OpenWorld.PLAYER_DEFAULT_BP, LocalGP = GetLocalGPByWorldGP(InitialPlayerBP), WorldGP = InitialPlayerBP};
+            bp.InitGUID();
+            WorldData.WorldBornPointGroupData_Runtime.SetDefaultPlayerBP_OpenWorld(bp);
+        }
+        else
+        {
+            uint Seed = 0;
+            if (UseCertainSeed)
+            {
+                Seed = GivenSeed;
+            }
+            else
+            {
+                Seed = (uint) Time.time.ToString().GetHashCode();
+            }
+
+            SRandom SRandom = new SRandom(Seed);
+
+            WorldMap_EntityDataMatrix.Add(TypeDefineType.Box, new EntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE]);
+            WorldMap_EntityDataMatrix.Add(TypeDefineType.Actor, new EntityData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE]);
+            WorldMap_TriggerEntityDataMatrix = new List<EntityData>[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+            for (int x = 0; x < WorldSize_X * WorldModule.MODULE_SIZE; x++)
+            for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
+            for (int z = 0; z < WorldSize_Z * WorldModule.MODULE_SIZE; z++)
+            {
+                WorldMap_TriggerEntityDataMatrix[x, y, z] = new List<EntityData>(4);
+            }
+
+            WorldMap_Occupied_BetweenBoxes = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+            WorldMap_Occupied_BoxAndActor = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+            WorldMap_StaticLayoutOccupied_IntactForStaticLayout = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+            WorldMap_StaticLayoutOccupied_IntactForBox = new ushort[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+            WorldMap_TerrainType = new TerrainType[WorldSize_X * WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+            WorldBornPointData = new BornPointData[WorldSize_X * WorldModule.MODULE_SIZE, WorldModule.MODULE_SIZE, WorldSize_Z * WorldModule.MODULE_SIZE];
+
+            WorldGUID = Seed + "_" + Guid.NewGuid().ToString("P"); // e.g: (ade24d16-db0f-40af-8794-1e08e2040df3);
+            m_LevelCacheData = new LevelCacheData();
+
+            ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.5f, "Loading Open World");
+            yield return null;
+
+            #region GenerateTerrain
+
+            m_LevelCacheData.TerrainGenerator = new CellularAutomataTerrainGenerator(m_GenerateTerrainData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
+            m_LevelCacheData.TerrainGenerator.ApplyToWorldTerrainMap();
+
+            #endregion
+
+            #region GenerateStaticLayoutLayer
+
+            int generatorCount_staticLayoutLayer = 0;
+
+            foreach (GenerateStaticLayoutLayerData staticLayoutLayerData in GenerateStaticLayoutLayerDataList) // 按层生成关卡静态布局数据
+            {
+                if (!staticLayoutLayerData.Enable) continue;
+                if (!staticLayoutLayerData.DeterminePlayerBP && TestTerrain) continue;
+                staticLayoutLayerData.Init();
+                MapGenerator generator = null;
+                switch (staticLayoutLayerData.m_GenerateAlgorithm)
+                {
+                    case GenerateAlgorithm.Random:
+                    {
+                        generator = new RandomMapGenerator(staticLayoutLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
+                        break;
+                    }
+                }
+
+                if (generator != null)
+                {
+                    generator.ApplyToWorldMap();
+                    m_LevelCacheData.CurrentGenerator_StaticLayouts.Add(generator);
+                    generatorCount_staticLayoutLayer++;
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.5f + 0.1f * generatorCount_staticLayoutLayer / GenerateStaticLayoutLayerDataList.Count, "Generating Map Static Layouts");
+                    yield return null;
+                }
+            }
+
+            ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.6f, "Generating Map Static Layouts Completed");
+            yield return null;
+
+            #endregion
+
+            #region GenerateBoxLayer
+
+            int generatorCount_boxLayer = 0;
+
+            foreach (GenerateBoxLayerData boxLayerData in GenerateBoxLayerDataList) // 按层生成关卡Box数据
+            {
+                if (!boxLayerData.Enable) continue;
+                if (TestTerrain) continue;
+                boxLayerData.Init();
+                MapGenerator generator = null;
+                switch (boxLayerData.m_GenerateAlgorithm)
+                {
+                    case GenerateAlgorithm.CellularAutomata:
+                    {
+                        generator = new CellularAutomataMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
+                        break;
+                    }
+                    case GenerateAlgorithm.PerlinNoise:
+                    {
+                        break;
+                    }
+                    case GenerateAlgorithm.Random:
+                    {
+                        generator = new RandomMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
+                        break;
+                    }
+                    case GenerateAlgorithm.Around:
+                    {
+                        generator = new AroundMapGenerator(boxLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
+                        break;
+                    }
+                }
+
+                if (generator != null)
+                {
+                    generator.ApplyToWorldMap();
+                    m_LevelCacheData.CurrentGenerators_Boxes.Add(generator);
+                    generatorCount_boxLayer++;
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.6f + 0.2f * generatorCount_boxLayer / GenerateBoxLayerDataList.Count, "Generating Map Boxes");
+                    yield return null;
+                }
+            }
+
+            ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.8f, "Generating Map Boxes Completed");
+            yield return null;
+
+            #endregion
+
+            #region GenerateActorLayer
+
+            int generatorCount_actorLayer = 0;
+            foreach (GenerateActorLayerData actorLayerData in GenerateActorLayerDataList) // 按层生成关卡Actor数据
+            {
+                if (!actorLayerData.Enable) continue;
+                if (TestTerrain) continue;
+                actorLayerData.Init();
+                MapGenerator generator = null;
+                switch (actorLayerData.m_GenerateAlgorithm)
+                {
+                    case GenerateAlgorithm.Random:
+                    {
+                        generator = new RandomMapGenerator(actorLayerData, WorldModule.MODULE_SIZE * WorldSize_X, WorldModule.MODULE_SIZE * WorldSize_Z, SRandom.Next((uint) 9999), this);
+                        break;
+                    }
+                }
+
+                if (generator != null)
+                {
+                    generator.ApplyToWorldMap();
+                    m_LevelCacheData.CurrentGenerators_Actors.Add(generator);
+                    generatorCount_actorLayer++;
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.8f + 0.1f * generatorCount_actorLayer / GenerateActorLayerDataList.Count, "Generating Map Actors");
+                    yield return null;
+                }
+            }
+
+            ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.9f, "Generating Map Actors Completed");
+            yield return null;
+
+            #endregion
         }
     }
 
@@ -352,6 +383,7 @@ public class OpenWorld : World
 
     #region Level Streaming
 
+    [Serializable]
     public class LevelCacheData
     {
         public CellularAutomataTerrainGenerator TerrainGenerator;
@@ -636,7 +668,10 @@ public class OpenWorld : World
     #region Dungeon
 
     internal bool InsideDungeon => DungeonMissionState != DungeonMissionState.NotInDungeon;
+
+    [ShowInInspector]
     internal DungeonMissionState DungeonMissionState;
+
     internal bool IsUsingSpecialESPSInsideDungeon = false;
 
     internal ushort CurrentDungeonWorldTypeIndex = 0;
@@ -691,14 +726,17 @@ public class OpenWorld : World
             SavePlayerGrowth();
             if (IsUsingSpecialESPSInsideDungeon) // 如果上个关卡是特殊关卡，出来后要恢复玩家成长到该关之前
             {
-                LoadPlayerGrowth();
+                LoadPlayerGrowth(false);
             }
+
+            DungeonMissionState = DungeonMissionState.DungeonInProgress;
         }
         else
         {
             LastLeaveOpenWorldPlayerGP = BattleManager.Instance.Player1.transform.position.ToGridPos3D();
+            SavePlayerGrowth(); // 此处是保存OpenWorld玩家成长数据
             DungeonMissionState = DungeonMissionState.DungeonInProgress;
-            SavePlayerGrowth();
+            SavePlayerGrowth(); // 此处是保存玩家进入Dungeon瞬间的成长数据
         }
 
         // Loading New Dungeon Modules
@@ -817,7 +855,7 @@ public class OpenWorld : World
         }
 
         SavePlayerGrowth();
-        LoadPlayerGrowth();
+        LoadPlayerGrowth(false);
         DungeonMissionState = DungeonMissionState.NotInDungeon;
 
         WwiseAudioManager.Instance.WwiseBGMConfiguration.SetCombatState(CombatState.Exploring); // 默认战斗状态 （如果有Camp的世界将由对应的TriggerBox来切换到InCamp）
@@ -893,7 +931,8 @@ public class OpenWorld : World
         yield return RecycleEmptyModules();
 
         DungeonMissionState = DungeonMissionState.DungeonPartialFailed;
-        LoadPlayerGrowth();
+        LoadPlayerGrowth(false);
+        DungeonMissionState = DungeonMissionState.DungeonInProgress;
 
         // Loading Dungeon Modules
         int totalModuleNum = dungeonData.WorldModuleGPOrder.Count;
@@ -1035,7 +1074,6 @@ public class OpenWorld : World
         }
         else if (DungeonMissionState == DungeonMissionState.DungeonInProgress)
         {
-            PlayerDataSave = PlayerData.GetPlayerData();
             PlayerDataSave_DungeonTemp = PlayerData.GetPlayerData();
         }
         else
@@ -1053,16 +1091,17 @@ public class OpenWorld : World
                 else if (DungeonMissionState == DungeonMissionState.DungeonComplete) // Dungeon通关，获得所有奖励，保存玩家成长数值和技能
                 {
                     PlayerDataSave = PlayerData.GetPlayerData();
+                    PlayerDataSave_DungeonTemp = null;
                 }
             }
         }
     }
 
-    private void LoadPlayerGrowth() // 提取存档
+    private void LoadPlayerGrowth(bool loadFromGameSave) // 提取存档
     {
         if (DungeonMissionState == DungeonMissionState.NotInDungeon)
         {
-            PlayerDataSave?.ApplyDataOnPlayer(true);
+            PlayerDataSave?.ApplyDataOnPlayer(!loadFromGameSave);
         }
         else
         {
@@ -1072,13 +1111,17 @@ public class OpenWorld : World
             }
             else
             {
-                if (DungeonMissionState == DungeonMissionState.DungeonPartialFailed) // Dungeon死亡，回到上一关的存档数据
+                if (DungeonMissionState == DungeonMissionState.DungeonInProgress)
                 {
-                    PlayerDataSave_DungeonTemp?.ApplyDataOnPlayer(true);
+                    PlayerDataSave_DungeonTemp?.ApplyDataOnPlayer(!loadFromGameSave);
+                }
+                else if (DungeonMissionState == DungeonMissionState.DungeonPartialFailed) // Dungeon死亡，回到上一关的存档数据
+                {
+                    PlayerDataSave_DungeonTemp?.ApplyDataOnPlayer(!loadFromGameSave);
                 }
                 else if (DungeonMissionState == DungeonMissionState.DungeonFailed) // Dungeon放弃，回到进入Dungeon之前的大世界的存档数据
                 {
-                    PlayerDataSave?.ApplyDataOnPlayer(true);
+                    PlayerDataSave?.ApplyDataOnPlayer(!loadFromGameSave);
                 }
             }
         }
@@ -1098,6 +1141,122 @@ public class OpenWorld : World
         {
             tileBox.BoxMarchingTextureHelper.Initialize();
         }
+    }
+
+    #endregion
+
+    #region SaveGame
+
+    [Serializable]
+    public class GameSaveData
+    {
+        public PlayerData PlayerData;
+        public PlayerData PlayerDataSave_DungeonTemp;
+        public LevelCacheData LevelCacheData;
+
+        public Dictionary<TypeDefineType, EntityData[,,]> WorldMap_EntityDataMatrix;
+        public List<EntityData>[,,] WorldMap_TriggerEntityDataMatrix;
+        public List<EntityPassiveSkill_LevelEventTriggerAppear.Data> EventTriggerAppearEntityDataList;
+
+        public TerrainType[,] WorldMap_TerrainType;
+        public BornPointData[,,] WorldBornPointData;
+        public TypeSelectHelper StartDungeonTypeName = new TypeSelectHelper {TypeDefineType = TypeDefineType.World};
+
+        public GridPos3D InitialPlayerBP;
+        public GridPos3D LastLeaveOpenWorldPlayerGP;
+        public bool IsUsingSpecialESPSInsideDungeon;
+        public DungeonMissionState DungeonMissionState;
+    }
+
+    public void SaveGame(string gameSaveName)
+    {
+        StartCoroutine(Co_SaveGame(gameSaveName));
+    }
+
+    private IEnumerator Co_SaveGame(string gameSaveName)
+    {
+        SavePlayerGrowth();
+        for (int x = 0; x < WORLD_SIZE; x++)
+        for (int y = 0; y < WORLD_HEIGHT; y++)
+        for (int z = 0; z < WORLD_SIZE; z++)
+        {
+            if (WorldModuleMatrix[x, y, z] != null)
+            {
+                yield return WorldModuleMatrix[x, y, z]?.RecordWorldModuleData(256);
+            }
+        }
+
+        GameSaveData gameSaveData = new GameSaveData();
+        gameSaveData.PlayerData = PlayerDataSave;
+        gameSaveData.PlayerDataSave_DungeonTemp = PlayerDataSave_DungeonTemp;
+        gameSaveData.LevelCacheData = m_LevelCacheData;
+        gameSaveData.WorldMap_EntityDataMatrix = WorldMap_EntityDataMatrix;
+        gameSaveData.WorldMap_TriggerEntityDataMatrix = WorldMap_TriggerEntityDataMatrix;
+        gameSaveData.EventTriggerAppearEntityDataList = EventTriggerAppearEntityDataList;
+        gameSaveData.WorldMap_TerrainType = WorldMap_TerrainType;
+        gameSaveData.WorldBornPointData = WorldBornPointData;
+
+        if (InsideDungeon)
+        {
+            gameSaveData.StartDungeonTypeName.TypeDefineType = TypeDefineType.World;
+            gameSaveData.StartDungeonTypeName.TypeSelection = ConfigManager.GetTypeName(TypeDefineType.World, CurrentDungeonWorldTypeIndex);
+            gameSaveData.StartDungeonTypeName.RefreshGUID();
+        }
+        else
+        {
+            gameSaveData.StartDungeonTypeName.TypeDefineType = TypeDefineType.World;
+            gameSaveData.StartDungeonTypeName.TypeSelection = "None";
+            gameSaveData.StartDungeonTypeName.RefreshGUID();
+        }
+
+        gameSaveData.InitialPlayerBP = InitialPlayerBP;
+        gameSaveData.LastLeaveOpenWorldPlayerGP = LastLeaveOpenWorldPlayerGP;
+        gameSaveData.IsUsingSpecialESPSInsideDungeon = IsUsingSpecialESPSInsideDungeon;
+        gameSaveData.DungeonMissionState = DungeonMissionState;
+
+        string folder = $"{Application.streamingAssetsPath}/GameSaves";
+        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+        string file = $"{folder}/GameSave_{gameSaveName}.save";
+        if (File.Exists(file)) File.Delete(file);
+        byte[] bytes = SerializationUtility.SerializeValue(gameSaveData, DataFormat.Binary);
+        byte[] bytes_compressed = Compress.CompressBytes(bytes);
+        File.WriteAllBytes(file, bytes_compressed);
+
+        ClientGameManager.Instance.NoticePanel.ShowTip("Game Saved!", NoticePanel.TipPositionType.Center, 1.5f);
+    }
+
+    public bool TryLoadGame(string gameName)
+    {
+        string folder = $"{Application.streamingAssetsPath}/GameSaves";
+        string file = $"{folder}/GameSave_{gameName}.save";
+        if (File.Exists(file))
+        {
+            FileInfo fi = new FileInfo(file);
+            byte[] bytes_compressed = File.ReadAllBytes(fi.FullName);
+            byte[] bytes = Compress.Decompress(bytes_compressed);
+            GameSaveData gameSaveData = SerializationUtility.DeserializeValue<GameSaveData>(bytes, DataFormat.Binary);
+            PlayerDataSave = gameSaveData.PlayerData;
+            PlayerDataSave_DungeonTemp = gameSaveData.PlayerDataSave_DungeonTemp;
+            m_LevelCacheData = gameSaveData.LevelCacheData;
+            foreach (KeyValuePair<GridPos3D, WorldModuleData> kv in m_LevelCacheData.WorldModuleDataDict)
+            {
+                kv.Value.OnLoadFromGameSave();
+            }
+
+            WorldMap_EntityDataMatrix = gameSaveData.WorldMap_EntityDataMatrix;
+            WorldMap_TriggerEntityDataMatrix = gameSaveData.WorldMap_TriggerEntityDataMatrix;
+            EventTriggerAppearEntityDataList = gameSaveData.EventTriggerAppearEntityDataList;
+            WorldMap_TerrainType = gameSaveData.WorldMap_TerrainType;
+            WorldBornPointData = gameSaveData.WorldBornPointData;
+            StartDungeonTypeName = gameSaveData.StartDungeonTypeName;
+            InitialPlayerBP = gameSaveData.InitialPlayerBP;
+            LastLeaveOpenWorldPlayerGP = gameSaveData.LastLeaveOpenWorldPlayerGP;
+            IsUsingSpecialESPSInsideDungeon = gameSaveData.IsUsingSpecialESPSInsideDungeon;
+            DungeonMissionState = gameSaveData.DungeonMissionState;
+            return true;
+        }
+
+        return false;
     }
 
     #endregion

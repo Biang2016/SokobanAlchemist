@@ -42,7 +42,14 @@ public class StartMenuPanel : BaseUIPanel
     public void OnStartButtonClick()
     {
         WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
-        ClientGameManager.Instance.StartGame();
+        ClientGameManager.Instance.StartGame("");
+        CloseUIForm();
+    }
+
+    public void OnLoadButtonClick()
+    {
+        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
+        ClientGameManager.Instance.StartGame("Slot1");
         CloseUIForm();
     }
 

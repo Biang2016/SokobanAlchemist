@@ -169,9 +169,9 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         WwiseAudioManager.WwiseBGMConfiguration.BGM_Start();
     }
 
-    public void StartGame()
+    public void StartGame(string gameSaveName)
     {
-        StartCoroutine(Co_StartGame());
+        StartCoroutine(Co_StartGame(gameSaveName));
     }
 
     public void CreateTextureArray()
@@ -195,7 +195,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     internal bool IsGameLoading = false;
 
-    internal IEnumerator Co_StartGame()
+    internal IEnumerator Co_StartGame(string gameSaveName)
     {
         IsGameLoading = true;
         LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
@@ -217,7 +217,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         LoadingMapPanel.SetBackgroundAlpha(1f);
         LoadingMapPanel.SetProgress(0.5f, "StartGame");
         PlayerStatHUDPanel = UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>();
-        yield return WorldManager.StartGame();
+        yield return WorldManager.StartGame(gameSaveName);
 
         LoadingMapPanel.SetProgress(1f, "Completed");
         yield return new WaitForSeconds(0.1f);
@@ -316,7 +316,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                     confirmPanel.Initialize("Wanna reload the game? You'll lose all the progress", "Reload", "Cancel",
                         () =>
                         {
-                            StartCoroutine(ReloadGame());
+                            StartCoroutine(Co_ReloadGame());
                             confirmPanel.CloseUIForm();
                         },
                         () => { confirmPanel.CloseUIForm(); }
@@ -462,7 +462,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             }
             else
             {
-                StartCoroutine(ReloadGame());
+                StartCoroutine(Co_ReloadGame());
                 return true;
             }
         }
@@ -470,10 +470,15 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         return false;
     }
 
+    public void ReloadGame()
+    {
+        StartCoroutine(Co_ReloadGame());
+    }
+
     public void SwitchWorld_ReloadGame(string worldName)
     {
         DebugChangeWorldName = worldName;
-        StartCoroutine(ReloadGame());
+        StartCoroutine(Co_ReloadGame());
     }
 
     public void ChangeWorld(string worldName, bool dungeonComplete, EntityData transportBoxEntityData = null)
@@ -496,7 +501,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         }
     }
 
-    public IEnumerator ReloadGame()
+    public IEnumerator Co_ReloadGame()
     {
         yield return ShutDownGame();
         OnReloadScene();
