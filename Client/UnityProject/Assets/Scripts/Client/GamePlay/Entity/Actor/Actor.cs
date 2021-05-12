@@ -1467,6 +1467,7 @@ public class Actor : Entity
         if (IsDestroying) return;
         base.DestroySelfByModuleRecycle();
         IsDestroying = true;
+
         if (ActorFrozenHelper.FrozenBox)
         {
             ActorFrozenHelper.FrozenBox.DestroySelfByModuleRecycle();
@@ -1478,6 +1479,8 @@ public class Actor : Entity
         {
             PoolRecycle();
         }
+
+        IsDestroying = false;
     }
 
     public override void DestroySelfWithoutSideEffect()
@@ -1496,6 +1499,8 @@ public class Actor : Entity
         {
             PoolRecycle();
         }
+
+        IsDestroying = false;
     }
 
     public override void DestroySelf(UnityAction callBack = null)
