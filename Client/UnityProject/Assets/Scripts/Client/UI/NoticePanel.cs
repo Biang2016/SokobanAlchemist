@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using BiangLibrary.GamePlay.UI;
 using TMPro;
 using UnityEngine;
@@ -32,17 +33,30 @@ public class NoticePanel : BaseUIPanel
 
     public AK.Wwise.Event OnShowTip;
 
+    private string currentRawTipContent = "";
+
     /// <summary>
     /// 显示提示
     /// </summary>
-    /// <param name="tipContent"></param>
+    /// <param name="rawTipContent"></param>
     /// <param name="duration">负值为永久</param>
-    public void ShowTip(string tipContent, TipPositionType tipPositionType, float duration)
+    public void ShowTip(string rawTipContent, TipPositionType tipPositionType, float duration)
     {
-        if (TipText.text.Equals(tipContent))
+        if (currentRawTipContent.Equals(rawTipContent))
         {
             tipShowDuration = Mathf.Max(tipShowDuration, duration);
             return;
+        }
+
+        currentRawTipContent = rawTipContent;
+
+        string tipContent = rawTipContent;
+        if (tipContent.Contains("{") && tipContent.Contains("}"))
+        {
+            foreach (KeyValuePair<ButtonNames, string> kv in ControlManager.Instance.GetCurrentButtonNamesForTips())
+            {
+                tipContent = tipContent.Replace("{" + kv.Key + "}", ControlManager.Instance.GetControlDescText(kv.Key));
+            }
         }
 
         OnShowTip?.Post(gameObject);
@@ -134,6 +148,7 @@ public class NoticePanel : BaseUIPanel
 
     public void HideTip()
     {
+        currentRawTipContent = "";
         TipText.text = "";
         if (!NoticeShown) return;
         if (hideTipCoroutine != null) StopCoroutine(hideTipCoroutine);

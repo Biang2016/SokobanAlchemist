@@ -43,6 +43,15 @@ public class ElementBottle : MonoBehaviour, ISkillBind
     void Start()
     {
         RefreshValue(0, 0, 0);
+        ControlManager.Instance.OnControlSchemeChanged += (before, after) =>
+        {
+            if (curEntitySkillRow != null && boundEntitySkill != null)
+            {
+                PlayerControllerHelper.KeyMappingDict.TryGetValue(MyKeyBind, out ButtonNames keyBindButtonName);
+                string keyBindStr = ControlManager.Instance.GetControlDescText(keyBindButtonName, false);
+                curEntitySkillRow.Initialize(BoundEntitySkill, (BoundEntitySkill is EntityActiveSkill) ? keyBindStr : "", 0);
+            }
+        };
     }
 
     public void Initialize()
@@ -66,7 +75,8 @@ public class ElementBottle : MonoBehaviour, ISkillBind
 
             curEntitySkillRow?.PoolRecycle();
             curEntitySkillRow = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(SkillRowContainer);
-            PlayerControllerHelper.KeyMappingStrDict.TryGetValue(MyKeyBind, out string keyBindStr);
+            PlayerControllerHelper.KeyMappingDict.TryGetValue(MyKeyBind, out ButtonNames keyBindButtonName);
+            string keyBindStr = ControlManager.Instance.GetControlDescText(keyBindButtonName, false);
             curEntitySkillRow.Initialize(entitySkill, (BoundEntitySkill is EntityActiveSkill) ? keyBindStr : "", 0);
         }
     }

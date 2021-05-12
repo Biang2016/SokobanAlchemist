@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BiangLibrary;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.Singleton;
 using UnityEngine;
@@ -330,6 +331,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         PlayerInput.Enable();
         CommonInputActions.Enable();
         BattleInputActions.Enable();
+
+        InitControlDescDict();
     }
 
     public override void FixedUpdate(float deltaTime)
@@ -430,5 +433,76 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         {
             return false;
         }
+    }
+
+    #region Control Description
+
+    private Dictionary<ControlScheme, Dictionary<ButtonNames, string>> ControlDescDict = new Dictionary<ControlScheme, Dictionary<ButtonNames, string>>();
+
+    private void InitControlDescDict()
+    {
+        ControlDescDict.Clear();
+
+        #region KeyboardMouse
+
+        Dictionary<ButtonNames, string> keyboardMouseDict = new Dictionary<ButtonNames, string>();
+        ControlDescDict.Add(ControlScheme.KeyboardMouse, keyboardMouseDict);
+        keyboardMouseDict.Add(ButtonNames.Fake_CharacterMove, "WASD");
+        keyboardMouseDict.Add(ButtonNames.Battle_Skill_0_Player1, "Space");
+        keyboardMouseDict.Add(ButtonNames.Battle_Skill_1_Player1, "Shift");
+        keyboardMouseDict.Add(ButtonNames.Battle_Skill_2_Player1, "H");
+        keyboardMouseDict.Add(ButtonNames.Battle_Skill_3_Player1, "J");
+        keyboardMouseDict.Add(ButtonNames.Battle_Skill_4_Player1, "K");
+        keyboardMouseDict.Add(ButtonNames.Battle_Skill_5_Player1, "L");
+        keyboardMouseDict.Add(ButtonNames.Battle_LeftSwitch, "Q");
+        keyboardMouseDict.Add(ButtonNames.Battle_RightSwitch, "E");
+        keyboardMouseDict.Add(ButtonNames.Common_InteractiveKey, "F");
+        keyboardMouseDict.Add(ButtonNames.Common_Exit, "ESC");
+        keyboardMouseDict.Add(ButtonNames.Common_Tab, "TAB");
+
+        #endregion
+
+        #region GamePad (XBox)
+
+        Dictionary<ButtonNames, string> gamePadDict = new Dictionary<ButtonNames, string>();
+        ControlDescDict.Add(ControlScheme.GamePad, gamePadDict);
+        gamePadDict.Add(ButtonNames.Fake_CharacterMove, "LStick");
+        gamePadDict.Add(ButtonNames.Battle_Skill_0_Player1, "LT");
+        gamePadDict.Add(ButtonNames.Battle_Skill_1_Player1, "RT");
+        gamePadDict.Add(ButtonNames.Battle_Skill_2_Player1, "");
+        gamePadDict.Add(ButtonNames.Battle_Skill_3_Player1, "X");
+        gamePadDict.Add(ButtonNames.Battle_Skill_4_Player1, "Y");
+        gamePadDict.Add(ButtonNames.Battle_Skill_5_Player1, "B");
+        gamePadDict.Add(ButtonNames.Battle_LeftSwitch, "LB");
+        gamePadDict.Add(ButtonNames.Battle_RightSwitch, "RB");
+        gamePadDict.Add(ButtonNames.Common_InteractiveKey, "A");
+        gamePadDict.Add(ButtonNames.Common_Exit, "Start");
+        gamePadDict.Add(ButtonNames.Common_Tab, "Select");
+
+        #endregion
+    }
+
+    public string GetControlDescText(ButtonNames buttonName, bool withColor = true)
+    {
+        if (ControlDescDict[CurrentControlScheme].TryGetValue(buttonName, out string desc))
+        {
+            string colored_Desc = CommonUtils.AddHighLightColorToText(desc, "#f1ff52");
+            return colored_Desc;
+        }
+
+        return buttonName.ToString();
+    }
+
+    public Dictionary<ButtonNames, string> GetCurrentButtonNamesForTips()
+    {
+        return ControlDescDict[CurrentControlScheme];
+    }
+
+    #endregion
+
+    public override void ShutDown()
+    {
+        base.ShutDown();
+        OnControlSchemeChanged = null;
     }
 }
