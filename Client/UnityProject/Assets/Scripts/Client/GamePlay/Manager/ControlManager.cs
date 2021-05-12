@@ -2,13 +2,38 @@
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.Singleton;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 
 public class ControlManager : TSingletonBaseManager<ControlManager>
 {
     private PlayerInput PlayerInput;
     private PlayerInput.CommonActions CommonInputActions;
     private PlayerInput.BattleInputActions BattleInputActions;
+
+    public enum ControlScheme
+    {
+        KeyboardMouse,
+        GamePad,
+    }
+
+    private ControlScheme currentControlScheme;
+
+    public ControlScheme CurrentControlScheme
+    {
+        get { return currentControlScheme; }
+        set
+        {
+            if (currentControlScheme != value)
+            {
+                OnControlSchemeChanged?.Invoke(currentControlScheme, value);
+                currentControlScheme = value;
+            }
+        }
+    }
+
+    public UnityAction<ControlScheme, ControlScheme> OnControlSchemeChanged;
 
     public Dictionary<ButtonNames, ButtonState> ButtonStateDict = new Dictionary<ButtonNames, ButtonState>();
     public Dictionary<ButtonNames, ButtonState> ButtonStateDict_LastFrame = new Dictionary<ButtonNames, ButtonState>();
@@ -153,6 +178,34 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     {
         ButtonStateDict.Clear();
         ButtonStateDict_LastFrame.Clear();
+
+        InputSystem.onActionChange +=
+            (obj, change) =>
+            {
+                if (change == InputActionChange.ActionPerformed)
+                {
+                    InputDevice lastDevice = ((InputAction) obj).activeControl.device;
+                    string currentControlSchemeStr = lastDevice.displayName;
+                    switch (currentControlSchemeStr)
+                    {
+                        case "Mouse":
+                        {
+                            CurrentControlScheme = ControlScheme.KeyboardMouse;
+                            break;
+                        }
+                        case "Keyboard":
+                        {
+                            CurrentControlScheme = ControlScheme.KeyboardMouse;
+                            break;
+                        }
+                        case "Xbox Controller":
+                        {
+                            CurrentControlScheme = ControlScheme.GamePad;
+                            break;
+                        }
+                    }
+                }
+            };
 
         PlayerInput = new PlayerInput();
         CommonInputActions = new PlayerInput.CommonActions(PlayerInput);

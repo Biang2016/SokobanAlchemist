@@ -15,6 +15,20 @@ public class ExitMenuPanel : BaseUIPanel
             UIFormLucencyTypes.ImPenetrable);
     }
 
+    void Start()
+    {
+        ControlManager.Instance.OnControlSchemeChanged += (before, after) =>
+        {
+            if (after == ControlManager.ControlScheme.GamePad)
+            {
+                if (IsShown)
+                {
+                    InitButtons();
+                }
+            }
+        };
+    }
+
     public Animator ExitMenuAnim;
 
     public Button ExitToOpenWorldButton;
@@ -31,13 +45,23 @@ public class ExitMenuPanel : BaseUIPanel
         base.Display();
         OnDisplay?.Post(gameObject);
         ExitMenuAnim.SetTrigger("Play");
-        if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
-        {
-            ExitToOpenWorldButton.gameObject.SetActive(openWorld.InsideDungeon);
-            RestartDungeonButton.gameObject.SetActive(openWorld.InsideDungeon);
-        }
 
-        SaveGameButton.Select();
+        InitButtons();
+    }
+
+    private void InitButtons()
+    {
+        bool insideDungeon = WorldManager.Instance.CurrentWorld != null && ((WorldManager.Instance.CurrentWorld is OpenWorld {InsideDungeon: true}) || !(WorldManager.Instance.CurrentWorld is OpenWorld));
+        ExitToOpenWorldButton.gameObject.SetActive(insideDungeon);
+        RestartDungeonButton.gameObject.SetActive(insideDungeon);
+        if (insideDungeon)
+        {
+            ExitToOpenWorldButton.Select();
+        }
+        else
+        {
+            SaveGameButton.Select();
+        }
     }
 
     public override void Hide()

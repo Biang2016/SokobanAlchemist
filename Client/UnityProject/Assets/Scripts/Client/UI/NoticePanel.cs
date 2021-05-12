@@ -2,6 +2,7 @@
 using BiangLibrary.GamePlay.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class NoticePanel : BaseUIPanel
 {
