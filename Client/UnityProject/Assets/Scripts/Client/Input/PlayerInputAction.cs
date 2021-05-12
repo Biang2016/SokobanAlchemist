@@ -1403,6 +1403,17 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""0c377215-e8a4-41bd-9d41-3ce4171cdb58"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""be9919a6-8c46-44ff-a0b2-449817606f7b"",
                     ""path"": ""<Keyboard>/tab"",
                     ""interactions"": ""Press(behavior=2)"",
