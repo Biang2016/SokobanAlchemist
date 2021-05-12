@@ -7,6 +7,8 @@ public class EntityGoldValueHelper : BoxMonoHelper
     [SerializeField]
     private Renderer[] Renderers;
 
+    public AnimationCurve GoldRatioMappingCurve;
+
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
@@ -30,11 +32,15 @@ public class EntityGoldValueHelper : BoxMonoHelper
     [ShowIf("isRandomTypeBinary")]
     public float BinaryP = 0.8f;
 
+    [Range(0, 1)]
+    [LabelText("完全无金概率")]
+    public float NoGoldProbability;
+
     private MaterialPropertyBlock materialPropertyBlock;
 
     private void OnChangeGoldValue(int goldValue, float maxGoldValue)
     {
-        float goldRatio = maxGoldValue.Equals(0) ? 0f : goldValue / maxGoldValue;
+        float goldRatio = GoldRatioMappingCurve.Evaluate(goldValue);
         foreach (Renderer renderer in Renderers)
         {
             materialPropertyBlock = new MaterialPropertyBlock();
@@ -56,7 +62,12 @@ public class EntityGoldValueHelper : BoxMonoHelper
         }
         else
         {
-            int dropNum = CommonUtils.GetRandomFromFloatProbability(RandomType, MinGoldProbability, MaxGoldProbability, BinaryP);
+            int dropNum = 0;
+            if (!NoGoldProbability.ProbabilityBool())
+            {
+                dropNum = CommonUtils.GetRandomFromFloatProbability(RandomType, MinGoldProbability, MaxGoldProbability, BinaryP);
+            }
+
             Entity.EntityStatPropSet.Gold.SetValue(dropNum);
             OnChangeGoldValue(Entity.EntityStatPropSet.Gold.Value, MaxGoldProbability);
         }
