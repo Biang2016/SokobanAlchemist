@@ -291,19 +291,6 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
     }
 
-    public void SetAllActorShown(bool shown)
-    {
-        for (int i = 0; i < MainPlayers.Length; i++)
-        {
-            MainPlayers[i]?.SetShown(shown);
-        }
-
-        foreach (Actor enemy in Enemies)
-        {
-            enemy.SetShown(shown);
-        }
-    }
-
     private List<Actor> cachedSearchActorList = new List<Actor>(32);
     private Collider[] cachedColliders = new Collider[128];
 
@@ -364,6 +351,11 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
             if (entity.IsNotNullAndAlive() && !entityGUIDSet.Contains(entity.GUID))
             {
                 entityGUIDSet.Add(entity.GUID);
+                if (entity.EntityTypeIndex == ConfigManager.Box_CombinedGroundBoxIndex)
+                {
+
+                }
+
                 foreach (EntityBuff entityBuff in entityBuffs)
                 {
                     if (entity.IsNotNullAndAlive())
@@ -420,7 +412,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         }
         else
         {
-            yield return ClientGameManager.Instance.ReloadGame();
+            yield return ClientGameManager.Instance.Co_ReloadGame();
         }
     }
 
@@ -428,7 +420,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     {
         WinLosePanel panel = UIManager.Instance.ShowUIForms<WinLosePanel>();
         yield return panel.Co_WinGame();
-        yield return ClientGameManager.Instance.ReloadGame();
+        yield return ClientGameManager.Instance.Co_ReloadGame();
     }
 
     public override void ShutDown()

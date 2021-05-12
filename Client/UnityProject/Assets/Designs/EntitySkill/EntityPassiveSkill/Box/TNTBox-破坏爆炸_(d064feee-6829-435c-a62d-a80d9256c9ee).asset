@@ -19,27 +19,42 @@ MonoBehaviour:
     00000000:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: (d064feee-6829-435c-a62d-a80d9256c9ee)
         SkillAlias: "TNTBox-\u7834\u574F\u7206\u70B8"
+        SkillName_EN: 
+        SkillName_ZH: 
         SkillIcon:
           TypeDefineType: 0
           TypeGUID: 
-        SkillDescription: 
-        IsAddedDuringGamePlay: 0
-        InitWorldModuleGUID: 0
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
         PassiveSkillCondition: 2048
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
-        EntityStatChangeType: 0
-        EntityStatChangeThreshold: 0
-        EntityStatChangeThresholdOperator: 0
-        EntityPropertyChangeType: 0
-        EntityPropertyChangeThreshold: 0
-        EntityPropertyChangeThresholdOperator: 0
         MultiEventTrigger: 0
         ListenLevelEventAliasList: []
         ListenLevelEventAlias: 
         MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
         RawEntitySkillActions:
         - id: 1
         - id: 2
@@ -47,6 +62,7 @@ MonoBehaviour:
       type: {class: EntitySkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         AddBuffRadius: 2
         ExactGPDistance: 1
         EffectiveOnRelativeCamp: 15
@@ -56,7 +72,8 @@ MonoBehaviour:
       type: {class: EntitySkillAction_RadiusAddEntitiesBuff, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        AddBuffRadius: 2.3
+        InitStaticLayoutGUID: 
+        AddBuffRadius: 3
         ExactGPDistance: 1
         EffectiveOnRelativeCamp: 15
         RawEntityBuffs:

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.GamePlay.UI;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -147,7 +148,7 @@ public class PlayerControllerHelper : ActorControllerHelper
     public override void OnFixedUpdate()
     {
         base.OnFixedUpdate();
-        if (Actor.IsNotNullAndAlive())
+        if (Actor.IsNotNullAndAlive() && !UIManager.Instance.IsUIShown<ExitMenuPanel>() && !UIManager.Instance.IsUIShown<ConfirmPanel>())
         {
             #region Move
 

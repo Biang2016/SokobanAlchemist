@@ -365,7 +365,7 @@
                 {
                     "name": "",
                     "id": "f9a3469e-bf26-401d-bd90-5b657d01ce7e",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -1102,7 +1102,7 @@
                 {
                     "name": "",
                     "id": "e8838878-13ab-429b-b78f-d6b7ebdb196c",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -1157,22 +1157,11 @@
                 {
                     "name": "",
                     "id": "ec90f968-9f44-44fb-83b5-eb6f1b4edfb2",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Skill_1_Player1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "25f8da1f-8500-41ca-9480-d4b803e16970",
-                    "path": "<Gamepad>/leftTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Skill_2_Player1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1283,6 +1272,14 @@
                     "interactions": "Press(behavior=2)"
                 },
                 {
+                    "name": "Cancel",
+                    "type": "Button",
+                    "id": "8d4f3577-d55d-4fac-a439-94225b57b9ad",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=1)"
+                },
+                {
                     "name": "Tab",
                     "type": "Button",
                     "id": "21fa8e64-6108-4648-bbba-0381934760dd",
@@ -1369,16 +1366,24 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "UINavigation",
+                    "type": "Button",
+                    "id": "bc02dd05-0578-4b0a-8f60-84da6c6b0a02",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
                 }
             ],
             "bindings": [
                 {
                     "name": "",
-                    "id": "c2a2ef1b-7b38-4f7c-aabe-258fb695fb5b",
-                    "path": "*/{Cancel}",
+                    "id": "2349d29d-84fe-419b-b518-7447fc786c1d",
+                    "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad;KeyboardMouse",
+                    "groups": "Gamepad",
                     "action": "Exit",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -1390,6 +1395,17 @@
                     "interactions": "Press(behavior=2)",
                     "processors": "Clamp(max=1)",
                     "groups": "KeyboardMouse",
+                    "action": "Tab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e143e42c-3e22-47ce-b879-1baa35066785",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Tab",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -1484,17 +1500,6 @@
                 },
                 {
                     "name": "",
-                    "id": "ca4af09e-ef36-4fff-a83c-0b72b962532f",
-                    "path": "<Gamepad>/start",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "RestartGame",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "50c4cd9c-6198-4d5d-b7b7-807142622972",
                     "path": "<Keyboard>/f3",
                     "interactions": "Press(behavior=2)",
@@ -1522,6 +1527,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
+                    "action": "InteractiveKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d745739c-0960-4a12-9791-8253378e2546",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "InteractiveKey",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -1580,6 +1596,72 @@
                     "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "90c64eb1-f2c1-40d0-9f13-1330c2807e89",
+                    "path": "*/{Cancel}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad;KeyboardMouse",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "DPad",
+                    "id": "ab5cb213-d49b-40c4-9c69-08bd686fd274",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UINavigation",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "f47bc717-2ecf-4528-a054-7adfdf2b0967",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UINavigation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "a7c57673-acf4-442d-9bd1-6c4f9b52a862",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UINavigation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "3858350b-3118-48d1-b4fc-2718511a1fb5",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UINavigation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "fc251bd0-a65f-466c-afa9-77c9ae21cbc3",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UINavigation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },

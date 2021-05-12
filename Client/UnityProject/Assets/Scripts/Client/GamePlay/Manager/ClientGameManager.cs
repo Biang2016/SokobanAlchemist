@@ -108,7 +108,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             () => ControlManager.Instance.Common_MouseLeft.Up,
             () => ControlManager.Instance.Common_MouseRight.Up,
             () => ControlManager.Instance.Common_Exit.Up,
-            () => ControlManager.Instance.Common_Confirm.Up,
+            () => ControlManager.Instance.Common_Confirm.Down,
             () => ControlManager.Instance.Common_Tab.Up
         );
 
@@ -169,9 +169,9 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         WwiseAudioManager.WwiseBGMConfiguration.BGM_Start();
     }
 
-    public void StartGame()
+    public void StartGame(string gameSaveName)
     {
-        StartCoroutine(Co_StartGame());
+        StartCoroutine(Co_StartGame(gameSaveName));
     }
 
     public void CreateTextureArray()
@@ -195,7 +195,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     internal bool IsGameLoading = false;
 
-    internal IEnumerator Co_StartGame()
+    internal IEnumerator Co_StartGame(string gameSaveName)
     {
         IsGameLoading = true;
         LoadingMapPanel = UIManager.Instance.ShowUIForms<LoadingMapPanel>();
@@ -217,7 +217,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         LoadingMapPanel.SetBackgroundAlpha(1f);
         LoadingMapPanel.SetProgress(0.5f, "StartGame");
         PlayerStatHUDPanel = UIManager.Instance.ShowUIForms<PlayerStatHUDPanel>();
-        yield return WorldManager.StartGame();
+        yield return WorldManager.StartGame(gameSaveName);
 
         LoadingMapPanel.SetProgress(1f, "Completed");
         yield return new WaitForSeconds(0.1f);
@@ -297,7 +297,10 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                 && !UIManager.IsUIShown<LoadingMapPanel>()
                 && !LearnSkillUpgradePanel.HasPage)
             {
-                UIManager.Instance.ToggleUIForm<ExitMenuPanel>();
+                if (BattleManager.Instance.IsStart)
+                {
+                    UIManager.Instance.ToggleUIForm<ExitMenuPanel>();
+                }
             }
         }
 
@@ -316,7 +319,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                     confirmPanel.Initialize("Wanna reload the game? You'll lose all the progress", "Reload", "Cancel",
                         () =>
                         {
-                            StartCoroutine(ReloadGame());
+                            StartCoroutine(Co_ReloadGame());
                             confirmPanel.CloseUIForm();
                         },
                         () => { confirmPanel.CloseUIForm(); }
@@ -414,6 +417,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     {
         if (!UIManager.IsUIShown<ConfirmPanel>())
         {
+            bool isExitMenuPanelShown = UIManager.Instance.IsUIShown<ExitMenuPanel>();
+            if (isExitMenuPanelShown) UIManager.Instance.CloseUIForm<ExitMenuPanel>();
             if (WorldManager.Instance.CurrentWorld != null && WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
             {
                 if (openWorld.InsideDungeon)
@@ -425,7 +430,11 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                             openWorld.ReturnToOpenWorld(false);
                             confirmPanel.CloseUIForm();
                         },
-                        () => { confirmPanel.CloseUIForm(); }
+                        () =>
+                        {
+                            confirmPanel.CloseUIForm();
+                            if (isExitMenuPanelShown) UIManager.Instance.ShowUIForms<ExitMenuPanel>();
+                        }
                     );
                     return true;
                 }
@@ -444,6 +453,8 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     {
         if (!UIManager.IsUIShown<ConfirmPanel>())
         {
+            bool isExitMenuPanelShown = UIManager.Instance.IsUIShown<ExitMenuPanel>();
+            if (isExitMenuPanelShown) UIManager.Instance.CloseUIForm<ExitMenuPanel>();
             if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
             {
                 if (openWorld.InsideDungeon)
@@ -455,14 +466,18 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                             openWorld.RestartDungeon();
                             confirmPanel.CloseUIForm();
                         },
-                        () => { confirmPanel.CloseUIForm(); }
+                        () =>
+                        {
+                            confirmPanel.CloseUIForm();
+                            if (isExitMenuPanelShown) UIManager.Instance.ShowUIForms<ExitMenuPanel>();
+                        }
                     );
                     return true;
                 }
             }
             else
             {
-                StartCoroutine(ReloadGame());
+                StartCoroutine(Co_ReloadGame());
                 return true;
             }
         }
@@ -470,10 +485,38 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         return false;
     }
 
+    public void ExitToMainMenu()
+    {
+        if (!UIManager.Instance.IsUIShown<ConfirmPanel>())
+        {
+            UIManager.Instance.CloseUIForm<ExitMenuPanel>();
+            ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
+            confirmPanel.Initialize("If you back to menu, you'll lose all the progress", "Go to menu", "Cancel",
+                () =>
+                {
+                    confirmPanel.CloseUIForm();
+                    UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
+                    ClientGameManager.Instance.ReloadGame();
+                },
+                () =>
+                {
+                    confirmPanel.CloseUIForm();
+                    UIManager.Instance.ShowUIForms<ExitMenuPanel>();
+                }
+            );
+            return;
+        }
+    }
+
+    public void ReloadGame()
+    {
+        StartCoroutine(Co_ReloadGame());
+    }
+
     public void SwitchWorld_ReloadGame(string worldName)
     {
         DebugChangeWorldName = worldName;
-        StartCoroutine(ReloadGame());
+        StartCoroutine(Co_ReloadGame());
     }
 
     public void ChangeWorld(string worldName, bool dungeonComplete, EntityData transportBoxEntityData = null)
@@ -496,7 +539,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         }
     }
 
-    public IEnumerator ReloadGame()
+    public IEnumerator Co_ReloadGame()
     {
         yield return ShutDownGame();
         OnReloadScene();

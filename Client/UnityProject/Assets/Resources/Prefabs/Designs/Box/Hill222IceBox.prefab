@@ -243,6 +243,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1312080329228686421}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &429222651745437905 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 97b29b6c4315aed4d9ae3a45c675bc0e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1312080329228686421}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1563651263474299323
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -420,6 +426,12 @@ GameObject:
 --- !u!4 &2646645145598689183 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3859c277a4e07b545b281486ffb51676,
+    type: 3}
+  m_PrefabInstance: {fileID: 2535663761723136116}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &3815086959663252720 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 3859c277a4e07b545b281486ffb51676,
     type: 3}
   m_PrefabInstance: {fileID: 2535663761723136116}
   m_PrefabAsset: {fileID: 0}
@@ -672,6 +684,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3783767432436916146}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &2540929381668913974 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: b3ad44a4c4b1bfe44bdceeefdcf98585,
+    type: 3}
+  m_PrefabInstance: {fileID: 3783767432436916146}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5446445233073709605
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -874,6 +892,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
+      propertyPath: EntityArtHelper
+      value: 
+      objectReference: {fileID: 181277996960087513}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
       propertyPath: ReplaceBoxTypeName
       value: BlackBox
       objectReference: {fileID: 0}
@@ -881,6 +904,11 @@ PrefabInstance:
         type: 3}
       propertyPath: RawEntityStatPropSet.FiringFX
       value: LoopFX_Burning
+      objectReference: {fileID: 0}
+    - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RawEntityStatPropSet.Gold._value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -4207928645834103369, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
@@ -1052,6 +1080,46 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1280696999112759699, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: BinaryP
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280696999112759699, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RandomType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280696999112759699, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: RangeRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280696999112759699, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: NoGoldProbability
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280696999112759699, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: Renderers.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280696999112759699, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: Renderers.Array.data[0]
+      value: 
+      objectReference: {fileID: 3815086959663252720}
+    - target: {fileID: 1280696999112759699, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: Renderers.Array.data[1]
+      value: 
+      objectReference: {fileID: 429222651745437905}
+    - target: {fileID: 1280696999112759699, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
+        type: 3}
+      propertyPath: Renderers.Array.data[2]
+      value: 
+      objectReference: {fileID: 2540929381668913974}
     - target: {fileID: 1916418203503847193, guid: 6cecbe5753a1cb5479294bf6cec13ba1,
         type: 3}
       propertyPath: m_Name

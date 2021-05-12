@@ -369,7 +369,7 @@ public class WorldModule : PoolObject
                                 }
                             }
 
-                            box.PoolRecycle();
+                            box.DestroySelfByModuleRecycle();
                             count++;
                             if (count > clearEntityNumPerFrame)
                             {
@@ -453,7 +453,7 @@ public class WorldModule : PoolObject
             GridPos3D localGP = data.LocalGP;
             appear.GenerateEntityAction = () =>
             {
-                BoxMatrix[localGP.x, localGP.y, localGP.z]?.DestroySelfByModuleRecycle(); // 强行删除该格占用Box
+                BoxMatrix[localGP.x, localGP.y, localGP.z]?.DestroySelfWithoutSideEffect(); // 强行删除该格占用Box
                 EntityData entityData = dataClone.EntityData.Clone();
                 entityData.RemoveAllLevelEventTriggerAppearPassiveSkill();
                 Entity entity = GenerateEntity(entityData, LocalGPToWorldGP(localGP), true, false);
@@ -563,7 +563,7 @@ public class WorldModule : PoolObject
                         if (isTriggerAppear)
                         {
                             valid = true;
-                            if (!canOverlap && box.Destroyable) box.DestroySelfByModuleRecycle();
+                            if (!canOverlap && box.Destroyable) box.DestroySelfWithoutSideEffect();
                         }
                         else
                         {
@@ -600,7 +600,7 @@ public class WorldModule : PoolObject
                             }
                         }
 
-                        box.ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
+                        box.ApplyEntityExtraSerializeData();
                         return box;
                     }
                     case TypeDefineType.Actor:
@@ -624,7 +624,7 @@ public class WorldModule : PoolObject
                             }
                         }
 
-                        actor.ApplyEntityExtraSerializeData(entityData.RawEntityExtraSerializeData);
+                        actor.ApplyEntityExtraSerializeData();
                         return actor;
                     }
                 }
@@ -666,8 +666,6 @@ public class WorldModule : PoolObject
         {
             kv.Value.RecordEntityExtraSerializeData();
         }
-
-        WorldModuleTriggerEntities.Clear();
 
         int count = 0;
         // Record Actor First
@@ -721,6 +719,8 @@ public class WorldModule : PoolObject
                 }
             }
         }
+
+        IsGeneratingOrRecycling = false;
     }
 
     public GridPos3D WorldGPToLocalGP(GridPos3D worldGP)

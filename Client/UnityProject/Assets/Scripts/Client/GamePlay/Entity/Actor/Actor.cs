@@ -19,29 +19,180 @@ public class Actor : Entity
         false;
 #endif
 
-    private bool forbidAction = false;
-
-    internal bool ForbidAction
+    protected override void Awake()
     {
-        get { return forbidAction; }
-        set
+        SmoothMoves = GetComponentsInChildren<SmoothMove>().ToList();
+        SetModelSmoothMoveLerpTime(0);
+        EntityStatPropSet = new EntityStatPropSet();
+    }
+
+    public override void OnUsed()
+    {
+        gameObject.SetActive(true);
+        base.OnUsed();
+        OnInitHelperList();
+        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers) entityMonoHelper?.OnHelperUsed();
+        foreach (Collider collider in ActorMoveColliders)
         {
-            if (forbidAction != value)
-            {
-                forbidAction = value;
-                if (forbidAction)
-                {
-                    RemoveRigidbody();
-                }
-                else
-                {
-                    AddRigidbody();
-                }
-            }
+            collider.enabled = true;
         }
     }
 
-    internal bool HasRigidbody = true;
+    internal bool IsRecycling = false;
+
+    /// <summary>
+    /// 在一场游戏中，Player不进行回收，回收会导致玩家的进度丢失
+    /// </summary>
+    public override void OnRecycled()
+    {
+        if (ActorClass == ActorClass.FinalBoss)
+        {
+            WwiseAudioManager.Instance.WwiseBGMConfiguration.SpiderLegEnemyDistanceToPlayer.SetGlobalValue(99999f);
+        }
+
+        IsRecycling = true;
+        ForbidAction = true;
+        if (!HasRigidbody) AddRigidbody();
+        RigidBody.drag = 100f;
+        RigidBody.velocity = Vector3.zero;
+
+        ActorBehaviourState = ActorBehaviourStates.Idle;
+        GraphOwner?.StopBehaviour();
+        ActorAIAgent?.Stop();
+        CurMoveAttempt = Vector3.zero;
+        LastMoveAttempt = Vector3.zero;
+        CurThrowMoveAttempt = Vector3.zero;
+        CurThrowPointOffset = Vector3.zero;
+        CurForward = Vector3.forward;
+        WorldGP = GridPos3D.Zero;
+        LastWorldGP = GridPos3D.Zero;
+        RealtimeWorldGP = GridPos3D.Zero;
+        ThrowState = ThrowStates.None;
+        ClearJumpParams();
+
+        foreach (EntityMonoHelper h in EntityMonoHelpers) h?.OnHelperRecycled();
+
+        UnInitActiveSkills();
+        UnInitPassiveSkills();
+        EntityStatPropSet.OnRecycled();
+
+        foreach (Collider collider in ActorMoveColliders)
+        {
+            collider.enabled = false;
+        }
+
+        SetModelSmoothMoveLerpTime(0);
+        SwitchEntityOrientation(GridPosR.Orientation.Up);
+        StopAllCoroutines();
+        gameObject.SetActive(false);
+        BattleManager.Instance.RemoveActor(this);
+        EntityMonoHelpers.Clear();
+        base.OnRecycled();
+        IsRecycling = false;
+    }
+
+    /// <summary>
+    /// 在一场游戏中，Player不进行反复Setup，除非重载场景进入其他world
+    /// 反复Setup将造成玩家的进度丢失
+    /// </summary>
+    /// <param name="entityData"></param>
+    /// <param name="worldGP"></param>
+    /// <param name="initWorldModuleGUID"></param>
+    public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
+    {
+        base.Setup(entityData, initWorldModuleGUID);
+        EntityTypeIndex = entityData.EntityTypeIndex;
+        ActorType = entityData.EntityType.TypeName;
+        ActorCategory = entityData.EntityTypeIndex == ConfigManager.Actor_PlayerIndex ? ActorCategory.Player : ActorCategory.Creature;
+        if (ActorCategory == ActorCategory.Player) ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
+
+        curWorldGP = worldGP; // 避免刚Setup就进行占位查询和登记，相关操作WorldModule已经代劳
+        WorldGP = worldGP; // 避免刚Setup就进行占位查询和登记，相关操作WorldModule已经代劳
+        LastWorldGP = WorldGP;
+        EntityOrientation = entityData.EntityOrientation;
+        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(curWorldGP.x, curWorldGP.z, entityData.EntityOrientation), transform, 1);
+
+        RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
+        EntityStatPropSet.Initialize(this);
+
+        ActorBattleHelper.Initialize();
+        EntityCollectHelper?.Initialize();
+        ActorBoxInteractHelper.Initialize();
+        ActorArtHelper.SetPFMoveGridSpeed(0);
+        ActorArtHelper.SetIsPushing(false);
+        ActorBattleHelper.OnDamaged += (damage) =>
+        {
+            float distance = (BattleManager.Instance.Player1.transform.position - transform.position).magnitude;
+            CameraManager.Instance.FieldCamera.CameraShake(damage, distance);
+        };
+
+        InitPassiveSkills();
+        InitActiveSkills();
+        if (ActorControllerHelper != null)
+        {
+            if (ActorControllerHelper is PlayerControllerHelper pch)
+            {
+                pch.OnSetup(PlayerNumber.Player1);
+            }
+            else if (ActorControllerHelper is EnemyControllerHelper ech)
+            {
+                ech.OnSetup();
+            }
+        }
+
+        ActorSkillLearningHelper?.LoadInitSkills();
+
+        ForbidAction = false;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        if (!BattleManager.Instance.IsStart) return;
+        if (IsRecycled) return;
+        UpdateThrowParabolaLine();
+    }
+
+    protected override void Tick(float interval)
+    {
+        base.Tick(interval);
+        if (!BattleManager.Instance.IsStart) return;
+        if (IsRecycled) return;
+        ActorControllerHelper?.OnTick(interval);
+    }
+
+    public void OnLoaded(Actor actor)
+    {
+        if (actor == this)
+        {
+            SetModelSmoothMoveLerpTime(DefaultSmoothMoveLerpTime);
+        }
+    }
+
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        if (!BattleManager.Instance.IsStart) return;
+        if (IsRecycled) return;
+        ActorControllerHelper?.OnFixedUpdate();
+        if (ENABLE_ACTOR_MOVE_LOG && WorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {WorldGP}");
+        LastWorldGP = WorldGP;
+        WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+    }
+
+    #region 属性
+
+    [FoldoutGroup("属性")]
+    [LabelText("频繁更新")]
+    public bool FrequentUpdate = false;
+
+    [FoldoutGroup("属性")]
+    [LabelText("角色阶级")]
+    public ActorClass ActorClass = ActorClass.Normal;
+
+    #endregion
+
+    #region Helpers
 
     [FoldoutGroup("组件")]
     public Rigidbody RigidBody;
@@ -76,69 +227,32 @@ public class Actor : Entity
     [FoldoutGroup("组件")]
     public Transform LiftBoxPivot;
 
-    public Vector3 ArtPos => ActorSkinHelper.MainArtTransform.position;
+    private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
 
-    #region EntityHelpers
+    internal ActorArtHelper ActorArtHelper => (ActorArtHelper) EntityArtHelper;
+    internal ActorFrozenHelper ActorFrozenHelper => (ActorFrozenHelper) EntityFrozenHelper;
 
-    internal override EntityArtHelper EntityArtHelper => ActorArtHelper;
-
-    [FoldoutGroup("组件")]
-    public ActorArtHelper ActorArtHelper;
-
-    internal override EntityWwiseHelper EntityWwiseHelper => ActorWwiseHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityWwiseHelper ActorWwiseHelper;
-
-    internal override EntityModelHelper EntityModelHelper => ActorModelHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityModelHelper ActorModelHelper;
-
-    internal override EntityIndicatorHelper EntityIndicatorHelper => ActorIndicatorHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityIndicatorHelper ActorIndicatorHelper;
-
-    internal override EntityBuffHelper EntityBuffHelper => ActorBuffHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityBuffHelper ActorBuffHelper;
-
-    internal override EntityFrozenHelper EntityFrozenHelper => ActorFrozenHelper;
-
-    [FoldoutGroup("组件")]
-    public ActorFrozenHelper ActorFrozenHelper;
-
-    internal override EntityTriggerZoneHelper EntityTriggerZoneHelper => ActorTriggerZoneHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityTriggerZoneHelper ActorTriggerZoneHelper;
-
-    internal override EntityCollectHelper EntityCollectHelper => ActorCollectHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityCollectHelper ActorCollectHelper;
-
-    internal override EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper => ActorGrindTriggerZoneHelper;
-
-    [FoldoutGroup("组件")]
-    public EntityGrindTriggerZoneHelper ActorGrindTriggerZoneHelper;
-
-    internal override List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers => ActorFlamethrowerHelpers;
-
-    [FoldoutGroup("组件")]
-    public List<EntityFlamethrowerHelper> ActorFlamethrowerHelpers;
-
-    internal override List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers => ActorLightningGeneratorHelpers;
-
-    [FoldoutGroup("组件")]
-    public List<EntityLightningGeneratorHelper> ActorLightningGeneratorHelpers;
+    protected override void OnInitHelperList()
+    {
+        base.OnInitHelperList();
+        EntityMonoHelpers.Add(ActorControllerHelper);
+        EntityMonoHelpers.Add(ActorPushHelper);
+        EntityMonoHelpers.Add(ActorFaceHelper);
+        EntityMonoHelpers.Add(ActorSkinHelper);
+        EntityMonoHelpers.Add(ActorLaunchArcRendererHelper);
+        EntityMonoHelpers.Add(ActorBattleHelper);
+        EntityMonoHelpers.Add(ActorBoxInteractHelper);
+        EntityMonoHelpers.Add(ActorSkillLearningHelper);
+    }
 
     #endregion
 
+    #region AI
+
     internal GraphOwner GraphOwner => ActorControllerHelper != null ? ((ActorControllerHelper is EnemyControllerHelper ech) ? ech.GraphOwner : null) : null;
     internal ActorAIAgent ActorAIAgent => ActorControllerHelper != null ? ((ActorControllerHelper is EnemyControllerHelper ech) ? ech.ActorAIAgent : null) : null;
+
+    #endregion
 
     #region 状态
 
@@ -309,541 +423,37 @@ public class Actor : Entity
 
     #endregion
 
-    #region 旋转朝向
+    #region Movement
 
-    internal override void SwitchEntityOrientation(GridPosR.Orientation newOrientation)
+    internal bool HasRigidbody = true;
+    private bool forbidAction = false;
+
+    internal bool ForbidAction
     {
-        if (EntityOrientation == newOrientation) return;
-
-        // Actor由于限制死平面必须是正方形，因此可以用左下角坐标相减得到核心坐标偏移量；在旋转时应用此偏移量，可以保证平面正方形仍在老位置
-        GridPos offset = ActorRotateWorldGPOffset(ActorWidth, newOrientation) - ActorRotateWorldGPOffset(ActorWidth, EntityOrientation);
-        if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
-        base.SwitchEntityOrientation(newOrientation);
-        if (!IsFrozen) RegisterInModule(curWorldGP, newOrientation);
-
-        transform.position = new Vector3(offset.x + curWorldGP.x, transform.position.y, offset.z + curWorldGP.z);
-        transform.rotation = Quaternion.Euler(0, (int) newOrientation * 90f, 0);
-        WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
-    }
-
-    public static GridPos ActorRotateWorldGPOffset(int actorWidth, GridPosR.Orientation orientation) // todo 这里的先决条件是所有的Actor都以左下角作为原点
-    {
-        switch (orientation)
+        get { return forbidAction; }
+        set
         {
-            case GridPosR.Orientation.Up:
-                return GridPos.Zero;
-            case GridPosR.Orientation.Right:
-                return new GridPos(0, actorWidth - 1);
-            case GridPosR.Orientation.Down:
-                return new GridPos(actorWidth - 1, actorWidth - 1);
-            case GridPosR.Orientation.Left:
-                return new GridPos(actorWidth - 1, 0);
-        }
-
-        return GridPos.Zero;
-    }
-
-    #endregion
-
-    #region Occupation
-
-    public const int ACTOR_MAX_HEIGHT = 4;
-    public int ActorWidth => EntityIndicatorHelper.EntityOccupationData.ActorWidth;
-    public int ActorHeight => EntityIndicatorHelper.EntityOccupationData.ActorHeight;
-
-    public bool CheckIsGrounded(float checkDistance, out GridPos3D nearestGroundGP)
-    {
-        bool isGrounded = false;
-        nearestGroundGP = GridPos3D.Zero;
-        float nearestDistance = float.MaxValue;
-        foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
-        {
-            Vector3 startPos = transform.position + offset;
-            if (WorldManager.Instance == null || WorldManager.Instance.CurrentWorld == null)
+            if (forbidAction != value)
             {
-                Debug.Log(name);
-            }
-
-            bool gridGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(startPos, checkDistance, true, out GridPos3D groundGP);
-            isGrounded |= gridGrounded;
-            if (gridGrounded)
-            {
-                float dist = (nearestGroundGP - startPos).magnitude;
-                if (nearestDistance > dist)
+                forbidAction = value;
+                if (forbidAction)
                 {
-                    nearestDistance = dist;
-                    nearestGroundGP = groundGP;
+                    RemoveRigidbody();
                 }
-            }
-        }
-
-        return isGrounded;
-    }
-
-    #endregion
-
-    #region 特效
-
-    [FoldoutGroup("特效")]
-    [LabelText("@\"受伤特效\t\"+InjureFX")]
-    public FXConfig InjureFX = new FXConfig();
-
-    [FoldoutGroup("特效")]
-    [LabelText("@\"生命恢复特效\t\"+HealFX")]
-    public FXConfig HealFX = new FXConfig();
-
-    [FoldoutGroup("特效")]
-    [LabelText("@\"死亡特效\t\"+DieFX")]
-    public FXConfig DieFX = new FXConfig();
-
-    #endregion
-
-    [FoldoutGroup("属性")]
-    [LabelText("频繁更新")]
-    public bool FrequentUpdate = false;
-
-    [FoldoutGroup("属性")]
-    [LabelText("角色阶级")]
-    public ActorClass ActorClass = ActorClass.Normal;
-
-    #region 手感
-
-    [FoldoutGroup("手感")]
-    [LabelText("起步速度")]
-    public float Accelerate = 200f;
-
-    internal float ThrowRadiusMin = 0.75f;
-
-    [FoldoutGroup("手感")]
-    [LabelText("踢箱子力量")]
-    public float KickForce = 30;
-
-    [FoldoutGroup("手感")]
-    [LabelText("扔半径")]
-    public float ThrowRadius = 15f;
-
-    [FoldoutGroup("手感")]
-    [LabelText("跳跃力")]
-    public float ActiveJumpForce = 10f;
-
-    [FoldoutGroup("手感")]
-    [LabelText("坠落力")]
-    public float FallForce = 0.1f;
-
-    #endregion
-
-    #region 推踢扔举能力
-
-    [FoldoutGroup("推踢扔举能力")]
-    [LabelText("推箱子类型")]
-    [ListDrawerSettings(ListElementLabelName = "TypeName")]
-    public List<TypeSelectHelper> PushableBoxList = new List<TypeSelectHelper>();
-
-    [FoldoutGroup("推踢扔举能力")]
-    [LabelText("踢箱子类型")]
-    [ListDrawerSettings(ListElementLabelName = "TypeName")]
-    public List<TypeSelectHelper> KickableBoxList = new List<TypeSelectHelper>();
-
-    [FoldoutGroup("推踢扔举能力")]
-    [LabelText("举箱子类型")]
-    [ListDrawerSettings(ListElementLabelName = "TypeName")]
-    public List<TypeSelectHelper> LiftableBoxList = new List<TypeSelectHelper>();
-
-    [FoldoutGroup("推踢扔举能力")]
-    [LabelText("扔箱子类型")]
-    [ListDrawerSettings(ListElementLabelName = "TypeName")]
-    public List<TypeSelectHelper> ThrowableBoxList = new List<TypeSelectHelper>();
-
-    #endregion
-
-    #region 死亡
-
-    public void Reborn()
-    {
-        EntityCollectHelper?.OnReborn();
-        EntityStatPropSet.OnReborn();
-        EntityBuffHelper.OnReborn();
-        ActorBattleHelper.InGameHealthBar.Initialize(ActorBattleHelper, 100, 30);
-        ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
-        ActiveSkillMarkAsDestroyed = false;
-        PassiveSkillMarkAsDestroyed = false;
-    }
-
-    public void ReloadESPS(EntityStatPropSet srcESPS, bool keepResources)
-    {
-        // 财产保留 todo 待重构
-        int gold = EntityStatPropSet.Gold.Value;
-        int fire = EntityStatPropSet.FireElementFragment.Value;
-        int ice = EntityStatPropSet.IceElementFragment.Value;
-        int lightning = EntityStatPropSet.LightningElementFragment.Value;
-
-        EntityStatPropSet.OnRecycled();
-        srcESPS.ApplyDataTo(EntityStatPropSet);
-        EntityStatPropSet.Initialize(this);
-        ActorBattleHelper.InGameHealthBar.Initialize(ActorBattleHelper, 100, 30);
-
-        if (keepResources)
-        {
-            EntityStatPropSet.Gold.SetValue(gold);
-            EntityStatPropSet.FireElementFragment.SetValue(fire);
-            EntityStatPropSet.IceElementFragment.SetValue(ice);
-            EntityStatPropSet.LightningElementFragment.SetValue(lightning);
-        }
-
-        ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
-        ActiveSkillMarkAsDestroyed = false;
-        PassiveSkillMarkAsDestroyed = false;
-    }
-
-    public void ReloadActorSkillLearningData(ActorSkillLearningData srcASLD)
-    {
-        foreach (EntityPassiveSkill eps in EntityPassiveSkills.ToArray())
-        {
-            ForgetPassiveSkill(eps.SkillGUID);
-        }
-
-        foreach (string skillGUID in EntityActiveSkillGUIDDict.Keys.ToArray())
-        {
-            ForgetActiveSkill(skillGUID);
-        }
-
-        ActorSkillLearningHelper.ActorSkillLearningData.Clear(); // 清空放在遗忘后面，放在添加前面，确保最终结果和srcASLD相同
-
-        foreach (string skillGUID in srcASLD.LearnedPassiveSkillGUIDs)
-        {
-            EntitySkill rawEntitySkill = ConfigManager.GetEntitySkill(skillGUID);
-            if (rawEntitySkill is EntityPassiveSkill eps)
-            {
-                AddNewPassiveSkill(eps);
-            }
-        }
-
-        foreach (string skillGUID in srcASLD.LearnedActiveSkillGUIDs)
-        {
-            EntitySkill rawEntitySkill = ConfigManager.GetEntitySkill(skillGUID);
-            if (rawEntitySkill is EntityActiveSkill eas)
-            {
-                EntitySkillIndex skillIndex = srcASLD.LearnedActiveSkillDict[skillGUID];
-                if (AddNewActiveSkill(eas, skillIndex))
+                else
                 {
-                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> kv in srcASLD.SkillKeyMappings)
-                    {
-                        foreach (EntitySkillIndex esi in kv.Value)
-                        {
-                            if (esi == skillIndex)
-                            {
-                                BindActiveSkillToKey(eas, kv.Key, false);
-                            }
-                        }
-                    }
+                    AddRigidbody();
                 }
             }
         }
     }
 
-    #endregion
-
-    #region 冻结
-
-    [FoldoutGroup("冻结")]
-    [LabelText("@\"冻结特效\t\"+FrozeFX")]
-    public FXConfig FrozeFX = new FXConfig();
-
-    [FoldoutGroup("冻结")]
-    [LabelText("@\"解冻特效\t\"+ThawFX")]
-    public FXConfig ThawFX = new FXConfig();
-
-    [SerializeReference]
-    [FoldoutGroup("冻结")]
-    [LabelText("冻结的箱子被动技能")]
-    [ListDrawerSettings(ListElementLabelName = "Description")]
-    public List<EntityPassiveSkill> RawFrozenBoxPassiveSkills = new List<EntityPassiveSkill>(); // 干数据，禁修改
-
-    #endregion
-
-    private List<SmoothMove> SmoothMoves = new List<SmoothMove>();
-
-    public enum ActorBehaviourStates
-    {
-        Idle,
-        Frozen,
-        Walk,
-        Chase,
-        Attack,
-        Push,
-        Dash,
-        Vault,
-        Kick,
-        Escape,
-        Jump,
-        SmashDown,
-        InAirMoving,
-    }
-
-    [ReadOnly]
-    [FoldoutGroup("状态")]
-    [LabelText("行为状态")]
-    public ActorBehaviourStates ActorBehaviourState = ActorBehaviourStates.Idle;
-
-    public enum ThrowStates
-    {
-        None,
-        Raising,
-        Lifting,
-        ThrowCharging,
-    }
-
-    [ReadOnly]
-    [FoldoutGroup("状态")]
-    [LabelText("扔技能状态")]
-    public ThrowStates ThrowState = ThrowStates.None;
-
-    public override void OnUsed()
-    {
-        gameObject.SetActive(true);
-        base.OnUsed();
-        EntityMonoHelpers.Clear();
-        EntityMonoHelpers.Add(EntityArtHelper);
-        EntityMonoHelpers.Add(EntityWwiseHelper);
-        EntityMonoHelpers.Add(EntityModelHelper);
-        EntityMonoHelpers.Add(EntityIndicatorHelper);
-        EntityMonoHelpers.Add(EntityBuffHelper);
-        EntityMonoHelpers.Add(EntityFrozenHelper);
-        EntityMonoHelpers.Add(EntityTriggerZoneHelper);
-        EntityMonoHelpers.Add(EntityCollectHelper);
-        EntityMonoHelpers.Add(EntityGrindTriggerZoneHelper);
-        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
-        {
-            EntityMonoHelpers.Add(h);
-        }
-
-        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
-        {
-            EntityMonoHelpers.Add(h);
-        }
-
-        EntityMonoHelpers.Add(ActorControllerHelper);
-        EntityMonoHelpers.Add(ActorPushHelper);
-        EntityMonoHelpers.Add(ActorFaceHelper);
-        EntityMonoHelpers.Add(ActorSkinHelper);
-        EntityMonoHelpers.Add(ActorLaunchArcRendererHelper);
-        EntityMonoHelpers.Add(ActorBattleHelper);
-        EntityMonoHelpers.Add(ActorBoxInteractHelper);
-        EntityMonoHelpers.Add(ActorSkillLearningHelper);
-
-        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
-        {
-            entityMonoHelper?.OnHelperUsed();
-        }
-
-        foreach (Collider collider in ActorMoveColliders)
-        {
-            collider.enabled = true;
-        }
-    }
-
-    internal bool IsRecycling = false;
-
-    /// <summary>
-    /// 在一场游戏中，Player不进行回收，回收会导致玩家的进度丢失
-    /// </summary>
-    public override void OnRecycled()
-    {
-        if (ActorClass == ActorClass.FinalBoss)
-        {
-            WwiseAudioManager.Instance.WwiseBGMConfiguration.SpiderLegEnemyDistanceToPlayer.SetGlobalValue(99999f);
-        }
-
-        IsRecycling = true;
-        ForbidAction = true;
-        if (!HasRigidbody) AddRigidbody();
-        RigidBody.drag = 100f;
-        RigidBody.velocity = Vector3.zero;
-
-        ActorBehaviourState = ActorBehaviourStates.Idle;
-        GraphOwner?.StopBehaviour();
-        ActorAIAgent?.Stop();
-        CurMoveAttempt = Vector3.zero;
-        LastMoveAttempt = Vector3.zero;
-        CurThrowMoveAttempt = Vector3.zero;
-        CurThrowPointOffset = Vector3.zero;
-        CurForward = Vector3.forward;
-        WorldGP = GridPos3D.Zero;
-        LastWorldGP = GridPos3D.Zero;
-        RealtimeWorldGP = GridPos3D.Zero;
-        ThrowState = ThrowStates.None;
-        ClearJumpParams();
-
-        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
-        {
-            entityMonoHelper?.OnHelperRecycled();
-        }
-
-        UnInitActiveSkills();
-        UnInitPassiveSkills();
-        EntityStatPropSet.OnRecycled();
-
-        foreach (Collider collider in ActorMoveColliders)
-        {
-            collider.enabled = false;
-        }
-
-        SetModelSmoothMoveLerpTime(0);
-        SwitchEntityOrientation(GridPosR.Orientation.Up);
-        StopAllCoroutines();
-        gameObject.SetActive(false);
-        BattleManager.Instance.RemoveActor(this);
-        EntityMonoHelpers.Clear();
-        base.OnRecycled();
-        IsRecycling = false;
-    }
-
-    void Awake()
-    {
-        SmoothMoves = GetComponentsInChildren<SmoothMove>().ToList();
-        SetModelSmoothMoveLerpTime(0);
-        EntityStatPropSet = new EntityStatPropSet();
-    }
-
-    internal float DefaultSmoothMoveLerpTime = 0.02f;
-
-    public void SetModelSmoothMoveLerpTime(float lerpTime)
-    {
-        if (lerpTime.Equals(0))
-        {
-            foreach (SmoothMove sm in SmoothMoves)
-            {
-                sm.enabled = false;
-            }
-        }
-        else
-        {
-            foreach (SmoothMove sm in SmoothMoves)
-            {
-                sm.enabled = true;
-                sm.SmoothTime = lerpTime;
-            }
-        }
-    }
-
-    /// <summary>
-    /// 在一场游戏中，Player不进行反复Setup，除非重载场景进入其他world
-    /// 反复Setup将造成玩家的进度丢失
-    /// </summary>
-    /// <param name="entityData"></param>
-    /// <param name="worldGP"></param>
-    /// <param name="initWorldModuleGUID"></param>
-    public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
-    {
-        base.Setup(entityData, initWorldModuleGUID);
-        EntityTypeIndex = entityData.EntityTypeIndex;
-        ActorType = entityData.EntityType.TypeName;
-        ActorCategory = entityData.EntityTypeIndex == ConfigManager.Actor_PlayerIndex ? ActorCategory.Player : ActorCategory.Creature;
-        if (ActorCategory == ActorCategory.Player) ClientGameManager.Instance.BattleMessenger.AddListener<Actor>((uint) Enum_Events.OnPlayerLoaded, OnLoaded);
-
-        curWorldGP = worldGP; // 避免刚Setup就进行占位查询和登记，相关操作WorldModule已经代劳
-        WorldGP = worldGP; // 避免刚Setup就进行占位查询和登记，相关操作WorldModule已经代劳
-        LastWorldGP = WorldGP;
-        EntityOrientation = entityData.EntityOrientation;
-        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(curWorldGP.x, curWorldGP.z, entityData.EntityOrientation), transform, 1);
-
-        RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
-        EntityStatPropSet.Initialize(this);
-        ActorBattleHelper.Initialize();
-        ActorCollectHelper?.Initialize();
-        ActorBoxInteractHelper.Initialize();
-        ActorArtHelper.SetPFMoveGridSpeed(0);
-        ActorArtHelper.SetIsPushing(false);
-        ActorBattleHelper.OnDamaged += (damage) =>
-        {
-            float distance = (BattleManager.Instance.Player1.transform.position - transform.position).magnitude;
-            CameraManager.Instance.FieldCamera.CameraShake(damage, distance);
-        };
-
-        InitPassiveSkills();
-        InitActiveSkills();
-        if (ActorControllerHelper != null)
-        {
-            if (ActorControllerHelper is PlayerControllerHelper pch)
-            {
-                pch.OnSetup(PlayerNumber.Player1);
-            }
-            else if (ActorControllerHelper is EnemyControllerHelper ech)
-            {
-                ech.OnSetup();
-            }
-        }
-
-        ActorSkillLearningHelper?.LoadInitSkills();
-
-        ForbidAction = false;
-    }
-
-    protected override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
-    {
-        base.RecordEntityExtraStates(entityDataExtraStates);
-        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
-        {
-            entityMonoHelper?.RecordEntityExtraStates(entityDataExtraStates);
-        }
-    }
-
-    protected override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
-    {
-        base.ApplyEntityExtraStates(entityDataExtraStates);
-        foreach (EntityMonoHelper entityMonoHelper in EntityMonoHelpers)
-        {
-            entityMonoHelper?.ApplyEntityExtraStates(entityDataExtraStates);
-        }
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-        if (!BattleManager.Instance.IsStart) return;
-        if (IsRecycled) return;
-        UpdateThrowParabolaLine();
-    }
-
-    protected override void Tick(float interval)
-    {
-        base.Tick(interval);
-        if (!BattleManager.Instance.IsStart) return;
-        if (IsRecycled) return;
-        ActorControllerHelper?.OnTick(interval);
-    }
-
-    public void OnLoaded(Actor actor)
-    {
-        if (actor == this)
-        {
-            SetModelSmoothMoveLerpTime(DefaultSmoothMoveLerpTime);
-        }
-    }
-
-    public void SetShown(bool shown)
+    public void MoveUp()
     {
     }
 
-    protected override void FixedUpdate()
+    public void MoveDown()
     {
-        base.FixedUpdate();
-        if (!BattleManager.Instance.IsStart) return;
-        if (IsRecycled) return;
-        ActorControllerHelper?.OnFixedUpdate();
-        if (ENABLE_ACTOR_MOVE_LOG && WorldGP != LastWorldGP) Debug.Log($"[{Time.frameCount}] [Actor] {name} Move {LastWorldGP} -> {WorldGP}");
-        LastWorldGP = WorldGP;
-        WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
-    }
-
-    public void TransportPlayerGridPos(GridPos3D worldGP, float lerpTime = 0)
-    {
-        SetModelSmoothMoveLerpTime(lerpTime);
-        transform.position = worldGP;
-        LastWorldGP = WorldGP;
-        curWorldGP = worldGP; // 强行移动
-        WorldGP = worldGP;
-        SetModelSmoothMoveLerpTime(DefaultSmoothMoveLerpTime);
     }
 
     internal virtual void MoveInternal()
@@ -1041,6 +651,16 @@ public class Actor : Entity
         }
     }
 
+    public void TransportPlayerGridPos(GridPos3D worldGP, float lerpTime = 0)
+    {
+        SetModelSmoothMoveLerpTime(lerpTime);
+        transform.position = worldGP;
+        LastWorldGP = WorldGP;
+        curWorldGP = worldGP; // 强行移动
+        WorldGP = worldGP;
+        SetModelSmoothMoveLerpTime(DefaultSmoothMoveLerpTime);
+    }
+
     private void AddRigidbody()
     {
         if (!HasRigidbody && RigidBody == null)
@@ -1093,32 +713,305 @@ public class Actor : Entity
         transform.localRotation = Quaternion.Euler(0, 90f * (int) EntityOrientation, 0);
     }
 
-    private float ThrowChargeTick;
-    internal float ThrowChargeMax = 1.5f;
+    #region 旋转朝向
 
-    internal virtual void ThrowChargeAimInternal()
+    internal override void SwitchEntityOrientation(GridPosR.Orientation newOrientation)
     {
-        if (ThrowState == ThrowStates.ThrowCharging)
+        if (EntityOrientation == newOrientation) return;
+
+        // Actor由于限制死平面必须是正方形，因此可以用左下角坐标相减得到核心坐标偏移量；在旋转时应用此偏移量，可以保证平面正方形仍在老位置
+        GridPos offset = ActorRotateWorldGPOffset(ActorWidth, newOrientation) - ActorRotateWorldGPOffset(ActorWidth, EntityOrientation);
+        if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
+        base.SwitchEntityOrientation(newOrientation);
+        if (!IsFrozen) RegisterInModule(curWorldGP, newOrientation);
+
+        transform.position = new Vector3(offset.x + curWorldGP.x, transform.position.y, offset.z + curWorldGP.z);
+        transform.rotation = Quaternion.Euler(0, (int) newOrientation * 90f, 0);
+        WorldGP = GridPos3D.GetGridPosByTrans(transform, 1);
+    }
+
+    public static GridPos ActorRotateWorldGPOffset(int actorWidth, GridPosR.Orientation orientation) // todo 这里的先决条件是所有的Actor都以左下角作为原点
+    {
+        switch (orientation)
         {
-            if (ThrowChargeTick < ThrowChargeMax)
+            case GridPosR.Orientation.Up:
+                return GridPos.Zero;
+            case GridPosR.Orientation.Right:
+                return new GridPos(0, actorWidth - 1);
+            case GridPosR.Orientation.Down:
+                return new GridPos(actorWidth - 1, actorWidth - 1);
+            case GridPosR.Orientation.Left:
+                return new GridPos(actorWidth - 1, 0);
+        }
+
+        return GridPos.Zero;
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Occupation
+
+    public const int ACTOR_MAX_HEIGHT = 4;
+    public int ActorWidth => EntityIndicatorHelper.EntityOccupationData.ActorWidth;
+    public int ActorHeight => EntityIndicatorHelper.EntityOccupationData.ActorHeight;
+
+    public bool CheckIsGrounded(float checkDistance, out GridPos3D nearestGroundGP)
+    {
+        bool isGrounded = false;
+        nearestGroundGP = GridPos3D.Zero;
+        float nearestDistance = float.MaxValue;
+        foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+        {
+            Vector3 startPos = transform.position + offset;
+            if (WorldManager.Instance == null || WorldManager.Instance.CurrentWorld == null)
             {
-                ThrowChargeTick += Time.fixedDeltaTime;
-            }
-            else
-            {
-                ThrowChargeTick = ThrowChargeMax;
+                Debug.Log(name);
             }
 
-            float radius = ThrowRadius * ThrowChargeTick / ThrowChargeMax + ThrowRadiusMin;
-            if (CurThrowPointOffset.magnitude > radius)
+            bool gridGrounded = WorldManager.Instance.CurrentWorld.CheckIsGroundByPos(startPos, checkDistance, true, out GridPos3D groundGP);
+            isGrounded |= gridGrounded;
+            if (gridGrounded)
             {
-                CurThrowPointOffset = CurThrowPointOffset.normalized * radius;
+                float dist = (nearestGroundGP - startPos).magnitude;
+                if (nearestDistance > dist)
+                {
+                    nearestDistance = dist;
+                    nearestGroundGP = groundGP;
+                }
+            }
+        }
+
+        return isGrounded;
+    }
+
+    #endregion
+
+    #region 特效
+
+    [FoldoutGroup("特效")]
+    [LabelText("@\"受伤特效\t\"+InjureFX")]
+    public FXConfig InjureFX = new FXConfig();
+
+    [FoldoutGroup("特效")]
+    [LabelText("@\"生命恢复特效\t\"+HealFX")]
+    public FXConfig HealFX = new FXConfig();
+
+    [FoldoutGroup("特效")]
+    [LabelText("@\"死亡特效\t\"+DieFX")]
+    public FXConfig DieFX = new FXConfig();
+
+    #endregion
+
+    #region 手感
+
+    [FoldoutGroup("手感")]
+    [LabelText("起步速度")]
+    public float Accelerate = 200f;
+
+    internal float ThrowRadiusMin = 0.75f;
+
+    [FoldoutGroup("手感")]
+    [LabelText("踢箱子力量")]
+    public float KickForce = 30;
+
+    [FoldoutGroup("手感")]
+    [LabelText("扔半径")]
+    public float ThrowRadius = 15f;
+
+    [FoldoutGroup("手感")]
+    [LabelText("跳跃力")]
+    public float ActiveJumpForce = 10f;
+
+    [FoldoutGroup("手感")]
+    [LabelText("坠落力")]
+    public float FallForce = 0.1f;
+
+    #endregion
+
+    #region 推踢扔举能力
+
+    [FoldoutGroup("推踢扔举能力")]
+    [LabelText("推箱子类型")]
+    [ListDrawerSettings(ListElementLabelName = "TypeName")]
+    public List<TypeSelectHelper> PushableBoxList = new List<TypeSelectHelper>();
+
+    [FoldoutGroup("推踢扔举能力")]
+    [LabelText("踢箱子类型")]
+    [ListDrawerSettings(ListElementLabelName = "TypeName")]
+    public List<TypeSelectHelper> KickableBoxList = new List<TypeSelectHelper>();
+
+    [FoldoutGroup("推踢扔举能力")]
+    [LabelText("举箱子类型")]
+    [ListDrawerSettings(ListElementLabelName = "TypeName")]
+    public List<TypeSelectHelper> LiftableBoxList = new List<TypeSelectHelper>();
+
+    [FoldoutGroup("推踢扔举能力")]
+    [LabelText("扔箱子类型")]
+    [ListDrawerSettings(ListElementLabelName = "TypeName")]
+    public List<TypeSelectHelper> ThrowableBoxList = new List<TypeSelectHelper>();
+
+    #endregion
+
+    #region 死亡
+
+    public void Reborn()
+    {
+        EntityCollectHelper?.OnReborn();
+        EntityStatPropSet.OnReborn();
+        EntityBuffHelper.OnReborn();
+        ActiveSkillMarkAsDestroyed = false;
+        PassiveSkillMarkAsDestroyed = false;
+    }
+
+    public void ReloadESPS(EntityStatPropSet srcESPS, bool keepResources)
+    {
+        // 财产保留 todo 待重构
+        int gold = EntityStatPropSet.Gold.Value;
+        int fire = EntityStatPropSet.FireElementFragment.Value;
+        int ice = EntityStatPropSet.IceElementFragment.Value;
+        int lightning = EntityStatPropSet.LightningElementFragment.Value;
+
+        EntityStatPropSet.OnRecycled();
+        srcESPS.ApplyDataTo(EntityStatPropSet);
+        EntityStatPropSet.Initialize(this);
+        ActorBattleHelper.InGameHealthBar.Initialize(ActorBattleHelper, 100, 30);
+
+        if (keepResources)
+        {
+            EntityStatPropSet.Gold.SetValue(gold);
+            EntityStatPropSet.FireElementFragment.SetValue(fire);
+            EntityStatPropSet.IceElementFragment.SetValue(ice);
+            EntityStatPropSet.LightningElementFragment.SetValue(lightning);
+        }
+
+        EntityBuffHelper.RemoveAllAbnormalStatFX();
+
+        ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
+        ActiveSkillMarkAsDestroyed = false;
+        PassiveSkillMarkAsDestroyed = false;
+    }
+
+    public void ReloadActorSkillLearningData(ActorSkillLearningData srcASLD)
+    {
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills.ToArray())
+        {
+            ForgetPassiveSkill(eps.SkillGUID);
+        }
+
+        foreach (string skillGUID in EntityActiveSkillGUIDDict.Keys.ToArray())
+        {
+            ForgetActiveSkill(skillGUID);
+        }
+
+        ActorSkillLearningHelper.ActorSkillLearningData.Clear(); // 清空放在遗忘后面，放在添加前面，确保最终结果和srcASLD相同
+
+        foreach (string skillGUID in srcASLD.LearnedPassiveSkillGUIDs)
+        {
+            EntitySkill rawEntitySkill = ConfigManager.GetEntitySkill(skillGUID);
+            if (rawEntitySkill is EntityPassiveSkill eps)
+            {
+                AddNewPassiveSkill(eps);
+            }
+        }
+
+        foreach (string skillGUID in srcASLD.LearnedActiveSkillGUIDs)
+        {
+            EntitySkill rawEntitySkill = ConfigManager.GetEntitySkill(skillGUID);
+            if (rawEntitySkill is EntityActiveSkill eas)
+            {
+                EntitySkillIndex skillIndex = srcASLD.LearnedActiveSkillDict[skillGUID];
+                if (AddNewActiveSkill(eas, skillIndex))
+                {
+                    foreach (KeyValuePair<PlayerControllerHelper.KeyBind, List<EntitySkillIndex>> kv in srcASLD.SkillKeyMappings)
+                    {
+                        foreach (EntitySkillIndex esi in kv.Value)
+                        {
+                            if (esi == skillIndex)
+                            {
+                                BindActiveSkillToKey(eas, kv.Key, false);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #endregion
+
+    #region 冻结
+
+    [FoldoutGroup("冻结")]
+    [LabelText("@\"冻结特效\t\"+FrozeFX")]
+    public FXConfig FrozeFX = new FXConfig();
+
+    [FoldoutGroup("冻结")]
+    [LabelText("@\"解冻特效\t\"+ThawFX")]
+    public FXConfig ThawFX = new FXConfig();
+
+    [SerializeReference]
+    [FoldoutGroup("冻结")]
+    [LabelText("冻结的箱子被动技能")]
+    [ListDrawerSettings(ListElementLabelName = "Description")]
+    public List<EntityPassiveSkill> RawFrozenBoxPassiveSkills = new List<EntityPassiveSkill>(); // 干数据，禁修改
+
+    #endregion
+
+    public enum ActorBehaviourStates
+    {
+        Idle,
+        Frozen,
+        Walk,
+        Chase,
+        Attack,
+        Push,
+        Dash,
+        Vault,
+        Kick,
+        Escape,
+        Jump,
+        SmashDown,
+        InAirMoving,
+    }
+
+    [ReadOnly]
+    [FoldoutGroup("状态")]
+    [LabelText("行为状态")]
+    public ActorBehaviourStates ActorBehaviourState = ActorBehaviourStates.Idle;
+
+    public enum ThrowStates
+    {
+        None,
+        Raising,
+        Lifting,
+        ThrowCharging,
+    }
+
+    [ReadOnly]
+    [FoldoutGroup("状态")]
+    [LabelText("扔技能状态")]
+    public ThrowStates ThrowState = ThrowStates.None;
+
+    internal float DefaultSmoothMoveLerpTime = 0.02f;
+
+    public void SetModelSmoothMoveLerpTime(float lerpTime)
+    {
+        if (lerpTime.Equals(0))
+        {
+            foreach (SmoothMove sm in SmoothMoves)
+            {
+                sm.enabled = false;
             }
         }
         else
         {
-            CurThrowPointOffset = Vector3.zero;
-            ThrowChargeTick = 0;
+            foreach (SmoothMove sm in SmoothMoves)
+            {
+                sm.enabled = true;
+                sm.SmoothTime = lerpTime;
+            }
         }
     }
 
@@ -1292,6 +1185,35 @@ public class Actor : Entity
         }
     }
 
+    private float ThrowChargeTick;
+    internal float ThrowChargeMax = 1.5f;
+
+    internal virtual void ThrowChargeAimInternal()
+    {
+        if (ThrowState == ThrowStates.ThrowCharging)
+        {
+            if (ThrowChargeTick < ThrowChargeMax)
+            {
+                ThrowChargeTick += Time.fixedDeltaTime;
+            }
+            else
+            {
+                ThrowChargeTick = ThrowChargeMax;
+            }
+
+            float radius = ThrowRadius * ThrowChargeTick / ThrowChargeMax + ThrowRadiusMin;
+            if (CurThrowPointOffset.magnitude > radius)
+            {
+                CurThrowPointOffset = CurThrowPointOffset.normalized * radius;
+            }
+        }
+        else
+        {
+            CurThrowPointOffset = Vector3.zero;
+            ThrowChargeTick = 0;
+        }
+    }
+
     public void Put()
     {
         if (CannotAct) return;
@@ -1323,18 +1245,6 @@ public class Actor : Entity
             CurrentLiftBox = null;
         }
     }
-
-    #region Vertically Move
-
-    public void MoveUp()
-    {
-    }
-
-    public void MoveDown()
-    {
-    }
-
-    #endregion
 
     #region Jump
 
@@ -1563,15 +1473,28 @@ public class Actor : Entity
             ActorFrozenHelper.FrozenBox = null;
         }
 
+        BattleManager.Instance.SetActorInCombat(GUID, CombatState.Exploring);
         if (this != BattleManager.Instance.Player1)
         {
             PoolRecycle();
-            IsDestroying = false;
         }
-        else
+    }
+
+    public override void DestroySelfWithoutSideEffect()
+    {
+        if (IsDestroying) return;
+        base.DestroySelfWithoutSideEffect();
+        IsDestroying = true;
+        if (ActorFrozenHelper.FrozenBox)
         {
-            BattleManager.Instance.SetActorInCombat(GUID, CombatState.Exploring);
-            IsDestroying = false;
+            ActorFrozenHelper.FrozenBox.DestroySelfWithoutSideEffect();
+            ActorFrozenHelper.FrozenBox = null;
+        }
+
+        BattleManager.Instance.SetActorInCombat(GUID, CombatState.Exploring);
+        if (this != BattleManager.Instance.Player1)
+        {
+            PoolRecycle();
         }
     }
 
@@ -1629,6 +1552,8 @@ public class Actor : Entity
 
     #endregion
 
+    #region Kill
+
     public void OnKillEnemy()
     {
         foreach (EntityPassiveSkill eps in EntityPassiveSkills)
@@ -1644,4 +1569,6 @@ public class Actor : Entity
             eps.OnKillBox();
         }
     }
+
+    #endregion
 }

@@ -25,8 +25,12 @@ public class DoorBoxHelper : BoxMonoHelper
                 open = value;
                 DoorAnim.ResetTrigger(open ? "Close" : "Open");
                 DoorAnim.SetTrigger(open ? "Open" : "Close");
-                if (value) OnDoorOpen?.Post(Entity.gameObject);
-                else OnDoorClose?.Post(Entity.gameObject);
+                if (playSound)
+                {
+                    if (value) OnDoorOpen?.Post(Entity.gameObject);
+                    else OnDoorClose?.Post(Entity.gameObject);
+                }
+
                 foreach (EntityIndicator doorEntityIndicator in DoorEntityIndicators)
                 {
                     GridPos3D offset = doorEntityIndicator.Offset;
@@ -46,26 +50,39 @@ public class DoorBoxHelper : BoxMonoHelper
         }
     }
 
+    private bool playSound = false;
+
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
+        playSound = false;
+        Open = false;
+        playSound = true;
     }
 
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
+        playSound = false;
         Open = false;
+        playSound = true;
     }
 
     public override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
     {
         base.RecordEntityExtraStates(entityDataExtraStates);
+        Entity.CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates.R_DoorOpen = true;
         Entity.CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates.DoorOpen = Open;
     }
 
     public override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
     {
         base.ApplyEntityExtraStates(entityDataExtraStates);
-        Open = entityDataExtraStates.DoorOpen;
+        if (entityDataExtraStates.R_DoorOpen)
+        {
+            playSound = false;
+            Open = entityDataExtraStates.DoorOpen;
+            playSound = true;
+        }
     }
 }

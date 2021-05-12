@@ -31,7 +31,7 @@ public class BoxMarchingTextureHelper : BoxMonoHelper
             TerrainType GetTerrainType(int x, int z)
             {
                 TerrainType terrainType = TerrainType.Earth;
-                if (x < 0 || x >=  openWorld.WorldSize_X * WorldModule.MODULE_SIZE || z < 0 || z >= openWorld.WorldSize_Z * WorldModule.MODULE_SIZE) return TerrainType.Earth;
+                if (x < 0 || x >= openWorld.WorldSize_X * WorldModule.MODULE_SIZE || z < 0 || z >= openWorld.WorldSize_Z * WorldModule.MODULE_SIZE) return TerrainType.Earth;
                 terrainType = openWorld.WorldMap_TerrainType[x, z];
                 return terrainType;
             }
@@ -51,8 +51,12 @@ public class BoxMarchingTextureHelper : BoxMonoHelper
                 for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
                 for (int z = 0; z < WorldModule.MODULE_SIZE; z++)
                 {
-                    MarchingSquareTerrainTile tt = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.MarchingSquareTerrainTile].AllocateGameObject<MarchingSquareTerrainTile>(BoxMarchingTextureTileContainer);
-                    BoxMarchingTextureTileMatrix[x, z] = tt;
+                    if (BoxMarchingTextureTileMatrix[x, z] == null)
+                    {
+                        MarchingSquareTerrainTile tt = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.MarchingSquareTerrainTile].AllocateGameObject<MarchingSquareTerrainTile>(BoxMarchingTextureTileContainer);
+                        BoxMarchingTextureTileMatrix[x, z] = tt;
+                    }
+
                     GridPos3D worldGP = Box.WorldModule.LocalGPToWorldGP(new GridPos3D(x, WorldModule.MODULE_SIZE - 1, z));
                     MarchingSquareTerrainTile.MarchingSquareData data = CalculateMarchingSquareData(worldGP.x, worldGP.z);
                     marchingSquareDataMatrix[x, z] = data;

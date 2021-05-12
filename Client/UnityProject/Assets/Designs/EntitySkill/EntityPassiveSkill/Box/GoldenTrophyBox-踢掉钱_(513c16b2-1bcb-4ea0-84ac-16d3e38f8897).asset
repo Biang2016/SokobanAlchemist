@@ -1,0 +1,145 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "GoldenTrophyBox-\u8E22\u6389\u94B1_(513c16b2-1bcb-4ea0-84ac-16d3e38f8897)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        SkillGUID: (513c16b2-1bcb-4ea0-84ac-16d3e38f8897)
+        SkillAlias: "GoldenTrophyBox-\u8E22\u6389\u94B1"
+        SkillName_EN: 
+        SkillName_ZH: 
+        SkillIcon:
+          TypeDefineType: 12
+          TypeGUID: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
+        PassiveSkillCondition: 8
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
+        RawEntitySkillActions:
+        - id: 1
+        - id: 2
+        - id: 3
+    00000001:
+      type: {class: EntitySkillAction_AddEntityBuffToSelf, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        RawEntityBuffs:
+        - id: 4
+    00000002:
+      type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        RawEntityBuffs:
+        - id: 5
+    00000003:
+      type: {class: EntitySkillAction_PlayFX, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        FX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: (299071b6-f620-41f2-80f9-0ea5a3deeeef)
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        PlayFXForEveryGrid: 1
+    00000004:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 15873
+        BuffAlias: 
+        EntityBuffAttribute: 0
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 1000
+        Delta: -3
+        Percent: 0
+    00000005:
+      type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}
+      data:
+        GUID: 15874
+        BuffAlias: 
+        EntityBuffAttribute: 0
+        EnableWhiteBlackList: 0
+        AllowAddBuffAliasList: []
+        ForbidAddBuffAliasList: []
+        IsPermanent: 0
+        Duration: 0
+        BuffFX:
+          FXType:
+            TypeDefineType: 7
+            TypeGUID: 
+          UseCurve: 0
+          FXScale: 1
+          AnimationCurve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        EntityStatType: 1000
+        Delta: 3
+        Percent: 0

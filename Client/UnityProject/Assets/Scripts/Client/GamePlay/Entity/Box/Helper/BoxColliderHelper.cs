@@ -138,7 +138,7 @@ public class BoxColliderHelper : BoxMonoHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
         BoxOnlyDynamicCollidersEnable = true;
-        Box.BoxIndicatorHelper.IsOn = false;
+        Box.EntityIndicatorHelper.IsOn = false;
     }
 
     public void OnKick_ToGrind() // 带有碾压性质的踢出
@@ -147,7 +147,7 @@ public class BoxColliderHelper : BoxMonoHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = true;
-        Box.BoxIndicatorHelper.IsOn = false;
+        Box.EntityIndicatorHelper.IsOn = false;
     }
 
     public void OnKick_ToGrind_End()
@@ -160,7 +160,7 @@ public class BoxColliderHelper : BoxMonoHelper
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = true;
-        Box.BoxIndicatorHelper.IsOn = false;
+        Box.EntityIndicatorHelper.IsOn = false;
     }
 
     public void OnThrow()
@@ -168,7 +168,7 @@ public class BoxColliderHelper : BoxMonoHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = true;
         BoxOnlyDynamicCollidersEnable = true;
-        Box.BoxIndicatorHelper.IsOn = false;
+        Box.EntityIndicatorHelper.IsOn = false;
     }
 
     public void OnPut()
@@ -183,7 +183,7 @@ public class BoxColliderHelper : BoxMonoHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = false;
-        Box.BoxIndicatorHelper.IsOn = false;
+        Box.EntityIndicatorHelper.IsOn = false;
         BoxOnlyDynamicColliderRoot.SetActive(true);
         if (Entity.IsTriggerEntity) gameObject.SetActive(true);
     }
@@ -193,7 +193,7 @@ public class BoxColliderHelper : BoxMonoHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = true;
-        Box.BoxIndicatorHelper.IsOn = false;
+        Box.EntityIndicatorHelper.IsOn = false;
         BoxOnlyDynamicColliderRoot.SetActive(true);
     }
 
@@ -202,7 +202,7 @@ public class BoxColliderHelper : BoxMonoHelper
         StaticColliderEnable = false;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = true;
-        Box.BoxIndicatorHelper.IsOn = false;
+        Box.EntityIndicatorHelper.IsOn = false;
         BoxOnlyDynamicColliderRoot.SetActive(true);
     }
 
@@ -211,7 +211,7 @@ public class BoxColliderHelper : BoxMonoHelper
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = false;
-        Box.BoxIndicatorHelper.IsOn = false;
+        Box.EntityIndicatorHelper.IsOn = false;
     }
 
     public void OnRigidbodyStop()
@@ -219,7 +219,7 @@ public class BoxColliderHelper : BoxMonoHelper
         StaticColliderEnable = true;
         DynamicColliderEnable = false;
         BoxOnlyDynamicCollidersEnable = false;
-        Box.BoxIndicatorHelper.IsOn = !Entity.IsTriggerEntity;
+        Box.EntityIndicatorHelper.IsOn = !Entity.IsTriggerEntity;
         BoxOnlyDynamicColliderRoot.SetActive(defaultBoxOnlyDynamicColliderRootActive);
         if (Entity.IsTriggerEntity) gameObject.SetActive(false);
     }

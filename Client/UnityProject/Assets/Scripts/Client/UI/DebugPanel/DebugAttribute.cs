@@ -20,15 +20,23 @@ public class DebugButtonAttribute : DebugControllerAttribute
         Shortcut = shortcut;
     }
 
-    public DebugButtonAttribute(string buttonName, string methodName, int priority = 0) : base(priority)
+    public DebugButtonAttribute(string buttonName, string methodName_1, int priority = 0) : base(priority)
     {
         ButtonName = buttonName;
-        MethodName = methodName;
+        MethodName_1 = methodName_1;
+    }
+
+    public DebugButtonAttribute(string buttonName, string methodName_1, string methodName_2, int priority = 0) : base(priority)
+    {
+        ButtonName = buttonName;
+        MethodName_1 = methodName_1;
+        MethodName_2 = methodName_2;
     }
 
     public string ButtonName { get; }
     public KeyCode Shortcut { get; }
-    public string MethodName { get; }
+    public string MethodName_1 { get; }
+    public string MethodName_2 { get; }
 }
 
 public class DebugSliderAttribute : DebugControllerAttribute

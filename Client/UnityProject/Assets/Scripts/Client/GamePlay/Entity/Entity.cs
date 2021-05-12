@@ -38,6 +38,171 @@ public abstract class Entity : PoolObject
 
     #endregion
 
+    protected virtual void Awake()
+    {
+    }
+
+    public override void OnRecycled()
+    {
+        base.OnRecycled();
+        StopAllCoroutines();
+        CurrentEntityData = null;
+        InitWorldModuleGUID = 0;
+        destroyBecauseNotInAnyModuleTick = 0;
+        cachedRemoveList_EntityPassiveSkill.Clear();
+        cachedRemoveList_EntityActiveSkill.Clear();
+        cachedAddList_EntityPassiveSkill.Clear();
+        IsDestroying = false;
+    }
+
+    public override void OnUsed()
+    {
+        base.OnUsed();
+        CanBeThreatened = true;
+    }
+
+    public void Setup(EntityData entityData, uint initWorldModuleGUID)
+    {
+        CurrentEntityData = entityData;
+        InitWorldModuleGUID = initWorldModuleGUID;
+        if (GUID == 0)
+        {
+            GUID = GetGUID();
+            if (IsBoxCamp)
+            {
+                if (SlowlyTick)
+                {
+                    GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_5X;
+                }
+                else
+                {
+                    GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
+                }
+            }
+            else
+            {
+                GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_01X;
+            }
+        }
+    }
+
+    protected virtual void Update()
+    {
+        if (!BattleManager.Instance.IsStart) return;
+        if (IsRecycled) return;
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
+        {
+            kv.Value.OnUpdate(Time.deltaTime);
+        }
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        if (!BattleManager.Instance.IsStart) return;
+        if (IsRecycled) return;
+        if (IsBoxCamp)
+        {
+            if (SlowlyTick)
+            {
+                if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_5X) // SlowTick Box 5秒一次
+                {
+                    Tick(5f);
+                }
+            }
+            else
+            {
+                if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate) // Box 1秒一次
+                {
+                    Tick(1f);
+                }
+            }
+        }
+        else
+        {
+            //if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_01X) // Actor 0.1秒一次
+            //{
+            Tick(0.02f);
+            //}
+        }
+
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
+        {
+            kv.Value.OnFixedUpdate(Time.fixedDeltaTime);
+        }
+
+        cachedRemoveList_EntityPassiveSkill.Clear();
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+        {
+            if (eps.MarkAsForget) cachedRemoveList_EntityPassiveSkill.Add(eps);
+        }
+
+        cachedRemoveList_EntityActiveSkill.Clear();
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
+        {
+            if (kv.Value.MarkAsForget) cachedRemoveList_EntityActiveSkill.Add(kv.Value);
+        }
+
+        foreach (EntityPassiveSkill skill in cachedRemoveList_EntityPassiveSkill)
+        {
+            ForgetPassiveSkill(skill.SkillGUID);
+        }
+
+        cachedRemoveList_EntityPassiveSkill.Clear();
+
+        foreach (EntityActiveSkill skill in cachedRemoveList_EntityActiveSkill)
+        {
+            ForgetActiveSkill(skill.SkillGUID);
+        }
+
+        cachedRemoveList_EntityActiveSkill.Clear();
+
+        foreach (EntityPassiveSkill skill in cachedAddList_EntityPassiveSkill)
+        {
+            AddNewPassiveSkill(skill);
+        }
+
+        cachedAddList_EntityPassiveSkill.Clear();
+    }
+
+    protected virtual void Tick(float interval)
+    {
+        if (!BattleManager.Instance.IsStart) return;
+        if (IsRecycled) return;
+        EntityStatPropSet.Tick(interval);
+        EntityBuffHelper.BuffTick(interval);
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+        {
+            eps.OnTick(interval);
+        }
+
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
+        {
+            kv.Value.OnTick(interval);
+        }
+
+        // Auto Delete when not in a module
+        if (AutoDeleteWhenNotInModule)
+        {
+            if (WorldManager.Instance != null)
+            {
+                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(transform.position.ToGridPos3D(), false);
+                if (module == null)
+                {
+                    destroyBecauseNotInAnyModuleTick += interval;
+                    if (destroyBecauseNotInAnyModuleTick > DestroyBecauseNotInAnyModuleThreshold)
+                    {
+                        destroyBecauseNotInAnyModuleTick = 0;
+                        DestroySelf(null);
+                    }
+                }
+            }
+        }
+    }
+
+    protected virtual void OnCollisionEnter(Collision collision)
+    {
+    }
+
     [ShowInInspector]
     [FoldoutGroup("属性")]
     [LabelText("是Trigger实体")]
@@ -51,28 +216,87 @@ public abstract class Entity : PoolObject
     [LabelText("出模组自动删除")]
     public bool AutoDeleteWhenNotInModule = true;
 
-    internal EntityData CurrentEntityData;
+    public bool IsFrozen => EntityStatPropSet.IsFrozen;
+
+    /// <summary>
+    /// （受各种控制技能影响）无法动弹
+    /// </summary>
+    public bool CannotAct => IsFrozen || EntityBuffHelper.IsStun || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed;
+
+    [FoldoutGroup("属性")]
+    [LabelText("能自动落下")]
+    public bool CanAutoFallDown = true;
 
     #region Helpers
 
-    internal abstract EntityArtHelper EntityArtHelper { get; }
-    internal abstract EntityWwiseHelper EntityWwiseHelper { get; }
-    internal abstract EntityModelHelper EntityModelHelper { get; }
-    internal abstract EntityIndicatorHelper EntityIndicatorHelper { get; }
-    internal abstract EntityBuffHelper EntityBuffHelper { get; }
-    internal abstract EntityFrozenHelper EntityFrozenHelper { get; }
-    internal abstract EntityTriggerZoneHelper EntityTriggerZoneHelper { get; }
-    internal abstract EntityCollectHelper EntityCollectHelper { get; }
-    internal abstract EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper { get; }
-    internal abstract List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers { get; }
-    internal abstract List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers { get; }
+    [FoldoutGroup("组件")]
+    public EntityArtHelper EntityArtHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityWwiseHelper EntityWwiseHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityModelHelper EntityModelHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityIndicatorHelper EntityIndicatorHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityBuffHelper EntityBuffHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityFrozenHelper EntityFrozenHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityTriggerZoneHelper EntityTriggerZoneHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityCollectHelper EntityCollectHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityGrindTriggerZoneHelper EntityGrindTriggerZoneHelper;
+
+    [FoldoutGroup("组件")]
+    public EntityGoldValueHelper EntityGoldValueHelper;
+
+    [FoldoutGroup("组件")]
+    public List<EntityFlamethrowerHelper> EntityFlamethrowerHelpers = new List<EntityFlamethrowerHelper>();
+
+    [FoldoutGroup("组件")]
+    public List<EntityLightningGeneratorHelper> EntityLightningGeneratorHelpers = new List<EntityLightningGeneratorHelper>();
 
     protected List<EntityMonoHelper> EntityMonoHelpers = new List<EntityMonoHelper>(32);
+
+    protected virtual void OnInitHelperList()
+    {
+        EntityMonoHelpers.Clear();
+        EntityMonoHelpers.Add(EntityArtHelper);
+        EntityMonoHelpers.Add(EntityWwiseHelper);
+        EntityMonoHelpers.Add(EntityModelHelper);
+        EntityMonoHelpers.Add(EntityIndicatorHelper);
+        EntityMonoHelpers.Add(EntityBuffHelper);
+        EntityMonoHelpers.Add(EntityFrozenHelper);
+        EntityMonoHelpers.Add(EntityTriggerZoneHelper);
+        EntityMonoHelpers.Add(EntityCollectHelper);
+        EntityMonoHelpers.Add(EntityGrindTriggerZoneHelper);
+        EntityMonoHelpers.Add(EntityGoldValueHelper);
+        foreach (EntityFlamethrowerHelper h in EntityFlamethrowerHelpers)
+        {
+            EntityMonoHelpers.Add(h);
+        }
+
+        foreach (EntityLightningGeneratorHelper h in EntityLightningGeneratorHelpers)
+        {
+            EntityMonoHelpers.Add(h);
+        }
+    }
 
     #endregion
 
     [HideInInspector]
     public ushort EntityTypeIndex;
+
+    #region 战斗数值
 
     [FoldoutGroup("初始战斗数值")]
     [HideLabel]
@@ -86,16 +310,7 @@ public abstract class Entity : PoolObject
     [ShowInInspector]
     public EntityStatPropSet EntityStatPropSet; // 湿数据，随生命周期消亡
 
-    public bool IsFrozen => EntityStatPropSet.IsFrozen;
-
-    /// <summary>
-    /// （受各种控制技能影响）无法动弹
-    /// </summary>
-    public bool CannotAct => IsFrozen || EntityBuffHelper.IsShocking || EntityBuffHelper.IsStun || EntityBuffHelper.IsBeingGround || EntityBuffHelper.IsBeingRepulsed;
-
-    [FoldoutGroup("跳跃")]
-    [LabelText("能自动落下")]
-    public bool CanAutoFallDown = true;
+    #endregion
 
     [DisplayAsString]
     [HideInEditorMode]
@@ -301,47 +516,6 @@ public abstract class Entity : PoolObject
 
     #endregion
 
-    #region EntityExtraData
-
-    public void ApplyEntityExtraSerializeData(EntityExtraSerializeData rawEntityExtraSerializeDataFromModule = null)
-    {
-        Profiler.BeginSample("ApplyEntityExtraSerializeData");
-        if (rawEntityExtraSerializeDataFromModule != null)
-        {
-            foreach (EntityPassiveSkill rawExtraPS in rawEntityExtraSerializeDataFromModule.EntityPassiveSkills)
-            {
-                EntityPassiveSkill newPS = (EntityPassiveSkill) rawExtraPS.Clone();
-                newPS.IsLevelExtraEntitySkill = true;
-                AddNewPassiveSkill(newPS);
-            }
-
-            ApplyEntityExtraStates(rawEntityExtraSerializeDataFromModule.EntityDataExtraStates);
-        }
-
-        Profiler.EndSample();
-    }
-
-    public void RecordEntityExtraSerializeData()
-    {
-        Profiler.BeginSample("RecordEntityExtraSerializeData");
-        if (CurrentEntityData != null && CurrentEntityData.RawEntityExtraSerializeData != null)
-        {
-            RecordEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
-        }
-
-        Profiler.EndSample();
-    }
-
-    protected virtual void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
-    {
-    }
-
-    protected virtual void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
-    {
-    }
-
-    #endregion
-
     #region 仇恨 // 临时，未来用量化的仇恨值代替
 
     [ShowInInspector]
@@ -350,49 +524,51 @@ public abstract class Entity : PoolObject
 
     #endregion
 
-    public override void OnRecycled()
-    {
-        base.OnRecycled();
-        StopAllCoroutines();
-        CurrentEntityData = null;
-        InitWorldModuleGUID = 0;
-        destroyBecauseNotInAnyModuleTick = 0;
-        cachedRemoveList_EntityPassiveSkill.Clear();
-        cachedRemoveList_EntityActiveSkill.Clear();
-        cachedAddList_EntityPassiveSkill.Clear();
-        IsDestroying = false;
-    }
+    #region EntityData
 
-    public override void OnUsed()
-    {
-        base.OnUsed();
-        CanBeThreatened = true;
-    }
+    internal EntityData CurrentEntityData;
 
-    public void Setup(EntityData entityData, uint initWorldModuleGUID)
+    public void ApplyEntityExtraSerializeData()
     {
-        CurrentEntityData = entityData;
-        InitWorldModuleGUID = initWorldModuleGUID;
-        if (GUID == 0)
+        Profiler.BeginSample("ApplyEntityExtraSerializeData");
+        foreach (EntityPassiveSkill rawExtraPS in CurrentEntityData.RawEntityExtraSerializeData.EntityPassiveSkills)
         {
-            GUID = GetGUID();
-            if (IsBoxCamp)
+            EntityPassiveSkill newPS = (EntityPassiveSkill) rawExtraPS.Clone();
+            newPS.IsLevelExtraEntitySkill = true;
+            AddNewPassiveSkill(newPS);
+        }
+
+        foreach (EntityMonoHelper h in EntityMonoHelpers)
+        {
+            h?.ApplyEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
+        }
+
+        Profiler.EndSample();
+    }
+
+    public void RecordEntityExtraSerializeData()
+    {
+        Profiler.BeginSample("RecordEntityExtraSerializeData");
+        foreach (EntityMonoHelper h in EntityMonoHelpers)
+        {
+            if (CurrentEntityData == null)
             {
-                if (SlowlyTick)
-                {
-                    GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_5X;
-                }
-                else
-                {
-                    GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate;
-                }
+                Debug.LogError("RecordEntityExtraSerializeData CurrentEntityData == null");
+            }
+            else if (CurrentEntityData.RawEntityExtraSerializeData == null)
+            {
+                Debug.LogError("RecordEntityExtraSerializeData CurrentEntityData.RawEntityExtraSerializeData == null");
             }
             else
             {
-                GUID_Mod_FixedFrameRate = ((int) GUID) % ClientGameManager.Instance.FixedFrameRate_01X;
+                h?.RecordEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
             }
         }
+
+        Profiler.EndSample();
     }
+
+    #endregion
 
     #region 技能
 
@@ -513,10 +689,13 @@ public abstract class Entity : PoolObject
                     PlayerStatHUD HUD = ClientGameManager.Instance.PlayerStatHUDPanel.PlayerStatHUDs_Player[0];
                     foreach (KeyValuePair<PlayerControllerHelper.KeyBind, ISkillBind> kv in HUD.SkillSlotDict)
                     {
-                        if (kv.Value.EmptySkill)
+                        if (!HUD.JKL_KeyBinds.Contains(kv.Key))
                         {
-                            kv.Value.BindSkill(eps);
-                            break;
+                            if (kv.Value.EmptySkill)
+                            {
+                                kv.Value.BindSkill(eps);
+                                break;
+                            }
                         }
                     }
                 }
@@ -889,119 +1068,6 @@ public abstract class Entity : PoolObject
 
     #endregion
 
-    protected virtual void Update()
-    {
-        if (!BattleManager.Instance.IsStart) return;
-        if (IsRecycled) return;
-        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
-        {
-            kv.Value.OnUpdate(Time.deltaTime);
-        }
-    }
-
-    protected virtual void FixedUpdate()
-    {
-        if (!BattleManager.Instance.IsStart) return;
-        if (IsRecycled) return;
-        if (IsBoxCamp)
-        {
-            if (SlowlyTick)
-            {
-                if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_5X) // SlowTick Box 5秒一次
-                {
-                    Tick(5f);
-                }
-            }
-            else
-            {
-                if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate) // Box 1秒一次
-                {
-                    Tick(1f);
-                }
-            }
-        }
-        else
-        {
-            //if (GUID_Mod_FixedFrameRate == ClientGameManager.Instance.CurrentFixedFrameCount_Mod_FixedFrameRate_01X) // Actor 0.1秒一次
-            //{
-            Tick(0.02f);
-            //}
-        }
-
-        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
-        {
-            kv.Value.OnFixedUpdate(Time.fixedDeltaTime);
-        }
-
-        cachedRemoveList_EntityPassiveSkill.Clear();
-        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
-        {
-            if (eps.MarkAsForget) cachedRemoveList_EntityPassiveSkill.Add(eps);
-        }
-
-        cachedRemoveList_EntityActiveSkill.Clear();
-        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
-        {
-            if (kv.Value.MarkAsForget) cachedRemoveList_EntityActiveSkill.Add(kv.Value);
-        }
-
-        foreach (EntityPassiveSkill skill in cachedRemoveList_EntityPassiveSkill)
-        {
-            ForgetPassiveSkill(skill.SkillGUID);
-        }
-
-        cachedRemoveList_EntityPassiveSkill.Clear();
-
-        foreach (EntityActiveSkill skill in cachedRemoveList_EntityActiveSkill)
-        {
-            ForgetActiveSkill(skill.SkillGUID);
-        }
-
-        cachedRemoveList_EntityActiveSkill.Clear();
-
-        foreach (EntityPassiveSkill skill in cachedAddList_EntityPassiveSkill)
-        {
-            AddNewPassiveSkill(skill);
-        }
-
-        cachedAddList_EntityPassiveSkill.Clear();
-    }
-
-    protected virtual void Tick(float interval)
-    {
-        if (!BattleManager.Instance.IsStart) return;
-        if (IsRecycled) return;
-        EntityStatPropSet.Tick(interval);
-        EntityBuffHelper.BuffTick(interval);
-        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
-        {
-            eps.OnTick(interval);
-        }
-
-        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
-        {
-            kv.Value.OnTick(interval);
-        }
-
-        // Auto Delete when not in a module
-        if (AutoDeleteWhenNotInModule)
-        {
-            if (WorldManager.Instance != null)
-            {
-                WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(transform.position.ToGridPos3D(), false);
-                if (module == null)
-                {
-                    destroyBecauseNotInAnyModuleTick += interval;
-                    if (destroyBecauseNotInAnyModuleTick > DestroyBecauseNotInAnyModuleThreshold)
-                    {
-                        destroyBecauseNotInAnyModuleTick = 0;
-                        DestroySelf(null);
-                    }
-                }
-            }
-        }
-    }
-
     #region Destroy
 
     private float destroyBecauseNotInAnyModuleTick = 0f;
@@ -1021,47 +1087,62 @@ public abstract class Entity : PoolObject
     public virtual void DestroySelfByModuleRecycle()
     {
     }
+    public virtual void DestroySelfWithoutSideEffect()
+    {
+    }
 
     public virtual void DestroySelf(UnityAction callBack = null)
     {
-        ThrowElementFragment(EntityStatType.FireElementFragment);
-        ThrowElementFragment(EntityStatType.IceElementFragment);
-        ThrowElementFragment(EntityStatType.LightningElementFragment);
+        ThrowResources(EntityStatType.Gold);
+        ThrowResources(EntityStatType.FireElementFragment);
+        ThrowResources(EntityStatType.IceElementFragment);
+        ThrowResources(EntityStatType.LightningElementFragment);
     }
 
-    private void ThrowElementFragment(EntityStatType elementFragmentType)
+    private List<ushort> cached_ThrowGoldBoxList = new List<ushort>(16);
+
+    private void ThrowResources(EntityStatType resourceType)
     {
-        int elementFragmentCount = EntityStatPropSet.StatDict[elementFragmentType].Value;
-        int dropElementFragmentCount = 0;
+        int resourceCount = EntityStatPropSet.StatDict[resourceType].Value;
+        int dropResourceCount = 0;
         if (this == BattleManager.Instance.Player1)
         {
-            dropElementFragmentCount = Mathf.RoundToInt(elementFragmentCount * 0.5f);
-            EntityStatPropSet.StatDict[elementFragmentType].SetValue(EntityStatPropSet.StatDict[elementFragmentType].Value - dropElementFragmentCount);
+            if (resourceType == EntityStatType.Gold) dropResourceCount = 0;
+            else dropResourceCount = Mathf.RoundToInt(resourceCount * 0.5f);
+            EntityStatPropSet.StatDict[resourceType].SetValue(EntityStatPropSet.StatDict[resourceType].Value - dropResourceCount);
         }
         else
         {
-            dropElementFragmentCount = Random.Range(Mathf.RoundToInt(elementFragmentCount * 0.7f), Mathf.RoundToInt(elementFragmentCount * 1.3f));
+            dropResourceCount = Random.Range(Mathf.RoundToInt(resourceCount * 0.7f), Mathf.RoundToInt(resourceCount * 1.3f));
         }
 
-        switch (elementFragmentType)
+        switch (resourceType)
         {
+            case EntityStatType.Gold:
+            {
+                int dropSmallCount = dropResourceCount % 5;
+                int dropMiddleCount = dropResourceCount / 5;
+                ThrowGold("Small", dropSmallCount);
+                ThrowGold("Middle", dropMiddleCount);
+                break;
+            }
             case EntityStatType.FireElementFragment:
             case EntityStatType.IceElementFragment:
             {
-                int dropSmallCount = dropElementFragmentCount % 5;
-                int dropMiddleCount = dropElementFragmentCount / 5;
-                DropElementFragment("Small", dropSmallCount);
-                DropElementFragment("Middle", dropMiddleCount);
+                int dropSmallCount = dropResourceCount % 5;
+                int dropMiddleCount = dropResourceCount / 5;
+                ThrowElementFragment("Small", dropSmallCount);
+                ThrowElementFragment("Middle", dropMiddleCount);
                 break;
             }
             case EntityStatType.LightningElementFragment:
             {
-                DropElementFragment("Small", dropElementFragmentCount);
+                ThrowElementFragment("Small", dropResourceCount);
                 break;
             }
         }
 
-        void DropElementFragment(string size, int count)
+        void ThrowElementFragment(string size, int count)
         {
             WorldModule worldModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(transform.position.ToGridPos3D());
             if (worldModule == null) worldModule = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(WorldGP);
@@ -1072,7 +1153,7 @@ public abstract class Entity : PoolObject
                 {
                     Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(DropConeAngle * Mathf.Deg2Rad);
                     Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);
-                    ushort index = ConfigManager.GetTypeIndex(TypeDefineType.CollectableItem, size + elementFragmentType);
+                    ushort index = ConfigManager.GetTypeIndex(TypeDefineType.CollectableItem, size + resourceType);
                     CollectableItem ci = GameObjectPoolManager.Instance.CollectableItemDict[index].AllocateGameObject<CollectableItem>(worldModule.WorldModuleCollectableItemRoot);
                     ci.Initialize(worldModule);
                     ci.ThrowFrom(transform.position, dropVel.normalized * DropVelocity);
@@ -1080,13 +1161,39 @@ public abstract class Entity : PoolObject
                 }
             }
         }
+
+        void ThrowGold(string size, int count)
+        {
+            cached_ThrowGoldBoxList.Clear();
+            switch (size)
+            {
+                case "Small":
+                {
+                    ushort boxTypeIndex = ConfigManager.Box_GoldenBoxIndex;
+                    for (int i = 0; i < count; i++)
+                    {
+                        cached_ThrowGoldBoxList.Add(boxTypeIndex);
+                    }
+
+                    break;
+                }
+                case "Middle":
+                {
+                    ushort boxTypeIndex = ConfigManager.Box_StackingGoldenBoxIndex;
+                    for (int i = 0; i < count; i++)
+                    {
+                        cached_ThrowGoldBoxList.Add(boxTypeIndex);
+                    }
+
+                    break;
+                }
+            }
+
+            WorldManager.Instance.CurrentWorld.ThrowBoxFormWorldGP(cached_ThrowGoldBoxList, EntityGeometryCenter.ToGridPos3D());
+        }
     }
 
     #endregion
-
-    protected virtual void OnCollisionEnter(Collision collision)
-    {
-    }
 
     public override int GetHashCode()
     {

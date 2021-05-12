@@ -19,6 +19,7 @@ public class ExitMenuPanel : BaseUIPanel
 
     public Button ExitToOpenWorldButton;
     public Button RestartDungeonButton;
+    public Button SaveGameButton;
     public Button ExitToMenuButton;
     public Button ExitToDesktopButton;
 
@@ -35,12 +36,19 @@ public class ExitMenuPanel : BaseUIPanel
             ExitToOpenWorldButton.gameObject.SetActive(openWorld.InsideDungeon);
             RestartDungeonButton.gameObject.SetActive(openWorld.InsideDungeon);
         }
+
+        SaveGameButton.Select();
     }
 
     public override void Hide()
     {
         OnHide?.Post(gameObject);
         base.Hide();
+    }
+
+    public void OnButtonClick()
+    {
+        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
     }
 
     public void OnButtonHover()
@@ -50,37 +58,30 @@ public class ExitMenuPanel : BaseUIPanel
 
     public void OnExitToOpenWorldButtonClick()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
         ClientGameManager.Instance.ReturnToOpenWorld();
     }
 
     public void OnRestartDungeonButtonClick()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
         ClientGameManager.Instance.RestartDungeon();
+    }
+
+    public void OnSaveGameButtonClick()
+    {
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            openWorld.SaveGame("Slot1");
+            CloseUIForm();
+        }
     }
 
     public void OnExitToMenuButtonClick()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
-        if (!UIManager.Instance.IsUIShown<ConfirmPanel>())
-        {
-            ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
-            confirmPanel.Initialize("If you back to menu, you'll lose all the progress", "Go to menu", "Cancel",
-                () =>
-                {
-                    StartCoroutine(ClientGameManager.Instance.ReloadGame());
-                    confirmPanel.CloseUIForm();
-                },
-                () => { confirmPanel.CloseUIForm(); }
-            );
-            return;
-        }
+        ClientGameManager.Instance.ExitToMainMenu();
     }
 
     public void OnExitToDesktopButtonClick()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
         Application.Quit();
     }
 }

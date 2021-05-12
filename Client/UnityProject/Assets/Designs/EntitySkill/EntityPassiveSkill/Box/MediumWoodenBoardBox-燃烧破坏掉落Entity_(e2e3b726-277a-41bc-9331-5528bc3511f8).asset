@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ed4677c8e2b644b9b7a478e1c75489, type: 3}
+  m_Name: "MediumWoodenBoardBox-\u71C3\u70E7\u7834\u574F\u6389\u843DEntity_(e2e3b726-277a-41bc-9331-5528bc3511f8)"
+  m_EditorClassIdentifier: 
+  EntitySkill:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        SkillGUID: (e2e3b726-277a-41bc-9331-5528bc3511f8)
+        SkillAlias: "MediumWoodenBoardBox-\u71C3\u70E7\u7834\u574F\u6389\u843DEntity"
+        SkillName_EN: 
+        SkillName_ZH: 
+        SkillIcon:
+          TypeDefineType: 0
+          TypeGUID: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
+        PassiveSkillCondition: 32768
+        TriggerProbabilityPercent: 100
+        DestroyEntityByElementDamageTypeList: 12000000
+        MultiEventTrigger: 0
+        ListenLevelEventAliasList: []
+        ListenLevelEventAlias: 
+        MaxTriggeredTimes: 1
+        EntityStatChangeType: 0
+        EntityStatChangeThreshold_UsePercent: 0
+        EntityStatChangeThreshold: 0
+        EntityStatChangeThresholdPercent: 0
+        EntityStatChangeThresholdType: 0
+        EntityPropertyChangeType: 0
+        EntityPropertyChangeThreshold: 0
+        EntityPropertyChangeThresholdType: 0
+        EntitySkillConditions: []
+        RawEntitySkillActions:
+        - id: 1
+    00000001:
+      type: {class: BoxSkillAction_ChangeBoxType, ns: , asm: Client}
+      data:
+        InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
+        EntityData:
+          WorldGP:
+            x: 0
+            y: 0
+            z: 0
+          LocalGP:
+            x: 0
+            y: 0
+            z: 0
+          InitStaticLayoutGUID: 
+          EntityType:
+            TypeDefineType: 0
+            TypeGUID: (62bccc84-6a59-4519-be2c-b64b161153b4)
+          EntityOrientation: 0
+          RawEntityExtraSerializeData:
+            EntityPassiveSkills: []
+            EntityDataExtraStates:
+              R_DoorOpen: 0
+              DoorOpen: 0
+              R_TransportBoxClosed: 0
+              TransportBoxClosed: 0
+              R_GoldValue: 0
+              GoldValue: 0
+              R_ModelIndex: 0
+              ModelIndex: 0
+              R_DecoratorIndex: 0
+              DecoratorIndex: 0
+              R_ModelScale: 0
+              ModelScale: {x: 1, y: 1, z: 1}
+              R_ModelRotation: 0
+              ModelRotation: {x: 0, y: 0, z: 0, w: 1}
+        ChangeForEveryGrid: 1
+        ExertOnTarget: 0

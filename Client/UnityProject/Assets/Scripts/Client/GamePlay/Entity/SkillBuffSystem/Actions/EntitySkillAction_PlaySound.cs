@@ -15,7 +15,10 @@ public class EntitySkillAction_PlaySound : EntitySkillAction, EntitySkillAction.
 
     public void Execute()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(CommonAudioEvent, Entity.gameObject);
+        if (Entity != null)
+        {
+            WwiseAudioManager.Instance.PlayCommonAudioSound(CommonAudioEvent, Entity.gameObject);
+        }
     }
 
     protected override void ChildClone(EntitySkillAction newAction)

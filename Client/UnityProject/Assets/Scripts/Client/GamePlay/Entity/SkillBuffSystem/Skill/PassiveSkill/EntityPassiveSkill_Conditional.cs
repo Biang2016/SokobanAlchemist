@@ -655,34 +655,61 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
             if (EntityStatChangeType == entityStatType)
             {
                 bool trigger = false;
-                int threshold = EntityStatChangeThreshold;
                 if (EntityStatChangeThreshold_UsePercent)
                 {
-                    if (max == 0) threshold = 0;
-                    else threshold = Mathf.RoundToInt(EntityStatChangeThresholdPercent / 100f * max);
+                    if (max != 0)
+                    {
+                        float threshold = EntityStatChangeThresholdPercent / 100f * max;
+                        switch (EntityStatChangeThresholdType)
+                        {
+                            case ValueChangeOverThresholdType.LE_to_G:
+                            {
+                                trigger = before <= threshold && after > threshold;
+                                break;
+                            }
+                            case ValueChangeOverThresholdType.L_to_GE:
+                            {
+                                trigger = before < threshold && after >= threshold;
+                                break;
+                            }
+                            case ValueChangeOverThresholdType.GE_to_L:
+                            {
+                                trigger = before >= threshold && after < threshold;
+                                break;
+                            }
+                            case ValueChangeOverThresholdType.G_to_LE:
+                            {
+                                trigger = before > threshold && after <= threshold;
+                                break;
+                            }
+                        }
+                    }
                 }
-
-                switch (EntityStatChangeThresholdType)
+                else
                 {
-                    case ValueChangeOverThresholdType.LE_to_G:
+                    int threshold = EntityStatChangeThreshold;
+                    switch (EntityStatChangeThresholdType)
                     {
-                        trigger = before <= threshold && after > threshold;
-                        break;
-                    }
-                    case ValueChangeOverThresholdType.L_to_GE:
-                    {
-                        trigger = before < threshold && after >= threshold;
-                        break;
-                    }
-                    case ValueChangeOverThresholdType.GE_to_L:
-                    {
-                        trigger = before >= threshold && after < threshold;
-                        break;
-                    }
-                    case ValueChangeOverThresholdType.G_to_LE:
-                    {
-                        trigger = before > threshold && after <= threshold;
-                        break;
+                        case ValueChangeOverThresholdType.LE_to_G:
+                        {
+                            trigger = before <= threshold && after > threshold;
+                            break;
+                        }
+                        case ValueChangeOverThresholdType.L_to_GE:
+                        {
+                            trigger = before < threshold && after >= threshold;
+                            break;
+                        }
+                        case ValueChangeOverThresholdType.GE_to_L:
+                        {
+                            trigger = before >= threshold && after < threshold;
+                            break;
+                        }
+                        case ValueChangeOverThresholdType.G_to_LE:
+                        {
+                            trigger = before > threshold && after <= threshold;
+                            break;
+                        }
                     }
                 }
 
@@ -868,7 +895,9 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
     [ListDrawerSettings(ListElementLabelName = "Description")]
     public List<EntitySkillAction> RawEntitySkillActions = new List<EntitySkillAction>(); // 干数据，禁修改
 
-    [HideInInspector]
+    [HideInEditorMode]
+    [ShowInInspector]
+    [LabelText("实时内容")]
     internal List<EntitySkillAction> EntitySkillActions = new List<EntitySkillAction>(); // 湿数据，每个Entity生命周期开始前从干数据数据拷贝，数量永远和干数据相等
 
     internal bool EntitySkillActionsMarkAsDeleted = false;

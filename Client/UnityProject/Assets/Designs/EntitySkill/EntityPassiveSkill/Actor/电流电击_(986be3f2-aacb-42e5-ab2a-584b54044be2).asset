@@ -20,12 +20,25 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: (986be3f2-aacb-42e5-ab2a-584b54044be2)
         SkillAlias: "\u7535\u6D41\u7535\u51FB"
+        SkillName_EN: 
+        SkillName_ZH: 
         SkillIcon:
           TypeDefineType: 12
           TypeGUID: 
-        SkillDescription: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
         PassiveSkillCondition: 128
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
@@ -48,7 +61,8 @@ MonoBehaviour:
       type: {class: EntitySkillAction_TriggerZoneAction, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
-        EffectiveOnRelativeCamp: 15
+        InitStaticLayoutGUID: 
+        EffectiveOnRelativeCamp: 7
         EffectiveOnSpecificEntity: 0
         EffectiveOnSpecificEntityType:
           TypeDefineType: 0
@@ -68,12 +82,14 @@ MonoBehaviour:
       type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         RawEntityBuffs:
         - id: 4
     00000003:
       type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         RawEntityBuffs:
         - id: 5
     00000004:
@@ -104,7 +120,7 @@ MonoBehaviour:
         EntitySkillSO: {fileID: 0}
         SkillGUID: 
         EntitySkillPropertyType: 0
-        Percent: -100
+        Percent: -80
         LinearDecayInDuration: 1
     00000005:
       type: {class: EntityBuff_ChangeEntityStatInstantly, ns: , asm: Client}

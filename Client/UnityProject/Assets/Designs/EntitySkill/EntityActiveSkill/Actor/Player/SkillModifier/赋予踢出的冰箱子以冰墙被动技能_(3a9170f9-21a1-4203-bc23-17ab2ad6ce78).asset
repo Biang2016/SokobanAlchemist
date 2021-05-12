@@ -20,6 +20,7 @@ MonoBehaviour:
       type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: (3a9170f9-21a1-4203-bc23-17ab2ad6ce78)
         SkillAlias: "\u8D4B\u4E88\u8E22\u51FA\u7684\u51B0\u7BB1\u5B50\u4EE5\u51B0\u5899\u88AB\u52A8\u6280\u80FD"
         SkillName_EN: 
@@ -30,12 +31,17 @@ MonoBehaviour:
         SkillDescription_EN: 
         SkillDescription_ZH: 
         PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
         SkillCategoryType: 0
         SkillRankType: 0
         SkillScrollType:
           TypeDefineType: 0
           TypeGUID: 
         TargetCamp: 8
+        NeedBindKey: 0
+        SkillKeyBind: 0
         SkillsPropertyCollection:
           CastingRadius:
             BaseValue: 0
@@ -78,7 +84,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           ConsumeIceElementFragment:
-            BaseValue: 10
+            BaseValue: 5
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 100
@@ -126,6 +132,7 @@ MonoBehaviour:
       type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         ForbidAllActiveSkill: 0
         RecoverAllActiveSkill: 0
         ForbidAllDropSkill: 0
@@ -139,6 +146,7 @@ MonoBehaviour:
       type: {class: EntitySkillAction_ChangeActorSkill, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         ForbidAllActiveSkill: 0
         RecoverAllActiveSkill: 0
         ForbidAllDropSkill: 0

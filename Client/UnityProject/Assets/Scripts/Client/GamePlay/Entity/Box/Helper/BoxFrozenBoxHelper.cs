@@ -31,7 +31,7 @@ public class BoxFrozenBoxHelper : BoxMonoHelper
     {
         foreach (GridPos3D offset in frozenActor.GetEntityOccupationGPs_Rotated())
         {
-            BoxIndicator boxIndicator = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxIndicator].AllocateGameObject<BoxIndicator>(Box.BoxIndicatorHelper.transform);
+            BoxIndicator boxIndicator = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxIndicator].AllocateGameObject<BoxIndicator>(Box.EntityIndicatorHelper.transform);
             FrozenBoxIndicators.Add(boxIndicator);
             boxIndicator.transform.position = frozenActor.WorldGP + offset;
         }

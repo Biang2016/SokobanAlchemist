@@ -78,7 +78,7 @@ public class DebugPanel : BaseUIPanel
             {
                 case DebugButtonAttribute dba:
                 {
-                    if (string.IsNullOrEmpty(dba.MethodName))
+                    if (string.IsNullOrEmpty(dba.MethodName_1))
                     {
                         UnityAction action = () => { m.Invoke(this, new object[] { }); };
                         AddButton(dba.ButtonName, dba.Shortcut, 0, DebugComponentDictTree, action, true);
@@ -95,19 +95,59 @@ public class DebugPanel : BaseUIPanel
                     }
                     else
                     {
-                        bool methodFound = false;
-                        foreach (MethodInfo method in type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
+                        if (string.IsNullOrEmpty(dba.MethodName_2))
                         {
-                            if (method.Name.Equals(dba.MethodName))
+                            bool methodFound = false;
+                            foreach (MethodInfo method in type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
                             {
-                                methodFound = true;
+                                if (method.Name.Equals(dba.MethodName_1))
+                                {
+                                    methodFound = true;
+                                    try
+                                    {
+                                        List<string> strList = (List<string>) method.Invoke(this, new object[] { });
+                                        foreach (string s in strList)
+                                        {
+                                            string buttonName = string.Format(dba.ButtonName, s);
+                                            AddButton(buttonName, KeyCode.None, 0, DebugComponentDictTree, () => { m.Invoke(this, new object[] {s}); }, true);
+                                        }
+
+                                        break;
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Debug.LogError(e);
+                                        throw;
+                                    }
+                                }
+                            }
+
+                            if (!methodFound) Debug.LogError($"[DebugPanel] 无法找到名为{dba.MethodName_1}的函数");
+                        }
+                        else
+                        {
+                            MethodInfo method_1 = null;
+                            MethodInfo method_2 = null;
+                            foreach (MethodInfo method in type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
+                            {
+                                if (method.Name.Equals(dba.MethodName_1)) method_1 = method;
+                                if (method.Name.Equals(dba.MethodName_2)) method_2 = method;
+                            }
+
+                            if (method_1 == null) Debug.LogError($"[DebugPanel] 无法找到名为{dba.MethodName_1}的函数");
+                            if (method_2 == null) Debug.LogError($"[DebugPanel] 无法找到名为{dba.MethodName_2}的函数");
+                            if (method_1 != null && method_2 != null)
+                            {
                                 try
                                 {
-                                    List<string> strList = (List<string>) method.Invoke(this, new object[] { });
-                                    foreach (string s in strList)
+                                    List<string> strList_1 = (List<string>) method_1.Invoke(this, new object[] { });
+                                    List<string> strList_2 = (List<string>) method_2.Invoke(this, new object[] { });
+                                    for (int index = 0; index < strList_1.Count; index++)
                                     {
-                                        string buttonName = string.Format(dba.ButtonName, s);
-                                        AddButton(buttonName, KeyCode.None, 0, DebugComponentDictTree, () => { m.Invoke(this, new object[] {s}); }, true);
+                                        string s_1 = strList_1[index];
+                                        string s_2 = strList_2[index];
+                                        string buttonName = string.Format(dba.ButtonName, s_1);
+                                        AddButton(buttonName, KeyCode.None, 0, DebugComponentDictTree, () => { m.Invoke(this, new object[] {s_1, s_2}); }, true);
                                     }
                                 }
                                 catch (Exception e)
@@ -116,11 +156,6 @@ public class DebugPanel : BaseUIPanel
                                     throw;
                                 }
                             }
-                        }
-
-                        if (!methodFound)
-                        {
-                            Debug.LogError($"[DebugPanel] 无法找到名为{dba.MethodName}的函数");
                         }
                     }
 
@@ -358,6 +393,75 @@ public class DebugPanel : BaseUIPanel
     public void AddActionRecover100()
     {
         BattleManager.Instance.Player1.EntityStatPropSet.ActionPointRecovery.AddModifier(new Property.PlusModifier {Delta = 100});
+    }
+
+    [DebugButton("Player/ChangeTerrainToFire", KeyCode.Z)]
+    public void ChangeTerrainToFire()
+    {
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            openWorld.ReplaceTerrain(BattleManager.Instance.Player1.WorldGP, TerrainType.Fire);
+        }
+    }
+
+    [DebugButton("Player/ChangeTerrainToIce", KeyCode.C)]
+    public void ChangeTerrainToIce()
+    {
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            openWorld.ReplaceTerrain(BattleManager.Instance.Player1.WorldGP, TerrainType.Ice);
+        }
+    }
+
+    [DebugButton("Player/ChangeTerrainToEarth", KeyCode.V)]
+    public void ChangeTerrainToEarth()
+    {
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            openWorld.ReplaceTerrain(BattleManager.Instance.Player1.WorldGP, TerrainType.Earth);
+        }
+    }
+
+    [DebugButton("Player/LearnSkill/{0}", "GetAllLearnableSkillNames", "GetAllLearnableSkillGUIDs")]
+    public void LearnSkill(string skillName, string skillGUID)
+    {
+        Actor target = BattleManager.Instance.Player1;
+        EntitySkill entitySkill = ConfigManager.GetEntitySkill(skillGUID);
+        if (entitySkill is EntityActiveSkill eas)
+        {
+            if (target.AddNewActiveSkill(eas))
+            {
+                target.BindActiveSkillToKey(eas, eas.SkillKeyBind, true);
+            }
+        }
+        else if (entitySkill is EntityPassiveSkill eps)
+        {
+            target.Async_AddNewPassiveSkill(eps);
+        }
+    }
+
+    public List<string> GetAllLearnableSkillNames()
+    {
+        List<string> res = new List<string>();
+        List<EntitySkill> entitySkills = ConfigManager.GetAllLearnableSkills();
+        foreach (EntitySkill entitySkill in entitySkills)
+        {
+            res.Add(entitySkill.SkillName_EN);
+        }
+
+        return res;
+    }
+
+    public List<string> GetAllLearnableSkillGUIDs()
+    {
+        List<string> res = new List<string>();
+        List<EntitySkill> entitySkills = ConfigManager.GetAllLearnableSkills();
+        foreach (EntitySkill entitySkill in entitySkills)
+        {
+            res.Add(entitySkill.SkillGUID);
+        }
+
+        return res;
     }
 
     [DebugToggleButton("Log/ToggleActorMoveLog")]

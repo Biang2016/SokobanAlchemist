@@ -651,9 +651,9 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
                 Box box = boxPrefab.GetComponent<Box>();
                 if (box)
                 {
-                    box.BoxIndicatorHelper.RefreshEntityIndicatorOccupationData();
+                    box.EntityIndicatorHelper.RefreshEntityIndicatorOccupationData();
                     EditorUtility.SetDirty(boxPrefab);
-                    EntityOccupationData occupationData = box.BoxIndicatorHelper.EntityOccupationData.Clone();
+                    EntityOccupationData occupationData = box.EntityIndicatorHelper.EntityOccupationData.Clone();
                     ushort entityTypeIndex = TypeDefineConfigs[TypeDefineType.Box].TypeIndexDict[box.name];
                     if (entityTypeIndex != 0)
                     {
@@ -1149,6 +1149,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static ushort Box_GroundBoxIndex => GetTypeIndex(TypeDefineType.Box, "GroundBox");
     public static ushort Box_BrickBoxIndex => GetTypeIndex(TypeDefineType.Box, "BrickBox");
     public static ushort Box_CombinedGroundBoxIndex => GetTypeIndex(TypeDefineType.Box, "CombinedGroundBox");
+    public static ushort Box_GoldenBoxIndex => GetTypeIndex(TypeDefineType.Box, "GoldenBox");
+    public static ushort Box_StackingGoldenBoxIndex => GetTypeIndex(TypeDefineType.Box, "StackingGoldenBox");
     public static ushort Actor_PlayerIndex => GetTypeIndex(TypeDefineType.Actor, "Player");
 
     #endregion
@@ -1229,6 +1231,22 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
 
         EntitySkill entitySkill = CommonUtils.GetRandomFromList(cached_GetRawEntitySkillByFilterList);
         return entitySkill;
+    }
+
+    private static List<EntitySkill> cached_GetAllLearnableSkillNamesList = new List<EntitySkill>(16);
+
+    public static List<EntitySkill> GetAllLearnableSkills()
+    {
+        cached_GetAllLearnableSkillNamesList.Clear();
+        foreach (KeyValuePair<string, EntitySkill> kv in EntitySkillLibrary)
+        {
+            if (kv.Value.PlayerCanLearn)
+            {
+                cached_GetAllLearnableSkillNamesList.Add(kv.Value);
+            }
+        }
+
+        return cached_GetAllLearnableSkillNamesList;
     }
 
     public static EntityOccupationData GetEntityOccupationData(ushort entityTypeIndex)

@@ -322,7 +322,13 @@ public class FieldCamera : MonoBehaviour
 
     private void RefreshCameraOrientation()
     {
-        RotateDirection = (GridPosR.Orientation) (Mathf.RoundToInt((TargetConfigData.HorAngle + 360f) / 90f) % 4);
+        float h_angle = TargetConfigData.HorAngle;
+        while (h_angle < 0f)
+        {
+            h_angle += 360f;
+        }
+
+        RotateDirection = (GridPosR.Orientation) (Mathf.RoundToInt((h_angle) / 90f) % 4);
     }
 
     #region Distance Levels

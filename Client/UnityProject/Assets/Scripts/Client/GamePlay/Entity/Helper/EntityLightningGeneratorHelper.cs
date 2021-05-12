@@ -7,6 +7,7 @@ public class EntityLightningGeneratorHelper : EntityMonoHelper, IEntityTriggerZo
     [LabelText("闪电技能")]
     public EntitySkillSO LightningSkillSO;
 
+    [ShowInInspector]
     private EntityPassiveSkill LightningSkill;
 
     private List<EntityLightning> EntityLightnings = new List<EntityLightning>();

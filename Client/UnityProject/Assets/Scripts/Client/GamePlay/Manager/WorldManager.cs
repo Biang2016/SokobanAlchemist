@@ -37,31 +37,31 @@ public class WorldManager : TSingletonBaseManager<WorldManager>
         base.Start();
     }
 
-    public IEnumerator StartGame()
+    public IEnumerator StartGame(string gameSaveName)
     {
+        WorldData worldData = null;
         if (string.IsNullOrEmpty(ClientGameManager.DebugChangeWorldName))
         {
-            yield return Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetTypeIndex(TypeDefineType.World, ClientGameManager.Instance.StartWorldName.TypeName)));
+            worldData = ConfigManager.GetWorldDataConfig(ConfigManager.GetTypeIndex(TypeDefineType.World, ClientGameManager.Instance.StartWorldName.TypeName));
         }
         else
         {
-            yield return Initialize(ConfigManager.GetWorldDataConfig(ConfigManager.GetTypeIndex(TypeDefineType.World, ClientGameManager.DebugChangeWorldName)));
+            worldData = ConfigManager.GetWorldDataConfig(ConfigManager.GetTypeIndex(TypeDefineType.World, ClientGameManager.DebugChangeWorldName));
         }
-    }
 
-    public IEnumerator Initialize(WorldData worldData)
-    {
         if (worldData.WorldFeature.HasFlag(WorldFeature.OpenWorld))
         {
             CurrentWorld = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.OpenWorld].AllocateGameObject<OpenWorld>(WorldRoot);
+            OpenWorld openWorld = (OpenWorld) CurrentWorld;
+            openWorld.Prepare(worldData);
+            yield return openWorld.GenerateMap(gameSaveName);
+            yield return openWorld.Initialize(worldData);
         }
         else
         {
             CurrentWorld = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.World].AllocateGameObject<World>(WorldRoot);
+            yield return CurrentWorld.Initialize(worldData);
         }
-
-        CurrentWorld.name = worldData.WorldTypeName;
-        yield return CurrentWorld.Initialize(worldData);
     }
 
     public IEnumerator OnAfterStartGame()
