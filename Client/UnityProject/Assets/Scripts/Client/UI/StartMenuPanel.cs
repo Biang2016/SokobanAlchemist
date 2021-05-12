@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.IO;
 using BiangLibrary.GamePlay.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,11 @@ public class StartMenuPanel : BaseUIPanel
         OnPlayAnim?.Post(gameObject);
     }
 
+    public void OnButtonClick()
+    {
+        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
+    }
+
     public void OnButtonHover()
     {
         WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonHover, WwiseAudioManager.Instance.gameObject);
@@ -36,26 +42,45 @@ public class StartMenuPanel : BaseUIPanel
 
     public void OnSettingButtonClick()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
     }
 
     public void OnStartButtonClick()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
-        ClientGameManager.Instance.StartGame("");
+        string folder = $"{Application.streamingAssetsPath}/GameSaves";
+        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+        string file = $"{folder}/GameSave_Slot1.save";
+        if (File.Exists(file))
+        {
+            ConfirmPanel cp = UIManager.Instance.ShowUIForms<ConfirmPanel>();
+            cp.Initialize("Continue old game (Y) or Start a new game (N)?", "Y", "N",
+                () =>
+                {
+                    cp.CloseUIForm();
+                    ClientGameManager.Instance.StartGame("Slot1");
+                },
+                () =>
+                {
+                    cp.CloseUIForm();
+                    ClientGameManager.Instance.StartGame("");
+                }
+            );
+        }
+        else
+        {
+            ClientGameManager.Instance.StartGame("");
+        }
+
         CloseUIForm();
     }
 
     public void OnLoadButtonClick()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
         ClientGameManager.Instance.StartGame("Slot1");
         CloseUIForm();
     }
 
     public void OnCreditButtonClick()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
         CreditAnim.SetTrigger("Show");
     }
 
@@ -66,7 +91,6 @@ public class StartMenuPanel : BaseUIPanel
 
     public void OnExitButtonClick()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
         Application.Quit();
     }
 

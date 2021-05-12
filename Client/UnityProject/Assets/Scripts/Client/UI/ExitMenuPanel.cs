@@ -19,6 +19,7 @@ public class ExitMenuPanel : BaseUIPanel
 
     public Button ExitToOpenWorldButton;
     public Button RestartDungeonButton;
+    public Button SaveGameButton;
     public Button ExitToMenuButton;
     public Button ExitToDesktopButton;
 
@@ -43,6 +44,11 @@ public class ExitMenuPanel : BaseUIPanel
         base.Hide();
     }
 
+    public void OnButtonClick()
+    {
+        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
+    }
+
     public void OnButtonHover()
     {
         WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonHover, WwiseAudioManager.Instance.gameObject);
@@ -50,19 +56,25 @@ public class ExitMenuPanel : BaseUIPanel
 
     public void OnExitToOpenWorldButtonClick()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
         ClientGameManager.Instance.ReturnToOpenWorld();
     }
 
     public void OnRestartDungeonButtonClick()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
         ClientGameManager.Instance.RestartDungeon();
+    }
+
+    public void OnSaveGameButtonClick()
+    {
+        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
+        {
+            openWorld.SaveGame("Slot1");
+            CloseUIForm();
+        }
     }
 
     public void OnExitToMenuButtonClick()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
         if (!UIManager.Instance.IsUIShown<ConfirmPanel>())
         {
             ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
@@ -82,7 +94,6 @@ public class ExitMenuPanel : BaseUIPanel
 
     public void OnExitToDesktopButtonClick()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
         Application.Quit();
     }
 }

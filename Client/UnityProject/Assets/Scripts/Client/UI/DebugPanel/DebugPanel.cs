@@ -440,15 +440,6 @@ public class DebugPanel : BaseUIPanel
         }
     }
 
-    [DebugButton("Save/Save_Slot1")]
-    public void SaveGame_Slot1()
-    {
-        if (WorldManager.Instance.CurrentWorld is OpenWorld openWorld)
-        {
-            openWorld.SaveGame("Slot1");
-        }
-    }
-
     public List<string> GetAllLearnableSkillNames()
     {
         List<string> res = new List<string>();

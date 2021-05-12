@@ -719,6 +719,8 @@ public class WorldModule : PoolObject
                 }
             }
         }
+
+        IsGeneratingOrRecycling = false;
     }
 
     public GridPos3D WorldGPToLocalGP(GridPos3D worldGP)
