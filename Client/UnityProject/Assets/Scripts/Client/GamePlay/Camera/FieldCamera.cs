@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
-//[ExecuteInEditMode]
+[ExecuteInEditMode]
 public class FieldCamera : MonoBehaviour
 {
     #region 相机本体
@@ -253,7 +253,7 @@ public class FieldCamera : MonoBehaviour
         Vector3 _offset = lerp ? Vector3.SmoothDamp(CurrentConfigData.Offset, TargetConfigData.Offset, ref tempChangeSpeed_Pos_Offset, CurrentConfigData.DampPosTime, 9999) : (Vector3) TargetConfigData.Offset;
         float _distance = lerp ? Mathf.SmoothDamp(CurrentLerpingDistance, BaseDistance * TargetConfigData.DistanceFactor, ref tempChangeSpeed_Pos_Distance, CurrentConfigData.DampPosTime, 9999) : BaseDistance * TargetConfigData.DistanceFactor;
         float _depthOfField = lerp ? Mathf.SmoothDamp(CurrentConfigData.DepthOfFieldFactor, TargetConfigData.DepthOfFieldFactor, ref tempChangeSpeed_DepthOfField, CurrentConfigData.DampPosTime, 9999) : BaseDistance * TargetConfigData.DepthOfFieldFactor;
-        PPV_DepthOfField.focusDistance.value = _distance * _depthOfField;
+        if (PPV_DepthOfField) PPV_DepthOfField.focusDistance.value = _distance * _depthOfField;
 
         // TargetPos计算（不带偏移）
         Vector3 _targetPos = Vector3.zero;
