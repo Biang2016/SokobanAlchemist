@@ -67,9 +67,12 @@ public class ButtonState
     }
 }
 
+// UI提示中的按键绑定依赖此处的枚举名称，名称慎重修改
 public enum ButtonNames
 {
     None = 0,
+
+    Fake_CharacterMove,
 
     BATTLE_MIN_FLAG = 300,
 

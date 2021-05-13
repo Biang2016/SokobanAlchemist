@@ -7,9 +7,9 @@ public class PlayerStatHUD : MonoBehaviour
 {
     void Awake()
     {
-        SkillSlotDict.Add(PlayerControllerHelper.KeyBind.J_RightTrigger, FireElementBottle);
-        SkillSlotDict.Add(PlayerControllerHelper.KeyBind.K, IceElementBottle);
-        SkillSlotDict.Add(PlayerControllerHelper.KeyBind.L, LightningElementBottle);
+        SkillSlotDict.Add(PlayerControllerHelper.KeyBind.J_West, FireElementBottle);
+        SkillSlotDict.Add(PlayerControllerHelper.KeyBind.K_North, IceElementBottle);
+        SkillSlotDict.Add(PlayerControllerHelper.KeyBind.L_East, LightningElementBottle);
         SkillSlotDict.Add(PlayerControllerHelper.KeyBind.Num1, SkillSlot_Num1);
         SkillSlotDict.Add(PlayerControllerHelper.KeyBind.Num2, SkillSlot_Num2);
         SkillSlotDict.Add(PlayerControllerHelper.KeyBind.Num3, SkillSlot_Num3);
@@ -70,7 +70,7 @@ public class PlayerStatHUD : MonoBehaviour
 
     public HashSet<PlayerControllerHelper.KeyBind> JKL_KeyBinds = new HashSet<PlayerControllerHelper.KeyBind>
     {
-        PlayerControllerHelper.KeyBind.J_RightTrigger, PlayerControllerHelper.KeyBind.K, PlayerControllerHelper.KeyBind.L
+        PlayerControllerHelper.KeyBind.J_West, PlayerControllerHelper.KeyBind.K_North, PlayerControllerHelper.KeyBind.L_East
     };
 
     public SkillSlot SkillSlot_Num1;
