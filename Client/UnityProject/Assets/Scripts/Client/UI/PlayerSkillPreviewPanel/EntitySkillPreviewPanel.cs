@@ -42,7 +42,7 @@ public class EntitySkillPreviewPanel : BaseUIPanel
             EntitySkillRow esr = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.EntitySkillRow].AllocateGameObject<EntitySkillRow>(ActiveSkillContainer);
             ActiveSkillRows.Add(esr);
 
-            string keyBindStr = "";
+            string keyBind = "";
             if (entity is Actor actor)
             {
                 if (actor.ActorControllerHelper is PlayerControllerHelper pch)
@@ -53,8 +53,7 @@ public class EntitySkillPreviewPanel : BaseUIPanel
                         {
                             if (kv.Key == entitySkillIndex)
                             {
-                                PlayerControllerHelper.KeyMappingDict.TryGetValue(_kv.Key, out ButtonNames keyBindButtonName);
-                                keyBindStr = ControlManager.Instance.GetControlDescText(keyBindButtonName, false);
+                                PlayerControllerHelper.KeyMappingStrDict.TryGetValue(_kv.Key, out keyBind);
                                 esr.transform.SetAsFirstSibling();
                             }
                         }
@@ -62,7 +61,7 @@ public class EntitySkillPreviewPanel : BaseUIPanel
                 }
             }
 
-            esr.Initialize(kv.Value, keyBindStr, 0);
+            esr.Initialize(kv.Value, keyBind, 0);
         }
     }
 

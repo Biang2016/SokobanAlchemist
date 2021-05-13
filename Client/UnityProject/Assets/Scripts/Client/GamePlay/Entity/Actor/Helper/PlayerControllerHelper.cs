@@ -19,12 +19,12 @@ public class PlayerControllerHelper : ActorControllerHelper
 
     public enum KeyBind
     {
-        Space_LT = 0,
-        Shift_RT = 1,
-        H = 2,
-        J_West = 3,
-        K_North = 4,
-        L_East = 5,
+        Space_South = 0,
+        Shift_East = 1,
+        H_LeftTrigger = 2,
+        J_RightTrigger = 3,
+        K = 4,
+        L = 5,
         Num1 = 6,
         Num2 = 7,
         Num3 = 8,
@@ -33,18 +33,18 @@ public class PlayerControllerHelper : ActorControllerHelper
         MAX
     }
 
-    public static Dictionary<KeyBind, ButtonNames> KeyMappingDict = new Dictionary<KeyBind, ButtonNames>
+    public static Dictionary<KeyBind, string> KeyMappingStrDict = new Dictionary<KeyBind, string>
     {
-        {KeyBind.Space_LT, ButtonNames.Battle_Skill_0_Player1},
-        {KeyBind.Shift_RT, ButtonNames.Battle_Skill_1_Player1},
-        {KeyBind.H, ButtonNames.Battle_Skill_2_Player1},
-        {KeyBind.J_West, ButtonNames.Battle_Skill_3_Player1},
-        {KeyBind.K_North, ButtonNames.Battle_Skill_4_Player1},
-        {KeyBind.L_East, ButtonNames.Battle_Skill_5_Player1},
-        {KeyBind.Num1, ButtonNames.Battle_Skill_6_Player1},
-        {KeyBind.Num2, ButtonNames.Battle_Skill_7_Player1},
-        {KeyBind.Num3, ButtonNames.Battle_Skill_8_Player1},
-        {KeyBind.Num4, ButtonNames.Battle_Skill_9_Player1},
+        {KeyBind.Space_South, "Space"},
+        {KeyBind.Shift_East, "LShift"},
+        {KeyBind.H_LeftTrigger, "H"},
+        {KeyBind.J_RightTrigger, "J"},
+        {KeyBind.K, "K"},
+        {KeyBind.L, "L"},
+        {KeyBind.Num1, "Num1"},
+        {KeyBind.Num2, "Num2"},
+        {KeyBind.Num3, "Num3"},
+        {KeyBind.Num4, "Num4"},
     };
 
     private ButtonState[] BS_SkillArray = new ButtonState[(int) KeyBind.MAX];
@@ -124,12 +124,12 @@ public class PlayerControllerHelper : ActorControllerHelper
         BS_Left = ControlManager.Instance.Battle_MoveButtons[(int) PlayerNumber, (int) GridPosR.Orientation.Left];
 
         SkillKeyMappings.Clear();
-        SkillKeyMappings.Add(KeyBind.Space_LT, SkillKeyMapping_0.Clone<EntitySkillIndex, EntitySkillIndex>());
-        SkillKeyMappings.Add(KeyBind.Shift_RT, SkillKeyMapping_1.Clone<EntitySkillIndex, EntitySkillIndex>());
-        SkillKeyMappings.Add(KeyBind.H, SkillKeyMapping_2.Clone<EntitySkillIndex, EntitySkillIndex>());
-        SkillKeyMappings.Add(KeyBind.J_West, SkillKeyMapping_3.Clone<EntitySkillIndex, EntitySkillIndex>());
-        SkillKeyMappings.Add(KeyBind.K_North, SkillKeyMapping_4.Clone<EntitySkillIndex, EntitySkillIndex>());
-        SkillKeyMappings.Add(KeyBind.L_East, SkillKeyMapping_5.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.Space_South, SkillKeyMapping_0.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.Shift_East, SkillKeyMapping_1.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.H_LeftTrigger, SkillKeyMapping_2.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.J_RightTrigger, SkillKeyMapping_3.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.K, SkillKeyMapping_4.Clone<EntitySkillIndex, EntitySkillIndex>());
+        SkillKeyMappings.Add(KeyBind.L, SkillKeyMapping_5.Clone<EntitySkillIndex, EntitySkillIndex>());
         SkillKeyMappings.Add(KeyBind.Num1, SkillKeyMapping_6.Clone<EntitySkillIndex, EntitySkillIndex>());
         SkillKeyMappings.Add(KeyBind.Num2, SkillKeyMapping_7.Clone<EntitySkillIndex, EntitySkillIndex>());
         SkillKeyMappings.Add(KeyBind.Num3, SkillKeyMapping_8.Clone<EntitySkillIndex, EntitySkillIndex>());

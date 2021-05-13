@@ -473,10 +473,10 @@ public abstract class EntityActiveSkill : EntitySkill
         // todo Entity 前摇animation， 且按时间缩放
         WingUpRatio = 0;
         float wingUpTick = 0f;
-        while (wingUpTick < wingUpTime / 1000f || Entity.CannotAct)
+        while (wingUpTick < wingUpTime / 1000f)
         {
             OnSkillWingingUp?.Invoke(ActiveSkillPhase.WingingUp, wingUpTick, wingUpTime / 1000f);
-            if (!Entity.CannotAct) wingUpTick += Time.deltaTime;
+            wingUpTick += Time.deltaTime;
             WingUpRatio = Mathf.Min(1f, wingUpTick / (wingUpTime / 1000f));
             yield return null;
         }
@@ -513,10 +513,10 @@ public abstract class EntityActiveSkill : EntitySkill
         }
 
         float castTick = 0f;
-        while (castTick < castDuration / 1000f || Entity.CannotAct)
+        while (castTick < castDuration / 1000f)
         {
             OnSkillCasting?.Invoke(ActiveSkillPhase.Casting, castTick, castDuration / 1000f);
-            if (!Entity.CannotAct) castTick += Time.deltaTime;
+            castTick += Time.deltaTime;
             CastRatio = Mathf.Min(1f, castTick / (castDuration / 1000f));
             yield return null;
         }
