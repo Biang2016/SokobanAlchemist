@@ -60,7 +60,7 @@
 												<Property Name="FadeInDuration" Type="Real64" Value="0.347222222222222"/>
 												<Property Name="FadeOutDuration" Type="Real64" Value="0.770833333333333"/>
 												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimEnd" Type="Real64" Value="1.55555555555556"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.04861111111112"/>
 											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>FrostBreathCast.wav</AudioFile>
@@ -76,6 +76,13 @@
 							</ChildrenList>
 						</RandomSequenceContainer>
 						<RandomSequenceContainer Name="IceEnemy_Purple_OnDestroyed_Common" ID="{B3CDD370-4442-4B2F-B50C-CCD1BE55DF8F}" ShortID="901325409">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-10</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2D11AD38-34B9-46CC-B26D-03C896AA9247}"/>
