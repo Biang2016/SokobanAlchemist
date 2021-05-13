@@ -48,9 +48,12 @@ public class StartMenuPanel : BaseUIPanel
         base.Display();
         WwiseAudioManager.Instance.WwiseBGMConfiguration.SwitchBGMTheme(BGM_Theme.StartMenu);
         StartMenuAnim.SetTrigger("Play");
-        OnPlayAnim?.Post(gameObject);
-
         InitButtons();
+    }
+
+    public void PlayAnimSound()
+    {
+        OnPlayAnim?.Post(gameObject);
     }
 
     private void InitButtons()
