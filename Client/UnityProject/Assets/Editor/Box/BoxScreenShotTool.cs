@@ -7,6 +7,35 @@ using UnityEngine;
 
 public class BoxScreenShotTool : Editor
 {
+    [MenuItem("Assets/开发工具/Box拍照工具", priority = -50)]
+    public static void CaptureScreenOnOneBox()
+    {
+        float defaultVerticalAngle = CameraManager.Instance.FieldCamera.TargetConfigData.VerAngle;
+        float defaultHorizontalAngle = CameraManager.Instance.FieldCamera.TargetConfigData.HorAngle;
+        float defaultFOV = CameraManager.Instance.FieldCamera.TargetConfigData.FOV;
+        Color defaultBackgroundColor = CameraManager.Instance.MainCamera.backgroundColor;
+
+        CameraManager.Instance.FieldCamera.TargetConfigData.FOV = 10;
+
+        GameObject[] selectedGOs = Selection.gameObjects;
+        foreach (GameObject go in selectedGOs)
+        {
+            Box box = go.GetComponent<Box>();
+            int count = 0;
+            ScreenShotAtOneBox(box.gameObject, false, selectedGOs.Length, ref count);
+        }
+
+        CameraManager.Instance.FieldCamera.TargetConfigData.VerAngle = defaultVerticalAngle;
+        CameraManager.Instance.FieldCamera.TargetConfigData.HorAngle = defaultHorizontalAngle;
+        CameraManager.Instance.FieldCamera.TargetConfigData.FOV = defaultFOV;
+        CameraManager.Instance.FieldCamera.ForceUpdateCamera();
+        CameraManager.Instance.MainCamera.backgroundColor = defaultBackgroundColor;
+        EditorUtility.ClearProgressBar();
+
+        AssetDatabase.Refresh();
+        EditorUtility.DisplayDialog("Box拍照", "拍照完成", "好");
+    }
+
     [MenuItem("开发工具/Box拍照工具")]
     public static void CaptureScreen()
     {
@@ -30,25 +59,7 @@ public class BoxScreenShotTool : Editor
                 if (kv.Key.Equals("BorderBox_Hidden")) continue;
                 if (kv.Key.Equals("EnemyFrozenBox")) continue;
                 GameObject boxPrefab = (GameObject) Resources.Load("Prefabs/Designs/Box/" + kv.Key);
-                GameObject boxGO = Instantiate(boxPrefab, null);
-                Box box = boxGO.GetComponent<Box>();
-                for (int verAngle = 0; verAngle <= 60; verAngle += 30)
-                {
-                    if (cancel) break;
-                    for (int horAngle = 0; horAngle <= 45; horAngle += 15)
-                    {
-                        if (cancel) break;
-                        count++;
-                        string filename = Application.dataPath + "/Textures/BoxScreenShots/" + kv.Key + "_" + horAngle + "_" + verAngle + ".png";
-                        CameraManager.Instance.FieldCamera.TargetConfigData.HorAngle = horAngle;
-                        CameraManager.Instance.FieldCamera.TargetConfigData.VerAngle = verAngle;
-                        CameraManager.Instance.FieldCamera.ForceUpdateCamera();
-                        CaptureScreenShot.CaptureTransparentScreenShot(Camera.main, 1920, 1080, filename);
-                        cancel = EditorUtility.DisplayCancelableProgressBar("拍照中", $"{kv.Key} 水平角{horAngle} 竖直角{verAngle}", (float) count / totalCount);
-                    }
-                }
-
-                DestroyImmediate(box.gameObject);
+                cancel = ScreenShotAtOneBox(boxPrefab, cancel, totalCount, ref count);
             }
         }
 
@@ -61,6 +72,54 @@ public class BoxScreenShotTool : Editor
 
         AssetDatabase.Refresh();
         EditorUtility.DisplayDialog("Box拍照", "拍照完成", "好");
+    }
+
+    private static bool ScreenShotAtOneBox(GameObject boxPrefab, bool cancel, int totalCount, ref int count)
+    {
+        GameObject boxGO = Instantiate(boxPrefab, null);
+        Box box = boxGO.GetComponent<Box>();
+        float maxSizeDimension = float.MinValue;
+        Vector3 size = box.EntityIndicatorHelper.EntityOccupationData.BoundsInt.size;
+        maxSizeDimension = Mathf.Max(maxSizeDimension, size.x);
+        maxSizeDimension = Mathf.Max(maxSizeDimension, size.y);
+        maxSizeDimension = Mathf.Max(maxSizeDimension, size.z);
+
+        CameraManager.Instance.FieldCamera.TargetConfigData.Offset = new Vector2(0, 1);
+        if (maxSizeDimension <= 1)
+        {
+            CameraManager.Instance.FieldCamera.TargetConfigData.FOV = 20;
+        }
+        else if (maxSizeDimension <= 2)
+        {
+            CameraManager.Instance.FieldCamera.TargetConfigData.FOV = 30;
+        }
+        else if (maxSizeDimension <= 3)
+        {
+            CameraManager.Instance.FieldCamera.TargetConfigData.FOV = 40;
+        }
+        else
+        {
+            CameraManager.Instance.FieldCamera.TargetConfigData.FOV = 60;
+        }
+
+        for (int verAngle = 0; verAngle <= 60; verAngle += 30)
+        {
+            if (cancel) break;
+            for (int horAngle = 0; horAngle <= 45; horAngle += 15)
+            {
+                if (cancel) break;
+                count++;
+                string filename = Application.dataPath + "/Textures/BoxScreenShots/" + boxPrefab.name + "_" + horAngle + "_" + verAngle + ".png";
+                CameraManager.Instance.FieldCamera.TargetConfigData.HorAngle = horAngle;
+                CameraManager.Instance.FieldCamera.TargetConfigData.VerAngle = verAngle;
+                CameraManager.Instance.FieldCamera.ForceUpdateCamera();
+                CaptureScreenShot.CaptureTransparentScreenShot(Camera.main, 1920, 1080, filename);
+                cancel = EditorUtility.DisplayCancelableProgressBar("拍照中", $"{boxPrefab.name} 水平角{horAngle} 竖直角{verAngle}", (float) count / totalCount);
+            }
+        }
+
+        DestroyImmediate(box.gameObject);
+        return cancel;
     }
 }
 
