@@ -18,6 +18,7 @@ public class PlayerStatHUD : MonoBehaviour
 
     public void Initialize(ActorBattleHelper helper)
     {
+        SetAllComponentShown(true);
         EntityStatPropSet asps = helper.Actor.EntityStatPropSet;
 
         HealthBottle.RefreshValue(asps.HealthDurability.Value, asps.HealthDurability.MinValue, asps.HealthDurability.MaxValue);
@@ -48,6 +49,84 @@ public class PlayerStatHUD : MonoBehaviour
         }
     }
 
+    [SerializeField]
+    private GameObject BGBar;
+
+    public void SetComponentShown(HUDComponent component, bool shown)
+    {
+        switch (component)
+        {
+            case HUDComponent.HealthBottle:
+            {
+                HealthBottle.gameObject.SetActive(shown);
+                break;
+            }
+            case HUDComponent.ActionPointBottle:
+            {
+                ActionPointBottle.gameObject.SetActive(shown);
+                break;
+            }
+            case HUDComponent.BGBar:
+            {
+                BGBar.SetActive(shown);
+                break;
+            }
+            case HUDComponent.GoldBottle:
+            {
+                GoldBottle.gameObject.SetActive(shown);
+                break;
+            }
+            case HUDComponent.FireElementBottle:
+            {
+                FireElementBottle.gameObject.SetActive(shown);
+                break;
+            }
+            case HUDComponent.IceElementBottle:
+            {
+                IceElementBottle.gameObject.SetActive(shown);
+                break;
+            }
+            case HUDComponent.LightningElementBottle:
+            {
+                LightningElementBottle.gameObject.SetActive(shown);
+                break;
+            }
+            case HUDComponent.SkillSlots:
+            {
+                SkillSlots.gameObject.SetActive(shown);
+                break;
+            }
+        }
+    }
+
+    public void SetAllComponentShown(bool shown)
+    {
+        HealthBottle.gameObject.SetActive(shown);
+        ActionPointBottle.gameObject.SetActive(shown);
+        BGBar.SetActive(shown);
+        GoldBottle.gameObject.SetActive(shown);
+        FireElementBottle.gameObject.SetActive(shown);
+        IceElementBottle.gameObject.SetActive(shown);
+        LightningElementBottle.gameObject.SetActive(shown);
+        SkillSlots.gameObject.SetActive(shown);
+    }
+
+    public enum HUDComponent
+    {
+        HealthBottle,
+        ActionPointBottle,
+        BGBar,
+        GoldBottle,
+        FireElementBottle,
+        IceElementBottle,
+        LightningElementBottle,
+        SkillSlots
+    }
+
+    public void ShowEveryElements()
+    {
+    }
+
     #region Health & ActionPoint
 
     public SphereBottle HealthBottle;
@@ -73,6 +152,7 @@ public class PlayerStatHUD : MonoBehaviour
         PlayerControllerHelper.KeyBind.J_West, PlayerControllerHelper.KeyBind.K_North, PlayerControllerHelper.KeyBind.L_East
     };
 
+    public GameObject SkillSlots;
     public SkillSlot SkillSlot_Num1;
     public SkillSlot SkillSlot_Num2;
     public SkillSlot SkillSlot_Num3;

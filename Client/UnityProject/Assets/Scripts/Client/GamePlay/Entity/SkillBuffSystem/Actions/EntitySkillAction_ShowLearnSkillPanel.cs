@@ -131,7 +131,7 @@ public class EntitySkillAction_ShowLearnSkillPanel : EntitySkillAction, EntitySk
     private void OnLearned()
     {
         BattleManager.Instance.Player1.EntityStatPropSet.Gold.SetValue(BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value - GoldCost);
-        Entity.DestroySelf();
+        Entity?.DestroySelf();
     }
 
     protected override void ChildClone(EntitySkillAction newAction)

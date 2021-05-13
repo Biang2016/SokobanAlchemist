@@ -20,6 +20,7 @@ MonoBehaviour:
       type: {class: ActorActiveSkill_KickAreaCast, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: (b2ad0d42-6858-4a85-b0ae-0fd517b935da)
         SkillAlias: "\u8E22"
         SkillName_EN: Kick
@@ -58,7 +59,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 0
           CastDuration:
-            BaseValue: 50
+            BaseValue: 0
             ModifiedValue: 0
             MinValue: 0
             MaxValue: 0
@@ -129,6 +130,7 @@ MonoBehaviour:
       type: {class: EntitySkillAction_KickOut, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         FX:
           FXType:
             TypeDefineType: 7

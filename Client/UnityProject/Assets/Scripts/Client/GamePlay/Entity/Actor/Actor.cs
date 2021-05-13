@@ -1478,6 +1478,8 @@ public class Actor : Entity
         {
             PoolRecycle();
         }
+
+        IsDestroying = false;
     }
 
     public override void DestroySelfWithoutSideEffect()
@@ -1496,6 +1498,8 @@ public class Actor : Entity
         {
             PoolRecycle();
         }
+
+        IsDestroying = false;
     }
 
     public override void DestroySelf(UnityAction callBack = null)

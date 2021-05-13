@@ -20,6 +20,7 @@ MonoBehaviour:
       type: {class: EntityActiveSkill_AreaCast, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: (cd5c6b8f-1215-4f5e-ad44-0c2900810a70)
         SkillAlias: "\u524D\u65B9\u5C0F\u51B0\u51BB"
         SkillName_EN: 
@@ -29,7 +30,18 @@ MonoBehaviour:
           TypeGUID: (b2ef5347-4082-4772-bcbe-7a9519436626)
         SkillDescription_EN: 
         SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
         TargetCamp: 15
+        NeedBindKey: 0
+        SkillKeyBind: 0
         SkillsPropertyCollection:
           CastingRadius:
             BaseValue: 0
@@ -47,7 +59,7 @@ MonoBehaviour:
             MinValue: 0
             MaxValue: 1000000
           CastDuration:
-            BaseValue: 500
+            BaseValue: 0
             ModifiedValue: 500
             MinValue: 0
             MaxValue: 1000000
@@ -120,6 +132,7 @@ MonoBehaviour:
       type: {class: EntitySkillAction_AddEntityBuff, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         RawEntityBuffs:
         - id: 3
         - id: 4
@@ -127,6 +140,7 @@ MonoBehaviour:
       type: {class: EntitySkillAction_PlayFXOnWorldGP, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         FX:
           FXType:
             TypeDefineType: 7

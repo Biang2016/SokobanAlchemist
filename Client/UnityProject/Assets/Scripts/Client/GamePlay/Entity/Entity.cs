@@ -1072,6 +1072,9 @@ public abstract class Entity : PoolObject
 
     private float destroyBecauseNotInAnyModuleTick = 0f;
     private float DestroyBecauseNotInAnyModuleThreshold = 1.5f;
+
+    [ShowInInspector]
+    [ReadOnly]
     protected bool IsDestroying = false;
 
     [SerializeField]
