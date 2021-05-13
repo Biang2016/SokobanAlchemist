@@ -94,13 +94,7 @@ public class LearnSkillUpgradePage : PoolObject
                 DescriptionText.text = rawEntitySkill.GetSkillDescription_EN;
                 NameText.text = rawEntitySkill.SkillName_EN;
                 KeyBindText.text = "";
-                if (rawEntitySkill is EntityActiveSkill _rawEAS && _rawEAS.NeedBindKey)
-                {
-                    PlayerControllerHelper.KeyMappingDict.TryGetValue(_rawEAS.SkillKeyBind, out ButtonNames keyBindButtonName);
-                    string keyBindStr = ControlManager.Instance.GetControlDescText(keyBindButtonName, false);
-                    KeyBindText.text = keyBindStr;
-                }
-
+                if (rawEntitySkill is EntityActiveSkill _rawEAS && _rawEAS.NeedBindKey) KeyBindText.text = PlayerControllerHelper.KeyMappingStrDict[_rawEAS.SkillKeyBind];
                 if (learnInfo.GoldCost > 0) CostText.text = learnInfo.GoldCost.ToString();
                 else CostText.text = "Free";
 

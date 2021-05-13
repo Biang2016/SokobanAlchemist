@@ -628,7 +628,7 @@ public class EntityStatPropSet
 
     private void OnHealthDurabilityReachZero(string changeInfo)
     {
-        Entity.PassiveSkillMarkAsDestroyed = true; // 避免其他被动技能继续tick
+        Entity.PassiveSkillMarkAsDestroyed = true;
         foreach (EntityBuffAttribute attribute in Enum.GetValues(typeof(EntityBuffAttribute)))
         {
             if (changeInfo.Contains($"Damage-{attribute}"))
