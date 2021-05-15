@@ -2,7 +2,167 @@
     "name": "PlayerInput",
     "maps": [
         {
-            "name": "BattleInput",
+            "name": "Common",
+            "id": "7e89e9d1-f7e1-49a8-bcc4-018eff99152e",
+            "actions": [
+                {
+                    "name": "MouseLeftClick",
+                    "type": "Button",
+                    "id": "1c84be6d-be71-459a-b015-48d29931e2a2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "MouseRightClick",
+                    "type": "Button",
+                    "id": "01504029-9327-4d64-ae1b-ea8d51e2a146",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "MouseMiddleClick",
+                    "type": "Button",
+                    "id": "d3ecfc04-fec2-4614-8ff5-618873f00b28",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "ReloadGame",
+                    "type": "Button",
+                    "id": "f08b4971-aebb-4143-b619-4cc77d25c2bb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "PauseGame",
+                    "type": "Button",
+                    "id": "c7c254db-3263-4037-a169-d65434e02f33",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "ToggleUI",
+                    "type": "Button",
+                    "id": "64044141-2d58-4858-a8df-455957fe23ea",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "ToggleDebugPanel",
+                    "type": "Button",
+                    "id": "25917861-bf33-45b7-906b-5b8ef997638c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "DebugConsole",
+                    "type": "Button",
+                    "id": "a3d49bae-abc7-4e11-8476-9ad2ac9ac463",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a1a5710a-99a2-4033-8f47-46dab9355f0a",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "MouseMiddleClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "15e73d6e-7d92-42fa-afe9-d3536d156ea4",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "MouseRightClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9857762b-435f-433c-8c10-5693573aa119",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "MouseLeftClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "73a94d58-4b5b-4d7d-a9fb-57918fb08e48",
+                    "path": "<Keyboard>/#(P)",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "Clamp(max=1)",
+                    "groups": "KeyboardMouse",
+                    "action": "PauseGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "50c4cd9c-6198-4d5d-b7b7-807142622972",
+                    "path": "<Keyboard>/f3",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ToggleUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "31728538-e785-458b-a6f4-15c2524dcb7b",
+                    "path": "<Keyboard>/f4",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ToggleDebugPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "39a93977-ae39-4a82-976d-66c6ae2b3b47",
+                    "path": "<Keyboard>/F10",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "Clamp(max=1)",
+                    "groups": "KeyboardMouse",
+                    "action": "ReloadGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3eed784b-c75c-4d15-8ec8-e96895d015b0",
+                    "path": "<Keyboard>/BackQuote",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "DebugConsole",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Battle",
             "id": "1ece4267-24e1-4d81-a6b1-405a9d7c51cb",
             "actions": [
                 {
@@ -25,6 +185,62 @@
                     "name": "MouseMiddleClick",
                     "type": "Button",
                     "id": "dcdf1bc6-6254-491a-874a-b162a7d558d8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "InteractiveKey",
+                    "type": "Button",
+                    "id": "51f8faae-3f17-4313-ad33-ff886816d5cb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "LeftSwitch",
+                    "type": "Button",
+                    "id": "4c0ad541-70b9-4323-b90a-f89bd96489f9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "RightSwitch",
+                    "type": "Button",
+                    "id": "7ecf879f-d5c0-432e-b67c-46f4c52d0d68",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "ReturnToOpenWorld",
+                    "type": "Button",
+                    "id": "d164a31a-f8ec-46cd-b97f-921399d5852a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "RestartGame",
+                    "type": "Button",
+                    "id": "f17a425e-8d39-453a-8aeb-64a790d07705",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "SlowDownGame",
+                    "type": "Button",
+                    "id": "316474e1-086e-43f6-a2ff-aac39ae19a43",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "ToggleBattleTip",
+                    "type": "Button",
+                    "id": "bc2fed5a-0d95-47bd-b476-ece2648b9499",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)"
@@ -190,14 +406,6 @@
                     "interactions": "Press(behavior=2)"
                 },
                 {
-                    "name": "ToggleBattleTip",
-                    "type": "Button",
-                    "id": "bc2fed5a-0d95-47bd-b476-ece2648b9499",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
                     "name": "Player1_Move_Up",
                     "type": "Button",
                     "id": "37b67fb2-d4f3-414a-8eba-ca6625406613",
@@ -332,22 +540,6 @@
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
-                },
-                {
-                    "name": "LeftSwitch",
-                    "type": "Button",
-                    "id": "4c0ad541-70b9-4323-b90a-f89bd96489f9",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "RightSwitch",
-                    "type": "Button",
-                    "id": "7ecf879f-d5c0-432e-b67c-46f4c52d0d68",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
                 }
             ],
             "bindings": [
@@ -403,17 +595,6 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "MouseRightClick",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "27cf3453-9af4-41fd-9ab4-deae6e3b6533",
-                    "path": "<Keyboard>/t",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "ToggleBattleTip",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -947,50 +1128,6 @@
                 },
                 {
                     "name": "",
-                    "id": "bb7a45e9-abe3-4220-bd4a-d31e251e0abc",
-                    "path": "<Keyboard>/#(Q)",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "LeftSwitch",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "dc807174-4bc3-4cbf-a080-cbb23c674455",
-                    "path": "<Gamepad>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "LeftSwitch",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ceb3501d-8804-4b43-83aa-7c167bdcf35a",
-                    "path": "<Keyboard>/#(E)",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "RightSwitch",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0dde1976-62bd-4118-9e7b-12e0cf3b0b3c",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "RightSwitch",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "5b02d28f-f1a0-4ef3-9507-eec407c0ce55",
                     "path": "<Keyboard>/h",
                     "interactions": "",
@@ -1208,299 +1345,10 @@
                     "action": "Skill_9_Player1",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Common",
-            "id": "7e89e9d1-f7e1-49a8-bcc4-018eff99152e",
-            "actions": [
-                {
-                    "name": "MouseLeftClick",
-                    "type": "Button",
-                    "id": "1c84be6d-be71-459a-b015-48d29931e2a2",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "MouseRightClick",
-                    "type": "Button",
-                    "id": "01504029-9327-4d64-ae1b-ea8d51e2a146",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "MouseMiddleClick",
-                    "type": "Button",
-                    "id": "d3ecfc04-fec2-4614-8ff5-618873f00b28",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "MousePosition",
-                    "type": "Value",
-                    "id": "c83e4c16-d1ae-4077-a4aa-f05b0242551a",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "MouseWheel",
-                    "type": "Value",
-                    "id": "ba2cb947-1326-4fed-81cd-9f68513c63cc",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Confirm",
-                    "type": "Button",
-                    "id": "9c95a13c-9036-4cae-9675-0ddef4b52926",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "Exit",
-                    "type": "Button",
-                    "id": "c221a3f9-4221-4da1-b188-bf04e006da04",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "Cancel",
-                    "type": "Button",
-                    "id": "8d4f3577-d55d-4fac-a439-94225b57b9ad",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=1)"
-                },
-                {
-                    "name": "Tab",
-                    "type": "Button",
-                    "id": "21fa8e64-6108-4648-bbba-0381934760dd",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "DebugConsole",
-                    "type": "Button",
-                    "id": "a3d49bae-abc7-4e11-8476-9ad2ac9ac463",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "RestartGame",
-                    "type": "Button",
-                    "id": "072a09ac-3b24-472b-aa42-f116b670abde",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "ReloadGame",
-                    "type": "Button",
-                    "id": "f08b4971-aebb-4143-b619-4cc77d25c2bb",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "PauseGame",
-                    "type": "Button",
-                    "id": "c7c254db-3263-4037-a169-d65434e02f33",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "ToggleUI",
-                    "type": "Button",
-                    "id": "64044141-2d58-4858-a8df-455957fe23ea",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "ToggleDebugPanel",
-                    "type": "Button",
-                    "id": "25917861-bf33-45b7-906b-5b8ef997638c",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "InteractiveKey",
-                    "type": "Button",
-                    "id": "2a2737b3-6adb-4d9c-ab7c-96f34dd805db",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "SlowDownGame",
-                    "type": "Button",
-                    "id": "6b643af7-1749-4735-8ca9-f26b532e5816",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "ReturnToOpenWorld",
-                    "type": "Button",
-                    "id": "ec437b7c-4a56-412f-baae-d2f1fefb8239",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "SkillPreviewPanel",
-                    "type": "Button",
-                    "id": "c70aeac8-43cc-456c-b1e7-d3feabe67bc6",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
-                    "name": "UINavigation",
-                    "type": "Button",
-                    "id": "bc02dd05-0578-4b0a-8f60-84da6c6b0a02",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press"
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "2349d29d-84fe-419b-b518-7447fc786c1d",
-                    "path": "<Gamepad>/start",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Exit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "70aa3ce7-9ff5-48db-bf5b-74455ba21d00",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Exit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "be9919a6-8c46-44ff-a0b2-449817606f7b",
-                    "path": "<Keyboard>/tab",
-                    "interactions": "Press(behavior=2)",
-                    "processors": "Clamp(max=1)",
-                    "groups": "KeyboardMouse",
-                    "action": "Tab",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e143e42c-3e22-47ce-b879-1baa35066785",
-                    "path": "<Gamepad>/select",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Tab",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3eed784b-c75c-4d15-8ec8-e96895d015b0",
-                    "path": "<Keyboard>/BackQuote",
-                    "interactions": "Press(behavior=2)",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "DebugConsole",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a1a5710a-99a2-4033-8f47-46dab9355f0a",
-                    "path": "<Mouse>/middleButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "MouseMiddleClick",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "15e73d6e-7d92-42fa-afe9-d3536d156ea4",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "MouseRightClick",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9857762b-435f-433c-8c10-5693573aa119",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "Press(behavior=2)",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "MouseLeftClick",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "bf3217aa-e15c-4140-9082-aa2291a3acbf",
-                    "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "MousePosition",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5ae4b0b1-cf3f-49dd-b9bc-010914dccf00",
-                    "path": "<Mouse>/scroll",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "MouseWheel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "73a94d58-4b5b-4d7d-a9fb-57918fb08e48",
-                    "path": "<Keyboard>/#(P)",
-                    "interactions": "Press(behavior=2)",
-                    "processors": "Clamp(max=1)",
-                    "groups": "KeyboardMouse",
-                    "action": "PauseGame",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6eb7e6eb-7226-408c-ab10-841faa1f75dc",
+                    "id": "a36444fc-7ace-434b-a432-8528d0fd1159",
                     "path": "<Keyboard>/#(R)",
                     "interactions": "Press(behavior=2)",
                     "processors": "Clamp(max=1)",
@@ -1511,73 +1359,7 @@
                 },
                 {
                     "name": "",
-                    "id": "50c4cd9c-6198-4d5d-b7b7-807142622972",
-                    "path": "<Keyboard>/f3",
-                    "interactions": "Press(behavior=2)",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "ToggleUI",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "31728538-e785-458b-a6f4-15c2524dcb7b",
-                    "path": "<Keyboard>/f4",
-                    "interactions": "Press(behavior=2)",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "ToggleDebugPanel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "07a95fc5-987a-4f13-a436-67b3a7c561cc",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "InteractiveKey",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d745739c-0960-4a12-9791-8253378e2546",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "InteractiveKey",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ca04e5db-4ab9-41d3-ae12-6cccc327ba41",
-                    "path": "<Keyboard>/equals",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "SlowDownGame",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "39a93977-ae39-4a82-976d-66c6ae2b3b47",
-                    "path": "<Keyboard>/F10",
-                    "interactions": "Press(behavior=2)",
-                    "processors": "Clamp(max=1)",
-                    "groups": "KeyboardMouse",
-                    "action": "ReloadGame",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d27e1062-395a-4e29-ab68-d66b2445373d",
+                    "id": "898e3719-5193-425a-9538-afc5b5213da3",
                     "path": "<Keyboard>/b",
                     "interactions": "",
                     "processors": "",
@@ -1588,40 +1370,215 @@
                 },
                 {
                     "name": "",
-                    "id": "05598b18-1fe4-4a74-86ce-59a8b88f126f",
-                    "path": "<Keyboard>/n",
+                    "id": "d24d6ec4-474a-40af-a7d0-44b3a2c141ec",
+                    "path": "<Keyboard>/equals",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "SkillPreviewPanel",
+                    "action": "SlowDownGame",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "dd493237-8c65-4d8b-961e-f9f1a409bb06",
-                    "path": "*/{Submit}",
-                    "interactions": "Press(behavior=2)",
-                    "processors": "",
-                    "groups": "KeyboardMouse;Gamepad",
-                    "action": "Confirm",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "90c64eb1-f2c1-40d0-9f13-1330c2807e89",
-                    "path": "*/{Cancel}",
+                    "id": "ceb3501d-8804-4b43-83aa-7c167bdcf35a",
+                    "path": "<Keyboard>/#(E)",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad;KeyboardMouse",
-                    "action": "Cancel",
+                    "groups": "KeyboardMouse",
+                    "action": "RightSwitch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
+                    "name": "",
+                    "id": "0dde1976-62bd-4118-9e7b-12e0cf3b0b3c",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "RightSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bb7a45e9-abe3-4220-bd4a-d31e251e0abc",
+                    "path": "<Keyboard>/#(Q)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "LeftSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dc807174-4bc3-4cbf-a080-cbb23c674455",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LeftSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7356351c-6c65-4455-9362-5dad27c5721d",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "InteractiveKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a0061ced-8e2d-4148-a81f-416fdfcd03fd",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "InteractiveKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "27cf3453-9af4-41fd-9ab4-deae6e3b6533",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ToggleBattleTip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Menu",
+            "id": "6eaa5bd4-2c96-4f4f-b15d-c6e334fdf4b9",
+            "actions": [
+                {
+                    "name": "MouseLeftClick",
+                    "type": "Button",
+                    "id": "ee30186d-8b13-4a24-a477-a78c6c60d2a7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "MouseRightClick",
+                    "type": "Button",
+                    "id": "19e0cdbc-19a5-4b13-92d4-b982a025bf5e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "MouseMiddleClick",
+                    "type": "Button",
+                    "id": "4f0135c0-f9a0-496a-bde2-bf74cc9b15e4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "MousePosition",
+                    "type": "Value",
+                    "id": "9ca2c8eb-3ed3-41f5-af31-1b71dda37d5c",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "MouseWheel",
+                    "type": "Value",
+                    "id": "9ff51ef3-f9c1-4830-bcd2-93698e2a7c3f",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "InteractiveKey",
+                    "type": "Button",
+                    "id": "ca022df5-e4f9-41ff-889c-2f79c484abd7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "UINavigation",
+                    "type": "Button",
+                    "id": "7c3e1073-95d1-4f43-ac21-728377e617b2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                },
+                {
+                    "name": "Confirm",
+                    "type": "Button",
+                    "id": "fb924e50-23c4-4898-b8d4-9cb53e290584",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "Cancel",
+                    "type": "Button",
+                    "id": "1066e9c3-0e0b-459d-b3f2-cb7d07fc2365",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "LeftSwitch",
+                    "type": "Button",
+                    "id": "e1370d77-46d1-48e0-907a-042b7dee8aba",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "RightSwitch",
+                    "type": "Button",
+                    "id": "45f6b082-b67f-4bb2-bf5f-b2cbb3838792",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "KeyBindPanel",
+                    "type": "Button",
+                    "id": "ffa62818-fe0e-413d-95ce-acb64067147c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "SkillPreviewPanel",
+                    "type": "Button",
+                    "id": "b9c7d0d3-0e32-4a36-8cb1-2d190cc5a7d6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "ExitMenuPanel",
+                    "type": "Button",
+                    "id": "5ace1458-a653-4cfe-b079-bb98e5af7749",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                }
+            ],
+            "bindings": [
+                {
                     "name": "DPad",
-                    "id": "ab5cb213-d49b-40c4-9c69-08bd686fd274",
+                    "id": "89780408-605d-4a81-bb84-3c2642156ce4",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
@@ -1632,7 +1589,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "f47bc717-2ecf-4528-a054-7adfdf2b0967",
+                    "id": "70cd9d26-0d1b-40d7-b246-d1208cf4287e",
                     "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
@@ -1643,7 +1600,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "a7c57673-acf4-442d-9bd1-6c4f9b52a862",
+                    "id": "2abc913d-a8c8-4235-9b1a-4c1db25bf7dc",
                     "path": "<Gamepad>/dpad/down",
                     "interactions": "",
                     "processors": "",
@@ -1654,7 +1611,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "3858350b-3118-48d1-b4fc-2718511a1fb5",
+                    "id": "3666f3e0-9784-43bf-9ffc-1e1f80151331",
                     "path": "<Gamepad>/dpad/left",
                     "interactions": "",
                     "processors": "",
@@ -1665,7 +1622,7 @@
                 },
                 {
                     "name": "right",
-                    "id": "fc251bd0-a65f-466c-afa9-77c9ae21cbc3",
+                    "id": "91396d3d-53a6-4d05-af91-1be21db84088",
                     "path": "<Gamepad>/dpad/right",
                     "interactions": "",
                     "processors": "",
@@ -1673,6 +1630,281 @@
                     "action": "UINavigation",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "WASD",
+                    "id": "8150052d-e31f-477a-b461-53e9d9b25b36",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UINavigation",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "e9907896-2d80-45a7-af4c-6c22f0adf631",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "UINavigation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "d42e8f43-dcae-4af5-8326-46d4fe95ba4b",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "UINavigation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "804a5743-246b-4a9b-bb9a-aae2d90a982d",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "UINavigation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "41513c37-039a-48c2-98e1-d5f0fc87f9f1",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "UINavigation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "29f4f364-57d1-4d20-bc63-caac333e7d7d",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "28a6295d-f9de-46c5-a5ff-a72492546a4f",
+                    "path": "*/{Cancel}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ac8a362b-2f0a-42ea-9314-f6d39aa8a2fa",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "MouseMiddleClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c95d9680-e553-4d51-b029-4b95fb97d7c5",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "MouseRightClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0c6ddf30-b302-42fb-8b48-016b80c7577d",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "MouseLeftClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "788588f5-ab7a-4e5a-890f-e729c2ea3ab0",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "MouseWheel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9464a6d0-d2d6-4d6a-a091-b9c556773889",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "MousePosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "86c99fbd-3918-440d-880a-750185f427a1",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Confirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "be6c0116-0264-4689-93a0-9dfbe80bf760",
+                    "path": "*/{Submit}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Confirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e83cd003-c5f4-44cb-9b5f-4735723d2547",
+                    "path": "<Keyboard>/#(Q)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "LeftSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e0018534-a7fd-451f-8e53-5081cc359841",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LeftSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "460213be-8980-4d3d-bc8e-d98ebdd46fcf",
+                    "path": "<Keyboard>/#(E)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "RightSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "271fc399-8476-4a95-b6b8-d9c5dd9552a8",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "RightSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2d2e8be4-0f9a-4c88-b21e-7fbac9132d11",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "KeyBindPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "42a312d5-69c3-4194-b903-5251cc98510b",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "KeyBindPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4a98eadd-6959-4070-97eb-2331bb92c5eb",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "SkillPreviewPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d6873206-707f-4c6b-8d5a-2ca80d1ae251",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ExitMenuPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fc6b02c1-360f-4ef6-a6fd-be774dedb868",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "ExitMenuPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "48583010-79dc-4b40-abd5-67f72c8d7e73",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "InteractiveKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "70151894-c656-4032-a65d-dbd6f520e397",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "InteractiveKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

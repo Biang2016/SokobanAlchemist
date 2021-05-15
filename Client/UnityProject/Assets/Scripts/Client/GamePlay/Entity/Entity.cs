@@ -90,6 +90,11 @@ public abstract class Entity : PoolObject
     {
         if (!BattleManager.Instance.IsStart) return;
         if (IsRecycled) return;
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+        {
+            eps.OnUpdate(Time.deltaTime);
+        }
+
         foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
         {
             kv.Value.OnUpdate(Time.deltaTime);
@@ -1090,6 +1095,7 @@ public abstract class Entity : PoolObject
     public virtual void DestroySelfByModuleRecycle()
     {
     }
+
     public virtual void DestroySelfWithoutSideEffect()
     {
     }
@@ -1192,7 +1198,7 @@ public abstract class Entity : PoolObject
                 }
             }
 
-            WorldManager.Instance.CurrentWorld.ThrowBoxFormWorldGP(cached_ThrowGoldBoxList, EntityGeometryCenter.ToGridPos3D());
+            WorldManager.Instance.CurrentWorld.ThrowBoxFormWorldGP(cached_ThrowGoldBoxList, EntityGeometryCenter.ToGridPos3D(), InitWorldModuleGUID, CurrentEntityData.InitStaticLayoutGUID);
         }
     }
 

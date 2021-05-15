@@ -39,6 +39,8 @@ public class ConfirmPanel : BaseUIPanel
     [SerializeField]
     private Text InputFieldPlaceHolderText3;
 
+    private bool PlayButtonHoverSound = false;
+
     void Awake()
     {
         UIType.InitUIType(
@@ -117,7 +119,10 @@ public class ConfirmPanel : BaseUIPanel
     {
         base.Display();
         OnDisplay?.Post(gameObject);
+        ControlManager.Instance.BattleActionEnabled = false;
+        PlayButtonHoverSound = false;
         InitButtons();
+        PlayButtonHoverSound = true;
     }
 
     private void InitButtons()
@@ -129,16 +134,20 @@ public class ConfirmPanel : BaseUIPanel
     {
         base.Hide();
         OnHide?.Post(gameObject);
-    }
-
-    public void OnButtonHover()
-    {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonHover, WwiseAudioManager.Instance.gameObject);
+        ControlManager.Instance.BattleActionEnabled = true;
     }
 
     public void OnButtonClick()
     {
         WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonClick, WwiseAudioManager.Instance.gameObject);
+    }
+
+    public void OnButtonHover()
+    {
+        if (PlayButtonHoverSound)
+        {
+            WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonHover, WwiseAudioManager.Instance.gameObject);
+        }
     }
 
     public string InputText1 => InputField1.text;

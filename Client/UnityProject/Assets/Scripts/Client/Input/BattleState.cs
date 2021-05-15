@@ -80,6 +80,13 @@ public enum ButtonNames
     Battle_MouseRight,
     Battle_MouseMiddle,
 
+    Battle_LeftSwitch,
+    Battle_RightSwitch,
+    Battle_InteractiveKey,
+    Battle_ReturnToOpenWorld,
+    Battle_RestartGame,
+    Battle_SlowDownGame,
+
     Battle_Move_Up_Player1,
     Battle_Move_Right_Player1,
     Battle_Move_Down_Player1,
@@ -111,9 +118,6 @@ public enum ButtonNames
     Battle_Skill_9_Player2,
     Battle_ToggleBattleTip,
 
-    Battle_LeftSwitch,
-    Battle_RightSwitch,
-
     BATTLE_MAX_FLAG = 400,
 
     COMMON_MIN_FLAG = 500,
@@ -122,19 +126,27 @@ public enum ButtonNames
     Common_MouseRight,
     Common_MouseMiddle,
 
-    Common_Confirm,
-    Common_Exit,
-    Common_Tab,
-    Common_RestartGame,
     Common_ReloadGame,
     Common_PauseGame,
     Common_ToggleUI,
-    Common_InteractiveKey,
-    Common_SlowDownGame,
-    Common_ReturnToOpenWorld,
-    Common_SkillPreviewPanel,
-    Common_DebugConsole,
     Common_ToggleDebugPanel,
+    Common_DebugConsole,
 
     COMMON_MAX_FLAG = 600,
+
+    MENU_MIN_FLAG = 700,
+
+    Menu_MouseLeft,
+    Menu_MouseRight,
+    Menu_MouseMiddle,
+
+    Menu_Cancel,
+    Menu_Confirm,
+    Menu_LeftSwitch,
+    Menu_RightSwitch,
+    Menu_SkillPreviewPanel,
+    Menu_ExitMenuPanel,
+    Menu_KeyBindPanel,
+
+    MENU_MAX_FLAG = 800,
 }

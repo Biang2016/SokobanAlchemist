@@ -77,7 +77,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public PlayerStatHUDPanel PlayerStatHUDPanel;
     public NoticePanel NoticePanel;
     public LearnSkillUpgradePanel LearnSkillUpgradePanel;
-    public ExitMenuPanel ExitMenuPanel;
 
     public bool WarmUpPool_Editor = true;
 
@@ -107,9 +106,9 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
             Debug.LogError,
             () => ControlManager.Instance.Common_MouseLeft.Up,
             () => ControlManager.Instance.Common_MouseRight.Up,
-            () => ControlManager.Instance.Common_Exit.Up,
-            () => ControlManager.Instance.Common_Confirm.Down,
-            () => ControlManager.Instance.Common_Tab.Up
+            () => false,
+            () => false,
+            () => false
         );
 
         ControlManager.Awake();
@@ -129,7 +128,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         RoutineManager.Awake();
         GameStateManager.Awake();
         DebugConsole.OnDebugConsoleKeyDownHandler = () => ControlManager.Instance.Common_DebugConsole.Down;
-        DebugConsole.OnDebugConsoleToggleHandler = (enable) => { ControlManager.Instance.EnableBattleInputActions(!enable); };
 
         BattleManager.Awake();
         WorldManager.Awake();
@@ -236,6 +234,115 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     private void Update()
     {
         ControlManager.Update(Time.deltaTime);
+        if (ControlManager.Menu_ExitMenuPanel.Up)
+        {
+            if (!UIManager.IsUIShown<StartMenuPanel>()
+                && !UIManager.IsUIShown<ConfirmPanel>()
+                && !UIManager.IsUIShown<TransportWorldPanel>()
+                && !UIManager.IsUIShown<EntitySkillPreviewPanel>()
+                && !UIManager.IsUIShown<KeyBindingPanel>()
+                && !UIManager.IsUIShown<LoadingMapPanel>()
+                && !LearnSkillUpgradePanel.HasPage)
+            {
+                if (BattleManager.Instance.IsStart)
+                {
+                    UIManager.Instance.ToggleUIForm<ExitMenuPanel>();
+                }
+            }
+        }
+
+        if (BattleManager.Instance.IsStart)
+        {
+            if (ControlManager.Battle_RestartGame.Up && !IsGameLoading)
+            {
+                if (RestartDungeon()) return;
+            }
+
+            if (ControlManager.Common_ReloadGame.Up && !IsGameLoading)
+            {
+                if (!UIManager.IsUIShown<ConfirmPanel>())
+                {
+                    ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
+                    confirmPanel.Initialize("Wanna reload the game? You'll lose all the progress", "Reload", "Cancel",
+                        () =>
+                        {
+                            StartCoroutine(Co_ReloadGame());
+                            confirmPanel.CloseUIForm();
+                        },
+                        () => { confirmPanel.CloseUIForm(); }
+                    );
+                    return;
+                }
+            }
+
+            if (ControlManager.Battle_ReturnToOpenWorld.Up && !IsGameLoading)
+            {
+                if (ReturnToOpenWorld()) return;
+            }
+
+            if (!LearnSkillUpgradePanel.HasPage)
+            {
+                if (ControlManager.Battle_LeftSwitch.Up)
+                {
+                    CameraManager.Instance.FieldCamera.CameraLeftRotate();
+                }
+
+                if (ControlManager.Battle_RightSwitch.Up)
+                {
+                    CameraManager.Instance.FieldCamera.CameraRightRotate();
+                }
+            }
+
+            if (ControlManager.Menu_KeyBindPanel.Down)
+            {
+                if (!UIManager.Instance.IsUIShown<ExitMenuPanel>())
+                {
+                    UIManager.Instance.ShowUIForms<KeyBindingPanel>();
+                }
+            }
+
+            if (ControlManager.Menu_KeyBindPanel.Up)
+            {
+                KeyBindingPanel.CloseUIForm();
+            }
+
+            if (ControlManager.Common_ToggleDebugPanel.Up)
+            {
+                UIManager.Instance.ToggleUIForm<DebugPanel>();
+            }
+
+            if (ControlManager.Menu_SkillPreviewPanel.Up)
+            {
+                if (!UIManager.Instance.IsUIShown<ExitMenuPanel>())
+                {
+                    UIManager.Instance.ToggleUIForm<EntitySkillPreviewPanel>();
+                    if (EntitySkillPreviewPanel.IsShown)
+                    {
+                        if (BattleManager.Instance.Player1 != null)
+                        {
+                            EntitySkillPreviewPanel.Initialize(BattleManager.Instance.Player1);
+                        }
+                    }
+                }
+            }
+
+            if (ControlManager.Common_ToggleUI.Up)
+            {
+                UIManager.Instance.UICamera.enabled = !UIManager.Instance.UICamera.enabled;
+            }
+
+            if (DebugPanel != null && DebugPanel.IsShown && !UIManager.IsUIShown<ExitMenuPanel>())
+            {
+                if (ControlManager.Battle_SlowDownGame.Pressed)
+                {
+                    Time.timeScale = 0.1f;
+                }
+                else
+                {
+                    Time.timeScale = 1f;
+                }
+            }
+        }
 
         ConfigManager.Update(Time.deltaTime);
         LayerManager.Update(Time.deltaTime);
@@ -286,117 +393,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         CurrentFixedFrameCount_Mod_FixedFrameRate_5X = CurrentFixedFrameCount % FixedFrameRate_5X;
 
         ControlManager.FixedUpdate(Time.fixedDeltaTime);
-
-        if (ControlManager.Common_Exit.Up)
-        {
-            if (!UIManager.IsUIShown<StartMenuPanel>()
-                && !UIManager.IsUIShown<ConfirmPanel>()
-                && !UIManager.IsUIShown<TransportWorldPanel>()
-                && !UIManager.IsUIShown<EntitySkillPreviewPanel>()
-                && !UIManager.IsUIShown<KeyBindingPanel>()
-                && !UIManager.IsUIShown<LoadingMapPanel>()
-                && !LearnSkillUpgradePanel.HasPage)
-            {
-                if (BattleManager.Instance.IsStart)
-                {
-                    UIManager.Instance.ToggleUIForm<ExitMenuPanel>();
-                }
-            }
-        }
-
-        if (BattleManager.Instance.IsStart)
-        {
-            if (ControlManager.Common_RestartGame.Up && !IsGameLoading)
-            {
-                if (RestartDungeon()) return;
-            }
-
-            if (ControlManager.Common_ReloadGame.Up && !IsGameLoading)
-            {
-                if (!UIManager.IsUIShown<ConfirmPanel>())
-                {
-                    ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
-                    confirmPanel.Initialize("Wanna reload the game? You'll lose all the progress", "Reload", "Cancel",
-                        () =>
-                        {
-                            StartCoroutine(Co_ReloadGame());
-                            confirmPanel.CloseUIForm();
-                        },
-                        () => { confirmPanel.CloseUIForm(); }
-                    );
-                    return;
-                }
-            }
-
-            if (ControlManager.Common_ReturnToOpenWorld.Up && !IsGameLoading)
-            {
-                if (ReturnToOpenWorld()) return;
-            }
-
-            if (!LearnSkillUpgradePanel.HasPage)
-            {
-                if (ControlManager.Battle_LeftSwitch.Up)
-                {
-                    CameraManager.Instance.FieldCamera.CameraLeftRotate();
-                }
-
-                if (ControlManager.Battle_RightSwitch.Up)
-                {
-                    CameraManager.Instance.FieldCamera.CameraRightRotate();
-                }
-            }
-
-            if (ControlManager.Common_Tab.Down)
-            {
-                if (!UIManager.Instance.IsUIShown<ExitMenuPanel>())
-                {
-                    UIManager.Instance.ShowUIForms<KeyBindingPanel>();
-                }
-            }
-
-            if (ControlManager.Common_Tab.Up)
-            {
-                KeyBindingPanel.CloseUIForm();
-            }
-
-            if (ControlManager.Common_ToggleDebugPanel.Up)
-            {
-                UIManager.Instance.ToggleUIForm<DebugPanel>();
-            }
-
-            if (ControlManager.Common_SkillPreviewPanel.Up)
-            {
-                if (!UIManager.Instance.IsUIShown<ExitMenuPanel>())
-                {
-                    UIManager.Instance.ToggleUIForm<EntitySkillPreviewPanel>();
-                    if (EntitySkillPreviewPanel.IsShown)
-                    {
-                        if (BattleManager.Instance.Player1 != null)
-                        {
-                            EntitySkillPreviewPanel.Initialize(BattleManager.Instance.Player1);
-                        }
-                    }
-                }
-            }
-
-            if (ControlManager.Common_ToggleUI.Up)
-            {
-                UIManager.Instance.UICamera.enabled = !UIManager.Instance.UICamera.enabled;
-            }
-
-            if (DebugPanel != null && DebugPanel.IsShown)
-            {
-                if (ControlManager.Common_SlowDownGame.Pressed)
-                {
-                    Time.timeScale = 0.1f;
-                }
-                else
-                {
-                    Time.timeScale = 1f;
-                }
-            }
-        }
-
         ConfigManager.FixedUpdate(Time.fixedDeltaTime);
         LayerManager.FixedUpdate(Time.fixedDeltaTime);
         PrefabManager.FixedUpdate(Time.fixedDeltaTime);
@@ -496,7 +492,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                 {
                     confirmPanel.CloseUIForm();
                     UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
-                    ClientGameManager.Instance.ReloadGame();
+                    ReloadGame();
                 },
                 () =>
                 {
@@ -553,7 +549,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
     private IEnumerator ShutDownGame()
     {
-        BattleManager.Instance.IsStart = false;
+        BattleManager.IsStart = false;
         WwiseAudioManager.ShutDown();
 
         GameStateManager.ShutDown(); // 设置游戏状态为ShutDown

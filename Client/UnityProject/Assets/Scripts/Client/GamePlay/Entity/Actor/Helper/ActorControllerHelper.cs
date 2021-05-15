@@ -44,6 +44,10 @@ public class ActorControllerHelper : ActorMonoHelper
     public virtual void OnFixedUpdate()
     {
     }
+
+    public virtual void OnUpdate()
+    {
+    }
 }
 
 public class AgentTarget

@@ -101,7 +101,7 @@ public class LearnSkillUpgradePage : PoolObject
         }
 
         QESwitchingTextTMP.text = $"↑\n{leftSwitchStr}\n{rightSwitchStr}\n↓";
-        string escStr = ControlManager.Instance.GetControlDescText(ButtonNames.Common_Exit, false);
+        string escStr = ControlManager.Instance.GetControlDescText(ButtonNames.Menu_ExitMenuPanel, false);
         if (ControlManager.Instance.CurrentControlScheme == ControlManager.ControlScheme.GamePad)
         {
             ESCText.text = $"<sprite name={escStr}> x";

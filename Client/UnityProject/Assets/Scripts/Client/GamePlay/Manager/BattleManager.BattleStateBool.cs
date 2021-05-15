@@ -6,6 +6,12 @@ public partial class BattleManager
     public Dictionary<uint, Dictionary<string, BattleStateBool>> BattleStateBoolDict_ByModule = new Dictionary<uint, Dictionary<string, BattleStateBool>>();
     public Dictionary<string, BattleStateBool> BattleStateBoolDict = new Dictionary<string, BattleStateBool>();
 
+    public void ClearAllStateBools()
+    {
+        BattleStateBoolDict_ByModule.Clear();
+        BattleStateBoolDict.Clear();
+    }
+
     public bool GetStateBool(string stateAlias)
     {
         if (string.IsNullOrWhiteSpace(stateAlias)) return false;

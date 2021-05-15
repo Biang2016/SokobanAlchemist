@@ -19,11 +19,7 @@ namespace BiangLibrary.GamePlay.UI
 
         void Update()
         {
-        }
-
-        void FixedUpdate()
-        {
-            ChildFixedUpdate();
+            ChildUpdate();
             if (UIType.IsESCClose)
             {
                 if (UIManager.Instance.CloseUIFormKeyDownHandler != null && UIManager.Instance.CloseUIFormKeyDownHandler.Invoke())
@@ -63,7 +59,7 @@ namespace BiangLibrary.GamePlay.UI
             }
         }
 
-        protected virtual void ChildFixedUpdate()
+        protected virtual void ChildUpdate()
         {
         }
 

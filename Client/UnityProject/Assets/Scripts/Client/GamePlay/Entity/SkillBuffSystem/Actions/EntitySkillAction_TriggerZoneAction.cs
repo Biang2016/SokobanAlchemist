@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.AI;
 
 [Serializable]
 public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkillAction.ITriggerAction
@@ -141,9 +142,16 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         }
     }
 
+    private bool stayStart = false;
+
     public void ExecuteOnTriggerStay(Collider collider)
     {
-        if (triggerTimeWhenStayCount >= MaxTriggerTimeWhenStay) return;
+        if (triggerTimeWhenStayCount >= MaxTriggerTimeWhenStay)
+        {
+            interactiveKeyUp = false;
+            return;
+        }
+
         if (LayerManager.Instance.CheckLayerValid(Entity.Camp, EffectiveOnRelativeCamp, collider.gameObject.layer))
         {
             Entity target = collider.GetComponentInParent<Entity>();
@@ -153,16 +161,18 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                 {
                     if (target.EntityTypeIndex != ConfigManager.GetTypeIndex(EffectiveOnSpecificEntityType.TypeDefineType, EffectiveOnSpecificEntityType.TypeName))
                     {
+                        interactiveKeyUp = false;
                         return;
                     }
                 }
 
+                stayStart = true;
                 if (EffectiveWhenInteractiveKeyDown)
                 {
                     if (!ClientGameManager.Instance.LearnSkillUpgradePanel.HasPage)
                     {
                         ClientGameManager.Instance.NoticePanel.ShowTip(InteractiveKeyNotice, TipPositionType, InteractiveKeyNoticeDuration);
-                        if (ControlManager.Instance.Common_InteractiveKey.Up)
+                        if (interactiveKeyUp)
                         {
                             triggerTimeWhenStayCount++;
                             foreach (EntitySkillAction action in EntityActions_Stay)
@@ -222,6 +232,8 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                 }
             }
         }
+
+        interactiveKeyUp = false;
     }
 
     public void ExecuteOnTriggerExit(Collider collider)
@@ -239,6 +251,7 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                     }
                 }
 
+                stayStart = false;
                 if (EffectiveWhenInteractiveKeyDown)
                 {
                     ClientGameManager.Instance.NoticePanel.HideTip();
@@ -266,6 +279,39 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                     }
                 }
             }
+        }
+    }
+
+    private bool interactiveKeyUp = false;
+
+    public override void OnUpdate(float deltaTime)
+    {
+        base.OnUpdate(deltaTime);
+        foreach (EntitySkillAction esa in EntityActions_Enter)
+        {
+            esa.OnUpdate(deltaTime);
+        }
+
+        foreach (EntitySkillAction esa in EntityActions_Stay)
+        {
+            esa.OnUpdate(deltaTime);
+        }
+
+        foreach (EntitySkillAction esa in EntityActions_Exit)
+        {
+            esa.OnUpdate(deltaTime);
+        }
+
+        if (stayStart)
+        {
+            if (ControlManager.Instance.Battle_InteractiveKey.Up)
+            {
+                interactiveKeyUp = true;
+            }
+        }
+        else
+        {
+            interactiveKeyUp = false;
         }
     }
 

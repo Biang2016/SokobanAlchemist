@@ -277,6 +277,15 @@ public class EntityPassiveSkill_Conditional : EntityPassiveSkill
         UnInitSkillConditions();
     }
 
+    public override void OnUpdate(float deltaTime)
+    {
+        base.OnUpdate(deltaTime);
+        foreach (EntitySkillAction action in EntitySkillActions)
+        {
+            action.OnUpdate(deltaTime);
+        }
+    }
+
     public override void OnTick(float deltaTime)
     {
         base.OnTick(deltaTime);

@@ -483,6 +483,11 @@ public class EntityActiveSkill_AreaCast : EntityActiveSkill
     public override void OnUpdate(float deltaTime)
     {
         base.OnUpdate(deltaTime);
+        foreach (EntitySkillAction action in EntitySkillActions)
+        {
+            action.OnUpdate(deltaTime);
+        }
+
         UpdateSkillEffectGridWarning();
     }
 

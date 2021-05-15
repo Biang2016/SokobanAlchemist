@@ -68,7 +68,7 @@ public class WorldModule : PoolObject
     /// <param name="isTriggerEntity"></param>
     /// <param name="triggerEntityGUID">针对TriggerEntity，由于其占位非一一对应，故需要一个GUID来映射到Dict</param>
     /// <returns></returns>
-    public Entity this[TypeDefineType entityType, GridPos3D localGP, bool isStart = false, bool isPartial = false, bool isTriggerEntity = false, uint triggerEntityGUID = 0, EntityData entityData = null]
+    public Entity this[TypeDefineType entityType, GridPos3D localGP, bool isStart = false, bool isPartial = false, bool isTriggerEntity = false, uint triggerEntityGUID = 0]
     {
         get
         {
@@ -111,7 +111,7 @@ public class WorldModule : PoolObject
                             }
                             else
                             {
-                                triggerEntityData = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                                triggerEntityData = value.CurrentEntityData; // todo 记录箱子的extraSer
                                 triggerEntityData.LocalGP = localGP;
                                 triggerEntityData.WorldGP = LocalGPToWorldGP(localGP);
                                 WorldModuleData.TriggerEntityDataDict.Add(value.GUID, triggerEntityData);
@@ -122,7 +122,7 @@ public class WorldModule : PoolObject
                         {
                             if (!WorldModuleData.TriggerEntityDataDict.ContainsKey(value.GUID))
                             {
-                                WorldModuleData.TriggerEntityDataDict.Add(value.GUID, entityData);
+                                WorldModuleData.TriggerEntityDataDict.Add(value.GUID, value.CurrentEntityData);
                             }
                         }
                     }
@@ -173,7 +173,7 @@ public class WorldModule : PoolObject
                                 }
                                 else
                                 {
-                                    WorldModuleData[TypeDefineType.Box, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                                    WorldModuleData[TypeDefineType.Box, localGP] = value.CurrentEntityData; // todo 记录箱子的extraSer
                                 }
                             }
                             else
@@ -213,7 +213,7 @@ public class WorldModule : PoolObject
                                 }
                                 else
                                 {
-                                    WorldModuleData[TypeDefineType.Actor, localGP] = new EntityData(value.EntityTypeIndex, value.EntityOrientation); // todo 记录箱子的extraSer
+                                    WorldModuleData[TypeDefineType.Actor, localGP] = value.CurrentEntityData; // todo 记录箱子的extraSer
                                 }
                             }
                             else
@@ -513,7 +513,7 @@ public class WorldModule : PoolObject
         IsGeneratingOrRecycling = false;
     }
 
-    public Entity GenerateEntity(EntityData entityData, GridPos3D worldGP, bool isTriggerAppear = false, bool isStartedEntities = false, bool findSpaceUpward = false, List<GridPos3D> overrideOccupation = null)
+    public Entity GenerateEntity(EntityData entityData, GridPos3D worldGP, bool isTriggerAppear = false, bool isStartedEntities = false, bool findSpaceUpward = false, List<GridPos3D> overrideOccupation = null, uint overrideWorldModuleGUID = 0)
     {
         if (entityData == null) return null;
         if (entityData.EntityTypeIndex == 0) return null;
@@ -586,7 +586,7 @@ public class WorldModule : PoolObject
                             box.BoxFrozenBoxHelper.FrozenBoxOccupation = entityOccupation_rotated;
                         }
 
-                        box.Setup(entityData, worldGP, GUID);
+                        box.Setup(entityData, worldGP, overrideWorldModuleGUID != 0 ? overrideWorldModuleGUID : GUID); // 覆写优先
                         box.Initialize(worldGP, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedEntities); // 如果是TriggerAppear的箱子则不需要检查坠落
 
                         // 到模组处登记
@@ -596,7 +596,7 @@ public class WorldModule : PoolObject
                             Entity existedEntity = World.GetImpassableEntityByGridPosition(gridPos, 0, out WorldModule module, out GridPos3D gridLocalGP);
                             if (module != null && (existedEntity == null || isTriggerEntity))
                             {
-                                module[TypeDefineType.Box, gridLocalGP, isStartedEntities, false, isTriggerEntity, box.GUID, entityData] = box;
+                                module[TypeDefineType.Box, gridLocalGP, isStartedEntities, false, isTriggerEntity, box.GUID] = box;
                             }
                         }
 
@@ -609,7 +609,15 @@ public class WorldModule : PoolObject
                         if (BattleManager.Instance.Player1 != null && isPlayer) return null;
                         Actor actor = GameObjectPoolManager.Instance.ActorDict[entityData.EntityTypeIndex].AllocateGameObject<Actor>(BattleManager.Instance.ActorContainerRoot);
                         GridPos3D.ApplyGridPosToLocalTrans(worldGP, actor.transform, 1);
-                        actor.Setup(entityData, worldGP, isPlayer ? 0 : GUID); // Player不属于任何一个模组
+                        if (overrideWorldModuleGUID != 0)
+                        {
+                            actor.Setup(entityData, worldGP, isPlayer ? 0 : overrideWorldModuleGUID); // Player不属于任何一个模组, 覆写优先
+                        }
+                        else
+                        {
+                            actor.Setup(entityData, worldGP, isPlayer ? 0 : GUID); // Player不属于任何一个模组
+                        }
+
                         if (isStartedEntities) actor.ForbidAction = !BattleManager.Instance.IsStart;
                         BattleManager.Instance.AddActor(this, actor);
 
@@ -620,7 +628,7 @@ public class WorldModule : PoolObject
                             Entity existedEntity = World.GetImpassableEntityByGridPosition(gridPos, actor.GUID, out WorldModule module, out GridPos3D gridLocalGP);
                             if (module != null && (existedEntity == null || isTriggerEntity))
                             {
-                                module[TypeDefineType.Actor, gridLocalGP, isStartedEntities, false, isTriggerEntity, actor.GUID, entityData] = actor;
+                                module[TypeDefineType.Actor, gridLocalGP, isStartedEntities, false, isTriggerEntity, actor.GUID] = actor;
                             }
                         }
 

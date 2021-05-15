@@ -40,7 +40,7 @@ public class EntitySkillAction_DropBox : EntitySkillAction, EntitySkillAction.IP
                 }
             }
 
-            WorldManager.Instance.CurrentWorld.ThrowBoxFormWorldGP(cached_DropBoxIndexList, Entity.EntityGeometryCenter.ToGridPos3D());
+            WorldManager.Instance.CurrentWorld.ThrowBoxFormWorldGP(cached_DropBoxIndexList, Entity.EntityGeometryCenter.ToGridPos3D(), Entity.InitWorldModuleGUID, Entity.CurrentEntityData.InitStaticLayoutGUID);
         }
     }
 

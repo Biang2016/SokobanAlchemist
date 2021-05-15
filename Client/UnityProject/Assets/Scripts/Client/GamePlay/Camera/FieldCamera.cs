@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class FieldCamera : MonoBehaviour
 {
     #region 相机本体
@@ -227,7 +227,7 @@ public class FieldCamera : MonoBehaviour
         return DistanceLevels_ScaleForBattleUI[Distance_Level];
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         UpdateFOVLevel();
     }

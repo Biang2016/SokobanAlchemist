@@ -197,12 +197,12 @@ public class LearnSkillUpgradePanel : BaseUIPanel
 
     #endregion
 
-    protected override void ChildFixedUpdate()
+    protected override void ChildUpdate()
     {
-        base.ChildFixedUpdate();
+        base.ChildUpdate();
         if (IsShown)
         {
-            if (ControlManager.Instance.Common_InteractiveKey.Up)
+            if (ControlManager.Instance.Battle_InteractiveKey.Up)
             {
                 if (PageList.Count > 0)
                 {
@@ -214,7 +214,7 @@ public class LearnSkillUpgradePanel : BaseUIPanel
                 }
             }
 
-            if (ControlManager.Instance.Common_Exit.Up)
+            if (ControlManager.Instance.Menu_ExitMenuPanel.Up)
             {
                 if (PageList.Count > 0)
                 {
@@ -222,18 +222,14 @@ public class LearnSkillUpgradePanel : BaseUIPanel
                 }
             }
 
-            if (ControlManager.Instance.Battle_LeftSwitch.Up)
+            if (ControlManager.Instance.Menu_LeftSwitch.Up)
             {
                 CurrentFocusPageIndex--;
             }
 
-            if (ControlManager.Instance.Battle_RightSwitch.Up)
+            if (ControlManager.Instance.Menu_RightSwitch.Up)
             {
                 CurrentFocusPageIndex++;
-            }
-
-            if (ControlManager.Instance.Common_InteractiveKey.Up)
-            {
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using BiangLibrary.GamePlay.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ExitMenuPanel : BaseUIPanel
@@ -40,13 +41,21 @@ public class ExitMenuPanel : BaseUIPanel
     public AK.Wwise.Event OnDisplay;
     public AK.Wwise.Event OnHide;
 
+    private bool PlayButtonHoverSound = false;
+
     public override void Display()
     {
         base.Display();
         OnDisplay?.Post(gameObject);
         ExitMenuAnim.SetTrigger("Play");
 
+        ControlManager.Instance.BattleActionEnabled = false;
+
+        PlayButtonHoverSound = false;
         InitButtons();
+        PlayButtonHoverSound = true;
+
+        Time.timeScale = 0;
     }
 
     private void InitButtons()
@@ -64,9 +73,21 @@ public class ExitMenuPanel : BaseUIPanel
         }
     }
 
+    protected override void ChildUpdate()
+    {
+        base.ChildUpdate();
+        if (ControlManager.Instance.Menu_Cancel.Up)
+        {
+            CloseUIForm();
+        }
+    }
+
     public override void Hide()
     {
         OnHide?.Post(gameObject);
+        ControlManager.Instance.BattleActionEnabled = true;
+        EventSystem.current.SetSelectedGameObject(null);
+        Time.timeScale = 1;
         base.Hide();
     }
 
@@ -77,7 +98,10 @@ public class ExitMenuPanel : BaseUIPanel
 
     public void OnButtonHover()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonHover, WwiseAudioManager.Instance.gameObject);
+        if (PlayButtonHoverSound)
+        {
+            WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonHover, WwiseAudioManager.Instance.gameObject);
+        }
     }
 
     public void OnExitToOpenWorldButtonClick()

@@ -103,6 +103,10 @@ public abstract class EntitySkill : IClone<EntitySkill>
         MarkAsForget = false;
     }
 
+    public virtual void OnUpdate(float deltaTime)
+    {
+    }
+
     public virtual void OnTick(float tickInterval)
     {
     }

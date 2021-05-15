@@ -47,6 +47,9 @@ public class BoxSkillAction_ChangeBoxType : BoxSkillAction, EntitySkillAction.IP
             worldGP = targetBox.transform.position.ToGridPos3D();
         }
 
+        uint initWorldModuleGUID = targetBox.InitWorldModuleGUID;
+        string initStaticLayoutGUID = targetBox.CurrentEntityData.InitStaticLayoutGUID;
+
         if (ChangeForEveryGrid)
         {
             List<GridPos3D> occupations = targetBox.GetEntityOccupationGPs_Rotated();
@@ -55,14 +58,24 @@ public class BoxSkillAction_ChangeBoxType : BoxSkillAction, EntitySkillAction.IP
             {
                 GridPos3D gridWorldGP = worldGP + gridPos;
                 WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(gridWorldGP);
-                if (module != null) module.GenerateEntity(EntityData.Clone(), gridWorldGP);
+                if (module != null)
+                {
+                    EntityData entityData = EntityData.Clone();
+                    entityData.InitStaticLayoutGUID = initStaticLayoutGUID;
+                    module.GenerateEntity(entityData, gridWorldGP, overrideWorldModuleGUID: initWorldModuleGUID);
+                }
             }
         }
         else
         {
             targetBox.DestroySelfWithoutSideEffect();
             WorldModule module = WorldManager.Instance.CurrentWorld.GetModuleByWorldGP(worldGP);
-            if (module != null) module.GenerateEntity(EntityData.Clone(), worldGP);
+            if (module != null)
+            {
+                EntityData entityData = EntityData.Clone();
+                entityData.InitStaticLayoutGUID = initStaticLayoutGUID;
+                module.GenerateEntity(entityData, worldGP, overrideWorldModuleGUID: initWorldModuleGUID);
+            }
         }
     }
 

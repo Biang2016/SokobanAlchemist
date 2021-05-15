@@ -23,11 +23,15 @@ public class EntitySkillAction_NoticeTip : EntitySkillAction, EntitySkillAction.
     [LabelText("持续时长(负数为永久)")]
     public float Duration;
 
+    [ShowIf("Show")]
+    [LabelText("不可打断")]
+    public bool CannotInterrupt;
+
     public void Execute()
     {
         if (Show)
         {
-            ClientGameManager.Instance.NoticePanel.ShowTip(NoticeTip, TipPositionType, Duration);
+            ClientGameManager.Instance.NoticePanel.ShowTip(NoticeTip, TipPositionType, Duration, CannotInterrupt);
         }
         else
         {
@@ -43,6 +47,7 @@ public class EntitySkillAction_NoticeTip : EntitySkillAction, EntitySkillAction.
         action.NoticeTip = NoticeTip;
         action.TipPositionType = TipPositionType;
         action.Duration = Duration;
+        action.CannotInterrupt = CannotInterrupt;
     }
 
     public override void CopyDataFrom(EntitySkillAction srcData)
@@ -53,5 +58,6 @@ public class EntitySkillAction_NoticeTip : EntitySkillAction, EntitySkillAction.
         NoticeTip = action.NoticeTip;
         TipPositionType = action.TipPositionType;
         Duration = action.Duration;
+        CannotInterrupt = action.CannotInterrupt;
     }
 }

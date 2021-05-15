@@ -81,4 +81,16 @@ public class EntitySkillPreviewPanel : BaseUIPanel
 
         ActiveSkillRows.Clear();
     }
+
+    public override void Display()
+    {
+        base.Display();
+        ControlManager.Instance.BattleActionEnabled = false;
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
+        ControlManager.Instance.BattleActionEnabled = true;
+    }
 }

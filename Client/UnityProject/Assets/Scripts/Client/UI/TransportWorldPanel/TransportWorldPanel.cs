@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using BiangLibrary.GamePlay.UI;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -30,16 +31,25 @@ public class TransportWorldPanel : BaseUIPanel
     private Text WorldCost;
 
     [SerializeField]
-    private Image ButtonIcon;
+    private Image TransportButtonIcon;
 
     [SerializeField]
-    private Sprite ButtonIconNormalSprite;
+    private Sprite TransportButtonIconNormalSprite_Keyboard;
 
     [SerializeField]
-    private Sprite ButtonIconGrayOutSprite;
+    private Sprite TransportButtonIconGrayOutSprite_Keyboard;
 
-    private UnityAction current_LearnCallBack;
-    private UnityAction current_LearnAction;
+    [SerializeField]
+    private Sprite TransportButtonIconNormalSprite_Controller;
+
+    [SerializeField]
+    private Sprite TransportButtonIconGrayOutSprite_Controller;
+
+    [SerializeField]
+    private TextMeshProUGUI ESCText;
+
+    private UnityAction current_TransportCallBack;
+    private UnityAction current_TransportAction;
     private WorldData current_RawWorldData;
 
     private Stack<TransportInfo> TransportInfoStack = new Stack<TransportInfo>();
@@ -49,16 +59,16 @@ public class TransportWorldPanel : BaseUIPanel
     private class TransportInfo
     {
         public WorldData RawWorldData;
-        public UnityAction LearnCallback;
+        public UnityAction TransportCallback;
         public int GoldCost;
     }
 
-    public void Initialize(WorldData rawWorldData, UnityAction learnCallback, int goldCost)
+    public void Initialize(WorldData rawWorldData, UnityAction transportCallback, int goldCost)
     {
         TransportInfoStack.Push(new TransportInfo
         {
             RawWorldData = rawWorldData,
-            LearnCallback = learnCallback,
+            TransportCallback = transportCallback,
             GoldCost = goldCost
         });
 
@@ -66,7 +76,7 @@ public class TransportWorldPanel : BaseUIPanel
         OnDisplay?.Post(gameObject);
 
         current_RawWorldData = rawWorldData;
-        current_LearnCallBack = learnCallback;
+        current_TransportCallBack = transportCallback;
 
         //Sprite sprite = ConfigManager.GetEntitySkillIconByName(rawWorldData.WorldIcon.TypeName);
         //WorldIcon.sprite = sprite;
@@ -75,29 +85,48 @@ public class TransportWorldPanel : BaseUIPanel
         else WorldCost.text = "Free";
 
         bool canAfford = BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value >= goldCost;
-        ButtonIcon.sprite = canAfford ? ButtonIconNormalSprite : ButtonIconGrayOutSprite;
+        switch (ControlManager.Instance.CurrentControlScheme)
+        {
+            case ControlManager.ControlScheme.GamePad:
+            {
+                ESCText.text = "<sprite name=Start> x";
+                TransportButtonIcon.sprite = canAfford ? TransportButtonIconNormalSprite_Controller : TransportButtonIconGrayOutSprite_Controller;
+                break;
+            }
+            case ControlManager.ControlScheme.KeyboardMouse:
+            {
+                ESCText.text = "ESC x";
+                TransportButtonIcon.sprite = canAfford ? TransportButtonIconNormalSprite_Keyboard : TransportButtonIconGrayOutSprite_Keyboard;
+                break;
+            }
+        }
 
         if (canAfford)
         {
-            current_LearnAction = () =>
+            current_TransportAction = () =>
             {
-                current_LearnAction = null;
-                current_LearnCallBack?.Invoke();
+                current_TransportAction = null;
+                current_TransportCallBack?.Invoke();
                 CloseUIForm();
             };
         }
         else
         {
-            current_LearnAction = () => { BattleManager.Instance.Player1.EntityStatPropSet.Gold.m_NotifyActionSet.OnValueNotEnoughWarning?.Invoke(); };
+            current_TransportAction = () => { BattleManager.Instance.Player1.EntityStatPropSet.Gold.m_NotifyActionSet.OnValueNotEnoughWarning?.Invoke(); };
         }
     }
 
-    protected override void ChildFixedUpdate()
+    protected override void ChildUpdate()
     {
-        base.ChildFixedUpdate();
-        if (ControlManager.Instance.Common_InteractiveKey.Down)
+        base.ChildUpdate();
+        if (ControlManager.Instance.Battle_InteractiveKey.Down)
         {
-            current_LearnAction?.Invoke();
+            current_TransportAction?.Invoke();
+        }
+
+        if (ControlManager.Instance.Menu_ExitMenuPanel.Up)
+        {
+            CloseUIForm();
         }
     }
 
@@ -114,8 +143,8 @@ public class TransportWorldPanel : BaseUIPanel
         if (TransportInfoStack.Count == 0)
         {
             UIManager.Instance.ShowUIForms<InGameUIPanel>();
-            current_LearnAction = null;
-            current_LearnCallBack = null;
+            current_TransportAction = null;
+            current_TransportCallBack = null;
             current_RawWorldData = null;
             Anim.SetTrigger("Hide");
         }
@@ -123,7 +152,7 @@ public class TransportWorldPanel : BaseUIPanel
         {
             TransportInfo transportInfo = TransportInfoStack.Pop();
             UIManager.Instance.ShowUIForms<TransportWorldPanel>();
-            Initialize(transportInfo.RawWorldData, transportInfo.LearnCallback, transportInfo.GoldCost);
+            Initialize(transportInfo.RawWorldData, transportInfo.TransportCallback, transportInfo.GoldCost);
         }
     }
 }

@@ -86,9 +86,9 @@ public class LoadingMapPanel : BaseUIPanel
     private float RefreshInterval = 0.2f;
     private float RefreshTick = 0.2f;
 
-    protected override void ChildFixedUpdate()
+    protected override void ChildUpdate()
     {
-        base.ChildFixedUpdate();
+        base.ChildUpdate();
         currentLoadingTick += Time.fixedDeltaTime;
         RefreshTick += Time.fixedDeltaTime;
         if (RefreshTick > RefreshInterval)

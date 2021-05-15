@@ -34,14 +34,16 @@ public class NoticePanel : BaseUIPanel
     public AK.Wwise.Event OnShowTip;
 
     private string currentRawTipContent = "";
+    private bool currentCannotInterrupt = false;
 
     /// <summary>
     /// 显示提示
     /// </summary>
     /// <param name="rawTipContent"></param>
     /// <param name="duration">负值为永久</param>
-    public void ShowTip(string rawTipContent, TipPositionType tipPositionType, float duration)
+    public void ShowTip(string rawTipContent, TipPositionType tipPositionType, float duration, bool cannotInterrupt = false)
     {
+        if (currentCannotInterrupt) return;
         if (currentRawTipContent.Equals(rawTipContent))
         {
             tipShowDuration = Mathf.Max(tipShowDuration, duration);
@@ -49,6 +51,7 @@ public class NoticePanel : BaseUIPanel
         }
 
         currentRawTipContent = rawTipContent;
+        currentCannotInterrupt = cannotInterrupt;
 
         string tipContent = rawTipContent;
         if (tipContent.Contains("{") && tipContent.Contains("}"))
@@ -148,6 +151,7 @@ public class NoticePanel : BaseUIPanel
 
     public void HideTip()
     {
+        currentCannotInterrupt = false;
         currentRawTipContent = "";
         TipText.text = "";
         if (!NoticeShown) return;

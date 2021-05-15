@@ -179,6 +179,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     public void Clear()
     {
+        ClearAllStateBools();
         Enemies.Clear();
 
         for (int index = 0; index < MainPlayers.Length; index++)

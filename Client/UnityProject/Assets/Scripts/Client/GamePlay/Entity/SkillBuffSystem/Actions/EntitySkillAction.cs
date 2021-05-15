@@ -33,6 +33,10 @@ public abstract class EntitySkillAction : IClone<EntitySkillAction>
         Entity = null;
     }
 
+    public virtual void OnUpdate(float deltaTime)
+    {
+    }
+
     protected virtual string Description => "Entity被动技能行为基类";
 
     public interface IAction : IClone<EntitySkillAction>

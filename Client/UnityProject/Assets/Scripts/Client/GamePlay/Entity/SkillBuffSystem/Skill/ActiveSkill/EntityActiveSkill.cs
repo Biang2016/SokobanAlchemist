@@ -712,8 +712,9 @@ public abstract class EntityActiveSkill : EntitySkill
 
     internal UnityAction<ActiveSkillPhase, float, float> OnSkillCoolingDown;
 
-    public virtual void OnUpdate(float deltaTime)
+    public override void OnUpdate(float deltaTime)
     {
+        base.OnUpdate(deltaTime);
         foreach (EntityActiveSkill subEAS in RunningSubActiveSkillList)
         {
             subEAS.OnUpdate(deltaTime);

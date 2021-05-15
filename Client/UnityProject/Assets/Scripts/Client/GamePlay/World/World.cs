@@ -1376,7 +1376,7 @@ public class World : PoolObject
         return false;
     }
 
-    public bool GenerateEntityOnWorldGPWithoutOccupy(ushort entityTypeIndex, GridPosR.Orientation entityOrientation, GridPos3D origin, out Entity dropEntity)
+    public bool GenerateEntityOnWorldGPWithoutOccupy(ushort entityTypeIndex, GridPosR.Orientation entityOrientation, GridPos3D origin, out Entity dropEntity, uint overrideWorldModuleGUID = 0, string overrideStaticLayoutGUID = "")
     {
         dropEntity = null;
         if (entityTypeIndex == 0) return false;
@@ -1391,7 +1391,8 @@ public class World : PoolObject
                     dropEntity = GameObjectPoolManager.Instance.BoxDict[entityTypeIndex].AllocateGameObject<Box>(transform);
                     Box dropBox = (Box) dropEntity;
                     EntityData entityData = new EntityData(entityTypeIndex, entityOrientation);
-                    dropBox.Setup(entityData, origin, module.GUID);
+                    entityData.InitStaticLayoutGUID = overrideStaticLayoutGUID;
+                    dropBox.Setup(entityData, origin, overrideWorldModuleGUID != 0 ? overrideWorldModuleGUID : module.GUID);
                     dropBox.Initialize(origin, module, 0, false, Box.LerpType.Create);
                     dropBox.ApplyEntityExtraSerializeData();
                     return true;
@@ -1401,7 +1402,8 @@ public class World : PoolObject
                     dropEntity = GameObjectPoolManager.Instance.ActorDict[entityTypeIndex].AllocateGameObject<Actor>(transform);
                     Actor dropActor = (Actor) dropEntity;
                     EntityData entityData = new EntityData(entityTypeIndex, entityOrientation);
-                    dropActor.Setup(entityData, origin, module.GUID);
+                    entityData.InitStaticLayoutGUID = overrideStaticLayoutGUID;
+                    dropActor.Setup(entityData, origin, overrideWorldModuleGUID != 0 ? overrideWorldModuleGUID : module.GUID);
                     dropActor.ForbidAction = !BattleManager.Instance.IsStart;
                     BattleManager.Instance.AddActor(module, dropActor);
                     return true;
@@ -1513,7 +1515,7 @@ public class World : PoolObject
 
     #endregion
 
-    public void ThrowBoxFormWorldGP(List<ushort> throwBoxIndexList, GridPos3D worldGP)
+    public void ThrowBoxFormWorldGP(List<ushort> throwBoxIndexList, GridPos3D worldGP, uint overrideWorldModuleGUID = 0, string overrideStaticLayoutGUID = "")
     {
         int dropConeAngle = 0;
         if (throwBoxIndexList.Count == 1) dropConeAngle = 0;
@@ -1523,7 +1525,7 @@ public class World : PoolObject
 
         foreach (ushort boxTypeIndex in throwBoxIndexList)
         {
-            if (WorldManager.Instance.CurrentWorld.GenerateEntityOnWorldGPWithoutOccupy(boxTypeIndex, (GridPosR.Orientation) Random.Range(0, 4), worldGP, out Entity dropEntity))
+            if (WorldManager.Instance.CurrentWorld.GenerateEntityOnWorldGPWithoutOccupy(boxTypeIndex, (GridPosR.Orientation) Random.Range(0, 4), worldGP, out Entity dropEntity, overrideWorldModuleGUID: overrideWorldModuleGUID, overrideStaticLayoutGUID: overrideStaticLayoutGUID))
             {
                 Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(dropConeAngle * Mathf.Deg2Rad);
                 Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);

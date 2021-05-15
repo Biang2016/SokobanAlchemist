@@ -43,12 +43,28 @@ public class StartMenuPanel : BaseUIPanel
 
     public AK.Wwise.Event OnPlayAnim;
 
+    private bool PlayButtonHoverSound = false;
+
     public override void Display()
     {
         base.Display();
         WwiseAudioManager.Instance.WwiseBGMConfiguration.SwitchBGMTheme(BGM_Theme.StartMenu);
         StartMenuAnim.SetTrigger("Play");
+        PlayButtonHoverSound = false;
         InitButtons();
+        PlayButtonHoverSound = true;
+        ControlManager.Instance.BattleActionEnabled = false;
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
+        ControlManager.Instance.BattleActionEnabled = true;
+    }
+
+    protected override void ChildUpdate()
+    {
+        base.ChildUpdate();
     }
 
     public void PlayAnimSound()
@@ -68,7 +84,10 @@ public class StartMenuPanel : BaseUIPanel
 
     public void OnButtonHover()
     {
-        WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonHover, WwiseAudioManager.Instance.gameObject);
+        if (PlayButtonHoverSound)
+        {
+            WwiseAudioManager.Instance.PlayCommonAudioSound(WwiseAudioManager.CommonAudioEvent.UI_ButtonHover, WwiseAudioManager.Instance.gameObject);
+        }
     }
 
     public void OnSettingButtonClick()

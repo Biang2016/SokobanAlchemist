@@ -1168,6 +1168,12 @@ public class OpenWorld : World
         public GridPos3D LastLeaveOpenWorldPlayerGP;
         public bool IsUsingSpecialESPSInsideDungeon;
         public DungeonMissionState DungeonMissionState;
+
+        [OdinSerialize]
+        public Dictionary<uint, Dictionary<string, BattleManager.BattleStateBool>> BattleStateBoolDict_ByModule;
+
+        [OdinSerialize]
+        public Dictionary<string, BattleManager.BattleStateBool> BattleStateBoolDict;
     }
 
     public void SaveGame(string gameSaveName)
@@ -1216,6 +1222,9 @@ public class OpenWorld : World
         gameSaveData.IsUsingSpecialESPSInsideDungeon = IsUsingSpecialESPSInsideDungeon;
         gameSaveData.DungeonMissionState = DungeonMissionState;
 
+        gameSaveData.BattleStateBoolDict_ByModule = BattleManager.Instance.BattleStateBoolDict_ByModule;
+        gameSaveData.BattleStateBoolDict = BattleManager.Instance.BattleStateBoolDict;
+
         string folder = $"{Application.streamingAssetsPath}/GameSaves";
         if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
         string file = $"{folder}/GameSave_{gameSaveName}.save";
@@ -1224,7 +1233,7 @@ public class OpenWorld : World
         byte[] bytes_compressed = Compress.CompressBytes(bytes);
         File.WriteAllBytes(file, bytes_compressed);
 
-        ClientGameManager.Instance.NoticePanel.ShowTip("Game Saved!", NoticePanel.TipPositionType.Center, 1.5f);
+        ClientGameManager.Instance.NoticePanel.ShowTip("Game Saved!", NoticePanel.TipPositionType.Center, 1.5f, true);
     }
 
     public bool TryLoadGame(string gameName)
@@ -1255,6 +1264,9 @@ public class OpenWorld : World
             LastLeaveOpenWorldPlayerGP = gameSaveData.LastLeaveOpenWorldPlayerGP;
             IsUsingSpecialESPSInsideDungeon = gameSaveData.IsUsingSpecialESPSInsideDungeon;
             DungeonMissionState = gameSaveData.DungeonMissionState;
+
+            BattleManager.Instance.BattleStateBoolDict_ByModule = gameSaveData.BattleStateBoolDict_ByModule;
+            BattleManager.Instance.BattleStateBoolDict = gameSaveData.BattleStateBoolDict;
             return true;
         }
 

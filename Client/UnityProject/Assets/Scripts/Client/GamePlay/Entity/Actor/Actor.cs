@@ -150,6 +150,7 @@ public class Actor : Entity
         base.Update();
         if (!BattleManager.Instance.IsStart) return;
         if (IsRecycled) return;
+        ActorControllerHelper?.OnUpdate();
         UpdateThrowParabolaLine();
     }
 

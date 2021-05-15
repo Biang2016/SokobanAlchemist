@@ -145,9 +145,9 @@ public class PlayerControllerHelper : ActorControllerHelper
     private float QuickMoveDuration; // 快速移动开始后经过的时间
     private Vector3 QuickMoveStartActorPosition = Vector3.zero;
 
-    public override void OnFixedUpdate()
+    public override void OnUpdate()
     {
-        base.OnFixedUpdate();
+        base.OnUpdate();
         if (Actor.IsNotNullAndAlive() && !UIManager.Instance.IsUIShown<ExitMenuPanel>() && !UIManager.Instance.IsUIShown<ConfirmPanel>())
         {
             #region Move
@@ -215,7 +215,7 @@ public class PlayerControllerHelper : ActorControllerHelper
                 if (quickMoveAttempt.z.Equals(1) && BS_Up.Pressed && BS_Up.PressedDuration >= QuickMovePressThreshold) isQuickMoving = false;
                 if (isQuickMoving)
                 {
-                    QuickMoveDuration += Time.fixedDeltaTime;
+                    QuickMoveDuration += Time.deltaTime;
                     float quickMoveSpeed = (transform.position - QuickMoveStartActorPosition).magnitude / QuickMoveDuration;
 
                     if (quickMoveStartWorldGP == Actor.WorldGP // 自短按开始后角色该轴位置还未发生变化，则继续施加移动效果
@@ -415,7 +415,7 @@ public class PlayerControllerHelper : ActorControllerHelper
             if (BS_SkillArray[1].Pressed)
             {
                 Actor.ThrowCharge();
-                Skill_1_PressDuration += Time.fixedDeltaTime;
+                Skill_1_PressDuration += Time.deltaTime;
             }
 
             if (BS_SkillArray[1].Up)

@@ -170,7 +170,7 @@ public class EntitySkillCondition_State : EntitySkillCondition, EntitySkillCondi
             }
             case ConditionType.BattleStateBool:
             {
-                return BattleManager.Instance.GetStateBool(BattleStateBool) == BattleStateBoolValue;
+                return BattleManager.Instance.GetStateBool(BattleStateBool.FormatEventAliasOrStateBool(Entity.InitWorldModuleGUID, Entity.CurrentEntityData.InitStaticLayoutGUID)) == BattleStateBoolValue;
             }
         }
 

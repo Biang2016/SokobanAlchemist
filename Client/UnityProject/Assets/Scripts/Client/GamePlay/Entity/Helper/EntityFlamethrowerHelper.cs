@@ -171,6 +171,14 @@ public class EntityFlamethrowerHelper : EntityMonoHelper, IEntityTriggerZoneHelp
         }
     }
 
+    void Update()
+    {
+        if (Entity.IsNotNullAndAlive() && FireOn)
+        {
+            FlamethrowerSkill?.OnUpdate(Time.deltaTime);
+        }
+    }
+
     private bool FireOn = false;
 
     public void TurnOnFire(FlamethrowerFuelData fuelData)
