@@ -486,8 +486,15 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     {
         if (ControlDescDict[CurrentControlScheme].TryGetValue(buttonName, out string desc))
         {
-            string colored_Desc = CommonUtils.AddHighLightColorToText(desc, "#f1ff52");
-            return colored_Desc;
+            if (withColor)
+            {
+                string colored_Desc = CommonUtils.AddHighLightColorToText(desc, "#f1ff52");
+                return colored_Desc;
+            }
+            else
+            {
+                return desc;
+            }
         }
 
         return buttonName.ToString();

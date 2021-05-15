@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
@@ -27,10 +28,13 @@ public class LearnSkillUpgradePage : PoolObject
     public Animator Anim;
 
     [SerializeField]
-    private GameObject ESCIcon;
+    private TextMeshProUGUI ESCText;
 
     [SerializeField]
     private GameObject QESwitching;
+
+    [SerializeField]
+    private TextMeshProUGUI QESwitchingTextTMP;
 
     [SerializeField]
     private Image Icon;
@@ -54,10 +58,16 @@ public class LearnSkillUpgradePage : PoolObject
     private Image LearnButtonIcon;
 
     [SerializeField]
-    private Sprite LearnButtonIconNormalSprite;
+    private Sprite LearnButtonIconNormalSprite_Keyboard;
 
     [SerializeField]
-    private Sprite LearnButtonIconGrayOutSprite;
+    private Sprite LearnButtonIconGrayOutSprite_Keyboard;
+
+    [SerializeField]
+    private Sprite LearnButtonIconNormalSprite_Controller;
+
+    [SerializeField]
+    private Sprite LearnButtonIconGrayOutSprite_Controller;
 
     private UnityAction current_LearnCallBack;
     internal UnityAction current_LearnAction;
@@ -81,6 +91,27 @@ public class LearnSkillUpgradePage : PoolObject
         GUID = GetGUID();
         ClientGameManager.Instance.LearnSkillUpgradePanel.PageDict.Add(GUID, this);
         current_LearnCallBack = learnInfo.LearnCallback;
+        string leftSwitchStr = ControlManager.Instance.GetControlDescText(ButtonNames.Battle_LeftSwitch, false);
+        string rightSwitchStr = ControlManager.Instance.GetControlDescText(ButtonNames.Battle_RightSwitch, false);
+
+        if (ControlManager.Instance.CurrentControlScheme == ControlManager.ControlScheme.GamePad)
+        {
+            leftSwitchStr = $"<sprite name={leftSwitchStr}>";
+            rightSwitchStr = $"<sprite name={rightSwitchStr}>";
+        }
+
+        QESwitchingTextTMP.text = $"↑\n{leftSwitchStr}\n{rightSwitchStr}\n↓";
+        string escStr = ControlManager.Instance.GetControlDescText(ButtonNames.Common_Exit, false);
+        if (ControlManager.Instance.CurrentControlScheme == ControlManager.ControlScheme.GamePad)
+        {
+            ESCText.text = $"<sprite name={escStr}> x";
+        }
+        else
+        {
+            ESCText.text = $"ESC x";
+        }
+
+        bool canAfford = false;
         switch (learnInfo.LearnType)
         {
             case LearnType.Skill:
@@ -100,12 +131,11 @@ public class LearnSkillUpgradePage : PoolObject
                     string keyBindStr = ControlManager.Instance.GetControlDescText(keyBindButtonName, false);
                     KeyBindText.text = keyBindStr;
                 }
+
                 if (learnInfo.GoldCost > 0) CostText.text = learnInfo.GoldCost.ToString();
                 else CostText.text = "Free";
 
-                bool canAfford = BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value >= learnInfo.GoldCost;
-                LearnButtonIcon.sprite = canAfford ? LearnButtonIconNormalSprite : LearnButtonIconGrayOutSprite;
-
+                canAfford = BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value >= learnInfo.GoldCost;
                 if (canAfford)
                 {
                     if (rawEntitySkill is EntityPassiveSkill rawEPS)
@@ -154,9 +184,7 @@ public class LearnSkillUpgradePage : PoolObject
                 if (learnInfo.GoldCost > 0) CostText.text = learnInfo.GoldCost.ToString();
                 else CostText.text = "Free";
 
-                bool canAfford = BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value >= learnInfo.GoldCost;
-                LearnButtonIcon.sprite = canAfford ? LearnButtonIconNormalSprite : LearnButtonIconGrayOutSprite;
-
+                canAfford = BattleManager.Instance.Player1.EntityStatPropSet.Gold.Value >= learnInfo.GoldCost;
                 if (canAfford)
                 {
                     current_LearnAction = () =>
@@ -172,6 +200,20 @@ public class LearnSkillUpgradePage : PoolObject
                     current_LearnAction = () => { BattleManager.Instance.Player1.EntityStatPropSet.Gold.m_NotifyActionSet.OnValueNotEnoughWarning?.Invoke(); };
                 }
 
+                break;
+            }
+        }
+
+        switch (ControlManager.Instance.CurrentControlScheme)
+        {
+            case ControlManager.ControlScheme.GamePad:
+            {
+                LearnButtonIcon.sprite = canAfford ? LearnButtonIconNormalSprite_Controller : LearnButtonIconGrayOutSprite_Controller;
+                break;
+            }
+            case ControlManager.ControlScheme.KeyboardMouse:
+            {
+                LearnButtonIcon.sprite = canAfford ? LearnButtonIconNormalSprite_Keyboard : LearnButtonIconGrayOutSprite_Keyboard;
                 break;
             }
         }
@@ -226,7 +268,7 @@ public class LearnSkillUpgradePage : PoolObject
         {
             isSelected = value;
             QESwitching.SetActive(value && ClientGameManager.Instance.LearnSkillUpgradePanel.PageCount > 1);
-            ESCIcon.SetActive(value);
+            ESCText.gameObject.SetActive(value);
         }
     }
 }

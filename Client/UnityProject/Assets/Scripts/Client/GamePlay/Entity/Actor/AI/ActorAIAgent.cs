@@ -363,7 +363,7 @@ public class ActorAIAgent
                     nextNode = nextNodeAfterNextNode;
                     RecalculateNextStraightNodeCount();
                 }
-                else if (diff.magnitude > 1 + arriveThreshold && !diff.x.Equals(0) && !diff.z.Equals(0)) // 由于某些意外，下一个路径点和目前离得较远，会发生角色原地打转不寻路的bug，此处强行重置
+                else if (diff.magnitude > 1 + arriveThreshold) // 由于某些意外，下一个路径点和目前离得较远，会发生角色原地打转不寻路的bug，此处强行重置
                 {
                     ClearPathFinding();
                 }
