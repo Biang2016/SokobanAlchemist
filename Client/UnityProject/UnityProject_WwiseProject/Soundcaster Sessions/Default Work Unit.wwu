@@ -150,6 +150,12 @@
 					</CurrentSwitchList>
 				</SoundcasterSession>
 				<SoundcasterSession Name="Player" ID="{C8F30AF5-6E35-4C81-8E76-0CFEA007C3A8}">
+					<ModuleList>
+						<Module>
+							<ObjectRef Name="Music" ID="{30CB71BC-EE60-4580-ADA5-A1F306814BB4}" WorkUnitID="{DB787D91-370D-401C-ACB6-B7A919E34893}"/>
+							<Position X="0" Y="0"/>
+						</Module>
+					</ModuleList>
 					<RTPCValueList ShowAll="true">
 						<RTPCValue>
 							<GameParameterRef Name="World_Volume" ID="{1332F4BF-9286-407A-945A-29E7D2B9ECA8}"/>
@@ -172,6 +178,10 @@
 							<Value>92.2297297297297</Value>
 						</RTPCValue>
 						<RTPCValue>
+							<GameParameterRef Name="Panel_Volume" ID="{4631257F-675A-49D2-86FC-C815F8926BA4}"/>
+							<Value>50</Value>
+						</RTPCValue>
+						<RTPCValue>
 							<GameParameterRef Name="Player_HealthPercent" ID="{9993C7FA-966E-4BDA-BF02-B14DC6DDACBD}"/>
 							<Value>50</Value>
 						</RTPCValue>
@@ -189,8 +199,8 @@
 						</RTPCValue>
 					</RTPCValueList>
 					<CurrentStateList ShowAll="true">
-						<CurrentStateRef Name="Exploring" ID="{3D43D6D3-16EE-4734-9A44-E93CFC6B1A41}"/>
-						<CurrentStateRef Name="OpenWorld" ID="{41EBF9DF-77D0-427C-A09C-F79D800DE37D}"/>
+						<CurrentStateRef Name="InCamp" ID="{EBC424C5-B0D7-47C4-9983-B3F24BAE5557}"/>
+						<CurrentStateRef Name="Tutorial" ID="{54FD0182-3652-4FEC-BA5B-9734C9C53A4F}"/>
 					</CurrentStateList>
 					<CurrentSwitchList ShowAll="true">
 						<CurrentSwitchRef Name="Earth" ID="{780183F2-AF58-4237-96F8-B204D6EBC684}"/>
