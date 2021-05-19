@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -426,3 +427,4 @@ public static class PictureCombine
         }
     }
 }
+#endif
