@@ -66,7 +66,6 @@ public class Actor : Entity
         CurForward = Vector3.forward;
         WorldGP = GridPos3D.Zero;
         LastWorldGP = GridPos3D.Zero;
-        RealtimeWorldGP = GridPos3D.Zero;
         ThrowState = ThrowStates.None;
         ClearJumpParams();
 
@@ -98,7 +97,7 @@ public class Actor : Entity
     /// <param name="entityData"></param>
     /// <param name="worldGP"></param>
     /// <param name="initWorldModuleGUID"></param>
-    public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
+    public void Setup(EntityData entityData, GridPos3D worldGP, string initWorldModuleGUID)
     {
         base.Setup(entityData, initWorldModuleGUID);
         EntityTypeIndex = entityData.EntityTypeIndex;
@@ -356,7 +355,6 @@ public class Actor : Entity
 
                 if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
                 curWorldGP = value;
-                RealtimeWorldGP = value;
                 if (!IsFrozen) RegisterInModule(curWorldGP, EntityOrientation);
             }
         }

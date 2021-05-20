@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public partial class BattleManager
 {
-    public Dictionary<uint, Dictionary<string, BattleStateBool>> BattleStateBoolDict_ByModule = new Dictionary<uint, Dictionary<string, BattleStateBool>>();
+    public Dictionary<string, Dictionary<string, BattleStateBool>> BattleStateBoolDict_ByModule = new Dictionary<string, Dictionary<string, BattleStateBool>>();
     public Dictionary<string, BattleStateBool> BattleStateBoolDict = new Dictionary<string, BattleStateBool>();
 
     public void ClearAllStateBools()
@@ -23,7 +23,7 @@ public partial class BattleManager
         return false;
     }
 
-    public void SetStateBool(uint worldModuleGUID, string stateAlias, bool value)
+    public void SetStateBool(string worldModuleGUID, string stateAlias, bool value)
     {
         if (!BattleStateBoolDict_ByModule.ContainsKey(worldModuleGUID))
         {
@@ -49,7 +49,7 @@ public partial class BattleManager
         }
     }
 
-    public void OnRecycleWorldModule(uint worldModuleGUID)
+    public void OnRecycleWorldModule(string worldModuleGUID)
     {
         if (BattleStateBoolDict_ByModule.TryGetValue(worldModuleGUID, out Dictionary<string, BattleStateBool> dict))
         {
@@ -65,11 +65,11 @@ public partial class BattleManager
     [Serializable]
     public class BattleStateBool
     {
-        public uint WorldModuleGUID;
+        public string WorldModuleGUID;
         public string StateAlias;
         public bool Value;
 
-        public BattleStateBool(uint worldModuleGUID, string stateAlias, bool value)
+        public BattleStateBool(string worldModuleGUID, string stateAlias, bool value)
         {
             WorldModuleGUID = worldModuleGUID;
             StateAlias = stateAlias;

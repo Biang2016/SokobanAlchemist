@@ -19,7 +19,7 @@ public class WorldModule : PoolObject
 
     [ReadOnly]
     [HideInEditorMode]
-    public uint GUID;
+    public string GUID;
 
     private static uint guidGenerator = (uint) ConfigManager.GUID_Separator.WorldModule;
 
@@ -415,7 +415,7 @@ public class WorldModule : PoolObject
     public virtual IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadEntityNumPerFrame)
     {
         IsGeneratingOrRecycling = true;
-        GUID = GetGUID();
+        GUID = GetGUID().ToString();
         ModuleGP = moduleGP;
         World = world;
         WorldModuleData = worldModuleData;
@@ -513,7 +513,7 @@ public class WorldModule : PoolObject
         IsGeneratingOrRecycling = false;
     }
 
-    public Entity GenerateEntity(EntityData entityData, GridPos3D worldGP, bool isTriggerAppear = false, bool isStartedEntities = false, bool findSpaceUpward = false, List<GridPos3D> overrideOccupation = null, uint overrideWorldModuleGUID = 0)
+    public Entity GenerateEntity(EntityData entityData, GridPos3D worldGP, bool isTriggerAppear = false, bool isStartedEntities = false, bool findSpaceUpward = false, List<GridPos3D> overrideOccupation = null, string overrideWorldModuleGUID = "")
     {
         if (entityData == null) return null;
         if (entityData.EntityTypeIndex == 0) return null;
@@ -586,7 +586,7 @@ public class WorldModule : PoolObject
                             box.BoxFrozenBoxHelper.FrozenBoxOccupation = entityOccupation_rotated;
                         }
 
-                        box.Setup(entityData, worldGP, overrideWorldModuleGUID != 0 ? overrideWorldModuleGUID : GUID); // 覆写优先
+                        box.Setup(entityData, worldGP, overrideWorldModuleGUID != "" ? overrideWorldModuleGUID : GUID); // 覆写优先
                         box.Initialize(worldGP, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedEntities); // 如果是TriggerAppear的箱子则不需要检查坠落
 
                         // 到模组处登记
@@ -609,13 +609,13 @@ public class WorldModule : PoolObject
                         if (BattleManager.Instance.Player1 != null && isPlayer) return null;
                         Actor actor = GameObjectPoolManager.Instance.ActorDict[entityData.EntityTypeIndex].AllocateGameObject<Actor>(BattleManager.Instance.ActorContainerRoot);
                         GridPos3D.ApplyGridPosToLocalTrans(worldGP, actor.transform, 1);
-                        if (overrideWorldModuleGUID != 0)
+                        if (overrideWorldModuleGUID != "")
                         {
-                            actor.Setup(entityData, worldGP, isPlayer ? 0 : overrideWorldModuleGUID); // Player不属于任何一个模组, 覆写优先
+                            actor.Setup(entityData, worldGP, isPlayer ? "" : overrideWorldModuleGUID); // Player不属于任何一个模组, 覆写优先
                         }
                         else
                         {
-                            actor.Setup(entityData, worldGP, isPlayer ? 0 : GUID); // Player不属于任何一个模组
+                            actor.Setup(entityData, worldGP, isPlayer ? "" : GUID); // Player不属于任何一个模组
                         }
 
                         if (isStartedEntities) actor.ForbidAction = !BattleManager.Instance.IsStart;

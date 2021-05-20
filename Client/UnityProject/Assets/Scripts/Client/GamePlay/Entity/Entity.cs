@@ -34,7 +34,7 @@ public abstract class Entity : PoolObject
 
     [ReadOnly]
     [HideInEditorMode]
-    public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
+    public string InitWorldModuleGUID; // 创建时所属的世界模组GUID
 
     #endregion
 
@@ -47,7 +47,7 @@ public abstract class Entity : PoolObject
         base.OnRecycled();
         StopAllCoroutines();
         CurrentEntityData = null;
-        InitWorldModuleGUID = 0;
+        InitWorldModuleGUID = "";
         destroyBecauseNotInAnyModuleTick = 0;
         cachedRemoveList_EntityPassiveSkill.Clear();
         cachedRemoveList_EntityActiveSkill.Clear();
@@ -61,7 +61,7 @@ public abstract class Entity : PoolObject
         CanBeThreatened = true;
     }
 
-    public void Setup(EntityData entityData, uint initWorldModuleGUID)
+    public void Setup(EntityData entityData, string initWorldModuleGUID)
     {
         CurrentEntityData = entityData;
         InitWorldModuleGUID = initWorldModuleGUID;
@@ -134,45 +134,13 @@ public abstract class Entity : PoolObject
         {
             kv.Value.OnFixedUpdate(Time.fixedDeltaTime);
         }
-
-        cachedRemoveList_EntityPassiveSkill.Clear();
-        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
-        {
-            if (eps.MarkAsForget) cachedRemoveList_EntityPassiveSkill.Add(eps);
-        }
-
-        cachedRemoveList_EntityActiveSkill.Clear();
-        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
-        {
-            if (kv.Value.MarkAsForget) cachedRemoveList_EntityActiveSkill.Add(kv.Value);
-        }
-
-        foreach (EntityPassiveSkill skill in cachedRemoveList_EntityPassiveSkill)
-        {
-            ForgetPassiveSkill(skill.SkillGUID);
-        }
-
-        cachedRemoveList_EntityPassiveSkill.Clear();
-
-        foreach (EntityActiveSkill skill in cachedRemoveList_EntityActiveSkill)
-        {
-            ForgetActiveSkill(skill.SkillGUID);
-        }
-
-        cachedRemoveList_EntityActiveSkill.Clear();
-
-        foreach (EntityPassiveSkill skill in cachedAddList_EntityPassiveSkill)
-        {
-            AddNewPassiveSkill(skill);
-        }
-
-        cachedAddList_EntityPassiveSkill.Clear();
     }
 
     protected virtual void Tick(float interval)
     {
         if (!BattleManager.Instance.IsStart) return;
         if (IsRecycled) return;
+        Async_TickAddRemoveActiveSkill();
         EntityStatPropSet.Tick(interval);
         EntityBuffHelper.BuffTick(interval);
         foreach (EntityPassiveSkill eps in EntityPassiveSkills)
@@ -337,28 +305,6 @@ public abstract class Entity : PoolObject
     [FoldoutGroup("状态")]
     [LabelText("实时世界坐标")]
     private GridPos3D realtimeWorldGP;
-
-    internal GridPos3D RealtimeWorldGP
-    {
-        get { return realtimeWorldGP; }
-        set
-        {
-            if (realtimeWorldGP != value)
-            {
-                realtimeWorldGP = value;
-                if (realtimeWorldGP != GridPos3D.Zero && value != GridPos3D.Zero && !IsRecycled)
-                {
-                    foreach (EntityPassiveSkill eps in EntityPassiveSkills)
-                    {
-                        foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
-                        {
-                            eps.OnPassGrid(realtimeWorldGP + offset);
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     public Vector3 CurForward
     {
@@ -991,6 +937,49 @@ public abstract class Entity : PoolObject
         }
 
         ActiveSkillMarkAsDestroyed = false;
+    }
+
+    private void Async_TickAddRemoveActiveSkill()
+    {
+        foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+        {
+            if (eps.MarkAsForget) cachedRemoveList_EntityPassiveSkill.Add(eps);
+        }
+
+        if (cachedRemoveList_EntityPassiveSkill.Count > 0)
+        {
+            foreach (EntityPassiveSkill skill in cachedRemoveList_EntityPassiveSkill)
+            {
+                ForgetPassiveSkill(skill.SkillGUID);
+            }
+
+            cachedRemoveList_EntityPassiveSkill.Clear();
+        }
+
+        foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
+        {
+            if (kv.Value.MarkAsForget) cachedRemoveList_EntityActiveSkill.Add(kv.Value);
+        }
+
+        if (cachedRemoveList_EntityActiveSkill.Count > 0)
+        {
+            foreach (EntityActiveSkill skill in cachedRemoveList_EntityActiveSkill)
+            {
+                ForgetActiveSkill(skill.SkillGUID);
+            }
+
+            cachedRemoveList_EntityActiveSkill.Clear();
+        }
+
+        if (cachedAddList_EntityPassiveSkill.Count > 0)
+        {
+            foreach (EntityPassiveSkill skill in cachedAddList_EntityPassiveSkill)
+            {
+                AddNewPassiveSkill(skill);
+            }
+
+            cachedAddList_EntityPassiveSkill.Clear();
+        }
     }
 
     #endregion

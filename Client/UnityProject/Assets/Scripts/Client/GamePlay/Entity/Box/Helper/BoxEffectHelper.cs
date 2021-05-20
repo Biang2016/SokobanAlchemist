@@ -8,16 +8,22 @@ public class BoxEffectHelper : BoxMonoHelper
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
+        IsShown = true;
         HideTrails();
     }
 
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
+        IsShown = true;
+        HideTrails();
     }
+
+    private bool IsShown = false;
 
     public void ShowTrails()
     {
+        if (IsShown) return;
         foreach (GridPos3D offset in Box.GetEntityOccupationGPs_Rotated())
         {
             BoxTrail boxTrail = GameObjectPoolManager.Instance.PoolDict[GameObjectPoolManager.PrefabNames.BoxTrail].AllocateGameObject<BoxTrail>(transform);
@@ -25,10 +31,13 @@ public class BoxEffectHelper : BoxMonoHelper
             boxTrail.Play();
             boxTrail.transform.localPosition = offset;
         }
+
+        IsShown = true;
     }
 
     public void HideTrails()
     {
+        if (!IsShown) return;
         foreach (BoxTrail boxTrail in BoxTrails)
         {
             boxTrail.Stop();
@@ -36,5 +45,6 @@ public class BoxEffectHelper : BoxMonoHelper
         }
 
         BoxTrails.Clear();
+        IsShown = false;
     }
 }

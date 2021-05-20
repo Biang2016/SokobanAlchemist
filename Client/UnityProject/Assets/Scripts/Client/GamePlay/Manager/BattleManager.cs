@@ -87,10 +87,10 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
 
     #region 分模组或静态布局记录模组所属的Actor信息
 
-    internal Dictionary<uint, HashSet<uint>> WorldModuleActorDict = new Dictionary<uint, HashSet<uint>>(); // Key: WorldModuleGUID, Value: HashSet<ActorGUID>
+    internal Dictionary<string, HashSet<uint>> WorldModuleActorDict = new Dictionary<string, HashSet<uint>>(); // Key: WorldModuleGUID, Value: HashSet<ActorGUID>
     internal Dictionary<string, HashSet<uint>> StaticLayoutActorDict = new Dictionary<string, HashSet<uint>>(); // Key: StaticLayoutGUID, Value: HashSet<ActorGUID>
 
-    private void RegisterEnemyToWorldModule(uint worldModuleGUID, uint actorGUID)
+    private void RegisterEnemyToWorldModule(string worldModuleGUID, uint actorGUID)
     {
         if (!WorldModuleActorDict.ContainsKey(worldModuleGUID))
         {
@@ -243,7 +243,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         if (MainPlayers[0] != null) return;
         Actor player = GameObjectPoolManager.Instance.ActorDict[ConfigManager.Actor_PlayerIndex].AllocateGameObject<Actor>(ActorContainerRoot);
         GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
-        player.Setup(new EntityData(ConfigManager.Actor_PlayerIndex, GridPosR.Orientation.Up), bpd.WorldGP, 0);
+        player.Setup(new EntityData(ConfigManager.Actor_PlayerIndex, GridPosR.Orientation.Up), bpd.WorldGP, "");
         AddActor(null, player);
         PlayerDefaultActorSkillLearningData = player.ActorSkillLearningHelper.ActorSkillLearningData.Clone();
         PlayerCurrentActorSkillLearningData = player.ActorSkillLearningHelper.ActorSkillLearningData;

@@ -9,12 +9,12 @@ public class BoxMarchingTextureHelper : BoxMonoHelper
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
-        for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
-        for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
-        {
-            BoxMarchingTextureTileMatrix[x, y]?.PoolRecycle();
-            BoxMarchingTextureTileMatrix[x, y] = null;
-        }
+        //for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
+        //for (int y = 0; y < WorldModule.MODULE_SIZE; y++)
+        //{
+        //    BoxMarchingTextureTileMatrix[x, y]?.PoolRecycle();
+        //    BoxMarchingTextureTileMatrix[x, y] = null;
+        //}
     }
 
     public override void OnHelperUsed()
@@ -30,9 +30,8 @@ public class BoxMarchingTextureHelper : BoxMonoHelper
         {
             TerrainType GetTerrainType(int x, int z)
             {
-                TerrainType terrainType = TerrainType.Earth;
                 if (x < 0 || x >= openWorld.WorldSize_X * WorldModule.MODULE_SIZE || z < 0 || z >= openWorld.WorldSize_Z * WorldModule.MODULE_SIZE) return TerrainType.Earth;
-                terrainType = openWorld.WorldMap_TerrainType[x, z];
+                TerrainType terrainType = openWorld.WorldMap_TerrainType[x, z];
                 return terrainType;
             }
 

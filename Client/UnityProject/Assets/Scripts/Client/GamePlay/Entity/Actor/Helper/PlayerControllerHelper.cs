@@ -148,7 +148,7 @@ public class PlayerControllerHelper : ActorControllerHelper
     public override void OnUpdate()
     {
         base.OnUpdate();
-        if (Actor.IsNotNullAndAlive() && !UIManager.Instance.IsUIShown<ExitMenuPanel>() && !UIManager.Instance.IsUIShown<ConfirmPanel>())
+        if (Actor.IsNotNullAndAlive())
         {
             #region Move
 

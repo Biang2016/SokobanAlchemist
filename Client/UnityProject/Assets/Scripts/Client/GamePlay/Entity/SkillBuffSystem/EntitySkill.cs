@@ -12,7 +12,7 @@ public abstract class EntitySkill : IClone<EntitySkill>
 
     [ReadOnly]
     [HideInEditorMode]
-    public uint InitWorldModuleGUID; // 创建时所属的世界模组GUID
+    public string InitWorldModuleGUID; // 创建时所属的世界模组GUID
 
     [ReadOnly]
     [HideInEditorMode]

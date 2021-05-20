@@ -1170,7 +1170,7 @@ public class OpenWorld : World
         public DungeonMissionState DungeonMissionState;
 
         [OdinSerialize]
-        public Dictionary<uint, Dictionary<string, BattleManager.BattleStateBool>> BattleStateBoolDict_ByModule;
+        public Dictionary<string, Dictionary<string, BattleManager.BattleStateBool>> BattleStateBoolDict_ByModule;
 
         [OdinSerialize]
         public Dictionary<string, BattleManager.BattleStateBool> BattleStateBoolDict;

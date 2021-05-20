@@ -47,7 +47,7 @@ public class BoxSkillAction_ChangeBoxType : BoxSkillAction, EntitySkillAction.IP
             worldGP = targetBox.transform.position.ToGridPos3D();
         }
 
-        uint initWorldModuleGUID = targetBox.InitWorldModuleGUID;
+        string initWorldModuleGUID = targetBox.InitWorldModuleGUID;
         string initStaticLayoutGUID = targetBox.CurrentEntityData.InitStaticLayoutGUID;
 
         if (ChangeForEveryGrid)

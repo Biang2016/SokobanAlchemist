@@ -105,7 +105,6 @@ public partial class Box : Entity
         WorldModule = null;
         WorldGP = GridPos3D.Zero;
         LastWorldGP = GridPos3D.Zero;
-        RealtimeWorldGP = GridPos3D.Zero;
         worldGP_WhenKicked = GridPos3D.Zero;
         LastState = States.Static;
         State = States.Static;
@@ -401,7 +400,7 @@ public partial class Box : Entity
         }
     }
 
-    public void Setup(EntityData entityData, GridPos3D worldGP, uint initWorldModuleGUID)
+    public void Setup(EntityData entityData, GridPos3D worldGP, string initWorldModuleGUID)
     {
         base.Setup(entityData, initWorldModuleGUID);
         transform.position = worldGP;
@@ -458,7 +457,6 @@ public partial class Box : Entity
         ArtOnly = artOnly;
         LastInteractEntity = null;
         LastWorldGP = WorldGP;
-        RealtimeWorldGP = worldGP;
         WorldModule = module;
         WorldGP = worldGP;
         LocalGP = module.WorldGPToLocalGP(worldGP);
@@ -907,8 +905,6 @@ public partial class Box : Entity
         {
             SwitchEntityOrientation(CameraManager.Instance.FieldCamera.RotateDirection);
         }
-
-        RealtimeWorldGP = transform.position.ToGridPos3D();
 
         if ((state == States.BeingKicked || state == States.BeingKickedToGrind) && IsInGridSystem)
         {

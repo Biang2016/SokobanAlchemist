@@ -1376,7 +1376,7 @@ public class World : PoolObject
         return false;
     }
 
-    public bool GenerateEntityOnWorldGPWithoutOccupy(ushort entityTypeIndex, GridPosR.Orientation entityOrientation, GridPos3D origin, out Entity dropEntity, uint overrideWorldModuleGUID = 0, string overrideStaticLayoutGUID = "")
+    public bool GenerateEntityOnWorldGPWithoutOccupy(ushort entityTypeIndex, GridPosR.Orientation entityOrientation, GridPos3D origin, out Entity dropEntity, string overrideWorldModuleGUID = "", string overrideStaticLayoutGUID = "")
     {
         dropEntity = null;
         if (entityTypeIndex == 0) return false;
@@ -1392,7 +1392,7 @@ public class World : PoolObject
                     Box dropBox = (Box) dropEntity;
                     EntityData entityData = new EntityData(entityTypeIndex, entityOrientation);
                     entityData.InitStaticLayoutGUID = overrideStaticLayoutGUID;
-                    dropBox.Setup(entityData, origin, overrideWorldModuleGUID != 0 ? overrideWorldModuleGUID : module.GUID);
+                    dropBox.Setup(entityData, origin, overrideWorldModuleGUID != "" ? overrideWorldModuleGUID : module.GUID);
                     dropBox.Initialize(origin, module, 0, false, Box.LerpType.Create);
                     dropBox.ApplyEntityExtraSerializeData();
                     return true;
@@ -1403,7 +1403,7 @@ public class World : PoolObject
                     Actor dropActor = (Actor) dropEntity;
                     EntityData entityData = new EntityData(entityTypeIndex, entityOrientation);
                     entityData.InitStaticLayoutGUID = overrideStaticLayoutGUID;
-                    dropActor.Setup(entityData, origin, overrideWorldModuleGUID != 0 ? overrideWorldModuleGUID : module.GUID);
+                    dropActor.Setup(entityData, origin, overrideWorldModuleGUID != "" ? overrideWorldModuleGUID : module.GUID);
                     dropActor.ForbidAction = !BattleManager.Instance.IsStart;
                     BattleManager.Instance.AddActor(module, dropActor);
                     return true;
@@ -1515,7 +1515,7 @@ public class World : PoolObject
 
     #endregion
 
-    public void ThrowBoxFormWorldGP(List<ushort> throwBoxIndexList, GridPos3D worldGP, uint overrideWorldModuleGUID = 0, string overrideStaticLayoutGUID = "")
+    public void ThrowBoxFormWorldGP(List<ushort> throwBoxIndexList, GridPos3D worldGP, string overrideWorldModuleGUID = "", string overrideStaticLayoutGUID = "")
     {
         int dropConeAngle = 0;
         if (throwBoxIndexList.Count == 1) dropConeAngle = 0;
