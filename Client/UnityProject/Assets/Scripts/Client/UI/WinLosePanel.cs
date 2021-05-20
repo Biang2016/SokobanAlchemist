@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using BiangLibrary.GamePlay.UI;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class WinLosePanel : BaseUIPanel

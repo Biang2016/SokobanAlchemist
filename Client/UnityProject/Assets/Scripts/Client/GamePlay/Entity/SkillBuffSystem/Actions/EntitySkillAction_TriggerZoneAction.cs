@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.AI;
 
 [Serializable]
 public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkillAction.ITriggerAction
@@ -52,6 +51,8 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
         {
             esa.UnInit();
         }
+
+        interactiveKeyUp = false;
     }
 
     protected override string Description => "箱子范围触发行为";

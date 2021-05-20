@@ -1,7 +1,5 @@
 ﻿using System;
-using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 [Serializable]
 public class EntitySkillAction_ChangeActiveSkillProperty : EntitySkillAction, EntitySkillAction.IPureAction

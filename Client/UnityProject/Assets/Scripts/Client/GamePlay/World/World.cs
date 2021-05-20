@@ -1525,7 +1525,7 @@ public class World : PoolObject
 
         foreach (ushort boxTypeIndex in throwBoxIndexList)
         {
-            if (WorldManager.Instance.CurrentWorld.GenerateEntityOnWorldGPWithoutOccupy(boxTypeIndex, (GridPosR.Orientation) Random.Range(0, 4), worldGP, out Entity dropEntity, overrideWorldModuleGUID: overrideWorldModuleGUID, overrideStaticLayoutGUID: overrideStaticLayoutGUID))
+            if (WorldManager.Instance.CurrentWorld.GenerateEntityOnWorldGPWithoutOccupy(boxTypeIndex, (GridPosR.Orientation) Random.Range(0, 4), worldGP, out Entity dropEntity, overrideWorldModuleGUID, overrideStaticLayoutGUID))
             {
                 Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(dropConeAngle * Mathf.Deg2Rad);
                 Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.IO;
+﻿using System.IO;
 using BiangLibrary.GamePlay.UI;
 using UnityEngine;
 using UnityEngine.UI;

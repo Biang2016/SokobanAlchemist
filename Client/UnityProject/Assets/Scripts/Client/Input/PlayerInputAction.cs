@@ -9,6 +9,7 @@ using UnityEngine.InputSystem.Utilities;
 public class @PlayerInput : IInputActionCollection, IDisposable
 {
     public InputActionAsset asset { get; }
+
     public @PlayerInput()
     {
         asset = InputActionAsset.FromJson(@"{
@@ -2039,87 +2040,87 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     ]
 }");
         // Common
-        m_Common = asset.FindActionMap("Common", throwIfNotFound: true);
-        m_Common_MouseLeftClick = m_Common.FindAction("MouseLeftClick", throwIfNotFound: true);
-        m_Common_MouseRightClick = m_Common.FindAction("MouseRightClick", throwIfNotFound: true);
-        m_Common_MouseMiddleClick = m_Common.FindAction("MouseMiddleClick", throwIfNotFound: true);
-        m_Common_ReloadGame = m_Common.FindAction("ReloadGame", throwIfNotFound: true);
-        m_Common_PauseGame = m_Common.FindAction("PauseGame", throwIfNotFound: true);
-        m_Common_ToggleUI = m_Common.FindAction("ToggleUI", throwIfNotFound: true);
-        m_Common_ToggleDebugPanel = m_Common.FindAction("ToggleDebugPanel", throwIfNotFound: true);
-        m_Common_DebugConsole = m_Common.FindAction("DebugConsole", throwIfNotFound: true);
+        m_Common = asset.FindActionMap("Common", true);
+        m_Common_MouseLeftClick = m_Common.FindAction("MouseLeftClick", true);
+        m_Common_MouseRightClick = m_Common.FindAction("MouseRightClick", true);
+        m_Common_MouseMiddleClick = m_Common.FindAction("MouseMiddleClick", true);
+        m_Common_ReloadGame = m_Common.FindAction("ReloadGame", true);
+        m_Common_PauseGame = m_Common.FindAction("PauseGame", true);
+        m_Common_ToggleUI = m_Common.FindAction("ToggleUI", true);
+        m_Common_ToggleDebugPanel = m_Common.FindAction("ToggleDebugPanel", true);
+        m_Common_DebugConsole = m_Common.FindAction("DebugConsole", true);
         // Battle
-        m_Battle = asset.FindActionMap("Battle", throwIfNotFound: true);
-        m_Battle_MouseLeftClick = m_Battle.FindAction("MouseLeftClick", throwIfNotFound: true);
-        m_Battle_MouseRightClick = m_Battle.FindAction("MouseRightClick", throwIfNotFound: true);
-        m_Battle_MouseMiddleClick = m_Battle.FindAction("MouseMiddleClick", throwIfNotFound: true);
-        m_Battle_InteractiveKey = m_Battle.FindAction("InteractiveKey", throwIfNotFound: true);
-        m_Battle_LeftSwitch = m_Battle.FindAction("LeftSwitch", throwIfNotFound: true);
-        m_Battle_RightSwitch = m_Battle.FindAction("RightSwitch", throwIfNotFound: true);
-        m_Battle_ReturnToOpenWorld = m_Battle.FindAction("ReturnToOpenWorld", throwIfNotFound: true);
-        m_Battle_RestartGame = m_Battle.FindAction("RestartGame", throwIfNotFound: true);
-        m_Battle_SlowDownGame = m_Battle.FindAction("SlowDownGame", throwIfNotFound: true);
-        m_Battle_ToggleBattleTip = m_Battle.FindAction("ToggleBattleTip", throwIfNotFound: true);
-        m_Battle_Skill_0_Player1 = m_Battle.FindAction("Skill_0_Player1", throwIfNotFound: true);
-        m_Battle_Skill_1_Player1 = m_Battle.FindAction("Skill_1_Player1", throwIfNotFound: true);
-        m_Battle_Skill_2_Player1 = m_Battle.FindAction("Skill_2_Player1", throwIfNotFound: true);
-        m_Battle_Skill_3_Player1 = m_Battle.FindAction("Skill_3_Player1", throwIfNotFound: true);
-        m_Battle_Skill_4_Player1 = m_Battle.FindAction("Skill_4_Player1", throwIfNotFound: true);
-        m_Battle_Skill_5_Player1 = m_Battle.FindAction("Skill_5_Player1", throwIfNotFound: true);
-        m_Battle_Skill_6_Player1 = m_Battle.FindAction("Skill_6_Player1", throwIfNotFound: true);
-        m_Battle_Skill_7_Player1 = m_Battle.FindAction("Skill_7_Player1", throwIfNotFound: true);
-        m_Battle_Skill_8_Player1 = m_Battle.FindAction("Skill_8_Player1", throwIfNotFound: true);
-        m_Battle_Skill_9_Player1 = m_Battle.FindAction("Skill_9_Player1", throwIfNotFound: true);
-        m_Battle_Skill_0_Player2 = m_Battle.FindAction("Skill_0_Player2", throwIfNotFound: true);
-        m_Battle_Skill_1_Player2 = m_Battle.FindAction("Skill_1_Player2", throwIfNotFound: true);
-        m_Battle_Skill_2_Player2 = m_Battle.FindAction("Skill_2_Player2", throwIfNotFound: true);
-        m_Battle_Skill_3_Player2 = m_Battle.FindAction("Skill_3_Player2", throwIfNotFound: true);
-        m_Battle_Skill_4_Player2 = m_Battle.FindAction("Skill_4_Player2", throwIfNotFound: true);
-        m_Battle_Skill_5_Player2 = m_Battle.FindAction("Skill_5_Player2", throwIfNotFound: true);
-        m_Battle_Skill_6_Player2 = m_Battle.FindAction("Skill_6_Player2", throwIfNotFound: true);
-        m_Battle_Skill_7_Player2 = m_Battle.FindAction("Skill_7_Player2", throwIfNotFound: true);
-        m_Battle_Skill_8_Player2 = m_Battle.FindAction("Skill_8_Player2", throwIfNotFound: true);
-        m_Battle_Skill_9_Player2 = m_Battle.FindAction("Skill_9_Player2", throwIfNotFound: true);
-        m_Battle_Player1_Move_Up = m_Battle.FindAction("Player1_Move_Up", throwIfNotFound: true);
-        m_Battle_Player1_Move_Up_M = m_Battle.FindAction("Player1_Move_Up_M", throwIfNotFound: true);
-        m_Battle_Player1_Move_Down = m_Battle.FindAction("Player1_Move_Down", throwIfNotFound: true);
-        m_Battle_Player1_Move_Down_M = m_Battle.FindAction("Player1_Move_Down_M", throwIfNotFound: true);
-        m_Battle_Player1_Move_Left = m_Battle.FindAction("Player1_Move_Left", throwIfNotFound: true);
-        m_Battle_Player1_Move_Left_M = m_Battle.FindAction("Player1_Move_Left_M", throwIfNotFound: true);
-        m_Battle_Player1_Move_Right = m_Battle.FindAction("Player1_Move_Right", throwIfNotFound: true);
-        m_Battle_Player1_Move_Right_M = m_Battle.FindAction("Player1_Move_Right_M", throwIfNotFound: true);
-        m_Battle_Player2_Move_Up = m_Battle.FindAction("Player2_Move_Up", throwIfNotFound: true);
-        m_Battle_Player2_Move_Up_M = m_Battle.FindAction("Player2_Move_Up_M", throwIfNotFound: true);
-        m_Battle_Player2_Move_Down = m_Battle.FindAction("Player2_Move_Down", throwIfNotFound: true);
-        m_Battle_Player2_Move_Down_M = m_Battle.FindAction("Player2_Move_Down_M", throwIfNotFound: true);
-        m_Battle_Player2_Move_Left = m_Battle.FindAction("Player2_Move_Left", throwIfNotFound: true);
-        m_Battle_Player2_Move_Left_M = m_Battle.FindAction("Player2_Move_Left_M", throwIfNotFound: true);
-        m_Battle_Player2_Move_Right = m_Battle.FindAction("Player2_Move_Right", throwIfNotFound: true);
-        m_Battle_Player2_Move_Right_M = m_Battle.FindAction("Player2_Move_Right_M", throwIfNotFound: true);
-        m_Battle_Player1_Move = m_Battle.FindAction("Player1_Move", throwIfNotFound: true);
+        m_Battle = asset.FindActionMap("Battle", true);
+        m_Battle_MouseLeftClick = m_Battle.FindAction("MouseLeftClick", true);
+        m_Battle_MouseRightClick = m_Battle.FindAction("MouseRightClick", true);
+        m_Battle_MouseMiddleClick = m_Battle.FindAction("MouseMiddleClick", true);
+        m_Battle_InteractiveKey = m_Battle.FindAction("InteractiveKey", true);
+        m_Battle_LeftSwitch = m_Battle.FindAction("LeftSwitch", true);
+        m_Battle_RightSwitch = m_Battle.FindAction("RightSwitch", true);
+        m_Battle_ReturnToOpenWorld = m_Battle.FindAction("ReturnToOpenWorld", true);
+        m_Battle_RestartGame = m_Battle.FindAction("RestartGame", true);
+        m_Battle_SlowDownGame = m_Battle.FindAction("SlowDownGame", true);
+        m_Battle_ToggleBattleTip = m_Battle.FindAction("ToggleBattleTip", true);
+        m_Battle_Skill_0_Player1 = m_Battle.FindAction("Skill_0_Player1", true);
+        m_Battle_Skill_1_Player1 = m_Battle.FindAction("Skill_1_Player1", true);
+        m_Battle_Skill_2_Player1 = m_Battle.FindAction("Skill_2_Player1", true);
+        m_Battle_Skill_3_Player1 = m_Battle.FindAction("Skill_3_Player1", true);
+        m_Battle_Skill_4_Player1 = m_Battle.FindAction("Skill_4_Player1", true);
+        m_Battle_Skill_5_Player1 = m_Battle.FindAction("Skill_5_Player1", true);
+        m_Battle_Skill_6_Player1 = m_Battle.FindAction("Skill_6_Player1", true);
+        m_Battle_Skill_7_Player1 = m_Battle.FindAction("Skill_7_Player1", true);
+        m_Battle_Skill_8_Player1 = m_Battle.FindAction("Skill_8_Player1", true);
+        m_Battle_Skill_9_Player1 = m_Battle.FindAction("Skill_9_Player1", true);
+        m_Battle_Skill_0_Player2 = m_Battle.FindAction("Skill_0_Player2", true);
+        m_Battle_Skill_1_Player2 = m_Battle.FindAction("Skill_1_Player2", true);
+        m_Battle_Skill_2_Player2 = m_Battle.FindAction("Skill_2_Player2", true);
+        m_Battle_Skill_3_Player2 = m_Battle.FindAction("Skill_3_Player2", true);
+        m_Battle_Skill_4_Player2 = m_Battle.FindAction("Skill_4_Player2", true);
+        m_Battle_Skill_5_Player2 = m_Battle.FindAction("Skill_5_Player2", true);
+        m_Battle_Skill_6_Player2 = m_Battle.FindAction("Skill_6_Player2", true);
+        m_Battle_Skill_7_Player2 = m_Battle.FindAction("Skill_7_Player2", true);
+        m_Battle_Skill_8_Player2 = m_Battle.FindAction("Skill_8_Player2", true);
+        m_Battle_Skill_9_Player2 = m_Battle.FindAction("Skill_9_Player2", true);
+        m_Battle_Player1_Move_Up = m_Battle.FindAction("Player1_Move_Up", true);
+        m_Battle_Player1_Move_Up_M = m_Battle.FindAction("Player1_Move_Up_M", true);
+        m_Battle_Player1_Move_Down = m_Battle.FindAction("Player1_Move_Down", true);
+        m_Battle_Player1_Move_Down_M = m_Battle.FindAction("Player1_Move_Down_M", true);
+        m_Battle_Player1_Move_Left = m_Battle.FindAction("Player1_Move_Left", true);
+        m_Battle_Player1_Move_Left_M = m_Battle.FindAction("Player1_Move_Left_M", true);
+        m_Battle_Player1_Move_Right = m_Battle.FindAction("Player1_Move_Right", true);
+        m_Battle_Player1_Move_Right_M = m_Battle.FindAction("Player1_Move_Right_M", true);
+        m_Battle_Player2_Move_Up = m_Battle.FindAction("Player2_Move_Up", true);
+        m_Battle_Player2_Move_Up_M = m_Battle.FindAction("Player2_Move_Up_M", true);
+        m_Battle_Player2_Move_Down = m_Battle.FindAction("Player2_Move_Down", true);
+        m_Battle_Player2_Move_Down_M = m_Battle.FindAction("Player2_Move_Down_M", true);
+        m_Battle_Player2_Move_Left = m_Battle.FindAction("Player2_Move_Left", true);
+        m_Battle_Player2_Move_Left_M = m_Battle.FindAction("Player2_Move_Left_M", true);
+        m_Battle_Player2_Move_Right = m_Battle.FindAction("Player2_Move_Right", true);
+        m_Battle_Player2_Move_Right_M = m_Battle.FindAction("Player2_Move_Right_M", true);
+        m_Battle_Player1_Move = m_Battle.FindAction("Player1_Move", true);
         // Menu
-        m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
-        m_Menu_MouseLeftClick = m_Menu.FindAction("MouseLeftClick", throwIfNotFound: true);
-        m_Menu_MouseRightClick = m_Menu.FindAction("MouseRightClick", throwIfNotFound: true);
-        m_Menu_MouseMiddleClick = m_Menu.FindAction("MouseMiddleClick", throwIfNotFound: true);
-        m_Menu_MousePosition = m_Menu.FindAction("MousePosition", throwIfNotFound: true);
-        m_Menu_MouseWheel = m_Menu.FindAction("MouseWheel", throwIfNotFound: true);
-        m_Menu_InteractiveKey = m_Menu.FindAction("InteractiveKey", throwIfNotFound: true);
-        m_Menu_UINavigation = m_Menu.FindAction("UINavigation", throwIfNotFound: true);
-        m_Menu_Confirm = m_Menu.FindAction("Confirm", throwIfNotFound: true);
-        m_Menu_Cancel = m_Menu.FindAction("Cancel", throwIfNotFound: true);
-        m_Menu_LeftSwitch = m_Menu.FindAction("LeftSwitch", throwIfNotFound: true);
-        m_Menu_RightSwitch = m_Menu.FindAction("RightSwitch", throwIfNotFound: true);
-        m_Menu_KeyBindPanel = m_Menu.FindAction("KeyBindPanel", throwIfNotFound: true);
-        m_Menu_SkillPreviewPanel = m_Menu.FindAction("SkillPreviewPanel", throwIfNotFound: true);
-        m_Menu_ExitMenuPanel = m_Menu.FindAction("ExitMenuPanel", throwIfNotFound: true);
+        m_Menu = asset.FindActionMap("Menu", true);
+        m_Menu_MouseLeftClick = m_Menu.FindAction("MouseLeftClick", true);
+        m_Menu_MouseRightClick = m_Menu.FindAction("MouseRightClick", true);
+        m_Menu_MouseMiddleClick = m_Menu.FindAction("MouseMiddleClick", true);
+        m_Menu_MousePosition = m_Menu.FindAction("MousePosition", true);
+        m_Menu_MouseWheel = m_Menu.FindAction("MouseWheel", true);
+        m_Menu_InteractiveKey = m_Menu.FindAction("InteractiveKey", true);
+        m_Menu_UINavigation = m_Menu.FindAction("UINavigation", true);
+        m_Menu_Confirm = m_Menu.FindAction("Confirm", true);
+        m_Menu_Cancel = m_Menu.FindAction("Cancel", true);
+        m_Menu_LeftSwitch = m_Menu.FindAction("LeftSwitch", true);
+        m_Menu_RightSwitch = m_Menu.FindAction("RightSwitch", true);
+        m_Menu_KeyBindPanel = m_Menu.FindAction("KeyBindPanel", true);
+        m_Menu_SkillPreviewPanel = m_Menu.FindAction("SkillPreviewPanel", true);
+        m_Menu_ExitMenuPanel = m_Menu.FindAction("ExitMenuPanel", true);
         // Editor
-        m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
-        m_Editor_MousePosition = m_Editor.FindAction("MousePosition", throwIfNotFound: true);
-        m_Editor_MouseWheel = m_Editor.FindAction("MouseWheel", throwIfNotFound: true);
-        m_Editor_MouseMiddleClick = m_Editor.FindAction("MouseMiddleClick", throwIfNotFound: true);
-        m_Editor_MouseRightClick = m_Editor.FindAction("MouseRightClick", throwIfNotFound: true);
-        m_Editor_MouseLeftClick = m_Editor.FindAction("MouseLeftClick", throwIfNotFound: true);
+        m_Editor = asset.FindActionMap("Editor", true);
+        m_Editor_MousePosition = m_Editor.FindAction("MousePosition", true);
+        m_Editor_MouseWheel = m_Editor.FindAction("MouseWheel", true);
+        m_Editor_MouseMiddleClick = m_Editor.FindAction("MouseMiddleClick", true);
+        m_Editor_MouseRightClick = m_Editor.FindAction("MouseRightClick", true);
+        m_Editor_MouseLeftClick = m_Editor.FindAction("MouseLeftClick", true);
     }
 
     public void Dispose()
@@ -2177,10 +2178,16 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Common_ToggleUI;
     private readonly InputAction m_Common_ToggleDebugPanel;
     private readonly InputAction m_Common_DebugConsole;
+
     public struct CommonActions
     {
         private @PlayerInput m_Wrapper;
-        public CommonActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+
+        public CommonActions(@PlayerInput wrapper)
+        {
+            m_Wrapper = wrapper;
+        }
+
         public InputAction @MouseLeftClick => m_Wrapper.m_Common_MouseLeftClick;
         public InputAction @MouseRightClick => m_Wrapper.m_Common_MouseRightClick;
         public InputAction @MouseMiddleClick => m_Wrapper.m_Common_MouseMiddleClick;
@@ -2189,11 +2196,29 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @ToggleUI => m_Wrapper.m_Common_ToggleUI;
         public InputAction @ToggleDebugPanel => m_Wrapper.m_Common_ToggleDebugPanel;
         public InputAction @DebugConsole => m_Wrapper.m_Common_DebugConsole;
-        public InputActionMap Get() { return m_Wrapper.m_Common; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
+
+        public InputActionMap Get()
+        {
+            return m_Wrapper.m_Common;
+        }
+
+        public void Enable()
+        {
+            Get().Enable();
+        }
+
+        public void Disable()
+        {
+            Get().Disable();
+        }
+
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(CommonActions set) { return set.Get(); }
+
+        public static implicit operator InputActionMap(CommonActions set)
+        {
+            return set.Get();
+        }
+
         public void SetCallbacks(ICommonActions instance)
         {
             if (m_Wrapper.m_CommonActionsCallbackInterface != null)
@@ -2223,6 +2248,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @DebugConsole.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnDebugConsole;
                 @DebugConsole.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnDebugConsole;
             }
+
             m_Wrapper.m_CommonActionsCallbackInterface = instance;
             if (instance != null)
             {
@@ -2253,6 +2279,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
             }
         }
     }
+
     public CommonActions @Common => new CommonActions(this);
 
     // Battle
@@ -2305,10 +2332,16 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Battle_Player2_Move_Right;
     private readonly InputAction m_Battle_Player2_Move_Right_M;
     private readonly InputAction m_Battle_Player1_Move;
+
     public struct BattleActions
     {
         private @PlayerInput m_Wrapper;
-        public BattleActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+
+        public BattleActions(@PlayerInput wrapper)
+        {
+            m_Wrapper = wrapper;
+        }
+
         public InputAction @MouseLeftClick => m_Wrapper.m_Battle_MouseLeftClick;
         public InputAction @MouseRightClick => m_Wrapper.m_Battle_MouseRightClick;
         public InputAction @MouseMiddleClick => m_Wrapper.m_Battle_MouseMiddleClick;
@@ -2356,11 +2389,29 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @Player2_Move_Right => m_Wrapper.m_Battle_Player2_Move_Right;
         public InputAction @Player2_Move_Right_M => m_Wrapper.m_Battle_Player2_Move_Right_M;
         public InputAction @Player1_Move => m_Wrapper.m_Battle_Player1_Move;
-        public InputActionMap Get() { return m_Wrapper.m_Battle; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
+
+        public InputActionMap Get()
+        {
+            return m_Wrapper.m_Battle;
+        }
+
+        public void Enable()
+        {
+            Get().Enable();
+        }
+
+        public void Disable()
+        {
+            Get().Disable();
+        }
+
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(BattleActions set) { return set.Get(); }
+
+        public static implicit operator InputActionMap(BattleActions set)
+        {
+            return set.Get();
+        }
+
         public void SetCallbacks(IBattleActions instance)
         {
             if (m_Wrapper.m_BattleActionsCallbackInterface != null)
@@ -2507,6 +2558,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Player1_Move.performed -= m_Wrapper.m_BattleActionsCallbackInterface.OnPlayer1_Move;
                 @Player1_Move.canceled -= m_Wrapper.m_BattleActionsCallbackInterface.OnPlayer1_Move;
             }
+
             m_Wrapper.m_BattleActionsCallbackInterface = instance;
             if (instance != null)
             {
@@ -2654,6 +2706,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
             }
         }
     }
+
     public BattleActions @Battle => new BattleActions(this);
 
     // Menu
@@ -2673,10 +2726,16 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Menu_KeyBindPanel;
     private readonly InputAction m_Menu_SkillPreviewPanel;
     private readonly InputAction m_Menu_ExitMenuPanel;
+
     public struct MenuActions
     {
         private @PlayerInput m_Wrapper;
-        public MenuActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+
+        public MenuActions(@PlayerInput wrapper)
+        {
+            m_Wrapper = wrapper;
+        }
+
         public InputAction @MouseLeftClick => m_Wrapper.m_Menu_MouseLeftClick;
         public InputAction @MouseRightClick => m_Wrapper.m_Menu_MouseRightClick;
         public InputAction @MouseMiddleClick => m_Wrapper.m_Menu_MouseMiddleClick;
@@ -2691,11 +2750,29 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @KeyBindPanel => m_Wrapper.m_Menu_KeyBindPanel;
         public InputAction @SkillPreviewPanel => m_Wrapper.m_Menu_SkillPreviewPanel;
         public InputAction @ExitMenuPanel => m_Wrapper.m_Menu_ExitMenuPanel;
-        public InputActionMap Get() { return m_Wrapper.m_Menu; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
+
+        public InputActionMap Get()
+        {
+            return m_Wrapper.m_Menu;
+        }
+
+        public void Enable()
+        {
+            Get().Enable();
+        }
+
+        public void Disable()
+        {
+            Get().Disable();
+        }
+
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
+
+        public static implicit operator InputActionMap(MenuActions set)
+        {
+            return set.Get();
+        }
+
         public void SetCallbacks(IMenuActions instance)
         {
             if (m_Wrapper.m_MenuActionsCallbackInterface != null)
@@ -2743,6 +2820,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @ExitMenuPanel.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnExitMenuPanel;
                 @ExitMenuPanel.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnExitMenuPanel;
             }
+
             m_Wrapper.m_MenuActionsCallbackInterface = instance;
             if (instance != null)
             {
@@ -2791,6 +2869,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
             }
         }
     }
+
     public MenuActions @Menu => new MenuActions(this);
 
     // Editor
@@ -2801,20 +2880,44 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Editor_MouseMiddleClick;
     private readonly InputAction m_Editor_MouseRightClick;
     private readonly InputAction m_Editor_MouseLeftClick;
+
     public struct EditorActions
     {
         private @PlayerInput m_Wrapper;
-        public EditorActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+
+        public EditorActions(@PlayerInput wrapper)
+        {
+            m_Wrapper = wrapper;
+        }
+
         public InputAction @MousePosition => m_Wrapper.m_Editor_MousePosition;
         public InputAction @MouseWheel => m_Wrapper.m_Editor_MouseWheel;
         public InputAction @MouseMiddleClick => m_Wrapper.m_Editor_MouseMiddleClick;
         public InputAction @MouseRightClick => m_Wrapper.m_Editor_MouseRightClick;
         public InputAction @MouseLeftClick => m_Wrapper.m_Editor_MouseLeftClick;
-        public InputActionMap Get() { return m_Wrapper.m_Editor; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
+
+        public InputActionMap Get()
+        {
+            return m_Wrapper.m_Editor;
+        }
+
+        public void Enable()
+        {
+            Get().Enable();
+        }
+
+        public void Disable()
+        {
+            Get().Disable();
+        }
+
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(EditorActions set) { return set.Get(); }
+
+        public static implicit operator InputActionMap(EditorActions set)
+        {
+            return set.Get();
+        }
+
         public void SetCallbacks(IEditorActions instance)
         {
             if (m_Wrapper.m_EditorActionsCallbackInterface != null)
@@ -2835,6 +2938,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @MouseLeftClick.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseLeftClick;
                 @MouseLeftClick.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnMouseLeftClick;
             }
+
             m_Wrapper.m_EditorActionsCallbackInterface = instance;
             if (instance != null)
             {
@@ -2856,8 +2960,10 @@ public class @PlayerInput : IInputActionCollection, IDisposable
             }
         }
     }
+
     public EditorActions @Editor => new EditorActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
+
     public InputControlScheme KeyboardMouseScheme
     {
         get
@@ -2866,7 +2972,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
             return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
         }
     }
+
     private int m_GamepadSchemeIndex = -1;
+
     public InputControlScheme GamepadScheme
     {
         get
@@ -2875,6 +2983,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
             return asset.controlSchemes[m_GamepadSchemeIndex];
         }
     }
+
     public interface ICommonActions
     {
         void OnMouseLeftClick(InputAction.CallbackContext context);
@@ -2886,6 +2995,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnToggleDebugPanel(InputAction.CallbackContext context);
         void OnDebugConsole(InputAction.CallbackContext context);
     }
+
     public interface IBattleActions
     {
         void OnMouseLeftClick(InputAction.CallbackContext context);
@@ -2936,6 +3046,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnPlayer2_Move_Right_M(InputAction.CallbackContext context);
         void OnPlayer1_Move(InputAction.CallbackContext context);
     }
+
     public interface IMenuActions
     {
         void OnMouseLeftClick(InputAction.CallbackContext context);
@@ -2953,6 +3064,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnSkillPreviewPanel(InputAction.CallbackContext context);
         void OnExitMenuPanel(InputAction.CallbackContext context);
     }
+
     public interface IEditorActions
     {
         void OnMousePosition(InputAction.CallbackContext context);

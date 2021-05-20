@@ -1,5 +1,4 @@
-﻿using BiangLibrary.ObjectPool;
-using UnityEngine.Events;
+﻿using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class DebugPanelSlider : DebugPanelComponent

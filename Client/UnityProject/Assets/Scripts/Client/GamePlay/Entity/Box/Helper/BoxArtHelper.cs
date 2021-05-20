@@ -102,7 +102,7 @@ public class BoxArtHelper : EntityArtHelper
         {
             entityDataExtraStates.R_ModelIndex = true;
             entityDataExtraStates.ModelIndex = ModelIndex;
-          
+
             entityDataExtraStates.R_DecoratorIndex = ShowDecoration;
             if (ShowDecoration) entityDataExtraStates.DecoratorIndex = DecorationIndex;
         }

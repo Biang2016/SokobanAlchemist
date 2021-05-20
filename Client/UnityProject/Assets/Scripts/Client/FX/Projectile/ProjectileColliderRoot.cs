@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 public class ProjectileColliderRoot : MonoBehaviour
 {

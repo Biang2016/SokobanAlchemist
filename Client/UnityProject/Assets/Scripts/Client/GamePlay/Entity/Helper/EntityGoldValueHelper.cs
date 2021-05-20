@@ -20,7 +20,7 @@ public class EntityGoldValueHelper : BoxMonoHelper
     }
 
     [LabelText("上下限比例系数")]
-    [MinMaxSlider(0, 2f, showFields: true)]
+    [MinMaxSlider(0, 2f, true)]
     public Vector2 RangeRatioFactor = new Vector2(0.7f, 1.3f);
 
     public RandomType RandomType = RandomType.Uniform;

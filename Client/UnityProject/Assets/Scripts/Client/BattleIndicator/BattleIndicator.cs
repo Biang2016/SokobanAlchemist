@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using BiangLibrary.ObjectPool;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class BattleIndicator : PoolObject
 {

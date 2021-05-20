@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
-using UnityEngine;
 
 /// <summary>
 /// 此类作为角色技能学习和遗忘的数据存储类，不对外产生副作用

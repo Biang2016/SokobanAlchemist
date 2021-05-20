@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-
-public class OpenWorld_SpiderLegManager
+﻿public class OpenWorld_SpiderLegManager
 {
     internal SpiderLegPhase Cur_SpiderLegPhase;
 

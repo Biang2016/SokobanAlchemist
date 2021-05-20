@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using BiangLibrary.GamePlay.UI;
-using UnityEngine.UI;
+using UnityEngine;
 
 public class EntitySkillPreviewPanel : BaseUIPanel
 {

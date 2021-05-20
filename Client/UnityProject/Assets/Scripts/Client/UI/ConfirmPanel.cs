@@ -44,12 +44,12 @@ public class ConfirmPanel : BaseUIPanel
     void Awake()
     {
         UIType.InitUIType(
-            isClearStack: false,
-            isESCClose: true,
-            isClickElsewhereClose: true,
-            uiForms_Type: UIFormTypes.PopUp,
-            uiForms_ShowMode: UIFormShowModes.Return,
-            uiForm_LucencyType: UIFormLucencyTypes.Blur);
+            false,
+            true,
+            true,
+            UIFormTypes.PopUp,
+            UIFormShowModes.Return,
+            UIFormLucencyTypes.Blur);
     }
 
     void Start()
@@ -69,12 +69,12 @@ public class ConfirmPanel : BaseUIPanel
     public void Initialize(string descText, string leftButtonText, string rightButtonText, UnityAction leftButtonClick, UnityAction rightButtonClick, string inputFieldPlaceHolderText1 = null, string inputFieldPlaceHolderText2 = null, string inputFieldPlaceHolderText3 = null)
     {
         UIType.InitUIType(
-            isClearStack: false,
-            isESCClose: true,
-            isClickElsewhereClose: true,
-            uiForms_Type: UIFormTypes.PopUp,
-            uiForms_ShowMode: UIFormShowModes.Return,
-            uiForm_LucencyType: UIFormLucencyTypes.Blur);
+            false,
+            true,
+            true,
+            UIFormTypes.PopUp,
+            UIFormShowModes.Return,
+            UIFormLucencyTypes.Blur);
         DescText.text = descText;
 
         LeftButton.onClick.RemoveAllListeners();

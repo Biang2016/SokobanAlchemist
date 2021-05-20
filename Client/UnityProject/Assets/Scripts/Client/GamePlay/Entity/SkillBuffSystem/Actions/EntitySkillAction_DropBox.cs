@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using BiangLibrary;
 using BiangLibrary.CloneVariant;
-using BiangLibrary.GameDataFormat.Grid;
-using BiangLibrary.GamePlay;
 using Sirenix.OdinInspector;
-using UnityEngine;
-using Random = UnityEngine.Random;
 
 [Serializable]
 public class EntitySkillAction_DropBox : EntitySkillAction, EntitySkillAction.IPureAction

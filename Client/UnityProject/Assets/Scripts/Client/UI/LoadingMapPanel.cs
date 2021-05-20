@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using BiangLibrary.GamePlay.UI;
+﻿using BiangLibrary.GamePlay.UI;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class LoadingMapPanel : BaseUIPanel

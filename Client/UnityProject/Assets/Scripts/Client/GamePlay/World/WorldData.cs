@@ -20,7 +20,7 @@ public class WorldData : IClone<WorldData>
 
     [LabelText("世界图标")]
     [PropertyOrder(-9)]
-    public TypeSelectHelper WorldIcon = new TypeSelectHelper { TypeDefineType = TypeDefineType.EntitySkillIcon };
+    public TypeSelectHelper WorldIcon = new TypeSelectHelper {TypeDefineType = TypeDefineType.EntitySkillIcon};
 
     [PreviewField]
     [ShowInInspector]

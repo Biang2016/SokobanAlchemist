@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 
 [Serializable]
 public class BoxSkillAction_ChangeBoxType : BoxSkillAction, EntitySkillAction.IPureAction, EntitySkillAction.IEntityAction

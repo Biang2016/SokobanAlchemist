@@ -4,7 +4,6 @@ using BiangLibrary;
 using BiangLibrary.CloneVariant;
 using BiangLibrary.GamePlay.UI;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 [Serializable]
 public class EntitySkillAction_ShowTransportWorldPanel : EntitySkillAction, EntitySkillAction.IPureAction
@@ -30,8 +29,8 @@ public class EntitySkillAction_ShowTransportWorldPanel : EntitySkillAction, Enti
             selectedWorld = CommonUtils.GetRandomFromList(WorldProbList);
             WorldProbList.Clear();
             WorldProbList.Add(selectedWorld);
-           
         }
+
         WorldData rawWorldData = ConfigManager.GetRawWorldDataConfig(ConfigManager.GetTypeIndex(TypeDefineType.World, selectedWorld.WorldTypeName.TypeName));
         if (rawWorldData != null)
         {

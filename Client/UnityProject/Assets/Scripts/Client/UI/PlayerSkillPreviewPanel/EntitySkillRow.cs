@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using BiangLibrary.ObjectPool;
+﻿using BiangLibrary.ObjectPool;
 using UnityEngine;
 using UnityEngine.UI;
 

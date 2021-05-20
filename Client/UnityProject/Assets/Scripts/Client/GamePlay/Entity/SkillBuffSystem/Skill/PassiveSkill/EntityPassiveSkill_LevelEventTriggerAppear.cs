@@ -1,5 +1,4 @@
 ﻿using System;
-using Sirenix.Serialization;
 using UnityEngine.Events;
 
 [Serializable]

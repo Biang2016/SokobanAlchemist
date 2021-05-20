@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using AK.Wwise;
+﻿using AK.Wwise;
 using BiangLibrary.Singleton;
 using UnityEngine;
 using Event = AK.Wwise.Event;

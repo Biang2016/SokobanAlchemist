@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class DiscreteStatPointBar : MonoBehaviour
@@ -50,7 +49,7 @@ public class DiscreteStatPointBar : MonoBehaviour
             {
                 PointIndicators[i].Ratio = 1f;
             }
-            else if(i >= currentGrid)
+            else if (i >= currentGrid)
             {
                 PointIndicators[i].Ratio = 0f;
             }

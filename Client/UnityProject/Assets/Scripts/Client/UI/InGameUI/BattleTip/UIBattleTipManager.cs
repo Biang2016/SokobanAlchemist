@@ -53,7 +53,7 @@ public class UIBattleTipManager : TSingletonBaseManager<UIBattleTipManager>
     private void HandleNumeralTip(NumeralUIBattleTipData data)
     {
         if (!EnableUIBattleTip) return;
-        if (data.MainNum == 0 && data.ExtraInfo_After.IsNullOrWhitespace()  && data.ExtraInfo_Before.IsNullOrWhitespace()) return;
+        if (data.MainNum == 0 && data.ExtraInfo_After.IsNullOrWhitespace() && data.ExtraInfo_Before.IsNullOrWhitespace()) return;
         UIBattleTipInfo info = new UIBattleTipInfo(
             0,
             data.BattleTipType,

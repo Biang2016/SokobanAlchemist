@@ -9,7 +9,7 @@ public struct NumeralUIBattleTipData
     public string ExtraInfo_Before;
     public string ExtraInfo_After;
 
-    public NumeralUIBattleTipData(Camp receiver,Vector3 receiverPosition ,int mainNum, BattleTipType battleTipType, string extraInfo_Before, string extraInfo_After)
+    public NumeralUIBattleTipData(Camp receiver, Vector3 receiverPosition, int mainNum, BattleTipType battleTipType, string extraInfo_Before, string extraInfo_After)
     {
         Receiver = receiver;
         ReceiverPosition = receiverPosition;

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using BiangLibrary.CloneVariant;
-using UnityEngine;
+﻿using BiangLibrary.CloneVariant;
 
 public class PlayerData : IClone<PlayerData>
 {

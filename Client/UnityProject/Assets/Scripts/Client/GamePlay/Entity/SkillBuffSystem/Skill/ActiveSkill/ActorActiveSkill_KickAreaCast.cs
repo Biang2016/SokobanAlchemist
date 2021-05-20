@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using BiangLibrary.GamePlay.UI;
 using UnityEngine;
 
 [Serializable]

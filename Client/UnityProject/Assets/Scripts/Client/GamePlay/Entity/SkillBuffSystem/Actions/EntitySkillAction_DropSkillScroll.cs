@@ -60,7 +60,7 @@ public class EntitySkillAction_DropSkillScroll : EntitySkillAction, EntitySkillA
             {
                 ushort scrollBoxTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, rawEntitySkill.SkillScrollType.TypeName);
                 GridPos3D worldGP = Entity.transform.position.ToGridPos3D();
-                if (WorldManager.Instance.CurrentWorld.GenerateEntityOnWorldGPWithoutOccupy(scrollBoxTypeIndex, (GridPosR.Orientation) Random.Range(0, 4), worldGP, out Entity dropEntity, overrideWorldModuleGUID: Entity.InitWorldModuleGUID, overrideStaticLayoutGUID: Entity.CurrentEntityData.InitStaticLayoutGUID))
+                if (WorldManager.Instance.CurrentWorld.GenerateEntityOnWorldGPWithoutOccupy(scrollBoxTypeIndex, (GridPosR.Orientation) Random.Range(0, 4), worldGP, out Entity dropEntity, Entity.InitWorldModuleGUID, Entity.CurrentEntityData.InitStaticLayoutGUID))
                 {
                     Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(dropConeAngle * Mathf.Deg2Rad);
                     Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);

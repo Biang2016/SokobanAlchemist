@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using BiangLibrary.GamePlay.UI;
+﻿using BiangLibrary.GamePlay.UI;
 
 public class InGameUIPanel : BaseUIPanel
 {

@@ -1,7 +1,5 @@
 ﻿using System;
-using BiangLibrary.GamePlay.UI;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 [Serializable]
 public class EntitySkillAction_LearnUpgrade : EntitySkillAction, EntitySkillAction.IEntityAction, EntitySkillAction.IPureAction

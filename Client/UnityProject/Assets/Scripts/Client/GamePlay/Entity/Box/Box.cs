@@ -883,6 +883,7 @@ public partial class Box : Entity
 
     private int CheckDropTickInterval = 3;
     private int CheckDropTickIntervalCount = 0;
+
     protected override void Tick(float interval)
     {
         base.Tick(interval);

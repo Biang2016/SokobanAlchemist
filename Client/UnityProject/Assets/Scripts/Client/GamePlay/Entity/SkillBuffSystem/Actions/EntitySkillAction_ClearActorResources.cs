@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 
 [Serializable]
 public class EntitySkillAction_ClearActorResources : EntitySkillAction, EntitySkillAction.IEntityAction, EntitySkillAction.IPureAction

@@ -1,9 +1,8 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using BiangLibrary.GamePlay.UI;
 using TMPro;
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEngine.InputSystem;
 
 public class NoticePanel : BaseUIPanel
 {

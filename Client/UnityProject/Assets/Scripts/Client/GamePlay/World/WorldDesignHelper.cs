@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -23,7 +22,7 @@ public class WorldDesignHelper : MonoBehaviour
 
     [LabelText("世界图标")]
     [PropertyOrder(-9)]
-    public TypeSelectHelper WorldIcon = new TypeSelectHelper { TypeDefineType = TypeDefineType.EntitySkillIcon };
+    public TypeSelectHelper WorldIcon = new TypeSelectHelper {TypeDefineType = TypeDefineType.EntitySkillIcon};
 
     [PreviewField]
     [ShowInInspector]

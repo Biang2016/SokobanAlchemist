@@ -234,9 +234,9 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
 
     public ButtonState Menu_LeftSwitch = new ButtonState() {ButtonName = ButtonNames.Menu_LeftSwitch};
     public ButtonState Menu_RightSwitch = new ButtonState() {ButtonName = ButtonNames.Menu_RightSwitch};
-    public ButtonState Menu_SkillPreviewPanel = new ButtonState() { ButtonName = ButtonNames.Menu_SkillPreviewPanel };
-    public ButtonState Menu_ExitMenuPanel = new ButtonState() { ButtonName = ButtonNames.Menu_ExitMenuPanel };
-    public ButtonState Menu_KeyBindPanel = new ButtonState() { ButtonName = ButtonNames.Menu_KeyBindPanel };
+    public ButtonState Menu_SkillPreviewPanel = new ButtonState() {ButtonName = ButtonNames.Menu_SkillPreviewPanel};
+    public ButtonState Menu_ExitMenuPanel = new ButtonState() {ButtonName = ButtonNames.Menu_ExitMenuPanel};
+    public ButtonState Menu_KeyBindPanel = new ButtonState() {ButtonName = ButtonNames.Menu_KeyBindPanel};
 
     #endregion
 

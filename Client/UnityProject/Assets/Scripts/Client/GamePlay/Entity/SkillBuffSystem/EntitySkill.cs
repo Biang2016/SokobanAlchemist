@@ -16,7 +16,7 @@ public abstract class EntitySkill : IClone<EntitySkill>
 
     [ReadOnly]
     [HideInEditorMode]
-    public string InitStaticLayoutGUID= ""; // 创建时所属的静态布局GUID
+    public string InitStaticLayoutGUID = ""; // 创建时所属的静态布局GUID
 
     internal bool IsLevelExtraEntitySkill;
     internal bool MarkAsForget;

@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using BiangLibrary.ObjectPool;
+﻿using BiangLibrary.ObjectPool;
+using UnityEngine;
 
 public class Marker : PoolObject
 {

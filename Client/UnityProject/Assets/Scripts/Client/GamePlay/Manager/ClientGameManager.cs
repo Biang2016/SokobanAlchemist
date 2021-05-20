@@ -4,7 +4,6 @@ using BiangLibrary.GamePlay.UI;
 using BiangLibrary.Log;
 using BiangLibrary.Messenger;
 using BiangLibrary.Singleton;
-using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -77,7 +76,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
     public PlayerStatHUDPanel PlayerStatHUDPanel;
     public NoticePanel NoticePanel;
     public LearnSkillUpgradePanel LearnSkillUpgradePanel;
-    public ExitMenuPanel ExitMenuPanel;
 
     public bool WarmUpPool_Editor = true;
 
@@ -164,8 +162,6 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         LoadingMapPanel = UIManager.Instance.WarmUpUIForms<LoadingMapPanel>();
         LearnSkillUpgradePanel = UIManager.Instance.ShowUIForms<LearnSkillUpgradePanel>();
         InGameUIPanel = UIManager.Instance.ShowUIForms<InGameUIPanel>();
-        ExitMenuPanel = UIManager.Instance.ShowUIForms<ExitMenuPanel>();
-        ExitMenuPanel.CloseUIForm();
         UIManager.Instance.ShowUIForms<StartMenuPanel>();
         WwiseAudioManager.WwiseBGMConfiguration.BGM_Start();
     }
@@ -298,7 +294,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
             if (ControlManager.Menu_KeyBindPanel.Down)
             {
-                if (!ExitMenuPanel.IsShown)
+                if (!UIManager.IsUIShown<ExitMenuPanel>())
                 {
                     UIManager.Instance.ShowUIForms<KeyBindingPanel>();
                 }
@@ -316,7 +312,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
 
             if (ControlManager.Menu_SkillPreviewPanel.Up)
             {
-                if (!ExitMenuPanel.IsShown)
+                if (!UIManager.IsUIShown<ExitMenuPanel>())
                 {
                     UIManager.Instance.ToggleUIForm<EntitySkillPreviewPanel>();
                     if (EntitySkillPreviewPanel.IsShown)
@@ -334,7 +330,7 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
                 UIManager.Instance.UICamera.enabled = !UIManager.Instance.UICamera.enabled;
             }
 
-            if (DebugPanel != null && DebugPanel.IsShown && !ExitMenuPanel.IsShown)
+            if (DebugPanel != null && DebugPanel.IsShown && !UIManager.IsUIShown<ExitMenuPanel>())
             {
                 if (ControlManager.Battle_SlowDownGame.Pressed)
                 {

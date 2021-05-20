@@ -8,7 +8,7 @@ public class Compress
     {
         using (MemoryStream compressStream = new MemoryStream())
         {
-            using (var zipStream = new GZipStream(compressStream, CompressionMode.Compress))
+            using (GZipStream zipStream = new GZipStream(compressStream, CompressionMode.Compress))
                 zipStream.Write(bytes, 0, bytes.Length);
             return compressStream.ToArray();
         }
@@ -16,7 +16,7 @@ public class Compress
 
     public static byte[] Decompress(byte[] bytes)
     {
-        using (var compressStream = new MemoryStream(bytes))
+        using (MemoryStream compressStream = new MemoryStream(bytes))
         {
             using (GZipStream zipStream = new GZipStream(compressStream, CompressionMode.Decompress))
             {
