@@ -162,8 +162,10 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         LoadingMapPanel = UIManager.Instance.WarmUpUIForms<LoadingMapPanel>();
         LearnSkillUpgradePanel = UIManager.Instance.ShowUIForms<LearnSkillUpgradePanel>();
         InGameUIPanel = UIManager.Instance.ShowUIForms<InGameUIPanel>();
-        UIManager.Instance.ShowUIForms<StartMenuPanel>();
+
         WwiseAudioManager.WwiseBGMConfiguration.BGM_Start();
+        WwiseAudioManager.Instance.WwiseBGMConfiguration.SwitchBGMTheme(BGM_Theme.StartMenu);
+        UIManager.Instance.ShowUIForms<StartMenuPanel>();
     }
 
     public void StartGame(string gameSaveName)
@@ -235,18 +237,37 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         ControlManager.Update(Time.deltaTime);
         if (ControlManager.Menu_ExitMenuPanel.Up)
         {
-            if (!UIManager.IsUIShown<StartMenuPanel>()
-                && !UIManager.IsUIShown<ConfirmPanel>()
-                && !UIManager.IsUIShown<TransportWorldPanel>()
-                && !UIManager.IsUIShown<EntitySkillPreviewPanel>()
-                && !UIManager.IsUIShown<KeyBindingPanel>()
-                && !UIManager.IsUIShown<LoadingMapPanel>()
-                && !LearnSkillUpgradePanel.HasPage)
+            if (UIManager.IsUIShown<SettingPanel>())
             {
-                if (BattleManager.Instance.IsStart)
+                UIManager.CloseUIForm<SettingPanel>();
+            }
+            else
+            {
+                if (!UIManager.IsUIShown<StartMenuPanel>()
+                    && !UIManager.IsUIShown<ConfirmPanel>()
+                    && !UIManager.IsUIShown<TransportWorldPanel>()
+                    && !UIManager.IsUIShown<EntitySkillPreviewPanel>()
+                    && !UIManager.IsUIShown<KeyBindingPanel>()
+                    && !UIManager.IsUIShown<LoadingMapPanel>()
+                    && !LearnSkillUpgradePanel.HasPage)
                 {
-                    UIManager.Instance.ToggleUIForm<ExitMenuPanel>();
+                    if (BattleManager.Instance.IsStart)
+                    {
+                        UIManager.Instance.ToggleUIForm<ExitMenuPanel>();
+                    }
                 }
+            }
+        }
+
+        if (ControlManager.Menu_Cancel.Up)
+        {
+            if (UIManager.IsUIShown<SettingPanel>())
+            {
+                UIManager.CloseUIForm<SettingPanel>();
+            }
+            else if (UIManager.IsUIShown<ExitMenuPanel>())
+            {
+                UIManager.CloseUIForm<ExitMenuPanel>();
             }
         }
 

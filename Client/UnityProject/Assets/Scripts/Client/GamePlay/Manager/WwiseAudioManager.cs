@@ -20,50 +20,6 @@ public class WwiseAudioManager : MonoSingleton<WwiseAudioManager>
 
     void Awake()
     {
-        if (PlayerPrefs.HasKey("InMenu_LowPass"))
-        {
-            InMenu_LowPass.SetGlobalValue(PlayerPrefs.GetFloat("InMenu_LowPass"));
-        }
-        else
-        {
-            InMenu_LowPass.SetGlobalValue(100f);
-        }
-
-        if (PlayerPrefs.HasKey("Master_Volume"))
-        {
-            Master_Volume.SetGlobalValue(PlayerPrefs.GetFloat("Master_Volume"));
-        }
-        else
-        {
-            Master_Volume.SetGlobalValue(100f);
-        }
-
-        if (PlayerPrefs.HasKey("Music_Volume"))
-        {
-            Music_Volume.SetGlobalValue(PlayerPrefs.GetFloat("Music_Volume"));
-        }
-        else
-        {
-            Music_Volume.SetGlobalValue(100f);
-        }
-
-        if (PlayerPrefs.HasKey("UI_Volume"))
-        {
-            UI_Volume.SetGlobalValue(PlayerPrefs.GetFloat("UI_Volume"));
-        }
-        else
-        {
-            UI_Volume.SetGlobalValue(100f);
-        }
-
-        if (PlayerPrefs.HasKey("World_Volume"))
-        {
-            World_Volume.SetGlobalValue(PlayerPrefs.GetFloat("World_Volume"));
-        }
-        else
-        {
-            World_Volume.SetGlobalValue(100f);
-        }
     }
 
     public Trigger Trigger_PlayerDeath;

@@ -1551,14 +1551,6 @@
                     "interactions": "Press(behavior=2)"
                 },
                 {
-                    "name": "KeyBindPanel",
-                    "type": "Button",
-                    "id": "ffa62818-fe0e-413d-95ce-acb64067147c",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)"
-                },
-                {
                     "name": "SkillPreviewPanel",
                     "type": "Button",
                     "id": "b9c7d0d3-0e32-4a36-8cb1-2d190cc5a7d6",
@@ -1570,6 +1562,30 @@
                     "name": "ExitMenuPanel",
                     "type": "Button",
                     "id": "5ace1458-a653-4cfe-b079-bb98e5af7749",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "KeyBindPanel",
+                    "type": "Button",
+                    "id": "ffa62818-fe0e-413d-95ce-acb64067147c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "DownNext",
+                    "type": "Button",
+                    "id": "c31044a4-d743-4574-8fda-b2f724e08394",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "UpPrevious",
+                    "type": "Button",
+                    "id": "0f19dce9-9429-4edb-9738-3fae3a78c6aa",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)"
@@ -1853,39 +1869,6 @@
                 },
                 {
                     "name": "",
-                    "id": "4a98eadd-6959-4070-97eb-2331bb92c5eb",
-                    "path": "<Keyboard>/n",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "SkillPreviewPanel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d6873206-707f-4c6b-8d5a-2ca80d1ae251",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "ExitMenuPanel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "fc6b02c1-360f-4ef6-a6fd-be774dedb868",
-                    "path": "<Gamepad>/start",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "ExitMenuPanel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "48583010-79dc-4b40-abd5-67f72c8d7e73",
                     "path": "<Keyboard>/f",
                     "interactions": "",
@@ -1903,6 +1886,50 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "InteractiveKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d2254ba8-01be-4b5f-bb22-09fd4ccaa108",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "DownNext",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a5a5d44f-947d-4c39-92e6-df3d4f873d81",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UpPrevious",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fc6b02c1-360f-4ef6-a6fd-be774dedb868",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "ExitMenuPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b265d245-888d-4a7a-b913-b4ade8dda601",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ExitMenuPanel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

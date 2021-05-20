@@ -38,6 +38,8 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     public static float BoxKickDragFactor_Cheat = 1f;
     public static float BoxWeightFactor_Cheat = 1f;
 
+    public static string GameSavePath => $"{Application.persistentDataPath}/{Application.version}/GameSaves";
+
     [ReadOnly]
     [ShowInInspector]
     [BoxGroup("角色Buff相克表")]

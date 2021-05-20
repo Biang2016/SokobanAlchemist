@@ -525,38 +525,27 @@ public class DebugPanel : BaseUIPanel
         Time.timeScale = value;
     }
 
-    [DebugSlider("Audio/InMenu_LowPass", 100, 0, 100)]
-    public void Set_InMenu_LowPass(float value)
+    [DebugButton("Game/ClearPref")]
+    public void ClearPref()
     {
-        PlayerPrefs.SetFloat("InMenu_LowPass", value);
-        WwiseAudioManager.Instance.InMenu_LowPass.SetGlobalValue(value);
+        PlayerPrefs.DeleteAll();
     }
 
     [DebugSlider("Audio/Master_Volume", 100, 0, 100)]
     public void Set_Master_Volume(float value)
     {
-        PlayerPrefs.SetFloat("Master_Volume", value);
-        WwiseAudioManager.Instance.Master_Volume.SetGlobalValue(value);
+        SettingManager.Instance.SetMasterVolume(value);
     }
 
     [DebugSlider("Audio/Music_Volume", 100, 0, 100)]
     public void Set_Music_Volume(float value)
     {
-        PlayerPrefs.SetFloat("Music_Volume", value);
-        WwiseAudioManager.Instance.Music_Volume.SetGlobalValue(value);
+        SettingManager.Instance.SetMusicVolume(value);
     }
 
-    [DebugSlider("Audio/UI_Volume", 100, 0, 100)]
-    public void Set_UI_Volume(float value)
+    [DebugSlider("Audio/Sound_Volume", 100, 0, 100)]
+    public void Set_Sound_Volume(float value)
     {
-        PlayerPrefs.SetFloat("UI_Volume", value);
-        WwiseAudioManager.Instance.UI_Volume.SetGlobalValue(value);
-    }
-
-    [DebugSlider("Audio/World_Volume", 100, 0, 100)]
-    public void Set_World_Volume(float value)
-    {
-        PlayerPrefs.SetFloat("World_Volume", value);
-        WwiseAudioManager.Instance.World_Volume.SetGlobalValue(value);
+        SettingManager.Instance.SetSoundVolume(value);
     }
 }

@@ -498,6 +498,49 @@ MonoBehaviour:
   BattleUICamera: {fileID: 3203221681298312851}
   FieldCamera: {fileID: 1662110492}
   PostProcessVolume: {fileID: 150754435}
+--- !u!1 &2755278696004118783
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 189653047201548334}
+  - component: {fileID: 5674809692292522350}
+  m_Layer: 0
+  m_Name: '@SettingManager'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &189653047201548334
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2755278696004118783}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5980882138566427480}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5674809692292522350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2755278696004118783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79e00f65b71428a4095b56cc0961f738, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4429083880332275475
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,6 +749,7 @@ Transform:
   - {fileID: 5980882138589961546}
   - {fileID: 5980882136729047176}
   - {fileID: 3005836633245540815}
+  - {fileID: 189653047201548334}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -721,22 +765,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b75c61f8083561479e2fe5fd692447b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dropSpeed: 8
+  dropSkillScrollSpeed: 8
   BoxMarchingSquareTerrainMat: {fileID: 2100000, guid: a65ed37378d07fc4ebe55dbb0be75ee7,
     type: 2}
   BoxMarchingTextureConfigMatrix: {fileID: 11400000, guid: 817bb5084d7e9f24282116896026f06d,
     type: 2}
   DebugConsole: {fileID: 8481769960839281818}
   DebugPanel: {fileID: 0}
+  InGameUIPanel: {fileID: 0}
   KeyBindingPanel: {fileID: 0}
   EntitySkillPreviewPanel: {fileID: 0}
   LoadingMapPanel: {fileID: 0}
   PlayerStatHUDPanel: {fileID: 0}
   NoticePanel: {fileID: 0}
+  LearnSkillUpgradePanel: {fileID: 0}
   WarmUpPool_Editor: 0
   StartWorldName:
     TypeDefineType: 6
     TypeGUID: (3484fcc0-5253-47d4-848f-b08cb3631830)
-  IsGameLoading: 0
 --- !u!1 &5980882138589961541
 GameObject:
   m_ObjectHideFlags: 0
@@ -800,13 +847,13 @@ MonoBehaviour:
   m_MoveRepeatRate: 0.1
   m_ActionsAsset: {fileID: -944628639613478452, guid: 4634a54e391fe9b47b532a194bce9c3d,
     type: 3}
-  m_PointAction: {fileID: -1517752456542158742, guid: 4634a54e391fe9b47b532a194bce9c3d,
+  m_PointAction: {fileID: -7780712231334010354, guid: 4634a54e391fe9b47b532a194bce9c3d,
     type: 3}
-  m_MoveAction: {fileID: -2547987418679573620, guid: 4634a54e391fe9b47b532a194bce9c3d,
+  m_MoveAction: {fileID: -6220335523727327106, guid: 4634a54e391fe9b47b532a194bce9c3d,
     type: 3}
-  m_SubmitAction: {fileID: -2198237443672592405, guid: 4634a54e391fe9b47b532a194bce9c3d,
+  m_SubmitAction: {fileID: 5794016082613160213, guid: 4634a54e391fe9b47b532a194bce9c3d,
     type: 3}
-  m_CancelAction: {fileID: -4628488549467307865, guid: 4634a54e391fe9b47b532a194bce9c3d,
+  m_CancelAction: {fileID: -2775298474542218357, guid: 4634a54e391fe9b47b532a194bce9c3d,
     type: 3}
   m_LeftClickAction: {fileID: 8932202983341656066, guid: 4634a54e391fe9b47b532a194bce9c3d,
     type: 3}
@@ -814,7 +861,7 @@ MonoBehaviour:
     type: 3}
   m_RightClickAction: {fileID: -4461977384893950311, guid: 4634a54e391fe9b47b532a194bce9c3d,
     type: 3}
-  m_ScrollWheelAction: {fileID: -8695125322600109426, guid: 4634a54e391fe9b47b532a194bce9c3d,
+  m_ScrollWheelAction: {fileID: 427257599502080915, guid: 4634a54e391fe9b47b532a194bce9c3d,
     type: 3}
   m_TrackedDevicePositionAction: {fileID: 0}
   m_TrackedDeviceOrientationAction: {fileID: 0}
@@ -904,6 +951,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1424680717478142597}
   - component: {fileID: 995470730}
+  - component: {fileID: 1243272814}
   m_Layer: 0
   m_Name: '@WwiseAudioManager'
   m_TagString: Untagged
@@ -940,11 +988,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WwiseBGMConfiguration: {fileID: 3209503607391181781}
-  StopAllEvent:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 11400000, guid: 624c61dede03c13488c716da806dcb8b,
-      type: 2}
   InMenu_LowPass:
     idInternal: 0
     valueGuidInternal: 
@@ -978,7 +1021,8 @@ MonoBehaviour:
   Trigger_QuestComplete:
     idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: 91210ec74ba1743de8b2d6e88644badf,
+      type: 2}
   Trigger_Teleport:
     idInternal: 0
     valueGuidInternal: 
@@ -987,7 +1031,70 @@ MonoBehaviour:
   Trigger_Victory:
     idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: 3e3b81201a9f94417b6a7c235ec53102,
+      type: 2}
+  UI_ButtonClick:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 3000eb24d4622489290a02f835557b9e,
+      type: 2}
+  UI_ButtonHover:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: f7d113f4e806b48a688c86782f82b2c1,
+      type: 2}
+  KeyBoxInLock:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 4aba7c1aa0fec45219d936b51b87af60,
+      type: 2}
+  LockBoxUnlocked:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: b54007e36fa9245c9b802b288cc885a5,
+      type: 2}
+  BoxTypeChange:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: c6d97ded6869f4c33a78d65e46e44ae1,
+      type: 2}
+  RewardBoxShow:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 19bbdb0af811d40daa735023b2870705,
+      type: 2}
+  TransportBoxShow:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 5bea050af546b4bd1a392feda603353b,
+      type: 2}
+--- !u!114 &1243272814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6240867138362267959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b538996ecc15554e8786712d54ac7e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InitializationSettings: {fileID: 11400000, guid: 7cfe3c125d59c69479a74e6b7ff1c8dd,
+    type: 2}
+  basePath: 
+  language: 
+  defaultPoolSize: 0
+  lowerPoolSize: 0
+  streamingPoolSize: 0
+  memoryCutoffThreshold: 0
+  monitorPoolSize: 0
+  monitorQueuePoolSize: 0
+  callbackManagerBufferSize: 0
+  spatialAudioPoolSize: 0
+  maxSoundPropagationDepth: 0
+  diffractionFlags: 11
+  engineLogging: 0
 --- !u!1 &9218268866114838885
 GameObject:
   m_ObjectHideFlags: 0
@@ -1286,7 +1393,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: WwiseGlobal
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6154460155326806613, guid: 04f48ae355d4df44f89897a1859fd915, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 04f48ae355d4df44f89897a1859fd915, type: 3}
 --- !u!4 &529643286577319992 stripped
 Transform:

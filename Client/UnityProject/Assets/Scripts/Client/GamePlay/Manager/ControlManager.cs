@@ -55,12 +55,12 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         {
             if (value)
             {
-                Debug.Log("CommonActions On");
+                //Debug.Log("CommonActions On");
                 CommonActions.Enable();
             }
             else
             {
-                Debug.Log("CommonActions Off");
+                //Debug.Log("CommonActions Off");
                 CommonActions.Disable();
             }
         }
@@ -120,12 +120,12 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         {
             if (value)
             {
-                Debug.Log("BattleActions On");
+                //Debug.Log("BattleActions On");
                 BattleActions.Enable();
             }
             else
             {
-                Debug.Log("BattleActions Off");
+                //Debug.Log("BattleActions Off");
                 BattleActions.Disable();
             }
         }
@@ -214,12 +214,12 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         {
             if (value)
             {
-                Debug.Log("MenuActions On");
+                //Debug.Log("MenuActions On");
                 MenuActions.Enable();
             }
             else
             {
-                Debug.Log("MenuActions Off");
+                //Debug.Log("MenuActions Off");
                 MenuActions.Disable();
             }
         }
@@ -237,6 +237,9 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
     public ButtonState Menu_SkillPreviewPanel = new ButtonState() {ButtonName = ButtonNames.Menu_SkillPreviewPanel};
     public ButtonState Menu_ExitMenuPanel = new ButtonState() {ButtonName = ButtonNames.Menu_ExitMenuPanel};
     public ButtonState Menu_KeyBindPanel = new ButtonState() {ButtonName = ButtonNames.Menu_KeyBindPanel};
+
+    public ButtonState Menu_DownNext = new ButtonState() {ButtonName = ButtonNames.Menu_DownNext};
+    public ButtonState Menu_UpPrevious = new ButtonState() {ButtonName = ButtonNames.Menu_UpPrevious};
 
     #endregion
 
@@ -411,6 +414,8 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
         Menu_SkillPreviewPanel.GetStateCallbackFromContext_UpDownPress(MenuActions.SkillPreviewPanel);
         Menu_ExitMenuPanel.GetStateCallbackFromContext_UpDownPress(MenuActions.ExitMenuPanel);
         Menu_KeyBindPanel.GetStateCallbackFromContext_UpDownPress(MenuActions.KeyBindPanel);
+        Menu_DownNext.GetStateCallbackFromContext_UpDownPress(MenuActions.DownNext);
+        Menu_UpPrevious.GetStateCallbackFromContext_UpDownPress(MenuActions.UpPrevious);
 
         #endregion
 

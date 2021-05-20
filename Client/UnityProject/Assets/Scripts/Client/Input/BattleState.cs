@@ -148,5 +148,8 @@ public enum ButtonNames
     Menu_ExitMenuPanel,
     Menu_KeyBindPanel,
 
+    Menu_DownNext,
+    Menu_UpPrevious,
+
     MENU_MAX_FLAG = 800,
 }

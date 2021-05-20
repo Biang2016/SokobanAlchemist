@@ -35,6 +35,7 @@ public class ExitMenuPanel : BaseUIPanel
     public Button ExitToOpenWorldButton;
     public Button RestartDungeonButton;
     public Button SaveGameButton;
+    public Button SettingButton;
     public Button ExitToMenuButton;
     public Button ExitToDesktopButton;
 
@@ -58,7 +59,7 @@ public class ExitMenuPanel : BaseUIPanel
         Time.timeScale = 0;
     }
 
-    private void InitButtons()
+    public void InitButtons()
     {
         bool insideDungeon = WorldManager.Instance.CurrentWorld != null && ((WorldManager.Instance.CurrentWorld is OpenWorld {InsideDungeon: true}) || !(WorldManager.Instance.CurrentWorld is OpenWorld));
         ExitToOpenWorldButton.gameObject.SetActive(insideDungeon);
@@ -73,13 +74,9 @@ public class ExitMenuPanel : BaseUIPanel
         }
     }
 
-    protected override void ChildUpdate()
+    public void InitButtons_Setting()
     {
-        base.ChildUpdate();
-        if (ControlManager.Instance.Menu_Cancel.Up)
-        {
-            CloseUIForm();
-        }
+        SettingButton.Select();
     }
 
     public override void Hide()
@@ -104,6 +101,16 @@ public class ExitMenuPanel : BaseUIPanel
         }
     }
 
+    public void SetAllInteractable(bool interactable)
+    {
+        ExitToOpenWorldButton.interactable = interactable;
+        RestartDungeonButton.interactable = interactable;
+        SaveGameButton.interactable = interactable;
+        SettingButton.interactable = interactable;
+        ExitToMenuButton.interactable = interactable;
+        ExitToDesktopButton.interactable = interactable;
+    }
+
     public void OnExitToOpenWorldButtonClick()
     {
         ClientGameManager.Instance.ReturnToOpenWorld();
@@ -121,6 +128,12 @@ public class ExitMenuPanel : BaseUIPanel
             openWorld.SaveGame("Slot1");
             CloseUIForm();
         }
+    }
+
+    public void OnSettingButtonClick()
+    {
+        SetAllInteractable(false);
+        UIManager.Instance.ShowUIForms<SettingPanel>();
     }
 
     public void OnExitToMenuButtonClick()

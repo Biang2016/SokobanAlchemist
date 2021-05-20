@@ -1152,6 +1152,7 @@ public class OpenWorld : World
     [Serializable]
     public class GameSaveData
     {
+        public string ClientVersion;
         public PlayerData PlayerData;
         public PlayerData PlayerDataSave_DungeonTemp;
         public LevelCacheData LevelCacheData;
@@ -1195,6 +1196,7 @@ public class OpenWorld : World
         }
 
         GameSaveData gameSaveData = new GameSaveData();
+        gameSaveData.ClientVersion = Application.version;
         gameSaveData.PlayerData = PlayerDataSave;
         gameSaveData.PlayerDataSave_DungeonTemp = PlayerDataSave_DungeonTemp;
         gameSaveData.LevelCacheData = m_LevelCacheData;
@@ -1225,9 +1227,8 @@ public class OpenWorld : World
         gameSaveData.BattleStateBoolDict_ByModule = BattleManager.Instance.BattleStateBoolDict_ByModule;
         gameSaveData.BattleStateBoolDict = BattleManager.Instance.BattleStateBoolDict;
 
-        string folder = $"{Application.streamingAssetsPath}/GameSaves";
-        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
-        string file = $"{folder}/GameSave_{gameSaveName}.save";
+        if (!Directory.Exists(ConfigManager.GameSavePath)) Directory.CreateDirectory(ConfigManager.GameSavePath);
+        string file = $"{ConfigManager.GameSavePath}/GameSave_{gameSaveName}.save";
         if (File.Exists(file)) File.Delete(file);
         byte[] bytes = SerializationUtility.SerializeValue(gameSaveData, DataFormat.Binary);
         byte[] bytes_compressed = Compress.CompressBytes(bytes);
@@ -1238,8 +1239,7 @@ public class OpenWorld : World
 
     public bool TryLoadGame(string gameName)
     {
-        string folder = $"{Application.streamingAssetsPath}/GameSaves";
-        string file = $"{folder}/GameSave_{gameName}.save";
+        string file = $"{ConfigManager.GameSavePath}/GameSave_{gameName}.save";
         if (File.Exists(file))
         {
             FileInfo fi = new FileInfo(file);
