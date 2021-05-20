@@ -143,6 +143,6 @@ public class ExitMenuPanel : BaseUIPanel
 
     public void OnExitToDesktopButtonClick()
     {
-        Application.Quit();
+        ClientGameManager.Instance.ExitToDesktop();
     }
 }

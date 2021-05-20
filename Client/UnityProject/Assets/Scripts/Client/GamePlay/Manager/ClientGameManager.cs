@@ -507,12 +507,33 @@ public class ClientGameManager : MonoSingleton<ClientGameManager>
         {
             UIManager.Instance.CloseUIForm<ExitMenuPanel>();
             ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
-            confirmPanel.Initialize("If you back to menu, you'll lose all the progress", "Go to menu", "Cancel",
+            confirmPanel.Initialize("If you back to menu, you'll lose the unsaved progress", "Go to menu", "Cancel",
                 () =>
                 {
                     confirmPanel.CloseUIForm();
                     UIManager.Instance.CloseUIForm<PlayerStatHUDPanel>();
                     ReloadGame();
+                },
+                () =>
+                {
+                    confirmPanel.CloseUIForm();
+                    UIManager.Instance.ShowUIForms<ExitMenuPanel>();
+                }
+            );
+            return;
+        }
+    }
+
+    public void ExitToDesktop()
+    {
+        if (!UIManager.Instance.IsUIShown<ConfirmPanel>())
+        {
+            UIManager.Instance.CloseUIForm<ExitMenuPanel>();
+            ConfirmPanel confirmPanel = UIManager.Instance.ShowUIForms<ConfirmPanel>();
+            confirmPanel.Initialize("If you quit, you'll lose the unsaved progress", "Quit", "Cancel",
+                () =>
+                {
+                    Application.Quit();
                 },
                 () =>
                 {
