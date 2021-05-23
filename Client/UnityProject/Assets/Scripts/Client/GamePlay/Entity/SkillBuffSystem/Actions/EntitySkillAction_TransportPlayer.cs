@@ -20,6 +20,7 @@ public class EntitySkillAction_TransportPlayer : BoxSkillAction, EntitySkillActi
 
     public void Execute()
     {
+        if (BattleManager.Instance.Player1.IsFrozen) return;
         if (selectedWorld == null)
         {
             selectedWorld = CommonUtils.GetRandomFromList(WorldProbList);

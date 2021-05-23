@@ -22,6 +22,7 @@ public class EntitySkillAction_ShowTransportWorldPanel : EntitySkillAction, Enti
 
     public void Execute()
     {
+        if (BattleManager.Instance.Player1.IsFrozen) return; // 冻结状态无法传送
         if (UIManager.Instance.IsUIShown<ExitMenuPanel>()) return;
         if (UIManager.Instance.IsUIShown<TransportWorldPanel>()) return;
         if (selectedWorld == null)

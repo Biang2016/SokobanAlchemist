@@ -829,6 +829,7 @@ public class OpenWorld : World
 
     public IEnumerator Co_ReturnToOpenWorld(bool dungeonComplete)
     {
+        BattleManager.Instance.Player1.EntityStatPropSet.FrozenValue.SetValue(0); // 解冻，否则冻结箱子随着模组被回收了
         returningToOpenWorldFormDungeon = true;
         CurrentDungeonWorldTypeIndex = 0;
         BattleManager.Instance.IsStart = false;
@@ -908,6 +909,7 @@ public class OpenWorld : World
     {
         restartingDungeon = true;
         BattleManager.Instance.IsStart = false;
+        BattleManager.Instance.Player1.EntityStatPropSet.FrozenValue.SetValue(0); // 解冻，否则冻结箱子随着模组被回收了
         WwiseAudioManager.Instance.Trigger_Teleport.Post(WwiseAudioManager.Instance.WwiseBGMConfiguration.gameObject);
         UIManager.Instance.ShowUIForms<LoadingMapPanel>();
         LoadingMapPanel.Clear();

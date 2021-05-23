@@ -302,6 +302,7 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("SwitchWorld/{0}", "GetAllWorldNames", -10)]
     public void ChangeWorld(string worldName)
     {
+        BattleManager.Instance.Player1.EntityStatPropSet.FrozenValue.SetValue(0);
         ClientGameManager.Instance.ChangeWorld(worldName, true);
     }
 
@@ -313,6 +314,7 @@ public class DebugPanel : BaseUIPanel
     [DebugButton("SwitchBornPoint/{0}", "GetAllWorldPlayerBornPoints", -9)]
     public void ChangeWorldPlayerBornPoint(string playerBornPointAlias)
     {
+        BattleManager.Instance.Player1.EntityStatPropSet.FrozenValue.SetValue(0);
         BattleManager.Instance.Player1.TransportPlayerGridPos(WorldManager.Instance.CurrentWorld.WorldData.WorldBornPointGroupData_Runtime.PlayerBornPointDataAliasDict[playerBornPointAlias].WorldGP);
     }
 
