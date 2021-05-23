@@ -34,6 +34,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
                 if (!FrozenBox.BoxFrozenBoxHelper.InitFrozen)
                 {
                     InitFrozen(false);
+                    FrozenBox.BoxFrozenBoxHelper.InitFrozen = true;
                 }
             }
             else
@@ -86,6 +87,7 @@ public class ActorFrozenHelper : EntityFrozenHelper
                 actor.ForbidAction = true;
                 transform.localRotation = Quaternion.identity; // todo 这行干啥用
                 FrozeModelRoot.SetActive(true);
+                FrozenBox.BoxFrozenBoxHelper.InitFrozen = true;
             }
         }
     }

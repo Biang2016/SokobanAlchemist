@@ -619,7 +619,7 @@ public class WorldModule : PoolObject
                         Actor actor = GameObjectPoolManager.Instance.ActorDict[entityData.EntityTypeIndex].AllocateGameObject<Actor>(BattleManager.Instance.ActorContainerRoot);
                         actor.Setup(entityData, worldGP);
                         if (isStartedEntities) actor.ForbidAction = !BattleManager.Instance.IsStart;
-                        BattleManager.Instance.AddActor(this, actor);
+                        BattleManager.Instance.AddActor(actor);
 
                         // 到模组处登记
                         foreach (GridPos3D offset in entityOccupation_rotated)

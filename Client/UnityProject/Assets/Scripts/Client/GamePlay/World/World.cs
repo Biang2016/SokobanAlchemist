@@ -1402,7 +1402,7 @@ public class World : PoolObject
                     actor.Setup(entityData, worldGP);
                     actor.ForbidAction = !BattleManager.Instance.IsStart;
                     actor.ApplyEntityExtraSerializeData();
-                    BattleManager.Instance.AddActor(module, actor);
+                    BattleManager.Instance.AddActor(actor);
                     return true;
                 }
             }
@@ -1429,7 +1429,7 @@ public class World : PoolObject
                     frozenActor.ForbidAction = !BattleManager.Instance.IsStart;
                     frozenActor.ApplyEntityExtraSerializeData();
                     frozenActor.transform.SetParent(frozenBox.transform);
-                    BattleManager.Instance.AddActor(module, frozenActor);
+                    BattleManager.Instance.AddActor(frozenActor);
                     return true;
                 }
             }

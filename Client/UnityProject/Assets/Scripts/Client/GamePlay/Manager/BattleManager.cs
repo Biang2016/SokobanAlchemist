@@ -111,7 +111,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
                     if (dict.Count == 0)
                     {
                         ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, $"WorldModule_{actor.CurrentEntityData.InitWorldModuleGUID}_EnemyClear");
-                        if (dict.Count == 0) WorldModuleActorDict.Remove(actor.CurrentEntityData.InitWorldModuleGUID); // 再判空集的原因是，EnemyClear的时候也可能又生成了Enemy
+                        //if (dict.Count == 0) WorldModuleActorDict.Remove(actor.CurrentEntityData.InitWorldModuleGUID); // 再判空集的原因是，EnemyClear的时候也可能又生成了Enemy
                     }
                 }
                 else
@@ -244,23 +244,23 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         Actor player = GameObjectPoolManager.Instance.ActorDict[ConfigManager.Actor_PlayerIndex].AllocateGameObject<Actor>(ActorContainerRoot);
         EntityData entityData = new EntityData(ConfigManager.Actor_PlayerIndex, GridPosR.Orientation.Up);
         player.Setup(entityData, bpd.WorldGP);
-        AddActor(null, player);
+        AddActor(player);
         PlayerDefaultActorSkillLearningData = player.ActorSkillLearningHelper.ActorSkillLearningData.Clone();
         PlayerCurrentActorSkillLearningData = player.ActorSkillLearningHelper.ActorSkillLearningData;
     }
 
-    public void AddActor(WorldModule worldModule, Actor actor)
+    public void AddActor(Actor actor)
     {
         if (actor.ActorCategory == ActorCategory.Player)
         {
-            BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, (Actor) actor);
+            BattleMessenger.Broadcast((uint) Enum_Events.OnPlayerLoaded, actor);
             MainPlayers[0] = actor;
             ClientGameManager.Instance.PlayerStatHUDPanel.Initialize();
         }
         else if (actor.ActorCategory == ActorCategory.Creature)
         {
             Enemies.Add(actor);
-            RegisterEnemyToWorldModule(worldModule.WorldModuleData.GUID, actor.GUID);
+            RegisterEnemyToWorldModule(actor.CurrentEntityData.InitWorldModuleGUID, actor.GUID);
             RegisterEnemyToStaticLayout(actor.CurrentEntityData.InitStaticLayoutGUID, actor.GUID);
         }
 

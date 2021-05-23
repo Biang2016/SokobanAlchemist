@@ -149,7 +149,6 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
     {
         if (triggerTimeWhenStayCount >= MaxTriggerTimeWhenStay)
         {
-            interactiveKeyUp = false;
             return;
         }
 
@@ -162,7 +161,6 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                 {
                     if (target.EntityTypeIndex != ConfigManager.GetTypeIndex(EffectiveOnSpecificEntityType.TypeDefineType, EffectiveOnSpecificEntityType.TypeName))
                     {
-                        interactiveKeyUp = false;
                         return;
                     }
                 }
@@ -193,6 +191,8 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                                     entityAction.ExecuteOnEntity(target);
                                 }
                             }
+
+                            interactiveKeyUp = false;
                         }
                     }
                 }
@@ -233,8 +233,6 @@ public class EntitySkillAction_TriggerZoneAction : EntitySkillAction, EntitySkil
                 }
             }
         }
-
-        interactiveKeyUp = false;
     }
 
     public void ExecuteOnTriggerExit(Collider collider)
